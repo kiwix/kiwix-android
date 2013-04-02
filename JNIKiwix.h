@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     JNIKiwix
  * Method:    nativeLoadZIM
- * Signature: ()Ljava/lang/Boolean;
+ * Signature: (Ljava/lang/String;)Z
  */
-JNIEXPORT jobject JNICALL Java_JNIKiwix_nativeLoadZIM
-  (JNIEnv *, jobject);
+JNIEXPORT jboolean JNICALL Java_JNIKiwix_nativeLoadZIM
+  (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     JNIKiwix
