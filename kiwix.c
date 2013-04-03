@@ -13,6 +13,14 @@ jstring c2jni(const std::string &val, JNIEnv *env) {
   return env->NewStringUTF(val.c_str());
 }
 
+jint c2jni(const int val) {
+  return (jint)val;
+}
+
+jint c2jni(const unsigned val) {
+  return (unsigned)val;
+}
+
 /* jni2c type conversion functions */
 bool jni2c(const jboolean &val) {
   return val == JNI_TRUE;
@@ -22,11 +30,23 @@ std::string jni2c(const jstring &val, JNIEnv *env) {
   return std::string(env->GetStringUTFChars(val, 0));
 }
 
+int jni2c(const jint val) {
+  return (int)val;
+}
+
+/* Method to deal with variable passed by reference */
+void setStringObjValue(const std::string &value, const jobject obj, JNIEnv *env) {
+  jclass objClass = env->GetObjectClass(obj);
+  jfieldID objFid = env->GetFieldID(objClass, "value", "Ljava/lang/String;");
+  env->SetObjectField(obj, objFid, c2jni(value, env));
+}
+
 /* Kiwix library functions */
 JNIEXPORT jboolean JNICALL Java_JNIKiwix_nativeLoadZIM(JNIEnv *env, jobject obj, jstring path) {
   return c2jni(true);
 }
 
-JNIEXPORT jstring JNICALL Java_JNIKiwix_nativeGetContent(JNIEnv *env, jobject obj, jstring url) {
+JNIEXPORT jbyteArray JNICALL Java_JNIKiwix_nativeGetContent(JNIEnv *env, jobject obj, jstring url, 
+							    jobject mimeTypeObj, jobject sizeObj) {
+  setStringObjValue("42", mimeTypeObj, env);
 }
-
