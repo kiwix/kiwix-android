@@ -1,6 +1,9 @@
 #include <jni.h>
 #include "JNIKiwix.h"
 
+#include <stdio.h>
+#include <string.h>
+
 #include <iostream>
 #include <string>
 
@@ -42,10 +45,9 @@ void setStringObjValue(const std::string &value, const jobject obj, JNIEnv *env)
 }
 
 void setIntObjValue(const int value, const jobject obj, JNIEnv *env) {
-  int tmp = value;
   jclass objClass = env->GetObjectClass(obj);
   jfieldID objFid = env->GetFieldID(objClass, "value", "I");
-  env->SetIntField(obj, objFid, c2jni(tmp));
+  env->SetIntField(obj, objFid, value);
 }
 
 void setBoolObjValue(const bool value, const jobject obj, JNIEnv *env) {
@@ -60,12 +62,16 @@ JNIEXPORT jboolean JNICALL Java_JNIKiwix_nativeLoadZIM(JNIEnv *env, jobject obj,
 }
 
 JNIEXPORT jbyteArray JNICALL Java_JNIKiwix_nativeGetContent(JNIEnv *env, jobject obj, jstring url, 
-							    jobject mimeTypeObj, jobject sizeObj,
-							    jobject isOkObj) {
+							    jobject mimeTypeObj, jobject sizeObj) {
   setStringObjValue("42", mimeTypeObj, env);
   setIntObjValue(42, sizeObj, env);
-  setBoolObjValue(false, isOkObj, env);
 
-  // Java program dies otherwise (please keep this "useless" line)
-  std::cout << "";
+  std::string cData = "This is great!";
+  jbyteArray data = env->NewByteArray(6);
+  jbyte *dataPointer = env->GetByteArrayElements(data, 0);
+  memcpy(dataPointer, cData.c_str(), c2jni(cData.size()));
+  env->ReleaseByteArrayElements(data, dataPointer, 0);
+
+  return data;
 }
+
