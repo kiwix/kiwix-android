@@ -18,10 +18,10 @@ JNIEXPORT jboolean JNICALL Java_JNIKiwix_nativeLoadZIM
 /*
  * Class:     JNIKiwix
  * Method:    nativeGetContent
- * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ * Signature: (Ljava/lang/String;LJNIKiwixString;LJNIKiwixInt;LJNIKiwixBool;)[B
  */
-JNIEXPORT jstring JNICALL Java_JNIKiwix_nativeGetContent
-  (JNIEnv *, jobject, jstring);
+JNIEXPORT jbyteArray JNICALL Java_JNIKiwix_nativeGetContent
+  (JNIEnv *, jobject, jstring, jobject, jobject, jobject);
 
 #ifdef __cplusplus
 }

@@ -1,6 +1,7 @@
 public class JNIKiwix {    
     public native boolean nativeLoadZIM(String path);    
-    public native byte[] nativeGetContent(String url, JNIKiwixString mimeType, JNIKiwixInt size);
+    public native byte[] nativeGetContent(String url, JNIKiwixString mimeType, 
+					  JNIKiwixInt size, JNIKiwixBool isOk);
 
     static {
         System.loadLibrary("kiwix");
@@ -14,8 +15,11 @@ public class JNIKiwix {
 	    
 	    JNIKiwixString mimeTypeObj = new JNIKiwixString();
 	    JNIKiwixInt sizeObj = new JNIKiwixInt();
-	    self.nativeGetContent("/A/Wikipedia.html", mimeTypeObj, sizeObj);
+	    JNIKiwixBool isOkObj = new JNIKiwixBool();
+	    self.nativeGetContent("/A/Wikipedia.html", mimeTypeObj, sizeObj, isOkObj);
 	    System.out.println(mimeTypeObj.value);
+	    System.out.println(sizeObj.value);
+	    System.out.println(isOkObj.value);
 	}
 	catch (Exception e) {
 	    System.out.println("Message " + e.getMessage());
@@ -32,4 +36,8 @@ class JNIKiwixString {
 
 class JNIKiwixInt {
     int value;
+}
+
+class JNIKiwixBool {
+    boolean value;
 }

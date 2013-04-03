@@ -41,12 +41,31 @@ void setStringObjValue(const std::string &value, const jobject obj, JNIEnv *env)
   env->SetObjectField(obj, objFid, c2jni(value, env));
 }
 
+void setIntObjValue(const int value, const jobject obj, JNIEnv *env) {
+  int tmp = value;
+  jclass objClass = env->GetObjectClass(obj);
+  jfieldID objFid = env->GetFieldID(objClass, "value", "I");
+  env->SetIntField(obj, objFid, c2jni(tmp));
+}
+
+void setBoolObjValue(const bool value, const jobject obj, JNIEnv *env) {
+  jclass objClass = env->GetObjectClass(obj);
+  jfieldID objFid = env->GetFieldID(objClass, "value", "Z");
+  env->SetIntField(obj, objFid, c2jni(value));
+}
+
 /* Kiwix library functions */
 JNIEXPORT jboolean JNICALL Java_JNIKiwix_nativeLoadZIM(JNIEnv *env, jobject obj, jstring path) {
   return c2jni(true);
 }
 
 JNIEXPORT jbyteArray JNICALL Java_JNIKiwix_nativeGetContent(JNIEnv *env, jobject obj, jstring url, 
-							    jobject mimeTypeObj, jobject sizeObj) {
+							    jobject mimeTypeObj, jobject sizeObj,
+							    jobject isOkObj) {
   setStringObjValue("42", mimeTypeObj, env);
+  setIntObjValue(42, sizeObj, env);
+  setBoolObjValue(false, isOkObj, env);
+
+  // Java program dies otherwise (please keep this "useless" line)
+  std::cout << "";
 }
