@@ -7,6 +7,8 @@
 #include <iostream>
 #include <string>
 
+#include <kiwix/reader.h>
+
 /* c2jni type conversion functions */
 jboolean c2jni(const bool &val) {
   return val ? JNI_TRUE : JNI_FALSE;
@@ -58,6 +60,8 @@ void setBoolObjValue(const bool value, const jobject obj, JNIEnv *env) {
 
 /* Kiwix library functions */
 JNIEXPORT jboolean JNICALL Java_JNIKiwix_nativeLoadZIM(JNIEnv *env, jobject obj, jstring path) {
+  //  kiwix::Reader reader = kiwix::Reader("42.zim");
+
   return c2jni(true);
 }
 
