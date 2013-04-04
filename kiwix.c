@@ -9,6 +9,9 @@
 
 #include <kiwix/reader.h>
 
+/* global variables */
+kiwix::Reader *reader = NULL;
+
 /* c2jni type conversion functions */
 jboolean c2jni(const bool &val) {
   return val ? JNI_TRUE : JNI_FALSE;
@@ -60,29 +63,64 @@ void setBoolObjValue(const bool value, const jobject obj, JNIEnv *env) {
 
 /* Kiwix library functions */
 JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getMainPage(JNIEnv *env, jobject obj) {
+  jstring url;
 
-  	std::string cpath = "/mnt/sdcard/test.zim";
-	kiwix::Reader reader = kiwix::Reader(cpath);
-	std::string mainp = reader.getMainPageUrl();
-
-	return c2jni(mainp, env);
+  if (reader != NULL) {
+    try {
+      std::string cUrl = reader->getMainPageUrl();
+      url = c2jni(cUrl, env);
+    } catch (exception &e) {
+      std::cerr << e.what() << std::endl;
+    }
+  }
+  
+  return url;
 }
 
 JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_nativeLoadZIM(JNIEnv *env, jobject obj, jstring path) {
+  std::string cPath = jni2c(path, env);
+  jboolean retVal = JNI_TRUE;
 
-	return c2jni(true);
+  try {
+    reader = new kiwix::Reader(cPath);
+  } catch (exception &e) {
+    std::cerr << e.what() << std::endl;
+    retVal = JNI_FALSE;
+  }
+
+  return retVal;
 }
 
-JNIEXPORT jbyteArray JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_nativeGetContent(JNIEnv *env, jobject obj, jstring url,
-							    jobject mimeTypeObj, jobject sizeObj) {
-  setStringObjValue("42", mimeTypeObj, env);
-  setIntObjValue(42, sizeObj, env);
+JNIEXPORT jbyteArray JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_nativeGetContent(JNIEnv *env, jobject obj, jstring url, jobject mimeTypeObj, jobject sizeObj) {
 
-  std::string cData = "This is great!";
-  jbyteArray data = env->NewByteArray(6);
-  jbyte *dataPointer = env->GetByteArrayElements(data, 0);
-  memcpy(dataPointer, cData.c_str(), c2jni(cData.size()));
-  env->ReleaseByteArrayElements(data, dataPointer, 0);
+  /* Default values */
+  setStringObjValue("", mimeTypeObj, env);
+  setIntObjValue(0, sizeObj, env);
+  jbyteArray data = env->NewByteArray(0);
 
+  /* Retrieve the content */
+  if (reader != NULL) {
+
+    std::string cUrl = jni2c(url, env);
+    std::string cData;
+    std::string cMimeType;
+    unsigned int cSize = 0;
+
+    try {
+      if (reader->getContentByUrl(cUrl, cData, cSize, cMimeType)) {
+	data = env->NewByteArray(cSize);
+	jbyte *dataPointer = env->GetByteArrayElements(data, 0);
+	memcpy(dataPointer, cData.c_str(), cSize);
+	env->ReleaseByteArrayElements(data, dataPointer, 0);
+
+	setStringObjValue(cMimeType, mimeTypeObj, env);
+	setIntObjValue(cSize, sizeObj, env);
+      }
+    } catch (exception &e) {
+      std::cerr << e.what() << std::endl;
+    }
+
+  }
+  
   return data;
 }
