@@ -78,8 +78,9 @@ JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getMainPage(JNIEnv
 }
 
 JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_nativeLoadZIM(JNIEnv *env, jobject obj, jstring path) {
-  std::string cPath = jni2c(path, env);
   jboolean retVal = JNI_TRUE;
+
+  std::string cPath = jni2c(path, env);
 
   try {
     reader = new kiwix::Reader(cPath);
