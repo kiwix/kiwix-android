@@ -17,7 +17,7 @@ CREATE_TOOLCHAIN = True
 COMPILE_LIBLZMA = True
 COMPILE_LIBZIM = True
 COMPILE_LIBKIWIX = True
-STRIP_LIBKIWIX = False
+STRIP_LIBKIWIX = True
 
 # store the OS's environment PATH as we'll mess with it
 # ORIGINAL_ENVIRON_PATH = os.environ.get('PATH')
@@ -58,7 +58,7 @@ NDK_PATH = os.environ.get('NDK_PATH',
 # Target Android EABI/version to compile for.
 # list of available platforms in <NDK_PATH>/platforms
 # android-14, android-3, android-4, android-5, android-8, android-9
-NDK_PLATFORM = os.environ.get('NDK_PLATFORM', 'android-9')
+NDK_PLATFORM = os.environ.get('NDK_PLATFORM', 'android-14')
 
 # will contain the different prepared toolchains for a specific build
 PLATFORM_PREFIX = os.environ.get('PLATFORM_PREFIX',
@@ -68,7 +68,7 @@ if not os.path.exists(PLATFORM_PREFIX):
 
 # root folder for liblzma
 LIBLZMA_SRC = os.path.join(os.path.dirname(CURRENT_PATH),
-                           'src', 'dependencies', 'xz-5.0.4')
+                           'src', 'dependencies', 'xz')
 
 # headers for liblzma
 LIBLZMA_INCLUDES = [os.path.join(LIBLZMA_SRC, 'src', 'liblzma', 'api')]
@@ -92,6 +92,10 @@ LIBZIM_SOURCE_FILES = ('article.cpp', 'articlesearch.cpp', 'cluster.cpp',
 # root folder for libkiwix
 LIBKIWIX_SRC = os.path.join(os.path.dirname(CURRENT_PATH),
                             'src', 'common')
+
+OPTIMIZATION_ENV = {'CXXFLAGS': ' -D__OPTIMIZE__ -fno-strict-aliasing '
+                                '-mfpu=vfp -mfloat-abi=softfp ',
+                    'NDK_DEBUG': '0'}
 
 # list of path that should already be set
 REQUIRED_PATHS = (NDK_PATH, PLATFORM_PREFIX,
@@ -178,6 +182,7 @@ for arch in ARCHS:
                    'CFLAGS': ' -fPIC '
                     }
     change_env(new_environ)
+    change_env(OPTIMIZATION_ENV)
 
     # compile liblzma.a, liblzma.so
     os.chdir(LIBLZMA_SRC)
