@@ -81,7 +81,7 @@ JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getMainPage(JNIEnv
   return url;
 }
 
-JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_nativeLoadZIM(JNIEnv *env, jobject obj, jstring path) {
+JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_loadZIM(JNIEnv *env, jobject obj, jstring path) {
   jboolean retVal = JNI_TRUE;
   std::string cPath = jni2c(path, env);
 
@@ -97,7 +97,7 @@ JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_nativeLoadZIM(JNI
   return retVal;
 }
 
-JNIEXPORT jbyteArray JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_nativeGetContent(JNIEnv *env, jobject obj, jstring url, jobject mimeTypeObj, jobject sizeObj) {
+JNIEXPORT jbyteArray JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getContent(JNIEnv *env, jobject obj, jstring url, jobject mimeTypeObj, jobject sizeObj) {
 
   /* Default values */
   setStringObjValue("", mimeTypeObj, env);
@@ -130,4 +130,68 @@ JNIEXPORT jbyteArray JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_nativeGetConten
   }
   
   return data;
+}
+
+JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_searchSuggestions
+(JNIEnv *env, jobject obj, jstring prefix, jint count) {
+  jboolean retVal = JNI_FALSE;
+  std::string cPrefix = jni2c(prefix, env);
+  unsigned int cCount = jni2c(count);
+
+  pthread_mutex_lock(&readerLock);
+  try {
+    if (reader != NULL) {
+      if (reader->searchSuggestionsSmart(cPrefix, cCount)) {
+	retVal = JNI_TRUE;
+      }
+    }
+  } catch (exception &e) {
+    std::cerr << e.what() << std::endl;
+  }
+  pthread_mutex_unlock(&readerLock);
+
+  return retVal;
+}
+
+JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getNextSuggestion
+(JNIEnv *env, jobject obj, jobject titleObj) {
+  jboolean retVal = JNI_FALSE;
+  std::string cTitle;
+
+  pthread_mutex_lock(&readerLock);
+  try {
+    if (reader != NULL) {
+      if (reader->getNextSuggestion(cTitle)) {
+	setStringObjValue(cTitle, titleObj, env);
+	retVal = JNI_TRUE;
+      }
+    }
+  } catch (exception &e) {
+    std::cerr << e.what() << std::endl;
+  }
+  pthread_mutex_unlock(&readerLock);
+
+  return retVal;
+}
+
+JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getPageUrlFromTitle
+(JNIEnv *env, jobject obj, jstring title, jobject urlObj) {
+  jboolean retVal = JNI_FALSE;
+  std::string cTitle = jni2c(title, env);
+  std::string cUrl;
+
+  pthread_mutex_lock(&readerLock);
+  try {
+    if (reader != NULL) {
+      if (reader->getPageUrlFromTitle(cTitle, cUrl)) {
+	setStringObjValue(cUrl, urlObj, env);
+	retVal = JNI_TRUE;
+      }
+    }
+  } catch (exception &e) {
+    std::cerr << e.what() << std::endl;
+  }
+  pthread_mutex_unlock(&readerLock);
+    
+  return retVal;
 }
