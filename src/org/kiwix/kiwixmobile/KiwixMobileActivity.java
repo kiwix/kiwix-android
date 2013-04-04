@@ -83,7 +83,8 @@ public class KiwixMobileActivity extends Activity {
             	                +articleUrl).toString());
             			return true;
             		} else {
-            			//FIXME Toast.makeText(this, "Article  not found.", Toast.LENGTH_SHORT).show(); //FIXME resource string
+            			String errorString = String.format(getResources().getString(R.string.error_articlenotfound), v.getText().toString());
+            			Toast.makeText(getWindow().getContext(), errorString, Toast.LENGTH_SHORT).show(); 
                         
             			return true;
             		}
@@ -155,7 +156,7 @@ public class KiwixMobileActivity extends Activity {
             }
 
         	public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-        	     String errorString = String.format(getResources().getString(R.string.error_articlenotfound), failingUrl);
+        	     String errorString = String.format(getResources().getString(R.string.error_articleurlnotfound), failingUrl);
         	     //TODO apparently screws up back/forward 
         	     webView.loadDataWithBaseURL("file://error","<html><body>"+errorString+"</body></html>", "text/html", "utf-8", failingUrl);
         	   }

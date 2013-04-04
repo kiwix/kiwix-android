@@ -15,5 +15,6 @@
     <string name="choose_file">Choose (*.zim) File</string>
     <string name="error_filenotfound">Error: The selected zim file could not be found.</string>    
     <string name="error_fileinvalid">Error: The selected file is not a valid zim file.</string>
-    <string name="error_articlenotfound">Error: Loading article (Url: %1$s) failed.</string>
+    <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
+    <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
 </resources>
