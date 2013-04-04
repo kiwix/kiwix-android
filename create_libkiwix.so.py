@@ -105,18 +105,21 @@ def fail_on_missing(path):
               u"and run 'make' in 'src/dependencies'" % path)
         sys.exit(1)
 
-def syscall(args, in_bash=False):
+def syscall(args, shell=False, with_print=True):
     ''' make a system call via bash '''
     args = args.split()
-    if in_bash:
-        args = ['/bin/bash'] + args
-    print(u"-----------\n" + u" ".join(args) + u"\n-----------")
-    call(args, shell=False)
+    if with_print:
+        print(u"-----------\n" + u" ".join(args) + u"\n-----------")
+
+    if shell:
+        args = ' '.join(args)
+    call(args, shell=shell)
 
 def change_env(values):
     ''' update a set of environment variables '''
     for k, v in values.items():
         os.environ[k] = v
+        syscall('export %s="%s"' % (k, v), shell=True, with_print=False)
 
 # check that required paths are in place before we start
 for path in REQUIRED_PATHS:
@@ -148,11 +151,13 @@ for arch in ARCHS:
     # required for compilation on an OSX host
     if UNAME == 'Darwin':
         toolchain_cmd += ' --system=darwin-x86_64'
+    elif UNAME == 'Linux':
+        toolchain_cmd += ' --system=linux-x86_64'
 
     if CREATE_TOOLCHAIN:
         # copies the precompiled toolchain for the platform:
         # includes gcc, headers and tools.
-        syscall(toolchain_cmd, in_bash=True)
+        syscall(toolchain_cmd, shell=True)
 
         # add a symlink for liblto_plugin.so to work
         # could not find how to direct gcc to the right folder
@@ -184,10 +189,11 @@ for arch in ARCHS:
         # configure, compile, copy and clean liblzma from official sources.
         # even though we need only static, we conpile also shared so it
         # switches the -fPIC properly.
-        syscall(configure_cmd, in_bash=True)
+        syscall(configure_cmd, shell=True)
         syscall('make clean')
         syscall('make')
         syscall('make install')
+        syscall('echo $PATH', shell=True)
         syscall('make clean')
 
     # create libzim.a
@@ -304,5 +310,3 @@ for arch in ARCHS:
 
     os.chdir(curdir)
     change_env(ORIGINAL_ENVIRON)
-
-    break
