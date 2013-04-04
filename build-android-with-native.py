@@ -18,7 +18,7 @@ COMPILE_LIBLZMA = True
 COMPILE_LIBZIM = True
 COMPILE_LIBKIWIX = True
 STRIP_LIBKIWIX = True
-COMPILE_APK = False
+COMPILE_APK = True
 
 # store the OS's environment PATH as we'll mess with it
 # ORIGINAL_ENVIRON_PATH = os.environ.get('PATH')
@@ -45,6 +45,7 @@ ARCHS_SHORT_NAMES = {
 # store host machine name
 UNAME = check_output(['uname', '-s']).strip()
 UARCH = check_output(['uname', '-m']).strip()
+SYSTEMS = {'Linux': 'linux', 'Darwin': 'mac'}
 
 # compiler version to use
 # list of available toolchains in <NDK_PATH>/toolchains
@@ -56,6 +57,10 @@ NDK_PATH = os.environ.get('NDK_PATH',
                           os.path.join(os.path.dirname(CURRENT_PATH),
                                        'src', 'dependencies',
                                        'android-ndk-r8e'))
+SDK_PATH = os.environ.get('ANDROID_HOME',
+                          os.path.join(os.path.dirname(CURRENT_PATH),
+                                       'src', 'dependencies',
+                                       'android-sdk', 'sdk'))
 
 # Target Android EABI/version to compile for.
 # list of available platforms in <NDK_PATH>/platforms
@@ -184,8 +189,8 @@ for arch in ARCHS:
                              'orig': ORIGINAL_ENVIRON['PATH'],
                              'arch_full': arch_full,
                              'gccver': COMPILER_VERSION}),
-                   'CFLAGS': ' -fPIC '
-                    }
+                   'CFLAGS': ' -fPIC ',
+                   'ANDROID_HOME': SDK_PATH}
     change_env(new_environ)
     change_env(OPTIMIZATION_ENV)
 
@@ -264,9 +269,9 @@ for arch in ARCHS:
             os.remove(src.replace('.cpp', '.o'))
 
     # compile JNI header
-    os.chdir(os.path.join(curdir, 'org', 'kiwix', 'kiwixmobile'))
+    os.chdir(os.path.join(curdir, 'src', 'org', 'kiwix', 'kiwixmobile'))
     syscall('javac JNIKiwix.java')
-    os.chdir(curdir)
+    os.chdir(os.path.join(curdir, 'src'))
     syscall('javah -jni org.kiwix.kiwixmobile.JNIKiwix')
 
     # create libkiwix.so
@@ -284,7 +289,9 @@ for arch in ARCHS:
                                                   + platform_includes
                                                   + [LIBKIWIX_SRC,
                                                      os.path.join(LIBZIM_SRC,
-                                                                  'include')])
+                                                                  'include'),
+                                                     os.path.join(curdir,
+                                                                  'src')])
                       })
 
     link_cmd = ('g++ -fPIC -shared -B%(platform)s/sysroot '
@@ -297,10 +304,12 @@ for arch in ARCHS:
                 '/libs/%(arch_short)s/libgnustl_static.a '
                 '-llog -landroid -lstdc++ -lc '
                 '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/libgcc.a '
-                '-o %(platform)s/lib/libkiwix.so'
+                '-o %(curdir)s/libs/%(arch_short)s/libkiwix.so'
                 % {'kwsrc': LIBKIWIX_SRC,
                    'platform': platform,
                    'arch_full': arch_full,
+                   'arch_short': arch_short,
+                   'curdir': curdir,
                    'gccver': COMPILER_VERSION,
                    'NDK_PATH': NDK_PATH,
                    'arch_short': arch_short})
@@ -309,14 +318,17 @@ for arch in ARCHS:
         syscall(compile_cmd)
         syscall(link_cmd)
 
-        for obj in ('kiwix.o', 'reader.o', 'stringTools.o'):
+        for obj in ('kiwix.o', 'reader.o', 'stringTools.o',
+                    'src/org_kiwix_kiwixmobile_JNIKiwix.h'):
             os.remove(obj)
 
     if STRIP_LIBKIWIX:
         syscall('%(platform)s/%(arch_full)s/bin/strip '
-                '%(platform)s/lib/libkiwix.so'
+                '%(curdir)s/libs/%(arch_short)s/libkiwix.so'
                 % {'platform': platform,
-                   'arch_full': arch_full})
+                   'arch_full': arch_full,
+                   'arch_short': arch_short,
+                   'curdir': curdir})
 
     os.chdir(curdir)
     change_env(ORIGINAL_ENVIRON)

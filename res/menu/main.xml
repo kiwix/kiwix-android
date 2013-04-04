@@ -1,0 +1,47 @@
+<!--
+  Copyright 2011 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:id="@+id/menu_help"
+        android:title="@string/menu_help"
+		android:icon="@drawable/action_help"                        
+        android:orderInCategory="0"
+        android:showAsAction="always" />
+    <item android:id="@+id/menu_openfile"
+        android:title="@string/menu_openfile"
+        android:icon="@drawable/device_access_sd_storage"        
+        android:orderInCategory="0"
+        android:showAsAction="always|withText" />
+    <item android:id="@+id/menu_search"
+        android:icon="@drawable/action_search"
+        android:title="@string/menu_search"
+        android:orderInCategory="0"
+        android:showAsAction="ifRoom" />
+    <item android:id="@+id/menu_back"
+        android:title="@string/menu_back"
+        android:icon="@drawable/navigation_back"        
+        android:orderInCategory="0"
+        android:showAsAction="always" />
+    
+    <item android:id="@+id/menu_forward"
+        android:title="@string/menu_forward"
+        android:icon="@drawable/navigation_forward"        
+        android:orderInCategory="0"
+        android:showAsAction="always" />
+    
+    
+    
+</menu>
