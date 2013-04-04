@@ -1,5 +1,5 @@
 #include <jni.h>
-#include "JNIKiwix.h"
+#include "org_kiwix_kiwixmobile_JNIKiwix.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -59,13 +59,21 @@ void setBoolObjValue(const bool value, const jobject obj, JNIEnv *env) {
 }
 
 /* Kiwix library functions */
-JNIEXPORT jboolean JNICALL Java_JNIKiwix_nativeLoadZIM(JNIEnv *env, jobject obj, jstring path) {
-  //  kiwix::Reader reader = kiwix::Reader("42.zim");
+JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getMainPage(JNIEnv *env, jobject obj) {
 
-  return c2jni(true);
+  	std::string cpath = "/mnt/sdcard/test.zim";
+	kiwix::Reader reader = kiwix::Reader(cpath);
+	std::string mainp = reader.getMainPageUrl();
+
+	return c2jni(mainp, env);
 }
 
-JNIEXPORT jbyteArray JNICALL Java_JNIKiwix_nativeGetContent(JNIEnv *env, jobject obj, jstring url, 
+JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_nativeLoadZIM(JNIEnv *env, jobject obj, jstring path) {
+
+	return c2jni(true);
+}
+
+JNIEXPORT jbyteArray JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_nativeGetContent(JNIEnv *env, jobject obj, jstring url,
 							    jobject mimeTypeObj, jobject sizeObj) {
   setStringObjValue("42", mimeTypeObj, env);
   setIntObjValue(42, sizeObj, env);
@@ -78,4 +86,3 @@ JNIEXPORT jbyteArray JNICALL Java_JNIKiwix_nativeGetContent(JNIEnv *env, jobject
 
   return data;
 }
-

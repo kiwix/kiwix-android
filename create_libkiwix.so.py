@@ -26,10 +26,15 @@ ORIGINAL_ENVIRON = copy.deepcopy(os.environ)
 # the directory of this file for relative referencing
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 
-PLATFORMS = {
+ARCHS_FULL_NAMES = {
     'arm-linux-androideabi': 'arm-linux-androideabi',
     'mipsel-linux-android': 'mipsel-linux-android',
     'x86': 'i686-linux-android'}
+
+ARCHS_SHORT_NAMES = {
+    'arm-linux-androideabi': 'armeabi',
+    'mipsel-linux-android': 'mips',
+    'x86': 'x86'}
 
 # store host machine name
 UNAME = check_output(['uname', '-s']).strip()
@@ -119,9 +124,11 @@ for path in REQUIRED_PATHS:
 
 for arch in ARCHS:
     # second name of the platform ; used as subfolder in platform/
-    arch_full = PLATFORMS.get(arch)
+    arch_full = ARCHS_FULL_NAMES.get(arch)
+    arch_short = ARCHS_SHORT_NAMES.get(arch)
 
     # store where we are so we can go back
+
     curdir = os.getcwd()
 
     # platform contains the toolchain
@@ -241,8 +248,10 @@ for arch in ARCHS:
             os.remove(src.replace('.cpp', '.o'))
 
     # compile JNI header
+    os.chdir(os.path.join(curdir, 'org', 'kiwix', 'kiwixmobile'))
     syscall('javac JNIKiwix.java')
-    syscall('javah -jni JNIKiwix')
+    os.chdir(curdir)
+    syscall('javah -jni org.kiwix.kiwixmobile.JNIKiwix')
 
     # create libkiwix.so
     os.chdir(curdir)
@@ -268,13 +277,17 @@ for arch in ARCHS:
                 'kiwix.o reader.o stringTools.o '
                 '%(platform)s/lib/libzim.a %(platform)s/lib/liblzma.a '
                 '-L%(platform)s/%(arch_full)s/lib '
-                # '-lgnustl_shared -llog -landroid -lstdc++ '
+                '%(NDK_PATH)s/sources/cxx-stl/gnu-libstdc++/%(gccver)s'
+                '/libs/%(arch_short)s/libgnustl_static.a '
+                '-llog -landroid -lstdc++ -lc '
                 '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/libgcc.a '
                 '-o %(platform)s/lib/libkiwix.so'
                 % {'kwsrc': LIBKIWIX_SRC,
                    'platform': platform,
                    'arch_full': arch_full,
-                   'gccver': COMPILER_VERSION})
+                   'gccver': COMPILER_VERSION,
+                   'NDK_PATH': NDK_PATH,
+                   'arch_short': arch_short})
 
     if COMPILE_LIBKIWIX:
         syscall(compile_cmd)
@@ -291,3 +304,5 @@ for arch in ARCHS:
 
     os.chdir(curdir)
     change_env(ORIGINAL_ENVIRON)
+
+    break
