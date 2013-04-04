@@ -12,6 +12,8 @@
 /* global variables */
 kiwix::Reader *reader = NULL;
 
+static pthread_mutex_t readerLock = PTHREAD_MUTEX_INITIALIZER;
+
 /* c2jni type conversion functions */
 jboolean c2jni(const bool &val) {
   return val ? JNI_TRUE : JNI_FALSE;
@@ -64,7 +66,8 @@ void setBoolObjValue(const bool value, const jobject obj, JNIEnv *env) {
 /* Kiwix library functions */
 JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getMainPage(JNIEnv *env, jobject obj) {
   jstring url;
-
+  
+  pthread_mutex_lock(&readerLock);
   if (reader != NULL) {
     try {
       std::string cUrl = reader->getMainPageUrl();
@@ -73,21 +76,23 @@ JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getMainPage(JNIEnv
       std::cerr << e.what() << std::endl;
     }
   }
+  pthread_mutex_unlock(&readerLock);
   
   return url;
 }
 
 JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_nativeLoadZIM(JNIEnv *env, jobject obj, jstring path) {
   jboolean retVal = JNI_TRUE;
-
   std::string cPath = jni2c(path, env);
 
+  pthread_mutex_lock(&readerLock);
   try {
     reader = new kiwix::Reader(cPath);
   } catch (exception &e) {
     std::cerr << e.what() << std::endl;
     retVal = JNI_FALSE;
   }
+  pthread_mutex_unlock(&readerLock);
 
   return retVal;
 }
@@ -107,12 +112,12 @@ JNIEXPORT jbyteArray JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_nativeGetConten
     std::string cMimeType;
     unsigned int cSize = 0;
 
+    pthread_mutex_lock(&readerLock);
     try {
       if (reader->getContentByUrl(cUrl, cData, cSize, cMimeType)) {
 	data = env->NewByteArray(cSize);
 	jbyte *dataPointer = env->GetByteArrayElements(data, 0);
 	memcpy(dataPointer, cData.c_str(), cSize);
-	env->ReleaseByteArrayElements(data, dataPointer, 0);
 
 	setStringObjValue(cMimeType, mimeTypeObj, env);
 	setIntObjValue(cSize, sizeObj, env);
@@ -120,6 +125,7 @@ JNIEXPORT jbyteArray JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_nativeGetConten
     } catch (exception &e) {
       std::cerr << e.what() << std::endl;
     }
+    pthread_mutex_unlock(&readerLock);
 
   }
   
