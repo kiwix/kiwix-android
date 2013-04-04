@@ -18,6 +18,7 @@ COMPILE_LIBLZMA = True
 COMPILE_LIBZIM = True
 COMPILE_LIBKIWIX = True
 STRIP_LIBKIWIX = True
+COMPILE_APK = False
 
 # store the OS's environment PATH as we'll mess with it
 # ORIGINAL_ENVIRON_PATH = os.environ.get('PATH')
@@ -319,3 +320,7 @@ for arch in ARCHS:
 
     os.chdir(curdir)
     change_env(ORIGINAL_ENVIRON)
+
+if COMPILE_APK:
+    syscall('ant debug')
+    syscall('ls -lh bin/*.apk', shell=True)
