@@ -26,11 +26,16 @@ ORIGINAL_ENVIRON = copy.deepcopy(os.environ)
 # the directory of this file for relative referencing
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 
+# target platform to compile for
+# list of available toolchains in <NDK_PATH>/toolchains
+# arm-linux-androideabi, mipsel-linux-android, x86, llvm
+ARCHS = ('arm-linux-androideabi', 'mipsel-linux-android', 'x86')
+
+# different names of folder path for accessing files
 ARCHS_FULL_NAMES = {
     'arm-linux-androideabi': 'arm-linux-androideabi',
     'mipsel-linux-android': 'mipsel-linux-android',
     'x86': 'i686-linux-android'}
-
 ARCHS_SHORT_NAMES = {
     'arm-linux-androideabi': 'armeabi',
     'mipsel-linux-android': 'mips',
@@ -38,11 +43,6 @@ ARCHS_SHORT_NAMES = {
 
 # store host machine name
 UNAME = check_output(['uname', '-s']).strip()
-
-# target platform to compile for
-# list of available toolchains in <NDK_PATH>/toolchains
-# arm-linux-androideabi, mipsel-linux-android, x86, llvm
-ARCHS = ('arm-linux-androideabi', 'mipsel-linux-android', 'x86')
 
 # compiler version to use
 # list of available toolchains in <NDK_PATH>/toolchains
@@ -106,7 +106,7 @@ def fail_on_missing(path):
         sys.exit(1)
 
 def syscall(args, shell=False, with_print=True):
-    ''' make a system call via bash '''
+    ''' make a system call '''
     args = args.split()
     if with_print:
         print(u"-----------\n" + u" ".join(args) + u"\n-----------")
