@@ -43,6 +43,7 @@ ARCHS_SHORT_NAMES = {
 
 # store host machine name
 UNAME = check_output(['uname', '-s']).strip()
+UARCH = check_output(['uname', '-m']).strip()
 
 # compiler version to use
 # list of available toolchains in <NDK_PATH>/toolchains
@@ -156,7 +157,10 @@ for arch in ARCHS:
     if UNAME == 'Darwin':
         toolchain_cmd += ' --system=darwin-x86_64'
     elif UNAME == 'Linux':
-        toolchain_cmd += ' --system=linux-x86_64'
+        if UARCH == 'i686':
+            toolchain_cmd += ' --system=linux-x86'
+        else:
+            toolchain_cmd += ' --system=linux-x86_64'
 
     if CREATE_TOOLCHAIN:
         # copies the precompiled toolchain for the platform:
