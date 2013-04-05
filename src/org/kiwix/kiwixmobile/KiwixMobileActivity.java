@@ -172,7 +172,7 @@ public class KiwixMobileActivity extends Activity {
 //            (i.p. internal urls load in webview, external urls in browser)
 // 			  as currently no custom setWebViewClient required it is commented        
         	webView.setWebViewClient(new WebViewClient() {
-        	
+        		
         	@Override
         	public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
@@ -184,12 +184,21 @@ public class KiwixMobileActivity extends Activity {
                 startActivity(intent);
                 return true;
             }
-
+        	
         	public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
         	     String errorString = String.format(getResources().getString(R.string.error_articleurlnotfound), failingUrl);
         	     //TODO apparently screws up back/forward 
         	     webView.loadDataWithBaseURL("file://error","<html><body>"+errorString+"</body></html>", "text/html", "utf-8", failingUrl);
+        	     String title = getResources().getString(R.string.app_name);
+        	     getActionBar().setTitle(title);
         	   }
+        	
+        	public void onPageFinished(WebView view, String url) {
+        		String title = getResources().getString(R.string.app_name);
+        		if (webView.getTitle()!=null && !webView.getTitle().isEmpty())
+        			title = webView.getTitle();
+        		getActionBar().setTitle(title);
+        	}
         	 });
         
         //Pinch to zoom
