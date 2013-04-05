@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SimpleCursorAdapter;
 //TODO API level 11 (honeycomb). use compatiblity packages instead   
@@ -131,6 +132,11 @@ LoaderManager.LoaderCallbacks<Cursor> {
 	public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
 		Log.d("zimgap", " DONE query zim files");
 		mCursorAdapter.swapCursor(cursor);
+		if(cursor==null || cursor.getCount()==0) {
+			//TODO find some better way to do this. (e.g. show instead of list)
+			Toast.makeText(this, getResources().getString(R.string.error_nozimfilesfound), Toast.LENGTH_LONG).show();
+		}
+		
 	}
 
 	@Override
