@@ -11,9 +11,9 @@
     <string name="search_label">Rechercher</string>
     <string name="articlesearch_hint">Tapez ici votre recherche</string>
     <string name="choose_file">Sélectionner un fichier de contenu ZIM (*.zim)</string>
-    <string name="error_nozimfilesfound">Aucun fichier ZIM trouvé sur l'appareil.\nMerci de consulter l'aide pour plus d'informations sur la manière de charger des contenus dans Kiwix.\nSi vous avez bien déposé un fichier ZIM sur l'appareil (ou le stockage externe), vous devriez réessayer dans une minute ou redémarrer l'appareil.</string>
-    <string name="error_filenotfound">Erreur: le fichier ZIM sélectionné n'a pas pu être chargé.</string>
-    <string name="error_fileinvalid">Erreur: le fichier sélectionné n'est pas un fichier ZIM valide.</string>
-    <string name="error_articlenotfound">Erreur: le chargement de l'article \"%1$s\" a échoué.</string>
-    <string name="error_articleurlnotfound">Erreur: le chargement de l'article (Url: %1$s) a échoué.</string>
+    <string name="error_nozimfilesfound">Aucun fichier ZIM trouvé sur l\'appareil.\nMerci de consulter l\'aide pour plus d\'informations sur la manière de charger des contenus dans Kiwix.\nSi vous avez bien déposé un fichier ZIM sur l\'appareil (ou le stockage externe), vous devriez réessayer dans une minute ou redémarrer l\'appareil.</string>
+    <string name="error_filenotfound">Erreur: le fichier ZIM sélectionné n\'a pas pu être chargé.</string>
+    <string name="error_fileinvalid">Erreur: le fichier sélectionné n\'est pas un fichier ZIM valide.</string>
+    <string name="error_articlenotfound">Erreur: le chargement de l\'article \"%1$s\" a échoué.</string>
+    <string name="error_articleurlnotfound">Erreur: le chargement de l\'article (Url: %1$s) a échoué.</string>
 </resources>
