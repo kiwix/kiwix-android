@@ -195,3 +195,44 @@ JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getPageUrlFromTit
     
   return retVal;
 }
+
+JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getTitle
+(JNIEnv *env , jobject obj, jobject titleObj) {
+  jboolean retVal = JNI_FALSE;
+  std::string cTitle;
+
+  pthread_mutex_lock(&readerLock);
+  try {
+    if (reader != NULL) {
+      std::string cTitle = reader->getTitle();
+      setStringObjValue(cTitle, titleObj, env);
+      retVal = JNI_TRUE;
+    }
+  } catch (exception &e) {
+    std::cerr << e.what() << std::endl;
+  }
+  pthread_mutex_unlock(&readerLock);
+
+  return retVal;
+
+}
+
+JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwibx_getDescription
+(JNIEnv *env, jobject obj, jobject descriptionObj) {
+  jboolean retVal = JNI_FALSE;
+  std::string cDescription;
+
+  pthread_mutex_lock(&readerLock);
+  try {
+    if (reader != NULL) {
+      std::string cDescription = reader->getDescription();
+      setStringObjValue(cDescription, descriptionObj, env);
+      retVal = JNI_TRUE;
+    }
+  } catch (exception &e) {
+    std::cerr << e.what() << std::endl;
+  }
+  pthread_mutex_unlock(&readerLock);
+
+  return retVal;
+}
