@@ -184,11 +184,14 @@ for arch in ARCHS:
     # change the PATH for compilation to use proper tools
     new_environ = {'PATH': ('%(platform)s/bin:%(platform)s/%(arch_full)s'
                             '/bin:%(platform)s/libexec/gcc/%(arch_full)s/'
-                            '%(gccver)s/:%(orig)s'
+                            '%(gccver)s/:%(sdka)s:%(sdkb)s/%(orig)s'
                           % {'platform': platform,
                              'orig': ORIGINAL_ENVIRON['PATH'],
                              'arch_full': arch_full,
-                             'gccver': COMPILER_VERSION}),
+                             'gccver': COMPILER_VERSION,
+                             'sdka': os.path.join(SDK_PATH,
+                                                     'platform-tools'),
+                             'sdkb': os.path.join(SDK_PATH, 'tools')}),
                    'CFLAGS': ' -fPIC ',
                    'ANDROID_HOME': SDK_PATH}
     change_env(new_environ)
