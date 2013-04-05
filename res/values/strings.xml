@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Kiwix</string>    
+    <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Open File</string>
     <string name="menu_help">Help</string>
-    <string name="menu_home">Home</string>    
+    <string name="menu_home">Home</string>
     <string name="menu_forward">Forward</string>
     <string name="menu_back">Back</string>
     <string name="menu_search">Search article</string>
-    <string name="menu_searchintext">Find in text</string>
+    <string name="menu_searchintext">Find in page</string>
     <string name="search_label">Search</string>
-    <string name="articlesearch_hint">Type to search article</string>
-    <string name="choose_file">Choose (*.zim) File</string>
-    <string name="error_nozimfilesfound">No zim files found on device.\nIn help you find information about how to put zim files on your device.\nIf you have already put a zim file you may want to to try to restart your device.</string>
-    <string name="error_filenotfound">Error: The selected zim file could not be found.</string>    
-    <string name="error_fileinvalid">Error: The selected file is not a valid zim file.</string>
+    <string name="articlesearch_hint">Type to lookup articles</string>
+    <string name="choose_file">Select a ZIM Content File (*.zim)</string>
+    <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
+    <string name="error_filenotfound">Error: The selected ZIM file could not be found.</string>
+    <string name="error_fileinvalid">Error: The selected file is not a valid ZIM file.</string>
     <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
     <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
 </resources>
