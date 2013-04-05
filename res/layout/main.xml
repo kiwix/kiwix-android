@@ -9,17 +9,28 @@
     android:id="@+id/articleSearchBar"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
-
-        <Button
+    android:orientation="horizontal" 
+    android:visibility="gone"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    >
+	
+	
+        <TextView
             android:id="@+id/articleSearchLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/search_label" />
+            style="@android:style/TextAppearance.Large"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/search_label" 
+            />
 
         <AutoCompleteTextView
             android:id="@+id/articleSearchTextView"
-            android:layout_width="236dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:completionThreshold="1"
             android:ellipsize="end"
@@ -28,10 +39,12 @@
             android:imeOptions="actionGo"
             android:inputType="text|textCapWords"
             android:maxLines="1"
-            android:paddingBottom="15dp"
-            android:paddingTop="15dp" />
+            style="@android:style/TextAppearance.Medium"
+           />
 
 	</LinearLayout>
+
+    
     <WebView
         android:id="@+id/webview"
         android:layout_width="fill_parent"

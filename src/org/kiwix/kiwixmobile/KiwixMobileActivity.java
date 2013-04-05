@@ -8,12 +8,14 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.LabeledIntent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -25,6 +27,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebBackForwardList;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -36,6 +40,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
@@ -50,6 +55,7 @@ public class KiwixMobileActivity extends Activity {
 	private static final int ZIMFILESELECT_REQUEST_CODE = 1234;
 	private static final String PREFS_KIWIX_MOBILE = "kiwix-mobile";
 	private AutoCompleteTextView articleSearchtextView;
+	private LinearLayout articleSearchBar;
 	
 	
 	public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
@@ -122,7 +128,10 @@ public class KiwixMobileActivity extends Activity {
         
         setContentView(R.layout.main);
         webView = (WebView) findViewById(R.id.webview);        
+        articleSearchBar = (LinearLayout) findViewById(R.id.articleSearchBar);
         articleSearchtextView = (AutoCompleteTextView) findViewById(R.id.articleSearchTextView);
+        
+        
         // Create the adapter and set it to the AutoCompleteTextView 
         adapter = new AutoCompleteAdapter(this, android.R.layout.simple_list_item_1); 
                
@@ -287,6 +296,12 @@ public class KiwixMobileActivity extends Activity {
                 Toast.makeText(this, "Tapped home", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_search:
+            	if (articleSearchBar.getVisibility()!=View.VISIBLE) {
+            		showSearchBar();
+            	} else {
+            		hideSearchBar();
+            	}
+            	break;            
             case R.id.menu_searchintext:
             	webView.showFindDialog("", true);
             	break;
@@ -320,6 +335,18 @@ public class KiwixMobileActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
+	private void showSearchBar() {
+		articleSearchBar.setVisibility(View.VISIBLE);
+		articleSearchtextView.requestFocus();
+		//Move cursor to end
+		articleSearchtextView.setSelection(articleSearchtextView.getText().length());
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+	}
     
     private String readTextFromResource(int resourceID)
     	{
@@ -443,8 +470,7 @@ public class KiwixMobileActivity extends Activity {
 		Log.d("zimgap", articleSearchtextView+" onEditorAction. TextView: "+articleSearchtextView.getText()+ " articleUrl: "+articleUrl);
 		
 		if (articleUrl!=null) {
-			// To close softkeyboard
-			webView.requestFocus();            		
+			hideSearchBar(); 
 			webView.loadUrl(Uri.parse(ZimContentProvider.CONTENT_URI
 		            +articleUrl).toString());
 			return true;
@@ -454,5 +480,18 @@ public class KiwixMobileActivity extends Activity {
 		    
 			return true;
 		}
+	}
+
+
+
+
+	private void hideSearchBar() {
+		// Hide searchbar
+		articleSearchBar.setVisibility(View.GONE);
+		// To close softkeyboard
+		webView.requestFocus(); 
+		//Seems not really be necessary
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(),0);
 	}
 }
