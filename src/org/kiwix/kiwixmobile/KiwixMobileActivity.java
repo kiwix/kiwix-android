@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Currency;
 
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
@@ -16,6 +17,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.LabeledIntent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -227,9 +229,15 @@ public class KiwixMobileActivity extends Activity {
         //Does not make much sense to cache data from zim files.(Not clear whether
         // this actually has any effect)
         webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-        //Workaround to avoid that default zoom is very small.  TODO check cause
-        //  and find better solution (e.g. may only be issue on tablets, etc...)
-        webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.CLOSE);
+        //Workaround to avoid that default zoom is very small on tablets
+        // TODO: find better solution, e.g. user configurable zoom setting
+        if (isTablet(getBaseContext())) {
+        	Log.d("zimgap", " Device is tablet -> setDefaultZoom(WebSettings.ZoomDensity.CLOSE)");
+        	webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.CLOSE);
+        } else {
+        	Log.d("zimgap", " Device is phone-> setDefaultZoom(WebSettings.ZoomDensity.MEDIUM)");
+        	webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
+        }
         if (getIntent().getData()!=null) {        	
         	String filePath = getIntent().getData().getEncodedPath();
             Log.d("zimgap", " Kiwix started from a filemanager. Intent filePath: "+filePath+" -> open this zimfile and load main page");
@@ -503,7 +511,12 @@ public class KiwixMobileActivity extends Activity {
 
 
 
-
+	public boolean isTablet(Context context) {
+	    return (context.getResources().getConfiguration().screenLayout
+	            & Configuration.SCREENLAYOUT_SIZE_MASK)
+	            >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+	}
+	
 	private void hideSearchBar() {
 		// Hide searchbar
 		articleSearchBar.setVisibility(View.GONE);
