@@ -188,7 +188,15 @@ public class KiwixMobileActivity extends Activity {
                     // This is my web site, so do not override; let my WebView load the page
                     return false;
                 } else if (url.startsWith("file://")) {
-                	// To handle help page (loaded from resources)
+                    // To handle help page (loaded from resources)
+                    return true;
+                } else if (url.startsWith(ZimContentProvider.UI_URI.toString())) {
+                	// To handle links which access user interface (i.p. used in help page)
+                	if (url.equals(ZimContentProvider.UI_URI.toString()+"selectzimfile")) {
+                		selectZimFile();
+                	} else {
+                		Log.e("zimgap", "UI Url "+url+ " not supported.");
+                	}
                 	return true;
                 }
                 // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
@@ -322,22 +330,30 @@ public class KiwixMobileActivity extends Activity {
             	showHelp();
             	break;
             case R.id.menu_openfile:
-            	final Intent target = new Intent(Intent.ACTION_GET_CONTENT); 
-        		// The MIME data type filter
-        		target.setType("*/*"); 
-        		// Only return URIs that can be opened with ContentResolver
-        		target.addCategory(Intent.CATEGORY_OPENABLE);
-        		//Force use of our file selection component.
-        		// (Note may make sense to just define a custom intent instead)
-        		target.setComponent(new ComponentName(getPackageName(), getPackageName()+".ZimFileSelectActivity"));
-            	try {
-            		startActivityForResult(target, ZIMFILESELECT_REQUEST_CODE);
-            	} catch (ActivityNotFoundException e) {
-            
-            	}break;
+			    selectZimFile();
+			    break;
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
+
+	private void selectZimFile() {
+		final Intent target = new Intent(Intent.ACTION_GET_CONTENT); 
+		// The MIME data type filter
+		target.setType("*/*"); 
+		// Only return URIs that can be opened with ContentResolver
+		target.addCategory(Intent.CATEGORY_OPENABLE);
+		//Force use of our file selection component.
+		// (Note may make sense to just define a custom intent instead)
+		target.setComponent(new ComponentName(getPackageName(), getPackageName()+".ZimFileSelectActivity"));
+		try {
+			startActivityForResult(target, ZIMFILESELECT_REQUEST_CODE);
+		} catch (ActivityNotFoundException e) {
+         
+		}
+	}
 
 
 

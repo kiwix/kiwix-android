@@ -37,6 +37,7 @@ import org.json.JSONObject;
 
 public class ZimContentProvider extends ContentProvider {
 	public static final Uri CONTENT_URI = Uri.parse("content://org.kiwix.zim/");
+	public static final Uri UI_URI = Uri.parse("content://org.kiwix.ui/");
 	private static final HashMap<String, String> MIME_TYPES = new HashMap<String, String>();
 
 	static {
