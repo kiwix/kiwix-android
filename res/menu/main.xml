@@ -19,7 +19,7 @@
         android:title="@string/menu_help"
 		android:icon="@drawable/action_help"                        
         android:orderInCategory="0"
-        android:showAsAction="always" />
+        android:showAsAction="ifRoom" />
     <item android:id="@+id/menu_openfile"
         android:title="@string/menu_openfile"
         android:icon="@drawable/device_access_sd_storage"        
