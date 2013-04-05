@@ -4,21 +4,34 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
+	
+    <LinearLayout 
+    android:id="@+id/articleSearchBar"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
 
-    <AutoCompleteTextView
-        android:id="@+id/articleSearchTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:inputType="text|textCapWords"
-        android:imeOptions="actionGo"
-        android:text=""
-        android:hint="@string/articlesearch_hint"
-        android:completionThreshold="1" >
-    </AutoCompleteTextView>
+        <Button
+            android:id="@+id/articleSearchLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_label" />
 
+        <AutoCompleteTextView
+            android:id="@+id/articleSearchTextView"
+            android:layout_width="236dp"
+            android:layout_height="wrap_content"
+            android:completionThreshold="1"
+            android:ellipsize="end"
+            android:ems="10"
+            android:hint="@string/articlesearch_hint"
+            android:imeOptions="actionGo"
+            android:inputType="text|textCapWords"
+            android:maxLines="1"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp" />
+
+	</LinearLayout>
     <WebView
         android:id="@+id/webview"
         android:layout_width="fill_parent"
