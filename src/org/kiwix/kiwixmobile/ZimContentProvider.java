@@ -189,11 +189,18 @@ public class ZimContentProvider extends ContentProvider {
 			Log.d("zimgap",
 					"Retrieving :"
 							+ articleUri.toString());
+			
 			String t = articleUri.toString();
 			int pos = articleUri.toString().indexOf(CONTENT_URI.toString());
 			if (pos != -1) 
 				t = articleUri.toString().substring(
 						CONTENT_URI.toString().length());
+			// Remove fragment (#...) as not supported by zimlib
+			pos = t.indexOf("#");
+			if (pos != -1) {
+				t = t.substring(0, pos);
+			}
+			
 			this.out = out;
 			this.articleZimUrl = t;
 		}
@@ -223,7 +230,7 @@ public class ZimContentProvider extends ContentProvider {
 				out.flush();
 
 				Log.d("zimgap", "reading  " + articleZimUrl 
-						+ " finished.");
+						+ "(mime "+mime.value+", size: "+size.value+") finished.");
 			} catch (IOException e) {
 				Log.e(getClass().getSimpleName(), "Exception reading article "
 						+ articleZimUrl + " from zim file", e);
