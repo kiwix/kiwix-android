@@ -48,7 +48,7 @@ public class ZimContentProvider extends ContentProvider {
 
 	public synchronized static String setZimFile(String fileName) {
 		if (!jniKiwix.loadZIM(fileName)) {
-			Log.e("zimgap", "Unable to open the file " + fileName);		
+			Log.e("kiwix", "Unable to open the file " + fileName);		
 			zimFileName = null;
 		} else { 
 			zimFileName = fileName;
@@ -186,7 +186,7 @@ public class ZimContentProvider extends ContentProvider {
 		TransferThread(JNIKiwix jniKiwix, Uri articleUri, OutputStream out) throws IOException {
 			this.articleUri = articleUri;
 			this.jniKiwix = jniKiwix;
-			Log.d("zimgap",
+			Log.d("kiwix",
 					"Retrieving :"
 							+ articleUri.toString());
 			
@@ -214,10 +214,10 @@ public class ZimContentProvider extends ContentProvider {
 				JNIKiwixString mime = new JNIKiwixString();
 				JNIKiwixInt size = new JNIKiwixInt();
 				byte[] data = jniKiwix.getContent(articleZimUrl, mime, size);
-				// Log.d("zimgap","articleDataByteArray:"+articleDataByteArray.toString());
+				// Log.d("kiwix","articleDataByteArray:"+articleDataByteArray.toString());
 				// ByteArrayInputStream articleDataInputStream = new
 				// ByteArrayInputStream(articleDataByteArray.toByteArray());
-				// Log.d("zimgap","article data loaded from zime file");
+				// Log.d("kiwix","article data loaded from zime file");
 
 				//ByteArrayInputStream articleDataInputStream = new ByteArrayInputStream(
 					//	articleDataByteArray.toByteArray());
@@ -229,7 +229,7 @@ public class ZimContentProvider extends ContentProvider {
 				articleDataInputStream.close();
 				out.flush();
 
-				Log.d("zimgap", "reading  " + articleZimUrl 
+				Log.d("kiwix", "reading  " + articleZimUrl 
 						+ "(mime "+mime.value+", size: "+size.value+") finished.");
 			} catch (IOException e) {
 				Log.e(getClass().getSimpleName(), "Exception reading article "

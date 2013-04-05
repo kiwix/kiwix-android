@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Currency;
 
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
@@ -16,6 +17,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.LabeledIntent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -167,9 +169,9 @@ public class KiwixMobileActivity extends Activity {
                 	 	 activity.setProgress(progress * 100);   
                          if (progress==100) {
                         	 
-                        	 Log.d("zimgap", "Loading article finished.");
+                        	 Log.d("kiwix", "Loading article finished.");
                         	 if (requestClearHistoryAfterLoad) {
-                        		 Log.d("zimgap", "Loading article finished and requestClearHistoryAfterLoad -> clearHistory");
+                        		 Log.d("kiwix", "Loading article finished and requestClearHistoryAfterLoad -> clearHistory");
                         		 webView.clearHistory();
                         		 requestClearHistoryAfterLoad=false;
                         	 }
@@ -195,7 +197,7 @@ public class KiwixMobileActivity extends Activity {
                 	if (url.equals(ZimContentProvider.UI_URI.toString()+"selectzimfile")) {
                 		selectZimFile();
                 	} else {
-                		Log.e("zimgap", "UI Url "+url+ " not supported.");
+                		Log.e("kiwix", "UI Url "+url+ " not supported.");
                 	}
                 	return true;
                 }
@@ -227,16 +229,22 @@ public class KiwixMobileActivity extends Activity {
         //Does not make much sense to cache data from zim files.(Not clear whether
         // this actually has any effect)
         webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-        //Workaround to avoid that default zoom is very small.  TODO check cause
-        //  and find better solution (e.g. may only be issue on tablets, etc...)
-        webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.CLOSE);
+        //Workaround to avoid that default zoom is very small on tablets
+        // TODO: find better solution, e.g. user configurable zoom setting
+        if (isTablet(getBaseContext())) {
+        	Log.d("kiwix", " Device is tablet -> setDefaultZoom(WebSettings.ZoomDensity.CLOSE)");
+        	webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.CLOSE);
+        } else {
+        	Log.d("kiwix", " Device is phone-> setDefaultZoom(WebSettings.ZoomDensity.MEDIUM)");
+        	webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
+        }
         if (getIntent().getData()!=null) {        	
         	String filePath = getIntent().getData().getEncodedPath();
-            Log.d("zimgap", " Kiwix started from a filemanager. Intent filePath: "+filePath+" -> open this zimfile and load main page");
+            Log.d("kiwix", " Kiwix started from a filemanager. Intent filePath: "+filePath+" -> open this zimfile and load main page");
             openZimFile(new File(filePath), false);
         	
         } else if (savedInstanceState!=null) {
-        	 Log.d("zimgap", " Kiwix started with a savedInstanceState (That is was closed by OS) -> restore webview state and zimfile (if set)");
+        	 Log.d("kiwix", " Kiwix started with a savedInstanceState (That is was closed by OS) -> restore webview state and zimfile (if set)");
         	 if (savedInstanceState.getString("currentzimfile")!=null) {
 	        	 	openZimFile(new File(savedInstanceState.getString("currentzimfile")), false);
              		
@@ -248,12 +256,12 @@ public class KiwixMobileActivity extends Activity {
         	SharedPreferences settings = getSharedPreferences(PREFS_KIWIX_MOBILE, 0);
         	String zimfile = settings.getString("currentzimfile", null);
             if (zimfile != null) {
-            	Log.d("zimgap", " Kiwix normal start, zimfile loaded last time -> Open last used zimfile "+zimfile);
+            	Log.d("kiwix", " Kiwix normal start, zimfile loaded last time -> Open last used zimfile "+zimfile);
             	openZimFile(new File(zimfile), false);
             	// Alternative would be to restore webView state. But more effort to implement, and actually 
         		//  fits better normal android behavior if after closing app ("back" button) state is not maintained.        		        		
             } else {
-            	Log.d("zimgap", " Kiwix normal start, no zimfile loaded last time  -> display welcome page");
+            	Log.d("kiwix", " Kiwix normal start, no zimfile loaded last time  -> display welcome page");
             	showHelp();            	
             }
         }
@@ -271,7 +279,7 @@ public class KiwixMobileActivity extends Activity {
         // Commit the edits!
         editor.commit();
 
-    	Log.d("zimgap", "onPause Save currentzimfile to preferences:"+ZimContentProvider.getZimFile());
+    	Log.d("kiwix", "onPause Save currentzimfile to preferences:"+ZimContentProvider.getZimFile());
     }
     
     @Override
@@ -281,7 +289,7 @@ public class KiwixMobileActivity extends Activity {
        
         webView.saveState(outState);
         outState.putString("currentzimfile", ZimContentProvider.getZimFile());
-        Log.v("zimgap", "onSaveInstanceState Save currentzimfile to bundle:"+ZimContentProvider.getZimFile()+" and webView state");
+        Log.v("kiwix", "onSaveInstanceState Save currentzimfile to bundle:"+ZimContentProvider.getZimFile()+" and webView state");
     }
     
     @Override
@@ -483,10 +491,10 @@ public class KiwixMobileActivity extends Activity {
 
 
 	private boolean openArticle() {
-		Log.d("zimgap", articleSearchtextView+" onEditorAction. "+articleSearchtextView.getText());
+		Log.d("kiwix", articleSearchtextView+" onEditorAction. "+articleSearchtextView.getText());
 		
 		String articleUrl = ZimContentProvider.getPageUrlFromTitle(articleSearchtextView.getText().toString());
-		Log.d("zimgap", articleSearchtextView+" onEditorAction. TextView: "+articleSearchtextView.getText()+ " articleUrl: "+articleUrl);
+		Log.d("kiwix", articleSearchtextView+" onEditorAction. TextView: "+articleSearchtextView.getText()+ " articleUrl: "+articleUrl);
 		
 		if (articleUrl!=null) {
 			hideSearchBar(); 
@@ -503,7 +511,12 @@ public class KiwixMobileActivity extends Activity {
 
 
 
-
+	public boolean isTablet(Context context) {
+	    return (context.getResources().getConfiguration().screenLayout
+	            & Configuration.SCREENLAYOUT_SIZE_MASK)
+	            >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+	}
+	
 	private void hideSearchBar() {
 		// Hide searchbar
 		articleSearchBar.setVisibility(View.GONE);

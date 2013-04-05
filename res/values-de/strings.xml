@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Datei öffnen</string>
+    <string name="menu_help">Hilfe</string>
+    <string name="menu_home">Home</string>    
     <string name="menu_forward">Vorwärts</string>
-    <string name="menu_back">Zurück</string>
-    <string name="choose_file">Datei auswählen</string>
+    <string name="menu_back">Rückwärts</string>
+    <string name="menu_search">Artikel suchen</string>
+    <string name="menu_searchintext">Im Text suchen</string>
+    <string name="search_label">Suchen</string>
+    <string name="articlesearch_hint">Tippe um zu suchen</string>
+    <string name="choose_file">Datei (*.zim) auswählen</string>
+    <string name="error_nozimfilesfound">Keine Zim-Dateien am Gerät gefunden.\nIn der Hilfe findest du Informationen, wie du zim-Files auf dein Gerät kopieren kannst.\nFalls du schon die Dateien auf das Gerät kopiert hast, könntest du versuchen dein Gerät neu zu starten.</string>
+    <string name="error_filenotfound">Fehler: Die ausgewählte Datei ist nicht verfügbar.</string>    
+    <string name="error_fileinvalid">Fehler: Die ausgewählte Datei ist keine gültige ZIM-Datei</string>
+    <string name="error_articlenotfound">Fehler: Der Artikel \"%1$s\" konnte nicht geladen werden.</string>
+    <string name="error_articleurlnotfound">Fehler: Der Artikel (Url: %1$s) konnte nicht geladen werden.</string>
 </resources>

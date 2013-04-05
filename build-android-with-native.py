@@ -282,6 +282,7 @@ for arch in ARCHS:
     os.chdir(curdir)
     compile_cmd = ('g++ -fPIC -c -B%(platform)s/sysroot -D_FILE_OFFSET_BITS=64 '
                    '-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE '
+                   '-DANDROID_NDK '
                    'kiwix.c %(kwsrc)s/kiwix/reader.cpp %(kwsrc)s'
                    '/stringTools.cpp '
                    '-I%(include_paths)s '
@@ -303,11 +304,12 @@ for arch in ARCHS:
                 '--sysroot %(platform)s/sysroot '
                 '-nostdlib '
                 'kiwix.o reader.o stringTools.o '
+                '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/crtbegin.o '
                 '%(platform)s/lib/libzim.a %(platform)s/lib/liblzma.a '
                 '-L%(platform)s/%(arch_full)s/lib '
                 '%(NDK_PATH)s/sources/cxx-stl/gnu-libstdc++/%(gccver)s'
                 '/libs/%(arch_short)s/libgnustl_static.a '
-                '-llog -landroid -lstdc++ -lc '
+                '-llog -landroid -lstdc++ -lc -ldl '
                 '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/libgcc.a '
                 '-o %(curdir)s/libs/%(arch_short)s/libkiwix.so'
                 % {'kwsrc': LIBKIWIX_SRC,

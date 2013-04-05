@@ -89,7 +89,7 @@ LoaderManager.LoaderCallbacks<Cursor> {
 
 	private void onListItemClick(AdapterView<?> adapter, View view, int position, long arg) {
 		// TODO Auto-generated method stub
-		Log.d("zimgap", " zimFileList.onItemClick");
+		Log.d("kiwix", " zimFileList.onItemClick");
 
 		ListView zimFileList = (ListView) findViewById(R.id.zimfilelist);
 		Cursor mycursor = (Cursor) zimFileList.getItemAtPosition(position);
@@ -123,7 +123,7 @@ LoaderManager.LoaderCallbacks<Cursor> {
 
 
 		String sortOrder = MediaStore.Images.Media.DATA; // unordered
-		Log.d("zimgap", " Performing query for zim files...");
+		Log.d("kiwix", " Performing query for zim files...");
 
 
 		return new CursorLoader(this, uri, projection, selection, selectionArgs, sortOrder);
@@ -132,7 +132,7 @@ LoaderManager.LoaderCallbacks<Cursor> {
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-		Log.d("zimgap", " DONE query zim files");
+		Log.d("kiwix", " DONE query zim files");
 		mCursorAdapter.swapCursor(cursor);
 		//Done here to avoid that shown while loading.
 		zimFileList.setEmptyView( findViewById( R.id.zimfilelist_nozimfilesfound_view ) );		
