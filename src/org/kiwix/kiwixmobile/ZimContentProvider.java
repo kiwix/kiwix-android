@@ -58,7 +58,20 @@ public class ZimContentProvider extends ContentProvider {
 	public static String getZimFile() {
 		return zimFileName;
 	}
+	public static String getZimFileTitle() {
+		if (jniKiwix==null)
+			return null;
+		else {
+			JNIKiwixString title = new JNIKiwixString();
+			if (jniKiwix.getTitle(title)) {
+				return title.value;
+			}
+			else return null;
+		}
+	}
 	
+    public native boolean getTitle(JNIKiwixString title);
+    
 	public static String getMainPage() {
 		if (jniKiwix==null)
 			return null;

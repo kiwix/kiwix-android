@@ -378,6 +378,9 @@ public class KiwixMobileActivity extends Activity {
 	private boolean openZimFile(File file, boolean clearHistory) {
 		if (file.exists()) {
 			if (ZimContentProvider.setZimFile(file.getAbsolutePath())!=null) {
+
+
+        		getActionBar().setSubtitle(ZimContentProvider.getZimFileTitle());
 				//Apparently with webView.clearHistory() only 
 				//    history before currently (fully) loaded page is cleared
 				// -> request clear, actual clear done after load.
