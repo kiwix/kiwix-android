@@ -178,6 +178,9 @@ public class KiwixMobileActivity extends Activity {
                 if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
                     // This is my web site, so do not override; let my WebView load the page
                     return false;
+                } else if (url.startsWith("file://")) {
+                	// To handle help page (loaded from resources)
+                	return true;
                 }
                 // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -341,7 +344,10 @@ public class KiwixMobileActivity extends Activity {
     
     private void showHelp() {
     	//Load from resource. Use with base url as else no images can be embedded.
-    	webView.loadDataWithBaseURL("file:///android_res/raw/", readTextFromResource(R.raw.welcome), "text/html", "utf-8", null);
+    	// Note that this leads inclusion of welcome page in browser history
+    	//   This is not perfect, but good enough. (and would be signifcant
+    	// effort to remove file)
+    	webView.loadUrl("file:///android_res/raw/welcome.html");
 	}
     
     
