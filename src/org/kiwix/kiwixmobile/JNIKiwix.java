@@ -8,6 +8,7 @@ public class JNIKiwix {
     public native boolean getPageUrlFromTitle(String title, JNIKiwixString url);
     public native boolean getTitle(JNIKiwixString title);
     public native boolean getDescription(JNIKiwixString title);
+    public native boolean getRandomPage(JNIKiwixString url);
 
     static {
         System.loadLibrary("kiwix");
