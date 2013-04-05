@@ -59,12 +59,10 @@ public class KiwixMobileActivity extends Activity {
         
      // Get a reference to the AutoCompleteTextView in the layout
         AutoCompleteTextView articleSearchtextView = (AutoCompleteTextView) findViewById(R.id.articleSearchTextView);
-        // Get the string array
-        //TODO Implement db backend
-        ArrayList<String> countries = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.articleSearchSuggestionsTrial)));
+        ArrayList<String> emptyList = new ArrayList<String>();
         // Create the adapter and set it to the AutoCompleteTextView 
         adapter = 
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, countries);
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, emptyList);
         articleSearchtextView.setAdapter(adapter);
         articleSearchtextView.setOnEditorActionListener(new OnEditorActionListener() {
 
