@@ -6,6 +6,8 @@ public class JNIKiwix {
     public native boolean searchSuggestions(String prefix, int count);
     public native boolean getNextSuggestion(JNIKiwixString title);
     public native boolean getPageUrlFromTitle(String title, JNIKiwixString url);
+    public native boolean getTitle(JNIKiwixString title);
+    public native boolean getDescription(JNIKiwixString title);
 
     static {
         System.loadLibrary("kiwix");
