@@ -11,6 +11,7 @@ import java.util.Arrays;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -22,14 +23,19 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.webkit.WebBackForwardList;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
@@ -43,8 +49,68 @@ public class KiwixMobileActivity extends Activity {
 	protected boolean requestClearHistoryAfterLoad;
 	private static final int ZIMFILESELECT_REQUEST_CODE = 1234;
 	private static final String PREFS_KIWIX_MOBILE = "kiwix-mobile";
+	private AutoCompleteTextView articleSearchtextView;
 	
 	
+	public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
+		private ArrayList<String> mData;
+
+		public AutoCompleteAdapter(Context context, int textViewResourceId) {
+			super(context, textViewResourceId);
+			mData = new ArrayList<String>();
+		}
+
+		@Override
+		public int getCount() {
+			return mData.size();
+		}
+
+		@Override
+		public String getItem(int index) {
+			return mData.get(index);
+		}
+
+		@Override
+		public Filter getFilter() {
+			Filter myFilter = new Filter() {
+				@Override
+				protected FilterResults performFiltering(CharSequence constraint) {
+					FilterResults filterResults = new FilterResults();
+					ArrayList<String> data = new ArrayList<String>();
+					if(constraint != null) {
+						// A class that queries a web API, parses the data and returns an ArrayList<Style>
+						try {
+							ZimContentProvider.searchSuggestions(constraint.toString(), 20);
+							String suggestion;
+							
+							data.clear();
+							while ((suggestion = ZimContentProvider.getNextSuggestion())!=null) {
+								data.add(suggestion);        
+							}    
+						}
+						catch(Exception e) {}
+						// Now assign the values and count to the FilterResults object
+						filterResults.values = data;
+						filterResults.count = data.size();
+					}
+					return filterResults;
+				}
+
+				@SuppressWarnings("unchecked")
+				@Override
+				protected void publishResults(CharSequence contraint, FilterResults results) {
+					if(results != null && results.count > 0) {
+						notifyDataSetChanged();
+						mData = (ArrayList<String>)results.values;
+					}
+					else {
+						notifyDataSetInvalidated();
+					}
+				}
+			};
+			return myFilter;
+		}
+	} 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,63 +121,28 @@ public class KiwixMobileActivity extends Activity {
         this.setProgressBarVisibility(true);        
         
         setContentView(R.layout.main);
-        webView = (WebView) findViewById(R.id.webview);
-        
-     // Get a reference to the AutoCompleteTextView in the layout
-        AutoCompleteTextView articleSearchtextView = (AutoCompleteTextView) findViewById(R.id.articleSearchTextView);
-        // Get the string array
-        //TODO Implement db backend
-        ArrayList<String> countries = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.articleSearchSuggestionsTrial)));
+        webView = (WebView) findViewById(R.id.webview);        
+        articleSearchtextView = (AutoCompleteTextView) findViewById(R.id.articleSearchTextView);
         // Create the adapter and set it to the AutoCompleteTextView 
-        adapter = 
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, countries);
+        adapter = new AutoCompleteAdapter(this, android.R.layout.simple_list_item_1); 
+               
         articleSearchtextView.setAdapter(adapter);
+        articleSearchtextView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				articleSearchtextView.setText(parent.getItemAtPosition(position).toString());
+				openArticle();
+			}
+		});
         articleSearchtextView.setOnEditorActionListener(new OnEditorActionListener() {
 
             @Override
             public boolean onEditorAction(TextView v, int actionId,
                     KeyEvent event) {
             		//Do Stuff
-            		Log.d("zimgap", v+" onEditorAction. "+v.getText());
-            		// To close softkeyboard
-            		String articleUrl = ZimContentProvider.getPageUrlFromTitle(v.getText().toString());
-            		Log.d("zimgap", v+" onEditorAction. TextView: "+v.getText()+ " articleUrl: "+articleUrl);
-            		
-            		if (articleUrl!=null) {            		
-            			webView.requestFocus();            		
-            			webView.loadUrl(Uri.parse(ZimContentProvider.CONTENT_URI
-            	                +articleUrl).toString());
-            			return true;
-            		} else {
-            			//FIXME Toast.makeText(this, "Article  not found.", Toast.LENGTH_SHORT).show(); //FIXME resource string
-                        
-            			return true;
-            		}
+            		return openArticle();
          }});
-        articleSearchtextView.addTextChangedListener(new TextWatcher()
-        {
-        public void afterTextChanged(Editable s)
-        {
-                                                                        // Abstract Method of TextWatcher Interface.
-        }
-        public void beforeTextChanged(CharSequence s,
-        int start, int count, int after)
-        {
-        // Abstract Method of TextWatcher Interface.
-        }
-        public void onTextChanged(CharSequence s,
-        		int start, int before, int count)
-        {        
-        	AutoCompleteTextView articleSearchtextView = (AutoCompleteTextView) findViewById(R.id.articleSearchTextView);
-        	Log.d("zimgap", "Adapter:"+adapter.getCount());
-        	adapter.clear();
-        	ZimContentProvider.searchSuggestions(s.toString(), 20);
-        	String suggestion;
-        	while ((suggestion = ZimContentProvider.getNextSuggestion())!=null) {
-        		adapter.add(suggestion);        
-        	}
-        }
-        });
         
     	 
         // js includes will not happen unless we enable JS
@@ -155,7 +186,7 @@ public class KiwixMobileActivity extends Activity {
             }
 
         	public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-        	     String errorString = String.format(getResources().getString(R.string.error_articlenotfound), failingUrl);
+        	     String errorString = String.format(getResources().getString(R.string.error_articleurlnotfound), failingUrl);
         	     //TODO apparently screws up back/forward 
         	     webView.loadDataWithBaseURL("file://error","<html><body>"+errorString+"</body></html>", "text/html", "utf-8", failingUrl);
         	   }
@@ -382,4 +413,27 @@ public class KiwixMobileActivity extends Activity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+
+
+
+	private boolean openArticle() {
+		Log.d("zimgap", articleSearchtextView+" onEditorAction. "+articleSearchtextView.getText());
+		
+		String articleUrl = ZimContentProvider.getPageUrlFromTitle(articleSearchtextView.getText().toString());
+		Log.d("zimgap", articleSearchtextView+" onEditorAction. TextView: "+articleSearchtextView.getText()+ " articleUrl: "+articleUrl);
+		
+		if (articleUrl!=null) {
+			// To close softkeyboard
+			webView.requestFocus();            		
+			webView.loadUrl(Uri.parse(ZimContentProvider.CONTENT_URI
+		            +articleUrl).toString());
+			return true;
+		} else {
+			String errorString = String.format(getResources().getString(R.string.error_articlenotfound), articleSearchtextView.getText().toString());
+			Toast.makeText(getWindow().getContext(), errorString, Toast.LENGTH_SHORT).show(); 
+		    
+			return true;
+		}
+	}
 }

@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">Kiwix</string>
-     <string-array name="articleSearchSuggestionsTrial">
-        <item>Paris</item>
-        <item>Wikipedia</item>
-        <item>Seine</item>        
-    </string-array>
+<resources>    
     <string name="menu_openfile">Open File</string>
     <string name="menu_help">Help</string>
     <string name="menu_forward">Forward</string>
@@ -15,5 +9,6 @@
     <string name="choose_file">Choose (*.zim) File</string>
     <string name="error_filenotfound">Error: The selected zim file could not be found.</string>    
     <string name="error_fileinvalid">Error: The selected file is not a valid zim file.</string>
-    <string name="error_articlenotfound">Error: Loading article (Url: %1$s) failed.</string>
+    <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
+    <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
 </resources>
