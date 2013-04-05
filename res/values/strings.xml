@@ -3,6 +3,7 @@
     <string name="app_name">Kiwix</string>    
     <string name="menu_openfile">Open File</string>
     <string name="menu_help">Help</string>
+    <string name="menu_home">Home</string>    
     <string name="menu_forward">Forward</string>
     <string name="menu_back">Back</string>
     <string name="menu_search">Search article</string>

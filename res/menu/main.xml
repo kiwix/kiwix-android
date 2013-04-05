@@ -15,12 +15,18 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	
+
+    	
     <item android:id="@+id/menu_search"
         android:icon="@drawable/action_search"
         android:title="@string/menu_search"
         android:orderInCategory="0"
         android:showAsAction="always" />
+    
+    <item android:id="@+id/menu_home"
+        android:title="@string/menu_home"                
+        android:orderInCategory="0"
+        android:showAsAction="ifRoom" />
     
     <item android:id="@+id/menu_back"
         android:title="@string/menu_back"
@@ -32,7 +38,7 @@
         android:title="@string/menu_forward"
         android:icon="@drawable/navigation_forward"        
         android:orderInCategory="0"
-        android:showAsAction="always" />
+        android:showAsAction="ifRoom" />     
      <item android:id="@+id/menu_openfile"
         android:title="@string/menu_openfile"
         android:icon="@drawable/device_access_sd_storage"        

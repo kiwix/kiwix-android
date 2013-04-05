@@ -305,6 +305,9 @@ public class KiwixMobileActivity extends Activity {
             case R.id.menu_searchintext:
             	webView.showFindDialog("", true);
             	break;
+            case R.id.menu_home:
+            	loadMainPage();
+            	break;
             case R.id.menu_forward:
             	if(webView.canGoForward() == true){
                     webView.goForward();
