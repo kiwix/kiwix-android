@@ -139,7 +139,7 @@ public class KiwixMobileActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				articleSearchtextView.setText(parent.getItemAtPosition(position).toString());
-				openArticle();
+				openArticleFromSearch();
 			}
 		});
         articleSearchtextView.setOnEditorActionListener(new OnEditorActionListener() {
@@ -148,7 +148,7 @@ public class KiwixMobileActivity extends Activity {
             public boolean onEditorAction(TextView v, int actionId,
                     KeyEvent event) {
             		//Do Stuff
-            		return openArticle();
+            		return openArticleFromSearch();
          }});
 
 
@@ -341,6 +341,9 @@ public class KiwixMobileActivity extends Activity {
                     webView.goBack();
                 }
                 break;
+            case R.id.menu_randomarticle:
+            	openRandomArticle();
+            	break;
             case R.id.menu_help:
             	showHelp();
             	break;
@@ -348,7 +351,7 @@ public class KiwixMobileActivity extends Activity {
 
 			    selectZimFile();
 			    break;
-
+			    
             case R.id.menu_settings:
             	// Display the fragment as the main content.
             	Intent i = new Intent(this, KiwixSettings.class);
@@ -514,10 +517,10 @@ public class KiwixMobileActivity extends Activity {
 
 
 
-	private boolean openArticle() {
-		Log.d("kiwix", articleSearchtextView+" onEditorAction. "+articleSearchtextView.getText());
+	
 
-		String articleUrl = ZimContentProvider.getPageUrlFromTitle(articleSearchtextView.getText().toString());
+
+	private boolean openArticle(String articleUrl) {
 		Log.d("kiwix", articleSearchtextView+" onEditorAction. TextView: "+articleSearchtextView.getText()+ " articleUrl: "+articleUrl);
 
 		if (articleUrl!=null) {
@@ -532,6 +535,20 @@ public class KiwixMobileActivity extends Activity {
 			return true;
 		}
 	}
+	
+	private boolean openArticleFromSearch() {
+		Log.d("kiwix", "openArticleFromSearch: "+articleSearchtextView.getText());
+		String articleTitle = articleSearchtextView.getText().toString();
+		String articleUrl = ZimContentProvider.getPageUrlFromTitle(articleTitle);
+		return openArticle(articleUrl);
+	}
+	
+	private boolean openRandomArticle() {
+		String articleUrl = ZimContentProvider.getRandomArticleUrl();
+		Log.d("kiwix", "openRandomArticle: "+articleUrl);
+		return openArticle(articleUrl);
+	}
+	
 
 
 

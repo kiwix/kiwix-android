@@ -47,11 +47,16 @@
         android:icon="@drawable/device_access_sd_storage"        
         android:orderInCategory="0"
         android:showAsAction="never" />
-      <item android:id="@+id/menu_searchintext"
+     <item android:id="@+id/menu_searchintext"
         android:icon="@drawable/action_search"
         android:title="@string/menu_searchintext"
         android:orderInCategory="0"
         android:showAsAction="never" />
+      <item android:id="@+id/menu_randomarticle"
+         android:title="@string/menu_randomarticle"
+        android:orderInCategory="0"
+        android:showAsAction="never" />
+    
     <item android:id="@+id/menu_help"
         android:title="@string/menu_help"
 		android:icon="@drawable/action_help"                        

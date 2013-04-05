@@ -116,6 +116,18 @@ public class ZimContentProvider extends ContentProvider {
 		} 
 	}
 	
+	public static String getRandomArticleUrl() {
+		if (jniKiwix==null)
+			return null;
+		else {
+			JNIKiwixString url=new JNIKiwixString();			
+			if (jniKiwix.getRandomPage(url)) {
+				return url.value;
+			} else {
+				return null;
+			}
+		} 
+	}
 	@Override
 	public boolean onCreate() {
 		jniKiwix = new JNIKiwix();
