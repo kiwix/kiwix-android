@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kiwix</string>
+     <string-array name="articleSearchSuggestionsTrial">
+        <item>Paris</item>
+        <item>Wikipedia</item>
+        <item>Seine</item>        
+    </string-array>
+    <string name="menu_openfile">Datei öffnen</string>
+    <string name="menu_forward">Vorwärts</string>
+    <string name="menu_back">Zurück</string>
+    <string name="choose_file">Datei auswählen</string>
+</resources>
