@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -30,6 +31,8 @@ LoaderManager.LoaderCallbacks<Cursor> {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);  
+		setProgressBarIndeterminateVisibility(true);
 		setContentView(R.layout.zimfilelist);
 		selectZimFile();
 
@@ -131,10 +134,9 @@ LoaderManager.LoaderCallbacks<Cursor> {
 	public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
 		Log.d("zimgap", " DONE query zim files");
 		mCursorAdapter.swapCursor(cursor);
+		//Done here to avoid that shown while loading.
 		zimFileList.setEmptyView( findViewById( R.id.zimfilelist_nozimfilesfound_view ) );		
-		
-		
-		
+		setProgressBarIndeterminateVisibility(false);		
 	}
 
 	@Override
