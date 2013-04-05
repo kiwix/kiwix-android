@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Datei öffnen</string>
     <string name="menu_help">Hilfe</string>
     <string name="menu_home">Home</string>    
