@@ -287,6 +287,7 @@ public class KiwixMobileActivity extends Activity {
                 Toast.makeText(this, "Tapped home", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_search:
+            case R.id.menu_searchintext:
             	webView.showFindDialog("", true);
             	break;
             case R.id.menu_forward:
