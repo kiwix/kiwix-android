@@ -7,7 +7,7 @@
     <string name="menu_search">Find in text</string>
     <string name="articlesearch_hint">Type to search article</string>
     <string name="choose_file">Choose (*.zim) File</string>
-    <string name="error_nozimfilesfound">Error: No zim files found on device. In help you find information about how to put zim files on your device. If you have already put a zim file you may want to to try to restart your device.</string>
+    <string name="error_nozimfilesfound">No zim files found on device.\nIn help you find information about how to put zim files on your device.\nIf you have already put a zim file you may want to to try to restart your device.</string>
     <string name="error_filenotfound">Error: The selected zim file could not be found.</string>    
     <string name="error_fileinvalid">Error: The selected file is not a valid zim file.</string>
     <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>

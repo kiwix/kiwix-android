@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SimpleCursorAdapter;
 //TODO API level 11 (honeycomb). use compatiblity packages instead   
@@ -26,6 +25,7 @@ LoaderManager.LoaderCallbacks<Cursor> {
 
 	private static final int LOADER_ID = 0x02;
 	private SimpleCursorAdapter mCursorAdapter;
+	private ListView zimFileList;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -70,9 +70,8 @@ LoaderManager.LoaderCallbacks<Cursor> {
 		setContentView(R.layout.zimfilelist);
 
 
-		ListView zimFileList = (ListView) findViewById(R.id.zimfilelist);
+		zimFileList = (ListView) findViewById(R.id.zimfilelist);
 		getLoaderManager().initLoader(LOADER_ID, null, this);
-
 		zimFileList.setAdapter(mCursorAdapter);
 		zimFileList.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
@@ -132,10 +131,9 @@ LoaderManager.LoaderCallbacks<Cursor> {
 	public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
 		Log.d("zimgap", " DONE query zim files");
 		mCursorAdapter.swapCursor(cursor);
-		if(cursor==null || cursor.getCount()==0) {
-			//TODO find some better way to do this. (e.g. show instead of list)
-			Toast.makeText(this, getResources().getString(R.string.error_nozimfilesfound), Toast.LENGTH_LONG).show();
-		}
+		zimFileList.setEmptyView( findViewById( R.id.zimfilelist_nozimfilesfound_view ) );		
+		
+		
 		
 	}
 
