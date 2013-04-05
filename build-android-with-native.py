@@ -192,7 +192,7 @@ for arch in ARCHS:
                              'sdka': os.path.join(SDK_PATH,
                                                      'platform-tools'),
                              'sdkb': os.path.join(SDK_PATH, 'tools')}),
-                   'CFLAGS': ' -fPIC ',
+                   'CFLAGS': ' -fPIC -D_FILE_OFFSET_BITS=64 ',
                    'ANDROID_HOME': SDK_PATH}
     change_env(new_environ)
     change_env(OPTIMIZATION_ENV)
@@ -200,7 +200,8 @@ for arch in ARCHS:
     # compile liblzma.a, liblzma.so
     os.chdir(LIBLZMA_SRC)
     configure_cmd = ('./configure --host=%(arch)s --prefix=%(platform)s '
-                     '--disable-assembler --enable-shared --enable-static'
+                     '--disable-assembler --enable-shared --enable-static '
+                     '--enable-largefile'
                      % {'arch': arch_full,
                         'platform': platform})
     if COMPILE_LIBLZMA:
@@ -243,7 +244,7 @@ for arch in ARCHS:
 
     src_dir = os.path.join(LIBZIM_SRC, 'src')
     compile_cmd = ('g++ -fPIC -c -D_FILE_OFFSET_BITS=64 '
-                   '-D_LARGEFILE64_SOURCE '
+                   '-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE '
                    '-B%(platform)s/sysroot '
                    '%(source_files)s -I%(include_paths)s '
                    % {'platform': platform,
@@ -279,7 +280,8 @@ for arch in ARCHS:
 
     # create libkiwix.so
     os.chdir(curdir)
-    compile_cmd = ('g++ -fPIC -c -B%(platform)s/sysroot '
+    compile_cmd = ('g++ -fPIC -c -B%(platform)s/sysroot -D_FILE_OFFSET_BITS=64 '
+                   '-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE '
                    'kiwix.c %(kwsrc)s/kiwix/reader.cpp %(kwsrc)s'
                    '/stringTools.cpp '
                    '-I%(include_paths)s '
@@ -314,8 +316,7 @@ for arch in ARCHS:
                    'arch_short': arch_short,
                    'curdir': curdir,
                    'gccver': COMPILER_VERSION,
-                   'NDK_PATH': NDK_PATH,
-                   'arch_short': arch_short})
+                   'NDK_PATH': NDK_PATH})
 
     if COMPILE_LIBKIWIX:
         syscall(compile_cmd)
