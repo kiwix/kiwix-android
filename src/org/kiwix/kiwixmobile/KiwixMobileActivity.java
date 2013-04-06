@@ -48,13 +48,14 @@ public class KiwixMobileActivity extends Activity {
 	private WebView webView;
 	private ArrayAdapter<String> adapter;
 	protected boolean requestClearHistoryAfterLoad;
+	protected int requestWebReloadOnFinished;
 	private static final int ZIMFILESELECT_REQUEST_CODE = 1234;
 	private static final int PREFERENCES_REQUEST_CODE = 1235;
 	private static final String PREFS_KIWIX_MOBILE = "kiwix-mobile";
 	private AutoCompleteTextView articleSearchtextView;
 	private LinearLayout articleSearchBar;
 
-
+	
 	public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 		private ArrayList<String> mData;
 
@@ -119,6 +120,7 @@ public class KiwixMobileActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestClearHistoryAfterLoad=false;
+        requestWebReloadOnFinished = 0;
 
 
         this.requestWindowFeature(Window.FEATURE_PROGRESS);
@@ -180,7 +182,9 @@ public class KiwixMobileActivity extends Activity {
 // 			  as currently no custom setWebViewClient required it is commented
         	webView.setWebViewClient(new WebViewClient() {
 
-        	@Override
+        	
+
+			@Override
         	public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
                     // This is my web site, so do not override; let my WebView load the page
@@ -218,6 +222,12 @@ public class KiwixMobileActivity extends Activity {
         		if (webView.getTitle()!=null && !webView.getTitle().isEmpty())
         			title = webView.getTitle();
         		getActionBar().setTitle(title);
+        		//Workaround for #643
+        		if (requestWebReloadOnFinished>0) {
+        			requestWebReloadOnFinished = requestWebReloadOnFinished-1;
+        			Log.d("kiwix", "Workaround for #643: onPageFinished. Trigger reloading. ("+requestWebReloadOnFinished+" reloads left to do)");
+        			view.reload();
+        		}	
         	}
         	 });
 
@@ -240,7 +250,14 @@ public class KiwixMobileActivity extends Activity {
 
 	         }
         	 // Restore the state of the WebView
-
+        	 // (Very ugly) Workaround for  #643 Android article blank after rotation and app reload
+        	 // In case of restore state, just reload page multiple times. Probability
+        	 // that after two refreshes page is still blank is low. 
+        	 // TODO: implement better fix
+        	 
+        	 requestWebReloadOnFinished = 2;
+        	 Log.d("kiwix", "Workaround for #643: reload "+requestWebReloadOnFinished+" times after restoring state");
+  			
 	         webView.restoreState(savedInstanceState);
         } else {
         	SharedPreferences settings = getSharedPreferences(PREFS_KIWIX_MOBILE, 0);
