@@ -20,8 +20,11 @@ import android.content.pm.LabeledIntent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -55,6 +58,7 @@ public class KiwixMobileActivity extends Activity {
 	private ArrayAdapter<String> adapter;
 	protected boolean requestClearHistoryAfterLoad;
 	private static final int ZIMFILESELECT_REQUEST_CODE = 1234;
+	private static final int PREFERENCES_REQUEST_CODE = 1235;
 	private static final String PREFS_KIWIX_MOBILE = "kiwix-mobile";
 	private AutoCompleteTextView articleSearchtextView;
 	private LinearLayout articleSearchBar;
@@ -225,22 +229,14 @@ public class KiwixMobileActivity extends Activity {
         	}
         	 });
 
-        //Pinch to zoom
+        loadPref();
+      //Pinch to zoom
         webView.getSettings().setBuiltInZoomControls(true);
         //webView.getSettings().setLoadsImagesAutomatically(false);
         //Does not make much sense to cache data from zim files.(Not clear whether
         // this actually has any effect)
         webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-        //Workaround to avoid that default zoom is very small on tablets
-        // TODO: find better solution, e.g. user configurable zoom setting
-        if (isTablet(getBaseContext())) {
-        	Log.d("kiwix", " Device is tablet -> setDefaultZoom(WebSettings.ZoomDensity.CLOSE)");
-        	webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.CLOSE);
-        } else {
-        	Log.d("kiwix", " Device is phone-> setDefaultZoom(WebSettings.ZoomDensity.MEDIUM)");
-        	webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
-        }
-        if (getIntent().getData()!=null) {
+        if (getIntent().getData()!=null) {        	
         	String filePath = getIntent().getData().getEncodedPath();
             Log.d("kiwix", " Kiwix started from a filemanager. Intent filePath: "+filePath+" -> open this zimfile and load main page");
             openZimFile(new File(filePath), false);
@@ -267,10 +263,27 @@ public class KiwixMobileActivity extends Activity {
             	showWelcome();
             }
         }
+        
     }
 
 
-
+    private void loadPref(){
+    	  SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+    	  String pref_zoom = mySharedPreferences.getString("pref_zoom", "automatic");
+    	  if (pref_zoom.equals("automatic")) {
+      		 setDefaultZoom();
+    	  } else if (pref_zoom.equals("medium")) {
+    		  webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
+    	  } else if (pref_zoom.equals("small")) {
+    		  webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);    	  
+    	  } else if (pref_zoom.equals("large")) {
+    		  webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.CLOSE);
+    	 } else {
+    		 Log.w("kiwix", "pref_displayZoom value ("+pref_zoom+" unknown. Assuming automatic");
+    		 webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
+    	 }
+    }
+    
 
     @Override
     public void onPause() {
@@ -340,8 +353,16 @@ public class KiwixMobileActivity extends Activity {
             	showHelp();
             	break;
             case R.id.menu_openfile:
+
 			    selectZimFile();
 			    break;
+
+            case R.id.menu_settings:
+            	// Display the fragment as the main content.
+            	Intent i = new Intent(this, KiwixSettings.class);
+                startActivityForResult(i, PREFERENCES_REQUEST_CODE);
+            	break;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -430,6 +451,11 @@ public class KiwixMobileActivity extends Activity {
                 // Create a File from this Uri
                 openZimFile(file, true);
             }
+            break;
+        case PREFERENCES_REQUEST_CODE:
+            
+             loadPref();
+        	break;
         }
     }
 
@@ -532,4 +558,35 @@ public class KiwixMobileActivity extends Activity {
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(),0);
 	}
+	
+	private void setDefaultZoom() {
+		DisplayMetrics metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+	
+		//Cleaner than approach used in 1.0 to set CLOSE for tables, MEDIUM for phones.
+		// However, unfortunately at least on Samsung Galaxy Tab 2 density is medium.
+		// Anyway, user can now override so it should be ok.
+		switch (metrics.densityDpi) {
+		case DisplayMetrics.DENSITY_HIGH:
+			Log.d("kiwix", "setDefaultZoom for Display DENSITY_HIGH-> ZoomDensity.FAR ");
+		    webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
+		    break;
+	
+		case DisplayMetrics.DENSITY_MEDIUM:
+			Log.d("kiwix", "setDefaultZoom for Display DENSITY_MEDIUM-> ZoomDensity.MEDIUM ");
+		    webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
+		    break;
+	
+		case DisplayMetrics.DENSITY_LOW:
+			Log.d("kiwix", "setDefaultZoom for Display DENSITY_LOW-> ZoomDensity.CLOSE ");
+		    webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.CLOSE);
+		    break;
+	
+		default:
+			Log.d("kiwix", "setDefaultZoom for Display OTHER -> ZoomDensity.MEDIUM ");
+		    webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
+		    break;
+		}
+	}
 }
+	

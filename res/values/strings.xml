@@ -6,6 +6,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_forward">Forward</string>
     <string name="menu_back">Back</string>
+    <string name="menu_settings">Settings</string>
     <string name="menu_search">Search article</string>
     <string name="menu_searchintext">Find in page</string>
     <string name="search_label">Search</string>
@@ -16,4 +17,25 @@
     <string name="error_fileinvalid">Error: The selected file is not a valid ZIM file.</string>
     <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
     <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
+    <string name="pref_display_title">Display</string>
+    <string name="pref_zoom_title">Zoom</string>
+    <string name="pref_zoom_summary">%s</string>
+    <string name="pref_zoom_dialogtitle">Zoom</string>    
+    <string-array
+        name="pref_zoom_entries">
+        <item>Automatic</item>
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+    
+    <string-array
+        name="pref_zoom_entryvalues"
+        translatable="false">
+        <item>automatic</item>
+        <item>small</item>
+        <item>medium</item>
+        <item>large</item>
+    </string-array>
+    
 </resources>

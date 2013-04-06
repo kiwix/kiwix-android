@@ -30,6 +30,8 @@ android:anyDensity="true"
             	<data android:mimeType="*/*" />
   			</intent-filter>
         </activity>
+        <activity android:name=".KiwixSettings">
+        </activity>
 		  <provider
 				android:name=".ZimContentProvider"
 				android:authorities="org.kiwix.zim"

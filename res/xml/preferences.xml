@@ -1,0 +1,24 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory 
+        android:key="pref_display"
+        android:title="@string/pref_display_title">
+        
+        
+        <ListPreference
+        	android:key="pref_zoom"
+        	android:title="@string/pref_zoom_title"
+        	android:summary="@string/pref_zoom_summary"
+        	android:dialogTitle="@string/pref_zoom_dialogtitle"
+        	android:entries="@array/pref_zoom_entries"
+        	android:entryValues="@array/pref_zoom_entryvalues"
+        	android:defaultValue="automatic" />
+        
+    </PreferenceCategory>
+    <!-- PreferenceCategory 
+           android:title="INFO"
+           android:key="pref_key_info">
+        
+        
+    </PreferenceCategory>-->
+       
+</PreferenceScreen>

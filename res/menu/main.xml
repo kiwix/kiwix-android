@@ -58,6 +58,13 @@
         android:orderInCategory="0"
         android:showAsAction="never" />
     
+    <item android:id="@+id/menu_settings"
+        android:title="@string/menu_settings"
+        android:icon="@drawable/navigation_forward"        
+        android:orderInCategory="0"
+        android:showAsAction="never"/>
+    
+    
     
     
 </menu>
