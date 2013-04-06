@@ -237,7 +237,7 @@ JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwibx_getDescription
   return retVal;
 }
 
-JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwibx_getRandomPage
+JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getRandomPage
 (JNIEnv *env, jobject obj, jobject urlObj) {
   jboolean retVal = JNI_FALSE;
   std::string cUrl;
