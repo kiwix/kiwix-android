@@ -345,7 +345,7 @@ public class KiwixMobileActivity extends Activity {
             	openRandomArticle();
             	break;
             case R.id.menu_help:
-            	showHelp();
+            	showWelcome();
             	break;
             case R.id.menu_openfile:
 
