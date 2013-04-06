@@ -12,13 +12,90 @@ import copy
 import shutil
 from subprocess import call, check_output
 
-# switchs for debugging purposes ; please ignore.
-CREATE_TOOLCHAIN = True
-COMPILE_LIBLZMA = True
-COMPILE_LIBZIM = True
-COMPILE_LIBKIWIX = True
-STRIP_LIBKIWIX = True
-COMPILE_APK = True
+# target platform to compile for
+# list of available toolchains in <NDK_PATH>/toolchains
+# arm-linux-androideabi, mipsel-linux-android, x86, llvm
+ALL_ARCHS = ['arm-linux-androideabi', 'mipsel-linux-android', 'x86']
+
+USAGE = '''Usage:  %s [--option]
+
+    Without option, all steps are executed on all archs.
+
+    --toolchain     Creates the toolchain
+    --lzma          Compile liblzma
+    --zim           Compile libzim
+    --kiwix         Compile libkiwix
+    --strip         Strip libkiwix.so
+    --apk           Create an APK file
+
+    Note that the '--' prefix is optionnal.
+
+    --on=ARCH       Disable steps on all archs and cherry pick the ones wanted.
+                    Multiple --on=ARCH can be specified.
+                    ARCH in 'armeabi', 'mips', 'x86'. '''
+
+
+def init_with_args(args):
+
+    def display_usage():
+        print(USAGE % args[0])
+        sys.exit(0)
+
+    # default is executing all the steps
+    create_toolchain = compile_liblzma = compile_libzim = \
+        compile_libkiwix = strip_libkiwix = compile_apk = True
+    archs = ALL_ARCHS
+
+    options = [a.lower() for a in args[1:]]
+
+    # print usage if help is requested
+    for help_str in ('-h', '--help'):
+        if options.count(help_str):
+            display_usage()
+
+    # do we have an --on= flag?
+    if '--on=' in u' '.join(args):
+        # yes, so we clear the arch list and build from request
+        archs = []
+        # store options on a dict so we can safely remove as we process
+        doptions = {}
+        for idx, param in enumerate(options):
+            doptions[idx] = param
+        # add found arch to list of archs
+        for idx, param in doptions.items():
+            if param.startswith('--on='):
+                try:
+                    rarch = param.split('=', 1)[1]
+                    archs.append([k for k, v in ARCHS_SHORT_NAMES.items()
+                                  if rarch == v][0])
+                except:
+                    pass
+                doptions.pop(idx)
+        # recreate options list from other items
+        options = [v for v in doptions.values() if not v.startswith('--on=')]
+
+    if len(options):
+        # we received options.
+        # consider we only want the specified steps
+        create_toolchain = compile_liblzma = compile_libzim = \
+            compile_libkiwix = strip_libkiwix = compile_apk = False
+
+        for option in options:
+            if 'toolchain' in option:
+                create_toolchain = True
+            if 'lzma' in option:
+                compile_liblzma = True
+            if 'zim' in option:
+                compile_libzim = True
+            if 'kiwix' in option:
+                compile_libkiwix = True
+            if 'strip' in option:
+                strip_libkiwix = True
+            if 'apk' in option:
+                compile_apk = True
+
+    return (create_toolchain, compile_liblzma, compile_libzim,
+            compile_libkiwix, strip_libkiwix, compile_apk, archs)
 
 # store the OS's environment PATH as we'll mess with it
 # ORIGINAL_ENVIRON_PATH = os.environ.get('PATH')
@@ -26,11 +103,6 @@ ORIGINAL_ENVIRON = copy.deepcopy(os.environ)
 
 # the directory of this file for relative referencing
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
-
-# target platform to compile for
-# list of available toolchains in <NDK_PATH>/toolchains
-# arm-linux-androideabi, mipsel-linux-android, x86, llvm
-ARCHS = ('arm-linux-androideabi', 'mipsel-linux-android', 'x86')
 
 # different names of folder path for accessing files
 ARCHS_FULL_NAMES = {
@@ -46,6 +118,10 @@ ARCHS_SHORT_NAMES = {
 UNAME = check_output(['uname', '-s']).strip()
 UARCH = check_output(['uname', '-m']).strip()
 SYSTEMS = {'Linux': 'linux', 'Darwin': 'mac'}
+
+# find out what to execute based on command line arguments
+CREATE_TOOLCHAIN, COMPILE_LIBLZMA, COMPILE_LIBZIM, COMPILE_LIBKIWIX, \
+    STRIP_LIBKIWIX, COMPILE_APK, ARCHS = init_with_args(sys.argv)
 
 # compiler version to use
 # list of available toolchains in <NDK_PATH>/toolchains
@@ -108,6 +184,7 @@ OPTIMIZATION_ENV = {'CXXFLAGS': ' -D__OPTIMIZE__ -fno-strict-aliasing '
 REQUIRED_PATHS = (NDK_PATH, PLATFORM_PREFIX,
                   LIBLZMA_SRC, LIBZIM_SRC, LIBKIWIX_SRC)
 
+
 def fail_on_missing(path):
     ''' check existence of path and error msg + exit if it fails '''
     if not os.path.exists(path):
@@ -115,6 +192,7 @@ def fail_on_missing(path):
               u"Check that you have installed the Android NDK properly "
               u"and run 'make' in 'src/dependencies'" % path)
         sys.exit(1)
+
 
 def syscall(args, shell=False, with_print=True):
     ''' make a system call '''
@@ -125,6 +203,7 @@ def syscall(args, shell=False, with_print=True):
     if shell:
         args = ' '.join(args)
     call(args, shell=shell)
+
 
 def change_env(values):
     ''' update a set of environment variables '''
@@ -178,20 +257,19 @@ for arch in ARCHS:
         ln_src = '%(platform)s/libexec' % {'platform': platform}
         dest = '%(platform)s/%(arch_full)s' % {'platform': platform,
                                                'arch_full': arch_full}
-        syscall('ln -s %(src)s %(dest)s/'
+        syscall('ln -sf %(src)s %(dest)s/'
                 % {'src': ln_src, 'dest': dest})
 
     # change the PATH for compilation to use proper tools
     new_environ = {'PATH': ('%(platform)s/bin:%(platform)s/%(arch_full)s'
                             '/bin:%(platform)s/libexec/gcc/%(arch_full)s/'
                             '%(gccver)s/:%(sdka)s:%(sdkb)s/%(orig)s'
-                          % {'platform': platform,
-                             'orig': ORIGINAL_ENVIRON['PATH'],
-                             'arch_full': arch_full,
-                             'gccver': COMPILER_VERSION,
-                             'sdka': os.path.join(SDK_PATH,
-                                                     'platform-tools'),
-                             'sdkb': os.path.join(SDK_PATH, 'tools')}),
+                   % {'platform': platform,
+                      'orig': ORIGINAL_ENVIRON['PATH'],
+                      'arch_full': arch_full,
+                      'gccver': COMPILER_VERSION,
+                      'sdka': os.path.join(SDK_PATH, 'platform-tools'),
+                      'sdkb': os.path.join(SDK_PATH, 'tools')}),
                    'CFLAGS': ' -fPIC -D_FILE_OFFSET_BITS=64 ',
                    'ANDROID_HOME': SDK_PATH}
     change_env(new_environ)
@@ -217,8 +295,7 @@ for arch in ARCHS:
 
     # create libzim.a
     os.chdir(curdir)
-    platform_includes = [
-                        '%(platform)s/include/c++/%(gccver)s/'
+    platform_includes = ['%(platform)s/include/c++/%(gccver)s/'
                          % {'platform': platform, 'gccver': COMPILER_VERSION},
 
                          '%(platform)s/include/c++/%(gccver)s/%(arch_full)s'
@@ -272,15 +349,10 @@ for arch in ARCHS:
         for src in LIBZIM_SOURCE_FILES:
             os.remove(src.replace('.cpp', '.o'))
 
-    # compile JNI header
-    os.chdir(os.path.join(curdir, 'src', 'org', 'kiwix', 'kiwixmobile'))
-    syscall('javac JNIKiwix.java')
-    os.chdir(os.path.join(curdir, 'src'))
-    syscall('javah -jni org.kiwix.kiwixmobile.JNIKiwix')
-
     # create libkiwix.so
     os.chdir(curdir)
-    compile_cmd = ('g++ -fPIC -c -B%(platform)s/sysroot -D_FILE_OFFSET_BITS=64 '
+    compile_cmd = ('g++ -fPIC -c -B%(platform)s/sysroot '
+                   '-D_FILE_OFFSET_BITS=64 '
                    '-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE '
                    '-DANDROID_NDK '
                    'kiwix.c %(kwsrc)s/kiwix/reader.cpp %(kwsrc)s'
@@ -321,6 +393,13 @@ for arch in ARCHS:
                    'NDK_PATH': NDK_PATH})
 
     if COMPILE_LIBKIWIX:
+
+        # compile JNI header
+        os.chdir(os.path.join(curdir, 'src', 'org', 'kiwix', 'kiwixmobile'))
+        syscall('javac JNIKiwix.java')
+        os.chdir(os.path.join(curdir, 'src'))
+        syscall('javah -jni org.kiwix.kiwixmobile.JNIKiwix')
+
         syscall(compile_cmd)
         syscall(link_cmd)
 
