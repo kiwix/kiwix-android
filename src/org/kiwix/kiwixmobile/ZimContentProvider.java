@@ -38,11 +38,7 @@ import org.json.JSONObject;
 public class ZimContentProvider extends ContentProvider {
 	public static final Uri CONTENT_URI = Uri.parse("content://org.kiwix.zim/");
 	public static final Uri UI_URI = Uri.parse("content://org.kiwix.ui/");
-	private static final HashMap<String, String> MIME_TYPES = new HashMap<String, String>();
-
-	static {
-		MIME_TYPES.put(".html", "text/html");
-	}
+	
 	private static String zimFileName;
 	private static JNIKiwix jniKiwix;
 
@@ -137,15 +133,8 @@ public class ZimContentProvider extends ContentProvider {
 
 	@Override
 	public String getType(Uri uri) {
-		String path = uri.toString();
-
-		for (String extension : MIME_TYPES.keySet()) {
-			if (path.endsWith(extension)) {
-				return (MIME_TYPES.get(extension));
-			}
-		}
-
-		return (null);
+		Log.w("kiwix", "ZimContentProvider.getType() (not implemented) called");
+		return null;
 	}
 
 	@Override
