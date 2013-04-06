@@ -13,11 +13,11 @@ import shutil
 from subprocess import call, check_output
 
 # switchs for debugging purposes ; please ignore.
-CREATE_TOOLCHAIN = False
-COMPILE_LIBLZMA = False
+CREATE_TOOLCHAIN = True
+COMPILE_LIBLZMA = True
 COMPILE_LIBZIM = True
 COMPILE_LIBKIWIX = True
-STRIP_LIBKIWIX = False
+STRIP_LIBKIWIX = True
 COMPILE_APK = True
 
 # store the OS's environment PATH as we'll mess with it
