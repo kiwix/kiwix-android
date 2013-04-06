@@ -7,7 +7,6 @@
         <ListPreference
         	android:key="pref_zoom"
         	android:title="@string/pref_zoom_title"
-        	android:summary="@string/pref_zoom_summary"
         	android:dialogTitle="@string/pref_zoom_dialogtitle"
         	android:entries="@array/pref_zoom_entries"
         	android:entryValues="@array/pref_zoom_entryvalues"
