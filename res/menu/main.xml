@@ -20,6 +20,7 @@
     <item android:id="@+id/menu_search"
         android:icon="@drawable/action_search"
         android:title="@string/menu_search"
+        android:enabled="false"
         android:orderInCategory="0"
         android:showAsAction="ifRoom" />
     
@@ -39,6 +40,7 @@
      <item android:id="@+id/menu_home"
         android:title="@string/menu_home"
         android:icon="@drawable/action_home"
+        android:enabled="false"
         android:orderInCategory="0"
         android:showAsAction="ifRoom" />
     
@@ -54,6 +56,7 @@
         android:showAsAction="never" />
       <item android:id="@+id/menu_randomarticle"
          android:title="@string/menu_randomarticle"
+         android:enabled="false"
         android:orderInCategory="0"
         android:showAsAction="never" />
     

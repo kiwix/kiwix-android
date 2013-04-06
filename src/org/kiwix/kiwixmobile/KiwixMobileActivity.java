@@ -52,6 +52,7 @@ public class KiwixMobileActivity extends Activity {
 	private static final String PREFS_KIWIX_MOBILE = "kiwix-mobile";
 	private AutoCompleteTextView articleSearchtextView;
 	private LinearLayout articleSearchBar;
+	private Menu menu;
 
 	
 	public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
@@ -328,6 +329,7 @@ public class KiwixMobileActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
+        this.menu = menu;
         return true;
     }
 
@@ -470,6 +472,9 @@ public class KiwixMobileActivity extends Activity {
 				//  but to be on save side don't clear history in such cases.
 				if (clearHistory)
 					requestClearHistoryAfterLoad=true;
+				menu.findItem(R.id.menu_home).setEnabled(true);
+				menu.findItem(R.id.menu_randomarticle).setEnabled(true);
+				menu.findItem(R.id.menu_search).setEnabled(true);
 				openMainPage();
 				return true;
 			} else {
