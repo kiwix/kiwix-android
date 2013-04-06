@@ -258,6 +258,10 @@ public class KiwixMobileActivity extends Activity {
         
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig){        
+        super.onConfigurationChanged(newConfig);
+    }
 
     private void loadPref(){
     	  SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
