@@ -6,24 +6,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Currency;
-
-import android.app.ActionBar.LayoutParams;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.LabeledIntent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -32,9 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.WebBackForwardList;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -122,9 +113,10 @@ public class KiwixMobileActivity extends Activity {
 			};
 			return myFilter;
 		}
-	}
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+	} 
+    @SuppressLint("SetJavaScriptEnabled")
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestClearHistoryAfterLoad=false;
 
