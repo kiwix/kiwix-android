@@ -211,6 +211,11 @@ def change_env(values):
         os.environ[k] = v
         syscall('export %s="%s"' % (k, v), shell=True, with_print=False)
 
+
+def failed_on_step(error_msg):
+    print('[ERROR] %s. Aborting.' % error_msg)
+    sys.exit(1)
+
 # check that required paths are in place before we start
 for path in REQUIRED_PATHS:
     fail_on_missing(path)
@@ -221,7 +226,6 @@ for arch in ARCHS:
     arch_short = ARCHS_SHORT_NAMES.get(arch)
 
     # store where we are so we can go back
-
     curdir = os.getcwd()
 
     # platform contains the toolchain
@@ -260,6 +264,15 @@ for arch in ARCHS:
         syscall('ln -sf %(src)s %(dest)s/'
                 % {'src': ln_src, 'dest': dest})
 
+    # check that the step went well
+    if CREATE_TOOLCHAIN or COMPILE_LIBLZMA or COMPILE_LIBZIM or \
+       COMPILE_LIBKIWIX or STRIP_LIBKIWIX:
+        if (not os.path.exists(os.path.join(platform, arch_full, 'bin', 'gcc'))
+            or not os.path.exists(os.path.join(platform,
+                                               arch_full, 'libexec'))):
+            failed_on_step('The toolchain was not '
+                           'copied properly and is not present.')
+
     # change the PATH for compilation to use proper tools
     new_environ = {'PATH': ('%(platform)s/bin:%(platform)s/%(arch_full)s'
                             '/bin:%(platform)s/libexec/gcc/%(arch_full)s/'
@@ -274,6 +287,10 @@ for arch in ARCHS:
                    'ANDROID_HOME': SDK_PATH}
     change_env(new_environ)
     change_env(OPTIMIZATION_ENV)
+
+    # check that the path has been changed
+    if not platform in os.environ.get('PATH'):
+        failed_on_step('The PATH environment variable was not set properly.')
 
     # compile liblzma.a, liblzma.so
     os.chdir(LIBLZMA_SRC)
@@ -290,8 +307,13 @@ for arch in ARCHS:
         syscall('make clean')
         syscall('make')
         syscall('make install')
-        syscall('echo $PATH', shell=True)
         syscall('make clean')
+
+    # check that the step went well
+    if COMPILE_LIBLZMA or COMPILE_LIBZIM or COMPILE_LIBKIWIX:
+        if not os.path.exists(os.path.join(platform, 'lib', 'liblzma.a')):
+            failed_on_step('The liblzma.a archive file has not been created '
+                           'and is not present.')
 
     # create libzim.a
     os.chdir(curdir)
@@ -349,6 +371,12 @@ for arch in ARCHS:
         for src in LIBZIM_SOURCE_FILES:
             os.remove(src.replace('.cpp', '.o'))
 
+    # check that the step went well
+    if COMPILE_LIBZIM or COMPILE_LIBKIWIX:
+        if not os.path.exists(os.path.join(platform, 'lib', 'libzim.a')):
+            failed_on_step('The libzim.a archive file has not been created '
+                           'and is not present.')
+
     # create libkiwix.so
     os.chdir(curdir)
     compile_cmd = ('g++ -fPIC -c -B%(platform)s/sysroot '
@@ -399,6 +427,7 @@ for arch in ARCHS:
         syscall('javac JNIKiwix.java')
         os.chdir(os.path.join(curdir, 'src'))
         syscall('javah -jni org.kiwix.kiwixmobile.JNIKiwix')
+        os.chdir(curdir)
 
         syscall(compile_cmd)
         syscall(link_cmd)
@@ -406,6 +435,12 @@ for arch in ARCHS:
         for obj in ('kiwix.o', 'reader.o', 'stringTools.o',
                     'src/org_kiwix_kiwixmobile_JNIKiwix.h'):
             os.remove(obj)
+
+    # check that the step went well
+    if COMPILE_LIBKIWIX or STRIP_LIBKIWIX or COMPILE_APK:
+        if not os.path.exists(os.path.join('libs', arch_short, 'libkiwix.so')):
+            failed_on_step('The libkiwix.so shared lib has not been created '
+                           'and is not present.')
 
     if STRIP_LIBKIWIX:
         syscall('%(platform)s/%(arch_full)s/bin/strip '
@@ -419,5 +454,12 @@ for arch in ARCHS:
     change_env(ORIGINAL_ENVIRON)
 
 if COMPILE_APK:
+    syscall('rm -f bin/*.apk', shell=True)
     syscall('ant debug')
     syscall('ls -lh bin/*.apk', shell=True)
+
+# check that the step went well
+if COMPILE_APK:
+    if not os.path.exists(os.path.join('bin', 'Kiwix-debug.apk')):
+        failed_on_step('The Kiwix-debug.apk package has not been created '
+                       'and is not present.')
