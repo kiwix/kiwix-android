@@ -472,9 +472,9 @@ public class KiwixMobileActivity extends Activity {
 				//  but to be on save side don't clear history in such cases.
 				if (clearHistory)
 					requestClearHistoryAfterLoad=true;
-				menu.findItem(R.id.menu_home).setEnabled(true);
-				menu.findItem(R.id.menu_randomarticle).setEnabled(true);
-				menu.findItem(R.id.menu_search).setEnabled(true);
+				menu.findItem(R.id.menu_home).setVisible(true);
+				menu.findItem(R.id.menu_randomarticle).setVisible(true);
+				menu.findItem(R.id.menu_search).setVisible(true);				
 				openMainPage();
 				return true;
 			} else {
