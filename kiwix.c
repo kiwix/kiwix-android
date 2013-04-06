@@ -236,3 +236,24 @@ JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwibx_getDescription
 
   return retVal;
 }
+
+JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwibx_getRandomPage
+(JNIEnv *env, jobject obj, jobject urlObj) {
+  jboolean retVal = JNI_FALSE;
+  std::string cUrl;
+
+  pthread_mutex_lock(&readerLock);
+  try {
+    if (reader != NULL) {
+      std::string cUrl = reader->getRandomPageUrl();
+      setStringObjValue(cUrl, urlObj, env);
+      retVal = JNI_TRUE;
+    }
+  } catch (exception &e) {
+    std::cerr << e.what() << std::endl;
+  }
+  pthread_mutex_unlock(&readerLock);
+
+  return retVal;
+}
+
