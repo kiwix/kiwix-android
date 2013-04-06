@@ -1,10 +1,8 @@
 package org.kiwix.kiwixmobile;
 
 
-import java.io.ByteArrayOutputStream;
+
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -414,28 +412,7 @@ public class KiwixMobileActivity extends Activity {
 		imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
 	}
 
-    private String readTextFromResource(int resourceID)
-    	{
-    	    InputStream raw = getResources().openRawResource(resourceID);
-    	    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-    	    int i;
-    	    try
-    	    {
-    	        i = raw.read();
-    	        while (i != -1)
-    	        {
-    	            stream.write(i);
-    	            i = raw.read();
-    	        }
-    	        raw.close();
-    	    }
-    	    catch (IOException e)
-    	    {
-    	        e.printStackTrace();
-    	    }
-    	    return stream.toString();
-    }
-
+   
     private void showWelcome() {
     	webView.loadUrl("file:///android_res/raw/welcome.html");
 	}

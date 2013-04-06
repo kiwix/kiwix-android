@@ -67,7 +67,6 @@ public class ZimContentProvider extends ContentProvider {
 		}
 	}
 	
-    public native boolean getTitle(JNIKiwixString title);
     
 	public static String getMainPage() {
 		if (jniKiwix==null)
