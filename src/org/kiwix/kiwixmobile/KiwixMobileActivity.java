@@ -348,7 +348,7 @@ public class KiwixMobileActivity extends Activity {
             	webView.showFindDialog("", true);
             	break;
             case R.id.menu_home:
-            	loadMainPage();
+            	openMainPage();
             	break;
             case R.id.menu_forward:
             	if(webView.canGoForward() == true){
@@ -425,7 +425,6 @@ public class KiwixMobileActivity extends Activity {
     	webView.loadUrl("file:///android_res/raw/help.html");
 	}
 
-
 	@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -471,7 +470,7 @@ public class KiwixMobileActivity extends Activity {
 				//  but to be on save side don't clear history in such cases.
 				if (clearHistory)
 					requestClearHistoryAfterLoad=true;
-				loadMainPage();
+				openMainPage();
 				return true;
 			} else {
 				Toast.makeText(this, getResources().getString(R.string.error_fileinvalid), Toast.LENGTH_LONG).show();
@@ -483,11 +482,7 @@ public class KiwixMobileActivity extends Activity {
 		return false;
 	}
 
-    private void loadMainPage() {
-    	String article = ZimContentProvider.getMainPage();
-        webView.loadUrl(Uri.parse(ZimContentProvider.CONTENT_URI
-                + article).toString());
-	}
+    
 
 
     @Override
@@ -548,7 +543,10 @@ public class KiwixMobileActivity extends Activity {
 	}
 	
 
-
+	private boolean openMainPage() {
+    	String articleUrl = ZimContentProvider.getMainPage();
+    	return openArticle(articleUrl);
+	}
 
 	public boolean isTablet(Context context) {
 	    return (context.getResources().getConfiguration().screenLayout
