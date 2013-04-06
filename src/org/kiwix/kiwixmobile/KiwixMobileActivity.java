@@ -50,7 +50,7 @@ import android.widget.Toast;
 
 public class KiwixMobileActivity extends Activity {
     /** Called when the activity is first created. */
-	
+
 	private WebView webView;
 	private ArrayAdapter<String> adapter;
 	protected boolean requestClearHistoryAfterLoad;
@@ -58,8 +58,8 @@ public class KiwixMobileActivity extends Activity {
 	private static final String PREFS_KIWIX_MOBILE = "kiwix-mobile";
 	private AutoCompleteTextView articleSearchtextView;
 	private LinearLayout articleSearchBar;
-	
-	
+
+
 	public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 		private ArrayList<String> mData;
 
@@ -90,11 +90,11 @@ public class KiwixMobileActivity extends Activity {
 						try {
 							ZimContentProvider.searchSuggestions(constraint.toString(), 20);
 							String suggestion;
-							
+
 							data.clear();
 							while ((suggestion = ZimContentProvider.getNextSuggestion())!=null) {
-								data.add(suggestion);        
-							}    
+								data.add(suggestion);
+							}
 						}
 						catch(Exception e) {}
 						// Now assign the values and count to the FilterResults object
@@ -118,25 +118,25 @@ public class KiwixMobileActivity extends Activity {
 			};
 			return myFilter;
 		}
-	} 
+	}
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestClearHistoryAfterLoad=false;
-        
-        
+
+
         this.requestWindowFeature(Window.FEATURE_PROGRESS);
-        this.setProgressBarVisibility(true);        
-        
+        this.setProgressBarVisibility(true);
+
         setContentView(R.layout.main);
-        webView = (WebView) findViewById(R.id.webview);        
+        webView = (WebView) findViewById(R.id.webview);
         articleSearchBar = (LinearLayout) findViewById(R.id.articleSearchBar);
         articleSearchtextView = (AutoCompleteTextView) findViewById(R.id.articleSearchTextView);
-        
-        
-        // Create the adapter and set it to the AutoCompleteTextView 
-        adapter = new AutoCompleteAdapter(this, android.R.layout.simple_list_item_1); 
-               
+
+
+        // Create the adapter and set it to the AutoCompleteTextView
+        adapter = new AutoCompleteAdapter(this, android.R.layout.simple_list_item_1);
+
         articleSearchtextView.setAdapter(adapter);
         articleSearchtextView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -154,8 +154,8 @@ public class KiwixMobileActivity extends Activity {
             		//Do Stuff
             		return openArticle();
          }});
-        
-    	 
+
+
         // js includes will not happen unless we enable JS
         webView.getSettings().setJavaScriptEnabled(true);
         //Does not seem to have  impact. (Idea was that
@@ -163,12 +163,12 @@ public class KiwixMobileActivity extends Activity {
         //webView.getSettings().setRenderPriority(RenderPriority.HIGH);
         final Activity activity = this;
 
-        webView.setWebChromeClient(new WebChromeClient(){        		 
-                
+        webView.setWebChromeClient(new WebChromeClient(){
+
 				public void onProgressChanged(WebView view, int progress) {
-                	 	 activity.setProgress(progress * 100);   
+                	 	 activity.setProgress(progress * 100);
                          if (progress==100) {
-                        	 
+
                         	 Log.d("kiwix", "Loading article finished.");
                         	 if (requestClearHistoryAfterLoad) {
                         		 Log.d("kiwix", "Loading article finished and requestClearHistoryAfterLoad -> clearHistory");
@@ -181,9 +181,9 @@ public class KiwixMobileActivity extends Activity {
 
 //       Should basically resemble the behavior when setWebClient not done
 //            (i.p. internal urls load in webview, external urls in browser)
-// 			  as currently no custom setWebViewClient required it is commented        
+// 			  as currently no custom setWebViewClient required it is commented
         	webView.setWebViewClient(new WebViewClient() {
-        		
+
         	@Override
         	public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
@@ -196,6 +196,8 @@ public class KiwixMobileActivity extends Activity {
                 	// To handle links which access user interface (i.p. used in help page)
                 	if (url.equals(ZimContentProvider.UI_URI.toString()+"selectzimfile")) {
                 		selectZimFile();
+                	} else if (url.equals(ZimContentProvider.UI_URI.toString()+"gotohelp")) {
+                		showHelp();
                 	} else {
                 		Log.e("kiwix", "UI Url "+url+ " not supported.");
                 	}
@@ -206,15 +208,15 @@ public class KiwixMobileActivity extends Activity {
                 startActivity(intent);
                 return true;
             }
-        	
+
         	public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
         	     String errorString = String.format(getResources().getString(R.string.error_articleurlnotfound), failingUrl);
-        	     //TODO apparently screws up back/forward 
+        	     //TODO apparently screws up back/forward
         	     webView.loadDataWithBaseURL("file://error","<html><body>"+errorString+"</body></html>", "text/html", "utf-8", failingUrl);
         	     String title = getResources().getString(R.string.app_name);
         	     getActionBar().setTitle(title);
         	   }
-        	
+
         	public void onPageFinished(WebView view, String url) {
         		String title = getResources().getString(R.string.app_name);
         		if (webView.getTitle()!=null && !webView.getTitle().isEmpty())
@@ -222,7 +224,7 @@ public class KiwixMobileActivity extends Activity {
         		getActionBar().setTitle(title);
         	}
         	 });
-        
+
         //Pinch to zoom
         webView.getSettings().setBuiltInZoomControls(true);
         //webView.getSettings().setLoadsImagesAutomatically(false);
@@ -238,38 +240,38 @@ public class KiwixMobileActivity extends Activity {
         	Log.d("kiwix", " Device is phone-> setDefaultZoom(WebSettings.ZoomDensity.MEDIUM)");
         	webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
         }
-        if (getIntent().getData()!=null) {        	
+        if (getIntent().getData()!=null) {
         	String filePath = getIntent().getData().getEncodedPath();
             Log.d("kiwix", " Kiwix started from a filemanager. Intent filePath: "+filePath+" -> open this zimfile and load main page");
             openZimFile(new File(filePath), false);
-        	
+
         } else if (savedInstanceState!=null) {
         	 Log.d("kiwix", " Kiwix started with a savedInstanceState (That is was closed by OS) -> restore webview state and zimfile (if set)");
         	 if (savedInstanceState.getString("currentzimfile")!=null) {
 	        	 	openZimFile(new File(savedInstanceState.getString("currentzimfile")), false);
-             		
+
 	         }
         	 // Restore the state of the WebView
-     		
+
 	         webView.restoreState(savedInstanceState);
-        } else {        	
+        } else {
         	SharedPreferences settings = getSharedPreferences(PREFS_KIWIX_MOBILE, 0);
         	String zimfile = settings.getString("currentzimfile", null);
             if (zimfile != null) {
             	Log.d("kiwix", " Kiwix normal start, zimfile loaded last time -> Open last used zimfile "+zimfile);
             	openZimFile(new File(zimfile), false);
-            	// Alternative would be to restore webView state. But more effort to implement, and actually 
-        		//  fits better normal android behavior if after closing app ("back" button) state is not maintained.        		        		
+            	// Alternative would be to restore webView state. But more effort to implement, and actually
+        		//  fits better normal android behavior if after closing app ("back" button) state is not maintained.
             } else {
             	Log.d("kiwix", " Kiwix normal start, no zimfile loaded last time  -> display welcome page");
-            	showHelp();            	
+            	showWelcome();
             }
         }
     }
-    
-	
-    
-    
+
+
+
+
     @Override
     public void onPause() {
     	super.onPause();
@@ -281,30 +283,30 @@ public class KiwixMobileActivity extends Activity {
 
     	Log.d("kiwix", "onPause Save currentzimfile to preferences:"+ZimContentProvider.getZimFile());
     }
-    
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
        super.onSaveInstanceState(outState);
     	// Save the state of the WebView
-       
+
         webView.saveState(outState);
         outState.putString("currentzimfile", ZimContentProvider.getZimFile());
         Log.v("kiwix", "onSaveInstanceState Save currentzimfile to bundle:"+ZimContentProvider.getZimFile()+" and webView state");
     }
-    
+
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-    	super.onRestoreInstanceState(savedInstanceState);    	 
-        
+    	super.onRestoreInstanceState(savedInstanceState);
+
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -317,7 +319,7 @@ public class KiwixMobileActivity extends Activity {
             	} else {
             		hideSearchBar();
             	}
-            	break;            
+            	break;
             case R.id.menu_searchintext:
             	webView.showFindDialog("", true);
             	break;
@@ -334,7 +336,7 @@ public class KiwixMobileActivity extends Activity {
                     webView.goBack();
                 }
                 break;
-            case R.id.menu_help: 
+            case R.id.menu_help:
             	showHelp();
             	break;
             case R.id.menu_openfile:
@@ -348,9 +350,9 @@ public class KiwixMobileActivity extends Activity {
 
 
 	private void selectZimFile() {
-		final Intent target = new Intent(Intent.ACTION_GET_CONTENT); 
+		final Intent target = new Intent(Intent.ACTION_GET_CONTENT);
 		// The MIME data type filter
-		target.setType("*/*"); 
+		target.setType("*/*");
 		// Only return URIs that can be opened with ContentResolver
 		target.addCategory(Intent.CATEGORY_OPENABLE);
 		//Force use of our file selection component.
@@ -359,7 +361,7 @@ public class KiwixMobileActivity extends Activity {
 		try {
 			startActivityForResult(target, ZIMFILESELECT_REQUEST_CODE);
 		} catch (ActivityNotFoundException e) {
-         
+
 		}
 	}
 
@@ -374,7 +376,7 @@ public class KiwixMobileActivity extends Activity {
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
 	}
-    
+
     private String readTextFromResource(int resourceID)
     	{
     	    InputStream raw = getResources().openRawResource(resourceID);
@@ -396,28 +398,32 @@ public class KiwixMobileActivity extends Activity {
     	    }
     	    return stream.toString();
     }
-    
+
+    private void showWelcome() {
+    	webView.loadUrl("file:///android_res/raw/welcome.html");
+	}
+
     private void showHelp() {
     	//Load from resource. Use with base url as else no images can be embedded.
     	// Note that this leads inclusion of welcome page in browser history
     	//   This is not perfect, but good enough. (and would be signifcant
     	// effort to remove file)
-    	webView.loadUrl("file:///android_res/raw/welcome.html");
+    	webView.loadUrl("file:///android_res/raw/help.html");
 	}
-    
-    
+
+
 	@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-        case ZIMFILESELECT_REQUEST_CODE:  
-            if (resultCode == RESULT_OK) {  
-                // The URI of the selected file 
+        case ZIMFILESELECT_REQUEST_CODE:
+            if (resultCode == RESULT_OK) {
+                // The URI of the selected file
                 final Uri uri = data.getData();
                 File file = null;
                 if (uri != null) {
                 	String path = uri.getPath();
                 	if (path != null)
-                		file = new File(path);                	
+                		file = new File(path);
                 }
                 if (file==null)
                 	return;
@@ -436,7 +442,7 @@ public class KiwixMobileActivity extends Activity {
 
 
         		getActionBar().setSubtitle(ZimContentProvider.getZimFileTitle());
-				//Apparently with webView.clearHistory() only 
+				//Apparently with webView.clearHistory() only
 				//    history before currently (fully) loaded page is cleared
 				// -> request clear, actual clear done after load.
 				//    Probably not working in all corners (e.g. zim file openend
@@ -451,20 +457,20 @@ public class KiwixMobileActivity extends Activity {
 			} else {
 				Toast.makeText(this, getResources().getString(R.string.error_fileinvalid), Toast.LENGTH_LONG).show();
 			}
-			
+
 		} else {
 			Toast.makeText(this, getResources().getString(R.string.error_filenotfound), Toast.LENGTH_LONG).show();
 		}
 		return false;
 	}
-     
+
     private void loadMainPage() {
     	String article = ZimContentProvider.getMainPage();
         webView.loadUrl(Uri.parse(ZimContentProvider.CONTENT_URI
                 + article).toString());
 	}
 
-	
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(event.getAction() == KeyEvent.ACTION_DOWN){
@@ -473,9 +479,9 @@ public class KiwixMobileActivity extends Activity {
             case KeyEvent.KEYCODE_BACK:
                 if(webView.canGoBack() == true){
                 	/*WebBackForwardList history = webView.copyBackForwardList();
-                	
+
                 	if (history.getCurrentIndex() )*/
-                	
+
                     webView.goBack();
                 }else{
                     finish();
@@ -492,19 +498,19 @@ public class KiwixMobileActivity extends Activity {
 
 	private boolean openArticle() {
 		Log.d("kiwix", articleSearchtextView+" onEditorAction. "+articleSearchtextView.getText());
-		
+
 		String articleUrl = ZimContentProvider.getPageUrlFromTitle(articleSearchtextView.getText().toString());
 		Log.d("kiwix", articleSearchtextView+" onEditorAction. TextView: "+articleSearchtextView.getText()+ " articleUrl: "+articleUrl);
-		
+
 		if (articleUrl!=null) {
-			hideSearchBar(); 
+			hideSearchBar();
 			webView.loadUrl(Uri.parse(ZimContentProvider.CONTENT_URI
 		            +articleUrl).toString());
 			return true;
 		} else {
 			String errorString = String.format(getResources().getString(R.string.error_articlenotfound), articleSearchtextView.getText().toString());
-			Toast.makeText(getWindow().getContext(), errorString, Toast.LENGTH_SHORT).show(); 
-		    
+			Toast.makeText(getWindow().getContext(), errorString, Toast.LENGTH_SHORT).show();
+
 			return true;
 		}
 	}
@@ -516,12 +522,12 @@ public class KiwixMobileActivity extends Activity {
 	            & Configuration.SCREENLAYOUT_SIZE_MASK)
 	            >= Configuration.SCREENLAYOUT_SIZE_LARGE;
 	}
-	
+
 	private void hideSearchBar() {
 		// Hide searchbar
 		articleSearchBar.setVisibility(View.GONE);
 		// To close softkeyboard
-		webView.requestFocus(); 
+		webView.requestFocus();
 		//Seems not really be necessary
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(),0);
