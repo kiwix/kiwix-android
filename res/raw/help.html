@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Welcome to Kiwix!</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+<link href="welcome.css" rel="stylesheet">
+</head>
+
+<body class="help" lang="en-US">
+
+<div id="content-wrapper">
+
+<section id="intro">
+<h1>Thank you for choosing Kiwix!</h1>
+<p>We are glad to have you onboard and would like assure you we are available to assist you in making the best use of this software.</p>
+<p>Please leave us a note at <a href="http://kiwix.org">kiwix.org</a>.</p>
+</section>
+
+<section id="what-does-kiwix-do">
+	<h2>What does Kiwix do?</h2>
+	<p><em>Kiwix</em> is an offline content reader. It acts very much like a browser but instead of accessing <em>online web pages</em>, it reads content from a file named a <em>ZIM file</em>.</p>
+	<p>While it has been originaly designed to provide Wikipedia offline, it also reads other contents.</p>
+</section>
+
+<section id="where-do-i-find-content">
+	<h2>Where is the content?</h2>
+	<p>The contents are located on the <a href="http://download.kiwix.org/mobile-download.html">kiwix website</a>.</p>
+	<p>They are available as ZIM files. There are <strong>a lot</strong> of them:</p>
+	<ul>
+		<li>Wikipedia is available separately for each language</li>
+		<li>Other contents like Wikileaks or Wikisource are also available</li>
+	</ul>
+	<p>Carefuly select the one(s) you want and launch the download. Put the resulting files on your SD card then open them with Kiwix.</p>
+	<p>Depending on the content and your Internet connection on this device, it might be preferable to download from a Desktop computer and transfer to your SD card.</p>
+	<p>ZIM files containing complete Wikipedia for instance are <strong>several gigabytes large</strong>.</p>
+	<p><button class="loadFromOnline">Load Content List from Website (requires Internet Access)</button></p>
+	<div id="contents"></div>
+</section>
+
+<section id="how-to-download">
+	<h2>How do I download?</h2>
+
+</section>
+
+<section id="can-wikipedia">
+	<h2>Can I download from Wikipedia directly?</h2>
+	<p>Yes! You can create a <em>book</em> while browsing Wikipedia and add as many article to this <em>book</em>. Once done, you can download the book as an <em>OpenZIM file</em>. This file can be opened by Kiwix.</p>
+	<p>Please refer to the <a href="http://en.wikipedia.org/wiki/Special:Book">Book Creator</a> documentation on Wikipedia for more infos.</p>
+</section>
+
+<section id="invalid-zim">
+	<h2>Why does Kiwix says <em>“Invalid ZIM file”</em> ?</h2>
+	<p>If your ZIM file weights more than 2GB, Kiwix will not open it properly. It's a bug on our side which we are investigating. Please split your file following <a href="http://kiwix.org/SplitZIMMobile.html">those instructions</a> and retry.</p>
+</section>
+
+</div>
+
+<script src="jquery.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script type="text/javascript">
+var loaded = false;
+function loadcontent() {
+	$('#contents').empty();
+	$('#contents').load('http://www.kiwix.org/wiki/Wikipedia #zimtable', function() {
+		$('#zimtable tr:not(:last-child) th:last-child').remove();
+		$('#zimtable tr:not(:last-child) td:last-child').remove();
+		var all_a_elem = $('#zimtable tr:last-child a:last-child');
+		var all_url = all_a_elem.attr('href');
+		all_a_elem.attr('href', 'http://www.kiwix.org' + all_url);
+
+		// remove md5 link
+		$('#zimtable a').each(function () {
+			if ($(this).attr('href').indexOf('.md5') != -1) {
+				$(this).parent().parent().remove();
+			}
+		});
+
+		// download bitorrent ; are there torrent clients on android?
+		$('#zimtable a').each(function () {
+			if ($(this).attr('href').indexOf('.torrent') != -1) {
+				$(this).parent().remove();
+			}
+		});
+	});
+}
+$(".loadFromOnline").click(function() {
+	if (!loaded) {
+		loadcontent();
+		loaded = true;
+	} else {
+		loaded = false;
+		$('#contents').empty();
+	}
+
+});
+</script>
+</body>
+</html>

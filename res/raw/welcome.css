@@ -1,0 +1,97 @@
+h1, h2, h3, h4, h5, h6 {
+    color: #444444;
+    font-family: "Open Sans";
+    font-weight: 300;
+    line-height: 1.15538em;
+    padding-bottom: 0.273em;
+    padding-top: 0.273em;
+    text-rendering: optimizelegibility;
+}
+
+body {
+	font-family: georgia,times new roman,serif;
+	color: #666666;
+	font-size: 90%;
+	background: none repeat scroll 0 0 #EEF8FB;
+}
+
+h1, h2 {
+    color: #555555;
+    font: italic bold 130% georgia,times new roman,serif;
+    letter-spacing: -0.09em;
+}
+
+h2 span {
+	font-size: 200%;
+	margin-right: 0.2em;
+}
+
+section {
+	padding: 0 2% 2% 2%;
+	border: 1% solid #333333;
+	border-radius: 5px 5px 5px 5px;
+	margin:0;
+}
+
+a {
+	color: rgba(0,153,204,1);
+	text-decoration: none;
+	font-weight: bold;
+	border-bottom: 0.1em solid rgba(0,153,204,1);
+	transition: all 0.2s ease-in-out 0s;
+}
+
+body.welcome a {
+	font-size: 1.3em;
+}
+
+a.button, button.loadFromOnline {
+	border-top: 6px solid transparent;
+	border-bottom: 0.2em solid rgba(0,153,204,1);
+	background-color: rgba(255,255,255,0.063);
+	text-decoration: none;
+	text-transform: uppercase;
+	font-weight: bold;
+	transition: all 0.2s ease-in-out 0s;
+	text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.8);
+	border-radius: 5px 5px 5px 5px;
+	background: none repeat scroll 0 0 #536B84;
+    color: #FFFFFF;
+    display: block;
+    margin: 0.5em 0 1em;
+    padding: 0.4em;
+    text-align: center;
+}
+
+section#step2 {
+	position: relative;
+}
+
+section#step1 p strong {
+	font-size: 1.2em;
+}
+
+section h2 {
+	clear: both;
+}
+
+a.button:hover {
+	background: none repeat scroll 0 0 #67a727;
+    color: #FFFFFF;
+}
+
+ a:hover
+{
+	text-decoration: none;
+	border-bottom-color: rgba(0,153,204,0.35);
+}
+
+img {
+	width: 30%;
+	max-width: 100px;
+	float: right;
+}
+
+div.alert {
+	margin-bottom: 0;
+}

@@ -1,15 +1,43 @@
+<!DOCTYPE html>
 <html>
 <head>
-<title>Welcome to Kiwix</title>
+<meta charset="UTF-8" />
+<title>Welcome to Kiwix!</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+<link href="welcome.css" rel="stylesheet">
 </head>
-<body>
 
-<h1>Welcome to Kiwix</h1>
+<body class="welcome" lang="en-US">
 
-Visit <a href="http://www.kiwix.org/landing_for_embedded_kiwix_for_android">Kiwix<img src="kiwix_icon.png"/></a> to find out how
-to download zim files, such as the Wikipedia.
-<p>
-<!-- Note to translator: Link text must match menu_openfile string -->
-Use <a href="content://org.kiwix.ui/selectzimfile">Open File</a> to open zim files stored on the device.  
+<div id="content-wrapper">
 
-</body></html>
+<section id="step1">
+	<h2><span>1.</span> Download a Content</h2>
+	<p><strong>Kiwix</strong> is an Offline Content Reader, perfectly tailored for Wikipedia. Enjoying Kiwix is just <strong>2 steps</strong> away.</p>
+	<p>Why don't you try our Wikipedia Demo file?</p>
+	<a class="button" href="http://download.kiwix.org/zim/0.9/android-demo.zim">Wikipedia-Demo.zim</a>
+	<p>It's a 2MB ZIM containing <em>all world countries</em>'pages from the English Wikipedia.</p>
+	<div class="alert alert-info"><strong>Warning!</strong> This download will take place in your browser. Don't forget to come back to Kiwix once download is complete!</div>
+</section>
+
+<section id="step2">
+	<h2><span>2.</span> Take a drink break!</h2>
+	<img class="media-object" data-src="holder.js/64x64" src="coffee.png">
+	<p>Downloads can take a long time, go mind your regular business and come back once done.</p>
+</section>
+
+<section id="step3">
+	<h2><span>3.</span> Open the file up-here!</h2>
+	<p>Click the <span><a href="content://org.kiwix.ui/selectzimfile">Open File</a></span> button in the toolbar up there and select the ZIM file you downloaded. <strong>That's It!</strong></p>
+	<p>Now, Enjoy your content, and take a look at the <a href="help.html">Help Page</a> once bored.</p>
+</section>
+
+</div>
+
+<script src="jquery.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>
