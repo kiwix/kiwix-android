@@ -1,15 +1,43 @@
+<!DOCTYPE html>
 <html>
 <head>
-<title>Willkommen zu Kiwix</title>
+<meta charset="UTF-8" />
+<title>Wilkommen zu Kiwix!</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="file:///android_asset/www/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="file:///android_asset/www/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+<link href="file:///android_asset/www/static.css" rel="stylesheet">
 </head>
-<body>
-<h1>Willkommen zu Kiwix</h1>
 
-Besuche <a href="http://www.kiwix.org/landing_for_embedded_kiwix_for_android">Kiwix<img src="kiwix_icon.png"/></a> f�r
-Informationen um zim-Dateien, zum Beispiel Wikipedia, herunterzuladen.
-<p>
-<!-- Note to translator: Link text must match menu_openfile string -->
-Verwende <a href="content://org.kiwix.ui/selectzimfile">Datei �ffnen</a> um auf dem Ger�t gespeicherte zim-Dateien zu �ffnen.  
+<body class="welcome" lang="de">
 
+<div id="content-wrapper">
 
-</body></html>
+<section id="step1">
+	<h2><span>1.</span> Inhalte runterladen</h2>
+	<p><strong>Kiwix</strong> ist ein Leseprogramm für Offline-Inhalte, das perfekt auf die Wikipedia zugeschnitten ist. Nach nur <strong>2 Schritten</strong> kannst du Kiwix genießen.</p>
+	<p>Probier doch unsere Wikipedia-Demo-Datei aus!</p>
+	<a class="button" href="http://download.kiwix.org/zim/0.9/android-demo.zim">Wikipedia-Demo.zim</a>
+	<p>Das ist eine 2MB-ZIM-Datei mit Artikeln über <em>alle Länder der Welt</em> aus der englischen Wikipedia.</p>
+	<div class="alert alert-info"><strong>Beachte!</strong> Der Download wird in deinem Browser durchgeführt. Denk daran, wieder zu Kiwix zurück zu kommen, sobald der Download fertig ist!</div>
+</section>
+
+<section id="step2">
+	<h2><span>2.</span> Mach eine Kaffee-Pause!</h2>
+	<img src="coffee.png">
+	<p>Downloads können lang dauern, mach inzwischen etwas anderes, und komm zurück sobald der Download fertig bist.</p>
+</section>
+
+<section id="step3">
+	<h2><span>3.</span> Öffne die Datei in Kiwix!</h2>
+	<p>Klicke <span><a href="content://org.kiwix.ui/selectzimfile">Datei öffnen</a></span> im Menu oben, und wähle dann die ZIM-Datei die du runtergeladen hast aus. <strong>Das war's schon!</strong></p>
+	<p>Genieße jetzt die Inhalte, und sobald dir langweilig wird schau auf auf <a href="content://org.kiwix.ui/gotohelp">Hilfe</a>.</p>
+</section>
+
+</div>
+
+<script src="file:///android_asset/www/jquery.js"></script>
+<script src="file:///android_asset/www/js/bootstrap.min.js"></script>
+</body>
+</html>
