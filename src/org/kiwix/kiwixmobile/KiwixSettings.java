@@ -8,8 +8,7 @@ import android.preference.PreferenceActivity;
 
 
 public class KiwixSettings extends PreferenceActivity {
-	ListPreference prefList;
-
+	
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -17,7 +16,12 @@ public class KiwixSettings extends PreferenceActivity {
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
         
-        prefList = (ListPreference) findPreference("pref_zoom");
+        prepareListPreferenceForAutoSummary("pref_zoom");        
+    }
+
+
+	private void prepareListPreferenceForAutoSummary(String preferenceID) {
+		ListPreference prefList = (ListPreference) findPreference(preferenceID);
         prefList.setDefaultValue(prefList.getEntryValues()[0]);
         String ss = prefList.getValue();
         if (ss == null) {
@@ -25,15 +29,15 @@ public class KiwixSettings extends PreferenceActivity {
             ss = prefList.getValue();
         }
         prefList.setSummary(prefList.getEntries()[prefList.findIndexOfValue(ss)]);
-
-
         prefList.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                prefList.setSummary(prefList.getEntries()[prefList.findIndexOfValue(newValue.toString())]);
+            public boolean onPreferenceChange(Preference preference, Object newValue) {            	 
+                if (preference instanceof ListPreference)
+            	preference.setSummary(((ListPreference)preference).getEntries()[((ListPreference)preference).findIndexOfValue(newValue.toString())]);
                 return true;
             }
         });     
-    }
+
+	}
 
 }
