@@ -23,10 +23,10 @@
     <string name="pref_zoom_dialogtitle">Zoom</string>    
     <string-array
         name="pref_zoom_entries">
-        <item>Automatisch</item>
-        <item>Klein</item>
-        <item>Mittel</item>
-        <item>Groß</item>
+        <item>Automatic</item>
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
     </string-array>
     
    
