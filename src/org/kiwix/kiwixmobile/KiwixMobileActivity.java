@@ -46,6 +46,7 @@ public class KiwixMobileActivity extends Activity {
 	private WebView webView;
 	private ArrayAdapter<String> adapter;
 	protected boolean requestClearHistoryAfterLoad;
+	protected boolean requestShowAllMenuItems;
 	protected int requestWebReloadOnFinished;
 	private static final int ZIMFILESELECT_REQUEST_CODE = 1234;
 	private static final int PREFERENCES_REQUEST_CODE = 1235;
@@ -120,6 +121,7 @@ public class KiwixMobileActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestClearHistoryAfterLoad=false;
         requestWebReloadOnFinished = 0;
+        requestShowAllMenuItems = false;
 
 
         this.requestWindowFeature(Window.FEATURE_PROGRESS);
@@ -329,7 +331,11 @@ public class KiwixMobileActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
+        
         this.menu = menu;
+        if (requestShowAllMenuItems) {
+        	showAllMenuItems();
+        }
         return true;
     }
 
@@ -472,9 +478,13 @@ public class KiwixMobileActivity extends Activity {
 				//  but to be on save side don't clear history in such cases.
 				if (clearHistory)
 					requestClearHistoryAfterLoad=true;
-				menu.findItem(R.id.menu_home).setVisible(true);
-				menu.findItem(R.id.menu_randomarticle).setVisible(true);
-				menu.findItem(R.id.menu_search).setVisible(true);				
+				if (menu!=null) {
+					showAllMenuItems();
+				} else {
+					// Menu may not be initialized yet. In this case
+					// signal to menu create to show  
+					requestShowAllMenuItems = true;
+				}
 				openMainPage();
 				return true;
 			} else {
@@ -485,6 +495,12 @@ public class KiwixMobileActivity extends Activity {
 			Toast.makeText(this, getResources().getString(R.string.error_filenotfound), Toast.LENGTH_LONG).show();
 		}
 		return false;
+	}
+
+	private void showAllMenuItems() {
+		menu.findItem(R.id.menu_home).setVisible(true);
+		menu.findItem(R.id.menu_randomarticle).setVisible(true);
+		menu.findItem(R.id.menu_search).setVisible(true);
 	}
 
     
