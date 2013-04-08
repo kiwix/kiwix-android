@@ -201,7 +201,8 @@ def syscall(args, shell=False, with_print=True):
         print(u"-----------\n" + u" ".join(args) + u"\n-----------")
 
     if shell:
-        args = ' '.join(args)
+        # args = ' '.join(args)
+        pass
     call(args, shell=shell)
 
 
@@ -304,7 +305,7 @@ for arch in ARCHS:
         # even though we need only static, we conpile also shared so it
         # switches the -fPIC properly.
         syscall(configure_cmd, shell=True)
-        # syscall('make clean')
+        syscall('make clean')
         syscall('make')
         syscall('make install')
         syscall('make clean')
