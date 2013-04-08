@@ -1,10 +1,8 @@
 package org.kiwix.kiwixmobile;
 
 
-import java.io.ByteArrayOutputStream;
+
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -48,12 +46,14 @@ public class KiwixMobileActivity extends Activity {
 	private WebView webView;
 	private ArrayAdapter<String> adapter;
 	protected boolean requestClearHistoryAfterLoad;
+	protected boolean requestShowAllMenuItems;
 	protected int requestWebReloadOnFinished;
 	private static final int ZIMFILESELECT_REQUEST_CODE = 1234;
 	private static final int PREFERENCES_REQUEST_CODE = 1235;
 	private static final String PREFS_KIWIX_MOBILE = "kiwix-mobile";
 	private AutoCompleteTextView articleSearchtextView;
 	private LinearLayout articleSearchBar;
+	private Menu menu;
 
 	
 	public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
@@ -121,6 +121,7 @@ public class KiwixMobileActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestClearHistoryAfterLoad=false;
         requestWebReloadOnFinished = 0;
+        requestShowAllMenuItems = false;
 
 
         this.requestWindowFeature(Window.FEATURE_PROGRESS);
@@ -330,6 +331,11 @@ public class KiwixMobileActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
+        
+        this.menu = menu;
+        if (requestShowAllMenuItems) {
+        	showAllMenuItems();
+        }
         return true;
     }
 
@@ -350,7 +356,7 @@ public class KiwixMobileActivity extends Activity {
             	webView.showFindDialog("", true);
             	break;
             case R.id.menu_home:
-            	loadMainPage();
+            	openMainPage();
             	break;
             case R.id.menu_forward:
             	if(webView.canGoForward() == true){
@@ -414,28 +420,7 @@ public class KiwixMobileActivity extends Activity {
 		imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
 	}
 
-    private String readTextFromResource(int resourceID)
-    	{
-    	    InputStream raw = getResources().openRawResource(resourceID);
-    	    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-    	    int i;
-    	    try
-    	    {
-    	        i = raw.read();
-    	        while (i != -1)
-    	        {
-    	            stream.write(i);
-    	            i = raw.read();
-    	        }
-    	        raw.close();
-    	    }
-    	    catch (IOException e)
-    	    {
-    	        e.printStackTrace();
-    	    }
-    	    return stream.toString();
-    }
-
+   
     private void showWelcome() {
     	webView.loadUrl("file:///android_res/raw/welcome.html");
 	}
@@ -447,7 +432,6 @@ public class KiwixMobileActivity extends Activity {
     	// effort to remove file)
     	webView.loadUrl("file:///android_res/raw/help.html");
 	}
-
 
 	@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -494,7 +478,14 @@ public class KiwixMobileActivity extends Activity {
 				//  but to be on save side don't clear history in such cases.
 				if (clearHistory)
 					requestClearHistoryAfterLoad=true;
-				loadMainPage();
+				if (menu!=null) {
+					showAllMenuItems();
+				} else {
+					// Menu may not be initialized yet. In this case
+					// signal to menu create to show  
+					requestShowAllMenuItems = true;
+				}
+				openMainPage();
 				return true;
 			} else {
 				Toast.makeText(this, getResources().getString(R.string.error_fileinvalid), Toast.LENGTH_LONG).show();
@@ -506,11 +497,13 @@ public class KiwixMobileActivity extends Activity {
 		return false;
 	}
 
-    private void loadMainPage() {
-    	String article = ZimContentProvider.getMainPage();
-        webView.loadUrl(Uri.parse(ZimContentProvider.CONTENT_URI
-                + article).toString());
+	private void showAllMenuItems() {
+		menu.findItem(R.id.menu_home).setVisible(true);
+		menu.findItem(R.id.menu_randomarticle).setVisible(true);
+		menu.findItem(R.id.menu_search).setVisible(true);
 	}
+
+    
 
 
     @Override
@@ -571,7 +564,10 @@ public class KiwixMobileActivity extends Activity {
 	}
 	
 
-
+	private boolean openMainPage() {
+    	String articleUrl = ZimContentProvider.getMainPage();
+    	return openArticle(articleUrl);
+	}
 
 	public boolean isTablet(Context context) {
 	    return (context.getResources().getConfiguration().screenLayout

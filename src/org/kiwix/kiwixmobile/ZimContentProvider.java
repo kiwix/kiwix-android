@@ -56,7 +56,7 @@ public class ZimContentProvider extends ContentProvider {
 		return zimFileName;
 	}
 	public static String getZimFileTitle() {
-		if (jniKiwix==null)
+		if (jniKiwix==null || zimFileName==null)
 			return null;
 		else {
 			JNIKiwixString title = new JNIKiwixString();
@@ -67,10 +67,8 @@ public class ZimContentProvider extends ContentProvider {
 		}
 	}
 	
-    public native boolean getTitle(JNIKiwixString title);
-    
-	public static String getMainPage() {
-		if (jniKiwix==null)
+    public static String getMainPage() {
+		if (jniKiwix==null || zimFileName==null)
 			return null;
 		else {
 			return jniKiwix.getMainPage();
@@ -78,7 +76,7 @@ public class ZimContentProvider extends ContentProvider {
 	}
 	
 	public static boolean searchSuggestions(String prefix, int count) {
-		if (jniKiwix==null)
+		if (jniKiwix==null || zimFileName==null)
 			return false;
 		else {
 			return jniKiwix.searchSuggestions(prefix, count);
@@ -86,7 +84,7 @@ public class ZimContentProvider extends ContentProvider {
 	}
 	
 	public static String getNextSuggestion() {
-		if (jniKiwix==null)
+		if (jniKiwix==null || zimFileName==null)
 			return null;
 		else {
 			JNIKiwixString title=new JNIKiwixString();			
@@ -100,7 +98,7 @@ public class ZimContentProvider extends ContentProvider {
 	}
 	
 	public static String getPageUrlFromTitle(String title) {
-		if (jniKiwix==null)
+		if (jniKiwix==null || zimFileName==null)
 			return null;
 		else {
 			JNIKiwixString url=new JNIKiwixString();			
@@ -113,7 +111,7 @@ public class ZimContentProvider extends ContentProvider {
 	}
 	
 	public static String getRandomArticleUrl() {
-		if (jniKiwix==null)
+		if (jniKiwix==null || zimFileName==null)
 			return null;
 		else {
 			JNIKiwixString url=new JNIKiwixString();			
