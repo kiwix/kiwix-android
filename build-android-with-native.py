@@ -201,8 +201,7 @@ def syscall(args, shell=False, with_print=True):
         print(u"-----------\n" + u" ".join(args) + u"\n-----------")
 
     if shell:
-        # args = ' '.join(args)
-        pass
+        args = ' '.join(args)
     call(args, shell=shell)
 
 
@@ -305,10 +304,10 @@ for arch in ARCHS:
         # even though we need only static, we conpile also shared so it
         # switches the -fPIC properly.
         syscall(configure_cmd, shell=True)
-        syscall('make clean')
-        syscall('make')
-        syscall('make install')
-        syscall('make clean')
+        syscall('make clean', shell=True)
+        syscall('make', shell=True)
+        syscall('make install', shell=True)
+        syscall('make clean', shell=True)
 
     # check that the step went well
     if COMPILE_LIBLZMA or COMPILE_LIBZIM or COMPILE_LIBKIWIX:
