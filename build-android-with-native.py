@@ -304,7 +304,7 @@ for arch in ARCHS:
         # even though we need only static, we conpile also shared so it
         # switches the -fPIC properly.
         syscall(configure_cmd, shell=True)
-        syscall('make clean')
+        # syscall('make clean')
         syscall('make')
         syscall('make install')
         syscall('make clean')
