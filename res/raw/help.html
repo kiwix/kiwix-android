@@ -61,42 +61,5 @@
 
 <script src="file:///android_asset/www/jquery.js"></script>
 <script src="file:///android_asset/www/js/bootstrap.min.js"></script>
-<script type="text/javascript">
-var loaded = false;
-function loadcontent() {
-	$('#contents').empty();
-	$('#contents').load('http://www.kiwix.org/wiki/Wikipedia #zimtable', function() {
-		$('#zimtable tr:not(:last-child) th:last-child').remove();
-		$('#zimtable tr:not(:last-child) td:last-child').remove();
-		var all_a_elem = $('#zimtable tr:last-child a:last-child');
-		var all_url = all_a_elem.attr('href');
-		all_a_elem.attr('href', 'http://www.kiwix.org' + all_url);
-
-		// remove md5 link
-		$('#zimtable a').each(function () {
-			if ($(this).attr('href').indexOf('.md5') != -1) {
-				$(this).parent().parent().remove();
-			}
-		});
-
-		// download bitorrent ; are there torrent clients on android?
-		$('#zimtable a').each(function () {
-			if ($(this).attr('href').indexOf('.torrent') != -1) {
-				$(this).parent().remove();
-			}
-		});
-	});
-}
-$(".loadFromOnline").click(function() {
-	if (!loaded) {
-		loadcontent();
-		loaded = true;
-	} else {
-		loaded = false;
-		$('#contents').empty();
-	}
-
-});
-</script>
 </body>
 </html>

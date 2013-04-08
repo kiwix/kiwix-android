@@ -8,6 +8,8 @@
     <string name="menu_back">Précédente</string>
     <string name="menu_search">Recherche</string>
     <string name="menu_searchintext">Trouver dans la page</string>
+    <string name="menu_randomarticle">Article au hasard</string>
+    <string name="menu_settings">Paramètres</string>
     <string name="search_label">Rechercher</string>
     <string name="articlesearch_hint">Tapez ici votre recherche</string>
     <string name="choose_file">Sélectionner un fichier de contenu ZIM (*.zim)</string>
@@ -16,4 +18,7 @@
     <string name="error_fileinvalid">Erreur: le fichier sélectionné n\'est pas un fichier ZIM valide.</string>
     <string name="error_articlenotfound">Erreur: le chargement de l\'article \"%1$s\" a échoué.</string>
     <string name="error_articleurlnotfound">Erreur: le chargement de l\'article (Url: %1$s) a échoué.</string>
+    <string name="pref_display_title">Affichage</string>
+    <string name="pref_zoom_title">Zoom</string>
+    <string name="pref_zoom_dialogtitle">Zoom</string>
 </resources>

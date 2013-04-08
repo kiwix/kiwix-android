@@ -1,15 +1,45 @@
+<!DOCTYPE html>
 <html>
 <head>
-<title>Bienvenue sur Kiwix !</title>
+<meta charset="UTF-8" />
+<title>Bienvenue sur Kiwix!</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="file:///android_asset/www/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="file:///android_asset/www/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+<link href="file:///android_asset/www/static.css" rel="stylesheet">
 </head>
-<body>
 
-<h1>Bienvenue sur Kiwix !</h1>
+<body class="welcome" lang="en-US">
 
-Visit <a href="http://www.kiwix.org/landing_for_embedded_kiwix_for_android">Kiwix<img src="kiwix_icon.png"/></a> to find out how
-to download zim files, such as the Wikipedia.
-<p>
-<!-- Note to translator: Link text must match menu_openfile string -->
-Use <a href="content://org.kiwix.ui/selectzimfile">Open File</a> to open zim files stored on the device.
+<div id="content-wrapper">
 
-</body></html>
+<section id="step1">
+	<h2><span>1.</span> Télécharger un contenu</h2>
+	<p><strong>Kiwix</strong> est un lecteur de contenus hors-ligne, parfaitement adpaté à Wikipédia. Profiter de Kiwix ne nécessite que <strong>2 petites étapes</strong>.</p>
+
+	<p>Pourquoi ne pas commencer par Ray Charles ?</p>
+	<a class="button" href="http://download.kiwix.org/zim/ray-charles-demo.zim">Ray-Charles-Demo.zim</a>
+	<p>C'est un petit fichier ZIM de 2Mio contenant des articles de Wikipedia (en anglais) sur le chanteur <em>Ray Charles</em>.</p>
+	<p>Ce n'est qu'un exemple! Consultez <a href="http://kiwix.org/m/">kiwix.org</a> et l'<a href="content://org.kiwix.ui/gotohelp">Aide</a> pour télécharger d'autres contenus comme ; Wikipédia par exemple.</p>
+	<div class="alert alert-info"><strong>Attention !</strong> Ce téléchargement aura lieu dans votre navigateur. N'oubliez pas de revenir une fois le téléchargement terminé.</div>
+</section>
+
+<section id="step2">
+	<h2><span>2.</span> Faîtes une pause !</h2>
+	<img src="coffee.png">
+	<p>Les téléchargements peuvent être très long ; profitez en pour vaquer à vos occupations habituelles et revenez une fois le fichier ZIM sur votre carte SD.</p>
+</section>
+
+<section id="step3">
+	<h2><span>3.</span> Ouvrez le fichier ZIM !</h2>
+	<p>Cliquez sur le bouton <span><a href="content://org.kiwix.ui/selectzimfile">Charger un fichier</a></span> du menu de la barre d'outils en haut et choisissez le fichier ZIM que vous avez téléchargé. <strong>C'est tout !</strong></p>
+	<p>Maintenant, profitez de votre contenu et jetez un œil à l'<a href="content://org.kiwix.ui/gotohelp">Aide</a> à l'occasion.</p>
+</section>
+
+</div>
+
+<script src="file:///android_asset/www/jquery.js"></script>
+<script src="file:///android_asset/www/js/bootstrap.min.js"></script>
+</body>
+</html>

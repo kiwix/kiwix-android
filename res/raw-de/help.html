@@ -10,7 +10,7 @@
 <link href="file:///android_asset/www/static.css" rel="stylesheet">
 </head>
 
-<body class="help" lang="en-US">
+<body class="help" lang="de-DE">
 
 <div id="content-wrapper">
 
@@ -37,7 +37,7 @@
 	<p>Überleg dir, welche Inhalte du verwenden möchtest, und starte den Download. Speichere die Datei auf die Speicherkarte und öffne sie in Kiwix.</p>
 	<p>Bei größere Dateien, und abhängig von der Internetverbindung auf deinem Mobilgerät,  ist es empfehlenswert mit einem PC herunterzuladen, und die Datei danach auf die Speicherkarte zu kopieren.</p>
 	<p>ZIM-Dateien der gesamten Wikipedia, sind zum Beispiel <strong>mehrere Gigabyte</strong> groß.</p>
-	
+
 </section>
 
 <section id="can-wikipedia">
@@ -53,42 +53,5 @@
 
 <script src="file:///android_asset/www/jquery.js"></script>
 <script src="file:///android_asset/www/js/bootstrap.min.js"></script>
-<script type="text/javascript">
-var loaded = false;
-function loadcontent() {
-	$('#contents').empty();
-	$('#contents').load('http://www.kiwix.org/wiki/Wikipedia #zimtable', function() {
-		$('#zimtable tr:not(:last-child) th:last-child').remove();
-		$('#zimtable tr:not(:last-child) td:last-child').remove();
-		var all_a_elem = $('#zimtable tr:last-child a:last-child');
-		var all_url = all_a_elem.attr('href');
-		all_a_elem.attr('href', 'http://www.kiwix.org' + all_url);
-
-		// remove md5 link
-		$('#zimtable a').each(function () {
-			if ($(this).attr('href').indexOf('.md5') != -1) {
-				$(this).parent().parent().remove();
-			}
-		});
-
-		// download bitorrent ; are there torrent clients on android?
-		$('#zimtable a').each(function () {
-			if ($(this).attr('href').indexOf('.torrent') != -1) {
-				$(this).parent().remove();
-			}
-		});
-	});
-}
-$(".loadFromOnline").click(function() {
-	if (!loaded) {
-		loadcontent();
-		loaded = true;
-	} else {
-		loaded = false;
-		$('#contents').empty();
-	}
-
-});
-</script>
 </body>
 </html>
