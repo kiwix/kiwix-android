@@ -17,7 +17,7 @@
 <section id="intro">
 <h1>Thank you for choosing Kiwix!</h1>
 <p>We are glad to have you onboard and would like assure you we are available to assist you in making the best use of this software.</p>
-<p>Please leave us a note at <a href="http://kiwix.org">kiwix.org</a>.</p>
+<p>Please leave us a note at <a href="mailto:contact@kiwix.org">contact@kiwix.org</a>.</p>
 </section>
 
 <section id="what-does-kiwix-do">
@@ -28,7 +28,7 @@
 
 <section id="where-do-i-find-content">
 	<h2>Where is the content?</h2>
-	<p>The contents are located on the <a href="http://download.kiwix.org/mobile-download.html">kiwix website</a>.</p>
+	<p>The contents are located on the <a href="http://kiwix.org/m/">kiwix website</a>.</p>
 	<p>They are available as ZIM files. There are <strong>a lot</strong> of them:</p>
 	<ul>
 		<li>Wikipedia is available separately for each language</li>
@@ -36,9 +36,6 @@
 	</ul>
 	<p>Carefuly select the one(s) you want and launch the download. Put the resulting files on your SD card then open them with Kiwix.</p>
 	<p>Depending on the content and your Internet connection on this device, it might be preferable to download from a Desktop computer and transfer to your SD card.</p>
-	<p>ZIM files containing complete Wikipedia for instance are <strong>several gigabytes large</strong>.</p>
-	<p><button class="loadFromOnline">Load Content List from Website (requires Internet Access)</button></p>
-	<div id="contents"></div>
 </section>
 
 <section id="can-wikipedia">
@@ -49,7 +46,15 @@
 
 <section id="invalid-zim">
 	<h2>Why does Kiwix says <em>“Invalid ZIM file”</em> ?</h2>
-	<p>If your ZIM file weights more than 2GB, Kiwix will not open it properly. It's a bug on our side which we are investigating. Please split your file following <a href="http://kiwix.org/SplitZIMMobile.html">those instructions</a> and retry.</p>
+	<p>If your ZIM file weights more than 2GB, Kiwix will not open it properly. It's a bug on our side which we are investigating.</p>
+	<p>If you want to use a ZIM file larger than 2GB, please split it using one of the following software:</p>
+	<ul>
+		<li> On Microsoft Windows: <a rel="nofollow" class="external text" href="http://www.jaist.ac.jp/~hoangle/filesj/">FSJ-Lite</a></li>
+		<li> On Apple Mac OSX: <a rel="nofollow" class="external text" href="http://loekjehe.home.xs4all.nl/Split&amp;Concat/">Split&amp;Concat</a></li>
+		<li> On GNU/Linux and with the console: <code>split --bytes=2000M my_big_file.zim</code></li>
+	</ul>
+	<p><strong>Note:</strong> your resulting files must be named <code>my_big_file.zimaa</code>, <code>my_big_file.zimab</code>, etc.</p>
+	<p>Please note that most SD card limit files to 4GB so it's a good habit to split them anyway.</p>
 </section>
 
 </div>
