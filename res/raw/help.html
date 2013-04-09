@@ -44,17 +44,16 @@
 	<p>Please refer to the <a href="http://en.wikipedia.org/wiki/Special:Book">Book Creator</a> documentation on Wikipedia for more infos.</p>
 </section>
 
-<section id="invalid-zim">
-	<h2>Why does Kiwix says <em>“Invalid ZIM file”</em> ?</h2>
-	<p>If your ZIM file weights more than 2GB, Kiwix will not open it properly. It's a bug on our side which we are investigating.</p>
-	<p>If you want to use a ZIM file larger than 2GB, please split it using one of the following software:</p>
+<section id="large-zim">
+	<h2>How to use large ZIM files?</h2>
+	<p>If your ZIM file weights more than 4GB, you might not be able to store it on your SD card due to filesystem limitations.</p>
+	<p>In this case, please split it using one of the following software:</p>
 	<ul>
 		<li> On Microsoft Windows: <a rel="nofollow" class="external text" href="http://www.jaist.ac.jp/~hoangle/filesj/">FSJ-Lite</a></li>
 		<li> On Apple Mac OSX: <a rel="nofollow" class="external text" href="http://loekjehe.home.xs4all.nl/Split&amp;Concat/">Split&amp;Concat</a></li>
-		<li> On GNU/Linux and with the console: <code>split --bytes=2000M my_big_file.zim</code></li>
+		<li> On GNU/Linux and with the console: <code>split --bytes=4000M my_big_file.zim</code></li>
 	</ul>
 	<p><strong>Note:</strong> your resulting files must be named <code>my_big_file.zimaa</code>, <code>my_big_file.zimab</code>, etc.</p>
-	<p>Please note that most SD card limit files to 4GB so it's a good habit to split them anyway.</p>
 </section>
 
 </div>
