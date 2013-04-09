@@ -342,7 +342,7 @@ for arch in ARCHS:
                          ]
 
     src_dir = os.path.join(LIBZIM_SRC, 'src')
-    compile_cmd = ('g++ -fPIC -c -D_FILE_OFFSET_BITS=64 '
+    compile_cmd = ('g++ -fPIC -c -D_FILE_OFFSET_BITS=64 -DHAVE_LSEEK64 '
                    '-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE '
                    '-B%(platform)s/sysroot '
                    '%(source_files)s -I%(include_paths)s '
