@@ -17,7 +17,7 @@ function die {
 	exit 1
 }
 
-android update project -p . -n Kiwix -t android-14
+../src/dependencies/android-sdk/sdk/tools/android update project -p . -n Kiwix -t android-14
 ant release || die "ant release error."
 jarsigner -verbose -sigalg MD5withRSA -digestalg SHA1 -keystore $CERTIFICATE bin/Kiwix-release-unsigned.apk kiwix || die "Error signing the package."
 jarsigner -verify bin/Kiwix-release-unsigned.apk || die "The package is not properly signed."
