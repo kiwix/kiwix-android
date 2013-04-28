@@ -39,7 +39,7 @@
             android:imeOptions="actionGo"
             android:inputType="text|textCapWords"
             android:maxLines="1"
-            style="@android:style/TextAppearance.Medium"
+            android:textColor="@android:color/primary_text_light"
            />
 
 	</LinearLayout>
