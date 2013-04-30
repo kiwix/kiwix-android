@@ -142,7 +142,7 @@ public class KiwixMobileActivity extends Activity {
         articleSearchtextView.measure(MeasureSpec.UNSPECIFIED,MeasureSpec.UNSPECIFIED);
         int height = articleSearchtextView.getMeasuredHeight()-articleSearchtextView.getPaddingTop()-articleSearchtextView.getPaddingBottom();
         clearIcon.setBounds(0, 0, height, height);
-        articleSearchtextView.setCompoundDrawables(null, null, articleSearchtextView.getText().equals("") ? null : clearIcon, null);
+        articleSearchtextView.setCompoundDrawables(null, null, articleSearchtextView.getText().toString().equals("") ? null : clearIcon, null);
         articleSearchtextView.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
