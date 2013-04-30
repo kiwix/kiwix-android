@@ -26,6 +26,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.MeasureSpec;
 import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -137,9 +138,11 @@ public class KiwixMobileActivity extends Activity {
         articleSearchBar = (LinearLayout) findViewById(R.id.articleSearchBar);
         articleSearchtextView = (AutoCompleteTextView) findViewById(R.id.articleSearchTextView);
 
-        final Drawable x = getResources().getDrawable(R.drawable.navigation_cancel);//your x image, this one from standard android images looks pretty good actually
-        x.setBounds(0, 0, x.getIntrinsicWidth(), x.getIntrinsicHeight());
-        articleSearchtextView.setCompoundDrawables(null, null, articleSearchtextView.getText().equals("") ? null : x, null);
+        final Drawable clearIcon = getResources().getDrawable(R.drawable.navigation_cancel);        
+        articleSearchtextView.measure(MeasureSpec.UNSPECIFIED,MeasureSpec.UNSPECIFIED);
+        int height = articleSearchtextView.getMeasuredHeight()-articleSearchtextView.getPaddingTop()-articleSearchtextView.getPaddingBottom();
+        clearIcon.setBounds(0, 0, height, height);
+        articleSearchtextView.setCompoundDrawables(null, null, articleSearchtextView.getText().equals("") ? null : clearIcon, null);
         articleSearchtextView.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -149,7 +152,7 @@ public class KiwixMobileActivity extends Activity {
                 if (event.getAction() != MotionEvent.ACTION_UP) {
                     return false;
                 }
-                if (event.getX() > articleSearchtextView.getWidth() - articleSearchtextView.getPaddingRight() - x.getIntrinsicWidth()) {
+                if (event.getX() > articleSearchtextView.getWidth() - articleSearchtextView.getPaddingRight() - clearIcon.getIntrinsicWidth()) {
                 	articleSearchtextView.setText("");
                 	articleSearchtextView.setCompoundDrawables(null, null, null, null);
                 }
@@ -159,7 +162,7 @@ public class KiwixMobileActivity extends Activity {
         articleSearchtextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-            	articleSearchtextView.setCompoundDrawables(null, null, articleSearchtextView.getText().toString().equals("") ? null : x, null);
+            	articleSearchtextView.setCompoundDrawables(null, null, articleSearchtextView.getText().toString().equals("") ? null : clearIcon, null);
             }
 
             @Override
@@ -454,7 +457,7 @@ public class KiwixMobileActivity extends Activity {
 		//Move cursor to end
 		articleSearchtextView.setSelection(articleSearchtextView.getText().length());
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+		imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);		
 	}
 
    
