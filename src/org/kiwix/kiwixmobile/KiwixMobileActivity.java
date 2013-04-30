@@ -12,16 +12,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebChromeClient;
@@ -132,7 +137,39 @@ public class KiwixMobileActivity extends Activity {
         articleSearchBar = (LinearLayout) findViewById(R.id.articleSearchBar);
         articleSearchtextView = (AutoCompleteTextView) findViewById(R.id.articleSearchTextView);
 
+        final Drawable x = getResources().getDrawable(R.drawable.navigation_cancel);//your x image, this one from standard android images looks pretty good actually
+        x.setBounds(0, 0, x.getIntrinsicWidth(), x.getIntrinsicHeight());
+        articleSearchtextView.setCompoundDrawables(null, null, articleSearchtextView.getText().equals("") ? null : x, null);
+        articleSearchtextView.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (articleSearchtextView.getCompoundDrawables()[2] == null) {
+                    return false;
+                }
+                if (event.getAction() != MotionEvent.ACTION_UP) {
+                    return false;
+                }
+                if (event.getX() > articleSearchtextView.getWidth() - articleSearchtextView.getPaddingRight() - x.getIntrinsicWidth()) {
+                	articleSearchtextView.setText("");
+                	articleSearchtextView.setCompoundDrawables(null, null, null, null);
+                }
+                return false;
+            }
+        });
+        articleSearchtextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            	articleSearchtextView.setCompoundDrawables(null, null, articleSearchtextView.getText().toString().equals("") ? null : x, null);
+            }
 
+            @Override
+            public void afterTextChanged(Editable arg0) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+        });
         // Create the adapter and set it to the AutoCompleteTextView
         adapter = new AutoCompleteAdapter(this, android.R.layout.simple_list_item_1);
 
