@@ -138,11 +138,14 @@ public class KiwixMobileActivity extends Activity {
         articleSearchBar = (LinearLayout) findViewById(R.id.articleSearchBar);
         articleSearchtextView = (AutoCompleteTextView) findViewById(R.id.articleSearchTextView);
 
-        final Drawable clearIcon = getResources().getDrawable(R.drawable.navigation_cancel);        
+        final Drawable clearIcon = getResources().getDrawable(R.drawable.navigation_cancel);
+        final Drawable searchIcon = getResources().getDrawable(R.drawable.action_search);
         articleSearchtextView.measure(MeasureSpec.UNSPECIFIED,MeasureSpec.UNSPECIFIED);
         int height = articleSearchtextView.getMeasuredHeight()-articleSearchtextView.getPaddingTop()-articleSearchtextView.getPaddingBottom();
         clearIcon.setBounds(0, 0, height, height);
-        articleSearchtextView.setCompoundDrawables(null, null, articleSearchtextView.getText().toString().equals("") ? null : clearIcon, null);
+        searchIcon.setBounds(0, 0, height, height);
+        articleSearchtextView.setCompoundDrawablePadding(5);
+        articleSearchtextView.setCompoundDrawables(searchIcon, null, articleSearchtextView.getText().toString().equals("") ? null : clearIcon, null);        
         articleSearchtextView.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -154,7 +157,7 @@ public class KiwixMobileActivity extends Activity {
                 }
                 if (event.getX() > articleSearchtextView.getWidth() - articleSearchtextView.getPaddingRight() - clearIcon.getIntrinsicWidth()) {
                 	articleSearchtextView.setText("");
-                	articleSearchtextView.setCompoundDrawables(null, null, null, null);
+                	articleSearchtextView.setCompoundDrawables(searchIcon, null, null, null);
                 }
                 return false;
             }
@@ -162,7 +165,7 @@ public class KiwixMobileActivity extends Activity {
         articleSearchtextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-            	articleSearchtextView.setCompoundDrawables(null, null, articleSearchtextView.getText().toString().equals("") ? null : clearIcon, null);
+            	articleSearchtextView.setCompoundDrawables(searchIcon, null, articleSearchtextView.getText().toString().equals("") ? null : clearIcon, null);
             }
 
             @Override

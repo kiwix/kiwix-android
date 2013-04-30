@@ -16,19 +16,7 @@
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     >
-	
-	
-        <TextView
-            android:id="@+id/articleSearchLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@android:style/TextAppearance.Large"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="@string/search_label" 
-            />
-
-        <AutoCompleteTextView
+	    <AutoCompleteTextView
             android:id="@+id/articleSearchTextView"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
