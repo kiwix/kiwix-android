@@ -276,7 +276,7 @@ for arch in ARCHS:
     # change the PATH for compilation to use proper tools
     new_environ = {'PATH': ('%(platform)s/bin:%(platform)s/%(arch_full)s'
                             '/bin:%(platform)s/libexec/gcc/%(arch_full)s/'
-                            '%(gccver)s/:%(sdka)s:%(sdkb)s/%(orig)s'
+                            '%(gccver)s/:%(sdka)s:%(sdkb)s/:%(orig)s'
                    % {'platform': platform,
                       'orig': ORIGINAL_ENVIRON['PATH'],
                       'arch_full': arch_full,
