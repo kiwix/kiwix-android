@@ -27,6 +27,7 @@ LoaderManager.LoaderCallbacks<Cursor> {
 	private static final int LOADER_ID = 0x02;
 	private SimpleCursorAdapter mCursorAdapter;
 	private ListView zimFileList;
+	private View tmpZimFileList;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -72,16 +73,21 @@ LoaderManager.LoaderCallbacks<Cursor> {
 		// Sets the adapter for the ListView
 		setContentView(R.layout.zimfilelist);
 
-
-		zimFileList = (ListView) findViewById(R.id.zimfilelist);
-		getLoaderManager().initLoader(LOADER_ID, null, this);
-		zimFileList.setAdapter(mCursorAdapter);
-		zimFileList.setOnItemClickListener(new OnItemClickListener() {
+		// For a reason I ingore, it seems that time to time
+		// tmpZimFileList is not castable in ListView. Kelson
+		tmpZimFileList = findViewById(R.id.zimfilelist);
+		if (tmpZimFileList instanceof ListView) {   
+		    zimFileList = (ListView) tmpZimFileList;
+		    getLoaderManager().initLoader(LOADER_ID, null, this);
+		    zimFileList.setAdapter(mCursorAdapter);
+		    zimFileList.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				// TODO Auto-generated method stub
 				onListItemClick((ListView) arg0, arg0, arg2, arg3);
 			}
-		});
+		    });
+		}
+
 		//TODO close cursor when done
 		//allNonMediaFiles.close();
 	}
