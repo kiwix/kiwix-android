@@ -94,7 +94,7 @@ public class KiwixMobileActivity extends Activity {
 							String suggestion;
 
 							data.clear();
-							while ((suggestion = ZimContentProvider.getNextSuggestion())!=null) {
+							while ((suggestion = ZimContentProvider.getNextSuggestion())!=null && !data.contains(suggestion)) {
 								data.add(suggestion);
 							}
 						}
