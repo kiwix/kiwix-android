@@ -90,7 +90,7 @@ public class KiwixMobileActivity extends Activity {
 					if(constraint != null) {
 						// A class that queries a web API, parses the data and returns an ArrayList<Style>
 						try {
-							ZimContentProvider.searchSuggestions(constraint.toString(), 20);
+							ZimContentProvider.searchSuggestions(constraint.toString(), 200);
 							String suggestion;
 
 							data.clear();
