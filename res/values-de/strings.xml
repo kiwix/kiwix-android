@@ -20,5 +20,6 @@
     <string name="error_articleurlnotfound">Fehler: Der Artikel (Url: %1$s) konnte nicht geladen werden.</string>
     <string name="pref_display_title">Anzeige</string>
     <string name="pref_zoom_title">Zoom</string>
-    <string name="pref_zoom_dialogtitle">Zoom</string>    
+    <string name="pref_zoom_dialogtitle">Zoom</string>
+    <string name="menu_exit">Schliessen</string>
 </resources>

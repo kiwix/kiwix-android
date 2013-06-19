@@ -28,8 +28,5 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
-        <string name="menu_exit">Exit</string>
-    
-   
-    
+    <string name="menu_exit">Exit</string>
 </resources>
