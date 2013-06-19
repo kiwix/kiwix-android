@@ -72,6 +72,7 @@
         android:icon="@drawable/navigation_forward"        
         android:orderInCategory="0"
         android:showAsAction="never"/>
+    <item android:id="@+id/menu_exit" android:orderInCategory="0" android:title="@string/menu_exit" android:showAsAction="never"></item>
     
     
     

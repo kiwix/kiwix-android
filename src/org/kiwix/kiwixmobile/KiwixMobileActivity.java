@@ -428,6 +428,9 @@ public class KiwixMobileActivity extends Activity {
                 startActivityForResult(i, PREFERENCES_REQUEST_CODE);
             	break;
 
+            case R.id.menu_exit:
+            	finish();
+            	break;
         }
         return super.onOptionsItemSelected(item);
     }
