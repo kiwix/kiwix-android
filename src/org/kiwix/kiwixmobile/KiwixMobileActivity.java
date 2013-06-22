@@ -236,6 +236,11 @@ public class KiwixMobileActivity extends Activity {
                 } else if (url.startsWith("file://")) {
                     // To handle help page (loaded from resources)
                     return true;
+                    
+                } else if (url.startsWith("javascript:")){
+                    // Allow javascript for HTML functions and code execution (EX: night mode)
+                    return true;
+                    
                 } else if (url.startsWith(ZimContentProvider.UI_URI.toString())) {
                 	// To handle links which access user interface (i.p. used in help page)
                 	if (url.equals(ZimContentProvider.UI_URI.toString()+"selectzimfile")) {
@@ -421,17 +426,22 @@ public class KiwixMobileActivity extends Activity {
 
 			    selectZimFile();
 			    break;
-			    
+
+            case R.id.menu_exit:
+            	finish();
+            	break;
+            
             case R.id.menu_settings:
             	// Display the fragment as the main content.
             	Intent i = new Intent(this, KiwixSettings.class);
                 startActivityForResult(i, PREFERENCES_REQUEST_CODE);
             	break;
-
-            case R.id.menu_exit:
-            	finish();
-            	break;
+            	
+            case R.id.menu_togglenightmode:
+            	ToggleNightMode();
+            	break;         
         }
+        
         return super.onOptionsItemSelected(item);
     }
 
@@ -629,6 +639,11 @@ public class KiwixMobileActivity extends Activity {
 		//Seems not really be necessary
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(),0);
+	}
+	
+	private void ToggleNightMode(){
+		String JSInvert = "javascript:function load_script(src,callback){var s=document.createElement('script');s.src=src;s.onload=callback;document.getElementsByTagName('head')[0].appendChild(s);}load_script('file:///android_asset/www/invert.js');";
+		webView.loadUrl(JSInvert);
 	}
 	
 	private void setDefaultZoom() {

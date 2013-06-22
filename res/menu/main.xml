@@ -61,6 +61,7 @@
         android:orderInCategory="0"
         android:showAsAction="never" />
     
+    <item android:id="@+id/menu_togglenightmode" android:title="@string/menu_togglenightmode" android:orderInCategory="0" android:showAsAction="never"></item>
     <item android:id="@+id/menu_help"
         android:title="@string/menu_help"
 		android:icon="@drawable/action_help"                        
@@ -73,6 +74,7 @@
         android:orderInCategory="0"
         android:showAsAction="never"/>
     <item android:id="@+id/menu_exit" android:orderInCategory="0" android:title="@string/menu_exit" android:showAsAction="never"></item>
+    
     
     
     
