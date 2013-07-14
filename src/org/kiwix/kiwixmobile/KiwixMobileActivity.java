@@ -3,7 +3,10 @@ package org.kiwix.kiwixmobile;
 
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -642,8 +645,18 @@ public class KiwixMobileActivity extends Activity {
 	}
 	
 	private void ToggleNightMode(){
-		String JSInvert = "javascript:function load_script(src,callback){var s=document.createElement('script');s.src=src;s.onload=callback;document.getElementsByTagName('head')[0].appendChild(s);}load_script('file:///android_asset/www/invert.js');";
-		webView.loadUrl(JSInvert);
+
+		try {
+			InputStream stream = getAssets().open("invertcode.js");
+			int size = stream.available();
+			byte[] buffer = new byte[size];
+			stream.read(buffer);
+			stream.close();
+			String JSInvert = new String(buffer);
+			webView.loadUrl("javascript:"+JSInvert);
+		} catch (IOException e) {
+
+		}
 	}
 	
 	private void setDefaultZoom() {
