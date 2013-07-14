@@ -71,10 +71,6 @@ function RGBColor(color_string) {
     // and overwrite the input
     var simple_colors = {
 
-        groupwiki: 'eeeeee',
-	wiki2:'ddddff',
-	wiki3:'f7f7f7',
-
         aliceblue: 'f0f8ff',
         antiquewhite: 'faebd7',
         aqua: '00ffff',
