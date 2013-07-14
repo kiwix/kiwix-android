@@ -1,24 +1,37 @@
+var Toggled;
 
-function invertColors() {
-
-    //Set background property to be proceded during the invert
-    $('body').css('background', '#FFFFFF');
+function initCss() {
+    var colorProperties = ['color', 'background-color', 'background'];
 
     $('*').each(function () {
-        var hascolorprop = false;
 
         for (var prop in colorProperties) {
             prop = colorProperties[prop];
-            if ($(this).css(prop))
-		hascolorprop=true;	
+            if (($(this).css(prop) === 'rgba(0, 0, 0, 0)') || ($(this).css(prop) === 'transparent')) {
+                if ($(this).is('body')) {
+                    $(this).css('background', 'rgb(255, 255, 255)');
+                    $(this).css('color', 'rgb(0, 0, 0)');
+                } else
+                if (!$(this).is('a'))
+                    $(this).css('color', 'rgb(0, 0, 0)');
+
+            }
+
         }
-
-	if (hascolorprop==false)
-	    $(this).css('color', '#000000');
-
     });
+}
+
+function invertColors() {
+
+    //First init for other elements
+    if (typeof Toggled === 'undefined') {
+        initCss();
+        Toggled = true;
+    }
+
 
     var colorProperties = ['color', 'background-color', 'background'];
+
     $('*').each(function () {
         var color = null;
         for (var prop in colorProperties) {
@@ -31,7 +44,9 @@ function invertColors() {
             color = null;
         }
     });
+
 }
+
 
 /**
  * A class to parse color values
@@ -55,6 +70,11 @@ function RGBColor(color_string) {
     // before getting into regexps, try simple matches
     // and overwrite the input
     var simple_colors = {
+
+        groupwiki: 'eeeeee',
+	wiki2:'ddddff',
+	wiki3:'f7f7f7',
+
         aliceblue: 'f0f8ff',
         antiquewhite: 'faebd7',
         aqua: '00ffff',
