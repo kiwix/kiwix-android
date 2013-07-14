@@ -383,8 +383,9 @@ for arch in ARCHS:
                    '-D_FILE_OFFSET_BITS=64 '
                    '-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE '
                    '-DANDROID_NDK '
-                   'kiwix.c %(kwsrc)s/kiwix/reader.cpp %(kwsrc)s'
-                   '/stringTools.cpp '
+                   'kiwix.c %(kwsrc)s/kiwix/reader.cpp '
+                   '%(kwsrc)s/stringTools.cpp '
+                   '%(kwsrc)s/pathTools.cpp '
                    '-I%(include_paths)s '
                    % {'platform': platform,
                       'arch_full': arch_full,
@@ -403,7 +404,7 @@ for arch in ARCHS:
     link_cmd = ('g++ -fPIC -shared -B%(platform)s/sysroot '
                 '--sysroot %(platform)s/sysroot '
                 '-nostdlib '
-                'kiwix.o reader.o stringTools.o '
+                'kiwix.o reader.o stringTools.o pathTools.o '
                 '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/crtbegin.o '
                 '%(platform)s/lib/libzim.a %(platform)s/lib/liblzma.a '
                 '-L%(platform)s/%(arch_full)s/lib '
@@ -432,7 +433,7 @@ for arch in ARCHS:
         syscall(compile_cmd)
         syscall(link_cmd)
 
-        for obj in ('kiwix.o', 'reader.o', 'stringTools.o',
+        for obj in ('kiwix.o', 'reader.o', 'stringTools.o', 'pathTools.o',
                     'src/org_kiwix_kiwixmobile_JNIKiwix.h'):
             os.remove(obj)
 
