@@ -56,6 +56,7 @@ public class KiwixMobileActivity extends Activity {
 	private ArrayAdapter<String> adapter;
 	protected boolean requestClearHistoryAfterLoad;
 	protected boolean requestShowAllMenuItems;
+	protected boolean NightMode;
 	protected int requestWebReloadOnFinished;
 	private static final int ZIMFILESELECT_REQUEST_CODE = 1234;
 	private static final int PREFERENCES_REQUEST_CODE = 1235;
@@ -131,6 +132,7 @@ public class KiwixMobileActivity extends Activity {
         requestClearHistoryAfterLoad=false;
         requestWebReloadOnFinished = 0;
         requestShowAllMenuItems = false;
+        NightMode = false;
 
 
         this.requestWindowFeature(Window.FEATURE_PROGRESS);
@@ -220,6 +222,13 @@ public class KiwixMobileActivity extends Activity {
                         		 webView.clearHistory();
                         		 requestClearHistoryAfterLoad=false;
                         	 }
+
+                        	 
+                        	 if(NightMode){
+                				NightMode=false;
+                				ToggleNightMode();
+                			}
+                        	 
                          }
                          }
         });
@@ -284,8 +293,7 @@ public class KiwixMobileActivity extends Activity {
         	 });
 
         loadPref();
-      //Pinch to zoom
-        webView.getSettings().setBuiltInZoomControls(true);
+
         //webView.getSettings().setLoadsImagesAutomatically(false);
         //Does not make much sense to cache data from zim files.(Not clear whether
         // this actually has any effect)
@@ -335,6 +343,8 @@ public class KiwixMobileActivity extends Activity {
     private void loadPref(){
     	  SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     	  String pref_zoom = mySharedPreferences.getString("pref_zoom", "automatic");
+    	  Boolean pref_zoom_enabled = mySharedPreferences.getBoolean("pref_zoom_enabled", false);
+
     	  if (pref_zoom.equals("automatic")) {
       		 setDefaultZoom();
     	  } else if (pref_zoom.equals("medium")) {
@@ -347,6 +357,10 @@ public class KiwixMobileActivity extends Activity {
     		 Log.w("kiwix", "pref_displayZoom value ("+pref_zoom+" unknown. Assuming automatic");
     		 webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
     	 }
+
+         //Pinch to zoom
+    	 Log.d("kiwix","pref_zoom_enabled value ("+pref_zoom_enabled+")");
+    	 webView.getSettings().setBuiltInZoomControls(pref_zoom_enabled);
     }
     
 
@@ -600,6 +614,7 @@ public class KiwixMobileActivity extends Activity {
 			hideSearchBar();
 			webView.loadUrl(Uri.parse(ZimContentProvider.CONTENT_URI
 		            +articleUrl).toString());
+			
 			return true;
 		} else {
 			String errorString = String.format(getResources().getString(R.string.error_articlenotfound), articleSearchtextView.getText().toString());
@@ -654,6 +669,7 @@ public class KiwixMobileActivity extends Activity {
 			stream.close();
 			String JSInvert = new String(buffer);
 			webView.loadUrl("javascript:"+JSInvert);
+			NightMode = !NightMode;
 		} catch (IOException e) {
 
 		}

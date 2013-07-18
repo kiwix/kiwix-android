@@ -30,4 +30,6 @@
     </string-array>
     <string name="menu_exit">Exit</string>
     <string name="menu_togglenightmode">Toggle night mode</string>
+    <string name="pref_zoom_enable">Enable Zoom</string>
+    <string name="pref_zoom_enable_summary">Enable or disable the zoom controls</string>
 </resources>
