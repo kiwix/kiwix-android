@@ -21,5 +21,8 @@
     <string name="pref_display_title">Affichage</string>
     <string name="pref_zoom_title">Zoom</string>
     <string name="pref_zoom_dialogtitle">Zoom</string>
+    <string name="menu_togglenightmode">Couleurs inversées</string>
+    <string name="pref_zoom_enable">Activer le zoom/string>
+    <string name="pref_zoom_enable_summary">Afficher le bouton de zoom</string>
     <string name="menu_exit">Quitter</string>
 </resources>
