@@ -19,10 +19,11 @@
     <string name="error_articlenotfound">Fehler: Der Artikel \"%1$s\" konnte nicht geladen werden.</string>
     <string name="error_articleurlnotfound">Fehler: Der Artikel (Url: %1$s) konnte nicht geladen werden.</string>
     <string name="pref_display_title">Anzeige</string>
-    <string name="pref_zoom_title">Zoom</string>
-    <string name="pref_zoom_dialogtitle">Zoom</string>
-    <string name="menu_togglenightmode">Nachtmodus</string>
-    <string name="pref_zoom_enable">Zoom aktivieren</string>
-    <string name="pref_zoom_enable_summary">Zoom Knopf darstellen</string>
+    <string name="pref_zoom_title">Vergrößerungsstufe</string>
+    <string name="pref_zoom_dialogtitle">Vergrößerungsstufe</string>
+    <string name="pref_nightmode">Nachtmodus</string>
+    <string name="pref_nightmode_summary">Darstellt die Artikeln mit umgekehrten Farben</string>
+    <string name="pref_zoom_enable">Zoom Knopf</string>
+    <string name="pref_zoom_enable_summary">Darstelt ein Zoom Knopf, rechts unten, am Bildschirm</string>
     <string name="menu_exit">Schliessen</string>
 </resources>

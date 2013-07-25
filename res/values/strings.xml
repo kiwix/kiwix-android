@@ -19,8 +19,8 @@
     <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
     <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
     <string name="pref_display_title">Display</string>
-    <string name="pref_zoom_title">Zoom</string>
-    <string name="pref_zoom_dialogtitle">Zoom</string>    
+    <string name="pref_zoom_title">Zoom level</string>
+    <string name="pref_zoom_dialogtitle">Zoom level</string>    
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -29,8 +29,8 @@
         <item>Large</item>
     </string-array>
     <string name="menu_exit">Exit</string>
-    <string name="pref_zoom_enable">Enable Zoom</string>
-    <string name="pref_zoom_enable_summary">Enable or disable the zoom controls</string>
-    <string name="pref_nightmode">Enabled night mode</string>
-    <string name="pref_nightmode_summary">Enable or disable the night mode</string>
+    <string name="pref_zoom_enable">Zoom controls</string>
+    <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
+    <string name="pref_nightmode">Night mode</string>
+    <string name="pref_nightmode_summary">Show articles with reverted colors</string>
 </resources>

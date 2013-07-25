@@ -19,10 +19,11 @@
     <string name="error_articlenotfound">Erreur: le chargement de l\'article \"%1$s\" a échoué.</string>
     <string name="error_articleurlnotfound">Erreur: le chargement de l\'article (Url: %1$s) a échoué.</string>
     <string name="pref_display_title">Affichage</string>
-    <string name="pref_zoom_title">Zoom</string>
-    <string name="pref_zoom_dialogtitle">Zoom</string>
-    <string name="menu_togglenightmode">Couleurs inversées</string>
-    <string name="pref_zoom_enable">Activer le zoom</string>
-    <string name="pref_zoom_enable_summary">Afficher le bouton de zoom</string>
+    <string name="pref_zoom_title">Niveau de zoom</string>
+    <string name="pref_zoom_dialogtitle">Niveau de zoom</string>
+    <string name="pref_nightmode">Affichage nocturne</string>
+    <string name="pref_nightmode_summary">Afficher les articles avec des couleurs inversées</string>
+    <string name="pref_zoom_enable">Bouton de zoom</string>
+    <string name="pref_zoom_enable_summary">Affiche un bouton de zoom dans le coin en bas à droite de l\'écran</string>
     <string name="menu_exit">Quitter</string>
 </resources>
