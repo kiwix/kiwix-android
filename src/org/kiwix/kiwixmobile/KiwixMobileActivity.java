@@ -223,8 +223,8 @@ public class KiwixMobileActivity extends Activity {
                         		 requestClearHistoryAfterLoad=false;
                         	 }
 
-                        	 
-                        	 if(NightMode){
+                        	 Log.d("kiwix", "Loaded URL: "+webView.getUrl());                        	 
+                        	 if(NightMode){ 
                 				NightMode=false;
                 				ToggleNightMode();
                 			}
@@ -344,6 +344,7 @@ public class KiwixMobileActivity extends Activity {
     	  SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     	  String pref_zoom = mySharedPreferences.getString("pref_zoom", "automatic");
     	  Boolean pref_zoom_enabled = mySharedPreferences.getBoolean("pref_zoom_enabled", false);
+    	  Boolean pref_nightmode= mySharedPreferences.getBoolean("pref_nightmode", false);
 
     	  if (pref_zoom.equals("automatic")) {
       		 setDefaultZoom();
@@ -361,6 +362,12 @@ public class KiwixMobileActivity extends Activity {
          //Pinch to zoom
     	 Log.d("kiwix","pref_zoom_enabled value ("+pref_zoom_enabled+")");
     	 webView.getSettings().setBuiltInZoomControls(pref_zoom_enabled);
+
+         //Night mode status
+    	 Log.d("kiwix","pref_nightmode value ("+pref_nightmode+")");
+    	 if(NightMode!=pref_nightmode)
+    		 ToggleNightMode();
+    	 
     }
     
 
@@ -453,10 +460,6 @@ public class KiwixMobileActivity extends Activity {
             	Intent i = new Intent(this, KiwixSettings.class);
                 startActivityForResult(i, PREFERENCES_REQUEST_CODE);
             	break;
-            	
-            case R.id.menu_togglenightmode:
-            	ToggleNightMode();
-            	break;         
         }
         
         return super.onOptionsItemSelected(item);
