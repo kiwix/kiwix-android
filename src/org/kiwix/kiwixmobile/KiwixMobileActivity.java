@@ -19,6 +19,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.InputType;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -201,7 +202,7 @@ public class KiwixMobileActivity extends Activity {
             		//Do Stuff
             		return openArticleFromSearch();
          }});
-
+	articleSearchtextView.setInputType(InputType.TYPE_CLASS_TEXT);
 
         // js includes will not happen unless we enable JS
         webView.getSettings().setJavaScriptEnabled(true);
