@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Kiwix</string>
-    <string name="menu_openfile">Datei öffnen …</string>
-    <string name="menu_help">Hilfe</string>
-    <string name="menu_home">Startseite</string>
-    <string name="menu_forward">Vorwärts</string>
-    <string name="menu_back">Rückwärts</string>
-    <string name="menu_settings">Einstellungen</string>
-    <string name="menu_search">Suche</string>
-    <string name="menu_searchintext">Im Text suchen</string>
-    <string name="menu_randomarticle">Zufälliger Artikel</string>
-    <string name="search_label">Suche</string>
+    <string name="menu_openfile">פתיחת קובץ...</string>
+    <string name="menu_help">עזרה</string>
+    <string name="menu_home">דף הבית</string>
+    <string name="menu_forward">קדימה</string>
+    <string name="menu_back">אחורה</string>
+    <string name="menu_settings">העדפות</string>
+    <string name="menu_search">חיפוש</string>
+    <string name="menu_searchintext">חיפוש בטקסט</string>
+    <string name="menu_randomarticle">ערך אקראי</string>
+    <string name="search_label">חיפוש</string>
     <string name="articlesearch_hint">Type to lookup articles</string>
     <string name="choose_file">Select a ZIM Content File (*.zim)</string>
     <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
@@ -18,7 +18,7 @@
     <string name="error_fileinvalid">Error: The selected file is not a valid ZIM file.</string>
     <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
     <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
-    <string name="pref_display_title">Bildschirm</string>
+    <string name="pref_display_title">תצוגה</string>
     <string name="pref_zoom_title">Zoom level</string>
     <string name="pref_zoom_dialogtitle">Zoom level</string>    
     <string-array
@@ -28,7 +28,7 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
-    <string name="menu_exit">Schliessen</string>
+    <string name="menu_exit">יציאה</string>
     <string name="pref_zoom_enable">Zoom controls</string>
     <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
     <string name="pref_nightmode">Night mode</string>
