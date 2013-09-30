@@ -17,7 +17,7 @@
     <string name="error_filenotfound">Error: The selected ZIM file could not be found.</string>
     <string name="error_fileinvalid">Error: The selected file is not a valid ZIM file.</string>
     <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
-    <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
+    <string name="error_articleurlnotfound">Ошибка: Загрузка статьи (Url: %1$s) не удалась.</string>
     <string name="pref_display_title">Показать</string>
     <string name="pref_zoom_title">Zoom level</string>
     <string name="pref_zoom_dialogtitle">Zoom level</string>    
@@ -31,6 +31,6 @@
     <string name="menu_exit">Выход</string>
     <string name="pref_zoom_enable">Zoom controls</string>
     <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
-    <string name="pref_nightmode">Night mode</string>
+    <string name="pref_nightmode">Ночной режим</string>
     <string name="pref_nightmode_summary">Show articles with reverted colors</string>
 </resources>

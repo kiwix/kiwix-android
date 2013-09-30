@@ -11,16 +11,16 @@
     <string name="menu_searchintext">テキストで検索</string>
     <string name="menu_randomarticle">ランダム記事</string>
     <string name="search_label">検索</string>
-    <string name="articlesearch_hint">Type to lookup articles</string>
+    <string name="articlesearch_hint">記事の検索</string>
     <string name="choose_file">Select a ZIM Content File (*.zim)</string>
     <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
-    <string name="error_filenotfound">Error: The selected ZIM file could not be found.</string>
-    <string name="error_fileinvalid">Error: The selected file is not a valid ZIM file.</string>
+    <string name="error_filenotfound">エラー: 選択した ZIM ファイルが見つかりませんでした。</string>
+    <string name="error_fileinvalid">エラー: 選択したファイルは有効な ZIM ファイルではありません。</string>
     <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
-    <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
+    <string name="error_articleurlnotfound">エラー: 記事 (URL: %1$s) を読み込めませんでした。</string>
     <string name="pref_display_title">表示</string>
-    <string name="pref_zoom_title">Zoom level</string>
-    <string name="pref_zoom_dialogtitle">Zoom level</string>    
+    <string name="pref_zoom_title">ズーム レベル</string>
+    <string name="pref_zoom_dialogtitle">ズーム レベル</string>    
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -29,8 +29,8 @@
         <item>Large</item>
     </string-array>
     <string name="menu_exit">終了</string>
-    <string name="pref_zoom_enable">Zoom controls</string>
-    <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
-    <string name="pref_nightmode">Night mode</string>
-    <string name="pref_nightmode_summary">Show articles with reverted colors</string>
+    <string name="pref_zoom_enable">ズーム コントロール</string>
+    <string name="pref_zoom_enable_summary">画面右下隅にズーム ボタンを表示する</string>
+    <string name="pref_nightmode">夜モード</string>
+    <string name="pref_nightmode_summary">記事を反転色で表示する</string>
 </resources>

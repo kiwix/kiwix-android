@@ -11,16 +11,16 @@
     <string name="menu_searchintext">Căutare în text</string>
     <string name="menu_randomarticle">Articol aleatoriu</string>
     <string name="search_label">Căutare</string>
-    <string name="articlesearch_hint">Type to lookup articles</string>
-    <string name="choose_file">Select a ZIM Content File (*.zim)</string>
-    <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
-    <string name="error_filenotfound">Error: The selected ZIM file could not be found.</string>
-    <string name="error_fileinvalid">Error: The selected file is not a valid ZIM file.</string>
+    <string name="articlesearch_hint">Tastați pentru a căuta articole</string>
+    <string name="choose_file">Alegeți un fișier cu conținut ZIM (*.zim)</string>
+    <string name="error_nozimfilesfound">Nu s-au găsit fișiere ZIM pe dispozitivul dumneavoastră.\nConsultați pagina de ajutor pentru detalii despre încărcarea conținutului în Kiwix.\nDacă totuși ați stocat un fișier ZIM pe dispozitivul dv./stocarea dv. externă, puteți reîncerca peste un minut sau puteți reporni dispozitivul.</string>
+    <string name="error_filenotfound">Eroare: Fișierul ZIM selectat nu poate fi găsit.</string>
+    <string name="error_fileinvalid">Eroare: Fișierul selectat nu este un fișier ZIM valid.</string>
     <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
-    <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
+    <string name="error_articleurlnotfound">Eroare: Încărcarea articolului (Url: %1$s) nu a reușit.</string>
     <string name="pref_display_title">Afișare</string>
-    <string name="pref_zoom_title">Zoom level</string>
-    <string name="pref_zoom_dialogtitle">Zoom level</string>    
+    <string name="pref_zoom_title">Nivel de zoom</string>
+    <string name="pref_zoom_dialogtitle">Nivel de zoom</string>    
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -29,8 +29,8 @@
         <item>Large</item>
     </string-array>
     <string name="menu_exit">Ieșire</string>
-    <string name="pref_zoom_enable">Zoom controls</string>
-    <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
-    <string name="pref_nightmode">Night mode</string>
-    <string name="pref_nightmode_summary">Show articles with reverted colors</string>
+    <string name="pref_zoom_enable">Controale de zoom</string>
+    <string name="pref_zoom_enable_summary">Afișează un buton de zoom în colțul din dreapta jos al ecranului</string>
+    <string name="pref_nightmode">Mod de noapte</string>
+    <string name="pref_nightmode_summary">Afișează articolele în culori inversate</string>
 </resources>

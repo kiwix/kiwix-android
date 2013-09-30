@@ -11,16 +11,16 @@
     <string name="menu_searchintext">Знайти в тексті</string>
     <string name="menu_randomarticle">Випадкова стаття</string>
     <string name="search_label">Знайти</string>
-    <string name="articlesearch_hint">Type to lookup articles</string>
-    <string name="choose_file">Select a ZIM Content File (*.zim)</string>
-    <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
-    <string name="error_filenotfound">Error: The selected ZIM file could not be found.</string>
-    <string name="error_fileinvalid">Error: The selected file is not a valid ZIM file.</string>
+    <string name="articlesearch_hint">Наберіть для пошуку статей</string>
+    <string name="choose_file">Виберіть файл вмісту ZIM (*.zim)</string>
+    <string name="error_nozimfilesfound">Файлів ZIM не знайдено на вашому пристрої.\nПогляньте на сторінку допомогти, щоб отримати вказівки, як завантажувати вміст у Kiwix.\nЯкщо ви поклали файл ZIM на ваш пристрій/зовнішній носій, то можете повторити за хвилину або перезапустити пристрій.</string>
+    <string name="error_filenotfound">Помилка: вибраний ZIM файл неможливо знайти.</string>
+    <string name="error_fileinvalid">Помилка: вибраний файл не є вірним файлом ZIM.</string>
     <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
-    <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
+    <string name="error_articleurlnotfound">Помилка: завантаження статті (Url: %1$s) не вдалося.</string>
     <string name="pref_display_title">Показати</string>
-    <string name="pref_zoom_title">Zoom level</string>
-    <string name="pref_zoom_dialogtitle">Zoom level</string>    
+    <string name="pref_zoom_title">Рівень масштабування</string>
+    <string name="pref_zoom_dialogtitle">Рівень масштабування</string>    
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -29,8 +29,8 @@
         <item>Large</item>
     </string-array>
     <string name="menu_exit">Вийти</string>
-    <string name="pref_zoom_enable">Zoom controls</string>
-    <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
-    <string name="pref_nightmode">Night mode</string>
-    <string name="pref_nightmode_summary">Show articles with reverted colors</string>
+    <string name="pref_zoom_enable">Управління масштабом</string>
+    <string name="pref_zoom_enable_summary">Відображати кнопку масштаб у нижньому правому куті екрану</string>
+    <string name="pref_nightmode">Нічний режим</string>
+    <string name="pref_nightmode_summary">Показати статті з повернутими кольорами</string>
 </resources>
