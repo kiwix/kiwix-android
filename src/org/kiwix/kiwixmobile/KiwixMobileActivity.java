@@ -580,9 +580,6 @@ public class KiwixMobileActivity extends Activity {
 		menu.findItem(R.id.menu_search).setVisible(true);
 	}
 
-    
-
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(event.getAction() == KeyEvent.ACTION_DOWN){
