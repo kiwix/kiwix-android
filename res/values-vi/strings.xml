@@ -11,16 +11,16 @@
     <string name="menu_searchintext">Tìm trong Văn bản</string>
     <string name="menu_randomarticle">Bài viết Ngẫu nhiên</string>
     <string name="search_label">Tìm kiếm</string>
-    <string name="articlesearch_hint">Type to lookup articles</string>
-    <string name="choose_file">Select a ZIM Content File (*.zim)</string>
-    <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
-    <string name="error_filenotfound">Error: The selected ZIM file could not be found.</string>
-    <string name="error_fileinvalid">Error: The selected file is not a valid ZIM file.</string>
+    <string name="articlesearch_hint">Gõ để tra cứu bài</string>
+    <string name="choose_file">Chọn một Tập tin Nội dung ZIM (*.zim)</string>
+    <string name="error_nozimfilesfound">Không tìm thấy tập tin ZIM trên thiết bị của bạn.\nHãy đọc Trang Trợ giúp để biết cách tải nội dung vào Kiwix.\nNếu bạn có đưa tập tin ZIM vào thiết bị hoặc bộ nhớ ngoài của bạn, hãy thử lại sau hoặc khởi động lại thiết bị của bạn.</string>
+    <string name="error_filenotfound">Lỗi: Không tìm thấy tập tin ZIM đã chọn</string>
+    <string name="error_fileinvalid">Lỗi: Tập tin đã chọn không phải là tập tin ZIM hợp lệ.</string>
     <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
-    <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
+    <string name="error_articleurlnotfound">Lỗi: Việc tải bài (URL: %1$s) bị thất bại.</string>
     <string name="pref_display_title">Hiển thị</string>
-    <string name="pref_zoom_title">Zoom level</string>
-    <string name="pref_zoom_dialogtitle">Zoom level</string>    
+    <string name="pref_zoom_title">Mức thu phóng</string>
+    <string name="pref_zoom_dialogtitle">Mức thu phóng</string>    
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -29,8 +29,8 @@
         <item>Large</item>
     </string-array>
     <string name="menu_exit">Thoát</string>
-    <string name="pref_zoom_enable">Zoom controls</string>
-    <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
-    <string name="pref_nightmode">Night mode</string>
-    <string name="pref_nightmode_summary">Show articles with reverted colors</string>
+    <string name="pref_zoom_enable">Điều khiển thu phóng</string>
+    <string name="pref_zoom_enable_summary">Hiện nút thu phóng ở góc phải bên dưới của màn hình</string>
+    <string name="pref_nightmode">Chế độ ban đêm</string>
+    <string name="pref_nightmode_summary">Đảo ngược màu sắc trong bài</string>
 </resources>

@@ -11,16 +11,16 @@
     <string name="menu_searchintext">جستجو در متن</string>
     <string name="menu_randomarticle">مقاله تصادفی</string>
     <string name="search_label">جستجو</string>
-    <string name="articlesearch_hint">Type to lookup articles</string>
-    <string name="choose_file">Select a ZIM Content File (*.zim)</string>
-    <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
-    <string name="error_filenotfound">Error: The selected ZIM file could not be found.</string>
-    <string name="error_fileinvalid">Error: The selected file is not a valid ZIM file.</string>
+    <string name="articlesearch_hint">برای یافتن مقاله‌ها تایپ کنید</string>
+    <string name="choose_file">یک پروندهٔ محتوایی ZIM را انتخاب کنید (*.zim)</string>
+    <string name="error_nozimfilesfound">هیچ پروندهٔ ZIM در دستگاه شما یافت نشد.\nنگاهی به صفحهٔ کمک برای گرفتن جهت‌هایی به بارگذاری محتویات به Kiwix نگاهی بیندازید.\nاگر شما پروندهٔ ZIM در دستگاه/حافظهٔ خارجی خود قرار دهید، شما چند دقیقه دیگر مجدداً سعی کنید یا دستگاه خود را ری‌استارت کنید.</string>
+    <string name="error_filenotfound">خطا: پروندهٔ ZIM انتخاب شده پیدا نشد.</string>
+    <string name="error_fileinvalid">خطا: پروندهٔ انتخاب‌شده یک پروندهٔ ZIM معتبر نیست.</string>
     <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
-    <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
+    <string name="error_articleurlnotfound">حطا: بارگیری مقالهٔ (نشانی: %1$s) شکست خورد.</string>
     <string name="pref_display_title">نمایش</string>
-    <string name="pref_zoom_title">Zoom level</string>
-    <string name="pref_zoom_dialogtitle">Zoom level</string>    
+    <string name="pref_zoom_title">سطح بزرگ/کوچک‌نمایی</string>
+    <string name="pref_zoom_dialogtitle">سطح بزرگ/کوچک‌نمایی</string>    
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -29,8 +29,8 @@
         <item>Large</item>
     </string-array>
     <string name="menu_exit">خروج</string>
-    <string name="pref_zoom_enable">Zoom controls</string>
-    <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
-    <string name="pref_nightmode">Night mode</string>
-    <string name="pref_nightmode_summary">Show articles with reverted colors</string>
+    <string name="pref_zoom_enable">کنترل‌های بزرگ/کوچک‌نمایی</string>
+    <string name="pref_zoom_enable_summary">نمایش یک دکمهٔ بزرگ/کوچک‌نمایی در گوشهٔ سمت راست پایین صفحه</string>
+    <string name="pref_nightmode">حالت شبانه</string>
+    <string name="pref_nightmode_summary">نمایش مقاله‌ها با رنگ‌های معکوس‌شده</string>
 </resources>

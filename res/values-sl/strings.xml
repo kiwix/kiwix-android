@@ -11,16 +11,16 @@
     <string name="menu_searchintext">Najdi v besedilu</string>
     <string name="menu_randomarticle">Naključni članek</string>
     <string name="search_label">Iskanje</string>
-    <string name="articlesearch_hint">Type to lookup articles</string>
-    <string name="choose_file">Select a ZIM Content File (*.zim)</string>
-    <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
-    <string name="error_filenotfound">Error: The selected ZIM file could not be found.</string>
-    <string name="error_fileinvalid">Error: The selected file is not a valid ZIM file.</string>
+    <string name="articlesearch_hint">Vrsta iskanih člankov</string>
+    <string name="choose_file">Izberite datoteko z vsebino ZIM (*.zim)</string>
+    <string name="error_nozimfilesfound">Na vaši napravi ni bila najdena nobena datoteka ZIM.\nZa napotke v zvezi z nalaganjem vsebine v Kiwix si poglejte Stran za pomoč.\nČe ste datoteko ZIM posneli na svojo napravo/zunanji disk, lahko ponovno poskusite po kratkem čakanju ali pa svojo napravo ponovno zaženete.</string>
+    <string name="error_filenotfound">Napaka: izbrane datoteke ZIM ni mogoče najti.</string>
+    <string name="error_fileinvalid">Napaka: izbrana datoteka ni veljavna datoteka ZIM.</string>
     <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
-    <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
+    <string name="error_articleurlnotfound">Napaka: nalaganje članka (url: %1$s) ni uspelo.</string>
     <string name="pref_display_title">Prikaz</string>
-    <string name="pref_zoom_title">Zoom level</string>
-    <string name="pref_zoom_dialogtitle">Zoom level</string>    
+    <string name="pref_zoom_title">Raven zumiranja</string>
+    <string name="pref_zoom_dialogtitle">Raven zumiranja</string>    
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -29,8 +29,8 @@
         <item>Large</item>
     </string-array>
     <string name="menu_exit">Izhod</string>
-    <string name="pref_zoom_enable">Zoom controls</string>
-    <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
-    <string name="pref_nightmode">Night mode</string>
-    <string name="pref_nightmode_summary">Show articles with reverted colors</string>
+    <string name="pref_zoom_enable">Kontrolniki zumiranja</string>
+    <string name="pref_zoom_enable_summary">V spodnjem desnem vogalu zaslona prikaži gumb za zumiranje</string>
+    <string name="pref_nightmode">Nočni način</string>
+    <string name="pref_nightmode_summary">Prikaz člankov z obrnjenimi barvami</string>
 </resources>

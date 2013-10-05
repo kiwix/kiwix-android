@@ -30,7 +30,7 @@
     </string-array>
     <string name="menu_exit">Esci</string>
     <string name="pref_zoom_enable">Controlli zoom</string>
-    <string name="pref_zoom_enable_summary">Visualizza un pulsante di zoom nell'angolo inferiore destro dello schermo</string>
+    <string name="pref_zoom_enable_summary">Visualizza un pulsante di zoom nell\'angolo inferiore destro dello schermo</string>
     <string name="pref_nightmode">Modalità notte</string>
     <string name="pref_nightmode_summary">Visualizza le voci con colori invertiti</string>
 </resources>
