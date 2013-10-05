@@ -300,7 +300,7 @@ public class KiwixMobileActivity extends Activity {
         // this actually has any effect)
         webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         if (getIntent().getData()!=null) {        	
-        	String filePath = getIntent().getData().getEncodedPath();
+        	String filePath = getIntent().getData().getPath();
             Log.d("kiwix", " Kiwix started from a filemanager. Intent filePath: "+filePath+" -> open this zimfile and load main page");
             openZimFile(new File(filePath), false);
 
