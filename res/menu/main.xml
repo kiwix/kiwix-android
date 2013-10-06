@@ -24,13 +24,6 @@
         android:orderInCategory="0"
         android:showAsAction="ifRoom" />
 
-    <item android:id="@+id/menu_randomarticle"
-        android:icon="@drawable/action_randomarticle"
-        android:title="@string/menu_randomarticle"
-        android:visible="false"
-        android:orderInCategory="0"
-        android:showAsAction="ifRoom" />
-   
     <item android:id="@+id/menu_back"
         android:title="@string/menu_back"
         android:icon="@drawable/navigation_back"        
@@ -43,6 +36,13 @@
         android:orderInCategory="0"
         android:showAsAction="ifRoom" />
     
+    <item android:id="@+id/menu_randomarticle"
+        android:icon="@drawable/action_randomarticle"
+        android:title="@string/menu_randomarticle"
+        android:visible="false"
+        android:orderInCategory="0"
+        android:showAsAction="ifRoom" />
+   
      <item android:id="@+id/menu_home"
         android:title="@string/menu_home"
         android:icon="@drawable/action_home"        
