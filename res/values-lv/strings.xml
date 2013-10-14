@@ -31,6 +31,6 @@
     <string name="menu_exit">Iziet</string>
     <string name="pref_zoom_enable">Zoom controls</string>
     <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
-    <string name="pref_nightmode">Night mode</string>
+    <string name="pref_nightmode">Nakts režīms</string>
     <string name="pref_nightmode_summary">Show articles with reverted colors</string>
 </resources>

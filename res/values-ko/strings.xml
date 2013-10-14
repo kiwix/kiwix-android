@@ -11,10 +11,10 @@
     <string name="menu_searchintext">본문에서 찾기</string>
     <string name="menu_randomarticle">임의 문서</string>
     <string name="search_label">찾기</string>
-    <string name="articlesearch_hint">Type to lookup articles</string>
-    <string name="choose_file">Select a ZIM Content File (*.zim)</string>
-    <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
-    <string name="error_filenotfound">Error: The selected ZIM file could not be found.</string>
+    <string name="articlesearch_hint">문서를 찾아보는 종류</string>
+    <string name="choose_file">ZIM 콘텐츠 파일 (*.zim) 선택</string>
+    <string name="error_nozimfilesfound">장치에서 ZIM 파일이 발견되지 않았습니다.\n도움말에서 콘텐츠를 어떻게 키윅스로 불러오는지 알아보세요.\n만약 파일을 외장 디스크나 기기에 넣었다면, 몇분 후 재시도하거나 재부팅해 보세요.</string>
+    <string name="error_filenotfound">오류: 선택된 ZIM 파일을 찾을 수 없습니다</string>
     <string name="error_fileinvalid">Error: The selected file is not a valid ZIM file.</string>
     <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
     <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>

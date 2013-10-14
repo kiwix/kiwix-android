@@ -12,12 +12,12 @@
     <string name="menu_randomarticle">ناټاکلې ليکنه</string>
     <string name="search_label">پلټل</string>
     <string name="articlesearch_hint">Type to lookup articles</string>
-    <string name="choose_file">Select a ZIM Content File (*.zim)</string>
+    <string name="choose_file">د ZIM مېنځپانگې يوه دوتنه ټاکل (*.zim)</string>
     <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
-    <string name="error_filenotfound">Error: The selected ZIM file could not be found.</string>
-    <string name="error_fileinvalid">Error: The selected file is not a valid ZIM file.</string>
+    <string name="error_filenotfound">تېروتنه: ستاسې ټاکلې ZIM دوتنه و نه موندل شوه.</string>
+    <string name="error_fileinvalid">تېروتنه: ستاسې ټاکلې دوتنه يوه کره ZIM دوتنه نه ده.</string>
     <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
-    <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
+    <string name="error_articleurlnotfound">تېروتنه: ليکنه برسېرېدنه (يو آر ال: %1$s) نابريالئ شوه.</string>
     <string name="pref_display_title">ښکارېدنه</string>
     <string name="pref_zoom_title">Zoom level</string>
     <string name="pref_zoom_dialogtitle">Zoom level</string>    
@@ -31,6 +31,6 @@
     <string name="menu_exit">بندول</string>
     <string name="pref_zoom_enable">Zoom controls</string>
     <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
-    <string name="pref_nightmode">Night mode</string>
-    <string name="pref_nightmode_summary">Show articles with reverted colors</string>
+    <string name="pref_nightmode">د شپې بڼه</string>
+    <string name="pref_nightmode_summary">رنگ اړول شوې ليکنې ښکاره کول</string>
 </resources>
