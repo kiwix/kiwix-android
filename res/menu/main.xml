@@ -36,6 +36,7 @@
      <item android:id="@+id/menu_searchintext"
         android:icon="@drawable/action_search"
         android:title="@string/menu_searchintext"
+        android:visible="false"
         android:orderInCategory="0"        
         android:showAsAction="never" />
     

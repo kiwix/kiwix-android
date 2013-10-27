@@ -579,6 +579,7 @@ public class KiwixMobileActivity extends Activity {
 	private void showAllMenuItems() {
 		menu.findItem(R.id.menu_home).setVisible(true);
 		menu.findItem(R.id.menu_randomarticle).setVisible(true);
+		menu.findItem(R.id.menu_searchintext).setVisible(true);
 		menu.findItem(R.id.menu_search).setVisible(true);
 	}
 
