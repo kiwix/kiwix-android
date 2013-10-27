@@ -361,14 +361,16 @@ public class KiwixMobileActivity extends Activity {
     	 }
 
          //Pinch to zoom
+	 //This seems to suffer from a bug in Android. If you set to "false" this only apply after a restart of the app.
     	 Log.d("kiwix","pref_zoom_enabled value ("+pref_zoom_enabled+")");
-    	 webView.getSettings().setBuiltInZoomControls(pref_zoom_enabled);
+	 webView.getSettings().setBuiltInZoomControls(true);
+	 webView.getSettings().setDisplayZoomControls(pref_zoom_enabled);
 
-         //Night mode status
-    	 Log.d("kiwix","pref_nightmode value ("+pref_nightmode+")");
-    	 if(NightMode!=pref_nightmode)
-    		 ToggleNightMode();
-    	 
+	//Night mode status
+	Log.d("kiwix","pref_nightmode value ("+pref_nightmode+")");
+	if(NightMode!=pref_nightmode)
+	    ToggleNightMode();
+	
     }
     
 
