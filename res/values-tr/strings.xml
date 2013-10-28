@@ -11,16 +11,16 @@
     <string name="menu_searchintext">Metinde bul</string>
     <string name="menu_randomarticle">Rastgele madde</string>
     <string name="search_label">Ara</string>
-    <string name="articlesearch_hint">Type to lookup articles</string>
-    <string name="choose_file">Select a ZIM Content File (*.zim)</string>
-    <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
-    <string name="error_filenotfound">Error: The selected ZIM file could not be found.</string>
-    <string name="error_fileinvalid">Error: The selected file is not a valid ZIM file.</string>
+    <string name="articlesearch_hint">Makalelerde aranacak kelimeyi yazın</string>
+    <string name="choose_file">Bir ZIM İçerik Dosyası seçin (*.zim)</string>
+    <string name="error_nozimfilesfound">Cihazınızda bir ZIM dosyası bulunamadı.\nKiwix\'e içerik yükleme talimatlarını görmek için Yardım Sayfası\'na bir göz atın.\nEğer cihazınıza/harici depolama kaynağınıza bir ZIM dosyası koyduysanız, birkaç dakika içerisinde yeniden deneyebilir veya cihazınızı yeniden başlatabilirsiniz.</string>
+    <string name="error_filenotfound">Hata: Seçili ZIM dosyası bulunamadı.</string>
+    <string name="error_fileinvalid">Hata: Seçili dosya geçerli bir ZIM dosyası değil.</string>
     <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
-    <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
+    <string name="error_articleurlnotfound">Hata: (Url: %1$s) makalesinin yüklemesi başarısız.</string>
     <string name="pref_display_title">Göster</string>
-    <string name="pref_zoom_title">Zoom level</string>
-    <string name="pref_zoom_dialogtitle">Zoom level</string>    
+    <string name="pref_zoom_title">Zum seviyesi</string>
+    <string name="pref_zoom_dialogtitle">Zum seviyesi</string>    
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -29,8 +29,8 @@
         <item>Large</item>
     </string-array>
     <string name="menu_exit">Çık</string>
-    <string name="pref_zoom_enable">Zoom controls</string>
-    <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
-    <string name="pref_nightmode">Night mode</string>
-    <string name="pref_nightmode_summary">Show articles with reverted colors</string>
+    <string name="pref_zoom_enable">Zum kontrolleri</string>
+    <string name="pref_zoom_enable_summary">Ekranın sağ alt köşesinde bir zum butonu görüntüle</string>
+    <string name="pref_nightmode">Gece modu</string>
+    <string name="pref_nightmode_summary">Makaleleri dönüştürülmüş renklerle göster</string>
 </resources>

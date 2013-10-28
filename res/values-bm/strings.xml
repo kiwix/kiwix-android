@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Kiwix</string>
-    <string name="menu_openfile">fisiye dayɛlɛn</string>
-    <string name="menu_help">dɛmɛ</string>
+    <string name="menu_openfile">Fisiye dayɛlɛn</string>
+    <string name="menu_help">Dɛmɛ</string>
     <string name="menu_home">Soba</string>
     <string name="menu_forward">Taa ɲɛfɛ</string>
     <string name="menu_back">Segin kɔfɛ</string>
