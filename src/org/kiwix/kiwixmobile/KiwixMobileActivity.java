@@ -183,9 +183,9 @@ public class KiwixMobileActivity extends Activity {
             }
         });
         // Create the adapter and set it to the AutoCompleteTextView
-        adapter = new AutoCompleteAdapter(this, android.R.layout.simple_list_item_1);
-
+	adapter = new AutoCompleteAdapter(this, android.R.layout.simple_dropdown_item_1line);
         articleSearchtextView.setAdapter(adapter);
+
         articleSearchtextView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
