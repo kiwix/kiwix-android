@@ -95,13 +95,26 @@ public class KiwixMobileActivity extends Activity {
 					if(constraint != null) {
 						// A class that queries a web API, parses the data and returns an ArrayList<Style>
 						try {
-							ZimContentProvider.searchSuggestions(constraint.toString(), 200);
+						        String prefix = constraint.toString();
+
+							ZimContentProvider.searchSuggestions(prefix, 200);
 							String suggestion;
 
 							data.clear();
 							while ((suggestion = ZimContentProvider.getNextSuggestion())!=null) {
 								data.add(suggestion);
 							}
+
+							// Android does not use the libicu and is not able to correctly make a ucfirst of the suggestion preffix.
+							// For this reason this is done here.
+							String ucFirstPrefix = prefix.substring(0, 1).toUpperCase() + prefix.substring(1);
+							ZimContentProvider.searchSuggestions(ucFirstPrefix, 200);
+							while ((suggestion = ZimContentProvider.getNextSuggestion())!=null) {
+							    if (!data.contains(suggestion)) {
+								data.add(suggestion);
+							    }
+							}
+
 						}
 						catch(Exception e) {}
 						// Now assign the values and count to the FilterResults object
@@ -183,7 +196,7 @@ public class KiwixMobileActivity extends Activity {
             }
         });
         // Create the adapter and set it to the AutoCompleteTextView
-	adapter = new AutoCompleteAdapter(this, android.R.layout.simple_dropdown_item_1line);
+	adapter = new AutoCompleteAdapter(this, android.R.layout.simple_list_item_1);
         articleSearchtextView.setAdapter(adapter);
 
         articleSearchtextView.setOnItemClickListener(new OnItemClickListener() {
