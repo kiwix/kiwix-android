@@ -11,16 +11,16 @@
     <string name="menu_searchintext">Trobar dins lo tèxte</string>
     <string name="menu_randomarticle">Article per escasença</string>
     <string name="search_label">Cèrca</string>
-    <string name="articlesearch_hint">Type to lookup articles</string>
-    <string name="choose_file">Select a ZIM Content File (*.zim)</string>
-    <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
-    <string name="error_filenotfound">Error: The selected ZIM file could not be found.</string>
-    <string name="error_fileinvalid">Error: The selected file is not a valid ZIM file.</string>
+    <string name="articlesearch_hint">Picar per recercar d\'articles</string>
+    <string name="choose_file">Seleccionar un fichièr de contengut ZIM (*.zim)</string>
+    <string name="error_nozimfilesfound">Cap de fichièr ZIM es pas estat trobat sus vòstra maquina.\nGetatz un còp d’uèlh a la pagina d’ajuda per aver d\'instruccions sul biais de cargar de contengut dins Kiwix.\nS\'avètz mes un fichièr ZIM sus vòstre emmagazinatge intèrne o extèrne, podètz tornar ensajar dins una minuta o reamodar vòstre aparelh.</string>
+    <string name="error_filenotfound">Error : Lo fichièr ZIM seleccionat es introbable.</string>
+    <string name="error_fileinvalid">Error : Lo fichièr seleccionat es pas un fichièr ZIM valid.</string>
     <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
-    <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
+    <string name="error_articleurlnotfound">Error : Lo cargament de l’article (Url: %1$s) a fracassat.</string>
     <string name="pref_display_title">Afichar</string>
-    <string name="pref_zoom_title">Zoom level</string>
-    <string name="pref_zoom_dialogtitle">Zoom level</string>    
+    <string name="pref_zoom_title">Nivèl de zoom</string>
+    <string name="pref_zoom_dialogtitle">Nivèl de zoom</string>    
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -29,8 +29,8 @@
         <item>Large</item>
     </string-array>
     <string name="menu_exit">Sortir</string>
-    <string name="pref_zoom_enable">Zoom controls</string>
-    <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
-    <string name="pref_nightmode">Night mode</string>
-    <string name="pref_nightmode_summary">Show articles with reverted colors</string>
+    <string name="pref_zoom_enable">Contraròtles del zoom</string>
+    <string name="pref_zoom_enable_summary">Afichar un boton de zoom dins lo canton inferior drech de l’ecran</string>
+    <string name="pref_nightmode">Mòde nocturne</string>
+    <string name="pref_nightmode_summary">Afichar los articles en colors inversadas</string>
 </resources>
