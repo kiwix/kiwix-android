@@ -1,7 +1,5 @@
 package org.kiwix.kiwixmobile;
 
-
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,7 +54,7 @@ public class KiwixMobileActivity extends Activity {
 	private WebView webView;
 	private ArrayAdapter<String> adapter;
 	protected boolean requestClearHistoryAfterLoad;
-	protected boolean requestShowAllMenuItems;
+	protected boolean requestInitAllMenuItems;
 	protected boolean NightMode;
 	protected int requestWebReloadOnFinished;
 	private static final int ZIMFILESELECT_REQUEST_CODE = 1234;
@@ -145,7 +143,7 @@ public class KiwixMobileActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestClearHistoryAfterLoad=false;
         requestWebReloadOnFinished = 0;
-        requestShowAllMenuItems = false;
+        requestInitAllMenuItems = false;
         NightMode = false;
 
 
@@ -236,6 +234,9 @@ public class KiwixMobileActivity extends Activity {
                         		 webView.clearHistory();
                         		 requestClearHistoryAfterLoad=false;
                         	 }
+
+				 menu.findItem(R.id.menu_back).setVisible(webView.canGoBack());
+				 menu.findItem(R.id.menu_forward).setVisible(webView.canGoForward());
 
                         	 Log.d("kiwix", "Loaded URL: "+webView.getUrl());                        	 
                         	 if(NightMode){ 
@@ -421,8 +422,8 @@ public class KiwixMobileActivity extends Activity {
         inflater.inflate(R.menu.main, menu);
         
         this.menu = menu;
-        if (requestShowAllMenuItems) {
-        	showAllMenuItems();
+        if (requestInitAllMenuItems) {
+        	initAllMenuItems();
         }
         return true;
     }
@@ -571,11 +572,11 @@ public class KiwixMobileActivity extends Activity {
 				if (clearHistory)
 					requestClearHistoryAfterLoad=true;
 				if (menu!=null) {
-					showAllMenuItems();
+					initAllMenuItems();
 				} else {
 					// Menu may not be initialized yet. In this case
 					// signal to menu create to show  
-					requestShowAllMenuItems = true;
+					requestInitAllMenuItems = true;
 				}
 				openMainPage();
 				return true;
@@ -589,7 +590,9 @@ public class KiwixMobileActivity extends Activity {
 		return false;
 	}
 
-	private void showAllMenuItems() {
+	private void initAllMenuItems() {
+		menu.findItem(R.id.menu_back).setVisible(false);
+		menu.findItem(R.id.menu_forward).setVisible(false);
 		menu.findItem(R.id.menu_home).setVisible(true);
 		menu.findItem(R.id.menu_randomarticle).setVisible(true);
 		menu.findItem(R.id.menu_searchintext).setVisible(true);
@@ -618,12 +621,6 @@ public class KiwixMobileActivity extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
-
-
-
-	
-
-
 	private boolean openArticle(String articleUrl) {
 		Log.d("kiwix", articleSearchtextView+" onEditorAction. TextView: "+articleSearchtextView.getText()+ " articleUrl: "+articleUrl);
 
@@ -631,7 +628,7 @@ public class KiwixMobileActivity extends Activity {
 			hideSearchBar();
 			webView.loadUrl(Uri.parse(ZimContentProvider.CONTENT_URI
 		            +articleUrl).toString());
-			
+
 			return true;
 		} else {
 			String errorString = String.format(getResources().getString(R.string.error_articlenotfound), articleSearchtextView.getText().toString());

@@ -11,12 +11,14 @@
         android:title="@string/menu_back"
         android:icon="@drawable/navigation_back"        
         android:orderInCategory="0"
+        android:visible="false"
         android:showAsAction="ifRoom" />
     
     <item android:id="@+id/menu_forward"
         android:title="@string/menu_forward"
         android:icon="@drawable/navigation_forward"        
         android:orderInCategory="0"
+        android:visible="false"
         android:showAsAction="ifRoom" />
     
     <item android:id="@+id/menu_randomarticle"
