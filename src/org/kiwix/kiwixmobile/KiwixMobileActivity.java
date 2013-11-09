@@ -541,6 +541,7 @@ public class KiwixMobileActivity extends Activity {
                 	return;
                 // Create a File from this Uri
                 openZimFile(file, true);
+		showSearchBar();
             }
             break;
         case PREFERENCES_REQUEST_CODE:
