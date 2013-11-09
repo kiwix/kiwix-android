@@ -235,9 +235,6 @@ public class KiwixMobileActivity extends Activity {
                         		 requestClearHistoryAfterLoad=false;
                         	 }
 
-				 menu.findItem(R.id.menu_back).setVisible(webView.canGoBack());
-				 menu.findItem(R.id.menu_forward).setVisible(webView.canGoForward());
-
                         	 Log.d("kiwix", "Loaded URL: "+webView.getUrl());                        	 
                         	 if(NightMode){ 
                 				NightMode=false;
@@ -454,6 +451,7 @@ public class KiwixMobileActivity extends Activity {
                 break;
             case R.id.menu_back:
             	if(webView.canGoBack() == true){
+		    menu.findItem(R.id.menu_forward).setVisible(true);
                     webView.goBack();
                 }
                 break;
@@ -591,7 +589,7 @@ public class KiwixMobileActivity extends Activity {
 	}
 
 	private void initAllMenuItems() {
-		menu.findItem(R.id.menu_back).setVisible(false);
+		menu.findItem(R.id.menu_back).setVisible(true);
 		menu.findItem(R.id.menu_forward).setVisible(false);
 		menu.findItem(R.id.menu_home).setVisible(true);
 		menu.findItem(R.id.menu_randomarticle).setVisible(true);
