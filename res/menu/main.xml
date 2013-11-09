@@ -46,7 +46,7 @@
         android:title="@string/menu_openfile"
         android:icon="@drawable/device_access_sd_storage"        
         android:orderInCategory="0"
-        android:showAsAction="never" />
+        android:showAsAction="ifRoom" />
 
     <item android:id="@+id/menu_help"
 	android:title="@string/menu_help"
