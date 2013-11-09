@@ -500,15 +500,22 @@ public class KiwixMobileActivity extends Activity {
 	}
 
 
+    private void showSearchBar() {
+	showSearchBar(true);
+    }
 
-
-	private void showSearchBar() {
+	private void showSearchBar(Boolean focus) {
 		articleSearchBar.setVisibility(View.VISIBLE);
-		articleSearchtextView.requestFocus();
-		//Move cursor to end
-		articleSearchtextView.setSelection(articleSearchtextView.getText().length());
-		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);		
+
+		if (focus) {
+		    articleSearchtextView.requestFocus();
+		    
+		    //Move cursor to end
+		    articleSearchtextView.setSelection(articleSearchtextView.getText().length());
+		    
+		    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+		}
 	}
 
    
@@ -577,7 +584,7 @@ public class KiwixMobileActivity extends Activity {
 					requestInitAllMenuItems = true;
 				}
 				openMainPage();
-				showSearchBar();
+				showSearchBar(false);
 				return true;
 			} else {
 				Toast.makeText(this, getResources().getString(R.string.error_fileinvalid), Toast.LENGTH_LONG).show();
