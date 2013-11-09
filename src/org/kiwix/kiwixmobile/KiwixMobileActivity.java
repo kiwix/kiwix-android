@@ -541,7 +541,6 @@ public class KiwixMobileActivity extends Activity {
                 	return;
                 // Create a File from this Uri
                 openZimFile(file, true);
-		showSearchBar();
             }
             break;
         case PREFERENCES_REQUEST_CODE:
@@ -578,6 +577,7 @@ public class KiwixMobileActivity extends Activity {
 					requestInitAllMenuItems = true;
 				}
 				openMainPage();
+				showSearchBar();
 				return true;
 			} else {
 				Toast.makeText(this, getResources().getString(R.string.error_fileinvalid), Toast.LENGTH_LONG).show();
