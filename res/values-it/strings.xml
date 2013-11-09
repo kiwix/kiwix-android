@@ -20,7 +20,7 @@
     <string name="error_articleurlnotfound">Errore: caricamento della voce (url: %1$s) non riuscita.</string>
     <string name="pref_display_title">Visualizza</string>
     <string name="pref_zoom_title">Livello di zoom</string>
-    <string name="pref_zoom_dialogtitle">Livello di zoom</string>    
+    <string name="pref_zoom_dialogtitle">Livello di zoom</string>
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -28,6 +28,8 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
+    <string name="pref_info_title">Information</string>
+    <string name="pref_info_version">Version</string>
     <string name="menu_exit">Esci</string>
     <string name="pref_zoom_enable">Controlli zoom</string>
     <string name="pref_zoom_enable_summary">Visualizza un pulsante di zoom nell\'angolo inferiore destro dello schermo</string>

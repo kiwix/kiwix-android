@@ -20,7 +20,7 @@
     <string name="error_articleurlnotfound">Грешка: Не успеав да ја вчитам статијата (URL: %1$s).</string>
     <string name="pref_display_title">Приказ</string>
     <string name="pref_zoom_title">Ниво на приближеност</string>
-    <string name="pref_zoom_dialogtitle">Ниво на приближеност</string>    
+    <string name="pref_zoom_dialogtitle">Ниво на приближеност</string>
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -28,6 +28,8 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
+    <string name="pref_info_title">Information</string>
+    <string name="pref_info_version">Version</string>
     <string name="menu_exit">Излези</string>
     <string name="pref_zoom_enable">Контроли за размер</string>
     <string name="pref_zoom_enable_summary">Прикажуваај копче за приближување во долниот десен агол</string>

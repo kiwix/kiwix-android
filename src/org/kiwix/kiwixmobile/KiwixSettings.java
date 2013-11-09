@@ -3,7 +3,12 @@ package org.kiwix.kiwixmobile;
 import android.app.Activity;
 import android.os.Bundle;
 import android.preference.ListPreference;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
 
@@ -16,7 +21,7 @@ public class KiwixSettings extends Activity {
 				.replace(android.R.id.content, new PrefsFragment()).commit();
 	}
 
-	public static class PrefsFragment extends PreferenceFragment {
+	public class PrefsFragment extends PreferenceFragment {
 
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
@@ -26,6 +31,16 @@ public class KiwixSettings extends Activity {
 			// Load the preferences from an XML resource
 			addPreferencesFromResource(R.xml.preferences);
 			prepareListPreferenceForAutoSummary("pref_zoom");
+
+			// Set version
+			String version;
+			try {
+			    version = getPackageManager().getPackageInfo("org.kiwix.kiwixmobile", 0).versionName;
+			} catch (NameNotFoundException e) {
+			    return;
+			}
+			EditTextPreference versionPref = (EditTextPreference)findPreference("pref_version");
+			versionPref.setSummary(version);
 		}
 
 		private void prepareListPreferenceForAutoSummary(String preferenceID) {

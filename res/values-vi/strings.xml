@@ -20,7 +20,7 @@
     <string name="error_articleurlnotfound">Lỗi: Việc tải bài (URL: %1$s) bị thất bại.</string>
     <string name="pref_display_title">Hiển thị</string>
     <string name="pref_zoom_title">Mức thu phóng</string>
-    <string name="pref_zoom_dialogtitle">Mức thu phóng</string>    
+    <string name="pref_zoom_dialogtitle">Mức thu phóng</string>
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -28,6 +28,8 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
+    <string name="pref_info_title">Information</string>
+    <string name="pref_info_version">Version</string>
     <string name="menu_exit">Thoát</string>
     <string name="pref_zoom_enable">Điều khiển thu phóng</string>
     <string name="pref_zoom_enable_summary">Hiện nút thu phóng ở góc phải bên dưới của màn hình</string>

@@ -20,7 +20,7 @@
     <string name="error_articleurlnotfound">Fili: Kunnafoni (Url: %1$s)  sariziyeli tigɛra sira la.</string>
     <string name="pref_display_title">Jirayɔrɔ</string>
     <string name="pref_zoom_title">Bonya/dɔgɔya hakɛ</string>
-    <string name="pref_zoom_dialogtitle">Bonya/dɔgɔya hakɛ</string>    
+    <string name="pref_zoom_dialogtitle">Bonya/dɔgɔya hakɛ</string>
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -28,6 +28,8 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
+    <string name="pref_info_title">Information</string>
+    <string name="pref_info_version">Version</string>
     <string name="menu_exit">Bɔ</string>
     <string name="pref_zoom_enable">Bonyali/dɔgɔyali kɔlɔsili</string>
     <string name="pref_zoom_enable_summary">Bonyali/dɔgɔyali butɔn dɔ jira ekaran kininfɛ seleke la, ka taa duguma.</string>

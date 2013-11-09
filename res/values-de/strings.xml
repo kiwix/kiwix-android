@@ -20,7 +20,7 @@
     <string name="error_articleurlnotfound">Fehler: Das Laden des Artikels (URL: %1$s) ist fehlgeschlagen.</string>
     <string name="pref_display_title">Bildschirm</string>
     <string name="pref_zoom_title">Vergrößerungsstufe</string>
-    <string name="pref_zoom_dialogtitle">Vergrößerungsstufe</string>    
+    <string name="pref_zoom_dialogtitle">Vergrößerungsstufe</string>
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -28,6 +28,8 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
+    <string name="pref_info_title">Information</string>
+    <string name="pref_info_version">Version</string>
     <string name="menu_exit">Schliessen</string>
     <string name="pref_zoom_enable">Zoom-Steuerung</string>
     <string name="pref_zoom_enable_summary">Einen Zoombutton in der rechten unteren Ecke anzeigen</string>

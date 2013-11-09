@@ -20,7 +20,7 @@
     <string name="error_articleurlnotfound">Помилка: завантаження статті (Url: %1$s) не вдалося.</string>
     <string name="pref_display_title">Показати</string>
     <string name="pref_zoom_title">Рівень масштабування</string>
-    <string name="pref_zoom_dialogtitle">Рівень масштабування</string>    
+    <string name="pref_zoom_dialogtitle">Рівень масштабування</string>
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -28,6 +28,8 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
+    <string name="pref_info_title">Information</string>
+    <string name="pref_info_version">Version</string>
     <string name="menu_exit">Вийти</string>
     <string name="pref_zoom_enable">Управління масштабом</string>
     <string name="pref_zoom_enable_summary">Відображати кнопку масштаб у нижньому правому куті екрану</string>

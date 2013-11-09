@@ -15,11 +15,19 @@
         <CheckBoxPreference android:key="pref_nightmode" android:title="@string/pref_nightmode" android:defaultValue="false" android:summary="@string/pref_nightmode_summary"/>
         
     </PreferenceCategory>
-    <!-- PreferenceCategory 
-           android:title="INFO"
-           android:key="pref_key_info">
-        
-        
-    </PreferenceCategory>-->
+    
+    <PreferenceCategory 
+           android:title="@string/pref_info_title"
+           android:key="pref_info">
+
+      <EditTextPreference
+	  android:key="pref_version"
+	  android:title="@string/pref_info_version"
+	  android:enabled="false" 
+	  android:selectable="false"
+	  android:persistent="false"
+	  android:shouldDisableView="false"/>
+
+    </PreferenceCategory>
        
 </PreferenceScreen>

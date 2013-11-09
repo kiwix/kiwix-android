@@ -20,7 +20,7 @@
     <string name="error_articleurlnotfound">Erreur : Le chargement de l’article (Url: %1$s) a échoué.</string>
     <string name="pref_display_title">Affichage</string>
     <string name="pref_zoom_title">Niveau de zoom</string>
-    <string name="pref_zoom_dialogtitle">Niveau de zoom</string>    
+    <string name="pref_zoom_dialogtitle">Niveau de zoom</string>
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -28,6 +28,8 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
+    <string name="pref_info_title">Information</string>
+    <string name="pref_info_version">Version</string>
     <string name="menu_exit">Quitter</string>
     <string name="pref_zoom_enable">Contrôles du zoom</string>
     <string name="pref_zoom_enable_summary">Afficher un bouton de zoom dans le coin inférieur droit de l’écran</string>

@@ -20,7 +20,7 @@
     <string name="error_articleurlnotfound">Erro: Non se puido cargar o artigo (URL: %1$s).</string>
     <string name="pref_display_title">Visualización</string>
     <string name="pref_zoom_title">Nivel de zoom</string>
-    <string name="pref_zoom_dialogtitle">Nivel de zoom</string>    
+    <string name="pref_zoom_dialogtitle">Nivel de zoom</string>
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -28,6 +28,8 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
+    <string name="pref_info_title">Information</string>
+    <string name="pref_info_version">Version</string>
     <string name="menu_exit">Saír</string>
     <string name="pref_zoom_enable">Controis do zoom</string>
     <string name="pref_zoom_enable_summary">Mostrar un botón de zoom no recuncho inferior dereito da pantalla</string>

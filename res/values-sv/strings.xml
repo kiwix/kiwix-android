@@ -20,7 +20,7 @@
     <string name="error_articleurlnotfound">Fel: Inläsning av artikel (url: %1$s) misslyckades.</string>
     <string name="pref_display_title">Visa</string>
     <string name="pref_zoom_title">Zoomnivå</string>
-    <string name="pref_zoom_dialogtitle">Zoomnivå</string>    
+    <string name="pref_zoom_dialogtitle">Zoomnivå</string>
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -28,6 +28,8 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
+    <string name="pref_info_title">Information</string>
+    <string name="pref_info_version">Version</string>
     <string name="menu_exit">Avsluta</string>
     <string name="pref_zoom_enable">Zoomkontrollerna</string>
     <string name="pref_zoom_enable_summary">Visa en zoomknapp längst ned i det högra hörnet på skärmen</string>

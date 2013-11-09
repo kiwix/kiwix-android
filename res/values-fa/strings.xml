@@ -20,7 +20,7 @@
     <string name="error_articleurlnotfound">حطا: بارگیری مقالهٔ (نشانی: %1$s) شکست خورد.</string>
     <string name="pref_display_title">نمایش</string>
     <string name="pref_zoom_title">سطح بزرگ/کوچک‌نمایی</string>
-    <string name="pref_zoom_dialogtitle">سطح بزرگ/کوچک‌نمایی</string>    
+    <string name="pref_zoom_dialogtitle">سطح بزرگ/کوچک‌نمایی</string>
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -28,6 +28,8 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
+    <string name="pref_info_title">Information</string>
+    <string name="pref_info_version">Version</string>
     <string name="menu_exit">خروج</string>
     <string name="pref_zoom_enable">کنترل‌های بزرگ/کوچک‌نمایی</string>
     <string name="pref_zoom_enable_summary">نمایش یک دکمهٔ بزرگ/کوچک‌نمایی در گوشهٔ سمت راست پایین صفحه</string>

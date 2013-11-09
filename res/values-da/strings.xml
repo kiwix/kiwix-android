@@ -20,7 +20,7 @@
     <string name="error_articleurlnotfound">Fejl: Indlæsning af artikel (Url: %1$s) mislykkedes.</string>
     <string name="pref_display_title">Vis</string>
     <string name="pref_zoom_title">Zoom-niveau</string>
-    <string name="pref_zoom_dialogtitle">Zoom-niveau</string>    
+    <string name="pref_zoom_dialogtitle">Zoom-niveau</string>
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -28,6 +28,8 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
+    <string name="pref_info_title">Information</string>
+    <string name="pref_info_version">Version</string>
     <string name="menu_exit">Afslut</string>
     <string name="pref_zoom_enable">Zoom kontrol</string>
     <string name="pref_zoom_enable_summary">Få vist en zoom-knap i skærmens nederste højre hjørne</string>

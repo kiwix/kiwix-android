@@ -20,7 +20,7 @@
     <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
     <string name="pref_display_title">Показване</string>
     <string name="pref_zoom_title">Zoom level</string>
-    <string name="pref_zoom_dialogtitle">Zoom level</string>    
+    <string name="pref_zoom_dialogtitle">Zoom level</string>
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -28,6 +28,8 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
+    <string name="pref_info_title">Information</string>
+    <string name="pref_info_version">Version</string>
     <string name="menu_exit">Излизане</string>
     <string name="pref_zoom_enable">Zoom controls</string>
     <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>

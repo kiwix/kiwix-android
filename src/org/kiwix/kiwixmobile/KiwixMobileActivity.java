@@ -47,7 +47,6 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
-
 public class KiwixMobileActivity extends Activity {
     /** Called when the activity is first created. */
 
@@ -63,7 +62,7 @@ public class KiwixMobileActivity extends Activity {
 	private AutoCompleteTextView articleSearchtextView;
 	private LinearLayout articleSearchBar;
 	private Menu menu;
-
+    
 	
 	public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 		private ArrayList<String> mData;
@@ -140,6 +139,7 @@ public class KiwixMobileActivity extends Activity {
     @SuppressLint("SetJavaScriptEnabled")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         requestClearHistoryAfterLoad=false;
         requestWebReloadOnFinished = 0;

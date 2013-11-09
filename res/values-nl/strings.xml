@@ -20,7 +20,7 @@
     <string name="error_articleurlnotfound">Fout: Het laden van de pagina (URL: %1$s) is mislukt.</string>
     <string name="pref_display_title">Beeld</string>
     <string name="pref_zoom_title">Zoomniveau</string>
-    <string name="pref_zoom_dialogtitle">Zoomniveau</string>    
+    <string name="pref_zoom_dialogtitle">Zoomniveau</string>
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -28,6 +28,8 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
+    <string name="pref_info_title">Information</string>
+    <string name="pref_info_version">Version</string>
     <string name="menu_exit">Stoppen</string>
     <string name="pref_zoom_enable">Besturingselementen voor zoomen</string>
     <string name="pref_zoom_enable_summary">Rechtsonder een zoomknop weergeven</string>

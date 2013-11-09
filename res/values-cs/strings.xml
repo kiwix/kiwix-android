@@ -20,7 +20,7 @@
     <string name="error_articleurlnotfound">Chyba: Načtení článku (Url: %1$s ) se nezdařilo.</string>
     <string name="pref_display_title">Zobrazení</string>
     <string name="pref_zoom_title">Úroveň zvětšení</string>
-    <string name="pref_zoom_dialogtitle">Úroveň zvětšení</string>    
+    <string name="pref_zoom_dialogtitle">Úroveň zvětšení</string>
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -28,6 +28,8 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
+    <string name="pref_info_title">Information</string>
+    <string name="pref_info_version">Version</string>
     <string name="menu_exit">Konec</string>
     <string name="pref_zoom_enable">Ovládání přiblížení</string>
     <string name="pref_zoom_enable_summary">Zobrazit tlačítko přiblížení v pravém dolním rohu obrazovky</string>

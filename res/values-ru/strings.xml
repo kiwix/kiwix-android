@@ -20,7 +20,7 @@
     <string name="error_articleurlnotfound">Ошибка: Загрузка статьи (Url: %1$s) не удалась.</string>
     <string name="pref_display_title">Показать</string>
     <string name="pref_zoom_title">Уровень масштабирования</string>
-    <string name="pref_zoom_dialogtitle">Уровень масштабирования</string>    
+    <string name="pref_zoom_dialogtitle">Уровень масштабирования</string>
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -28,6 +28,8 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
+    <string name="pref_info_title">Information</string>
+    <string name="pref_info_version">Version</string>
     <string name="menu_exit">Выход</string>
     <string name="pref_zoom_enable">Управления масштабированием</string>
     <string name="pref_zoom_enable_summary">Отображать кнопку масштабирования в правом нижнем углу экрана</string>

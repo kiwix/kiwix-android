@@ -20,7 +20,7 @@
     <string name="error_articleurlnotfound">Hata: (Url: %1$s) makalesinin yüklemesi başarısız.</string>
     <string name="pref_display_title">Göster</string>
     <string name="pref_zoom_title">Zum seviyesi</string>
-    <string name="pref_zoom_dialogtitle">Zum seviyesi</string>    
+    <string name="pref_zoom_dialogtitle">Zum seviyesi</string>
     <string-array
         name="pref_zoom_entries">
         <item>Automatic</item>
@@ -28,6 +28,8 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
+    <string name="pref_info_title">Information</string>
+    <string name="pref_info_version">Version</string>
     <string name="menu_exit">Çık</string>
     <string name="pref_zoom_enable">Zum kontrolleri</string>
     <string name="pref_zoom_enable_summary">Ekranın sağ alt köşesinde bir zum butonu görüntüle</string>
