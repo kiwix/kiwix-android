@@ -631,7 +631,7 @@ public class KiwixMobileActivity extends Activity {
 		Log.d("kiwix", articleSearchtextView+" onEditorAction. TextView: "+articleSearchtextView.getText()+ " articleUrl: "+articleUrl);
 
 		if (articleUrl!=null) {
-			hideSearchBar();
+		    //			hideSearchBar();
 			webView.loadUrl(Uri.parse(ZimContentProvider.CONTENT_URI
 		            +articleUrl).toString());
 
