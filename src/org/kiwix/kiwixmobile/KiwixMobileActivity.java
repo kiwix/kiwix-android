@@ -101,17 +101,6 @@ public class KiwixMobileActivity extends Activity {
 							while ((suggestion = ZimContentProvider.getNextSuggestion())!=null) {
 								data.add(suggestion);
 							}
-
-							// Android does not use the libicu and is not able to correctly make a ucfirst of the suggestion preffix.
-							// For this reason this is done here.
-							String ucFirstPrefix = prefix.substring(0, 1).toUpperCase() + prefix.substring(1);
-							ZimContentProvider.searchSuggestions(ucFirstPrefix, 200);
-							while ((suggestion = ZimContentProvider.getNextSuggestion())!=null) {
-							    if (!data.contains(suggestion)) {
-								data.add(suggestion);
-							    }
-							}
-
 						}
 						catch(Exception e) {}
 						// Now assign the values and count to the FilterResults object
