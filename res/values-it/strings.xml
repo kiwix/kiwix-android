@@ -10,6 +10,8 @@
     <string name="menu_search">Ricerca</string>
     <string name="menu_searchintext">Trova nel testo</string>
     <string name="menu_randomarticle">Voce a caso</string>
+    <string name="menu_fullscreen">Fullscreen</string>
+    <string name="menu_exitfullscreen">Exit fullScreen</string>
     <string name="search_label">Ricerca</string>
     <string name="articlesearch_hint">Scrivi per ricercare le voci</string>
     <string name="choose_file">Seleziona un file di contenuto ZIM (*.zim)</string>

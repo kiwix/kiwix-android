@@ -10,6 +10,8 @@
     <string name="menu_search">Klask</string>
     <string name="menu_searchintext">Kavout en destenn</string>
     <string name="menu_randomarticle">Ur pennad dre zegouezh</string>
+    <string name="menu_fullscreen">Fullscreen</string>
+    <string name="menu_exitfullscreen">Exit fullScreen</string>
     <string name="search_label">Klask</string>
     <string name="articlesearch_hint">Type to lookup articles</string>
     <string name="choose_file">Select a ZIM Content File (*.zim)</string>

@@ -10,6 +10,8 @@
     <string name="menu_search">Søg</string>
     <string name="menu_searchintext">Find i teksten</string>
     <string name="menu_randomarticle">Tilfældig artikel</string>
+    <string name="menu_fullscreen">Fullscreen</string>
+    <string name="menu_exitfullscreen">Exit fullScreen</string>
     <string name="search_label">Søg</string>
     <string name="articlesearch_hint">Skriv for at finde artikler</string>
     <string name="choose_file">Vælg en ZIM indholdsfil (*.zim)</string>

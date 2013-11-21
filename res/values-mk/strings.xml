@@ -10,6 +10,8 @@
     <string name="menu_search">Пребарување</string>
     <string name="menu_searchintext">Пронајди во текстот</string>
     <string name="menu_randomarticle">Случајна статија</string>
+    <string name="menu_fullscreen">Fullscreen</string>
+    <string name="menu_exitfullscreen">Exit fullScreen</string>
     <string name="search_label">Пребарување</string>
     <string name="articlesearch_hint">Тип за пребарување статии</string>
     <string name="choose_file">Изберете ZIM-податотека (*.zim)</string>

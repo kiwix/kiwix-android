@@ -10,6 +10,8 @@
     <string name="menu_search">Tìm kiếm</string>
     <string name="menu_searchintext">Tìm trong Văn bản</string>
     <string name="menu_randomarticle">Bài viết Ngẫu nhiên</string>
+    <string name="menu_fullscreen">Fullscreen</string>
+    <string name="menu_exitfullscreen">Exit fullScreen</string>
     <string name="search_label">Tìm kiếm</string>
     <string name="articlesearch_hint">Gõ để tra cứu bài</string>
     <string name="choose_file">Chọn một Tập tin Nội dung ZIM (*.zim)</string>

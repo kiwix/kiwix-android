@@ -10,6 +10,8 @@
     <string name="menu_search">Поиск</string>
     <string name="menu_searchintext">Найти в тексте</string>
     <string name="menu_randomarticle">Случайная статья</string>
+    <string name="menu_fullscreen">Fullscreen</string>
+    <string name="menu_exitfullscreen">Exit fullScreen</string>
     <string name="search_label">Поиск</string>
     <string name="articlesearch_hint">Введите для поиска статей</string>
     <string name="choose_file">Выберите ZIM-файл (*.zim)</string>

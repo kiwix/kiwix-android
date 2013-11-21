@@ -10,6 +10,8 @@
     <string name="menu_search">Buscar</string>
     <string name="menu_searchintext">Buscar en el texto</string>
     <string name="menu_randomarticle">Página aleatoria</string>
+    <string name="menu_fullscreen">Fullscreen</string>
+    <string name="menu_exitfullscreen">Exit fullScreen</string>
     <string name="search_label">Buscar</string>
     <string name="articlesearch_hint">Tipo de búsqueda de artículos</string>
     <string name="choose_file">Seleccione un archivo de contenido de ZIM (*.zim)</string>

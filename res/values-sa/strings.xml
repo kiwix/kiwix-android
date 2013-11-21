@@ -10,6 +10,8 @@
     <string name="menu_search">अन्वेषणम्</string>
     <string name="menu_searchintext">पाठे अन्विष्यताम्</string>
     <string name="menu_randomarticle">यादृच्छिक लेख</string>
+    <string name="menu_fullscreen">Fullscreen</string>
+    <string name="menu_exitfullscreen">Exit fullScreen</string>
     <string name="search_label">अन्वेषणम्</string>
     <string name="articlesearch_hint">Type to lookup articles</string>
     <string name="choose_file">Select a ZIM Content File (*.zim)</string>

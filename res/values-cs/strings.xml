@@ -10,6 +10,8 @@
     <string name="menu_search">Vyhledávání</string>
     <string name="menu_searchintext">Najít v textu</string>
     <string name="menu_randomarticle">Náhodný článek</string>
+    <string name="menu_fullscreen">Fullscreen</string>
+    <string name="menu_exitfullscreen">Exit fullScreen</string>
     <string name="search_label">Vyhledávání</string>
     <string name="articlesearch_hint">Pro vyhledání článků pište</string>
     <string name="choose_file">Vyberte obsahový soubor ZIM (*.zim)</string>

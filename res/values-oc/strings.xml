@@ -10,6 +10,8 @@
     <string name="menu_search">Cèrca</string>
     <string name="menu_searchintext">Trobar dins lo tèxte</string>
     <string name="menu_randomarticle">Article per escasença</string>
+    <string name="menu_fullscreen">Fullscreen</string>
+    <string name="menu_exitfullscreen">Exit fullScreen</string>
     <string name="search_label">Cèrca</string>
     <string name="articlesearch_hint">Picar per recercar d\'articles</string>
     <string name="choose_file">Seleccionar un fichièr de contengut ZIM (*.zim)</string>

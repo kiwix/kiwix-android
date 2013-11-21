@@ -10,6 +10,8 @@
     <string name="menu_search">Rechercher</string>
     <string name="menu_searchintext">Rechercher dans le texte</string>
     <string name="menu_randomarticle">Article au hasard</string>
+    <string name="menu_fullscreen">Fullscreen</string>
+    <string name="menu_exitfullscreen">Exit fullScreen</string>
     <string name="search_label">Rechercher</string>
     <string name="articlesearch_hint">Taper pour rechercher des articles</string>
     <string name="choose_file">Sélectionner un fichier de contenu ZIM (*.zim)</string>

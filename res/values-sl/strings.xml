@@ -10,6 +10,8 @@
     <string name="menu_search">Iskanje</string>
     <string name="menu_searchintext">Najdi v besedilu</string>
     <string name="menu_randomarticle">Naključni članek</string>
+    <string name="menu_fullscreen">Fullscreen</string>
+    <string name="menu_exitfullscreen">Exit fullScreen</string>
     <string name="search_label">Iskanje</string>
     <string name="articlesearch_hint">Vrsta iskanih člankov</string>
     <string name="choose_file">Izberite datoteko z vsebino ZIM (*.zim)</string>

@@ -10,6 +10,8 @@
     <string name="menu_search">پلټل</string>
     <string name="menu_searchintext">په متن کې موندل</string>
     <string name="menu_randomarticle">ناټاکلې ليکنه</string>
+    <string name="menu_fullscreen">Fullscreen</string>
+    <string name="menu_exitfullscreen">Exit fullScreen</string>
     <string name="search_label">پلټل</string>
     <string name="articlesearch_hint">Type to lookup articles</string>
     <string name="choose_file">د ZIM مېنځپانگې يوه دوتنه ټاکل (*.zim)</string>

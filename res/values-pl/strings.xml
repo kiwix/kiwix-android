@@ -10,6 +10,8 @@
     <string name="menu_search">Szukaj</string>
     <string name="menu_searchintext">Znajdź w tekście</string>
     <string name="menu_randomarticle">Losowy artykuł</string>
+    <string name="menu_fullscreen">Fullscreen</string>
+    <string name="menu_exitfullscreen">Exit fullScreen</string>
     <string name="search_label">Szukaj</string>
     <string name="articlesearch_hint">Type to lookup articles</string>
     <string name="choose_file">Select a ZIM Content File (*.zim)</string>

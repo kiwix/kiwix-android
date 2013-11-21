@@ -10,6 +10,8 @@
     <string name="menu_search">جستجو</string>
     <string name="menu_searchintext">جستجو در متن</string>
     <string name="menu_randomarticle">مقاله تصادفی</string>
+    <string name="menu_fullscreen">Fullscreen</string>
+    <string name="menu_exitfullscreen">Exit fullScreen</string>
     <string name="search_label">جستجو</string>
     <string name="articlesearch_hint">برای یافتن مقاله‌ها تایپ کنید</string>
     <string name="choose_file">یک پروندهٔ محتوایی ZIM را انتخاب کنید (*.zim)</string>

@@ -10,6 +10,8 @@
     <string name="menu_search">Sök</string>
     <string name="menu_searchintext">Hitta i text</string>
     <string name="menu_randomarticle">Slumpmässig artikel</string>
+    <string name="menu_fullscreen">Fullscreen</string>
+    <string name="menu_exitfullscreen">Exit fullScreen</string>
     <string name="search_label">Sök</string>
     <string name="articlesearch_hint">Skriv för att kolla upp artiklar</string>
     <string name="choose_file">Välj en ZIM-innehållsfil (*.zim)</string>

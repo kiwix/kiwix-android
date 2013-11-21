@@ -10,6 +10,8 @@
     <string name="menu_search">Zoeken</string>
     <string name="menu_searchintext">Zoeken in tekst</string>
     <string name="menu_randomarticle">Willekeurig artikel</string>
+    <string name="menu_fullscreen">Fullscreen</string>
+    <string name="menu_exitfullscreen">Exit fullScreen</string>
     <string name="search_label">Zoeken</string>
     <string name="articlesearch_hint">Voer tekst in om pagina\'s te zoeken</string>
     <string name="choose_file">Selecteer een ZIM inhoudsbestand (*.zim)</string>

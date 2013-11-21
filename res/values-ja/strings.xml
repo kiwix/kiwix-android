@@ -10,6 +10,8 @@
     <string name="menu_search">検索</string>
     <string name="menu_searchintext">テキストで検索</string>
     <string name="menu_randomarticle">ランダム記事</string>
+    <string name="menu_fullscreen">Fullscreen</string>
+    <string name="menu_exitfullscreen">Exit fullScreen</string>
     <string name="search_label">検索</string>
     <string name="articlesearch_hint">記事の検索</string>
     <string name="choose_file">Select a ZIM Content File (*.zim)</string>

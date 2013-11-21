@@ -10,6 +10,8 @@
     <string name="menu_search">தேடு</string>
     <string name="menu_searchintext">உரையில் கண்டுபிடி</string>
     <string name="menu_randomarticle">தொடர்பற்ற கட்டுரை</string>
+    <string name="menu_fullscreen">Fullscreen</string>
+    <string name="menu_exitfullscreen">Exit fullScreen</string>
     <string name="search_label">தேடு</string>
     <string name="articlesearch_hint">Type to lookup articles</string>
     <string name="choose_file">ZIM கோப்பை தேர்வு செய் (*.zim)</string>
