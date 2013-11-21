@@ -53,7 +53,14 @@
 	android:icon="@drawable/action_help"                        
         android:orderInCategory="0"
         android:showAsAction="never" />
-    
+
+    <item android:id="@+id/menu_fullscreen"
+          android:icon="@drawable/action_search"
+          android:title="@string/menu_fullscreen"
+          android:visible="false"
+          android:orderInCategory="0"
+          android:showAsAction="ifRoom" />
+
     <item android:id="@+id/menu_settings"
         android:title="@string/menu_settings"
         android:icon="@drawable/navigation_forward"        

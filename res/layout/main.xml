@@ -1,44 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/MainLayout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
-    <LinearLayout 
-    android:id="@+id/articleSearchBar"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal" 
-    android:visibility="gone"
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="10dp"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    >
-	    <AutoCompleteTextView
-            android:id="@+id/articleSearchTextView"
+              android:id="@+id/MainLayout"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical" >
+    <RelativeLayout
+            android:id="@+id/FullscreenButtonLayout"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:completionThreshold="1"
-            android:ellipsize="end"
-            android:ems="10"
-            android:hint="@string/articlesearch_hint"
-            android:imeOptions="actionGo"
-            android:inputType="text|textCapWords"
-            android:maxLines="1"
-	    android:background="@android:color/background_dark"
-	    android:textColor="@android:color/primary_text_dark"
-           />
+            android:layout_height="fill_parent">
 
-	</LinearLayout>
 
-    
-    <WebView
-        android:id="@+id/webview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-        <requestFocus />        
-    </WebView>
+
+        <LinearLayout
+                android:id="@+id/ElementsLayout"
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                android:orientation="vertical"
+                >
+
+            <LinearLayout
+                    android:id="@+id/articleSearchBar"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    >
+                <AutoCompleteTextView
+                        android:id="@+id/articleSearchTextView"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:completionThreshold="1"
+                        android:ellipsize="end"
+                        android:ems="10"
+                        android:hint="@string/articlesearch_hint"
+                        android:imeOptions="actionGo"
+                        android:inputType="text|textCapWords"
+                        android:maxLines="1"
+                        android:background="@android:color/background_dark"
+                        android:textColor="@android:color/primary_text_dark"
+                        />
+
+            </LinearLayout>
+
+
+            <WebView
+                    android:id="@+id/webview"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+                <requestFocus />
+            </WebView>
+
+        </LinearLayout>
+
+        <ImageButton
+                android:id="@+id/FullscreenControlButton"
+                android:layout_width="100px"
+                android:layout_height="100px"
+                android:src="@drawable/fullscreen_exit"
+                android:layout_marginTop="0px"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:visibility="invisible"
+
+                >
+
+        </ImageButton>
+
+    </RelativeLayout>
+
 
 </LinearLayout>

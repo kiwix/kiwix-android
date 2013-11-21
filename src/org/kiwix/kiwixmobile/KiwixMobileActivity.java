@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnTouchListener;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -42,10 +43,12 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
+import android.view.View.OnClickListener;
 
 public class KiwixMobileActivity extends Activity {
     /** Called when the activity is first created. */
@@ -62,8 +65,10 @@ public class KiwixMobileActivity extends Activity {
 	private AutoCompleteTextView articleSearchtextView;
 	private LinearLayout articleSearchBar;
 	private Menu menu;
-    
-	
+    private boolean isFullscreenOpened;
+	private ImageButton exitFullscreenButton;
+
+
 	public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 		private ArrayList<String> mData;
 
@@ -134,6 +139,7 @@ public class KiwixMobileActivity extends Activity {
         requestWebReloadOnFinished = 0;
         requestInitAllMenuItems = false;
         NightMode = false;
+        isFullscreenOpened = false;
 
 
         this.requestWindowFeature(Window.FEATURE_PROGRESS);
@@ -143,6 +149,16 @@ public class KiwixMobileActivity extends Activity {
         webView = (WebView) findViewById(R.id.webview);
         articleSearchBar = (LinearLayout) findViewById(R.id.articleSearchBar);
         articleSearchtextView = (AutoCompleteTextView) findViewById(R.id.articleSearchTextView);
+
+        exitFullscreenButton=(ImageButton)findViewById(R.id.FullscreenControlButton);
+        exitFullscreenButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeFullScreen();
+
+
+            }
+        });
 
         final Drawable clearIcon = getResources().getDrawable(R.drawable.navigation_cancel);
         final Drawable searchIcon = getResources().getDrawable(R.drawable.action_search);
@@ -191,6 +207,8 @@ public class KiwixMobileActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				articleSearchtextView.setText(parent.getItemAtPosition(position).toString());
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(),0);
 				openArticleFromSearch();
 			}
 		});
@@ -464,6 +482,14 @@ public class KiwixMobileActivity extends Activity {
             	Intent i = new Intent(this, KiwixSettings.class);
                 startActivityForResult(i, PREFERENCES_REQUEST_CODE);
             	break;
+
+            case R.id.menu_fullscreen:
+                if(isFullscreenOpened){
+                    closeFullScreen();
+                }else{
+                    openFullScreen();
+                }
+                break;
         }
         
         return super.onOptionsItemSelected(item);
@@ -586,6 +612,7 @@ public class KiwixMobileActivity extends Activity {
 	}
 
 	private void initAllMenuItems() {
+        menu.findItem(R.id.menu_fullscreen).setVisible(true);
 		menu.findItem(R.id.menu_back).setVisible(true);
 		menu.findItem(R.id.menu_forward).setVisible(false);
 		menu.findItem(R.id.menu_home).setVisible(true);
@@ -632,6 +659,28 @@ public class KiwixMobileActivity extends Activity {
 			return true;
 		}
 	}
+
+    private void openFullScreen(){
+        getActionBar().hide();
+        exitFullscreenButton.setVisibility(0);
+        menu.findItem(R.id.menu_fullscreen).setTitle(getResources().getString(R.string.menu_exitfullscreen));
+        int fullScreenFlag=WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        int classicScreenFlag=WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
+        getWindow().addFlags(fullScreenFlag);
+        getWindow().clearFlags(classicScreenFlag);
+        isFullscreenOpened=true;
+    }
+
+    private void closeFullScreen(){
+        getActionBar().show();
+        menu.findItem(R.id.menu_fullscreen).setTitle(getResources().getString(R.string.menu_fullscreen));
+        exitFullscreenButton.setVisibility(4);
+        int fullScreenFlag=WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        int classicScreenFlag=WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
+        getWindow().clearFlags(fullScreenFlag);
+        getWindow().addFlags(classicScreenFlag);
+        isFullscreenOpened=false;
+    }
 	
 	private boolean openArticleFromSearch() {
 		Log.d("kiwix", "openArticleFromSearch: "+articleSearchtextView.getText());
