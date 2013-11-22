@@ -10,8 +10,9 @@
     <string name="menu_search">Iskanje</string>
     <string name="menu_searchintext">Najdi v besedilu</string>
     <string name="menu_randomarticle">Naključni članek</string>
-    <string name="menu_fullscreen">Fullscreen</string>
-    <string name="menu_exitfullscreen">Exit fullScreen</string>
+    <string name="menu_fullscreen">Celoten zaslon</string>
+    <string name="menu_exitfullscreen">Izhod iz celozaslonskega načina</string>
+    <string name="button_backtotop">Back to Top</string>
     <string name="search_label">Iskanje</string>
     <string name="articlesearch_hint">Vrsta iskanih člankov</string>
     <string name="choose_file">Izberite datoteko z vsebino ZIM (*.zim)</string>
@@ -37,7 +38,6 @@
     <string name="pref_zoom_enable_summary">V spodnjem desnem vogalu zaslona prikaži gumb za zumiranje</string>
     <string name="pref_nightmode">Nočni način</string>
     <string name="pref_nightmode_summary">Prikaz člankov z obrnjenimi barvami</string>
-    <string name="button_pref_title">Back to top button</string>
-    <string name="button_pref_description">Adds a button to the end of the page to scroll up to top</string>
-    <string name="button_text_back_to_top">Back To Top</string>
+    <string name="pref_backtotop">Back to Top button</string>
+    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
 </resources>

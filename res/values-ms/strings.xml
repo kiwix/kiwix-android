@@ -10,8 +10,9 @@
     <string name="menu_search">Cari</string>
     <string name="menu_searchintext">Cari dalam teks</string>
     <string name="menu_randomarticle">Rencana rawak</string>
-    <string name="menu_fullscreen">Fullscreen</string>
-    <string name="menu_exitfullscreen">Exit fullScreen</string>
+    <string name="menu_fullscreen">Skrin penuh</string>
+    <string name="menu_exitfullscreen">Keluar dari ragam skrin penuh</string>
+    <string name="button_backtotop">Back to Top</string>
     <string name="search_label">Cari</string>
     <string name="articlesearch_hint">Taip untuk mencari rencana</string>
     <string name="choose_file">Pilih Fail Kandungan ZIM (*.zim)</string>
@@ -37,7 +38,6 @@
     <string name="pref_zoom_enable_summary">Paparkan butang zum pada sudut kanan bawah skrin</string>
     <string name="pref_nightmode">Mod malam</string>
     <string name="pref_nightmode_summary">Paparkan rencana yang diterbalikkan warnanya</string>
-    <string name="button_pref_title">Back to top button</string>
-    <string name="button_pref_description">Adds a button to the end of the page to scroll up to top</string>
-    <string name="button_text_back_to_top">Back To Top</string>
+    <string name="pref_backtotop">Back to Top button</string>
+    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
 </resources>

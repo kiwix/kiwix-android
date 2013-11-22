@@ -10,8 +10,9 @@
     <string name="menu_search">Cerca</string>
     <string name="menu_searchintext">Cercar en el text</string>
     <string name="menu_randomarticle">Article a l\'atzar</string>
-    <string name="menu_fullscreen">Fullscreen</string>
-    <string name="menu_exitfullscreen">Exit fullScreen</string>
+    <string name="menu_fullscreen">Pantalla completa</string>
+    <string name="menu_exitfullscreen">Surt del mode de pantalla sencera</string>
+    <string name="button_backtotop">Back to Top</string>
     <string name="search_label">Cerca</string>
     <string name="articlesearch_hint">Type to lookup articles</string>
     <string name="choose_file">Seleccioneu un fitxer de contingut ZIM (*.zim)</string>
@@ -37,7 +38,6 @@
     <string name="pref_zoom_enable_summary">Mostrar un botó de zoom a la part inferior dreta de la pantalla</string>
     <string name="pref_nightmode">Mode nocturn</string>
     <string name="pref_nightmode_summary">Mostrar els articles amb colors inverses</string>
-    <string name="button_pref_title">Back to top button</string>
-    <string name="button_pref_description">Adds a button to the end of the page to scroll up to top</string>
-    <string name="button_text_back_to_top">Back To Top</string>
+    <string name="pref_backtotop">Back to Top button</string>
+    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
 </resources>

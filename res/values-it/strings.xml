@@ -10,8 +10,9 @@
     <string name="menu_search">Ricerca</string>
     <string name="menu_searchintext">Trova nel testo</string>
     <string name="menu_randomarticle">Voce a caso</string>
-    <string name="menu_fullscreen">Fullscreen</string>
-    <string name="menu_exitfullscreen">Exit fullScreen</string>
+    <string name="menu_fullscreen">A tutto schermo</string>
+    <string name="menu_exitfullscreen">Esci dalla modalità a tutto schermo</string>
+    <string name="button_backtotop">Back to Top</string>
     <string name="search_label">Ricerca</string>
     <string name="articlesearch_hint">Scrivi per ricercare le voci</string>
     <string name="choose_file">Seleziona un file di contenuto ZIM (*.zim)</string>
@@ -37,7 +38,6 @@
     <string name="pref_zoom_enable_summary">Visualizza un pulsante di zoom nell\'angolo inferiore destro dello schermo</string>
     <string name="pref_nightmode">Modalità notte</string>
     <string name="pref_nightmode_summary">Visualizza le voci con colori invertiti</string>
-    <string name="button_pref_title">Back to top button</string>
-    <string name="button_pref_description">Adds a button to the end of the page to scroll up to top</string>
-    <string name="button_text_back_to_top">Back To Top</string>
+    <string name="pref_backtotop">Back to Top button</string>
+    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
 </resources>

@@ -10,8 +10,9 @@
     <string name="menu_search">Søg</string>
     <string name="menu_searchintext">Find i teksten</string>
     <string name="menu_randomarticle">Tilfældig artikel</string>
-    <string name="menu_fullscreen">Fullscreen</string>
-    <string name="menu_exitfullscreen">Exit fullScreen</string>
+    <string name="menu_fullscreen">Fuld skærm</string>
+    <string name="menu_exitfullscreen">Forlad fuldskærm</string>
+    <string name="button_backtotop">Back to Top</string>
     <string name="search_label">Søg</string>
     <string name="articlesearch_hint">Skriv for at finde artikler</string>
     <string name="choose_file">Vælg en ZIM indholdsfil (*.zim)</string>
@@ -37,7 +38,6 @@
     <string name="pref_zoom_enable_summary">Få vist en zoom-knap i skærmens nederste højre hjørne</string>
     <string name="pref_nightmode">Nat-tilstand</string>
     <string name="pref_nightmode_summary">Vis artikler med inverterede farver</string>
-    <string name="button_pref_title">Back to top button</string>
-    <string name="button_pref_description">Adds a button to the end of the page to scroll up to top</string>
-    <string name="button_text_back_to_top">Back To Top</string>
+    <string name="pref_backtotop">Back to Top button</string>
+    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
 </resources>

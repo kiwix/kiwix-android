@@ -10,8 +10,9 @@
     <string name="menu_search">ଖୋଜିବେ</string>
     <string name="menu_searchintext">ଲେଖାରେ ଖୋଜିବେ</string>
     <string name="menu_randomarticle">ଯାହିତାହି ପ୍ରସଙ୍ଗ</string>
-    <string name="menu_fullscreen">Fullscreen</string>
-    <string name="menu_exitfullscreen">Exit fullScreen</string>
+    <string name="menu_fullscreen">ପୁରା ସ୍କ୍ରିନ</string>
+    <string name="menu_exitfullscreen">ପୁରା ସ୍କ୍ରିନ ମୋଡରୁ ଓହରି ଆସିବେ</string>
+    <string name="button_backtotop">Back to Top</string>
     <string name="search_label">ଖୋଜିବେ</string>
     <string name="articlesearch_hint">Type to lookup articles</string>
     <string name="choose_file">Select a ZIM Content File (*.zim)</string>
@@ -37,7 +38,6 @@
     <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
     <string name="pref_nightmode">Night mode</string>
     <string name="pref_nightmode_summary">Show articles with reverted colors</string>
-    <string name="button_pref_title">Back to top button</string>
-    <string name="button_pref_description">Adds a button to the end of the page to scroll up to top</string>
-    <string name="button_text_back_to_top">Back To Top</string>
+    <string name="pref_backtotop">Back to Top button</string>
+    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
 </resources>

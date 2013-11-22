@@ -10,8 +10,9 @@
     <string name="menu_search">Cercar</string>
     <string name="menu_searchintext">Cercar in texto</string>
     <string name="menu_randomarticle">Articulo aleatori</string>
-    <string name="menu_fullscreen">Fullscreen</string>
-    <string name="menu_exitfullscreen">Exit fullScreen</string>
+    <string name="menu_fullscreen">Schermo complete</string>
+    <string name="menu_exitfullscreen">Exir del schermo complete</string>
+    <string name="button_backtotop">Back to Top</string>
     <string name="search_label">Cercar</string>
     <string name="articlesearch_hint">Dactylographar pro cercar articulos</string>
     <string name="choose_file">Selige un file de contento ZIM (*.zim)</string>
@@ -37,7 +38,6 @@
     <string name="pref_zoom_enable_summary">Monstrar un button de zoom in le angulo inferior dextre del schermo</string>
     <string name="pref_nightmode">Modo nocturne</string>
     <string name="pref_nightmode_summary">Monstrar articulos in colores invertite</string>
-    <string name="button_pref_title">Back to top button</string>
-    <string name="button_pref_description">Adds a button to the end of the page to scroll up to top</string>
-    <string name="button_text_back_to_top">Back To Top</string>
+    <string name="pref_backtotop">Back to Top button</string>
+    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
 </resources>
