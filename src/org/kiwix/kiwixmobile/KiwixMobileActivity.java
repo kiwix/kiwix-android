@@ -152,7 +152,7 @@ public class KiwixMobileActivity extends Activity {
 
         setContentView(R.layout.main);
         //Locate and hook up the Back to top button
-        findViewById(R.id.btn_back_to_top).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.button_backtotop).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 webView.pageUp(true);
@@ -319,22 +319,22 @@ public class KiwixMobileActivity extends Activity {
                                {
                                    //Don't go on the values these are observed to be working :p
                                    //Simple logic if scrolled to more than the threshold then show the button.
-                                   if (((double)page/maxPages) >= 0.1)
+                                   if (page > 0)
                                    {
-                                       if (KiwixMobileActivity.this.findViewById(R.id.btn_back_to_top).getVisibility() == View.INVISIBLE)
+                                       if (KiwixMobileActivity.this.findViewById(R.id.button_backtotop).getVisibility() == View.INVISIBLE)
                                        {
-                                           KiwixMobileActivity.this.findViewById(R.id.btn_back_to_top).setVisibility(View.VISIBLE);
+                                           KiwixMobileActivity.this.findViewById(R.id.button_backtotop).setVisibility(View.VISIBLE);
                                            //U said you wanted fancy huh,then this might just do it.
-                                           KiwixMobileActivity.this.findViewById(R.id.btn_back_to_top).startAnimation(AnimationUtils.loadAnimation(KiwixMobileActivity.this,android.R.anim.fade_in));
+                                           KiwixMobileActivity.this.findViewById(R.id.button_backtotop).startAnimation(AnimationUtils.loadAnimation(KiwixMobileActivity.this,android.R.anim.fade_in));
                                        }
                                    }
                                    else
                                    {
-                                       if (KiwixMobileActivity.this.findViewById(R.id.btn_back_to_top).getVisibility() == View.VISIBLE)
+                                       if (KiwixMobileActivity.this.findViewById(R.id.button_backtotop).getVisibility() == View.VISIBLE)
                                        {
-                                           KiwixMobileActivity.this.findViewById(R.id.btn_back_to_top).setVisibility(View.INVISIBLE);
+                                           KiwixMobileActivity.this.findViewById(R.id.button_backtotop).setVisibility(View.INVISIBLE);
                                            //U said you wanted fancy huh,then this might just do it.
-                                           KiwixMobileActivity.this.findViewById(R.id.btn_back_to_top).startAnimation(AnimationUtils.loadAnimation(KiwixMobileActivity.this,android.R.anim.fade_out));
+                                           KiwixMobileActivity.this.findViewById(R.id.button_backtotop).startAnimation(AnimationUtils.loadAnimation(KiwixMobileActivity.this,android.R.anim.fade_out));
                                        }
                                    }
                                }
@@ -432,8 +432,8 @@ public class KiwixMobileActivity extends Activity {
         //PreferenceFrag. so it might cause issues
         if (!isButtonEnabled)
         {
-            if (findViewById(R.id.btn_back_to_top).getVisibility() == View.VISIBLE)
-                findViewById(R.id.btn_back_to_top).setVisibility(View.INVISIBLE);
+            if (findViewById(R.id.button_backtotop).getVisibility() == View.VISIBLE)
+                findViewById(R.id.button_backtotop).setVisibility(View.INVISIBLE);
         }
 	
         //Night mode status
