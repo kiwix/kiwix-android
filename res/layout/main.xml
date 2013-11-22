@@ -4,12 +4,39 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
               android:orientation="vertical" >
+
+  <LinearLayout
+      android:id="@+id/articleSearchBar"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:visibility="gone"
+      android:layout_marginTop="10dp"
+      android:layout_marginBottom="10dp"
+      android:layout_marginLeft="10dp"
+      android:layout_marginRight="10dp"
+      >
+    <AutoCompleteTextView
+	android:id="@+id/articleSearchTextView"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:completionThreshold="1"
+	android:ellipsize="end"
+	android:ems="10"
+	android:hint="@string/articlesearch_hint"
+	android:imeOptions="actionGo"
+	android:inputType="text|textCapWords"
+	android:maxLines="1"
+	android:background="@android:color/background_dark"
+	android:textColor="@android:color/primary_text_dark"
+	/>
+    
+  </LinearLayout>
+
     <RelativeLayout
             android:id="@+id/FullscreenButtonLayout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
-
-
 
         <RelativeLayout
                 android:id="@+id/ElementsLayout"
@@ -17,34 +44,6 @@
                 android:layout_width="fill_parent"
                 android:orientation="vertical"
                 >
-
-            <LinearLayout
-                    android:id="@+id/articleSearchBar"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="gone"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    >
-                <AutoCompleteTextView
-                        android:id="@+id/articleSearchTextView"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:completionThreshold="1"
-                        android:ellipsize="end"
-                        android:ems="10"
-                        android:hint="@string/articlesearch_hint"
-                        android:imeOptions="actionGo"
-                        android:inputType="text|textCapWords"
-                        android:maxLines="1"
-                        android:background="@android:color/background_dark"
-                        android:textColor="@android:color/primary_text_dark"
-                        />
-
-            </LinearLayout>
 
             <org.kiwix.kiwixmobile.KiwixWebView
                     android:id="@+id/webview"
