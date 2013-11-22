@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Kiwix</string>
-    <string name="menu_openfile">Открыть файл ...</string>
+    <string name="menu_openfile">Открыть файл…</string>
     <string name="menu_help">Справка</string>
     <string name="menu_home">В начало</string>
     <string name="menu_forward">Вперед</string>
@@ -19,7 +19,7 @@
     <string name="error_nozimfilesfound">Не удалось найти ZIM-файлы на вашем устройстве.\nВзгляните на страницу справки, чтобы получить указания о том, как загружать содержимое на Kiwix.\nЕсли вы расположили ZIM-файл на вашем устройстве или внешнем носителе, возможно, стоит повторить попытку через минуту-другую или перезагрузить устройство.</string>
     <string name="error_filenotfound">Ошибка: выбранный ZIM-файл не найден.</string>
     <string name="error_fileinvalid">Ошибка: Выбранный файл не является пригодным ZIM-файлом.</string>
-    <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
+    <string name="error_articlenotfound">Ошибка: Загрузка статьи \«%1$s\» не удалась.</string>
     <string name="error_articleurlnotfound">Ошибка: Загрузка статьи (Url: %1$s) не удалась.</string>
     <string name="pref_display_title">Показать</string>
     <string name="pref_zoom_title">Уровень масштабирования</string>
@@ -31,8 +31,8 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
-    <string name="pref_info_title">Information</string>
-    <string name="pref_info_version">Version</string>
+    <string name="pref_info_title">Информация</string>
+    <string name="pref_info_version">Версия</string>
     <string name="menu_exit">Выход</string>
     <string name="pref_zoom_enable">Управления масштабированием</string>
     <string name="pref_zoom_enable_summary">Отображать кнопку масштабирования в правом нижнем углу экрана</string>
