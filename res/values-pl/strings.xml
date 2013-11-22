@@ -37,4 +37,7 @@
     <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
     <string name="pref_nightmode">Tryb nocny</string>
     <string name="pref_nightmode_summary">Show articles with reverted colors</string>
+    <string name="button_pref_title">Back to top button</string>
+    <string name="button_pref_description">Adds a button to the end of the page to scroll up to top</string>
+    <string name="button_text_back_to_top">Back To Top</string>
 </resources>

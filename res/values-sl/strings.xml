@@ -37,4 +37,7 @@
     <string name="pref_zoom_enable_summary">V spodnjem desnem vogalu zaslona prikaži gumb za zumiranje</string>
     <string name="pref_nightmode">Nočni način</string>
     <string name="pref_nightmode_summary">Prikaz člankov z obrnjenimi barvami</string>
+    <string name="button_pref_title">Back to top button</string>
+    <string name="button_pref_description">Adds a button to the end of the page to scroll up to top</string>
+    <string name="button_text_back_to_top">Back To Top</string>
 </resources>

@@ -37,4 +37,7 @@
     <string name="pref_zoom_enable_summary">Afficher un bouton de zoom dans le coin inférieur droit de l’écran</string>
     <string name="pref_nightmode">Mode nocturne</string>
     <string name="pref_nightmode_summary">Afficher les articles en couleurs inversées</string>
+    <string name="button_pref_title">Back to top button</string>
+    <string name="button_pref_description">Adds a button to the end of the page to scroll up to top</string>
+    <string name="button_text_back_to_top">Back To Top</string>
 </resources>

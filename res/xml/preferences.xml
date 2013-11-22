@@ -13,7 +13,7 @@
         	android:defaultValue="automatic" />
         <CheckBoxPreference android:key="pref_zoom_enabled" android:title="@string/pref_zoom_enable" android:summary="@string/pref_zoom_enable_summary" android:defaultValue="false"/>
         <CheckBoxPreference android:key="pref_nightmode" android:title="@string/pref_nightmode" android:defaultValue="false" android:summary="@string/pref_nightmode_summary"/>
-        
+        <CheckBoxPreference android:key="pref_top_button" android:title="@string/button_pref_title" android:summary="@string/button_pref_description" android:defaultValue="true"/>        
     </PreferenceCategory>
     
     <PreferenceCategory 

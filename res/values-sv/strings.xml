@@ -37,4 +37,7 @@
     <string name="pref_zoom_enable_summary">Visa en zoomknapp längst ned i det högra hörnet på skärmen</string>
     <string name="pref_nightmode">Nattläge</string>
     <string name="pref_nightmode_summary">Visa artiklar med inverterade färger</string>
+    <string name="button_pref_title">Back to top button</string>
+    <string name="button_pref_description">Adds a button to the end of the page to scroll up to top</string>
+    <string name="button_text_back_to_top">Back To Top</string>
 </resources>

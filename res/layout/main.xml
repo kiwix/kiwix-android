@@ -46,13 +46,13 @@
 
             </LinearLayout>
 
-            <WebView
+            <org.kiwix.kiwixmobile.KiwixWebView
                     android:id="@+id/webview"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent">
                 <requestFocus />
 
-            </WebView>
+            </org.kiwix.kiwixmobile.KiwixWebView>
 		<ImageButton
 		    android:id="@+id/FullscreenControlButton"
 		    android:layout_width="55px"
@@ -61,6 +61,19 @@
 		    android:layout_alignParentRight="true"
 		    android:visibility="invisible"
 		    />
+                <!--back to top button -->
+                <Button
+                    android:id="@+id/btn_back_to_top"
+                    android:layout_width="wrap_content"                    
+                    android:layout_height="wrap_content"
+                    android:text="@string/button_text_back_to_top"
+                    android:alpha="0.6"
+                    android:textColor="@android:color/black"
+                    android:background="@android:color/transparent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:visibility="invisible"
+                    />
         </RelativeLayout>
 
     </RelativeLayout>
