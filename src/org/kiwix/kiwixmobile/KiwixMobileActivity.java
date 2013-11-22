@@ -49,11 +49,13 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 import android.view.View.OnClickListener;
+import android.view.animation.AnimationUtils;
 
 public class KiwixMobileActivity extends Activity {
     /** Called when the activity is first created. */
 
-	private WebView webView;
+        private SharedPreferences mySharedPreferences;
+	private KiwixWebView webView;
 	private ArrayAdapter<String> adapter;
 	protected boolean requestClearHistoryAfterLoad;
 	protected boolean requestInitAllMenuItems;
@@ -65,7 +67,9 @@ public class KiwixMobileActivity extends Activity {
 	private AutoCompleteTextView articleSearchtextView;
 	private LinearLayout articleSearchBar;
 	private Menu menu;
-    private boolean isFullscreenOpened;
+        //Tracks the user preference of of showing the button or not
+        private boolean isButtonEnabled = true;
+        private boolean isFullscreenOpened;
 	private ImageButton exitFullscreenButton;
 
 
@@ -146,7 +150,14 @@ public class KiwixMobileActivity extends Activity {
         this.setProgressBarVisibility(true);
 
         setContentView(R.layout.main);
-        webView = (WebView) findViewById(R.id.webview);
+        //Locate and hook up the Back to top button
+        findViewById(R.id.btn_back_to_top).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                webView.pageUp(true);
+            }
+        });
+        webView =(KiwixWebView) findViewById(R.id.webview);
         articleSearchBar = (LinearLayout) findViewById(R.id.articleSearchBar);
         articleSearchtextView = (AutoCompleteTextView) findViewById(R.id.articleSearchTextView);
 
@@ -298,7 +309,38 @@ public class KiwixMobileActivity extends Activity {
         	   }
 
         	public void onPageFinished(WebView view, String url) {
-        		String title = getResources().getString(R.string.app_name);
+        		
+                       //register a {@KiwixWebView.OnPageChangeListener} to get changes in scroll position
+                       webView.registerOnPageChangedListener(new KiwixWebView.OnPageChangeListener() {
+                           @Override
+                           public void onPageChanged(int page, int maxPages) {
+                               if (isButtonEnabled)
+                               {
+                                   //Don't go on the values these are observed to be working :p
+                                   //Simple logic if scrolled to more than the threshold then show the button.
+                                   if (((double)page/maxPages) >= 0.1)
+                                   {
+                                       if (KiwixMobileActivity.this.findViewById(R.id.btn_back_to_top).getVisibility() == View.INVISIBLE)
+                                       {
+                                           KiwixMobileActivity.this.findViewById(R.id.btn_back_to_top).setVisibility(View.VISIBLE);
+                                           //U said you wanted fancy huh,then this might just do it.
+                                           KiwixMobileActivity.this.findViewById(R.id.btn_back_to_top).startAnimation(AnimationUtils.loadAnimation(KiwixMobileActivity.this,android.R.anim.fade_in));
+                                       }
+                                   }
+                                   else
+                                   {
+                                       if (KiwixMobileActivity.this.findViewById(R.id.btn_back_to_top).getVisibility() == View.VISIBLE)
+                                       {
+                                           KiwixMobileActivity.this.findViewById(R.id.btn_back_to_top).setVisibility(View.INVISIBLE);
+                                           //U said you wanted fancy huh,then this might just do it.
+                                           KiwixMobileActivity.this.findViewById(R.id.btn_back_to_top).startAnimation(AnimationUtils.loadAnimation(KiwixMobileActivity.this,android.R.anim.fade_out));
+                                       }
+                                   }
+                               }
+                           }
+                        });
+
+                        String title = getResources().getString(R.string.app_name);
         		if (webView.getTitle()!=null && !webView.getTitle().isEmpty())
         			title = webView.getTitle();
         		getActionBar().setTitle(title);
@@ -360,11 +402,11 @@ public class KiwixMobileActivity extends Activity {
     }
 
     private void loadPref(){
-    	  SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+    	  mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     	  String pref_zoom = mySharedPreferences.getString("pref_zoom", "automatic");
     	  Boolean pref_zoom_enabled = mySharedPreferences.getBoolean("pref_zoom_enabled", false);
     	  Boolean pref_nightmode= mySharedPreferences.getBoolean("pref_nightmode", false);
-
+          isButtonEnabled = mySharedPreferences.getBoolean("pref_top_button",isButtonEnabled);
     	  if (pref_zoom.equals("automatic")) {
       		 setDefaultZoom();
     	  } else if (pref_zoom.equals("medium")) {
@@ -384,7 +426,16 @@ public class KiwixMobileActivity extends Activity {
 	 webView.getSettings().setBuiltInZoomControls(true);
 	 webView.getSettings().setDisplayZoomControls(pref_zoom_enabled);
 
-	//Night mode status
+        Log.d("kiwix","pref_top_button value ("+pref_zoom_enabled+")");
+        //DONT register a onSharedPrefenceChangedListener as the activity is haulted when on
+        //PreferenceFrag. so it might cause issues
+        if (!isButtonEnabled)
+        {
+            if (findViewById(R.id.btn_back_to_top).getVisibility() == View.VISIBLE)
+                findViewById(R.id.btn_back_to_top).setVisibility(View.INVISIBLE);
+        }
+	
+        //Night mode status
 	Log.d("kiwix","pref_nightmode value ("+pref_nightmode+")");
 	if(NightMode!=pref_nightmode)
 	    ToggleNightMode();
