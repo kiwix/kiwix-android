@@ -11,7 +11,7 @@
 
 
 
-        <LinearLayout
+        <RelativeLayout
                 android:id="@+id/ElementsLayout"
                 android:layout_height="fill_parent"
                 android:layout_width="fill_parent"
@@ -46,29 +46,22 @@
 
             </LinearLayout>
 
-
             <WebView
                     android:id="@+id/webview"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent">
                 <requestFocus />
+
             </WebView>
-
-        </LinearLayout>
-
-        <ImageButton
-                android:id="@+id/FullscreenControlButton"
-                android:layout_width="100px"
-                android:layout_height="100px"
-                android:src="@drawable/fullscreen_exit"
-                android:layout_marginTop="0px"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:visibility="invisible"
-
-                >
-
-        </ImageButton>
+		<ImageButton
+		    android:id="@+id/FullscreenControlButton"
+		    android:layout_width="55px"
+		    android:layout_height="55px"
+		    android:src="@drawable/fullscreen_exit"
+		    android:layout_alignParentRight="true"
+		    android:visibility="invisible"
+		    />
+        </RelativeLayout>
 
     </RelativeLayout>
 
