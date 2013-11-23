@@ -38,6 +38,9 @@
     <string name="pref_zoom_enable_summary">Прикажуваај копче за приближување во долниот десен агол</string>
     <string name="pref_nightmode">Ноќен режим</string>
     <string name="pref_nightmode_summary">Прикажувај ги статиите во обратни бои</string>
-    <string name="pref_backtotop">Back to Top button</string>
+    <string name="pref_backtotop">Back to Top</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="rescan_mediastore">Resync</string>
+    <string name="progress_dialog_scanning">Scanning for zim files please wait</string>
+    <string name="description_window_button">Return to windowed mode</string>
 </resources>

@@ -38,6 +38,9 @@
     <string name="pref_zoom_enable_summary">Visa en zoomknapp längst ned i det högra hörnet på skärmen</string>
     <string name="pref_nightmode">Nattläge</string>
     <string name="pref_nightmode_summary">Visa artiklar med inverterade färger</string>
-    <string name="pref_backtotop">Back to Top button</string>
+    <string name="pref_backtotop">Back to Top</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="rescan_mediastore">Resync</string>
+    <string name="progress_dialog_scanning">Scanning for zim files please wait</string>
+    <string name="description_window_button">Return to windowed mode</string>
 </resources>

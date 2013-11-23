@@ -38,6 +38,9 @@
     <string name="pref_zoom_enable_summary">Afichar un boton de zoom dins lo canton inferior drech de l’ecran</string>
     <string name="pref_nightmode">Mòde nocturne</string>
     <string name="pref_nightmode_summary">Afichar los articles en colors inversadas</string>
-    <string name="pref_backtotop">Back to Top button</string>
+    <string name="pref_backtotop">Back to Top</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="rescan_mediastore">Resync</string>
+    <string name="progress_dialog_scanning">Scanning for zim files please wait</string>
+    <string name="description_window_button">Return to windowed mode</string>
 </resources>
