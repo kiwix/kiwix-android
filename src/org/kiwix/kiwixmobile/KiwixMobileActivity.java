@@ -474,12 +474,10 @@ public class KiwixMobileActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-        
+        getMenuInflater().inflate(R.menu.main, menu);
         this.menu = menu;
         if (requestInitAllMenuItems) {
-        	initAllMenuItems();
+	    initAllMenuItems();
         }
         return true;
     }
