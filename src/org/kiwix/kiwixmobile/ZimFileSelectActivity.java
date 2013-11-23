@@ -39,16 +39,12 @@ LoaderManager.LoaderCallbacks<Cursor> {
 		setProgressBarIndeterminateVisibility(true);
 		setContentView(R.layout.zimfilelist);
 		selectZimFile();
-
-
 	}
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.zim_file_select,menu);
-        return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.zim_file_select, menu);
+	return super.onCreateOptionsMenu(menu);
     }
 
     @Override
