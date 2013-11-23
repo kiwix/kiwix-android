@@ -44,7 +44,7 @@ public class ZimFileScanner extends AsyncTask<Void,Void,Void> implements MediaSc
         mMediaScannerConnection = new MediaScannerConnection(callingActivity,this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
-        progressDialog.setMessage(callingActivity.getString(R.string.progress_dialog_scanning));
+        progressDialog.setMessage(callingActivity.getString(R.string.rescan_fs_warning));
     }
 
     @Override
