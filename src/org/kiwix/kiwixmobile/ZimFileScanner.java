@@ -42,6 +42,7 @@ public class ZimFileScanner extends AsyncTask<Void,Void,Void> implements MediaSc
         super.onPreExecute();
         progressDialog = new ProgressDialog(callingActivity);
         mMediaScannerConnection = new MediaScannerConnection(callingActivity,this);
+        mMediaScannerConnection.connect();
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
         progressDialog.setMessage(callingActivity.getString(R.string.rescan_fs_warning));
@@ -80,7 +81,6 @@ public class ZimFileScanner extends AsyncTask<Void,Void,Void> implements MediaSc
         {
             mMediaScannerConnection.scanFile(zim.next().get().getAbsolutePath(),null);
         }
-        mMediaScannerConnection.disconnect();
     }
 
     @Override
@@ -93,7 +93,7 @@ public class ZimFileScanner extends AsyncTask<Void,Void,Void> implements MediaSc
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         Log.d("kiwix","Browsed : "+filesScanned+" files");
-        mMediaScannerConnection.connect();
+        mMediaScannerConnection.disconnect();
         progressDialog.dismiss();
     }
 }
