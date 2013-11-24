@@ -484,6 +484,8 @@ public class KiwixMobileActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+	InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
         switch (item.getItemId()) {
             case android.R.id.home:
                 Toast.makeText(this, "Tapped home", Toast.LENGTH_SHORT).show();
@@ -499,40 +501,39 @@ public class KiwixMobileActivity extends Activity {
             	webView.showFindDialog("", true);
             	break;
             case R.id.menu_home:
+		imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(),0);
             	openMainPage();
             	break;
             case R.id.menu_forward:
-            	if(webView.canGoForward() == true){
+            	if (webView.canGoForward() == true) {
+		    imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(),0);
                     webView.goForward();
                 }
                 break;
             case R.id.menu_back:
-            	if(webView.canGoBack() == true){
+            	if (webView.canGoBack() == true){
 		    menu.findItem(R.id.menu_forward).setVisible(true);
+		    imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(),0);
                     webView.goBack();
                 }
                 break;
             case R.id.menu_randomarticle:
+		imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(),0);
             	openRandomArticle();
             	break;
             case R.id.menu_help:
             	showWelcome();
             	break;
             case R.id.menu_openfile:
-
-			    selectZimFile();
-			    break;
-
+		selectZimFile();
+		break;
             case R.id.menu_exit:
             	finish();
             	break;
-            
             case R.id.menu_settings:
-            	// Display the fragment as the main content.
             	Intent i = new Intent(this, KiwixSettings.class);
                 startActivityForResult(i, PREFERENCES_REQUEST_CODE);
             	break;
-
             case R.id.menu_fullscreen:
                 if(isFullscreenOpened){
                     closeFullScreen();
@@ -545,24 +546,21 @@ public class KiwixMobileActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-
-
-
-	private void selectZimFile() {
-		final Intent target = new Intent(Intent.ACTION_GET_CONTENT);
-		// The MIME data type filter
-		target.setType("*/*");
-		// Only return URIs that can be opened with ContentResolver
-		target.addCategory(Intent.CATEGORY_OPENABLE);
-		//Force use of our file selection component.
-		// (Note may make sense to just define a custom intent instead)
-		target.setComponent(new ComponentName(getPackageName(), getPackageName()+".ZimFileSelectActivity"));
-		try {
-			startActivityForResult(target, ZIMFILESELECT_REQUEST_CODE);
-		} catch (ActivityNotFoundException e) {
-
-		}
+    private void selectZimFile() {
+	final Intent target = new Intent(Intent.ACTION_GET_CONTENT);
+	// The MIME data type filter
+	target.setType("*/*");
+	// Only return URIs that can be opened with ContentResolver
+	target.addCategory(Intent.CATEGORY_OPENABLE);
+	//Force use of our file selection component.
+	// (Note may make sense to just define a custom intent instead)
+	target.setComponent(new ComponentName(getPackageName(), getPackageName()+".ZimFileSelectActivity"));
+	try {
+	    startActivityForResult(target, ZIMFILESELECT_REQUEST_CODE);
+	} catch (ActivityNotFoundException e) {
+	    
 	}
+    }
 
 
     private void showSearchBar() {
