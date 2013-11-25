@@ -57,6 +57,7 @@
 	  android:id="@+id/FullscreenControlButton"
 	  android:layout_width="55px"
 	  android:layout_height="55px"
+	  android:layout_margin="7px"
 	  android:hint="@string/menu_exitfullscreen"
 	  android:background="#DDFFFFFF"
 	  android:src="@drawable/fullscreen_exit"
