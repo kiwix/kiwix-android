@@ -12,10 +12,14 @@
     <string name="menu_randomarticle">Naključni članek</string>
     <string name="menu_fullscreen">Celoten zaslon</string>
     <string name="menu_exitfullscreen">Izhod iz celozaslonskega načina</string>
+    <string name="menu_exit">Izhod</string>
+    <string name="menu_share">Share with friends</string>
     <string name="button_backtotop">Back to Top</string>
     <string name="search_label">Iskanje</string>
     <string name="articlesearch_hint">Vrsta iskanih člankov</string>
     <string name="choose_file">Izberite datoteko z vsebino ZIM (*.zim)</string>
+    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
+    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Na vaši napravi ni bila najdena nobena datoteka ZIM.\nZa napotke v zvezi z nalaganjem vsebine v Kiwix si poglejte Stran za pomoč.\nČe ste datoteko ZIM posneli na svojo napravo/zunanji disk, lahko ponovno poskusite po kratkem čakanju ali pa svojo napravo ponovno zaženete.</string>
     <string name="error_filenotfound">Napaka: izbrane datoteke ZIM ni mogoče najti.</string>
     <string name="error_fileinvalid">Napaka: izbrana datoteka ni veljavna datoteka ZIM.</string>
@@ -25,19 +29,20 @@
     <string name="pref_zoom_title">Raven zumiranja</string>
     <string name="pref_zoom_dialogtitle">Raven zumiranja</string>
     <string-array
-        name="pref_zoom_entries">
-        <item>Automatic</item>
-        <item>Small</item>
-        <item>Medium</item>
-        <item>Large</item>
+	name="pref_zoom_entries">
+	<item>Automatic</item>
+	<item>Small</item>
+	<item>Medium</item>
+	<item>Large</item>
     </string-array>
     <string name="pref_info_title">Information</string>
     <string name="pref_info_version">Version</string>
-    <string name="menu_exit">Izhod</string>
     <string name="pref_zoom_enable">Kontrolniki zumiranja</string>
     <string name="pref_zoom_enable_summary">V spodnjem desnem vogalu zaslona prikaži gumb za zumiranje</string>
     <string name="pref_nightmode">Nočni način</string>
     <string name="pref_nightmode_summary">Prikaz člankov z obrnjenimi barvami</string>
     <string name="pref_backtotop">Back to Top</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="rescan_fs">Rescan SD card</string>
+    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
 </resources>

@@ -12,10 +12,14 @@
     <string name="menu_randomarticle">Rastgele madde</string>
     <string name="menu_fullscreen">Tam ekran</string>
     <string name="menu_exitfullscreen">Tam ekran modundan çık</string>
+    <string name="menu_exit">Çık</string>
+    <string name="menu_share">Share with friends</string>
     <string name="button_backtotop">Back to Top</string>
     <string name="search_label">Ara</string>
     <string name="articlesearch_hint">Makalelerde aranacak kelimeyi yazın</string>
     <string name="choose_file">Bir ZIM İçerik Dosyası seçin (*.zim)</string>
+    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
+    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Cihazınızda bir ZIM dosyası bulunamadı.\nKiwix\'e içerik yükleme talimatlarını görmek için Yardım Sayfası\'na bir göz atın.\nEğer cihazınıza/harici depolama kaynağınıza bir ZIM dosyası koyduysanız, birkaç dakika içerisinde yeniden deneyebilir veya cihazınızı yeniden başlatabilirsiniz.</string>
     <string name="error_filenotfound">Hata: Seçili ZIM dosyası bulunamadı.</string>
     <string name="error_fileinvalid">Hata: Seçili dosya geçerli bir ZIM dosyası değil.</string>
@@ -25,19 +29,20 @@
     <string name="pref_zoom_title">Zum seviyesi</string>
     <string name="pref_zoom_dialogtitle">Zum seviyesi</string>
     <string-array
-        name="pref_zoom_entries">
-        <item>Automatic</item>
-        <item>Small</item>
-        <item>Medium</item>
-        <item>Large</item>
+	name="pref_zoom_entries">
+	<item>Automatic</item>
+	<item>Small</item>
+	<item>Medium</item>
+	<item>Large</item>
     </string-array>
     <string name="pref_info_title">Information</string>
     <string name="pref_info_version">Version</string>
-    <string name="menu_exit">Çık</string>
     <string name="pref_zoom_enable">Zum kontrolleri</string>
     <string name="pref_zoom_enable_summary">Ekranın sağ alt köşesinde bir zum butonu görüntüle</string>
     <string name="pref_nightmode">Gece modu</string>
     <string name="pref_nightmode_summary">Makaleleri dönüştürülmüş renklerle göster</string>
     <string name="pref_backtotop">Back to Top</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="rescan_fs">Rescan SD card</string>
+    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
 </resources>

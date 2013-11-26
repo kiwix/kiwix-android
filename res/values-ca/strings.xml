@@ -12,10 +12,14 @@
     <string name="menu_randomarticle">Article a l\'atzar</string>
     <string name="menu_fullscreen">Pantalla completa</string>
     <string name="menu_exitfullscreen">Surt del mode de pantalla sencera</string>
+    <string name="menu_exit">Surt</string>
+    <string name="menu_share">Share with friends</string>
     <string name="button_backtotop">Back to Top</string>
     <string name="search_label">Cerca</string>
     <string name="articlesearch_hint">Type to lookup articles</string>
     <string name="choose_file">Seleccioneu un fitxer de contingut ZIM (*.zim)</string>
+    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
+    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
     <string name="error_filenotfound">Error: no s\'ha trobat el fitxer ZIP.</string>
     <string name="error_fileinvalid">Error: el fitxer seleccionat no és un fitxer ZIM vàlid.</string>
@@ -25,19 +29,20 @@
     <string name="pref_zoom_title">Nivell de zoom</string>
     <string name="pref_zoom_dialogtitle">Nivell de zoom</string>
     <string-array
-        name="pref_zoom_entries">
-        <item>Automatic</item>
-        <item>Small</item>
-        <item>Medium</item>
-        <item>Large</item>
+	name="pref_zoom_entries">
+	<item>Automatic</item>
+	<item>Small</item>
+	<item>Medium</item>
+	<item>Large</item>
     </string-array>
     <string name="pref_info_title">Information</string>
     <string name="pref_info_version">Version</string>
-    <string name="menu_exit">Surt</string>
     <string name="pref_zoom_enable">Controls de zoom</string>
     <string name="pref_zoom_enable_summary">Mostrar un botó de zoom a la part inferior dreta de la pantalla</string>
     <string name="pref_nightmode">Mode nocturn</string>
     <string name="pref_nightmode_summary">Mostrar els articles amb colors inverses</string>
     <string name="pref_backtotop">Back to Top</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="rescan_fs">Rescan SD card</string>
+    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
 </resources>

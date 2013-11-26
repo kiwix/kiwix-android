@@ -12,10 +12,14 @@
     <string name="menu_randomarticle">Articol aleatoriu</string>
     <string name="menu_fullscreen">Ecran complet</string>
     <string name="menu_exitfullscreen">Ieșire din modul ecran complet</string>
+    <string name="menu_exit">Ieșire</string>
+    <string name="menu_share">Share with friends</string>
     <string name="button_backtotop">Back to Top</string>
     <string name="search_label">Căutare</string>
     <string name="articlesearch_hint">Tastați pentru a căuta articole</string>
     <string name="choose_file">Alegeți un fișier cu conținut ZIM (*.zim)</string>
+    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
+    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Nu s-au găsit fișiere ZIM pe dispozitivul dumneavoastră.\nConsultați pagina de ajutor pentru detalii despre încărcarea conținutului în Kiwix.\nDacă totuși ați stocat un fișier ZIM pe dispozitivul dv./stocarea dv. externă, puteți reîncerca peste un minut sau puteți reporni dispozitivul.</string>
     <string name="error_filenotfound">Eroare: Fișierul ZIM selectat nu poate fi găsit.</string>
     <string name="error_fileinvalid">Eroare: Fișierul selectat nu este un fișier ZIM valid.</string>
@@ -25,19 +29,20 @@
     <string name="pref_zoom_title">Nivel de zoom</string>
     <string name="pref_zoom_dialogtitle">Nivel de zoom</string>
     <string-array
-        name="pref_zoom_entries">
-        <item>Automatic</item>
-        <item>Small</item>
-        <item>Medium</item>
-        <item>Large</item>
+	name="pref_zoom_entries">
+	<item>Automatic</item>
+	<item>Small</item>
+	<item>Medium</item>
+	<item>Large</item>
     </string-array>
     <string name="pref_info_title">Information</string>
     <string name="pref_info_version">Version</string>
-    <string name="menu_exit">Ieșire</string>
     <string name="pref_zoom_enable">Controale de zoom</string>
     <string name="pref_zoom_enable_summary">Afișează un buton de zoom în colțul din dreapta jos al ecranului</string>
     <string name="pref_nightmode">Mod de noapte</string>
     <string name="pref_nightmode_summary">Afișează articolele în culori inversate</string>
     <string name="pref_backtotop">Back to Top</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="rescan_fs">Rescan SD card</string>
+    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
 </resources>

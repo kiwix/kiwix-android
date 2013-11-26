@@ -12,10 +12,14 @@
     <string name="menu_randomarticle">Случајна статија</string>
     <string name="menu_fullscreen">На цел екран</string>
     <string name="menu_exitfullscreen">Излези од цел екран</string>
+    <string name="menu_exit">Излези</string>
+    <string name="menu_share">Share with friends</string>
     <string name="button_backtotop">Back to Top</string>
     <string name="search_label">Пребарување</string>
     <string name="articlesearch_hint">Тип за пребарување статии</string>
     <string name="choose_file">Изберете ZIM-податотека (*.zim)</string>
+    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
+    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">На уредот не се најдени ZIM-податотеки.\nПогледајте ја страницата за помош за да дознаете како да ставите содржини во Kiwix.\nАко сепак имате ставено ZIM-податотека во уредот/надворешниот склад, обидете се повторно за една минута или превклучете го уредот.</string>
     <string name="error_filenotfound">Грешка: Не ја најдов избраната ZIM-податотека.</string>
     <string name="error_fileinvalid">Грешка: Одбраната податотека не е вежачка ZIM-податотека.</string>
@@ -25,19 +29,20 @@
     <string name="pref_zoom_title">Ниво на приближеност</string>
     <string name="pref_zoom_dialogtitle">Ниво на приближеност</string>
     <string-array
-        name="pref_zoom_entries">
-        <item>Automatic</item>
-        <item>Small</item>
-        <item>Medium</item>
-        <item>Large</item>
+	name="pref_zoom_entries">
+	<item>Automatic</item>
+	<item>Small</item>
+	<item>Medium</item>
+	<item>Large</item>
     </string-array>
     <string name="pref_info_title">Information</string>
     <string name="pref_info_version">Version</string>
-    <string name="menu_exit">Излези</string>
     <string name="pref_zoom_enable">Контроли за размер</string>
     <string name="pref_zoom_enable_summary">Прикажуваај копче за приближување во долниот десен агол</string>
     <string name="pref_nightmode">Ноќен режим</string>
     <string name="pref_nightmode_summary">Прикажувај ги статиите во обратни бои</string>
     <string name="pref_backtotop">Back to Top</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="rescan_fs">Rescan SD card</string>
+    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
 </resources>

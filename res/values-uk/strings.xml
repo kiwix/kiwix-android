@@ -12,10 +12,14 @@
     <string name="menu_randomarticle">Випадкова стаття</string>
     <string name="menu_fullscreen">Повноекранний режим</string>
     <string name="menu_exitfullscreen">Вийти з повноекранного режиму</string>
+    <string name="menu_exit">Вийти</string>
+    <string name="menu_share">Share with friends</string>
     <string name="button_backtotop">Back to Top</string>
     <string name="search_label">Знайти</string>
     <string name="articlesearch_hint">Наберіть для пошуку статей</string>
     <string name="choose_file">Виберіть файл вмісту ZIM (*.zim)</string>
+    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
+    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Файлів ZIM не знайдено на вашому пристрої.\nПогляньте на сторінку допомогти, щоб отримати вказівки, як завантажувати вміст у Kiwix.\nЯкщо ви поклали файл ZIM на ваш пристрій/зовнішній носій, то можете повторити за хвилину або перезапустити пристрій.</string>
     <string name="error_filenotfound">Помилка: вибраний ZIM файл неможливо знайти.</string>
     <string name="error_fileinvalid">Помилка: вибраний файл не є вірним файлом ZIM.</string>
@@ -25,19 +29,20 @@
     <string name="pref_zoom_title">Рівень масштабування</string>
     <string name="pref_zoom_dialogtitle">Рівень масштабування</string>
     <string-array
-        name="pref_zoom_entries">
-        <item>Automatic</item>
-        <item>Small</item>
-        <item>Medium</item>
-        <item>Large</item>
+	name="pref_zoom_entries">
+	<item>Automatic</item>
+	<item>Small</item>
+	<item>Medium</item>
+	<item>Large</item>
     </string-array>
     <string name="pref_info_title">Інформація</string>
     <string name="pref_info_version">Версія</string>
-    <string name="menu_exit">Вийти</string>
     <string name="pref_zoom_enable">Управління масштабом</string>
     <string name="pref_zoom_enable_summary">Відображати кнопку масштаб у нижньому правому куті екрану</string>
     <string name="pref_nightmode">Нічний режим</string>
     <string name="pref_nightmode_summary">Показати статті з повернутими кольорами</string>
     <string name="pref_backtotop">Back to Top</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="rescan_fs">Rescan SD card</string>
+    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
 </resources>

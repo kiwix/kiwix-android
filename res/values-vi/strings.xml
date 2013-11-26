@@ -12,10 +12,14 @@
     <string name="menu_randomarticle">Bài viết Ngẫu nhiên</string>
     <string name="menu_fullscreen">Toàn màn hình</string>
     <string name="menu_exitfullscreen">Thoát chế độ toàn màn hình</string>
+    <string name="menu_exit">Thoát</string>
+    <string name="menu_share">Share with friends</string>
     <string name="button_backtotop">Back to Top</string>
     <string name="search_label">Tìm kiếm</string>
     <string name="articlesearch_hint">Gõ để tra cứu bài</string>
     <string name="choose_file">Chọn một Tập tin Nội dung ZIM (*.zim)</string>
+    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
+    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Không tìm thấy tập tin ZIM trên thiết bị của bạn.\nHãy đọc Trang Trợ giúp để biết cách tải nội dung vào Kiwix.\nNếu bạn có đưa tập tin ZIM vào thiết bị hoặc bộ nhớ ngoài của bạn, hãy thử lại sau hoặc khởi động lại thiết bị của bạn.</string>
     <string name="error_filenotfound">Lỗi: Không tìm thấy tập tin ZIM đã chọn</string>
     <string name="error_fileinvalid">Lỗi: Tập tin đã chọn không phải là tập tin ZIM hợp lệ.</string>
@@ -25,19 +29,20 @@
     <string name="pref_zoom_title">Mức thu phóng</string>
     <string name="pref_zoom_dialogtitle">Mức thu phóng</string>
     <string-array
-        name="pref_zoom_entries">
-        <item>Automatic</item>
-        <item>Small</item>
-        <item>Medium</item>
-        <item>Large</item>
+	name="pref_zoom_entries">
+	<item>Automatic</item>
+	<item>Small</item>
+	<item>Medium</item>
+	<item>Large</item>
     </string-array>
     <string name="pref_info_title">Information</string>
     <string name="pref_info_version">Version</string>
-    <string name="menu_exit">Thoát</string>
     <string name="pref_zoom_enable">Điều khiển thu phóng</string>
     <string name="pref_zoom_enable_summary">Hiện nút thu phóng ở góc phải bên dưới của màn hình</string>
     <string name="pref_nightmode">Chế độ ban đêm</string>
     <string name="pref_nightmode_summary">Đảo ngược màu sắc trong bài</string>
     <string name="pref_backtotop">Back to Top</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="rescan_fs">Rescan SD card</string>
+    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
 </resources>

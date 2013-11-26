@@ -1,64 +1,68 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-  
+
   <item android:id="@+id/menu_search"
-        android:icon="@drawable/action_search"
-        android:title="@string/menu_search"
-        android:visible="false"
-        android:showAsAction="ifRoom" />
-  
+	android:icon="@drawable/action_search"
+	android:title="@string/menu_search"
+	android:visible="false"
+	android:showAsAction="ifRoom" />
+
   <item android:id="@+id/menu_back"
-        android:title="@string/menu_back"
-        android:icon="@drawable/navigation_back"        
-        android:visible="false"
-        android:showAsAction="ifRoom" />
-  
+	android:title="@string/menu_back"
+	android:icon="@drawable/navigation_back"
+	android:visible="false"
+	android:showAsAction="ifRoom" />
+
   <item android:id="@+id/menu_forward"
-        android:title="@string/menu_forward"
-        android:icon="@drawable/navigation_forward"        
-        android:visible="false"
-        android:showAsAction="ifRoom" />
-  
+	android:title="@string/menu_forward"
+	android:icon="@drawable/navigation_forward"
+	android:visible="false"
+	android:showAsAction="ifRoom" />
+
   <item android:id="@+id/menu_randomarticle"
-        android:icon="@drawable/action_randomarticle"
-        android:title="@string/menu_randomarticle"
-        android:visible="false"
-        android:showAsAction="ifRoom" />
-   
+	android:icon="@drawable/action_randomarticle"
+	android:title="@string/menu_randomarticle"
+	android:visible="false"
+	android:showAsAction="ifRoom" />
+
   <item android:id="@+id/menu_home"
-        android:title="@string/menu_home"
-        android:icon="@drawable/action_home"        
-        android:visible="false"
-        android:showAsAction="ifRoom" />
-  
-  <item android:id="@+id/menu_searchintext"
-        android:icon="@drawable/action_search"
-        android:title="@string/menu_searchintext"
-        android:visible="false"
-        android:showAsAction="ifRoom" />
-  
+	android:title="@string/menu_home"
+	android:icon="@drawable/action_home"
+	android:visible="false"
+	android:showAsAction="ifRoom" />
+
   <item android:id="@+id/menu_openfile"
 	android:title="@string/menu_openfile"
-	android:icon="@drawable/device_access_sd_storage"        
-        android:showAsAction="ifRoom" />
-  
+	android:icon="@drawable/device_access_sd_storage"
+	android:showAsAction="ifRoom" />
+
+  <item android:id="@+id/menu_searchintext"
+      android:icon="@drawable/action_search"
+      android:title="@string/menu_searchintext"
+      android:visible="false"
+      android:showAsAction="ifRoom" />
+
   <item android:id="@+id/menu_fullscreen"
 	android:icon="@drawable/action_search"
 	android:title="@string/menu_fullscreen"
 	android:visible="false"
 	android:showAsAction="never" />
-  
+
   <item android:id="@+id/menu_settings"
-        android:title="@string/menu_settings"
-        android:icon="@drawable/navigation_forward"        
-        android:showAsAction="never"/>
+	android:title="@string/menu_settings"
+	android:icon="@drawable/navigation_forward"
+	android:showAsAction="never"/>
 
   <item android:id="@+id/menu_help"
 	android:title="@string/menu_help"
-	android:icon="@drawable/action_help"                        
-        android:showAsAction="never" />
-  
-  <item android:id="@+id/menu_exit" 
-	android:title="@string/menu_exit"
+	android:icon="@drawable/action_help"
 	android:showAsAction="never" />
 
+  <item android:id="@+id/menu_share"
+      android:title="@string/menu_share"
+      android:icon="@drawable/action_share"
+      android:showAsAction="ifRoom" />
+
+  <item android:id="@+id/menu_exit"
+	android:title="@string/menu_exit"
+	android:showAsAction="never" />
 </menu>

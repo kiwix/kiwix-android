@@ -12,10 +12,14 @@
     <string name="menu_randomarticle">Articulo aleatori</string>
     <string name="menu_fullscreen">Schermo complete</string>
     <string name="menu_exitfullscreen">Exir del schermo complete</string>
+    <string name="menu_exit">Quitar</string>
+    <string name="menu_share">Share with friends</string>
     <string name="button_backtotop">Back to Top</string>
     <string name="search_label">Cercar</string>
     <string name="articlesearch_hint">Dactylographar pro cercar articulos</string>
     <string name="choose_file">Selige un file de contento ZIM (*.zim)</string>
+    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
+    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Nulle file ZIM trovate in vostre dispositivo.\nIn le pagina de adjuta se trova instructiones pro cargar contento in Kiwix.\nSi vos ha de facto mittite un file ZIM in vostre dispositivo o spatio de immagazinage externe, vos pote essayar de novo post un minuta o reinitiar vostre dispositivo.</string>
     <string name="error_filenotfound">Error: Le file ZIM seligite non poteva esser trovate.</string>
     <string name="error_fileinvalid">Error: Le file seligite non es un file ZIM valide.</string>
@@ -25,19 +29,20 @@
     <string name="pref_zoom_title">Nivello de zoom</string>
     <string name="pref_zoom_dialogtitle">Nivello de zoom</string>
     <string-array
-        name="pref_zoom_entries">
-        <item>Automatic</item>
-        <item>Small</item>
-        <item>Medium</item>
-        <item>Large</item>
+	name="pref_zoom_entries">
+	<item>Automatic</item>
+	<item>Small</item>
+	<item>Medium</item>
+	<item>Large</item>
     </string-array>
     <string name="pref_info_title">Information</string>
     <string name="pref_info_version">Version</string>
-    <string name="menu_exit">Quitar</string>
     <string name="pref_zoom_enable">Controlos de zoom</string>
     <string name="pref_zoom_enable_summary">Monstrar un button de zoom in le angulo inferior dextre del schermo</string>
     <string name="pref_nightmode">Modo nocturne</string>
     <string name="pref_nightmode_summary">Monstrar articulos in colores invertite</string>
     <string name="pref_backtotop">Back to Top</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="rescan_fs">Rescan SD card</string>
+    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
 </resources>
