@@ -522,15 +522,19 @@ public class KiwixMobileActivity extends Activity {
             	openRandomArticle();
             	break;
             case R.id.menu_help:
+		imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(),0);
             	showWelcome();
             	break;
             case R.id.menu_openfile:
+		imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(),0);
 		selectZimFile();
 		break;
             case R.id.menu_exit:
+		imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(),0);
             	finish();
             	break;
             case R.id.menu_settings:
+		imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(),0);
             	Intent i = new Intent(this, KiwixSettings.class);
                 startActivityForResult(i, PREFERENCES_REQUEST_CODE);
             	break;
