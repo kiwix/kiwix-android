@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      android:versionCode="9"
-      android:versionName="1.6" package="org.kiwix.kiwixmobile">
+      android:versionCode="10"
+      android:versionName="1.7" package="org.kiwix.kiwixmobile">
       <supports-screens
 android:largeScreens="true"
 android:normalScreens="true"
