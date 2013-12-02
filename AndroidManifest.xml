@@ -9,6 +9,7 @@
             android:resizeable="true"
             android:anyDensity="true"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="17"/>
     <application android:icon="@drawable/kiwix_icon" android:label="@string/app_name"
                  android:allowBackup="true"

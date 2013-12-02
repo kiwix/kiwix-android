@@ -14,6 +14,9 @@
     <string name="menu_exitfullscreen">പൂർണ സ്ക്രീനിൽ നിന്ന് പുറത്തു കടക്കുക</string>
     <string name="menu_exit">അടയ്ക്കുക</string>
     <string name="menu_share">Share with friends</string>
+    <string name="save_image">Save Image</string>
+    <string name="save_image_error">An error occured when trying to save an image!</string>
+    <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
     <string name="button_backtotop">Back to Top</string>
     <string name="search_label">തിരയുക</string>
     <string name="articlesearch_hint">Type to lookup articles</string>

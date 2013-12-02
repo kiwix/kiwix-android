@@ -13,9 +13,11 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Environment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -30,15 +32,20 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.MenuItem;
 import android.view.View.MeasureSpec;
 import android.view.View.OnTouchListener;
+import android.view.ContextMenu;
+import android.view.View.OnCreateContextMenuListener;
 import android.view.ViewGroup;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.WebView.HitTestResult;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -56,6 +63,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.io.FileInputStream;
+import java.io.OutputStream;
+import java.io.InputStream;
+import java.io.FileOutputStream;
 
 public class KiwixMobileFragment extends Fragment {
 
@@ -313,6 +324,81 @@ public class KiwixMobileFragment extends Fragment {
         });
 
         articleSearchtextView.setInputType(InputType.TYPE_CLASS_TEXT);
+
+	final Handler saveHandler = new Handler() {
+	@Override
+	    public void handleMessage(Message msg) {
+	    String url = (String) msg.getData().get("url");
+	    String src = (String) msg.getData().get("src");
+	    
+	    if (url != null && src != null) {
+		url = url.substring(url.lastIndexOf('/')+1, url.length());
+		url = url.substring(url.indexOf("%3A")+3, url.length());
+		int dotIndex = url.lastIndexOf('.');
+		File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), url);
+		String newurl = url;
+		for (int i = 2; storageDir.exists(); i++) {
+		    newurl = url.substring(0, dotIndex) + "_" + i + url.substring(dotIndex, url.length());
+		    storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), newurl);
+		}
+		
+		Uri source = Uri.parse(src);
+		Uri picUri = Uri.fromFile(storageDir);
+		
+		String toastText;
+		try {
+		    InputStream istream = getActivity().getContentResolver().openInputStream(source);
+		    OutputStream ostream = new FileOutputStream(storageDir);
+		    
+		    byte[] buffer = new byte[1024];
+		    int len;
+		    while((len = istream.read(buffer)) > 0) {
+			ostream.write(buffer, 0, len);
+		    }
+		    
+		    istream.close();
+		    ostream.close();
+		} catch (IOException e) {
+		    Log.d("kiwix", "Couldn't save image", e);
+		    toastText = getResources().getString(R.string.save_image_error);
+		} finally {
+		    toastText = String.format(getResources().getString(R.string.save_image_saved), newurl);
+		}
+		
+		Toast toast = Toast.makeText(getActivity().getApplicationContext(), toastText, Toast.LENGTH_LONG);
+		toast.show();
+	    }
+	}
+	};
+	
+        final Handler viewHandler = new Handler() {
+        @Override
+            public void handleMessage(Message msg) {
+                String url = (String) msg.getData().get("url");
+
+                if (url != null) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(intent);
+                }
+           }
+        };
+
+        // Image long-press
+        webView.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+	  @Override  
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {  
+                final HitTestResult result = ((WebView) v).getHitTestResult();
+                if (result.getType() == HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
+                    menu.add(0, 1, 0, getResources().getString(R.string.save_image)).setOnMenuItemClickListener(new OnMenuItemClickListener() {
+                        public boolean onMenuItemClick(MenuItem item) {                                           
+                           Message msg = saveHandler.obtainMessage();
+                           webView.requestFocusNodeHref(msg);
+                           return true;
+                       }
+                    });
+                } 
+           }  
+        });
 
         // js includes will not happen unless we enable JS
         webView.getSettings().setJavaScriptEnabled(true);

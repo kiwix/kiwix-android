@@ -14,6 +14,9 @@
     <string name="menu_exitfullscreen">Quitter le plein écran</string>
     <string name="menu_exit">Quitter</string>
     <string name="menu_share">Share with friends</string>
+    <string name="save_image">Save Image</string>
+    <string name="save_image_error">An error occured when trying to save an image!</string>
+    <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
     <string name="button_backtotop">Retourner en début</string>
     <string name="search_label">Rechercher</string>
     <string name="articlesearch_hint">Taper pour rechercher des articles</string>
