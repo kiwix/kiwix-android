@@ -14,7 +14,7 @@
     <string name="menu_exitfullscreen">Wyjdź z trybu pełnego ekranu</string>
     <string name="menu_exit">Zakończ</string>
     <string name="menu_share">Share with friends</string>
-    <string name="button_backtotop">Back to Top</string>
+    <string name="button_backtotop">Powrót do góry</string>
     <string name="search_label">Szukaj</string>
     <string name="articlesearch_hint">Type to lookup articles</string>
     <string name="choose_file">Select a ZIM Content File (*.zim)</string>
@@ -36,12 +36,12 @@
 	<item>Large</item>
     </string-array>
     <string name="pref_info_title">Information</string>
-    <string name="pref_info_version">Version</string>
+    <string name="pref_info_version">Wersja</string>
     <string name="pref_zoom_enable">Zoom controls</string>
     <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
     <string name="pref_nightmode">Tryb nocny</string>
     <string name="pref_nightmode_summary">Show articles with reverted colors</string>
-    <string name="pref_backtotop">Back to Top</string>
+    <string name="pref_backtotop">Powrót do góry</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
     <string name="rescan_fs">Rescan SD card</string>
     <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>

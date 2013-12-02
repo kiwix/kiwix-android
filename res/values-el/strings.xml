@@ -35,8 +35,8 @@
 	<item>Medium</item>
 	<item>Large</item>
     </string-array>
-    <string name="pref_info_title">Information</string>
-    <string name="pref_info_version">Version</string>
+    <string name="pref_info_title">Πληροφορίες</string>
+    <string name="pref_info_version">Έκδοση</string>
     <string name="pref_zoom_enable">Zoom controls</string>
     <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
     <string name="pref_nightmode">Night mode</string>

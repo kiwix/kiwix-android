@@ -14,7 +14,7 @@
     <string name="menu_exitfullscreen">Esci dalla modalità a tutto schermo</string>
     <string name="menu_exit">Esci</string>
     <string name="menu_share">Share with friends</string>
-    <string name="button_backtotop">Back to Top</string>
+    <string name="button_backtotop">Torna all\'inizio</string>
     <string name="search_label">Ricerca</string>
     <string name="articlesearch_hint">Scrivi per ricercare le voci</string>
     <string name="choose_file">Seleziona un file di contenuto ZIM (*.zim)</string>
@@ -23,8 +23,8 @@
     <string name="error_nozimfilesfound">Nessun file ZIM trovano sul tuo dispositivo.\nLeggi la pagina di aiuto per ottenere indicazioni su come caricare il contenuto in Kiwix.\nSe ha inserito un file ZIM sul tuo dispositivo, potresti ritentare fra un minuto o riavviare il dispositivo.</string>
     <string name="error_filenotfound">Errore: il file ZIM selezionato non è stato trovato.</string>
     <string name="error_fileinvalid">Errore: il file selezionato non è un file ZIM valido.</string>
-    <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
-    <string name="error_articleurlnotfound">Errore: caricamento della voce (url: %1$s) non riuscita.</string>
+    <string name="error_articlenotfound">Errore: caricamento della voce \"%1$s\" non riuscito.</string>
+    <string name="error_articleurlnotfound">Errore: caricamento della voce (url: %1$s) non riuscito.</string>
     <string name="pref_display_title">Visualizza</string>
     <string name="pref_zoom_title">Livello di zoom</string>
     <string name="pref_zoom_dialogtitle">Livello di zoom</string>
@@ -35,14 +35,14 @@
 	<item>Medium</item>
 	<item>Large</item>
     </string-array>
-    <string name="pref_info_title">Information</string>
-    <string name="pref_info_version">Version</string>
+    <string name="pref_info_title">Informazioni</string>
+    <string name="pref_info_version">Versione</string>
     <string name="pref_zoom_enable">Controlli zoom</string>
     <string name="pref_zoom_enable_summary">Visualizza un pulsante di zoom nell\'angolo inferiore destro dello schermo</string>
     <string name="pref_nightmode">Modalità notte</string>
     <string name="pref_nightmode_summary">Visualizza le voci con colori invertiti</string>
-    <string name="pref_backtotop">Back to Top</string>
-    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="pref_backtotop">Torna all\'inizio</string>
+    <string name="pref_backtotop_summary">Mostra un pulsante alla fine della pagina per scorrere fino all\'inizio</string>
     <string name="rescan_fs">Rescan SD card</string>
     <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
 </resources>

@@ -14,7 +14,7 @@
     <string name="menu_exitfullscreen">Volledig schermmodus verlaten</string>
     <string name="menu_exit">Stoppen</string>
     <string name="menu_share">Share with friends</string>
-    <string name="button_backtotop">Back to Top</string>
+    <string name="button_backtotop">Terug naar boven</string>
     <string name="search_label">Zoeken</string>
     <string name="articlesearch_hint">Voer tekst in om pagina\'s te zoeken</string>
     <string name="choose_file">Selecteer een ZIM inhoudsbestand (*.zim)</string>
@@ -41,8 +41,8 @@
     <string name="pref_zoom_enable_summary">Rechtsonder een zoomknop weergeven</string>
     <string name="pref_nightmode">Nachtmodus</string>
     <string name="pref_nightmode_summary">Pagina\'s weergeven met omgekeerde kleuren</string>
-    <string name="pref_backtotop">Back to Top</string>
-    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="pref_backtotop">Terug naar boven</string>
+    <string name="pref_backtotop_summary">Aan het einde van de pagina een knop weergeven om terug te gaan naar boven</string>
     <string name="rescan_fs">Rescan SD card</string>
-    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
+    <string name="rescan_fs_warning">Zoeken naar ZIM-bestanden. Even geduld...</string>
 </resources>

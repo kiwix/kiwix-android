@@ -14,7 +14,7 @@
     <string name="menu_exitfullscreen">Forlad fuldskærm</string>
     <string name="menu_exit">Afslut</string>
     <string name="menu_share">Share with friends</string>
-    <string name="button_backtotop">Back to Top</string>
+    <string name="button_backtotop">Tilbage til toppen</string>
     <string name="search_label">Søg</string>
     <string name="articlesearch_hint">Skriv for at finde artikler</string>
     <string name="choose_file">Vælg en ZIM indholdsfil (*.zim)</string>
@@ -23,7 +23,7 @@
     <string name="error_nozimfilesfound">Ingen ZIM filer fundet på enheden.\nTag et kig på hjælpesiden for at få anvisninger om, hvordan man indlæser indhold i Kiwix.\nHvis du har sat en ZIM fil på din enhed/ekstern, kan du prøve igen i et minut eller genstarte din enhed.</string>
     <string name="error_filenotfound">Fejl: Den valgte ZIM fil blev ikke fundet.</string>
     <string name="error_fileinvalid">Fejl: Den valgte fil er ikke en gyldig ZIM fil.</string>
-    <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
+    <string name="error_articlenotfound">Fejl: Indlæsning af artikel \"%1$s\" mislykkedes.</string>
     <string name="error_articleurlnotfound">Fejl: Indlæsning af artikel (Url: %1$s) mislykkedes.</string>
     <string name="pref_display_title">Vis</string>
     <string name="pref_zoom_title">Zoom-niveau</string>
@@ -41,8 +41,8 @@
     <string name="pref_zoom_enable_summary">Få vist en zoom-knap i skærmens nederste højre hjørne</string>
     <string name="pref_nightmode">Nat-tilstand</string>
     <string name="pref_nightmode_summary">Vis artikler med inverterede farver</string>
-    <string name="pref_backtotop">Back to Top</string>
-    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="pref_backtotop">Tilbage til toppen</string>
+    <string name="pref_backtotop_summary">Få vist en knap i slutningen af siden for at rulle op til toppen</string>
     <string name="rescan_fs">Rescan SD card</string>
     <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
 </resources>

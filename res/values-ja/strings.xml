@@ -11,10 +11,10 @@
     <string name="menu_searchintext">テキストで検索</string>
     <string name="menu_randomarticle">ランダム記事</string>
     <string name="menu_fullscreen">全画面表示</string>
-    <string name="menu_exitfullscreen">全画面表示モードを終了</string>
+    <string name="menu_exitfullscreen">全画面表示を終了</string>
     <string name="menu_exit">終了</string>
     <string name="menu_share">Share with friends</string>
-    <string name="button_backtotop">Back to Top</string>
+    <string name="button_backtotop">トップに戻る</string>
     <string name="search_label">検索</string>
     <string name="articlesearch_hint">記事の検索</string>
     <string name="choose_file">Select a ZIM Content File (*.zim)</string>
@@ -23,7 +23,7 @@
     <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
     <string name="error_filenotfound">エラー: 選択した ZIM ファイルが見つかりませんでした。</string>
     <string name="error_fileinvalid">エラー: 選択したファイルは有効な ZIM ファイルではありません。</string>
-    <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
+    <string name="error_articlenotfound">エラー: 記事「%1$s」を読み込めませんでした。</string>
     <string name="error_articleurlnotfound">エラー: 記事 (URL: %1$s) を読み込めませんでした。</string>
     <string name="pref_display_title">表示</string>
     <string name="pref_zoom_title">ズーム レベル</string>
@@ -35,13 +35,13 @@
 	<item>Medium</item>
 	<item>Large</item>
     </string-array>
-    <string name="pref_info_title">Information</string>
-    <string name="pref_info_version">Version</string>
+    <string name="pref_info_title">情報</string>
+    <string name="pref_info_version">バージョン</string>
     <string name="pref_zoom_enable">ズーム コントロール</string>
     <string name="pref_zoom_enable_summary">画面右下隅にズーム ボタンを表示する</string>
     <string name="pref_nightmode">夜モード</string>
     <string name="pref_nightmode_summary">記事を反転色で表示する</string>
-    <string name="pref_backtotop">Back to Top</string>
+    <string name="pref_backtotop">トップに戻る</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
     <string name="rescan_fs">Rescan SD card</string>
     <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>

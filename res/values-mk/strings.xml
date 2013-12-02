@@ -14,7 +14,7 @@
     <string name="menu_exitfullscreen">Излези од цел екран</string>
     <string name="menu_exit">Излези</string>
     <string name="menu_share">Share with friends</string>
-    <string name="button_backtotop">Back to Top</string>
+    <string name="button_backtotop">Најгоре</string>
     <string name="search_label">Пребарување</string>
     <string name="articlesearch_hint">Тип за пребарување статии</string>
     <string name="choose_file">Изберете ZIM-податотека (*.zim)</string>
@@ -23,7 +23,7 @@
     <string name="error_nozimfilesfound">На уредот не се најдени ZIM-податотеки.\nПогледајте ја страницата за помош за да дознаете како да ставите содржини во Kiwix.\nАко сепак имате ставено ZIM-податотека во уредот/надворешниот склад, обидете се повторно за една минута или превклучете го уредот.</string>
     <string name="error_filenotfound">Грешка: Не ја најдов избраната ZIM-податотека.</string>
     <string name="error_fileinvalid">Грешка: Одбраната податотека не е вежачка ZIM-податотека.</string>
-    <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
+    <string name="error_articlenotfound">Грешка: Не успеав да ја вчитам статијата \"%1$s\".</string>
     <string name="error_articleurlnotfound">Грешка: Не успеав да ја вчитам статијата (URL: %1$s).</string>
     <string name="pref_display_title">Приказ</string>
     <string name="pref_zoom_title">Ниво на приближеност</string>
@@ -35,14 +35,14 @@
 	<item>Medium</item>
 	<item>Large</item>
     </string-array>
-    <string name="pref_info_title">Information</string>
-    <string name="pref_info_version">Version</string>
+    <string name="pref_info_title">Информации</string>
+    <string name="pref_info_version">Верзија</string>
     <string name="pref_zoom_enable">Контроли за размер</string>
     <string name="pref_zoom_enable_summary">Прикажуваај копче за приближување во долниот десен агол</string>
     <string name="pref_nightmode">Ноќен режим</string>
     <string name="pref_nightmode_summary">Прикажувај ги статиите во обратни бои</string>
-    <string name="pref_backtotop">Back to Top</string>
-    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="pref_backtotop">Најгоре</string>
+    <string name="pref_backtotop_summary">Прикажувај копче за враќање најгоре на крајот од страницата</string>
     <string name="rescan_fs">Rescan SD card</string>
     <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
 </resources>

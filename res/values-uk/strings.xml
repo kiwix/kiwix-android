@@ -14,7 +14,7 @@
     <string name="menu_exitfullscreen">Вийти з повноекранного режиму</string>
     <string name="menu_exit">Вийти</string>
     <string name="menu_share">Share with friends</string>
-    <string name="button_backtotop">Back to Top</string>
+    <string name="button_backtotop">Назад догори</string>
     <string name="search_label">Знайти</string>
     <string name="articlesearch_hint">Наберіть для пошуку статей</string>
     <string name="choose_file">Виберіть файл вмісту ZIM (*.zim)</string>
@@ -41,8 +41,8 @@
     <string name="pref_zoom_enable_summary">Відображати кнопку масштаб у нижньому правому куті екрану</string>
     <string name="pref_nightmode">Нічний режим</string>
     <string name="pref_nightmode_summary">Показати статті з повернутими кольорами</string>
-    <string name="pref_backtotop">Back to Top</string>
-    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="pref_backtotop">Наверх</string>
+    <string name="pref_backtotop_summary">Відображати кнопки в кінці сторінки для прокрутки вгору</string>
     <string name="rescan_fs">Rescan SD card</string>
     <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
 </resources>
