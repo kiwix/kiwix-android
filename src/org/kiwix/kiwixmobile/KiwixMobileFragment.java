@@ -606,8 +606,6 @@ public class KiwixMobileFragment extends Fragment {
         menu.findItem(R.id.menu_randomarticle).setVisible(true);
         menu.findItem(R.id.menu_searchintext).setVisible(true);
         menu.findItem(R.id.menu_search).setVisible(true);
-        menu.findItem(R.id.menu_add_tab).setVisible(true);
-        menu.findItem(R.id.menu_remove_tab).setVisible(true);
     }
 
     public void onKeyDown(int keyCode, KeyEvent event) {
