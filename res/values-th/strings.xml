@@ -28,12 +28,11 @@
     <string name="pref_display_title">แสดงผล</string>
     <string name="pref_zoom_title">Zoom level</string>
     <string name="pref_zoom_dialogtitle">Zoom level</string>
-    <string-array
-	name="pref_zoom_entries">
-	<item>Automatic</item>
-	<item>Small</item>
-	<item>Medium</item>
-	<item>Large</item>
+    <string-array name="pref_zoom_entries">
+        <item>Automatic</item>
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
     </string-array>
     <string name="pref_info_title">Information</string>
     <string name="pref_info_version">Version</string>
@@ -45,4 +44,9 @@
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
     <string name="rescan_fs">Rescan SD card</string>
     <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
+    <string name="remove_tab">Remove Tab</string>
+    <string name="add_tab">Add new Tab</string>
+    <string name="remove">Remove</string>
+    <string name="open_in_new_tab">Open link in new Tab?</string>
+    <string name="share_via">Share via</string>
 </resources>
