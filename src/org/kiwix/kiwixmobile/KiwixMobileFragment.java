@@ -124,7 +124,7 @@ public class KiwixMobileFragment extends Fragment {
 
     private Button mBackToTopButton;
 
-    private LinearLayout mTabDeleteCross;
+    private ImageButton mTabDeleteCross;
 
     private FragmentCommunicator mFragmentCommunicator;
 
@@ -143,7 +143,7 @@ public class KiwixMobileFragment extends Fragment {
 
         mBackToTopButton = (Button) root.findViewById(R.id.button_backtotop);
 
-        mTabDeleteCross = (LinearLayout) root.findViewById(R.id.remove_tab);
+        mTabDeleteCross = (ImageButton) root.findViewById(R.id.remove_tab);
 
         exitFullscreenButton = (ImageButton) root.findViewById(R.id.FullscreenControlButton);
 

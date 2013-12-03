@@ -52,13 +52,15 @@
 
             </org.kiwix.kiwixmobile.KiwixWebView>
 
-            <LinearLayout
+            <ImageButton
                     android:id="@+id/remove_tab"
                     android:orientation="vertical"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_margin="100px"
+                    android:background="#44FF0000"
                     android:layout_centerInParent="true"
-                    android:background="@drawable/navigation_cancel"
+                    android:src="@drawable/navigation_cancel"
                     android:visibility="invisible"/>
 
             <ImageButton
