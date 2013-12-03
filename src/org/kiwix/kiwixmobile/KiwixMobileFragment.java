@@ -160,7 +160,7 @@ public class KiwixMobileFragment extends Fragment {
             public void onPageChanged(int page, int maxPages) {
                 if (isButtonEnabled) {
 
-                    if (((double) page / maxPages) >= 0.1) {
+                    if (webView.getScrollY() > 200) {
                         if (mBackToTopButton.getVisibility() == View.INVISIBLE) {
                             mBackToTopButton.setText(R.string.button_backtotop);
                             mBackToTopButton.setVisibility(View.VISIBLE);
