@@ -369,15 +369,19 @@ public class KiwixMobileFragment extends Fragment {
                         if (mBackToTopButton.getVisibility() == View.INVISIBLE) {
                             mBackToTopButton.setText(R.string.button_backtotop);
                             mBackToTopButton.setVisibility(View.VISIBLE);
-                            mBackToTopButton.startAnimation(
-                                    AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in));
+                            if (isAdded()) {
+                                mBackToTopButton.startAnimation(
+                                        AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in));
+                            }
+
                         }
                     } else {
                         if (mBackToTopButton.getVisibility() == View.VISIBLE) {
                             mBackToTopButton.setVisibility(View.INVISIBLE);
-                            //U said you wanted fancy huh,then this might just do it.
-                            mBackToTopButton.startAnimation(
-                                    AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out));
+                            if (isAdded()) {
+                                mBackToTopButton.startAnimation(
+                                        AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out));
+                            }
                         }
                     }
                 }
