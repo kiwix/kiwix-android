@@ -126,16 +126,24 @@ public class KiwixMobileFragment extends Fragment {
 
     private FragmentCommunicator mFragmentCommunicator;
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
-    public void setRetainInstance(boolean retain) {
-        super.setRetainInstance(retain);
+    public void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
+        requestClearHistoryAfterLoad = false;
+        requestWebReloadOnFinished = 0;
+        requestInitAllMenuItems = false;
+        nightMode = false;
+        isFullscreenOpened = false;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        final View root = inflater.inflate(R.layout.main, container, false);
+        View root = inflater.inflate(R.layout.main, container, false);
 
         webView = (KiwixWebView) root.findViewById(R.id.webview);
 
@@ -145,93 +153,92 @@ public class KiwixMobileFragment extends Fragment {
 
         exitFullscreenButton = (ImageButton) root.findViewById(R.id.FullscreenControlButton);
 
-        exitFullscreenButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mFragmentCommunicator.closeFullScreenMode();
-            }
-        });
-
-        webView.setOnPageChangedListener(new KiwixWebView.OnPageChangeListener() {
-
-            @Override
-            public void onPageChanged(int page, int maxPages) {
-                if (isButtonEnabled) {
-
-                    if (webView.getScrollY() > 200) {
-                        if (mBackToTopButton.getVisibility() == View.INVISIBLE) {
-                            mBackToTopButton.setText(R.string.button_backtotop);
-                            mBackToTopButton.setVisibility(View.VISIBLE);
-                            mBackToTopButton.startAnimation(
-                                    AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in));
-                        }
-                    } else {
-                        if (mBackToTopButton.getVisibility() == View.VISIBLE) {
-                            mBackToTopButton.setVisibility(View.INVISIBLE);
-                            //U said you wanted fancy huh,then this might just do it.
-                            mBackToTopButton.startAnimation(
-                                    AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out));
-                        }
-                    }
-                }
-            }
-        });
-
-        webView.setOnLongClickListener(new KiwixWebView.OnLongClickListener() {
-
-            @Override
-            public void onLongClick(final String url) {
-                boolean handleEvent = false;
-                if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
-                    // This is my web site, so do not override; let my WebView load the page
-                    handleEvent = true;
-
-                } else if (url.startsWith("file://")) {
-                    // To handle help page (loaded from resources)
-                    handleEvent = true;
-
-                } else if (url.startsWith(ZimContentProvider.UI_URI.toString())) {
-                    handleEvent = true;
-                }
-
-                if (handleEvent) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-                    builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            mFragmentCommunicator.addNewTab(url);
-                        }
-                    });
-                    builder.setNegativeButton(android.R.string.no, null);
-                    builder.setMessage(getString(R.string.open_in_new_tab));
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
-            }
-        });
-
-        mTabDeleteCross.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-
-                switch (event.getAction()) {
-
-                    case DragEvent.ACTION_DROP:
-                        int tabPosition = mFragmentCommunicator.getPositionOfTab();
-                        mFragmentCommunicator.removeTabAt(tabPosition);
-
-                    case DragEvent.ACTION_DRAG_ENDED:
-                        mTabDeleteCross.startAnimation(
-                                AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out));
-                        mTabDeleteCross.setVisibility(View.INVISIBLE);
-                        mTabDeleteCross.getBackground().clearColorFilter();
-                }
-                return true;
-            }
-        });
-
         articleSearchBar = (LinearLayout) root.findViewById(R.id.articleSearchBar);
+
         articleSearchtextView = (AutoCompleteTextView) root.findViewById(R.id.articleSearchTextView);
+
+        setUpExitFullscreenButton();
+
+        setUpWebView();
+
+        setUpTabDeleteCross();
+
+        setUpArticleSearchTextView(savedInstanceState);
+
+        loadPrefs();
+
+        manageExternalLaunchAndRestoringState(savedInstanceState);
+
+        return root;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        SharedPreferences settings = getActivity().getSharedPreferences(PREFS_KIWIX_MOBILE, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(TAG_CURRENTZIMFILE, ZimContentProvider.getZimFile());
+
+        // Commit the edits!
+        editor.commit();
+
+        Log.d(TAG_KIWIX,
+                "onPause Save currentzimfile to preferences:" + ZimContentProvider.getZimFile());
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        mFragmentCommunicator = (KiwixMobileActivity) activity;
+        super.onAttach(activity);
+    }
+
+    private void manageExternalLaunchAndRestoringState(Bundle savedInstanceState) {
+
+        if (getActivity().getIntent().getData() != null) {
+            String filePath = getActivity().getIntent().getData().getPath();
+            Log.d(TAG_KIWIX, " Kiwix started from a filemanager. Intent filePath: " + filePath
+                    + " -> open this zimfile and load main page");
+            openZimFile(new File(filePath), false);
+
+        } else if (savedInstanceState != null) {
+            Log.d(TAG_KIWIX,
+                    " Kiwix started with a savedInstanceState (That is was closed by OS) -> restore webview state and zimfile (if set)");
+            if (savedInstanceState.getString(TAG_CURRENTZIMFILE) != null) {
+                openZimFile(new File(savedInstanceState.getString(TAG_CURRENTZIMFILE)), false);
+            }
+            if (savedInstanceState.getString(TAG_CURRENTARTICLE) != null) {
+                webView.loadUrl(savedInstanceState.getString(TAG_CURRENTARTICLE));
+
+            }
+            webView.restoreState(savedInstanceState);
+
+            // Restore the state of the WebView
+            // (Very ugly) Workaround for  #643 Android article blank after rotation and app reload
+            // In case of restore state, just reload page multiple times. Probability
+            // that after two refreshes page is still blank is low.
+            // TODO: implement better fix
+            requestWebReloadOnFinished = 2;
+            Log.d(TAG_KIWIX, "Workaround for #643: reload " + requestWebReloadOnFinished
+                    + " times after restoring state");
+
+        } else {
+            SharedPreferences settings = getActivity().getSharedPreferences(PREFS_KIWIX_MOBILE, 0);
+            String zimFile = settings.getString(TAG_CURRENTZIMFILE, null);
+            if (zimFile != null) {
+                Log.d(TAG_KIWIX, " Kiwix normal start, zimFile loaded last time -> Open last used zimFile "
+                        + zimFile);
+                openZimFile(new File(zimFile), false);
+                // Alternative would be to restore webView state. But more effort to implement, and actually
+                // fits better normal android behavior if after closing app ("back" button) state is not maintained.
+            } else {
+                Log.d(TAG_KIWIX, " Kiwix normal start, no zimFile loaded last time  -> display welcome page");
+                showWelcome();
+            }
+        }
+    }
+
+    private void setUpArticleSearchTextView(Bundle savedInstanceState) {
+
         final Drawable clearIcon = getResources().getDrawable(R.drawable.navigation_cancel);
         final Drawable searchIcon = getResources().getDrawable(R.drawable.action_search);
 
@@ -325,8 +332,93 @@ public class KiwixMobileFragment extends Fragment {
         });
 
         articleSearchtextView.setInputType(InputType.TYPE_CLASS_TEXT);
+    }
+
+    private void setUpTabDeleteCross() {
+
+        mTabDeleteCross.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+
+                switch (event.getAction()) {
+
+                    case DragEvent.ACTION_DROP:
+                        int tabPosition = mFragmentCommunicator.getPositionOfTab();
+                        mFragmentCommunicator.removeTabAt(tabPosition);
+
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        mTabDeleteCross.startAnimation(
+                                AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out));
+                        mTabDeleteCross.setVisibility(View.INVISIBLE);
+                        mTabDeleteCross.getBackground().clearColorFilter();
+                }
+                return true;
+            }
+        });
+    }
+
+    private void setUpWebView() {
+
+        webView.setOnPageChangedListener(new KiwixWebView.OnPageChangeListener() {
+
+            @Override
+            public void onPageChanged(int page, int maxPages) {
+                if (isButtonEnabled) {
+
+                    if (webView.getScrollY() > 200) {
+                        if (mBackToTopButton.getVisibility() == View.INVISIBLE) {
+                            mBackToTopButton.setText(R.string.button_backtotop);
+                            mBackToTopButton.setVisibility(View.VISIBLE);
+                            mBackToTopButton.startAnimation(
+                                    AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in));
+                        }
+                    } else {
+                        if (mBackToTopButton.getVisibility() == View.VISIBLE) {
+                            mBackToTopButton.setVisibility(View.INVISIBLE);
+                            //U said you wanted fancy huh,then this might just do it.
+                            mBackToTopButton.startAnimation(
+                                    AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out));
+                        }
+                    }
+                }
+            }
+        });
+
+        webView.setOnLongClickListener(new KiwixWebView.OnLongClickListener() {
+
+            @Override
+            public void onLongClick(final String url) {
+                boolean handleEvent = false;
+                if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
+                    // This is my web site, so do not override; let my WebView load the page
+                    handleEvent = true;
+
+                } else if (url.startsWith("file://")) {
+                    // To handle help page (loaded from resources)
+                    handleEvent = true;
+
+                } else if (url.startsWith(ZimContentProvider.UI_URI.toString())) {
+                    handleEvent = true;
+                }
+
+                if (handleEvent) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                    builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            mFragmentCommunicator.addNewTab(url);
+                        }
+                    });
+                    builder.setNegativeButton(android.R.string.no, null);
+                    builder.setMessage(getString(R.string.open_in_new_tab));
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            }
+        });
 
         final Handler saveHandler = new
+
                 Handler() {
 
                     @Override
@@ -413,90 +505,65 @@ public class KiwixMobileFragment extends Fragment {
             }
         });
 
-        // js includes will not happen unless we enable JS
+        // JS includes will not happen unless we enable JS
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.setWebChromeClient(new MyWebChromeClient());
-        root.findViewById(R.id.button_backtotop).setOnClickListener(new View.OnClickListener() {
+
+        mBackToTopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 webView.pageUp(true);
             }
         });
 
-        // Should basically resemble the behavior when setWebClient not done
-        // (i.p. internal urls load in webview, external urls in browser)
-        // as currently no custom setWebViewClient required it is commented
-        webView.setWebViewClient(new MyWebViewClient());
-
-        loadPrefs();
-
         // webView.getSettings().setLoadsImagesAutomatically(false);
         // Does not make much sense to cache data from zim files.(Not clear whether
         // this actually has any effect)
         webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
 
-        if (getActivity().getIntent().getData() != null) {
-            String filePath = getActivity().getIntent().getData().getPath();
-            Log.d(TAG_KIWIX, " Kiwix started from a filemanager. Intent filePath: " + filePath
-                    + " -> open this zimfile and load main page");
-            openZimFile(new File(filePath), false);
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
 
-        } else if (savedInstanceState != null) {
-            Log.d(TAG_KIWIX,
-                    " Kiwix started with a savedInstanceState (That is was closed by OS) -> restore webview state and zimfile (if set)");
-            if (savedInstanceState.getString(TAG_CURRENTZIMFILE) != null) {
-                openZimFile(new File(savedInstanceState.getString(TAG_CURRENTZIMFILE)), false);
-            }
-            if (savedInstanceState.getString(TAG_CURRENTARTICLE) != null) {
-                webView.loadUrl(savedInstanceState.getString(TAG_CURRENTARTICLE));
+                webView.setWebChromeClient(new MyWebChromeClient());
+
+                // Should basically resemble the behavior when setWebClient not done
+                // (i.p. internal urls load in webview, external urls in browser)
+                // as currently no custom setWebViewClient required it is commented
+                webView.setWebViewClient(new MyWebViewClient());
 
             }
-            webView.restoreState(savedInstanceState);
+        });
 
-            // Restore the state of the WebView
-            // (Very ugly) Workaround for  #643 Android article blank after rotation and app reload
-            // In case of restore state, just reload page multiple times. Probability
-            // that after two refreshes page is still blank is low.
-            // TODO: implement better fix
-            requestWebReloadOnFinished = 2;
-            Log.d(TAG_KIWIX, "Workaround for #643: reload " + requestWebReloadOnFinished
-                    + " times after restoring state");
-
-        } else {
-            SharedPreferences settings = getActivity().getSharedPreferences(PREFS_KIWIX_MOBILE, 0);
-            String zimFile = settings.getString(TAG_CURRENTZIMFILE, null);
-            if (zimFile != null) {
-                Log.d(TAG_KIWIX, " Kiwix normal start, zimFile loaded last time -> Open last used zimFile "
-                        + zimFile);
-                openZimFile(new File(zimFile), false);
-                // Alternative would be to restore webView state. But more effort to implement, and actually
-                // fits better normal android behavior if after closing app ("back" button) state is not maintained.
-            } else {
-                Log.d(TAG_KIWIX, " Kiwix normal start, no zimFile loaded last time  -> display welcome page");
-                showWelcome();
-            }
-        }
-
-        return root;
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    private void setUpExitFullscreenButton() {
 
-        super.onCreate(savedInstanceState);
-
-        setHasOptionsMenu(true);
-        requestClearHistoryAfterLoad = false;
-        requestWebReloadOnFinished = 0;
-        requestInitAllMenuItems = false;
-        nightMode = false;
-        isFullscreenOpened = false;
+        exitFullscreenButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mFragmentCommunicator.closeFullScreenMode();
+            }
+        });
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        webView.saveState(outState);
+        outState.putString(TAG_CURRENTZIMFILE, ZimContentProvider.getZimFile());
+        outState.putString(TAG_CURRENTARTICLE, webView.getUrl());
+
+    }
+
+    @Override
+    public void setRetainInstance(boolean retain) {
+        super.setRetainInstance(retain);
     }
 
     @Override
@@ -538,6 +605,16 @@ public class KiwixMobileFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main, menu);
+        this.menu = menu;
+        if (requestInitAllMenuItems) {
+            initAllMenuItems();
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
     public void loadPrefs() {
         mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String pref_zoom = mySharedPreferences.getString(PREF_ZOOM, AUTOMATIC);
@@ -575,29 +652,6 @@ public class KiwixMobileFragment extends Fragment {
         if (nightMode != pref_nightmode) {
             ToggleNightMode();
         }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        SharedPreferences settings = getActivity().getSharedPreferences(PREFS_KIWIX_MOBILE, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString(TAG_CURRENTZIMFILE, ZimContentProvider.getZimFile());
-        // Commit the edits!
-        editor.commit();
-
-        Log.d(TAG_KIWIX,
-                "onPause Save currentzimfile to preferences:" + ZimContentProvider.getZimFile());
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.main, menu);
-        this.menu = menu;
-        if (requestInitAllMenuItems) {
-            initAllMenuItems();
-        }
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     public void selectZimFile() {
@@ -720,16 +774,6 @@ public class KiwixMobileFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        webView.saveState(outState);
-        outState.putString(TAG_CURRENTZIMFILE, ZimContentProvider.getZimFile());
-        outState.putString(TAG_CURRENTARTICLE, webView.getUrl());
-
-    }
-
     private boolean openArticle(String articleUrl) {
         Log.d(TAG_KIWIX, articleSearchtextView + " onEditorAction. TextView: " + articleSearchtextView
                 .getText() + " articleUrl: " + articleUrl);
@@ -830,12 +874,6 @@ public class KiwixMobileFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        mFragmentCommunicator = (KiwixMobileActivity) activity;
-        super.onAttach(activity);
-    }
-
     // Interface through which we will communicate from the Fragment to the Activity
     public interface FragmentCommunicator {
 
@@ -912,8 +950,13 @@ public class KiwixMobileFragment extends Fragment {
 
     private class MyWebChromeClient extends WebChromeClient {
 
+        @Override
         public void onProgressChanged(WebView view, int progress) {
-            getActivity().setProgress(progress * 100);
+
+            if (isAdded()) {
+                getActivity().setProgress(progress * 100);
+            }
+
             if (progress == 100) {
 
                 Log.d(TAG_KIWIX, "Loading article finished.");
@@ -969,11 +1012,10 @@ public class KiwixMobileFragment extends Fragment {
         }
 
         @Override
-        public void onReceivedError(WebView view, int errorCode, String description,
-                String failingUrl) {
-            String errorString = String
-                    .format(getResources().getString(R.string.error_articleurlnotfound),
-                            failingUrl);
+        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+
+            String errorString = String.format(getResources().getString(R.string.error_articleurlnotfound),
+                    failingUrl);
             // TODO apparently screws up back/forward
             webView.loadDataWithBaseURL("file://error",
                     "<html><body>" + errorString + "</body></html>", "text/html", "utf-8",
@@ -984,25 +1026,28 @@ public class KiwixMobileFragment extends Fragment {
 
         @Override
         public void onPageFinished(WebView view, String url) {
-            String title = getResources().getString(R.string.app_name);
-            if (webView.getTitle() != null && !webView.getTitle().isEmpty()) {
-                title = webView.getTitle();
-            }
 
-            if (getActivity().getActionBar().getTabCount() < 2) {
-                getActivity().getActionBar().setTitle(title);
-            }
+            if (isAdded()) {
+                String title = getResources().getString(R.string.app_name);
+                if (webView.getTitle() != null && !webView.getTitle().isEmpty()) {
+                    title = webView.getTitle();
+                }
 
-            if (getActivity().getActionBar().getNavigationMode() == ActionBar.NAVIGATION_MODE_TABS) {
-                getActivity().getActionBar().getSelectedTab().setText(title);
-            }
+                if (getActivity().getActionBar().getTabCount() < 2) {
+                    getActivity().getActionBar().setTitle(title);
+                }
 
-            //Workaround for #643
-            if (requestWebReloadOnFinished > 0) {
-                requestWebReloadOnFinished = requestWebReloadOnFinished - 1;
-                Log.d(TAG_KIWIX, "Workaround for #643: onPageFinished. Trigger reloading. ("
-                        + requestWebReloadOnFinished + " reloads left to do)");
-                view.reload();
+                if (getActivity().getActionBar().getNavigationMode() == ActionBar.NAVIGATION_MODE_TABS) {
+                    getActivity().getActionBar().getSelectedTab().setText(title);
+                }
+
+                //Workaround for #643
+                if (requestWebReloadOnFinished > 0) {
+                    requestWebReloadOnFinished = requestWebReloadOnFinished - 1;
+                    Log.d(TAG_KIWIX, "Workaround for #643: onPageFinished. Trigger reloading. ("
+                            + requestWebReloadOnFinished + " reloads left to do)");
+                    view.reload();
+                }
             }
         }
     }
