@@ -167,7 +167,7 @@ public class KiwixMobileFragment extends Fragment {
 
         loadPrefs();
 
-        manageExternalLaunchAndRestoringState(savedInstanceState);
+        manageExternalLaunchAndRestoringViewState(savedInstanceState);
 
         return root;
     }
@@ -192,7 +192,7 @@ public class KiwixMobileFragment extends Fragment {
         super.onAttach(activity);
     }
 
-    private void manageExternalLaunchAndRestoringState(Bundle savedInstanceState) {
+    private void manageExternalLaunchAndRestoringViewState(Bundle savedInstanceState) {
 
         if (getActivity().getIntent().getData() != null) {
             String filePath = getActivity().getIntent().getData().getPath();
@@ -519,20 +519,13 @@ public class KiwixMobileFragment extends Fragment {
         // Does not make much sense to cache data from zim files.(Not clear whether
         // this actually has any effect)
         webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        webView.setWebChromeClient(new MyWebChromeClient());
 
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
+        // Should basically resemble the behavior when setWebClient not done
+        // (i.p. internal urls load in webview, external urls in browser)
+        // as currently no custom setWebViewClient required it is commented
+        webView.setWebViewClient(new MyWebViewClient());
 
-                webView.setWebChromeClient(new MyWebChromeClient());
-
-                // Should basically resemble the behavior when setWebClient not done
-                // (i.p. internal urls load in webview, external urls in browser)
-                // as currently no custom setWebViewClient required it is commented
-                webView.setWebViewClient(new MyWebViewClient());
-
-            }
-        });
 
     }
 
