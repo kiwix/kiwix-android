@@ -2,6 +2,8 @@ package org.kiwix.kiwixmobile;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +25,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -126,10 +129,13 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
 
         mCurrentFragment = getCurrentVisibleFragment();
 
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
         switch (item.getItemId()) {
 
             case R.id.menu_home:
             case android.R.id.home:
+                imm.hideSoftInputFromWindow(mCurrentFragment.articleSearchtextView.getWindowToken(), 0);
                 mCurrentFragment.openMainPage();
                 break;
 
@@ -146,12 +152,14 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
                 break;
 
             case R.id.menu_forward:
+                imm.hideSoftInputFromWindow(mCurrentFragment.articleSearchtextView.getWindowToken(), 0);
                 if (mCurrentFragment.webView.canGoForward()) {
                     mCurrentFragment.webView.goForward();
                 }
                 break;
 
             case R.id.menu_back:
+                imm.hideSoftInputFromWindow(mCurrentFragment.articleSearchtextView.getWindowToken(), 0);
                 if (mCurrentFragment.webView.canGoBack()) {
                     mCurrentFragment.menu.findItem(R.id.menu_forward).setVisible(true);
                     mCurrentFragment.webView.goBack();
@@ -466,7 +474,9 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
 
         getCurrentVisibleFragment().handleTabDeleteCross();
 
-        v.startDrag(null, shadowBuilder, v, 0);
+        ClipData data = ClipData.newPlainText("", "");
+
+        v.startDrag(data, shadowBuilder, v, 0);
 
         return true;
     }
