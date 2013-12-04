@@ -167,6 +167,7 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
                 break;
 
             case R.id.menu_randomarticle:
+                imm.hideSoftInputFromWindow(mCurrentFragment.articleSearchtextView.getWindowToken(), 0);
                 mCurrentFragment.openRandomArticle();
                 break;
 
@@ -175,18 +176,22 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
                 break;
 
             case R.id.menu_help:
+                imm.hideSoftInputFromWindow(mCurrentFragment.articleSearchtextView.getWindowToken(), 0);
                 mCurrentFragment.showWelcome();
                 break;
 
             case R.id.menu_openfile:
+                imm.hideSoftInputFromWindow(mCurrentFragment.articleSearchtextView.getWindowToken(), 0);
                 mCurrentFragment.selectZimFile();
                 break;
 
             case R.id.menu_exit:
+                imm.hideSoftInputFromWindow(mCurrentFragment.articleSearchtextView.getWindowToken(), 0);
                 finish();
                 break;
 
             case R.id.menu_settings:
+                imm.hideSoftInputFromWindow(mCurrentFragment.articleSearchtextView.getWindowToken(), 0);
                 // Display the fragment as the main content.
                 mCurrentFragment.selectSettings();
                 break;
