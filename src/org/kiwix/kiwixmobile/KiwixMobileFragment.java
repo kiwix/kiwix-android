@@ -495,7 +495,9 @@ public class KiwixMobileFragment extends Fragment {
             @Override
             public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
                 final HitTestResult result = ((WebView) v).getHitTestResult();
-                if (result.getType() == HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
+                if (result.getType() == HitTestResult.IMAGE_ANCHOR_TYPE
+                        || result.getType() == HitTestResult.IMAGE_TYPE
+                        || result.getType() == HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
                     menu.add(0, 1, 0, getResources().getString(R.string.save_image))
                             .setOnMenuItemClickListener(
                                     new OnMenuItemClickListener() {
