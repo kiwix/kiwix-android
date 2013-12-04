@@ -427,10 +427,13 @@ public class KiwixMobileFragment extends Fragment {
 
                     @Override
                     public void handleMessage(Message msg) {
+                        Log.e("kiwix", msg.getData().toString());
+
                         String url = (String) msg.getData().get("url");
                         String src = (String) msg.getData().get("src");
 
-                        if (url != null && src != null) {
+                        if (url != null || src != null) {
+                            url = url == null ? src : url;
                             url = url.substring(url.lastIndexOf('/') + 1, url.length());
                             url = url.substring(url.indexOf("%3A") + 3, url.length());
                             int dotIndex = url.lastIndexOf('.');
@@ -469,9 +472,7 @@ public class KiwixMobileFragment extends Fragment {
                                         .format(getResources().getString(R.string.save_image_saved), newurl);
                             }
 
-                            Toast toast = Toast.makeText(getActivity().getApplicationContext(), toastText,
-                                    Toast.LENGTH_LONG);
-                            toast.show();
+                            Toast.makeText(getActivity(), toastText, Toast.LENGTH_LONG).show();
                         }
                     }
                 };
