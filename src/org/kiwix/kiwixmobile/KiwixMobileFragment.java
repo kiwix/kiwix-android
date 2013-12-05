@@ -364,7 +364,6 @@ public class KiwixMobileFragment extends Fragment {
             @Override
             public void onPageChanged(int page, int maxPages) {
                 if (isButtonEnabled) {
-
                     if (webView.getScrollY() > 200) {
                         if (mBackToTopButton.getVisibility() == View.INVISIBLE) {
                             mBackToTopButton.setText(R.string.button_backtotop);
@@ -619,7 +618,7 @@ public class KiwixMobileFragment extends Fragment {
         String pref_zoom = mySharedPreferences.getString(PREF_ZOOM, AUTOMATIC);
         Boolean pref_zoom_enabled = mySharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
         Boolean pref_nightmode = mySharedPreferences.getBoolean(PREF_NIGHTMODE, false);
-        isButtonEnabled = mySharedPreferences.getBoolean("pref_top_button", isButtonEnabled);
+        isButtonEnabled = mySharedPreferences.getBoolean("pref_backtotop", isButtonEnabled);
 
         if (pref_zoom.equals(AUTOMATIC)) {
             setDefaultZoom();
@@ -641,9 +640,7 @@ public class KiwixMobileFragment extends Fragment {
         webView.getSettings().setDisplayZoomControls(pref_zoom_enabled);
 
         if (!isButtonEnabled) {
-            if (mBackToTopButton.getVisibility() == View.VISIBLE) {
-                mBackToTopButton.setVisibility(View.INVISIBLE);
-            }
+	    mBackToTopButton.setVisibility(View.INVISIBLE);
         }
 
         // Night mode status
