@@ -77,7 +77,7 @@
             <Button
                     android:id="@+id/button_backtotop"
                     android:layout_width="fill_parent"
-                    android:layout_height="30px"
+                    android:layout_height="wrap_content"
                     android:alpha="0.6"
                     android:gravity="center"
                     android:textColor="@android:color/black"
