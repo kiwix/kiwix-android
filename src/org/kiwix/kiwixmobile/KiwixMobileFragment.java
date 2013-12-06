@@ -742,6 +742,7 @@ public class KiwixMobileFragment extends Fragment {
             }
 
         } else {
+	    Log.e("kiwix", "ZIM file doesn't exist at " + file.getAbsolutePath());		
             Toast.makeText(getActivity(), getResources().getString(R.string.error_filenotfound),
                     Toast.LENGTH_LONG).show();
         }
