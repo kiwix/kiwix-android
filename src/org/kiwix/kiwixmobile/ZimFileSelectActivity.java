@@ -146,6 +146,7 @@ public class ZimFileSelectActivity extends FragmentActivity
         mCursorAdapter.swapCursor(cursor);
         // Done here to avoid that shown while loading.
         mZimFileList.setEmptyView(findViewById(R.id.zimfilelist_nozimfilesfound_view));
+	setProgressBarIndeterminateVisibility(false);
         mCursorAdapter.notifyDataSetChanged();
     }
 
