@@ -3,6 +3,7 @@ package org.kiwix.kiwixmobile;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -143,11 +144,38 @@ public class ZimFileSelectActivity extends FragmentActivity
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         Log.d("kiwix", "DONE querying Mediastore for .zim files");
+        removeNonExistentFiles(cursor);
         mCursorAdapter.swapCursor(cursor);
         // Done here to avoid that shown while loading.
         mZimFileList.setEmptyView(findViewById(R.id.zimfilelist_nozimfilesfound_view));
-	setProgressBarIndeterminateVisibility(false);
+        setProgressBarIndeterminateVisibility(false);
         mCursorAdapter.notifyDataSetChanged();
+
+    }
+
+    // Connect to the MediaScannerConnection service and scan all the files, that are returned to us by
+    // our MediaStore query. The file will get removed, if the scan resturns null and our CursorAdapter
+    // will update.
+    private void removeNonExistentFiles(Cursor cursor) {
+
+        List<String> files = new ArrayList<String>();
+
+        // Iterate trough the data from our curser and add every file path column to an ArrayList
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+            files.add(cursor.getString(2));
+        }
+
+        // Scan every file (and delete it from the MediaStore, if it does not exist)
+        MediaScannerConnection.scanFile(
+                ZimFileSelectActivity.this,
+                files.toArray(new String[files.size()]),
+                null,
+                new MediaScannerConnection.OnScanCompletedListener() {
+                    @Override
+                    public void onScanCompleted(String path, Uri uri) {
+
+                    }
+                });
     }
 
     @Override
@@ -215,7 +243,7 @@ public class ZimFileSelectActivity extends FragmentActivity
 
         } else {
             Cursor cursor = (Cursor) mZimFileList.getItemAtPosition(position);
-            file = cursor.getString(1);
+            file = cursor.getString(2);
         }
 
         finishResult(file);
