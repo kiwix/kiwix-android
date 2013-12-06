@@ -36,10 +36,10 @@ public class ZimContentProvider extends ContentProvider {
 
 	public synchronized static String setZimFile(String fileName) {
 		if (!jniKiwix.loadZIM(fileName)) {
-			Log.e("kiwix", "Unable to open the file " + fileName);		
-			zimFileName = null;
+		    Log.e("kiwix", "Unable to open the file " + fileName);
+		    zimFileName = null;
 		} else { 
-			zimFileName = fileName;
+		    zimFileName = fileName;
 		}   
 		return zimFileName;
 	}
