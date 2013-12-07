@@ -22,7 +22,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -58,12 +57,15 @@ public class ZimFileSelectActivity extends FragmentActivity
 
     private ListView mZimFileList;
 
+    private ProgressBar mProgressBar;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setProgressBarIndeterminateVisibility(true);
         setContentView(R.layout.zimfilelist);
+
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mProgressBar.setVisibility(View.VISIBLE);
 
         mZimFileList = (ListView) findViewById(R.id.zimfilelist);
         mFiles = new ArrayList<DataModel>();
@@ -150,7 +152,7 @@ public class ZimFileSelectActivity extends FragmentActivity
 
         // Done here to avoid that shown while loading.
         mZimFileList.setEmptyView(findViewById(R.id.zimfilelist_nozimfilesfound_view));
-        setProgressBarIndeterminateVisibility(false);
+        mProgressBar.setVisibility(View.GONE);
         mCursorAdapter.notifyDataSetChanged();
 
     }
@@ -165,6 +167,8 @@ public class ZimFileSelectActivity extends FragmentActivity
             // Check if file exists
             if (new File(cursor.getString(2)).exists()) {
                 files.add(new DataModel(cursor.getString(1), cursor.getString(2)));
+            } else {
+                Log.e("kiwix", cursor.getString(2) + "does not exist");
             }
         }
 
