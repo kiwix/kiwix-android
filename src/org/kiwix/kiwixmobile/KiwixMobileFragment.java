@@ -568,6 +568,8 @@ public class KiwixMobileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        Log.i("kiwix", "Intent data: " + data);
+
         switch (requestCode) {
             case ZIMFILESELECT_REQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
@@ -641,7 +643,7 @@ public class KiwixMobileFragment extends Fragment {
         webView.getSettings().setDisplayZoomControls(pref_zoom_enabled);
 
         if (!isButtonEnabled) {
-	    mBackToTopButton.setVisibility(View.INVISIBLE);
+            mBackToTopButton.setVisibility(View.INVISIBLE);
         }
 
         // Night mode status
@@ -742,7 +744,7 @@ public class KiwixMobileFragment extends Fragment {
             }
 
         } else {
-	    Log.e("kiwix", "ZIM file doesn't exist at " + file.getAbsolutePath());		
+            Log.e("kiwix", "ZIM file doesn't exist at " + file.getAbsolutePath());
             Toast.makeText(getActivity(), getResources().getString(R.string.error_filenotfound),
                     Toast.LENGTH_LONG).show();
         }
@@ -750,13 +752,18 @@ public class KiwixMobileFragment extends Fragment {
     }
 
     private void initAllMenuItems() {
-        menu.findItem(R.id.menu_fullscreen).setVisible(true);
-        menu.findItem(R.id.menu_back).setVisible(true);
-        menu.findItem(R.id.menu_forward).setVisible(false);
-        menu.findItem(R.id.menu_home).setVisible(true);
-        menu.findItem(R.id.menu_randomarticle).setVisible(true);
-        menu.findItem(R.id.menu_searchintext).setVisible(true);
-        menu.findItem(R.id.menu_search).setVisible(true);
+
+        try {
+            menu.findItem(R.id.menu_forward).setVisible(false);
+            menu.findItem(R.id.menu_fullscreen).setVisible(true);
+            menu.findItem(R.id.menu_back).setVisible(true);
+            menu.findItem(R.id.menu_home).setVisible(true);
+            menu.findItem(R.id.menu_randomarticle).setVisible(true);
+            menu.findItem(R.id.menu_searchintext).setVisible(true);
+            menu.findItem(R.id.menu_search).setVisible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void onKeyDown(int keyCode, KeyEvent event) {

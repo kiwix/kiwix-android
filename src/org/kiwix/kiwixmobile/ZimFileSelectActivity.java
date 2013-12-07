@@ -81,6 +81,7 @@ public class ZimFileSelectActivity extends FragmentActivity
         if (path != null) {
             File file = new File(path);
             Uri uri = Uri.fromFile(file);
+            Log.i("kiwix", "Opening " + uri);
             setResult(RESULT_OK, new Intent().setData(uri));
             finish();
         } else {
@@ -189,12 +190,28 @@ public class ZimFileSelectActivity extends FragmentActivity
     // if the scan resturns null and our CursorAdapter will update.
     private void removeNonExistentFiles(Cursor cursor) {
 
-        List<String> files = new ArrayList<String>();
+        ArrayList<String> files = new ArrayList<String>();
 
         // Iterate trough the data from our curser and add every file path column to an ArrayList
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
             files.add(cursor.getString(2));
         }
+        updateMediaStore(files);
+
+    }
+
+    // Add new files to the MediaStore
+    private void addDataToMediaStore(ArrayList<DataModel> files) {
+
+        ArrayList<String> paths = new ArrayList<String>();
+
+        for (int i = 0; i < files.size(); i++) {
+            paths.add(files.get(i).getPath());
+        }
+        updateMediaStore(paths);
+    }
+
+    private void updateMediaStore(ArrayList<String> files) {
 
         // Scan every file (and delete it from the MediaStore, if it does not exist)
         MediaScannerConnection.scanFile(
@@ -311,6 +328,8 @@ public class ZimFileSelectActivity extends FragmentActivity
 
             mProgressBarMessage.setVisibility(View.GONE);
             mProgressBar.setVisibility(View.GONE);
+
+            addDataToMediaStore(mFiles);
 
             super.onPostExecute(result);
         }
