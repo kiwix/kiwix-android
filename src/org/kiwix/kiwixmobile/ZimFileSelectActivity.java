@@ -62,7 +62,7 @@ public class ZimFileSelectActivity extends FragmentActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-	setProgressBarIndeterminateVisibility(true);
+        setProgressBarIndeterminateVisibility(true);
         setContentView(R.layout.zimfilelist);
 
         mZimFileList = (ListView) findViewById(R.id.zimfilelist);
@@ -150,7 +150,7 @@ public class ZimFileSelectActivity extends FragmentActivity
 
         // Done here to avoid that shown while loading.
         mZimFileList.setEmptyView(findViewById(R.id.zimfilelist_nozimfilesfound_view));
-	setProgressBarIndeterminateVisibility(false);
+        setProgressBarIndeterminateVisibility(false);
         mCursorAdapter.notifyDataSetChanged();
 
     }
@@ -277,10 +277,15 @@ public class ZimFileSelectActivity extends FragmentActivity
 
         ProgressBar mProgressBar;
 
+        TextView mProgressBarMessage;
+
         @Override
         protected void onPreExecute() {
             mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+            mProgressBarMessage = (TextView) findViewById(R.id.progressbar_message);
+
             mProgressBar.setVisibility(View.VISIBLE);
+            mProgressBarMessage.setVisibility(View.VISIBLE);
 
             super.onPreExecute();
         }
@@ -299,6 +304,7 @@ public class ZimFileSelectActivity extends FragmentActivity
             mZimFileList.setAdapter(mRescanAdapter);
 
             mProgressBar.setVisibility(View.GONE);
+            mProgressBarMessage.setVisibility(View.GONE);
 
             super.onPostExecute(result);
         }
