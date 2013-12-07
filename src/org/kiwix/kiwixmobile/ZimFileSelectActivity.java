@@ -62,7 +62,7 @@ public class ZimFileSelectActivity extends FragmentActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setProgressBarIndeterminateVisibility(true);
+	setProgressBarIndeterminateVisibility(true);
         setContentView(R.layout.zimfilelist);
 
         mZimFileList = (ListView) findViewById(R.id.zimfilelist);
@@ -148,7 +148,7 @@ public class ZimFileSelectActivity extends FragmentActivity
         mCursorAdapter.swapCursor(cursor);
         // Done here to avoid that shown while loading.
         mZimFileList.setEmptyView(findViewById(R.id.zimfilelist_nozimfilesfound_view));
-        setProgressBarIndeterminateVisibility(false);
+	setProgressBarIndeterminateVisibility(false);
         mCursorAdapter.notifyDataSetChanged();
 
     }
@@ -218,7 +218,7 @@ public class ZimFileSelectActivity extends FragmentActivity
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.menu_rescan:
+            case R.id.menu_rescan_fs:
                 // Execute our AsyncTask, that scans the file system for the actual data
                 new RescanFileSystem().execute();
         }
