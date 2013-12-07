@@ -59,12 +59,16 @@ public class ZimFileSelectActivity extends FragmentActivity
 
     private ProgressBar mProgressBar;
 
+    private TextView mProgressBarMessage;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.zimfilelist);
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mProgressBarMessage = (TextView) findViewById(R.id.progressbar_message);
+
         mProgressBar.setVisibility(View.VISIBLE);
 
         mZimFileList = (ListView) findViewById(R.id.zimfilelist);
@@ -152,7 +156,11 @@ public class ZimFileSelectActivity extends FragmentActivity
 
         // Done here to avoid that shown while loading.
         mZimFileList.setEmptyView(findViewById(R.id.zimfilelist_nozimfilesfound_view));
-        mProgressBar.setVisibility(View.GONE);
+
+        if (mProgressBarMessage.getVisibility() == View.GONE) {
+            mProgressBar.setVisibility(View.GONE);
+        }
+
         mCursorAdapter.notifyDataSetChanged();
 
     }
@@ -279,17 +287,11 @@ public class ZimFileSelectActivity extends FragmentActivity
     // This AsyncTask will scan the file system for files with the Extension ".zim" or ".zimaa"
     private class RescanFileSystem extends AsyncTask<Void, Void, Void> {
 
-        ProgressBar mProgressBar;
-
-        TextView mProgressBarMessage;
-
         @Override
         protected void onPreExecute() {
-            mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-            mProgressBarMessage = (TextView) findViewById(R.id.progressbar_message);
 
-            mProgressBar.setVisibility(View.VISIBLE);
             mProgressBarMessage.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.VISIBLE);
 
             super.onPreExecute();
         }
@@ -307,8 +309,8 @@ public class ZimFileSelectActivity extends FragmentActivity
 
             mZimFileList.setAdapter(mRescanAdapter);
 
-            mProgressBar.setVisibility(View.GONE);
             mProgressBarMessage.setVisibility(View.GONE);
+            mProgressBar.setVisibility(View.GONE);
 
             super.onPostExecute(result);
         }
