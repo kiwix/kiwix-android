@@ -44,7 +44,7 @@ public class ZimFileSelectActivity extends FragmentActivity
 
     private static final int LOADER_ID = 0x02;
 
-    // array of valid audio file extensions
+    // Array of zim file extensions
     private static final String[] zimFiles = {"zim", "zimaa"};
 
     // Adapter of the Data populated by the MediaStore
@@ -60,6 +60,10 @@ public class ZimFileSelectActivity extends FragmentActivity
     private ProgressBar mProgressBar;
 
     private TextView mProgressBarMessage;
+
+    private boolean mNeedsUpdate = false;
+
+    private boolean mAdapterRefreshed = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,6 +82,10 @@ public class ZimFileSelectActivity extends FragmentActivity
     }
 
     private void finishResult(String path) {
+        // Add new files to MediaStore
+        addDataToMediaStore(mFiles);
+        // Remove the nonexistent files from the MediaStore
+        removeNonExistentFiles(mCursorAdapter.getCursor());
         if (path != null) {
             File file = new File(path);
             Uri uri = Uri.fromFile(file);
@@ -91,6 +99,14 @@ public class ZimFileSelectActivity extends FragmentActivity
     }
 
     protected void selectZimFile() {
+
+        // Stop endless loops
+        if (mAdapterRefreshed) {
+            return;
+        } else {
+            mAdapterRefreshed = true;
+        }
+
         // Defines a list of columns to retrieve from the Cursor and load into an output row
         String[] mZimListColumns = {MediaStore.Files.FileColumns.TITLE, MediaStore.Files.FileColumns.DATA};
 
@@ -196,7 +212,7 @@ public class ZimFileSelectActivity extends FragmentActivity
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
             files.add(cursor.getString(2));
         }
-        updateMediaStore(files);
+        // updateMediaStore(files);
 
     }
 
@@ -205,13 +221,20 @@ public class ZimFileSelectActivity extends FragmentActivity
 
         ArrayList<String> paths = new ArrayList<String>();
 
-        for (int i = 0; i < files.size(); i++) {
-            paths.add(files.get(i).getPath());
+        for (DataModel file : files) {
+            paths.add(file.getPath());
         }
         updateMediaStore(paths);
     }
 
     private void updateMediaStore(ArrayList<String> files) {
+
+        // Abort endless loops. Let this update process only run on rescan.
+        if (!mNeedsUpdate) {
+            return;
+        }
+
+        Log.i("kiwix", "Updating MediaStore");
 
         // Scan every file (and delete it from the MediaStore, if it does not exist)
         MediaScannerConnection.scanFile(
@@ -224,6 +247,8 @@ public class ZimFileSelectActivity extends FragmentActivity
 
                     }
                 });
+
+        mNeedsUpdate = false;
     }
 
     @Override
@@ -271,8 +296,9 @@ public class ZimFileSelectActivity extends FragmentActivity
                 // Execute our AsyncTask, that scans the file system for the actual data
                 new RescanFileSystem().execute();
 
-                // Remove the nonexistent files from the MediaStore
-                removeNonExistentFiles(mCursorAdapter.getCursor());
+                // Make sure, that we set mNeedsUpdate to true and to false, after the MediaStore has been
+                // updated. Otherwise it will result in a endless loop.
+                mNeedsUpdate = true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -328,8 +354,6 @@ public class ZimFileSelectActivity extends FragmentActivity
 
             mProgressBarMessage.setVisibility(View.GONE);
             mProgressBar.setVisibility(View.GONE);
-
-            addDataToMediaStore(mFiles);
 
             super.onPostExecute(result);
         }
