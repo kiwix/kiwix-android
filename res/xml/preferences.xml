@@ -24,7 +24,7 @@
                 android:key="pref_backtotop"
                 android:title="@string/pref_backtotop"
                 android:summary="@string/pref_backtotop_summary"
-                android:defaultValue="true"/>
+                android:defaultValue="false"/>
 
     </PreferenceCategory>
 

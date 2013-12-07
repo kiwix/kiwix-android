@@ -13,10 +13,12 @@
     <string name="menu_fullscreen">পূর্ণাঙ্গ স্ক্রিন</string>
     <string name="menu_exitfullscreen">পূর্ণঙ্গ স্ক্রীন বন্ধ করুন</string>
     <string name="menu_exit">বন্ধ</string>
+    <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Share with friends</string>
     <string name="save_image">Save Image</string>
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
+    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
     <string name="button_backtotop">Back to Top</string>
     <string name="search_label">অনুসন্ধান</string>
     <string name="articlesearch_hint">Type to lookup articles</string>
@@ -45,8 +47,6 @@
     <string name="pref_nightmode_summary">Show articles with reverted colors</string>
     <string name="pref_backtotop">Back to Top</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
-    <string name="rescan_fs">Rescan SD card</string>
-    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
     <string name="remove_tab">Remove Tab</string>
     <string name="add_tab">Add new Tab</string>
     <string name="remove">Remove</string>
