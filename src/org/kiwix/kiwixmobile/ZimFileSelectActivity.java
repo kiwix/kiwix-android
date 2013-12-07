@@ -54,7 +54,7 @@ public class ZimFileSelectActivity extends FragmentActivity
     // Adapter of the Data populated by recanning the Filesystem by ourselves
     private RescanDataAdapter mRescanAdapter;
 
-    private ArrayList<RescanDataModel> mFiles;
+    private ArrayList<DataModel> mFiles;
 
     private ListView mZimFileList;
 
@@ -66,7 +66,7 @@ public class ZimFileSelectActivity extends FragmentActivity
         setContentView(R.layout.zimfilelist);
 
         mZimFileList = (ListView) findViewById(R.id.zimfilelist);
-        mFiles = new ArrayList<RescanDataModel>();
+        mFiles = new ArrayList<DataModel>();
 
         selectZimFile();
     }
@@ -104,7 +104,6 @@ public class ZimFileSelectActivity extends FragmentActivity
                 // Flags for the Adapter
                 Adapter.NO_SELECTION);
 
-        mZimFileList.setAdapter(mCursorAdapter);
         mZimFileList.setOnItemClickListener(this);
 
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
@@ -144,8 +143,11 @@ public class ZimFileSelectActivity extends FragmentActivity
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         Log.d("kiwix", "DONE querying Mediastore for .zim files");
-        removeNonExistentFiles(cursor);
+        buildArrayAdapter(cursor);
         mCursorAdapter.swapCursor(cursor);
+        mRescanAdapter = buildArrayAdapter(cursor);
+        mZimFileList.setAdapter(mRescanAdapter);
+
         // Done here to avoid that shown while loading.
         mZimFileList.setEmptyView(findViewById(R.id.zimfilelist_nozimfilesfound_view));
         setProgressBarIndeterminateVisibility(false);
@@ -153,9 +155,26 @@ public class ZimFileSelectActivity extends FragmentActivity
 
     }
 
+    // Get the data of our cursor and wrap it all in our ArrayAdapter.
+    // We are doing this because the CursorAdapter does not allow us do remove rows from its dataset.
+    private RescanDataAdapter buildArrayAdapter(Cursor cursor) {
+
+        ArrayList<DataModel> files = new ArrayList<DataModel>();
+
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+            // Check if file exists
+            if (new File(cursor.getString(2)).exists()) {
+                files.add(new DataModel(cursor.getString(1), cursor.getString(2)));
+            }
+        }
+
+        mFiles = files;
+        return new RescanDataAdapter(ZimFileSelectActivity.this, 0, files);
+    }
+
     // Connect to the MediaScannerConnection service and scan all the files, that are returned to us by
-    // our MediaStore query. The file will get removed, if the scan resturns null and our CursorAdapter
-    // will update.
+    // our MediaStore query. The file will ideally get removed from the MediaStore,
+    // if the scan resturns null and our CursorAdapter will update.
     private void removeNonExistentFiles(Cursor cursor) {
 
         List<String> files = new ArrayList<String>();
@@ -189,6 +208,7 @@ public class ZimFileSelectActivity extends FragmentActivity
         // Check, if the user has rescanned the file system, if he has, then we want to save this list,
         // so this can be shown again, if the actvitity is recreated (on a device rotation for example)
         if (!mFiles.isEmpty()) {
+            Log.i("kiwix", "Saved state of the ListView");
             outState.putParcelableArrayList("rescanData", mFiles);
         }
         super.onSaveInstanceState(outState);
@@ -199,7 +219,7 @@ public class ZimFileSelectActivity extends FragmentActivity
 
         // Get the rescanned data, if available. Create an Adapter for the ListView and display the list
         if (savedInstanceState.getParcelableArrayList("rescanData") != null) {
-            ArrayList<RescanDataModel> data = savedInstanceState.getParcelableArrayList("rescanData");
+            ArrayList<DataModel> data = savedInstanceState.getParcelableArrayList("rescanData");
             mRescanAdapter = new RescanDataAdapter(ZimFileSelectActivity.this, 0, data);
 
             mZimFileList.setAdapter(mRescanAdapter);
@@ -221,6 +241,9 @@ public class ZimFileSelectActivity extends FragmentActivity
             case R.id.menu_rescan:
                 // Execute our AsyncTask, that scans the file system for the actual data
                 new RescanFileSystem().execute();
+
+                // Remove the nonexistent files from the MediaStore
+                removeNonExistentFiles(mCursorAdapter.getCursor());
         }
 
         return super.onOptionsItemSelected(item);
@@ -235,10 +258,10 @@ public class ZimFileSelectActivity extends FragmentActivity
 
         // Check which one of the Adapters is currently filling the ListView.
         // If the data is populated by the LoaderManager cast the current selected item to Cursor,
-        // if the data is populated by the ArrayAdapter, then cast it to the RescanDataModel class.
-        if (mZimFileList.getItemAtPosition(position) instanceof RescanDataModel) {
+        // if the data is populated by the ArrayAdapter, then cast it to the DataModel class.
+        if (mZimFileList.getItemAtPosition(position) instanceof DataModel) {
 
-            RescanDataModel data = (RescanDataModel) mZimFileList.getItemAtPosition(position);
+            DataModel data = (DataModel) mZimFileList.getItemAtPosition(position);
             file = data.getPath();
 
         } else {
@@ -280,7 +303,8 @@ public class ZimFileSelectActivity extends FragmentActivity
             super.onPostExecute(result);
         }
 
-        private ArrayList<RescanDataModel> FindFiles() {
+        // Scan through the file system and find all the files with .zim and .zimaa extensions
+        private ArrayList<DataModel> FindFiles() {
             String directory = new File(
                     Environment.getExternalStorageDirectory().getAbsolutePath()).toString();
             final List<String> fileList = new ArrayList<String>();
@@ -335,19 +359,19 @@ public class ZimFileSelectActivity extends FragmentActivity
             return files.toArray(arr);
         }
 
-        // Create an ArrayList with our RescanDataModel
-        private ArrayList<RescanDataModel> createDataForAdapter(List<String> list) {
+        // Create an ArrayList with our DataModel
+        private ArrayList<DataModel> createDataForAdapter(List<String> list) {
 
-            ArrayList<RescanDataModel> data = new ArrayList<RescanDataModel>();
+            ArrayList<DataModel> data = new ArrayList<DataModel>();
             for (String file : list) {
 
-                data.add(new RescanDataModel(getTitleFromFilePath(file), file));
+                data.add(new DataModel(getTitleFromFilePath(file), file));
             }
 
             // Sorting the data in alphabetical order
-            Collections.sort(data, new Comparator<RescanDataModel>() {
+            Collections.sort(data, new Comparator<DataModel>() {
                 @Override
-                public int compare(RescanDataModel a, RescanDataModel b) {
+                public int compare(DataModel a, DataModel b) {
                     return a.getTitle().compareToIgnoreCase(b.getTitle());
                 }
             });
@@ -364,36 +388,35 @@ public class ZimFileSelectActivity extends FragmentActivity
     // This items class stores the Data for the ArrayAdapter.
     // We Have to implement Parcelable, so we can store ArrayLists with this generic type in the Bundle
     // of onSaveInstanceState() and retrieve it later on in onRestoreInstanceState()
-    private class RescanDataModel implements Parcelable {
+    private class DataModel implements Parcelable {
 
         // Interface that must be implemented and provided as a public CREATOR field.
         // It generates instances of your Parcelable class from a Parcel.
-        public Parcelable.Creator<RescanDataModel> CREATOR = new Parcelable.Creator<RescanDataModel>() {
+        public Parcelable.Creator<DataModel> CREATOR = new Parcelable.Creator<DataModel>() {
 
             @Override
-            public RescanDataModel createFromParcel(Parcel source) {
-                return new RescanDataModel(source);
+            public DataModel createFromParcel(Parcel source) {
+                return new DataModel(source);
             }
 
             @Override
-            public RescanDataModel[] newArray(int size) {
-                return new RescanDataModel[size];
+            public DataModel[] newArray(int size) {
+                return new DataModel[size];
             }
-
         };
 
         private String mTitle;
 
         private String mPath;
 
-        private RescanDataModel(String title, String path) {
+        private DataModel(String title, String path) {
             mTitle = title;
             mPath = path;
         }
 
         // This constructor will be called when this class is generated by a Parcel.
         // We have to read the previously written Data in this Parcel.
-        public RescanDataModel(Parcel parcel) {
+        public DataModel(Parcel parcel) {
             String[] data = new String[2];
             parcel.readStringArray(data);
             mTitle = data[0];
@@ -416,15 +439,15 @@ public class ZimFileSelectActivity extends FragmentActivity
         @Override
         public void writeToParcel(Parcel dest, int flags) {
             // Write the data to the Parcel, so we can restore this Data later on.
-            // It will be restored by the RescanDataModel(Parcel parcel) constructor.
+            // It will be restored by the DataModel(Parcel parcel) constructor.
             dest.writeArray(new String[]{mTitle, mPath});
         }
     }
 
     // The Adapter for the ListView for when the ListView is populated with the rescanned files
-    private class RescanDataAdapter extends ArrayAdapter<RescanDataModel> {
+    private class RescanDataAdapter extends ArrayAdapter<DataModel> {
 
-        public RescanDataAdapter(Context context, int textViewResourceId, List<RescanDataModel> objects) {
+        public RescanDataAdapter(Context context, int textViewResourceId, List<DataModel> objects) {
             super(context, textViewResourceId, objects);
         }
 

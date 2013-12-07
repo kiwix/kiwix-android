@@ -288,7 +288,6 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
                 }
             }
         });
-
     }
 
     @Override
@@ -409,7 +408,6 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
                 mCurrentFragment.webView.loadUrl(url);
             }
         });
-
     }
 
     @Override
