@@ -188,12 +188,10 @@ public class ZimFileSelectActivity extends FragmentActivity
         ArrayList<DataModel> files = new ArrayList<DataModel>();
 
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-            // Check if file exists
-            //if (new File(cursor.getString(2)).exists()) {
-            files.add(new DataModel(cursor.getString(1), cursor.getString(2)));
-            //} else {
-            Log.e("kiwix", cursor.getString(2) + " does not exist");
-            //}
+
+            if (new File(cursor.getString(2)).exists()) {
+                files.add(new DataModel(cursor.getString(1), cursor.getString(2)));
+            }
         }
 
         files = new FileWriter(ZimFileSelectActivity.this, files).getDataModelList();
@@ -201,6 +199,7 @@ public class ZimFileSelectActivity extends FragmentActivity
         for (int i = 0; i < files.size(); i++) {
 
             if (!new File(files.get(i).getPath()).exists()) {
+                Log.e("kiwix", "File removed: " + files.get(i).getTitle());
                 files.remove(i);
             }
         }
@@ -208,7 +207,7 @@ public class ZimFileSelectActivity extends FragmentActivity
         files = sortDataModel(files);
         mFiles = files;
 
-        return new RescanDataAdapter(ZimFileSelectActivity.this, 0, files);
+        return new RescanDataAdapter(ZimFileSelectActivity.this, 0, mFiles);
     }
 
     // Connect to the MediaScannerConnection service and scan all the files, that are returned to us by

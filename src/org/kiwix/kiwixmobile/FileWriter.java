@@ -52,7 +52,7 @@ public class FileWriter {
 
         for (String file : readCsv()) {
             if (!mDataList.contains(new ZimFileSelectActivity.DataModel(getTitleFromFilePath(file), file))) {
-
+                Log.i("kiwix", "Added file: " + file);
                 mDataList.add(new ZimFileSelectActivity.DataModel(getTitleFromFilePath(file), file));
             }
         }
