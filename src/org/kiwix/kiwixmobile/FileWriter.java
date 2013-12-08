@@ -16,23 +16,23 @@ public class FileWriter {
 
     private Context mContext;
 
-    private ArrayList<ZimFileSelectActivity.DataModel> mDataList;
+    private ArrayList<DataModel> mDataList;
 
     public FileWriter(Context context) {
         mContext = context;
     }
 
-    public FileWriter(Context context, ArrayList<ZimFileSelectActivity.DataModel> dataList) {
+    public FileWriter(Context context, ArrayList<DataModel> dataList) {
         mDataList = dataList;
         mContext = context;
     }
 
     // Build a CSV list from the file paths
-    public void saveArray(ArrayList<ZimFileSelectActivity.DataModel> files) {
+    public void saveArray(ArrayList<DataModel> files) {
 
         ArrayList<String> list = new ArrayList<String>();
 
-        for (ZimFileSelectActivity.DataModel file : files) {
+        for (DataModel file : files) {
             list.add(file.getPath());
         }
 
@@ -48,12 +48,12 @@ public class FileWriter {
     // Add items to the MediaStore list, that are not in the MediaStore database.
     // These will be loaded from a previously saved CSV file.
     // We are checking, if these file still exist as well.
-    public ArrayList<ZimFileSelectActivity.DataModel> getDataModelList() {
+    public ArrayList<DataModel> getDataModelList() {
 
         for (String file : readCsv()) {
-            if (!mDataList.contains(new ZimFileSelectActivity.DataModel(getTitleFromFilePath(file), file))) {
+            if (!mDataList.contains(new DataModel(getTitleFromFilePath(file), file))) {
                 Log.i("kiwix", "Added file: " + file);
-                mDataList.add(new ZimFileSelectActivity.DataModel(getTitleFromFilePath(file), file));
+                mDataList.add(new DataModel(getTitleFromFilePath(file), file));
             }
         }
 

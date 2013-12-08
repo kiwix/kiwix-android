@@ -3,13 +3,9 @@ package org.kiwix.kiwixmobile;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
@@ -31,21 +27,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Vector;
 
 public class ZimFileSelectActivity extends FragmentActivity
         implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener {
 
     private static final int LOADER_ID = 0x02;
-
-    // Array of zim file extensions
-    private static final String[] zimFiles = {"zim", "zimaa"};
 
     // Adapter of the Data populated by the MediaStore
     private SimpleCursorAdapter mCursorAdapter;
@@ -61,10 +49,6 @@ public class ZimFileSelectActivity extends FragmentActivity
 
     private TextView mProgressBarMessage;
 
-    private boolean mNeedsUpdate = false;
-
-    private boolean mAdapterRefreshed = false;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,64 +56,11 @@ public class ZimFileSelectActivity extends FragmentActivity
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mProgressBarMessage = (TextView) findViewById(R.id.progressbar_message);
-
         mProgressBar.setVisibility(View.VISIBLE);
-
         mZimFileList = (ListView) findViewById(R.id.zimfilelist);
         mFiles = new ArrayList<DataModel>();
 
-        selectZimFile();
-    }
-
-    private void finishResult(String path) {
-        // Add new files to MediaStore
-        addDataToMediaStore(mFiles);
-        // Remove the nonexistent files from the MediaStore
-        removeNonExistentFiles(mCursorAdapter.getCursor());
-        if (path != null) {
-            File file = new File(path);
-            Uri uri = Uri.fromFile(file);
-            Log.i("kiwix", "Opening " + uri);
-            setResult(RESULT_OK, new Intent().setData(uri));
-            finish();
-        } else {
-            setResult(RESULT_CANCELED);
-            finish();
-        }
-    }
-
-    protected void selectZimFile() {
-
-        // Stop endless loops
-        if (mAdapterRefreshed) {
-            return;
-        } else {
-            mAdapterRefreshed = true;
-        }
-
-        // Defines a list of columns to retrieve from the Cursor and load into an output row
-        String[] mZimListColumns = {MediaStore.Files.FileColumns.TITLE, MediaStore.Files.FileColumns.DATA};
-
-        // Defines a list of View IDs that will receive the Cursor columns for each row
-        int[] mZimListItems = {android.R.id.text1, android.R.id.text2};
-
-        mCursorAdapter = new SimpleCursorAdapter(
-                // The Context object
-                ZimFileSelectActivity.this,
-                // A layout in XML for one row in the ListView
-                android.R.layout.simple_list_item_2,
-                // The cursor, swapped later by cursorloader
-                null,
-                // A string array of column names in the cursor
-                mZimListColumns,
-                // An integer array of view IDs in the row layout
-                mZimListItems,
-                // Flags for the Adapter
-                Adapter.NO_SELECTION);
-
-        mZimFileList.setOnItemClickListener(this);
-
-        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+        startQuery();
     }
 
     @Override
@@ -150,9 +81,9 @@ public class ZimFileSelectActivity extends FragmentActivity
         String query = MediaStore.Files.FileColumns.MEDIA_TYPE + "="
                 + MediaStore.Files.FileColumns.MEDIA_TYPE_NONE + " AND"
                 + " ( LOWER(" +
-                MediaStore.Images.Media.DATA + ") LIKE '%." + zimFiles[0] + "'"
+                MediaStore.Images.Media.DATA + ") LIKE '%." + FileSearch.zimFiles[0] + "'"
                 + " OR LOWER(" +
-                MediaStore.Images.Media.DATA + ") LIKE '%." + zimFiles[1] + "'"
+                MediaStore.Images.Media.DATA + ") LIKE '%." + FileSearch.zimFiles[1] + "'"
                 + " ) ";
 
         String[] selectionArgs = null; // There is no ? in query so null here
@@ -179,98 +110,6 @@ public class ZimFileSelectActivity extends FragmentActivity
         }
 
         mCursorAdapter.notifyDataSetChanged();
-    }
-
-    // Get the data of our cursor and wrap it all in our ArrayAdapter.
-    // We are doing this because the CursorAdapter does not allow us do remove rows from its dataset.
-    private RescanDataAdapter buildArrayAdapter(Cursor cursor) {
-
-        ArrayList<DataModel> files = new ArrayList<DataModel>();
-
-        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-
-            if (new File(cursor.getString(2)).exists()) {
-                files.add(new DataModel(cursor.getString(1), cursor.getString(2)));
-            }
-        }
-
-        files = new FileWriter(ZimFileSelectActivity.this, files).getDataModelList();
-
-        for (int i = 0; i < files.size(); i++) {
-
-            if (!new File(files.get(i).getPath()).exists()) {
-                Log.e("kiwix", "File removed: " + files.get(i).getTitle());
-                files.remove(i);
-            }
-        }
-
-        files = sortDataModel(files);
-        mFiles = files;
-
-        return new RescanDataAdapter(ZimFileSelectActivity.this, 0, mFiles);
-    }
-
-    // Connect to the MediaScannerConnection service and scan all the files, that are returned to us by
-    // our MediaStore query. The file will ideally get removed from the MediaStore,
-    // if the scan resturns null and our CursorAdapter will update.
-    private void removeNonExistentFiles(Cursor cursor) {
-
-        ArrayList<String> files = new ArrayList<String>();
-
-        // Iterate trough the data from our curser and add every file path column to an ArrayList
-        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-            files.add(cursor.getString(2));
-        }
-        updateMediaStore(files);
-
-    }
-
-    // Add new files to the MediaStore
-    private void addDataToMediaStore(ArrayList<DataModel> files) {
-
-        ArrayList<String> paths = new ArrayList<String>();
-
-        for (DataModel file : files) {
-            paths.add(file.getPath());
-        }
-        updateMediaStore(paths);
-    }
-
-    private void updateMediaStore(ArrayList<String> files) {
-
-        // Abort endless loops. Let this update process only run on rescan.
-        if (!mNeedsUpdate) {
-            return;
-        }
-
-        Log.i("kiwix", "Updating MediaStore");
-
-        // Scan every file (and delete it from the MediaStore, if it does not exist)
-        MediaScannerConnection.scanFile(
-                ZimFileSelectActivity.this,
-                files.toArray(new String[files.size()]),
-                null,
-                new MediaScannerConnection.OnScanCompletedListener() {
-                    @Override
-                    public void onScanCompleted(String path, Uri uri) {
-
-                    }
-                });
-
-        mNeedsUpdate = false;
-    }
-
-    public ArrayList<DataModel> sortDataModel(ArrayList<DataModel> data) {
-
-        // Sorting the data in alphabetical order
-        Collections.sort(data, new Comparator<DataModel>() {
-            @Override
-            public int compare(DataModel a, DataModel b) {
-                return a.getTitle().compareToIgnoreCase(b.getTitle());
-            }
-        });
-
-        return data;
     }
 
     @Override
@@ -320,7 +159,6 @@ public class ZimFileSelectActivity extends FragmentActivity
 
                 // Make sure, that we set mNeedsUpdate to true and to false, after the MediaStore has been
                 // updated. Otherwise it will result in a endless loop.
-                mNeedsUpdate = true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -349,193 +187,75 @@ public class ZimFileSelectActivity extends FragmentActivity
         finishResult(file);
     }
 
-    // This items class stores the Data for the ArrayAdapter.
-    // We Have to implement Parcelable, so we can store ArrayLists with this generic type in the Bundle
-    // of onSaveInstanceState() and retrieve it later on in onRestoreInstanceState()
-    public static class DataModel implements Parcelable {
+    // Query through the MediaStore
+    protected void startQuery() {
 
-        // Interface that must be implemented and provided as a public CREATOR field.
-        // It generates instances of our Parcelable class from a Parcel.
-        public Parcelable.Creator<DataModel> CREATOR = new Parcelable.Creator<DataModel>() {
+        // Defines a list of columns to retrieve from the Cursor and load into an output row
+        String[] mZimListColumns = {MediaStore.Files.FileColumns.TITLE, MediaStore.Files.FileColumns.DATA};
 
-            @Override
-            public DataModel createFromParcel(Parcel source) {
-                return new DataModel(source);
-            }
+        // Defines a list of View IDs that will receive the Cursor columns for each row
+        int[] mZimListItems = {android.R.id.text1, android.R.id.text2};
 
-            @Override
-            public boolean equals(Object o) {
-                return super.equals(o);
-            }
+        mCursorAdapter = new SimpleCursorAdapter(
+                // The Context object
+                ZimFileSelectActivity.this,
+                // A layout in XML for one row in the ListView
+                android.R.layout.simple_list_item_2,
+                // The cursor, swapped later by cursorloader
+                null,
+                // A string array of column names in the cursor
+                mZimListColumns,
+                // An integer array of view IDs in the row layout
+                mZimListItems,
+                // Flags for the Adapter
+                Adapter.NO_SELECTION);
 
-            @Override
-            public int hashCode() {
-                return super.hashCode();
-            }
+        mZimFileList.setOnItemClickListener(this);
 
-            @Override
-            public DataModel[] newArray(int size) {
-                return new DataModel[size];
-            }
-        };
-
-        private String mTitle;
-
-        private String mPath;
-
-        public DataModel(String title, String path) {
-            mTitle = title;
-            mPath = path;
-        }
-
-        // This constructor will be called when this class is generated by a Parcel.
-        // We have to read the previously written Data in this Parcel.
-        public DataModel(Parcel parcel) {
-            String[] data = new String[2];
-            parcel.readStringArray(data);
-            mTitle = data[0];
-            mTitle = data[1];
-        }
-
-        public String getTitle() {
-            return mTitle;
-        }
-
-        public String getPath() {
-            return mPath;
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            // Write the data to the Parcel, so we can restore this Data later on.
-            // It will be restored by the DataModel(Parcel parcel) constructor.
-            dest.writeArray(new String[]{mTitle, mPath});
-        }
-
-        // Override equals(Object) so we can compare objects. Specifically, so List#contains() works.
-        @Override
-        public boolean equals(Object object) {
-            boolean isEqual = false;
-
-            if (object != null && object instanceof DataModel) {
-                isEqual = (this.mPath.equals(((DataModel) object).mPath));
-            }
-
-            return isEqual;
-        }
+        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
-    // This AsyncTask will scan the file system for files with the Extension ".zim" or ".zimaa"
-    private class RescanFileSystem extends AsyncTask<Void, Void, Void> {
+    // Get the data of our cursor and wrap it all in our ArrayAdapter.
+    // We are doing this because the CursorAdapter does not allow us do remove rows from its dataset.
+    private RescanDataAdapter buildArrayAdapter(Cursor cursor) {
 
-        @Override
-        protected void onPreExecute() {
+        ArrayList<DataModel> files = new ArrayList<DataModel>();
 
-            mProgressBarMessage.setVisibility(View.VISIBLE);
-            mProgressBar.setVisibility(View.VISIBLE);
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
 
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            mFiles = FindFiles();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            mRescanAdapter = new RescanDataAdapter(ZimFileSelectActivity.this, 0, mFiles);
-
-            mZimFileList.setAdapter(mRescanAdapter);
-
-            mProgressBarMessage.setVisibility(View.GONE);
-            mProgressBar.setVisibility(View.GONE);
-
-            new FileWriter(ZimFileSelectActivity.this).saveArray(mFiles);
-
-            super.onPostExecute(result);
-        }
-
-        // Scan through the file system and find all the files with .zim and .zimaa extensions
-        private ArrayList<DataModel> FindFiles() {
-            String directory = new File(
-                    Environment.getExternalStorageDirectory().getAbsolutePath()).toString();
-            final List<String> fileList = new ArrayList<String>();
-            FilenameFilter[] filter = new FilenameFilter[zimFiles.length];
-
-            int i = 0;
-            for (final String extension : zimFiles) {
-                filter[i] = new FilenameFilter() {
-                    public boolean accept(File dir, String name) {
-                        return name.endsWith("." + extension);
-                    }
-                };
-                i++;
+            if (new File(cursor.getString(2)).exists()) {
+                files.add(new DataModel(cursor.getString(1), cursor.getString(2)));
             }
+        }
 
-            File[] foundFiles = listFilesAsArray(new File(directory), filter, -1);
-            for (File f : foundFiles) {
-                fileList.add(f.getAbsolutePath());
+        files = new FileWriter(ZimFileSelectActivity.this, files).getDataModelList();
+
+        for (int i = 0; i < files.size(); i++) {
+
+            if (!new File(files.get(i).getPath()).exists()) {
+                Log.e("kiwix", "File removed: " + files.get(i).getTitle());
+                files.remove(i);
             }
-
-            return createDataForAdapter(fileList);
         }
 
-        private Collection<File> listFiles(File directory, FilenameFilter[] filter,
-                int recurse) {
+        files = new FileSearch().sortDataModel(files);
+        mFiles = files;
 
-            Vector<File> files = new Vector<File>();
+        return new RescanDataAdapter(ZimFileSelectActivity.this, 0, mFiles);
+    }
 
-            File[] entries = directory.listFiles();
+    // Get the selected file and return the result to the Activity, that called this Activity
+    private void finishResult(String path) {
 
-            if (entries != null) {
-                for (File entry : entries) {
-                    for (FilenameFilter filefilter : filter) {
-                        if (filter == null || filefilter.accept(directory, entry.getName())) {
-                            files.add(entry);
-                        }
-                    }
-                    if ((recurse <= -1) || (recurse > 0 && entry.isDirectory())) {
-                        recurse--;
-                        files.addAll(listFiles(entry, filter, recurse));
-                        recurse++;
-                    }
-                }
-            }
-            return files;
-        }
-
-        public File[] listFilesAsArray(File directory, FilenameFilter[] filter, int recurse) {
-            Collection<File> files = listFiles(directory, filter, recurse);
-
-            File[] arr = new File[files.size()];
-            return files.toArray(arr);
-        }
-
-        // Create an ArrayList with our DataModel
-        private ArrayList<DataModel> createDataForAdapter(List<String> list) {
-
-            ArrayList<DataModel> data = new ArrayList<DataModel>();
-            for (String file : list) {
-
-                data.add(new DataModel(getTitleFromFilePath(file), file));
-            }
-
-            data = sortDataModel(data);
-
-            return data;
-        }
-
-        // Remove the file path and the extension and return a file name for the given file path
-        private String getTitleFromFilePath(String path) {
-            return new File(path).getName().replaceFirst("[.][^.]+$", "");
+        if (path != null) {
+            File file = new File(path);
+            Uri uri = Uri.fromFile(file);
+            Log.i("kiwix", "Opening " + uri);
+            setResult(RESULT_OK, new Intent().setData(uri));
+            finish();
+        } else {
+            setResult(RESULT_CANCELED);
+            finish();
         }
     }
 
@@ -575,5 +295,40 @@ public class ZimFileSelectActivity extends FragmentActivity
 
             TextView path;
         }
+    }
+
+    // This AsyncTask will scan the file system for files with the Extension ".zim" or ".zimaa"
+    private class RescanFileSystem extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+
+            mProgressBarMessage.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.VISIBLE);
+
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            mFiles = new FileSearch().findFiles();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            mRescanAdapter = new RescanDataAdapter(ZimFileSelectActivity.this, 0, mFiles);
+
+            mZimFileList.setAdapter(mRescanAdapter);
+
+            mProgressBarMessage.setVisibility(View.GONE);
+            mProgressBar.setVisibility(View.GONE);
+
+            new FileWriter(ZimFileSelectActivity.this).saveArray(mFiles);
+
+            super.onPostExecute(result);
+        }
+
     }
 }
