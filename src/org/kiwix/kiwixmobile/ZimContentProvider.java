@@ -66,6 +66,14 @@ public class ZimContentProvider extends ContentProvider {
 			return jniKiwix.getMainPage();
 		}			
 	}
+
+    public static String getId() {
+		if (jniKiwix==null || zimFileName==null)
+			return null;
+		else {
+			return jniKiwix.getId();
+		}			
+	}
 	
 	public static boolean searchSuggestions(String prefix, int count) {
 		if (jniKiwix==null || zimFileName==null)
