@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kiwix</string>
+    <string name="menu_openfile">Otevřít soubor...</string>
+    <string name="menu_help">Nápověda</string>
+    <string name="menu_home">Domů</string>
+    <string name="menu_forward">Vpřed</string>
+    <string name="menu_back">Zpět</string>
+    <string name="menu_settings">Možnosti</string>
+    <string name="menu_search">Vyhledávání</string>
+    <string name="menu_searchintext">Najít v textu</string>
+    <string name="menu_randomarticle">Náhodný článek</string>
+    <string name="menu_fullscreen">Celá obrazovka</string>
+    <string name="menu_exitfullscreen">Ukončit celoobrazovkový režim</string>
+    <string name="button_backtotop">Back to Top</string>
+    <string name="search_label">Vyhledávání</string>
+    <string name="articlesearch_hint">Pro vyhledání článků pište</string>
+    <string name="choose_file">Vyberte obsahový soubor ZIM (*.zim)</string>
+    <string name="error_nozimfilesfound">Na zařízení nenalezeny soubory ZIM.\nPro vodítka, jak nahrávat do Kiwixu obsah, se podívejte na stránku nápovědy.\nPokud jste na své zařízení nebo externí paměť opravdu nahráli soubor ZIM, můžete zkusit načtení za minutu a nebo po restartu zařízení.</string>
+    <string name="error_filenotfound">Chyba: Nelze najít vybraný soubor ZIM.</string>
+    <string name="error_fileinvalid">Chyba: Vybraný soubor není platným souborem ZIM.</string>
+    <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
+    <string name="error_articleurlnotfound">Chyba: Načtení článku (Url: %1$s ) se nezdařilo.</string>
+    <string name="pref_display_title">Zobrazení</string>
+    <string name="pref_zoom_title">Úroveň zvětšení</string>
+    <string name="pref_zoom_dialogtitle">Úroveň zvětšení</string>
+    <string-array
+        name="pref_zoom_entries">
+        <item>Automatic</item>
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+    <string name="pref_info_title">Information</string>
+    <string name="pref_info_version">Version</string>
+    <string name="menu_exit">Konec</string>
+    <string name="pref_zoom_enable">Ovládání přiblížení</string>
+    <string name="pref_zoom_enable_summary">Zobrazit tlačítko přiblížení v pravém dolním rohu obrazovky</string>
+    <string name="pref_nightmode">Noční režim</string>
+    <string name="pref_nightmode_summary">Zobrazuje stránky v obrácených barvách.</string>
+    <string name="pref_backtotop">Back to Top</string>
+    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="rescan_fs">Rescan SD card</string>
+    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
+</resources>

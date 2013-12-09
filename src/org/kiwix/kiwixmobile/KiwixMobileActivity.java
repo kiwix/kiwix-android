@@ -1,7 +1,5 @@
 package org.kiwix.kiwixmobile;
 
-
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +17,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.InputType;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -32,6 +31,7 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnTouchListener;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -43,19 +43,23 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
-
+import android.view.View.OnClickListener;
+import android.view.animation.AnimationUtils;
 
 public class KiwixMobileActivity extends Activity {
     /** Called when the activity is first created. */
 
-	private WebView webView;
+        private SharedPreferences mySharedPreferences;
+	private KiwixWebView webView;
 	private ArrayAdapter<String> adapter;
 	protected boolean requestClearHistoryAfterLoad;
-	protected boolean requestShowAllMenuItems;
+	protected boolean requestInitAllMenuItems;
 	protected boolean NightMode;
 	protected int requestWebReloadOnFinished;
 	private static final int ZIMFILESELECT_REQUEST_CODE = 1234;
@@ -64,8 +68,12 @@ public class KiwixMobileActivity extends Activity {
 	private AutoCompleteTextView articleSearchtextView;
 	private LinearLayout articleSearchBar;
 	private Menu menu;
+        //Tracks the user preference of of showing the button or not
+        private boolean isButtonEnabled = true;
+        private boolean isFullscreenOpened;
+	private ImageButton exitFullscreenButton;
 
-	
+
 	public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 		private ArrayList<String> mData;
 
@@ -94,7 +102,9 @@ public class KiwixMobileActivity extends Activity {
 					if(constraint != null) {
 						// A class that queries a web API, parses the data and returns an ArrayList<Style>
 						try {
-							ZimContentProvider.searchSuggestions(constraint.toString(), 200);
+						        String prefix = constraint.toString();
+
+							ZimContentProvider.searchSuggestions(prefix, 200);
 							String suggestion;
 
 							data.clear();
@@ -128,20 +138,39 @@ public class KiwixMobileActivity extends Activity {
     @SuppressLint("SetJavaScriptEnabled")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         requestClearHistoryAfterLoad=false;
         requestWebReloadOnFinished = 0;
-        requestShowAllMenuItems = false;
+        requestInitAllMenuItems = false;
         NightMode = false;
+        isFullscreenOpened = false;
 
 
         this.requestWindowFeature(Window.FEATURE_PROGRESS);
         this.setProgressBarVisibility(true);
 
         setContentView(R.layout.main);
-        webView = (WebView) findViewById(R.id.webview);
+        //Locate and hook up the Back to top button
+        findViewById(R.id.button_backtotop).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                webView.pageUp(true);
+            }
+        });
+        webView =(KiwixWebView) findViewById(R.id.webview);
         articleSearchBar = (LinearLayout) findViewById(R.id.articleSearchBar);
         articleSearchtextView = (AutoCompleteTextView) findViewById(R.id.articleSearchTextView);
+
+        exitFullscreenButton=(ImageButton)findViewById(R.id.FullscreenControlButton);
+        exitFullscreenButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeFullScreen();
+
+
+            }
+        });
 
         final Drawable clearIcon = getResources().getDrawable(R.drawable.navigation_cancel);
         final Drawable searchIcon = getResources().getDrawable(R.drawable.action_search);
@@ -182,14 +211,16 @@ public class KiwixMobileActivity extends Activity {
             }
         });
         // Create the adapter and set it to the AutoCompleteTextView
-        adapter = new AutoCompleteAdapter(this, android.R.layout.simple_list_item_1);
-
+	adapter = new AutoCompleteAdapter(this, android.R.layout.simple_list_item_1);
         articleSearchtextView.setAdapter(adapter);
+
         articleSearchtextView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				articleSearchtextView.setText(parent.getItemAtPosition(position).toString());
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(),0);
 				openArticleFromSearch();
 			}
 		});
@@ -201,7 +232,7 @@ public class KiwixMobileActivity extends Activity {
             		//Do Stuff
             		return openArticleFromSearch();
          }});
-
+	articleSearchtextView.setInputType(InputType.TYPE_CLASS_TEXT);
 
         // js includes will not happen unless we enable JS
         webView.getSettings().setJavaScriptEnabled(true);
@@ -279,7 +310,38 @@ public class KiwixMobileActivity extends Activity {
         	   }
 
         	public void onPageFinished(WebView view, String url) {
-        		String title = getResources().getString(R.string.app_name);
+        		
+                       //register a {@KiwixWebView.OnPageChangeListener} to get changes in scroll position
+                       webView.registerOnPageChangedListener(new KiwixWebView.OnPageChangeListener() {
+                           @Override
+                           public void onPageChanged(int page, int maxPages) {
+                               if (isButtonEnabled)
+                               {
+                                   //Don't go on the values these are observed to be working :p
+                                   //Simple logic if scrolled to more than the threshold then show the button.
+                                   if (page > 0)
+                                   {
+                                       if (KiwixMobileActivity.this.findViewById(R.id.button_backtotop).getVisibility() == View.INVISIBLE)
+                                       {
+                                           KiwixMobileActivity.this.findViewById(R.id.button_backtotop).setVisibility(View.VISIBLE);
+                                           //U said you wanted fancy huh,then this might just do it.
+                                           KiwixMobileActivity.this.findViewById(R.id.button_backtotop).startAnimation(AnimationUtils.loadAnimation(KiwixMobileActivity.this,android.R.anim.fade_in));
+                                       }
+                                   }
+                                   else
+                                   {
+                                       if (KiwixMobileActivity.this.findViewById(R.id.button_backtotop).getVisibility() == View.VISIBLE)
+                                       {
+                                           KiwixMobileActivity.this.findViewById(R.id.button_backtotop).setVisibility(View.INVISIBLE);
+                                           //U said you wanted fancy huh,then this might just do it.
+                                           KiwixMobileActivity.this.findViewById(R.id.button_backtotop).startAnimation(AnimationUtils.loadAnimation(KiwixMobileActivity.this,android.R.anim.fade_out));
+                                       }
+                                   }
+                               }
+                           }
+                        });
+
+                        String title = getResources().getString(R.string.app_name);
         		if (webView.getTitle()!=null && !webView.getTitle().isEmpty())
         			title = webView.getTitle();
         		getActionBar().setTitle(title);
@@ -299,7 +361,7 @@ public class KiwixMobileActivity extends Activity {
         // this actually has any effect)
         webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         if (getIntent().getData()!=null) {        	
-        	String filePath = getIntent().getData().getEncodedPath();
+        	String filePath = getIntent().getData().getPath();
             Log.d("kiwix", " Kiwix started from a filemanager. Intent filePath: "+filePath+" -> open this zimfile and load main page");
             openZimFile(new File(filePath), false);
 
@@ -341,11 +403,11 @@ public class KiwixMobileActivity extends Activity {
     }
 
     private void loadPref(){
-    	  SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+    	  mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     	  String pref_zoom = mySharedPreferences.getString("pref_zoom", "automatic");
     	  Boolean pref_zoom_enabled = mySharedPreferences.getBoolean("pref_zoom_enabled", false);
     	  Boolean pref_nightmode= mySharedPreferences.getBoolean("pref_nightmode", false);
-
+          isButtonEnabled = mySharedPreferences.getBoolean("pref_top_button",isButtonEnabled);
     	  if (pref_zoom.equals("automatic")) {
       		 setDefaultZoom();
     	  } else if (pref_zoom.equals("medium")) {
@@ -360,14 +422,25 @@ public class KiwixMobileActivity extends Activity {
     	 }
 
          //Pinch to zoom
+	 //This seems to suffer from a bug in Android. If you set to "false" this only apply after a restart of the app.
     	 Log.d("kiwix","pref_zoom_enabled value ("+pref_zoom_enabled+")");
-    	 webView.getSettings().setBuiltInZoomControls(pref_zoom_enabled);
+	 webView.getSettings().setBuiltInZoomControls(true);
+	 webView.getSettings().setDisplayZoomControls(pref_zoom_enabled);
 
-         //Night mode status
-    	 Log.d("kiwix","pref_nightmode value ("+pref_nightmode+")");
-    	 if(NightMode!=pref_nightmode)
-    		 ToggleNightMode();
-    	 
+        Log.d("kiwix","pref_top_button value ("+pref_zoom_enabled+")");
+        //DONT register a onSharedPrefenceChangedListener as the activity is haulted when on
+        //PreferenceFrag. so it might cause issues
+        if (!isButtonEnabled)
+        {
+            if (findViewById(R.id.button_backtotop).getVisibility() == View.VISIBLE)
+                findViewById(R.id.button_backtotop).setVisibility(View.INVISIBLE);
+        }
+	
+        //Night mode status
+	Log.d("kiwix","pref_nightmode value ("+pref_nightmode+")");
+	if(NightMode!=pref_nightmode)
+	    ToggleNightMode();
+	
     }
     
 
@@ -401,12 +474,10 @@ public class KiwixMobileActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-        
+        getMenuInflater().inflate(R.menu.main, menu);
         this.menu = menu;
-        if (requestShowAllMenuItems) {
-        	showAllMenuItems();
+        if (requestInitAllMenuItems) {
+	    initAllMenuItems();
         }
         return true;
     }
@@ -437,6 +508,7 @@ public class KiwixMobileActivity extends Activity {
                 break;
             case R.id.menu_back:
             	if(webView.canGoBack() == true){
+		    menu.findItem(R.id.menu_forward).setVisible(true);
                     webView.goBack();
                 }
                 break;
@@ -460,6 +532,14 @@ public class KiwixMobileActivity extends Activity {
             	Intent i = new Intent(this, KiwixSettings.class);
                 startActivityForResult(i, PREFERENCES_REQUEST_CODE);
             	break;
+
+            case R.id.menu_fullscreen:
+                if(isFullscreenOpened){
+                    closeFullScreen();
+                }else{
+                    openFullScreen();
+                }
+                break;
         }
         
         return super.onOptionsItemSelected(item);
@@ -485,15 +565,22 @@ public class KiwixMobileActivity extends Activity {
 	}
 
 
+    private void showSearchBar() {
+	showSearchBar(true);
+    }
 
-
-	private void showSearchBar() {
+	private void showSearchBar(Boolean focus) {
 		articleSearchBar.setVisibility(View.VISIBLE);
-		articleSearchtextView.requestFocus();
-		//Move cursor to end
-		articleSearchtextView.setSelection(articleSearchtextView.getText().length());
-		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);		
+
+		if (focus) {
+		    articleSearchtextView.requestFocus();
+		    
+		    //Move cursor to end
+		    articleSearchtextView.setSelection(articleSearchtextView.getText().length());
+		    
+		    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+		}
 	}
 
    
@@ -555,13 +642,14 @@ public class KiwixMobileActivity extends Activity {
 				if (clearHistory)
 					requestClearHistoryAfterLoad=true;
 				if (menu!=null) {
-					showAllMenuItems();
+					initAllMenuItems();
 				} else {
 					// Menu may not be initialized yet. In this case
 					// signal to menu create to show  
-					requestShowAllMenuItems = true;
+					requestInitAllMenuItems = true;
 				}
 				openMainPage();
+				showSearchBar(false);
 				return true;
 			} else {
 				Toast.makeText(this, getResources().getString(R.string.error_fileinvalid), Toast.LENGTH_LONG).show();
@@ -573,14 +661,15 @@ public class KiwixMobileActivity extends Activity {
 		return false;
 	}
 
-	private void showAllMenuItems() {
+	private void initAllMenuItems() {
+        menu.findItem(R.id.menu_fullscreen).setVisible(true);
+		menu.findItem(R.id.menu_back).setVisible(true);
+		menu.findItem(R.id.menu_forward).setVisible(false);
 		menu.findItem(R.id.menu_home).setVisible(true);
 		menu.findItem(R.id.menu_randomarticle).setVisible(true);
+		menu.findItem(R.id.menu_searchintext).setVisible(true);
 		menu.findItem(R.id.menu_search).setVisible(true);
 	}
-
-    
-
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -604,20 +693,14 @@ public class KiwixMobileActivity extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
-
-
-
-	
-
-
 	private boolean openArticle(String articleUrl) {
 		Log.d("kiwix", articleSearchtextView+" onEditorAction. TextView: "+articleSearchtextView.getText()+ " articleUrl: "+articleUrl);
 
 		if (articleUrl!=null) {
-			hideSearchBar();
+		    //			hideSearchBar();
 			webView.loadUrl(Uri.parse(ZimContentProvider.CONTENT_URI
 		            +articleUrl).toString());
-			
+
 			return true;
 		} else {
 			String errorString = String.format(getResources().getString(R.string.error_articlenotfound), articleSearchtextView.getText().toString());
@@ -626,6 +709,28 @@ public class KiwixMobileActivity extends Activity {
 			return true;
 		}
 	}
+
+    private void openFullScreen(){
+        getActionBar().hide();
+        exitFullscreenButton.setVisibility(0);
+        menu.findItem(R.id.menu_fullscreen).setTitle(getResources().getString(R.string.menu_exitfullscreen));
+        int fullScreenFlag=WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        int classicScreenFlag=WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
+        getWindow().addFlags(fullScreenFlag);
+        getWindow().clearFlags(classicScreenFlag);
+        isFullscreenOpened=true;
+    }
+
+    private void closeFullScreen(){
+        getActionBar().show();
+        menu.findItem(R.id.menu_fullscreen).setTitle(getResources().getString(R.string.menu_fullscreen));
+        exitFullscreenButton.setVisibility(4);
+        int fullScreenFlag=WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        int classicScreenFlag=WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
+        getWindow().clearFlags(fullScreenFlag);
+        getWindow().addFlags(classicScreenFlag);
+        isFullscreenOpened=false;
+    }
 	
 	private boolean openArticleFromSearch() {
 		Log.d("kiwix", "openArticleFromSearch: "+articleSearchtextView.getText());

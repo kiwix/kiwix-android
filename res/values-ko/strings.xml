@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kiwix</string>
+    <string name="menu_openfile">파일 열기...</string>
+    <string name="menu_help">도움말</string>
+    <string name="menu_home">처음으로</string>
+    <string name="menu_forward">앞으로</string>
+    <string name="menu_back">뒤로</string>
+    <string name="menu_settings">환경 설정</string>
+    <string name="menu_search">찾기</string>
+    <string name="menu_searchintext">본문에서 찾기</string>
+    <string name="menu_randomarticle">임의 문서</string>
+    <string name="menu_fullscreen">전체 화면</string>
+    <string name="menu_exitfullscreen">전체 화면 모드에서 나가기</string>
+    <string name="button_backtotop">Back to Top</string>
+    <string name="search_label">찾기</string>
+    <string name="articlesearch_hint">문서를 찾아보는 종류</string>
+    <string name="choose_file">ZIM 콘텐츠 파일 (*.zim) 선택</string>
+    <string name="error_nozimfilesfound">장치에서 ZIM 파일이 발견되지 않았습니다.\n도움말에서 콘텐츠를 어떻게 키윅스로 불러오는지 알아보세요.\n만약 파일을 외장 디스크나 기기에 넣었다면, 몇분 후 재시도하거나 재부팅해 보세요.</string>
+    <string name="error_filenotfound">오류: 선택된 ZIM 파일을 찾을 수 없습니다</string>
+    <string name="error_fileinvalid">에러: 선택한 파일은 올바른 ZIM 파일이 아닙니다.</string>
+    <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
+    <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
+    <string name="pref_display_title">표시</string>
+    <string name="pref_zoom_title">확대/축소 수준</string>
+    <string name="pref_zoom_dialogtitle">확대/축소 수준</string>
+    <string-array
+        name="pref_zoom_entries">
+        <item>Automatic</item>
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+    <string name="pref_info_title">Information</string>
+    <string name="pref_info_version">Version</string>
+    <string name="menu_exit">끝내기</string>
+    <string name="pref_zoom_enable">Zoom controls</string>
+    <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
+    <string name="pref_nightmode">야간 모드</string>
+    <string name="pref_nightmode_summary">Show articles with reverted colors</string>
+    <string name="pref_backtotop">Back to Top</string>
+    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="rescan_fs">Rescan SD card</string>
+    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
+</resources>

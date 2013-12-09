@@ -1,29 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Kiwix</string>
-    <string name="menu_openfile">Charger un fichier</string>
+    <string name="menu_openfile">Ouvrir un fichier...</string>
     <string name="menu_help">Aide</string>
-    <string name="menu_home">Démarrage</string>
+    <string name="menu_home">Page d\'accueil</string>
     <string name="menu_forward">Suivante</string>
     <string name="menu_back">Précédente</string>
-    <string name="menu_search">Recherche</string>
-    <string name="menu_searchintext">Trouver dans la page</string>
+    <string name="menu_settings">Options</string>
+    <string name="menu_search">Rechercher</string>
+    <string name="menu_searchintext">Rechercher dans le texte</string>
     <string name="menu_randomarticle">Article au hasard</string>
-    <string name="menu_settings">Paramètres</string>
+    <string name="menu_fullscreen">Plein écran</string>
+    <string name="menu_exitfullscreen">Quitter le mode plein écran</string>
+    <string name="button_backtotop">Back to Top</string>
     <string name="search_label">Rechercher</string>
-    <string name="articlesearch_hint">Tapez ici votre recherche</string>
+    <string name="articlesearch_hint">Taper pour rechercher des articles</string>
     <string name="choose_file">Sélectionner un fichier de contenu ZIM (*.zim)</string>
-    <string name="error_nozimfilesfound">Aucun fichier ZIM trouvé sur l\'appareil.\nMerci de consulter l\'aide pour plus d\'informations sur la manière de charger des contenus dans Kiwix.\nSi vous avez bien déposé un fichier ZIM sur l\'appareil (ou le stockage externe), vous devriez réessayer dans une minute ou redémarrer l\'appareil.</string>
-    <string name="error_filenotfound">Erreur: le fichier ZIM sélectionné n\'a pas pu être chargé.</string>
-    <string name="error_fileinvalid">Erreur: le fichier sélectionné n\'est pas un fichier ZIM valide.</string>
-    <string name="error_articlenotfound">Erreur: le chargement de l\'article \"%1$s\" a échoué.</string>
-    <string name="error_articleurlnotfound">Erreur: le chargement de l\'article (Url: %1$s) a échoué.</string>
+    <string name="error_nozimfilesfound">Aucun fichier ZIM n’a été trouvé sur votre machine.\nJetez un coup d’œil à la page d’aide pour avoir des instructions sur la manière de charger du contenu dans Kiwix.\nSi vous avez mis un fichier ZIM sur votre stockage interne ou externe, vous pouvez réessayer dans une minute ou redémarrer votre appareil.</string>
+    <string name="error_filenotfound">Erreur : Le fichier ZIM sélectionné est introuvable.</string>
+    <string name="error_fileinvalid">Erreur : Le fichier sélectionné n’est pas un fichier ZIM valide.</string>
+    <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
+    <string name="error_articleurlnotfound">Erreur : Le chargement de l’article (Url: %1$s) a échoué.</string>
     <string name="pref_display_title">Affichage</string>
     <string name="pref_zoom_title">Niveau de zoom</string>
     <string name="pref_zoom_dialogtitle">Niveau de zoom</string>
-    <string name="pref_nightmode">Affichage nocturne</string>
-    <string name="pref_nightmode_summary">Afficher les articles avec des couleurs inversées</string>
-    <string name="pref_zoom_enable">Bouton de zoom</string>
-    <string name="pref_zoom_enable_summary">Affiche un bouton de zoom dans le coin en bas à droite de l\'écran</string>
+    <string-array
+        name="pref_zoom_entries">
+        <item>Automatic</item>
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+    <string name="pref_info_title">Information</string>
+    <string name="pref_info_version">Version</string>
     <string name="menu_exit">Quitter</string>
+    <string name="pref_zoom_enable">Contrôles du zoom</string>
+    <string name="pref_zoom_enable_summary">Afficher un bouton de zoom dans le coin inférieur droit de l’écran</string>
+    <string name="pref_nightmode">Mode nocturne</string>
+    <string name="pref_nightmode_summary">Afficher les articles en couleurs inversées</string>
+    <string name="pref_backtotop">Back to Top</string>
+    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="rescan_fs">Rescan SD card</string>
+    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
 </resources>

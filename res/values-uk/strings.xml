@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kiwix</string>
+    <string name="menu_openfile">Відкрити файл ...</string>
+    <string name="menu_help">Довідка</string>
+    <string name="menu_home">Головна</string>
+    <string name="menu_forward">Вперед</string>
+    <string name="menu_back">Назад</string>
+    <string name="menu_settings">Уподобання</string>
+    <string name="menu_search">Знайти</string>
+    <string name="menu_searchintext">Знайти в тексті</string>
+    <string name="menu_randomarticle">Випадкова стаття</string>
+    <string name="menu_fullscreen">Повноекранний режим</string>
+    <string name="menu_exitfullscreen">Вийти з повноекранного режиму</string>
+    <string name="button_backtotop">Back to Top</string>
+    <string name="search_label">Знайти</string>
+    <string name="articlesearch_hint">Наберіть для пошуку статей</string>
+    <string name="choose_file">Виберіть файл вмісту ZIM (*.zim)</string>
+    <string name="error_nozimfilesfound">Файлів ZIM не знайдено на вашому пристрої.\nПогляньте на сторінку допомогти, щоб отримати вказівки, як завантажувати вміст у Kiwix.\nЯкщо ви поклали файл ZIM на ваш пристрій/зовнішній носій, то можете повторити за хвилину або перезапустити пристрій.</string>
+    <string name="error_filenotfound">Помилка: вибраний ZIM файл неможливо знайти.</string>
+    <string name="error_fileinvalid">Помилка: вибраний файл не є вірним файлом ZIM.</string>
+    <string name="error_articlenotfound">Помилка: завантаження статті \"%1$s\" не вдалося.</string>
+    <string name="error_articleurlnotfound">Помилка: завантаження статті (Url: %1$s) не вдалося.</string>
+    <string name="pref_display_title">Показати</string>
+    <string name="pref_zoom_title">Рівень масштабування</string>
+    <string name="pref_zoom_dialogtitle">Рівень масштабування</string>
+    <string-array
+        name="pref_zoom_entries">
+        <item>Automatic</item>
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+    <string name="pref_info_title">Інформація</string>
+    <string name="pref_info_version">Версія</string>
+    <string name="menu_exit">Вийти</string>
+    <string name="pref_zoom_enable">Управління масштабом</string>
+    <string name="pref_zoom_enable_summary">Відображати кнопку масштаб у нижньому правому куті екрану</string>
+    <string name="pref_nightmode">Нічний режим</string>
+    <string name="pref_nightmode_summary">Показати статті з повернутими кольорами</string>
+    <string name="pref_backtotop">Back to Top</string>
+    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="rescan_fs">Rescan SD card</string>
+    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
+</resources>

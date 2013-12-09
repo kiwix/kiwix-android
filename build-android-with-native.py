@@ -23,6 +23,7 @@ USAGE = '''Usage:  %s [--option]
 
     --toolchain     Creates the toolchain
     --lzma          Compile liblzma
+    --icu           Compile libicu
     --zim           Compile libzim
     --kiwix         Compile libkiwix
     --strip         Strip libkiwix.so
@@ -42,8 +43,9 @@ def init_with_args(args):
         sys.exit(0)
 
     # default is executing all the steps
-    create_toolchain = compile_liblzma = compile_libzim = \
-        compile_libkiwix = strip_libkiwix = compile_apk = True
+    create_toolchain = compile_liblzma = compile_libicu = \
+        compile_libzim = compile_libkiwix = strip_libkiwix = \
+        compile_apk = True
     archs = ALL_ARCHS
 
     options = [a.lower() for a in args[1:]]
@@ -77,7 +79,7 @@ def init_with_args(args):
     if len(options):
         # we received options.
         # consider we only want the specified steps
-        create_toolchain = compile_liblzma = compile_libzim = \
+        create_toolchain = compile_liblzma = compile_libicu = compile_libzim = \
             compile_libkiwix = strip_libkiwix = compile_apk = False
 
         for option in options:
@@ -85,6 +87,8 @@ def init_with_args(args):
                 create_toolchain = True
             if 'lzma' in option:
                 compile_liblzma = True
+            if 'icu' in option:
+                compile_libicu = True
             if 'zim' in option:
                 compile_libzim = True
             if 'kiwix' in option:
@@ -94,7 +98,7 @@ def init_with_args(args):
             if 'apk' in option:
                 compile_apk = True
 
-    return (create_toolchain, compile_liblzma, compile_libzim,
+    return (create_toolchain, compile_liblzma, compile_libicu, compile_libzim,
             compile_libkiwix, strip_libkiwix, compile_apk, archs)
 
 # store the OS's environment PATH as we'll mess with it
@@ -120,8 +124,8 @@ UARCH = check_output(['uname', '-m']).strip()
 SYSTEMS = {'Linux': 'linux', 'Darwin': 'mac'}
 
 # find out what to execute based on command line arguments
-CREATE_TOOLCHAIN, COMPILE_LIBLZMA, COMPILE_LIBZIM, COMPILE_LIBKIWIX, \
-    STRIP_LIBKIWIX, COMPILE_APK, ARCHS = init_with_args(sys.argv)
+CREATE_TOOLCHAIN, COMPILE_LIBLZMA, COMPILE_LIBICU, COMPILE_LIBZIM, \
+    COMPILE_LIBKIWIX, STRIP_LIBKIWIX, COMPILE_APK, ARCHS = init_with_args(sys.argv)
 
 # compiler version to use
 # list of available toolchains in <NDK_PATH>/toolchains
@@ -156,6 +160,13 @@ LIBLZMA_SRC = os.path.join(os.path.dirname(CURRENT_PATH),
 # headers for liblzma
 LIBLZMA_INCLUDES = [os.path.join(LIBLZMA_SRC, 'src', 'liblzma', 'api')]
 
+# root folder for libicu
+LIBICU_SRC = os.path.join(os.path.dirname(CURRENT_PATH),
+                          'src', 'dependencies', 'icu', 'source')
+
+# headers for libicu
+LIBICU_INCLUDES = [os.path.join(LIBICU_SRC, 'i18n'), os.path.join(LIBICU_SRC, 'common')]
+
 # root folder for libzim
 LIBZIM_SRC = os.path.join(os.path.dirname(CURRENT_PATH),
                           'src', 'dependencies', 'zimlib-1.1')
@@ -177,13 +188,17 @@ LIBKIWIX_SRC = os.path.join(os.path.dirname(CURRENT_PATH),
                             'src', 'common')
 
 OPTIMIZATION_ENV = {'CXXFLAGS': ' -D__OPTIMIZE__ -fno-strict-aliasing '
-                                '-mfpu=vfp -mfloat-abi=softfp ',
+                                ' -DU_HAVE_NL_LANGINFO_CODESET=0 -DU_STATIC_IMPLEMENTATION -DU_HAVE_STD_STRING -DU_TIMEZONE=0',
                     'NDK_DEBUG': '0'}
 
 # list of path that should already be set
 REQUIRED_PATHS = (NDK_PATH, PLATFORM_PREFIX,
                   LIBLZMA_SRC, LIBZIM_SRC, LIBKIWIX_SRC)
 
+# list of paths for libicu
+ICU_TMP = PLATFORM_PREFIX + '/tmp/'
+ICU_TMP_HOST = ICU_TMP + 'host/'
+ICU_TMP_TARGET = ICU_TMP + 'target/'
 
 def fail_on_missing(path):
     ''' check existence of path and error msg + exit if it fails '''
@@ -220,13 +235,26 @@ def failed_on_step(error_msg):
 for path in REQUIRED_PATHS:
     fail_on_missing(path)
 
+# store where we are so we can go back
+    curdir = os.getcwd()
+
+# Prepare the libicu cross-compilation
+if COMPILE_LIBICU:
+    if (not os.path.exists(ICU_TMP)):
+        os.mkdir(ICU_TMP);
+    if (not os.path.exists(ICU_TMP_HOST)):
+        os.mkdir(ICU_TMP_HOST);
+    if (not os.path.exists(ICU_TMP_TARGET)):
+        os.mkdir(ICU_TMP_TARGET);
+    os.chdir(ICU_TMP_HOST)
+    syscall(LIBICU_SRC + '/configure', shell=True)
+    syscall('make', shell=True)
+    os.chdir(os.getcwd())
+
 for arch in ARCHS:
     # second name of the platform ; used as subfolder in platform/
     arch_full = ARCHS_FULL_NAMES.get(arch)
     arch_short = ARCHS_SHORT_NAMES.get(arch)
-
-    # store where we are so we can go back
-    curdir = os.getcwd()
 
     # platform contains the toolchain
     platform = os.path.join(PLATFORM_PREFIX, arch)
@@ -287,7 +315,7 @@ for arch in ARCHS:
                    'ANDROID_HOME': SDK_PATH}
     change_env(new_environ)
     change_env(OPTIMIZATION_ENV)
-
+ 
     # check that the path has been changed
     if not platform in os.environ.get('PATH'):
         failed_on_step('The PATH environment variable was not set properly.')
@@ -314,6 +342,28 @@ for arch in ARCHS:
         if not os.path.exists(os.path.join(platform, 'lib', 'liblzma.a')):
             failed_on_step('The liblzma.a archive file has not been created '
                            'and is not present.')
+
+    # compile libicu.a, libicu.so
+    os.chdir(ICU_TMP_TARGET)
+    configure_cmd = ( LIBICU_SRC + '/configure --host=%(arch)s --enable-static '
+                     '--prefix=%(platform)s --with-cross-build=%(icu)s  --disable-shared --enable-static '
+                     % {'arch': arch_full, 'platform': platform, 'icu': ICU_TMP_HOST})
+
+    if COMPILE_LIBICU:
+        # configure, compile, copy and clean libicu from official sources.
+        # even though we need only static, we conpile also shared so it
+        # switches the -fPIC properly.
+        syscall(configure_cmd, shell=True)
+        syscall('make clean', shell=True)
+        syscall('make VERBOSE=1', shell=True)
+        syscall('make install', shell=True)
+        syscall('make clean', shell=True)
+
+    # check that the step went well
+    if COMPILE_LIBICU or COMPILE_LIBKIWIX:
+        if not os.path.exists(os.path.join(platform, 'lib', 'libicui18n.a')):
+            failed_on_step('The libicu.a archive file has not been created for ' 
+                           + platform + ' and is not present.')
 
     # create libzim.a
     os.chdir(curdir)
@@ -353,6 +403,7 @@ for arch in ARCHS:
                                                 for src
                                                 in LIBZIM_SOURCE_FILES]),
                       'include_paths': ' -I'.join(LIBLZMA_INCLUDES
+                                                  + LIBICU_INCLUDES
                                                   + LIBZIM_INCLUDES
                                                   + platform_includes)})
     link_cmd = ('ar rvs libzim.a '
@@ -380,6 +431,7 @@ for arch in ARCHS:
     # create libkiwix.so
     os.chdir(curdir)
     compile_cmd = ('g++ -fPIC -c -B%(platform)s/sysroot '
+                   '-DU_HAVE_STD_STRING '
                    '-D_FILE_OFFSET_BITS=64 '
                    '-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE '
                    '-DANDROID_NDK '
@@ -392,6 +444,7 @@ for arch in ARCHS:
                       'gccver': COMPILER_VERSION,
                       'kwsrc': LIBKIWIX_SRC,
                       'include_paths': ' -I'.join(LIBLZMA_INCLUDES
+                                                  + LIBICU_INCLUDES
                                                   + LIBZIM_INCLUDES
                                                   + platform_includes
                                                   + [LIBKIWIX_SRC,
@@ -407,10 +460,17 @@ for arch in ARCHS:
                 'kiwix.o reader.o stringTools.o pathTools.o '
                 '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/crtbegin.o '
                 '%(platform)s/lib/libzim.a %(platform)s/lib/liblzma.a '
+#                '%(platform)s/lib/libicutu.a '
+#                '%(platform)s/lib/libicuio.a '
+                '%(platform)s/lib/libicuuc.a '
+#                '%(platform)s/lib/libicule.a '
+#                '%(platform)s/lib/libiculx.a '
+#                '%(platform)s/lib/libicui18n.a '
+                '%(platform)s/lib/libicudata.a '
                 '-L%(platform)s/%(arch_full)s/lib '
                 '%(NDK_PATH)s/sources/cxx-stl/gnu-libstdc++/%(gccver)s'
                 '/libs/%(arch_short)s/libgnustl_static.a '
-                '-llog -landroid -lstdc++ -lc -ldl '
+                '-llog -landroid -lstdc++ -lc -lm -ldl '
                 '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/libgcc.a '
                 '-o %(curdir)s/libs/%(arch_short)s/libkiwix.so'
                 % {'kwsrc': LIBKIWIX_SRC,

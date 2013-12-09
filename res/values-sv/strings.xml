@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kiwix</string>
+    <string name="menu_openfile">Öppna fil...</string>
+    <string name="menu_help">Hjälp</string>
+    <string name="menu_home">Hem</string>
+    <string name="menu_forward">Framåt</string>
+    <string name="menu_back">Tillbaka</string>
+    <string name="menu_settings">Inställningar</string>
+    <string name="menu_search">Sök</string>
+    <string name="menu_searchintext">Hitta i text</string>
+    <string name="menu_randomarticle">Slumpmässig artikel</string>
+    <string name="menu_fullscreen">Helskärm</string>
+    <string name="menu_exitfullscreen">Avsluta helskärmsläge</string>
+    <string name="button_backtotop">Back to Top</string>
+    <string name="search_label">Sök</string>
+    <string name="articlesearch_hint">Skriv för att kolla upp artiklar</string>
+    <string name="choose_file">Välj en ZIM-innehållsfil (*.zim)</string>
+    <string name="error_nozimfilesfound">Inga ZIM-filer hittades på din enhet.\nTa en titt på hjälpsidan för att få hjälp om hur man läser in innehåll i Kiwix.\nOm du lade in en ZIM-fil på din enhet/externa minne bör du kanske prova igen om någon minut eller starta om din enhet.</string>
+    <string name="error_filenotfound">Fel: Den valda ZIM-filen kunde inte hittas.</string>
+    <string name="error_fileinvalid">Fel: Den valda filen är inte en giltig ZIM-fil.</string>
+    <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
+    <string name="error_articleurlnotfound">Fel: Inläsning av artikel (url: %1$s) misslyckades.</string>
+    <string name="pref_display_title">Visa</string>
+    <string name="pref_zoom_title">Zoomnivå</string>
+    <string name="pref_zoom_dialogtitle">Zoomnivå</string>
+    <string-array
+        name="pref_zoom_entries">
+        <item>Automatic</item>
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+    <string name="pref_info_title">Information</string>
+    <string name="pref_info_version">Version</string>
+    <string name="menu_exit">Avsluta</string>
+    <string name="pref_zoom_enable">Zoomkontrollerna</string>
+    <string name="pref_zoom_enable_summary">Visa en zoomknapp längst ned i det högra hörnet på skärmen</string>
+    <string name="pref_nightmode">Nattläge</string>
+    <string name="pref_nightmode_summary">Visa artiklar med inverterade färger</string>
+    <string name="pref_backtotop">Back to Top</string>
+    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="rescan_fs">Rescan SD card</string>
+    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
+</resources>

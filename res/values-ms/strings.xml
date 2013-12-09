@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kiwix</string>
+    <string name="menu_openfile">Buka fail...</string>
+    <string name="menu_help">Bantuan</string>
+    <string name="menu_home">Laman utama</string>
+    <string name="menu_forward">Ke hadapan</string>
+    <string name="menu_back">Ke belakang</string>
+    <string name="menu_settings">Keutamaan</string>
+    <string name="menu_search">Cari</string>
+    <string name="menu_searchintext">Cari dalam teks</string>
+    <string name="menu_randomarticle">Rencana rawak</string>
+    <string name="menu_fullscreen">Skrin penuh</string>
+    <string name="menu_exitfullscreen">Keluar dari ragam skrin penuh</string>
+    <string name="button_backtotop">Back to Top</string>
+    <string name="search_label">Cari</string>
+    <string name="articlesearch_hint">Taip untuk mencari rencana</string>
+    <string name="choose_file">Pilih Fail Kandungan ZIM (*.zim)</string>
+    <string name="error_nozimfilesfound">Tidak terdapat fail ZIM di dalam peranti anda.\nSila baca halaman Bantuan untuk mendapat petua untuk cara memuatkan kandungan ke dalam Kiwix.\nJika benar anda meletakkan fail ZIM di dalam peranti/storan luaran anda, apa kata anda cuba lagi sebentar kemudian atau me-restart peranti anda.</string>
+    <string name="error_filenotfound">Ralat: Fail ZIM yang terpilih tidak dapat ditemui.</string>
+    <string name="error_fileinvalid">Ralat: Fail yang terpilih bukan fail ZIM yang sah.</string>
+    <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
+    <string name="error_articleurlnotfound">Ralat: Rencana (Url: %1$s) gagal dimuatkan.</string>
+    <string name="pref_display_title">Paparan</string>
+    <string name="pref_zoom_title">Takat zum</string>
+    <string name="pref_zoom_dialogtitle">Takat zum</string>
+    <string-array
+        name="pref_zoom_entries">
+        <item>Automatic</item>
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+    <string name="pref_info_title">Information</string>
+    <string name="pref_info_version">Version</string>
+    <string name="menu_exit">Keluar</string>
+    <string name="pref_zoom_enable">Kawalan zum</string>
+    <string name="pref_zoom_enable_summary">Paparkan butang zum pada sudut kanan bawah skrin</string>
+    <string name="pref_nightmode">Mod malam</string>
+    <string name="pref_nightmode_summary">Paparkan rencana yang diterbalikkan warnanya</string>
+    <string name="pref_backtotop">Back to Top</string>
+    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="rescan_fs">Rescan SD card</string>
+    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
+</resources>

@@ -7,9 +7,12 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Adapter;
@@ -36,11 +39,26 @@ LoaderManager.LoaderCallbacks<Cursor> {
 		setProgressBarIndeterminateVisibility(true);
 		setContentView(R.layout.zimfilelist);
 		selectZimFile();
-
-
 	}
 
-	private void finishResult(String path) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.zim_file_select, menu);
+	return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.menu_rescan:
+                new ZimFileScanner(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void finishResult(String path) {
 		if (path != null) {
 			File file = new File(path);
 			Uri uri = Uri.fromFile(file);
