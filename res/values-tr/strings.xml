@@ -11,35 +11,45 @@
     <string name="menu_searchintext">Metinde bul</string>
     <string name="menu_randomarticle">Rastgele madde</string>
     <string name="menu_fullscreen">Tam ekran</string>
-    <string name="menu_exitfullscreen">Tam ekran modundan çık</string>
-    <string name="button_backtotop">Back to Top</string>
+    <string name="menu_exitfullscreen">Tam ekrandan çık</string>
+    <string name="menu_exit">Çık</string>
+    <string name="menu_rescan_fs">Rescan SD card</string>
+    <string name="menu_share">Share with friends</string>
+    <string name="save_image">Save Image</string>
+    <string name="save_image_error">An error occured when trying to save an image!</string>
+    <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
+    <string name="rescan_fs_warning">ZIM dosyaları için taranıyor, lütfen bekleyin...</string>
+    <string name="button_backtotop">Başa dön</string>
     <string name="search_label">Ara</string>
     <string name="articlesearch_hint">Makalelerde aranacak kelimeyi yazın</string>
     <string name="choose_file">Bir ZIM İçerik Dosyası seçin (*.zim)</string>
+    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
+    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Cihazınızda bir ZIM dosyası bulunamadı.\nKiwix\'e içerik yükleme talimatlarını görmek için Yardım Sayfası\'na bir göz atın.\nEğer cihazınıza/harici depolama kaynağınıza bir ZIM dosyası koyduysanız, birkaç dakika içerisinde yeniden deneyebilir veya cihazınızı yeniden başlatabilirsiniz.</string>
     <string name="error_filenotfound">Hata: Seçili ZIM dosyası bulunamadı.</string>
     <string name="error_fileinvalid">Hata: Seçili dosya geçerli bir ZIM dosyası değil.</string>
-    <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
+    <string name="error_articlenotfound">Hata: \"%1$s\" makalesinin yüklemesi başarısız oldu.</string>
     <string name="error_articleurlnotfound">Hata: (Url: %1$s) makalesinin yüklemesi başarısız.</string>
     <string name="pref_display_title">Göster</string>
     <string name="pref_zoom_title">Zum seviyesi</string>
     <string name="pref_zoom_dialogtitle">Zum seviyesi</string>
-    <string-array
-        name="pref_zoom_entries">
+    <string-array name="pref_zoom_entries">
         <item>Automatic</item>
         <item>Small</item>
         <item>Medium</item>
         <item>Large</item>
     </string-array>
-    <string name="pref_info_title">Information</string>
-    <string name="pref_info_version">Version</string>
-    <string name="menu_exit">Çık</string>
+    <string name="pref_info_title">Bilgi</string>
+    <string name="pref_info_version">Sürüm</string>
     <string name="pref_zoom_enable">Zum kontrolleri</string>
     <string name="pref_zoom_enable_summary">Ekranın sağ alt köşesinde bir zum butonu görüntüle</string>
     <string name="pref_nightmode">Gece modu</string>
     <string name="pref_nightmode_summary">Makaleleri dönüştürülmüş renklerle göster</string>
-    <string name="pref_backtotop">Back to Top</string>
-    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
-    <string name="rescan_fs">Rescan SD card</string>
-    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
+    <string name="pref_backtotop">Başa dön</string>
+    <string name="pref_backtotop_summary">Başa dönmek için sayfanın altında bir düğme görüntüler</string>
+    <string name="remove_tab">Remove Tab</string>
+    <string name="add_tab">Add new Tab</string>
+    <string name="remove">Remove</string>
+    <string name="open_in_new_tab">Open link in new Tab?</string>
+    <string name="share_via">Share via</string>
 </resources>

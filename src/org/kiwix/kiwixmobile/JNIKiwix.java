@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile;
 public class JNIKiwix {
     public native String getMainPage();
+    public native String getId();
     public native boolean loadZIM(String path);
     public native byte[] getContent(String url, JNIKiwixString mimeType, JNIKiwixInt size);
     public native boolean searchSuggestions(String prefix, int count);

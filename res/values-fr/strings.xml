@@ -11,21 +11,29 @@
     <string name="menu_searchintext">Rechercher dans le texte</string>
     <string name="menu_randomarticle">Article au hasard</string>
     <string name="menu_fullscreen">Plein écran</string>
-    <string name="menu_exitfullscreen">Quitter le mode plein écran</string>
-    <string name="button_backtotop">Back to Top</string>
+    <string name="menu_exitfullscreen">Quitter le plein écran</string>
+    <string name="menu_exit">Quitter</string>
+    <string name="menu_rescan_fs">Rescan SD card</string>
+    <string name="menu_share">Share with friends</string>
+    <string name="save_image">Save Image</string>
+    <string name="save_image_error">An error occured when trying to save an image!</string>
+    <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
+    <string name="rescan_fs_warning">Analyse des fichiers ZIM en cours, veuillez patienter…</string>
+    <string name="button_backtotop">Retourner en début</string>
     <string name="search_label">Rechercher</string>
     <string name="articlesearch_hint">Taper pour rechercher des articles</string>
     <string name="choose_file">Sélectionner un fichier de contenu ZIM (*.zim)</string>
+    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
+    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Aucun fichier ZIM n’a été trouvé sur votre machine.\nJetez un coup d’œil à la page d’aide pour avoir des instructions sur la manière de charger du contenu dans Kiwix.\nSi vous avez mis un fichier ZIM sur votre stockage interne ou externe, vous pouvez réessayer dans une minute ou redémarrer votre appareil.</string>
     <string name="error_filenotfound">Erreur : Le fichier ZIM sélectionné est introuvable.</string>
     <string name="error_fileinvalid">Erreur : Le fichier sélectionné n’est pas un fichier ZIM valide.</string>
-    <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
+    <string name="error_articlenotfound">Erreur : Échec au chargement de l’article « %1$s ».</string>
     <string name="error_articleurlnotfound">Erreur : Le chargement de l’article (Url: %1$s) a échoué.</string>
     <string name="pref_display_title">Affichage</string>
     <string name="pref_zoom_title">Niveau de zoom</string>
     <string name="pref_zoom_dialogtitle">Niveau de zoom</string>
-    <string-array
-        name="pref_zoom_entries">
+    <string-array name="pref_zoom_entries">
         <item>Automatic</item>
         <item>Small</item>
         <item>Medium</item>
@@ -33,13 +41,15 @@
     </string-array>
     <string name="pref_info_title">Information</string>
     <string name="pref_info_version">Version</string>
-    <string name="menu_exit">Quitter</string>
     <string name="pref_zoom_enable">Contrôles du zoom</string>
     <string name="pref_zoom_enable_summary">Afficher un bouton de zoom dans le coin inférieur droit de l’écran</string>
     <string name="pref_nightmode">Mode nocturne</string>
     <string name="pref_nightmode_summary">Afficher les articles en couleurs inversées</string>
-    <string name="pref_backtotop">Back to Top</string>
-    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
-    <string name="rescan_fs">Rescan SD card</string>
-    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
+    <string name="pref_backtotop">Retourner au début</string>
+    <string name="pref_backtotop_summary">Afficher un bouton en bas de la page pour revenir au début</string>
+    <string name="remove_tab">Remove Tab</string>
+    <string name="add_tab">Add new Tab</string>
+    <string name="remove">Remove</string>
+    <string name="open_in_new_tab">Open link in new Tab?</string>
+    <string name="share_via">Share via</string>
 </resources>

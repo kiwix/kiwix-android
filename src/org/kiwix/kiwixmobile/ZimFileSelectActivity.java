@@ -1,171 +1,340 @@
 package org.kiwix.kiwixmobile;
 
-import java.io.File;
-
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
+import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.SimpleCursorAdapter;
-//TODO API level 11 (honeycomb). use compatiblity packages instead   
-import android.content.CursorLoader;
-import android.app.LoaderManager;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
-public class ZimFileSelectActivity extends Activity implements
-LoaderManager.LoaderCallbacks<Cursor> {
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
-	private static final int LOADER_ID = 0x02;
-	private SimpleCursorAdapter mCursorAdapter;
-	private ListView zimFileList;
-	private View tmpZimFileList;
+public class ZimFileSelectActivity extends FragmentActivity
+        implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener {
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);  
-		setProgressBarIndeterminateVisibility(true);
-		setContentView(R.layout.zimfilelist);
-		selectZimFile();
-	}
+    private static final int LOADER_ID = 0x02;
+
+    // Adapter of the Data populated by the MediaStore
+    private SimpleCursorAdapter mCursorAdapter;
+
+    // Adapter of the Data populated by recanning the Filesystem by ourselves
+    private RescanDataAdapter mRescanAdapter;
+
+    private ArrayList<DataModel> mFiles;
+
+    private ListView mZimFileList;
+
+    private ProgressBar mProgressBar;
+
+    private TextView mProgressBarMessage;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.zimfilelist);
+
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mProgressBarMessage = (TextView) findViewById(R.id.progressbar_message);
+        mZimFileList = (ListView) findViewById(R.id.zimfilelist);
+
+        mProgressBar.setVisibility(View.VISIBLE);
+        mZimFileList.setAlpha(0.4f);
+
+        mFiles = new ArrayList<DataModel>();
+
+        startQuery();
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        Uri uri = MediaStore.Files.getContentUri("external");
+
+        String[] projection = {
+                MediaStore.Files.FileColumns._ID,
+                // File Name
+                MediaStore.Files.FileColumns.TITLE,
+                // File Path
+                MediaStore.Files.FileColumns.DATA
+        };
+
+        // Exclude media files, they would be here also (perhaps
+        // somewhat better performance), and filter for zim files
+        // (normal and first split)
+        String query = MediaStore.Files.FileColumns.MEDIA_TYPE + "="
+                + MediaStore.Files.FileColumns.MEDIA_TYPE_NONE + " AND"
+                + " ( LOWER(" +
+                MediaStore.Images.Media.DATA + ") LIKE '%." + FileSearch.zimFiles[0] + "'"
+                + " OR LOWER(" +
+                MediaStore.Images.Media.DATA + ") LIKE '%." + FileSearch.zimFiles[1] + "'"
+                + " ) ";
+
+        String[] selectionArgs = null; // There is no ? in query so null here
+
+        String sortOrder = MediaStore.Images.Media.TITLE; // Sorted alphabetical
+        Log.d("kiwix", " Performing query for zim files...");
+
+        return new CursorLoader(this, uri, projection, query, selectionArgs, sortOrder);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+        Log.d("kiwix", "DONE querying Mediastore for .zim files");
+        buildArrayAdapter(cursor);
+        mCursorAdapter.swapCursor(cursor);
+        mRescanAdapter = buildArrayAdapter(cursor);
+        mZimFileList.setAdapter(mRescanAdapter);
+
+        // Done here to avoid that shown while loading.
+        mZimFileList.setEmptyView(findViewById(R.id.zimfilelist_nozimfilesfound_view));
+
+        if (mProgressBarMessage.getVisibility() == View.GONE) {
+            mProgressBar.setVisibility(View.GONE);
+            mZimFileList.setAlpha(1f);
+        }
+
+        mCursorAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+        mCursorAdapter.swapCursor(null);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        // Check, if the user has rescanned the file system, if he has, then we want to save this list,
+        // so this can be shown again, if the actvitity is recreated (on a device rotation for example)
+        if (!mFiles.isEmpty()) {
+            Log.i("kiwix", "Saved state of the ListView");
+            outState.putParcelableArrayList("rescanData", mFiles);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        // Get the rescanned data, if available. Create an Adapter for the ListView and display the list
+        if (savedInstanceState.getParcelableArrayList("rescanData") != null) {
+            ArrayList<DataModel> data = savedInstanceState.getParcelableArrayList("rescanData");
+            mRescanAdapter = new RescanDataAdapter(ZimFileSelectActivity.this, 0, data);
+
+            mZimFileList.setAdapter(mRescanAdapter);
+        }
+        super.onRestoreInstanceState(savedInstanceState);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.zim_file_select, menu);
-	return super.onCreateOptionsMenu(menu);
+        final MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.fileselector, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
-            case R.id.menu_rescan:
-                new ZimFileScanner(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                return true;
+
+        switch (item.getItemId()) {
+            case R.id.menu_rescan_fs:
+                // Execute our AsyncTask, that scans the file system for the actual data
+                new RescanFileSystem().execute();
+
+                // Make sure, that we set mNeedsUpdate to true and to false, after the MediaStore has been
+                // updated. Otherwise it will result in a endless loop.
         }
+
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        Log.d("kiwix", " mZimFileList.onItemClick");
+
+        String file;
+
+        // Check which one of the Adapters is currently filling the ListView.
+        // If the data is populated by the LoaderManager cast the current selected item to Cursor,
+        // if the data is populated by the ArrayAdapter, then cast it to the DataModel class.
+        if (mZimFileList.getItemAtPosition(position) instanceof DataModel) {
+
+            DataModel data = (DataModel) mZimFileList.getItemAtPosition(position);
+            file = data.getPath();
+
+        } else {
+            Cursor cursor = (Cursor) mZimFileList.getItemAtPosition(position);
+            file = cursor.getString(2);
+        }
+
+        finishResult(file);
+    }
+
+    // Query through the MediaStore
+    protected void startQuery() {
+
+        // Defines a list of columns to retrieve from the Cursor and load into an output row
+        String[] mZimListColumns = {MediaStore.Files.FileColumns.TITLE, MediaStore.Files.FileColumns.DATA};
+
+        // Defines a list of View IDs that will receive the Cursor columns for each row
+        int[] mZimListItems = {android.R.id.text1, android.R.id.text2};
+
+        mCursorAdapter = new SimpleCursorAdapter(
+                // The Context object
+                ZimFileSelectActivity.this,
+                // A layout in XML for one row in the ListView
+                android.R.layout.simple_list_item_2,
+                // The cursor, swapped later by cursorloader
+                null,
+                // A string array of column names in the cursor
+                mZimListColumns,
+                // An integer array of view IDs in the row layout
+                mZimListItems,
+                // Flags for the Adapter
+                Adapter.NO_SELECTION);
+
+        mZimFileList.setOnItemClickListener(this);
+
+        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+    }
+
+    // Get the data of our cursor and wrap it all in our ArrayAdapter.
+    // We are doing this because the CursorAdapter does not allow us do remove rows from its dataset.
+    private RescanDataAdapter buildArrayAdapter(Cursor cursor) {
+
+        ArrayList<DataModel> files = new ArrayList<DataModel>();
+
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+
+            if (new File(cursor.getString(2)).exists()) {
+                files.add(new DataModel(cursor.getString(1), cursor.getString(2)));
+            }
+        }
+
+        files = new FileWriter(ZimFileSelectActivity.this, files).getDataModelList();
+
+        for (int i = 0; i < files.size(); i++) {
+
+            if (!new File(files.get(i).getPath()).exists()) {
+                Log.e("kiwix", "File removed: " + files.get(i).getTitle());
+                files.remove(i);
+            }
+        }
+
+        files = new FileSearch().sortDataModel(files);
+        mFiles = files;
+
+        return new RescanDataAdapter(ZimFileSelectActivity.this, 0, mFiles);
+    }
+
+    // Get the selected file and return the result to the Activity, that called this Activity
     private void finishResult(String path) {
-		if (path != null) {
-			File file = new File(path);
-			Uri uri = Uri.fromFile(file);
-			setResult(RESULT_OK, new Intent().setData(uri));
-			finish();
-		} else {
-			setResult(RESULT_CANCELED);	
-			finish();
-		}
-	}
 
-	protected void selectZimFile()  {
-		// Defines a list of columns to retrieve from the Cursor and load into an output row
-		String[] mZimListColumns =
-			{
-				MediaStore.Images.Media.DATA
-			};
+        if (path != null) {
+            File file = new File(path);
+            Uri uri = Uri.fromFile(file);
+            Log.i("kiwix", "Opening " + uri);
+            setResult(RESULT_OK, new Intent().setData(uri));
+            finish();
+        } else {
+            setResult(RESULT_CANCELED);
+            finish();
+        }
+    }
 
-		// Defines a list of View IDs that will receive the Cursor columns for each row
-		int[] mZimListItems = { R.id.zim_file_list_entry_path};
+    // The Adapter for the ListView for when the ListView is populated with the rescanned files
+    private class RescanDataAdapter extends ArrayAdapter<DataModel> {
 
-		mCursorAdapter = new SimpleCursorAdapter(
-				getApplicationContext(),               // The application's Context object
-				R.layout.zimfilelistentry,                  // A layout in XML for one row in the ListView
-				null,                               // The cursor, swapped later by cursorloader
-				mZimListColumns,                      // A string array of column names in the cursor
-				mZimListItems,                        // An integer array of view IDs in the row layout
-				Adapter.NO_SELECTION);
+        public RescanDataAdapter(Context context, int textViewResourceId, List<DataModel> objects) {
+            super(context, textViewResourceId, objects);
+        }
 
-		// Sets the adapter for the ListView
-		setContentView(R.layout.zimfilelist);
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
 
-		// For a reason I ingore, it seems that time to time
-		// tmpZimFileList is not castable in ListView. Kelson
-		tmpZimFileList = findViewById(R.id.zimfilelist);
-		if (tmpZimFileList instanceof ListView) {   
-		    zimFileList = (ListView) tmpZimFileList;
-		    getLoaderManager().initLoader(LOADER_ID, null, this);
-		    zimFileList.setAdapter(mCursorAdapter);
-		    zimFileList.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				// TODO Auto-generated method stub
-				onListItemClick((ListView) arg0, arg0, arg2, arg3);
-			}
-		    });
-		}
+            ViewHolder holder;
 
-		//TODO close cursor when done
-		//allNonMediaFiles.close();
-	}
+            // Check if we should inflate the layout for a new row, or if we can reuse a view.
+            if (convertView == null) {
+                convertView = View.inflate(getContext(), android.R.layout.simple_list_item_2, null);
+                holder = new ViewHolder();
+                holder.title = (TextView) convertView.findViewById(android.R.id.text1);
+                holder.path = (TextView) convertView.findViewById(android.R.id.text2);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+            holder.title.setText(getItem(position).getTitle());
+            holder.path.setText(getItem(position).getPath());
+            return convertView;
+        }
 
+        // We are using the ViewHolder pattern in order to optimize the ListView by reusing
+        // Views and saving them to this item class, and not inlating the layout every time
+        // we need to create a row.
+        private class ViewHolder {
 
-	private void onListItemClick(AdapterView<?> adapter, View view, int position, long arg) {
-		// TODO Auto-generated method stub
-		Log.d("kiwix", " zimFileList.onItemClick");
+            TextView title;
 
-		ListView zimFileList = (ListView) findViewById(R.id.zimfilelist);
-		Cursor mycursor = (Cursor) zimFileList.getItemAtPosition(position);
-		//TODO not very clean		
-		finishResult(mycursor.getString(1));
-	}
+            TextView path;
+        }
+    }
 
-	@Override
-	public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-		//TODO leads to API min 11
-		Uri uri = MediaStore.Files.getContentUri("external");
+    // This AsyncTask will scan the file system for files with the Extension ".zim" or ".zimaa"
+    private class RescanFileSystem extends AsyncTask<Void, Void, Void> {
 
-		String[] projection = {
-				MediaStore.Images.Media._ID,
-				MediaStore.Images.Media.DATA, //Path        
-		};
+        @Override
+        protected void onPreExecute() {
 
-		// exclude media files, they would be here also (perhaps
-		// somewhat better performance), and filter for zim files
-		// (normal and first split)        
-		String selection = MediaStore.Files.FileColumns.MEDIA_TYPE + "="
-				+ MediaStore.Files.FileColumns.MEDIA_TYPE_NONE + " AND "
-				+ " ( LOWER(" +
-				MediaStore.Images.Media.DATA + ") LIKE '%.zim'"
-				+ " OR LOWER(" +
-				MediaStore.Images.Media.DATA + ") LIKE '%.zimaa'"
-				+" ) ";
+            mProgressBarMessage.setVisibility(View.VISIBLE);
+            mProgressBar.setVisibility(View.VISIBLE);
+            mZimFileList.setAlpha(0.4f);
 
+            super.onPreExecute();
+        }
 
-		String[] selectionArgs = null; // there is no ? in selection so null here
+        @Override
+        protected Void doInBackground(Void... params) {
 
+            mFiles = new FileSearch().findFiles();
+            return null;
+        }
 
-		String sortOrder = MediaStore.Images.Media.DATA; // unordered
-		Log.d("kiwix", " Performing query for zim files...");
+        @Override
+        protected void onPostExecute(Void result) {
+            mRescanAdapter = new RescanDataAdapter(ZimFileSelectActivity.this, 0, mFiles);
 
+            mZimFileList.setAdapter(mRescanAdapter);
 
-		return new CursorLoader(this, uri, projection, selection, selectionArgs, sortOrder);
+            mProgressBarMessage.setVisibility(View.GONE);
+            mProgressBar.setVisibility(View.GONE);
+            mZimFileList.setAlpha(1f);
 
-	}
+            new FileWriter(ZimFileSelectActivity.this).saveArray(mFiles);
 
-	@Override
-	public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-		Log.d("kiwix", " DONE query zim files");
-		mCursorAdapter.swapCursor(cursor);
-		//Done here to avoid that shown while loading.
-		zimFileList.setEmptyView( findViewById( R.id.zimfilelist_nozimfilesfound_view ) );		
-		setProgressBarIndeterminateVisibility(false);		
-	}
+            super.onPostExecute(result);
+        }
 
-	@Override
-	public void onLoaderReset(Loader<Cursor> cursorLoader) {
-		mCursorAdapter.swapCursor(null);
-	}
-
+    }
 }

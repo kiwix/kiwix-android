@@ -11,21 +11,29 @@
     <string name="menu_searchintext">Hitta i text</string>
     <string name="menu_randomarticle">Slumpmässig artikel</string>
     <string name="menu_fullscreen">Helskärm</string>
-    <string name="menu_exitfullscreen">Avsluta helskärmsläge</string>
-    <string name="button_backtotop">Back to Top</string>
+    <string name="menu_exitfullscreen">Stäng helskärm</string>
+    <string name="menu_exit">Avsluta</string>
+    <string name="menu_rescan_fs">Rescan SD card</string>
+    <string name="menu_share">Share with friends</string>
+    <string name="save_image">Save Image</string>
+    <string name="save_image_error">An error occured when trying to save an image!</string>
+    <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
+    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
+    <string name="button_backtotop">Tillbaka till toppen</string>
     <string name="search_label">Sök</string>
     <string name="articlesearch_hint">Skriv för att kolla upp artiklar</string>
     <string name="choose_file">Välj en ZIM-innehållsfil (*.zim)</string>
+    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
+    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Inga ZIM-filer hittades på din enhet.\nTa en titt på hjälpsidan för att få hjälp om hur man läser in innehåll i Kiwix.\nOm du lade in en ZIM-fil på din enhet/externa minne bör du kanske prova igen om någon minut eller starta om din enhet.</string>
     <string name="error_filenotfound">Fel: Den valda ZIM-filen kunde inte hittas.</string>
     <string name="error_fileinvalid">Fel: Den valda filen är inte en giltig ZIM-fil.</string>
-    <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
+    <string name="error_articlenotfound">Fel: Kunde inte läsa in artikeln \"%1$s\".</string>
     <string name="error_articleurlnotfound">Fel: Inläsning av artikel (url: %1$s) misslyckades.</string>
     <string name="pref_display_title">Visa</string>
     <string name="pref_zoom_title">Zoomnivå</string>
     <string name="pref_zoom_dialogtitle">Zoomnivå</string>
-    <string-array
-        name="pref_zoom_entries">
+    <string-array name="pref_zoom_entries">
         <item>Automatic</item>
         <item>Small</item>
         <item>Medium</item>
@@ -33,13 +41,15 @@
     </string-array>
     <string name="pref_info_title">Information</string>
     <string name="pref_info_version">Version</string>
-    <string name="menu_exit">Avsluta</string>
     <string name="pref_zoom_enable">Zoomkontrollerna</string>
     <string name="pref_zoom_enable_summary">Visa en zoomknapp längst ned i det högra hörnet på skärmen</string>
     <string name="pref_nightmode">Nattläge</string>
     <string name="pref_nightmode_summary">Visa artiklar med inverterade färger</string>
-    <string name="pref_backtotop">Back to Top</string>
-    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
-    <string name="rescan_fs">Rescan SD card</string>
-    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
+    <string name="pref_backtotop">Tillbaka till toppen</string>
+    <string name="pref_backtotop_summary">Visar en knapp i slutet på sidan för att rulla upp till toppen</string>
+    <string name="remove_tab">Remove Tab</string>
+    <string name="add_tab">Add new Tab</string>
+    <string name="remove">Remove</string>
+    <string name="open_in_new_tab">Open link in new Tab?</string>
+    <string name="share_via">Share via</string>
 </resources>

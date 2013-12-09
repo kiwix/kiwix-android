@@ -1,816 +1,587 @@
 package org.kiwix.kiwixmobile;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
+import android.app.ActionBar;
+import android.app.FragmentTransaction;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.text.InputType;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.SparseArray;
+import android.view.DragEvent;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.MeasureSpec;
-import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.ImageButton;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
-import android.widget.Toast;
-import android.view.View.OnClickListener;
-import android.view.animation.AnimationUtils;
+import android.widget.Spinner;
 
-public class KiwixMobileActivity extends Activity {
-    /** Called when the activity is first created. */
+public class KiwixMobileActivity extends FragmentActivity implements ActionBar.TabListener,
+        View.OnLongClickListener, View.OnDragListener, KiwixMobileFragment.FragmentCommunicator {
 
-        private SharedPreferences mySharedPreferences;
-	private KiwixWebView webView;
-	private ArrayAdapter<String> adapter;
-	protected boolean requestClearHistoryAfterLoad;
-	protected boolean requestInitAllMenuItems;
-	protected boolean NightMode;
-	protected int requestWebReloadOnFinished;
-	private static final int ZIMFILESELECT_REQUEST_CODE = 1234;
-	private static final int PREFERENCES_REQUEST_CODE = 1235;
-	private static final String PREFS_KIWIX_MOBILE = "kiwix-mobile";
-	private AutoCompleteTextView articleSearchtextView;
-	private LinearLayout articleSearchBar;
-	private Menu menu;
-        //Tracks the user preference of of showing the button or not
-        private boolean isButtonEnabled = true;
-        private boolean isFullscreenOpened;
-	private ImageButton exitFullscreenButton;
+    private int NUM_ITEMS = 0;
 
+    private ViewPagerAdapter mViewPagerAdapter;
 
-	public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
-		private ArrayList<String> mData;
+    private ViewPager mViewPager;
 
-		public AutoCompleteAdapter(Context context, int textViewResourceId) {
-			super(context, textViewResourceId);
-			mData = new ArrayList<String>();
-		}
+    private ActionBar mActionBar;
 
-		@Override
-		public int getCount() {
-			return mData.size();
-		}
+    private KiwixMobileFragment mCurrentFragment;
 
-		@Override
-		public String getItem(int index) {
-			return mData.get(index);
-		}
+    private int mCurrentDraggedTab;
 
-		@Override
-		public Filter getFilter() {
-			Filter myFilter = new Filter() {
-				@Override
-				protected FilterResults performFiltering(CharSequence constraint) {
-					FilterResults filterResults = new FilterResults();
-					ArrayList<String> data = new ArrayList<String>();
-					if(constraint != null) {
-						// A class that queries a web API, parses the data and returns an ArrayList<Style>
-						try {
-						        String prefix = constraint.toString();
+    private int mTabsWidth;
 
-							ZimContentProvider.searchSuggestions(prefix, 200);
-							String suggestion;
+    private int mTabsHeight;
 
-							data.clear();
-							while ((suggestion = ZimContentProvider.getNextSuggestion())!=null) {
-								data.add(suggestion);
-							}
-						}
-						catch(Exception e) {}
-						// Now assign the values and count to the FilterResults object
-						filterResults.values = data;
-						filterResults.count = data.size();
-					}
-					return filterResults;
-				}
-
-				@SuppressWarnings("unchecked")
-				@Override
-				protected void publishResults(CharSequence contraint, FilterResults results) {
-					if(results != null && results.count > 0) {
-						notifyDataSetChanged();
-						mData = (ArrayList<String>)results.values;
-					}
-					else {
-						notifyDataSetInvalidated();
-					}
-				}
-			};
-			return myFilter;
-		}
-	} 
-    @SuppressLint("SetJavaScriptEnabled")
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestClearHistoryAfterLoad=false;
-        requestWebReloadOnFinished = 0;
-        requestInitAllMenuItems = false;
-        NightMode = false;
-        isFullscreenOpened = false;
 
+        requestWindowFeature(Window.FEATURE_PROGRESS);
+        setProgressBarVisibility(true);
 
-        this.requestWindowFeature(Window.FEATURE_PROGRESS);
-        this.setProgressBarVisibility(true);
+        setContentView(R.layout.viewpager);
 
-        setContentView(R.layout.main);
-        //Locate and hook up the Back to top button
-        findViewById(R.id.button_backtotop).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                webView.pageUp(true);
-            }
-        });
-        webView =(KiwixWebView) findViewById(R.id.webview);
-        articleSearchBar = (LinearLayout) findViewById(R.id.articleSearchBar);
-        articleSearchtextView = (AutoCompleteTextView) findViewById(R.id.articleSearchTextView);
+        // Set an OnDragListener on the entire View. Now we can track, if the user drags the
+        // Tab outside the View
+        getWindow().getDecorView().setOnDragListener(this);
 
-        exitFullscreenButton=(ImageButton)findViewById(R.id.FullscreenControlButton);
-        exitFullscreenButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                closeFullScreen();
+        mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
+        mActionBar = getActionBar();
 
-            }
-        });
-
-        final Drawable clearIcon = getResources().getDrawable(R.drawable.navigation_cancel);
-        final Drawable searchIcon = getResources().getDrawable(R.drawable.action_search);
-        articleSearchtextView.measure(MeasureSpec.UNSPECIFIED,MeasureSpec.UNSPECIFIED);
-        int height = articleSearchtextView.getMeasuredHeight()-articleSearchtextView.getPaddingTop()-articleSearchtextView.getPaddingBottom();
-        clearIcon.setBounds(0, 0, height, height);
-        searchIcon.setBounds(0, 0, height, height);
-        articleSearchtextView.setCompoundDrawablePadding(5);
-        articleSearchtextView.setCompoundDrawables(searchIcon, null, articleSearchtextView.getText().toString().equals("") ? null : clearIcon, null);        
-        articleSearchtextView.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (articleSearchtextView.getCompoundDrawables()[2] == null) {
-                    return false;
-                }
-                if (event.getAction() != MotionEvent.ACTION_UP) {
-                    return false;
-                }
-                if (event.getX() > articleSearchtextView.getWidth() - articleSearchtextView.getPaddingRight() - clearIcon.getIntrinsicWidth()) {
-                	articleSearchtextView.setText("");
-                	articleSearchtextView.setCompoundDrawables(searchIcon, null, null, null);
-                }
-                return false;
-            }
-        });
-        articleSearchtextView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            	articleSearchtextView.setCompoundDrawables(searchIcon, null, articleSearchtextView.getText().toString().equals("") ? null : clearIcon, null);
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-        });
-        // Create the adapter and set it to the AutoCompleteTextView
-	adapter = new AutoCompleteAdapter(this, android.R.layout.simple_list_item_1);
-        articleSearchtextView.setAdapter(adapter);
-
-        articleSearchtextView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				articleSearchtextView.setText(parent.getItemAtPosition(position).toString());
-				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(),0);
-				openArticleFromSearch();
-			}
-		});
-        articleSearchtextView.setOnEditorActionListener(new OnEditorActionListener() {
-
-            @Override
-            public boolean onEditorAction(TextView v, int actionId,
-                    KeyEvent event) {
-            		//Do Stuff
-            		return openArticleFromSearch();
-         }});
-	articleSearchtextView.setInputType(InputType.TYPE_CLASS_TEXT);
-
-        // js includes will not happen unless we enable JS
-        webView.getSettings().setJavaScriptEnabled(true);
-        //Does not seem to have  impact. (Idea was that
-        // web page is rendered before loading all pictures)
-        //webView.getSettings().setRenderPriority(RenderPriority.HIGH);
-        final Activity activity = this;
-
-        webView.setWebChromeClient(new WebChromeClient(){
-
-				public void onProgressChanged(WebView view, int progress) {
-                	 	 activity.setProgress(progress * 100);
-                         if (progress==100) {
-
-                        	 Log.d("kiwix", "Loading article finished.");
-                        	 if (requestClearHistoryAfterLoad) {
-                        		 Log.d("kiwix", "Loading article finished and requestClearHistoryAfterLoad -> clearHistory");
-                        		 webView.clearHistory();
-                        		 requestClearHistoryAfterLoad=false;
-                        	 }
-
-                        	 Log.d("kiwix", "Loaded URL: "+webView.getUrl());                        	 
-                        	 if(NightMode){ 
-                				NightMode=false;
-                				ToggleNightMode();
-                			}
-                        	 
-                         }
-                         }
-        });
-
-//       Should basically resemble the behavior when setWebClient not done
-//            (i.p. internal urls load in webview, external urls in browser)
-// 			  as currently no custom setWebViewClient required it is commented
-        	webView.setWebViewClient(new WebViewClient() {
-
-        	
-
-			@Override
-        	public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
-                    // This is my web site, so do not override; let my WebView load the page
-                    return false;
-                } else if (url.startsWith("file://")) {
-                    // To handle help page (loaded from resources)
-                    return true;
-                    
-                } else if (url.startsWith("javascript:")){
-                    // Allow javascript for HTML functions and code execution (EX: night mode)
-                    return true;
-                    
-                } else if (url.startsWith(ZimContentProvider.UI_URI.toString())) {
-                	// To handle links which access user interface (i.p. used in help page)
-                	if (url.equals(ZimContentProvider.UI_URI.toString()+"selectzimfile")) {
-                		selectZimFile();
-                	} else if (url.equals(ZimContentProvider.UI_URI.toString()+"gotohelp")) {
-                		showHelp();
-                	} else {
-                		Log.e("kiwix", "UI Url "+url+ " not supported.");
-                	}
-                	return true;
-                }
-                // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(intent);
-                return true;
-            }
-
-        	public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-        	     String errorString = String.format(getResources().getString(R.string.error_articleurlnotfound), failingUrl);
-        	     //TODO apparently screws up back/forward
-        	     webView.loadDataWithBaseURL("file://error","<html><body>"+errorString+"</body></html>", "text/html", "utf-8", failingUrl);
-        	     String title = getResources().getString(R.string.app_name);
-        	     getActionBar().setTitle(title);
-        	   }
-
-        	public void onPageFinished(WebView view, String url) {
-        		
-                       //register a {@KiwixWebView.OnPageChangeListener} to get changes in scroll position
-                       webView.registerOnPageChangedListener(new KiwixWebView.OnPageChangeListener() {
-                           @Override
-                           public void onPageChanged(int page, int maxPages) {
-                               if (isButtonEnabled)
-                               {
-                                   //Don't go on the values these are observed to be working :p
-                                   //Simple logic if scrolled to more than the threshold then show the button.
-                                   if (page > 0)
-                                   {
-                                       if (KiwixMobileActivity.this.findViewById(R.id.button_backtotop).getVisibility() == View.INVISIBLE)
-                                       {
-                                           KiwixMobileActivity.this.findViewById(R.id.button_backtotop).setVisibility(View.VISIBLE);
-                                           //U said you wanted fancy huh,then this might just do it.
-                                           KiwixMobileActivity.this.findViewById(R.id.button_backtotop).startAnimation(AnimationUtils.loadAnimation(KiwixMobileActivity.this,android.R.anim.fade_in));
-                                       }
-                                   }
-                                   else
-                                   {
-                                       if (KiwixMobileActivity.this.findViewById(R.id.button_backtotop).getVisibility() == View.VISIBLE)
-                                       {
-                                           KiwixMobileActivity.this.findViewById(R.id.button_backtotop).setVisibility(View.INVISIBLE);
-                                           //U said you wanted fancy huh,then this might just do it.
-                                           KiwixMobileActivity.this.findViewById(R.id.button_backtotop).startAnimation(AnimationUtils.loadAnimation(KiwixMobileActivity.this,android.R.anim.fade_out));
-                                       }
-                                   }
-                               }
-                           }
-                        });
-
-                        String title = getResources().getString(R.string.app_name);
-        		if (webView.getTitle()!=null && !webView.getTitle().isEmpty())
-        			title = webView.getTitle();
-        		getActionBar().setTitle(title);
-        		//Workaround for #643
-        		if (requestWebReloadOnFinished>0) {
-        			requestWebReloadOnFinished = requestWebReloadOnFinished-1;
-        			Log.d("kiwix", "Workaround for #643: onPageFinished. Trigger reloading. ("+requestWebReloadOnFinished+" reloads left to do)");
-        			view.reload();
-        		}	
-        	}
-        	 });
-
-        loadPref();
-
-        //webView.getSettings().setLoadsImagesAutomatically(false);
-        //Does not make much sense to cache data from zim files.(Not clear whether
-        // this actually has any effect)
-        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-        if (getIntent().getData()!=null) {        	
-        	String filePath = getIntent().getData().getPath();
-            Log.d("kiwix", " Kiwix started from a filemanager. Intent filePath: "+filePath+" -> open this zimfile and load main page");
-            openZimFile(new File(filePath), false);
-
-        } else if (savedInstanceState!=null) {
-        	 Log.d("kiwix", " Kiwix started with a savedInstanceState (That is was closed by OS) -> restore webview state and zimfile (if set)");
-        	 if (savedInstanceState.getString("currentzimfile")!=null) {
-	        	 	openZimFile(new File(savedInstanceState.getString("currentzimfile")), false);
-
-	         }
-        	 // Restore the state of the WebView
-        	 // (Very ugly) Workaround for  #643 Android article blank after rotation and app reload
-        	 // In case of restore state, just reload page multiple times. Probability
-        	 // that after two refreshes page is still blank is low. 
-        	 // TODO: implement better fix
-        	 
-        	 requestWebReloadOnFinished = 2;
-        	 Log.d("kiwix", "Workaround for #643: reload "+requestWebReloadOnFinished+" times after restoring state");
-  			
-	         webView.restoreState(savedInstanceState);
-        } else {
-        	SharedPreferences settings = getSharedPreferences(PREFS_KIWIX_MOBILE, 0);
-        	String zimfile = settings.getString("currentzimfile", null);
-            if (zimfile != null) {
-            	Log.d("kiwix", " Kiwix normal start, zimfile loaded last time -> Open last used zimfile "+zimfile);
-            	openZimFile(new File(zimfile), false);
-            	// Alternative would be to restore webView state. But more effort to implement, and actually
-        		//  fits better normal android behavior if after closing app ("back" button) state is not maintained.
-            } else {
-            	Log.d("kiwix", " Kiwix normal start, no zimfile loaded last time  -> display welcome page");
-            	showWelcome();
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            mActionBar.setHomeButtonEnabled(false);
         }
-        
+
+        mViewPager = (ViewPager) findViewById(R.id.viewPager);
+        mViewPager.setAdapter(mViewPagerAdapter);
+        // set the amount of pages, that the ViewPager adapter should keep in cache
+        mViewPager.setOffscreenPageLimit(3);
+        // margin between every ViewPager Fragment
+        mViewPager.setPageMargin(3);
+        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                reattachOnLongClickListener();
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                reattachOnLongClickListener();
+                super.onPageScrollStateChanged(state);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                // Update the tab position
+                if (mActionBar.getNavigationMode() == ActionBar.NAVIGATION_MODE_TABS
+                        || mActionBar.getNavigationMode() == ActionBar.NAVIGATION_MODE_LIST) {
+                    mActionBar.setSelectedNavigationItem(position);
+                }
+
+                // If the app is in landscape mode, Android will switch the navigationmode from
+                // "NAVIGATION_MODE_TABS" to "NAVIGATION_MODE_LIST" (as long as the app has more than 3 tabs open).
+                // There is no way to update this Spinner without creating an extra adapter for that.
+                // But for that we would have to track each and every title of every tab.
+                // So, instead of doing that, we will traverse through the view hierarchy and find that spinner
+                // ourselves and update it manually on every swipe of the ViewPager.
+                ViewParent root = findViewById(android.R.id.content).getParent();
+                updateListNavigation(root, position);
+                setTabsOnLongClickListener(root);
+            }
+        });
+
+        // Set the initial tab. It's hidden.
+        addNewTab();
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig){        
-        super.onConfigurationChanged(newConfig);
-    }
-
-    private void loadPref(){
-    	  mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-    	  String pref_zoom = mySharedPreferences.getString("pref_zoom", "automatic");
-    	  Boolean pref_zoom_enabled = mySharedPreferences.getBoolean("pref_zoom_enabled", false);
-    	  Boolean pref_nightmode= mySharedPreferences.getBoolean("pref_nightmode", false);
-          isButtonEnabled = mySharedPreferences.getBoolean("pref_top_button",isButtonEnabled);
-    	  if (pref_zoom.equals("automatic")) {
-      		 setDefaultZoom();
-    	  } else if (pref_zoom.equals("medium")) {
-    		  webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
-    	  } else if (pref_zoom.equals("small")) {
-    		  webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);    	  
-    	  } else if (pref_zoom.equals("large")) {
-    		  webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.CLOSE);
-    	 } else {
-    		 Log.w("kiwix", "pref_displayZoom value ("+pref_zoom+" unknown. Assuming automatic");
-    		 webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
-    	 }
-
-         //Pinch to zoom
-	 //This seems to suffer from a bug in Android. If you set to "false" this only apply after a restart of the app.
-    	 Log.d("kiwix","pref_zoom_enabled value ("+pref_zoom_enabled+")");
-	 webView.getSettings().setBuiltInZoomControls(true);
-	 webView.getSettings().setDisplayZoomControls(pref_zoom_enabled);
-
-        Log.d("kiwix","pref_top_button value ("+pref_zoom_enabled+")");
-        //DONT register a onSharedPrefenceChangedListener as the activity is haulted when on
-        //PreferenceFrag. so it might cause issues
-        if (!isButtonEnabled)
-        {
-            if (findViewById(R.id.button_backtotop).getVisibility() == View.VISIBLE)
-                findViewById(R.id.button_backtotop).setVisibility(View.INVISIBLE);
-        }
-	
-        //Night mode status
-	Log.d("kiwix","pref_nightmode value ("+pref_nightmode+")");
-	if(NightMode!=pref_nightmode)
-	    ToggleNightMode();
-	
-    }
-    
-
-    @Override
-    public void onPause() {
-    	super.onPause();
-    	SharedPreferences settings = getSharedPreferences(PREFS_KIWIX_MOBILE, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString("currentzimfile", ZimContentProvider.getZimFile());
-        // Commit the edits!
-        editor.commit();
-
-    	Log.d("kiwix", "onPause Save currentzimfile to preferences:"+ZimContentProvider.getZimFile());
+    protected void onDestroy() {
+        finish();
+        super.onDestroy();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-       super.onSaveInstanceState(outState);
-    	// Save the state of the WebView
-
-        webView.saveState(outState);
-        outState.putString("currentzimfile", ZimContentProvider.getZimFile());
-        Log.v("kiwix", "onSaveInstanceState Save currentzimfile to bundle:"+ZimContentProvider.getZimFile()+" and webView state");
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-    	super.onRestoreInstanceState(savedInstanceState);
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        this.menu = menu;
-        if (requestInitAllMenuItems) {
-	    initAllMenuItems();
-        }
-        return true;
+        super.onSaveInstanceState(outState);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Toast.makeText(this, "Tapped home", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.menu_search:
-            	if (articleSearchBar.getVisibility()!=View.VISIBLE) {
-            		showSearchBar();
-            	} else {
-            		hideSearchBar();
-            	}
-            	break;
-            case R.id.menu_searchintext:
-            	webView.showFindDialog("", true);
-            	break;
-            case R.id.menu_home:
-            	openMainPage();
-            	break;
-            case R.id.menu_forward:
-            	if(webView.canGoForward() == true){
-                    webView.goForward();
-                }
-                break;
-            case R.id.menu_back:
-            	if(webView.canGoBack() == true){
-		    menu.findItem(R.id.menu_forward).setVisible(true);
-                    webView.goBack();
-                }
-                break;
-            case R.id.menu_randomarticle:
-            	openRandomArticle();
-            	break;
-            case R.id.menu_help:
-            	showWelcome();
-            	break;
-            case R.id.menu_openfile:
 
-			    selectZimFile();
-			    break;
+        mCurrentFragment = getCurrentVisibleFragment();
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        switch (item.getItemId()) {
+
+            case R.id.menu_home:
+            case android.R.id.home:
+                imm.hideSoftInputFromWindow(mCurrentFragment.articleSearchtextView.getWindowToken(), 0);
+                mCurrentFragment.openMainPage();
+                break;
+
+            case R.id.menu_search:
+                if (mCurrentFragment.articleSearchBar.getVisibility() != View.VISIBLE) {
+                    mCurrentFragment.showSearchBar();
+                } else {
+                    mCurrentFragment.hideSearchBar();
+                }
+                break;
+
+            case R.id.menu_searchintext:
+                mCurrentFragment.webView.showFindDialog("", true);
+                break;
+
+            case R.id.menu_forward:
+                imm.hideSoftInputFromWindow(mCurrentFragment.articleSearchtextView.getWindowToken(), 0);
+                if (mCurrentFragment.webView.canGoForward()) {
+                    mCurrentFragment.webView.goForward();
+                }
+                break;
+
+            case R.id.menu_back:
+                imm.hideSoftInputFromWindow(mCurrentFragment.articleSearchtextView.getWindowToken(), 0);
+                if (mCurrentFragment.webView.canGoBack()) {
+                    mCurrentFragment.menu.findItem(R.id.menu_forward).setVisible(true);
+                    mCurrentFragment.webView.goBack();
+                }
+                break;
+
+            case R.id.menu_randomarticle:
+                imm.hideSoftInputFromWindow(mCurrentFragment.articleSearchtextView.getWindowToken(), 0);
+                mCurrentFragment.openRandomArticle();
+                break;
+
+            case R.id.menu_share:
+                shareKiwix();
+                break;
+
+            case R.id.menu_help:
+                imm.hideSoftInputFromWindow(mCurrentFragment.articleSearchtextView.getWindowToken(), 0);
+                mCurrentFragment.showWelcome();
+                break;
+
+            case R.id.menu_openfile:
+                imm.hideSoftInputFromWindow(mCurrentFragment.articleSearchtextView.getWindowToken(), 0);
+                mCurrentFragment.selectZimFile();
+                break;
 
             case R.id.menu_exit:
-            	finish();
-            	break;
-            
+                imm.hideSoftInputFromWindow(mCurrentFragment.articleSearchtextView.getWindowToken(), 0);
+                finish();
+                break;
+
             case R.id.menu_settings:
-            	// Display the fragment as the main content.
-            	Intent i = new Intent(this, KiwixSettings.class);
-                startActivityForResult(i, PREFERENCES_REQUEST_CODE);
-            	break;
+                imm.hideSoftInputFromWindow(mCurrentFragment.articleSearchtextView.getWindowToken(), 0);
+                // Display the fragment as the main content.
+                mCurrentFragment.selectSettings();
+                break;
 
             case R.id.menu_fullscreen:
-                if(isFullscreenOpened){
+                if (mCurrentFragment.isFullscreenOpened) {
                     closeFullScreen();
-                }else{
+                } else {
                     openFullScreen();
                 }
                 break;
         }
-        
+
         return super.onOptionsItemSelected(item);
     }
 
+    private void shareKiwix() {
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
 
+        String title = getResources().getString(R.string.info_share_title);
+        String shareText = getResources().getString(R.string.info_share_content);
 
-
-	private void selectZimFile() {
-		final Intent target = new Intent(Intent.ACTION_GET_CONTENT);
-		// The MIME data type filter
-		target.setType("*/*");
-		// Only return URIs that can be opened with ContentResolver
-		target.addCategory(Intent.CATEGORY_OPENABLE);
-		//Force use of our file selection component.
-		// (Note may make sense to just define a custom intent instead)
-		target.setComponent(new ComponentName(getPackageName(), getPackageName()+".ZimFileSelectActivity"));
-		try {
-			startActivityForResult(target, ZIMFILESELECT_REQUEST_CODE);
-		} catch (ActivityNotFoundException e) {
-
-		}
-	}
-
-
-    private void showSearchBar() {
-	showSearchBar(true);
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, title);
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareText);
+        startActivity(Intent.createChooser(sharingIntent, getString(R.string.share_via)));
     }
 
-	private void showSearchBar(Boolean focus) {
-		articleSearchBar.setVisibility(View.VISIBLE);
+    private void openFullScreen() {
+        mCurrentFragment = getCurrentVisibleFragment();
 
-		if (focus) {
-		    articleSearchtextView.requestFocus();
-		    
-		    //Move cursor to end
-		    articleSearchtextView.setSelection(articleSearchtextView.getText().length());
-		    
-		    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
-		}
-	}
-
-   
-    private void showWelcome() {
-    	webView.loadUrl("file:///android_res/raw/welcome.html");
-	}
-
-    private void showHelp() {
-    	//Load from resource. Use with base url as else no images can be embedded.
-    	// Note that this leads inclusion of welcome page in browser history
-    	//   This is not perfect, but good enough. (and would be signifcant
-    	// effort to remove file)
-    	webView.loadUrl("file:///android_res/raw/help.html");
-	}
-
-	@Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-        case ZIMFILESELECT_REQUEST_CODE:
-            if (resultCode == RESULT_OK) {
-                // The URI of the selected file
-                final Uri uri = data.getData();
-                File file = null;
-                if (uri != null) {
-                	String path = uri.getPath();
-                	if (path != null)
-                		file = new File(path);
-                }
-                if (file==null)
-                	return;
-                // Create a File from this Uri
-                openZimFile(file, true);
-            }
-            break;
-        case PREFERENCES_REQUEST_CODE:
-            
-             loadPref();
-        	break;
-        }
+        getActionBar().hide();
+        mCurrentFragment.exitFullscreenButton.setVisibility(0);
+        mCurrentFragment.menu.findItem(R.id.menu_fullscreen)
+                .setTitle(getResources().getString(R.string.menu_exitfullscreen));
+        int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
+        getWindow().addFlags(fullScreenFlag);
+        getWindow().clearFlags(classicScreenFlag);
+        mCurrentFragment.isFullscreenOpened = true;
     }
 
+    private void closeFullScreen() {
+        mCurrentFragment = getCurrentVisibleFragment();
 
-
-
-	private boolean openZimFile(File file, boolean clearHistory) {
-		if (file.exists()) {
-			if (ZimContentProvider.setZimFile(file.getAbsolutePath())!=null) {
-
-
-        		getActionBar().setSubtitle(ZimContentProvider.getZimFileTitle());
-				//Apparently with webView.clearHistory() only
-				//    history before currently (fully) loaded page is cleared
-				// -> request clear, actual clear done after load.
-				//    Probably not working in all corners (e.g. zim file openend
-				//    while load in progress, mainpage of new zim file invalid, ...
-				//       but should be good enough.
-				// Actually probably redundant if no zim file openend before in session,
-				//  but to be on save side don't clear history in such cases.
-				if (clearHistory)
-					requestClearHistoryAfterLoad=true;
-				if (menu!=null) {
-					initAllMenuItems();
-				} else {
-					// Menu may not be initialized yet. In this case
-					// signal to menu create to show  
-					requestInitAllMenuItems = true;
-				}
-				openMainPage();
-				showSearchBar(false);
-				return true;
-			} else {
-				Toast.makeText(this, getResources().getString(R.string.error_fileinvalid), Toast.LENGTH_LONG).show();
-			}
-
-		} else {
-			Toast.makeText(this, getResources().getString(R.string.error_filenotfound), Toast.LENGTH_LONG).show();
-		}
-		return false;
-	}
-
-	private void initAllMenuItems() {
-        menu.findItem(R.id.menu_fullscreen).setVisible(true);
-		menu.findItem(R.id.menu_back).setVisible(true);
-		menu.findItem(R.id.menu_forward).setVisible(false);
-		menu.findItem(R.id.menu_home).setVisible(true);
-		menu.findItem(R.id.menu_randomarticle).setVisible(true);
-		menu.findItem(R.id.menu_searchintext).setVisible(true);
-		menu.findItem(R.id.menu_search).setVisible(true);
-	}
+        getActionBar().show();
+        mCurrentFragment.menu.findItem(R.id.menu_fullscreen)
+                .setTitle(getResources().getString(R.string.menu_fullscreen));
+        mCurrentFragment.exitFullscreenButton.setVisibility(4);
+        int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
+        getWindow().clearFlags(fullScreenFlag);
+        getWindow().addFlags(classicScreenFlag);
+        mCurrentFragment.isFullscreenOpened = false;
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(event.getAction() == KeyEvent.ACTION_DOWN){
-            switch(keyCode)
-            {
-            case KeyEvent.KEYCODE_BACK:
-                if(webView.canGoBack() == true){
-                	/*WebBackForwardList history = webView.copyBackForwardList();
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            mCurrentFragment = getCurrentVisibleFragment();
 
-                	if (history.getCurrentIndex() )*/
+            // handle the back button for the WebView in the current Fragment
+            mCurrentFragment.onKeyDown(keyCode, event);
 
-                    webView.goBack();
-                }else{
-                    finish();
-                }
-                return true;
-            }
-
+            return true;
         }
         return super.onKeyDown(keyCode, event);
     }
 
-	private boolean openArticle(String articleUrl) {
-		Log.d("kiwix", articleSearchtextView+" onEditorAction. TextView: "+articleSearchtextView.getText()+ " articleUrl: "+articleUrl);
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+        mViewPager.setCurrentItem(tab.getPosition(), true);
 
-		if (articleUrl!=null) {
-		    //			hideSearchBar();
-			webView.loadUrl(Uri.parse(ZimContentProvider.CONTENT_URI
-		            +articleUrl).toString());
+        mCurrentFragment = getCurrentVisibleFragment();
 
-			return true;
-		} else {
-			String errorString = String.format(getResources().getString(R.string.error_articlenotfound), articleSearchtextView.getText().toString());
-			Toast.makeText(getWindow().getContext(), errorString, Toast.LENGTH_SHORT).show();
+        // Update the title of the ActionBar. This well get triggered through the onPageSelected() callback
+        // of the ViewPager. We will have to post a Runnable to the message queue of the WebView, otherwise
+        // it might trigger a NullPointerExcaption, if the user swipes this tab away too fast (and therefore
+        // causes the Fragment to not load completely)
+        mCurrentFragment.webView.post(new Runnable() {
+            @Override
+            public void run() {
+                String title = getResources().getString(R.string.app_name);
+                if (mCurrentFragment.webView.getTitle() != null && !mCurrentFragment.webView.getTitle()
+                        .isEmpty()) {
+                    title = mCurrentFragment.webView.getTitle();
+                }
 
-			return true;
-		}
-	}
-
-    private void openFullScreen(){
-        getActionBar().hide();
-        exitFullscreenButton.setVisibility(0);
-        menu.findItem(R.id.menu_fullscreen).setTitle(getResources().getString(R.string.menu_exitfullscreen));
-        int fullScreenFlag=WindowManager.LayoutParams.FLAG_FULLSCREEN;
-        int classicScreenFlag=WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
-        getWindow().addFlags(fullScreenFlag);
-        getWindow().clearFlags(classicScreenFlag);
-        isFullscreenOpened=true;
+                // Check, if the app is in tabs mode. This is necessary, because getting a reference to the
+                // current tab would throw a NullPointerException, if the app were in landscape mode and
+                // therefore possibly in NAVIGATION_MODE_LIST mode
+                if (mActionBar.getNavigationMode() == ActionBar.NAVIGATION_MODE_TABS) {
+                    getActionBar().getSelectedTab().setText(title);
+                }
+            }
+        });
     }
 
-    private void closeFullScreen(){
-        getActionBar().show();
-        menu.findItem(R.id.menu_fullscreen).setTitle(getResources().getString(R.string.menu_fullscreen));
-        exitFullscreenButton.setVisibility(4);
-        int fullScreenFlag=WindowManager.LayoutParams.FLAG_FULLSCREEN;
-        int classicScreenFlag=WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
-        getWindow().clearFlags(fullScreenFlag);
-        getWindow().addFlags(classicScreenFlag);
-        isFullscreenOpened=false;
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+        reattachOnLongClickListener();
     }
-	
-	private boolean openArticleFromSearch() {
-		Log.d("kiwix", "openArticleFromSearch: "+articleSearchtextView.getText());
-		String articleTitle = articleSearchtextView.getText().toString();
-		String articleUrl = ZimContentProvider.getPageUrlFromTitle(articleTitle);
-		return openArticle(articleUrl);
-	}
-	
-	private boolean openRandomArticle() {
-		String articleUrl = ZimContentProvider.getRandomArticleUrl();
-		Log.d("kiwix", "openRandomArticle: "+articleUrl);
-		return openArticle(articleUrl);
-	}
-	
 
-	private boolean openMainPage() {
-    	String articleUrl = ZimContentProvider.getMainPage();
-    	return openArticle(articleUrl);
-	}
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+        reattachOnLongClickListener();
+    }
 
-	public boolean isTablet(Context context) {
-	    return (context.getResources().getConfiguration().screenLayout
-	            & Configuration.SCREENLAYOUT_SIZE_MASK)
-	            >= Configuration.SCREENLAYOUT_SIZE_LARGE;
-	}
+    @Override
+    public void removeTabAt(int position) {
 
-	private void hideSearchBar() {
-		// Hide searchbar
-		articleSearchBar.setVisibility(View.GONE);
-		// To close softkeyboard
-		webView.requestFocus();
-		//Seems not really be necessary
-		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(),0);
-	}
-	
-	private void ToggleNightMode(){
+        final ActionBar.Tab tab = mActionBar.getTabAt(position);
 
-		try {
-			InputStream stream = getAssets().open("invertcode.js");
-			int size = stream.available();
-			byte[] buffer = new byte[size];
-			stream.read(buffer);
-			stream.close();
-			String JSInvert = new String(buffer);
-			webView.loadUrl("javascript:"+JSInvert);
-			NightMode = !NightMode;
-		} catch (IOException e) {
+        // Check if the tab, that gets removed is the first tab. If true, then shift the user to the
+        // first tab to the right. Otherwise select the Fragment, that is one to the left.
+        if (tab.getPosition() == 0) {
+            mViewPager.setCurrentItem(tab.getPosition() + 1, true);
+        } else {
+            mViewPager.setCurrentItem(tab.getPosition(), true);
+        }
 
-		}
-	}
-	
-	private void setDefaultZoom() {
-		DisplayMetrics metrics = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(metrics);
-	
-		//Cleaner than approach used in 1.0 to set CLOSE for tables, MEDIUM for phones.
-		// However, unfortunately at least on Samsung Galaxy Tab 2 density is medium.
-		// Anyway, user can now override so it should be ok.
-		switch (metrics.densityDpi) {
-		case DisplayMetrics.DENSITY_HIGH:
-			Log.d("kiwix", "setDefaultZoom for Display DENSITY_HIGH-> ZoomDensity.FAR ");
-		    webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
-		    break;
-	
-		case DisplayMetrics.DENSITY_MEDIUM:
-			Log.d("kiwix", "setDefaultZoom for Display DENSITY_MEDIUM-> ZoomDensity.MEDIUM ");
-		    webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
-		    break;
-	
-		case DisplayMetrics.DENSITY_LOW:
-			Log.d("kiwix", "setDefaultZoom for Display DENSITY_LOW-> ZoomDensity.CLOSE ");
-		    webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.CLOSE);
-		    break;
-	
-		default:
-			Log.d("kiwix", "setDefaultZoom for Display OTHER -> ZoomDensity.MEDIUM ");
-		    webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
-		    break;
-		}
-	}
+        mActionBar.removeTabAt(tab.getPosition());
+        mViewPagerAdapter.removeFragment(tab.getPosition());
+        mViewPagerAdapter.notifyDataSetChanged();
+
+        if (mActionBar.getTabCount() == 1) {
+            mActionBar.setTitle(mActionBar.getSelectedTab().getText());
+            mActionBar.setSubtitle(ZimContentProvider.getZimFileTitle());
+            mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        }
+    }
+
+    private void removeCurrentTab() {
+        int position = mActionBar.getSelectedTab().getPosition();
+        removeTabAt(position);
+    }
+
+    // Find the Spinner in the ActionBar, if the ActionBar is in NAVIGATION_MODE_LIST mode
+    private boolean updateListNavigation(Object root, int position) {
+        if (root instanceof android.widget.Spinner) {
+            // Found the Spinner
+            Spinner spinner = (Spinner) root;
+            spinner.setSelection(position);
+            return true;
+        } else if (root instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) root;
+            if (group.getId() != android.R.id.content) {
+                // Found a container that isn't the container holding our screen layout
+                for (int i = 0; i < group.getChildCount(); i++) {
+                    if (updateListNavigation(group.getChildAt(i), position)) {
+                        // Found and done searching the View tree
+                        return true;
+                    }
+                }
+            }
+        }
+        // Found nothing
+        return false;
+    }
+
+    // Set an OnLongClickListener on all active ActionBar Tabs
+    private boolean setTabsOnLongClickListener(Object root) {
+
+        // Found the container, that holds the Tabs. This is the ScrollContainerView to be specific,
+        // but checking against that class is not possible, since it's part of the hidden API.
+        // We will check, if root is an derivative of HorizontalScrollView instead,
+        // since ScrollContainerView extends HorizontalScrollView.
+        if (root instanceof HorizontalScrollView) {
+            // The Tabs are all wraped in a LinearLayout
+            root = ((ViewGroup) root).getChildAt(0);
+            if (root instanceof LinearLayout) {
+                // Found the Tabs. Now we can set an OnLongClickListener on all of them.
+                for (int i = 0; i < ((ViewGroup) root).getChildCount(); i++) {
+                    LinearLayout child = ((LinearLayout) ((ViewGroup) root).getChildAt(i));
+                    child.setOnLongClickListener(this);
+                    child.setTag(R.id.action_bar_tab_id, i);
+                }
+                return true;
+            }
+            // Search ActionBar and the Tabs. Exclude the content of the app from this search.
+        } else if (root instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) root;
+            if (group.getId() != android.R.id.content) {
+                // Found a container that isn't the container holding our screen layout.
+                // The Tabs have to be in here.
+                for (int i = 0; i < group.getChildCount(); i++) {
+                    if (setTabsOnLongClickListener(group.getChildAt(i))) {
+                        // Found and done searching the View tree
+                        return true;
+                    }
+                }
+            }
+        }
+        // Found nothing
+        return false;
+    }
+
+    // We have to reattach the listeners on the Tabs, because they keep getting deattached every time the user
+    // swipes between the pages.
+    public void reattachOnLongClickListener() {
+        ViewParent root = findViewById(android.R.id.content).getParent();
+        setTabsOnLongClickListener(root);
+    }
+
+    @Override
+    public void addNewTab(final String url) {
+
+        addNewTab();
+        mCurrentFragment = getCurrentVisibleFragment();
+
+        mCurrentFragment.webView.post(new Runnable() {
+            @Override
+            public void run() {
+                mCurrentFragment.webView.loadUrl(url);
+            }
+        });
+    }
+
+    @Override
+    public void closeFullScreenMode() {
+        closeFullScreen();
+    }
+
+    @Override
+    public int getPositionOfTab() {
+        return mCurrentDraggedTab;
+    }
+
+    private void addNewTab() {
+
+        // If it's the first (visible) tab, then switch the navigation mode from  NAVIGATION_MODE_NORMAL to
+        // NAVIGATION_MODE_TABS and show tabs
+        if (NUM_ITEMS == 1) {
+            mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+            mCurrentFragment = getCurrentVisibleFragment();
+
+            String title = getResources().getString(R.string.app_name);
+            if (mCurrentFragment.webView.getTitle() != null &&
+                    !mCurrentFragment.webView.getTitle().isEmpty()) {
+                title = mCurrentFragment.webView.getTitle();
+            }
+
+            // Set the title for the selected Tab
+            if (mActionBar.getNavigationMode() == ActionBar.NAVIGATION_MODE_TABS) {
+                getActionBar().getSelectedTab().setText(title);
+            }
+        }
+
+        mActionBar.addTab(mActionBar.newTab().setTabListener(this));
+
+        NUM_ITEMS = NUM_ITEMS + 1;
+        mViewPagerAdapter.notifyDataSetChanged();
+
+        if (mActionBar.getTabCount() > 1) {
+            mActionBar.setTitle(ZimContentProvider.getZimFileTitle());
+            mActionBar.setSubtitle(null);
+        }
+
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                mViewPager.setCurrentItem(mActionBar.getTabCount() - 1, true);
+            }
+        });
+        reattachOnLongClickListener();
+    }
+
+    // This method gets a reference to the fragment, that is currently visible in the ViewPager
+    private KiwixMobileFragment getCurrentVisibleFragment() {
+
+        return ((KiwixMobileFragment) mViewPagerAdapter.
+                getFragmentAtPosition(mViewPager.getCurrentItem()));
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
+
+        mCurrentDraggedTab = (Integer) v.getTag(R.id.action_bar_tab_id);
+
+        mTabsWidth = v.getWidth();
+        mTabsHeight = v.getHeight();
+
+        getCurrentVisibleFragment().handleTabDeleteCross();
+
+        ClipData data = ClipData.newPlainText("", "");
+
+        v.startDrag(data, shadowBuilder, v, 0);
+
+        return true;
+    }
+
+    // Delete the current Tab, that is being dragged, if it hits the bounds of the Screen
+    @Override
+    public boolean onDrag(View v, DragEvent event) {
+
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+
+        // Get the height of the title bar
+        final int titleBarHeight;
+
+        switch (displaymetrics.densityDpi) {
+
+            case DisplayMetrics.DENSITY_HIGH:
+                titleBarHeight = 48;
+                break;
+
+            case DisplayMetrics.DENSITY_MEDIUM:
+                titleBarHeight = 32;
+                break;
+
+            case DisplayMetrics.DENSITY_LOW:
+                titleBarHeight = 24;
+                break;
+
+            default:
+                titleBarHeight = 0;
+        }
+
+        // Get the width and height of the screen
+        final int screenHeight = displaymetrics.heightPixels;
+        final int screenWidth = displaymetrics.widthPixels;
+
+        // Get the current position of the View, that is being dragged
+        final int positionX = (int) event.getX();
+        final int positionY = (int) event.getY();
+
+        if (event.getAction() == DragEvent.ACTION_DRAG_EXITED) {
+
+            removeTabAt(mCurrentDraggedTab);
+            return true;
+        }
+
+        if (event.getAction() == DragEvent.ACTION_DROP) {
+
+            // Does it hit the boundries on the x-axis?
+            if ((positionX > screenWidth - (0.25 * mTabsWidth)) ||
+                    (positionX < (0.25 * mTabsWidth))) {
+                Log.i("kiwix", "Dragged out");
+                removeTabAt(mCurrentDraggedTab);
+            }
+            // Does it hit the boundries on the y-axis?
+            else if ((positionY > screenHeight - (0.25 * mTabsHeight)) ||
+                    ((positionY - titleBarHeight) < (0.5 * mTabsHeight))) {
+                Log.i("kiwix", "Dragged out");
+                removeTabAt(mCurrentDraggedTab);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public class ViewPagerAdapter extends FragmentStatePagerAdapter {
+
+        // Keep track of the active Fragments
+        SparseArray<Fragment> tabs = new SparseArray<Fragment>();
+
+        public ViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int i) {
+
+            Fragment fragment = new KiwixMobileFragment();
+            tabs.put(i, fragment);
+            return fragment;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            tabs.remove(position);
+            super.destroyItem(container, position, object);
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_ITEMS;
+        }
+
+        public void removeFragment(int position) {
+            tabs.remove(position);
+            NUM_ITEMS = NUM_ITEMS - 1;
+            mViewPagerAdapter.notifyDataSetChanged();
+        }
+
+        // Gets the current visible Fragment or returns a new Fragment, if that fails
+        public Fragment getFragmentAtPosition(int position) {
+            return tabs.get(position) == null ? new KiwixMobileFragment() : tabs.get(position);
+        }
+    }
 }
-	

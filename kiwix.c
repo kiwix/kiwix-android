@@ -81,6 +81,23 @@ JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getMainPage(JNIEnv
   return url;
 }
 
+JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getId(JNIEnv *env, jobject obj) {
+  jstring id;
+  
+  pthread_mutex_lock(&readerLock);
+  if (reader != NULL) {
+    try {
+      std::string cId = reader->getId();
+      id = c2jni(cId, env);
+    } catch (exception &e) {
+      std::cerr << e.what() << std::endl;
+    }
+  }
+  pthread_mutex_unlock(&readerLock);
+  
+  return id;
+}
+
 JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_loadZIM(JNIEnv *env, jobject obj, jstring path) {
   jboolean retVal = JNI_TRUE;
   std::string cPath = jni2c(path, env);
