@@ -628,7 +628,7 @@ public class KiwixMobileFragment extends Fragment {
         String pref_zoom = mySharedPreferences.getString(PREF_ZOOM, AUTOMATIC);
         Boolean pref_zoom_enabled = mySharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
         Boolean pref_nightmode = mySharedPreferences.getBoolean(PREF_NIGHTMODE, false);
-        Boolean pref_buttonEnabled = mySharedPreferences.getBoolean(PREF_BACK_TO_TOP, false);
+        isButtonEnabled = mySharedPreferences.getBoolean(PREF_BACK_TO_TOP, isButtonEnabled);
 
         if (pref_zoom.equals(AUTOMATIC)) {
             setDefaultZoom();
@@ -649,10 +649,8 @@ public class KiwixMobileFragment extends Fragment {
         webView.getSettings().setBuiltInZoomControls(pref_zoom_enabled);
         webView.getSettings().setDisplayZoomControls(pref_zoom_enabled);
 
-        if (pref_buttonEnabled) {
-            mBackToTopButton.setVisibility(View.VISIBLE);
-        } else {
-            mBackToTopButton.setVisibility(View.VISIBLE);
+        if (!isButtonEnabled) {
+            mBackToTopButton.setVisibility(View.INVISIBLE);
         }
 
         // Night mode status
