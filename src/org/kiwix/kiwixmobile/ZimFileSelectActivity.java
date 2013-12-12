@@ -296,7 +296,6 @@ public class ZimFileSelectActivity extends FragmentActivity
         private class ViewHolder {
 
             TextView title;
-
             TextView path;
         }
     }

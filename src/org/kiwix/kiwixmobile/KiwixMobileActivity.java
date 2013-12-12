@@ -30,8 +30,12 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
+import java.util.ArrayList;
+
 public class KiwixMobileActivity extends FragmentActivity implements ActionBar.TabListener,
         View.OnLongClickListener, View.OnDragListener, KiwixMobileFragment.FragmentCommunicator {
+
+    public static ArrayList<State> mPrefState;
 
     private int NUM_ITEMS = 0;
 
@@ -63,6 +67,8 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
         getWindow().getDecorView().setOnDragListener(this);
 
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        mPrefState = new ArrayList<State>();
 
         mActionBar = getActionBar();
 
@@ -262,8 +268,9 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
     }
 
     @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-        mViewPager.setCurrentItem(tab.getPosition(), true);
+    public void onTabSelected(final ActionBar.Tab tab, FragmentTransaction ft) {
+        final int position = tab.getPosition();
+        mViewPager.setCurrentItem(position, true);
 
         mCurrentFragment = getCurrentVisibleFragment();
 
@@ -285,6 +292,11 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
                 // therefore possibly in NAVIGATION_MODE_LIST mode
                 if (mActionBar.getNavigationMode() == ActionBar.NAVIGATION_MODE_TABS) {
                     getActionBar().getSelectedTab().setText(title);
+                }
+                if (mPrefState.size() != 0) {
+                    if (mPrefState.get(position).hasToBeRefreshed()) {
+                        mCurrentFragment.loadPrefs();
+                    }
                 }
             }
         });
@@ -445,6 +457,8 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
         NUM_ITEMS = NUM_ITEMS + 1;
         mViewPagerAdapter.notifyDataSetChanged();
 
+        mPrefState.add(NUM_ITEMS - 1, new State(false));
+
         if (mActionBar.getTabCount() > 1) {
             mActionBar.setTitle(ZimContentProvider.getZimFileTitle());
             mActionBar.setSubtitle(null);
@@ -543,6 +557,23 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
             return true;
         }
         return false;
+    }
+
+    public class State {
+
+        private boolean hasToBeRefreshed;
+
+        private State(boolean hasToBeRefreshed) {
+            this.hasToBeRefreshed = hasToBeRefreshed;
+        }
+
+        public boolean hasToBeRefreshed() {
+            return hasToBeRefreshed;
+        }
+
+        public void setHasToBeRefreshed(boolean hasToBeRefreshed) {
+            this.hasToBeRefreshed = hasToBeRefreshed;
+        }
     }
 
     public class ViewPagerAdapter extends FragmentStatePagerAdapter {

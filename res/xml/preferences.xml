@@ -21,10 +21,10 @@
                 android:defaultValue="false"
                 android:summary="@string/pref_nightmode_summary"/>
         <CheckBoxPreference
-                android:key="pref_backtotop"
+                android:key="pref_back_to_top"
                 android:title="@string/pref_backtotop"
                 android:summary="@string/pref_backtotop_summary"
-                android:defaultValue="false"/>
+                android:defaultValue="true"/>
 
     </PreferenceCategory>
 

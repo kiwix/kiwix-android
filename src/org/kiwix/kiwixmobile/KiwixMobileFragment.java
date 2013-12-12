@@ -80,7 +80,9 @@ public class KiwixMobileFragment extends Fragment {
 
     private static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
 
-    private static final String PREFS_KIWIX_MOBILE = "kiwix-mobile";
+    private static final String PREF_KIWIX_MOBILE = "kiwix-mobile";
+
+    private static final String PREF_BACK_TO_TOP = "pref_back_to_top";
 
     private static final String AUTOMATIC = "automatic";
 
@@ -114,9 +116,9 @@ public class KiwixMobileFragment extends Fragment {
 
     protected int requestWebReloadOnFinished;
 
-    private SharedPreferences mySharedPreferences;
+    private boolean isButtonEnabled;
 
-    private boolean isButtonEnabled = true;
+    private SharedPreferences mySharedPreferences;
 
     private ArrayAdapter<String> adapter;
 
@@ -137,6 +139,7 @@ public class KiwixMobileFragment extends Fragment {
         requestWebReloadOnFinished = 0;
         requestInitAllMenuItems = false;
         nightMode = false;
+        isButtonEnabled = true;
         isFullscreenOpened = false;
     }
 
@@ -175,7 +178,7 @@ public class KiwixMobileFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        SharedPreferences settings = getActivity().getSharedPreferences(PREFS_KIWIX_MOBILE, 0);
+        SharedPreferences settings = getActivity().getSharedPreferences(PREF_KIWIX_MOBILE, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(TAG_CURRENTZIMFILE, ZimContentProvider.getZimFile());
 
@@ -222,7 +225,7 @@ public class KiwixMobileFragment extends Fragment {
                     + " times after restoring state");
 
         } else {
-            SharedPreferences settings = getActivity().getSharedPreferences(PREFS_KIWIX_MOBILE, 0);
+            SharedPreferences settings = getActivity().getSharedPreferences(PREF_KIWIX_MOBILE, 0);
             String zimFile = settings.getString(TAG_CURRENTZIMFILE, null);
             if (zimFile != null) {
                 Log.d(TAG_KIWIX, " Kiwix normal start, zimFile loaded last time -> Open last used zimFile "
@@ -598,8 +601,10 @@ public class KiwixMobileFragment extends Fragment {
                 break;
             case PREFERENCES_REQUEST_CODE:
                 loadPrefs();
-                getActivity().finish();
-                startActivity(new Intent(getActivity(), KiwixMobileActivity.class));
+                for (KiwixMobileActivity.State state : KiwixMobileActivity.mPrefState) {
+                    state.setHasToBeRefreshed(true);
+                }
+                Log.e("kiwix", KiwixMobileActivity.mPrefState.get(0).hasToBeRefreshed() + "");
                 break;
         }
 
@@ -617,11 +622,13 @@ public class KiwixMobileFragment extends Fragment {
     }
 
     public void loadPrefs() {
+
         mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
         String pref_zoom = mySharedPreferences.getString(PREF_ZOOM, AUTOMATIC);
         Boolean pref_zoom_enabled = mySharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
         Boolean pref_nightmode = mySharedPreferences.getBoolean(PREF_NIGHTMODE, false);
-        isButtonEnabled = mySharedPreferences.getBoolean("pref_backtotop", isButtonEnabled);
+        Boolean pref_buttonEnabled = mySharedPreferences.getBoolean(PREF_BACK_TO_TOP, false);
 
         if (pref_zoom.equals(AUTOMATIC)) {
             setDefaultZoom();
@@ -639,11 +646,13 @@ public class KiwixMobileFragment extends Fragment {
         // Pinch to zoom
         // This seems to suffer from a bug in Android. If you set to "false" this only apply after a restart of the app.
         Log.d(TAG_KIWIX, "pref_zoom_enabled value (" + pref_zoom_enabled + ")");
-        webView.getSettings().setBuiltInZoomControls(true);
+        webView.getSettings().setBuiltInZoomControls(pref_zoom_enabled);
         webView.getSettings().setDisplayZoomControls(pref_zoom_enabled);
 
-        if (!isButtonEnabled) {
-            mBackToTopButton.setVisibility(View.INVISIBLE);
+        if (pref_buttonEnabled) {
+            mBackToTopButton.setVisibility(View.VISIBLE);
+        } else {
+            mBackToTopButton.setVisibility(View.VISIBLE);
         }
 
         // Night mode status
