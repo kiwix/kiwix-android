@@ -169,7 +169,7 @@ LIBICU_INCLUDES = [os.path.join(LIBICU_SRC, 'i18n'), os.path.join(LIBICU_SRC, 'c
 
 # root folder for libzim
 LIBZIM_SRC = os.path.join(os.path.dirname(CURRENT_PATH),
-                          'src', 'zimlib')
+                          'src', 'dependencies', 'zimlib-1.1')
 
 # headers for libzim
 LIBZIM_INCLUDES = [os.path.join(LIBZIM_SRC, 'include')]
