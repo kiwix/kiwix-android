@@ -180,7 +180,7 @@ LIBZIM_SOURCE_FILES = ('article.cpp', 'articlesearch.cpp', 'cluster.cpp',
                        'fileimpl.cpp', 'indexarticle.cpp', 'ptrstream.cpp',
                        'search.cpp', 'template.cpp', 'unicode.cpp', 'uuid.cpp',
                        'zintstream.cpp', 'envvalue.cpp', 'lzmastream.cpp',
-                       'unlzmastream.cpp', 'fstream.cpp', 'md5.cpp',
+                       'unlzmastream.cpp', 'fstream.cpp', 'md5.c',
                        'md5stream.cpp')
 
 # root folder for libkiwix
