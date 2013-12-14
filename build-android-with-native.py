@@ -7,6 +7,7 @@
     . Compile libkiwix '''
 
 import os
+import re
 import sys
 import copy
 import shutil
@@ -408,7 +409,7 @@ for arch in ARCHS:
                                                   + platform_includes)})
     link_cmd = ('ar rvs libzim.a '
                 '%(obj_files)s '
-                % {'obj_files': ' '.join([n.replace('.cpp', '.o')
+                % {'obj_files': ' '.join([re.sub('(\.c[p]*)', '.o', n)
                                           for n in LIBZIM_SOURCE_FILES])})
 
     if COMPILE_LIBZIM:
@@ -420,7 +421,7 @@ for arch in ARCHS:
         os.remove(libzim_file)
 
         for src in LIBZIM_SOURCE_FILES:
-            os.remove(src.replace('.cpp', '.o'))
+            os.remove(re.sub('(\.c[p]*)', '.o', src))
 
     # check that the step went well
     if COMPILE_LIBZIM or COMPILE_LIBKIWIX:
