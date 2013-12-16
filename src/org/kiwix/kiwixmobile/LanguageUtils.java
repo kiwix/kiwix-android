@@ -1,9 +1,11 @@
 package org.kiwix.kiwixmobile;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.InflateException;
@@ -81,6 +83,14 @@ public class LanguageUtils {
         for (Locale s : Locale.getAvailableLocales()) {
             if (s.getLanguage().equals(Locale.getDefault().toString())) {
 
+                return false;
+            }
+
+            // Don't change the language, if the options hasn't been set
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+            String language = prefs.getString("pref_language_chooser", "");
+
+            if (language.isEmpty()) {
                 return false;
             }
         }

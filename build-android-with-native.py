@@ -29,6 +29,7 @@ USAGE = '''Usage:  %s [--option]
     --kiwix         Compile libkiwix
     --strip         Strip libkiwix.so
     --apk           Create an APK file
+    --locales       Create the locales.txt file
 
     Note that the '--' prefix is optionnal.
 
@@ -518,8 +519,7 @@ for arch in ARCHS:
     change_env(ORIGINAL_ENVIRON)
 
 if COMPILE_APK:
-    # create locales.txt
-    # create_locales.write_locales(create_locales.get_all_language_codes())
+
     syscall('rm -f bin/*.apk', shell=True)
     syscall('ant debug')
     syscall('ls -lh bin/*.apk', shell=True)
@@ -540,7 +540,7 @@ if LOCALES_TXT:
   with open(os.path.join(curdir, 'assets', 'locales.txt'), 'w') as f:
     f.write(',\n'.join(files))
 
-
+  print 'Created locales.txt file.'
 
 # check that the step went well
 if COMPILE_APK:
