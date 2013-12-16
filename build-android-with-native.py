@@ -11,7 +11,6 @@ import re
 import sys
 import copy
 import shutil
-# import create_locales
 from subprocess import call, check_output
 
 # target platform to compile for
@@ -47,7 +46,7 @@ def init_with_args(args):
     # default is executing all the steps
     create_toolchain = compile_liblzma = compile_libicu = \
         compile_libzim = compile_libkiwix = strip_libkiwix = \
-        compile_apk = True
+        compile_apk = locales_txt = True
     archs = ALL_ARCHS
 
     options = [a.lower() for a in args[1:]]
@@ -82,7 +81,7 @@ def init_with_args(args):
         # we received options.
         # consider we only want the specified steps
         create_toolchain = compile_liblzma = compile_libicu = compile_libzim = \
-            compile_libkiwix = strip_libkiwix = compile_apk = False
+            compile_libkiwix = strip_libkiwix = compile_apk = locales_txt = False
 
         for option in options:
             if 'toolchain' in option:
@@ -99,9 +98,11 @@ def init_with_args(args):
                 strip_libkiwix = True
             if 'apk' in option:
                 compile_apk = True
+            if 'locales' in option:
+                locales_txt = True
 
     return (create_toolchain, compile_liblzma, compile_libicu, compile_libzim,
-            compile_libkiwix, strip_libkiwix, compile_apk, archs)
+            compile_libkiwix, strip_libkiwix, compile_apk, locales_txt, archs)
 
 # store the OS's environment PATH as we'll mess with it
 # ORIGINAL_ENVIRON_PATH = os.environ.get('PATH')
@@ -127,7 +128,7 @@ SYSTEMS = {'Linux': 'linux', 'Darwin': 'mac'}
 
 # find out what to execute based on command line arguments
 CREATE_TOOLCHAIN, COMPILE_LIBLZMA, COMPILE_LIBICU, COMPILE_LIBZIM, \
-    COMPILE_LIBKIWIX, STRIP_LIBKIWIX, COMPILE_APK, ARCHS = init_with_args(sys.argv)
+    COMPILE_LIBKIWIX, STRIP_LIBKIWIX, COMPILE_APK, LOCALES_TXT, ARCHS = init_with_args(sys.argv)
 
 # compiler version to use
 # list of available toolchains in <NDK_PATH>/toolchains
@@ -522,6 +523,24 @@ if COMPILE_APK:
     syscall('rm -f bin/*.apk', shell=True)
     syscall('ant debug')
     syscall('ls -lh bin/*.apk', shell=True)
+
+if LOCALES_TXT:
+
+  # Get the path of the res folder
+  res_path = os.path.join(curdir,'res')
+
+  # Get all the ISO 639-1 language codes from the suffix of the value folders
+  files = [f.split('values-')[1] for f in os.listdir(res_path) if f.startswith('values-')]
+
+  # Append the English Locale to the list, since the default values folder, (the english) values folder
+  # does not have a suffix and gets ignored when creating the above list
+  files.append('en')
+
+  # Create a CSV file with all the langauge codes in the assets folder
+  with open(os.path.join(curdir, 'assets', 'locales.txt'), 'w') as f:
+    f.write(',\n'.join(files))
+
+
 
 # check that the step went well
 if COMPILE_APK:
