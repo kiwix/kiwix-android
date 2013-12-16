@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -8,6 +9,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
+import android.util.Log;
 
 import java.util.Locale;
 
@@ -44,10 +46,12 @@ public class KiwixSettings extends Activity {
 
             prefList.setDefaultValue(prefList.getEntryValues()[0]);
             String summary = prefList.getValue();
+
             if (summary == null) {
                 prefList.setValue((String) prefList.getEntryValues()[0]);
                 summary = prefList.getValue();
             }
+
             prefList.setSummary(prefList.getEntries()[prefList.findIndexOfValue(summary)]);
             prefList.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
@@ -69,6 +73,8 @@ public class KiwixSettings extends Activity {
 
             LanguageUtils languageUtils = new LanguageUtils(getActivity());
 
+            languageList.setTitle(Locale.getDefault().getDisplayLanguage());
+
             languageList.setEntries(languageUtils.getValues().toArray(new String[0]));
             languageList.setEntryValues(languageUtils.getKeys().toArray(new String[0]));
 
@@ -79,10 +85,13 @@ public class KiwixSettings extends Activity {
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
 
                     if (!newValue.equals(Locale.getDefault().toString())) {
+
+                        LanguageUtils.handleLocaleChange(getActivity(), newValue.toString());
                         // Request a restart when the user returns to the Activity, that called this Activity
                         setResult(RESULT_RESTART);
+                        finish();
+                        startActivity(new Intent(getActivity(), KiwixSettings.class));
                     }
-
                     return true;
                 }
             });

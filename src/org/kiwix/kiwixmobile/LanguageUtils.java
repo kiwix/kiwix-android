@@ -2,12 +2,13 @@ package org.kiwix.kiwixmobile;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -41,6 +43,27 @@ public class LanguageUtils {
         setupLanguageList();
 
         sortLanguageList();
+    }
+
+    public static void handleLocaleChange(Context context) {
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String language = prefs.getString("pref_language_chooser", "");
+
+        if (language.isEmpty()) {
+            return;
+        }
+
+        handleLocaleChange(context, language);
+    }
+
+    public static void handleLocaleChange(Context context, String language) {
+
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
     }
 
     // Read the language codes, that are supported in this app from the locales.txt file
@@ -126,6 +149,11 @@ public class LanguageUtils {
         }
     }
 
+    private boolean isLanguageSet() {
+
+        return false;
+    }
+
     // Get a list of all the language names
     public List<String> getValues() {
 
@@ -177,8 +205,14 @@ public class LanguageUtils {
                     final View view = inflater.createView(name, null, attrs);
                     new Handler().post(new Runnable() {
                         public void run() {
-                            ((TextView) view).setTypeface(Typeface.createFromAsset(
-                                    mContext.getAssets(), "DejaVuSansCondensed.ttf"));
+                            TextView textView = ((TextView) view);
+
+                            // Set the custom typeface
+                            textView.setTypeface(Typeface.createFromAsset(
+                                    mContext.getAssets(), getTypeface()));
+
+                            // Reduce the text size
+                            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textView.getTextSize() - 3f);
                         }
                     });
 
@@ -191,6 +225,25 @@ public class LanguageUtils {
                 }
             }
             return null;
+        }
+
+        // This method will determine which font will be applied to the not-supported-locale.
+        // You can define exceptions to the default DejaVu font in the 'exceptions' Hashmap:
+        // Key: the language code; Value: the name of the font.
+        // The font has to be placed in the assets folder.
+        private String getTypeface() {
+
+            // Define the exceptions to the rule
+            HashMap<String, String> exceptions = new HashMap<String, String>();
+            exceptions.put("my", "Parabaik.ttf");
+
+            // Check, if an exception applies to our current locale
+            if (exceptions.containsKey(Locale.getDefault().getLanguage())) {
+                return exceptions.get(Locale.getDefault().getLanguage());
+            }
+
+            // Return the default font
+            return "DejaVuSansCondensed.ttf";
         }
     }
 
@@ -205,7 +258,13 @@ public class LanguageUtils {
         // possible incompatibilities, since not all language names are available in all languages.
         private LanguageContainer(String languageCode) {
             mLanguageCode = languageCode;
-            mLanguageName = new Locale(languageCode).getDisplayLanguage(new Locale("en"));
+            mLanguageName = new Locale(languageCode).getDisplayLanguage();
+
+            // Use the English name of the language, if the language name is not
+            // available in the current Locale
+            if (mLanguageName.length() == 2) {
+                mLanguageName = new Locale(languageCode).getDisplayLanguage(new Locale("en"));
+            }
         }
 
         public String getLanguageCode() {

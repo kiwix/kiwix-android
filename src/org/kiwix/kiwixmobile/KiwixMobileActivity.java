@@ -133,19 +133,7 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
 
     // Reset the Locale and change the font of all TextViews and its subclasses, if necessary
     private void handleLocaleCheck() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String language = prefs.getString("pref_language_chooser", "");
-
-        if (language.isEmpty()) {
-            return;
-        }
-
-        Locale locale = new Locale(language);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-
+        LanguageUtils.handleLocaleChange(this);
         new LanguageUtils(this).changeFont(getLayoutInflater());
     }
 
