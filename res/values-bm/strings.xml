@@ -52,4 +52,6 @@
     <string name="remove">Remove</string>
     <string name="open_in_new_tab">Open link in new Tab?</string>
     <string name="share_via">Share via</string>
+    <string name="pref_language_title">Language</string>
+    <string name="pref_language_chooser">Choose a language</string>
 </resources>

@@ -102,6 +102,8 @@ public class KiwixMobileFragment extends Fragment {
 
     public KiwixWebView webView;
 
+    public boolean isFullscreenOpened;
+
     public ImageButton exitFullscreenButton;
 
     public AutoCompleteTextView articleSearchtextView;
@@ -138,6 +140,7 @@ public class KiwixMobileFragment extends Fragment {
         requestInitAllMenuItems = false;
         nightMode = false;
         isButtonEnabled = true;
+        isFullscreenOpened = false;
     }
 
     @Override
