@@ -24,13 +24,10 @@ import android.app.FragmentTransaction;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -53,12 +50,13 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class KiwixMobileActivity extends FragmentActivity implements ActionBar.TabListener,
         View.OnLongClickListener, View.OnDragListener, KiwixMobileFragment.FragmentCommunicator {
 
     public static ArrayList<State> mPrefState;
+
+    public static boolean mIsFullscreenOpened;
 
     private ViewPagerAdapter mViewPagerAdapter;
 
@@ -99,6 +97,8 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
 
         mPrefState = new ArrayList<State>();
 
+        mIsFullscreenOpened = false;
+
         setUpViewPagerAndActionBar();
 
         // Set the initial tab. It's hidden.
@@ -136,6 +136,10 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
                         || mActionBar.getNavigationMode() == ActionBar.NAVIGATION_MODE_LIST) {
                     mActionBar.setSelectedNavigationItem(position);
                 }
+
+                // Set the visibillity of the fullscreen button
+                int visibillity = mIsFullscreenOpened ? View.VISIBLE : View.INVISIBLE;
+                mCurrentFragment.exitFullscreenButton.setVisibility(visibillity);
 
                 // If the app is in landscape mode, Android will switch the navigationmode from
                 // "NAVIGATION_MODE_TABS" to "NAVIGATION_MODE_LIST" (as long as the app has more than 3 tabs open).
@@ -240,7 +244,7 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
                 break;
 
             case R.id.menu_fullscreen:
-                if (mCurrentFragment.isFullscreenOpened) {
+                if (mIsFullscreenOpened) {
                     closeFullScreen();
                 } else {
                     openFullScreen();
@@ -267,14 +271,14 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
         mCurrentFragment = getCurrentVisibleFragment();
 
         getActionBar().hide();
-        mCurrentFragment.exitFullscreenButton.setVisibility(0);
+        mCurrentFragment.exitFullscreenButton.setVisibility(View.VISIBLE);
         mCurrentFragment.menu.findItem(R.id.menu_fullscreen)
                 .setTitle(getResources().getString(R.string.menu_exitfullscreen));
         int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
         int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
         getWindow().addFlags(fullScreenFlag);
         getWindow().clearFlags(classicScreenFlag);
-        mCurrentFragment.isFullscreenOpened = true;
+        mIsFullscreenOpened = true;
     }
 
     private void closeFullScreen() {
@@ -283,12 +287,12 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
         getActionBar().show();
         mCurrentFragment.menu.findItem(R.id.menu_fullscreen)
                 .setTitle(getResources().getString(R.string.menu_fullscreen));
-        mCurrentFragment.exitFullscreenButton.setVisibility(4);
+        mCurrentFragment.exitFullscreenButton.setVisibility(View.INVISIBLE);
         int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
         int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
         getWindow().clearFlags(fullScreenFlag);
         getWindow().addFlags(classicScreenFlag);
-        mCurrentFragment.isFullscreenOpened = false;
+        mIsFullscreenOpened = false;
     }
 
     @Override

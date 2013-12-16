@@ -101,7 +101,7 @@ public class KiwixMobileFragment extends Fragment {
 
     private static final String PREF_KIWIX_MOBILE = "kiwix-mobile";
 
-    private static final String PREF_BACK_TO_TOP = "pref_backtotop";
+    private static final String PREF_BACK_TO_TOP = "pref_back_to_top";
 
     private static final String AUTOMATIC = "automatic";
 
@@ -135,7 +135,7 @@ public class KiwixMobileFragment extends Fragment {
 
     protected int requestWebReloadOnFinished;
 
-    private boolean isFullscreenButtonEnabled;
+    private boolean isButtonEnabled;
 
     private SharedPreferences mySharedPreferences;
 
@@ -158,7 +158,7 @@ public class KiwixMobileFragment extends Fragment {
         requestWebReloadOnFinished = 0;
         requestInitAllMenuItems = false;
         nightMode = false;
-        isFullscreenButtonEnabled = true;
+        isButtonEnabled = true;
         isFullscreenOpened = false;
     }
 
@@ -385,7 +385,7 @@ public class KiwixMobileFragment extends Fragment {
 
             @Override
             public void onPageChanged(int page, int maxPages) {
-                if (isFullscreenButtonEnabled) {
+                if (isButtonEnabled) {
                     if (webView.getScrollY() > 200) {
                         if (mBackToTopButton.getVisibility() == View.INVISIBLE) {
                             mBackToTopButton.setText(R.string.button_backtotop);
@@ -653,7 +653,7 @@ public class KiwixMobileFragment extends Fragment {
         String pref_zoom = mySharedPreferences.getString(PREF_ZOOM, AUTOMATIC);
         Boolean pref_zoom_enabled = mySharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
         Boolean pref_nightmode = mySharedPreferences.getBoolean(PREF_NIGHTMODE, false);
-        isFullscreenButtonEnabled = mySharedPreferences.getBoolean(PREF_BACK_TO_TOP, isFullscreenButtonEnabled);
+        isButtonEnabled = mySharedPreferences.getBoolean(PREF_BACK_TO_TOP, isButtonEnabled);
 
         if (pref_zoom.equals(AUTOMATIC)) {
             setDefaultZoom();
@@ -674,7 +674,7 @@ public class KiwixMobileFragment extends Fragment {
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setDisplayZoomControls(pref_zoom_enabled);
 
-        if (!isFullscreenButtonEnabled) {
+        if (!isButtonEnabled) {
             mBackToTopButton.setVisibility(View.INVISIBLE);
         }
 
