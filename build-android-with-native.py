@@ -7,6 +7,7 @@
     . Compile libkiwix '''
 
 import os
+import re
 import sys
 import copy
 import shutil
@@ -181,7 +182,7 @@ LIBZIM_SOURCE_FILES = ('article.cpp', 'articlesearch.cpp', 'cluster.cpp',
                        'fileimpl.cpp', 'indexarticle.cpp', 'ptrstream.cpp',
                        'search.cpp', 'template.cpp', 'unicode.cpp', 'uuid.cpp',
                        'zintstream.cpp', 'envvalue.cpp', 'lzmastream.cpp',
-                       'unlzmastream.cpp', 'fstream.cpp', 'md5.cpp',
+                       'unlzmastream.cpp', 'fstream.cpp', 'md5.c',
                        'md5stream.cpp')
 
 # root folder for libkiwix
@@ -409,7 +410,7 @@ for arch in ARCHS:
                                                   + platform_includes)})
     link_cmd = ('ar rvs libzim.a '
                 '%(obj_files)s '
-                % {'obj_files': ' '.join([n.replace('.cpp', '.o')
+                % {'obj_files': ' '.join([re.sub('(\.c[p]*)', '.o', n)
                                           for n in LIBZIM_SOURCE_FILES])})
 
     if COMPILE_LIBZIM:
@@ -421,7 +422,7 @@ for arch in ARCHS:
         os.remove(libzim_file)
 
         for src in LIBZIM_SOURCE_FILES:
-            os.remove(src.replace('.cpp', '.o'))
+            os.remove(re.sub('(\.c[p]*)', '.o', src))
 
     # check that the step went well
     if COMPILE_LIBZIM or COMPILE_LIBKIWIX:
