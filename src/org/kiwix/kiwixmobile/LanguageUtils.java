@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.util.AttributeSet;
@@ -88,11 +89,11 @@ public class LanguageUtils {
 
     // Change the font of all the TextViews and its subclasses in our whole app by attaching a custom
     // Factory to the LayoutInflater of the Activity.
-    // The Factory is called on each element name as the xml is parsed and we can therefore modify the parsed
-    // Elements while the content is being parsed.
-    // A Factory can only be set once on a LayoutInflator. And since we are using the support Library,
+    // The Factory is called on each element name as the xml is parsed and we can therefore modify
+    // the parsed Elements.
+    // A Factory can only be set once on a LayoutInflater. And since we are using the support Library,
     // which also sets a Factory on the LayoutInflator, we have to access the private field of the
-    // LayoutInflater, that handles this restriction via the Java's reflection API
+    // LayoutInflater, that handles this restriction via Java's reflection API
     // and make it accessible set it to false again.
     public void changeFont(LayoutInflater layoutInflater) {
 

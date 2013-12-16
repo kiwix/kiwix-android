@@ -517,8 +517,8 @@ for arch in ARCHS:
     change_env(ORIGINAL_ENVIRON)
 
 if COMPILE_APK:
-    #create locales.txt
-    create_locales.write_locales(create_locales.get_all_language_codes())
+    # create locales.txt
+    # create_locales.write_locales(create_locales.get_all_language_codes())
     syscall('rm -f bin/*.apk', shell=True)
     syscall('ant debug')
     syscall('ls -lh bin/*.apk', shell=True)
