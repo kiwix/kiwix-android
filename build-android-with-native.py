@@ -11,7 +11,7 @@ import re
 import sys
 import copy
 import shutil
-import create_locales
+# import create_locales
 from subprocess import call, check_output
 
 # target platform to compile for
