@@ -149,11 +149,6 @@ public class LanguageUtils {
         }
     }
 
-    private boolean isLanguageSet() {
-
-        return false;
-    }
-
     // Get a list of all the language names
     public List<String> getValues() {
 
@@ -193,7 +188,6 @@ public class LanguageUtils {
 
         @Override
         public View onCreateView(String name, Context context, AttributeSet attrs) {
-            Log.e("kiwix", name);
 
             // Apply the custom font, if the xml tag equals "TextView", "EditText" or "AutoCompleteTextView"
             if (name.equalsIgnoreCase("TextView")
@@ -229,11 +223,10 @@ public class LanguageUtils {
 
         // This method will determine which font will be applied to the not-supported-locale.
         // You can define exceptions to the default DejaVu font in the 'exceptions' Hashmap:
-        // Key: the language code; Value: the name of the font.
-        // The font has to be placed in the assets folder.
         private String getTypeface() {
 
-            // Define the exceptions to the rule
+            // Define the exceptions to the rule. The font has to be placed in the assets folder.
+            // Key: the language code; Value: the name of the font.
             HashMap<String, String> exceptions = new HashMap<String, String>();
             exceptions.put("my", "Parabaik.ttf");
 
