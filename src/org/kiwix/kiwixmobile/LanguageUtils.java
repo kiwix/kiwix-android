@@ -1,5 +1,5 @@
 /*
- * Copyright 2013
+ * Copyright 2013  Rashiq Ahmad <rashiq.z@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU  General Public License as published by
@@ -26,7 +26,6 @@ import android.graphics.Typeface;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.InflateException;
 import android.view.LayoutInflater;

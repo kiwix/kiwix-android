@@ -1,5 +1,5 @@
 /*
- * Copyright 2013
+ * Copyright 2013 Rashiq Ahmad <rashiq.z@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU  General Public License as published by
@@ -122,6 +122,4 @@ public class FileSearch {
     private String getTitleFromFilePath(String path) {
         return new File(path).getName().replaceFirst("[.][^.]+$", "");
     }
-
-
 }

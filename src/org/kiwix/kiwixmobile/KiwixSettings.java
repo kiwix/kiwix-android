@@ -1,5 +1,5 @@
 /*
- * Copyright 2013
+ * Copyright 2013  Rashiq Ahmad <rashiq.z@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU  General Public License as published by
@@ -28,7 +28,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
-import android.util.Log;
 
 import java.util.Locale;
 
