@@ -375,7 +375,6 @@ public class KiwixMobileFragment extends Fragment {
                                 mBackToTopButton.startAnimation(
                                         AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in));
                             }
-
                         }
                     } else {
                         if (mBackToTopButton.getVisibility() == View.VISIBLE) {
@@ -600,6 +599,11 @@ public class KiwixMobileFragment extends Fragment {
                 }
                 break;
             case PREFERENCES_REQUEST_CODE:
+                if (resultCode == KiwixSettings.RESULT_RESTART) {
+                    getActivity().finish();
+                    startActivity(new Intent(getActivity(), KiwixMobileActivity.class));
+                }
+
                 loadPrefs();
                 for (KiwixMobileActivity.State state : KiwixMobileActivity.mPrefState) {
                     state.setHasToBeRefreshed(true);
@@ -615,9 +619,11 @@ public class KiwixMobileFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main, menu);
         this.menu = menu;
+
         if (requestInitAllMenuItems) {
             initAllMenuItems();
         }
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -646,7 +652,7 @@ public class KiwixMobileFragment extends Fragment {
         // Pinch to zoom
         // This seems to suffer from a bug in Android. If you set to "false" this only apply after a restart of the app.
         Log.d(TAG_KIWIX, "pref_zoom_enabled value (" + pref_zoom_enabled + ")");
-        webView.getSettings().setBuiltInZoomControls(pref_zoom_enabled);
+        webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setDisplayZoomControls(pref_zoom_enabled);
 
         if (!isButtonEnabled) {
@@ -937,6 +943,7 @@ public class KiwixMobileFragment extends Fragment {
                                 data.add(suggestion);
                             }
                         } catch (Exception e) {
+
                         }
                         // Now assign the values and count to the FilterResults object
                         filterResults.values = data;
@@ -1053,7 +1060,7 @@ public class KiwixMobileFragment extends Fragment {
                     getActivity().getActionBar().getSelectedTab().setText(title);
                 }
 
-                //Workaround for #643
+                // Workaround for #643
                 if (requestWebReloadOnFinished > 0) {
                     requestWebReloadOnFinished = requestWebReloadOnFinished - 1;
                     Log.d(TAG_KIWIX, "Workaround for #643: onPageFinished. Trigger reloading. ("

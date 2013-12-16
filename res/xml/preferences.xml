@@ -29,8 +29,20 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-            android:title="@string/pref_info_title"
-            android:key="pref_info">
+            android:key="pref_language"
+            android:title="@string/pref_language_title">
+
+        <ListPreference
+                android:key="pref_language_chooser"
+                android:title="@string/pref_language_title"
+                android:summary="@string/pref_language_chooser"
+                android:dialogTitle="@string/pref_language_chooser"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            android:key="pref_info"
+            android:title="@string/pref_info_title">
 
         <EditTextPreference
                 android:key="pref_version"

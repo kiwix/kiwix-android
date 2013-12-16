@@ -52,6 +52,9 @@ public class ZimFileSelectActivity extends FragmentActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        new LanguageUtils(this).changeFont(getLayoutInflater());
+
         setContentView(R.layout.zimfilelist);
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);

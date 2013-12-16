@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -45,6 +47,28 @@ public class FileWriter {
         saveCsvToPrefrences(sb.toString());
     }
 
+    // Read the locales.txt file in the assets folder, that has been created at compile time by the
+    // build script
+    public ArrayList<String> readFileFromAssets() {
+
+        String content = "";
+
+        try {
+            InputStream stream = mContext.getAssets().open("locales.txt");
+
+            int size = stream.available();
+            byte[] buffer = new byte[size];
+            stream.read(buffer);
+            stream.close();
+            content = new String(buffer);
+
+        } catch (IOException e) {
+
+        }
+
+        return readCsv(content);
+    }
+
     // Add items to the MediaStore list, that are not in the MediaStore database.
     // These will be loaded from a previously saved CSV file.
     // We are checking, if these file still exist as well.
@@ -64,6 +88,11 @@ public class FileWriter {
     private ArrayList<String> readCsv() {
 
         String csv = getCsvFromPrefrences();
+
+        return readCsv(csv);
+    }
+
+    private ArrayList<String> readCsv(String csv) {
 
         String[] csvArray = csv.split(",");
 

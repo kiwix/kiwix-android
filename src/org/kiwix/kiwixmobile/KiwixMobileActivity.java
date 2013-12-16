@@ -5,10 +5,13 @@ import android.app.FragmentTransaction;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -31,13 +34,12 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class KiwixMobileActivity extends FragmentActivity implements ActionBar.TabListener,
         View.OnLongClickListener, View.OnDragListener, KiwixMobileFragment.FragmentCommunicator {
 
     public static ArrayList<State> mPrefState;
-
-    private int NUM_ITEMS = 0;
 
     private ViewPagerAdapter mViewPagerAdapter;
 
@@ -46,6 +48,8 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
     private ActionBar mActionBar;
 
     private KiwixMobileFragment mCurrentFragment;
+
+    private int mNumberOfTabs = 0;
 
     private int mCurrentDraggedTab;
 
@@ -60,6 +64,8 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
         requestWindowFeature(Window.FEATURE_PROGRESS);
         setProgressBarVisibility(true);
 
+        handleLocaleCheck();
+
         setContentView(R.layout.viewpager);
 
         // Set an OnDragListener on the entire View. Now we can track, if the user drags the
@@ -68,15 +74,24 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
 
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        mPrefState = new ArrayList<State>();
+        mViewPager = (ViewPager) findViewById(R.id.viewPager);
 
         mActionBar = getActionBar();
+
+        mPrefState = new ArrayList<State>();
+
+        setUpViewPagerAndActionBar();
+
+        // Set the initial tab. It's hidden.
+        addNewTab();
+    }
+
+    private void setUpViewPagerAndActionBar() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             mActionBar.setHomeButtonEnabled(false);
         }
 
-        mViewPager = (ViewPager) findViewById(R.id.viewPager);
         mViewPager.setAdapter(mViewPagerAdapter);
         // set the amount of pages, that the ViewPager adapter should keep in cache
         mViewPager.setOffscreenPageLimit(3);
@@ -114,9 +129,24 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
                 setTabsOnLongClickListener(root);
             }
         });
+    }
 
-        // Set the initial tab. It's hidden.
-        addNewTab();
+    // Reset the Locale and change the font of all TextViews and its subclasses, if necessary
+    private void handleLocaleCheck() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String language = prefs.getString("pref_language_chooser", "");
+
+        if (language.isEmpty()) {
+            return;
+        }
+
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+
+        new LanguageUtils(this).changeFont(getLayoutInflater());
     }
 
     @Override
@@ -436,7 +466,7 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
 
         // If it's the first (visible) tab, then switch the navigation mode from  NAVIGATION_MODE_NORMAL to
         // NAVIGATION_MODE_TABS and show tabs
-        if (NUM_ITEMS == 1) {
+        if (mNumberOfTabs == 1) {
             mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
             mCurrentFragment = getCurrentVisibleFragment();
 
@@ -454,10 +484,10 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
 
         mActionBar.addTab(mActionBar.newTab().setTabListener(this));
 
-        NUM_ITEMS = NUM_ITEMS + 1;
+        mNumberOfTabs = mNumberOfTabs + 1;
         mViewPagerAdapter.notifyDataSetChanged();
 
-        mPrefState.add(NUM_ITEMS - 1, new State(false));
+        mPrefState.add(mNumberOfTabs - 1, new State(false));
 
         if (mActionBar.getTabCount() > 1) {
             mActionBar.setTitle(ZimContentProvider.getZimFileTitle());
@@ -601,12 +631,12 @@ public class KiwixMobileActivity extends FragmentActivity implements ActionBar.T
 
         @Override
         public int getCount() {
-            return NUM_ITEMS;
+            return mNumberOfTabs;
         }
 
         public void removeFragment(int position) {
             tabs.remove(position);
-            NUM_ITEMS = NUM_ITEMS - 1;
+            mNumberOfTabs = mNumberOfTabs - 1;
             mViewPagerAdapter.notifyDataSetChanged();
         }
 
