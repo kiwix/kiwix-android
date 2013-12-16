@@ -28,8 +28,8 @@ USAGE = '''Usage:  %s [--option]
     --zim           Compile libzim
     --kiwix         Compile libkiwix
     --strip         Strip libkiwix.so
-    --apk           Create an APK file
     --locales       Create the locales.txt file
+    --apk           Create an APK file
 
     Note that the '--' prefix is optionnal.
 
