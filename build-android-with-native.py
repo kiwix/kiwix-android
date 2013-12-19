@@ -298,8 +298,8 @@ for arch in ARCHS:
 
         # add a link to android-support-v4.jar
         ln_src = '%(SDK_PATH)s/extras/android/support/v4/android-support-v4.jar' % {'SDK_PATH': SDK_PATH}
-        dest = 'libs/'
-        syscall('ln -sf %(src)s %(dest)s' 
+        dest = os.path.join(os.path.dirname(CURRENT_PATH), 'android', 'libs')
+        syscall('ln -sf %(src)s %(dest)s/' 
                 % {'src': ln_src, 'dest': dest})
 
     # check that the step went well
