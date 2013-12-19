@@ -296,6 +296,13 @@ for arch in ARCHS:
         syscall('ln -sf %(src)s %(dest)s/'
                 % {'src': ln_src, 'dest': dest})
 
+        # add a link to android-support-v4.jar
+        ln_src = '%(SDK_PATH)s/extras/android/support/v4/android-support-v4.jar' % {'SDK_PATH': SDK_PATH}
+        dest = 'libs/'
+        syscall('ln -sf %(src)s %(dest)s' 
+                % {'src': ln_src, 'dest': dest})
+        sys.exit(0)
+
     # check that the step went well
     if CREATE_TOOLCHAIN or COMPILE_LIBLZMA or COMPILE_LIBZIM or \
        COMPILE_LIBKIWIX or STRIP_LIBKIWIX:
