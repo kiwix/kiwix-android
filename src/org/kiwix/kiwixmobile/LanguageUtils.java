@@ -26,11 +26,17 @@ import android.graphics.Typeface;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -207,6 +213,8 @@ public class LanguageUtils {
         @Override
         public View onCreateView(String name, Context context, AttributeSet attrs) {
 
+            Log.e("kiwix1", name);
+
             // Apply the custom font, if the xml tag equals "TextView", "EditText" or "AutoCompleteTextView"
             if (name.equalsIgnoreCase("TextView")
                     || name.equalsIgnoreCase("EditText")
@@ -236,6 +244,7 @@ public class LanguageUtils {
 
                 }
             }
+
             return null;
         }
 

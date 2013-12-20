@@ -807,6 +807,10 @@ public class KiwixMobileFragment extends Fragment {
                     } else {
                         getActivity().finish();
                     }
+                    break;
+                case KeyEvent.KEYCODE_MENU:
+                    getActivity().openOptionsMenu();
+                    break;
             }
         }
     }
