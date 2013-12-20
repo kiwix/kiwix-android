@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">گشودن پرونده...</string>
-    <string name="menu_help">کمک</string>
+    <string name="menu_help">راهنما</string>
     <string name="menu_home">خانه</string>
     <string name="menu_forward">جلو</string>
     <string name="menu_back">عقب</string>

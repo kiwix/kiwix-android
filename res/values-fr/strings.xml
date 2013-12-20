@@ -19,7 +19,7 @@
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">Analyse des fichiers ZIM en cours, veuillez patienter…</string>
-    <string name="button_backtotop">Retourner en début</string>
+    <string name="button_backtotop">Haut de page</string>
     <string name="search_label">Rechercher</string>
     <string name="articlesearch_hint">Taper pour rechercher des articles</string>
     <string name="choose_file">Sélectionner un fichier de contenu ZIM (*.zim)</string>
