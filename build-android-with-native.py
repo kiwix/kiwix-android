@@ -31,7 +31,7 @@ USAGE = '''Usage:  %s [--option]
     --locales       Create the locales.txt file
     --apk           Create an APK file
 
-    Note that the '--' prefix is optionnal.
+    Note that the '--' prefix is optional.
 
     --on=ARCH       Disable steps on all archs and cherry pick the ones wanted.
                     Multiple --on=ARCH can be specified.
@@ -526,9 +526,9 @@ for arch in ARCHS:
 
 if COMPILE_APK:
 
-    syscall('rm -f bin/*.apk', shell=True)
-    syscall('ant debug')
-    syscall('ls -lh bin/*.apk', shell=True)
+    syscall('rm -f build/apk/*.apk', shell=True)
+    syscall('sh gradlew build')
+    syscall('ls -lh build/apk/*.apk', shell=True)
 
 if LOCALES_TXT:
 
@@ -550,6 +550,6 @@ if LOCALES_TXT:
 
 # check that the step went well
 if COMPILE_APK:
-    if not os.path.exists(os.path.join('bin', 'Kiwix-debug.apk')):
-        failed_on_step('The Kiwix-debug.apk package has not been created '
+    if not os.path.exists(os.path.join('build', 'apk', 'android-debug-unaligned.apk')):
+        failed_on_step('The android-debug-unaligned.apk package has not been created '
                        'and is not present.')

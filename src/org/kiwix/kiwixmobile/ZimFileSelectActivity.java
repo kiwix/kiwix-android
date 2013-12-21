@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
@@ -81,11 +82,15 @@ public class ZimFileSelectActivity extends FragmentActivity
         mZimFileList = (ListView) findViewById(R.id.zimfilelist);
 
         mProgressBar.setVisibility(View.VISIBLE);
-        mZimFileList.setAlpha(0.4f);
+        // mZimFileList.setAlpha(0.4f);
 
         mFiles = new ArrayList<DataModel>();
 
-        startQuery();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            startQuery();
+        } else {
+            new RescanFileSystem().execute();
+        }
     }
 
     @Override
@@ -113,7 +118,7 @@ public class ZimFileSelectActivity extends FragmentActivity
 
         String[] selectionArgs = null; // There is no ? in query so null here
 
-        String sortOrder = MediaStore.Images.Media.TITLE; // Sorted alphabetical
+        String sortOrder = MediaStore.Files.FileColumns.TITLE; // Sorted alphabetical
         Log.d("kiwix", " Performing query for zim files...");
 
         return new CursorLoader(this, uri, projection, query, selectionArgs, sortOrder);
@@ -132,7 +137,7 @@ public class ZimFileSelectActivity extends FragmentActivity
 
         if (mProgressBarMessage.getVisibility() == View.GONE) {
             mProgressBar.setVisibility(View.GONE);
-            mZimFileList.setAlpha(1f);
+            // mZimFileList.setAlpha(1f);
         }
 
         mCursorAdapter.notifyDataSetChanged();
@@ -318,6 +323,7 @@ public class ZimFileSelectActivity extends FragmentActivity
         private class ViewHolder {
 
             TextView title;
+
             TextView path;
         }
     }
@@ -330,7 +336,7 @@ public class ZimFileSelectActivity extends FragmentActivity
 
             mProgressBarMessage.setVisibility(View.VISIBLE);
             mProgressBar.setVisibility(View.VISIBLE);
-            mZimFileList.setAlpha(0.4f);
+            // mZimFileList.setAlpha(0.4f);
 
             super.onPreExecute();
         }
@@ -350,7 +356,7 @@ public class ZimFileSelectActivity extends FragmentActivity
 
             mProgressBarMessage.setVisibility(View.GONE);
             mProgressBar.setVisibility(View.GONE);
-            mZimFileList.setAlpha(1f);
+            //  mZimFileList.setAlpha(1f);
 
             new FileWriter(ZimFileSelectActivity.this).saveArray(mFiles);
 

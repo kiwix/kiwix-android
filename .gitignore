@@ -1,0 +1,17 @@
+# Gradle
+.gradle
+/local.properties
+
+# IDE
+/.idea/workspace.xml
+.settings
+*.iml
+
+# Mac OS X
+.DS_Store
+
+# Build files
+/build
+/gen
+/out
+/platforms
