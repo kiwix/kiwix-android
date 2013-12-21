@@ -11,42 +11,42 @@
     <string name="menu_searchintext">په متن کې موندل</string>
     <string name="menu_randomarticle">ناټاکلې ليکنه</string>
     <string name="menu_fullscreen">ډکه پرده</string>
-    <string name="menu_exitfullscreen">د بشپړ پردې ښکارېدنې نه وتل</string>
+    <string name="menu_exitfullscreen">بشپړ پردې څخه وتل</string>
     <string name="menu_exit">بندول</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Share with friends</string>
     <string name="save_image">Save Image</string>
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
-    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
-    <string name="button_backtotop">Back to Top</string>
+    <string name="rescan_fs_warning">د ZIM دوتنو لپاره ځيرڅارنه، لطفاً تم شۍ...</string>
+    <string name="button_backtotop">بېرته سر ته</string>
     <string name="search_label">پلټل</string>
-    <string name="articlesearch_hint">Type to lookup articles</string>
+    <string name="articlesearch_hint">د ليکنو موندلو لپاره وټاپۍ</string>
     <string name="choose_file">د ZIM مېنځپانگې يوه دوتنه ټاکل (*.zim)</string>
     <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
     <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
-    <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
+    <string name="error_nozimfilesfound">ستاسې په وزلې هېڅ کومه ZIM دوتنه و نه موندل شوه.\nکيويکس کې د مېنځپانگې د برسېرولو لپاره د لارښود مخ ولولۍ.\nکه تاسې په خپلې وزلې کې يو ZIM دوتنه نه وي ايښې، نو تاسې کولی شی چې يوه دقيقه وروسته يې بيا وآزمويۍ او يا هم خپله وزله سر له نوي ولگوۍ او بيا هڅه وکړۍ.</string>
     <string name="error_filenotfound">تېروتنه: ستاسې ټاکلې ZIM دوتنه و نه موندل شوه.</string>
     <string name="error_fileinvalid">تېروتنه: ستاسې ټاکلې دوتنه يوه کره ZIM دوتنه نه ده.</string>
-    <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
+    <string name="error_articlenotfound">تېروتنه: ليکنه برسېرېدنه \"%1$s\" نابريالۍ شوه.</string>
     <string name="error_articleurlnotfound">تېروتنه: ليکنه برسېرېدنه (يو آر ال: %1$s) نابريالئ شوه.</string>
     <string name="pref_display_title">ښکارېدنه</string>
-    <string name="pref_zoom_title">Zoom level</string>
-    <string name="pref_zoom_dialogtitle">Zoom level</string>
+    <string name="pref_zoom_title">لوډېرولو کچه</string>
+    <string name="pref_zoom_dialogtitle">لوډېرولو کچه</string>
     <string-array name="pref_zoom_entries">
         <item>Automatic</item>
         <item>Small</item>
         <item>Medium</item>
         <item>Large</item>
     </string-array>
-    <string name="pref_info_title">Information</string>
-    <string name="pref_info_version">Version</string>
-    <string name="pref_zoom_enable">Zoom controls</string>
-    <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
+    <string name="pref_info_title">مالومات</string>
+    <string name="pref_info_version">بڼه</string>
+    <string name="pref_zoom_enable">لوډېرولو مهارونې</string>
+    <string name="pref_zoom_enable_summary">د لوډېرولو يوه تڼۍ د پردې لانديني ښي گوټ کې ښکاره کول</string>
     <string name="pref_nightmode">د شپې بڼه</string>
     <string name="pref_nightmode_summary">رنگ اړول شوې ليکنې ښکاره کول</string>
-    <string name="pref_backtotop">Back to Top</string>
-    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="pref_backtotop">بېرته سر ته</string>
+    <string name="pref_backtotop_summary">د مخ په پای کې د مخ سر ته ورتللو لپاره يوه تڼۍ ښکاره کول</string>
     <string name="remove_tab">Remove Tab</string>
     <string name="add_tab">Add new Tab</string>
     <string name="remove">Remove</string>

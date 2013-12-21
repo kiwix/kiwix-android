@@ -18,8 +18,8 @@
     <string name="save_image">Save Image</string>
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
-    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
-    <string name="button_backtotop">Back to Top</string>
+    <string name="rescan_fs_warning">Probíhá hledání ZIM souborů, prosím čekejte...</string>
+    <string name="button_backtotop">Zpět na začátek</string>
     <string name="search_label">Vyhledávání</string>
     <string name="articlesearch_hint">Pro vyhledání článků pište</string>
     <string name="choose_file">Vyberte obsahový soubor ZIM (*.zim)</string>
@@ -45,8 +45,8 @@
     <string name="pref_zoom_enable_summary">Zobrazit tlačítko přiblížení v pravém dolním rohu obrazovky</string>
     <string name="pref_nightmode">Noční režim</string>
     <string name="pref_nightmode_summary">Zobrazuje stránky v obrácených barvách.</string>
-    <string name="pref_backtotop">Back to Top</string>
-    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="pref_backtotop">Zpět na začátek</string>
+    <string name="pref_backtotop_summary">Zobrazit tlačítko "Zpět na začátek" na konci stránky</string>
     <string name="remove_tab">Remove Tab</string>
     <string name="add_tab">Add new Tab</string>
     <string name="remove">Remove</string>

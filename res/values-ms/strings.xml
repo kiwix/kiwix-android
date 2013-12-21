@@ -11,15 +11,15 @@
     <string name="menu_searchintext">Cari dalam teks</string>
     <string name="menu_randomarticle">Rencana rawak</string>
     <string name="menu_fullscreen">Skrin penuh</string>
-    <string name="menu_exitfullscreen">Keluar dari ragam skrin penuh</string>
+    <string name="menu_exitfullscreen">Keluar dari skrin penuh</string>
     <string name="menu_exit">Keluar</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Share with friends</string>
     <string name="save_image">Save Image</string>
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
-    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
-    <string name="button_backtotop">Back to Top</string>
+    <string name="rescan_fs_warning">Sedang mengimbas untuk fail ZIM, sila tunggu...</string>
+    <string name="button_backtotop">Kembali ke Atas</string>
     <string name="search_label">Cari</string>
     <string name="articlesearch_hint">Taip untuk mencari rencana</string>
     <string name="choose_file">Pilih Fail Kandungan ZIM (*.zim)</string>
@@ -28,7 +28,7 @@
     <string name="error_nozimfilesfound">Tidak terdapat fail ZIM di dalam peranti anda.\nSila baca halaman Bantuan untuk mendapat petua untuk cara memuatkan kandungan ke dalam Kiwix.\nJika benar anda meletakkan fail ZIM di dalam peranti/storan luaran anda, apa kata anda cuba lagi sebentar kemudian atau me-restart peranti anda.</string>
     <string name="error_filenotfound">Ralat: Fail ZIM yang terpilih tidak dapat ditemui.</string>
     <string name="error_fileinvalid">Ralat: Fail yang terpilih bukan fail ZIM yang sah.</string>
-    <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
+    <string name="error_articlenotfound">Ralat: Rencana \"%1$s\" gagal dimuatkan.</string>
     <string name="error_articleurlnotfound">Ralat: Rencana (Url: %1$s) gagal dimuatkan.</string>
     <string name="pref_display_title">Paparan</string>
     <string name="pref_zoom_title">Takat zum</string>
@@ -39,14 +39,14 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
-    <string name="pref_info_title">Information</string>
-    <string name="pref_info_version">Version</string>
+    <string name="pref_info_title">Maklumat</string>
+    <string name="pref_info_version">Versi</string>
     <string name="pref_zoom_enable">Kawalan zum</string>
     <string name="pref_zoom_enable_summary">Paparkan butang zum pada sudut kanan bawah skrin</string>
     <string name="pref_nightmode">Mod malam</string>
     <string name="pref_nightmode_summary">Paparkan rencana yang diterbalikkan warnanya</string>
-    <string name="pref_backtotop">Back to Top</string>
-    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="pref_backtotop">Kembali ke Atas</string>
+    <string name="pref_backtotop_summary">Paparkan butang di kaki halaman untuk menskrol kembali ke atas</string>
     <string name="remove_tab">Remove Tab</string>
     <string name="add_tab">Add new Tab</string>
     <string name="remove">Remove</string>

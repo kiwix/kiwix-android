@@ -18,7 +18,7 @@
     <string name="save_image">Save Image</string>
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
-    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
+    <string name="rescan_fs_warning">Söker efter ZIM-filer, var god vänta...</string>
     <string name="button_backtotop">Tillbaka till toppen</string>
     <string name="search_label">Sök</string>
     <string name="articlesearch_hint">Skriv för att kolla upp artiklar</string>

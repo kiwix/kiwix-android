@@ -11,42 +11,42 @@
     <string name="menu_searchintext">पाठ में खोजें</string>
     <string name="menu_randomarticle">यादृच्छिक अनुच्छेद</string>
     <string name="menu_fullscreen">संपूर्ण स्क्रीन</string>
-    <string name="menu_exitfullscreen">Exit full screen</string>
+    <string name="menu_exitfullscreen">पूरे स्क्रीन से बाहर निकलें</string>
     <string name="menu_exit">बाहर निकलें</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Share with friends</string>
     <string name="save_image">Save Image</string>
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
-    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
-    <string name="button_backtotop">Back to Top</string>
+    <string name="rescan_fs_warning">ZIM फ़ाइलों के लिए स्कैन किया जा रहा है, कृपया प्रतीक्षा करें...</string>
+    <string name="button_backtotop">वापस शीर्ष पे जाएँ</string>
     <string name="search_label">खोजें</string>
-    <string name="articlesearch_hint">Type to lookup articles</string>
-    <string name="choose_file">Select a ZIM Content File (*.zim)</string>
+    <string name="articlesearch_hint">लेख तलाश करने के लिए लिखें</string>
+    <string name="choose_file">एक ZIM कान्टेन्ट फ़ाइल (*.zim) का चयन करें</string>
     <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
     <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
-    <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
-    <string name="error_filenotfound">Error: The selected ZIM file could not be found.</string>
-    <string name="error_fileinvalid">Error: The selected file is not a valid ZIM file.</string>
-    <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
-    <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
+    <string name="error_nozimfilesfound">आपकी डिवाइस पर कोई ZIM फ़ाइल नही मिली।\nKiwix मे कान्टेन्ट लोड करने के बारे मे जानने के लिए हेल्प पृष्ठ देखें।\nयदि आपने अपने डिवाइस/इक्स्टर्नल स्टोरिज पर ZIM फ़ाइल डाली है, तो फिर से इक मिनिट मे प्रयास करें, या फिर डिवाइस पुनरारंभ करें।</string>
+    <string name="error_filenotfound">त्रुटि: चुनी गयी ZIM फ़ाइल नही मिल सकी।</string>
+    <string name="error_fileinvalid">त्रुटि: चुनी गयी फ़ाइल एक वैध ZIM फ़ाइल नहीं है।</string>
+    <string name="error_articlenotfound">त्रुटि: आलेख \ " %1$s \" लोड करना विफल रहा।</string>
+    <string name="error_articleurlnotfound">त्रुटि: आलेख (Url:  %1$s ) लोड करना विफल रहा।</string>
     <string name="pref_display_title">डिस्प्ले</string>
-    <string name="pref_zoom_title">Zoom level</string>
-    <string name="pref_zoom_dialogtitle">Zoom level</string>
+    <string name="pref_zoom_title">ज़ूम स्तर</string>
+    <string name="pref_zoom_dialogtitle">ज़ूम स्तर</string>
     <string-array name="pref_zoom_entries">
         <item>Automatic</item>
         <item>Small</item>
         <item>Medium</item>
         <item>Large</item>
     </string-array>
-    <string name="pref_info_title">Information</string>
-    <string name="pref_info_version">Version</string>
-    <string name="pref_zoom_enable">Zoom controls</string>
-    <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
-    <string name="pref_nightmode">Night mode</string>
-    <string name="pref_nightmode_summary">Show articles with reverted colors</string>
-    <string name="pref_backtotop">Back to Top</string>
-    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="pref_info_title">जानकारी</string>
+    <string name="pref_info_version">संस्करण</string>
+    <string name="pref_zoom_enable">ज़ूम नियंत्रण</string>
+    <string name="pref_zoom_enable_summary">स्क्रीन के नीचे दायें कोने में ज़ूम बटन दिखाएँ</string>
+    <string name="pref_nightmode">रात्रि मोड</string>
+    <string name="pref_nightmode_summary">उल्टे रंगों के साथ लेख दिखाएँ</string>
+    <string name="pref_backtotop">वापस शीर्ष पे जाएँ</string>
+    <string name="pref_backtotop_summary">उपर तक स्क्रॉल करने के लिए पृष्ठ के अंत में एक बटन दिखाएँ</string>
     <string name="remove_tab">Remove Tab</string>
     <string name="add_tab">Add new Tab</string>
     <string name="remove">Remove</string>

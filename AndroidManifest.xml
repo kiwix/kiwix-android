@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          android:versionCode="13"
-          android:versionName="1.8"
+          android:versionCode="14"
+          android:versionName="1.9"
           package="org.kiwix.kiwixmobile">
 
     <supports-screens
@@ -16,7 +16,7 @@
 
     <uses-sdk
             android:minSdkVersion="11"
-            android:targetSdkVersion="17"/>
+            android:targetSdkVersion="19"/>
     <application
             android:icon="@drawable/kiwix_icon"
             android:label="@string/app_name"
