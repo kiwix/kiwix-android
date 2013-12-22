@@ -527,7 +527,7 @@ for arch in ARCHS:
 if COMPILE_APK:
 
     syscall('rm -f build/apk/*.apk', shell=True)
-    syscall('sh gradlew build')
+    syscall('./gradlew build')
     syscall('ls -lh build/apk/*.apk', shell=True)
 
 if LOCALES_TXT:
