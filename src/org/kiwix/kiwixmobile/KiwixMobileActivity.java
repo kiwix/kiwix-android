@@ -99,7 +99,7 @@ public class KiwixMobileActivity extends ActionBarActivity implements ActionBar.
 
         // Set an OnDragListener on the entire View. Now we can track,
         // if the user drags the Tab outside the View
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (newApi()) {
             setUpOnDragListener();
             getWindow().getDecorView().setOnDragListener(mOnDragListener);
         }

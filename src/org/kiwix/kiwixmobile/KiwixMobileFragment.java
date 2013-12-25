@@ -350,7 +350,6 @@ public class KiwixMobileFragment extends Fragment {
                 InputMethodManager imm = (InputMethodManager)
                         getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(), 0);
-                articleSearchtextView.setText(parent.getItemAtPosition(position).toString());
                 openArticleFromSearch();
             }
         });
