@@ -11,8 +11,13 @@ buildscript {
 
 apply plugin: 'android'
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     compile 'com.android.support:support-v4:19.0.0'
+    compile 'com.android.support:appcompat-v7:19.0.0'
     compile files("$buildDir/native-libs/native-libs.jar")
 
 }
@@ -22,7 +27,7 @@ android {
     buildToolsVersion "19"
 
     defaultConfig {
-        minSdkVersion 11
+        minSdkVersion 9
         targetSdkVersion 19
     }
 

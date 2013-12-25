@@ -22,6 +22,7 @@ package org.kiwix.kiwixmobile;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -32,6 +33,7 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -160,11 +162,13 @@ public class LanguageUtils {
             layoutInflater.setFactory(new LayoutInflaterFactory(mContext, layoutInflater));
 
         } catch (NoSuchFieldException e) {
+            Log.e("kiwix", "could not access private field of the LayoutInflater");
 
         } catch (IllegalArgumentException e) {
+            Log.e("kiwix", "could not access private field of the LayoutInflater");
 
         } catch (IllegalAccessException e) {
-
+            Log.e("kiwix", "could not access private field of the LayoutInflater");
         }
     }
 
@@ -226,17 +230,17 @@ public class LanguageUtils {
                             Log.d("kiwix", "Applying custom font");
 
                             // Reduce the text size
-                            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textView.getTextSize() - 3f);
+                            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textView.getTextSize() - 2f);
                         }
                     });
 
                     return view;
 
                 } catch (InflateException e) {
-                    Log.e("kiwix", "Could not apply the custom font");
+                    Log.e("kiwix", "Could not apply the custom font to " + name + " " + e.getMessage());
 
                 } catch (ClassNotFoundException e) {
-                    Log.e("kiwix", "Could not apply the custom font");
+                    Log.e("kiwix", "Could not apply the custom font to " + name + " " + e.getMessage());
                 }
             }
 
@@ -245,12 +249,13 @@ public class LanguageUtils {
 
         // This method will determine which font will be applied to the not-supported-locale.
         // You can define exceptions to the default DejaVu font in the 'exceptions' Hashmap:
+
         private String getTypeface() {
 
             // Define the exceptions to the rule. The font has to be placed in the assets folder.
             // Key: the language code; Value: the name of the font.
             HashMap<String, String> exceptions = new HashMap<String, String>();
-            exceptions.put("my", "Parabaik.ttf");
+            exceptions.put("my", "fonts/Parabaik.ttf");
 
             // Check, if an exception applies to our current locale
             if (exceptions.containsKey(Locale.getDefault().getLanguage())) {
@@ -258,7 +263,7 @@ public class LanguageUtils {
             }
 
             // Return the default font
-            return "DejaVuSansCondensed.ttf";
+            return "fonts/DejaVuSansCondensed.ttf";
         }
     }
 

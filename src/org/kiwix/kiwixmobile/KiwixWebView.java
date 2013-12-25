@@ -21,17 +21,26 @@ package org.kiwix.kiwixmobile;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.webkit.WebView;
+import android.widget.ZoomButtonsController;
 
-/*
- * Custom version of link{@android.webkit.WebView}
- * to get scroll positions for implimenting the Back to top
+import java.lang.reflect.Method;
+
+import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.newApi;
+
+/**
+ * A custom WebView to get scroll positions for implimenting the Back-To-Top Button
  */
 public class KiwixWebView extends WebView {
 
     private OnPageChangeListener mChangeListener;
 
     private OnLongClickListener mOnLongClickListener;
+
+    private ZoomButtonsController zoomControll = null;
+
+    private boolean mDisableZoomControlls;
 
 
     public KiwixWebView(Context context) {
@@ -63,10 +72,43 @@ public class KiwixWebView extends WebView {
         int windowHeight = getMeasuredHeight();
         int pages = getContentHeight() / windowHeight;
         int page = t / windowHeight;
-        //alert the listeners
+
+        // Alert the listener
         if (mChangeListener != null) {
             mChangeListener.onPageChanged(page, pages);
         }
+    }
+
+    public void disableZoomControlls(boolean disable) {
+
+        mDisableZoomControlls = disable;
+
+        if (newApi()) {
+            getSettings().setBuiltInZoomControls(true);
+            getSettings().setDisplayZoomControls(disable);
+        } else {
+            getZoomControlls();
+        }
+    }
+
+    // Use reflection to hide the zoom controlls
+    private void getZoomControlls() {
+        try {
+            Class webview = Class.forName("android.webkit.WebView");
+            Method method = webview.getMethod("getZoomButtonsController");
+            zoomControll = (ZoomButtonsController) method.invoke(this, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        super.onTouchEvent(ev);
+        if (zoomControll != null) {
+            zoomControll.setVisible(mDisableZoomControlls);
+        }
+        return true;
     }
 
     public void setOnPageChangedListener(OnPageChangeListener listener) {

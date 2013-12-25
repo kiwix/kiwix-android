@@ -20,6 +20,7 @@
 package org.kiwix.kiwixmobile;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -32,6 +33,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -39,6 +41,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -84,6 +87,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+
+import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.newApi;
 
 public class KiwixMobileFragment extends Fragment {
 
@@ -183,13 +188,15 @@ public class KiwixMobileFragment extends Fragment {
 
         setUpWebView();
 
-        setUpTabDeleteCross();
-
         setUpArticleSearchTextView(savedInstanceState);
 
         loadPrefs();
 
         manageExternalLaunchAndRestoringViewState(savedInstanceState);
+
+        if (newApi()) {
+            setUpTabDeleteCross();
+        }
 
         return root;
     }
@@ -296,8 +303,8 @@ public class KiwixMobileFragment extends Fragment {
                 if (event.getAction() != MotionEvent.ACTION_UP) {
                     return false;
                 }
-                if (event.getX() > articleSearchtextView.getWidth() - articleSearchtextView.getPaddingRight()
-                        - mClearIcon.getIntrinsicWidth()) {
+                if (event.getX() > articleSearchtextView.getWidth()
+                        - articleSearchtextView.getPaddingRight() - mClearIcon.getIntrinsicWidth()) {
                     articleSearchtextView.setText("");
                     articleSearchtextView.setCompoundDrawables(mSearchIcon, null, null, null);
                 }
@@ -316,8 +323,7 @@ public class KiwixMobileFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 articleSearchtextView.setCompoundDrawables(mSearchIcon, null,
-                        articleSearchtextView.getText().toString().equals("") ? null : mClearIcon,
-                        null);
+                        articleSearchtextView.getText().toString().equals("") ? null : mClearIcon, null);
             }
 
             @Override
@@ -330,15 +336,19 @@ public class KiwixMobileFragment extends Fragment {
         });
 
         // Create the adapter and set it to the AutoCompleteTextView
-        adapter = new AutoCompleteAdapter(getActivity(),
-                android.R.layout.simple_list_item_1);
+        if (newApi()) {
+            adapter = new AutoCompleteAdapter(getActivity(), android.R.layout.simple_list_item_1);
+        } else {
+            adapter = new AutoCompleteAdapter(getActivity(), R.layout.simple_list_item);
+        }
+
         articleSearchtextView.setAdapter(adapter);
         articleSearchtextView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
-                        Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager)
+                        getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(), 0);
                 articleSearchtextView.setText(parent.getItemAtPosition(position).toString());
                 openArticleFromSearch();
@@ -347,8 +357,7 @@ public class KiwixMobileFragment extends Fragment {
 
         articleSearchtextView.setOnEditorActionListener(new OnEditorActionListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId,
-                    KeyEvent event) {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 return openArticleFromSearch();
             }
         });
@@ -356,6 +365,7 @@ public class KiwixMobileFragment extends Fragment {
         articleSearchtextView.setInputType(InputType.TYPE_CLASS_TEXT);
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void setUpTabDeleteCross() {
 
         mTabDeleteCross.setOnDragListener(new View.OnDragListener() {
@@ -618,7 +628,7 @@ public class KiwixMobileFragment extends Fragment {
                 }
                 break;
             case PREFERENCES_REQUEST_CODE:
-                if (resultCode == KiwixSettings.RESULT_RESTART) {
+                if (resultCode == KiwixSettingsActivity.RESULT_RESTART) {
                     getActivity().finish();
                     startActivity(new Intent(getActivity(), KiwixMobileActivity.class));
                 }
@@ -671,8 +681,7 @@ public class KiwixMobileFragment extends Fragment {
         // Pinch to zoom
         // This seems to suffer from a bug in Android. If you set to "false" this only apply after a restart of the app.
         Log.d(TAG_KIWIX, "pref_zoom_enabled value (" + pref_zoom_enabled + ")");
-        webView.getSettings().setBuiltInZoomControls(true);
-        webView.getSettings().setDisplayZoomControls(pref_zoom_enabled);
+        webView.disableZoomControlls(pref_zoom_enabled);
 
         if (!isBacktotopEnabled) {
             mBackToTopButton.setVisibility(View.INVISIBLE);
@@ -699,7 +708,7 @@ public class KiwixMobileFragment extends Fragment {
     }
 
     public void selectSettings() {
-        Intent i = new Intent(getActivity(), KiwixSettings.class);
+        Intent i = new Intent(getActivity(), KiwixSettingsActivity.class);
         startActivityForResult(i, PREFERENCES_REQUEST_CODE);
     }
 
@@ -716,8 +725,8 @@ public class KiwixMobileFragment extends Fragment {
             // Move cursor to end
             articleSearchtextView.setSelection(articleSearchtextView.getText().length());
 
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
-                    Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getActivity()
+                    .getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
     }
@@ -747,7 +756,8 @@ public class KiwixMobileFragment extends Fragment {
         if (file.exists()) {
             if (ZimContentProvider.setZimFile(file.getAbsolutePath()) != null) {
 
-                getActivity().getActionBar().setSubtitle(ZimContentProvider.getZimFileTitle());
+                ((ActionBarActivity) getActivity()).getSupportActionBar()
+                        .setSubtitle(ZimContentProvider.getZimFileTitle());
 
                 // Apparently with webView.clearHistory() only history before currently (fully)
                 // loaded page is cleared -> request clear, actual clear done after load.
@@ -1060,10 +1070,9 @@ public class KiwixMobileFragment extends Fragment {
                     failingUrl);
             // TODO apparently screws up back/forward
             webView.loadDataWithBaseURL("file://error",
-                    "<html><body>" + errorString + "</body></html>", "text/html", "utf-8",
-                    failingUrl);
+                    "<html><body>" + errorString + "</body></html>", "text/html", "utf-8", failingUrl);
             String title = getResources().getString(R.string.app_name);
-            getActivity().getActionBar().setTitle(title);
+            ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(title);
         }
 
         @Override
@@ -1075,12 +1084,13 @@ public class KiwixMobileFragment extends Fragment {
                     title = webView.getTitle();
                 }
 
-                if (getActivity().getActionBar().getTabCount() < 2) {
-                    getActivity().getActionBar().setTitle(title);
+                if (((ActionBarActivity) getActivity()).getSupportActionBar().getTabCount() < 2) {
+                    ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(title);
                 }
 
-                if (getActivity().getActionBar().getNavigationMode() == ActionBar.NAVIGATION_MODE_TABS) {
-                    getActivity().getActionBar().getSelectedTab().setText(title);
+                if (((ActionBarActivity) getActivity()).getSupportActionBar().getNavigationMode()
+                        == ActionBar.NAVIGATION_MODE_TABS) {
+                    ((ActionBarActivity) getActivity()).getSupportActionBar().getSelectedTab().setText(title);
                 }
 
                 // Workaround for #643

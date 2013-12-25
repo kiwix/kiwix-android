@@ -28,7 +28,7 @@
                 android:inputType="text|textCapWords"
                 android:maxLines="1"
                 android:background="@android:color/background_dark"
-                android:textColor="@android:color/primary_text_dark"/>
+                android:textColor="@android:color/white"/>
 
     </LinearLayout>
 
