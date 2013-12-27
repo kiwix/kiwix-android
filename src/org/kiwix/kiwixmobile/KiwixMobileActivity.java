@@ -280,6 +280,7 @@ public class KiwixMobileActivity extends ActionBarActivity implements ActionBar.
                 mCompatCallback.setWebView(mCurrentFragment.webView);
                 mCompatCallback.showSoftInput();
                 startSupportActionMode(mCompatCallback);
+                break;
 
             case R.id.menu_forward:
                 if (mCurrentFragment.webView.canGoForward()) {
@@ -315,7 +316,6 @@ public class KiwixMobileActivity extends ActionBarActivity implements ActionBar.
                 break;
 
             case R.id.menu_settings:
-                // Display the fragment as the main content.
                 mCurrentFragment.selectSettings();
                 break;
 
@@ -385,7 +385,9 @@ public class KiwixMobileActivity extends ActionBarActivity implements ActionBar.
 
             // handle the back button for the WebView in the current Fragment
             mCurrentFragment = getCurrentVisibleFragment();
-            mCurrentFragment.onKeyDown(keyCode, event);
+            if (mCurrentFragment != null) {
+                mCurrentFragment.onKeyDown(keyCode, event);
+            }
 
             return true;
         }

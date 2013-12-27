@@ -33,5 +33,4 @@ public class BackwardsCompatibilityTools {
 
         return Build.VERSION.SDK_INT >= api;
     }
-
 }

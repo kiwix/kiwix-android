@@ -194,7 +194,7 @@ public class CompatFindActionModeCallback implements ActionMode.Callback, TextWa
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        // Does nothing.  Needed to implement TextWatcher.
+        // Does nothing. Needed to implement a TextWatcher.
     }
 
     @Override
@@ -204,6 +204,6 @@ public class CompatFindActionModeCallback implements ActionMode.Callback, TextWa
 
     @Override
     public void afterTextChanged(Editable s) {
-        // Does nothing.  Needed to implement TextWatcher.
+        // Does nothing. Needed to implement a TextWatcher.
     }
 }

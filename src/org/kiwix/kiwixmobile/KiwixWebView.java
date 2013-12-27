@@ -29,9 +29,6 @@ import java.lang.reflect.Method;
 
 import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.newApi;
 
-/**
- * A custom WebView to get scroll positions for implimenting the Back-To-Top Button
- */
 public class KiwixWebView extends WebView {
 
     private OnPageChangeListener mChangeListener;
@@ -41,7 +38,6 @@ public class KiwixWebView extends WebView {
     private ZoomButtonsController zoomControll = null;
 
     private boolean mDisableZoomControlls;
-
 
     public KiwixWebView(Context context) {
         super(context);
@@ -105,6 +101,7 @@ public class KiwixWebView extends WebView {
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         super.onTouchEvent(ev);
+
         if (zoomControll != null) {
             zoomControll.setVisible(mDisableZoomControlls);
         }
