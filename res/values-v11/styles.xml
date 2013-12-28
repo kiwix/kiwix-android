@@ -7,6 +7,8 @@
 
     <style name="TabTextStyle" parent="@android:style/Widget.Holo.ActionBar.TabText">
         <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">13sp</item>
+
     </style>
 
 </resources>
