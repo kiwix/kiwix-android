@@ -19,7 +19,7 @@
             android:targetSdkVersion="19"/>
     <application
             android:icon="@drawable/kiwix_icon"
-            android:theme="@style/Theme.AppCompat"
+            android:theme="@style/AppStyle"
             android:label="@string/app_name"
             android:allowBackup="true">
         <activity
@@ -43,8 +43,8 @@
                 <data android:mimeType="*/*"/>
             </intent-filter>
         </activity>
-        <activity android:name=".KiwixSettingsActivity">
-        </activity>
+        <activity android:name=".settings.KiwixSettingsActivityGB"/>
+        <activity android:name=".settings.KiwixSettingsActivityHC"/>
 
         <provider
                 android:name=".ZimContentProvider"

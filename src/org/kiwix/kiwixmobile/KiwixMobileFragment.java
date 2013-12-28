@@ -19,6 +19,10 @@
 
 package org.kiwix.kiwixmobile;
 
+import org.kiwix.kiwixmobile.settings.KiwixSettingsActivityGB;
+import org.kiwix.kiwixmobile.settings.KiwixSettingsActivityHC;
+import org.kiwix.kiwixmobile.settings.SettingsHelper;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
@@ -627,7 +631,7 @@ public class KiwixMobileFragment extends Fragment {
                 }
                 break;
             case PREFERENCES_REQUEST_CODE:
-                if (resultCode == KiwixSettingsActivity.RESULT_RESTART) {
+                if (resultCode == SettingsHelper.RESULT_RESTART) {
                     getActivity().finish();
                     startActivity(new Intent(getActivity(), KiwixMobileActivity.class));
                 }
@@ -707,7 +711,12 @@ public class KiwixMobileFragment extends Fragment {
     }
 
     public void selectSettings() {
-        Intent i = new Intent(getActivity(), KiwixSettingsActivity.class);
+        Intent i;
+        if (newApi()) {
+            i = new Intent(getActivity(), KiwixSettingsActivityHC.class);
+        } else {
+            i = new Intent(getActivity(), KiwixSettingsActivityGB.class);
+        }
         startActivityForResult(i, PREFERENCES_REQUEST_CODE);
     }
 

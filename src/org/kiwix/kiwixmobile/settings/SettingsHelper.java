@@ -17,37 +17,46 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.settings;
 
+
+import org.kiwix.kiwixmobile.LanguageUtils;
+
+import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.os.Bundle;
+import android.content.pm.PackageManager;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
 
 import java.util.Locale;
 
-public class KiwixSettingsActivity extends PreferenceActivity {
+import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.newApi;
+
+
+public class SettingsHelper {
 
     public static final int RESULT_RESTART = 1236;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.preferences);
+    private Object mPreference;
 
+
+    public SettingsHelper(Object preference) {
+        mPreference = preference;
+        setUpSettings();
+    }
+
+    public void setUpSettings() {
         prepareListPreferenceForAutoSummary("pref_zoom");
         setUpLanguageChooser("pref_language_chooser");
         setAppVersionNumber();
-        new LanguageUtils(this).changeFont(getLayoutInflater());
     }
 
     private void prepareListPreferenceForAutoSummary(String preferenceId) {
 
-        ListPreference prefList = (ListPreference) findPreference(preferenceId);
+        ListPreference prefList = (ListPreference) getPrefrence(preferenceId);
 
         prefList.setDefaultValue(prefList.getEntryValues()[0]);
         String summary = prefList.getValue();
@@ -58,14 +67,14 @@ public class KiwixSettingsActivity extends PreferenceActivity {
         }
 
         prefList.setSummary(prefList.getEntries()[prefList.findIndexOfValue(summary)]);
-        prefList.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+        prefList.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (preference instanceof ListPreference) {
-                    preference.setSummary(((ListPreference) preference)
-                            .getEntries()[((ListPreference) preference)
-                            .findIndexOfValue(newValue.toString())]);
+                    ListPreference listPreference = ((ListPreference) preference);
+                    preference.setSummary(listPreference.getEntries()
+                            [listPreference.findIndexOfValue(newValue.toString())]);
                 }
                 return true;
             }
@@ -74,44 +83,60 @@ public class KiwixSettingsActivity extends PreferenceActivity {
 
     private void setUpLanguageChooser(String preferenceId) {
 
-        ListPreference languageList = (ListPreference) findPreference(preferenceId);
-
-        LanguageUtils languageUtils = new LanguageUtils(KiwixSettingsActivity.this);
+        ListPreference languageList = (ListPreference) getPrefrence(preferenceId);
+        LanguageUtils languageUtils = new LanguageUtils(getContext());
 
         languageList.setTitle(Locale.getDefault().getDisplayLanguage());
-
         languageList.setEntries(languageUtils.getValues().toArray(new String[0]));
-
         languageList.setEntryValues(languageUtils.getKeys().toArray(new String[0]));
-
         languageList.setDefaultValue(Locale.getDefault().toString());
-
-        languageList.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+        languageList.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
 
                 if (!newValue.equals(Locale.getDefault().toString())) {
 
-                    LanguageUtils.handleLocaleChange(KiwixSettingsActivity.this, newValue.toString());
+                    LanguageUtils.handleLocaleChange(getContext(), newValue.toString());
                     // Request a restart when the user returns to the Activity, that called this Activity
-                    setResult(RESULT_RESTART);
-                    finish();
-                    startActivity(new Intent(KiwixSettingsActivity.this, KiwixSettingsActivity.class));
+                    restartActivity();
                 }
                 return true;
             }
         });
     }
 
+    private void restartActivity() {
+        getContext().setResult(RESULT_RESTART);
+        getContext().finish();
+        getContext().startActivity(new Intent(getContext(), getContext().getClass()));
+    }
+
     private void setAppVersionNumber() {
         String version;
 
         try {
-            version = getPackageManager().getPackageInfo("org.kiwix.kiwixmobile", 0).versionName;
-        } catch (NameNotFoundException e) {
+            version = getContext().getPackageManager().getPackageInfo("org.kiwix.kiwixmobile", 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
             return;
         }
-        EditTextPreference versionPref = (EditTextPreference) findPreference("pref_version");
+        EditTextPreference versionPref = (EditTextPreference) getPrefrence("pref_version");
         versionPref.setSummary(version);
+    }
+
+    private Activity getContext() {
+        if (newApi()) {
+            return ((PreferenceFragment) mPreference).getActivity();
+        }
+
+        return ((PreferenceActivity) mPreference);
+    }
+
+    private Preference getPrefrence(String preferenceId) {
+
+        if (newApi()) {
+            return ((PreferenceFragment) mPreference).findPreference(preferenceId);
+        }
+
+        return ((PreferenceActivity) mPreference).findPreference(preferenceId);
     }
 }
