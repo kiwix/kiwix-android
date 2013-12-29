@@ -22,7 +22,6 @@ package org.kiwix.kiwixmobile;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -33,7 +32,6 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -267,7 +265,7 @@ public class LanguageUtils {
         }
     }
 
-    private class LanguageContainer {
+    public static class LanguageContainer {
 
         private String mLanguageCode;
 
@@ -276,14 +274,20 @@ public class LanguageUtils {
         // This constructor will take care of creating a language name for the given ISO 639-1 language code.
         // The language name will always be in english to ensure user friendliness and to prevent
         // possible incompatibilities, since not all language names are available in all languages.
-        private LanguageContainer(String languageCode) {
+        public LanguageContainer(String languageCode) {
             mLanguageCode = languageCode;
-            mLanguageName = new Locale(languageCode).getDisplayLanguage();
 
-            // Use the English name of the language, if the language name is not
-            // available in the current Locale
-            if (mLanguageName.length() == 2) {
-                mLanguageName = new Locale(languageCode).getDisplayLanguage(new Locale("en"));
+            try {
+                mLanguageName = new Locale(languageCode).getDisplayLanguage();
+
+                // Use the English name of the language, if the language name is not
+                // available in the current Locale
+                if (mLanguageName.length() == 2) {
+                    mLanguageName = new Locale(languageCode).getDisplayLanguage(new Locale("en"));
+                }
+
+            } catch (Exception e) {
+                mLanguageName = "";
             }
         }
 

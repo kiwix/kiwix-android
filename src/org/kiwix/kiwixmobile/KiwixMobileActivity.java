@@ -20,6 +20,12 @@
 package org.kiwix.kiwixmobile;
 
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.MenuItem;
+
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.ClipData;
@@ -34,14 +40,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.DragEvent;
 import android.view.KeyEvent;
-import android.view.MenuItem;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -57,7 +62,7 @@ import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.equalsOrNewThanA
 import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.newApi;
 
 
-public class KiwixMobileActivity extends ActionBarActivity implements ActionBar.TabListener,
+public class KiwixMobileActivity extends SherlockFragmentActivity implements ActionBar.TabListener,
         View.OnLongClickListener, KiwixMobileFragment.FragmentCommunicator {
 
     public static ArrayList<State> mPrefState;
@@ -84,10 +89,12 @@ public class KiwixMobileActivity extends ActionBarActivity implements ActionBar.
 
     private CompatFindActionModeCallback mCompatCallback;
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+       // startActivity(new Intent(this, LibraryActivity.class));
 
         requestWindowFeature(Window.FEATURE_PROGRESS);
 
@@ -279,7 +286,7 @@ public class KiwixMobileActivity extends ActionBarActivity implements ActionBar.
                 mCompatCallback.setActive();
                 mCompatCallback.setWebView(mCurrentFragment.webView);
                 mCompatCallback.showSoftInput();
-                startSupportActionMode(mCompatCallback);
+                startActionMode(mCompatCallback);
                 break;
 
             case R.id.menu_forward:

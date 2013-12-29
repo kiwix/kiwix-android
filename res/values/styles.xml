@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppStyle" parent="Theme.AppCompat">
+    <style name="AppStyle" parent="Theme.Sherlock">
         <item name="actionBarTabTextStyle">@style/TabTextStyle</item>
     </style>
 
-    <style name="TabTextStyle" parent="Widget.AppCompat.ActionBar.TabText">
-        <item name="textAllCaps">false</item>
+    <style name="TabTextStyle" parent="Widget.Sherlock.ActionBar.TabText">
+
     </style>
 
 </resources>

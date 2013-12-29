@@ -42,7 +42,6 @@ public class SettingsHelper {
 
     private Object mPreference;
 
-
     public SettingsHelper(Object preference) {
         mPreference = preference;
         setUpSettings();

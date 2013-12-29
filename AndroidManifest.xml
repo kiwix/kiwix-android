@@ -13,6 +13,9 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
 
     <uses-sdk
             android:minSdkVersion="9"
@@ -47,6 +50,8 @@
                 android:name=".settings.KiwixSettingsActivityGB"
                 android:theme="@style/AppStyle"/>
         <activity android:name=".settings.KiwixSettingsActivityHC"/>
+        <activity android:name=".LibraryActivity"
+                  android:theme="@style/AppStyle"/>
 
         <provider
                 android:name=".ZimContentProvider"

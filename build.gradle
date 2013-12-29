@@ -17,7 +17,7 @@ repositories {
 
 dependencies {
     compile 'com.android.support:support-v4:19.0.0'
-    compile 'com.android.support:appcompat-v7:19.0.0'
+    compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
     compile files("$buildDir/native-libs/native-libs.jar")
 
 }

@@ -19,6 +19,12 @@
 
 package org.kiwix.kiwixmobile;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
@@ -32,11 +38,10 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.support.v7.app.ActionBarActivity;
+
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -53,7 +58,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ZimFileSelectActivity extends ActionBarActivity
+public class ZimFileSelectActivity extends SherlockFragmentActivity
         implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener {
 
     private static final int LOADER_ID = 0x02;
@@ -181,7 +186,7 @@ public class ZimFileSelectActivity extends ActionBarActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        final MenuInflater inflater = getMenuInflater();
+        final MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.fileselector, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -209,7 +214,7 @@ public class ZimFileSelectActivity extends ActionBarActivity
         String file;
 
         // Check which one of the Adapters is currently filling the ListView.
-        // If the data is populated by the LoaderManager cast the current selected item to Cursor,
+        // If the data is populated by the LoaderManager cast the current selected mLibrary to Cursor,
         // if the data is populated by the ArrayAdapter, then cast it to the DataModel class.
         if (mZimFileList.getItemAtPosition(position) instanceof DataModel) {
 
@@ -337,7 +342,7 @@ public class ZimFileSelectActivity extends ActionBarActivity
         }
 
         // We are using the ViewHolder pattern in order to optimize the ListView by reusing
-        // Views and saving them to this item class, and not inlating the layout every time
+        // Views and saving them to this mLibrary class, and not inlating the layout every time
         // we need to create a row.
         private class ViewHolder {
 

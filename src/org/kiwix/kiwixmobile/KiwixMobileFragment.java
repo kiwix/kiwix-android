@@ -19,6 +19,10 @@
 
 package org.kiwix.kiwixmobile;
 
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivityGB;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivityHC;
 import org.kiwix.kiwixmobile.settings.SettingsHelper;
@@ -44,8 +48,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -55,10 +57,6 @@ import android.view.ContextMenu;
 import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -94,7 +92,7 @@ import java.util.ArrayList;
 
 import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.newApi;
 
-public class KiwixMobileFragment extends Fragment {
+public class KiwixMobileFragment extends SherlockFragment {
 
     public static final String TAG_KIWIX = "kiwix";
 
@@ -534,8 +532,8 @@ public class KiwixMobileFragment extends Fragment {
                         || result.getType() == HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
                     menu.add(0, 1, 0, getResources().getString(R.string.save_image))
                             .setOnMenuItemClickListener(
-                                    new OnMenuItemClickListener() {
-                                        public boolean onMenuItemClick(MenuItem item) {
+                                    new android.view.MenuItem.OnMenuItemClickListener() {
+                                        public boolean onMenuItemClick(android.view.MenuItem item) {
                                             Message msg = saveHandler.obtainMessage();
                                             webView.requestFocusNodeHref(msg);
                                             return true;
@@ -764,7 +762,7 @@ public class KiwixMobileFragment extends Fragment {
         if (file.exists()) {
             if (ZimContentProvider.setZimFile(file.getAbsolutePath()) != null) {
 
-                ((ActionBarActivity) getActivity()).getSupportActionBar()
+                getSherlockActivity().getSupportActionBar()
                         .setSubtitle(ZimContentProvider.getZimFileTitle());
 
                 // Apparently with webView.clearHistory() only history before currently (fully)
@@ -1080,7 +1078,7 @@ public class KiwixMobileFragment extends Fragment {
             webView.loadDataWithBaseURL("file://error",
                     "<html><body>" + errorString + "</body></html>", "text/html", "utf-8", failingUrl);
             String title = getResources().getString(R.string.app_name);
-            ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(title);
+            getSherlockActivity().getSupportActionBar().setTitle(title);
         }
 
         @Override
@@ -1092,13 +1090,13 @@ public class KiwixMobileFragment extends Fragment {
                     title = webView.getTitle();
                 }
 
-                if (((ActionBarActivity) getActivity()).getSupportActionBar().getTabCount() < 2) {
-                    ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(title);
+                if (getSherlockActivity().getSupportActionBar().getTabCount() < 2) {
+                    getSherlockActivity().getSupportActionBar().setTitle(title);
                 }
 
-                if (((ActionBarActivity) getActivity()).getSupportActionBar().getNavigationMode()
+                if (getSherlockActivity().getSupportActionBar().getNavigationMode()
                         == ActionBar.NAVIGATION_MODE_TABS) {
-                    ((ActionBarActivity) getActivity()).getSupportActionBar().getSelectedTab().setText(title);
+                    getSherlockActivity().getSupportActionBar().getSelectedTab().setText(title);
                 }
 
                 // Workaround for #643
