@@ -18,8 +18,8 @@
     <string name="save_image">Save Image</string>
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
-    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
-    <string name="button_backtotop">Back to Top</string>
+    <string name="rescan_fs_warning">Cerca files ZIM, per favor attende...</string>
+    <string name="button_backtotop">Initio del pagina</string>
     <string name="search_label">Cercar</string>
     <string name="articlesearch_hint">Dactylographar pro cercar articulos</string>
     <string name="choose_file">Selige un file de contento ZIM (*.zim)</string>
@@ -45,8 +45,8 @@
     <string name="pref_zoom_enable_summary">Monstrar un button de zoom in le angulo inferior dextre del schermo</string>
     <string name="pref_nightmode">Modo nocturne</string>
     <string name="pref_nightmode_summary">Monstrar articulos in colores invertite</string>
-    <string name="pref_backtotop">Back to Top</string>
-    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="pref_backtotop">Initio del pagina</string>
+    <string name="pref_backtotop_summary">Monstrar un button al fin del pagina pro retornar al initio</string>
     <string name="remove_tab">Remove Tab</string>
     <string name="add_tab">Add new Tab</string>
     <string name="remove">Remove</string>

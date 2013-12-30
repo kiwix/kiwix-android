@@ -11,15 +11,15 @@
     <string name="menu_searchintext">Căutare în text</string>
     <string name="menu_randomarticle">Articol aleatoriu</string>
     <string name="menu_fullscreen">Ecran complet</string>
-    <string name="menu_exitfullscreen">Ieșire din modul ecran complet</string>
+    <string name="menu_exitfullscreen">Ieșire din ecran complet</string>
     <string name="menu_exit">Ieșire</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Share with friends</string>
     <string name="save_image">Save Image</string>
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
-    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
-    <string name="button_backtotop">Back to Top</string>
+    <string name="rescan_fs_warning">Se caută fișiere ZIM; vă rugăm să așteptați...</string>
+    <string name="button_backtotop">Începutul paginii</string>
     <string name="search_label">Căutare</string>
     <string name="articlesearch_hint">Tastați pentru a căuta articole</string>
     <string name="choose_file">Alegeți un fișier cu conținut ZIM (*.zim)</string>
@@ -28,7 +28,7 @@
     <string name="error_nozimfilesfound">Nu s-au găsit fișiere ZIM pe dispozitivul dumneavoastră.\nConsultați pagina de ajutor pentru detalii despre încărcarea conținutului în Kiwix.\nDacă totuși ați stocat un fișier ZIM pe dispozitivul dv./stocarea dv. externă, puteți reîncerca peste un minut sau puteți reporni dispozitivul.</string>
     <string name="error_filenotfound">Eroare: Fișierul ZIM selectat nu poate fi găsit.</string>
     <string name="error_fileinvalid">Eroare: Fișierul selectat nu este un fișier ZIM valid.</string>
-    <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
+    <string name="error_articlenotfound">Eroare: Încărcarea articolului \"%1$s\" nu a reușit.</string>
     <string name="error_articleurlnotfound">Eroare: Încărcarea articolului (Url: %1$s) nu a reușit.</string>
     <string name="pref_display_title">Afișare</string>
     <string name="pref_zoom_title">Nivel de zoom</string>
@@ -39,14 +39,14 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
-    <string name="pref_info_title">Information</string>
-    <string name="pref_info_version">Version</string>
+    <string name="pref_info_title">Informații</string>
+    <string name="pref_info_version">Versiune</string>
     <string name="pref_zoom_enable">Controale de zoom</string>
     <string name="pref_zoom_enable_summary">Afișează un buton de zoom în colțul din dreapta jos al ecranului</string>
     <string name="pref_nightmode">Mod de noapte</string>
     <string name="pref_nightmode_summary">Afișează articolele în culori inversate</string>
-    <string name="pref_backtotop">Back to Top</string>
-    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="pref_backtotop">Începutul paginii</string>
+    <string name="pref_backtotop_summary">Afișează un buton la sfârșitul paginii pentru a reveni la începutul acesteia</string>
     <string name="remove_tab">Remove Tab</string>
     <string name="add_tab">Add new Tab</string>
     <string name="remove">Remove</string>

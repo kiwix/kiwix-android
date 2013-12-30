@@ -6,11 +6,11 @@
     <string name="menu_home">होम</string>
     <string name="menu_forward">आगे जाएँ</string>
     <string name="menu_back">पीछे जाएँ</string>
-    <string name="menu_settings">वरीयताएँ</string>
+    <string name="menu_settings">प्राथमिकताएँ</string>
     <string name="menu_search">खोजें</string>
     <string name="menu_searchintext">पाठ में खोजें</string>
-    <string name="menu_randomarticle">यादृच्छिक अनुच्छेद</string>
-    <string name="menu_fullscreen">संपूर्ण स्क्रीन</string>
+    <string name="menu_randomarticle">रैन्डम लेख</string>
+    <string name="menu_fullscreen">पूरा स्क्रीन</string>
     <string name="menu_exitfullscreen">पूरे स्क्रीन से बाहर निकलें</string>
     <string name="menu_exit">बाहर निकलें</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
