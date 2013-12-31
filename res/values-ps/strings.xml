@@ -23,6 +23,9 @@
     <string name="search_label">پلټل</string>
     <string name="articlesearch_hint">د ليکنو موندلو لپاره وټاپۍ</string>
     <string name="choose_file">د ZIM مېنځپانگې يوه دوتنه ټاکل (*.zim)</string>
+    <string name="open_in_new_tab">Open link in new tab?</string>
+    <string name="remove_tab_confirm">Do you want to remove this tab?</string>
+    <string name="remove_tab">Remove tab</string>
     <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
     <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">ستاسې په وزلې هېڅ کومه ZIM دوتنه و نه موندل شوه.\nکيويکس کې د مېنځپانگې د برسېرولو لپاره د لارښود مخ ولولۍ.\nکه تاسې په خپلې وزلې کې يو ZIM دوتنه نه وي ايښې، نو تاسې کولی شی چې يوه دقيقه وروسته يې بيا وآزمويۍ او يا هم خپله وزله سر له نوي ولگوۍ او بيا هڅه وکړۍ.</string>
@@ -47,11 +50,8 @@
     <string name="pref_nightmode_summary">رنگ اړول شوې ليکنې ښکاره کول</string>
     <string name="pref_backtotop">بېرته سر ته</string>
     <string name="pref_backtotop_summary">د مخ په پای کې د مخ سر ته ورتللو لپاره يوه تڼۍ ښکاره کول</string>
-    <string name="remove_tab">Remove Tab</string>
-    <string name="add_tab">Add new Tab</string>
-    <string name="remove">Remove</string>
-    <string name="open_in_new_tab">Open link in new Tab?</string>
     <string name="share_via">Share via</string>
     <string name="pref_language_title">Language</string>
     <string name="pref_language_chooser">Choose a language</string>
+    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

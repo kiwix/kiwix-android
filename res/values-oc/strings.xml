@@ -23,6 +23,9 @@
     <string name="search_label">Cèrca</string>
     <string name="articlesearch_hint">Picar per recercar d\'articles</string>
     <string name="choose_file">Seleccionar un fichièr de contengut ZIM (*.zim)</string>
+    <string name="open_in_new_tab">Open link in new tab?</string>
+    <string name="remove_tab_confirm">Do you want to remove this tab?</string>
+    <string name="remove_tab">Remove tab</string>
     <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
     <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Cap de fichièr ZIM es pas estat trobat sus vòstra maquina.\nGetatz un còp d’uèlh a la pagina d’ajuda per aver d\'instruccions sul biais de cargar de contengut dins Kiwix.\nS\'avètz mes un fichièr ZIM sus vòstre emmagazinatge intèrne o extèrne, podètz tornar ensajar dins una minuta o reamodar vòstre aparelh.</string>
@@ -47,11 +50,8 @@
     <string name="pref_nightmode_summary">Afichar los articles en colors inversadas</string>
     <string name="pref_backtotop">Back to Top</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
-    <string name="remove_tab">Remove Tab</string>
-    <string name="add_tab">Add new Tab</string>
-    <string name="remove">Remove</string>
-    <string name="open_in_new_tab">Open link in new Tab?</string>
     <string name="share_via">Share via</string>
     <string name="pref_language_title">Language</string>
     <string name="pref_language_chooser">Choose a language</string>
+    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

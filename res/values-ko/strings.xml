@@ -23,6 +23,9 @@
     <string name="search_label">검색</string>
     <string name="articlesearch_hint">문서를 찾아보는 종류</string>
     <string name="choose_file">ZIM 콘텐츠 파일 (*.zim) 선택</string>
+    <string name="open_in_new_tab">Open link in new tab?</string>
+    <string name="remove_tab_confirm">Do you want to remove this tab?</string>
+    <string name="remove_tab">Remove tab</string>
     <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
     <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">장치에서 ZIM 파일이 발견되지 않았습니다.\n도움말에서 콘텐츠를 어떻게 키윅스로 불러오는지 알아보세요.\n만약 파일을 외장 디스크나 기기에 넣었다면, 몇분 후 재시도하거나 재부팅해 보세요.</string>
@@ -47,11 +50,8 @@
     <string name="pref_nightmode_summary">되돌린 색으로 문서를 보여줍니다</string>
     <string name="pref_backtotop">Back to Top</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
-    <string name="remove_tab">Remove Tab</string>
-    <string name="add_tab">Add new Tab</string>
-    <string name="remove">Remove</string>
-    <string name="open_in_new_tab">Open link in new Tab?</string>
     <string name="share_via">Share via</string>
     <string name="pref_language_title">Language</string>
     <string name="pref_language_chooser">Choose a language</string>
+    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>
