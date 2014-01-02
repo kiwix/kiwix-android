@@ -29,6 +29,14 @@ public class JNIKiwix {
     public native boolean getPageUrlFromTitle(String title, JNIKiwixString url);
     public native boolean getTitle(JNIKiwixString title);
     public native boolean getDescription(JNIKiwixString title);
+    public native boolean getLanguage(JNIKiwixString language);
+    public native boolean getDate(JNIKiwixString language);
+    public native boolean getFavicon(JNIKiwixString content, JNIKiwixString mimeType);
+    public native boolean getCreator(JNIKiwixString creator);
+    public native boolean getPublisher(JNIKiwixString publisher);
+    public native boolean getFileSize(JNIKiwixInt size);
+    public native boolean getArticleCount(JNIKiwixInt count);
+    public native boolean getMediaCount(JNIKiwixInt count);
     public native boolean getRandomPage(JNIKiwixString url);
 
     static {

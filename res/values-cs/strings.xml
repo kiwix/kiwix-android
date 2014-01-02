@@ -23,6 +23,9 @@
     <string name="search_label">Vyhledávání</string>
     <string name="articlesearch_hint">Pro vyhledání článků pište</string>
     <string name="choose_file">Vyberte obsahový soubor ZIM (*.zim)</string>
+    <string name="open_in_new_tab">Open link in new tab?</string>
+    <string name="remove_tab_confirm">Do you want to remove this tab?</string>
+    <string name="remove_tab">Remove tab</string>
     <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
     <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Na zařízení nenalezeny soubory ZIM.\nPro vodítka, jak nahrávat do Kiwixu obsah, se podívejte na stránku nápovědy.\nPokud jste na své zařízení nebo externí paměť opravdu nahráli soubor ZIM, můžete zkusit načtení za minutu a nebo po restartu zařízení.</string>
@@ -47,11 +50,8 @@
     <string name="pref_nightmode_summary">Zobrazuje stránky v obrácených barvách.</string>
     <string name="pref_backtotop">Zpět na začátek</string>
     <string name="pref_backtotop_summary">Zobrazit tlačítko "Zpět na začátek" na konci stránky</string>
-    <string name="remove_tab">Remove Tab</string>
-    <string name="add_tab">Add new Tab</string>
-    <string name="remove">Remove</string>
-    <string name="open_in_new_tab">Open link in new Tab?</string>
     <string name="share_via">Share via</string>
     <string name="pref_language_title">Language</string>
     <string name="pref_language_chooser">Choose a language</string>
+    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

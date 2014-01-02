@@ -23,6 +23,9 @@
     <string name="search_label">Поиск</string>
     <string name="articlesearch_hint">Введите для поиска статей</string>
     <string name="choose_file">Выберите ZIM-файл (*.zim)</string>
+    <string name="open_in_new_tab">Open link in new tab?</string>
+    <string name="remove_tab_confirm">Do you want to remove this tab?</string>
+    <string name="remove_tab">Remove tab</string>
     <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
     <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Не удалось найти ZIM-файлы на вашем устройстве.\nВзгляните на страницу справки, чтобы получить указания о том, как загружать содержимое на Kiwix.\nЕсли вы расположили ZIM-файл на вашем устройстве или внешнем носителе, возможно, стоит повторить попытку через минуту-другую или перезагрузить устройство.</string>
@@ -47,11 +50,8 @@
     <string name="pref_nightmode_summary">Показать статьи в «ночном режиме»</string>
     <string name="pref_backtotop">Вернуться наверх</string>
     <string name="pref_backtotop_summary">Отобразить кнопку в конце страницы для прокрутки вверх</string>
-    <string name="remove_tab">Remove Tab</string>
-    <string name="add_tab">Add new Tab</string>
-    <string name="remove">Remove</string>
-    <string name="open_in_new_tab">Open link in new Tab?</string>
     <string name="share_via">Share via</string>
     <string name="pref_language_title">Language</string>
     <string name="pref_language_chooser">Choose a language</string>
+    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

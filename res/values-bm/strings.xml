@@ -23,6 +23,9 @@
     <string name="search_label">Ɲinini kɛ</string>
     <string name="articlesearch_hint">I ka kunnafoni ɲinintaw sɛbɛn yan.</string>
     <string name="choose_file">I mago bɛ fisiye min na ZIMU kɔnɔ, o suganti yan.</string>
+    <string name="open_in_new_tab">Open link in new tab?</string>
+    <string name="remove_tab_confirm">Do you want to remove this tab?</string>
+    <string name="remove_tab">Remove tab</string>
     <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
     <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Fisiye ZIMU foyi ma sɔrɔ i ka mansin kan. \nTaa i ɲɛ jɔ  dɛmɛ ɲɛ kan, walasa ka faamuya sɔrɔ kunnafoniw bila cogo la Kiwikisi kan. \nN\'a sɔrɔla i ye Fisiye ZIMU dɔ bila i ka mansin kan walima kile dɔ kan, i bɛ se ka segin a kan miniti kelen kɔnɔ walima k\'i ka mansin faga k\'a mɛnɛ.</string>
@@ -47,11 +50,8 @@
     <string name="pref_nightmode_summary">Kunnafoni minnu ɲɛ cogoya yɛlɛmanen don, olu jira.</string>
     <string name="pref_backtotop">Back to Top</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
-    <string name="remove_tab">Remove Tab</string>
-    <string name="add_tab">Add new Tab</string>
-    <string name="remove">Remove</string>
-    <string name="open_in_new_tab">Open link in new Tab?</string>
     <string name="share_via">Share via</string>
     <string name="pref_language_title">Language</string>
     <string name="pref_language_chooser">Choose a language</string>
+    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

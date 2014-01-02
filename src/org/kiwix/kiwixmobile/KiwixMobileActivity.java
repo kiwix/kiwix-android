@@ -647,8 +647,8 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
-        dialog.setTitle(getString(R.string.delete_tab_title));
-        dialog.setMessage(getString(R.string.delete_tab_message));
+        dialog.setTitle(getString(R.string.remove_tab));
+        dialog.setMessage(getString(R.string.remove_tab_confirm));
         dialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 removeTabAt(mCurrentDraggedTab);
