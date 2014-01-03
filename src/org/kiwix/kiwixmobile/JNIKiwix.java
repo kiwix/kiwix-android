@@ -38,6 +38,7 @@ public class JNIKiwix {
     public native boolean getArticleCount(JNIKiwixInt count);
     public native boolean getMediaCount(JNIKiwixInt count);
     public native boolean getRandomPage(JNIKiwixString url);
+    public native void setDataDirectory(String icuDataDir);
 
     static {
         System.loadLibrary("kiwix");

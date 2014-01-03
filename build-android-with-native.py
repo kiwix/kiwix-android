@@ -251,7 +251,7 @@ if COMPILE_LIBICU:
     if (not os.path.exists(ICU_TMP_TARGET)):
         os.mkdir(ICU_TMP_TARGET);
     os.chdir(ICU_TMP_HOST)
-    syscall(LIBICU_SRC + '/configure', shell=True)
+    syscall(LIBICU_SRC + '/configure --with-data-packaging=archive', shell=True)
     syscall('make', shell=True)
     os.chdir(os.getcwd())
 
@@ -299,6 +299,12 @@ for arch in ARCHS:
         # add a link to android-support-v4.jar
         ln_src = '%(SDK_PATH)s/extras/android/support/v4/android-support-v4.jar' % {'SDK_PATH': SDK_PATH}
         dest = os.path.join(os.path.dirname(CURRENT_PATH), 'android', 'libs')
+        syscall('ln -sf %(src)s %(dest)s/' 
+                % {'src': ln_src, 'dest': dest})
+
+        # add a link to icudt49l.dat
+        ln_src = LIBICU_SRC + '/data/in/icudt49l.dat'
+        dest = os.path.join(os.path.dirname(CURRENT_PATH), 'android', 'assets')
         syscall('ln -sf %(src)s %(dest)s/' 
                 % {'src': ln_src, 'dest': dest})
 
@@ -356,7 +362,7 @@ for arch in ARCHS:
     # compile libicu.a, libicu.so
     os.chdir(ICU_TMP_TARGET)
     configure_cmd = ( LIBICU_SRC + '/configure --host=%(arch)s --enable-static '
-                     '--prefix=%(platform)s --with-cross-build=%(icu)s  --disable-shared --enable-static '
+                     '--prefix=%(platform)s --with-cross-build=%(icu)s  --disable-shared --with-data-packaging=archive '
                      % {'arch': arch_full, 'platform': platform, 'icu': ICU_TMP_HOST})
 
     if COMPILE_LIBICU:

@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
@@ -28,8 +29,11 @@ import android.os.ParcelFileDescriptor.AutoCloseOutputStream;
 import android.util.Log;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;  
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;   
 import java.io.IOException;
+import java.io.InputStream; 
 import java.io.OutputStream;
 
 public class ZimContentProvider extends ContentProvider {
@@ -135,7 +139,7 @@ public class ZimContentProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         jniKiwix = new JNIKiwix();
-
+	setIcuDataDirectory();
         return (true);
     }
 
@@ -261,4 +265,41 @@ public class ZimContentProvider extends ContentProvider {
             }
         }
     }
+
+    private void setIcuDataDirectory() {
+        File workingDir = this.getContext().getFilesDir();
+        String icuDirPath = loadICUData(this.getContext(), workingDir);
+
+        if(icuDirPath != null) {
+            Log.d("kiwix", "Setting the ICU directory path to " + icuDirPath);
+            jniKiwix.setDataDirectory(icuDirPath);
+        }
+    }
+
+    private static String loadICUData(Context context, File workingDir) {
+        String icuFileName = "icudt49l.dat";
+        try {
+            File icuDir = new File(workingDir, "icu");
+            if(!icuDir.exists()) icuDir.mkdirs();
+            File icuDataFile = new File(icuDir, icuFileName);
+            if(!icuDataFile.exists()) {
+                InputStream in = context.getAssets().open(icuFileName);
+                OutputStream out =  new FileOutputStream(icuDataFile);
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+                in.close();
+                out.flush();
+                out.close();
+            }
+            return icuDir.getAbsolutePath();
+        }
+        catch (Exception e) {
+            Log.e("kiwix", "Error copying icu data file", e);
+            return null;
+        }
+    }
+
 }

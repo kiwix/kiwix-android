@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 
+#include "unicode/putil.h"
 #include <kiwix/reader.h>
 
 /* global variables */
@@ -274,3 +275,15 @@ JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getRandomPage
   return retVal;
 }
 
+JNIEXPORT void JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_setDataDirectory
+  (JNIEnv *env, jobject obj, jstring dirStr) {
+  std::string cPath = jni2c(dirStr, env);
+
+  pthread_mutex_lock(&readerLock); 
+  try {
+    u_setDataDirectory(cPath.c_str());
+  } catch (exception &e) {
+    std::cerr << e.what() << std::endl;
+  }
+  pthread_mutex_unlock(&readerLock);
+}
