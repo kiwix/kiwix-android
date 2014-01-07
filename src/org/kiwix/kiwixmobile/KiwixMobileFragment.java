@@ -674,10 +674,11 @@ public class KiwixMobileFragment extends SherlockFragment {
 
 	if (webView.getTitle() == null || ZimContentProvider.getPageUrlFromTitle(webView.getTitle()) == null) {
 	    menu.findItem(R.id.menu_bookmarks).setVisible(false);
-	} else{
-	    if (bookmarks.contains(webView.getTitle())){
+	} else {
+	    menu.findItem(R.id.menu_bookmarks).setVisible(true);
+	    if (bookmarks.contains(webView.getTitle())) {
 		menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmarks_active);
-	    } else{
+	    } else {
 		menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmarks);
 	    }
 	}
@@ -778,12 +779,10 @@ public class KiwixMobileFragment extends SherlockFragment {
     }
 
     private void showHelp() {
-
         // Load from resource. Use with base url as else no images can be embedded.
         // Note that this leads inclusion of welcome page in browser history
         // This is not perfect, but good enough. (and would be signifcant effort to remove file)
         webView.loadUrl("file:///android_res/raw/help.html");
-	menu.findItem(R.id.menu_bookmarks).setVisible(false);
     }
 
     public boolean openZimFile(File file, boolean clearHistory) {
@@ -830,12 +829,12 @@ public class KiwixMobileFragment extends SherlockFragment {
 
     private void initAllMenuItems() {
         try {
+	    menu.findItem(R.id.menu_bookmarks).setVisible(true);
             menu.findItem(R.id.menu_forward).setVisible(false);
             menu.findItem(R.id.menu_fullscreen).setVisible(true);
             menu.findItem(R.id.menu_back).setVisible(true);
             menu.findItem(R.id.menu_home).setVisible(true);
             menu.findItem(R.id.menu_randomarticle).setVisible(true);
-	    menu.findItem(R.id.menu_bookmarks).setVisible(true);
             menu.findItem(R.id.menu_searchintext).setVisible(true);
             menu.findItem(R.id.menu_search).setVisible(true);
         } catch (Exception e) {
@@ -860,11 +859,14 @@ public class KiwixMobileFragment extends SherlockFragment {
         }
     }
 
-    public void toggleBookmark(){
+    public void toggleBookmark() {
 	String title = webView.getTitle();
-	if(title!=null && !bookmarks.contains(title)){
+	if (title!=null && !bookmarks.contains(title)){
 	    bookmarks.add(title);
-	}else bookmarks.remove(title);
+	} else {
+	    bookmarks.remove(title);
+	}
+	
 	getActivity().invalidateOptionsMenu();
     }
 
@@ -1117,7 +1119,6 @@ public class KiwixMobileFragment extends SherlockFragment {
     }
 
     private class MyWebViewClient extends WebViewClient {
-
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
