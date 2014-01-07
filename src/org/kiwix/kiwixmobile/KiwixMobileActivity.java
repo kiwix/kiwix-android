@@ -61,9 +61,8 @@ import java.util.ArrayList;
 import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.equalsOrNewThanApi;
 import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.newApi;
 
-
 public class KiwixMobileActivity extends SherlockFragmentActivity implements ActionBar.TabListener,
-        View.OnLongClickListener, KiwixMobileFragment.FragmentCommunicator {
+     View.OnLongClickListener, KiwixMobileFragment.FragmentCommunicator, BookmarkDialog.BookmarkDialogListener {
 
     public static ArrayList<State> mPrefState;
 
@@ -301,6 +300,10 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
                     mCurrentFragment.webView.goBack();
                 }
                 break;
+
+	    case R.id.menu_bookmarks:
+	        mCurrentFragment.viewBookmarks();
+	        break;
 
             case R.id.menu_randomarticle:
                 mCurrentFragment.openRandomArticle();
@@ -673,6 +676,17 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
         public void setHasToBeRefreshed(boolean hasToBeRefreshed) {
             this.hasToBeRefreshed = hasToBeRefreshed;
         }
+    }
+
+    //These two methods are used with the BookmarkDialog.
+    @Override
+    public void onListItemSelect(String choice) {
+	mCurrentFragment.openArticleFromBookmark(choice);
+    }
+
+    @Override
+    public void onBookmarkButtonPressed() {
+	mCurrentFragment.toggleBookmark();
     }
 
     public class ViewPagerAdapter extends FragmentStatePagerAdapter {

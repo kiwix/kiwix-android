@@ -83,10 +83,13 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
@@ -152,6 +155,8 @@ public class KiwixMobileFragment extends SherlockFragment {
 
     private ImageButton mTabDeleteCross;
 
+    private ArrayList<String> bookmarks;
+
     private FragmentCommunicator mFragmentCommunicator;
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -161,6 +166,8 @@ public class KiwixMobileFragment extends SherlockFragment {
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
+	bookmarks=new ArrayList<String>();
+	refreshBookmarks();
         requestClearHistoryAfterLoad = false;
         requestWebReloadOnFinished = 0;
         requestInitAllMenuItems = false;
@@ -212,6 +219,9 @@ public class KiwixMobileFragment extends SherlockFragment {
 
         // Commit the edits!
         editor.commit();
+	
+	// Save bookmarks
+	saveBookmarks();
 
         Log.d(TAG_KIWIX,
                 "onPause Save currentzimfile to preferences:" + ZimContentProvider.getZimFile());
@@ -278,8 +288,8 @@ public class KiwixMobileFragment extends SherlockFragment {
         }
 
         articleSearchtextView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
-        int height = articleSearchtextView.getMeasuredHeight() - articleSearchtextView.getPaddingTop()
-                - articleSearchtextView.getPaddingBottom();
+	int height = articleSearchtextView.getMeasuredHeight() - articleSearchtextView.getPaddingTop()
+	    - articleSearchtextView.getPaddingBottom();
 
         clearIcon.setBounds(0, 0, height, height);
         searchIcon.setBounds(0, 0, height, height);
@@ -559,12 +569,12 @@ public class KiwixMobileFragment extends SherlockFragment {
         webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         webView.setWebChromeClient(new MyWebChromeClient());
 
-        // Should basically resemble the behavior when setWebClient not done
-        // (i.p. internal urls load in webview, external urls in browser)
-        // as currently no custom setWebViewClient required it is commented
+	// Should basically resemble the behavior when setWebClient not done
+	// (i.p. internal urls load in webview, external urls in browser)
+	// as currently no custom setWebViewClient required it is commented
+	// However, it must notify the bookmark system when a page is finished loading
+	// so that it can refresh the menu.
         webView.setWebViewClient(new MyWebViewClient());
-
-
     }
 
     private void setUpExitFullscreenButton() {
@@ -657,6 +667,22 @@ public class KiwixMobileFragment extends SherlockFragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    //This method refreshes the menu for the bookmark system.
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+	if (webView.getTitle() == null || ZimContentProvider.getPageUrlFromTitle(webView.getTitle()) == null) {
+	    menu.findItem(R.id.menu_bookmarks).setVisible(false);
+	} else{
+	    if (bookmarks.contains(webView.getTitle())){
+		menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmarks_active);
+	    } else{
+		menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmarks);
+	    }
+	}
+    }
+
     public void loadPrefs() {
 
         mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -696,6 +722,7 @@ public class KiwixMobileFragment extends SherlockFragment {
     }
 
     public void selectZimFile() {
+	saveBookmarks();
         final Intent target = new Intent(getActivity(), ZimFileSelectActivity.class);
         target.setAction(Intent.ACTION_GET_CONTENT);
         // The MIME data type filter
@@ -756,6 +783,7 @@ public class KiwixMobileFragment extends SherlockFragment {
         // Note that this leads inclusion of welcome page in browser history
         // This is not perfect, but good enough. (and would be signifcant effort to remove file)
         webView.loadUrl("file:///android_res/raw/help.html");
+	menu.findItem(R.id.menu_bookmarks).setVisible(false);
     }
 
     public boolean openZimFile(File file, boolean clearHistory) {
@@ -785,6 +813,7 @@ public class KiwixMobileFragment extends SherlockFragment {
 
                 openMainPage();
                 showSearchBar(false);
+		refreshBookmarks();
                 return true;
             } else {
                 Toast.makeText(getActivity(), getResources().getString(R.string.error_fileinvalid),
@@ -800,13 +829,13 @@ public class KiwixMobileFragment extends SherlockFragment {
     }
 
     private void initAllMenuItems() {
-
         try {
             menu.findItem(R.id.menu_forward).setVisible(false);
             menu.findItem(R.id.menu_fullscreen).setVisible(true);
             menu.findItem(R.id.menu_back).setVisible(true);
             menu.findItem(R.id.menu_home).setVisible(true);
             menu.findItem(R.id.menu_randomarticle).setVisible(true);
+	    menu.findItem(R.id.menu_bookmarks).setVisible(true);
             menu.findItem(R.id.menu_searchintext).setVisible(true);
             menu.findItem(R.id.menu_search).setVisible(true);
         } catch (Exception e) {
@@ -829,6 +858,59 @@ public class KiwixMobileFragment extends SherlockFragment {
                     break;
             }
         }
+    }
+
+    public void toggleBookmark(){
+	String title = webView.getTitle();
+	if(title!=null && !bookmarks.contains(title)){
+	    bookmarks.add(title);
+	}else bookmarks.remove(title);
+	getActivity().invalidateOptionsMenu();
+    }
+
+    public void viewBookmarks() {
+	new BookmarkDialog(bookmarks.toArray(new String[bookmarks.size()]),bookmarks.contains(webView.getTitle())).show(getActivity().getSupportFragmentManager(), "BookmarkDialog");
+    }
+
+    private void refreshBookmarks() {
+	bookmarks.clear();
+	if (ZimContentProvider.getId()!=null) try {
+		InputStream stream = getActivity().openFileInput(ZimContentProvider.getId()+".txt");
+		String in;
+		if (stream!= null) {
+		    BufferedReader read = new BufferedReader(new InputStreamReader(stream));
+		    while((in=read.readLine())!=null) {
+			bookmarks.add(in);
+		    }
+		    Log.d("Kiwix", "Switched to bookmarkfile "+ZimContentProvider.getId());
+		}
+	    }
+	    catch (FileNotFoundException e) {
+		Log.e("kiwix", "File not found: " + e.toString());
+	    } catch (IOException e) {
+		Log.e("kiwix", "Can not read file: " + e.toString());
+	    }
+    }
+
+    private void saveBookmarks() {
+	try {
+	    OutputStream stream = getActivity().openFileOutput(ZimContentProvider.getId()+".txt", Context.MODE_PRIVATE);
+	    if (stream!= null) {
+		for(String s:bookmarks){
+		    stream.write((s+"\n").getBytes());
+		}
+	    }
+	    Log.d("Kiwix", "Saved data in bookmarkfile "+ZimContentProvider.getId());
+	} catch (FileNotFoundException e) {
+	    Log.e("kiwix", "File not found: " + e.toString());
+	} catch (IOException e) {
+	    Log.e("kiwix", "Can not read file: " + e.toString());
+	}
+    }
+
+    public boolean openArticleFromBookmark(String bookmarkTitle) {
+	Log.d("kiwix", "openArticleFromBookmark: "+articleSearchtextView.getText());
+	return openArticle(ZimContentProvider.getPageUrlFromTitle(bookmarkTitle));
     }
 
     private boolean openArticle(String articleUrl) {
