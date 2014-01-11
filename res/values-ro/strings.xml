@@ -9,6 +9,7 @@
     <string name="menu_settings">Preferințe</string>
     <string name="menu_search">Căutare</string>
     <string name="menu_searchintext">Căutare în text</string>
+    <string name="menu_bookmarks">Bookmarks</string>
     <string name="menu_randomarticle">Articol aleatoriu</string>
     <string name="menu_fullscreen">Ecran complet</string>
     <string name="menu_exitfullscreen">Ieșire din ecran complet</string>
@@ -26,6 +27,9 @@
     <string name="open_in_new_tab">Open link in new tab?</string>
     <string name="remove_tab_confirm">Do you want to remove this tab?</string>
     <string name="remove_tab">Remove tab</string>
+    <string name="add_bookmark">Add bookmark</string>
+    <string name="remove_bookmark">Remove bookmark</string>
+    <string name="view_bookmarks">View all bookmarks</string>
     <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
     <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Nu s-au găsit fișiere ZIM pe dispozitivul dumneavoastră.\nConsultați pagina de ajutor pentru detalii despre încărcarea conținutului în Kiwix.\nDacă totuși ați stocat un fișier ZIM pe dispozitivul dv./stocarea dv. externă, puteți reîncerca peste un minut sau puteți reporni dispozitivul.</string>

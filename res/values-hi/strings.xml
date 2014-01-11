@@ -9,6 +9,7 @@
     <string name="menu_settings">प्राथमिकताएँ</string>
     <string name="menu_search">खोजें</string>
     <string name="menu_searchintext">पाठ में खोजें</string>
+    <string name="menu_bookmarks">Bookmarks</string>
     <string name="menu_randomarticle">रैन्डम लेख</string>
     <string name="menu_fullscreen">पूरा स्क्रीन</string>
     <string name="menu_exitfullscreen">पूरे स्क्रीन से बाहर निकलें</string>
@@ -26,6 +27,9 @@
     <string name="open_in_new_tab">Open link in new tab?</string>
     <string name="remove_tab_confirm">Do you want to remove this tab?</string>
     <string name="remove_tab">Remove tab</string>
+    <string name="add_bookmark">Add bookmark</string>
+    <string name="remove_bookmark">Remove bookmark</string>
+    <string name="view_bookmarks">View all bookmarks</string>
     <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
     <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">आपकी डिवाइस पर कोई ZIM फ़ाइल नही मिली।\nKiwix मे कान्टेन्ट लोड करने के बारे मे जानने के लिए हेल्प पृष्ठ देखें।\nयदि आपने अपने डिवाइस/इक्स्टर्नल स्टोरिज पर ZIM फ़ाइल डाली है, तो फिर से इक मिनिट मे प्रयास करें, या फिर डिवाइस पुनरारंभ करें।</string>

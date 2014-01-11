@@ -9,6 +9,7 @@
     <string name="menu_settings">Preferències</string>
     <string name="menu_search">Cerca</string>
     <string name="menu_searchintext">Cercar en el text</string>
+    <string name="menu_bookmarks">Bookmarks</string>
     <string name="menu_randomarticle">Article a l\'atzar</string>
     <string name="menu_fullscreen">Pantalla completa</string>
     <string name="menu_exitfullscreen">Surt del mode de pantalla completa</string>
@@ -26,6 +27,9 @@
     <string name="open_in_new_tab">Open link in new tab?</string>
     <string name="remove_tab_confirm">Do you want to remove this tab?</string>
     <string name="remove_tab">Remove tab</string>
+    <string name="add_bookmark">Add bookmark</string>
+    <string name="remove_bookmark">Remove bookmark</string>
+    <string name="view_bookmarks">View all bookmarks</string>
     <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
     <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">No s\'han trobat arxius ZIM en el vostre dispositiu. Visiteu la Pàgina d\'Ajuda per obtenir instruccions sobre com carregar contingut a Kiwix. Si realment vau col·locar un arxiu ZIM en el vostre dispositiu/emmagatzematge extern, podeu tornar a intentar-ho en uns moments, o reinicieu el vostre dispositiu.</string>

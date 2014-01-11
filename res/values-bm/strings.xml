@@ -9,6 +9,7 @@
     <string name="menu_settings">I diyanyeta</string>
     <string name="menu_search">Ɲinini kɛ</string>
     <string name="menu_searchintext">Ɲinini kɛ sɛbɛnni kɔnɔ</string>
+    <string name="menu_bookmarks">Bookmarks</string>
     <string name="menu_randomarticle">Laala kunnafoni</string>
     <string name="menu_fullscreen">Ekaran fa</string>
     <string name="menu_exitfullscreen">Bɔ ekaran falen na</string>
@@ -26,6 +27,9 @@
     <string name="open_in_new_tab">Open link in new tab?</string>
     <string name="remove_tab_confirm">Do you want to remove this tab?</string>
     <string name="remove_tab">Remove tab</string>
+    <string name="add_bookmark">Add bookmark</string>
+    <string name="remove_bookmark">Remove bookmark</string>
+    <string name="view_bookmarks">View all bookmarks</string>
     <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
     <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Fisiye ZIMU foyi ma sɔrɔ i ka mansin kan. \nTaa i ɲɛ jɔ  dɛmɛ ɲɛ kan, walasa ka faamuya sɔrɔ kunnafoniw bila cogo la Kiwikisi kan. \nN\'a sɔrɔla i ye Fisiye ZIMU dɔ bila i ka mansin kan walima kile dɔ kan, i bɛ se ka segin a kan miniti kelen kɔnɔ walima k\'i ka mansin faga k\'a mɛnɛ.</string>

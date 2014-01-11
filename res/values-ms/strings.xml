@@ -9,6 +9,7 @@
     <string name="menu_settings">Keutamaan</string>
     <string name="menu_search">Cari</string>
     <string name="menu_searchintext">Cari dalam teks</string>
+    <string name="menu_bookmarks">Bookmarks</string>
     <string name="menu_randomarticle">Rencana rawak</string>
     <string name="menu_fullscreen">Skrin penuh</string>
     <string name="menu_exitfullscreen">Keluar dari skrin penuh</string>
@@ -26,6 +27,9 @@
     <string name="open_in_new_tab">Open link in new tab?</string>
     <string name="remove_tab_confirm">Do you want to remove this tab?</string>
     <string name="remove_tab">Remove tab</string>
+    <string name="add_bookmark">Add bookmark</string>
+    <string name="remove_bookmark">Remove bookmark</string>
+    <string name="view_bookmarks">View all bookmarks</string>
     <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
     <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Tidak terdapat fail ZIM di dalam peranti anda.\nSila baca halaman Bantuan untuk mendapat petua untuk cara memuatkan kandungan ke dalam Kiwix.\nJika benar anda meletakkan fail ZIM di dalam peranti/storan luaran anda, apa kata anda cuba lagi sebentar kemudian atau me-restart peranti anda.</string>

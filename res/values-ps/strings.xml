@@ -9,6 +9,7 @@
     <string name="menu_settings">غوره توبونه</string>
     <string name="menu_search">پلټل</string>
     <string name="menu_searchintext">په متن کې موندل</string>
+    <string name="menu_bookmarks">Bookmarks</string>
     <string name="menu_randomarticle">ناټاکلې ليکنه</string>
     <string name="menu_fullscreen">ډکه پرده</string>
     <string name="menu_exitfullscreen">بشپړ پردې څخه وتل</string>
@@ -26,6 +27,9 @@
     <string name="open_in_new_tab">Open link in new tab?</string>
     <string name="remove_tab_confirm">Do you want to remove this tab?</string>
     <string name="remove_tab">Remove tab</string>
+    <string name="add_bookmark">Add bookmark</string>
+    <string name="remove_bookmark">Remove bookmark</string>
+    <string name="view_bookmarks">View all bookmarks</string>
     <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
     <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">ستاسې په وزلې هېڅ کومه ZIM دوتنه و نه موندل شوه.\nکيويکس کې د مېنځپانگې د برسېرولو لپاره د لارښود مخ ولولۍ.\nکه تاسې په خپلې وزلې کې يو ZIM دوتنه نه وي ايښې، نو تاسې کولی شی چې يوه دقيقه وروسته يې بيا وآزمويۍ او يا هم خپله وزله سر له نوي ولگوۍ او بيا هڅه وکړۍ.</string>
