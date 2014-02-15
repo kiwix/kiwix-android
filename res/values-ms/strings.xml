@@ -15,7 +15,7 @@
     <string name="menu_exitfullscreen">Keluar dari skrin penuh</string>
     <string name="menu_exit">Keluar</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Share with friends</string>
+    <string name="menu_share">Kongsi dengan kawan²</string>
     <string name="save_image">Save Image</string>
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
@@ -24,14 +24,14 @@
     <string name="search_label">Cari</string>
     <string name="articlesearch_hint">Taip untuk mencari rencana</string>
     <string name="choose_file">Pilih Fail Kandungan ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Open link in new tab?</string>
-    <string name="remove_tab_confirm">Do you want to remove this tab?</string>
-    <string name="remove_tab">Remove tab</string>
+    <string name="open_in_new_tab">Buka pautan dalam tab baru?</string>
+    <string name="remove_tab_confirm">Mahu gugurkan tab ini?</string>
+    <string name="remove_tab">Gugurkan tab</string>
     <string name="add_bookmark">Add bookmark</string>
     <string name="remove_bookmark">Remove bookmark</string>
     <string name="view_bookmarks">View all bookmarks</string>
-    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
-    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
+    <string name="info_share_title">Seronoknya Wikipedia Offline dengan Kiwix!</string>
+    <string name="info_share_content">Seronoknya Wikipedia Offline dengan Kiwix! Seluruh ilmu pengetahuan insani di tanganmu di mana sahaja anda berada! Malah tanpa Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Tidak terdapat fail ZIM di dalam peranti anda.\nSila baca halaman Bantuan untuk mendapat petua untuk cara memuatkan kandungan ke dalam Kiwix.\nJika benar anda meletakkan fail ZIM di dalam peranti/storan luaran anda, apa kata anda cuba lagi sebentar kemudian atau me-restart peranti anda.</string>
     <string name="error_filenotfound">Ralat: Fail ZIM yang terpilih tidak dapat ditemui.</string>
     <string name="error_fileinvalid">Ralat: Fail yang terpilih bukan fail ZIM yang sah.</string>
@@ -54,7 +54,7 @@
     <string name="pref_nightmode_summary">Paparkan rencana yang diterbalikkan warnanya</string>
     <string name="pref_backtotop">Kembali ke Atas</string>
     <string name="pref_backtotop_summary">Paparkan butang di kaki halaman untuk menskrol kembali ke atas</string>
-    <string name="share_via">Share via</string>
+    <string name="share_via">Kongsi melalui...</string>
     <string name="pref_language_title">Language</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>

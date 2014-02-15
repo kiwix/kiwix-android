@@ -15,7 +15,7 @@
     <string name="menu_exitfullscreen">Saír da pantalla completa</string>
     <string name="menu_exit">Saír</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Share with friends</string>
+    <string name="menu_share">Compartir cos amigos</string>
     <string name="save_image">Save Image</string>
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
@@ -24,14 +24,14 @@
     <string name="search_label">Procurar</string>
     <string name="articlesearch_hint">Empece a escribir para procurar artigos</string>
     <string name="choose_file">Seleccione un ficheiro de contido ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Open link in new tab?</string>
-    <string name="remove_tab_confirm">Do you want to remove this tab?</string>
-    <string name="remove_tab">Remove tab</string>
+    <string name="open_in_new_tab">Quere abrir a ligazón nunha nova lapela?</string>
+    <string name="remove_tab_confirm">Quere pechar esta lapela?</string>
+    <string name="remove_tab">Pechar a lapela</string>
     <string name="add_bookmark">Add bookmark</string>
     <string name="remove_bookmark">Remove bookmark</string>
     <string name="view_bookmarks">View all bookmarks</string>
-    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
-    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
+    <string name="info_share_title">Gozo da Wikipedia sen conexión con Kiwix!</string>
+    <string name="info_share_content">Gozo da Wikipedia sen conexión con Kiwix! Todo o coñecemento humano na man onde queira que vaias! Sen internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Non se atopou ningún ficheiro ZIM no seu dispositivo.\nBote unha ollada á páxina de axuda para aprender a cargar contido no Kiwix.\nSe xa puxo o ficheiro ZIM no seu dispositivo de almacenamento interno ou externo, pode reintentalo nun minuto ou reiniciar o dispositivo.</string>
     <string name="error_filenotfound">Erro: Non se puido atopar o ficheiro ZIM seleccionado.</string>
     <string name="error_fileinvalid">Erro: O ficheiro seleccionado non é un ficheiro ZIM válido.</string>
@@ -54,7 +54,7 @@
     <string name="pref_nightmode_summary">Mostrar os artigos coas cores invertidas</string>
     <string name="pref_backtotop">Volver ao inicio</string>
     <string name="pref_backtotop_summary">Mostrar un botón ao final da páxina para volver ao inicio da mesma</string>
-    <string name="share_via">Share via</string>
+    <string name="share_via">Compartir a través de...</string>
     <string name="pref_language_title">Language</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>

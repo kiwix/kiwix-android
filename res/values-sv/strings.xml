@@ -30,8 +30,8 @@
     <string name="add_bookmark">Add bookmark</string>
     <string name="remove_bookmark">Remove bookmark</string>
     <string name="view_bookmarks">View all bookmarks</string>
-    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
-    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
+    <string name="info_share_title">Jag gillar Wikipedia Offline med Kiwix!</string>
+    <string name="info_share_content">Jag gillar Wikipedia Offline med Kiwix! Hela mänsklighetens samlade kunskap till hands vart du än går! Utan Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Inga ZIM-filer hittades på din enhet.\nTa en titt på hjälpsidan för att få hjälp om hur man läser in innehåll i Kiwix.\nOm du lade in en ZIM-fil på din enhet/externa minne bör du kanske prova igen om någon minut eller starta om din enhet.</string>
     <string name="error_filenotfound">Fel: Den valda ZIM-filen kunde inte hittas.</string>
     <string name="error_fileinvalid">Fel: Den valda filen är inte en giltig ZIM-fil.</string>

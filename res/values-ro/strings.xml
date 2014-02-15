@@ -15,7 +15,7 @@
     <string name="menu_exitfullscreen">Ieșire din ecran complet</string>
     <string name="menu_exit">Ieșire</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Share with friends</string>
+    <string name="menu_share">Partajează cu prietenii</string>
     <string name="save_image">Save Image</string>
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
@@ -24,14 +24,14 @@
     <string name="search_label">Căutare</string>
     <string name="articlesearch_hint">Tastați pentru a căuta articole</string>
     <string name="choose_file">Alegeți un fișier cu conținut ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Open link in new tab?</string>
-    <string name="remove_tab_confirm">Do you want to remove this tab?</string>
-    <string name="remove_tab">Remove tab</string>
+    <string name="open_in_new_tab">Deschideți legătura într-o filă nouă?</string>
+    <string name="remove_tab_confirm">Doriți să eliminați această filă?</string>
+    <string name="remove_tab">Eliminare filă</string>
     <string name="add_bookmark">Add bookmark</string>
     <string name="remove_bookmark">Remove bookmark</string>
     <string name="view_bookmarks">View all bookmarks</string>
-    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
-    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
+    <string name="info_share_title">Îmi place Wikipedia offline cu Kiwix!</string>
+    <string name="info_share_content">Îmi place Wikipedia offline cu Kiwix! Toate cunoștințele omenirii la îndemână oricând vrei! Fără Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Nu s-au găsit fișiere ZIM pe dispozitivul dumneavoastră.\nConsultați pagina de ajutor pentru detalii despre încărcarea conținutului în Kiwix.\nDacă totuși ați stocat un fișier ZIM pe dispozitivul dv./stocarea dv. externă, puteți reîncerca peste un minut sau puteți reporni dispozitivul.</string>
     <string name="error_filenotfound">Eroare: Fișierul ZIM selectat nu poate fi găsit.</string>
     <string name="error_fileinvalid">Eroare: Fișierul selectat nu este un fișier ZIM valid.</string>
@@ -54,7 +54,7 @@
     <string name="pref_nightmode_summary">Afișează articolele în culori inversate</string>
     <string name="pref_backtotop">Începutul paginii</string>
     <string name="pref_backtotop_summary">Afișează un buton la sfârșitul paginii pentru a reveni la începutul acesteia</string>
-    <string name="share_via">Share via</string>
+    <string name="share_via">Distribuire prin...</string>
     <string name="pref_language_title">Language</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>

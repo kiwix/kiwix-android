@@ -15,7 +15,7 @@
     <string name="menu_exitfullscreen">Выход из полноэкранного режима</string>
     <string name="menu_exit">Выход</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Share with friends</string>
+    <string name="menu_share">Поделиться с друзьями</string>
     <string name="save_image">Save Image</string>
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
@@ -26,12 +26,12 @@
     <string name="choose_file">Выберите ZIM-файл (*.zim)</string>
     <string name="open_in_new_tab">Открыть ссылку в новой вкладке?</string>
     <string name="remove_tab_confirm">Вы действительно хотите удалить эту вкладку?</string>
-    <string name="remove_tab">Remove tab</string>
+    <string name="remove_tab">Удалить вкладку</string>
     <string name="add_bookmark">Add bookmark</string>
     <string name="remove_bookmark">Remove bookmark</string>
     <string name="view_bookmarks">View all bookmarks</string>
-    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
-    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
+    <string name="info_share_title">Мне нравится Википедии, доступная без подключения к Интернету, с использованием Kiwix!</string>
+    <string name="info_share_content">Мне нравится Википедии, доступная без подключения к Интернету, с использованием Kiwix! Знание всего человечества у вас под рукой, куда бы вы не поехали! Без Интернета! http://goo.GL/h9Smkk</string>
     <string name="error_nozimfilesfound">Не удалось найти ZIM-файлы на вашем устройстве.\nВзгляните на страницу справки, чтобы получить указания о том, как загружать содержимое на Kiwix.\nЕсли вы расположили ZIM-файл на вашем устройстве или внешнем носителе, возможно, стоит повторить попытку через минуту-другую или перезагрузить устройство.</string>
     <string name="error_filenotfound">Ошибка: выбранный ZIM-файл не найден.</string>
     <string name="error_fileinvalid">Ошибка: Выбранный файл не является пригодным ZIM-файлом.</string>

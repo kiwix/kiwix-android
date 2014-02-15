@@ -25,7 +25,7 @@
     <string name="articlesearch_hint">Gõ để tra cứu bài</string>
     <string name="choose_file">Chọn một Tập tin Nội dung ZIM (*.zim)</string>
     <string name="open_in_new_tab">Mở liên kết trong thẻ mới?</string>
-    <string name="remove_tab_confirm">Bạn có muốn đóng thẻ này?</string>
+    <string name="remove_tab_confirm">Bạn có muốn đóng thẻ này không?</string>
     <string name="remove_tab">Đóng thẻ</string>
     <string name="add_bookmark">Add bookmark</string>
     <string name="remove_bookmark">Remove bookmark</string>

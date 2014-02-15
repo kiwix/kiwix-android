@@ -15,7 +15,7 @@
     <string name="menu_exitfullscreen">Exir del schermo complete</string>
     <string name="menu_exit">Quitar</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Share with friends</string>
+    <string name="menu_share">Divider con amicos</string>
     <string name="save_image">Save Image</string>
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
@@ -24,14 +24,14 @@
     <string name="search_label">Cercar</string>
     <string name="articlesearch_hint">Dactylographar pro cercar articulos</string>
     <string name="choose_file">Selige un file de contento ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Open link in new tab?</string>
-    <string name="remove_tab_confirm">Do you want to remove this tab?</string>
-    <string name="remove_tab">Remove tab</string>
+    <string name="open_in_new_tab">Aperir ligamine in nove scheda?</string>
+    <string name="remove_tab_confirm">Vole tu remover iste scheda?</string>
+    <string name="remove_tab">Remover scheda</string>
     <string name="add_bookmark">Add bookmark</string>
     <string name="remove_bookmark">Remove bookmark</string>
     <string name="view_bookmarks">View all bookmarks</string>
-    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
-    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
+    <string name="info_share_title">Me place Wikipedia Offline con Kiwix!</string>
+    <string name="info_share_content">Me place Wikipedia Offline con Kiwix! Tote le cognoscentia human a portata de mano, ubicinque tu va! Sin Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Nulle file ZIM trovate in vostre dispositivo.\nIn le pagina de adjuta se trova instructiones pro cargar contento in Kiwix.\nSi vos ha de facto mittite un file ZIM in vostre dispositivo o spatio de immagazinage externe, vos pote essayar de novo post un minuta o reinitiar vostre dispositivo.</string>
     <string name="error_filenotfound">Error: Le file ZIM seligite non poteva esser trovate.</string>
     <string name="error_fileinvalid">Error: Le file seligite non es un file ZIM valide.</string>
@@ -54,7 +54,7 @@
     <string name="pref_nightmode_summary">Monstrar articulos in colores invertite</string>
     <string name="pref_backtotop">Initio del pagina</string>
     <string name="pref_backtotop_summary">Monstrar un button al fin del pagina pro retornar al initio</string>
-    <string name="share_via">Share via</string>
+    <string name="share_via">Divider via...</string>
     <string name="pref_language_title">Language</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>

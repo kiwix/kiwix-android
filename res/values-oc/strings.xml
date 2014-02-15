@@ -12,25 +12,25 @@
     <string name="menu_bookmarks">Bookmarks</string>
     <string name="menu_randomarticle">Article per escasença</string>
     <string name="menu_fullscreen">Plen ecran</string>
-    <string name="menu_exitfullscreen">Quitar lo mòde ecran complet</string>
+    <string name="menu_exitfullscreen">Quitar l\'ecran complet</string>
     <string name="menu_exit">Sortir</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Share with friends</string>
+    <string name="menu_share">Partejar amb vòstres amics</string>
     <string name="save_image">Save Image</string>
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
-    <string name="button_backtotop">Back to Top</string>
+    <string name="button_backtotop">Naut de pagina</string>
     <string name="search_label">Cèrca</string>
     <string name="articlesearch_hint">Picar per recercar d\'articles</string>
     <string name="choose_file">Seleccionar un fichièr de contengut ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Open link in new tab?</string>
+    <string name="open_in_new_tab">Dobrir lo ligam dins un onglet novèl ?</string>
     <string name="remove_tab_confirm">Do you want to remove this tab?</string>
-    <string name="remove_tab">Remove tab</string>
+    <string name="remove_tab">Suprimir l\'onglet</string>
     <string name="add_bookmark">Add bookmark</string>
     <string name="remove_bookmark">Remove bookmark</string>
     <string name="view_bookmarks">View all bookmarks</string>
-    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
+    <string name="info_share_title">M\'agrada Wikipèdia Offline amb Kiwix !</string>
     <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Cap de fichièr ZIM es pas estat trobat sus vòstra maquina.\nGetatz un còp d’uèlh a la pagina d’ajuda per aver d\'instruccions sul biais de cargar de contengut dins Kiwix.\nS\'avètz mes un fichièr ZIM sus vòstre emmagazinatge intèrne o extèrne, podètz tornar ensajar dins una minuta o reamodar vòstre aparelh.</string>
     <string name="error_filenotfound">Error : Lo fichièr ZIM seleccionat es introbable.</string>
@@ -46,15 +46,15 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
-    <string name="pref_info_title">Information</string>
+    <string name="pref_info_title">Informacion</string>
     <string name="pref_info_version">Version</string>
     <string name="pref_zoom_enable">Contraròtles del zoom</string>
     <string name="pref_zoom_enable_summary">Afichar un boton de zoom dins lo canton inferior drech de l’ecran</string>
     <string name="pref_nightmode">Mòde nocturne</string>
     <string name="pref_nightmode_summary">Afichar los articles en colors inversadas</string>
-    <string name="pref_backtotop">Back to Top</string>
+    <string name="pref_backtotop">Retorn al començament</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
-    <string name="share_via">Share via</string>
+    <string name="share_via">Partejar via...</string>
     <string name="pref_language_title">Language</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>

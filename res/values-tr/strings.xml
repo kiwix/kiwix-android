@@ -15,7 +15,7 @@
     <string name="menu_exitfullscreen">Tam ekrandan çık</string>
     <string name="menu_exit">Çık</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Share with friends</string>
+    <string name="menu_share">Arkadaşlarınla paylaş</string>
     <string name="save_image">Save Image</string>
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
@@ -24,13 +24,13 @@
     <string name="search_label">Ara</string>
     <string name="articlesearch_hint">Makalelerde aranacak kelimeyi yazın</string>
     <string name="choose_file">Bir ZIM İçerik Dosyası seçin (*.zim)</string>
-    <string name="open_in_new_tab">Open link in new tab?</string>
+    <string name="open_in_new_tab">Bağlantı yeni sekmede açılsın mı?</string>
     <string name="remove_tab_confirm">Do you want to remove this tab?</string>
     <string name="remove_tab">Remove tab</string>
     <string name="add_bookmark">Add bookmark</string>
     <string name="remove_bookmark">Remove bookmark</string>
     <string name="view_bookmarks">View all bookmarks</string>
-    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
+    <string name="info_share_title">Kiwix ile Çevrim Dışı Vikipedi\'nin tadını çıkarıyorum!</string>
     <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Cihazınızda bir ZIM dosyası bulunamadı.\nKiwix\'e içerik yükleme talimatlarını görmek için Yardım Sayfası\'na bir göz atın.\nEğer cihazınıza/harici depolama kaynağınıza bir ZIM dosyası koyduysanız, birkaç dakika içerisinde yeniden deneyebilir veya cihazınızı yeniden başlatabilirsiniz.</string>
     <string name="error_filenotfound">Hata: Seçili ZIM dosyası bulunamadı.</string>
@@ -54,7 +54,7 @@
     <string name="pref_nightmode_summary">Makaleleri dönüştürülmüş renklerle göster</string>
     <string name="pref_backtotop">Başa dön</string>
     <string name="pref_backtotop_summary">Başa dönmek için sayfanın altında bir düğme görüntüler</string>
-    <string name="share_via">Share via</string>
+    <string name="share_via">Üzerinden paylaşın...</string>
     <string name="pref_language_title">Language</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
