@@ -12,10 +12,10 @@
     <string name="menu_bookmarks">Bookmarks</string>
     <string name="menu_randomarticle">કોઈપણ એક લેખ</string>
     <string name="menu_fullscreen">આખી સ્ક્રિન</string>
-    <string name="menu_exitfullscreen">પૂર્ણ સ્ક્રીન સ્થિતિમાંથી બહાર નીકળો</string>
+    <string name="menu_exitfullscreen">પૂર્ણ સ્ક્રીનથી બહાર નીકળો</string>
     <string name="menu_exit">બહાર નીકળો</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Share with friends</string>
+    <string name="menu_share">મિત્રો સાથે વહેંચો</string>
     <string name="save_image">Save Image</string>
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
@@ -24,9 +24,9 @@
     <string name="search_label">શોધો</string>
     <string name="articlesearch_hint">Type to lookup articles</string>
     <string name="choose_file">ZIM માહિતી ફાઇલ (*.zim) પસંદ કરો</string>
-    <string name="open_in_new_tab">Open link in new tab?</string>
+    <string name="open_in_new_tab">કડી નવી ટેબમાં ખોલશો?</string>
     <string name="remove_tab_confirm">Do you want to remove this tab?</string>
-    <string name="remove_tab">Remove tab</string>
+    <string name="remove_tab">ટેબ દૂર કરો</string>
     <string name="add_bookmark">Add bookmark</string>
     <string name="remove_bookmark">Remove bookmark</string>
     <string name="view_bookmarks">View all bookmarks</string>
@@ -46,8 +46,8 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
-    <string name="pref_info_title">Information</string>
-    <string name="pref_info_version">Version</string>
+    <string name="pref_info_title">માહિતી</string>
+    <string name="pref_info_version">આવૃત્તિ</string>
     <string name="pref_zoom_enable">Zoom controls</string>
     <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
     <string name="pref_nightmode">રાત્રિ સ્થિતિ</string>

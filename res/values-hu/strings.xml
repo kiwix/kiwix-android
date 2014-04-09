@@ -12,7 +12,7 @@
     <string name="menu_bookmarks">Bookmarks</string>
     <string name="menu_randomarticle">Lap találomra</string>
     <string name="menu_fullscreen">Teljes képernyő</string>
-    <string name="menu_exitfullscreen">Kilépés a teljes képernyős üzemmódból</string>
+    <string name="menu_exitfullscreen">Kilépés a teljes képernyőből</string>
     <string name="menu_exit">Kilépés</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Share with friends</string>

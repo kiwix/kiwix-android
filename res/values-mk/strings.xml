@@ -30,8 +30,8 @@
     <string name="add_bookmark">Add bookmark</string>
     <string name="remove_bookmark">Remove bookmark</string>
     <string name="view_bookmarks">View all bookmarks</string>
-    <string name="info_share_title">Ја читам Википедија без интернет со Kiwix!</string>
-    <string name="info_share_content">Ја читам Википедија без интернет со Kiwix! Целокупното знаење на човештвото ми е при рака, кај и да сум! Без интернет! http://goo.gl/h9Smkk</string>
+    <string name="info_share_title">Ја читам Википедија вонсемрежно со Kiwix!</string>
+    <string name="info_share_content">Ја читам Википедија вонсемрежно со Kiwix! Целокупното знаење на човештвото ми е при рака, кај и да сум! Вон семрежјето! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">На уредот не се најдени ZIM-податотеки.\nПогледајте ја страницата за помош за да дознаете како да ставите содржини во Kiwix.\nАко сепак имате ставено ZIM-податотека во уредот/надворешниот склад, обидете се повторно за една минута или превклучете го уредот.</string>
     <string name="error_filenotfound">Грешка: Не ја најдов избраната ZIM-податотека.</string>
     <string name="error_fileinvalid">Грешка: Одбраната податотека не е вежачка ZIM-податотека.</string>
