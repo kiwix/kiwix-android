@@ -12,10 +12,10 @@
     <string name="menu_bookmarks">Bookmarks</string>
     <string name="menu_randomarticle">कुनै लेख</string>
     <string name="menu_fullscreen">पूरा पर्दा</string>
-    <string name="menu_exitfullscreen">Exit full screen</string>
+    <string name="menu_exitfullscreen">पूरा पर्दाबाट बाहिरिने</string>
     <string name="menu_exit">बन्दगर्ने</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Share with friends</string>
+    <string name="menu_share">साथीहरूमाझ साझेदारी गर्नुहोस्</string>
     <string name="save_image">Save Image</string>
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
@@ -38,21 +38,21 @@
     <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
     <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
     <string name="pref_display_title">दृश्य</string>
-    <string name="pref_zoom_title">Zoom level</string>
-    <string name="pref_zoom_dialogtitle">Zoom level</string>
+    <string name="pref_zoom_title">जुम स्तर</string>
+    <string name="pref_zoom_dialogtitle">जुम स्तर</string>
     <string-array name="pref_zoom_entries">
         <item>Automatic</item>
         <item>Small</item>
         <item>Medium</item>
         <item>Large</item>
     </string-array>
-    <string name="pref_info_title">Information</string>
-    <string name="pref_info_version">Version</string>
+    <string name="pref_info_title">जानकारी</string>
+    <string name="pref_info_version">संस्करण</string>
     <string name="pref_zoom_enable">Zoom controls</string>
     <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
     <string name="pref_nightmode">Night mode</string>
     <string name="pref_nightmode_summary">Show articles with reverted colors</string>
-    <string name="pref_backtotop">Back to Top</string>
+    <string name="pref_backtotop">सुरुमा जानुहोस्</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
     <string name="share_via">Share via</string>
     <string name="pref_language_title">Language</string>

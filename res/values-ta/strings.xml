@@ -20,7 +20,7 @@
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
-    <string name="button_backtotop">Back to Top</string>
+    <string name="button_backtotop">மீண்டும் மேலே</string>
     <string name="search_label">தேடு</string>
     <string name="articlesearch_hint">Type to lookup articles</string>
     <string name="choose_file">ZIM கோப்பை தேர்வு செய் (*.zim)</string>

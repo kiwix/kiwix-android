@@ -51,7 +51,7 @@
     <string name="pref_zoom_enable">Controles de zoom</string>
     <string name="pref_zoom_enable_summary">Mostrar un botón de zoom en la esquina inferior derecha de la pantalla</string>
     <string name="pref_nightmode">Modo nocturno</string>
-    <string name="pref_nightmode_summary">Mostrar artículos con colores revertidas</string>
+    <string name="pref_nightmode_summary">Mostrar artículos con colores invertidos</string>
     <string name="pref_backtotop">Volver al principio</string>
     <string name="pref_backtotop_summary">Mostrar un botón al final de la página para desplazarse al comienzo</string>
     <string name="share_via">Compartir a través de...</string>
