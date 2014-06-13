@@ -253,7 +253,15 @@ public class LanguageUtils {
             // Define the exceptions to the rule. The font has to be placed in the assets folder.
             // Key: the language code; Value: the name of the font.
             HashMap<String, String> exceptions = new HashMap<String, String>();
+            exceptions.put("gu", "fonts/Lohit-Gujarati.ttf");
             exceptions.put("my", "fonts/Parabaik.ttf");
+            exceptions.put("or", "fonts/Lohit-Odia.ttf");
+            // These scripts could be supported via more Lohit fonts if DevaVu doesn't
+            // support them.  That is untested now as they aren't even in the language
+            // menu:
+            //  * (no ISO code?) (Devanagari/Nagari) -- at 0% in translatewiki
+            //  * mr (Marathi) -- at 21% in translatewiki
+            //  * pa (Punjabi) -- at 3% in translatewiki
 
             // Check, if an exception applies to our current locale
             if (exceptions.containsKey(Locale.getDefault().getLanguage())) {
