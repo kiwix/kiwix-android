@@ -396,10 +396,8 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
             // handle the back button for the WebView in the current Fragment
             mCurrentFragment = getCurrentVisibleFragment();
             if (mCurrentFragment != null) {
-                mCurrentFragment.onKeyDown(keyCode, event);
+              return mCurrentFragment.onKeyDown(keyCode, event);
             }
-
-            return true;
         }
 
         return super.onKeyDown(keyCode, event);

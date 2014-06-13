@@ -842,7 +842,7 @@ public class KiwixMobileFragment extends SherlockFragment {
         }
     }
 
-    public void onKeyDown(int keyCode, KeyEvent event) {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
@@ -851,12 +851,13 @@ public class KiwixMobileFragment extends SherlockFragment {
                     } else {
                         getActivity().finish();
                     }
-                    break;
+                    return true;
                 case KeyEvent.KEYCODE_MENU:
                     getActivity().openOptionsMenu();
-                    break;
+                    return true;
             }
         }
+        return false;
     }
 
     public void toggleBookmark() {
@@ -1193,4 +1194,3 @@ public class KiwixMobileFragment extends SherlockFragment {
         }
     }
 }
-
