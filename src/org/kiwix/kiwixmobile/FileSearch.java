@@ -20,6 +20,7 @@
 package org.kiwix.kiwixmobile;
 
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -37,10 +38,16 @@ public class FileSearch {
 
     // Scan through the file system and find all the files with .zim and .zimaa extensions
     public ArrayList<DataModel> findFiles() {
-        String directory = new File(
-                Environment.getExternalStorageDirectory().getAbsolutePath()).toString();
         final List<String> fileList = new ArrayList<String>();
         FilenameFilter[] filter = new FilenameFilter[zimFiles.length];
+
+        // Android doesn't provide an easy way to enumerate additional sdcards
+        // present on the device besides the primary one. If enumerating these
+        // paths proves insufficient, the alternatives used by some projects
+        // is to read and parse contents of /proc/mounts.
+        final String[] additionalRoots = {
+            "/storage/extSdCard",
+        };
 
         int i = 0;
         for (final String extension : zimFiles) {
@@ -52,9 +59,21 @@ public class FileSearch {
             i++;
         }
 
-        File[] foundFiles = listFilesAsArray(new File(directory), filter, -1);
-        for (File f : foundFiles) {
-            fileList.add(f.getAbsolutePath());
+        String dirNamePrimary = new File(
+                Environment.getExternalStorageDirectory().getAbsolutePath()).toString();
+        addFilesToFileList(dirNamePrimary, filter, fileList);
+
+        for (final String dirName : additionalRoots) {
+            if (dirNamePrimary.equals(dirName)) {
+                // We already got this directory from getExternalStorageDirectory().
+                continue;
+            }
+            File f = new File(dirName);
+            if (f.isDirectory()) {
+                addFilesToFileList(dirName, filter, fileList);
+            } else {
+                Log.i("kiwix", "Skipping missing directory " + dirName);
+            }
         }
 
         return createDataForAdapter(fileList);
@@ -116,6 +135,16 @@ public class FileSearch {
         data = sortDataModel(data);
 
         return data;
+    }
+
+    // Fill fileList with files found in the specific directory
+    private void addFilesToFileList(String directory, FilenameFilter[] filter, List<String> fileList) {
+        Log.d("kiwix", "Searching directory " + directory);
+        File[] foundFiles = listFilesAsArray(new File(directory), filter, -1);
+        for (File f : foundFiles) {
+            Log.d("kiwix", "Found " + f.getAbsolutePath());
+            fileList.add(f.getAbsolutePath());
+        }
     }
 
     // Remove the file path and the extension and return a file name for the given file path
