@@ -12,25 +12,25 @@
     <string name="menu_bookmarks">Bookmarks</string>
     <string name="menu_randomarticle">অজানা যে-কোনো নিবন্ধ</string>
     <string name="menu_fullscreen">পূর্ণাঙ্গ স্ক্রিন</string>
-    <string name="menu_exitfullscreen">পূর্ণঙ্গ স্ক্রীন বন্ধ করুন</string>
+    <string name="menu_exitfullscreen">পূর্ণাঙ্গ স্ক্রিন বন্ধ</string>
     <string name="menu_exit">বন্ধ</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Share with friends</string>
+    <string name="menu_share">বন্ধুদের সাথে শেয়ার করুন</string>
     <string name="save_image">Save Image</string>
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
-    <string name="button_backtotop">Back to Top</string>
+    <string name="button_backtotop">উপরে যাও</string>
     <string name="search_label">অনুসন্ধান</string>
-    <string name="articlesearch_hint">Type to lookup articles</string>
-    <string name="choose_file">Select a ZIM Content File (*.zim)</string>
-    <string name="open_in_new_tab">Open link in new tab?</string>
-    <string name="remove_tab_confirm">Do you want to remove this tab?</string>
-    <string name="remove_tab">Remove tab</string>
+    <string name="articlesearch_hint">নিবন্ধ দেখতে টাইপ করুন</string>
+    <string name="choose_file">কোন জিম (*.zim) কন্টেন্ট ফাইল নির্বাচন করুন</string>
+    <string name="open_in_new_tab">নতুন ট্যাবে লিঙ্ক খোলা হবে?</string>
+    <string name="remove_tab_confirm">আপনি কি এই ট্যাব অপসারণ করতে চান?</string>
+    <string name="remove_tab">ট্যাব অপসারণ</string>
     <string name="add_bookmark">Add bookmark</string>
     <string name="remove_bookmark">Remove bookmark</string>
     <string name="view_bookmarks">View all bookmarks</string>
-    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
+    <string name="info_share_title">আমি কিউইক্স দিয়ে অফলাইন উইকিপিডিয়া উপভোগ করি!</string>
     <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
     <string name="error_filenotfound">Error: The selected ZIM file could not be found.</string>
@@ -38,8 +38,8 @@
     <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
     <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
     <string name="pref_display_title">প্রদর্শন</string>
-    <string name="pref_zoom_title">Zoom level</string>
-    <string name="pref_zoom_dialogtitle">Zoom level</string>
+    <string name="pref_zoom_title">জুমের পর্যায়</string>
+    <string name="pref_zoom_dialogtitle">জুমের পর্যায়</string>
     <string-array name="pref_zoom_entries">
         <item>Automatic</item>
         <item>Small</item>
@@ -48,13 +48,13 @@
     </string-array>
     <string name="pref_info_title">Information</string>
     <string name="pref_info_version">Version</string>
-    <string name="pref_zoom_enable">Zoom controls</string>
+    <string name="pref_zoom_enable">জুম নিয়ন্ত্রণ</string>
     <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
     <string name="pref_nightmode">Night mode</string>
     <string name="pref_nightmode_summary">Show articles with reverted colors</string>
     <string name="pref_backtotop">Back to Top</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
-    <string name="share_via">Share via</string>
+    <string name="share_via">শেয়ার করুন...</string>
     <string name="pref_language_title">Language</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>

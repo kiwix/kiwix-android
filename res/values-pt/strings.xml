@@ -19,7 +19,7 @@
     <string name="save_image">Save Image</string>
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
-    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
+    <string name="rescan_fs_warning">Escaneando os ZIM files, por favor espere...</string>
     <string name="button_backtotop">Voltar ao Topo</string>
     <string name="search_label">Pesquisar</string>
     <string name="articlesearch_hint">Digite para pesquisar artigos.</string>
@@ -30,30 +30,30 @@
     <string name="add_bookmark">Add bookmark</string>
     <string name="remove_bookmark">Remove bookmark</string>
     <string name="view_bookmarks">View all bookmarks</string>
-    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
-    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
-    <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
+    <string name="info_share_title">Eu disfruto com o Kiwix a minha Wikipédia Offline!</string>
+    <string name="info_share_content">Eu disfruto da Wikipédia Offline  com o Kiwix! Todo o conhecimento humano na mão vá para onder for. http://goo.gl/h9Smkk</string>
+    <string name="error_nozimfilesfound">Não foram encontrados or ficheiros ZIM no dispositivo.\nAtentamente reveja a Help Page para conhecer métodos e meios de como carregar conteúdo para o Kiwix.\nSe voçê já colocou o ZIM no dispotivo alvo, tente novamente no espaço de um minuto recarregar ou faça restart ao dispositivo .</string>
     <string name="error_filenotfound">Erro: O ficheiro ZIM selecionado não pôde ser encontrado.</string>
     <string name="error_fileinvalid">Erro: O ficheiro selecionado não é um ficheiro ZIM válido.</string>
-    <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
-    <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
+    <string name="error_articlenotfound">Erro com: carregamento do artigo \"%1$s\" falhou.</string>
+    <string name="error_articleurlnotfound">Erro com: carregamento do artigo, ligação (Url: %1$s) falhou.</string>
     <string name="pref_display_title">Ver</string>
-    <string name="pref_zoom_title">Zoom level</string>
-    <string name="pref_zoom_dialogtitle">Zoom level</string>
+    <string name="pref_zoom_title">Nível de Zoom</string>
+    <string name="pref_zoom_dialogtitle">Nível de Zoom</string>
     <string-array name="pref_zoom_entries">
         <item>Automatic</item>
         <item>Small</item>
         <item>Medium</item>
         <item>Large</item>
     </string-array>
-    <string name="pref_info_title">Information</string>
-    <string name="pref_info_version">Version</string>
-    <string name="pref_zoom_enable">Zoom controls</string>
-    <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
-    <string name="pref_nightmode">Night mode</string>
-    <string name="pref_nightmode_summary">Show articles with reverted colors</string>
+    <string name="pref_info_title">Informação</string>
+    <string name="pref_info_version">Versão</string>
+    <string name="pref_zoom_enable">Controlos de Zoom</string>
+    <string name="pref_zoom_enable_summary">Exibir o botão de Zoom no canto inferior direito da imagem</string>
+    <string name="pref_nightmode">Modo nocturno</string>
+    <string name="pref_nightmode_summary">Mostrat artigos com cores invetidas</string>
     <string name="pref_backtotop">Voltar ao Topo</string>
-    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="pref_backtotop_summary">Exibir botão no fim da página para redireccionar ao inicio da página</string>
     <string name="share_via">Compartilhar via...</string>
     <string name="pref_language_title">Language</string>
     <string name="pref_language_chooser">Choose a language</string>

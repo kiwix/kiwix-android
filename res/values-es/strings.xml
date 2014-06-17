@@ -10,7 +10,7 @@
     <string name="menu_search">Buscar</string>
     <string name="menu_searchintext">Buscar en el texto</string>
     <string name="menu_bookmarks">Bookmarks</string>
-    <string name="menu_randomarticle">Página aleatoria</string>
+    <string name="menu_randomarticle">Artículo aleatorio</string>
     <string name="menu_fullscreen">Pantalla completa</string>
     <string name="menu_exitfullscreen">Salir del modo de pantalla completa</string>
     <string name="menu_exit">Salir</string>

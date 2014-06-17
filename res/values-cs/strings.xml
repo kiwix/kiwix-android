@@ -12,7 +12,7 @@
     <string name="menu_bookmarks">Bookmarks</string>
     <string name="menu_randomarticle">Náhodný článek</string>
     <string name="menu_fullscreen">Celá obrazovka</string>
-    <string name="menu_exitfullscreen">Ukončit celoobrazovkový režim</string>
+    <string name="menu_exitfullscreen">Ukončit celou obrazovku</string>
     <string name="menu_exit">Konec</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Sdílet s přáteli</string>
@@ -32,7 +32,7 @@
     <string name="view_bookmarks">View all bookmarks</string>
     <string name="info_share_title">Baví mě Wikipedia Offline s Kiwix!</string>
     <string name="info_share_content">Baví mě Wikipedie Offline s Kiwix! Znalosti lidstva po ruce ať jste kdekoliv! Bez internetu! http://goo.gl/h9Smkk</string>
-    <string name="error_nozimfilesfound">Na zařízení nenalezeny soubory ZIM.\nPro vodítka, jak nahrávat do Kiwixu obsah, se podívejte na stránku nápovědy.\nPokud jste na své zařízení nebo externí paměť opravdu nahráli soubor ZIM, můžete zkusit načtení za minutu a nebo po restartu zařízení.</string>
+    <string name="error_nozimfilesfound">Na zařízení nebyly nalezeny soubory ZIM.\nPro pokyny, jak nahrávat do Kiwixu obsah, se podívejte na stránku nápovědy.\nPokud jste na své zařízení nebo externí paměť opravdu nahráli soubor ZIM, můžete zkusit načtení za minutu opakovat nebo restartovat zařízení.</string>
     <string name="error_filenotfound">Chyba: Nelze najít vybraný soubor ZIM.</string>
     <string name="error_fileinvalid">Chyba: Vybraný soubor není platným souborem ZIM.</string>
     <string name="error_articlenotfound">Chyba: Načtení článku \"%1$s\" se nezdařilo.</string>

@@ -19,24 +19,24 @@
     <string name="save_image">Save Image</string>
     <string name="save_image_error">An error occured when trying to save an image!</string>
     <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
-    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
+    <string name="rescan_fs_warning">Skanowanie plików ZIM, proszę czekać...</string>
     <string name="button_backtotop">Powrót do góry</string>
     <string name="search_label">Szukaj</string>
-    <string name="articlesearch_hint">Type to lookup articles</string>
-    <string name="choose_file">Select a ZIM Content File (*.zim)</string>
+    <string name="articlesearch_hint">Wpisz do wyszukiwania artykułów</string>
+    <string name="choose_file">Wybierz plik zawartości ZIM (*.zim)</string>
     <string name="open_in_new_tab">Otwórz odnośnik na nowej karcie</string>
     <string name="remove_tab_confirm">Czy chcesz usunąć tą kartę?</string>
     <string name="remove_tab">Usuń kartę</string>
     <string name="add_bookmark">Add bookmark</string>
     <string name="remove_bookmark">Remove bookmark</string>
     <string name="view_bookmarks">View all bookmarks</string>
-    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
-    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
-    <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
-    <string name="error_filenotfound">Error: The selected ZIM file could not be found.</string>
-    <string name="error_fileinvalid">Error: The selected file is not a valid ZIM file.</string>
-    <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
-    <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
+    <string name="info_share_title">Uwielbiam Wikipedia Offline z Kiwix!</string>
+    <string name="info_share_content">Uwielbiam Wikipedia Offline z Kiwix! Cała wiedza ludzkości pod ręką, gdziekolwiek idziesz! Bez Internetu!</string>
+    <string name="error_nozimfilesfound">Nie znaleziono żadnego pliku ZIM na twoim urządzeniu. Zobaczc na stronę pomócy, aby uzyskać wskazówki jak pobierać zawartość na Kiwix. Jeśli plik ZIM jest umieszczony na urządzeniu/zewnętrznej pamięci masowej, spróbuj za chwilę lub włącz ponownie urządzenie.</string>
+    <string name="error_filenotfound">Błąd: Wybrany plik ZIM nie został znaleziony.</string>
+    <string name="error_fileinvalid">Błąd: Wybrany plik nie jest prawidłowym plikiem ZIM.</string>
+    <string name="error_articlenotfound">Błąd: Ładowanie artykułu \ " %1$s \" się nie powiodło.</string>
+    <string name="error_articleurlnotfound">Błąd: Ładowanie artykułu (Url:  %1$s ) się nie powiodło.</string>
     <string name="pref_display_title">Widok</string>
     <string name="pref_zoom_title">Poziom powiększenia</string>
     <string name="pref_zoom_dialogtitle">Poziom powiększenia</string>
@@ -46,14 +46,14 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
-    <string name="pref_info_title">Information</string>
+    <string name="pref_info_title">Informacje</string>
     <string name="pref_info_version">Wersja</string>
-    <string name="pref_zoom_enable">Zoom controls</string>
-    <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
+    <string name="pref_zoom_enable">Zarządzanie skali</string>
+    <string name="pref_zoom_enable_summary">Wyświetl przycisk skali w prawym rogu ekranu</string>
     <string name="pref_nightmode">Tryb nocny</string>
-    <string name="pref_nightmode_summary">Show articles with reverted colors</string>
+    <string name="pref_nightmode_summary">Pokaż artykuły w trybie nocnym</string>
     <string name="pref_backtotop">Powrót do góry</string>
-    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="pref_backtotop_summary">Wyświetl przycisk na końcu strony, aby przewinąć do góry</string>
     <string name="share_via">Podziel się za pośrednictwem...</string>
     <string name="pref_language_title">Language</string>
     <string name="pref_language_chooser">Choose a language</string>
