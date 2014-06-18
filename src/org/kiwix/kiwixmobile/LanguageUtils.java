@@ -253,6 +253,7 @@ public class LanguageUtils {
             // Define the exceptions to the rule. The font has to be placed in the assets folder.
             // Key: the language code; Value: the name of the font.
             HashMap<String, String> exceptions = new HashMap<String, String>();
+            exceptions.put("km", "fonts/KhmerOS.ttf");
             exceptions.put("gu", "fonts/Lohit-Gujarati.ttf");
             exceptions.put("my", "fonts/Parabaik.ttf");
             exceptions.put("or", "fonts/Lohit-Odia.ttf");
