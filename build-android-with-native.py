@@ -530,11 +530,6 @@ for arch in ARCHS:
     os.chdir(curdir)
     change_env(ORIGINAL_ENVIRON)
 
-if COMPILE_APK:
-
-    syscall('rm -f build/apk/*.apk', shell=True)
-    syscall('./gradlew build')
-
 if LOCALES_TXT:
 
   # Get the path of the res folder
@@ -553,8 +548,13 @@ if LOCALES_TXT:
 
   print 'Created locales.txt file.'
 
-# check that the step went well
 if COMPILE_APK:
+
+    # Compile java and build APK
+    syscall('rm -f build/apk/*.apk', shell=True)
+    syscall('./gradlew build')
+
+    # Check that the step went well
     if not os.path.exists(os.path.join('build', 'apk', 'android-debug-unaligned.apk')):
         failed_on_step('The android-debug-unaligned.apk package has not been created '
                        'and is not present.')
