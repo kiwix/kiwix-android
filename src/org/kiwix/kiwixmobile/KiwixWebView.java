@@ -24,7 +24,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.webkit.WebView;
 import android.widget.ZoomButtonsController;
-
+import android.webkit.WebSettings.LayoutAlgorithm;
+import android.os.Build;
 import java.lang.reflect.Method;
 
 import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.newApi;
@@ -41,14 +42,25 @@ public class KiwixWebView extends WebView {
 
     public KiwixWebView(Context context) {
         super(context);
+	init();
     }
 
     public KiwixWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
+	init();
     }
 
     public KiwixWebView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+	init();
+    }
+
+    private void init() {
+	getSettings().setSupportMultipleWindows(true);
+	getSettings().setSupportZoom(true);
+	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+	    getSettings().setLayoutAlgorithm(LayoutAlgorithm.TEXT_AUTOSIZING);
+	}
     }
 
     @Override
