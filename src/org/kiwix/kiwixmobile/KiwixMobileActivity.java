@@ -76,6 +76,8 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
 
     private KiwixMobileFragment mCurrentFragment;
 
+    private Fragment mAttachedFragment;
+
     private View.OnDragListener mOnDragListener;
 
     private int mNumberOfTabs = 0;
@@ -111,6 +113,14 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
         }
 
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        // When the Activity is initialized after hibernation, a Fragment
+        // is created and attached to this Activity during the super class
+        // onCreate call.
+        // In this case, make sure the ViewPagerAdaper holds the reference.
+        if (mAttachedFragment != null) {
+            mViewPagerAdapter.putItem(mAttachedFragment);
+        }
 
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
 
@@ -259,6 +269,11 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        mAttachedFragment = fragement;
     }
 
     @Override
@@ -702,6 +717,10 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
             Fragment fragment = new KiwixMobileFragment();
             tabs.put(i, fragment);
             return fragment;
+        }
+
+        protected void putItem(Fragment attachedFragment) {
+            tabs.put(tabs.size(), attachedFragment);
         }
 
         @Override
