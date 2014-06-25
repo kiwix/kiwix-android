@@ -32,7 +32,7 @@
     <string name="view_bookmarks">View all bookmarks</string>
     <string name="info_share_title">Nafurahia Wikipedia Offline na Kiwix</string>
     <string name="info_share_content">Nafurahia Wikipedia Offline na Kiwix!Ufahamu wote wa binadamu mkononi popote nilipo! Bila mtandao!http://goo.gl/h9Smkk</string>
-    <string name="error_nozimfilesfound">\nHakuna Faili za ZIM zilizopatikana kwenya mtambo wako.\nTazama ukurasa wa Help Page ili kupata usaidizi jinsi ya kupakia makala kwenye Kiwix.\nIwapo uliweka failia ya ZIM kwenye mtambo wako/kiwekeo cha nje, itakubidi kujaribu baada ya dakika moja au kuanzisha mtambo wako upya</string>
+    <string name="error_nozimfilesfound">Hakuna Faili za ZIM zilizopatikana kwenya mtambo wako.\nTazama ukurasa wa Help Page ili kupata usaidizi jinsi ya kupakia makala kwenye Kiwix.\nIwapo uliweka failia ya ZIM kwenye mtambo wako/kiwekeo cha nje, itakubidi kujaribu baada ya dakika moja au kuanzisha mtambo wako upya</string>
     <string name="error_filenotfound">Hitilafu: Faili ya ZIM iliyochaguliwa haija patikana.</string>
     <string name="error_fileinvalid">Hitilafu:Faili iliyochaguliwa sio faili sahihi ya ZIM.</string>
     <string name="error_articlenotfound">Hitilafu: Upakuzi wa makala umefeli \"%1$s\"</string>
