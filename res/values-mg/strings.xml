@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kiwix</string>
+    <string name="menu_openfile">Hanokatra rakitra</string>
+    <string name="menu_help">Fanoroana</string>
+    <string name="menu_home">Fandraisana</string>
+    <string name="menu_forward">Manaraka</string>
+    <string name="menu_back">Taloha</string>
+    <string name="menu_settings">Safidy</string>
+    <string name="menu_search">Hikaroka</string>
+    <string name="menu_searchintext">Hitady anaty lahatsoratra</string>
+    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_randomarticle">Takelaka kisendra</string>
+    <string name="menu_fullscreen">Fisehoana mameno ekrà</string>
+    <string name="menu_exitfullscreen">Hiala amin\'ny fisehoana mameno fikandra</string>
+    <string name="menu_exit">Hiala</string>
+    <string name="menu_rescan_fs">Rescan SD card</string>
+    <string name="menu_share">Hizara amin\'ny namana</string>
+    <string name="save_image">Save Image</string>
+    <string name="save_image_error">An error occured when trying to save an image!</string>
+    <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
+    <string name="rescan_fs_warning">Am-pandinihana ny raktra ZIM, miandrasa azafady....</string>
+    <string name="button_backtotop">Tampon-pejy</string>
+    <string name="search_label">Hikaroka</string>
+    <string name="articlesearch_hint">Manorata eto raha hikaroka lahatsoratra</string>
+    <string name="choose_file">Hisafidy rakitra misy votoatiny (*.zim)</string>
+    <string name="open_in_new_tab">Hanokatra rohy anaty sasa-joro vaovao?</string>
+    <string name="remove_tab_confirm">Tianao ho esorina ve ity sasajoro ity?</string>
+    <string name="remove_tab">Hanala ny sasa-joro</string>
+    <string name="add_bookmark">Add bookmark</string>
+    <string name="remove_bookmark">Remove bookmark</string>
+    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="info_share_title">Tia an\'i Wikipedia Offline amin\'i Kiwix aho!</string>
+    <string name="info_share_content">Tia an\'i Wikipedia Offline amin\'i Kiwix aho! Eo am-pelantanako daholo ny fahalalan\'ny olombelona na aiza na aiza! Tsy misy aterineto! http://goo.gl/h9Smkk</string>
+    <string name="error_nozimfilesfound">Tsy nahitana rakitra ZIM tao amin\'ny fitaovanao.\nJereo ny pejy fanoroana mikasika ny fampidirana votoatiny anaty Kiwix.\nRaha efa nametraka rakitra ZIM tanaty fitahirizana ivelany na anaty ianao, dia andramo afaka iray minitra ary avereno ampirehetina ny fitaovanao.</string>
+    <string name="error_filenotfound">Hadisoana: Tsy nahita ilay rakitra ZIM voafidinao.</string>
+    <string name="error_fileinvalid">Hadisoana: Rakitra ZIM tsy azo raisina ilay voafidinao.</string>
+    <string name="error_articlenotfound">Hadisoana: Tsy nahafahana ilay lahatsoratra "%1$s".</string>
+    <string name="error_articleurlnotfound">Hadisoana: tsy nahafahana ilay lahatsoratra (Url: %1$s).</string>
+    <string name="pref_display_title">Fiseho</string>
+    <string name="pref_zoom_title">Lentan\'ny zoom</string>
+    <string name="pref_zoom_dialogtitle">Lentan\'ny zoom</string>
+    <string-array name="pref_zoom_entries">
+        <item>Automatic</item>
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+    <string name="pref_info_title">Fampahalalana</string>
+    <string name="pref_info_version">Versiona</string>
+    <string name="pref_zoom_enable">Famehezana zoom</string>
+    <string name="pref_zoom_enable_summary">Aseho amin\'ny sisiny ambany havanan\'ny fikandra ny bokotra zoom</string>
+    <string name="pref_nightmode">Fiseho amin\'ny alina</string>
+    <string name="pref_nightmode_summary">Haneho lahatsoratra amin\'ny loko mivadika</string>
+    <string name="pref_backtotop">Hiverina any an-tampony</string>
+    <string name="pref_backtotop_summary">Haneho bokotra amin\'ny faran\'ny pejy mba hiverenana any am-pihatombohana</string>
+    <string name="share_via">Hizara amin\'ny alalan\'i...</string>
+    <string name="pref_language_title">Language</string>
+    <string name="pref_language_chooser">Choose a language</string>
+    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
+</resources>
