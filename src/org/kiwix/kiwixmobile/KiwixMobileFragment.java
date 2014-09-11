@@ -507,10 +507,10 @@ public class KiwixMobileFragment extends SherlockFragment {
                                 ostream.close();
                             } catch (IOException e) {
                                 Log.d("kiwix", "Couldn't save image", e);
-                                toastText = getResources().getString(R.string.save_image_error);
+                                toastText = getResources().getString(R.string.save_media_error);
                             } finally {
                                 toastText = String
-                                        .format(getResources().getString(R.string.save_image_saved), newurl);
+                                        .format(getResources().getString(R.string.save_media_saved), newurl);
                             }
 
                             Toast.makeText(getActivity(), toastText, Toast.LENGTH_LONG).show();
@@ -540,7 +540,7 @@ public class KiwixMobileFragment extends SherlockFragment {
                 if (result.getType() == HitTestResult.IMAGE_ANCHOR_TYPE
                         || result.getType() == HitTestResult.IMAGE_TYPE
                         || result.getType() == HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
-                    menu.add(0, 1, 0, getResources().getString(R.string.save_image))
+                    menu.add(0, 1, 0, getResources().getString(R.string.save_media))
                             .setOnMenuItemClickListener(
                                     new android.view.MenuItem.OnMenuItemClickListener() {
                                         public boolean onMenuItemClick(android.view.MenuItem item) {
