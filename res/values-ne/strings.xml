@@ -16,9 +16,9 @@
     <string name="menu_exit">छोड्ने</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">साथीहरूमाझ साझेदारी गर्नुहोस्</string>
-    <string name="save_image">Save Image</string>
-    <string name="save_image_error">An error occured when trying to save an image!</string>
-    <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
+    <string name="save_media">Save Media</string>
+    <string name="save_media_error">An error occured when trying to save the media!</string>
+    <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">कृपया पर्खनुहोस्, जिम फाइलहरू स्क्यान हुँदैछ</string>
     <string name="button_backtotop">सिरानमा जाने</string>
     <string name="search_label">खोज</string>

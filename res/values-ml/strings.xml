@@ -16,9 +16,9 @@
     <string name="menu_exit">അടയ്ക്കുക</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">സുഹൃത്തുക്കളുമായി പങ്കുവയ്ക്കുക</string>
-    <string name="save_image">Save Image</string>
-    <string name="save_image_error">An error occured when trying to save an image!</string>
-    <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
+    <string name="save_media">Save Media</string>
+    <string name="save_media_error">An error occured when trying to save the media!</string>
+    <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">സിം ഫയലുകൾക്കായി തിരയുന്നു. ദയവായി കാത്തിരിക്കൂ..</string>
     <string name="button_backtotop">മുകളിലേക്ക്</string>
     <string name="search_label">തിരയുക</string>

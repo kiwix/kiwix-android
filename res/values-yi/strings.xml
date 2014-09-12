@@ -16,9 +16,9 @@
     <string name="menu_exit">פֿארלאזן</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">טיילט מיט חברים</string>
-    <string name="save_image">Save Image</string>
-    <string name="save_image_error">An error occured when trying to save an image!</string>
-    <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
+    <string name="save_media">שפייכלערן מעדיעוויקי ווי…</string>
+    <string name="save_media_error">An error occured when trying to save the media!</string>
+    <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
     <string name="button_backtotop">צוריק אויבן</string>
     <string name="search_label">זוכן</string>

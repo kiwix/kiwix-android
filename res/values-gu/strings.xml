@@ -16,9 +16,9 @@
     <string name="menu_exit">બહાર નીકળો</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">મિત્રો સાથે વહેંચો</string>
-    <string name="save_image">Save Image</string>
-    <string name="save_image_error">An error occured when trying to save an image!</string>
-    <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
+    <string name="save_media">Save Media</string>
+    <string name="save_media_error">An error occured when trying to save the media!</string>
+    <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">ZIM ફાઇલ્સ શોધો છે, મહેરબાની કરી થોડી રાહ જુઓ...</string>
     <string name="button_backtotop">ટોપ પર પાછા જાઓ</string>
     <string name="search_label">શોધો</string>

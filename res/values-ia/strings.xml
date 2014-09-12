@@ -16,9 +16,9 @@
     <string name="menu_exit">Quitar</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Divider con amicos</string>
-    <string name="save_image">Save Image</string>
-    <string name="save_image_error">An error occured when trying to save an image!</string>
-    <string name="save_image_saved">Saved image as %s in your Pictures folder.</string>
+    <string name="save_media">Salveguardar multimedia como…</string>
+    <string name="save_media_error">An error occured when trying to save the media!</string>
+    <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">Cerca files ZIM, per favor attende...</string>
     <string name="button_backtotop">Initio del pagina</string>
     <string name="search_label">Cercar</string>
