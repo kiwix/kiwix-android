@@ -672,9 +672,10 @@ public class KiwixMobileFragment extends SherlockFragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-	if (webView.getTitle() == null || ZimContentProvider.getPageUrlFromTitle(webView.getTitle()) == null) {
-	    menu.findItem(R.id.menu_bookmarks).setVisible(false);
-	} else {
+	if (menu.findItem(R.id.menu_bookmarks) != null &&
+	    webView.getUrl() != null &&
+	    webView.getUrl() != "file:///android_res/raw/help.html" &&
+	    ZimContentProvider.getId() != null) {
 	    menu.findItem(R.id.menu_bookmarks).setVisible(true);
 	    if (bookmarks.contains(webView.getTitle())) {
 		menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmarks_active);
@@ -862,13 +863,13 @@ public class KiwixMobileFragment extends SherlockFragment {
 
     public void toggleBookmark() {
 	String title = webView.getTitle();
+
 	if (title!=null && !bookmarks.contains(title)){
 	    bookmarks.add(title);
 	} else {
 	    bookmarks.remove(title);
 	}
-	
-	getActivity().invalidateOptionsMenu();
+	getSherlockActivity().supportInvalidateOptionsMenu();
     }
 
     public void viewBookmarks() {
@@ -877,7 +878,8 @@ public class KiwixMobileFragment extends SherlockFragment {
 
     private void refreshBookmarks() {
 	bookmarks.clear();
-	if (ZimContentProvider.getId()!=null) try {
+	if (ZimContentProvider.getId()!=null) {
+	    try {
 		InputStream stream = getActivity().openFileInput(ZimContentProvider.getId()+".txt");
 		String in;
 		if (stream!= null) {
@@ -887,12 +889,12 @@ public class KiwixMobileFragment extends SherlockFragment {
 		    }
 		    Log.d("Kiwix", "Switched to bookmarkfile "+ZimContentProvider.getId());
 		}
-	    }
-	    catch (FileNotFoundException e) {
+	    } catch (FileNotFoundException e) {
 		Log.e("kiwix", "File not found: " + e.toString());
 	    } catch (IOException e) {
 		Log.e("kiwix", "Can not read file: " + e.toString());
 	    }
+	}
     }
 
     private void saveBookmarks() {
@@ -924,15 +926,13 @@ public class KiwixMobileFragment extends SherlockFragment {
             // hideSearchBar();
             webView.loadUrl(Uri.parse(ZimContentProvider.CONTENT_URI
                     + articleUrl).toString());
-            return true;
-
         } else {
             String errorString = String.format(getResources().getString(R.string.error_articlenotfound),
                     articleSearchtextView.getText().toString());
             Toast.makeText(getActivity().getWindow().getContext(), errorString, Toast.LENGTH_SHORT).show();
-
-            return true;
         }
+
+	return true;
     }
 
     private boolean openArticleFromSearch() {
@@ -1100,6 +1100,12 @@ public class KiwixMobileFragment extends SherlockFragment {
                 getActivity().setProgress(progress * 100);
             }
 
+	    if (progress > 20) {
+		if (getSherlockActivity() != null) {
+		    getSherlockActivity().supportInvalidateOptionsMenu();
+		}
+	    }
+
             if (progress == 100) {
 
                 Log.d(TAG_KIWIX, "Loading article finished.");
@@ -1116,6 +1122,7 @@ public class KiwixMobileFragment extends SherlockFragment {
                     ToggleNightMode();
                 }
             }
+
         }
     }
 
