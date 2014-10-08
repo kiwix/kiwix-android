@@ -12,10 +12,10 @@
     <string name="menu_bookmarks">Bookmarks</string>
     <string name="menu_randomarticle">தொடர்பற்ற கட்டுரை</string>
     <string name="menu_fullscreen">முழு திரை</string>
-    <string name="menu_exitfullscreen">முழு திரை வகையிலிருந்து வெளியேறு</string>
+    <string name="menu_exitfullscreen">முழு திரையிலிருந்து வெளியேறுக</string>
     <string name="menu_exit">முடித்துக்கொள்</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Share with friends</string>
+    <string name="menu_share">நண்பர்களுடன் பகிர்க</string>
     <string name="save_media">Save Media</string>
     <string name="save_media_error">An error occured when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
@@ -52,7 +52,7 @@
     <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
     <string name="pref_nightmode">Night mode</string>
     <string name="pref_nightmode_summary">Show articles with reverted colors</string>
-    <string name="pref_backtotop">Back to Top</string>
+    <string name="pref_backtotop">மேலே செல்லவும்</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
     <string name="share_via">இவ்வழியாக பகிர்....</string>
     <string name="pref_language_title">Language</string>

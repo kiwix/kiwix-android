@@ -12,21 +12,21 @@
     <string name="menu_bookmarks">Bookmarks</string>
     <string name="menu_randomarticle">අහඹු ලිපිය</string>
     <string name="menu_fullscreen">පූර්ණ තිරය</string>
-    <string name="menu_exitfullscreen">පූර්ණ තිර ආකාරයෙන් ඉවත් වන්න</string>
+    <string name="menu_exitfullscreen">සම්පූර්ණ තිරයෙන් ඉවත් වන්න</string>
     <string name="menu_exit">ඉවත් වන්න</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Share with friends</string>
-    <string name="save_media">Save Media</string>
+    <string name="menu_share">මිතුරන් සමග හුවමාරු කරන්න</string>
+    <string name="save_media">මාධ්‍යය සුරකින්න...</string>
     <string name="save_media_error">An error occured when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
-    <string name="button_backtotop">Back to Top</string>
+    <string name="button_backtotop">නැවත මුදුනට</string>
     <string name="search_label">ගවේෂණය</string>
     <string name="articlesearch_hint">Type to lookup articles</string>
     <string name="choose_file">Select a ZIM Content File (*.zim)</string>
-    <string name="open_in_new_tab">Open link in new tab?</string>
-    <string name="remove_tab_confirm">Do you want to remove this tab?</string>
-    <string name="remove_tab">Remove tab</string>
+    <string name="open_in_new_tab">සබැඳිය නව තීරුවක විවෘත කරන්න?</string>
+    <string name="remove_tab_confirm">ඔබට මෙම තීරුව ඉවත් කළ යුතු ද?</string>
+    <string name="remove_tab">තීරුව ඉවත් කරන්න</string>
     <string name="add_bookmark">Add bookmark</string>
     <string name="remove_bookmark">Remove bookmark</string>
     <string name="view_bookmarks">View all bookmarks</string>
@@ -38,23 +38,23 @@
     <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
     <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
     <string name="pref_display_title">පෙන්වීම</string>
-    <string name="pref_zoom_title">Zoom level</string>
-    <string name="pref_zoom_dialogtitle">Zoom level</string>
+    <string name="pref_zoom_title">විශාලන මට්ටම</string>
+    <string name="pref_zoom_dialogtitle">විශාලන මට්ටම</string>
     <string-array name="pref_zoom_entries">
         <item>Automatic</item>
         <item>Small</item>
         <item>Medium</item>
         <item>Large</item>
     </string-array>
-    <string name="pref_info_title">Information</string>
-    <string name="pref_info_version">Version</string>
-    <string name="pref_zoom_enable">Zoom controls</string>
-    <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
-    <string name="pref_nightmode">Night mode</string>
-    <string name="pref_nightmode_summary">Show articles with reverted colors</string>
-    <string name="pref_backtotop">Back to Top</string>
-    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
-    <string name="share_via">Share via</string>
+    <string name="pref_info_title">තොරතුරු</string>
+    <string name="pref_info_version">අනුවාදය</string>
+    <string name="pref_zoom_enable">විශාලන පාලක</string>
+    <string name="pref_zoom_enable_summary">තිරයේ පහළ දකුණු කෙළවර විශාලන බොත්තමක් පෙන්වන්න</string>
+    <string name="pref_nightmode">රාත්‍රී ආකාරය</string>
+    <string name="pref_nightmode_summary">ප්‍රතිවර්තිත වර්ණ සමග ලිපි පෙන්වන්න</string>
+    <string name="pref_backtotop">නැවත උඩට</string>
+    <string name="pref_backtotop_summary">ඉහළට උඩු අනුචලනය කිරීමට පිටුවේ අග බොත්තමක් පෙන්වන්න</string>
+    <string name="share_via">මගින් හුවමාරු කරන්න...</string>
     <string name="pref_language_title">Language</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>

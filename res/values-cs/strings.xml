@@ -16,7 +16,7 @@
     <string name="menu_exit">Konec</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Sdílet s přáteli</string>
-    <string name="save_media">Save Media</string>
+    <string name="save_media">Uložit médium jako...</string>
     <string name="save_media_error">An error occured when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">Probíhá hledání ZIM souborů, prosím čekejte...</string>

@@ -12,7 +12,7 @@
     <string name="menu_bookmarks">Bookmarks</string>
     <string name="menu_randomarticle">Artículo aleatorio</string>
     <string name="menu_fullscreen">Pantalla completa</string>
-    <string name="menu_exitfullscreen">Salir del modo de pantalla completa</string>
+    <string name="menu_exitfullscreen">Salir de pantalla completa</string>
     <string name="menu_exit">Salir</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Compartir con amigos</string>
@@ -22,10 +22,10 @@
     <string name="rescan_fs_warning">Buscando archivos ZIM, espera…</string>
     <string name="button_backtotop">Volver al principio</string>
     <string name="search_label">Buscar</string>
-    <string name="articlesearch_hint">Tipo de búsqueda de artículos</string>
-    <string name="choose_file">Seleccione un archivo de contenido de ZIM (*.zim)</string>
+    <string name="articlesearch_hint">Escribe para buscar artículos</string>
+    <string name="choose_file">Selecciona un archivo de contenido ZIM (*.zim)</string>
     <string name="open_in_new_tab">¿Abrir enlace en una nueva pestaña?</string>
-    <string name="remove_tab_confirm">¿Quiere cerrar esta pestaña?</string>
+    <string name="remove_tab_confirm">¿Quieres cerrar esta pestaña?</string>
     <string name="remove_tab">Cerrar pestaña</string>
     <string name="add_bookmark">Add bookmark</string>
     <string name="remove_bookmark">Remove bookmark</string>
@@ -33,13 +33,13 @@
     <string name="info_share_title">¡Yo disfruto de Wikipedia sin conexión con Kiwix!</string>
     <string name="info_share_content">¡Disfruto de Wikipedia sin conexión con Kiwix! ¡Todo el conocimiento humano a la mano donde quiera que vayas! ¡Sin internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">No se encontró ningún archivo ZIM en tu dispositivo.\nEcha un vistazo a la Página de Ayuda para obtener instrucciones acerca de cómo cargar contenido en Kiwix.\nSi pusiste un archivo ZIM en tu dispositivo de almacenamiento externo, puedes intentar en un minuto o reiniciar el dispositivo.</string>
-    <string name="error_filenotfound">Error: No se encontró el archivo ZIM seleccionado.</string>
-    <string name="error_fileinvalid">Error: El archivo seleccionado no es un archivo ZIM válido.</string>
-    <string name="error_articlenotfound">Error: Falló la carga del artículo «%1$s» failed.</string>
-    <string name="error_articleurlnotfound">Error: la Carga de artículo (Url: %1$s) ha fallado.</string>
+    <string name="error_filenotfound">Error: no se encontró el archivo ZIM seleccionado.</string>
+    <string name="error_fileinvalid">Error: el archivo seleccionado no es un archivo ZIM válido.</string>
+    <string name="error_articlenotfound">Error: falló la carga del artículo «%1$s».</string>
+    <string name="error_articleurlnotfound">Error: falló la carga del artículo (URL: %1$s).</string>
     <string name="pref_display_title">Mostrar</string>
-    <string name="pref_zoom_title">Nivel de zoom</string>
-    <string name="pref_zoom_dialogtitle">Nivel de zoom</string>
+    <string name="pref_zoom_title">Nivel de ampliación</string>
+    <string name="pref_zoom_dialogtitle">Nivel de ampliación</string>
     <string-array name="pref_zoom_entries">
         <item>Automatic</item>
         <item>Small</item>
@@ -48,8 +48,8 @@
     </string-array>
     <string name="pref_info_title">Información</string>
     <string name="pref_info_version">Versión</string>
-    <string name="pref_zoom_enable">Controles de zoom</string>
-    <string name="pref_zoom_enable_summary">Mostrar un botón de zoom en la esquina inferior derecha de la pantalla</string>
+    <string name="pref_zoom_enable">Controles de ampliación</string>
+    <string name="pref_zoom_enable_summary">Mostrar un botón de ampliación en la esquina inferior derecha de la pantalla</string>
     <string name="pref_nightmode">Modo nocturno</string>
     <string name="pref_nightmode_summary">Mostrar artículos con colores invertidos</string>
     <string name="pref_backtotop">Volver al principio</string>

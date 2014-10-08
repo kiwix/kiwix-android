@@ -16,7 +16,7 @@
     <string name="menu_exit">Излизане</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Споделете с приятели</string>
-    <string name="save_media">Save Media</string>
+    <string name="save_media">Съхраняване на медията като...</string>
     <string name="save_media_error">An error occured when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">Сканиране на ZIM файлове, моля, изчакайте...</string>

@@ -46,13 +46,13 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
-    <string name="pref_info_title">Information</string>
-    <string name="pref_info_version">Version</string>
+    <string name="pref_info_title">তথ্য</string>
+    <string name="pref_info_version">সংস্করণ</string>
     <string name="pref_zoom_enable">জুম নিয়ন্ত্রণ</string>
     <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
-    <string name="pref_nightmode">Night mode</string>
+    <string name="pref_nightmode">রাত্রি মোড</string>
     <string name="pref_nightmode_summary">Show articles with reverted colors</string>
-    <string name="pref_backtotop">Back to Top</string>
+    <string name="pref_backtotop">উপরে ফিরুন</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
     <string name="share_via">শেয়ার করুন...</string>
     <string name="pref_language_title">Language</string>
