@@ -982,6 +982,8 @@ public class KiwixMobileFragment extends SherlockFragment {
             nightMode = !nightMode;
         } catch (IOException e) {
 
+        } catch (NullPointerException npe) {
+        	Log.e(TAG_KIWIX, "getActivity() NPE " + npe.getMessage()); 
         }
     }
 
