@@ -47,6 +47,12 @@ public class FileSearch {
         // is to read and parse contents of /proc/mounts.
         final String[] additionalRoots = {
             "/storage/extSdCard",
+	    
+	    // These 3 entries might be necessary to deail with USB OTG extern
+	    // devices
+            "/storage/usbdisk0",
+            "/storage/usbdisk1",
+            "/storage/usbdisk2"
         };
 
         int i = 0;
