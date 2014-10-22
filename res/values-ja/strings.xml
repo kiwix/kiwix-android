@@ -16,8 +16,8 @@
     <string name="menu_exit">終了</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">友達と共有する</string>
-    <string name="save_media">Save Media</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
+    <string name="save_media">メディアに名前を付けて保存...</string>
+    <string name="save_media_error">メディアを保存しようとした際にエラーが発生しました!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">ZIM ファイルをスキャンしています。お待ちください...</string>
     <string name="button_backtotop">トップに戻る</string>

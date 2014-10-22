@@ -17,8 +17,8 @@
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Condividi con amici</string>
     <string name="save_media">Salva file multimediale come...</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
-    <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
+    <string name="save_media_error">Si è verificato un errore durante il salvataggio del file multimediale!</string>
+    <string name="save_media_saved">Salvato file multimediale come %1$s nella cartella Immagini</string>
     <string name="rescan_fs_warning">Scansione per file ZIM, attendi...</string>
     <string name="button_backtotop">Torna all\'inizio</string>
     <string name="search_label">Ricerca</string>

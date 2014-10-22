@@ -17,8 +17,8 @@
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">මිතුරන් සමග හුවමාරු කරන්න</string>
     <string name="save_media">මාධ්‍යය සුරකින්න...</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
-    <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
+    <string name="save_media_error">මාධ්‍යය ආරක්ෂණය කිරීමට යාමේදී හටගන්නා ලදී!</string>
+    <string name="save_media_saved">ඔබගේ පින්තුර ගොනුවෙහි %1$s ලෙස, මාධ්‍යය සුරක්ෂිත කරන ලදී</string>
     <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
     <string name="button_backtotop">නැවත මුදුනට</string>
     <string name="search_label">ගවේෂණය</string>

@@ -18,7 +18,7 @@
     <string name="menu_share">दोस्तों के साथ बांटे</string>
     <string name="save_media">Save Media</string>
     <string name="save_media_error">An error occured when trying to save the media!</string>
-    <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
+    <string name="save_media_saved">मीडिया को %1$s के रूप में अपने चित्र निदेशिका में सहेजें</string>
     <string name="rescan_fs_warning">ZIM फ़ाइलों के लिए स्कैन किया जा रहा है, कृपया प्रतीक्षा करें...</string>
     <string name="button_backtotop">वापस शीर्ष पे जाएँ</string>
     <string name="search_label">खोजें</string>
