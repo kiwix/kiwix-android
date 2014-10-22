@@ -46,9 +46,7 @@ public class FileSearch {
         // paths proves insufficient, the alternatives used by some projects
         // is to read and parse contents of /proc/mounts.
         final String[] additionalRoots = {
-            "/storage/extSdCard",
-	    "/mnt/usb_storage",
-            "/storage/usbdisk0"
+	    "/mnt"
         };
 
         int i = 0;
@@ -63,7 +61,7 @@ public class FileSearch {
 
         String dirNamePrimary = new File(
                 Environment.getExternalStorageDirectory().getAbsolutePath()).toString();
-        addFilesToFileList(dirNamePrimary, filter, fileList);
+	//        addFilesToFileList(dirNamePrimary, filter, fileList);
 
         for (final String dirName : additionalRoots) {
             if (dirNamePrimary.equals(dirName)) {
