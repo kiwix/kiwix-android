@@ -31,6 +31,8 @@ import java.util.Arrays;
 
 public class FileWriter {
 
+    public static final String TAG_KIWIX = "kiwix";
+
     private static final String PREF_NAME = "csv_file";
 
     private static final String CSV_PREF_NAME = "csv_string";
@@ -95,7 +97,7 @@ public class FileWriter {
 
         for (String file : readCsv()) {
             if (!mDataList.contains(new DataModel(getTitleFromFilePath(file), file))) {
-                Log.i("kiwix", "Added file: " + file);
+                Log.i(TAG_KIWIX, "Added file: " + file);
                 mDataList.add(new DataModel(getTitleFromFilePath(file), file));
             }
         }

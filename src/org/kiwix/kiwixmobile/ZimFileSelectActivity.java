@@ -61,6 +61,8 @@ import java.util.List;
 public class ZimFileSelectActivity extends SherlockFragmentActivity
         implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener {
 
+    public static final String TAG_KIWIX = "kiwix";
+
     private static final int LOADER_ID = 0x02;
 
     // Adapter of the Data populated by the MediaStore
@@ -130,14 +132,14 @@ public class ZimFileSelectActivity extends SherlockFragmentActivity
         String[] selectionArgs = null; // There is no ? in query so null here
 
         String sortOrder = MediaStore.Files.FileColumns.TITLE; // Sorted alphabetical
-        Log.d("kiwix", " Performing query for zim files...");
+        Log.d(TAG_KIWIX, " Performing query for zim files...");
 
         return new CursorLoader(this, uri, projection, query, selectionArgs, sortOrder);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        Log.d("kiwix", "DONE querying Mediastore for .zim files");
+        Log.d(TAG_KIWIX, "DONE querying Mediastore for .zim files");
         buildArrayAdapter(cursor);
         mCursorAdapter.swapCursor(cursor);
         mRescanAdapter = buildArrayAdapter(cursor);
@@ -165,7 +167,7 @@ public class ZimFileSelectActivity extends SherlockFragmentActivity
         // Check, if the user has rescanned the file system, if he has, then we want to save this list,
         // so this can be shown again, if the actvitity is recreated (on a device rotation for example)
         if (!mFiles.isEmpty()) {
-            Log.i("kiwix", "Saved state of the ListView");
+            Log.i(TAG_KIWIX, "Saved state of the ListView");
             outState.putParcelableArrayList("rescanData", mFiles);
         }
         super.onSaveInstanceState(outState);
@@ -209,7 +211,7 @@ public class ZimFileSelectActivity extends SherlockFragmentActivity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        Log.d("kiwix", " mZimFileList.onItemClick");
+        Log.d(TAG_KIWIX, " mZimFileList.onItemClick");
 
         String file;
 
@@ -273,7 +275,7 @@ public class ZimFileSelectActivity extends SherlockFragmentActivity
         for (int i = 0; i < files.size(); i++) {
 
             if (!new File(files.get(i).getPath()).exists()) {
-                Log.e("kiwix", "File removed: " + files.get(i).getTitle());
+                Log.e(TAG_KIWIX, "File removed: " + files.get(i).getTitle());
                 files.remove(i);
             }
         }
@@ -290,7 +292,7 @@ public class ZimFileSelectActivity extends SherlockFragmentActivity
         if (path != null) {
             File file = new File(path);
             Uri uri = Uri.fromFile(file);
-            Log.i("kiwix", "Opening " + uri);
+            Log.i(TAG_KIWIX, "Opening " + uri);
             setResult(RESULT_OK, new Intent().setData(uri));
             finish();
         } else {

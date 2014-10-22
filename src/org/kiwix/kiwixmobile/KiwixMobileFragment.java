@@ -468,7 +468,7 @@ public class KiwixMobileFragment extends SherlockFragment {
 
                     @Override
                     public void handleMessage(Message msg) {
-                        Log.e("kiwix", msg.getData().toString());
+                        Log.e(TAG_KIWIX, msg.getData().toString());
 
                         String url = (String) msg.getData().get("url");
                         String src = (String) msg.getData().get("src");
@@ -506,7 +506,7 @@ public class KiwixMobileFragment extends SherlockFragment {
                                 istream.close();
                                 ostream.close();
                             } catch (IOException e) {
-                                Log.d("kiwix", "Couldn't save image", e);
+                                Log.d(TAG_KIWIX, "Couldn't save image", e);
                                 toastText = getResources().getString(R.string.save_media_error);
                             } finally {
                                 toastText = String
@@ -610,7 +610,7 @@ public class KiwixMobileFragment extends SherlockFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        Log.i("kiwix", "Intent data: " + data);
+        Log.i(TAG_KIWIX, "Intent data: " + data);
 
         switch (requestCode) {
             case ZIMFILESELECT_REQUEST_CODE:
@@ -648,7 +648,7 @@ public class KiwixMobileFragment extends SherlockFragment {
                 for (KiwixMobileActivity.State state : KiwixMobileActivity.mPrefState) {
                     state.setHasToBeRefreshed(true);
                 }
-                Log.e("kiwix", KiwixMobileActivity.mPrefState.get(0).hasToBeRefreshed() + "");
+                Log.e(TAG_KIWIX, KiwixMobileActivity.mPrefState.get(0).hasToBeRefreshed() + "");
                 break;
         }
 
@@ -821,7 +821,7 @@ public class KiwixMobileFragment extends SherlockFragment {
             }
 
         } else {
-            Log.e("kiwix", "ZIM file doesn't exist at " + file.getAbsolutePath());
+            Log.e(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
             Toast.makeText(getActivity(), getResources().getString(R.string.error_filenotfound),
                     Toast.LENGTH_LONG).show();
         }
@@ -887,12 +887,12 @@ public class KiwixMobileFragment extends SherlockFragment {
 		    while((in=read.readLine())!=null) {
 			bookmarks.add(in);
 		    }
-		    Log.d("Kiwix", "Switched to bookmarkfile "+ZimContentProvider.getId());
+		    Log.d(TAG_KIWIX, "Switched to bookmarkfile "+ZimContentProvider.getId());
 		}
 	    } catch (FileNotFoundException e) {
-		Log.e("kiwix", "File not found: " + e.toString());
+		Log.e(TAG_KIWIX, "File not found: " + e.toString());
 	    } catch (IOException e) {
-		Log.e("kiwix", "Can not read file: " + e.toString());
+		Log.e(TAG_KIWIX, "Can not read file: " + e.toString());
 	    }
 	}
     }
@@ -905,16 +905,16 @@ public class KiwixMobileFragment extends SherlockFragment {
 		    stream.write((s+"\n").getBytes());
 		}
 	    }
-	    Log.d("Kiwix", "Saved data in bookmarkfile "+ZimContentProvider.getId());
+	    Log.d(TAG_KIWIX, "Saved data in bookmarkfile "+ZimContentProvider.getId());
 	} catch (FileNotFoundException e) {
-	    Log.e("kiwix", "File not found: " + e.toString());
+	    Log.e(TAG_KIWIX, "File not found: " + e.toString());
 	} catch (IOException e) {
-	    Log.e("kiwix", "Can not read file: " + e.toString());
+	    Log.e(TAG_KIWIX, "Can not read file: " + e.toString());
 	}
     }
 
     public boolean openArticleFromBookmark(String bookmarkTitle) {
-	Log.d("kiwix", "openArticleFromBookmark: "+articleSearchtextView.getText());
+	Log.d(TAG_KIWIX, "openArticleFromBookmark: "+articleSearchtextView.getText());
 	return openArticle(ZimContentProvider.getPageUrlFromTitle(bookmarkTitle));
     }
 

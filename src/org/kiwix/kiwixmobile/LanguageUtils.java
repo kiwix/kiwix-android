@@ -43,6 +43,8 @@ import java.util.Locale;
 
 public class LanguageUtils {
 
+    public static final String TAG_KIWIX = "kiwix";
+
     private List<LanguageContainer> mLanguageList;
 
     private List<String> mLocaleLanguageCodes;
@@ -160,13 +162,13 @@ public class LanguageUtils {
             layoutInflater.setFactory(new LayoutInflaterFactory(mContext, layoutInflater));
 
         } catch (NoSuchFieldException e) {
-            Log.e("kiwix", "could not access private field of the LayoutInflater");
+            Log.e(TAG_KIWIX, "could not access private field of the LayoutInflater");
 
         } catch (IllegalArgumentException e) {
-            Log.e("kiwix", "could not access private field of the LayoutInflater");
+            Log.e(TAG_KIWIX, "could not access private field of the LayoutInflater");
 
         } catch (IllegalAccessException e) {
-            Log.e("kiwix", "could not access private field of the LayoutInflater");
+            Log.e(TAG_KIWIX, "could not access private field of the LayoutInflater");
         }
     }
 
@@ -225,7 +227,7 @@ public class LanguageUtils {
                             // Set the custom typeface
                             textView.setTypeface(
                                     Typeface.createFromAsset(mContext.getAssets(), getTypeface()));
-                            Log.d("kiwix", "Applying custom font");
+                            Log.d(TAG_KIWIX, "Applying custom font");
 
                             // Reduce the text size
                             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textView.getTextSize() - 2f);
@@ -235,10 +237,10 @@ public class LanguageUtils {
                     return view;
 
                 } catch (InflateException e) {
-                    Log.e("kiwix", "Could not apply the custom font to " + name + " " + e.getMessage());
+                    Log.e(TAG_KIWIX, "Could not apply the custom font to " + name + " " + e.getMessage());
 
                 } catch (ClassNotFoundException e) {
-                    Log.e("kiwix", "Could not apply the custom font to " + name + " " + e.getMessage());
+                    Log.e(TAG_KIWIX, "Could not apply the custom font to " + name + " " + e.getMessage());
                 }
             }
 
