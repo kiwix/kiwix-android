@@ -17,7 +17,7 @@
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Partager avec vos amis</string>
     <string name="save_media">Enregistrer le média sous…</string>
-    <string name="save_media_error">Une erreur s&est produite en essayant d’enregistrer le média !</string>
+    <string name="save_media_error">Une erreur s\'est produite en essayant d’enregistrer le média !</string>
     <string name="save_media_saved">Média enregistré sous %1$s dans votre dossier Images</string>
     <string name="rescan_fs_warning">Analyse des fichiers ZIM en cours, veuillez patienter…</string>
     <string name="button_backtotop">Haut de page</string>
