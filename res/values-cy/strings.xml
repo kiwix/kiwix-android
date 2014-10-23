@@ -55,7 +55,7 @@
     <string name="pref_backtotop">Nôl i\'r brig</string>
     <string name="pref_backtotop_summary">Arddangos botwm ar waelod y dudalen i sgrolio hyd at y brig</string>
     <string name="share_via">Rhannwch drwy</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">Iaith</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

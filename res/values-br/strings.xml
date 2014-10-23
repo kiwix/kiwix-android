@@ -55,7 +55,7 @@
     <string name="pref_backtotop">Distreiñ da grec\'h ar bajenn</string>
     <string name="pref_backtotop_summary">Diskwel ur bouton e traoñ ar bajenn evit distreiñ d\'an deroù</string>
     <string name="share_via">Rannañ dre...</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">Yezh</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

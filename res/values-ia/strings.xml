@@ -55,7 +55,7 @@
     <string name="pref_backtotop">Initio del pagina</string>
     <string name="pref_backtotop_summary">Monstrar un button al fin del pagina pro retornar al initio</string>
     <string name="share_via">Divider via...</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">Lingua</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

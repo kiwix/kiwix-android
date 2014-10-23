@@ -55,7 +55,7 @@
     <string name="pref_backtotop">צוריק אויבן</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
     <string name="share_via">טיילן דורך…</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">שפראַך</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

@@ -55,7 +55,7 @@
     <string name="pref_backtotop">맨 위로 돌아가기</string>
     <string name="pref_backtotop_summary">맨 위로 돌아가는 버튼을 문서의 끝에 표시하기</string>
     <string name="share_via">...을 통해 공유</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">언어</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

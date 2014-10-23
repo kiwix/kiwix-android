@@ -55,7 +55,7 @@
     <string name="pref_backtotop">Vissza a lap tetejére</string>
     <string name="pref_backtotop_summary">Gomb megjelenítése a lap alján, melynek segítségével visszatérhet a lap tetejére</string>
     <string name="share_via">Megosztás ezzel...</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">Nyelv</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

@@ -55,7 +55,7 @@
     <string name="pref_backtotop">Terug na bo</string>
     <string name="pref_backtotop_summary">Wys \'n knop onder die bladsy om na bo terug te spring</string>
     <string name="share_via">Deel...</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">Taal</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

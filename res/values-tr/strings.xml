@@ -55,7 +55,7 @@
     <string name="pref_backtotop">Başa dön</string>
     <string name="pref_backtotop_summary">Başa dönmek için sayfanın altında bir düğme görüntüler</string>
     <string name="share_via">Üzerinden paylaşın...</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">Dil</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

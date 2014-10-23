@@ -55,7 +55,7 @@
     <string name="pref_backtotop">Zpět na začátek</string>
     <string name="pref_backtotop_summary">Zobrazit tlačítko "Zpět na začátek" na konci stránky</string>
     <string name="share_via">Sdílet přes...</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">Jazyk</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

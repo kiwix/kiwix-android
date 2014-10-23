@@ -55,7 +55,7 @@
     <string name="pref_backtotop">Tornar a dalt</string>
     <string name="pref_backtotop_summary">Mostra un botó al final de la pàgina per desplaçar-se cap a la part superior</string>
     <string name="share_via">Compartir mitjançant...</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">Idioma</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

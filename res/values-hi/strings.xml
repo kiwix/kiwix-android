@@ -55,7 +55,7 @@
     <string name="pref_backtotop">वापस शीर्ष पे जाएँ</string>
     <string name="pref_backtotop_summary">उपर तक स्क्रॉल करने के लिए पृष्ठ के अंत में एक बटन दिखाएँ</string>
     <string name="share_via">अलग माध्यम से बांटे</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">भाषा</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

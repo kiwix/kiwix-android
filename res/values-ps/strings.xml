@@ -55,7 +55,7 @@
     <string name="pref_backtotop">بېرته سر ته</string>
     <string name="pref_backtotop_summary">د مخ په پای کې د مخ سر ته ورتللو لپاره يوه تڼۍ ښکاره کول</string>
     <string name="share_via">د شريکولو لار ...</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">ژبه</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

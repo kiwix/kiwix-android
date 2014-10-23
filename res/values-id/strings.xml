@@ -55,7 +55,7 @@
     <string name="pref_backtotop">Kembali ke Atas</string>
     <string name="pref_backtotop_summary">Tampilkan tombol di akhir halaman untuk menggulir ke atas</string>
     <string name="share_via">Berbagi melalui...</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">Bahasa</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

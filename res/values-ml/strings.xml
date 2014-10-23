@@ -55,7 +55,7 @@
     <string name="pref_backtotop">തിരികെ മുകളിലേക്ക്</string>
     <string name="pref_backtotop_summary">താളിനു താഴെയായി മുകളിലേക്ക് തിരികെ പോകാനുള്ള ബട്ടൺ കാണിക്കുക.</string>
     <string name="share_via">ഇതുവഴി പങ്ക് വെയ്ക്കുക</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">ഭാഷ</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

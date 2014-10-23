@@ -55,7 +55,7 @@
     <string name="pref_backtotop">חזרה למעלה</string>
     <string name="pref_backtotop_summary">הצגת כפתור בסוף העמוד לגלילה למעלה</string>
     <string name="share_via">שיתוף דרך...</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">שפה</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

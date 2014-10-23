@@ -55,7 +55,7 @@
     <string name="pref_backtotop">ଉପରକୁ ଫେରିବେ</string>
     <string name="pref_backtotop_summary">ପୃଷ୍ଠାର ତଳୁ ଉପରକୁ ଯିବେ</string>
     <string name="share_via">କାହା ଦ୍ୱାରା ବାକିମାନଙ୍କୁ ଜଣାଇବେ...</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">ଭାଷା</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

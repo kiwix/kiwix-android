@@ -55,7 +55,7 @@
     <string name="pref_backtotop">Hiverina any an-tampony</string>
     <string name="pref_backtotop_summary">Haneho bokotra amin\'ny faran\'ny pejy mba hiverenana any am-pihatombohana</string>
     <string name="share_via">Hizara amin\'ny alalan\'i...</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">Tenim-pirenena</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

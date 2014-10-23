@@ -55,7 +55,7 @@
     <string name="pref_backtotop">ارجع إلى الأعلى</string>
     <string name="pref_backtotop_summary">عرض زر في نهاية الصفحة للذهاب إلى أعلاها</string>
     <string name="share_via">شارك عبر...</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">اللغة</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

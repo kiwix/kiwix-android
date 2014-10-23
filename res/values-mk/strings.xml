@@ -55,7 +55,7 @@
     <string name="pref_backtotop">Најгоре</string>
     <string name="pref_backtotop_summary">Прикажувај копче за враќање најгоре на крајот од страницата</string>
     <string name="share_via">Сподели преку...</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">Јазик</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

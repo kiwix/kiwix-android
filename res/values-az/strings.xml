@@ -55,7 +55,7 @@
     <string name="pref_backtotop">Əvvələ qayıt</string>
     <string name="pref_backtotop_summary">Səhifənin sonunda göstərilən və səhifənin əvvəlinə qaytaran düymə.</string>
     <string name="share_via">Paylaş...</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">Dil</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

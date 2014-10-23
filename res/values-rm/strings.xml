@@ -55,7 +55,7 @@
     <string name="pref_backtotop">Enavos a l\'entschatta</string>
     <string name="pref_backtotop_summary">Mussar in buttun a la fin da la pagina per ir enavos a l\'entschatta</string>
     <string name="share_via">Parter tras...</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">Lingua</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

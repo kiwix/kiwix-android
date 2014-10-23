@@ -55,7 +55,7 @@
     <string name="pref_backtotop">Începutul paginii</string>
     <string name="pref_backtotop_summary">Afișează un buton la sfârșitul paginii pentru a reveni la începutul acesteia</string>
     <string name="share_via">Distribuire prin...</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">Limbă</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

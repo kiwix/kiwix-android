@@ -46,7 +46,7 @@
         <item>Medium</item>
         <item>Large</item>
     </string-array>
-    <string name="pref_info_title">Information</string>
+    <string name="pref_info_title">Informazzjoni</string>
     <string name="pref_info_version">Version</string>
     <string name="pref_zoom_enable">Zoom controls</string>
     <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
@@ -55,7 +55,7 @@
     <string name="pref_backtotop">Back to Top</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
     <string name="share_via">Share via</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">Lingwa</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

@@ -55,7 +55,7 @@
     <string name="pref_backtotop">නැවත උඩට</string>
     <string name="pref_backtotop_summary">ඉහළට උඩු අනුචලනය කිරීමට පිටුවේ අග බොත්තමක් පෙන්වන්න</string>
     <string name="share_via">මගින් හුවමාරු කරන්න...</string>
-    <string name="pref_language_title">Language</string>
+    <string name="pref_language_title">භාෂාව</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>
