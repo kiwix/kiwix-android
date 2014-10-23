@@ -33,6 +33,8 @@ import java.util.Vector;
 
 public class FileSearch {
 
+    public static final String TAG_KIWIX = "kiwix";
+
     // Array of zim file extensions
     public static final String[] zimFiles = {"zim", "zimaa"};
 
@@ -72,7 +74,7 @@ public class FileSearch {
             if (f.isDirectory()) {
                 addFilesToFileList(dirName, filter, fileList);
             } else {
-                Log.i("kiwix", "Skipping missing directory " + dirName);
+                Log.i(TAG_KIWIX, "Skipping missing directory " + dirName);
             }
         }
 
@@ -139,10 +141,10 @@ public class FileSearch {
 
     // Fill fileList with files found in the specific directory
     private void addFilesToFileList(String directory, FilenameFilter[] filter, List<String> fileList) {
-        Log.d("kiwix", "Searching directory " + directory);
+        Log.d(TAG_KIWIX, "Searching directory " + directory);
         File[] foundFiles = listFilesAsArray(new File(directory), filter, -1);
         for (File f : foundFiles) {
-            Log.d("kiwix", "Found " + f.getAbsolutePath());
+            Log.d(TAG_KIWIX, "Found " + f.getAbsolutePath());
             fileList.add(f.getAbsolutePath());
         }
     }

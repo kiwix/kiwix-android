@@ -64,6 +64,8 @@ import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.newApi;
 public class KiwixMobileActivity extends SherlockFragmentActivity implements ActionBar.TabListener,
      View.OnLongClickListener, KiwixMobileFragment.FragmentCommunicator, BookmarkDialog.BookmarkDialogListener {
 
+    public static final String TAG_KIWIX = "kiwix";
+
     public static ArrayList<State> mPrefState;
 
     public static boolean mIsFullscreenOpened;
@@ -238,13 +240,13 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
                     // Does it hit the boundries on the x-axis?
                     if ((positionX > screenWidth - (0.25 * mTabsWidth)) ||
                             (positionX < (0.25 * mTabsWidth))) {
-                        Log.i("kiwix", "Dragged out");
+                        Log.i(TAG_KIWIX, "Dragged out");
                         removeTabAt(mCurrentDraggedTab);
                     }
                     // Does it hit the boundries on the y-axis?
                     else if ((positionY > screenHeight - (0.25 * mTabsHeight)) ||
                             ((positionY - titleBarHeight) < (0.5 * mTabsHeight))) {
-                        Log.i("kiwix", "Dragged out");
+                        Log.i(TAG_KIWIX, "Dragged out");
                         removeTabAt(mCurrentDraggedTab);
                     }
                     return true;

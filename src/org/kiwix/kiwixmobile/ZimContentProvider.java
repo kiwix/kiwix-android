@@ -38,6 +38,8 @@ import java.io.OutputStream;
 
 public class ZimContentProvider extends ContentProvider {
 
+    public static final String TAG_KIWIX = "kiwix";
+
     public static final Uri CONTENT_URI = Uri.parse("content://org.kiwix.zim/");
 
     public static final Uri UI_URI = Uri.parse("content://org.kiwix.ui/");
@@ -48,7 +50,7 @@ public class ZimContentProvider extends ContentProvider {
 
     public synchronized static String setZimFile(String fileName) {
         if (!jniKiwix.loadZIM(fileName)) {
-            Log.e("kiwix", "Unable to open the file " + fileName);
+            Log.e(TAG_KIWIX, "Unable to open the file " + fileName);
             zimFileName = null;
         } else {
             zimFileName = fileName;
@@ -145,7 +147,7 @@ public class ZimContentProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
-        Log.w("kiwix", "ZimContentProvider.getType() (not implemented) called");
+        Log.w(TAG_KIWIX, "ZimContentProvider.getType() (not implemented) called");
         return null;
     }
 
@@ -159,7 +161,7 @@ public class ZimContentProvider extends ContentProvider {
             new TransferThread(jniKiwix, uri, new AutoCloseOutputStream(
                     pipe[1])).start();
         } catch (IOException e) {
-            Log.e(getClass().getSimpleName(), "Exception opening pipe", e);
+            Log.e(TAG_KIWIX, "Exception opening pipe", e);
             throw new FileNotFoundException("Could not open pipe for: "
                     + uri.toString());
         }
@@ -202,9 +204,7 @@ public class ZimContentProvider extends ContentProvider {
         TransferThread(JNIKiwix jniKiwix, Uri articleUri, OutputStream out) throws IOException {
             this.articleUri = articleUri;
             this.jniKiwix = jniKiwix;
-            Log.d("kiwix",
-                    "Retrieving :"
-                            + articleUri.toString());
+            Log.d(TAG_KIWIX, "Retrieving :" + articleUri.toString());
 
             String t = articleUri.toString();
             int pos = articleUri.toString().indexOf(CONTENT_URI.toString());
@@ -231,10 +231,10 @@ public class ZimContentProvider extends ContentProvider {
                 JNIKiwixString mime = new JNIKiwixString();
                 JNIKiwixInt size = new JNIKiwixInt();
                 byte[] data = jniKiwix.getContent(articleZimUrl, mime, size);
-                // Log.d("kiwix","articleDataByteArray:"+articleDataByteArray.toString());
+                // Log.d(TAG_KIWIX, "articleDataByteArray:"+articleDataByteArray.toString());
                 // ByteArrayInputStream articleDataInputStream = new
                 // ByteArrayInputStream(articleDataByteArray.toByteArray());
-                // Log.d("kiwix","article data loaded from zime file");
+                // Log.d(TAG_KIWIX, "article data loaded from zime file");
 
                 //ByteArrayInputStream articleDataInputStream = new ByteArrayInputStream(
                 //	articleDataByteArray.toByteArray());
@@ -246,14 +246,12 @@ public class ZimContentProvider extends ContentProvider {
                 articleDataInputStream.close();
                 out.flush();
 
-                Log.d("kiwix", "reading  " + articleZimUrl
+                Log.d(TAG_KIWIX, "reading  " + articleZimUrl
                         + "(mime " + mime.value + ", size: " + size.value + ") finished.");
             } catch (IOException e) {
-                Log.e(getClass().getSimpleName(), "Exception reading article "
-                        + articleZimUrl + " from zim file", e);
+                Log.e(TAG_KIWIX, "Exception reading article " + articleZimUrl + " from zim file", e);
             } catch (NullPointerException e) {
-                Log.e(getClass().getSimpleName(), "Exception reading article "
-                        + articleZimUrl + " from zim file", e);
+                Log.e(TAG_KIWIX, "Exception reading article " + articleZimUrl + " from zim file", e);
 
             } finally {
                 try {
@@ -271,7 +269,7 @@ public class ZimContentProvider extends ContentProvider {
         String icuDirPath = loadICUData(this.getContext(), workingDir);
 
         if(icuDirPath != null) {
-            Log.d("kiwix", "Setting the ICU directory path to " + icuDirPath);
+            Log.d(TAG_KIWIX, "Setting the ICU directory path to " + icuDirPath);
             jniKiwix.setDataDirectory(icuDirPath);
         }
     }
@@ -297,7 +295,7 @@ public class ZimContentProvider extends ContentProvider {
             return icuDir.getAbsolutePath();
         }
         catch (Exception e) {
-            Log.e("kiwix", "Error copying icu data file", e);
+            Log.e(TAG_KIWIX, "Error copying icu data file", e);
             return null;
         }
     }
