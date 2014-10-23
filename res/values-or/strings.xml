@@ -41,10 +41,10 @@
     <string name="pref_zoom_title">ଜୁମ ବଢ଼ାଇବା/କମାଇବା</string>
     <string name="pref_zoom_dialogtitle">ଜୁମ ବଢ଼ାଇବା/କମାଇବା</string>
     <string-array name="pref_zoom_entries">
-        <item>Automatic</item>
-        <item>Small</item>
-        <item>Medium</item>
-        <item>Large</item>
+        <item name="pref_zoom_entry_automatic">Automatic</item>
+        <item name="pref_zoom_entry_small">Small</item>
+        <item name="pref_zoom_entry_medium">Medium</item>
+        <item name="pref_zoom_entry_large">Large</item>
     </string-array>
     <string name="pref_info_title">ସୂଚନା</string>
     <string name="pref_info_version">ସଂସ୍କରଣ</string>

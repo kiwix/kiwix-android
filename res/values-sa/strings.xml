@@ -41,10 +41,10 @@
     <string name="pref_zoom_title">वीक्षणस्य (zoom) स्तरम्</string>
     <string name="pref_zoom_dialogtitle">वीक्षणस्य (zoom) स्तरम्</string>
     <string-array name="pref_zoom_entries">
-        <item>Automatic</item>
-        <item>Small</item>
-        <item>Medium</item>
-        <item>Large</item>
+        <item name="pref_zoom_entry_automatic">Automatic</item>
+        <item name="pref_zoom_entry_small">Small</item>
+        <item name="pref_zoom_entry_medium">Medium</item>
+        <item name="pref_zoom_entry_large">Large</item>
     </string-array>
     <string name="pref_info_title">सूचना</string>
     <string name="pref_info_version">संस्करणम्</string>

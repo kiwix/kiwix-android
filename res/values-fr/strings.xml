@@ -41,10 +41,10 @@
     <string name="pref_zoom_title">Niveau de zoom</string>
     <string name="pref_zoom_dialogtitle">Niveau de zoom</string>
     <string-array name="pref_zoom_entries">
-        <item>Automatic</item>
-        <item>Small</item>
-        <item>Medium</item>
-        <item>Large</item>
+        <item name="pref_zoom_entry_automatic">Automatique</item>
+        <item name="pref_zoom_entry_small">Faible</item>
+        <item name="pref_zoom_entry_medium">Moyen</item>
+        <item name="pref_zoom_entry_large">Fort</item>
     </string-array>
     <string name="pref_info_title">Information</string>
     <string name="pref_info_version">Version</string>
