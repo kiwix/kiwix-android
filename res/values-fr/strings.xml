@@ -56,6 +56,6 @@
     <string name="pref_backtotop_summary">Afficher un bouton en bas de la page pour revenir au début</string>
     <string name="share_via">Partager via...</string>
     <string name="pref_language_title">Langue</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Choisir une langue</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>
