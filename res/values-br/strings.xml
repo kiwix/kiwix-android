@@ -41,10 +41,10 @@
     <string name="pref_zoom_title">Live zoum</string>
     <string name="pref_zoom_dialogtitle">Live zoum</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">Emgefre</item>
+        <item name="pref_zoom_entry_small">Bihan</item>
+        <item name="pref_zoom_entry_medium">Etre</item>
+        <item name="pref_zoom_entry_large">Bras</item>
     </string-array>
     <string name="pref_info_title">Titouroù</string>
     <string name="pref_info_version">Stumm</string>
@@ -56,6 +56,6 @@
     <string name="pref_backtotop_summary">Diskwel ur bouton e traoñ ar bajenn evit distreiñ d\'an deroù</string>
     <string name="share_via">Rannañ dre...</string>
     <string name="pref_language_title">Yezh</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Dibabit ur yezh</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

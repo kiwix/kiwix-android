@@ -41,10 +41,10 @@
     <string name="pref_zoom_title">Nivel de ampliación</string>
     <string name="pref_zoom_dialogtitle">Nivel de ampliación</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">Automático</item>
+        <item name="pref_zoom_entry_small">Pequeño</item>
+        <item name="pref_zoom_entry_medium">Mediano</item>
+        <item name="pref_zoom_entry_large">Grande</item>
     </string-array>
     <string name="pref_info_title">Información</string>
     <string name="pref_info_version">Versión</string>
@@ -56,6 +56,6 @@
     <string name="pref_backtotop_summary">Mostrar un botón al final de la página para desplazarse al comienzo</string>
     <string name="share_via">Compartir a través de...</string>
     <string name="pref_language_title">Idioma</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Elige un idioma</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

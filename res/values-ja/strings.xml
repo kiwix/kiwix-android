@@ -41,10 +41,10 @@
     <string name="pref_zoom_title">ズーム レベル</string>
     <string name="pref_zoom_dialogtitle">ズーム レベル</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
+        <item name="pref_zoom_entry_automatic">自動</item>
+        <item name="pref_zoom_entry_small">小</item>
         <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_large">大</item>
     </string-array>
     <string name="pref_info_title">情報</string>
     <string name="pref_info_version">バージョン</string>
@@ -56,6 +56,6 @@
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
     <string name="share_via">Share via</string>
     <string name="pref_language_title">言語</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">言語を選択</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

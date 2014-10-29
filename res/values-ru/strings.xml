@@ -41,10 +41,10 @@
     <string name="pref_zoom_title">Уровень масштабирования</string>
     <string name="pref_zoom_dialogtitle">Уровень масштабирования</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">Автоматически</item>
+        <item name="pref_zoom_entry_small">Маленький</item>
+        <item name="pref_zoom_entry_medium">Средний</item>
+        <item name="pref_zoom_entry_large">Большой</item>
     </string-array>
     <string name="pref_info_title">Информация</string>
     <string name="pref_info_version">Версия</string>
@@ -56,6 +56,6 @@
     <string name="pref_backtotop_summary">Отобразить кнопку в конце страницы для прокрутки вверх</string>
     <string name="share_via">Поделиться через…</string>
     <string name="pref_language_title">Язык</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Выберите язык</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

@@ -42,9 +42,9 @@
     <string name="pref_zoom_dialogtitle">Takat zum</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_small">Kecil</item>
+        <item name="pref_zoom_entry_medium">Sederhana</item>
+        <item name="pref_zoom_entry_large">Besar</item>
     </string-array>
     <string name="pref_info_title">Maklumat</string>
     <string name="pref_info_version">Versi</string>
@@ -56,6 +56,6 @@
     <string name="pref_backtotop_summary">Paparkan butang di kaki halaman untuk menskrol kembali ke atas</string>
     <string name="share_via">Kongsi melalui...</string>
     <string name="pref_language_title">Bahasa</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Pilih bahasa</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

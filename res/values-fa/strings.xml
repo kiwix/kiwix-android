@@ -17,8 +17,8 @@
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">اشتراک گذاری با دوستان</string>
     <string name="save_media">ذخیره رسانه با نام ....</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
-    <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
+    <string name="save_media_error">در زمان ذخیره رسانه خطایی به وجود آمد!</string>
+    <string name="save_media_saved">ذخیره کردن رسانه  با عنوان %1$s در پوشه تصویر شما</string>
     <string name="rescan_fs_warning">چستچو برای پرونده‌های ZIM، لطفاً صبر کنید...</string>
     <string name="button_backtotop">بازگشت به بالای صفحه</string>
     <string name="search_label">جستجو</string>
@@ -41,10 +41,10 @@
     <string name="pref_zoom_title">سطح بزرگ/کوچک‌نمایی</string>
     <string name="pref_zoom_dialogtitle">سطح بزرگ/کوچک‌نمایی</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">خودکار</item>
+        <item name="pref_zoom_entry_small">کوچک</item>
+        <item name="pref_zoom_entry_medium">متوسط</item>
+        <item name="pref_zoom_entry_large">بزرگ</item>
     </string-array>
     <string name="pref_info_title">اطلاعات</string>
     <string name="pref_info_version">نسخه</string>
@@ -56,6 +56,6 @@
     <string name="pref_backtotop_summary">نمایش دکمه در پایان صفحه برای انتقال به بالا</string>
     <string name="share_via">اشتراک از طریق...</string>
     <string name="pref_language_title">تغییر زبان</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">انتخاب زبان</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

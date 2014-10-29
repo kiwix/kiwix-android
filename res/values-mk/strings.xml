@@ -41,10 +41,10 @@
     <string name="pref_zoom_title">Ниво на приближеност</string>
     <string name="pref_zoom_dialogtitle">Ниво на приближеност</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">Автоматски</item>
+        <item name="pref_zoom_entry_small">Мал</item>
+        <item name="pref_zoom_entry_medium">Среден</item>
+        <item name="pref_zoom_entry_large">Голем</item>
     </string-array>
     <string name="pref_info_title">Информации</string>
     <string name="pref_info_version">Верзија</string>
@@ -56,6 +56,6 @@
     <string name="pref_backtotop_summary">Прикажувај копче за враќање најгоре на крајот од страницата</string>
     <string name="share_via">Сподели преку...</string>
     <string name="pref_language_title">Јазик</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Изберете јазик</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>
