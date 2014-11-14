@@ -41,10 +41,10 @@
     <string name="pref_zoom_title">Zoomnivå</string>
     <string name="pref_zoom_dialogtitle">Zoomnivå</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">Automatiskt</item>
+        <item name="pref_zoom_entry_small">Liten</item>
+        <item name="pref_zoom_entry_medium">Mellan</item>
+        <item name="pref_zoom_entry_large">Stor</item>
     </string-array>
     <string name="pref_info_title">Information</string>
     <string name="pref_info_version">Version</string>
@@ -56,6 +56,6 @@
     <string name="pref_backtotop_summary">Visar en knapp i slutet på sidan för att rulla upp till toppen</string>
     <string name="share_via">Dela via...</string>
     <string name="pref_language_title">Språk</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Välj ett språk</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

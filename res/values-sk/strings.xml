@@ -17,8 +17,8 @@
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Zdielať s priaťeľmi</string>
     <string name="save_media">Uložiť médiá ako...</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
-    <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
+    <string name="save_media_error">Pri ukladaní došlo k chybe!</string>
+    <string name="save_media_saved">Médiá uložené ako %1$s v priečinku Obrázky</string>
     <string name="rescan_fs_warning">Vyhľadávanie ZIM súborov, čakajte prosím...</string>
     <string name="button_backtotop">Späť na začiatok</string>
     <string name="search_label">Hľadať</string>
@@ -41,10 +41,10 @@
     <string name="pref_zoom_title">Úroveň lupy</string>
     <string name="pref_zoom_dialogtitle">Úroveň lupy</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">Automaticky</item>
+        <item name="pref_zoom_entry_small">Malé</item>
+        <item name="pref_zoom_entry_medium">Stredné</item>
+        <item name="pref_zoom_entry_large">Veľké</item>
     </string-array>
     <string name="pref_info_title">Informácie</string>
     <string name="pref_info_version">Verzia</string>
@@ -56,6 +56,6 @@
     <string name="pref_backtotop_summary">Zobraziť tlačidlo na konci stránky pre prechod na začiatok.</string>
     <string name="share_via">Zdielať cez...</string>
     <string name="pref_language_title">Jazyk</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Zvoliť jazyk</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

@@ -41,7 +41,7 @@
     <string name="pref_zoom_title">Takat zum</string>
     <string name="pref_zoom_dialogtitle">Takat zum</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
+        <item name="pref_zoom_entry_automatic">Automatik</item>
         <item name="pref_zoom_entry_small">Kecil</item>
         <item name="pref_zoom_entry_medium">Sederhana</item>
         <item name="pref_zoom_entry_large">Besar</item>
