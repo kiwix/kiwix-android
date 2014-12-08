@@ -23,6 +23,7 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.webkit.MimeTypeMap;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.os.ParcelFileDescriptor.AutoCloseOutputStream;
@@ -147,8 +148,35 @@ public class ZimContentProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
-        Log.w(TAG_KIWIX, "ZimContentProvider.getType() (not implemented) called");
-        return null;
+	String mimeType;
+
+	// This is the code which makes a guess based on the file extenstion
+	String extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString().toLowerCase());
+	mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+
+	// This is the code which retrieve the mimeType from the libzim
+        // "slow" and still bugyy
+        if (mimeType.isEmpty() && jniKiwix != null && uri == null) {
+            String t = uri.toString();
+            int pos = uri.toString().indexOf(CONTENT_URI.toString());
+            if (pos != -1) {
+                t = uri.toString().substring(
+                        CONTENT_URI.toString().length());
+            }
+            // Remove fragment (#...) as not supported by zimlib
+            pos = t.indexOf("#");
+            if (pos != -1) {
+                t = t.substring(0, pos);
+            }
+
+	    mimeType = jniKiwix.getMimeType(t);
+	    
+	    // Truncate mime-type (everything after the first space
+	    mimeType = mimeType.replaceAll("^([^ ]+).*$", "$1");
+        }
+
+	Log.d(TAG_KIWIX, "Getting mime-type for " + uri.toString() + " = " + mimeType);
+        return mimeType;
     }
 
     @Override
@@ -247,7 +275,7 @@ public class ZimContentProvider extends ContentProvider {
                 out.flush();
 
                 Log.d(TAG_KIWIX, "reading  " + articleZimUrl
-                        + "(mime " + mime.value + ", size: " + size.value + ") finished.");
+                        + "(mime: " + mime.value + ", size: " + size.value + ") finished.");
             } catch (IOException e) {
                 Log.e(TAG_KIWIX, "Exception reading article " + articleZimUrl + " from zim file", e);
             } catch (NullPointerException e) {
