@@ -17,8 +17,8 @@
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Compartir cos amigos</string>
     <string name="save_media">Gardar o ficheiro multimedia como...</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
-    <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
+    <string name="save_media_error">Houbo un erro ao intentar gardar o multimedia!</string>
+    <string name="save_media_saved">Multimedia gardado como %1$s na súa carpeta de imaxes</string>
     <string name="rescan_fs_warning">Buscando os ficheiros ZIM. Agarde, por favor...</string>
     <string name="button_backtotop">Volver ao inicio</string>
     <string name="search_label">Procurar</string>
@@ -41,10 +41,10 @@
     <string name="pref_zoom_title">Nivel de zoom</string>
     <string name="pref_zoom_dialogtitle">Nivel de zoom</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">Automático</item>
+        <item name="pref_zoom_entry_small">Pequeno</item>
+        <item name="pref_zoom_entry_medium">Mediano</item>
+        <item name="pref_zoom_entry_large">Grande</item>
     </string-array>
     <string name="pref_info_title">Información</string>
     <string name="pref_info_version">Versión</string>
@@ -56,6 +56,6 @@
     <string name="pref_backtotop_summary">Mostrar un botón ao final da páxina para volver ao inicio da mesma</string>
     <string name="share_via">Compartir a través de...</string>
     <string name="pref_language_title">Lingua</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Escolla unha lingua</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

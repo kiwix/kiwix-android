@@ -41,10 +41,10 @@
     <string name="pref_zoom_title">Poziom powiększenia</string>
     <string name="pref_zoom_dialogtitle">Poziom powiększenia</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">Automatycznie</item>
+        <item name="pref_zoom_entry_small">Mały</item>
+        <item name="pref_zoom_entry_medium">Średni</item>
+        <item name="pref_zoom_entry_large">Duży</item>
     </string-array>
     <string name="pref_info_title">Informacje</string>
     <string name="pref_info_version">Wersja</string>
@@ -56,6 +56,6 @@
     <string name="pref_backtotop_summary">Wyświetl przycisk na końcu strony, aby przewinąć do góry</string>
     <string name="share_via">Podziel się za pośrednictwem...</string>
     <string name="pref_language_title">Język</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Wybierz język</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

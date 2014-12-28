@@ -41,10 +41,10 @@
     <string name="pref_zoom_title">Nivell de zoom</string>
     <string name="pref_zoom_dialogtitle">Nivell de zoom</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">Automàtic</item>
+        <item name="pref_zoom_entry_small">Petita</item>
+        <item name="pref_zoom_entry_medium">Mitjana</item>
+        <item name="pref_zoom_entry_large">Gran</item>
     </string-array>
     <string name="pref_info_title">Informació</string>
     <string name="pref_info_version">Versió</string>
@@ -56,6 +56,6 @@
     <string name="pref_backtotop_summary">Mostra un botó al final de la pàgina per desplaçar-se cap a la part superior</string>
     <string name="share_via">Compartir mitjançant...</string>
     <string name="pref_language_title">Idioma</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Trieu un idioma</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

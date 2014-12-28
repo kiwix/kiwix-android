@@ -12,7 +12,7 @@
     <string name="menu_bookmarks">Bookmarks</string>
     <string name="menu_randomarticle">Articul sporadic</string>
     <string name="menu_fullscreen">Scren ampli</string>
-    <string name="menu_exitfullscreen">Exit full screen</string>
+    <string name="menu_exitfullscreen">Cluder plen-scren</string>
     <string name="menu_exit">Abandonar</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Share with friends</string>
@@ -20,7 +20,7 @@
     <string name="save_media_error">An error occured when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
-    <string name="button_backtotop">Back to Top</string>
+    <string name="button_backtotop">Retro a supra</string>
     <string name="search_label">Sercha</string>
     <string name="articlesearch_hint">Type to lookup articles</string>
     <string name="choose_file">Select a ZIM Content File (*.zim)</string>
@@ -52,8 +52,8 @@
     <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
     <string name="pref_nightmode">Night mode</string>
     <string name="pref_nightmode_summary">Show articles with reverted colors</string>
-    <string name="pref_backtotop">Back to Top</string>
-    <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+    <string name="pref_backtotop">Retro a supra</string>
+    <string name="pref_backtotop_summary">Monstra un taste in li fin del págine por saltar a supra.</string>
     <string name="share_via">Share via</string>
     <string name="pref_language_title">Lingue</string>
     <string name="pref_language_chooser">Choose a language</string>

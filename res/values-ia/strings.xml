@@ -42,9 +42,9 @@
     <string name="pref_zoom_dialogtitle">Nivello de zoom</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_small">Micre</item>
+        <item name="pref_zoom_entry_medium">Medie</item>
+        <item name="pref_zoom_entry_large">Grande</item>
     </string-array>
     <string name="pref_info_title">Information</string>
     <string name="pref_info_version">Version</string>
@@ -56,6 +56,6 @@
     <string name="pref_backtotop_summary">Monstrar un button al fin del pagina pro retornar al initio</string>
     <string name="share_via">Divider via...</string>
     <string name="pref_language_title">Lingua</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Selige un lingua</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

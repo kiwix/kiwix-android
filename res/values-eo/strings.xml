@@ -16,9 +16,9 @@
     <string name="menu_exit">Eliri</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Dividi kun amikoj</string>
-    <string name="save_media">Save Media</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
-    <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
+    <string name="save_media">Konservi plurmediaĵon kiel...</string>
+    <string name="save_media_error">Eraro okazis dum provo konservi la plurmediaĵon!</string>
+    <string name="save_media_saved">Plumediaĵoj konservitaj kiel %1$s en via dosierujo Bildoj</string>
     <string name="rescan_fs_warning">Daŭras serĉado de ZIM-dosieroj, bonvolu atendi...</string>
     <string name="button_backtotop">Reiri al Supro</string>
     <string name="search_label">Serĉi</string>
@@ -41,10 +41,10 @@
     <string name="pref_zoom_title">Zomnivelo</string>
     <string name="pref_zoom_dialogtitle">Zomnivelo</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">Aŭtomate</item>
+        <item name="pref_zoom_entry_small">Malgranda</item>
+        <item name="pref_zoom_entry_medium">Mezgranda</item>
+        <item name="pref_zoom_entry_large">Granda</item>
     </string-array>
     <string name="pref_info_title">Informo</string>
     <string name="pref_info_version">Versio</string>
@@ -56,6 +56,6 @@
     <string name="pref_backtotop_summary">Montri suprenan rulumilon paĝofine</string>
     <string name="share_via">Kundividi per...</string>
     <string name="pref_language_title">Lingvo</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Elektu lingvon</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>

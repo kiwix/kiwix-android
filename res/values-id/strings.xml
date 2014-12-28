@@ -17,8 +17,8 @@
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Bagikan dengan teman</string>
     <string name="save_media">Simpan media sebagai...</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
-    <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
+    <string name="save_media_error">Kesalahan terjadi ketika menyimpan media!</string>
+    <string name="save_media_saved">Simpan media sebagai %1$s pada folder Gambar</string>
     <string name="rescan_fs_warning">Pemindaian berkas ZIM, mohon ditunggu...</string>
     <string name="button_backtotop">Kembali ke Atas</string>
     <string name="search_label">Cari</string>
@@ -41,10 +41,10 @@
     <string name="pref_zoom_title">Tingkat perbesaran</string>
     <string name="pref_zoom_dialogtitle">Tingkat perbesaran</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">Otomatis</item>
+        <item name="pref_zoom_entry_small">Kecil</item>
+        <item name="pref_zoom_entry_medium">Menengah</item>
+        <item name="pref_zoom_entry_large">Besar</item>
     </string-array>
     <string name="pref_info_title">Informasi</string>
     <string name="pref_info_version">Versi</string>
@@ -56,6 +56,6 @@
     <string name="pref_backtotop_summary">Tampilkan tombol di akhir halaman untuk menggulir ke atas</string>
     <string name="share_via">Berbagi melalui...</string>
     <string name="pref_language_title">Bahasa</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Pilih bahasa</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
 </resources>
