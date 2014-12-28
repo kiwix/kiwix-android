@@ -84,6 +84,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
+import java.net.URLDecoder;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -476,8 +477,9 @@ public class KiwixMobileFragment extends SherlockFragment {
 
 				if (url != null || src != null) {
 					url = url == null ? src : url;
-					url = url.substring(url.lastIndexOf('/') + 1, url.length());
-					url = url.substring(url.indexOf("%3A") + 3, url.length());
+					url = java.net.URLDecoder.decode(url);
+					url = url.substring(url.lastIndexOf('/') + 1);
+					url = url.replaceAll(":", "_");
 					int dotIndex = url.lastIndexOf('.');
 					File storageDir = new File(Environment.getExternalStoragePublicDirectory(
 							Environment.DIRECTORY_PICTURES), url);
