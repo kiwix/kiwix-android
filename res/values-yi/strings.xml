@@ -9,7 +9,7 @@
     <string name="menu_settings">פרעפֿערענצן</string>
     <string name="menu_search">זוכן</string>
     <string name="menu_searchintext">זוכן אין טעקסט</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">ליין־צייכנס</string>
     <string name="menu_randomarticle">צופֿעליגער ארטיקל</string>
     <string name="menu_fullscreen">פֿולער עקראן</string>
     <string name="menu_exitfullscreen">אוועקגיין פון פולן עקראן</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">עפענען לינק אין א נײַעם טאב?</string>
     <string name="remove_tab_confirm">צי ווילט איר אראפנעמען דעם טאב?</string>
     <string name="remove_tab">אראפנעמען טאב</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">מארקירן דעם בלאט</string>
+    <string name="remove_bookmark">אוממארקירן אויסגעוויילטע</string>
     <string name="info_share_title">כ׳האב הנאה פון וויקיפעדיע אפליין מיט קיוויקס!</string>
     <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>

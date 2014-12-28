@@ -9,7 +9,7 @@
     <string name="menu_settings">Agordoj</string>
     <string name="menu_search">Serĉi</string>
     <string name="menu_searchintext">Trovi en teksto</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">Legosignoj</string>
     <string name="menu_randomarticle">Hazarda artikolo</string>
     <string name="menu_fullscreen">Plenekrane</string>
     <string name="menu_exitfullscreen">Eliri plenekranon</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">Ĉu malfermi ligilon en nova langeto?</string>
     <string name="remove_tab_confirm">Ĉu vi volas forigi tiun ĉi langeton?</string>
     <string name="remove_tab">Forigi langeton</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">Marki ĉi tiun paĝon</string>
+    <string name="remove_bookmark">Malmarki elektitajn</string>
     <string name="info_share_title">Mi ĝuas Vikipedion eksterrete kun Kiwix!</string>
     <string name="info_share_content">Mi ĝuas Vikipedion eksterrete kun Kiwix! La tuta homa scio ĉemane kien ajn vi iras! Sen la reto! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Neniu ZIM-dosiero estas trovita en la memorilo.\nKonzultu la paĝon Helpo por trovi instrukciojn pri ŝargado de enhavo en Kiwix.\nSe vi enmetis ZIM-dosieron en la memorilon, vi povas reprovi post momento aŭ restartigi la memorilon.</string>

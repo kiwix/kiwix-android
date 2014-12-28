@@ -9,7 +9,7 @@
     <string name="menu_settings">Indstillinger</string>
     <string name="menu_search">Søg</string>
     <string name="menu_searchintext">Find i teksten</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">Bogmærker</string>
     <string name="menu_randomarticle">Tilfældig artikel</string>
     <string name="menu_fullscreen">Fuld skærm</string>
     <string name="menu_exitfullscreen">Forlad fuldskærm</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">Åbn link i nyt faneblad?</string>
     <string name="remove_tab_confirm">Vil du fjerne denne fane?</string>
     <string name="remove_tab">Fjern fane</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">Marker denne side</string>
+    <string name="remove_bookmark">Fjern markering af valgte</string>
     <string name="info_share_title">Jeg nyder Wikipedia Offline med Kiwix!</string>
     <string name="info_share_content">Jeg nyder Wikipedia Offline med Kiwix! Hele den menneskelige viden ved hånden, uanset hvor du er! Uden internettet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Ingen ZIM filer fundet på enheden.\nTag et kig på hjælpesiden for at få anvisninger om, hvordan man indlæser indhold i Kiwix.\nHvis du har puttet en ZIM fil på din enhed/ekstern, kan du prøve igen om et minut eller genstarte din enhed.</string>

@@ -9,7 +9,7 @@
     <string name="menu_settings">Preferenzas</string>
     <string name="menu_search">Tschertgar</string>
     <string name="menu_searchintext">Tschertgar en il text</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">Segnapaginas</string>
     <string name="menu_randomarticle">Artitgel casual</string>
     <string name="menu_fullscreen">Maletg entir</string>
     <string name="menu_exitfullscreen">Ord il maletg entir</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">Avrir il link en in nov tab?</string>
     <string name="remove_tab_confirm">Vulais vus stizzar quest tab?</string>
     <string name="remove_tab">Stizzar il tab</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">Agiuntar questa pagina als segnapaginas</string>
+    <string name="remove_bookmark">Allontanar questa pagina dals segnapaginas</string>
     <string name="info_share_title">Jau giaud Wikipedia Offline cun Kiwix!</string>
     <string name="info_share_content">Jau giaud Wikipedia Offline cun Kiwix! Tutta la savida umana en maun nua che ti vas! Senza Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Nagina datoteca ZIM chattada sin vos apparat.\nConsultai la pagina d\'agid per instrucziuns davart chargiar cuntegn en Kiwix.\nSche vus avais mess ina datoteca ZIM sin il apparat/la memoria externa, pudais vus pruvar danovamain en ina minuta u reaviar il apparat.</string>

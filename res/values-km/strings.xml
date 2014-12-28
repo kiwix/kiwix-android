@@ -9,7 +9,7 @@
     <string name="menu_settings">ចំណង់ចំណូលចិត្ត</string>
     <string name="menu_search">ស្វែងរក</string>
     <string name="menu_searchintext">ស្វែងរកក្នុងអត្ថបទ</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">ការកត់ចំណាំ</string>
     <string name="menu_randomarticle">អត្ថបទចៃដន្យ</string>
     <string name="menu_fullscreen">ទំហំពេញអេក្រង់</string>
     <string name="menu_exitfullscreen">ចាកចេញពីម៉ូដទំហំពេញអេក្រង់</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">បើក​តំណ​ក្នុង​ផ្ទាំង​ថ្មី?</string>
     <string name="remove_tab_confirm">តើ​អ្នក​ពិត​ជា​ចង់​ដក​ផ្ទាំង​នេះ​មែនទេ?</string>
     <string name="remove_tab">ដក​ផ្ទាំង​ចេញ</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">កត់ចំណាំទំព័រនេះ</string>
+    <string name="remove_bookmark">ឈប់កត់ចំណាំទំព័រដែលបានជ្រើសយក</string>
     <string name="info_share_title">ខ្ញុំ​រីករាយ​នឹង​វិគីភីឌា​ក្រៅ​បណ្ដាញ​តាម​រយៈ Kiwix!</string>
     <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>

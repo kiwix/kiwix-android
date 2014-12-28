@@ -9,7 +9,7 @@
     <string name="menu_settings">Tercihler</string>
     <string name="menu_search">Ara</string>
     <string name="menu_searchintext">Metinde bul</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">Yer imleri</string>
     <string name="menu_randomarticle">Rastgele madde</string>
     <string name="menu_fullscreen">Tam ekran</string>
     <string name="menu_exitfullscreen">Tam ekrandan çık</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">Bağlantı yeni sekmede açılsın mı?</string>
     <string name="remove_tab_confirm">Bu sekmeyi kaldırmak istediğinizden emin misiniz?</string>
     <string name="remove_tab">Sekmeyi kaldır</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">Bu sayfayı işaretle</string>
+    <string name="remove_bookmark">Seçilenin işaretini kaldır</string>
     <string name="info_share_title">Kiwix ile Çevrim Dışı Vikipedi\'nin tadını çıkarıyorum!</string>
     <string name="info_share_content">Kiwix ile Wikipedia Offline tadını çıkarın! Bütün insan bilgi el gidersen git! Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Cihazınızda bir ZIM dosyası bulunamadı.\nKiwix\'e içerik yükleme talimatlarını görmek için Yardım Sayfası\'na bir göz atın.\nEğer cihazınıza/harici depolama kaynağınıza bir ZIM dosyası koyduysanız, birkaç dakika içerisinde yeniden deneyebilir veya cihazınızı yeniden başlatabilirsiniz.</string>

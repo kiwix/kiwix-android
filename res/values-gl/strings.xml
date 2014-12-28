@@ -9,7 +9,7 @@
     <string name="menu_settings">Preferencias</string>
     <string name="menu_search">Procurar</string>
     <string name="menu_searchintext">Atopar no texto</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">Favoritos</string>
     <string name="menu_randomarticle">Artigo ao chou</string>
     <string name="menu_fullscreen">Pantalla completa</string>
     <string name="menu_exitfullscreen">Saír da pantalla completa</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">Quere abrir a ligazón nunha nova lapela?</string>
     <string name="remove_tab_confirm">Quere pechar esta lapela?</string>
     <string name="remove_tab">Pechar a lapela</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">Marcar esta páxina</string>
+    <string name="remove_bookmark">Desmarcar a selección</string>
     <string name="info_share_title">Gozo da Wikipedia sen conexión con Kiwix!</string>
     <string name="info_share_content">Gozo da Wikipedia sen conexión con Kiwix! Todo o coñecemento humano na man onde queira que vaias! Sen internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Non se atopou ningún ficheiro ZIM no seu dispositivo.\nBote unha ollada á páxina de axuda para aprender a cargar contido no Kiwix.\nSe xa puxo o ficheiro ZIM no seu dispositivo de almacenamento interno ou externo, pode reintentalo nun minuto ou reiniciar o dispositivo.</string>

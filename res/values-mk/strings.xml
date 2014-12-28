@@ -9,7 +9,7 @@
     <string name="menu_settings">Нагодувања</string>
     <string name="menu_search">Пребарување</string>
     <string name="menu_searchintext">Пронајди во текстот</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">Обележани</string>
     <string name="menu_randomarticle">Случајна статија</string>
     <string name="menu_fullscreen">На цел екран</string>
     <string name="menu_exitfullscreen">Излези од цел екран</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">Да ја отворам врската во ново јазиче?</string>
     <string name="remove_tab_confirm">Дали да го отстранам јазичево?</string>
     <string name="remove_tab">Отстрани го јазичето</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">Означи ја страницава</string>
+    <string name="remove_bookmark">Тргни обележано</string>
     <string name="info_share_title">Ја читам Википедија вонсемрежно со Kiwix!</string>
     <string name="info_share_content">Ја читам Википедија вонсемрежно со Kiwix! Целокупното знаење на човештвото ми е при рака, кај и да сум! Вон семрежјето! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">На уредот не се најдени ZIM-податотеки.\nПогледајте ја страницата за помош за да дознаете како да ставите содржини во Kiwix.\nАко сепак имате ставено ZIM-податотека во уредот/надворешниот склад, обидете се повторно за една минута или превклучете го уредот.</string>

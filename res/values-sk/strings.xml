@@ -9,7 +9,7 @@
     <string name="menu_settings">Nastavenia</string>
     <string name="menu_search">Hľadať</string>
     <string name="menu_searchintext">Nájsť v texte</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">Záložky</string>
     <string name="menu_randomarticle">Náhodný článok</string>
     <string name="menu_fullscreen">Celá obrazovka</string>
     <string name="menu_exitfullscreen">Ukončiť režim celej obrazovky</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">Otvoriť odkaz na novej karte?</string>
     <string name="remove_tab_confirm">Chcete odstrániť túto kartu?</string>
     <string name="remove_tab">Odstrániť kartu</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">Označiť túto stránku</string>
+    <string name="remove_bookmark">Zrušiť označenie vybraných</string>
     <string name="info_share_title">Užívam si Wikipédiu Offline s Kiwixom!</string>
     <string name="info_share_content">Užívam si Wikipédiu s Kiwixom! Celé ľudské poznanie na dosah ruky kamkoľvek idete! Bez internetu! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Na vašom zariadení sa nenašli žiadne ZIM súbory.\nPozrite sa na stránku Pomoc, aby ste sa dozvedeli ako načítať obsah do aplikácie Kiwix.\nAk ste do Vášho zariadenia pridali ZIM súbor, skúste ho načítať o minútu alebo zariadenie reštartujte.</string>

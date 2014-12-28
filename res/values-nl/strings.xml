@@ -9,7 +9,7 @@
     <string name="menu_settings">Voorkeuren</string>
     <string name="menu_search">Zoeken</string>
     <string name="menu_searchintext">Zoeken in tekst</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">Bladwijzers</string>
     <string name="menu_randomarticle">Willekeurig artikel</string>
     <string name="menu_fullscreen">Volledig scherm</string>
     <string name="menu_exitfullscreen">Volledig schermmodus verlaten</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">Koppeling openen in nieuw tabblad?</string>
     <string name="remove_tab_confirm">Wilt u dit tabblad verwijderen?</string>
     <string name="remove_tab">Tabblad verwijderen</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">Pagina markeren</string>
+    <string name="remove_bookmark">Markering voor geselecteerde verwijderen</string>
     <string name="info_share_title">Ik geniet van Wikipedia Offline met Kiwix!</string>
     <string name="info_share_content">Ik geniet van Wikipedia Offline met Kiwix! Alle menselijke kennis bij de hand waar u gaat! Zonder internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Er zijn geen ZIM-bestanden op uw apparaat gevonden.\nKijk op de Hulppagina voor hulp bij het laden van inhoud in Kiwix.\nAls u een ZIM-bestand op uw apparaat of externe opslag hebt gezet, probeer het dan even een aantal seconden opnieuw of herstart uw apparaat.</string>

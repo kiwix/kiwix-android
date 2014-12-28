@@ -9,7 +9,7 @@
     <string name="menu_settings">අභිරුචි</string>
     <string name="menu_search">ගවේෂණය</string>
     <string name="menu_searchintext">පෙළෙහි සොයන්න</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">පොත්යොමු</string>
     <string name="menu_randomarticle">අහඹු ලිපිය</string>
     <string name="menu_fullscreen">පූර්ණ තිරය</string>
     <string name="menu_exitfullscreen">සම්පූර්ණ තිරයෙන් ඉවත් වන්න</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">සබැඳිය නව තීරුවක විවෘත කරන්න?</string>
     <string name="remove_tab_confirm">ඔබට මෙම තීරුව ඉවත් කළ යුතු ද?</string>
     <string name="remove_tab">තීරුව ඉවත් කරන්න</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">මෙම පිටුව සලකුණු කරන්න</string>
+    <string name="remove_bookmark">තෝරාගත්ත අසලකුණු කරන්න</string>
     <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
     <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>

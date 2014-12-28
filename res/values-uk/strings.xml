@@ -9,7 +9,7 @@
     <string name="menu_settings">Уподобання</string>
     <string name="menu_search">Знайти</string>
     <string name="menu_searchintext">Знайти в тексті</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">Закладки</string>
     <string name="menu_randomarticle">Випадкова стаття</string>
     <string name="menu_fullscreen">Повноекранний режим</string>
     <string name="menu_exitfullscreen">Вийти з повноекранного режиму</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">Відкрити посилання у новій вкладці?</string>
     <string name="remove_tab_confirm">Ви дійсно хочете видалити цю вкладку?</string>
     <string name="remove_tab">Видалити вкладку</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">Позначити цю сторінку</string>
+    <string name="remove_bookmark">Зняти позначку з виділених</string>
     <string name="info_share_title">Я люблю Вікіпедію в автономному режимі з Kiwix!</string>
     <string name="info_share_content">Мені подобається автономний режим Вікіпедії з Kiwix! Усі людські знання під рукою коли завгодно! Без Інтернету! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Файлів ZIM не знайдено на вашому пристрої.\nПогляньте на сторінку допомогти, щоб отримати вказівки, як завантажувати вміст у Kiwix.\nЯкщо ви поклали файл ZIM на ваш пристрій/зовнішній носій, то можете повторити за хвилину або перезапустити пристрій.</string>

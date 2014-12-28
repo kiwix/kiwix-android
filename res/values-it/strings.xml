@@ -9,7 +9,7 @@
     <string name="menu_settings">Preferenze</string>
     <string name="menu_search">Ricerca</string>
     <string name="menu_searchintext">Trova nel testo</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">Segnalibri</string>
     <string name="menu_randomarticle">Voce a caso</string>
     <string name="menu_fullscreen">A tutto schermo</string>
     <string name="menu_exitfullscreen">Esci dalla modalità a tutto schermo</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">Apri il collegamento in una nuova scheda?</string>
     <string name="remove_tab_confirm">Vuoi rimuovere questa scheda?</string>
     <string name="remove_tab">Rimuovi scheda</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">Aggiungi questa pagina ai segnalibri</string>
+    <string name="remove_bookmark">Togli questa pagina dai segnalibri</string>
     <string name="info_share_title">Mi piace Wikipedia Offline con Kiwix!</string>
     <string name="info_share_content">Mi piace Wikipedia Offline con Kiwix! Tutta la conoscenza umana a portata di mano, ovunque tu vada! Senza Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Nessun file ZIM trovano sul tuo dispositivo.\nLeggi la pagina di aiuto per ottenere indicazioni su come caricare il contenuto in Kiwix.\nSe ha inserito un file ZIM sul tuo dispositivo, potresti ritentare fra un minuto o riavviare il dispositivo.</string>

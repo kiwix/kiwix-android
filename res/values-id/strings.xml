@@ -9,7 +9,7 @@
     <string name="menu_settings">Preferensi</string>
     <string name="menu_search">Cari</string>
     <string name="menu_searchintext">Cari di teks</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">Markah</string>
     <string name="menu_randomarticle">Artikel sembarang</string>
     <string name="menu_fullscreen">Layar penuh</string>
     <string name="menu_exitfullscreen">Keluar dari modus layar penuh</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">Buka pranala di tab baru?</string>
     <string name="remove_tab_confirm">Apakah Anda ingin menghapus tab ini?</string>
     <string name="remove_tab">Hapuskan tab</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">Tandai halaman ini</string>
+    <string name="remove_bookmark">Hapus tanda yang dipilih</string>
     <string name="info_share_title">Saya senang menggunakan Kiwix untuk Wikipedia Luring!</string>
     <string name="info_share_content">Saya senang menggunakan Kiwix untuk Wikipedia Luring! Seluruh ilmu pengetahuan dapat diakses di mana saja Anda berada tanpa Internet!</string>
     <string name="error_nozimfilesfound">Berkas ZIM tidak ditemukan di perangkat Anda.\nLihat di Halaman Bantuan untuk memuat konten ke dalam Kiwix.\nJika Anda meletakkan berkas ZIM di perangkat/media penyimpanan ektsternal Anda, silakan diulang lagi atau nyalakan ulang perangkat Anda.</string>

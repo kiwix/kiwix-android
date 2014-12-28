@@ -9,7 +9,7 @@
     <string name="menu_settings">העדפות</string>
     <string name="menu_search">חיפוש</string>
     <string name="menu_searchintext">חיפוש בטקסט</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">סימניות</string>
     <string name="menu_randomarticle">ערך אקראי</string>
     <string name="menu_fullscreen">מסך מלא</string>
     <string name="menu_exitfullscreen">יציאה ממסך מלא</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">לפתוח קישור בלשונית חדשה?</string>
     <string name="remove_tab_confirm">האם להסיר את הלשונית הזאת?</string>
     <string name="remove_tab">הסרת לשונית</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">סימון דף זה</string>
+    <string name="remove_bookmark">ביטול סימון בקטע הנבחר</string>
     <string name="info_share_title">כיף לי עם ויקיפדיה בלי חיבור לרשת באמצעות קיוויקס!</string>
     <string name="info_share_content">כיף לי עם ויקיפדיה בלי חיבור לרשת באמצעות קיוויקס! כל הידע האנושי בידיים שלי בכל מקום שאליו אלך! בלי אינטרנט! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">לא נמצאו קובצי ZIM במכשיר שלך.\nר\' את דף העזרה להכוונה על טעינת תוכן לקיוויקס.\nאם שמת קובץ ZIM במכשיר שלך או באחסון חיצוני, אולי כדאי לך לנסות שוב בעוד דקה או לאתחל את המכשיר.</string>

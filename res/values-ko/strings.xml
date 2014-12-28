@@ -9,7 +9,7 @@
     <string name="menu_settings">환경 설정</string>
     <string name="menu_search">검색</string>
     <string name="menu_searchintext">본문에서 찾기</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">책갈피</string>
     <string name="menu_randomarticle">임의 문서</string>
     <string name="menu_fullscreen">전체 화면</string>
     <string name="menu_exitfullscreen">전체 화면에서 나가기</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">새 탭으로 링크를 여시겠습니까?</string>
     <string name="remove_tab_confirm">이 탭을 제거하시겠습니까?</string>
     <string name="remove_tab">탭 제거</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">이 페이지 표시하기</string>
+    <string name="remove_bookmark">선택을 표시 취소하기</string>
     <string name="info_share_title">Kiwix로 위키백과 오프라인을 즐깁니다!</string>
     <string name="info_share_content">Kiwix로 위키백과 오프라인을 즐깁니다! 어디를 가든 당신의 손에 모든 인류 지식이! 인터넷 없이! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">장치에서 ZIM 파일이 발견되지 않았습니다.\n도움말에서 내용을 어떻게 Kiwix로 불러오는지 알아보세요.\n만약 파일을 외장 디스크나 기기에 넣었다면, 잠시 뒤에 다시 시도하거나 자시 시작해 보세요.</string>

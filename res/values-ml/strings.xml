@@ -9,7 +9,7 @@
     <string name="menu_settings">ഐച്ഛികങ്ങള്‍</string>
     <string name="menu_search">തിരയുക</string>
     <string name="menu_searchintext">എഴുത്തിൽ തിരയുക</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">ബൂക്ക്മാർക്കുകൾ</string>
     <string name="menu_randomarticle">ഏതെങ്കിലും ലേഖനം</string>
     <string name="menu_fullscreen">മുഴുവന്‍ സ്ക്രീനില്‍</string>
     <string name="menu_exitfullscreen">പൂർണ സ്ക്രീനിൽ നിന്ന് പുറത്തു കടക്കുക</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">കണ്ണി പുതിയ ടാബിൽ തുറക്കണോ?</string>
     <string name="remove_tab_confirm">ഈ ടാബ് ഇല്ലാതാക്കണോ?</string>
     <string name="remove_tab">ടാബ് ഇല്ലാതാക്കുക</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">ഈ താള്‍ അടയാളപ്പെടുത്തുക</string>
+    <string name="remove_bookmark">തിരഞ്ഞെടുത്തവ അടയാളപ്പെടുത്താതിരിക്കുക</string>
     <string name="info_share_title">ഞാൻ കിവിക്സ് ഉപയോഗിച്ച് ഓഫ്‌ലൈനായി വിക്കിപീഡിയ വായിക്കുന്നു.</string>
     <string name="info_share_content">ഞാൻ കിവിക്സ് ഉപയോഗിച്ച് ഓഫ്‌ലൈനായി വിക്കിപീഡിയ വായിക്കുന്നു! എല്ലാ മനുഷ്യവിജ്ഞാനവും ഞാൻ പോകുന്നിടത്തെല്ലാം, ഇന്റർനെറ്റ് ബന്ധം പോലുമില്ലാതെ. http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">താങ്കളുടെ ഉപകരണത്തിൽ സിം ഫയലുകളൊന്നുമില്ല. \nസഹായം താളുകൾ ഉപയോഗപ്പെടുത്തി കിവിക്സിൽ എങ്ങനെ ഉള്ളടക്കം ചേർക്കണമെന്ന് മനസ്സിലാക്കൂ. താങ്കൾ ഒരു സിം ഫയൽ താങ്കളുടെ ഉപകരണത്തിൽ/ബാഹ്യ സ്റ്റോറേജിൽ ഉൾപ്പെടുത്തിയെങ്കിൽ ദയവായി ഒരു മിനിറ്റ് കാത്തിരിക്കുകയോ ഉപകരണം റീസ്റ്റാർട്ട് ചെയ്യുകയോ വേണം.</string>

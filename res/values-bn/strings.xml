@@ -9,7 +9,7 @@
     <string name="menu_settings">পছন্দ</string>
     <string name="menu_search">অনুসন্ধান</string>
     <string name="menu_searchintext">লেখায় খুঁজুন</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">বুকমার্ক</string>
     <string name="menu_randomarticle">অজানা যে-কোনো নিবন্ধ</string>
     <string name="menu_fullscreen">পূর্ণাঙ্গ স্ক্রিন</string>
     <string name="menu_exitfullscreen">পূর্ণাঙ্গ স্ক্রিন বন্ধ</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">নতুন ট্যাবে লিঙ্ক খোলা হবে?</string>
     <string name="remove_tab_confirm">আপনি কি এই ট্যাব অপসারণ করতে চান?</string>
     <string name="remove_tab">ট্যাব অপসারণ</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">এটি পাতাটি নজরে রাখুন</string>
+    <string name="remove_bookmark">নজর সরিয়ে নেওয়া হয়েছে</string>
     <string name="info_share_title">আমি কিউইক্স দিয়ে অফলাইন উইকিপিডিয়া উপভোগ করি!</string>
     <string name="info_share_content">আমি কিউইক্স দিয়ে অফলাইন উইকিপিডিয়া উপভোগ করছি! ইন্টারনেট ছাড়াই! আপনি যেখানেই আপনি যান আপনার হাতের মধ্যে পুরো মানব জ্ঞান! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">আপনার ডিভাইসে কোন ZIM ফাইল পাওয়া যায়নি।\nকিউইক্সের মধ্যে কিভাবে বিষয়বস্তু লোড করবেন তার দিকনির্দেশ পেতে সাহায্য পাতা একবার দেখে নিন।\nআপনি যদি আপনার ডিভাইস/বহিস্থিত সংগ্রহস্থলে ZIM ফাইল রেখে থাকেন, তাহলে আপনি একটি মিনিট পর পুনরায় চেষ্টা করুন বা আপনার ডিভাইসটি পুনরায় আরম্ভ করুন।</string>

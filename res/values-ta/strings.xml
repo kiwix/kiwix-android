@@ -9,7 +9,7 @@
     <string name="menu_settings">விருப்பங்கள்</string>
     <string name="menu_search">தேடு</string>
     <string name="menu_searchintext">உரையில் கண்டுபிடி</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">புத்தகக்குறிகள்</string>
     <string name="menu_randomarticle">தொடர்பற்ற கட்டுரை</string>
     <string name="menu_fullscreen">முழு திரை</string>
     <string name="menu_exitfullscreen">முழு திரையிலிருந்து வெளியேறுக</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">இணைப்பை புதிய தாவலில் திறக்கவேண்டுமா?</string>
     <string name="remove_tab_confirm">நீங்கள் இந்தத் தாவலை நீக்க விரும்புகிறீர்களா?</string>
     <string name="remove_tab">தத்தளை நீக்கு</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">இப்பக்கத்தை  குறியிடு</string>
+    <string name="remove_bookmark">தேர்ந்தெடுத்ததை குறியிட்டதை அழி</string>
     <string name="info_share_title">நான் Kiwixஉடன் இணைய இணைப்பற்ற விக்கிபீடியாவை துய்த்து மகிழ்கிறேன்!</string>
     <string name="info_share_content">நான் Kiwixஉடன் இணைய இணைப்பற்ற விக்கிபீடியாவை துய்த்து மகிழ்கிறேன்! ஒட்டுமொத்த மனித அறிவுக்களஞ்சியமும், எங்கும் எப்பொழுதும், நம் உள்ளங்கையில்!</string>
     <string name="error_nozimfilesfound">தங்கள் சாதனத்தில் ZIM கோப்புகள் எதுவும் காணப்படவில்லை. Kiwix-னுள், உட்பொருளை எவ்வாறு ஏற்றுவது என்பதற்கான வழிகாட்டுதல்களைப்பெற, உதவிப் பக்கத்‌தைக் காண்க.\nநீங்கள் ZIM கோப்பினை, தங்களுடைய இந்த சாதனத்தில் அல்லது வெளிசேமிப்பில் வைத்திருந்தீர்கள் என்றால்,\nமீண்டும் ஒருநிமிட இடைவெளியில் முயற்சி செய்யுங்கள் அல்லது சாதனத்தை அணைத்து, மறுதுவக்கம் செய்யுங்கள்.</string>

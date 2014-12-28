@@ -9,7 +9,7 @@
     <string name="menu_settings">غوره توبونه</string>
     <string name="menu_search">پلټل</string>
     <string name="menu_searchintext">په متن کې موندل</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">کتاب نخښې</string>
     <string name="menu_randomarticle">ناټاکلې ليکنه</string>
     <string name="menu_fullscreen">ډکه پرده</string>
     <string name="menu_exitfullscreen">بشپړ پردې څخه وتل</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">تړنه په نوې کړکۍ کې پرانيستل</string>
     <string name="remove_tab_confirm">آيا دا ټب غورځول غواړې؟</string>
     <string name="remove_tab">ټب غورځول</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">دا مخ په نخښه کول</string>
+    <string name="remove_bookmark">ټاکلي بې نخښې کول</string>
     <string name="info_share_title">زه د کيويکس په مرسته له پرې ليکې ويکيپېډيا خوند اخلم!</string>
     <string name="info_share_content">زه د کيويکس په مرسته د پرې ليکې ويکيپېډيا څخه خوند اخلم! اوس هر چېرته چې لاړ شې، انساني پوهه دې په خپل لاس کې ده! د اېنټرنېټ پرته! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">ستاسې په وزلې هېڅ کومه ZIM دوتنه و نه موندل شوه.\nکيويکس کې د مېنځپانگې د برسېرولو لپاره د لارښود مخ ولولۍ.\nکه تاسې په خپلې وزلې کې يو ZIM دوتنه نه وي ايښې، نو تاسې کولی شی چې يوه دقيقه وروسته يې بيا وآزمويۍ او يا هم خپله وزله سر له نوي ولگوۍ او بيا هڅه وکړۍ.</string>

@@ -9,7 +9,7 @@
     <string name="menu_settings">التفضيلات</string>
     <string name="menu_search">إبحث</string>
     <string name="menu_searchintext">إبحث في النص</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">علامات القراءة</string>
     <string name="menu_randomarticle">مقالة عشوائية</string>
     <string name="menu_fullscreen">ملئ الشاشة</string>
     <string name="menu_exitfullscreen">إنهاء وضع الشاشة الكاملة</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">افتح الوصلة في علامة تبويب جديدة</string>
     <string name="remove_tab_confirm">هل تريد إزالة علامة التبويب هذه؟</string>
     <string name="remove_tab">إزالة علامة التبويب</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">علّم هذه الصفحة</string>
+    <string name="remove_bookmark">أزل تعليم المحدد</string>
     <string name="info_share_title">أنا أستمتع بويكيبيديا بدون ربط مع كيويكس</string>
     <string name="info_share_content">أنا أستمتع بويكيبيديا بدون ربط باستعمال كيويكس! جل ّالمعرفة البشرية في متناول اليد أينما تذهب! دون الإنترنت! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">لا توجد ملفات زيم على الجهتز الخاص بك.\nالق نظرة صفحة المساعدة للحصول على الإرشادات الخاصة بكيفيّة تحميل محتوى على كيويكس.\nإذا قمت بوضع ملف زيم على الجهز الخاص بك أو وحدة التخزين الخارجيّة، ربّما أنت في حاجة إلى إعادة تشغيل الجهاز.</string>

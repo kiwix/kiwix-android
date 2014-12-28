@@ -9,7 +9,7 @@
     <string name="menu_settings">Safidy</string>
     <string name="menu_search">Hikaroka</string>
     <string name="menu_searchintext">Hitady anaty lahatsoratra</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">Marika pejy</string>
     <string name="menu_randomarticle">Takelaka kisendra</string>
     <string name="menu_fullscreen">Fisehoana mameno ekrà</string>
     <string name="menu_exitfullscreen">Hiala amin\'ny fisehoana mameno fikandra</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">Hanokatra rohy anaty sasa-joro vaovao?</string>
     <string name="remove_tab_confirm">Tianao ho esorina ve ity sasajoro ity?</string>
     <string name="remove_tab">Hanala ny sasa-joro</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">Hanamarika ity pejy ity</string>
+    <string name="remove_bookmark">Hanala marika ny voafidy</string>
     <string name="info_share_title">Tia an\'i Wikipedia Offline amin\'i Kiwix aho!</string>
     <string name="info_share_content">Tia an\'i Wikipedia Offline amin\'i Kiwix aho! Eo am-pelantanako daholo ny fahalalan\'ny olombelona na aiza na aiza! Tsy misy aterineto! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Tsy nahitana rakitra ZIM tao amin\'ny fitaovanao.\nJereo ny pejy fanoroana mikasika ny fampidirana votoatiny anaty Kiwix.\nRaha efa nametraka rakitra ZIM tanaty fitahirizana ivelany na anaty ianao, dia andramo afaka iray minitra ary avereno ampirehetina ny fitaovanao.</string>

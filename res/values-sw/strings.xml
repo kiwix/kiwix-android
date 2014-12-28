@@ -9,7 +9,7 @@
     <string name="menu_settings">Mapendekezo</string>
     <string name="menu_search">Tafuta</string>
     <string name="menu_searchintext">Tafuta katika makala</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">Maalamisho</string>
     <string name="menu_randomarticle">Ukurasa wa bahati</string>
     <string name="menu_fullscreen">Skrini nzima</string>
     <string name="menu_exitfullscreen">Toka kwa modi ya Skrini nzima</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">Fungua kiungo kwenye kivinjari kipya</string>
     <string name="remove_tab_confirm">Unataka kutoa kivinjari hiki?</string>
     <string name="remove_tab">Ondoa kivinjari</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">Alamisha ukurasa huu</string>
+    <string name="remove_bookmark">Toa alama kwa zilizo chaguliwa</string>
     <string name="info_share_title">Nafurahia Wikipedia Offline na Kiwix</string>
     <string name="info_share_content">Nafurahia Wikipedia Offline na Kiwix!Ufahamu wote wa binadamu mkononi popote nilipo! Bila mtandao!http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Hakuna Faili za ZIM zilizopatikana kwenya mtambo wako.\nTazama ukurasa wa Help Page ili kupata usaidizi jinsi ya kupakia makala kwenye Kiwix.\nIwapo uliweka failia ya ZIM kwenye mtambo wako/kiwekeo cha nje, itakubidi kujaribu baada ya dakika moja au kuanzisha mtambo wako upya</string>

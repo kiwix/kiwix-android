@@ -9,7 +9,7 @@
     <string name="menu_settings">Možnosti</string>
     <string name="menu_search">Vyhledávání</string>
     <string name="menu_searchintext">Najít v textu</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">Záložky</string>
     <string name="menu_randomarticle">Náhodný článek</string>
     <string name="menu_fullscreen">Celá obrazovka</string>
     <string name="menu_exitfullscreen">Ukončit celou obrazovku</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">Otevřít odkaz v nové záložce?</string>
     <string name="remove_tab_confirm">Chcete smazat tuto záložku?</string>
     <string name="remove_tab">Smazat záložku</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">Označit tuto stránku</string>
+    <string name="remove_bookmark">Odznačit vybrané</string>
     <string name="info_share_title">Baví mě Wikipedia Offline s Kiwix!</string>
     <string name="info_share_content">Baví mě Wikipedie Offline s Kiwix! Znalosti lidstva po ruce ať jste kdekoliv! Bez internetu! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Na zařízení nebyly nalezeny soubory ZIM.\nPro pokyny, jak nahrávat do Kiwixu obsah, se podívejte na stránku nápovědy.\nPokud jste na své zařízení nebo externí paměť opravdu nahráli soubor ZIM, můžete zkusit načtení za minutu opakovat nebo restartovat zařízení.</string>

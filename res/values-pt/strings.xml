@@ -9,7 +9,7 @@
     <string name="menu_settings">Preferências</string>
     <string name="menu_search">Pesquisar</string>
     <string name="menu_searchintext">Procurar no texto</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">Favoritos</string>
     <string name="menu_randomarticle">Artigo aleatório</string>
     <string name="menu_fullscreen">Ecrã completo</string>
     <string name="menu_exitfullscreen">Sair de ecrã inteiro</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">Abrir ligação num novo separador?</string>
     <string name="remove_tab_confirm">Deseja remover este separador?</string>
     <string name="remove_tab">Remover separador</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">Marcar esta página</string>
+    <string name="remove_bookmark">Desmarcar selecionadas</string>
     <string name="info_share_title">Eu disfruto com o Kiwix a minha Wikipédia Offline!</string>
     <string name="info_share_content">Eu disfruto da Wikipédia Offline  com o Kiwix! Todo o conhecimento humano na mão vá para onder for. http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Não foram encontrados or ficheiros ZIM no dispositivo.\nAtentamente reveja a Help Page para conhecer métodos e meios de como carregar conteúdo para o Kiwix.\nSe voçê já colocou o ZIM no dispotivo alvo, tente novamente no espaço de um minuto recarregar ou faça restart ao dispositivo .</string>

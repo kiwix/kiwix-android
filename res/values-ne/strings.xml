@@ -9,7 +9,7 @@
     <string name="menu_settings">प्राथमिकताहरु</string>
     <string name="menu_search">खोज</string>
     <string name="menu_searchintext">पाठ्यांशमा भेट्टाउने</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">पुस्तक चिनोहरु</string>
     <string name="menu_randomarticle">कुनै लेख</string>
     <string name="menu_fullscreen">पूरा पर्दा</string>
     <string name="menu_exitfullscreen">पूरा पर्दाबाट बाहिरिने</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">लिङ्कलाइ नयाँ ट्याबमा खोल्ने?</string>
     <string name="remove_tab_confirm">के यो ट्याब हटाउन चाहनुहुन्छ?</string>
     <string name="remove_tab">ट्याब हटाउने</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">यो पृष्ठ चिनो लगाउने</string>
+    <string name="remove_bookmark">छानिएकामा चिनो हटाउने</string>
     <string name="info_share_title">म किविक्स सँग अफलाइन विकिपीडियाको मज्जा लिन्छु!</string>
     <string name="info_share_content">म किविक्स सँग अफलाइन विकिपीडियाको मज्जा लिन्छु! जहाँ गएपनि सम्पूर्ण मानव ज्ञान तपाईंको हातमा! इन्टरनेट बिना! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">तपाईंको उपकरणमा ZIM फाइलहरू भेटिएनन्।\nकिविक्समा सामग्री कसरी खोल्ने भन्ने विषयको निर्देशनका लागि सहायता पृष्ठमा हेर्नुहोस्।\nतपाईंले उपकरण वा बाह्य भण्डारणमा ZIM फाइल राख्नुभएको थियो भने, एक मिनटमा पुनः प्रयास गर्नुहोस् अथवा उपकरण पुनः सुरू गर्नुहोस्।</string>

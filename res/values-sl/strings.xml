@@ -9,7 +9,7 @@
     <string name="menu_settings">Nastavitve</string>
     <string name="menu_search">Iskanje</string>
     <string name="menu_searchintext">Najdi v besedilu</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">Zaznamki</string>
     <string name="menu_randomarticle">Naključni članek</string>
     <string name="menu_fullscreen">Celoten zaslon</string>
     <string name="menu_exitfullscreen">Izhod iz celozaslonskega načina</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">Odprem povezavo v novem zavihku?</string>
     <string name="remove_tab_confirm">Želite odstraniti zavihek?</string>
     <string name="remove_tab">Odstrani zavihek</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">Označi to stran</string>
+    <string name="remove_bookmark">Odznači izbrane</string>
     <string name="info_share_title">Uživam Wikipedijo brez povezave s Kiwix!</string>
     <string name="info_share_content">Uživam Wikipedijo brez povezave s Kiwix! Celotno človeško znanje pri roki, kamor koli greste! Brez interneta! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Na vaši napravi ni bila najdena nobena datoteka ZIM.\nZa napotke v zvezi z nalaganjem vsebine v Kiwix si poglejte Stran za pomoč.\nČe ste datoteko ZIM posneli na svojo napravo/zunanji disk, lahko ponovno poskusite po kratkem čakanju ali pa svojo napravo ponovno zaženete.</string>

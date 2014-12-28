@@ -9,7 +9,7 @@
     <string name="menu_settings">Предпочитания</string>
     <string name="menu_search">Търсене</string>
     <string name="menu_searchintext">Откриване в текста</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">Отметки</string>
     <string name="menu_randomarticle">Случайна статия</string>
     <string name="menu_fullscreen">Цял екран</string>
     <string name="menu_exitfullscreen">Изход от цял екран</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">Отваряне на препратката в нов раздел?</string>
     <string name="remove_tab_confirm">Искате ли да премахнете този раздел?</string>
     <string name="remove_tab">Премахване на раздел</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">Отбелязване на тази страница</string>
+    <string name="remove_bookmark">Отмаркиране на избраното</string>
     <string name="info_share_title">Аз ползвам Уикипедия в офлайн режим с Kiwix!</string>
     <string name="info_share_content">Аз ползвам Уикипедия офлайн с Kiwix! Цялото човешко познание е в ръцете ви, където и да отидете! Без интернет! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Няма намерени ZIM файлове на вашето устройство.\nПрегледайте страницата на помощ, за да получите указания как да заредите съдържанието в Kiwix.\nАко сте сложили ZIM файл на вашето устройство/външен диск за съхранение, може да опитате отново след една минута или да рестартирате устройството.</string>

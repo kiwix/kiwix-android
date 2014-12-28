@@ -9,7 +9,7 @@
     <string name="menu_settings">Voorkeure</string>
     <string name="menu_search">Soek</string>
     <string name="menu_searchintext">Soek in teks</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">Boekmerke</string>
     <string name="menu_randomarticle">Lukrake artikel</string>
     <string name="menu_fullscreen">Volle skerm</string>
     <string name="menu_exitfullscreen">Verlaat volskerm-modus</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">Open skakel in nuwe oortjie?</string>
     <string name="remove_tab_confirm">Wil u die oortjie verwyder?</string>
     <string name="remove_tab">Verwyder oortjie</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">Merk hierdie bladsy</string>
+    <string name="remove_bookmark">Ontmerk gekose</string>
     <string name="info_share_title">Ek geniet Wikipedia Aflyn met Kiwix!</string>
     <string name="info_share_content">Ek geniet Wikipedia Aflyn met Kiwix! Alle menslike kennis byderhand waar u ook al gaan Sonder internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Geen ZIM-lêers op u toestel nie.\nKyk na die Hulpbladsy vir instruksies oor hoe om inhoud in Kiwix te laai.\nAs u \'n ZIM-lêer op u toestel/eksterne kaart gesit het, probeer na \'n paar sekondes weer of herlaai u toestel.</string>

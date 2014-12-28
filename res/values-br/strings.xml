@@ -9,7 +9,7 @@
     <string name="menu_settings">Penndibaboù</string>
     <string name="menu_search">Klask</string>
     <string name="menu_searchintext">Kavout en destenn</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">Sinedoù</string>
     <string name="menu_randomarticle">Ur pennad dre zegouezh</string>
     <string name="menu_fullscreen">Skramm leun</string>
     <string name="menu_exitfullscreen">Kuitaat ar skramm leun</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">Digeriñ al liamm en un ivinell nevez ?</string>
     <string name="remove_tab_confirm">Ha fellout a ra deoc\'h dilemel an ivinell-mañ ?</string>
     <string name="remove_tab">Dilemel an ivinell</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">Merkañ ar bajenn-mañ</string>
+    <string name="remove_bookmark">Diverkañ ar sined diuzet</string>
     <string name="info_share_title">Plijout a ra din Offline gant Kiwix !</string>
     <string name="info_share_content">Plijout a ra din Offline gat Kiwix!Holl ouiziegezhioù Mab-den a-hed dorn e kement lec\'h ma\'z eot ! Hep Internet !http://goo.GL/h9Smkk</string>
     <string name="error_nozimfilesfound">N\'eus bet kavet restr ZIM ebet en hoc\'h urzhiataer.\nTaolit ur sell ouzh ar bajenn skoazell evit deskiñ penaos kargañ endalc\'hadoù e Kiwix. M\'ho peus lakaet ur restr Kiwix en hoc\'h ardivink stokañ diabarzh pe diavaez e c\'hallit klask en-dro a-benn ur vutunenn pe adloc\'hit hoc\'h urzhiataer.</string>

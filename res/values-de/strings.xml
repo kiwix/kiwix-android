@@ -9,7 +9,7 @@
     <string name="menu_settings">Einstellungen</string>
     <string name="menu_search">Suche</string>
     <string name="menu_searchintext">Im Text suchen</string>
-    <string name="menu_bookmarks">Bookmarks</string>
+    <string name="menu_bookmarks">Lesezeichen</string>
     <string name="menu_randomarticle">Zufälliger Artikel</string>
     <string name="menu_fullscreen">Vollbildmodus</string>
     <string name="menu_exitfullscreen">Vollbild beenden</string>
@@ -27,9 +27,8 @@
     <string name="open_in_new_tab">Link in neuer Registerkarte öffnen?</string>
     <string name="remove_tab_confirm">Möchtest du diese Registerkarte entfernen?</string>
     <string name="remove_tab">Registerkarte entfernen</string>
-    <string name="add_bookmark">Add bookmark</string>
-    <string name="remove_bookmark">Remove bookmark</string>
-    <string name="view_bookmarks">View all bookmarks</string>
+    <string name="add_bookmark">Seite markieren</string>
+    <string name="remove_bookmark">Markierung aufheben</string>
     <string name="info_share_title">Ich lese die Wikipedia offline mit Kiwix!</string>
     <string name="info_share_content">Ich lese die Wikipedia offline mit Kiwix! Das gesamte Wissen der Menschheit überall griffbereit! Ohne Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Es wurden keine ZIM-Dateien auf deinem Gerät gefunden.\nSchau auf den Hilfeseiten nach, um Lösungen zum Laden von Inhalt in Kiwix zu erhalten.\nFalls sich eine ZIM-Datei auf deinem Gerät/externen Speicher befindet, kannst du es in einer Minute erneut versuchen oder dein Gerät neu starten.</string>
