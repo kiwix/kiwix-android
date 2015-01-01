@@ -13,6 +13,8 @@
     <string name="menu_randomarticle">Випадкова стаття</string>
     <string name="menu_fullscreen">Повноекранний режим</string>
     <string name="menu_exitfullscreen">Вийти з повноекранного режиму</string>
+    <string name="menu_read_aloud">Read aloud</string>
+    <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_exit">Вийти</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Поділитися з друзями</string>
@@ -57,4 +59,5 @@
     <string name="pref_language_title">Мова</string>
     <string name="pref_language_chooser">Оберіть мову</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
+    <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

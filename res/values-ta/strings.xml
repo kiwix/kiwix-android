@@ -13,6 +13,8 @@
     <string name="menu_randomarticle">தொடர்பற்ற கட்டுரை</string>
     <string name="menu_fullscreen">முழு திரை</string>
     <string name="menu_exitfullscreen">முழு திரையிலிருந்து வெளியேறுக</string>
+    <string name="menu_read_aloud">Read aloud</string>
+    <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_exit">முடித்துக்கொள்</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">நண்பர்களுடன் பகிர்க</string>
@@ -57,4 +59,5 @@
     <string name="pref_language_title">மொழி</string>
     <string name="pref_language_chooser">மொழியைத் தேர்ந்தெடு</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
+    <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

@@ -63,8 +63,8 @@
             android:showAsAction="never"/>
 
     <item
-            android:id="@+id/menu_speak_aloud"
-            android:title="@string/menu_speak_aloud"
+            android:id="@+id/menu_read_aloud"
+            android:title="@string/menu_read_aloud"
             android:visible="false"
             android:showAsAction="never"/>
 

@@ -350,8 +350,8 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
                 mCurrentFragment.selectSettings();
                 break;
 
-            case R.id.menu_speak_aloud:
-                mCurrentFragment.speakAloud();
+            case R.id.menu_read_aloud:
+                mCurrentFragment.readAloud();
                 break;
 
             case R.id.menu_fullscreen:

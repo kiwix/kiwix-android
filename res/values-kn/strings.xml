@@ -13,6 +13,8 @@
     <string name="menu_randomarticle">ಯಾವುದಾದರೊಂದು ಲೇಖನ</string>
     <string name="menu_fullscreen">ಪೂರ್ಣಪರದೆ</string>
     <string name="menu_exitfullscreen">ಪೂರ್ಣ ತೆರೆಯನ್ನು ನಿರ್ಗಮಿಸಿ</string>
+    <string name="menu_read_aloud">Read aloud</string>
+    <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_exit">ನಿರ್ಗಮಿಸು</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Share with friends</string>
@@ -57,4 +59,5 @@
     <string name="pref_language_title">ಭಾಷೆ</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
+    <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

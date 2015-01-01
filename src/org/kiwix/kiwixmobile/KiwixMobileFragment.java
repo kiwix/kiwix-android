@@ -184,9 +184,6 @@ public class KiwixMobileFragment extends SherlockFragment {
 				new KiwixTextToSpeech.OnInitSucceedListener() {
 			@Override
 			public void onInitSucceed() {
-				if (menu != null) {
-					menu.findItem(R.id.menu_speak_aloud).setVisible(true);
-				}
 			}
 		}, new KiwixTextToSpeech.OnSpeakingListener() {
 			@Override
@@ -194,8 +191,8 @@ public class KiwixMobileFragment extends SherlockFragment {
 				getActivity().runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						menu.findItem(R.id.menu_speak_aloud).setTitle(
-							getResources().getString(R.string.menu_speak_aloud_stop));
+						menu.findItem(R.id.menu_read_aloud).setTitle(
+							getResources().getString(R.string.menu_read_aloud_stop));
 					}
 				});
 			}
@@ -205,8 +202,8 @@ public class KiwixMobileFragment extends SherlockFragment {
 				getActivity().runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						menu.findItem(R.id.menu_speak_aloud).setTitle(
-							getResources().getString(R.string.menu_speak_aloud));
+						menu.findItem(R.id.menu_read_aloud).setTitle(
+							getResources().getString(R.string.menu_read_aloud));
 					}
 				});
 			}
@@ -885,7 +882,7 @@ public class KiwixMobileFragment extends SherlockFragment {
 			menu.findItem(R.id.menu_searchintext).setVisible(true);
 			menu.findItem(R.id.menu_search).setVisible(true);
 			if (tts.isInitialized()) {
-				menu.findItem(R.id.menu_speak_aloud).setVisible(true);
+				menu.findItem(R.id.menu_read_aloud).setVisible(true);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1079,8 +1076,8 @@ public class KiwixMobileFragment extends SherlockFragment {
 		}
 	}
 
-	public void speakAloud() {
-		tts.speakAloud();
+	public void readAloud() {
+		tts.readAloud();
 	}
 
 	// Interface through which we will communicate from the Fragment to the Activity

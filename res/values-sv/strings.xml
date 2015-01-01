@@ -13,6 +13,8 @@
     <string name="menu_randomarticle">Slumpmässig artikel</string>
     <string name="menu_fullscreen">Helskärm</string>
     <string name="menu_exitfullscreen">Stäng helskärm</string>
+    <string name="menu_read_aloud">Read aloud</string>
+    <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_exit">Avsluta</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Dela med vänner</string>
@@ -57,4 +59,5 @@
     <string name="pref_language_title">Språk</string>
     <string name="pref_language_chooser">Välj ett språk</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
+    <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

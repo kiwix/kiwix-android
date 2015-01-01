@@ -90,7 +90,7 @@ public class KiwixTextToSpeech {
     /**
      * Starts speaking the WebView content aloud (or stops it if TTS is speaking now).
      */
-    public void speakAloud() {
+    public void readAloud() {
         if (tts.isSpeaking()) {
             if (tts.stop() == TextToSpeech.SUCCESS) {
                 onSpeakingListener.onSpeakingEnded();
