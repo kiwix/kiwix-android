@@ -35,6 +35,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -57,6 +58,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.equalsOrNewThanApi;
 import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.newApi;
@@ -91,6 +93,8 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
     private int mTabsHeight;
 
     private CompatFindActionModeCallback mCompatCallback;
+
+    private TextToSpeech tts;
 
 
     @Override
@@ -344,6 +348,10 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
 
             case R.id.menu_settings:
                 mCurrentFragment.selectSettings();
+                break;
+
+            case R.id.menu_speak_aloud:
+                mCurrentFragment.speakAloud();
                 break;
 
             case R.id.menu_fullscreen:

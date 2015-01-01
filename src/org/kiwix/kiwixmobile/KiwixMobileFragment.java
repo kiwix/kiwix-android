@@ -84,7 +84,6 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
-import java.net.URLDecoder;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -161,6 +160,8 @@ public class KiwixMobileFragment extends SherlockFragment {
 
 	private FragmentCommunicator mFragmentCommunicator;
 
+	private KiwixTextToSpeech tts;
+
 	@SuppressLint("SetJavaScriptEnabled")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -176,6 +177,30 @@ public class KiwixMobileFragment extends SherlockFragment {
 		nightMode = false;
 		isBacktotopEnabled = false;
 		isFullscreenOpened = false;
+	}
+
+	private void setUpTTS() {
+		tts = new KiwixTextToSpeech(getActivity(), webView,
+				new KiwixTextToSpeech.OnInitSucceedListener() {
+			@Override
+			public void onInitSucceed() {
+				if (menu != null) {
+					menu.findItem(R.id.menu_speak_aloud).setVisible(true);
+				}
+			}
+		}, new KiwixTextToSpeech.OnSpeakingListener() {
+			@Override
+			public void onSpeakingStarted() {
+				menu.findItem(R.id.menu_speak_aloud).setTitle(
+						getResources().getString(R.string.menu_speak_aloud_stop));
+			}
+
+			@Override
+			public void onSpeakingEnded() {
+			    menu.findItem(R.id.menu_speak_aloud).setTitle(
+			    		getResources().getString(R.string.menu_speak_aloud));
+			}
+		});
 	}
 
 	@Override
@@ -200,6 +225,8 @@ public class KiwixMobileFragment extends SherlockFragment {
 		setUpWebView();
 
 		setUpArticleSearchTextView(savedInstanceState);
+
+		setUpTTS();
 
 		loadPrefs();
 
@@ -227,6 +254,12 @@ public class KiwixMobileFragment extends SherlockFragment {
 
 		Log.d(TAG_KIWIX,
 				"onPause Save currentzimfile to preferences:" + ZimContentProvider.getZimFile());
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		tts.shutdown();
 	}
 
 	@Override
@@ -841,6 +874,9 @@ public class KiwixMobileFragment extends SherlockFragment {
 			menu.findItem(R.id.menu_randomarticle).setVisible(true);
 			menu.findItem(R.id.menu_searchintext).setVisible(true);
 			menu.findItem(R.id.menu_search).setVisible(true);
+			if (tts.isInitialized()) {
+				menu.findItem(R.id.menu_speak_aloud).setVisible(true);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1031,6 +1067,10 @@ public class KiwixMobileFragment extends SherlockFragment {
 			webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
 			break;
 		}
+	}
+
+	public void speakAloud() {
+		tts.speakAloud();
 	}
 
 	// Interface through which we will communicate from the Fragment to the Activity
