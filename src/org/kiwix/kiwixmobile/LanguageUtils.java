@@ -40,10 +40,13 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.MissingResourceException;
 
 public class LanguageUtils {
 
     public static final String TAG_KIWIX = "kiwix";
+
+    private static HashMap<String, Locale> mLocaleMap;
 
     private List<LanguageContainer> mLanguageList;
 
@@ -85,6 +88,27 @@ public class LanguageUtils {
         Configuration config = new Configuration();
         config.locale = locale;
         context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+    }
+
+    /**
+     * Converts ISO3 language code to {@link java.util.Locale}.
+     *
+     * @param iso3 ISO3 language code
+     * @return {@link java.util.Locale} that represents the language of the provided code
+     */
+    public static Locale ISO3ToLocale(String iso3) {
+        if (mLocaleMap == null) {
+            Locale[] locales = Locale.getAvailableLocales();
+            mLocaleMap = new HashMap<String, Locale>();
+            for (Locale locale : locales) {
+                try {
+                    mLocaleMap.put(locale.getISO3Language().toUpperCase(), locale);
+                } catch (MissingResourceException e) {
+                    // Do nothing
+                }
+            }
+        }
+        return mLocaleMap.get(iso3.toUpperCase());
     }
 
     // Read the language codes, that are supported in this app from the locales.txt file

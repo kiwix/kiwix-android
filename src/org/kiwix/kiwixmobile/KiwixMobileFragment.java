@@ -191,14 +191,24 @@ public class KiwixMobileFragment extends SherlockFragment {
 		}, new KiwixTextToSpeech.OnSpeakingListener() {
 			@Override
 			public void onSpeakingStarted() {
-				menu.findItem(R.id.menu_speak_aloud).setTitle(
-						getResources().getString(R.string.menu_speak_aloud_stop));
+				getActivity().runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						menu.findItem(R.id.menu_speak_aloud).setTitle(
+							getResources().getString(R.string.menu_speak_aloud_stop));
+					}
+				});
 			}
 
 			@Override
 			public void onSpeakingEnded() {
-			    menu.findItem(R.id.menu_speak_aloud).setTitle(
-			    		getResources().getString(R.string.menu_speak_aloud));
+				getActivity().runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						menu.findItem(R.id.menu_speak_aloud).setTitle(
+							getResources().getString(R.string.menu_speak_aloud));
+					}
+				});
 			}
 		});
 	}
