@@ -92,6 +92,14 @@ public class ZimContentProvider extends ContentProvider {
         }
     }
 
+    public static String getLanguage() {
+        if (jniKiwix == null || zimFileName == null) {
+            return null;
+        } else {
+            return jniKiwix.getLanguage();
+        }
+    }
+
     public static boolean searchSuggestions(String prefix, int count) {
         if (jniKiwix == null || zimFileName == null) {
             return false;

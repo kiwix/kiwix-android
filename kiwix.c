@@ -99,6 +99,23 @@ JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getId(JNIEnv *env,
   return id;
 }
 
+JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getLanguage(JNIEnv *env, jobject obj) {
+  jstring language;
+  
+  pthread_mutex_lock(&readerLock);
+  if (reader != NULL) {
+    try {
+      std::string cLanguage = reader->getLanguage();
+      language = c2jni(cLanguage, env);
+    } catch (exception &e) {
+      std::cerr << e.what() << std::endl;
+    }
+  }
+  pthread_mutex_unlock(&readerLock);
+  
+  return language;
+}
+
 JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getMimeType(JNIEnv *env, jobject obj, jstring url) {
   jstring mimeType;
   

@@ -22,6 +22,7 @@ package org.kiwix.kiwixmobile;
 public class JNIKiwix {
     public native String getMainPage();
     public native String getId();
+    public native String getLanguage();
     public native String getMimeType(String url);
     public native boolean loadZIM(String path);
     public native byte[] getContent(String url, JNIKiwixString mimeType, JNIKiwixInt size);
@@ -30,7 +31,6 @@ public class JNIKiwix {
     public native boolean getPageUrlFromTitle(String title, JNIKiwixString url);
     public native boolean getTitle(JNIKiwixString title);
     public native boolean getDescription(JNIKiwixString title);
-    public native boolean getLanguage(JNIKiwixString language);
     public native boolean getDate(JNIKiwixString language);
     public native boolean getFavicon(JNIKiwixString content, JNIKiwixString mimeType);
     public native boolean getCreator(JNIKiwixString creator);
