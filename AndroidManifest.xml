@@ -19,7 +19,7 @@
 
     <uses-sdk
             android:minSdkVersion="9"
-            android:targetSdkVersion="19"/>
+            android:targetSdkVersion="21"/>
     <application
             android:icon="@drawable/kiwix_icon"
             android:label="@string/app_name"

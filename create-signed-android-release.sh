@@ -17,11 +17,11 @@ function die {
 	exit 1
 }
 
-../src/dependencies/android-sdk/sdk/tools/android update project -p . -n Kiwix -t android-14
+../src/dependencies/android-sdk/tools/android update project -p . -n Kiwix -t android-14
 
 jarsigner -verbose -sigalg MD5withRSA -digestalg SHA1 -keystore $CERTIFICATE build/apk/android-release-unsigned.apk kiwix || die "Error signing the package."
 jarsigner -verify build/apk/android-release-unsigned.apk || die "The package is not properly signed."
-../src/dependencies/android-sdk/sdk/tools/zipalign -f -v 4 build/apk/android-release-unsigned.apk kiwix-android.apk || die "Could not zipalign the signed package. Please check."
+../src/dependencies/android-sdk/tools/zipalign -f -v 4 build/apk/android-release-unsigned.apk kiwix-android.apk || die "Could not zipalign the signed package. Please check."
 
 echo "[SUCCESS] Your signed release package is ready:"
 ls -lh kiwix-android.apk
