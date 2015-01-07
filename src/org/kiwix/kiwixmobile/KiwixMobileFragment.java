@@ -874,7 +874,7 @@ public class KiwixMobileFragment extends SherlockFragment {
 	private void initAllMenuItems() {
 		try {
 			menu.findItem(R.id.menu_bookmarks).setVisible(true);
-			menu.findItem(R.id.menu_forward).setVisible(false);
+			menu.findItem(R.id.menu_forward).setVisible(true);
 			menu.findItem(R.id.menu_fullscreen).setVisible(true);
 			menu.findItem(R.id.menu_back).setVisible(true);
 			menu.findItem(R.id.menu_home).setVisible(true);
