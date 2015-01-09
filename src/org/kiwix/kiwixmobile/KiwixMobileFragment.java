@@ -133,8 +133,6 @@ public class KiwixMobileFragment extends SherlockFragment {
 	public KiwixWebView webView;
 
 	public boolean isFullscreenOpened;
-	
-	public boolean isBackButtonPressed;
 
 	public ImageButton exitFullscreenButton;
 
@@ -176,7 +174,6 @@ public class KiwixMobileFragment extends SherlockFragment {
 		requestClearHistoryAfterLoad = false;
 		requestWebReloadOnFinished = 0;
 		requestInitAllMenuItems = false;
-		isBackButtonPressed = false;
 		nightMode = false;
 		isBacktotopEnabled = false;
 		isFullscreenOpened = false;
@@ -877,12 +874,7 @@ public class KiwixMobileFragment extends SherlockFragment {
 	private void initAllMenuItems() {
 		try {
 			menu.findItem(R.id.menu_bookmarks).setVisible(true);
-			if (isBackButtonPressed) {
-				menu.findItem(R.id.menu_forward).setVisible(true);
-			}
-			else {
-				menu.findItem(R.id.menu_forward).setVisible(false);
-			}
+			menu.findItem(R.id.menu_forward).setVisible(webView.canGoForward());
 			menu.findItem(R.id.menu_fullscreen).setVisible(true);
 			menu.findItem(R.id.menu_back).setVisible(true);
 			menu.findItem(R.id.menu_home).setVisible(true);
