@@ -312,12 +312,23 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
             case R.id.menu_forward:
                 if (mCurrentFragment.webView.canGoForward()) {
                     mCurrentFragment.webView.goForward();
+                    //If cannot go forward again, remove forward button
+                    if (!mCurrentFragment.webView.canGoForward()) { 
+                    	mCurrentFragment.isBackButtonPressed = false;
+                    	if (newApi()) {
+							invalidateOptionsMenu();
+						}
+                    }
                 }
                 break;
 
             case R.id.menu_back:
                 if (mCurrentFragment.webView.canGoBack()) {
-                    mCurrentFragment.menu.findItem(R.id.menu_forward).setVisible(true);
+                	mCurrentFragment.isBackButtonPressed = true;
+                    if (newApi()) {
+						invalidateOptionsMenu();
+					}
+                    //mCurrentFragment.menu.findItem(R.id.menu_forward).setVisible(true);
                     mCurrentFragment.webView.goBack();
                 }
                 break;
