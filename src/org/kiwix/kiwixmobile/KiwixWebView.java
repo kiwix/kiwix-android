@@ -78,13 +78,15 @@ public class KiwixWebView extends WebView {
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
         int windowHeight = getMeasuredHeight();
-        int pages = getContentHeight() / windowHeight;
-        int page = t / windowHeight;
 
-        // Alert the listener
-        if (mChangeListener != null) {
-            mChangeListener.onPageChanged(page, pages);
-        }
+	// It seems that in a few cases, getMeasuredHeight() returns 0
+	if (windowHeight > 0) {
+	    int pages = getContentHeight() / windowHeight;
+	    int page = t / windowHeight;
+	    if (mChangeListener != null) {
+		mChangeListener.onPageChanged(page, pages);
+	    }
+	}
     }
 
     public void disableZoomControlls(boolean disable) {
@@ -129,7 +131,6 @@ public class KiwixWebView extends WebView {
     }
 
     public interface OnPageChangeListener {
-
         public void onPageChanged(int page, int maxPages);
     }
 
