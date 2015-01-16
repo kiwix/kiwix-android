@@ -59,7 +59,13 @@ public class KiwixWebView extends WebView {
 	getSettings().setSupportMultipleWindows(true);
 	getSettings().setSupportZoom(true);
 	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-	    getSettings().setLayoutAlgorithm(LayoutAlgorithm.TEXT_AUTOSIZING);
+	    
+	    // Avoid crash with WebViewClassic
+	    try {
+		getSettings().setLayoutAlgorithm(LayoutAlgorithm.TEXT_AUTOSIZING);
+	    } catch (Exception e) {
+		e.printStackTrace();
+	    }
 	}
     }
 
