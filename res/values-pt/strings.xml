@@ -42,10 +42,10 @@
     <string name="pref_zoom_title">Nível de Zoom</string>
     <string name="pref_zoom_dialogtitle">Nível de Zoom</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">Automático</item>
+        <item name="pref_zoom_entry_small">Pouco</item>
+        <item name="pref_zoom_entry_medium">Médio</item>
+        <item name="pref_zoom_entry_large">Muito</item>
     </string-array>
     <string name="pref_info_title">Informação</string>
     <string name="pref_info_version">Versão</string>
@@ -57,7 +57,7 @@
     <string name="pref_backtotop_summary">Exibir botão no fim da página para redireccionar ao inicio da página</string>
     <string name="share_via">Compartilhar via...</string>
     <string name="pref_language_title">Língua</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Escolha um idioma</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

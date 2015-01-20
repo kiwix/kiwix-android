@@ -19,8 +19,8 @@
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Споделете с приятели</string>
     <string name="save_media">Съхраняване на медията като...</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
-    <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
+    <string name="save_media_error">Възникна грешка при опита за съхранение на медийния файл!</string>
+    <string name="save_media_saved">Медийният файл е съхранен като %1$s във вашата папка с изображения</string>
     <string name="rescan_fs_warning">Сканиране на ZIM файлове, моля, изчакайте...</string>
     <string name="button_backtotop">Обратно нагоре</string>
     <string name="search_label">Търсене</string>

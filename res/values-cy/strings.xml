@@ -42,10 +42,10 @@
     <string name="pref_zoom_title">Lefel pellhau</string>
     <string name="pref_zoom_dialogtitle">Lefel pellhau</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">Otomatig</item>
+        <item name="pref_zoom_entry_small">Bach</item>
+        <item name="pref_zoom_entry_medium">Canolig</item>
+        <item name="pref_zoom_entry_large">Mawr</item>
     </string-array>
     <string name="pref_info_title">Gwybodaeth</string>
     <string name="pref_info_version">Fersiwn</string>
@@ -57,7 +57,7 @@
     <string name="pref_backtotop_summary">Arddangos botwm ar waelod y dudalen i sgrolio hyd at y brig</string>
     <string name="share_via">Rhannwch drwy</string>
     <string name="pref_language_title">Iaith</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Dewis iaith</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>
