@@ -13,8 +13,8 @@
     <string name="menu_randomarticle">Ur pennad dre zegouezh</string>
     <string name="menu_fullscreen">Skramm leun</string>
     <string name="menu_exitfullscreen">Kuitaat ar skramm leun</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">Lenn a vouezh uhel</string>
+    <string name="menu_read_aloud_stop">Paouez da lenn a vouezh uhel</string>
     <string name="menu_exit">Kuitaat</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Rannañ gant mignoned</string>

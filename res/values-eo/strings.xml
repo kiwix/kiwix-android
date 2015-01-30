@@ -13,8 +13,8 @@
     <string name="menu_randomarticle">Hazarda artikolo</string>
     <string name="menu_fullscreen">Plenekrane</string>
     <string name="menu_exitfullscreen">Eliri plenekranon</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">Laŭtlegi</string>
+    <string name="menu_read_aloud_stop">Ĉesi laŭtlegadon</string>
     <string name="menu_exit">Eliri</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Dividi kun amikoj</string>

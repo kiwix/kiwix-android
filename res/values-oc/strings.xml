@@ -13,14 +13,14 @@
     <string name="menu_randomarticle">Article per escasença</string>
     <string name="menu_fullscreen">Plen ecran</string>
     <string name="menu_exitfullscreen">Quitar l\'ecran complet</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">Legir a votz nauta</string>
+    <string name="menu_read_aloud_stop">Arrestar de legir a votz nauta</string>
     <string name="menu_exit">Sortir</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Partejar amb vòstres amics</string>
     <string name="save_media">Enregistrar lo mèdia jos…</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
-    <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
+    <string name="save_media_error">Una error s\'es producha al moment de la temptativa d\'enregistrar lo mèdia !</string>
+    <string name="save_media_saved">Mèdia enregistrat jos %1$s dins vòstre dorsièr Imatges</string>
     <string name="rescan_fs_warning">Analisi dels fichièrs ZIM en cors, pacientatz…</string>
     <string name="button_backtotop">Naut de pagina</string>
     <string name="search_label">Cèrca</string>
@@ -43,9 +43,9 @@
     <string name="pref_zoom_dialogtitle">Nivèl de zoom</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_small">Pichon</item>
+        <item name="pref_zoom_entry_medium">Mejan</item>
+        <item name="pref_zoom_entry_large">Grand</item>
     </string-array>
     <string name="pref_info_title">Informacion</string>
     <string name="pref_info_version">Version</string>
@@ -57,7 +57,7 @@
     <string name="pref_backtotop_summary">Afichar un boton en bas de la pagina per tornar al començament</string>
     <string name="share_via">Partejar via...</string>
     <string name="pref_language_title">Lenga</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Causir una lenga</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

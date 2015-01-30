@@ -13,8 +13,8 @@
     <string name="menu_randomarticle">Slumpmässig artikel</string>
     <string name="menu_fullscreen">Helskärm</string>
     <string name="menu_exitfullscreen">Stäng helskärm</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">Läs upp</string>
+    <string name="menu_read_aloud_stop">Sluta läsa upp</string>
     <string name="menu_exit">Avsluta</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Dela med vänner</string>

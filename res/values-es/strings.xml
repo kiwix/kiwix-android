@@ -13,8 +13,8 @@
     <string name="menu_randomarticle">Artículo aleatorio</string>
     <string name="menu_fullscreen">Pantalla completa</string>
     <string name="menu_exitfullscreen">Salir de pantalla completa</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">Leer en voz alta</string>
+    <string name="menu_read_aloud_stop">Dejar de leer en voz alta</string>
     <string name="menu_exit">Salir</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Compartir con amigos</string>

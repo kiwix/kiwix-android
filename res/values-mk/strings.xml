@@ -13,8 +13,8 @@
     <string name="menu_randomarticle">Случајна статија</string>
     <string name="menu_fullscreen">На цел екран</string>
     <string name="menu_exitfullscreen">Излези од цел екран</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">Прочитај на глас</string>
+    <string name="menu_read_aloud_stop">Запри читање на глас</string>
     <string name="menu_exit">Излези</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Сподели со пријателите</string>

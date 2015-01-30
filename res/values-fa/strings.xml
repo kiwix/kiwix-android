@@ -13,8 +13,8 @@
     <string name="menu_randomarticle">مقاله تصادفی</string>
     <string name="menu_fullscreen">تمام صفحه</string>
     <string name="menu_exitfullscreen">خروج از تمام‌صفحه</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">خواندن با صدای بلند</string>
+    <string name="menu_read_aloud_stop">توقف خواندن با صدای بلند</string>
     <string name="menu_exit">خروج</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">اشتراک گذاری با دوستان</string>

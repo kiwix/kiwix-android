@@ -13,8 +13,8 @@
     <string name="menu_randomarticle">Zufälliger Artikel</string>
     <string name="menu_fullscreen">Vollbildmodus</string>
     <string name="menu_exitfullscreen">Vollbild beenden</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">Vorlesen</string>
+    <string name="menu_read_aloud_stop">Mit dem Vorlesen aufhören</string>
     <string name="menu_exit">Schliessen</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Mit Freunden teilen</string>
