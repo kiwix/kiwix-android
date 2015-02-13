@@ -23,6 +23,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.webkit.WebView;
+import android.webkit.WebChromeClient;
+import android.webkit.WebViewClient;
 import android.widget.ZoomButtonsController;
 import android.webkit.WebSettings.LayoutAlgorithm;
 import android.os.Build;
@@ -56,6 +58,9 @@ public class KiwixWebView extends WebView {
     }
 
     private void init() {
+	setWebChromeClient(new WebChromeClient());
+	setWebViewClient(new WebViewClient());
+	getSettings().setJavaScriptEnabled(true);
 	getSettings().setSupportMultipleWindows(true);
 	getSettings().setSupportZoom(true);
 	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
