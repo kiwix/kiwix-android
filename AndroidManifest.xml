@@ -37,7 +37,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
-
                 <data android:scheme="file"/>
                 <data android:pathPattern=".*\\.zim(aa|)"/>
                 <data android:pathPattern=".*\\..*\\.zim(aa|)"/>
@@ -49,8 +48,31 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
 		<category android:name="android.intent.category.BROWSABLE" />
-
                 <data android:scheme="http"/>
+                <data android:host="*"/>
+                <data android:pathPattern=".*\\.zim(aa|)"/>
+                <data android:pathPattern=".*\\..*\\.zim(aa|)"/>
+                <data android:pathPattern=".*\\..*\\..*\\.zim(aa|)"/>
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.zim(aa|)"/>
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+		<category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https"/>
+                <data android:host="*"/>
+                <data android:pathPattern=".*\\.zim(aa|)"/>
+                <data android:pathPattern=".*\\..*\\.zim(aa|)"/>
+                <data android:pathPattern=".*\\..*\\..*\\.zim(aa|)"/>
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.zim(aa|)"/>
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+		<category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="content"/>
                 <data android:host="*"/>
                 <data android:pathPattern=".*\\.zim(aa|)"/>
                 <data android:pathPattern=".*\\..*\\.zim(aa|)"/>
