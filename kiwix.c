@@ -179,15 +179,8 @@ JNIEXPORT jbyteArray JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getContent(JNIE
     pthread_mutex_unlock(&readerLock);
 
     if (isOK) {
-      if (cSize > 142) {
-	std::stringstream ss;
-	ss << "JNI values for " << cUrl << ":" << (int)(cData[142]) << "," << (int)(cData[143]) << "," << (int)(cData[144]);
-	LOGI(ss.str().c_str());
-      }
-      
       data = env->NewByteArray(cSize);
       env->SetByteArrayRegion(data, 0, cSize, reinterpret_cast<const jbyte*>(cData.c_str()));
-
       setStringObjValue(cMimeType, mimeTypeObj, env);
       setIntObjValue(cSize, sizeObj, env);
     }
