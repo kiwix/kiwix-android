@@ -189,19 +189,18 @@ public class ZimContentProvider extends ContentProvider {
 
     @Override
     public ParcelFileDescriptor openFile(Uri uri, String mode)
-            throws FileNotFoundException {
-        ParcelFileDescriptor[] pipe = null;
-
+    throws FileNotFoundException {
+	ParcelFileDescriptor[] pipe = null;
+	
         try {
             pipe = ParcelFileDescriptor.createPipe();
-            new TransferThread(jniKiwix, uri, new AutoCloseOutputStream(
-                    pipe[1])).start();
+            new TransferThread(jniKiwix, uri, new AutoCloseOutputStream(pipe[1])).start();
         } catch (IOException e) {
             Log.e(TAG_KIWIX, "Exception opening pipe", e);
             throw new FileNotFoundException("Could not open pipe for: "
                     + uri.toString());
         }
-
+	
         return (pipe[0]);
     }
 
@@ -260,40 +259,27 @@ public class ZimContentProvider extends ContentProvider {
 
         @Override
         public void run() {
-            byte[] buf = new byte[1024];
+            byte[] buf = new byte[8192];
             int len;
 
             try {
                 JNIKiwixString mime = new JNIKiwixString();
                 JNIKiwixInt size = new JNIKiwixInt();
                 byte[] data = jniKiwix.getContent(articleZimUrl, mime, size);
-                // Log.d(TAG_KIWIX, "articleDataByteArray:"+articleDataByteArray.toString());
-                // ByteArrayInputStream articleDataInputStream = new
-                // ByteArrayInputStream(articleDataByteArray.toByteArray());
-                // Log.d(TAG_KIWIX, "article data loaded from zime file");
-
-                //ByteArrayInputStream articleDataInputStream = new ByteArrayInputStream(
-                //	articleDataByteArray.toByteArray());
-                ByteArrayInputStream articleDataInputStream = new ByteArrayInputStream(data);
-                while ((len = articleDataInputStream.read(buf)) > 0) {
-                    out.write(buf, 0, len);
-                }
-
-                articleDataInputStream.close();
+		out.write(data, 0, data.length);
                 out.flush();
 
                 Log.d(TAG_KIWIX, "reading  " + articleZimUrl
-                        + "(mime: " + mime.value + ", size: " + size.value + ") finished.");
+		      + "(mime: " + mime.value + ", size: " + size.value + ") finished.");
             } catch (IOException e) {
                 Log.e(TAG_KIWIX, "Exception reading article " + articleZimUrl + " from zim file", e);
             } catch (NullPointerException e) {
                 Log.e(TAG_KIWIX, "Exception reading article " + articleZimUrl + " from zim file", e);
-
             } finally {
                 try {
                     out.close();
                 } catch (IOException e) {
-
+		    Log.e(TAG_KIWIX, "Custom exception by closing out stream for article " + articleZimUrl, e);
                 }
 
             }
