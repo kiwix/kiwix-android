@@ -10,6 +10,9 @@
 #include "unicode/putil.h"
 #include <kiwix/reader.h>
 
+#include <android/log.h>
+#define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO, "kiwix", __VA_ARGS__)
+
 /* global variables */
 kiwix::Reader *reader = NULL;
 
@@ -157,10 +160,10 @@ JNIEXPORT jbyteArray JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getContent(JNIE
   setStringObjValue("", mimeTypeObj, env);
   setIntObjValue(0, sizeObj, env);
   jbyteArray data = env->NewByteArray(0);
+  bool isOK = false;
 
   /* Retrieve the content */
   if (reader != NULL) {
-
     std::string cUrl = jni2c(url, env);
     std::string cData;
     std::string cMimeType;
@@ -168,19 +171,26 @@ JNIEXPORT jbyteArray JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getContent(JNIE
 
     pthread_mutex_lock(&readerLock);
     try {
-      if (reader->getContentByUrl(cUrl, cData, cSize, cMimeType)) {
-	data = env->NewByteArray(cSize);
-	jbyte *dataPointer = env->GetByteArrayElements(data, 0);
-	memcpy(dataPointer, cData.c_str(), cSize);
-
-	setStringObjValue(cMimeType, mimeTypeObj, env);
-	setIntObjValue(cSize, sizeObj, env);
-      }
+      isOK = reader->getContentByUrl(cUrl, cData, cSize, cMimeType);
     } catch (exception &e) {
+      LOGI(e.what());
       std::cerr << e.what() << std::endl;
     }
     pthread_mutex_unlock(&readerLock);
 
+    if (isOK) {
+      if (cSize > 142) {
+	std::stringstream ss;
+	ss << "JNI values for " << cUrl << ":" << (int)(cData[142]) << "," << (int)(cData[143]) << "," << (int)(cData[144]);
+	LOGI(ss.str().c_str());
+      }
+      
+      data = env->NewByteArray(cSize);
+      env->SetByteArrayRegion(data, 0, cSize, reinterpret_cast<const jbyte*>(cData.c_str()));
+
+      setStringObjValue(cMimeType, mimeTypeObj, env);
+      setIntObjValue(cSize, sizeObj, env);
+    }
   }
   
   return data;
