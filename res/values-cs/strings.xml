@@ -13,8 +13,8 @@
     <string name="menu_randomarticle">Náhodný článek</string>
     <string name="menu_fullscreen">Celá obrazovka</string>
     <string name="menu_exitfullscreen">Ukončit celou obrazovku</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">Číst nahlas</string>
+    <string name="menu_read_aloud_stop">Zastavit čtení nahlas</string>
     <string name="menu_exit">Konec</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Sdílet s přáteli</string>

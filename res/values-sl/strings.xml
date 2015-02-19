@@ -42,10 +42,10 @@
     <string name="pref_zoom_title">Raven zumiranja</string>
     <string name="pref_zoom_dialogtitle">Raven zumiranja</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">Samodejno</item>
+        <item name="pref_zoom_entry_small">Majhno</item>
+        <item name="pref_zoom_entry_medium">Medij</item>
+        <item name="pref_zoom_entry_large">Veliko</item>
     </string-array>
     <string name="pref_info_title">Informacije</string>
     <string name="pref_info_version">Različica</string>
@@ -57,7 +57,7 @@
     <string name="pref_backtotop_summary">Na dnu strani prikaži gumb za pomik na vrh strani</string>
     <string name="share_via">Deli na ...</string>
     <string name="pref_language_title">Jezik</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Izberite jezik</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

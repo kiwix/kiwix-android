@@ -42,10 +42,10 @@
     <string name="pref_zoom_title">Татах ойр хол</string>
     <string name="pref_zoom_dialogtitle">Татах ойр хол</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">Автомат</item>
+        <item name="pref_zoom_entry_small">Жижиг</item>
+        <item name="pref_zoom_entry_medium">дунд</item>
+        <item name="pref_zoom_entry_large">Том</item>
     </string-array>
     <string name="pref_info_title">Мэдээлэл</string>
     <string name="pref_info_version">Хувилбар</string>
@@ -57,7 +57,7 @@
     <string name="pref_backtotop_summary">Товчийг хуудасны сүүлд байршуулж дээш оч</string>
     <string name="share_via">Хуваалцах сайтууд...</string>
     <string name="pref_language_title">Хэл</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Хэлээ сонгоно уу</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

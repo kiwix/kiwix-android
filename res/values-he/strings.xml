@@ -13,8 +13,8 @@
     <string name="menu_randomarticle">ערך אקראי</string>
     <string name="menu_fullscreen">מסך מלא</string>
     <string name="menu_exitfullscreen">יציאה ממסך מלא</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">להקריא בקול</string>
+    <string name="menu_read_aloud_stop">להפסיק להקריא בקול</string>
     <string name="menu_exit">יציאה</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">שיתוף עם חברים</string>

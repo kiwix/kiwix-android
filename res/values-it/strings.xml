@@ -13,8 +13,8 @@
     <string name="menu_randomarticle">Voce a caso</string>
     <string name="menu_fullscreen">A tutto schermo</string>
     <string name="menu_exitfullscreen">Esci dalla modalità a tutto schermo</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">Leggi a voce alta</string>
+    <string name="menu_read_aloud_stop">Interrompi lettura a voce alta</string>
     <string name="menu_exit">Esci</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Condividi con amici</string>

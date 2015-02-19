@@ -13,8 +13,8 @@
     <string name="menu_randomarticle">Articol aleatoriu</string>
     <string name="menu_fullscreen">Ecran complet</string>
     <string name="menu_exitfullscreen">Ieșire din ecran complet</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">Citește cu voce tare</string>
+    <string name="menu_read_aloud_stop">Oprește citirea cu voce tare</string>
     <string name="menu_exit">Ieșire</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Partajează cu prietenii</string>

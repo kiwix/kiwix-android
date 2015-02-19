@@ -42,22 +42,22 @@
     <string name="pref_zoom_title">Zoom level</string>
     <string name="pref_zoom_dialogtitle">Zoom level</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">Automaattinen</item>
+        <item name="pref_zoom_entry_small">Pieni</item>
+        <item name="pref_zoom_entry_medium">Keskikokoinen</item>
+        <item name="pref_zoom_entry_large">Suuri</item>
     </string-array>
-    <string name="pref_info_title">Tietoja</string>
+    <string name="pref_info_title">Tiedot</string>
     <string name="pref_info_version">Versio</string>
     <string name="pref_zoom_enable">Zoom controls</string>
     <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
     <string name="pref_nightmode">Night mode</string>
     <string name="pref_nightmode_summary">Show articles with reverted colors</string>
-    <string name="pref_backtotop">Back to Top</string>
+    <string name="pref_backtotop">Takaisin alkuun</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
     <string name="share_via">Share via</string>
     <string name="pref_language_title">Kieli</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Valitse kieli</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

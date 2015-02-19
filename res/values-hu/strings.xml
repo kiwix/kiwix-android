@@ -42,10 +42,10 @@
     <string name="pref_zoom_title">Nagyítási szint</string>
     <string name="pref_zoom_dialogtitle">Nagyítási szint</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">Automatikus</item>
+        <item name="pref_zoom_entry_small">Kicsi</item>
+        <item name="pref_zoom_entry_medium">Közepes</item>
+        <item name="pref_zoom_entry_large">Nagy</item>
     </string-array>
     <string name="pref_info_title">Információ</string>
     <string name="pref_info_version">Verzió</string>
@@ -57,7 +57,7 @@
     <string name="pref_backtotop_summary">Gomb megjelenítése a lap alján, melynek segítségével visszatérhet a lap tetejére</string>
     <string name="share_via">Megosztás ezzel...</string>
     <string name="pref_language_title">Nyelv</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Válassz nyelvet</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

@@ -42,10 +42,10 @@
     <string name="pref_zoom_title">Miqyas səviyyəsi</string>
     <string name="pref_zoom_dialogtitle">Miqyas səviyyəsi</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">Avtomatik</item>
+        <item name="pref_zoom_entry_small">Kiçik</item>
+        <item name="pref_zoom_entry_medium">Orta</item>
+        <item name="pref_zoom_entry_large">Geniş</item>
     </string-array>
     <string name="pref_info_title">Məlumat</string>
     <string name="pref_info_version">Versiya</string>
@@ -57,7 +57,7 @@
     <string name="pref_backtotop_summary">Səhifənin sonunda göstərilən və səhifənin əvvəlinə qaytaran düymə.</string>
     <string name="share_via">Paylaş...</string>
     <string name="pref_language_title">Dil</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Dili seçin</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

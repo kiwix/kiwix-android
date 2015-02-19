@@ -13,14 +13,14 @@
     <string name="menu_randomarticle">ناټاکلې ليکنه</string>
     <string name="menu_fullscreen">ډکه پرده</string>
     <string name="menu_exitfullscreen">بشپړ پردې څخه وتل</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">په جگ غږ لوستل</string>
+    <string name="menu_read_aloud_stop">په جگ غږ لوستل درول</string>
     <string name="menu_exit">بندول</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">له ملگرو سره شريکول</string>
     <string name="save_media">رسنۍ ساتل لکه...</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
-    <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
+    <string name="save_media_error">د رسنۍ په ساتلو کې يوه تېروتنه رامنځ ته شوه!</string>
+    <string name="save_media_saved">رسنۍ خپل د انځورونو په ټولگه کې د %1$s په نوم ساتل</string>
     <string name="rescan_fs_warning">د ZIM دوتنو لپاره ځيرڅارنه، لطفاً تم شۍ...</string>
     <string name="button_backtotop">بېرته سر ته</string>
     <string name="search_label">پلټل</string>
@@ -42,10 +42,10 @@
     <string name="pref_zoom_title">لوډېرولو کچه</string>
     <string name="pref_zoom_dialogtitle">لوډېرولو کچه</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">اتوماتيک</item>
+        <item name="pref_zoom_entry_small">وړوکی</item>
+        <item name="pref_zoom_entry_medium">منځوی</item>
+        <item name="pref_zoom_entry_large">لوی</item>
     </string-array>
     <string name="pref_info_title">مالومات</string>
     <string name="pref_info_version">بڼه</string>
@@ -57,7 +57,7 @@
     <string name="pref_backtotop_summary">د مخ په پای کې د مخ سر ته ورتللو لپاره يوه تڼۍ ښکاره کول</string>
     <string name="share_via">د شريکولو لار ...</string>
     <string name="pref_language_title">ژبه</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">يوه ژبه وټاکئ</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

@@ -13,8 +13,8 @@
     <string name="menu_randomarticle">Bài viết Ngẫu nhiên</string>
     <string name="menu_fullscreen">Toàn màn hình</string>
     <string name="menu_exitfullscreen">Thoát toàn màn hình</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">Đọc to</string>
+    <string name="menu_read_aloud_stop">Dừng đọc to</string>
     <string name="menu_exit">Thoát</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Chia sẻ với bạn bè</string>

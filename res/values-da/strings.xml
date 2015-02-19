@@ -42,10 +42,10 @@
     <string name="pref_zoom_title">Zoom-niveau</string>
     <string name="pref_zoom_dialogtitle">Zoom-niveau</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">Automatisk</item>
+        <item name="pref_zoom_entry_small">Lille</item>
+        <item name="pref_zoom_entry_medium">Medie</item>
+        <item name="pref_zoom_entry_large">Stor</item>
     </string-array>
     <string name="pref_info_title">Information</string>
     <string name="pref_info_version">Version</string>
@@ -57,7 +57,7 @@
     <string name="pref_backtotop_summary">Få vist en knap i slutningen af siden for at rulle op til toppen</string>
     <string name="share_via">Del via...</string>
     <string name="pref_language_title">Sprog</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">Vælg et sprog</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

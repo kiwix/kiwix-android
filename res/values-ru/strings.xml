@@ -13,8 +13,8 @@
     <string name="menu_randomarticle">Случайная статья</string>
     <string name="menu_fullscreen">На весь экран</string>
     <string name="menu_exitfullscreen">Выход из полноэкранного режима</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">Читать вслух</string>
+    <string name="menu_read_aloud_stop">Остановить чтение вслух</string>
     <string name="menu_exit">Выход</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Поделиться с друзьями</string>

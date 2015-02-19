@@ -43,9 +43,9 @@
     <string name="pref_zoom_dialogtitle">സൂം നിലവാരം</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_small">ചെറുത്</item>
+        <item name="pref_zoom_entry_medium">ഇടത്തരം</item>
+        <item name="pref_zoom_entry_large">വലുത്</item>
     </string-array>
     <string name="pref_info_title">വിവരം</string>
     <string name="pref_info_version">പതിപ്പ്</string>
@@ -57,7 +57,7 @@
     <string name="pref_backtotop_summary">താളിനു താഴെയായി മുകളിലേക്ക് തിരികെ പോകാനുള്ള ബട്ടൺ കാണിക്കുക.</string>
     <string name="share_via">ഇതുവഴി പങ്ക് വെയ്ക്കുക</string>
     <string name="pref_language_title">ഭാഷ</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">ഭാഷ തിരഞ്ഞെടുക്കുക</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

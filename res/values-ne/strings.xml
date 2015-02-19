@@ -43,9 +43,9 @@
     <string name="pref_zoom_dialogtitle">जुम स्तर</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_small">सानो</item>
+        <item name="pref_zoom_entry_medium">मझौलो</item>
+        <item name="pref_zoom_entry_large">ठूलो</item>
     </string-array>
     <string name="pref_info_title">जानकारी</string>
     <string name="pref_info_version">संस्करण</string>
@@ -57,7 +57,7 @@
     <string name="pref_backtotop_summary">पृष्ठको अन्तमा सुरुमा जने बटन देखाउने</string>
     <string name="share_via">सझेदारी गर्ने माध्यम</string>
     <string name="pref_language_title">भाषा</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">भाषा चुन्ने</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>
