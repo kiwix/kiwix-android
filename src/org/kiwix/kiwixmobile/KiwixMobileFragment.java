@@ -542,9 +542,12 @@ public class KiwixMobileFragment extends SherlockFragment {
 
 						byte[] buffer = new byte[1024];
 						int len;
+						int contentSize = 0;
 						while ((len = istream.read(buffer)) > 0) {
 							ostream.write(buffer, 0, len);
+							contentSize += len;
 						}
+						Log.i(TAG_KIWIX, "Save media " + source + " to " + storageDir + " (size: " + contentSize + ")");
 
 						istream.close();
 						ostream.close();
