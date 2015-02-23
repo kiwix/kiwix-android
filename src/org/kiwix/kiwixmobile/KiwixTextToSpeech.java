@@ -96,33 +96,32 @@ public class KiwixTextToSpeech {
                 onSpeakingListener.onSpeakingEnded();
             }
         } else {
-            Locale locale = LanguageUtils.ISO3ToLocale(ZimContentProvider.getLanguage());
+	    Locale locale = LanguageUtils.ISO3ToLocale(ZimContentProvider.getLanguage());
             int result;
             if (locale == null
                     || (result = tts.isLanguageAvailable(locale)) == TextToSpeech.LANG_MISSING_DATA
                     || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.d(TAG_KIWIX, "TextToSpeech: language not supported: " +
-                        ZimContentProvider.getLanguage());
+		      ZimContentProvider.getLanguage() + " (" + locale.getLanguage() + ")");
                 Toast.makeText(context,
-                        context.getResources().getString(R.string.tts_lang_not_supported),
-                        Toast.LENGTH_LONG).show();
-                tts.setLanguage(Locale.ENGLISH);
+			       context.getResources().getString(R.string.tts_lang_not_supported),
+			       Toast.LENGTH_LONG).show();
             } else {
                 tts.setLanguage(locale);
-            }
-
-            // We use JavaScript to get the content of the page conveniently, earlier making some
-            // changes in the page
-            webView.loadUrl("javascript:" +
-                    "body = document.getElementsByTagName('body')[0].cloneNode(true);" +
-                    // Remove some elements that are shouldn't be read (table of contents,
-                    // references numbers, thumbnail captions, duplicated title, etc.)
-                    "toRemove = body.querySelectorAll('sup.reference, #toc, .thumbcaption, " +
-                    "    title, .navbox');" +
-                    "Array.prototype.forEach.call(toRemove, function(elem) {" +
-                    "    elem.parentElement.removeChild(elem);" +
-                    "});" +
-                    "tts.speakAloud(body.innerText);");
+		
+		// We use JavaScript to get the content of the page conveniently, earlier making some
+		// changes in the page
+		webView.loadUrl("javascript:" +
+				"body = document.getElementsByTagName('body')[0].cloneNode(true);" +
+				// Remove some elements that are shouldn't be read (table of contents,
+				// references numbers, thumbnail captions, duplicated title, etc.)
+				"toRemove = body.querySelectorAll('sup.reference, #toc, .thumbcaption, " +
+				"    title, .navbox');" +
+				"Array.prototype.forEach.call(toRemove, function(elem) {" +
+				"    elem.parentElement.removeChild(elem);" +
+				"});" +
+				"tts.speakAloud(body.innerText);");
+	    }
         }
     }
 
