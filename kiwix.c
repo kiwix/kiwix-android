@@ -160,7 +160,6 @@ JNIEXPORT jbyteArray JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getContent(JNIE
   setStringObjValue("", mimeTypeObj, env);
   setIntObjValue(0, sizeObj, env);
   jbyteArray data = env->NewByteArray(0);
-  bool isOK = false;
 
   /* Retrieve the content */
   if (reader != NULL) {
@@ -171,19 +170,17 @@ JNIEXPORT jbyteArray JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getContent(JNIE
 
     pthread_mutex_lock(&readerLock);
     try {
-      isOK = reader->getContentByUrl(cUrl, cData, cSize, cMimeType);
+      if (reader->getContentByUrl(cUrl, cData, cSize, cMimeType)) {
+	data = env->NewByteArray(cSize);
+	env->SetByteArrayRegion(data, 0, cSize, reinterpret_cast<const jbyte*>(cData.c_str()));
+	setStringObjValue(cMimeType, mimeTypeObj, env);
+	setIntObjValue(cSize, sizeObj, env);
+      }
     } catch (exception &e) {
       LOGI(e.what());
       std::cerr << e.what() << std::endl;
     }
     pthread_mutex_unlock(&readerLock);
-
-    if (isOK) {
-      data = env->NewByteArray(cSize);
-      env->SetByteArrayRegion(data, 0, cSize, reinterpret_cast<const jbyte*>(cData.c_str()));
-      setStringObjValue(cMimeType, mimeTypeObj, env);
-      setIntObjValue(cSize, sizeObj, env);
-    }
   }
   
   return data;
