@@ -91,7 +91,7 @@
 
         <provider
                 android:name=".ZimContentProvider"
-                android:authorities="org.kiwix.zim"
+                android:authorities="org.kiwix.zim.base"
                 android:exported="false"/>
 
         <activity
