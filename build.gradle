@@ -49,7 +49,7 @@ android {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.9'
+    gradleVersion = '2.3'
 }
 
 task nativeLibsToJar(type: Zip) {
