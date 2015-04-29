@@ -24,14 +24,11 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
 import android.content.Context;
-
 import android.text.Editable;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-
-
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
@@ -39,7 +36,8 @@ import android.widget.EditText;
 
 import java.lang.reflect.Method;
 
-public class CompatFindActionModeCallback implements ActionMode.Callback, TextWatcher, View.OnClickListener {
+public class CompatFindActionModeCallback
+        implements ActionMode.Callback, TextWatcher, View.OnClickListener {
 
     public boolean mIsActive;
 
@@ -94,7 +92,8 @@ public class CompatFindActionModeCallback implements ActionMode.Callback, TextWa
     // Set the WebView to search.  Must be non null, and set before calling startActionMode.
     public void setWebView(WebView webView) {
         if (null == webView) {
-            throw new AssertionError("WebView supplied to CompatFindActionModeCallback cannot be null");
+            throw new AssertionError(
+                    "WebView supplied to CompatFindActionModeCallback cannot be null");
         }
         mWebView = webView;
     }
@@ -178,7 +177,8 @@ public class CompatFindActionModeCallback implements ActionMode.Callback, TextWa
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         if (mWebView == null) {
-            throw new AssertionError("No WebView for CompatFindActionModeCallback::onActionItemClicked");
+            throw new AssertionError(
+                    "No WebView for CompatFindActionModeCallback::onActionItemClicked");
         }
 
         mInput.hideSoftInputFromWindow(mWebView.getWindowToken(), 0);

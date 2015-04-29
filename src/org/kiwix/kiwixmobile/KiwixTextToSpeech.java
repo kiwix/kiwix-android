@@ -14,12 +14,17 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class KiwixTextToSpeech {
+
     public static final String TAG_KIWIX = "kiwix";
 
     private Context context;
+
     private OnSpeakingListener onSpeakingListener;
+
     private WebView webView;
+
     private TextToSpeech tts;
+
     private boolean initialized = false;
 
     /**
@@ -33,8 +38,8 @@ public class KiwixTextToSpeech {
      *                              ended
      */
     public KiwixTextToSpeech(Context context, WebView webView,
-                             final OnInitSucceedListener onInitSucceedListener,
-                             final OnSpeakingListener onSpeakingListener) {
+            final OnInitSucceedListener onInitSucceedListener,
+            final OnSpeakingListener onSpeakingListener) {
         Log.d(TAG_KIWIX, "Initializing TextToSpeech");
 
         this.context = context;
@@ -59,7 +64,8 @@ public class KiwixTextToSpeech {
                 }
             }
         });
-        if (BackwardsCompatibilityTools.equalsOrNewThanApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)) {
+        if (BackwardsCompatibilityTools
+                .equalsOrNewThanApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)) {
             tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                 @Override
                 public void onStart(String utteranceId) {
@@ -96,32 +102,32 @@ public class KiwixTextToSpeech {
                 onSpeakingListener.onSpeakingEnded();
             }
         } else {
-	    Locale locale = LanguageUtils.ISO3ToLocale(ZimContentProvider.getLanguage());
+            Locale locale = LanguageUtils.ISO3ToLocale(ZimContentProvider.getLanguage());
             int result;
             if (locale == null
                     || (result = tts.isLanguageAvailable(locale)) == TextToSpeech.LANG_MISSING_DATA
                     || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Log.d(TAG_KIWIX, "TextToSpeech: language not supported: " +
-		      ZimContentProvider.getLanguage() + " (" + locale.getLanguage() + ")");
+                        ZimContentProvider.getLanguage() + " (" + locale.getLanguage() + ")");
                 Toast.makeText(context,
-			       context.getResources().getString(R.string.tts_lang_not_supported),
-			       Toast.LENGTH_LONG).show();
+                        context.getResources().getString(R.string.tts_lang_not_supported),
+                        Toast.LENGTH_LONG).show();
             } else {
                 tts.setLanguage(locale);
-		
-		// We use JavaScript to get the content of the page conveniently, earlier making some
-		// changes in the page
-		webView.loadUrl("javascript:" +
-				"body = document.getElementsByTagName('body')[0].cloneNode(true);" +
-				// Remove some elements that are shouldn't be read (table of contents,
-				// references numbers, thumbnail captions, duplicated title, etc.)
-				"toRemove = body.querySelectorAll('sup.reference, #toc, .thumbcaption, " +
-				"    title, .navbox');" +
-				"Array.prototype.forEach.call(toRemove, function(elem) {" +
-				"    elem.parentElement.removeChild(elem);" +
-				"});" +
-				"tts.speakAloud(body.innerText);");
-	    }
+
+                // We use JavaScript to get the content of the page conveniently, earlier making some
+                // changes in the page
+                webView.loadUrl("javascript:" +
+                        "body = document.getElementsByTagName('body')[0].cloneNode(true);" +
+                        // Remove some elements that are shouldn't be read (table of contents,
+                        // references numbers, thumbnail captions, duplicated title, etc.)
+                        "toRemove = body.querySelectorAll('sup.reference, #toc, .thumbcaption, " +
+                        "    title, .navbox');" +
+                        "Array.prototype.forEach.call(toRemove, function(elem) {" +
+                        "    elem.parentElement.removeChild(elem);" +
+                        "});" +
+                        "tts.speakAloud(body.innerText);");
+            }
         }
     }
 
@@ -143,7 +149,30 @@ public class KiwixTextToSpeech {
         tts.shutdown();
     }
 
+    /**
+     * The listener which is notified when initialization of the TextToSpeech engine is successfully
+     * done.
+     */
+    public interface OnInitSucceedListener {
+
+        public void onInitSucceed();
+    }
+
+    /**
+     * The listener that is notified when speaking starts or stops (regardless of whether it was a
+     * result of error, user, or because whole text was read).
+     *
+     * Note that the methods of this interface may not be called from the UI thread.
+     */
+    public interface OnSpeakingListener {
+
+        public void onSpeakingStarted();
+
+        public void onSpeakingEnded();
+    }
+
     private class TTSJavaScriptInterface {
+
         @JavascriptInterface
         @SuppressWarnings("unused")
         public void speakAloud(String content) {
@@ -163,25 +192,5 @@ public class KiwixTextToSpeech {
                 onSpeakingListener.onSpeakingStarted();
             }
         }
-    }
-
-    /**
-     * The listener which is notified when initialization of the TextToSpeech engine is successfully
-     * done.
-     */
-    public interface OnInitSucceedListener {
-        public void onInitSucceed();
-    }
-
-    /**
-     * The listener that is notified when speaking starts or stops (regardless of whether it was
-     * a result of error, user, or because whole text was read).
-     *
-     * Note that the methods of this interface may not be called from the UI thread.
-     */
-    public interface OnSpeakingListener {
-        public void onSpeakingStarted();
-
-        public void onSpeakingEnded();
     }
 }

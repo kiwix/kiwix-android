@@ -87,7 +87,8 @@ public class LanguageUtils {
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;
-        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
+        context.getResources()
+                .updateConfiguration(config, context.getResources().getDisplayMetrics());
     }
 
     /**
@@ -254,17 +255,20 @@ public class LanguageUtils {
                             Log.d(TAG_KIWIX, "Applying custom font");
 
                             // Reduce the text size
-                            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textView.getTextSize() - 2f);
+                            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                                    textView.getTextSize() - 2f);
                         }
                     });
 
                     return view;
 
                 } catch (InflateException e) {
-                    Log.e(TAG_KIWIX, "Could not apply the custom font to " + name + " " + e.getMessage());
+                    Log.e(TAG_KIWIX,
+                            "Could not apply the custom font to " + name + " " + e.getMessage());
 
                 } catch (ClassNotFoundException e) {
-                    Log.e(TAG_KIWIX, "Could not apply the custom font to " + name + " " + e.getMessage());
+                    Log.e(TAG_KIWIX,
+                            "Could not apply the custom font to " + name + " " + e.getMessage());
                 }
             }
 

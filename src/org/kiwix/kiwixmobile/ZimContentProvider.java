@@ -23,18 +23,17 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.webkit.MimeTypeMap;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.os.ParcelFileDescriptor.AutoCloseOutputStream;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;  
+import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;   
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream; 
+import java.io.InputStream;
 import java.io.OutputStream;
 
 public class ZimContentProvider extends ContentProvider {
@@ -147,22 +146,49 @@ public class ZimContentProvider extends ContentProvider {
         }
     }
 
+    private static String loadICUData(Context context, File workingDir) {
+        String icuFileName = "icudt49l.dat";
+        try {
+            File icuDir = new File(workingDir, "icu");
+            if (!icuDir.exists()) {
+                icuDir.mkdirs();
+            }
+            File icuDataFile = new File(icuDir, icuFileName);
+            if (!icuDataFile.exists()) {
+                InputStream in = context.getAssets().open(icuFileName);
+                OutputStream out = new FileOutputStream(icuDataFile);
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+                in.close();
+                out.flush();
+                out.close();
+            }
+            return icuDir.getAbsolutePath();
+        } catch (Exception e) {
+            Log.e(TAG_KIWIX, "Error copying icu data file", e);
+            return null;
+        }
+    }
+
     @Override
     public boolean onCreate() {
         jniKiwix = new JNIKiwix();
-	setIcuDataDirectory();
+        setIcuDataDirectory();
         return (true);
     }
 
     @Override
     public String getType(Uri uri) {
-	String mimeType;
+        String mimeType;
 
-	// This is the code which makes a guess based on the file extenstion
-	String extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString().toLowerCase());
-	mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        // This is the code which makes a guess based on the file extenstion
+        String extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString().toLowerCase());
+        mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
 
-	// This is the code which retrieve the mimeType from the libzim
+        // This is the code which retrieve the mimeType from the libzim
         // "slow" and still bugyy
         if (mimeType.isEmpty() && jniKiwix != null && uri == null) {
             String t = uri.toString();
@@ -177,21 +203,21 @@ public class ZimContentProvider extends ContentProvider {
                 t = t.substring(0, pos);
             }
 
-	    mimeType = jniKiwix.getMimeType(t);
-	    
-	    // Truncate mime-type (everything after the first space
-	    mimeType = mimeType.replaceAll("^([^ ]+).*$", "$1");
+            mimeType = jniKiwix.getMimeType(t);
+
+            // Truncate mime-type (everything after the first space
+            mimeType = mimeType.replaceAll("^([^ ]+).*$", "$1");
         }
 
-	Log.d(TAG_KIWIX, "Getting mime-type for " + uri.toString() + " = " + mimeType);
+        Log.d(TAG_KIWIX, "Getting mime-type for " + uri.toString() + " = " + mimeType);
         return mimeType;
     }
 
     @Override
     public ParcelFileDescriptor openFile(Uri uri, String mode)
-    throws FileNotFoundException {
-	ParcelFileDescriptor[] pipe = null;
-	
+            throws FileNotFoundException {
+        ParcelFileDescriptor[] pipe = null;
+
         try {
             pipe = ParcelFileDescriptor.createPipe();
             new TransferThread(jniKiwix, uri, new AutoCloseOutputStream(pipe[1])).start();
@@ -200,7 +226,7 @@ public class ZimContentProvider extends ContentProvider {
             throw new FileNotFoundException("Could not open pipe for: "
                     + uri.toString());
         }
-	
+
         return (pipe[0]);
     }
 
@@ -224,6 +250,16 @@ public class ZimContentProvider extends ContentProvider {
     @Override
     public int delete(Uri uri, String where, String[] whereArgs) {
         throw new RuntimeException("Operation not supported");
+    }
+
+    private void setIcuDataDirectory() {
+        File workingDir = this.getContext().getFilesDir();
+        String icuDirPath = loadICUData(this.getContext(), workingDir);
+
+        if (icuDirPath != null) {
+            Log.d(TAG_KIWIX, "Setting the ICU directory path to " + icuDirPath);
+            jniKiwix.setDataDirectory(icuDirPath);
+        }
     }
 
     static class TransferThread extends Thread {
@@ -266,59 +302,27 @@ public class ZimContentProvider extends ContentProvider {
                 JNIKiwixString mime = new JNIKiwixString();
                 JNIKiwixInt size = new JNIKiwixInt();
                 byte[] data = jniKiwix.getContent(articleZimUrl, mime, size);
-		out.write(data, 0, data.length);
+                out.write(data, 0, data.length);
                 out.flush();
 
                 Log.d(TAG_KIWIX, "reading  " + articleZimUrl
-		      + "(mime: " + mime.value + ", size: " + size.value + ") finished.");
+                        + "(mime: " + mime.value + ", size: " + size.value + ") finished.");
             } catch (IOException e) {
-                Log.e(TAG_KIWIX, "Exception reading article " + articleZimUrl + " from zim file", e);
+                Log.e(TAG_KIWIX, "Exception reading article " + articleZimUrl + " from zim file",
+                        e);
             } catch (NullPointerException e) {
-                Log.e(TAG_KIWIX, "Exception reading article " + articleZimUrl + " from zim file", e);
+                Log.e(TAG_KIWIX, "Exception reading article " + articleZimUrl + " from zim file",
+                        e);
             } finally {
                 try {
                     out.close();
                 } catch (IOException e) {
-		    Log.e(TAG_KIWIX, "Custom exception by closing out stream for article " + articleZimUrl, e);
+                    Log.e(TAG_KIWIX,
+                            "Custom exception by closing out stream for article " + articleZimUrl,
+                            e);
                 }
 
             }
-        }
-    }
-
-    private void setIcuDataDirectory() {
-        File workingDir = this.getContext().getFilesDir();
-        String icuDirPath = loadICUData(this.getContext(), workingDir);
-
-        if(icuDirPath != null) {
-            Log.d(TAG_KIWIX, "Setting the ICU directory path to " + icuDirPath);
-            jniKiwix.setDataDirectory(icuDirPath);
-        }
-    }
-
-    private static String loadICUData(Context context, File workingDir) {
-        String icuFileName = "icudt49l.dat";
-        try {
-            File icuDir = new File(workingDir, "icu");
-            if(!icuDir.exists()) icuDir.mkdirs();
-            File icuDataFile = new File(icuDir, icuFileName);
-            if(!icuDataFile.exists()) {
-                InputStream in = context.getAssets().open(icuFileName);
-                OutputStream out =  new FileOutputStream(icuDataFile);
-                byte[] buf = new byte[1024];
-                int len;
-                while ((len = in.read(buf)) > 0) {
-                    out.write(buf, 0, len);
-                }
-                in.close();
-                out.flush();
-                out.close();
-            }
-            return icuDir.getAbsolutePath();
-        }
-        catch (Exception e) {
-            Log.e(TAG_KIWIX, "Error copying icu data file", e);
-            return null;
         }
     }
 

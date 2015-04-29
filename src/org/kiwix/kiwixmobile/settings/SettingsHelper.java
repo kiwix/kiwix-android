@@ -114,7 +114,8 @@ public class SettingsHelper {
         String version;
 
         try {
-            version = getContext().getPackageManager().getPackageInfo("org.kiwix.kiwixmobile", 0).versionName;
+            version = getContext().getPackageManager()
+                    .getPackageInfo("org.kiwix.kiwixmobile", 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
             return;
         }

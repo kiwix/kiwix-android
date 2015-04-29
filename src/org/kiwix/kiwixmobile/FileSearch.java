@@ -48,7 +48,7 @@ public class FileSearch {
         // paths proves insufficient, the alternatives used by some projects
         // is to read and parse contents of /proc/mounts.
         final String[] additionalRoots = {
-	    "/mnt"
+                "/mnt"
         };
 
         int i = 0;
@@ -63,7 +63,7 @@ public class FileSearch {
 
         String dirNamePrimary = new File(
                 Environment.getExternalStorageDirectory().getAbsolutePath()).toString();
-	//        addFilesToFileList(dirNamePrimary, filter, fileList);
+        //        addFilesToFileList(dirNamePrimary, filter, fileList);
 
         for (final String dirName : additionalRoots) {
             if (dirNamePrimary.equals(dirName)) {
@@ -140,7 +140,8 @@ public class FileSearch {
     }
 
     // Fill fileList with files found in the specific directory
-    private void addFilesToFileList(String directory, FilenameFilter[] filter, List<String> fileList) {
+    private void addFilesToFileList(String directory, FilenameFilter[] filter,
+            List<String> fileList) {
         Log.d(TAG_KIWIX, "Searching directory " + directory);
         File[] foundFiles = listFilesAsArray(new File(directory), filter, -1);
         for (File f : foundFiles) {

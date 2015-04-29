@@ -21,8 +21,6 @@ package org.kiwix.kiwixmobile;
 
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 
@@ -41,13 +39,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.DragEvent;
 import android.view.KeyEvent;
-
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -58,13 +54,13 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.equalsOrNewThanApi;
 import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.newApi;
 
 public class KiwixMobileActivity extends SherlockFragmentActivity implements ActionBar.TabListener,
-     View.OnLongClickListener, KiwixMobileFragment.FragmentCommunicator, BookmarkDialog.BookmarkDialogListener {
+        View.OnLongClickListener, KiwixMobileFragment.FragmentCommunicator,
+        BookmarkDialog.BookmarkDialogListener {
 
     public static final String TAG_KIWIX = "kiwix";
 
@@ -101,7 +97,7 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-       // startActivity(new Intent(this, LibraryActivity.class));
+        // startActivity(new Intent(this, LibraryActivity.class));
 
         requestWindowFeature(Window.FEATURE_PROGRESS);
 
@@ -157,7 +153,8 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
         mViewPager.setPageMargin(3);
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onPageScrolled(int position, float positionOffset,
+                    int positionOffsetPixels) {
                 reattachOnLongClickListener();
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels);
             }
@@ -312,24 +309,24 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
             case R.id.menu_forward:
                 if (mCurrentFragment.webView.canGoForward()) {
                     mCurrentFragment.webView.goForward();
-		    if (newApi()) {
-			invalidateOptionsMenu();
-		    }
-		}
+                    if (newApi()) {
+                        invalidateOptionsMenu();
+                    }
+                }
                 break;
 
             case R.id.menu_back:
                 if (mCurrentFragment.webView.canGoBack()) {
-		    mCurrentFragment.webView.goBack();
-		    if (newApi()) {
-			invalidateOptionsMenu();
-		    }
+                    mCurrentFragment.webView.goBack();
+                    if (newApi()) {
+                        invalidateOptionsMenu();
+                    }
                 }
                 break;
 
-	    case R.id.menu_bookmarks:
-	        mCurrentFragment.viewBookmarks();
-	        break;
+            case R.id.menu_bookmarks:
+                mCurrentFragment.viewBookmarks();
+                break;
 
             case R.id.menu_randomarticle:
                 mCurrentFragment.openRandomArticle();
@@ -426,7 +423,7 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
             // handle the back button for the WebView in the current Fragment
             mCurrentFragment = getCurrentVisibleFragment();
             if (mCurrentFragment != null) {
-              return mCurrentFragment.onKeyDown(keyCode, event);
+                return mCurrentFragment.onKeyDown(keyCode, event);
             }
         }
 
@@ -448,7 +445,8 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
             @Override
             public void run() {
                 String title = getResources().getString(R.string.app_name);
-                if (mCurrentFragment.webView.getTitle() != null && !mCurrentFragment.webView.getTitle()
+                if (mCurrentFragment.webView.getTitle() != null && !mCurrentFragment.webView
+                        .getTitle()
                         .isEmpty()) {
                     title = mCurrentFragment.webView.getTitle();
                 }
@@ -642,7 +640,8 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
     // This method gets a reference to the fragment, that is currently visible in the ViewPager
     private KiwixMobileFragment getCurrentVisibleFragment() {
 
-        return ((KiwixMobileFragment) mViewPagerAdapter.getFragmentAtPosition(mViewPager.getCurrentItem()));
+        return ((KiwixMobileFragment) mViewPagerAdapter
+                .getFragmentAtPosition(mViewPager.getCurrentItem()));
     }
 
     @Override
@@ -689,6 +688,17 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
         dialog.show();
     }
 
+    //These two methods are used with the BookmarkDialog.
+    @Override
+    public void onListItemSelect(String choice) {
+        mCurrentFragment.openArticleFromBookmark(choice);
+    }
+
+    @Override
+    public void onBookmarkButtonPressed() {
+        mCurrentFragment.toggleBookmark();
+    }
+
     public class State {
 
         private boolean hasToBeRefreshed;
@@ -704,17 +714,6 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
         public void setHasToBeRefreshed(boolean hasToBeRefreshed) {
             this.hasToBeRefreshed = hasToBeRefreshed;
         }
-    }
-
-    //These two methods are used with the BookmarkDialog.
-    @Override
-    public void onListItemSelect(String choice) {
-	mCurrentFragment.openArticleFromBookmark(choice);
-    }
-
-    @Override
-    public void onBookmarkButtonPressed() {
-	mCurrentFragment.toggleBookmark();
     }
 
     public class ViewPagerAdapter extends FragmentStatePagerAdapter {
@@ -733,9 +732,9 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
             return fragment;
         }
 
-	protected void putItem(Fragment attachedFragment) {
-	    tabs.put(tabs.size(), attachedFragment);
-	}
+        protected void putItem(Fragment attachedFragment) {
+            tabs.put(tabs.size(), attachedFragment);
+        }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {

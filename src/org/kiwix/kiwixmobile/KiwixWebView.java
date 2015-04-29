@@ -20,14 +20,15 @@
 package org.kiwix.kiwixmobile;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.webkit.WebView;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings.LayoutAlgorithm;
+import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ZoomButtonsController;
-import android.webkit.WebSettings.LayoutAlgorithm;
-import android.os.Build;
+
 import java.lang.reflect.Method;
 
 import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.newApi;
@@ -44,34 +45,34 @@ public class KiwixWebView extends WebView {
 
     public KiwixWebView(Context context) {
         super(context);
-	init();
+        init();
     }
 
     public KiwixWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
-	init();
+        init();
     }
 
     public KiwixWebView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-	init();
+        init();
     }
 
     private void init() {
-	setWebChromeClient(new WebChromeClient());
-	setWebViewClient(new WebViewClient());
-	getSettings().setJavaScriptEnabled(true);
-	getSettings().setSupportMultipleWindows(true);
-	getSettings().setSupportZoom(true);
-	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-	    
-	    // Avoid crash with WebViewClassic
-	    try {
-		getSettings().setLayoutAlgorithm(LayoutAlgorithm.TEXT_AUTOSIZING);
-	    } catch (Exception e) {
-		e.printStackTrace();
-	    }
-	}
+        setWebChromeClient(new WebChromeClient());
+        setWebViewClient(new WebViewClient());
+        getSettings().setJavaScriptEnabled(true);
+        getSettings().setSupportMultipleWindows(true);
+        getSettings().setSupportZoom(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+
+            // Avoid crash with WebViewClassic
+            try {
+                getSettings().setLayoutAlgorithm(LayoutAlgorithm.TEXT_AUTOSIZING);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -90,14 +91,14 @@ public class KiwixWebView extends WebView {
         super.onScrollChanged(l, t, oldl, oldt);
         int windowHeight = getMeasuredHeight();
 
-	// It seems that in a few cases, getMeasuredHeight() returns 0
-	if (windowHeight > 0) {
-	    int pages = getContentHeight() / windowHeight;
-	    int page = t / windowHeight;
-	    if (mChangeListener != null) {
-		mChangeListener.onPageChanged(page, pages);
-	    }
-	}
+        // It seems that in a few cases, getMeasuredHeight() returns 0
+        if (windowHeight > 0) {
+            int pages = getContentHeight() / windowHeight;
+            int page = t / windowHeight;
+            if (mChangeListener != null) {
+                mChangeListener.onPageChanged(page, pages);
+            }
+        }
     }
 
     public void disableZoomControlls(boolean disable) {
@@ -142,6 +143,7 @@ public class KiwixWebView extends WebView {
     }
 
     public interface OnPageChangeListener {
+
         public void onPageChanged(int page, int maxPages);
     }
 

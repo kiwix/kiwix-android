@@ -19,7 +19,6 @@
 
 package org.kiwix.kiwixmobile;
 
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -38,10 +37,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
-
 import android.util.Log;
-
-
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -52,7 +48,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -235,7 +230,8 @@ public class ZimFileSelectActivity extends SherlockFragmentActivity
     protected void startQuery() {
 
         // Defines a list of columns to retrieve from the Cursor and load into an output row
-        String[] mZimListColumns = {MediaStore.Files.FileColumns.TITLE, MediaStore.Files.FileColumns.DATA};
+        String[] mZimListColumns = {MediaStore.Files.FileColumns.TITLE,
+                MediaStore.Files.FileColumns.DATA};
 
         // Defines a list of View IDs that will receive the Cursor columns for each row
         int[] mZimListItems = {android.R.id.text1, android.R.id.text2};

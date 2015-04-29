@@ -32,7 +32,8 @@ public class KiwixSettingsActivityHC extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new PrefsFragment()).commit();
+        getFragmentManager().beginTransaction().replace(android.R.id.content, new PrefsFragment())
+                .commit();
     }
 
     public class PrefsFragment extends PreferenceFragment {
