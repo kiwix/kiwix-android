@@ -35,6 +35,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ZimContentProvider extends ContentProvider {
 
@@ -44,9 +46,15 @@ public class ZimContentProvider extends ContentProvider {
 
     public static final Uri UI_URI = Uri.parse("content://org.kiwix.ui/");
 
+    private static final String VIDEO_PATTERN = "([^\\s]+(\\.(?i)(3gp|mp4|m4a|aac))$)";
+
     private static String zimFileName;
 
     private static JNIKiwix jniKiwix;
+
+    private Pattern pattern;
+
+    private Matcher matcher;
 
     public synchronized static String setZimFile(String fileName) {
         if (!jniKiwix.loadZIM(fileName)) {
@@ -177,7 +185,8 @@ public class ZimContentProvider extends ContentProvider {
     public boolean onCreate() {
         jniKiwix = new JNIKiwix();
         setIcuDataDirectory();
-        return (true);
+        pattern = Pattern.compile(VIDEO_PATTERN);
+        return true;
     }
 
     @Override
@@ -216,7 +225,16 @@ public class ZimContentProvider extends ContentProvider {
     @Override
     public ParcelFileDescriptor openFile(Uri uri, String mode)
             throws FileNotFoundException {
-        ParcelFileDescriptor[] pipe = null;
+        ParcelFileDescriptor[] pipe;
+
+        matcher = pattern.matcher(uri.toString());
+        if (matcher.matches()) {
+            try {
+                return saveVideoToCache(uri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         try {
             pipe = ParcelFileDescriptor.createPipe();
@@ -228,6 +246,26 @@ public class ZimContentProvider extends ContentProvider {
         }
 
         return (pipe[0]);
+    }
+
+    private ParcelFileDescriptor saveVideoToCache(Uri uri) throws IOException {
+        String filePath = getFilePath(uri);
+
+        String fileName = uri.toString();
+        fileName = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.length());
+
+        File f = new File(FileUtils.getFileCacheDir(getContext()), fileName);
+
+        JNIKiwixString mime = new JNIKiwixString();
+        JNIKiwixInt size = new JNIKiwixInt();
+        byte[] data = jniKiwix.getContent(filePath, mime, size);
+
+        FileOutputStream out = new FileOutputStream(f);
+
+        out.write(data, 0, data.length);
+        out.flush();
+
+        return ParcelFileDescriptor.open(f, ParcelFileDescriptor.MODE_READ_ONLY);
     }
 
     @Override
@@ -275,29 +313,16 @@ public class ZimContentProvider extends ContentProvider {
         TransferThread(JNIKiwix jniKiwix, Uri articleUri, OutputStream out) throws IOException {
             this.articleUri = articleUri;
             this.jniKiwix = jniKiwix;
-            Log.d(TAG_KIWIX, "Retrieving :" + articleUri.toString());
+            Log.d(TAG_KIWIX, "Retrieving: " + articleUri.toString());
 
-            String t = articleUri.toString();
-            int pos = articleUri.toString().indexOf(CONTENT_URI.toString());
-            if (pos != -1) {
-                t = articleUri.toString().substring(
-                        CONTENT_URI.toString().length());
-            }
-            // Remove fragment (#...) as not supported by zimlib
-            pos = t.indexOf("#");
-            if (pos != -1) {
-                t = t.substring(0, pos);
-            }
+            String filePath = getFilePath(articleUri);
 
             this.out = out;
-            this.articleZimUrl = t;
+            this.articleZimUrl = filePath;
         }
 
         @Override
         public void run() {
-            byte[] buf = new byte[8192];
-            int len;
-
             try {
                 JNIKiwixString mime = new JNIKiwixString();
                 JNIKiwixInt size = new JNIKiwixInt();
@@ -307,10 +332,7 @@ public class ZimContentProvider extends ContentProvider {
 
                 Log.d(TAG_KIWIX, "reading  " + articleZimUrl
                         + "(mime: " + mime.value + ", size: " + size.value + ") finished.");
-            } catch (IOException e) {
-                Log.e(TAG_KIWIX, "Exception reading article " + articleZimUrl + " from zim file",
-                        e);
-            } catch (NullPointerException e) {
+            } catch (IOException | NullPointerException e) {
                 Log.e(TAG_KIWIX, "Exception reading article " + articleZimUrl + " from zim file",
                         e);
             } finally {
@@ -321,9 +343,22 @@ public class ZimContentProvider extends ContentProvider {
                             "Custom exception by closing out stream for article " + articleZimUrl,
                             e);
                 }
-
             }
         }
     }
 
+    private static String getFilePath(Uri articleUri) {
+        String filePath = articleUri.toString();
+        int pos = articleUri.toString().indexOf(CONTENT_URI.toString());
+        if (pos != -1) {
+            filePath = articleUri.toString().substring(
+                    CONTENT_URI.toString().length());
+        }
+        // Remove fragment (#...) as not supported by zimlib
+        pos = filePath.indexOf("#");
+        if (pos != -1) {
+            filePath = filePath.substring(0, pos);
+        }
+        return filePath;
+    }
 }

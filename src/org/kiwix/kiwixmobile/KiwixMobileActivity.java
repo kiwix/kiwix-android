@@ -265,8 +265,9 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
 
     @Override
     protected void onDestroy() {
-        finish();
         super.onDestroy();
+        // TODO create a base Activity class that class this.
+        FileUtils.deleteCachedFiles(this);
     }
 
     @Override
