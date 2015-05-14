@@ -31,7 +31,7 @@ proguard/
 gen-external-apklibs
 
 # IDE
-/.idea/workspace.xml
+.idea
 .settings
 *.iml
 

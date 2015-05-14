@@ -9,14 +9,14 @@ buildscript {
     }
 }
 
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:19.1.0'
+    compile 'com.android.support:support-v4:21.0.3'
     compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
     compile files("$buildDir/native-libs/native-libs.jar")
 
