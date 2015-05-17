@@ -185,7 +185,7 @@ public class ZimContentProvider extends ContentProvider {
     public boolean onCreate() {
         jniKiwix = new JNIKiwix();
         setIcuDataDirectory();
-        pattern = Pattern.compile(VIDEO_PATTERN);
+        pattern = Pattern.compile(VIDEO_PATTERN, Pattern.CASE_INSENSITIVE);
         return true;
     }
 
