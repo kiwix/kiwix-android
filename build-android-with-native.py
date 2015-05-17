@@ -551,10 +551,10 @@ if LOCALES_TXT:
 if COMPILE_APK:
 
     # Compile java and build APK
-    syscall('rm -f build/apk/*.apk', shell=True)
+    syscall('rm -f build/outputs/apk/*.apk', shell=True)
     syscall('./gradlew build --stacktrace')
 
     # Check that the step went well
-    if not os.path.exists(os.path.join('build', 'apk', 'android-debug-unaligned.apk')):
+    if not os.path.exists(os.path.join('build', 'outputs', 'apk', 'android-debug-unaligned.apk')):
         failed_on_step('The android-debug-unaligned.apk package has not been created '
                        'and is not present.')
