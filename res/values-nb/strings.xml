@@ -13,8 +13,8 @@
     <string name="menu_randomarticle">Tilfeldig artikkel</string>
     <string name="menu_fullscreen">Fullskjerm</string>
     <string name="menu_exitfullscreen">Avslutt fullskjerm</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">Les høyt</string>
+    <string name="menu_read_aloud_stop">Stopp høytlesning</string>
     <string name="menu_exit">Avslutt</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Del med venner</string>

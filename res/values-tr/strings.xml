@@ -13,14 +13,14 @@
     <string name="menu_randomarticle">Rastgele madde</string>
     <string name="menu_fullscreen">Tam ekran</string>
     <string name="menu_exitfullscreen">Tam ekrandan çık</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">Yüksek sesle oku</string>
+    <string name="menu_read_aloud_stop">Yüksek sesle okumayı sonlandır</string>
     <string name="menu_exit">Çık</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Arkadaşlarınla paylaş</string>
     <string name="save_media">Medyayı şu şekilde kaydet...</string>
     <string name="save_media_error">Medya kaydedilmeye çalışılırken bir hata oluştu!</string>
-    <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
+    <string name="save_media_saved">Medyanın %1$\'i Resim dosyanıza kaydedildi</string>
     <string name="rescan_fs_warning">ZIM dosyaları için taranıyor, lütfen bekleyin...</string>
     <string name="button_backtotop">Başa dön</string>
     <string name="search_label">Ara</string>

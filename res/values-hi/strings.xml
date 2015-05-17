@@ -13,8 +13,8 @@
     <string name="menu_randomarticle">रैन्डम लेख</string>
     <string name="menu_fullscreen">पूरा स्क्रीन</string>
     <string name="menu_exitfullscreen">पूरे स्क्रीन से बाहर निकलें</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">पढ़ा कर सुनें</string>
+    <string name="menu_read_aloud_stop">पढ़ा कर सुनना समाप्त करें</string>
     <string name="menu_exit">बाहर निकलें</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">दोस्तों के साथ बांटे</string>

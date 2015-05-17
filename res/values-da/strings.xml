@@ -44,7 +44,7 @@
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatisk</item>
         <item name="pref_zoom_entry_small">Lille</item>
-        <item name="pref_zoom_entry_medium">Medie</item>
+        <item name="pref_zoom_entry_medium">Mellem</item>
         <item name="pref_zoom_entry_large">Stor</item>
     </string-array>
     <string name="pref_info_title">Information</string>

@@ -13,8 +13,8 @@
     <string name="menu_randomarticle">צופֿעליגער ארטיקל</string>
     <string name="menu_fullscreen">פֿולער עקראן</string>
     <string name="menu_exitfullscreen">אוועקגיין פון פולן עקראן</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">לייענען הויך</string>
+    <string name="menu_read_aloud_stop">אויפהיטן לייענען הויך</string>
     <string name="menu_exit">פֿארלאזן</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">טיילט מיט חברים</string>

@@ -10,7 +10,7 @@
     <string name="menu_search">अन्विष्यताम्</string>
     <string name="menu_searchintext">पाठे अन्विष्यताम्</string>
     <string name="menu_bookmarks">पुस्तकचिह्नानि</string>
-    <string name="menu_randomarticle">अशृङ्खलं (Random) पृष्ठम्</string>
+    <string name="menu_randomarticle">यादृच्छिकं (Random) पृष्ठम्</string>
     <string name="menu_fullscreen">सम्पूर्णपटलम्</string>
     <string name="menu_exitfullscreen">सम्पूर्णपटलं निर्गमनम्</string>
     <string name="menu_read_aloud">Read aloud</string>

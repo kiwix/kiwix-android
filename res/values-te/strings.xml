@@ -9,18 +9,18 @@
     <string name="menu_settings">అభిరుచులు</string>
     <string name="menu_search">వెతుకు</string>
     <string name="menu_searchintext">పాఠ్యంలో వెతుకు</string>
-    <string name="menu_bookmarks">పుటీకలు</string>
+    <string name="menu_bookmarks">మడతపేజీలు</string>
     <string name="menu_randomarticle">యాదృచ్ఛిక వ్యాసం</string>
     <string name="menu_fullscreen">నిండుతెర</string>
     <string name="menu_exitfullscreen">నిండుతెరను చాలించు</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">బయటకి చదువు</string>
+    <string name="menu_read_aloud_stop">బయటకి చదవడం ఆపివేయి</string>
     <string name="menu_exit">నిలిపివేయి</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">స్నేహితులతో పంచుకోండి</string>
-    <string name="save_media">Save Media</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
-    <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
+    <string name="save_media">మీడియాని ఇలా భద్రపరచండి...</string>
+    <string name="save_media_error">మీడియాను భద్రపరచడంలో తప్పు జరిగింది.</string>
+    <string name="save_media_saved">మీడియాని మీ బొమ్మల సంచయంలోని %1$s వద్ద భద్రపరచాము</string>
     <string name="rescan_fs_warning">ZIM దస్త్రాలను స్కాన్ చేస్తున్నాం, దయచేసి వేచి ఉండండి...</string>
     <string name="button_backtotop">తిరిగి పైకి</string>
     <string name="search_label">వెతుకు</string>
@@ -42,10 +42,10 @@
     <string name="pref_zoom_title">అతిరూపణ స్థాయి</string>
     <string name="pref_zoom_dialogtitle">అతిరూపణ స్థాయి</string>
     <string-array name="pref_zoom_entries">
-        <item name="pref_zoom_entry_automatic">Automatic</item>
-        <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_automatic">స్వయంచాలితం</item>
+        <item name="pref_zoom_entry_small">చిన్న</item>
+        <item name="pref_zoom_entry_medium">మధ్యస్థ</item>
+        <item name="pref_zoom_entry_large">పెద్ద</item>
     </string-array>
     <string name="pref_info_title">సమాచారం</string>
     <string name="pref_info_version">సంచిక</string>
@@ -57,7 +57,7 @@
     <string name="pref_backtotop_summary">పేజీ చివర్లో పేజీ మొదటికి చేరుకునే బొత్తమును చూపండి</string>
     <string name="share_via">పంచుకోండి ...</string>
     <string name="pref_language_title">భాష</string>
-    <string name="pref_language_chooser">Choose a language</string>
+    <string name="pref_language_chooser">భాషను ఎంచుకోండి</string>
     <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

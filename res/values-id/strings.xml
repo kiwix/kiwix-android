@@ -14,7 +14,7 @@
     <string name="menu_fullscreen">Layar penuh</string>
     <string name="menu_exitfullscreen">Keluar dari modus layar penuh</string>
     <string name="menu_read_aloud">Bacakan</string>
-    <string name="menu_read_aloud_stop">Berhenti pembacaan</string>
+    <string name="menu_read_aloud_stop">Hentikan pembacaan</string>
     <string name="menu_exit">Keluar</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Bagikan dengan teman</string>
