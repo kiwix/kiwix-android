@@ -46,7 +46,7 @@ public class ZimContentProvider extends ContentProvider {
 
     public static final Uri UI_URI = Uri.parse("content://org.kiwix.ui/");
 
-    private static final String VIDEO_PATTERN = "([^\\s]+(\\.(?i)(3gp|mp4|m4a|webm|mkv))$)";
+    private static final String VIDEO_PATTERN = "([^\\s]+(\\.(?i)(3gp|mp4|m4a|webm|mkv|ogg|ogv))$)";
 
     private static String zimFileName;
 
