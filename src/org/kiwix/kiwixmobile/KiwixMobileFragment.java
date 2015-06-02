@@ -843,7 +843,7 @@ public class KiwixMobileFragment extends SherlockFragment {
         webView.loadUrl("file:///android_res/raw/welcome.html");
     }
 
-    private void showHelp() {
+    public void showHelp() {
         // Load from resource. Use with base url as else no images can be embedded.
         // Note that this leads inclusion of welcome page in browser history
         // This is not perfect, but good enough. (and would be signifcant effort to remove file)

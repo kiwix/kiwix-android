@@ -338,7 +338,7 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
                 break;
 
             case R.id.menu_help:
-                mCurrentFragment.showWelcome();
+                mCurrentFragment.showHelp();
                 break;
 
             case R.id.menu_openfile:
