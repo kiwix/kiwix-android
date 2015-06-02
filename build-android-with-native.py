@@ -18,7 +18,7 @@ from subprocess import call, check_output
 # arm-linux-androideabi, mipsel-linux-android, x86, llvm
 ALL_ARCHS = ['arm-linux-androideabi', 'mipsel-linux-android', 'x86']
 
-USAGE = '''Usage:  %s [--option]
+USAGE = '''Usage:  {arg0} [--option]
 
     Without option, all steps are executed on all archs.
 
@@ -41,7 +41,7 @@ USAGE = '''Usage:  %s [--option]
 def init_with_args(args):
 
     def display_usage():
-        print(USAGE % args[0])
+        print(USAGE.format(arg0=args[0]))
         sys.exit(0)
 
     # default is executing all the steps
@@ -82,7 +82,8 @@ def init_with_args(args):
         # we received options.
         # consider we only want the specified steps
         create_toolchain = compile_liblzma = compile_libicu = compile_libzim = \
-            compile_libkiwix = strip_libkiwix = compile_apk = locales_txt = False
+            compile_libkiwix = strip_libkiwix = \
+            compile_apk = locales_txt = False
 
         for option in options:
             if 'toolchain' in option:
@@ -129,7 +130,8 @@ SYSTEMS = {'Linux': 'linux', 'Darwin': 'mac'}
 
 # find out what to execute based on command line arguments
 CREATE_TOOLCHAIN, COMPILE_LIBLZMA, COMPILE_LIBICU, COMPILE_LIBZIM, \
-    COMPILE_LIBKIWIX, STRIP_LIBKIWIX, COMPILE_APK, LOCALES_TXT, ARCHS = init_with_args(sys.argv)
+    COMPILE_LIBKIWIX, STRIP_LIBKIWIX, COMPILE_APK, \
+    LOCALES_TXT, ARCHS = init_with_args(sys.argv)
 
 # compiler version to use
 # list of available toolchains in <NDK_PATH>/toolchains
@@ -169,7 +171,8 @@ LIBICU_SRC = os.path.join(os.path.dirname(CURRENT_PATH),
                           'src', 'dependencies', 'icu', 'source')
 
 # headers for libicu
-LIBICU_INCLUDES = [os.path.join(LIBICU_SRC, 'i18n'), os.path.join(LIBICU_SRC, 'common')]
+LIBICU_INCLUDES = [os.path.join(LIBICU_SRC, 'i18n'),
+                   os.path.join(LIBICU_SRC, 'common')]
 
 # root folder for libzim
 LIBZIM_SRC = os.path.join(os.path.dirname(CURRENT_PATH),
@@ -192,7 +195,9 @@ LIBKIWIX_SRC = os.path.join(os.path.dirname(CURRENT_PATH),
                             'src', 'common')
 
 OPTIMIZATION_ENV = {'CXXFLAGS': ' -D__OPTIMIZE__ -fno-strict-aliasing '
-                                ' -DU_HAVE_NL_LANGINFO_CODESET=0 -DU_STATIC_IMPLEMENTATION -DU_HAVE_STD_STRING -DU_TIMEZONE=0',
+                                ' -DU_HAVE_NL_LANGINFO_CODESET=0 '
+                                '-DU_STATIC_IMPLEMENTATION '
+                                '-DU_HAVE_STD_STRING -DU_TIMEZONE=0',
                     'NDK_DEBUG': '0'}
 
 # list of path that should already be set
@@ -203,6 +208,7 @@ REQUIRED_PATHS = (NDK_PATH, PLATFORM_PREFIX,
 ICU_TMP = PLATFORM_PREFIX + '/tmp/'
 ICU_TMP_HOST = ICU_TMP + 'host/'
 ICU_TMP_TARGET = ICU_TMP + 'target/'
+
 
 def fail_on_missing(path):
     ''' check existence of path and error msg + exit if it fails '''
@@ -245,13 +251,14 @@ for path in REQUIRED_PATHS:
 # Prepare the libicu cross-compilation
 if COMPILE_LIBICU:
     if (not os.path.exists(ICU_TMP)):
-        os.mkdir(ICU_TMP);
+        os.mkdir(ICU_TMP)
     if (not os.path.exists(ICU_TMP_HOST)):
-        os.mkdir(ICU_TMP_HOST);
+        os.mkdir(ICU_TMP_HOST)
     if (not os.path.exists(ICU_TMP_TARGET)):
-        os.mkdir(ICU_TMP_TARGET);
+        os.mkdir(ICU_TMP_TARGET)
     os.chdir(ICU_TMP_HOST)
-    syscall(LIBICU_SRC + '/configure --with-data-packaging=archive', shell=True)
+    syscall(LIBICU_SRC + '/configure --with-data-packaging=archive',
+            shell=True)
     syscall('make', shell=True)
     os.chdir(os.getcwd())
 
@@ -296,18 +303,6 @@ for arch in ARCHS:
         syscall('ln -sf %(src)s %(dest)s/'
                 % {'src': ln_src, 'dest': dest})
 
-        # add a link to android-support-v4.jar
-        ln_src = '%(SDK_PATH)s/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0.jar' % {'SDK_PATH': SDK_PATH}
-        dest = os.path.join(os.path.dirname(CURRENT_PATH), 'android', 'libs')
-        syscall('ln -sf %(src)s %(dest)s/' 
-                % {'src': ln_src, 'dest': dest})
-
-        # add a link to icudt49l.dat
-        ln_src = LIBICU_SRC + '/data/in/icudt49l.dat'
-        dest = os.path.join(os.path.dirname(CURRENT_PATH), 'android', 'assets')
-        syscall('ln -sf %(src)s %(dest)s/' 
-                % {'src': ln_src, 'dest': dest})
-
     # check that the step went well
     if CREATE_TOOLCHAIN or COMPILE_LIBLZMA or COMPILE_LIBZIM or \
        COMPILE_LIBKIWIX or STRIP_LIBKIWIX:
@@ -331,9 +326,9 @@ for arch in ARCHS:
                    'ANDROID_HOME': SDK_PATH}
     change_env(new_environ)
     change_env(OPTIMIZATION_ENV)
- 
+
     # check that the path has been changed
-    if not platform in os.environ.get('PATH'):
+    if platform not in os.environ.get('PATH'):
         failed_on_step('The PATH environment variable was not set properly.')
 
     # compile liblzma.a, liblzma.so
@@ -361,9 +356,11 @@ for arch in ARCHS:
 
     # compile libicu.a, libicu.so
     os.chdir(ICU_TMP_TARGET)
-    configure_cmd = ( LIBICU_SRC + '/configure --host=%(arch)s --enable-static '
-                     '--prefix=%(platform)s --with-cross-build=%(icu)s  --disable-shared --with-data-packaging=archive '
-                     % {'arch': arch_full, 'platform': platform, 'icu': ICU_TMP_HOST})
+    configure_cmd = (LIBICU_SRC + '/configure --host=%(arch)s --enable-static '
+                     '--prefix=%(platform)s --with-cross-build=%(icu)s  '
+                     '--disable-shared --with-data-packaging=archive '
+                     % {'arch': arch_full, 'platform': platform,
+                        'icu': ICU_TMP_HOST})
 
     if COMPILE_LIBICU:
         # configure, compile, copy and clean libicu from official sources.
@@ -378,8 +375,9 @@ for arch in ARCHS:
     # check that the step went well
     if COMPILE_LIBICU or COMPILE_LIBKIWIX:
         if not os.path.exists(os.path.join(platform, 'lib', 'libicui18n.a')):
-            failed_on_step('The libicu.a archive file has not been created for ' 
-                           + platform + ' and is not present.')
+            failed_on_step("The libicu.a archive file "
+                           "has not been created for {} and is not present."
+                           .format(platform))
 
     # create libzim.a
     os.chdir(curdir)
@@ -476,12 +474,12 @@ for arch in ARCHS:
                 'kiwix.o reader.o stringTools.o pathTools.o '
                 '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/crtbegin.o '
                 '%(platform)s/lib/libzim.a %(platform)s/lib/liblzma.a '
-#                '%(platform)s/lib/libicutu.a '
-#                '%(platform)s/lib/libicuio.a '
+                # '%(platform)s/lib/libicutu.a '
+                # '%(platform)s/lib/libicuio.a '
                 '%(platform)s/lib/libicuuc.a '
-#                '%(platform)s/lib/libicule.a '
-#                '%(platform)s/lib/libiculx.a '
-#                '%(platform)s/lib/libicui18n.a '
+                # '%(platform)s/lib/libicule.a '
+                # '%(platform)s/lib/libiculx.a '
+                # '%(platform)s/lib/libicui18n.a '
                 '%(platform)s/lib/libicudata.a '
                 '-L%(platform)s/%(arch_full)s/lib '
                 '%(NDK_PATH)s/sources/cxx-stl/gnu-libstdc++/%(gccver)s'
@@ -532,21 +530,23 @@ for arch in ARCHS:
 
 if LOCALES_TXT:
 
-  # Get the path of the res folder
-  res_path = os.path.join(curdir,'res')
+    # Get the path of the res folder
+    res_path = os.path.join(curdir, 'res')
 
-  # Get all the ISO 639-1 language codes from the suffix of the value folders
-  files = [f.split('values-')[1] for f in os.listdir(res_path) if f.startswith('values-')]
+    # Get all the ISO 639-1 language codes from the suffix of the value folders
+    files = [f.split('values-')[1]
+             for f in os.listdir(res_path) if f.startswith('values-')]
 
-  # Append the English Locale to the list, since the default values folder, (the english) values folder
-  # does not have a suffix and gets ignored when creating the above list
-  files.append('en')
+    # Append the English Locale to the list,
+    # since the default values folder, (the english) values folder
+    # does not have a suffix and gets ignored when creating the above list
+    files.append('en')
 
-  # Create a CSV file with all the langauge codes in the assets folder
-  with open(os.path.join(curdir, 'assets', 'locales.txt'), 'w') as f:
-    f.write(',\n'.join(files))
+    # Create a CSV file with all the langauge codes in the assets folder
+    with open(os.path.join(curdir, 'assets', 'locales.txt'), 'w') as f:
+        f.write(",\n".join(files))
 
-  print 'Created locales.txt file.'
+    print("Created locales.txt file.")
 
 if COMPILE_APK:
 
@@ -555,6 +555,7 @@ if COMPILE_APK:
     syscall('./gradlew build --stacktrace')
 
     # Check that the step went well
-    if not os.path.exists(os.path.join('build', 'outputs', 'apk', 'android-debug-unaligned.apk')):
-        failed_on_step('The android-debug-unaligned.apk package has not been created '
-                       'and is not present.')
+    if not os.path.exists(os.path.join('build', 'outputs', 'apk',
+                                       'android-debug-unaligned.apk')):
+        failed_on_step("The android-debug-unaligned.apk package "
+                       "has not been created and is not present.")
