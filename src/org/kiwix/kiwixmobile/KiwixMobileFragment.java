@@ -32,6 +32,7 @@ import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -65,6 +66,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.MimeTypeMap;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -93,6 +95,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.newApi;
 
@@ -1220,11 +1223,34 @@ public class KiwixMobileFragment extends SherlockFragment {
 
     private class MyWebViewClient extends WebViewClient {
 
+        HashMap<String, String> documentTypes = new HashMap<String, String>() {{
+            put("epub", "application/epub+zip");
+            put("pdf", "application/pdf");
+        }};
+
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
             if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
-                // This is my web site, so do not override; let my WebView load the page
+
+                String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+                if (documentTypes.containsKey(extension)) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    Uri uri = Uri.parse(url);
+                    intent.setDataAndType(uri, documentTypes.get(extension));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    try {
+                        startActivity(intent);
+                    } catch (ActivityNotFoundException e) {
+                        Toast.makeText(getActivity(),
+                                getActivity()
+                                        .getString(R.string.no_reader_application_installed),
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                    return true;
+                }
+
                 return false;
 
             } else if (url.startsWith("file://")) {
@@ -1246,9 +1272,12 @@ public class KiwixMobileFragment extends SherlockFragment {
                 }
                 return true;
             }
+
             // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+
             startActivity(intent);
+
             return true;
         }
 
