@@ -48,11 +48,11 @@ public class ZimContentProvider extends ContentProvider {
 
     private static final String VIDEO_PATTERN = "([^\\s]+(\\.(?i)(3gp|mp4|m4a|webm|mkv|ogg|ogv))$)";
 
+    private static final Pattern PATTERN = Pattern.compile(VIDEO_PATTERN, Pattern.CASE_INSENSITIVE);
+
     private static String zimFileName;
 
     private static JNIKiwix jniKiwix;
-
-    private Pattern pattern;
 
     private Matcher matcher;
 
@@ -185,7 +185,6 @@ public class ZimContentProvider extends ContentProvider {
     public boolean onCreate() {
         jniKiwix = new JNIKiwix();
         setIcuDataDirectory();
-        pattern = Pattern.compile(VIDEO_PATTERN, Pattern.CASE_INSENSITIVE);
         return true;
     }
 
@@ -199,7 +198,7 @@ public class ZimContentProvider extends ContentProvider {
 
         // This is the code which retrieve the mimeType from the libzim
         // "slow" and still bugyy
-        if (mimeType.isEmpty() && jniKiwix != null && uri == null) {
+        if (mimeType.isEmpty()) {
             String t = uri.toString();
             int pos = uri.toString().indexOf(CONTENT_URI.toString());
             if (pos != -1) {
@@ -225,9 +224,8 @@ public class ZimContentProvider extends ContentProvider {
     @Override
     public ParcelFileDescriptor openFile(Uri uri, String mode)
             throws FileNotFoundException {
-        ParcelFileDescriptor[] pipe;
 
-        matcher = pattern.matcher(uri.toString());
+        matcher = PATTERN.matcher(uri.toString());
         if (matcher.matches()) {
             try {
                 return saveVideoToCache(uri);
@@ -235,7 +233,11 @@ public class ZimContentProvider extends ContentProvider {
                 e.printStackTrace();
             }
         }
+        return loadContent(uri);
+    }
 
+    private ParcelFileDescriptor loadContent(Uri uri) throws FileNotFoundException {
+        ParcelFileDescriptor[] pipe;
         try {
             pipe = ParcelFileDescriptor.createPipe();
             new TransferThread(jniKiwix, uri, new AutoCloseOutputStream(pipe[1])).start();

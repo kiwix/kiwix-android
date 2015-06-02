@@ -101,7 +101,7 @@
         <provider
                 android:name=".ZimContentProvider"
                 android:authorities="org.kiwix.zim.base"
-                android:exported="false"/>
+                android:exported="true"/>
 
         <activity
                 android:name=".ZimFileSelectActivity"
