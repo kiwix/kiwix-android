@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Help</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="file:///android_asset/www/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="file:///android_asset/www/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="file:///android_asset/www/static.css" rel="stylesheet">
+</head>
+
+<body class="help" lang="en-US">
+
+<div id="content-wrapper">
+
+    <section>
+        <h2>How to get Help?</h2>
+        <p>If you need assistance or encounter a problem using <em><span class="kiwix-branding" data-id="app_name"></span></em>, please contact us via <span class="kiwix-branding" data-id="support_email"></span>.</p>
+    </section>
+
+</div>
+
+<!--<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>-->
+<script src="file:///android_asset/www/jquery-2.1.4.min.js"></script>
+<script src="file:///android_asset/www/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $('title').html(branding.appName() + " Help");
+
+    $('span.kiwix-branding').each(function (idx, elem) {
+        var id = $(elem).data('id');
+        var replacement = null;
+
+        if (id == 'app_name') {
+            replacement = branding.appName();
+        }
+
+        if (id == 'support_email') {
+            replacement = branding.supportEmail();
+        }
+
+        if (id == 'app_id') {
+            replacement = branding.appId();
+        }
+
+        if (replacement !== null) {
+            $(elem).html(replacement);
+        }
+    });
+    </script>
+</body>
+</html>

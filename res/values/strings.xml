@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Open File</string>
     <string name="menu_help">Help</string>
     <string name="menu_home">Home</string>
@@ -31,8 +30,6 @@
     <string name="remove_tab">Remove tab</string>
     <string name="add_bookmark">Add bookmark</string>
     <string name="remove_bookmark">Remove bookmark</string>
-    <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
-    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
     <string name="error_filenotfound">Error: The selected ZIM file could not be found.</string>
     <string name="error_fileinvalid">Error: The selected file is not a valid ZIM file.</string>

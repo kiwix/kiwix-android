@@ -23,6 +23,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 
+import org.kiwix.kiwixmobile.settings.Constants;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivityGB;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivityHC;
 import org.kiwix.kiwixmobile.settings.SettingsHelper;
@@ -66,6 +67,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.JavascriptInterface;
 import android.webkit.MimeTypeMap;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -847,10 +849,25 @@ public class KiwixMobileFragment extends SherlockFragment {
     }
 
     public void showHelp() {
-        // Load from resource. Use with base url as else no images can be embedded.
-        // Note that this leads inclusion of welcome page in browser history
-        // This is not perfect, but good enough. (and would be signifcant effort to remove file)
-        webView.loadUrl("file:///android_res/raw/help.html");
+        if (Constants.IS_CUSTOM_APP) {
+            // On custom app, inject a Javascript object which contains some branding data
+            // so we just have to maintain a generic help page for them.
+            class JsObject {
+                @JavascriptInterface
+                public String appName() { return getResources().getString(R.string.app_name); }
+                @JavascriptInterface
+                public String supportEmail() { return Constants.CUSTOM_APP_SUPPORT_EMAIL; }
+                @JavascriptInterface
+                public String appId() { return Constants.CUSTOM_APP_ID; }
+            }
+            webView.addJavascriptInterface(new JsObject(), "branding");
+            webView.loadUrl("file:///android_res/raw/help_custom.html");
+        } else {
+            // Load from resource. Use with base url as else no images can be embedded.
+            // Note that this leads inclusion of welcome page in browser history
+            // This is not perfect, but good enough. (and would be significant effort to remove file)
+            webView.loadUrl("file:///android_res/raw/help.html");
+        }
     }
 
     public boolean openZimFile(File file, boolean clearHistory) {
