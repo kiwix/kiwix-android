@@ -24,13 +24,12 @@
                 android:ellipsize="end"
                 android:ems="10"
                 android:hint="@string/articlesearch_hint"
-                android:imeOptions="actionGo"
+                android:imeOptions="actionGo|flagNoExtractUi"
                 android:inputType="text|textCapWords"
                 android:maxLines="1"
                 android:background="@android:color/background_dark"
                 android:textColor="@android:color/white"
-		android:selectAllOnFocus="true"
-		/>
+                android:selectAllOnFocus="true"/>
 
     </LinearLayout>
 
