@@ -52,7 +52,6 @@ import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.DragEvent;
@@ -107,11 +106,7 @@ public class KiwixMobileFragment extends SherlockFragment {
 
     private static final String TAG_CURRENTARTICLE = "currentarticle";
 
-    private static final String PREF_ZOOM = "pref_zoom";
-
     private static final String PREF_NIGHTMODE = "pref_nightmode";
-
-    private static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
 
     private static final String PREF_KIWIX_MOBILE = "kiwix-mobile";
 
@@ -455,6 +450,23 @@ public class KiwixMobileFragment extends SherlockFragment {
 
     private void setUpWebView() {
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WebView.setWebContentsDebuggingEnabled(true);
+        }
+
+        // webView.getSettings().setLoadsImagesAutomatically(false);
+        // Does not make much sense to cache data from zim files.(Not clear whether
+        // this actually has any effect)
+        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        webView.setWebChromeClient(new MyWebChromeClient());
+
+        // Should basically resemble the behavior when setWebClient not done
+        // (i.p. internal urls load in webview, external urls in browser)
+        // as currently no custom setWebViewClient required it is commented
+        // However, it must notify the bookmark system when a page is finished loading
+        // so that it can refresh the menu.
+        webView.setWebViewClient(new MyWebViewClient());
+
         webView.setOnPageChangedListener(new KiwixWebView.OnPageChangeListener() {
 
             @Override
@@ -618,28 +630,12 @@ public class KiwixMobileFragment extends SherlockFragment {
             }
         });
 
-        // JS includes will not happen unless we enable JS
-        webView.getSettings().setJavaScriptEnabled(true);
-
         mBackToTopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 webView.pageUp(true);
             }
         });
-
-        // webView.getSettings().setLoadsImagesAutomatically(false);
-        // Does not make much sense to cache data from zim files.(Not clear whether
-        // this actually has any effect)
-        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-        webView.setWebChromeClient(new MyWebChromeClient());
-
-        // Should basically resemble the behavior when setWebClient not done
-        // (i.p. internal urls load in webview, external urls in browser)
-        // as currently no custom setWebViewClient required it is commented
-        // However, it must notify the bookmark system when a page is finished loading
-        // so that it can refresh the menu.
-        webView.setWebViewClient(new MyWebViewClient());
     }
 
     private void setUpExitFullscreenButton() {
@@ -753,38 +749,16 @@ public class KiwixMobileFragment extends SherlockFragment {
     public void loadPrefs() {
 
         mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-        String pref_zoom = mySharedPreferences.getString(PREF_ZOOM, AUTOMATIC);
-        Boolean pref_zoom_enabled = mySharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
-        Boolean pref_nightmode = mySharedPreferences.getBoolean(PREF_NIGHTMODE, false);
+        boolean nightMode = mySharedPreferences.getBoolean(PREF_NIGHTMODE, false);
         isBacktotopEnabled = mySharedPreferences.getBoolean(PREF_BACKTOTOP, false);
-
-        if (pref_zoom.equals(AUTOMATIC)) {
-            setDefaultZoom();
-        } else if (pref_zoom.equals(MEDIUM)) {
-            webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
-        } else if (pref_zoom.equals(SMALL)) {
-            webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
-        } else if (pref_zoom.equals(LARGE)) {
-            webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.CLOSE);
-        } else {
-            Log.w(TAG_KIWIX,
-                    "pref_displayZoom value (" + pref_zoom + " unknown. Assuming automatic");
-            webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
-        }
-
-        // Pinch to zoom
-        // This seems to suffer from a bug in Android. If you set to "false" this only apply after a restart of the app.
-        Log.d(TAG_KIWIX, "pref_zoom_enabled value (" + pref_zoom_enabled + ")");
-        webView.disableZoomControlls(pref_zoom_enabled);
 
         if (!isBacktotopEnabled) {
             mBackToTopButton.setVisibility(View.INVISIBLE);
         }
 
         // Night mode status
-        Log.d(TAG_KIWIX, "pref_nightmode value (" + pref_nightmode + ")");
-        if (nightMode != pref_nightmode) {
+        Log.d(TAG_KIWIX, "nightMode value (" + nightMode + ")");
+        if (this.nightMode != nightMode) {
             ToggleNightMode();
         }
     }
@@ -999,8 +973,10 @@ public class KiwixMobileFragment extends SherlockFragment {
 
         if (articleUrl != null) {
             // hideSearchBar();
+
             webView.loadUrl(Uri.parse(ZimContentProvider.CONTENT_URI
                     + articleUrl).toString());
+
         } else {
             String errorString = String
                     .format(getResources().getString(R.string.error_articlenotfound),
@@ -1073,37 +1049,6 @@ public class KiwixMobileFragment extends SherlockFragment {
 
         } catch (NullPointerException npe) {
             Log.e(TAG_KIWIX, "getActivity() NPE " + npe.getMessage());
-        }
-    }
-
-    public void setDefaultZoom() {
-        DisplayMetrics metrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-        // Cleaner than approach used in 1.0 to set CLOSE for tables, MEDIUM for phones.
-        // However, unfortunately at least on Samsung Galaxy Tab 2 density is medium.
-        // Anyway, user can now override so it should be ok.
-        switch (metrics.densityDpi) {
-
-            case DisplayMetrics.DENSITY_HIGH:
-                Log.d(TAG_KIWIX, "setDefaultZoom for Display DENSITY_HIGH-> ZoomDensity.FAR ");
-                webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
-                break;
-
-            case DisplayMetrics.DENSITY_MEDIUM:
-                Log.d(TAG_KIWIX, "setDefaultZoom for Display DENSITY_MEDIUM-> ZoomDensity.MEDIUM ");
-                webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
-                break;
-
-            case DisplayMetrics.DENSITY_LOW:
-                Log.d(TAG_KIWIX, "setDefaultZoom for Display DENSITY_LOW-> ZoomDensity.CLOSE ");
-                webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.CLOSE);
-                break;
-
-            default:
-                Log.d(TAG_KIWIX, "setDefaultZoom for Display OTHER -> ZoomDensity.MEDIUM ");
-                webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
-                break;
         }
     }
 
@@ -1322,6 +1267,21 @@ public class KiwixMobileFragment extends SherlockFragment {
                     view.reload();
                 }
             }
+
+            String viewPortJs = "javascript:"
+                    + "viewport = document.querySelector(\"meta[name=viewport]\");\n"
+                    + "\n"
+                    + "if (!viewport) {\n"
+                    + "  var viewPortTag = document.createElement('meta');\n"
+                    + "  viewPortTag.id = \"viewport\";\n"
+                    + "  viewPortTag.name = \"viewport\";\n"
+                    + "  viewPortTag.content = \"width=device-width, initial-scale=1.0, "
+                    + "\";\n"
+                    + "  document.getElementsByTagName('head')[0].appendChild(viewPortTag);\n"
+                    + "\n"
+                    + "}";
+
+            webView.loadUrl(viewPortJs);
         }
     }
 }

@@ -20,13 +20,9 @@
 package org.kiwix.kiwixmobile;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ZoomButtonsController;
 
 import java.lang.reflect.Method;
@@ -59,20 +55,12 @@ public class KiwixWebView extends WebView {
     }
 
     private void init() {
-        setWebChromeClient(new WebChromeClient());
-        setWebViewClient(new WebViewClient());
+        // setWebChromeClient(new WebChromeClient());
+        // setWebViewClient(new WebViewClient());
         getSettings().setJavaScriptEnabled(true);
         getSettings().setSupportMultipleWindows(true);
         getSettings().setSupportZoom(true);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-
-            // Avoid crash with WebViewClassic
-            try {
-                getSettings().setLayoutAlgorithm(LayoutAlgorithm.TEXT_AUTOSIZING);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        disableZoomControlls();
     }
 
     @Override
@@ -101,20 +89,18 @@ public class KiwixWebView extends WebView {
         }
     }
 
-    public void disableZoomControlls(boolean disable) {
-
-        mDisableZoomControlls = disable;
+    public void disableZoomControlls() {
 
         if (newApi()) {
             getSettings().setBuiltInZoomControls(true);
-            getSettings().setDisplayZoomControls(disable);
+            getSettings().setDisplayZoomControls(false);
         } else {
-            getZoomControlls();
+            getZoomControls();
         }
     }
 
     // Use reflection to hide the zoom controlls
-    private void getZoomControlls() {
+    private void getZoomControls() {
         try {
             Class webview = Class.forName("android.webkit.WebView");
             Method method = webview.getMethod("getZoomButtonsController");

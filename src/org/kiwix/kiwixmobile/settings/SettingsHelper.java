@@ -48,36 +48,8 @@ public class SettingsHelper {
     }
 
     public void setUpSettings() {
-        prepareListPreferenceForAutoSummary("pref_zoom");
         setUpLanguageChooser("pref_language_chooser");
         setAppVersionNumber();
-    }
-
-    private void prepareListPreferenceForAutoSummary(String preferenceId) {
-
-        ListPreference prefList = (ListPreference) getPrefrence(preferenceId);
-
-        prefList.setDefaultValue(prefList.getEntryValues()[0]);
-        String summary = prefList.getValue();
-
-        if (summary == null) {
-            prefList.setValue((String) prefList.getEntryValues()[0]);
-            summary = prefList.getValue();
-        }
-
-        prefList.setSummary(prefList.getEntries()[prefList.findIndexOfValue(summary)]);
-        prefList.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (preference instanceof ListPreference) {
-                    ListPreference listPreference = ((ListPreference) preference);
-                    preference.setSummary(listPreference.getEntries()
-                            [listPreference.findIndexOfValue(newValue.toString())]);
-                }
-                return true;
-            }
-        });
     }
 
     private void setUpLanguageChooser(String preferenceId) {
