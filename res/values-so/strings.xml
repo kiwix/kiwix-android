@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Fur galka</string>
@@ -39,8 +39,6 @@
     <string name="error_articlenotfound">Qalad: Galinta maqaalka \"%1$s\" waa lagu fashilmay.</string>
     <string name="error_articleurlnotfound">Qalad: Galinta maqaalka (Url: %1$s) ma galin.</string>
     <string name="pref_display_title">Qaab aragga</string>
-    <string name="pref_zoom_title">Heelka weynaynta</string>
-    <string name="pref_zoom_dialogtitle">Heelka weynaynta</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Talantaali</item>
         <item name="pref_zoom_entry_small">Yar</item>
@@ -49,8 +47,6 @@
     </string-array>
     <string name="pref_info_title">Macluumaad</string>
     <string name="pref_info_version">Nuqul</string>
-    <string name="pref_zoom_enable">Weynayn hagista</string>
-    <string name="pref_zoom_enable_summary">Batoonka Muuq weyneeyaha ee xagasha midig hoose ee shaashadda</string>
     <string name="pref_nightmode">Habka habeenkii</string>
     <string name="pref_nightmode_summary">Show articles with reverted colors</string>
     <string name="pref_backtotop">Ku laabo kor</string>
@@ -58,6 +54,5 @@
     <string name="share_via">La wadaag dhanka...</string>
     <string name="pref_language_title">Luqad</string>
     <string name="pref_language_chooser">Dooro luqad</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

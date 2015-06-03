@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Fungua faili ...</string>
@@ -39,8 +39,6 @@
     <string name="error_articlenotfound">Hitilafu: Upakuzi wa makala umefeli \"%1$s\"</string>
     <string name="error_articleurlnotfound">Hitilafu:Upakiaji wa makala umefeli (Url: %1$s)</string>
     <string name="pref_display_title">Onesha</string>
-    <string name="pref_zoom_title">Kiwango cha ukuzi</string>
-    <string name="pref_zoom_dialogtitle">Kiwango cha ukuzi</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">otomatiki</item>
         <item name="pref_zoom_entry_small">ndogo</item>
@@ -49,8 +47,6 @@
     </string-array>
     <string name="pref_info_title">Maarifa</string>
     <string name="pref_info_version">Toleo</string>
-    <string name="pref_zoom_enable">Vidhibiti vya ukuzi</string>
-    <string name="pref_zoom_enable_summary">Onyesha kidude cha ukuzi katika sehemu ya kona ya kulia kwenye skrini</string>
     <string name="pref_nightmode">Hali ya Usiku</string>
     <string name="pref_nightmode_summary">Onyesha makala yakiwa na rangi kubatilishwa</string>
     <string name="pref_backtotop">Rudi kwenye kichwa cha ukurasa</string>
@@ -58,6 +54,5 @@
     <string name="share_via">Shiriki kupitia...</string>
     <string name="pref_language_title">Lugha</string>
     <string name="pref_language_chooser">Chagua lugha</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

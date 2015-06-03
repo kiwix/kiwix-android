@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">सञ्चिका उद्घाट्यताम्...</string>
@@ -39,8 +39,6 @@
     <string name="error_articlenotfound">दोषः : \"%1$s\" लेखस्य अवारोपणं विफलम् अभवत् ।</string>
     <string name="error_articleurlnotfound">दोषः : (Url: %1$s) लेखस्य अवारोपणं विफलम् अभवत् ।</string>
     <string name="pref_display_title">प्रदर्श्यताम्</string>
-    <string name="pref_zoom_title">वीक्षणस्य (zoom) स्तरम्</string>
-    <string name="pref_zoom_dialogtitle">वीक्षणस्य (zoom) स्तरम्</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
         <item name="pref_zoom_entry_small">लघु</item>
@@ -49,8 +47,6 @@
     </string-array>
     <string name="pref_info_title">सूचना</string>
     <string name="pref_info_version">संस्करणम्</string>
-    <string name="pref_zoom_enable">वीक्षण(zoom)नियन्त्रकानि</string>
-    <string name="pref_zoom_enable_summary">पटलस्य दक्षिणविभागे अधः वीक्षणकुड्णलं (zoom button) स्थापयतु</string>
     <string name="pref_nightmode">रात्र्यवस्था</string>
     <string name="pref_nightmode_summary">विपरितरङ्गैः लेखः दृश्यताम्</string>
     <string name="pref_backtotop">साक्षात् उपरि गच्छतु</string>
@@ -58,6 +54,5 @@
     <string name="share_via">द्वारा विभज्यताम्....</string>
     <string name="pref_language_title">भाषा</string>
     <string name="pref_language_chooser">Choose a language</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

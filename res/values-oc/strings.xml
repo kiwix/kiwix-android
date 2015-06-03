@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Dobrir un fichièr...</string>
@@ -39,8 +39,6 @@
     <string name="error_articlenotfound">Error : Fracàs al cargament de l’article « %1$s ».</string>
     <string name="error_articleurlnotfound">Error : Lo cargament de l’article (Url: %1$s) a fracassat.</string>
     <string name="pref_display_title">Afichar</string>
-    <string name="pref_zoom_title">Nivèl de zoom</string>
-    <string name="pref_zoom_dialogtitle">Nivèl de zoom</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
         <item name="pref_zoom_entry_small">Pichon</item>
@@ -49,8 +47,6 @@
     </string-array>
     <string name="pref_info_title">Informacion</string>
     <string name="pref_info_version">Version</string>
-    <string name="pref_zoom_enable">Contraròtles del zoom</string>
-    <string name="pref_zoom_enable_summary">Afichar un boton de zoom dins lo canton inferior drech de l’ecran</string>
     <string name="pref_nightmode">Mòde nocturne</string>
     <string name="pref_nightmode_summary">Afichar los articles en colors inversadas</string>
     <string name="pref_backtotop">Retorn al començament</string>
@@ -58,6 +54,5 @@
     <string name="share_via">Partejar via...</string>
     <string name="pref_language_title">Lenga</string>
     <string name="pref_language_chooser">Causir una lenga</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

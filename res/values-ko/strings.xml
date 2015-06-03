@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">파일 열기...</string>
@@ -39,8 +39,6 @@
     <string name="error_articlenotfound">오류: \"%1$s\" 문서를 불러오는 데 실패했습니다.</string>
     <string name="error_articleurlnotfound">오류: 문서(Url: %1$s)를 불러오는 데 실패했습니다.</string>
     <string name="pref_display_title">보기</string>
-    <string name="pref_zoom_title">확대/축소 수준</string>
-    <string name="pref_zoom_dialogtitle">확대/축소 수준</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">자동</item>
         <item name="pref_zoom_entry_small">작게</item>
@@ -49,8 +47,6 @@
     </string-array>
     <string name="pref_info_title">정보</string>
     <string name="pref_info_version">버전</string>
-    <string name="pref_zoom_enable">확대 컨트롤</string>
-    <string name="pref_zoom_enable_summary">화면 아래 오른쪽 모서리에 있는 확대 버튼을 보여줍니다</string>
     <string name="pref_nightmode">야간 모드</string>
     <string name="pref_nightmode_summary">되돌린 색으로 문서를 보여줍니다</string>
     <string name="pref_backtotop">맨 위로 돌아가기</string>
@@ -58,6 +54,5 @@
     <string name="share_via">...을 통해 공유</string>
     <string name="pref_language_title">언어</string>
     <string name="pref_language_chooser">언어 선택</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

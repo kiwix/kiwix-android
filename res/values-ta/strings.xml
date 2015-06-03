@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">கோப்பை திறக்கவும்...</string>
@@ -39,8 +39,6 @@
     <string name="error_articlenotfound">பிழை: \"%1$s\" கட்டுரையை ஏற்றித்துவங்க தவறிவிட்டது</string>
     <string name="error_articleurlnotfound">பிழை: (Url: %1$s) கட்டுரையை ஏற்றித்துவங்க தவறிவிட்டது</string>
     <string name="pref_display_title">காண்பி</string>
-    <string name="pref_zoom_title">உரு அளவு நிலை</string>
-    <string name="pref_zoom_dialogtitle">உரு அளவு நிலை</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">தன்னியக்கம்</item>
         <item name="pref_zoom_entry_small">சிறிய</item>
@@ -49,8 +47,6 @@
     </string-array>
     <string name="pref_info_title">தகவல்</string>
     <string name="pref_info_version">பதிப்பு</string>
-    <string name="pref_zoom_enable">உரு அளவு கட்டுப்படுத்திகள்</string>
-    <string name="pref_zoom_enable_summary">உரு அளவு மாற்றும் பொத்தானை, திரையின் வலப்புற கீழ்ப்பகுதியில், தெரியும்படி வை</string>
     <string name="pref_nightmode">இரவுத்தோற்றம்</string>
     <string name="pref_nightmode_summary">கட்டுரைகளை தலைகீழ் நிறங்களில் காண்பி</string>
     <string name="pref_backtotop">மேலே செல்லவும்</string>
@@ -58,6 +54,5 @@
     <string name="share_via">இவ்வழியாக பகிர்....</string>
     <string name="pref_language_title">மொழி</string>
     <string name="pref_language_chooser">மொழியைத் தேர்ந்தெடு</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

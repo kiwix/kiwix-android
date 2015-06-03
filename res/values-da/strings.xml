@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Åbn fil...</string>
@@ -39,8 +39,6 @@
     <string name="error_articlenotfound">Fejl: Indlæsning af artikel \"%1$s\" mislykkedes.</string>
     <string name="error_articleurlnotfound">Fejl: Indlæsning af artikel (Url: %1$s) mislykkedes.</string>
     <string name="pref_display_title">Vis</string>
-    <string name="pref_zoom_title">Zoom-niveau</string>
-    <string name="pref_zoom_dialogtitle">Zoom-niveau</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatisk</item>
         <item name="pref_zoom_entry_small">Lille</item>
@@ -49,8 +47,6 @@
     </string-array>
     <string name="pref_info_title">Information</string>
     <string name="pref_info_version">Version</string>
-    <string name="pref_zoom_enable">Zoom kontrol</string>
-    <string name="pref_zoom_enable_summary">Få vist en zoom-knap i skærmens nederste højre hjørne</string>
     <string name="pref_nightmode">Nat-tilstand</string>
     <string name="pref_nightmode_summary">Vis artikler med inverterede farver</string>
     <string name="pref_backtotop">Tilbage til toppen</string>
@@ -58,6 +54,5 @@
     <string name="share_via">Del via...</string>
     <string name="pref_language_title">Sprog</string>
     <string name="pref_language_chooser">Vælg et sprog</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

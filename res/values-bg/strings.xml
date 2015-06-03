@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Отваряне на файл...</string>
@@ -39,8 +39,6 @@
     <string name="error_articlenotfound">Грешка: Зареждането на статия \"%1$s\" е неуспешно.</string>
     <string name="error_articleurlnotfound">Грешка: Зареждането на статия (Url: %1$s) е неуспешно.</string>
     <string name="pref_display_title">Показване</string>
-    <string name="pref_zoom_title">Ниво на мащабиране</string>
-    <string name="pref_zoom_dialogtitle">Ниво на мащабиране</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Автоматично</item>
         <item name="pref_zoom_entry_small">Малък</item>
@@ -49,8 +47,6 @@
     </string-array>
     <string name="pref_info_title">Информация</string>
     <string name="pref_info_version">Версия</string>
-    <string name="pref_zoom_enable">Управление на мащаба</string>
-    <string name="pref_zoom_enable_summary">Показване на бутон за мащабиране в долния десен ъгъл на екрана</string>
     <string name="pref_nightmode">Нощен режим</string>
     <string name="pref_nightmode_summary">Показване на статии в "нощен режим"</string>
     <string name="pref_backtotop">Връщане в началото</string>
@@ -58,6 +54,5 @@
     <string name="share_via">Споделете чрез...</string>
     <string name="pref_language_title">Език</string>
     <string name="pref_language_chooser">Избиране на език</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

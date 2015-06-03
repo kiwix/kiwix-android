@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Avrir ina datoteca…</string>
@@ -39,8 +39,6 @@
     <string name="error_articlenotfound">Errur: chargiar il artitgel \"%1$s\" n\'a betg funcziunà.</string>
     <string name="error_articleurlnotfound">Errur: chargiar il artitgel (Url: %1$s) n\'a betg funcziunà.</string>
     <string name="pref_display_title">Vista</string>
-    <string name="pref_zoom_title">Nivel da zoom</string>
-    <string name="pref_zoom_dialogtitle">Nivel da zoom</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
         <item name="pref_zoom_entry_small">Small</item>
@@ -49,8 +47,6 @@
     </string-array>
     <string name="pref_info_title">Infurmaziun</string>
     <string name="pref_info_version">Versiun</string>
-    <string name="pref_zoom_enable">Controlla d\'il zoom</string>
-    <string name="pref_zoom_enable_summary">Mussar in buttun da zoom en il chantun engiu dretg d\'il maletg</string>
     <string name="pref_nightmode">Modus da notg</string>
     <string name="pref_nightmode_summary">Mussar artitgels cun colurs invertidas</string>
     <string name="pref_backtotop">Enavos a l\'entschatta</string>
@@ -58,6 +54,5 @@
     <string name="share_via">Parter tras...</string>
     <string name="pref_language_title">Lingua</string>
     <string name="pref_language_chooser">Choose a language</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

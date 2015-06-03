@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Отвори податотека...</string>
@@ -39,8 +39,6 @@
     <string name="error_articlenotfound">Грешка: Не успеав да ја вчитам статијата \"%1$s\".</string>
     <string name="error_articleurlnotfound">Грешка: Не успеав да ја вчитам статијата (URL: %1$s).</string>
     <string name="pref_display_title">Приказ</string>
-    <string name="pref_zoom_title">Ниво на приближеност</string>
-    <string name="pref_zoom_dialogtitle">Ниво на приближеност</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Автоматски</item>
         <item name="pref_zoom_entry_small">Мал</item>
@@ -49,8 +47,6 @@
     </string-array>
     <string name="pref_info_title">Информации</string>
     <string name="pref_info_version">Верзија</string>
-    <string name="pref_zoom_enable">Контроли за размер</string>
-    <string name="pref_zoom_enable_summary">Прикажуваај копче за приближување во долниот десен агол</string>
     <string name="pref_nightmode">Ноќен режим</string>
     <string name="pref_nightmode_summary">Прикажувај ги статиите во обратни бои</string>
     <string name="pref_backtotop">Најгоре</string>
@@ -58,6 +54,5 @@
     <string name="share_via">Сподели преку...</string>
     <string name="pref_language_title">Јазик</string>
     <string name="pref_language_chooser">Изберете јазик</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

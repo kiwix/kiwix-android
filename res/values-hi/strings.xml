@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">फ़ाइल खोलें...</string>
@@ -39,8 +39,6 @@
     <string name="error_articlenotfound">त्रुटि: आलेख \ " %1$s \" लोड करना विफल रहा।</string>
     <string name="error_articleurlnotfound">त्रुटि: आलेख (Url:  %1$s ) लोड करना विफल रहा।</string>
     <string name="pref_display_title">डिस्प्ले</string>
-    <string name="pref_zoom_title">ज़ूम स्तर</string>
-    <string name="pref_zoom_dialogtitle">ज़ूम स्तर</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">स्वतः</item>
         <item name="pref_zoom_entry_small">लघु</item>
@@ -49,8 +47,6 @@
     </string-array>
     <string name="pref_info_title">जानकारी</string>
     <string name="pref_info_version">संस्करण</string>
-    <string name="pref_zoom_enable">ज़ूम नियंत्रण</string>
-    <string name="pref_zoom_enable_summary">स्क्रीन के नीचे दायें कोने में ज़ूम बटन दिखाएँ</string>
     <string name="pref_nightmode">रात्रि मोड</string>
     <string name="pref_nightmode_summary">उल्टे रंगों के साथ लेख दिखाएँ</string>
     <string name="pref_backtotop">वापस शीर्ष पे जाएँ</string>
@@ -58,6 +54,5 @@
     <string name="share_via">अलग माध्यम से बांटे</string>
     <string name="pref_language_title">भाषा</string>
     <string name="pref_language_chooser">भाषा चुनें</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

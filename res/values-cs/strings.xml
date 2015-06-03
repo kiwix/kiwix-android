@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Otevřít soubor...</string>
@@ -39,8 +39,6 @@
     <string name="error_articlenotfound">Chyba: Načtení článku \"%1$s\" se nezdařilo.</string>
     <string name="error_articleurlnotfound">Chyba: Načtení článku (Url: %1$s ) se nezdařilo.</string>
     <string name="pref_display_title">Zobrazení</string>
-    <string name="pref_zoom_title">Úroveň zvětšení</string>
-    <string name="pref_zoom_dialogtitle">Úroveň zvětšení</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatický</item>
         <item name="pref_zoom_entry_small">Malý</item>
@@ -49,8 +47,6 @@
     </string-array>
     <string name="pref_info_title">Informace</string>
     <string name="pref_info_version">Verze</string>
-    <string name="pref_zoom_enable">Ovládání přiblížení</string>
-    <string name="pref_zoom_enable_summary">Zobrazit tlačítko přiblížení v pravém dolním rohu obrazovky</string>
     <string name="pref_nightmode">Noční režim</string>
     <string name="pref_nightmode_summary">Zobrazuje stránky v obrácených barvách.</string>
     <string name="pref_backtotop">Zpět na začátek</string>
@@ -58,6 +54,5 @@
     <string name="share_via">Sdílet přes...</string>
     <string name="pref_language_title">Jazyk</string>
     <string name="pref_language_chooser">Vyberte jazyk</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

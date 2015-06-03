@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">ফাইল খোলো...</string>
@@ -39,8 +39,6 @@
     <string name="error_articlenotfound">ত্রুটি: নিবন্ধ লোডে \"%1$s\" ব্যর্থ।</string>
     <string name="error_articleurlnotfound">ত্রুটি: নিবন্ধ লোডে (Url: %1$s) ব্যর্থ।</string>
     <string name="pref_display_title">প্রদর্শন</string>
-    <string name="pref_zoom_title">জুমের পর্যায়</string>
-    <string name="pref_zoom_dialogtitle">জুমের পর্যায়</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">স্বয়ংক্রিয়</item>
         <item name="pref_zoom_entry_small">ছোট</item>
@@ -49,8 +47,6 @@
     </string-array>
     <string name="pref_info_title">তথ্য</string>
     <string name="pref_info_version">সংস্করণ</string>
-    <string name="pref_zoom_enable">জুম নিয়ন্ত্রণ</string>
-    <string name="pref_zoom_enable_summary">পর্দা নীচের অংশে ডানদিকে কোণায় অবস্থিত একটি জুম বোতাম প্রদর্শন করা হবে</string>
     <string name="pref_nightmode">রাত্রি মোড</string>
     <string name="pref_nightmode_summary">প্রত্যাবর্তন রঙসহ নিবন্ধ দেখান</string>
     <string name="pref_backtotop">উপরে ফিরুন</string>
@@ -58,6 +54,5 @@
     <string name="share_via">শেয়ার করুন...</string>
     <string name="pref_language_title">ভাষা</string>
     <string name="pref_language_chooser">একটি ভাষা নির্বাচন করুন</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

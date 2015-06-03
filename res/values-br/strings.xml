@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Digeriñ ur restr...</string>
@@ -39,8 +39,6 @@
     <string name="error_articlenotfound">Fazi : N\'eus ket bet gallet kargañ an draezenn \"%1$s\"</string>
     <string name="error_articleurlnotfound">Fazi : N\'eus ket bet gallet kargañ ar pennad \"%1$s\"</string>
     <string name="pref_display_title">Diskwel</string>
-    <string name="pref_zoom_title">Live zoum</string>
-    <string name="pref_zoom_dialogtitle">Live zoum</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Emgefre</item>
         <item name="pref_zoom_entry_small">Bihan</item>
@@ -49,8 +47,6 @@
     </string-array>
     <string name="pref_info_title">Titouroù</string>
     <string name="pref_info_version">Stumm</string>
-    <string name="pref_zoom_enable">Kontrolloù ar zoum</string>
-    <string name="pref_zoom_enable_summary">Diskwel ur nozelenn zoumañ e korn traoñ dehoù ar skramm</string>
     <string name="pref_nightmode">Mod noz</string>
     <string name="pref_nightmode_summary">Diskouez ar pennadoù gant livioù eilpennet</string>
     <string name="pref_backtotop">Distreiñ da grec\'h ar bajenn</string>
@@ -58,6 +54,5 @@
     <string name="share_via">Rannañ dre...</string>
     <string name="pref_language_title">Yezh</string>
     <string name="pref_language_chooser">Dibabit ur yezh</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>
