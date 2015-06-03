@@ -30,6 +30,7 @@ USAGE = '''Usage:  {arg0} [--option]
     --strip         Strip libkiwix.so
     --locales       Create the locales.txt file
     --apk           Create an APK file
+    --clean         Remove build folder (except apk files)
 
     Note that the '--' prefix is optional.
 
@@ -47,7 +48,7 @@ def init_with_args(args):
     # default is executing all the steps
     create_toolchain = compile_liblzma = compile_libicu = \
         compile_libzim = compile_libkiwix = strip_libkiwix = \
-        compile_apk = locales_txt = True
+        compile_apk = locales_txt = clean = True
     archs = ALL_ARCHS
 
     options = [a.lower() for a in args[1:]]
@@ -83,7 +84,7 @@ def init_with_args(args):
         # consider we only want the specified steps
         create_toolchain = compile_liblzma = compile_libicu = compile_libzim = \
             compile_libkiwix = strip_libkiwix = \
-            compile_apk = locales_txt = False
+            compile_apk = locales_txt = clean = False
 
         for option in options:
             if 'toolchain' in option:
@@ -102,9 +103,12 @@ def init_with_args(args):
                 compile_apk = True
             if 'locales' in option:
                 locales_txt = True
+            if 'clean' in option:
+                clean = True
 
     return (create_toolchain, compile_liblzma, compile_libicu, compile_libzim,
-            compile_libkiwix, strip_libkiwix, compile_apk, locales_txt, archs)
+            compile_libkiwix, strip_libkiwix, compile_apk, locales_txt,
+            clean, archs)
 
 # store the OS's environment PATH as we'll mess with it
 # ORIGINAL_ENVIRON_PATH = os.environ.get('PATH')
@@ -112,6 +116,9 @@ ORIGINAL_ENVIRON = copy.deepcopy(os.environ)
 
 # the directory of this file for relative referencing
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
+
+# the parent directory of this file for relative referencing
+PARENT_PATH = os.path.dirname(CURRENT_PATH)
 
 # different names of folder path for accessing files
 ARCHS_FULL_NAMES = {
@@ -131,7 +138,7 @@ SYSTEMS = {'Linux': 'linux', 'Darwin': 'mac'}
 # find out what to execute based on command line arguments
 CREATE_TOOLCHAIN, COMPILE_LIBLZMA, COMPILE_LIBICU, COMPILE_LIBZIM, \
     COMPILE_LIBKIWIX, STRIP_LIBKIWIX, COMPILE_APK, \
-    LOCALES_TXT, ARCHS = init_with_args(sys.argv)
+    LOCALES_TXT, CLEAN, ARCHS = init_with_args(sys.argv)
 
 # compiler version to use
 # list of available toolchains in <NDK_PATH>/toolchains
@@ -155,7 +162,7 @@ NDK_PLATFORM = os.environ.get('NDK_PLATFORM', 'android-14')
 
 # will contain the different prepared toolchains for a specific build
 PLATFORM_PREFIX = os.environ.get('PLATFORM_PREFIX',
-                                 os.path.join(CURRENT_PATH, 'platforms'))
+                                 os.path.join(PARENT_PATH, 'platforms'))
 if not os.path.exists(PLATFORM_PREFIX):
     os.makedirs(PLATFORM_PREFIX)
 
@@ -559,3 +566,10 @@ if COMPILE_APK:
                                        'android-debug-unaligned.apk')):
         failed_on_step("The android-debug-unaligned.apk package "
                        "has not been created and is not present.")
+
+if CLEAN:
+
+    # remove everything from build folder expect the APKs
+    syscall('rm -rf build/generated build/intermediates build/native-libs '
+            'build/reports build/test-results build/tmp build/outputs/logs '
+            'build/outputs/lint*', shell=True)
