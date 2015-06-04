@@ -87,11 +87,6 @@
 
         </activity>
 
-        <provider
-                android:name=".ZimContentProvider"
-                android:authorities="org.kiwix.zim.base"
-                android:exported="true"/>
-
         <activity
                 android:name=".ZimFileSelectActivity"
                 android:icon="@drawable/kiwix_icon"
@@ -106,5 +101,13 @@
                 <data android:mimeType="*/*"/>
             </intent-filter>
         </activity>
+
+        <activity android:name=".settings.KiwixSettingsActivity"/>
+
+        <provider
+                android:name=".ZimContentProvider"
+                android:authorities="org.kiwix.zim.base"
+                android:exported="true"/>
+
     </application>
 </manifest>

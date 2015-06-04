@@ -23,6 +23,7 @@ import org.kiwix.kiwixmobile.LanguageUtils;
 import org.kiwix.kiwixmobile.R;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -30,10 +31,21 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.BaseAdapter;
 
 import java.util.Locale;
 
 public class KiwixSettingsActivity extends AppCompatActivity {
+
+    public static final int RESULT_RESTART = 1236;
+
+    public static final String PREF_LANG = "pref_language_chooser";
+
+    public static final String PREF_VERSION = "pref_version";
+
+    public static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
+
+    public static final String PREF_ZOOM = "pref_zoom";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,22 +55,50 @@ public class KiwixSettingsActivity extends AppCompatActivity {
                 .commit();
     }
 
-    private class PrefsFragment extends PreferenceFragment {
+    public static class PrefsFragment extends PreferenceFragment implements
+            SharedPreferences.OnSharedPreferenceChangeListener {
 
-        public static final int RESULT_RESTART = 1236;
+
+        private SliderPreference mSlider;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
-            // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences);
+
+            mSlider = (SliderPreference) getPrefrence(PREF_ZOOM);
+            setSliderState();
             setUpSettings();
-            new LanguageUtils(getActivity()).changeFont(getLayoutInflater());
+            new LanguageUtils(getActivity()).changeFont(getActivity().getLayoutInflater());
+        }
+
+        private void setSliderState() {
+            boolean enabled = getPreferenceManager().getSharedPreferences().getBoolean(
+                    PREF_ZOOM_ENABLED, false);
+            if (enabled) {
+                mSlider.setEnabled(true);
+            } else {
+                mSlider.setEnabled(false);
+            }
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            getPreferenceScreen().getSharedPreferences()
+                    .registerOnSharedPreferenceChangeListener(this);
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            getPreferenceScreen().getSharedPreferences()
+                    .unregisterOnSharedPreferenceChangeListener(this);
         }
 
         public void setUpSettings() {
-            setUpLanguageChooser("pref_language_chooser");
+
+            setUpLanguageChooser(PREF_LANG);
             setAppVersionNumber();
         }
 
@@ -102,14 +142,26 @@ public class KiwixSettingsActivity extends AppCompatActivity {
                 return;
             }
             EditTextPreference versionPref = (EditTextPreference) PrefsFragment.this
-                    .findPreference("pref_version");
+                    .findPreference(PREF_VERSION);
             versionPref.setSummary(version);
         }
 
         private Preference getPrefrence(String preferenceId) {
-
             return PrefsFragment.this.findPreference(preferenceId);
+        }
 
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+            if (key.equals(PREF_ZOOM_ENABLED)) {
+                setSliderState();
+            }
+            if (key.equals(PREF_ZOOM)) {
+                mSlider.setSummary(mSlider.getSummary());
+                ((BaseAdapter) getPreferenceScreen().getRootAdapter()).notifyDataSetChanged();
+
+            }
         }
     }
 }

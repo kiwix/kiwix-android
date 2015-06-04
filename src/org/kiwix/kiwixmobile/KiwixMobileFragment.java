@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile;
 
 
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
-import org.kiwix.kiwixmobile.settings.SettingsHelper;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -692,7 +691,7 @@ public class KiwixMobileFragment extends Fragment {
                 }
                 break;
             case PREFERENCES_REQUEST_CODE:
-                if (resultCode == SettingsHelper.RESULT_RESTART) {
+                if (resultCode == KiwixSettingsActivity.RESULT_RESTART) {
                     getActivity().finish();
                     startActivity(new Intent(getActivity(), KiwixMobileActivity.class));
                 }
@@ -748,6 +747,8 @@ public class KiwixMobileFragment extends Fragment {
         if (mIsZoomEnabled) {
             int zoomScale = (int) mSharedPreferences.getFloat(PREF_ZOOM, 100.0f);
             webView.setInitialScale(zoomScale);
+        } else {
+            webView.setInitialScale(0);
         }
 
         if (!mIsBacktotopEnabled) {

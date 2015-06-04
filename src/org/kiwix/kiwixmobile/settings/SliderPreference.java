@@ -6,14 +6,13 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class SliderPreference extends DialogPreference {
 
-    protected final static int SEEKBAR_MAX = 300;
+    protected final static int SEEKBAR_MAX = 500;
 
     protected int mSeekBarValue;
 
@@ -69,9 +68,10 @@ public class SliderPreference extends DialogPreference {
     public CharSequence getSummary() {
         if (mSummaries != null && mSummaries.length > 0) {
             double piece = SEEKBAR_MAX / mSummaries.length;
-            Log.e("yolol", piece + "");
             int index = (int) (mSeekBarValue / piece);
-            Log.e("yolol", index + " " + mSeekBarValue);
+            if (index == SEEKBAR_MAX){
+                index--;
+            }
             return mSummaries[index];
         } else {
             return super.getSummary();
@@ -95,7 +95,6 @@ public class SliderPreference extends DialogPreference {
     @Override
     public void setSummary(CharSequence summary) {
         super.setSummary(summary);
-        mSummaries = null;
     }
 
     public float getValue() {
