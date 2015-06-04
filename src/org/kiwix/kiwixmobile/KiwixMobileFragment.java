@@ -322,9 +322,42 @@ public class KiwixMobileFragment extends SherlockFragment {
                 // Alternative would be to restore webView state. But more effort to implement, and actually
                 // fits better normal android behavior if after closing app ("back" button) state is not maintained.
             } else {
-                Log.d(TAG_KIWIX,
-                        " Kiwix normal start, no zimFile loaded last time  -> display welcome page");
-                showWelcome();
+                if (Constants.IS_CUSTOM_APP) {
+                    Log.d(TAG_KIWIX, "Kiwix Custom App starting for the first time. Check Companion ZIM.");
+
+                    //Context context = this.getActivity().getApplicationContext();
+                    String fileName = FileUtils.getExpansionAPKFileName(true);
+                    Log.d(TAG_KIWIX, "Looking for: " + fileName + " -- filesize: " + Constants.ZIM_FILE_SIZE);
+                    if (!FileUtils.doesFileExist(fileName, Constants.ZIM_FILE_SIZE, false)) {
+                        Log.d(TAG_KIWIX, "... doesn't exist.");
+
+                        AlertDialog.Builder zimFileMissingBuilder = new AlertDialog.Builder(this.getActivity());
+                        zimFileMissingBuilder.setTitle(R.string.app_name);
+                        zimFileMissingBuilder.setMessage(R.string.customapp_missing_content);
+                        zimFileMissingBuilder.setIcon(R.drawable.kiwix_icon);
+                        final Activity activity = this.getActivity();
+                        zimFileMissingBuilder.setPositiveButton(getString(R.string.go_to_play_store),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        String market_uri = "market://details?id=" + Constants.CUSTOM_APP_ID;
+                                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                                        intent.setData(Uri.parse(market_uri));
+                                        startActivity(intent);
+                                        activity.finish();
+                                        System.exit(0);
+                                    }
+                                });
+                        zimFileMissingBuilder.setCancelable(false);
+                        AlertDialog zimFileMissingDialog = zimFileMissingBuilder.create();
+                        zimFileMissingDialog.show();
+                    } else {
+                        openZimFile(new File(FileUtils.generateSaveFileName(fileName)), true);
+                    }
+                } else {
+                    Log.d(TAG_KIWIX,
+                            " Kiwix normal start, no zimFile loaded last time  -> display welcome page");
+                    showWelcome();
+                }
             }
         }
     }
