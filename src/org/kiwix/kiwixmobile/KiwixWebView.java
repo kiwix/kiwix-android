@@ -27,7 +27,6 @@ import android.widget.ZoomButtonsController;
 
 import java.lang.reflect.Method;
 
-import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.newApi;
 
 public class KiwixWebView extends WebView {
 
@@ -91,12 +90,8 @@ public class KiwixWebView extends WebView {
 
     public void disableZoomControlls() {
 
-        if (newApi()) {
-            getSettings().setBuiltInZoomControls(true);
-            getSettings().setDisplayZoomControls(false);
-        } else {
-            getZoomControls();
-        }
+        getSettings().setBuiltInZoomControls(true);
+        getSettings().setDisplayZoomControls(false);
     }
 
     // Use reflection to hide the zoom controlls

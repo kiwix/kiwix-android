@@ -96,7 +96,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.newApi;
 
 public class KiwixMobileFragment extends Fragment {
 
@@ -237,9 +236,7 @@ public class KiwixMobileFragment extends Fragment {
 
         manageExternalLaunchAndRestoringViewState(savedInstanceState);
 
-        if (newApi()) {
-            setUpTabDeleteCross();
-        }
+        setUpTabDeleteCross();
 
         return root;
     }
@@ -393,11 +390,8 @@ public class KiwixMobileFragment extends Fragment {
         });
 
         // Create the adapter and set it to the AutoCompleteTextView
-        if (newApi()) {
-            adapter = new AutoCompleteAdapter(getActivity(), android.R.layout.simple_list_item_1);
-        } else {
-            adapter = new AutoCompleteAdapter(getActivity(), R.layout.simple_list_item);
-        }
+
+        adapter = new AutoCompleteAdapter(getActivity(), android.R.layout.simple_list_item_1);
 
         articleSearchtextView.setAdapter(adapter);
         articleSearchtextView.setOnItemClickListener(new OnItemClickListener() {
@@ -1250,7 +1244,8 @@ public class KiwixMobileFragment extends Fragment {
 
                 if (((AppCompatActivity) getActivity()).getSupportActionBar().getNavigationMode()
                         == ActionBar.NAVIGATION_MODE_TABS) {
-                    ((AppCompatActivity) getActivity()).getSupportActionBar().getSelectedTab().setText(title);
+                    ((AppCompatActivity) getActivity()).getSupportActionBar().getSelectedTab()
+                            .setText(title);
                 }
 
                 // Workaround for #643

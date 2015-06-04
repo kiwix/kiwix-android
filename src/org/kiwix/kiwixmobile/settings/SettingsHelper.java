@@ -28,12 +28,9 @@ import android.content.pm.PackageManager;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 
 import java.util.Locale;
-
-import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.newApi;
 
 
 public class SettingsHelper {
@@ -96,19 +93,13 @@ public class SettingsHelper {
     }
 
     private Activity getContext() {
-        if (newApi()) {
-            return ((PreferenceFragment) mPreference).getActivity();
-        }
 
-        return ((PreferenceActivity) mPreference);
+        return ((PreferenceFragment) mPreference).getActivity();
     }
 
     private Preference getPrefrence(String preferenceId) {
 
-        if (newApi()) {
-            return ((PreferenceFragment) mPreference).findPreference(preferenceId);
-        }
+        return ((PreferenceFragment) mPreference).findPreference(preferenceId);
 
-        return ((PreferenceActivity) mPreference).findPreference(preferenceId);
     }
 }

@@ -20,7 +20,6 @@
 package org.kiwix.kiwixmobile;
 
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -99,7 +98,6 @@ public class ZimFileSelectActivity extends AppCompatActivity
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
 

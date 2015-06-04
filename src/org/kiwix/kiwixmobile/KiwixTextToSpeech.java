@@ -64,34 +64,26 @@ public class KiwixTextToSpeech {
                 }
             }
         });
-        if (BackwardsCompatibilityTools
-                .equalsOrNewThanApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)) {
-            tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                @Override
-                public void onStart(String utteranceId) {
-                }
 
-                @Override
-                public void onDone(String utteranceId) {
-                    Log.e(TAG_KIWIX, "TextToSpeech: " + utteranceId);
-                    onSpeakingListener.onSpeakingEnded();
-                }
+        tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+            @Override
+            public void onStart(String utteranceId) {
+            }
 
-                @Override
-                public void onError(String utteranceId) {
-                    Log.e(TAG_KIWIX, "TextToSpeech: " + utteranceId);
-                    onSpeakingListener.onSpeakingEnded();
-                }
-            });
-        } else {
-            tts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
-                @Override
-                public void onUtteranceCompleted(String utteranceId) {
-                    onSpeakingListener.onSpeakingEnded();
-                }
-            });
-        }
+            @Override
+            public void onDone(String utteranceId) {
+                Log.e(TAG_KIWIX, "TextToSpeech: " + utteranceId);
+                onSpeakingListener.onSpeakingEnded();
+            }
+
+            @Override
+            public void onError(String utteranceId) {
+                Log.e(TAG_KIWIX, "TextToSpeech: " + utteranceId);
+                onSpeakingListener.onSpeakingEnded();
+            }
+        });
     }
+
 
     /**
      * Starts speaking the WebView content aloud (or stops it if TTS is speaking now).

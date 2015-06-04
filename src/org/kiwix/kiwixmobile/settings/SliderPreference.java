@@ -78,16 +78,6 @@ public class SliderPreference extends DialogPreference {
         }
     }
 
-    public void setSummary(CharSequence[] summaries) {
-        mSummaries = summaries;
-    }
-
-    @Override
-    public void setSummary(CharSequence summary) {
-        super.setSummary(summary);
-        mSummaries = null;
-    }
-
     @Override
     public void setSummary(int summaryResId) {
         try {
@@ -98,12 +88,21 @@ public class SliderPreference extends DialogPreference {
         }
     }
 
+    public void setSummary(CharSequence[] summaries) {
+        mSummaries = summaries;
+    }
+
+    @Override
+    public void setSummary(CharSequence summary) {
+        super.setSummary(summary);
+        mSummaries = null;
+    }
+
     public float getValue() {
         return mSeekBarValue;
     }
 
     public void setValue(float value) {
-        //value = Math.max(0, Math.min(value, 1)); // clamp to [0, 1]
         if (shouldPersist()) {
             persistFloat(value);
         }
