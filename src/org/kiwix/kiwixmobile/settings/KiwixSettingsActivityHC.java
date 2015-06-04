@@ -22,11 +22,11 @@ package org.kiwix.kiwixmobile.settings;
 import org.kiwix.kiwixmobile.LanguageUtils;
 import org.kiwix.kiwixmobile.R;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.support.v7.app.AppCompatActivity;
 
-public class KiwixSettingsActivityHC extends Activity {
+public class KiwixSettingsActivityHC extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class KiwixSettingsActivityHC extends Activity {
                 .commit();
     }
 
-    public class PrefsFragment extends PreferenceFragment {
+    private class PrefsFragment extends PreferenceFragment {
 
         @Override
         public void onCreate(Bundle savedInstanceState) {

@@ -19,11 +19,7 @@
 
 package org.kiwix.kiwixmobile;
 
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
 
-import org.kiwix.kiwixmobile.settings.KiwixSettingsActivityGB;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivityHC;
 import org.kiwix.kiwixmobile.settings.SettingsHelper;
 
@@ -49,6 +45,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -57,6 +55,8 @@ import android.view.ContextMenu;
 import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -98,7 +98,7 @@ import java.util.HashMap;
 
 import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.newApi;
 
-public class KiwixMobileFragment extends SherlockFragment {
+public class KiwixMobileFragment extends Fragment {
 
     public static final String TAG_KIWIX = "kiwix";
 
@@ -782,12 +782,7 @@ public class KiwixMobileFragment extends SherlockFragment {
     }
 
     public void selectSettings() {
-        Intent i;
-        if (newApi()) {
-            i = new Intent(getActivity(), KiwixSettingsActivityHC.class);
-        } else {
-            i = new Intent(getActivity(), KiwixSettingsActivityGB.class);
-        }
+        Intent i = new Intent(getActivity(), KiwixSettingsActivityHC.class);
         startActivityForResult(i, PREFERENCES_REQUEST_CODE);
     }
 
@@ -835,7 +830,7 @@ public class KiwixMobileFragment extends SherlockFragment {
         if (file.exists()) {
             if (ZimContentProvider.setZimFile(file.getAbsolutePath()) != null) {
 
-                getSherlockActivity().getSupportActionBar()
+                ((AppCompatActivity) getActivity()).getSupportActionBar()
                         .setSubtitle(ZimContentProvider.getZimFileTitle());
 
                 // Apparently with webView.clearHistory() only history before currently (fully)
@@ -917,7 +912,7 @@ public class KiwixMobileFragment extends SherlockFragment {
         } else {
             bookmarks.remove(title);
         }
-        getSherlockActivity().supportInvalidateOptionsMenu();
+        getActivity().supportInvalidateOptionsMenu();
     }
 
     public void viewBookmarks() {
@@ -1140,8 +1135,8 @@ public class KiwixMobileFragment extends SherlockFragment {
             }
 
             if (progress > 20) {
-                if (getSherlockActivity() != null) {
-                    getSherlockActivity().supportInvalidateOptionsMenu();
+                if (getActivity() != null) {
+                    getActivity().supportInvalidateOptionsMenu();
                 }
             }
 
@@ -1237,7 +1232,7 @@ public class KiwixMobileFragment extends SherlockFragment {
                     "<html><body>" + errorString + "</body></html>", "text/html", "utf-8",
                     failingUrl);
             String title = getResources().getString(R.string.app_name);
-            getSherlockActivity().getSupportActionBar().setTitle(title);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(title);
         }
 
         @Override
@@ -1249,13 +1244,13 @@ public class KiwixMobileFragment extends SherlockFragment {
                     title = webView.getTitle();
                 }
 
-                if (getSherlockActivity().getSupportActionBar().getTabCount() < 2) {
-                    getSherlockActivity().getSupportActionBar().setTitle(title);
+                if (((AppCompatActivity) getActivity()).getSupportActionBar().getTabCount() < 2) {
+                    ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(title);
                 }
 
-                if (getSherlockActivity().getSupportActionBar().getNavigationMode()
+                if (((AppCompatActivity) getActivity()).getSupportActionBar().getNavigationMode()
                         == ActionBar.NAVIGATION_MODE_TABS) {
-                    getSherlockActivity().getSupportActionBar().getSelectedTab().setText(title);
+                    ((AppCompatActivity) getActivity()).getSupportActionBar().getSelectedTab().setText(title);
                 }
 
                 // Workaround for #643

@@ -19,10 +19,6 @@
 
 package org.kiwix.kiwixmobile;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -37,7 +33,11 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -53,7 +53,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ZimFileSelectActivity extends SherlockFragmentActivity
+public class ZimFileSelectActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener {
 
     public static final String TAG_KIWIX = "kiwix";
@@ -183,7 +183,7 @@ public class ZimFileSelectActivity extends SherlockFragmentActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        final MenuInflater inflater = getSupportMenuInflater();
+        final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.fileselector, menu);
         return super.onCreateOptionsMenu(menu);
     }

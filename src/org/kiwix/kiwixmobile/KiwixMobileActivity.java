@@ -20,10 +20,6 @@
 package org.kiwix.kiwixmobile;
 
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.MenuItem;
-
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.ClipData;
@@ -39,11 +35,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.DragEvent;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -58,7 +57,7 @@ import java.util.ArrayList;
 import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.equalsOrNewThanApi;
 import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.newApi;
 
-public class KiwixMobileActivity extends SherlockFragmentActivity implements ActionBar.TabListener,
+public class KiwixMobileActivity extends AppCompatActivity implements ActionBar.TabListener,
         View.OnLongClickListener, KiwixMobileFragment.FragmentCommunicator,
         BookmarkDialog.BookmarkDialogListener {
 
@@ -95,12 +94,8 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // startActivity(new Intent(this, LibraryActivity.class));
-
         requestWindowFeature(Window.FEATURE_PROGRESS);
-
+        super.onCreate(savedInstanceState);
         setProgressBarVisibility(true);
 
         handleLocaleCheck();
@@ -304,7 +299,7 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
                 mCompatCallback.setActive();
                 mCompatCallback.setWebView(mCurrentFragment.webView);
                 mCompatCallback.showSoftInput();
-                startActionMode(mCompatCallback);
+                startSupportActionMode(mCompatCallback);
                 break;
 
             case R.id.menu_forward:
