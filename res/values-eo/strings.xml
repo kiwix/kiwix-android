@@ -37,7 +37,7 @@
     <string name="error_articlenotfound">Eraro: Ŝargado de la artikolo \"%1$s\" fiaskis.</string>
     <string name="error_articleurlnotfound">Eraro: Ŝargado de la artikolo (Url: %1$s) fiaskis.</string>
     <string name="pref_display_title">Montri</string>
-    <string name="pref_zoom_title">Zomnivelo</string>
+    <string name="pref_zoom_dialog">Zomnivelo</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Aŭtomate</item>
         <item name="pref_zoom_entry_small">Malgranda</item>

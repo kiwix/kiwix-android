@@ -37,7 +37,7 @@
     <string name="error_articlenotfound">Fout: Laai van bladsy \"%1$s\" het gefaal.</string>
     <string name="error_articleurlnotfound">Fout: Laai van bladsy (URL: %1$s) het gefaal.</string>
     <string name="pref_display_title">Wys</string>
-    <string name="pref_zoom_title">Zoom-vlak</string>
+    <string name="pref_zoom_dialog">Zoom-vlak</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Outomaties</item>
         <item name="pref_zoom_entry_small">Klein</item>

@@ -8,11 +8,19 @@
                 android:title="@string/pref_nightmode"
                 android:defaultValue="false"
                 android:summary="@string/pref_nightmode_summary"/>
+
         <CheckBoxPreference
                 android:key="pref_backtotop"
                 android:title="@string/pref_backtotop"
                 android:summary="@string/pref_backtotop_summary"
                 android:defaultValue="false"/>
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            android:key="pref_zoom_sub"
+            android:title="@string/pref_zoom_sub_title">
 
         <CheckBoxPreference
                 android:key="pref_zoom_enabled"
@@ -22,12 +30,11 @@
 
         <org.kiwix.kiwixmobile.settings.SliderPreference
                 android:key="pref_zoom"
-                android:title="@string/pref_zoom_title"
+                android:title="@string/pref_zoom_dialog"
                 android:summary="@array/pref_zoom_entryvalues"
                 android:dialogMessage="0"
                 android:defaultValue="250.0"
                 android:enabled="false"/>
-
     </PreferenceCategory>
 
     <PreferenceCategory

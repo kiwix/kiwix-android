@@ -37,7 +37,7 @@
     <string name="error_articlenotfound">பிழை: \"%1$s\" கட்டுரையை ஏற்றித்துவங்க தவறிவிட்டது</string>
     <string name="error_articleurlnotfound">பிழை: (Url: %1$s) கட்டுரையை ஏற்றித்துவங்க தவறிவிட்டது</string>
     <string name="pref_display_title">காண்பி</string>
-    <string name="pref_zoom_title">உரு அளவு நிலை</string>
+    <string name="pref_zoom_dialog">உரு அளவு நிலை</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">தன்னியக்கம்</item>
         <item name="pref_zoom_entry_small">சிறிய</item>

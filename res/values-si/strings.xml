@@ -37,7 +37,7 @@
     <string name="error_articlenotfound">දෝෂය: \"%1$s\" ලිපිය පූරණය වීම අසාර්ථකයි.</string>
     <string name="error_articleurlnotfound">දෝෂය: (Url: %1$s) ලිපිය පූරණය වීම අසාර්ථකයි.</string>
     <string name="pref_display_title">පෙන්වීම</string>
-    <string name="pref_zoom_title">විශාලන මට්ටම</string>
+    <string name="pref_zoom_dialog">විශාලන මට්ටම</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">ස්වයංක්‍රීය</item>
         <item name="pref_zoom_entry_small">කුඩා</item>

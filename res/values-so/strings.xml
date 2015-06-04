@@ -37,7 +37,7 @@
     <string name="error_articlenotfound">Qalad: Galinta maqaalka \"%1$s\" waa lagu fashilmay.</string>
     <string name="error_articleurlnotfound">Qalad: Galinta maqaalka (Url: %1$s) ma galin.</string>
     <string name="pref_display_title">Qaab aragga</string>
-    <string name="pref_zoom_title">Heelka weynaynta</string>
+    <string name="pref_zoom_dialog">Heelka weynaynta</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Talantaali</item>
         <item name="pref_zoom_entry_small">Yar</item>

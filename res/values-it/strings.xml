@@ -37,7 +37,7 @@
     <string name="error_articlenotfound">Errore: caricamento della voce \"%1$s\" non riuscito.</string>
     <string name="error_articleurlnotfound">Errore: caricamento della voce (url: %1$s) non riuscito.</string>
     <string name="pref_display_title">Visualizza</string>
-    <string name="pref_zoom_title">Livello di zoom</string>
+    <string name="pref_zoom_dialog">Livello di zoom</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatico</item>
         <item name="pref_zoom_entry_small">Piccolo</item>

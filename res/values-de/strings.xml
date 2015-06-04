@@ -15,7 +15,7 @@
     <string name="menu_exitfullscreen">Vollbild beenden</string>
     <string name="menu_read_aloud">Vorlesen</string>
     <string name="menu_read_aloud_stop">Mit dem Vorlesen aufhören</string>
-    <string name="menu_exit">Schliessen</string>
+    <string name="menu_exit">Schließen</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Mit Freunden teilen</string>
     <string name="save_media">Medium speichern als …</string>
@@ -37,7 +37,7 @@
     <string name="error_articlenotfound">Fehler: Das Laden des Artikels \"%1$s\" ist fehlgeschlagen.</string>
     <string name="error_articleurlnotfound">Fehler: Das Laden des Artikels (URL: %1$s) ist fehlgeschlagen.</string>
     <string name="pref_display_title">Bildschirm</string>
-    <string name="pref_zoom_title">Vergrößerungsstufe</string>
+    <string name="pref_zoom_dialog">Vergrößerungsstufe</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatisch</item>
         <item name="pref_zoom_entry_small">Klein</item>

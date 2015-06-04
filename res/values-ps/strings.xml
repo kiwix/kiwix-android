@@ -37,7 +37,7 @@
     <string name="error_articlenotfound">تېروتنه: ليکنه برسېرېدنه \"%1$s\" نابريالۍ شوه.</string>
     <string name="error_articleurlnotfound">تېروتنه: ليکنه برسېرېدنه (يو آر ال: %1$s) نابريالئ شوه.</string>
     <string name="pref_display_title">ښکارېدنه</string>
-    <string name="pref_zoom_title">لوډېرولو کچه</string>
+    <string name="pref_zoom_dialog">لوډېرولو کچه</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">اتوماتيک</item>
         <item name="pref_zoom_entry_small">وړوکی</item>

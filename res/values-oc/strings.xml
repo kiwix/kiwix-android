@@ -37,7 +37,7 @@
     <string name="error_articlenotfound">Error : Fracàs al cargament de l’article « %1$s ».</string>
     <string name="error_articleurlnotfound">Error : Lo cargament de l’article (Url: %1$s) a fracassat.</string>
     <string name="pref_display_title">Afichar</string>
-    <string name="pref_zoom_title">Nivèl de zoom</string>
+    <string name="pref_zoom_dialog">Nivèl de zoom</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
         <item name="pref_zoom_entry_small">Pichon</item>

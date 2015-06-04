@@ -37,7 +37,7 @@
     <string name="error_articlenotfound">Fejl: Indlæsning af artikel \"%1$s\" mislykkedes.</string>
     <string name="error_articleurlnotfound">Fejl: Indlæsning af artikel (Url: %1$s) mislykkedes.</string>
     <string name="pref_display_title">Vis</string>
-    <string name="pref_zoom_title">Zoom-niveau</string>
+    <string name="pref_zoom_dialog">Zoom-niveau</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatisk</item>
         <item name="pref_zoom_entry_small">Lille</item>

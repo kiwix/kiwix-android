@@ -37,7 +37,7 @@
     <string name="error_articlenotfound">Fout: Het laden van de pagina \"%1$s\" is mislukt.</string>
     <string name="error_articleurlnotfound">Fout: Het laden van de pagina (URL: %1$s) is mislukt.</string>
     <string name="pref_display_title">Beeld</string>
-    <string name="pref_zoom_title">Zoomniveau</string>
+    <string name="pref_zoom_dialog">Zoomniveau</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatisch</item>
         <item name="pref_zoom_entry_small">Klein</item>

@@ -37,7 +37,7 @@
     <string name="error_articlenotfound">Fel: Kunde inte läsa in artikeln \"%1$s\".</string>
     <string name="error_articleurlnotfound">Fel: Inläsning av artikel (url: %1$s) misslyckades.</string>
     <string name="pref_display_title">Visa</string>
-    <string name="pref_zoom_title">Zoomnivå</string>
+    <string name="pref_zoom_dialog">Zoomnivå</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatiskt</item>
         <item name="pref_zoom_entry_small">Liten</item>

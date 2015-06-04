@@ -37,7 +37,7 @@
     <string name="error_articlenotfound">Xəta:\"%1$s\" adlı məqalənin yüklənməsi alınmadı.</string>
     <string name="error_articleurlnotfound">Xəta: Məqalənin (Url: %1$s) yüklənməsi alınmadı.</string>
     <string name="pref_display_title">Ekran</string>
-    <string name="pref_zoom_title">Miqyas səviyyəsi</string>
+    <string name="pref_zoom_dialog">Miqyas səviyyəsi</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Avtomatik</item>
         <item name="pref_zoom_entry_small">Kiçik</item>
