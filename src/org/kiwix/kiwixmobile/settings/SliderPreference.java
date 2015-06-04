@@ -69,8 +69,8 @@ public class SliderPreference extends DialogPreference {
         if (mSummaries != null && mSummaries.length > 0) {
             double piece = SEEKBAR_MAX / mSummaries.length;
             int index = (int) (mSeekBarValue / piece);
-            if (index == SEEKBAR_MAX){
-                index--;
+            if (index == mSummaries.length){
+                --index;
             }
             return mSummaries[index];
         } else {

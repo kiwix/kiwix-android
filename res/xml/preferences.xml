@@ -25,7 +25,7 @@
                 android:title="@string/pref_zoom_title"
                 android:summary="@array/pref_zoom_entryvalues"
                 android:dialogMessage="0"
-                android:defaultValue="100.0"
+                android:defaultValue="250.0"
                 android:enabled="false"/>
 
     </PreferenceCategory>
