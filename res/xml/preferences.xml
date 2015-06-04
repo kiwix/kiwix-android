@@ -14,6 +14,13 @@
                 android:summary="@string/pref_backtotop_summary"
                 android:defaultValue="false"/>
 
+        <org.kiwix.kiwixmobile.settings.SliderPreference
+                android:key="my_slider"
+                android:title="@string/"
+                android:summary="@array/slider_summaries"
+                android:defaultValue="@string/slider_default"
+                android:dialogMessage="@string/slider_message"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory

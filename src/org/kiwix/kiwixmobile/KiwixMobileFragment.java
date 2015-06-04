@@ -254,7 +254,7 @@ public class KiwixMobileFragment extends SherlockFragment {
         editor.putString(TAG_CURRENTZIMFILE, ZimContentProvider.getZimFile());
 
         // Commit the edits!
-        editor.commit();
+        editor.apply();
 
         // Save bookmarks
         saveBookmarks();
@@ -1006,11 +1006,6 @@ public class KiwixMobileFragment extends SherlockFragment {
         return openArticle(articleUrl);
     }
 
-    public boolean isTablet(Context context) {
-        return (context.getResources().getConfiguration().screenLayout
-                & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
-    }
-
     public void hideSearchBar() {
         // Hide searchbar
         articleSearchBar.setVisibility(View.GONE);
@@ -1268,20 +1263,19 @@ public class KiwixMobileFragment extends SherlockFragment {
                 }
             }
 
-            String viewPortJs = "javascript:"
-                    + "viewport = document.querySelector(\"meta[name=viewport]\");\n"
-                    + "\n"
-                    + "if (!viewport) {\n"
-                    + "  var viewPortTag = document.createElement('meta');\n"
-                    + "  viewPortTag.id = \"viewport\";\n"
-                    + "  viewPortTag.name = \"viewport\";\n"
-                    + "  viewPortTag.content = \"width=device-width, initial-scale=1.0, "
-                    + "\";\n"
-                    + "  document.getElementsByTagName('head')[0].appendChild(viewPortTag);\n"
-                    + "\n"
-                    + "}";
-
-            webView.loadUrl(viewPortJs);
+//            String viewPortJs = "javascript:"
+//                    + "viewport = document.querySelector(\"meta[name=viewport]\");\n"
+//                    + "\n"
+//                    + "if (!viewport) {\n"
+//                    + "  var viewPortTag = document.createElement('meta');\n"
+//                    + "  viewPortTag.id = \"viewport\";\n"
+//                    + "  viewPortTag.name = \"viewport\";\n"
+//                    + "  viewPortTag.content = \"width=device-width, initial-scale=1.0\";\n"
+//                    + "  document.getElementsByTagName('head')[0].appendChild(viewPortTag);\n"
+//                    + "\n"
+//                    + "}";
+//
+//            //webView.loadUrl(viewPortJs);
         }
     }
 }

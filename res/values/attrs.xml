@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<resources>
+
+    <declare-styleable name="SliderPreference">
+        <attr name="android:summary"/>
+    </declare-styleable>
+
+</resources>
