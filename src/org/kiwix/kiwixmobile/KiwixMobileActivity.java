@@ -20,14 +20,8 @@
 package org.kiwix.kiwixmobile;
 
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.MenuItem;
-
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
 import android.content.ClipData;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,11 +33,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.DragEvent;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -55,10 +52,8 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 
-import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.equalsOrNewThanApi;
-import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.newApi;
 
-public class KiwixMobileActivity extends SherlockFragmentActivity implements ActionBar.TabListener,
+public class KiwixMobileActivity extends AppCompatActivity implements ActionBar.TabListener,
         View.OnLongClickListener, KiwixMobileFragment.FragmentCommunicator,
         BookmarkDialog.BookmarkDialogListener {
 
@@ -95,12 +90,8 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // startActivity(new Intent(this, LibraryActivity.class));
-
         requestWindowFeature(Window.FEATURE_PROGRESS);
-
+        super.onCreate(savedInstanceState);
         setProgressBarVisibility(true);
 
         handleLocaleCheck();
@@ -109,10 +100,9 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
 
         // Set an OnDragListener on the entire View. Now we can track,
         // if the user drags the Tab outside the View
-        if (newApi()) {
-            setUpOnDragListener();
-            getWindow().getDecorView().setOnDragListener(mOnDragListener);
-        }
+
+        setUpOnDragListener();
+        getWindow().getDecorView().setOnDragListener(mOnDragListener);
 
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
@@ -142,9 +132,7 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
 
     private void setUpViewPagerAndActionBar() {
 
-        if (equalsOrNewThanApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)) {
-            mActionBar.setHomeButtonEnabled(false);
-        }
+        mActionBar.setHomeButtonEnabled(false);
 
         mViewPager.setAdapter(mViewPagerAdapter);
         // set the amount of pages, that the ViewPager adapter should keep in cache
@@ -304,24 +292,22 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
                 mCompatCallback.setActive();
                 mCompatCallback.setWebView(mCurrentFragment.webView);
                 mCompatCallback.showSoftInput();
-                startActionMode(mCompatCallback);
+                startSupportActionMode(mCompatCallback);
                 break;
 
             case R.id.menu_forward:
                 if (mCurrentFragment.webView.canGoForward()) {
                     mCurrentFragment.webView.goForward();
-                    if (newApi()) {
-                        invalidateOptionsMenu();
-                    }
+                    invalidateOptionsMenu();
                 }
                 break;
 
             case R.id.menu_back:
                 if (mCurrentFragment.webView.canGoBack()) {
                     mCurrentFragment.webView.goBack();
-                    if (newApi()) {
-                        invalidateOptionsMenu();
-                    }
+
+                    invalidateOptionsMenu();
+
                 }
                 break;
 
@@ -650,16 +636,11 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
 
         mCurrentDraggedTab = (Integer) v.getTag(R.id.action_bar_tab_id);
 
-        if (newApi()) {
-            onLongClickOperation(v);
-        } else {
-            compatOnLongClickOperation();
-        }
+        onLongClickOperation(v);
 
         return true;
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void onLongClickOperation(View v) {
 
         View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
@@ -672,21 +653,6 @@ public class KiwixMobileActivity extends SherlockFragmentActivity implements Act
         ClipData data = ClipData.newPlainText("", "");
 
         v.startDrag(data, shadowBuilder, v, 0);
-    }
-
-    private void compatOnLongClickOperation() {
-
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
-        dialog.setTitle(getString(R.string.remove_tab));
-        dialog.setMessage(getString(R.string.remove_tab_confirm));
-        dialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                removeTabAt(mCurrentDraggedTab);
-            }
-        });
-        dialog.setNegativeButton(android.R.string.no, null);
-        dialog.show();
     }
 
     //These two methods are used with the BookmarkDialog.

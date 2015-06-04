@@ -19,14 +19,9 @@
 
 package org.kiwix.kiwixmobile;
 
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
 
 import org.kiwix.kiwixmobile.settings.Constants;
-import org.kiwix.kiwixmobile.settings.KiwixSettingsActivityGB;
-import org.kiwix.kiwixmobile.settings.KiwixSettingsActivityHC;
-import org.kiwix.kiwixmobile.settings.SettingsHelper;
+import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -50,15 +45,18 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -99,9 +97,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static org.kiwix.kiwixmobile.BackwardsCompatibilityTools.newApi;
 
-public class KiwixMobileFragment extends SherlockFragment {
+public class KiwixMobileFragment extends Fragment {
 
     public static final String TAG_KIWIX = "kiwix";
 
@@ -109,23 +106,15 @@ public class KiwixMobileFragment extends SherlockFragment {
 
     private static final String TAG_CURRENTARTICLE = "currentarticle";
 
-    private static final String PREF_ZOOM = "pref_zoom";
-
     private static final String PREF_NIGHTMODE = "pref_nightmode";
-
-    private static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
 
     private static final String PREF_KIWIX_MOBILE = "kiwix-mobile";
 
     private static final String PREF_BACKTOTOP = "pref_backtotop";
 
-    private static final String AUTOMATIC = "automatic";
+    private static final String PREF_ZOOM = "pref_zoom";
 
-    private static final String MEDIUM = "medium";
-
-    private static final String SMALL = "small";
-
-    private static final String LARGE = "large";
+    private static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
 
     private static final int ZIMFILESELECT_REQUEST_CODE = 1234;
 
@@ -151,9 +140,9 @@ public class KiwixMobileFragment extends SherlockFragment {
 
     protected int requestWebReloadOnFinished;
 
-    private boolean isBacktotopEnabled;
+    private boolean mIsBacktotopEnabled;
 
-    private SharedPreferences mySharedPreferences;
+    private SharedPreferences mSharedPreferences;
 
     private ArrayAdapter<String> adapter;
 
@@ -166,6 +155,8 @@ public class KiwixMobileFragment extends SherlockFragment {
     private FragmentCommunicator mFragmentCommunicator;
 
     private KiwixTextToSpeech tts;
+
+    private boolean mIsZoomEnabled;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -180,7 +171,7 @@ public class KiwixMobileFragment extends SherlockFragment {
         requestWebReloadOnFinished = 0;
         requestInitAllMenuItems = false;
         nightMode = false;
-        isBacktotopEnabled = false;
+        mIsBacktotopEnabled = false;
         isFullscreenOpened = false;
     }
 
@@ -246,9 +237,7 @@ public class KiwixMobileFragment extends SherlockFragment {
 
         manageExternalLaunchAndRestoringViewState(savedInstanceState);
 
-        if (newApi()) {
-            setUpTabDeleteCross();
-        }
+        setUpTabDeleteCross();
 
         return root;
     }
@@ -261,7 +250,7 @@ public class KiwixMobileFragment extends SherlockFragment {
         editor.putString(TAG_CURRENTZIMFILE, ZimContentProvider.getZimFile());
 
         // Commit the edits!
-        editor.commit();
+        editor.apply();
 
         // Save bookmarks
         saveBookmarks();
@@ -435,11 +424,8 @@ public class KiwixMobileFragment extends SherlockFragment {
         });
 
         // Create the adapter and set it to the AutoCompleteTextView
-        if (newApi()) {
-            adapter = new AutoCompleteAdapter(getActivity(), android.R.layout.simple_list_item_1);
-        } else {
-            adapter = new AutoCompleteAdapter(getActivity(), R.layout.simple_list_item);
-        }
+
+        adapter = new AutoCompleteAdapter(getActivity(), android.R.layout.simple_list_item_1);
 
         articleSearchtextView.setAdapter(adapter);
         articleSearchtextView.setOnItemClickListener(new OnItemClickListener() {
@@ -490,11 +476,28 @@ public class KiwixMobileFragment extends SherlockFragment {
 
     private void setUpWebView() {
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WebView.setWebContentsDebuggingEnabled(true);
+        }
+
+        // webView.getSettings().setLoadsImagesAutomatically(false);
+        // Does not make much sense to cache data from zim files.(Not clear whether
+        // this actually has any effect)
+        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        webView.setWebChromeClient(new MyWebChromeClient());
+
+        // Should basically resemble the behavior when setWebClient not done
+        // (i.p. internal urls load in webview, external urls in browser)
+        // as currently no custom setWebViewClient required it is commented
+        // However, it must notify the bookmark system when a page is finished loading
+        // so that it can refresh the menu.
+        webView.setWebViewClient(new MyWebViewClient());
+
         webView.setOnPageChangedListener(new KiwixWebView.OnPageChangeListener() {
 
             @Override
             public void onPageChanged(int page, int maxPages) {
-                if (isBacktotopEnabled) {
+                if (mIsBacktotopEnabled) {
                     if (webView.getScrollY() > 200) {
                         if (mBackToTopButton.getVisibility() == View.INVISIBLE) {
                             mBackToTopButton.setText(R.string.button_backtotop);
@@ -653,28 +656,12 @@ public class KiwixMobileFragment extends SherlockFragment {
             }
         });
 
-        // JS includes will not happen unless we enable JS
-        webView.getSettings().setJavaScriptEnabled(true);
-
         mBackToTopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 webView.pageUp(true);
             }
         });
-
-        // webView.getSettings().setLoadsImagesAutomatically(false);
-        // Does not make much sense to cache data from zim files.(Not clear whether
-        // this actually has any effect)
-        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-        webView.setWebChromeClient(new MyWebChromeClient());
-
-        // Should basically resemble the behavior when setWebClient not done
-        // (i.p. internal urls load in webview, external urls in browser)
-        // as currently no custom setWebViewClient required it is commented
-        // However, it must notify the bookmark system when a page is finished loading
-        // so that it can refresh the menu.
-        webView.setWebViewClient(new MyWebViewClient());
     }
 
     private void setUpExitFullscreenButton() {
@@ -739,7 +726,7 @@ public class KiwixMobileFragment extends SherlockFragment {
                 }
                 break;
             case PREFERENCES_REQUEST_CODE:
-                if (resultCode == SettingsHelper.RESULT_RESTART) {
+                if (resultCode == KiwixSettingsActivity.RESULT_RESTART) {
                     getActivity().finish();
                     startActivity(new Intent(getActivity(), KiwixMobileActivity.class));
                 }
@@ -787,39 +774,25 @@ public class KiwixMobileFragment extends SherlockFragment {
 
     public void loadPrefs() {
 
-        mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        boolean nightMode = mSharedPreferences.getBoolean(PREF_NIGHTMODE, false);
+        mIsBacktotopEnabled = mSharedPreferences.getBoolean(PREF_BACKTOTOP, false);
+        mIsZoomEnabled = mSharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
 
-        String pref_zoom = mySharedPreferences.getString(PREF_ZOOM, AUTOMATIC);
-        Boolean pref_zoom_enabled = mySharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
-        Boolean pref_nightmode = mySharedPreferences.getBoolean(PREF_NIGHTMODE, false);
-        isBacktotopEnabled = mySharedPreferences.getBoolean(PREF_BACKTOTOP, false);
-
-        if (pref_zoom.equals(AUTOMATIC)) {
-            setDefaultZoom();
-        } else if (pref_zoom.equals(MEDIUM)) {
-            webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
-        } else if (pref_zoom.equals(SMALL)) {
-            webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
-        } else if (pref_zoom.equals(LARGE)) {
-            webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.CLOSE);
+        if (mIsZoomEnabled) {
+            int zoomScale = (int) mSharedPreferences.getFloat(PREF_ZOOM, 100.0f);
+            webView.setInitialScale(zoomScale);
         } else {
-            Log.w(TAG_KIWIX,
-                    "pref_displayZoom value (" + pref_zoom + " unknown. Assuming automatic");
-            webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
+            webView.setInitialScale(0);
         }
 
-        // Pinch to zoom
-        // This seems to suffer from a bug in Android. If you set to "false" this only apply after a restart of the app.
-        Log.d(TAG_KIWIX, "pref_zoom_enabled value (" + pref_zoom_enabled + ")");
-        webView.disableZoomControlls(pref_zoom_enabled);
-
-        if (!isBacktotopEnabled) {
+        if (!mIsBacktotopEnabled) {
             mBackToTopButton.setVisibility(View.INVISIBLE);
         }
 
         // Night mode status
-        Log.d(TAG_KIWIX, "pref_nightmode value (" + pref_nightmode + ")");
-        if (nightMode != pref_nightmode) {
+        Log.d(TAG_KIWIX, "nightMode value (" + nightMode + ")");
+        if (this.nightMode != nightMode) {
             ToggleNightMode();
         }
     }
@@ -839,12 +812,7 @@ public class KiwixMobileFragment extends SherlockFragment {
     }
 
     public void selectSettings() {
-        Intent i;
-        if (newApi()) {
-            i = new Intent(getActivity(), KiwixSettingsActivityHC.class);
-        } else {
-            i = new Intent(getActivity(), KiwixSettingsActivityGB.class);
-        }
+        Intent i = new Intent(getActivity(), KiwixSettingsActivity.class);
         startActivityForResult(i, PREFERENCES_REQUEST_CODE);
     }
 
@@ -907,7 +875,7 @@ public class KiwixMobileFragment extends SherlockFragment {
         if (file.exists()) {
             if (ZimContentProvider.setZimFile(file.getAbsolutePath()) != null) {
 
-                getSherlockActivity().getSupportActionBar()
+                ((AppCompatActivity) getActivity()).getSupportActionBar()
                         .setSubtitle(ZimContentProvider.getZimFileTitle());
 
                 // Apparently with webView.clearHistory() only history before currently (fully)
@@ -989,7 +957,7 @@ public class KiwixMobileFragment extends SherlockFragment {
         } else {
             bookmarks.remove(title);
         }
-        getSherlockActivity().supportInvalidateOptionsMenu();
+        getActivity().supportInvalidateOptionsMenu();
     }
 
     public void viewBookmarks() {
@@ -1049,8 +1017,10 @@ public class KiwixMobileFragment extends SherlockFragment {
 
         if (articleUrl != null) {
             // hideSearchBar();
+
             webView.loadUrl(Uri.parse(ZimContentProvider.CONTENT_URI
                     + articleUrl).toString());
+
         } else {
             String errorString = String
                     .format(getResources().getString(R.string.error_articlenotfound),
@@ -1078,11 +1048,6 @@ public class KiwixMobileFragment extends SherlockFragment {
     public boolean openMainPage() {
         String articleUrl = ZimContentProvider.getMainPage();
         return openArticle(articleUrl);
-    }
-
-    public boolean isTablet(Context context) {
-        return (context.getResources().getConfiguration().screenLayout
-                & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
     public void hideSearchBar() {
@@ -1123,37 +1088,6 @@ public class KiwixMobileFragment extends SherlockFragment {
 
         } catch (NullPointerException npe) {
             Log.e(TAG_KIWIX, "getActivity() NPE " + npe.getMessage());
-        }
-    }
-
-    public void setDefaultZoom() {
-        DisplayMetrics metrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-        // Cleaner than approach used in 1.0 to set CLOSE for tables, MEDIUM for phones.
-        // However, unfortunately at least on Samsung Galaxy Tab 2 density is medium.
-        // Anyway, user can now override so it should be ok.
-        switch (metrics.densityDpi) {
-
-            case DisplayMetrics.DENSITY_HIGH:
-                Log.d(TAG_KIWIX, "setDefaultZoom for Display DENSITY_HIGH-> ZoomDensity.FAR ");
-                webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
-                break;
-
-            case DisplayMetrics.DENSITY_MEDIUM:
-                Log.d(TAG_KIWIX, "setDefaultZoom for Display DENSITY_MEDIUM-> ZoomDensity.MEDIUM ");
-                webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
-                break;
-
-            case DisplayMetrics.DENSITY_LOW:
-                Log.d(TAG_KIWIX, "setDefaultZoom for Display DENSITY_LOW-> ZoomDensity.CLOSE ");
-                webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.CLOSE);
-                break;
-
-            default:
-                Log.d(TAG_KIWIX, "setDefaultZoom for Display OTHER -> ZoomDensity.MEDIUM ");
-                webView.getSettings().setDefaultZoom(WebSettings.ZoomDensity.MEDIUM);
-                break;
         }
     }
 
@@ -1246,8 +1180,8 @@ public class KiwixMobileFragment extends SherlockFragment {
             }
 
             if (progress > 20) {
-                if (getSherlockActivity() != null) {
-                    getSherlockActivity().supportInvalidateOptionsMenu();
+                if (getActivity() != null) {
+                    getActivity().supportInvalidateOptionsMenu();
                 }
             }
 
@@ -1343,7 +1277,7 @@ public class KiwixMobileFragment extends SherlockFragment {
                     "<html><body>" + errorString + "</body></html>", "text/html", "utf-8",
                     failingUrl);
             String title = getResources().getString(R.string.app_name);
-            getSherlockActivity().getSupportActionBar().setTitle(title);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(title);
         }
 
         @Override
@@ -1355,13 +1289,14 @@ public class KiwixMobileFragment extends SherlockFragment {
                     title = webView.getTitle();
                 }
 
-                if (getSherlockActivity().getSupportActionBar().getTabCount() < 2) {
-                    getSherlockActivity().getSupportActionBar().setTitle(title);
+                if (((AppCompatActivity) getActivity()).getSupportActionBar().getTabCount() < 2) {
+                    ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(title);
                 }
 
-                if (getSherlockActivity().getSupportActionBar().getNavigationMode()
+                if (((AppCompatActivity) getActivity()).getSupportActionBar().getNavigationMode()
                         == ActionBar.NAVIGATION_MODE_TABS) {
-                    getSherlockActivity().getSupportActionBar().getSelectedTab().setText(title);
+                    ((AppCompatActivity) getActivity()).getSupportActionBar().getSelectedTab()
+                            .setText(title);
                 }
 
                 // Workaround for #643

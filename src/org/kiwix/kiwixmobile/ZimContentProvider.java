@@ -181,6 +181,21 @@ public class ZimContentProvider extends ContentProvider {
         }
     }
 
+    private static String getFilePath(Uri articleUri) {
+        String filePath = articleUri.toString();
+        int pos = articleUri.toString().indexOf(CONTENT_URI.toString());
+        if (pos != -1) {
+            filePath = articleUri.toString().substring(
+                    CONTENT_URI.toString().length());
+        }
+        // Remove fragment (#...) as not supported by zimlib
+        pos = filePath.indexOf("#");
+        if (pos != -1) {
+            filePath = filePath.substring(0, pos);
+        }
+        return filePath;
+    }
+
     @Override
     public boolean onCreate() {
         jniKiwix = new JNIKiwix();
@@ -347,20 +362,5 @@ public class ZimContentProvider extends ContentProvider {
                 }
             }
         }
-    }
-
-    private static String getFilePath(Uri articleUri) {
-        String filePath = articleUri.toString();
-        int pos = articleUri.toString().indexOf(CONTENT_URI.toString());
-        if (pos != -1) {
-            filePath = articleUri.toString().substring(
-                    CONTENT_URI.toString().length());
-        }
-        // Remove fragment (#...) as not supported by zimlib
-        pos = filePath.indexOf("#");
-        if (pos != -1) {
-            filePath = filePath.substring(0, pos);
-        }
-        return filePath;
     }
 }
