@@ -6,18 +6,20 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 public class SliderPreference extends DialogPreference {
 
-    protected final static int SEEKBAR_RESOLUTION = 10000;
-
-    protected float mValue;
+    protected final static int SEEKBAR_MAX = 300;
 
     protected int mSeekBarValue;
 
     protected CharSequence[] mSummaries;
+
+    private TextView mMessage;
 
     /**
      * @param context
@@ -40,6 +42,10 @@ public class SliderPreference extends DialogPreference {
 
     private void setup(Context context, AttributeSet attrs) {
         setDialogLayoutResource(R.layout.slider_preference_dialog);
+        updateSummaryText(context, attrs);
+    }
+
+    public void updateSummaryText(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SliderPreference);
         try {
             setSummary(a.getTextArray(R.styleable.SliderPreference_android_summary));
@@ -56,14 +62,16 @@ public class SliderPreference extends DialogPreference {
 
     @Override
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
-        setValue(restoreValue ? getPersistedFloat(mValue) : (Float) defaultValue);
+        setValue(restoreValue ? getPersistedFloat(mSeekBarValue) : (Float) defaultValue);
     }
 
     @Override
     public CharSequence getSummary() {
         if (mSummaries != null && mSummaries.length > 0) {
-            int index = (int) (mValue * mSummaries.length);
-            index = Math.min(index, mSummaries.length - 1);
+            double piece = SEEKBAR_MAX / mSummaries.length;
+            Log.e("yolol", piece + "");
+            int index = (int) (mSeekBarValue / piece);
+            Log.e("yolol", index + " " + mSeekBarValue);
             return mSummaries[index];
         } else {
             return super.getSummary();
@@ -91,26 +99,28 @@ public class SliderPreference extends DialogPreference {
     }
 
     public float getValue() {
-        return mValue;
+        return mSeekBarValue;
     }
 
     public void setValue(float value) {
-        value = Math.max(0, Math.min(value, 1)); // clamp to [0, 1]
+        //value = Math.max(0, Math.min(value, 1)); // clamp to [0, 1]
         if (shouldPersist()) {
             persistFloat(value);
         }
-        if (value != mValue) {
-            mValue = value;
+        if (value != mSeekBarValue) {
+            mSeekBarValue = (int) value;
             notifyChanged();
+
         }
     }
 
     @Override
     protected View onCreateDialogView() {
-        mSeekBarValue = (int) (mValue * SEEKBAR_RESOLUTION);
         View view = super.onCreateDialogView();
+        mMessage = (TextView) view.findViewById(R.id.message);
+        mMessage.setText(String.valueOf(mSeekBarValue));
         SeekBar seekbar = (SeekBar) view.findViewById(R.id.slider_preference_seekbar);
-        seekbar.setMax(SEEKBAR_RESOLUTION);
+        seekbar.setMax(SEEKBAR_MAX);
         seekbar.setProgress(mSeekBarValue);
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -125,7 +135,8 @@ public class SliderPreference extends DialogPreference {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
-                    SliderPreference.this.mSeekBarValue = progress;
+                    mSeekBarValue = progress;
+                    mMessage.setText(String.valueOf(mSeekBarValue));
                 }
             }
         });
@@ -134,9 +145,8 @@ public class SliderPreference extends DialogPreference {
 
     @Override
     protected void onDialogClosed(boolean positiveResult) {
-        final float newValue = (float) mSeekBarValue / SEEKBAR_RESOLUTION;
-        if (positiveResult && callChangeListener(newValue)) {
-            setValue(newValue);
+        if (positiveResult && callChangeListener(mSeekBarValue)) {
+            setValue(mSeekBarValue);
         }
         super.onDialogClosed(positiveResult);
     }

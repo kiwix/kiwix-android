@@ -2,24 +2,25 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/slider_preference_layout"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
               android:orientation="vertical"
-              android:paddingBottom="8dip"
-              android:paddingLeft="16dip"
-              android:paddingRight="16dip"
-              android:paddingTop="8dip">
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp"
+              android:paddingBottom="8dp"
+              android:paddingTop="8dp">
 
     <TextView
-            android:id="@android:id/message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:id="@+id/message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"/>
 
     <SeekBar
             android:id="@+id/slider_preference_seekbar"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="12dip"
-            android:paddingTop="12dip"/>
+            android:paddingBottom="12dp"
+            android:paddingTop="12dp"/>
 
 </LinearLayout>

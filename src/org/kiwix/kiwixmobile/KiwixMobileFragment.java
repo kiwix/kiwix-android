@@ -112,13 +112,9 @@ public class KiwixMobileFragment extends SherlockFragment {
 
     private static final String PREF_BACKTOTOP = "pref_backtotop";
 
-    private static final String AUTOMATIC = "automatic";
+    private static final String PREF_ZOOM = "pref_zoom";
 
-    private static final String MEDIUM = "medium";
-
-    private static final String SMALL = "small";
-
-    private static final String LARGE = "large";
+    private static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
 
     private static final int ZIMFILESELECT_REQUEST_CODE = 1234;
 
@@ -144,9 +140,9 @@ public class KiwixMobileFragment extends SherlockFragment {
 
     protected int requestWebReloadOnFinished;
 
-    private boolean isBacktotopEnabled;
+    private boolean mIsBacktotopEnabled;
 
-    private SharedPreferences mySharedPreferences;
+    private SharedPreferences mSharedPreferences;
 
     private ArrayAdapter<String> adapter;
 
@@ -159,6 +155,8 @@ public class KiwixMobileFragment extends SherlockFragment {
     private FragmentCommunicator mFragmentCommunicator;
 
     private KiwixTextToSpeech tts;
+
+    private boolean mIsZoomEnabled;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -173,7 +171,7 @@ public class KiwixMobileFragment extends SherlockFragment {
         requestWebReloadOnFinished = 0;
         requestInitAllMenuItems = false;
         nightMode = false;
-        isBacktotopEnabled = false;
+        mIsBacktotopEnabled = false;
         isFullscreenOpened = false;
     }
 
@@ -471,7 +469,7 @@ public class KiwixMobileFragment extends SherlockFragment {
 
             @Override
             public void onPageChanged(int page, int maxPages) {
-                if (isBacktotopEnabled) {
+                if (mIsBacktotopEnabled) {
                     if (webView.getScrollY() > 200) {
                         if (mBackToTopButton.getVisibility() == View.INVISIBLE) {
                             mBackToTopButton.setText(R.string.button_backtotop);
@@ -748,11 +746,17 @@ public class KiwixMobileFragment extends SherlockFragment {
 
     public void loadPrefs() {
 
-        mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        boolean nightMode = mySharedPreferences.getBoolean(PREF_NIGHTMODE, false);
-        isBacktotopEnabled = mySharedPreferences.getBoolean(PREF_BACKTOTOP, false);
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        boolean nightMode = mSharedPreferences.getBoolean(PREF_NIGHTMODE, false);
+        mIsBacktotopEnabled = mSharedPreferences.getBoolean(PREF_BACKTOTOP, false);
+        mIsZoomEnabled = mSharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
 
-        if (!isBacktotopEnabled) {
+        if (mIsZoomEnabled) {
+            int zoomScale = (int) mSharedPreferences.getFloat(PREF_ZOOM, 100.0f);
+            webView.setInitialScale(zoomScale);
+        }
+
+        if (!mIsBacktotopEnabled) {
             mBackToTopButton.setVisibility(View.INVISIBLE);
         }
 
@@ -1262,20 +1266,6 @@ public class KiwixMobileFragment extends SherlockFragment {
                     view.reload();
                 }
             }
-
-//            String viewPortJs = "javascript:"
-//                    + "viewport = document.querySelector(\"meta[name=viewport]\");\n"
-//                    + "\n"
-//                    + "if (!viewport) {\n"
-//                    + "  var viewPortTag = document.createElement('meta');\n"
-//                    + "  viewPortTag.id = \"viewport\";\n"
-//                    + "  viewPortTag.name = \"viewport\";\n"
-//                    + "  viewPortTag.content = \"width=device-width, initial-scale=1.0\";\n"
-//                    + "  document.getElementsByTagName('head')[0].appendChild(viewPortTag);\n"
-//                    + "\n"
-//                    + "}";
-//
-//            //webView.loadUrl(viewPortJs);
         }
     }
 }

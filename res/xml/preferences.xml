@@ -14,12 +14,19 @@
                 android:summary="@string/pref_backtotop_summary"
                 android:defaultValue="false"/>
 
+        <CheckBoxPreference
+                android:key="pref_zoom_enabled"
+                android:title="@string/pref_zoom_enable"
+                android:summary="@string/pref_zoom_enable_summary"
+                android:defaultValue="false"/>
+
         <org.kiwix.kiwixmobile.settings.SliderPreference
-                android:key="my_slider"
-                android:title="@string/"
-                android:summary="@array/slider_summaries"
-                android:defaultValue="@string/slider_default"
-                android:dialogMessage="@string/slider_message"/>
+                android:key="pref_zoom"
+                android:title="@string/pref_zoom_title"
+                android:summary="@array/pref_zoom_entryvalues"
+                android:dialogMessage="0"
+                android:defaultValue="100.0"
+                android:enabled="false"/>
 
     </PreferenceCategory>
 

@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Datei öffnen …</string>
@@ -39,6 +39,8 @@
     <string name="error_articlenotfound">Fehler: Das Laden des Artikels \"%1$s\" ist fehlgeschlagen.</string>
     <string name="error_articleurlnotfound">Fehler: Das Laden des Artikels (URL: %1$s) ist fehlgeschlagen.</string>
     <string name="pref_display_title">Bildschirm</string>
+    <string name="pref_zoom_title">Vergrößerungsstufe</string>
+    <string name="pref_zoom_dialogtitle">Vergrößerungsstufe</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatisch</item>
         <item name="pref_zoom_entry_small">Klein</item>
@@ -47,6 +49,8 @@
     </string-array>
     <string name="pref_info_title">Information</string>
     <string name="pref_info_version">Version</string>
+    <string name="pref_zoom_enable">Zoom-Steuerung</string>
+    <string name="pref_zoom_enable_summary">Einen Zoombutton in der rechten unteren Ecke anzeigen</string>
     <string name="pref_nightmode">Nachtmodus</string>
     <string name="pref_nightmode_summary">Artikel mit umgekehrten Farben ansehen</string>
     <string name="pref_backtotop">Zurück nach oben</string>
@@ -54,5 +58,6 @@
     <string name="share_via">Teilen über …</string>
     <string name="pref_language_title">Sprache</string>
     <string name="pref_language_chooser">Eine Sprache auswählen</string>
+    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

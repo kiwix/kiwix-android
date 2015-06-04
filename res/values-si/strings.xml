@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">ගොනුව විවෘත කරන්න...</string>
@@ -39,6 +39,8 @@
     <string name="error_articlenotfound">දෝෂය: \"%1$s\" ලිපිය පූරණය වීම අසාර්ථකයි.</string>
     <string name="error_articleurlnotfound">දෝෂය: (Url: %1$s) ලිපිය පූරණය වීම අසාර්ථකයි.</string>
     <string name="pref_display_title">පෙන්වීම</string>
+    <string name="pref_zoom_title">විශාලන මට්ටම</string>
+    <string name="pref_zoom_dialogtitle">විශාලන මට්ටම</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">ස්වයංක්‍රීය</item>
         <item name="pref_zoom_entry_small">කුඩා</item>
@@ -47,6 +49,8 @@
     </string-array>
     <string name="pref_info_title">තොරතුරු</string>
     <string name="pref_info_version">අනුවාදය</string>
+    <string name="pref_zoom_enable">විශාලන පාලක</string>
+    <string name="pref_zoom_enable_summary">තිරයේ පහළ දකුණු කෙළවර විශාලන බොත්තමක් පෙන්වන්න</string>
     <string name="pref_nightmode">රාත්‍රී ආකාරය</string>
     <string name="pref_nightmode_summary">ප්‍රතිවර්තිත වර්ණ සමග ලිපි පෙන්වන්න</string>
     <string name="pref_backtotop">නැවත උඩට</string>
@@ -54,5 +58,6 @@
     <string name="share_via">මගින් හුවමාරු කරන්න...</string>
     <string name="pref_language_title">භාෂාව</string>
     <string name="pref_language_chooser">භාෂාවක් තෝරාගන්න</string>
+    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Открыть файл…</string>
@@ -39,6 +39,8 @@
     <string name="error_articlenotfound">Ошибка: Загрузка статьи \«%1$s\» не удалась.</string>
     <string name="error_articleurlnotfound">Ошибка: Загрузка статьи (Url: %1$s) не удалась.</string>
     <string name="pref_display_title">Показать</string>
+    <string name="pref_zoom_title">Уровень масштабирования</string>
+    <string name="pref_zoom_dialogtitle">Уровень масштабирования</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Автоматически</item>
         <item name="pref_zoom_entry_small">Маленький</item>
@@ -47,6 +49,8 @@
     </string-array>
     <string name="pref_info_title">Информация</string>
     <string name="pref_info_version">Версия</string>
+    <string name="pref_zoom_enable">Управления масштабированием</string>
+    <string name="pref_zoom_enable_summary">Отображать кнопку масштабирования в правом нижнем углу экрана</string>
     <string name="pref_nightmode">Ночной режим</string>
     <string name="pref_nightmode_summary">Показать статьи в «ночном режиме»</string>
     <string name="pref_backtotop">Вернуться наверх</string>
@@ -54,5 +58,6 @@
     <string name="share_via">Поделиться через…</string>
     <string name="pref_language_title">Язык</string>
     <string name="pref_language_chooser">Выберите язык</string>
+    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

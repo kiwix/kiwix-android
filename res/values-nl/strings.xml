@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Bestand openen...</string>
@@ -39,6 +39,8 @@
     <string name="error_articlenotfound">Fout: Het laden van de pagina \"%1$s\" is mislukt.</string>
     <string name="error_articleurlnotfound">Fout: Het laden van de pagina (URL: %1$s) is mislukt.</string>
     <string name="pref_display_title">Beeld</string>
+    <string name="pref_zoom_title">Zoomniveau</string>
+    <string name="pref_zoom_dialogtitle">Zoomniveau</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatisch</item>
         <item name="pref_zoom_entry_small">Klein</item>
@@ -47,6 +49,8 @@
     </string-array>
     <string name="pref_info_title">Informatie</string>
     <string name="pref_info_version">Versie</string>
+    <string name="pref_zoom_enable">Besturingselementen voor zoomen</string>
+    <string name="pref_zoom_enable_summary">Rechtsonder een zoomknop weergeven</string>
     <string name="pref_nightmode">Nachtmodus</string>
     <string name="pref_nightmode_summary">Pagina\'s weergeven met omgekeerde kleuren</string>
     <string name="pref_backtotop">Terug naar boven</string>
@@ -54,5 +58,6 @@
     <string name="share_via">Delen...</string>
     <string name="pref_language_title">Taal</string>
     <string name="pref_language_chooser">Taal kiezen</string>
+    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

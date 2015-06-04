@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">افتح ملفًا...</string>
@@ -39,6 +39,8 @@
     <string name="error_articlenotfound">خطأ: تحميل المقالة \"%1$s\" لم يتم بنجاح.</string>
     <string name="error_articleurlnotfound">خطأ: تحميل المقالة (Url: %1$s) لم يتم بنجاح.</string>
     <string name="pref_display_title">عرض</string>
+    <string name="pref_zoom_title">مستوى التكبير/التصغير</string>
+    <string name="pref_zoom_dialogtitle">مستوى التكبير/التصغير</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">آلي</item>
         <item name="pref_zoom_entry_small">صغير</item>
@@ -47,6 +49,8 @@
     </string-array>
     <string name="pref_info_title">معلومة</string>
     <string name="pref_info_version">نسخة</string>
+    <string name="pref_zoom_enable">تحكم التكبير/التصغير</string>
+    <string name="pref_zoom_enable_summary">عرض زر تكبير/تصغير في الزاوية اليمنى أسفل الشاشة</string>
     <string name="pref_nightmode">الوضع الليلي</string>
     <string name="pref_nightmode_summary">إظهار المقالات مع الألوان المسترجعة</string>
     <string name="pref_backtotop">ارجع إلى الأعلى</string>
@@ -54,5 +58,6 @@
     <string name="share_via">شارك عبر...</string>
     <string name="pref_language_title">اللغة</string>
     <string name="pref_language_chooser">اختر لغة</string>
+    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

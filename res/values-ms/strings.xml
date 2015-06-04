@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Buka fail...</string>
@@ -39,6 +39,8 @@
     <string name="error_articlenotfound">Ralat: Rencana \"%1$s\" gagal dimuatkan.</string>
     <string name="error_articleurlnotfound">Ralat: Rencana (Url: %1$s) gagal dimuatkan.</string>
     <string name="pref_display_title">Paparan</string>
+    <string name="pref_zoom_title">Takat zum</string>
+    <string name="pref_zoom_dialogtitle">Takat zum</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatik</item>
         <item name="pref_zoom_entry_small">Kecil</item>
@@ -47,6 +49,8 @@
     </string-array>
     <string name="pref_info_title">Maklumat</string>
     <string name="pref_info_version">Versi</string>
+    <string name="pref_zoom_enable">Kawalan zum</string>
+    <string name="pref_zoom_enable_summary">Paparkan butang zum pada sudut kanan bawah skrin</string>
     <string name="pref_nightmode">Mod malam</string>
     <string name="pref_nightmode_summary">Paparkan rencana yang diterbalikkan warnanya</string>
     <string name="pref_backtotop">Kembali ke Atas</string>
@@ -54,5 +58,6 @@
     <string name="share_via">Kongsi melalui...</string>
     <string name="pref_language_title">Bahasa</string>
     <string name="pref_language_chooser">Pilih bahasa</string>
+    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

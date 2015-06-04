@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Fichier opmaachen...</string>
@@ -39,6 +39,8 @@
     <string name="error_articlenotfound">Feeler: D\'Luede vum Artikel  \"%1$s\" huet net funktionéiert.</string>
     <string name="error_articleurlnotfound">Feeler: D\'Luede vum Artikel (URL: %1$s) huet net funktionéiert.</string>
     <string name="pref_display_title">Ausgesinn</string>
+    <string name="pref_zoom_title">Niveau vum Zoom</string>
+    <string name="pref_zoom_dialogtitle">Niveau vum Zoom</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatesch</item>
         <item name="pref_zoom_entry_small">Kleng</item>
@@ -47,6 +49,8 @@
     </string-array>
     <string name="pref_info_title">Informatioun</string>
     <string name="pref_info_version">Versioun</string>
+    <string name="pref_zoom_enable">Zoom-Steierung</string>
+    <string name="pref_zoom_enable_summary">Zoom-Knäppche riets ënnen am Eck vum Schierm uweisen</string>
     <string name="pref_nightmode">Nuetsmodus</string>
     <string name="pref_nightmode_summary">Artikelen an invertéierte Faarwen weisen</string>
     <string name="pref_backtotop">Zréck no uewen</string>
@@ -54,5 +58,6 @@
     <string name="share_via">Deelen iwwer ...</string>
     <string name="pref_language_title">Sprooch</string>
     <string name="pref_language_chooser">Sicht eng Sprooch eraus</string>
+    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">ဖိုင်ဖွင့်...</string>
@@ -39,6 +39,8 @@
     <string name="error_articlenotfound">အမှားသတိပေးချက် − \"%1$s\" ဆောင်းပါးထည့်သွင်းခြင်း မအောင်မြင်ပါ။</string>
     <string name="error_articleurlnotfound">အမှားသတိပေးချက် − (Url: %1$s) ဆောင်းပါးထည့်သွင်းခြင်း မအောင်မြင်ပါ။</string>
     <string name="pref_display_title">မြင်ကွင်း</string>
+    <string name="pref_zoom_title">ချဲ့ကြည့်သည့်အဆင့်</string>
+    <string name="pref_zoom_dialogtitle">ချဲ့ကြည့်သည့်အဆင့်</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">အလိုအလျောက်</item>
         <item name="pref_zoom_entry_small">သေးသေး</item>
@@ -47,6 +49,8 @@
     </string-array>
     <string name="pref_info_title">သတင်းအချက်အလက်</string>
     <string name="pref_info_version">မူ</string>
+    <string name="pref_zoom_enable">ချဲ့ကြည့်ရာတွင် ထိန်းချုပ်မှုများ</string>
+    <string name="pref_zoom_enable_summary">ချဲ့ကြည့်သည့်ခလုတ်ကို စကရင်၏ အောက်ခြေ ညာဘက်ထောင့်တွင် ပြပါ။</string>
     <string name="pref_nightmode">ညကြည့်ပုံစံ</string>
     <string name="pref_nightmode_summary">ဆောင်းပါးများကို အရောင်ပြောင်းပြန်သုံး၍ ပြရန်</string>
     <string name="pref_backtotop">ထိပ်ဆုံးသို့ ပြန်သွားရန်</string>
@@ -54,5 +58,6 @@
     <string name="share_via">ဤသည်မှတဆင့် မျှဝေပါ...</string>
     <string name="pref_language_title">ဘာသာစကား</string>
     <string name="pref_language_chooser">ဘာသာစကားရွေးချယ်ရန်</string>
+    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Agor ffeil...</string>
@@ -39,6 +39,8 @@
     <string name="error_articlenotfound">Gwall: Methwyd a llwytho\'r erthygl: \"%1$s\".</string>
     <string name="error_articleurlnotfound">Gwall: Methwyd a llwytho\'r erthygl: (Url: %1$s).</string>
     <string name="pref_display_title">Golwg</string>
+    <string name="pref_zoom_title">Lefel pellhau</string>
+    <string name="pref_zoom_dialogtitle">Lefel pellhau</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Otomatig</item>
         <item name="pref_zoom_entry_small">Bach</item>
@@ -47,6 +49,8 @@
     </string-array>
     <string name="pref_info_title">Gwybodaeth</string>
     <string name="pref_info_version">Fersiwn</string>
+    <string name="pref_zoom_enable">Rheolaeth pellter</string>
+    <string name="pref_zoom_enable_summary">Arddangos botwm chwyddo yn y gornel dde ar waelod y sgrîn.</string>
     <string name="pref_nightmode">Modd nos</string>
     <string name="pref_nightmode_summary">Dangos erthyglau gyda lliwiau croes</string>
     <string name="pref_backtotop">Nôl i\'r brig</string>
@@ -54,5 +58,6 @@
     <string name="share_via">Rhannwch drwy</string>
     <string name="pref_language_title">Iaith</string>
     <string name="pref_language_chooser">Dewis iaith</string>
+    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>
