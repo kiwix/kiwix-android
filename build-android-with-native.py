@@ -18,6 +18,8 @@ from subprocess import call, check_output
 # arm-linux-androideabi, mipsel-linux-android, x86, llvm
 ALL_ARCHS = ['arm-linux-androideabi', 'mipsel-linux-android', 'x86']
 
+PACKAGE = 'org.kiwix.kiwixmobile'
+
 USAGE = '''Usage:  {arg0} [--option]
 
     Without option, all steps are executed on all archs.
@@ -36,7 +38,9 @@ USAGE = '''Usage:  {arg0} [--option]
 
     --on=ARCH       Disable steps on all archs and cherry pick the ones wanted.
                     Multiple --on=ARCH can be specified.
-                    ARCH in 'armeabi', 'mips', 'x86'. '''
+                    ARCH in 'armeabi', 'mips', 'x86'.
+
+    --package=org.kiwix.kiwixmobile '''
 
 
 def init_with_args(args):
@@ -78,6 +82,13 @@ def init_with_args(args):
                 doptions.pop(idx)
         # recreate options list from other items
         options = [v for v in doptions.values() if not v.startswith('--on=')]
+
+    # do we have an --package= flag?
+    if '--package=' in u' '.join(args):
+        for option in options:
+            if option.startswith('--package'):
+                global PACKAGE
+                PACKAGE = option.split('=', 1)[-1]
 
     if len(options):
         # we received options.
@@ -505,17 +516,17 @@ for arch in ARCHS:
     if COMPILE_LIBKIWIX:
 
         # compile JNI header
-        os.chdir(os.path.join(curdir, 'src', 'org', 'kiwix', 'kiwixmobile'))
+        os.chdir(os.path.join(curdir, 'src', *PACKAGE.split('.')))
         syscall('javac JNIKiwix.java')
         os.chdir(os.path.join(curdir, 'src'))
-        syscall('javah -jni org.kiwix.kiwixmobile.JNIKiwix')
+        syscall('javah -jni {package}.JNIKiwix'.format(package=PACKAGE))
         os.chdir(curdir)
 
         syscall(compile_cmd)
         syscall(link_cmd)
 
         for obj in ('kiwix.o', 'reader.o', 'stringTools.o', 'pathTools.o',
-                    'src/org_kiwix_kiwixmobile_JNIKiwix.h'):
+                    'src/{}_JNIKiwix.h'.format("_".join(PACKAGE.split('.')))):
             os.remove(obj)
 
     # check that the step went well

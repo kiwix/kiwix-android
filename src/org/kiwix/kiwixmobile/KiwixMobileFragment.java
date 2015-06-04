@@ -20,6 +20,7 @@
 package org.kiwix.kiwixmobile;
 
 
+import org.kiwix.kiwixmobile.settings.Constants;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 
 import android.annotation.SuppressLint;
@@ -64,6 +65,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.JavascriptInterface;
 import android.webkit.MimeTypeMap;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -309,9 +311,42 @@ public class KiwixMobileFragment extends Fragment {
                 // Alternative would be to restore webView state. But more effort to implement, and actually
                 // fits better normal android behavior if after closing app ("back" button) state is not maintained.
             } else {
-                Log.d(TAG_KIWIX,
-                        " Kiwix normal start, no zimFile loaded last time  -> display welcome page");
-                showWelcome();
+                if (Constants.IS_CUSTOM_APP) {
+                    Log.d(TAG_KIWIX, "Kiwix Custom App starting for the first time. Check Companion ZIM.");
+
+                    //Context context = this.getActivity().getApplicationContext();
+                    String fileName = FileUtils.getExpansionAPKFileName(true);
+                    Log.d(TAG_KIWIX, "Looking for: " + fileName + " -- filesize: " + Constants.ZIM_FILE_SIZE);
+                    if (!FileUtils.doesFileExist(fileName, Constants.ZIM_FILE_SIZE, false)) {
+                        Log.d(TAG_KIWIX, "... doesn't exist.");
+
+                        AlertDialog.Builder zimFileMissingBuilder = new AlertDialog.Builder(this.getActivity());
+                        zimFileMissingBuilder.setTitle(R.string.app_name);
+                        zimFileMissingBuilder.setMessage(R.string.customapp_missing_content);
+                        zimFileMissingBuilder.setIcon(R.drawable.kiwix_icon);
+                        final Activity activity = this.getActivity();
+                        zimFileMissingBuilder.setPositiveButton(getString(R.string.go_to_play_store),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        String market_uri = "market://details?id=" + Constants.CUSTOM_APP_ID;
+                                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                                        intent.setData(Uri.parse(market_uri));
+                                        startActivity(intent);
+                                        activity.finish();
+                                        System.exit(0);
+                                    }
+                                });
+                        zimFileMissingBuilder.setCancelable(false);
+                        AlertDialog zimFileMissingDialog = zimFileMissingBuilder.create();
+                        zimFileMissingDialog.show();
+                    } else {
+                        openZimFile(new File(FileUtils.generateSaveFileName(fileName)), true);
+                    }
+                } else {
+                    Log.d(TAG_KIWIX,
+                            " Kiwix normal start, no zimFile loaded last time  -> display welcome page");
+                    showWelcome();
+                }
             }
         }
     }
@@ -815,10 +850,25 @@ public class KiwixMobileFragment extends Fragment {
     }
 
     public void showHelp() {
-        // Load from resource. Use with base url as else no images can be embedded.
-        // Note that this leads inclusion of welcome page in browser history
-        // This is not perfect, but good enough. (and would be signifcant effort to remove file)
-        webView.loadUrl("file:///android_res/raw/help.html");
+        if (Constants.IS_CUSTOM_APP) {
+            // On custom app, inject a Javascript object which contains some branding data
+            // so we just have to maintain a generic help page for them.
+            class JsObject {
+                @JavascriptInterface
+                public String appName() { return getResources().getString(R.string.app_name); }
+                @JavascriptInterface
+                public String supportEmail() { return Constants.CUSTOM_APP_SUPPORT_EMAIL; }
+                @JavascriptInterface
+                public String appId() { return Constants.CUSTOM_APP_ID; }
+            }
+            webView.addJavascriptInterface(new JsObject(), "branding");
+            webView.loadUrl("file:///android_res/raw/help_custom.html");
+        } else {
+            // Load from resource. Use with base url as else no images can be embedded.
+            // Note that this leads inclusion of welcome page in browser history
+            // This is not perfect, but good enough. (and would be significant effort to remove file)
+            webView.loadUrl("file:///android_res/raw/help.html");
+        }
     }
 
     public boolean openZimFile(File file, boolean clearHistory) {
