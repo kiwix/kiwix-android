@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Abrir un archivo…</string>
@@ -27,8 +27,6 @@
     <string name="articlesearch_hint">Escribe para buscar artículos</string>
     <string name="choose_file">Selecciona un archivo de contenido ZIM (*.zim)</string>
     <string name="open_in_new_tab">¿Abrir enlace en una nueva pestaña?</string>
-    <string name="remove_tab_confirm">¿Quieres cerrar esta pestaña?</string>
-    <string name="remove_tab">Cerrar pestaña</string>
     <string name="add_bookmark">Marcar esta página</string>
     <string name="remove_bookmark">Desmarcar seleccionados</string>
     <string name="info_share_title">¡Yo disfruto de Wikipedia sin conexión con Kiwix!</string>
@@ -40,7 +38,6 @@
     <string name="error_articleurlnotfound">Error: falló la carga del artículo (URL: %1$s).</string>
     <string name="pref_display_title">Mostrar</string>
     <string name="pref_zoom_title">Nivel de ampliación</string>
-    <string name="pref_zoom_dialogtitle">Nivel de ampliación</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automático</item>
         <item name="pref_zoom_entry_small">Pequeño</item>
@@ -50,7 +47,6 @@
     <string name="pref_info_title">Información</string>
     <string name="pref_info_version">Versión</string>
     <string name="pref_zoom_enable">Controles de ampliación</string>
-    <string name="pref_zoom_enable_summary">Mostrar un botón de ampliación en la esquina inferior derecha de la pantalla</string>
     <string name="pref_nightmode">Modo nocturno</string>
     <string name="pref_nightmode_summary">Mostrar artículos con colores invertidos</string>
     <string name="pref_backtotop">Volver al principio</string>
@@ -58,6 +54,5 @@
     <string name="share_via">Compartir a través de...</string>
     <string name="pref_language_title">Idioma</string>
     <string name="pref_language_chooser">Elige un idioma</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

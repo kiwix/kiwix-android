@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Åbn fil...</string>
@@ -27,8 +27,6 @@
     <string name="articlesearch_hint">Skriv for at finde artikler</string>
     <string name="choose_file">Vælg en ZIM indholdsfil (*.zim)</string>
     <string name="open_in_new_tab">Åbn link i nyt faneblad?</string>
-    <string name="remove_tab_confirm">Vil du fjerne denne fane?</string>
-    <string name="remove_tab">Fjern fane</string>
     <string name="add_bookmark">Marker denne side</string>
     <string name="remove_bookmark">Fjern markering af valgte</string>
     <string name="info_share_title">Jeg nyder Wikipedia Offline med Kiwix!</string>
@@ -40,7 +38,6 @@
     <string name="error_articleurlnotfound">Fejl: Indlæsning af artikel (Url: %1$s) mislykkedes.</string>
     <string name="pref_display_title">Vis</string>
     <string name="pref_zoom_title">Zoom-niveau</string>
-    <string name="pref_zoom_dialogtitle">Zoom-niveau</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatisk</item>
         <item name="pref_zoom_entry_small">Lille</item>
@@ -50,7 +47,6 @@
     <string name="pref_info_title">Information</string>
     <string name="pref_info_version">Version</string>
     <string name="pref_zoom_enable">Zoom kontrol</string>
-    <string name="pref_zoom_enable_summary">Få vist en zoom-knap i skærmens nederste højre hjørne</string>
     <string name="pref_nightmode">Nat-tilstand</string>
     <string name="pref_nightmode_summary">Vis artikler med inverterede farver</string>
     <string name="pref_backtotop">Tilbage til toppen</string>
@@ -58,6 +54,5 @@
     <string name="share_via">Del via...</string>
     <string name="pref_language_title">Sprog</string>
     <string name="pref_language_chooser">Vælg et sprog</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

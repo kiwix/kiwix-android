@@ -17,7 +17,7 @@
         <CheckBoxPreference
                 android:key="pref_zoom_enabled"
                 android:title="@string/pref_zoom_enable"
-                android:summary="@string/pref_zoom_enable_summary"
+
                 android:defaultValue="false"/>
 
         <org.kiwix.kiwixmobile.settings.SliderPreference

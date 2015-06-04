@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Atidaryti failą...</string>
@@ -27,8 +27,6 @@
     <string name="articlesearch_hint">Klasifikuoti kaip informacijos paieškos straipsnius</string>
     <string name="choose_file">Pasirinkite ZIM Turinio Failą (*.zim)</string>
     <string name="open_in_new_tab">Atidaryti nuorodą naujame skirtuke?</string>
-    <string name="remove_tab_confirm">Ar tikrai norite pašalinti šį skirtuką?</string>
-    <string name="remove_tab">Pašalinti skirtuką</string>
     <string name="add_bookmark">Pažymėti šį puslapį</string>
     <string name="remove_bookmark">Atžymėti pasirinktus</string>
     <string name="info_share_title">Man patinka Vikipedija neprisijungus su Kiwix!</string>
@@ -40,7 +38,6 @@
     <string name="error_articleurlnotfound">Klaida: nepavyko įkelti straipsnio (Url: %1$s).</string>
     <string name="pref_display_title">Rodyti</string>
     <string name="pref_zoom_title">Mastelio keitimo lygis</string>
-    <string name="pref_zoom_dialogtitle">Mastelio keitimo lygis</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatinis</item>
         <item name="pref_zoom_entry_small">Mažas</item>
@@ -50,7 +47,6 @@
     <string name="pref_info_title">Informacija</string>
     <string name="pref_info_version">Versija</string>
     <string name="pref_zoom_enable">Mastelio keitimo kontrolė</string>
-    <string name="pref_zoom_enable_summary">Rodyti mastelio keitimo mygtuką ekrano dešiniajame apatiniame kampe</string>
     <string name="pref_nightmode">Naktinis režimas</string>
     <string name="pref_nightmode_summary">Rodyti straipsnius su ankstesnėmis spalvomis</string>
     <string name="pref_backtotop">Atgal į viršų</string>
@@ -58,6 +54,5 @@
     <string name="share_via">Dalintis per...</string>
     <string name="pref_language_title">Kalba</string>
     <string name="pref_language_chooser">Pasirinkite kalbą</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

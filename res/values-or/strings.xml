@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">ଫାଇଲଟି ଖୋଲିବେ...</string>
@@ -27,8 +27,6 @@
     <string name="articlesearch_hint">ପ୍ରସଙ୍ଗମାନ ଖୋଜିବାକୁ ଚେଷ୍ଟାକରନ୍ତୁ</string>
     <string name="choose_file">ZIM ବିଷୟବସ୍ତୁ ଥିବା (*.zim) ଫାଇଲ ବାଛନ୍ତୁ</string>
     <string name="open_in_new_tab">ନୂଆ ଟ୍ୟାବରେ ଲିଙ୍କଟି ଖୋଲିବେ?</string>
-    <string name="remove_tab_confirm">ଟ୍ୟାବଟି ହଟାଇବାକୁ ଚାହାଁନ୍ତି?</string>
-    <string name="remove_tab">ଟ୍ୟାବ ହଟାନ୍ତୁ</string>
     <string name="add_bookmark">ଏଇ ପୃଷ୍ଠାଟିକୁ ଚିହ୍ନିତ କରିବେ</string>
     <string name="remove_bookmark">ବଛାଯାଇଥିବା ବସ୍ତୁ ସବୁକୁ ବାଛିବେ ନାହିଁ</string>
     <string name="info_share_title">ମୁଁ କିଉଇକ୍ସ ସହ ଉଇକିପିଡ଼ିଆ ଅଫଲାଇନର ମଜା ଉଠାଇଲି!</string>
@@ -40,7 +38,6 @@
     <string name="error_articleurlnotfound">ଅସୁବିଧା: (Url: %1$s) ପ୍ରସଙ୍ଗ ଖୋଲିବାରେ ବିଫଳ ହେଲୁ ।</string>
     <string name="pref_display_title">ଦେଖଣା</string>
     <string name="pref_zoom_title">ଜୁମ ବଢ଼ାଇବା/କମାଇବା</string>
-    <string name="pref_zoom_dialogtitle">ଜୁମ ବଢ଼ାଇବା/କମାଇବା</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
         <item name="pref_zoom_entry_small">ଛୋଟ</item>
@@ -50,7 +47,6 @@
     <string name="pref_info_title">ସୂଚନା</string>
     <string name="pref_info_version">ସଂସ୍କରଣ</string>
     <string name="pref_zoom_enable">ଜୁମ ବଢ଼ାଇବା/କମାଇବା</string>
-    <string name="pref_zoom_enable_summary">ସ୍କ୍ରିନର ତଳେ ଡାହାଣ ପଟେ ଏକ ଜୁମ ବଟନ ଦେଖାଇବେ</string>
     <string name="pref_nightmode">ରାତି ମୋଡ଼</string>
     <string name="pref_nightmode_summary">ରଙ୍ଗର ଓଲଟା କ୍ରମରେ ପ୍ରସଙ୍ଗମାନ ଦେଖାଇବେ</string>
     <string name="pref_backtotop">ଉପରକୁ ଫେରିବେ</string>
@@ -58,6 +54,5 @@
     <string name="share_via">କାହା ଦ୍ୱାରା ବାକିମାନଙ୍କୁ ଜଣାଇବେ...</string>
     <string name="pref_language_title">ଭାଷା</string>
     <string name="pref_language_chooser">ଭାଷା ଚୟନ କରନ୍ତୁ</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

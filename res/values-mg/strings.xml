@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Hanokatra rakitra</string>
@@ -27,8 +27,6 @@
     <string name="articlesearch_hint">Manorata eto raha hikaroka lahatsoratra</string>
     <string name="choose_file">Hisafidy rakitra misy votoatiny (*.zim)</string>
     <string name="open_in_new_tab">Hanokatra rohy anaty sasa-joro vaovao?</string>
-    <string name="remove_tab_confirm">Tianao ho esorina ve ity sasajoro ity?</string>
-    <string name="remove_tab">Hanala ny sasa-joro</string>
     <string name="add_bookmark">Hanamarika ity pejy ity</string>
     <string name="remove_bookmark">Hanala marika ny voafidy</string>
     <string name="info_share_title">Tia an\'i Wikipedia Offline amin\'i Kiwix aho!</string>
@@ -40,7 +38,6 @@
     <string name="error_articleurlnotfound">Hadisoana: tsy nahafahana ilay lahatsoratra (Url: %1$s).</string>
     <string name="pref_display_title">Fiseho</string>
     <string name="pref_zoom_title">Lentan\'ny zoom</string>
-    <string name="pref_zoom_dialogtitle">Lentan\'ny zoom</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
         <item name="pref_zoom_entry_small">Kely</item>
@@ -50,7 +47,6 @@
     <string name="pref_info_title">Fampahalalana</string>
     <string name="pref_info_version">Versiona</string>
     <string name="pref_zoom_enable">Famehezana zoom</string>
-    <string name="pref_zoom_enable_summary">Aseho amin\'ny sisiny ambany havanan\'ny fikandra ny bokotra zoom</string>
     <string name="pref_nightmode">Fiseho amin\'ny alina</string>
     <string name="pref_nightmode_summary">Haneho lahatsoratra amin\'ny loko mivadika</string>
     <string name="pref_backtotop">Hiverina any an-tampony</string>
@@ -58,6 +54,5 @@
     <string name="share_via">Hizara amin\'ny alalan\'i...</string>
     <string name="pref_language_title">Tenim-pirenena</string>
     <string name="pref_language_chooser">Choose a language</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

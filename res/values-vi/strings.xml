@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Mở Tập tin…</string>
@@ -27,8 +27,6 @@
     <string name="articlesearch_hint">Gõ để tra cứu bài</string>
     <string name="choose_file">Chọn một Tập tin Nội dung ZIM (*.zim)</string>
     <string name="open_in_new_tab">Mở liên kết trong thẻ mới?</string>
-    <string name="remove_tab_confirm">Bạn có muốn đóng thẻ này không?</string>
-    <string name="remove_tab">Đóng thẻ</string>
     <string name="add_bookmark">Đánh dấu Trang Này</string>
     <string name="remove_bookmark">Xóa Dấu trang Lựa chọn</string>
     <string name="info_share_title">Tôi thích Wikipedia Ngoại tuyến trong Kiwix!</string>
@@ -40,7 +38,6 @@
     <string name="error_articleurlnotfound">Lỗi: Việc tải bài (URL: %1$s) bị thất bại.</string>
     <string name="pref_display_title">Hiển thị</string>
     <string name="pref_zoom_title">Mức thu phóng</string>
-    <string name="pref_zoom_dialogtitle">Mức thu phóng</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Tự động</item>
         <item name="pref_zoom_entry_small">Nhỏ</item>
@@ -50,7 +47,6 @@
     <string name="pref_info_title">Thông tin</string>
     <string name="pref_info_version">Phiên bản</string>
     <string name="pref_zoom_enable">Điều khiển thu phóng</string>
-    <string name="pref_zoom_enable_summary">Hiện nút thu phóng ở góc phải bên dưới của màn hình</string>
     <string name="pref_nightmode">Chế độ ban đêm</string>
     <string name="pref_nightmode_summary">Đảo ngược màu sắc trong bài</string>
     <string name="pref_backtotop">Trở lên Đầu trang</string>
@@ -58,6 +54,5 @@
     <string name="share_via">Chia sẻ qua…</string>
     <string name="pref_language_title">Ngôn ngữ</string>
     <string name="pref_language_chooser">Chọn ngôn ngữ</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

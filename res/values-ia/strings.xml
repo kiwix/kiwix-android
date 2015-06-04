@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Aperir file...</string>
@@ -27,8 +27,6 @@
     <string name="articlesearch_hint">Dactylographar pro cercar articulos</string>
     <string name="choose_file">Selige un file de contento ZIM (*.zim)</string>
     <string name="open_in_new_tab">Aperir ligamine in nove scheda?</string>
-    <string name="remove_tab_confirm">Vole tu remover iste scheda?</string>
-    <string name="remove_tab">Remover scheda</string>
     <string name="add_bookmark">Marcar iste pagina</string>
     <string name="remove_bookmark">Dismarcar selection</string>
     <string name="info_share_title">Me place Wikipedia Offline con Kiwix!</string>
@@ -40,7 +38,6 @@
     <string name="error_articleurlnotfound">Error: Le cargamento del articulo (Url: %1$s) ha fallite.</string>
     <string name="pref_display_title">Visualisation</string>
     <string name="pref_zoom_title">Nivello de zoom</string>
-    <string name="pref_zoom_dialogtitle">Nivello de zoom</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
         <item name="pref_zoom_entry_small">Micre</item>
@@ -50,7 +47,6 @@
     <string name="pref_info_title">Information</string>
     <string name="pref_info_version">Version</string>
     <string name="pref_zoom_enable">Controlos de zoom</string>
-    <string name="pref_zoom_enable_summary">Monstrar un button de zoom in le angulo inferior dextre del schermo</string>
     <string name="pref_nightmode">Modo nocturne</string>
     <string name="pref_nightmode_summary">Monstrar articulos in colores invertite</string>
     <string name="pref_backtotop">Initio del pagina</string>
@@ -58,6 +54,5 @@
     <string name="share_via">Divider via...</string>
     <string name="pref_language_title">Lingua</string>
     <string name="pref_language_chooser">Selige un lingua</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

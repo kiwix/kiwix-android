@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">گشودن پرونده...</string>
@@ -27,8 +27,6 @@
     <string name="articlesearch_hint">برای یافتن مقاله‌ها تایپ کنید</string>
     <string name="choose_file">یک پروندهٔ محتوایی ZIM را انتخاب کنید (*.zim)</string>
     <string name="open_in_new_tab">بازکردن پیوند در زبانهٔ جدید؟</string>
-    <string name="remove_tab_confirm">آیا قصد حذف این زبانه را دارید؟</string>
-    <string name="remove_tab">برداشتن زبانه</string>
     <string name="add_bookmark">این صفحه را علامت بزن</string>
     <string name="remove_bookmark">علامت انتخاب‌شده را بردار</string>
     <string name="info_share_title">از ویکی‌پدیای آفلاین با کیویکس لذت بردم!</string>
@@ -40,7 +38,6 @@
     <string name="error_articleurlnotfound">حطا: بارگیری مقالهٔ (نشانی: %1$s) شکست خورد.</string>
     <string name="pref_display_title">نمایش</string>
     <string name="pref_zoom_title">سطح بزرگ/کوچک‌نمایی</string>
-    <string name="pref_zoom_dialogtitle">سطح بزرگ/کوچک‌نمایی</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">خودکار</item>
         <item name="pref_zoom_entry_small">کوچک</item>
@@ -50,7 +47,6 @@
     <string name="pref_info_title">اطلاعات</string>
     <string name="pref_info_version">نسخه</string>
     <string name="pref_zoom_enable">کنترل‌های بزرگ/کوچک‌نمایی</string>
-    <string name="pref_zoom_enable_summary">نمایش یک دکمهٔ بزرگ/کوچک‌نمایی در گوشهٔ سمت راست پایین صفحه</string>
     <string name="pref_nightmode">حالت شبانه</string>
     <string name="pref_nightmode_summary">نمایش مقاله‌ها با رنگ‌های معکوس‌شده</string>
     <string name="pref_backtotop">بازگشت به بالای صفحه</string>
@@ -58,6 +54,5 @@
     <string name="share_via">اشتراک از طریق...</string>
     <string name="pref_language_title">تغییر زبان</string>
     <string name="pref_language_chooser">انتخاب زبان</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

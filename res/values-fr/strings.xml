@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Ouvrir un fichier...</string>
@@ -27,8 +27,6 @@
     <string name="articlesearch_hint">Taper pour rechercher des articles</string>
     <string name="choose_file">Sélectionner un fichier de contenu ZIM (*.zim)</string>
     <string name="open_in_new_tab">Ouvrir le lien dans un nouvel onglet ?</string>
-    <string name="remove_tab_confirm">Voulez-vous supprimer cet onglet ?</string>
-    <string name="remove_tab">Supprimer l\'onglet</string>
     <string name="add_bookmark">Marquer cette page</string>
     <string name="remove_bookmark">Ne plus sélectionner ce marque-page</string>
     <string name="info_share_title">J\'aime Wikipedia Offline avec Kiwix !</string>
@@ -40,7 +38,6 @@
     <string name="error_articleurlnotfound">Erreur : Le chargement de l’article (Url: %1$s) a échoué.</string>
     <string name="pref_display_title">Affichage</string>
     <string name="pref_zoom_title">Niveau de zoom</string>
-    <string name="pref_zoom_dialogtitle">Niveau de zoom</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatique</item>
         <item name="pref_zoom_entry_small">Faible</item>
@@ -50,7 +47,6 @@
     <string name="pref_info_title">Information</string>
     <string name="pref_info_version">Version</string>
     <string name="pref_zoom_enable">Contrôles du zoom</string>
-    <string name="pref_zoom_enable_summary">Afficher un bouton de zoom dans le coin inférieur droit de l’écran</string>
     <string name="pref_nightmode">Mode nocturne</string>
     <string name="pref_nightmode_summary">Afficher les articles en couleurs inversées</string>
     <string name="pref_backtotop">Retourner au début</string>
@@ -58,6 +54,5 @@
     <string name="share_via">Partager via...</string>
     <string name="pref_language_title">Langue</string>
     <string name="pref_language_chooser">Choisir une langue</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

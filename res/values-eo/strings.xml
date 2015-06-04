@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Malfermi dosieron...</string>
@@ -27,8 +27,6 @@
     <string name="articlesearch_hint">Trovu artikolon tajpante</string>
     <string name="choose_file">Elektu enhavan dosieron ZIM (*.zim)</string>
     <string name="open_in_new_tab">Ĉu malfermi ligilon en nova langeto?</string>
-    <string name="remove_tab_confirm">Ĉu vi volas forigi tiun ĉi langeton?</string>
-    <string name="remove_tab">Forigi langeton</string>
     <string name="add_bookmark">Marki ĉi tiun paĝon</string>
     <string name="remove_bookmark">Malmarki elektitajn</string>
     <string name="info_share_title">Mi ĝuas Vikipedion eksterrete kun Kiwix!</string>
@@ -40,7 +38,6 @@
     <string name="error_articleurlnotfound">Eraro: Ŝargado de la artikolo (Url: %1$s) fiaskis.</string>
     <string name="pref_display_title">Montri</string>
     <string name="pref_zoom_title">Zomnivelo</string>
-    <string name="pref_zoom_dialogtitle">Zomnivelo</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Aŭtomate</item>
         <item name="pref_zoom_entry_small">Malgranda</item>
@@ -50,7 +47,6 @@
     <string name="pref_info_title">Informo</string>
     <string name="pref_info_version">Versio</string>
     <string name="pref_zoom_enable">Zomregiloj</string>
-    <string name="pref_zoom_enable_summary">Montri zombutonon en la malsupra dekstra ekranangulo</string>
     <string name="pref_nightmode">Nokta reĝimo</string>
     <string name="pref_nightmode_summary">Montri artikolojn inverskolore</string>
     <string name="pref_backtotop">Reiri al Supro</string>
@@ -58,6 +54,5 @@
     <string name="share_via">Kundividi per...</string>
     <string name="pref_language_title">Lingvo</string>
     <string name="pref_language_chooser">Elektu lingvon</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

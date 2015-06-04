@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">फ़ाइल खोलें...</string>
@@ -27,8 +27,6 @@
     <string name="articlesearch_hint">लेख तलाश करने के लिए लिखें</string>
     <string name="choose_file">एक ZIM कान्टेन्ट फ़ाइल (*.zim) का चयन करें</string>
     <string name="open_in_new_tab">नए टैब में लिंक खोलें?</string>
-    <string name="remove_tab_confirm">क्या आप इस टैब को निकालना चाहते हैं?</string>
-    <string name="remove_tab">टैब निकालें</string>
     <string name="add_bookmark">इस पृष्ठ को चिह्नित करें</string>
     <string name="remove_bookmark">चयनित अचिह्नित करें</string>
     <string name="info_share_title">मैं विकिपीडिया ऑफ़लाइन का आनंद ले रहा हूँ किविक्स के साथ!</string>
@@ -40,7 +38,6 @@
     <string name="error_articleurlnotfound">त्रुटि: आलेख (Url:  %1$s ) लोड करना विफल रहा।</string>
     <string name="pref_display_title">डिस्प्ले</string>
     <string name="pref_zoom_title">ज़ूम स्तर</string>
-    <string name="pref_zoom_dialogtitle">ज़ूम स्तर</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">स्वतः</item>
         <item name="pref_zoom_entry_small">लघु</item>
@@ -50,7 +47,6 @@
     <string name="pref_info_title">जानकारी</string>
     <string name="pref_info_version">संस्करण</string>
     <string name="pref_zoom_enable">ज़ूम नियंत्रण</string>
-    <string name="pref_zoom_enable_summary">स्क्रीन के नीचे दायें कोने में ज़ूम बटन दिखाएँ</string>
     <string name="pref_nightmode">रात्रि मोड</string>
     <string name="pref_nightmode_summary">उल्टे रंगों के साथ लेख दिखाएँ</string>
     <string name="pref_backtotop">वापस शीर्ष पे जाएँ</string>
@@ -58,6 +54,5 @@
     <string name="share_via">अलग माध्यम से बांटे</string>
     <string name="pref_language_title">भाषा</string>
     <string name="pref_language_chooser">भाषा चुनें</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

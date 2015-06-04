@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Faylı aç...</string>
@@ -27,8 +27,6 @@
     <string name="articlesearch_hint">Məqalədə axtarmaq istədiyiniz sözü daxil edin.</string>
     <string name="choose_file">ZIM məzmunlu fayl seç (*.zim)</string>
     <string name="open_in_new_tab">Linki yeni pəncərədə aç?</string>
-    <string name="remove_tab_confirm">Siz bu pəncərəni silmək istədiyinizə əminsiz?</string>
-    <string name="remove_tab">Pəncərəni sil</string>
     <string name="add_bookmark">Bu səhifəni qeyd et</string>
     <string name="remove_bookmark">Seçilmiş işarələri götür</string>
     <string name="info_share_title">Kiwix-dən istifadə edərək internetə qoşulmadan Vikipediyaya daxil olmaq  əladır!</string>
@@ -40,7 +38,6 @@
     <string name="error_articleurlnotfound">Xəta: Məqalənin (Url: %1$s) yüklənməsi alınmadı.</string>
     <string name="pref_display_title">Ekran</string>
     <string name="pref_zoom_title">Miqyas səviyyəsi</string>
-    <string name="pref_zoom_dialogtitle">Miqyas səviyyəsi</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Avtomatik</item>
         <item name="pref_zoom_entry_small">Kiçik</item>
@@ -50,7 +47,6 @@
     <string name="pref_info_title">Məlumat</string>
     <string name="pref_info_version">Versiya</string>
     <string name="pref_zoom_enable">Miqyas quraşdırılmaları</string>
-    <string name="pref_zoom_enable_summary">Ekranın sağ alt küncündə miqyas düyməsini göstər</string>
     <string name="pref_nightmode">Gecə rejimi</string>
     <string name="pref_nightmode_summary">Məqalələri "gecə rejimində" göstər</string>
     <string name="pref_backtotop">Əvvələ qayıt</string>
@@ -58,6 +54,5 @@
     <string name="share_via">Paylaş...</string>
     <string name="pref_language_title">Dil</string>
     <string name="pref_language_chooser">Dili seçin</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

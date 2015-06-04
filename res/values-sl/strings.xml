@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Odpri datoteko ...</string>
@@ -27,8 +27,6 @@
     <string name="articlesearch_hint">Vrsta iskanih člankov</string>
     <string name="choose_file">Izberite datoteko z vsebino ZIM (*.zim)</string>
     <string name="open_in_new_tab">Odprem povezavo v novem zavihku?</string>
-    <string name="remove_tab_confirm">Želite odstraniti zavihek?</string>
-    <string name="remove_tab">Odstrani zavihek</string>
     <string name="add_bookmark">Označi to stran</string>
     <string name="remove_bookmark">Odznači izbrane</string>
     <string name="info_share_title">Uživam Wikipedijo brez povezave s Kiwix!</string>
@@ -40,7 +38,6 @@
     <string name="error_articleurlnotfound">Napaka: nalaganje članka (url: %1$s) ni uspelo.</string>
     <string name="pref_display_title">Prikaz</string>
     <string name="pref_zoom_title">Raven zumiranja</string>
-    <string name="pref_zoom_dialogtitle">Raven zumiranja</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Samodejno</item>
         <item name="pref_zoom_entry_small">Majhno</item>
@@ -50,7 +47,6 @@
     <string name="pref_info_title">Informacije</string>
     <string name="pref_info_version">Različica</string>
     <string name="pref_zoom_enable">Kontrolniki zumiranja</string>
-    <string name="pref_zoom_enable_summary">V spodnjem desnem vogalu zaslona prikaži gumb za zumiranje</string>
     <string name="pref_nightmode">Nočni način</string>
     <string name="pref_nightmode_summary">Prikaz člankov z obrnjenimi barvami</string>
     <string name="pref_backtotop">Nazaj na vrh</string>
@@ -58,6 +54,5 @@
     <string name="share_via">Deli na ...</string>
     <string name="pref_language_title">Jezik</string>
     <string name="pref_language_chooser">Izberite jezik</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>
