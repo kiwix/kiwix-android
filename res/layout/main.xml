@@ -27,7 +27,6 @@
                 android:imeOptions="actionGo|flagNoExtractUi"
                 android:inputType="text|textCapWords"
                 android:maxLines="1"
-                android:background="@android:color/background_dark"
                 android:textColor="@android:color/white"
                 android:selectAllOnFocus="true"/>
 
