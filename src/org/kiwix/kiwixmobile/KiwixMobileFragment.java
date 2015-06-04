@@ -20,7 +20,7 @@
 package org.kiwix.kiwixmobile;
 
 
-import org.kiwix.kiwixmobile.settings.KiwixSettingsActivityHC;
+import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.settings.SettingsHelper;
 
 import android.annotation.SuppressLint;
@@ -782,7 +782,7 @@ public class KiwixMobileFragment extends Fragment {
     }
 
     public void selectSettings() {
-        Intent i = new Intent(getActivity(), KiwixSettingsActivityHC.class);
+        Intent i = new Intent(getActivity(), KiwixSettingsActivity.class);
         startActivityForResult(i, PREFERENCES_REQUEST_CODE);
     }
 

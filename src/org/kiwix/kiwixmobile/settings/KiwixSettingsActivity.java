@@ -26,7 +26,7 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
 
-public class KiwixSettingsActivityHC extends AppCompatActivity {
+public class KiwixSettingsActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
