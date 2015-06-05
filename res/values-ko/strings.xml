@@ -32,7 +32,7 @@
     <string name="error_articleurlnotfound">오류: 문서(Url: %1$s)를 불러오는 데 실패했습니다.</string>
     <string name="pref_display_title">보기</string>
     <string name="pref_zoom_sub_title">Zoom</string>
-    <string name="pref_zoom_dialog">Zoom level</string>
+    <string name="pref_zoom_dialog">확대/축소 수준</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">자동</item>
         <item name="pref_zoom_entry_small">작게</item>

@@ -32,7 +32,7 @@
     <string name="error_articleurlnotfound">त्रुटि: आलेख (Url:  %1$s ) लोड करना विफल रहा।</string>
     <string name="pref_display_title">डिस्प्ले</string>
     <string name="pref_zoom_sub_title">Zoom</string>
-    <string name="pref_zoom_dialog">Zoom level</string>
+    <string name="pref_zoom_dialog">ज़ूम स्तर</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">स्वतः</item>
         <item name="pref_zoom_entry_small">लघु</item>

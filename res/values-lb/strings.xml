@@ -32,7 +32,7 @@
     <string name="error_articleurlnotfound">Feeler: D\'Luede vum Artikel (URL: %1$s) huet net funktionéiert.</string>
     <string name="pref_display_title">Ausgesinn</string>
     <string name="pref_zoom_sub_title">Zoom</string>
-    <string name="pref_zoom_dialog">Zoom level</string>
+    <string name="pref_zoom_dialog">Niveau vum Zoom</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatesch</item>
         <item name="pref_zoom_entry_small">Kleng</item>

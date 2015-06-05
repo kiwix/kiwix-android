@@ -32,7 +32,7 @@
     <string name="error_articleurlnotfound">దోషం : వ్యాసం (Url: %1$s) ను లోడ్ చెయ్యడం విఫలమయింది.</string>
     <string name="pref_display_title">వీక్షణం</string>
     <string name="pref_zoom_sub_title">Zoom</string>
-    <string name="pref_zoom_dialog">Zoom level</string>
+    <string name="pref_zoom_dialog">అతిరూపణ స్థాయి</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">స్వయంచాలితం</item>
         <item name="pref_zoom_entry_small">చిన్న</item>

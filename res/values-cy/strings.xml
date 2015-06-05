@@ -32,7 +32,7 @@
     <string name="error_articleurlnotfound">Gwall: Methwyd a llwytho\'r erthygl: (Url: %1$s).</string>
     <string name="pref_display_title">Golwg</string>
     <string name="pref_zoom_sub_title">Zoom</string>
-    <string name="pref_zoom_dialog">Zoom level</string>
+    <string name="pref_zoom_dialog">Lefel pellhau</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Otomatig</item>
         <item name="pref_zoom_entry_small">Bach</item>

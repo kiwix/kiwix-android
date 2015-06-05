@@ -32,7 +32,7 @@
     <string name="error_articleurlnotfound">Hata: (Url: %1$s) makalesinin yüklemesi başarısız.</string>
     <string name="pref_display_title">Göster</string>
     <string name="pref_zoom_sub_title">Zoom</string>
-    <string name="pref_zoom_dialog">Zoom level</string>
+    <string name="pref_zoom_dialog">Zum seviyesi</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Otomatik</item>
         <item name="pref_zoom_entry_small">Küçük</item>
