@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Išeiti iš viso ekrano režimo</string>
     <string name="menu_read_aloud">Skaityk garsiai</string>
     <string name="menu_read_aloud_stop">Nustok garsiai skaityti</string>
-    <string name="menu_exit">Išėiti</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Pasidalink su draugais</string>
     <string name="save_media">Išsaugoti duomenis kaip...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Paieška</string>
     <string name="articlesearch_hint">Klasifikuoti kaip informacijos paieškos straipsnius</string>
     <string name="choose_file">Pasirinkite ZIM Turinio Failą (*.zim)</string>
-    <string name="open_in_new_tab">Atidaryti nuorodą naujame skirtuke?</string>
     <string name="add_bookmark">Pažymėti šį puslapį</string>
     <string name="remove_bookmark">Atžymėti pasirinktus</string>
     <string name="info_share_title">Man patinka Vikipedija neprisijungus su Kiwix!</string>

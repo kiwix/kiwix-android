@@ -21,6 +21,10 @@ package org.kiwix.kiwixmobile;
 
 public class JNIKiwix {
 
+    static {
+        System.loadLibrary("kiwix");
+    }
+
     public native String getMainPage();
 
     public native String getId();
@@ -60,10 +64,6 @@ public class JNIKiwix {
     public native boolean getRandomPage(JNIKiwixString url);
 
     public native void setDataDirectory(String icuDataDir);
-
-    static {
-        System.loadLibrary("kiwix");
-    }
 }
 
 class JNIKiwixString {

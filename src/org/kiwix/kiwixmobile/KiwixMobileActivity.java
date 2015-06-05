@@ -91,10 +91,6 @@ public class KiwixMobileActivity extends AppCompatActivity
         implements BookmarkDialog.BookmarkDialogListener {
 
 
-    public static ArrayList<State> mPrefState;
-
-    public static boolean mIsFullscreenOpened;
-
     public static final String TAG_KIWIX = "kiwix";
 
     private static final String TAG_CURRENTZIMFILE = "currentzimfile";
@@ -114,6 +110,10 @@ public class KiwixMobileActivity extends AppCompatActivity
     private static final int ZIMFILESELECT_REQUEST_CODE = 1234;
 
     private static final int PREFERENCES_REQUEST_CODE = 1235;
+
+    public static ArrayList<State> mPrefState;
+
+    public static boolean mIsFullscreenOpened;
 
     public LinearLayout articleSearchBar;
 
@@ -315,10 +315,6 @@ public class KiwixMobileActivity extends AppCompatActivity
                 selectZimFile();
                 break;
 
-            case R.id.menu_exit:
-                finish();
-                break;
-
             case R.id.menu_settings:
                 selectSettings();
                 break;
@@ -404,23 +400,6 @@ public class KiwixMobileActivity extends AppCompatActivity
     @Override
     public void onBookmarkButtonPressed() {
         toggleBookmark();
-    }
-
-    public class State {
-
-        private boolean hasToBeRefreshed;
-
-        private State(boolean hasToBeRefreshed) {
-            this.hasToBeRefreshed = hasToBeRefreshed;
-        }
-
-        public boolean hasToBeRefreshed() {
-            return hasToBeRefreshed;
-        }
-
-        public void setHasToBeRefreshed(boolean hasToBeRefreshed) {
-            this.hasToBeRefreshed = hasToBeRefreshed;
-        }
     }
 
     public void showWelcome() {
@@ -850,7 +829,6 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -899,7 +877,6 @@ public class KiwixMobileActivity extends AppCompatActivity
 
         super.onActivityResult(requestCode, resultCode, data);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -1177,7 +1154,6 @@ public class KiwixMobileActivity extends AppCompatActivity
         }
     }
 
-
     @Override
     public void onPause() {
         super.onPause();
@@ -1195,6 +1171,22 @@ public class KiwixMobileActivity extends AppCompatActivity
                 "onPause Save currentzimfile to preferences:" + ZimContentProvider.getZimFile());
     }
 
+    public class State {
+
+        private boolean hasToBeRefreshed;
+
+        private State(boolean hasToBeRefreshed) {
+            this.hasToBeRefreshed = hasToBeRefreshed;
+        }
+
+        public boolean hasToBeRefreshed() {
+            return hasToBeRefreshed;
+        }
+
+        public void setHasToBeRefreshed(boolean hasToBeRefreshed) {
+            this.hasToBeRefreshed = hasToBeRefreshed;
+        }
+    }
 
     private class MyWebViewClient extends WebViewClient {
 

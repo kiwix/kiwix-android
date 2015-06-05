@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Kilépés a teljes képernyőből</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">Kilépés</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Megosztás ismerősökkel</string>
     <string name="save_media">Média mentése másként...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Keresés</string>
     <string name="articlesearch_hint">Írja be a keresett cikk címét</string>
     <string name="choose_file">ZIM-tartalomfájl kiválasztása (*.zim)</string>
-    <string name="open_in_new_tab">Hivatkozás megnyitása új lapon?</string>
     <string name="add_bookmark">Oldal megjelölése</string>
     <string name="remove_bookmark">Kijelölés megszüntetése</string>
     <string name="info_share_title">Kedvelem a Kiwix offline Wikipédia-olvasót!</string>

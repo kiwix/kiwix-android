@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Tam ekrandan çık</string>
     <string name="menu_read_aloud">Yüksek sesle oku</string>
     <string name="menu_read_aloud_stop">Yüksek sesle okumayı sonlandır</string>
-    <string name="menu_exit">Çık</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Arkadaşlarınla paylaş</string>
     <string name="save_media">Medyayı şu şekilde kaydet...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Ara</string>
     <string name="articlesearch_hint">Makalelerde aranacak kelimeyi yazın</string>
     <string name="choose_file">Bir ZIM İçerik Dosyası seçin (*.zim)</string>
-    <string name="open_in_new_tab">Bağlantı yeni sekmede açılsın mı?</string>
     <string name="add_bookmark">Bu sayfayı işaretle</string>
     <string name="remove_bookmark">Seçilenin işaretini kaldır</string>
     <string name="info_share_title">Kiwix ile Çevrim Dışı Vikipedi\'nin tadını çıkarıyorum!</string>

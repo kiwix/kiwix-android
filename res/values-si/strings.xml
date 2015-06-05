@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">සම්පූර්ණ තිරයෙන් ඉවත් වන්න</string>
     <string name="menu_read_aloud">හඬනගා කියවන්න</string>
     <string name="menu_read_aloud_stop">හඬනගා කියවීම නවත්වන්න</string>
-    <string name="menu_exit">ඉවත් වන්න</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">මිතුරන් සමග හුවමාරු කරන්න</string>
     <string name="save_media">මාධ්‍යය සුරකින්න...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">ගවේෂණය</string>
     <string name="articlesearch_hint">ලිපි බැලීමට ටයිප් කරන්න</string>
     <string name="choose_file">ZIM වර්ගයේ ගොනුවක් තෝරාගන්න (*.zim)</string>
-    <string name="open_in_new_tab">සබැඳිය නව තීරුවක විවෘත කරන්න?</string>
     <string name="add_bookmark">මෙම පිටුව සලකුණු කරන්න</string>
     <string name="remove_bookmark">තෝරාගත්ත අසලකුණු කරන්න</string>
     <string name="info_share_title">මම Kiwix මගින් මාර්ගගත නොවී විකිපීඩියාව භාවිතයට කැමැත්තෙමි!</string>

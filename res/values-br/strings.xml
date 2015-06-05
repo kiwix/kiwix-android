@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Kuitaat ar skramm leun</string>
     <string name="menu_read_aloud">Lenn a vouezh uhel</string>
     <string name="menu_read_aloud_stop">Paouez da lenn a vouezh uhel</string>
-    <string name="menu_exit">Kuitaat</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Rannañ gant mignoned</string>
     <string name="save_media">Enrollañ ar media evel...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Klask</string>
     <string name="articlesearch_hint">Skrivañ evit klask pennadoù</string>
     <string name="choose_file">Dibab ur restr endac\'h ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Digeriñ al liamm en un ivinell nevez ?</string>
     <string name="add_bookmark">Merkañ ar bajenn-mañ</string>
     <string name="remove_bookmark">Diverkañ ar sined diuzet</string>
     <string name="info_share_title">Plijout a ra din Offline gant Kiwix !</string>

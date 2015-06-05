@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Keluar dari skrin penuh</string>
     <string name="menu_read_aloud">Bacakan</string>
     <string name="menu_read_aloud_stop">Berhenti bacakan</string>
-    <string name="menu_exit">Keluar</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Kongsi dengan kawan²</string>
     <string name="save_media">Simpan media sebagai...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Cari</string>
     <string name="articlesearch_hint">Taip untuk mencari rencana</string>
     <string name="choose_file">Pilih Fail Kandungan ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Buka pautan dalam tab baru?</string>
     <string name="add_bookmark">Gemari halaman ini</string>
     <string name="remove_bookmark">Buang yang dipilih</string>
     <string name="info_share_title">Seronoknya Wikipedia Offline dengan Kiwix!</string>

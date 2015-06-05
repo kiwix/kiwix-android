@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">אוועקגיין פון פולן עקראן</string>
     <string name="menu_read_aloud">לייענען הויך</string>
     <string name="menu_read_aloud_stop">אויפהיטן לייענען הויך</string>
-    <string name="menu_exit">פֿארלאזן</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">טיילט מיט חברים</string>
     <string name="save_media">שפייכלערן מעדיעוויקי ווי…</string>
@@ -26,7 +25,6 @@
     <string name="search_label">זוכן</string>
     <string name="articlesearch_hint">Type to lookup articles</string>
     <string name="choose_file">Select a ZIM Content File (*.zim)</string>
-    <string name="open_in_new_tab">עפענען לינק אין א נײַעם טאב?</string>
     <string name="add_bookmark">מארקירן דעם בלאט</string>
     <string name="remove_bookmark">אוממארקירן אויסגעוויילטע</string>
     <string name="info_share_title">כ׳האב הנאה פון וויקיפעדיע אפליין מיט קיוויקס!</string>

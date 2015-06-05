@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Quitter le plein écran</string>
     <string name="menu_read_aloud">Lire à haute voix</string>
     <string name="menu_read_aloud_stop">Arrêter de lire à haute voix</string>
-    <string name="menu_exit">Quitter</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Partager avec vos amis</string>
     <string name="save_media">Enregistrer le média sous…</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Rechercher</string>
     <string name="articlesearch_hint">Taper pour rechercher des articles</string>
     <string name="choose_file">Sélectionner un fichier de contenu ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Ouvrir le lien dans un nouvel onglet ?</string>
     <string name="add_bookmark">Marquer cette page</string>
     <string name="remove_bookmark">Ne plus sélectionner ce marque-page</string>
     <string name="info_share_title">J\'aime Wikipedia Offline avec Kiwix !</string>

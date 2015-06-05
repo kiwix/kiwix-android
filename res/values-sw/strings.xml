@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Toka kwa modi ya Skrini nzima</string>
     <string name="menu_read_aloud">Soma kwa sauti</string>
     <string name="menu_read_aloud_stop">Simama kusoma kwa sauti</string>
-    <string name="menu_exit">Ondoka</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Shiriki na marafiki</string>
     <string name="save_media">Hifadhi midia kama...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Tafuta</string>
     <string name="articlesearch_hint">Andika ili kutafuta makala</string>
     <string name="choose_file">Chagua Faili ya Makala ya ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Fungua kiungo kwenye kivinjari kipya</string>
     <string name="add_bookmark">Alamisha ukurasa huu</string>
     <string name="remove_bookmark">Toa alama kwa zilizo chaguliwa</string>
     <string name="info_share_title">Nafurahia Wikipedia Offline na Kiwix</string>

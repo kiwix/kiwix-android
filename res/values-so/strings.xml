@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Ka bax shaashadda weyn</string>
     <string name="menu_read_aloud">Aqri kuwa kale</string>
     <string name="menu_read_aloud_stop">Iska jooji aqrinta kuwa kale</string>
-    <string name="menu_exit">ka bax</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">La wadaag asxaabtaada</string>
     <string name="save_media">Kaydi galka muuqaalka ah si</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Raadi</string>
     <string name="articlesearch_hint">Qor si aad u raadiso maqaallo</string>
     <string name="choose_file">Dooro galka ZIM ee ka samaysan (*.zim)</string>
-    <string name="open_in_new_tab">Fur webka qaab cusub</string>
     <string name="add_bookmark">Boggaan ku samee calamad</string>
     <string name="remove_bookmark">Ka saar calaamadda</string>
     <string name="info_share_title">Aniga waxaan ku baashaalaa Wikipedia Soomaaliga si qad la,aan ahanigoo u maraya Kiwix!</string>

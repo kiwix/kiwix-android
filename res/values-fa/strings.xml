@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">خروج از تمام‌صفحه</string>
     <string name="menu_read_aloud">خواندن با صدای بلند</string>
     <string name="menu_read_aloud_stop">توقف خواندن با صدای بلند</string>
-    <string name="menu_exit">خروج</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">اشتراک گذاری با دوستان</string>
     <string name="save_media">ذخیره رسانه با نام ....</string>
@@ -26,7 +25,6 @@
     <string name="search_label">جستجو</string>
     <string name="articlesearch_hint">برای یافتن مقاله‌ها تایپ کنید</string>
     <string name="choose_file">یک پروندهٔ محتوایی ZIM را انتخاب کنید (*.zim)</string>
-    <string name="open_in_new_tab">بازکردن پیوند در زبانهٔ جدید؟</string>
     <string name="add_bookmark">این صفحه را علامت بزن</string>
     <string name="remove_bookmark">علامت انتخاب‌شده را بردار</string>
     <string name="info_share_title">از ویکی‌پدیای آفلاین با کیویکس لذت بردم!</string>

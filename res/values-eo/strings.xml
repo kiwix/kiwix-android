@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Eliri plenekranon</string>
     <string name="menu_read_aloud">Laŭtlegi</string>
     <string name="menu_read_aloud_stop">Ĉesi laŭtlegadon</string>
-    <string name="menu_exit">Eliri</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Dividi kun amikoj</string>
     <string name="save_media">Konservi plurmediaĵon kiel...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Serĉi</string>
     <string name="articlesearch_hint">Trovu artikolon tajpante</string>
     <string name="choose_file">Elektu enhavan dosieron ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Ĉu malfermi ligilon en nova langeto?</string>
     <string name="add_bookmark">Marki ĉi tiun paĝon</string>
     <string name="remove_bookmark">Malmarki elektitajn</string>
     <string name="info_share_title">Mi ĝuas Vikipedion eksterrete kun Kiwix!</string>

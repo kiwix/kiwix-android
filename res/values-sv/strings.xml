@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Stäng helskärm</string>
     <string name="menu_read_aloud">Läs upp</string>
     <string name="menu_read_aloud_stop">Sluta läsa upp</string>
-    <string name="menu_exit">Avsluta</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Dela med vänner</string>
     <string name="save_media">Spara media som...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Sök</string>
     <string name="articlesearch_hint">Skriv för att kolla upp artiklar</string>
     <string name="choose_file">Välj en ZIM-innehållsfil (*.zim)</string>
-    <string name="open_in_new_tab">Öppna länk i ny flik?</string>
     <string name="add_bookmark">Markera denna sida</string>
     <string name="remove_bookmark">Avmarkera valda</string>
     <string name="info_share_title">Jag gillar Wikipedia Offline med Kiwix!</string>

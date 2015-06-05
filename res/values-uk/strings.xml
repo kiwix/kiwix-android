@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Вийти з повноекранного режиму</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">Вийти</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Поділитися з друзями</string>
     <string name="save_media">Зберегти медіафайл як...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Знайти</string>
     <string name="articlesearch_hint">Наберіть для пошуку статей</string>
     <string name="choose_file">Виберіть файл вмісту ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Відкрити посилання у новій вкладці?</string>
     <string name="add_bookmark">Позначити цю сторінку</string>
     <string name="remove_bookmark">Зняти позначку з виділених</string>
     <string name="info_share_title">Я люблю Вікіпедію в автономному режимі з Kiwix!</string>

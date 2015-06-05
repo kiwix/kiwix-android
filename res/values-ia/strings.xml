@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Exir del schermo complete</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">Quitar</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Divider con amicos</string>
     <string name="save_media">Salveguardar multimedia como…</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Cercar</string>
     <string name="articlesearch_hint">Dactylographar pro cercar articulos</string>
     <string name="choose_file">Selige un file de contento ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Aperir ligamine in nove scheda?</string>
     <string name="add_bookmark">Marcar iste pagina</string>
     <string name="remove_bookmark">Dismarcar selection</string>
     <string name="info_share_title">Me place Wikipedia Offline con Kiwix!</string>

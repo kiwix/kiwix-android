@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">전체 화면에서 나가기</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">끝내기</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">친구와 공유하기</string>
     <string name="save_media">다른 이름으로 미디어 저장...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">검색</string>
     <string name="articlesearch_hint">문서를 찾아보는 종류</string>
     <string name="choose_file">ZIM 내용 파일 (*.zim) 선택</string>
-    <string name="open_in_new_tab">새 탭으로 링크를 여시겠습니까?</string>
     <string name="add_bookmark">이 페이지 표시하기</string>
     <string name="remove_bookmark">선택을 표시 취소하기</string>
     <string name="info_share_title">Kiwix로 위키백과 오프라인을 즐깁니다!</string>
