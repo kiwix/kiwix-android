@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">ხმამაღლა კითხვა</string>
     <string name="menu_read_aloud_stop">ხმამაღლა კითხვის შეჩერება</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">მეგობრებისთვის გაზიარება</string>
     <string name="save_media">მედიის შენახვა როგორც...</string>
     <string name="save_media_error">მედია-ფაილის შენახვისას მოხდა შეცდომა!</string>
     <string name="save_media_saved">მედია-ფაილის თქვენი სურათების საქაღალდეში შენახვა როგორც %1$</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">სტატიის შებრუნებული ფერებით ჩვენება</string>
     <string name="pref_backtotop">თავში დაბრუნება</string>
     <string name="pref_backtotop_summary">გვერდის ბოლოში ზევით დაბრუნების ღილაკის ჩვენება</string>
-    <string name="share_via">გაზიარება...</string>
     <string name="pref_language_title">ენა</string>
     <string name="pref_language_chooser">აირჩიეთ ენა</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

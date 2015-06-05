@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">उच्चैः पठ्यताम्</string>
     <string name="menu_read_aloud_stop">उच्चैः पठनं स्थगयतु</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">मित्रैः सह विभाजनम्</string>
     <string name="save_media">सञ्चिकाम् अमुकनाम्ना रक्ष</string>
     <string name="save_media_error">सञ्चिकायाः रक्षणकाले दोषः समुद्भूतः !</string>
     <string name="save_media_saved">सञ्चिका %1$s -रूपेण स्वचित्राणां समुच्चये रक्ष्यताम्</string>
