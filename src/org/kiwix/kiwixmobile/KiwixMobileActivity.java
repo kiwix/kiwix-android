@@ -1113,6 +1113,15 @@ public class KiwixMobileActivity extends AppCompatActivity
                     Log.d(TAG_KIWIX,
                             "Kiwix Custom App starting for the first time. Check Companion ZIM.");
 
+                    if (Constants.CUSTOM_APP_ENFORCED_LANG.length() > 0) {
+                        // Custom App recommends to start off a specific language
+                        LanguageUtils.handleLocaleChange(this, Constants.CUSTOM_APP_ENFORCED_LANG);
+
+                        this.setResult(1236);
+                        this.finish();
+                        this.startActivity(new Intent(this, this.getClass()));
+                    }
+
                     //Context context = this.getApplicationContext();
                     String fileName = FileUtils.getExpansionAPKFileName(true);
                     Log.d(TAG_KIWIX, "Looking for: " + fileName + " -- filesize: "
