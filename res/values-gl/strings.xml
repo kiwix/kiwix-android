@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Abrir un ficheiro...</string>
     <string name="menu_help">Axuda</string>
     <string name="menu_home">Inicio</string>
@@ -16,7 +15,6 @@
     <string name="menu_read_aloud">Ler en voz alta</string>
     <string name="menu_read_aloud_stop">Deixar de ler en voz alta</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Compartir cos amigos</string>
     <string name="save_media">Gardar o ficheiro multimedia como...</string>
     <string name="save_media_error">Houbo un erro ao intentar gardar o multimedia!</string>
     <string name="save_media_saved">Multimedia gardado como %1$s na súa carpeta de imaxes</string>
@@ -27,15 +25,14 @@
     <string name="choose_file">Seleccione un ficheiro de contido ZIM (*.zim)</string>
     <string name="add_bookmark">Marcar esta páxina</string>
     <string name="remove_bookmark">Desmarcar a selección</string>
-    <string name="info_share_title">Gozo da Wikipedia sen conexión con Kiwix!</string>
-    <string name="info_share_content">Gozo da Wikipedia sen conexión con Kiwix! Todo o coñecemento humano na man onde queira que vaias! Sen internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Non se atopou ningún ficheiro ZIM no seu dispositivo.\nBote unha ollada á páxina de axuda para aprender a cargar contido no Kiwix.\nSe xa puxo o ficheiro ZIM no seu dispositivo de almacenamento interno ou externo, pode reintentalo nun minuto ou reiniciar o dispositivo.</string>
     <string name="error_filenotfound">Erro: Non se puido atopar o ficheiro ZIM seleccionado.</string>
     <string name="error_fileinvalid">Erro: O ficheiro seleccionado non é un ficheiro ZIM válido.</string>
     <string name="error_articlenotfound">Erro: Non se puido cargar o artigo \"%1$s\".</string>
     <string name="error_articleurlnotfound">Erro: Non se puido cargar o artigo (URL: %1$s).</string>
     <string name="pref_display_title">Visualización</string>
-    <string name="pref_zoom_dialog">Nivel de zoom</string>
+    <string name="pref_zoom_sub_title">Zoom</string>
+    <string name="pref_zoom_dialog">Zoom level</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automático</item>
         <item name="pref_zoom_entry_small">Pequeno</item>
@@ -49,8 +46,10 @@
     <string name="pref_nightmode_summary">Mostrar os artigos coas cores invertidas</string>
     <string name="pref_backtotop">Volver ao inicio</string>
     <string name="pref_backtotop_summary">Mostrar un botón ao final da páxina para volver ao inicio da mesma</string>
-    <string name="share_via">Compartir a través de...</string>
     <string name="pref_language_title">Lingua</string>
     <string name="pref_language_chooser">Escolla unha lingua</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
+    <string name="no_reader_application_installed">Could not find an installed application for this type of file</string>
+    <string name="customapp_missing_content">Your application is corrupted.\nThis might happen when you remove files on the SD Card.\nYou need to uninstall then reinstall the App from the Play Store.</string>
+    <string name="go_to_play_store">Go to Play Store</string>
 </resources>

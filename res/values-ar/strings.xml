@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="app_name">Kiwix</string>
     <string name="menu_openfile">افتح ملفًا...</string>
     <string name="menu_help">المساعدة</string>
     <string name="menu_home">الصفحة الرئيسية</string>
@@ -16,7 +15,6 @@
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">شارك مع الأصدقاء</string>
     <string name="save_media">حفظ وسائط باسم...</string>
     <string name="save_media_error">حدث خطأ أثناء محاولة حفظ الملف!</string>
     <string name="save_media_saved">نمّ حفظ الملف تحت %1$s في ملف الصور الخاص بك</string>
@@ -27,15 +25,14 @@
     <string name="choose_file">حدد ملف محتوى زيم (*.zim)</string>
     <string name="add_bookmark">علّم هذه الصفحة</string>
     <string name="remove_bookmark">أزل تعليم المحدد</string>
-    <string name="info_share_title">أنا أستمتع بويكيبيديا بدون ربط مع كيويكس</string>
-    <string name="info_share_content">أنا أستمتع بويكيبيديا بدون ربط باستعمال كيويكس! جل ّالمعرفة البشرية في متناول اليد أينما تذهب! دون الإنترنت! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">لا توجد ملفات زيم على الجهتز الخاص بك.\nالق نظرة صفحة المساعدة للحصول على الإرشادات الخاصة بكيفيّة تحميل محتوى على كيويكس.\nإذا قمت بوضع ملف زيم على الجهز الخاص بك أو وحدة التخزين الخارجيّة، ربّما أنت في حاجة إلى إعادة تشغيل الجهاز.</string>
     <string name="error_filenotfound">خطأ: تعذر العثور على الملف المحدد زيم.</string>
     <string name="error_fileinvalid">خطأ: ملف زيم المحدد ليس ملفا صالحا.</string>
     <string name="error_articlenotfound">خطأ: تحميل المقالة \"%1$s\" لم يتم بنجاح.</string>
     <string name="error_articleurlnotfound">خطأ: تحميل المقالة (Url: %1$s) لم يتم بنجاح.</string>
     <string name="pref_display_title">عرض</string>
-    <string name="pref_zoom_dialog">مستوى التكبير/التصغير</string>
+    <string name="pref_zoom_sub_title">Zoom</string>
+    <string name="pref_zoom_dialog">Zoom level</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">آلي</item>
         <item name="pref_zoom_entry_small">صغير</item>
@@ -49,8 +46,10 @@
     <string name="pref_nightmode_summary">إظهار المقالات مع الألوان المسترجعة</string>
     <string name="pref_backtotop">ارجع إلى الأعلى</string>
     <string name="pref_backtotop_summary">عرض زر في نهاية الصفحة للذهاب إلى أعلاها</string>
-    <string name="share_via">شارك عبر...</string>
     <string name="pref_language_title">اللغة</string>
     <string name="pref_language_chooser">اختر لغة</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
+    <string name="no_reader_application_installed">Could not find an installed application for this type of file</string>
+    <string name="customapp_missing_content">Your application is corrupted.\nThis might happen when you remove files on the SD Card.\nYou need to uninstall then reinstall the App from the Play Store.</string>
+    <string name="go_to_play_store">Go to Play Store</string>
 </resources>

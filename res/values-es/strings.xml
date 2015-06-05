@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Abrir un archivo…</string>
     <string name="menu_help">Ayuda</string>
     <string name="menu_home">Inicio</string>
@@ -16,7 +15,6 @@
     <string name="menu_read_aloud">Leer en voz alta</string>
     <string name="menu_read_aloud_stop">Dejar de leer en voz alta</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Compartir con amigos</string>
     <string name="save_media">Guardar multimedia como…</string>
     <string name="save_media_error">¡Se produjo un error al intentar guardar los medios!</string>
     <string name="save_media_saved">Multimedia guardado como %1$s en tu carpeta de imagenes</string>
@@ -27,15 +25,14 @@
     <string name="choose_file">Selecciona un archivo de contenido ZIM (*.zim)</string>
     <string name="add_bookmark">Marcar esta página</string>
     <string name="remove_bookmark">Desmarcar seleccionados</string>
-    <string name="info_share_title">¡Yo disfruto de Wikipedia sin conexión con Kiwix!</string>
-    <string name="info_share_content">¡Disfruto de Wikipedia sin conexión con Kiwix! ¡Todo el conocimiento humano a la mano donde quiera que vayas! ¡Sin internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">No se encontró ningún archivo ZIM en tu dispositivo.\nEcha un vistazo a la Página de Ayuda para obtener instrucciones acerca de cómo cargar contenido en Kiwix.\nSi pusiste un archivo ZIM en tu dispositivo de almacenamiento externo, puedes intentar en un minuto o reiniciar el dispositivo.</string>
     <string name="error_filenotfound">Error: no se encontró el archivo ZIM seleccionado.</string>
     <string name="error_fileinvalid">Error: el archivo seleccionado no es un archivo ZIM válido.</string>
     <string name="error_articlenotfound">Error: falló la carga del artículo «%1$s».</string>
     <string name="error_articleurlnotfound">Error: falló la carga del artículo (URL: %1$s).</string>
     <string name="pref_display_title">Mostrar</string>
-    <string name="pref_zoom_dialog">Nivel de ampliación</string>
+    <string name="pref_zoom_sub_title">Zoom</string>
+    <string name="pref_zoom_dialog">Zoom level</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automático</item>
         <item name="pref_zoom_entry_small">Pequeño</item>
@@ -49,8 +46,10 @@
     <string name="pref_nightmode_summary">Mostrar artículos con colores invertidos</string>
     <string name="pref_backtotop">Volver al principio</string>
     <string name="pref_backtotop_summary">Mostrar un botón al final de la página para desplazarse al comienzo</string>
-    <string name="share_via">Compartir a través de...</string>
     <string name="pref_language_title">Idioma</string>
     <string name="pref_language_chooser">Elige un idioma</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
+    <string name="no_reader_application_installed">Could not find an installed application for this type of file</string>
+    <string name="customapp_missing_content">Your application is corrupted.\nThis might happen when you remove files on the SD Card.\nYou need to uninstall then reinstall the App from the Play Store.</string>
+    <string name="go_to_play_store">Go to Play Store</string>
 </resources>

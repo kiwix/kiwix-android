@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="app_name">Kiwix</string>
     <string name="menu_openfile">फ़ाइल खोलें...</string>
     <string name="menu_help">सहायता</string>
     <string name="menu_home">होम</string>
@@ -16,7 +15,6 @@
     <string name="menu_read_aloud">पढ़ा कर सुनें</string>
     <string name="menu_read_aloud_stop">पढ़ा कर सुनना समाप्त करें</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">दोस्तों के साथ बांटे</string>
     <string name="save_media">मीडिया को इस तरह सहेजें...</string>
     <string name="save_media_error">मीडिया को सहेजते समय एक त्रुटि आयी।</string>
     <string name="save_media_saved">मीडिया को %1$s के रूप में अपने चित्र निदेशिका में सहेजें</string>
@@ -27,15 +25,14 @@
     <string name="choose_file">एक ZIM कान्टेन्ट फ़ाइल (*.zim) का चयन करें</string>
     <string name="add_bookmark">इस पृष्ठ को चिह्नित करें</string>
     <string name="remove_bookmark">चयनित अचिह्नित करें</string>
-    <string name="info_share_title">मैं विकिपीडिया ऑफ़लाइन का आनंद ले रहा हूँ किविक्स के साथ!</string>
-    <string name="info_share_content">मैं विकिपीडिया ऑफ़लाइन का आनंद ले रहा हूँ किविक्स के साथ! हाथ में पूरा मानव ज्ञान जहाँ भी तुम जाओ! इंटरनेट के बिना! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">आपकी डिवाइस पर कोई ZIM फ़ाइल नही मिली।\nKiwix मे कान्टेन्ट लोड करने के बारे मे जानने के लिए हेल्प पृष्ठ देखें।\nयदि आपने अपने डिवाइस/इक्स्टर्नल स्टोरिज पर ZIM फ़ाइल डाली है, तो फिर से इक मिनिट मे प्रयास करें, या फिर डिवाइस पुनरारंभ करें।</string>
     <string name="error_filenotfound">त्रुटि: चुनी गयी ZIM फ़ाइल नही मिल सकी।</string>
     <string name="error_fileinvalid">त्रुटि: चुनी गयी फ़ाइल एक वैध ZIM फ़ाइल नहीं है।</string>
     <string name="error_articlenotfound">त्रुटि: आलेख \ " %1$s \" लोड करना विफल रहा।</string>
     <string name="error_articleurlnotfound">त्रुटि: आलेख (Url:  %1$s ) लोड करना विफल रहा।</string>
     <string name="pref_display_title">डिस्प्ले</string>
-    <string name="pref_zoom_dialog">ज़ूम स्तर</string>
+    <string name="pref_zoom_sub_title">Zoom</string>
+    <string name="pref_zoom_dialog">Zoom level</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">स्वतः</item>
         <item name="pref_zoom_entry_small">लघु</item>
@@ -49,8 +46,10 @@
     <string name="pref_nightmode_summary">उल्टे रंगों के साथ लेख दिखाएँ</string>
     <string name="pref_backtotop">वापस शीर्ष पे जाएँ</string>
     <string name="pref_backtotop_summary">उपर तक स्क्रॉल करने के लिए पृष्ठ के अंत में एक बटन दिखाएँ</string>
-    <string name="share_via">अलग माध्यम से बांटे</string>
     <string name="pref_language_title">भाषा</string>
     <string name="pref_language_chooser">भाषा चुनें</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
+    <string name="no_reader_application_installed">Could not find an installed application for this type of file</string>
+    <string name="customapp_missing_content">Your application is corrupted.\nThis might happen when you remove files on the SD Card.\nYou need to uninstall then reinstall the App from the Play Store.</string>
+    <string name="go_to_play_store">Go to Play Store</string>
 </resources>

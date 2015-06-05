@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="app_name">Kiwix</string>
     <string name="menu_openfile">ଫାଇଲଟି ଖୋଲିବେ...</string>
     <string name="menu_help">ସହଯୋଗ</string>
     <string name="menu_home">ମୂଳ ଜାଗା</string>
@@ -16,7 +15,6 @@
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">ବନ୍ଧୁମାନଙ୍କୁ ଜଣାନ୍ତୁ</string>
     <string name="save_media">Save Media</string>
     <string name="save_media_error">An error occured when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
@@ -27,15 +25,14 @@
     <string name="choose_file">ZIM ବିଷୟବସ୍ତୁ ଥିବା (*.zim) ଫାଇଲ ବାଛନ୍ତୁ</string>
     <string name="add_bookmark">ଏଇ ପୃଷ୍ଠାଟିକୁ ଚିହ୍ନିତ କରିବେ</string>
     <string name="remove_bookmark">ବଛାଯାଇଥିବା ବସ୍ତୁ ସବୁକୁ ବାଛିବେ ନାହିଁ</string>
-    <string name="info_share_title">ମୁଁ କିଉଇକ୍ସ ସହ ଉଇକିପିଡ଼ିଆ ଅଫଲାଇନର ମଜା ଉଠାଇଲି!</string>
-    <string name="info_share_content">ମୁଁ କିଉଇକ୍ସ ସହ ଉଇକିପିଡ଼ିଆ ଅଫଲାଇନର ମଜା ଉଠାଇଲି! ଆପଣଙ୍କ ହାତରେ ସମସ୍ତ ମାନବ ଜ୍ଞାନ! ତାହା ମଧ୍ୟ ବିନା ଇଣ୍ଟରନେଟରେ! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">ଆପଣଙ୍କ ଉପକରଣରେ କୌଣସି ZIM ଫାଇଲ ମିଳିଲା ନାହିଁ ।\nସହାୟତା ପୃଷ୍ଠାଟି ଦେଖି କିଉଇକ୍ସର ବିଷୟବସ୍ତୁ ଜାଣିବା ବାବଦରେ ଜାଣିପାରିବେ ।\nଆପଣଙ୍କ ଉପକରଣରେ କିମ୍ବା ବାହାର ସଞ୍ଚୟ ଉପକରଣରେ ZIM ଫାଇଲ ଆଗରୁ ରଖିଥିଲେ ମିନିଟଟିଏ ଛାଡ଼ି ଚେଷ୍ଟା କରନ୍ତୁ ଅଥବା ପୁନରାରମ୍ଭ କରନ୍ତୁ ।</string>
     <string name="error_filenotfound">ଅସୁବିଧା: ବଛାଯାଇଥିବା ZIM ଫାଇଲ ମିଳିଲାନାହିଁ ।</string>
     <string name="error_fileinvalid">ଅସୁବିଧା: ବଛାଯାଇଥିବା ZIM ଫାଇଲଟି ବୈଧ ନୁହେଁ ।</string>
     <string name="error_articlenotfound">ଅସୁବିଧା:  \"%1$s\" ପ୍ରସଙ୍ଗଟି ଖୋଲିବାରେ ବିଫଳ ହେଲୁ ।</string>
     <string name="error_articleurlnotfound">ଅସୁବିଧା: (Url: %1$s) ପ୍ରସଙ୍ଗ ଖୋଲିବାରେ ବିଫଳ ହେଲୁ ।</string>
     <string name="pref_display_title">ଦେଖଣା</string>
-    <string name="pref_zoom_dialog">ଜୁମ ବଢ଼ାଇବା/କମାଇବା</string>
+    <string name="pref_zoom_sub_title">Zoom</string>
+    <string name="pref_zoom_dialog">Zoom level</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
         <item name="pref_zoom_entry_small">ଛୋଟ</item>
@@ -49,8 +46,10 @@
     <string name="pref_nightmode_summary">ରଙ୍ଗର ଓଲଟା କ୍ରମରେ ପ୍ରସଙ୍ଗମାନ ଦେଖାଇବେ</string>
     <string name="pref_backtotop">ଉପରକୁ ଫେରିବେ</string>
     <string name="pref_backtotop_summary">ପୃଷ୍ଠାର ତଳୁ ଉପରକୁ ଯିବେ</string>
-    <string name="share_via">କାହା ଦ୍ୱାରା ବାକିମାନଙ୍କୁ ଜଣାଇବେ...</string>
     <string name="pref_language_title">ଭାଷା</string>
     <string name="pref_language_chooser">ଭାଷା ଚୟନ କରନ୍ତୁ</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
+    <string name="no_reader_application_installed">Could not find an installed application for this type of file</string>
+    <string name="customapp_missing_content">Your application is corrupted.\nThis might happen when you remove files on the SD Card.\nYou need to uninstall then reinstall the App from the Play Store.</string>
+    <string name="go_to_play_store">Go to Play Store</string>
 </resources>

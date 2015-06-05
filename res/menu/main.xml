@@ -81,10 +81,4 @@
             android:icon="@drawable/action_help"
             app:showAsAction="never"/>
 
-    <item
-            android:id="@+id/menu_share"
-            android:title="@string/menu_share"
-            android:icon="@drawable/action_share"
-            app:showAsAction="ifRoom"/>
-
 </menu>
