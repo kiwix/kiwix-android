@@ -49,7 +49,9 @@ DEFAULT_JSDATA = {
     'email': "kelson@kiwix.org",
 
     # help page content
-    'support_email': "kelson@kiwix.org"
+    'support_email': "kelson@kiwix.org",
+
+    'enforced_lang': None
 }
 
 SIZE_MATRIX = {
