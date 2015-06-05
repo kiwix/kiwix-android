@@ -570,6 +570,7 @@ if COMPILE_APK:
 
     # Compile java and build APK
     syscall('rm -f build/outputs/apk/*.apk', shell=True)
+    syscall('./gradlew clean assemble')
     syscall('./gradlew build --stacktrace')
 
     # Check that the step went well
