@@ -49,6 +49,7 @@ import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -197,8 +198,6 @@ public class KiwixMobileActivity extends AppCompatActivity
         setProgressBarVisibility(true);
 
         handleLocaleCheck();
-
-
 
         mActionBar = getSupportActionBar();
 
@@ -893,43 +892,45 @@ public class KiwixMobileActivity extends AppCompatActivity
                 loadPrefs();
                 for (KiwixMobileActivity.State state : KiwixMobileActivity.mPrefState) {
                     state.setHasToBeRefreshed(true);
+                    Log.e(TAG_KIWIX, KiwixMobileActivity.mPrefState.get(0).hasToBeRefreshed() + "");
                 }
-                Log.e(TAG_KIWIX, KiwixMobileActivity.mPrefState.get(0).hasToBeRefreshed() + "");
                 break;
         }
 
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.main, menu);
-//        this.menu = menu;
-//
-//        if (requestInitAllMenuItems) {
-//            initAllMenuItems();
-//        }
-//
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
 
-    //This method refreshes the menu for the bookmark system.
-//    @Override
-//    public void onPrepareOptionsMenu(Menu menu) {
-//        super.onPrepareOptionsMenu(menu);
-//
-//        if (menu.findItem(R.id.menu_bookmarks) != null &&
-//                webView.getUrl() != null &&
-//                webView.getUrl() != "file:///android_res/raw/help.html" &&
-//                ZimContentProvider.getId() != null) {
-//            menu.findItem(R.id.menu_bookmarks).setVisible(true);
-//            if (bookmarks.contains(webView.getTitle())) {
-//                menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmarks_active);
-//            } else {
-//                menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmarks);
-//            }
-//        }
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        this.menu = menu;
+
+        if (requestInitAllMenuItems) {
+            initAllMenuItems();
+        }
+        return true;
+    }
+
+    // This method refreshes the menu for the bookmark system.
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        if (menu.findItem(R.id.menu_bookmarks) != null &&
+                webView.getUrl() != null &&
+                !webView.getUrl().equals("file:///android_res/raw/help.html") &&
+                ZimContentProvider.getId() != null) {
+            menu.findItem(R.id.menu_bookmarks).setVisible(true);
+            if (bookmarks.contains(webView.getTitle())) {
+                menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmarks_active);
+            } else {
+                menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmarks);
+            }
+        }
+        return true;
+    }
 
     public void loadPrefs() {
 
@@ -1042,11 +1043,10 @@ public class KiwixMobileActivity extends AppCompatActivity
             }
         });
 
-        final Drawable searchIcon1 = searchIcon;
         final Drawable clearIcon1 = clearIcon;
 
         articleSearchtextView.addTextChangedListener(new TextWatcher() {
-            private final Drawable mSearchIcon = searchIcon1;
+            private final Drawable mSearchIcon = searchIcon;
 
             private final Drawable mClearIcon = clearIcon1;
 
