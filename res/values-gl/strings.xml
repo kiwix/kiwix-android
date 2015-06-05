@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">Ler en voz alta</string>
     <string name="menu_read_aloud_stop">Deixar de ler en voz alta</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Compartir cos amigos</string>
     <string name="save_media">Gardar o ficheiro multimedia como...</string>
     <string name="save_media_error">Houbo un erro ao intentar gardar o multimedia!</string>
     <string name="save_media_saved">Multimedia gardado como %1$s na súa carpeta de imaxes</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">Mostrar os artigos coas cores invertidas</string>
     <string name="pref_backtotop">Volver ao inicio</string>
     <string name="pref_backtotop_summary">Mostrar un botón ao final da páxina para volver ao inicio da mesma</string>
-    <string name="share_via">Compartir a través de...</string>
     <string name="pref_language_title">Lingua</string>
     <string name="pref_language_chooser">Escolla unha lingua</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

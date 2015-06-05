@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">நண்பர்களுடன் பகிர்க</string>
     <string name="save_media">ஊடகப்பொருளை இவ்வாறு சேமித்து வை</string>
     <string name="save_media_error">ஊடகப்பொருளை சேமிக்கும் முயற்சியில் ஒரு பிழை நேர்ந்துவிட்டது!</string>
     <string name="save_media_saved">தங்களுடைய படங்களின் கொப்புறைக்குள், ஊடகப்பொருளை இவ்வாறு %1$s சேமிக்கவும்</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">கட்டுரைகளை தலைகீழ் நிறங்களில் காண்பி</string>
     <string name="pref_backtotop">மேலே செல்லவும்</string>
     <string name="pref_backtotop_summary">மேற்பகுதிக்குச் செல்ல, பக்கத்‌தின் அடியில் ஒரு பொத்தானை காண்பி</string>
-    <string name="share_via">இவ்வழியாக பகிர்....</string>
     <string name="pref_language_title">மொழி</string>
     <string name="pref_language_chooser">மொழியைத் தேர்ந்தெடு</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

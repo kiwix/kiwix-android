@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">Legir a votz nauta</string>
     <string name="menu_read_aloud_stop">Arrestar de legir a votz nauta</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Partejar amb vòstres amics</string>
     <string name="save_media">Enregistrar lo mèdia jos…</string>
     <string name="save_media_error">Una error s\'es producha al moment de la temptativa d\'enregistrar lo mèdia !</string>
     <string name="save_media_saved">Mèdia enregistrat jos %1$s dins vòstre dorsièr Imatges</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">Afichar los articles en colors inversadas</string>
     <string name="pref_backtotop">Retorn al començament</string>
     <string name="pref_backtotop_summary">Afichar un boton en bas de la pagina per tornar al començament</string>
-    <string name="share_via">Partejar via...</string>
     <string name="pref_language_title">Lenga</string>
     <string name="pref_language_chooser">Causir una lenga</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

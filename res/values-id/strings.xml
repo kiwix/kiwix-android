@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">Bacakan</string>
     <string name="menu_read_aloud_stop">Hentikan pembacaan</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Bagikan dengan teman</string>
     <string name="save_media">Simpan media sebagai...</string>
     <string name="save_media_error">Kesalahan terjadi ketika menyimpan media!</string>
     <string name="save_media_saved">Simpan media sebagai %1$s pada folder Gambar</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">Tampilkan artikel dengan warna terbalik</string>
     <string name="pref_backtotop">Kembali ke Atas</string>
     <string name="pref_backtotop_summary">Tampilkan tombol di akhir halaman untuk menggulir ke atas</string>
-    <string name="share_via">Berbagi melalui...</string>
     <string name="pref_language_title">Bahasa</string>
     <string name="pref_language_chooser">Pilih bahasa</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

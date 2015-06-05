@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">להקריא בקול</string>
     <string name="menu_read_aloud_stop">להפסיק להקריא בקול</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">שיתוף עם חברים</string>
     <string name="save_media">לשמור מדיה בתור...</string>
     <string name="save_media_error">אירעה שגיאה בעת ניסיון לשמור את המדיה!</string>
     <string name="save_media_saved">נמדיה נשמרה בתור %1$s בתיקיית התמונות שלך</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">הצגת ערכים עם צבעים הפוכים</string>
     <string name="pref_backtotop">חזרה למעלה</string>
     <string name="pref_backtotop_summary">הצגת כפתור בסוף העמוד לגלילה למעלה</string>
-    <string name="share_via">שיתוף דרך...</string>
     <string name="pref_language_title">שפה</string>
     <string name="pref_language_chooser">בחירת שפה</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

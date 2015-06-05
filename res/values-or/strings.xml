@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">ବନ୍ଧୁମାନଙ୍କୁ ଜଣାନ୍ତୁ</string>
     <string name="save_media">Save Media</string>
     <string name="save_media_error">An error occured when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">ରଙ୍ଗର ଓଲଟା କ୍ରମରେ ପ୍ରସଙ୍ଗମାନ ଦେଖାଇବେ</string>
     <string name="pref_backtotop">ଉପରକୁ ଫେରିବେ</string>
     <string name="pref_backtotop_summary">ପୃଷ୍ଠାର ତଳୁ ଉପରକୁ ଯିବେ</string>
-    <string name="share_via">କାହା ଦ୍ୱାରା ବାକିମାନଙ୍କୁ ଜଣାଇବେ...</string>
     <string name="pref_language_title">ଭାଷା</string>
     <string name="pref_language_chooser">ଭାଷା ଚୟନ କରନ୍ତୁ</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

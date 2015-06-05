@@ -21,22 +21,15 @@ package org.kiwix.kiwixmobile;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.webkit.WebView;
 import android.widget.ZoomButtonsController;
-
-import java.lang.reflect.Method;
 
 
 public class KiwixWebView extends WebView {
 
     private OnPageChangeListener mChangeListener;
 
-    private OnLongClickListener mOnLongClickListener;
-
     private ZoomButtonsController zoomControll = null;
-
-    private boolean mDisableZoomControlls;
 
     public KiwixWebView(Context context) {
         super(context);
@@ -54,23 +47,10 @@ public class KiwixWebView extends WebView {
     }
 
     private void init() {
-        // setWebChromeClient(new WebChromeClient());
-        // setWebViewClient(new WebViewClient());
         getSettings().setJavaScriptEnabled(true);
         getSettings().setSupportMultipleWindows(true);
         getSettings().setSupportZoom(true);
         disableZoomControlls();
-    }
-
-    @Override
-    public boolean performLongClick() {
-        WebView.HitTestResult result = getHitTestResult();
-
-        if (result.getType() == HitTestResult.SRC_ANCHOR_TYPE) {
-            mOnLongClickListener.onLongClick(result.getExtra());
-            return true;
-        }
-        return super.performLongClick();
     }
 
     @Override
@@ -94,42 +74,13 @@ public class KiwixWebView extends WebView {
         getSettings().setDisplayZoomControls(false);
     }
 
-    // Use reflection to hide the zoom controlls
-    private void getZoomControls() {
-        try {
-            Class webview = Class.forName("android.webkit.WebView");
-            Method method = webview.getMethod("getZoomButtonsController");
-            zoomControll = (ZoomButtonsController) method.invoke(this, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        super.onTouchEvent(ev);
-
-        if (zoomControll != null) {
-            zoomControll.setVisible(mDisableZoomControlls);
-        }
-        return true;
-    }
-
     public void setOnPageChangedListener(OnPageChangeListener listener) {
         mChangeListener = listener;
     }
 
-    public void setOnLongClickListener(OnLongClickListener listener) {
-        mOnLongClickListener = listener;
-    }
 
     public interface OnPageChangeListener {
 
-        public void onPageChanged(int page, int maxPages);
-    }
-
-    public interface OnLongClickListener {
-
-        public void onLongClick(String url);
+        void onPageChanged(int page, int maxPages);
     }
 }

@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Rhannu gyda ffrindiau</string>
     <string name="save_media">Cadw\'r cyfrwng fel...</string>
     <string name="save_media_error">Gwall wrth geisio achub y cyfryngau!</string>
     <string name="save_media_saved">Arbedwyd cyfryngau fel  %1$s  yn eich ffolder Lluniau</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">Dangos erthyglau gyda lliwiau croes</string>
     <string name="pref_backtotop">Nôl i\'r brig</string>
     <string name="pref_backtotop_summary">Arddangos botwm ar waelod y dudalen i sgrolio hyd at y brig</string>
-    <string name="share_via">Rhannwch drwy</string>
     <string name="pref_language_title">Iaith</string>
     <string name="pref_language_chooser">Dewis iaith</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

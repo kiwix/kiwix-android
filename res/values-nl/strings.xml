@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">Voorlezen</string>
     <string name="menu_read_aloud_stop">Stoppen met voorlezen</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Delen met vrienden</string>
     <string name="save_media">Sla media op als...</string>
     <string name="save_media_error">Er is een fout opgetreden bij het opslaan van de media!</string>
     <string name="save_media_saved">Het bestand is opgeslagen als %1$s in uw afbeeldingenmap</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">Pagina\'s weergeven met omgekeerde kleuren</string>
     <string name="pref_backtotop">Terug naar boven</string>
     <string name="pref_backtotop_summary">Aan het einde van de pagina een knop weergeven om terug te gaan naar boven</string>
-    <string name="share_via">Delen...</string>
     <string name="pref_language_title">Taal</string>
     <string name="pref_language_chooser">Taal kiezen</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

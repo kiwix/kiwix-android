@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">Читать вслух</string>
     <string name="menu_read_aloud_stop">Остановить чтение вслух</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Поделиться с друзьями</string>
     <string name="save_media">Сохранить медиа-содержимое как…</string>
     <string name="save_media_error">Произошла ошибка при сохранении медиа-файла!</string>
     <string name="save_media_saved">Медиа-файл сохранён как %1$s в вашей папке для изображений</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">Показать статьи в «ночном режиме»</string>
     <string name="pref_backtotop">Вернуться наверх</string>
     <string name="pref_backtotop_summary">Отобразить кнопку в конце страницы для прокрутки вверх</string>
-    <string name="share_via">Поделиться через…</string>
     <string name="pref_language_title">Язык</string>
     <string name="pref_language_chooser">Выберите язык</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

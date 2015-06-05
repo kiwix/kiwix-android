@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">په جگ غږ لوستل</string>
     <string name="menu_read_aloud_stop">په جگ غږ لوستل درول</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">له ملگرو سره شريکول</string>
     <string name="save_media">رسنۍ ساتل لکه...</string>
     <string name="save_media_error">د رسنۍ په ساتلو کې يوه تېروتنه رامنځ ته شوه!</string>
     <string name="save_media_saved">رسنۍ خپل د انځورونو په ټولگه کې د %1$s په نوم ساتل</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">رنگ اړول شوې ليکنې ښکاره کول</string>
     <string name="pref_backtotop">بېرته سر ته</string>
     <string name="pref_backtotop_summary">د مخ په پای کې د مخ سر ته ورتللو لپاره يوه تڼۍ ښکاره کول</string>
-    <string name="share_via">د شريکولو لار ...</string>
     <string name="pref_language_title">ژبه</string>
     <string name="pref_language_chooser">يوه ژبه وټاکئ</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

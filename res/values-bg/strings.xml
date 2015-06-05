@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">Четене на глас</string>
     <string name="menu_read_aloud_stop">Спиране четенето на глас</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Споделете с приятели</string>
     <string name="save_media">Съхраняване на медията като...</string>
     <string name="save_media_error">Възникна грешка при опита за съхранение на медийния файл!</string>
     <string name="save_media_saved">Медийният файл е съхранен като %1$s във вашата папка с изображения</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">Показване на статии в "нощен режим"</string>
     <string name="pref_backtotop">Връщане в началото</string>
     <string name="pref_backtotop_summary">Показване на бутон в края на страницата за превъртане нагоре</string>
-    <string name="share_via">Споделете чрез...</string>
     <string name="pref_language_title">Език</string>
     <string name="pref_language_chooser">Избиране на език</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

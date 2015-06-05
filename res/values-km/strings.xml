@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">ចែករំលែក​ជាមួយ​មិត្តភក្ដិ</string>
     <string name="save_media">Save Media</string>
     <string name="save_media_error">An error occured when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">បង្ហាញអត្ថបទជាមួយនឹងពណ៌ដើម</string>
     <string name="pref_backtotop">ត្រឡប់ទៅលើ</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
-    <string name="share_via">ចែក​រំលែក​តាម...</string>
     <string name="pref_language_title">ភាសា​</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

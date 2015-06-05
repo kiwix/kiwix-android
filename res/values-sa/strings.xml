@@ -47,7 +47,6 @@
     <string name="pref_nightmode_summary">विपरितरङ्गैः लेखः दृश्यताम्</string>
     <string name="pref_backtotop">साक्षात् उपरि गच्छतु</string>
     <string name="pref_backtotop_summary">साक्षात् उपरि गन्तु पृष्ठस्य अन्ते सारणकुड्मलं (scroll button) दर्श्यताम्</string>
-    <string name="share_via">द्वारा विभज्यताम्....</string>
     <string name="pref_language_title">भाषा</string>
     <string name="pref_language_chooser">भाषां चिनोतु</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">पढ़ा कर सुनें</string>
     <string name="menu_read_aloud_stop">पढ़ा कर सुनना समाप्त करें</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">दोस्तों के साथ बांटे</string>
     <string name="save_media">मीडिया को इस तरह सहेजें...</string>
     <string name="save_media_error">मीडिया को सहेजते समय एक त्रुटि आयी।</string>
     <string name="save_media_saved">मीडिया को %1$s के रूप में अपने चित्र निदेशिका में सहेजें</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">उल्टे रंगों के साथ लेख दिखाएँ</string>
     <string name="pref_backtotop">वापस शीर्ष पे जाएँ</string>
     <string name="pref_backtotop_summary">उपर तक स्क्रॉल करने के लिए पृष्ठ के अंत में एक बटन दिखाएँ</string>
-    <string name="share_via">अलग माध्यम से बांटे</string>
     <string name="pref_language_title">भाषा</string>
     <string name="pref_language_chooser">भाषा चुनें</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

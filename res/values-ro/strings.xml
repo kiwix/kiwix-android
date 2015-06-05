@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">Citește cu voce tare</string>
     <string name="menu_read_aloud_stop">Oprește citirea cu voce tare</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Partajează cu prietenii</string>
     <string name="save_media">Salvează multimedia ca...</string>
     <string name="save_media_error">A apărut o eroare în încercarea de a salva fișierul media!</string>
     <string name="save_media_saved">Fișierul media salvat ca %1$s în folderul Imagini</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">Afișează articolele în culori inversate</string>
     <string name="pref_backtotop">Începutul paginii</string>
     <string name="pref_backtotop_summary">Afișează un buton la sfârșitul paginii pentru a reveni la începutul acesteia</string>
-    <string name="share_via">Distribuire prin...</string>
     <string name="pref_language_title">Limbă</string>
     <string name="pref_language_chooser">Alegeți o limbă</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

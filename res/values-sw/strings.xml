@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">Soma kwa sauti</string>
     <string name="menu_read_aloud_stop">Simama kusoma kwa sauti</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Shiriki na marafiki</string>
     <string name="save_media">Hifadhi midia kama...</string>
     <string name="save_media_error">Kosa lilitokea wakati wa kuhifadhi midia!</string>
     <string name="save_media_saved">Midia imehifadhiwa kwa jina la %1$s katika kabrasha yako ya picha</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">Onyesha makala yakiwa na rangi kubatilishwa</string>
     <string name="pref_backtotop">Rudi kwenye kichwa cha ukurasa</string>
     <string name="pref_backtotop_summary">Onyesha kidude kwenye mwisho wa kurasa ili kurudi hadi sehemu ya juu</string>
-    <string name="share_via">Shiriki kupitia...</string>
     <string name="pref_language_title">Lugha</string>
     <string name="pref_language_chooser">Chagua lugha</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

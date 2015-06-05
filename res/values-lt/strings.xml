@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">Skaityk garsiai</string>
     <string name="menu_read_aloud_stop">Nustok garsiai skaityti</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Pasidalink su draugais</string>
     <string name="save_media">Išsaugoti duomenis kaip...</string>
     <string name="save_media_error">Įvyko klaida bandant išsaugoti duomenis!</string>
     <string name="save_media_saved">Duomenys išsaugoti jūsų Paveikslėlių aplanke kaip %1$s</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">Rodyti straipsnius su ankstesnėmis spalvomis</string>
     <string name="pref_backtotop">Atgal į viršų</string>
     <string name="pref_backtotop_summary">Rodyti  puslapio pabaigoje mygtuką sugrįžti į viršų</string>
-    <string name="share_via">Dalintis per...</string>
     <string name="pref_language_title">Kalba</string>
     <string name="pref_language_chooser">Pasirinkite kalbą</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

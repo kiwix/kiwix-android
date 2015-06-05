@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">친구와 공유하기</string>
     <string name="save_media">다른 이름으로 미디어 저장...</string>
     <string name="save_media_error">An error occured when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">되돌린 색으로 문서를 보여줍니다</string>
     <string name="pref_backtotop">맨 위로 돌아가기</string>
     <string name="pref_backtotop_summary">맨 위로 돌아가는 버튼을 문서의 끝에 표시하기</string>
-    <string name="share_via">...을 통해 공유</string>
     <string name="pref_language_title">언어</string>
     <string name="pref_language_chooser">언어 선택</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

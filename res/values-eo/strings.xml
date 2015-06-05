@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">Laŭtlegi</string>
     <string name="menu_read_aloud_stop">Ĉesi laŭtlegadon</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Dividi kun amikoj</string>
     <string name="save_media">Konservi plurmediaĵon kiel...</string>
     <string name="save_media_error">Eraro okazis dum provo konservi la plurmediaĵon!</string>
     <string name="save_media_saved">Plumediaĵoj konservitaj kiel %1$s en via dosierujo Bildoj</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">Montri artikolojn inverskolore</string>
     <string name="pref_backtotop">Reiri al Supro</string>
     <string name="pref_backtotop_summary">Montri suprenan rulumilon paĝofine</string>
-    <string name="share_via">Kundividi per...</string>
     <string name="pref_language_title">Lingvo</string>
     <string name="pref_language_chooser">Elektu lingvon</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

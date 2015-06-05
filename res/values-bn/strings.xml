@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">জোরে পড়ুন</string>
     <string name="menu_read_aloud_stop">জোরে পড়া বন্ধ করুন</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">বন্ধুদের সাথে শেয়ার করুন</string>
     <string name="save_media">...হিসাবে মিডিয়া সংরক্ষণ করুন</string>
     <string name="save_media_error">মিডিয়া সংরক্ষণ করার চেষ্টা করার সময় একটি ত্রুটি ঘটেছে!</string>
     <string name="save_media_saved">আপনার ছবির ফোল্ডারে %1$s হিসাবে মিডিয়া সংরক্ষিত হয়েছে</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">প্রত্যাবর্তন রঙসহ নিবন্ধ দেখান</string>
     <string name="pref_backtotop">উপরে ফিরুন</string>
     <string name="pref_backtotop_summary">উপরে স্ক্রল করতে পাতার শেষে একটি বোতাম প্রদর্শিত হবে</string>
-    <string name="share_via">শেয়ার করুন...</string>
     <string name="pref_language_title">ভাষা</string>
     <string name="pref_language_chooser">একটি ভাষা নির্বাচন করুন</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

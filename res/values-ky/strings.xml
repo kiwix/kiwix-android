@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">Үн чыгарып окуу</string>
     <string name="menu_read_aloud_stop">Үн чыгарып окууну токтотуу</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Достор менен бөлүшүү</string>
     <string name="save_media">Медианы бул катары сактоо</string>
     <string name="save_media_error">An error occured when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">Show articles with reverted colors</string>
     <string name="pref_backtotop">Back to Top</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
-    <string name="share_via">Булл аркылуу бөлүшүү...</string>
     <string name="pref_language_title">Тил</string>
     <string name="pref_language_chooser">Тилин тандаңыз</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

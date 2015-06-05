@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">Les høyt</string>
     <string name="menu_read_aloud_stop">Stopp høytlesning</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Del med venner</string>
     <string name="save_media">Lagre media som...</string>
     <string name="save_media_error">En feil oppstod under lagring av mediet!</string>
     <string name="save_media_saved">Lagret media som %1$s i din bildemappe.</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">Vis artikler med inverterte farger</string>
     <string name="pref_backtotop">Tilbake til toppen</string>
     <string name="pref_backtotop_summary">Vis en knapp nederst på siden for å returnere til toppen</string>
-    <string name="share_via">Del via...</string>
     <string name="pref_language_title">Språk</string>
     <string name="pref_language_chooser">Velg et språk</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

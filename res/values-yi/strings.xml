@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">לייענען הויך</string>
     <string name="menu_read_aloud_stop">אויפהיטן לייענען הויך</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">טיילט מיט חברים</string>
     <string name="save_media">שפייכלערן מעדיעוויקי ווי…</string>
     <string name="save_media_error">א טעות האט פאסירט ביים אויפהיטן די מעדיע!</string>
     <string name="save_media_saved">מעדיע אויפגעהיטן ווי %1$s אין אײַער בילדער־טעקע</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">Show articles with reverted colors</string>
     <string name="pref_backtotop">צוריק אויבן</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
-    <string name="share_via">טיילן דורך…</string>
     <string name="pref_language_title">שפראַך</string>
     <string name="pref_language_chooser">קלויבט א שפראך</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">ကျယ်ကျယ်ဖတ်ပါ</string>
     <string name="menu_read_aloud_stop">ကျယ်ကျယ်ဖတ်နေခြင်းကို ရပ်တန့်ပါ</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">မိတ်ဆွေများနှင့် ဝေမျှရန်</string>
     <string name="save_media">မီဒီယာဖိုင်ကို ဤသို့သိမ်းရန်..</string>
     <string name="save_media_error">မီဒီယာဖိုင်ကို သိမ်းရန်ကြိုးစားနေစဉ် အမှားတစ်ခု ဖြစ်ပေါ်သွားသည်။</string>
     <string name="save_media_saved">သင့် Pictures ဖိုင်တွဲထဲတွင် မီဒီယာဖိုင်ကို %1$s အဖြစ် သိမ်းပြီးဖြစ်သည်။</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">ဆောင်းပါးများကို အရောင်ပြောင်းပြန်သုံး၍ ပြရန်</string>
     <string name="pref_backtotop">ထိပ်ဆုံးသို့ ပြန်သွားရန်</string>
     <string name="pref_backtotop_summary">ထိပ်ဆုံးသို့ပြန်သွားရန်အတွက် စာမျက်နှာ၏အောက်ဆုံးတွင် ခလုတ်တစ်ခု ပြပါ။</string>
-    <string name="share_via">ဤသည်မှတဆင့် မျှဝေပါ...</string>
     <string name="pref_language_title">ဘာသာစကား</string>
     <string name="pref_language_chooser">ဘာသာစကားရွေးချယ်ရန်</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

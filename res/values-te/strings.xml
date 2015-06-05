@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">బయటకి చదువు</string>
     <string name="menu_read_aloud_stop">బయటకి చదవడం ఆపివేయి</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">స్నేహితులతో పంచుకోండి</string>
     <string name="save_media">మీడియాని ఇలా భద్రపరచండి...</string>
     <string name="save_media_error">మీడియాను భద్రపరచడంలో తప్పు జరిగింది.</string>
     <string name="save_media_saved">మీడియాని మీ బొమ్మల సంచయంలోని %1$s వద్ద భద్రపరచాము</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">వ్యాసాలను వ్యతిరేక రంగులలో చూపించు</string>
     <string name="pref_backtotop">తిరిగి పైకి</string>
     <string name="pref_backtotop_summary">పేజీ చివర్లో పేజీ మొదటికి చేరుకునే బొత్తమును చూపండి</string>
-    <string name="share_via">పంచుకోండి ...</string>
     <string name="pref_language_title">భాష</string>
     <string name="pref_language_chooser">భాషను ఎంచుకోండి</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

@@ -291,7 +291,6 @@ public class KiwixMobileActivity extends AppCompatActivity
                     webView.goBack();
 
                     invalidateOptionsMenu();
-
                 }
                 break;
 
@@ -301,10 +300,6 @@ public class KiwixMobileActivity extends AppCompatActivity
 
             case R.id.menu_randomarticle:
                 openRandomArticle();
-                break;
-
-            case R.id.menu_share:
-                shareKiwix();
                 break;
 
             case R.id.menu_help:
@@ -333,18 +328,6 @@ public class KiwixMobileActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void shareKiwix() {
-        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-        sharingIntent.setType("text/plain");
-
-        String title = getResources().getString(R.string.info_share_title);
-        String shareText = getResources().getString(R.string.info_share_content);
-
-        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, title);
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareText);
-        startActivity(Intent.createChooser(sharingIntent, getString(R.string.share_via)));
     }
 
     private void openFullScreen() {

@@ -15,7 +15,6 @@
     <string name="menu_read_aloud">Bacakan</string>
     <string name="menu_read_aloud_stop">Berhenti bacakan</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Kongsi dengan kawan²</string>
     <string name="save_media">Simpan media sebagai...</string>
     <string name="save_media_error">Ralat berlaku ketika cubaan menyimpan media!</string>
     <string name="save_media_saved">Menyimpan media sebagai %1$s dalam folder Gambar (Pictures) anda</string>
@@ -47,7 +46,6 @@
     <string name="pref_nightmode_summary">Paparkan rencana yang diterbalikkan warnanya</string>
     <string name="pref_backtotop">Kembali ke Atas</string>
     <string name="pref_backtotop_summary">Paparkan butang di kaki halaman untuk menskrol kembali ke atas</string>
-    <string name="share_via">Kongsi melalui...</string>
     <string name="pref_language_title">Bahasa</string>
     <string name="pref_language_chooser">Pilih bahasa</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
