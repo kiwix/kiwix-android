@@ -1,9 +1,9 @@
 package org.kiwix.kiwixmobile;
 
+import org.kiwix.kiwixmobile.settings.Constants;
+
 import android.content.Context;
 import android.os.Environment;
-
-import org.kiwix.kiwixmobile.settings.Constants;
 
 import java.io.File;
 
@@ -29,19 +29,18 @@ public class FileUtils {
     }
 
     /**
-     * Returns the file name (without full path) for an Expansion APK file from
-     * the given context.
+     * Returns the file name (without full path) for an Expansion APK file from the given context.
      *
      * @param mainFile true for main file, false for patch file
      * @return String the file name of the expansion file
      */
     public static String getExpansionAPKFileName(boolean mainFile) {
-        return (mainFile ? "main." : "patch.") + Constants.CUSTOM_APP_VERSION_CODE + "." + Constants.CUSTOM_APP_ID + ".obb";
+        return (mainFile ? "main." : "patch.") + Constants.CUSTOM_APP_VERSION_CODE + "."
+                + Constants.CUSTOM_APP_ID + ".obb";
     }
 
     /**
-     * Returns the filename (where the file should be saved) from info about a
-     * download
+     * Returns the filename (where the file should be saved) from info about a download
      */
     static public String generateSaveFileName(String fileName) {
         return getSaveFilePath() + File.separator + fileName;
@@ -54,16 +53,15 @@ public class FileUtils {
     }
 
     /**
-     * Helper function to ascertain the existence of a file and return
-     * true/false appropriately
+     * Helper function to ascertain the existence of a file and return true/false appropriately
      *
-     * @param fileName the name (sans path) of the file to query
-     * @param fileSize the size that the file must match
-     * @param deleteFileOnMismatch if the file sizes do not match, delete the
-     *            file
+     * @param fileName             the name (sans path) of the file to query
+     * @param fileSize             the size that the file must match
+     * @param deleteFileOnMismatch if the file sizes do not match, delete the file
      * @return true if it does exist, false otherwise
      */
-    static public boolean doesFileExist(String fileName, long fileSize, boolean deleteFileOnMismatch) {
+    static public boolean doesFileExist(String fileName, long fileSize,
+            boolean deleteFileOnMismatch) {
         // the file may have been delivered by Market --- let's make sure
         // it's the size we expect
         File fileForNewFile = new File(generateSaveFileName(fileName));

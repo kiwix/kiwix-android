@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Ukončiť režim celej obrazovky</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">Ukončiť</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Zdielať s priaťeľmi</string>
     <string name="save_media">Uložiť médiá ako...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Hľadať</string>
     <string name="articlesearch_hint">Napíšte čo chcete vyhľadať</string>
     <string name="choose_file">Vyberte súbor so ZIM obsahom (*.zim)</string>
-    <string name="open_in_new_tab">Otvoriť odkaz na novej karte?</string>
     <string name="add_bookmark">Označiť túto stránku</string>
     <string name="remove_bookmark">Zrušiť označenie vybraných</string>
     <string name="info_share_title">Užívam si Wikipédiu Offline s Kiwixom!</string>

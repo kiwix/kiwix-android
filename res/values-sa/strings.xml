@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">सम्पूर्णपटलं निर्गमनम्</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">त्यजतु</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">मित्रैः सह विभाजनम्</string>
     <string name="save_media">Save Media</string>
@@ -26,7 +25,6 @@
     <string name="search_label">अन्विष्यताम्</string>
     <string name="articlesearch_hint">लिखम् अन्वेषितुं लिखतु</string>
     <string name="choose_file">एतस्याः ZIM पूर्वलिखितसञ्चिकायाः चयनं करोतु (*.zim)</string>
-    <string name="open_in_new_tab">एतत् परिसन्धिं नवीन-टेब्-मध्ये उद्घाटयतु</string>
     <string name="add_bookmark">एतत् पृष्ठम् अङ्क्यताम्</string>
     <string name="remove_bookmark">अङ्कितम् अनङ्कितं करोतु</string>
     <string name="info_share_title">KiwiX इत्यनेन सह वियुक्त(off-line)विकिपीडिया-जालस्थानं मे आनन्दाय !</string>

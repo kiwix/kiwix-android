@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">முழு திரையிலிருந்து வெளியேறுக</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">முடித்துக்கொள்</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">நண்பர்களுடன் பகிர்க</string>
     <string name="save_media">ஊடகப்பொருளை இவ்வாறு சேமித்து வை</string>
@@ -26,7 +25,6 @@
     <string name="search_label">தேடு</string>
     <string name="articlesearch_hint">கட்டுரைகளில் தேட தட்டச்சு செய்க</string>
     <string name="choose_file">ZIM கோப்பை தேர்வு செய் (*.zim)</string>
-    <string name="open_in_new_tab">இணைப்பை புதிய தாவலில் திறக்கவேண்டுமா?</string>
     <string name="add_bookmark">இப்பக்கத்தை  குறியிடு</string>
     <string name="remove_bookmark">தேர்ந்தெடுத்ததை குறியிட்டதை அழி</string>
     <string name="info_share_title">நான் Kiwixஉடன் இணைய இணைப்பற்ற விக்கிபீடியாவை துய்த்து மகிழ்கிறேன்!</string>

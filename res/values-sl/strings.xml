@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Izhod iz celozaslonskega načina</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">Izhod</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Deli s prijatelji</string>
     <string name="save_media">Shrani predstavnost kot ...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Iskanje</string>
     <string name="articlesearch_hint">Vrsta iskanih člankov</string>
     <string name="choose_file">Izberite datoteko z vsebino ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Odprem povezavo v novem zavihku?</string>
     <string name="add_bookmark">Označi to stran</string>
     <string name="remove_bookmark">Odznači izbrane</string>
     <string name="info_share_title">Uživam Wikipedijo brez povezave s Kiwix!</string>

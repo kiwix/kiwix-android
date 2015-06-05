@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Thoát toàn màn hình</string>
     <string name="menu_read_aloud">Đọc to</string>
     <string name="menu_read_aloud_stop">Dừng đọc to</string>
-    <string name="menu_exit">Thoát</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Chia sẻ với bạn bè</string>
     <string name="save_media">Lưu Phương tiện Như…</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Tìm kiếm</string>
     <string name="articlesearch_hint">Gõ để tra cứu bài</string>
     <string name="choose_file">Chọn một Tập tin Nội dung ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Mở liên kết trong thẻ mới?</string>
     <string name="add_bookmark">Đánh dấu Trang Này</string>
     <string name="remove_bookmark">Xóa Dấu trang Lựa chọn</string>
     <string name="info_share_title">Tôi thích Wikipedia Ngoại tuyến trong Kiwix!</string>

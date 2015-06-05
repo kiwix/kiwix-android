@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Tam ekran rejimini bağla</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">Çıxış</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Dostlarınla paylaş</string>
     <string name="save_media">Save Media</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Axtar</string>
     <string name="articlesearch_hint">Məqalədə axtarmaq istədiyiniz sözü daxil edin.</string>
     <string name="choose_file">ZIM məzmunlu fayl seç (*.zim)</string>
-    <string name="open_in_new_tab">Linki yeni pəncərədə aç?</string>
     <string name="add_bookmark">Bu səhifəni qeyd et</string>
     <string name="remove_bookmark">Seçilmiş işarələri götür</string>
     <string name="info_share_title">Kiwix-dən istifadə edərək internetə qoşulmadan Vikipediyaya daxil olmaq  əladır!</string>

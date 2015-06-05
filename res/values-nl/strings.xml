@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Volledig schermmodus verlaten</string>
     <string name="menu_read_aloud">Voorlezen</string>
     <string name="menu_read_aloud_stop">Stoppen met voorlezen</string>
-    <string name="menu_exit">Stoppen</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Delen met vrienden</string>
     <string name="save_media">Sla media op als...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Zoeken</string>
     <string name="articlesearch_hint">Voer tekst in om pagina\'s te zoeken</string>
     <string name="choose_file">Selecteer een ZIM inhoudsbestand (*.zim)</string>
-    <string name="open_in_new_tab">Koppeling openen in nieuw tabblad?</string>
     <string name="add_bookmark">Pagina markeren</string>
     <string name="remove_bookmark">Markering voor geselecteerde verwijderen</string>
     <string name="info_share_title">Ik geniet van Wikipedia Offline met Kiwix!</string>

@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Ieșire din ecran complet</string>
     <string name="menu_read_aloud">Citește cu voce tare</string>
     <string name="menu_read_aloud_stop">Oprește citirea cu voce tare</string>
-    <string name="menu_exit">Ieșire</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Partajează cu prietenii</string>
     <string name="save_media">Salvează multimedia ca...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Căutare</string>
     <string name="articlesearch_hint">Tastați pentru a căuta articole</string>
     <string name="choose_file">Alegeți un fișier cu conținut ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Deschideți legătura într-o filă nouă?</string>
     <string name="add_bookmark">Marchează această pagină</string>
     <string name="remove_bookmark">Șterge marcajul selectat</string>
     <string name="info_share_title">Îmi place Wikipedia offline cu Kiwix!</string>

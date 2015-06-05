@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">পূর্ণাঙ্গ স্ক্রিন বন্ধ</string>
     <string name="menu_read_aloud">জোরে পড়ুন</string>
     <string name="menu_read_aloud_stop">জোরে পড়া বন্ধ করুন</string>
-    <string name="menu_exit">বন্ধ</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">বন্ধুদের সাথে শেয়ার করুন</string>
     <string name="save_media">...হিসাবে মিডিয়া সংরক্ষণ করুন</string>
@@ -26,7 +25,6 @@
     <string name="search_label">অনুসন্ধান</string>
     <string name="articlesearch_hint">নিবন্ধ দেখতে টাইপ করুন</string>
     <string name="choose_file">কোন জিম (*.zim) কন্টেন্ট ফাইল নির্বাচন করুন</string>
-    <string name="open_in_new_tab">নতুন ট্যাবে লিঙ্ক খোলা হবে?</string>
     <string name="add_bookmark">এটি পাতাটি নজরে রাখুন</string>
     <string name="remove_bookmark">নজর সরিয়ে নেওয়া হয়েছে</string>
     <string name="info_share_title">আমি কিউইক্স দিয়ে অফলাইন উইকিপিডিয়া উপভোগ করি!</string>

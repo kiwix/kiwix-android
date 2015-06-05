@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">မျက်နှာဖွင့်အပြည့်မှ ထွက်ရန်</string>
     <string name="menu_read_aloud">ကျယ်ကျယ်ဖတ်ပါ</string>
     <string name="menu_read_aloud_stop">ကျယ်ကျယ်ဖတ်နေခြင်းကို ရပ်တန့်ပါ</string>
-    <string name="menu_exit">ထွက်</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">မိတ်ဆွေများနှင့် ဝေမျှရန်</string>
     <string name="save_media">မီဒီယာဖိုင်ကို ဤသို့သိမ်းရန်..</string>
@@ -26,7 +25,6 @@
     <string name="search_label">ရှာ​ဖွေ​ရန်​</string>
     <string name="articlesearch_hint">ဆောင်းပါးများ ရှာဖွေကြည့်ရှုရန် စာရိုက်ထည့်ပါ</string>
     <string name="choose_file">ZIM အချက်အလက်ဖိုင်တစ်ခုကို ရွေးချယ်ပါ (*.zim)</string>
-    <string name="open_in_new_tab">တဘ်အသစ်မှာ လင့်ကိုဖွင့်မလား။</string>
     <string name="add_bookmark">ဤစာမျက်နှာကို မှတ်ထားရန်</string>
     <string name="remove_bookmark">မှတ်သားထားသည်ကို ပယ်ဖျက်ရန်</string>
     <string name="info_share_title">ကီဝစ်သုံးထားတဲ့ ဝီကီပီးဒီးယားအော့ဖ်လိုင်းကို ကြိုက်တယ်။</string>

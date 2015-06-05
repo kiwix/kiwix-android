@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Излези од цел екран</string>
     <string name="menu_read_aloud">Прочитај на глас</string>
     <string name="menu_read_aloud_stop">Запри читање на глас</string>
-    <string name="menu_exit">Излези</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Сподели со пријателите</string>
     <string name="save_media">Зачувај го медиумиот како...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Пребарување</string>
     <string name="articlesearch_hint">Тип за пребарување статии</string>
     <string name="choose_file">Изберете ZIM-податотека (*.zim)</string>
-    <string name="open_in_new_tab">Да ја отворам врската во ново јазиче?</string>
     <string name="add_bookmark">Означи ја страницава</string>
     <string name="remove_bookmark">Тргни обележано</string>
     <string name="info_share_title">Ја читам Википедија вонсемрежно со Kiwix!</string>

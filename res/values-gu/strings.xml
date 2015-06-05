@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">પૂર્ણ સ્ક્રીનથી બહાર નીકળો</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">બહાર નીકળો</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">મિત્રો સાથે વહેંચો</string>
     <string name="save_media">Save Media</string>
@@ -26,7 +25,6 @@
     <string name="search_label">શોધો</string>
     <string name="articlesearch_hint">લેખો શોધવા માટે લખો</string>
     <string name="choose_file">ZIM માહિતી ફાઇલ (*.zim) પસંદ કરો</string>
-    <string name="open_in_new_tab">કડી નવી ટેબમાં ખોલશો?</string>
     <string name="add_bookmark">આ પાનું ચિન્હિત  કરો</string>
     <string name="remove_bookmark">આ પાનું  ચિન્હિત  ના કરો</string>
     <string name="info_share_title">Kiwix સાથે હું વિકિપીડિઆ ઑફલાઇન માણી શકુ છું!</string>

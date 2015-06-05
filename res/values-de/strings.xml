@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Vollbild beenden</string>
     <string name="menu_read_aloud">Vorlesen</string>
     <string name="menu_read_aloud_stop">Mit dem Vorlesen aufhören</string>
-    <string name="menu_exit">Schließen</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Mit Freunden teilen</string>
     <string name="save_media">Medium speichern als …</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Suche</string>
     <string name="articlesearch_hint">Zum Suchen von Artikeln tippen</string>
     <string name="choose_file">Wähle eine ZIM-Inhaltsdatei aus (*.zim)</string>
-    <string name="open_in_new_tab">Link in neuer Registerkarte öffnen?</string>
     <string name="add_bookmark">Seite markieren</string>
     <string name="remove_bookmark">Markierung aufheben</string>
     <string name="info_share_title">Ich lese die Wikipedia offline mit Kiwix!</string>

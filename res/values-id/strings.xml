@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Keluar dari modus layar penuh</string>
     <string name="menu_read_aloud">Bacakan</string>
     <string name="menu_read_aloud_stop">Hentikan pembacaan</string>
-    <string name="menu_exit">Keluar</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Bagikan dengan teman</string>
     <string name="save_media">Simpan media sebagai...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Cari</string>
     <string name="articlesearch_hint">Ketik untuk mencari artikel</string>
     <string name="choose_file">Pilih Konten Berkas ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Buka pranala di tab baru?</string>
     <string name="add_bookmark">Tandai halaman ini</string>
     <string name="remove_bookmark">Hapus tanda yang dipilih</string>
     <string name="info_share_title">Saya senang menggunakan Kiwix untuk Wikipedia Luring!</string>

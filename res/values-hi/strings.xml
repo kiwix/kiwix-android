@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">पूरे स्क्रीन से बाहर निकलें</string>
     <string name="menu_read_aloud">पढ़ा कर सुनें</string>
     <string name="menu_read_aloud_stop">पढ़ा कर सुनना समाप्त करें</string>
-    <string name="menu_exit">बाहर निकलें</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">दोस्तों के साथ बांटे</string>
     <string name="save_media">मीडिया को इस तरह सहेजें...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">खोजें</string>
     <string name="articlesearch_hint">लेख तलाश करने के लिए लिखें</string>
     <string name="choose_file">एक ZIM कान्टेन्ट फ़ाइल (*.zim) का चयन करें</string>
-    <string name="open_in_new_tab">नए टैब में लिंक खोलें?</string>
     <string name="add_bookmark">इस पृष्ठ को चिह्नित करें</string>
     <string name="remove_bookmark">चयनित अचिह्नित करें</string>
     <string name="info_share_title">मैं विकिपीडिया ऑफ़लाइन का आनंद ले रहा हूँ किविक्स के साथ!</string>

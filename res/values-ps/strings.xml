@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">بشپړ پردې څخه وتل</string>
     <string name="menu_read_aloud">په جگ غږ لوستل</string>
     <string name="menu_read_aloud_stop">په جگ غږ لوستل درول</string>
-    <string name="menu_exit">بندول</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">له ملگرو سره شريکول</string>
     <string name="save_media">رسنۍ ساتل لکه...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">پلټل</string>
     <string name="articlesearch_hint">د ليکنو موندلو لپاره وټاپۍ</string>
     <string name="choose_file">د ZIM مېنځپانگې يوه دوتنه ټاکل (*.zim)</string>
-    <string name="open_in_new_tab">تړنه په نوې کړکۍ کې پرانيستل</string>
     <string name="add_bookmark">دا مخ په نخښه کول</string>
     <string name="remove_bookmark">ټاکلي بې نخښې کول</string>
     <string name="info_share_title">زه د کيويکس په مرسته له پرې ليکې ويکيپېډيا خوند اخلم!</string>

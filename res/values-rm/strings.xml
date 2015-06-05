@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Ord il maletg entir</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">Terminar</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Parter cun amis</string>
     <string name="save_media">Save Media</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Tschertgar</string>
     <string name="articlesearch_hint">Scriver insatge per tschertgar artitgels</string>
     <string name="choose_file">Selecziunar ina datoteca da cuntegn ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Avrir il link en in nov tab?</string>
     <string name="add_bookmark">Agiuntar questa pagina als segnapaginas</string>
     <string name="remove_bookmark">Allontanar questa pagina dals segnapaginas</string>
     <string name="info_share_title">Jau giaud Wikipedia Offline cun Kiwix!</string>

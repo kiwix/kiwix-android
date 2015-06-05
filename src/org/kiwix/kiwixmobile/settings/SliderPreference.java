@@ -69,13 +69,18 @@ public class SliderPreference extends DialogPreference {
         if (mSummaries != null && mSummaries.length > 0) {
             double piece = SEEKBAR_MAX / mSummaries.length;
             int index = (int) (mSeekBarValue / piece);
-            if (index == mSummaries.length){
+            if (index == mSummaries.length) {
                 --index;
             }
             return mSummaries[index];
         } else {
             return super.getSummary();
         }
+    }
+
+    @Override
+    public void setSummary(CharSequence summary) {
+        super.setSummary(summary);
     }
 
     @Override
@@ -90,11 +95,6 @@ public class SliderPreference extends DialogPreference {
 
     public void setSummary(CharSequence[] summaries) {
         mSummaries = summaries;
-    }
-
-    @Override
-    public void setSummary(CharSequence summary) {
-        super.setSummary(summary);
     }
 
     public float getValue() {

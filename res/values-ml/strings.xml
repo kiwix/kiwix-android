@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">പൂർണ സ്ക്രീനിൽ നിന്ന് പുറത്തു കടക്കുക</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">അടയ്ക്കുക</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">സുഹൃത്തുക്കളുമായി പങ്കുവയ്ക്കുക</string>
     <string name="save_media">Save Media</string>
@@ -26,7 +25,6 @@
     <string name="search_label">തിരയുക</string>
     <string name="articlesearch_hint">ലേഖനങ്ങൾ കണ്ടെത്താൻ ടൈപ്പ് ചെയ്യൂ.</string>
     <string name="choose_file">ഒരു സിം കണ്ടന്റ് ഫയൽ (*.zim) തിരഞ്ഞെടുക്കൂ</string>
-    <string name="open_in_new_tab">കണ്ണി പുതിയ ടാബിൽ തുറക്കണോ?</string>
     <string name="add_bookmark">ഈ താള്‍ അടയാളപ്പെടുത്തുക</string>
     <string name="remove_bookmark">തിരഞ്ഞെടുത്തവ അടയാളപ്പെടുത്താതിരിക്കുക</string>
     <string name="info_share_title">ഞാൻ കിവിക്സ് ഉപയോഗിച്ച് ഓഫ്‌ലൈനായി വിക്കിപീഡിയ വായിക്കുന്നു.</string>

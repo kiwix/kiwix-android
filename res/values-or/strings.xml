@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">ପୁରା ସ୍କ୍ରିନ ସ୍ଥିତିରୁ ବାହାରି ଆସନ୍ତୁ</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">ଛାଡ଼ିବେ</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">ବନ୍ଧୁମାନଙ୍କୁ ଜଣାନ୍ତୁ</string>
     <string name="save_media">Save Media</string>
@@ -26,7 +25,6 @@
     <string name="search_label">ଖୋଜିବେ</string>
     <string name="articlesearch_hint">ପ୍ରସଙ୍ଗମାନ ଖୋଜିବାକୁ ଚେଷ୍ଟାକରନ୍ତୁ</string>
     <string name="choose_file">ZIM ବିଷୟବସ୍ତୁ ଥିବା (*.zim) ଫାଇଲ ବାଛନ୍ତୁ</string>
-    <string name="open_in_new_tab">ନୂଆ ଟ୍ୟାବରେ ଲିଙ୍କଟି ଖୋଲିବେ?</string>
     <string name="add_bookmark">ଏଇ ପୃଷ୍ଠାଟିକୁ ଚିହ୍ନିତ କରିବେ</string>
     <string name="remove_bookmark">ବଛାଯାଇଥିବା ବସ୍ତୁ ସବୁକୁ ବାଛିବେ ନାହିଁ</string>
     <string name="info_share_title">ମୁଁ କିଉଇକ୍ସ ସହ ଉଇକିପିଡ଼ିଆ ଅଫଲାଇନର ମଜା ଉଠାଇଲି!</string>

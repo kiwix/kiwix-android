@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Sortir del mode de pantalla completa</string>
     <string name="menu_read_aloud">Llegir en veu alta</string>
     <string name="menu_read_aloud_stop">Deixar de llegir en veu alta</string>
-    <string name="menu_exit">Surt</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Compartir amb amics</string>
     <string name="save_media">Desa el fitxer com...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Cercar</string>
     <string name="articlesearch_hint">Escriviu per buscar articles</string>
     <string name="choose_file">Seleccioneu un fitxer de contingut ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Obrir l\'enllaç en una pestanya nova?</string>
     <string name="add_bookmark">Marcar aquesta pàgina</string>
     <string name="remove_bookmark">Desmarcar la selecció</string>
     <string name="info_share_title">M\'agrada la Viquipèdia sense connexió amb Kiwix!</string>

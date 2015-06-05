@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">ចាកចេញពីម៉ូដទំហំពេញអេក្រង់</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">ចាកចេញ</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">ចែករំលែក​ជាមួយ​មិត្តភក្ដិ</string>
     <string name="save_media">Save Media</string>
@@ -26,7 +25,6 @@
     <string name="search_label">ស្វែងរក</string>
     <string name="articlesearch_hint">វាយបញ្ចូលដើម្បីរកមើលអត្ថបទ</string>
     <string name="choose_file">ជ្រើសរើសឯកសារមាតិកា ZIM (*.zim)</string>
-    <string name="open_in_new_tab">បើក​តំណ​ក្នុង​ផ្ទាំង​ថ្មី?</string>
     <string name="add_bookmark">កត់ចំណាំទំព័រនេះ</string>
     <string name="remove_bookmark">ឈប់កត់ចំណាំទំព័រដែលបានជ្រើសយក</string>
     <string name="info_share_title">ខ្ញុំ​រីករាយ​នឹង​វិគីភីឌា​ក្រៅ​បណ្ដាញ​តាម​រយៈ Kiwix!</string>

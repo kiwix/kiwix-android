@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Бүтэн дэлгэцээр үзүүлэхийг болиулах</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">Гарах</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Найзууддаа хуваалцах</string>
     <string name="save_media">медиаг өөр төрлөөр хадгалах</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Хайлт</string>
     <string name="articlesearch_hint">Нийтлэлийг хайх төрөл</string>
     <string name="choose_file">ZIM  агуулгын файлыг сонгох (*.zim)</string>
-    <string name="open_in_new_tab">Холбоосыг өөр табд нээ</string>
     <string name="add_bookmark">Энэ хуудсыг сана</string>
     <string name="remove_bookmark">Сонгосон хэсгийг бүү сана</string>
     <string name="info_share_title">Kiwix -г ашиглаж Wikipedia -г Offline -аар хэрэглэхэд надад маш таатай!</string>

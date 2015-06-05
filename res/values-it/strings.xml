@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Esci dalla modalità a tutto schermo</string>
     <string name="menu_read_aloud">Leggi a voce alta</string>
     <string name="menu_read_aloud_stop">Interrompi lettura a voce alta</string>
-    <string name="menu_exit">Esci</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Condividi con amici</string>
     <string name="save_media">Salva file multimediale come...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Ricerca</string>
     <string name="articlesearch_hint">Scrivi per ricercare le voci</string>
     <string name="choose_file">Seleziona un file di contenuto ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Apri il collegamento in una nuova scheda?</string>
     <string name="add_bookmark">Aggiungi questa pagina ai segnalibri</string>
     <string name="remove_bookmark">Togli questa pagina dai segnalibri</string>
     <string name="info_share_title">Mi piace Wikipedia Offline con Kiwix!</string>

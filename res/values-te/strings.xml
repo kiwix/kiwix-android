@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">నిండుతెరను చాలించు</string>
     <string name="menu_read_aloud">బయటకి చదువు</string>
     <string name="menu_read_aloud_stop">బయటకి చదవడం ఆపివేయి</string>
-    <string name="menu_exit">నిలిపివేయి</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">స్నేహితులతో పంచుకోండి</string>
     <string name="save_media">మీడియాని ఇలా భద్రపరచండి...</string>
@@ -26,7 +25,6 @@
     <string name="search_label">వెతుకు</string>
     <string name="articlesearch_hint">వ్యాసాల్లో వెతకడానికి టైపుచెయ్యండి</string>
     <string name="choose_file">ZIM విషయ దస్త్రాన్ని ఎంచుకోండి (*.zim)</string>
-    <string name="open_in_new_tab">లంకెను కొత్త ట్యాబులో తెరువాలా?</string>
     <string name="add_bookmark">ఈ పుటను గుర్తించు</string>
     <string name="remove_bookmark">ఎంపికచేసినవాటినితొలగించు</string>
     <string name="info_share_title">నేను కివిక్స్ ద్వారా ఆఫ్లైన్ వికీపీడియాను సంతోషంగా వాడుతున్నాను!</string>

@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Aus dem ganzen Ecran erausgoen</string>
     <string name="menu_read_aloud">Virliesen</string>
     <string name="menu_read_aloud_stop">Ophale mat Virliesen</string>
-    <string name="menu_exit">Erausgoen</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Mat Frënn deelen</string>
     <string name="save_media">Medium späicheren als…</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Sichen</string>
     <string name="articlesearch_hint">Tippt fir Artikelen ze sichen</string>
     <string name="choose_file">Wielt eng ZIM-Inhaltsdatei aus (*.zim)</string>
-    <string name="open_in_new_tab">Link an engem neien Tab opmaachen?</string>
     <string name="add_bookmark">Dës Säit markéieren</string>
     <string name="remove_bookmark">Ausgewielt Markéierung läschen</string>
     <string name="info_share_title">Ech benotze Wikipedia offline mat Kiwix!</string>

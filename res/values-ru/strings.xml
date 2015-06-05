@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Выход из полноэкранного режима</string>
     <string name="menu_read_aloud">Читать вслух</string>
     <string name="menu_read_aloud_stop">Остановить чтение вслух</string>
-    <string name="menu_exit">Выход</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Поделиться с друзьями</string>
     <string name="save_media">Сохранить медиа-содержимое как…</string>
@@ -26,7 +25,6 @@
     <string name="search_label">Поиск</string>
     <string name="articlesearch_hint">Введите для поиска статей</string>
     <string name="choose_file">Выберите ZIM-файл (*.zim)</string>
-    <string name="open_in_new_tab">Открыть ссылку в новой вкладке?</string>
     <string name="add_bookmark">Отметить эту страницу</string>
     <string name="remove_bookmark">Снять пометку с выбранного</string>
     <string name="info_share_title">Мне нравится Википедии, доступная без подключения к Интернету, с использованием Kiwix!</string>

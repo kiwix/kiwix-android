@@ -49,6 +49,7 @@ import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -90,10 +91,6 @@ public class KiwixMobileActivity extends AppCompatActivity
         implements BookmarkDialog.BookmarkDialogListener {
 
 
-    public static ArrayList<State> mPrefState;
-
-    public static boolean mIsFullscreenOpened;
-
     public static final String TAG_KIWIX = "kiwix";
 
     private static final String TAG_CURRENTZIMFILE = "currentzimfile";
@@ -113,6 +110,10 @@ public class KiwixMobileActivity extends AppCompatActivity
     private static final int ZIMFILESELECT_REQUEST_CODE = 1234;
 
     private static final int PREFERENCES_REQUEST_CODE = 1235;
+
+    public static ArrayList<State> mPrefState;
+
+    public static boolean mIsFullscreenOpened;
 
     public LinearLayout articleSearchBar;
 
@@ -197,8 +198,6 @@ public class KiwixMobileActivity extends AppCompatActivity
         setProgressBarVisibility(true);
 
         handleLocaleCheck();
-
-
 
         mActionBar = getSupportActionBar();
 
@@ -316,10 +315,6 @@ public class KiwixMobileActivity extends AppCompatActivity
                 selectZimFile();
                 break;
 
-            case R.id.menu_exit:
-                finish();
-                break;
-
             case R.id.menu_settings:
                 selectSettings();
                 break;
@@ -405,23 +400,6 @@ public class KiwixMobileActivity extends AppCompatActivity
     @Override
     public void onBookmarkButtonPressed() {
         toggleBookmark();
-    }
-
-    public class State {
-
-        private boolean hasToBeRefreshed;
-
-        private State(boolean hasToBeRefreshed) {
-            this.hasToBeRefreshed = hasToBeRefreshed;
-        }
-
-        public boolean hasToBeRefreshed() {
-            return hasToBeRefreshed;
-        }
-
-        public void setHasToBeRefreshed(boolean hasToBeRefreshed) {
-            this.hasToBeRefreshed = hasToBeRefreshed;
-        }
     }
 
     public void showWelcome() {
@@ -851,7 +829,6 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -893,43 +870,44 @@ public class KiwixMobileActivity extends AppCompatActivity
                 loadPrefs();
                 for (KiwixMobileActivity.State state : KiwixMobileActivity.mPrefState) {
                     state.setHasToBeRefreshed(true);
+                    Log.e(TAG_KIWIX, KiwixMobileActivity.mPrefState.get(0).hasToBeRefreshed() + "");
                 }
-                Log.e(TAG_KIWIX, KiwixMobileActivity.mPrefState.get(0).hasToBeRefreshed() + "");
                 break;
         }
 
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.main, menu);
-//        this.menu = menu;
-//
-//        if (requestInitAllMenuItems) {
-//            initAllMenuItems();
-//        }
-//
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        this.menu = menu;
 
-    //This method refreshes the menu for the bookmark system.
-//    @Override
-//    public void onPrepareOptionsMenu(Menu menu) {
-//        super.onPrepareOptionsMenu(menu);
-//
-//        if (menu.findItem(R.id.menu_bookmarks) != null &&
-//                webView.getUrl() != null &&
-//                webView.getUrl() != "file:///android_res/raw/help.html" &&
-//                ZimContentProvider.getId() != null) {
-//            menu.findItem(R.id.menu_bookmarks).setVisible(true);
-//            if (bookmarks.contains(webView.getTitle())) {
-//                menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmarks_active);
-//            } else {
-//                menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmarks);
-//            }
-//        }
-//    }
+        if (requestInitAllMenuItems) {
+            initAllMenuItems();
+        }
+        return true;
+    }
+
+    // This method refreshes the menu for the bookmark system.
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        if (menu.findItem(R.id.menu_bookmarks) != null &&
+                webView.getUrl() != null &&
+                !webView.getUrl().equals("file:///android_res/raw/help.html") &&
+                ZimContentProvider.getId() != null) {
+            menu.findItem(R.id.menu_bookmarks).setVisible(true);
+            if (bookmarks.contains(webView.getTitle())) {
+                menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmarks_active);
+            } else {
+                menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmarks);
+            }
+        }
+        return true;
+    }
 
     public void loadPrefs() {
 
@@ -1042,11 +1020,10 @@ public class KiwixMobileActivity extends AppCompatActivity
             }
         });
 
-        final Drawable searchIcon1 = searchIcon;
         final Drawable clearIcon1 = clearIcon;
 
         articleSearchtextView.addTextChangedListener(new TextWatcher() {
-            private final Drawable mSearchIcon = searchIcon1;
+            private final Drawable mSearchIcon = searchIcon;
 
             private final Drawable mClearIcon = clearIcon1;
 
@@ -1177,7 +1154,6 @@ public class KiwixMobileActivity extends AppCompatActivity
         }
     }
 
-
     @Override
     public void onPause() {
         super.onPause();
@@ -1195,6 +1171,22 @@ public class KiwixMobileActivity extends AppCompatActivity
                 "onPause Save currentzimfile to preferences:" + ZimContentProvider.getZimFile());
     }
 
+    public class State {
+
+        private boolean hasToBeRefreshed;
+
+        private State(boolean hasToBeRefreshed) {
+            this.hasToBeRefreshed = hasToBeRefreshed;
+        }
+
+        public boolean hasToBeRefreshed() {
+            return hasToBeRefreshed;
+        }
+
+        public void setHasToBeRefreshed(boolean hasToBeRefreshed) {
+            this.hasToBeRefreshed = hasToBeRefreshed;
+        }
+    }
 
     private class MyWebViewClient extends WebViewClient {
 
