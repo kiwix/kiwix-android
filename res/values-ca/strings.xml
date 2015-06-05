@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">Llegir en veu alta</string>
     <string name="menu_read_aloud_stop">Deixar de llegir en veu alta</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Compartir amb amics</string>
     <string name="save_media">Desa el fitxer com...</string>
     <string name="save_media_error">S\'ha produït un error en mirar de desar el fitxer!</string>
     <string name="save_media_saved">El fitxer s\'ha desat amb el nom %1$s a la vostra carpeta d\'imatges</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">Seleccioneu un fitxer de contingut ZIM (*.zim)</string>
     <string name="add_bookmark">Marcar aquesta pàgina</string>
     <string name="remove_bookmark">Desmarcar la selecció</string>
-    <string name="info_share_title">M\'agrada la Viquipèdia sense connexió amb Kiwix!</string>
-    <string name="info_share_content">M\'agrada la Viquipèdia sense connexió amb Kiwix! Tens a mà tot el coneixement humà vagis on vagis. I sense Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">No s\'han trobat fitxers ZIM al vostre dispositiu. A la pàgina d\'ajuda trobareu instruccions sobre com carregar contingut a Kiwix. Si realment vau col·locar un fitxer ZIM al vostre dispositiu d\'emmagatzematge extern, podeu tornar a intentar-ho d\'aquí uns moments o bé reiniciar el dispositiu.</string>
     <string name="error_filenotfound">Error: no s\'ha trobat el fitxer ZIM.</string>
     <string name="error_fileinvalid">Error: el fitxer seleccionat no és un fitxer ZIM vàlid.</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">Mostrar els articles amb colors invertits</string>
     <string name="pref_backtotop">Tornar a dalt</string>
     <string name="pref_backtotop_summary">Mostrar un botó al final de la pàgina per a desplaçar-se cap a la part superior</string>
-    <string name="share_via">Compartir mitjançant...</string>
     <string name="pref_language_title">Idioma</string>
     <string name="pref_language_chooser">Trieu un idioma</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

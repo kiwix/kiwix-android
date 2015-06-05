@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">Skaityk garsiai</string>
     <string name="menu_read_aloud_stop">Nustok garsiai skaityti</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Pasidalink su draugais</string>
     <string name="save_media">Išsaugoti duomenis kaip...</string>
     <string name="save_media_error">Įvyko klaida bandant išsaugoti duomenis!</string>
     <string name="save_media_saved">Duomenys išsaugoti jūsų Paveikslėlių aplanke kaip %1$s</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">Pasirinkite ZIM Turinio Failą (*.zim)</string>
     <string name="add_bookmark">Pažymėti šį puslapį</string>
     <string name="remove_bookmark">Atžymėti pasirinktus</string>
-    <string name="info_share_title">Man patinka Vikipedija neprisijungus su Kiwix!</string>
-    <string name="info_share_content">Man patinka Vikipedija neprisijungus su Kiwix! Visos žmonijos žinios po ranka, kur beeitum! Be interneto! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Jūsų prietaise ZIM failų nerasta.\nPažvelkite Pagalbos puslapį norėdami gauti nurodymus, kaip įkelti turinį į Kiwix.\nJei jūs įkėlėte ZIM failą į jūsų prietaisą/išorinę atmintį,  po minutės galite pabandyti iš naujo  arba iš naujo paleisti įrenginį.</string>
     <string name="error_filenotfound">Klaida: pasirinktas ZIM failas nerastas.</string>
     <string name="error_fileinvalid">Klaida: pasirinktas failas nėra galiojantis ZIM failas.</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">Rodyti straipsnius su ankstesnėmis spalvomis</string>
     <string name="pref_backtotop">Atgal į viršų</string>
     <string name="pref_backtotop_summary">Rodyti  puslapio pabaigoje mygtuką sugrįžti į viršų</string>
-    <string name="share_via">Dalintis per...</string>
     <string name="pref_language_title">Kalba</string>
     <string name="pref_language_chooser">Pasirinkite kalbą</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

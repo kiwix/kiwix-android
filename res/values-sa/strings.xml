@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">मित्रैः सह विभाजनम्</string>
     <string name="save_media">Save Media</string>
     <string name="save_media_error">An error occured when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">एतस्याः ZIM पूर्वलिखितसञ्चिकायाः चयनं करोतु (*.zim)</string>
     <string name="add_bookmark">एतत् पृष्ठम् अङ्क्यताम्</string>
     <string name="remove_bookmark">अङ्कितम् अनङ्कितं करोतु</string>
-    <string name="info_share_title">KiwiX इत्यनेन सह वियुक्त(off-line)विकिपीडिया-जालस्थानं मे आनन्दाय !</string>
-    <string name="info_share_content">KiwiX इत्यनेन सह वियुक्त(off-line)विकिपीडिया-जालस्थानं मे आनन्दाय !</string>
     <string name="error_nozimfilesfound">भवतः/भवत्याः यन्त्रे न कापि ZIM सञ्चिका प्राप्ता । Kiwix इत्यस्मिन् सूचना अवारोपयितुं (load) "साहाय्यम्" पृष्ठं प्रति गच्छतु । स्वस्य यन्त्रे/सङ्ग्रहयन्त्रे (in storage device) यदि ZIM सञ्चिका पूर्वस्मादेव अवारोपिता अस्ति, तर्हि किञ्चित् समयं यावत् प्रतिक्षां करोतु अथवा यन्त्रं पुनः चालयतु ।</string>
     <string name="error_filenotfound">दोषः : चितसञ्चिका ZIM न प्राप्ता ।</string>
     <string name="error_fileinvalid">दोषः : चितसञ्चिका योग्या ZIM-सञ्चिका नस्ति ।</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">विपरितरङ्गैः लेखः दृश्यताम्</string>
     <string name="pref_backtotop">साक्षात् उपरि गच्छतु</string>
     <string name="pref_backtotop_summary">साक्षात् उपरि गन्तु पृष्ठस्य अन्ते सारणकुड्मलं (scroll button) दर्श्यताम्</string>
-    <string name="share_via">द्वारा विभज्यताम्....</string>
     <string name="pref_language_title">भाषा</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

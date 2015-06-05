@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Poleć znajomym</string>
     <string name="save_media">Zapisz plik multimedialny jako...</string>
     <string name="save_media_error">Wystąpił błąd przy zapisywanie plików multimedialnych!</string>
     <string name="save_media_saved">Zapisano plik multimedialny jako %1$s w folderze Zdjęcia.</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">Wybierz plik zawartości ZIM (*.zim)</string>
     <string name="add_bookmark">Zaznacz bieżącą stronę</string>
     <string name="remove_bookmark">Odznacz wybrane</string>
-    <string name="info_share_title">Uwielbiam Wikipedia Offline z Kiwix!</string>
-    <string name="info_share_content">Uwielbiam Wikipedia Offline z Kiwix! Cała wiedza ludzkości pod ręką, gdziekolwiek idziesz! Bez Internetu!</string>
     <string name="error_nozimfilesfound">Nie znaleziono żadnego pliku ZIM na twoim urządzeniu. Zobaczc na stronę pomócy, aby uzyskać wskazówki jak pobierać zawartość na Kiwix. Jeśli plik ZIM jest umieszczony na urządzeniu/zewnętrznej pamięci masowej, spróbuj za chwilę lub włącz ponownie urządzenie.</string>
     <string name="error_filenotfound">Błąd: Wybrany plik ZIM nie został znaleziony.</string>
     <string name="error_fileinvalid">Błąd: Wybrany plik nie jest prawidłowym plikiem ZIM.</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">Pokaż artykuły w trybie nocnym</string>
     <string name="pref_backtotop">Powrót do góry</string>
     <string name="pref_backtotop_summary">Wyświetl przycisk na końcu strony, aby przewinąć do góry</string>
-    <string name="share_via">Podziel się za pośrednictwem...</string>
     <string name="pref_language_title">Język</string>
     <string name="pref_language_chooser">Wybierz język</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

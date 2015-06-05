@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">Aqri kuwa kale</string>
     <string name="menu_read_aloud_stop">Iska jooji aqrinta kuwa kale</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">La wadaag asxaabtaada</string>
     <string name="save_media">Kaydi galka muuqaalka ah si</string>
     <string name="save_media_error">Waxaa dhacay qalad markii la doonayay in la kaydiyo!</string>
     <string name="save_media_saved">U kaydi qaab ah %1$s galka sawirka gaarka kuu ah</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">Dooro galka ZIM ee ka samaysan (*.zim)</string>
     <string name="add_bookmark">Boggaan ku samee calamad</string>
     <string name="remove_bookmark">Ka saar calaamadda</string>
-    <string name="info_share_title">Aniga waxaan ku baashaalaa Wikipedia Soomaaliga si qad la,aan ahanigoo u maraya Kiwix!</string>
-    <string name="info_share_content">Waan ku baashaalaa Wikipedia Soomaaliga si qad la\'an ah anigoo u maraya Kiwix! Asigoo usoo gudbiyay aqoonta biniaadamka meel kasta uu joogo! Internet la\'aan! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Lagama helin wax galal ZIM ah qalabkaada.\nSoo eeg bogga caawimaadda si aad u hesho hagis gaar ah taasaa ku tusaysa sidii aad wax u galinlahad Kiwix.\nHaddii aad galisat galka ZIM qalabkaad/kaydiyaha kuu gaarka ah, waxaa laga yaabaa inaad u baahantahay inaad dib u soo shido.</string>
     <string name="error_filenotfound">Qalad: Galka ZIM ee aad dooratay lama helin.</string>
     <string name="error_fileinvalid">Qalad: Galka ZIM ee aad dooratay maaha mid shaqaynaya.</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">Show articles with reverted colors</string>
     <string name="pref_backtotop">Ku laabo kor</string>
     <string name="pref_backtotop_summary">Itus batoonka dhammaadka bogga si kor loogu laabto</string>
-    <string name="share_via">La wadaag dhanka...</string>
     <string name="pref_language_title">Luqad</string>
     <string name="pref_language_chooser">Dooro luqad</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

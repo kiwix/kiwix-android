@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">Yüksek sesle oku</string>
     <string name="menu_read_aloud_stop">Yüksek sesle okumayı sonlandır</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Arkadaşlarınla paylaş</string>
     <string name="save_media">Medyayı şu şekilde kaydet...</string>
     <string name="save_media_error">Medya kaydedilmeye çalışılırken bir hata oluştu!</string>
     <string name="save_media_saved">Medyanın %1$\'i Resim dosyanıza kaydedildi</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">Bir ZIM İçerik Dosyası seçin (*.zim)</string>
     <string name="add_bookmark">Bu sayfayı işaretle</string>
     <string name="remove_bookmark">Seçilenin işaretini kaldır</string>
-    <string name="info_share_title">Kiwix ile Çevrim Dışı Vikipedi\'nin tadını çıkarıyorum!</string>
-    <string name="info_share_content">Kiwix ile Wikipedia Offline tadını çıkarın! Bütün insan bilgi el gidersen git! Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Cihazınızda bir ZIM dosyası bulunamadı.\nKiwix\'e içerik yükleme talimatlarını görmek için Yardım Sayfası\'na bir göz atın.\nEğer cihazınıza/harici depolama kaynağınıza bir ZIM dosyası koyduysanız, birkaç dakika içerisinde yeniden deneyebilir veya cihazınızı yeniden başlatabilirsiniz.</string>
     <string name="error_filenotfound">Hata: Seçili ZIM dosyası bulunamadı.</string>
     <string name="error_fileinvalid">Hata: Seçili dosya geçerli bir ZIM dosyası değil.</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">Makaleleri dönüştürülmüş renklerle göster</string>
     <string name="pref_backtotop">Başa dön</string>
     <string name="pref_backtotop_summary">Başa dönmek için sayfanın altında bir düğme görüntüler</string>
-    <string name="share_via">Üzerinden paylaşın...</string>
     <string name="pref_language_title">Dil</string>
     <string name="pref_language_chooser">Bir dil seçin</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

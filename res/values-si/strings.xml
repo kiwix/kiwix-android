@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">හඬනගා කියවන්න</string>
     <string name="menu_read_aloud_stop">හඬනගා කියවීම නවත්වන්න</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">මිතුරන් සමග හුවමාරු කරන්න</string>
     <string name="save_media">මාධ්‍යය සුරකින්න...</string>
     <string name="save_media_error">මාධ්‍යය ආරක්ෂණය කිරීමට යාමේදී හටගන්නා ලදී!</string>
     <string name="save_media_saved">ඔබගේ පින්තුර ගොනුවෙහි %1$s ලෙස, මාධ්‍යය සුරක්ෂිත කරන ලදී</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">ZIM වර්ගයේ ගොනුවක් තෝරාගන්න (*.zim)</string>
     <string name="add_bookmark">මෙම පිටුව සලකුණු කරන්න</string>
     <string name="remove_bookmark">තෝරාගත්ත අසලකුණු කරන්න</string>
-    <string name="info_share_title">මම Kiwix මගින් මාර්ගගත නොවී විකිපීඩියාව භාවිතයට කැමැත්තෙමි!</string>
-    <string name="info_share_content">මම Kiwix මගින් මාර්ගගත නොවී විකිපීඩියාව භාවිතයට කැමැත්තෙමි! මුළු මානව දැනුමම ඔබ යන ඕනෑම තැනකට ගෙන යා හැක! අන්තර්ජාලය නොමැතිව! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">ඔබේ උපකරණය තුළ ZIM ගොනු හමු නොවිණි.\nKiwix වෙත අන්තර්ගතය පූරණය කරන ආකාරය දැනගැනීම සඳහා උදව් පිටුව බලන්න.\nඔබ ZIM ගොනුවක් ඔබේ උපකරණයේ/බාහිර රැඳවුමේ තැබුවේ නම්, ඔබ නැවත මිනිත්තුවකින් උත්සහ කරන්න නැතහොත් ඔබේ උපකරණය යළි පණගන්වන්න.</string>
     <string name="error_filenotfound">දෝෂය: තෝරාගත් ZIM ගොනුව සොයා ගැනීමට නොහැකි විය.</string>
     <string name="error_fileinvalid">දෝෂය: තෝරාගත් ගොනුව වලංගු ZIM ගොනුවක් නොවේ.</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">ප්‍රතිවර්තිත වර්ණ සමග ලිපි පෙන්වන්න</string>
     <string name="pref_backtotop">නැවත උඩට</string>
     <string name="pref_backtotop_summary">ඉහළට උඩු අනුචලනය කිරීමට පිටුවේ අග බොත්තමක් පෙන්වන්න</string>
-    <string name="share_via">මගින් හුවමාරු කරන්න...</string>
     <string name="pref_language_title">භාෂාව</string>
     <string name="pref_language_chooser">භාෂාවක් තෝරාගන්න</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

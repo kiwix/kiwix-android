@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">Đọc to</string>
     <string name="menu_read_aloud_stop">Dừng đọc to</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Chia sẻ với bạn bè</string>
     <string name="save_media">Lưu Phương tiện Như…</string>
     <string name="save_media_error">Đã xuất hiện lỗi khi lưu phương tiện!</string>
     <string name="save_media_saved">Đã lưu phương tiện thành %1$s trong thư mục hình ảnh của bạn</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">Chọn một Tập tin Nội dung ZIM (*.zim)</string>
     <string name="add_bookmark">Đánh dấu Trang Này</string>
     <string name="remove_bookmark">Xóa Dấu trang Lựa chọn</string>
-    <string name="info_share_title">Tôi thích Wikipedia Ngoại tuyến trong Kiwix!</string>
-    <string name="info_share_content">Tôi thích Wikipedia Ngoại tuyến trong Kiwix! Đi đâu cũng có khối kiến thức chung của nhân loại! Không cần Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Không tìm thấy tập tin ZIM trên thiết bị của bạn.\nHãy đọc Trang Trợ giúp để biết cách tải nội dung vào Kiwix.\nNếu bạn có đưa tập tin ZIM vào thiết bị hoặc bộ nhớ ngoài của bạn, hãy thử lại sau hoặc khởi động lại thiết bị của bạn.</string>
     <string name="error_filenotfound">Lỗi: Không tìm thấy tập tin ZIM đã chọn</string>
     <string name="error_fileinvalid">Lỗi: Tập tin đã chọn không phải là tập tin ZIM hợp lệ.</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">Đảo ngược màu sắc trong bài</string>
     <string name="pref_backtotop">Trở lên Đầu trang</string>
     <string name="pref_backtotop_summary">Hiển thị nút ở cuối trang để di chuyển lên trên cùng</string>
-    <string name="share_via">Chia sẻ qua…</string>
     <string name="pref_language_title">Ngôn ngữ</string>
     <string name="pref_language_chooser">Chọn ngôn ngữ</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

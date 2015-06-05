@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">Четене на глас</string>
     <string name="menu_read_aloud_stop">Спиране четенето на глас</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Споделете с приятели</string>
     <string name="save_media">Съхраняване на медията като...</string>
     <string name="save_media_error">Възникна грешка при опита за съхранение на медийния файл!</string>
     <string name="save_media_saved">Медийният файл е съхранен като %1$s във вашата папка с изображения</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">Изберете ZIM файл със съдържание (*.zim)</string>
     <string name="add_bookmark">Отбелязване на тази страница</string>
     <string name="remove_bookmark">Отмаркиране на избраното</string>
-    <string name="info_share_title">Аз ползвам Уикипедия в офлайн режим с Kiwix!</string>
-    <string name="info_share_content">Аз ползвам Уикипедия офлайн с Kiwix! Цялото човешко познание е в ръцете ви, където и да отидете! Без интернет! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Няма намерени ZIM файлове на вашето устройство.\nПрегледайте страницата на помощ, за да получите указания как да заредите съдържанието в Kiwix.\nАко сте сложили ZIM файл на вашето устройство/външен диск за съхранение, може да опитате отново след една минута или да рестартирате устройството.</string>
     <string name="error_filenotfound">Грешка: Избраният ZIM файл не е намерен.</string>
     <string name="error_fileinvalid">Грешка: Избраният файл не е валиден ZIM файл.</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">Показване на статии в "нощен режим"</string>
     <string name="pref_backtotop">Връщане в началото</string>
     <string name="pref_backtotop_summary">Показване на бутон в края на страницата за превъртане нагоре</string>
-    <string name="share_via">Споделете чрез...</string>
     <string name="pref_language_title">Език</string>
     <string name="pref_language_chooser">Избиране на език</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

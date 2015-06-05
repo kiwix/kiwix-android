@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">Lire à haute voix</string>
     <string name="menu_read_aloud_stop">Arrêter de lire à haute voix</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Partager avec vos amis</string>
     <string name="save_media">Enregistrer le média sous…</string>
     <string name="save_media_error">Une erreur s\'est produite en essayant d’enregistrer le média !</string>
     <string name="save_media_saved">Média enregistré sous %1$s dans votre dossier Images</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">Sélectionner un fichier de contenu ZIM (*.zim)</string>
     <string name="add_bookmark">Marquer cette page</string>
     <string name="remove_bookmark">Ne plus sélectionner ce marque-page</string>
-    <string name="info_share_title">J\'aime Wikipedia Offline avec Kiwix !</string>
-    <string name="info_share_content">J\'aime Wikipedia Offline avec Kiwix ! Toute la connaissance humaine à portée de main partout où vous allez ! Sans Internet ! http://goo.GL/h9Smkk</string>
     <string name="error_nozimfilesfound">Aucun fichier ZIM n’a été trouvé sur votre machine.\nJetez un coup d’œil à la page d’aide pour avoir des instructions sur la manière de charger du contenu dans Kiwix.\nSi vous avez mis un fichier ZIM sur votre stockage interne ou externe, vous pouvez réessayer dans une minute ou redémarrer votre appareil.</string>
     <string name="error_filenotfound">Erreur : Le fichier ZIM sélectionné est introuvable.</string>
     <string name="error_fileinvalid">Erreur : Le fichier sélectionné n’est pas un fichier ZIM valide.</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">Afficher les articles en couleurs inversées</string>
     <string name="pref_backtotop">Retourner au début</string>
     <string name="pref_backtotop_summary">Afficher un bouton en bas de la page pour revenir au début</string>
-    <string name="share_via">Partager via...</string>
     <string name="pref_language_title">Langue</string>
     <string name="pref_language_chooser">Choisir une langue</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

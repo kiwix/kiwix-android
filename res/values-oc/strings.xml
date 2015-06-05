@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">Legir a votz nauta</string>
     <string name="menu_read_aloud_stop">Arrestar de legir a votz nauta</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Partejar amb vòstres amics</string>
     <string name="save_media">Enregistrar lo mèdia jos…</string>
     <string name="save_media_error">Una error s\'es producha al moment de la temptativa d\'enregistrar lo mèdia !</string>
     <string name="save_media_saved">Mèdia enregistrat jos %1$s dins vòstre dorsièr Imatges</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">Seleccionar un fichièr de contengut ZIM (*.zim)</string>
     <string name="add_bookmark">Marcar aquela pagina</string>
     <string name="remove_bookmark">Desmarcar la seleccion</string>
-    <string name="info_share_title">M\'agrada Wikipèdia Offline amb Kiwix !</string>
-    <string name="info_share_content">M\'agrada Wikipedia Offline amb Kiwix ! Tota la coneissença umana a portada de man pertot ont anatz ! Sens Internet ! http://goo.GL/h9Smkk</string>
     <string name="error_nozimfilesfound">Cap de fichièr ZIM es pas estat trobat sus vòstra maquina.\nGetatz un còp d’uèlh a la pagina d’ajuda per aver d\'instruccions sul biais de cargar de contengut dins Kiwix.\nS\'avètz mes un fichièr ZIM sus vòstre emmagazinatge intèrne o extèrne, podètz tornar ensajar dins una minuta o reamodar vòstre aparelh.</string>
     <string name="error_filenotfound">Error : Lo fichièr ZIM seleccionat es introbable.</string>
     <string name="error_fileinvalid">Error : Lo fichièr seleccionat es pas un fichièr ZIM valid.</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">Afichar los articles en colors inversadas</string>
     <string name="pref_backtotop">Retorn al començament</string>
     <string name="pref_backtotop_summary">Afichar un boton en bas de la pagina per tornar al començament</string>
-    <string name="share_via">Partejar via...</string>
     <string name="pref_language_title">Lenga</string>
     <string name="pref_language_chooser">Causir una lenga</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

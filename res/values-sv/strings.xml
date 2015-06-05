@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">Läs upp</string>
     <string name="menu_read_aloud_stop">Sluta läsa upp</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Dela med vänner</string>
     <string name="save_media">Spara media som...</string>
     <string name="save_media_error">Ett fel uppstod när media skulle sparas!</string>
     <string name="save_media_saved">Sparade media som %1$s i din bildmapp</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">Välj en ZIM-innehållsfil (*.zim)</string>
     <string name="add_bookmark">Markera denna sida</string>
     <string name="remove_bookmark">Avmarkera valda</string>
-    <string name="info_share_title">Jag gillar Wikipedia Offline med Kiwix!</string>
-    <string name="info_share_content">Jag gillar Wikipedia Offline med Kiwix! Hela mänsklighetens samlade kunskap till hands vart du än går! Utan Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Inga ZIM-filer hittades på din enhet.\nTa en titt på hjälpsidan för att få hjälp om hur man läser in innehåll i Kiwix.\nOm du lade in en ZIM-fil på din enhet/externa minne bör du kanske prova igen om någon minut eller starta om din enhet.</string>
     <string name="error_filenotfound">Fel: Den valda ZIM-filen kunde inte hittas.</string>
     <string name="error_fileinvalid">Fel: Den valda filen är inte en giltig ZIM-fil.</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">Visa artiklar med inverterade färger</string>
     <string name="pref_backtotop">Tillbaka till toppen</string>
     <string name="pref_backtotop_summary">Visar en knapp i slutet på sidan för att rulla upp till toppen</string>
-    <string name="share_via">Dela via...</string>
     <string name="pref_language_title">Språk</string>
     <string name="pref_language_chooser">Välj ett språk</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

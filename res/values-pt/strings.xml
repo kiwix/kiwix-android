@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">Ler em voz alta</string>
     <string name="menu_read_aloud_stop">Parar de ler em voz alta</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Compartilhe com amigos</string>
     <string name="save_media">Salvar media como...</string>
     <string name="save_media_error">An error occured when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">Selecione um arquivo de conteúdo ZIM (*.zim)</string>
     <string name="add_bookmark">Marcar esta página</string>
     <string name="remove_bookmark">Desmarcar selecionadas</string>
-    <string name="info_share_title">Eu disfruto com o Kiwix a minha Wikipédia Offline!</string>
-    <string name="info_share_content">Eu disfruto da Wikipédia Offline  com o Kiwix! Todo o conhecimento humano na mão vá para onder for. http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Não foram encontrados or ficheiros ZIM no dispositivo.\nAtentamente reveja a Help Page para conhecer métodos e meios de como carregar conteúdo para o Kiwix.\nSe voçê já colocou o ZIM no dispotivo alvo, tente novamente no espaço de um minuto recarregar ou faça restart ao dispositivo .</string>
     <string name="error_filenotfound">Erro: O ficheiro ZIM selecionado não pôde ser encontrado.</string>
     <string name="error_fileinvalid">Erro: O ficheiro selecionado não é um ficheiro ZIM válido.</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">Mostrat artigos com cores invetidas</string>
     <string name="pref_backtotop">Voltar ao Topo</string>
     <string name="pref_backtotop_summary">Exibir botão no fim da página para redireccionar ao inicio da página</string>
-    <string name="share_via">Compartilhar via...</string>
     <string name="pref_language_title">Língua</string>
     <string name="pref_language_chooser">Escolha um idioma</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

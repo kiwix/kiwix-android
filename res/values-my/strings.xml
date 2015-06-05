@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">ကျယ်ကျယ်ဖတ်ပါ</string>
     <string name="menu_read_aloud_stop">ကျယ်ကျယ်ဖတ်နေခြင်းကို ရပ်တန့်ပါ</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">မိတ်ဆွေများနှင့် ဝေမျှရန်</string>
     <string name="save_media">မီဒီယာဖိုင်ကို ဤသို့သိမ်းရန်..</string>
     <string name="save_media_error">မီဒီယာဖိုင်ကို သိမ်းရန်ကြိုးစားနေစဉ် အမှားတစ်ခု ဖြစ်ပေါ်သွားသည်။</string>
     <string name="save_media_saved">သင့် Pictures ဖိုင်တွဲထဲတွင် မီဒီယာဖိုင်ကို %1$s အဖြစ် သိမ်းပြီးဖြစ်သည်။</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">ZIM အချက်အလက်ဖိုင်တစ်ခုကို ရွေးချယ်ပါ (*.zim)</string>
     <string name="add_bookmark">ဤစာမျက်နှာကို မှတ်ထားရန်</string>
     <string name="remove_bookmark">မှတ်သားထားသည်ကို ပယ်ဖျက်ရန်</string>
-    <string name="info_share_title">ကီဝစ်သုံးထားတဲ့ ဝီကီပီးဒီးယားအော့ဖ်လိုင်းကို ကြိုက်တယ်။</string>
-    <string name="info_share_content">ကီဝစ်သုံးထားတဲ့ ဝီကီပီးဒီးယားအော့ဖ်လိုင်းကို ကြိုက်တယ်။ ဗဟုသုတဟင်းလေးအိုးကြီးကို သွားလေရာ သယ်သွားနိုင်ပြီ။ အင်တာနက်မလို။ http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">သင့်စက်ပေါ်တွင် ZIM ဖိုင် တစ်ခုမှ ရှာမတွေ့ပါ။\nအကူအညီစာမျက်နှာကိုကြည့်၍ ကီဝစ်ထဲသို့ အချက်အလက်များ မည်သို့ထည့်ရမည်ကို လမ်းညွှန်မှု ရယူပါ။\nအကယ်၍ ZIM ဖိုင်ကို သင့်စက်ထဲ/သိုလှောင်သိမ်းဆည်းရာ နေရာထဲ ထည့်ပြီးသည်မှာ သေချာလျှင် တစ်မိနစ်ခန့် အကြာတွက် ပြန်ကြိုးစားကြည့်ပါ၊ သို့မဟုတ် စက်ကို ရီစတတ်ချကြည့်ပါ။</string>
     <string name="error_filenotfound">အမှားသတိပေးချက် − ရွေးချယ်ထားသော ZIM ဖိုင်ကို ရှာမတွေ့ပါ။</string>
     <string name="error_fileinvalid">အမှားသတိပေးချက် − ရွေးချယ်ထားသောဖိုင်သည် တရားဝင် ZIM ဖိုင် မဟုတ်ပါ။</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">ဆောင်းပါးများကို အရောင်ပြောင်းပြန်သုံး၍ ပြရန်</string>
     <string name="pref_backtotop">ထိပ်ဆုံးသို့ ပြန်သွားရန်</string>
     <string name="pref_backtotop_summary">ထိပ်ဆုံးသို့ပြန်သွားရန်အတွက် စာမျက်နှာ၏အောက်ဆုံးတွင် ခလုတ်တစ်ခု ပြပါ။</string>
-    <string name="share_via">ဤသည်မှတဆင့် မျှဝေပါ...</string>
     <string name="pref_language_title">ဘာသာစကား</string>
     <string name="pref_language_chooser">ဘာသာစကားရွေးချယ်ရန်</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

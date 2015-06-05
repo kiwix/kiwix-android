@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">לייענען הויך</string>
     <string name="menu_read_aloud_stop">אויפהיטן לייענען הויך</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">טיילט מיט חברים</string>
     <string name="save_media">שפייכלערן מעדיעוויקי ווי…</string>
     <string name="save_media_error">א טעות האט פאסירט ביים אויפהיטן די מעדיע!</string>
     <string name="save_media_saved">מעדיע אויפגעהיטן ווי %1$s אין אײַער בילדער־טעקע</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">Select a ZIM Content File (*.zim)</string>
     <string name="add_bookmark">מארקירן דעם בלאט</string>
     <string name="remove_bookmark">אוממארקירן אויסגעוויילטע</string>
-    <string name="info_share_title">כ׳האב הנאה פון וויקיפעדיע אפליין מיט קיוויקס!</string>
-    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
     <string name="error_filenotfound">Error: The selected ZIM file could not be found.</string>
     <string name="error_fileinvalid">Error: The selected file is not a valid ZIM file.</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">Show articles with reverted colors</string>
     <string name="pref_backtotop">צוריק אויבן</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
-    <string name="share_via">טיילן דורך…</string>
     <string name="pref_language_title">שפראַך</string>
     <string name="pref_language_chooser">קלויבט א שפראך</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">Virliesen</string>
     <string name="menu_read_aloud_stop">Ophale mat Virliesen</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Mat Frënn deelen</string>
     <string name="save_media">Medium späicheren als…</string>
     <string name="save_media_error">Iwwer dem Späichere vum Medium ass e Feeler geschitt!</string>
     <string name="save_media_saved">Medium als %1$s an Ärem Biller-Dossier gespäichert</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">Wielt eng ZIM-Inhaltsdatei aus (*.zim)</string>
     <string name="add_bookmark">Dës Säit markéieren</string>
     <string name="remove_bookmark">Ausgewielt Markéierung läschen</string>
-    <string name="info_share_title">Ech benotze Wikipedia offline mat Kiwix!</string>
-    <string name="info_share_content">Ech benotze Wikipedia offline mat Kiwix! D\'ganzt Wësse vun der Mënschheet zu all Moment grëffbereet! Ouni Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Op Ärer Maschinn konnt keng ZIM-Datei fonnt ginn. Luusst op der Hëllefssäit era fir gewuer ze ginn, wéi ee kann Inhalter a Kiwix eralueden.\nWann Dir eng ZIM-Datei op Ärer Maschinn oder Ärem externe Späicher hutt, probéiert et an enger Minutt nach eng Kéier oder maacht ee Neistart.</string>
     <string name="error_filenotfound">Feeler: Déi ausgewielten ZIM-Datei konnt net fonnt ginn.</string>
     <string name="error_fileinvalid">Feeler: Déi ausgewielten Datei ass keng gülteg ZIM-Datei.</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">Artikelen an invertéierte Faarwen weisen</string>
     <string name="pref_backtotop">Zréck no uewen</string>
     <string name="pref_backtotop_summary">Weist e Knäppchen ënnen op der Säit fir no uewen ze scrollen</string>
-    <string name="share_via">Deelen iwwer ...</string>
     <string name="pref_language_title">Sprooch</string>
     <string name="pref_language_chooser">Sicht eng Sprooch eraus</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

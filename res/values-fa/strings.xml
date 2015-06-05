@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">خواندن با صدای بلند</string>
     <string name="menu_read_aloud_stop">توقف خواندن با صدای بلند</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">اشتراک گذاری با دوستان</string>
     <string name="save_media">ذخیره رسانه با نام ....</string>
     <string name="save_media_error">در زمان ذخیره رسانه خطایی به وجود آمد!</string>
     <string name="save_media_saved">ذخیره کردن رسانه  با عنوان %1$s در پوشه تصویر شما</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">یک پروندهٔ محتوایی ZIM را انتخاب کنید (*.zim)</string>
     <string name="add_bookmark">این صفحه را علامت بزن</string>
     <string name="remove_bookmark">علامت انتخاب‌شده را بردار</string>
-    <string name="info_share_title">از ویکی‌پدیای آفلاین با کیویکس لذت بردم!</string>
-    <string name="info_share_content">از کار کردن با کیویکس لذب بردم. استفاده از دانش بشر بدر هر کجا که بروید! بدون اینترنت! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">هیچ پروندهٔ ZIM در دستگاه شما یافت نشد.\nنگاهی به صفحهٔ کمک برای گرفتن جهت‌هایی به بارگذاری محتویات به Kiwix نگاهی بیندازید.\nاگر شما پروندهٔ ZIM در دستگاه/حافظهٔ خارجی خود قرار دهید، شما چند دقیقه دیگر مجدداً سعی کنید یا دستگاه خود را ری‌استارت کنید.</string>
     <string name="error_filenotfound">خطا: پروندهٔ ZIM انتخاب شده پیدا نشد.</string>
     <string name="error_fileinvalid">خطا: پروندهٔ انتخاب‌شده یک پروندهٔ ZIM معتبر نیست.</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">نمایش مقاله‌ها با رنگ‌های معکوس‌شده</string>
     <string name="pref_backtotop">بازگشت به بالای صفحه</string>
     <string name="pref_backtotop_summary">نمایش دکمه در پایان صفحه برای انتقال به بالا</string>
-    <string name="share_via">اشتراک از طریق...</string>
     <string name="pref_language_title">تغییر زبان</string>
     <string name="pref_language_chooser">انتخاب زبان</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

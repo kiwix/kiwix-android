@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">സുഹൃത്തുക്കളുമായി പങ്കുവയ്ക്കുക</string>
     <string name="save_media">Save Media</string>
     <string name="save_media_error">An error occured when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">ഒരു സിം കണ്ടന്റ് ഫയൽ (*.zim) തിരഞ്ഞെടുക്കൂ</string>
     <string name="add_bookmark">ഈ താള്‍ അടയാളപ്പെടുത്തുക</string>
     <string name="remove_bookmark">തിരഞ്ഞെടുത്തവ അടയാളപ്പെടുത്താതിരിക്കുക</string>
-    <string name="info_share_title">ഞാൻ കിവിക്സ് ഉപയോഗിച്ച് ഓഫ്‌ലൈനായി വിക്കിപീഡിയ വായിക്കുന്നു.</string>
-    <string name="info_share_content">ഞാൻ കിവിക്സ് ഉപയോഗിച്ച് ഓഫ്‌ലൈനായി വിക്കിപീഡിയ വായിക്കുന്നു! എല്ലാ മനുഷ്യവിജ്ഞാനവും ഞാൻ പോകുന്നിടത്തെല്ലാം, ഇന്റർനെറ്റ് ബന്ധം പോലുമില്ലാതെ. http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">താങ്കളുടെ ഉപകരണത്തിൽ സിം ഫയലുകളൊന്നുമില്ല. \nസഹായം താളുകൾ ഉപയോഗപ്പെടുത്തി കിവിക്സിൽ എങ്ങനെ ഉള്ളടക്കം ചേർക്കണമെന്ന് മനസ്സിലാക്കൂ. താങ്കൾ ഒരു സിം ഫയൽ താങ്കളുടെ ഉപകരണത്തിൽ/ബാഹ്യ സ്റ്റോറേജിൽ ഉൾപ്പെടുത്തിയെങ്കിൽ ദയവായി ഒരു മിനിറ്റ് കാത്തിരിക്കുകയോ ഉപകരണം റീസ്റ്റാർട്ട് ചെയ്യുകയോ വേണം.</string>
     <string name="error_filenotfound">പിഴവ്: തിരഞ്ഞെടുത്ത സിം ഫയൽ കണ്ടെത്താനായില്ല</string>
     <string name="error_fileinvalid">പിഴവ്: തിരഞ്ഞെടുത്ത സിം ഫയൽ സാധുവല്ല.</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">ലേഖനങ്ങളുടെ നിറം നേർവിപരീതമാക്കുക</string>
     <string name="pref_backtotop">തിരികെ മുകളിലേക്ക്</string>
     <string name="pref_backtotop_summary">താളിനു താഴെയായി മുകളിലേക്ക് തിരികെ പോകാനുള്ള ബട്ടൺ കാണിക്കുക.</string>
-    <string name="share_via">ഇതുവഴി പങ്ക് വെയ്ക്കുക</string>
     <string name="pref_language_title">ഭാഷ</string>
     <string name="pref_language_chooser">ഭാഷ തിരഞ്ഞെടുക്കുക</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

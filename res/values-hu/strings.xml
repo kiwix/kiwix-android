@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Megosztás ismerősökkel</string>
     <string name="save_media">Média mentése másként...</string>
     <string name="save_media_error">Hiba történt a média mentése közben!</string>
     <string name="save_media_saved">Média mentése %1s néven a Fényképek mappába</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">ZIM-tartalomfájl kiválasztása (*.zim)</string>
     <string name="add_bookmark">Oldal megjelölése</string>
     <string name="remove_bookmark">Kijelölés megszüntetése</string>
-    <string name="info_share_title">Kedvelem a Kiwix offline Wikipédia-olvasót!</string>
-    <string name="info_share_content">Kedvelem a Kiwix offline Wikipédia-olvasót! Az emberiség teljes tudása kéznél van, bárhova is megy! Internetkapcsolat nélkül! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Nem található ZIM-fájl a készülékén. Tekintse meg a súgóoldalt, ahol útmutatót talál a Kiwix-tartalom letöltéséhez. Ha a ZIM-fájlt már átmásolta készülékére/az SD-kártyára, próbálja meg egy perc múlva ismét, vagy indítsa újra a készülékét!</string>
     <string name="error_filenotfound">Hiba: A kijelölt ZIM-fájl nem található.</string>
     <string name="error_fileinvalid">Hiba: A kijelölt fájl nem érvényes ZIM-fájl.</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">Inverz színek használata a cikkek megjelenítéséhez</string>
     <string name="pref_backtotop">Vissza a lap tetejére</string>
     <string name="pref_backtotop_summary">Gomb megjelenítése a lap alján, melynek segítségével visszatérhet a lap tetejére</string>
-    <string name="share_via">Megosztás ezzel...</string>
     <string name="pref_language_title">Nyelv</string>
     <string name="pref_language_chooser">Válassz nyelvet</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

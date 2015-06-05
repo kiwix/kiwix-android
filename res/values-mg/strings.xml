@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Hizara amin\'ny namana</string>
     <string name="save_media">Hitahiry ny media ho...</string>
     <string name="save_media_error">An error occured when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">Hisafidy rakitra misy votoatiny (*.zim)</string>
     <string name="add_bookmark">Hanamarika ity pejy ity</string>
     <string name="remove_bookmark">Hanala marika ny voafidy</string>
-    <string name="info_share_title">Tia an\'i Wikipedia Offline amin\'i Kiwix aho!</string>
-    <string name="info_share_content">Tia an\'i Wikipedia Offline amin\'i Kiwix aho! Eo am-pelantanako daholo ny fahalalan\'ny olombelona na aiza na aiza! Tsy misy aterineto! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Tsy nahitana rakitra ZIM tao amin\'ny fitaovanao.\nJereo ny pejy fanoroana mikasika ny fampidirana votoatiny anaty Kiwix.\nRaha efa nametraka rakitra ZIM tanaty fitahirizana ivelany na anaty ianao, dia andramo afaka iray minitra ary avereno ampirehetina ny fitaovanao.</string>
     <string name="error_filenotfound">Hadisoana: Tsy nahita ilay rakitra ZIM voafidinao.</string>
     <string name="error_fileinvalid">Hadisoana: Rakitra ZIM tsy azo raisina ilay voafidinao.</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">Haneho lahatsoratra amin\'ny loko mivadika</string>
     <string name="pref_backtotop">Hiverina any an-tampony</string>
     <string name="pref_backtotop_summary">Haneho bokotra amin\'ny faran\'ny pejy mba hiverenana any am-pihatombohana</string>
-    <string name="share_via">Hizara amin\'ny alalan\'i...</string>
     <string name="pref_language_title">Tenim-pirenena</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

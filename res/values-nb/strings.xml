@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">Les høyt</string>
     <string name="menu_read_aloud_stop">Stopp høytlesning</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Del med venner</string>
     <string name="save_media">Lagre media som...</string>
     <string name="save_media_error">En feil oppstod under lagring av mediet!</string>
     <string name="save_media_saved">Lagret media som %1$s i din bildemappe.</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">Velg en ZIM-innholdsfil (*.zim)</string>
     <string name="add_bookmark">Marker denne siden</string>
     <string name="remove_bookmark">Fjern markering for valgte</string>
-    <string name="info_share_title">Jeg nyter Wikipedia offline med Kiwix!</string>
-    <string name="info_share_content">Jeg nyter Wikipedia offline med Kiwix! Hele menneskehetens kunnskap tilgjengelig hvor enn du er! Uten internett! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Ingen ZIM-filer ble funnet på din enhet. Ta en kikk på hjelpesiden for hjelp om hvordan en laster inn innhold i Kiwix. Hvis du har lastet inn en ZIM-fil på din enhet/eksterne lagring kan du forsøke på nytt om ett minutt eller omstarte enheten.</string>
     <string name="error_filenotfound">Feil: Den valgte ZIM-filen ble ikke funnet</string>
     <string name="error_fileinvalid">Feil: Den valgte filen er ikke en gyldig ZIM-fil</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">Vis artikler med inverterte farger</string>
     <string name="pref_backtotop">Tilbake til toppen</string>
     <string name="pref_backtotop_summary">Vis en knapp nederst på siden for å returnere til toppen</string>
-    <string name="share_via">Del via...</string>
     <string name="pref_language_title">Språk</string>
     <string name="pref_language_chooser">Velg et språk</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

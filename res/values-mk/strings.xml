@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">Прочитај на глас</string>
     <string name="menu_read_aloud_stop">Запри читање на глас</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">Сподели со пријателите</string>
     <string name="save_media">Зачувај го медиумиот како...</string>
     <string name="save_media_error">Настана грешка при зачувувањето на податотеката!</string>
     <string name="save_media_saved">Податотеката е зачувана во %1$s во вашата папка „Слики“</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">Изберете ZIM-податотека (*.zim)</string>
     <string name="add_bookmark">Означи ја страницава</string>
     <string name="remove_bookmark">Тргни обележано</string>
-    <string name="info_share_title">Ја читам Википедија вонсемрежно со Kiwix!</string>
-    <string name="info_share_content">Ја читам Википедија вонсемрежно со Kiwix! Целокупното знаење на човештвото ми е при рака, кај и да сум! Вон семрежјето! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">На уредот не се најдени ZIM-податотеки.\nПогледајте ја страницата за помош за да дознаете како да ставите содржини во Kiwix.\nАко сепак имате ставено ZIM-податотека во уредот/надворешниот склад, обидете се повторно за една минута или превклучете го уредот.</string>
     <string name="error_filenotfound">Грешка: Не ја најдов избраната ZIM-податотека.</string>
     <string name="error_fileinvalid">Грешка: Одбраната податотека не е вежачка ZIM-податотека.</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">Прикажувај ги статиите во обратни бои</string>
     <string name="pref_backtotop">Најгоре</string>
     <string name="pref_backtotop_summary">Прикажувај копче за враќање најгоре на крајот од страницата</string>
-    <string name="share_via">Сподели преку...</string>
     <string name="pref_language_title">Јазик</string>
     <string name="pref_language_chooser">Изберете јазик</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

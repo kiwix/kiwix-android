@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">להקריא בקול</string>
     <string name="menu_read_aloud_stop">להפסיק להקריא בקול</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">שיתוף עם חברים</string>
     <string name="save_media">לשמור מדיה בתור...</string>
     <string name="save_media_error">אירעה שגיאה בעת ניסיון לשמור את המדיה!</string>
     <string name="save_media_saved">נמדיה נשמרה בתור %1$s בתיקיית התמונות שלך</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">בחירת קובץ ZIM עם תוכן (*.zim)</string>
     <string name="add_bookmark">סימון דף זה</string>
     <string name="remove_bookmark">ביטול סימון בקטע הנבחר</string>
-    <string name="info_share_title">כיף לי עם ויקיפדיה בלי חיבור לרשת באמצעות קיוויקס!</string>
-    <string name="info_share_content">כיף לי עם ויקיפדיה בלי חיבור לרשת באמצעות קיוויקס! כל הידע האנושי בידיים שלי בכל מקום שאליו אלך! בלי אינטרנט! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">לא נמצאו קובצי ZIM במכשיר שלך.\nר\' את דף העזרה להכוונה על טעינת תוכן לקיוויקס.\nאם שמת קובץ ZIM במכשיר שלך או באחסון חיצוני, אולי כדאי לך לנסות שוב בעוד דקה או לאתחל את המכשיר.</string>
     <string name="error_filenotfound">שגיאה: קובץ ה־ZIM שנבחר לא נמצא.</string>
     <string name="error_fileinvalid">שגיאה: הקובץ שנבחר אינו קובץ ZIM תקין.</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">הצגת ערכים עם צבעים הפוכים</string>
     <string name="pref_backtotop">חזרה למעלה</string>
     <string name="pref_backtotop_summary">הצגת כפתור בסוף העמוד לגלילה למעלה</string>
-    <string name="share_via">שיתוף דרך...</string>
     <string name="pref_language_title">שפה</string>
     <string name="pref_language_chooser">בחירת שפה</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>

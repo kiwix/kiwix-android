@@ -16,7 +16,6 @@
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="menu_share">મિત્રો સાથે વહેંચો</string>
     <string name="save_media">Save Media</string>
     <string name="save_media_error">An error occured when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
@@ -27,8 +26,6 @@
     <string name="choose_file">ZIM માહિતી ફાઇલ (*.zim) પસંદ કરો</string>
     <string name="add_bookmark">આ પાનું ચિન્હિત  કરો</string>
     <string name="remove_bookmark">આ પાનું  ચિન્હિત  ના કરો</string>
-    <string name="info_share_title">Kiwix સાથે હું વિકિપીડિઆ ઑફલાઇન માણી શકુ છું!</string>
-    <string name="info_share_content">I enjoy Wikipedia Offline with Kiwix! The whole human knowledge at hand wherever you go! Without Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
     <string name="error_filenotfound">ક્ષતિ: પસંદ કરેલ ZIM ફાઇલ મળી શકી નહી.</string>
     <string name="error_fileinvalid">ક્ષતિ: પસંદ કરેલ ફાઇલ યોગ્ય ZIM ફાઇલ નથી.</string>
@@ -49,7 +46,6 @@
     <string name="pref_nightmode_summary">ઉલ્ટા રંગો વડે લેખો દર્શાવો</string>
     <string name="pref_backtotop">ટોપ પર પાછા જાઓ</string>
     <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
-    <string name="share_via">આના વડે વહેંચો...</string>
     <string name="pref_language_title">ભાષા</string>
     <string name="pref_language_chooser">ભાષા પસંદ કરો</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
