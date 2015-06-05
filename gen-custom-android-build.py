@@ -330,10 +330,17 @@ def main(args):
             '--package={}'
             .format(jsdata.get('package')))  # --apk --clean')
 
-    # copy APK somewhere
+    # move generated APK to satisfy other scripts
+    for variant in ('debug', 'debug-unaligned', 'release-unsigned'):
+        shutil.move(os.path.join(ANDROID_PATH, 'build', 'outputs', 'apk',
+                                 "{}-{}.apk"
+                                 .format(jsdata.get('package'), variant)),
+                    os.path.join(CURRENT_PATH, 'build', 'outputs', 'apk',
+                                 "{}-{}.apk"
+                                 .format(jsdata.get('package'), variant)))
 
     # delete temp folder
-    # shutil.rmtree(ANDROID_PATH)
+    shutil.rmtree(ANDROID_PATH)
 
 if __name__ == '__main__':
     main(sys.argv)

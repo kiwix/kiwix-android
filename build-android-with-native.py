@@ -11,6 +11,7 @@ import re
 import sys
 import copy
 import shutil
+from xml.dom.minidom import parse
 from subprocess import call, check_output
 
 # target platform to compile for
@@ -18,7 +19,13 @@ from subprocess import call, check_output
 # arm-linux-androideabi, mipsel-linux-android, x86, llvm
 ALL_ARCHS = ['arm-linux-androideabi', 'mipsel-linux-android', 'x86']
 
-PACKAGE = 'org.kiwix.kiwixmobile'
+
+def find_package():
+    d = parse('AndroidManifest.xml')
+    return [e.getAttribute('package').strip()
+            for e in d.getElementsByTagName('manifest')][-1]
+
+PACKAGE = find_package()
 
 USAGE = '''Usage:  {arg0} [--option]
 
@@ -38,9 +45,7 @@ USAGE = '''Usage:  {arg0} [--option]
 
     --on=ARCH       Disable steps on all archs and cherry pick the ones wanted.
                     Multiple --on=ARCH can be specified.
-                    ARCH in 'armeabi', 'mips', 'x86'.
-
-    --package=org.kiwix.kiwixmobile '''
+                    ARCH in 'armeabi', 'mips', 'x86'. '''
 
 
 def init_with_args(args):
@@ -82,13 +87,6 @@ def init_with_args(args):
                 doptions.pop(idx)
         # recreate options list from other items
         options = [v for v in doptions.values() if not v.startswith('--on=')]
-
-    # do we have an --package= flag?
-    if '--package=' in u' '.join(args):
-        for option in options:
-            if option.startswith('--package'):
-                global PACKAGE
-                PACKAGE = option.split('=', 1)[-1]
 
     if len(options):
         # we received options.
@@ -548,6 +546,8 @@ for arch in ARCHS:
 
 if LOCALES_TXT:
 
+    os.chdir(curdir)
+
     # Get the path of the res folder
     res_path = os.path.join(curdir, 'res')
 
@@ -568,18 +568,32 @@ if LOCALES_TXT:
 
 if COMPILE_APK:
 
+    os.chdir(curdir)
+
     # Compile java and build APK
-    syscall('rm -f build/outputs/apk/*.apk', shell=True)
+    syscall('rm -f build/outputs/apk/{}-*.apk'.format(PACKAGE), shell=True)
     syscall('./gradlew build --stacktrace')
 
+    folder_name = os.path.split(curdir)[-1]
+
     # Check that the step went well
-    if not os.path.exists(os.path.join('build', 'outputs', 'apk',
-                                       'android-debug-unaligned.apk')):
-        failed_on_step("The android-debug-unaligned.apk package "
-                       "has not been created and is not present.")
+    if not os.path.exists(
+            os.path.join('build', 'outputs', 'apk',
+                         '{}-debug-unaligned.apk'.format(folder_name))):
+        failed_on_step("The {}-debug-unaligned.apk package "
+                       "has not been created and is not present."
+                       .format(folder_name))
+
+    # rename APKs for better listing
+    for variant in ('debug', 'debug-unaligned', 'release-unsigned'):
+        shutil.move(os.path.join('build', 'outputs', 'apk',
+                                 "{}-{}.apk".format(folder_name, variant)),
+                    os.path.join('build', 'outputs', 'apk',
+                                 "{}-{}.apk".format(PACKAGE, variant)))
 
 if CLEAN:
 
+    os.chdir(curdir)
     # remove everything from build folder expect the APKs
     syscall('rm -rf build/generated build/intermediates build/native-libs '
             'build/reports build/test-results build/tmp build/outputs/logs '
