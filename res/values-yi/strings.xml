@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">עפֿענען טעקע…</string>
@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">אוועקגיין פון פולן עקראן</string>
     <string name="menu_read_aloud">לייענען הויך</string>
     <string name="menu_read_aloud_stop">אויפהיטן לייענען הויך</string>
-    <string name="menu_exit">פֿארלאזן</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">טיילט מיט חברים</string>
     <string name="save_media">שפייכלערן מעדיעוויקי ווי…</string>
@@ -26,9 +25,6 @@
     <string name="search_label">זוכן</string>
     <string name="articlesearch_hint">Type to lookup articles</string>
     <string name="choose_file">Select a ZIM Content File (*.zim)</string>
-    <string name="open_in_new_tab">עפענען לינק אין א נײַעם טאב?</string>
-    <string name="remove_tab_confirm">צי ווילט איר אראפנעמען דעם טאב?</string>
-    <string name="remove_tab">אראפנעמען טאב</string>
     <string name="add_bookmark">מארקירן דעם בלאט</string>
     <string name="remove_bookmark">אוממארקירן אויסגעוויילטע</string>
     <string name="info_share_title">כ׳האב הנאה פון וויקיפעדיע אפליין מיט קיוויקס!</string>
@@ -39,8 +35,7 @@
     <string name="error_articlenotfound">טעות: לאדן ארטיקל  \"%1$s\" דורגעפאלן.</string>
     <string name="error_articleurlnotfound">טעות: לאדן ארטיקל (Url: %1$s) דורכגעפאלן.</string>
     <string name="pref_display_title">אויסשטעלונג</string>
-    <string name="pref_zoom_title">פארגרעסערונג ניווא</string>
-    <string name="pref_zoom_dialogtitle">פארגרעסערונג ניווא</string>
+    <string name="pref_zoom_dialog">פארגרעסערונג ניווא</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">אויטאמאטיש</item>
         <item name="pref_zoom_entry_small">קליין</item>
@@ -50,7 +45,6 @@
     <string name="pref_info_title">אינפֿארמאציע</string>
     <string name="pref_info_version">ווערסיע</string>
     <string name="pref_zoom_enable">Zoom controls</string>
-    <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
     <string name="pref_nightmode">נאכטמאדע</string>
     <string name="pref_nightmode_summary">Show articles with reverted colors</string>
     <string name="pref_backtotop">צוריק אויבן</string>
@@ -58,6 +52,5 @@
     <string name="share_via">טיילן דורך…</string>
     <string name="pref_language_title">שפראַך</string>
     <string name="pref_language_chooser">קלויבט א שפראך</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

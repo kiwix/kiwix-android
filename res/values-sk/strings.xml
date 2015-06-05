@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Otvoriť súbor...</string>
@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Ukončiť režim celej obrazovky</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">Ukončiť</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Zdielať s priaťeľmi</string>
     <string name="save_media">Uložiť médiá ako...</string>
@@ -26,9 +25,6 @@
     <string name="search_label">Hľadať</string>
     <string name="articlesearch_hint">Napíšte čo chcete vyhľadať</string>
     <string name="choose_file">Vyberte súbor so ZIM obsahom (*.zim)</string>
-    <string name="open_in_new_tab">Otvoriť odkaz na novej karte?</string>
-    <string name="remove_tab_confirm">Chcete odstrániť túto kartu?</string>
-    <string name="remove_tab">Odstrániť kartu</string>
     <string name="add_bookmark">Označiť túto stránku</string>
     <string name="remove_bookmark">Zrušiť označenie vybraných</string>
     <string name="info_share_title">Užívam si Wikipédiu Offline s Kiwixom!</string>
@@ -39,8 +35,7 @@
     <string name="error_articlenotfound">Chyba: Načítavanie článku \"%1$s\" sa nepodarilo.</string>
     <string name="error_articleurlnotfound">Chyba: Načítavanie článku (Url: %1$s) sa nepodarilo.</string>
     <string name="pref_display_title">Zobrazenie</string>
-    <string name="pref_zoom_title">Úroveň lupy</string>
-    <string name="pref_zoom_dialogtitle">Úroveň lupy</string>
+    <string name="pref_zoom_dialog">Úroveň lupy</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automaticky</item>
         <item name="pref_zoom_entry_small">Malé</item>
@@ -50,7 +45,6 @@
     <string name="pref_info_title">Informácie</string>
     <string name="pref_info_version">Verzia</string>
     <string name="pref_zoom_enable">Ovládanie prvky lupy</string>
-    <string name="pref_zoom_enable_summary">Zobraziť tlačidlo lupy na obrazovke v dolnom pravom rohu.</string>
     <string name="pref_nightmode">Nočný režim</string>
     <string name="pref_nightmode_summary">Zobraziť články s otočenými farbami</string>
     <string name="pref_backtotop">Späť na začiatok</string>
@@ -58,6 +52,5 @@
     <string name="share_via">Zdielať cez...</string>
     <string name="pref_language_title">Jazyk</string>
     <string name="pref_language_chooser">Zvoliť jazyk</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

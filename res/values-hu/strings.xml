@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Fájl megnyitása...</string>
@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Kilépés a teljes képernyőből</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">Kilépés</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Megosztás ismerősökkel</string>
     <string name="save_media">Média mentése másként...</string>
@@ -26,9 +25,6 @@
     <string name="search_label">Keresés</string>
     <string name="articlesearch_hint">Írja be a keresett cikk címét</string>
     <string name="choose_file">ZIM-tartalomfájl kiválasztása (*.zim)</string>
-    <string name="open_in_new_tab">Hivatkozás megnyitása új lapon?</string>
-    <string name="remove_tab_confirm">Eltávolítja ezt a lapot?</string>
-    <string name="remove_tab">Lap eltávolítása</string>
     <string name="add_bookmark">Oldal megjelölése</string>
     <string name="remove_bookmark">Kijelölés megszüntetése</string>
     <string name="info_share_title">Kedvelem a Kiwix offline Wikipédia-olvasót!</string>
@@ -39,8 +35,7 @@
     <string name="error_articlenotfound">Hiba: A(z) \"%1$s\" cikk betöltése nem sikerült.</string>
     <string name="error_articleurlnotfound">Hiba: A(z) (Url: %1$s) cikk betöltése nem sikerült.</string>
     <string name="pref_display_title">Megjelenítés</string>
-    <string name="pref_zoom_title">Nagyítási szint</string>
-    <string name="pref_zoom_dialogtitle">Nagyítási szint</string>
+    <string name="pref_zoom_dialog">Nagyítási szint</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatikus</item>
         <item name="pref_zoom_entry_small">Kicsi</item>
@@ -50,7 +45,6 @@
     <string name="pref_info_title">Információ</string>
     <string name="pref_info_version">Verzió</string>
     <string name="pref_zoom_enable">Nagyítási vezérlők</string>
-    <string name="pref_zoom_enable_summary">Nagyítás gomb megjelenítése a képernyő jobb alsó sarkában</string>
     <string name="pref_nightmode">Éjszakai mód</string>
     <string name="pref_nightmode_summary">Inverz színek használata a cikkek megjelenítéséhez</string>
     <string name="pref_backtotop">Vissza a lap tetejére</string>
@@ -58,6 +52,5 @@
     <string name="share_via">Megosztás ezzel...</string>
     <string name="pref_language_title">Nyelv</string>
     <string name="pref_language_chooser">Válassz nyelvet</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

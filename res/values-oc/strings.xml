@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Dobrir un fichièr...</string>
@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Quitar l\'ecran complet</string>
     <string name="menu_read_aloud">Legir a votz nauta</string>
     <string name="menu_read_aloud_stop">Arrestar de legir a votz nauta</string>
-    <string name="menu_exit">Sortir</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Partejar amb vòstres amics</string>
     <string name="save_media">Enregistrar lo mèdia jos…</string>
@@ -26,9 +25,6 @@
     <string name="search_label">Cèrca</string>
     <string name="articlesearch_hint">Picar per recercar d\'articles</string>
     <string name="choose_file">Seleccionar un fichièr de contengut ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Dobrir lo ligam dins un onglet novèl ?</string>
-    <string name="remove_tab_confirm">Volètz suprimir aqueste onglet ?</string>
-    <string name="remove_tab">Suprimir l\'onglet</string>
     <string name="add_bookmark">Marcar aquela pagina</string>
     <string name="remove_bookmark">Desmarcar la seleccion</string>
     <string name="info_share_title">M\'agrada Wikipèdia Offline amb Kiwix !</string>
@@ -39,8 +35,7 @@
     <string name="error_articlenotfound">Error : Fracàs al cargament de l’article « %1$s ».</string>
     <string name="error_articleurlnotfound">Error : Lo cargament de l’article (Url: %1$s) a fracassat.</string>
     <string name="pref_display_title">Afichar</string>
-    <string name="pref_zoom_title">Nivèl de zoom</string>
-    <string name="pref_zoom_dialogtitle">Nivèl de zoom</string>
+    <string name="pref_zoom_dialog">Nivèl de zoom</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
         <item name="pref_zoom_entry_small">Pichon</item>
@@ -50,7 +45,6 @@
     <string name="pref_info_title">Informacion</string>
     <string name="pref_info_version">Version</string>
     <string name="pref_zoom_enable">Contraròtles del zoom</string>
-    <string name="pref_zoom_enable_summary">Afichar un boton de zoom dins lo canton inferior drech de l’ecran</string>
     <string name="pref_nightmode">Mòde nocturne</string>
     <string name="pref_nightmode_summary">Afichar los articles en colors inversadas</string>
     <string name="pref_backtotop">Retorn al començament</string>
@@ -58,6 +52,5 @@
     <string name="share_via">Partejar via...</string>
     <string name="pref_language_title">Lenga</string>
     <string name="pref_language_chooser">Causir una lenga</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

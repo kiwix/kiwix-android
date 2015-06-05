@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Dosya aç...</string>
@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Tam ekrandan çık</string>
     <string name="menu_read_aloud">Yüksek sesle oku</string>
     <string name="menu_read_aloud_stop">Yüksek sesle okumayı sonlandır</string>
-    <string name="menu_exit">Çık</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Arkadaşlarınla paylaş</string>
     <string name="save_media">Medyayı şu şekilde kaydet...</string>
@@ -26,9 +25,6 @@
     <string name="search_label">Ara</string>
     <string name="articlesearch_hint">Makalelerde aranacak kelimeyi yazın</string>
     <string name="choose_file">Bir ZIM İçerik Dosyası seçin (*.zim)</string>
-    <string name="open_in_new_tab">Bağlantı yeni sekmede açılsın mı?</string>
-    <string name="remove_tab_confirm">Bu sekmeyi kaldırmak istediğinizden emin misiniz?</string>
-    <string name="remove_tab">Sekmeyi kaldır</string>
     <string name="add_bookmark">Bu sayfayı işaretle</string>
     <string name="remove_bookmark">Seçilenin işaretini kaldır</string>
     <string name="info_share_title">Kiwix ile Çevrim Dışı Vikipedi\'nin tadını çıkarıyorum!</string>
@@ -39,8 +35,7 @@
     <string name="error_articlenotfound">Hata: \"%1$s\" makalesinin yüklemesi başarısız oldu.</string>
     <string name="error_articleurlnotfound">Hata: (Url: %1$s) makalesinin yüklemesi başarısız.</string>
     <string name="pref_display_title">Göster</string>
-    <string name="pref_zoom_title">Zum seviyesi</string>
-    <string name="pref_zoom_dialogtitle">Zum seviyesi</string>
+    <string name="pref_zoom_dialog">Zum seviyesi</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Otomatik</item>
         <item name="pref_zoom_entry_small">Küçük</item>
@@ -50,7 +45,6 @@
     <string name="pref_info_title">Bilgi</string>
     <string name="pref_info_version">Sürüm</string>
     <string name="pref_zoom_enable">Zum kontrolleri</string>
-    <string name="pref_zoom_enable_summary">Ekranın sağ alt köşesinde bir zum butonu görüntüle</string>
     <string name="pref_nightmode">Gece modu</string>
     <string name="pref_nightmode_summary">Makaleleri dönüştürülmüş renklerle göster</string>
     <string name="pref_backtotop">Başa dön</string>
@@ -58,6 +52,5 @@
     <string name="share_via">Üzerinden paylaşın...</string>
     <string name="pref_language_title">Dil</string>
     <string name="pref_language_chooser">Bir dil seçin</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

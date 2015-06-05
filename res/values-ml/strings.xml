@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">പ്രമാണം തുറക്കുക...</string>
@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">പൂർണ സ്ക്രീനിൽ നിന്ന് പുറത്തു കടക്കുക</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">അടയ്ക്കുക</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">സുഹൃത്തുക്കളുമായി പങ്കുവയ്ക്കുക</string>
     <string name="save_media">Save Media</string>
@@ -26,9 +25,6 @@
     <string name="search_label">തിരയുക</string>
     <string name="articlesearch_hint">ലേഖനങ്ങൾ കണ്ടെത്താൻ ടൈപ്പ് ചെയ്യൂ.</string>
     <string name="choose_file">ഒരു സിം കണ്ടന്റ് ഫയൽ (*.zim) തിരഞ്ഞെടുക്കൂ</string>
-    <string name="open_in_new_tab">കണ്ണി പുതിയ ടാബിൽ തുറക്കണോ?</string>
-    <string name="remove_tab_confirm">ഈ ടാബ് ഇല്ലാതാക്കണോ?</string>
-    <string name="remove_tab">ടാബ് ഇല്ലാതാക്കുക</string>
     <string name="add_bookmark">ഈ താള്‍ അടയാളപ്പെടുത്തുക</string>
     <string name="remove_bookmark">തിരഞ്ഞെടുത്തവ അടയാളപ്പെടുത്താതിരിക്കുക</string>
     <string name="info_share_title">ഞാൻ കിവിക്സ് ഉപയോഗിച്ച് ഓഫ്‌ലൈനായി വിക്കിപീഡിയ വായിക്കുന്നു.</string>
@@ -39,8 +35,7 @@
     <string name="error_articlenotfound">പിഴവ്:  \"%1$s\" -  ലോഡ് ചെയ്യൽ പരാജയം</string>
     <string name="error_articleurlnotfound">പിഴവ്: (Url: %1$s) എന്ന ലേഖനം ലോഡ് ചെയ്യുന്നത് പരാജയപ്പെട്ടു.</string>
     <string name="pref_display_title">കാഴ്ച</string>
-    <string name="pref_zoom_title">സൂം നിലവാരം</string>
-    <string name="pref_zoom_dialogtitle">സൂം നിലവാരം</string>
+    <string name="pref_zoom_dialog">സൂം നിലവാരം</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
         <item name="pref_zoom_entry_small">ചെറുത്</item>
@@ -50,7 +45,6 @@
     <string name="pref_info_title">വിവരം</string>
     <string name="pref_info_version">പതിപ്പ്</string>
     <string name="pref_zoom_enable">സൂം നിയന്ത്രണങ്ങൾ</string>
-    <string name="pref_zoom_enable_summary">സ്ക്രീനിനു താഴെ വലതു മൂലയിലായി ഒരു സൂം ബട്ടൺ കാണിക്കുക</string>
     <string name="pref_nightmode">രാത്രികാല മോഡ്</string>
     <string name="pref_nightmode_summary">ലേഖനങ്ങളുടെ നിറം നേർവിപരീതമാക്കുക</string>
     <string name="pref_backtotop">തിരികെ മുകളിലേക്ക്</string>
@@ -58,6 +52,5 @@
     <string name="share_via">ഇതുവഴി പങ്ക് വെയ്ക്കുക</string>
     <string name="pref_language_title">ഭാഷ</string>
     <string name="pref_language_chooser">ഭാഷ തിരഞ്ഞെടുക്കുക</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Maak lêer oop...</string>
@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Verlaat volskerm-modus</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">Sluit</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Deel met vriende</string>
     <string name="save_media">Save Media</string>
@@ -26,9 +25,6 @@
     <string name="search_label">Soek</string>
     <string name="articlesearch_hint">Tik om artikels te soek</string>
     <string name="choose_file">Kies \'n ZIM-inhoudslêer (*.zim)</string>
-    <string name="open_in_new_tab">Open skakel in nuwe oortjie?</string>
-    <string name="remove_tab_confirm">Wil u die oortjie verwyder?</string>
-    <string name="remove_tab">Verwyder oortjie</string>
     <string name="add_bookmark">Merk hierdie bladsy</string>
     <string name="remove_bookmark">Ontmerk gekose</string>
     <string name="info_share_title">Ek geniet Wikipedia Aflyn met Kiwix!</string>
@@ -39,8 +35,7 @@
     <string name="error_articlenotfound">Fout: Laai van bladsy \"%1$s\" het gefaal.</string>
     <string name="error_articleurlnotfound">Fout: Laai van bladsy (URL: %1$s) het gefaal.</string>
     <string name="pref_display_title">Wys</string>
-    <string name="pref_zoom_title">Zoom-vlak</string>
-    <string name="pref_zoom_dialogtitle">Zoom-vlak</string>
+    <string name="pref_zoom_dialog">Zoom-vlak</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Outomaties</item>
         <item name="pref_zoom_entry_small">Klein</item>
@@ -50,7 +45,6 @@
     <string name="pref_info_title">Inligting</string>
     <string name="pref_info_version">Weergawe</string>
     <string name="pref_zoom_enable">Zoom-instellings</string>
-    <string name="pref_zoom_enable_summary">Wys \'n zoom-knop regs onder op die skerm</string>
     <string name="pref_nightmode">Nag-modus</string>
     <string name="pref_nightmode_summary">Wys artikels met omgekeerde kleure</string>
     <string name="pref_backtotop">Terug na bo</string>
@@ -58,6 +52,5 @@
     <string name="share_via">Deel...</string>
     <string name="pref_language_title">Taal</string>
     <string name="pref_language_chooser">Kies \'n taal</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

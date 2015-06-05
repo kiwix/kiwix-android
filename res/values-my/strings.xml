@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">ဖိုင်ဖွင့်...</string>
@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">မျက်နှာဖွင့်အပြည့်မှ ထွက်ရန်</string>
     <string name="menu_read_aloud">ကျယ်ကျယ်ဖတ်ပါ</string>
     <string name="menu_read_aloud_stop">ကျယ်ကျယ်ဖတ်နေခြင်းကို ရပ်တန့်ပါ</string>
-    <string name="menu_exit">ထွက်</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">မိတ်ဆွေများနှင့် ဝေမျှရန်</string>
     <string name="save_media">မီဒီယာဖိုင်ကို ဤသို့သိမ်းရန်..</string>
@@ -26,9 +25,6 @@
     <string name="search_label">ရှာ​ဖွေ​ရန်​</string>
     <string name="articlesearch_hint">ဆောင်းပါးများ ရှာဖွေကြည့်ရှုရန် စာရိုက်ထည့်ပါ</string>
     <string name="choose_file">ZIM အချက်အလက်ဖိုင်တစ်ခုကို ရွေးချယ်ပါ (*.zim)</string>
-    <string name="open_in_new_tab">တဘ်အသစ်မှာ လင့်ကိုဖွင့်မလား။</string>
-    <string name="remove_tab_confirm">ဤ တဘ်ကို ဖယ်ရှားချင်ပါသလား။</string>
-    <string name="remove_tab">တဘ်ကို ဖယ်ရှားရန်</string>
     <string name="add_bookmark">ဤစာမျက်နှာကို မှတ်ထားရန်</string>
     <string name="remove_bookmark">မှတ်သားထားသည်ကို ပယ်ဖျက်ရန်</string>
     <string name="info_share_title">ကီဝစ်သုံးထားတဲ့ ဝီကီပီးဒီးယားအော့ဖ်လိုင်းကို ကြိုက်တယ်။</string>
@@ -39,8 +35,7 @@
     <string name="error_articlenotfound">အမှားသတိပေးချက် − \"%1$s\" ဆောင်းပါးထည့်သွင်းခြင်း မအောင်မြင်ပါ။</string>
     <string name="error_articleurlnotfound">အမှားသတိပေးချက် − (Url: %1$s) ဆောင်းပါးထည့်သွင်းခြင်း မအောင်မြင်ပါ။</string>
     <string name="pref_display_title">မြင်ကွင်း</string>
-    <string name="pref_zoom_title">ချဲ့ကြည့်သည့်အဆင့်</string>
-    <string name="pref_zoom_dialogtitle">ချဲ့ကြည့်သည့်အဆင့်</string>
+    <string name="pref_zoom_dialog">ချဲ့ကြည့်သည့်အဆင့်</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">အလိုအလျောက်</item>
         <item name="pref_zoom_entry_small">သေးသေး</item>
@@ -50,7 +45,6 @@
     <string name="pref_info_title">သတင်းအချက်အလက်</string>
     <string name="pref_info_version">မူ</string>
     <string name="pref_zoom_enable">ချဲ့ကြည့်ရာတွင် ထိန်းချုပ်မှုများ</string>
-    <string name="pref_zoom_enable_summary">ချဲ့ကြည့်သည့်ခလုတ်ကို စကရင်၏ အောက်ခြေ ညာဘက်ထောင့်တွင် ပြပါ။</string>
     <string name="pref_nightmode">ညကြည့်ပုံစံ</string>
     <string name="pref_nightmode_summary">ဆောင်းပါးများကို အရောင်ပြောင်းပြန်သုံး၍ ပြရန်</string>
     <string name="pref_backtotop">ထိပ်ဆုံးသို့ ပြန်သွားရန်</string>
@@ -58,6 +52,5 @@
     <string name="share_via">ဤသည်မှတဆင့် မျှဝေပါ...</string>
     <string name="pref_language_title">ဘာသာစကား</string>
     <string name="pref_language_chooser">ဘာသာစကားရွေးချယ်ရန်</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

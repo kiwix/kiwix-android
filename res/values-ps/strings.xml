@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">دوتنه پرانيستل...</string>
@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">بشپړ پردې څخه وتل</string>
     <string name="menu_read_aloud">په جگ غږ لوستل</string>
     <string name="menu_read_aloud_stop">په جگ غږ لوستل درول</string>
-    <string name="menu_exit">بندول</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">له ملگرو سره شريکول</string>
     <string name="save_media">رسنۍ ساتل لکه...</string>
@@ -26,9 +25,6 @@
     <string name="search_label">پلټل</string>
     <string name="articlesearch_hint">د ليکنو موندلو لپاره وټاپۍ</string>
     <string name="choose_file">د ZIM مېنځپانگې يوه دوتنه ټاکل (*.zim)</string>
-    <string name="open_in_new_tab">تړنه په نوې کړکۍ کې پرانيستل</string>
-    <string name="remove_tab_confirm">آيا دا ټب غورځول غواړې؟</string>
-    <string name="remove_tab">ټب غورځول</string>
     <string name="add_bookmark">دا مخ په نخښه کول</string>
     <string name="remove_bookmark">ټاکلي بې نخښې کول</string>
     <string name="info_share_title">زه د کيويکس په مرسته له پرې ليکې ويکيپېډيا خوند اخلم!</string>
@@ -39,8 +35,7 @@
     <string name="error_articlenotfound">تېروتنه: ليکنه برسېرېدنه \"%1$s\" نابريالۍ شوه.</string>
     <string name="error_articleurlnotfound">تېروتنه: ليکنه برسېرېدنه (يو آر ال: %1$s) نابريالئ شوه.</string>
     <string name="pref_display_title">ښکارېدنه</string>
-    <string name="pref_zoom_title">لوډېرولو کچه</string>
-    <string name="pref_zoom_dialogtitle">لوډېرولو کچه</string>
+    <string name="pref_zoom_dialog">لوډېرولو کچه</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">اتوماتيک</item>
         <item name="pref_zoom_entry_small">وړوکی</item>
@@ -50,7 +45,6 @@
     <string name="pref_info_title">مالومات</string>
     <string name="pref_info_version">بڼه</string>
     <string name="pref_zoom_enable">لوډېرولو مهارونې</string>
-    <string name="pref_zoom_enable_summary">د لوډېرولو يوه تڼۍ د پردې لانديني ښي گوټ کې ښکاره کول</string>
     <string name="pref_nightmode">د شپې بڼه</string>
     <string name="pref_nightmode_summary">رنگ اړول شوې ليکنې ښکاره کول</string>
     <string name="pref_backtotop">بېرته سر ته</string>
@@ -58,6 +52,5 @@
     <string name="share_via">د شريکولو لار ...</string>
     <string name="pref_language_title">ژبه</string>
     <string name="pref_language_chooser">يوه ژبه وټاکئ</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

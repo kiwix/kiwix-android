@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Agor ffeil...</string>
@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Gadael modd sgrin-llawn</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">Gorffen</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Rhannu gyda ffrindiau</string>
     <string name="save_media">Cadw\'r cyfrwng fel...</string>
@@ -26,9 +25,6 @@
     <string name="search_label">Chwilio</string>
     <string name="articlesearch_hint">Teipiwch i chwilio am erthyglau</string>
     <string name="choose_file">Dewisiwch Ffeil ZIM Content (*.zim)</string>
-    <string name="open_in_new_tab">Agor y ddolen mewn tab newydd?</string>
-    <string name="remove_tab_confirm">Ydych chi am i gael gwared ar y tab hwn?</string>
-    <string name="remove_tab">Dileu tab</string>
     <string name="add_bookmark">Marcio\'r dudalen hon</string>
     <string name="remove_bookmark">Dewiswyd dad-farcio</string>
     <string name="info_share_title">Rwy\'n mwynhau Wikipedia all-lein gyda Kiwix!</string>
@@ -39,8 +35,7 @@
     <string name="error_articlenotfound">Gwall: Methwyd a llwytho\'r erthygl: \"%1$s\".</string>
     <string name="error_articleurlnotfound">Gwall: Methwyd a llwytho\'r erthygl: (Url: %1$s).</string>
     <string name="pref_display_title">Golwg</string>
-    <string name="pref_zoom_title">Lefel pellhau</string>
-    <string name="pref_zoom_dialogtitle">Lefel pellhau</string>
+    <string name="pref_zoom_dialog">Lefel pellhau</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Otomatig</item>
         <item name="pref_zoom_entry_small">Bach</item>
@@ -50,7 +45,6 @@
     <string name="pref_info_title">Gwybodaeth</string>
     <string name="pref_info_version">Fersiwn</string>
     <string name="pref_zoom_enable">Rheolaeth pellter</string>
-    <string name="pref_zoom_enable_summary">Arddangos botwm chwyddo yn y gornel dde ar waelod y sgrîn.</string>
     <string name="pref_nightmode">Modd nos</string>
     <string name="pref_nightmode_summary">Dangos erthyglau gyda lliwiau croes</string>
     <string name="pref_backtotop">Nôl i\'r brig</string>
@@ -58,6 +52,5 @@
     <string name="share_via">Rhannwch drwy</string>
     <string name="pref_language_title">Iaith</string>
     <string name="pref_language_chooser">Dewis iaith</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

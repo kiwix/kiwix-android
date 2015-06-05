@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">פתיחת קובץ...</string>
@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">יציאה ממסך מלא</string>
     <string name="menu_read_aloud">להקריא בקול</string>
     <string name="menu_read_aloud_stop">להפסיק להקריא בקול</string>
-    <string name="menu_exit">יציאה</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">שיתוף עם חברים</string>
     <string name="save_media">לשמור מדיה בתור...</string>
@@ -26,9 +25,6 @@
     <string name="search_label">חיפוש</string>
     <string name="articlesearch_hint">להקליד כאן לחיפוש ערכים</string>
     <string name="choose_file">בחירת קובץ ZIM עם תוכן (*.zim)</string>
-    <string name="open_in_new_tab">לפתוח קישור בלשונית חדשה?</string>
-    <string name="remove_tab_confirm">האם להסיר את הלשונית הזאת?</string>
-    <string name="remove_tab">הסרת לשונית</string>
     <string name="add_bookmark">סימון דף זה</string>
     <string name="remove_bookmark">ביטול סימון בקטע הנבחר</string>
     <string name="info_share_title">כיף לי עם ויקיפדיה בלי חיבור לרשת באמצעות קיוויקס!</string>
@@ -39,8 +35,7 @@
     <string name="error_articlenotfound">שגיאה: טעינת הערך \"%1$s\" נכשלה.</string>
     <string name="error_articleurlnotfound">שגיאה: טעינת הערך נכשלה (כתובת: %1$s).</string>
     <string name="pref_display_title">תצוגה</string>
-    <string name="pref_zoom_title">רמת התקריב</string>
-    <string name="pref_zoom_dialogtitle">רמת התקריב</string>
+    <string name="pref_zoom_dialog">רמת התקריב</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">אוטומטי</item>
         <item name="pref_zoom_entry_small">קטן</item>
@@ -50,7 +45,6 @@
     <string name="pref_info_title">מידע</string>
     <string name="pref_info_version">גרסה</string>
     <string name="pref_zoom_enable">בקרת תקריב</string>
-    <string name="pref_zoom_enable_summary">הצגת קפתור תקריב בפינה השמאלית התחתונה של המסך</string>
     <string name="pref_nightmode">מצב לילה</string>
     <string name="pref_nightmode_summary">הצגת ערכים עם צבעים הפוכים</string>
     <string name="pref_backtotop">חזרה למעלה</string>
@@ -58,6 +52,5 @@
     <string name="share_via">שיתוף דרך...</string>
     <string name="pref_language_title">שפה</string>
     <string name="pref_language_chooser">בחירת שפה</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

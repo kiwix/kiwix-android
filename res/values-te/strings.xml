@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">దస్త్రాన్ని తెరువు...</string>
@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">నిండుతెరను చాలించు</string>
     <string name="menu_read_aloud">బయటకి చదువు</string>
     <string name="menu_read_aloud_stop">బయటకి చదవడం ఆపివేయి</string>
-    <string name="menu_exit">నిలిపివేయి</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">స్నేహితులతో పంచుకోండి</string>
     <string name="save_media">మీడియాని ఇలా భద్రపరచండి...</string>
@@ -26,9 +25,6 @@
     <string name="search_label">వెతుకు</string>
     <string name="articlesearch_hint">వ్యాసాల్లో వెతకడానికి టైపుచెయ్యండి</string>
     <string name="choose_file">ZIM విషయ దస్త్రాన్ని ఎంచుకోండి (*.zim)</string>
-    <string name="open_in_new_tab">లంకెను కొత్త ట్యాబులో తెరువాలా?</string>
-    <string name="remove_tab_confirm">ఈ ట్యాబును తొలగించాలనుకుంటున్నారా?</string>
-    <string name="remove_tab">ట్యాబును తొలగించండి</string>
     <string name="add_bookmark">ఈ పుటను గుర్తించు</string>
     <string name="remove_bookmark">ఎంపికచేసినవాటినితొలగించు</string>
     <string name="info_share_title">నేను కివిక్స్ ద్వారా ఆఫ్లైన్ వికీపీడియాను సంతోషంగా వాడుతున్నాను!</string>
@@ -39,8 +35,7 @@
     <string name="error_articlenotfound">దోషం :  \"%1$s\" వ్యాసం లోడ్ చెయ్యడం విఫలమయింది.</string>
     <string name="error_articleurlnotfound">దోషం : వ్యాసం (Url: %1$s) ను లోడ్ చెయ్యడం విఫలమయింది.</string>
     <string name="pref_display_title">వీక్షణం</string>
-    <string name="pref_zoom_title">అతిరూపణ స్థాయి</string>
-    <string name="pref_zoom_dialogtitle">అతిరూపణ స్థాయి</string>
+    <string name="pref_zoom_dialog">అతిరూపణ స్థాయి</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">స్వయంచాలితం</item>
         <item name="pref_zoom_entry_small">చిన్న</item>
@@ -50,7 +45,6 @@
     <string name="pref_info_title">సమాచారం</string>
     <string name="pref_info_version">సంచిక</string>
     <string name="pref_zoom_enable">అతిరూపణ నియంత్రణలు</string>
-    <string name="pref_zoom_enable_summary">అతిరూపణ బొత్తమును స్క్రీనుకు కింద కుడి మూలన చూపండి</string>
     <string name="pref_nightmode">చీకటి రీతి</string>
     <string name="pref_nightmode_summary">వ్యాసాలను వ్యతిరేక రంగులలో చూపించు</string>
     <string name="pref_backtotop">తిరిగి పైకి</string>
@@ -58,6 +52,5 @@
     <string name="share_via">పంచుకోండి ...</string>
     <string name="pref_language_title">భాష</string>
     <string name="pref_language_chooser">భాషను ఎంచుకోండి</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

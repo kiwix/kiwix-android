@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Deschide un fișier...</string>
@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Ieșire din ecran complet</string>
     <string name="menu_read_aloud">Citește cu voce tare</string>
     <string name="menu_read_aloud_stop">Oprește citirea cu voce tare</string>
-    <string name="menu_exit">Ieșire</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Partajează cu prietenii</string>
     <string name="save_media">Salvează multimedia ca...</string>
@@ -26,9 +25,6 @@
     <string name="search_label">Căutare</string>
     <string name="articlesearch_hint">Tastați pentru a căuta articole</string>
     <string name="choose_file">Alegeți un fișier cu conținut ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Deschideți legătura într-o filă nouă?</string>
-    <string name="remove_tab_confirm">Doriți să eliminați această filă?</string>
-    <string name="remove_tab">Eliminare filă</string>
     <string name="add_bookmark">Marchează această pagină</string>
     <string name="remove_bookmark">Șterge marcajul selectat</string>
     <string name="info_share_title">Îmi place Wikipedia offline cu Kiwix!</string>
@@ -39,8 +35,7 @@
     <string name="error_articlenotfound">Eroare: Încărcarea articolului \"%1$s\" nu a reușit.</string>
     <string name="error_articleurlnotfound">Eroare: Încărcarea articolului (Url: %1$s) nu a reușit.</string>
     <string name="pref_display_title">Afișare</string>
-    <string name="pref_zoom_title">Nivel de zoom</string>
-    <string name="pref_zoom_dialogtitle">Nivel de zoom</string>
+    <string name="pref_zoom_dialog">Nivel de zoom</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automat</item>
         <item name="pref_zoom_entry_small">Scăzut</item>
@@ -50,7 +45,6 @@
     <string name="pref_info_title">Informații</string>
     <string name="pref_info_version">Versiune</string>
     <string name="pref_zoom_enable">Controale de zoom</string>
-    <string name="pref_zoom_enable_summary">Afișează un buton de zoom în colțul din dreapta jos al ecranului</string>
     <string name="pref_nightmode">Mod de noapte</string>
     <string name="pref_nightmode_summary">Afișează articolele în culori inversate</string>
     <string name="pref_backtotop">Începutul paginii</string>
@@ -58,6 +52,5 @@
     <string name="share_via">Distribuire prin...</string>
     <string name="pref_language_title">Limbă</string>
     <string name="pref_language_chooser">Alegeți o limbă</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

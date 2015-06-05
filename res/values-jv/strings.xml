@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Mbukak berkas...</string>
@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Metu saka modé layar kebak</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">Metu</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Share with friends</string>
     <string name="save_media">Save Media</string>
@@ -26,9 +25,6 @@
     <string name="search_label">Golèk</string>
     <string name="articlesearch_hint">Type to lookup articles</string>
     <string name="choose_file">Select a ZIM Content File (*.zim)</string>
-    <string name="open_in_new_tab">Open link in new tab?</string>
-    <string name="remove_tab_confirm">Do you want to remove this tab?</string>
-    <string name="remove_tab">Remove tab</string>
     <string name="add_bookmark">Tengeri kaca iki</string>
     <string name="remove_bookmark">Ilangi tenger saka sing dipilih</string>
     <string name="info_share_title">I enjoy Wikipedia Offline with Kiwix!</string>
@@ -39,8 +35,7 @@
     <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
     <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
     <string name="pref_display_title">Pajangan</string>
-    <string name="pref_zoom_title">Zoom level</string>
-    <string name="pref_zoom_dialogtitle">Zoom level</string>
+    <string name="pref_zoom_dialog">Zoom level</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
         <item name="pref_zoom_entry_small">Small</item>
@@ -50,7 +45,6 @@
     <string name="pref_info_title">Informasi</string>
     <string name="pref_info_version">Version</string>
     <string name="pref_zoom_enable">Zoom controls</string>
-    <string name="pref_zoom_enable_summary">Display a zoom button in the screen bottom right corner</string>
     <string name="pref_nightmode">Night mode</string>
     <string name="pref_nightmode_summary">Show articles with reverted colors</string>
     <string name="pref_backtotop">Back to Top</string>
@@ -58,6 +52,5 @@
     <string name="share_via">Share via</string>
     <string name="pref_language_title">Basa</string>
     <string name="pref_language_chooser">Choose a language</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

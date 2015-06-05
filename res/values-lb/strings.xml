@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Fichier opmaachen...</string>
@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Aus dem ganzen Ecran erausgoen</string>
     <string name="menu_read_aloud">Virliesen</string>
     <string name="menu_read_aloud_stop">Ophale mat Virliesen</string>
-    <string name="menu_exit">Erausgoen</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Mat Frënn deelen</string>
     <string name="save_media">Medium späicheren als…</string>
@@ -26,9 +25,6 @@
     <string name="search_label">Sichen</string>
     <string name="articlesearch_hint">Tippt fir Artikelen ze sichen</string>
     <string name="choose_file">Wielt eng ZIM-Inhaltsdatei aus (*.zim)</string>
-    <string name="open_in_new_tab">Link an engem neien Tab opmaachen?</string>
-    <string name="remove_tab_confirm">Wëllt Dir dësen Tab ewechhuelen?</string>
-    <string name="remove_tab">Tab ewechhuelen</string>
     <string name="add_bookmark">Dës Säit markéieren</string>
     <string name="remove_bookmark">Ausgewielt Markéierung läschen</string>
     <string name="info_share_title">Ech benotze Wikipedia offline mat Kiwix!</string>
@@ -39,8 +35,7 @@
     <string name="error_articlenotfound">Feeler: D\'Luede vum Artikel  \"%1$s\" huet net funktionéiert.</string>
     <string name="error_articleurlnotfound">Feeler: D\'Luede vum Artikel (URL: %1$s) huet net funktionéiert.</string>
     <string name="pref_display_title">Ausgesinn</string>
-    <string name="pref_zoom_title">Niveau vum Zoom</string>
-    <string name="pref_zoom_dialogtitle">Niveau vum Zoom</string>
+    <string name="pref_zoom_dialog">Niveau vum Zoom</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatesch</item>
         <item name="pref_zoom_entry_small">Kleng</item>
@@ -50,7 +45,6 @@
     <string name="pref_info_title">Informatioun</string>
     <string name="pref_info_version">Versioun</string>
     <string name="pref_zoom_enable">Zoom-Steierung</string>
-    <string name="pref_zoom_enable_summary">Zoom-Knäppche riets ënnen am Eck vum Schierm uweisen</string>
     <string name="pref_nightmode">Nuetsmodus</string>
     <string name="pref_nightmode_summary">Artikelen an invertéierte Faarwen weisen</string>
     <string name="pref_backtotop">Zréck no uewen</string>
@@ -58,6 +52,5 @@
     <string name="share_via">Deelen iwwer ...</string>
     <string name="pref_language_title">Sprooch</string>
     <string name="pref_language_chooser">Sicht eng Sprooch eraus</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

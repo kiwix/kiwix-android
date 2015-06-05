@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Відкрити файл ...</string>
@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Вийти з повноекранного режиму</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
-    <string name="menu_exit">Вийти</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Поділитися з друзями</string>
     <string name="save_media">Зберегти медіафайл як...</string>
@@ -26,9 +25,6 @@
     <string name="search_label">Знайти</string>
     <string name="articlesearch_hint">Наберіть для пошуку статей</string>
     <string name="choose_file">Виберіть файл вмісту ZIM (*.zim)</string>
-    <string name="open_in_new_tab">Відкрити посилання у новій вкладці?</string>
-    <string name="remove_tab_confirm">Ви дійсно хочете видалити цю вкладку?</string>
-    <string name="remove_tab">Видалити вкладку</string>
     <string name="add_bookmark">Позначити цю сторінку</string>
     <string name="remove_bookmark">Зняти позначку з виділених</string>
     <string name="info_share_title">Я люблю Вікіпедію в автономному режимі з Kiwix!</string>
@@ -39,8 +35,7 @@
     <string name="error_articlenotfound">Помилка: завантаження статті \"%1$s\" не вдалося.</string>
     <string name="error_articleurlnotfound">Помилка: завантаження статті (Url: %1$s) не вдалося.</string>
     <string name="pref_display_title">Показати</string>
-    <string name="pref_zoom_title">Рівень масштабування</string>
-    <string name="pref_zoom_dialogtitle">Рівень масштабування</string>
+    <string name="pref_zoom_dialog">Рівень масштабування</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Автоматично</item>
         <item name="pref_zoom_entry_small">Малий</item>
@@ -50,7 +45,6 @@
     <string name="pref_info_title">Інформація</string>
     <string name="pref_info_version">Версія</string>
     <string name="pref_zoom_enable">Управління масштабом</string>
-    <string name="pref_zoom_enable_summary">Відображати кнопку масштаб у нижньому правому куті екрану</string>
     <string name="pref_nightmode">Нічний режим</string>
     <string name="pref_nightmode_summary">Показати статті з повернутими кольорами</string>
     <string name="pref_backtotop">Наверх</string>
@@ -58,6 +52,5 @@
     <string name="share_via">Поділитися через…</string>
     <string name="pref_language_title">Мова</string>
     <string name="pref_language_chooser">Оберіть мову</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

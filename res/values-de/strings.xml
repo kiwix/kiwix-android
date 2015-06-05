@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Datei öffnen …</string>
@@ -15,7 +15,6 @@
     <string name="menu_exitfullscreen">Vollbild beenden</string>
     <string name="menu_read_aloud">Vorlesen</string>
     <string name="menu_read_aloud_stop">Mit dem Vorlesen aufhören</string>
-    <string name="menu_exit">Schliessen</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="menu_share">Mit Freunden teilen</string>
     <string name="save_media">Medium speichern als …</string>
@@ -26,9 +25,6 @@
     <string name="search_label">Suche</string>
     <string name="articlesearch_hint">Zum Suchen von Artikeln tippen</string>
     <string name="choose_file">Wähle eine ZIM-Inhaltsdatei aus (*.zim)</string>
-    <string name="open_in_new_tab">Link in neuer Registerkarte öffnen?</string>
-    <string name="remove_tab_confirm">Möchten Sie diese Registerkarte entfernen?</string>
-    <string name="remove_tab">Registerkarte entfernen</string>
     <string name="add_bookmark">Seite markieren</string>
     <string name="remove_bookmark">Markierung aufheben</string>
     <string name="info_share_title">Ich lese die Wikipedia offline mit Kiwix!</string>
@@ -39,8 +35,7 @@
     <string name="error_articlenotfound">Fehler: Das Laden des Artikels \"%1$s\" ist fehlgeschlagen.</string>
     <string name="error_articleurlnotfound">Fehler: Das Laden des Artikels (URL: %1$s) ist fehlgeschlagen.</string>
     <string name="pref_display_title">Bildschirm</string>
-    <string name="pref_zoom_title">Vergrößerungsstufe</string>
-    <string name="pref_zoom_dialogtitle">Vergrößerungsstufe</string>
+    <string name="pref_zoom_dialog">Vergrößerungsstufe</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatisch</item>
         <item name="pref_zoom_entry_small">Klein</item>
@@ -50,7 +45,6 @@
     <string name="pref_info_title">Information</string>
     <string name="pref_info_version">Version</string>
     <string name="pref_zoom_enable">Zoom-Steuerung</string>
-    <string name="pref_zoom_enable_summary">Einen Zoombutton in der rechten unteren Ecke anzeigen</string>
     <string name="pref_nightmode">Nachtmodus</string>
     <string name="pref_nightmode_summary">Artikel mit umgekehrten Farben ansehen</string>
     <string name="pref_backtotop">Zurück nach oben</string>
@@ -58,6 +52,5 @@
     <string name="share_via">Teilen über …</string>
     <string name="pref_language_title">Sprache</string>
     <string name="pref_language_chooser">Eine Sprache auswählen</string>
-    <string name="error_internet_connection_failed">Couldn\'t connect to the internet.</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
 </resources>

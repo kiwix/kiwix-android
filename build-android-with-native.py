@@ -571,7 +571,8 @@ if COMPILE_APK:
     os.chdir(curdir)
 
     # Compile java and build APK
-    syscall('rm -f build/outputs/apk/{}-*.apk'.format(PACKAGE), shell=True)
+    syscall('rm -f build/outputs/apk/*.apk', shell=True)
+    syscall('./gradlew clean assemble')
     syscall('./gradlew build --stacktrace')
 
     folder_name = os.path.split(curdir)[-1]
