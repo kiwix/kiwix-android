@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Ouvrir un fichier...</string>
     <string name="menu_help">Aide</string>
     <string name="menu_home">Page d\'accueil</string>
@@ -27,15 +26,14 @@
     <string name="choose_file">Sélectionner un fichier de contenu ZIM (*.zim)</string>
     <string name="add_bookmark">Marquer cette page</string>
     <string name="remove_bookmark">Ne plus sélectionner ce marque-page</string>
-    <string name="info_share_title">J\'aime Wikipedia Offline avec Kiwix !</string>
-    <string name="info_share_content">J\'aime Wikipedia Offline avec Kiwix ! Toute la connaissance humaine à portée de main partout où vous allez ! Sans Internet ! http://goo.GL/h9Smkk</string>
     <string name="error_nozimfilesfound">Aucun fichier ZIM n’a été trouvé sur votre machine.\nJetez un coup d’œil à la page d’aide pour avoir des instructions sur la manière de charger du contenu dans Kiwix.\nSi vous avez mis un fichier ZIM sur votre stockage interne ou externe, vous pouvez réessayer dans une minute ou redémarrer votre appareil.</string>
     <string name="error_filenotfound">Erreur : Le fichier ZIM sélectionné est introuvable.</string>
     <string name="error_fileinvalid">Erreur : Le fichier sélectionné n’est pas un fichier ZIM valide.</string>
     <string name="error_articlenotfound">Erreur : Échec au chargement de l’article « %1$s ».</string>
     <string name="error_articleurlnotfound">Erreur : Le chargement de l’article (Url: %1$s) a échoué.</string>
     <string name="pref_display_title">Affichage</string>
-    <string name="pref_zoom_dialog">Niveau de zoom</string>
+    <string name="pref_zoom_sub_title">Zoom</string>
+    <string name="pref_zoom_dialog">Zoom level</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatique</item>
         <item name="pref_zoom_entry_small">Faible</item>
@@ -53,4 +51,7 @@
     <string name="pref_language_title">Langue</string>
     <string name="pref_language_chooser">Choisir une langue</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
+    <string name="no_reader_application_installed">Could not find an installed application for this type of file</string>
+    <string name="customapp_missing_content">Your application is corrupted.\nThis might happen when you remove files on the SD Card.\nYou need to uninstall then reinstall the App from the Play Store.</string>
+    <string name="go_to_play_store">Go to Play Store</string>
 </resources>

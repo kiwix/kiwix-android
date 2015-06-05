@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Öppna fil...</string>
     <string name="menu_help">Hjälp</string>
     <string name="menu_home">Hem</string>
@@ -27,15 +26,14 @@
     <string name="choose_file">Välj en ZIM-innehållsfil (*.zim)</string>
     <string name="add_bookmark">Markera denna sida</string>
     <string name="remove_bookmark">Avmarkera valda</string>
-    <string name="info_share_title">Jag gillar Wikipedia Offline med Kiwix!</string>
-    <string name="info_share_content">Jag gillar Wikipedia Offline med Kiwix! Hela mänsklighetens samlade kunskap till hands vart du än går! Utan Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Inga ZIM-filer hittades på din enhet.\nTa en titt på hjälpsidan för att få hjälp om hur man läser in innehåll i Kiwix.\nOm du lade in en ZIM-fil på din enhet/externa minne bör du kanske prova igen om någon minut eller starta om din enhet.</string>
     <string name="error_filenotfound">Fel: Den valda ZIM-filen kunde inte hittas.</string>
     <string name="error_fileinvalid">Fel: Den valda filen är inte en giltig ZIM-fil.</string>
     <string name="error_articlenotfound">Fel: Kunde inte läsa in artikeln \"%1$s\".</string>
     <string name="error_articleurlnotfound">Fel: Inläsning av artikel (url: %1$s) misslyckades.</string>
     <string name="pref_display_title">Visa</string>
-    <string name="pref_zoom_dialog">Zoomnivå</string>
+    <string name="pref_zoom_sub_title">Zoom</string>
+    <string name="pref_zoom_dialog">Zoom level</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatiskt</item>
         <item name="pref_zoom_entry_small">Liten</item>
@@ -53,4 +51,7 @@
     <string name="pref_language_title">Språk</string>
     <string name="pref_language_chooser">Välj ett språk</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
+    <string name="no_reader_application_installed">Could not find an installed application for this type of file</string>
+    <string name="customapp_missing_content">Your application is corrupted.\nThis might happen when you remove files on the SD Card.\nYou need to uninstall then reinstall the App from the Play Store.</string>
+    <string name="go_to_play_store">Go to Play Store</string>
 </resources>

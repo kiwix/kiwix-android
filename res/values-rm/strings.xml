@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="app_name">Kiwix</string>
     <string name="menu_openfile">Avrir ina datoteca…</string>
     <string name="menu_help">Agid</string>
     <string name="menu_home">Pagina da partenza</string>
@@ -27,15 +26,14 @@
     <string name="choose_file">Selecziunar ina datoteca da cuntegn ZIM (*.zim)</string>
     <string name="add_bookmark">Agiuntar questa pagina als segnapaginas</string>
     <string name="remove_bookmark">Allontanar questa pagina dals segnapaginas</string>
-    <string name="info_share_title">Jau giaud Wikipedia Offline cun Kiwix!</string>
-    <string name="info_share_content">Jau giaud Wikipedia Offline cun Kiwix! Tutta la savida umana en maun nua che ti vas! Senza Internet! http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">Nagina datoteca ZIM chattada sin vos apparat.\nConsultai la pagina d\'agid per instrucziuns davart chargiar cuntegn en Kiwix.\nSche vus avais mess ina datoteca ZIM sin il apparat/la memoria externa, pudais vus pruvar danovamain en ina minuta u reaviar il apparat.</string>
     <string name="error_filenotfound">Errur: la datoteca ZIM selecziunada è betg vegnida chattada.</string>
     <string name="error_fileinvalid">Errur: la datoteca selecziunada è betg ina datoteca ZIM valida.</string>
     <string name="error_articlenotfound">Errur: chargiar il artitgel \"%1$s\" n\'a betg funcziunà.</string>
     <string name="error_articleurlnotfound">Errur: chargiar il artitgel (Url: %1$s) n\'a betg funcziunà.</string>
     <string name="pref_display_title">Vista</string>
-    <string name="pref_zoom_dialog">Nivel da zoom</string>
+    <string name="pref_zoom_sub_title">Zoom</string>
+    <string name="pref_zoom_dialog">Zoom level</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
         <item name="pref_zoom_entry_small">Small</item>
@@ -53,4 +51,7 @@
     <string name="pref_language_title">Lingua</string>
     <string name="pref_language_chooser">Choose a language</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
+    <string name="no_reader_application_installed">Could not find an installed application for this type of file</string>
+    <string name="customapp_missing_content">Your application is corrupted.\nThis might happen when you remove files on the SD Card.\nYou need to uninstall then reinstall the App from the Play Store.</string>
+    <string name="go_to_play_store">Go to Play Store</string>
 </resources>

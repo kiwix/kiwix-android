@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="app_name">Kiwix</string>
     <string name="menu_openfile">പ്രമാണം തുറക്കുക...</string>
     <string name="menu_help">സഹായം</string>
     <string name="menu_home">പ്രധാനം</string>
@@ -27,15 +26,14 @@
     <string name="choose_file">ഒരു സിം കണ്ടന്റ് ഫയൽ (*.zim) തിരഞ്ഞെടുക്കൂ</string>
     <string name="add_bookmark">ഈ താള്‍ അടയാളപ്പെടുത്തുക</string>
     <string name="remove_bookmark">തിരഞ്ഞെടുത്തവ അടയാളപ്പെടുത്താതിരിക്കുക</string>
-    <string name="info_share_title">ഞാൻ കിവിക്സ് ഉപയോഗിച്ച് ഓഫ്‌ലൈനായി വിക്കിപീഡിയ വായിക്കുന്നു.</string>
-    <string name="info_share_content">ഞാൻ കിവിക്സ് ഉപയോഗിച്ച് ഓഫ്‌ലൈനായി വിക്കിപീഡിയ വായിക്കുന്നു! എല്ലാ മനുഷ്യവിജ്ഞാനവും ഞാൻ പോകുന്നിടത്തെല്ലാം, ഇന്റർനെറ്റ് ബന്ധം പോലുമില്ലാതെ. http://goo.gl/h9Smkk</string>
     <string name="error_nozimfilesfound">താങ്കളുടെ ഉപകരണത്തിൽ സിം ഫയലുകളൊന്നുമില്ല. \nസഹായം താളുകൾ ഉപയോഗപ്പെടുത്തി കിവിക്സിൽ എങ്ങനെ ഉള്ളടക്കം ചേർക്കണമെന്ന് മനസ്സിലാക്കൂ. താങ്കൾ ഒരു സിം ഫയൽ താങ്കളുടെ ഉപകരണത്തിൽ/ബാഹ്യ സ്റ്റോറേജിൽ ഉൾപ്പെടുത്തിയെങ്കിൽ ദയവായി ഒരു മിനിറ്റ് കാത്തിരിക്കുകയോ ഉപകരണം റീസ്റ്റാർട്ട് ചെയ്യുകയോ വേണം.</string>
     <string name="error_filenotfound">പിഴവ്: തിരഞ്ഞെടുത്ത സിം ഫയൽ കണ്ടെത്താനായില്ല</string>
     <string name="error_fileinvalid">പിഴവ്: തിരഞ്ഞെടുത്ത സിം ഫയൽ സാധുവല്ല.</string>
     <string name="error_articlenotfound">പിഴവ്:  \"%1$s\" -  ലോഡ് ചെയ്യൽ പരാജയം</string>
     <string name="error_articleurlnotfound">പിഴവ്: (Url: %1$s) എന്ന ലേഖനം ലോഡ് ചെയ്യുന്നത് പരാജയപ്പെട്ടു.</string>
     <string name="pref_display_title">കാഴ്ച</string>
-    <string name="pref_zoom_dialog">സൂം നിലവാരം</string>
+    <string name="pref_zoom_sub_title">Zoom</string>
+    <string name="pref_zoom_dialog">Zoom level</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
         <item name="pref_zoom_entry_small">ചെറുത്</item>
@@ -53,4 +51,7 @@
     <string name="pref_language_title">ഭാഷ</string>
     <string name="pref_language_chooser">ഭാഷ തിരഞ്ഞെടുക്കുക</string>
     <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
+    <string name="no_reader_application_installed">Could not find an installed application for this type of file</string>
+    <string name="customapp_missing_content">Your application is corrupted.\nThis might happen when you remove files on the SD Card.\nYou need to uninstall then reinstall the App from the Play Store.</string>
+    <string name="go_to_play_store">Go to Play Store</string>
 </resources>
