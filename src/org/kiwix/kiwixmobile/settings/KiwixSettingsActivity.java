@@ -54,8 +54,15 @@ public class KiwixSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
 
-        getFragmentManager().beginTransaction().replace(R.id.content_frame, new PrefsFragment())
+        getFragmentManager()
+                .beginTransaction().
+                replace(R.id.content_frame, new PrefsFragment())
                 .commit();
+
+        setUpToolbar();
+    }
+
+    private void setUpToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

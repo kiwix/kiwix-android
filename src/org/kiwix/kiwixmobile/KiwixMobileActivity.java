@@ -26,6 +26,7 @@ import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -41,6 +42,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -168,7 +170,6 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     private ActionBarDrawerToggle mDrawerToggle;
 
-    private boolean isBacktotopEnabled;
 
 
     @Override
@@ -185,20 +186,18 @@ public class KiwixMobileActivity extends AppCompatActivity
         requestWebReloadOnFinished = 0;
         requestInitAllMenuItems = false;
         nightMode = false;
-        isBacktotopEnabled = false;
+        mIsBacktotopEnabled = false;
         isFullscreenOpened = false;
         mBackToTopButton = (Button) findViewById(R.id.button_backtotop);
         mPrefState = new ArrayList<State>();
 
-//        mTabDeleteCross = (ImageButton) findViewById(R.id.remove_tab);
-//
-//        exitFullscreenButton = (ImageButton) findViewById(R.id.FullscreenControlButton);
+        exitFullscreenButton = (ImageButton) findViewById(R.id.FullscreenControlButton);
 
         articleSearchBar = (LinearLayout) findViewById(R.id.articleSearchBar);
 
         articleSearchtextView = (AutoCompleteTextView) findViewById(R.id.articleSearchTextView);
 
-        //loadPrefs();
+
 
         RelativeLayout newTabButton = (RelativeLayout) findViewById(R.id.new_tab_button);
         newTabButton.setOnClickListener(new View.OnClickListener() {
@@ -222,16 +221,15 @@ public class KiwixMobileActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectTab(position);
+                loadPrefs();
             }
         });
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar,
-                R.string.info_share_content, R.string.info_share_content);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, 0, 0);
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         mDrawerToggle.syncState();
-//        mActionBar = getSupportActionBar();
 
         mCompatCallback = new CompatFindActionModeCallback(this);
 
@@ -243,7 +241,9 @@ public class KiwixMobileActivity extends AppCompatActivity
 
         manageExternalLaunchAndRestoringViewState(savedInstanceState);
         setUpWebView();
+        setUpExitFullscreenButton();
         setUpArticleSearchTextView(savedInstanceState);
+        loadPrefs();
     }
 
     private void setUpTTS() {
@@ -436,24 +436,6 @@ public class KiwixMobileActivity extends AppCompatActivity
         mIsFullscreenOpened = false;
     }
 
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-//
-//            // Finish the search functionality on API 11<
-//            if (keyCode == KeyEvent.KEYCODE_BACK) {
-//                if (mCompatCallback.mIsActive) {
-//                    mCompatCallback.finish();
-//                    return true;
-//                }
-//            }
-//
-//        }
-//
-//        return super.onKeyDown(keyCode, event);
-//    }
-
-
     //These two methods are used with the BookmarkDialog.
     @Override
     public void onListItemSelect(String choice) {
@@ -565,6 +547,9 @@ public class KiwixMobileActivity extends AppCompatActivity
                         getCurrentWebView().goBack();
                     } else {
                         finish();
+                    }
+                    if (mCompatCallback.mIsActive) {
+                        mCompatCallback.finish();
                     }
                     return true;
                 case KeyEvent.KEYCODE_MENU:
@@ -856,12 +841,12 @@ public class KiwixMobileActivity extends AppCompatActivity
             }
         });
 
-//        mBackToTopButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                getCurrentWebView().pageUp(true);
-//            }
-//        });
+        mBackToTopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getCurrentWebView().pageUp(true);
+            }
+        });
     }
 
     private void setUpExitFullscreenButton() {
@@ -983,9 +968,9 @@ public class KiwixMobileActivity extends AppCompatActivity
             getCurrentWebView().setInitialScale(0);
         }
 
-//        if (!mIsBacktotopEnabled) {
-//            mBackToTopButton.setVisibility(View.INVISIBLE);
-//        }
+        if (!mIsBacktotopEnabled) {
+            mBackToTopButton.setVisibility(View.INVISIBLE);
+        }
 
         // Night mode status
         Log.d(TAG_KIWIX, "nightMode value (" + nightMode + ")");
@@ -1171,11 +1156,7 @@ public class KiwixMobileActivity extends AppCompatActivity
                 // Alternative would be to restore webView state. But more effort to implement, and actually
                 // fits better normal android behavior if after closing app ("back" button) state is not maintained.
             } else {
-<<<<<<< HEAD
-                Log.d(TAG_KIWIX,
-                        " Kiwix normal start, no zimFile loaded last time  -> display welcome page");
-                showWelcome();
-=======
+
                 if (Constants.IS_CUSTOM_APP) {
                     Log.d(TAG_KIWIX,
                             "Kiwix Custom App starting for the first time. Check Companion ZIM.");
@@ -1226,7 +1207,6 @@ public class KiwixMobileActivity extends AppCompatActivity
                             " Kiwix normal start, no zimFile loaded last time  -> display welcome page");
                     showWelcome();
                 }
->>>>>>> origin/master
             }
         }
     }

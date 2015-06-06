@@ -81,18 +81,7 @@ public class ZimFileSelectActivity extends AppCompatActivity
         new LanguageUtils(this).changeFont(getLayoutInflater());
 
         setContentView(R.layout.zim_list);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        setUpToolbar();
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mProgressBarMessage = (TextView) findViewById(R.id.progressbar_message);
@@ -109,6 +98,21 @@ public class ZimFileSelectActivity extends AppCompatActivity
         } else {
             new RescanFileSystem().execute();
         }
+    }
+
+    private void setUpToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override
