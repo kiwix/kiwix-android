@@ -16,9 +16,9 @@
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="save_media">Save Media</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
+    <string name="save_media_error">An error occurred when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
-    <string name="rescan_fs_warning">Scanning for ZIM files, please wait...</string>
+    <string name="rescan_fs_warning">Scanning for ZIM files, please wait…</string>
     <string name="button_backtotop">Back to Top</string>
     <string name="search_label">Search</string>
     <string name="articlesearch_hint">Type to lookup articles</string>

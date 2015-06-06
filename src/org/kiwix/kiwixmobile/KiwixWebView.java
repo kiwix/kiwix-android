@@ -20,67 +20,201 @@
 package org.kiwix.kiwixmobile;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.webkit.WebView;
+import android.widget.Toast;
 import android.widget.ZoomButtonsController;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 
 public class KiwixWebView extends WebView {
 
     private OnPageChangeListener mChangeListener;
 
+    private OnLongClickListener mOnLongClickListener;
+
     private ZoomButtonsController zoomControll = null;
+
+    public static final String TAG_KIWIX = "kiwix";
+
+    private static final String PREF_ZOOM = "pref_zoom";
+
+    private static final String PREF_NIGHTMODE = "pref_nightmode";
+
+    private static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
+
+    private boolean mIsZoomEnabled;
+
+    private Handler saveHandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+
+            String url = (String) msg.getData().get("url");
+            String src = (String) msg.getData().get("src");
+
+            if (url != null || src != null) {
+                url = url == null ? src : url;
+                url = url.substring(url.lastIndexOf('/') + 1, url.length());
+                url = url.substring(url.indexOf("%3A") + 3, url.length());
+                int dotIndex = url.lastIndexOf('.');
+
+                File storageDir = new File(Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_PICTURES), url);
+
+                String newUrl = url;
+                for (int i = 2; storageDir.exists(); i++) {
+                    newUrl = url.substring(0, dotIndex) + "_" + i
+                            + url.substring(dotIndex, url.length());
+                    storageDir = new File(Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_PICTURES), newUrl);
+                }
+
+                Uri source = Uri.parse(src);
+                String toastText;
+
+                try {
+                    InputStream input = getContext().getContentResolver().openInputStream(source);
+                    OutputStream output = new FileOutputStream(storageDir);
+
+                    byte[] buffer = new byte[1024];
+                    int len;
+                    while ((len = input.read(buffer)) > 0) {
+                        output.write(buffer, 0, len);
+                    }
+                    input.close();
+                    output.close();
+
+                    String imageSaved = getResources().getString(R.string.save_media_saved);
+                    toastText = String.format(imageSaved, newUrl);
+                } catch (IOException e) {
+                    Log.d("kiwix", "Couldn't save image", e);
+                    toastText = getResources().getString(R.string.save_media_error);
+                }
+
+                Toast.makeText(getContext(), toastText, Toast.LENGTH_LONG).show();
+            }
+        }
+    };
+
 
     public KiwixWebView(Context context) {
         super(context);
-        init();
     }
 
     public KiwixWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
     }
 
     public KiwixWebView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
     }
 
-    private void init() {
-        getSettings().setJavaScriptEnabled(true);
-        getSettings().setSupportMultipleWindows(true);
-        getSettings().setSupportZoom(true);
-        disableZoomControlls();
+    public void loadPrefs() {
+
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(getContext());
+//        boolean nightMode = sharedPreferences.getBoolean(PREF_NIGHTMODE, false);
+//        mIsBacktotopEnabled = sharedPreferences.getBoolean(PREF_BACKTOTOP, false);
+        mIsZoomEnabled = sharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
+
+        if (mIsZoomEnabled) {
+            int zoomScale = (int) sharedPreferences.getFloat(PREF_ZOOM, 100.0f);
+            setInitialScale(zoomScale);
+        } else {
+            setInitialScale(0);
+        }
+
+//        if (!mIsBacktotopEnabled) {
+//            mBackToTopButton.setVisibility(View.INVISIBLE);
+//        }
+
+        // Night mode status
+//        Log.d(TAG_KIWIX, "nightMode value (" + nightMode + ")");
+//        if (this.nightMode != nightMode) {
+//            ToggleNightMode();
+//        }
+    }
+
+
+    @Override
+    public boolean performLongClick() {
+        HitTestResult result = getHitTestResult();
+
+        if (result.getType() == HitTestResult.SRC_ANCHOR_TYPE) {
+            mOnLongClickListener.onLongClick(result.getExtra());
+            return true;
+        }
+        return super.performLongClick();
+    }
+
+    @Override
+    protected void onCreateContextMenu(ContextMenu menu) {
+        super.onCreateContextMenu(menu);
+        final HitTestResult result = getHitTestResult();
+        if (result.getType() == HitTestResult.IMAGE_ANCHOR_TYPE
+                || result.getType() == HitTestResult.IMAGE_TYPE
+                || result.getType() == HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
+            MenuItem saveMenu = menu.add(0, 1, 0, getResources().getString(R.string.save_media));
+            saveMenu.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                public boolean onMenuItemClick(android.view.MenuItem item) {
+                    Message msg = saveHandler.obtainMessage();
+                    requestFocusNodeHref(msg);
+                    return true;
+                }
+            });
+        }
     }
 
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
         int windowHeight = getMeasuredHeight();
+        int pages = getContentHeight() / windowHeight;
+        int page = t / windowHeight;
 
-        // It seems that in a few cases, getMeasuredHeight() returns 0
-        if (windowHeight > 0) {
-            int pages = getContentHeight() / windowHeight;
-            int page = t / windowHeight;
-            if (mChangeListener != null) {
-                mChangeListener.onPageChanged(page, pages);
-            }
+        // Alert the listener
+        if (mChangeListener != null) {
+            mChangeListener.onPageChanged(page, pages);
         }
     }
 
-    public void disableZoomControlls() {
+    public void disableZoomControls(boolean disable) {
 
         getSettings().setBuiltInZoomControls(true);
-        getSettings().setDisplayZoomControls(false);
+        getSettings().setDisplayZoomControls(true);
     }
 
     public void setOnPageChangedListener(OnPageChangeListener listener) {
         mChangeListener = listener;
     }
 
+    public void setOnLongClickListener(OnLongClickListener listener) {
+        mOnLongClickListener = listener;
+    }
 
     public interface OnPageChangeListener {
 
-        void onPageChanged(int page, int maxPages);
+        public void onPageChanged(int page, int maxPages);
+    }
+
+    public interface OnLongClickListener {
+
+        public void onLongClick(String url);
     }
 }
+
