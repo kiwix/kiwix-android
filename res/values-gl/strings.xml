@@ -32,7 +32,7 @@
     <string name="error_articleurlnotfound">Erro: Non se puido cargar o artigo (URL: %1$s).</string>
     <string name="pref_display_title">Visualización</string>
     <string name="pref_zoom_sub_title">Zoom</string>
-    <string name="pref_zoom_dialog">Zoom level</string>
+    <string name="pref_zoom_dialog">Nivel de zoom</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automático</item>
         <item name="pref_zoom_entry_small">Pequeno</item>

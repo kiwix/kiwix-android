@@ -32,7 +32,7 @@
     <string name="error_articleurlnotfound">အမှားသတိပေးချက် − (Url: %1$s) ဆောင်းပါးထည့်သွင်းခြင်း မအောင်မြင်ပါ။</string>
     <string name="pref_display_title">မြင်ကွင်း</string>
     <string name="pref_zoom_sub_title">Zoom</string>
-    <string name="pref_zoom_dialog">Zoom level</string>
+    <string name="pref_zoom_dialog">ချဲ့ကြည့်သည့်အဆင့်</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">အလိုအလျောက်</item>
         <item name="pref_zoom_entry_small">သေးသေး</item>

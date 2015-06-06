@@ -32,7 +32,7 @@
     <string name="error_articleurlnotfound">ଅସୁବିଧା: (Url: %1$s) ପ୍ରସଙ୍ଗ ଖୋଲିବାରେ ବିଫଳ ହେଲୁ ।</string>
     <string name="pref_display_title">ଦେଖଣା</string>
     <string name="pref_zoom_sub_title">Zoom</string>
-    <string name="pref_zoom_dialog">Zoom level</string>
+    <string name="pref_zoom_dialog">ଜୁମ ବଢ଼ାଇବା/କମାଇବା</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
         <item name="pref_zoom_entry_small">ଛୋଟ</item>

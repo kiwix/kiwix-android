@@ -54,7 +54,7 @@ public class CompatFindActionModeCallback
     private ActionMode mActionMode;
 
     public CompatFindActionModeCallback(Context context) {
-        mCustomView = LayoutInflater.from(context).inflate(R.layout.webview_find, null);
+        mCustomView = LayoutInflater.from(context).inflate(R.layout.webview_search, null);
         mEditText = (EditText) mCustomView.findViewById(R.id.edit);
         mEditText.setOnClickListener(this);
         mInput = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);

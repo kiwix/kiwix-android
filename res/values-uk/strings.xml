@@ -32,7 +32,7 @@
     <string name="error_articleurlnotfound">Помилка: завантаження статті (Url: %1$s) не вдалося.</string>
     <string name="pref_display_title">Показати</string>
     <string name="pref_zoom_sub_title">Zoom</string>
-    <string name="pref_zoom_dialog">Zoom level</string>
+    <string name="pref_zoom_dialog">Рівень масштабування</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Автоматично</item>
         <item name="pref_zoom_entry_small">Малий</item>

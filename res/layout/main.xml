@@ -1,95 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/MainLayout"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:orientation="vertical">
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
 
-    <LinearLayout
-            android:id="@+id/articleSearchBar"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
 
-        <AutoCompleteTextView
-                android:id="@+id/articleSearchTextView"
+    <include layout="@layout/toolbar"/>
+
+    <android.support.v4.widget.DrawerLayout
+            android:id="@+id/drawer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+        <LinearLayout
+                android:id="@+id/MainLayout"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:completionThreshold="1"
-                android:ellipsize="end"
-                android:ems="10"
-                android:hint="@string/articlesearch_hint"
-                android:imeOptions="actionGo|flagNoExtractUi"
-                android:inputType="text|textCapWords"
-                android:maxLines="1"
-                android:textColor="@android:color/white"
-                android:selectAllOnFocus="true"/>
-
-    </LinearLayout>
-
-    <RelativeLayout
-            android:id="@+id/FullscreenButtonLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
-        <RelativeLayout
-                android:id="@+id/ElementsLayout"
                 android:layout_height="fill_parent"
-                android:layout_width="fill_parent"
                 android:orientation="vertical">
 
-            <org.kiwix.kiwixmobile.KiwixWebView
-                    android:id="@+id/webview"
-                    android:hardwareAccelerated="true"
+            <LinearLayout
+                    android:id="@+id/articleSearchBar"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp">
+
+                <AutoCompleteTextView
+                        android:id="@+id/articleSearchTextView"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:completionThreshold="1"
+                        android:ellipsize="end"
+                        android:ems="10"
+                        android:hint="@string/articlesearch_hint"
+                        android:imeOptions="actionGo|flagNoExtractUi"
+                        android:inputType="text|textCapWords"
+                        android:maxLines="1"
+                        android:textColor="@android:color/white"
+                        android:selectAllOnFocus="true"/>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                    android:id="@+id/FullscreenButtonLayout"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent">
 
-                <requestFocus/>
+                <RelativeLayout
+                        android:id="@+id/ElementsLayout"
+                        android:layout_height="fill_parent"
+                        android:layout_width="fill_parent"
+                        android:orientation="vertical">
 
-            </org.kiwix.kiwixmobile.KiwixWebView>
+                    <FrameLayout
+                            android:id="@+id/content_frame"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"/>
 
-            <ImageButton
-                    android:id="@+id/remove_tab"
-                    android:orientation="vertical"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_margin="100px"
-                    android:background="#44FF0000"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/navigation_cancel"
-                    android:visibility="invisible"/>
 
-            <ImageButton
-                    android:id="@+id/FullscreenControlButton"
-                    android:layout_width="55px"
-                    android:layout_height="55px"
-                    android:layout_margin="7px"
-                    android:hint="@string/menu_exitfullscreen"
-                    android:background="#DDFFFFFF"
-                    android:src="@drawable/fullscreen_exit"
-                    android:layout_alignParentRight="true"
-                    android:visibility="invisible"/>
+                    <ImageButton
+                            android:id="@+id/FullscreenControlButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="7dp"
+                            android:hint="@string/menu_exitfullscreen"
+                            android:background="#DDFFFFFF"
+                            android:src="@drawable/fullscreen_exit"
+                            android:layout_alignParentRight="true"
+                            android:visibility="invisible"/>
 
-            <Button
-                    android:id="@+id/button_backtotop"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.6"
-                    android:gravity="center"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold"
-                    android:background="#DDFFFFFF"
-                    android:layout_centerHorizontal="true"
-                    android:layout_alignParentBottom="true"
-                    android:visibility="invisible"/>
+                    <Button
+                            android:id="@+id/button_backtotop"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:alpha="0.6"
+                            android:gravity="center"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
+                            android:background="#DDFFFFFF"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentBottom="true"
+                            android:visibility="invisible"/>
 
-        </RelativeLayout>
+                </RelativeLayout>
 
-    </RelativeLayout>
+            </RelativeLayout>
 
+        </LinearLayout>
+
+
+        <include layout="@layout/drawer"/>
+
+
+    </android.support.v4.widget.DrawerLayout>
 </LinearLayout>

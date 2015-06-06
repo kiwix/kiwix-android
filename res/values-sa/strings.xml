@@ -32,7 +32,7 @@
     <string name="error_articleurlnotfound">दोषः : (Url: %1$s) लेखस्य अवारोपणं विफलम् अभवत् ।</string>
     <string name="pref_display_title">प्रदर्श्यताम्</string>
     <string name="pref_zoom_sub_title">Zoom</string>
-    <string name="pref_zoom_dialog">Zoom level</string>
+    <string name="pref_zoom_dialog">वीक्षणस्य (zoom) स्तरम्</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">स्वचालितम्</item>
         <item name="pref_zoom_entry_small">लघु</item>

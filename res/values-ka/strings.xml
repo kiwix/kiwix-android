@@ -32,7 +32,7 @@
     <string name="error_articleurlnotfound">შეცდომა: სტატია (Url: %1$s) ვერ ჩაიტვირთა.</string>
     <string name="pref_display_title">ჩვენება</string>
     <string name="pref_zoom_sub_title">Zoom</string>
-    <string name="pref_zoom_dialog">Zoom level</string>
+    <string name="pref_zoom_dialog">მასშტაბირების დონე</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">ავტომატური</item>
         <item name="pref_zoom_entry_small">პატარა</item>

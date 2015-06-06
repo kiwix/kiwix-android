@@ -33,6 +33,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -79,7 +80,8 @@ public class ZimFileSelectActivity extends AppCompatActivity
 
         new LanguageUtils(this).changeFont(getLayoutInflater());
 
-        setContentView(R.layout.zimfilelist);
+        setContentView(R.layout.zim_list);
+        setUpToolbar();
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mProgressBarMessage = (TextView) findViewById(R.id.progressbar_message);
@@ -96,6 +98,21 @@ public class ZimFileSelectActivity extends AppCompatActivity
         } else {
             new RescanFileSystem().execute();
         }
+    }
+
+    private void setUpToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override

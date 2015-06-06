@@ -40,7 +40,7 @@ public class SliderPreference extends DialogPreference {
     }
 
     private void setup(Context context, AttributeSet attrs) {
-        setDialogLayoutResource(R.layout.slider_preference_dialog);
+        setDialogLayoutResource(R.layout.slider_dialog);
         updateSummaryText(context, attrs);
     }
 

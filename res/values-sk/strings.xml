@@ -32,7 +32,7 @@
     <string name="error_articleurlnotfound">Chyba: Načítavanie článku (Url: %1$s) sa nepodarilo.</string>
     <string name="pref_display_title">Zobrazenie</string>
     <string name="pref_zoom_sub_title">Zoom</string>
-    <string name="pref_zoom_dialog">Zoom level</string>
+    <string name="pref_zoom_dialog">Úroveň lupy</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automaticky</item>
         <item name="pref_zoom_entry_small">Malé</item>
