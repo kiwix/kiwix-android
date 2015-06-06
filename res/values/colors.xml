@@ -8,4 +8,8 @@
     <color name="secondary_text">#727272</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#B6B6B6</color>
+    <color name="gray_list_bg">#0d000000</color>
+    <color name="drawer_background">#ffffff</color>
+    <color name="selected_light">#0F000000</color>
+    <color name="divider_light">#1E000000</color>
 </resources>

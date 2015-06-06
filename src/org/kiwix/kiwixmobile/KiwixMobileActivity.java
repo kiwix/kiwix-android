@@ -208,7 +208,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         //mNewTab = (RelativeLayout) findViewById(R.id.new_tab_button);
         //mDrawer = (RelativeLayout) findViewById(R.id.drawer);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer_list);
         mDrawerList.setDivider(null);
         mDrawerList.setDividerHeight(0);
         mDrawerList.setAdapter(mDrawerAdapter);
@@ -307,11 +307,37 @@ public class KiwixMobileActivity extends AppCompatActivity
         return webView;
     }
 
+    private void closeTab(int index) {
+
+        if (mWebViews.size() > 1) {
+            if (mCurrentWebViewIndex == index) {
+                if (mCurrentWebViewIndex >= 1) {
+                    selectTab(mCurrentWebViewIndex - 1);
+                    mWebViews.remove(index);
+                } else {
+                    selectTab(mCurrentWebViewIndex + 1);
+                    mWebViews.remove(index);
+                }
+            } else {
+                mWebViews.remove(index);
+                if (index < mCurrentWebViewIndex){
+                    mCurrentWebViewIndex--;
+                }
+                mDrawerList.setItemChecked(mCurrentWebViewIndex, true);
+            }
+        } else {
+            mWebViews.remove(index);
+            finish();
+        }
+        mDrawerAdapter.notifyDataSetChanged();
+    }
+
     private void selectTab(int position) {
         mCurrentWebViewIndex = position;
         mDrawerList.setItemChecked(position, true);
         mContentFrame.removeAllViews();
         mContentFrame.addView(mWebViews.get(position));
+        mDrawerList.setItemChecked(mCurrentWebViewIndex, true);
 
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             final Handler handler = new Handler();
@@ -454,37 +480,59 @@ public class KiwixMobileActivity extends AppCompatActivity
             class JsObject {
 
                 @JavascriptInterface
-                public boolean isCustomApp() { return Constants.IS_CUSTOM_APP; }
+                public boolean isCustomApp() {
+                    return Constants.IS_CUSTOM_APP;
+                }
 
                 @JavascriptInterface
-                public String appId() { return Constants.CUSTOM_APP_ID; }
+                public String appId() {
+                    return Constants.CUSTOM_APP_ID;
+                }
 
                 @JavascriptInterface
-                public boolean hasEmbedZim() { return Constants.CUSTOM_APP_HAS_EMBEDDED_ZIM; }
+                public boolean hasEmbedZim() {
+                    return Constants.CUSTOM_APP_HAS_EMBEDDED_ZIM;
+                }
 
                 @JavascriptInterface
-                public String zimFileName() { return Constants.CUSTOM_APP_ZIM_FILE_NAME; }
+                public String zimFileName() {
+                    return Constants.CUSTOM_APP_ZIM_FILE_NAME;
+                }
 
                 @JavascriptInterface
-                public long zimFileSize() { return Constants.CUSTOM_APP_ZIM_FILE_SIZE; }
+                public long zimFileSize() {
+                    return Constants.CUSTOM_APP_ZIM_FILE_SIZE;
+                }
 
                 @JavascriptInterface
-                public String versionName() { return Constants.CUSTOM_APP_VERSION_NAME; }
+                public String versionName() {
+                    return Constants.CUSTOM_APP_VERSION_NAME;
+                }
 
                 @JavascriptInterface
-                public int versionCode() { return Constants.CUSTOM_APP_VERSION_CODE; }
+                public int versionCode() {
+                    return Constants.CUSTOM_APP_VERSION_CODE;
+                }
 
                 @JavascriptInterface
-                public String website() { return Constants.CUSTOM_APP_WEBSITE; }
+                public String website() {
+                    return Constants.CUSTOM_APP_WEBSITE;
+                }
 
                 @JavascriptInterface
-                public String email() { return Constants.CUSTOM_APP_EMAIL; }
+                public String email() {
+                    return Constants.CUSTOM_APP_EMAIL;
+                }
 
                 @JavascriptInterface
-                public String supportEmail() { return Constants.CUSTOM_APP_SUPPORT_EMAIL; }
+                public String supportEmail() {
+                    return Constants.CUSTOM_APP_SUPPORT_EMAIL;
+                }
 
                 @JavascriptInterface
-                public String enforcedLang() { return Constants.CUSTOM_APP_ENFORCED_LANG; }
+                public String enforcedLang() {
+                    return Constants.CUSTOM_APP_ENFORCED_LANG;
+                }
 
             }
             getCurrentWebView().addJavascriptInterface(new JsObject(), "branding");
@@ -1207,14 +1255,17 @@ public class KiwixMobileActivity extends AppCompatActivity
 
                     String filePath;
                     if (Constants.CUSTOM_APP_HAS_EMBEDDED_ZIM) {
-                        filePath = String.format("/data/data/%s/lib/%s", Constants.CUSTOM_APP_ID, Constants.CUSTOM_APP_ZIM_FILE_NAME);
+                        filePath = String.format("/data/data/%s/lib/%s", Constants.CUSTOM_APP_ID,
+                                Constants.CUSTOM_APP_ZIM_FILE_NAME);
                     } else {
                         String fileName = FileUtils.getExpansionAPKFileName(true);
                         filePath = FileUtils.generateSaveFileName(fileName);
                     }
 
-                    Log.d(TAG_KIWIX, "Looking for: " + filePath + " -- filesize: " + Constants.CUSTOM_APP_ZIM_FILE_SIZE);
-                    if (!FileUtils.doesFileExist(filePath, Constants.CUSTOM_APP_ZIM_FILE_SIZE, false)) {
+                    Log.d(TAG_KIWIX, "Looking for: " + filePath + " -- filesize: "
+                            + Constants.CUSTOM_APP_ZIM_FILE_SIZE);
+                    if (!FileUtils
+                            .doesFileExist(filePath, Constants.CUSTOM_APP_ZIM_FILE_SIZE, false)) {
                         Log.d(TAG_KIWIX, "... doesn't exist.");
 
                         AlertDialog.Builder zimFileMissingBuilder = new AlertDialog.Builder(
@@ -1437,8 +1488,8 @@ public class KiwixMobileActivity extends AppCompatActivity
                 row = inflater.inflate(mLayoutResource, parent, false);
 
                 holder = new ViewHolder();
-                holder.txtTitle = (TextView) row.findViewById(R.id.tab_title);
-                holder.exit = (ImageView) row.findViewById(R.id.tab_delete);
+                holder.txtTitle = (TextView) row.findViewById(R.id.textTab);
+                holder.exit = (ImageView) row.findViewById(R.id.deleteButton);
                 holder.exit.setTag(position);
                 row.setTag(holder);
             } else {
@@ -1449,7 +1500,7 @@ public class KiwixMobileActivity extends AppCompatActivity
 
                 @Override
                 public void onClick(View view) {
-                    notifyDataSetChanged();
+                    closeTab(position);
                 }
 
             });
