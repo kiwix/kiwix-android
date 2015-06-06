@@ -32,7 +32,7 @@
     <string name="error_articleurlnotfound">Ralat: Rencana (Url: %1$s) gagal dimuatkan.</string>
     <string name="pref_display_title">Paparan</string>
     <string name="pref_zoom_sub_title">Zoom</string>
-    <string name="pref_zoom_dialog">Zoom level</string>
+    <string name="pref_zoom_dialog">Takat zum</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatik</item>
         <item name="pref_zoom_entry_small">Kecil</item>

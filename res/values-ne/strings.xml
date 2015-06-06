@@ -32,7 +32,7 @@
     <string name="error_articleurlnotfound">त्रुटी: लेख खोल्न असफल । (Url: %1$s)</string>
     <string name="pref_display_title">दृश्य</string>
     <string name="pref_zoom_sub_title">Zoom</string>
-    <string name="pref_zoom_dialog">Zoom level</string>
+    <string name="pref_zoom_dialog">जुम स्तर</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
         <item name="pref_zoom_entry_small">सानो</item>

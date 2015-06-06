@@ -32,7 +32,7 @@
     <string name="error_articleurlnotfound">تېروتنه: ليکنه برسېرېدنه (يو آر ال: %1$s) نابريالئ شوه.</string>
     <string name="pref_display_title">ښکارېدنه</string>
     <string name="pref_zoom_sub_title">Zoom</string>
-    <string name="pref_zoom_dialog">Zoom level</string>
+    <string name="pref_zoom_dialog">لوډېرولو کچه</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">اتوماتيک</item>
         <item name="pref_zoom_entry_small">وړوکی</item>

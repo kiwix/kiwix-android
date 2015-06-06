@@ -32,7 +32,7 @@
     <string name="error_articleurlnotfound">Fazi : N\'eus ket bet gallet kargañ ar pennad \"%1$s\"</string>
     <string name="pref_display_title">Diskwel</string>
     <string name="pref_zoom_sub_title">Zoom</string>
-    <string name="pref_zoom_dialog">Zoom level</string>
+    <string name="pref_zoom_dialog">Live zoum</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Emgefre</item>
         <item name="pref_zoom_entry_small">Bihan</item>

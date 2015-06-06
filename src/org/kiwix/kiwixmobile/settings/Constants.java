@@ -19,4 +19,6 @@ public class Constants {
     public static final String CUSTOM_APP_EMAIL = "~support_email~";
 
     public static final String CUSTOM_APP_SUPPORT_EMAIL = "~support_email~";
+
+    public static final String CUSTOM_APP_ENFORCED_LANG = "";
 }

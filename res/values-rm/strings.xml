@@ -32,7 +32,7 @@
     <string name="error_articleurlnotfound">Errur: chargiar il artitgel (Url: %1$s) n\'a betg funcziunà.</string>
     <string name="pref_display_title">Vista</string>
     <string name="pref_zoom_sub_title">Zoom</string>
-    <string name="pref_zoom_dialog">Zoom level</string>
+    <string name="pref_zoom_dialog">Nivel da zoom</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
         <item name="pref_zoom_entry_small">Small</item>

@@ -32,7 +32,7 @@
     <string name="error_articleurlnotfound">טעות: לאדן ארטיקל (Url: %1$s) דורכגעפאלן.</string>
     <string name="pref_display_title">אויסשטעלונג</string>
     <string name="pref_zoom_sub_title">Zoom</string>
-    <string name="pref_zoom_dialog">Zoom level</string>
+    <string name="pref_zoom_dialog">פארגרעסערונג ניווא</string>
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">אויטאמאטיש</item>
         <item name="pref_zoom_entry_small">קליין</item>
