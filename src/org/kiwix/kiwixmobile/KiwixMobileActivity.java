@@ -208,9 +208,9 @@ public class KiwixMobileActivity extends AppCompatActivity
 
             @Override
             public void onClick(View v) {
-               if( getCurrentWebView().canGoForward()){
-                   getCurrentWebView().goForward();
-               }
+                if (getCurrentWebView().canGoForward()) {
+                    getCurrentWebView().goForward();
+                }
             }
         });
         RelativeLayout previousButton = (RelativeLayout) findViewById(R.id.action_back);
@@ -218,7 +218,7 @@ public class KiwixMobileActivity extends AppCompatActivity
 
             @Override
             public void onClick(View v) {
-                if( getCurrentWebView().canGoBack()){
+                if (getCurrentWebView().canGoBack()) {
                     getCurrentWebView().goBack();
                 }
             }
@@ -404,14 +404,6 @@ public class KiwixMobileActivity extends AppCompatActivity
             case R.id.menu_forward:
                 if (webView.canGoForward()) {
                     webView.goForward();
-                    invalidateOptionsMenu();
-                }
-                break;
-
-            case R.id.menu_back:
-                if (webView.canGoBack()) {
-                    webView.goBack();
-
                     invalidateOptionsMenu();
                 }
                 break;
@@ -609,7 +601,6 @@ public class KiwixMobileActivity extends AppCompatActivity
             menu.findItem(R.id.menu_bookmarks).setVisible(true);
             menu.findItem(R.id.menu_forward).setVisible(getCurrentWebView().canGoForward());
             menu.findItem(R.id.menu_fullscreen).setVisible(true);
-            menu.findItem(R.id.menu_back).setVisible(true);
             menu.findItem(R.id.menu_home).setVisible(true);
             menu.findItem(R.id.menu_randomarticle).setVisible(true);
             menu.findItem(R.id.menu_searchintext).setVisible(true);
