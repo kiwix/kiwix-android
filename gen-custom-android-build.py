@@ -296,6 +296,21 @@ def step_update_main_menu_xml(jsdata, **options):
     flushxml(soup, 'menu', menu_xml, head=False)
 
 
+def step_update_preferences_xml(jsdata, **options):
+    ''' change package-named item reference in preference UI xml '''
+
+    move_to_android_placeholder()
+
+    # rename settings.SliderPreference node in res/xml/preferences.xml
+    preferences_xml = os.path.join(ANDROID_PATH, 'res', 'xml',
+                                   'preferences.xml')
+    soup = soup = BeautifulSoup(open(preferences_xml, 'r'),
+                                'xml', from_encoding='utf-8')
+    item = soup.find('org.kiwix.kiwixmobile.settings.SliderPreference')
+    item.name = '{}.settings.SliderPreference'.format(jsdata.get('package'))
+    flushxml(soup, 'PreferenceScreen', preferences_xml, head=False)
+
+
 def step_update_android_manifest(jsdata, **options):
     ''' update AndroidManifest.xml to set package, name, version
 
@@ -454,6 +469,7 @@ ARGS_MATRIX = OrderedDict([
     ('branding', step_update_branding_xml),
     ('constants', step_gen_constants_java),
     ('menu', step_update_main_menu_xml),
+    ('preferences', step_update_preferences_xml),
     ('manifest', step_update_android_manifest),
     ('jni', step_update_kiwix_c),
     ('libkiwix', step_compile_libkiwix),
