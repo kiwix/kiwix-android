@@ -600,3 +600,6 @@ if CLEAN:
     syscall('rm -rf build/generated build/intermediates build/native-libs '
             'build/reports build/test-results build/tmp build/outputs/logs '
             'build/outputs/lint*', shell=True)
+
+# display built APKs
+syscall('ls -lh build/outputs/apk/{}-*'.format(PACKAGE), shell=True)
