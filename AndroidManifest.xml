@@ -104,6 +104,8 @@
 
         <activity android:name=".settings.KiwixSettingsActivity"/>
 
+        <activity android:name=".SearchActivity"/>
+
         <provider
                 android:name=".ZimContentProvider"
                 android:authorities="org.kiwix.zim.base"

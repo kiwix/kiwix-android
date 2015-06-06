@@ -1,49 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
 
     <include layout="@layout/toolbar"/>
 
-    <ListView
-            android:id="@+id/zimfilelist"
+    <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/toolbar">
-    </ListView>
+            android:layout_height="match_parent">
 
-    <TextView
-            android:id="@+id/zimfilelist_nozimfilesfound_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@android:style/TextAppearance.Large"
-            android:paddingBottom="15dp"
-            android:paddingTop="15dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="@string/error_nozimfilesfound"
-            android:visibility="gone"/>
+        <ListView
+                android:id="@+id/zimfilelist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/toolbar">
+        </ListView>
 
-    <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:visibility="gone">
-    </ProgressBar>
+        <TextView
+                android:id="@+id/zimfilelist_nozimfilesfound_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@android:style/TextAppearance.Large"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/error_nozimfilesfound"
+                android:visibility="gone"/>
 
-    <TextView
-            android:id="@+id/progressbar_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/rescan_fs_warning"
-            android:paddingTop="10px"
-            android:textStyle="bold"
-            android:layout_below="@id/progressBar"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:visibility="gone"/>
-</RelativeLayout>
+        <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:visibility="gone">
+        </ProgressBar>
+
+        <TextView
+                android:id="@+id/progressbar_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rescan_fs_warning"
+                android:paddingTop="10px"
+                android:textStyle="bold"
+                android:layout_below="@id/progressBar"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:visibility="gone"/>
+    </RelativeLayout>
+</LinearLayout>
