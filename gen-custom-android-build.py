@@ -286,7 +286,7 @@ def step_update_main_menu_xml(jsdata, **options):
     move_to_android_placeholder()
 
     # Parse and edit res/menu/main.xml
-    menu_xml = os.path.join(ANDROID_PATH, 'res', 'menu', 'main.xml')
+    menu_xml = os.path.join(ANDROID_PATH, 'res', 'menu', 'menu_main.xml')
     soup = soup = BeautifulSoup(open(menu_xml, 'r'),
                                 'xml', from_encoding='utf-8')
     for elem in soup.findAll('item'):
@@ -309,6 +309,25 @@ def step_update_preferences_xml(jsdata, **options):
     item = soup.find('org.kiwix.kiwixmobile.settings.SliderPreference')
     item.name = '{}.settings.SliderPreference'.format(jsdata.get('package'))
     flushxml(soup, 'PreferenceScreen', preferences_xml, head=False)
+
+
+def step_update_gradle(jsdata, **options):
+    ''' uncomment compiling the content-libs.jar file into the APK '''
+
+    if not jsdata.get('embed_zim'):
+        return
+
+    move_to_android_placeholder()
+
+    # rename settings.SliderPreference node in res/xml/preferences.xml
+    fpath = os.path.join(ANDROID_PATH, 'build.gradle')
+    lines = open(fpath, 'r').readlines()
+    for idx, line in enumerate(lines):
+        if 'content-libs.jar' in line:
+            lines[idx] = ("    {}\n"
+                          .format(re.sub(r'^//', '', line.strip()).strip()))
+    with open(fpath, 'w') as f:
+        f.write(''.join(lines))
 
 
 def step_update_android_manifest(jsdata, **options):
@@ -392,26 +411,27 @@ def step_compile_libkiwix(jsdata, **options):
 def step_embed_zimfile(jsdata, **options):
     ''' prepare a content-libs.jar file with ZIM file for inclusion in APK '''
 
+    if not jsdata.get('embed_zim'):
+        return
+
     move_to_android_placeholder()
 
-    if jsdata.get('embed_zim'):
-        # create content-libs.jar
-        tmpd = tempfile.mkdtemp()
-        archs = os.listdir('libs')
-        for arch in archs:
-            os.makedirs(os.path.join(tmpd, 'lib', arch))
-            # shutil.copy(os.path.join('libs', arch, 'libkiwix.so'),
-            #             os.path.join(tmpd, 'lib', arch, 'libkiwix.so'))
-        copy_to(jsdata.get('zim_file'),
-                os.path.join(tmpd, 'lib', archs[0], jsdata.get('zim_name')))
-        for arch in archs[1:]:
-            os.chdir(os.path.join(tmpd, 'lib', arch))
-            os.symlink('../{}/{}'.format(archs[0], jsdata.get('zim_name')),
-                       jsdata.get('zim_name'))
-        os.chdir(tmpd)
-        syscall('zip -r -0 -y {} lib'
-                .format(os.path.join(ANDROID_PATH, 'content-libs.jar')))
-    os.chdir(ANDROID_PATH)
+    # create content-libs.jar
+    tmpd = tempfile.mkdtemp()
+    archs = os.listdir('libs')
+    for arch in archs:
+        os.makedirs(os.path.join(tmpd, 'lib', arch))
+        # shutil.copy(os.path.join('libs', arch, 'libkiwix.so'),
+        #             os.path.join(tmpd, 'lib', arch, 'libkiwix.so'))
+    copy_to(jsdata.get('zim_file'),
+            os.path.join(tmpd, 'lib', archs[0], jsdata.get('zim_name')))
+    for arch in archs[1:]:
+        os.chdir(os.path.join(tmpd, 'lib', arch))
+        os.symlink('../{}/{}'.format(archs[0], jsdata.get('zim_name')),
+                   jsdata.get('zim_name'))
+    os.chdir(tmpd)
+    syscall('zip -r -0 -y {} lib'
+            .format(os.path.join(ANDROID_PATH, 'content-libs.jar')))
 
 
 def step_build_apk(jsdata, **options):
@@ -474,6 +494,7 @@ ARGS_MATRIX = OrderedDict([
     ('jni', step_update_kiwix_c),
     ('libkiwix', step_compile_libkiwix),
     ('embed', step_embed_zimfile),
+    ('gradle', step_update_gradle),
     ('build', step_build_apk),
     ('move', step_move_apk_to_destination),
     ('clean', step_remove_android_placeholder),
@@ -538,7 +559,9 @@ def main(jspath, **options):
     # loop through each step and execute if requested by command line
     for step_name, step_func in ARGS_MATRIX.items():
         if options.get('do_{}'.format(step_name), False):
+            move_to_android_placeholder()
             step_func(jsdata, **options)
+    move_to_current_folder()
 
 if __name__ == '__main__':
 
