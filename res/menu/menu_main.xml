@@ -16,16 +16,16 @@
             app:showAsAction="ifRoom"/>
 
     <item
-            android:id="@+id/menu_randomarticle"
-            android:icon="@drawable/action_randomarticle"
-            android:title="@string/menu_randomarticle"
+            android:id="@+id/menu_home"
+            android:title="@string/menu_home"
+            android:icon="@drawable/action_home"
             android:visible="false"
             app:showAsAction="ifRoom"/>
 
     <item
-            android:id="@+id/menu_home"
-            android:title="@string/menu_home"
-            android:icon="@drawable/action_home"
+            android:id="@+id/menu_randomarticle"
+            android:icon="@drawable/action_randomarticle"
+            android:title="@string/menu_randomarticle"
             android:visible="false"
             app:showAsAction="ifRoom"/>
 
