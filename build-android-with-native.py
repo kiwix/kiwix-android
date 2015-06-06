@@ -11,7 +11,6 @@ import re
 import sys
 import copy
 import shutil
-import tempfile
 from xml.dom.minidom import parse
 from subprocess import call, check_output
 
@@ -570,6 +569,11 @@ if LOCALES_TXT:
 if COMPILE_APK:
 
     os.chdir(curdir)
+
+    # rewrite local.properties to target proper SDK
+    with open('local.properties', 'w') as f:
+        f.write('# {}'.format(check_output('date').strip()))
+        f.write('sdk.dir={}'.format(os.path.abspath(SDK_PATH)))
 
     # Compile java and build APK
     syscall('rm -f build/outputs/apk/*.apk', shell=True)
