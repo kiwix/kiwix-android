@@ -203,6 +203,26 @@ public class KiwixMobileActivity extends AppCompatActivity
                 newTab();
             }
         });
+        RelativeLayout nextButton = (RelativeLayout) findViewById(R.id.action_forward);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+               if( getCurrentWebView().canGoForward()){
+                   getCurrentWebView().goForward();
+               }
+            }
+        });
+        RelativeLayout previousButton = (RelativeLayout) findViewById(R.id.action_back);
+        previousButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if( getCurrentWebView().canGoBack()){
+                    getCurrentWebView().goBack();
+                }
+            }
+        });
 
         mDrawerAdapter = new KiwixWebViewAdapter(this, R.layout.tabs_list, mWebViews);
         //mNewTab = (RelativeLayout) findViewById(R.id.new_tab_button);
@@ -320,7 +340,7 @@ public class KiwixMobileActivity extends AppCompatActivity
                 }
             } else {
                 mWebViews.remove(index);
-                if (index < mCurrentWebViewIndex){
+                if (index < mCurrentWebViewIndex) {
                     mCurrentWebViewIndex--;
                 }
                 mDrawerList.setItemChecked(mCurrentWebViewIndex, true);
