@@ -60,11 +60,10 @@ public class FileUtils {
      * @param deleteFileOnMismatch if the file sizes do not match, delete the file
      * @return true if it does exist, false otherwise
      */
-    static public boolean doesFileExist(String fileName, long fileSize,
-            boolean deleteFileOnMismatch) {
+    static public boolean doesFileExist(String fileName, long fileSize, boolean deleteFileOnMismatch) {
         // the file may have been delivered by Market --- let's make sure
         // it's the size we expect
-        File fileForNewFile = new File(generateSaveFileName(fileName));
+        File fileForNewFile = new File(fileName);
         if (fileForNewFile.exists()) {
             if (fileForNewFile.length() == fileSize) {
                 return true;

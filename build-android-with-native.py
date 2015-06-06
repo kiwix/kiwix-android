@@ -11,6 +11,7 @@ import re
 import sys
 import copy
 import shutil
+import tempfile
 from xml.dom.minidom import parse
 from subprocess import call, check_output
 
@@ -540,6 +541,17 @@ for arch in ARCHS:
                    'arch_full': arch_full,
                    'arch_short': arch_short,
                    'curdir': curdir})
+
+    if COMPILE_LIBKIWIX:
+        # create content-libs.jar
+        tmpd = tempfile.mkdtemp()
+        for arch in ARCHS:
+            os.makedirs(os.path.join(tmpd, 'lib', arch))
+            # shutil.copy(os.path.join('libs', arch, 'libkiwix.so'),
+            #             os.path.join(tmpd, 'lib', arch, 'libkiwix.so'))
+        os.chdir(tmpd)
+        syscall('zip -r -0 -y {} lib'
+                .format(os.path.join(curdir, 'content-libs.jar')))
 
     os.chdir(curdir)
     change_env(ORIGINAL_ENVIRON)

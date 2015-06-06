@@ -396,19 +396,38 @@ public class KiwixMobileActivity extends AppCompatActivity
             class JsObject {
 
                 @JavascriptInterface
-                public String appName() {
-                    return getResources().getString(R.string.app_name);
-                }
+                public boolean isCustomApp() { return Constants.IS_CUSTOM_APP; }
 
                 @JavascriptInterface
-                public String supportEmail() {
-                    return Constants.CUSTOM_APP_SUPPORT_EMAIL;
-                }
+                public String appId() { return Constants.CUSTOM_APP_ID; }
 
                 @JavascriptInterface
-                public String appId() {
-                    return Constants.CUSTOM_APP_ID;
-                }
+                public boolean hasEmbedZim() { return Constants.CUSTOM_APP_HAS_EMBEDDED_ZIM; }
+
+                @JavascriptInterface
+                public String zimFileName() { return Constants.CUSTOM_APP_ZIM_FILE_NAME; }
+
+                @JavascriptInterface
+                public long zimFileSize() { return Constants.CUSTOM_APP_ZIM_FILE_SIZE; }
+
+                @JavascriptInterface
+                public String versionName() { return Constants.CUSTOM_APP_VERSION_NAME; }
+
+                @JavascriptInterface
+                public int versionCode() { return Constants.CUSTOM_APP_VERSION_CODE; }
+
+                @JavascriptInterface
+                public String website() { return Constants.CUSTOM_APP_WEBSITE; }
+
+                @JavascriptInterface
+                public String email() { return Constants.CUSTOM_APP_EMAIL; }
+
+                @JavascriptInterface
+                public String supportEmail() { return Constants.CUSTOM_APP_SUPPORT_EMAIL; }
+
+                @JavascriptInterface
+                public String enforcedLang() { return Constants.CUSTOM_APP_ENFORCED_LANG; }
+
             }
             webView.addJavascriptInterface(new JsObject(), "branding");
             webView.loadUrl("file:///android_res/raw/help_custom.html");
@@ -1105,11 +1124,16 @@ public class KiwixMobileActivity extends AppCompatActivity
                         this.startActivity(new Intent(this, this.getClass()));
                     }
 
-                    //Context context = this.getApplicationContext();
-                    String fileName = FileUtils.getExpansionAPKFileName(true);
-                    Log.d(TAG_KIWIX, "Looking for: " + fileName + " -- filesize: "
-                            + Constants.ZIM_FILE_SIZE);
-                    if (!FileUtils.doesFileExist(fileName, Constants.ZIM_FILE_SIZE, false)) {
+                    String filePath;
+                    if (Constants.CUSTOM_APP_HAS_EMBEDDED_ZIM) {
+                        filePath = String.format("/data/data/%s/lib/%s", Constants.CUSTOM_APP_ID, Constants.CUSTOM_APP_ZIM_FILE_NAME);
+                    } else {
+                        String fileName = FileUtils.getExpansionAPKFileName(true);
+                        filePath = FileUtils.generateSaveFileName(fileName);
+                    }
+
+                    Log.d(TAG_KIWIX, "Looking for: " + filePath + " -- filesize: " + Constants.CUSTOM_APP_ZIM_FILE_SIZE);
+                    if (!FileUtils.doesFileExist(filePath, Constants.CUSTOM_APP_ZIM_FILE_SIZE, false)) {
                         Log.d(TAG_KIWIX, "... doesn't exist.");
 
                         AlertDialog.Builder zimFileMissingBuilder = new AlertDialog.Builder(
@@ -1135,7 +1159,7 @@ public class KiwixMobileActivity extends AppCompatActivity
                         AlertDialog zimFileMissingDialog = zimFileMissingBuilder.create();
                         zimFileMissingDialog.show();
                     } else {
-                        openZimFile(new File(FileUtils.generateSaveFileName(fileName)), true);
+                        openZimFile(new File(filePath), true);
                     }
                 } else {
                     Log.d(TAG_KIWIX,
