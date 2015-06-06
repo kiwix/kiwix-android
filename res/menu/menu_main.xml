@@ -9,18 +9,11 @@
             app:showAsAction="ifRoom"/>
 
     <item
-            android:id="@+id/menu_back"
-            android:title="@string/menu_back"
-            android:icon="@drawable/navigation_back"
-            android:visible="false"
-            app:showAsAction="ifRoom"/>
-
-    <item
             android:id="@+id/menu_bookmarks"
             android:icon="@drawable/action_bookmarks"
             android:title="@string/menu_bookmarks"
             android:visible="false"
-            app:showAsAction="always"/>
+            app:showAsAction="ifRoom"/>
 
     <item
             android:id="@+id/menu_randomarticle"
@@ -70,15 +63,15 @@
             app:showAsAction="never"/>
 
     <item
-            android:id="@+id/menu_settings"
-            android:title="@string/menu_settings"
-            android:icon="@drawable/navigation_forward"
-            app:showAsAction="never"/>
-
-    <item
             android:id="@+id/menu_help"
             android:title="@string/menu_help"
             android:icon="@drawable/action_help"
+            app:showAsAction="never"/>
+
+    <item
+            android:id="@+id/menu_settings"
+            android:title="@string/menu_settings"
+            android:icon="@drawable/navigation_forward"
             app:showAsAction="never"/>
 
 </menu>
