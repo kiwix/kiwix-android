@@ -31,11 +31,11 @@ public class FileUtils {
     /**
      * Returns the file name (without full path) for an Expansion APK file from the given context.
      *
-     * @param mainFile true for main file, false for patch file
+     * @param mainFile true for menu_main file, false for patch file
      * @return String the file name of the expansion file
      */
     public static String getExpansionAPKFileName(boolean mainFile) {
-        return (mainFile ? "main." : "patch.") + Constants.CUSTOM_APP_VERSION_CODE + "."
+        return (mainFile ? "menu_main." : "patch.") + Constants.CUSTOM_APP_VERSION_CODE + "."
                 + Constants.CUSTOM_APP_ID + ".obb";
     }
 

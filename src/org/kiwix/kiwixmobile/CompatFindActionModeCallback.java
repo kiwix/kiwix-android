@@ -152,7 +152,7 @@ public class CompatFindActionModeCallback
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         mode.setCustomView(mCustomView);
-        mode.getMenuInflater().inflate(R.menu.webview_menu, menu);
+        mode.getMenuInflater().inflate(R.menu.menu_webview, menu);
         mActionMode = mode;
         Editable edit = mEditText.getText();
         Selection.setSelection(edit, edit.length());

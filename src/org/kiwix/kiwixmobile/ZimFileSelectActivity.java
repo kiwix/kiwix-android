@@ -199,7 +199,7 @@ public class ZimFileSelectActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         final MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.fileselector, menu);
+        inflater.inflate(R.menu.menu_files, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

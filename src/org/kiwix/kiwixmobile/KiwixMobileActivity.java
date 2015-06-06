@@ -30,7 +30,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -45,9 +44,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
@@ -55,12 +51,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.MimeTypeMap;
 import android.webkit.ValueCallback;
@@ -70,10 +65,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -102,9 +94,11 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     public static final String TAG_KIWIX = "kiwix";
 
-    private static final String TAG_CURRENTZIMFILE = "currentzimfile";
+    private static final String TAG_CURRENT_FILE = "currentzimfile";
 
-    private static final String TAG_CURRENTARTICLE = "currentarticle";
+    private static final String TAG_CURRENT_ARTICLE = "currentarticle";
+
+    public static final String TAG_FILE_SEARCHED = "searchedarticle";
 
     private static final String PREF_NIGHTMODE = "pref_nightmode";
 
@@ -116,9 +110,11 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     private static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
 
-    private static final int ZIMFILESELECT_REQUEST_CODE = 1234;
+    private static final int REQUEST_FILE_SELECT = 1234;
 
-    private static final int PREFERENCES_REQUEST_CODE = 1235;
+    private static final int REQUEST_PREFERENCES = 1235;
+
+    public static final int REQUEST_FILE_SEARCH = 1236;
 
     public static ArrayList<State> mPrefState;
 
@@ -133,7 +129,7 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     public ImageButton exitFullscreenButton;
 
-    public AutoCompleteTextView articleSearchtextView;
+//    public AutoCompleteTextView articleSearchtextView;
 
     protected boolean requestClearHistoryAfterLoad;
 
@@ -170,14 +166,18 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     private ActionBarDrawerToggle mDrawerToggle;
 
+    private AnimatedProgressBar mProgressBar;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_PROGRESS);
+
         super.onCreate(savedInstanceState);
         handleLocaleCheck();
 
         setContentView(R.layout.main);
+        getWindow().setFeatureInt(Window.FEATURE_PROGRESS, Window.PROGRESS_VISIBILITY_ON);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -191,13 +191,9 @@ public class KiwixMobileActivity extends AppCompatActivity
         mBackToTopButton = (Button) findViewById(R.id.button_backtotop);
         mPrefState = new ArrayList<State>();
 
+        mProgressBar = (AnimatedProgressBar) findViewById(R.id.progress_view);
         exitFullscreenButton = (ImageButton) findViewById(R.id.FullscreenControlButton);
-
         articleSearchBar = (LinearLayout) findViewById(R.id.articleSearchBar);
-
-        articleSearchtextView = (AutoCompleteTextView) findViewById(R.id.articleSearchTextView);
-
-
 
         RelativeLayout newTabButton = (RelativeLayout) findViewById(R.id.new_tab_button);
         newTabButton.setOnClickListener(new View.OnClickListener() {
@@ -240,9 +236,9 @@ public class KiwixMobileActivity extends AppCompatActivity
         newTab();
 
         manageExternalLaunchAndRestoringViewState(savedInstanceState);
-        setUpWebView();
+//        setUpWebView();
         setUpExitFullscreenButton();
-        setUpArticleSearchTextView(savedInstanceState);
+//        setUpArticleSearchTextView(savedInstanceState);
         loadPrefs();
     }
 
@@ -307,7 +303,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         mWebViews.add(webView);
         mDrawerAdapter.notifyDataSetChanged();
         selectTab(mWebViews.size() - 1);
-
+        setUpWebView();
         return webView;
     }
 
@@ -344,13 +340,13 @@ public class KiwixMobileActivity extends AppCompatActivity
                 openMainPage();
                 break;
 
-            case R.id.menu_search:
-                if (articleSearchBar.getVisibility() != View.VISIBLE) {
-                    showSearchBar();
-                } else {
-                    hideSearchBar();
-                }
-                break;
+//            case R.id.menu_search:
+//                if (articleSearchBar.getVisibility() != View.VISIBLE) {
+//                    showSearchBar();
+//                } else {
+//                    hideSearchBar();
+//                }
+//                break;
 
             case R.id.menu_searchintext:
                 mCompatCallback.setActive();
@@ -524,7 +520,7 @@ public class KiwixMobileActivity extends AppCompatActivity
                 }
 
                 openMainPage();
-                showSearchBar(false);
+//                showSearchBar(false);
                 refreshBookmarks();
                 return true;
             } else {
@@ -549,7 +545,19 @@ public class KiwixMobileActivity extends AppCompatActivity
             menu.findItem(R.id.menu_home).setVisible(true);
             menu.findItem(R.id.menu_randomarticle).setVisible(true);
             menu.findItem(R.id.menu_searchintext).setVisible(true);
-            menu.findItem(R.id.menu_search).setVisible(true);
+
+            MenuItem searchItem = menu.findItem(R.id.menu_search);
+            searchItem.setVisible(true);
+            searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    Intent i = new Intent(KiwixMobileActivity.this, SearchActivity.class);
+                    startActivityForResult(i, REQUEST_FILE_SEARCH);
+                    overridePendingTransition(0, 0);
+                    return true;
+                }
+            });
+
             if (tts.isInitialized()) {
                 menu.findItem(R.id.menu_read_aloud).setVisible(true);
             }
@@ -636,7 +644,7 @@ public class KiwixMobileActivity extends AppCompatActivity
     }
 
     public boolean openArticleFromBookmark(String bookmarkTitle) {
-        Log.d(TAG_KIWIX, "openArticleFromBookmark: " + articleSearchtextView.getText());
+//        Log.d(TAG_KIWIX, "openArticleFromBookmark: " + articleSearchtextView.getText());
         return openArticle(ZimContentProvider.getPageUrlFromTitle(bookmarkTitle));
     }
 
@@ -646,28 +654,28 @@ public class KiwixMobileActivity extends AppCompatActivity
 //                        .getText() + " articleUrl: " + articleUrl);
 
         if (articleUrl != null) {
-            hideSearchBar();
+//            hideSearchBar();
 
             getCurrentWebView().loadUrl(Uri.parse(ZimContentProvider.CONTENT_URI
                     + articleUrl).toString());
 
         } else {
-            String errorString = String
-                    .format(getResources().getString(R.string.error_articlenotfound),
-                            articleSearchtextView.getText().toString());
-            Toast.makeText(getWindow().getContext(), errorString, Toast.LENGTH_SHORT)
-                    .show();
+//            String errorString = String
+//                    .format(getResources().getString(R.string.error_articlenotfound),
+//                            articleSearchtextView.getText().toString());
+//            Toast.makeText(getWindow().getContext(), errorString, Toast.LENGTH_SHORT)
+//                    .show();
         }
 
         return true;
     }
 
-    private boolean openArticleFromSearch() {
-        Log.d(TAG_KIWIX, "openArticleFromSearch: " + articleSearchtextView.getText());
-        String articleTitle = articleSearchtextView.getText().toString();
-        String articleUrl = ZimContentProvider.getPageUrlFromTitle(articleTitle);
-        return openArticle(articleUrl);
-    }
+//    private boolean openArticleFromSearch() {
+//        Log.d(TAG_KIWIX, "openArticleFromSearch: " + articleSearchtextView.getText());
+//        String articleTitle = articleSearchtextView.getText().toString();
+//        String articleUrl = ZimContentProvider.getPageUrlFromTitle(articleTitle);
+//        return openArticle(articleUrl);
+//    }
 
     public boolean openRandomArticle() {
         String articleUrl = ZimContentProvider.getRandomArticleUrl();
@@ -680,16 +688,16 @@ public class KiwixMobileActivity extends AppCompatActivity
         return openArticle(articleUrl);
     }
 
-    public void hideSearchBar() {
-        // Hide searchbar
-        articleSearchBar.setVisibility(View.GONE);
-        // To close softkeyboard
-        getCurrentWebView().requestFocus();
-        // Seems not really be necessary
-        InputMethodManager imm = (InputMethodManager)
-                getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(), 0);
-    }
+//    public void hideSearchBar() {
+//        // Hide searchbar
+//        articleSearchBar.setVisibility(View.GONE);
+//        // To close softkeyboard
+//        getCurrentWebView().requestFocus();
+//        // Seems not really be necessary
+//        InputMethodManager imm = (InputMethodManager)
+//                getSystemService(Context.INPUT_METHOD_SERVICE);
+//        imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(), 0);
+//    }
 
     private void ToggleNightMode() {
 
@@ -727,6 +735,7 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     private void setUpWebView() {
 
+        getCurrentWebView().getSettings().setJavaScriptEnabled(true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             WebView.setWebContentsDebuggingEnabled(true);
         }
@@ -888,8 +897,8 @@ public class KiwixMobileActivity extends AppCompatActivity
         super.onSaveInstanceState(outState);
 
         getCurrentWebView().saveState(outState);
-        outState.putString(TAG_CURRENTZIMFILE, ZimContentProvider.getZimFile());
-        outState.putString(TAG_CURRENTARTICLE, getCurrentWebView().getUrl());
+        outState.putString(TAG_CURRENT_FILE, ZimContentProvider.getZimFile());
+        outState.putString(TAG_CURRENT_ARTICLE, getCurrentWebView().getUrl());
 
     }
 
@@ -899,8 +908,8 @@ public class KiwixMobileActivity extends AppCompatActivity
         Log.i(TAG_KIWIX, "Intent data: " + data);
 
         switch (requestCode) {
-            case ZIMFILESELECT_REQUEST_CODE:
-                if (resultCode == Activity.RESULT_OK) {
+            case REQUEST_FILE_SELECT:
+                if (resultCode == RESULT_OK) {
                     // The URI of the selected file
                     final Uri uri = data.getData();
                     File file = null;
@@ -925,7 +934,14 @@ public class KiwixMobileActivity extends AppCompatActivity
                     });
                 }
                 break;
-            case PREFERENCES_REQUEST_CODE:
+            case REQUEST_FILE_SEARCH:
+                if (resultCode == RESULT_OK) {
+                    String title = data.getStringExtra(TAG_FILE_SEARCHED);
+                    String articleUrl = ZimContentProvider.getPageUrlFromTitle(title);
+                    openArticle(articleUrl);
+                }
+                break;
+            case REQUEST_PREFERENCES:
                 if (resultCode == KiwixSettingsActivity.RESULT_RESTART) {
                     finish();
                     startActivity(new Intent(KiwixMobileActivity.this, KiwixMobileActivity.class));
@@ -945,7 +961,7 @@ public class KiwixMobileActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
+        inflater.inflate(R.menu.menu_main, menu);
         this.menu = menu;
 
         if (requestInitAllMenuItems) {
@@ -1009,148 +1025,148 @@ public class KiwixMobileActivity extends AppCompatActivity
         // Force use of our file selection component.
         // (Note may make sense to just define a custom intent instead)
 
-        startActivityForResult(target, ZIMFILESELECT_REQUEST_CODE);
+        startActivityForResult(target, REQUEST_FILE_SELECT);
     }
 
     public void selectSettings() {
         Intent i = new Intent(this, KiwixSettingsActivity.class);
-        startActivityForResult(i, PREFERENCES_REQUEST_CODE);
+        startActivityForResult(i, REQUEST_PREFERENCES);
     }
 
-    public void showSearchBar() {
-        showSearchBar(true);
-    }
+//    public void showSearchBar() {
+//        showSearchBar(true);
+//    }
 
-    private void showSearchBar(Boolean focus) {
-        articleSearchBar.setVisibility(View.VISIBLE);
-
-        if (focus) {
-            articleSearchtextView.requestFocus();
-
-            // Move cursor to end
-            articleSearchtextView.setSelection(articleSearchtextView.getText().length());
-
-            InputMethodManager imm = (InputMethodManager) getSystemService(
-                    Context.INPUT_METHOD_SERVICE);
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        }
-    }
-
-    private void setUpArticleSearchTextView(Bundle savedInstanceState) {
-
-        final Drawable clearIcon = getResources().getDrawable(R.drawable.navigation_cancel);
-        final Drawable searchIcon = getResources().getDrawable(R.drawable.action_search);
-
-        if (savedInstanceState != null) {
-            getCurrentWebView().restoreState(savedInstanceState);
-        }
-
-        articleSearchtextView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        int height = articleSearchtextView.getMeasuredHeight() - articleSearchtextView
-                .getPaddingTop()
-                - articleSearchtextView.getPaddingBottom();
-
-        clearIcon.setBounds(0, 0, height, height);
-        searchIcon.setBounds(0, 0, height, height);
-
-        articleSearchtextView.setCompoundDrawablePadding(5);
-        articleSearchtextView.setCompoundDrawables(searchIcon, null,
-                articleSearchtextView.getText().toString().equals("") ? null : clearIcon, null);
-
-        final Drawable clearIcon2 = clearIcon;
-        final Drawable searchIcon2 = searchIcon;
-
-        articleSearchtextView.setOnTouchListener(new View.OnTouchListener() {
-
-            private final Drawable mClearIcon = clearIcon2;
-
-            private final Drawable mSearchIcon = searchIcon2;
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (articleSearchtextView.getCompoundDrawables()[2] == null) {
-                    return false;
-                }
-                if (event.getAction() != MotionEvent.ACTION_UP) {
-                    return false;
-                }
-                if (event.getX() > articleSearchtextView.getWidth()
-                        - articleSearchtextView.getPaddingRight() - mClearIcon
-                        .getIntrinsicWidth()) {
-                    articleSearchtextView.setText("");
-                    articleSearchtextView.setCompoundDrawables(mSearchIcon, null, null, null);
-                }
-                return false;
-            }
-        });
-
-        final Drawable clearIcon1 = clearIcon;
-
-        articleSearchtextView.addTextChangedListener(new TextWatcher() {
-            private final Drawable mSearchIcon = searchIcon;
-
-            private final Drawable mClearIcon = clearIcon1;
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                articleSearchtextView.setCompoundDrawables(mSearchIcon, null,
-                        articleSearchtextView.getText().toString().equals("") ? null : mClearIcon,
-                        null);
-            }
-
-            @Override
-            public void afterTextChanged(Editable arg0) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-        });
-
-        // Create the adapter and set it to the AutoCompleteTextView
-
-        ArrayAdapter<String> adapter = new AutoCompleteAdapter(this,
-                android.R.layout.simple_list_item_1);
-
-        articleSearchtextView.setAdapter(adapter);
-        articleSearchtextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                InputMethodManager imm = (InputMethodManager)
-                        getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(), 0);
-                openArticleFromSearch();
-            }
-        });
-
-        articleSearchtextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                return openArticleFromSearch();
-            }
-        });
-
-        articleSearchtextView.setInputType(InputType.TYPE_CLASS_TEXT);
-    }
+//    private void showSearchBar(Boolean focus) {
+//        articleSearchBar.setVisibility(View.VISIBLE);
+//
+//        if (focus) {
+//            articleSearchtextView.requestFocus();
+//
+//            // Move cursor to end
+//            articleSearchtextView.setSelection(articleSearchtextView.getText().length());
+//
+//            InputMethodManager imm = (InputMethodManager) getSystemService(
+//                    Context.INPUT_METHOD_SERVICE);
+//            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+//        }
+//    }
+//
+//    private void setUpArticleSearchTextView(Bundle savedInstanceState) {
+//
+//        final Drawable clearIcon = getResources().getDrawable(R.drawable.navigation_cancel);
+//        final Drawable searchIcon = getResources().getDrawable(R.drawable.action_search);
+//
+//        if (savedInstanceState != null) {
+//            getCurrentWebView().restoreState(savedInstanceState);
+//        }
+//
+//        articleSearchtextView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+//        int height = articleSearchtextView.getMeasuredHeight() - articleSearchtextView
+//                .getPaddingTop()
+//                - articleSearchtextView.getPaddingBottom();
+//
+//        clearIcon.setBounds(0, 0, height, height);
+//        searchIcon.setBounds(0, 0, height, height);
+//
+//        articleSearchtextView.setCompoundDrawablePadding(5);
+//        articleSearchtextView.setCompoundDrawables(searchIcon, null,
+//                articleSearchtextView.getText().toString().equals("") ? null : clearIcon, null);
+//
+//        final Drawable clearIcon2 = clearIcon;
+//        final Drawable searchIcon2 = searchIcon;
+//
+//        articleSearchtextView.setOnTouchListener(new View.OnTouchListener() {
+//
+//            private final Drawable mClearIcon = clearIcon2;
+//
+//            private final Drawable mSearchIcon = searchIcon2;
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if (articleSearchtextView.getCompoundDrawables()[2] == null) {
+//                    return false;
+//                }
+//                if (event.getAction() != MotionEvent.ACTION_UP) {
+//                    return false;
+//                }
+//                if (event.getX() > articleSearchtextView.getWidth()
+//                        - articleSearchtextView.getPaddingRight() - mClearIcon
+//                        .getIntrinsicWidth()) {
+//                    articleSearchtextView.setText("");
+//                    articleSearchtextView.setCompoundDrawables(mSearchIcon, null, null, null);
+//                }
+//                return false;
+//            }
+//        });
+//
+//        final Drawable clearIcon1 = clearIcon;
+//
+//        articleSearchtextView.addTextChangedListener(new TextWatcher() {
+//            private final Drawable mSearchIcon = searchIcon;
+//
+//            private final Drawable mClearIcon = clearIcon1;
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                articleSearchtextView.setCompoundDrawables(mSearchIcon, null,
+//                        articleSearchtextView.getText().toString().equals("") ? null : mClearIcon,
+//                        null);
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable arg0) {
+//            }
+//
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//            }
+//        });
+//
+//        // Create the adapter and set it to the AutoCompleteTextView
+//
+//        ArrayAdapter<String> adapter = new AutoCompleteAdapter(this,
+//                android.R.layout.simple_list_item_1);
+//
+//        articleSearchtextView.setAdapter(adapter);
+//        articleSearchtextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                InputMethodManager imm = (InputMethodManager)
+//                        getSystemService(Context.INPUT_METHOD_SERVICE);
+//                imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(), 0);
+//                openArticleFromSearch();
+//            }
+//        });
+//
+//        articleSearchtextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                return openArticleFromSearch();
+//            }
+//        });
+//
+//        articleSearchtextView.setInputType(InputType.TYPE_CLASS_TEXT);
+//    }
 
     private void manageExternalLaunchAndRestoringViewState(Bundle savedInstanceState) {
 
         if (getIntent().getData() != null) {
             String filePath = getIntent().getData().getPath();
             Log.d(TAG_KIWIX, " Kiwix started from a filemanager. Intent filePath: " + filePath
-                    + " -> open this zimfile and load main page");
+                    + " -> open this zimfile and load menu_main page");
             openZimFile(new File(filePath), false);
 
         } else if (savedInstanceState != null) {
             Log.d(TAG_KIWIX,
                     " Kiwix started with a savedInstanceState (That is was closed by OS) -> restore webview state and zimfile (if set)");
-            if (savedInstanceState.getString(TAG_CURRENTZIMFILE) != null) {
-                openZimFile(new File(savedInstanceState.getString(TAG_CURRENTZIMFILE)), false);
+            if (savedInstanceState.getString(TAG_CURRENT_FILE) != null) {
+                openZimFile(new File(savedInstanceState.getString(TAG_CURRENT_FILE)), false);
             }
-            if (savedInstanceState.getString(TAG_CURRENTARTICLE) != null) {
+            if (savedInstanceState.getString(TAG_CURRENT_ARTICLE) != null) {
                 getCurrentWebView().loadUrl(savedInstanceState.getString
-                        (TAG_CURRENTARTICLE));
+                        (TAG_CURRENT_ARTICLE));
 
             }
             getCurrentWebView().restoreState(savedInstanceState);
@@ -1166,7 +1182,7 @@ public class KiwixMobileActivity extends AppCompatActivity
 
         } else {
             SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
-            String zimFile = settings.getString(TAG_CURRENTZIMFILE, null);
+            String zimFile = settings.getString(TAG_CURRENT_FILE, null);
             if (zimFile != null) {
                 Log.d(TAG_KIWIX,
                         " Kiwix normal start, zimFile loaded last time -> Open last used zimFile "
@@ -1240,7 +1256,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         super.onPause();
         SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putString(TAG_CURRENTZIMFILE, ZimContentProvider.getZimFile());
+        editor.putString(TAG_CURRENT_FILE, ZimContentProvider.getZimFile());
 
         // Commit the edits!
         editor.apply();
@@ -1371,17 +1387,12 @@ public class KiwixMobileActivity extends AppCompatActivity
 
         @Override
         public void onProgressChanged(WebView view, int progress) {
-
-            setProgress(progress * 100);
-
+            mProgressBar.setProgress(progress);
             if (progress > 20) {
-
                 supportInvalidateOptionsMenu();
-
             }
 
             if (progress == 100) {
-
                 Log.d(TAG_KIWIX, "Loading article finished.");
                 if (requestClearHistoryAfterLoad) {
                     Log.d(TAG_KIWIX,
@@ -1397,69 +1408,6 @@ public class KiwixMobileActivity extends AppCompatActivity
                 }
             }
 
-        }
-    }
-
-    private class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
-
-        private ArrayList<String> mData;
-
-        public AutoCompleteAdapter(Context context, int textViewResourceId) {
-            super(context, textViewResourceId);
-            mData = new ArrayList<String>();
-        }
-
-        @Override
-        public int getCount() {
-            return mData.size();
-        }
-
-        @Override
-        public String getItem(int index) {
-            return mData.get(index);
-        }
-
-        @Override
-        public Filter getFilter() {
-            Filter myFilter = new Filter() {
-                @Override
-                protected FilterResults performFiltering(CharSequence constraint) {
-                    FilterResults filterResults = new FilterResults();
-                    ArrayList<String> data = new ArrayList<String>();
-                    if (constraint != null) {
-                        // A class that queries a web API, parses the data and returns an ArrayList<Style>
-                        try {
-                            String prefix = constraint.toString();
-
-                            ZimContentProvider.searchSuggestions(prefix, 200);
-                            String suggestion;
-
-                            data.clear();
-                            while ((suggestion = ZimContentProvider.getNextSuggestion()) != null) {
-                                data.add(suggestion);
-                            }
-                        } catch (Exception e) {
-
-                        }
-                        // Now assign the values and count to the FilterResults object
-                        filterResults.values = data;
-                        filterResults.count = data.size();
-                    }
-                    return filterResults;
-                }
-
-                @SuppressWarnings("unchecked")
-                @Override
-                protected void publishResults(CharSequence contraint, FilterResults results) {
-                    if (results != null && results.count > 0) {
-                        notifyDataSetChanged();
-                        mData = (ArrayList<String>) results.values;
-                    } else {
-                        notifyDataSetInvalidated();
-                    }
-                }
-            };
-            return myFilter;
         }
     }
 

@@ -2,8 +2,16 @@
 
 <resources>
 
+    <attr name="progressBackgroundColor" format="color"/>
+
     <declare-styleable name="SliderPreference">
         <attr name="android:summary"/>
+    </declare-styleable>
+
+    <declare-styleable name="AnimatedProgressBar">
+        <attr name="progressColor" format="color"/>
+        <attr name="backgroundColor" format="color"/>
+        <attr name="bidirectionalAnimate" format="boolean"/>
     </declare-styleable>
 
 </resources>
