@@ -575,10 +575,21 @@ if COMPILE_APK:
         f.write('# {}'.format(check_output('date').strip()))
         f.write('sdk.dir={}'.format(os.path.abspath(SDK_PATH)))
 
+    # store ANDROID_HOME if exist
+    android_home = os.environ.get('ANDROID_HOME')
+
+    # update env for that compile
+    if android_home:
+        change_env({'ANDROID_HOME': os.path.abspath(SDK_PATH)})
+
     # Compile java and build APK
     syscall('rm -f build/outputs/apk/*.apk', shell=True)
     syscall('./gradlew clean assemble')
     syscall('./gradlew build --stacktrace')
+
+    # compile complete, restore ANDROID_HOME
+    if android_home:
+        change_env({'ANDROID_HOME': android_home})
 
     folder_name = os.path.split(curdir)[-1]
 
