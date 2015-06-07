@@ -30,7 +30,7 @@
             android:textColorHint="@color/hint_foreground_material_dark"
             android:textColor="@android:color/white"
             android:imeOptions="actionDone|flagNoExtractUi|flagNoFullscreen"
-            android:layout_marginRight="10dip">
+            android:layout_marginEnd="10dip">
 
         <requestFocus/>
     </EditText>
