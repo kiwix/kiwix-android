@@ -497,8 +497,8 @@ ARGS_MATRIX = OrderedDict([
     ('gradle', step_update_gradle),
     ('build', step_build_apk),
     ('move', step_move_apk_to_destination),
-    ('clean', step_remove_android_placeholder),
     ('list', step_list_output_apk),
+    ('clean', step_remove_android_placeholder),
 ])
 
 
