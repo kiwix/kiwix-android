@@ -37,3 +37,5 @@ gen-external-apklibs
 
 # Mac OS X
 .DS_Store
+
+ic_launcher_512_*.png
