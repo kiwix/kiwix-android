@@ -24,9 +24,9 @@
                 android:id="@+id/progress_view"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                app:backgroundColor="#00000000"
+                app:backgroundColor="@color/primary_dark"
                 app:bidirectionalAnimate="false"
-                app:progressColor="@color/primary_light"/>
+                app:progressColor="@color/accent"/>
     </FrameLayout>
 
 </LinearLayout>
