@@ -25,6 +25,7 @@
     <string name="choose_file">Изберете ZIM-податотека (*.zim)</string>
     <string name="add_bookmark">Означи ја страницава</string>
     <string name="remove_bookmark">Тргни обележано</string>
+    <string name="open_in_new_tab">Да ја отворам врската во ново јазиче?</string>
     <string name="error_nozimfilesfound">На уредот не се најдени ZIM-податотеки.\nПогледајте ја страницата за помош за да дознаете како да ставите содржини во Kiwix.\nАко сепак имате ставено ZIM-податотека во уредот/надворешниот склад, обидете се повторно за една минута или превклучете го уредот.</string>
     <string name="error_filenotfound">Грешка: Не ја најдов избраната ZIM-податотека.</string>
     <string name="error_fileinvalid">Грешка: Одбраната податотека не е вежачка ZIM-податотека.</string>

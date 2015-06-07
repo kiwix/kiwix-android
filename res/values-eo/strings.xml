@@ -25,6 +25,7 @@
     <string name="choose_file">Elektu enhavan dosieron ZIM (*.zim)</string>
     <string name="add_bookmark">Marki ĉi tiun paĝon</string>
     <string name="remove_bookmark">Malmarki elektitajn</string>
+    <string name="open_in_new_tab">Ĉu malfermi ligilon en nova langeto?</string>
     <string name="error_nozimfilesfound">Neniu ZIM-dosiero estas trovita en la memorilo.\nKonzultu la paĝon Helpo por trovi instrukciojn pri ŝargado de enhavo en Kiwix.\nSe vi enmetis ZIM-dosieron en la memorilon, vi povas reprovi post momento aŭ restartigi la memorilon.</string>
     <string name="error_filenotfound">Eraro: Ne eblis trovi la elektitan ZIM-dosieron.</string>
     <string name="error_fileinvalid">Eraro: La elektita dosiero ne estas valida ZIM-dosiero.</string>

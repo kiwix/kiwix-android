@@ -25,6 +25,7 @@
     <string name="choose_file">Изберете ZIM файл със съдържание (*.zim)</string>
     <string name="add_bookmark">Отбелязване на тази страница</string>
     <string name="remove_bookmark">Отмаркиране на избраното</string>
+    <string name="open_in_new_tab">Отваряне на препратката в нов раздел?</string>
     <string name="error_nozimfilesfound">Няма намерени ZIM файлове на вашето устройство.\nПрегледайте страницата на помощ, за да получите указания как да заредите съдържанието в Kiwix.\nАко сте сложили ZIM файл на вашето устройство/външен диск за съхранение, може да опитате отново след една минута или да рестартирате устройството.</string>
     <string name="error_filenotfound">Грешка: Избраният ZIM файл не е намерен.</string>
     <string name="error_fileinvalid">Грешка: Избраният файл не е валиден ZIM файл.</string>

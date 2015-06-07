@@ -25,6 +25,7 @@
     <string name="choose_file">Chọn một Tập tin Nội dung ZIM (*.zim)</string>
     <string name="add_bookmark">Đánh dấu Trang Này</string>
     <string name="remove_bookmark">Xóa Dấu trang Lựa chọn</string>
+    <string name="open_in_new_tab">Mở liên kết trong thẻ mới?</string>
     <string name="error_nozimfilesfound">Không tìm thấy tập tin ZIM trên thiết bị của bạn.\nHãy đọc Trang Trợ giúp để biết cách tải nội dung vào Kiwix.\nNếu bạn có đưa tập tin ZIM vào thiết bị hoặc bộ nhớ ngoài của bạn, hãy thử lại sau hoặc khởi động lại thiết bị của bạn.</string>
     <string name="error_filenotfound">Lỗi: Không tìm thấy tập tin ZIM đã chọn</string>
     <string name="error_fileinvalid">Lỗi: Tập tin đã chọn không phải là tập tin ZIM hợp lệ.</string>

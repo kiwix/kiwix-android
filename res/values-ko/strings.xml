@@ -16,7 +16,7 @@
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="save_media">다른 이름으로 미디어 저장...</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
+    <string name="save_media_error">An error occurred when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">ZIM 파일을 검색 중입니다. 잠시 기다려주세요...</string>
     <string name="button_backtotop">맨 위로 돌아가기</string>
@@ -25,6 +25,7 @@
     <string name="choose_file">ZIM 내용 파일 (*.zim) 선택</string>
     <string name="add_bookmark">이 페이지 표시하기</string>
     <string name="remove_bookmark">선택을 표시 취소하기</string>
+    <string name="open_in_new_tab">새 탭으로 링크를 여시겠습니까?</string>
     <string name="error_nozimfilesfound">장치에서 ZIM 파일이 발견되지 않았습니다.\n도움말에서 내용을 어떻게 Kiwix로 불러오는지 알아보세요.\n만약 파일을 외장 디스크나 기기에 넣었다면, 잠시 뒤에 다시 시도하거나 자시 시작해 보세요.</string>
     <string name="error_filenotfound">오류: 선택된 ZIM 파일을 찾을 수 없습니다</string>
     <string name="error_fileinvalid">에러: 선택한 파일은 올바른 ZIM 파일이 아닙니다.</string>

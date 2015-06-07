@@ -16,7 +16,7 @@
     <string name="menu_read_aloud_stop">Parar de ler em voz alta</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="save_media">Salvar media como...</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
+    <string name="save_media_error">An error occurred when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">Escaneando os ZIM files, por favor espere...</string>
     <string name="button_backtotop">Voltar ao Topo</string>
@@ -25,6 +25,7 @@
     <string name="choose_file">Selecione um arquivo de conteúdo ZIM (*.zim)</string>
     <string name="add_bookmark">Marcar esta página</string>
     <string name="remove_bookmark">Desmarcar selecionadas</string>
+    <string name="open_in_new_tab">Abrir ligação num novo separador?</string>
     <string name="error_nozimfilesfound">Não foram encontrados or ficheiros ZIM no dispositivo.\nAtentamente reveja a Help Page para conhecer métodos e meios de como carregar conteúdo para o Kiwix.\nSe voçê já colocou o ZIM no dispotivo alvo, tente novamente no espaço de um minuto recarregar ou faça restart ao dispositivo .</string>
     <string name="error_filenotfound">Erro: O ficheiro ZIM selecionado não pôde ser encontrado.</string>
     <string name="error_fileinvalid">Erro: O ficheiro selecionado não é um ficheiro ZIM válido.</string>

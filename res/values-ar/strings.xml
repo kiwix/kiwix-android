@@ -25,6 +25,7 @@
     <string name="choose_file">حدد ملف محتوى زيم (*.zim)</string>
     <string name="add_bookmark">علّم هذه الصفحة</string>
     <string name="remove_bookmark">أزل تعليم المحدد</string>
+    <string name="open_in_new_tab">افتح الوصلة في علامة تبويب جديدة</string>
     <string name="error_nozimfilesfound">لا توجد ملفات زيم على الجهتز الخاص بك.\nالق نظرة صفحة المساعدة للحصول على الإرشادات الخاصة بكيفيّة تحميل محتوى على كيويكس.\nإذا قمت بوضع ملف زيم على الجهز الخاص بك أو وحدة التخزين الخارجيّة، ربّما أنت في حاجة إلى إعادة تشغيل الجهاز.</string>
     <string name="error_filenotfound">خطأ: تعذر العثور على الملف المحدد زيم.</string>
     <string name="error_fileinvalid">خطأ: ملف زيم المحدد ليس ملفا صالحا.</string>

@@ -25,6 +25,7 @@
     <string name="choose_file">Seleccioneu un fitxer de contingut ZIM (*.zim)</string>
     <string name="add_bookmark">Marcar aquesta pàgina</string>
     <string name="remove_bookmark">Desmarcar la selecció</string>
+    <string name="open_in_new_tab">Obrir l\'enllaç en una pestanya nova?</string>
     <string name="error_nozimfilesfound">No s\'han trobat fitxers ZIM al vostre dispositiu. A la pàgina d\'ajuda trobareu instruccions sobre com carregar contingut a Kiwix. Si realment vau col·locar un fitxer ZIM al vostre dispositiu d\'emmagatzematge extern, podeu tornar a intentar-ho d\'aquí uns moments o bé reiniciar el dispositiu.</string>
     <string name="error_filenotfound">Error: no s\'ha trobat el fitxer ZIM.</string>
     <string name="error_fileinvalid">Error: el fitxer seleccionat no és un fitxer ZIM vàlid.</string>

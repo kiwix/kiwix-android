@@ -25,6 +25,7 @@
     <string name="choose_file">Wybierz plik zawartości ZIM (*.zim)</string>
     <string name="add_bookmark">Zaznacz bieżącą stronę</string>
     <string name="remove_bookmark">Odznacz wybrane</string>
+    <string name="open_in_new_tab">Otwórz odnośnik na nowej karcie</string>
     <string name="error_nozimfilesfound">Nie znaleziono żadnego pliku ZIM na twoim urządzeniu. Zobaczc na stronę pomócy, aby uzyskać wskazówki jak pobierać zawartość na Kiwix. Jeśli plik ZIM jest umieszczony na urządzeniu/zewnętrznej pamięci masowej, spróbuj za chwilę lub włącz ponownie urządzenie.</string>
     <string name="error_filenotfound">Błąd: Wybrany plik ZIM nie został znaleziony.</string>
     <string name="error_fileinvalid">Błąd: Wybrany plik nie jest prawidłowym plikiem ZIM.</string>

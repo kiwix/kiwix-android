@@ -25,6 +25,7 @@
     <string name="choose_file">د ZIM مېنځپانگې يوه دوتنه ټاکل (*.zim)</string>
     <string name="add_bookmark">دا مخ په نخښه کول</string>
     <string name="remove_bookmark">ټاکلي بې نخښې کول</string>
+    <string name="open_in_new_tab">تړنه په نوې کړکۍ کې پرانيستل</string>
     <string name="error_nozimfilesfound">ستاسې په وزلې هېڅ کومه ZIM دوتنه و نه موندل شوه.\nکيويکس کې د مېنځپانگې د برسېرولو لپاره د لارښود مخ ولولۍ.\nکه تاسې په خپلې وزلې کې يو ZIM دوتنه نه وي ايښې، نو تاسې کولی شی چې يوه دقيقه وروسته يې بيا وآزمويۍ او يا هم خپله وزله سر له نوي ولگوۍ او بيا هڅه وکړۍ.</string>
     <string name="error_filenotfound">تېروتنه: ستاسې ټاکلې ZIM دوتنه و نه موندل شوه.</string>
     <string name="error_fileinvalid">تېروتنه: ستاسې ټاکلې دوتنه يوه کره ZIM دوتنه نه ده.</string>

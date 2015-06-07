@@ -25,6 +25,7 @@
     <string name="choose_file">Vyberte súbor so ZIM obsahom (*.zim)</string>
     <string name="add_bookmark">Označiť túto stránku</string>
     <string name="remove_bookmark">Zrušiť označenie vybraných</string>
+    <string name="open_in_new_tab">Otvoriť odkaz na novej karte?</string>
     <string name="error_nozimfilesfound">Na vašom zariadení sa nenašli žiadne ZIM súbory.\nPozrite sa na stránku Pomoc, aby ste sa dozvedeli ako načítať obsah do aplikácie Kiwix.\nAk ste do Vášho zariadenia pridali ZIM súbor, skúste ho načítať o minútu alebo zariadenie reštartujte.</string>
     <string name="error_filenotfound">Chyba: Vybraný súbor ZIM sa nenašiel.</string>
     <string name="error_fileinvalid">Chyba: Vybraný súbor nie je platný ZIM súbor.</string>

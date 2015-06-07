@@ -25,6 +25,7 @@
     <string name="choose_file">Dibab ur restr endac\'h ZIM (*.zim)</string>
     <string name="add_bookmark">Merkañ ar bajenn-mañ</string>
     <string name="remove_bookmark">Diverkañ ar sined diuzet</string>
+    <string name="open_in_new_tab">Digeriñ al liamm en un ivinell nevez ?</string>
     <string name="error_nozimfilesfound">N\'eus bet kavet restr ZIM ebet en hoc\'h urzhiataer.\nTaolit ur sell ouzh ar bajenn skoazell evit deskiñ penaos kargañ endalc\'hadoù e Kiwix. M\'ho peus lakaet ur restr Kiwix en hoc\'h ardivink stokañ diabarzh pe diavaez e c\'hallit klask en-dro a-benn ur vutunenn pe adloc\'hit hoc\'h urzhiataer.</string>
     <string name="error_filenotfound">Fazi : N\'eus ket bet gallet kavout ar restr ZIM diuzet.</string>
     <string name="error_fileinvalid">Fazi : Ar restr diuzet n\'eo ket ur restr ZIM reizh.</string>

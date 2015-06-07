@@ -25,6 +25,7 @@
     <string name="choose_file">एक ZIM कान्टेन्ट फ़ाइल (*.zim) का चयन करें</string>
     <string name="add_bookmark">इस पृष्ठ को चिह्नित करें</string>
     <string name="remove_bookmark">चयनित अचिह्नित करें</string>
+    <string name="open_in_new_tab">नए टैब में लिंक खोलें?</string>
     <string name="error_nozimfilesfound">आपकी डिवाइस पर कोई ZIM फ़ाइल नही मिली।\nKiwix मे कान्टेन्ट लोड करने के बारे मे जानने के लिए हेल्प पृष्ठ देखें।\nयदि आपने अपने डिवाइस/इक्स्टर्नल स्टोरिज पर ZIM फ़ाइल डाली है, तो फिर से इक मिनिट मे प्रयास करें, या फिर डिवाइस पुनरारंभ करें।</string>
     <string name="error_filenotfound">त्रुटि: चुनी गयी ZIM फ़ाइल नही मिल सकी।</string>
     <string name="error_fileinvalid">त्रुटि: चुनी गयी फ़ाइल एक वैध ZIM फ़ाइल नहीं है।</string>

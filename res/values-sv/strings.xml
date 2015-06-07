@@ -25,6 +25,7 @@
     <string name="choose_file">Välj en ZIM-innehållsfil (*.zim)</string>
     <string name="add_bookmark">Markera denna sida</string>
     <string name="remove_bookmark">Avmarkera valda</string>
+    <string name="open_in_new_tab">Öppna länk i ny flik?</string>
     <string name="error_nozimfilesfound">Inga ZIM-filer hittades på din enhet.\nTa en titt på hjälpsidan för att få hjälp om hur man läser in innehåll i Kiwix.\nOm du lade in en ZIM-fil på din enhet/externa minne bör du kanske prova igen om någon minut eller starta om din enhet.</string>
     <string name="error_filenotfound">Fel: Den valda ZIM-filen kunde inte hittas.</string>
     <string name="error_fileinvalid">Fel: Den valda filen är inte en giltig ZIM-fil.</string>

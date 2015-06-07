@@ -25,6 +25,7 @@
     <string name="choose_file">Seleccionar un fichièr de contengut ZIM (*.zim)</string>
     <string name="add_bookmark">Marcar aquela pagina</string>
     <string name="remove_bookmark">Desmarcar la seleccion</string>
+    <string name="open_in_new_tab">Dobrir lo ligam dins un onglet novèl ?</string>
     <string name="error_nozimfilesfound">Cap de fichièr ZIM es pas estat trobat sus vòstra maquina.\nGetatz un còp d’uèlh a la pagina d’ajuda per aver d\'instruccions sul biais de cargar de contengut dins Kiwix.\nS\'avètz mes un fichièr ZIM sus vòstre emmagazinatge intèrne o extèrne, podètz tornar ensajar dins una minuta o reamodar vòstre aparelh.</string>
     <string name="error_filenotfound">Error : Lo fichièr ZIM seleccionat es introbable.</string>
     <string name="error_fileinvalid">Error : Lo fichièr seleccionat es pas un fichièr ZIM valid.</string>

@@ -25,6 +25,7 @@
     <string name="choose_file">Pilih Fail Kandungan ZIM (*.zim)</string>
     <string name="add_bookmark">Gemari halaman ini</string>
     <string name="remove_bookmark">Buang yang dipilih</string>
+    <string name="open_in_new_tab">Buka pautan dalam tab baru?</string>
     <string name="error_nozimfilesfound">Tidak terdapat fail ZIM di dalam peranti anda.\nSila baca halaman Bantuan untuk mendapat petua untuk cara memuatkan kandungan ke dalam Kiwix.\nJika benar anda meletakkan fail ZIM di dalam peranti/storan luaran anda, apa kata anda cuba lagi sebentar kemudian atau me-restart peranti anda.</string>
     <string name="error_filenotfound">Ralat: Fail ZIM yang terpilih tidak dapat ditemui.</string>
     <string name="error_fileinvalid">Ralat: Fail yang terpilih bukan fail ZIM yang sah.</string>

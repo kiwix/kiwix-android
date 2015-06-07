@@ -25,6 +25,7 @@
     <string name="choose_file">בחירת קובץ ZIM עם תוכן (*.zim)</string>
     <string name="add_bookmark">סימון דף זה</string>
     <string name="remove_bookmark">ביטול סימון בקטע הנבחר</string>
+    <string name="open_in_new_tab">לפתוח קישור בלשונית חדשה?</string>
     <string name="error_nozimfilesfound">לא נמצאו קובצי ZIM במכשיר שלך.\nר\' את דף העזרה להכוונה על טעינת תוכן לקיוויקס.\nאם שמת קובץ ZIM במכשיר שלך או באחסון חיצוני, אולי כדאי לך לנסות שוב בעוד דקה או לאתחל את המכשיר.</string>
     <string name="error_filenotfound">שגיאה: קובץ ה־ZIM שנבחר לא נמצא.</string>
     <string name="error_fileinvalid">שגיאה: הקובץ שנבחר אינו קובץ ZIM תקין.</string>

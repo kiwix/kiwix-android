@@ -25,6 +25,7 @@
     <string name="choose_file">Selecciona un archivo de contenido ZIM (*.zim)</string>
     <string name="add_bookmark">Marcar esta página</string>
     <string name="remove_bookmark">Desmarcar seleccionados</string>
+    <string name="open_in_new_tab">¿Abrir enlace en una nueva pestaña?</string>
     <string name="error_nozimfilesfound">No se encontró ningún archivo ZIM en tu dispositivo.\nEcha un vistazo a la Página de Ayuda para obtener instrucciones acerca de cómo cargar contenido en Kiwix.\nSi pusiste un archivo ZIM en tu dispositivo de almacenamiento externo, puedes intentar en un minuto o reiniciar el dispositivo.</string>
     <string name="error_filenotfound">Error: no se encontró el archivo ZIM seleccionado.</string>
     <string name="error_fileinvalid">Error: el archivo seleccionado no es un archivo ZIM válido.</string>

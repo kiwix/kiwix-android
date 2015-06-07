@@ -16,7 +16,7 @@
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="save_media">Shrani predstavnost kot ...</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
+    <string name="save_media_error">An error occurred when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">Iskanje datotek ZIM; prosimo, počakajte ...</string>
     <string name="button_backtotop">Nazaj na vrh</string>
@@ -25,6 +25,7 @@
     <string name="choose_file">Izberite datoteko z vsebino ZIM (*.zim)</string>
     <string name="add_bookmark">Označi to stran</string>
     <string name="remove_bookmark">Odznači izbrane</string>
+    <string name="open_in_new_tab">Odprem povezavo v novem zavihku?</string>
     <string name="error_nozimfilesfound">Na vaši napravi ni bila najdena nobena datoteka ZIM.\nZa napotke v zvezi z nalaganjem vsebine v Kiwix si poglejte Stran za pomoč.\nČe ste datoteko ZIM posneli na svojo napravo/zunanji disk, lahko ponovno poskusite po kratkem čakanju ali pa svojo napravo ponovno zaženete.</string>
     <string name="error_filenotfound">Napaka: izbrane datoteke ZIM ni mogoče najti.</string>
     <string name="error_fileinvalid">Napaka: izbrana datoteka ni veljavna datoteka ZIM.</string>

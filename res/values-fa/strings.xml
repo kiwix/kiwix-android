@@ -25,6 +25,7 @@
     <string name="choose_file">یک پروندهٔ محتوایی ZIM را انتخاب کنید (*.zim)</string>
     <string name="add_bookmark">این صفحه را علامت بزن</string>
     <string name="remove_bookmark">علامت انتخاب‌شده را بردار</string>
+    <string name="open_in_new_tab">بازکردن پیوند در زبانهٔ جدید؟</string>
     <string name="error_nozimfilesfound">هیچ پروندهٔ ZIM در دستگاه شما یافت نشد.\nنگاهی به صفحهٔ کمک برای گرفتن جهت‌هایی به بارگذاری محتویات به Kiwix نگاهی بیندازید.\nاگر شما پروندهٔ ZIM در دستگاه/حافظهٔ خارجی خود قرار دهید، شما چند دقیقه دیگر مجدداً سعی کنید یا دستگاه خود را ری‌استارت کنید.</string>
     <string name="error_filenotfound">خطا: پروندهٔ ZIM انتخاب شده پیدا نشد.</string>
     <string name="error_fileinvalid">خطا: پروندهٔ انتخاب‌شده یک پروندهٔ ZIM معتبر نیست.</string>

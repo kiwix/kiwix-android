@@ -16,7 +16,7 @@
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="save_media">Save Media</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
+    <string name="save_media_error">An error occurred when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">ZIM ଫାଇଲ ସ୍କାନ କରୁଛୁ, ଦୟାକରି ଅପେକ୍ଷା କରନ୍ତୁ...</string>
     <string name="button_backtotop">ଉପରକୁ ଫେରନ୍ତୁ</string>
@@ -25,6 +25,7 @@
     <string name="choose_file">ZIM ବିଷୟବସ୍ତୁ ଥିବା (*.zim) ଫାଇଲ ବାଛନ୍ତୁ</string>
     <string name="add_bookmark">ଏଇ ପୃଷ୍ଠାଟିକୁ ଚିହ୍ନିତ କରିବେ</string>
     <string name="remove_bookmark">ବଛାଯାଇଥିବା ବସ୍ତୁ ସବୁକୁ ବାଛିବେ ନାହିଁ</string>
+    <string name="open_in_new_tab">ନୂଆ ଟ୍ୟାବରେ ଲିଙ୍କଟି ଖୋଲିବେ?</string>
     <string name="error_nozimfilesfound">ଆପଣଙ୍କ ଉପକରଣରେ କୌଣସି ZIM ଫାଇଲ ମିଳିଲା ନାହିଁ ।\nସହାୟତା ପୃଷ୍ଠାଟି ଦେଖି କିଉଇକ୍ସର ବିଷୟବସ୍ତୁ ଜାଣିବା ବାବଦରେ ଜାଣିପାରିବେ ।\nଆପଣଙ୍କ ଉପକରଣରେ କିମ୍ବା ବାହାର ସଞ୍ଚୟ ଉପକରଣରେ ZIM ଫାଇଲ ଆଗରୁ ରଖିଥିଲେ ମିନିଟଟିଏ ଛାଡ଼ି ଚେଷ୍ଟା କରନ୍ତୁ ଅଥବା ପୁନରାରମ୍ଭ କରନ୍ତୁ ।</string>
     <string name="error_filenotfound">ଅସୁବିଧା: ବଛାଯାଇଥିବା ZIM ଫାଇଲ ମିଳିଲାନାହିଁ ।</string>
     <string name="error_fileinvalid">ଅସୁବିଧା: ବଛାଯାଇଥିବା ZIM ଫାଇଲଟି ବୈଧ ନୁହେଁ ।</string>
