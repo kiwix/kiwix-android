@@ -203,12 +203,32 @@ public class KiwixMobileActivity extends AppCompatActivity
                 newTab();
             }
         });
+        RelativeLayout nextButton = (RelativeLayout) findViewById(R.id.action_forward);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (getCurrentWebView().canGoForward()) {
+                    getCurrentWebView().goForward();
+                }
+            }
+        });
+        RelativeLayout previousButton = (RelativeLayout) findViewById(R.id.action_back);
+        previousButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (getCurrentWebView().canGoBack()) {
+                    getCurrentWebView().goBack();
+                }
+            }
+        });
 
         mDrawerAdapter = new KiwixWebViewAdapter(this, R.layout.tabs_list, mWebViews);
         //mNewTab = (RelativeLayout) findViewById(R.id.new_tab_button);
         //mDrawer = (RelativeLayout) findViewById(R.id.drawer);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer_list);
         mDrawerList.setDivider(null);
         mDrawerList.setDividerHeight(0);
         mDrawerList.setAdapter(mDrawerAdapter);
@@ -236,10 +256,15 @@ public class KiwixMobileActivity extends AppCompatActivity
         newTab();
 
         manageExternalLaunchAndRestoringViewState(savedInstanceState);
-//        setUpWebView();
+        setUpWebView();
         setUpExitFullscreenButton();
-//        setUpArticleSearchTextView(savedInstanceState);
+        setUpTTS();
         loadPrefs();
+        updateTitle(ZimContentProvider.getZimFileTitle());
+    }
+
+    private void updateTitle(String zimFileTitle) {
+        getSupportActionBar().setTitle(zimFileTitle);
     }
 
     private void setUpTTS() {
@@ -307,11 +332,38 @@ public class KiwixMobileActivity extends AppCompatActivity
         return webView;
     }
 
+    private void closeTab(int index) {
+
+        if (mWebViews.size() > 1) {
+            if (mCurrentWebViewIndex == index) {
+                if (mCurrentWebViewIndex >= 1) {
+                    selectTab(mCurrentWebViewIndex - 1);
+                    mWebViews.remove(index);
+                } else {
+                    selectTab(mCurrentWebViewIndex + 1);
+                    mWebViews.remove(index);
+                }
+            } else {
+                mWebViews.remove(index);
+                if (index < mCurrentWebViewIndex) {
+                    mCurrentWebViewIndex--;
+                }
+                mDrawerList.setItemChecked(mCurrentWebViewIndex, true);
+            }
+        } else {
+            // Do nothing
+            // mWebViews.remove(index);
+            // finish();
+        }
+        mDrawerAdapter.notifyDataSetChanged();
+    }
+
     private void selectTab(int position) {
         mCurrentWebViewIndex = position;
         mDrawerList.setItemChecked(position, true);
         mContentFrame.removeAllViews();
         mContentFrame.addView(mWebViews.get(position));
+        mDrawerList.setItemChecked(mCurrentWebViewIndex, true);
 
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             final Handler handler = new Handler();
@@ -353,21 +405,6 @@ public class KiwixMobileActivity extends AppCompatActivity
                 mCompatCallback.setWebView(webView);
                 mCompatCallback.showSoftInput();
                 startSupportActionMode(mCompatCallback);
-                break;
-
-            case R.id.menu_forward:
-                if (webView.canGoForward()) {
-                    webView.goForward();
-                    invalidateOptionsMenu();
-                }
-                break;
-
-            case R.id.menu_back:
-                if (webView.canGoBack()) {
-                    webView.goBack();
-
-                    invalidateOptionsMenu();
-                }
                 break;
 
             case R.id.menu_bookmarks:
@@ -454,37 +491,59 @@ public class KiwixMobileActivity extends AppCompatActivity
             class JsObject {
 
                 @JavascriptInterface
-                public boolean isCustomApp() { return Constants.IS_CUSTOM_APP; }
+                public boolean isCustomApp() {
+                    return Constants.IS_CUSTOM_APP;
+                }
 
                 @JavascriptInterface
-                public String appId() { return Constants.CUSTOM_APP_ID; }
+                public String appId() {
+                    return Constants.CUSTOM_APP_ID;
+                }
 
                 @JavascriptInterface
-                public boolean hasEmbedZim() { return Constants.CUSTOM_APP_HAS_EMBEDDED_ZIM; }
+                public boolean hasEmbedZim() {
+                    return Constants.CUSTOM_APP_HAS_EMBEDDED_ZIM;
+                }
 
                 @JavascriptInterface
-                public String zimFileName() { return Constants.CUSTOM_APP_ZIM_FILE_NAME; }
+                public String zimFileName() {
+                    return Constants.CUSTOM_APP_ZIM_FILE_NAME;
+                }
 
                 @JavascriptInterface
-                public long zimFileSize() { return Constants.CUSTOM_APP_ZIM_FILE_SIZE; }
+                public long zimFileSize() {
+                    return Constants.CUSTOM_APP_ZIM_FILE_SIZE;
+                }
 
                 @JavascriptInterface
-                public String versionName() { return Constants.CUSTOM_APP_VERSION_NAME; }
+                public String versionName() {
+                    return Constants.CUSTOM_APP_VERSION_NAME;
+                }
 
                 @JavascriptInterface
-                public int versionCode() { return Constants.CUSTOM_APP_VERSION_CODE; }
+                public int versionCode() {
+                    return Constants.CUSTOM_APP_VERSION_CODE;
+                }
 
                 @JavascriptInterface
-                public String website() { return Constants.CUSTOM_APP_WEBSITE; }
+                public String website() {
+                    return Constants.CUSTOM_APP_WEBSITE;
+                }
 
                 @JavascriptInterface
-                public String email() { return Constants.CUSTOM_APP_EMAIL; }
+                public String email() {
+                    return Constants.CUSTOM_APP_EMAIL;
+                }
 
                 @JavascriptInterface
-                public String supportEmail() { return Constants.CUSTOM_APP_SUPPORT_EMAIL; }
+                public String supportEmail() {
+                    return Constants.CUSTOM_APP_SUPPORT_EMAIL;
+                }
 
                 @JavascriptInterface
-                public String enforcedLang() { return Constants.CUSTOM_APP_ENFORCED_LANG; }
+                public String enforcedLang() {
+                    return Constants.CUSTOM_APP_ENFORCED_LANG;
+                }
 
             }
             getCurrentWebView().addJavascriptInterface(new JsObject(), "branding");
@@ -539,9 +598,7 @@ public class KiwixMobileActivity extends AppCompatActivity
     private void initAllMenuItems() {
         try {
             menu.findItem(R.id.menu_bookmarks).setVisible(true);
-            menu.findItem(R.id.menu_forward).setVisible(getCurrentWebView().canGoForward());
             menu.findItem(R.id.menu_fullscreen).setVisible(true);
-            menu.findItem(R.id.menu_back).setVisible(true);
             menu.findItem(R.id.menu_home).setVisible(true);
             menu.findItem(R.id.menu_randomarticle).setVisible(true);
             menu.findItem(R.id.menu_searchintext).setVisible(true);
@@ -781,6 +838,39 @@ public class KiwixMobileActivity extends AppCompatActivity
                 }
             }
         });
+        getCurrentWebView().setOnLongClickListener(new KiwixWebView.OnLongClickListener() {
+
+            @Override
+            public void onLongClick(final String url) {
+                boolean handleEvent = false;
+                if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
+                    // This is my web site, so do not override; let my WebView load the page
+                    handleEvent = true;
+
+                } else if (url.startsWith("file://")) {
+                    // To handle help page (loaded from resources)
+                    handleEvent = true;
+
+                } else if (url.startsWith(ZimContentProvider.UI_URI.toString())) {
+                    handleEvent = true;
+                }
+
+                if (handleEvent) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(KiwixMobileActivity.this);
+
+                    builder.setPositiveButton(android.R.string.yes,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    newTab(url);
+                                }
+                            });
+                    builder.setNegativeButton(android.R.string.no, null);
+                    builder.setMessage(getString(R.string.open_in_new_tab));
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            }
+        });
 
         final Handler saveHandler = new
 
@@ -899,7 +989,6 @@ public class KiwixMobileActivity extends AppCompatActivity
         getCurrentWebView().saveState(outState);
         outState.putString(TAG_CURRENT_FILE, ZimContentProvider.getZimFile());
         outState.putString(TAG_CURRENT_ARTICLE, getCurrentWebView().getUrl());
-
     }
 
     @Override
@@ -981,9 +1070,9 @@ public class KiwixMobileActivity extends AppCompatActivity
                 ZimContentProvider.getId() != null) {
             menu.findItem(R.id.menu_bookmarks).setVisible(true);
             if (bookmarks.contains(getCurrentWebView().getTitle())) {
-                menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmarks_active);
+                menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmark_active);
             } else {
-                menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmarks);
+                menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmark);
             }
         }
         return true;
@@ -1207,21 +1296,24 @@ public class KiwixMobileActivity extends AppCompatActivity
 
                     String filePath;
                     if (Constants.CUSTOM_APP_HAS_EMBEDDED_ZIM) {
-                        filePath = String.format("/data/data/%s/lib/%s", Constants.CUSTOM_APP_ID, Constants.CUSTOM_APP_ZIM_FILE_NAME);
+                        filePath = String.format("/data/data/%s/lib/%s", Constants.CUSTOM_APP_ID,
+                                Constants.CUSTOM_APP_ZIM_FILE_NAME);
                     } else {
                         String fileName = FileUtils.getExpansionAPKFileName(true);
                         filePath = FileUtils.generateSaveFileName(fileName);
                     }
 
-                    Log.d(TAG_KIWIX, "Looking for: " + filePath + " -- filesize: " + Constants.CUSTOM_APP_ZIM_FILE_SIZE);
-                    if (!FileUtils.doesFileExist(filePath, Constants.CUSTOM_APP_ZIM_FILE_SIZE, false)) {
+                    Log.d(TAG_KIWIX, "Looking for: " + filePath + " -- filesize: "
+                            + Constants.CUSTOM_APP_ZIM_FILE_SIZE);
+                    if (!FileUtils
+                            .doesFileExist(filePath, Constants.CUSTOM_APP_ZIM_FILE_SIZE, false)) {
                         Log.d(TAG_KIWIX, "... doesn't exist.");
 
                         AlertDialog.Builder zimFileMissingBuilder = new AlertDialog.Builder(
                                 this);
                         zimFileMissingBuilder.setTitle(R.string.app_name);
                         zimFileMissingBuilder.setMessage(R.string.customapp_missing_content);
-                        zimFileMissingBuilder.setIcon(R.drawable.kiwix_icon);
+                        zimFileMissingBuilder.setIcon(R.mipmap.kiwix_icon);
                         final Activity activity = this;
                         zimFileMissingBuilder
                                 .setPositiveButton(getString(R.string.go_to_play_store),
@@ -1365,7 +1457,7 @@ public class KiwixMobileActivity extends AppCompatActivity
                     "<html><body>" + errorString + "</body></html>", "text/html", "utf-8",
                     failingUrl);
             String title = getResources().getString(R.string.app_name);
-            getSupportActionBar().setTitle(title);
+            updateTitle(title);
         }
 
         @Override
@@ -1437,8 +1529,8 @@ public class KiwixMobileActivity extends AppCompatActivity
                 row = inflater.inflate(mLayoutResource, parent, false);
 
                 holder = new ViewHolder();
-                holder.txtTitle = (TextView) row.findViewById(R.id.tab_title);
-                holder.exit = (ImageView) row.findViewById(R.id.tab_delete);
+                holder.txtTitle = (TextView) row.findViewById(R.id.textTab);
+                holder.exit = (ImageView) row.findViewById(R.id.deleteButton);
                 holder.exit.setTag(position);
                 row.setTag(holder);
             } else {
@@ -1449,7 +1541,7 @@ public class KiwixMobileActivity extends AppCompatActivity
 
                 @Override
                 public void onClick(View view) {
-                    notifyDataSetChanged();
+                    closeTab(position);
                 }
 
             });
@@ -1467,5 +1559,4 @@ public class KiwixMobileActivity extends AppCompatActivity
             ImageView exit;
         }
     }
-
 }

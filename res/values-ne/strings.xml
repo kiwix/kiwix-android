@@ -16,7 +16,7 @@
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="save_media">Save Media</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
+    <string name="save_media_error">An error occurred when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">कृपया पर्खनुहोस्, जिम फाइलहरू स्क्यान हुँदैछ</string>
     <string name="button_backtotop">सिरानमा जाने</string>
@@ -25,6 +25,7 @@
     <string name="choose_file">ZIM सामग्री फाइल (*.zim) छान्नुहोस</string>
     <string name="add_bookmark">यो पृष्ठ चिनो लगाउने</string>
     <string name="remove_bookmark">छानिएकामा चिनो हटाउने</string>
+    <string name="open_in_new_tab">लिङ्कलाइ नयाँ ट्याबमा खोल्ने?</string>
     <string name="error_nozimfilesfound">तपाईंको उपकरणमा ZIM फाइलहरू भेटिएनन्।\nकिविक्समा सामग्री कसरी खोल्ने भन्ने विषयको निर्देशनका लागि सहायता पृष्ठमा हेर्नुहोस्।\nतपाईंले उपकरण वा बाह्य भण्डारणमा ZIM फाइल राख्नुभएको थियो भने, एक मिनटमा पुनः प्रयास गर्नुहोस् अथवा उपकरण पुनः सुरू गर्नुहोस्।</string>
     <string name="error_filenotfound">त्रुटी: छानिएको ZIM फाइल भेटाउन सकिएन।</string>
     <string name="error_fileinvalid">त्रुटी: छानिएको फाइल मान्य ZIM फाइल होइन।</string>

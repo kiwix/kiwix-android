@@ -25,6 +25,7 @@
     <string name="choose_file">Selige un file de contento ZIM (*.zim)</string>
     <string name="add_bookmark">Marcar iste pagina</string>
     <string name="remove_bookmark">Dismarcar selection</string>
+    <string name="open_in_new_tab">Aperir ligamine in nove scheda?</string>
     <string name="error_nozimfilesfound">Nulle file ZIM trovate in vostre dispositivo.\nIn le pagina de adjuta se trova instructiones pro cargar contento in Kiwix.\nSi vos ha de facto mittite un file ZIM in vostre dispositivo o spatio de immagazinage externe, vos pote essayar de novo post un minuta o reinitiar vostre dispositivo.</string>
     <string name="error_filenotfound">Error: Le file ZIM seligite non poteva esser trovate.</string>
     <string name="error_fileinvalid">Error: Le file seligite non es un file ZIM valide.</string>

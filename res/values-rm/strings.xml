@@ -16,7 +16,7 @@
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="save_media">Save Media</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
+    <string name="save_media_error">An error occurred when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">Tschertga datotecas ZIM, spetgai per plaschair...</string>
     <string name="button_backtotop">Enavos a l\'entschatta</string>
@@ -25,6 +25,7 @@
     <string name="choose_file">Selecziunar ina datoteca da cuntegn ZIM (*.zim)</string>
     <string name="add_bookmark">Agiuntar questa pagina als segnapaginas</string>
     <string name="remove_bookmark">Allontanar questa pagina dals segnapaginas</string>
+    <string name="open_in_new_tab">Avrir il link en in nov tab?</string>
     <string name="error_nozimfilesfound">Nagina datoteca ZIM chattada sin vos apparat.\nConsultai la pagina d\'agid per instrucziuns davart chargiar cuntegn en Kiwix.\nSche vus avais mess ina datoteca ZIM sin il apparat/la memoria externa, pudais vus pruvar danovamain en ina minuta u reaviar il apparat.</string>
     <string name="error_filenotfound">Errur: la datoteca ZIM selecziunada è betg vegnida chattada.</string>
     <string name="error_fileinvalid">Errur: la datoteca selecziunada è betg ina datoteca ZIM valida.</string>

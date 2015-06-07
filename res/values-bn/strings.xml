@@ -25,6 +25,7 @@
     <string name="choose_file">কোন জিম (*.zim) কন্টেন্ট ফাইল নির্বাচন করুন</string>
     <string name="add_bookmark">এটি পাতাটি নজরে রাখুন</string>
     <string name="remove_bookmark">নজর সরিয়ে নেওয়া হয়েছে</string>
+    <string name="open_in_new_tab">নতুন ট্যাবে লিঙ্ক খোলা হবে?</string>
     <string name="error_nozimfilesfound">আপনার ডিভাইসে কোন ZIM ফাইল পাওয়া যায়নি।\nকিউইক্সের মধ্যে কিভাবে বিষয়বস্তু লোড করবেন তার দিকনির্দেশ পেতে সাহায্য পাতা একবার দেখে নিন।\nআপনি যদি আপনার ডিভাইস/বহিস্থিত সংগ্রহস্থলে ZIM ফাইল রেখে থাকেন, তাহলে আপনি একটি মিনিট পর পুনরায় চেষ্টা করুন বা আপনার ডিভাইসটি পুনরায় আরম্ভ করুন।</string>
     <string name="error_filenotfound">ত্রুটি: নির্বাচিত ZIM ফাইলটি খুঁজে পাওয়া যায় নি।</string>
     <string name="error_fileinvalid">ত্রুটি: নির্বাচিত ফাইলটি বৈধ ZIM ফাইল নয়।</string>

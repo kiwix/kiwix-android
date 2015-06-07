@@ -16,7 +16,7 @@
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="save_media">Save Media</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
+    <string name="save_media_error">An error occurred when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">Soek ZIM-lêers. Wag asb...</string>
     <string name="button_backtotop">Terug na bo</string>
@@ -25,6 +25,7 @@
     <string name="choose_file">Kies \'n ZIM-inhoudslêer (*.zim)</string>
     <string name="add_bookmark">Merk hierdie bladsy</string>
     <string name="remove_bookmark">Ontmerk gekose</string>
+    <string name="open_in_new_tab">Open skakel in nuwe oortjie?</string>
     <string name="error_nozimfilesfound">Geen ZIM-lêers op u toestel nie.\nKyk na die Hulpbladsy vir instruksies oor hoe om inhoud in Kiwix te laai.\nAs u \'n ZIM-lêer op u toestel/eksterne kaart gesit het, probeer na \'n paar sekondes weer of herlaai u toestel.</string>
     <string name="error_filenotfound">Fout: die geselekteerde ZIM-lêer kon nie gevind word nie.</string>
     <string name="error_fileinvalid">Fout: die geselekteerde lêer is nie \'n geldige ZIM-lêer nie.</string>

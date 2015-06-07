@@ -125,6 +125,7 @@ public class KiwixWebView extends WebView {
     }
 
     public void loadPrefs() {
+        disableZoomControls();
 
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(getContext());
@@ -193,10 +194,10 @@ public class KiwixWebView extends WebView {
         }
     }
 
-    public void disableZoomControls(boolean disable) {
+    public void disableZoomControls() {
 
         getSettings().setBuiltInZoomControls(true);
-        getSettings().setDisplayZoomControls(true);
+        getSettings().setDisplayZoomControls(false);
     }
 
     public void setOnPageChangedListener(OnPageChangeListener listener) {

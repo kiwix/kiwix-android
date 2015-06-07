@@ -25,6 +25,7 @@
     <string name="choose_file">Dooro galka ZIM ee ka samaysan (*.zim)</string>
     <string name="add_bookmark">Boggaan ku samee calamad</string>
     <string name="remove_bookmark">Ka saar calaamadda</string>
+    <string name="open_in_new_tab">Fur webka qaab cusub</string>
     <string name="error_nozimfilesfound">Lagama helin wax galal ZIM ah qalabkaada.\nSoo eeg bogga caawimaadda si aad u hesho hagis gaar ah taasaa ku tusaysa sidii aad wax u galinlahad Kiwix.\nHaddii aad galisat galka ZIM qalabkaad/kaydiyaha kuu gaarka ah, waxaa laga yaabaa inaad u baahantahay inaad dib u soo shido.</string>
     <string name="error_filenotfound">Qalad: Galka ZIM ee aad dooratay lama helin.</string>
     <string name="error_fileinvalid">Qalad: Galka ZIM ee aad dooratay maaha mid shaqaynaya.</string>

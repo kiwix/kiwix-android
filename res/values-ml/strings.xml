@@ -16,7 +16,7 @@
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="save_media">Save Media</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
+    <string name="save_media_error">An error occurred when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">സിം ഫയലുകൾക്കായി തിരയുന്നു. ദയവായി കാത്തിരിക്കൂ..</string>
     <string name="button_backtotop">മുകളിലേക്ക്</string>
@@ -25,6 +25,7 @@
     <string name="choose_file">ഒരു സിം കണ്ടന്റ് ഫയൽ (*.zim) തിരഞ്ഞെടുക്കൂ</string>
     <string name="add_bookmark">ഈ താള്‍ അടയാളപ്പെടുത്തുക</string>
     <string name="remove_bookmark">തിരഞ്ഞെടുത്തവ അടയാളപ്പെടുത്താതിരിക്കുക</string>
+    <string name="open_in_new_tab">കണ്ണി പുതിയ ടാബിൽ തുറക്കണോ?</string>
     <string name="error_nozimfilesfound">താങ്കളുടെ ഉപകരണത്തിൽ സിം ഫയലുകളൊന്നുമില്ല. \nസഹായം താളുകൾ ഉപയോഗപ്പെടുത്തി കിവിക്സിൽ എങ്ങനെ ഉള്ളടക്കം ചേർക്കണമെന്ന് മനസ്സിലാക്കൂ. താങ്കൾ ഒരു സിം ഫയൽ താങ്കളുടെ ഉപകരണത്തിൽ/ബാഹ്യ സ്റ്റോറേജിൽ ഉൾപ്പെടുത്തിയെങ്കിൽ ദയവായി ഒരു മിനിറ്റ് കാത്തിരിക്കുകയോ ഉപകരണം റീസ്റ്റാർട്ട് ചെയ്യുകയോ വേണം.</string>
     <string name="error_filenotfound">പിഴവ്: തിരഞ്ഞെടുത്ത സിം ഫയൽ കണ്ടെത്താനായില്ല</string>
     <string name="error_fileinvalid">പിഴവ്: തിരഞ്ഞെടുത്ത സിം ഫയൽ സാധുവല്ല.</string>

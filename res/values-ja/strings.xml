@@ -25,6 +25,7 @@
     <string name="choose_file">Select a ZIM Content File (*.zim)</string>
     <string name="add_bookmark">このページをマーク</string>
     <string name="remove_bookmark">選択したマークを解除</string>
+    <string name="open_in_new_tab">リンクを新しいタブで開きますか?</string>
     <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
     <string name="error_filenotfound">エラー: 選択した ZIM ファイルが見つかりませんでした。</string>
     <string name="error_fileinvalid">エラー: 選択したファイルは有効な ZIM ファイルではありません。</string>

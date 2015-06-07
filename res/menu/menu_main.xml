@@ -9,23 +9,9 @@
             app:showAsAction="ifRoom"/>
 
     <item
-            android:id="@+id/menu_back"
-            android:title="@string/menu_back"
-            android:icon="@drawable/navigation_back"
-            android:visible="false"
-            app:showAsAction="ifRoom"/>
-
-    <item
             android:id="@+id/menu_bookmarks"
-            android:icon="@drawable/action_bookmarks"
+            android:icon="@drawable/action_bookmark_active"
             android:title="@string/menu_bookmarks"
-            android:visible="false"
-            app:showAsAction="always"/>
-
-    <item
-            android:id="@+id/menu_randomarticle"
-            android:icon="@drawable/action_randomarticle"
-            android:title="@string/menu_randomarticle"
             android:visible="false"
             app:showAsAction="ifRoom"/>
 
@@ -37,28 +23,26 @@
             app:showAsAction="ifRoom"/>
 
     <item
-            android:id="@+id/menu_openfile"
-            android:title="@string/menu_openfile"
-            android:icon="@drawable/device_access_sd_storage"
+            android:id="@+id/menu_randomarticle"
+            android:icon="@drawable/action_randomarticle"
+            android:title="@string/menu_randomarticle"
+            android:visible="false"
             app:showAsAction="ifRoom"/>
 
     <item
-            android:id="@+id/menu_forward"
-            android:title="@string/menu_forward"
-            android:icon="@drawable/navigation_forward"
-            android:visible="false"
-            app:showAsAction="never"/>
+            android:id="@+id/menu_openfile"
+            android:title="@string/menu_openfile"
+            android:icon="@drawable/action_open_file"
+            app:showAsAction="ifRoom"/>
 
     <item
             android:id="@+id/menu_searchintext"
-            android:icon="@drawable/action_search"
             android:title="@string/menu_searchintext"
             android:visible="false"
             app:showAsAction="never"/>
 
     <item
             android:id="@+id/menu_fullscreen"
-            android:icon="@drawable/action_search"
             android:title="@string/menu_fullscreen"
             android:visible="false"
             app:showAsAction="never"/>
@@ -70,15 +54,15 @@
             app:showAsAction="never"/>
 
     <item
-            android:id="@+id/menu_settings"
-            android:title="@string/menu_settings"
-            android:icon="@drawable/navigation_forward"
-            app:showAsAction="never"/>
-
-    <item
             android:id="@+id/menu_help"
             android:title="@string/menu_help"
             android:icon="@drawable/action_help"
+            app:showAsAction="never"/>
+
+    <item
+            android:id="@+id/menu_settings"
+            android:title="@string/menu_settings"
+            android:icon="@drawable/navigation_forward"
             app:showAsAction="never"/>
 
 </menu>

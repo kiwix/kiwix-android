@@ -25,6 +25,7 @@
     <string name="choose_file">Alegeți un fișier cu conținut ZIM (*.zim)</string>
     <string name="add_bookmark">Marchează această pagină</string>
     <string name="remove_bookmark">Șterge marcajul selectat</string>
+    <string name="open_in_new_tab">Deschideți legătura într-o filă nouă?</string>
     <string name="error_nozimfilesfound">Nu s-au găsit fișiere ZIM pe dispozitivul dumneavoastră.\nConsultați pagina de ajutor pentru detalii despre încărcarea conținutului în Kiwix.\nDacă totuși ați stocat un fișier ZIM pe dispozitivul dv./stocarea dv. externă, puteți reîncerca peste un minut sau puteți reporni dispozitivul.</string>
     <string name="error_filenotfound">Eroare: Fișierul ZIM selectat nu poate fi găsit.</string>
     <string name="error_fileinvalid">Eroare: Fișierul selectat nu este un fișier ZIM valid.</string>

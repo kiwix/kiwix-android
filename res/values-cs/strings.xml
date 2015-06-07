@@ -25,6 +25,7 @@
     <string name="choose_file">Vyberte obsahový soubor ZIM (*.zim)</string>
     <string name="add_bookmark">Označit tuto stránku</string>
     <string name="remove_bookmark">Odznačit vybrané</string>
+    <string name="open_in_new_tab">Otevřít odkaz v nové záložce?</string>
     <string name="error_nozimfilesfound">Na zařízení nebyly nalezeny soubory ZIM.\nPro pokyny, jak nahrávat do Kiwixu obsah, se podívejte na stránku nápovědy.\nPokud jste na své zařízení nebo externí paměť opravdu nahráli soubor ZIM, můžete zkusit načtení za minutu opakovat nebo restartovat zařízení.</string>
     <string name="error_filenotfound">Chyba: Nelze najít vybraný soubor ZIM.</string>
     <string name="error_fileinvalid">Chyba: Vybraný soubor není platným souborem ZIM.</string>

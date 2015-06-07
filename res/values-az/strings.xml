@@ -16,7 +16,7 @@
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="save_media">Save Media</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
+    <string name="save_media_error">An error occurred when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">ZIM fayllar axtarılır, xahiş edirik, gözləyin...</string>
     <string name="button_backtotop">Əvvələ qayıt</string>
@@ -25,6 +25,7 @@
     <string name="choose_file">ZIM məzmunlu fayl seç (*.zim)</string>
     <string name="add_bookmark">Bu səhifəni qeyd et</string>
     <string name="remove_bookmark">Seçilmiş işarələri götür</string>
+    <string name="open_in_new_tab">Linki yeni pəncərədə aç?</string>
     <string name="error_nozimfilesfound">Sizin qurğunuzda ZIM-faylları tapılmadı. Kiwix tərkibinin necə yüklənilməsi barədə göstərişlər\nməlumat səhifəsində yerləşdirilmişdir.\nƏgər siz, cihaz və ya daşıyıcı yaddaş qurğusunda ZIM-fayl yerləşdirmisinzə, proqramı və ya cihazı yenidən başladın.</string>
     <string name="error_filenotfound">Xəta: Seçilmiş ZIM fayl mövcud deyil.</string>
     <string name="error_fileinvalid">Xəta: Seçilmiş ZIM faylı yararlı deyil.</string>

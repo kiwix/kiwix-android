@@ -25,6 +25,7 @@
     <string name="choose_file">Bir ZIM İçerik Dosyası seçin (*.zim)</string>
     <string name="add_bookmark">Bu sayfayı işaretle</string>
     <string name="remove_bookmark">Seçilenin işaretini kaldır</string>
+    <string name="open_in_new_tab">Bağlantı yeni sekmede açılsın mı?</string>
     <string name="error_nozimfilesfound">Cihazınızda bir ZIM dosyası bulunamadı.\nKiwix\'e içerik yükleme talimatlarını görmek için Yardım Sayfası\'na bir göz atın.\nEğer cihazınıza/harici depolama kaynağınıza bir ZIM dosyası koyduysanız, birkaç dakika içerisinde yeniden deneyebilir veya cihazınızı yeniden başlatabilirsiniz.</string>
     <string name="error_filenotfound">Hata: Seçili ZIM dosyası bulunamadı.</string>
     <string name="error_fileinvalid">Hata: Seçili dosya geçerli bir ZIM dosyası değil.</string>

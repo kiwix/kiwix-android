@@ -25,6 +25,7 @@
     <string name="choose_file">Wielt eng ZIM-Inhaltsdatei aus (*.zim)</string>
     <string name="add_bookmark">Dës Säit markéieren</string>
     <string name="remove_bookmark">Ausgewielt Markéierung läschen</string>
+    <string name="open_in_new_tab">Link an engem neien Tab opmaachen?</string>
     <string name="error_nozimfilesfound">Op Ärer Maschinn konnt keng ZIM-Datei fonnt ginn. Luusst op der Hëllefssäit era fir gewuer ze ginn, wéi ee kann Inhalter a Kiwix eralueden.\nWann Dir eng ZIM-Datei op Ärer Maschinn oder Ärem externe Späicher hutt, probéiert et an enger Minutt nach eng Kéier oder maacht ee Neistart.</string>
     <string name="error_filenotfound">Feeler: Déi ausgewielten ZIM-Datei konnt net fonnt ginn.</string>
     <string name="error_fileinvalid">Feeler: Déi ausgewielten Datei ass keng gülteg ZIM-Datei.</string>

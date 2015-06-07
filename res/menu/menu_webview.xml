@@ -19,10 +19,10 @@
 
     <item
             android:id="@+id/find_prev"
-            android:icon="@drawable/ic_find_previous_holo_dark"
+            android:icon="@drawable/action_find_previous"
             app:showAsAction="always"/>
     <item
             android:id="@+id/find_next"
-            android:icon="@drawable/ic_find_next_holo_dark"
+            android:icon="@drawable/action_find_next"
             app:showAsAction="always"/>
 </menu>

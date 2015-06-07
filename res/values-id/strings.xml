@@ -25,6 +25,7 @@
     <string name="choose_file">Pilih Konten Berkas ZIM (*.zim)</string>
     <string name="add_bookmark">Tandai halaman ini</string>
     <string name="remove_bookmark">Hapus tanda yang dipilih</string>
+    <string name="open_in_new_tab">Buka pranala di tab baru?</string>
     <string name="error_nozimfilesfound">Berkas ZIM tidak ditemukan di perangkat Anda.\nLihat di Halaman Bantuan untuk memuat konten ke dalam Kiwix.\nJika Anda meletakkan berkas ZIM di perangkat/media penyimpanan ektsternal Anda, silakan diulang lagi atau nyalakan ulang perangkat Anda.</string>
     <string name="error_filenotfound">Galat: Berkas ZIM yang dipilih tidak ditemukan.</string>
     <string name="error_fileinvalid">Galat: Berkas yang dipilih bukan berkas ZIM yang sah.</string>

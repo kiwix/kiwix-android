@@ -16,7 +16,7 @@
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="save_media">Save Media</string>
-    <string name="save_media_error">An error occured when trying to save the media!</string>
+    <string name="save_media_error">An error occurred when trying to save the media!</string>
     <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
     <string name="rescan_fs_warning">ZIM ફાઇલ્સ શોધો છે, મહેરબાની કરી થોડી રાહ જુઓ...</string>
     <string name="button_backtotop">ટોપ પર પાછા જાઓ</string>
@@ -25,6 +25,7 @@
     <string name="choose_file">ZIM માહિતી ફાઇલ (*.zim) પસંદ કરો</string>
     <string name="add_bookmark">આ પાનું ચિન્હિત  કરો</string>
     <string name="remove_bookmark">આ પાનું  ચિન્હિત  ના કરો</string>
+    <string name="open_in_new_tab">કડી નવી ટેબમાં ખોલશો?</string>
     <string name="error_nozimfilesfound">No ZIM files found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
     <string name="error_filenotfound">ક્ષતિ: પસંદ કરેલ ZIM ફાઇલ મળી શકી નહી.</string>
     <string name="error_fileinvalid">ક્ષતિ: પસંદ કરેલ ફાઇલ યોગ્ય ZIM ફાઇલ નથી.</string>

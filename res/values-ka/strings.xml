@@ -25,6 +25,7 @@
     <string name="choose_file">აირჩიეთ ZIM-ფაილი (*.zim)</string>
     <string name="add_bookmark">ამ გვერდის მონიშვნა</string>
     <string name="remove_bookmark">მონიშვნის მოხსნა შერჩეულთათვის</string>
+    <string name="open_in_new_tab">ბმული ახალ ჩანართში გაიხსნას?</string>
     <string name="error_nozimfilesfound">თქვენს მოწყობილობაში ZIM-ფაილების პოვნა ვერ მოხერხდა.\nიხლეთ დახმარების გვერდი, რათა გაიგოთ თუ როგორ ატვირთოთ შიგთავსი Kiwix-ზე.\nთუკი თქვენ ZIM-ფაილი თქვენს მოწყობილობაში ან მატარებელზე განათავსეთ, შესაძლოა, უკეთსი იყოს ცოტა ხნის შემდეგ გაიმეოროთ ან მოწყობილობა გადატვირთოთ.</string>
     <string name="error_filenotfound">შეცდომა: არჩეული ZIM ფაილი ვერ მოიძებნა.</string>
     <string name="error_fileinvalid">შეცდომა: არჩეული ფაილი არ არის სწორი ZIM ფაილი.</string>

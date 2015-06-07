@@ -25,6 +25,7 @@
     <string name="choose_file">ZIM-tartalomfájl kiválasztása (*.zim)</string>
     <string name="add_bookmark">Oldal megjelölése</string>
     <string name="remove_bookmark">Kijelölés megszüntetése</string>
+    <string name="open_in_new_tab">Hivatkozás megnyitása új lapon?</string>
     <string name="error_nozimfilesfound">Nem található ZIM-fájl a készülékén. Tekintse meg a súgóoldalt, ahol útmutatót talál a Kiwix-tartalom letöltéséhez. Ha a ZIM-fájlt már átmásolta készülékére/az SD-kártyára, próbálja meg egy perc múlva ismét, vagy indítsa újra a készülékét!</string>
     <string name="error_filenotfound">Hiba: A kijelölt ZIM-fájl nem található.</string>
     <string name="error_fileinvalid">Hiba: A kijelölt fájl nem érvényes ZIM-fájl.</string>
