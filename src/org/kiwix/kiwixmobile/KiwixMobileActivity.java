@@ -256,7 +256,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         newTab();
 
         manageExternalLaunchAndRestoringViewState(savedInstanceState);
-//        setUpWebView();
+        setUpWebView();
         setUpExitFullscreenButton();
 //        setUpArticleSearchTextView(savedInstanceState);
         loadPrefs();
@@ -837,6 +837,39 @@ public class KiwixMobileActivity extends AppCompatActivity
 
                         }
                     }
+                }
+            }
+        });
+        getCurrentWebView().setOnLongClickListener(new KiwixWebView.OnLongClickListener() {
+
+            @Override
+            public void onLongClick(final String url) {
+                boolean handleEvent = false;
+                if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
+                    // This is my web site, so do not override; let my WebView load the page
+                    handleEvent = true;
+
+                } else if (url.startsWith("file://")) {
+                    // To handle help page (loaded from resources)
+                    handleEvent = true;
+
+                } else if (url.startsWith(ZimContentProvider.UI_URI.toString())) {
+                    handleEvent = true;
+                }
+
+                if (handleEvent) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(KiwixMobileActivity.this);
+
+                    builder.setPositiveButton(android.R.string.yes,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    newTab(url);
+                                }
+                            });
+                    builder.setNegativeButton(android.R.string.no, null);
+                    builder.setMessage(getString(R.string.open_in_new_tab));
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 }
             }
         });
