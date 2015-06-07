@@ -78,6 +78,10 @@ public class SliderPreference extends DialogPreference {
         }
     }
 
+    public void setSummary(CharSequence[] summaries) {
+        mSummaries = summaries;
+    }
+
     @Override
     public void setSummary(CharSequence summary) {
         super.setSummary(summary);
@@ -91,10 +95,6 @@ public class SliderPreference extends DialogPreference {
         } catch (Exception e) {
             super.setSummary(summaryResId);
         }
-    }
-
-    public void setSummary(CharSequence[] summaries) {
-        mSummaries = summaries;
     }
 
     public float getValue() {

@@ -17,6 +17,10 @@ import android.widget.LinearLayout;
 
 public class AnimatedProgressBar extends LinearLayout {
 
+    private final Paint mPaint = new Paint();
+
+    private final Rect mRect = new Rect();
+
     private int mProgress = 0;
 
     private boolean mBidirectionalAnimate = true;
@@ -77,18 +81,6 @@ public class AnimatedProgressBar extends LinearLayout {
         return mProgress;
     }
 
-    private final Paint mPaint = new Paint();
-
-    private final Rect mRect = new Rect();
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        mPaint.setColor(mProgressColor);
-        mPaint.setStrokeWidth(10);
-        mRect.right = mRect.left + mDrawWidth;
-        canvas.drawRect(mRect, mPaint);
-    }
-
     /**
      * sets the progress as an integer value between 0 and 100. Values above or below that interval
      * will be adjusted to their nearest value within the interval, i.e. setting a value of 150 will
@@ -132,6 +124,14 @@ public class AnimatedProgressBar extends LinearLayout {
                 - mDrawWidth;     // calculate amount the width has to change
 
         animateView(mDrawWidth, mWidth, deltaWidth);    // animate the width change
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        mPaint.setColor(mProgressColor);
+        mPaint.setStrokeWidth(10);
+        mRect.right = mRect.left + mDrawWidth;
+        canvas.drawRect(mRect, mPaint);
     }
 
     /**

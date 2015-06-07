@@ -32,7 +32,6 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.widget.Toast;
-import android.widget.ZoomButtonsController;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,13 +42,13 @@ import java.io.OutputStream;
 
 public class KiwixWebView extends WebView {
 
-    private OnPageChangeListener mChangeListener;
-
-    private OnLongClickListener mOnLongClickListener;
-
     private static final String PREF_ZOOM = "pref_zoom";
 
     private static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
+
+    private OnPageChangeListener mChangeListener;
+
+    private OnLongClickListener mOnLongClickListener;
 
     private boolean mIsZoomEnabled;
 

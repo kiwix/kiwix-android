@@ -94,11 +94,13 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     public static final String TAG_KIWIX = "kiwix";
 
+    public static final String TAG_FILE_SEARCHED = "searchedarticle";
+
+    public static final int REQUEST_FILE_SEARCH = 1236;
+
     private static final String TAG_CURRENT_FILE = "currentzimfile";
 
     private static final String TAG_CURRENT_ARTICLE = "currentarticle";
-
-    public static final String TAG_FILE_SEARCHED = "searchedarticle";
 
     private static final String PREF_NIGHTMODE = "pref_nightmode";
 
@@ -113,8 +115,6 @@ public class KiwixMobileActivity extends AppCompatActivity
     private static final int REQUEST_FILE_SELECT = 1234;
 
     private static final int REQUEST_PREFERENCES = 1235;
-
-    public static final int REQUEST_FILE_SEARCH = 1236;
 
     public static ArrayList<State> mPrefState;
 
