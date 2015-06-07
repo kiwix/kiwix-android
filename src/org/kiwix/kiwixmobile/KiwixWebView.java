@@ -191,12 +191,12 @@ public class KiwixWebView extends WebView {
 
     public interface OnPageChangeListener {
 
-        public void onPageChanged(int page, int maxPages);
+        void onPageChanged(int page, int maxPages);
     }
 
     public interface OnLongClickListener {
 
-        public void onLongClick(String url);
+        void onLongClick(String url);
     }
 }
 

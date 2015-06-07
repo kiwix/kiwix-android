@@ -33,10 +33,8 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -45,7 +43,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -78,7 +75,6 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -817,93 +813,6 @@ public class KiwixMobileActivity extends AppCompatActivity
                     builder.setMessage(getString(R.string.open_in_new_tab));
                     AlertDialog dialog = builder.create();
                     dialog.show();
-                }
-            }
-        });
-
-        final Handler saveHandler = new
-
-                Handler() {
-
-                    @Override
-                    public void handleMessage(Message msg) {
-                        Log.e(TAG_KIWIX, msg.getData().toString());
-
-                        String url = (String) msg.getData().get("url");
-                        String src = (String) msg.getData().get("src");
-
-                        if (url != null || src != null) {
-                            url = url == null ? src : url;
-                            url = java.net.URLDecoder.decode(url);
-                            url = url.substring(url.lastIndexOf('/') + 1);
-                            url = url.replaceAll(":", "_");
-                            int dotIndex = url.lastIndexOf('.');
-                            File storageDir = new File(
-                                    Environment.getExternalStoragePublicDirectory(
-                                            Environment.DIRECTORY_PICTURES), url);
-                            String newurl = url;
-                            for (int i = 2; storageDir.exists(); i++) {
-                                newurl = url.substring(0, dotIndex) + "_" + i + url
-                                        .substring(dotIndex, url.length());
-                                storageDir = new File(Environment.getExternalStoragePublicDirectory(
-                                        Environment.DIRECTORY_PICTURES), newurl);
-                            }
-
-                            Uri source = Uri.parse(src);
-                            Uri picUri = Uri.fromFile(storageDir);
-
-                            String toastText;
-                            try {
-                                InputStream istream = getContentResolver()
-                                        .openInputStream(source);
-                                OutputStream ostream = new FileOutputStream(storageDir);
-
-                                byte[] buffer = new byte[1024];
-                                int len;
-                                int contentSize = 0;
-                                while ((len = istream.read(buffer)) > 0) {
-                                    ostream.write(buffer, 0, len);
-                                    contentSize += len;
-                                }
-                                Log.i(TAG_KIWIX,
-                                        "Save media " + source + " to " + storageDir + " (size: "
-                                                + contentSize + ")");
-
-                                istream.close();
-                                ostream.close();
-                            } catch (IOException e) {
-                                Log.d(TAG_KIWIX, "Couldn't save image", e);
-                                toastText = getResources().getString(R.string.save_media_error);
-                            } finally {
-                                toastText = String
-                                        .format(getResources().getString(R.string.save_media_saved),
-                                                newurl);
-                            }
-
-                            Toast.makeText(KiwixMobileActivity.this, toastText,
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    }
-                };
-
-        // Image long-press
-        getCurrentWebView().setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-            @Override
-            public void onCreateContextMenu(ContextMenu menu, View v,
-                    ContextMenu.ContextMenuInfo menuInfo) {
-                final WebView.HitTestResult result = ((WebView) v).getHitTestResult();
-                if (result.getType() == WebView.HitTestResult.IMAGE_ANCHOR_TYPE
-                        || result.getType() == WebView.HitTestResult.IMAGE_TYPE
-                        || result.getType() == WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
-                    menu.add(0, 1, 0, getResources().getString(R.string.save_media))
-                            .setOnMenuItemClickListener(
-                                    new android.view.MenuItem.OnMenuItemClickListener() {
-                                        public boolean onMenuItemClick(android.view.MenuItem item) {
-                                            Message msg = saveHandler.obtainMessage();
-                                            getCurrentWebView().requestFocusNodeHref(msg);
-                                            return true;
-                                        }
-                                    });
                 }
             }
         });
