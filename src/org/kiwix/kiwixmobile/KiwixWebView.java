@@ -47,13 +47,7 @@ public class KiwixWebView extends WebView {
 
     private OnLongClickListener mOnLongClickListener;
 
-    private ZoomButtonsController zoomControll = null;
-
-    public static final String TAG_KIWIX = "kiwix";
-
     private static final String PREF_ZOOM = "pref_zoom";
-
-    private static final String PREF_NIGHTMODE = "pref_nightmode";
 
     private static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
 
@@ -129,8 +123,6 @@ public class KiwixWebView extends WebView {
 
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(getContext());
-//        boolean nightMode = sharedPreferences.getBoolean(PREF_NIGHTMODE, false);
-//        mIsBacktotopEnabled = sharedPreferences.getBoolean(PREF_BACKTOTOP, false);
         mIsZoomEnabled = sharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
 
         if (mIsZoomEnabled) {
@@ -139,16 +131,6 @@ public class KiwixWebView extends WebView {
         } else {
             setInitialScale(0);
         }
-
-//        if (!mIsBacktotopEnabled) {
-//            mBackToTopButton.setVisibility(View.INVISIBLE);
-//        }
-
-        // Night mode status
-//        Log.d(TAG_KIWIX, "nightMode value (" + nightMode + ")");
-//        if (this.nightMode != nightMode) {
-//            ToggleNightMode();
-//        }
     }
 
 

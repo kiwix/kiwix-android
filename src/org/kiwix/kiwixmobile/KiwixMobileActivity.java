@@ -124,12 +124,9 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     public Menu menu;
 
-
     public boolean isFullscreenOpened;
 
     public ImageButton exitFullscreenButton;
-
-//    public AutoCompleteTextView articleSearchtextView;
 
     protected boolean requestClearHistoryAfterLoad;
 
@@ -146,7 +143,6 @@ public class KiwixMobileActivity extends AppCompatActivity
     private ListView mDrawerList;
 
     private DrawerLayout mDrawerLayout;
-
 
     private ArrayList<String> bookmarks;
 
@@ -189,7 +185,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         mIsBacktotopEnabled = false;
         isFullscreenOpened = false;
         mBackToTopButton = (Button) findViewById(R.id.button_backtotop);
-        mPrefState = new ArrayList<State>();
+        mPrefState = new ArrayList<>();
 
         mProgressBar = (AnimatedProgressBar) findViewById(R.id.progress_view);
         exitFullscreenButton = (ImageButton) findViewById(R.id.FullscreenControlButton);
@@ -225,8 +221,6 @@ public class KiwixMobileActivity extends AppCompatActivity
         });
 
         mDrawerAdapter = new KiwixWebViewAdapter(this, R.layout.tabs_list, mWebViews);
-        //mNewTab = (RelativeLayout) findViewById(R.id.new_tab_button);
-        //mDrawer = (RelativeLayout) findViewById(R.id.drawer);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer_list);
         mDrawerList.setDivider(null);
@@ -248,10 +242,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         mDrawerToggle.syncState();
 
         mCompatCallback = new CompatFindActionModeCallback(this);
-
         mIsFullscreenOpened = false;
-
-        // Set the initial tab. It's hidden.
         mContentFrame = (FrameLayout) findViewById(R.id.content_frame);
         newTab();
 
@@ -391,14 +382,6 @@ public class KiwixMobileActivity extends AppCompatActivity
             case android.R.id.home:
                 openMainPage();
                 break;
-
-//            case R.id.menu_search:
-//                if (articleSearchBar.getVisibility() != View.VISIBLE) {
-//                    showSearchBar();
-//                } else {
-//                    hideSearchBar();
-//                }
-//                break;
 
             case R.id.menu_searchintext:
                 mCompatCallback.setActive();
@@ -579,7 +562,6 @@ public class KiwixMobileActivity extends AppCompatActivity
                 }
 
                 openMainPage();
-//                showSearchBar(false);
                 refreshBookmarks();
                 return true;
             } else {
@@ -706,33 +688,12 @@ public class KiwixMobileActivity extends AppCompatActivity
     }
 
     private boolean openArticle(String articleUrl) {
-//        Log.d(TAG_KIWIX,
-//                articleSearchtextView + " onEditorAction. TextView: " + articleSearchtextView
-//                        .getText() + " articleUrl: " + articleUrl);
-
         if (articleUrl != null) {
-//            hideSearchBar();
-
-            getCurrentWebView().loadUrl(Uri.parse(ZimContentProvider.CONTENT_URI
-                    + articleUrl).toString());
-
-        } else {
-//            String errorString = String
-//                    .format(getResources().getString(R.string.error_articlenotfound),
-//                            articleSearchtextView.getText().toString());
-//            Toast.makeText(getWindow().getContext(), errorString, Toast.LENGTH_SHORT)
-//                    .show();
+            getCurrentWebView()
+                    .loadUrl(Uri.parse(ZimContentProvider.CONTENT_URI + articleUrl).toString());
         }
-
         return true;
     }
-
-//    private boolean openArticleFromSearch() {
-//        Log.d(TAG_KIWIX, "openArticleFromSearch: " + articleSearchtextView.getText());
-//        String articleTitle = articleSearchtextView.getText().toString();
-//        String articleUrl = ZimContentProvider.getPageUrlFromTitle(articleTitle);
-//        return openArticle(articleUrl);
-//    }
 
     public boolean openRandomArticle() {
         String articleUrl = ZimContentProvider.getRandomArticleUrl();
@@ -744,17 +705,6 @@ public class KiwixMobileActivity extends AppCompatActivity
         String articleUrl = ZimContentProvider.getMainPage();
         return openArticle(articleUrl);
     }
-
-//    public void hideSearchBar() {
-//        // Hide searchbar
-//        articleSearchBar.setVisibility(View.GONE);
-//        // To close softkeyboard
-//        getCurrentWebView().requestFocus();
-//        // Seems not really be necessary
-//        InputMethodManager imm = (InputMethodManager)
-//                getSystemService(Context.INPUT_METHOD_SERVICE);
-//        imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(), 0);
-//    }
 
     private void ToggleNightMode() {
 
@@ -801,14 +751,12 @@ public class KiwixMobileActivity extends AppCompatActivity
         // Does not make much sense to cache data from zim files.(Not clear whether
         // this actually has any effect)
         getCurrentWebView().getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-//        webView.setWebChromeClient(new KiwixWebChromeClient());
 
         // Should basically resemble the behavior when setWebClient not done
         // (i.p. internal urls load in webview, external urls in browser)
         // as currently no custom setWebViewClient required it is commented
         // However, it must notify the bookmark system when a page is finished loading
         // so that it can refresh the menu.
-//        webView.setWebViewClient(new KiwixWebViewClient());
 
         getCurrentWebView().setOnPageChangedListener(new KiwixWebView.OnPageChangeListener() {
 
@@ -838,6 +786,7 @@ public class KiwixMobileActivity extends AppCompatActivity
                 }
             }
         });
+
         getCurrentWebView().setOnLongClickListener(new KiwixWebView.OnLongClickListener() {
 
             @Override
@@ -1122,123 +1071,6 @@ public class KiwixMobileActivity extends AppCompatActivity
         startActivityForResult(i, REQUEST_PREFERENCES);
     }
 
-//    public void showSearchBar() {
-//        showSearchBar(true);
-//    }
-
-//    private void showSearchBar(Boolean focus) {
-//        articleSearchBar.setVisibility(View.VISIBLE);
-//
-//        if (focus) {
-//            articleSearchtextView.requestFocus();
-//
-//            // Move cursor to end
-//            articleSearchtextView.setSelection(articleSearchtextView.getText().length());
-//
-//            InputMethodManager imm = (InputMethodManager) getSystemService(
-//                    Context.INPUT_METHOD_SERVICE);
-//            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-//        }
-//    }
-//
-//    private void setUpArticleSearchTextView(Bundle savedInstanceState) {
-//
-//        final Drawable clearIcon = getResources().getDrawable(R.drawable.navigation_cancel);
-//        final Drawable searchIcon = getResources().getDrawable(R.drawable.action_search);
-//
-//        if (savedInstanceState != null) {
-//            getCurrentWebView().restoreState(savedInstanceState);
-//        }
-//
-//        articleSearchtextView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-//        int height = articleSearchtextView.getMeasuredHeight() - articleSearchtextView
-//                .getPaddingTop()
-//                - articleSearchtextView.getPaddingBottom();
-//
-//        clearIcon.setBounds(0, 0, height, height);
-//        searchIcon.setBounds(0, 0, height, height);
-//
-//        articleSearchtextView.setCompoundDrawablePadding(5);
-//        articleSearchtextView.setCompoundDrawables(searchIcon, null,
-//                articleSearchtextView.getText().toString().equals("") ? null : clearIcon, null);
-//
-//        final Drawable clearIcon2 = clearIcon;
-//        final Drawable searchIcon2 = searchIcon;
-//
-//        articleSearchtextView.setOnTouchListener(new View.OnTouchListener() {
-//
-//            private final Drawable mClearIcon = clearIcon2;
-//
-//            private final Drawable mSearchIcon = searchIcon2;
-//
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if (articleSearchtextView.getCompoundDrawables()[2] == null) {
-//                    return false;
-//                }
-//                if (event.getAction() != MotionEvent.ACTION_UP) {
-//                    return false;
-//                }
-//                if (event.getX() > articleSearchtextView.getWidth()
-//                        - articleSearchtextView.getPaddingRight() - mClearIcon
-//                        .getIntrinsicWidth()) {
-//                    articleSearchtextView.setText("");
-//                    articleSearchtextView.setCompoundDrawables(mSearchIcon, null, null, null);
-//                }
-//                return false;
-//            }
-//        });
-//
-//        final Drawable clearIcon1 = clearIcon;
-//
-//        articleSearchtextView.addTextChangedListener(new TextWatcher() {
-//            private final Drawable mSearchIcon = searchIcon;
-//
-//            private final Drawable mClearIcon = clearIcon1;
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                articleSearchtextView.setCompoundDrawables(mSearchIcon, null,
-//                        articleSearchtextView.getText().toString().equals("") ? null : mClearIcon,
-//                        null);
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable arg0) {
-//            }
-//
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//            }
-//        });
-//
-//        // Create the adapter and set it to the AutoCompleteTextView
-//
-//        ArrayAdapter<String> adapter = new AutoCompleteAdapter(this,
-//                android.R.layout.simple_list_item_1);
-//
-//        articleSearchtextView.setAdapter(adapter);
-//        articleSearchtextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                InputMethodManager imm = (InputMethodManager)
-//                        getSystemService(Context.INPUT_METHOD_SERVICE);
-//                imm.hideSoftInputFromWindow(articleSearchtextView.getWindowToken(), 0);
-//                openArticleFromSearch();
-//            }
-//        });
-//
-//        articleSearchtextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                return openArticleFromSearch();
-//            }
-//        });
-//
-//        articleSearchtextView.setInputType(InputType.TYPE_CLASS_TEXT);
-//    }
-
     private void manageExternalLaunchAndRestoringViewState(Bundle savedInstanceState) {
 
         if (getIntent().getData() != null) {
@@ -1266,9 +1098,6 @@ public class KiwixMobileActivity extends AppCompatActivity
             // that after two refreshes page is still blank is low.
             // TODO: implement better fix
             // requestWebReloadOnFinished = 2;
-//            Log.d(TAG_KIWIX, "Workaround for #643: reload " + requestWebReloadOnFinished
-//                    + " times after restoring state");
-
         } else {
             SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
             String zimFile = settings.getString(TAG_CURRENT_FILE, null);
