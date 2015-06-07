@@ -258,6 +258,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         manageExternalLaunchAndRestoringViewState(savedInstanceState);
         setUpWebView();
         setUpExitFullscreenButton();
+        setUpTTS();
         loadPrefs();
         updateTitle(ZimContentProvider.getZimFileTitle());
     }
@@ -1320,7 +1321,7 @@ public class KiwixMobileActivity extends AppCompatActivity
                                 this);
                         zimFileMissingBuilder.setTitle(R.string.app_name);
                         zimFileMissingBuilder.setMessage(R.string.customapp_missing_content);
-                        zimFileMissingBuilder.setIcon(R.drawable.kiwix_icon);
+                        zimFileMissingBuilder.setIcon(R.mipmap.kiwix_icon);
                         final Activity activity = this;
                         zimFileMissingBuilder
                                 .setPositiveButton(getString(R.string.go_to_play_store),
