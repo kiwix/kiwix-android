@@ -27,10 +27,11 @@
             android:scrollHorizontally="true"
             android:inputType="text"
             android:hint="@string/search_label"
+            android:focusableInTouchMode="true"
             android:textColorHint="@color/hint_foreground_material_dark"
             android:textColor="@android:color/white"
             android:imeOptions="actionDone|flagNoExtractUi|flagNoFullscreen"
-            android:layout_marginEnd="10dip">
+            android:layout_marginRight="10dip">
 
         <requestFocus/>
     </EditText>

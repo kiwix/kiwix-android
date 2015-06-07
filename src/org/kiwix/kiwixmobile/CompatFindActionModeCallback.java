@@ -141,7 +141,15 @@ public class CompatFindActionModeCallback
 
     // Show on screen keyboard
     public void showSoftInput() {
-        mInput.showSoftInput(mEditText, 0);
+        mEditText.requestFocus();
+        mEditText.setFocusable(true);
+        mEditText.setFocusableInTouchMode(true);
+        mEditText.requestFocusFromTouch();
+
+
+        if (mEditText.requestFocus()) {
+            mInput.showSoftInput(mEditText, InputMethodManager.SHOW_IMPLICIT);
+        }
     }
 
     @Override
