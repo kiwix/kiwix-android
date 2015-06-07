@@ -16,6 +16,7 @@
         <item name="progressBackgroundColor">@color/primary_dark</item>
         <item name="listBackground">@drawable/list_bg</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="windowActionModeOverlay">true</item>
         <item name="arrowBackDrawable">@drawable/ic_action_back</item>
         <item name="arrowForwardDrawable">@drawable/ic_action_forward</item>
         <item name="drawerBackground">@color/drawer_background</item>
