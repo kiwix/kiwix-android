@@ -407,13 +407,6 @@ public class KiwixMobileActivity extends AppCompatActivity
                 startSupportActionMode(mCompatCallback);
                 break;
 
-            case R.id.menu_forward:
-                if (webView.canGoForward()) {
-                    webView.goForward();
-                    invalidateOptionsMenu();
-                }
-                break;
-
             case R.id.menu_bookmarks:
                 viewBookmarks();
                 break;
@@ -605,7 +598,6 @@ public class KiwixMobileActivity extends AppCompatActivity
     private void initAllMenuItems() {
         try {
             menu.findItem(R.id.menu_bookmarks).setVisible(true);
-            menu.findItem(R.id.menu_forward).setVisible(getCurrentWebView().canGoForward());
             menu.findItem(R.id.menu_fullscreen).setVisible(true);
             menu.findItem(R.id.menu_home).setVisible(true);
             menu.findItem(R.id.menu_randomarticle).setVisible(true);
@@ -1078,9 +1070,9 @@ public class KiwixMobileActivity extends AppCompatActivity
                 ZimContentProvider.getId() != null) {
             menu.findItem(R.id.menu_bookmarks).setVisible(true);
             if (bookmarks.contains(getCurrentWebView().getTitle())) {
-                menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmarks_active);
+                menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmark_active);
             } else {
-                menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmarks);
+                menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmark);
             }
         }
         return true;
