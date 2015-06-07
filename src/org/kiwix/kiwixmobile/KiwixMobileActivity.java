@@ -258,8 +258,12 @@ public class KiwixMobileActivity extends AppCompatActivity
         manageExternalLaunchAndRestoringViewState(savedInstanceState);
         setUpWebView();
         setUpExitFullscreenButton();
-//        setUpArticleSearchTextView(savedInstanceState);
         loadPrefs();
+        updateTitle(ZimContentProvider.getZimFileTitle());
+    }
+
+    private void updateTitle(String zimFileTitle) {
+        getSupportActionBar().setTitle(zimFileTitle);
     }
 
     private void setUpTTS() {
@@ -346,8 +350,9 @@ public class KiwixMobileActivity extends AppCompatActivity
                 mDrawerList.setItemChecked(mCurrentWebViewIndex, true);
             }
         } else {
-            mWebViews.remove(index);
-            finish();
+            // Do nothing
+            // mWebViews.remove(index);
+            // finish();
         }
         mDrawerAdapter.notifyDataSetChanged();
     }
@@ -991,7 +996,6 @@ public class KiwixMobileActivity extends AppCompatActivity
         getCurrentWebView().saveState(outState);
         outState.putString(TAG_CURRENT_FILE, ZimContentProvider.getZimFile());
         outState.putString(TAG_CURRENT_ARTICLE, getCurrentWebView().getUrl());
-
     }
 
     @Override
@@ -1460,7 +1464,7 @@ public class KiwixMobileActivity extends AppCompatActivity
                     "<html><body>" + errorString + "</body></html>", "text/html", "utf-8",
                     failingUrl);
             String title = getResources().getString(R.string.app_name);
-            getSupportActionBar().setTitle(title);
+            updateTitle(title);
         }
 
         @Override
@@ -1562,5 +1566,4 @@ public class KiwixMobileActivity extends AppCompatActivity
             ImageView exit;
         }
     }
-
 }
