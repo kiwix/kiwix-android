@@ -92,10 +92,10 @@ ANDROID_PATH = tempfile.mkdtemp(prefix='android-custom-', dir=PARENT_PATH)
 try:
     import requests
     from bs4 import BeautifulSoup
-    # check for convert (imagemagick)
 except ImportError:
-    logger.error("Missing dependency: Unable to import requests.\n"
-                 "Please install requests with "
+    logger.error("Missing dependency: Unable to import requests "
+                 "or beautifulsoup.\n"
+                 "Please install requests/beautifulsoup with "
                  "`pip install requests BeautifulSoup4 lxml` "
                  "either on your machine or in a virtualenv.")
     sys.exit(1)
@@ -153,12 +153,19 @@ def get_local_remote_fd(path):
 
 def copy_to(src, dst):
     ''' copy source content (local or remote) to local file '''
+    local = None
     if is_remote_path(src):
         local = tempfile.NamedTemporaryFile(delete=False)
-        local.write(get_remote_content(src))
-        local.close()
-        src = local
+        download_remote_file(src, local.name)
+        src = local.name
     shutil.copy(src, dst)
+    if local is not None:
+        os.remove(local.name)
+
+
+def download_remote_file(url, path):
+    ''' download url to path '''
+    syscall('wget -c -O {path} {url}'.format(path=path, url=url))
 
 
 def get_remote_url_size(url):
@@ -166,14 +173,6 @@ def get_remote_url_size(url):
         return int(urllib2.urlopen(url).info().getheaders("Content-Length")[0])
     except:
         return None
-
-
-def download_remote_file(url, path):
-    ''' download url to path '''
-    req = requests.get(url)
-    req.raise_for_status()
-    with open(path, 'w') as f:
-        f.write(req.text)
 
 
 def get_file_size(path):
@@ -432,6 +431,7 @@ def step_embed_zimfile(jsdata, **options):
     os.chdir(tmpd)
     syscall('zip -r -0 -y {} lib'
             .format(os.path.join(ANDROID_PATH, 'content-libs.jar')))
+    shutil.rmtree(tmpd)
 
 
 def step_build_apk(jsdata, **options):
