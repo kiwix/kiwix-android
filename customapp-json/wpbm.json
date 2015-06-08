@@ -1,0 +1,42 @@
+{
+    "ic_launcher": "ic_launcher_512_bm.png", 
+    "app_name": "Wikipedia BM", 
+    "package": "org.kiwix.kiwixcustomwpbm", 
+    "zim_file": "/Users/reg/Downloads/wikipedia_bm.zim", 
+    "play_store": {
+        "images": {
+            "featureGraphic": ["/Users/reg/Desktop/feature-bm.png"], 
+            "tvScreenshots": [], 
+            "tenInchScreenshots": [], 
+            "promoGraphic": [], 
+            "tvBanner": [], 
+            "sevenInchScreenshots": [], 
+            "phoneScreenshots": [], 
+            "icon": ""
+        }, 
+        "listings": {
+            "en-US": {
+                "video": null, 
+                "shortDescription": "Offline version of the Bamanakan Wikipedia", 
+                "fullDescription": "Wikipedia is a free-access, free-content Internet encyclopedia, supported and hosted by the non-profit Wikimedia Foundation. Those who can access the site can edit most of its articles. Editors are expected to follow the website's rules. Wikipedia is ranked among the ten most popular websites and constitutes the Internet's largest and most popular general reference work.\n\nThis application is a read-only archive of the Bamanakan language Wikipedia.", 
+                "title": "Bamanankan Wikipedia"
+            }, 
+            "fr-FR": {
+                "video": null, 
+                "shortDescription": "Version hors-ligne de l'encyclop\u00e9die Wikip\u00e9dia Bambara", 
+                "fullDescription": "Wikip\u00e9dia est un projet d'encyclop\u00e9die universelle, multilingue (287 langues mi-2013), sous licence CC-BY-SA 3.0, cr\u00e9\u00e9e par Jimmy Wales et Larry Sanger le 15 janvier 20011 en wiki sous le nom de domaine wikipedia.org.\n\nLe wiki est h\u00e9berg\u00e9 sur Internet gr\u00e2ce aux serveurs financ\u00e9s par la Wikimedia Foundation, organisation \u00e0 but non lucratif am\u00e9ricaine et d\u00e9positaire de la marque Wikip\u00e9dia.\n\nN'importe qui pouvant acc\u00e9der au site peut modifier la quasi-totalit\u00e9 de ses articles. Wikip\u00e9dia est le sixi\u00e8me site le plus fr\u00e9quent\u00e9, et constitue le plus grand et le plus populaire des ouvrages de r\u00e9f\u00e9rences g\u00e9n\u00e9rales d'Internet. En f\u00e9vrier 2014, il y avait presque 500 millions de visiteurs chaque mois. Wikip\u00e9dia dispose de 22 millions de comptes, dont plus de 73000 sont consid\u00e9r\u00e9s \u00e9diteurs actifs, et ce \u00e0 l'\u00e9chelle mondiale au mois de mai 2014.\n\nCette Application est une version hors-ligne de Wikip\u00e9dia en Bamabra", 
+                "title": "Wikip\u00e9dia Bambara"
+            }
+        }, 
+        "details": {
+            "contactEmail": "contact+android@kiwix.org", 
+            "contactPhone": null, 
+            "contactWebsite": "http://kiwix.org", 
+            "defaultLanguage": "en-US"
+        }
+    }, 
+    "version_code": "4", 
+    "embed_zim": false, 
+    "enforced_lang": "bm", 
+    "version_name": "2015-06"
+}
