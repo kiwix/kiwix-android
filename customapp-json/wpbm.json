@@ -1,8 +1,8 @@
 {
     "ic_launcher": "ic_launcher_512_bm.png", 
-    "app_name": "Wikipedia BM", 
+    "app_name": "Wikip\u00e9dia BM", 
     "package": "org.kiwix.kiwixcustomwpbm", 
-    "zim_file": "/Users/reg/Downloads/wikipedia_bm.zim", 
+    "zim_file": "/Users/reg/Downloads/wikipedia_bm_all_2015-06.zim", 
     "play_store": {
         "images": {
             "featureGraphic": ["/Users/reg/Desktop/feature-bm.png"], 
@@ -35,7 +35,7 @@
             "defaultLanguage": "en-US"
         }
     }, 
-    "version_code": "4", 
+    "version_code": "5", 
     "embed_zim": false, 
     "enforced_lang": "bm", 
     "version_name": "2015-06"
