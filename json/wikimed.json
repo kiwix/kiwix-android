@@ -1,0 +1,9 @@
+{
+    "app_name": "WikiMed",
+    "package": "org.kiwix.kiwixcustomwikimed",
+    "version_name": "2015-06",
+    "version_code": "2",
+    "zim_file": "wikipedia_en_wikimed_2015-06.zim",
+    "ic_launcher": "ic_launcher_512_en.png",
+    "enforced_lang": "en"
+}
