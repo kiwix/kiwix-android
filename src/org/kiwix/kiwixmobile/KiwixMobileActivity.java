@@ -82,6 +82,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 
 public class KiwixMobileActivity extends AppCompatActivity
@@ -1023,10 +1024,20 @@ public class KiwixMobileActivity extends AppCompatActivity
                     Log.d(TAG_KIWIX,
                             "Kiwix Custom App starting for the first time. Check Companion ZIM.");
 
-                    if (Constants.CUSTOM_APP_ENFORCED_LANG.length() > 0) {
-                        // Custom App recommends to start off a specific language
+                    String currentLocaleCode = Locale.getDefault().toString();
+                    // Custom App recommends to start off a specific language
+                    if (Constants.CUSTOM_APP_ENFORCED_LANG.length() > 0 && !Constants.CUSTOM_APP_ENFORCED_LANG.equals(currentLocaleCode)) {
+
+                        // change the locale machinery
                         LanguageUtils.handleLocaleChange(this, Constants.CUSTOM_APP_ENFORCED_LANG);
 
+                        // save new locale into preferences for next startup
+                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("pref_language_chooser", Constants.CUSTOM_APP_ENFORCED_LANG);
+                        editor.commit();
+
+                        // restart activity for new locale to take effect
                         this.setResult(1236);
                         this.finish();
                         this.startActivity(new Intent(this, this.getClass()));
