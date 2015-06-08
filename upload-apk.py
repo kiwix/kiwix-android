@@ -110,7 +110,7 @@ def download_remote_file(url, path):
 
 def upload_to_play_store(jsdata, channel=None):
     if channel is None:
-        channel = ALPHA
+        channel = BETA
 
     logger.info("Starting Google Play Store using {}".format(channel))
 
@@ -121,8 +121,10 @@ def upload_to_play_store(jsdata, channel=None):
         from oauth2client import client
     except ImportError:
         logger.error("Missing Google API Client dependency.\n"
-                     "Please install with: "
-                     "pip install google-api-python-client")
+                     "Please install with: \n"
+                     "apt-get install libffi-dev libssl-devel\n"
+                     "pip install google-api-python-client PyOpenSSL\n"
+                     "Install from github in case of oauth http errors.")
         return
 
     if 'GOOGLE_API_KEY' not in os.environ:
