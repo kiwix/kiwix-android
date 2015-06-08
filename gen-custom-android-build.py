@@ -47,7 +47,6 @@ DEFAULT_JSDATA = {
     # 'package': "org.kiwix.zim.custom",
     # 'version_name': "1.0",
     # 'zim_file': "wikipedia_bm.zim",
-    # 'license': None,
     'enforced_lang': None,
     'embed_zim': False,
 
@@ -70,6 +69,8 @@ DEFAULT_JSDATA = {
 }
 
 SIZE_MATRIX = {
+    'xxxhdpi': 192,
+    'xxhdpi': 144,
     'xhdpi': 96,
     'mdpi': 72,
     'ldpi': 48,
@@ -231,7 +232,7 @@ def step_prepare_launcher_icons(jsdata, **options):
                 .format(inf=os.path.join(ANDROID_PATH, 'ic_launcher_512.png'),
                         p=pixels,
                         outf=os.path.join(ANDROID_PATH, 'res',
-                                          'drawable-{}'.format(density),
+                                          'mipmap-{}'.format(density),
                                           'kiwix_icon.png')))
 
 
@@ -295,7 +296,7 @@ def step_update_main_menu_xml(jsdata, **options):
     flushxml(soup, 'menu', menu_xml, head=False)
 
 
-def step_update_preferences_xml(jsdata, **options):
+def step_update_xml_nodes(jsdata, **options):
     ''' change package-named item reference in preference UI xml '''
 
     move_to_android_placeholder()
@@ -308,6 +309,14 @@ def step_update_preferences_xml(jsdata, **options):
     item = soup.find('org.kiwix.kiwixmobile.settings.SliderPreference')
     item.name = '{}.settings.SliderPreference'.format(jsdata.get('package'))
     flushxml(soup, 'PreferenceScreen', preferences_xml, head=False)
+
+    # rename AnimatedProgressBar node in res/layout/toolbar.xml
+    toolbar_xml = os.path.join(ANDROID_PATH, 'res', 'layout', 'toolbar.xml')
+    soup = soup = BeautifulSoup(open(toolbar_xml, 'r'),
+                                'xml', from_encoding='utf-8')
+    item = soup.find('org.kiwix.kiwixmobile.AnimatedProgressBar')
+    item.name = '{}.AnimatedProgressBar'.format(jsdata.get('package'))
+    flushxml(soup, 'LinearLayout', toolbar_xml, head=False)
 
 
 def step_update_gradle(jsdata, **options):
@@ -489,7 +498,7 @@ ARGS_MATRIX = OrderedDict([
     ('branding', step_update_branding_xml),
     ('constants', step_gen_constants_java),
     ('menu', step_update_main_menu_xml),
-    ('preferences', step_update_preferences_xml),
+    ('xmlnodes', step_update_xml_nodes),
     ('manifest', step_update_android_manifest),
     ('jni', step_update_kiwix_c),
     ('libkiwix', step_compile_libkiwix),

@@ -181,7 +181,7 @@ def upload_to_play_store(jsdata, channel=None):
             packageName=package_name,
             body={'versionCodes': [apk_response['versionCode']]}).execute()
 
-        logger.debug("Publicatio set to {} for version code {}"
+        logger.debug("Publication set to {} for version code {}"
                      .format(track_response['track'],
                              str(track_response['versionCodes'])))
 
@@ -213,7 +213,7 @@ STORES = {
 }
 
 
-def main(json_path, store='{}:{}'.format(PLAY_STORE, ALPHA)):
+def main(json_path, store='{}:{}'.format(PLAY_STORE, ALPHA), *args):
     jsdata = json.load(get_local_remote_fd(json_path))
 
     logger.info("Uploading {} APK to {}".format(jsdata['package'], store))
