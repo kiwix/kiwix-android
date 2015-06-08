@@ -1,0 +1,36 @@
+{
+    "ic_launcher": "customapp-json/wikivoyage_en-icon.png", 
+    "app_name": "Wikivoyage", 
+    "package": "org.kiwix.kiwixcustomwikivoyage", 
+    "zim_file": "/Users/reg/Downloads/wikivoyage_en_all_2015-06.zim", 
+    "play_store": {
+        "images": {
+            "featureGraphic": [], 
+            "tvScreenshots": [], 
+            "tenInchScreenshots": [], 
+            "promoGraphic": [], 
+            "tvBanner": [], 
+            "sevenInchScreenshots": [], 
+            "phoneScreenshots": [], 
+            "icon": ""
+        }, 
+        "listings": {
+            "en-US": {
+                "video": null, 
+                "shortDescription": "Offline version of the Wikivoyage Travel Guide", 
+                "fullDescription": "Wikivoyage is a free web-based travel guide for travel destinations and travel topics written by volunteer authors. It is a sister project of Wikipedia and supported and hosted by the same non-profit Wikimedia Foundation. Wikivoyage has been called the Wikipedia of travel guides.\n\nThis App provides a complete version of Wikivoyage for reading (contribution is not possible).", 
+                "title": "Wikivoyage Travel Guide"
+            }
+        }, 
+        "details": {
+            "contactEmail": "contact+android@kiwix.org", 
+            "contactPhone": null, 
+            "contactWebsite": "http://kiwix.org", 
+            "defaultLanguage": "en-US"
+        }
+    }, 
+    "version_code": "3", 
+    "embed_zim": false, 
+    "enforced_lang": "en", 
+    "version_name": "2015-06"
+}
