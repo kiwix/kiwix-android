@@ -26,7 +26,7 @@ if sys.version_info.major < 3:
 PLAY_STORE = 'play_store'
 ALPHA = 'alpha'
 BETA = 'beta'
-PROD = 'prod'
+PROD = 'production'
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
