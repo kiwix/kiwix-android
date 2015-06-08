@@ -338,10 +338,6 @@ public class KiwixMobileActivity extends AppCompatActivity
                 }
                 mDrawerList.setItemChecked(mCurrentWebViewIndex, true);
             }
-        } else {
-            // Do nothing
-            // mWebViews.remove(index);
-            // finish();
         }
         mDrawerAdapter.notifyDataSetChanged();
     }
