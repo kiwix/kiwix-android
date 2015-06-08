@@ -37,6 +37,7 @@ import tempfile
 import urllib2
 from collections import OrderedDict
 from subprocess import call
+PY3 = sys.version_info.major >= 3
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -73,7 +74,6 @@ SIZE_MATRIX = {
     'xxhdpi': 144,
     'xhdpi': 96,
     'mdpi': 72,
-    'ldpi': 48,
     'hdpi': 72,
 }
 
@@ -197,7 +197,9 @@ def flushxml(dom, rootNodeName, fpath, head=True):
     with open(fpath, 'w') as f:
         f.write("{head}{content}"
                 .format(head=head,
-                        content=dom.find(rootNodeName).encode()))
+                        content=dom.find(rootNodeName).encode()
+                                                      .decode('utf-8'))
+                .encode('utf-8'))
 
 
 def move_to_android_placeholder():
@@ -265,7 +267,10 @@ def step_gen_constants_java(jsdata, **options):
             return ""
         if isinstance(val, bool):
             return str(val).lower()
-        return str(val)
+        if PY3:
+            return str(val)
+        else:
+            return unicode(val)
 
     # copy template to actual location
     shutil.copy(os.path.join(ANDROID_PATH, 'templates', 'Constants.java'),
