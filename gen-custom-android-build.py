@@ -81,6 +81,9 @@ SIZE_MATRIX = {
 REQUIRED_FIELDS = ('app_name', 'package', 'version_name', 'version_code',
                    'zim_file')
 
+USELESS_PERMISSIONS = ['WRITE_EXTERNAL_STORAGE',
+                       'INTERNET', 'ACCESS_NETWORK_STATE']
+
 # the directory of this file for relative referencing
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -363,6 +366,13 @@ def step_update_android_manifest(jsdata, **options):
             # only remove VIEW intents (keep LAUNCHER and GET_CONTENT)
             continue
         intent.replace_with('')
+
+    # remove useless permissions
+    for permission in soup.findAll('uses-permission'):
+        if permission['android:name'].replace("android.permission.", "") \
+                in USELESS_PERMISSIONS:
+            permission.replace_with('')
+
     flushxml(soup, 'manifest', manif_xml)
 
     # move kiwixmobile to proper package name
