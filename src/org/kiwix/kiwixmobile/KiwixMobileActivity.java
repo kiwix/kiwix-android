@@ -170,7 +170,7 @@ public class KiwixMobileActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        bookmarks = new ArrayList<String>();
+        bookmarks = new ArrayList<>();
         requestClearHistoryAfterLoad = false;
         requestWebReloadOnFinished = 0;
         requestInitAllMenuItems = false;
@@ -249,7 +249,11 @@ public class KiwixMobileActivity extends AppCompatActivity
     }
 
     private void updateTitle(String zimFileTitle) {
-        getSupportActionBar().setTitle(zimFileTitle);
+        if (zimFileTitle == null || zimFileTitle.trim().isEmpty()) {
+            getSupportActionBar().setTitle(getString(R.string.app_name));
+        } else {
+            getSupportActionBar().setTitle(zimFileTitle);
+        }
     }
 
     private void setUpTTS() {
