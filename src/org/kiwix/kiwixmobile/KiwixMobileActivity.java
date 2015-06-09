@@ -147,8 +147,6 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     private KiwixTextToSpeech tts;
 
-    private boolean mIsZoomEnabled;
-
     private CompatFindActionModeCallback mCompatCallback;
 
     private ArrayAdapter<KiwixWebView> mDrawerAdapter;
@@ -156,8 +154,6 @@ public class KiwixMobileActivity extends AppCompatActivity
     private FrameLayout mContentFrame;
 
     private int mCurrentWebViewIndex = 0;
-
-    private ActionBarDrawerToggle mDrawerToggle;
 
     private AnimatedProgressBar mProgressBar;
 
@@ -231,12 +227,13 @@ public class KiwixMobileActivity extends AppCompatActivity
                 loadPrefs();
             }
         });
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, 0, 0);
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar,
+                0, 0);
 
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerLayout.setDrawerListener(drawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        mDrawerToggle.syncState();
+        drawerToggle.syncState();
 
         mCompatCallback = new CompatFindActionModeCallback(this);
         mIsFullscreenOpened = false;
@@ -297,7 +294,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         super.onDestroy();
         // TODO create a base Activity class that class this.
         FileUtils.deleteCachedFiles(this);
-//        tts.shutdown();
+        tts.shutdown();
     }
 
     private KiwixWebView newTab() {
@@ -938,9 +935,9 @@ public class KiwixMobileActivity extends AppCompatActivity
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean nightMode = sharedPreferences.getBoolean(PREF_NIGHTMODE, false);
         mIsBacktotopEnabled = sharedPreferences.getBoolean(PREF_BACKTOTOP, false);
-        mIsZoomEnabled = sharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
+        boolean isZoomEnabled = sharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
 
-        if (mIsZoomEnabled) {
+        if (isZoomEnabled) {
             int zoomScale = (int) sharedPreferences.getFloat(PREF_ZOOM, 100.0f);
             getCurrentWebView().setInitialScale(zoomScale);
         } else {
@@ -1022,15 +1019,18 @@ public class KiwixMobileActivity extends AppCompatActivity
 
                     String currentLocaleCode = Locale.getDefault().toString();
                     // Custom App recommends to start off a specific language
-                    if (Constants.CUSTOM_APP_ENFORCED_LANG.length() > 0 && !Constants.CUSTOM_APP_ENFORCED_LANG.equals(currentLocaleCode)) {
+                    if (Constants.CUSTOM_APP_ENFORCED_LANG.length() > 0
+                            && !Constants.CUSTOM_APP_ENFORCED_LANG.equals(currentLocaleCode)) {
 
                         // change the locale machinery
                         LanguageUtils.handleLocaleChange(this, Constants.CUSTOM_APP_ENFORCED_LANG);
 
                         // save new locale into preferences for next startup
-                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                        SharedPreferences sharedPreferences = PreferenceManager
+                                .getDefaultSharedPreferences(this);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("pref_language_chooser", Constants.CUSTOM_APP_ENFORCED_LANG);
+                        editor.putString("pref_language_chooser",
+                                Constants.CUSTOM_APP_ENFORCED_LANG);
                         editor.commit();
 
                         // restart activity for new locale to take effect
