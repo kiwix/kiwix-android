@@ -55,7 +55,6 @@ import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.webkit.JavascriptInterface;
 import android.webkit.MimeTypeMap;
-import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -129,8 +128,6 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     protected boolean requestInitAllMenuItems;
 
-    protected boolean mNightMode;
-
     protected int requestWebReloadOnFinished;
 
     private boolean mIsBacktotopEnabled;
@@ -174,7 +171,6 @@ public class KiwixMobileActivity extends AppCompatActivity
         requestClearHistoryAfterLoad = false;
         requestWebReloadOnFinished = 0;
         requestInitAllMenuItems = false;
-        mNightMode = false;
         mIsBacktotopEnabled = false;
         isFullscreenOpened = false;
         mBackToTopButton = (Button) findViewById(R.id.button_backtotop);
@@ -926,7 +922,6 @@ public class KiwixMobileActivity extends AppCompatActivity
         Log.d(TAG_KIWIX, "mNightMode value (" + nightMode + ")");
         if (nightMode) {
             getCurrentWebView().toggleNightMode();
-            mNightMode = true;
         } else {
             getCurrentWebView().deactiviateNightMode();
         }
