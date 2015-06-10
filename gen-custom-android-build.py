@@ -324,7 +324,7 @@ def step_update_xml_nodes(jsdata, **options):
                                 'xml', from_encoding='utf-8')
     item = soup.find('org.kiwix.kiwixmobile.AnimatedProgressBar')
     item.name = '{}.AnimatedProgressBar'.format(jsdata.get('package'))
-    flushxml(soup, 'LinearLayout', toolbar_xml, head=False)
+    flushxml(soup, 'RelativeLayout', toolbar_xml, head=False)
 
 
 def step_update_gradle(jsdata, **options):
