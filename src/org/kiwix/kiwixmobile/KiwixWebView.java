@@ -21,7 +21,10 @@ package org.kiwix.kiwixmobile;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -30,6 +33,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
 import android.widget.Toast;
 
@@ -45,6 +49,12 @@ public class KiwixWebView extends WebView {
     private static final String PREF_ZOOM = "pref_zoom";
 
     private static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
+
+    private static final float[] mNegativeColorArray = {-1.0f, 0, 0, 0, 255, // red
+            0, -1.0f, 0, 0, 255, // green
+            0, 0, -1.0f, 0, 255, // blue
+            0, 0, 0, 1.0f, 0 // alpha
+    };
 
     private OnPageChangeListener mChangeListener;
 
@@ -104,7 +114,6 @@ public class KiwixWebView extends WebView {
         }
     };
 
-
     public KiwixWebView(Context context) {
         super(context);
     }
@@ -132,6 +141,35 @@ public class KiwixWebView extends WebView {
         }
     }
 
+    public void deactiviateNightMode() {
+        setLayerType(View.LAYER_TYPE_NONE, null);
+    }
+
+    public void toggleNightMode() {
+
+        Paint paint = new Paint();
+        ColorMatrixColorFilter filterInvert = new ColorMatrixColorFilter(mNegativeColorArray);
+        paint.setColorFilter(filterInvert);
+
+        setLayerType(View.LAYER_TYPE_HARDWARE, paint);
+        try {
+            InputStream stream = getContext().getAssets().open("invertcode.js");
+            int size = stream.available();
+            byte[] buffer = new byte[size];
+            stream.read(buffer);
+            stream.close();
+            String JSInvert = new String(buffer);
+
+            if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                evaluateJavascript("javascript:" + JSInvert, null);
+            } else {
+                //loadUrl("javascript:" + JSInvert);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public boolean performLongClick() {

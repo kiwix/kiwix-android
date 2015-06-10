@@ -129,7 +129,7 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     protected boolean requestInitAllMenuItems;
 
-    protected boolean nightMode;
+    protected boolean mNightMode;
 
     protected int requestWebReloadOnFinished;
 
@@ -174,7 +174,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         requestClearHistoryAfterLoad = false;
         requestWebReloadOnFinished = 0;
         requestInitAllMenuItems = false;
-        nightMode = false;
+        mNightMode = false;
         mIsBacktotopEnabled = false;
         isFullscreenOpened = false;
         mBackToTopButton = (Button) findViewById(R.id.button_backtotop);
@@ -224,7 +224,6 @@ public class KiwixMobileActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectTab(position);
-                loadPrefs();
             }
         });
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar,
@@ -359,6 +358,7 @@ public class KiwixMobileActivity extends AppCompatActivity
                 }
             }, 150);
         }
+        loadPrefs();
     }
 
     private KiwixWebView getCurrentWebView() {
@@ -700,36 +700,6 @@ public class KiwixMobileActivity extends AppCompatActivity
         return openArticle(articleUrl);
     }
 
-    private void ToggleNightMode() {
-
-        try {
-            InputStream stream = getAssets().open("invertcode.js");
-            int size = stream.available();
-            byte[] buffer = new byte[size];
-            stream.read(buffer);
-            stream.close();
-            String JSInvert = new String(buffer);
-            ValueCallback<String> resultCallback;
-            resultCallback = new ValueCallback<String>() {
-                @Override
-                public void onReceiveValue(String s) {
-                    //Haven't done anything with callback
-                }
-            };
-            //KitKat requires use of evaluateJavascript
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                getCurrentWebView().evaluateJavascript(JSInvert, resultCallback);
-            } else {
-                getCurrentWebView().loadUrl("javascript:" + JSInvert);
-            }
-            nightMode = !nightMode;
-        } catch (IOException e) {
-
-        } catch (NullPointerException npe) {
-            Log.e(TAG_KIWIX, "getActivity() NPE " + npe.getMessage());
-        }
-    }
-
     public void readAloud() {
         tts.readAloud();
     }
@@ -953,9 +923,12 @@ public class KiwixMobileActivity extends AppCompatActivity
         }
 
         // Night mode status
-        Log.d(TAG_KIWIX, "nightMode value (" + nightMode + ")");
-        if (this.nightMode != nightMode) {
-            ToggleNightMode();
+        Log.d(TAG_KIWIX, "mNightMode value (" + nightMode + ")");
+        if (nightMode) {
+            getCurrentWebView().toggleNightMode();
+            mNightMode = true;
+        } else {
+            getCurrentWebView().deactiviateNightMode();
         }
     }
 
@@ -1243,10 +1216,6 @@ public class KiwixMobileActivity extends AppCompatActivity
                 }
 
                 Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView().getUrl());
-                if (nightMode) {
-                    nightMode = false;
-                    ToggleNightMode();
-                }
             }
 
         }
