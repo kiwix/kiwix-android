@@ -12,8 +12,8 @@
     <string name="menu_randomarticle">Náhodný článok</string>
     <string name="menu_fullscreen">Celá obrazovka</string>
     <string name="menu_exitfullscreen">Ukončiť režim celej obrazovky</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">Čítať nahlas</string>
+    <string name="menu_read_aloud_stop">Zastaviť čítanie nahlas</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="save_media">Uložiť médiá ako...</string>
     <string name="save_media_error">Pri ukladaní došlo k chybe!</string>

@@ -12,8 +12,8 @@
     <string name="menu_randomarticle">Articulo aleatori</string>
     <string name="menu_fullscreen">Schermo complete</string>
     <string name="menu_exitfullscreen">Exir del schermo complete</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">Leger a voce alte</string>
+    <string name="menu_read_aloud_stop">Cessar de leger a voce alte</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="save_media">Salveguardar multimedia como…</string>
     <string name="save_media_error">Un error occurreva durante le salveguarda del file multimedial!</string>

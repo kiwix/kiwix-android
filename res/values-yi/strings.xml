@@ -42,7 +42,7 @@
     </string-array>
     <string name="pref_info_title">אינפֿארמאציע</string>
     <string name="pref_info_version">ווערסיע</string>
-    <string name="pref_zoom_enable">Zoom controls</string>
+    <string name="pref_zoom_enable">זום־קאנטראלן</string>
     <string name="pref_nightmode">נאכטמאדע</string>
     <string name="pref_nightmode_summary">Show articles with reverted colors</string>
     <string name="pref_backtotop">צוריק אויבן</string>
