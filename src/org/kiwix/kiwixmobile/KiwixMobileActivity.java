@@ -43,6 +43,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -154,6 +155,40 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     private AnimatedProgressBar mProgressBar;
 
+    // Initialized when onActionModeStarted is triggered.
+    private ActionMode mActionMode = null;
+
+    @Override
+    public void onActionModeStarted(ActionMode mode) {
+        if (mActionMode == null) {
+            mActionMode = mode;
+            Menu menu = mode.getMenu();
+            // Inflate custom menu icon.
+            getMenuInflater().inflate(R.menu.menu_webview_action, menu);
+        }
+        super.onActionModeStarted(mode);
+    }
+
+    @Override
+    public void onActionModeFinished(ActionMode mode) {
+        mActionMode = null;
+        super.onActionModeFinished(mode);
+    }
+
+    public void onContextMenuClicked(MenuItem item) {
+      switch (item.getItemId()) {
+        case R.id.menu_speak_text:
+          Log.i(TAG_KIWIX, "Speaking selection.");
+          tts.readSelection();
+          break;
+        default:
+          Log.e(TAG_KIWIX, "Unexpected context menu click.");
+          break;
+      }
+      if (mActionMode != null) {
+        mActionMode.finish();
+      }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
