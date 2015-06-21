@@ -247,16 +247,21 @@ def step_update_branding_xml(jsdata, **options):
     move_to_android_placeholder()
 
     # copy and rewrite res/values/branding.xml
-    for root, dirs, files in os.walk(os.path.join(ANDROID_PATH, 'res')):
-        for file in files:
-            if file.endswith('branding.xml'):
-                branding_xml = os.path.join(root, file)
-                soup = soup = BeautifulSoup(open(branding_xml, 'r'),
-                                            'xml', from_encoding='utf-8')
-                for elem in soup.findAll('string'):
-                    elem.string.replace_with(
-                        elem.text.replace('Kiwix', jsdata.get('app_name')))
-                    flushxml(soup, 'resources', branding_xml)
+    branding_xml = os.path.join(ANDROID_PATH, 'res', 'values', 'branding.xml')
+    soup = soup = BeautifulSoup(open(branding_xml, 'r'),
+                                'xml', from_encoding='utf-8')
+    for elem in soup.findAll('string'):
+        elem.string.replace_with(
+            elem.text.replace('Kiwix', jsdata.get('app_name')))
+    flushxml(soup, 'resources', branding_xml)
+
+    # remove all non-default branding.xml files
+    for folder in os.listdir(os.path.join(ANDROID_PATH, 'res')):
+        if re.match(r'^values\-[a-z]{2}$', folder):
+            lbx = os.path.join(ANDROID_PATH, 'res', folder, 'branding.xml')
+            if os.path.exists(lbx):
+                os.remove(lbx)
+
 
 def step_gen_constants_java(jsdata, **options):
     ''' gen Java Source class (final constants) with all JSON values '''
