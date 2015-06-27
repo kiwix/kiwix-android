@@ -12,12 +12,12 @@
     <string name="menu_randomarticle">임의 문서</string>
     <string name="menu_fullscreen">전체 화면</string>
     <string name="menu_exitfullscreen">전체 화면에서 나가기</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">소리내어 읽기</string>
+    <string name="menu_read_aloud_stop">그만 소리내어 읽기</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="save_media">다른 이름으로 미디어 저장...</string>
-    <string name="save_media_error">An error occurred when trying to save the media!</string>
-    <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
+    <string name="save_media_error">미디어 저장하기를 시도하는 도중, 문제가 발생하였습니다!</string>
+    <string name="save_media_saved">내 사진 폴더에 %1$s로 저장되었습니다.</string>
     <string name="rescan_fs_warning">ZIM 파일을 검색 중입니다. 잠시 기다려주세요...</string>
     <string name="button_backtotop">맨 위로 돌아가기</string>
     <string name="search_label">검색</string>

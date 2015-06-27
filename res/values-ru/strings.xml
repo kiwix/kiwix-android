@@ -15,9 +15,9 @@
     <string name="menu_read_aloud">Читать вслух</string>
     <string name="menu_read_aloud_stop">Остановить чтение вслух</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="save_media">Сохранить медиа-содержимое как…</string>
-    <string name="save_media_error">Произошла ошибка при сохранении медиа-файла!</string>
-    <string name="save_media_saved">Медиа-файл сохранён как %1$s в вашей папке для изображений</string>
+    <string name="save_media">Сохранить медиафайл как…</string>
+    <string name="save_media_error">Произошла ошибка при сохранении медиафайла!</string>
+    <string name="save_media_saved">Медиафайл сохранён как %1$s в вашей папке для изображений</string>
     <string name="rescan_fs_warning">Поиск ZIM-файлов, пожалуйста, подождите…</string>
     <string name="button_backtotop">Вернуться наверх</string>
     <string name="search_label">Поиск</string>
