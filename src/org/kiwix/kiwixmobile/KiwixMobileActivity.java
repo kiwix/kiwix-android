@@ -20,9 +20,6 @@
 package org.kiwix.kiwixmobile;
 
 
-import org.kiwix.kiwixmobile.settings.Constants;
-import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
-
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -71,6 +68,9 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.kiwix.kiwixmobile.settings.Constants;
+import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -176,18 +176,18 @@ public class KiwixMobileActivity extends AppCompatActivity
     }
 
     public void onContextMenuClicked(MenuItem item) {
-      switch (item.getItemId()) {
-        case R.id.menu_speak_text:
-          Log.i(TAG_KIWIX, "Speaking selection.");
-          tts.readSelection();
-          break;
-        default:
-          Log.e(TAG_KIWIX, "Unexpected context menu click.");
-          break;
-      }
-      if (mActionMode != null) {
-        mActionMode.finish();
-      }
+        switch (item.getItemId()) {
+            case R.id.menu_speak_text:
+                Log.i(TAG_KIWIX, "Speaking selection.");
+                tts.readSelection();
+                break;
+            default:
+                Log.e(TAG_KIWIX, "Unexpected context menu click.");
+                break;
+        }
+        if (mActionMode != null) {
+            mActionMode.finish();
+        }
     }
 
     @Override
@@ -213,7 +213,6 @@ public class KiwixMobileActivity extends AppCompatActivity
 
         mProgressBar = (AnimatedProgressBar) findViewById(R.id.progress_view);
         exitFullscreenButton = (ImageButton) findViewById(R.id.FullscreenControlButton);
-        articleSearchBar = (LinearLayout) findViewById(R.id.articleSearchBar);
 
         RelativeLayout newTabButton = (RelativeLayout) findViewById(R.id.new_tab_button);
         newTabButton.setOnClickListener(new View.OnClickListener() {
@@ -1199,7 +1198,7 @@ public class KiwixMobileActivity extends AppCompatActivity
 
         @Override
         public void onReceivedError(WebView view, int errorCode, String description,
-                String failingUrl) {
+                                    String failingUrl) {
 
             String errorString = String
                     .format(getResources().getString(R.string.error_articleurlnotfound),
