@@ -63,7 +63,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -117,8 +116,6 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     public static boolean mIsFullscreenOpened;
 
-    public LinearLayout articleSearchBar;
-
     public Menu menu;
 
     public boolean isFullscreenOpened;
@@ -150,6 +147,8 @@ public class KiwixMobileActivity extends AppCompatActivity
     private ArrayAdapter<KiwixWebView> mDrawerAdapter;
 
     private FrameLayout mContentFrame;
+
+    private RelativeLayout mToolbarContainer;
 
     private int mCurrentWebViewIndex = 0;
 
@@ -210,7 +209,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         isFullscreenOpened = false;
         mBackToTopButton = (Button) findViewById(R.id.button_backtotop);
         mPrefState = new ArrayList<>();
-
+        mToolbarContainer = (RelativeLayout) findViewById(R.id.toolbar_layout);
         mProgressBar = (AnimatedProgressBar) findViewById(R.id.progress_view);
         exitFullscreenButton = (ImageButton) findViewById(R.id.FullscreenControlButton);
 
@@ -452,7 +451,7 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     private void openFullScreen() {
 
-        getSupportActionBar().hide();
+        mToolbarContainer.setVisibility(View.GONE);
         exitFullscreenButton.setVisibility(View.VISIBLE);
         menu.findItem(R.id.menu_fullscreen)
                 .setTitle(getResources().getString(R.string.menu_exitfullscreen));
@@ -465,7 +464,7 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     private void closeFullScreen() {
 
-        getSupportActionBar().show();
+        mToolbarContainer.setVisibility(View.VISIBLE);
         menu.findItem(R.id.menu_fullscreen)
                 .setTitle(getResources().getString(R.string.menu_fullscreen));
         exitFullscreenButton.setVisibility(View.INVISIBLE);
