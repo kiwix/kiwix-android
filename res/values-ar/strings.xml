@@ -12,8 +12,8 @@
     <string name="menu_randomarticle">مقالة عشوائية</string>
     <string name="menu_fullscreen">ملئ الشاشة</string>
     <string name="menu_exitfullscreen">إنهاء وضع الشاشة الكاملة</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">اقرأ بصوت عال</string>
+    <string name="menu_read_aloud_stop">توقف عن القراءة بصوت عال</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="save_media">حفظ وسائط باسم...</string>
     <string name="save_media_error">حدث خطأ أثناء محاولة حفظ الملف!</string>

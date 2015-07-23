@@ -37,8 +37,8 @@
     <string-array name="pref_zoom_entries">
         <item name="pref_zoom_entry_automatic">Automatic</item>
         <item name="pref_zoom_entry_small">Small</item>
-        <item name="pref_zoom_entry_medium">Medium</item>
-        <item name="pref_zoom_entry_large">Large</item>
+        <item name="pref_zoom_entry_medium">Орточо</item>
+        <item name="pref_zoom_entry_large">Чоң</item>
     </string-array>
     <string name="pref_info_title">Маалымат</string>
     <string name="pref_info_version">Версия</string>
