@@ -2,10 +2,10 @@ package org.kiwix.kiwixmobile;
 
 import org.kiwix.kiwixmobile.settings.Constants;
 
+import java.io.File;
+
 import android.content.Context;
 import android.os.Environment;
-
-import java.io.File;
 
 public class FileUtils {
 
@@ -21,11 +21,14 @@ public class FileUtils {
     }
 
 
-    public static void deleteCachedFiles(Context context) {
-        for (File file : getFileCacheDir(context).listFiles()) {
-            file.delete();
+    public static synchronized void deleteCachedFiles(Context context) {
+        try {
+            for (File file : getFileCacheDir(context).listFiles()) {
+                file.delete();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
     }
 
     /**
@@ -61,7 +64,7 @@ public class FileUtils {
      * @return true if it does exist, false otherwise
      */
     static public boolean doesFileExist(String fileName, long fileSize,
-            boolean deleteFileOnMismatch) {
+                                        boolean deleteFileOnMismatch) {
         // the file may have been delivered by Market --- let's make sure
         // it's the size we expect
         File fileForNewFile = new File(fileName);

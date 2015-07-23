@@ -84,6 +84,12 @@ public class KiwixTextToSpeech {
         });
     }
 
+    /**
+     * Reads the currently selected text in the WebView.
+     */
+    public void readSelection() {
+      webView.loadUrl("javascript:tts.speakAloud(window.getSelection().toString());", null);
+    }
 
     /**
      * Starts speaking the WebView content aloud (or stops it if TTS is speaking now).

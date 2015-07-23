@@ -255,6 +255,13 @@ def step_update_branding_xml(jsdata, **options):
             elem.text.replace('Kiwix', jsdata.get('app_name')))
     flushxml(soup, 'resources', branding_xml)
 
+    # remove all non-default branding.xml files
+    for folder in os.listdir(os.path.join(ANDROID_PATH, 'res')):
+        if re.match(r'^values\-[a-z]{2}$', folder):
+            lbx = os.path.join(ANDROID_PATH, 'res', folder, 'branding.xml')
+            if os.path.exists(lbx):
+                os.remove(lbx)
+
 
 def step_gen_constants_java(jsdata, **options):
     ''' gen Java Source class (final constants) with all JSON values '''
