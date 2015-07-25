@@ -46,7 +46,7 @@ import java.io.OutputStream;
 
 public class KiwixWebView extends WebView {
 
-    private static final String PREF_ZOOM = "pref_zoom";
+    private static final String PREF_ZOOM = "pref_zoom_slider";
 
     private static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
 
@@ -59,8 +59,6 @@ public class KiwixWebView extends WebView {
     private OnPageChangeListener mChangeListener;
 
     private OnLongClickListener mOnLongClickListener;
-
-    private boolean mIsZoomEnabled;
 
     private Handler saveHandler = new Handler() {
 
@@ -131,9 +129,9 @@ public class KiwixWebView extends WebView {
 
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(getContext());
-        mIsZoomEnabled = sharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
+        boolean zoomEnabled = sharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
 
-        if (mIsZoomEnabled) {
+        if (zoomEnabled) {
             int zoomScale = (int) sharedPreferences.getFloat(PREF_ZOOM, 100.0f);
             setInitialScale(zoomScale);
         } else {

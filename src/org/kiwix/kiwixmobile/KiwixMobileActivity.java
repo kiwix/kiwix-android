@@ -105,7 +105,7 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     private static final String PREF_BACKTOTOP = "pref_backtotop";
 
-    private static final String PREF_ZOOM = "pref_zoom";
+    private static final String PREF_ZOOM = "pref_zoom_slider";
 
     private static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
 
