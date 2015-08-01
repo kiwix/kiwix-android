@@ -1,8 +1,8 @@
 {
-    "ic_launcher": "customapp-json/wikivoyage_en-icon.png", 
+    "ic_launcher": "customapp/wikivoyage/icon.png", 
     "app_name": "Wikivoyage", 
     "package": "org.kiwix.kiwixcustomwikivoyage", 
-    "zim_file": "wikivoyage_en_all_2015-06.zim", 
+    "zim_file": "customapp/wikivoyage/content.zim", 
     "play_store": {
         "images": {
             "featureGraphic": [], 
@@ -25,12 +25,12 @@
         "details": {
             "contactEmail": "contact+android@kiwix.org", 
             "contactPhone": null, 
-            "contactWebsite": "http://kiwix.org", 
+            "contactWebsite": "http://www.kiwix.org", 
             "defaultLanguage": "en-US"
         }
     }, 
-    "version_code": "4", 
+    "version_code": "5", 
     "embed_zim": false, 
     "enforced_lang": "en", 
-    "version_name": "2015-06"
+    "version_name": "2015-07"
 }
