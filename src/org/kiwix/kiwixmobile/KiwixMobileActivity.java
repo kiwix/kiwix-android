@@ -164,6 +164,7 @@ public class KiwixMobileActivity extends AppCompatActivity
             Menu menu = mode.getMenu();
             // Inflate custom menu icon.
             getMenuInflater().inflate(R.menu.menu_webview_action, menu);
+            readAloudSelection(menu);
         }
         super.onActionModeStarted(mode);
     }
@@ -174,18 +175,19 @@ public class KiwixMobileActivity extends AppCompatActivity
         super.onActionModeFinished(mode);
     }
 
-    public void onContextMenuClicked(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_speak_text:
-                Log.i(TAG_KIWIX, "Speaking selection.");
-                tts.readSelection();
-                break;
-            default:
-                Log.e(TAG_KIWIX, "Unexpected context menu click.");
-                break;
-        }
-        if (mActionMode != null) {
-            mActionMode.finish();
+    private void readAloudSelection(Menu menu) {
+        if (menu != null) {
+            menu.findItem(R.id.menu_speak_text).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    Log.i(TAG_KIWIX, "Speaking selection.");
+                    tts.readSelection();
+                    if (mActionMode != null) {
+                        mActionMode.finish();
+                    }
+                    return true;
+                }
+            });
         }
     }
 
