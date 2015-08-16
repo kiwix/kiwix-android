@@ -460,7 +460,7 @@ for arch in ARCHS:
 
     # create libkiwix.so
     os.chdir(curdir)
-    compile_cmd = ('g++ -fPIC -c -B%(platform)s/sysroot '
+    compile_cmd = ('g++ -std=c++11 -std=gnu++11 -fPIC -c -B%(platform)s/sysroot '
                    '-DU_HAVE_STD_STRING '
                    '-D_FILE_OFFSET_BITS=64 '
                    '-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE '
