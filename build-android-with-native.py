@@ -152,13 +152,13 @@ CREATE_TOOLCHAIN, COMPILE_LIBLZMA, COMPILE_LIBICU, COMPILE_LIBZIM, \
 # compiler version to use
 # list of available toolchains in <NDK_PATH>/toolchains
 # 4.4.3, 4.6, 4.7, clang3.1, clang3.2
-COMPILER_VERSION = '4.6'  # /!\ doesn't work with 4.7
+COMPILER_VERSION = '4.8'
 
 # location of Android NDK
 NDK_PATH = os.environ.get('NDK_PATH',
                           os.path.join(os.path.dirname(CURRENT_PATH),
                                        'src', 'dependencies',
-                                       'android-ndk-r8e'))
+                                       'android-ndk-r10e'))
 SDK_PATH = os.environ.get('ANDROID_HOME',
                           os.path.join(os.path.dirname(CURRENT_PATH),
                                        'src', 'dependencies',
@@ -416,9 +416,6 @@ for arch in ARCHS:
                          '/include-fixed'
                          % {'platform': platform, 'arch_full': arch_full,
                             'gccver': COMPILER_VERSION},
-
-                         '%(platform)s/sysroot/usr/include/linux/'
-                         % {'platform': platform}
                          ]
 
     src_dir = os.path.join(LIBZIM_SRC, 'src')
@@ -489,6 +486,7 @@ for arch in ARCHS:
                 '-nostdlib '
                 'kiwix.o reader.o stringTools.o pathTools.o '
                 '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/crtbegin.o '
+                '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/crtend.o '
                 '%(platform)s/lib/libzim.a %(platform)s/lib/liblzma.a '
                 # '%(platform)s/lib/libicutu.a '
                 # '%(platform)s/lib/libicuio.a '
