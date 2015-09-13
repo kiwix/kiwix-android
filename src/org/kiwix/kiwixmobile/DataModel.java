@@ -29,7 +29,7 @@ public class DataModel implements Parcelable {
 
     // Interface that must be implemented and provided as a public CREATOR field.
     // It generates instances of our Parcelable class from a Parcel.
-    public Creator<DataModel> CREATOR = new Creator<>() {
+    public Creator<DataModel> CREATOR = new Creator<DataModel>() {
 
         @Override
         public DataModel createFromParcel(Parcel source) {

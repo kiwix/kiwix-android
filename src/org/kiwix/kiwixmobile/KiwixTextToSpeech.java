@@ -180,7 +180,7 @@ public class KiwixTextToSpeech {
                 tts.speak(line, TextToSpeech.QUEUE_ADD, null);
             }
 
-            HashMap<String, String> params = new HashMap<>();
+            HashMap<String, String> params = new HashMap<String, String>();
             // The utterance ID isn't actually used anywhere, the param is passed only to force
             // the utterance listener to be notified
             params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "kiwixLastMessage");

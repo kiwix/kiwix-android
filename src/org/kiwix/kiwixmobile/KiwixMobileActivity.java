@@ -138,7 +138,7 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     private ArrayList<String> bookmarks;
 
-    private List<KiwixWebView> mWebViews = new ArrayList<>();
+    private List<KiwixWebView> mWebViews = new ArrayList<KiwixWebView>();
 
     private KiwixTextToSpeech tts;
 
@@ -1131,7 +1131,7 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     private class KiwixWebViewClient extends WebViewClient {
 
-        HashMap<String, String> documentTypes = new HashMap<>() {{
+        HashMap<String, String> documentTypes = new HashMap<String, String>() {{
             put("epub", "application/epub+zip");
             put("pdf", "application/pdf");
         }};

@@ -40,7 +40,7 @@ public class FileSearch {
 
     // Scan through the file system and find all the files with .zim and .zimaa extensions
     public ArrayList<DataModel> findFiles() {
-        final List<String> fileList = new ArrayList<>();
+        final List<String> fileList = new ArrayList<String>();
         FilenameFilter[] filter = new FilenameFilter[zimFiles.length];
 
         // Android doesn't provide an easy way to enumerate additional sdcards
@@ -97,7 +97,7 @@ public class FileSearch {
     // Iterate through the file system
     private Collection<File> listFiles(File directory, FilenameFilter[] filter, int recurse) {
 
-        Vector<File> files = new Vector<>();
+        Vector<File> files = new Vector<File>();
 
         File[] entries = directory.listFiles();
 
@@ -128,7 +128,7 @@ public class FileSearch {
     // Create an ArrayList with our DataModel
     private ArrayList<DataModel> createDataForAdapter(List<String> list) {
 
-        ArrayList<DataModel> data = new ArrayList<>();
+        ArrayList<DataModel> data = new ArrayList<DataModel>();
         for (String file : list) {
 
             data.add(new DataModel(getTitleFromFilePath(file), file));
