@@ -16,15 +16,15 @@ repositories {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:22.2.1'
-    compile 'com.android.support:support-v4:22.2.1'
+    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:support-v4:22.2.0'
     compile files("$buildDir/native-libs/native-libs.jar")
     // compile fileTree(dir: '.', include: 'content-libs.jar') // DO NOT REMOVE !!
 }
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "22.0.1"
 
     defaultConfig {
         minSdkVersion 14
