@@ -11,7 +11,7 @@
     <string name="menu_bookmarks">Grāmatzīmes</string>
     <string name="menu_randomarticle">Nejaušs raksts</string>
     <string name="menu_fullscreen">Pilnekrāna režīms</string>
-    <string name="menu_exitfullscreen">Iziet no pilnekrāna režīma</string>
+    <string name="menu_exitfullscreen">Iziet no pilnekrāna</string>
     <string name="menu_read_aloud">Read aloud</string>
     <string name="menu_read_aloud_stop">Stop reading aloud</string>
     <string name="menu_rescan_fs">Rescan SD card</string>

@@ -16,8 +16,8 @@
     <string name="menu_read_aloud_stop">Hijanona tsy hamaky ho heno</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="save_media">Hitahiry ny media ho...</string>
-    <string name="save_media_error">An error occurred when trying to save the media!</string>
-    <string name="save_media_saved">Saved media as %s in your Pictures folder.</string>
+    <string name="save_media_error">Nisy hadisoana nitranga tam-pitahirizana ny haino aman-jery!</string>
+    <string name="save_media_saved">Haino aman-jery voatahiry ao amin\'ny %1$s ao amin\'ny petra-tsarinao</string>
     <string name="rescan_fs_warning">Am-pandinihana ny raktra ZIM, miandrasa azafady....</string>
     <string name="button_backtotop">Tampon-pejy</string>
     <string name="search_label">Hikaroka</string>
