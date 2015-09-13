@@ -115,7 +115,7 @@ public class LanguageUtils {
     // Read the language codes, that are supported in this app from the locales.txt file
     private void getLanguageCodesFromAssets() {
 
-        List<String> locales = new ArrayList<String>(new FileWriter(mContext).readFileFromAssets());
+        List<String> locales = new ArrayList<>(new FileWriter(mContext).readFileFromAssets());
 
         for (String locale : locales) {
 
@@ -200,7 +200,7 @@ public class LanguageUtils {
     // Get a list of all the language names
     public List<String> getValues() {
 
-        List<String> values = new ArrayList<String>();
+        List<String> values = new ArrayList<>();
 
         for (LanguageContainer value : mLanguageList) {
             values.add(value.getLanguageName());
@@ -212,7 +212,7 @@ public class LanguageUtils {
     // Get a list of all the language codes
     public List<String> getKeys() {
 
-        List<String> keys = new ArrayList<String>();
+        List<String> keys = new ArrayList<>();
 
         for (LanguageContainer key : mLanguageList) {
             keys.add(key.getLanguageCode());
@@ -282,7 +282,7 @@ public class LanguageUtils {
 
             // Define the exceptions to the rule. The font has to be placed in the assets folder.
             // Key: the language code; Value: the name of the font.
-            HashMap<String, String> exceptions = new HashMap<String, String>();
+            HashMap<String, String> exceptions = new HashMap<>();
             exceptions.put("km", "fonts/KhmerOS.ttf");
             exceptions.put("gu", "fonts/Lohit-Gujarati.ttf");
             exceptions.put("my", "fonts/Parabaik.ttf");

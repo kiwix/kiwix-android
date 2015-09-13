@@ -53,7 +53,7 @@ public class FileWriter {
     // Build a CSV list from the file paths
     public void saveArray(ArrayList<DataModel> files) {
 
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
 
         for (DataModel file : files) {
             list.add(file.getPath());

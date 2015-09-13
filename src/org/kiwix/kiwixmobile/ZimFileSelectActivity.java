@@ -272,7 +272,7 @@ public class ZimFileSelectActivity extends AppCompatActivity
     // We are doing this because the CursorAdapter does not allow us do remove rows from its dataset.
     private RescanDataAdapter buildArrayAdapter(Cursor cursor) {
 
-        ArrayList<DataModel> files = new ArrayList<DataModel>();
+        ArrayList<DataModel> files = new ArrayList<>();
 
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
 

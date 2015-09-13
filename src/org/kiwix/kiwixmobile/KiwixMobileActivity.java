@@ -138,7 +138,7 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     private ArrayList<String> bookmarks;
 
-    private List<KiwixWebView> mWebViews = new ArrayList<KiwixWebView>();
+    private List<KiwixWebView> mWebViews = new ArrayList<>();
 
     private KiwixTextToSpeech tts;
 
