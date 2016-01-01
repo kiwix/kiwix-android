@@ -12,8 +12,8 @@
     <string name="menu_randomarticle">Erthygl ar hap</string>
     <string name="menu_fullscreen">Sgrin lawn</string>
     <string name="menu_exitfullscreen">Gadael modd sgrin-llawn</string>
-    <string name="menu_read_aloud">Read aloud</string>
-    <string name="menu_read_aloud_stop">Stop reading aloud</string>
+    <string name="menu_read_aloud">Darllenwch yn uchel</string>
+    <string name="menu_read_aloud_stop">Stopiwch ddarllen yn uchel</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
     <string name="save_media">Cadw\'r cyfrwng fel...</string>
     <string name="save_media_error">Gwall wrth geisio achub y cyfryngau!</string>

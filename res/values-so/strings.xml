@@ -44,7 +44,7 @@
     <string name="pref_info_version">Nuqul</string>
     <string name="pref_zoom_enable">Weynayn hagista</string>
     <string name="pref_nightmode">Habka habeenkii</string>
-    <string name="pref_nightmode_summary">Show articles with reverted colors</string>
+    <string name="pref_nightmode_summary">Itus maqaalada iyagoo leh midab madadaalo ah</string>
     <string name="pref_backtotop">Ku laabo kor</string>
     <string name="pref_backtotop_summary">Itus batoonka dhammaadka bogga si kor loogu laabto</string>
     <string name="pref_language_title">Luqad</string>

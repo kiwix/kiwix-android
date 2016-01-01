@@ -29,8 +29,8 @@
     <string name="error_nozimfilesfound">Δεν βρέθηκαν αρχεία ZIM στη συσκευή σας. Ρίξτε μια ματιά στη Σελίδα Βοήθειας για να λάβετε οδηγίες σχετικά με το πως να επιφορτώσετε περιεχόμενο στο Kiwix. \nΑν έβαλες ένα αρχείο ZIM στη συσκευή σου/μέσο εξωτερικής αποθήκευσης, μπορεί να ξαναδοκιμάσεις σε ένα λεπτό ή να επανεκκινήσεις τη συσκευή σου.</string>
     <string name="error_filenotfound">Σφάλμα: Το επιλεγμένο ZIM αρχείο δεν μπόρεσε να βρεθεί.</string>
     <string name="error_fileinvalid">Σφάλμα: Το επιλεγμένο αρχείο δεν είναι έγκυρο αρχείο ZIM.</string>
-    <string name="error_articlenotfound">Σφάλμα: η επιφόρτωση λήμματος  \"%1$s\"  απέτυχε.</string>
-    <string name="error_articleurlnotfound">Σφάλμα: η επιφόρτωση λήμματος (Url: %1$s) απέτυχε.</string>
+    <string name="error_articlenotfound">Σφάλμα: το ανέβασμα λήμματος  \"%1$s\"  απέτυχε.</string>
+    <string name="error_articleurlnotfound">Σφάλμα:το Ανέβασμα του λήμματος (Url: %1$s) απέτυχε.</string>
     <string name="pref_display_title">Εμφάνιση</string>
     <string name="pref_zoom_sub_title">Zoom</string>
     <string name="pref_zoom_dialog">Το επίπεδο ζουμ</string>
