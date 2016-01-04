@@ -108,6 +108,8 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     private static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
 
+    private static final String PREF_FULLSCREEN = "pref_fullscreen";
+
     private static final int REQUEST_FILE_SELECT = 1234;
 
     private static final int REQUEST_PREFERENCES = 1235;
@@ -266,7 +268,6 @@ public class KiwixMobileActivity extends AppCompatActivity
         drawerToggle.syncState();
 
         mCompatCallback = new CompatFindActionModeCallback(this);
-        mIsFullscreenOpened = false;
         mContentFrame = (FrameLayout) findViewById(R.id.content_frame);
         newTab();
 
@@ -455,25 +456,37 @@ public class KiwixMobileActivity extends AppCompatActivity
 
         mToolbarContainer.setVisibility(View.GONE);
         exitFullscreenButton.setVisibility(View.VISIBLE);
-        menu.findItem(R.id.menu_fullscreen)
-                .setTitle(getResources().getString(R.string.menu_exitfullscreen));
+        if(menu != null){
+            menu.findItem(R.id.menu_fullscreen)
+                    .setTitle(getResources().getString(R.string.menu_exitfullscreen));
+        }
         int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
         int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
         getWindow().addFlags(fullScreenFlag);
         getWindow().clearFlags(classicScreenFlag);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean(PREF_FULLSCREEN, true);
+        editor.commit();
         mIsFullscreenOpened = true;
     }
 
     private void closeFullScreen() {
 
         mToolbarContainer.setVisibility(View.VISIBLE);
-        menu.findItem(R.id.menu_fullscreen)
-                .setTitle(getResources().getString(R.string.menu_fullscreen));
+        if(menu != null){
+            menu.findItem(R.id.menu_fullscreen)
+                    .setTitle(getResources().getString(R.string.menu_fullscreen));
+        }
         exitFullscreenButton.setVisibility(View.INVISIBLE);
         int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
         int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
         getWindow().clearFlags(fullScreenFlag);
         getWindow().addFlags(classicScreenFlag);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean(PREF_FULLSCREEN, false);
+        editor.commit();
         mIsFullscreenOpened = false;
     }
 
@@ -609,6 +622,11 @@ public class KiwixMobileActivity extends AppCompatActivity
             menu.findItem(R.id.menu_home).setVisible(true);
             menu.findItem(R.id.menu_randomarticle).setVisible(true);
             menu.findItem(R.id.menu_searchintext).setVisible(true);
+
+            if(mIsFullscreenOpened){
+                menu.findItem(R.id.menu_fullscreen)
+                        .setTitle(getResources().getString(R.string.menu_exitfullscreen));
+            }
 
             MenuItem searchItem = menu.findItem(R.id.menu_search);
             searchItem.setVisible(true);
@@ -940,6 +958,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean nightMode = sharedPreferences.getBoolean(PREF_NIGHTMODE, false);
         mIsBacktotopEnabled = sharedPreferences.getBoolean(PREF_BACKTOTOP, false);
+        mIsFullscreenOpened = sharedPreferences.getBoolean(PREF_FULLSCREEN, false);
         boolean isZoomEnabled = sharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
 
         if (isZoomEnabled) {
@@ -951,6 +970,10 @@ public class KiwixMobileActivity extends AppCompatActivity
 
         if (!mIsBacktotopEnabled) {
             mBackToTopButton.setVisibility(View.INVISIBLE);
+        }
+
+        if (mIsFullscreenOpened) {
+            openFullScreen();
         }
 
         // Night mode status
