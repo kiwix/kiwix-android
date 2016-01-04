@@ -108,6 +108,8 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     private static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
 
+    private static final String PREF_FULLSCREEN = "pref_fullscreen";
+
     private static final int REQUEST_FILE_SELECT = 1234;
 
     private static final int REQUEST_PREFERENCES = 1235;
@@ -266,7 +268,6 @@ public class KiwixMobileActivity extends AppCompatActivity
         drawerToggle.syncState();
 
         mCompatCallback = new CompatFindActionModeCallback(this);
-        mIsFullscreenOpened = false;
         mContentFrame = (FrameLayout) findViewById(R.id.content_frame);
         newTab();
 
@@ -461,6 +462,10 @@ public class KiwixMobileActivity extends AppCompatActivity
         int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
         getWindow().addFlags(fullScreenFlag);
         getWindow().clearFlags(classicScreenFlag);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean(PREF_FULLSCREEN, true);
+        editor.commit();
         mIsFullscreenOpened = true;
     }
 
@@ -474,6 +479,10 @@ public class KiwixMobileActivity extends AppCompatActivity
         int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
         getWindow().clearFlags(fullScreenFlag);
         getWindow().addFlags(classicScreenFlag);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean(PREF_FULLSCREEN, false);
+        editor.commit();
         mIsFullscreenOpened = false;
     }
 
@@ -913,6 +922,9 @@ public class KiwixMobileActivity extends AppCompatActivity
         if (requestInitAllMenuItems) {
             initAllMenuItems();
         }
+        if (mIsFullscreenOpened) {
+            openFullScreen();
+        }
         return true;
     }
 
@@ -940,6 +952,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean nightMode = sharedPreferences.getBoolean(PREF_NIGHTMODE, false);
         mIsBacktotopEnabled = sharedPreferences.getBoolean(PREF_BACKTOTOP, false);
+        mIsFullscreenOpened = sharedPreferences.getBoolean(PREF_FULLSCREEN, false);
         boolean isZoomEnabled = sharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
 
         if (isZoomEnabled) {
