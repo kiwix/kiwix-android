@@ -120,6 +120,8 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     public Menu menu;
 
+    public Toolbar toolbar;
+
     public boolean isFullscreenOpened;
 
     public ImageButton exitFullscreenButton;
@@ -203,7 +205,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         setContentView(R.layout.main);
         getWindow().setFeatureInt(Window.FEATURE_PROGRESS, Window.PROGRESS_VISIBILITY_ON);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         bookmarks = new ArrayList<>();
         requestClearHistoryAfterLoad = false;
@@ -637,6 +639,15 @@ public class KiwixMobileActivity extends AppCompatActivity
                     startActivityForResult(i, REQUEST_FILE_SEARCH);
                     overridePendingTransition(0, 0);
                     return true;
+                }
+            });
+
+            toolbar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(KiwixMobileActivity.this, SearchActivity.class);
+                    startActivityForResult(i, REQUEST_FILE_SEARCH);
+                    overridePendingTransition(0, 0);
                 }
             });
 
