@@ -120,6 +120,8 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     public Menu menu;
 
+    public Toolbar toolbar;
+
     public boolean isFullscreenOpened;
 
     public ImageButton exitFullscreenButton;
@@ -203,7 +205,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         setContentView(R.layout.main);
         getWindow().setFeatureInt(Window.FEATURE_PROGRESS, Window.PROGRESS_VISIBILITY_ON);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         bookmarks = new ArrayList<>();
         requestClearHistoryAfterLoad = false;
@@ -456,8 +458,10 @@ public class KiwixMobileActivity extends AppCompatActivity
 
         mToolbarContainer.setVisibility(View.GONE);
         exitFullscreenButton.setVisibility(View.VISIBLE);
-        menu.findItem(R.id.menu_fullscreen)
-                .setTitle(getResources().getString(R.string.menu_exitfullscreen));
+        if(menu != null){
+            menu.findItem(R.id.menu_fullscreen)
+                    .setTitle(getResources().getString(R.string.menu_exitfullscreen));
+        }
         int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
         int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
         getWindow().addFlags(fullScreenFlag);
@@ -472,8 +476,10 @@ public class KiwixMobileActivity extends AppCompatActivity
     private void closeFullScreen() {
 
         mToolbarContainer.setVisibility(View.VISIBLE);
-        menu.findItem(R.id.menu_fullscreen)
-                .setTitle(getResources().getString(R.string.menu_fullscreen));
+        if(menu != null){
+            menu.findItem(R.id.menu_fullscreen)
+                    .setTitle(getResources().getString(R.string.menu_fullscreen));
+        }
         exitFullscreenButton.setVisibility(View.INVISIBLE);
         int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
         int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
@@ -619,6 +625,11 @@ public class KiwixMobileActivity extends AppCompatActivity
             menu.findItem(R.id.menu_randomarticle).setVisible(true);
             menu.findItem(R.id.menu_searchintext).setVisible(true);
 
+            if(mIsFullscreenOpened){
+                menu.findItem(R.id.menu_fullscreen)
+                        .setTitle(getResources().getString(R.string.menu_exitfullscreen));
+            }
+
             MenuItem searchItem = menu.findItem(R.id.menu_search);
             searchItem.setVisible(true);
             searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
@@ -628,6 +639,15 @@ public class KiwixMobileActivity extends AppCompatActivity
                     startActivityForResult(i, REQUEST_FILE_SEARCH);
                     overridePendingTransition(0, 0);
                     return true;
+                }
+            });
+
+            toolbar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(KiwixMobileActivity.this, SearchActivity.class);
+                    startActivityForResult(i, REQUEST_FILE_SEARCH);
+                    overridePendingTransition(0, 0);
                 }
             });
 
@@ -964,6 +984,10 @@ public class KiwixMobileActivity extends AppCompatActivity
 
         if (!mIsBacktotopEnabled) {
             mBackToTopButton.setVisibility(View.INVISIBLE);
+        }
+
+        if (mIsFullscreenOpened) {
+            openFullScreen();
         }
 
         // Night mode status
