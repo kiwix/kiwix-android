@@ -17,11 +17,13 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.utils.files;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+
+import org.kiwix.kiwixmobile.DataModel;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.views;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -14,6 +14,8 @@ import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Transformation;
 import android.widget.LinearLayout;
+
+import org.kiwix.kiwixmobile.R;
 
 public class AnimatedProgressBar extends LinearLayout {
 

@@ -13,7 +13,7 @@
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-    <org.kiwix.kiwixmobile.AnimatedProgressBar
+    <org.kiwix.kiwixmobile.views.AnimatedProgressBar
             android:id="@+id/progress_view"
             android:layout_width="match_parent"
             android:layout_height="3dp"

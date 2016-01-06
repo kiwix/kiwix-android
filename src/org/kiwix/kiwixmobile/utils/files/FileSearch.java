@@ -17,10 +17,12 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.utils.files;
 
 import android.os.Environment;
 import android.util.Log;
+
+import org.kiwix.kiwixmobile.DataModel;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -141,7 +143,7 @@ public class FileSearch {
 
     // Fill fileList with files found in the specific directory
     private void addFilesToFileList(String directory, FilenameFilter[] filter,
-            List<String> fileList) {
+                                    List<String> fileList) {
         Log.d(TAG_KIWIX, "Searching directory " + directory);
         File[] foundFiles = listFilesAsArray(new File(directory), filter, -1);
         for (File f : foundFiles) {

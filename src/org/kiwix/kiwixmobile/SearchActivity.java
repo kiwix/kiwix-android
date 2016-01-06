@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 
 public class SearchActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 

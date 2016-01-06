@@ -32,8 +32,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.BaseAdapter;
 
-import org.kiwix.kiwixmobile.LanguageUtils;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.utils.LanguageUtils;
+import org.kiwix.kiwixmobile.views.SliderPreference;
 
 import java.util.Locale;
 

@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 
 @SuppressLint("ValidFragment")
-public class BookmarkDialog extends DialogFragment {
+public class BookmarkDialogFragment extends DialogFragment {
 
     private BookmarkDialogListener listen;
 
@@ -17,7 +17,7 @@ public class BookmarkDialog extends DialogFragment {
 
     private boolean isBookmarked;
 
-    public BookmarkDialog(String[] contents, boolean isBookmarked) {
+    public BookmarkDialogFragment(String[] contents, boolean isBookmarked) {
         this.contents = contents;
         this.isBookmarked = isBookmarked;
     }

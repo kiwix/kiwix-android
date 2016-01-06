@@ -17,7 +17,7 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.views;
 
 
 import android.content.Context;
@@ -33,6 +33,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.EditText;
+
+import org.kiwix.kiwixmobile.R;
 
 import java.lang.reflect.Method;
 

@@ -15,7 +15,7 @@
     <string name="menu_read_aloud">Voorlezen</string>
     <string name="menu_read_aloud_stop">Stoppen met voorlezen</string>
     <string name="menu_rescan_fs">Rescan SD card</string>
-    <string name="save_media">Sla media op als...</string>
+    <string name="save_media">Media opslaan als...</string>
     <string name="save_media_error">Er is een fout opgetreden bij het opslaan van de media!</string>
     <string name="save_media_saved">Het bestand is opgeslagen als %1$s in uw afbeeldingenmap</string>
     <string name="rescan_fs_warning">Zoeken naar ZIM-bestanden. Even geduld...</string>

@@ -1,13 +1,14 @@
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.views;
 
 import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 
+import org.kiwix.kiwixmobile.ZimContentProvider;
+
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 

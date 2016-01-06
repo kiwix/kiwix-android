@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.utils;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -9,6 +9,9 @@ import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.widget.Toast;
+
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.ZimContentProvider;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -38,8 +41,8 @@ public class KiwixTextToSpeech {
      *                              ended
      */
     public KiwixTextToSpeech(Context context, WebView webView,
-            final OnInitSucceedListener onInitSucceedListener,
-            final OnSpeakingListener onSpeakingListener) {
+                             final OnInitSucceedListener onInitSucceedListener,
+                             final OnSpeakingListener onSpeakingListener) {
         Log.d(TAG_KIWIX, "Initializing TextToSpeech");
 
         this.context = context;
@@ -88,7 +91,7 @@ public class KiwixTextToSpeech {
      * Reads the currently selected text in the WebView.
      */
     public void readSelection() {
-      webView.loadUrl("javascript:tts.speakAloud(window.getSelection().toString());", null);
+        webView.loadUrl("javascript:tts.speakAloud(window.getSelection().toString());", null);
     }
 
     /**
@@ -159,7 +162,7 @@ public class KiwixTextToSpeech {
     /**
      * The listener that is notified when speaking starts or stops (regardless of whether it was a
      * result of error, user, or because whole text was read).
-     *
+     * <p/>
      * Note that the methods of this interface may not be called from the UI thread.
      */
     public interface OnSpeakingListener {
