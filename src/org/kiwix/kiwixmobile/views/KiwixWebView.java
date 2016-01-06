@@ -50,7 +50,8 @@ public class KiwixWebView extends WebView {
 
     private static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
 
-    private static final float[] mNegativeColorArray = {-1.0f, 0, 0, 0, 255, // red
+    private static final float[] NIGHT_MODE_COLORS = {
+            -1.0f, 0, 0, 0, 255, // red
             0, -1.0f, 0, 0, 255, // green
             0, 0, -1.0f, 0, 255, // blue
             0, 0, 0, 1.0f, 0 // alpha
@@ -139,34 +140,15 @@ public class KiwixWebView extends WebView {
         }
     }
 
-    public void deactiviateNightMode() {
+    public void deactivateNightMode() {
         setLayerType(View.LAYER_TYPE_NONE, null);
     }
 
     public void toggleNightMode() {
-
         Paint paint = new Paint();
-        ColorMatrixColorFilter filterInvert = new ColorMatrixColorFilter(mNegativeColorArray);
+        ColorMatrixColorFilter filterInvert = new ColorMatrixColorFilter(NIGHT_MODE_COLORS);
         paint.setColorFilter(filterInvert);
-
         setLayerType(View.LAYER_TYPE_HARDWARE, paint);
-        try {
-            InputStream stream = getContext().getAssets().open("invertcode.js");
-            int size = stream.available();
-            byte[] buffer = new byte[size];
-            stream.read(buffer);
-            stream.close();
-            String JSInvert = new String(buffer);
-
-            if (Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                evaluateJavascript("javascript:" + JSInvert, null);
-            } else {
-                //loadUrl("javascript:" + JSInvert);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
