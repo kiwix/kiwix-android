@@ -23,12 +23,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import org.kiwix.kiwixmobile.DataModel;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.kiwix.kiwixmobile.DataModel;
 
 public class FileWriter {
 

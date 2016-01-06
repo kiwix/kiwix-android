@@ -24,7 +24,6 @@ import android.content.SharedPreferences;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -37,12 +36,13 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.Toast;
 
+import org.kiwix.kiwixmobile.R;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import org.kiwix.kiwixmobile.R;
 
 public class KiwixWebView extends WebView {
 

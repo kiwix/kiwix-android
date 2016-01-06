@@ -22,6 +22,8 @@ package org.kiwix.kiwixmobile.utils.files;
 import android.os.Environment;
 import android.util.Log;
 
+import org.kiwix.kiwixmobile.DataModel;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
@@ -30,7 +32,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
-import org.kiwix.kiwixmobile.DataModel;
 
 public class FileSearch {
 
@@ -142,7 +143,7 @@ public class FileSearch {
 
     // Fill fileList with files found in the specific directory
     private void addFilesToFileList(String directory, FilenameFilter[] filter,
-            List<String> fileList) {
+                                    List<String> fileList) {
         Log.d(TAG_KIWIX, "Searching directory " + directory);
         File[] foundFiles = listFilesAsArray(new File(directory), filter, -1);
         for (File f : foundFiles) {

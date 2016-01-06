@@ -70,6 +70,12 @@ import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.settings.Constants;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
+import org.kiwix.kiwixmobile.utils.KiwixTextToSpeech;
+import org.kiwix.kiwixmobile.utils.LanguageUtils;
+import org.kiwix.kiwixmobile.utils.files.FileUtils;
+import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
+import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
+import org.kiwix.kiwixmobile.views.KiwixWebView;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -82,12 +88,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import org.kiwix.kiwixmobile.utils.KiwixTextToSpeech;
-import org.kiwix.kiwixmobile.utils.LanguageUtils;
-import org.kiwix.kiwixmobile.utils.files.FileUtils;
-import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
-import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
-import org.kiwix.kiwixmobile.views.KiwixWebView;
 
 public class KiwixMobileActivity extends AppCompatActivity
         implements BookmarkDialogFragment.BookmarkDialogListener {
@@ -463,7 +463,7 @@ public class KiwixMobileActivity extends AppCompatActivity
 
         mToolbarContainer.setVisibility(View.GONE);
         exitFullscreenButton.setVisibility(View.VISIBLE);
-        if(menu != null){
+        if (menu != null) {
             menu.findItem(R.id.menu_fullscreen)
                     .setTitle(getResources().getString(R.string.menu_exitfullscreen));
         }
@@ -481,7 +481,7 @@ public class KiwixMobileActivity extends AppCompatActivity
     private void closeFullScreen() {
 
         mToolbarContainer.setVisibility(View.VISIBLE);
-        if(menu != null){
+        if (menu != null) {
             menu.findItem(R.id.menu_fullscreen)
                     .setTitle(getResources().getString(R.string.menu_fullscreen));
         }
@@ -630,7 +630,7 @@ public class KiwixMobileActivity extends AppCompatActivity
             menu.findItem(R.id.menu_randomarticle).setVisible(true);
             menu.findItem(R.id.menu_searchintext).setVisible(true);
 
-            if(mIsFullscreenOpened){
+            if (mIsFullscreenOpened) {
                 menu.findItem(R.id.menu_fullscreen)
                         .setTitle(getResources().getString(R.string.menu_exitfullscreen));
             }
@@ -1000,7 +1000,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         if (nightMode) {
             getCurrentWebView().toggleNightMode();
         } else {
-            getCurrentWebView().deactiviateNightMode();
+            getCurrentWebView().deactivateNightMode();
         }
     }
 

@@ -29,6 +29,8 @@ import android.os.ParcelFileDescriptor.AutoCloseOutputStream;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import org.kiwix.kiwixmobile.utils.files.FileUtils;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -37,7 +39,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
 public class ZimContentProvider extends ContentProvider {
 
@@ -288,7 +289,7 @@ public class ZimContentProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri url, String[] projection, String selection,
-            String[] selectionArgs, String sort) {
+                        String[] selectionArgs, String sort) {
         throw new RuntimeException("Operation not supported");
     }
 
@@ -299,7 +300,7 @@ public class ZimContentProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String where,
-            String[] whereArgs) {
+                      String[] whereArgs) {
         throw new RuntimeException("Operation not supported");
     }
 

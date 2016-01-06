@@ -5,9 +5,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 
+import org.kiwix.kiwixmobile.ZimContentProvider;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.kiwix.kiwixmobile.ZimContentProvider;
 
 public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 
