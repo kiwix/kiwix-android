@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.kiwix.kiwixmobile"
-<<<<<<< HEAD
-    android:versionCode="26"
-    android:versionName="1.96">
-=======
     android:versionCode="27"
     android:versionName="1.97">
->>>>>>> origin/master
 
     <supports-screens
         android:anyDensity="true"
