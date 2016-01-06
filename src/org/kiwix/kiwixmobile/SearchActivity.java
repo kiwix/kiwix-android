@@ -37,6 +37,8 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
 
     @Override
     public void finish() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         super.finish();
         overridePendingTransition(0, 0);
     }
