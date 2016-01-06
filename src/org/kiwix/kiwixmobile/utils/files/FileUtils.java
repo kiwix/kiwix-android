@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.utils.files;
 
 import org.kiwix.kiwixmobile.settings.Constants;
 

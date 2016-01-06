@@ -17,7 +17,7 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.utils.files;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import org.kiwix.kiwixmobile.DataModel;
 
 public class FileWriter {
 

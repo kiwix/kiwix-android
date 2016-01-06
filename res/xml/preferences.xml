@@ -28,7 +28,7 @@
 
                 android:defaultValue="false"/>
 
-        <org.kiwix.kiwixmobile.settings.SliderPreference
+        <org.kiwix.kiwixmobile.views.SliderPreference
                 android:key="pref_zoom_slider"
                 android:title="@string/pref_zoom_dialog"
                 android:summary="@array/pref_zoom_entryvalues"

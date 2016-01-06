@@ -82,10 +82,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-
+import org.kiwix.kiwixmobile.utils.KiwixTextToSpeech;
+import org.kiwix.kiwixmobile.utils.LanguageUtils;
+import org.kiwix.kiwixmobile.utils.files.FileUtils;
+import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
+import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
+import org.kiwix.kiwixmobile.views.KiwixWebView;
 
 public class KiwixMobileActivity extends AppCompatActivity
-        implements BookmarkDialog.BookmarkDialogListener {
+        implements BookmarkDialogFragment.BookmarkDialogListener {
 
 
     public static final String TAG_KIWIX = "kiwix";
@@ -692,7 +697,7 @@ public class KiwixMobileActivity extends AppCompatActivity
     }
 
     public void viewBookmarks() {
-        new BookmarkDialog(bookmarks.toArray(new String[bookmarks.size()]),
+        new BookmarkDialogFragment(bookmarks.toArray(new String[bookmarks.size()]),
                 bookmarks.contains(getCurrentWebView().getTitle()))
                 .show(getSupportFragmentManager(), "BookmarkDialog");
     }

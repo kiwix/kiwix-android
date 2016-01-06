@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile.settings;
+package org.kiwix.kiwixmobile.views;
 
 import org.kiwix.kiwixmobile.R;
 

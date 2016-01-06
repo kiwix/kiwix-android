@@ -17,7 +17,7 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.views;
 
 
 import android.content.Context;
@@ -35,6 +35,7 @@ import android.webkit.WebView;
 import android.widget.EditText;
 
 import java.lang.reflect.Method;
+import org.kiwix.kiwixmobile.R;
 
 public class CompatFindActionModeCallback
         implements ActionMode.Callback, TextWatcher, View.OnClickListener {

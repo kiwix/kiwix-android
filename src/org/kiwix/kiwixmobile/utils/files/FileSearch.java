@@ -17,7 +17,7 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.utils.files;
 
 import android.os.Environment;
 import android.util.Log;
@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
+import org.kiwix.kiwixmobile.DataModel;
 
 public class FileSearch {
 
