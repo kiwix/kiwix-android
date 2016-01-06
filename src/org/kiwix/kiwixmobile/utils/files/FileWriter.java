@@ -22,127 +22,124 @@ package org.kiwix.kiwixmobile.utils.files;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-
-import org.kiwix.kiwixmobile.DataModel;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import org.kiwix.kiwixmobile.DataModel;
 
 public class FileWriter {
 
-    public static final String TAG_KIWIX = "kiwix";
+  public static final String TAG_KIWIX = "kiwix";
 
-    private static final String PREF_NAME = "csv_file";
+  private static final String PREF_NAME = "csv_file";
 
-    private static final String CSV_PREF_NAME = "csv_string";
+  private static final String CSV_PREF_NAME = "csv_string";
 
-    private Context mContext;
+  private Context mContext;
 
-    private ArrayList<DataModel> mDataList;
+  private ArrayList<DataModel> mDataList;
 
-    public FileWriter(Context context) {
-        mContext = context;
+  public FileWriter(Context context) {
+    mContext = context;
+  }
+
+  public FileWriter(Context context, ArrayList<DataModel> dataList) {
+    mDataList = dataList;
+    mContext = context;
+  }
+
+  // Build a CSV list from the file paths
+  public void saveArray(ArrayList<DataModel> files) {
+
+    ArrayList<String> list = new ArrayList<>();
+
+    for (DataModel file : files) {
+      list.add(file.getPath());
     }
 
-    public FileWriter(Context context, ArrayList<DataModel> dataList) {
-        mDataList = dataList;
-        mContext = context;
+    StringBuilder sb = new StringBuilder();
+    for (String s : list) {
+      sb.append(s);
+      sb.append(",");
     }
 
-    // Build a CSV list from the file paths
-    public void saveArray(ArrayList<DataModel> files) {
+    saveCsvToPrefrences(sb.toString());
+  }
 
-        ArrayList<String> list = new ArrayList<>();
+  // Read the locales.txt file in the assets folder, that has been created at compile time by the
+  // build script
+  public ArrayList<String> readFileFromAssets() {
 
-        for (DataModel file : files) {
-            list.add(file.getPath());
-        }
+    String content = "";
 
-        StringBuilder sb = new StringBuilder();
-        for (String s : list) {
-            sb.append(s);
-            sb.append(",");
-        }
+    try {
+      InputStream stream = mContext.getAssets().open("locales.txt");
 
-        saveCsvToPrefrences(sb.toString());
+      int size = stream.available();
+      byte[] buffer = new byte[size];
+      stream.read(buffer);
+      stream.close();
+      content = new String(buffer);
+    } catch (IOException e) {
+
     }
 
-    // Read the locales.txt file in the assets folder, that has been created at compile time by the
-    // build script
-    public ArrayList<String> readFileFromAssets() {
+    return readCsv(content);
+  }
 
-        String content = "";
+  // Add items to the MediaStore list, that are not in the MediaStore database.
+  // These will be loaded from a previously saved CSV file.
+  // We are checking, if these file still exist as well.
+  public ArrayList<DataModel> getDataModelList() {
 
-        try {
-            InputStream stream = mContext.getAssets().open("locales.txt");
-
-            int size = stream.available();
-            byte[] buffer = new byte[size];
-            stream.read(buffer);
-            stream.close();
-            content = new String(buffer);
-
-        } catch (IOException e) {
-
-        }
-
-        return readCsv(content);
+    for (String file : readCsv()) {
+      if (!mDataList.contains(new DataModel(getTitleFromFilePath(file), file))) {
+        Log.i(TAG_KIWIX, "Added file: " + file);
+        mDataList.add(new DataModel(getTitleFromFilePath(file), file));
+      }
     }
 
-    // Add items to the MediaStore list, that are not in the MediaStore database.
-    // These will be loaded from a previously saved CSV file.
-    // We are checking, if these file still exist as well.
-    public ArrayList<DataModel> getDataModelList() {
+    return mDataList;
+  }
 
-        for (String file : readCsv()) {
-            if (!mDataList.contains(new DataModel(getTitleFromFilePath(file), file))) {
-                Log.i(TAG_KIWIX, "Added file: " + file);
-                mDataList.add(new DataModel(getTitleFromFilePath(file), file));
-            }
-        }
+  // Split the CSV by the comma and return an ArrayList with the file paths
+  private ArrayList<String> readCsv() {
 
-        return mDataList;
-    }
+    String csv = getCsvFromPrefrences();
 
-    // Split the CSV by the comma and return an ArrayList with the file paths
-    private ArrayList<String> readCsv() {
+    return readCsv(csv);
+  }
 
-        String csv = getCsvFromPrefrences();
+  private ArrayList<String> readCsv(String csv) {
 
-        return readCsv(csv);
-    }
+    String[] csvArray = csv.split(",");
 
-    private ArrayList<String> readCsv(String csv) {
+    return new ArrayList<String>(Arrays.asList(csvArray));
+  }
 
-        String[] csvArray = csv.split(",");
+  // Save a CSV file to the prefrences
+  private void saveCsvToPrefrences(String csv) {
 
-        return new ArrayList<String>(Arrays.asList(csvArray));
-    }
+    SharedPreferences preferences = mContext.getSharedPreferences(PREF_NAME, 0);
+    SharedPreferences.Editor editor = preferences.edit();
+    editor.putString(CSV_PREF_NAME, csv);
 
-    // Save a CSV file to the prefrences
-    private void saveCsvToPrefrences(String csv) {
+    editor.commit();
+  }
 
-        SharedPreferences preferences = mContext.getSharedPreferences(PREF_NAME, 0);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(CSV_PREF_NAME, csv);
+  // Load the CSV from the prefrences
+  private String getCsvFromPrefrences() {
+    SharedPreferences preferences = mContext.getSharedPreferences(PREF_NAME, 0);
 
-        editor.commit();
-    }
+    return preferences.getString(CSV_PREF_NAME, "");
+  }
 
-    // Load the CSV from the prefrences
-    private String getCsvFromPrefrences() {
-        SharedPreferences preferences = mContext.getSharedPreferences(PREF_NAME, 0);
-
-        return preferences.getString(CSV_PREF_NAME, "");
-    }
-
-    // Remove the file path and the extension and return a file name for the given file path
-    private String getTitleFromFilePath(String path) {
-        return new File(path).getName().replaceFirst("[.][^.]+$", "");
-    }
+  // Remove the file path and the extension and return a file name for the given file path
+  private String getTitleFromFilePath(String path) {
+    return new File(path).getName().replaceFirst("[.][^.]+$", "");
+  }
 }
 
 

@@ -11,59 +11,59 @@ import android.support.v4.app.DialogFragment;
 @SuppressLint("ValidFragment")
 public class BookmarkDialogFragment extends DialogFragment {
 
-    private BookmarkDialogListener listen;
+  private BookmarkDialogListener listen;
 
-    private String[] contents;
+  private String[] contents;
 
-    private boolean isBookmarked;
+  private boolean isBookmarked;
 
-    public BookmarkDialogFragment(String[] contents, boolean isBookmarked) {
-        this.contents = contents;
-        this.isBookmarked = isBookmarked;
+  public BookmarkDialogFragment(String[] contents, boolean isBookmarked) {
+    this.contents = contents;
+    this.isBookmarked = isBookmarked;
+  }
+
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    AlertDialog.Builder build = new AlertDialog.Builder(getActivity());
+    //build.setTitle(R.string.menu_bookmarks);
+    String buttonText;
+    if (isBookmarked) {
+      buttonText = getResources().getString(R.string.remove_bookmark);
+    } else {
+      buttonText = getResources().getString(R.string.add_bookmark);
     }
 
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder build = new AlertDialog.Builder(getActivity());
-        //build.setTitle(R.string.menu_bookmarks);
-        String buttonText;
-        if (isBookmarked) {
-            buttonText = getResources().getString(R.string.remove_bookmark);
-        } else {
-            buttonText = getResources().getString(R.string.add_bookmark);
+    if (contents.length != 0) {
+      build.setItems(contents, new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int choice) {
+          listen.onListItemSelect(contents[choice]);
         }
-
-        if (contents.length != 0) {
-            build.setItems(contents, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int choice) {
-                    listen.onListItemSelect(contents[choice]);
-                }
-            });
-        }
-
-        build.setNeutralButton(buttonText, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int choice) {
-                listen.onBookmarkButtonPressed();
-            }
-        });
-
-        return build.create();
+      });
     }
 
-    @Override
-    public void onAttach(Activity a) {
-        super.onAttach(a);
-        try {
-            listen = (BookmarkDialogListener) a;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(a.toString()
-                    + " must implement BookmarkDialogListener");
-        }
+    build.setNeutralButton(buttonText, new DialogInterface.OnClickListener() {
+      public void onClick(DialogInterface dialog, int choice) {
+        listen.onBookmarkButtonPressed();
+      }
+    });
+
+    return build.create();
+  }
+
+  @Override
+  public void onAttach(Activity a) {
+    super.onAttach(a);
+    try {
+      listen = (BookmarkDialogListener) a;
+    } catch (ClassCastException e) {
+      throw new ClassCastException(a.toString()
+          + " must implement BookmarkDialogListener");
     }
+  }
 
-    public interface BookmarkDialogListener {
+  public interface BookmarkDialogListener {
 
-        public void onListItemSelect(String choice);
+    public void onListItemSelect(String choice);
 
-        public void onBookmarkButtonPressed();
-    }
+    public void onBookmarkButtonPressed();
+  }
 }

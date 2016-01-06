@@ -4,74 +4,67 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+  <include layout="@layout/toolbar"/>
 
-    <include layout="@layout/toolbar" />
+  <android.support.v4.widget.DrawerLayout
+      android:id="@+id/drawer_layout"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
 
+    <LinearLayout
+        android:id="@+id/MainLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
 
-    <android.support.v4.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+      <RelativeLayout
+          android:id="@+id/FullscreenButtonLayout"
+          android:layout_width="fill_parent"
+          android:layout_height="fill_parent">
 
-
-        <LinearLayout
-            android:id="@+id/MainLayout"
+        <RelativeLayout
+            android:id="@+id/ElementsLayout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical">
 
+          <FrameLayout
+              android:id="@+id/content_frame"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"/>
 
-            <RelativeLayout
-                android:id="@+id/FullscreenButtonLayout"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+          <ImageButton
+              android:id="@+id/FullscreenControlButton"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignParentRight="true"
+              android:layout_margin="7dp"
+              android:background="#DDFFFFFF"
+              android:hint="@string/menu_exitfullscreen"
+              android:src="@drawable/fullscreen_exit"
+              android:visibility="invisible"/>
 
-                <RelativeLayout
-                    android:id="@+id/ElementsLayout"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:orientation="vertical">
+          <Button
+              android:id="@+id/button_backtotop"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:layout_alignParentBottom="true"
+              android:layout_centerHorizontal="true"
+              android:alpha="0.6"
+              android:background="#DDFFFFFF"
+              android:gravity="center"
+              android:textColor="@android:color/black"
+              android:textStyle="bold"
+              android:visibility="invisible"/>
 
-                    <FrameLayout
-                        android:id="@+id/content_frame"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical" />
+        </RelativeLayout>
 
+      </RelativeLayout>
 
-                    <ImageButton
-                        android:id="@+id/FullscreenControlButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_margin="7dp"
-                        android:background="#DDFFFFFF"
-                        android:hint="@string/menu_exitfullscreen"
-                        android:src="@drawable/fullscreen_exit"
-                        android:visibility="invisible" />
+    </LinearLayout>
 
-                    <Button
-                        android:id="@+id/button_backtotop"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:alpha="0.6"
-                        android:background="#DDFFFFFF"
-                        android:gravity="center"
-                        android:textColor="@android:color/black"
-                        android:textStyle="bold"
-                        android:visibility="invisible" />
+    <include layout="@layout/drawer"/>
 
-                </RelativeLayout>
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-
-        <include layout="@layout/drawer" />
-
-
-    </android.support.v4.widget.DrawerLayout>
+  </android.support.v4.widget.DrawerLayout>
 </LinearLayout>
