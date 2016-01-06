@@ -69,8 +69,8 @@ public class AnimatedProgressBar extends LinearLayout {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.progress_bar, this, true);
 
-        this.setBackgroundColor(
-                backgroundColor);           // set the background color for this view
+        // set the background color for this view
+        this.setBackgroundColor(backgroundColor);
 
     }
 

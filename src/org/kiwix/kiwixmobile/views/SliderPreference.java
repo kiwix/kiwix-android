@@ -79,6 +79,11 @@ public class SliderPreference extends DialogPreference {
     }
 
     @Override
+    public void setSummary(CharSequence summary) {
+        super.setSummary(summary);
+    }
+
+    @Override
     public void setSummary(int summaryResId) {
         try {
             //noinspection ResourceType
@@ -90,11 +95,6 @@ public class SliderPreference extends DialogPreference {
 
     public void setSummary(CharSequence[] summaries) {
         mSummaries = summaries;
-    }
-
-    @Override
-    public void setSummary(CharSequence summary) {
-        super.setSummary(summary);
     }
 
     public float getValue() {
