@@ -1,66 +1,65 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
-            android:key="pref_display"
-            android:title="@string/pref_display_title">
+  <PreferenceCategory
+      android:key="pref_display"
+      android:title="@string/pref_display_title">
 
-        <CheckBoxPreference
-                android:key="pref_nightmode"
-                android:title="@string/pref_nightmode"
-                android:defaultValue="false"
-                android:summary="@string/pref_nightmode_summary"/>
+    <CheckBoxPreference
+        android:key="pref_nightmode"
+        android:title="@string/pref_nightmode"
+        android:defaultValue="false"
+        android:summary="@string/pref_nightmode_summary"/>
 
-        <CheckBoxPreference
-                android:key="pref_backtotop"
-                android:title="@string/pref_backtotop"
-                android:summary="@string/pref_backtotop_summary"
-                android:defaultValue="false"/>
+    <CheckBoxPreference
+        android:key="pref_backtotop"
+        android:title="@string/pref_backtotop"
+        android:summary="@string/pref_backtotop_summary"
+        android:defaultValue="false"/>
 
+  </PreferenceCategory>
 
-    </PreferenceCategory>
+  <PreferenceCategory
+      android:key="pref_zoom_sub"
+      android:title="@string/pref_zoom_sub_title">
 
-    <PreferenceCategory
-            android:key="pref_zoom_sub"
-            android:title="@string/pref_zoom_sub_title">
+    <CheckBoxPreference
+        android:key="pref_zoom_enabled"
+        android:title="@string/pref_zoom_enable"
 
-        <CheckBoxPreference
-                android:key="pref_zoom_enabled"
-                android:title="@string/pref_zoom_enable"
+        android:defaultValue="false"/>
 
-                android:defaultValue="false"/>
+    <org.kiwix.kiwixmobile.views.SliderPreference
+        android:key="pref_zoom_slider"
+        android:title="@string/pref_zoom_dialog"
+        android:summary="@array/pref_zoom_entryvalues"
+        android:dialogMessage="0"
+        android:defaultValue="250.0"
+        android:enabled="false"/>
+  </PreferenceCategory>
 
-        <org.kiwix.kiwixmobile.settings.SliderPreference
-                android:key="pref_zoom_slider"
-                android:title="@string/pref_zoom_dialog"
-                android:summary="@array/pref_zoom_entryvalues"
-                android:dialogMessage="0"
-                android:defaultValue="250.0"
-                android:enabled="false"/>
-    </PreferenceCategory>
+  <PreferenceCategory
+      android:key="pref_language"
+      android:title="@string/pref_language_title">
 
-    <PreferenceCategory
-            android:key="pref_language"
-            android:title="@string/pref_language_title">
+    <ListPreference
+        android:key="pref_language_chooser"
+        android:title="@string/pref_language_title"
+        android:summary="@string/pref_language_chooser"
+        android:dialogTitle="@string/pref_language_chooser"/>
 
-        <ListPreference
-                android:key="pref_language_chooser"
-                android:title="@string/pref_language_title"
-                android:summary="@string/pref_language_chooser"
-                android:dialogTitle="@string/pref_language_chooser"/>
+  </PreferenceCategory>
 
-    </PreferenceCategory>
+  <PreferenceCategory
+      android:key="pref_info"
+      android:title="@string/pref_info_title">
 
-    <PreferenceCategory
-            android:key="pref_info"
-            android:title="@string/pref_info_title">
+    <EditTextPreference
+        android:key="pref_version"
+        android:title="@string/pref_info_version"
+        android:enabled="false"
+        android:selectable="false"
+        android:persistent="false"
+        android:shouldDisableView="false"/>
 
-        <EditTextPreference
-                android:key="pref_version"
-                android:title="@string/pref_info_version"
-                android:enabled="false"
-                android:selectable="false"
-                android:persistent="false"
-                android:shouldDisableView="false"/>
-
-    </PreferenceCategory>
+  </PreferenceCategory>
 
 </PreferenceScreen>

@@ -321,7 +321,7 @@ def step_update_xml_nodes(jsdata, **options):
                                    'preferences.xml')
     soup = soup = BeautifulSoup(open(preferences_xml, 'r'),
                                 'xml', from_encoding='utf-8')
-    item = soup.find('org.kiwix.kiwixmobile.settings.SliderPreference')
+    item = soup.find('org.kiwix.kiwixmobile.views.SliderPreference')
     item.name = '{}.settings.SliderPreference'.format(jsdata.get('package'))
     flushxml(soup, 'PreferenceScreen', preferences_xml, head=False)
 
@@ -329,7 +329,7 @@ def step_update_xml_nodes(jsdata, **options):
     toolbar_xml = os.path.join(ANDROID_PATH, 'res', 'layout', 'toolbar.xml')
     soup = soup = BeautifulSoup(open(toolbar_xml, 'r'),
                                 'xml', from_encoding='utf-8')
-    item = soup.find('org.kiwix.kiwixmobile.AnimatedProgressBar')
+    item = soup.find('org.kiwix.kiwixmobile.views.AnimatedProgressBar')
     item.name = '{}.AnimatedProgressBar'.format(jsdata.get('package'))
     flushxml(soup, 'RelativeLayout', toolbar_xml, head=False)
 

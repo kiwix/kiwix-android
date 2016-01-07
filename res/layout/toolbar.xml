@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/toolbar_layout"
-                android:layout_width="match_parent"
-                android:layout_height="?actionBarSize">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar_layout"
+    android:layout_width="match_parent"
+    android:layout_height="?actionBarSize">
 
-    <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            android:background="?colorPrimaryDark"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+  <android.support.v7.widget.Toolbar
+      android:id="@+id/toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="?actionBarSize"
+      android:background="?colorPrimaryDark"
+      app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+      app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-    <org.kiwix.kiwixmobile.AnimatedProgressBar
-            android:id="@+id/progress_view"
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_alignParentBottom="true"
-            app:backgroundColor="@color/primary_dark"
-            app:bidirectionalAnimate="false"
-            app:progressColor="@color/accent"/>
+  <org.kiwix.kiwixmobile.views.AnimatedProgressBar
+      android:id="@+id/progress_view"
+      android:layout_width="match_parent"
+      android:layout_height="3dp"
+      android:layout_alignParentBottom="true"
+      app:backgroundColor="@color/primary_dark"
+      app:bidirectionalAnimate="false"
+      app:progressColor="@color/accent"/>
 
 </RelativeLayout>

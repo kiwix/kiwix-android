@@ -1,10 +1,10 @@
 {
-    "app_name": "Medical Wikipedia",
-    "package": "org.kiwix.kiwixcustomwikimed",
-    "version_name": "2015-12",
-    "version_code": "4",
-    "zim_file": "customapp/wikimed/content.zim",
-    "embed_zim": false,
-    "ic_launcher": "customapp/wikimed/icon.png",
-    "enforced_lang": "en"
+  "app_name": "Medical Wikipedia",
+  "package": "org.kiwix.kiwixcustomwikimed",
+  "version_name": "2015-12",
+  "version_code": "4",
+  "zim_file": "customapp/wikimed/content.zim",
+  "embed_zim": false,
+  "ic_launcher": "customapp/wikimed/icon.png",
+  "enforced_lang": "en"
 }
