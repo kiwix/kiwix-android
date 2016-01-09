@@ -99,6 +99,8 @@ public class KiwixMobileActivity extends AppCompatActivity
 
   private static final String TAG_CURRENT_ARTICLE = "currentarticle";
 
+  private static final String TAG_CURRENT_POSITION = "currentposition";
+
   private static final String PREF_NIGHTMODE = "pref_nightmode";
 
   private static final String PREF_KIWIX_MOBILE = "kiwix-mobile";
@@ -870,6 +872,7 @@ public class KiwixMobileActivity extends AppCompatActivity
     getCurrentWebView().saveState(outState);
     outState.putString(TAG_CURRENT_FILE, ZimContentProvider.getZimFile());
     outState.putString(TAG_CURRENT_ARTICLE, getCurrentWebView().getUrl());
+    outState.putInt(TAG_CURRENT_POSITION, getCurrentWebView().getScrollY());
   }
 
   @Override
@@ -892,14 +895,14 @@ public class KiwixMobileActivity extends AppCompatActivity
           if (file == null) {
             return;
           }
-          // Create a File from this Uri
-          openZimFile(file, true);
+
           new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
               finish();
-              startActivity(new Intent(KiwixMobileActivity.this,
-                  KiwixMobileActivity.class));
+              Intent newZimFile = new Intent(KiwixMobileActivity.this, KiwixMobileActivity.class);
+              newZimFile.setData(uri);
+              startActivity(newZimFile);
             }
           });
         }
@@ -1027,8 +1030,8 @@ public class KiwixMobileActivity extends AppCompatActivity
         openZimFile(new File(savedInstanceState.getString(TAG_CURRENT_FILE)), false);
       }
       if (savedInstanceState.getString(TAG_CURRENT_ARTICLE) != null) {
-        getCurrentWebView().loadUrl(savedInstanceState.getString
-            (TAG_CURRENT_ARTICLE));
+        getCurrentWebView().loadUrl(savedInstanceState.getString(TAG_CURRENT_ARTICLE));
+        getCurrentWebView().setScrollY(savedInstanceState.getInt(TAG_CURRENT_POSITION));
       }
       getCurrentWebView().restoreState(savedInstanceState);
 
@@ -1041,11 +1044,17 @@ public class KiwixMobileActivity extends AppCompatActivity
     } else {
       SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
       String zimFile = settings.getString(TAG_CURRENT_FILE, null);
+      String zimArticle = settings.getString(TAG_CURRENT_ARTICLE, null);
+      int zimPosition = settings.getInt(TAG_CURRENT_POSITION, 0);
       if (zimFile != null) {
         Log.d(TAG_KIWIX,
-            " Kiwix normal start, zimFile loaded last time -> Open last used zimFile "
-                + zimFile);
+                " Kiwix normal start, zimFile loaded last time -> Open last used zimFile "
+                        + zimFile);
         openZimFile(new File(zimFile), false);
+        if (zimArticle != null) {
+          getCurrentWebView().loadUrl(zimArticle);
+          getCurrentWebView().setScrollY(zimPosition);
+        }
         // Alternative would be to restore webView state. But more effort to implement, and actually
         // fits better normal android behavior if after closing app ("back" button) state is not maintained.
       } else {
@@ -1131,6 +1140,8 @@ public class KiwixMobileActivity extends AppCompatActivity
     SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
     SharedPreferences.Editor editor = settings.edit();
     editor.putString(TAG_CURRENT_FILE, ZimContentProvider.getZimFile());
+    editor.putString(TAG_CURRENT_ARTICLE, getCurrentWebView().getUrl());
+    editor.putInt(TAG_CURRENT_POSITION, getCurrentWebView().getScrollY());
 
     // Commit the edits!
     editor.apply();

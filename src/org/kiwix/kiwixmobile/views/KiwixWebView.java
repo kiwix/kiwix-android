@@ -181,7 +181,12 @@ public class KiwixWebView extends WebView {
   @Override
   protected void onScrollChanged(int l, int t, int oldl, int oldt) {
     super.onScrollChanged(l, t, oldl, oldt);
-    int windowHeight = getMeasuredHeight();
+    int windowHeight;
+    if (getMeasuredHeight() > 0) {
+      windowHeight = getMeasuredHeight();
+    } else {
+      windowHeight = 1;
+    }
     int pages = getContentHeight() / windowHeight;
     int page = t / windowHeight;
 
