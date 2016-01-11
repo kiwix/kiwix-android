@@ -17,7 +17,7 @@ from subprocess import call, check_output
 # target platform to compile for
 # list of available toolchains in <NDK_PATH>/toolchains
 # arm-linux-androideabi, mipsel-linux-android, x86, llvm
-ALL_ARCHS = ['arm-linux-androideabi', 'mipsel-linux-android', 'x86']
+ALL_ARCHS = ['arm-linux-androideabi', 'mipsel-linux-android', 'x86', 'aarch64-linux-android']
 
 
 def find_package():
@@ -132,10 +132,12 @@ PARENT_PATH = os.path.dirname(CURRENT_PATH)
 # different names of folder path for accessing files
 ARCHS_FULL_NAMES = {
     'arm-linux-androideabi': 'arm-linux-androideabi',
+    'aarch64-linux-android': 'aarch64-linux-android',
     'mipsel-linux-android': 'mipsel-linux-android',
     'x86': 'i686-linux-android'}
 ARCHS_SHORT_NAMES = {
     'arm-linux-androideabi': 'armeabi',
+    'aarch64-linux-android' : 'arm64-v8a',
     'mipsel-linux-android': 'mips',
     'x86': 'x86'}
 
