@@ -45,7 +45,7 @@ USAGE = '''Usage:  {arg0} [--option]
 
     --on=ARCH       Disable steps on all archs and cherry pick the ones wanted.
                     Multiple --on=ARCH can be specified.
-                    ARCH in 'armeabi', 'mips', 'x86'. '''
+                    ARCH in 'armeabi', 'mips', 'x86', 'arm64-v8a'. '''
 
 
 def init_with_args(args):
@@ -56,7 +56,7 @@ def init_with_args(args):
 
     # default is executing all the steps
     create_toolchain = compile_liblzma = compile_libicu = \
-        compile_libzim = compile_libkiwix = strip_libkiwix = \
+        compile_libzim = compile_libkiwix = compile_libxapian = strip_libkiwix = \
         compile_apk = locales_txt = clean = True
     archs = ALL_ARCHS
 
@@ -84,7 +84,7 @@ def init_with_args(args):
                                   if rarch == v][0])
                 except:
                     pass
-                doptions.pop(idx)
+                #doptions.pop(idx)
         # recreate options list from other items
         options = [v for v in doptions.values() if not v.startswith('--on=')]
 
@@ -92,7 +92,7 @@ def init_with_args(args):
         # we received options.
         # consider we only want the specified steps
         create_toolchain = compile_liblzma = compile_libicu = compile_libzim = \
-            compile_libkiwix = strip_libkiwix = \
+            compile_libkiwix = compile_libxapian = strip_libkiwix = \
             compile_apk = locales_txt = clean = False
 
         for option in options:
@@ -106,6 +106,8 @@ def init_with_args(args):
                 compile_libzim = True
             if 'kiwix' in option:
                 compile_libkiwix = True
+            if 'xapian' in option:
+                compile_libxapian = True
             if 'strip' in option:
                 strip_libkiwix = True
             if 'apk' in option:
@@ -116,7 +118,7 @@ def init_with_args(args):
                 clean = True
 
     return (create_toolchain, compile_liblzma, compile_libicu, compile_libzim,
-            compile_libkiwix, strip_libkiwix, compile_apk, locales_txt,
+            compile_libkiwix, compile_libxapian, strip_libkiwix, compile_apk, locales_txt,
             clean, archs)
 
 # store the OS's environment PATH as we'll mess with it
@@ -148,13 +150,13 @@ SYSTEMS = {'Linux': 'linux', 'Darwin': 'mac'}
 
 # find out what to execute based on command line arguments
 CREATE_TOOLCHAIN, COMPILE_LIBLZMA, COMPILE_LIBICU, COMPILE_LIBZIM, \
-    COMPILE_LIBKIWIX, STRIP_LIBKIWIX, COMPILE_APK, \
+    COMPILE_LIBKIWIX, COMPILE_LIBXAPIAN, STRIP_LIBKIWIX, COMPILE_APK, \
     LOCALES_TXT, CLEAN, ARCHS = init_with_args(sys.argv)
 
 # compiler version to use
 # list of available toolchains in <NDK_PATH>/toolchains
 # 4.4.3, 4.6, 4.7, clang3.1, clang3.2
-COMPILER_VERSION = '4.8'
+COMPILER_VERSION = '4.9'
 
 # location of Android NDK
 NDK_PATH = os.environ.get('NDK_PATH',
@@ -320,6 +322,13 @@ for arch in ARCHS:
                                                'arch_full': arch_full}
         syscall('ln -sf %(src)s %(dest)s/'
                 % {'src': ln_src, 'dest': dest})
+
+        if not os.path.exists(os.path.join(platform, arch_full, 'bin', 'gcc')):
+            for target in ["gcc", "g++", "c++"]:
+                syscall('ln -sf %(src)s %(dest)s'
+                    % {'src': os.path.join(platform, 'bin', '%s-%s'
+                    % (arch_full, target)), 'dest': os.path.join(platform,
+                    arch_full, 'bin', target)})
 
     # check that the step went well
     if CREATE_TOOLCHAIN or COMPILE_LIBLZMA or COMPILE_LIBZIM or \
