@@ -36,6 +36,8 @@ USAGE = '''Usage:  {arg0} [--option]
     --lzma          Compile liblzma
     --icu           Compile libicu
     --zim           Compile libzim
+    --xapian        Compile libxapian
+    --glassify      Compile glassify binary
     --kiwix         Compile libkiwix
     --strip         Strip libkiwix.so
     --locales       Create the locales.txt file
@@ -59,6 +61,7 @@ def init_with_args(args):
     create_toolchain = compile_liblzma = compile_libicu = \
         compile_libzim = compile_libkiwix = compile_libxapian = strip_libkiwix = \
         compile_apk = locales_txt = clean = True
+    compile_glassify = False # dont want to compile this everytime
     archs = ALL_ARCHS
 
     options = [a.lower() for a in args[1:]]
@@ -94,7 +97,7 @@ def init_with_args(args):
         # consider we only want the specified steps
         create_toolchain = compile_liblzma = compile_libicu = compile_libzim = \
             compile_libkiwix = compile_libxapian = strip_libkiwix = \
-            compile_apk = locales_txt = clean = False
+            compile_apk = locales_txt = clean = compile_glassify = False
 
         for option in options:
             if 'toolchain' in option:
@@ -111,6 +114,8 @@ def init_with_args(args):
                 compile_libxapian = True
             if 'strip' in option:
                 strip_libkiwix = True
+            if 'glassify' in option:
+                compile_glassify = True
             if 'apk' in option:
                 compile_apk = True
             if 'locales' in option:
@@ -119,7 +124,7 @@ def init_with_args(args):
                 clean = True
 
     return (create_toolchain, compile_liblzma, compile_libicu, compile_libzim,
-            compile_libkiwix, compile_libxapian, strip_libkiwix, compile_apk, locales_txt,
+            compile_libkiwix, compile_libxapian, strip_libkiwix, compile_apk, compile_glassify, locales_txt,
             clean, archs)
 
 # store the OS's environment PATH as we'll mess with it
@@ -152,7 +157,7 @@ SYSTEMS = {'Linux': 'linux', 'Darwin': 'mac'}
 # find out what to execute based on command line arguments
 CREATE_TOOLCHAIN, COMPILE_LIBLZMA, COMPILE_LIBICU, COMPILE_LIBZIM, \
     COMPILE_LIBKIWIX, COMPILE_LIBXAPIAN, STRIP_LIBKIWIX, COMPILE_APK, \
-    LOCALES_TXT, CLEAN, ARCHS = init_with_args(sys.argv)
+    COMPILE_GLASSIFY, LOCALES_TXT, CLEAN, ARCHS = init_with_args(sys.argv)
 
 # compiler version to use
 # list of available toolchains in <NDK_PATH>/toolchains
@@ -505,6 +510,20 @@ for arch in ARCHS:
             failed_on_step('The libxapian.a archive file has not been created '
                            'and is not present.')
 
+    # recompile xapian for build system arch to compile glassify
+    if COMPILE_GLASSIFY:
+        change_env(ORIGINAL_ENVIRON)
+        os.chdir(os.path.join(curdir, '..', 'src', 'dependencies', 'xapian-core-1.3.4'))
+        syscall('make clean')
+        syscall('./configure')
+        syscall('make')
+        os.chdir(curdir)
+        syscall('g++ glassify.cc -o glassify.o -I../src/dependencies/xapian-core-1.3.4/include')
+        syscall('ld glassify.o ../src/dependencies/xapian-core-1.3.4/.libs/libxapian-1.3.a -o glassify')
+
+        change_env(new_environ)
+        change_env(OPTIMIZATION_ENV)
+
     # create libzim.a
     os.chdir(curdir)
     platform_includes = ['%(platform)s/include/c++/%(gccver)s/'
@@ -597,8 +616,6 @@ for arch in ARCHS:
                 'kiwix.o reader.o stringTools.o pathTools.o '
                 '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/crtbegin.o '
                 '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/crtend.o '
-                '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/libuuid.a '
-                '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/libz.a '
                 '%(platform)s/lib/libzim.a %(platform)s/lib/liblzma.a '
                 # '%(platform)s/lib/libicutu.a '
                 # '%(platform)s/lib/libicuio.a '
@@ -608,6 +625,8 @@ for arch in ARCHS:
                 # '%(platform)s/lib/libicui18n.a '
                 '%(platform)s/lib/libicudata.a '
                 '%(platform)s/lib/libxapian.a '
+                '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/libuuid.a '
+                '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/libz.a '
                 '-L%(platform)s/%(arch_full)s/lib '
                 '%(NDK_PATH)s/sources/cxx-stl/gnu-libstdc++/%(gccver)s'
                 '/libs/%(arch_short)s/libgnustl_static.a '
