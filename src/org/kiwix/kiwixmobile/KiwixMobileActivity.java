@@ -415,8 +415,8 @@ public class KiwixMobileActivity extends AppCompatActivity
       case R.id.menu_searchintext:
         mCompatCallback.setActive();
         mCompatCallback.setWebView(webView);
-        mCompatCallback.showSoftInput();
         startSupportActionMode(mCompatCallback);
+        mCompatCallback.showSoftInput();
         break;
 
       case R.id.menu_bookmarks:
