@@ -413,8 +413,14 @@ for arch in ARCHS:
         os.chdir(os.path.join(curdir, '../src', 'dependencies'))
         if not os.path.exists("e2fsprogs-1.42"):
             syscall('make e2fsprogs-1.42')
-        if not os.path.exists("xapian-core-1.2.3"):
-            syscall('make xapian-core-1.2.3')
+        if not os.path.exists("xapian-core-1.3.4"):
+            print("Fetching recent xapian...")
+            urllib.urlretrieve('http://oligarchy.co.uk/xapian/1.3.4/xapian-core-1.3.4.tar.xz', 'xapian-core-1.3.4.tar.xz') # for glass support
+            change_env(ORIGINAL_ENVIRON)
+            syscall('tar xvf xapian-core-1.3.4.tar.xz')
+            change_env(new_environ)
+            change_env(OPTIMIZATION_ENV)
+
         if not os.path.exists("zlib-1.2.8"):
             syscall('make zlib-1.2.8')
         os.chdir('zlib-1.2.8')
@@ -424,8 +430,11 @@ for arch in ARCHS:
         syscall('make')
         shutil.copy('libz.a', os.path.join(platform, 'lib', 'gcc', arch_full, COMPILER_VERSION, 'libz.a'))
         os.chdir('../e2fsprogs-1.42')
-        urllib.urlretrieve('http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD', 'config/config.guess')
-        urllib.urlretrieve('http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD', 'config/config.sub')
+        print("Fetching latest compile.sub...")
+        shutil.copy(os.path.join("..", "xapian-core-1.3.4", "config.guess"), os.path.join("config", "config.guess"))
+        shutil.copy(os.path.join("..", "xapian-core-1.3.4", "config.sub"), os.path.join("config", "config.sub"))
+#        urllib.urlretrieve('http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD', 'config/config.guess')
+#        urllib.urlretrieve('http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD', 'config/config.sub')
         if os.path.exists("Makefile"):
             syscall('make clean')
         syscall('./configure --host=%s --prefix=%s' % (arch_full, platform))
@@ -446,11 +455,10 @@ for arch in ARCHS:
         shutil.copy('uuid.h', os.path.join(platform, 'include', 'c++', COMPILER_VERSION, 'uuid', 'uuid.h'))
         shutil.copy('libuuid.a', os.path.join(platform, 'lib', 'gcc', arch_full, COMPILER_VERSION, 'libuuid.a'))
         shutil.copy('libuuid.a', os.path.join(platform, 'lib', 'libuuid.a'))
-        os.chdir('../../../xapian-core-1.2.3')
+        os.chdir('../../../xapian-core-1.3.4')
         if os.path.exists("Makefile"):
             syscall('make clean')
-        shutil.copy(os.path.join('..', 'e2fsprogs-1.42', 'config', 'config.sub'), 'config.sub')
-        shutil.copy(os.path.join('..', 'e2fsprogs-1.42', 'config', 'config.guess'), 'config.guess')
+
         syscall('./configure --host=%s --disable-shared --enable-largefile' % arch_full)
         f = open("config.h", "r")
         old_contents = f.readlines()
@@ -468,8 +476,28 @@ for arch in ARCHS:
         f.write(contents)
         f.close()
 
+        f = open(os.path.join(platform, "sysroot", "usr", "include", "fcntl.h"), "r")
+        old_contents = f.readlines()
+        f.close()
+        contents = []
+        i = 0
+        while i < len(old_contents):
+            if not "__creat_too_many_args" in old_contents[i]:
+                contents.append(old_contents[i])
+            i = i + 1
+        f = open(os.path.join(platform, "sysroot", "usr", "include", "fcntl.h"), "w")
+        contents = "".join(contents)
+        f.write(contents)
+        f.close()
+
+        try:
+            shutil.copytree(os.path.join('include', 'xapian'), os.path.join(platform, 'include', 'c++', COMPILER_VERSION, 'xapian'))
+            shutil.copy(os.path.join('include', 'xapian.h'), os.path.join(platform, 'include', 'c++', COMPILER_VERSION, 'xapian.h'))
+        except:
+            pass
+
         syscall('make')
-        shutil.copy(os.path.join('.libs', 'libxapian.a'), os.path.join(platform, 'lib', 'libxapian.a'))
+        shutil.copy(os.path.join(curdir, '..', 'src', 'dependencies', 'xapian-core-1.3.4', '.libs', 'libxapian-1.3.a'), os.path.join(platform, 'lib', 'libxapian.a'))
 
     # check that the step went well
     if COMPILE_LIBXAPIAN or COMPILE_LIBKIWIX:
