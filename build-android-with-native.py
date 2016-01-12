@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 ''' Compiles Kiwix dependencies for Android
 
@@ -11,6 +11,7 @@ import re
 import sys
 import copy
 import shutil
+import urllib
 from xml.dom.minidom import parse
 from subprocess import call, check_output
 
@@ -406,6 +407,62 @@ for arch in ARCHS:
                            "has not been created for {} and is not present."
                            .format(platform))
 
+    # compile xapian
+    if COMPILE_LIBXAPIAN:
+        # fetch xapian, e2fsprogs, zlib
+        os.chdir(os.path.join(curdir, '../src', 'dependencies'))
+        if not os.path.exists("e2fsprogs-1.42"):
+            syscall('make e2fsprogs-1.42')
+        if not os.path.exists("xapian-core-1.2.3"):
+            syscall('make xapian-core-1.2.3')
+        if not os.path.exists("zlib-1.2.8"):
+            syscall('make zlib-1.2.8')
+        os.chdir('zlib-1.2.8')
+        if os.path.exists("Makefile"):
+            syscall('make clean')
+        syscall('./configure')
+        syscall('make')
+        shutil.copy('libz.a', os.path.join(platform, 'lib', 'libz.a'))
+        os.chdir('../e2fsprogs-1.42')
+        urllib.urlretrieve('http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD', 'config/config.guess')
+        urllib.urlretrieve('http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD', 'config/config.sub')
+        if os.path.exists("Makefile"):
+            syscall('make clean')
+        syscall('./configure --host=%s --prefix=%s' % (arch_full, platform))
+        os.chdir('lib/uuid')
+        syscall('make')
+        shutil.copy('uuid.h', os.path.join(platform, 'include', 'c++', COMPILER_VERSION, 'uuid.h'))
+        shutil.copy('libuuid.a', os.path.join(platform, 'lib', 'gcc', arch_full, COMPILER_VERSION, 'libz.a'))
+        shutil.copy('libuuid.a', os.path.join(platform, 'lib', 'libuuid.a'))
+        os.chdir('../../../xapian-core-1.2.3')
+        if os.path.exists("Makefile"):
+            syscall('make clean')
+        shutil.copy(os.path.join('..', 'e2fsprogs-1.42', 'config', 'config.sub'), 'config.sub')
+        shutil.copy(os.path.join('..', 'e2fsprogs-1.42', 'config', 'config.guess'), 'config.guess')
+        syscall('./configure --host=%s --disable-shared --enable-largefile' % arch_full)
+        f = open("config.h", "r")
+        old_contents = f.readlines()
+        f.close()
+        contents = []
+        while i < len(old_contents):
+            if "HAVE_DECL_SYS_NERR" in old_contents[i]:
+                contents.append("#define HAVE_DECL_SYS_NERR 0\n")
+            else:
+                contents.append(old_contents[i])
+        f = open("config.h", "w")
+        contents = "".join(contents)
+        f.write(contents)
+        f.close()
+
+        syscall('make')
+        shutil.copy(os.path.join('.libs', 'libxapian.a'), os.path.join(platform, 'lib', 'libxapian.a'))
+
+    # check that the step went well
+    if COMPILE_LIBXAPIAN or COMPILE_LIBKIWIX:
+        if not os.path.exists(os.path.join(platform, 'lib', 'libxapian.a')):
+            failed_on_step('The libxapian.a archive file has not been created '
+                           'and is not present.')
+
     # create libzim.a
     os.chdir(curdir)
     platform_includes = ['%(platform)s/include/c++/%(gccver)s/'
@@ -498,6 +555,7 @@ for arch in ARCHS:
                 'kiwix.o reader.o stringTools.o pathTools.o '
                 '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/crtbegin.o '
                 '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/crtend.o '
+                '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/libuuid.a '
                 '%(platform)s/lib/libzim.a %(platform)s/lib/liblzma.a '
                 # '%(platform)s/lib/libicutu.a '
                 # '%(platform)s/lib/libicuio.a '
@@ -506,6 +564,8 @@ for arch in ARCHS:
                 # '%(platform)s/lib/libiculx.a '
                 # '%(platform)s/lib/libicui18n.a '
                 '%(platform)s/lib/libicudata.a '
+                '%(platform)s/lib/libz.a '
+                '%(platform)s/lib/libxapian.a '
                 '-L%(platform)s/%(arch_full)s/lib '
                 '%(NDK_PATH)s/sources/cxx-stl/gnu-libstdc++/%(gccver)s'
                 '/libs/%(arch_short)s/libgnustl_static.a '
