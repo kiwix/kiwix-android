@@ -422,17 +422,29 @@ for arch in ARCHS:
             syscall('make clean')
         syscall('./configure')
         syscall('make')
-        shutil.copy('libz.a', os.path.join(platform, 'lib', 'libz.a'))
+        shutil.copy('libz.a', os.path.join(platform, 'lib', 'gcc', arch_full, COMPILER_VERSION, 'libz.a'))
         os.chdir('../e2fsprogs-1.42')
         urllib.urlretrieve('http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD', 'config/config.guess')
         urllib.urlretrieve('http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD', 'config/config.sub')
         if os.path.exists("Makefile"):
             syscall('make clean')
         syscall('./configure --host=%s --prefix=%s' % (arch_full, platform))
+        os.chdir('util')
+        change_env(ORIGINAL_ENVIRON)
+        syscall('gcc subst.c -o subst')
+
+        change_env(new_environ)
+        change_env(OPTIMIZATION_ENV)
+
+        os.chdir('..')
         os.chdir('lib/uuid')
         syscall('make')
-        shutil.copy('uuid.h', os.path.join(platform, 'include', 'c++', COMPILER_VERSION, 'uuid.h'))
-        shutil.copy('libuuid.a', os.path.join(platform, 'lib', 'gcc', arch_full, COMPILER_VERSION, 'libz.a'))
+        try:
+            os.makedirs(os.path.join(platform, 'include', 'c++', COMPILER_VERSION, 'uuid'))
+        except:
+            pass
+        shutil.copy('uuid.h', os.path.join(platform, 'include', 'c++', COMPILER_VERSION, 'uuid', 'uuid.h'))
+        shutil.copy('libuuid.a', os.path.join(platform, 'lib', 'gcc', arch_full, COMPILER_VERSION, 'libuuid.a'))
         shutil.copy('libuuid.a', os.path.join(platform, 'lib', 'libuuid.a'))
         os.chdir('../../../xapian-core-1.2.3')
         if os.path.exists("Makefile"):
@@ -444,11 +456,13 @@ for arch in ARCHS:
         old_contents = f.readlines()
         f.close()
         contents = []
+        i = 0
         while i < len(old_contents):
             if "HAVE_DECL_SYS_NERR" in old_contents[i]:
                 contents.append("#define HAVE_DECL_SYS_NERR 0\n")
             else:
                 contents.append(old_contents[i])
+            i = i + 1
         f = open("config.h", "w")
         contents = "".join(contents)
         f.write(contents)
@@ -556,6 +570,7 @@ for arch in ARCHS:
                 '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/crtbegin.o '
                 '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/crtend.o '
                 '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/libuuid.a '
+                '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/libz.a '
                 '%(platform)s/lib/libzim.a %(platform)s/lib/liblzma.a '
                 # '%(platform)s/lib/libicutu.a '
                 # '%(platform)s/lib/libicuio.a '
@@ -564,7 +579,6 @@ for arch in ARCHS:
                 # '%(platform)s/lib/libiculx.a '
                 # '%(platform)s/lib/libicui18n.a '
                 '%(platform)s/lib/libicudata.a '
-                '%(platform)s/lib/libz.a '
                 '%(platform)s/lib/libxapian.a '
                 '-L%(platform)s/%(arch_full)s/lib '
                 '%(NDK_PATH)s/sources/cxx-stl/gnu-libstdc++/%(gccver)s'
