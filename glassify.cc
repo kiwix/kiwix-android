@@ -1,23 +1,27 @@
 #include <iostream>
 #include <string>
 #include <xapian.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 using namespace std;
 
 void compact(const char* in, const char* out) {
-    Xapian::Database indb(get_database(in));
-    string outdbpath = get_named_writable_database_path(out);
-    int fd = open(outdbpath.c_str(), O_CREAT|O_RDWR, 0666);
+    Xapian::Database indb(in);
+    int fd = open(out, O_CREAT|O_RDWR, 0666);
     if (fd != -1) {
         indb.compact(fd);
-        if (close(fd) != -1 && errno == EBADF) {
-            cout << "Done!" << endl;
-            return;
-        }
+        close(fd);
+        cout << "Done!" << endl;
+        return;
     }
     cout << "Some error happened..." << endl;
 }
 
 int main(int argc, char** argv) {
+    if (argc != 3) {
+        cout << "Wrong number of arguments!" << endl << "\t" << argv[0] << " [input folder] [output glassdb]" << endl;
+    }
+    compact(argv[1], argv[2]);
     return 0;
 }
