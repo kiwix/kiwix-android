@@ -297,6 +297,10 @@ for arch in ARCHS:
     platform = os.path.join(PLATFORM_PREFIX, arch)
 
     # prepare the toolchain
+    if "aarch64" in arch_full and "14" in NDK_PLATFORM:
+        NDK_PLATFORM = "android-21"
+    else:
+        NDK_PLATFORM = os.environ.get('NDK_PLATFORM', 'android-14')
     toolchain = '%(arch)s-%(version)s' % {'arch': arch,
                                           'version': COMPILER_VERSION}
     toolchain_cmd = ('%(NDK_PATH)s/build/tools/make-standalone-toolchain.sh '
