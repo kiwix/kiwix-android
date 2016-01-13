@@ -510,20 +510,6 @@ for arch in ARCHS:
             failed_on_step('The libxapian.a archive file has not been created '
                            'and is not present.')
 
-    # recompile xapian for build system arch to compile glassify
-    if COMPILE_GLASSIFY:
-        change_env(ORIGINAL_ENVIRON)
-        os.chdir(os.path.join(curdir, '..', 'src', 'dependencies', 'xapian-core-1.3.4'))
-        syscall('make clean')
-        syscall('./configure')
-        syscall('make')
-        os.chdir(curdir)
-        syscall('g++ glassify.cc -o glassify.o -I../src/dependencies/xapian-core-1.3.4/include')
-        syscall('ld glassify.o ../src/dependencies/xapian-core-1.3.4/.libs/libxapian-1.3.a -o glassify')
-
-        change_env(new_environ)
-        change_env(OPTIMIZATION_ENV)
-
     # create libzim.a
     os.chdir(curdir)
     platform_includes = ['%(platform)s/include/c++/%(gccver)s/'
@@ -670,9 +656,21 @@ for arch in ARCHS:
                    'arch_full': arch_full,
                    'arch_short': arch_short,
                    'curdir': curdir})
+    if COMPILE_GLASSIFY:
+        os.chdir(curdir)
+        syscall('g++ glassify.cc ../src/dependencies/xapian-core-1.3.4/.libs/libxapian-1.3.a -o glassify_%s -lz -luuid -lrt -I../src/dependencies/xapian-core-1.3.4/include' % arch_short)
 
     os.chdir(curdir)
     change_env(ORIGINAL_ENVIRON)
+
+# recompile xapian for build system arch to compile glassify
+if COMPILE_GLASSIFY:
+    os.chdir(os.path.join(curdir, '..', 'src', 'dependencies', 'xapian-core-1.3.4'))
+    syscall('make clean')
+    syscall('./configure')
+    syscall('make')
+    os.chdir(curdir)
+    syscall('g++ glassify.cc ../src/dependencies/xapian-core-1.3.4/.libs/libxapian-1.3.a -o glassify -lz -luuid -lrt -I../src/dependencies/xapian-core-1.3.4/include')
 
 if LOCALES_TXT:
 
