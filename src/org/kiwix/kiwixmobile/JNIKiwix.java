@@ -64,6 +64,10 @@ public class JNIKiwix {
   public native boolean getRandomPage(JNIKiwixString url);
 
   public native void setDataDirectory(String icuDataDir);
+
+  public static native String indexedQuery(String db, String query);
+
+  public static native String indexedQueryPartial(String db, String query);
 }
 
 class JNIKiwixString {
