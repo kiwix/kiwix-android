@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 ''' Compiles Kiwix dependencies for Android
 
@@ -11,13 +11,14 @@ import re
 import sys
 import copy
 import shutil
+import urllib
 from xml.dom.minidom import parse
 from subprocess import call, check_output
 
 # target platform to compile for
 # list of available toolchains in <NDK_PATH>/toolchains
 # arm-linux-androideabi, mipsel-linux-android, x86, llvm
-ALL_ARCHS = ['arm-linux-androideabi', 'mipsel-linux-android', 'x86']
+ALL_ARCHS = ['arm-linux-androideabi', 'mipsel-linux-android', 'x86', 'aarch64-linux-android']
 
 
 def find_package():
@@ -35,6 +36,8 @@ USAGE = '''Usage:  {arg0} [--option]
     --lzma          Compile liblzma
     --icu           Compile libicu
     --zim           Compile libzim
+    --xapian        Compile libxapian
+    --glassify      Compile glassify binary
     --kiwix         Compile libkiwix
     --strip         Strip libkiwix.so
     --locales       Create the locales.txt file
@@ -45,7 +48,7 @@ USAGE = '''Usage:  {arg0} [--option]
 
     --on=ARCH       Disable steps on all archs and cherry pick the ones wanted.
                     Multiple --on=ARCH can be specified.
-                    ARCH in 'armeabi', 'mips', 'x86'. '''
+                    ARCH in 'armeabi', 'mips', 'x86', 'arm64-v8a'. '''
 
 
 def init_with_args(args):
@@ -56,8 +59,9 @@ def init_with_args(args):
 
     # default is executing all the steps
     create_toolchain = compile_liblzma = compile_libicu = \
-        compile_libzim = compile_libkiwix = strip_libkiwix = \
+        compile_libzim = compile_libkiwix = compile_libxapian = strip_libkiwix = \
         compile_apk = locales_txt = clean = True
+    compile_glassify = False # dont want to compile this everytime
     archs = ALL_ARCHS
 
     options = [a.lower() for a in args[1:]]
@@ -84,7 +88,7 @@ def init_with_args(args):
                                   if rarch == v][0])
                 except:
                     pass
-                doptions.pop(idx)
+                #doptions.pop(idx)
         # recreate options list from other items
         options = [v for v in doptions.values() if not v.startswith('--on=')]
 
@@ -92,8 +96,8 @@ def init_with_args(args):
         # we received options.
         # consider we only want the specified steps
         create_toolchain = compile_liblzma = compile_libicu = compile_libzim = \
-            compile_libkiwix = strip_libkiwix = \
-            compile_apk = locales_txt = clean = False
+            compile_libkiwix = compile_libxapian = strip_libkiwix = \
+            compile_apk = locales_txt = clean = compile_glassify = False
 
         for option in options:
             if 'toolchain' in option:
@@ -106,8 +110,12 @@ def init_with_args(args):
                 compile_libzim = True
             if 'kiwix' in option:
                 compile_libkiwix = True
+            if 'xapian' in option:
+                compile_libxapian = True
             if 'strip' in option:
                 strip_libkiwix = True
+            if 'glassify' in option:
+                compile_glassify = True
             if 'apk' in option:
                 compile_apk = True
             if 'locales' in option:
@@ -116,7 +124,7 @@ def init_with_args(args):
                 clean = True
 
     return (create_toolchain, compile_liblzma, compile_libicu, compile_libzim,
-            compile_libkiwix, strip_libkiwix, compile_apk, locales_txt,
+            compile_libkiwix, compile_libxapian, strip_libkiwix, compile_apk, compile_glassify, locales_txt,
             clean, archs)
 
 # store the OS's environment PATH as we'll mess with it
@@ -132,10 +140,12 @@ PARENT_PATH = os.path.dirname(CURRENT_PATH)
 # different names of folder path for accessing files
 ARCHS_FULL_NAMES = {
     'arm-linux-androideabi': 'arm-linux-androideabi',
+    'aarch64-linux-android': 'aarch64-linux-android',
     'mipsel-linux-android': 'mipsel-linux-android',
     'x86': 'i686-linux-android'}
 ARCHS_SHORT_NAMES = {
     'arm-linux-androideabi': 'armeabi',
+    'aarch64-linux-android' : 'arm64-v8a',
     'mipsel-linux-android': 'mips',
     'x86': 'x86'}
 
@@ -146,13 +156,13 @@ SYSTEMS = {'Linux': 'linux', 'Darwin': 'mac'}
 
 # find out what to execute based on command line arguments
 CREATE_TOOLCHAIN, COMPILE_LIBLZMA, COMPILE_LIBICU, COMPILE_LIBZIM, \
-    COMPILE_LIBKIWIX, STRIP_LIBKIWIX, COMPILE_APK, \
-    LOCALES_TXT, CLEAN, ARCHS = init_with_args(sys.argv)
+    COMPILE_LIBKIWIX, COMPILE_LIBXAPIAN, STRIP_LIBKIWIX, COMPILE_APK, \
+    COMPILE_GLASSIFY, LOCALES_TXT, CLEAN, ARCHS = init_with_args(sys.argv)
 
 # compiler version to use
 # list of available toolchains in <NDK_PATH>/toolchains
 # 4.4.3, 4.6, 4.7, clang3.1, clang3.2
-COMPILER_VERSION = '4.8'
+COMPILER_VERSION = '4.9'
 
 # location of Android NDK
 NDK_PATH = os.environ.get('NDK_PATH',
@@ -287,6 +297,10 @@ for arch in ARCHS:
     platform = os.path.join(PLATFORM_PREFIX, arch)
 
     # prepare the toolchain
+    if "aarch64" in arch_full and "14" in NDK_PLATFORM:
+        NDK_PLATFORM = "android-21"
+    else:
+        NDK_PLATFORM = os.environ.get('NDK_PLATFORM', 'android-14')
     toolchain = '%(arch)s-%(version)s' % {'arch': arch,
                                           'version': COMPILER_VERSION}
     toolchain_cmd = ('%(NDK_PATH)s/build/tools/make-standalone-toolchain.sh '
@@ -318,6 +332,13 @@ for arch in ARCHS:
                                                'arch_full': arch_full}
         syscall('ln -sf %(src)s %(dest)s/'
                 % {'src': ln_src, 'dest': dest})
+
+        if not os.path.exists(os.path.join(platform, arch_full, 'bin', 'gcc')):
+            for target in ["gcc", "g++", "c++"]:
+                syscall('ln -sf %(src)s %(dest)s'
+                    % {'src': os.path.join(platform, 'bin', '%s-%s'
+                    % (arch_full, target)), 'dest': os.path.join(platform,
+                    arch_full, 'bin', target)})
 
     # check that the step went well
     if CREATE_TOOLCHAIN or COMPILE_LIBLZMA or COMPILE_LIBZIM or \
@@ -394,6 +415,104 @@ for arch in ARCHS:
             failed_on_step("The libicu.a archive file "
                            "has not been created for {} and is not present."
                            .format(platform))
+
+    # compile xapian
+    if COMPILE_LIBXAPIAN:
+        # fetch xapian, e2fsprogs, zlib
+        os.chdir(os.path.join(curdir, '../src', 'dependencies'))
+        if not os.path.exists("e2fsprogs-1.42"):
+            syscall('make e2fsprogs-1.42')
+        if not os.path.exists("xapian-core-1.3.4"):
+            print("Fetching recent xapian...")
+            urllib.urlretrieve('http://oligarchy.co.uk/xapian/1.3.4/xapian-core-1.3.4.tar.xz', 'xapian-core-1.3.4.tar.xz') # for glass support
+            change_env(ORIGINAL_ENVIRON)
+            syscall('tar xvf xapian-core-1.3.4.tar.xz')
+            change_env(new_environ)
+            change_env(OPTIMIZATION_ENV)
+
+        if not os.path.exists("zlib-1.2.8"):
+            syscall('make zlib-1.2.8')
+        os.chdir('zlib-1.2.8')
+        if os.path.exists("Makefile"):
+            syscall('make clean')
+        syscall('./configure')
+        syscall('make')
+        shutil.copy('libz.a', os.path.join(platform, 'lib', 'gcc', arch_full, COMPILER_VERSION, 'libz.a'))
+        os.chdir('../e2fsprogs-1.42')
+        print("Fetching latest compile.sub...")
+        shutil.copy(os.path.join("..", "xapian-core-1.3.4", "config.guess"), os.path.join("config", "config.guess"))
+        shutil.copy(os.path.join("..", "xapian-core-1.3.4", "config.sub"), os.path.join("config", "config.sub"))
+#        urllib.urlretrieve('http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD', 'config/config.guess')
+#        urllib.urlretrieve('http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD', 'config/config.sub')
+        if os.path.exists("Makefile"):
+            syscall('make clean')
+        syscall('./configure --host=%s --prefix=%s' % (arch_full, platform))
+        os.chdir('util')
+        change_env(ORIGINAL_ENVIRON)
+        syscall('gcc subst.c -o subst')
+
+        change_env(new_environ)
+        change_env(OPTIMIZATION_ENV)
+
+        os.chdir('..')
+        os.chdir('lib/uuid')
+        syscall('make')
+        try:
+            os.makedirs(os.path.join(platform, 'include', 'c++', COMPILER_VERSION, 'uuid'))
+        except:
+            pass
+        shutil.copy('uuid.h', os.path.join(platform, 'include', 'c++', COMPILER_VERSION, 'uuid', 'uuid.h'))
+        shutil.copy('libuuid.a', os.path.join(platform, 'lib', 'gcc', arch_full, COMPILER_VERSION, 'libuuid.a'))
+        shutil.copy('libuuid.a', os.path.join(platform, 'lib', 'libuuid.a'))
+        os.chdir('../../../xapian-core-1.3.4')
+        if os.path.exists("Makefile"):
+            syscall('make clean')
+
+        syscall('./configure --host=%s --disable-shared --enable-largefile' % arch_full)
+        f = open("config.h", "r")
+        old_contents = f.readlines()
+        f.close()
+        contents = []
+        i = 0
+        while i < len(old_contents):
+            if "HAVE_DECL_SYS_NERR" in old_contents[i]:
+                contents.append("#define HAVE_DECL_SYS_NERR 0\n")
+            else:
+                contents.append(old_contents[i])
+            i = i + 1
+        f = open("config.h", "w")
+        contents = "".join(contents)
+        f.write(contents)
+        f.close()
+
+        f = open(os.path.join(platform, "sysroot", "usr", "include", "fcntl.h"), "r")
+        old_contents = f.readlines()
+        f.close()
+        contents = []
+        i = 0
+        while i < len(old_contents):
+            if not "__creat_too_many_args" in old_contents[i]:
+                contents.append(old_contents[i])
+            i = i + 1
+        f = open(os.path.join(platform, "sysroot", "usr", "include", "fcntl.h"), "w")
+        contents = "".join(contents)
+        f.write(contents)
+        f.close()
+
+        try:
+            shutil.copytree(os.path.join('include', 'xapian'), os.path.join(platform, 'include', 'c++', COMPILER_VERSION, 'xapian'))
+            shutil.copy(os.path.join('include', 'xapian.h'), os.path.join(platform, 'include', 'c++', COMPILER_VERSION, 'xapian.h'))
+        except:
+            pass
+
+        syscall('make')
+        shutil.copy(os.path.join(curdir, '..', 'src', 'dependencies', 'xapian-core-1.3.4', '.libs', 'libxapian-1.3.a'), os.path.join(platform, 'lib', 'libxapian.a'))
+
+    # check that the step went well
+    if COMPILE_LIBXAPIAN or COMPILE_LIBKIWIX:
+        if not os.path.exists(os.path.join(platform, 'lib', 'libxapian.a')):
+            failed_on_step('The libxapian.a archive file has not been created '
+                           'and is not present.')
 
     # create libzim.a
     os.chdir(curdir)
@@ -495,6 +614,9 @@ for arch in ARCHS:
                 # '%(platform)s/lib/libiculx.a '
                 # '%(platform)s/lib/libicui18n.a '
                 '%(platform)s/lib/libicudata.a '
+                '%(platform)s/lib/libxapian.a '
+                '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/libuuid.a '
+                '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/libz.a '
                 '-L%(platform)s/%(arch_full)s/lib '
                 '%(NDK_PATH)s/sources/cxx-stl/gnu-libstdc++/%(gccver)s'
                 '/libs/%(arch_short)s/libgnustl_static.a '
@@ -538,9 +660,21 @@ for arch in ARCHS:
                    'arch_full': arch_full,
                    'arch_short': arch_short,
                    'curdir': curdir})
+    if COMPILE_GLASSIFY:
+        os.chdir(curdir)
+        syscall('g++ glassify.cc ../src/dependencies/xapian-core-1.3.4/.libs/libxapian-1.3.a -o glassify_%s -lz -luuid -lrt -I../src/dependencies/xapian-core-1.3.4/include' % arch_short)
 
     os.chdir(curdir)
     change_env(ORIGINAL_ENVIRON)
+
+# recompile xapian for build system arch to compile glassify
+if COMPILE_GLASSIFY:
+    os.chdir(os.path.join(curdir, '..', 'src', 'dependencies', 'xapian-core-1.3.4'))
+    syscall('make clean')
+    syscall('./configure')
+    syscall('make')
+    os.chdir(curdir)
+    syscall('g++ glassify.cc ../src/dependencies/xapian-core-1.3.4/.libs/libxapian-1.3.a -o glassify -lz -luuid -lrt -I../src/dependencies/xapian-core-1.3.4/include')
 
 if LOCALES_TXT:
 

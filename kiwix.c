@@ -13,6 +13,8 @@
 #include <android/log.h>
 #define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO, "kiwix", __VA_ARGS__)
 
+#include <xapian.h>
+
 /* global variables */
 kiwix::Reader *reader = NULL;
 
@@ -323,3 +325,56 @@ JNIEXPORT void JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_setDataDirectory
   }
   pthread_mutex_unlock(&readerLock);
 }
+
+const char* executeQuery(const char* dbLoc, const char* qu, bool partial) try {
+    Xapian::Database db(dbLoc);
+
+    // Start an enquire session.
+    Xapian::Enquire enquire(db);
+
+    std::string query_string(qu);
+    std::string reply("");
+
+    // Parse the query string to produce a Xapian::Query object.
+    Xapian::QueryParser qp;
+    Xapian::Stem stemmer("english");
+    qp.set_stemmer(stemmer);
+    qp.set_database(db);
+    qp.set_stemming_strategy(Xapian::QueryParser::STEM_ALL);
+    Xapian::Query query;
+
+    if (partial)
+        query = qp.parse_query(query_string, Xapian::QueryParser::FLAG_PARTIAL);
+    else
+        query = qp.parse_query(query_string);
+
+    // Find the top 20 results for the query.
+    enquire.set_query(query);
+    Xapian::MSet matches = enquire.get_mset(0, 20);
+
+    for (Xapian::MSetIterator i = matches.begin(); i != matches.end(); ++i) {
+        reply += i.get_document().get_data();
+        reply += "\n";
+    }
+    return reply.c_str();
+}  catch (const Xapian::Error &e) {
+    //return e.get_description().c_str();
+    return "";
+}
+
+JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_indexedQuery
+        (JNIEnv *env, jclass thiz, jstring db, jstring qu) {
+    const char* d = env->GetStringUTFChars(db, 0);
+    const char* q = env->GetStringUTFChars(qu, 0);
+    const char* result = executeQuery(d, q, false);
+    return env->NewStringUTF(result);
+}
+
+JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_indexedQueryPartial
+             (JNIEnv *env,jclass thiz, jstring db, jstring qu) {
+    const char* d = env->GetStringUTFChars(db, 0);
+    const char* q = env->GetStringUTFChars(qu, 0);
+    const char* result = executeQuery(d, q, true);
+    return env->NewStringUTF(result);
+}
+

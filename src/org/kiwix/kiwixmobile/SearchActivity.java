@@ -80,7 +80,7 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
 
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-    String title = mAdapter.getItem(position);
+    String title = mAdapter.getItemRaw(position);
     sendMessage(title);
   }
 

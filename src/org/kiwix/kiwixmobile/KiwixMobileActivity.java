@@ -909,9 +909,16 @@ public class KiwixMobileActivity extends AppCompatActivity
         break;
       case REQUEST_FILE_SEARCH:
         if (resultCode == RESULT_OK) {
-          String title = data.getStringExtra(TAG_FILE_SEARCHED);
-          String articleUrl = ZimContentProvider.getPageUrlFromTitle(title);
-          openArticle(articleUrl);
+            String title = data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
+            String articleUrl = "";
+
+            if(title.startsWith("A/")) {
+                articleUrl = title;
+            } else articleUrl = ZimContentProvider.getPageUrlFromTitle(title);
+
+            //System.out.println("Opening "+articleUrl + " (" + title + ")");
+
+            openArticle(articleUrl);
         }
         break;
       case REQUEST_PREFERENCES:
