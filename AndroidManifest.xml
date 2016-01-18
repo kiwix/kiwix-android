@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.kiwix.kiwixmobile"
     android:versionCode="27"
-    android:versionName="1.97">
+    android:versionName="1.97"
+    android:installLocation="auto">
 
   <supports-screens
       android:anyDensity="true"
@@ -20,7 +21,6 @@
       android:allowBackup="true"
       android:hardwareAccelerated="true"
       android:icon="@mipmap/kiwix_icon"
-      android:installLocation="auto"
       android:label="@string/app_name"
       android:theme="@style/AppTheme">
     <activity
