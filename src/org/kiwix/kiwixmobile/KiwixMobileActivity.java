@@ -49,6 +49,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.webkit.JavascriptInterface;
 import android.webkit.MimeTypeMap;
@@ -796,14 +797,22 @@ public class KiwixMobileActivity extends AppCompatActivity
               mBackToTopButton.startAnimation(
                   AnimationUtils.loadAnimation(KiwixMobileActivity.this,
                       android.R.anim.fade_in));
+              mBackToTopButton.setVisibility(View.INVISIBLE);
+              Animation fadeAnimation = AnimationUtils.loadAnimation(
+                  KiwixMobileActivity.this, android.R.anim.fade_out);
+              fadeAnimation.setStartOffset(1500);
+              mBackToTopButton.startAnimation(fadeAnimation);
             }
           } else {
             if (mBackToTopButton.getVisibility() == View.VISIBLE) {
               mBackToTopButton.setVisibility(View.INVISIBLE);
 
+              mBackToTopButton.clearAnimation();
               mBackToTopButton.startAnimation(
                   AnimationUtils.loadAnimation(KiwixMobileActivity.this,
                       android.R.anim.fade_out));
+            } else {
+              mBackToTopButton.clearAnimation();
             }
           }
         }
