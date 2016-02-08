@@ -146,7 +146,7 @@ public class CompatFindActionModeCallback
     mEditText.requestFocusFromTouch();
 
     if (mEditText.requestFocus()) {
-      mInput.showSoftInput(mEditText, InputMethodManager.SHOW_IMPLICIT);
+      mInput.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
     }
   }
 
