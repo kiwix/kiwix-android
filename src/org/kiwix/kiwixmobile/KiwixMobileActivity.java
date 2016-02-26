@@ -377,6 +377,9 @@ public class KiwixMobileActivity extends AppCompatActivity
         }
         mDrawerList.setItemChecked(mCurrentWebViewIndex, true);
       }
+    } else {
+      mWebViews.remove(0);
+      newTab();
     }
     mDrawerAdapter.notifyDataSetChanged();
   }
