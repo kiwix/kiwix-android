@@ -138,6 +138,8 @@ public class KiwixMobileActivity extends AppCompatActivity
 
   private boolean mIsBacktotopEnabled;
 
+  private boolean mIsSpeaking;
+
   private Button mBackToTopButton;
 
   private ListView mDrawerList;
@@ -190,7 +192,7 @@ public class KiwixMobileActivity extends AppCompatActivity
             @Override
             public boolean onMenuItemClick(MenuItem item) {
               Log.i(TAG_KIWIX, "Speaking selection.");
-              tts.readSelection();
+              tts.readSelection(getCurrentWebView());
               if (mActionMode != null) {
                 mActionMode.finish();
               }
@@ -218,6 +220,7 @@ public class KiwixMobileActivity extends AppCompatActivity
     requestInitAllMenuItems = false;
     mIsBacktotopEnabled = false;
     isFullscreenOpened = false;
+    mIsSpeaking = false;
     mBackToTopButton = (Button) findViewById(R.id.button_backtotop);
     mPrefState = new ArrayList<>();
     mToolbarContainer = (RelativeLayout) findViewById(R.id.toolbar_layout);
@@ -276,12 +279,11 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     mCompatCallback = new CompatFindActionModeCallback(this);
     mContentFrame = (FrameLayout) findViewById(R.id.content_frame);
+    setUpTTS();
     newTab();
 
     manageExternalLaunchAndRestoringViewState(savedInstanceState);
-    setUpWebView();
     setUpExitFullscreenButton();
-    setUpTTS();
     loadPrefs();
     updateTitle(ZimContentProvider.getZimFileTitle());
   }
@@ -295,7 +297,7 @@ public class KiwixMobileActivity extends AppCompatActivity
   }
 
   private void setUpTTS() {
-    tts = new KiwixTextToSpeech(this, getCurrentWebView(),
+    tts = new KiwixTextToSpeech(this,
         new KiwixTextToSpeech.OnInitSucceedListener() {
           @Override
           public void onInitSucceed() {
@@ -303,6 +305,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         }, new KiwixTextToSpeech.OnSpeakingListener() {
       @Override
       public void onSpeakingStarted() {
+        mIsSpeaking = true;
         runOnUiThread(new Runnable() {
           @Override
           public void run() {
@@ -314,6 +317,7 @@ public class KiwixMobileActivity extends AppCompatActivity
 
       @Override
       public void onSpeakingEnded() {
+        mIsSpeaking = false;
         runOnUiThread(new Runnable() {
           @Override
           public void run() {
@@ -379,6 +383,7 @@ public class KiwixMobileActivity extends AppCompatActivity
       }
     } else {
       mWebViews.remove(0);
+      mCurrentWebViewIndex = 0;
       newTab();
     }
     mDrawerAdapter.notifyDataSetChanged();
@@ -658,6 +663,10 @@ public class KiwixMobileActivity extends AppCompatActivity
 
       if (tts.isInitialized()) {
         menu.findItem(R.id.menu_read_aloud).setVisible(true);
+        if (mIsSpeaking) {
+          menu.findItem(R.id.menu_read_aloud).setTitle(
+              getResources().getString(R.string.menu_read_aloud_stop));
+        }
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -766,7 +775,7 @@ public class KiwixMobileActivity extends AppCompatActivity
   }
 
   public void readAloud() {
-    tts.readAloud();
+    tts.readAloud(getCurrentWebView());
   }
 
   private void setUpWebView() {
@@ -860,6 +869,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         getCurrentWebView().pageUp(true);
       }
     });
+    tts.initWebView(getCurrentWebView());
   }
 
   private void setUpExitFullscreenButton() {

@@ -22,8 +22,6 @@ public class KiwixTextToSpeech {
 
   private OnSpeakingListener onSpeakingListener;
 
-  private WebView webView;
-
   private TextToSpeech tts;
 
   private boolean initialized = false;
@@ -32,22 +30,17 @@ public class KiwixTextToSpeech {
    * Constructor.
    *
    * @param context the context to create TextToSpeech with
-   * @param webView {@link android.webkit.WebView} to take contents from
    * @param onInitSucceedListener listener that receives event when initialization of TTS is done
    * (and does not receive if it failed)
    * @param onSpeakingListener listener that receives an event when speaking just started or
    * ended
    */
-  public KiwixTextToSpeech(Context context, WebView webView,
+  public KiwixTextToSpeech(Context context,
       final OnInitSucceedListener onInitSucceedListener,
       final OnSpeakingListener onSpeakingListener) {
     Log.d(TAG_KIWIX, "Initializing TextToSpeech");
-
     this.context = context;
     this.onSpeakingListener = onSpeakingListener;
-    this.webView = webView;
-    this.webView.addJavascriptInterface(new TTSJavaScriptInterface(), "tts");
-
     initTTS(onInitSucceedListener);
   }
 
@@ -88,14 +81,14 @@ public class KiwixTextToSpeech {
   /**
    * Reads the currently selected text in the WebView.
    */
-  public void readSelection() {
+  public void readSelection(WebView webView) {
     webView.loadUrl("javascript:tts.speakAloud(window.getSelection().toString());", null);
   }
 
   /**
    * Starts speaking the WebView content aloud (or stops it if TTS is speaking now).
    */
-  public void readAloud() {
+  public void readAloud(WebView webView) {
     if (tts.isSpeaking()) {
       if (tts.stop() == TextToSpeech.SUCCESS) {
         onSpeakingListener.onSpeakingEnded();
@@ -128,6 +121,10 @@ public class KiwixTextToSpeech {
             "tts.speakAloud(body.innerText);");
       }
     }
+  }
+
+  public void initWebView(WebView webView){
+    webView.addJavascriptInterface(new TTSJavaScriptInterface(), "tts");
   }
 
   /**
