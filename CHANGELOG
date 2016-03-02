@@ -1,0 +1,75 @@
+1.97
+FIXED: Soft-keyboard opens on "find in page" click
+FIXED: "Back to Top" button fades out after 1.5 seconds
+NEW: App can be moved to SD card
+NEW: ARM64 support
+NEW: Beta full-text search (put the *.idx" directory beside the ZIM)
+NEW: Restart with last open article on exact same position
+NEW: Click on app title displays the search input box
+NEW: Remember fullscreen setting over app restarts
+NEW: Few additional languages supported for the UI
+NEW: Build against newer version of Android NDK/SDK
+
+1.96
+FIXED: Freezes with long press on text
+FIXED: Duplicates in suggestions list
+
+1.95
+FIXED: Crash with the Settings
+
+1.94
+NEW: Revamped tabs system
+NEW: Revamped zoom system
+NEW: Audio/Video suport
+NEW: Updated "Ray Charles" ZIM demo file
+FIXED: AutoCompleteTextView in landscape mode
+FIXED: PDF & EPUB viewing
+REMOVED: Gingerbread support
+REMOVED: Share with friends
+REMOVED: Zoom button
+
+1.93
+* FIXED: blanck pages and broken images on Android 5.0 (Lollipop)
+* KNOWN BUG: text rewrapping problem with 4.4 & 5.0
+
+1.92
+* NEW: text2speech (TTS)
+* NEW: compiled against API21 (Android 5.0 Lollipop)
+* FIXED: invisible "go forward" button
+* FIXED: a few crash scenarios
+* FIXED: "save picture" filename truncation
+* FIXED: "night mode" on 4.4
+* KNOWN BUG: text rewrapping problem with 4.4
+* KNOWN BUG: invisible images on 5.0
+
+1.91
+* NEW: bookmarking feature
+* FIXED: Better support of Indian languages
+* FIXED: Many crash scenarios
+* NEW: scan the external SD card
+* KNOWN BUG: text rewrapping problem with 4.4
+
+1.9
+* Support extended to API 9+
+* First steps to have an integrated library manager (still not activated)
+
+1.8
+* FIX buggy hardware menu button handling
+
+1.7
+* FIX buggy "Show backtop button" option
+* NEW Tabs system
+* NEW "scanner" tool for the filepicker
+* NEW UI language chooser
+* NEW UI support for Android non native languages
+* NEW "save image" feature
+
+1.6
+* New "share with friends" button
+* New "fullscreen" feature
+* New 'back to top" button
+* Better search suggestions
+* Small UI fixes
+
+1.0
+* NEW: Initial version
