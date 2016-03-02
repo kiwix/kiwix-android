@@ -122,7 +122,7 @@ def upload_to_play_store(jsdata, channel=None):
     except ImportError:
         logger.error("Missing Google API Client dependency.\n"
                      "Please install with: \n"
-                     "apt-get install libffi-dev libssl-devel\n"
+                     "apt-get install libffi-dev libssl-dev python-pip\n"
                      "pip install google-api-python-client PyOpenSSL\n"
                      "Install from github in case of oauth http errors.")
         return
