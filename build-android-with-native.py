@@ -286,7 +286,7 @@ if COMPILE_LIBICU:
     syscall(LIBICU_SRC + '/configure --with-data-packaging=archive',
             shell=True)
     syscall('make', shell=True)
-    os.chdir(os.getcwd())
+    os.chdir(curdir)
 
 for arch in ARCHS:
     # second name of the platform ; used as subfolder in platform/
@@ -369,7 +369,6 @@ for arch in ARCHS:
         failed_on_step('The PATH environment variable was not set properly.')
 
     # compile liblzma.a, liblzma.so
-    os.chdir(LIBLZMA_SRC)
     configure_cmd = ('./configure --host=%(arch)s --prefix=%(platform)s '
                      '--disable-assembler --enable-shared --enable-static '
                      '--enable-largefile'
@@ -379,11 +378,13 @@ for arch in ARCHS:
         # configure, compile, copy and clean liblzma from official sources.
         # even though we need only static, we conpile also shared so it
         # switches the -fPIC properly.
+        os.chdir(LIBLZMA_SRC)
         syscall(configure_cmd, shell=True)
         syscall('make clean', shell=True)
         syscall('make', shell=True)
         syscall('make install', shell=True)
         syscall('make clean', shell=True)
+        os.chdir(curdir)
 
     # check that the step went well
     if COMPILE_LIBLZMA or COMPILE_LIBZIM or COMPILE_LIBKIWIX:
@@ -392,7 +393,6 @@ for arch in ARCHS:
                            'and is not present.')
 
     # compile libicu.a, libicu.so
-    os.chdir(ICU_TMP_TARGET)
     configure_cmd = (LIBICU_SRC + '/configure --host=%(arch)s --enable-static '
                      '--prefix=%(platform)s --with-cross-build=%(icu)s  '
                      '--disable-shared --with-data-packaging=archive '
@@ -403,11 +403,13 @@ for arch in ARCHS:
         # configure, compile, copy and clean libicu from official sources.
         # even though we need only static, we conpile also shared so it
         # switches the -fPIC properly.
+        os.chdir(ICU_TMP_TARGET)
         syscall(configure_cmd, shell=True)
         syscall('make clean', shell=True)
         syscall('make VERBOSE=1', shell=True)
         syscall('make install', shell=True)
         syscall('make clean', shell=True)
+        os.chdir(curdir)
 
     # check that the step went well
     if COMPILE_LIBICU or COMPILE_LIBKIWIX:
@@ -508,6 +510,7 @@ for arch in ARCHS:
 
         syscall('make')
         shutil.copy(os.path.join(curdir, '..', 'src', 'dependencies', 'xapian-core-1.3.4', '.libs', 'libxapian-1.3.a'), os.path.join(platform, 'lib', 'libxapian.a'))
+        os.chdir(curdir)
 
     # check that the step went well
     if COMPILE_LIBXAPIAN or COMPILE_LIBKIWIX:
