@@ -422,9 +422,10 @@ for arch in ARCHS:
         os.chdir(os.path.join(curdir, '../src', 'dependencies'))
         if not os.path.exists("e2fsprogs-1.42"):
             syscall('make e2fsprogs-1.42')
+        # TODO: this needs to be handle uniquely in src/dependencies (at the time xapian 1.3 is stable)
         if not os.path.exists("xapian-core-1.3.4"):
             print("Fetching recent xapian...")
-            urllib.urlretrieve('http://oligarchy.co.uk/xapian/1.3.4/xapian-core-1.3.4.tar.xz', 'xapian-core-1.3.4.tar.xz') # for glass support
+            urllib.urlretrieve('http://download.kiwix.org/dev/xapian-core-1.3.4.tar.gz', 'xapian-core-1.3.4.tar.xz') # for glass support
             change_env(ORIGINAL_ENVIRON)
             syscall('tar xvf xapian-core-1.3.4.tar.xz')
             change_env(new_environ)
