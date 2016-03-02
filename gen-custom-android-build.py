@@ -330,7 +330,7 @@ def step_update_xml_nodes(jsdata, **options):
     soup = soup = BeautifulSoup(open(toolbar_xml, 'r'),
                                 'xml', from_encoding='utf-8')
     item = soup.find('org.kiwix.kiwixmobile.views.AnimatedProgressBar')
-    item.name = '{}.AnimatedProgressBar'.format(jsdata.get('package'))
+    item.name = '{}.views.AnimatedProgressBar'.format(jsdata.get('package'))
     flushxml(soup, 'RelativeLayout', toolbar_xml, head=False)
 
 
