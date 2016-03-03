@@ -460,7 +460,7 @@ def step_embed_zimfile(jsdata, **options):
         os.symlink('../{}/{}'.format(archs[0], jsdata.get('zim_name')),
                    jsdata.get('zim_name'))
     os.chdir(tmpd)
-    syscall('zip -r -0 -y {} lib'
+    syscall('zip -r -0 {} lib'
             .format(os.path.join(ANDROID_PATH, 'content-libs.jar')))
     shutil.rmtree(tmpd)
 
