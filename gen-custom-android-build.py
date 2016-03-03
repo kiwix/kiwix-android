@@ -457,7 +457,7 @@ def step_embed_zimfile(jsdata, **options):
             os.path.join(tmpd, 'lib', archs[0], jsdata.get('zim_name')))
     for arch in archs[1:]:
         os.chdir(os.path.join(tmpd, 'lib', arch))
-        os.symlink('../{}/{}'.format(archs[0], jsdata.get('zim_name')),
+        os.link('../{}/{}'.format(archs[0], jsdata.get('zim_name')),
                    jsdata.get('zim_name'))
     os.chdir(tmpd)
     syscall('zip -r -0 -y {} lib'
