@@ -86,6 +86,12 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       super.onCreate(savedInstanceState);
       addPreferencesFromResource(R.xml.preferences);
 
+      if (Constants.CUSTOM_APP_ENFORCED_LANG.equals("")) {
+        setUpLanguageChooser(PREF_LANG);
+      } else {
+        getPreferenceScreen().removePreference(getPrefrence("pref_language"));
+      }
+
       mSlider = (SliderPreference) getPrefrence(PREF_ZOOM);
       setSliderState();
       setUpSettings();
@@ -117,8 +123,6 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     }
 
     public void setUpSettings() {
-
-      setUpLanguageChooser(PREF_LANG);
       setAppVersionNumber();
     }
 
