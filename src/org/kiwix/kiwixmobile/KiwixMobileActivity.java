@@ -1123,11 +1123,8 @@ public class KiwixMobileActivity extends AppCompatActivity
             filePath = FileUtils.generateSaveFileName(fileName);
           }
 
-          Log.d(TAG_KIWIX, "Looking for: " + filePath + " -- filesize: "
-              + Constants.CUSTOM_APP_ZIM_FILE_SIZE);
           if (!FileUtils
               .doesFileExist(filePath, Constants.CUSTOM_APP_ZIM_FILE_SIZE, false)) {
-            Log.d(TAG_KIWIX, "... doesn't exist.");
 
             AlertDialog.Builder zimFileMissingBuilder = new AlertDialog.Builder(
                 this);

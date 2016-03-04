@@ -1,11 +1,14 @@
 package org.kiwix.kiwixmobile.utils.files;
 
+import android.util.Log;
 import android.content.Context;
 import android.os.Environment;
 import java.io.File;
 import org.kiwix.kiwixmobile.settings.Constants;
 
 public class FileUtils {
+
+  public static final String TAG_KIWIX = "kiwix";
 
   public static File getFileCacheDir(Context context) {
     boolean external = Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
@@ -61,18 +64,27 @@ public class FileUtils {
    */
   static public boolean doesFileExist(String fileName, long fileSize,
       boolean deleteFileOnMismatch) {
+
+    Log.d(TAG_KIWIX, "Looking for '" + fileName + "' with size=" + fileSize);
+
     // the file may have been delivered by Market --- let's make sure
     // it's the size we expect
     File fileForNewFile = new File(fileName);
     if (fileForNewFile.exists()) {
       if (fileForNewFile.length() == fileSize) {
+        Log.d(TAG_KIWIX, "Correct file '" + fileName + "' found.");
         return true;
+      } else {
+        Log.d(TAG_KIWIX, "File '" + fileName + "' found but with wrong size=" + fileForNewFile.length());
       }
+
       if (deleteFileOnMismatch) {
         // delete the file --- we won't be able to resume
         // because we cannot confirm the integrity of the file
         fileForNewFile.delete();
       }
+    } else {
+      Log.d(TAG_KIWIX, "No file '" + fileName + "' found.");
     }
     return false;
   }
