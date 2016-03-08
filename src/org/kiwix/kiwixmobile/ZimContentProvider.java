@@ -36,7 +36,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.kiwix.kiwixmobile.utils.files.FileUtils
+import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.settings.Constants;
 
 public class ZimContentProvider extends ContentProvider {
