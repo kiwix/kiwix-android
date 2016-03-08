@@ -334,25 +334,6 @@ def step_update_xml_nodes(jsdata, **options):
     flushxml(soup, 'RelativeLayout', toolbar_xml, head=False)
 
 
-def step_update_gradle(jsdata, **options):
-    ''' uncomment compiling the content-libs.jar file into the APK '''
-
-    if not jsdata.get('embed_zim'):
-        return
-
-    move_to_android_placeholder()
-
-    # rename settings.SliderPreference node in res/xml/preferences.xml
-    fpath = os.path.join(ANDROID_PATH, 'build.gradle')
-    lines = open(fpath, 'r').readlines()
-    for idx, line in enumerate(lines):
-        if 'content-libs.jar' in line:
-            lines[idx] = ("    {}\n"
-                          .format(re.sub(r'^//', '', line.strip()).strip()))
-    with open(fpath, 'w') as f:
-        f.write(''.join(lines))
-
-
 def step_update_android_manifest(jsdata, **options):
     ''' update AndroidManifest.xml to set package, name, version
 
@@ -446,23 +427,8 @@ def step_embed_zimfile(jsdata, **options):
 
     move_to_android_placeholder()
 
-    # create content-libs.jar
-    tmpd = tempfile.mkdtemp()
-    archs = os.listdir('libs')
-    for arch in archs:
-        os.makedirs(os.path.join(tmpd, 'lib', arch))
-        # shutil.copy(os.path.join('libs', arch, 'libkiwix.so'),
-        #             os.path.join(tmpd, 'lib', arch, 'libkiwix.so'))
     copy_to(jsdata.get('zim_file'),
-            os.path.join(tmpd, 'lib', archs[0], jsdata.get('zim_name')))
-    for arch in archs[1:]:
-        os.chdir(os.path.join(tmpd, 'lib', arch))
-        os.link('../{}/{}'.format(archs[0], jsdata.get('zim_name')),
-                   jsdata.get('zim_name'))
-    os.chdir(tmpd)
-    syscall('zip -r -0 -y {} lib'
-            .format(os.path.join(ANDROID_PATH, 'content-libs.jar')))
-    shutil.rmtree(tmpd)
+            os.path.join('assets', jsdata.get('zim_name')))
 
 def step_build_apk(jsdata, **options):
     ''' build the actual APK '''
@@ -524,7 +490,6 @@ ARGS_MATRIX = OrderedDict([
     ('jni', step_update_kiwix_c),
     ('libkiwix', step_compile_libkiwix),
     ('embed', step_embed_zimfile),
-    ('gradle', step_update_gradle),
     ('build', step_build_apk),
     ('move', step_move_apk_to_destination),
     ('list', step_list_output_apk),
@@ -576,7 +541,7 @@ def main(jspath, **options):
     jsdata.update({'zim_size': str(get_file_size(jsdata.get('zim_file')))})
     jsdata.update({'zim_name': zim_name_from_path(jsdata.get('zim_file'))})
     if jsdata.get('embed_zim'):
-        jsdata.update({'zim_name': 'libcontent.so'})
+        jsdata.update({'zim_name': 'content.zim'})
 
     # greetings
     logger.info("Your are now building {app_name} version {version_name} "

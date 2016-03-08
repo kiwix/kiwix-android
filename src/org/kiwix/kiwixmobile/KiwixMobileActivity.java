@@ -1116,7 +1116,7 @@ public class KiwixMobileActivity extends AppCompatActivity
 
           String filePath;
           if (Constants.CUSTOM_APP_HAS_EMBEDDED_ZIM) {
-            filePath = String.format("/data/data/%s/lib/%s", Constants.CUSTOM_APP_ID,
+            filePath = String.format("/data/data/%s/files/zim/%s", Constants.CUSTOM_APP_ID,
                 Constants.CUSTOM_APP_ZIM_FILE_NAME);
           } else {
             String fileName = FileUtils.getExpansionAPKFileName(true);

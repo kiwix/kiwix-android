@@ -181,6 +181,33 @@ public class ZimContentProvider extends ContentProvider {
     }
   }
 
+  private static String loadZIMData(Context context, File workingDir) {
+    String zimFileName = "content.zim";
+    try {
+      File zimDir = new File(workingDir, "zim");
+      if (!zimDir.exists()) {
+        zimDir.mkdirs();
+      }
+      File zimDataFile = new File(zimDir, zimFileName);
+      if (!zimDataFile.exists()) {
+        InputStream in = context.getAssets().open(zimFileName);
+        OutputStream out = new FileOutputStream(zimDataFile);
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = in.read(buf)) > 0) {
+          out.write(buf, 0, len);
+        }
+        in.close();
+        out.flush();
+        out.close();
+      }
+      return zimDir.getAbsolutePath();
+    } catch (Exception e) {
+      Log.e(TAG_KIWIX, "Error copying ZIM data file", e);
+      return null;
+    }
+  }
+
   private static String getFilePath(Uri articleUri) {
     String filePath = articleUri.toString();
     int pos = articleUri.toString().indexOf(CONTENT_URI.toString());
@@ -200,6 +227,7 @@ public class ZimContentProvider extends ContentProvider {
   public boolean onCreate() {
     jniKiwix = new JNIKiwix();
     setIcuDataDirectory();
+    setZIMDataDirectory();
     return true;
   }
 
@@ -315,6 +343,11 @@ public class ZimContentProvider extends ContentProvider {
       Log.d(TAG_KIWIX, "Setting the ICU directory path to " + icuDirPath);
       jniKiwix.setDataDirectory(icuDirPath);
     }
+  }
+
+  private void setZIMDataDirectory() {
+    File workingDir = this.getContext().getFilesDir();
+    loadZIMData(this.getContext(), workingDir);
   }
 
   static class TransferThread extends Thread {
