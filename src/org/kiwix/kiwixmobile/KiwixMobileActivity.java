@@ -78,6 +78,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import org.json.JSONArray;
 import org.kiwix.kiwixmobile.settings.Constants;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.KiwixTextToSpeech;
@@ -98,9 +99,11 @@ public class KiwixMobileActivity extends AppCompatActivity
 
   private static final String TAG_CURRENT_FILE = "currentzimfile";
 
-  private static final String TAG_CURRENT_ARTICLE = "currentarticle";
+  private static final String TAG_CURRENT_ARTICLES = "currentarticles";
 
-  private static final String TAG_CURRENT_POSITION = "currentposition";
+  private static final String TAG_CURRENT_POSITIONS = "currentpositions";
+
+  private static final String TAG_CURRENT_TAB = "currenttab";
 
   private static final String PREF_NIGHTMODE = "pref_nightmode";
 
@@ -888,16 +891,6 @@ public class KiwixMobileActivity extends AppCompatActivity
   }
 
   @Override
-  public void onSaveInstanceState(Bundle outState) {
-    super.onSaveInstanceState(outState);
-
-    getCurrentWebView().saveState(outState);
-    outState.putString(TAG_CURRENT_FILE, ZimContentProvider.getZimFile());
-    outState.putString(TAG_CURRENT_ARTICLE, getCurrentWebView().getUrl());
-    outState.putInt(TAG_CURRENT_POSITION, getCurrentWebView().getScrollY());
-  }
-
-  @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
     Log.i(TAG_KIWIX, "Intent data: " + data);
@@ -1045,6 +1038,50 @@ public class KiwixMobileActivity extends AppCompatActivity
     startActivityForResult(i, REQUEST_PREFERENCES);
   }
 
+  public void saveTabStates(){
+    SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
+    SharedPreferences.Editor editor = settings.edit();
+
+    JSONArray urls = new JSONArray();
+    JSONArray positions = new JSONArray();
+    for (KiwixWebView view : mWebViews){
+      urls.put(view.getUrl());
+      positions.put(view.getScrollY());
+    }
+
+    editor.putString(TAG_CURRENT_FILE, ZimContentProvider.getZimFile());
+    editor.putString(TAG_CURRENT_ARTICLES, urls.toString());
+    editor.putString(TAG_CURRENT_POSITIONS, positions.toString());
+    editor.putInt(TAG_CURRENT_TAB, mCurrentWebViewIndex);
+
+    // Commit the edits!
+    editor.apply();
+  }
+
+  public void restoreTabStates(){
+    SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
+    String zimFile = settings.getString(TAG_CURRENT_FILE, null);
+    String zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null);
+    String zimPositions = settings.getString(TAG_CURRENT_POSITIONS, null);
+    int currentTab = settings.getInt(TAG_CURRENT_TAB, 0 );
+    openZimFile( new File(zimFile), false);
+    try {
+      JSONArray urls = new JSONArray(zimArticles);
+      JSONArray positions = new JSONArray(zimPositions);
+      int i=0;
+      getCurrentWebView().loadUrl(urls.getString(i));
+      getCurrentWebView().setScrollY(positions.getInt(i));
+      i++;
+      for (;i<urls.length();i++){
+        newTab(urls.getString(i));
+        getCurrentWebView().setScrollY(positions.getInt(i));
+      }
+      selectTab(currentTab);
+    } catch (Exception e ) {
+      Log.d(TAG_KIWIX, " Kiwix sharedpreferences corrupted");
+    }
+  }
+
   private void manageExternalLaunchAndRestoringViewState(Bundle savedInstanceState) {
 
     if (getIntent().getData() != null) {
@@ -1052,38 +1089,14 @@ public class KiwixMobileActivity extends AppCompatActivity
       Log.d(TAG_KIWIX, " Kiwix started from a filemanager. Intent filePath: " + filePath
           + " -> open this zimfile and load menu_main page");
       openZimFile(new File(filePath), false);
-    } else if (savedInstanceState != null) {
-      Log.d(TAG_KIWIX,
-          " Kiwix started with a savedInstanceState (That is was closed by OS) -> restore webview state and zimfile (if set)");
-      if (savedInstanceState.getString(TAG_CURRENT_FILE) != null) {
-        openZimFile(new File(savedInstanceState.getString(TAG_CURRENT_FILE)), false);
-      }
-      if (savedInstanceState.getString(TAG_CURRENT_ARTICLE) != null) {
-        getCurrentWebView().loadUrl(savedInstanceState.getString(TAG_CURRENT_ARTICLE));
-        getCurrentWebView().setScrollY(savedInstanceState.getInt(TAG_CURRENT_POSITION));
-      }
-      getCurrentWebView().restoreState(savedInstanceState);
-
-      // Restore the state of the WebView
-      // (Very ugly) Workaround for  #643 Android article blank after rotation and app reload
-      // In case of restore state, just reload page multiple times. Probability
-      // that after two refreshes page is still blank is low.
-      // TODO: implement better fix
-      // requestWebReloadOnFinished = 2;
     } else {
       SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
       String zimFile = settings.getString(TAG_CURRENT_FILE, null);
-      String zimArticle = settings.getString(TAG_CURRENT_ARTICLE, null);
-      int zimPosition = settings.getInt(TAG_CURRENT_POSITION, 0);
       if (zimFile != null) {
         Log.d(TAG_KIWIX,
                 " Kiwix normal start, zimFile loaded last time -> Open last used zimFile "
                         + zimFile);
-        openZimFile(new File(zimFile), false);
-        if (zimArticle != null) {
-          getCurrentWebView().loadUrl(zimArticle);
-          getCurrentWebView().setScrollY(zimPosition);
-        }
+        restoreTabStates();
         // Alternative would be to restore webView state. But more effort to implement, and actually
         // fits better normal android behavior if after closing app ("back" button) state is not maintained.
       } else {
@@ -1160,19 +1173,13 @@ public class KiwixMobileActivity extends AppCompatActivity
     }
   }
 
+
+
   @Override
   public void onPause() {
     super.onPause();
-    SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
-    SharedPreferences.Editor editor = settings.edit();
-    editor.putString(TAG_CURRENT_FILE, ZimContentProvider.getZimFile());
-    editor.putString(TAG_CURRENT_ARTICLE, getCurrentWebView().getUrl());
-    editor.putInt(TAG_CURRENT_POSITION, getCurrentWebView().getScrollY());
 
-    // Commit the edits!
-    editor.apply();
-
-    // Save bookmarks
+    saveTabStates();
     saveBookmarks();
 
     Log.d(TAG_KIWIX,
