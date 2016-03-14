@@ -409,6 +409,9 @@ public class KiwixMobileActivity extends AppCompatActivity
       }, 150);
     }
     loadPrefs();
+    if (menu != null) {
+      refreshBookmarkSymbol(menu);
+    }
   }
 
   private KiwixWebView getCurrentWebView() {
@@ -972,7 +975,11 @@ public class KiwixMobileActivity extends AppCompatActivity
   @Override
   public boolean onPrepareOptionsMenu(Menu menu) {
     super.onPrepareOptionsMenu(menu);
+    refreshBookmarkSymbol(menu);
+    return true;
+  }
 
+  public void refreshBookmarkSymbol(Menu menu){
     if (menu.findItem(R.id.menu_bookmarks) != null &&
         getCurrentWebView().getUrl() != null &&
         !getCurrentWebView().getUrl().equals("file:///android_res/raw/help.html") &&
@@ -984,7 +991,6 @@ public class KiwixMobileActivity extends AppCompatActivity
         menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmark);
       }
     }
-    return true;
   }
 
   public void loadPrefs() {
