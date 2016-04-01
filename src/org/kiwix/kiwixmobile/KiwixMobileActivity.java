@@ -26,6 +26,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -628,7 +631,7 @@ public class KiwixMobileActivity extends AppCompatActivity
     } else {
       Log.e(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
       Toast.makeText(this, getResources().getString(R.string.error_filenotfound),
-          Toast.LENGTH_LONG).show();
+              Toast.LENGTH_LONG).show();
     }
     return false;
   }
@@ -976,10 +979,11 @@ public class KiwixMobileActivity extends AppCompatActivity
   public boolean onPrepareOptionsMenu(Menu menu) {
     super.onPrepareOptionsMenu(menu);
     refreshBookmarkSymbol(menu);
+    refreshNavigationButtons();
     return true;
   }
 
-  public void refreshBookmarkSymbol(Menu menu){
+  public void refreshBookmarkSymbol(Menu menu) {
     if (menu.findItem(R.id.menu_bookmarks) != null &&
         getCurrentWebView().getUrl() != null &&
         !getCurrentWebView().getUrl().equals("file:///android_res/raw/help.html") &&
@@ -991,6 +995,26 @@ public class KiwixMobileActivity extends AppCompatActivity
         menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmark);
       }
     }
+  }
+
+  public void refreshNavigationButtons() {
+    ImageView back = (ImageView) mDrawerLayout.findViewById(R.id.action_back_button);
+    ImageView forward = (ImageView) mDrawerLayout.findViewById(R.id.action_forward_button);
+    toggleImageViewGrayFilter(back, getCurrentWebView().canGoBack());
+    toggleImageViewGrayFilter(forward, getCurrentWebView().canGoForward());
+    mDrawerLayout.findViewById(R.id.action_back).setEnabled(getCurrentWebView().canGoBack());
+    mDrawerLayout.findViewById(R.id.action_forward).setEnabled(getCurrentWebView().canGoForward());
+  }
+
+  public void toggleImageViewGrayFilter(ImageView image, boolean state) {
+    Drawable originalIcon = image.getDrawable();
+    Drawable res = originalIcon.mutate();
+    if (state) {
+      res.clearColorFilter();
+    } else {
+      res.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN);
+    }
+    image.setImageDrawable(res);
   }
 
   public void loadPrefs() {
