@@ -430,6 +430,7 @@ public class KiwixMobileActivity extends AppCompatActivity
                   @Override
                   public void onClick(View v) {
                       restoreTabAtIndex(tempForUndo.getUrl(), index);
+                      selectTab(index);
                   }
               });
       undoSnackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
