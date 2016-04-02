@@ -374,7 +374,7 @@ public class KiwixMobileActivity extends AppCompatActivity
     return webView;
   }
 
-  private KiwixWebView RestoreTabAtIndex(String url, int index) {
+  private KiwixWebView restoreTabAtIndex(String url, int index) {
     KiwixWebView webView = new KiwixWebView(KiwixMobileActivity.this);
     webView.setWebViewClient(new KiwixWebViewClient(KiwixMobileActivity.this, mDrawerAdapter));
     webView.setWebChromeClient(new KiwixWebChromeClient());
@@ -398,7 +398,7 @@ public class KiwixMobileActivity extends AppCompatActivity
           tempForUndo = mWebViews.get(index);
 
           mWebViews.remove(index);
-          UndoSnackbar(index);
+          undoSnackbar(index);
 
         } else {
           selectTab(mCurrentWebViewIndex + 1);
@@ -409,7 +409,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         tempForUndo = mWebViews.get(index);
         mWebViews.remove(index);
         selectTab(mCurrentWebViewIndex - 1);
-        UndoSnackbar(index);
+        undoSnackbar(index);
         if (index < mCurrentWebViewIndex) {
           mCurrentWebViewIndex--;
         }
@@ -423,13 +423,13 @@ public class KiwixMobileActivity extends AppCompatActivity
     mDrawerAdapter.notifyDataSetChanged();
   }
 
-  private void UndoSnackbar(final int index) {
+  private void undoSnackbar(final int index) {
       Snackbar undoSnackbar =
           Snackbar.make(snackbarLayout, "Tab closed", Snackbar.LENGTH_LONG)
               .setAction("Undo", new View.OnClickListener() {
                   @Override
                   public void onClick(View v) {
-                      RestoreTabAtIndex(tempForUndo.getUrl(), index);
+                      restoreTabAtIndex(tempForUndo.getUrl(), index);
                   }
               });
       undoSnackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
