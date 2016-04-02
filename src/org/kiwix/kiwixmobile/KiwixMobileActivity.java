@@ -374,6 +374,20 @@ public class KiwixMobileActivity extends AppCompatActivity
     return webView;
   }
 
+  private KiwixWebView newTabAtIndex(String url, int index) {
+    KiwixWebView webView = new KiwixWebView(KiwixMobileActivity.this);
+    webView.setWebViewClient(new KiwixWebViewClient(KiwixMobileActivity.this, mDrawerAdapter));
+    webView.setWebChromeClient(new KiwixWebChromeClient());
+    webView.loadUrl(url);
+    webView.loadPrefs();
+
+    mWebViews.add(index,webView);
+    mDrawerAdapter.notifyDataSetChanged();
+    selectTab(mWebViews.size() - 1);
+    setUpWebView();
+    return webView;
+  }
+
   private void closeTab(int index) {
 
     if (mWebViews.size() > 1) {
@@ -384,7 +398,7 @@ public class KiwixMobileActivity extends AppCompatActivity
           tempForUndo = mWebViews.get(index);
 
           mWebViews.remove(index);
-          UndoSnackbar();
+          UndoSnackbar(index);
 
         } else {
           selectTab(mCurrentWebViewIndex + 1);
@@ -395,7 +409,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         tempForUndo = mWebViews.get(index);
         mWebViews.remove(index);
         selectTab(mCurrentWebViewIndex - 1);
-        UndoSnackbar();
+        UndoSnackbar(index);
         if (index < mCurrentWebViewIndex) {
           mCurrentWebViewIndex--;
         }
@@ -409,13 +423,13 @@ public class KiwixMobileActivity extends AppCompatActivity
     mDrawerAdapter.notifyDataSetChanged();
   }
 
-  private void UndoSnackbar() {
+  private void UndoSnackbar(final int index) {
       Snackbar undoSnackbar =
-          Snackbar.make(snackbarLayout, "Click to restore tab", Snackbar.LENGTH_LONG)
+          Snackbar.make(snackbarLayout, "Tab closed", Snackbar.LENGTH_LONG)
               .setAction("Undo", new View.OnClickListener() {
                   @Override
                   public void onClick(View v) {
-                      newTab(tempForUndo.getUrl());
+                      newTabAtIndex(tempForUndo.getUrl(), index);
                   }
               });
       undoSnackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
