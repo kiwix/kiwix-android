@@ -374,7 +374,7 @@ public class KiwixMobileActivity extends AppCompatActivity
     return webView;
   }
 
-  private KiwixWebView newTabAtIndex(String url, int index) {
+  private KiwixWebView RestoreTabAtIndex(String url, int index) {
     KiwixWebView webView = new KiwixWebView(KiwixMobileActivity.this);
     webView.setWebViewClient(new KiwixWebViewClient(KiwixMobileActivity.this, mDrawerAdapter));
     webView.setWebChromeClient(new KiwixWebChromeClient());
@@ -429,7 +429,7 @@ public class KiwixMobileActivity extends AppCompatActivity
               .setAction("Undo", new View.OnClickListener() {
                   @Override
                   public void onClick(View v) {
-                      newTabAtIndex(tempForUndo.getUrl(), index);
+                      RestoreTabAtIndex(tempForUndo.getUrl(), index);
                   }
               });
       undoSnackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
