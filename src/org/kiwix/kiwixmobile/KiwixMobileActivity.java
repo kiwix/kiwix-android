@@ -298,15 +298,22 @@ public class KiwixMobileActivity extends AppCompatActivity
     mRightDrawerList.setDivider(null);
     mRightDrawerList.setDividerHeight(0);
     mRightDrawerList.setAdapter(mRightArrayAdapter);
+    TextView tView = (TextView) findViewById(R.id.empty);
+    mRightDrawerList.setEmptyView(tView);
     sectionProperties = new ArrayList<SectionProperties>();
-    //
-    // +mRightDrawerList.addHeaderView(tDiddy);
     mRightArrayAdapter.notifyDataSetChanged();
 
     mLeftDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         selectTab(position);
+      }
+    });
+    mRightDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      @Override
+      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        getCurrentWebView().loadUrl("javascript:document.getElementById('" + sectionProperties.get(position - mRightDrawerList.getHeaderViewsCount()).sectionId+ "').scrollIntoView();");
+        mRightDrawerLayout.closeDrawers();
       }
     });
     final ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, mLeftDrawerLayout, toolbar,
@@ -1178,7 +1185,7 @@ public class KiwixMobileActivity extends AppCompatActivity
     String zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null);
     String zimPositions = settings.getString(TAG_CURRENT_POSITIONS, null);
     int currentTab = settings.getInt(TAG_CURRENT_TAB, 0 );
-    openZimFile( new File(zimFile), false);
+    openZimFile(new File(zimFile), false);
     try {
       JSONArray urls = new JSONArray(zimArticles);
       JSONArray positions = new JSONArray(zimPositions);
@@ -1523,14 +1530,6 @@ public class KiwixMobileActivity extends AppCompatActivity
         holder = (ViewHolder) row.getTag();
       }
 
-      holder.txtTitle.setOnClickListener(new View.OnClickListener() {
-
-        @Override
-        public void onClick(View view) {
-          getCurrentWebView().loadUrl("javascript:document.getElementById('" + sectionProperties.get(position).sectionId + "').scrollIntoView();");
-          mRightDrawerLayout.closeDrawers();
-        }
-      });
       if (sectionProperties.isEmpty())
         return row;
       SectionProperties section = sectionProperties.get(position);

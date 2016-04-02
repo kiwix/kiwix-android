@@ -4,7 +4,9 @@
     android:layout_height="56dp"
     android:background="?attr/selectedBackground"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+                android:clickable="false"
+                android:focusable="false">
 
   <TextView
       android:id="@+id/textTab"
