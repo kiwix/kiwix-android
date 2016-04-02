@@ -20,6 +20,7 @@
 package org.kiwix.kiwixmobile;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -80,12 +81,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.prefs.Preferences;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.settings.Constants;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.KiwixTextToSpeech;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
+import org.kiwix.kiwixmobile.utils.files.RateAppCounter;
 import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
 import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
 import org.kiwix.kiwixmobile.views.KiwixWebView;
@@ -173,7 +176,8 @@ public class KiwixMobileActivity extends AppCompatActivity
   private ActionMode mActionMode = null;
   private KiwixWebView tempForUndo;
   private LinearLayout snackbarLayout;
-
+  private RateAppCounter visitCounterPref;
+  private int tempVisitCount;
   @Override
   public void onActionModeStarted(ActionMode mode) {
     if (mActionMode == null) {
@@ -221,6 +225,17 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
+
+    visitCounterPref = new RateAppCounter(this);
+    tempVisitCount = visitCounterPref.getCount();
+    ++tempVisitCount;
+    visitCounterPref.setCount(tempVisitCount);
+
+    if(tempVisitCount >= 5 && !visitCounterPref.getNoThanksState()){
+        showRateDialog(this,visitCounterPref.getEditor());
+    }
+
+
     bookmarks = new ArrayList<>();
     requestClearHistoryAfterLoad = false;
     requestWebReloadOnFinished = 0;
@@ -235,9 +250,8 @@ public class KiwixMobileActivity extends AppCompatActivity
     exitFullscreenButton = (ImageButton) findViewById(R.id.FullscreenControlButton);
     tempForUndo =
         new KiwixWebView(getApplicationContext());   /**  initializing temporary tab value **/
-
     snackbarLayout =
-        (LinearLayout) findViewById(R.id.linearlayout_main);  /** Coordinator layout definition**/
+        (LinearLayout) findViewById(R.id.linearlayout_main);  /** Linear layout definition**/
     RelativeLayout newTabButton = (RelativeLayout) findViewById(R.id.new_tab_button);
     newTabButton.setOnClickListener(new View.OnClickListener() {
 
@@ -297,6 +311,73 @@ public class KiwixMobileActivity extends AppCompatActivity
     setUpExitFullscreenButton();
     loadPrefs();
     updateTitle(ZimContentProvider.getZimFileTitle());
+  }
+
+  public  void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {
+    AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
+
+    alertDialog.setTitle("Please Rate");
+
+    alertDialog.setMessage("If you enjoy using "
+        + getString(R.string.app_name)
+        + ", please take a moment to rate it. Thanks for your support!");
+
+    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Rate!",
+        new DialogInterface.OnClickListener() {
+
+          public void onClick(DialogInterface dialog, int id) {
+            visitCounterPref.setNoThanksState(true);
+            goToRateApp();
+
+          }
+        });
+
+    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No, thanks",
+        new DialogInterface.OnClickListener() {
+
+          public void onClick(DialogInterface dialog, int id) {
+
+            visitCounterPref.setNoThanksState(true);
+
+          }
+        });
+
+    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Remind me later",
+        new DialogInterface.OnClickListener() {
+
+          public void onClick(DialogInterface dialog, int id) {
+
+            tempVisitCount = 0;
+            visitCounterPref.setCount(tempVisitCount);
+
+          }
+        });
+
+
+
+      alertDialog.show();
+
+
+
+
+  }
+
+  private void goToRateApp() {
+
+    Uri uri = Uri.parse("market://details?id=" + getPackageName());
+    Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+
+    goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+        Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET |
+        Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+
+    try {
+      startActivity(goToMarket);
+    } catch (ActivityNotFoundException e) {
+      startActivity(new Intent(Intent.ACTION_VIEW,
+          Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+    }
+
   }
 
   private void updateTitle(String zimFileTitle) {
@@ -430,6 +511,7 @@ public class KiwixMobileActivity extends AppCompatActivity
                   @Override
                   public void onClick(View v) {
                       restoreTabAtIndex(tempForUndo.getUrl(), index);
+                      selectTab(index);
                   }
               });
       undoSnackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
