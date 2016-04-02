@@ -374,6 +374,20 @@ public class KiwixMobileActivity extends AppCompatActivity
     return webView;
   }
 
+  private KiwixWebView restoreTabAtIndex(String url, int index) {
+    KiwixWebView webView = new KiwixWebView(KiwixMobileActivity.this);
+    webView.setWebViewClient(new KiwixWebViewClient(KiwixMobileActivity.this, mDrawerAdapter));
+    webView.setWebChromeClient(new KiwixWebChromeClient());
+    webView.loadUrl(url);
+    webView.loadPrefs();
+
+    mWebViews.add(index,webView);
+    mDrawerAdapter.notifyDataSetChanged();
+    selectTab(mWebViews.size() - 1);
+    setUpWebView();
+    return webView;
+  }
+
   private void closeTab(int index) {
 
     if (mWebViews.size() > 1) {
@@ -384,22 +398,18 @@ public class KiwixMobileActivity extends AppCompatActivity
           tempForUndo = mWebViews.get(index);
 
           mWebViews.remove(index);
-          Snackbar undoSnackbar =
-              Snackbar.make(snackbarLayout, "Click to restore tab", Snackbar.LENGTH_LONG)
-                  .setAction("Undo", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                      newTab(tempForUndo.getUrl());
-                    }
-                  });
-          undoSnackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
-          undoSnackbar.show();
+          undoSnackbar(index);
+
         } else {
           selectTab(mCurrentWebViewIndex + 1);
           mWebViews.remove(index);
+
         }
       } else {
+        tempForUndo = mWebViews.get(index);
         mWebViews.remove(index);
+        selectTab(mCurrentWebViewIndex - 1);
+        undoSnackbar(index);
         if (index < mCurrentWebViewIndex) {
           mCurrentWebViewIndex--;
         }
@@ -411,6 +421,19 @@ public class KiwixMobileActivity extends AppCompatActivity
       newTab();
     }
     mDrawerAdapter.notifyDataSetChanged();
+  }
+
+  private void undoSnackbar(final int index) {
+      Snackbar undoSnackbar =
+          Snackbar.make(snackbarLayout, "Tab closed", Snackbar.LENGTH_LONG)
+              .setAction("Undo", new View.OnClickListener() {
+                  @Override
+                  public void onClick(View v) {
+                      restoreTabAtIndex(tempForUndo.getUrl(), index);
+                  }
+              });
+      undoSnackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
+      undoSnackbar.show();
   }
 
   private void selectTab(int position) {
@@ -1178,15 +1201,14 @@ public class KiwixMobileActivity extends AppCompatActivity
             zimFileMissingBuilder
                 .setPositiveButton(getString(R.string.go_to_play_store),
                     new DialogInterface.OnClickListener() {
-                      public void onClick(DialogInterface dialog, int which) {
-                        String market_uri = "market://details?id="
-                            + Constants.CUSTOM_APP_ID;
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(market_uri));
-                        startActivity(intent);
-                        activity.finish();
-                        System.exit(0);
-                      }
+                        public void onClick(DialogInterface dialog, int which) {
+                            String market_uri = "market://details?id=" + Constants.CUSTOM_APP_ID;
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setData(Uri.parse(market_uri));
+                            startActivity(intent);
+                            activity.finish();
+                            System.exit(0);
+                        }
                     });
             zimFileMissingBuilder.setCancelable(false);
             AlertDialog zimFileMissingDialog = zimFileMissingBuilder.create();
@@ -1301,8 +1323,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         String failingUrl) {
 
       String errorString = String
-          .format(getResources().getString(R.string.error_articleurlnotfound),
-              failingUrl);
+          .format(getResources().getString(R.string.error_articleurlnotfound), failingUrl);
       // TODO apparently screws up back/forward
       getCurrentWebView().loadDataWithBaseURL("file://error",
           "<html><body>" + errorString + "</body></html>", "text/html", "utf-8",
