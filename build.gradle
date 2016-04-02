@@ -23,6 +23,7 @@ dependencies {
   compile 'com.android.support:support-v4:22.2.0'
   compile files("$buildDir/native-libs/native-libs.jar")
   compile 'com.yahoo.squidb:squidb:2.0.0'
+  compile 'com.android.support:design:22.2.0'
   compile 'com.yahoo.squidb:squidb-annotations:2.0.0'
   apt 'com.yahoo.squidb:squidb-processor:2.0.0'
   // compile fileTree(dir: '.', include: 'content-libs.jar') // DO NOT REMOVE !!
