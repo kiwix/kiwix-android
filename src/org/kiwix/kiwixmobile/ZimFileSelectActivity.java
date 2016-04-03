@@ -176,7 +176,7 @@ public class ZimFileSelectActivity extends AppCompatActivity
   protected void onSaveInstanceState(Bundle outState) {
 
     // Check, if the user has rescanned the file system, if he has, then we want to save this list,
-    // so this can be shown again, if the actvitity is recreated (on a device rotation for example)
+    // so this can be shown again, if the activity is recreated (on a device rotation for example)
     if (!mFiles.isEmpty()) {
       Log.i(TAG_KIWIX, "Saved state of the ListView");
       outState.putParcelableArrayList("rescanData", mFiles);

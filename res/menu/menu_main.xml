@@ -15,6 +15,11 @@
       android:visible="false"
       app:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/menu_bookmarks_list"
+        android:title="@string/menu_bookmarks_list"
+        app:showAsAction="never"/>
+
   <item
       android:id="@+id/menu_home"
       android:title="@string/menu_home"

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.kiwix.kiwixmobile"
+    android:installLocation="auto"
     android:versionCode="27"
     android:versionName="1.97"
-    android:installLocation="auto">
+    package="org.kiwix.kiwixmobile">
 
   <supports-screens
       android:anyDensity="true"
@@ -27,14 +27,14 @@
         android:name=".KiwixMobileActivity"
         android:configChanges="orientation|keyboardHidden|screenSize|locale"
         android:label="@string/app_name">
-
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
+
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
-
       <intent-filter>
         <action android:name="android.intent.action.VIEW"/>
+
         <category android:name="android.intent.category.DEFAULT"/>
 
         <data android:scheme="file"/>
@@ -43,7 +43,6 @@
         <data android:pathPattern=".*\\..*\\..*\\.zim(aa|)"/>
         <data android:pathPattern=".*\\..*\\..*\\..*\\.zim(aa|)"/>
       </intent-filter>
-
       <intent-filter>
         <action android:name="android.intent.action.VIEW"/>
 
@@ -57,7 +56,6 @@
         <data android:pathPattern=".*\\..*\\..*\\.zim(aa|)"/>
         <data android:pathPattern=".*\\..*\\..*\\..*\\.zim(aa|)"/>
       </intent-filter>
-
       <intent-filter>
         <action android:name="android.intent.action.VIEW"/>
 
@@ -71,7 +69,6 @@
         <data android:pathPattern=".*\\..*\\..*\\.zim(aa|)"/>
         <data android:pathPattern=".*\\..*\\..*\\..*\\.zim(aa|)"/>
       </intent-filter>
-
       <intent-filter>
         <action android:name="android.intent.action.VIEW"/>
 
@@ -85,12 +82,11 @@
         <data android:pathPattern=".*\\..*\\..*\\.zim(aa|)"/>
         <data android:pathPattern=".*\\..*\\..*\\..*\\.zim(aa|)"/>
       </intent-filter>
-
     </activity>
-
     <activity
         android:name=".ZimFileSelectActivity"
         android:label="@string/choose_file">
+
       <!-- TODO -->
       <intent-filter>
         <action android:name="android.intent.action.GET_CONTENT"/>
@@ -101,15 +97,17 @@
         <data android:mimeType="*/*"/>
       </intent-filter>
     </activity>
-
     <activity android:name=".settings.KiwixSettingsActivity"/>
-
     <activity android:name=".SearchActivity"/>
+    <activity android:name=".views.BookmarksActivity"/>
 
     <provider
         android:name=".ZimContentProvider"
         android:authorities="org.kiwix.zim.base"
         android:exported="true"/>
 
+
+
   </application>
+
 </manifest>

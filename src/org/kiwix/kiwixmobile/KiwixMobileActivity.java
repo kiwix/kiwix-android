@@ -71,6 +71,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -91,11 +92,12 @@ import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.utils.files.RateAppCounter;
 import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
+import org.kiwix.kiwixmobile.views.BookmarksActivity;
 import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
 import org.kiwix.kiwixmobile.views.KiwixWebView;
 
 public class KiwixMobileActivity extends AppCompatActivity
-    implements BookmarkDialogFragment.BookmarkDialogListener {
+     {
 
   public static final String TAG_KIWIX = "kiwix";
 
@@ -179,7 +181,7 @@ public class KiwixMobileActivity extends AppCompatActivity
   private LinearLayout snackbarLayout;
   private RateAppCounter visitCounterPref;
   private int tempVisitCount;
-
+  private static final int BOOKMARK_CHOSEN_REQUEST = 1;
   @Override public void onActionModeStarted(ActionMode mode) {
     if (mActionMode == null) {
       mActionMode = mode;
@@ -474,9 +476,11 @@ public class KiwixMobileActivity extends AppCompatActivity
         mDrawerList.setItemChecked(mCurrentWebViewIndex, true);
       }
     } else {
-      mWebViews.remove(0);
-      mCurrentWebViewIndex = 0;
+      tempForUndo = mWebViews.get(index);
+      mWebViews.remove(index);
       newTab();
+      mCurrentWebViewIndex = 0;
+      undoSnackbar(index);
     }
     mDrawerAdapter.notifyDataSetChanged();
   }
@@ -485,9 +489,14 @@ public class KiwixMobileActivity extends AppCompatActivity
     Snackbar undoSnackbar = Snackbar.make(snackbarLayout, "Tab closed", Snackbar.LENGTH_LONG)
         .setAction("Undo", new View.OnClickListener() {
           @Override public void onClick(View v) {
-            restoreTabAtIndex(tempForUndo.getUrl(), index);
-            selectTab(index);
+            if (index == 0)
+              openArticleFromBookmark(tempForUndo.getTitle());
+            else {
+              restoreTabAtIndex(tempForUndo.getUrl(), index);
+              selectTab(index);
+            }
             mDrawerLayout.openDrawer(Gravity.LEFT);
+
           }
         });
     undoSnackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
@@ -537,9 +546,12 @@ public class KiwixMobileActivity extends AppCompatActivity
         break;
 
       case R.id.menu_bookmarks:
-        viewBookmarks();
+        toggleBookmark();
         break;
 
+      case R.id.menu_bookmarks_list:
+        goToBookmarks();
+        break;
       case R.id.menu_randomarticle:
         openRandomArticle();
         break;
@@ -570,6 +582,12 @@ public class KiwixMobileActivity extends AppCompatActivity
     }
 
     return super.onOptionsItemSelected(item);
+  }
+
+  private void goToBookmarks() {
+    Intent intentBookmarks = new Intent(getBaseContext(), BookmarksActivity.class);
+    intentBookmarks.putExtra("bookmark_contents", bookmarks.toArray(new String[0]));
+    startActivityForResult(intentBookmarks, BOOKMARK_CHOSEN_REQUEST);
   }
 
   private void openFullScreen() {
@@ -609,14 +627,7 @@ public class KiwixMobileActivity extends AppCompatActivity
     mIsFullscreenOpened = false;
   }
 
-  //These two methods are used with the BookmarkDialog.
-  @Override public void onListItemSelect(String choice) {
-    openArticleFromBookmark(choice);
-  }
 
-  @Override public void onBookmarkButtonPressed() {
-    toggleBookmark();
-  }
 
   public void showWelcome() {
     getCurrentWebView().loadUrl("file:///android_res/raw/welcome.html");
@@ -786,20 +797,41 @@ public class KiwixMobileActivity extends AppCompatActivity
 
   public void toggleBookmark() {
     String title = getCurrentWebView().getTitle();
-
+      boolean isBookmark;
     if (title != null && !bookmarks.contains(title)) {
       bookmarks.add(title);
+      isBookmark = true;
+      popBookmarkSnackbar(isBookmark);
     } else {
       bookmarks.remove(title);
+      isBookmark = false;
+      popBookmarkSnackbar(isBookmark);
     }
     supportInvalidateOptionsMenu();
+
   }
 
-  public void viewBookmarks() {
-    new BookmarkDialogFragment(bookmarks.toArray(new String[bookmarks.size()]),
-        bookmarks.contains(getCurrentWebView().getTitle())).show(getSupportFragmentManager(),
-        "BookmarkDialog");
+  private void popBookmarkSnackbar(boolean isBookmark) {
+    if(isBookmark) {
+      Snackbar bookmarkSnackbar =
+          Snackbar.make(snackbarLayout, "Bookmark added", Snackbar.LENGTH_LONG)
+              .setAction("Open", new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                      goToBookmarks();
+                }
+              });
+      bookmarkSnackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
+      bookmarkSnackbar.show();
+    }
+    else{
+      Snackbar bookmarkSnackbar =
+          Snackbar.make(snackbarLayout, "Bookmark removed", Snackbar.LENGTH_LONG);
+          bookmarkSnackbar.show();
+    }
+
   }
+
+
 
   private void refreshBookmarks() {
     bookmarks.clear();
@@ -1027,6 +1059,13 @@ public class KiwixMobileActivity extends AppCompatActivity
           Log.e(TAG_KIWIX, KiwixMobileActivity.mPrefState.get(0).hasToBeRefreshed() + "");
         }
         break;
+
+      case BOOKMARK_CHOSEN_REQUEST:
+        if (resultCode == RESULT_OK){
+          String bookmarkChosen = data.getStringExtra("choseX");
+          newTab();
+          openArticleFromBookmark(bookmarkChosen);
+        }
     }
 
     super.onActivityResult(requestCode, resultCode, data);
