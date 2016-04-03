@@ -20,6 +20,7 @@
 package org.kiwix.kiwixmobile;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,6 +37,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -68,6 +70,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -83,6 +86,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.prefs.Preferences;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.settings.Constants;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
@@ -91,6 +95,7 @@ import org.kiwix.kiwixmobile.utils.KiwixTextToSpeech;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.files.FileReader;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
+import org.kiwix.kiwixmobile.utils.files.RateAppCounter;
 import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
 import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
 import org.kiwix.kiwixmobile.views.KiwixWebView;
@@ -192,7 +197,10 @@ public class KiwixMobileActivity extends AppCompatActivity
 
   // Initialized when onActionModeStarted is triggered.
   private ActionMode mActionMode = null;
-
+  private KiwixWebView tempForUndo;
+  private LinearLayout snackbarLayout;
+  private RateAppCounter visitCounterPref;
+  private int tempVisitCount;
   @Override
   public void onActionModeStarted(ActionMode mode) {
     if (mActionMode == null) {
@@ -240,6 +248,17 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
+
+    visitCounterPref = new RateAppCounter(this);
+    tempVisitCount = visitCounterPref.getCount();
+    ++tempVisitCount;
+    visitCounterPref.setCount(tempVisitCount);
+
+    if(tempVisitCount >= 5 && !visitCounterPref.getNoThanksState()){
+        showRateDialog(this,visitCounterPref.getEditor());
+    }
+
+
     bookmarks = new ArrayList<>();
     requestClearHistoryAfterLoad = false;
     requestWebReloadOnFinished = 0;
@@ -255,6 +274,11 @@ public class KiwixMobileActivity extends AppCompatActivity
 
     FileReader fileReader = new FileReader();
     jsContent = fileReader.readFile("www/js/jsfile.js", this);
+
+    tempForUndo =
+        new KiwixWebView(getApplicationContext());   /**  initializing temporary tab value **/
+    snackbarLayout =
+        (LinearLayout) findViewById(R.id.linearlayout_main);  /** Linear layout definition**/
 
     RelativeLayout newTabButton = (RelativeLayout) findViewById(R.id.new_tab_button);
     newTabButton.setOnClickListener(new View.OnClickListener() {
@@ -366,6 +390,73 @@ public class KiwixMobileActivity extends AppCompatActivity
     updateTitle(ZimContentProvider.getZimFileTitle());
   }
 
+  public  void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {
+    AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
+
+    alertDialog.setTitle("Please Rate");
+
+    alertDialog.setMessage("If you enjoy using "
+        + getString(R.string.app_name)
+        + ", please take a moment to rate it. Thanks for your support!");
+
+    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Rate!",
+        new DialogInterface.OnClickListener() {
+
+          public void onClick(DialogInterface dialog, int id) {
+            visitCounterPref.setNoThanksState(true);
+            goToRateApp();
+
+          }
+        });
+
+    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No, thanks",
+        new DialogInterface.OnClickListener() {
+
+          public void onClick(DialogInterface dialog, int id) {
+
+            visitCounterPref.setNoThanksState(true);
+
+          }
+        });
+
+    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Remind me later",
+        new DialogInterface.OnClickListener() {
+
+          public void onClick(DialogInterface dialog, int id) {
+
+            tempVisitCount = 0;
+            visitCounterPref.setCount(tempVisitCount);
+
+          }
+        });
+
+
+
+      alertDialog.show();
+
+
+
+
+  }
+
+  private void goToRateApp() {
+
+    Uri uri = Uri.parse("market://details?id=" + getPackageName());
+    Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+
+    goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+        Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET |
+        Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+
+    try {
+      startActivity(goToMarket);
+    } catch (ActivityNotFoundException e) {
+      startActivity(new Intent(Intent.ACTION_VIEW,
+          Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+    }
+
+  }
+
   private void updateTitle(String zimFileTitle) {
     if (zimFileTitle == null || zimFileTitle.trim().isEmpty()) {
       getSupportActionBar().setTitle(getString(R.string.app_name));
@@ -447,19 +538,42 @@ public class KiwixMobileActivity extends AppCompatActivity
     return webView;
   }
 
+  private KiwixWebView restoreTabAtIndex(String url, int index) {
+    KiwixWebView webView = new KiwixWebView(KiwixMobileActivity.this);
+    webView.setWebViewClient(new KiwixWebViewClient(KiwixMobileActivity.this, mLeftArrayAdapter));
+    webView.setWebChromeClient(new KiwixWebChromeClient());
+    webView.loadUrl(url);
+    webView.loadPrefs();
+
+    mWebViews.add(index,webView);
+    mLeftArrayAdapter.notifyDataSetChanged();
+    selectTab(mWebViews.size() - 1);
+    setUpWebView();
+    return webView;
+  }
+
   private void closeTab(int index) {
 
     if (mWebViews.size() > 1) {
       if (mCurrentWebViewIndex == index) {
         if (mCurrentWebViewIndex >= 1) {
           selectTab(mCurrentWebViewIndex - 1);
+
+          tempForUndo = mWebViews.get(index);
+
           mWebViews.remove(index);
+          undoSnackbar(index);
+
         } else {
           selectTab(mCurrentWebViewIndex + 1);
           mWebViews.remove(index);
+
         }
       } else {
+        tempForUndo = mWebViews.get(index);
         mWebViews.remove(index);
+        selectTab(mCurrentWebViewIndex - 1);
+        undoSnackbar(index);
         if (index < mCurrentWebViewIndex) {
           mCurrentWebViewIndex--;
         }
@@ -471,6 +585,20 @@ public class KiwixMobileActivity extends AppCompatActivity
       newTab();
     }
     mLeftArrayAdapter.notifyDataSetChanged();
+  }
+
+  private void undoSnackbar(final int index) {
+      Snackbar undoSnackbar =
+          Snackbar.make(snackbarLayout, "Tab closed", Snackbar.LENGTH_LONG)
+              .setAction("Undo", new View.OnClickListener() {
+                  @Override
+                  public void onClick(View v) {
+                      restoreTabAtIndex(tempForUndo.getUrl(), index);
+                      selectTab(index);
+                  }
+              });
+      undoSnackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
+      undoSnackbar.show();
   }
 
   private void selectTab(int position) {
@@ -1022,16 +1150,19 @@ public class KiwixMobileActivity extends AppCompatActivity
         break;
       case REQUEST_FILE_SEARCH:
         if (resultCode == RESULT_OK) {
-            String title = data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
-            String articleUrl = "";
+          String title =
+              data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
+          String articleUrl = "";
 
-            if(title.startsWith("A/")) {
-                articleUrl = title;
-            } else articleUrl = ZimContentProvider.getPageUrlFromTitle(title);
+          if (title.startsWith("A/")) {
+            articleUrl = title;
+          } else {
+            articleUrl = ZimContentProvider.getPageUrlFromTitle(title);
+          }
 
-            //System.out.println("Opening "+articleUrl + " (" + title + ")");
+          //System.out.println("Opening "+articleUrl + " (" + title + ")");
 
-            openArticle(articleUrl);
+          openArticle(articleUrl);
         }
         break;
       case REQUEST_PREFERENCES:
@@ -1160,13 +1291,13 @@ public class KiwixMobileActivity extends AppCompatActivity
     startActivityForResult(i, REQUEST_PREFERENCES);
   }
 
-  public void saveTabStates(){
+  public void saveTabStates() {
     SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
     SharedPreferences.Editor editor = settings.edit();
 
     JSONArray urls = new JSONArray();
     JSONArray positions = new JSONArray();
-    for (KiwixWebView view : mWebViews){
+    for (KiwixWebView view : mWebViews) {
       urls.put(view.getUrl());
       positions.put(view.getScrollY());
     }
@@ -1180,26 +1311,28 @@ public class KiwixMobileActivity extends AppCompatActivity
     editor.apply();
   }
 
-  public void restoreTabStates(){
+  public void restoreTabStates() {
     SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
     String zimFile = settings.getString(TAG_CURRENT_FILE, null);
     String zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null);
     String zimPositions = settings.getString(TAG_CURRENT_POSITIONS, null);
-    int currentTab = settings.getInt(TAG_CURRENT_TAB, 0 );
+
+    int currentTab = settings.getInt(TAG_CURRENT_TAB, 0);
+
     openZimFile(new File(zimFile), false);
     try {
       JSONArray urls = new JSONArray(zimArticles);
       JSONArray positions = new JSONArray(zimPositions);
-      int i=0;
+      int i = 0;
       getCurrentWebView().loadUrl(urls.getString(i));
       getCurrentWebView().setScrollY(positions.getInt(i));
       i++;
-      for (;i<urls.length();i++){
+      for (; i < urls.length(); i++) {
         newTab(urls.getString(i));
         getCurrentWebView().setScrollY(positions.getInt(i));
       }
       selectTab(currentTab);
-    } catch (Exception e ) {
+    } catch (Exception e) {
       Log.d(TAG_KIWIX, " Kiwix sharedpreferences corrupted");
     }
   }
@@ -1216,8 +1349,8 @@ public class KiwixMobileActivity extends AppCompatActivity
       String zimFile = settings.getString(TAG_CURRENT_FILE, null);
       if (zimFile != null) {
         Log.d(TAG_KIWIX,
-                " Kiwix normal start, zimFile loaded last time -> Open last used zimFile "
-                        + zimFile);
+            " Kiwix normal start, zimFile loaded last time -> Open last used zimFile "
+                + zimFile);
         restoreTabStates();
         // Alternative would be to restore webView state. But more effort to implement, and actually
         // fits better normal android behavior if after closing app ("back" button) state is not maintained.
@@ -1270,15 +1403,14 @@ public class KiwixMobileActivity extends AppCompatActivity
             zimFileMissingBuilder
                 .setPositiveButton(getString(R.string.go_to_play_store),
                     new DialogInterface.OnClickListener() {
-                      public void onClick(DialogInterface dialog, int which) {
-                        String market_uri = "market://details?id="
-                            + Constants.CUSTOM_APP_ID;
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(Uri.parse(market_uri));
-                        startActivity(intent);
-                        activity.finish();
-                        System.exit(0);
-                      }
+                        public void onClick(DialogInterface dialog, int which) {
+                            String market_uri = "market://details?id=" + Constants.CUSTOM_APP_ID;
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setData(Uri.parse(market_uri));
+                            startActivity(intent);
+                            activity.finish();
+                            System.exit(0);
+                        }
                     });
             zimFileMissingBuilder.setCancelable(false);
             AlertDialog zimFileMissingDialog = zimFileMissingBuilder.create();
@@ -1294,8 +1426,6 @@ public class KiwixMobileActivity extends AppCompatActivity
       }
     }
   }
-
-
 
   @Override
   public void onPause() {
@@ -1395,8 +1525,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         String failingUrl) {
 
       String errorString = String
-          .format(getResources().getString(R.string.error_articleurlnotfound),
-              failingUrl);
+          .format(getResources().getString(R.string.error_articleurlnotfound), failingUrl);
       // TODO apparently screws up back/forward
       getCurrentWebView().loadDataWithBaseURL("file://error",
           "<html><body>" + errorString + "</body></html>", "text/html", "utf-8",
