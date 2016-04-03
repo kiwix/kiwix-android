@@ -42,6 +42,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ActionMode;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -486,6 +487,7 @@ public class KiwixMobileActivity extends AppCompatActivity
           @Override public void onClick(View v) {
             restoreTabAtIndex(tempForUndo.getUrl(), index);
             selectTab(index);
+            mDrawerLayout.openDrawer(Gravity.LEFT);
           }
         });
     undoSnackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
