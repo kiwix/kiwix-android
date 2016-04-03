@@ -549,6 +549,7 @@ public class KiwixMobileActivity extends AppCompatActivity
     mLeftArrayAdapter.notifyDataSetChanged();
     selectTab(mWebViews.size() - 1);
     setUpWebView();
+    htmlUtils.initInterface(webView);
     return webView;
   }
 
