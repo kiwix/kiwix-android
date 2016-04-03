@@ -61,8 +61,7 @@ public class KiwixWebView extends WebView {
 
   private Handler saveHandler = new Handler() {
 
-    @Override
-    public void handleMessage(Message msg) {
+    @Override public void handleMessage(Message msg) {
 
       String url = (String) msg.getData().get("url");
       String src = (String) msg.getData().get("src");
@@ -73,15 +72,16 @@ public class KiwixWebView extends WebView {
         url = url.substring(url.indexOf("%3A") + 3, url.length());
         int dotIndex = url.lastIndexOf('.');
 
-        File storageDir = new File(Environment.getExternalStoragePublicDirectory(
-            Environment.DIRECTORY_PICTURES), url);
+        File storageDir =
+            new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                url);
 
         String newUrl = url;
         for (int i = 2; storageDir.exists(); i++) {
-          newUrl = url.substring(0, dotIndex) + "_" + i
-              + url.substring(dotIndex, url.length());
-          storageDir = new File(Environment.getExternalStoragePublicDirectory(
-              Environment.DIRECTORY_PICTURES), newUrl);
+          newUrl = url.substring(0, dotIndex) + "_" + i + url.substring(dotIndex, url.length());
+          storageDir = new File(
+              Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+              newUrl);
         }
 
         Uri source = Uri.parse(src);
@@ -126,8 +126,8 @@ public class KiwixWebView extends WebView {
   public void loadPrefs() {
     disableZoomControls();
 
-    SharedPreferences sharedPreferences = PreferenceManager
-        .getDefaultSharedPreferences(getContext());
+    SharedPreferences sharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(getContext());
     boolean zoomEnabled = sharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
 
     if (zoomEnabled) {
@@ -149,8 +149,7 @@ public class KiwixWebView extends WebView {
     setLayerType(View.LAYER_TYPE_HARDWARE, paint);
   }
 
-  @Override
-  public boolean performLongClick() {
+  @Override public boolean performLongClick() {
     HitTestResult result = getHitTestResult();
 
     if (result.getType() == HitTestResult.SRC_ANCHOR_TYPE) {
@@ -160,8 +159,7 @@ public class KiwixWebView extends WebView {
     return super.performLongClick();
   }
 
-  @Override
-  protected void onCreateContextMenu(ContextMenu menu) {
+  @Override protected void onCreateContextMenu(ContextMenu menu) {
     super.onCreateContextMenu(menu);
     final HitTestResult result = getHitTestResult();
     if (result.getType() == HitTestResult.IMAGE_ANCHOR_TYPE
@@ -178,8 +176,7 @@ public class KiwixWebView extends WebView {
     }
   }
 
-  @Override
-  protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+  @Override protected void onScrollChanged(int l, int t, int oldl, int oldt) {
     super.onScrollChanged(l, t, oldl, oldt);
     int windowHeight;
     if (getMeasuredHeight() > 0) {
@@ -197,7 +194,6 @@ public class KiwixWebView extends WebView {
   }
 
   public void disableZoomControls() {
-
     getSettings().setBuiltInZoomControls(true);
     getSettings().setDisplayZoomControls(false);
   }
