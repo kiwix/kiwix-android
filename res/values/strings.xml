@@ -54,4 +54,6 @@
   <string name="customapp_missing_content">Your application is corrupted.\nThis might happen when you remove files on the SD Card.\nYou need to uninstall then reinstall the App from the Play Store.</string>
   <string name="go_to_play_store">Go to Play Store</string>
   <string name="no_section_info">No Content Headers Found</string>
+  <string name="request_storage">To search for zim files we need access to your storage</string>
+  <string name="request_storage_title">Warning</string>
 </resources>
