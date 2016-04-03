@@ -422,6 +422,7 @@ public class KiwixMobileActivity extends AppCompatActivity
   }
 
   private void updateTableOfContents(){
+    mRightDrawerList.clearChoices();
     getCurrentWebView().loadUrl("javascript:(" + jsContent + ")()");
   }
 
