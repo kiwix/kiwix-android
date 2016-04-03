@@ -109,6 +109,8 @@ public class KiwixMobileActivity extends AppCompatActivity
 
   public static final int REQUEST_FILE_SEARCH = 1236;
 
+  public static final int REQUEST_STORAGE_PERMISSION = 1;
+
   private static final String TAG_CURRENT_FILE = "currentzimfile";
 
   private static final String TAG_CURRENT_ARTICLES = "currentarticles";
@@ -859,10 +861,12 @@ public class KiwixMobileActivity extends AppCompatActivity
 
       MenuItem searchItem = menu.findItem(R.id.menu_search);
       searchItem.setVisible(true);
+      final String zimFile = ZimContentProvider.getZimFile();
       searchItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(MenuItem item) {
           Intent i = new Intent(KiwixMobileActivity.this, SearchActivity.class);
+          i.putExtra("zimFile", zimFile);
           startActivityForResult(i, REQUEST_FILE_SEARCH);
           overridePendingTransition(0, 0);
           return true;
@@ -873,6 +877,7 @@ public class KiwixMobileActivity extends AppCompatActivity
         @Override
         public void onClick(View v) {
           Intent i = new Intent(KiwixMobileActivity.this, SearchActivity.class);
+          i.putExtra("zimFile", zimFile);
           startActivityForResult(i, REQUEST_FILE_SEARCH);
           overridePendingTransition(0, 0);
         }

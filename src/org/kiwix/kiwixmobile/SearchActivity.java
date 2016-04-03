@@ -41,9 +41,9 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setHomeButtonEnabled(true);
 
-
+    String zimFile = getIntent().getStringExtra("zimFile");
     mListView = (ListView) findViewById(R.id.search_list);
-    mDatabaseHelper = new DatabaseHelper(this);
+    mDatabaseHelper = new DatabaseHelper(this, zimFile);
     ArrayList<String> a = mDatabaseHelper.getRecentSearches();
     mDefaultAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1);
     mListView.setAdapter(mDefaultAdapter);

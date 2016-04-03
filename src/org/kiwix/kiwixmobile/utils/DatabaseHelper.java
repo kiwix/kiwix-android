@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.DatabaseUtils;
+import android.util.Log;
+
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,9 +20,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
   public static final String CONTACTS_TABLE_NAME = "recentsearches";
   public static final String CONTACTS_COLUMN_ID = "id";
   public static final String CONTACTS_COLUMN_SEARCH = "search";
+  public static final String CONTACTS_COLUMN_ZIM = "zim";
+  public static String zimFile;
 
-  public DatabaseHelper(Context context) {
-    super(context, DATABASE_NAME, null, 1);
+  public DatabaseHelper(Context context , String zimFile) {
+
+    super(context, DATABASE_NAME, null, 2);
+    this.zimFile = zimFile;
   }
 
   @Override
@@ -27,7 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // TODO Auto-generated method stub
     db.execSQL(
         "create table " + CONTACTS_TABLE_NAME +
-            " (id integer primary key, search text)"
+            " (id integer primary key, search text, zim text)"
     );
   }
 
@@ -42,6 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     SQLiteDatabase db = this.getWritableDatabase();
     ContentValues contentValues = new ContentValues();
     contentValues.put(CONTACTS_COLUMN_SEARCH, search);
+    contentValues.put(CONTACTS_COLUMN_ZIM, zimFile);
     db.insert(CONTACTS_TABLE_NAME, null, contentValues);
     return true;
   }
@@ -70,7 +78,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //hp = new HashMap();
     SQLiteDatabase db = this.getReadableDatabase();
-    Cursor res = db.rawQuery("select * from " + CONTACTS_TABLE_NAME, null);
+    Log.d(KiwixMobileActivity.TAG_KIWIX, zimFile);
+    Cursor res = db.rawQuery("select * from " + CONTACTS_TABLE_NAME + " where " + CONTACTS_COLUMN_ZIM +" = '" + zimFile + "'", null);
     res.moveToLast();
 
     while (res.isBeforeFirst() == false) {
