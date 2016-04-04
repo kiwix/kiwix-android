@@ -1,11 +1,9 @@
 package org.kiwix.kiwixmobile.views;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -16,9 +14,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 import java.util.ArrayList;
-import java.util.Collections;
 import org.kiwix.kiwixmobile.R;
 
 public class BookmarksActivity extends AppCompatActivity
@@ -26,9 +22,10 @@ public class BookmarksActivity extends AppCompatActivity
 
   private ArrayList<String> contents;
   private ListView bookmarksList;
-  private ArrayAdapter<String> adapter;
+  private ArrayAdapter adapter;
   private ArrayList<String> selected;
   private int numOfSelected;
+  SparseBooleanArray sparseBooleanArray;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -37,9 +34,8 @@ public class BookmarksActivity extends AppCompatActivity
     contents = getIntent().getStringArrayListExtra("bookmark_contents");
     selected = new ArrayList<>();
     bookmarksList = (ListView) findViewById(R.id.bookmarks_list);
-    adapter =
-        new ArrayAdapter<>(getApplicationContext(), R.layout.bookmarks_row, R.id.bookmark_title,
-            contents);
+    adapter = new ArrayAdapter(getApplicationContext(), R.layout.bookmarks_row, R.id.bookmark_title,
+        contents);
     bookmarksList.setAdapter(adapter);
     bookmarksList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
     bookmarksList.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
@@ -55,6 +51,10 @@ public class BookmarksActivity extends AppCompatActivity
           numOfSelected--;
           mode.setTitle(numOfSelected + " Selected");
         }
+        //sparseBooleanArray = bookmarksList.getCheckedItemPositions();
+        //adapter.setSparse(sparseBooleanArray);
+        //adapter.notifyDataSetChanged();
+
       }
 
       @Override public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -88,12 +88,12 @@ public class BookmarksActivity extends AppCompatActivity
   }
 
   private void deleteSelectedItems() {
-    SparseBooleanArray sparseBooleanArray = bookmarksList.getCheckedItemPositions();
-    for(int i = sparseBooleanArray.size() -1; i >= 0; i--)
+    sparseBooleanArray = bookmarksList.getCheckedItemPositions();
+    for (int i = sparseBooleanArray.size() - 1; i >= 0; i--)
       contents.remove(sparseBooleanArray.keyAt(i));
 
     adapter.notifyDataSetChanged();
-    }
+  }
 
   private void setUpToolbar() {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -105,7 +105,7 @@ public class BookmarksActivity extends AppCompatActivity
       @Override public void onClick(View v) {
         Intent intent = new Intent();
         intent.putExtra("bookmarks_array_list", contents);
-        intent.putExtra("bookmarkClicked" , false);
+        intent.putExtra("bookmarkClicked", false);
         setResult(RESULT_OK, intent);
         finish();
       }
@@ -116,16 +116,15 @@ public class BookmarksActivity extends AppCompatActivity
     Intent intent = new Intent();
     intent.putExtra("choseX", contents.get(position));
     intent.putExtra("bookmarks_array_list", contents);
-    intent.putExtra("bookmarkClicked" , true);
+    intent.putExtra("bookmarkClicked", true);
     setResult(RESULT_OK, intent);
     finish();
   }
 
-  @Override
-  public void onBackPressed() {
+  @Override public void onBackPressed() {
     Intent intent = new Intent();
     intent.putExtra("bookmarks_array_list", contents);
-    intent.putExtra("bookmarkClicked" , false);
+    intent.putExtra("bookmarkClicked", false);
     setResult(RESULT_OK, intent);
     finish();
     super.onBackPressed();
