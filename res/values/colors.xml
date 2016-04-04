@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
   <color name="primary">#ff212121</color>
   <color name="primary_dark">#ff212121</color>
   <color name="primary_light">#F5F5F5</color>
@@ -13,4 +14,5 @@
   <color name="drawer_background">#ffffff</color>
   <color name="selected_light">#0F000000</color>
   <color name="divider_light">#1E000000</color>
+  <drawable name="greyed_out_selected">#BDBDBD</drawable>
 </resources>

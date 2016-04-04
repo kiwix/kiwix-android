@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/bookmark_title"
-        android:textColor="@color/material_blue_grey_900"
-        android:textSize="20sp"
-        android:layout_margin="20dp"/>
+  <TextView
+      android:id="@+id/bookmark_title"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:layout_margin="15dp"
+      android:textColor="@color/material_blue_grey_900"
+      android:textSize="20sp"
+      />
+
 
 </LinearLayout>

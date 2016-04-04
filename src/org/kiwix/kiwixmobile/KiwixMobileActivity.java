@@ -96,8 +96,7 @@ import org.kiwix.kiwixmobile.views.BookmarksActivity;
 import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
 import org.kiwix.kiwixmobile.views.KiwixWebView;
 
-public class KiwixMobileActivity extends AppCompatActivity
-     {
+public class KiwixMobileActivity extends AppCompatActivity {
 
   public static final String TAG_KIWIX = "kiwix";
 
@@ -182,6 +181,7 @@ public class KiwixMobileActivity extends AppCompatActivity
   private RateAppCounter visitCounterPref;
   private int tempVisitCount;
   private static final int BOOKMARK_CHOSEN_REQUEST = 1;
+
   @Override public void onActionModeStarted(ActionMode mode) {
     if (mActionMode == null) {
       mActionMode = mode;
@@ -311,7 +311,7 @@ public class KiwixMobileActivity extends AppCompatActivity
   public void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {
     AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
 
-    alertDialog.setTitle("Please Rate");
+    alertDialog.setTitle("Please Rate Us");
 
     alertDialog.setMessage("If you enjoy using "
         + getString(R.string.app_name)
@@ -449,7 +449,7 @@ public class KiwixMobileActivity extends AppCompatActivity
   private void closeTab(int index) {
 
     if (mWebViews.size() > 1) {
-      if (mCurrentWebViewIndex == index)  {
+      if (mCurrentWebViewIndex == index) {
         if (mCurrentWebViewIndex >= 1) {
           selectTab(mCurrentWebViewIndex - 1);
           tempForUndo = mWebViews.get(index);
@@ -465,10 +465,11 @@ public class KiwixMobileActivity extends AppCompatActivity
       } else {
         tempForUndo = mWebViews.get(index);
         mWebViews.remove(index);
-        if(mCurrentWebViewIndex == 0)
-          selectTab(mWebViews.size()-1);
-        else
+        if (mCurrentWebViewIndex == 0) {
+          selectTab(mWebViews.size() - 1);
+        } else {
           selectTab(mCurrentWebViewIndex - 1);
+        }
         undoSnackbar(index);
         if (index < mCurrentWebViewIndex) {
           mCurrentWebViewIndex--;
@@ -489,14 +490,13 @@ public class KiwixMobileActivity extends AppCompatActivity
     Snackbar undoSnackbar = Snackbar.make(snackbarLayout, "Tab closed", Snackbar.LENGTH_LONG)
         .setAction("Undo", new View.OnClickListener() {
           @Override public void onClick(View v) {
-            if (index == 0)
+            if (mWebViews.size() == 1) {
               openArticleFromBookmark(tempForUndo.getTitle());
-            else {
+            } else {
               restoreTabAtIndex(tempForUndo.getUrl(), index);
               selectTab(index);
             }
             mDrawerLayout.openDrawer(Gravity.LEFT);
-
           }
         });
     undoSnackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
@@ -586,7 +586,7 @@ public class KiwixMobileActivity extends AppCompatActivity
 
   private void goToBookmarks() {
     Intent intentBookmarks = new Intent(getBaseContext(), BookmarksActivity.class);
-    intentBookmarks.putExtra("bookmark_contents", bookmarks.toArray(new String[0]));
+    intentBookmarks.putExtra("bookmark_contents", bookmarks);
     startActivityForResult(intentBookmarks, BOOKMARK_CHOSEN_REQUEST);
   }
 
@@ -626,8 +626,6 @@ public class KiwixMobileActivity extends AppCompatActivity
     editor.commit();
     mIsFullscreenOpened = false;
   }
-
-
 
   public void showWelcome() {
     getCurrentWebView().loadUrl("file:///android_res/raw/welcome.html");
@@ -797,7 +795,7 @@ public class KiwixMobileActivity extends AppCompatActivity
 
   public void toggleBookmark() {
     String title = getCurrentWebView().getTitle();
-      boolean isBookmark;
+    boolean isBookmark;
     if (title != null && !bookmarks.contains(title)) {
       bookmarks.add(title);
       isBookmark = true;
@@ -808,30 +806,25 @@ public class KiwixMobileActivity extends AppCompatActivity
       popBookmarkSnackbar(isBookmark);
     }
     supportInvalidateOptionsMenu();
-
   }
 
   private void popBookmarkSnackbar(boolean isBookmark) {
-    if(isBookmark) {
+    if (isBookmark) {
       Snackbar bookmarkSnackbar =
           Snackbar.make(snackbarLayout, "Bookmark added", Snackbar.LENGTH_LONG)
               .setAction("Open", new View.OnClickListener() {
                 @Override public void onClick(View v) {
-                      goToBookmarks();
+                  goToBookmarks();
                 }
               });
       bookmarkSnackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
       bookmarkSnackbar.show();
-    }
-    else{
+    } else {
       Snackbar bookmarkSnackbar =
           Snackbar.make(snackbarLayout, "Bookmark removed", Snackbar.LENGTH_LONG);
-          bookmarkSnackbar.show();
+      bookmarkSnackbar.show();
     }
-
   }
-
-
 
   private void refreshBookmarks() {
     bookmarks.clear();
@@ -967,10 +960,10 @@ public class KiwixMobileActivity extends AppCompatActivity
           AlertDialog.Builder builder = new AlertDialog.Builder(KiwixMobileActivity.this);
 
           builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                  newTab(url);
-                }
-              });
+            public void onClick(DialogInterface dialog, int id) {
+              newTab(url);
+            }
+          });
           builder.setNegativeButton(android.R.string.no, null);
           builder.setMessage(getString(R.string.open_in_new_tab));
           AlertDialog dialog = builder.create();
@@ -1061,10 +1054,19 @@ public class KiwixMobileActivity extends AppCompatActivity
         break;
 
       case BOOKMARK_CHOSEN_REQUEST:
-        if (resultCode == RESULT_OK){
-          String bookmarkChosen = data.getStringExtra("choseX");
-          newTab();
-          openArticleFromBookmark(bookmarkChosen);
+        if (resultCode == RESULT_OK) {
+          boolean itemClicked = data.getBooleanExtra("bookmarkClicked", false);
+
+          if (itemClicked) {
+            String bookmarkChosen = data.getStringExtra("choseX");
+            newTab();
+            openArticleFromBookmark(bookmarkChosen);
+            bookmarks = new ArrayList<>(data.getStringArrayListExtra("bookmarks_array_list"));
+            refreshBookmarkSymbol(menu);
+          } else {
+            bookmarks = new ArrayList<>(data.getStringArrayListExtra("bookmarks_array_list"));
+            refreshBookmarkSymbol(menu);
+          }
         }
     }
 
