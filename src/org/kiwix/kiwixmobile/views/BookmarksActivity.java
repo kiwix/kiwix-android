@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 import org.kiwix.kiwixmobile.R;
@@ -31,6 +32,7 @@ public class BookmarksActivity extends AppCompatActivity
   private int numOfSelected;
   SparseBooleanArray sparseBooleanArray;
   private LinearLayout snackbarLayout;
+  private TextView noBookmarksTextView;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -40,9 +42,13 @@ public class BookmarksActivity extends AppCompatActivity
     contents = getIntent().getStringArrayListExtra("bookmark_contents");
     selected = new ArrayList<>();
     bookmarksList = (ListView) findViewById(R.id.bookmarks_list);
+    noBookmarksTextView = (TextView) findViewById(R.id.bookmarks_list_nobookmarks);
     adapter = new ArrayAdapter(getApplicationContext(), R.layout.bookmarks_row, R.id.bookmark_title,
         contents);
     bookmarksList.setAdapter(adapter);
+
+    setNoBookmarksState();
+
     bookmarksList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
     bookmarksList.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
       @Override public void onItemCheckedStateChanged(ActionMode mode, int position, long id,
@@ -90,6 +96,13 @@ public class BookmarksActivity extends AppCompatActivity
     bookmarksList.setOnItemClickListener(this);
   }
 
+  private void setNoBookmarksState() {
+    if(bookmarksList.getCount() == 0)
+      noBookmarksTextView.setVisibility(View.VISIBLE);
+    else
+      noBookmarksTextView.setVisibility(View.GONE);
+  }
+
   private void popDeleteBookmarksSnackbar() {
     Snackbar bookmarkDeleteSnackbar =
         Snackbar.make(snackbarLayout, numOfSelected + " deleted", Snackbar.LENGTH_LONG)
@@ -98,6 +111,7 @@ public class BookmarksActivity extends AppCompatActivity
                 contents.clear();
                 contents.addAll(tempContents);
                 adapter.notifyDataSetChanged();
+                setNoBookmarksState();
                 Toast.makeText(getApplicationContext(), "Bookmarks restored", Toast.LENGTH_SHORT).show();
               }
             });
@@ -112,6 +126,7 @@ public class BookmarksActivity extends AppCompatActivity
       contents.remove(sparseBooleanArray.keyAt(i));
 
     adapter.notifyDataSetChanged();
+    setNoBookmarksState();
   }
 
   private void setUpToolbar() {
