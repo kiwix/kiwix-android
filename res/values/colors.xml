@@ -15,4 +15,5 @@
   <color name="selected_light">#0F000000</color>
   <color name="divider_light">#1E000000</color>
   <color name="greyed_out_selected">#BDBDBD</color>
+  <color name="black_regular_mat_design">#212121</color>
 </resources>

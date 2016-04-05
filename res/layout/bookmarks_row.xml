@@ -11,7 +11,7 @@
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
       android:layout_margin="15dp"
-      android:textColor="@color/material_blue_grey_900"
+      android:textColor="@drawable/bookmarks_selector"
       android:textSize="15sp"
       />
 
