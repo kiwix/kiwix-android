@@ -65,7 +65,8 @@
 
     </LinearLayout>
 
-    <include layout="@layout/drawer"/>
+    <include layout="@layout/drawer_left"/>
+    <include layout="@layout/drawer_right"/>
 
   </android.support.v4.widget.DrawerLayout>
 </LinearLayout>

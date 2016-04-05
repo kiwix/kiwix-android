@@ -55,7 +55,8 @@
           android:paddingLeft="4dp"
           android:paddingRight="4dp"
           android:paddingTop="4dp"
-          android:src="?attr/arrowBackDrawable"/>
+          android:src="?attr/arrowBackDrawable"
+          android:id="@+id/action_back_button" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -94,7 +95,8 @@
           android:paddingLeft="4dp"
           android:paddingRight="4dp"
           android:paddingTop="4dp"
-          android:src="?attr/arrowForwardDrawable"/>
+          android:src="?attr/arrowForwardDrawable"
+          android:id="@+id/action_forward_button" />
     </RelativeLayout>
   </LinearLayout>
 
