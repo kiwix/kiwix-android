@@ -12,7 +12,7 @@
       android:layout_height="fill_parent"
       android:layout_margin="15dp"
       android:textColor="@color/material_blue_grey_900"
-      android:textSize="20sp"
+      android:textSize="15sp"
       />
 
 

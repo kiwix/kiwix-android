@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.views;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -13,7 +14,9 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 import java.util.ArrayList;
 import org.kiwix.kiwixmobile.R;
 
@@ -21,16 +24,19 @@ public class BookmarksActivity extends AppCompatActivity
     implements AdapterView.OnItemClickListener {
 
   private ArrayList<String> contents;
+  private ArrayList<String> tempContents;
   private ListView bookmarksList;
   private ArrayAdapter adapter;
   private ArrayList<String> selected;
   private int numOfSelected;
   SparseBooleanArray sparseBooleanArray;
+  private LinearLayout snackbarLayout;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_bookmarks);
     setUpToolbar();
+    snackbarLayout = (LinearLayout) findViewById(R.id.bookmarks_activity_layout);
     contents = getIntent().getStringArrayListExtra("bookmark_contents");
     selected = new ArrayList<>();
     bookmarksList = (ListView) findViewById(R.id.bookmarks_list);
@@ -51,10 +57,6 @@ public class BookmarksActivity extends AppCompatActivity
           numOfSelected--;
           mode.setTitle(numOfSelected + " Selected");
         }
-        //sparseBooleanArray = bookmarksList.getCheckedItemPositions();
-        //adapter.setSparse(sparseBooleanArray);
-        //adapter.notifyDataSetChanged();
-
       }
 
       @Override public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -73,6 +75,7 @@ public class BookmarksActivity extends AppCompatActivity
         switch (item.getItemId()) {
           case R.id.menu_bookmarks_delete:
             deleteSelectedItems();
+            popDeleteBookmarksSnackbar();
             mode.finish();
             return true;
           default:
@@ -87,8 +90,24 @@ public class BookmarksActivity extends AppCompatActivity
     bookmarksList.setOnItemClickListener(this);
   }
 
+  private void popDeleteBookmarksSnackbar() {
+    Snackbar bookmarkDeleteSnackbar =
+        Snackbar.make(snackbarLayout, numOfSelected + " deleted", Snackbar.LENGTH_LONG)
+            .setAction("Undo", new View.OnClickListener() {
+              @Override public void onClick(View v) {
+                contents.clear();
+                contents.addAll(tempContents);
+                adapter.notifyDataSetChanged();
+                Toast.makeText(getApplicationContext(), "Bookmarks restored", Toast.LENGTH_SHORT).show();
+              }
+            });
+    bookmarkDeleteSnackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
+    bookmarkDeleteSnackbar.show();
+  }
+
   private void deleteSelectedItems() {
     sparseBooleanArray = bookmarksList.getCheckedItemPositions();
+    tempContents = new ArrayList<>(contents);
     for (int i = sparseBooleanArray.size() - 1; i >= 0; i--)
       contents.remove(sparseBooleanArray.keyAt(i));
 
