@@ -1,6 +1,11 @@
 1.98
 FIXED: Bookmark icon correctly updates when switching tabs
 NEW: Tabs reopen as you left them after app restart
+NEW: Undo tab deletions with one click
+NEW: Table of contents for articles accessed by swiping left
+NEW: Improved Bookmark System
+NEW: Back and forward buttons show as disabled if unusable
+NEW: Real time permission requests for Marshmallow
 
 1.97
 FIXED: Soft-keyboard opens on "find in page" click
