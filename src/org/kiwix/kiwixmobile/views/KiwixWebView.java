@@ -35,12 +35,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Toast;
+
+import org.kiwix.kiwixmobile.R;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import org.kiwix.kiwixmobile.R;
 
 public class KiwixWebView extends WebView {
 
@@ -61,7 +63,8 @@ public class KiwixWebView extends WebView {
 
   private Handler saveHandler = new Handler() {
 
-    @Override public void handleMessage(Message msg) {
+    @Override
+    public void handleMessage(Message msg) {
 
       String url = (String) msg.getData().get("url");
       String src = (String) msg.getData().get("src");
@@ -149,7 +152,8 @@ public class KiwixWebView extends WebView {
     setLayerType(View.LAYER_TYPE_HARDWARE, paint);
   }
 
-  @Override public boolean performLongClick() {
+  @Override
+  public boolean performLongClick() {
     HitTestResult result = getHitTestResult();
 
     if (result.getType() == HitTestResult.SRC_ANCHOR_TYPE) {
@@ -159,7 +163,8 @@ public class KiwixWebView extends WebView {
     return super.performLongClick();
   }
 
-  @Override protected void onCreateContextMenu(ContextMenu menu) {
+  @Override
+  protected void onCreateContextMenu(ContextMenu menu) {
     super.onCreateContextMenu(menu);
     final HitTestResult result = getHitTestResult();
     if (result.getType() == HitTestResult.IMAGE_ANCHOR_TYPE
@@ -176,7 +181,8 @@ public class KiwixWebView extends WebView {
     }
   }
 
-  @Override protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+  @Override
+  protected void onScrollChanged(int l, int t, int oldl, int oldt) {
     super.onScrollChanged(l, t, oldl, oldt);
     int windowHeight;
     if (getMeasuredHeight() > 0) {
