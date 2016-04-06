@@ -6,6 +6,7 @@ NEW: Table of contents for articles accessed by swiping left
 NEW: Improved Bookmark System
 NEW: Back and forward buttons show as disabled if unusable
 NEW: Real time permission requests for Marshmallow
+NEW: Asks the user if they would consider rating the app
 
 1.97
 FIXED: Soft-keyboard opens on "find in page" click
