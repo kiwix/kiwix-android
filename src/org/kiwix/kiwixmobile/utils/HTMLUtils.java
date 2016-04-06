@@ -12,11 +12,9 @@ import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
+import java.util.List;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
-
-import java.util.List;
 
 public class HTMLUtils {
 
@@ -76,17 +74,17 @@ public class HTMLUtils {
             section.sectionId = id;
             switch (element) {
               case "H2":
-                section.leftPadding = (int) (30 * context.getResources().getDisplayMetrics().density);
+                section.leftPadding = (int) (16 * context.getResources().getDisplayMetrics().density);
                 section.typeface = Typeface.DEFAULT;
                 section.color = Color.BLACK;
                 break;
               case "H3":
-                section.leftPadding = (int) (50 * context.getResources().getDisplayMetrics().density);
+                section.leftPadding = (int) (36 * context.getResources().getDisplayMetrics().density);
                 section.typeface = Typeface.DEFAULT;
                 section.color = Color.GRAY;
                 break;
               default:
-                section.leftPadding = (int) (30 * context.getResources().getDisplayMetrics().density);
+                section.leftPadding = (int) (16 * context.getResources().getDisplayMetrics().density);
                 section.typeface = Typeface.DEFAULT;
                 section.color = Color.BLACK;
                 break;
