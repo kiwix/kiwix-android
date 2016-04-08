@@ -937,6 +937,14 @@ public class KiwixMobileActivity extends AppCompatActivity {
         }
       });
 
+      findViewById(R.id.menu_bookmarks).setOnLongClickListener(new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View view) {
+          goToBookmarks();
+          return false;
+        }
+      });
+
       if (tts.isInitialized()) {
         menu.findItem(R.id.menu_read_aloud).setVisible(true);
         if (mIsSpeaking) {
@@ -948,7 +956,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
       e.printStackTrace();
     }
   }
-
+  
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     if (event.getAction() == KeyEvent.ACTION_DOWN) {
       switch (keyCode) {
