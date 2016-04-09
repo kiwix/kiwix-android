@@ -56,6 +56,5 @@
   <string name="no_bookmarks">No bookmarks!</string>
   <string name="menu_bookmarks_list">Bookmarks</string>
   <string name="no_section_info">No Content Headers Found</string>
-  <string name="request_storage">To search for zim files we need access to your storage</string>
-  <string name="request_storage_title">Warning</string>
+  <string name="request_storage">To access zim files we need access to your storage</string>
 </resources>

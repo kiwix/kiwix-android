@@ -19,12 +19,14 @@
 
 package org.kiwix.kiwixmobile;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -37,6 +39,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -74,7 +78,17 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.settings.Constants;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
@@ -88,18 +102,6 @@ import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
 import org.kiwix.kiwixmobile.views.BookmarksActivity;
 import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
 import org.kiwix.kiwixmobile.views.KiwixWebView;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 
 public class KiwixMobileActivity extends AppCompatActivity {
 
@@ -198,6 +200,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
   private int mCurrentWebViewIndex = 0;
 
   private AnimatedProgressBar mProgressBar;
+
+  private File mFile;
 
   // Initialized when onActionModeStarted is triggered.
   private ActionMode mActionMode = null;
@@ -816,41 +820,72 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   public boolean openZimFile(File file, boolean clearHistory) {
-    if (file.exists()) {
-      if (ZimContentProvider.setZimFile(file.getAbsolutePath()) != null) {
+    if (ContextCompat.checkSelfPermission(this,
+        Manifest.permission.READ_EXTERNAL_STORAGE)
+        == PackageManager.PERMISSION_GRANTED) {
+      if (file.exists()) {
+        if (ZimContentProvider.setZimFile(file.getAbsolutePath()) != null) {
 
-        // Apparently with webView.clearHistory() only history before currently (fully)
-        // loaded page is cleared -> request clear, actual clear done after load.
-        // Probably not working in all corners (e.g. zim file openend
-        // while load in progress, mainpage of new zim file invalid, ...
-        // but should be good enough.
-        // Actually probably redundant if no zim file openend before in session,
-        // but to be on save side don't clear history in such cases.
-        if (clearHistory) {
-          requestClearHistoryAfterLoad = true;
-        }
-        if (menu != null) {
-          initAllMenuItems();
+          // Apparently with webView.clearHistory() only history before currently (fully)
+          // loaded page is cleared -> request clear, actual clear done after load.
+          // Probably not working in all corners (e.g. zim file openend
+          // while load in progress, mainpage of new zim file invalid, ...
+          // but should be good enough.
+          // Actually probably redundant if no zim file openend before in session,
+          // but to be on save side don't clear history in such cases.
+          if (clearHistory) {
+            requestClearHistoryAfterLoad = true;
+          }
+          if (menu != null) {
+            initAllMenuItems();
+          } else {
+            // Menu may not be initialized yet. In this case
+            // signal to menu create to show
+            requestInitAllMenuItems = true;
+          }
+
+          openMainPage();
+          refreshBookmarks();
+          return true;
         } else {
-          // Menu may not be initialized yet. In this case
-          // signal to menu create to show
-          requestInitAllMenuItems = true;
+          Toast.makeText(this, getResources().getString(R.string.error_fileinvalid),
+              Toast.LENGTH_LONG).show();
         }
-
-        openMainPage();
-        refreshBookmarks();
-        return true;
       } else {
-        Toast.makeText(this, getResources().getString(R.string.error_fileinvalid),
-            Toast.LENGTH_LONG).show();
-      }
-    } else {
-      Log.e(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
+        Log.e(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
 
-      Toast.makeText(this, getResources().getString(R.string.error_filenotfound), Toast.LENGTH_LONG)
+        Toast.makeText(this, getResources().getString(R.string.error_filenotfound), Toast.LENGTH_LONG)
+            .show();
+      }
+      return false;
+    } else {
+      mFile = file;
+      ActivityCompat.requestPermissions(this,
+          new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+          KiwixMobileActivity.REQUEST_STORAGE_PERMISSION);
+      Toast.makeText(this, getResources().getString(R.string.request_storage), Toast.LENGTH_LONG)
           .show();
+      return false;
     }
-    return false;
+  }
+  @Override
+  public void onRequestPermissionsResult(int requestCode,
+                                         String permissions[], int[] grantResults) {
+    switch (requestCode) {
+      case KiwixMobileActivity.REQUEST_STORAGE_PERMISSION: {
+        if (grantResults.length > 0
+            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+          finish();
+          Intent newZimFile = new Intent(KiwixMobileActivity.this, KiwixMobileActivity.class);
+          newZimFile.setData(Uri.fromFile(mFile));
+          startActivity(newZimFile);
+        } else {
+          finish();
+        }
+        return;
+      }
+
+    }
   }
 
   private void initAllMenuItems() {
@@ -902,6 +937,14 @@ public class KiwixMobileActivity extends AppCompatActivity {
         }
       });
 
+      findViewById(R.id.menu_bookmarks).setOnLongClickListener(new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View view) {
+          goToBookmarks();
+          return false;
+        }
+      });
+
       if (tts.isInitialized()) {
         menu.findItem(R.id.menu_read_aloud).setVisible(true);
         if (mIsSpeaking) {
@@ -913,7 +956,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
       e.printStackTrace();
     }
   }
-
+  
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     if (event.getAction() == KeyEvent.ACTION_DOWN) {
       switch (keyCode) {
@@ -966,6 +1009,14 @@ public class KiwixMobileActivity extends AppCompatActivity {
       Snackbar bookmarkSnackbar =
           Snackbar.make(snackbarLayout, "Bookmark removed", Snackbar.LENGTH_LONG);
       bookmarkSnackbar.show();
+    }
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    if (menu != null) {
+      refreshBookmarkSymbol(menu);
     }
   }
 
@@ -1212,10 +1263,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
             newTab();
             openArticleFromBookmark(bookmarkChosen);
             bookmarks = new ArrayList<>(data.getStringArrayListExtra("bookmarks_array_list"));
-            refreshBookmarkSymbol(menu);
           } else {
             bookmarks = new ArrayList<>(data.getStringArrayListExtra("bookmarks_array_list"));
-            refreshBookmarkSymbol(menu);
           }
         }
     }

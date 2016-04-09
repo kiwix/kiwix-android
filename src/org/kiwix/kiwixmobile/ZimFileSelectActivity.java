@@ -35,7 +35,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -52,6 +51,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -112,13 +112,34 @@ public class ZimFileSelectActivity extends AppCompatActivity
 
   public void checkPermissions(){
     if (ContextCompat.checkSelfPermission(this,
-        Manifest.permission.READ_CONTACTS)
+        Manifest.permission.READ_EXTERNAL_STORAGE)
         != PackageManager.PERMISSION_GRANTED) {
-
+      Toast.makeText(this, getResources().getString(R.string.request_storage), Toast.LENGTH_LONG)
+          .show();
         ActivityCompat.requestPermissions(this,
             new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
             KiwixMobileActivity.REQUEST_STORAGE_PERMISSION);
 
+    } else {
+      getFiles();
+    }
+  }
+
+  public void getFiles(){
+
+    mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+    mProgressBarMessage = (TextView) findViewById(R.id.progressbar_message);
+    mZimFileList = (ListView) findViewById(R.id.zimfilelist);
+
+    mZimFileList.setOnItemClickListener(this);
+
+    mProgressBar.setVisibility(View.VISIBLE);
+    setAlpha(true);
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      startQuery();
+    } else {
+      new RescanFileSystem().execute();
     }
   }
 
@@ -129,23 +150,7 @@ public class ZimFileSelectActivity extends AppCompatActivity
       case KiwixMobileActivity.REQUEST_STORAGE_PERMISSION: {
         if (grantResults.length > 0
             && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-
-          mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-          mProgressBarMessage = (TextView) findViewById(R.id.progressbar_message);
-          mZimFileList = (ListView) findViewById(R.id.zimfilelist);
-
-          mZimFileList.setOnItemClickListener(this);
-
-          mProgressBar.setVisibility(View.VISIBLE);
-          setAlpha(true);
-
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            startQuery();
-          } else {
-            new RescanFileSystem().execute();
-          }
-
+            getFiles();
         } else {
           finish();
         }
