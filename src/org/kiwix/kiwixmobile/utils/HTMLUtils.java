@@ -50,22 +50,26 @@ public class HTMLUtils {
         @Override
         public void run() {
           if (element.equals("H1")) {
-            mRightListView.removeHeaderView(headerView);
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.section_list, null);
-            headerView = (TextView) view.findViewById(R.id.textTab);
-            headerView.setText(sectionTitle);
-            headerView.setPadding((int) (26 * context.getResources().getDisplayMetrics().density), 0, 0, 0);
-            headerView.setBackgroundColor(Color.LTGRAY);
-            headerView.setTypeface(Typeface.DEFAULT_BOLD);
-            headerView.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                context.getCurrentWebView().setScrollY(0);
-                context.mRightDrawerLayout.closeDrawer(Gravity.RIGHT);
-              }
-            });
-            mRightListView.addHeaderView(headerView);
+            if (mRightListView.getHeaderViewsCount() == 0) {
+              mRightListView.removeHeaderView(headerView);
+              LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+              View view = inflater.inflate(R.layout.section_list, null);
+              headerView = (TextView) view.findViewById(R.id.textTab);
+              headerView.setText(sectionTitle);
+              headerView.setPadding((int) (26 * context.getResources().getDisplayMetrics().density), 0, 0, 0);
+              headerView.setBackgroundColor(Color.LTGRAY);
+              headerView.setTypeface(Typeface.DEFAULT_BOLD);
+              headerView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                  context.getCurrentWebView().setScrollY(0);
+                  context.mRightDrawerLayout.closeDrawer(Gravity.RIGHT);
+                }
+              });
+              mRightListView.addHeaderView(headerView);
+            } else {
+              headerView.setText(sectionTitle);
+            }
           } else {
             textViews.add(i, new TextView(context));
             sectionProperties.add(i, new KiwixMobileActivity.SectionProperties());
