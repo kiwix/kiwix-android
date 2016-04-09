@@ -1012,6 +1012,14 @@ public class KiwixMobileActivity extends AppCompatActivity {
     }
   }
 
+  @Override
+  public void onResume() {
+    super.onResume();
+    if (menu != null) {
+      refreshBookmarkSymbol(menu);
+    }
+  }
+
   private void refreshBookmarks() {
     bookmarks.clear();
     if (ZimContentProvider.getId() != null) {
@@ -1255,10 +1263,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
             newTab();
             openArticleFromBookmark(bookmarkChosen);
             bookmarks = new ArrayList<>(data.getStringArrayListExtra("bookmarks_array_list"));
-            refreshBookmarkSymbol(menu);
           } else {
             bookmarks = new ArrayList<>(data.getStringArrayListExtra("bookmarks_array_list"));
-            refreshBookmarkSymbol(menu);
           }
         }
     }
