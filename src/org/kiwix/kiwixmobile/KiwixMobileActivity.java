@@ -214,6 +214,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private int tempVisitCount;
 
+  public static TextView headerView;
+
   @Override
   public void onActionModeStarted(ActionMode mode) {
     if (mActionMode == null) {
@@ -333,6 +335,24 @@ public class KiwixMobileActivity extends AppCompatActivity {
     mRightDrawerList = (ListView) findViewById(R.id.right_drawer_list);
     mRightDrawerList.setDivider(null);
     mRightDrawerList.setDividerHeight(0);
+
+
+    LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    View view = inflater.inflate(R.layout.content_header, null);
+    headerView = (TextView) view.findViewById(R.id.contentHeader);
+    headerView.setText(R.string.no_section_info);
+    headerView.setPadding((int) (26 * getResources().getDisplayMetrics().density), 0, 0, 0);
+    headerView.setBackgroundColor(Color.LTGRAY);
+    headerView.setTypeface(Typeface.DEFAULT_BOLD);
+    headerView.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        getCurrentWebView().setScrollY(0);
+        mRightDrawerLayout.closeDrawer(Gravity.RIGHT);
+      }
+    });
+    mRightDrawerList.addHeaderView(headerView);
+
     mRightDrawerList.setAdapter(mRightArrayAdapter);
     TextView tView = (TextView) findViewById(R.id.empty);
     mRightDrawerList.setEmptyView(tView);
