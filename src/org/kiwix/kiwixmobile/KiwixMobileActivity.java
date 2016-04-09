@@ -599,7 +599,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
         .setAction("Undo", new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-            if (mWebViews.size() == 1) {
+            if (mWebViews.size() == 1 && (mCurrentWebViewIndex == index)) {
               openArticleFromBookmark(tempForUndo.getTitle());
             } else {
               restoreTabAtIndex(tempForUndo.getUrl(), index);
