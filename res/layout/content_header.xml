@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    android:id="@+id/contentHeader"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_toLeftOf="@+id/deleteButton"
+    android:ellipsize="end"
+    android:fontFamily="sans-serif-light"
+    android:gravity="center_vertical"
+    android:maxLines="1"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:singleLine="true"
+    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+    xmlns:android="http://schemas.android.com/apk/res/android"/>
