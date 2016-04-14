@@ -19,22 +19,29 @@
 
 package org.kiwix.kiwixmobile.settings;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.BaseAdapter;
-import java.util.Locale;
+
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.utils.DatabaseHelper;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.views.SliderPreference;
+
+import java.util.Locale;
 
 public class KiwixSettingsActivity extends AppCompatActivity {
 
@@ -48,10 +55,16 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
   public static final String PREF_ZOOM = "pref_zoom_slider";
 
+  public static final String PREF_HISTORY = "pref_clear_history";
+
+  public static String zimFile;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.settings);
+
+    zimFile = getIntent().getStringExtra("zim_file");
 
     getFragmentManager()
         .beginTransaction().
@@ -91,11 +104,36 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       } else {
         getPreferenceScreen().removePreference(getPrefrence("pref_language"));
       }
-
       mSlider = (SliderPreference) getPrefrence(PREF_ZOOM);
       setSliderState();
       setUpSettings();
       new LanguageUtils(getActivity()).changeFont(getActivity().getLayoutInflater());
+    }
+
+
+    private void historyConfirmDialog() {
+      new AlertDialog.Builder(getActivity())
+          .setTitle("Clear History")
+          .setMessage(getResources().getString(R.string.history_dialog))
+          .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+              DeleteHistory();
+            }
+          })
+          .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+              // do nothing
+            }
+          })
+          .setIcon(android.R.drawable.ic_dialog_alert)
+          .show();
+    }
+
+    private void DeleteHistory() {
+      DatabaseHelper mDatabaseHelper = new DatabaseHelper(getActivity(), zimFile);
+      SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
+
+      mDatabaseHelper.deleteSearchTable(db);
     }
 
     private void setSliderState() {
@@ -184,6 +222,20 @@ public class KiwixSettingsActivity extends AppCompatActivity {
         mSlider.setSummary(mSlider.getSummary());
         ((BaseAdapter) getPreferenceScreen().getRootAdapter()).notifyDataSetChanged();
       }
+
+    }
+
+
+    @Override
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
+                                         Preference preference) {
+
+      if (preference.getKey().equalsIgnoreCase(PREF_HISTORY)) {
+        historyConfirmDialog();
+
+      }
+
+      return true;
     }
   }
 }

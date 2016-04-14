@@ -4,16 +4,16 @@
       android:title="@string/pref_display_title">
 
     <CheckBoxPreference
-        android:key="pref_nightmode"
-        android:title="@string/pref_nightmode"
         android:defaultValue="false"
-        android:summary="@string/pref_nightmode_summary"/>
+        android:key="pref_nightmode"
+        android:summary="@string/pref_nightmode_summary"
+        android:title="@string/pref_nightmode"/>
 
     <CheckBoxPreference
+        android:defaultValue="false"
         android:key="pref_backtotop"
-        android:title="@string/pref_backtotop"
         android:summary="@string/pref_backtotop_summary"
-        android:defaultValue="false"/>
+        android:title="@string/pref_backtotop"/>
 
   </PreferenceCategory>
 
@@ -22,29 +22,41 @@
       android:title="@string/pref_zoom_sub_title">
 
     <CheckBoxPreference
+        android:defaultValue="false"
         android:key="pref_zoom_enabled"
-        android:title="@string/pref_zoom_enable"
 
-        android:defaultValue="false"/>
+        android:title="@string/pref_zoom_enable"/>
 
     <org.kiwix.kiwixmobile.views.SliderPreference
-        android:key="pref_zoom_slider"
-        android:title="@string/pref_zoom_dialog"
-        android:summary="@array/pref_zoom_entryvalues"
-        android:dialogMessage="0"
         android:defaultValue="250.0"
-        android:enabled="false"/>
+        android:dialogMessage="0"
+        android:enabled="false"
+        android:key="pref_zoom_slider"
+        android:summary="@array/pref_zoom_entryvalues"
+        android:title="@string/pref_zoom_dialog"/>
   </PreferenceCategory>
 
+  <PreferenceCategory
+      android:key="pref_general"
+      android:title="General">
+
+    <Preference
+        android:key="pref_clear_history"
+        android:summary="Clear all history"
+        android:title="Clear History"
+        />
+
+
+  </PreferenceCategory>
   <PreferenceCategory
       android:key="pref_language"
       android:title="@string/pref_language_title">
 
     <ListPreference
+        android:dialogTitle="@string/pref_language_chooser"
         android:key="pref_language_chooser"
-        android:title="@string/pref_language_title"
         android:summary="@string/pref_language_chooser"
-        android:dialogTitle="@string/pref_language_chooser"/>
+        android:title="@string/pref_language_title"/>
 
   </PreferenceCategory>
 
@@ -53,12 +65,12 @@
       android:title="@string/pref_info_title">
 
     <EditTextPreference
-        android:key="pref_version"
-        android:title="@string/pref_info_version"
         android:enabled="false"
-        android:selectable="false"
+        android:key="pref_version"
         android:persistent="false"
-        android:shouldDisableView="false"/>
+        android:selectable="false"
+        android:shouldDisableView="false"
+        android:title="@string/pref_info_version"/>
 
   </PreferenceCategory>
 

@@ -57,4 +57,5 @@
   <string name="menu_bookmarks_list">Bookmarks</string>
   <string name="no_section_info">No Content Headers Found</string>
   <string name="request_storage">To access zim files we need access to your storage</string>
+  <string name="history_dialog">Are you sure you want to delete all history?</string>
 </resources>

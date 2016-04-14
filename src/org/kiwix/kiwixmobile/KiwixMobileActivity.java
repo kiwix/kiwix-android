@@ -78,17 +78,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
+
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.settings.Constants;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
@@ -102,6 +92,18 @@ import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
 import org.kiwix.kiwixmobile.views.BookmarksActivity;
 import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
 import org.kiwix.kiwixmobile.views.KiwixWebView;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 public class KiwixMobileActivity extends AppCompatActivity {
 
@@ -142,79 +144,43 @@ public class KiwixMobileActivity extends AppCompatActivity {
   public static ArrayList<State> mPrefState;
 
   public static boolean mIsFullscreenOpened;
-
+  public static TextView headerView;
   private static String jsContent;
-
   public Menu menu;
-
   public Toolbar toolbar;
-
   public boolean isFullscreenOpened;
-
   public ImageButton exitFullscreenButton;
-
   public List<SectionProperties> sectionProperties;
-
   public DrawerLayout mRightDrawerLayout;
-
   public Handler mHandler = new Handler();
-
   protected boolean requestClearHistoryAfterLoad;
-
   protected boolean requestInitAllMenuItems;
-
   protected int requestWebReloadOnFinished;
-
   private HTMLUtils htmlUtils;
-
   private boolean mIsBacktotopEnabled;
-
   private boolean mIsSpeaking;
-
   private Button mBackToTopButton;
-
   private ListView mLeftDrawerList;
-
   private ListView mRightDrawerList;
-
   private DrawerLayout mLeftDrawerLayout;
-
   private ArrayList<String> bookmarks;
-
   private List<KiwixWebView> mWebViews = new ArrayList<>();
-
   private List<TextView> mSections = new ArrayList<>();
-
   private KiwixTextToSpeech tts;
-
   private CompatFindActionModeCallback mCompatCallback;
-
   private ArrayAdapter<KiwixWebView> mLeftArrayAdapter;
-
   private ArrayAdapter<TextView> mRightArrayAdapter;
-
   private FrameLayout mContentFrame;
-
   private RelativeLayout mToolbarContainer;
-
   private int mCurrentWebViewIndex = 0;
-
   private AnimatedProgressBar mProgressBar;
-
   private File mFile;
-
   // Initialized when onActionModeStarted is triggered.
   private ActionMode mActionMode = null;
-
   private KiwixWebView tempForUndo;
-
   private LinearLayout snackbarLayout;
-
   private RateAppCounter visitCounterPref;
-
   private int tempVisitCount;
-
-  public static TextView headerView;
 
   @Override
   public void onActionModeStarted(ActionMode mode) {
@@ -843,7 +809,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
   public boolean openZimFile(File file, boolean clearHistory) {
     if (ContextCompat.checkSelfPermission(this,
         Manifest.permission.READ_EXTERNAL_STORAGE)
-        == PackageManager.PERMISSION_GRANTED ||  Build.VERSION.SDK_INT < 19) {
+        == PackageManager.PERMISSION_GRANTED || Build.VERSION.SDK_INT < 19) {
       if (file.exists()) {
         if (ZimContentProvider.setZimFile(file.getAbsolutePath()) != null) {
 
@@ -889,6 +855,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
       return false;
     }
   }
+
   @Override
   public void onRequestPermissionsResult(int requestCode,
                                          String permissions[], int[] grantResults) {
@@ -977,7 +944,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
       e.printStackTrace();
     }
   }
-  
+
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     if (event.getAction() == KeyEvent.ACTION_DOWN) {
       switch (keyCode) {
@@ -1399,7 +1366,9 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   public void selectSettings() {
+    final String zimFile = ZimContentProvider.getZimFile();
     Intent i = new Intent(this, KiwixSettingsActivity.class);
+    i.putExtra("zim_file", zimFile);
     startActivityForResult(i, REQUEST_PREFERENCES);
   }
 

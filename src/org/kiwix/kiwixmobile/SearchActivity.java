@@ -1,7 +1,7 @@
 package org.kiwix.kiwixmobile;
 
-import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -44,8 +44,10 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
     String zimFile = getIntent().getStringExtra("zimFile");
     mListView = (ListView) findViewById(R.id.search_list);
     mDatabaseHelper = new DatabaseHelper(this, zimFile);
+    SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
+    mDatabaseHelper.onCreate(db);
     ArrayList<String> a = mDatabaseHelper.getRecentSearches();
-    mDefaultAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1);
+    mDefaultAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
     mListView.setAdapter(mDefaultAdapter);
     mDefaultAdapter.addAll(a);
     mDefaultAdapter.notifyDataSetChanged();
@@ -89,16 +91,16 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
     });
 
     MenuItemCompat.setOnActionExpandListener(searchMenuItem,
-            new MenuItemCompat.OnActionExpandListener() {
-              @Override
-              public boolean onMenuItemActionExpand(MenuItem item) {
-                return false;
-              }
+        new MenuItemCompat.OnActionExpandListener() {
+          @Override
+          public boolean onMenuItemActionExpand(MenuItem item) {
+            return false;
+          }
 
-              @Override
-              public boolean onMenuItemActionCollapse(MenuItem item) {
-                finish();
-                return true;
+          @Override
+          public boolean onMenuItemActionCollapse(MenuItem item) {
+            finish();
+            return true;
           }
         });
     return true;

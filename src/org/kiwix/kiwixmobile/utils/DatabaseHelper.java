@@ -3,15 +3,14 @@ package org.kiwix.kiwixmobile.utils;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.DatabaseUtils;
 import android.util.Log;
 
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -23,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
   public static final String CONTACTS_COLUMN_ZIM = "zim";
   public static String zimFile;
 
-  public DatabaseHelper(Context context , String zimFile) {
+  public DatabaseHelper(Context context, String zimFile) {
 
     super(context, DATABASE_NAME, null, 2);
     this.zimFile = zimFile;
@@ -33,7 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
   public void onCreate(SQLiteDatabase db) {
     // TODO Auto-generated method stub
     db.execSQL(
-        "create table " + CONTACTS_TABLE_NAME +
+        "create table IF NOT EXISTS " + CONTACTS_TABLE_NAME +
             " (id integer primary key, search text, zim text)"
     );
   }
@@ -43,6 +42,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // TODO Auto-generated method stub
     db.execSQL("DROP TABLE IF EXISTS " + CONTACTS_TABLE_NAME);
     onCreate(db);
+  }
+
+  public void deleteSearchTable(SQLiteDatabase db) {
+    db.execSQL("DROP TABLE IF EXISTS " + CONTACTS_TABLE_NAME);
   }
 
   public boolean insertSearch(String search) {
@@ -75,18 +78,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
   public ArrayList<String> getRecentSearches() {
     ArrayList<String> array_list = new ArrayList<String>();
-
-    //hp = new HashMap();
     SQLiteDatabase db = this.getReadableDatabase();
+    //hp = new HashMap();
     Log.d(KiwixMobileActivity.TAG_KIWIX, zimFile);
-    Cursor res = db.rawQuery("select * from " + CONTACTS_TABLE_NAME + " where " + CONTACTS_COLUMN_ZIM +" = '" + zimFile + "'", null);
+    Cursor res = db.rawQuery("select * from " + CONTACTS_TABLE_NAME
+        + " where " + CONTACTS_COLUMN_ZIM + " = '" + zimFile + "'", null);
     res.moveToLast();
 
     while (res.isBeforeFirst() == false) {
       array_list.add(res.getString(res.getColumnIndex(CONTACTS_COLUMN_SEARCH)));
       res.moveToPrevious();
     }
+
+
     return array_list;
+
+
   }
 }
 
