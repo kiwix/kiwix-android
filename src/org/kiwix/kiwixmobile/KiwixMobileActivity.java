@@ -602,10 +602,11 @@ public class KiwixMobileActivity extends AppCompatActivity {
         } else {
           selectTab(mCurrentWebViewIndex - 1);
         }
-        undoSnackbar(index);
         if (index < mCurrentWebViewIndex) {
           mCurrentWebViewIndex--;
         }
+        undoSnackbar(index);
+
         mLeftDrawerList.setItemChecked(mCurrentWebViewIndex, true);
       }
     } else {
