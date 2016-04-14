@@ -168,7 +168,7 @@ COMPILER_VERSION = '4.9'
 NDK_PATH = os.environ.get('NDK_PATH',
                           os.path.join(os.path.dirname(CURRENT_PATH),
                                        'src', 'dependencies',
-                                       'android-ndk-r10e'))
+                                       'android-ndk'))
 SDK_PATH = os.environ.get('ANDROID_HOME',
                           os.path.join(os.path.dirname(CURRENT_PATH),
                                        'src', 'dependencies',

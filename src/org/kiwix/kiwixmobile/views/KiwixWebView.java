@@ -35,14 +35,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Toast;
-
-import org.kiwix.kiwixmobile.R;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import org.kiwix.kiwixmobile.R;
 
 public class KiwixWebView extends WebView {
 
@@ -72,7 +70,7 @@ public class KiwixWebView extends WebView {
       if (url != null || src != null) {
         url = url == null ? src : url;
         url = url.substring(url.lastIndexOf('/') + 1, url.length());
-        url = url.substring(url.indexOf("%3A") + 3, url.length());
+        url = url.substring(url.indexOf("%3A") + 1, url.length());
         int dotIndex = url.lastIndexOf('.');
 
         File storageDir =

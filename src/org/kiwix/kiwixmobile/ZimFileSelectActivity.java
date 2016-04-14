@@ -113,7 +113,7 @@ public class ZimFileSelectActivity extends AppCompatActivity
   public void checkPermissions(){
     if (ContextCompat.checkSelfPermission(this,
         Manifest.permission.READ_EXTERNAL_STORAGE)
-        != PackageManager.PERMISSION_GRANTED) {
+        != PackageManager.PERMISSION_GRANTED && Build.VERSION.SDK_INT > 18) {
       Toast.makeText(this, getResources().getString(R.string.request_storage), Toast.LENGTH_LONG)
           .show();
         ActivityCompat.requestPermissions(this,
