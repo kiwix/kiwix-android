@@ -37,13 +37,13 @@
   </PreferenceCategory>
 
   <PreferenceCategory
-      android:key="pref_general"
-      android:title="General">
+      android:key="pref_history"
+      android:title="History">
 
     <Preference
-        android:key="pref_clear_history"
-        android:summary="Clear all history"
-        android:title="Clear History"
+        android:key="pref_clear_recent_searches"
+        android:summary="Clear all recent search history"
+        android:title="Clear recent searches"
         />
 
 

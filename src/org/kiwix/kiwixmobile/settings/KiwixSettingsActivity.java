@@ -35,6 +35,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.BaseAdapter;
+import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.utils.DatabaseHelper;
@@ -55,7 +56,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
   public static final String PREF_ZOOM = "pref_zoom_slider";
 
-  public static final String PREF_HISTORY = "pref_clear_history";
+  public static final String PREF_RECENT_SEARCH = "pref_clear_recent_searches";
 
   public static String zimFile;
 
@@ -111,13 +112,14 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     }
 
 
-    private void historyConfirmDialog() {
+    private void recentSearchConfirmDialog() {
       new AlertDialog.Builder(getActivity())
           .setTitle("Clear History")
           .setMessage(getResources().getString(R.string.history_dialog))
           .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-              DeleteHistory();
+              deleteSearchHistoryFromDb();
+              Toast.makeText(getActivity(), "Recent searches cleared", Toast.LENGTH_SHORT).show();
             }
           })
           .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -129,7 +131,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
           .show();
     }
 
-    private void DeleteHistory() {
+    private void deleteSearchHistoryFromDb() {
       DatabaseHelper mDatabaseHelper = new DatabaseHelper(getActivity(), zimFile);
       SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
 
@@ -230,8 +232,8 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
                                          Preference preference) {
 
-      if (preference.getKey().equalsIgnoreCase(PREF_HISTORY)) {
-        historyConfirmDialog();
+      if (preference.getKey().equalsIgnoreCase(PREF_RECENT_SEARCH)) {
+        recentSearchConfirmDialog();
 
       }
 
