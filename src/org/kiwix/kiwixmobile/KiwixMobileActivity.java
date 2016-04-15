@@ -181,7 +181,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
   private LinearLayout snackbarLayout;
   private RateAppCounter visitCounterPref;
   private int tempVisitCount;
-
+  private int prevSize; // size before removed (undo snackbar)
   @Override
   public void onActionModeStarted(ActionMode mode) {
     if (mActionMode == null) {
@@ -536,6 +536,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     webView.loadUrl(url);
     webView.loadPrefs();
 
+
     mWebViews.add(index, webView);
     mLeftArrayAdapter.notifyDataSetChanged();
     selectTab(mWebViews.size() - 1);
@@ -545,13 +546,12 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   private void closeTab(int index) {
-
     if (mWebViews.size() > 1) {
       if (mCurrentWebViewIndex == index) {
         if (mCurrentWebViewIndex >= 1) {
           selectTab(mCurrentWebViewIndex - 1);
           tempForUndo = mWebViews.get(index);
-
+          prevSize = mWebViews.size(); //****
           mWebViews.remove(index);
           undoSnackbar(index);
         } else {
@@ -562,6 +562,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
         }
       } else {
         tempForUndo = mWebViews.get(index);
+        prevSize = mWebViews.size();
         mWebViews.remove(index);
         if (mCurrentWebViewIndex == 0) {
           selectTab(mWebViews.size() - 1);
@@ -577,6 +578,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
       }
     } else {
       tempForUndo = mWebViews.get(index);
+      prevSize = mWebViews.size();
       mWebViews.remove(index);
       newTab();
       mCurrentWebViewIndex = 0;
@@ -590,7 +592,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
         .setAction("Undo", new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-            if (mWebViews.size() == 1 && (mCurrentWebViewIndex == index)) {
+
+             if (mWebViews.size() == 1 && prevSize == 1) {
               openArticleFromBookmark(tempForUndo.getTitle());
             } else {
               restoreTabAtIndex(tempForUndo.getUrl(), index);
