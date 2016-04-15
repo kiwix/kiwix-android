@@ -182,6 +182,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
   private RateAppCounter visitCounterPref;
   private int tempVisitCount;
   private int prevSize; // size before removed (undo snackbar)
+
   @Override
   public void onActionModeStarted(ActionMode mode) {
     if (mActionMode == null) {
@@ -593,7 +594,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
           @Override
           public void onClick(View v) {
 
-             if (mWebViews.size() == 1 && prevSize == 1) {
+            if (mWebViews.size() == 1 && prevSize == 1) {
               openArticleFromBookmark(tempForUndo.getTitle());
             } else {
               restoreTabAtIndex(tempForUndo.getUrl(), index);
