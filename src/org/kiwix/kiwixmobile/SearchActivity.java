@@ -1,9 +1,11 @@
 package org.kiwix.kiwixmobile;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -14,13 +16,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.utils.DatabaseHelper;
 import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 
 import java.util.ArrayList;
 
-public class SearchActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class SearchActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
   private ListView mListView;
 
@@ -54,6 +57,7 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
     context = this;
     mAutoAdapter = new AutoCompleteAdapter(context);
     mListView.setOnItemClickListener(context);
+    mListView.setOnItemLongClickListener(context);
   }
 
   @Override
@@ -119,4 +123,58 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
     setResult(RESULT_OK, i);
     finish();
   }
+
+  @Override
+  public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+    String searched = mListView.getItemAtPosition(position).toString();
+    deleteSpecificSearchDialog(searched);
+    return true;
+  }
+
+  private void deleteSpecificSearchDialog(final String search) {
+    new AlertDialog.Builder(this)
+        .setTitle("Delete recent search")
+        .setMessage(getResources().getString(R.string.deleteRecentSearchItem))
+        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int which) {
+            deleteSpecificSearchItem(search);
+            Toast.makeText(getBaseContext(), "Recent search removed", Toast.LENGTH_SHORT).show();
+          }
+        })
+        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int which) {
+            // do nothing
+          }
+        })
+        .setIcon(android.R.drawable.ic_dialog_alert)
+        .show();
+  }
+
+  private void deleteSpecificSearchItem(String search) {
+    SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
+    mDatabaseHelper.deleteSpecificSearch(db, escapeSqlSyntax(search));
+    resetAdapter();
+  }
+
+  private String escapeSqlSyntax(String search) { //Escapes sql ' if exists
+    String tempStr = "";
+    char[] charArray = search.toCharArray();
+    for (char a : charArray) {
+      if (a != '\'')
+        tempStr += a;
+      else
+        tempStr += "''";
+    }
+    return tempStr;
+  }
+
+  private void resetAdapter() {
+    ArrayList<String> a = mDatabaseHelper.getRecentSearches();
+    mDefaultAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+    mListView.setAdapter(mDefaultAdapter);
+    mDefaultAdapter.addAll(a);
+    mDefaultAdapter.notifyDataSetChanged();
+  }
+
+
 }

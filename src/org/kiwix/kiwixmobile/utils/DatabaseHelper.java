@@ -33,7 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // TODO Auto-generated method stub
     db.execSQL(
         "create table IF NOT EXISTS " + CONTACTS_TABLE_NAME +
-            " (id integer primary key, search text, zim text)"
+            " (id integer primary key, search text unique, zim text)"
     );
   }
 
@@ -46,6 +46,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
   public void deleteSearchTable(SQLiteDatabase db) {
     db.execSQL("DROP TABLE IF EXISTS " + CONTACTS_TABLE_NAME);
+  }
+
+  public void deleteSpecificSearch(SQLiteDatabase db, String search) {
+    db.execSQL("delete from " + CONTACTS_TABLE_NAME + " where " + CONTACTS_COLUMN_SEARCH + "= '" + search + "'");
   }
 
   public boolean insertSearch(String search) {
