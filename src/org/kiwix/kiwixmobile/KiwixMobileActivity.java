@@ -1238,7 +1238,11 @@ public class KiwixMobileActivity extends AppCompatActivity {
           finish();
           startActivity(new Intent(KiwixMobileActivity.this, KiwixMobileActivity.class));
         }
-
+        if (resultCode == KiwixSettingsActivity.RESULT_HISTORY_CLEARED) {
+          mWebViews.clear();
+          newTab();
+          mLeftArrayAdapter.notifyDataSetChanged();
+        }
         loadPrefs();
         for (KiwixMobileActivity.State state : KiwixMobileActivity.mPrefState) {
           state.setHasToBeRefreshed(true);

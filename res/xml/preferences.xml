@@ -42,10 +42,11 @@
 
     <Preference
         android:key="pref_clear_recent_searches"
-        android:summary="Clear all recent search history"
-        android:title="Clear recent searches"
-        />
-
+        android:title="@string/pref_clear_recent_searches_title"/>
+    <Preference
+        android:key="pref_clear_all_history"
+        android:summary="@string/pref_clear_all_history_summary"
+        android:title="@string/pref_clear_all_history_title"/>
 
   </PreferenceCategory>
   <PreferenceCategory

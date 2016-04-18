@@ -133,9 +133,8 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
 
   private void deleteSpecificSearchDialog(final String search) {
     new AlertDialog.Builder(this)
-        .setTitle("Delete recent search")
         .setMessage(getResources().getString(R.string.deleteRecentSearchItem))
-        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int which) {
             deleteSpecificSearchItem(search);
             Toast.makeText(getBaseContext(), "Recent search removed", Toast.LENGTH_SHORT).show();
@@ -146,7 +145,6 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
             // do nothing
           }
         })
-        .setIcon(android.R.drawable.ic_dialog_alert)
         .show();
   }
 
