@@ -59,4 +59,7 @@
   <string name="request_storage">To access zim files we need access to your storage</string>
   <string name="history_dialog">Are you sure you want to delete all history?</string>
   <string name="deleteRecentSearchItem">Delete this item?</string>
+  <string name="pref_clear_all_history_title">Clear all history</string>
+  <string name="pref_clear_all_history_summary">Clears recent searches,tabs history</string>
+  <string name="pref_clear_recent_searches_title">Clear recent searches</string>
 </resources>
