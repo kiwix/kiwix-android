@@ -61,7 +61,7 @@
   <string name="clear_recent_and_tabs_history_dialog">Are you sure you want to delete your search history and reset all active tabs?</string>
   <string name="deleteRecentSearchItem">Delete this item?</string>
   <string name="pref_clear_all_history_title">Clear all history</string>
-  <string name="pref_clear_all_history_summary">Clears recent searches,tabs history</string>
+  <string name="pref_clear_all_history_summary">Clears recent searches and resets active tabs</string>
   <string name="pref_clear_recent_searches_title">Clear recent searches</string>
   <string name="all_history_cleared_toast">All History Cleared</string>
   <string name="recent_search_removed_toast">Recent searches cleared</string>

@@ -144,43 +144,80 @@ public class KiwixMobileActivity extends AppCompatActivity {
   public static ArrayList<State> mPrefState;
 
   public static boolean mIsFullscreenOpened;
+
   public static TextView headerView;
+
   private static String jsContent;
+
   public Menu menu;
+
   public Toolbar toolbar;
+
   public boolean isFullscreenOpened;
+
   public ImageButton exitFullscreenButton;
+
   public List<SectionProperties> sectionProperties;
+
   public DrawerLayout mRightDrawerLayout;
+
   public Handler mHandler = new Handler();
+
   protected boolean requestClearHistoryAfterLoad;
+
   protected boolean requestInitAllMenuItems;
+
   protected int requestWebReloadOnFinished;
+
   private HTMLUtils htmlUtils;
+
   private boolean mIsBacktotopEnabled;
+
   private boolean mIsSpeaking;
+
   private Button mBackToTopButton;
+
   private ListView mLeftDrawerList;
+
   private ListView mRightDrawerList;
+
   private DrawerLayout mLeftDrawerLayout;
+
   private ArrayList<String> bookmarks;
+
   private List<KiwixWebView> mWebViews = new ArrayList<>();
+
   private List<TextView> mSections = new ArrayList<>();
+
   private KiwixTextToSpeech tts;
+
   private CompatFindActionModeCallback mCompatCallback;
+
   private ArrayAdapter<KiwixWebView> mLeftArrayAdapter;
+
   private ArrayAdapter<TextView> mRightArrayAdapter;
+
   private FrameLayout mContentFrame;
+
   private RelativeLayout mToolbarContainer;
+
   private int mCurrentWebViewIndex = 0;
+
   private AnimatedProgressBar mProgressBar;
+
   private File mFile;
+
   // Initialized when onActionModeStarted is triggered.
   private ActionMode mActionMode = null;
+
   private KiwixWebView tempForUndo;
+
   private LinearLayout snackbarLayout;
+
   private RateAppCounter visitCounterPref;
+
   private int tempVisitCount;
+
   private int prevSize; // size before removed (undo snackbar)
 
   @Override
