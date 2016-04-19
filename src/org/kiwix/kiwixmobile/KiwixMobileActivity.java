@@ -552,7 +552,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
         if (mCurrentWebViewIndex >= 1) {
           selectTab(mCurrentWebViewIndex - 1);
           tempForUndo = mWebViews.get(index);
-          prevSize = mWebViews.size(); //****
+          prevSize = mWebViews.size();
           mWebViews.remove(index);
           undoSnackbar(index);
         } else {

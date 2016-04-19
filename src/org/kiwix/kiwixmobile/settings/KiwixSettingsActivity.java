@@ -132,12 +132,12 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
     private void recentSearchConfirmDialog() {
       new AlertDialog.Builder(getActivity())
-          .setTitle("Clear History")
-          .setMessage(getResources().getString(R.string.history_dialog))
+          .setTitle(getResources().getString(R.string.recent_search_dialog_title))
+          .setMessage(getResources().getString(R.string.clear_recent_history_dialog))
           .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
               deleteSearchHistoryFromDb();
-              Toast.makeText(getActivity(), "Recent searches cleared", Toast.LENGTH_SHORT).show();
+              Toast.makeText(getActivity(), getResources().getString(R.string.recent_search_removed_toast), Toast.LENGTH_SHORT).show();
             }
           })
           .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -247,13 +247,13 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
     private void clearAllHistoryDialog() {
       new AlertDialog.Builder(getActivity())
-          .setTitle("Clear All History")
-          .setMessage(getResources().getString(R.string.history_dialog))
+          .setTitle(getResources().getString(R.string.clear_all_history_dialog_title))
+          .setMessage(getResources().getString(R.string.clear_recent_and_tabs_history_dialog))
           .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
               deleteSearchHistoryFromDb();
               allHistoryCleared = true;
-              Toast.makeText(getActivity(), "All HIstory Cleared", Toast.LENGTH_SHORT).show();
+              Toast.makeText(getActivity(), getResources().getString(R.string.all_history_cleared_toast), Toast.LENGTH_SHORT).show();
             }
           })
           .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
