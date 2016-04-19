@@ -126,8 +126,10 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
 
   @Override
   public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-    String searched = mListView.getItemAtPosition(position).toString();
-    deleteSpecificSearchDialog(searched);
+    if (parent.getAdapter() == mDefaultAdapter) {
+      String searched = mListView.getItemAtPosition(position).toString();
+      deleteSpecificSearchDialog(searched);
+    }
     return true;
   }
 

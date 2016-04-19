@@ -253,7 +253,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
               deleteSearchHistoryFromDb();
               allHistoryCleared = true;
-              Toast.makeText(getActivity(), "Cleared all history", Toast.LENGTH_SHORT).show();
+              Toast.makeText(getActivity(), "All HIstory Cleared", Toast.LENGTH_SHORT).show();
             }
           })
           .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
