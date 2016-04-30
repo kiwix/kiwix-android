@@ -41,9 +41,6 @@
       android:title="History">
 
     <Preference
-        android:key="pref_clear_recent_searches"
-        android:title="@string/pref_clear_recent_searches_title"/>
-    <Preference
         android:key="pref_clear_all_history"
         android:summary="@string/pref_clear_all_history_summary"
         android:title="@string/pref_clear_all_history_title"/>

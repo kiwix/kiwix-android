@@ -58,8 +58,6 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
   public static final String PREF_ZOOM = "pref_zoom_slider";
 
-  public static final String PREF_RECENT_SEARCH = "pref_clear_recent_searches";
-
   public static final String PREF_CLEAR_ALL_HISTORY = "pref_clear_all_history";
 
   public static String zimFile;
@@ -127,26 +125,6 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       setSliderState();
       setUpSettings();
       new LanguageUtils(getActivity()).changeFont(getActivity().getLayoutInflater());
-    }
-
-
-    private void recentSearchConfirmDialog() {
-      new AlertDialog.Builder(getActivity())
-          .setTitle(getResources().getString(R.string.recent_search_dialog_title))
-          .setMessage(getResources().getString(R.string.clear_recent_history_dialog))
-          .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-              deleteSearchHistoryFromDb();
-              Toast.makeText(getActivity(), getResources().getString(R.string.recent_search_removed_toast), Toast.LENGTH_SHORT).show();
-            }
-          })
-          .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-              // do nothing
-            }
-          })
-          .setIcon(android.R.drawable.ic_dialog_alert)
-          .show();
     }
 
     private void deleteSearchHistoryFromDb() {
@@ -268,10 +246,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
                                          Preference preference) {
-
-      if (preference.getKey().equalsIgnoreCase(PREF_RECENT_SEARCH)) {
-        recentSearchConfirmDialog();
-      } else if (preference.getKey().equalsIgnoreCase(PREF_CLEAR_ALL_HISTORY))
+      if (preference.getKey().equalsIgnoreCase(PREF_CLEAR_ALL_HISTORY))
         clearAllHistoryDialog();
 
       return true;

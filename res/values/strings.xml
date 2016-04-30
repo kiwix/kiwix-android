@@ -57,15 +57,12 @@
   <string name="menu_bookmarks_list">Bookmarks</string>
   <string name="no_section_info">No Content Headers Found</string>
   <string name="request_storage">To access zim files we need access to your storage</string>
-  <string name="clear_recent_history_dialog">Are you sure you want to delete your search history?</string>
   <string name="clear_recent_and_tabs_history_dialog">Are you sure you want to delete your search history and reset all active tabs?</string>
   <string name="deleteRecentSearchItem">Delete this item?</string>
-  <string name="pref_clear_all_history_title">Clear all history</string>
+  <string name="pref_clear_all_history_title">Clear History</string>
   <string name="pref_clear_all_history_summary">Clears recent searches,tabs history</string>
   <string name="pref_clear_recent_searches_title">Clear recent searches</string>
   <string name="all_history_cleared_toast">All History Cleared</string>
-  <string name="recent_search_removed_toast">Recent searches cleared</string>
-  <string name="recent_search_dialog_title">Clear History</string>
   <string name="clear_all_history_dialog_title">Clear All History</string>
   <string name="delete">Delete</string>
   <string name="delete_specific_search_toast">Recent search removed</string>
