@@ -222,6 +222,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private boolean isFirstRun;
 
+  private SharedPreferences settings;
   @Override
   public void onActionModeStarted(ActionMode mode) {
     if (mActionMode == null) {
@@ -270,7 +271,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
     toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
-    isFirstRun = getSharedPreferences("PREFERENCES", MODE_PRIVATE).getBoolean("isFirstRun", true);
+    settings = PreferenceManager.getDefaultSharedPreferences(this);
+    isFirstRun = settings.getBoolean("isFirstRun", true);
     visitCounterPref = new RateAppCounter(this);
     tempVisitCount = visitCounterPref.getCount();
     ++tempVisitCount;
@@ -563,7 +565,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
         // onClick
         if (isFirstRun) {
           contentsDrawerHint();
-          SharedPreferences.Editor editor = getSharedPreferences("PREFERENCES", MODE_PRIVATE).edit(); 
+          SharedPreferences.Editor editor = settings.edit();
           editor.putBoolean("isFirstRun", false); // It is no longer the first run
           isFirstRun = false;
           editor.commit(); 
@@ -1117,12 +1119,12 @@ public class KiwixMobileActivity extends AppCompatActivity {
     }, 500);
 
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setMessage("You can swipe left to view the contents of this article ")
-        .setPositiveButton("Got it", new DialogInterface.OnClickListener() {
+    builder.setMessage(getResources().getString(R.string.hint_contents_drawer_message))
+        .setPositiveButton(getResources().getString(R.string.got_it), new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int id) {
           }
         })
-        .setTitle("Did you know?")
+        .setTitle(getResources().getString(R.string.did_you_know))
         .setIcon(R.drawable.icon_question);
     AlertDialog alert = builder.create();
     alert.show();//showing the dialog
@@ -1312,7 +1314,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
           startActivity(new Intent(KiwixMobileActivity.this, KiwixMobileActivity.class));
         }
         if (resultCode == KiwixSettingsActivity.RESULT_HISTORY_CLEARED) {
-          SharedPreferences.Editor editor = getSharedPreferences("PREFERENCES", MODE_PRIVATE).edit();
+          SharedPreferences.Editor editor = settings.edit();
           editor.putBoolean("isFirstRun", true); // clearing like first launch
           isFirstRun = true;
           editor.commit();
