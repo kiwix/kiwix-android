@@ -1114,7 +1114,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
       public void run() {
         mLeftDrawerLayout.openDrawer(Gravity.RIGHT);
       }
-    }, 1000);
+    }, 500);
 
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setMessage("You can swipe left to view the contents of this article ")
@@ -1312,6 +1312,10 @@ public class KiwixMobileActivity extends AppCompatActivity {
           startActivity(new Intent(KiwixMobileActivity.this, KiwixMobileActivity.class));
         }
         if (resultCode == KiwixSettingsActivity.RESULT_HISTORY_CLEARED) {
+          SharedPreferences.Editor editor = getSharedPreferences("PREFERENCES", MODE_PRIVATE).edit();
+          editor.putBoolean("isFirstRun", true); // clearing like first launch
+          isFirstRun = true;
+          editor.commit();
           mWebViews.clear();
           newTab();
           mLeftArrayAdapter.notifyDataSetChanged();
