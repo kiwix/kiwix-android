@@ -20,6 +20,7 @@
       android:layout_width="match_parent"
       android:layout_height="0dp"
       android:layout_weight="1"
+      android:layout_gravity="start"
       android:choiceMode="singleChoice"
       android:divider="@null"
       android:dividerHeight="0dp"

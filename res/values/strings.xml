@@ -66,4 +66,7 @@
   <string name="clear_all_history_dialog_title">Clear All History</string>
   <string name="delete">Delete</string>
   <string name="delete_specific_search_toast">Recent search removed</string>
+  <string name="hint_contents_drawer_message">You can swipe left to view the contents of this article</string>
+  <string name="got_it">Got it</string>
+  <string name="did_you_know">Did you know?</string>
 </resources>

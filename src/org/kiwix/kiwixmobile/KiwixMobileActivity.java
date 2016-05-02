@@ -220,6 +220,9 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private int prevSize; // size before removed (undo snackbar)
 
+  private boolean isFirstRun;
+
+  private SharedPreferences settings;
   @Override
   public void onActionModeStarted(ActionMode mode) {
     if (mActionMode == null) {
@@ -268,6 +271,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
     toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
+    settings = PreferenceManager.getDefaultSharedPreferences(this);
+    isFirstRun = settings.getBoolean("isFirstRun", true);
     visitCounterPref = new RateAppCounter(this);
     tempVisitCount = visitCounterPref.getCount();
     ++tempVisitCount;
@@ -554,7 +559,20 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private KiwixWebView newTab(String url) {
     KiwixWebView webView = new KiwixWebView(KiwixMobileActivity.this);
-    webView.setWebViewClient(new KiwixWebViewClient(KiwixMobileActivity.this, mLeftArrayAdapter));
+    webView.setWebViewClient(new KiwixWebViewClient(KiwixMobileActivity.this, mLeftArrayAdapter){
+      @Override
+      public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        // onClick
+        if (isFirstRun) {
+          contentsDrawerHint();
+          SharedPreferences.Editor editor = settings.edit();
+          editor.putBoolean("isFirstRun", false); // It is no longer the first run
+          isFirstRun = false;
+          editor.commit(); 
+        }
+        return super.shouldOverrideUrlLoading(view, url);
+      }
+    });
     webView.setWebChromeClient(new KiwixWebChromeClient());
     webView.loadUrl(url);
     webView.loadPrefs();
@@ -1092,6 +1110,26 @@ public class KiwixMobileActivity extends AppCompatActivity {
     return openArticle(ZimContentProvider.getPageUrlFromTitle(bookmarkTitle));
   }
 
+  private void contentsDrawerHint() {
+    mLeftDrawerLayout.postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        mLeftDrawerLayout.openDrawer(Gravity.RIGHT);
+      }
+    }, 500);
+
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setMessage(getResources().getString(R.string.hint_contents_drawer_message))
+        .setPositiveButton(getResources().getString(R.string.got_it), new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int id) {
+          }
+        })
+        .setTitle(getResources().getString(R.string.did_you_know))
+        .setIcon(R.drawable.icon_question);
+    AlertDialog alert = builder.create();
+    alert.show();//showing the dialog
+  }
+
   private boolean openArticle(String articleUrl) {
     if (articleUrl != null) {
       getCurrentWebView().loadUrl(
@@ -1276,6 +1314,10 @@ public class KiwixMobileActivity extends AppCompatActivity {
           startActivity(new Intent(KiwixMobileActivity.this, KiwixMobileActivity.class));
         }
         if (resultCode == KiwixSettingsActivity.RESULT_HISTORY_CLEARED) {
+          SharedPreferences.Editor editor = settings.edit();
+          editor.putBoolean("isFirstRun", true); // clearing like first launch
+          isFirstRun = true;
+          editor.commit();
           mWebViews.clear();
           newTab();
           mLeftArrayAdapter.notifyDataSetChanged();
