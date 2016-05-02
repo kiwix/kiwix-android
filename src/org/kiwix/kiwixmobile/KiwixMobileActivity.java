@@ -220,6 +220,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private int prevSize; // size before removed (undo snackbar)
 
+  private boolean isFirstRun;
+
   @Override
   public void onActionModeStarted(ActionMode mode) {
     if (mActionMode == null) {
@@ -268,6 +270,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
+    isFirstRun = getSharedPreferences("PREFERENCES", MODE_PRIVATE).getBoolean("isFirstRun", true);
     visitCounterPref = new RateAppCounter(this);
     tempVisitCount = visitCounterPref.getCount();
     ++tempVisitCount;
@@ -554,7 +557,20 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private KiwixWebView newTab(String url) {
     KiwixWebView webView = new KiwixWebView(KiwixMobileActivity.this);
-    webView.setWebViewClient(new KiwixWebViewClient(KiwixMobileActivity.this, mLeftArrayAdapter));
+    webView.setWebViewClient(new KiwixWebViewClient(KiwixMobileActivity.this, mLeftArrayAdapter){
+      @Override
+      public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        // onClick
+        if (isFirstRun) {
+          contentsDrawerHint();
+          SharedPreferences.Editor editor = getSharedPreferences("PREFERENCES", MODE_PRIVATE).edit(); 
+          editor.putBoolean("isFirstRun", false); // It is no longer the first run
+          isFirstRun = false;
+          editor.commit(); 
+        }
+        return super.shouldOverrideUrlLoading(view, url);
+      }
+    });
     webView.setWebChromeClient(new KiwixWebChromeClient());
     webView.loadUrl(url);
     webView.loadPrefs();
@@ -1090,6 +1106,26 @@ public class KiwixMobileActivity extends AppCompatActivity {
   public boolean openArticleFromBookmark(String bookmarkTitle) {
     //        Log.d(TAG_KIWIX, "openArticleFromBookmark: " + articleSearchtextView.getText());
     return openArticle(ZimContentProvider.getPageUrlFromTitle(bookmarkTitle));
+  }
+
+  private void contentsDrawerHint() {
+    mLeftDrawerLayout.postDelayed(new Runnable() {
+      @Override
+      public void run() {
+        mLeftDrawerLayout.openDrawer(Gravity.RIGHT);
+      }
+    }, 1000);
+
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setMessage("You can swipe left to view the contents of this article ")
+        .setPositiveButton("Got it", new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int id) {
+          }
+        })
+        .setTitle("Did you know?")
+        .setIcon(R.drawable.icon_question);
+    AlertDialog alert = builder.create();
+    alert.show();//showing the dialog
   }
 
   private boolean openArticle(String articleUrl) {
