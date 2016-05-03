@@ -31,6 +31,9 @@ dependencies {
   compile 'com.squareup.retrofit2:retrofit:2.0.2'
   compile 'com.squareup.retrofit2:converter-simplexml:2.0.2'
 
+  compile 'com.jakewharton:butterknife:8.0.1'
+  apt 'com.jakewharton:butterknife-compiler:8.0.1'
+
   compile files("$buildDir/native-libs/native-libs.jar")
 
   // compile fileTree(dir: '.', include: 'content-libs.jar') // DO NOT REMOVE !!
