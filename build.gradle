@@ -19,9 +19,9 @@ repositories {
 }
 
 dependencies {
-  compile 'com.android.support:appcompat-v7:23.1.1'
-  compile 'com.android.support:support-v4:23.1.1'
-  compile 'com.android.support:design:23.1.1'
+  compile 'com.android.support:appcompat-v7:23.3.0'
+  compile 'com.android.support:support-v4:23.3.0'
+  compile 'com.android.support:design:23.3.0'
 
   compile 'com.yahoo.squidb:squidb:2.0.0'
   compile 'com.yahoo.squidb:squidb-annotations:2.0.0'
@@ -29,7 +29,11 @@ dependencies {
 
   compile 'com.squareup.okhttp3:okhttp:3.2.0'
   compile 'com.squareup.retrofit2:retrofit:2.0.2'
-  compile 'com.squareup.retrofit2:converter-simplexml:2.0.2'
+  compile('com.squareup.retrofit2:converter-simplexml:2.0.2') {
+    exclude group: 'xpp3', module: 'xpp3'
+    exclude group: 'stax', module: 'stax-api'
+    exclude group: 'stax', module: 'stax'
+  }
 
   compile 'com.jakewharton:butterknife:8.0.1'
   apt 'com.jakewharton:butterknife-compiler:8.0.1'
