@@ -1,3 +1,9 @@
+2.0:
+NEW: Clean history button
+
+1.99
+FIXED: ZIM load error on ICS
+
 1.98
 FIXED: Bookmark icon correctly updates when switching tabs
 NEW: Tabs reopen as you left them after app restart

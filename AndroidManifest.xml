@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.kiwix.kiwixmobile"
     android:installLocation="auto"
-    android:versionCode="29"
-    android:versionName="1.99">
+    android:versionCode="30"
+    android:versionName="2.0">
 
   <supports-screens
       android:anyDensity="true"
