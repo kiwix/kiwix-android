@@ -478,6 +478,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
           }
         });
 
+    alertDialog.setIcon(getResources().getDrawable(R.drawable.kiwix_icon));
+
     alertDialog.show();
   }
 
