@@ -147,6 +147,10 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   public static TextView headerView;
 
+  private static Uri KIWIX_LOCAL_MARKET_URI;
+
+  private static Uri KIWIX_BROWSER_MARKET_URI;
+
   private static String jsContent;
 
   public Menu menu;
@@ -282,6 +286,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
       showRateDialog(this, visitCounterPref.getEditor());
     }
 
+    KIWIX_LOCAL_MARKET_URI = Uri.parse("market://details?id=" + getPackageName());
+    KIWIX_BROWSER_MARKET_URI = Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName());
     bookmarks = new ArrayList<>();
     requestClearHistoryAfterLoad = false;
     requestWebReloadOnFinished = 0;
@@ -438,13 +444,13 @@ public class KiwixMobileActivity extends AppCompatActivity {
   public void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {
     AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
 
-    alertDialog.setTitle("Please Rate Us");
+    alertDialog.setTitle(stringsGetter(R.string.rate_dialog_title));
 
-    alertDialog.setMessage("If you enjoy using "
+    alertDialog.setMessage(stringsGetter(R.string.rate_dialog_msg_1) + " "
         + getString(R.string.app_name)
-        + ", please take a moment to rate it. Thanks for your support!");
+        + stringsGetter(R.string.rate_dialog_msg_2));
 
-    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Rate!",
+    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, stringsGetter(R.string.rate_dialog_positive),
         new DialogInterface.OnClickListener() {
 
           public void onClick(DialogInterface dialog, int id) {
@@ -453,7 +459,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
           }
         });
 
-    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No, thanks",
+    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, stringsGetter(R.string.rate_dialog_negative),
         new DialogInterface.OnClickListener() {
 
           public void onClick(DialogInterface dialog, int id) {
@@ -462,7 +468,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
           }
         });
 
-    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Remind me later",
+    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, stringsGetter(R.string.rate_dialog_neutral),
         new DialogInterface.OnClickListener() {
 
           public void onClick(DialogInterface dialog, int id) {
@@ -475,10 +481,13 @@ public class KiwixMobileActivity extends AppCompatActivity {
     alertDialog.show();
   }
 
+  private String stringsGetter(int strId) {
+    return getResources().getString(strId);
+  }
+
   private void goToRateApp() {
 
-    Uri uri = Uri.parse("market://details?id=" + getPackageName());
-    Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+    Intent goToMarket = new Intent(Intent.ACTION_VIEW, KIWIX_LOCAL_MARKET_URI);
 
     goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
         Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET |
@@ -488,7 +497,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
       startActivity(goToMarket);
     } catch (ActivityNotFoundException e) {
       startActivity(new Intent(Intent.ACTION_VIEW,
-          Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName())));
+          KIWIX_BROWSER_MARKET_URI));
     }
   }
 
@@ -559,7 +568,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private KiwixWebView newTab(String url) {
     KiwixWebView webView = new KiwixWebView(KiwixMobileActivity.this);
-    webView.setWebViewClient(new KiwixWebViewClient(KiwixMobileActivity.this, mLeftArrayAdapter){
+    webView.setWebViewClient(new KiwixWebViewClient(KiwixMobileActivity.this, mLeftArrayAdapter) {
       @Override
       public boolean shouldOverrideUrlLoading(WebView view, String url) {
         // onClick
@@ -568,7 +577,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
           SharedPreferences.Editor editor = settings.edit();
           editor.putBoolean("isFirstRun", false); // It is no longer the first run
           isFirstRun = false;
-          editor.commit(); 
+          editor.commit();
         }
         return super.shouldOverrideUrlLoading(view, url);
       }
@@ -644,8 +653,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   private void undoSnackbar(final int index) {
-    Snackbar undoSnackbar = Snackbar.make(snackbarLayout, "Tab closed", Snackbar.LENGTH_LONG)
-        .setAction("Undo", new View.OnClickListener() {
+    Snackbar undoSnackbar = Snackbar.make(snackbarLayout, stringsGetter(R.string.tab_closed), Snackbar.LENGTH_LONG)
+        .setAction(stringsGetter(R.string.undo), new View.OnClickListener() {
           @Override
           public void onClick(View v) {
 
@@ -1043,8 +1052,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
   private void popBookmarkSnackbar(boolean isBookmark) {
     if (isBookmark) {
       Snackbar bookmarkSnackbar =
-          Snackbar.make(snackbarLayout, "Bookmark added", Snackbar.LENGTH_LONG)
-              .setAction("Open", new View.OnClickListener() {
+          Snackbar.make(snackbarLayout, stringsGetter(R.string.bookmark_added), Snackbar.LENGTH_LONG)
+              .setAction(stringsGetter(R.string.open), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                   goToBookmarks();
@@ -1054,7 +1063,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
       bookmarkSnackbar.show();
     } else {
       Snackbar bookmarkSnackbar =
-          Snackbar.make(snackbarLayout, "Bookmark removed", Snackbar.LENGTH_LONG);
+          Snackbar.make(snackbarLayout, stringsGetter(R.string.bookmark_removed), Snackbar.LENGTH_LONG);
       bookmarkSnackbar.show();
     }
   }
@@ -1119,12 +1128,12 @@ public class KiwixMobileActivity extends AppCompatActivity {
     }, 500);
 
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setMessage(getResources().getString(R.string.hint_contents_drawer_message))
-        .setPositiveButton(getResources().getString(R.string.got_it), new DialogInterface.OnClickListener() {
+    builder.setMessage(stringsGetter(R.string.hint_contents_drawer_message))
+        .setPositiveButton(stringsGetter(R.string.got_it), new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int id) {
           }
         })
-        .setTitle(getResources().getString(R.string.did_you_know))
+        .setTitle(stringsGetter(R.string.did_you_know))
         .setIcon(R.drawable.icon_question);
     AlertDialog alert = builder.create();
     alert.show();//showing the dialog
@@ -1314,10 +1323,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
           startActivity(new Intent(KiwixMobileActivity.this, KiwixMobileActivity.class));
         }
         if (resultCode == KiwixSettingsActivity.RESULT_HISTORY_CLEARED) {
-          SharedPreferences.Editor editor = settings.edit();
-          editor.putBoolean("isFirstRun", true); // clearing like first launch
-          isFirstRun = true;
-          editor.commit();
           mWebViews.clear();
           newTab();
           mLeftArrayAdapter.notifyDataSetChanged();
@@ -1382,7 +1387,9 @@ public class KiwixMobileActivity extends AppCompatActivity {
       } else {
         menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmark);
       }
-    }
+    } else
+      menu.findItem(R.id.menu_bookmarks).setVisible(false);
+
   }
 
   public void refreshNavigationButtons() {

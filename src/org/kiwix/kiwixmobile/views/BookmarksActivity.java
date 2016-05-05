@@ -18,9 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import org.kiwix.kiwixmobile.R;
-
 import java.util.ArrayList;
 
 public class BookmarksActivity extends AppCompatActivity
@@ -57,15 +55,14 @@ public class BookmarksActivity extends AppCompatActivity
       @Override
       public void onItemCheckedStateChanged(ActionMode mode, int position, long id,
                                             boolean checked) {
-        // TODO: make item greyed out when checked (selected)
         if (checked) {
           selected.add(contents.get(position));
           numOfSelected++;
-          mode.setTitle(numOfSelected + " Selected");
+          mode.setTitle(Integer.toString(numOfSelected));
         } else if (selected.contains(contents.get(position))) {
           selected.remove(contents.get(position));
           numOfSelected--;
-          mode.setTitle(numOfSelected + " Selected");
+          mode.setTitle(Integer.toString(numOfSelected));
         }
       }
 
@@ -114,15 +111,15 @@ public class BookmarksActivity extends AppCompatActivity
 
   private void popDeleteBookmarksSnackbar() {
     Snackbar bookmarkDeleteSnackbar =
-        Snackbar.make(snackbarLayout, numOfSelected + " deleted", Snackbar.LENGTH_LONG)
-            .setAction("Undo", new View.OnClickListener() {
+        Snackbar.make(snackbarLayout, numOfSelected + " " + stringsGetter(R.string.deleted_message), Snackbar.LENGTH_LONG)
+            .setAction(stringsGetter(R.string.undo), new View.OnClickListener() {
               @Override
               public void onClick(View v) {
                 contents.clear();
                 contents.addAll(tempContents);
                 adapter.notifyDataSetChanged();
                 setNoBookmarksState();
-                Toast.makeText(getApplicationContext(), "Bookmarks restored", Toast.LENGTH_SHORT)
+                Toast.makeText(getApplicationContext(), stringsGetter(R.string.bookmarks_restored), Toast.LENGTH_SHORT)
                     .show();
               }
             });
@@ -142,7 +139,7 @@ public class BookmarksActivity extends AppCompatActivity
 
   private void setUpToolbar() {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    toolbar.setTitle(getResources().getString(R.string.menu_bookmarks_list));
+    toolbar.setTitle(stringsGetter(R.string.menu_bookmarks_list));
     setSupportActionBar(toolbar);
     getSupportActionBar().setHomeButtonEnabled(true);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -176,5 +173,9 @@ public class BookmarksActivity extends AppCompatActivity
     setResult(RESULT_OK, intent);
     finish();
     super.onBackPressed();
+  }
+
+  public String stringsGetter(int strId){
+    return getResources().getString(strId);
   }
 }
