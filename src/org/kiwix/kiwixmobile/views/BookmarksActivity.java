@@ -62,7 +62,12 @@ public class BookmarksActivity extends AppCompatActivity
         } else if (selected.contains(contents.get(position))) {
           selected.remove(contents.get(position));
           numOfSelected--;
-          mode.setTitle(Integer.toString(numOfSelected));
+          if(numOfSelected == 0){
+            mode.finish();
+          }
+          else {
+            mode.setTitle(Integer.toString(numOfSelected));
+          }
         }
       }
 
