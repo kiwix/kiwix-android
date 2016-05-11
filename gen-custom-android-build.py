@@ -32,9 +32,9 @@ import copy
 import json
 import shutil
 import logging
-import StringIO
+from io import StringIO
 import tempfile
-import urllib2
+import urllib.request as urllib2
 from collections import OrderedDict
 from subprocess import call
 PY3 = sys.version_info.major >= 3
