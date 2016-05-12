@@ -135,6 +135,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private static final String PREF_FULLSCREEN = "pref_fullscreen";
 
+  private static final String PREF_NEWTAB_SWITCH = "pref_newtab_switch_to";
+
   private static final int REQUEST_FILE_SELECT = 1234;
 
   private static final int REQUEST_PREFERENCES = 1235;
@@ -178,6 +180,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
   private boolean mIsBacktotopEnabled;
 
   private boolean mIsSpeaking;
+
+  private boolean isSwitchToNewTab;
 
   private Button mBackToTopButton;
 
@@ -594,6 +598,23 @@ public class KiwixMobileActivity extends AppCompatActivity {
     setUpWebView();
     htmlUtils.initInterface(webView);
     return webView;
+  }
+
+  private void newTabNoFocus(String url) {
+    KiwixWebView webView = new KiwixWebView(KiwixMobileActivity.this);
+    webView.setWebChromeClient(new KiwixWebChromeClient() {
+      @Override
+      public void onReceivedTitle(WebView view, String sTitle) {
+        super.onReceivedTitle(view, sTitle);
+        mLeftArrayAdapter.notifyDataSetChanged();
+      }
+    });
+    webView.loadUrl(url);
+    webView.loadPrefs();
+    mWebViews.add(webView);
+    mLeftArrayAdapter.notifyDataSetChanged();
+    setUpWebView();
+    htmlUtils.initInterface(webView);
   }
 
   private KiwixWebView restoreTabAtIndex(String url, int index) {
@@ -1235,7 +1256,13 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
           builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-              newTab(url);
+              if(isSwitchToNewTab){
+                newTab(url);
+              } else {
+                newTabNoFocus(url);
+                Snackbar snackbar = Snackbar.make(snackbarLayout, stringsGetter(R.string.new_tab_snackbar) , Snackbar.LENGTH_LONG);
+                snackbar.show();
+              }
             }
           });
           builder.setNegativeButton(android.R.string.no, null);
@@ -1422,6 +1449,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     mIsBacktotopEnabled = sharedPreferences.getBoolean(PREF_BACKTOTOP, false);
     mIsFullscreenOpened = sharedPreferences.getBoolean(PREF_FULLSCREEN, false);
     boolean isZoomEnabled = sharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
+    isSwitchToNewTab = sharedPreferences.getBoolean(PREF_NEWTAB_SWITCH, false);
 
     if (isZoomEnabled) {
       int zoomScale = (int) sharedPreferences.getFloat(PREF_ZOOM, 100.0f);

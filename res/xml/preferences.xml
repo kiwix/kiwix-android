@@ -18,6 +18,18 @@
   </PreferenceCategory>
 
   <PreferenceCategory
+      android:key="pref_extras"
+      android:title="@string/pref_extras">
+
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="pref_newtab_switch_to"
+        android:title="@string/pref_newtab_switch_title"
+        android:summary="@string/pref_newtab_switch_summary"/>
+
+  </PreferenceCategory>
+
+  <PreferenceCategory
       android:key="pref_zoom_sub"
       android:title="@string/pref_zoom_sub_title">
 
