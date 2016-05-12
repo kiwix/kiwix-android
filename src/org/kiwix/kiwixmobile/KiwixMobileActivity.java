@@ -135,7 +135,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private static final String PREF_FULLSCREEN = "pref_fullscreen";
 
-  private static final String PREF_NEWTAB_SWITCH = "pref_newtab_switch_to";
+  private static final String PREF_NEWTAB_BACKGROUND = "pref_newtab_background";
 
   private static final int REQUEST_FILE_SELECT = 1234;
 
@@ -181,7 +181,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private boolean mIsSpeaking;
 
-  private boolean isSwitchToNewTab;
+  private boolean isOpenNewTabInBackground;
 
   private Button mBackToTopButton;
 
@@ -600,7 +600,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     return webView;
   }
 
-  private void newTabNoFocus(String url) {
+  private void newTabInBackground(String url) {
     KiwixWebView webView = new KiwixWebView(KiwixMobileActivity.this);
     webView.setWebChromeClient(new KiwixWebChromeClient() {
       @Override
@@ -1256,12 +1256,20 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
           builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-              if(isSwitchToNewTab){
-                newTab(url);
-              } else {
-                newTabNoFocus(url);
-                Snackbar snackbar = Snackbar.make(snackbarLayout, stringsGetter(R.string.new_tab_snackbar) , Snackbar.LENGTH_LONG);
+              if(isOpenNewTabInBackground){
+                newTabInBackground(url);
+                Snackbar snackbar = Snackbar.make(snackbarLayout, stringsGetter(R.string.new_tab_snackbar) , Snackbar.LENGTH_LONG)
+                .setAction(stringsGetter(R.string.open), new View.OnClickListener() {
+                  @Override
+                  public void onClick(View v) {
+                    if(mWebViews.size() > 1)
+                      selectTab(mWebViews.size() -1);
+                  }
+                });
+                snackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
                 snackbar.show();
+              } else {
+                newTab(url);
               }
             }
           });
@@ -1449,7 +1457,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     mIsBacktotopEnabled = sharedPreferences.getBoolean(PREF_BACKTOTOP, false);
     mIsFullscreenOpened = sharedPreferences.getBoolean(PREF_FULLSCREEN, false);
     boolean isZoomEnabled = sharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
-    isSwitchToNewTab = sharedPreferences.getBoolean(PREF_NEWTAB_SWITCH, false);
+    isOpenNewTabInBackground = sharedPreferences.getBoolean(PREF_NEWTAB_BACKGROUND, false);
 
     if (isZoomEnabled) {
       int zoomScale = (int) sharedPreferences.getFloat(PREF_ZOOM, 100.0f);

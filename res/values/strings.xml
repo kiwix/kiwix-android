@@ -82,8 +82,8 @@
   <string name="bookmark_added">Bookmark added</string>
   <string name="open">Open</string>
   <string name="bookmark_removed">Bookmark removed</string>
-  <string name="pref_newtab_switch_title">Focus on new tab</string>
-  <string name="pref_newtab_switch_summary">When opening a new tab switch view to it</string>
+  <string name="pref_newtab_background_title">Open new tab in background</string>
+  <string name="pref_newtab_background_summary">When opening a new tab it will open in background</string>
   <string name="pref_extras">Extras</string>
   <string name="new_tab_snackbar">Link opened in new tab</string>
 </resources>

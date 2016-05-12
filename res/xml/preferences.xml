@@ -23,9 +23,9 @@
 
     <CheckBoxPreference
         android:defaultValue="false"
-        android:key="pref_newtab_switch_to"
-        android:title="@string/pref_newtab_switch_title"
-        android:summary="@string/pref_newtab_switch_summary"/>
+        android:key="pref_newtab_background"
+        android:title="@string/pref_newtab_background_title"
+        android:summary="@string/pref_newtab_background_summary"/>
 
   </PreferenceCategory>
 
