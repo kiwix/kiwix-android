@@ -1842,9 +1842,9 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
     class ViewHolder {
 
-      TextView txtTitle;
+      private TextView txtTitle;
 
-      ImageView exit;
+      private ImageView exit;
     }
   }
 
