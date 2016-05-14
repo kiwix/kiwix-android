@@ -45,6 +45,7 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
     getSupportActionBar().setHomeButtonEnabled(true);
 
     String zimFile = getIntent().getStringExtra("zimFile");
+    zimFile = escapeSqlSyntax(zimFile);
     mListView = (ListView) findViewById(R.id.search_list);
     mDatabaseHelper = new DatabaseHelper(this, zimFile);
     SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
@@ -113,6 +114,7 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
     String title = ((TextView) view).getText().toString();
+    title = escapeSqlSyntax(title);
     mDatabaseHelper.insertSearch(title);
     sendMessage(title);
   }

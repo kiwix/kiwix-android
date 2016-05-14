@@ -20,7 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
   public static final String CONTACTS_COLUMN_ID = "id";
   public static final String CONTACTS_COLUMN_SEARCH = "search";
   public static final String CONTACTS_COLUMN_ZIM = "zim";
-  public static String zimFile;
+  public String zimFile;
 
   public DatabaseHelper(Context context, String zimFile) {
 
@@ -89,12 +89,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         + " where " + CONTACTS_COLUMN_ZIM + " = '" + zimFile + "'", null);
     res.moveToLast();
 
-    while (res.isBeforeFirst() == false) {
+    while (!res.isBeforeFirst()) {
       array_list.add(res.getString(res.getColumnIndex(CONTACTS_COLUMN_SEARCH)));
       res.moveToPrevious();
     }
-
-
+    res.close();
     return array_list;
 
 
