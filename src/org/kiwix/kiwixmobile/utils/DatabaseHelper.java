@@ -89,12 +89,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         + " where " + CONTACTS_COLUMN_ZIM + " = '" + zimFile + "'", null);
     res.moveToLast();
 
-    while (res.isBeforeFirst() == false) {
+    while (!res.isBeforeFirst()) {
       array_list.add(res.getString(res.getColumnIndex(CONTACTS_COLUMN_SEARCH)));
       res.moveToPrevious();
     }
-
-
+    res.close();
     return array_list;
 
 

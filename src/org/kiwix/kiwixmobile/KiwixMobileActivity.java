@@ -231,6 +231,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
   private boolean isFirstRun;
 
   private SharedPreferences settings;
+
   @Override
   public void onActionModeStarted(ActionMode mode) {
     if (mActionMode == null) {
@@ -774,6 +775,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
           openFullScreen();
         }
         break;
+      default:
+        break;
     }
 
     return super.onOptionsItemSelected(item);
@@ -1256,16 +1259,16 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
           builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-              if(isOpenNewTabInBackground){
+              if (isOpenNewTabInBackground) {
                 newTabInBackground(url);
-                Snackbar snackbar = Snackbar.make(snackbarLayout, stringsGetter(R.string.new_tab_snackbar) , Snackbar.LENGTH_LONG)
-                .setAction(stringsGetter(R.string.open), new View.OnClickListener() {
-                  @Override
-                  public void onClick(View v) {
-                    if(mWebViews.size() > 1)
-                      selectTab(mWebViews.size() -1);
-                  }
-                });
+                Snackbar snackbar = Snackbar.make(snackbarLayout, stringsGetter(R.string.new_tab_snackbar), Snackbar.LENGTH_LONG)
+                    .setAction(stringsGetter(R.string.open), new View.OnClickListener() {
+                      @Override
+                      public void onClick(View v) {
+                        if (mWebViews.size() > 1)
+                          selectTab(mWebViews.size() - 1);
+                      }
+                    });
                 snackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
                 snackbar.show();
               } else {
@@ -1384,6 +1387,9 @@ public class KiwixMobileActivity extends AppCompatActivity {
             bookmarks = new ArrayList<>(data.getStringArrayListExtra("bookmarks_array_list"));
           }
         }
+        break;
+      default:
+        break;
     }
 
     super.onActivityResult(requestCode, resultCode, data);
@@ -1673,7 +1679,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private class KiwixWebViewClient extends WebViewClient {
 
-    HashMap<String, String> documentTypes = new HashMap<String, String>() {{
+    private HashMap<String, String> documentTypes = new HashMap<String, String>() {{
       put("epub", "application/epub+zip");
       put("pdf", "application/pdf");
     }};

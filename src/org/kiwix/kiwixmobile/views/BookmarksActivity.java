@@ -18,13 +18,15 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import org.kiwix.kiwixmobile.R;
+
 import java.util.ArrayList;
 
 public class BookmarksActivity extends AppCompatActivity
     implements AdapterView.OnItemClickListener {
 
-  SparseBooleanArray sparseBooleanArray;
+  private SparseBooleanArray sparseBooleanArray;
   private ArrayList<String> contents;
   private ArrayList<String> tempContents;
   private ListView bookmarksList;
@@ -62,10 +64,9 @@ public class BookmarksActivity extends AppCompatActivity
         } else if (selected.contains(contents.get(position))) {
           selected.remove(contents.get(position));
           numOfSelected--;
-          if(numOfSelected == 0){
+          if (numOfSelected == 0) {
             mode.finish();
-          }
-          else {
+          } else {
             mode.setTitle(Integer.toString(numOfSelected));
           }
         }
@@ -180,7 +181,7 @@ public class BookmarksActivity extends AppCompatActivity
     super.onBackPressed();
   }
 
-  public String stringsGetter(int strId){
+  public String stringsGetter(int strId) {
     return getResources().getString(strId);
   }
 }
