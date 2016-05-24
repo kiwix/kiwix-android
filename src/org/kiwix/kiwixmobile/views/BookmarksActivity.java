@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 
 import java.util.ArrayList;
 
@@ -117,15 +118,15 @@ public class BookmarksActivity extends AppCompatActivity
 
   private void popDeleteBookmarksSnackbar() {
     Snackbar bookmarkDeleteSnackbar =
-        Snackbar.make(snackbarLayout, numOfSelected + " " + stringsGetter(R.string.deleted_message), Snackbar.LENGTH_LONG)
-            .setAction(stringsGetter(R.string.undo), new View.OnClickListener() {
+        Snackbar.make(snackbarLayout, numOfSelected + " " + ShortcutUtils.stringsGetter(R.string.deleted_message,this), Snackbar.LENGTH_LONG)
+            .setAction(ShortcutUtils.stringsGetter(R.string.undo,this), new View.OnClickListener() {
               @Override
               public void onClick(View v) {
                 contents.clear();
                 contents.addAll(tempContents);
                 adapter.notifyDataSetChanged();
                 setNoBookmarksState();
-                Toast.makeText(getApplicationContext(), stringsGetter(R.string.bookmarks_restored), Toast.LENGTH_SHORT)
+                Toast.makeText(getApplicationContext(), ShortcutUtils.stringsGetter(R.string.bookmarks_restored,getBaseContext()), Toast.LENGTH_SHORT)
                     .show();
               }
             });
@@ -145,7 +146,7 @@ public class BookmarksActivity extends AppCompatActivity
 
   private void setUpToolbar() {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    toolbar.setTitle(stringsGetter(R.string.menu_bookmarks_list));
+    toolbar.setTitle(ShortcutUtils.stringsGetter(R.string.menu_bookmarks_list,this));
     setSupportActionBar(toolbar);
     getSupportActionBar().setHomeButtonEnabled(true);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -181,7 +182,4 @@ public class BookmarksActivity extends AppCompatActivity
     super.onBackPressed();
   }
 
-  public String stringsGetter(int strId) {
-    return getResources().getString(strId);
-  }
 }

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.utils.DatabaseHelper;
+import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 
 import java.util.ArrayList;
@@ -45,7 +46,6 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
     getSupportActionBar().setHomeButtonEnabled(true);
 
     String zimFile = getIntent().getStringExtra("zimFile");
-    zimFile = escapeSqlSyntax(zimFile);
     mListView = (ListView) findViewById(R.id.search_list);
     mDatabaseHelper = new DatabaseHelper(this, zimFile);
     SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
@@ -114,7 +114,6 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
     String title = ((TextView) view).getText().toString();
-    title = escapeSqlSyntax(title);
     mDatabaseHelper.insertSearch(title);
     sendMessage(title);
   }
@@ -137,7 +136,7 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
 
   private void deleteSpecificSearchDialog(final String search) {
     new AlertDialog.Builder(this)
-        .setMessage(getResources().getString(R.string.deleteRecentSearchItem))
+        .setMessage(ShortcutUtils.stringsGetter(R.string.delete_recent_search_item,this))
         .setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int which) {
             deleteSpecificSearchItem(search);
@@ -154,20 +153,8 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
 
   private void deleteSpecificSearchItem(String search) {
     SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
-    mDatabaseHelper.deleteSpecificSearch(db, escapeSqlSyntax(search));
+    mDatabaseHelper.deleteSpecificSearch(db, ShortcutUtils.escapeSqlSyntax(search));
     resetAdapter();
-  }
-
-  private String escapeSqlSyntax(String search) { //Escapes sql ' if exists
-    String tempStr = "";
-    char[] charArray = search.toCharArray();
-    for (char a : charArray) {
-      if (a != '\'')
-        tempStr += a;
-      else
-        tempStr += "''";
-    }
-    return tempStr;
   }
 
   private void resetAdapter() {
@@ -177,6 +164,5 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
     mDefaultAdapter.addAll(a);
     mDefaultAdapter.notifyDataSetChanged();
   }
-
 
 }

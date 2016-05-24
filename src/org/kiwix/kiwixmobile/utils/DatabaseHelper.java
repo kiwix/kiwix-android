@@ -86,7 +86,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //hp = new HashMap();
     Log.d(KiwixMobileActivity.TAG_KIWIX, zimFile);
     Cursor res = db.rawQuery("select * from " + CONTACTS_TABLE_NAME
-        + " where " + CONTACTS_COLUMN_ZIM + " = '" + zimFile + "'", null);
+        + " where " + CONTACTS_COLUMN_ZIM + " = '" + ShortcutUtils.escapeSqlSyntax(zimFile) + "'", null);
     res.moveToLast();
 
     while (!res.isBeforeFirst()) {

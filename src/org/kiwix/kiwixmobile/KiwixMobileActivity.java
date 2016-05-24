@@ -85,6 +85,7 @@ import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.HTMLUtils;
 import org.kiwix.kiwixmobile.utils.KiwixTextToSpeech;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
+import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 import org.kiwix.kiwixmobile.utils.files.FileReader;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.utils.files.RateAppCounter;
@@ -449,13 +450,13 @@ public class KiwixMobileActivity extends AppCompatActivity {
   public void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {
     AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
 
-    alertDialog.setTitle(stringsGetter(R.string.rate_dialog_title));
+    alertDialog.setTitle(ShortcutUtils.stringsGetter(R.string.rate_dialog_title, this));
 
-    alertDialog.setMessage(stringsGetter(R.string.rate_dialog_msg_1) + " "
+    alertDialog.setMessage(ShortcutUtils.stringsGetter(R.string.rate_dialog_msg_1, this) + " "
         + getString(R.string.app_name)
-        + stringsGetter(R.string.rate_dialog_msg_2));
+        + ShortcutUtils.stringsGetter(R.string.rate_dialog_msg_2, this));
 
-    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, stringsGetter(R.string.rate_dialog_positive),
+    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, ShortcutUtils.stringsGetter(R.string.rate_dialog_positive, this),
         new DialogInterface.OnClickListener() {
 
           public void onClick(DialogInterface dialog, int id) {
@@ -464,7 +465,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
           }
         });
 
-    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, stringsGetter(R.string.rate_dialog_negative),
+    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, ShortcutUtils.stringsGetter(R.string.rate_dialog_negative, this),
         new DialogInterface.OnClickListener() {
 
           public void onClick(DialogInterface dialog, int id) {
@@ -473,7 +474,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
           }
         });
 
-    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, stringsGetter(R.string.rate_dialog_neutral),
+    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, ShortcutUtils.stringsGetter(R.string.rate_dialog_neutral, this),
         new DialogInterface.OnClickListener() {
 
           public void onClick(DialogInterface dialog, int id) {
@@ -486,10 +487,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
     alertDialog.setIcon(getResources().getDrawable(R.mipmap.kiwix_icon));
 
     alertDialog.show();
-  }
-
-  private String stringsGetter(int strId) {
-    return getResources().getString(strId);
   }
 
   private void goToRateApp() {
@@ -677,8 +674,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   private void undoSnackbar(final int index) {
-    Snackbar undoSnackbar = Snackbar.make(snackbarLayout, stringsGetter(R.string.tab_closed), Snackbar.LENGTH_LONG)
-        .setAction(stringsGetter(R.string.undo), new View.OnClickListener() {
+    Snackbar undoSnackbar = Snackbar.make(snackbarLayout, ShortcutUtils.stringsGetter(R.string.tab_closed, this), Snackbar.LENGTH_LONG)
+        .setAction(ShortcutUtils.stringsGetter(R.string.undo, this), new View.OnClickListener() {
           @Override
           public void onClick(View v) {
 
@@ -1078,8 +1075,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
   private void popBookmarkSnackbar(boolean isBookmark) {
     if (isBookmark) {
       Snackbar bookmarkSnackbar =
-          Snackbar.make(snackbarLayout, stringsGetter(R.string.bookmark_added), Snackbar.LENGTH_LONG)
-              .setAction(stringsGetter(R.string.open), new View.OnClickListener() {
+          Snackbar.make(snackbarLayout, ShortcutUtils.stringsGetter(R.string.bookmark_added, this), Snackbar.LENGTH_LONG)
+              .setAction(ShortcutUtils.stringsGetter(R.string.open, this), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                   goToBookmarks();
@@ -1089,7 +1086,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
       bookmarkSnackbar.show();
     } else {
       Snackbar bookmarkSnackbar =
-          Snackbar.make(snackbarLayout, stringsGetter(R.string.bookmark_removed), Snackbar.LENGTH_LONG);
+          Snackbar.make(snackbarLayout, ShortcutUtils.stringsGetter(R.string.bookmark_removed, this), Snackbar.LENGTH_LONG);
       bookmarkSnackbar.show();
     }
   }
@@ -1154,12 +1151,12 @@ public class KiwixMobileActivity extends AppCompatActivity {
     }, 500);
 
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setMessage(stringsGetter(R.string.hint_contents_drawer_message))
-        .setPositiveButton(stringsGetter(R.string.got_it), new DialogInterface.OnClickListener() {
+    builder.setMessage(ShortcutUtils.stringsGetter(R.string.hint_contents_drawer_message, this))
+        .setPositiveButton(ShortcutUtils.stringsGetter(R.string.got_it, this), new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int id) {
           }
         })
-        .setTitle(stringsGetter(R.string.did_you_know))
+        .setTitle(ShortcutUtils.stringsGetter(R.string.did_you_know, this))
         .setIcon(R.drawable.icon_question);
     AlertDialog alert = builder.create();
     alert.show();//showing the dialog
@@ -1261,8 +1258,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int id) {
               if (isOpenNewTabInBackground) {
                 newTabInBackground(url);
-                Snackbar snackbar = Snackbar.make(snackbarLayout, stringsGetter(R.string.new_tab_snackbar), Snackbar.LENGTH_LONG)
-                    .setAction(stringsGetter(R.string.open), new View.OnClickListener() {
+                Snackbar snackbar = Snackbar.make(snackbarLayout, ShortcutUtils.stringsGetter(R.string.new_tab_snackbar, getBaseContext()), Snackbar.LENGTH_LONG)
+                    .setAction(ShortcutUtils.stringsGetter(R.string.open, getBaseContext()), new View.OnClickListener() {
                       @Override
                       public void onClick(View v) {
                         if (mWebViews.size() > 1)
