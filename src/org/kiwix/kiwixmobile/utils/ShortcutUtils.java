@@ -14,16 +14,20 @@ public class ShortcutUtils {
     return context.getResources().getString(strId);
   }
 
-  public static String escapeSqlSyntax(String search) { //Escapes sql ' if exists
-    String tempStr = "";
-    char[] charArray = search.toCharArray();
-    for (char a : charArray) {
-      if (a != '\'')
-        tempStr += a;
-      else
-        tempStr += "''";
+  public static String escapeSqlSyntax(String search) {//Escapes sql ' if exists
+    if (search != null) {
+      String tempStr = "";
+      char[] charArray = search.toCharArray();
+      for (char a : charArray) {
+        if (a != '\'')
+          tempStr += a;
+        else
+          tempStr += "''";
+      }
+      return tempStr;
+    } else {
+      return search;
     }
-    return tempStr;
   }
 
 }

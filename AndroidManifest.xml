@@ -107,6 +107,13 @@
         android:authorities="org.kiwix.zim.base"
         android:exported="true" />
 
+    <receiver android:name=".utils.KiwixSearchWidget" >
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+      </intent-filter>
+      <meta-data android:name="android.appwidget.provider"
+                 android:resource="@xml/kiwix_widget_provider_info" />
+    </receiver>
 
   </application>
 

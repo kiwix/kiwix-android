@@ -24,7 +24,8 @@ import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 
 import java.util.ArrayList;
 
-public class SearchActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+public class SearchActivity extends AppCompatActivity
+    implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
   private ListView mListView;
 

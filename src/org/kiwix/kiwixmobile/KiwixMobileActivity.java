@@ -138,6 +138,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private static final String PREF_NEWTAB_BACKGROUND = "pref_newtab_background";
 
+  private static boolean IS_WIDGET_INTENT = false;
+
   private static final int REQUEST_FILE_SELECT = 1234;
 
   private static final int REQUEST_PREFERENCES = 1235;
@@ -306,7 +308,10 @@ public class KiwixMobileActivity extends AppCompatActivity {
     mToolbarContainer = (RelativeLayout) findViewById(R.id.toolbar_layout);
     mProgressBar = (AnimatedProgressBar) findViewById(R.id.progress_view);
     exitFullscreenButton = (ImageButton) findViewById(R.id.FullscreenControlButton);
-
+    IS_WIDGET_INTENT = getIntent().getBooleanExtra("isWidget", false);
+    if (IS_WIDGET_INTENT){
+      goToSearch();
+    }
     tempForUndo =
         new KiwixWebView(getApplicationContext());   /**  initializing temporary tab value **/
     snackbarLayout =
@@ -445,6 +450,13 @@ public class KiwixMobileActivity extends AppCompatActivity {
     setUpExitFullscreenButton();
     loadPrefs();
     updateTitle(ZimContentProvider.getZimFileTitle());
+  }
+
+  private void goToSearch() {
+    final String zimFile = ZimContentProvider.getZimFile();
+    Intent i = new Intent(KiwixMobileActivity.this, SearchActivity.class);
+    i.putExtra("zimFile", zimFile);
+    startActivityForResult(i, REQUEST_FILE_SEARCH);
   }
 
   public void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {

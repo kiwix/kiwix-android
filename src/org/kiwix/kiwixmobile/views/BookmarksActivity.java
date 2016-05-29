@@ -43,14 +43,16 @@ public class BookmarksActivity extends AppCompatActivity
     setContentView(R.layout.activity_bookmarks);
     setUpToolbar();
     snackbarLayout = (LinearLayout) findViewById(R.id.bookmarks_activity_layout);
-    contents = getIntent().getStringArrayListExtra("bookmark_contents");
-    selected = new ArrayList<>();
-    bookmarksList = (ListView) findViewById(R.id.bookmarks_list);
-    noBookmarksTextView = (TextView) findViewById(R.id.bookmarks_list_nobookmarks);
-    adapter = new ArrayAdapter(getApplicationContext(), R.layout.bookmarks_row, R.id.bookmark_title,
-        contents);
-    bookmarksList.setAdapter(adapter);
+      selected = new ArrayList<>();
+      bookmarksList = (ListView) findViewById(R.id.bookmarks_list);
+      noBookmarksTextView = (TextView) findViewById(R.id.bookmarks_list_nobookmarks);
 
+    if(getIntent().getStringArrayListExtra("bookmark_contents") != null) {
+      contents = getIntent().getStringArrayListExtra("bookmark_contents");
+      adapter = new ArrayAdapter(getApplicationContext(), R.layout.bookmarks_row, R.id.bookmark_title,
+          contents);
+      bookmarksList.setAdapter(adapter);
+    }
     setNoBookmarksState();
 
     bookmarksList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
