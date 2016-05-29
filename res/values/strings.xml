@@ -86,4 +86,5 @@
   <string name="pref_newtab_background_summary">When opening a new tab it will open in background</string>
   <string name="pref_extras">Extras</string>
   <string name="new_tab_snackbar">Link opened in new tab</string>
+  <string name="search_widget_text">Search Kiwix</string>
 </resources>

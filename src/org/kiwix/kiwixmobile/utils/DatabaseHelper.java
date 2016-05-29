@@ -6,9 +6,6 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
 
 import java.util.ArrayList;
 
@@ -84,7 +81,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     ArrayList<String> array_list = new ArrayList<String>();
     SQLiteDatabase db = this.getReadableDatabase();
     //hp = new HashMap();
-    Log.d(KiwixMobileActivity.TAG_KIWIX, zimFile);
+//    Log.d(KiwixMobileActivity.TAG_KIWIX, zimFile);
     Cursor res = db.rawQuery("select * from " + CONTACTS_TABLE_NAME
         + " where " + CONTACTS_COLUMN_ZIM + " = '" + ShortcutUtils.escapeSqlSyntax(zimFile) + "'", null);
     res.moveToLast();

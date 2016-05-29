@@ -9,11 +9,12 @@
   <color name="secondary_text">#727272</color>
   <color name="icons">#212121</color>
   <color name="divider">#B6B6B6</color>
-  <color name="white_undo">#FAFAFA</color>
+  <color name="white">#FAFAFA</color>
   <color name="gray_list_bg">#0d000000</color>
   <color name="drawer_background">#ffffff</color>
   <color name="selected_light">#0F000000</color>
   <color name="divider_light">#1E000000</color>
   <color name="greyed_out_selected">#BDBDBD</color>
   <color name="black_regular_mat_design">#212121</color>
+  <color name="grey">#808080</color>
 </resources>

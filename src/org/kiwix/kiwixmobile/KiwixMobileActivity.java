@@ -138,8 +138,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private static final String PREF_NEWTAB_BACKGROUND = "pref_newtab_background";
 
-  private static boolean IS_WIDGET_INTENT = false;
-
   private static final int REQUEST_FILE_SELECT = 1234;
 
   private static final int REQUEST_PREFERENCES = 1235;
@@ -308,10 +306,16 @@ public class KiwixMobileActivity extends AppCompatActivity {
     mToolbarContainer = (RelativeLayout) findViewById(R.id.toolbar_layout);
     mProgressBar = (AnimatedProgressBar) findViewById(R.id.progress_view);
     exitFullscreenButton = (ImageButton) findViewById(R.id.FullscreenControlButton);
-    IS_WIDGET_INTENT = getIntent().getBooleanExtra("isWidget", false);
-    if (IS_WIDGET_INTENT){
-      goToSearch();
-    }
+
+    boolean IS_WIDGET_SEARCH_INTENT;
+    boolean IS_WIDGET_VOICE_SEARCH;
+    boolean IS_WIDGET_STAR;
+    IS_WIDGET_SEARCH_INTENT = getIntent().getBooleanExtra("isWidgetSearch", false);
+    IS_WIDGET_VOICE_SEARCH = getIntent().getBooleanExtra("isWidgetVoice", false);
+    IS_WIDGET_STAR = getIntent().getBooleanExtra("isWidgetStar", false);
+
+
+
     tempForUndo =
         new KiwixWebView(getApplicationContext());   /**  initializing temporary tab value **/
     snackbarLayout =
@@ -450,6 +454,13 @@ public class KiwixMobileActivity extends AppCompatActivity {
     setUpExitFullscreenButton();
     loadPrefs();
     updateTitle(ZimContentProvider.getZimFileTitle());
+    if(IS_WIDGET_STAR){
+      goToBookmarks();
+    } else if (IS_WIDGET_SEARCH_INTENT) {
+      goToSearch();
+    } else if (IS_WIDGET_VOICE_SEARCH) {
+
+    }
   }
 
   private void goToSearch() {
@@ -700,7 +711,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
             mLeftDrawerLayout.openDrawer(Gravity.LEFT);
           }
         });
-    undoSnackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
+    undoSnackbar.setActionTextColor(getResources().getColor(R.color.white));
     undoSnackbar.show();
   }
 
@@ -1094,7 +1105,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
                   goToBookmarks();
                 }
               });
-      bookmarkSnackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
+      bookmarkSnackbar.setActionTextColor(getResources().getColor(R.color.white));
       bookmarkSnackbar.show();
     } else {
       Snackbar bookmarkSnackbar =
@@ -1278,7 +1289,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
                           selectTab(mWebViews.size() - 1);
                       }
                     });
-                snackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
+                snackbar.setActionTextColor(getResources().getColor(R.color.white));
                 snackbar.show();
               } else {
                 newTab(url);

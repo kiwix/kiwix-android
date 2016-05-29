@@ -137,7 +137,7 @@ public class SearchActivity extends AppCompatActivity
 
   private void deleteSpecificSearchDialog(final String search) {
     new AlertDialog.Builder(this)
-        .setMessage(ShortcutUtils.stringsGetter(R.string.delete_recent_search_item,this))
+        .setMessage(ShortcutUtils.stringsGetter(R.string.delete_recent_search_item, this))
         .setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int which) {
             deleteSpecificSearchItem(search);

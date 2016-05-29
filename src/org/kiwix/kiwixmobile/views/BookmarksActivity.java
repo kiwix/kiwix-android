@@ -132,7 +132,7 @@ public class BookmarksActivity extends AppCompatActivity
                     .show();
               }
             });
-    bookmarkDeleteSnackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
+    bookmarkDeleteSnackbar.setActionTextColor(getResources().getColor(R.color.white));
     bookmarkDeleteSnackbar.show();
   }
 
