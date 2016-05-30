@@ -3,10 +3,11 @@
                     android:minWidth="250dp"
                     android:minHeight="40dp"
                     android:minResizeWidth="250dp"
+                    android:minResizeHeight="40dp"
                     android:updatePeriodMillis="86400000"
-                    android:previewImage="@mipmap/kiwix_icon"
+                    android:previewImage="@drawable/search_widget_preview"
                     android:initialLayout="@layout/kiwix_search_widget"
-                    android:resizeMode="horizontal">
+                    android:resizeMode="horizontal|vertical">
 
 
 
