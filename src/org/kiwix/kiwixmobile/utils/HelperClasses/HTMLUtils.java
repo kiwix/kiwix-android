@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile.utils;
+package org.kiwix.kiwixmobile.utils.HelperClasses;
 
 import android.graphics.Color;
 import android.graphics.Typeface;

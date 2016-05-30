@@ -18,7 +18,7 @@
  */
 
 
-package org.kiwix.kiwixmobile.views;
+package org.kiwix.kiwixmobile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,7 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.utils.ShortcutUtils;
+import org.kiwix.kiwixmobile.utils.HelperClasses.ShortcutUtils;
 
 import java.util.ArrayList;
 

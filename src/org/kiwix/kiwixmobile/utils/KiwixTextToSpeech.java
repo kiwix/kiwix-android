@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.ZimContentProvider;
+import org.kiwix.kiwixmobile.utils.HelperClasses.LanguageUtils;
 
 public class KiwixTextToSpeech {
 

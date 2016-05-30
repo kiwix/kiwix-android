@@ -99,7 +99,7 @@
     </activity>
     <activity android:name=".settings.KiwixSettingsActivity" />
     <activity android:name=".SearchActivity" />
-    <activity android:name=".views.BookmarksActivity" />
+    <activity android:name=".BookmarksActivity" />
 
 
     <provider

@@ -18,7 +18,7 @@
  */
 
 
-package org.kiwix.kiwixmobile.utils;
+package org.kiwix.kiwixmobile.utils.HelperClasses;
 
 import android.content.Context;
 
