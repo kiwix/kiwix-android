@@ -88,7 +88,7 @@ import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 import org.kiwix.kiwixmobile.utils.files.FileReader;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
-import org.kiwix.kiwixmobile.utils.files.RateAppCounter;
+import org.kiwix.kiwixmobile.utils.RateAppCounter;
 import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
 import org.kiwix.kiwixmobile.views.BookmarksActivity;
 import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
