@@ -73,13 +73,13 @@
   <string name="tab_closed">Tab closed</string>
   <string name="deleted_message">Deleted</string>
   <string name="bookmarks_restored">Bookmarks restored</string>
+  <string name="bookmark_added">Bookmark added</string>
   <string name="rate_dialog_title">Please Rate Us</string>
   <string name="rate_dialog_msg_1">If you enjoy using</string>
   <string name="rate_dialog_msg_2">, please take a moment to rate it. Thanks for your support!</string>
   <string name="rate_dialog_positive">Rate!</string>
   <string name="rate_dialog_negative">No, thanks</string>
   <string name="rate_dialog_neutral">Later</string>
-  <string name="bookmark_added">Bookmark added</string>
   <string name="open">Open</string>
   <string name="bookmark_removed">Bookmark removed</string>
   <string name="pref_newtab_background_title">Open new tab in background</string>
