@@ -1,6 +1,7 @@
 2.0:
 NEW: Clean history button
 NEW: Open new tab in background - settings option
+FIXED: Opening problem with ZIM filenames with special characters
 
 1.99
 FIXED: ZIM load error on ICS
