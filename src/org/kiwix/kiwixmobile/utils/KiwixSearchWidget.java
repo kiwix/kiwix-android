@@ -63,7 +63,7 @@ public class KiwixSearchWidget extends AppWidgetProvider {
       Intent starIntent = new Intent(context, KiwixMobileActivity.class);
       starIntent.putExtra("isWidgetStar", true);
       starIntent.setAction(STAR_CLICKED);
-      PendingIntent starPendingIntent = PendingIntent.getActivity(context,0,starIntent, 0);
+      PendingIntent starPendingIntent = PendingIntent.getActivity(context, 0, starIntent, 0);
 
 
       /** Microphone icon intent for voice search **/

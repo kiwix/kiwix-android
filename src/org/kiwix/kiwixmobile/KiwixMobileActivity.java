@@ -1126,15 +1126,13 @@ public class KiwixMobileActivity extends AppCompatActivity {
   @Override
   protected void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
-    boolean IS_WIDGET_STAR = getIntent().getBooleanExtra("isWidgetStar", false);
-    boolean IS_WIDGET_SEARCH_INTENT = getIntent().getBooleanExtra("isWidgetSearch", false);
-
+    boolean IS_WIDGET_STAR = intent.getBooleanExtra("isWidgetStar", false);
+    boolean IS_WIDGET_SEARCH_INTENT = intent.getBooleanExtra("isWidgetSearch", false);
     if (IS_WIDGET_STAR) {
       goToBookmarks();
     } else if (IS_WIDGET_SEARCH_INTENT) {
       goToSearch(false);
     }
-
   }
 
   private void refreshBookmarks() {
