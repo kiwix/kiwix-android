@@ -53,12 +53,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
   public boolean insertSearch(String search) {
     SQLiteDatabase db = this.getWritableDatabase();
+    deleteSpecificSearch(db,search);
     ContentValues contentValues = new ContentValues();
     contentValues.put(CONTACTS_COLUMN_SEARCH, search);
     contentValues.put(CONTACTS_COLUMN_ZIM, zimFile);
     db.insert(CONTACTS_TABLE_NAME, null, contentValues);
     return true;
   }
+
+
 
   public Cursor getData(int id) {
     SQLiteDatabase db = this.getReadableDatabase();
