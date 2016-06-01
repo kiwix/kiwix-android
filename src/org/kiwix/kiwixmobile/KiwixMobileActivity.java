@@ -83,12 +83,12 @@ import org.json.JSONArray;
 import org.kiwix.kiwixmobile.settings.Constants;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.HelperClasses.HTMLUtils;
-import org.kiwix.kiwixmobile.utils.KiwixTextToSpeech;
 import org.kiwix.kiwixmobile.utils.HelperClasses.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.HelperClasses.ShortcutUtils;
+import org.kiwix.kiwixmobile.utils.KiwixTextToSpeech;
+import org.kiwix.kiwixmobile.utils.RateAppCounter;
 import org.kiwix.kiwixmobile.utils.files.FileReader;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
-import org.kiwix.kiwixmobile.utils.RateAppCounter;
 import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
 import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
 import org.kiwix.kiwixmobile.views.KiwixWebView;
@@ -314,7 +314,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
     IS_WIDGET_STAR = getIntent().getBooleanExtra("isWidgetStar", false);
 
 
-
     tempForUndo =
         new KiwixWebView(getApplicationContext());   /**  initializing temporary tab value **/
     snackbarLayout =
@@ -453,19 +452,22 @@ public class KiwixMobileActivity extends AppCompatActivity {
     setUpExitFullscreenButton();
     loadPrefs();
     updateTitle(ZimContentProvider.getZimFileTitle());
-    if(IS_WIDGET_STAR){
+    if (IS_WIDGET_STAR) {
       goToBookmarks();
     } else if (IS_WIDGET_SEARCH_INTENT) {
-      goToSearch();
+      goToSearch(false);
     } else if (IS_WIDGET_VOICE_SEARCH) {
-
+      goToSearch(true);
     }
   }
 
-  private void goToSearch() {
+  private void goToSearch(boolean isVoice) {
     final String zimFile = ZimContentProvider.getZimFile();
     Intent i = new Intent(KiwixMobileActivity.this, SearchActivity.class);
     i.putExtra("zimFile", zimFile);
+    if (isVoice) {
+      i.putExtra("isWidgetVoice", true);
+    }
     startActivityForResult(i, REQUEST_FILE_SEARCH);
   }
 
@@ -1119,6 +1121,20 @@ public class KiwixMobileActivity extends AppCompatActivity {
     if (menu != null) {
       refreshBookmarkSymbol(menu);
     }
+  }
+
+  @Override
+  protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+    boolean IS_WIDGET_STAR = getIntent().getBooleanExtra("isWidgetStar", false);
+    boolean IS_WIDGET_SEARCH_INTENT = getIntent().getBooleanExtra("isWidgetSearch", false);
+
+    if (IS_WIDGET_STAR) {
+      goToBookmarks();
+    } else if (IS_WIDGET_SEARCH_INTENT) {
+      goToSearch(false);
+    }
+
   }
 
   private void refreshBookmarks() {

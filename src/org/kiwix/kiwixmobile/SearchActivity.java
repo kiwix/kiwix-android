@@ -1,9 +1,11 @@
 package org.kiwix.kiwixmobile;
 
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,18 +25,16 @@ import org.kiwix.kiwixmobile.utils.HelperClasses.ShortcutUtils;
 import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class SearchActivity extends AppCompatActivity
     implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
+  private final int REQ_CODE_SPEECH_INPUT = 100;
   private ListView mListView;
-
   private AutoCompleteAdapter mAutoAdapter;
-
   private ArrayAdapter<String> mDefaultAdapter;
-
   private SearchActivity context;
-
   private DatabaseHelper mDatabaseHelper;
 
   @Override
@@ -60,6 +60,11 @@ public class SearchActivity extends AppCompatActivity
     mAutoAdapter = new AutoCompleteAdapter(context);
     mListView.setOnItemClickListener(context);
     mListView.setOnItemLongClickListener(context);
+
+    boolean IS_VOICE_SEARCH_INTENT = getIntent().getBooleanExtra("isWidgetVoice", false);
+    if (IS_VOICE_SEARCH_INTENT) {
+      promptSpeechInput();
+    }
   }
 
   @Override
@@ -166,4 +171,52 @@ public class SearchActivity extends AppCompatActivity
     mDefaultAdapter.notifyDataSetChanged();
   }
 
+
+  private void promptSpeechInput() {
+    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault()); // TODO: choose selected lang on kiwix
+    intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
+        getString(R.string.speech_prompt_text));
+    try {
+      startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
+    } catch (ActivityNotFoundException a) {
+      Toast.makeText(getApplicationContext(),
+          getString(R.string.speech_not_supported),
+          Toast.LENGTH_SHORT).show();
+    }
+
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    switch (requestCode) {
+
+      case REQ_CODE_SPEECH_INPUT: {
+        if (resultCode == RESULT_OK && data != null) {
+          ArrayList<String> result = data
+              .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+          searchViaVoice(result.get(0));
+        }
+        break;
+      }
+
+
+    }
+  }
+
+
+  private void searchViaVoice(String search) {
+    search = capitalizeSearch(search);
+    mDatabaseHelper.insertSearch(search);
+    sendMessage(search);
+  }
+
+  private String capitalizeSearch(String search) {
+    search = search.substring(0, 1).toUpperCase() + search.substring(1).toLowerCase();
+    return search;
+  }
 }

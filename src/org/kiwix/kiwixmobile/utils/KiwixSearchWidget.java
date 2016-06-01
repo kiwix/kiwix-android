@@ -67,10 +67,16 @@ public class KiwixSearchWidget extends AppWidgetProvider {
 
 
       /** Microphone icon intent for voice search **/
+      Intent voiceIntent = new Intent(context, KiwixMobileActivity.class);
+      voiceIntent.putExtra("isWidgetVoice", true);
+      voiceIntent.setAction(MIC_CLICKED);
+      PendingIntent voicePendingIntent = PendingIntent.getActivity(context, 0, voiceIntent, 0);
 
       views.setOnClickPendingIntent(R.id.search_widget_text, searchPendingIntent);
       views.setOnClickPendingIntent(R.id.search_widget_icon, mainAppPendingIntent);
       views.setOnClickPendingIntent(R.id.search_widget_star, starPendingIntent);
+      views.setOnClickPendingIntent(R.id.search_widget_mic, voicePendingIntent);
+
       appWidgetManager.updateAppWidget(appWidgetId, views);
     }
   }
