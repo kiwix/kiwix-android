@@ -99,7 +99,7 @@
     </activity>
     <activity android:name=".settings.KiwixSettingsActivity" />
     <activity android:name=".SearchActivity" />
-    <activity android:name=".views.BookmarksActivity" />
+    <activity android:name=".BookmarksActivity" />
 
 
     <provider
@@ -107,6 +107,18 @@
         android:authorities="org.kiwix.zim.base"
         android:exported="true" />
 
+    <receiver android:name=".utils.KiwixSearchWidget" >
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.TEXT_CLICKED"/>
+        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.ICON_CLICKED"/>
+        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.MIC_CLICKED"/>
+        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.STAR_CLICKED"/>
+
+      </intent-filter>
+      <meta-data android:name="android.appwidget.provider"
+                 android:resource="@xml/kiwix_widget_provider_info" />
+    </receiver>
 
   </application>
 

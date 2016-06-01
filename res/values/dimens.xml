@@ -6,5 +6,6 @@
   <dimen name="dimen_small_padding">4dp</dimen>
   <dimen name="dimen_medium_padding">8dp</dimen>
   <dimen name="navigation_width">260dp</dimen>
+  <dimen name="widget_margin">0dp</dimen>
 
 </resources>

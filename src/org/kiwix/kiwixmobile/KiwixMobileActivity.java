@@ -82,14 +82,14 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.settings.Constants;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
-import org.kiwix.kiwixmobile.utils.HTMLUtils;
+import org.kiwix.kiwixmobile.utils.HelperClasses.HTMLUtils;
+import org.kiwix.kiwixmobile.utils.HelperClasses.LanguageUtils;
+import org.kiwix.kiwixmobile.utils.HelperClasses.ShortcutUtils;
 import org.kiwix.kiwixmobile.utils.KiwixTextToSpeech;
-import org.kiwix.kiwixmobile.utils.LanguageUtils;
+import org.kiwix.kiwixmobile.utils.RateAppCounter;
 import org.kiwix.kiwixmobile.utils.files.FileReader;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
-import org.kiwix.kiwixmobile.utils.files.RateAppCounter;
 import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
-import org.kiwix.kiwixmobile.views.BookmarksActivity;
 import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
 import org.kiwix.kiwixmobile.views.KiwixWebView;
 
@@ -306,6 +306,14 @@ public class KiwixMobileActivity extends AppCompatActivity {
     mProgressBar = (AnimatedProgressBar) findViewById(R.id.progress_view);
     exitFullscreenButton = (ImageButton) findViewById(R.id.FullscreenControlButton);
 
+    boolean IS_WIDGET_SEARCH_INTENT;
+    boolean IS_WIDGET_VOICE_SEARCH;
+    boolean IS_WIDGET_STAR;
+    IS_WIDGET_SEARCH_INTENT = getIntent().getBooleanExtra("isWidgetSearch", false);
+    IS_WIDGET_VOICE_SEARCH = getIntent().getBooleanExtra("isWidgetVoice", false);
+    IS_WIDGET_STAR = getIntent().getBooleanExtra("isWidgetStar", false);
+
+
     tempForUndo =
         new KiwixWebView(getApplicationContext());   /**  initializing temporary tab value **/
     snackbarLayout =
@@ -444,18 +452,35 @@ public class KiwixMobileActivity extends AppCompatActivity {
     setUpExitFullscreenButton();
     loadPrefs();
     updateTitle(ZimContentProvider.getZimFileTitle());
+    if (IS_WIDGET_STAR) {
+      goToBookmarks();
+    } else if (IS_WIDGET_SEARCH_INTENT) {
+      goToSearch(false);
+    } else if (IS_WIDGET_VOICE_SEARCH) {
+      goToSearch(true);
+    }
+  }
+
+  private void goToSearch(boolean isVoice) {
+    final String zimFile = ZimContentProvider.getZimFile();
+    Intent i = new Intent(KiwixMobileActivity.this, SearchActivity.class);
+    i.putExtra("zimFile", zimFile);
+    if (isVoice) {
+      i.putExtra("isWidgetVoice", true);
+    }
+    startActivityForResult(i, REQUEST_FILE_SEARCH);
   }
 
   public void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {
     AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
 
-    alertDialog.setTitle(stringsGetter(R.string.rate_dialog_title));
+    alertDialog.setTitle(ShortcutUtils.stringsGetter(R.string.rate_dialog_title, this));
 
-    alertDialog.setMessage(stringsGetter(R.string.rate_dialog_msg_1) + " "
+    alertDialog.setMessage(ShortcutUtils.stringsGetter(R.string.rate_dialog_msg_1, this) + " "
         + getString(R.string.app_name)
-        + stringsGetter(R.string.rate_dialog_msg_2));
+        + ShortcutUtils.stringsGetter(R.string.rate_dialog_msg_2, this));
 
-    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, stringsGetter(R.string.rate_dialog_positive),
+    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, ShortcutUtils.stringsGetter(R.string.rate_dialog_positive, this),
         new DialogInterface.OnClickListener() {
 
           public void onClick(DialogInterface dialog, int id) {
@@ -464,7 +489,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
           }
         });
 
-    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, stringsGetter(R.string.rate_dialog_negative),
+    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, ShortcutUtils.stringsGetter(R.string.rate_dialog_negative, this),
         new DialogInterface.OnClickListener() {
 
           public void onClick(DialogInterface dialog, int id) {
@@ -473,7 +498,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
           }
         });
 
-    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, stringsGetter(R.string.rate_dialog_neutral),
+    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, ShortcutUtils.stringsGetter(R.string.rate_dialog_neutral, this),
         new DialogInterface.OnClickListener() {
 
           public void onClick(DialogInterface dialog, int id) {
@@ -486,10 +511,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
     alertDialog.setIcon(getResources().getDrawable(R.mipmap.kiwix_icon));
 
     alertDialog.show();
-  }
-
-  private String stringsGetter(int strId) {
-    return getResources().getString(strId);
   }
 
   private void goToRateApp() {
@@ -677,8 +698,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   private void undoSnackbar(final int index) {
-    Snackbar undoSnackbar = Snackbar.make(snackbarLayout, stringsGetter(R.string.tab_closed), Snackbar.LENGTH_LONG)
-        .setAction(stringsGetter(R.string.undo), new View.OnClickListener() {
+    Snackbar undoSnackbar = Snackbar.make(snackbarLayout, ShortcutUtils.stringsGetter(R.string.tab_closed, this), Snackbar.LENGTH_LONG)
+        .setAction(ShortcutUtils.stringsGetter(R.string.undo, this), new View.OnClickListener() {
           @Override
           public void onClick(View v) {
 
@@ -691,7 +712,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
             mLeftDrawerLayout.openDrawer(Gravity.LEFT);
           }
         });
-    undoSnackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
+    undoSnackbar.setActionTextColor(getResources().getColor(R.color.white));
     undoSnackbar.show();
   }
 
@@ -1078,18 +1099,18 @@ public class KiwixMobileActivity extends AppCompatActivity {
   private void popBookmarkSnackbar(boolean isBookmark) {
     if (isBookmark) {
       Snackbar bookmarkSnackbar =
-          Snackbar.make(snackbarLayout, stringsGetter(R.string.bookmark_added), Snackbar.LENGTH_LONG)
-              .setAction(stringsGetter(R.string.open), new View.OnClickListener() {
+          Snackbar.make(snackbarLayout, ShortcutUtils.stringsGetter(R.string.bookmark_added, this), Snackbar.LENGTH_LONG)
+              .setAction(ShortcutUtils.stringsGetter(R.string.open, this), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                   goToBookmarks();
                 }
               });
-      bookmarkSnackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
+      bookmarkSnackbar.setActionTextColor(getResources().getColor(R.color.white));
       bookmarkSnackbar.show();
     } else {
       Snackbar bookmarkSnackbar =
-          Snackbar.make(snackbarLayout, stringsGetter(R.string.bookmark_removed), Snackbar.LENGTH_LONG);
+          Snackbar.make(snackbarLayout, ShortcutUtils.stringsGetter(R.string.bookmark_removed, this), Snackbar.LENGTH_LONG);
       bookmarkSnackbar.show();
     }
   }
@@ -1100,6 +1121,20 @@ public class KiwixMobileActivity extends AppCompatActivity {
     if (menu != null) {
       refreshBookmarkSymbol(menu);
     }
+  }
+
+  @Override
+  protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+    boolean IS_WIDGET_STAR = getIntent().getBooleanExtra("isWidgetStar", false);
+    boolean IS_WIDGET_SEARCH_INTENT = getIntent().getBooleanExtra("isWidgetSearch", false);
+
+    if (IS_WIDGET_STAR) {
+      goToBookmarks();
+    } else if (IS_WIDGET_SEARCH_INTENT) {
+      goToSearch(false);
+    }
+
   }
 
   private void refreshBookmarks() {
@@ -1154,12 +1189,12 @@ public class KiwixMobileActivity extends AppCompatActivity {
     }, 500);
 
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setMessage(stringsGetter(R.string.hint_contents_drawer_message))
-        .setPositiveButton(stringsGetter(R.string.got_it), new DialogInterface.OnClickListener() {
+    builder.setMessage(ShortcutUtils.stringsGetter(R.string.hint_contents_drawer_message, this))
+        .setPositiveButton(ShortcutUtils.stringsGetter(R.string.got_it, this), new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int id) {
           }
         })
-        .setTitle(stringsGetter(R.string.did_you_know))
+        .setTitle(ShortcutUtils.stringsGetter(R.string.did_you_know, this))
         .setIcon(R.drawable.icon_question);
     AlertDialog alert = builder.create();
     alert.show();//showing the dialog
@@ -1261,15 +1296,15 @@ public class KiwixMobileActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int id) {
               if (isOpenNewTabInBackground) {
                 newTabInBackground(url);
-                Snackbar snackbar = Snackbar.make(snackbarLayout, stringsGetter(R.string.new_tab_snackbar), Snackbar.LENGTH_LONG)
-                    .setAction(stringsGetter(R.string.open), new View.OnClickListener() {
+                Snackbar snackbar = Snackbar.make(snackbarLayout, ShortcutUtils.stringsGetter(R.string.new_tab_snackbar, getBaseContext()), Snackbar.LENGTH_LONG)
+                    .setAction(ShortcutUtils.stringsGetter(R.string.open, getBaseContext()), new View.OnClickListener() {
                       @Override
                       public void onClick(View v) {
                         if (mWebViews.size() > 1)
                           selectTab(mWebViews.size() - 1);
                       }
                     });
-                snackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
+                snackbar.setActionTextColor(getResources().getColor(R.color.white));
                 snackbar.show();
               } else {
                 newTab(url);

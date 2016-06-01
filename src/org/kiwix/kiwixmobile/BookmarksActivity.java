@@ -1,4 +1,24 @@
-package org.kiwix.kiwixmobile.views;
+/*
+ * Copyright 2013  Elad Keyshawn <elad.keyshawn@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU  General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA 02110-1301, USA.
+ */
+
+
+package org.kiwix.kiwixmobile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.utils.HelperClasses.ShortcutUtils;
 
 import java.util.ArrayList;
 
@@ -42,14 +63,16 @@ public class BookmarksActivity extends AppCompatActivity
     setContentView(R.layout.activity_bookmarks);
     setUpToolbar();
     snackbarLayout = (LinearLayout) findViewById(R.id.bookmarks_activity_layout);
-    contents = getIntent().getStringArrayListExtra("bookmark_contents");
-    selected = new ArrayList<>();
-    bookmarksList = (ListView) findViewById(R.id.bookmarks_list);
-    noBookmarksTextView = (TextView) findViewById(R.id.bookmarks_list_nobookmarks);
-    adapter = new ArrayAdapter(getApplicationContext(), R.layout.bookmarks_row, R.id.bookmark_title,
-        contents);
-    bookmarksList.setAdapter(adapter);
+      selected = new ArrayList<>();
+      bookmarksList = (ListView) findViewById(R.id.bookmarks_list);
+      noBookmarksTextView = (TextView) findViewById(R.id.bookmarks_list_nobookmarks);
 
+    if(getIntent().getStringArrayListExtra("bookmark_contents") != null) {
+      contents = getIntent().getStringArrayListExtra("bookmark_contents");
+      adapter = new ArrayAdapter(getApplicationContext(), R.layout.bookmarks_row, R.id.bookmark_title,
+          contents);
+      bookmarksList.setAdapter(adapter);
+    }
     setNoBookmarksState();
 
     bookmarksList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
@@ -117,19 +140,19 @@ public class BookmarksActivity extends AppCompatActivity
 
   private void popDeleteBookmarksSnackbar() {
     Snackbar bookmarkDeleteSnackbar =
-        Snackbar.make(snackbarLayout, numOfSelected + " " + stringsGetter(R.string.deleted_message), Snackbar.LENGTH_LONG)
-            .setAction(stringsGetter(R.string.undo), new View.OnClickListener() {
+        Snackbar.make(snackbarLayout, numOfSelected + " " + ShortcutUtils.stringsGetter(R.string.deleted_message,this), Snackbar.LENGTH_LONG)
+            .setAction(ShortcutUtils.stringsGetter(R.string.undo,this), new View.OnClickListener() {
               @Override
               public void onClick(View v) {
                 contents.clear();
                 contents.addAll(tempContents);
                 adapter.notifyDataSetChanged();
                 setNoBookmarksState();
-                Toast.makeText(getApplicationContext(), stringsGetter(R.string.bookmarks_restored), Toast.LENGTH_SHORT)
+                Toast.makeText(getApplicationContext(), ShortcutUtils.stringsGetter(R.string.bookmarks_restored,getBaseContext()), Toast.LENGTH_SHORT)
                     .show();
               }
             });
-    bookmarkDeleteSnackbar.setActionTextColor(getResources().getColor(R.color.white_undo));
+    bookmarkDeleteSnackbar.setActionTextColor(getResources().getColor(R.color.white));
     bookmarkDeleteSnackbar.show();
   }
 
@@ -145,7 +168,7 @@ public class BookmarksActivity extends AppCompatActivity
 
   private void setUpToolbar() {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    toolbar.setTitle(stringsGetter(R.string.menu_bookmarks_list));
+    toolbar.setTitle(ShortcutUtils.stringsGetter(R.string.menu_bookmarks_list,this));
     setSupportActionBar(toolbar);
     getSupportActionBar().setHomeButtonEnabled(true);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -181,7 +204,4 @@ public class BookmarksActivity extends AppCompatActivity
     super.onBackPressed();
   }
 
-  public String stringsGetter(int strId) {
-    return getResources().getString(strId);
-  }
 }

@@ -38,8 +38,8 @@ import android.widget.BaseAdapter;
 import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.utils.DatabaseHelper;
-import org.kiwix.kiwixmobile.utils.LanguageUtils;
+import org.kiwix.kiwixmobile.utils.HelperClasses.DatabaseHelper;
+import org.kiwix.kiwixmobile.utils.HelperClasses.LanguageUtils;
 import org.kiwix.kiwixmobile.views.SliderPreference;
 
 import java.util.Locale;

@@ -1,9 +1,11 @@
 package org.kiwix.kiwixmobile;
 
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,21 +20,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.kiwix.kiwixmobile.utils.DatabaseHelper;
+import org.kiwix.kiwixmobile.utils.HelperClasses.DatabaseHelper;
+import org.kiwix.kiwixmobile.utils.HelperClasses.ShortcutUtils;
 import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
-public class SearchActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+public class SearchActivity extends AppCompatActivity
+    implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
+  private final int REQ_CODE_SPEECH_INPUT = 100;
   private ListView mListView;
-
   private AutoCompleteAdapter mAutoAdapter;
-
   private ArrayAdapter<String> mDefaultAdapter;
-
   private SearchActivity context;
-
   private DatabaseHelper mDatabaseHelper;
 
   @Override
@@ -45,7 +47,6 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
     getSupportActionBar().setHomeButtonEnabled(true);
 
     String zimFile = getIntent().getStringExtra("zimFile");
-    zimFile = escapeSqlSyntax(zimFile);
     mListView = (ListView) findViewById(R.id.search_list);
     mDatabaseHelper = new DatabaseHelper(this, zimFile);
     SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
@@ -59,6 +60,11 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
     mAutoAdapter = new AutoCompleteAdapter(context);
     mListView.setOnItemClickListener(context);
     mListView.setOnItemLongClickListener(context);
+
+    boolean IS_VOICE_SEARCH_INTENT = getIntent().getBooleanExtra("isWidgetVoice", false);
+    if (IS_VOICE_SEARCH_INTENT) {
+      promptSpeechInput();
+    }
   }
 
   @Override
@@ -114,7 +120,6 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
     String title = ((TextView) view).getText().toString();
-    title = escapeSqlSyntax(title);
     mDatabaseHelper.insertSearch(title);
     sendMessage(title);
   }
@@ -137,7 +142,7 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
 
   private void deleteSpecificSearchDialog(final String search) {
     new AlertDialog.Builder(this)
-        .setMessage(getResources().getString(R.string.deleteRecentSearchItem))
+        .setMessage(ShortcutUtils.stringsGetter(R.string.delete_recent_search_item, this))
         .setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int which) {
             deleteSpecificSearchItem(search);
@@ -154,20 +159,8 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
 
   private void deleteSpecificSearchItem(String search) {
     SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
-    mDatabaseHelper.deleteSpecificSearch(db, escapeSqlSyntax(search));
+    mDatabaseHelper.deleteSpecificSearch(db, ShortcutUtils.escapeSqlSyntax(search));
     resetAdapter();
-  }
-
-  private String escapeSqlSyntax(String search) { //Escapes sql ' if exists
-    String tempStr = "";
-    char[] charArray = search.toCharArray();
-    for (char a : charArray) {
-      if (a != '\'')
-        tempStr += a;
-      else
-        tempStr += "''";
-    }
-    return tempStr;
   }
 
   private void resetAdapter() {
@@ -179,4 +172,51 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
   }
 
 
+  private void promptSpeechInput() {
+    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault()); // TODO: choose selected lang on kiwix
+    intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
+        getString(R.string.speech_prompt_text));
+    try {
+      startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
+    } catch (ActivityNotFoundException a) {
+      Toast.makeText(getApplicationContext(),
+          getString(R.string.speech_not_supported),
+          Toast.LENGTH_SHORT).show();
+    }
+
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    switch (requestCode) {
+
+      case REQ_CODE_SPEECH_INPUT: {
+        if (resultCode == RESULT_OK && data != null) {
+          ArrayList<String> result = data
+              .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+          searchViaVoice(result.get(0));
+        }
+        break;
+      }
+
+
+    }
+  }
+
+
+  private void searchViaVoice(String search) {
+    search = capitalizeSearch(search);
+    mDatabaseHelper.insertSearch(search);
+    sendMessage(search);
+  }
+
+  private String capitalizeSearch(String search) {
+    search = search.substring(0, 1).toUpperCase() + search.substring(1).toLowerCase();
+    return search;
+  }
 }

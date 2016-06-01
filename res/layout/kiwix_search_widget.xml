@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:id="@+id/kiwix_search_widget_layout_id"
+    android:background="@drawable/search_widget_background"
+    android:padding="@dimen/widget_margin"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_widget_icon"
+        android:src="@drawable/ic_widget_kiwix"
+        android:layout_weight="0.1"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search_widget_text"
+        android:textColor="@color/grey"
+        android:id="@+id/search_widget_text"
+        android:layout_weight="0.7"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_widget_star"
+        android:src="@drawable/ic_stars_black_24dp"
+        android:layout_weight="0.1"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_widget_mic"
+        android:src="@drawable/ic_mic_black_24dp"
+        android:layout_weight="0.1"/>
+
+
+
+
+
+
+
+</LinearLayout>
