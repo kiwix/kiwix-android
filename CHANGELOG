@@ -7,6 +7,7 @@ FIXED: Opening problem with ZIM filenames with special characters
 FIXED: Useless "w820dp" language
 FIXED: Failing he, id, yi locales
 FIXED: Non-localised setting language list sorting
+FIXED: Multiple search history problems
 
 1.99
 FIXED: ZIM load error on ICS
