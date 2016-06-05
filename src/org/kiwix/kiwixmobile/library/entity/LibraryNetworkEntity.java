@@ -32,7 +32,7 @@ public class LibraryNetworkEntity {
   @Attribute(name = "version", required = false)
   private String version;
 
-  public List<Book> getBook() {
+  public List<Book> getBooks() {
     return this.book;
   }
 
