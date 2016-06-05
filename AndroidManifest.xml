@@ -102,7 +102,6 @@
     <activity android:name=".SearchActivity" />
     <activity android:name=".BookmarksActivity" />
 
-
     <provider
         android:name=".ZimContentProvider"
         android:authorities="org.kiwix.zim.base"
@@ -121,6 +120,8 @@
                  android:resource="@xml/kiwix_widget_provider_info" />
     </receiver>
 
+    <activity android:name=".LibraryActivity" />
+    <service android:name=".downloader.DownloadService" />
   </application>
 
 </manifest>
