@@ -24,6 +24,7 @@ import com.yahoo.squidb.data.SquidDatabase;
 import com.yahoo.squidb.data.adapter.SQLiteDatabaseWrapper;
 import com.yahoo.squidb.sql.Table;
 import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
+import org.kiwix.kiwixmobile.database.entity.LibraryDatabaseEntity;
 
 public class KiwixDatabase extends SquidDatabase {
 
@@ -40,7 +41,8 @@ public class KiwixDatabase extends SquidDatabase {
   @Override
   protected Table[] getTables() {
     return new Table[] {
-        BookDatabaseEntity.TABLE
+        BookDatabaseEntity.TABLE,
+        LibraryDatabaseEntity.TABLE
     };
   }
 
