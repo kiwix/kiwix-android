@@ -7,10 +7,12 @@ import android.util.Log;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.UUID;
 
 public class StorageUtils {
 
-  private static final String SDCARD_ROOT = Environment.getExternalStorageDirectory().getAbsolutePath();
+  private static final String SDCARD_ROOT =
+      Environment.getExternalStorageDirectory().getAbsolutePath();
 
   public static final String FILE_ROOT = SDCARD_ROOT + "/kiwix/";
 
@@ -81,5 +83,22 @@ public class StorageUtils {
       Log.e(null, "File does not exist.");
       return false;
     }
+  }
+
+  public static String getFileNameFromUrl(String url) {
+
+    int index = url.lastIndexOf('?');
+    String filename;
+    if (index > 1) {
+      filename = url.substring(url.lastIndexOf('/') + 1, index);
+    } else {
+      filename = url.substring(url.lastIndexOf('/') + 1);
+    }
+
+    if ("".equals(filename.trim())) {
+      filename = String.valueOf(UUID.randomUUID());
+    }
+
+    return filename;
   }
 }
