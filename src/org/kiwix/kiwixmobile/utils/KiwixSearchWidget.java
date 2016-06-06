@@ -26,6 +26,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
@@ -42,12 +43,14 @@ public class KiwixSearchWidget extends AppWidgetProvider {
   public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 
     final int N = appWidgetIds.length;
+    String appName = context.getApplicationContext().getResources().getString(R.string.app_name);
+
 
     for (int i = 0; i < N; i++) {
       int appWidgetId = appWidgetIds[i];
 
       RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.kiwix_search_widget);
-
+      views.setTextViewText(R.id.search_widget_text, "Search " + appName);
       /** Search Kiwix intent **/
       Intent mainIntent = new Intent(context, KiwixMobileActivity.class);
       mainIntent.putExtra("isWidgetSearch", true);

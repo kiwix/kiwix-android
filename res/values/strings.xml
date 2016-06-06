@@ -88,5 +88,5 @@
   <string name="new_tab_snackbar">Article opened in new tab</string>
   <string name="search_widget_text">Search Kiwix</string>
   <string name="speech_prompt_text">Speak to search Kiwix</string>
-  <string name="speech_not_supported">Sorry! Your device doesn\\\'t support speech input</string>
+  <string name="speech_not_supported">Sorry! Your device does not support speech input</string>
 </resources>
