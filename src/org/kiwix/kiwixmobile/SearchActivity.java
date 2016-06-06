@@ -173,12 +173,13 @@ public class SearchActivity extends AppCompatActivity
 
 
   private void promptSpeechInput() {
+    String appName = getResources().getString(R.string.app_name);
     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
         RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault()); // TODO: choose selected lang on kiwix
     intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
-        getString(R.string.speech_prompt_text));
+        String.format(getString(R.string.speech_prompt_text), appName));
     try {
       startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
     } catch (ActivityNotFoundException a) {
