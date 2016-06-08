@@ -63,7 +63,8 @@ public class KiwixDatabase extends SquidDatabase {
 
   @Override protected boolean onUpgrade(SQLiteDatabaseWrapper db, int oldVersion, int newVersion) {
     if (newVersion >= 3) {
-      db.execSQL("DROP TABLE IF EXISTS recents");
+        db.execSQL("DROP TABLE IF EXISTS recents");
+        tryCreateTable(RecentSearch.TABLE);
     }
     return true;
   }
