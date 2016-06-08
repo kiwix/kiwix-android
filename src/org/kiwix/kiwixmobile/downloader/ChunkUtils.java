@@ -2,7 +2,7 @@ package org.kiwix.kiwixmobile.downloader;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.kiwix.kiwixmobile.utils.StorageUtils;
+import org.kiwix.kiwixmobile.utils.HelperClasses.StorageUtils;
 
 public class ChunkUtils {
 

@@ -35,7 +35,7 @@ import java.util.Locale;
 import java.util.Map;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
-import org.kiwix.kiwixmobile.utils.LanguageUtils;
+import org.kiwix.kiwixmobile.utils.HelperClasses.LanguageUtils;
 
 public class LibraryAdapter extends ArrayAdapter<Book> {
 
