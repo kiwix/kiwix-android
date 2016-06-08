@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile.utils.HelperClasses;
+package org.kiwix.kiwixmobile.utils;
 
 import android.content.ContentValues;
 import android.content.Context;

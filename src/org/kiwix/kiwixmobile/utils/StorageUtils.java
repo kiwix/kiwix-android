@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile.utils.HelperClasses;
+package org.kiwix.kiwixmobile.utils;
 
 import android.os.Build;
 import android.os.Environment;

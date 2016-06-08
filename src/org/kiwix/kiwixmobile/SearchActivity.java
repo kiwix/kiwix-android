@@ -20,8 +20,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.kiwix.kiwixmobile.utils.HelperClasses.DatabaseHelper;
-import org.kiwix.kiwixmobile.utils.HelperClasses.ShortcutUtils;
+import org.kiwix.kiwixmobile.utils.DatabaseHelper;
+import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 
 import java.util.ArrayList;

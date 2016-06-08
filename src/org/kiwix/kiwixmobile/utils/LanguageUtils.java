@@ -17,7 +17,7 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile.utils.HelperClasses;
+package org.kiwix.kiwixmobile.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

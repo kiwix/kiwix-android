@@ -39,8 +39,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.utils.HelperClasses.ShortcutUtils;
+import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 
 import java.util.ArrayList;
 
