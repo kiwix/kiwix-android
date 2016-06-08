@@ -85,8 +85,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
   public ArrayList<String> getRecentSearches() {
     ArrayList<String> array_list = new ArrayList<String>();
     SQLiteDatabase db = this.getReadableDatabase();
-    //hp = new HashMap();
-//    Log.d(KiwixMobileActivity.TAG_KIWIX, zimFile);
     Cursor res = db.rawQuery("select * from " + SEARCH_TABLE_NAME
         + " where " + SEARCH_COLUMN_ZIM + " = '" + ShortcutUtils.escapeSqlSyntax(zimFile) + "'", null);
     res.moveToLast();
