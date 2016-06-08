@@ -61,7 +61,7 @@ public class DownloadService extends Service {
         .concatMap(this::downloadChunk)
         .distinctUntilChanged()
         .subscribe(progress -> {
-          if (progress == 99) {
+          if (progress == 100) {
             notification.setOngoing(false);
           }
           notification.setProgress(100, progress, false);
