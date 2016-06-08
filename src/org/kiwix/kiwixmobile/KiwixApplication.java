@@ -3,7 +3,6 @@ package org.kiwix.kiwixmobile;
 import android.app.Application;
 import okhttp3.OkHttpClient;
 import org.kiwix.kiwixmobile.network.KiwixService;
-import org.kiwix.kiwixmobile.network.converter.MetaLinkConverterFactory;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
@@ -22,7 +21,6 @@ public class KiwixApplication extends Application {
   private void createRetrofitService() {
     Retrofit retrofit = new Retrofit.Builder()
         .baseUrl("http://kiwix.org/")
-        .addConverterFactory(MetaLinkConverterFactory.create())
         .addConverterFactory(SimpleXmlConverterFactory.create())
         .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
         .build();

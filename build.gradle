@@ -47,6 +47,7 @@ dependencies {
   compile files("$buildDir/native-libs/native-libs.jar")
 
   // compile fileTree(dir: '.', include: 'content-libs.jar') // DO NOT REMOVE !!
+  testCompile 'junit:junit:4.12'
 }
 
 android {
@@ -79,6 +80,11 @@ android {
       renderscript.srcDirs = ['src']
       res.srcDirs = ['res']
       assets.srcDirs = ['assets']
+    }
+
+    test {
+      java.srcDirs = ['test']
+      resources.srcDirs = ['test']
     }
   }
 }
