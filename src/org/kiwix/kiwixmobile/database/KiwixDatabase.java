@@ -42,7 +42,7 @@ import java.util.List;
 
 public class KiwixDatabase extends SquidDatabase {
 
-  private static final int VERSION = 1;
+  private static final int VERSION = 3;
 
   public KiwixDatabase(Context context) {
     super(context);
@@ -62,7 +62,10 @@ public class KiwixDatabase extends SquidDatabase {
   }
 
   @Override protected boolean onUpgrade(SQLiteDatabaseWrapper db, int oldVersion, int newVersion) {
-    return false;
+    if (newVersion >= 3) {
+      db.execSQL("DROP TABLE IF EXISTS recents");
+    }
+    return true;
   }
 
   @Override
