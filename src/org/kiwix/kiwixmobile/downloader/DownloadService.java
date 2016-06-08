@@ -56,7 +56,7 @@ public class DownloadService extends Service {
   private void downloadBook(String url) {
     kiwixService.getMetaLinks(url)
         .subscribeOn(AndroidSchedulers.mainThread())
-        .flatMap(metaLink -> getMetaLinkContentLength(metaLink.getRelevantUrl()))
+        .flatMap(metaLink -> getMetaLinkContentLength(metaLink.getRelevantUrl().getValue()))
         .flatMap(pair -> Observable.from(ChunkUtils.getChunks(pair.first, pair.second)))
         .concatMap(this::downloadChunk)
         .distinctUntilChanged()
