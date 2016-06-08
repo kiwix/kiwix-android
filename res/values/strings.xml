@@ -89,4 +89,6 @@
   <string name="search_widget_text">Search Kiwix</string>
   <string name="speech_prompt_text">Speak to search %s</string>
   <string name="speech_not_supported">Sorry! Your device does not support speech input</string>
+  <string name="download_started_library">Download started...</string>
+  <string name="menu_library">Download ZIM files</string>
 </resources>

@@ -796,11 +796,19 @@ public class KiwixMobileActivity extends AppCompatActivity {
           openFullScreen();
         }
         break;
+
+      case R.id.menu_library:
+        openDownloadManager();
       default:
         break;
     }
 
     return super.onOptionsItemSelected(item);
+  }
+
+  private void openDownloadManager() {
+    Intent downloadIntent = new Intent(this, LibraryActivity.class);
+    startActivity(downloadIntent);
   }
 
   private void goToBookmarks() {

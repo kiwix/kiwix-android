@@ -41,6 +41,10 @@
       app:showAsAction="ifRoom"/>
 
   <item
+      android:id="@+id/menu_library"
+      android:title="@string/menu_library"
+      app:showAsAction="ifRoom"/>
+  <item
       android:id="@+id/menu_searchintext"
       android:title="@string/menu_searchintext"
       android:visible="false"

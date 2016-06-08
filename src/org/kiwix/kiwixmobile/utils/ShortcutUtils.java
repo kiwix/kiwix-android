@@ -25,7 +25,7 @@ import android.content.Context;
 
 /*
 Helper class containing basic useful functions
-that are meant to make shortcuts and beautifying code.
+meant to provide shortcuts and beautification of code.
 */
 
 public class ShortcutUtils {

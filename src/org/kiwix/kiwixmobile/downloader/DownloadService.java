@@ -63,6 +63,7 @@ public class DownloadService extends Service {
         .subscribe(progress -> {
           if (progress == 100) {
             notification.setOngoing(false);
+            //TODO: change title to 'Name' + downloaded 
           }
           notification.setProgress(100, progress, false);
           notificationManager.notify(DownloadIntent.DOWNLOAD_NOTIFICATION_ID, notification.build());
