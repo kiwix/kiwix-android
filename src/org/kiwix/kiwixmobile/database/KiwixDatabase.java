@@ -35,7 +35,7 @@ public class KiwixDatabase extends SquidDatabase {
   }
 
   @Override public String getName() {
-    return "kiwix.db";
+    return "Kiwix.db";
   }
 
   @Override
