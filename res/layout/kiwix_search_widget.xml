@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/search_widget_icon"
-        android:src="@drawable/ic_kiwix_widget_32dp"
+        android:src="@drawable/ic_kiwix_widget"
         android:layout_weight="0.1"/>
 
     <TextView
