@@ -110,7 +110,7 @@ To make an APK which embeds a ZIM file:
 * In the json file, add:
     "embed_zim": true,
 * You might need to set up following env. variable:
-    _JAVA_OPTIONS="\"-Xmx4096m\" \"-Xms4096m\" \"-XX:MaxPermSize=4096m\""
+    _JAVA_OPTIONS="\"-Xmx4096m\" \"-Xms4096m\""
 
 *********************************************************************
 *************************** CONTACT *********************************

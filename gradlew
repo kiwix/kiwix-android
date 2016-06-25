@@ -7,7 +7,7 @@
 ##############################################################################
 
 # Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
-DEFAULT_JVM_OPTS="\"-Xmx4096m\" \"-Xms4096m\" \"-XX:MaxPermSize=4096m\""
+DEFAULT_JVM_OPTS="\"-Xmx4096m\" \"-Xms4096m\""
 
 APP_NAME="Gradle"
 APP_BASE_NAME=`basename "$0"`
