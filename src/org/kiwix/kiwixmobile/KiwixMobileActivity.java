@@ -605,7 +605,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
           SharedPreferences.Editor editor = settings.edit();
           editor.putBoolean("isFirstRun", false); // It is no longer the first run
           isFirstRun = false;
-          editor.commit();
+          editor.apply();
         }
         return super.shouldOverrideUrlLoading(view, url);
       }
@@ -832,7 +832,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
     SharedPreferences.Editor editor = settings.edit();
     editor.putBoolean(PREF_FULLSCREEN, true);
-    editor.commit();
+    editor.apply();
     mIsFullscreenOpened = true;
   }
 
@@ -850,7 +850,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
     SharedPreferences.Editor editor = settings.edit();
     editor.putBoolean(PREF_FULLSCREEN, false);
-    editor.commit();
+    editor.apply();
     mIsFullscreenOpened = false;
   }
 
@@ -1632,7 +1632,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
                 PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("pref_language_chooser", Constants.CUSTOM_APP_ENFORCED_LANG);
-            editor.commit();
+            editor.apply();
 
             // restart activity for new locale to take effect
             this.setResult(1236);

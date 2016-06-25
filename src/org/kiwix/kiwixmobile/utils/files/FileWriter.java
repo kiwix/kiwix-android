@@ -126,7 +126,7 @@ public class FileWriter {
     SharedPreferences.Editor editor = preferences.edit();
     editor.putString(CSV_PREF_NAME, csv);
 
-    editor.commit();
+    editor.apply();
   }
 
   // Load the CSV from the prefrences

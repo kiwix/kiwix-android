@@ -42,7 +42,7 @@ public class RateAppCounter {
   public void setNoThanksState(boolean val) {
     SharedPreferences.Editor CounterEditor = visitCounter.edit();
     CounterEditor.putBoolean(NOTHANKS_CLICKED, val);
-    CounterEditor.commit();
+    CounterEditor.apply();
   }
 
   public SharedPreferences.Editor getEditor() {
@@ -56,7 +56,7 @@ public class RateAppCounter {
   public void setCount(int count) {
     SharedPreferences.Editor CounterEditor = visitCounter.edit();
     CounterEditor.putInt("count", count);
-    CounterEditor.commit();
+    CounterEditor.apply();
 
   }
 }
