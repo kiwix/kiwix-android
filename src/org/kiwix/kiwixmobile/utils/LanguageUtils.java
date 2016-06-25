@@ -40,33 +40,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.text.Collator;
 import org.kiwix.kiwixmobile.utils.files.FileWriter;
 
 public class LanguageUtils {
 
   public static final String TAG_KIWIX = "kiwix";
-
   private static HashMap<String, Locale> mLocaleMap;
-
   private List<LanguageContainer> mLanguageList;
-
   private List<String> mLocaleLanguageCodes;
-
   private Context mContext;
 
   public LanguageUtils(Context context) {
-
     mContext = context;
-
     mLanguageList = new ArrayList<LanguageContainer>();
-
     mLocaleLanguageCodes = new ArrayList<String>();
-
     getLanguageCodesFromAssets();
-
     setupLanguageList();
-
-    sortLanguageList();
+    sortLanguageList(context.getResources().getConfiguration().locale);
   }
 
   public static void handleLocaleChange(Context context) {
@@ -134,12 +125,15 @@ public class LanguageUtils {
   }
 
   // Sort the language list by the language name
-  private void sortLanguageList() {
+  private void sortLanguageList(Locale locale) {
+
+    Collator localeCollator = Collator.getInstance(locale);
+    localeCollator.setStrength(Collator.SECONDARY);
 
     Collections.sort(mLanguageList, new Comparator<LanguageContainer>() {
       @Override
       public int compare(LanguageContainer a, LanguageContainer b) {
-        return a.getLanguageName().compareToIgnoreCase(b.getLanguageName());
+        return localeCollator.compare(a.getLanguageName(), b.getLanguageName());
       }
     });
   }
@@ -150,7 +144,6 @@ public class LanguageUtils {
 
     for (Locale s : Locale.getAvailableLocales()) {
       if (s.getLanguage().equals(Locale.getDefault().toString())) {
-
         return false;
       }
 
@@ -281,7 +274,7 @@ public class LanguageUtils {
       exceptions.put("gu", "fonts/Lohit-Gujarati.ttf");
       exceptions.put("my", "fonts/Parabaik.ttf");
       exceptions.put("or", "fonts/Lohit-Odia.ttf");
-      // These scripts could be supported via more Lohit fonts if DevaVu doesn't
+      // These scripts could be supported via more Lohit fonts if DejaVu doesn't
       // support them.  That is untested now as they aren't even in the language
       // menu:
       //  * (no ISO code?) (Devanagari/Nagari) -- at 0% in translatewiki
