@@ -34,7 +34,7 @@ import shutil
 import logging
 from io import StringIO
 import tempfile
-import urllib.request as urllib2
+import urllib2
 from collections import OrderedDict
 from subprocess import call
 PY3 = sys.version_info.major >= 3
