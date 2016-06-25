@@ -3,6 +3,7 @@ NEW: Clean history button
 NEW: Open new tab in background - settings option
 NEW: Kiwix search home screen widget
 FIXED: Opening problem with ZIM filenames with special characters
+FIXED: Useless "w820dp" language
 
 1.99
 FIXED: ZIM load error on ICS
