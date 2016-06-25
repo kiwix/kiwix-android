@@ -98,12 +98,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     getSupportActionBar().setHomeButtonEnabled(true);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        onBackPressed();
-      }
-    });
+    toolbar.setNavigationOnClickListener(v -> onBackPressed());
   }
 
   public static class PrefsFragment extends PreferenceFragment implements
