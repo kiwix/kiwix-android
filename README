@@ -44,6 +44,11 @@ Steps to build a Custom App:
 1. Build your first APK
 
 * Generate your icon using `gen-std-icon.py logo-file.png lang_code`
+* For creating a corresponding custom app icon of our widget, please follow these subinstructions:
+  a) Go to this icon generator -> https://goo.gl/6QtNGJ
+  b) Click select image and upload your custom app icon .png
+  c) Download zip, extract, select all drawable folder (hdpi,mdpi...)
+  d) Paste in project's drawable folder (replace existing icon)
 * Prepare your JSON file using the sample in the script
 * Choose your package name wisely.
 ** org.kiwix.kiwixcustomXXXXXX

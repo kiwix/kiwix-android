@@ -20,15 +20,29 @@
 package org.kiwix.kiwixmobile.database;
 
 import android.content.Context;
+
+import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.data.SquidDatabase;
 import com.yahoo.squidb.data.adapter.SQLiteDatabaseWrapper;
+import com.yahoo.squidb.sql.Order;
+import com.yahoo.squidb.sql.Property;
+import com.yahoo.squidb.sql.Query;
 import com.yahoo.squidb.sql.Table;
+
+import org.kiwix.kiwixmobile.database.entity.BookDataSource;
 import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.LibraryDatabaseEntity;
+import org.kiwix.kiwixmobile.database.entity.RecentSearch;
+import org.kiwix.kiwixmobile.database.entity.RecentSearchSpec;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class KiwixDatabase extends SquidDatabase {
 
-  private static final int VERSION = 1;
+  private static final int VERSION = 3;
 
   public KiwixDatabase(Context context) {
     super(context);
@@ -42,16 +56,22 @@ public class KiwixDatabase extends SquidDatabase {
   protected Table[] getTables() {
     return new Table[] {
         BookDatabaseEntity.TABLE,
-        LibraryDatabaseEntity.TABLE
+        LibraryDatabaseEntity.TABLE,
+        RecentSearch.TABLE
     };
   }
 
   @Override protected boolean onUpgrade(SQLiteDatabaseWrapper db, int oldVersion, int newVersion) {
-    return false;
+    if (newVersion >= 3) {
+      db.execSQL("DROP TABLE IF EXISTS recents");
+      tryCreateTable(RecentSearch.TABLE);
+    }
+    return true;
   }
 
   @Override
   protected int getVersion() {
     return VERSION;
   }
+
 }

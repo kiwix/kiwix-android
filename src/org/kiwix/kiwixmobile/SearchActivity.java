@@ -3,7 +3,6 @@ package org.kiwix.kiwixmobile;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v4.view.MenuItemCompat;
@@ -20,11 +19,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.kiwix.kiwixmobile.utils.DatabaseHelper;
+import org.kiwix.kiwixmobile.database.KiwixDatabase;
+import org.kiwix.kiwixmobile.database.RecentSearchDao;
 import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class SearchActivity extends AppCompatActivity
@@ -35,7 +36,7 @@ public class SearchActivity extends AppCompatActivity
   private AutoCompleteAdapter mAutoAdapter;
   private ArrayAdapter<String> mDefaultAdapter;
   private SearchActivity context;
-  private DatabaseHelper mDatabaseHelper;
+  private RecentSearchDao recentSearchDao;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +49,11 @@ public class SearchActivity extends AppCompatActivity
 
     String zimFile = getIntent().getStringExtra("zimFile");
     mListView = (ListView) findViewById(R.id.search_list);
-    mDatabaseHelper = new DatabaseHelper(this, zimFile);
-    SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
-    mDatabaseHelper.onCreate(db);
-    ArrayList<String> a = mDatabaseHelper.getRecentSearches();
+    recentSearchDao = new RecentSearchDao(new KiwixDatabase(this));
+    List<String> recentSearches = recentSearchDao.getRecentSearches();
     mDefaultAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
     mListView.setAdapter(mDefaultAdapter);
-    mDefaultAdapter.addAll(a);
+    mDefaultAdapter.addAll(recentSearches);
     mDefaultAdapter.notifyDataSetChanged();
     context = this;
     mAutoAdapter = new AutoCompleteAdapter(context);
@@ -120,7 +119,7 @@ public class SearchActivity extends AppCompatActivity
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
     String title = ((TextView) view).getText().toString();
-    mDatabaseHelper.insertSearch(title);
+    recentSearchDao.saveSearch(title);
     sendMessage(title);
   }
 
@@ -158,16 +157,15 @@ public class SearchActivity extends AppCompatActivity
   }
 
   private void deleteSpecificSearchItem(String search) {
-    SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
-    mDatabaseHelper.deleteSpecificSearch(db, ShortcutUtils.escapeSqlSyntax(search));
+    recentSearchDao.deleteSearchString(search);
     resetAdapter();
   }
 
   private void resetAdapter() {
-    ArrayList<String> a = mDatabaseHelper.getRecentSearches();
     mDefaultAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
     mListView.setAdapter(mDefaultAdapter);
-    mDefaultAdapter.addAll(a);
+    List<String> recentSearches = recentSearchDao.getRecentSearches();
+    mDefaultAdapter.addAll(recentSearches);
     mDefaultAdapter.notifyDataSetChanged();
   }
 
@@ -209,10 +207,9 @@ public class SearchActivity extends AppCompatActivity
     }
   }
 
-
   private void searchViaVoice(String search) {
     search = capitalizeSearch(search);
-    mDatabaseHelper.insertSearch(search);
+    recentSearchDao.saveSearch(search);
     sendMessage(search);
   }
 

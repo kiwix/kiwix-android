@@ -23,7 +23,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -38,7 +37,8 @@ import android.widget.BaseAdapter;
 import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.utils.DatabaseHelper;
+import org.kiwix.kiwixmobile.database.KiwixDatabase;
+import org.kiwix.kiwixmobile.database.RecentSearchDao;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.views.SliderPreference;
 
@@ -110,6 +110,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       SharedPreferences.OnSharedPreferenceChangeListener {
 
     private SliderPreference mSlider;
+    private RecentSearchDao recentSearchDao;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -125,13 +126,11 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       setSliderState();
       setUpSettings();
       new LanguageUtils(getActivity()).changeFont(getActivity().getLayoutInflater());
+      recentSearchDao = new RecentSearchDao(new KiwixDatabase(getActivity()));
     }
 
     private void deleteSearchHistoryFromDb() {
-      DatabaseHelper mDatabaseHelper = new DatabaseHelper(getActivity(), zimFile);
-      SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
-
-      mDatabaseHelper.deleteSearchTable(db);
+      recentSearchDao.deleteSearchHistory();
     }
 
     private void setSliderState() {
