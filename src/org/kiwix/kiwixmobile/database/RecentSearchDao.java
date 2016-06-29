@@ -60,4 +60,6 @@ public class RecentSearchDao {
   public void deleteSearchHistory() {
     mDb.deleteWhere(RecentSearch.class, RecentSearch.ID.isNotNull());
   }
+
+
 }

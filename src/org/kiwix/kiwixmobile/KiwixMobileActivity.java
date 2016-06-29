@@ -80,13 +80,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.kiwix.kiwixmobile.database.BookmarksDao;
+import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.settings.Constants;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.HTMLUtils;
-import org.kiwix.kiwixmobile.utils.LanguageUtils;
-import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 import org.kiwix.kiwixmobile.utils.KiwixTextToSpeech;
+import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.RateAppCounter;
+import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 import org.kiwix.kiwixmobile.utils.files.FileReader;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
@@ -99,7 +101,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -232,6 +233,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private SharedPreferences settings;
 
+  private BookmarksDao bookmarksDao;
+
   @Override
   public void onActionModeStarted(ActionMode mode) {
     if (mActionMode == null) {
@@ -293,7 +296,12 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
     KIWIX_LOCAL_MARKET_URI = Uri.parse("market://details?id=" + getPackageName());
     KIWIX_BROWSER_MARKET_URI = Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName());
+
+    //Bookmarks
     bookmarks = new ArrayList<>();
+    bookmarksDao = new BookmarksDao(new KiwixDatabase(this));
+    bookmarks = bookmarksDao.getBookmarks();
+
     requestClearHistoryAfterLoad = false;
     requestWebReloadOnFinished = 0;
     requestInitAllMenuItems = false;
@@ -1081,17 +1089,17 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   public void toggleBookmark() {
-    String title = getCurrentWebView().getTitle();
-    boolean isBookmark;
-    if (title != null && !bookmarks.contains(title)) {
-      bookmarks.add(title);
+    //Check maybe need refresh
+    String article = getCurrentWebView().getTitle();
+    boolean isBookmark = false;
+    if (article != null && !bookmarks.contains(article)) {
+      saveBookmark(article);
       isBookmark = true;
-      popBookmarkSnackbar(isBookmark);
-    } else {
-      bookmarks.remove(title);
+    } else if(article != null) {
+      deleteBookmark(article);
       isBookmark = false;
-      popBookmarkSnackbar(isBookmark);
     }
+    popBookmarkSnackbar(isBookmark);
     supportInvalidateOptionsMenu();
   }
 
@@ -1136,40 +1144,17 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private void refreshBookmarks() {
     bookmarks.clear();
-    if (ZimContentProvider.getId() != null) {
-      try {
-        InputStream stream = openFileInput(ZimContentProvider.getId() + ".txt");
-        String in;
-        if (stream != null) {
-          BufferedReader read = new BufferedReader(new InputStreamReader(stream));
-          while ((in = read.readLine()) != null) {
-            bookmarks.add(in);
-          }
-          Log.d(TAG_KIWIX, "Switched to bookmarkfile " + ZimContentProvider.getId());
-        }
-      } catch (FileNotFoundException e) {
-        Log.e(TAG_KIWIX, "File not found: " + e.toString());
-      } catch (IOException e) {
-        Log.e(TAG_KIWIX, "Can not read file: " + e.toString());
-      }
-    }
+    bookmarks = bookmarksDao.getBookmarks();
   }
 
-  private void saveBookmarks() { //// TODO: implement database save
-    try {
-      OutputStream stream =
-          openFileOutput(ZimContentProvider.getId() + ".txt", Context.MODE_PRIVATE);
-      if (stream != null) {
-        for (String s : bookmarks) {
-          stream.write((s + "\n").getBytes());
-        }
-      }
-      Log.d(TAG_KIWIX, "Saved data in bookmarkfile " + ZimContentProvider.getId());
-    } catch (FileNotFoundException e) {
-      Log.e(TAG_KIWIX, "File not found: " + e.toString());
-    } catch (IOException e) {
-      Log.e(TAG_KIWIX, "Can not read file: " + e.toString());
-    }
+  private void saveBookmark(String article) { //// TODO: implement database save
+    bookmarksDao.saveBookmark(article);
+    refreshBookmarks();
+  }
+
+  private void deleteBookmark(String article){
+    bookmarksDao.deleteBookmark(article);
+    refreshBookmarks();
   }
 
   public boolean openArticleFromBookmark(String bookmarkTitle) {
@@ -1409,15 +1394,15 @@ public class KiwixMobileActivity extends AppCompatActivity {
       case BOOKMARK_CHOSEN_REQUEST:
         if (resultCode == RESULT_OK) {
           boolean itemClicked = data.getBooleanExtra("bookmarkClicked", false);
+          bookmarks = bookmarksDao.getBookmarks();
 
           if (itemClicked) {
             String bookmarkChosen = data.getStringExtra("choseX");
             newTab();
             openArticleFromBookmark(bookmarkChosen);
-            bookmarks = new ArrayList<>(data.getStringArrayListExtra("bookmarks_array_list"));
-          } else {
-            bookmarks = new ArrayList<>(data.getStringArrayListExtra("bookmarks_array_list")); // TODO: check what is this shit
           }
+
+          refreshBookmarkSymbol(menu);
         }
         break;
       default:
@@ -1522,7 +1507,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   public void selectZimFile() {
-    saveBookmarks();
+    refreshBookmarks();
     final Intent target = new Intent(this, ZimFileSelectActivity.class);
     target.setAction(Intent.ACTION_GET_CONTENT);
     // The MIME data type filter
@@ -1678,7 +1663,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     super.onPause();
 
     saveTabStates();
-    saveBookmarks();
+    refreshBookmarks();
 
     Log.d(TAG_KIWIX,
         "onPause Save currentzimfile to preferences:" + ZimContentProvider.getZimFile());

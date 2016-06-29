@@ -31,6 +31,7 @@ import com.yahoo.squidb.sql.Table;
 
 import org.kiwix.kiwixmobile.database.entity.BookDataSource;
 import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
+import org.kiwix.kiwixmobile.database.entity.Bookmarks;
 import org.kiwix.kiwixmobile.database.entity.LibraryDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.RecentSearch;
 import org.kiwix.kiwixmobile.database.entity.RecentSearchSpec;
@@ -57,7 +58,8 @@ public class KiwixDatabase extends SquidDatabase {
     return new Table[] {
         BookDatabaseEntity.TABLE,
         LibraryDatabaseEntity.TABLE,
-        RecentSearch.TABLE
+        RecentSearch.TABLE,
+        Bookmarks.TABLE
     };
   }
 

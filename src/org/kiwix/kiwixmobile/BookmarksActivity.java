@@ -39,6 +39,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.kiwix.kiwixmobile.database.BookmarksDao;
+import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 
 import java.util.ArrayList;
@@ -47,7 +49,7 @@ public class BookmarksActivity extends AppCompatActivity
     implements AdapterView.OnItemClickListener {
 
   private SparseBooleanArray sparseBooleanArray;
-  private ArrayList<String> contents;
+  private ArrayList<String> bookmarks;
   private ArrayList<String> tempContents;
   private ListView bookmarksList;
   private ArrayAdapter adapter;
@@ -55,6 +57,7 @@ public class BookmarksActivity extends AppCompatActivity
   private int numOfSelected;
   private LinearLayout snackbarLayout;
   private TextView noBookmarksTextView;
+  private BookmarksDao bookmarksDao;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -62,16 +65,16 @@ public class BookmarksActivity extends AppCompatActivity
     setContentView(R.layout.activity_bookmarks);
     setUpToolbar();
     snackbarLayout = (LinearLayout) findViewById(R.id.bookmarks_activity_layout);
-      selected = new ArrayList<>();
-      bookmarksList = (ListView) findViewById(R.id.bookmarks_list);
-      noBookmarksTextView = (TextView) findViewById(R.id.bookmarks_list_nobookmarks);
+    selected = new ArrayList<>();
+    bookmarksList = (ListView) findViewById(R.id.bookmarks_list);
+    noBookmarksTextView = (TextView) findViewById(R.id.bookmarks_list_nobookmarks);
 
-    if(getIntent().getStringArrayListExtra("bookmark_contents") != null) {
-      contents = getIntent().getStringArrayListExtra("bookmark_contents");
-      adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.bookmarks_row, R.id.bookmark_title,
-          contents);
-      bookmarksList.setAdapter(adapter);
-    }
+
+    bookmarksDao = new BookmarksDao(new KiwixDatabase(this));
+    bookmarks = bookmarksDao.getBookmarks();
+
+    adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.bookmarks_row, R.id.bookmark_title, bookmarks);
+    bookmarksList.setAdapter(adapter);
     setNoBookmarksState();
 
     bookmarksList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
@@ -80,11 +83,11 @@ public class BookmarksActivity extends AppCompatActivity
       public void onItemCheckedStateChanged(ActionMode mode, int position, long id,
                                             boolean checked) {
         if (checked) {
-          selected.add(contents.get(position));
+          selected.add(bookmarks.get(position));
           numOfSelected++;
           mode.setTitle(Integer.toString(numOfSelected));
-        } else if (selected.contains(contents.get(position))) {
-          selected.remove(contents.get(position));
+        } else if (selected.contains(bookmarks.get(position))) {
+          selected.remove(bookmarks.get(position));
           numOfSelected--;
           if (numOfSelected == 0) {
             mode.finish();
@@ -139,55 +142,57 @@ public class BookmarksActivity extends AppCompatActivity
 
   private void popDeleteBookmarksSnackbar() {
     Snackbar bookmarkDeleteSnackbar =
-        Snackbar.make(snackbarLayout, numOfSelected + " " + ShortcutUtils.stringsGetter(R.string.deleted_message,this), Snackbar.LENGTH_LONG)
-            .setAction(ShortcutUtils.stringsGetter(R.string.undo,this), new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                contents.clear();
-                contents.addAll(tempContents);
-                adapter.notifyDataSetChanged();
-                setNoBookmarksState();
-                Toast.makeText(getApplicationContext(), ShortcutUtils.stringsGetter(R.string.bookmarks_restored,getBaseContext()), Toast.LENGTH_SHORT)
-                    .show();
-              }
+        Snackbar.make(snackbarLayout, numOfSelected + " " + ShortcutUtils.stringsGetter(R.string.deleted_message, this), Snackbar.LENGTH_LONG)
+            .setAction(ShortcutUtils.stringsGetter(R.string.undo, this), v -> {
+              restoreBookmarks();
+              setNoBookmarksState();
+              Toast.makeText(getApplicationContext(), ShortcutUtils.stringsGetter(R.string.bookmarks_restored, getBaseContext()), Toast.LENGTH_SHORT)
+                  .show();
             });
     bookmarkDeleteSnackbar.setActionTextColor(getResources().getColor(R.color.white));
     bookmarkDeleteSnackbar.show();
   }
 
-  private void deleteSelectedItems() { // TOOD delete sel
-    sparseBooleanArray = bookmarksList.getCheckedItemPositions();
-    tempContents = new ArrayList<>(contents);
-    for (int i = sparseBooleanArray.size() - 1; i >= 0; i--)
-      contents.remove(sparseBooleanArray.keyAt(i));
+  private void restoreBookmarks() {
+    bookmarksDao.resetBookmarksToPrevious(tempContents);
+    refreshBookmarksList();
+  }
 
+  private void deleteSelectedItems() {
+    sparseBooleanArray = bookmarksList.getCheckedItemPositions();
+    tempContents = new ArrayList<>(bookmarks);
+    for (int i = sparseBooleanArray.size() - 1; i >= 0; i--) {
+      deleteBookmark(bookmarks.get(sparseBooleanArray.keyAt(i)));
+    }
+    refreshBookmarksList();
+  }
+
+  private void deleteBookmark(String article){
+    bookmarksDao.deleteBookmark(article);
+  }
+
+  private void refreshBookmarksList(){
+    bookmarks.clear();
+    bookmarks = bookmarksDao.getBookmarks();
     adapter.notifyDataSetChanged();
     setNoBookmarksState();
   }
 
   private void setUpToolbar() {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    toolbar.setTitle(ShortcutUtils.stringsGetter(R.string.menu_bookmarks_list,this));
+    toolbar.setTitle(ShortcutUtils.stringsGetter(R.string.menu_bookmarks_list, this));
     setSupportActionBar(toolbar);
     getSupportActionBar().setHomeButtonEnabled(true);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Intent intent = new Intent();
-        intent.putExtra("bookmarks_array_list", contents);
-        intent.putExtra("bookmarkClicked", false);
-        setResult(RESULT_OK, intent);
-        finish();
-      }
+    toolbar.setNavigationOnClickListener(v -> {
+      onBackPressed();
     });
   }
 
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
     Intent intent = new Intent();
-    intent.putExtra("choseX", contents.get(position));
-    intent.putExtra("bookmarks_array_list", contents);
+    intent.putExtra("choseX", bookmarks.get(position));
     intent.putExtra("bookmarkClicked", true);
     setResult(RESULT_OK, intent);
     finish();
@@ -196,7 +201,6 @@ public class BookmarksActivity extends AppCompatActivity
   @Override
   public void onBackPressed() {
     Intent intent = new Intent();
-    intent.putExtra("bookmarks_array_list", contents);
     intent.putExtra("bookmarkClicked", false);
     setResult(RESULT_OK, intent);
     finish();
