@@ -68,7 +68,7 @@ public class BookmarksActivity extends AppCompatActivity
 
     if(getIntent().getStringArrayListExtra("bookmark_contents") != null) {
       contents = getIntent().getStringArrayListExtra("bookmark_contents");
-      adapter = new ArrayAdapter(getApplicationContext(), R.layout.bookmarks_row, R.id.bookmark_title,
+      adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.bookmarks_row, R.id.bookmark_title,
           contents);
       bookmarksList.setAdapter(adapter);
     }
@@ -155,7 +155,7 @@ public class BookmarksActivity extends AppCompatActivity
     bookmarkDeleteSnackbar.show();
   }
 
-  private void deleteSelectedItems() {
+  private void deleteSelectedItems() { // TOOD delete sel
     sparseBooleanArray = bookmarksList.getCheckedItemPositions();
     tempContents = new ArrayList<>(contents);
     for (int i = sparseBooleanArray.size() - 1; i >= 0; i--)

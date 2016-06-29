@@ -699,18 +699,15 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private void undoSnackbar(final int index) {
     Snackbar undoSnackbar = Snackbar.make(snackbarLayout, ShortcutUtils.stringsGetter(R.string.tab_closed, this), Snackbar.LENGTH_LONG)
-        .setAction(ShortcutUtils.stringsGetter(R.string.undo, this), new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
+        .setAction(ShortcutUtils.stringsGetter(R.string.undo, this), v -> {
 
-            if (mWebViews.size() == 1 && prevSize == 1) {
-              openArticleFromBookmark(tempForUndo.getTitle());
-            } else {
-              restoreTabAtIndex(tempForUndo.getUrl(), index);
-              selectTab(index);
-            }
-            mLeftDrawerLayout.openDrawer(Gravity.LEFT);
+          if (mWebViews.size() == 1 && prevSize == 1) {
+            openArticleFromBookmark(tempForUndo.getTitle());
+          } else {
+            restoreTabAtIndex(tempForUndo.getUrl(), index);
+            selectTab(index);
           }
+          mLeftDrawerLayout.openDrawer(Gravity.LEFT);
         });
     undoSnackbar.setActionTextColor(getResources().getColor(R.color.white));
     undoSnackbar.show();
@@ -725,13 +722,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
     if (mLeftDrawerLayout.isDrawerOpen(GravityCompat.START)) {
       final Handler handler = new Handler();
-      handler.postDelayed(new Runnable() {
-
-        @Override
-        public void run() {
-          mLeftDrawerLayout.closeDrawers();
-        }
-      }, 150);
+      handler.postDelayed(() -> mLeftDrawerLayout.closeDrawers(), 150);
     }
     loadPrefs();
     if (menu != null) {
@@ -1164,7 +1155,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     }
   }
 
-  private void saveBookmarks() {
+  private void saveBookmarks() { //// TODO: implement database save
     try {
       OutputStream stream =
           openFileOutput(ZimContentProvider.getId() + ".txt", Context.MODE_PRIVATE);
@@ -1425,7 +1416,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
             openArticleFromBookmark(bookmarkChosen);
             bookmarks = new ArrayList<>(data.getStringArrayListExtra("bookmarks_array_list"));
           } else {
-            bookmarks = new ArrayList<>(data.getStringArrayListExtra("bookmarks_array_list"));
+            bookmarks = new ArrayList<>(data.getStringArrayListExtra("bookmarks_array_list")); // TODO: check what is this shit
           }
         }
         break;
@@ -1460,7 +1451,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     return true;
   }
 
-  public void refreshBookmarkSymbol(Menu menu) {
+  public void refreshBookmarkSymbol(Menu menu) { // Checks if current webview is in bookmarks array
     if (menu.findItem(R.id.menu_bookmarks) != null &&
         getCurrentWebView().getUrl() != null &&
         !getCurrentWebView().getUrl().equals("file:///android_res/raw/help.html") &&

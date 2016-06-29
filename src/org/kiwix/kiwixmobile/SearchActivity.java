@@ -47,7 +47,7 @@ public class SearchActivity extends AppCompatActivity
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setHomeButtonEnabled(true);
 
-    String zimFile = getIntent().getStringExtra("zimFile");
+//    String zimFile = getIntent().getStringExtra("zimFile");
     mListView = (ListView) findViewById(R.id.search_list);
     recentSearchDao = new RecentSearchDao(new KiwixDatabase(this));
     List<String> recentSearches = recentSearchDao.getRecentSearches();
