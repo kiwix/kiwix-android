@@ -710,7 +710,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
             restoreTabAtIndex(tempForUndo.getUrl(), index);
             selectTab(index);
           }
-          mLeftDrawerLayout.openDrawer(Gravity.LEFT);
+          mLeftDrawerLayout.openDrawer(GravityCompat.START);
         });
     undoSnackbar.setActionTextColor(getResources().getColor(R.color.white));
     undoSnackbar.show();
@@ -1158,7 +1158,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     mLeftDrawerLayout.postDelayed(new Runnable() {
       @Override
       public void run() {
-        mLeftDrawerLayout.openDrawer(Gravity.RIGHT);
+        mLeftDrawerLayout.openDrawer(GravityCompat.END);
       }
     }, 500);
 
