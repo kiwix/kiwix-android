@@ -6,6 +6,7 @@
     android:layout_centerVertical="true"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
+    android:layout_toStartOf="@+id/deleteButton"
     android:layout_toLeftOf="@+id/deleteButton"
     android:ellipsize="end"
     android:fontFamily="sans-serif-light"
@@ -14,4 +15,5 @@
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:singleLine="true"
     android:textAppearance="?android:attr/textAppearanceListItemSmall"
-    xmlns:android="http://schemas.android.com/apk/res/android"/>
+    xmlns:android="http://schemas.android.com/apk/res/android"
+   />

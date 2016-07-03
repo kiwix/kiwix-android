@@ -19,10 +19,12 @@
 
 package org.kiwix.kiwixmobile.utils;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
@@ -72,12 +74,14 @@ public class LanguageUtils {
     handleLocaleChange(context, language);
   }
 
+  @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
   public static void handleLocaleChange(Context context, String language) {
 
     Locale locale = new Locale(language);
     Locale.setDefault(locale);
     Configuration config = new Configuration();
     config.locale = locale;
+    config.setLayoutDirection(locale);
     context.getResources()
         .updateConfiguration(config, context.getResources().getDisplayMetrics());
   }

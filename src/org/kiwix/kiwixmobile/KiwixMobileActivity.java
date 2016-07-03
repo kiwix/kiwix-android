@@ -95,12 +95,7 @@ import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
 import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
 import org.kiwix.kiwixmobile.views.KiwixWebView;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -384,7 +379,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
       @Override
       public void onClick(View v) {
         getCurrentWebView().setScrollY(0);
-        mRightDrawerLayout.closeDrawer(Gravity.RIGHT);
+        mRightDrawerLayout.closeDrawer(GravityCompat.END);
       }
     });
     mRightDrawerList.addHeaderView(headerView);
@@ -426,10 +421,10 @@ public class KiwixMobileActivity extends AppCompatActivity {
             if (drawerView.getId() == R.id.left_drawer) {
               super.onDrawerOpened(drawerView);
               mRightDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
-                  Gravity.RIGHT);
+                  GravityCompat.END);
             } else {
               mLeftDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
-                  Gravity.LEFT);
+                  GravityCompat.START);
             }
           }
 
@@ -438,9 +433,9 @@ public class KiwixMobileActivity extends AppCompatActivity {
             // Make sure it was the navigation drawer
             if (drawerView.getId() == R.id.left_drawer) {
               super.onDrawerClosed(drawerView);
-              mRightDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.RIGHT);
+              mRightDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END);
             } else {
-              mLeftDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.LEFT);
+              mLeftDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.START);
             }
           }
         };
@@ -1037,22 +1032,19 @@ public class KiwixMobileActivity extends AppCompatActivity {
       toolbar.setNavigationOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-          if (mRightDrawerLayout.isDrawerOpen(Gravity.RIGHT)) {
-            mRightDrawerLayout.closeDrawer(Gravity.RIGHT);
-          } else if (mLeftDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
-            mLeftDrawerLayout.closeDrawer(Gravity.LEFT);
+          if (mRightDrawerLayout.isDrawerOpen(GravityCompat.END)) {
+            mRightDrawerLayout.closeDrawer(GravityCompat.END);
+          } else if (mLeftDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mLeftDrawerLayout.closeDrawer(GravityCompat.START);
           } else {
-            mLeftDrawerLayout.openDrawer(Gravity.LEFT);
+            mLeftDrawerLayout.openDrawer(GravityCompat.START);
           }
         }
       });
 
-      findViewById(R.id.menu_bookmarks).setOnLongClickListener(new View.OnLongClickListener() {
-        @Override
-        public boolean onLongClick(View view) {
-          goToBookmarks();
-          return false;
-        }
+      findViewById(R.id.menu_bookmarks).setOnLongClickListener(view -> {
+        goToBookmarks();
+        return false;
       });
 
       if (tts.isInitialized()) {
@@ -1095,7 +1087,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     if (article != null && !bookmarks.contains(article)) {
       saveBookmark(article);
       isBookmark = true;
-    } else if(article != null) {
+    } else if (article != null) {
       deleteBookmark(article);
       isBookmark = false;
     }
@@ -1147,12 +1139,12 @@ public class KiwixMobileActivity extends AppCompatActivity {
     bookmarks = bookmarksDao.getBookmarks();
   }
 
-  private void saveBookmark(String article) { //// TODO: implement database save
+  private void saveBookmark(String article) {
     bookmarksDao.saveBookmark(article);
     refreshBookmarks();
   }
 
-  private void deleteBookmark(String article){
+  private void deleteBookmark(String article) {
     bookmarksDao.deleteBookmark(article);
     refreshBookmarks();
   }

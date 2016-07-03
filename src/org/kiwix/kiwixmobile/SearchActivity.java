@@ -44,7 +44,7 @@ public class SearchActivity extends AppCompatActivity
     setContentView(R.layout.search);
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
     getSupportActionBar().setHomeButtonEnabled(true);
 
 //    String zimFile = getIntent().getStringExtra("zimFile");

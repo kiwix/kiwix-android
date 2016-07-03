@@ -37,7 +37,6 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.database.BookmarksDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
@@ -142,20 +141,24 @@ public class BookmarksActivity extends AppCompatActivity
 
   private void popDeleteBookmarksSnackbar() {
     Snackbar bookmarkDeleteSnackbar =
-        Snackbar.make(snackbarLayout, numOfSelected + " " + ShortcutUtils.stringsGetter(R.string.deleted_message, this), Snackbar.LENGTH_LONG)
-            .setAction(ShortcutUtils.stringsGetter(R.string.undo, this), v -> {
-              restoreBookmarks();
-              setNoBookmarksState();
-              Toast.makeText(getApplicationContext(), ShortcutUtils.stringsGetter(R.string.bookmarks_restored, getBaseContext()), Toast.LENGTH_SHORT)
-                  .show();
-            });
+        Snackbar.make(snackbarLayout, numOfSelected + " " + ShortcutUtils.stringsGetter(R.string.deleted_message, this), Snackbar.LENGTH_LONG);
+//            .setAction(ShortcutUtils.stringsGetter(R.string.undo, this), v -> {
+//              restoreBookmarks();
+//              setNoBookmarksState();
+//              Toast.makeText(getApplicationContext(), ShortcutUtils.stringsGetter(R.string.bookmarks_restored, getBaseContext()), Toast.LENGTH_SHORT)
+//                  .show();
+//            });
+
     bookmarkDeleteSnackbar.setActionTextColor(getResources().getColor(R.color.white));
     bookmarkDeleteSnackbar.show();
   }
 
   private void restoreBookmarks() {
     bookmarksDao.resetBookmarksToPrevious(tempContents);
-    refreshBookmarksList();
+    bookmarks = bookmarksDao.getBookmarks();
+    adapter.notifyDataSetChanged();
+    setNoBookmarksState();
+//    refreshBookmarksList();
   }
 
   private void deleteSelectedItems() {
@@ -163,15 +166,17 @@ public class BookmarksActivity extends AppCompatActivity
     tempContents = new ArrayList<>(bookmarks);
     for (int i = sparseBooleanArray.size() - 1; i >= 0; i--) {
       deleteBookmark(bookmarks.get(sparseBooleanArray.keyAt(i)));
+      bookmarks.remove(sparseBooleanArray.keyAt(i));
     }
-    refreshBookmarksList();
+    adapter.notifyDataSetChanged();
+    setNoBookmarksState();
   }
 
-  private void deleteBookmark(String article){
+  private void deleteBookmark(String article) {
     bookmarksDao.deleteBookmark(article);
   }
 
-  private void refreshBookmarksList(){
+  private void refreshBookmarksList() {
     bookmarks.clear();
     bookmarks = bookmarksDao.getBookmarks();
     adapter.notifyDataSetChanged();
