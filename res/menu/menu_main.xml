@@ -36,14 +36,10 @@
 
   <item
       android:id="@+id/menu_openfile"
-      android:title="@string/menu_openfile"
+      android:title="@string/menu_zim_manager"
       android:icon="@drawable/action_open_file"
       app:showAsAction="ifRoom"/>
 
-  <item
-      android:id="@+id/menu_library"
-      android:title="@string/menu_library"
-      app:showAsAction="ifRoom"/>
   <item
       android:id="@+id/menu_searchintext"
       android:title="@string/menu_searchintext"

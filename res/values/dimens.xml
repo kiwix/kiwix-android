@@ -7,5 +7,7 @@
   <dimen name="dimen_medium_padding">8dp</dimen>
   <dimen name="navigation_width">260dp</dimen>
   <dimen name="widget_margin">0dp</dimen>
+  <dimen name="fab_margin">16dp</dimen>
+  <dimen name="appbar_padding_top">8dp</dimen>
 
 </resources>

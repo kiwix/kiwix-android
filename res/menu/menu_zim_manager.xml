@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:context=".ZimManageActivity">
+  <item
+    android:id="@+id/menu_rescan_fs"
+    android:icon="@drawable/action_refresh"
+    android:title="@string/menu_rescan_fs"
+    app:showAsAction="always"/>
+</menu>

@@ -5,13 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="org.kiwix.kiwixmobile.LibraryActivity">
-
-  <include layout="@layout/toolbar" />
+    tools:context=".LibraryFragment">
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
   <ListView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:id="@+id/library_list" />
 
+  <ProgressBar
+    android:id="@+id/progressBar"
+    style="?android:attr/progressBarStyleLarge"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
+    android:visibility="visible">
+  </ProgressBar>
+
+  <TextView
+    android:id="@+id/progressbar_message"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/rescan_fs_warning"
+    android:paddingTop="10px"
+    android:textStyle="bold"
+    android:layout_below="@id/progressBar"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
+    android:visibility="visible"/>
+  </RelativeLayout>
 </LinearLayout>

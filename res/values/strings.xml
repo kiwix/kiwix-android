@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="menu_openfile">Open File</string>
+  <string name="menu_zim_manager">Get Content</string>
   <string name="menu_help">Help</string>
   <string name="menu_home">Home</string>
   <string name="menu_forward">Forward</string>
@@ -91,4 +91,7 @@
   <string name="speech_not_supported">Sorry! Your device does not support speech input</string>
   <string name="download_started_library">Download started...</string>
   <string name="menu_library">Download ZIM files</string>
+  <string name="local_zims">Local</string>
+  <string name="remote_zims">Remote</string>
+  <string name="zim_manager">Content Management</string>
 </resources>

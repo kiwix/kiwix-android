@@ -30,6 +30,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
@@ -38,6 +40,7 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -48,6 +51,7 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -59,7 +63,7 @@ import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileWriter;
 
-public class ZimFileSelectActivity extends AppCompatActivity
+public class ZimFileSelectFragment extends Fragment
     implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener {
 
   public static final String TAG_KIWIX = "kiwix";
@@ -79,44 +83,53 @@ public class ZimFileSelectActivity extends AppCompatActivity
   private ProgressBar mProgressBar;
 
   private TextView mProgressBarMessage;
+  public LinearLayout llLayout;
+
+  public static Context context;
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    FragmentActivity faActivity  = (FragmentActivity)    super.getActivity();
+    context = super.getActivity();
+    // Replace LinearLayout by the type of the root element of the layout you're trying to load
+    llLayout    = (LinearLayout)    inflater.inflate(R.layout.zim_list, container, false);
+    // Of course you will want to faActivity and llLayout in the class and not this method to access them in the rest of
+    // the class, just initialize them here
 
-    new LanguageUtils(this).changeFont(getLayoutInflater());
+    new LanguageUtils(super.getActivity()).changeFont(super.getActivity().getLayoutInflater());
 
-    setContentView(R.layout.zim_list);
-    setUpToolbar();
     mFiles = new ArrayList<DataModel>();
+
+    mProgressBar = (ProgressBar) llLayout.findViewById(R.id.progressBar);
+    mProgressBarMessage = (TextView) llLayout.findViewById(R.id.progressbar_message);
+    mZimFileList = (ListView)  llLayout.findViewById(R.id.zimfilelist);
+
+    mZimFileList.setOnItemClickListener(this);
+
+    mProgressBar.setVisibility(View.VISIBLE);
+    setAlpha(true);
 
     checkPermissions();
 
+    // Don't use this method, it's handled by inflater.inflate() above :
+    // setContentView(R.layout.activity_layout);
+
+    // The FragmentActivity doesn't contain the layout directly so we must use our instance of     LinearLayout :
+    //llLayout.findViewById(R.id.someGuiElement);
+    // Instead of :
+    // findViewById(R.id.someGuiElement);
+    return llLayout; // We must return the loaded Layout
   }
 
-  private void setUpToolbar() {
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-
-    getSupportActionBar().setHomeButtonEnabled(true);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        finish();
-      }
-    });
-  }
 
 
   public void checkPermissions(){
-    if (ContextCompat.checkSelfPermission(this,
+    if (ContextCompat.checkSelfPermission(super.getActivity(),
         Manifest.permission.READ_EXTERNAL_STORAGE)
         != PackageManager.PERMISSION_GRANTED && Build.VERSION.SDK_INT > 18) {
-      Toast.makeText(this, getResources().getString(R.string.request_storage), Toast.LENGTH_LONG)
+      Toast.makeText(super.getActivity(), getResources().getString(R.string.request_storage), Toast.LENGTH_LONG)
           .show();
-        ActivityCompat.requestPermissions(this,
+        ActivityCompat.requestPermissions(super.getActivity(),
             new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
             KiwixMobileActivity.REQUEST_STORAGE_PERMISSION);
 
@@ -126,21 +139,7 @@ public class ZimFileSelectActivity extends AppCompatActivity
   }
 
   public void getFiles(){
-
-    mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-    mProgressBarMessage = (TextView) findViewById(R.id.progressbar_message);
-    mZimFileList = (ListView) findViewById(R.id.zimfilelist);
-
-    mZimFileList.setOnItemClickListener(this);
-
-    mProgressBar.setVisibility(View.VISIBLE);
-    setAlpha(true);
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-      startQuery();
-    } else {
       new RescanFileSystem().execute();
-    }
   }
 
   @Override
@@ -152,7 +151,7 @@ public class ZimFileSelectActivity extends AppCompatActivity
             && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             getFiles();
         } else {
-          finish();
+          super.getActivity().finish();
         }
         return;
       }
@@ -189,7 +188,7 @@ public class ZimFileSelectActivity extends AppCompatActivity
     String sortOrder = MediaStore.Files.FileColumns.TITLE; // Sorted alphabetical
     Log.d(TAG_KIWIX, " Performing query for zim files...");
 
-    return new CursorLoader(this, uri, projection, query, selectionArgs, sortOrder);
+    return new CursorLoader(super.getActivity(), uri, projection, query, selectionArgs, sortOrder);
   }
 
   @Override
@@ -201,7 +200,7 @@ public class ZimFileSelectActivity extends AppCompatActivity
     mZimFileList.setAdapter(mRescanAdapter);
 
     // Done here to avoid that shown while loading.
-    mZimFileList.setEmptyView(findViewById(R.id.zimfilelist_nozimfilesfound_view));
+    mZimFileList.setEmptyView( llLayout.findViewById(R.id.zimfilelist_nozimfilesfound_view));
 
     if (mProgressBarMessage.getVisibility() == View.GONE) {
       mProgressBar.setVisibility(View.GONE);
@@ -216,37 +215,8 @@ public class ZimFileSelectActivity extends AppCompatActivity
     mCursorAdapter.swapCursor(null);
   }
 
-  @Override
-  protected void onSaveInstanceState(Bundle outState) {
 
-    // Check, if the user has rescanned the file system, if he has, then we want to save this list,
-    // so this can be shown again, if the activity is recreated (on a device rotation for example)
-    if (!mFiles.isEmpty()) {
-      Log.i(TAG_KIWIX, "Saved state of the ListView");
-      outState.putParcelableArrayList("rescanData", mFiles);
-    }
-    super.onSaveInstanceState(outState);
-  }
 
-  @Override
-  protected void onRestoreInstanceState(Bundle savedInstanceState) {
-
-    // Get the rescanned data, if available. Create an Adapter for the ListView and display the list
-    if (savedInstanceState.getParcelableArrayList("rescanData") != null) {
-      ArrayList<DataModel> data = savedInstanceState.getParcelableArrayList("rescanData");
-      mRescanAdapter = new RescanDataAdapter(ZimFileSelectActivity.this, 0, data);
-
-      mZimFileList.setAdapter(mRescanAdapter);
-    }
-    super.onRestoreInstanceState(savedInstanceState);
-  }
-
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    final MenuInflater inflater = getMenuInflater();
-    inflater.inflate(R.menu.menu_files, menu);
-    return super.onCreateOptionsMenu(menu);
-  }
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
@@ -264,7 +234,7 @@ public class ZimFileSelectActivity extends AppCompatActivity
   }
 
   @Override
-  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
     Log.d(TAG_KIWIX, " mZimFileList.onItemClick");
 
@@ -299,7 +269,7 @@ public class ZimFileSelectActivity extends AppCompatActivity
 
     mCursorAdapter = new SimpleCursorAdapter(
         // The Context object
-        ZimFileSelectActivity.this,
+            super.getActivity(),
         // A layout in XML for one row in the ListView
         android.R.layout.simple_list_item_2,
         // The cursor, swapped later by cursorloader
@@ -311,7 +281,7 @@ public class ZimFileSelectActivity extends AppCompatActivity
         // Flags for the Adapter
         Adapter.NO_SELECTION);
 
-    getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+    super.getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
   }
 
   // Get the data of our cursor and wrap it all in our ArrayAdapter.
@@ -327,7 +297,7 @@ public class ZimFileSelectActivity extends AppCompatActivity
       }
     }
 
-    files = new FileWriter(ZimFileSelectActivity.this, files).getDataModelList();
+    files = new FileWriter(super.getActivity(), files).getDataModelList();
 
     for (int i = 0; i < files.size(); i++) {
 
@@ -340,21 +310,20 @@ public class ZimFileSelectActivity extends AppCompatActivity
     files = new FileSearch().sortDataModel(files);
     mFiles = files;
 
-    return new RescanDataAdapter(ZimFileSelectActivity.this, 0, mFiles);
+    return new RescanDataAdapter(super.getActivity(), 0, mFiles);
   }
 
-  // Get the selected file and return the result to the Activity, that called this Activity
   private void finishResult(String path) {
 
     if (path != null) {
       File file = new File(path);
       Uri uri = Uri.fromFile(file);
       Log.i(TAG_KIWIX, "Opening " + uri);
-      setResult(RESULT_OK, new Intent().setData(uri));
-      finish();
+      super.getActivity().setResult(super.getActivity().RESULT_OK, new Intent().setData(uri));
+      super.getActivity().finish();
     } else {
-      setResult(RESULT_CANCELED);
-      finish();
+      super.getActivity().setResult(super.getActivity().RESULT_CANCELED);
+      super.getActivity().finish();
     }
   }
 
@@ -430,10 +399,9 @@ public class ZimFileSelectActivity extends AppCompatActivity
       mFiles = new FileSearch().findFiles();
       return null;
     }
-
     @Override
     protected void onPostExecute(Void result) {
-      mRescanAdapter = new RescanDataAdapter(ZimFileSelectActivity.this, 0, mFiles);
+      mRescanAdapter = new RescanDataAdapter(ZimFileSelectFragment.context, 0, mFiles);
 
       mZimFileList.setAdapter(mRescanAdapter);
 
@@ -441,7 +409,7 @@ public class ZimFileSelectActivity extends AppCompatActivity
       mProgressBar.setVisibility(View.GONE);
       setAlpha(false);
 
-      new FileWriter(ZimFileSelectActivity.this).saveArray(mFiles);
+      new FileWriter(ZimFileSelectFragment.context).saveArray(mFiles);
 
       super.onPostExecute(result);
     }

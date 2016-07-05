@@ -49,7 +49,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ActionMode;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -271,7 +270,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
     super.onCreate(savedInstanceState);
     handleLocaleCheck();
-
     setContentView(R.layout.main);
     getWindow().setFeatureInt(Window.FEATURE_PROGRESS, Window.PROGRESS_VISIBILITY_ON);
 
@@ -772,7 +770,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
         break;
 
       case R.id.menu_openfile:
-        selectZimFile();
+        manageZimFiles();
         break;
 
       case R.id.menu_settings:
@@ -791,8 +789,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
         }
         break;
 
-      case R.id.menu_library:
-        openDownloadManager();
       default:
         break;
     }
@@ -801,7 +797,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   private void openDownloadManager() {
-    Intent downloadIntent = new Intent(this, LibraryActivity.class);
+    Intent downloadIntent = new Intent(this, LibraryFragment.class);
     startActivity(downloadIntent);
   }
 
@@ -1498,9 +1494,9 @@ public class KiwixMobileActivity extends AppCompatActivity {
     }
   }
 
-  public void selectZimFile() {
+  public void manageZimFiles() {
     refreshBookmarks();
-    final Intent target = new Intent(this, ZimFileSelectActivity.class);
+    final Intent target = new Intent(this, ZimManageActivity.class);
     target.setAction(Intent.ACTION_GET_CONTENT);
     // The MIME data type filter
     target.setType("//");
@@ -1733,7 +1729,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
       } else if (url.startsWith(ZimContentProvider.UI_URI.toString())) {
         // To handle links which access user interface (i.p. used in help page)
         if (url.equals(ZimContentProvider.UI_URI.toString() + "selectzimfile")) {
-          selectZimFile();
+          manageZimFiles();
         } else if (url.equals(ZimContentProvider.UI_URI.toString() + "gotohelp")) {
           showHelp();
         } else {
