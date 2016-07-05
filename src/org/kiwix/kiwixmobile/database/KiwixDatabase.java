@@ -43,7 +43,7 @@ import java.util.List;
 
 public class KiwixDatabase extends SquidDatabase {
 
-  private static final int VERSION = 3;
+  private static final int VERSION = 4;
 
   public KiwixDatabase(Context context) {
     super(context);
@@ -67,6 +67,9 @@ public class KiwixDatabase extends SquidDatabase {
     if (newVersion >= 3) {
       db.execSQL("DROP TABLE IF EXISTS recents");
       tryCreateTable(RecentSearch.TABLE);
+    }
+    if (newVersion >= 4) {
+      tryCreateTable(Bookmarks.TABLE);
     }
     return true;
   }
