@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Environment;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -44,7 +45,8 @@ public class DownloadService extends Service {
     notification = new NotificationCompat.Builder(this)
         .setContentTitle("Download Zim")
         .setProgress(100, 0, false)
-        .setSmallIcon(R.mipmap.kiwix_icon)
+        .setSmallIcon(R.drawable.kiwix_notification)
+        .setColor(Color.BLACK)
         .setOngoing(true);
 
     startForeground(DownloadIntent.DOWNLOAD_NOTIFICATION_ID, notification.build());
