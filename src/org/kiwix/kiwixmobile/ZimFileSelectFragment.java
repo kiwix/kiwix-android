@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -37,6 +38,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -60,11 +62,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
+import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 import org.kiwix.kiwixmobile.utils.files.FileSearch;
+import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.utils.files.FileWriter;
 
 public class ZimFileSelectFragment extends Fragment
-    implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener {
+    implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener, AdapterView.OnItemLongClickListener {
 
   public static final String TAG_KIWIX = "kiwix";
 
@@ -105,7 +109,7 @@ public class ZimFileSelectFragment extends Fragment
     mZimFileList = (ListView)  llLayout.findViewById(R.id.zimfilelist);
 
     mZimFileList.setOnItemClickListener(this);
-
+    mZimFileList.setOnItemLongClickListener(this);
     mProgressBar.setVisibility(View.VISIBLE);
     setAlpha(true);
 
@@ -234,7 +238,7 @@ public class ZimFileSelectFragment extends Fragment
   }
 
   @Override
-public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
     Log.d(TAG_KIWIX, " mZimFileList.onItemClick");
 
@@ -253,6 +257,36 @@ public void onItemClick(AdapterView<?> parent, View view, int position, long id)
     }
 
     finishResult(file);
+  }
+
+  @Override
+  public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+    String file = mZimFileList.getItemAtPosition(position).toString();
+    deleteSpecificZimDialog(position);
+    return true;
+  }
+
+  public void deleteSpecificZimDialog(int position) {
+    new AlertDialog.Builder(super.getActivity())
+        .setMessage(ShortcutUtils.stringsGetter(R.string.delete_specific_zim, context))
+        .setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int which) {
+            deleteSpecificZimFile(position);
+            Toast.makeText(context, getResources().getString(R.string.delete_specific_zim_toast), Toast.LENGTH_SHORT).show();
+          }
+        })
+        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int which) {
+            // do nothing
+          }
+        })
+        .show();
+  }
+
+  public void deleteSpecificZimFile(int position) {
+    FileUtils.deleteZimFile(mFiles.get(position).getPath());
+    mFiles.remove(position);
+    mRescanAdapter.notifyDataSetChanged();
   }
 
   // Query through the MediaStore

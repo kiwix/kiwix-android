@@ -30,6 +30,11 @@ public class FileUtils {
     }
   }
 
+  public static synchronized void deleteZimFile(String path){
+    File file = new File(path);
+    file.delete();
+  }
+
   /**
    * Returns the file name (without full path) for an Expansion APK file from the given context.
    *
