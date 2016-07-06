@@ -796,10 +796,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
     return super.onOptionsItemSelected(item);
   }
 
-  private void openDownloadManager() {
-    Intent downloadIntent = new Intent(this, LibraryFragment.class);
-    startActivity(downloadIntent);
-  }
 
   private void goToBookmarks() {
     Intent intentBookmarks = new Intent(getBaseContext(), BookmarksActivity.class);

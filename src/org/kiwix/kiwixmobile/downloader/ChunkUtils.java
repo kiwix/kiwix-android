@@ -10,14 +10,14 @@ public class ChunkUtils {
   public static final String ZIM_EXTENSION = ".zim";
   public static final long CHUNK_SIZE = 1024L * 1024L * 1024L * 2L;
 
-  public static List<Chunk> getChunks(String url, long contentLength) {
+  public static List<Chunk> getChunks(String url, long contentLength, int notificationID) {
     int fileCount = getZimChunkFileCount(contentLength);
     String filename = StorageUtils.getFileNameFromUrl(url);
     String[] fileNames = getZimChunkFileNames(filename, fileCount);
-    return generateChunks(contentLength, url, fileNames);
+    return generateChunks(contentLength, url, fileNames, notificationID);
   }
 
-  private static List<Chunk> generateChunks(long contentLength, String url, String[] fileNames) {
+  private static List<Chunk> generateChunks(long contentLength, String url, String[] fileNames, int notificationID) {
     List<Chunk> chunks = new ArrayList<>();
     long currentRange = 0;
     for (String zim : fileNames) {
@@ -28,7 +28,7 @@ public class ChunkUtils {
         range = String.format("%d-%d", currentRange, currentRange + CHUNK_SIZE);
       }
       currentRange += CHUNK_SIZE + 1;
-      chunks.add(new Chunk(range, zim, url, contentLength));
+      chunks.add(new Chunk(range, zim, url, contentLength, notificationID));
     }
     return chunks;
   }

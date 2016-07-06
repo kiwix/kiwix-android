@@ -1,6 +1,12 @@
 package org.kiwix.kiwixmobile;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.DataSetObserver;
 import android.support.design.widget.TabLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -9,9 +15,25 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.kiwix.kiwixmobile.downloader.DownloadFragment;
+import org.kiwix.kiwixmobile.downloader.DownloadService;
+import org.kiwix.kiwixmobile.utils.ShortcutUtils;
+
+import java.util.ArrayList;
 
 public class ZimManageActivity extends AppCompatActivity {
 
@@ -30,6 +52,8 @@ public class ZimManageActivity extends AppCompatActivity {
    */
   private ViewPager mViewPager;
 
+  public boolean downloading = false;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -46,6 +70,11 @@ public class ZimManageActivity extends AppCompatActivity {
 
     TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
     tabLayout.setupWithViewPager(mViewPager);
+
+    Intent i = getIntent();
+    if (i.getBooleanExtra("library",false)){
+      displayDownloadInterface();
+    }
 
   }
 
@@ -67,6 +96,12 @@ public class ZimManageActivity extends AppCompatActivity {
     });
   }
 
+
+  public void displayDownloadInterface() {
+    downloading = true;
+    mSectionsPagerAdapter.notifyDataSetChanged();
+    mViewPager.setCurrentItem(2);
+  }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
@@ -108,17 +143,21 @@ public class ZimManageActivity extends AppCompatActivity {
     @Override
     public Fragment getItem(int position) {
       // getItem is called to instantiate the fragment for the given page.
-      if (position == 0) {
-        return new ZimFileSelectFragment();
-      } else {
-        return new LibraryFragment();
+      switch (position) {
+        case 0:
+          return new ZimFileSelectFragment();
+        case 1:
+          return new LibraryFragment();
+        case 2:
+          return new DownloadFragment();
+        default:
+          return null;
       }
     }
-
     @Override
     public int getCount() {
       // Show 3 total pages.
-      return 2;
+      return 3;
     }
 
     @Override
@@ -128,8 +167,11 @@ public class ZimManageActivity extends AppCompatActivity {
           return getResources().getString(R.string.local_zims);
         case 1:
           return getResources().getString(R.string.remote_zims);
+        case 2:
+          return "Downloads";
       }
       return null;
     }
   }
+
 }

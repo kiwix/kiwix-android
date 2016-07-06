@@ -96,4 +96,10 @@
   <string name="zim_manager">Content Management</string>
   <string name="delete_specific_zim">Delete this ZIM?</string>
   <string name="delete_specific_zim_toast">ZIM file deleted</string>
+  <string name="zim_file_downloading">Downloading</string>
+  <string name="zim_file_downloaded">Downloaded</string>
+  <string name="download_pause">pause</string>
+  <string name="download_play">play</string>
+  <string name="download_stop">stop</string>
+  <string name="download_close">close</string>
 </resources>

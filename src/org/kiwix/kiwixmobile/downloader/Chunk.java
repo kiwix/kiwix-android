@@ -6,12 +6,14 @@ public class Chunk {
   private String fileName;
   private String url;
   private long contentLength;
+  private int notificationID;
 
-  public Chunk(String rangeHeader, String fileName, String url, long contentLength) {
+  public Chunk(String rangeHeader, String fileName, String url, long contentLength, int notificationID) {
     this.rangeHeader = rangeHeader;
     this.fileName = fileName;
     this.url = url;
     this.contentLength = contentLength;
+    this.notificationID = notificationID;
   }
 
   public String getRangeHeader() {
@@ -29,4 +31,6 @@ public class Chunk {
   public String getUrl() {
     return url;
   }
+
+  public int getNotificationID(){ return notificationID; }
 }
