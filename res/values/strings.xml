@@ -93,7 +93,7 @@
   <string name="menu_library">Download ZIM files</string>
   <string name="local_zims">Local</string>
   <string name="remote_zims">Remote</string>
-  <string name="zim_manager">Content Management</string>
+  <string name="zim_manager">ZIM Management</string>
   <string name="delete_specific_zim">Delete this ZIM?</string>
   <string name="delete_specific_zim_toast">ZIM file deleted</string>
   <string name="zim_file_downloading">Downloading</string>

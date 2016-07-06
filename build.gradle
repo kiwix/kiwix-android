@@ -45,6 +45,7 @@ dependencies {
   apt 'com.jakewharton:butterknife-compiler:8.0.1'
 
   compile files("$buildDir/native-libs/native-libs.jar")
+  compile group: 'com.google.guava', name: 'guava', version: '19.0'
 
   // compile fileTree(dir: '.', include: 'content-libs.jar') // DO NOT REMOVE !!
   testCompile 'junit:junit:4.12'

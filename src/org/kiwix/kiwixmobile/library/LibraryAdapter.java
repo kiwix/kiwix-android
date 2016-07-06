@@ -26,23 +26,32 @@ import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+
+import com.google.common.collect.ImmutableList;
+
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 public class LibraryAdapter extends ArrayAdapter<Book> {
 
   private Map<String, Locale> mLocaleMap;
+  final private ImmutableList<Book> allBooks;
+  private BookFilter filter;
 
-  public LibraryAdapter(Context context, List<Book> book) {
-    super(context, 0, book);
+  public LibraryAdapter(Context context, List<Book> books) {
+    super(context, 0, books);
+    allBooks = ImmutableList.copyOf(books);
     initLanguageMap();
   }
 
@@ -113,6 +122,50 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
     }
 
     return convertView;
+  }
+
+  private class BookFilter extends Filter {
+    @Override
+    protected FilterResults performFiltering(CharSequence s) {
+      ArrayList<Book> filteredBooks = new ArrayList<Book>();
+      if (s.length() == 0) {
+        filteredBooks.addAll(allBooks);
+      } else {
+        for (Book b : allBooks) {
+          StringBuffer text = new StringBuffer();
+          text.append(b.getTitle() + "|" + b.getDescription() + "|");
+          if (mLocaleMap.containsKey(b.getLanguage())) {
+            text.append(mLocaleMap.get(b.getLanguage()).getDisplayLanguage());
+            text.append("|");
+          }
+          if (text.toString().toLowerCase().contains(s.toString().toLowerCase())) {
+            filteredBooks.add(b);
+          }
+        }
+      }
+      FilterResults results = new FilterResults();
+      results.values = filteredBooks;
+      results.count = filteredBooks.size();
+      return results;
+    }
+
+    @Override
+    protected void publishResults(CharSequence constraint, FilterResults results) {
+      List<Book> filtered = (List<Book>) results.values;
+      LibraryAdapter.this.clear();
+      if (filtered != null) {
+        LibraryAdapter.this.addAll(filtered);
+      }
+      notifyDataSetChanged();
+    }
+  }
+
+  @Override
+  public Filter getFilter() {
+    if (filter == null) {
+      filter = new BookFilter();
+    }
+    return filter;
   }
 
   // Create a map of ISO 369-2 language codes

@@ -8,6 +8,7 @@ import android.database.DataSetObserver;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
+import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 
 import java.util.ArrayList;
@@ -54,6 +56,9 @@ public class ZimManageActivity extends AppCompatActivity {
 
   public boolean downloading = false;
 
+  private Menu mMenu;
+
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -67,6 +72,7 @@ public class ZimManageActivity extends AppCompatActivity {
     // Set up the ViewPager with the sections adapter.
     mViewPager = (ViewPager) findViewById(R.id.container);
     mViewPager.setAdapter(mSectionsPagerAdapter);
+
 
     TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
     tabLayout.setupWithViewPager(mViewPager);
@@ -82,7 +88,7 @@ public class ZimManageActivity extends AppCompatActivity {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     // Don't use this method, it's handled by inflater.inflate() above :
-    // setContentView(R.layout.activity_layout);
+    // setContentView(R.layout.activity_lay out);
 
     getSupportActionBar().setHomeButtonEnabled(true);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -107,6 +113,24 @@ public class ZimManageActivity extends AppCompatActivity {
   public boolean onCreateOptionsMenu(Menu menu) {
     // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.menu_zim_manager, menu);
+    mMenu = menu;
+    SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+      @Override
+      public boolean onQueryTextSubmit(String s) {
+        return false;
+      }
+
+      @Override
+      public boolean onQueryTextChange(String s) {
+        if (LibraryFragment.libraryAdapter != null) {
+          LibraryFragment.libraryAdapter.getFilter().filter(s);
+        }
+        mViewPager.setCurrentItem(1);
+        return true;
+      }
+    });
+
     return true;
   }
 
@@ -118,6 +142,7 @@ public class ZimManageActivity extends AppCompatActivity {
     int id = item.getItemId();
 
     if (id == R.id.menu_rescan_fs){
+
       mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
       int position = mViewPager.getCurrentItem();
       mViewPager.setAdapter(mSectionsPagerAdapter);

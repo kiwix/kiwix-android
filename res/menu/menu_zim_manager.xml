@@ -1,10 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  tools:context=".ZimManageActivity">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <item android:id="@+id/action_search"
+        android:icon="@drawable/action_search"
+        android:title="Search"
+        android:visible="true"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="always|collapseActionView"
+        app:iconifiedByDefault="true" />
   <item
     android:id="@+id/menu_rescan_fs"
     android:icon="@drawable/action_refresh"
     android:title="@string/menu_rescan_fs"
+    android:visible="true"
     app:showAsAction="always"/>
 </menu>
+

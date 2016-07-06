@@ -61,6 +61,8 @@ public class LibraryFragment extends Fragment {
 
   private boolean active;
 
+  public static LibraryAdapter libraryAdapter;
+
   private DownloadServiceConnection mConnection = new DownloadServiceConnection();
 
     @Override
@@ -81,7 +83,8 @@ public class LibraryFragment extends Fragment {
           .subscribe(library -> {
             books = library.getBooks();
             if (active) {
-              libraryList.setAdapter(new LibraryAdapter(super.getActivity(), books));
+              libraryAdapter = new LibraryAdapter(super.getActivity(), books);
+              libraryList.setAdapter(libraryAdapter);
               progressBar.setVisibility(View.INVISIBLE);
               progressText.setVisibility(View.INVISIBLE);
             }
