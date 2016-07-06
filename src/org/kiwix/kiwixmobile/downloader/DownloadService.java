@@ -30,6 +30,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okio.BufferedSource;
 import org.kiwix.kiwixmobile.KiwixApplication;
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.ZimManageActivity;
@@ -66,7 +67,7 @@ public class DownloadService extends Service {
     DownloadService.notificationCount ++;
     notificationTitle = intent.getExtras().getString(DownloadIntent.DOWNLOAD_ZIM_TITLE);
     notifications.add(notificationTitle);
-    final Intent target = new Intent(this, ZimManageActivity.class);
+    final Intent target = new Intent(this, KiwixMobileActivity.class);
     target.putExtra("library",true);
     PendingIntent pendingIntent = PendingIntent.getActivity(getBaseContext(), 0,
         target,  PendingIntent.FLAG_CANCEL_CURRENT);

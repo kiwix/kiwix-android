@@ -460,6 +460,12 @@ public class KiwixMobileActivity extends AppCompatActivity {
     } else if (IS_WIDGET_VOICE_SEARCH) {
       goToSearch(true);
     }
+
+    Intent i = getIntent();
+    if (i.getBooleanExtra("library",false)){
+      manageZimFiles();
+    }
+
   }
 
   private void goToSearch(boolean isVoice) {

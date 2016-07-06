@@ -77,11 +77,6 @@ public class ZimManageActivity extends AppCompatActivity {
     TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
     tabLayout.setupWithViewPager(mViewPager);
 
-    Intent i = getIntent();
-    if (i.getBooleanExtra("library",false)){
-      displayDownloadInterface();
-    }
-
   }
 
   private void setUpToolbar() {
@@ -107,6 +102,15 @@ public class ZimManageActivity extends AppCompatActivity {
     downloading = true;
     mSectionsPagerAdapter.notifyDataSetChanged();
     mViewPager.setCurrentItem(2);
+  }
+
+  @Override
+  public void onBackPressed()
+  {
+    super.onBackPressed();  // optional depending on your needs
+    Intent startIntent = new Intent(this, KiwixMobileActivity.class);
+    startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    this.startActivity(startIntent);
   }
 
   @Override
