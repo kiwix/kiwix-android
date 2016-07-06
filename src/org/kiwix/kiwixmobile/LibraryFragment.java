@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -29,13 +30,16 @@ import butterknife.ButterKnife;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import org.kiwix.kiwixmobile.downloader.DownloadIntent;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
+import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -53,7 +57,7 @@ public class LibraryFragment extends Fragment {
 
   public LinearLayout llLayout;
 
-  private List<LibraryNetworkEntity.Book> books;
+  private LinkedList<LibraryNetworkEntity.Book> books;
 
   public static DownloadService mService = new DownloadService();
 
@@ -83,6 +87,19 @@ public class LibraryFragment extends Fragment {
           .subscribe(library -> {
             books = library.getBooks();
             if (active) {
+              LinkedList<LibraryNetworkEntity.Book> booksCopy = new LinkedList<LibraryNetworkEntity.Book>(books);
+              LinkedList<LibraryNetworkEntity.Book> booksAdditions= new LinkedList<LibraryNetworkEntity.Book>();
+              for (LibraryNetworkEntity.Book book : books){
+
+                if (book.getLanguage() != null && book.getLanguage().equals(getActivity().getResources().getConfiguration().locale.getISO3Language())){
+                  booksCopy.remove(book);
+                  booksAdditions.addFirst(book);
+                }
+              }
+              for (LibraryNetworkEntity.Book book : booksAdditions) {
+                booksCopy.addFirst(book);
+              }
+              books = booksCopy;
               libraryAdapter = new LibraryAdapter(super.getActivity(), books);
               libraryList.setAdapter(libraryAdapter);
               progressBar.setVisibility(View.INVISIBLE);

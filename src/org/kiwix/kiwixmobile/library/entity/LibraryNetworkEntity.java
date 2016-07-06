@@ -18,6 +18,7 @@
  */
 package org.kiwix.kiwixmobile.library.entity;
 
+import java.util.LinkedList;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
@@ -27,12 +28,12 @@ import org.simpleframework.xml.Root;
 public class LibraryNetworkEntity {
 
   @ElementList(name = "book", inline = true, required = false)
-  private List<Book> book;
+  private LinkedList<Book> book;
 
   @Attribute(name = "version", required = false)
   private String version;
 
-  public List<Book> getBooks() {
+  public LinkedList<Book> getBooks() {
     return this.book;
   }
 
