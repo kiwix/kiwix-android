@@ -41,9 +41,9 @@ public class MetaLinkNetworkEntity {
     private List<Url> urls;
 
     @Element
-    private int size;
+    private long size;
 
-    public int getSize() {
+    public long getSize() {
       return size;
     }
 
