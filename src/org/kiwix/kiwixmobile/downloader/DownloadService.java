@@ -170,7 +170,7 @@ public class DownloadService extends Service {
 
         BufferedSource input = response.body().source();
         byte[] buffer = new byte[2048];
-        long downloaded = Integer.parseInt(chunk.getRangeHeader().split("-")[0]);
+        long downloaded = Long.parseLong(chunk.getRangeHeader().split("-")[0]);
 
         int read;
         while ((read = input.read(buffer)) != -1) {
