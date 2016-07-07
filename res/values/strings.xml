@@ -102,4 +102,6 @@
   <string name="download_play">play</string>
   <string name="download_stop">stop</string>
   <string name="download_close">close</string>
+  <string name="no_downloads_here">No Downloads Here!</string>
+  <string name="download_complete_snackbar">Download complete</string>
 </resources>

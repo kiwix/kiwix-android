@@ -56,6 +56,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.File;
@@ -84,7 +85,7 @@ public class ZimFileSelectFragment extends Fragment
 
   private ListView mZimFileList;
 
-  private ProgressBar mProgressBar;
+  private RelativeLayout mProgressBar;
 
   private TextView mProgressBarMessage;
   public LinearLayout llLayout;
@@ -96,7 +97,7 @@ public class ZimFileSelectFragment extends Fragment
     FragmentActivity faActivity  = (FragmentActivity)    super.getActivity();
     context = super.getActivity();
     // Replace LinearLayout by the type of the root element of the layout you're trying to load
-    llLayout    = (LinearLayout)    inflater.inflate(R.layout.zim_list, container, false);
+    llLayout = (LinearLayout) inflater.inflate(R.layout.zim_list, container, false);
     // Of course you will want to faActivity and llLayout in the class and not this method to access them in the rest of
     // the class, just initialize them here
 
@@ -104,8 +105,8 @@ public class ZimFileSelectFragment extends Fragment
 
     mFiles = new ArrayList<DataModel>();
 
-    mProgressBar = (ProgressBar) llLayout.findViewById(R.id.progressBar);
-    mProgressBarMessage = (TextView) llLayout.findViewById(R.id.progressbar_message);
+    mProgressBar = (RelativeLayout) llLayout.findViewById(R.id.progressbar_layout);
+//    mProgressBarMessage = (TextView) llLayout.findViewById(R.id.progressbar_message);
     mZimFileList = (ListView)  llLayout.findViewById(R.id.zimfilelist);
 
     mZimFileList.setOnItemClickListener(this);
@@ -420,7 +421,6 @@ public class ZimFileSelectFragment extends Fragment
     @Override
     protected void onPreExecute() {
 
-      mProgressBarMessage.setVisibility(View.VISIBLE);
       mProgressBar.setVisibility(View.VISIBLE);
       setAlpha(true);
 
@@ -439,7 +439,6 @@ public class ZimFileSelectFragment extends Fragment
 
       mZimFileList.setAdapter(mRescanAdapter);
 
-      mProgressBarMessage.setVisibility(View.GONE);
       mProgressBar.setVisibility(View.GONE);
       setAlpha(false);
 

@@ -6,9 +6,9 @@
               android:weightSum="1">
 
   <RelativeLayout
-      android:layout_width="match_parent"
-      android:descendantFocusability="blocksDescendants"
-      android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:descendantFocusability="blocksDescendants"
+    android:layout_height="wrap_content">
 
   </RelativeLayout>
 
@@ -20,21 +20,22 @@
       android:gravity="center">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:gravity="center"  >
+      android:orientation="vertical"
+      android:layout_width="0dp"
+      android:layout_weight="1"
+      android:layout_height="wrap_content"
+      android:layoutDirection="locale"
+      android:gravity="center"  >
 
       <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:textAppearance="?android:attr/textAppearanceLarge"
-          android:text="Large Text"
-          android:id="@+id/downloadTitle"
-          android:layout_alignParentLeft="true"
-          android:layout_alignParentStart="true"
-          android:padding="8dp"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/downloadTitle"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:padding="8dp"/>
 
       <ProgressBar
           style="?android:attr/progressBarStyleHorizontal"
@@ -49,11 +50,11 @@
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true">
+      android:orientation="horizontal"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true">
 
       <ImageView
           android:layout_width="wrap_content"
@@ -69,18 +70,18 @@
           android:layout_weight="0.5"/>
 
       <ImageView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:id="@+id/stop"
-          android:layout_alignParentEnd="true"
-          android:minHeight="35dp"
-          android:minWidth="35dp"
-          android:layout_gravity="center_vertical"
-          android:text="@string/download_stop"
-          android:src="@drawable/ic_stop_black_24dp"
-          android:layout_weight="0.5"
-          android:layout_marginLeft="8dp"
-          android:layout_marginRight="8dp"  />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/stop"
+        android:layout_alignParentEnd="true"
+        android:minHeight="35dp"
+        android:minWidth="35dp"
+        android:layout_gravity="center_vertical"
+        android:text="@string/download_stop"
+        android:src="@drawable/ic_stop_black_24dp"
+        android:layout_weight="0.5"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"  />
     </LinearLayout>
   </LinearLayout>
 

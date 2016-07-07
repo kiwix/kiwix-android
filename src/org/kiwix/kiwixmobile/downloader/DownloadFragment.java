@@ -5,6 +5,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
@@ -20,7 +23,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
@@ -37,23 +42,41 @@ import java.util.Map;
 public class DownloadFragment extends Fragment {
 
   public static LinkedHashMap<Integer, String> mDownloads= new LinkedHashMap<Integer, String>();
-  public LinearLayout llLayout;
-  public ListView listView;
+  public RelativeLayout relLayout;
+  public static ListView listView;
   public static DownloadAdapter downloadAdapter;
+  private ZimManageActivity zimManageActivity;
+  CoordinatorLayout mainLayout;
+  private static FragmentActivity faActivity;
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    FragmentActivity faActivity = (FragmentActivity) super.getActivity();
-    // Replace LinearLayout by the type of the root element of the layout you're trying to load
-    llLayout = (LinearLayout) inflater.inflate(R.layout.download_management, container, false);
-    // Of course you will want to faActivity and llLayout in the class and not this method to access them in the rest of
-    // the class, just initialize them here
+    faActivity = (FragmentActivity) super.getActivity();
+    relLayout = (RelativeLayout) inflater.inflate(R.layout.download_management, container, false);
 
-    listView = (ListView) llLayout.findViewById(R.id.downloadingZims);
+    zimManageActivity = (ZimManageActivity) super.getActivity();
+    listView = (ListView) relLayout.findViewById(R.id.downloadingZims);
     downloadAdapter = new DownloadAdapter(mDownloads);
     listView.setAdapter(downloadAdapter);
+    mainLayout = (CoordinatorLayout) faActivity.findViewById(R.id.zim_manager_main_activity);
+    return relLayout;
+  }
 
-    return llLayout;
-    // Don't use this method, it's handled by inflater.inflate() above :
+  @Override
+  public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+
+    updateNoDownloads();
+
+  }
+
+  private static void updateNoDownloads() {
+    TextView noDownloadsText = (TextView) faActivity.findViewById(R.id.download_management_no_downloads);
+    if (listView.getCount() == 0) {
+      noDownloadsText.setVisibility(View.VISIBLE);
+    } else if (listView.getCount() > 0){
+      noDownloadsText.setVisibility(View.GONE);
+    }
+
   }
 
   public class DownloadAdapter extends BaseAdapter {
@@ -86,10 +109,22 @@ public class DownloadFragment extends Fragment {
       ProgressBar downloadProgress = (ProgressBar) viewGroup.findViewById(R.id.downloadProgress);
       downloadProgress.setProgress(progress);
       if (progress ==  100){
-        Button pause = (Button) viewGroup.findViewById(R.id.pause);
+        ImageView pause = (ImageView) viewGroup.findViewById(R.id.pause);
         pause.setEnabled(false);
-        Button stop = (Button) viewGroup.findViewById(R.id.stop);
-        stop.setText("CLOSE");
+        mDownloads.remove(mKeys[position]);
+        downloadAdapter.notifyDataSetChanged();
+        updateNoDownloads();
+
+
+        Snackbar completeSnack = Snackbar.make(mainLayout, getResources().getString(R.string.download_complete_snackbar), Snackbar.LENGTH_LONG);
+        completeSnack.setAction(getResources().getString(R.string.open), new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            zimManageActivity.displayLocalTab();
+          }
+        })
+            .setActionTextColor(getResources().getColor(R.color.white))
+            .show();
       }
     }
 
@@ -109,28 +144,28 @@ public class DownloadFragment extends Fragment {
       ProgressBar downloadProgress = (ProgressBar) convertView.findViewById(R.id.downloadProgress);
       if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) != null && LibraryFragment.mService.downloadStatus.get(mKeys[position]) == 4) {
         downloadProgress.setProgress(100);
-        Button pause = (Button) convertView.findViewById(R.id.pause);
+        ImageView pause = (ImageView) convertView.findViewById(R.id.pause);
         pause.setEnabled(false);
-        Button stop = (Button) convertView.findViewById(R.id.stop);
-        stop.setText(getResources().getString(R.string.download_close));
+        ImageView stop = (ImageView) convertView.findViewById(R.id.stop);
+//        stop.setText(getResources().getString(R.string.download_close));
       }
 
-      Button pause = (Button) convertView.findViewById(R.id.pause);
+      ImageView pause = (ImageView) convertView.findViewById(R.id.pause);
       pause.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
           if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == 0) {
             LibraryFragment.mService.pauseDownload(mKeys[position]);
-            pause.setText(getResources().getString(R.string.download_play));
+            pause.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
           } else {
             LibraryFragment.mService.playDownload(mKeys[position]);
-            pause.setText(getResources().getString(R.string.download_pause));
+            pause.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_black_24dp));
           }
         }
       });
 
 
-      Button stop = (Button) convertView.findViewById(R.id.stop);
+      ImageView stop = (ImageView) convertView.findViewById(R.id.stop);
       stop.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -157,6 +192,7 @@ public class DownloadFragment extends Fragment {
   public static void addDownload(int position, String title){
     mDownloads.put(position, title);
     downloadAdapter.notifyDataSetChanged();
+    updateNoDownloads();
   }
 
 }

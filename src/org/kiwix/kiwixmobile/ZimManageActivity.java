@@ -104,6 +104,10 @@ public class ZimManageActivity extends AppCompatActivity {
     mViewPager.setCurrentItem(2);
   }
 
+  public void displayLocalTab() {
+    mViewPager.setCurrentItem(0);
+  }
+
   @Override
   public void onBackPressed()
   {

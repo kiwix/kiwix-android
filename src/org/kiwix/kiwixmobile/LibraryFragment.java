@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -22,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,8 +51,7 @@ import static org.kiwix.kiwixmobile.utils.ShortcutUtils.stringsGetter;
 public class LibraryFragment extends Fragment {
 
   @BindView(R.id.library_list) ListView libraryList;
-  @BindView(R.id.progressBar) ProgressBar progressBar;
-  @BindView(R.id.progressbar_message) TextView progressText;
+  @BindView(R.id.progressbar_layout) RelativeLayout progressBar;
 
 
   private KiwixService kiwixService;
@@ -79,7 +80,6 @@ public class LibraryFragment extends Fragment {
 
         // Don't use this method, it's handled by inflater.inflate() above :
         // setContentView(R.layout.activity_layout);
-
       ButterKnife.bind(this, llLayout);
       kiwixService = ((KiwixApplication) super.getActivity().getApplication()).getKiwixService();
       kiwixService.getLibrary()
@@ -102,8 +102,7 @@ public class LibraryFragment extends Fragment {
               books = booksCopy;
               libraryAdapter = new LibraryAdapter(super.getActivity(), books);
               libraryList.setAdapter(libraryAdapter);
-              progressBar.setVisibility(View.INVISIBLE);
-              progressText.setVisibility(View.INVISIBLE);
+              progressBar.setVisibility(View.GONE);
             }
           });
 
@@ -127,6 +126,14 @@ public class LibraryFragment extends Fragment {
         // findViewById(R.id.someGuiElement);
         return llLayout; // We must return the loaded Layout
     }
+
+  @Override
+  public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    progressBar.setVisibility(View.VISIBLE);
+
+  }
+
   @Override
   public void onDestroyView() {
     super.onDestroyView();

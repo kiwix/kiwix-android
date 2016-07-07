@@ -28,26 +28,37 @@
         android:text="@string/error_nozimfilesfound"
         android:visibility="gone"/>
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleLarge"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:visibility="gone">
-    </ProgressBar>
+        android:layout_height="match_parent"
+        android:id="@+id/progressbar_layout"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
 
-    <TextView
-        android:id="@+id/progressbar_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/rescan_fs_warning"
-        android:paddingTop="10px"
-        android:textStyle="bold"
-        android:layout_below="@id/progressBar"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:visibility="gone"/>
+        android:layout_marginTop="300dp">
+
+      <ProgressBar
+          android:id="@+id/progressBar"
+          style="?android:attr/progressBarStyleLarge"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerHorizontal="true">
+      </ProgressBar>
+
+      <TextView
+          android:id="@+id/progressbar_message"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/rescan_fs_warning"
+          android:paddingTop="10px"
+          android:textStyle="bold"
+          android:layout_below="@id/progressBar"
+          android:layout_centerHorizontal="true"
+          android:layout_centerVertical="true"
+          />
+
+
+    </RelativeLayout>
+
   </RelativeLayout>
 </LinearLayout>
