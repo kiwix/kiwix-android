@@ -6,16 +6,17 @@
 
   <TextView
       android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+      android:layout_height="match_parent"
       android:id="@+id/download_management_no_downloads"
       android:text="@string/no_downloads_here"
       android:textSize="20sp"
       android:layout_centerInParent="true"
-      android:visibility="gone"/>
+      android:visibility="gone"
+      android:layout_marginBottom="400dp"/>
 
   <ListView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/downloadingZims"/>
+    android:id="@+id/zim_downloader_list"/>
 
 </RelativeLayout>

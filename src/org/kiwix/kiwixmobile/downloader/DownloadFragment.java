@@ -1,42 +1,28 @@
 package org.kiwix.kiwixmobile.downloader;
 
 
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.ZimManageActivity;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 
 public class DownloadFragment extends Fragment {
@@ -54,7 +40,7 @@ public class DownloadFragment extends Fragment {
     relLayout = (RelativeLayout) inflater.inflate(R.layout.download_management, container, false);
 
     zimManageActivity = (ZimManageActivity) super.getActivity();
-    listView = (ListView) relLayout.findViewById(R.id.downloadingZims);
+    listView = (ListView) relLayout.findViewById(R.id.zim_downloader_list);
     downloadAdapter = new DownloadAdapter(mDownloads);
     listView.setAdapter(downloadAdapter);
     mainLayout = (CoordinatorLayout) faActivity.findViewById(R.id.zim_manager_main_activity);
