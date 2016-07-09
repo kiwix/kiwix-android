@@ -11,9 +11,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.StatFs;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -35,6 +37,8 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -147,6 +151,13 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+    if (getSpaceAvailable() < Long.parseLong(books.get(position).getSize()) * 1024f){
+      Toast.makeText(super.getActivity(), stringsGetter(R.string.download_no_space, super.getActivity())
+          + "\n" +stringsGetter(R.string.space_available, super.getActivity()) + " "
+          + bytesToHuman(getSpaceAvailable()), Toast.LENGTH_LONG).show();
+      return;
+    }
+
     if (Build.VERSION.SDK_INT >= 23) {
       NetworkInfo network = conMan.getActiveNetworkInfo();
       if (network.getType() != ConnectivityManager.TYPE_WIFI){
@@ -162,11 +173,34 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
         downloadFile(position);
       }
     }
-
-
-
-
   }
+
+  public static String bytesToHuman (long size)
+  {
+    long KB = 1  * 1024;
+    long MB = KB * 1024;
+    long GB = MB * 1024;
+    long TB = GB * 1024;
+    long PB = TB * 1024;
+    long EB = PB * 1024;
+
+    if (size <  KB)                 return size + " Bytes";
+    if (size >= KB && size < MB)    return round3SF((double)size / KB) + " KB";
+    if (size >= MB && size < GB)    return round3SF((double)size / MB) + " MB";
+    if (size >= GB && size < TB)    return round3SF((double)size / GB) + " GB";
+    if (size >= TB && size < PB)    return round3SF((double)size / TB) + " TB";
+    if (size >= PB && size < EB)    return round3SF((double)size / PB) + " PB";
+    if (size >= EB)                 return round3SF((double)size / EB) + " EB";
+
+    return "???";
+  }
+
+  public static String round3SF(double size){
+    BigDecimal bd = new BigDecimal(size);
+    bd = bd.round(new MathContext(3));
+    return String.valueOf(bd.doubleValue());
+  }
+
 
   public void mobileDownloadDialog(int position) {
     new AlertDialog.Builder(super.getActivity())
@@ -193,6 +227,10 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
     super.getActivity().bindService(service, mConnection.downloadServiceInterface, Context.BIND_AUTO_CREATE);
     ZimManageActivity manange = (ZimManageActivity) super.getActivity();
     manange.displayDownloadInterface();
+  }
+
+  public static long getSpaceAvailable() {
+    return Environment.getExternalStorageDirectory().getFreeSpace();
   }
 
   public class DownloadServiceConnection {

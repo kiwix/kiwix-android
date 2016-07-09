@@ -105,4 +105,6 @@
   <string name="no_downloads_here">No Downloads Here!</string>
   <string name="download_complete_snackbar">Download complete</string>
   <string name="download_over_network">Are you sure you want to start the download without WiFi?</string>
+  <string name="download_no_space">Insufficient space to download this file</string>
+  <string name="space_available">Space Available:</string>
 </resources>
