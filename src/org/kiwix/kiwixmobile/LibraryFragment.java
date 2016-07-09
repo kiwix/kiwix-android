@@ -4,22 +4,27 @@ import android.app.IntentService;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -48,7 +53,7 @@ import rx.android.schedulers.AndroidSchedulers;
 
 import static org.kiwix.kiwixmobile.utils.ShortcutUtils.stringsGetter;
 
-public class LibraryFragment extends Fragment {
+public class LibraryFragment extends Fragment implements AdapterView.OnItemClickListener {
 
   @BindView(R.id.library_list) ListView libraryList;
   @BindView(R.id.progressbar_layout) RelativeLayout progressBar;
@@ -69,6 +74,9 @@ public class LibraryFragment extends Fragment {
   public static LibraryAdapter libraryAdapter;
 
   private DownloadServiceConnection mConnection = new DownloadServiceConnection();
+
+  private ConnectivityManager conMan;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -106,19 +114,9 @@ public class LibraryFragment extends Fragment {
             }
           });
 
-      libraryList.setOnItemClickListener(
-          (parent, view, position, id) -> {
-            Toast.makeText(super.getActivity(), stringsGetter(R.string.download_started_library, super.getActivity()), Toast.LENGTH_LONG).show();
-            Intent service = new Intent(super.getActivity(), DownloadService.class);
-            service.putExtra(DownloadIntent.DOWNLOAD_URL_PARAMETER, books.get(position).getUrl());
-            service.putExtra(DownloadIntent.DOWNLOAD_ZIM_TITLE, books.get(position).getTitle());
-            super.getActivity().startService(service);
-            mConnection = new DownloadServiceConnection();
-            super.getActivity().bindService(service, mConnection.downloadServiceInterface, Context.BIND_AUTO_CREATE);
-            ZimManageActivity manange = (ZimManageActivity) super.getActivity();
-            manange.displayDownloadInterface();
-          });
 
+        libraryList.setOnItemClickListener(this);
+        conMan = (ConnectivityManager) super.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         active = true;
         // The FragmentActivity doesn't contain the layout directly so we must use our instance of     LinearLayout :
         //llLayout.findViewById(R.id.someGuiElement);
@@ -145,6 +143,58 @@ public class LibraryFragment extends Fragment {
     }
 
   }
+
+  @Override
+  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+    if (Build.VERSION.SDK_INT >= 23) {
+      NetworkInfo network = conMan.getActiveNetworkInfo();
+      if (network.getType() != ConnectivityManager.TYPE_WIFI){
+        mobileDownloadDialog(position);
+      } else {
+        downloadFile(position);
+      }
+    } else {
+      NetworkInfo wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+      if (!wifi.isConnected()){
+        mobileDownloadDialog(position);
+      } else {
+        downloadFile(position);
+      }
+    }
+
+
+
+
+  }
+
+  public void mobileDownloadDialog(int position) {
+    new AlertDialog.Builder(super.getActivity())
+        .setMessage(ShortcutUtils.stringsGetter(R.string.download_over_network, super.getActivity()))
+        .setPositiveButton(getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int which) {
+            downloadFile(position);
+          }
+        })
+        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int which) {
+          }
+        })
+        .show();
+  }
+
+  public void downloadFile(int position) {
+    Toast.makeText(super.getActivity(), stringsGetter(R.string.download_started_library, super.getActivity()), Toast.LENGTH_LONG).show();
+    Intent service = new Intent(super.getActivity(), DownloadService.class);
+    service.putExtra(DownloadIntent.DOWNLOAD_URL_PARAMETER, books.get(position).getUrl());
+    service.putExtra(DownloadIntent.DOWNLOAD_ZIM_TITLE, books.get(position).getTitle());
+    super.getActivity().startService(service);
+    mConnection = new DownloadServiceConnection();
+    super.getActivity().bindService(service, mConnection.downloadServiceInterface, Context.BIND_AUTO_CREATE);
+    ZimManageActivity manange = (ZimManageActivity) super.getActivity();
+    manange.displayDownloadInterface();
+  }
+
   public class DownloadServiceConnection {
     public DownloadServiceInterface downloadServiceInterface;
     public boolean bound;
