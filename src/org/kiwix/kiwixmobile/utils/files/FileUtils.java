@@ -3,6 +3,8 @@ package org.kiwix.kiwixmobile.utils.files;
 import android.util.Log;
 import android.content.Context;
 import android.os.Environment;
+import android.widget.PopupWindow;
+
 import java.io.File;
 import org.kiwix.kiwixmobile.settings.Constants;
 
@@ -32,7 +34,22 @@ public class FileUtils {
 
   public static synchronized void deleteZimFile(String path){
     File file = new File(path);
-    file.delete();
+    if (!file.getPath().substring(file.getPath().length() - 3).equals("zim")){
+      fileloop:
+        for(char alphabetFirst = 'a'; alphabetFirst <= 'z';alphabetFirst++) {
+          for (char alphabetSecond = 'a'; alphabetSecond <= 'z'; alphabetSecond++) {
+            String chunkPath = path.substring(0, path.length() - 2) + alphabetFirst + alphabetSecond;
+            File fileChunk = new File(chunkPath);
+            if (fileChunk.exists()) {
+              fileChunk.delete();
+            } else {
+              break fileloop;
+            }
+          }
+        }
+    } else {
+      file.delete();
+    }
   }
 
   /**
