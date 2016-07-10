@@ -32,7 +32,9 @@ import android.widget.TextView;
 
 import com.google.common.collect.ImmutableList;
 
+import org.kiwix.kiwixmobile.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.ZimManageActivity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
@@ -43,16 +45,22 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static org.kiwix.kiwixmobile.utils.ShortcutUtils.stringsGetter;
+
 public class LibraryAdapter extends ArrayAdapter<Book> {
+
+
 
   private Map<String, Locale> mLocaleMap;
   final private ImmutableList<Book> allBooks;
   private BookFilter filter;
+  private Context mContext;
 
   public LibraryAdapter(Context context, List<Book> books) {
     super(context, 0, books);
     allBooks = ImmutableList.copyOf(books);
     initLanguageMap();
+    mContext = context;
   }
 
   @Override public View getView(int position, View convertView, ViewGroup parent) {
@@ -67,6 +75,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
       holder.publisher = (TextView) convertView.findViewById(R.id.publisher);
       holder.date = (TextView) convertView.findViewById(R.id.date);
       holder.size = (TextView) convertView.findViewById(R.id.size);
+      holder.fileName = (TextView) convertView.findViewById(R.id.fileName);
       holder.favicon = (ImageView) convertView.findViewById(R.id.favicon);
       convertView.setTag(holder);
     } else {
@@ -82,6 +91,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
     holder.publisher.setText(book.getPublisher());
     holder.date.setText(book.getDate());
     holder.size.setText(createGbString(book.getSize()));
+    holder.fileName.setText(parseURL(book.getUrl()));
     holder.favicon.setImageBitmap(createBitmapFromEncodedString(book.getFavicon()));
 
     //// Check if no value is empty. Set the view to View.GONE, if it is. To View.VISIBLE, if not.
@@ -122,6 +132,22 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
     }
 
     return convertView;
+  }
+
+  public String parseURL(String url){
+    String details;
+    try {
+      details = url.substring(url.lastIndexOf("/") + 1,url.length() - 10);
+      details = details.substring(details.indexOf("_", details.indexOf("_") + 1) + 1, details.lastIndexOf("_"));
+      details = details.replaceAll("_", " ");
+      details = details.replaceAll("all","");
+      details = details.replaceAll("nopic", stringsGetter(R.string.zim_nopic, mContext));
+      details = details.replaceAll("simple", stringsGetter(R.string.zim_simple, mContext));
+      details = details.trim().replaceAll(" +", " ");
+      return details;
+    } catch (Exception e ){
+      return  "";
+    }
   }
 
   private class BookFilter extends Filter {
@@ -247,6 +273,8 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
     TextView date;
 
     TextView size;
+
+    TextView fileName;
 
     ImageView favicon;
   }
