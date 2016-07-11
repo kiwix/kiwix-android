@@ -67,6 +67,7 @@ import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.utils.files.FileWriter;
+import org.w3c.dom.Text;
 
 public class ZimFileSelectFragment extends Fragment
     implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener, AdapterView.OnItemLongClickListener {
@@ -87,8 +88,11 @@ public class ZimFileSelectFragment extends Fragment
 
   private RelativeLayout mProgressBar;
 
+  private TextView mFileMessage;
+
   private TextView mProgressBarMessage;
-  public LinearLayout llLayout;
+
+  public RelativeLayout llLayout;
 
   public static Context context;
 
@@ -97,7 +101,7 @@ public class ZimFileSelectFragment extends Fragment
     FragmentActivity faActivity  = (FragmentActivity)    super.getActivity();
     context = super.getActivity();
     // Replace LinearLayout by the type of the root element of the layout you're trying to load
-    llLayout = (LinearLayout) inflater.inflate(R.layout.zim_list, container, false);
+    llLayout = (RelativeLayout) inflater.inflate(R.layout.zim_list, container, false);
     // Of course you will want to faActivity and llLayout in the class and not this method to access them in the rest of
     // the class, just initialize them here
 
@@ -106,6 +110,7 @@ public class ZimFileSelectFragment extends Fragment
     mFiles = new ArrayList<DataModel>();
 
     mProgressBar = (RelativeLayout) llLayout.findViewById(R.id.progressbar_layout);
+    mFileMessage = (TextView) llLayout.findViewById(R.id.file_management_no_files);
 //    mProgressBarMessage = (TextView) llLayout.findViewById(R.id.progressbar_message);
     mZimFileList = (ListView)  llLayout.findViewById(R.id.zimfilelist);
 
@@ -288,6 +293,7 @@ public class ZimFileSelectFragment extends Fragment
     FileUtils.deleteZimFile(mFiles.get(position).getPath());
     mFiles.remove(position);
     mRescanAdapter.notifyDataSetChanged();
+    checkEmpty();
   }
 
   // Query through the MediaStore
@@ -415,6 +421,12 @@ public class ZimFileSelectFragment extends Fragment
     }
   }
 
+  public void checkEmpty(){
+    if (mZimFileList.getCount() == 0){
+      mFileMessage.setVisibility(View.VISIBLE);
+    }
+  }
+
   // This AsyncTask will scan the file system for files with the Extension ".zim" or ".zimaa"
   private class RescanFileSystem extends AsyncTask<Void, Void, Void> {
 
@@ -440,6 +452,9 @@ public class ZimFileSelectFragment extends Fragment
       mZimFileList.setAdapter(mRescanAdapter);
 
       mProgressBar.setVisibility(View.GONE);
+
+      checkEmpty();
+
       setAlpha(false);
 
       new FileWriter(ZimFileSelectFragment.context).saveArray(mFiles);

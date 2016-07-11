@@ -57,6 +57,9 @@ public class DownloadFragment extends Fragment {
 
   private static void updateNoDownloads() {
     TextView noDownloadsText = (TextView) faActivity.findViewById(R.id.download_management_no_downloads);
+    if (noDownloadsText == null) {
+      return;
+    }
     if (listView.getCount() == 0) {
       noDownloadsText.setVisibility(View.VISIBLE);
     } else if (listView.getCount() > 0){
@@ -158,6 +161,7 @@ public class DownloadFragment extends Fragment {
             LibraryFragment.mService.stopDownload(mKeys[position]);
             mDownloads.remove(mKeys[position]);
             downloadAdapter.notifyDataSetChanged();
+            updateNoDownloads();
         }
       });
 
