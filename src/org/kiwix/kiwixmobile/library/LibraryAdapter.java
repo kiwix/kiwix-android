@@ -51,10 +51,10 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
 
 
 
-  private Map<String, Locale> mLocaleMap;
+  public static Map<String, Locale> mLocaleMap;
   final private ImmutableList<Book> allBooks;
   private BookFilter filter;
-  private Context mContext;
+  private static Context mContext;
 
   public LibraryAdapter(Context context, List<Book> books) {
     super(context, 0, books);
@@ -134,7 +134,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
     return convertView;
   }
 
-  public String parseURL(String url){
+  public static String parseURL(String url){
     String details;
     try {
       details = url.substring(url.lastIndexOf("/") + 1,url.length() - 10);
@@ -195,7 +195,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
   }
 
   // Create a map of ISO 369-2 language codes
-  private void initLanguageMap() {
+  public static void initLanguageMap() {
     String[] languages = Locale.getISOLanguages();
     mLocaleMap = new HashMap<>(languages.length);
     for (String language : languages) {
@@ -205,7 +205,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
   }
 
   // Get the language from the language codes of the parsed xml stream
-  private String getLanguage(String languageCode) {
+  public static String getLanguage(String languageCode) {
 
     if (languageCode == null) {
       return "";
@@ -224,7 +224,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
   }
 
   // Create a string that represents the size of the zim file in a human readable way
-  private String createGbString(String megaByte) {
+  public static String createGbString(String megaByte) {
 
     int size = 0;
     try {
@@ -246,7 +246,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
   }
 
   // Decode and create a Bitmap from the 64-Bit encoded favicon string
-  private Bitmap createBitmapFromEncodedString(String encodedString) {
+  public static Bitmap createBitmapFromEncodedString(String encodedString) {
 
     try {
       byte[] decodedString = Base64.decode(encodedString, Base64.DEFAULT);
@@ -255,7 +255,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
       e.printStackTrace();
     }
 
-    return BitmapFactory.decodeResource(getContext().getResources(), R.mipmap.kiwix_icon);
+    return BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.kiwix_icon);
   }
 
   private static class ViewHolder {

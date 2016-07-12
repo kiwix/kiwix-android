@@ -83,6 +83,8 @@ public class LibraryNetworkEntity {
     @Attribute(name = "size", required = false)
     public String size;
 
+    public boolean downloaded =  false;
+
     public String getId() {
       return this.id;
     }

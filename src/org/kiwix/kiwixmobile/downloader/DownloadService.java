@@ -123,6 +123,7 @@ public class DownloadService extends Service {
           if (progress == 100) {
             notification.setOngoing(false);
             notification.setContentTitle(notificationTitle + " " + getResources().getString(R.string.zim_file_downloaded));
+            book.downloaded = true;
             bookDao.saveBook(book);
           }
           notification.setProgress(100, progress, false);

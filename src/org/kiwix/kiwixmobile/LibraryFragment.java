@@ -46,6 +46,9 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.kiwix.kiwixmobile.database.BookDao;
+import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.downloader.DownloadIntent;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
@@ -83,6 +86,8 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
 
   private ConnectivityManager conMan;
 
+  private BookDao bookDao;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -98,6 +103,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
       kiwixService = ((KiwixApplication) super.getActivity().getApplication()).getKiwixService();
       conMan = (ConnectivityManager) super.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
       NetworkInfo network = conMan.getActiveNetworkInfo();
+      bookDao = new BookDao(new KiwixDatabase(super.getActivity()));
       if (network != null && network.isConnected()) {
         kiwixService.getLibrary()
             .observeOn(AndroidSchedulers.mainThread())
@@ -166,7 +172,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
           + bytesToHuman(getSpaceAvailable()), Toast.LENGTH_LONG).show();
       return;
     }
-
+    bookDao.saveBook(books.get(position));
     if (Build.VERSION.SDK_INT >= 23) {
       NetworkInfo network = conMan.getActiveNetworkInfo();
       if (network.getType() != ConnectivityManager.TYPE_WIFI){
@@ -227,6 +233,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
   }
 
   public void downloadFile(int position, LibraryNetworkEntity.Book book) {
+    bookDao.saveBook(book);
     Toast.makeText(super.getActivity(), stringsGetter(R.string.download_started_library, super.getActivity()), Toast.LENGTH_LONG).show();
     Intent service = new Intent(super.getActivity(), DownloadService.class);
     service.putExtra(DownloadIntent.DOWNLOAD_URL_PARAMETER, books.get(position).getUrl());

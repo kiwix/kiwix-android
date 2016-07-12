@@ -25,6 +25,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -53,6 +55,7 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -62,6 +65,11 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.kiwix.kiwixmobile.database.BookDao;
+import org.kiwix.kiwixmobile.database.KiwixDatabase;
+import org.kiwix.kiwixmobile.library.LibraryAdapter;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 import org.kiwix.kiwixmobile.utils.files.FileSearch;
@@ -96,6 +104,8 @@ public class ZimFileSelectFragment extends Fragment
 
   public static Context context;
 
+  private BookDao bookDao;
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     FragmentActivity faActivity  = (FragmentActivity)    super.getActivity();
@@ -117,7 +127,8 @@ public class ZimFileSelectFragment extends Fragment
     mZimFileList.setOnItemClickListener(this);
     mZimFileList.setOnItemLongClickListener(this);
     mProgressBar.setVisibility(View.VISIBLE);
-    setAlpha(true);
+
+    bookDao = new BookDao(new KiwixDatabase(context));
 
     checkPermissions();
 
@@ -194,16 +205,14 @@ public class ZimFileSelectFragment extends Fragment
     // Check which one of the Adapters is currently filling the ListView.
     // If the data is populated by the LoaderManager cast the current selected mLibrary to Cursor,
     // if the data is populated by the ArrayAdapter, then cast it to the DataModel class.
-    if (mZimFileList.getItemAtPosition(position) instanceof DataModel) {
 
+    if (view.getAlpha() == 1f) {
       DataModel data = (DataModel) mZimFileList.getItemAtPosition(position);
       file = data.getPath();
+      finishResult(file);
     } else {
-      Cursor cursor = (Cursor) mZimFileList.getItemAtPosition(position);
-      file = cursor.getString(2);
+      openCorruptZimDialog(position);
     }
-
-    finishResult(file);
   }
 
   @Override
@@ -229,6 +238,25 @@ public class ZimFileSelectFragment extends Fragment
         })
         .show();
   }
+  public void openCorruptZimDialog(int position) {
+    new AlertDialog.Builder(super.getActivity())
+        .setMessage(ShortcutUtils.stringsGetter(R.string.open_partial_zim, context))
+        .setPositiveButton(getResources().getString(R.string.open), new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int which) {
+            String file;
+            DataModel data = (DataModel) mZimFileList.getItemAtPosition(position);
+            file = data.getPath();
+            finishResult(file);
+          }
+        })
+        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int which) {
+            // do nothing
+          }
+        })
+        .show();
+  }
+
 
   public void deleteSpecificZimFile(int position) {
     FileUtils.deleteZimFile(mFiles.get(position).getPath());
@@ -237,34 +265,6 @@ public class ZimFileSelectFragment extends Fragment
     checkEmpty();
   }
 
-  // Get the data of our cursor and wrap it all in our ArrayAdapter.
-  // We are doing this because the CursorAdapter does not allow us do remove rows from its dataset.
-  private RescanDataAdapter buildArrayAdapter(Cursor cursor) {
-
-    ArrayList<DataModel> files = new ArrayList<>();
-
-    for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-
-      if (new File(cursor.getString(2)).exists()) {
-        files.add(new DataModel(cursor.getString(1), cursor.getString(2)));
-      }
-    }
-
-    files = new FileWriter(super.getActivity(), files).getDataModelList();
-
-    for (int i = 0; i < files.size(); i++) {
-
-      if (!new File(files.get(i).getPath()).exists()) {
-        Log.e(TAG_KIWIX, "File removed: " + files.get(i).getTitle());
-        files.remove(i);
-      }
-    }
-
-    files = new FileSearch().sortDataModel(files);
-    mFiles = files;
-
-    return new RescanDataAdapter(super.getActivity(), 0, mFiles);
-  }
 
   private void finishResult(String path) {
 
@@ -280,26 +280,13 @@ public class ZimFileSelectFragment extends Fragment
     }
   }
 
-  // Make the View transparent or opaque
-  private void setAlpha(boolean transparent) {
-
-    float viewTransparency = transparent ? 0.4F : 1F;
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-      mZimFileList.setAlpha(viewTransparency);
-    } else {
-      AlphaAnimation alpha = new AlphaAnimation(viewTransparency, viewTransparency);
-      alpha.setDuration(0);
-      alpha.setFillAfter(true);
-      mZimFileList.startAnimation(alpha);
-    }
-  }
 
   // The Adapter for the ListView for when the ListView is populated with the rescanned files
   private class RescanDataAdapter extends ArrayAdapter<DataModel> {
 
     public RescanDataAdapter(Context context, int textViewResourceId, List<DataModel> objects) {
       super(context, textViewResourceId, objects);
+      LibraryAdapter.initLanguageMap();
     }
 
     @Override
@@ -308,17 +295,93 @@ public class ZimFileSelectFragment extends Fragment
       ViewHolder holder;
 
       // Check if we should inflate the layout for a new row, or if we can reuse a view.
-      if (convertView == null) {
-        convertView = View.inflate(getContext(), android.R.layout.simple_list_item_2, null);
-        holder = new ViewHolder();
-        holder.title = (TextView) convertView.findViewById(android.R.id.text1);
-        holder.path = (TextView) convertView.findViewById(android.R.id.text2);
-        convertView.setTag(holder);
+
+      if (bookDao.getBook(mFiles.get(position).getTitle()) == null) {
+        if (convertView == null) {
+          convertView = View.inflate(getContext(), R.layout.library_item, null);
+          holder = new ViewHolder();
+          holder.title = (TextView) convertView.findViewById(R.id.title);
+          holder.description = (TextView) convertView.findViewById(R.id.description);
+          convertView.setTag(holder);
+        } else {
+          holder = (ViewHolder) convertView.getTag();
+        }
+        holder.title.setText(getItem(position).getTitle());
+        holder.description.setText(getItem(position).getPath());
       } else {
-        holder = (ViewHolder) convertView.getTag();
+        LibraryNetworkEntity.Book book = bookDao.getBook(mFiles.get(position).getTitle());
+        if (convertView == null) {
+          convertView = View.inflate(getContext(), R.layout.library_item, null);
+          holder = new ViewHolder();
+          holder.title = (TextView) convertView.findViewById(R.id.title);
+          holder.description = (TextView) convertView.findViewById(R.id.description);
+          holder.language = (TextView) convertView.findViewById(R.id.language);
+          holder.creator = (TextView) convertView.findViewById(R.id.creator);
+          holder.publisher = (TextView) convertView.findViewById(R.id.publisher);
+          holder.date = (TextView) convertView.findViewById(R.id.date);
+          holder.size = (TextView) convertView.findViewById(R.id.size);
+          holder.fileName = (TextView) convertView.findViewById(R.id.fileName);
+          holder.favicon = (ImageView) convertView.findViewById(R.id.favicon);
+          convertView.setTag(holder);
+        } else {
+          holder = (ViewHolder) convertView.getTag();
+        }
+
+        holder.title.setText(book.getTitle());
+        holder.description.setText(book.getDescription());
+        holder.language.setText(LibraryAdapter.getLanguage(book.getLanguage()));
+        holder.creator.setText(book.getCreator());
+        holder.publisher.setText(book.getPublisher());
+        holder.date.setText(book.getDate());
+        holder.size.setText(LibraryAdapter.createGbString(book.getSize()));
+        holder.fileName.setText(LibraryAdapter.parseURL(book.getUrl()));
+        holder.favicon.setImageBitmap(LibraryAdapter.createBitmapFromEncodedString(book.getFavicon()));
+
+
+        //// Check if no value is empty. Set the view to View.GONE, if it is. To View.VISIBLE, if not.
+        if (book.getTitle() == null || book.getTitle().isEmpty()) {
+          holder.title.setVisibility(View.GONE);
+        } else {
+          holder.title.setVisibility(View.VISIBLE);
+        }
+
+        if (book.getDescription() == null || book.getDescription().isEmpty()) {
+          holder.description.setVisibility(View.GONE);
+        } else {
+          holder.description.setVisibility(View.VISIBLE);
+        }
+
+        if (book.getCreator() == null || book.getCreator().isEmpty()) {
+          holder.creator.setVisibility(View.GONE);
+        } else {
+          holder.creator.setVisibility(View.VISIBLE);
+        }
+
+        if (book.getPublisher() == null || book.getPublisher().isEmpty()) {
+          holder.publisher.setVisibility(View.GONE);
+        } else {
+          holder.publisher.setVisibility(View.VISIBLE);
+        }
+
+        if (book.getDate() == null || book.getDate().isEmpty()) {
+          holder.date.setVisibility(View.GONE);
+        } else {
+          holder.date.setVisibility(View.VISIBLE);
+        }
+
+        if (book.getSize() == null || book.getSize().isEmpty()) {
+          holder.size.setVisibility(View.GONE);
+        } else {
+          holder.size.setVisibility(View.VISIBLE);
+        }
+
+        if (!book.downloaded) {
+          convertView.setAlpha(0.3f);
+        } else {
+          convertView.setAlpha(1f);
+        }
+
       }
-      holder.title.setText(getItem(position).getTitle());
-      holder.path.setText(getItem(position).getPath());
       return convertView;
     }
 
@@ -326,10 +389,23 @@ public class ZimFileSelectFragment extends Fragment
     // Views and saving them to this mLibrary class, and not inlating the layout every time
     // we need to create a row.
     private class ViewHolder {
-
       TextView title;
 
-      TextView path;
+      TextView description;
+
+      TextView language;
+
+      TextView creator;
+
+      TextView publisher;
+
+      TextView date;
+
+      TextView size;
+
+      TextView fileName;
+
+      ImageView favicon;
     }
   }
 
@@ -346,7 +422,6 @@ public class ZimFileSelectFragment extends Fragment
     protected void onPreExecute() {
 
       mProgressBar.setVisibility(View.VISIBLE);
-      setAlpha(true);
 
       super.onPreExecute();
     }
@@ -366,8 +441,6 @@ public class ZimFileSelectFragment extends Fragment
       mProgressBar.setVisibility(View.GONE);
 
       checkEmpty();
-
-      setAlpha(false);
 
       new FileWriter(ZimFileSelectFragment.context).saveArray(mFiles);
 

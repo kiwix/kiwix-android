@@ -48,4 +48,6 @@ public class BookDataSource {
 
   public String favicon;
 
+  public boolean downloaded;
+
 }

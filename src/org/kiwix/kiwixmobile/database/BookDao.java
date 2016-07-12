@@ -27,29 +27,31 @@ public class BookDao {
   public LibraryNetworkEntity.Book getBook(String fileName) {
     SquidCursor<BookDatabaseEntity> bookCursor = mDb.query(
         BookDatabaseEntity.class,
-        Query.select().where(BookDatabaseEntity.URL.like(fileName)));
+        Query.select());
     LibraryNetworkEntity.Book book = new LibraryNetworkEntity.Book();
-    if (bookCursor.moveToNext()){
-      book.id = bookCursor.get(BookDatabaseEntity.BOOK_ID);
-      book.title = bookCursor.get(BookDatabaseEntity.TITLE);
-      book.description = bookCursor.get(BookDatabaseEntity.DESCRIPTION);
-      book.language = bookCursor.get(BookDatabaseEntity.LANGUAGE);
-      book.creator = bookCursor.get(BookDatabaseEntity.BOOK_CREATOR);
-      book.publisher = bookCursor.get(BookDatabaseEntity.PUBLISHER);
-      book.date = bookCursor.get(BookDatabaseEntity.DATE);
-      book.url = bookCursor.get(BookDatabaseEntity.URL);
-      book.articleCount = bookCursor.get(BookDatabaseEntity.ARTICLE_COUNT);
-      book.mediaCount = bookCursor.get(BookDatabaseEntity.MEDIA_COUNT);
-      book.size = bookCursor.get(BookDatabaseEntity.SIZE);
-      book.favicon = bookCursor.get(BookDatabaseEntity.FAVICON);
-      bookCursor.close();
-      return book;
-    } else {
-      bookCursor.close();
-      return null;
+    while (bookCursor.moveToNext()){
+      if (bookCursor.get(BookDatabaseEntity.URL).contains("/" + fileName + ".")) {
+        book.id = bookCursor.get(BookDatabaseEntity.BOOK_ID);
+        book.title = bookCursor.get(BookDatabaseEntity.TITLE);
+        book.description = bookCursor.get(BookDatabaseEntity.DESCRIPTION);
+        book.language = bookCursor.get(BookDatabaseEntity.LANGUAGE);
+        book.creator = bookCursor.get(BookDatabaseEntity.BOOK_CREATOR);
+        book.publisher = bookCursor.get(BookDatabaseEntity.PUBLISHER);
+        book.date = bookCursor.get(BookDatabaseEntity.DATE);
+        book.url = bookCursor.get(BookDatabaseEntity.URL);
+        book.articleCount = bookCursor.get(BookDatabaseEntity.ARTICLE_COUNT);
+        book.mediaCount = bookCursor.get(BookDatabaseEntity.MEDIA_COUNT);
+        book.size = bookCursor.get(BookDatabaseEntity.SIZE);
+        book.favicon = bookCursor.get(BookDatabaseEntity.FAVICON);
+        book.downloaded = bookCursor.get(BookDatabaseEntity.DOWNLOADED);
+        bookCursor.close();
+        return book;
+      }
     }
+    bookCursor.close();
+    return null;
   }
-  
+
   public void saveBook(LibraryNetworkEntity.Book book) {
     BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
     bookDatabaseEntity.setBookId(book.getId());
@@ -64,6 +66,7 @@ public class BookDao {
     bookDatabaseEntity.setMediaCount(book.getMediaCount());
     bookDatabaseEntity.setSize(book.getSize());
     bookDatabaseEntity.setFavicon(book.getFavicon());
+    bookDatabaseEntity.setIsDownloaded(book.downloaded);
     mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(book.getUrl()));
     mDb.persist(bookDatabaseEntity);
   }

@@ -283,6 +283,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     ++tempVisitCount;
     visitCounterPref.setCount(tempVisitCount);
 
+
     if (tempVisitCount >= 5 && !visitCounterPref.getNoThanksState()) {
       showRateDialog(this, visitCounterPref.getEditor());
     }
@@ -465,7 +466,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
     if (i.getBooleanExtra("library",false)){
       manageZimFiles();
     }
-
   }
 
   private void goToSearch(boolean isVoice) {
