@@ -70,7 +70,7 @@ import org.kiwix.kiwixmobile.utils.files.FileWriter;
 import org.w3c.dom.Text;
 
 public class ZimFileSelectFragment extends Fragment
-    implements LoaderManager.LoaderCallbacks<Cursor>, OnItemClickListener, AdapterView.OnItemLongClickListener {
+    implements OnItemClickListener, AdapterView.OnItemLongClickListener {
 
   public static final String TAG_KIWIX = "kiwix";
 
@@ -170,65 +170,6 @@ public class ZimFileSelectFragment extends Fragment
   }
 
   @Override
-  public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-
-    Uri uri = MediaStore.Files.getContentUri("external");
-
-    String[] projection = {
-        MediaStore.Files.FileColumns._ID,
-        // File Name
-        MediaStore.Files.FileColumns.TITLE,
-        // File Path
-        MediaStore.Files.FileColumns.DATA
-    };
-
-    // Exclude media files, they would be here also (perhaps
-    // somewhat better performance), and filter for zim files
-    // (normal and first split)
-    String query = MediaStore.Files.FileColumns.MEDIA_TYPE + "="
-        + MediaStore.Files.FileColumns.MEDIA_TYPE_NONE + " AND"
-        + " ( LOWER(" +
-        MediaStore.Images.Media.DATA + ") LIKE '%." + FileSearch.zimFiles[0] + "'"
-        + " OR LOWER(" +
-        MediaStore.Images.Media.DATA + ") LIKE '%." + FileSearch.zimFiles[1] + "'"
-        + " ) ";
-
-    String[] selectionArgs = null; // There is no ? in query so null here
-
-    String sortOrder = MediaStore.Files.FileColumns.TITLE; // Sorted alphabetical
-    Log.d(TAG_KIWIX, " Performing query for zim files...");
-
-    return new CursorLoader(super.getActivity(), uri, projection, query, selectionArgs, sortOrder);
-  }
-
-  @Override
-  public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-    Log.d(TAG_KIWIX, "DONE querying Mediastore for .zim files");
-    buildArrayAdapter(cursor);
-    mCursorAdapter.swapCursor(cursor);
-    mRescanAdapter = buildArrayAdapter(cursor);
-    mZimFileList.setAdapter(mRescanAdapter);
-
-    // Done here to avoid that shown while loading.
-    mZimFileList.setEmptyView( llLayout.findViewById(R.id.zimfilelist_nozimfilesfound_view));
-
-    if (mProgressBarMessage.getVisibility() == View.GONE) {
-      mProgressBar.setVisibility(View.GONE);
-      setAlpha(false);
-    }
-
-    mCursorAdapter.notifyDataSetChanged();
-  }
-
-  @Override
-  public void onLoaderReset(Loader<Cursor> cursorLoader) {
-    mCursorAdapter.swapCursor(null);
-  }
-
-
-
-
-  @Override
   public boolean onOptionsItemSelected(MenuItem item) {
 
     switch (item.getItemId()) {
@@ -294,35 +235,6 @@ public class ZimFileSelectFragment extends Fragment
     mFiles.remove(position);
     mRescanAdapter.notifyDataSetChanged();
     checkEmpty();
-  }
-
-  // Query through the MediaStore
-  protected void startQuery() {
-
-    // Defines a list of columns to retrieve from the Cursor and load into an output row
-    String[] mZimListColumns = {
-        MediaStore.Files.FileColumns.TITLE,
-        MediaStore.Files.FileColumns.DATA
-    };
-
-    // Defines a list of View IDs that will receive the Cursor columns for each row
-    int[] mZimListItems = { android.R.id.text1, android.R.id.text2 };
-
-    mCursorAdapter = new SimpleCursorAdapter(
-        // The Context object
-            super.getActivity(),
-        // A layout in XML for one row in the ListView
-        android.R.layout.simple_list_item_2,
-        // The cursor, swapped later by cursorloader
-        null,
-        // A string array of column names in the cursor
-        mZimListColumns,
-        // An integer array of view IDs in the row layout
-        mZimListItems,
-        // Flags for the Adapter
-        Adapter.NO_SELECTION);
-
-    super.getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
   }
 
   // Get the data of our cursor and wrap it all in our ArrayAdapter.
