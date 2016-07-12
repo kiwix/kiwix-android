@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.ConnectivityManager;
+import android.net.Network;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
@@ -61,6 +62,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
 
   @BindView(R.id.library_list) ListView libraryList;
   @BindView(R.id.progressbar_layout) RelativeLayout progressBar;
+  @BindView(R.id.progressbar_message) TextView progressBarMessage;
 
 
   private KiwixService kiwixService;
@@ -94,34 +96,41 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
         // setContentView(R.layout.activity_layout);
       ButterKnife.bind(this, llLayout);
       kiwixService = ((KiwixApplication) super.getActivity().getApplication()).getKiwixService();
-      kiwixService.getLibrary()
-          .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(library -> {
-            books = library.getBooks();
-            if (active) {
-              LinkedList<LibraryNetworkEntity.Book> booksCopy = new LinkedList<LibraryNetworkEntity.Book>(books);
-              LinkedList<LibraryNetworkEntity.Book> booksAdditions= new LinkedList<LibraryNetworkEntity.Book>();
-              for (LibraryNetworkEntity.Book book : books){
+      conMan = (ConnectivityManager) super.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+      NetworkInfo network = conMan.getActiveNetworkInfo();
+      if (network != null && network.isConnected()) {
+        kiwixService.getLibrary()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(library -> {
+              books = library.getBooks();
+              if (active) {
+                LinkedList<LibraryNetworkEntity.Book> booksCopy = new LinkedList<LibraryNetworkEntity.Book>(books);
+                LinkedList<LibraryNetworkEntity.Book> booksAdditions = new LinkedList<LibraryNetworkEntity.Book>();
+                for (LibraryNetworkEntity.Book book : books) {
 
-                if (book.getLanguage() != null && book.getLanguage().equals(getActivity().getResources().getConfiguration().locale.getISO3Language())){
-                  booksCopy.remove(book);
-                  booksAdditions.addFirst(book);
+                  if (book.getLanguage() != null && book.getLanguage().equals(getActivity().getResources().getConfiguration().locale.getISO3Language())) {
+                    booksCopy.remove(book);
+                    booksAdditions.addFirst(book);
+                  }
                 }
+                for (LibraryNetworkEntity.Book book : booksAdditions) {
+                  booksCopy.addFirst(book);
+                }
+                books = booksCopy;
+                libraryAdapter = new LibraryAdapter(super.getActivity(), books);
+                libraryList.setAdapter(libraryAdapter);
+                progressBar.setVisibility(View.GONE);
               }
-              for (LibraryNetworkEntity.Book book : booksAdditions) {
-                booksCopy.addFirst(book);
-              }
-              books = booksCopy;
-              libraryAdapter = new LibraryAdapter(super.getActivity(), books);
-              libraryList.setAdapter(libraryAdapter);
-              progressBar.setVisibility(View.GONE);
-            }
-          });
+            });
 
 
         libraryList.setOnItemClickListener(this);
-        conMan = (ConnectivityManager) super.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
         active = true;
+      } else {
+        progressBar.setVisibility(View.INVISIBLE);
+        progressBarMessage.setText("No network connection");
+      }
         // The FragmentActivity doesn't contain the layout directly so we must use our instance of     LinearLayout :
         //llLayout.findViewById(R.id.someGuiElement);
         // Instead of :
@@ -163,14 +172,14 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
       if (network.getType() != ConnectivityManager.TYPE_WIFI){
         mobileDownloadDialog(position);
       } else {
-        downloadFile(position);
+        downloadFile(position, books.get(position));
       }
     } else {
       NetworkInfo wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
       if (!wifi.isConnected()){
         mobileDownloadDialog(position);
       } else {
-        downloadFile(position);
+        downloadFile(position, books.get(position));
       }
     }
   }
@@ -207,7 +216,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
         .setMessage(ShortcutUtils.stringsGetter(R.string.download_over_network, super.getActivity()))
         .setPositiveButton(getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int which) {
-            downloadFile(position);
+            downloadFile(position, books.get(position));
           }
         })
         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -217,11 +226,12 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
         .show();
   }
 
-  public void downloadFile(int position) {
+  public void downloadFile(int position, LibraryNetworkEntity.Book book) {
     Toast.makeText(super.getActivity(), stringsGetter(R.string.download_started_library, super.getActivity()), Toast.LENGTH_LONG).show();
     Intent service = new Intent(super.getActivity(), DownloadService.class);
     service.putExtra(DownloadIntent.DOWNLOAD_URL_PARAMETER, books.get(position).getUrl());
     service.putExtra(DownloadIntent.DOWNLOAD_ZIM_TITLE, books.get(position).getTitle());
+    service.putExtra("Book", book);
     super.getActivity().startService(service);
     mConnection = new DownloadServiceConnection();
     super.getActivity().bindService(service, mConnection.downloadServiceInterface, Context.BIND_AUTO_CREATE);

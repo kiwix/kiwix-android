@@ -48,5 +48,4 @@ public class BookDataSource {
 
   public String favicon;
 
-  public String filePath;
 }

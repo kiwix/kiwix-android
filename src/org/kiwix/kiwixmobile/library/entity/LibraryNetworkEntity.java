@@ -18,6 +18,7 @@
  */
 package org.kiwix.kiwixmobile.library.entity;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import org.simpleframework.xml.Attribute;
@@ -41,46 +42,46 @@ public class LibraryNetworkEntity {
     return this.version;
   }
 
-  public static class Book {
+  public static class Book implements Serializable{
 
     @Attribute(name = "id", required = false)
-    String id;
+    public String id;
 
     @Attribute(name = "title", required = false)
-    String title;
+    public String title;
 
     @Attribute(name = "description", required = false)
-    String description;
+    public String description;
 
     @Attribute(name = "language", required = false)
-    String language;
+    public String language;
 
     @Attribute(name = "creator", required = false)
-    String creator;
+    public String creator;
 
     @Attribute(name = "publisher", required = false)
-    String publisher;
+    public String publisher;
 
     @Attribute(name = "favicon", required = false)
-    String favicon;
+    public String favicon;
 
     @Attribute(name = "faviconMimeType", required = false)
-    String faviconMimeType;
+    public String faviconMimeType;
 
     @Attribute(name = "date", required = false)
-    String date;
+    public String date;
 
     @Attribute(name = "url", required = false)
-    String url;
+    public String url;
 
     @Attribute(name = "articleCount", required = false)
-    String articleCount;
+    public String articleCount;
 
     @Attribute(name = "mediaCount", required = false)
-    String mediaCount;
+    public String mediaCount;
 
     @Attribute(name = "size", required = false)
-    String size;
+    public String size;
 
     public String getId() {
       return this.id;

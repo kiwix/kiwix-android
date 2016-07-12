@@ -34,6 +34,9 @@ import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.ZimManageActivity;
+import org.kiwix.kiwixmobile.database.BookDao;
+import org.kiwix.kiwixmobile.database.KiwixDatabase;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
 import rx.Observable;
 import rx.Scheduler;
@@ -53,6 +56,7 @@ public class DownloadService extends Service {
   private NotificationManager notificationManager;
   public HashMap<Integer,Integer> downloadStatus= new HashMap<Integer, Integer>();
   public static Object pauseLock = new Object();
+  public static BookDao bookDao;
 
   Handler handler = new Handler(Looper.getMainLooper());
   @Override public void onCreate() {
@@ -66,9 +70,11 @@ public class DownloadService extends Service {
   @Override public int onStartCommand(Intent intent, int flags, int startId) {
     DownloadService.notificationCount ++;
     notificationTitle = intent.getExtras().getString(DownloadIntent.DOWNLOAD_ZIM_TITLE);
+    LibraryNetworkEntity.Book book = (LibraryNetworkEntity.Book) intent.getSerializableExtra("Book");
     notifications.add(notificationTitle);
     final Intent target = new Intent(this, KiwixMobileActivity.class);
     target.putExtra("library",true);
+    bookDao = new BookDao(new KiwixDatabase(this));
     PendingIntent pendingIntent = PendingIntent.getActivity(getBaseContext(), 0,
         target,  PendingIntent.FLAG_CANCEL_CURRENT);
 
@@ -83,7 +89,7 @@ public class DownloadService extends Service {
 
     downloadStatus.put(notificationCount,0);
     String url = intent.getExtras().getString(DownloadIntent.DOWNLOAD_URL_PARAMETER);
-    downloadBook(url, notificationCount);
+    downloadBook(url, notificationCount, book);
     return START_STICKY;
   }
 
@@ -105,7 +111,7 @@ public class DownloadService extends Service {
     }
   }
 
-  private void downloadBook(String url, int notificationID) {
+  private void downloadBook(String url, int notificationID, LibraryNetworkEntity.Book book) {
     DownloadFragment.addDownload(notificationID, notificationTitle);
     kiwixService.getMetaLinks(url)
         .subscribeOn(AndroidSchedulers.mainThread())
@@ -117,6 +123,7 @@ public class DownloadService extends Service {
           if (progress == 100) {
             notification.setOngoing(false);
             notification.setContentTitle(notificationTitle + " " + getResources().getString(R.string.zim_file_downloaded));
+            bookDao.saveBook(book);
           }
           notification.setProgress(100, progress, false);
           notificationManager.notify(notificationID, notification.build());
