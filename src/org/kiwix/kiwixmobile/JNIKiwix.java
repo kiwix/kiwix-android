@@ -33,7 +33,7 @@ public class JNIKiwix {
 
   public native String getMimeType(String url);
 
-  public static native boolean loadZIM(String path);
+  public native boolean loadZIM(String path);
 
   public native byte[] getContent(String url, JNIKiwixString mimeType, JNIKiwixInt size);
 
