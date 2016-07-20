@@ -35,7 +35,7 @@ public class MetaLinkNetworkEntityTest {
 
     // Basic file attributes
     assertThat(result.getFile().getName(), is("wikipedia_af_all_nopic_2016-05.zim"));
-    assertThat(result.getFile().getSize(), is(63973123));
+    assertThat(result.getFile().getSize(), is(63973123L));
 
     // File hashes
     assertThat(result.getFile().getHash("md5"), is("6f06866b61c4a921b57f28cfd4307220"));
