@@ -378,7 +378,6 @@ def step_update_android_manifest(jsdata, **options):
         os.path.join(ANDROID_PATH, 'test', 'org', 'kiwix', 'kiwixmobile'),
         os.path.join(ANDROID_PATH, 'test', 'org', 'kiwix', package_tail))
 
-
     # replace package in every file
     for dirpath, dirnames, filenames in os.walk(ANDROID_PATH):
         for filename in filenames:
