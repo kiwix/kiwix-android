@@ -9,5 +9,7 @@
   <dimen name="widget_margin">0dp</dimen>
   <dimen name="fab_margin">16dp</dimen>
   <dimen name="appbar_padding_top">8dp</dimen>
-
+  <dimen name="abc_search_view_text_min_width">160dip</dimen>
+  <dimen name="abc_dropdownitem_text_padding_left">8dip</dimen>
+  <dimen name="abc_dropdownitem_text_padding_right">8dip</dimen>
 </resources>
