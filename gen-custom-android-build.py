@@ -370,13 +370,14 @@ def step_update_android_manifest(jsdata, **options):
 
     # move kiwixmobile to proper package name
     package_tail = jsdata.get('package').split('.')[-1]
+    package_path = jsdata.get('package').split('.')
     shutil.move(
         os.path.join(ANDROID_PATH, 'src', 'org', 'kiwix', 'kiwixmobile'),
-        os.path.join(ANDROID_PATH, 'src', 'org', 'kiwix', package_tail))
+        os.path.join(ANDROID_PATH, 'src', *package_path))
 	
     shutil.move(
         os.path.join(ANDROID_PATH, 'test', 'org', 'kiwix', 'kiwixmobile'),
-        os.path.join(ANDROID_PATH, 'test', 'org', 'kiwix', package_tail))
+        os.path.join(ANDROID_PATH, 'test', *package_path))
 
     # replace package in every file
     for dirpath, dirnames, filenames in os.walk(ANDROID_PATH):
@@ -391,7 +392,7 @@ def step_update_android_manifest(jsdata, **options):
                                         jsdata.get('package'))
                                .replace('org.kiwix.zim.base',
                                         'org.kiwix.zim.{}'
-                                        .format(package_tail)))
+                                        .format(package_tail[10:])))
 
 
 def step_update_kiwix_c(jsdata, **options):
