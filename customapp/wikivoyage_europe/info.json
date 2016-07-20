@@ -1,7 +1,7 @@
 {
   "ic_launcher": "customapp/wikivoyage_europe/icon.png",
   "app_name": "Wikivoyage European Travels",
-  "package": "org.kiwix.kiwixcustomwikivoyage.europe",
+  "package": "org.kiwix.kiwixcustomwikivoyageeurope",
   "zim_file": "customapp/wikivoyage_europe/content.zim",
   "play_store": {
     "images": {
@@ -29,7 +29,7 @@
       "defaultLanguage": "en-US"
     }
   },
-  "version_code": "1",
+  "version_code": "2",
   "embed_zim": false,
   "enforced_lang": "en",
   "version_name": "2016-07"
