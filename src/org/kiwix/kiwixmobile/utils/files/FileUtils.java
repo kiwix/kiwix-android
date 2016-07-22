@@ -33,6 +33,9 @@ public class FileUtils {
   }
 
   public static synchronized void deleteZimFile(String path){
+    if (path.substring(path.length() - 5).equals(".part")) {
+      path = path.substring(0, path.length() - 5);
+    }
     File file = new File(path);
     if (!file.getPath().substring(file.getPath().length() - 3).equals("zim")){
       fileloop:
@@ -42,14 +45,24 @@ public class FileUtils {
             File fileChunk = new File(chunkPath);
             if (fileChunk.exists()) {
               fileChunk.delete();
-            } else {
+            } else if (!deleteZimFileParts(chunkPath)) {
               break fileloop;
             }
           }
         }
     } else {
       file.delete();
+      deleteZimFileParts(path);
     }
+  }
+
+  private static synchronized boolean deleteZimFileParts(String path) {
+    File file = new File(path + ".part");
+    if (file.exists()) {
+      file.delete();
+      return true;
+    }
+    return false;
   }
 
   /**

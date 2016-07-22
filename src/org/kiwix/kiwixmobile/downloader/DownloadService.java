@@ -38,6 +38,8 @@ import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
+import org.kiwix.kiwixmobile.utils.files.FileUtils;
+
 import rx.Observable;
 import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
@@ -164,6 +166,10 @@ public class DownloadService extends Service {
     return Observable.create(subscriber -> {
       if (subscriber.isUnsubscribed()) return;
       try {
+        if(downloadStatus.get(chunk.getNotificationID()) == 4){
+          subscriber.onCompleted();
+          return;
+        }
         File file = new File(KIWIX_ROOT, chunk.getFileName());
         file.getParentFile().mkdirs();
         file.createNewFile();
@@ -182,10 +188,10 @@ public class DownloadService extends Service {
 
         int read;
         while ((read = input.read(buffer)) != -1) {
-          if(downloadStatus.get(chunk.getNotificationID())==2){
+          if(downloadStatus.get(chunk.getNotificationID()) == 2){
             break;
           }
-          if(downloadStatus.get(chunk.getNotificationID())==1){
+          if(downloadStatus.get(chunk.getNotificationID()) == 1){
             synchronized(pauseLock) {
               try {
                 // Calling wait() will block this thread until another thread
@@ -202,6 +208,18 @@ public class DownloadService extends Service {
           subscriber.onNext(progress);
         }
         input.close();
+        if (downloadStatus.get(chunk.getNotificationID()) == 2) {
+          String path = file.getPath();
+          if (path.substring(path.length() - 8).equals("zim.part")){
+            path = path.substring(0, path.length() - 5);
+            FileUtils.deleteZimFile(path);
+          } else {
+            path = path.substring(0, path.length() - 7) + "aa";
+            FileUtils.deleteZimFile(path);
+          }
+        } else {
+          file.renameTo(new File(file.getPath().replace(".part", "")));
+        }
         downloadStatus.put(chunk.getNotificationID(), 4);
         subscriber.onCompleted();
       } catch (IOException e) {

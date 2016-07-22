@@ -36,7 +36,7 @@ public class FileSearch {
   public static final String TAG_KIWIX = "kiwix";
 
   // Array of zim file extensions
-  public static final String[] zimFiles = { "zim", "zimaa" };
+  public static final String[] zimFiles = { "zim", "zimaa", "zim.part", "zimaa.part" };
 
   // Scan through the file system and find all the files with .zim and .zimaa extensions
   public ArrayList<DataModel> findFiles() {
@@ -152,6 +152,13 @@ public class FileSearch {
 
   // Remove the file path and the extension and return a file name for the given file path
   private String getTitleFromFilePath(String path) {
-    return new File(path).getName().replaceFirst("[.][^.]+$", "");
+    String title = new File(path).getName();
+    if (title.charAt(title.length() - 1) == "m".charAt(0)) {
+      title = title.replaceFirst("[.][^.]+$", "");
+    } else {
+      title =  title.replaceFirst("[.][^.]+$", "");
+      title =  title.replaceFirst("[.][^.]+$", "");
+    }
+    return title;
   }
 }
