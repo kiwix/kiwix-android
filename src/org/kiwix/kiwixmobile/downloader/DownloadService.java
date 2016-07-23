@@ -174,7 +174,7 @@ public class DownloadService extends Service {
       if (subscriber.isUnsubscribed()) return;
       try {
         // Stop if download is completed
-        if (downloadStatus.get(chunk.getNotificationID()) == 4) {
+        if (chunk.isDownloaded) {
           subscriber.onCompleted();
           return;
         }
@@ -231,6 +231,9 @@ public class DownloadService extends Service {
               downloaded += read;
               output.write(buffer, 0, read);
               int progress = (int) ((100 * downloaded) / chunk.getContentLength());
+              if (progress == 100){
+                downloadStatus.put(chunk.getNotificationID(), 4);
+              }
               subscriber.onNext(progress);
             }
             attempts = timeout;
@@ -261,7 +264,7 @@ public class DownloadService extends Service {
           file.renameTo(new File(file.getPath().replace(".part", "")));
         }
         // Mark chuck status as downloaded
-        downloadStatus.put(chunk.getNotificationID(), 4);
+        chunk.isDownloaded = true;
         subscriber.onCompleted();
       } catch (IOException e) {
         // Catch unforeseen file system errors

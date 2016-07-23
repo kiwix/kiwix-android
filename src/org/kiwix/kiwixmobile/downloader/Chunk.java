@@ -9,6 +9,7 @@ public class Chunk {
   private int notificationID;
   private long startByte;
   private long endByte;
+  public boolean isDownloaded = false;
 
   public Chunk(String rangeHeader, String fileName, String url, long contentLength, int notificationID , long startByte, long endByte) {
     this.rangeHeader = rangeHeader;
