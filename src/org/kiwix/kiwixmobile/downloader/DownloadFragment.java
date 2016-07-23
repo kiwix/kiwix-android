@@ -131,12 +131,9 @@ public class DownloadFragment extends Fragment {
       // Populate the data into the template view using the data object
       downloadTitle.setText(getItem(position));
       ProgressBar downloadProgress = (ProgressBar) convertView.findViewById(R.id.downloadProgress);
-      if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) != null && LibraryFragment.mService.downloadStatus.get(mKeys[position]) == 4) {
-        downloadProgress.setProgress(100);
-        ImageView pause = (ImageView) convertView.findViewById(R.id.pause);
-        pause.setEnabled(false);
-        ImageView stop = (ImageView) convertView.findViewById(R.id.stop);
-//        stop.setText(getResources().getString(R.string.download_close));
+
+      if (LibraryFragment.mService.downloadProgress.get(mKeys[position]) != null) {
+        downloadProgress.setProgress(LibraryFragment.mService.downloadProgress.get(mKeys[position]));
       }
 
       ImageView pause = (ImageView) convertView.findViewById(R.id.pause);

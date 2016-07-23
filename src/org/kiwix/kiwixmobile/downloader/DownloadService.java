@@ -60,6 +60,7 @@ public class DownloadService extends Service {
   private NotificationCompat.Builder notification;
   private NotificationManager notificationManager;
   public HashMap<Integer, Integer> downloadStatus = new HashMap<Integer, Integer>();
+  public HashMap<Integer, Integer> downloadProgress = new HashMap<Integer, Integer>();
   public static Object pauseLock = new Object();
   public static BookDao bookDao;
 
@@ -231,6 +232,7 @@ public class DownloadService extends Service {
               downloaded += read;
               output.write(buffer, 0, read);
               int progress = (int) ((100 * downloaded) / chunk.getContentLength());
+              downloadProgress.put(chunk.getNotificationID(), progress);
               if (progress == 100){
                 downloadStatus.put(chunk.getNotificationID(), 4);
               }
