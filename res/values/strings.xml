@@ -111,4 +111,5 @@
   <string name="zim_simple">Simple</string>
   <string name="zim_nopic">No Pictures</string>
   <string name="open_partial_zim">This file could be incomplete. Do you wish to attempt to open it?</string>
+  <string name="no_network_connection">No network connection</string>
 </resources>

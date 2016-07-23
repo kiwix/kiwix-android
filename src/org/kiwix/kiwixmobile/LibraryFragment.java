@@ -64,8 +64,9 @@ import static org.kiwix.kiwixmobile.utils.ShortcutUtils.stringsGetter;
 public class LibraryFragment extends Fragment implements AdapterView.OnItemClickListener {
 
   @BindView(R.id.library_list) ListView libraryList;
-  @BindView(R.id.progressbar_layout) RelativeLayout progressBar;
+  @BindView(R.id.progressBar) ProgressBar progressBar;
   @BindView(R.id.progressbar_message) TextView progressBarMessage;
+  @BindView(R.id.progressbar_layout) RelativeLayout progressBarLayout;
 
 
   private KiwixService kiwixService;
@@ -100,6 +101,11 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
         // Don't use this method, it's handled by inflater.inflate() above :
         // setContentView(R.layout.activity_layout);
       ButterKnife.bind(this, llLayout);
+
+      progressBar.setVisibility(View.VISIBLE);
+      progressBarMessage.setVisibility(View.VISIBLE);
+      progressBarLayout.setVisibility(View.VISIBLE);
+
       kiwixService = ((KiwixApplication) super.getActivity().getApplication()).getKiwixService();
       conMan = (ConnectivityManager) super.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
       NetworkInfo network = conMan.getActiveNetworkInfo();
@@ -125,8 +131,10 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
                 books = booksCopy;
                 libraryAdapter = new LibraryAdapter(super.getActivity(), books);
                 libraryList.setAdapter(libraryAdapter);
-                progressBar.setVisibility(View.GONE);
+                progressBarLayout.setVisibility(View.GONE);
               }
+            },error -> {
+              noNetworkConnection();
             });
 
 
@@ -134,8 +142,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
 
         active = true;
       } else {
-        progressBar.setVisibility(View.INVISIBLE);
-        progressBarMessage.setText("No network connection");
+        noNetworkConnection();
       }
         // The FragmentActivity doesn't contain the layout directly so we must use our instance of     LinearLayout :
         //llLayout.findViewById(R.id.someGuiElement);
@@ -144,11 +151,11 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
         return llLayout; // We must return the loaded Layout
     }
 
-  @Override
-  public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    progressBar.setVisibility(View.VISIBLE);
-
+  public void noNetworkConnection() {
+    progressBar.setVisibility(View.INVISIBLE);
+    progressBarLayout.setVisibility(View.VISIBLE);
+    progressBarMessage.setVisibility(View.VISIBLE);
+    progressBarMessage.setText("No network connection");
   }
 
   @Override
