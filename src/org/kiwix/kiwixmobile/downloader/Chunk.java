@@ -7,12 +7,16 @@ public class Chunk {
   private String url;
   private long contentLength;
   private int notificationID;
+  private long startByte;
+  private long endByte;
 
-  public Chunk(String rangeHeader, String fileName, String url, long contentLength, int notificationID) {
+  public Chunk(String rangeHeader, String fileName, String url, long contentLength, int notificationID , long startByte, long endByte) {
     this.rangeHeader = rangeHeader;
     this.fileName = fileName;
     this.url = url;
     this.contentLength = contentLength;
+    this.startByte = startByte;
+    this.endByte = endByte;
     this.notificationID = notificationID;
   }
 
@@ -33,4 +37,8 @@ public class Chunk {
   }
 
   public int getNotificationID(){ return notificationID; }
+
+  public long getStartByte(){ return startByte; }
+
+  public long getEndByte(){ return endByte; }
 }
