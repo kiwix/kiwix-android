@@ -10,6 +10,7 @@ FIXED: Useless "w820dp" language
 FIXED: Failing he, id, yi locales
 FIXED: Non-localised setting language list sorting
 FIXED: Multiple search history problems
+FIXED: Crashes with 'Twillight' app
 
 1.99
 FIXED: ZIM load error on ICS
