@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.downloader;
 
 import android.app.DownloadManager;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -24,7 +25,9 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import okhttp3.OkHttpClient;
@@ -57,7 +60,7 @@ public class DownloadService extends Service {
   public static int notificationCount = 1;
   public static ArrayList<String> notifications = new ArrayList<String>();
   public String notificationTitle;
-  private NotificationCompat.Builder notification;
+  private HashMap<Integer, NotificationCompat.Builder> notification = new HashMap<>();
   private NotificationManager notificationManager;
   public HashMap<Integer, Integer> downloadStatus = new HashMap<Integer, Integer>();
   public HashMap<Integer, Integer> downloadProgress = new HashMap<Integer, Integer>();
@@ -87,14 +90,13 @@ public class DownloadService extends Service {
     PendingIntent pendingIntent = PendingIntent.getActivity(getBaseContext(), 0,
         target, PendingIntent.FLAG_CANCEL_CURRENT);
 
-    notification = new NotificationCompat.Builder(this)
+    notification.put(notificationCount , new NotificationCompat.Builder(this)
         .setContentTitle(getResources().getString(R.string.zim_file_downloading) + " " + notificationTitle)
         .setProgress(100, 0, false)
         .setSmallIcon(R.drawable.kiwix_notification)
         .setColor(Color.BLACK)
         .setContentIntent(pendingIntent)
-        .setOngoing(true);
-
+        .setOngoing(true));
 
     downloadStatus.put(notificationCount, 0);
     String url = intent.getExtras().getString(DownloadIntent.DOWNLOAD_URL_PARAMETER);
@@ -108,6 +110,7 @@ public class DownloadService extends Service {
       pauseLock.notify();
     }
     notificationManager.cancel(notificationID);
+    updateForeground();
   }
 
   public void pauseDownload(int notificationID) {
@@ -131,13 +134,17 @@ public class DownloadService extends Service {
         .distinctUntilChanged()
         .subscribe(progress -> {
           if (progress == 100) {
-            notification.setOngoing(false);
-            notification.setContentTitle(notificationTitle + " " + getResources().getString(R.string.zim_file_downloaded));
+            notification.get(notificationID).setOngoing(false);
+            notification.get(notificationID).setContentTitle(notificationTitle + " " + getResources().getString(R.string.zim_file_downloaded));
             book.downloaded = true;
             bookDao.saveBook(book);
+            updateForeground();
+          } else if (progress == 0) {
+            // Tells android to not kill the service
+            startForeground(notificationCount, notification.get(notificationCount).build());
           }
-          notification.setProgress(100, progress, false);
-          notificationManager.notify(notificationID, notification.build());
+          notification.get(notificationID).setProgress(100, progress, false);
+          notificationManager.notify(notificationID, notification.get(notificationID).build());
           if (DownloadFragment.mDownloads != null && DownloadFragment.mDownloads.get(notificationID) != null) {
             handler.post(new Runnable() {
               @Override
@@ -148,9 +155,19 @@ public class DownloadService extends Service {
               }
             });
           }
-          stopForeground(true);
-          stopSelf();
         }, Throwable::printStackTrace);
+  }
+
+  private void updateForeground() {
+    // Allow notification to be dismissible while ensuring integrity of service if active downloads
+    stopForeground(true);
+    Iterator it = downloadStatus.entrySet().iterator();
+    while (it.hasNext()){
+      Map.Entry pair = (Map.Entry) it.next();
+      if ((int) pair.getValue() != 4 && (int) pair.getValue() != 2 ){
+        startForeground( (int) pair.getKey(), notification.get(pair.getKey()).build());
+      }
+    }
   }
 
   private Observable<Pair<String, Long>> getMetaLinkContentLength(String url) {

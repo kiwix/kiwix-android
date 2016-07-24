@@ -63,6 +63,8 @@ import android.view.animation.AnimationUtils;
 import android.webkit.JavascriptInterface;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -94,7 +96,9 @@ import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
 import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
 import org.kiwix.kiwixmobile.views.KiwixWebView;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -1700,6 +1704,10 @@ public class KiwixMobileActivity extends AppCompatActivity {
       mAdapter = adapter;
     }
 
+    @Override
+    public void onLoadResource(WebView view, String url) {
+      Log.d("kiwix", url);
+    }
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
