@@ -1705,10 +1705,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onLoadResource(WebView view, String url) {
-      Log.d("kiwix", url);
-    }
-    @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
       if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
