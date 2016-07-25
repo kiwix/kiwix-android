@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="menu_openfile">Avrir ina datoteca…</string>
+  <string name="menu_zim_manager">Get Content</string>
   <string name="menu_help">Agid</string>
   <string name="menu_home">Pagina da partenza</string>
   <string name="menu_forward">Enavant</string>
@@ -51,7 +51,7 @@
   <string name="pref_language_chooser">Choose a language</string>
   <string name="tts_lang_not_supported">The language of this page is not supported, or appropriate language data was not installed. The article may not be properly read.</string>
   <string name="no_reader_application_installed">Could not find an installed application for this type of file</string>
-  <string name="customapp_missing_content">Your application is corrupted.\nThis might happen when you remove files on the SD Card.\nYou need to uninstall then reinstall the App from the Play Store.</string>
+  <string name="custom_app_missing_content">Your application is corrupted.\nThis might happen when you remove files on the SD Card.\nYou need to uninstall then reinstall the App from the Play Store.</string>
   <string name="go_to_play_store">Go to Play Store</string>
   <string name="no_bookmarks">No Bookmarks</string>
   <string name="menu_bookmarks_list">Segnapaginas</string>
@@ -59,7 +59,7 @@
   <string name="request_storage">To access zim files we need access to your storage</string>
   <string name="clear_recent_history_dialog">Are you sure you want to delete your search history?</string>
   <string name="clear_recent_and_tabs_history_dialog">Are you sure you want to delete your search history and reset all active tabs?</string>
-  <string name="deleteRecentSearchItem">Delete this item?</string>
+  <string name="delete_recent_search_item">Delete this item?</string>
   <string name="pref_clear_all_history_title">Clear History</string>
   <string name="pref_clear_all_history_summary">Clear recent searches and tabs history</string>
   <string name="all_history_cleared_toast">All History Cleared</string>
@@ -71,7 +71,7 @@
   <string name="did_you_know">Did you know?</string>
   <string name="undo">Undo</string>
   <string name="tab_closed">Tab closed</string>
-  <string name="deleted_message">Deleted</string>
+  <string name="deleted_message">deleted</string>
   <string name="bookmarks_restored">Bookmarks restored</string>
   <string name="bookmark_added">Bookmark added</string>
   <string name="rate_dialog_title">Please Rate Us</string>
@@ -85,5 +85,31 @@
   <string name="pref_newtab_background_title">Open new tab in background</string>
   <string name="pref_newtab_background_summary">When opening a new tab it will open in background</string>
   <string name="pref_extras">Extras</string>
-  <string name="new_tab_snackbar">Link opened in new tab</string>
+  <string name="new_tab_snackbar">Article opened in new tab</string>
+  <string name="search_widget_text">Search Kiwix</string>
+  <string name="speech_prompt_text">Speak to search %s</string>
+  <string name="speech_not_supported">Sorry! Your device does not support speech input</string>
+  <string name="download_started_library">Download started...</string>
+  <string name="menu_library">Download ZIM files</string>
+  <string name="local_zims">Local</string>
+  <string name="remote_zims">Remote</string>
+  <string name="zim_manager">ZIM Management</string>
+  <string name="delete_specific_zim">Delete this ZIM?</string>
+  <string name="delete_specific_zim_toast">ZIM file deleted</string>
+  <string name="zim_file_downloading">Downloading</string>
+  <string name="zim_file_downloaded">Downloaded</string>
+  <string name="download_pause">pause</string>
+  <string name="download_play">play</string>
+  <string name="download_stop">stop</string>
+  <string name="download_close">close</string>
+  <string name="no_downloads_here">No Downloads Here</string>
+  <string name="no_files_here">No Files Here</string>
+  <string name="download_complete_snackbar">Download complete</string>
+  <string name="download_over_network">Are you sure you want to start the download without WiFi?</string>
+  <string name="download_no_space">Insufficient space to download this file</string>
+  <string name="space_available">Space Available:</string>
+  <string name="zim_simple">Simple</string>
+  <string name="zim_nopic">No Pictures</string>
+  <string name="open_partial_zim">This file could be incomplete. Do you wish to attempt to open it?</string>
+  <string name="no_network_connection">No network connection</string>
 </resources>
