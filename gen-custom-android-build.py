@@ -42,6 +42,8 @@ PY3 = sys.version_info.major >= 3
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+architectures = [];
+
 DEFAULT_JSDATA = {
     # mandatory fields
     # 'app_name': "Kiwix Custom App",
@@ -393,7 +395,7 @@ def step_update_android_manifest(jsdata, **options):
     shutil.move(
         os.path.join(ANDROID_PATH, 'src', 'org', 'kiwix', 'kiwixmobile'),
         os.path.join(ANDROID_PATH, 'src', *package_path))
-	
+    
     shutil.move(
         os.path.join(ANDROID_PATH, 'test', 'org', 'kiwix', 'kiwixmobile'),
         os.path.join(ANDROID_PATH, 'test', *package_path))
@@ -431,17 +433,24 @@ def step_compile_libkiwix(jsdata, **options):
     ''' launch the native libkiwix script without building an APK '''
 
     move_to_android_placeholder()
-
-    # compile libkiwix and all dependencies
-    syscall('./build-android-with-native.py '
-            '--toolchain '
-            '--lzma '
-            '--icu '
-            '--zim '
-            '--kiwix '
-            '--strip '
-            '--locales ')
-
+    
+    if not architectures:
+        # compile libkiwix and all dependencies
+        syscall('./build-android-with-native.py '
+                '--toolchain '
+                '--lzma '
+                '--icu '
+                '--zim '
+                '--kiwix '
+                '--strip '
+                '--locales ')
+    else:
+        command = './build-android-with-native.py --toolchain --lzma --icu --zim --kiwix --strip --locales '
+                
+        for arch in architectures:
+            command += "--on=" + arch
+            
+        syscall(command)
 
 def step_embed_zimfile(jsdata, **options):
     ''' prepare a content-libs.jar file with ZIM file for inclusion in APK '''
@@ -450,19 +459,17 @@ def step_embed_zimfile(jsdata, **options):
         return
 
     move_to_android_placeholder()
-
     # create content-libs.jar
     tmpd = tempfile.mkdtemp()
-    archs = os.listdir('libs')
-    for arch in archs:
+    for arch in architectures:
         os.makedirs(os.path.join(tmpd, 'lib', arch))
         # shutil.copy(os.path.join('libs', arch, 'libkiwix.so'),
         #             os.path.join(tmpd, 'lib', arch, 'libkiwix.so'))
     copy_to(jsdata.get('zim_file'),
-            os.path.join(tmpd, 'lib', archs[0], jsdata.get('zim_name')))
-    for arch in archs[1:]:
+            os.path.join(tmpd, 'lib', architectures[0], jsdata.get('zim_name')))
+    for arch in architectures[1:]:
         os.chdir(os.path.join(tmpd, 'lib', arch))
-        os.link('../{}/{}'.format(archs[0], jsdata.get('zim_name')),
+        os.link('../{}/{}'.format(architectures[0], jsdata.get('zim_name')),
                    jsdata.get('zim_name'))
     os.chdir(tmpd)
     syscall('zip -r -0 -y {} lib'
@@ -473,12 +480,11 @@ def step_build_apk(jsdata, **options):
     ''' build the actual APK '''
 
     move_to_android_placeholder()
-
+    
     # compile KiwixAndroid
     syscall('./build-android-with-native.py '
             '--apk '
             '--clean ')
-
 
 def step_move_apk_to_destination(jsdata, **options):
     ''' place and rename built APKs to main output directory '''
@@ -607,16 +613,24 @@ if __name__ == '__main__':
         jspath = sys.argv[1]
         args = sys.argv[2:]
 
-    if len(args) == 0:
+    full = True
+    for arg in args:
+        step_name = re.sub(r'^\-\-', '', arg)
+        if step_name in ARGS_MATRIX.keys():
+            full = False
+    if (len(args) == 0) or (full):
         options = OrderedDict([('do_{}'.format(step), True)
                                for step in ARGS_MATRIX.keys()])
-    else:
-        options = OrderedDict()
+    if (len(args) != 0):
         for arg in args:
             step_name = re.sub(r'^\-\-', '', arg)
             if step_name not in ARGS_MATRIX.keys():
-                logger.error("{} not a valid step. Exiting.".format(step_name))
-                usage(sys.argv[0], 1)
+                if step_name.startswith('on='):
+                    rarch = step_name.split('=', 1)[1]
+                    architectures.append(rarch)
+                else:
+                    logger.error("{} not a valid step. Exiting.".format(step_name))
+                    usage(sys.argv[0], 1)
             else:
                 options.update({'do_{}'.format(step_name): True})
 

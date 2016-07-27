@@ -21,6 +21,17 @@ from subprocess import call, check_output
 ALL_ARCHS = ['arm-linux-androideabi', 'mipsel-linux-android', 'x86', 'aarch64-linux-android']
 
 
+def syscall(args, shell=False, with_print=True):
+    ''' make a system call '''
+    args = args.split()
+    if with_print:
+        print(u"-----------\n" + u" ".join(args) + u"\n-----------")
+
+    if shell:
+        args = ' '.join(args)
+    call(args, shell=shell)
+
+
 def find_package():
     d = parse('AndroidManifest.xml')
     return [e.getAttribute('package').strip()
@@ -91,6 +102,9 @@ def init_with_args(args):
                 #doptions.pop(idx)
         # recreate options list from other items
         options = [v for v in doptions.values() if not v.startswith('--on=')]
+        # clean out current libs
+        os.chdir(curdir)
+        syscall('rm -rf libs/*', shell=True)
 
     if len(options):
         # we received options.
@@ -137,6 +151,9 @@ CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 # the parent directory of this file for relative referencing
 PARENT_PATH = os.path.dirname(CURRENT_PATH)
 
+# store where we are so we can go back
+curdir = os.getcwd()
+
 # different names of folder path for accessing files
 ARCHS_FULL_NAMES = {
     'arm-linux-androideabi': 'arm-linux-androideabi',
@@ -159,6 +176,7 @@ CREATE_TOOLCHAIN, COMPILE_LIBLZMA, COMPILE_LIBICU, COMPILE_LIBZIM, \
     COMPILE_LIBKIWIX, COMPILE_LIBXAPIAN, STRIP_LIBKIWIX, COMPILE_APK, \
     COMPILE_GLASSIFY, LOCALES_TXT, CLEAN, ARCHS = init_with_args(sys.argv)
 
+    
 # compiler version to use
 # list of available toolchains in <NDK_PATH>/toolchains
 # 4.4.3, 4.6, 4.7, clang3.1, clang3.2
@@ -244,18 +262,6 @@ def fail_on_missing(path):
               u"and run 'make' in 'src/dependencies'" % path)
         sys.exit(1)
 
-
-def syscall(args, shell=False, with_print=True):
-    ''' make a system call '''
-    args = args.split()
-    if with_print:
-        print(u"-----------\n" + u" ".join(args) + u"\n-----------")
-
-    if shell:
-        args = ' '.join(args)
-    call(args, shell=shell)
-
-
 def change_env(values):
     ''' update a set of environment variables '''
     for k, v in values.items():
@@ -271,9 +277,6 @@ def failed_on_step(error_msg):
 for path in REQUIRED_PATHS:
     fail_on_missing(path)
 
-# store where we are so we can go back
-    curdir = os.getcwd()
-
 # Prepare the libicu cross-compilation
 if COMPILE_LIBICU:
     if (not os.path.exists(ICU_TMP)):
@@ -287,12 +290,15 @@ if COMPILE_LIBICU:
             shell=True)
     syscall('make', shell=True)
     os.chdir(curdir)
-
+    
 for arch in ARCHS:
     # second name of the platform ; used as subfolder in platform/
     arch_full = ARCHS_FULL_NAMES.get(arch)
     arch_short = ARCHS_SHORT_NAMES.get(arch)
-
+    
+    if (not os.path.exists('libs/' + arch_short)):
+        syscall('mkdir libs/' + arch_short, shell=True)
+    
     # platform contains the toolchain
     platform = os.path.join(PLATFORM_PREFIX, arch)
 
@@ -652,7 +658,7 @@ for arch in ARCHS:
             os.remove(obj)
 
     # check that the step went well
-    if COMPILE_LIBKIWIX or STRIP_LIBKIWIX or COMPILE_APK:
+    if COMPILE_LIBKIWIX or STRIP_LIBKIWIX:
         if not os.path.exists(os.path.join('libs', arch_short, 'libkiwix.so')):
             failed_on_step('The libkiwix.so shared lib has not been created '
                            'and is not present.')
