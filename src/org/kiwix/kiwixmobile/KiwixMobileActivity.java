@@ -1084,10 +1084,10 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   public void toggleBookmark() {
     //Check maybe need refresh
-    String article = getCurrentWebView().getTitle();
+    String article = getCurrentWebView().getUrl();
     boolean isBookmark = false;
     if (article != null && !bookmarks.contains(article)) {
-      saveBookmark(article);
+      saveBookmark(article, getCurrentWebView().getTitle());
       isBookmark = true;
     } else if (article != null) {
       deleteBookmark(article);
@@ -1141,8 +1141,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
     bookmarks = bookmarksDao.getBookmarks();
   }
 
-  private void saveBookmark(String article) {
-    bookmarksDao.saveBookmark(article);
+  private void saveBookmark(String articleUrl, String articleTitle) {
+    bookmarksDao.saveBookmark(articleUrl, articleTitle);
     refreshBookmarks();
   }
 
@@ -1436,7 +1436,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
         !getCurrentWebView().getUrl().equals("file:///android_res/raw/help.html") &&
         ZimContentProvider.getId() != null) {
       menu.findItem(R.id.menu_bookmarks).setVisible(true);
-      if (bookmarks.contains(getCurrentWebView().getTitle())) {
+      if (bookmarks.contains(getCurrentWebView().getUrl())) {
         menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmark_active);
       } else {
         menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmark);

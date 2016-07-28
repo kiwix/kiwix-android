@@ -49,6 +49,7 @@ public class BookmarksActivity extends AppCompatActivity
 
   private SparseBooleanArray sparseBooleanArray;
   private ArrayList<String> bookmarks;
+  private ArrayList<String> bookmarkUrls;
   private ArrayList<String> tempContents;
   private ListView bookmarksList;
   private ArrayAdapter adapter;
@@ -70,7 +71,8 @@ public class BookmarksActivity extends AppCompatActivity
 
 
     bookmarksDao = new BookmarksDao(new KiwixDatabase(this));
-    bookmarks = bookmarksDao.getBookmarks();
+    bookmarks = bookmarksDao.getBookmarkTitles();
+    bookmarkUrls = bookmarksDao.getBookmarks();
 
     adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.bookmarks_row, R.id.bookmark_title, bookmarks);
     bookmarksList.setAdapter(adapter);
@@ -165,8 +167,9 @@ public class BookmarksActivity extends AppCompatActivity
     sparseBooleanArray = bookmarksList.getCheckedItemPositions();
     tempContents = new ArrayList<>(bookmarks);
     for (int i = sparseBooleanArray.size() - 1; i >= 0; i--) {
-      deleteBookmark(bookmarks.get(sparseBooleanArray.keyAt(i)));
+      deleteBookmark(bookmarkUrls.get(sparseBooleanArray.keyAt(i)));
       bookmarks.remove(sparseBooleanArray.keyAt(i));
+      bookmarkUrls.remove(sparseBooleanArray.keyAt(i));
     }
     adapter.notifyDataSetChanged();
     setNoBookmarksState();

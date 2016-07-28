@@ -10,6 +10,7 @@ import com.yahoo.squidb.annotations.TableModelSpec;
 public class BookmarksSpec {
 
   @ColumnSpec(constraints = "NOT NULL")
-  public String bookmarkStr;
+  public String bookmarkUrl;
+  public String bookmarkTitle;
 
 }

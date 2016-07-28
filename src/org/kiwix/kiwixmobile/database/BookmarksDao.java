@@ -26,12 +26,28 @@ public class BookmarksDao {
   public ArrayList<String> getBookmarks() {
     SquidCursor<Bookmarks> bookmarkCursor = mDb.query(
         Bookmarks.class,
-        Query.selectDistinct(Bookmarks.BOOKMARK_STR)
+        Query.selectDistinct(Bookmarks.BOOKMARK_URL)
             .orderBy(Bookmarks.ID.desc()));
     ArrayList<String> result = new ArrayList<>();
     try {
       while (bookmarkCursor.moveToNext()) {
-        result.add(bookmarkCursor.get(Bookmarks.BOOKMARK_STR));
+        result.add(bookmarkCursor.get(Bookmarks.BOOKMARK_URL));
+      }
+    } finally {
+      bookmarkCursor.close();
+    }
+    return result;
+  }
+
+  public ArrayList<String> getBookmarkTitles() {
+    SquidCursor<Bookmarks> bookmarkCursor = mDb.query(
+        Bookmarks.class,
+        Query.selectDistinct(Bookmarks.BOOKMARK_TITLE)
+            .orderBy(Bookmarks.ID.desc()));
+    ArrayList<String> result = new ArrayList<>();
+    try {
+      while (bookmarkCursor.moveToNext()) {
+        result.add(bookmarkCursor.get(Bookmarks.BOOKMARK_TITLE));
       }
     } finally {
       bookmarkCursor.close();
@@ -42,20 +58,20 @@ public class BookmarksDao {
   /**
    * Save {@code searchString} as the most recent search.
    */
-  public void saveBookmark(String favArticle) {
-    mDb.persist(new Bookmarks().setBookmarkStr(favArticle));
+  public void saveBookmark(String articleUrl, String articleTitle) {
+    mDb.persist(new Bookmarks().setBookmarkUrl(articleUrl).setBookmarkTitle(articleTitle));
   }
 
   /**
    * Delete all entries that exactly matches {@code searchString}
    */
   public void deleteBookmark(String favArticle) {
-    mDb.deleteWhere(Bookmarks.class, Bookmarks.BOOKMARK_STR.eq(favArticle));
+    mDb.deleteWhere(Bookmarks.class, Bookmarks.BOOKMARK_URL.eq(favArticle));
   }
 
   public void saveAll(ArrayList<String> articles){
     for (String article : articles) {
-      mDb.persist(new Bookmarks().setBookmarkStr(article));
+      mDb.persist(new Bookmarks().setBookmarkUrl(article));
     }
   }
 
