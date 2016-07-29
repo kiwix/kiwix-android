@@ -713,7 +713,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
         .setAction(ShortcutUtils.stringsGetter(R.string.undo, this), v -> {
 
           if (mWebViews.size() == 1 && prevSize == 1) {
-            openArticleFromBookmark(tempForUndo.getTitle());
+            openArticleFromBookmarkURL(tempForUndo.getUrl());
           } else {
             restoreTabAtIndex(tempForUndo.getUrl(), index);
             selectTab(index);
@@ -1151,9 +1151,14 @@ public class KiwixMobileActivity extends AppCompatActivity {
     refreshBookmarks();
   }
 
-  public boolean openArticleFromBookmark(String bookmarkTitle) {
+  public boolean openArticleFromBookmarkTitle(String bookmarkTitle) {
     //        Log.d(TAG_KIWIX, "openArticleFromBookmark: " + articleSearchtextView.getText());
     return openArticle(ZimContentProvider.getPageUrlFromTitle(bookmarkTitle));
+  }
+
+  public boolean openArticleFromBookmarkURL(String bookmarkURL) {
+    //        Log.d(TAG_KIWIX, "openArticleFromBookmark: " + articleSearchtextView.getText());
+    return openArticle(bookmarkURL);
   }
 
   private void contentsDrawerHint() {
@@ -1391,9 +1396,17 @@ public class KiwixMobileActivity extends AppCompatActivity {
           bookmarks = bookmarksDao.getBookmarks();
 
           if (itemClicked) {
-            String bookmarkChosen = data.getStringExtra("choseX");
-            newTab();
-            openArticleFromBookmark(bookmarkChosen);
+            String bookmarkChosen;
+            if (data.getStringExtra("choseXURL") != null) {
+              bookmarkChosen = data.getStringExtra("choseXURL");
+              newTab();
+              getCurrentWebView().loadUrl(bookmarkChosen);
+            } else {
+              newTab();
+              bookmarkChosen = data.getStringExtra("choseXTitle");
+              openArticleFromBookmarkTitle(bookmarkChosen);
+            }
+
           }
 
           refreshBookmarkSymbol(menu);

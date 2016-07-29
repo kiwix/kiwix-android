@@ -200,7 +200,11 @@ public class BookmarksActivity extends AppCompatActivity
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
     Intent intent = new Intent();
-    intent.putExtra("choseX", bookmarks.get(position));
+    if (!bookmarkUrls.get(position).equals("null")) {
+      intent.putExtra("choseXURL", bookmarkUrls.get(position));
+    } else {
+      intent.putExtra("choseXTitle", bookmarks.get(position));
+    }
     intent.putExtra("bookmarkClicked", true);
     setResult(RESULT_OK, intent);
     finish();

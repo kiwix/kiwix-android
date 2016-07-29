@@ -92,6 +92,23 @@ public class KiwixDatabase extends SquidDatabase {
       db.execSQL("DROP TABLE IF EXISTS Bookmarks");
       tryCreateTable(Bookmarks.TABLE);
       BookmarksDao bookmarksDao = new BookmarksDao(this);
+      if (ZimContentProvider.getId() != null) {
+        try {
+          InputStream stream = context.openFileInput(ZimContentProvider.getId() + ".txt");
+          String in;
+          if (stream != null) {
+            BufferedReader read = new BufferedReader(new InputStreamReader(stream));
+            while ((in = read.readLine()) != null) {
+              bookmarksDao.saveBookmark(null,in);
+            }
+            Log.d(KiwixMobileActivity.TAG_KIWIX, "Switched to bookmarkfile " + ZimContentProvider.getId());
+          }
+        } catch (FileNotFoundException e) {
+          Log.e(KiwixMobileActivity.TAG_KIWIX, "File not found: " + e.toString());
+        } catch (IOException e) {
+          Log.e(KiwixMobileActivity.TAG_KIWIX, "Can not read file: " + e.toString());
+        }
+      }
     }
     return true;
   }

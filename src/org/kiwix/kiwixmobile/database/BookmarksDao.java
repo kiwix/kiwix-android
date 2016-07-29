@@ -59,7 +59,11 @@ public class BookmarksDao {
    * Save {@code searchString} as the most recent search.
    */
   public void saveBookmark(String articleUrl, String articleTitle) {
-    mDb.persist(new Bookmarks().setBookmarkUrl(articleUrl).setBookmarkTitle(articleTitle));
+    if (articleUrl != null) {
+      mDb.persist(new Bookmarks().setBookmarkUrl(articleUrl).setBookmarkTitle(articleTitle));
+    } else {
+      mDb.persist(new Bookmarks().setBookmarkUrl("null").setBookmarkTitle(articleTitle));
+    }
   }
 
   /**
