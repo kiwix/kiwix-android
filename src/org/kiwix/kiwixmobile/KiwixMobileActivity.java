@@ -295,11 +295,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
     KIWIX_LOCAL_MARKET_URI = Uri.parse("market://details?id=" + getPackageName());
     KIWIX_BROWSER_MARKET_URI = Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName());
 
-    //Bookmarks
-    bookmarks = new ArrayList<>();
-    bookmarksDao = new BookmarksDao(new KiwixDatabase(this));
-    bookmarks = bookmarksDao.getBookmarks();
-
     requestClearHistoryAfterLoad = false;
     requestWebReloadOnFinished = 0;
     requestInitAllMenuItems = false;
@@ -458,6 +453,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     setUpExitFullscreenButton();
     loadPrefs();
     updateTitle(ZimContentProvider.getZimFileTitle());
+
     if (IS_WIDGET_STAR) {
       goToBookmarks();
     } else if (IS_WIDGET_SEARCH_INTENT) {
@@ -950,6 +946,11 @@ public class KiwixMobileActivity extends AppCompatActivity {
             requestInitAllMenuItems = true;
           }
 
+          //Bookmarks
+          bookmarks = new ArrayList<>();
+          bookmarksDao = new BookmarksDao(new KiwixDatabase(this));
+          bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId());
+
           openMainPage();
           refreshBookmarks();
           return true;
@@ -1138,16 +1139,16 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private void refreshBookmarks() {
     bookmarks.clear();
-    bookmarks = bookmarksDao.getBookmarks();
+    bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId());
   }
 
   private void saveBookmark(String articleUrl, String articleTitle) {
-    bookmarksDao.saveBookmark(articleUrl, articleTitle);
+    bookmarksDao.saveBookmark(articleUrl, articleTitle, ZimContentProvider.getId());
     refreshBookmarks();
   }
 
   private void deleteBookmark(String article) {
-    bookmarksDao.deleteBookmark(article);
+    bookmarksDao.deleteBookmark(article, ZimContentProvider.getId());
     refreshBookmarks();
   }
 
@@ -1393,7 +1394,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
       case BOOKMARK_CHOSEN_REQUEST:
         if (resultCode == RESULT_OK) {
           boolean itemClicked = data.getBooleanExtra("bookmarkClicked", false);
-          bookmarks = bookmarksDao.getBookmarks();
+          bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId());
 
           if (itemClicked) {
             String bookmarkChosen;

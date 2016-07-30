@@ -71,8 +71,8 @@ public class BookmarksActivity extends AppCompatActivity
 
 
     bookmarksDao = new BookmarksDao(new KiwixDatabase(this));
-    bookmarks = bookmarksDao.getBookmarkTitles();
-    bookmarkUrls = bookmarksDao.getBookmarks();
+    bookmarks = bookmarksDao.getBookmarkTitles(ZimContentProvider.getId());
+    bookmarkUrls = bookmarksDao.getBookmarks(ZimContentProvider.getId());
 
     adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.bookmarks_row, R.id.bookmark_title, bookmarks);
     bookmarksList.setAdapter(adapter);
@@ -155,13 +155,13 @@ public class BookmarksActivity extends AppCompatActivity
     bookmarkDeleteSnackbar.show();
   }
 
-  private void restoreBookmarks() {
+  /*private void restoreBookmarks() {
     bookmarksDao.resetBookmarksToPrevious(tempContents);
     bookmarks = bookmarksDao.getBookmarks();
     adapter.notifyDataSetChanged();
     setNoBookmarksState();
-//    refreshBookmarksList();
-  }
+    refreshBookmarksList();
+  }*/
 
   private void deleteSelectedItems() {
     sparseBooleanArray = bookmarksList.getCheckedItemPositions();
@@ -176,15 +176,15 @@ public class BookmarksActivity extends AppCompatActivity
   }
 
   private void deleteBookmark(String article) {
-    bookmarksDao.deleteBookmark(article);
+    bookmarksDao.deleteBookmark(article, ZimContentProvider.getId());
   }
 
-  private void refreshBookmarksList() {
+  /*private void refreshBookmarksList() {
     bookmarks.clear();
     bookmarks = bookmarksDao.getBookmarks();
     adapter.notifyDataSetChanged();
     setNoBookmarksState();
-  }
+  }*/
 
   private void setUpToolbar() {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

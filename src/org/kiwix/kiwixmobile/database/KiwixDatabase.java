@@ -91,22 +91,11 @@ public class KiwixDatabase extends SquidDatabase {
     if (newVersion >= 6 && oldVersion < 6) {
       db.execSQL("DROP TABLE IF EXISTS Bookmarks");
       tryCreateTable(Bookmarks.TABLE);
-      BookmarksDao bookmarksDao = new BookmarksDao(this);
-      if (ZimContentProvider.getId() != null) {
-        try {
-          InputStream stream = context.openFileInput(ZimContentProvider.getId() + ".txt");
-          String in;
-          if (stream != null) {
-            BufferedReader read = new BufferedReader(new InputStreamReader(stream));
-            while ((in = read.readLine()) != null) {
-              bookmarksDao.saveBookmark(null,in);
-            }
-            Log.d(KiwixMobileActivity.TAG_KIWIX, "Switched to bookmarkfile " + ZimContentProvider.getId());
-          }
-        } catch (FileNotFoundException e) {
-          Log.e(KiwixMobileActivity.TAG_KIWIX, "File not found: " + e.toString());
-        } catch (IOException e) {
-          Log.e(KiwixMobileActivity.TAG_KIWIX, "Can not read file: " + e.toString());
+      String[] ids = context.fileList();
+      for (String id : ids) {
+        if (id.length() == 40 && id.substring(id.length() - 4).equals(".txt")) {
+          migrateBookmarks(id.substring(0, id.length() - 4));
+          Log.d(KiwixMobileActivity.TAG_KIWIX, "migrated " + id);
         }
       }
     }
@@ -118,4 +107,25 @@ public class KiwixDatabase extends SquidDatabase {
     return VERSION;
   }
 
+  public void migrateBookmarks(String id) {
+    BookmarksDao bookmarksDao = new BookmarksDao(this);
+    try {
+      InputStream stream = context.openFileInput(id + ".txt");
+      String in;
+      if (stream != null) {
+        BufferedReader read = new BufferedReader(new InputStreamReader(stream));
+        while ((in = read.readLine()) != null) {
+          bookmarksDao.saveBookmark(null, in, id);
+        }
+        context.deleteFile(id + ".txt");
+        Log.d(KiwixMobileActivity.TAG_KIWIX, "Switched to bookmarkfile " + ZimContentProvider.getId());
+      }
+    } catch (FileNotFoundException e) {
+      Log.e(KiwixMobileActivity.TAG_KIWIX, "File not found: " + e.toString());
+    } catch (IOException e) {
+      Log.e(KiwixMobileActivity.TAG_KIWIX, "Can not read file: " + e.toString());
+    }
+  }
 }
+
+
