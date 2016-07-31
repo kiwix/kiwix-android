@@ -454,12 +454,15 @@ public class KiwixMobileActivity extends AppCompatActivity {
     loadPrefs();
     updateTitle(ZimContentProvider.getZimFileTitle());
 
-    if (IS_WIDGET_STAR) {
+
+    if (IS_WIDGET_STAR && ZimContentProvider.getId() != null) {
       goToBookmarks();
-    } else if (IS_WIDGET_SEARCH_INTENT) {
+    } else if (IS_WIDGET_SEARCH_INTENT && ZimContentProvider.getId() != null) {
       goToSearch(false);
-    } else if (IS_WIDGET_VOICE_SEARCH) {
+    } else if (IS_WIDGET_VOICE_SEARCH && ZimContentProvider.getId() != null) {
       goToSearch(true);
+    } else if (IS_WIDGET_STAR || IS_WIDGET_SEARCH_INTENT || IS_WIDGET_VOICE_SEARCH) {
+      manageZimFiles();
     }
 
     Intent i = getIntent();
@@ -1128,18 +1131,27 @@ public class KiwixMobileActivity extends AppCompatActivity {
   @Override
   protected void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
-    boolean IS_WIDGET_STAR = intent.getBooleanExtra("isWidgetStar", false);
     boolean IS_WIDGET_SEARCH_INTENT = intent.getBooleanExtra("isWidgetSearch", false);
-    if (IS_WIDGET_STAR) {
+    boolean IS_WIDGET_VOICE_SEARCH = intent.getBooleanExtra("isWidgetVoice", false);
+    boolean IS_WIDGET_STAR = intent.getBooleanExtra("isWidgetStar", false);
+
+    if (IS_WIDGET_STAR && ZimContentProvider.getId() != null) {
       goToBookmarks();
-    } else if (IS_WIDGET_SEARCH_INTENT) {
+    } else if (IS_WIDGET_SEARCH_INTENT && ZimContentProvider.getId() != null) {
       goToSearch(false);
+    } else if (IS_WIDGET_VOICE_SEARCH && ZimContentProvider.getId() != null) {
+      goToSearch(true);
+    } else if (IS_WIDGET_STAR || IS_WIDGET_SEARCH_INTENT || IS_WIDGET_VOICE_SEARCH) {
+      manageZimFiles();
     }
   }
 
   private void refreshBookmarks() {
-    bookmarks.clear();
-    bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId());
+    if (bookmarks != null) {
+      bookmarks.clear();
+    } if (bookmarksDao != null) {
+      bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId());
+    }
   }
 
   private void saveBookmark(String articleUrl, String articleTitle) {
