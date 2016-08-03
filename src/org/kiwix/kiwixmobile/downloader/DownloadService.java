@@ -81,6 +81,9 @@ public class DownloadService extends Service {
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
     DownloadService.notificationCount++;
+    if (intent == null) {
+      return START_NOT_STICKY;
+    }
     notificationTitle = intent.getExtras().getString(DownloadIntent.DOWNLOAD_ZIM_TITLE);
     LibraryNetworkEntity.Book book = (LibraryNetworkEntity.Book) intent.getSerializableExtra("Book");
     notifications.add(notificationTitle);
