@@ -271,7 +271,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     requestWindowFeature(Window.FEATURE_PROGRESS);
-
+    setTheme(R.style.AppTheme);
     super.onCreate(savedInstanceState);
     handleLocaleCheck();
     setContentView(R.layout.main);
