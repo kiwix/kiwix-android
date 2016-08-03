@@ -150,8 +150,7 @@ public class ZimFileSelectFragment extends Fragment
         != PackageManager.PERMISSION_GRANTED && Build.VERSION.SDK_INT > 18) {
       Toast.makeText(super.getActivity(), getResources().getString(R.string.request_storage), Toast.LENGTH_LONG)
           .show();
-        ActivityCompat.requestPermissions(super.getActivity(),
-            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+        requestPermissions( new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
             KiwixMobileActivity.REQUEST_STORAGE_PERMISSION);
 
     } else {
