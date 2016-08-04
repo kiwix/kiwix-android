@@ -6,6 +6,7 @@ NEW: Download manager
 NEW: Improved ZIM management
 NEW: Build against newer version of Android NDK/SDK
 NEW: Bookmarks for multiple articles with the same title can be created
+NEW: Splash Screen and improved Welcome Screen
 FIXED: Opening problem with ZIM filenames with special characters
 FIXED: Useless "w820dp" language
 FIXED: Failing he, id, yi locales

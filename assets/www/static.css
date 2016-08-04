@@ -12,7 +12,6 @@ body {
 	font-family: georgia,times new roman,serif;
 	color: #666666;
 	font-size: 90%;
-	background: none repeat scroll 0 0 #EEF8FB;
 }
 
 h1, h2 {
@@ -87,9 +86,10 @@ a.button:hover {
 }
 
 img {
-	width: 30%;
-	max-width: 100px;
-	float: right;
+	width: 80%;
+    display: block;
+    margin: auto;
+    padding: 0.4em;
 }
 
 div.alert {

@@ -56,6 +56,8 @@ public class ZimManageActivity extends AppCompatActivity {
 
   public boolean downloading = false;
 
+  public static final String TAB_EXTRA = "TAB";
+
   private Menu mMenu;
 
 
@@ -76,6 +78,9 @@ public class ZimManageActivity extends AppCompatActivity {
 
     TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
     tabLayout.setupWithViewPager(mViewPager);
+
+    getIntent().getIntExtra(TAB_EXTRA,0);
+    mViewPager.setCurrentItem(getIntent().getIntExtra(TAB_EXTRA,0));
 
   }
 

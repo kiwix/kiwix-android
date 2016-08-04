@@ -80,6 +80,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.database.BookmarksDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
@@ -453,7 +454,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
     setUpExitFullscreenButton();
     loadPrefs();
     updateTitle(ZimContentProvider.getZimFileTitle());
-
 
     if (IS_WIDGET_STAR && ZimContentProvider.getId() != null) {
       goToBookmarks();
@@ -920,7 +920,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
       // Load from resource. Use with base url as else no images can be embedded.
       // Note that this leads inclusion of welcome page in browser history
       // This is not perfect, but good enough. (and would be significant effort to remove file)
-      getCurrentWebView().loadUrl("file:///android_res/raw/help.html");
+      newTab();
+      getCurrentWebView().loadUrl("file:///android_res/raw/welcome.html");
     }
   }
 
@@ -1540,6 +1541,22 @@ public class KiwixMobileActivity extends AppCompatActivity {
     startActivityForResult(target, REQUEST_FILE_SELECT);
   }
 
+  public void downloadZimFiles() {
+    refreshBookmarks();
+    final Intent target = new Intent(this, ZimManageActivity.class);
+    target.setAction(Intent.ACTION_GET_CONTENT);
+    target.putExtra(ZimManageActivity.TAB_EXTRA,1);
+    // The MIME data type filter
+    target.setType("//");
+    // Only return URIs that can be opened with ContentResolver
+    target.addCategory(Intent.CATEGORY_OPENABLE);
+    // Force use of our file selection component.
+    // (Note may make sense to just define a custom intent instead)
+
+    startActivityForResult(target, REQUEST_FILE_SELECT);
+  }
+
+
   public void selectSettings() {
     final String zimFile = ZimContentProvider.getZimFile();
     Intent i = new Intent(this, KiwixSettingsActivity.class);
@@ -1761,9 +1778,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
       } else if (url.startsWith(ZimContentProvider.UI_URI.toString())) {
         // To handle links which access user interface (i.p. used in help page)
         if (url.equals(ZimContentProvider.UI_URI.toString() + "selectzimfile")) {
-          manageZimFiles();
-        } else if (url.equals(ZimContentProvider.UI_URI.toString() + "gotohelp")) {
-          showHelp();
+          downloadZimFiles();
         } else {
           Log.e(TAG_KIWIX, "UI Url " + url + " not supported.");
         }
