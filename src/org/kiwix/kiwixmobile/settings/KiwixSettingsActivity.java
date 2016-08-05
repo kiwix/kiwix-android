@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -32,6 +33,8 @@ import android.preference.PreferenceScreen;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 
@@ -59,6 +62,8 @@ public class KiwixSettingsActivity extends AppCompatActivity {
   public static final String PREF_ZOOM = "pref_zoom_slider";
 
   public static final String PREF_CLEAR_ALL_HISTORY = "pref_clear_all_history";
+
+  public static final String PREF_CREDITS = "pref_credits";
 
   public static String zimFile;
 
@@ -122,6 +127,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       setUpSettings();
       new LanguageUtils(getActivity()).changeFont(getActivity().getLayoutInflater());
       recentSearchDao = new RecentSearchDao(new KiwixDatabase(getActivity()));
+
     }
 
     private void deleteSearchHistoryFromDb() {
@@ -237,12 +243,22 @@ public class KiwixSettingsActivity extends AppCompatActivity {
           .show();
     }
 
+    public void openCredits(){
+      WebView view = (WebView) LayoutInflater.from(getActivity()).inflate(R.layout.credits_webview, null);
+      view.loadUrl("file:///android_res/raw/credits.html");
+      AlertDialog mAlertDialog = new AlertDialog.Builder(getActivity(), R.style.Theme_AppCompat_Light_Dialog_Alert)
+          .setView(view)
+          .setPositiveButton(android.R.string.ok, null)
+          .show();
+    }
+
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
                                          Preference preference) {
       if (preference.getKey().equalsIgnoreCase(PREF_CLEAR_ALL_HISTORY))
         clearAllHistoryDialog();
-
+      if (preference.getKey().equalsIgnoreCase(PREF_CREDITS))
+        openCredits();
       return true;
     }
   }
