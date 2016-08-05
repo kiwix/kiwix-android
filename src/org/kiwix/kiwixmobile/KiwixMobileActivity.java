@@ -1344,6 +1344,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
       case BOOKMARK_CHOSEN_REQUEST:
         if (resultCode == RESULT_OK) {
           boolean itemClicked = data.getBooleanExtra("bookmarkClicked", false);
+          if (ZimContentProvider.getId() == null)
+            return;
           bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId());
 
           if (itemClicked) {
