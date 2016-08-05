@@ -854,75 +854,12 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   public void showHelp() {
-    if (Constants.IS_CUSTOM_APP) {
-      // On custom app, inject a Javascript object which contains some branding data
-      // so we just have to maintain a generic help page for them.
-      class JsObject {
 
-        @JavascriptInterface
-        public boolean isCustomApp() {
-          return Constants.IS_CUSTOM_APP;
-        }
-
-        @JavascriptInterface
-        public String appId() {
-          return Constants.CUSTOM_APP_ID;
-        }
-
-        @JavascriptInterface
-        public boolean hasEmbedZim() {
-          return Constants.CUSTOM_APP_HAS_EMBEDDED_ZIM;
-        }
-
-        @JavascriptInterface
-        public String zimFileName() {
-          return Constants.CUSTOM_APP_ZIM_FILE_NAME;
-        }
-
-        @JavascriptInterface
-        public long zimFileSize() {
-          return Constants.CUSTOM_APP_ZIM_FILE_SIZE;
-        }
-
-        @JavascriptInterface
-        public String versionName() {
-          return Constants.CUSTOM_APP_VERSION_NAME;
-        }
-
-        @JavascriptInterface
-        public int versionCode() {
-          return Constants.CUSTOM_APP_VERSION_CODE;
-        }
-
-        @JavascriptInterface
-        public String website() {
-          return Constants.CUSTOM_APP_WEBSITE;
-        }
-
-        @JavascriptInterface
-        public String email() {
-          return Constants.CUSTOM_APP_EMAIL;
-        }
-
-        @JavascriptInterface
-        public String supportEmail() {
-          return Constants.CUSTOM_APP_SUPPORT_EMAIL;
-        }
-
-        @JavascriptInterface
-        public String enforcedLang() {
-          return Constants.CUSTOM_APP_ENFORCED_LANG;
-        }
-      }
-      getCurrentWebView().addJavascriptInterface(new JsObject(), "branding");
-      getCurrentWebView().loadUrl("file:///android_res/raw/help_custom.html");
-    } else {
       // Load from resource. Use with base url as else no images can be embedded.
       // Note that this leads inclusion of welcome page in browser history
       // This is not perfect, but good enough. (and would be significant effort to remove file)
       newTab();
       getCurrentWebView().loadUrl("file:///android_res/raw/welcome.html");
-    }
   }
 
   public boolean openZimFile(File file, boolean clearHistory) {
@@ -1438,6 +1375,10 @@ public class KiwixMobileActivity extends AppCompatActivity {
     MenuInflater inflater = getMenuInflater();
     inflater.inflate(R.menu.menu_main, menu);
     this.menu = menu;
+
+    if (Constants.IS_CUSTOM_APP) {
+      menu.findItem(R.id.menu_help).setVisible(false);
+    }
 
     if (requestInitAllMenuItems) {
       initAllMenuItems();
