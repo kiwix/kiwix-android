@@ -241,7 +241,13 @@ def step_prepare_launcher_icons(jsdata, **options):
                         outf=os.path.join(ANDROID_PATH, 'res',
                                           'mipmap-{}'.format(density),
                                           'kiwix_icon.png')))
-
+    
+        syscall("convert {inf} -resize {p}x{p} {outf}"
+                .format(inf=os.path.join(ANDROID_PATH, 'ic_launcher_512.png'),
+                        p=256,
+                        outf=os.path.join(ANDROID_PATH, 'res',
+                                          'drawable',
+                                          'splash_screen.png')))
 
 def step_update_branding_xml(jsdata, **options):
     ''' change app_name value in branding.xml '''
