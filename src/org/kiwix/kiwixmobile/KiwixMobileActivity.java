@@ -1363,8 +1363,9 @@ public class KiwixMobileActivity extends AppCompatActivity {
             }
 
           }
-
-          refreshBookmarkSymbol(menu);
+          if (menu != null) {
+            refreshBookmarkSymbol(menu);
+          }
         }
         break;
       default:
