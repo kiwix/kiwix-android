@@ -1403,6 +1403,10 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   public void refreshBookmarkSymbol(Menu menu) { // Checks if current webview is in bookmarks array
+    if (bookmarks == null){
+      bookmarksDao = new BookmarksDao(new KiwixDatabase(this));
+      bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId());
+    }
     if (menu.findItem(R.id.menu_bookmarks) != null &&
         getCurrentWebView().getUrl() != null &&
         !getCurrentWebView().getUrl().equals("file:///android_res/raw/help.html") &&
