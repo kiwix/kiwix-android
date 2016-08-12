@@ -17,8 +17,11 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.ZimContentProvider;
+import org.kiwix.kiwixmobile.ZimFileSelectFragment;
 import org.kiwix.kiwixmobile.ZimManageActivity;
 
 import java.util.Arrays;
@@ -28,6 +31,7 @@ import java.util.LinkedHashMap;
 public class DownloadFragment extends Fragment {
 
   public static LinkedHashMap<Integer, String> mDownloads= new LinkedHashMap<Integer, String>();
+  public static LinkedHashMap<Integer, String> mDownloadFiles= new LinkedHashMap<Integer, String>();
   public RelativeLayout relLayout;
   public static ListView listView;
   public static DownloadAdapter downloadAdapter;
@@ -97,23 +101,22 @@ public class DownloadFragment extends Fragment {
       ViewGroup viewGroup = (ViewGroup) listView.getChildAt(position - listView.getFirstVisiblePosition());
       ProgressBar downloadProgress = (ProgressBar) viewGroup.findViewById(R.id.downloadProgress);
       downloadProgress.setProgress(progress);
-      if (progress ==  100){
+      if (progress ==  100) {
         ImageView pause = (ImageView) viewGroup.findViewById(R.id.pause);
         pause.setEnabled(false);
-        mDownloads.remove(mKeys[position]);
-        downloadAdapter.notifyDataSetChanged();
-        updateNoDownloads();
-
-
         Snackbar completeSnack = Snackbar.make(mainLayout, getResources().getString(R.string.download_complete_snackbar), Snackbar.LENGTH_LONG);
+        String fileName = mDownloadFiles.get(mKeys[position]);
         completeSnack.setAction(getResources().getString(R.string.open), new View.OnClickListener() {
           @Override
           public void onClick(View v) {
-            zimManageActivity.displayLocalTab();
+            ZimFileSelectFragment.finishResult(fileName);
           }
-        })
-            .setActionTextColor(getResources().getColor(R.color.white))
-            .show();
+        }).setActionTextColor(getResources().getColor(R.color.white)).show();
+
+        mDownloads.remove(mKeys[position]);
+        mDownloadFiles.remove(mKeys[position]);
+        downloadAdapter.notifyDataSetChanged();
+        updateNoDownloads();
       }
     }
 
@@ -157,6 +160,7 @@ public class DownloadFragment extends Fragment {
         public void onClick(View v) {
             LibraryFragment.mService.stopDownload(mKeys[position]);
             mDownloads.remove(mKeys[position]);
+            mDownloadFiles.remove(mKeys[position]);
             downloadAdapter.notifyDataSetChanged();
             updateNoDownloads();
         }
@@ -176,8 +180,9 @@ public class DownloadFragment extends Fragment {
     }
 
   }
-  public static void addDownload(int position, String title){
+  public static void addDownload(int position, String title, String fileName){
     mDownloads.put(position, title);
+    mDownloadFiles.put(position, fileName);
     downloadAdapter.notifyDataSetChanged();
     updateNoDownloads();
   }

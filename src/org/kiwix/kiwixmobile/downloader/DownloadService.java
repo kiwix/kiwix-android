@@ -44,6 +44,7 @@ import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
+import org.kiwix.kiwixmobile.utils.StorageUtils;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
 import rx.Observable;
@@ -90,7 +91,8 @@ public class DownloadService extends Service {
     final Intent target = new Intent(this, KiwixMobileActivity.class);
     target.putExtra("library", true);
     bookDao = new BookDao(new KiwixDatabase(this));
-    PendingIntent pendingIntent = PendingIntent.getActivity(getBaseContext(), 0,
+    PendingIntent pendingIntent = PendingIntent.getActivity
+        (getBaseContext(), 0,
         target, PendingIntent.FLAG_CANCEL_CURRENT);
 
     notification.put(notificationCount , new NotificationCompat.Builder(this)
@@ -128,7 +130,7 @@ public class DownloadService extends Service {
   }
 
   private void downloadBook(String url, int notificationID, LibraryNetworkEntity.Book book) {
-    DownloadFragment.addDownload(notificationID, notificationTitle);
+    DownloadFragment.addDownload(notificationID, notificationTitle, KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
     kiwixService.getMetaLinks(url)
         .subscribeOn(AndroidSchedulers.mainThread())
         .flatMap(metaLink -> getMetaLinkContentLength(metaLink.getRelevantUrl().getValue()))

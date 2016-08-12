@@ -265,17 +265,17 @@ public class ZimFileSelectFragment extends Fragment
   }
 
 
-  private void finishResult(String path) {
-
+  public static void finishResult(String path) {
+    ZimManageActivity zimManageActivity = (ZimManageActivity) context;
     if (path != null) {
       File file = new File(path);
       Uri uri = Uri.fromFile(file);
       Log.i(TAG_KIWIX, "Opening " + uri);
-      super.getActivity().setResult(super.getActivity().RESULT_OK, new Intent().setData(uri));
-      super.getActivity().finish();
+      zimManageActivity.setResult(zimManageActivity.RESULT_OK, new Intent().setData(uri));
+      zimManageActivity.finish();
     } else {
-      super.getActivity().setResult(super.getActivity().RESULT_CANCELED);
-      super.getActivity().finish();
+      zimManageActivity.setResult(zimManageActivity.RESULT_CANCELED);
+      zimManageActivity.finish();
     }
   }
 

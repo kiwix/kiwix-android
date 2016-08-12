@@ -98,6 +98,7 @@ public class StorageUtils {
     if ("".equals(filename.trim())) {
       filename = String.valueOf(UUID.randomUUID());
     }
+    filename = filename.replace(".meta4","");
 
     return filename;
   }
