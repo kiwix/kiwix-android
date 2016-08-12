@@ -84,6 +84,7 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.database.BookmarksDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
+import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.settings.Constants;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.HTMLUtils;
@@ -461,12 +462,29 @@ public class KiwixMobileActivity extends AppCompatActivity {
     } else if (IS_WIDGET_VOICE_SEARCH && ZimContentProvider.getId() != null) {
       goToSearch(true);
     } else if (IS_WIDGET_STAR || IS_WIDGET_SEARCH_INTENT || IS_WIDGET_VOICE_SEARCH) {
-      manageZimFiles();
+      manageZimFiles(0);
     }
 
     Intent i = getIntent();
     if (i.getBooleanExtra("library",false)){
-      manageZimFiles();
+      manageZimFiles(2);
+    }
+    if (i.hasExtra("zimFile")){
+      File file = new File(i.getStringExtra("zimFile"));
+      Uri uri = Uri.fromFile(file);
+      if (file == null) {
+        return;
+      }
+
+      new Handler(Looper.getMainLooper()).post(new Runnable() {
+        @Override
+        public void run() {
+          finish();
+          Intent newZimFile = new Intent(KiwixMobileActivity.this, KiwixMobileActivity.class);
+          newZimFile.setData(uri);
+          startActivity(newZimFile);
+        }
+      });
     }
   }
 
@@ -778,7 +796,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
         break;
 
       case R.id.menu_openfile:
-        manageZimFiles();
+        manageZimFiles(0);
         break;
 
       case R.id.menu_settings:
@@ -1079,7 +1097,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     } else if (IS_WIDGET_VOICE_SEARCH && ZimContentProvider.getId() != null) {
       goToSearch(true);
     } else if (IS_WIDGET_STAR || IS_WIDGET_SEARCH_INTENT || IS_WIDGET_VOICE_SEARCH) {
-      manageZimFiles();
+      manageZimFiles(0);
     }
   }
 
@@ -1477,12 +1495,13 @@ public class KiwixMobileActivity extends AppCompatActivity {
     }
   }
 
-  public void manageZimFiles() {
+  public void manageZimFiles(int tab) {
     refreshBookmarks();
     final Intent target = new Intent(this, ZimManageActivity.class);
     target.setAction(Intent.ACTION_GET_CONTENT);
     // The MIME data type filter
     target.setType("//");
+    target.putExtra(ZimManageActivity.TAB_EXTRA,tab);
     // Only return URIs that can be opened with ContentResolver
     target.addCategory(Intent.CATEGORY_OPENABLE);
     // Force use of our file selection component.
@@ -1491,20 +1510,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
     startActivityForResult(target, REQUEST_FILE_SELECT);
   }
 
-  public void downloadZimFiles() {
-    refreshBookmarks();
-    final Intent target = new Intent(this, ZimManageActivity.class);
-    target.setAction(Intent.ACTION_GET_CONTENT);
-    target.putExtra(ZimManageActivity.TAB_EXTRA,1);
-    // The MIME data type filter
-    target.setType("//");
-    // Only return URIs that can be opened with ContentResolver
-    target.addCategory(Intent.CATEGORY_OPENABLE);
-    // Force use of our file selection component.
-    // (Note may make sense to just define a custom intent instead)
-
-    startActivityForResult(target, REQUEST_FILE_SELECT);
-  }
 
 
   public void selectSettings() {
@@ -1728,7 +1733,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
       } else if (url.startsWith(ZimContentProvider.UI_URI.toString())) {
         // To handle links which access user interface (i.p. used in help page)
         if (url.equals(ZimContentProvider.UI_URI.toString() + "selectzimfile")) {
-          downloadZimFiles();
+          manageZimFiles(1);
         } else {
           Log.e(TAG_KIWIX, "UI Url " + url + " not supported.");
         }

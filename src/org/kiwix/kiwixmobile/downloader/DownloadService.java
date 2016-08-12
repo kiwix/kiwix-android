@@ -118,6 +118,8 @@ public class DownloadService extends Service {
     updateForeground();
   }
 
+
+
   public void pauseDownload(int notificationID) {
     downloadStatus.put(notificationID, 1);
   }
@@ -141,7 +143,13 @@ public class DownloadService extends Service {
           if (progress == 100) {
             notification.get(notificationID).setOngoing(false);
             notification.get(notificationID).setContentTitle(notificationTitle + " " + getResources().getString(R.string.zim_file_downloaded));
+            final Intent target = new Intent(this, KiwixMobileActivity.class);
+            target.putExtra("zimFile", KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
+            PendingIntent pendingIntent = PendingIntent.getActivity
+                (getBaseContext(), 0,
+                    target, PendingIntent.FLAG_CANCEL_CURRENT);
             book.downloaded = true;
+            notification.get(notificationID).setContentIntent(pendingIntent);
             bookDao.saveBook(book);
             updateForeground();
           } else if (progress == 0) {
