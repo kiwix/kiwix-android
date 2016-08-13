@@ -85,6 +85,8 @@ public class LibraryNetworkEntity {
 
     public boolean downloaded =  false;
 
+    public int searchMatches = 0;
+
     public String getId() {
       return this.id;
     }

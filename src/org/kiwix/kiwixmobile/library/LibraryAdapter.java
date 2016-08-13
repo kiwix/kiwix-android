@@ -35,12 +35,16 @@ import com.google.common.collect.ImmutableList;
 import org.kiwix.kiwixmobile.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.ZimManageActivity;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -52,15 +56,16 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
 
 
   public static Map<String, Locale> mLocaleMap;
-  final private ImmutableList<Book> allBooks;
+  private ImmutableList<Book> allBooks;
   private BookFilter filter;
   private static Context mContext;
 
-  public LibraryAdapter(Context context, List<Book> books) {
+  public LibraryAdapter(Context context, ArrayList<Book> books) {
     super(context, 0, books);
     allBooks = ImmutableList.copyOf(books);
     initLanguageMap();
     mContext = context;
+    getFilter().filter("");
   }
 
   @Override public View getView(int position, View convertView, ViewGroup parent) {
@@ -155,7 +160,18 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
     protected FilterResults performFiltering(CharSequence s) {
       ArrayList<Book> filteredBooks = new ArrayList<Book>();
       if (s.length() == 0) {
-        filteredBooks.addAll(allBooks);
+        LinkedList<Book> booksCopy = new LinkedList<LibraryNetworkEntity.Book>(allBooks);
+        LinkedList<Book> booksAdditions = new LinkedList<LibraryNetworkEntity.Book>();
+        for (Book b : allBooks){
+          if (b.getLanguage() != null && b.getLanguage().equals(mContext.getResources().getConfiguration().locale.getISO3Language())){
+            booksCopy.remove(b);
+            booksAdditions.addFirst(b);
+          }
+        }
+        for (Book b : booksAdditions){
+          booksCopy.addFirst(b);
+        }
+        filteredBooks.addAll(booksCopy);
       } else {
         for (Book b : allBooks) {
           StringBuffer text = new StringBuffer();
@@ -164,10 +180,19 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
             text.append(mLocaleMap.get(b.getLanguage()).getDisplayLanguage());
             text.append("|");
           }
-          if (text.toString().toLowerCase().contains(s.toString().toLowerCase())) {
-            filteredBooks.add(b);
+          String[] words = s.toString().toLowerCase().split("\\s+");
+          for (String word : words){
+            if (text.toString().toLowerCase().contains(word)){
+              if (filteredBooks.size() == 0 || filteredBooks.get(filteredBooks.size() - 1).id != b.id) {
+                b.searchMatches++;
+                filteredBooks.add(b);
+              } else {
+                filteredBooks.get(filteredBooks.size() - 1).searchMatches++;
+              }
+            }
           }
         }
+        Collections.sort(filteredBooks, new BookMatchComparator());
       }
       FilterResults results = new FilterResults();
       results.values = filteredBooks;
@@ -277,5 +302,10 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
     TextView fileName;
 
     ImageView favicon;
+  }
+}
+class BookMatchComparator implements Comparator<Book> {
+  public int compare(Book book1, Book book2) {
+    return book2.searchMatches - book1.searchMatches;
   }
 }

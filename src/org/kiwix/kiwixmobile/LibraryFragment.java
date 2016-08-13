@@ -116,20 +116,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
             .subscribe(library -> {
               books = library.getBooks();
               if (active) {
-                LinkedList<LibraryNetworkEntity.Book> booksCopy = new LinkedList<LibraryNetworkEntity.Book>(books);
-                LinkedList<LibraryNetworkEntity.Book> booksAdditions = new LinkedList<LibraryNetworkEntity.Book>();
-                for (LibraryNetworkEntity.Book book : books) {
-
-                  if (book.getLanguage() != null && book.getLanguage().equals(getActivity().getResources().getConfiguration().locale.getISO3Language())) {
-                    booksCopy.remove(book);
-                    booksAdditions.addFirst(book);
-                  }
-                }
-                for (LibraryNetworkEntity.Book book : booksAdditions) {
-                  booksCopy.addFirst(book);
-                }
-                books = booksCopy;
-                libraryAdapter = new LibraryAdapter(super.getActivity(), books);
+                libraryAdapter = new LibraryAdapter(super.getActivity(), new ArrayList<LibraryNetworkEntity.Book>(books));
                 libraryList.setAdapter(libraryAdapter);
                 progressBarLayout.setVisibility(View.GONE);
               }
