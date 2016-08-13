@@ -118,6 +118,9 @@ public class DownloadService extends Service {
     updateForeground();
   }
 
+  public void cancelNotification(int notificationID) {
+    notificationManager.cancel(notificationID);
+  }
 
 
   public void pauseDownload(int notificationID) {
@@ -145,6 +148,7 @@ public class DownloadService extends Service {
             notification.get(notificationID).setContentTitle(notificationTitle + " " + getResources().getString(R.string.zim_file_downloaded));
             final Intent target = new Intent(this, KiwixMobileActivity.class);
             target.putExtra("zimFile", KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
+            target.putExtra("notificationID", notificationID);
             PendingIntent pendingIntent = PendingIntent.getActivity
                 (getBaseContext(), 0,
                     target, PendingIntent.FLAG_CANCEL_CURRENT);

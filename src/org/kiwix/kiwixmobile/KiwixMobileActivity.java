@@ -471,6 +471,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     }
     if (i.hasExtra("zimFile")){
       File file = new File(i.getStringExtra("zimFile"));
+      LibraryFragment.mService.cancelNotification(i.getIntExtra("notificationID",0));
       Uri uri = Uri.fromFile(file);
       if (file == null) {
         return;
