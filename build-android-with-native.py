@@ -48,7 +48,6 @@ USAGE = '''Usage:  {arg0} [--option]
     --icu           Compile libicu
     --zim           Compile libzim
     --xapian        Compile libxapian
-    --glassify      Compile glassify binary
     --kiwix         Compile libkiwix
     --strip         Strip libkiwix.so
     --locales       Create the locales.txt file
@@ -72,7 +71,6 @@ def init_with_args(args):
     create_toolchain = compile_liblzma = compile_libicu = \
         compile_libzim = compile_libkiwix = compile_libxapian = strip_libkiwix = \
         compile_apk = locales_txt = clean = True
-    compile_glassify = False # dont want to compile this everytime
     archs = ALL_ARCHS
 
     options = [a.lower() for a in args[1:]]
@@ -111,7 +109,7 @@ def init_with_args(args):
         # consider we only want the specified steps
         create_toolchain = compile_liblzma = compile_libicu = compile_libzim = \
             compile_libkiwix = compile_libxapian = strip_libkiwix = \
-            compile_apk = locales_txt = clean = compile_glassify = False
+            compile_apk = locales_txt = clean = False
 
         for option in options:
             if 'toolchain' in option:
@@ -128,8 +126,6 @@ def init_with_args(args):
                 compile_libxapian = True
             if 'strip' in option:
                 strip_libkiwix = True
-            if 'glassify' in option:
-                compile_glassify = True
             if 'apk' in option:
                 compile_apk = True
             if 'locales' in option:
@@ -138,7 +134,7 @@ def init_with_args(args):
                 clean = True
 
     return (create_toolchain, compile_liblzma, compile_libicu, compile_libzim,
-            compile_libkiwix, compile_libxapian, strip_libkiwix, compile_apk, compile_glassify, locales_txt,
+            compile_libkiwix, compile_libxapian, strip_libkiwix, compile_apk, locales_txt,
             clean, archs)
 
 # store the OS's environment PATH as we'll mess with it
@@ -174,7 +170,7 @@ SYSTEMS = {'Linux': 'linux', 'Darwin': 'mac'}
 # find out what to execute based on command line arguments
 CREATE_TOOLCHAIN, COMPILE_LIBLZMA, COMPILE_LIBICU, COMPILE_LIBZIM, \
     COMPILE_LIBKIWIX, COMPILE_LIBXAPIAN, STRIP_LIBKIWIX, COMPILE_APK, \
-    COMPILE_GLASSIFY, LOCALES_TXT, CLEAN, ARCHS = init_with_args(sys.argv)
+    LOCALES_TXT, CLEAN, ARCHS = init_with_args(sys.argv)
 
     
 # compiler version to use
@@ -220,7 +216,7 @@ LIBICU_INCLUDES = [os.path.join(LIBICU_SRC, 'i18n'),
 
 # root folder for libzim
 LIBZIM_SRC = os.path.join(os.path.dirname(CURRENT_PATH),
-                          'src', 'dependencies', 'zimlib-1.2')
+                          'src', 'dependencies', 'zimlib-1.3')
 
 # headers for libzim
 LIBZIM_INCLUDES = [os.path.join(LIBZIM_SRC, 'include')]
@@ -426,19 +422,11 @@ for arch in ARCHS:
 
     # compile xapian
     if COMPILE_LIBXAPIAN:
+        
         # fetch xapian, e2fsprogs, zlib
         os.chdir(os.path.join(curdir, '../src', 'dependencies'))
         if not os.path.exists("e2fsprogs-1.42"):
             syscall('make e2fsprogs-1.42')
-        # TODO: this needs to be handle uniquely in src/dependencies (at the time xapian 1.3 is stable)
-        if not os.path.exists("xapian-core-1.3.4"):
-            print("Fetching recent xapian...")
-            urllib.urlretrieve('http://download.kiwix.org/dev/xapian-core-1.3.4.tar.gz', 'xapian-core-1.3.4.tar.xz') # for glass support
-            change_env(ORIGINAL_ENVIRON)
-            syscall('tar xvf xapian-core-1.3.4.tar.xz')
-            change_env(new_environ)
-            change_env(OPTIMIZATION_ENV)
-
         if not os.path.exists("zlib-1.2.8"):
             syscall('make zlib-1.2.8')
         os.chdir('zlib-1.2.8')
@@ -449,10 +437,8 @@ for arch in ARCHS:
         shutil.copy('libz.a', os.path.join(platform, 'lib', 'gcc', arch_full, COMPILER_VERSION, 'libz.a'))
         os.chdir('../e2fsprogs-1.42')
         print("Fetching latest compile.sub...")
-        shutil.copy(os.path.join("..", "xapian-core-1.3.4", "config.guess"), os.path.join("config", "config.guess"))
-        shutil.copy(os.path.join("..", "xapian-core-1.3.4", "config.sub"), os.path.join("config", "config.sub"))
-#        urllib.urlretrieve('http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD', 'config/config.guess')
-#        urllib.urlretrieve('http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD', 'config/config.sub')
+        shutil.copy(os.path.join("..", "xapian-core-1.4.0", "config.guess"), os.path.join("config", "config.guess"))
+        shutil.copy(os.path.join("..", "xapian-core-1.4.0", "config.sub"), os.path.join("config", "config.sub"))
         if os.path.exists("Makefile"):
             syscall('make clean')
         syscall('./configure --host=%s --prefix=%s' % (arch_full, platform))
@@ -473,7 +459,7 @@ for arch in ARCHS:
         shutil.copy('uuid.h', os.path.join(platform, 'include', 'c++', COMPILER_VERSION, 'uuid', 'uuid.h'))
         shutil.copy('libuuid.a', os.path.join(platform, 'lib', 'gcc', arch_full, COMPILER_VERSION, 'libuuid.a'))
         shutil.copy('libuuid.a', os.path.join(platform, 'lib', 'libuuid.a'))
-        os.chdir('../../../xapian-core-1.3.4')
+        os.chdir('../../../xapian-core-1.4.0')
         if os.path.exists("Makefile"):
             syscall('make clean')
 
@@ -515,7 +501,6 @@ for arch in ARCHS:
             pass
 
         syscall('make')
-        shutil.copy(os.path.join(curdir, '..', 'src', 'dependencies', 'xapian-core-1.3.4', '.libs', 'libxapian-1.3.a'), os.path.join(platform, 'lib', 'libxapian.a'))
         os.chdir(curdir)
 
     # check that the step went well
@@ -670,21 +655,9 @@ for arch in ARCHS:
                    'arch_full': arch_full,
                    'arch_short': arch_short,
                    'curdir': curdir})
-    if COMPILE_GLASSIFY:
-        os.chdir(curdir)
-        syscall('g++ glassify.cc ../src/dependencies/xapian-core-1.3.4/.libs/libxapian-1.3.a -o glassify_%s -lz -luuid -lrt -I../src/dependencies/xapian-core-1.3.4/include' % arch_short)
 
     os.chdir(curdir)
     change_env(ORIGINAL_ENVIRON)
-
-# recompile xapian for build system arch to compile glassify
-if COMPILE_GLASSIFY:
-    os.chdir(os.path.join(curdir, '..', 'src', 'dependencies', 'xapian-core-1.3.4'))
-    syscall('make clean')
-    syscall('./configure')
-    syscall('make')
-    os.chdir(curdir)
-    syscall('g++ glassify.cc ../src/dependencies/xapian-core-1.3.4/.libs/libxapian-1.3.a -o glassify -lz -luuid -lrt -I../src/dependencies/xapian-core-1.3.4/include')
 
 if LOCALES_TXT:
 
