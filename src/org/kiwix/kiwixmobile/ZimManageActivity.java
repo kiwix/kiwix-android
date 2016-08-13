@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -60,6 +61,8 @@ public class ZimManageActivity extends AppCompatActivity {
 
   private Menu mMenu;
 
+  public  Toolbar toolbar;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +88,7 @@ public class ZimManageActivity extends AppCompatActivity {
   }
 
   private void setUpToolbar() {
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     // Don't use this method, it's handled by inflater.inflate() above :
     // setContentView(R.layout.activity_lay out);
@@ -128,6 +131,20 @@ public class ZimManageActivity extends AppCompatActivity {
     getMenuInflater().inflate(R.menu.menu_zim_manager, menu);
     mMenu = menu;
     SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+    menu.findItem(R.id.action_search).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
+      @Override
+      public boolean onMenuItemClick(MenuItem v) {
+        mViewPager.setCurrentItem(1);
+        return true;
+      }
+    });
+    toolbar.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        mViewPager.setCurrentItem(1);
+        MenuItemCompat.expandActionView(menu.findItem(R.id.action_search));
+      }
+    });
     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
       @Override
       public boolean onQueryTextSubmit(String s) {
