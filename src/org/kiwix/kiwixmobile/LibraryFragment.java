@@ -28,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -67,6 +68,8 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
   @BindView(R.id.progressBar) ProgressBar progressBar;
   @BindView(R.id.progressbar_message) TextView progressBarMessage;
   @BindView(R.id.progressbar_layout) RelativeLayout progressBarLayout;
+  @BindView(R.id.network_permission_text) TextView permissionText;
+  @BindView(R.id.network_permission_button) Button permissionButton;
 
 
   private KiwixService kiwixService;
@@ -102,32 +105,16 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
         // setContentView(R.layout.activity_layout);
       ButterKnife.bind(this, llLayout);
 
-      progressBar.setVisibility(View.VISIBLE);
-      progressBarMessage.setVisibility(View.VISIBLE);
-      progressBarLayout.setVisibility(View.VISIBLE);
-
       kiwixService = ((KiwixApplication) super.getActivity().getApplication()).getKiwixService();
       conMan = (ConnectivityManager) super.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
       NetworkInfo network = conMan.getActiveNetworkInfo();
       bookDao = new BookDao(new KiwixDatabase(super.getActivity()));
       if (network != null && network.isConnected()) {
-        kiwixService.getLibrary()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(library -> {
-              books = library.getBooks();
-              if (active) {
-                libraryAdapter = new LibraryAdapter(super.getActivity(), new ArrayList<LibraryNetworkEntity.Book>(books));
-                libraryList.setAdapter(libraryAdapter);
-                progressBarLayout.setVisibility(View.GONE);
-              }
-            },error -> {
-              noNetworkConnection();
-            });
-
-
-        libraryList.setOnItemClickListener(this);
-
-        active = true;
+        if (isWiFi()) {
+          getLibraryData();
+        } else {
+          displayNetworkConfirmation();
+        }
       } else {
         noNetworkConnection();
       }
@@ -137,6 +124,42 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
         // findViewById(R.id.someGuiElement);
         return llLayout; // We must return the loaded Layout
     }
+
+  public void getLibraryData(){
+    progressBar.setVisibility(View.VISIBLE);
+    progressBarMessage.setVisibility(View.VISIBLE);
+    progressBarLayout.setVisibility(View.VISIBLE);
+    kiwixService.getLibrary()
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(library -> {
+          books = library.getBooks();
+          if (active) {
+            libraryAdapter = new LibraryAdapter(super.getActivity(), new ArrayList<LibraryNetworkEntity.Book>(books));
+            libraryList.setAdapter(libraryAdapter);
+            progressBarLayout.setVisibility(View.GONE);
+          }
+        },error -> {
+          noNetworkConnection();
+        });
+
+
+    libraryList.setOnItemClickListener(this);
+
+    active = true;
+  }
+
+  public void displayNetworkConfirmation(){
+    permissionText.setVisibility(View.VISIBLE);
+    permissionButton.setVisibility(View.VISIBLE);
+    permissionButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        getLibraryData();
+        permissionButton.setVisibility(View.GONE);
+        permissionText.setVisibility(View.GONE);
+      }
+    });
+  }
 
   public void noNetworkConnection() {
     progressBar.setVisibility(View.INVISIBLE);
@@ -167,19 +190,28 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
       return;
     }
     bookDao.saveBook(books.get(position));
+    if (isWiFi()){
+      mobileDownloadDialog(position);
+    } else {
+      downloadFile(position, books.get(position));
+    }
+
+  }
+
+  public boolean isWiFi(){
     if (Build.VERSION.SDK_INT >= 23) {
       NetworkInfo network = conMan.getActiveNetworkInfo();
       if (network.getType() != ConnectivityManager.TYPE_WIFI){
-        mobileDownloadDialog(position);
+        return false;
       } else {
-        downloadFile(position, books.get(position));
+        return true;
       }
     } else {
       NetworkInfo wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
       if (!wifi.isConnected()){
-        mobileDownloadDialog(position);
+        return false;
       } else {
-        downloadFile(position, books.get(position));
+        return true;
       }
     }
   }

@@ -14,7 +14,22 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:id="@+id/library_list" />
-
+  <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:visibility="gone"
+    android:layout_marginTop="200dp"
+    android:text="@string/get_library_over_network"
+    android:layout_centerHorizontal="true"
+    android:id="@+id/network_permission_text"/>
+  <Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="230dp"
+    android:id="@+id/network_permission_button"
+    android:text="@string/proceed"
+    android:layout_centerHorizontal="true"
+    android:visibility="gone"/>
 
     <RelativeLayout
         android:layout_width="wrap_content"

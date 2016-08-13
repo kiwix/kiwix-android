@@ -114,4 +114,6 @@
   <string name="zim_nopic">No Pictures</string>
   <string name="open_partial_zim">This file could be incomplete. Do you wish to attempt to open it?</string>
   <string name="no_network_connection">No network connection</string>
+  <string name="get_library_over_network">Use network to download ZIM list. (Approximately 6MB)</string>
+  <string name="proceed">Proceed</string>
 </resources>
