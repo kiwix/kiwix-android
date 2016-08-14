@@ -51,7 +51,7 @@ import java.util.List;
 
 public class KiwixDatabase extends SquidDatabase {
 
-  private static final int VERSION = 6;
+  private static final int VERSION = 7;
   private Context context;
 
 
@@ -81,11 +81,17 @@ public class KiwixDatabase extends SquidDatabase {
       db.execSQL("DROP TABLE IF EXISTS recents");
       tryCreateTable(RecentSearch.TABLE);
     }
-    if (newVersion >= 4 && oldVersion < 4) {
+    if (newVersion >= 3) {
+      tryCreateTable(RecentSearch.TABLE);
+    }
+    if (newVersion >= 4) {
       tryCreateTable(Bookmarks.TABLE);
     }
     if (newVersion >= 5 && oldVersion < 5) {
       db.execSQL("DROP TABLE IF EXISTS book");
+      tryCreateTable(BookDatabaseEntity.TABLE);
+    }
+    if (newVersion >= 5) {
       tryCreateTable(BookDatabaseEntity.TABLE);
     }
     if (newVersion >= 6 && oldVersion < 6) {
@@ -98,6 +104,9 @@ public class KiwixDatabase extends SquidDatabase {
           Log.d(KiwixMobileActivity.TAG_KIWIX, "migrated " + id);
         }
       }
+    }
+    if (newVersion >= 6) {
+      tryCreateTable(Bookmarks.TABLE);
     }
     return true;
   }
