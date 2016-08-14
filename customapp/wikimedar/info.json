@@ -2,9 +2,9 @@
   "app_name": "وِيكيبيديا الطبية (بلا اتصال بالانترنت)",
   "package": "org.kiwix.kiwixcustomwikimedar",
   "version_name": "2016-07",
-  "version_code": "1",
+  "version_code": "2",
   "zim_file": "customapp/wikimedar/content.zim",
-  "embed_zim": true,
+  "embed_zim": false,
   "ic_launcher": "customapp/wikimedar/icon.png",
   "enforced_lang": "ar"
 }
