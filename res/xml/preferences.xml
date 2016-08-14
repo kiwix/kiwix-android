@@ -3,13 +3,13 @@
       android:key="pref_display"
       android:title="@string/pref_display_title">
 
-    <CheckBoxPreference
+    <SwitchPreference
         android:defaultValue="false"
         android:key="pref_nightmode"
         android:summary="@string/pref_nightmode_summary"
         android:title="@string/pref_nightmode"/>
 
-    <CheckBoxPreference
+    <SwitchPreference
         android:defaultValue="false"
         android:key="pref_backtotop"
         android:summary="@string/pref_backtotop_summary"
@@ -21,7 +21,7 @@
       android:key="pref_extras"
       android:title="@string/pref_extras">
 
-    <CheckBoxPreference
+    <SwitchPreference
         android:defaultValue="false"
         android:key="pref_newtab_background"
         android:title="@string/pref_newtab_background_title"
@@ -33,7 +33,7 @@
       android:key="pref_zoom_sub"
       android:title="@string/pref_zoom_sub_title">
 
-    <CheckBoxPreference
+    <SwitchPreference
         android:defaultValue="false"
         android:key="pref_zoom_enabled"
 
