@@ -1,0 +1,10 @@
+{
+  "app_name": "Wikipedia Médica (Offline)",
+  "package": "org.kiwix.kiwixcustomwikimedes",
+  "version_name": "2016-08",
+  "version_code": "1",
+  "zim_file": "customapp/wikimedes/content.zim",
+  "embed_zim": false,
+  "ic_launcher": "customapp/wikimedes/icon.png",
+  "enforced_lang": "es"
+}
