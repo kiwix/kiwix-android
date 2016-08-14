@@ -94,7 +94,6 @@ public class SearchActivity extends AppCompatActivity
         } else {
           mListView.setAdapter(mAutoAdapter);
           mAutoAdapter.getFilter().filter(s.toLowerCase());
-
         }
 
         return true;
