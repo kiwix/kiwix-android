@@ -51,7 +51,7 @@ import java.util.List;
 
 public class KiwixDatabase extends SquidDatabase {
 
-  private static final int VERSION = 7;
+  private static final int VERSION = 8;
   private Context context;
 
 
