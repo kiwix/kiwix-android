@@ -81,6 +81,11 @@ public class KiwixDatabase extends SquidDatabase {
       db.execSQL("DROP TABLE IF EXISTS recents");
       tryCreateTable(RecentSearch.TABLE);
     }
+    if (newVersion >= 3 && (oldVersion < 3 || oldVersion == 7)) {
+      db.execSQL("DROP TABLE IF EXISTS recents");
+      db.execSQL("DROP TABLE IF EXISTS recentsearches");
+      tryCreateTable(RecentSearch.TABLE);
+    }
     if (newVersion >= 3) {
       tryCreateTable(RecentSearch.TABLE);
     }
