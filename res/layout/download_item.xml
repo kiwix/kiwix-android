@@ -1,87 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="match_parent"
-              android:weightSum="1">
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:minHeight="?android:attr/listPreferredItemHeight"
+              android:paddingTop="@dimen/activity_vertical_margin"
+              android:paddingBottom="@dimen/activity_vertical_margin"
+              android:paddingLeft="@dimen/activity_horizontal_margin"
+              android:paddingRight="@dimen/activity_horizontal_margin">
 
-  <RelativeLayout
-      android:layout_width="match_parent"
-      android:descendantFocusability="blocksDescendants"
-      android:layout_height="wrap_content">
-
-  </RelativeLayout>
+  <ImageView
+    android:layout_width="48dp"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="@dimen/dimen_medium_padding"
+    android:adjustViewBounds="true"
+    android:src="@mipmap/kiwix_icon"
+    android:scaleType="fitCenter"
+    android:layout_gravity="center"
+    android:id="@+id/favicon"
+    android:minHeight="?android:attr/listPreferredItemHeight"/>
 
   <LinearLayout
-      android:orientation="horizontal"
+    android:orientation="vertical"
+    android:layout_width="0dp"
+    android:layout_weight="1"
+    android:layout_height="wrap_content"
+    android:gravity="center"  >
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textAppearance="?android:attr/textAppearanceListItem"
+      android:text="Title"
+      android:id="@+id/title"
+      android:layout_gravity="left"/>
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textAppearance="?android:attr/textAppearanceSmall"
+      android:text="Description"
+      android:id="@+id/description"
+      android:layout_gravity="left"/>
+    <ProgressBar
+      style="?android:attr/progressBarStyleHorizontal"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
-      android:baselineAligned="false"
-      android:gravity="center">
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:gravity="center"  >
-
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:textAppearance="?android:attr/textAppearanceLarge"
-          android:text="Large Text"
-          android:id="@+id/downloadTitle"
-          android:layout_alignParentLeft="true"
-          android:layout_alignParentStart="true"
-          android:padding="8dp"/>
-
-      <ProgressBar
-          style="?android:attr/progressBarStyleHorizontal"
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-          android:id="@+id/downloadProgress"
-          android:indeterminate="false"
-          android:paddingBottom="10dp"
-          android:layout_alignParentStart="true"
-          android:layout_alignParentLeft="true"
-          android:padding="4dp"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true">
-
-      <ImageView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:id="@+id/pause"
-          android:layout_alignParentEnd="true"
-          android:layout_alignParentRight="true"
-          android:minHeight="35dp"
-          android:minWidth="35dp"
-          android:layout_gravity="center_vertical"
-          android:text="@string/download_pause"
-          android:src="@drawable/ic_pause_black_24dp"
-          android:layout_weight="0.5"/>
-
-      <ImageView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:id="@+id/stop"
-          android:layout_alignParentEnd="true"
-          android:minHeight="35dp"
-          android:minWidth="35dp"
-          android:layout_gravity="center_vertical"
-          android:text="@string/download_stop"
-          android:src="@drawable/ic_stop_black_24dp"
-          android:layout_weight="0.5"
-          android:layout_marginLeft="8dp"
-          android:layout_marginRight="8dp"  />
-    </LinearLayout>
+      android:id="@+id/downloadProgress"
+      android:indeterminate="false"
+      android:paddingBottom="10dp"
+      android:layout_alignParentStart="true"
+      android:layout_alignParentLeft="true"
+      android:padding="4dp"/>
   </LinearLayout>
 
+  <LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentRight="true">
+
+    <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:id="@+id/pause"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:minHeight="35dp"
+      android:minWidth="35dp"
+      android:layout_gravity="center_vertical"
+      android:text="@string/download_pause"
+      android:src="@drawable/ic_pause_black_24dp"
+      android:layout_weight="0.5"/>
+
+    <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:id="@+id/stop"
+      android:layout_alignParentEnd="true"
+      android:minHeight="35dp"
+      android:minWidth="35dp"
+      android:layout_gravity="center_vertical"
+      android:text="@string/download_stop"
+      android:src="@drawable/ic_stop_black_24dp"
+      android:layout_weight="0.5"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+      android:layout_alignParentRight="true"/>
+  </LinearLayout>
 </LinearLayout>

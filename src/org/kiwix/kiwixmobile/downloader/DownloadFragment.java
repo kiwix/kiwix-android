@@ -1,12 +1,15 @@
 package org.kiwix.kiwixmobile.downloader;
 
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +26,8 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.ZimContentProvider;
 import org.kiwix.kiwixmobile.ZimFileSelectFragment;
 import org.kiwix.kiwixmobile.ZimManageActivity;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.w3c.dom.Text;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -30,7 +35,7 @@ import java.util.LinkedHashMap;
 
 public class DownloadFragment extends Fragment {
 
-  public static LinkedHashMap<Integer, String> mDownloads= new LinkedHashMap<Integer, String>();
+  public static LinkedHashMap<Integer, LibraryNetworkEntity.Book> mDownloads= new LinkedHashMap<Integer, LibraryNetworkEntity.Book>();
   public static LinkedHashMap<Integer, String> mDownloadFiles= new LinkedHashMap<Integer, String>();
   public RelativeLayout relLayout;
   public static ListView listView;
@@ -74,9 +79,9 @@ public class DownloadFragment extends Fragment {
 
   public class DownloadAdapter extends BaseAdapter {
 
-    private LinkedHashMap<Integer, String> mData = new LinkedHashMap<Integer, String>();
+    private LinkedHashMap<Integer, LibraryNetworkEntity.Book> mData = new LinkedHashMap<Integer, LibraryNetworkEntity.Book>();
     private Integer[] mKeys;
-    public DownloadAdapter(LinkedHashMap<Integer, String> data){
+    public DownloadAdapter(LinkedHashMap<Integer, LibraryNetworkEntity.Book> data){
         mData = data;
         mKeys = mData.keySet().toArray(new Integer[data.size()]);
     }
@@ -87,7 +92,7 @@ public class DownloadFragment extends Fragment {
     }
 
     @Override
-    public String getItem(int position) {
+    public LibraryNetworkEntity.Book getItem(int position) {
         return mData.get(mKeys[position]);
     }
 
@@ -129,10 +134,15 @@ public class DownloadFragment extends Fragment {
       }
       mKeys = mData.keySet().toArray(new Integer[mData.size()]);
       // Lookup view for data population
-      TextView downloadTitle = (TextView) convertView.findViewById(R.id.downloadTitle);
       //downloadProgress.setProgress(download.progress);
       // Populate the data into the template view using the data object
-      downloadTitle.setText(getItem(position));
+      TextView title = (TextView) convertView.findViewById(R.id.title);
+      TextView description = (TextView) convertView.findViewById(R.id.description);
+      ImageView imageView = (ImageView)  convertView.findViewById(R.id.favicon);
+      title.setText(getItem(position).getTitle());
+      description.setText(getItem(position).getDescription());
+      imageView.setImageBitmap(StringToBitMap(getItem(position).getFavicon()));
+
       ProgressBar downloadProgress = (ProgressBar) convertView.findViewById(R.id.downloadProgress);
 
       if (LibraryFragment.mService.downloadProgress.get(mKeys[position]) != null) {
@@ -180,11 +190,21 @@ public class DownloadFragment extends Fragment {
     }
 
   }
-  public static void addDownload(int position, String title, String fileName){
-    mDownloads.put(position, title);
+  public static void addDownload(int position, LibraryNetworkEntity.Book book, String fileName){
+    mDownloads.put(position, book);
     mDownloadFiles.put(position, fileName);
     downloadAdapter.notifyDataSetChanged();
     updateNoDownloads();
+  }
+  public Bitmap StringToBitMap(String encodedString){
+    try{
+      byte [] encodeByte= Base64.decode(encodedString,Base64.DEFAULT);
+      Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+      return bitmap;
+    }catch(Exception e){
+      e.getMessage();
+      return null;
+    }
   }
 
 }

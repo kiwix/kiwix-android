@@ -135,7 +135,7 @@ public class DownloadService extends Service {
   }
 
   private void downloadBook(String url, int notificationID, LibraryNetworkEntity.Book book) {
-    DownloadFragment.addDownload(notificationID, notificationTitle, KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
+    DownloadFragment.addDownload(notificationID, book, KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
     kiwixService.getMetaLinks(url)
         .subscribeOn(AndroidSchedulers.mainThread())
         .flatMap(metaLink -> getMetaLinkContentLength(metaLink.getRelevantUrl().getValue()))

@@ -189,11 +189,11 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
           + bytesToHuman(getSpaceAvailable()), Toast.LENGTH_LONG).show();
       return;
     }
-    bookDao.saveBook(books.get(position));
+    bookDao.saveBook((LibraryNetworkEntity.Book) parent.getAdapter().getItem(position));
     if (isWiFi()){
-      downloadFile(position, books.get(position));
+      downloadFile((LibraryNetworkEntity.Book) parent.getAdapter().getItem(position));
     } else {
-      mobileDownloadDialog(position);
+      mobileDownloadDialog(position, parent);
     }
 
   }
@@ -243,12 +243,12 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
   }
 
 
-  public void mobileDownloadDialog(int position) {
+  public void mobileDownloadDialog(int position, AdapterView<?> parent) {
     new AlertDialog.Builder(super.getActivity())
         .setMessage(ShortcutUtils.stringsGetter(R.string.download_over_network, super.getActivity()))
         .setPositiveButton(getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int which) {
-            downloadFile(position, books.get(position));
+            downloadFile((LibraryNetworkEntity.Book) parent.getAdapter().getItem(position));
           }
         })
         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -258,12 +258,12 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
         .show();
   }
 
-  public void downloadFile(int position, LibraryNetworkEntity.Book book) {
+  public void downloadFile(LibraryNetworkEntity.Book book) {
     bookDao.saveBook(book);
     Toast.makeText(super.getActivity(), stringsGetter(R.string.download_started_library, super.getActivity()), Toast.LENGTH_LONG).show();
     Intent service = new Intent(super.getActivity(), DownloadService.class);
-    service.putExtra(DownloadIntent.DOWNLOAD_URL_PARAMETER, books.get(position).getUrl());
-    service.putExtra(DownloadIntent.DOWNLOAD_ZIM_TITLE, books.get(position).getTitle());
+    service.putExtra(DownloadIntent.DOWNLOAD_URL_PARAMETER, book.getUrl());
+    service.putExtra(DownloadIntent.DOWNLOAD_ZIM_TITLE, book.getTitle());
     service.putExtra("Book", book);
     super.getActivity().startService(service);
     mConnection = new DownloadServiceConnection();
