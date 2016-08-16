@@ -47,18 +47,36 @@
               android:src="@drawable/fullscreen_exit"
               android:visibility="invisible"/>
 
-          <Button
-              android:id="@+id/button_backtotop"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:layout_alignParentBottom="true"
-              android:layout_centerHorizontal="true"
-              android:alpha="0.6"
-              android:background="#DDFFFFFF"
-              android:gravity="center"
-              android:textColor="@android:color/black"
-              android:textStyle="bold"
-              android:visibility="invisible"/>
+
+            <Button
+                android:id="@+id/button_backtotop"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:alpha="0.6"
+                android:background="#DDFFFFFF"
+                android:gravity="center"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:text="@string/button_backtotop"
+                android:visibility="invisible"/>
+
+
+            <Button
+                android:id="@+id/button_stop_tts"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:alpha="0.6"
+                android:background="#DDFFFFFF"
+                android:gravity="center"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:text="stop"
+                android:visibility="invisible"/>
+
 
         </RelativeLayout>
 

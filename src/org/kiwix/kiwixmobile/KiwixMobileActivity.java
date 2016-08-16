@@ -187,6 +187,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private Button mBackToTopButton;
 
+  private Button stopTTSButton;
+
   private ListView mLeftDrawerList;
 
   private ListView mRightDrawerList;
@@ -304,6 +306,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     isFullscreenOpened = false;
     mIsSpeaking = false;
     mBackToTopButton = (Button) findViewById(R.id.button_backtotop);
+    stopTTSButton = (Button) findViewById(R.id.button_stop_tts);
     mPrefState = new ArrayList<>();
     mToolbarContainer = (RelativeLayout) findViewById(R.id.toolbar_layout);
     mProgressBar = (AnimatedProgressBar) findViewById(R.id.progress_view);
@@ -315,6 +318,16 @@ public class KiwixMobileActivity extends AppCompatActivity {
     IS_WIDGET_SEARCH_INTENT = getIntent().getBooleanExtra("isWidgetSearch", false);
     IS_WIDGET_VOICE_SEARCH = getIntent().getBooleanExtra("isWidgetVoice", false);
     IS_WIDGET_STAR = getIntent().getBooleanExtra("isWidgetStar", false);
+
+
+    stopTTSButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+          readAloud();
+          stopTTSButton.setVisibility(View.INVISIBLE);
+        mIsBacktotopEnabled = true;
+      }
+    });
 
 
     tempForUndo =
@@ -580,6 +593,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
           public void run() {
             menu.findItem(R.id.menu_read_aloud)
                 .setTitle(getResources().getString(R.string.menu_read_aloud_stop));
+            stopTTSButton.setVisibility(View.VISIBLE);
           }
         });
       }
@@ -592,6 +606,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
           public void run() {
             menu.findItem(R.id.menu_read_aloud)
                 .setTitle(getResources().getString(R.string.menu_read_aloud));
+            stopTTSButton.setVisibility(View.INVISIBLE);
           }
         });
       }
@@ -807,6 +822,11 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
       case R.id.menu_read_aloud:
         readAloud();
+        stopTTSButton.setVisibility(View.VISIBLE);
+        if(mIsBacktotopEnabled) {
+          mBackToTopButton.setVisibility(View.INVISIBLE);
+          mIsBacktotopEnabled = false;
+        }
         break;
 
       case R.id.menu_fullscreen:
