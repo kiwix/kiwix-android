@@ -191,9 +191,9 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
     }
     bookDao.saveBook(books.get(position));
     if (isWiFi()){
-      mobileDownloadDialog(position);
-    } else {
       downloadFile(position, books.get(position));
+    } else {
+      mobileDownloadDialog(position);
     }
 
   }
