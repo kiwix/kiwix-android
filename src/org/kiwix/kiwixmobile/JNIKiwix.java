@@ -45,21 +45,21 @@ public class JNIKiwix {
 
   public native boolean getTitle(JNIKiwixString title);
 
-  public native boolean getDescription(JNIKiwixString title);
+  public native String getDescription();
 
-  public native boolean getDate(JNIKiwixString language);
+  public native String getDate();
 
-  public native boolean getFavicon(JNIKiwixString content, JNIKiwixString mimeType);
+  public native String getFavicon();
 
-  public native boolean getCreator(JNIKiwixString creator);
+  public native String getCreator();
 
-  public native boolean getPublisher(JNIKiwixString publisher);
+  public native String getPublisher();
 
   public native boolean getFileSize(JNIKiwixInt size);
 
-  public native boolean getArticleCount(JNIKiwixInt count);
+  public native int getArticleCount();
 
-  public native boolean getMediaCount(JNIKiwixInt count);
+  public native int getMediaCount();
 
   public native boolean getRandomPage(JNIKiwixString url);
 

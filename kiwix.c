@@ -9,6 +9,7 @@
 
 #include "unicode/putil.h"
 #include <kiwix/reader.h>
+#include <base64.h>
 
 #include <android/log.h>
 #define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO, "kiwix", __VA_ARGS__)
@@ -102,6 +103,76 @@ JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getId(JNIEnv *env,
   pthread_mutex_unlock(&readerLock);
   
   return id;
+}
+
+JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getCreator(JNIEnv *env, jobject obj) {
+  jstring creator;
+  
+  pthread_mutex_lock(&readerLock);
+  if (reader != NULL) {
+    try {
+      std::string cCreator = reader->getCreator();
+      creator = c2jni(cCreator, env);
+    } catch (exception &e) {
+      std::cerr << e.what() << std::endl;
+    }
+  }
+  pthread_mutex_unlock(&readerLock);
+  
+  return creator;
+}
+
+JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getPublisher(JNIEnv *env, jobject obj) {
+  jstring publisher;
+  
+  pthread_mutex_lock(&readerLock);
+  if (reader != NULL) {
+    try {
+      std::string cPublisher = reader->getPublisher();
+      publisher = c2jni(cPublisher, env);
+    } catch (exception &e) {
+      std::cerr << e.what() << std::endl;
+    }
+  }
+  pthread_mutex_unlock(&readerLock);
+  
+  return publisher;
+}
+
+JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getFavicon(JNIEnv *env, jobject obj) {
+  jstring favicon;
+  
+  pthread_mutex_lock(&readerLock);
+  if (reader != NULL) {
+    try {
+	  std::string cContent;
+	  std::string cMime;
+      reader->getFavicon(cContent, cMime);
+      favicon = c2jni(base64_encode(reinterpret_cast<const unsigned char*>(cContent.c_str()), cContent.length()), env);
+    } catch (exception &e) {
+      std::cerr << e.what() << std::endl;
+    }
+  }
+  pthread_mutex_unlock(&readerLock);
+  
+  return favicon;
+}
+
+JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getDate(JNIEnv *env, jobject obj) {
+  jstring date;
+  
+  pthread_mutex_lock(&readerLock);
+  if (reader != NULL) {
+    try {
+      std::string cDate = reader->getDate();
+      date = c2jni(cDate, env);
+    } catch (exception &e) {
+      std::cerr << e.what() << std::endl;
+    }
+  }
+  pthread_mutex_unlock(&readerLock);
+  
+  return date;
 }
 
 JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getLanguage(JNIEnv *env, jobject obj) {
@@ -273,24 +344,21 @@ JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getTitle
 
 }
 
-JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwibx_getDescription
-(JNIEnv *env, jobject obj, jobject descriptionObj) {
-  jboolean retVal = JNI_FALSE;
-  std::string cDescription;
-
+JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getDescription(JNIEnv *env, jobject obj) {
+  jstring description;
+  
   pthread_mutex_lock(&readerLock);
-  try {
-    if (reader != NULL) {
+  if (reader != NULL) {
+    try {
       std::string cDescription = reader->getDescription();
-      setStringObjValue(cDescription, descriptionObj, env);
-      retVal = JNI_TRUE;
+      description = c2jni(cDescription, env);
+    } catch (exception &e) {
+      std::cerr << e.what() << std::endl;
     }
-  } catch (exception &e) {
-    std::cerr << e.what() << std::endl;
   }
   pthread_mutex_unlock(&readerLock);
-
-  return retVal;
+  
+  return description;
 }
 
 JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getRandomPage

@@ -579,6 +579,7 @@ for arch in ARCHS:
                    'kiwix.c %(kwsrc)s/kiwix/reader.cpp '
                    '%(kwsrc)s/stringTools.cpp '
                    '%(kwsrc)s/pathTools.cpp '
+                   '%(kwsrc)s/base64.cpp '
                    '-I%(include_paths)s '
                    % {'platform': platform,
                       'arch_full': arch_full,
@@ -598,7 +599,7 @@ for arch in ARCHS:
     link_cmd = ('g++ -fPIC -shared -B%(platform)s/sysroot '
                 '--sysroot %(platform)s/sysroot '
                 '-nostdlib '
-                'kiwix.o reader.o stringTools.o pathTools.o '
+                'kiwix.o reader.o stringTools.o pathTools.o base64.o '
                 '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/crtbegin.o '
                 '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/crtend.o '
                 '%(platform)s/lib/libzim.a %(platform)s/lib/liblzma.a '
@@ -638,7 +639,7 @@ for arch in ARCHS:
         syscall(compile_cmd)
         syscall(link_cmd)
 
-        for obj in ('kiwix.o', 'reader.o', 'stringTools.o', 'pathTools.o',
+        for obj in ('kiwix.o', 'reader.o', 'stringTools.o', 'pathTools.o', 'base64.o',
                     'src/{}_JNIKiwix.h'.format("_".join(PACKAGE.split('.')))):
             os.remove(obj)
 
