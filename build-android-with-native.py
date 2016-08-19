@@ -501,6 +501,7 @@ for arch in ARCHS:
             pass
 
         syscall('make')
+        shutil.copy(os.path.join(curdir, '..', 'src', 'dependencies', 'xapian-core-1.4.0', '.libs', 'libxapian.a'), os.path.join(platform, 'lib', 'libxapian.a'))
         os.chdir(curdir)
 
     # check that the step went well
