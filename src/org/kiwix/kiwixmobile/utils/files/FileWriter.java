@@ -22,12 +22,14 @@ package org.kiwix.kiwixmobile.utils.files;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.kiwix.kiwixmobile.DataModel;
 
 public class FileWriter {
 
@@ -39,24 +41,24 @@ public class FileWriter {
 
   private Context mContext;
 
-  private ArrayList<DataModel> mDataList;
+  private ArrayList<LibraryNetworkEntity.Book> mDataList;
 
   public FileWriter(Context context) {
     mContext = context;
   }
 
-  public FileWriter(Context context, ArrayList<DataModel> dataList) {
+  public FileWriter(Context context, ArrayList<LibraryNetworkEntity.Book> dataList) {
     mDataList = dataList;
     mContext = context;
   }
 
   // Build a CSV list from the file paths
-  public void saveArray(ArrayList<DataModel> files) {
+  public void saveArray(ArrayList<LibraryNetworkEntity.Book> files) {
 
     ArrayList<String> list = new ArrayList<>();
 
-    for (DataModel file : files) {
-      list.add(file.getPath());
+    for (LibraryNetworkEntity.Book file : files) {
+      list.add(file.file.getPath());
     }
 
     StringBuilder sb = new StringBuilder();
@@ -89,20 +91,6 @@ public class FileWriter {
     return readCsv(content);
   }
 
-  // Add items to the MediaStore list, that are not in the MediaStore database.
-  // These will be loaded from a previously saved CSV file.
-  // We are checking, if these file still exist as well.
-  public ArrayList<DataModel> getDataModelList() {
-
-    for (String file : readCsv()) {
-      if (!mDataList.contains(new DataModel(getTitleFromFilePath(file), file))) {
-        Log.i(TAG_KIWIX, "Added file: " + file);
-        mDataList.add(new DataModel(getTitleFromFilePath(file), file));
-      }
-    }
-
-    return mDataList;
-  }
 
   // Split the CSV by the comma and return an ArrayList with the file paths
   private ArrayList<String> readCsv() {

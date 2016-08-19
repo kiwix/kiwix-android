@@ -83,28 +83,32 @@ public class ZimFileSelectFragment extends Fragment
   public static final String TAG_KIWIX = "kiwix";
 
   private static final int LOADER_ID = 0x02;
-
+  public static Context context;
+  public RelativeLayout llLayout;
   // Adapter of the Data populated by the MediaStore
   private SimpleCursorAdapter mCursorAdapter;
-
   // Adapter of the Data populated by recanning the Filesystem by ourselves
   private RescanDataAdapter mRescanAdapter;
-
-  private ArrayList<DataModel> mFiles;
-
+  private ArrayList<LibraryNetworkEntity.Book> mFiles;
   private ListView mZimFileList;
-
   private RelativeLayout mProgressBar;
-
   private TextView mFileMessage;
-
   private TextView mProgressBarMessage;
-
-  public RelativeLayout llLayout;
-
-  public static Context context;
-
   private BookDao bookDao;
+
+  public static void finishResult(String path) {
+    ZimManageActivity zimManageActivity = (ZimManageActivity) context;
+    if (path != null) {
+      File file = new File(path);
+      Uri uri = Uri.fromFile(file);
+      Log.i(TAG_KIWIX, "Opening " + uri);
+      zimManageActivity.setResult(zimManageActivity.RESULT_OK, new Intent().setData(uri));
+      zimManageActivity.finish();
+    } else {
+      zimManageActivity.setResult(zimManageActivity.RESULT_CANCELED);
+      zimManageActivity.finish();
+    }
+  }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -117,7 +121,7 @@ public class ZimFileSelectFragment extends Fragment
 
     new LanguageUtils(super.getActivity()).changeFont(super.getActivity().getLayoutInflater());
 
-    mFiles = new ArrayList<DataModel>();
+    mFiles = new ArrayList<LibraryNetworkEntity.Book>();
 
     mProgressBar = (RelativeLayout) llLayout.findViewById(R.id.progressbar_layout);
     mFileMessage = (TextView) llLayout.findViewById(R.id.file_management_no_files);
@@ -141,8 +145,6 @@ public class ZimFileSelectFragment extends Fragment
     // findViewById(R.id.someGuiElement);
     return llLayout; // We must return the loaded Layout
   }
-
-
 
   public void checkPermissions(){
     if (ContextCompat.checkSelfPermission(super.getActivity(),
@@ -206,8 +208,8 @@ public class ZimFileSelectFragment extends Fragment
     // if the data is populated by the ArrayAdapter, then cast it to the DataModel class.
 
     if (view.getAlpha() == 1f) {
-      DataModel data = (DataModel) mZimFileList.getItemAtPosition(position);
-      file = data.getPath();
+      LibraryNetworkEntity.Book data = (LibraryNetworkEntity.Book) mZimFileList.getItemAtPosition(position);
+      file = data.file.getPath();
       finishResult(file);
     } else {
       openCorruptZimDialog(position);
@@ -237,14 +239,15 @@ public class ZimFileSelectFragment extends Fragment
         })
         .show();
   }
+
   public void openCorruptZimDialog(int position) {
     new AlertDialog.Builder(super.getActivity())
         .setMessage(ShortcutUtils.stringsGetter(R.string.open_partial_zim, context))
         .setPositiveButton(getResources().getString(R.string.open), new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int which) {
             String file;
-            DataModel data = (DataModel) mZimFileList.getItemAtPosition(position);
-            file = data.getPath();
+            LibraryNetworkEntity.Book data = (LibraryNetworkEntity.Book) mZimFileList.getItemAtPosition(position);
+            file = data.file.getPath();
             finishResult(file);
           }
         })
@@ -256,34 +259,23 @@ public class ZimFileSelectFragment extends Fragment
         .show();
   }
 
-
   public void deleteSpecificZimFile(int position) {
-    FileUtils.deleteZimFile(mFiles.get(position).getPath());
+    FileUtils.deleteZimFile(mFiles.get(position).file.getPath());
     mFiles.remove(position);
     mRescanAdapter.notifyDataSetChanged();
     checkEmpty();
   }
 
-
-  public static void finishResult(String path) {
-    ZimManageActivity zimManageActivity = (ZimManageActivity) context;
-    if (path != null) {
-      File file = new File(path);
-      Uri uri = Uri.fromFile(file);
-      Log.i(TAG_KIWIX, "Opening " + uri);
-      zimManageActivity.setResult(zimManageActivity.RESULT_OK, new Intent().setData(uri));
-      zimManageActivity.finish();
-    } else {
-      zimManageActivity.setResult(zimManageActivity.RESULT_CANCELED);
-      zimManageActivity.finish();
+  public void checkEmpty(){
+    if (mZimFileList.getCount() == 0){
+      mFileMessage.setVisibility(View.VISIBLE);
     }
   }
 
-
   // The Adapter for the ListView for when the ListView is populated with the rescanned files
-  private class RescanDataAdapter extends ArrayAdapter<DataModel> {
+  private class RescanDataAdapter extends ArrayAdapter<LibraryNetworkEntity.Book> {
 
-    public RescanDataAdapter(Context context, int textViewResourceId, List<DataModel> objects) {
+    public RescanDataAdapter(Context context, int textViewResourceId, List<LibraryNetworkEntity.Book> objects) {
       super(context, textViewResourceId, objects);
       LibraryAdapter.initLanguageMap();
     }
@@ -292,23 +284,7 @@ public class ZimFileSelectFragment extends Fragment
     public View getView(int position, View convertView, ViewGroup parent) {
 
       ViewHolder holder;
-
-      // Check if we should inflate the layout for a new row, or if we can reuse a view.
-
-      if (bookDao.getBook(mFiles.get(position).getTitle()) == null) {
-        if (convertView == null) {
-          convertView = View.inflate(getContext(), R.layout.library_item, null);
-          holder = new ViewHolder();
-          holder.title = (TextView) convertView.findViewById(R.id.title);
-          holder.description = (TextView) convertView.findViewById(R.id.description);
-          convertView.setTag(holder);
-        } else {
-          holder = (ViewHolder) convertView.getTag();
-        }
-        holder.title.setText(getItem(position).getTitle());
-        holder.description.setText(getItem(position).getPath());
-      } else {
-        LibraryNetworkEntity.Book book = bookDao.getBook(mFiles.get(position).getTitle());
+      LibraryNetworkEntity.Book book = getItem(position);
         if (convertView == null) {
           convertView = View.inflate(getContext(), R.layout.library_item, null);
           holder = new ViewHolder();
@@ -333,7 +309,7 @@ public class ZimFileSelectFragment extends Fragment
         holder.publisher.setText(book.getPublisher());
         holder.date.setText(book.getDate());
         holder.size.setText(LibraryAdapter.createGbString(book.getSize()));
-        holder.fileName.setText(LibraryAdapter.parseURL(book.getUrl()));
+        holder.fileName.setText(LibraryAdapter.parseURL(book.file.getPath()));
         holder.favicon.setImageBitmap(LibraryAdapter.createBitmapFromEncodedString(book.getFavicon()));
 
 
@@ -373,15 +349,9 @@ public class ZimFileSelectFragment extends Fragment
         } else {
           holder.size.setVisibility(View.VISIBLE);
         }
-
-        if (!book.downloaded) {
-          convertView.setAlpha(0.3f);
-        } else {
-          convertView.setAlpha(1f);
-        }
-
-      }
+      
       return convertView;
+
     }
 
     // We are using the ViewHolder pattern in order to optimize the ListView by reusing
@@ -405,12 +375,6 @@ public class ZimFileSelectFragment extends Fragment
       TextView fileName;
 
       ImageView favicon;
-    }
-  }
-
-  public void checkEmpty(){
-    if (mZimFileList.getCount() == 0){
-      mFileMessage.setVisibility(View.VISIBLE);
     }
   }
 

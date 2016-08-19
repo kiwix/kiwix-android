@@ -21,6 +21,11 @@ package org.kiwix.kiwixmobile.utils.files;
 
 import android.os.Environment;
 import android.util.Log;
+
+import org.kiwix.kiwixmobile.ZimContentProvider;
+import org.kiwix.kiwixmobile.library.LibraryAdapter;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
@@ -29,17 +34,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
-import org.kiwix.kiwixmobile.DataModel;
 
 public class FileSearch {
 
   public static final String TAG_KIWIX = "kiwix";
 
   // Array of zim file extensions
-  public static final String[] zimFiles = { "zim", "zimaa", "zim.part", "zimaa.part" };
+  public static final String[] zimFiles = { "zim", "zimaa" };
 
   // Scan through the file system and find all the files with .zim and .zimaa extensions
-  public ArrayList<DataModel> findFiles() {
+  public ArrayList<LibraryNetworkEntity.Book> findFiles() {
     final List<String> fileList = new ArrayList<>();
     FilenameFilter[] filter = new FilenameFilter[zimFiles.length];
 
@@ -81,12 +85,12 @@ public class FileSearch {
     return createDataForAdapter(fileList);
   }
 
-  public ArrayList<DataModel> sortDataModel(ArrayList<DataModel> data) {
+  public ArrayList<LibraryNetworkEntity.Book> sortDataModel(ArrayList<LibraryNetworkEntity.Book> data) {
 
     // Sorting the data in alphabetical order
-    Collections.sort(data, new Comparator<DataModel>() {
+    Collections.sort(data, new Comparator<LibraryNetworkEntity.Book>() {
       @Override
-      public int compare(DataModel a, DataModel b) {
+      public int compare(LibraryNetworkEntity.Book a, LibraryNetworkEntity.Book b) {
         return a.getTitle().compareToIgnoreCase(b.getTitle());
       }
     });
@@ -126,12 +130,23 @@ public class FileSearch {
   }
 
   // Create an ArrayList with our DataModel
-  private ArrayList<DataModel> createDataForAdapter(List<String> list) {
+  private ArrayList<LibraryNetworkEntity.Book> createDataForAdapter(List<String> list) {
 
-    ArrayList<DataModel> data = new ArrayList<>();
+    ArrayList<LibraryNetworkEntity.Book> data = new ArrayList<>();
     for (String file : list) {
-
-      data.add(new DataModel(getTitleFromFilePath(file), file));
+      ZimContentProvider.setZimFile(file);
+      LibraryNetworkEntity.Book b = new LibraryNetworkEntity.Book();
+      b.title = ZimContentProvider.getZimFileTitle();
+      b.id = ZimContentProvider.getId();
+      b.file = new File(file);
+      b.size = String.valueOf(b.file.length() / 1024);
+      b.favicon = ZimContentProvider.getFavicon();
+      b.creator = ZimContentProvider.getCreator();
+      b.publisher = ZimContentProvider.getPublisher();
+      b.date = ZimContentProvider.getDate();
+      b.description = ZimContentProvider.getDescription();
+      b.language = ZimContentProvider.getLanguage();
+      data.add(b);
     }
 
     data = sortDataModel(data);

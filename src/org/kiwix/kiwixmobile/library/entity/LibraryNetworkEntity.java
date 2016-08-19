@@ -18,6 +18,7 @@
  */
 package org.kiwix.kiwixmobile.library.entity;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -86,6 +87,8 @@ public class LibraryNetworkEntity {
     public boolean downloaded =  false;
 
     public int searchMatches = 0;
+
+    public File file;
 
     public String getId() {
       return this.id;
