@@ -102,6 +102,67 @@ public class ZimContentProvider extends ContentProvider {
     }
   }
 
+  public static int getArticleCount() {
+    if (jniKiwix == null || zimFileName == null) {
+      return 0;
+    } else {
+      return jniKiwix.getArticleCount();
+
+    }
+  }
+  public static int getMediaCount() {
+    if (jniKiwix == null || zimFileName == null) {
+      return 0;
+    } else {
+      return jniKiwix.getMediaCount();
+
+    }
+  }
+
+  public static String getCreator() {
+    if (jniKiwix == null || zimFileName == null) {
+      return null;
+    } else {
+      return jniKiwix.getCreator();
+    }
+  }
+
+  public static String getPublisher() {
+    if (jniKiwix == null || zimFileName == null) {
+      return null;
+    } else {
+      return jniKiwix.getPublisher();
+    }
+  }
+
+  public static String getDate() {
+    if (jniKiwix == null || zimFileName == null) {
+      return null;
+    } else {
+      return jniKiwix.getDate();
+    }
+  }
+
+  public static String getDescription() {
+    if (jniKiwix == null || zimFileName == null) {
+      return null;
+    } else {
+      JNIKiwixString descrpition = new JNIKiwixString();
+      return jniKiwix.getDescription();
+    }
+  }
+
+  public static String getFavicon() {
+    if (jniKiwix == null || zimFileName == null) {
+      return null;
+    } else {
+      JNIKiwixString string = new JNIKiwixString();
+      JNIKiwixString mime = new JNIKiwixString();
+      mime.value = "image/x-ms-bmp";
+      return jniKiwix.getFavicon();
+    }
+  }
+
   public static String getLanguage() {
     if (jniKiwix == null || zimFileName == null) {
       return null;
@@ -198,6 +259,8 @@ public class ZimContentProvider extends ContentProvider {
     }
     return filePath;
   }
+
+
 
   @Override
   public boolean onCreate() {
