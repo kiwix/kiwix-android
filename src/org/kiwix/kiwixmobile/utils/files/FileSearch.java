@@ -134,19 +134,20 @@ public class FileSearch {
 
     ArrayList<LibraryNetworkEntity.Book> data = new ArrayList<>();
     for (String file : list) {
-      ZimContentProvider.setZimFile(file);
-      LibraryNetworkEntity.Book b = new LibraryNetworkEntity.Book();
-      b.title = ZimContentProvider.getZimFileTitle();
-      b.id = ZimContentProvider.getId();
-      b.file = new File(file);
-      b.size = String.valueOf(b.file.length() / 1024);
-      b.favicon = ZimContentProvider.getFavicon();
-      b.creator = ZimContentProvider.getCreator();
-      b.publisher = ZimContentProvider.getPublisher();
-      b.date = ZimContentProvider.getDate();
-      b.description = ZimContentProvider.getDescription();
-      b.language = ZimContentProvider.getLanguage();
-      data.add(b);
+      if (ZimContentProvider.setZimFile(file) != null) {
+        LibraryNetworkEntity.Book b = new LibraryNetworkEntity.Book();
+        b.title = ZimContentProvider.getZimFileTitle();
+        b.id = ZimContentProvider.getId();
+        b.file = new File(file);
+        b.size = String.valueOf(b.file.length() / 1024);
+        b.favicon = ZimContentProvider.getFavicon();
+        b.creator = ZimContentProvider.getCreator();
+        b.publisher = ZimContentProvider.getPublisher();
+        b.date = ZimContentProvider.getDate();
+        b.description = ZimContentProvider.getDescription();
+        b.language = ZimContentProvider.getLanguage();
+        data.add(b);
+      }
     }
 
     data = sortDataModel(data);

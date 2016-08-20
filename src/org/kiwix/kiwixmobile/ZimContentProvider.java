@@ -81,7 +81,7 @@ public class ZimContentProvider extends ContentProvider {
       if (jniKiwix.getTitle(title)) {
         return title.value;
       } else {
-        return null;
+        return "No Title Found";
       }
     }
   }
