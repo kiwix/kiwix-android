@@ -1260,10 +1260,10 @@ public class KiwixMobileActivity extends AppCompatActivity {
         if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
           // This is my web site, so do not override; let my WebView load the page
           handleEvent = true;
-        } else if (url.startsWith("file://")) {
+        } else if (url.startsWith("file://") && !url.contains("selectzimfile")) {
           // To handle help page (loaded from resources)
           handleEvent = true;
-        } else if (url.startsWith(ZimContentProvider.UI_URI.toString())) {
+        } else if (url.startsWith(ZimContentProvider.UI_URI.toString()) && !url.contains("selectzimfile")) {
           handleEvent = true;
         }
 
