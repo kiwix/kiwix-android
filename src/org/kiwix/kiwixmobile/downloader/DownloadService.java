@@ -154,7 +154,6 @@ public class DownloadService extends Service {
                     target, PendingIntent.FLAG_CANCEL_CURRENT);
             book.downloaded = true;
             notification.get(notificationID).setContentIntent(pendingIntent);
-            bookDao.saveBook(book);
             updateForeground();
           } else if (progress == 0) {
             // Tells android to not kill the service

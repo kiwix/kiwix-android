@@ -189,7 +189,6 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
           + bytesToHuman(getSpaceAvailable()), Toast.LENGTH_LONG).show();
       return;
     }
-    bookDao.saveBook((LibraryNetworkEntity.Book) parent.getAdapter().getItem(position));
     if (isWiFi()){
       downloadFile((LibraryNetworkEntity.Book) parent.getAdapter().getItem(position));
     } else {
@@ -259,7 +258,6 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
   }
 
   public void downloadFile(LibraryNetworkEntity.Book book) {
-    bookDao.saveBook(book);
     Toast.makeText(super.getActivity(), stringsGetter(R.string.download_started_library, super.getActivity()), Toast.LENGTH_LONG).show();
     Intent service = new Intent(super.getActivity(), DownloadService.class);
     service.putExtra(DownloadIntent.DOWNLOAD_URL_PARAMETER, book.getUrl());

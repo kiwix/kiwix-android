@@ -64,6 +64,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.kiwix.kiwixmobile.database.BookDao;
@@ -85,16 +88,15 @@ public class ZimFileSelectFragment extends Fragment
   private static final int LOADER_ID = 0x02;
   public static Context context;
   public RelativeLayout llLayout;
-  // Adapter of the Data populated by the MediaStore
-  private SimpleCursorAdapter mCursorAdapter;
   // Adapter of the Data populated by recanning the Filesystem by ourselves
   private RescanDataAdapter mRescanAdapter;
   private ArrayList<LibraryNetworkEntity.Book> mFiles;
   private ListView mZimFileList;
-  private RelativeLayout mProgressBar;
+  private RelativeLayout progressBar;
   private TextView mFileMessage;
-  private TextView mProgressBarMessage;
+
   private BookDao bookDao;
+
 
   public static void finishResult(String path) {
     ZimManageActivity zimManageActivity = (ZimManageActivity) context;
@@ -110,40 +112,51 @@ public class ZimFileSelectFragment extends Fragment
     }
   }
 
+  public void refreshFragment(){
+    // Of course you will want to faActivity and llLayout in the class and not this method to access them in the rest of
+    // the class, just initialize them here
+    if (mZimFileList == null)
+      return;
+
+    mZimFileList.addFooterView(progressBar);
+    mZimFileList.setOnItemClickListener(this);
+    mZimFileList.setOnItemLongClickListener(this);
+
+    bookDao = new BookDao(new KiwixDatabase(context));
+
+    mFiles = bookDao.getBooks();
+    Collections.sort(mFiles, new fileComparator());
+
+    mRescanAdapter = new RescanDataAdapter(ZimFileSelectFragment.context, 0, mFiles);
+
+    mZimFileList.setAdapter(mRescanAdapter);
+    mRescanAdapter.notifyDataSetChanged();
+    checkPermissions();
+  }
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     FragmentActivity faActivity  = (FragmentActivity)    super.getActivity();
     context = super.getActivity();
     // Replace LinearLayout by the type of the root element of the layout you're trying to load
     llLayout = (RelativeLayout) inflater.inflate(R.layout.zim_list, container, false);
-    // Of course you will want to faActivity and llLayout in the class and not this method to access them in the rest of
-    // the class, just initialize them here
-
     new LanguageUtils(super.getActivity()).changeFont(super.getActivity().getLayoutInflater());
 
-    mFiles = new ArrayList<LibraryNetworkEntity.Book>();
-
-    mProgressBar = (RelativeLayout) llLayout.findViewById(R.id.progressbar_layout);
     mFileMessage = (TextView) llLayout.findViewById(R.id.file_management_no_files);
-//    mProgressBarMessage = (TextView) llLayout.findViewById(R.id.progressbar_message);
     mZimFileList = (ListView)  llLayout.findViewById(R.id.zimfilelist);
 
-    mZimFileList.setOnItemClickListener(this);
-    mZimFileList.setOnItemLongClickListener(this);
-    mProgressBar.setVisibility(View.VISIBLE);
+    mFiles = new ArrayList<LibraryNetworkEntity.Book>();
+    progressBar = (RelativeLayout) super.getActivity().getLayoutInflater().inflate(R.layout.progress_bar, null);
+    refreshFragment();
 
-    bookDao = new BookDao(new KiwixDatabase(context));
-
-    checkPermissions();
-
-    // Don't use this method, it's handled by inflater.inflate() above :
-    // setContentView(R.layout.activity_layout);
-
-    // The FragmentActivity doesn't contain the layout directly so we must use our instance of     LinearLayout :
-    //llLayout.findViewById(R.id.someGuiElement);
-    // Instead of :
-    // findViewById(R.id.someGuiElement);
     return llLayout; // We must return the loaded Layout
+  }
+
+  private class fileComparator implements Comparator<LibraryNetworkEntity.Book> {
+    @Override
+    public int compare(LibraryNetworkEntity.Book b1, LibraryNetworkEntity.Book b2) {
+      return b1.getTitle().compareTo(b2.getTitle());
+    }
   }
 
   public void checkPermissions(){
@@ -384,8 +397,6 @@ public class ZimFileSelectFragment extends Fragment
     @Override
     protected void onPreExecute() {
 
-      mProgressBar.setVisibility(View.VISIBLE);
-
       super.onPreExecute();
     }
 
@@ -393,6 +404,8 @@ public class ZimFileSelectFragment extends Fragment
     protected Void doInBackground(Void... params) {
 
       mFiles = new FileSearch().findFiles();
+      Collections.sort(mFiles, new fileComparator());
+      bookDao.saveBooks(mFiles);
       return null;
     }
     @Override
@@ -401,11 +414,10 @@ public class ZimFileSelectFragment extends Fragment
 
       mZimFileList.setAdapter(mRescanAdapter);
 
-      mProgressBar.setVisibility(View.GONE);
+      mZimFileList.removeFooterView(progressBar);
+      //mZimFileList.addFooterView(emptyView);
 
       checkEmpty();
-
-      new FileWriter(ZimFileSelectFragment.context).saveArray(mFiles);
 
       super.onPostExecute(result);
     }

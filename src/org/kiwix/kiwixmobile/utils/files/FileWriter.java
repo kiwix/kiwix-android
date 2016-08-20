@@ -52,23 +52,6 @@ public class FileWriter {
     mContext = context;
   }
 
-  // Build a CSV list from the file paths
-  public void saveArray(ArrayList<LibraryNetworkEntity.Book> files) {
-
-    ArrayList<String> list = new ArrayList<>();
-
-    for (LibraryNetworkEntity.Book file : files) {
-      list.add(file.file.getPath());
-    }
-
-    StringBuilder sb = new StringBuilder();
-    for (String s : list) {
-      sb.append(s);
-      sb.append(",");
-    }
-
-    saveCsvToPrefrences(sb.toString());
-  }
 
   // Read the locales.txt file in the assets folder, that has been created at compile time by the
   // build script
@@ -91,15 +74,6 @@ public class FileWriter {
     return readCsv(content);
   }
 
-
-  // Split the CSV by the comma and return an ArrayList with the file paths
-  private ArrayList<String> readCsv() {
-
-    String csv = getCsvFromPrefrences();
-
-    return readCsv(csv);
-  }
-
   private ArrayList<String> readCsv(String csv) {
 
     String[] csvArray = csv.split(",");
@@ -107,27 +81,6 @@ public class FileWriter {
     return new ArrayList<String>(Arrays.asList(csvArray));
   }
 
-  // Save a CSV file to the prefrences
-  private void saveCsvToPrefrences(String csv) {
-
-    SharedPreferences preferences = mContext.getSharedPreferences(PREF_NAME, 0);
-    SharedPreferences.Editor editor = preferences.edit();
-    editor.putString(CSV_PREF_NAME, csv);
-
-    editor.apply();
-  }
-
-  // Load the CSV from the prefrences
-  private String getCsvFromPrefrences() {
-    SharedPreferences preferences = mContext.getSharedPreferences(PREF_NAME, 0);
-
-    return preferences.getString(CSV_PREF_NAME, "");
-  }
-
-  // Remove the file path and the extension and return a file name for the given file path
-  private String getTitleFromFilePath(String path) {
-    return new File(path).getName().replaceFirst("[.][^.]+$", "");
-  }
 }
 
 

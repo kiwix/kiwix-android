@@ -8,7 +8,10 @@ import org.kiwix.kiwixmobile.database.entity.BookDataSource;
 import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.Bookmarks;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
+
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -24,13 +27,13 @@ public class BookDao {
   }
 
 
-  public LibraryNetworkEntity.Book getBook(String fileName) {
+  public ArrayList<Book> getBooks() {
     SquidCursor<BookDatabaseEntity> bookCursor = mDb.query(
         BookDatabaseEntity.class,
         Query.select());
-    LibraryNetworkEntity.Book book = new LibraryNetworkEntity.Book();
+    ArrayList<Book> books = new ArrayList<>();
     while (bookCursor.moveToNext()){
-      if (bookCursor.get(BookDatabaseEntity.URL).contains("/" + fileName + ".")) {
+        Book book = new Book();
         book.id = bookCursor.get(BookDatabaseEntity.BOOK_ID);
         book.title = bookCursor.get(BookDatabaseEntity.TITLE);
         book.description = bookCursor.get(BookDatabaseEntity.DESCRIPTION);
@@ -38,38 +41,41 @@ public class BookDao {
         book.creator = bookCursor.get(BookDatabaseEntity.BOOK_CREATOR);
         book.publisher = bookCursor.get(BookDatabaseEntity.PUBLISHER);
         book.date = bookCursor.get(BookDatabaseEntity.DATE);
-        book.url = bookCursor.get(BookDatabaseEntity.URL);
+        book.file = new File(bookCursor.get(BookDatabaseEntity.URL));
         book.articleCount = bookCursor.get(BookDatabaseEntity.ARTICLE_COUNT);
         book.mediaCount = bookCursor.get(BookDatabaseEntity.MEDIA_COUNT);
         book.size = bookCursor.get(BookDatabaseEntity.SIZE);
         book.favicon = bookCursor.get(BookDatabaseEntity.FAVICON);
-        book.downloaded = bookCursor.get(BookDatabaseEntity.DOWNLOADED);
-        bookCursor.close();
-        return book;
+        if (book.file.exists()) {
+          books.add(book);
+        } else {
+          String path = bookCursor.get(BookDatabaseEntity.URL);
+          mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(path));
+        }
       }
-    }
     bookCursor.close();
-    return null;
+    return books;
   }
 
-  public void saveBook(LibraryNetworkEntity.Book book) {
-    BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
-    bookDatabaseEntity.setBookId(book.getId());
-    bookDatabaseEntity.setTitle(book.getTitle());
-    bookDatabaseEntity.setDescription(book.getTitle());
-    bookDatabaseEntity.setLanguage(book.getLanguage());
-    bookDatabaseEntity.setBookCreator(book.getCreator());
-    bookDatabaseEntity.setPublisher(book.getPublisher());
-    bookDatabaseEntity.setDate(book.getDate());
-    bookDatabaseEntity.setUrl(book.getUrl());
-    bookDatabaseEntity.setArticleCount(book.getArticleCount());
-    bookDatabaseEntity.setMediaCount(book.getMediaCount());
-    bookDatabaseEntity.setSize(book.getSize());
-    bookDatabaseEntity.setFavicon(book.getFavicon());
-    bookDatabaseEntity.setIsDownloaded(book.downloaded);
-    mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(book.getUrl()));
-    mDb.persist(bookDatabaseEntity);
+  public void saveBooks(ArrayList<Book> books) {
+    for (Book book : books){
+      BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
+      bookDatabaseEntity.setBookId(book.getId());
+      bookDatabaseEntity.setTitle(book.getTitle());
+      bookDatabaseEntity.setDescription(book.getDescription());
+      bookDatabaseEntity.setLanguage(book.getLanguage());
+      bookDatabaseEntity.setBookCreator(book.getCreator());
+      bookDatabaseEntity.setPublisher(book.getPublisher());
+      bookDatabaseEntity.setDate(book.getDate());
+      bookDatabaseEntity.setUrl(book.file.getPath());
+      bookDatabaseEntity.setArticleCount(book.getArticleCount());
+      bookDatabaseEntity.setMediaCount(book.getMediaCount());
+      bookDatabaseEntity.setSize(book.getSize());
+      bookDatabaseEntity.setFavicon(book.getFavicon());
+      String filePath = book.file.getPath();
+      mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(filePath));
+      mDb.persist(bookDatabaseEntity);
+    }
   }
-
 
 }

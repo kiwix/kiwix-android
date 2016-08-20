@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -63,6 +64,10 @@ public class ZimManageActivity extends AppCompatActivity {
 
   public  Toolbar toolbar;
 
+  public MenuItem refeshItem;
+
+  private MenuItem searchItem;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -82,11 +87,43 @@ public class ZimManageActivity extends AppCompatActivity {
     TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
     tabLayout.setupWithViewPager(mViewPager);
 
-    getIntent().getIntExtra(TAB_EXTRA,0);
     mViewPager.setCurrentItem(getIntent().getIntExtra(TAB_EXTRA,0));
+    mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+      @Override
+      public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+      }
+
+      @Override
+      public void onPageSelected(int position) {
+        updateMenu(position);
+      }
+
+      @Override
+      public void onPageScrollStateChanged(int state) {
+
+      }
+    });
   }
 
+  private void updateMenu(int position){
+    if (searchItem == null)
+      return;
+    switch (position){
+      case 0:
+        refeshItem.setVisible(true);
+        searchItem.setVisible(false);
+        break;
+      case 1:
+        refeshItem.setVisible(false);
+        searchItem.setVisible(true);
+        break;
+      case 2:
+        refeshItem.setVisible(false);
+        searchItem.setVisible(false);
+        break;
+    }
+  }
   private void setUpToolbar() {
     toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
@@ -130,19 +167,15 @@ public class ZimManageActivity extends AppCompatActivity {
     // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.menu_zim_manager, menu);
     mMenu = menu;
-    SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-    menu.findItem(R.id.action_search).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
-      @Override
-      public boolean onMenuItemClick(MenuItem v) {
-        mViewPager.setCurrentItem(1);
-        return true;
-      }
-    });
+    refeshItem = (MenuItem) menu.findItem(R.id.menu_rescan_fs);
+    searchItem = (MenuItem) menu.findItem(R.id.action_search);
+    SearchView searchView = (SearchView) searchItem.getActionView();
+    updateMenu(mViewPager.getCurrentItem());
     toolbar.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        mViewPager.setCurrentItem(1);
-        MenuItemCompat.expandActionView(menu.findItem(R.id.action_search));
+        if (mViewPager.getCurrentItem() == 1)
+          MenuItemCompat.expandActionView(menu.findItem(R.id.action_search));
       }
     });
     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -173,10 +206,8 @@ public class ZimManageActivity extends AppCompatActivity {
 
     if (id == R.id.menu_rescan_fs){
 
-      mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-      int position = mViewPager.getCurrentItem();
-      mViewPager.setAdapter(mSectionsPagerAdapter);
-      mViewPager.setCurrentItem(position);
+      ZimFileSelectFragment fragment = (ZimFileSelectFragment) mSectionsPagerAdapter.getItem(0);
+      fragment.refreshFragment();
      // mViewPager.notify();
     }
     //noinspection SimplifiableIfStatement
@@ -191,6 +222,12 @@ public class ZimManageActivity extends AppCompatActivity {
    */
   public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+    private ZimFileSelectFragment zimFileSelectFragment = new ZimFileSelectFragment();
+
+    private LibraryFragment libraryFragment = new LibraryFragment();
+
+    private DownloadFragment downloadFragment = new DownloadFragment();
+
     public SectionsPagerAdapter(FragmentManager fm) {
       super(fm);
     }
@@ -200,11 +237,11 @@ public class ZimManageActivity extends AppCompatActivity {
       // getItem is called to instantiate the fragment for the given page.
       switch (position) {
         case 0:
-          return new ZimFileSelectFragment();
+          return zimFileSelectFragment;
         case 1:
-          return new LibraryFragment();
+          return libraryFragment;
         case 2:
-          return new DownloadFragment();
+          return downloadFragment;
         default:
           return null;
       }
@@ -223,7 +260,7 @@ public class ZimManageActivity extends AppCompatActivity {
         case 1:
           return getResources().getString(R.string.remote_zims);
         case 2:
-          return "Downloads";
+          return getResources().getString(R.string.zim_downloads);
       }
       return null;
     }
