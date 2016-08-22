@@ -117,4 +117,5 @@
   <string name="no_network_connection">No network connection</string>
   <string name="get_library_over_network">Use network to download ZIM list. (Approximately 6MB)</string>
   <string name="proceed">Proceed</string>
+  <string name="wait_for_load">Content Still Loading</string>
 </resources>

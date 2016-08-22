@@ -23,6 +23,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -56,15 +57,18 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
 
 
   public static Map<String, Locale> mLocaleMap;
-  private ImmutableList<Book> allBooks;
+  public static ArrayList<Language> mLanguages = new ArrayList<>();
+  private static ImmutableList<Book> allBooks;
   private BookFilter filter;
-  private static Context mContext;
+  private static ZimManageActivity mActivity;
+  private static ArrayList<String> bookLanguages;
 
   public LibraryAdapter(Context context, ArrayList<Book> books) {
     super(context, 0, books);
     allBooks = ImmutableList.copyOf(books);
+    mActivity = (ZimManageActivity) context;
     initLanguageMap();
-    mContext = context;
+    getLanguages();
     getFilter().filter("");
   }
 
@@ -146,8 +150,8 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
       details = details.substring(details.indexOf("_", details.indexOf("_") + 1) + 1, details.lastIndexOf("_"));
       details = details.replaceAll("_", " ");
       details = details.replaceAll("all","");
-      details = details.replaceAll("nopic", stringsGetter(R.string.zim_nopic, mContext));
-      details = details.replaceAll("simple", stringsGetter(R.string.zim_simple, mContext));
+      details = details.replaceAll("nopic", stringsGetter(R.string.zim_nopic, mActivity));
+      details = details.replaceAll("simple", stringsGetter(R.string.zim_simple, mActivity));
       details = details.trim().replaceAll(" +", " ");
       return details;
     } catch (Exception e ){
@@ -163,13 +167,14 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
         LinkedList<Book> booksCopy = new LinkedList<LibraryNetworkEntity.Book>(allBooks);
         LinkedList<Book> booksAdditions = new LinkedList<LibraryNetworkEntity.Book>();
         for (Book b : allBooks){
-          if (b.getLanguage() != null && b.getLanguage().equals(mContext.getResources().getConfiguration().locale.getISO3Language())){
-            booksCopy.remove(b);
-            booksAdditions.addFirst(b);
+          Boolean contains = false;
+          for (Language language : mLanguages){
+            if (language.languageCode.equals(b.getLanguage()) && language.active == true){
+              contains = true;
+            }
           }
-        }
-        for (Book b : booksAdditions){
-          booksCopy.addFirst(b);
+          if (!contains)
+            booksCopy.remove(b);
         }
         filteredBooks.addAll(booksCopy);
       } else {
@@ -208,6 +213,8 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
         LibraryAdapter.this.addAll(filtered);
       }
       notifyDataSetChanged();
+      mActivity.mSectionsPagerAdapter.libraryFragment.progressBarLayout.setVisibility(View.GONE);
+      mActivity.mSectionsPagerAdapter.libraryFragment.libraryList.setVisibility(View.VISIBLE);
     }
   }
 
@@ -222,11 +229,32 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
   // Create a map of ISO 369-2 language codes
   public static void initLanguageMap() {
     String[] languages = Locale.getISOLanguages();
-    mLocaleMap = new HashMap<>(languages.length);
-    for (String language : languages) {
-      Locale locale = new Locale(language);
-      mLocaleMap.put(locale.getISO3Language(), locale);
-    }
+    bookLanguages = new ArrayList<>();
+      mLocaleMap = new HashMap<>(languages.length);
+      for (String language : languages) {
+        Locale locale = new Locale(language);
+        mLocaleMap.put(locale.getISO3Language(), locale);
+      }
+  }
+
+  public static void getLanguages() {
+    String[] languages = Locale.getISOLanguages();
+      for (Book book : LibraryAdapter.allBooks){
+        if (!bookLanguages.contains(book.getLanguage())){
+          bookLanguages.add(book.getLanguage());
+        }
+      }
+      mLanguages = new ArrayList<>();
+      for (String language : languages) {
+        Locale locale = new Locale(language);
+        if (bookLanguages.contains(locale.getISO3Language())) {
+          if (locale.getISO3Language().equals(mActivity.getResources().getConfiguration().locale.getISO3Language())){
+            mLanguages.add(new Language(locale, true));
+          } else {
+            mLanguages.add(new Language(locale, false));
+          }
+        }
+      }
   }
 
   // Get the language from the language codes of the parsed xml stream
@@ -280,7 +308,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
       e.printStackTrace();
     }
 
-    return BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.kiwix_icon);
+    return BitmapFactory.decodeResource(mActivity.getResources(), R.mipmap.kiwix_icon);
   }
 
   private static class ViewHolder {
@@ -303,9 +331,29 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
 
     ImageView favicon;
   }
-}
-class BookMatchComparator implements Comparator<Book> {
-  public int compare(Book book1, Book book2) {
-    return book2.searchMatches - book1.searchMatches;
+  class BookMatchComparator implements Comparator<Book> {
+    public int compare(Book book1, Book book2) {
+      return book2.searchMatches - book1.searchMatches;
+    }
+  }
+
+  public static class Language {
+    public String language;
+    public String languageCode;
+    public Boolean active;
+    public Language(Locale locale, Boolean active){
+      this.language = locale.getDisplayLanguage();
+      this.active = active;
+      this.languageCode = locale.getISO3Language();
+    }
+    public Language(String languageCode, String language, Boolean active){
+      this.language = language;
+      this.active = active;
+      this.languageCode = languageCode;
+    }
+    @Override
+    public boolean equals(Object obj) {
+      return ((Language)obj).language.equals(language) && ((Language)obj).active == ((Language) obj).active;
+    }
   }
 }

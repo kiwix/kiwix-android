@@ -64,10 +64,10 @@ import static org.kiwix.kiwixmobile.utils.ShortcutUtils.stringsGetter;
 
 public class LibraryFragment extends Fragment implements AdapterView.OnItemClickListener {
 
-  @BindView(R.id.library_list) ListView libraryList;
+  public @BindView(R.id.library_list) ListView libraryList;
   @BindView(R.id.progressBar) ProgressBar progressBar;
   @BindView(R.id.progressbar_message) TextView progressBarMessage;
-  @BindView(R.id.progressbar_layout) RelativeLayout progressBarLayout;
+  public @BindView(R.id.progressbar_layout) RelativeLayout progressBarLayout;
   @BindView(R.id.network_permission_text) TextView permissionText;
   @BindView(R.id.network_permission_button) Button permissionButton;
 
@@ -129,6 +129,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
     progressBar.setVisibility(View.VISIBLE);
     progressBarMessage.setVisibility(View.VISIBLE);
     progressBarLayout.setVisibility(View.VISIBLE);
+    libraryList.setVisibility(View.GONE);
     kiwixService.getLibrary()
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(library -> {
@@ -136,7 +137,6 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
           if (active) {
             libraryAdapter = new LibraryAdapter(super.getActivity(), new ArrayList<LibraryNetworkEntity.Book>(books));
             libraryList.setAdapter(libraryAdapter);
-            progressBarLayout.setVisibility(View.GONE);
           }
         },error -> {
           noNetworkConnection();

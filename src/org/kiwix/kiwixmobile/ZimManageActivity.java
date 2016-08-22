@@ -24,6 +24,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -35,9 +37,14 @@ import android.widget.Toast;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
+import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class ZimManageActivity extends AppCompatActivity {
 
@@ -49,7 +56,7 @@ public class ZimManageActivity extends AppCompatActivity {
    * may be best to switch to a
    * {@link android.support.v4.app.FragmentStatePagerAdapter}.
    */
-  private SectionsPagerAdapter mSectionsPagerAdapter;
+  public SectionsPagerAdapter mSectionsPagerAdapter;
 
   /**
    * The {@link ViewPager} that will host the section contents.
@@ -67,6 +74,8 @@ public class ZimManageActivity extends AppCompatActivity {
   public MenuItem refeshItem;
 
   private MenuItem searchItem;
+
+  private MenuItem languageItem;
 
 
   @Override
@@ -113,14 +122,17 @@ public class ZimManageActivity extends AppCompatActivity {
       case 0:
         refeshItem.setVisible(true);
         searchItem.setVisible(false);
+        languageItem.setVisible(false);
         break;
       case 1:
         refeshItem.setVisible(false);
         searchItem.setVisible(true);
+        languageItem.setVisible(true);
         break;
       case 2:
         refeshItem.setVisible(false);
         searchItem.setVisible(false);
+        languageItem.setVisible(false);
         break;
     }
   }
@@ -169,6 +181,7 @@ public class ZimManageActivity extends AppCompatActivity {
     mMenu = menu;
     refeshItem = (MenuItem) menu.findItem(R.id.menu_rescan_fs);
     searchItem = (MenuItem) menu.findItem(R.id.action_search);
+    languageItem = (MenuItem) menu.findItem(R.id.select_language);
     SearchView searchView = (SearchView) searchItem.getActionView();
     updateMenu(mViewPager.getCurrentItem());
     toolbar.setOnClickListener(new View.OnClickListener() {
@@ -194,6 +207,7 @@ public class ZimManageActivity extends AppCompatActivity {
       }
     });
 
+
     return true;
   }
 
@@ -210,9 +224,30 @@ public class ZimManageActivity extends AppCompatActivity {
       fragment.refreshFragment();
      // mViewPager.notify();
     }
+    if (id == R.id.select_language){
+      showLanguageSelect();
+    }
+
     //noinspection SimplifiableIfStatement
 
     return super.onOptionsItemSelected(item);
+  }
+
+  private void showLanguageSelect(){
+    LinearLayout view = (LinearLayout) getLayoutInflater().inflate(R.layout.language_selection, null);
+    ListView listView = (ListView) view.findViewById(R.id.language_check_view);
+    if (LibraryAdapter.mLanguages.size() == 0){
+      Toast.makeText(this, getResources().getString(R.string.wait_for_load), Toast.LENGTH_LONG).show();
+      return;
+    }
+    LanguageArrayAdapter languageArrayAdapter = new LanguageArrayAdapter(this,0,LibraryAdapter.mLanguages);
+    listView.setAdapter(languageArrayAdapter);
+    AlertDialog mAlertDialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog_Alert)
+        .setView(view)
+        .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
+          LibraryFragment.libraryAdapter.getFilter().filter("");
+        })
+        .show();
   }
 
 
@@ -224,7 +259,7 @@ public class ZimManageActivity extends AppCompatActivity {
 
     private ZimFileSelectFragment zimFileSelectFragment = new ZimFileSelectFragment();
 
-    private LibraryFragment libraryFragment = new LibraryFragment();
+    public LibraryFragment libraryFragment = new LibraryFragment();
 
     private DownloadFragment downloadFragment = new DownloadFragment();
 
@@ -266,4 +301,48 @@ public class ZimManageActivity extends AppCompatActivity {
     }
   }
 
+
+  private class LanguageArrayAdapter extends ArrayAdapter<LibraryAdapter.Language> {
+
+    private ArrayList<LibraryAdapter.Language> mLanguages;
+
+    public LanguageArrayAdapter(Context context, int textViewResourceId, ArrayList<LibraryAdapter.Language> objects) {
+      super(context, textViewResourceId, objects);
+      mLanguages = objects;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+      ViewHolder holder;
+      if (convertView == null) {
+        convertView = View.inflate(getContext(), R.layout.language_check_item, null);
+        holder = new ViewHolder();
+        holder.checkBox = (CheckBox) convertView.findViewById(R.id.language_checkbox);
+        holder.language = (TextView) convertView.findViewById(R.id.language_name);
+        convertView.setTag(holder);
+      } else {
+        holder = (ViewHolder) convertView.getTag();
+      }
+
+      holder.checkBox.setOnCheckedChangeListener(null);
+      holder.language.setText(getItem(position).language);
+      holder.checkBox.setChecked(getItem(position).active);
+      holder.checkBox.setOnCheckedChangeListener((compoundButton, b) -> {
+        getItem(position).active = b;
+      });
+
+      return convertView;
+
+    }
+
+    // We are using the ViewHolder pattern in order to optimize the ListView by reusing
+    // Views and saving them to this mLibrary class, and not inlating the layout every time
+    // we need to create a row.
+    private class ViewHolder {
+      CheckBox checkBox;
+
+      TextView language;
+    }
+  }
 }
