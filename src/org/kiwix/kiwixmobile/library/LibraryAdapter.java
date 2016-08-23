@@ -22,6 +22,7 @@ package org.kiwix.kiwixmobile.library;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -36,6 +37,8 @@ import com.google.common.collect.ImmutableList;
 import org.kiwix.kiwixmobile.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.ZimManageActivity;
+import org.kiwix.kiwixmobile.database.KiwixDatabase;
+import org.kiwix.kiwixmobile.database.NetworkLanguageDao;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
@@ -62,11 +65,13 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
   private BookFilter filter;
   private static ZimManageActivity mActivity;
   private static ArrayList<String> bookLanguages;
+  private static NetworkLanguageDao networkLanguageDao;
 
   public LibraryAdapter(Context context, ArrayList<Book> books) {
     super(context, 0, books);
     allBooks = ImmutableList.copyOf(books);
     mActivity = (ZimManageActivity) context;
+    networkLanguageDao = new NetworkLanguageDao(new KiwixDatabase(mActivity));
     initLanguageMap();
     getLanguages();
     getFilter().filter("");
@@ -237,7 +242,20 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
       }
   }
 
+  public static void updateNetworklanguages(){
+    new saveNetworkLanguages().execute(mLanguages);
+  }
+
   public static void getLanguages() {
+    if (mLanguages.size() > 0){
+      return;
+    }
+
+    if (networkLanguageDao.getFilteredLanguages().size() > 0){
+      mLanguages = networkLanguageDao.getFilteredLanguages();
+      return;
+    }
+
     String[] languages = Locale.getISOLanguages();
       for (Book book : LibraryAdapter.allBooks){
         if (!bookLanguages.contains(book.getLanguage())){
@@ -255,6 +273,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
           }
         }
       }
+      new saveNetworkLanguages().execute(mLanguages);
   }
 
   // Get the language from the language codes of the parsed xml stream
@@ -346,8 +365,8 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
       this.active = active;
       this.languageCode = locale.getISO3Language();
     }
-    public Language(String languageCode, String language, Boolean active){
-      this.language = language;
+    public Language(String languageCode, Boolean active){
+      this.language = new Locale(languageCode).getDisplayLanguage();
       this.active = active;
       this.languageCode = languageCode;
     }
@@ -356,4 +375,12 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
       return ((Language)obj).language.equals(language) && ((Language)obj).active == ((Language) obj).active;
     }
   }
+  private static class saveNetworkLanguages extends AsyncTask<ArrayList<Language>, Object, Void> {
+    @Override
+    protected Void doInBackground(ArrayList<Language>... params) {
+      networkLanguageDao.saveFilteredLanguages(params[0]);
+      return null;
+    }
+  }
+
 }

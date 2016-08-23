@@ -36,6 +36,7 @@ import org.kiwix.kiwixmobile.database.entity.BookDataSource;
 import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.Bookmarks;
 import org.kiwix.kiwixmobile.database.entity.LibraryDatabaseEntity;
+import org.kiwix.kiwixmobile.database.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.RecentSearch;
 import org.kiwix.kiwixmobile.database.entity.RecentSearchSpec;
 
@@ -51,7 +52,7 @@ import java.util.List;
 
 public class KiwixDatabase extends SquidDatabase {
 
-  private static final int VERSION = 9;
+  private static final int VERSION = 10;
   private Context context;
 
 
@@ -71,7 +72,8 @@ public class KiwixDatabase extends SquidDatabase {
         BookDatabaseEntity.TABLE,
         LibraryDatabaseEntity.TABLE,
         RecentSearch.TABLE,
-        Bookmarks.TABLE
+        Bookmarks.TABLE,
+        NetworkLanguageDatabaseEntity.TABLE
     };
   }
 
@@ -116,6 +118,9 @@ public class KiwixDatabase extends SquidDatabase {
     if (newVersion >= 9) {
       db.execSQL("DROP TABLE IF EXISTS book");
       tryCreateTable(BookDatabaseEntity.TABLE);
+    }
+    if (newVersion >= 10) {
+      tryCreateTable(NetworkLanguageDatabaseEntity.TABLE);
     }
     return true;
   }

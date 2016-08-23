@@ -245,6 +245,7 @@ public class ZimManageActivity extends AppCompatActivity {
     AlertDialog mAlertDialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog_Alert)
         .setView(view)
         .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
+          LibraryAdapter.updateNetworklanguages();
           LibraryFragment.libraryAdapter.getFilter().filter("");
         })
         .show();
