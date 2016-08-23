@@ -144,12 +144,16 @@ public class DownloadFragment extends Fragment {
       imageView.setImageBitmap(StringToBitMap(getItem(position).getFavicon()));
 
       ProgressBar downloadProgress = (ProgressBar) convertView.findViewById(R.id.downloadProgress);
+      ImageView pause = (ImageView) convertView.findViewById(R.id.pause);
 
       if (LibraryFragment.mService.downloadProgress.get(mKeys[position]) != null) {
         downloadProgress.setProgress(LibraryFragment.mService.downloadProgress.get(mKeys[position]));
+        if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == 1) {
+          LibraryFragment.mService.pauseDownload(mKeys[position]);
+          pause.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+        }
       }
 
-      ImageView pause = (ImageView) convertView.findViewById(R.id.pause);
       pause.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
