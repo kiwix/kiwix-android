@@ -77,6 +77,8 @@ public class ZimManageActivity extends AppCompatActivity {
 
   private MenuItem languageItem;
 
+  public SearchView searchView;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -182,7 +184,7 @@ public class ZimManageActivity extends AppCompatActivity {
     refeshItem = (MenuItem) menu.findItem(R.id.menu_rescan_fs);
     searchItem = (MenuItem) menu.findItem(R.id.action_search);
     languageItem = (MenuItem) menu.findItem(R.id.select_language);
-    SearchView searchView = (SearchView) searchItem.getActionView();
+    searchView = (SearchView) searchItem.getActionView();
     updateMenu(mViewPager.getCurrentItem());
     toolbar.setOnClickListener(new View.OnClickListener() {
       @Override

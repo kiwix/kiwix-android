@@ -37,8 +37,10 @@ import com.google.common.collect.ImmutableList;
 import org.kiwix.kiwixmobile.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.ZimManageActivity;
+import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.database.NetworkLanguageDao;
+import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
@@ -48,6 +50,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -62,20 +65,25 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
   public static Map<String, Locale> mLocaleMap;
   public static ArrayList<Language> mLanguages = new ArrayList<>();
   private static ImmutableList<Book> allBooks;
+  private static  ArrayList<Book> arrayBooks;
   private BookFilter filter;
   private static ZimManageActivity mActivity;
   private static ArrayList<String> bookLanguages;
   private static NetworkLanguageDao networkLanguageDao;
+  private static BookDao bookDao;
 
   public LibraryAdapter(Context context, ArrayList<Book> books) {
     super(context, 0, books);
     allBooks = ImmutableList.copyOf(books);
+    arrayBooks = books;
     mActivity = (ZimManageActivity) context;
     networkLanguageDao = new NetworkLanguageDao(new KiwixDatabase(mActivity));
+    bookDao = new BookDao(new KiwixDatabase(context));
     initLanguageMap();
     getLanguages();
-    getFilter().filter("");
+    getFilter().filter(mActivity.searchView.getQuery());
   }
+
 
   @Override public View getView(int position, View convertView, ViewGroup parent) {
     ViewHolder holder;
@@ -178,12 +186,58 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
               contains = true;
             }
           }
-          if (!contains)
+          if (!contains) {
             booksCopy.remove(b);
+          } else {
+            // Check file doesn't exist locally
+            for (Book book : bookDao.getBooks()) {
+              if (book.getId().equals(b.getId())) {
+                booksCopy.remove(b);
+                contains = false;
+                break;
+              }
+            }
+            if (contains) {
+              // Check file isn't being downloaded
+              Iterator it = DownloadFragment.mDownloads.entrySet().iterator();
+              while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry) it.next();
+                Book book = (Book) pair.getValue();
+                if (book.getId().equals(b.getId())) {
+                  booksCopy.remove(b);
+                  break;
+                }
+              }
+            }
+          }
         }
         filteredBooks.addAll(booksCopy);
       } else {
+        // Check file doesn't exist locally
         for (Book b : allBooks) {
+          Boolean exits = false;
+          for (Book book : bookDao.getBooks()) {
+            if (book.getId().equals(b.getId())) {
+              exits = true;
+              break;
+            }
+          }
+          if (exits)
+            continue;
+
+          // Check file isn't being downloaded
+          Iterator it = DownloadFragment.mDownloads.entrySet().iterator();
+          while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            Book book = (Book) pair.getValue();
+            if (book.getId().equals(b.getId())) {
+              exits = true;
+              break;
+            }
+          }
+          if (exits)
+            continue;
+
           StringBuffer text = new StringBuffer();
           text.append(b.getTitle() + "|" + b.getDescription() + "|");
           if (mLocaleMap.containsKey(b.getLanguage())) {
