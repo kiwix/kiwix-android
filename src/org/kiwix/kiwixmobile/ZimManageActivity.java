@@ -1,53 +1,38 @@
 package org.kiwix.kiwixmobile;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.DataSetObserver;
+import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
-import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
-import org.kiwix.kiwixmobile.utils.LanguageUtils;
-import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 public class ZimManageActivity extends AppCompatActivity {
 
+  public static final String TAB_EXTRA = "TAB";
   /**
    * The {@link android.support.v4.view.PagerAdapter} that will provide
    * fragments for each of the sections. We use a
@@ -117,10 +102,10 @@ public class ZimManageActivity extends AppCompatActivity {
     });
   }
 
-  private void updateMenu(int position){
+  private void updateMenu(int position) {
     if (searchItem == null)
       return;
-    switch (position){
+    switch (position) {
       case 0:
         refeshItem.setVisible(true);
         searchItem.setVisible(false);
@@ -138,6 +123,7 @@ public class ZimManageActivity extends AppCompatActivity {
         break;
     }
   }
+
   private void setUpToolbar() {
     toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
@@ -151,7 +137,7 @@ public class ZimManageActivity extends AppCompatActivity {
     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        finish();
+        onBackPressed();
       }
     });
   }
@@ -168,12 +154,16 @@ public class ZimManageActivity extends AppCompatActivity {
   }
 
   @Override
-  public void onBackPressed()
-  {
-    super.onBackPressed();  // optional depending on your needs
-    Intent startIntent = new Intent(this, KiwixMobileActivity.class);
-    startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    this.startActivity(startIntent);
+  public void onBackPressed() {
+    int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
+    if (value == 1) {
+      Intent startIntent = new Intent(this, KiwixMobileActivity.class);
+//      startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      startActivity(startIntent);
+    } else {
+      super.onBackPressed();  // optional depending on your needs
+    }
+
   }
 
   @Override
@@ -215,34 +205,35 @@ public class ZimManageActivity extends AppCompatActivity {
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
-    int id = item.getItemId();
 
-    if (id == R.id.menu_rescan_fs){
+    switch (item.getItemId()) {
 
-      ZimFileSelectFragment fragment = (ZimFileSelectFragment) mSectionsPagerAdapter.getItem(0);
-      fragment.refreshFragment();
-     // mViewPager.notify();
-    }
-    if (id == R.id.select_language){
-      showLanguageSelect();
+      case R.id.menu_rescan_fs: {
+        ZimFileSelectFragment fragment = (ZimFileSelectFragment) mSectionsPagerAdapter.getItem(0);
+        fragment.refreshFragment();
+        // mViewPager.notify();
+      }
+      case R.id.select_language:
+        showLanguageSelect();
+
+
+      default:
+        return super.onOptionsItemSelected(item);
+
     }
 
     //noinspection SimplifiableIfStatement
 
-    return super.onOptionsItemSelected(item);
   }
 
-  private void showLanguageSelect(){
+  private void showLanguageSelect() {
     LinearLayout view = (LinearLayout) getLayoutInflater().inflate(R.layout.language_selection, null);
     ListView listView = (ListView) view.findViewById(R.id.language_check_view);
-    if (LibraryAdapter.mLanguages.size() == 0){
+    if (LibraryAdapter.mLanguages.size() == 0) {
       Toast.makeText(this, getResources().getString(R.string.wait_for_load), Toast.LENGTH_LONG).show();
       return;
     }
-    LanguageArrayAdapter languageArrayAdapter = new LanguageArrayAdapter(this,0,LibraryAdapter.mLanguages);
+    LanguageArrayAdapter languageArrayAdapter = new LanguageArrayAdapter(this, 0, LibraryAdapter.mLanguages);
     listView.setAdapter(languageArrayAdapter);
     AlertDialog mAlertDialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog_Alert)
         .setView(view)
