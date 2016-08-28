@@ -776,7 +776,11 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   public KiwixWebView getCurrentWebView() {
-    return mLeftArrayAdapter.getItem(mCurrentWebViewIndex);
+    if (mCurrentWebViewIndex < mLeftArrayAdapter.getCount()) {
+      return mLeftArrayAdapter.getItem(mCurrentWebViewIndex);
+    } else {
+      return mLeftArrayAdapter.getItem(0);
+    }
   }
 
   @Override
