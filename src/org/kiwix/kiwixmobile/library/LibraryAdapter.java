@@ -239,7 +239,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
             continue;
 
           StringBuffer text = new StringBuffer();
-          text.append(b.getTitle() + "|" + b.getDescription() + "|");
+          text.append(b.getTitle() + "|" + b.getDescription() + "|" + parseURL(b.getUrl()) + "|");
           if (mLocaleMap.containsKey(b.getLanguage())) {
             text.append(mLocaleMap.get(b.getLanguage()).getDisplayLanguage());
             text.append("|");
