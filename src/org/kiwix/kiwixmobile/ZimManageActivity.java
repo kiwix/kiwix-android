@@ -50,8 +50,6 @@ public class ZimManageActivity extends AppCompatActivity {
 
   public boolean downloading = false;
 
-  public static final String TAB_EXTRA = "TAB";
-
   private Menu mMenu;
 
   public  Toolbar toolbar;
