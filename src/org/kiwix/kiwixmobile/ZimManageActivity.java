@@ -32,7 +32,6 @@ import java.util.ArrayList;
 
 public class ZimManageActivity extends AppCompatActivity {
 
-  public static final String TAB_EXTRA = "TAB";
   /**
    * The {@link android.support.v4.view.PagerAdapter} that will provide
    * fragments for each of the sections. We use a
