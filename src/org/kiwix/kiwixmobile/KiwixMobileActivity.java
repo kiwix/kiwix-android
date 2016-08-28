@@ -78,6 +78,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -101,6 +102,7 @@ import org.kiwix.kiwixmobile.views.KiwixWebView;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1728,6 +1730,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
     private KiwixMobileActivity mActivity;
 
+    private ScrollView help;
+
     private ArrayAdapter mAdapter;
 
     public KiwixWebViewClient(KiwixMobileActivity activity, ArrayAdapter adapter) {
@@ -1737,7 +1741,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
-
       if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
 
         String extension = MimeTypeMap.getFileExtensionFromUrl(url);
@@ -1796,7 +1799,13 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
     @Override
     public void onPageFinished(WebView view, String url) {
-
+      if (!url.equals("file:///android_res/raw/welcome.html")) {
+        view.removeView(help);
+      } else {
+        help = (ScrollView) mActivity.getLayoutInflater().inflate(R.layout.help, null);
+        help.findViewById(R.id.get_content_button).setOnClickListener(button -> manageZimFiles(1));
+        view.addView(help);
+      }
       // Workaround for #643
       if (requestWebReloadOnFinished > 0) {
         requestWebReloadOnFinished = requestWebReloadOnFinished - 1;
