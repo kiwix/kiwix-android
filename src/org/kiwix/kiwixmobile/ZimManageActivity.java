@@ -207,12 +207,15 @@ public class ZimManageActivity extends AppCompatActivity {
     switch (item.getItemId()) {
 
       case R.id.menu_rescan_fs: {
-        ZimFileSelectFragment fragment = (ZimFileSelectFragment) mSectionsPagerAdapter.getItem(0);
-        fragment.refreshFragment();
+        if (mViewPager.getCurrentItem() == 0) {
+          ZimFileSelectFragment fragment = (ZimFileSelectFragment) mSectionsPagerAdapter.getItem(0);
+          fragment.refreshFragment();
+        }
         // mViewPager.notify();
       }
       case R.id.select_language:
-        showLanguageSelect();
+        if (mViewPager.getCurrentItem() == 1)
+          showLanguageSelect();
 
 
       default:
