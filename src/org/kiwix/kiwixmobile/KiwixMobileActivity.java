@@ -944,12 +944,14 @@ public class KiwixMobileActivity extends AppCompatActivity {
         } else {
           Toast.makeText(this, getResources().getString(R.string.error_fileinvalid),
               Toast.LENGTH_LONG).show();
+          showWelcome();
         }
       } else {
         Log.e(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
 
         Toast.makeText(this, getResources().getString(R.string.error_filenotfound), Toast.LENGTH_LONG)
             .show();
+        showWelcome();
       }
       return false;
     } else {
@@ -1800,6 +1802,10 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
     @Override
     public void onPageFinished(WebView view, String url) {
+      if (url.equals("content://org.kiwix.zim.base/null")){
+        showWelcome();
+        return;
+      }
       if (!url.equals("file:///android_res/raw/welcome.html")) {
         view.removeView(help);
       } else {
