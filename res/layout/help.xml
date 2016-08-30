@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/scrollView"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:layout_gravity="center_horizontal"
-  android:onClick="openDownloads">
+  xmlns:card_view="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+<LinearLayout
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:orientation="vertical">
+  <android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    card_view:cardElevation="2dp"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardUseCompatPadding="true"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
 
-  <LinearLayout
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp">
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
     <ImageView
       android:id="@+id/imageView"
       android:layout_width="match_parent"
@@ -19,178 +31,311 @@
       android:layout_gravity="center_horizontal"
       android:adjustViewBounds="true"
       android:longClickable="false"
-      android:src="@drawable/kiwix_icon"
+      android:src="@drawable/kiwix_welcome"
       android:visibility="visible" />
 
-
-    <Button
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/menu_zim_manager"
-      android:id="@+id/get_content_button"
-      android:layout_gravity="center_horizontal" />
 
     <TextView
       android:id="@+id/welcome1"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:paddingTop="10dp"
       android:text="@string/help_1"
       android:textAppearance="?android:attr/textAppearanceMedium"
-      android:paddingTop="10dp" />
+      android:paddingLeft="10dp"
+      android:paddingRight="10dp"
+      android:paddingBottom="10dp" />
 
+    </LinearLayout>
+  </android.support.v7.widget.CardView>
+  <android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    card_view:cardElevation="2dp"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardUseCompatPadding="true"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:id="@+id/get_content_card">
+    <TextView
+      android:id="@+id/get_content_text"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:paddingBottom="10dp"
+      android:paddingTop="10dp"
+      android:textAlignment="center"
+      android:text="@string/menu_zim_manager"
+      android:textAppearance="?android:attr/textAppearanceLarge"
+      android:background="@color/accent_material_light"
+      android:paddingLeft="10dp"
+      android:paddingRight="10dp" />
+  </android.support.v7.widget.CardView>
+
+
+  <android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    card_view:cardElevation="2dp"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardUseCompatPadding="true"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
     <TextView
       android:id="@+id/welcome2"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:paddingBottom="10dp"
+      android:paddingTop="10dp"
       android:text="@string/help_2"
       android:textAppearance="?android:attr/textAppearanceLarge"
-      android:paddingTop="10dp"
-      android:paddingBottom="10dp" />
+      android:paddingLeft="10dp"
+      android:paddingRight="10dp" />
 
     <TextView
       android:id="@+id/welcome3"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="@string/help_3"
-      android:textAppearance="?android:attr/textAppearanceMedium" />
+      android:textAppearance="?android:attr/textAppearanceMedium"
+      android:paddingLeft="10dp"
+      android:paddingRight="10dp" />
 
     <TextView
       android:id="@+id/welcome4"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="@string/help_4"
-      android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-      android:id="@+id/welcome5"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/help_5"
-      android:textAppearance="?android:attr/textAppearanceLarge"
-      android:paddingTop="10dp"
-      android:paddingBottom="10dp" />
-
-    <TextView
-      android:id="@+id/welcome6"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/help_6"
-      android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-      android:id="@+id/welcome7"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/help_7"
-      android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-      android:id="@+id/welcome8"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/help_8"
       android:textAppearance="?android:attr/textAppearanceMedium"
-      android:paddingTop="10dp" />
-
-    <TextView
-      android:id="@+id/welcome9"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/help_9"
-      android:textAppearance="?android:attr/textAppearanceMedium"
+      android:paddingLeft="10dp"
+      android:paddingRight="10dp"
       android:paddingBottom="10dp" />
+    </LinearLayout>
+  </android.support.v7.widget.CardView>
 
-    <TextView
-      android:id="@+id/welcome10"
-      android:layout_width="wrap_content"
+  <android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    card_view:cardElevation="2dp"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardUseCompatPadding="true"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <LinearLayout
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:text="@string/help_10"
-      android:textAppearance="?android:attr/textAppearanceMedium" />
+      android:orientation="vertical">
+      <TextView
+        android:id="@+id/welcome5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="@string/help_5"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
 
-    <TextView
-      android:id="@+id/welcome11"
-      android:layout_width="wrap_content"
+      <TextView
+        android:id="@+id/welcome6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/help_6"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
+
+      <TextView
+        android:id="@+id/welcome7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/help_7"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
+
+      <TextView
+        android:id="@+id/welcome8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:text="@string/help_8"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
+
+      <TextView
+        android:id="@+id/welcome9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:text="@string/help_9"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
+
+      <TextView
+        android:id="@+id/welcome10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/help_10"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
+
+      <TextView
+        android:id="@+id/welcome11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/help_11"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp" />
+    </LinearLayout>
+  </android.support.v7.widget.CardView>
+  <android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    card_view:cardElevation="2dp"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardUseCompatPadding="true"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <LinearLayout
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:text="@string/help_11"
-      android:textAppearance="?android:attr/textAppearanceMedium" />
+      android:orientation="vertical">
+      <TextView
+        android:id="@+id/welcome12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="@string/help_12"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
 
-    <TextView
-      android:id="@+id/welcome12"
-      android:layout_width="wrap_content"
+      <TextView
+        android:id="@+id/welcome13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/help_13"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
+
+      <TextView
+        android:id="@+id/welcome14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/help_14"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
+
+      <TextView
+        android:id="@+id/welcome15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/help_15"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
+
+      <TextView
+        android:id="@+id/welcome16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:text="@string/help_16"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
+
+      <TextView
+        android:id="@+id/welcome17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/help_17"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
+
+      <TextView
+        android:id="@+id/welcome18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:text="@string/help_18"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
+
+      <TextView
+        android:id="@+id/welcome19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/help_19"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp" />
+    </LinearLayout>
+  </android.support.v7.widget.CardView>
+
+  <android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    card_view:cardElevation="2dp"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardUseCompatPadding="true"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <LinearLayout
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:text="@string/help_12"
-      android:textAppearance="?android:attr/textAppearanceLarge"
-      android:paddingTop="10dp"
-      android:paddingBottom="10dp" />
+      android:orientation="vertical">
 
-    <TextView
-      android:id="@+id/welcome13"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/help_13"
-      android:textAppearance="?android:attr/textAppearanceMedium" />
+      <TextView
+        android:id="@+id/welcome20"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="@string/help_20"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
 
-    <TextView
-      android:id="@+id/welcome14"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/help_14"
-      android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-      android:id="@+id/welcome15"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/help_15"
-      android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-      android:id="@+id/welcome16"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/help_16"
-      android:textAppearance="?android:attr/textAppearanceMedium"
-      android:paddingTop="10dp" />
-
-    <TextView
-      android:id="@+id/welcome17"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/help_17"
-      android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-      android:id="@+id/welcome18"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/help_18"
-      android:textAppearance="?android:attr/textAppearanceMedium"
-      android:paddingBottom="10dp" />
-
-    <TextView
-      android:id="@+id/welcome19"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/help_19"
-      android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-      android:id="@+id/welcome20"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/help_20"
-      android:textAppearance="?android:attr/textAppearanceLarge"
-      android:paddingTop="10dp"
-      android:paddingBottom="10dp" />
-
-    <TextView
-      android:id="@+id/welcome21"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/help_21"
-      android:textAppearance="?android:attr/textAppearanceMedium"
-      android:paddingBottom="10dp" />
-
-
-  </LinearLayout>
-</ScrollView>
+      <TextView
+        android:id="@+id/welcome21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:text="@string/help_21"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
+    </LinearLayout>
+  </android.support.v7.widget.CardView>
+</LinearLayout>
+  </ScrollView>

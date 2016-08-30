@@ -47,6 +47,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.ActionMenuItemView;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ActionMode;
@@ -1803,7 +1804,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
         view.removeView(help);
       } else {
         help = (ScrollView) mActivity.getLayoutInflater().inflate(R.layout.help, null);
-        help.findViewById(R.id.get_content_button).setOnClickListener(button -> manageZimFiles(1));
+        help.findViewById(R.id.get_content_card).setOnClickListener(card -> manageZimFiles(1));
         view.addView(help);
       }
       // Workaround for #643
