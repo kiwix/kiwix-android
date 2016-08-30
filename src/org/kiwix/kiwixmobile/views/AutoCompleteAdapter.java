@@ -78,6 +78,14 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
       data.add("A/" + toAdd + ".html");
     }
 
+    public String getDbName(String file){
+      String name = file;
+      if (!name.substring(name.length() - 3).equals("zim")){
+        name = name.substring(0, name.length() - 2);
+      }
+      return name + ".idk";
+    }
+
     @Override
     protected FilterResults performFiltering(CharSequence constraint) {
       FilterResults filterResults = new FilterResults();
@@ -86,10 +94,10 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
         try {
           final String prefix = constraint.toString();
           String qStr = capitalizeQuery(prefix);
-          String[] result = JNIKiwix.indexedQuery(ZimContentProvider.getZimFile() + ".idx", qStr).split("\n");
+          String[] result = JNIKiwix.indexedQuery(getDbName(ZimContentProvider.getZimFile()), qStr).split("\n");
 
           if (result.length == 1 && result[0].trim().isEmpty()) {
-            result = JNIKiwix.indexedQueryPartial(ZimContentProvider.getZimFile() + ".idx", qStr).split("\n");
+            result = JNIKiwix.indexedQueryPartial(getDbName(ZimContentProvider.getZimFile()), qStr).split("\n");
           }
 
           if (hasNonEmptyResult(result)) {
