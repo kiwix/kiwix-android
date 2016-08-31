@@ -119,7 +119,8 @@ public class DownloadService extends Service {
   }
 
   public void cancelNotification(int notificationID) {
-    notificationManager.cancel(notificationID);
+    if (notificationManager != null)
+      notificationManager.cancel(notificationID);
   }
 
 
