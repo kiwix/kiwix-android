@@ -27,6 +27,11 @@ dependencies {
   compile 'com.android.support:design:24.1.0'
   compile 'com.android.support:cardview-v7:21.0.+'
 
+  androidTestCompile 'com.android.support:support-annotations:24.1.0'
+  androidTestCompile 'com.android.support.test:runner:0.5'
+  androidTestCompile 'com.android.support.test:rules:0.5'
+
+
   compile 'com.yahoo.squidb:squidb:2.0.0'
   compile 'com.yahoo.squidb:squidb-annotations:2.0.0'
   apt 'com.yahoo.squidb:squidb-processor:2.0.0'
@@ -51,6 +56,9 @@ dependencies {
 
   // compile fileTree(dir: '.', include: 'content-libs.jar') // DO NOT REMOVE !!
   testCompile 'junit:junit:4.12'
+  androidTestCompile 'junit:junit:4.12'
+  compile 'com.android.support.test:runner:0.5'
+  compile 'junit:junit:4.12'
 }
 
 android {
@@ -60,6 +68,7 @@ android {
   defaultConfig {
     minSdkVersion 14
     targetSdkVersion 24
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
 
   lintOptions {

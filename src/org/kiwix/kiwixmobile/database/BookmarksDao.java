@@ -27,7 +27,7 @@ public class BookmarksDao {
     SquidCursor<Bookmarks> bookmarkCursor = mDb.query(
         Bookmarks.class,
         Query.selectDistinct(Bookmarks.BOOKMARK_URL).where(Bookmarks.ZIM_ID.eq(ZimId))
-            .orderBy(Bookmarks.ID.desc()));
+            .orderBy(Bookmarks.ID.asc()));
     ArrayList<String> result = new ArrayList<>();
     try {
       while (bookmarkCursor.moveToNext()) {
@@ -43,7 +43,7 @@ public class BookmarksDao {
     SquidCursor<Bookmarks> bookmarkCursor = mDb.query(
         Bookmarks.class,
         Query.selectDistinct(Bookmarks.BOOKMARK_TITLE).where(Bookmarks.ZIM_ID.eq(ZimId))
-            .orderBy(Bookmarks.ID.desc()));
+            .orderBy(Bookmarks.ID.asc()));
     ArrayList<String> result = new ArrayList<>();
     try {
       while (bookmarkCursor.moveToNext()) {
