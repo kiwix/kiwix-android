@@ -1802,13 +1802,13 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
     @Override
     public void onPageFinished(WebView view, String url) {
-      if (url.equals("content://org.kiwix.zim.base/null")){
+      if (url.equals("content://org.kiwix.zim.base/null") && !Constants.IS_CUSTOM_APP){
         showWelcome();
         return;
       }
       if (!url.equals("file:///android_res/raw/welcome.html")) {
         view.removeView(help);
-      } else {
+      } else if (!Constants.IS_CUSTOM_APP){
         help = (ScrollView) mActivity.getLayoutInflater().inflate(R.layout.help, null);
         help.findViewById(R.id.get_content_card).setOnClickListener(card -> manageZimFiles(1));
         view.addView(help);
