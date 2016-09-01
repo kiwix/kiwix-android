@@ -465,7 +465,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
     mContentFrame = (FrameLayout) findViewById(R.id.content_frame);
     setUpTTS();
     htmlUtils = new HTMLUtils(sectionProperties, mSections, mRightDrawerList, this, mHandler);
-    newTab();
 
     manageExternalLaunchAndRestoringViewState(savedInstanceState);
     setUpExitFullscreenButton();
@@ -779,6 +778,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   public KiwixWebView getCurrentWebView() {
+    if (mLeftArrayAdapter.getCount() == 0)
+      return newTab();
     if (mCurrentWebViewIndex < mLeftArrayAdapter.getCount()) {
       return mLeftArrayAdapter.getItem(mCurrentWebViewIndex);
     } else {
