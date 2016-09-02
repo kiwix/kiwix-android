@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
@@ -124,10 +125,15 @@ public class SearchActivity extends AppCompatActivity
   }
 
   private void sendMessage(String uri) {
-    Intent i = new Intent();
+    Intent i = new Intent(this, KiwixMobileActivity.class);
     i.putExtra(KiwixMobileActivity.TAG_FILE_SEARCHED, uri);
-    setResult(RESULT_OK, i);
-    finish();
+    int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
+    if (value == 1) {
+      startActivity(i);
+    } else {
+      setResult(RESULT_OK, i);
+      finish();
+    }
   }
 
   @Override

@@ -485,6 +485,9 @@ public class KiwixMobileActivity extends AppCompatActivity {
     if (i.getBooleanExtra("library",false)){
       manageZimFiles(2);
     }
+    if (i.hasExtra(TAG_FILE_SEARCHED)){
+      searchForTitle(i.getStringExtra(TAG_FILE_SEARCHED));
+    }
     if (i.hasExtra("zimFile")){
       File file = new File(i.getStringExtra("zimFile"));
       LibraryFragment.mService.cancelNotification(i.getIntExtra("notificationID",0));
@@ -1331,6 +1334,19 @@ public class KiwixMobileActivity extends AppCompatActivity {
     super.onConfigurationChanged(newConfig);
   }
 
+  public void searchForTitle(String title){
+    String articleUrl = "";
+
+    if (title.startsWith("A/")) {
+      articleUrl = title;
+    } else {
+      articleUrl = ZimContentProvider.getPageUrlFromTitle(title);
+    }
+
+    //System.out.println("Opening "+articleUrl + " (" + title + ")");
+
+    openArticle(articleUrl);
+  }
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -1367,17 +1383,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
           String title =
               data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
-          String articleUrl = "";
-
-          if (title.startsWith("A/")) {
-            articleUrl = title;
-          } else {
-            articleUrl = ZimContentProvider.getPageUrlFromTitle(title);
-          }
-
-          //System.out.println("Opening "+articleUrl + " (" + title + ")");
-
-          openArticle(articleUrl);
+          searchForTitle(title);
         }
         break;
       case REQUEST_PREFERENCES:

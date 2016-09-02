@@ -95,7 +95,7 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".ZimFileSelectFragment"
+      android:name=".ZimManageActivity"
       android:label="@string/choose_file">
 
       <!-- TODO -->
@@ -131,13 +131,9 @@
         android:resource="@xml/kiwix_widget_provider_info" />
     </receiver>
 
-    <activity android:name=".LibraryFragment" />
 
     <service android:name=".downloader.DownloadService" />
 
-    <activity
-      android:name=".ZimManageActivity"
-      android:theme="@style/AppTheme"></activity>
   </application>
 
 </manifest>
