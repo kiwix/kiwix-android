@@ -4,7 +4,8 @@
   <item android:drawable="@android:color/white"/>
   <item>
     <bitmap
-      android:src="@drawable/splash_screen"
-      android:gravity="center"/>
+      android:src="@drawable/kiwix_icon__with_title"
+      android:gravity="center"
+        />
   </item>
 </layer-list>
