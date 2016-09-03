@@ -61,6 +61,11 @@ public class KiwixWebView extends WebView {
 
   private OnLongClickListener mOnLongClickListener;
 
+  @Override
+  public void loadUrl(String url){
+    super.loadUrl(url);
+  }
+
   private Handler saveHandler = new Handler() {
 
     @Override

@@ -22,6 +22,7 @@ package org.kiwix.kiwixmobile;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -199,24 +200,32 @@ public class BookmarksActivity extends AppCompatActivity
 
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-    Intent intent = new Intent();
+    Intent intent = new Intent(this, KiwixMobileActivity.class);
     if (!bookmarkUrls.get(position).equals("null")) {
       intent.putExtra("choseXURL", bookmarkUrls.get(position));
     } else {
       intent.putExtra("choseXTitle", bookmarks.get(position));
     }
     intent.putExtra("bookmarkClicked", true);
-    setResult(RESULT_OK, intent);
-    finish();
+    int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
+    if (value == 1) {
+      startActivity(intent);
+      finish();
+    } else {
+      setResult(RESULT_OK, intent);
+      finish();
+    }
   }
 
   @Override
   public void onBackPressed() {
-    Intent intent = new Intent();
-    intent.putExtra("bookmarkClicked", false);
-    setResult(RESULT_OK, intent);
-    finish();
-    super.onBackPressed();
+    int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
+    if (value == 1) {
+      Intent startIntent = new Intent(this, KiwixMobileActivity.class);
+      startActivity(startIntent);
+    } else {
+      super.onBackPressed();
+    }
   }
 
 }

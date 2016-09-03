@@ -55,25 +55,25 @@ public class KiwixSearchWidget extends AppWidgetProvider {
       Intent mainIntent = new Intent(context, KiwixMobileActivity.class);
       mainIntent.putExtra("isWidgetSearch", true);
       mainIntent.setAction(TEXT_CLICKED);
-      PendingIntent searchPendingIntent = PendingIntent.getActivity(context, 0, mainIntent, 0);
+      PendingIntent searchPendingIntent = PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE), mainIntent, 0);
 
       /** Kiwix icon intent to main app **/
       Intent kiwixIconIntent = new Intent(context, KiwixMobileActivity.class);
       kiwixIconIntent.setAction(ICON_CLICKED);
-      PendingIntent mainAppPendingIntent = PendingIntent.getActivity(context, 0, kiwixIconIntent, 0);
+      PendingIntent mainAppPendingIntent = PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE), kiwixIconIntent, 0);
 
       /** Star icon intent to bookmarks **/
       Intent starIntent = new Intent(context, KiwixMobileActivity.class);
       starIntent.putExtra("isWidgetStar", true);
       starIntent.setAction(STAR_CLICKED);
-      PendingIntent starPendingIntent = PendingIntent.getActivity(context, 0, starIntent, 0);
+      PendingIntent starPendingIntent = PendingIntent.getActivity(context,(int) (System.currentTimeMillis() % Integer.MAX_VALUE), starIntent, 0);
 
 
       /** Microphone icon intent for voice search **/
       Intent voiceIntent = new Intent(context, KiwixMobileActivity.class);
       voiceIntent.putExtra("isWidgetVoice", true);
       voiceIntent.setAction(MIC_CLICKED);
-      PendingIntent voicePendingIntent = PendingIntent.getActivity(context, 0, voiceIntent, 0);
+      PendingIntent voicePendingIntent = PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE), voiceIntent, 0);
 
       views.setOnClickPendingIntent(R.id.search_widget_text, searchPendingIntent);
       views.setOnClickPendingIntent(R.id.search_widget_icon, mainAppPendingIntent);
@@ -84,16 +84,7 @@ public class KiwixSearchWidget extends AppWidgetProvider {
     }
   }
 
-  public void onReceive(Context context, Intent intent) {
-    super.onReceive(context, intent);
 
-  }
-
-//  protected PendingIntent getPendingSelfIntent(Context context, String action) {
-//    Intent intent = new Intent(context, getClass());
-//    intent.setAction(action);
-//    return PendingIntent.getBroadcast(context, 0, intent, 0);
-//  }
 
 
 }

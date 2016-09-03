@@ -11,6 +11,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -67,12 +69,21 @@ public class SearchActivity extends AppCompatActivity
     }
   }
 
+
+
+
   @Override
   public void finish() {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
-    super.finish();
-    overridePendingTransition(0, 0);
+    int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
+    if (value == 1) {
+      Intent intent = new Intent(this, KiwixMobileActivity.class);
+      startActivity(intent);
+    } else {
+      super.finish();
+      overridePendingTransition(0, 0);
+    }
   }
 
   @Override
@@ -125,12 +136,14 @@ public class SearchActivity extends AppCompatActivity
   }
 
   private void sendMessage(String uri) {
-    Intent i = new Intent(this, KiwixMobileActivity.class);
-    i.putExtra(KiwixMobileActivity.TAG_FILE_SEARCHED, uri);
     int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
     if (value == 1) {
+      Intent i = new Intent(this, KiwixMobileActivity.class);
+      i.putExtra(KiwixMobileActivity.TAG_FILE_SEARCHED, uri);
       startActivity(i);
     } else {
+      Intent i = new Intent();
+      i.putExtra(KiwixMobileActivity.TAG_FILE_SEARCHED, uri);
       setResult(RESULT_OK, i);
       finish();
     }

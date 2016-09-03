@@ -21,7 +21,9 @@ package org.kiwix.kiwixmobile;
 
 import android.Manifest;
 import android.app.Activity;
+import android.appwidget.AppWidgetManager;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -91,6 +93,7 @@ import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.settings.Constants;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.HTMLUtils;
+import org.kiwix.kiwixmobile.utils.KiwixSearchWidget;
 import org.kiwix.kiwixmobile.utils.KiwixTextToSpeech;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.RateAppCounter;
@@ -315,14 +318,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
     mProgressBar = (AnimatedProgressBar) findViewById(R.id.progress_view);
     exitFullscreenButton = (ImageButton) findViewById(R.id.FullscreenControlButton);
 
-    boolean IS_WIDGET_SEARCH_INTENT;
-    boolean IS_WIDGET_VOICE_SEARCH;
-    boolean IS_WIDGET_STAR;
-    IS_WIDGET_SEARCH_INTENT = getIntent().getBooleanExtra("isWidgetSearch", false);
-    IS_WIDGET_VOICE_SEARCH = getIntent().getBooleanExtra("isWidgetVoice", false);
-    IS_WIDGET_STAR = getIntent().getBooleanExtra("isWidgetStar", false);
-
-
     stopTTSButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
@@ -471,15 +466,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     loadPrefs();
     updateTitle(ZimContentProvider.getZimFileTitle());
 
-    if (IS_WIDGET_STAR && ZimContentProvider.getId() != null) {
-      goToBookmarks();
-    } else if (IS_WIDGET_SEARCH_INTENT && ZimContentProvider.getId() != null) {
-      goToSearch(false);
-    } else if (IS_WIDGET_VOICE_SEARCH && ZimContentProvider.getId() != null) {
-      goToSearch(true);
-    } else if (IS_WIDGET_STAR || IS_WIDGET_SEARCH_INTENT || IS_WIDGET_VOICE_SEARCH) {
-      manageZimFiles(0);
-    }
+
 
     Intent i = getIntent();
     if (i.getBooleanExtra("library",false)){
@@ -487,6 +474,15 @@ public class KiwixMobileActivity extends AppCompatActivity {
     }
     if (i.hasExtra(TAG_FILE_SEARCHED)){
       searchForTitle(i.getStringExtra(TAG_FILE_SEARCHED));
+      selectTab(mLeftArrayAdapter.getCount() - 1);
+    }
+    if (i.hasExtra("choseXURL")){
+      newTab();
+      getCurrentWebView().loadUrl(i.getStringExtra("choseXURL"));
+    }
+    if (i.hasExtra("choseXTitle")){
+      newTab();
+      getCurrentWebView().loadUrl(i.getStringExtra("choseXTitle"));
     }
     if (i.hasExtra("zimFile")){
       File file = new File(i.getStringExtra("zimFile"));
@@ -510,6 +506,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private void goToSearch(boolean isVoice) {
     final String zimFile = ZimContentProvider.getZimFile();
+    saveTabStates();
     Intent i = new Intent(KiwixMobileActivity.this, SearchActivity.class);
     i.putExtra("zimFile", zimFile);
     if (isVoice) {
@@ -857,6 +854,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
 
   private void goToBookmarks() {
+    saveTabStates();
     Intent intentBookmarks = new Intent(getBaseContext(), BookmarksActivity.class);
     intentBookmarks.putExtra("bookmark_contents", bookmarks);
     startActivityForResult(intentBookmarks, BOOKMARK_CHOSEN_REQUEST);
@@ -1123,6 +1121,23 @@ public class KiwixMobileActivity extends AppCompatActivity {
     if (menu != null) {
       refreshBookmarkSymbol(menu);
     }
+
+    boolean IS_WIDGET_SEARCH_INTENT = getIntent().getBooleanExtra("isWidgetSearch", false);
+    boolean IS_WIDGET_VOICE_SEARCH = getIntent().getBooleanExtra("isWidgetVoice", false);
+    boolean IS_WIDGET_STAR = getIntent().getBooleanExtra("isWidgetStar", false);
+    getIntent().removeExtra("isWidgetSearch");
+    getIntent().removeExtra("isWidgetVoice");
+    getIntent().removeExtra("isWidgetStar");
+    if (IS_WIDGET_STAR && ZimContentProvider.getId() != null) {
+      goToBookmarks();
+    } else if (IS_WIDGET_SEARCH_INTENT && ZimContentProvider.getId() != null) {
+      goToSearch(false);
+    } else if (IS_WIDGET_VOICE_SEARCH && ZimContentProvider.getId() != null) {
+      goToSearch(true);
+    } else if (IS_WIDGET_STAR || IS_WIDGET_SEARCH_INTENT || IS_WIDGET_VOICE_SEARCH) {
+      manageZimFiles(0);
+    }
+    updateWidgets(this);
   }
 
   @Override
@@ -1213,6 +1228,23 @@ public class KiwixMobileActivity extends AppCompatActivity {
   public void readAloud() {
     tts.readAloud(getCurrentWebView());
   }
+
+
+  public static void updateWidgets(Context context) {
+    Intent intent = new Intent(context.getApplicationContext(), KiwixSearchWidget.class);
+    intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+    // Use an array and EXTRA_APPWIDGET_IDS instead of AppWidgetManager.EXTRA_APPWIDGET_ID,
+    // since it seems the onUpdate() is only fired on that:
+    AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+    int[] ids = widgetManager.getAppWidgetIds(new ComponentName(context, KiwixSearchWidget.class));
+
+    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+      widgetManager.notifyAppWidgetViewDataChanged(ids, android.R.id.list);
+
+    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+    context.sendBroadcast(intent);
+  }
+
 
   private void setUpWebView() {
 
@@ -1347,6 +1379,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
     openArticle(articleUrl);
   }
+
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -1410,6 +1443,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
             return;
 
           //Bookmarks
+          bookmarksDao = new BookmarksDao(new KiwixDatabase(this));
           bookmarksDao = new BookmarksDao(new KiwixDatabase(this));
           bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId());
 
@@ -1571,6 +1605,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
     JSONArray urls = new JSONArray();
     JSONArray positions = new JSONArray();
     for (KiwixWebView view : mWebViews) {
+      if (view.getUrl() == null)
+        continue;
       urls.put(view.getUrl());
       positions.put(view.getScrollY());
     }
@@ -1809,7 +1845,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
     @Override
     public void onPageFinished(WebView view, String url) {
-      if (url.equals("content://org.kiwix.zim.base/null") && !Constants.IS_CUSTOM_APP){
+      if ((url.equals("content://org.kiwix.zim.base/null")) && !Constants.IS_CUSTOM_APP){
         showWelcome();
         return;
       }
