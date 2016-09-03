@@ -1776,7 +1776,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
     private KiwixMobileActivity mActivity;
 
-    private ScrollView help;
+    private LinearLayout help;
 
     private ArrayAdapter mAdapter;
 
@@ -1852,7 +1852,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
       if (!url.equals("file:///android_res/raw/welcome.html")) {
         view.removeView(help);
       } else if (!Constants.IS_CUSTOM_APP){
-        help = (ScrollView) mActivity.getLayoutInflater().inflate(R.layout.help, null);
+        help = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.help, null);
         help.findViewById(R.id.get_content_card).setOnClickListener(card -> manageZimFiles(1));
         view.addView(help);
       }
