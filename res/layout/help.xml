@@ -3,17 +3,18 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
 
 
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:card_view="http://schemas.android.com/apk/res-auto"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent">
+<ScrollView
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+    android:background="@color/white">
 <LinearLayout
-android:layout_width="fill_parent"
-android:layout_height="fill_parent"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
 android:orientation="vertical">
   <android.support.v7.widget.CardView
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -55,30 +56,6 @@ android:orientation="vertical">
 
     </LinearLayout>
   </android.support.v7.widget.CardView>
-  <!--<android.support.v7.widget.CardView-->
-    <!--xmlns:card_view="http://schemas.android.com/apk/res-auto"-->
-    <!--android:layout_gravity="center"-->
-    <!--android:paddingLeft="20dp"-->
-    <!--android:paddingRight="20dp"-->
-    <!--card_view:cardElevation="2dp"-->
-    <!--card_view:cardCornerRadius="4dp"-->
-    <!--card_view:cardUseCompatPadding="true"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:id="@+id/get_content_card">-->
-    <!--<TextView-->
-      <!--android:id="@+id/get_content_text"-->
-      <!--android:layout_width="fill_parent"-->
-      <!--android:layout_height="fill_parent"-->
-      <!--android:paddingBottom="10dp"-->
-      <!--android:paddingTop="10dp"-->
-      <!--android:textAlignment="center"-->
-      <!--android:text="@string/menu_zim_manager"-->
-      <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
-      <!--android:background="@color/accent_material_light"-->
-      <!--android:paddingLeft="10dp"-->
-      <!--android:paddingRight="10dp" />-->
-  <!--</android.support.v7.widget.CardView>-->
 
   <Button
       android:layout_width="match_parent"
@@ -86,6 +63,7 @@ android:orientation="vertical">
       android:id="@+id/get_content_card"
       android:background="@drawable/get_content_ripple_shape"
       android:textSize="20sp"
+      android:textColor="@color/white"
       android:layout_margin="3dp"
       android:textAllCaps="false"
       android:text="Get Content"/>
