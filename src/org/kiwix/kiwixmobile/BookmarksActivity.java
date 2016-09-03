@@ -57,7 +57,7 @@ public class BookmarksActivity extends AppCompatActivity
   private ArrayList<String> selected;
   private int numOfSelected;
   private LinearLayout snackbarLayout;
-  private TextView noBookmarksTextView;
+  private LinearLayout noBookmarksLayout;
   private BookmarksDao bookmarksDao;
 
   @Override
@@ -68,7 +68,7 @@ public class BookmarksActivity extends AppCompatActivity
     snackbarLayout = (LinearLayout) findViewById(R.id.bookmarks_activity_layout);
     selected = new ArrayList<>();
     bookmarksList = (ListView) findViewById(R.id.bookmarks_list);
-    noBookmarksTextView = (TextView) findViewById(R.id.bookmarks_list_nobookmarks);
+    noBookmarksLayout = (LinearLayout) findViewById(R.id.bookmarks_none_linlayout);
 
 
     bookmarksDao = new BookmarksDao(new KiwixDatabase(this));
@@ -136,9 +136,9 @@ public class BookmarksActivity extends AppCompatActivity
 
   private void setNoBookmarksState() {
     if (bookmarksList.getCount() == 0) {
-      noBookmarksTextView.setVisibility(View.VISIBLE);
+      noBookmarksLayout.setVisibility(View.VISIBLE);
     } else {
-      noBookmarksTextView.setVisibility(View.GONE);
+      noBookmarksLayout.setVisibility(View.GONE);
     }
   }
 

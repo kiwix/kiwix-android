@@ -30,7 +30,8 @@ import org.kiwix.kiwixmobile.library.LibraryAdapter;
 
 import java.util.ArrayList;
 
-public class ZimManageActivity extends AppCompatActivity {
+public class
+ZimManageActivity extends AppCompatActivity {
 
   public static final String TAB_EXTRA = "TAB";
   /**
