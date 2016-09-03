@@ -75,7 +75,7 @@
                 android:textColor="@android:color/black"
                 android:textStyle="bold"
                 android:text="stop"
-                android:visibility="invisible"/>
+                android:visibility="gone"/>
 
 
         </RelativeLayout>

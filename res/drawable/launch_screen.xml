@@ -4,7 +4,7 @@
   <item android:drawable="@android:color/white"/>
   <item>
     <bitmap
-      android:src="@drawable/kiwix_icon__with_title"
+      android:src="@drawable/kiwix_icon_with_title"
       android:gravity="center"
         />
   </item>
