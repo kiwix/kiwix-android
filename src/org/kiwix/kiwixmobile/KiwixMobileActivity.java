@@ -322,8 +322,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
       @Override
       public void onClick(View view) {
           readAloud();
-          stopTTSButton.setVisibility(View.INVISIBLE);
-        mIsBacktotopEnabled = true;
+          stopTTSButton.setVisibility(View.GONE);
+
       }
     });
 
@@ -608,7 +608,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
           public void run() {
             menu.findItem(R.id.menu_read_aloud)
                 .setTitle(getResources().getString(R.string.menu_read_aloud));
-            stopTTSButton.setVisibility(View.INVISIBLE);
+            stopTTSButton.setVisibility(View.GONE);
           }
         });
       }
@@ -829,12 +829,18 @@ public class KiwixMobileActivity extends AppCompatActivity {
         break;
 
       case R.id.menu_read_aloud:
-        readAloud();
-        stopTTSButton.setVisibility(View.VISIBLE);
-        if(mIsBacktotopEnabled) {
-          mBackToTopButton.setVisibility(View.INVISIBLE);
-          mIsBacktotopEnabled = false;
+        if(stopTTSButton.getVisibility() == View.GONE) {
+          if(mIsBacktotopEnabled) {
+            mBackToTopButton.setVisibility(View.INVISIBLE);
+          }
+        } else if (stopTTSButton.getVisibility() == View.VISIBLE){
+          if(mIsBacktotopEnabled) {
+            mBackToTopButton.setVisibility(View.VISIBLE);
+          }
         }
+        readAloud();
+
+
         break;
 
       case R.id.menu_fullscreen:
@@ -1270,7 +1276,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
       public void onPageChanged(int page, int maxPages) {
         if (mIsBacktotopEnabled) {
           if (getCurrentWebView().getScrollY() > 200) {
-            if (mBackToTopButton.getVisibility() == View.INVISIBLE) {
+            if (mBackToTopButton.getVisibility() == View.INVISIBLE && stopTTSButton.getVisibility() == View.GONE ) {
               mBackToTopButton.setText(R.string.button_backtotop);
               mBackToTopButton.setVisibility(View.VISIBLE);
 
@@ -1279,7 +1285,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
               mBackToTopButton.setVisibility(View.INVISIBLE);
               Animation fadeAnimation =
                   AnimationUtils.loadAnimation(KiwixMobileActivity.this, android.R.anim.fade_out);
-              fadeAnimation.setStartOffset(1500);
+              fadeAnimation.setStartOffset(1200);
               mBackToTopButton.startAnimation(fadeAnimation);
             }
           } else {
