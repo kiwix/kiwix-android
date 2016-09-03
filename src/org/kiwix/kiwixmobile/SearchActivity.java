@@ -40,6 +40,7 @@ public class SearchActivity extends AppCompatActivity
   private ArrayAdapter<String> mDefaultAdapter;
   private SearchActivity context;
   private RecentSearchDao recentSearchDao;
+  private SearchView searchView;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +93,7 @@ public class SearchActivity extends AppCompatActivity
     getMenuInflater().inflate(R.menu.menu_search, menu);
     MenuItem searchMenuItem = menu.findItem(R.id.menu_search);
     MenuItemCompat.expandActionView(searchMenuItem);
-    SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+    searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
       @Override
       public boolean onQueryTextSubmit(String s) {
@@ -227,9 +228,7 @@ public class SearchActivity extends AppCompatActivity
   }
 
   private void searchViaVoice(String search) {
-    search = capitalizeSearch(search);
-    recentSearchDao.saveSearch(search);
-    sendMessage(search);
+    searchView.setQuery(search, false);
   }
 
   private String capitalizeSearch(String search) {
