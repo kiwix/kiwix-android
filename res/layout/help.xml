@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools">
 
 
 
@@ -57,16 +58,27 @@ android:orientation="vertical">
     </LinearLayout>
   </android.support.v7.widget.CardView>
 
-  <Button
+
+  <com.andexert.library.RippleView
+      android:id="@+id/more"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:id="@+id/get_content_card"
-      android:background="@drawable/get_content_ripple_shape"
-      android:textSize="20sp"
-      android:textColor="@color/white"
-      android:layout_margin="3dp"
-      android:textAllCaps="false"
-      android:text="Get Content"/>
+      android:layout_margin="5dp">
+
+    <Button
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/get_content_card"
+    android:background="@drawable/get_content_btn_shape"
+    android:textSize="20sp"
+    android:textColor="@color/white"
+    android:layout_margin="3dp"
+    android:textAllCaps="false"
+    android:text="@string/menu_zim_manager"/>
+
+  </com.andexert.library.RippleView>
+
+
 
 
   <android.support.v7.widget.CardView
