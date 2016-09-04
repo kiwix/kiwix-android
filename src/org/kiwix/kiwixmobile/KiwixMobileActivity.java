@@ -1859,7 +1859,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
         view.removeView(help);
       } else if (!Constants.IS_CUSTOM_APP){
         help = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.help, null);
-//        help.findViewById(R.id.get_content_card).setOnClickListener(card -> manageZimFiles(1));
+        help.findViewById(R.id.get_content_card).setOnClickListener(card -> manageZimFiles(1));
         view.addView(help);
       }
       // Workaround for #643
