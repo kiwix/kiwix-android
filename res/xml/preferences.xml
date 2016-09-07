@@ -30,6 +30,16 @@
   </PreferenceCategory>
 
   <PreferenceCategory
+    android:key="pref_storage"
+    android:title="@string/pref_storage">
+
+    <Preference
+      android:key="pref_select_folder"
+      android:title="@string/pref_current_folder"/>
+
+  </PreferenceCategory>
+
+  <PreferenceCategory
       android:key="pref_zoom_sub"
       android:title="@string/pref_zoom_sub_title">
 

@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -56,8 +57,8 @@ public class DownloadService extends Service {
   private KiwixService kiwixService;
   private OkHttpClient client;
 
-  private static final String SD_CARD = Environment.getExternalStorageDirectory().getAbsolutePath();
-  public static final String KIWIX_ROOT = SD_CARD + "/Kiwix/";
+  private static String SD_CARD;
+  public static String KIWIX_ROOT;
   public static int notificationCount = 1;
   public static ArrayList<String> notifications = new ArrayList<String>();
   public String notificationTitle;
@@ -85,6 +86,11 @@ public class DownloadService extends Service {
     if (intent == null) {
       return START_NOT_STICKY;
     }
+    SD_CARD = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+        .getString(KiwixMobileActivity.PREF_STORAGE,Environment.getExternalStorageDirectory().getPath());
+    KIWIX_ROOT = SD_CARD + "/Kiwix/";
+
+
     notificationTitle = intent.getExtras().getString(DownloadIntent.DOWNLOAD_ZIM_TITLE);
     LibraryNetworkEntity.Book book = (LibraryNetworkEntity.Book) intent.getSerializableExtra("Book");
     notifications.add(notificationTitle);

@@ -39,6 +39,7 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
@@ -273,8 +274,9 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
     manange.displayDownloadInterface();
   }
 
-  public static long getSpaceAvailable() {
-    return Environment.getExternalStorageDirectory().getFreeSpace();
+  public long getSpaceAvailable() {
+    return new File(PreferenceManager.getDefaultSharedPreferences(super.getActivity())
+        .getString(KiwixMobileActivity.PREF_STORAGE,Environment.getExternalStorageState())).getFreeSpace();
   }
 
   public class DownloadServiceConnection {

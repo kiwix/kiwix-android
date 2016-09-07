@@ -22,11 +22,10 @@ public class StorageUtils {
     return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
   }
 
-  public static long getAvailableStorage() {
+  public static long getAvailableStorage(File path) {
 
     String storageDirectory;
-    storageDirectory = Environment.getExternalStorageDirectory().toString();
-
+    storageDirectory = path.getPath();
     try {
       StatFs stat = new StatFs(storageDirectory);
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -38,8 +37,8 @@ public class StorageUtils {
     }
   }
 
-  public static boolean checkAvailableStorage() {
-    return getAvailableStorage() >= LOW_STORAGE_THRESHOLD;
+  public static boolean checkAvailableStorage(File path) {
+    return getAvailableStorage(path) >= LOW_STORAGE_THRESHOLD;
   }
 
   public static boolean isSDCardAvailable() {
