@@ -403,12 +403,12 @@ def step_update_android_manifest(jsdata, **options):
         os.path.join(ANDROID_PATH, 'src', *package_path))
     
     shutil.move(
-        os.path.join(ANDROID_PATH, 'src', 'java', 'test', 'org', 'kiwix', 'kiwixmobile'),
-        os.path.join(ANDROID_PATH, 'src', 'java', 'test', *package_path))
+        os.path.join(ANDROID_PATH, 'src', 'test', 'java', 'org', 'kiwix', 'kiwixmobile'),
+        os.path.join(ANDROID_PATH, 'src', 'test', 'java', *package_path))
         
     shutil.move(
-        os.path.join(ANDROID_PATH, 'src', 'java', 'androidTest', 'org', 'kiwix', 'kiwixmobile'),
-        os.path.join(ANDROID_PATH, 'src', 'java', 'androidTest', *package_path))
+        os.path.join(ANDROID_PATH, 'src', 'androidTest', 'java', 'org', 'kiwix', 'kiwixmobile'),
+        os.path.join(ANDROID_PATH, 'src', 'androidTest', 'java', *package_path))
 
     # replace package in every file
     for dirpath, dirnames, filenames in os.walk(ANDROID_PATH):
