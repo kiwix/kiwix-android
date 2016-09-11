@@ -84,15 +84,13 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
       if (!names[0].substring(names[0].length() - 3).equals("zim")){
         names[0] = names[0].substring(0, names[0].length() - 2);
       }
-      names[0] += ".idk";
-      names[1] += ".idx";
       for(String name : names) { // try possible places for index directory
-        File f = new File(name);
+        File f = new File(name + ".idx");
         if (f.exists() && f.isDirectory()) {
-          return name; // index in directory <zimfile>.zim.idk or <zimfile>.zimaa.idx
+          return name + ".idx"; // index in directory <zimfile>.zim.idx or <zimfile>.zimaa.idx
         }
       }
-      return file; // index is in zim file itself... (TODO :: test if actually the case, and which zim file if this is a multi-zim wiki?)
+      return file; // index is in zim file itself...
     }
 
     @Override
