@@ -16,6 +16,7 @@ import org.kiwix.kiwixmobile.JNIKiwix;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.io.File;
 
 import org.kiwix.kiwixmobile.ZimContentProvider;
 
@@ -79,11 +80,19 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
     }
 
     public String getDbName(String file){
-      String name = file;
-      if (!name.substring(name.length() - 3).equals("zim")){
-        name = name.substring(0, name.length() - 2);
+      String[] names = {file, file};
+      if (!names[0].substring(names[0].length() - 3).equals("zim")){
+        names[0] = names[0].substring(0, names[0].length() - 2);
       }
-      return name + ".idk";
+      names[0] += ".idk";
+      names[1] += ".idx";
+      for(String name : names) { // try possible places for index directory
+        File f = new File(name);
+        if (f.exists() && f.isDirectory()) {
+          return name; // index in directory <zimfile>.zim.idk or <zimfile>.zimaa.idx
+        }
+      }
+      return file; // index is in zim file itself... (TODO :: test if actually the case, and which zim file if this is a multi-zim wiki?)
     }
 
     @Override

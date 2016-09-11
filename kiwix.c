@@ -15,6 +15,10 @@
 #define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO, "kiwix", __VA_ARGS__)
 
 #include <xapian.h>
+#include <zim/zim.h>
+#include <zim/file.h>
+#include <zim/article.h>
+#include <zim/error.h>
 
 /* global variables */
 kiwix::Reader *reader = NULL;
@@ -395,7 +399,27 @@ JNIEXPORT void JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_setDataDirectory
 }
 
 const char* executeQuery(const char* dbLoc, const char* qu, bool partial) try {
-    Xapian::Database db(dbLoc);
+    Xapian::Database db;
+    //LOGI("Looking at %s\n", dbLoc);
+    // see if index is embedded in zim file...
+    try
+    {
+      zim::File zimFile = zim::File(dbLoc);
+      zim::Article xapianArticle = zimFile.getArticle('Z', "/Z/fulltextIndex/xapian");
+      //LOGI("Opened right article...\n");
+
+      if (xapianArticle.good())
+      {
+        zim::offset_type dbOffset = xapianArticle.getOffset();
+        int databasefd = open(dbLoc, O_RDONLY);
+        lseek(databasefd, dbOffset, SEEK_SET);
+        db = Xapian::Database(databasefd);
+      }
+    } catch (zim::ZimFileFormatError)
+    {
+      //LOGI("Nope, not Looking at %s as an indexed zim\n", dbLoc);
+      db = Xapian::Database(dbLoc); // nope, try as a folder...
+    }
 
     // Start an enquire session.
     Xapian::Enquire enquire(db);
@@ -426,7 +450,7 @@ const char* executeQuery(const char* dbLoc, const char* qu, bool partial) try {
     }
     return reply.c_str();
 }  catch (const Xapian::Error &e) {
-    //return e.get_description().c_str();
+    //LOGI(e.get_description().c_str());
     return "";
 }
 
