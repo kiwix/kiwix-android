@@ -1175,6 +1175,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
     }
   }
 
+
+  // TODO: change saving bookbark by zim name not id
   private void saveBookmark(String articleUrl, String articleTitle) {
     bookmarksDao.saveBookmark(articleUrl, articleTitle, ZimContentProvider.getId());
     refreshBookmarks();
