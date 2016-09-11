@@ -96,6 +96,7 @@ import org.kiwix.kiwixmobile.utils.HTMLUtils;
 import org.kiwix.kiwixmobile.utils.KiwixSearchWidget;
 import org.kiwix.kiwixmobile.utils.KiwixTextToSpeech;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
+import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.RateAppCounter;
 import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 import org.kiwix.kiwixmobile.utils.files.FileReader;
@@ -300,7 +301,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     visitCounterPref.setCount(tempVisitCount);
 
 
-    if (tempVisitCount >= 5 && !visitCounterPref.getNoThanksState()) {
+    if (tempVisitCount >= 5 && !visitCounterPref.getNoThanksState() && NetworkUtils.isNetworkAvailable(this)) {
       showRateDialog(this, visitCounterPref.getEditor());
     }
 
