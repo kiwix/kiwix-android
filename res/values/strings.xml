@@ -109,7 +109,7 @@
   <string name="no_files_here">No Files Here</string>
   <string name="download_complete_snackbar">Download complete</string>
   <string name="download_over_network">Are you sure you want to start the download without WiFi?</string>
-  <string name="download_no_space">Insufficient space to download this file</string>
+  <string name="download_no_space">Insufficient space to download this file (You can change the default storage device in settings)</string>
   <string name="space_available">Space Available:</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_nopic">No Pictures</string>
