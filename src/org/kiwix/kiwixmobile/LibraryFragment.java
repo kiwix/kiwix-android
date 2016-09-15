@@ -276,7 +276,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
 
   public long getSpaceAvailable() {
     return new File(PreferenceManager.getDefaultSharedPreferences(super.getActivity())
-        .getString(KiwixMobileActivity.PREF_STORAGE,Environment.getExternalStorageState())).getFreeSpace();
+        .getString(KiwixMobileActivity.PREF_STORAGE,Environment.getExternalStorageDirectory().getPath())).getFreeSpace();
   }
 
   public class DownloadServiceConnection {
