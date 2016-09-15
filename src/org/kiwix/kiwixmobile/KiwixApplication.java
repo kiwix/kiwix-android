@@ -11,16 +11,18 @@ import rx.schedulers.Schedulers;
 public class KiwixApplication extends Application {
 
   private static KiwixService service;
-  private static OkHttpClient client = new OkHttpClient();
+  private static OkHttpClient client = new OkHttpClient().newBuilder().followRedirects(true).followSslRedirects(true).build();
 
   @Override public void onCreate() {
     super.onCreate();
     createRetrofitService();
+
   }
 
   private void createRetrofitService() {
     Retrofit retrofit = new Retrofit.Builder()
-        .baseUrl("http://kiwix.org/")
+        .baseUrl("http://download.kiwix.org/")
+        .client(client)
         .addConverterFactory(SimpleXmlConverterFactory.create())
         .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
         .build();

@@ -84,6 +84,12 @@ public class LibraryNetworkEntity {
     @Attribute(name = "size", required = false)
     public String size;
 
+    @Attribute(name = "name", required = false)
+    public String bookName;
+
+    @Attribute(name = "tags", required = false)
+    public String tags;
+
     public boolean downloaded =  false;
 
     public int searchMatches = 0;
