@@ -84,7 +84,7 @@ REQUIRED_FIELDS = ('app_name', 'package', 'version_name', 'version_code',
                    'zim_file')
 
 USELESS_PERMISSIONS = ['WRITE_EXTERNAL_STORAGE',
-                       'INTERNET', 'ACCESS_NETWORK_STATE']
+                       'INTERNET']
 
 # the directory of this file for relative referencing
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
