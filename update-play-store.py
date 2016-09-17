@@ -29,7 +29,7 @@ try:
 except ImportError:
     print("Missing Google API Client dependency.\n"
           "Please install with: \n"
-          "apt-get install libffi-dev libssl-devel\n"
+          "apt-get install libffi-dev libssl-dev\n"
           "pip install google-api-python-client PyOpenSSL\n"
           "Install from github in case of oauth http errors.")
     sys.exit(1)
