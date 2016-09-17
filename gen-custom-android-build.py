@@ -247,7 +247,7 @@ def step_prepare_launcher_icons(jsdata, **options):
                         p=256,
                         outf=os.path.join(ANDROID_PATH, 'res',
                                           'drawable',
-                                          'splash_screen.png')))
+                                          'kiwix_icon__with_title.png')))
 
 def step_update_branding_xml(jsdata, **options):
     ''' change app_name value in branding.xml '''
