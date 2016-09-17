@@ -11,6 +11,7 @@ import json
 import requests
 import tempfile
 import shutil
+import codecs
 from subprocess import call
 try:
     from StringIO import StringIO
@@ -119,6 +120,7 @@ def upload_to_play_store(jsdata, channel=None):
         import httplib2
         from apiclient.discovery import build
         from oauth2client import client
+        from oauth2client.service_account import ServiceAccountCredentials
     except ImportError:
         logger.error("Missing Google API Client dependency.\n"
                      "Please install with: \n"
@@ -136,12 +138,12 @@ def upload_to_play_store(jsdata, channel=None):
                        '9@developer.gserviceaccount.com'
 
     service = build('androidpublisher', 'v2')
-
-    key = open(os.environ['GOOGLE_API_KEY'], 'rb').read()
-    credentials = client.SignedJwtAssertionCredentials(
+    scope = 'https://www.googleapis.com/auth/androidpublisher'
+    key = os.environ['GOOGLE_API_KEY']
+    credentials = ServiceAccountCredentials.from_p12_keyfile(
         GOOGLE_CLIENT_ID,
         key,
-        scope='https://www.googleapis.com/auth/androidpublisher')
+        scopes=[scope])
 
     http = httplib2.Http()
     http = credentials.authorize(http)
