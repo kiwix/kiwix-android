@@ -922,7 +922,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
   public boolean openZimFile(File file, boolean clearHistory) {
     if (ContextCompat.checkSelfPermission(this,
         Manifest.permission.READ_EXTERNAL_STORAGE)
-        == PackageManager.PERMISSION_GRANTED || Build.VERSION.SDK_INT < 19 || Constants.IS_CUSTOM_APP) {
+        == PackageManager.PERMISSION_GRANTED || Build.VERSION.SDK_INT < 19 || (Constants.IS_CUSTOM_APP && Build.VERSION.SDK_INT != 23)) {
       if (file.exists()) {
         if (ZimContentProvider.setZimFile(file.getAbsolutePath()) != null) {
 
