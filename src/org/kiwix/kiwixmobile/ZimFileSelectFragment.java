@@ -405,7 +405,7 @@ public class ZimFileSelectFragment extends Fragment
     @Override
     protected Void doInBackground(Void... params) {
 
-      mFiles = new FileSearch().findFiles();
+      mFiles = new FileSearch().findFiles(context);
       Collections.sort(mFiles, new fileComparator());
       bookDao.saveBooks(mFiles);
       return null;

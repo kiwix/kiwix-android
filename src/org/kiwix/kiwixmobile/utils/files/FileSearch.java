@@ -19,9 +19,12 @@
 
 package org.kiwix.kiwixmobile.utils.files;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
+import org.kiwix.kiwixmobile.LibraryFragment;
 import org.kiwix.kiwixmobile.ZimContentProvider;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
@@ -35,6 +38,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 
+import eu.mhutti1.utils.storage.StorageDevice;
+import eu.mhutti1.utils.storage.StorageDeviceUtils;
+
 public class FileSearch {
 
   public static final String TAG_KIWIX = "kiwix";
@@ -43,17 +49,20 @@ public class FileSearch {
   public static final String[] zimFiles = { "zim", "zimaa" };
 
   // Scan through the file system and find all the files with .zim and .zimaa extensions
-  public ArrayList<LibraryNetworkEntity.Book> findFiles() {
+  public ArrayList<LibraryNetworkEntity.Book> findFiles(Context context) {
     final List<String> fileList = new ArrayList<>();
     FilenameFilter[] filter = new FilenameFilter[zimFiles.length];
 
-    // Android doesn't provide an easy way to enumerate additional sdcards
-    // present on the device besides the primary one. If enumerating these
-    // paths proves insufficient, the alternatives used by some projects
-    // is to read and parse contents of /proc/mounts.
-    final String[] additionalRoots = {
-        "/mnt"
-    };
+    // Search all external directories that we can find.
+    String[] tempRoots = new String[StorageDeviceUtils.getStorageDevices((Activity) context).size() + 1];
+    int j = 0;
+    tempRoots[j] = "/mnt";
+    for (StorageDevice storageDevice : StorageDeviceUtils.getStorageDevices((Activity) context)){
+      j++;
+      tempRoots[j] = storageDevice.getName();
+    }
+
+    final String[] additionalRoots = tempRoots;
 
     int i = 0;
     for (final String extension : zimFiles) {
