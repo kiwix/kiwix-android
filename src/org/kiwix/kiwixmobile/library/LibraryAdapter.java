@@ -272,8 +272,10 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
         LibraryAdapter.this.addAll(filtered);
       }
       notifyDataSetChanged();
-      mActivity.mSectionsPagerAdapter.libraryFragment.progressBarLayout.setVisibility(View.GONE);
-      mActivity.mSectionsPagerAdapter.libraryFragment.libraryList.setVisibility(View.VISIBLE);
+      if (mActivity.mSectionsPagerAdapter.libraryFragment.progressBarLayout != null) {
+        mActivity.mSectionsPagerAdapter.libraryFragment.progressBarLayout.setVisibility(View.GONE);
+        mActivity.mSectionsPagerAdapter.libraryFragment.libraryList.setVisibility(View.VISIBLE);
+      }
     }
   }
 
