@@ -214,8 +214,8 @@ public class DownloadService extends Service {
     return Observable.create(subscriber -> {
       if (subscriber.isUnsubscribed()) return;
       try {
-        // Stop if download is completed
-        if (chunk.isDownloaded) {
+        // Stop if download is completed or download canceled
+        if (chunk.isDownloaded || downloadStatus.get(chunk.getNotificationID()) == 2) {
           subscriber.onCompleted();
           return;
         }
