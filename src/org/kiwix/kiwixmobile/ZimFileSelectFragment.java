@@ -216,17 +216,9 @@ public class ZimFileSelectFragment extends Fragment
 
     String file;
 
-    // Check which one of the Adapters is currently filling the ListView.
-    // If the data is populated by the LoaderManager cast the current selected mLibrary to Cursor,
-    // if the data is populated by the ArrayAdapter, then cast it to the DataModel class.
-
-    if (view.getAlpha() == 1f) {
-      LibraryNetworkEntity.Book data = (LibraryNetworkEntity.Book) mZimFileList.getItemAtPosition(position);
-      file = data.file.getPath();
-      finishResult(file);
-    } else {
-      openCorruptZimDialog(position);
-    }
+    LibraryNetworkEntity.Book data = (LibraryNetworkEntity.Book) mZimFileList.getItemAtPosition(position);
+    file = data.file.getPath();
+    finishResult(file);
   }
 
   @Override
@@ -243,25 +235,6 @@ public class ZimFileSelectFragment extends Fragment
           public void onClick(DialogInterface dialog, int which) {
             deleteSpecificZimFile(position);
             Toast.makeText(context, getResources().getString(R.string.delete_specific_zim_toast), Toast.LENGTH_SHORT).show();
-          }
-        })
-        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int which) {
-            // do nothing
-          }
-        })
-        .show();
-  }
-
-  public void openCorruptZimDialog(int position) {
-    new AlertDialog.Builder(super.getActivity())
-        .setMessage(ShortcutUtils.stringsGetter(R.string.open_partial_zim, context))
-        .setPositiveButton(getResources().getString(R.string.open), new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int which) {
-            String file;
-            LibraryNetworkEntity.Book data = (LibraryNetworkEntity.Book) mZimFileList.getItemAtPosition(position);
-            file = data.file.getPath();
-            finishResult(file);
           }
         })
         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
