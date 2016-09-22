@@ -291,6 +291,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
     getWindow().setFeatureInt(Window.FEATURE_PROGRESS, Window.PROGRESS_VISIBILITY_ON);
 
     toolbar = (Toolbar) findViewById(R.id.toolbar);
+    toolbar.setPadding(0,0,0,0);
+    toolbar.setContentInsetsAbsolute(0,0);
     setSupportActionBar(toolbar);
 
     settings = PreferenceManager.getDefaultSharedPreferences(this);
