@@ -54,10 +54,10 @@ public class FileSearch {
     FilenameFilter[] filter = new FilenameFilter[zimFiles.length];
 
     // Search all external directories that we can find.
-    String[] tempRoots = new String[StorageDeviceUtils.getStorageDevices((Activity) context).size() + 1];
+    String[] tempRoots = new String[StorageDeviceUtils.getStorageDevices((Activity) context, false).size() + 1];
     int j = 0;
     tempRoots[j] = "/mnt";
-    for (StorageDevice storageDevice : StorageDeviceUtils.getStorageDevices((Activity) context)){
+    for (StorageDevice storageDevice : StorageDeviceUtils.getStorageDevices((Activity) context, false)){
       j++;
       tempRoots[j] = storageDevice.getName();
     }
