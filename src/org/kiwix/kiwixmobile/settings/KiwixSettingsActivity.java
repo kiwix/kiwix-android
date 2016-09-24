@@ -226,7 +226,9 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
       try {
         version = getActivity().getPackageManager()
-            .getPackageInfo("org.kiwix.kiwixmobile", 0).versionName;
+            .getPackageInfo("org.kiwix.kiwixmobile", 0).versionName + " Build: " +
+            getActivity().getPackageManager()
+            .getPackageInfo("org.kiwix.kiwixmobile", 0).versionCode;
       } catch (PackageManager.NameNotFoundException e) {
         return;
       }
