@@ -121,11 +121,12 @@ def upload_to_play_store(jsdata, channel=None):
         from apiclient.discovery import build
         from oauth2client import client
         from oauth2client.service_account import ServiceAccountCredentials
-    except ImportError:
+    except ImportError as error:
+        logger.error("You don't have module {0} installed".format(error))
         logger.error("Missing Google API Client dependency.\n"
                      "Please install with: \n"
-                     "apt-get install libffi-dev libssl-dev python-pip\n"
-                     "pip install google-api-python-client PyOpenSSL\n"
+                     "apt-get install libffi-dev libssl-dev python3-pip\n"
+                     "pip3 install google-api-python-client PyOpenSSL\n"
                      "Install from github in case of oauth http errors.")
         return
 
