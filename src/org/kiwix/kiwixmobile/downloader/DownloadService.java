@@ -132,10 +132,18 @@ public class DownloadService extends Service {
   }
 
   public String checkWritable(String path){
-    if (new File(path).canWrite())
-      return path;
-    Toast.makeText(this, getResources().getString(R.string.path_not_writable), Toast.LENGTH_LONG).show();
-    return Environment.getExternalStorageDirectory().getPath();
+    try {
+      File f = new File(path);
+      f.mkdir();
+      if (f.canWrite()) {
+        return path;
+      }
+      Toast.makeText(this, getResources().getString(R.string.path_not_writable), Toast.LENGTH_LONG).show();
+      return Environment.getExternalStorageDirectory().getPath();
+    } catch (Exception e){
+      Toast.makeText(this, getResources().getString(R.string.path_not_writable), Toast.LENGTH_LONG).show();
+      return Environment.getExternalStorageDirectory().getPath();
+    }
   }
 
   public void pauseDownload(int notificationID) {
