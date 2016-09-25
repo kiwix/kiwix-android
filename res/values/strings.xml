@@ -141,4 +141,5 @@
   <string name="help_21">We are glad to have you on board and would appreciate any feedback or suggestions.</string>
   <string name="pref_storage">Storage</string>
   <string name="pref_current_folder">Current Folder</string>
+  <string name="path_not_writable">Can't access desired directory, using default. To fix this reselect the desired directory in app settings.</string>
 </resources>

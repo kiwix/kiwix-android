@@ -20,6 +20,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.util.Pair;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -90,6 +91,7 @@ public class DownloadService extends Service {
         .getString(KiwixMobileActivity.PREF_STORAGE,Environment.getExternalStorageDirectory().getPath());
     KIWIX_ROOT = SD_CARD + "/Kiwix/";
 
+    KIWIX_ROOT = checkWritable(KIWIX_ROOT);
 
     notificationTitle = intent.getExtras().getString(DownloadIntent.DOWNLOAD_ZIM_TITLE);
     LibraryNetworkEntity.Book book = (LibraryNetworkEntity.Book) intent.getSerializableExtra("Book");
@@ -129,6 +131,12 @@ public class DownloadService extends Service {
       notificationManager.cancel(notificationID);
   }
 
+  public String checkWritable(String path){
+    if (new File(path).canWrite())
+      return path;
+    Toast.makeText(this, getResources().getString(R.string.path_not_writable), Toast.LENGTH_LONG).show();
+    return Environment.getExternalStorageDirectory().getPath();
+  }
 
   public void pauseDownload(int notificationID) {
     downloadStatus.put(notificationID, 1);
