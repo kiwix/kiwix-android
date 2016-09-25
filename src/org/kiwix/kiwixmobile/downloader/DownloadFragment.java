@@ -35,14 +35,15 @@ import java.util.LinkedHashMap;
 
 public class DownloadFragment extends Fragment {
 
-  public static LinkedHashMap<Integer, LibraryNetworkEntity.Book> mDownloads= new LinkedHashMap<Integer, LibraryNetworkEntity.Book>();
-  public static LinkedHashMap<Integer, String> mDownloadFiles= new LinkedHashMap<Integer, String>();
+  public static LinkedHashMap<Integer, LibraryNetworkEntity.Book> mDownloads = new LinkedHashMap<Integer, LibraryNetworkEntity.Book>();
+  public static LinkedHashMap<Integer, String> mDownloadFiles = new LinkedHashMap<Integer, String>();
   public RelativeLayout relLayout;
   public static ListView listView;
   public static DownloadAdapter downloadAdapter;
   private ZimManageActivity zimManageActivity;
   CoordinatorLayout mainLayout;
   private static FragmentActivity faActivity;
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     faActivity = (FragmentActivity) super.getActivity();
@@ -71,7 +72,7 @@ public class DownloadFragment extends Fragment {
     }
     if (listView.getCount() == 0) {
       noDownloadsText.setVisibility(View.VISIBLE);
-    } else if (listView.getCount() > 0){
+    } else if (listView.getCount() > 0) {
       noDownloadsText.setVisibility(View.GONE);
     }
 
@@ -81,9 +82,10 @@ public class DownloadFragment extends Fragment {
 
     private LinkedHashMap<Integer, LibraryNetworkEntity.Book> mData = new LinkedHashMap<Integer, LibraryNetworkEntity.Book>();
     private Integer[] mKeys;
-    public DownloadAdapter(LinkedHashMap<Integer, LibraryNetworkEntity.Book> data){
-        mData = data;
-        mKeys = mData.keySet().toArray(new Integer[data.size()]);
+
+    public DownloadAdapter(LinkedHashMap<Integer, LibraryNetworkEntity.Book> data) {
+      mData = data;
+      mKeys = mData.keySet().toArray(new Integer[data.size()]);
     }
 
     @Override
@@ -93,7 +95,7 @@ public class DownloadFragment extends Fragment {
 
     @Override
     public LibraryNetworkEntity.Book getItem(int position) {
-        return mData.get(mKeys[position]);
+      return mData.get(mKeys[position]);
     }
 
     @Override
@@ -101,28 +103,30 @@ public class DownloadFragment extends Fragment {
       return arg0;
     }
 
-    public void updateProgress(int progress, int notificationID){
-      int position = Arrays.asList(mKeys).indexOf(notificationID);
-      ViewGroup viewGroup = (ViewGroup) listView.getChildAt(position - listView.getFirstVisiblePosition());
-      ProgressBar downloadProgress = (ProgressBar) viewGroup.findViewById(R.id.downloadProgress);
-      downloadProgress.setProgress(progress);
-      if (progress ==  100) {
-        ImageView pause = (ImageView) viewGroup.findViewById(R.id.pause);
-        pause.setEnabled(false);
-        if (isAdded()) {
-          Snackbar completeSnack = Snackbar.make(mainLayout, getResources().getString(R.string.download_complete_snackbar), Snackbar.LENGTH_LONG);
-          String fileName = mDownloadFiles.get(mKeys[position]);
-          completeSnack.setAction(getResources().getString(R.string.open), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-              ZimFileSelectFragment.finishResult(fileName);
-            }
-          }).setActionTextColor(getResources().getColor(R.color.white)).show();
+    public void updateProgress(int progress, int notificationID) {
+      if (isAdded()) {
+        int position = Arrays.asList(mKeys).indexOf(notificationID);
+        ViewGroup viewGroup = (ViewGroup) listView.getChildAt(position - listView.getFirstVisiblePosition());
+        ProgressBar downloadProgress = (ProgressBar) viewGroup.findViewById(R.id.downloadProgress);
+        downloadProgress.setProgress(progress);
+        if (progress == 100) {
+          ImageView pause = (ImageView) viewGroup.findViewById(R.id.pause);
+          pause.setEnabled(false);
+          {
+            Snackbar completeSnack = Snackbar.make(mainLayout, getResources().getString(R.string.download_complete_snackbar), Snackbar.LENGTH_LONG);
+            String fileName = mDownloadFiles.get(mKeys[position]);
+            completeSnack.setAction(getResources().getString(R.string.open), new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                ZimFileSelectFragment.finishResult(fileName);
+              }
+            }).setActionTextColor(getResources().getColor(R.color.white)).show();
+          }
+          mDownloads.remove(mKeys[position]);
+          mDownloadFiles.remove(mKeys[position]);
+          downloadAdapter.notifyDataSetChanged();
+          updateNoDownloads();
         }
-        mDownloads.remove(mKeys[position]);
-        mDownloadFiles.remove(mKeys[position]);
-        downloadAdapter.notifyDataSetChanged();
-        updateNoDownloads();
       }
     }
 
@@ -139,7 +143,7 @@ public class DownloadFragment extends Fragment {
       // Populate the data into the template view using the data object
       TextView title = (TextView) convertView.findViewById(R.id.title);
       TextView description = (TextView) convertView.findViewById(R.id.description);
-      ImageView imageView = (ImageView)  convertView.findViewById(R.id.favicon);
+      ImageView imageView = (ImageView) convertView.findViewById(R.id.favicon);
       title.setText(getItem(position).getTitle());
       description.setText(getItem(position).getDescription());
       imageView.setImageBitmap(StringToBitMap(getItem(position).getFavicon()));
@@ -173,12 +177,12 @@ public class DownloadFragment extends Fragment {
       stop.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            LibraryFragment.mService.stopDownload(mKeys[position]);
-            mDownloads.remove(mKeys[position]);
-            mDownloadFiles.remove(mKeys[position]);
-            downloadAdapter.notifyDataSetChanged();
-            updateNoDownloads();
-            LibraryFragment.libraryAdapter.getFilter().filter(((ZimManageActivity) getActivity()).searchView.getQuery());
+          LibraryFragment.mService.stopDownload(mKeys[position]);
+          mDownloads.remove(mKeys[position]);
+          mDownloadFiles.remove(mKeys[position]);
+          downloadAdapter.notifyDataSetChanged();
+          updateNoDownloads();
+          LibraryFragment.libraryAdapter.getFilter().filter(((ZimManageActivity) getActivity()).searchView.getQuery());
 
         }
       });
@@ -191,24 +195,27 @@ public class DownloadFragment extends Fragment {
   public static class Download {
     public String title;
     public int progress;
+
     public Download(String title) {
       this.title = title;
       progress = 0;
     }
 
   }
-  public static void addDownload(int position, LibraryNetworkEntity.Book book, String fileName){
+
+  public static void addDownload(int position, LibraryNetworkEntity.Book book, String fileName) {
     mDownloads.put(position, book);
     mDownloadFiles.put(position, fileName);
     downloadAdapter.notifyDataSetChanged();
     updateNoDownloads();
   }
-  public Bitmap StringToBitMap(String encodedString){
-    try{
-      byte [] encodeByte= Base64.decode(encodedString,Base64.DEFAULT);
-      Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+
+  public Bitmap StringToBitMap(String encodedString) {
+    try {
+      byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+      Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
       return bitmap;
-    }catch(Exception e){
+    } catch (Exception e) {
       e.getMessage();
       return null;
     }
