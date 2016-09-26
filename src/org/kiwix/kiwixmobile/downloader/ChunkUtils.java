@@ -25,12 +25,12 @@ public class ChunkUtils {
       String range;
       if (currentRange + CHUNK_SIZE >= contentLength) {
         range = String.format("%d-", currentRange);
-        currentRange += CHUNK_SIZE + 1;
         chunks.add(new Chunk(range, zim, url, contentLength, notificationID, currentRange, contentLength));
+        currentRange += CHUNK_SIZE + 1;
       } else {
         range = String.format("%d-%d", currentRange, currentRange + CHUNK_SIZE);
-        currentRange += CHUNK_SIZE + 1;
         chunks.add(new Chunk(range, zim, url, contentLength, notificationID, currentRange, currentRange + CHUNK_SIZE));
+        currentRange += CHUNK_SIZE + 1;
       }
     }
     return chunks;
