@@ -107,6 +107,8 @@ public class DownloadFragment extends Fragment {
       if (isAdded()) {
         int position = Arrays.asList(mKeys).indexOf(notificationID);
         ViewGroup viewGroup = (ViewGroup) listView.getChildAt(position - listView.getFirstVisiblePosition());
+        if (viewGroup == null)
+          return;
         ProgressBar downloadProgress = (ProgressBar) viewGroup.findViewById(R.id.downloadProgress);
         downloadProgress.setProgress(progress);
         if (progress == 100) {
