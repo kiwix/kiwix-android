@@ -102,6 +102,14 @@ public class ZimContentProvider extends ContentProvider {
     }
   }
 
+  public static int getFileSize() {
+    if (jniKiwix == null || zimFileName == null) {
+      return 0;
+    } else {
+      return jniKiwix.getFileSize();
+    }
+  }
+
   public static int getArticleCount() {
     if (jniKiwix == null || zimFileName == null) {
       return 0;

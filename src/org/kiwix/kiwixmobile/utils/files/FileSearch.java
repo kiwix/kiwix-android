@@ -148,7 +148,7 @@ public class FileSearch {
         b.title = ZimContentProvider.getZimFileTitle();
         b.id = ZimContentProvider.getId();
         b.file = new File(file);
-        b.size = String.valueOf(b.file.length() / 1024);
+        b.size = String.valueOf(ZimContentProvider.getFileSize());
         b.favicon = ZimContentProvider.getFavicon();
         b.creator = ZimContentProvider.getCreator();
         b.publisher = ZimContentProvider.getPublisher();
