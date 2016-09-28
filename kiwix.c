@@ -109,6 +109,23 @@ JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getId(JNIEnv *env,
   return id;
 }
 
+JNIEXPORT jint JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getFileSize(JNIEnv *env, jobject obj) {
+  jint size;
+  
+  pthread_mutex_lock(&readerLock);
+  if (reader != NULL) {
+    try {
+      int cSize = reader->getFileSize();
+      size = c2jni(cSize);
+    } catch (exception &e) {
+      std::cerr << e.what() << std::endl;
+    }
+  }
+  pthread_mutex_unlock(&readerLock);
+  
+  return size;
+}
+
 JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getCreator(JNIEnv *env, jobject obj) {
   jstring creator;
   
@@ -149,8 +166,8 @@ JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getFavicon(JNIEnv 
   pthread_mutex_lock(&readerLock);
   if (reader != NULL) {
     try {
-	  std::string cContent;
-	  std::string cMime;
+      std::string cContent;
+      std::string cMime;
       reader->getFavicon(cContent, cMime);
       favicon = c2jni(base64_encode(reinterpret_cast<const unsigned char*>(cContent.c_str()), cContent.length()), env);
     } catch (exception &e) {
@@ -248,10 +265,10 @@ JNIEXPORT jbyteArray JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getContent(JNIE
     pthread_mutex_lock(&readerLock);
     try {
       if (reader->getContentByUrl(cUrl, cData, cSize, cMimeType)) {
-	data = env->NewByteArray(cSize);
-	env->SetByteArrayRegion(data, 0, cSize, reinterpret_cast<const jbyte*>(cData.c_str()));
-	setStringObjValue(cMimeType, mimeTypeObj, env);
-	setIntObjValue(cSize, sizeObj, env);
+        data = env->NewByteArray(cSize);
+        env->SetByteArrayRegion(data, 0, cSize, reinterpret_cast<const jbyte*>(cData.c_str()));
+        setStringObjValue(cMimeType, mimeTypeObj, env);
+        setIntObjValue(cSize, sizeObj, env);
       }
     } catch (exception &e) {
       LOGI(e.what());
@@ -273,7 +290,7 @@ JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_searchSuggestions
   try {
     if (reader != NULL) {
       if (reader->searchSuggestionsSmart(cPrefix, cCount)) {
-	retVal = JNI_TRUE;
+        retVal = JNI_TRUE;
       }
     }
   } catch (exception &e) {
@@ -293,8 +310,8 @@ JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getNextSuggestion
   try {
     if (reader != NULL) {
       if (reader->getNextSuggestion(cTitle)) {
-	setStringObjValue(cTitle, titleObj, env);
-	retVal = JNI_TRUE;
+        setStringObjValue(cTitle, titleObj, env);
+        retVal = JNI_TRUE;
       }
     }
   } catch (exception &e) {
@@ -315,8 +332,8 @@ JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getPageUrlFromTit
   try {
     if (reader != NULL) {
       if (reader->getPageUrlFromTitle(cTitle, cUrl)) {
-	setStringObjValue(cUrl, urlObj, env);
-	retVal = JNI_TRUE;
+        setStringObjValue(cUrl, urlObj, env);
+        retVal = JNI_TRUE;
       }
     }
   } catch (exception &e) {
