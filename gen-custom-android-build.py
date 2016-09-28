@@ -338,8 +338,8 @@ def step_update_xml_nodes(jsdata, **options):
                                    'preferences.xml')
     soup = soup = BeautifulSoup(open(preferences_xml, 'r'),
                                 'xml', from_encoding='utf-8')
-    item = soup.find('org.kiwix.kiwixmobile.settings.CustomSwitchPreference')
-    item.name = '{}.settings.CustomSwitchPreference'.format(jsdata.get('package'))
+    for item in soup.findAll('org.kiwix.kiwixmobile.settings.CustomSwitchPreference'):
+        item.name = '{}.settings.CustomSwitchPreference'.format(jsdata.get('package'))
     flushxml(soup, 'PreferenceScreen', preferences_xml, head=False)
 
     # rename AnimatedProgressBar node in res/layout/toolbar.xml
