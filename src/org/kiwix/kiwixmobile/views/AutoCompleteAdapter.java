@@ -1,6 +1,8 @@
 package org.kiwix.kiwixmobile.views;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,6 +20,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.io.File;
 
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.ZimContentProvider;
 
 public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
@@ -26,8 +29,11 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
 
   private KiwixFilter mFilter;
 
+  private Context context;
+
   public AutoCompleteAdapter(Context context) {
     super(context, android.R.layout.simple_list_item_1);
+    this.context = context;
     mData = new ArrayList<String>();
     mFilter = new KiwixFilter();
   }
@@ -99,14 +105,17 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
       ArrayList<String> data = new ArrayList<>();
       if (constraint != null) {
         try {
+          SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
           final String prefix = constraint.toString();
           String qStr = capitalizeQuery(prefix);
-          String[] result = JNIKiwix.indexedQuery(getDbName(ZimContentProvider.getZimFile()), qStr).split("\n");
+          String[] result = new String[0];
+          if (sharedPreferences.getBoolean(KiwixMobileActivity.PREF_FULL_TEXT_SEARCH, false)) {
+            result = JNIKiwix.indexedQuery(getDbName(ZimContentProvider.getZimFile()), qStr).split("\n");
 
-          if (result.length == 1 && result[0].trim().isEmpty()) {
-            result = JNIKiwix.indexedQueryPartial(getDbName(ZimContentProvider.getZimFile()), qStr).split("\n");
+            if (result.length == 1 && result[0].trim().isEmpty()) {
+              result = JNIKiwix.indexedQueryPartial(getDbName(ZimContentProvider.getZimFile()), qStr).split("\n");
+            }
           }
-
           if (hasNonEmptyResult(result)) {
             // At least one non empty result
             data.clear();

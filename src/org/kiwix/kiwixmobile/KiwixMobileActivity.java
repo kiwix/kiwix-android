@@ -146,6 +146,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private static final String PREF_NEWTAB_BACKGROUND = "pref_newtab_background";
 
+  public static final String PREF_FULL_TEXT_SEARCH = "pref_full_text_search";
+
   private static final int REQUEST_FILE_SELECT = 1234;
 
   private static final int REQUEST_PREFERENCES = 1235;
