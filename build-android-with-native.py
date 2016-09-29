@@ -236,8 +236,9 @@ LIBKIWIX_SRC = os.path.join(os.path.dirname(CURRENT_PATH),
 
 OPTIMIZATION_ENV = {'CXXFLAGS': ' -D__OPTIMIZE__ -fno-strict-aliasing '
                                 ' -DU_HAVE_NL_LANGINFO_CODESET=0 '
-                                '-DU_STATIC_IMPLEMENTATION '
+                                '-DU_STATIC_IMPLEMENTATION -O3 '
                                 '-DU_HAVE_STD_STRING -DU_TIMEZONE=0',
+                    'CFLAGS': ' -O3 ',
                     'NDK_DEBUG': '0'}
 
 # list of path that should already be set
