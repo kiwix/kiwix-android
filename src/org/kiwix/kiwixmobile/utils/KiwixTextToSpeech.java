@@ -44,7 +44,6 @@ public class KiwixTextToSpeech {
     initTTS(onInitSucceedListener);
   }
 
-  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
   private void initTTS(final OnInitSucceedListener onInitSucceedListener) {
     tts = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
       @Override
@@ -58,24 +57,25 @@ public class KiwixTextToSpeech {
         }
       }
     });
+    if (Build.VERSION.SDK_INT >= 15) {
+      tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+        @Override
+        public void onStart(String utteranceId) {
+        }
 
-    tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-      @Override
-      public void onStart(String utteranceId) {
-      }
+        @Override
+        public void onDone(String utteranceId) {
+          Log.e(TAG_KIWIX, "TextToSpeech: " + utteranceId);
+          onSpeakingListener.onSpeakingEnded();
+        }
 
-      @Override
-      public void onDone(String utteranceId) {
-        Log.e(TAG_KIWIX, "TextToSpeech: " + utteranceId);
-        onSpeakingListener.onSpeakingEnded();
-      }
-
-      @Override
-      public void onError(String utteranceId) {
-        Log.e(TAG_KIWIX, "TextToSpeech: " + utteranceId);
-        onSpeakingListener.onSpeakingEnded();
-      }
-    });
+        @Override
+        public void onError(String utteranceId) {
+          Log.e(TAG_KIWIX, "TextToSpeech: " + utteranceId);
+          onSpeakingListener.onSpeakingEnded();
+        }
+      });
+    }
   }
 
   /**

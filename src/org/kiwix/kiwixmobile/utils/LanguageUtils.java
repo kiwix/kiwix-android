@@ -34,6 +34,7 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,6 +44,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.text.Collator;
+
 import org.kiwix.kiwixmobile.utils.files.FileWriter;
 
 public class LanguageUtils {
@@ -74,14 +76,15 @@ public class LanguageUtils {
     handleLocaleChange(context, language);
   }
 
-  @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
   public static void handleLocaleChange(Context context, String language) {
 
     Locale locale = new Locale(language);
     Locale.setDefault(locale);
     Configuration config = new Configuration();
     config.locale = locale;
-    config.setLayoutDirection(locale);
+    if (Build.VERSION.SDK_INT >= 17) {
+      config.setLayoutDirection(locale);
+    }
     context.getResources()
         .updateConfiguration(config, context.getResources().getDisplayMetrics());
   }
