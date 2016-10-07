@@ -122,7 +122,7 @@ public class ZimFileSelectFragment extends Fragment
     mZimFileList.setOnItemClickListener(this);
     mZimFileList.setOnItemLongClickListener(this);
 
-    bookDao = new BookDao(new KiwixDatabase(context));
+    bookDao = new BookDao(KiwixDatabase.getInstance(context));
 
     mFiles = bookDao.getBooks();
     Collections.sort(mFiles, new fileComparator());

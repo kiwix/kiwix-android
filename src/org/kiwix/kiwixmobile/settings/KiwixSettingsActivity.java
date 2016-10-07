@@ -146,7 +146,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       setStorage();
       setUpSettings();
       new LanguageUtils(getActivity()).changeFont(getActivity().getLayoutInflater());
-      recentSearchDao = new RecentSearchDao(new KiwixDatabase(getActivity()));
+      recentSearchDao = new RecentSearchDao(KiwixDatabase.getInstance(getActivity()));
 
     }
 

@@ -52,6 +52,8 @@ public class BookmarksDao {
     } finally {
       bookmarkCursor.close();
     }
+
+
     return result;
   }
 

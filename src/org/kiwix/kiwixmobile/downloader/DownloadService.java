@@ -98,7 +98,7 @@ public class DownloadService extends Service {
     notifications.add(notificationTitle);
     final Intent target = new Intent(this, KiwixMobileActivity.class);
     target.putExtra("library", true);
-    bookDao = new BookDao(new KiwixDatabase(this));
+    bookDao = new BookDao(KiwixDatabase.getInstance(this));
     PendingIntent pendingIntent = PendingIntent.getActivity
         (getBaseContext(), 0,
         target, PendingIntent.FLAG_CANCEL_CURRENT);

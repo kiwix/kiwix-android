@@ -110,7 +110,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
       kiwixService = ((KiwixApplication) super.getActivity().getApplication()).getKiwixService();
       conMan = (ConnectivityManager) super.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
       NetworkInfo network = conMan.getActiveNetworkInfo();
-      bookDao = new BookDao(new KiwixDatabase(super.getActivity()));
+      bookDao = new BookDao(KiwixDatabase.getInstance(super.getActivity()));
       if (network != null && network.isConnected()) {
         if (isWiFi()) {
           getLibraryData();
