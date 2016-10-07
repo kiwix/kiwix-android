@@ -71,7 +71,7 @@ public class BookmarksActivity extends AppCompatActivity
     noBookmarksLayout = (LinearLayout) findViewById(R.id.bookmarks_none_linlayout);
 
 
-    bookmarksDao = new BookmarksDao(new KiwixDatabase(this));
+    bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
     bookmarks = bookmarksDao.getBookmarkTitles(ZimContentProvider.getId());
     bookmarkUrls = bookmarksDao.getBookmarks(ZimContentProvider.getId());
 

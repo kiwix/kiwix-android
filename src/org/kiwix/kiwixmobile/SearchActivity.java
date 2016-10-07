@@ -53,7 +53,7 @@ public class SearchActivity extends AppCompatActivity
 
 //    String zimFile = getIntent().getStringExtra("zimFile");
     mListView = (ListView) findViewById(R.id.search_list);
-    recentSearchDao = new RecentSearchDao(new KiwixDatabase(this));
+    recentSearchDao = new RecentSearchDao(KiwixDatabase.getInstance(this));
     List<String> recentSearches = recentSearchDao.getRecentSearches();
     mDefaultAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
     mListView.setAdapter(mDefaultAdapter);

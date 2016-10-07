@@ -77,8 +77,8 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
     allBooks = ImmutableList.copyOf(books);
     arrayBooks = books;
     mActivity = (ZimManageActivity) context;
-    networkLanguageDao = new NetworkLanguageDao(new KiwixDatabase(mActivity));
-    bookDao = new BookDao(new KiwixDatabase(context));
+    networkLanguageDao = new NetworkLanguageDao(KiwixDatabase.getInstance(mActivity));
+    bookDao = new BookDao( KiwixDatabase.getInstance(context));
     initLanguageMap();
     getLanguages();
     getFilter().filter(mActivity.searchView.getQuery());

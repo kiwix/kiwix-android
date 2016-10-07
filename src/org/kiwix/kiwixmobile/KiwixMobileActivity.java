@@ -950,7 +950,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
           //Bookmarks
           bookmarks = new ArrayList<>();
-          bookmarksDao = new BookmarksDao(new KiwixDatabase(this));
+          bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
           bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId());
 
           openMainPage();
@@ -1189,6 +1189,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
   private void deleteBookmark(String article) {
     bookmarksDao.deleteBookmark(article, ZimContentProvider.getId());
     refreshBookmarks();
+
   }
 
   public boolean openArticleFromBookmarkTitle(String bookmarkTitle) {
@@ -1458,8 +1459,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
             return;
 
           //Bookmarks
-          bookmarksDao = new BookmarksDao(new KiwixDatabase(this));
-          bookmarksDao = new BookmarksDao(new KiwixDatabase(this));
+          bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
           bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId());
 
           if (itemClicked) {
@@ -1516,8 +1516,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   public void refreshBookmarkSymbol(Menu menu) { // Checks if current webview is in bookmarks array
-    if (bookmarks == null){
-      bookmarksDao = new BookmarksDao(new KiwixDatabase(this));
+    if (bookmarks == null || bookmarks.size() == 0){
+      bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
       bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId());
     }
     if (menu.findItem(R.id.menu_bookmarks) != null &&

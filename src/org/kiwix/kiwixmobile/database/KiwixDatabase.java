@@ -54,11 +54,20 @@ public class KiwixDatabase extends SquidDatabase {
 
   private static final int VERSION = 10;
   private Context context;
+  private static KiwixDatabase instance = null;
 
 
-  public KiwixDatabase(Context context) {
+  protected KiwixDatabase(Context context) {
     super(context);
     this.context = context;
+  }
+
+
+  public static KiwixDatabase getInstance(Context context) {
+    if(instance == null) {
+      instance = new KiwixDatabase(context);
+    }
+    return instance;
   }
 
   @Override
