@@ -93,7 +93,7 @@
         android:enabled="false"
         android:key="pref_version"
         android:persistent="false"
-        android:selectable="false"
+        android:selectable="true"
         android:shouldDisableView="false"
         android:title="@string/pref_info_version"/>
 
