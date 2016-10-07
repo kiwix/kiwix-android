@@ -52,7 +52,7 @@ import java.util.List;
 
 public class KiwixDatabase extends SquidDatabase {
 
-  private static final int VERSION = 10;
+  private static final int VERSION = 11;
   private Context context;
 
 
@@ -115,6 +115,13 @@ public class KiwixDatabase extends SquidDatabase {
     }
     if (newVersion >= 10) {
       tryCreateTable(NetworkLanguageDatabaseEntity.TABLE);
+    }
+    if (newVersion >= 11 && oldVersion < 11) {
+      db.execSQL("DROP TABLE IF EXISTS recentSearches");
+      tryCreateTable(RecentSearch.TABLE);
+    }
+    if (newVersion >= 11) {
+      tryCreateTable(RecentSearch.TABLE);
     }
     return true;
   }
