@@ -147,6 +147,10 @@ public class ZimFileSelectFragment extends Fragment
 
     mFiles = new ArrayList<LibraryNetworkEntity.Book>();
     progressBar = (RelativeLayout) super.getActivity().getLayoutInflater().inflate(R.layout.progress_bar, null);
+
+    // Allow temporary use of ZimContentProvider to query books
+    ZimContentProvider.canIterate = true;
+
     refreshFragment();
 
     return llLayout; // We must return the loaded Layout
@@ -213,9 +217,10 @@ public class ZimFileSelectFragment extends Fragment
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
     Log.d(TAG_KIWIX, " mZimFileList.onItemClick");
+    // Stop file search from accessing content provider potentially opening wrong file
+    ZimContentProvider.canIterate = false;
 
     String file;
-
     LibraryNetworkEntity.Book data = (LibraryNetworkEntity.Book) mZimFileList.getItemAtPosition(position);
     file = data.file.getPath();
     finishResult(file);

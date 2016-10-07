@@ -38,6 +38,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.function.BooleanSupplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,11 +50,15 @@ public class ZimContentProvider extends ContentProvider {
 
   public static final Uri UI_URI = Uri.parse("content://org.kiwix.ui/");
 
+  public static String originalFileName = "";
+
+  public static Boolean canIterate = true;
+
   private static final String VIDEO_PATTERN = "([^\\s]+(\\.(?i)(3gp|mp4|m4a|webm|mkv|ogg|ogv))$)";
 
   private static final Pattern PATTERN = Pattern.compile(VIDEO_PATTERN, Pattern.CASE_INSENSITIVE);
 
-  private static String zimFileName;
+  public static String zimFileName;
 
   private static JNIKiwix jniKiwix;
 
@@ -64,6 +69,7 @@ public class ZimContentProvider extends ContentProvider {
       Log.e(TAG_KIWIX, "Unable to open the file " + fileName);
       zimFileName = null;
     } else {
+      Log.d(TAG_KIWIX, "Opening file");
       zimFileName = fileName;
     }
     return zimFileName;

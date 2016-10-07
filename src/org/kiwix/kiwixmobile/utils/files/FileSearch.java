@@ -46,7 +46,7 @@ public class FileSearch {
   public static final String TAG_KIWIX = "kiwix";
 
   // Array of zim file extensions
-  public static final String[] zimFiles = { "zim", "zimaa" };
+  public static final String[] zimFiles = {"zim", "zimaa"};
 
   // Scan through the file system and find all the files with .zim and .zimaa extensions
   public ArrayList<LibraryNetworkEntity.Book> findFiles(Context context) {
@@ -57,7 +57,7 @@ public class FileSearch {
     String[] tempRoots = new String[StorageDeviceUtils.getStorageDevices((Activity) context, false).size() + 1];
     int j = 0;
     tempRoots[j] = "/mnt";
-    for (StorageDevice storageDevice : StorageDeviceUtils.getStorageDevices((Activity) context, false)){
+    for (StorageDevice storageDevice : StorageDeviceUtils.getStorageDevices((Activity) context, false)) {
       j++;
       tempRoots[j] = storageDevice.getName();
     }
@@ -142,23 +142,30 @@ public class FileSearch {
   private ArrayList<LibraryNetworkEntity.Book> createDataForAdapter(List<String> list) {
 
     ArrayList<LibraryNetworkEntity.Book> data = new ArrayList<>();
+    ZimContentProvider.originalFileName = ZimContentProvider.zimFileName;
     for (String file : list) {
-      if (ZimContentProvider.setZimFile(file) != null) {
-        LibraryNetworkEntity.Book b = new LibraryNetworkEntity.Book();
-        b.title = ZimContentProvider.getZimFileTitle();
-        b.id = ZimContentProvider.getId();
-        b.file = new File(file);
-        b.size = String.valueOf(ZimContentProvider.getFileSize());
-        b.favicon = ZimContentProvider.getFavicon();
-        b.creator = ZimContentProvider.getCreator();
-        b.publisher = ZimContentProvider.getPublisher();
-        b.date = ZimContentProvider.getDate();
-        b.description = ZimContentProvider.getDescription();
-        b.language = ZimContentProvider.getLanguage();
-        data.add(b);
+      // Check a file isn't being opened and temporally use content provider to access details
+      // This is not a great solution as we shouldn't need to fully open our ZIM files to get their metadata
+      if (ZimContentProvider.canIterate) {
+        if (ZimContentProvider.setZimFile(file) != null) {
+          LibraryNetworkEntity.Book b = new LibraryNetworkEntity.Book();
+          b.title = ZimContentProvider.getZimFileTitle();
+          b.id = ZimContentProvider.getId();
+          b.file = new File(file);
+          b.size = String.valueOf(ZimContentProvider.getFileSize());
+          b.favicon = ZimContentProvider.getFavicon();
+          b.creator = ZimContentProvider.getCreator();
+          b.publisher = ZimContentProvider.getPublisher();
+          b.date = ZimContentProvider.getDate();
+          b.description = ZimContentProvider.getDescription();
+          b.language = ZimContentProvider.getLanguage();
+          data.add(b);
+        }
       }
     }
-
+    // Return content provider to its previous state
+    ZimContentProvider.setZimFile(ZimContentProvider.originalFileName);
+    ZimContentProvider.originalFileName = "";
     data = sortDataModel(data);
 
     return data;
@@ -166,7 +173,7 @@ public class FileSearch {
 
   // Fill fileList with files found in the specific directory
   private void addFilesToFileList(String directory, FilenameFilter[] filter,
-      List<String> fileList) {
+                                  List<String> fileList) {
     Log.d(TAG_KIWIX, "Searching directory " + directory);
     File[] foundFiles = listFilesAsArray(new File(directory), filter, -1);
     for (File f : foundFiles) {
@@ -181,8 +188,8 @@ public class FileSearch {
     if (title.charAt(title.length() - 1) == "m".charAt(0)) {
       title = title.replaceFirst("[.][^.]+$", "");
     } else {
-      title =  title.replaceFirst("[.][^.]+$", "");
-      title =  title.replaceFirst("[.][^.]+$", "");
+      title = title.replaceFirst("[.][^.]+$", "");
+      title = title.replaceFirst("[.][^.]+$", "");
     }
     return title;
   }
