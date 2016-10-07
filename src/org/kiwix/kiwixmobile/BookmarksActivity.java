@@ -220,11 +220,15 @@ public class BookmarksActivity extends AppCompatActivity
   @Override
   public void onBackPressed() {
     int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
-    if (value == 1) {
-      Intent startIntent = new Intent(this, KiwixMobileActivity.class);
+    Intent startIntent = new Intent(this, KiwixMobileActivity.class);
+    startIntent.putExtra("bookmarkClicked", false);
+
+    if (value == 1) { // means there's only 1 activity in stack so start new
       startActivity(startIntent);
-    } else {
-      super.onBackPressed();
+
+    } else { // we have a parent activity waiting...
+      setResult(RESULT_OK,startIntent );
+      finish();
     }
   }
 
