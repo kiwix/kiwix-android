@@ -142,7 +142,9 @@ public class FileSearch {
   private ArrayList<LibraryNetworkEntity.Book> createDataForAdapter(List<String> list) {
 
     ArrayList<LibraryNetworkEntity.Book> data = new ArrayList<>();
-    ZimContentProvider.originalFileName = ZimContentProvider.zimFileName;
+    if (ZimContentProvider.zimFileName != null) {
+      ZimContentProvider.originalFileName = ZimContentProvider.zimFileName;
+    }
     for (String file : list) {
       // Check a file isn't being opened and temporally use content provider to access details
       // This is not a great solution as we shouldn't need to fully open our ZIM files to get their metadata
@@ -164,7 +166,9 @@ public class FileSearch {
       }
     }
     // Return content provider to its previous state
-    ZimContentProvider.setZimFile(ZimContentProvider.originalFileName);
+    if (!ZimContentProvider.originalFileName.equals("")) {
+      ZimContentProvider.setZimFile(ZimContentProvider.originalFileName);
+    }
     ZimContentProvider.originalFileName = "";
     data = sortDataModel(data);
 
