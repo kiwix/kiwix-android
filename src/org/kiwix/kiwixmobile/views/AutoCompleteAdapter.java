@@ -90,12 +90,13 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
           if (sharedPreferences.getBoolean(KiwixMobileActivity.PREF_FULL_TEXT_SEARCH, false)) {
             String[] results = JNIKiwix.indexedQuery(query, 200).split("\n");
             for (String result : results) {
-              data.add(result);
+		if (!result.trim().isEmpty())
+		    data.add(result);
             }
           }
 
-	  /* Suggestion search */
-	  else {
+	  /* Suggestion search if no fulltext results */
+	  if (data.size() == 0) {
    	    ZimContentProvider.searchSuggestions(query, 200);
 	    String suggestion;
 	    String suggestionUrl;

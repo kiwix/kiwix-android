@@ -452,7 +452,9 @@ JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_indexedQuery
   try {
     if (searcher != NULL) {
       searcher->search(cQuery, 0, count);
-      while (searcher->getNextResult(url, title, score)) {
+      while (searcher->getNextResult(url, title, score) &&
+	     !title.empty() &&
+	     !url.empty()) {
 	result += title + "\n";
       }
     }
