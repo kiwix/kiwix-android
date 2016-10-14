@@ -263,7 +263,7 @@ public class ZimContentProvider extends ContentProvider {
   }
 
   private static String loadICUData(Context context, File workingDir) {
-    String icuFileName = "icudt49l.dat";
+    String icuFileName = "icudt56l.dat";
     try {
       File icuDir = new File(workingDir, "icu");
       if (!icuDir.exists()) {
