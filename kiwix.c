@@ -241,9 +241,11 @@ JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_loadZIM(JNIEnv *e
 
   pthread_mutex_lock(&readerLock);
   try {
+    if (reader != NULL) delete reader;
     reader = new kiwix::Reader(cPath);
   } catch (exception &e) {
     std::cerr << e.what() << std::endl;
+    reader = NULL;
     retVal = JNI_FALSE;
   }
   pthread_mutex_unlock(&readerLock);
@@ -423,10 +425,13 @@ JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_loadFulltextIndex
   std::string cPath = jni2c(path, env);
 
   pthread_mutex_lock(&searcherLock);
+  searcher = NULL;
   try {
+    if (searcher != NULL) delete searcher;
     searcher = new kiwix::XapianSearcher(cPath);
   } catch (exception &e) {
     std::cerr << e.what() << std::endl;
+    searcher = NULL;
     retVal = JNI_FALSE;
   }
   pthread_mutex_unlock(&searcherLock);
