@@ -578,8 +578,12 @@ for arch in ARCHS:
                    '-D_FILE_OFFSET_BITS=64 '
                    '-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE '
                    '-DANDROID_NDK '
-                   'kiwix.c %(kwsrc)s/kiwix/reader.cpp '
+                   'kiwix.c '
+                   '%(kwsrc)s/kiwix/reader.cpp '
+                   '%(kwsrc)s/kiwix/xapianSearcher.cpp '
+                   '%(kwsrc)s/kiwix/searcher.cpp '
                    '%(kwsrc)s/stringTools.cpp '
+                   '%(kwsrc)s/resourceTools.cpp '
                    '%(kwsrc)s/pathTools.cpp '
                    '%(kwsrc)s/base64.cpp '
                    '-I%(include_paths)s '
@@ -587,7 +591,7 @@ for arch in ARCHS:
                       'arch_full': arch_full,
                       'gccver': COMPILER_VERSION,
                       'kwsrc': LIBKIWIX_SRC,
-                      'include_paths': ' -I'.join(LIBLZMA_INCLUDES
+                      'include_paths': ' -I'.join(  LIBLZMA_INCLUDES
                                                   + LIBICU_INCLUDES
                                                   + LIBZIM_INCLUDES
                                                   + platform_includes
@@ -601,16 +605,19 @@ for arch in ARCHS:
     link_cmd = ('g++ -fPIC -shared -B%(platform)s/sysroot '
                 '--sysroot %(platform)s/sysroot '
                 '-nostdlib '
-                'kiwix.o reader.o stringTools.o pathTools.o base64.o '
+                'kiwix.o searcher.o xapianSearcher.o reader.o '
+                'resourceTools.o stringTools.o pathTools.o base64.o '
                 '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/crtbegin.o '
                 '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/crtend.o '
                 '%(platform)s/lib/libzim.a %(platform)s/lib/liblzma.a '
-                # '%(platform)s/lib/libicutu.a '
-                # '%(platform)s/lib/libicuio.a '
+#                '%(platform)s/lib/libicule.a '
+#                '%(platform)s/lib/libicutest.a '
+#                '%(platform)s/lib/libicutu.a '
+#                '%(platform)s/lib/libicuio.a '
+#                '%(platform)s/lib/libicule.a '
+#                '%(platform)s/lib/libiculx.a '
+                '%(platform)s/lib/libicui18n.a '
                 '%(platform)s/lib/libicuuc.a '
-                # '%(platform)s/lib/libicule.a '
-                # '%(platform)s/lib/libiculx.a '
-                # '%(platform)s/lib/libicui18n.a '
                 '%(platform)s/lib/libicudata.a '
                 '%(platform)s/lib/libxapian.a '
                 '%(platform)s/lib/gcc/%(arch_full)s/%(gccver)s/libuuid.a '
@@ -641,7 +648,8 @@ for arch in ARCHS:
         syscall(compile_cmd)
         syscall(link_cmd)
 
-        for obj in ('kiwix.o', 'reader.o', 'stringTools.o', 'pathTools.o', 'base64.o',
+        for obj in ('kiwix.o', 'reader.o', 'searcher.o', 'xapianSearcher.o',
+                    'resourceTools.o', 'stringTools.o', 'pathTools.o', 'base64.o',
                     'src/{}_JNIKiwix.h'.format("_".join(PACKAGE.split('.')))):
             os.remove(obj)
 
