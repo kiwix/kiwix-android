@@ -9,6 +9,7 @@
 
 #include "unicode/putil.h"
 #include <kiwix/reader.h>
+#include <kiwix/xapianSearcher.h>
 #include <base64.h>
 
 #include <android/log.h>
@@ -22,8 +23,10 @@
 
 /* global variables */
 kiwix::Reader *reader = NULL;
+kiwix::XapianSearcher *searcher = NULL;
 
 static pthread_mutex_t readerLock = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t searcherLock = PTHREAD_MUTEX_INITIALIZER;
 
 /* c2jni type conversion functions */
 jboolean c2jni(const bool &val) {
@@ -415,75 +418,45 @@ JNIEXPORT void JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_setDataDirectory
   pthread_mutex_unlock(&readerLock);
 }
 
-const char* executeQuery(const char* dbLoc, const char* qu, bool partial) try {
-    Xapian::Database db;
-    //LOGI("Looking at %s\n", dbLoc);
-    // see if index is embedded in zim file...
-    try
-    {
-      zim::File zimFile = zim::File(dbLoc);
-      zim::Article xapianArticle = zimFile.getArticle('Z', "/Z/fulltextIndex/xapian");
-      //LOGI("Opened right article...\n");
+JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_loadFulltextIndex(JNIEnv *env, jobject obj, jstring path) {
+  jboolean retVal = JNI_TRUE;
+  std::string cPath = jni2c(path, env);
 
-      if (xapianArticle.good())
-      {
-        zim::offset_type dbOffset = xapianArticle.getOffset();
-        int databasefd = open(dbLoc, O_RDONLY);
-        lseek(databasefd, dbOffset, SEEK_SET);
-        db = Xapian::Database(databasefd);
-      }
-    } catch (zim::ZimFileFormatError)
-    {
-      //LOGI("Nope, not Looking at %s as an indexed zim\n", dbLoc);
-      db = Xapian::Database(dbLoc); // nope, try as a folder...
-    }
+  pthread_mutex_lock(&searcherLock);
+  try {
+    searcher = new kiwix::XapianSearcher(cPath);
+  } catch (exception &e) {
+    std::cerr << e.what() << std::endl;
+    retVal = JNI_FALSE;
+  }
+  pthread_mutex_unlock(&searcherLock);
 
-    // Start an enquire session.
-    Xapian::Enquire enquire(db);
-
-    std::string query_string(qu);
-    std::string reply("");
-
-    // Parse the query string to produce a Xapian::Query object.
-    Xapian::QueryParser qp;
-    Xapian::Stem stemmer("english");
-    qp.set_stemmer(stemmer);
-    qp.set_database(db);
-    qp.set_stemming_strategy(Xapian::QueryParser::STEM_ALL);
-    Xapian::Query query;
-
-    if (partial)
-        query = qp.parse_query(query_string, Xapian::QueryParser::FLAG_PARTIAL);
-    else
-        query = qp.parse_query(query_string);
-
-    // Find the top 20 results for the query.
-    enquire.set_query(query);
-    Xapian::MSet matches = enquire.get_mset(0, 20);
-
-    for (Xapian::MSetIterator i = matches.begin(); i != matches.end(); ++i) {
-        reply += i.get_document().get_data();
-        reply += "\n";
-    }
-    return reply.c_str();
-}  catch (const Xapian::Error &e) {
-    //LOGI(e.get_description().c_str());
-    return "";
+  return retVal;
 }
 
 JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_indexedQuery
-        (JNIEnv *env, jclass thiz, jstring db, jstring qu) {
-    const char* d = env->GetStringUTFChars(db, 0);
-    const char* q = env->GetStringUTFChars(qu, 0);
-    const char* result = executeQuery(d, q, false);
-    return env->NewStringUTF(result);
+  (JNIEnv *env, jclass obj, jstring query, jint count) {
+  std::string cQuery = jni2c(query, env);
+  unsigned int cCount = jni2c(count);
+  std::string url;
+  std::string title;
+  std::string result;
+  unsigned int score;
+      
+  pthread_mutex_lock(&searcherLock);
+  try {
+    if (searcher != NULL) {
+      searcher->search(cQuery, 0, count);
+      while (searcher->getNextResult(url, title, score)) {
+	result += title + "\n";
+      }
+    }
+  } catch (const Xapian::Error &e) {
+    LOGI(e.get_description().c_str());
+  }
+  pthread_mutex_unlock(&searcherLock);
+
+  return env->NewStringUTF(result.c_str());
 }
 
-JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_indexedQueryPartial
-             (JNIEnv *env,jclass thiz, jstring db, jstring qu) {
-    const char* d = env->GetStringUTFChars(db, 0);
-    const char* q = env->GetStringUTFChars(qu, 0);
-    const char* result = executeQuery(d, q, true);
-    return env->NewStringUTF(result);
-}
 

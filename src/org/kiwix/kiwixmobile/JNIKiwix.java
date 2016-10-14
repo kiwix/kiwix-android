@@ -35,6 +35,8 @@ public class JNIKiwix {
 
   public native boolean loadZIM(String path);
 
+    public native boolean loadFulltextIndex(String path);
+    
   public native byte[] getContent(String url, JNIKiwixString mimeType, JNIKiwixInt size);
 
   public native boolean searchSuggestions(String prefix, int count);
@@ -65,9 +67,7 @@ public class JNIKiwix {
 
   public native void setDataDirectory(String icuDataDir);
 
-  public static native String indexedQuery(String db, String query);
-
-  public static native String indexedQueryPartial(String db, String query);
+  public static native String indexedQuery(String db, int count);
 }
 
 class JNIKiwixString {
