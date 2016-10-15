@@ -1672,7 +1672,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     } else {
       SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
       String zimFile = settings.getString(TAG_CURRENT_FILE, null);
-      if (zimFile != null) {
+      if (zimFile != null && new File(zimFile).exists()) {
         Log.d(TAG_KIWIX,
             " Kiwix normal start, zimFile loaded last time -> Open last used zimFile " + zimFile);
         restoreTabStates();
