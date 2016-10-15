@@ -7,6 +7,7 @@ import com.yahoo.squidb.sql.Query;
 import org.kiwix.kiwixmobile.database.entity.BookDataSource;
 import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.Bookmarks;
+import org.kiwix.kiwixmobile.database.entity.RecentSearch;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
@@ -58,6 +59,7 @@ public class BookDao {
   }
 
   public void saveBooks(ArrayList<Book> books) {
+    mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.ID.isNotNull());
     for (Book book : books){
       BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
       bookDatabaseEntity.setBookId(book.getId());
