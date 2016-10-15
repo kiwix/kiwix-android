@@ -20,6 +20,8 @@
 package org.kiwix.kiwixmobile;
 
 import android.content.ContentProvider;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -64,13 +66,41 @@ public class ZimContentProvider extends ContentProvider {
 
   private Matcher matcher;
 
+  private static String getFulltextIndexPath(String file){
+    String[] names = {file, file};
+
+    /* File might be a ZIM chunk like foobar.zimaa */
+    if (!names[0].substring(names[0].length() - 3).equals("zim")){
+      names[0] = names[0].substring(0, names[0].length() - 2);
+    }
+
+    /* Try to find a *.idx fulltext file/directory beside the ZIM
+     * file. Returns <zimfile>.zim.idx or <zimfile>.zimaa.idx. */
+    for (String name : names) {
+      File f = new File(name + ".idx");
+      if (f.exists() && f.isDirectory()) {
+        return f.getPath();
+      }
+    }
+
+    /* If no separate fulltext index file found then returns the ZIM
+     * file path itself (embedded fulltext index) */
+    return file;
+  }
+    
   public synchronized static String setZimFile(String fileName) {
     if (!jniKiwix.loadZIM(fileName)) {
-      Log.e(TAG_KIWIX, "Unable to open the file " + fileName);
+      Log.e(TAG_KIWIX, "Unable to open the ZIM file " + fileName);
       zimFileName = null;
     } else {
-      Log.d(TAG_KIWIX, "Opening file");
+      Log.d(TAG_KIWIX, "Opening ZIM file " + fileName);
       zimFileName = fileName;
+
+      /* Try to open the corresponding fulltext index */
+      String fullText = getFulltextIndexPath(fileName);
+      if (!jniKiwix.loadFulltextIndex(fullText)) {
+	  Log.e(TAG_KIWIX, "Unable to open the ZIM fulltext index " + fullText);
+      }
     }
     return zimFileName;
   }
@@ -233,7 +263,7 @@ public class ZimContentProvider extends ContentProvider {
   }
 
   private static String loadICUData(Context context, File workingDir) {
-    String icuFileName = "icudt49l.dat";
+    String icuFileName = "icudt56l.dat";
     try {
       File icuDir = new File(workingDir, "icu");
       if (!icuDir.exists()) {

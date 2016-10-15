@@ -74,105 +74,51 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
 
   class KiwixFilter extends Filter {
 
-    private void addToList(List data, String result, String prefix) {
-      // highlight by word
-      String[] highlight = prefix.split(" ");
-      String toAdd = result.substring(0, result.length() - 5).substring(2);
-      for (String todo : highlight)
-        if (todo.length() > 0)
-          toAdd = toAdd.replaceAll("(?i)(" + Pattern.quote(todo) + ")", "<b>$1</b>");
-      // add to list
-      data.add("A/" + toAdd + ".html");
-    }
-
-    public String getDbName(String file){
-      String[] names = {file, file};
-      if (!names[0].substring(names[0].length() - 3).equals("zim")){
-        names[0] = names[0].substring(0, names[0].length() - 2);
-      }
-      for(String name : names) { // try possible places for index directory
-        File f = new File(name + ".idx");
-        if (f.exists() && f.isDirectory()) {
-          return name + ".idx"; // index in directory <zimfile>.zim.idx or <zimfile>.zimaa.idx
-        }
-      }
-      return file; // index is in zim file itself...
-    }
-
     @Override
     protected FilterResults performFiltering(CharSequence constraint) {
       FilterResults filterResults = new FilterResults();
       ArrayList<String> data = new ArrayList<>();
+
       if (constraint != null) {
         try {
+	    
+	  /* Get search request */
+	  final String query = constraint.toString();
+	  
+	  /* Fulltex search */
           SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-          final String prefix = constraint.toString();
-          String qStr = capitalizeQuery(prefix);
-          String[] result = new String[0];
           if (sharedPreferences.getBoolean(KiwixMobileActivity.PREF_FULL_TEXT_SEARCH, false)) {
-            result = JNIKiwix.indexedQuery(getDbName(ZimContentProvider.getZimFile()), qStr).split("\n");
+            String[] results = JNIKiwix.indexedQuery(query, 200).split("\n");
+            for (String result : results) {
+		if (!result.trim().isEmpty())
+		    data.add(result);
+            }
+          }
 
-            if (result.length == 1 && result[0].trim().isEmpty()) {
-              result = JNIKiwix.indexedQueryPartial(getDbName(ZimContentProvider.getZimFile()), qStr).split("\n");
-            }
-          }
-          if (hasNonEmptyResult(result)) {
-            // At least one non empty result
-            data.clear();
-            List<String> alreadyAdded = new ArrayList<String>();
-            String pageUrl = ZimContentProvider.getPageUrlFromTitle(prefix);
-            if (pageUrl != null) {
-              addToList(data, pageUrl, prefix);
-              alreadyAdded.add(pageUrl);
-            }
-            for (int i = 0; i < 3; i++) {
-              String suggestion = ZimContentProvider.getNextSuggestion();
-              if (suggestion != null && !suggestion.isEmpty()) {
-                pageUrl = ZimContentProvider.getPageUrlFromTitle(suggestion);
-                if (!alreadyAdded.contains(pageUrl)) {
-                  addToList(data, pageUrl, prefix);
-                  alreadyAdded.add(pageUrl);
-                }
-              }
-            }
-            for (String res : result) {
-              if (!alreadyAdded.contains(res)) {
-                addToList(data, res, prefix);
-                alreadyAdded.add(pageUrl);
-              }
-            }
-          } else {
-            // fallback to legacy search method if index not found
-            ZimContentProvider.searchSuggestions(prefix, 200);
-            String suggestion;
-            data.clear();
-            while ((suggestion = ZimContentProvider.getNextSuggestion()) != null) {
-              data.add(suggestion);
-            }
-          }
+	  /* Suggestion search if no fulltext results */
+	  if (data.size() == 0) {
+   	    ZimContentProvider.searchSuggestions(query, 200);
+	    String suggestion;
+	    String suggestionUrl;
+	    List<String> alreadyAdded = new ArrayList<String>();
+	    while ((suggestion = ZimContentProvider.getNextSuggestion()) != null) {
+   	      suggestionUrl = ZimContentProvider.getPageUrlFromTitle(suggestion);
+	      if (!alreadyAdded.contains(suggestionUrl)) {
+		alreadyAdded.add(suggestionUrl);
+		data.add(suggestion);
+	      }
+	    }
+	  }
+	  
         } catch (Exception e) {
           e.printStackTrace();
         }
-        filterResults.values = data;
-        filterResults.count = data.size();
+
+	/* Return results */
+	filterResults.values = data;
+        filterResults.count  = data.size();
       }
       return filterResults;
-    }
-
-    private boolean hasNonEmptyResult(String[] result) {
-      return result.length > 0 && !result[0].trim().isEmpty();
-    }
-
-    private String capitalizeQuery(String prefix) {
-      List<String> rs = new ArrayList<>();
-      for (String word : prefix.split(" ")) {
-        rs.add((word.length() > 1
-            ? Character.toUpperCase(word.charAt(0)) + word.substring(1)
-            : word.toUpperCase()));
-      }
-      String query = TextUtils.join(" ", rs);
-      query.replace("us ", "U.S. ");
-      return query;
     }
 
     @Override
