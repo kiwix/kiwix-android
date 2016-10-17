@@ -429,8 +429,7 @@ JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_loadFulltextIndex
   try {
     if (searcher != NULL) delete searcher;
     searcher = new kiwix::XapianSearcher(cPath);
-  } catch (exception &e) {
-    std::cerr << e.what() << std::endl;
+  } catch (...) {
     searcher = NULL;
     retVal = JNI_FALSE;
   }
