@@ -578,7 +578,7 @@ for arch in ARCHS:
                    '-D_FILE_OFFSET_BITS=64 '
                    '-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE '
                    '-DANDROID_NDK '
-                   'kiwix.c '
+                   'kiwix.cpp '
                    '%(kwsrc)s/kiwix/reader.cpp '
                    '%(kwsrc)s/kiwix/xapianSearcher.cpp '
                    '%(kwsrc)s/kiwix/searcher.cpp '
