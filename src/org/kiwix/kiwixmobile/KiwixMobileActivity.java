@@ -417,8 +417,15 @@ public class KiwixMobileActivity extends AppCompatActivity {
     mRightDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        getCurrentWebView().loadUrl("javascript:document.getElementById('" + sectionProperties.get(
-            position - mRightDrawerList.getHeaderViewsCount()).sectionId + "').scrollIntoView();");
+        KiwixMobileActivity.this.runOnUiThread(new Runnable(){
+          @Override
+          public void run() {
+            getCurrentWebView().loadUrl("javascript:document.getElementById('" + sectionProperties.get(
+                position - mRightDrawerList.getHeaderViewsCount()).sectionId + "').scrollIntoView();");
+            return;
+          }
+        });
+
         mRightDrawerLayout.closeDrawers();
       }
     });
@@ -1361,7 +1368,12 @@ public class KiwixMobileActivity extends AppCompatActivity {
     mBackToTopButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        getCurrentWebView().pageUp(true);
+        KiwixMobileActivity.this.runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+            getCurrentWebView().pageUp(true);
+          }
+        });
       }
     });
     tts.initWebView(getCurrentWebView());
