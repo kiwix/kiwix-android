@@ -3,8 +3,8 @@
   "package": "org.kiwix.kiwixcustomwikimed",
   "version_name": "2016-09",
   "version_code": "7",
-  "zim_file": "customapp/wikimed/content.zim",
+  "zim_file": "custom/wikimed/content.zim",
   "embed_zim": false,
-  "ic_launcher": "customapp/wikimed/icon.png",
+  "ic_launcher": "custom/wikimed/icon.png",
   "enforced_lang": "en"
 }

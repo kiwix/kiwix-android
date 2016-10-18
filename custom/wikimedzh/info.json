@@ -3,8 +3,8 @@
   "package": "org.kiwix.kiwixcustomwikimedzh",
   "version_name": "2016-07",
   "version_code": "3",
-  "zim_file": "customapp/wikimedzh/content.zim",
+  "zim_file": "custom/wikimedzh/content.zim",
   "embed_zim": false,
-  "ic_launcher": "customapp/wikimedzh/icon.png",
+  "ic_launcher": "custom/wikimedzh/icon.png",
   "enforced_lang": "zh"
 }
