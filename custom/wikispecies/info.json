@@ -3,8 +3,8 @@
   "package": "org.kiwix.kiwixcustomwikispecies",
   "version_name": "2016-10",
   "version_code": "1",
-  "zim_file": "customapp/wikispecies/content.zim",
+  "zim_file": "custom/wikispecies/content.zim",
   "embed_zim": false,
-  "ic_launcher": "customapp/wikispecies/icon.png",
+  "ic_launcher": "custom/wikispecies/icon.png",
   "enforced_lang": "en"
 }

@@ -3,8 +3,8 @@
   "package": "org.kiwix.kiwixcustomwikimedar",
   "version_name": "2016-07",
   "version_code": "2",
-  "zim_file": "customapp/wikimedar/content.zim",
+  "zim_file": "custom/wikimedar/content.zim",
   "embed_zim": false,
-  "ic_launcher": "customapp/wikimedar/icon.png",
+  "ic_launcher": "custom/wikimedar/icon.png",
   "enforced_lang": "ar"
 }
