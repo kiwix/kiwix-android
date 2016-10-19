@@ -1,8 +1,8 @@
 {
   "app_name": "Enciclopedia de Venezuela",
   "package": "org.kiwix.kiwixcustomvenezuela",
-  "version_name": "2016-04",
-  "version_code": "2",
+  "version_name": "2016-10",
+  "version_code": "3",
   "zim_file": "custom/venezuela/content.zim",
   "embed_zim": false,
   "ic_launcher": "custom/venezuela/icon.png",

@@ -2,7 +2,7 @@
   "app_name": "WikiSpecies",
   "package": "org.kiwix.kiwixcustomwikispecies",
   "version_name": "2016-10",
-  "version_code": "1",
+  "version_code": "2",
   "zim_file": "custom/wikispecies/content.zim",
   "embed_zim": false,
   "ic_launcher": "custom/wikispecies/icon.png",

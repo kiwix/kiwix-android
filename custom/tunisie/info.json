@@ -1,8 +1,8 @@
 {
   "app_name": "Encyclopédie de la Tunisie",
   "package": "org.kiwix.kiwixcustomtunisie",
-  "version_name": "2016-04",
-  "version_code": "2",
+  "version_name": "2016-10",
+  "version_code": "3",
   "zim_file": "custom/tunisie/content.zim",
   "embed_zim": false,
   "ic_launcher": "custom/tunisie/icon.png",
