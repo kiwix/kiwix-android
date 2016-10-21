@@ -1,0 +1,10 @@
+{
+  "app_name": "ମେଡିକାଲ ଉଇକିପିଡିଆ (ଅଫଲାଇନ)",
+  "package": "org.kiwix.kiwixcustomwikimedor",
+  "version_name": "2016-10",
+  "version_code": "2",
+  "zim_file": "custom/wikimedor/content.zim",
+  "embed_zim": false,
+  "ic_launcher": "custom/wikimedor/icon.png",
+  "enforced_lang": "or"
+}
