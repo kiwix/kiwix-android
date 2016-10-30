@@ -1,0 +1,10 @@
+{
+  "app_name": "医療ウィキペディア(オフライン)",
+  "package": "org.kiwix.kiwixcustomwikimedja",
+  "version_name": "2016-10",
+  "version_code": "1",
+  "zim_file": "custom/wikimedja/content.zim",
+  "embed_zim": false,
+  "ic_launcher": "custom/wikimedja/icon.png",
+  "enforced_lang": "ja"
+}
