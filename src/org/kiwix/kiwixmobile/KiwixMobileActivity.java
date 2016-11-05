@@ -51,6 +51,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.KeyEvent;
@@ -1007,8 +1009,19 @@ public class KiwixMobileActivity extends AppCompatActivity {
     }
   }
 
+  // Workaround for popup bottom menu on older devices
+  private void StyleMenuButtons(Menu m) {
+    // Find each menu item and set its text colour to black
+    for (int i = 0; i < m.size(); i++ ) {
+      SpannableString s = new SpannableString(m.getItem(i).getTitle());
+      s.setSpan(new ForegroundColorSpan (Color.BLACK),0,s.length(),0);
+      m.getItem(i).setTitle(s);
+    }
+  }
+
   private void initAllMenuItems() {
     try {
+
       menu.findItem(R.id.menu_bookmarks).setVisible(true);
       menu.findItem(R.id.menu_fullscreen).setVisible(true);
       menu.findItem(R.id.menu_home).setVisible(true);
@@ -1504,7 +1517,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     MenuInflater inflater = getMenuInflater();
     inflater.inflate(R.menu.menu_main, menu);
     this.menu = menu;
-
+    StyleMenuButtons(menu);
     if (Constants.IS_CUSTOM_APP) {
       menu.findItem(R.id.menu_help).setVisible(false);
     }

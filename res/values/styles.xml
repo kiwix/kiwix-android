@@ -23,6 +23,7 @@
     <item name="deleteDrawable">@drawable/ic_action_delete</item>
     <item name="dividerColor">@color/divider_light</item>
     <item name="selectedBackground">@drawable/list_bg_light</item>
+    <item name="android:itemBackground">@color/primary_light</item>
   </style>
 
   <style name="AppTheme.Launcher">
