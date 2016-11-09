@@ -116,6 +116,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+
 public class KiwixMobileActivity extends AppCompatActivity {
 
   public static final String TAG_KIWIX = "kiwix";
@@ -1154,7 +1156,15 @@ public class KiwixMobileActivity extends AppCompatActivity {
     if (menu != null) {
       refreshBookmarkSymbol(menu);
     }
-
+    if (getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE){
+      if (menu != null) {
+        menu.getItem(4).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+      }
+    } else {
+      if (menu != null) {
+        menu.getItem(4).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+      }
+    }
     boolean IS_WIDGET_SEARCH_INTENT = getIntent().getBooleanExtra("isWidgetSearch", false);
     boolean IS_WIDGET_VOICE_SEARCH = getIntent().getBooleanExtra("isWidgetVoice", false);
     boolean IS_WIDGET_STAR = getIntent().getBooleanExtra("isWidgetStar", false);
@@ -1405,6 +1415,25 @@ public class KiwixMobileActivity extends AppCompatActivity {
   @Override
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
+    toggleActionItemsConfig();
+    }
+
+
+  void toggleActionItemsConfig() {
+    if (menu != null) {
+      MenuItem random = menu.findItem(R.id.menu_randomarticle);
+      MenuItem home = menu.findItem(R.id.menu_home);
+      MenuItem openFile = menu.findItem(R.id.menu_openfile);
+      if (getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE) {
+        random.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        home.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+      }
+      else {
+        random.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        home.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+
+      }
+    }
   }
 
   public void searchForTitle(String title){
@@ -1535,6 +1564,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
   @Override
   public boolean onPrepareOptionsMenu(Menu menu) {
     super.onPrepareOptionsMenu(menu);
+    toggleActionItemsConfig();
     refreshBookmarkSymbol(menu);
     refreshNavigationButtons();
     return true;
@@ -1547,7 +1577,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
     }
     if (menu.findItem(R.id.menu_bookmarks) != null &&
         getCurrentWebView().getUrl() != null &&
-        !getCurrentWebView().getUrl().equals("file:///android_res/raw/welcome.html") &&
         ZimContentProvider.getId() != null) {
       menu.findItem(R.id.menu_bookmarks).setVisible(true);
       if (bookmarks.contains(getCurrentWebView().getUrl())) {
