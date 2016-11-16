@@ -144,4 +144,5 @@
   <string name="path_not_writable">Can not access desired directory, using default. To fix this reselect the desired directory in app settings.</string>
   <string name="pref_full_text_search_title">Fulltext Search</string>
   <string name="pref_full_text_search_summary">Allow app to search the text within articles. Caution this can slow search down considerably.</string>
+  <string name="reboot_message">Due to a bug in android 6.0 we require you to reboot your device to continue without granting us the storage permission. We are sorry for any inconvenience this may cause.</string>
 </resources>
