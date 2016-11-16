@@ -16,6 +16,8 @@ public class Constants {
 
   public static final int CUSTOM_APP_VERSION_CODE = 2;
 
+  public static final int CUSTOM_APP_CONTENT_VERSION_CODE = CUSTOM_APP_VERSION_CODE;
+
   public static final String CUSTOM_APP_WEBSITE = "~website~";
 
   public static final String CUSTOM_APP_EMAIL = "~support_email~";

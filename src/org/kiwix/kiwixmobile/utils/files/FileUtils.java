@@ -72,7 +72,7 @@ public class FileUtils {
    * @return String the file name of the expansion file
    */
   public static String getExpansionAPKFileName(boolean mainFile) {
-    return (mainFile ? "main." : "patch.") + Constants.CUSTOM_APP_VERSION_CODE + "."
+    return (mainFile ? "main." : "patch.") + Constants.CUSTOM_APP_CONTENT_VERSION_CODE + "."
         + Constants.CUSTOM_APP_ID + ".obb";
   }
 
