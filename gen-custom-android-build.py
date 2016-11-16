@@ -52,6 +52,7 @@ DEFAULT_JSDATA = {
     # 'zim_file': "wikipedia_bm.zim",
     'enforced_lang': None,
     'embed_zim': False,
+    'content_version_code' : 0,    
 
     # main icon source & store icon
     'ic_launcher': os.path.join('android',
@@ -608,7 +609,11 @@ def main(jspath, **options):
     jsdata.update({'zim_name': zim_name_from_path(jsdata.get('zim_file'))})
     if jsdata.get('embed_zim'):
         jsdata.update({'zim_name': 'libcontent.so'})
-
+    
+    # Update Content Version Code
+    if jsdata.get('content_version_code') == 0:
+        jsdata.update({'content_version_code' : jsdata.get('version_code')})
+      
     # greetings
     logger.info("Your are now building {app_name} version {version_name} "
                 "at {path} for {zim_name}"
