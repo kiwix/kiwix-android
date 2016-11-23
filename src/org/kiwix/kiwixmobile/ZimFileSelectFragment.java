@@ -67,7 +67,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
@@ -382,9 +384,19 @@ public class ZimFileSelectFragment extends Fragment
 
     @Override
     protected Void doInBackground(Void... params) {
-
+      // Search file system for files
       mFiles = new FileSearch().findFiles(context);
+
+      // Remove duplicate files
+      HashSet<LibraryNetworkEntity.Book> singularBooks = new HashSet<>();
+      singularBooks.addAll(mFiles);
+      mFiles.clear();
+      mFiles.addAll(singularBooks);
+
+      // Sort files
       Collections.sort(mFiles, new fileComparator());
+
+      // Save files for quick access later
       bookDao.saveBooks(mFiles);
       return null;
     }

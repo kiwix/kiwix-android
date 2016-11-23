@@ -22,6 +22,8 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -146,6 +148,23 @@ public class LibraryNetworkEntity {
 
     public String getSize() {
       return this.size;
+    }
+
+    // Two books are equal if their ids match
+    @Override
+    public boolean equals (Object obj) {
+      if (obj instanceof Book) {
+        if (((Book) obj).getId().equals(getId()) ) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    // Only use the book's id to generate a hash code
+    @Override
+    public int hashCode() {
+      return getId().hashCode();
     }
   }
 }
