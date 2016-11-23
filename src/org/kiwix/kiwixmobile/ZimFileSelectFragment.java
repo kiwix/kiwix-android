@@ -257,7 +257,9 @@ public class ZimFileSelectFragment extends Fragment
     mFiles.remove(position);
     mRescanAdapter.notifyDataSetChanged();
     checkEmpty();
-    LibraryFragment.libraryAdapter.getFilter().filter(context.searchView.getQuery());
+    if (LibraryFragment.libraryAdapter != null) {
+      LibraryFragment.libraryAdapter.getFilter().filter(context.searchView.getQuery());
+    }
 
   }
 
