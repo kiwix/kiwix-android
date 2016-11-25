@@ -59,6 +59,7 @@
   <string name="menu_bookmarks_list">Bookmarks</string>
   <string name="no_section_info">No Content Headers Found</string>
   <string name="request_storage">To access offline content we need access to your storage</string>
+  <string name="request_storage_custom">If you see a screen overlay warning simply restart your device to fix.</string>
   <string name="clear_recent_history_dialog">Are you sure you want to delete your search history?</string>
   <string name="clear_recent_and_tabs_history_dialog">Are you sure you want to delete your search history and reset all active tabs?</string>
   <string name="delete_recent_search_item">Delete this item?</string>

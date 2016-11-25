@@ -983,8 +983,13 @@ public class KiwixMobileActivity extends AppCompatActivity {
       ActivityCompat.requestPermissions(this,
           new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
           KiwixMobileActivity.REQUEST_STORAGE_PERMISSION);
-      Toast.makeText(this, getResources().getString(R.string.request_storage), Toast.LENGTH_LONG)
-          .show();
+      if (Constants.IS_CUSTOM_APP && Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
+        Toast.makeText(this, getResources().getString(R.string.request_storage_custom), Toast.LENGTH_LONG)
+            .show();
+      } else {
+        Toast.makeText(this, getResources().getString(R.string.request_storage), Toast.LENGTH_LONG)
+            .show();
+      }
       return false;
     }
   }
