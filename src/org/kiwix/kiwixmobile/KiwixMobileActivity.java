@@ -332,9 +332,18 @@ public class KiwixMobileActivity extends AppCompatActivity {
     stopTTSButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-          readAloud();
-          stopTTSButton.setVisibility(View.GONE);
+          if (tts.currentTTSTask == null) {
+              tts.stop();
+              return;
+          }
 
+          if (tts.currentTTSTask.paused) {
+              tts.pauseOrResume();
+              stopTTSButton.setText("PAUSE");
+          } else {
+              tts.pauseOrResume();
+              stopTTSButton.setText("RESUME");
+          }
       }
     });
 
@@ -627,6 +636,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
             menu.findItem(R.id.menu_read_aloud)
                 .setTitle(getResources().getString(R.string.menu_read_aloud));
             stopTTSButton.setVisibility(View.GONE);
+            stopTTSButton.setText("PAUSE");
           }
         });
       }

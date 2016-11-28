@@ -74,7 +74,7 @@
                 android:gravity="center"
                 android:textColor="@android:color/black"
                 android:textStyle="bold"
-                android:text="stop"
+                android:text="pause"
                 android:visibility="gone"/>
 
 
