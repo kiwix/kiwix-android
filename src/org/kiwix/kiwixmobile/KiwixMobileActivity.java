@@ -1741,7 +1741,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
       String filePath = FileUtils.getLocalFilePathByUri(getApplicationContext(), getIntent().getData());
 
       if (filePath == null) {
-        Toast.makeText(KiwixMobileActivity.this, "Unable to load file", Toast.LENGTH_LONG).show();
+        Toast.makeText(KiwixMobileActivity.this, getString(R.string.error_filenotfound), Toast.LENGTH_LONG).show();
         return;
       }
 
