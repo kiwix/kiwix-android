@@ -204,6 +204,10 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private Button stopTTSButton;
 
+  private Button pauseTTSButton;
+
+  private LinearLayout TTSControls;
+
   private ListView mLeftDrawerList;
 
   private ListView mRightDrawerList;
@@ -324,12 +328,14 @@ public class KiwixMobileActivity extends AppCompatActivity {
     mIsSpeaking = false;
     mBackToTopButton = (Button) findViewById(R.id.button_backtotop);
     stopTTSButton = (Button) findViewById(R.id.button_stop_tts);
+    pauseTTSButton = (Button) findViewById(R.id.button_pause_tts);
+    TTSControls = (LinearLayout) findViewById(R.id.tts_controls);
     mPrefState = new ArrayList<>();
     mToolbarContainer = (RelativeLayout) findViewById(R.id.toolbar_layout);
     mProgressBar = (AnimatedProgressBar) findViewById(R.id.progress_view);
     exitFullscreenButton = (ImageButton) findViewById(R.id.FullscreenControlButton);
 
-    stopTTSButton.setOnClickListener(new View.OnClickListener() {
+    pauseTTSButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
           if (tts.currentTTSTask == null) {
@@ -339,11 +345,18 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
           if (tts.currentTTSTask.paused) {
               tts.pauseOrResume();
-              stopTTSButton.setText("PAUSE");
+              pauseTTSButton.setText(R.string.tts_pause);
           } else {
               tts.pauseOrResume();
-              stopTTSButton.setText("RESUME");
+              pauseTTSButton.setText(R.string.tts_resume);
           }
+      }
+    });
+
+    stopTTSButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        tts.stop();
       }
     });
 
@@ -622,7 +635,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
           public void run() {
             menu.findItem(R.id.menu_read_aloud)
                 .setTitle(getResources().getString(R.string.menu_read_aloud_stop));
-            stopTTSButton.setVisibility(View.VISIBLE);
+            TTSControls.setVisibility(View.VISIBLE);
           }
         });
       }
@@ -635,8 +648,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
           public void run() {
             menu.findItem(R.id.menu_read_aloud)
                 .setTitle(getResources().getString(R.string.menu_read_aloud));
-            stopTTSButton.setVisibility(View.GONE);
-            stopTTSButton.setText("PAUSE");
+            TTSControls.setVisibility(View.GONE);
+            pauseTTSButton.setText(R.string.tts_pause);
           }
         });
       }
@@ -857,11 +870,11 @@ public class KiwixMobileActivity extends AppCompatActivity {
         break;
 
       case R.id.menu_read_aloud:
-        if(stopTTSButton.getVisibility() == View.GONE) {
+        if(TTSControls.getVisibility() == View.GONE) {
           if(mIsBacktotopEnabled) {
             mBackToTopButton.setVisibility(View.INVISIBLE);
           }
-        } else if (stopTTSButton.getVisibility() == View.VISIBLE){
+        } else if (TTSControls.getVisibility() == View.VISIBLE){
           if(mIsBacktotopEnabled) {
             mBackToTopButton.setVisibility(View.VISIBLE);
           }
@@ -1333,7 +1346,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
       public void onPageChanged(int page, int maxPages) {
         if (mIsBacktotopEnabled) {
           if (getCurrentWebView().getScrollY() > 200) {
-            if (mBackToTopButton.getVisibility() == View.INVISIBLE && stopTTSButton.getVisibility() == View.GONE ) {
+            if (mBackToTopButton.getVisibility() == View.INVISIBLE && TTSControls.getVisibility() == View.GONE ) {
               mBackToTopButton.setText(R.string.button_backtotop);
               mBackToTopButton.setVisibility(View.VISIBLE);
 
