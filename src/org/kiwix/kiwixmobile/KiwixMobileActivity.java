@@ -42,14 +42,12 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.ActionMenuItemView;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -66,11 +64,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.webkit.JavascriptInterface;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -83,7 +78,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -91,7 +85,6 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.database.BookmarksDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
-import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.settings.Constants;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.HTMLUtils;
@@ -107,10 +100,7 @@ import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
 import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
 import org.kiwix.kiwixmobile.views.KiwixWebView;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -1748,7 +1738,13 @@ public class KiwixMobileActivity extends AppCompatActivity {
   private void manageExternalLaunchAndRestoringViewState(Bundle savedInstanceState) {
 
     if (getIntent().getData() != null) {
-      String filePath = getIntent().getData().getPath();
+      String filePath = FileUtils.getLocalFilePathByUri(getApplicationContext(), getIntent().getData());
+
+      if (filePath == null) {
+        Toast.makeText(KiwixMobileActivity.this, "Unable to load file", Toast.LENGTH_LONG).show();
+        return;
+      }
+
       Log.d(TAG_KIWIX, " Kiwix started from a filemanager. Intent filePath: "
           + filePath
           + " -> open this zimfile and load menu_main page");

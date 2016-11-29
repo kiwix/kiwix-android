@@ -1,11 +1,18 @@
 package org.kiwix.kiwixmobile.utils.files;
 
+import android.content.ContentUris;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.DocumentsContract;
 import android.util.Log;
 import android.content.Context;
 import android.os.Environment;
 import android.widget.PopupWindow;
 
 import java.io.File;
+
 import org.kiwix.kiwixmobile.settings.Constants;
 
 public class FileUtils {
@@ -32,24 +39,24 @@ public class FileUtils {
     }
   }
 
-  public static synchronized void deleteZimFile(String path){
+  public static synchronized void deleteZimFile(String path) {
     if (path.substring(path.length() - 5).equals(".part")) {
       path = path.substring(0, path.length() - 5);
     }
     File file = new File(path);
-    if (!file.getPath().substring(file.getPath().length() - 3).equals("zim")){
+    if (!file.getPath().substring(file.getPath().length() - 3).equals("zim")) {
       fileloop:
-        for(char alphabetFirst = 'a'; alphabetFirst <= 'z';alphabetFirst++) {
-          for (char alphabetSecond = 'a'; alphabetSecond <= 'z'; alphabetSecond++) {
-            String chunkPath = path.substring(0, path.length() - 2) + alphabetFirst + alphabetSecond;
-            File fileChunk = new File(chunkPath);
-            if (fileChunk.exists()) {
-              fileChunk.delete();
-            } else if (!deleteZimFileParts(chunkPath)) {
-              break fileloop;
-            }
+      for (char alphabetFirst = 'a'; alphabetFirst <= 'z'; alphabetFirst++) {
+        for (char alphabetSecond = 'a'; alphabetSecond <= 'z'; alphabetSecond++) {
+          String chunkPath = path.substring(0, path.length() - 2) + alphabetFirst + alphabetSecond;
+          File fileChunk = new File(chunkPath);
+          if (fileChunk.exists()) {
+            fileChunk.delete();
+          } else if (!deleteZimFileParts(chunkPath)) {
+            break fileloop;
           }
         }
+      }
     } else {
       file.delete();
       deleteZimFileParts(path);
@@ -73,7 +80,7 @@ public class FileUtils {
    */
   public static String getExpansionAPKFileName(boolean mainFile) {
     return (mainFile ? "main." : "patch.") + Constants.CUSTOM_APP_CONTENT_VERSION_CODE + "."
-        + Constants.CUSTOM_APP_ID + ".obb";
+            + Constants.CUSTOM_APP_ID + ".obb";
   }
 
   /**
@@ -92,13 +99,13 @@ public class FileUtils {
   /**
    * Helper function to ascertain the existence of a file and return true/false appropriately
    *
-   * @param fileName the name (sans path) of the file to query
-   * @param fileSize the size that the file must match
+   * @param fileName             the name (sans path) of the file to query
+   * @param fileSize             the size that the file must match
    * @param deleteFileOnMismatch if the file sizes do not match, delete the file
    * @return true if it does exist, false otherwise
    */
   static public boolean doesFileExist(String fileName, long fileSize,
-      boolean deleteFileOnMismatch) {
+                                      boolean deleteFileOnMismatch) {
 
     Log.d(TAG_KIWIX, "Looking for '" + fileName + "' with size=" + fileSize);
 
@@ -122,5 +129,46 @@ public class FileUtils {
       Log.d(TAG_KIWIX, "No file '" + fileName + "' found.");
     }
     return false;
+  }
+
+  static public String getLocalFilePathByUri(final Context ctx, final Uri uri) {
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(ctx, uri)) {
+      if ("com.android.externalstorage.documents".equals(uri.getAuthority())) {
+        String[] documentId = DocumentsContract.getDocumentId(uri).split(":");
+
+        if (documentId[0].equals("primary"))
+          return Environment.getExternalStorageDirectory() + "/" + documentId[1];
+
+      } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
+        String documentId = DocumentsContract.getDocumentId(uri);
+        Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(documentId));
+
+        return contentQuery(ctx, contentUri);
+      }
+    } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+      return contentQuery(ctx, uri);
+    } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+      return uri.getPath();
+    }
+
+    return null;
+  }
+
+  static private String contentQuery(Context context, Uri uri) {
+    Cursor cursor = null;
+
+    try {
+      cursor = context.getContentResolver().query(uri, new String[]{"_data"}, null, null, null);
+
+      if (cursor != null && cursor.moveToFirst())
+        return cursor.getString(cursor.getColumnIndexOrThrow("_data"));
+
+    } finally {
+      if (cursor != null)
+        cursor.close();
+    }
+
+    return null;
   }
 }
