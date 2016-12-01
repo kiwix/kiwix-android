@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.ZimContentProvider;
@@ -117,6 +118,7 @@ public class KiwixTextToSpeech {
 
   public void stop() {
     if (tts.stop() == TextToSpeech.SUCCESS) {
+      currentTTSTask = null;
       onSpeakingListener.onSpeakingEnded();
     }
   }
@@ -233,7 +235,6 @@ public class KiwixTextToSpeech {
           @Override
           public void onError(String s) {
             Log.e(TAG_KIWIX, "TextToSpeech: " + s);
-            stop();
           }
         });
       }
@@ -249,7 +250,13 @@ public class KiwixTextToSpeech {
     @JavascriptInterface
     @SuppressWarnings("unused")
     public void speakAloud(String content) {
-      List<String> pieces = Arrays.asList(content.split("[\\n\\.;]"));
+      String[] splitted = content.split("[\\n\\.;]");
+      List<String> pieces = new ArrayList<>();
+
+      for (String s : splitted) {
+        if (!s.trim().isEmpty())
+          pieces.add(s.trim());
+      }
 
       if (!pieces.isEmpty()) {
         onSpeakingListener.onSpeakingStarted();
