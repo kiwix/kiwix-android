@@ -20,13 +20,15 @@
 package org.kiwix.kiwixmobile.utils.files;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 
-import org.kiwix.kiwixmobile.LibraryFragment;
 import org.kiwix.kiwixmobile.ZimContentProvider;
-import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 
 import java.io.File;
@@ -35,7 +37,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Vector;
 
 import eu.mhutti1.utils.storage.StorageDevice;
@@ -48,9 +49,66 @@ public class FileSearch {
   // Array of zim file extensions
   public static final String[] zimFiles = {"zim", "zimaa"};
 
+
+  private final Context context;
+  private final ResultListener listener;
+
+  private boolean fileSystemScanCompleted = false;
+  private boolean mediaStoreScanCompleted = false;
+
+  public FileSearch(Context ctx, ResultListener listener) {
+    this.context = ctx;
+    this.listener = listener;
+  }
+
+  public void scan() {
+    fileSystemScanCompleted = false;
+    mediaStoreScanCompleted = false;
+
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        scanFileSystem();
+        fileSystemScanCompleted = true;
+        checkCompleted();
+      }
+    }).start();
+
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        scanMediaStore();
+        mediaStoreScanCompleted = true;
+        checkCompleted();
+      }
+    }).start();
+  }
+
+  private synchronized void checkCompleted() {
+    if (mediaStoreScanCompleted && fileSystemScanCompleted)
+      listener.onScanCompleted();
+  }
+
+  public void scanMediaStore() {
+    ContentResolver contentResolver = context.getContentResolver();
+    Uri uri = MediaStore.Files.getContentUri("external");
+
+    String[] projection = {MediaStore.MediaColumns.DATA};
+    String selection = MediaStore.MediaColumns.DATA + " like ? or "+MediaStore.MediaColumns.DATA +" like ? ";
+
+    Cursor query = contentResolver.query(uri, projection, selection, new String[]{"%."+zimFiles[0], "%."+zimFiles[1]}, null);
+
+    try {
+      while (query.moveToNext()) {
+        onFileFound(query.getString(0));
+      }
+    } finally {
+      query.close();
+    }
+  }
+
   // Scan through the file system and find all the files with .zim and .zimaa extensions
-  public ArrayList<LibraryNetworkEntity.Book> findFiles(Context context) {
-    final List<String> fileList = new ArrayList<>();
+  public void scanFileSystem() {
     FilenameFilter[] filter = new FilenameFilter[zimFiles.length];
 
     // Search all external directories that we can find.
@@ -85,13 +143,11 @@ public class FileSearch {
       }
       File f = new File(dirName);
       if (f.isDirectory()) {
-        addFilesToFileList(dirName, filter, fileList);
+        scanDirectory(dirName, filter);
       } else {
         Log.i(TAG_KIWIX, "Skipping missing directory " + dirName);
       }
     }
-
-    return createDataForAdapter(fileList);
   }
 
   public ArrayList<LibraryNetworkEntity.Book> sortDataModel(ArrayList<LibraryNetworkEntity.Book> data) {
@@ -138,31 +194,27 @@ public class FileSearch {
     return files.toArray(arr);
   }
 
-  // Create an ArrayList with our DataModel
-  private ArrayList<LibraryNetworkEntity.Book> createDataForAdapter(List<String> list) {
+  private synchronized LibraryNetworkEntity.Book fileToBook(String filePath) {
+    LibraryNetworkEntity.Book book = null;
 
-    ArrayList<LibraryNetworkEntity.Book> data = new ArrayList<>();
     if (ZimContentProvider.zimFileName != null) {
       ZimContentProvider.originalFileName = ZimContentProvider.zimFileName;
     }
-    for (String file : list) {
-      // Check a file isn't being opened and temporally use content provider to access details
-      // This is not a great solution as we shouldn't need to fully open our ZIM files to get their metadata
-      if (ZimContentProvider.canIterate) {
-        if (ZimContentProvider.setZimFile(file) != null) {
-          LibraryNetworkEntity.Book b = new LibraryNetworkEntity.Book();
-          b.title = ZimContentProvider.getZimFileTitle();
-          b.id = ZimContentProvider.getId();
-          b.file = new File(file);
-          b.size = String.valueOf(ZimContentProvider.getFileSize());
-          b.favicon = ZimContentProvider.getFavicon();
-          b.creator = ZimContentProvider.getCreator();
-          b.publisher = ZimContentProvider.getPublisher();
-          b.date = ZimContentProvider.getDate();
-          b.description = ZimContentProvider.getDescription();
-          b.language = ZimContentProvider.getLanguage();
-          data.add(b);
-        }
+    // Check a file isn't being opened and temporally use content provider to access details
+    // This is not a great solution as we shouldn't need to fully open our ZIM files to get their metadata
+    if (ZimContentProvider.canIterate) {
+      if (ZimContentProvider.setZimFile(filePath) != null) {
+        book = new LibraryNetworkEntity.Book();
+        book.title = ZimContentProvider.getZimFileTitle();
+        book.id = ZimContentProvider.getId();
+        book.file = new File(filePath);
+        book.size = String.valueOf(ZimContentProvider.getFileSize());
+        book.favicon = ZimContentProvider.getFavicon();
+        book.creator = ZimContentProvider.getCreator();
+        book.publisher = ZimContentProvider.getPublisher();
+        book.date = ZimContentProvider.getDate();
+        book.description = ZimContentProvider.getDescription();
+        book.language = ZimContentProvider.getLanguage();
       }
     }
     // Return content provider to its previous state
@@ -170,19 +222,17 @@ public class FileSearch {
       ZimContentProvider.setZimFile(ZimContentProvider.originalFileName);
     }
     ZimContentProvider.originalFileName = "";
-    data = sortDataModel(data);
 
-    return data;
+    return book;
   }
 
   // Fill fileList with files found in the specific directory
-  private void addFilesToFileList(String directory, FilenameFilter[] filter,
-                                  List<String> fileList) {
+  private void scanDirectory(String directory, FilenameFilter[] filter) {
     Log.d(TAG_KIWIX, "Searching directory " + directory);
     File[] foundFiles = listFilesAsArray(new File(directory), filter, -1);
     for (File f : foundFiles) {
       Log.d(TAG_KIWIX, "Found " + f.getAbsolutePath());
-      fileList.add(f.getAbsolutePath());
+      onFileFound(f.getAbsolutePath());
     }
   }
 
@@ -196,5 +246,18 @@ public class FileSearch {
       title = title.replaceFirst("[.][^.]+$", "");
     }
     return title;
+  }
+
+  public void onFileFound(String filePath) {
+    LibraryNetworkEntity.Book book = fileToBook(filePath);
+
+    if (book != null)
+      listener.onBookFound(book);
+  }
+
+  public interface ResultListener {
+    void onBookFound(LibraryNetworkEntity.Book book);
+
+    void onScanCompleted();
   }
 }
