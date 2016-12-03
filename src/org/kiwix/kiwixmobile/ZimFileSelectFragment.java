@@ -133,9 +133,11 @@ public class ZimFileSelectFragment extends Fragment
     ArrayList<LibraryNetworkEntity.Book> books = bookDao.getBooks();
     Collections.sort(books, new fileComparator());
 
-    for (LibraryNetworkEntity.Book book : books)
-      if (!mFiles.contains(book))
+    for (LibraryNetworkEntity.Book book : books) {
+      if (!mFiles.contains(book)) {
         mFiles.add(book);
+      }
+    }
 
     mZimFileList.setAdapter(mRescanAdapter);
     mRescanAdapter.notifyDataSetChanged();
@@ -215,10 +217,11 @@ public class ZimFileSelectFragment extends Fragment
       public void onScanCompleted() {
         //filter deleted files
         ArrayList<LibraryNetworkEntity.Book> books = new ArrayList<>(mFiles);
-        for (LibraryNetworkEntity.Book book : books)
+        for (LibraryNetworkEntity.Book book : books) {
           if (book.file == null || !book.file.canRead()) {
             mFiles.remove(book);
           }
+        }
 
         context.runOnUiThread(new Runnable() {
           @Override
