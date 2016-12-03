@@ -223,6 +223,10 @@ public class ZimFileSelectFragment extends Fragment
           }
         }
 
+        if (LibraryFragment.libraryAdapter != null) {
+          LibraryFragment.libraryAdapter.getFilter().filter(context.searchView.getQuery());
+        }
+
         context.runOnUiThread(new Runnable() {
           @Override
           public void run() {
