@@ -62,8 +62,6 @@ public class FileSearch {
   }
 
   public void scan() {
-    fileSystemScanCompleted = false;
-    mediaStoreScanCompleted = false;
 
     new Thread(new Runnable() {
       @Override
@@ -100,7 +98,10 @@ public class FileSearch {
 
     try {
       while (query.moveToNext()) {
-        onFileFound(query.getString(0));
+        File file = new File(query.getString(0));
+
+        if (file.canRead())
+          onFileFound(file.getAbsolutePath());
       }
     } finally {
       query.close();
@@ -133,7 +134,7 @@ public class FileSearch {
     }
 
     String dirNamePrimary = new File(
-        Environment.getExternalStorageDirectory().getAbsolutePath()).toString();
+            Environment.getExternalStorageDirectory().getAbsolutePath()).toString();
     //        addFilesToFileList(dirNamePrimary, filter, fileList);
 
     for (final String dirName : additionalRoots) {

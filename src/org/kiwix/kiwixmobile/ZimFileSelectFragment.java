@@ -114,6 +114,12 @@ public class ZimFileSelectFragment extends Fragment
     }
   }
 
+  @Override
+  public void onResume() {
+    refreshFragment();
+    super.onResume();
+  }
+
   public void refreshFragment(){
     // Of course you will want to faActivity and llLayout in the class and not this method to access them in the rest of
     // the class, just initialize them here
@@ -183,6 +189,9 @@ public class ZimFileSelectFragment extends Fragment
   }
 
   public void getFiles(){
+    if (mZimFileList.getFooterViewsCount() != 0)
+      return;
+
     mZimFileList.addFooterView(progressBar);
     checkEmpty();
 
@@ -204,9 +213,18 @@ public class ZimFileSelectFragment extends Fragment
 
       @Override
       public void onScanCompleted() {
+        //filter deleted files
+        ArrayList<LibraryNetworkEntity.Book> books = new ArrayList<>(mFiles);
+        for (LibraryNetworkEntity.Book book : books)
+          if (book.file == null || !book.file.canRead()) {
+            mFiles.remove(book);
+          }
+
         context.runOnUiThread(new Runnable() {
           @Override
           public void run() {
+            mRescanAdapter.notifyDataSetChanged();
+
             bookDao.saveBooks(mFiles);
             mZimFileList.removeFooterView(progressBar);
             checkEmpty();
@@ -258,6 +276,12 @@ public class ZimFileSelectFragment extends Fragment
     String file;
     LibraryNetworkEntity.Book data = (LibraryNetworkEntity.Book) mZimFileList.getItemAtPosition(position);
     file = data.file.getPath();
+
+    if (!data.file.canRead()) {
+      Toast.makeText(context, getString(R.string.error_filenotfound), Toast.LENGTH_LONG).show();
+      return;
+    }
+
     finishResult(file);
   }
 
