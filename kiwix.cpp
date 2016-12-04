@@ -86,8 +86,8 @@ JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getMainPage(JNIEnv
     try {
       std::string cUrl = reader->getMainPageUrl();
       url = c2jni(cUrl, env);
-    } catch (exception &e) {
-      std::cerr << e.what() << std::endl;
+    } catch (...) {
+      std::cerr << "Unable to get ZIM main page" << std::endl;
     }
   }
   pthread_mutex_unlock(&readerLock);
@@ -103,8 +103,8 @@ JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getId(JNIEnv *env,
     try {
       std::string cId = reader->getId();
       id = c2jni(cId, env);
-    } catch (exception &e) {
-      std::cerr << e.what() << std::endl;
+    } catch (...) {
+      std::cerr << "Unable to get ZIM id" << std::endl;
     }
   }
   pthread_mutex_unlock(&readerLock);
@@ -120,8 +120,8 @@ JNIEXPORT jint JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getFileSize(JNIEnv *e
     try {
       int cSize = reader->getFileSize();
       size = c2jni(cSize);
-    } catch (exception &e) {
-      std::cerr << e.what() << std::endl;
+    } catch (...) {
+      std::cerr << "Unable to get ZIM file size" << std::endl;
     }
   }
   pthread_mutex_unlock(&readerLock);
@@ -137,8 +137,8 @@ JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getCreator(JNIEnv 
     try {
       std::string cCreator = reader->getCreator();
       creator = c2jni(cCreator, env);
-    } catch (exception &e) {
-      std::cerr << e.what() << std::endl;
+    } catch (...) {
+      std::cerr << "Unable to get ZIM creator" << std::endl;
     }
   }
   pthread_mutex_unlock(&readerLock);
@@ -154,8 +154,8 @@ JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getPublisher(JNIEn
     try {
       std::string cPublisher = reader->getPublisher();
       publisher = c2jni(cPublisher, env);
-    } catch (exception &e) {
-      std::cerr << e.what() << std::endl;
+    } catch (...) {
+      std::cerr << "Unable to get ZIM creator" << std::endl;
     }
   }
   pthread_mutex_unlock(&readerLock);
@@ -173,8 +173,8 @@ JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getFavicon(JNIEnv 
       std::string cMime;
       reader->getFavicon(cContent, cMime);
       favicon = c2jni(base64_encode(reinterpret_cast<const unsigned char*>(cContent.c_str()), cContent.length()), env);
-    } catch (exception &e) {
-      std::cerr << e.what() << std::endl;
+    } catch (...) {
+      std::cerr << "Unable to get ZIM favicon" << std::endl;
     }
   }
   pthread_mutex_unlock(&readerLock);
@@ -190,8 +190,8 @@ JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getDate(JNIEnv *en
     try {
       std::string cDate = reader->getDate();
       date = c2jni(cDate, env);
-    } catch (exception &e) {
-      std::cerr << e.what() << std::endl;
+    } catch (...) {
+      std::cerr << "Unable to get ZIM date" << std::endl;
     }
   }
   pthread_mutex_unlock(&readerLock);
@@ -207,8 +207,8 @@ JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getLanguage(JNIEnv
     try {
       std::string cLanguage = reader->getLanguage();
       language = c2jni(cLanguage, env);
-    } catch (exception &e) {
-      std::cerr << e.what() << std::endl;
+    } catch (...) {
+      std::cerr << "Unable to get ZIM language" << std::endl;
     }
   }
   pthread_mutex_unlock(&readerLock);
@@ -226,8 +226,8 @@ JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getMimeType(JNIEnv
       std::string cMimeType;
       reader->getMimeTypeByUrl(cUrl, cMimeType);
       mimeType = c2jni(cMimeType, env);
-    } catch (exception &e) {
-      std::cerr << e.what() << std::endl;
+    } catch (...) {
+      std::cerr << "Unable to get mime-type for url " << cUrl << std::endl;
     }
   }
   pthread_mutex_unlock(&readerLock);
@@ -243,8 +243,8 @@ JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_loadZIM(JNIEnv *e
   try {
     if (reader != NULL) delete reader;
     reader = new kiwix::Reader(cPath);
-  } catch (exception &e) {
-    std::cerr << e.what() << std::endl;
+  } catch (...) {
+    std::cerr << "Unable to load ZIM " << cPath << std::endl;
     reader = NULL;
     retVal = JNI_FALSE;
   }
@@ -275,9 +275,8 @@ JNIEXPORT jbyteArray JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getContent(JNIE
         setStringObjValue(cMimeType, mimeTypeObj, env);
         setIntObjValue(cSize, sizeObj, env);
       }
-    } catch (exception &e) {
-      LOGI(e.what());
-      std::cerr << e.what() << std::endl;
+    } catch (...) {
+      std::cerr << "Unable to get content for url " << cUrl << std::endl;
     }
     pthread_mutex_unlock(&readerLock);
   }
@@ -298,8 +297,8 @@ JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_searchSuggestions
         retVal = JNI_TRUE;
       }
     }
-  } catch (exception &e) {
-    std::cerr << e.what() << std::endl;
+  } catch (...) {
+    std::cerr << "Unable to search suggestions for pattern " << cPrefix << std::endl;
   }
   pthread_mutex_unlock(&readerLock);
 
@@ -319,8 +318,8 @@ JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getNextSuggestion
         retVal = JNI_TRUE;
       }
     }
-  } catch (exception &e) {
-    std::cerr << e.what() << std::endl;
+  } catch (...) {
+    std::cerr << "Unable to get next suggestion" << std::endl;
   }
   pthread_mutex_unlock(&readerLock);
 
@@ -341,8 +340,8 @@ JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getPageUrlFromTit
         retVal = JNI_TRUE;
       }
     }
-  } catch (exception &e) {
-    std::cerr << e.what() << std::endl;
+  } catch (...) {
+    std::cerr << "Unable to get URL for title " << cTitle << std::endl;
   }
   pthread_mutex_unlock(&readerLock);
     
@@ -361,8 +360,8 @@ JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getTitle
       setStringObjValue(cTitle, titleObj, env);
       retVal = JNI_TRUE;
     }
-  } catch (exception &e) {
-    std::cerr << e.what() << std::endl;
+  } catch (...) {
+    std::cerr << "Unable to get ZIM title" << std::endl;
   }
   pthread_mutex_unlock(&readerLock);
 
@@ -378,8 +377,8 @@ JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getDescription(JNI
     try {
       std::string cDescription = reader->getDescription();
       description = c2jni(cDescription, env);
-    } catch (exception &e) {
-      std::cerr << e.what() << std::endl;
+    } catch (...) {
+      std::cerr << "Unable to get ZIM description" << std::endl;
     }
   }
   pthread_mutex_unlock(&readerLock);
@@ -399,8 +398,8 @@ JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getRandomPage
       setStringObjValue(cUrl, urlObj, env);
       retVal = JNI_TRUE;
     }
-  } catch (exception &e) {
-    std::cerr << e.what() << std::endl;
+  } catch (...) {
+    std::cerr << "Unable to get random page" << std::endl;
   }
   pthread_mutex_unlock(&readerLock);
 
@@ -414,8 +413,8 @@ JNIEXPORT void JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_setDataDirectory
   pthread_mutex_lock(&readerLock); 
   try {
     u_setDataDirectory(cPath.c_str());
-  } catch (exception &e) {
-    std::cerr << e.what() << std::endl;
+  } catch (...) {
+    std::cerr << "Unable to set data directory " << cPath << std::endl;
   }
   pthread_mutex_unlock(&readerLock);
 }
@@ -432,6 +431,7 @@ JNIEXPORT jboolean JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_loadFulltextIndex
   } catch (...) {
     searcher = NULL;
     retVal = JNI_FALSE;
+    std::cerr << "Unable to load full text index " << cPath << std::endl;
   }
   pthread_mutex_unlock(&searcherLock);
 
@@ -457,8 +457,8 @@ JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_indexedQuery
 	result += title + "\n";
       }
     }
-  } catch (const Xapian::Error &e) {
-    LOGI(e.get_description().c_str());
+  } catch (...) {
+    std::cerr << "Unable to make indexed query " << cQuery << std::endl;
   }
   pthread_mutex_unlock(&searcherLock);
 
