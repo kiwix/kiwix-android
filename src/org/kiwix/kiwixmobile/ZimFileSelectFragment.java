@@ -135,11 +135,7 @@ public class ZimFileSelectFragment extends Fragment
 
     mFiles.clear();
 
-    for (LibraryNetworkEntity.Book book : books) {
-      if (!mFiles.contains(book)) {
-        mFiles.add(book);
-      }
-    }
+    mFiles.addAll(books);
 
     mZimFileList.setAdapter(mRescanAdapter);
     mRescanAdapter.notifyDataSetChanged();
