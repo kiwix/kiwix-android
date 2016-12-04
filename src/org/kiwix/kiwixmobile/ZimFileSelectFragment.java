@@ -114,25 +114,32 @@ public class ZimFileSelectFragment extends Fragment
     }
   }
 
+  @Override
+  public void onResume() {
+    refreshFragment();
+    super.onResume();
+  }
+
   public void refreshFragment(){
     // Of course you will want to faActivity and llLayout in the class and not this method to access them in the rest of
     // the class, just initialize them here
     if (mZimFileList == null)
       return;
 
-    mZimFileList.addFooterView(progressBar);
     mZimFileList.setOnItemClickListener(this);
     mZimFileList.setOnItemLongClickListener(this);
 
     bookDao = new BookDao(KiwixDatabase.getInstance(context));
+    ArrayList<LibraryNetworkEntity.Book> books = bookDao.getBooks();
+    Collections.sort(books, new fileComparator());
 
-    mFiles = bookDao.getBooks();
-    Collections.sort(mFiles, new fileComparator());
+    mFiles.clear();
 
-    mRescanAdapter = new RescanDataAdapter(ZimFileSelectFragment.context, 0, mFiles);
+    mFiles.addAll(books);
 
     mZimFileList.setAdapter(mRescanAdapter);
     mRescanAdapter.notifyDataSetChanged();
+    checkEmpty();
     checkPermissions();
   }
 
@@ -149,6 +156,8 @@ public class ZimFileSelectFragment extends Fragment
 
     mFiles = new ArrayList<LibraryNetworkEntity.Book>();
     progressBar = (RelativeLayout) super.getActivity().getLayoutInflater().inflate(R.layout.progress_bar, null);
+
+    mRescanAdapter = new RescanDataAdapter(ZimFileSelectFragment.context, 0, mFiles);
 
     // Allow temporary use of ZimContentProvider to query books
     ZimContentProvider.canIterate = true;
@@ -180,7 +189,54 @@ public class ZimFileSelectFragment extends Fragment
   }
 
   public void getFiles(){
-      new RescanFileSystem().execute();
+    if (mZimFileList.getFooterViewsCount() != 0)
+      return;
+
+    mZimFileList.addFooterView(progressBar);
+    checkEmpty();
+
+    new FileSearch(context, new FileSearch.ResultListener() {
+      @Override
+      public void onBookFound(LibraryNetworkEntity.Book book) {
+        if (!mFiles.contains(book)) {
+          context.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+              Log.i("Scanner", "Found "+book.title);
+              mFiles.add(book);
+              mRescanAdapter.notifyDataSetChanged();
+              checkEmpty();
+            }
+          });
+        }
+      }
+
+      @Override
+      public void onScanCompleted() {
+        //filter deleted files
+        ArrayList<LibraryNetworkEntity.Book> books = new ArrayList<>(mFiles);
+        for (LibraryNetworkEntity.Book book : books) {
+          if (book.file == null || !book.file.canRead()) {
+            mFiles.remove(book);
+          }
+        }
+
+        if (LibraryFragment.libraryAdapter != null) {
+          LibraryFragment.libraryAdapter.getFilter().filter(context.searchView.getQuery());
+        }
+
+        context.runOnUiThread(new Runnable() {
+          @Override
+          public void run() {
+            mRescanAdapter.notifyDataSetChanged();
+
+            bookDao.saveBooks(mFiles);
+            mZimFileList.removeFooterView(progressBar);
+            checkEmpty();
+          }
+        });
+      }
+    }).scan();
   }
 
   @Override
@@ -206,7 +262,7 @@ public class ZimFileSelectFragment extends Fragment
     switch (item.getItemId()) {
       case R.id.menu_rescan_fs:
         // Execute our AsyncTask, that scans the file system for the actual data
-        new RescanFileSystem().execute();
+       getFiles();
 
         // Make sure, that we set mNeedsUpdate to true and to false, after the MediaStore has been
         // updated. Otherwise it will result in a endless loop.
@@ -225,6 +281,12 @@ public class ZimFileSelectFragment extends Fragment
     String file;
     LibraryNetworkEntity.Book data = (LibraryNetworkEntity.Book) mZimFileList.getItemAtPosition(position);
     file = data.file.getPath();
+
+    if (!data.file.canRead()) {
+      Toast.makeText(context, getString(R.string.error_filenotfound), Toast.LENGTH_LONG).show();
+      return;
+    }
+
     finishResult(file);
   }
 
@@ -273,7 +335,8 @@ public class ZimFileSelectFragment extends Fragment
   public void checkEmpty(){
     if (mZimFileList.getCount() == 0){
       mFileMessage.setVisibility(View.VISIBLE);
-    }
+    } else
+      mFileMessage.setVisibility(View.GONE);
   }
 
   // The Adapter for the ListView for when the ListView is populated with the rescanned files
@@ -379,49 +442,6 @@ public class ZimFileSelectFragment extends Fragment
       TextView fileName;
 
       ImageView favicon;
-    }
-  }
-
-  // This AsyncTask will scan the file system for files with the Extension ".zim" or ".zimaa"
-  private class RescanFileSystem extends AsyncTask<Void, Void, Void> {
-
-    @Override
-    protected void onPreExecute() {
-
-      super.onPreExecute();
-    }
-
-    @Override
-    protected Void doInBackground(Void... params) {
-      // Search file system for files
-      mFiles = new FileSearch().findFiles(context);
-
-      // Remove duplicate files
-      HashSet<LibraryNetworkEntity.Book> singularBooks = new HashSet<>();
-      singularBooks.addAll(mFiles);
-      mFiles.clear();
-      mFiles.addAll(singularBooks);
-
-      // Sort files
-      Collections.sort(mFiles, new fileComparator());
-
-      // Save files for quick access later
-      bookDao.saveBooks(mFiles);
-      return null;
-    }
-    @Override
-    protected void onPostExecute(Void result) {
-      mRescanAdapter = new RescanDataAdapter(ZimFileSelectFragment.context, 0, mFiles);
-
-      mZimFileList.setAdapter(mRescanAdapter);
-
-      mZimFileList.removeFooterView(progressBar);
-      //mZimFileList.addFooterView(emptyView);
-
-      checkEmpty();
-
-
-      super.onPostExecute(result);
     }
   }
 }
