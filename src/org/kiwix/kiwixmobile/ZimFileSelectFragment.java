@@ -133,6 +133,8 @@ public class ZimFileSelectFragment extends Fragment
     ArrayList<LibraryNetworkEntity.Book> books = bookDao.getBooks();
     Collections.sort(books, new fileComparator());
 
+    mFiles.clear();
+
     for (LibraryNetworkEntity.Book book : books) {
       if (!mFiles.contains(book)) {
         mFiles.add(book);
