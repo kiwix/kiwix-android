@@ -158,6 +158,8 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       if (Constants.IS_CUSTOM_APP){
         getPreferenceScreen().removePreference(getPrefrence("pref_storage"));
       } else {
+        getPrefrence(PREF_STORAGE).setTitle(PreferenceManager.getDefaultSharedPreferences(getActivity())
+            .getString(KiwixMobileActivity.PREF_STORAGE_TITLE, getResources().getString(R.string.default_storage)));
         getPrefrence(PREF_STORAGE).setSummary(LibraryFragment.bytesToHuman( new File(PreferenceManager.getDefaultSharedPreferences(getActivity())
             .getString(KiwixMobileActivity.PREF_STORAGE, Environment.getExternalStorageDirectory().getPath())).getFreeSpace()));
       }
@@ -306,9 +308,11 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     @Override
     public void selectionCallback(StorageDevice storageDevice) {
       findPreference(PREF_STORAGE).setSummary(storageDevice.getSize());
+      findPreference(PREF_STORAGE).setTitle(storageDevice.getLocationName());
       SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
       SharedPreferences.Editor editor = sharedPreferences.edit();
       editor.putString(KiwixMobileActivity.PREF_STORAGE,storageDevice.getName());
+      editor.putString(KiwixMobileActivity.PREF_STORAGE_TITLE,storageDevice.getLocationName());
       editor.commit();
     }
   }

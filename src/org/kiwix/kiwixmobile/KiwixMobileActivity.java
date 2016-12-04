@@ -150,6 +150,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   public static final String PREF_STORAGE = "pref_selected_storage";
 
+  public static final String PREF_STORAGE_TITLE = "pref_selected_title";
+
   public static ArrayList<State> mPrefState;
 
   public static boolean mIsFullscreenOpened;
