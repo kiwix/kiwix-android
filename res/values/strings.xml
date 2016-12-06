@@ -94,9 +94,9 @@
   <string name="speech_not_supported">Sorry! Your device does not support speech input</string>
   <string name="download_started_library">Download started...</string>
   <string name="menu_library">Download content files</string>
-  <string name="local_zims">Local</string>
-  <string name="remote_zims">Remote</string>
-  <string name="zim_downloads">Downloads</string>
+  <string name="local_zims">Device</string>
+  <string name="remote_zims">Online</string>
+  <string name="zim_downloads">Downloading</string>
   <string name="zim_manager">Content Management</string>
   <string name="delete_specific_zim">Delete this file?</string>
   <string name="delete_specific_zim_toast">File deleted</string>
