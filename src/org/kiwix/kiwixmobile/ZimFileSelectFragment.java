@@ -247,7 +247,7 @@ public class ZimFileSelectFragment extends Fragment
         if (grantResults.length > 0
             && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             getFiles();
-        } else {
+        } else if (grantResults.length != 0) {
           super.getActivity().finish();
         }
         return;
