@@ -221,7 +221,7 @@ public class ZimFileSelectFragment extends Fragment
           }
         }
 
-        if (LibraryFragment.libraryAdapter != null) {
+        if (LibraryFragment.libraryAdapter != null && context.searchView != null) {
           LibraryFragment.libraryAdapter.getFilter().filter(context.searchView.getQuery());
         }
 
