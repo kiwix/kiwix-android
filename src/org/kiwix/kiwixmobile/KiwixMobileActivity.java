@@ -1599,7 +1599,9 @@ public class KiwixMobileActivity extends AppCompatActivity {
     }
     if (menu.findItem(R.id.menu_bookmarks) != null &&
         getCurrentWebView().getUrl() != null &&
-        ZimContentProvider.getId() != null) {
+        ZimContentProvider.getId() != null &&
+            !getCurrentWebView().getUrl().equals("file:///android_res/raw/welcome.html")) {
+
       menu.findItem(R.id.menu_bookmarks).setVisible(true);
       if (bookmarks.contains(getCurrentWebView().getUrl())) {
         menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmark_active);
