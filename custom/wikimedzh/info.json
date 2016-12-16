@@ -1,8 +1,8 @@
 {
   "app_name": "醫學維基百科(離線版)",
   "package": "org.kiwix.kiwixcustomwikimedzh",
-  "version_name": "2016-07",
-  "version_code": "3",
+  "version_name": "2016-12",
+  "version_code": "4",
   "zim_file": "custom/wikimedzh/content.zim",
   "embed_zim": false,
   "ic_launcher": "custom/wikimedzh/icon.png",
