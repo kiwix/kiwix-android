@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="org.kiwix.kiwixmobile"
   android:installLocation="auto"
-  android:versionCode="40"
+  android:versionCode="45"
   android:versionName="2.1">
 
   <supports-screens
