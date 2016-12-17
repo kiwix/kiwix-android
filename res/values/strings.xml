@@ -150,5 +150,6 @@
   <string name="tts_pause">pause</string>
   <string name="tts_resume">resume</string>
   <string name="tts_stop">stop</string>
-  <string name="default_storage">Default</string>
+  <string name="internal_storage">Internal</string>
+  <string name="external_storage">External</string>
 </resources>

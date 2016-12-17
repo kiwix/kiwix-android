@@ -158,8 +158,13 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       if (Constants.IS_CUSTOM_APP){
         getPreferenceScreen().removePreference(getPrefrence("pref_storage"));
       } else {
-        getPrefrence(PREF_STORAGE).setTitle(PreferenceManager.getDefaultSharedPreferences(getActivity())
-            .getString(KiwixMobileActivity.PREF_STORAGE_TITLE, getResources().getString(R.string.default_storage)));
+        if (Environment.isExternalStorageEmulated()) {
+          getPrefrence(PREF_STORAGE).setTitle(PreferenceManager.getDefaultSharedPreferences(getActivity())
+              .getString(KiwixMobileActivity.PREF_STORAGE_TITLE, "Internal"));
+        } else {
+          getPrefrence(PREF_STORAGE).setTitle(PreferenceManager.getDefaultSharedPreferences(getActivity())
+              .getString(KiwixMobileActivity.PREF_STORAGE_TITLE, "External"));
+        }
         getPrefrence(PREF_STORAGE).setSummary(LibraryFragment.bytesToHuman( new File(PreferenceManager.getDefaultSharedPreferences(getActivity())
             .getString(KiwixMobileActivity.PREF_STORAGE, Environment.getExternalStorageDirectory().getPath())).getFreeSpace()));
       }
@@ -292,14 +297,19 @@ public class KiwixSettingsActivity extends AppCompatActivity {
         clearAllHistoryDialog();
       if (preference.getKey().equalsIgnoreCase(PREF_CREDITS))
         openCredits();
-      if (preference.getKey().equalsIgnoreCase(PREF_STORAGE))
+      if (preference.getKey().equalsIgnoreCase(PREF_STORAGE)) {
         openFolderSelect();
+      }
       return true;
     }
 
     public void openFolderSelect(){
       FragmentManager fm = getFragmentManager();
-      StorageSelectDialog dialogFragment = new StorageSelectDialog ();
+      StorageSelectDialog dialogFragment = new StorageSelectDialog();
+      Bundle b = new Bundle();
+      b.putString("INTERNAL", getResources().getString(R.string.internal_storage));
+      b.putString("EXTERNAL", getResources().getString(R.string.external_storage));
+      dialogFragment.setArguments(b);
       dialogFragment.setOnSelectListener(this);
       dialogFragment.show(fm, getResources().getString(R.string.pref_storage));
 
@@ -308,11 +318,16 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     @Override
     public void selectionCallback(StorageDevice storageDevice) {
       findPreference(PREF_STORAGE).setSummary(storageDevice.getSize());
-      findPreference(PREF_STORAGE).setTitle(storageDevice.getLocationName());
       SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
       SharedPreferences.Editor editor = sharedPreferences.edit();
       editor.putString(KiwixMobileActivity.PREF_STORAGE,storageDevice.getName());
-      editor.putString(KiwixMobileActivity.PREF_STORAGE_TITLE,storageDevice.getLocationName());
+      if (storageDevice.isInternal()) {
+        findPreference(PREF_STORAGE).setTitle(getResources().getString(R.string.internal_storage));
+        editor.putString(KiwixMobileActivity.PREF_STORAGE_TITLE, getResources().getString(R.string.internal_storage));
+      } else {
+        findPreference(PREF_STORAGE).setTitle(getResources().getString(R.string.external_storage));
+        editor.putString(KiwixMobileActivity.PREF_STORAGE_TITLE, getResources().getString(R.string.external_storage));
+      }
       editor.commit();
     }
   }
