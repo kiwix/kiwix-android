@@ -28,7 +28,7 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
-@Root(name = "library")
+@Root(name = "library", strict = false)
 public class LibraryNetworkEntity {
 
   @ElementList(name = "book", inline = true, required = false)
@@ -45,6 +45,7 @@ public class LibraryNetworkEntity {
     return this.version;
   }
 
+  @Root(name = "book", strict = false)
   public static class Book implements Serializable{
 
     @Attribute(name = "id", required = false)
