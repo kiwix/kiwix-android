@@ -77,6 +77,7 @@ import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.ShortcutUtils;
+import org.kiwix.kiwixmobile.utils.files.FileReader;
 import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.utils.files.FileWriter;
@@ -141,6 +142,12 @@ public class ZimFileSelectFragment extends Fragment
     mRescanAdapter.notifyDataSetChanged();
     checkEmpty();
     checkPermissions();
+  }
+
+  public void addBook(String path) {
+    mFiles.add(FileSearch.fileToBook(path));
+    mRescanAdapter.notifyDataSetChanged();
+    bookDao.saveBooks(mFiles);
   }
 
   @Override

@@ -121,9 +121,9 @@ public class DownloadFragment extends Fragment {
         if (progress == 100) {
           ImageView pause = (ImageView) viewGroup.findViewById(R.id.pause);
           pause.setEnabled(false);
+          String fileName = mDownloadFiles.get(mKeys[position]);
           {
             Snackbar completeSnack = Snackbar.make(mainLayout, getResources().getString(R.string.download_complete_snackbar), Snackbar.LENGTH_LONG);
-            String fileName = mDownloadFiles.get(mKeys[position]);
             completeSnack.setAction(getResources().getString(R.string.open), new View.OnClickListener() {
               @Override
               public void onClick(View v) {
@@ -131,6 +131,8 @@ public class DownloadFragment extends Fragment {
               }
             }).setActionTextColor(getResources().getColor(R.color.white)).show();
           }
+          ZimFileSelectFragment zimFileSelectFragment = (ZimFileSelectFragment) zimManageActivity.mSectionsPagerAdapter.getItem(0);
+          zimFileSelectFragment.addBook(fileName);
           mDownloads.remove(mKeys[position]);
           mDownloadFiles.remove(mKeys[position]);
           downloadAdapter.notifyDataSetChanged();

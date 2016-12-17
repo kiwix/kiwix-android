@@ -195,7 +195,7 @@ public class FileSearch {
     return files.toArray(arr);
   }
 
-  private synchronized LibraryNetworkEntity.Book fileToBook(String filePath) {
+  public static synchronized LibraryNetworkEntity.Book fileToBook(String filePath) {
     LibraryNetworkEntity.Book book = null;
 
     if (ZimContentProvider.zimFileName != null) {
