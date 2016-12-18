@@ -1,8 +1,8 @@
 {
   "app_name": "ویکی‌پدیای پزشکی (آفلاین)",
   "package": "org.kiwix.kiwixcustomwikimedfa",
-  "version_name": "2016-09",
-  "version_code": "3",
+  "version_name": "2016-12",
+  "version_code": "4",
   "zim_file": "custom/wikimedfa/content.zim",
   "embed_zim": false,
   "ic_launcher": "custom/wikimedfa/icon.png",
