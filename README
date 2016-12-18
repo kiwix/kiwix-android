@@ -106,6 +106,25 @@ $python3 ./upload-apk.py my-file.json`
 9. [whenever you feel the need to] Update Play Store listing using
 play-store script.
 
+To update the apk only without a content update:
+
+1. Add the "content_version_code" field to json file and set it to 
+the version code of the expansion file you want (check google play to find this).
+Increment the actual version code.
+
+2. Ensure the content file is located locally. Without this the
+app will think that it is corrupt.
+
+3. Compile as usual.
+
+4. Sign and upload to the Google Play store.
+
+5. When uploading you are given the choice of which expansion file to use.
+Make sure to tell Google the right one.
+
+6. Publish
+
+
 To make an APK which embeds a ZIM file:
 * In the json file, add:
     "embed_zim": true,
