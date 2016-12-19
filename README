@@ -3,10 +3,6 @@ make Wikipedia available offline.  This is done by reading the content
 of the project stored in a file format ZIM, a high compressed open
 format with additional meta-data.
 
-*********************************************************************
-************* COMPILATION INSTRUCTIONS FOR ANDROID ******************
-*********************************************************************
-
 Android is just an additional target but you can still build for
 Android only from a Linux or Mac (it cross-compiles).
 
@@ -21,7 +17,9 @@ Android only from a Linux or Mac (it cross-compiles).
 To install the newly created APK on your device, use the following script:
 ./android/install-kiwix-on-device.sh
 
-== Android Custom App ==
+*********************************************************************
+****************************** CUSTOM APPS **************************
+*********************************************************************
 
 Android Custom App are single-content Kiwix-android clones. Those app
 are tied to a single content and CAN NOT open other zim file. As well,
@@ -108,9 +106,13 @@ play-store script.
 
 To update the apk only without a content update:
 
-1. Add the "content_version_code" field to json file and set it to 
-the version code of the expansion file you want (check google play to find this).
-Increment the actual version code.
+*********************************************************************
+*************** CUSTOM APPS - APK UPDATE ONLY ***********************
+*********************************************************************
+
+1. Add the "content_version_code" field to json file and set it to the
+version code of the expansion file you want (check google play to find
+this).  Increment the actual version code.
 
 2. Ensure the content file is located locally. Without this the
 app will think that it is corrupt.
@@ -119,11 +121,14 @@ app will think that it is corrupt.
 
 4. Sign and upload to the Google Play store.
 
-5. When uploading you are given the choice of which expansion file to use.
-Make sure to tell Google the right one.
+5. When uploading you are given the choice of which expansion file to
+use.  Make sure to tell Google the right one.
 
 6. Publish
 
+*********************************************************************
+********************** APK WITH ZIM FILE ****************************
+*********************************************************************
 
 To make an APK which embeds a ZIM file:
 * In the json file, add:
