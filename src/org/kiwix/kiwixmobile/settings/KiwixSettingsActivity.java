@@ -84,6 +84,8 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
   public static final String PREF_STORAGE = "pref_select_folder";
 
+  public static final String PREF_NIGHTMODE = "pref_nightmode";
+
   public static String zimFile;
 
   public static boolean allHistoryCleared = false;
@@ -257,6 +259,9 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       if (key.equals(PREF_ZOOM)) {
         mSlider.setSummary(mSlider.getSummary());
         ((BaseAdapter) getPreferenceScreen().getRootAdapter()).notifyDataSetChanged();
+      }
+      if (key.equals(PREF_NIGHTMODE)) {
+        KiwixMobileActivity.refresh = true;
       }
 
     }

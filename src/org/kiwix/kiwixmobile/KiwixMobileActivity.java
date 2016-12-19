@@ -178,6 +178,10 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   public Handler mHandler = new Handler();
 
+  public static boolean mNightMode;
+
+  public static boolean refresh;
+
   protected boolean requestClearHistoryAfterLoad;
 
   protected boolean requestInitAllMenuItems;
@@ -1175,6 +1179,13 @@ public class KiwixMobileActivity extends AppCompatActivity {
   @Override
   public void onResume() {
     super.onResume();
+
+    if (refresh) {
+      for (KiwixWebView kiwixWebView : mWebViews) {
+        kiwixWebView.reload();
+      }
+      refresh = false;
+    }
     if (menu != null) {
       refreshBookmarkSymbol(menu);
     }
@@ -1637,7 +1648,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
   public void loadPrefs() {
 
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-    boolean nightMode = sharedPreferences.getBoolean(PREF_NIGHTMODE, false);
+    mNightMode = sharedPreferences.getBoolean(PREF_NIGHTMODE, false);
     mIsBacktotopEnabled = sharedPreferences.getBoolean(PREF_BACKTOTOP, false);
     mIsFullscreenOpened = sharedPreferences.getBoolean(PREF_FULLSCREEN, false);
     boolean isZoomEnabled = sharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
@@ -1659,8 +1670,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
     }
 
     // Night mode status
-    Log.d(TAG_KIWIX, "mNightMode value (" + nightMode + ")");
-    if (nightMode) {
+    Log.d(TAG_KIWIX, "mNightMode value (" + mNightMode + ")");
+    if (mNightMode) {
       getCurrentWebView().toggleNightMode();
     } else {
       getCurrentWebView().deactivateNightMode();

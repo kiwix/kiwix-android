@@ -40,6 +40,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.function.BooleanSupplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -371,7 +373,6 @@ public class ZimContentProvider extends ContentProvider {
       throw new FileNotFoundException("Could not open pipe for: "
           + uri.toString());
     }
-
     return (pipe[0]);
   }
 
@@ -454,6 +455,12 @@ public class ZimContentProvider extends ContentProvider {
         JNIKiwixString mime = new JNIKiwixString();
         JNIKiwixInt size = new JNIKiwixInt();
         byte[] data = jniKiwix.getContent(articleZimUrl, mime, size);
+        if (mime.value.equals("text/css") && KiwixMobileActivity.mNightMode) {
+          out.write(("img { \n" +
+              " -webkit-filter: invert(1); \n" +
+              " filter: invert(1); \n" +
+              "} \n").getBytes(Charset.forName("UTF-8")));
+        }
         out.write(data, 0, data.length);
         out.flush();
 
