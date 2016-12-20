@@ -12,6 +12,9 @@ import android.os.Environment;
 import android.widget.PopupWindow;
 
 import java.io.File;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 
 import org.kiwix.kiwixmobile.settings.Constants;
 
@@ -80,7 +83,7 @@ public class FileUtils {
    */
   public static String getExpansionAPKFileName(boolean mainFile) {
     return (mainFile ? "main." : "patch.") + Constants.CUSTOM_APP_CONTENT_VERSION_CODE + "."
-            + Constants.CUSTOM_APP_ID + ".obb";
+        + Constants.CUSTOM_APP_ID + ".obb";
   }
 
   /**
@@ -170,5 +173,19 @@ public class FileUtils {
     }
 
     return null;
+  }
+
+  public static boolean canWrite(File file) {
+    try {
+      RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");
+      FileChannel fileChannel = randomAccessFile.getChannel();
+      FileLock fileLock = fileChannel.lock();
+      fileLock.release();
+      fileChannel.close();
+      randomAccessFile.close();
+      return true;
+    } catch (Exception ex) {
+      return false;
+    }
   }
 }

@@ -19,6 +19,8 @@
 
 package org.kiwix.kiwixmobile.views;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.ColorMatrixColorFilter;
@@ -28,6 +30,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -36,7 +39,9 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.Toast;
 
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -62,7 +67,7 @@ public class KiwixWebView extends WebView {
   private OnLongClickListener mOnLongClickListener;
 
   @Override
-  public void loadUrl(String url){
+  public void loadUrl(String url) {
     super.loadUrl(url);
   }
 
@@ -70,7 +75,7 @@ public class KiwixWebView extends WebView {
 
     @Override
     public void handleMessage(Message msg) {
-
+      KiwixMobileActivity kiwixMobileActivity = (KiwixMobileActivity) getContext();
       String url = (String) msg.getData().get("url");
       String src = (String) msg.getData().get("src");
 
@@ -80,16 +85,17 @@ public class KiwixWebView extends WebView {
         url = url.substring(url.indexOf("%3A") + 1, url.length());
         int dotIndex = url.lastIndexOf('.');
 
-        File storageDir =
-            new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                url);
+        File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP && kiwixMobileActivity.getExternalMediaDirs().length > 0) {
+          root = kiwixMobileActivity.getExternalMediaDirs()[0];
+        }
+
+        File storageDir = new File(root, url);
         String newUrl = url;
         for (int i = 2; storageDir.exists(); i++) {
           newUrl = url.substring(0, dotIndex) + "_" + i + url.substring(dotIndex, url.length());
-          storageDir = new File(
-              Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-              newUrl);
+          storageDir = new File(root, newUrl);
         }
 
         Uri source = Uri.parse(src);
