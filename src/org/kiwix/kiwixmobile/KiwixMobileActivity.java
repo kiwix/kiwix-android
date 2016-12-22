@@ -1799,11 +1799,14 @@ public class KiwixMobileActivity extends AppCompatActivity {
             this.startActivity(new Intent(this, this.getClass()));
           }
 
-          String filePath;
+          String filePath = "";
           if (Constants.CUSTOM_APP_HAS_EMBEDDED_ZIM) {
             String appPath = getPackageResourcePath();
-            filePath = appPath.substring(0, appPath.lastIndexOf("/")) + "/lib/" + Constants.CUSTOM_APP_ZIM_FILE_NAME;
-            if (!new File(filePath).exists()) {
+            File libDir = new File(appPath.substring(0, appPath.lastIndexOf("/")) + "/lib/");
+            if (libDir.exists() && libDir.listFiles().length > 0) {
+              filePath = libDir.listFiles()[0].getPath() + "/" + Constants.CUSTOM_APP_ZIM_FILE_NAME;
+            }
+            if (filePath == "" || !new File(filePath).exists()) {
               filePath = String.format("/data/data/%s/lib/%s", Constants.CUSTOM_APP_ID,
                   Constants.CUSTOM_APP_ZIM_FILE_NAME);
             }
