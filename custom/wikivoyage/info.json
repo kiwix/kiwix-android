@@ -1,8 +1,8 @@
 {
-  "ic_launcher": "custom/wikivoyage/icon.png",
+  "ic_launcher": "icon.png",
   "app_name": "Wikivoyage",
   "package": "org.kiwix.kiwixcustomwikivoyage",
-  "zim_file": "custom/wikivoyage/content.zim",
+  "zim_file": "content.zim",
   "play_store": {
     "images": {
       "featureGraphic": [],

@@ -3,8 +3,8 @@
   "package": "org.kiwix.kiwixcustomvenezuela",
   "version_name": "2016-10",
   "version_code": "3",
-  "zim_file": "custom/venezuela/content.zim",
+  "zim_file": "content.zim",
   "embed_zim": false,
-  "ic_launcher": "custom/venezuela/icon.png",
+  "ic_launcher": "icon.png",
   "enforced_lang": "es"
 }
