@@ -4,8 +4,8 @@
   "version_name": "2016-09",
   "version_code": "8",
   "content_version_code" : 7,
-  "zim_file": "custom/wikimedfr/content.zim",
+  "zim_file": "content.zim",
   "embed_zim": false,
-  "ic_launcher": "custom/wikimedfr/icon.png",
+  "ic_launcher": "icon.png",
   "enforced_lang": "fr"
 }

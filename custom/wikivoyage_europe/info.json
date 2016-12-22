@@ -1,8 +1,8 @@
 {
-  "ic_launcher": "custom/wikivoyage_europe/icon.png",
+  "ic_launcher": "icon.png",
   "app_name": "Wikivoyage European Travels",
   "package": "org.kiwix.kiwixcustomwikivoyageeurope",
-  "zim_file": "custom/wikivoyage_europe/content.zim",
+  "zim_file": "content.zim",
   "play_store": {
     "images": {
       "featureGraphic": [],

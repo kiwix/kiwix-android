@@ -55,8 +55,8 @@ DEFAULT_JSDATA = {
     'content_version_code' : 0,    
 
     # main icon source & store icon
-    'ic_launcher': os.path.join('android',
-                                'Kiwix_icon_transparent_512x512.png'),
+    'ic_launcher': os.path.abspath(os.path.join('android',
+                                'Kiwix_icon_transparent_512x512.png')),
 
     # store listing
     'feature_image': None,
@@ -605,6 +605,14 @@ def main(jspath, **options):
             logger.error("Required fields are: {}"
                          .format(", ".join(REQUIRED_FIELDS)))
             sys.exit(1)
+
+    # update relative paths to absolute
+    if not is_remote_path(jspath):
+        json_file_dir = os.path.abspath(os.path.dirname(jspath))
+        os.chdir(json_file_dir)
+        jsdata.update({'zim_file': os.path.abspath(jsdata.get('zim_file'))})
+        jsdata.update({'ic_launcher': os.path.abspath(jsdata.get('ic_launcher'))})
+        move_to_current_folder()
 
     def zim_name_from_path(path):
         fname = path.rsplit('/', 1)[-1]

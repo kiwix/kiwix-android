@@ -3,8 +3,8 @@
   "package": "org.kiwix.kiwixcustomphet",
   "version_name": "2016-06",
   "version_code": "2",
-  "zim_file": "custom/phet/content.zim",
+  "zim_file": "content.zim",
   "embed_zim": false,
-  "ic_launcher": "custom/phet/icon.png",
+  "ic_launcher": "icon.png",
   "enforced_lang": "en"
 }
