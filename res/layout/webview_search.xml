@@ -28,7 +28,7 @@
       android:inputType="text"
       android:hint="@string/search_label"
       android:focusableInTouchMode="true"
-      android:textColorHint="@color/material_dark_foreground_hint"
+      android:textColorHint="@color/hint_foreground_material_dark"
       android:textColor="@android:color/white"
       android:imeOptions="actionDone|flagNoExtractUi|flagNoFullscreen"
       android:layout_marginRight="10dip">
