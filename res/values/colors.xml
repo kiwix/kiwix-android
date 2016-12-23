@@ -18,4 +18,5 @@
   <color name="black_regular_mat_design">#212121</color>
   <color name="grey">#808080</color>
   <color name="blue_grey">#ECEFF1</color>
+  <color name="foreground_material_dark">@android:color/white</color>
 </resources>
