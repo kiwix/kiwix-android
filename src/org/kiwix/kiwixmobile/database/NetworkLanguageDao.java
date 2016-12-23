@@ -42,7 +42,9 @@ public class NetworkLanguageDao {
     ArrayList<LibraryAdapter.Language> result = new ArrayList<>();
     try {
       while (languageCursor.moveToNext()) {
-        result.add(new LibraryAdapter.Language(languageCursor.get(NetworkLanguageDatabaseEntity.LANGUAGE_I_S_O_3), languageCursor.get(NetworkLanguageDatabaseEntity.ENABLED)));
+        String languageCode = languageCursor.get(NetworkLanguageDatabaseEntity.LANGUAGE_I_S_O_3);
+        boolean enabled = languageCursor.get(NetworkLanguageDatabaseEntity.ENABLED);
+        result.add(new LibraryAdapter.Language(languageCode, enabled));
       }
     } finally {
       languageCursor.close();

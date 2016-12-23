@@ -2,13 +2,10 @@ package org.kiwix.kiwixmobile.database;
 
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
-
-import org.kiwix.kiwixmobile.ZimContentProvider;
-import org.kiwix.kiwixmobile.database.entity.RecentSearch;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
+import org.kiwix.kiwixmobile.ZimContentProvider;
+import org.kiwix.kiwixmobile.database.entity.RecentSearch;
 
 /**
  * Dao class for recent searches.
@@ -62,6 +59,4 @@ public class RecentSearchDao {
   public void deleteSearchHistory() {
     mDb.deleteWhere(RecentSearch.class, RecentSearch.ID.isNotNull());
   }
-
-
 }

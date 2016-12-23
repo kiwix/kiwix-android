@@ -21,34 +21,21 @@ package org.kiwix.kiwixmobile.database;
 
 import android.content.Context;
 import android.util.Log;
-
-import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.data.SquidDatabase;
 import com.yahoo.squidb.data.adapter.SQLiteDatabaseWrapper;
-import com.yahoo.squidb.sql.Order;
-import com.yahoo.squidb.sql.Property;
-import com.yahoo.squidb.sql.Query;
 import com.yahoo.squidb.sql.Table;
-
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
-import org.kiwix.kiwixmobile.ZimContentProvider;
-import org.kiwix.kiwixmobile.database.entity.BookDataSource;
-import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
-import org.kiwix.kiwixmobile.database.entity.Bookmarks;
-import org.kiwix.kiwixmobile.database.entity.LibraryDatabaseEntity;
-import org.kiwix.kiwixmobile.database.entity.NetworkLanguageDatabaseEntity;
-import org.kiwix.kiwixmobile.database.entity.RecentSearch;
-import org.kiwix.kiwixmobile.database.entity.RecentSearchSpec;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.ZimContentProvider;
+import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
+import org.kiwix.kiwixmobile.database.entity.Bookmarks;
+import org.kiwix.kiwixmobile.database.entity.LibraryDatabaseEntity;
+import org.kiwix.kiwixmobile.database.entity.NetworkLanguageDatabaseEntity;
+import org.kiwix.kiwixmobile.database.entity.RecentSearch;
 
 public class KiwixDatabase extends SquidDatabase {
 
@@ -56,12 +43,10 @@ public class KiwixDatabase extends SquidDatabase {
   private Context context;
   private static KiwixDatabase instance = null;
 
-
   protected KiwixDatabase(Context context) {
     super(context);
     this.context = context;
   }
-
 
   public static KiwixDatabase getInstance(Context context) {
     if(instance == null) {

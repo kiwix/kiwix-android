@@ -285,11 +285,8 @@ public class ZimManageActivity extends AppCompatActivity {
 
   private class LanguageArrayAdapter extends ArrayAdapter<LibraryAdapter.Language> {
 
-    private ArrayList<LibraryAdapter.Language> mLanguages;
-
-    public LanguageArrayAdapter(Context context, int textViewResourceId, ArrayList<LibraryAdapter.Language> objects) {
-      super(context, textViewResourceId, objects);
-      mLanguages = objects;
+    public LanguageArrayAdapter(Context context, int textViewResourceId, ArrayList<LibraryAdapter.Language> languages) {
+      super(context, textViewResourceId, languages);
     }
 
     @Override
@@ -311,7 +308,6 @@ public class ZimManageActivity extends AppCompatActivity {
       holder.checkBox.setChecked(getItem(position).active);
       holder.checkBox.setOnCheckedChangeListener((compoundButton, b) -> getItem(position).active = b);
       return convertView;
-
     }
 
     // We are using the ViewHolder pattern in order to optimize the ListView by reusing

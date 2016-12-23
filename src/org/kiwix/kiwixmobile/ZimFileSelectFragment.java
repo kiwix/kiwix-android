@@ -28,7 +28,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -77,7 +76,7 @@ public class ZimFileSelectFragment extends Fragment
 
 
   public static void finishResult(String path) {
-    ZimManageActivity zimManageActivity = (ZimManageActivity) context;
+    ZimManageActivity zimManageActivity = context;
     if (path != null) {
       File file = new File(path);
       Uri uri = Uri.fromFile(file);
@@ -127,7 +126,6 @@ public class ZimFileSelectFragment extends Fragment
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    FragmentActivity faActivity  = (FragmentActivity)    super.getActivity();
     context = (ZimManageActivity) super.getActivity();
     // Replace LinearLayout by the type of the root element of the layout you're trying to load
     llLayout = (RelativeLayout) inflater.inflate(R.layout.zim_list, container, false);
@@ -136,7 +134,7 @@ public class ZimFileSelectFragment extends Fragment
     mFileMessage = (TextView) llLayout.findViewById(R.id.file_management_no_files);
     mZimFileList = (ListView)  llLayout.findViewById(R.id.zimfilelist);
 
-    mFiles = new ArrayList<LibraryNetworkEntity.Book>();
+    mFiles = new ArrayList<>();
     progressBar = (RelativeLayout) super.getActivity().getLayoutInflater().inflate(R.layout.progress_bar, null);
 
     mRescanAdapter = new RescanDataAdapter(ZimFileSelectFragment.context, 0, mFiles);

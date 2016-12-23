@@ -19,18 +19,13 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 import org.kiwix.kiwixmobile.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.ZimContentProvider;
 import org.kiwix.kiwixmobile.ZimFileSelectFragment;
 import org.kiwix.kiwixmobile.ZimManageActivity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
-import org.w3c.dom.Text;
-
-import java.util.Arrays;
-import java.util.LinkedHashMap;
 
 
 public class DownloadFragment extends Fragment {
@@ -46,7 +41,7 @@ public class DownloadFragment extends Fragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    faActivity = (FragmentActivity) super.getActivity();
+    faActivity = super.getActivity();
     relLayout = (RelativeLayout) inflater.inflate(R.layout.download_management, container, false);
 
     zimManageActivity = (ZimManageActivity) super.getActivity();
@@ -60,22 +55,17 @@ public class DownloadFragment extends Fragment {
   @Override
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-
     updateNoDownloads();
-
   }
 
   private static void updateNoDownloads() {
     TextView noDownloadsText = (TextView) faActivity.findViewById(R.id.download_management_no_downloads);
-    if (noDownloadsText == null) {
-      return;
-    }
+    if (noDownloadsText == null) return;
     if (listView.getCount() == 0) {
       noDownloadsText.setVisibility(View.VISIBLE);
     } else if (listView.getCount() > 0) {
       noDownloadsText.setVisibility(View.GONE);
     }
-
   }
 
   public class DownloadAdapter extends BaseAdapter {

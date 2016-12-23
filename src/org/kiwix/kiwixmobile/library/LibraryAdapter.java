@@ -58,7 +58,6 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
   public static Map<String, Locale> mLocaleMap;
   public static ArrayList<Language> mLanguages = new ArrayList<>();
   private static ImmutableList<Book> allBooks;
-  private static  ArrayList<Book> arrayBooks;
   private BookFilter filter;
   private static ZimManageActivity mActivity;
   private static ArrayList<String> bookLanguages;
@@ -68,7 +67,6 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
   public LibraryAdapter(Context context, ArrayList<Book> books) {
     super(context, 0, books);
     allBooks = ImmutableList.copyOf(books);
-    arrayBooks = books;
     mActivity = (ZimManageActivity) context;
     networkLanguageDao = new NetworkLanguageDao(KiwixDatabase.getInstance(mActivity));
     bookDao = new BookDao( KiwixDatabase.getInstance(context));

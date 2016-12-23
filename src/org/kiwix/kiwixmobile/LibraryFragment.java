@@ -1,29 +1,19 @@
 package org.kiwix.kiwixmobile;
 
-import android.app.IntentService;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.ConnectivityManager;
-import android.net.Network;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
-import android.os.StatFs;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,30 +25,19 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.List;
-
-import org.kiwix.kiwixmobile.database.BookDao;
-import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.downloader.DownloadIntent;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
-import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.ShortcutUtils;
-
 import rx.android.schedulers.AndroidSchedulers;
 
 import static org.kiwix.kiwixmobile.utils.ShortcutUtils.stringsGetter;
@@ -91,8 +70,6 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
 
   private ConnectivityManager conMan;
 
-  private BookDao bookDao;
-
   private ZimManageActivity faActivity;
 
     @Override
@@ -110,7 +87,6 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
       kiwixService = ((KiwixApplication) super.getActivity().getApplication()).getKiwixService();
       conMan = (ConnectivityManager) super.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
       NetworkInfo network = conMan.getActiveNetworkInfo();
-      bookDao = new BookDao(KiwixDatabase.getInstance(super.getActivity()));
       if (network != null && network.isConnected()) {
         if (isWiFi()) {
           getLibraryData();
@@ -177,9 +153,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
     if (mBound) {
       super.getActivity().unbindService(mConnection.downloadServiceInterface);
       mBound = false;
-
     }
-
   }
 
   @Override
@@ -197,7 +171,6 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
     } else {
       mobileDownloadDialog(position, parent);
     }
-
   }
 
   public boolean isWiFi(){
@@ -218,22 +191,21 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
     }
   }
 
-  public static String bytesToHuman (long size)
-  {
-    long KB = 1  * 1024;
+  public static String bytesToHuman(long size) {
+    long KB = 1 * 1024;
     long MB = KB * 1024;
     long GB = MB * 1024;
     long TB = GB * 1024;
     long PB = TB * 1024;
     long EB = PB * 1024;
 
-    if (size <  KB)                 return size + " Bytes";
-    if (size >= KB && size < MB)    return round3SF((double)size / KB) + " KB";
-    if (size >= MB && size < GB)    return round3SF((double)size / MB) + " MB";
-    if (size >= GB && size < TB)    return round3SF((double)size / GB) + " GB";
-    if (size >= TB && size < PB)    return round3SF((double)size / TB) + " TB";
-    if (size >= PB && size < EB)    return round3SF((double)size / PB) + " PB";
-    if (size >= EB)                 return round3SF((double)size / EB) + " EB";
+    if (size < KB) { return size + " Bytes"; }
+    if (size >= KB && size < MB) { return round3SF((double) size / KB) + " KB"; }
+    if (size >= MB && size < GB) { return round3SF((double) size / MB) + " MB"; }
+    if (size >= GB && size < TB) { return round3SF((double) size / GB) + " GB"; }
+    if (size >= TB && size < PB) { return round3SF((double) size / TB) + " TB"; }
+    if (size >= PB && size < EB) { return round3SF((double) size / PB) + " PB"; }
+    if (size >= EB) { return round3SF((double) size / EB) + " EB"; }
 
     return "???";
   }
@@ -290,8 +262,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
     public class DownloadServiceInterface implements ServiceConnection {
 
       @Override
-      public void onServiceConnected(ComponentName className,
-                                     IBinder service) {
+      public void onServiceConnected(ComponentName className, IBinder service) {
         // We've bound to LocalService, cast the IBinder and get LocalService instance
         DownloadService.LocalBinder binder = (DownloadService.LocalBinder) service;
         mService = binder.getService();

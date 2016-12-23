@@ -20,8 +20,6 @@
 package org.kiwix.kiwixmobile;
 
 import android.content.ContentProvider;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -30,10 +28,6 @@ import android.os.ParcelFileDescriptor;
 import android.os.ParcelFileDescriptor.AutoCloseOutputStream;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
-
-import org.kiwix.kiwixmobile.settings.Constants;
-import org.kiwix.kiwixmobile.utils.files.FileUtils;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -41,10 +35,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.function.BooleanSupplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
 public class ZimContentProvider extends ContentProvider {
 
@@ -65,8 +58,6 @@ public class ZimContentProvider extends ContentProvider {
   public static String zimFileName;
 
   private static JNIKiwix jniKiwix;
-
-  private Matcher matcher;
 
   private static String getFulltextIndexPath(String file){
     String[] names = {file, file};
@@ -349,10 +340,9 @@ public class ZimContentProvider extends ContentProvider {
   }
 
   @Override
-  public ParcelFileDescriptor openFile(Uri uri, String mode)
-      throws FileNotFoundException {
+  public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
 
-    matcher = PATTERN.matcher(uri.toString());
+    Matcher matcher = PATTERN.matcher(uri.toString());
     if (matcher.matches()) {
       try {
         return saveVideoToCache(uri);

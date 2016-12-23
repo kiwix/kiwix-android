@@ -3,12 +3,8 @@ package org.kiwix.kiwixmobile.database;
 
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
-
-import org.kiwix.kiwixmobile.database.entity.Bookmarks;
-import org.kiwix.kiwixmobile.database.entity.RecentSearch;
-
 import java.util.ArrayList;
-import java.util.List;
+import org.kiwix.kiwixmobile.database.entity.Bookmarks;
 
 /**
  * Dao class for bookmarks.
@@ -21,7 +17,6 @@ public class BookmarksDao {
   public BookmarksDao(KiwixDatabase kiwikDatabase) {
     this.mDb = kiwikDatabase;
   }
-
 
   public ArrayList<String> getBookmarks(String ZimId) {
     SquidCursor<Bookmarks> bookmarkCursor = mDb.query(
