@@ -180,6 +180,9 @@ def get_remote_url_size(url):
     except:
         return None
 
+def get_remote_file_name(url):
+    ''' returns remote filename of final redirect '''
+    return urllib2.urlopen(url).geturl().split('/')[-1];
 
 def get_file_size(path):
     ''' file size in bytes of a path (either remote or local) '''
@@ -606,13 +609,21 @@ def main(jspath, **options):
                          .format(", ".join(REQUIRED_FIELDS)))
             sys.exit(1)
 
+    json_file_dir = os.path.abspath(os.path.dirname(jspath))
+
+    # download remote zim file
+    if is_remote_path(jsdata.get('zim_file')):
+        zimfile_url = jsdata.get('zim_file')
+        remote_filename = get_remote_file_name(zimfile_url)
+        local_file_path = os.path.join(json_file_dir, remote_filename)
+        download_remote_file(zimfile_url, local_file_path)
+        jsdata.update({'zim_file': local_file_path})
+
     # update relative paths to absolute
-    if not is_remote_path(jspath):
-        json_file_dir = os.path.abspath(os.path.dirname(jspath))
-        os.chdir(json_file_dir)
-        jsdata.update({'zim_file': os.path.abspath(jsdata.get('zim_file'))})
-        jsdata.update({'ic_launcher': os.path.abspath(jsdata.get('ic_launcher'))})
-        move_to_current_folder()
+    os.chdir(json_file_dir)
+    jsdata.update({'zim_file': os.path.abspath(jsdata.get('zim_file'))})
+    jsdata.update({'ic_launcher': os.path.abspath(jsdata.get('ic_launcher'))})
+    move_to_current_folder()
 
     def zim_name_from_path(path):
         fname = path.rsplit('/', 1)[-1]
