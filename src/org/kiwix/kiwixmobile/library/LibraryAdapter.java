@@ -24,27 +24,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.google.common.collect.ImmutableList;
-
-import org.kiwix.kiwixmobile.LibraryFragment;
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.ZimManageActivity;
-import org.kiwix.kiwixmobile.database.BookDao;
-import org.kiwix.kiwixmobile.database.KiwixDatabase;
-import org.kiwix.kiwixmobile.database.NetworkLanguageDao;
-import org.kiwix.kiwixmobile.downloader.DownloadFragment;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
-import org.kiwix.kiwixmobile.utils.LanguageUtils;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,12 +41,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.ZimManageActivity;
+import org.kiwix.kiwixmobile.database.BookDao;
+import org.kiwix.kiwixmobile.database.KiwixDatabase;
+import org.kiwix.kiwixmobile.database.NetworkLanguageDao;
+import org.kiwix.kiwixmobile.downloader.DownloadFragment;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
 import static org.kiwix.kiwixmobile.utils.ShortcutUtils.stringsGetter;
 
 public class LibraryAdapter extends ArrayAdapter<Book> {
-
-
 
   public static Map<String, Locale> mLocaleMap;
   public static ArrayList<Language> mLanguages = new ArrayList<>();
@@ -116,7 +109,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
     holder.fileName.setText(parseURL(book.getUrl()));
     holder.favicon.setImageBitmap(createBitmapFromEncodedString(book.getFavicon()));
 
-    //// Check if no value is empty. Set the view to View.GONE, if it is. To View.VISIBLE, if not.
+    // Check if no value is empty. Set the view to View.GONE, if it is. To View.VISIBLE, if not.
     if (book.getTitle() == null || book.getTitle().isEmpty()) {
       holder.title.setVisibility(View.GONE);
     } else {

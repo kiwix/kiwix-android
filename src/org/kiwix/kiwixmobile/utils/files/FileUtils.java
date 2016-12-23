@@ -1,21 +1,18 @@
 package org.kiwix.kiwixmobile.utils.files;
 
 import android.content.ContentUris;
+import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.util.Log;
-import android.content.Context;
-import android.os.Environment;
-import android.widget.PopupWindow;
-
 import java.io.File;
-import java.io.RandomAccessFile;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
-
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import org.kiwix.kiwixmobile.settings.Constants;
 
 public class FileUtils {
@@ -175,17 +172,26 @@ public class FileUtils {
     return null;
   }
 
-  public static boolean canWrite(File file) {
+  public static ArrayList<String> readLocalesFromAssets(Context context) {
+
+    String content = "";
+
     try {
-      RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");
-      FileChannel fileChannel = randomAccessFile.getChannel();
-      FileLock fileLock = fileChannel.lock();
-      fileLock.release();
-      fileChannel.close();
-      randomAccessFile.close();
-      return true;
-    } catch (Exception ex) {
-      return false;
-    }
+      InputStream stream = context.getAssets().open("locales.txt");
+
+      int size = stream.available();
+      byte[] buffer = new byte[size];
+      stream.read(buffer);
+      stream.close();
+      content = new String(buffer);
+    } catch (IOException ignored) { }
+
+    return readCsv(content);
+  }
+
+  private static ArrayList<String> readCsv(String csv) {
+
+    String[] csvArray = csv.split(",");
+    return new ArrayList<>(Arrays.asList(csvArray));
   }
 }

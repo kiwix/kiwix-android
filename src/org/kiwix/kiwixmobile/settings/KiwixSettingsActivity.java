@@ -19,34 +19,30 @@
 
 package org.kiwix.kiwixmobile.settings;
 
-import android.app.Activity;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
-
+import eu.mhutti1.utils.storage.StorageDevice;
+import eu.mhutti1.utils.storage.StorageSelectDialog;
+import java.io.File;
+import java.util.Locale;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
@@ -54,15 +50,7 @@ import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.database.RecentSearchDao;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.ShortcutUtils;
-import org.kiwix.kiwixmobile.utils.StorageUtils;
 import org.kiwix.kiwixmobile.views.SliderPreference;
-
-import java.io.File;
-import java.util.Locale;
-
-import eu.mhutti1.utils.storage.StorageDevice;
-import eu.mhutti1.utils.storage.StorageDeviceUtils;
-import eu.mhutti1.utils.storage.StorageSelectDialog;
 
 public class KiwixSettingsActivity extends AppCompatActivity {
 
@@ -333,7 +321,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
         findPreference(PREF_STORAGE).setTitle(getResources().getString(R.string.external_storage));
         editor.putString(KiwixMobileActivity.PREF_STORAGE_TITLE, getResources().getString(R.string.external_storage));
       }
-      editor.commit();
+      editor.apply();
     }
   }
 }

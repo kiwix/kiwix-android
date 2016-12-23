@@ -80,8 +80,11 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.database.BookmarksDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
@@ -99,12 +102,6 @@ import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
 import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
 import org.kiwix.kiwixmobile.views.KiwixWebView;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
@@ -444,7 +441,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
           public void run() {
             getCurrentWebView().loadUrl("javascript:document.getElementById('" + sectionProperties.get(
                 position - mRightDrawerList.getHeaderViewsCount()).sectionId + "').scrollIntoView();");
-            return;
           }
         });
 
@@ -524,9 +520,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
       File file = new File(i.getStringExtra("zimFile"));
       LibraryFragment.mService.cancelNotification(i.getIntExtra("notificationID",0));
       Uri uri = Uri.fromFile(file);
-      if (file == null) {
-        return;
-      }
 
       new Handler(Looper.getMainLooper()).post(new Runnable() {
         @Override
@@ -1875,11 +1868,11 @@ public class KiwixMobileActivity extends AppCompatActivity {
       this.hasToBeRefreshed = hasToBeRefreshed;
     }
 
-    public boolean hasToBeRefreshed() {
+    private boolean hasToBeRefreshed() {
       return hasToBeRefreshed;
     }
 
-    public void setHasToBeRefreshed(boolean hasToBeRefreshed) {
+    private void setHasToBeRefreshed(boolean hasToBeRefreshed) {
       this.hasToBeRefreshed = hasToBeRefreshed;
     }
   }

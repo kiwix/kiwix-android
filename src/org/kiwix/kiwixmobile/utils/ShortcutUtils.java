@@ -23,11 +23,10 @@ package org.kiwix.kiwixmobile.utils;
 import android.content.Context;
 
 
-/*
-Helper class containing basic useful functions
-meant to provide shortcuts and beautification of code.
-*/
-
+/**
+ * Helper class containing basic useful functions meant to provide
+ * shortcuts and beautification of code.
+ */
 public class ShortcutUtils {
 
   public static String stringsGetter(int strId, Context context) {
@@ -45,9 +44,6 @@ public class ShortcutUtils {
           tempStr += "''";
       }
       return tempStr;
-    } else {
-      return search;
-    }
+    } else return null;
   }
-
 }

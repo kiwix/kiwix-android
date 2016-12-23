@@ -24,14 +24,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import java.util.ArrayList;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 
-import java.util.ArrayList;
-
-public class
-ZimManageActivity extends AppCompatActivity {
+public class ZimManageActivity extends AppCompatActivity {
 
   public static final String TAB_EXTRA = "TAB";
   /**
@@ -50,8 +47,6 @@ ZimManageActivity extends AppCompatActivity {
   private ViewPager mViewPager;
 
   public boolean downloading = false;
-
-  private Menu mMenu;
 
   public  Toolbar toolbar;
 
@@ -168,10 +163,9 @@ ZimManageActivity extends AppCompatActivity {
   public boolean onCreateOptionsMenu(Menu menu) {
     // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.menu_zim_manager, menu);
-    mMenu = menu;
-    refeshItem = (MenuItem) menu.findItem(R.id.menu_rescan_fs);
-    searchItem = (MenuItem) menu.findItem(R.id.action_search);
-    languageItem = (MenuItem) menu.findItem(R.id.select_language);
+    refeshItem = menu.findItem(R.id.menu_rescan_fs);
+    searchItem = menu.findItem(R.id.action_search);
+    languageItem = menu.findItem(R.id.select_language);
     searchView = (SearchView) searchItem.getActionView();
     updateMenu(mViewPager.getCurrentItem());
     toolbar.setOnClickListener(new View.OnClickListener() {
@@ -205,26 +199,18 @@ ZimManageActivity extends AppCompatActivity {
   public boolean onOptionsItemSelected(MenuItem item) {
 
     switch (item.getItemId()) {
-
       case R.id.menu_rescan_fs: {
         if (mViewPager.getCurrentItem() == 0) {
           ZimFileSelectFragment fragment = (ZimFileSelectFragment) mSectionsPagerAdapter.getItem(0);
           fragment.refreshFragment();
         }
-        // mViewPager.notify();
       }
       case R.id.select_language:
         if (mViewPager.getCurrentItem() == 1)
           showLanguageSelect();
-
-
       default:
         return super.onOptionsItemSelected(item);
-
     }
-
-    //noinspection SimplifiableIfStatement
-
   }
 
   private void showLanguageSelect() {
@@ -236,7 +222,7 @@ ZimManageActivity extends AppCompatActivity {
     }
     LanguageArrayAdapter languageArrayAdapter = new LanguageArrayAdapter(this, 0, LibraryAdapter.mLanguages);
     listView.setAdapter(languageArrayAdapter);
-    AlertDialog mAlertDialog = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog_Alert)
+    new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog_Alert)
         .setView(view)
         .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
           LibraryAdapter.updateNetworklanguages();
@@ -323,10 +309,7 @@ ZimManageActivity extends AppCompatActivity {
       holder.checkBox.setOnCheckedChangeListener(null);
       holder.language.setText(getItem(position).language);
       holder.checkBox.setChecked(getItem(position).active);
-      holder.checkBox.setOnCheckedChangeListener((compoundButton, b) -> {
-        getItem(position).active = b;
-      });
-
+      holder.checkBox.setOnCheckedChangeListener((compoundButton, b) -> getItem(position).active = b);
       return convertView;
 
     }

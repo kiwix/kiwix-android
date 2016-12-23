@@ -27,20 +27,14 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-
-import org.kiwix.kiwixmobile.ZimContentProvider;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
-
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Vector;
-
 import eu.mhutti1.utils.storage.StorageDevice;
 import eu.mhutti1.utils.storage.StorageDeviceUtils;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.Collection;
+import java.util.Vector;
+import org.kiwix.kiwixmobile.ZimContentProvider;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 
 public class FileSearch {
 
@@ -121,8 +115,6 @@ public class FileSearch {
       tempRoots[j] = storageDevice.getName();
     }
 
-    final String[] additionalRoots = tempRoots;
-
     int i = 0;
     for (final String extension : zimFiles) {
       filter[i] = new FilenameFilter() {
@@ -137,7 +129,7 @@ public class FileSearch {
             Environment.getExternalStorageDirectory().getAbsolutePath()).toString();
     //        addFilesToFileList(dirNamePrimary, filter, fileList);
 
-    for (final String dirName : additionalRoots) {
+    for (final String dirName : tempRoots) {
       if (dirNamePrimary.equals(dirName)) {
         // We already got this directory from getExternalStorageDirectory().
         continue;
@@ -149,19 +141,6 @@ public class FileSearch {
         Log.i(TAG_KIWIX, "Skipping missing directory " + dirName);
       }
     }
-  }
-
-  public ArrayList<LibraryNetworkEntity.Book> sortDataModel(ArrayList<LibraryNetworkEntity.Book> data) {
-
-    // Sorting the data in alphabetical order
-    Collections.sort(data, new Comparator<LibraryNetworkEntity.Book>() {
-      @Override
-      public int compare(LibraryNetworkEntity.Book a, LibraryNetworkEntity.Book b) {
-        return a.getTitle().compareToIgnoreCase(b.getTitle());
-      }
-    });
-
-    return data;
   }
 
   // Iterate through the file system
@@ -235,18 +214,6 @@ public class FileSearch {
       Log.d(TAG_KIWIX, "Found " + f.getAbsolutePath());
       onFileFound(f.getAbsolutePath());
     }
-  }
-
-  // Remove the file path and the extension and return a file name for the given file path
-  private String getTitleFromFilePath(String path) {
-    String title = new File(path).getName();
-    if (title.charAt(title.length() - 1) == "m".charAt(0)) {
-      title = title.replaceFirst("[.][^.]+$", "");
-    } else {
-      title = title.replaceFirst("[.][^.]+$", "");
-      title = title.replaceFirst("[.][^.]+$", "");
-    }
-    return title;
   }
 
   public void onFileFound(String filePath) {

@@ -11,8 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,15 +19,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.database.RecentSearchDao;
 import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 public class SearchActivity extends AppCompatActivity
     implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
@@ -38,7 +34,6 @@ public class SearchActivity extends AppCompatActivity
   private ListView mListView;
   private AutoCompleteAdapter mAutoAdapter;
   private ArrayAdapter<String> mDefaultAdapter;
-  private SearchActivity context;
   private RecentSearchDao recentSearchDao;
   private SearchView searchView;
 
@@ -51,7 +46,6 @@ public class SearchActivity extends AppCompatActivity
     getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
     getSupportActionBar().setHomeButtonEnabled(true);
 
-//    String zimFile = getIntent().getStringExtra("zimFile");
     mListView = (ListView) findViewById(R.id.search_list);
     recentSearchDao = new RecentSearchDao(KiwixDatabase.getInstance(this));
     List<String> recentSearches = recentSearchDao.getRecentSearches();
@@ -59,19 +53,15 @@ public class SearchActivity extends AppCompatActivity
     mListView.setAdapter(mDefaultAdapter);
     mDefaultAdapter.addAll(recentSearches);
     mDefaultAdapter.notifyDataSetChanged();
-    context = this;
-    mAutoAdapter = new AutoCompleteAdapter(context);
-    mListView.setOnItemClickListener(context);
-    mListView.setOnItemLongClickListener(context);
+    mAutoAdapter = new AutoCompleteAdapter(this);
+    mListView.setOnItemClickListener(this);
+    mListView.setOnItemLongClickListener(this);
 
     boolean IS_VOICE_SEARCH_INTENT = getIntent().getBooleanExtra("isWidgetVoice", false);
     if (IS_VOICE_SEARCH_INTENT) {
       promptSpeechInput();
     }
   }
-
-
-
 
   @Override
   public void finish() {
@@ -205,7 +195,6 @@ public class SearchActivity extends AppCompatActivity
           getString(R.string.speech_not_supported),
           Toast.LENGTH_SHORT).show();
     }
-
   }
 
   @Override
@@ -222,17 +211,10 @@ public class SearchActivity extends AppCompatActivity
         }
         break;
       }
-
-
     }
   }
 
   private void searchViaVoice(String search) {
     searchView.setQuery(search, false);
-  }
-
-  private String capitalizeSearch(String search) {
-    search = search.substring(0, 1).toUpperCase() + search.substring(1).toLowerCase();
-    return search;
   }
 }
