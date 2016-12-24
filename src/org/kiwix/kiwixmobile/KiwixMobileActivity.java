@@ -455,7 +455,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     setUpTTS();
     htmlUtils = new HTMLUtils(sectionProperties, mSections, mRightDrawerList, this, mHandler);
 
-    manageExternalLaunchAndRestoringViewState(savedInstanceState);
+    manageExternalLaunchAndRestoringViewState();
     setUpExitFullscreenButton();
     loadPrefs();
     updateTitle(ZimContentProvider.getZimFileTitle());
@@ -817,8 +817,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
           }
         }
         readAloud();
-
-
         break;
 
       case R.id.menu_fullscreen:
@@ -968,9 +966,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
           dialog.show();
           finish();
         }
-        return;
       }
-
     }
   }
 
@@ -1193,22 +1189,15 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   public boolean openArticleFromBookmarkTitle(String bookmarkTitle) {
-    //        Log.d(TAG_KIWIX, "openArticleFromBookmark: " + articleSearchtextView.getText());
     return openArticle(ZimContentProvider.getPageUrlFromTitle(bookmarkTitle));
   }
 
   public boolean openArticleFromBookmarkURL(String bookmarkURL) {
-    //        Log.d(TAG_KIWIX, "openArticleFromBookmark: " + articleSearchtextView.getText());
     return openArticle(bookmarkURL);
   }
 
   private void contentsDrawerHint() {
-    mLeftDrawerLayout.postDelayed(new Runnable() {
-      @Override
-      public void run() {
-        mLeftDrawerLayout.openDrawer(GravityCompat.END);
-      }
-    }, 500);
+    mLeftDrawerLayout.postDelayed(() -> mLeftDrawerLayout.openDrawer(GravityCompat.END), 500);
 
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setMessage(ShortcutUtils.stringsGetter(R.string.hint_contents_drawer_message, this))
@@ -1683,7 +1672,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     }
   }
 
-  private void manageExternalLaunchAndRestoringViewState(Bundle savedInstanceState) {
+  private void manageExternalLaunchAndRestoringViewState() {
 
     if (getIntent().getData() != null) {
       String filePath = FileUtils.getLocalFilePathByUri(getApplicationContext(), getIntent().getData());
