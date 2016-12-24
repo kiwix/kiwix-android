@@ -156,7 +156,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private static Uri KIWIX_BROWSER_MARKET_URI;
 
-  private static String jsContent;
+  private String jsContent;
 
   public Menu menu;
 
@@ -190,8 +190,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private Button mBackToTopButton;
 
-  private Button stopTTSButton;
-
   private Button pauseTTSButton;
 
   private LinearLayout TTSControls;
@@ -213,8 +211,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
   private CompatFindActionModeCallback mCompatCallback;
 
   private ArrayAdapter<KiwixWebView> mLeftArrayAdapter;
-
-  private ArrayAdapter<TextView> mRightArrayAdapter;
 
   private FrameLayout mContentFrame;
 
@@ -314,7 +310,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     mIsBacktotopEnabled = false;
     mIsSpeaking = false;
     mBackToTopButton = (Button) findViewById(R.id.button_backtotop);
-    stopTTSButton = (Button) findViewById(R.id.button_stop_tts);
+    Button stopTTSButton = (Button) findViewById(R.id.button_stop_tts);
     pauseTTSButton = (Button) findViewById(R.id.button_pause_tts);
     TTSControls = (LinearLayout) findViewById(R.id.tts_controls);
     mToolbarContainer = (RelativeLayout) findViewById(R.id.toolbar_layout);
@@ -371,7 +367,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
     mLeftDrawerList.setDividerHeight(0);
     mLeftDrawerList.setAdapter(mLeftArrayAdapter);
 
-    mRightArrayAdapter = new KiwixToCAdapter(this, R.layout.section_list, mSections, this);
+    ArrayAdapter<TextView> mRightArrayAdapter =
+        new KiwixToCAdapter(this, R.layout.section_list, mSections, this);
     mRightDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
     mRightDrawerList = (ListView) findViewById(R.id.right_drawer_list);
     mRightDrawerList.setDivider(null);
