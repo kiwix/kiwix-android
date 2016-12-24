@@ -162,8 +162,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   public Toolbar toolbar;
 
-  public boolean isFullscreenOpened;
-
   public ImageButton exitFullscreenButton;
 
   public List<SectionProperties> sectionProperties;
@@ -314,7 +312,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
     requestWebReloadOnFinished = 0;
     requestInitAllMenuItems = false;
     mIsBacktotopEnabled = false;
-    isFullscreenOpened = false;
     mIsSpeaking = false;
     mBackToTopButton = (Button) findViewById(R.id.button_backtotop);
     stopTTSButton = (Button) findViewById(R.id.button_stop_tts);
