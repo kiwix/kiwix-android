@@ -37,11 +37,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.database.BookmarksDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
-import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 
 import java.util.ArrayList;
 
@@ -144,7 +142,7 @@ public class BookmarksActivity extends AppCompatActivity
 
   private void popDeleteBookmarksSnackbar() {
     Snackbar bookmarkDeleteSnackbar =
-        Snackbar.make(snackbarLayout, numOfSelected + " " + ShortcutUtils.stringsGetter(R.string.deleted_message, this), Snackbar.LENGTH_LONG);
+        Snackbar.make(snackbarLayout, numOfSelected + " " + getString(R.string.deleted_message), Snackbar.LENGTH_LONG);
 //            .setAction(ShortcutUtils.stringsGetter(R.string.undo, this), v -> {
 //              restoreBookmarks();
 //              setNoBookmarksState();
@@ -189,13 +187,11 @@ public class BookmarksActivity extends AppCompatActivity
 
   private void setUpToolbar() {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    toolbar.setTitle(ShortcutUtils.stringsGetter(R.string.menu_bookmarks_list, this));
+    toolbar.setTitle(getString(R.string.menu_bookmarks_list));
     setSupportActionBar(toolbar);
     getSupportActionBar().setHomeButtonEnabled(true);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    toolbar.setNavigationOnClickListener(v -> {
-      onBackPressed();
-    });
+    toolbar.setNavigationOnClickListener(v -> onBackPressed());
   }
 
   @Override

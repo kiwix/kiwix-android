@@ -51,8 +51,6 @@ import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
-import static org.kiwix.kiwixmobile.utils.ShortcutUtils.stringsGetter;
-
 public class LibraryAdapter extends ArrayAdapter<Book> {
 
   public static Map<String, Locale> mLocaleMap;
@@ -154,8 +152,8 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
       details = details.substring(details.indexOf("_", details.indexOf("_") + 1) + 1, details.lastIndexOf("_"));
       details = details.replaceAll("_", " ");
       details = details.replaceAll("all","");
-      details = details.replaceAll("nopic", stringsGetter(R.string.zim_nopic, mActivity));
-      details = details.replaceAll("simple", stringsGetter(R.string.zim_simple, mActivity));
+      details = details.replaceAll("nopic", mActivity.getString(R.string.zim_nopic));
+      details = details.replaceAll("simple", mActivity.getString(R.string.zim_simple));
       details = details.trim().replaceAll(" +", " ");
       return details;
     } catch (Exception e ){

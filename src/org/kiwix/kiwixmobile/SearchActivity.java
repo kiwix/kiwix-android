@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Locale;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.database.RecentSearchDao;
-import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 
 public class SearchActivity extends AppCompatActivity
@@ -151,7 +150,7 @@ public class SearchActivity extends AppCompatActivity
 
   private void deleteSpecificSearchDialog(final String search) {
     new AlertDialog.Builder(this)
-        .setMessage(ShortcutUtils.stringsGetter(R.string.delete_recent_search_item, this))
+        .setMessage(getString(R.string.delete_recent_search_item))
         .setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int which) {
             deleteSpecificSearchItem(search);

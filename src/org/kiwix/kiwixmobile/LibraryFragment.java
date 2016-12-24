@@ -37,10 +37,7 @@ import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
-import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 import rx.android.schedulers.AndroidSchedulers;
-
-import static org.kiwix.kiwixmobile.utils.ShortcutUtils.stringsGetter;
 
 public class LibraryFragment extends Fragment implements AdapterView.OnItemClickListener {
 
@@ -160,8 +157,8 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
     if (getSpaceAvailable() < Long.parseLong( ((LibraryNetworkEntity.Book)(parent.getAdapter().getItem(position))).getSize()) * 1024f){
-      Toast.makeText(super.getActivity(), stringsGetter(R.string.download_no_space, super.getActivity())
-          + "\n" +stringsGetter(R.string.space_available, super.getActivity()) + " "
+      Toast.makeText(super.getActivity(), getString(R.string.download_no_space)
+          + "\n" + getString(R.string.space_available)+ " "
           + bytesToHuman(getSpaceAvailable()), Toast.LENGTH_LONG).show();
       return;
     }
@@ -219,7 +216,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
 
   public void mobileDownloadDialog(int position, AdapterView<?> parent) {
     new AlertDialog.Builder(super.getActivity())
-        .setMessage(ShortcutUtils.stringsGetter(R.string.download_over_network, super.getActivity()))
+        .setMessage(getString(R.string.download_over_network))
         .setPositiveButton(getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int which) {
             downloadFile((LibraryNetworkEntity.Book) parent.getAdapter().getItem(position));
@@ -234,7 +231,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
   }
 
   public void downloadFile(LibraryNetworkEntity.Book book) {
-    Toast.makeText(super.getActivity(), stringsGetter(R.string.download_started_library, super.getActivity()), Toast.LENGTH_LONG).show();
+    Toast.makeText(super.getActivity(), getString(R.string.download_started_library), Toast.LENGTH_LONG).show();
     Intent service = new Intent(super.getActivity(), DownloadService.class);
     service.putExtra(DownloadIntent.DOWNLOAD_URL_PARAMETER, book.getUrl());
     service.putExtra(DownloadIntent.DOWNLOAD_ZIM_TITLE, book.getTitle());

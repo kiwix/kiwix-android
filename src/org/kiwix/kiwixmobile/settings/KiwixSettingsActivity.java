@@ -49,7 +49,6 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.database.RecentSearchDao;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
-import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 import org.kiwix.kiwixmobile.views.SliderPreference;
 
 public class KiwixSettingsActivity extends AppCompatActivity {
@@ -108,7 +107,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
   private void setUpToolbar() {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
-    getSupportActionBar().setTitle(ShortcutUtils.stringsGetter(R.string.menu_settings, this));
+    getSupportActionBar().setTitle(getString(R.string.menu_settings));
     getSupportActionBar().setHomeButtonEnabled(true);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

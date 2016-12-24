@@ -53,7 +53,6 @@ import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
-import org.kiwix.kiwixmobile.utils.ShortcutUtils;
 import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
@@ -279,7 +278,7 @@ public class ZimFileSelectFragment extends Fragment
 
   public void deleteSpecificZimDialog(int position) {
     new AlertDialog.Builder(super.getActivity())
-        .setMessage(ShortcutUtils.stringsGetter(R.string.delete_specific_zim, context))
+        .setMessage(getString(R.string.delete_specific_zim))
         .setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int which) {
             if (deleteSpecificZimFile(position)) {

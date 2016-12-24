@@ -295,12 +295,15 @@ public class KiwixMobileActivity extends AppCompatActivity {
     ++tempVisitCount;
     visitCounterPref.setCount(tempVisitCount);
 
-    if (tempVisitCount >= 5 && !visitCounterPref.getNoThanksState() && NetworkUtils.isNetworkAvailable(this)) {
+    if (tempVisitCount >= 5
+        && !visitCounterPref.getNoThanksState()
+        && NetworkUtils.isNetworkAvailable(this)) {
       showRateDialog(this, visitCounterPref.getEditor());
     }
 
     KIWIX_LOCAL_MARKET_URI = Uri.parse("market://details?id=" + getPackageName());
-    KIWIX_BROWSER_MARKET_URI = Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName());
+    KIWIX_BROWSER_MARKET_URI =
+        Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName());
 
     requestClearHistoryAfterLoad = false;
     requestWebReloadOnFinished = 0;
@@ -318,18 +321,18 @@ public class KiwixMobileActivity extends AppCompatActivity {
     pauseTTSButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-          if (tts.currentTTSTask == null) {
-              tts.stop();
-              return;
-          }
+        if (tts.currentTTSTask == null) {
+          tts.stop();
+          return;
+        }
 
-          if (tts.currentTTSTask.paused) {
-              tts.pauseOrResume();
-              pauseTTSButton.setText(R.string.tts_pause);
-          } else {
-              tts.pauseOrResume();
-              pauseTTSButton.setText(R.string.tts_resume);
-          }
+        if (tts.currentTTSTask.paused) {
+          tts.pauseOrResume();
+          pauseTTSButton.setText(R.string.tts_pause);
+        } else {
+          tts.pauseOrResume();
+          pauseTTSButton.setText(R.string.tts_resume);
+        }
       }
     });
 
@@ -565,7 +568,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
           @Override
           public void run() {
-            menu.findItem(R.id.menu_read_aloud).setTitle(getResources().getString(R.string.menu_read_aloud_stop));
+            menu.findItem(R.id.menu_read_aloud)
+                .setTitle(getResources().getString(R.string.menu_read_aloud_stop));
             TTSControls.setVisibility(View.VISIBLE);
           }
         });
@@ -845,7 +849,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   public boolean openZimFile(File file, boolean clearHistory) {
-    if (file.canRead() || Build.VERSION.SDK_INT < 19 || (Constants.IS_CUSTOM_APP && Build.VERSION.SDK_INT != 23)) {
+    if (file.canRead() || Build.VERSION.SDK_INT < 19 || (Constants.IS_CUSTOM_APP
+        && Build.VERSION.SDK_INT != 23)) {
       if (file.exists()) {
         if (ZimContentProvider.setZimFile(file.getAbsolutePath()) != null) {
 
@@ -906,7 +911,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   @Override
   public void onRequestPermissionsResult(int requestCode,
-                                         String permissions[], int[] grantResults) {
+      String permissions[], int[] grantResults) {
     switch (requestCode) {
       case KiwixMobileActivity.REQUEST_STORAGE_PERMISSION: {
         if (grantResults.length > 0
@@ -1199,8 +1204,9 @@ public class KiwixMobileActivity extends AppCompatActivity {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
       widgetManager.notifyAppWidgetViewDataChanged(ids, android.R.id.list);
 
-    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-    context.sendBroadcast(intent);
+      intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+      context.sendBroadcast(intent);
+    }
   }
 
   private void setUpWebView() {
