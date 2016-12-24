@@ -15,8 +15,8 @@ public class RecentSearchDao {
   private static final int NUM_RECENT_RESULTS = 5;
   private KiwixDatabase mDb;
 
-  public RecentSearchDao(KiwixDatabase kiwikDatabase) {
-    this.mDb = kiwikDatabase;
+  public RecentSearchDao(KiwixDatabase kiwixDatabase) {
+    this.mDb = kiwixDatabase;
   }
 
   /**

@@ -69,7 +69,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -346,13 +345,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
       }
     });
 
-    stopTTSButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        tts.stop();
-      }
-    });
-
+    stopTTSButton.setOnClickListener((View view) -> tts.stop());
 
     tempForUndo =
         new KiwixWebView(getApplicationContext());   /**  initializing temporary tab value **/
@@ -363,31 +356,17 @@ public class KiwixMobileActivity extends AppCompatActivity {
     jsContent = fileReader.readFile("www/js/jsfile.js", this);
 
     RelativeLayout newTabButton = (RelativeLayout) findViewById(R.id.new_tab_button);
-    newTabButton.setOnClickListener(new View.OnClickListener() {
-
-      @Override
-      public void onClick(View v) {
-        newTab();
-      }
-    });
+    newTabButton.setOnClickListener((View view) -> newTab());
     RelativeLayout nextButton = (RelativeLayout) findViewById(R.id.action_forward);
-    nextButton.setOnClickListener(new View.OnClickListener() {
-
-      @Override
-      public void onClick(View v) {
-        if (getCurrentWebView().canGoForward()) {
-          getCurrentWebView().goForward();
-        }
+    nextButton.setOnClickListener((View view) -> {
+      if (getCurrentWebView().canGoForward()) {
+        getCurrentWebView().goForward();
       }
     });
     RelativeLayout previousButton = (RelativeLayout) findViewById(R.id.action_back);
-    previousButton.setOnClickListener(new View.OnClickListener() {
-
-      @Override
-      public void onClick(View v) {
-        if (getCurrentWebView().canGoBack()) {
-          getCurrentWebView().goBack();
-        }
+    previousButton.setOnClickListener((View view) -> {
+      if (getCurrentWebView().canGoBack()) {
+        getCurrentWebView().goBack();
       }
     });
 
@@ -412,40 +391,32 @@ public class KiwixMobileActivity extends AppCompatActivity {
     headerView.setPadding((int) (26 * getResources().getDisplayMetrics().density), 0, 0, 0);
     headerView.setBackgroundColor(Color.LTGRAY);
     headerView.setTypeface(Typeface.DEFAULT_BOLD);
-    headerView.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        getCurrentWebView().setScrollY(0);
-        mRightDrawerLayout.closeDrawer(GravityCompat.END);
-      }
+    headerView.setOnClickListener((View v) -> {
+      getCurrentWebView().setScrollY(0);
+      mRightDrawerLayout.closeDrawer(GravityCompat.END);
     });
     mRightDrawerList.addHeaderView(headerView);
 
     mRightDrawerList.setAdapter(mRightArrayAdapter);
     TextView tView = (TextView) findViewById(R.id.empty);
     mRightDrawerList.setEmptyView(tView);
-    sectionProperties = new ArrayList<SectionProperties>();
+    sectionProperties = new ArrayList<>();
     mRightArrayAdapter.notifyDataSetChanged();
 
-    mLeftDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-      @Override
-      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        selectTab(position);
-      }
-    });
-    mRightDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-      @Override
-      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        KiwixMobileActivity.this.runOnUiThread(new Runnable(){
-          @Override
-          public void run() {
-            getCurrentWebView().loadUrl("javascript:document.getElementById('" + sectionProperties.get(
-                position - mRightDrawerList.getHeaderViewsCount()).sectionId + "').scrollIntoView();");
-          }
-        });
+    mLeftDrawerList.setOnItemClickListener((parent, view1, position, id) -> selectTab(position));
 
-        mRightDrawerLayout.closeDrawers();
-      }
+    mRightDrawerList.setOnItemClickListener((parent, view12, position, id) -> {
+      runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+          getCurrentWebView().loadUrl("javascript:document.getElementById('"
+              + sectionProperties.get(
+              position - mRightDrawerList.getHeaderViewsCount()).sectionId
+              + "').scrollIntoView();");
+        }
+      });
+
+      mRightDrawerLayout.closeDrawers();
     });
     final ActionBarDrawerToggle drawerToggle =
         new ActionBarDrawerToggle(this, mLeftDrawerLayout, toolbar, 0, 0) {
@@ -553,33 +524,19 @@ public class KiwixMobileActivity extends AppCompatActivity {
         + getString(R.string.app_name)
         + ShortcutUtils.stringsGetter(R.string.rate_dialog_msg_2, this));
 
-    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, ShortcutUtils.stringsGetter(R.string.rate_dialog_positive, this),
-        new DialogInterface.OnClickListener() {
+    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, ShortcutUtils.stringsGetter(R.string.rate_dialog_positive, this), (dialog, id) -> {
+      visitCounterPref.setNoThanksState(true);
+      goToRateApp();
+    });
 
-          public void onClick(DialogInterface dialog, int id) {
-            visitCounterPref.setNoThanksState(true);
-            goToRateApp();
-          }
-        });
+    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, ShortcutUtils.stringsGetter(R.string.rate_dialog_negative, this), (dialog, id) -> {
+      visitCounterPref.setNoThanksState(true);
+    });
 
-    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, ShortcutUtils.stringsGetter(R.string.rate_dialog_negative, this),
-        new DialogInterface.OnClickListener() {
-
-          public void onClick(DialogInterface dialog, int id) {
-
-            visitCounterPref.setNoThanksState(true);
-          }
-        });
-
-    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, ShortcutUtils.stringsGetter(R.string.rate_dialog_neutral, this),
-        new DialogInterface.OnClickListener() {
-
-          public void onClick(DialogInterface dialog, int id) {
-
-            tempVisitCount = 0;
-            visitCounterPref.setCount(tempVisitCount);
-          }
-        });
+    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, ShortcutUtils.stringsGetter(R.string.rate_dialog_neutral, this), (dialog, id) -> {
+      tempVisitCount = 0;
+      visitCounterPref.setCount(tempVisitCount);
+    });
 
     alertDialog.setIcon(getResources().getDrawable(R.mipmap.kiwix_icon));
 
