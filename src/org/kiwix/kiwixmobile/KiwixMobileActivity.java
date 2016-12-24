@@ -148,8 +148,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   public static final String PREF_STORAGE_TITLE = "pref_selected_title";
 
-  public static ArrayList<State> mPrefState;
-
   public static boolean mIsFullscreenOpened;
 
   public static TextView headerView;
@@ -322,7 +320,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
     stopTTSButton = (Button) findViewById(R.id.button_stop_tts);
     pauseTTSButton = (Button) findViewById(R.id.button_pause_tts);
     TTSControls = (LinearLayout) findViewById(R.id.tts_controls);
-    mPrefState = new ArrayList<>();
     mToolbarContainer = (RelativeLayout) findViewById(R.id.toolbar_layout);
     mProgressBar = (AnimatedProgressBar) findViewById(R.id.progress_view);
     exitFullscreenButton = (ImageButton) findViewById(R.id.FullscreenControlButton);
@@ -1483,10 +1480,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
           mLeftArrayAdapter.notifyDataSetChanged();
         }
         loadPrefs();
-        for (KiwixMobileActivity.State state : KiwixMobileActivity.mPrefState) {
-          state.setHasToBeRefreshed(true);
-          Log.e(TAG_KIWIX, KiwixMobileActivity.mPrefState.get(0).hasToBeRefreshed() + "");
-        }
         break;
 
       case BOOKMARK_CHOSEN_REQUEST:
@@ -1815,23 +1808,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
     public String sectionTitle;
     public String sectionId;
     public int color;
-  }
-
-  public class State {
-
-    private boolean hasToBeRefreshed;
-
-    private State(boolean hasToBeRefreshed) {
-      this.hasToBeRefreshed = hasToBeRefreshed;
-    }
-
-    private boolean hasToBeRefreshed() {
-      return hasToBeRefreshed;
-    }
-
-    private void setHasToBeRefreshed(boolean hasToBeRefreshed) {
-      this.hasToBeRefreshed = hasToBeRefreshed;
-    }
   }
 
   private class KiwixWebViewClient extends WebViewClient {
