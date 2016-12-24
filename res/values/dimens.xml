@@ -12,6 +12,7 @@
   <dimen name="abc_search_view_text_min_width">160dip</dimen>
   <dimen name="abc_dropdownitem_text_padding_left">8dip</dimen>
   <dimen name="abc_dropdownitem_text_padding_right">8dip</dimen>
-  <dimen name="material_light_hint_alpha">0.38f</dimen>
-  <dimen name="material_dark_hint_pressed_alpha">0.70f</dimen>
+  <!-- Workaround to store floats in dimen -->
+  <item format="float" name="material_light_hint_alpha" type="dimen">0.38</item>
+  <item format="float" name="material_dark_hint_pressed_alpha" type="dimen">0.70</item>
 </resources>
