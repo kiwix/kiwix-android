@@ -122,11 +122,11 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private static final String TAG_CURRENT_TAB = "currenttab";
 
-  private static final String PREF_NIGHTMODE = "pref_nightmode";
+  private static final String PREF_NIGHT_MODE = "pref_nightmode";
 
   private static final String PREF_KIWIX_MOBILE = "kiwix-mobile";
 
-  private static final String PREF_BACKTOTOP = "pref_backtotop";
+  private static final String PREF_BACK_TO_TOP = "pref_backtotop";
 
   private static final String PREF_ZOOM = "pref_zoom_slider";
 
@@ -134,7 +134,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private static final String PREF_FULLSCREEN = "pref_fullscreen";
 
-  private static final String PREF_NEWTAB_BACKGROUND = "pref_newtab_background";
+  private static final String PREF_NEW_TAB_BACKGROUND = "pref_newtab_background";
 
   public static final String PREF_FULL_TEXT_SEARCH = "pref_full_text_search";
 
@@ -1598,11 +1598,11 @@ public class KiwixMobileActivity extends AppCompatActivity {
   public void loadPrefs() {
 
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-    mNightMode = sharedPreferences.getBoolean(PREF_NIGHTMODE, false);
-    mIsBacktotopEnabled = sharedPreferences.getBoolean(PREF_BACKTOTOP, false);
+    mNightMode = sharedPreferences.getBoolean(PREF_NIGHT_MODE, false);
+    mIsBacktotopEnabled = sharedPreferences.getBoolean(PREF_BACK_TO_TOP, false);
     mIsFullscreenOpened = sharedPreferences.getBoolean(PREF_FULLSCREEN, false);
     boolean isZoomEnabled = sharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
-    isOpenNewTabInBackground = sharedPreferences.getBoolean(PREF_NEWTAB_BACKGROUND, false);
+    isOpenNewTabInBackground = sharedPreferences.getBoolean(PREF_NEW_TAB_BACKGROUND, false);
 
     if (isZoomEnabled) {
       int zoomScale = (int) sharedPreferences.getFloat(PREF_ZOOM, 100.0f);
