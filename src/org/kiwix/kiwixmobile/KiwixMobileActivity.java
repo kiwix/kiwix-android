@@ -32,7 +32,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -56,12 +55,10 @@ import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -71,15 +68,12 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
@@ -151,13 +145,11 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   public static boolean mIsFullscreenOpened;
 
-  private TextView headerView;
-
   private static Uri KIWIX_LOCAL_MARKET_URI;
 
   private static Uri KIWIX_BROWSER_MARKET_URI;
 
-  private String jsContent;
+  private String documentParserJs;
 
   public Menu menu;
 
@@ -195,7 +187,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private RecyclerView tabDrawerLeft;
 
-  private ListView mRightDrawerList;
+  private RecyclerView mRightDrawerList;
 
   private DrawerLayout mLeftDrawerLayout;
 
@@ -338,7 +330,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     snackbarLayout = (LinearLayout) findViewById(R.id.linearlayout_main);
 
     FileReader fileReader = new FileReader();
-    jsContent = fileReader.readFile("js/documentParser.js", this);
+    documentParserJs = fileReader.readFile("js/documentParser.js", this);
 
     RelativeLayout newTabButton = (RelativeLayout) findViewById(R.id.new_tab_button);
     newTabButton.setOnClickListener((View view) -> newTab());
@@ -361,29 +353,29 @@ public class KiwixMobileActivity extends AppCompatActivity {
     tabDrawerLeft.setLayoutManager(new LinearLayoutManager(this));
     tabDrawerLeft.setAdapter(tabDrawerAdapter);
 
-    ArrayAdapter<TextView> mRightArrayAdapter =
-        new TableOfContentAdapter(this);
+    // TODO fix this duplicate
     mRightDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-    mRightDrawerList = (ListView) findViewById(R.id.right_drawer_list);
-    mRightDrawerList.setDivider(null);
-    mRightDrawerList.setDividerHeight(0);
+    mRightDrawerList = (RecyclerView) findViewById(R.id.right_drawer_list);
+    mRightDrawerList.setLayoutManager(new LinearLayoutManager(this));
 
-    LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    View view = inflater.inflate(R.layout.content_header, null);
-    headerView = (TextView) view.findViewById(R.id.contentHeader);
-    headerView.setText(R.string.no_section_info);
-    headerView.setPadding((int) (26 * getResources().getDisplayMetrics().density), 0, 0, 0);
-    headerView.setTypeface(Typeface.DEFAULT_BOLD);
-    headerView.setOnClickListener((View v) -> {
-      getCurrentWebView().setScrollY(0);
-      mRightDrawerLayout.closeDrawer(GravityCompat.END);
+    TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter();
+    mRightDrawerList.setAdapter(tableDrawerAdapter);
+    tableDrawerAdapter.setTableClickListener(new TableDrawerAdapter.TableClickListener() {
+      @Override public void onHeaderClick(View view) {
+        getCurrentWebView().setScrollY(0);
+        mRightDrawerLayout.closeDrawer(GravityCompat.END);
+      }
+
+      @Override public void onSectionClick(View view, int position) {
+        getCurrentWebView().loadUrl("javascript:document.getElementById('"
+            + documentSections.get(position).id
+            + "').scrollIntoView();");
+
+        mRightDrawerLayout.closeDrawers();
+      }
     });
-    mRightDrawerList.addHeaderView(headerView);
 
-    mRightDrawerList.setAdapter(mRightArrayAdapter);
-    TextView tView = (TextView) findViewById(R.id.empty);
-    mRightDrawerList.setEmptyView(tView);
-    mRightArrayAdapter.notifyDataSetChanged();
+    tableDrawerAdapter.notifyDataSetChanged();
 
     tabDrawerAdapter.setTabClickListener(new TabDrawerAdapter.TabClickListener() {
       @Override public void onSelectTab(View view, int position) {
@@ -395,19 +387,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
       }
     });
 
-    mRightDrawerList.setOnItemClickListener((parent, view12, position, id) -> {
-      runOnUiThread(new Runnable() {
-        @Override
-        public void run() {
-          getCurrentWebView().loadUrl("javascript:document.getElementById('"
-              + documentSections.get(
-              position - mRightDrawerList.getHeaderViewsCount()).id
-              + "').scrollIntoView();");
-        }
-      });
-
-      mRightDrawerLayout.closeDrawers();
-    });
     final ActionBarDrawerToggle drawerToggle =
         new ActionBarDrawerToggle(this, mLeftDrawerLayout, toolbar, 0, 0) {
 
@@ -455,14 +434,15 @@ public class KiwixMobileActivity extends AppCompatActivity {
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
       @Override
       public void sectionsLoaded(String title, List<DocumentSection> sections) {
-        headerView.setText(title);
         documentSections.addAll(sections);
-        mRightArrayAdapter.notifyDataSetChanged();
+        tableDrawerAdapter.setTitle(title);
+        tableDrawerAdapter.setSections(documentSections);
+        tableDrawerAdapter.notifyDataSetChanged();
       }
 
       @Override public void clearSections() {
         documentSections.clear();
-        mRightArrayAdapter.notifyDataSetChanged();
+        tableDrawerAdapter.notifyDataSetChanged();
       }
     });
 
@@ -617,8 +597,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   private void updateTableOfContents() {
-    mRightDrawerList.clearChoices();
-    getCurrentWebView().loadUrl("javascript:(" + jsContent + ")()");
+    getCurrentWebView().loadUrl("javascript:(" + documentParserJs + ")()");
   }
 
   private KiwixWebView newTab() {
@@ -684,13 +663,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
     int selectedPosition = tabDrawerAdapter.getSelectedPosition();
     int newSelectedPosition = selectedPosition;
 
-    if (index <= selectedPosition) {
-      if (selectedPosition == 0) {
-        newTab();
-      } else {
-        newSelectedPosition = selectedPosition - 1;
-      }
-    }
+    if (index < selectedPosition) newSelectedPosition = selectedPosition - 1;
+    if (mWebViews.size() == 1) newTab();
 
     mWebViews.remove(index);
     showRestoreTabSnackbar(index);
@@ -1856,44 +1830,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
         Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView().getUrl());
       }
-    }
-  }
-
-  private class TableOfContentAdapter extends ArrayAdapter {
-
-    public TableOfContentAdapter(Context context) {
-      super(context, 0);
-    }
-
-    @Override public View getView(final int position, View convertView, final ViewGroup parent) {
-      View row = convertView;
-      ViewHolder holder;
-
-      if (row == null) {
-        LayoutInflater inflater = getLayoutInflater();
-        row = inflater.inflate(R.layout.section_list, parent, false);
-
-        holder = new ViewHolder();
-        holder.title = (TextView) row.findViewById(R.id.titleText);
-        row.setTag(holder);
-      } else {
-        holder = (ViewHolder) row.getTag();
-      }
-
-      DocumentSection section = documentSections.get(position);
-      holder.title.setText(section.title);
-      int padding = (int) (((section.level - 1) * 16) * getResources().getDisplayMetrics().density);
-      holder.title.setPadding(padding, 0, 0, 0);
-      holder.title.setTextColor((section.level) % 2 == 0 ? Color.BLACK : Color.GRAY);
-      return row;
-    }
-
-    @Override public int getCount() {
-      return documentSections.size();
-    }
-
-    class ViewHolder {
-      TextView title;
     }
   }
 }

@@ -15,7 +15,7 @@
     android:layout_centerVertical="true"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
-    android:layout_toLeftOf="@+id/exitButton"
+    android:paddingLeft="16dp"
     android:ellipsize="end"
     android:fontFamily="sans-serif-light"
     android:gravity="center_vertical"

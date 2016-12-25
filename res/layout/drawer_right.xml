@@ -1,43 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/right_drawer"
-    android:layout_width="@dimen/navigation_width"
+  android:id="@+id/right_drawer"
+  android:layout_width="@dimen/navigation_width"
+  android:layout_height="match_parent"
+  android:layout_gravity="end"
+  android:background="?attr/drawerBackground"
+  android:clickable="true"
+  android:fitsSystemWindows="true"
+  android:orientation="vertical">
+
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/right_drawer_list"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="end"
-    android:background="?attr/drawerBackground"
-    android:clickable="true"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical">
-
-
-  <ListView
-      android:id="@+id/right_drawer_list"
-      android:layout_width="match_parent"
-      android:layout_height="0dp"
-      android:layout_weight="1"
-      android:layout_gravity="end"
-      android:choiceMode="singleChoice"
-      android:divider="@null"
-      android:dividerHeight="0dp"
-      android:listSelector="?attr/listBackground"/>
-
-    <TextView
-        android:id="@+id/empty"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_toLeftOf="@+id/exitButton"
-        android:ellipsize="end"
-        android:fontFamily="sans-serif-light"
-        android:gravity="center_vertical"
-        android:maxLines="1"
-        android:text="@string/no_section_info"
-        android:minHeight="?android:attr/listPreferredItemHeightSmall"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        />
-
+    android:layout_gravity="end"/>
 
 </LinearLayout>
