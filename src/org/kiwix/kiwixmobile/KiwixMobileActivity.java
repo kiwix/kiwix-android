@@ -41,6 +41,7 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -286,7 +287,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     if (tempVisitCount >= 5
         && !visitCounterPref.getNoThanksState()
         && NetworkUtils.isNetworkAvailable(this)) {
-      showRateDialog(this, visitCounterPref.getEditor());
+      showRateDialog();
     }
 
     KIWIX_LOCAL_MARKET_URI = Uri.parse("market://details?id=" + getPackageName());
@@ -495,32 +496,31 @@ public class KiwixMobileActivity extends AppCompatActivity {
     startActivityForResult(i, REQUEST_FILE_SEARCH);
   }
 
-  public void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {
-    AlertDialog alertDialog = new AlertDialog.Builder(mContext).create();
-
-    alertDialog.setTitle(getString(R.string.rate_dialog_title));
-
-    alertDialog.setMessage(getString(R.string.rate_dialog_msg_1) + " "
+  public void showRateDialog() {
+    String title = getString(R.string.rate_dialog_title);
+    String message = getString(R.string.rate_dialog_msg_1) + " "
         + getString(R.string.app_name)
-        + getString(R.string.rate_dialog_msg_2));
+        + getString(R.string.rate_dialog_msg_2);
+    String positive = getString(R.string.rate_dialog_positive);
+    String negative = getString(R.string.rate_dialog_negative);
+    String neutral = getString(R.string.rate_dialog_neutral);
 
-    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.rate_dialog_positive), (dialog, id) -> {
-      visitCounterPref.setNoThanksState(true);
-      goToRateApp();
-    });
-
-    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.rate_dialog_negative), (dialog, id) -> {
-      visitCounterPref.setNoThanksState(true);
-    });
-
-    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.rate_dialog_neutral), (dialog, id) -> {
-      tempVisitCount = 0;
-      visitCounterPref.setCount(tempVisitCount);
-    });
-
-    alertDialog.setIcon(getResources().getDrawable(R.mipmap.kiwix_icon));
-
-    alertDialog.show();
+    new AlertDialog.Builder(this)
+        .setTitle(title)
+        .setMessage(message)
+        .setPositiveButton(positive, (dialog, id) -> {
+          visitCounterPref.setNoThanksState(true);
+          goToRateApp();
+        })
+        .setNegativeButton(negative, (dialog, id) -> {
+          visitCounterPref.setNoThanksState(true);
+        })
+        .setNeutralButton(neutral, (dialog, id) -> {
+          tempVisitCount = 0;
+          visitCounterPref.setCount(tempVisitCount);
+        })
+        .setIcon(ContextCompat.getDrawable(this, R.mipmap.kiwix_icon))
+        .show();
   }
 
   private void goToRateApp() {
