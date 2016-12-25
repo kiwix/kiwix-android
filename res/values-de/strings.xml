@@ -55,7 +55,7 @@
   <string name="go_to_play_store">Zum Play Store gehen</string>
   <string name="no_bookmarks">Keine Lesezeichen!</string>
   <string name="menu_bookmarks_list">Lesezeichen</string>
-  <string name="no_section_info">Keine Inhaltsheader gefunden</string>
+  <string name="no_section_info">Kein Header gefunden</string>
   <string name="request_storage">Um auf ZIM-Dateien zuzugreifen, müssen wir auf Ihren Speicher zugreifen.</string>
   <string name="clear_recent_history_dialog">Are you sure you want to delete your search history?</string>
   <string name="clear_recent_and_tabs_history_dialog">Are you sure you want to delete your search history and reset all active tabs?</string>
