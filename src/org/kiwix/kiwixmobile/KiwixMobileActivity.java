@@ -338,9 +338,9 @@ public class KiwixMobileActivity extends AppCompatActivity {
     stopTTSButton.setOnClickListener((View view) -> tts.stop());
 
     tempForUndo =
-        new KiwixWebView(getApplicationContext());   /**  initializing temporary tab value **/
+        new KiwixWebView(getApplicationContext());
     snackbarLayout =
-        (LinearLayout) findViewById(R.id.linearlayout_main);  /** Linear layout definition**/
+        (LinearLayout) findViewById(R.id.linearlayout_main);
 
     FileReader fileReader = new FileReader();
     jsContent = fileReader.readFile("www/js/jsfile.js", this);
