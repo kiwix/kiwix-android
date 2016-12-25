@@ -12,8 +12,7 @@ import java.util.List;
 import org.kiwix.kiwixmobile.views.KiwixWebView;
 
 public class TabDrawerAdapter extends RecyclerView.Adapter<TabDrawerAdapter.ViewHolder> {
-  private OnCloseTabClickListener onCloseTabClickListener;
-  private OnSelectTabClickListener onSelectTabClickListener;
+  private TabClickListener listener;
   private List<KiwixWebView> webViews;
 
   private int selectedPosition = 0;
@@ -32,9 +31,9 @@ public class TabDrawerAdapter extends RecyclerView.Adapter<TabDrawerAdapter.View
   public void onBindViewHolder(ViewHolder holder, int position) {
     KiwixWebView webView = webViews.get(position);
     holder.title.setText(webView.getTitle());
-    holder.exit.setOnClickListener(v -> onCloseTabClickListener.onCloseTabClick(v, position));
+    holder.exit.setOnClickListener(v -> listener.onCloseTab(v, position));
     holder.itemView.setOnClickListener(v -> {
-      onSelectTabClickListener.onSelectTabClick(v, position);
+      listener.onSelectTab(v, position);
       selectedPosition = holder.getAdapterPosition();
       notifyDataSetChanged();
       holder.itemView.setActivated(true);
@@ -55,20 +54,14 @@ public class TabDrawerAdapter extends RecyclerView.Adapter<TabDrawerAdapter.View
     return selectedPosition;
   }
 
-  public void setOnCloseTabClickListener(OnCloseTabClickListener listener) {
-    this.onCloseTabClickListener = listener;
+  public void setTabClickListener(TabClickListener listener) {
+    this.listener = listener;
   }
 
-  public void setOnSelectTabClickListener(OnSelectTabClickListener listener) {
-    this.onSelectTabClickListener = listener;
-  }
+  public interface TabClickListener {
+    void onSelectTab(View view, int position);
 
-  public interface OnCloseTabClickListener {
-    void onCloseTabClick(View view, int position);
-  }
-
-  public interface OnSelectTabClickListener {
-    void onSelectTabClick(View view, int position);
+    void onCloseTab(View view, int position);
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
