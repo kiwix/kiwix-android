@@ -116,6 +116,11 @@
         <data android:pathPattern=".*\\..*\\..*\\.zim(aa|)" />
         <data android:pathPattern=".*\\..*\\..*\\..*\\.zim(aa|)" />
       </intent-filter>
+      <intent-filter android:label="@string/app_search_string">
+        <action android:name="android.intent.action.PROCESS_TEXT"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <data android:mimeType="text/plain"/>
+      </intent-filter>
     </activity>
     <activity
       android:name=".ZimManageActivity"

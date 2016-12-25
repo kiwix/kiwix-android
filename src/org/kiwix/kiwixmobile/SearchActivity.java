@@ -115,6 +115,11 @@ public class SearchActivity extends AppCompatActivity
             return true;
           }
         });
+
+    if (getIntent().hasExtra(Intent.EXTRA_PROCESS_TEXT)) {
+      searchView.setQuery(getIntent().getStringExtra(Intent.EXTRA_PROCESS_TEXT), true);
+    }
+
     return true;
   }
 

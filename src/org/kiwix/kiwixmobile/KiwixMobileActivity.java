@@ -326,7 +326,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
     });
 
     stopTTSButton.setOnClickListener((View view) -> tts.stop());
-
     tempForUndo = new KiwixWebView(getApplicationContext());
     snackbarLayout = (LinearLayout) findViewById(R.id.linearlayout_main);
 
@@ -1076,6 +1075,18 @@ public class KiwixMobileActivity extends AppCompatActivity {
         menu.getItem(4).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
       }
     }
+
+    if (getIntent().getAction() != null && getIntent().getAction().equals(Intent.ACTION_PROCESS_TEXT)) {
+      final String zimFile = ZimContentProvider.getZimFile();
+      saveTabStates();
+      Intent i = new Intent(KiwixMobileActivity.this, SearchActivity.class);
+      i.putExtra("zimFile", zimFile);
+      i.putExtra(Intent.EXTRA_PROCESS_TEXT, getIntent().getStringExtra(Intent.EXTRA_PROCESS_TEXT));
+      getIntent().setAction("");
+      startActivityForResult(i, REQUEST_FILE_SEARCH);
+    }
+
+
     boolean IS_WIDGET_SEARCH_INTENT = getIntent().getBooleanExtra("isWidgetSearch", false);
     boolean IS_WIDGET_VOICE_SEARCH = getIntent().getBooleanExtra("isWidgetVoice", false);
     boolean IS_WIDGET_STAR = getIntent().getBooleanExtra("isWidgetStar", false);
