@@ -310,25 +310,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
     isBackToTopEnabled = false;
     isSpeaking = false;
 
-    pauseTTSButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        if (tts.currentTTSTask == null) {
-          tts.stop();
-          return;
-        }
-
-        if (tts.currentTTSTask.paused) {
-          tts.pauseOrResume();
-          pauseTTSButton.setText(R.string.tts_pause);
-        } else {
-          tts.pauseOrResume();
-          pauseTTSButton.setText(R.string.tts_resume);
-        }
-      }
-    });
-
-    stopTTSButton.setOnClickListener((View view) -> tts.stop());
     tempForUndo = new KiwixWebView(getApplicationContext());
 
     FileReader fileReader = new FileReader();
@@ -397,11 +378,9 @@ public class KiwixMobileActivity extends AppCompatActivity {
             // Make sure it was the navigation drawer
             if (drawerView.getId() == R.id.left_drawer) {
               super.onDrawerOpened(drawerView);
-              drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
-                  GravityCompat.END);
+              drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED,GravityCompat.END);
             } else {
-              drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
-                  GravityCompat.START);
+              drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.START);
             }
           }
 
@@ -572,6 +551,26 @@ public class KiwixMobileActivity extends AppCompatActivity {
         });
       }
     });
+
+    pauseTTSButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        if (tts.currentTTSTask == null) {
+          tts.stop();
+          return;
+        }
+
+        if (tts.currentTTSTask.paused) {
+          tts.pauseOrResume();
+          pauseTTSButton.setText(R.string.tts_pause);
+        } else {
+          tts.pauseOrResume();
+          pauseTTSButton.setText(R.string.tts_resume);
+        }
+      }
+    });
+
+    stopTTSButton.setOnClickListener((View view) -> tts.stop());
   }
 
   // Reset the Locale and change the font of all TextViews and its subclasses, if necessary
