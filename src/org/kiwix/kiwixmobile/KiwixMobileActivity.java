@@ -76,6 +76,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -99,17 +101,24 @@ import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
 import org.kiwix.kiwixmobile.views.KiwixWebView;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
-import static org.kiwix.kiwixmobile.TableDrawerAdapter.*;
+import static org.kiwix.kiwixmobile.TableDrawerAdapter.DocumentSection;
+import static org.kiwix.kiwixmobile.TableDrawerAdapter.TableClickListener;
 
 public class KiwixMobileActivity extends AppCompatActivity {
-
-  public static final String TAG_KIWIX = "kiwix";
-
-  public static final String TAG_FILE_SEARCHED = "searchedarticle";
 
   public static final int REQUEST_FILE_SEARCH = 1236;
 
   public static final int REQUEST_STORAGE_PERMISSION = 1;
+
+  private static final int REQUEST_FILE_SELECT = 1234;
+
+  private static final int REQUEST_PREFERENCES = 1235;
+
+  private static final int BOOKMARK_CHOSEN_REQUEST = 1;
+
+  public static final String TAG_KIWIX = "kiwix";
+
+  public static final String TAG_FILE_SEARCHED = "searchedarticle";
 
   private static final String TAG_CURRENT_FILE = "currentzimfile";
 
@@ -135,31 +144,17 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   public static final String PREF_FULL_TEXT_SEARCH = "pref_full_text_search";
 
-  private static final int REQUEST_FILE_SELECT = 1234;
-
-  private static final int REQUEST_PREFERENCES = 1235;
-
-  private static final int BOOKMARK_CHOSEN_REQUEST = 1;
-
   public static final String PREF_STORAGE = "pref_selected_storage";
 
   public static final String PREF_STORAGE_TITLE = "pref_selected_title";
 
   public static boolean isFullscreenOpened;
 
-  private static Uri KIWIX_LOCAL_MARKET_URI;
+  private boolean isBackToTopEnabled;
 
-  private static Uri KIWIX_BROWSER_MARKET_URI;
+  private boolean isSpeaking;
 
-  private String documentParserJs;
-
-  public Menu menu;
-
-  public Toolbar toolbar;
-
-  public ImageButton exitFullscreenButton;
-
-  public List<TableDrawerAdapter.DocumentSection> documentSections;
+  private boolean isOpenNewTabInBackground;
 
   public static boolean nightMode;
 
@@ -171,21 +166,17 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   protected int requestWebReloadOnFinished;
 
+  private static Uri KIWIX_LOCAL_MARKET_URI;
+
+  private static Uri KIWIX_BROWSER_MARKET_URI;
+
+  private String documentParserJs;
+
   private DocumentParser documentParser;
 
-  private boolean isBackToTopEnabled;
+  public List<TableDrawerAdapter.DocumentSection> documentSections;
 
-  private boolean isSpeaking;
-
-  private boolean isOpenNewTabInBackground;
-
-  private Button backToTopButton;
-
-  private Button pauseTTSButton;
-
-  private LinearLayout TTSControls;
-
-  private DrawerLayout drawerLayout;
+  public Menu menu;
 
   private ArrayList<String> bookmarks;
 
@@ -197,22 +188,13 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private TabDrawerAdapter tabDrawerAdapter;
 
-  private FrameLayout contentFrame;
-
-  private RelativeLayout toolbarContainer;
-
   private int currentWebViewIndex = 0;
-
-  private AnimatedProgressBar progressBar;
 
   private File file;
 
-  // Initialized when onActionModeStarted is triggered.
   private ActionMode actionMode = null;
 
   private KiwixWebView tempForUndo;
-
-  private LinearLayout snackbarLayout;
 
   private RateAppCounter visitCounterPref;
 
@@ -223,6 +205,43 @@ public class KiwixMobileActivity extends AppCompatActivity {
   private SharedPreferences settings;
 
   private BookmarksDao bookmarksDao;
+
+  @BindView(R.id.toolbar) Toolbar toolbar;
+
+  @BindView(R.id.button_backtotop) Button backToTopButton;
+
+  @BindView(R.id.button_stop_tts) Button stopTTSButton;
+
+  @BindView(R.id.button_pause_tts) Button pauseTTSButton;
+
+  @BindView(R.id.tts_controls) LinearLayout TTSControls;
+
+  @BindView(R.id.toolbar_layout) RelativeLayout toolbarContainer;
+
+  @BindView(R.id.progress_view) AnimatedProgressBar progressBar;
+
+  @BindView(R.id.FullscreenControlButton) ImageButton exitFullscreenButton;
+
+  @BindView(R.id.linearlayout_main) LinearLayout snackbarLayout;
+
+  @BindView(R.id.new_tab_button) RelativeLayout newTabButton;
+
+  @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
+
+  @BindView(R.id.left_drawer_list) RecyclerView tabDrawerLeft;
+
+  @BindView(R.id.right_drawer_list) RecyclerView tableDrawerRight;
+
+  @BindView(R.id.content_frame) FrameLayout contentFrame;
+
+  @BindView(R.id.action_back_button) ImageView tabBackButton;
+
+  @BindView(R.id.action_forward_button) ImageView tabForwardButton;
+
+  @BindView(R.id.action_back) View tabBackButtonContainer;
+
+  @BindView(R.id.action_forward) View tabForwardButtonContainer;
+
 
   @Override
   public void onActionModeStarted(ActionMode mode) {
@@ -266,8 +285,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
     handleLocaleCheck();
     setContentView(R.layout.main);
     getWindow().setFeatureInt(Window.FEATURE_PROGRESS, Window.PROGRESS_VISIBILITY_ON);
+    ButterKnife.bind(this);
 
-    toolbar = (Toolbar) findViewById(R.id.toolbar);
     toolbar.setPadding(0, 0, 0, 0);
     toolbar.setContentInsetsAbsolute(0, 0);
     setSupportActionBar(toolbar);
@@ -294,13 +313,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
     requestInitAllMenuItems = false;
     isBackToTopEnabled = false;
     isSpeaking = false;
-    backToTopButton = (Button) findViewById(R.id.button_backtotop);
-    Button stopTTSButton = (Button) findViewById(R.id.button_stop_tts);
-    pauseTTSButton = (Button) findViewById(R.id.button_pause_tts);
-    TTSControls = (LinearLayout) findViewById(R.id.tts_controls);
-    toolbarContainer = (RelativeLayout) findViewById(R.id.toolbar_layout);
-    progressBar = (AnimatedProgressBar) findViewById(R.id.progress_view);
-    exitFullscreenButton = (ImageButton) findViewById(R.id.FullscreenControlButton);
 
     pauseTTSButton.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -322,37 +334,30 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
     stopTTSButton.setOnClickListener((View view) -> tts.stop());
     tempForUndo = new KiwixWebView(getApplicationContext());
-    snackbarLayout = (LinearLayout) findViewById(R.id.linearlayout_main);
 
     FileReader fileReader = new FileReader();
     documentParserJs = fileReader.readFile("js/documentParser.js", this);
 
-    RelativeLayout newTabButton = (RelativeLayout) findViewById(R.id.new_tab_button);
     newTabButton.setOnClickListener((View view) -> newTab());
-    RelativeLayout nextButton = (RelativeLayout) findViewById(R.id.action_forward);
-    nextButton.setOnClickListener((View view) -> {
+    tabForwardButtonContainer.setOnClickListener((View view) -> {
       if (getCurrentWebView().canGoForward()) {
         getCurrentWebView().goForward();
       }
     });
-    RelativeLayout previousButton = (RelativeLayout) findViewById(R.id.action_back);
-    previousButton.setOnClickListener((View view) -> {
+    tabBackButtonContainer.setOnClickListener((View view) -> {
       if (getCurrentWebView().canGoBack()) {
         getCurrentWebView().goBack();
       }
     });
+
     documentSections = new ArrayList<>();
     tabDrawerAdapter = new TabDrawerAdapter(mWebViews);
-    drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-    RecyclerView tabDrawerLeft = (RecyclerView) findViewById(R.id.left_drawer_list);
     tabDrawerLeft.setLayoutManager(new LinearLayoutManager(this));
     tabDrawerLeft.setAdapter(tabDrawerAdapter);
-
-    RecyclerView rightDrawerList = (RecyclerView) findViewById(R.id.right_drawer_list);
-    rightDrawerList.setLayoutManager(new LinearLayoutManager(this));
+    tableDrawerRight.setLayoutManager(new LinearLayoutManager(this));
 
     TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter();
-    rightDrawerList.setAdapter(tableDrawerAdapter);
+    tableDrawerRight.setAdapter(tableDrawerAdapter);
     tableDrawerAdapter.setTableClickListener(new TableClickListener() {
       @Override public void onHeaderClick(View view) {
         getCurrentWebView().setScrollY(0);
@@ -422,7 +427,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
     drawerToggle.syncState();
 
     compatCallback = new CompatFindActionModeCallback(this);
-    contentFrame = (FrameLayout) findViewById(R.id.content_frame);
     setUpTTS();
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
       @Override
@@ -1458,12 +1462,10 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   public void refreshNavigationButtons() {
-    ImageView back = (ImageView) findViewById(R.id.action_back_button);
-    ImageView forward = (ImageView) findViewById(R.id.action_forward_button);
-    toggleImageViewGrayFilter(back, getCurrentWebView().canGoBack());
-    toggleImageViewGrayFilter(forward, getCurrentWebView().canGoForward());
-    findViewById(R.id.action_back).setEnabled(getCurrentWebView().canGoBack());
-    findViewById(R.id.action_forward).setEnabled(getCurrentWebView().canGoForward());
+    toggleImageViewGrayFilter(tabBackButton, getCurrentWebView().canGoBack());
+    toggleImageViewGrayFilter(tabForwardButton, getCurrentWebView().canGoForward());
+    tabBackButtonContainer.setEnabled(getCurrentWebView().canGoBack());
+    tabForwardButtonContainer.setEnabled(getCurrentWebView().canGoForward());
   }
 
   public void toggleImageViewGrayFilter(ImageView image, boolean state) {
@@ -1549,7 +1551,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
     editor.putString(TAG_CURRENT_POSITIONS, positions.toString());
     editor.putInt(TAG_CURRENT_TAB, currentWebViewIndex);
 
-    // Commit the edits!
     editor.apply();
   }
 
