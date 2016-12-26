@@ -287,9 +287,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
     initPlayStoreUri();
 
-
-    tempForUndo = new KiwixWebView(getApplicationContext());
-
     FileReader fileReader = new FileReader();
     documentParserJs = fileReader.readFile("js/documentParser.js", this);
 
