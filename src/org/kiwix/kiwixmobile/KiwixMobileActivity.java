@@ -600,7 +600,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private KiwixWebView newTab(String url) {
     KiwixWebView webView = new KiwixWebView(KiwixMobileActivity.this);
-    webView.setWebViewClient(new KiwixWebViewClient(KiwixMobileActivity.this, tabDrawerAdapter));
+    webView.setWebViewClient(new KiwixWebViewClient(tabDrawerAdapter));
     webView.setWebChromeClient(new KiwixWebChromeClient());
     webView.loadUrl(url);
     webView.loadPrefs();
@@ -1465,13 +1465,12 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   public void refreshNavigationButtons() {
-    ImageView back = (ImageView) drawerLayout.findViewById(R.id.action_back_button);
-    ImageView forward = (ImageView) drawerLayout.findViewById(R.id.action_forward_button);
+    ImageView back = (ImageView) findViewById(R.id.action_back_button);
+    ImageView forward = (ImageView) findViewById(R.id.action_forward_button);
     toggleImageViewGrayFilter(back, getCurrentWebView().canGoBack());
     toggleImageViewGrayFilter(forward, getCurrentWebView().canGoForward());
-    drawerLayout.findViewById(R.id.action_back).setEnabled(getCurrentWebView().canGoBack());
-    drawerLayout.findViewById(R.id.action_forward)
-        .setEnabled(getCurrentWebView().canGoForward());
+    findViewById(R.id.action_back).setEnabled(getCurrentWebView().canGoBack());
+    findViewById(R.id.action_forward).setEnabled(getCurrentWebView().canGoForward());
   }
 
   public void toggleImageViewGrayFilter(ImageView image, boolean state) {
@@ -1703,14 +1702,11 @@ public class KiwixMobileActivity extends AppCompatActivity {
       put("pdf", "application/pdf");
     }};
 
-    private KiwixMobileActivity mActivity;
-
     private LinearLayout help;
 
     private TabDrawerAdapter mAdapter;
 
-    public KiwixWebViewClient(KiwixMobileActivity activity, TabDrawerAdapter adapter) {
-      mActivity = activity;
+    public KiwixWebViewClient(TabDrawerAdapter adapter) {
       mAdapter = adapter;
     }
 
@@ -1789,7 +1785,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
       if (!url.equals("file:///android_res/raw/welcome.html")) {
         view.removeView(help);
       } else if (!Constants.IS_CUSTOM_APP) {
-        help = (LinearLayout) mActivity.getLayoutInflater().inflate(R.layout.help, null);
+        help = (LinearLayout) getLayoutInflater().inflate(R.layout.help, null);
         help.findViewById(R.id.get_content_card).setOnClickListener(card -> manageZimFiles(1));
         view.addView(help);
       }
