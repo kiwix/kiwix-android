@@ -421,7 +421,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
           }
         };
 
-    drawerLayout.setDrawerListener(drawerToggle);
+    drawerLayout.addDrawerListener(drawerToggle);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setHomeButtonEnabled(true);
     drawerToggle.syncState();
@@ -949,17 +949,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
           } else {
             drawerLayout.openDrawer(GravityCompat.START);
           }
-        }
-      });
-      new Handler().post(new Runnable() {
-        @Override
-        public void run() {
-          ActionMenuItemView m = (ActionMenuItemView) findViewById(R.id.menu_bookmarks);
-          if (m == null) { return; }
-          findViewById(R.id.menu_bookmarks).setOnLongClickListener(view -> {
-            goToBookmarks();
-            return false;
-          });
         }
       });
 
