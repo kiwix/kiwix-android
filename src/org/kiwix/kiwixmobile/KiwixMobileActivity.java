@@ -818,13 +818,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
       if (file.exists()) {
         if (ZimContentProvider.setZimFile(file.getAbsolutePath()) != null) {
 
-          // Apparently with webView.clearHistory() only history before currently (fully)
-          // loaded page is cleared -> request clear, actual clear done after load.
-          // Probably not working in all corners (e.g. zim file openend
-          // while load in progress, mainpage of new zim file invalid, ...
-          // but should be good enough.
-          // Actually probably redundant if no zim file openend before in session,
-          // but to be on save side don't clear history in such cases.
           if (clearHistory) {
             requestClearHistoryAfterLoad = true;
           }
