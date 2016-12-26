@@ -148,19 +148,19 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   public static boolean isFullscreenOpened;
 
-  private boolean isBackToTopEnabled;
+  private boolean isBackToTopEnabled = false;
 
-  private boolean isSpeaking;
+  private boolean isSpeaking = false;
+
+  protected boolean requestClearHistoryAfterLoad = false;
+
+  protected boolean requestInitAllMenuItems = false;
 
   private boolean isOpenNewTabInBackground;
 
   public static boolean nightMode;
 
   public static boolean refresh;
-
-  protected boolean requestClearHistoryAfterLoad = false;
-
-  protected boolean requestInitAllMenuItems;
 
   private static Uri KIWIX_LOCAL_MARKET_URI;
 
@@ -287,9 +287,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
     initPlayStoreUri();
 
-    requestInitAllMenuItems = false;
-    isBackToTopEnabled = false;
-    isSpeaking = false;
 
     tempForUndo = new KiwixWebView(getApplicationContext());
 
