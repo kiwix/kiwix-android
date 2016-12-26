@@ -158,11 +158,9 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   public static boolean refresh;
 
-  protected boolean requestClearHistoryAfterLoad;
+  protected boolean requestClearHistoryAfterLoad = false;
 
   protected boolean requestInitAllMenuItems;
-
-  protected int requestWebReloadOnFinished;
 
   private static Uri KIWIX_LOCAL_MARKET_URI;
 
@@ -283,29 +281,12 @@ public class KiwixMobileActivity extends AppCompatActivity {
     setContentView(R.layout.main);
     ButterKnife.bind(this);
 
-    toolbar.setPadding(0, 0, 0, 0);
-    toolbar.setContentInsetsAbsolute(0, 0);
-    setSupportActionBar(toolbar);
+    setUpToolbar();
 
-    settings = PreferenceManager.getDefaultSharedPreferences(this);
-    isFirstRun = settings.getBoolean("isFirstRun", true);
-    visitCounterPref = new RateAppCounter(this);
-    tempVisitCount = visitCounterPref.getCount();
-    ++tempVisitCount;
-    visitCounterPref.setCount(tempVisitCount);
+    checkForRateDialog();
 
-    if (tempVisitCount >= 5
-        && !visitCounterPref.getNoThanksState()
-        && NetworkUtils.isNetworkAvailable(this)) {
-      showRateDialog();
-    }
+    initPlayStoreUri();
 
-    KIWIX_LOCAL_MARKET_URI = Uri.parse("market://details?id=" + getPackageName());
-    KIWIX_BROWSER_MARKET_URI =
-        Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName());
-
-    requestClearHistoryAfterLoad = false;
-    requestWebReloadOnFinished = 0;
     requestInitAllMenuItems = false;
     isBackToTopEnabled = false;
     isSpeaking = false;
@@ -456,15 +437,25 @@ public class KiwixMobileActivity extends AppCompatActivity {
     }
   }
 
-  private void goToSearch(boolean isVoice) {
-    final String zimFile = ZimContentProvider.getZimFile();
-    saveTabStates();
-    Intent i = new Intent(KiwixMobileActivity.this, SearchActivity.class);
-    i.putExtra("zimFile", zimFile);
-    if (isVoice) {
-      i.putExtra("isWidgetVoice", true);
+  private void initPlayStoreUri() {
+    KIWIX_LOCAL_MARKET_URI = Uri.parse("market://details?id=" + getPackageName());
+    KIWIX_BROWSER_MARKET_URI =
+        Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName());
+  }
+
+  private void checkForRateDialog() {
+    settings = PreferenceManager.getDefaultSharedPreferences(this);
+    isFirstRun = settings.getBoolean("isFirstRun", true);
+    visitCounterPref = new RateAppCounter(this);
+    tempVisitCount = visitCounterPref.getCount();
+    ++tempVisitCount;
+    visitCounterPref.setCount(tempVisitCount);
+
+    if (tempVisitCount >= 5
+        && !visitCounterPref.getNoThanksState()
+        && NetworkUtils.isNetworkAvailable(this)) {
+      showRateDialog();
     }
-    startActivityForResult(i, REQUEST_FILE_SEARCH);
   }
 
   public void showRateDialog() {
@@ -492,6 +483,24 @@ public class KiwixMobileActivity extends AppCompatActivity {
         })
         .setIcon(ContextCompat.getDrawable(this, R.mipmap.kiwix_icon))
         .show();
+  }
+
+
+  private void setUpToolbar() {
+    toolbar.setPadding(0, 0, 0, 0);
+    toolbar.setContentInsetsAbsolute(0, 0);
+    setSupportActionBar(toolbar);
+  }
+
+  private void goToSearch(boolean isVoice) {
+    final String zimFile = ZimContentProvider.getZimFile();
+    saveTabStates();
+    Intent i = new Intent(KiwixMobileActivity.this, SearchActivity.class);
+    i.putExtra("zimFile", zimFile);
+    if (isVoice) {
+      i.putExtra("isWidgetVoice", true);
+    }
+    startActivityForResult(i, REQUEST_FILE_SEARCH);
   }
 
   private void goToRateApp() {
@@ -1766,14 +1775,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
         help = (LinearLayout) getLayoutInflater().inflate(R.layout.help, null);
         help.findViewById(R.id.get_content_card).setOnClickListener(card -> manageZimFiles(1));
         view.addView(help);
-      }
-      // Workaround for #643
-      if (requestWebReloadOnFinished > 0) {
-        requestWebReloadOnFinished = requestWebReloadOnFinished - 1;
-        Log.d(TAG_KIWIX, "Workaround for #643: onPageFinished. Trigger reloading. ("
-            + requestWebReloadOnFinished
-            + " reloads left to do)");
-        view.reload();
       }
       mAdapter.notifyDataSetChanged();
       updateTableOfContents();
