@@ -445,7 +445,7 @@ public class ZimContentProvider extends ContentProvider {
         JNIKiwixString mime = new JNIKiwixString();
         JNIKiwixInt size = new JNIKiwixInt();
         byte[] data = jniKiwix.getContent(articleZimUrl, mime, size);
-        if (mime.value.equals("text/css") && KiwixMobileActivity.mNightMode) {
+        if (mime.value.equals("text/css") && KiwixMobileActivity.nightMode) {
           out.write(("img { \n" +
               " -webkit-filter: invert(1); \n" +
               " filter: invert(1); \n" +
