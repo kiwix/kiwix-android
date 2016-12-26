@@ -1635,7 +1635,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
             if (libDir.exists() && libDir.listFiles().length > 0) {
               filePath = libDir.listFiles()[0].getPath() + "/" + Constants.CUSTOM_APP_ZIM_FILE_NAME;
             }
-            if (filePath == "" || !new File(filePath).exists()) {
+            if (filePath.isEmpty() || !new File(filePath).exists()) {
               filePath = String.format("/data/data/%s/lib/%s", Constants.CUSTOM_APP_ID,
                   Constants.CUSTOM_APP_ZIM_FILE_NAME);
             }
