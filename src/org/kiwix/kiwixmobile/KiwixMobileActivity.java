@@ -161,8 +161,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   public List<TableDrawerAdapter.DocumentSection> documentSections;
 
-  public DrawerLayout rightDrawerLayout;
-
   public static boolean nightMode;
 
   public static boolean refresh;
@@ -187,7 +185,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private LinearLayout TTSControls;
 
-  private DrawerLayout leftDrawerLayout;
+  private DrawerLayout drawerLayout;
 
   private ArrayList<String> bookmarks;
 
@@ -345,13 +343,11 @@ public class KiwixMobileActivity extends AppCompatActivity {
     });
     documentSections = new ArrayList<>();
     tabDrawerAdapter = new TabDrawerAdapter(mWebViews);
-    leftDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+    drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
     RecyclerView tabDrawerLeft = (RecyclerView) findViewById(R.id.left_drawer_list);
     tabDrawerLeft.setLayoutManager(new LinearLayoutManager(this));
     tabDrawerLeft.setAdapter(tabDrawerAdapter);
 
-    // TODO fix this duplicate
-    rightDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
     RecyclerView rightDrawerList = (RecyclerView) findViewById(R.id.right_drawer_list);
     rightDrawerList.setLayoutManager(new LinearLayoutManager(this));
 
@@ -360,7 +356,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     tableDrawerAdapter.setTableClickListener(new TableClickListener() {
       @Override public void onHeaderClick(View view) {
         getCurrentWebView().setScrollY(0);
-        rightDrawerLayout.closeDrawer(GravityCompat.END);
+        drawerLayout.closeDrawer(GravityCompat.END);
       }
 
       @Override public void onSectionClick(View view, int position) {
@@ -368,7 +364,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
             + documentSections.get(position).id
             + "').scrollIntoView();");
 
-        rightDrawerLayout.closeDrawers();
+        drawerLayout.closeDrawers();
       }
     });
 
@@ -385,7 +381,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
     });
 
     final ActionBarDrawerToggle drawerToggle =
-        new ActionBarDrawerToggle(this, leftDrawerLayout, toolbar, 0, 0) {
+        new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0) {
 
           @Override
           public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -400,10 +396,10 @@ public class KiwixMobileActivity extends AppCompatActivity {
             // Make sure it was the navigation drawer
             if (drawerView.getId() == R.id.left_drawer) {
               super.onDrawerOpened(drawerView);
-              rightDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
+              drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
                   GravityCompat.END);
             } else {
-              leftDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
+              drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED,
                   GravityCompat.START);
             }
           }
@@ -413,14 +409,14 @@ public class KiwixMobileActivity extends AppCompatActivity {
             // Make sure it was the navigation drawer
             if (drawerView.getId() == R.id.left_drawer) {
               super.onDrawerClosed(drawerView);
-              rightDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END);
+              drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END);
             } else {
-              leftDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.START);
+              drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.START);
             }
           }
         };
 
-    leftDrawerLayout.setDrawerListener(drawerToggle);
+    drawerLayout.setDrawerListener(drawerToggle);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setHomeButtonEnabled(true);
     drawerToggle.syncState();
@@ -661,7 +657,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
         Snackbar.LENGTH_LONG)
         .setAction(getString(R.string.undo), v -> {
           restoreTab(index);
-          leftDrawerLayout.openDrawer(GravityCompat.START);
+          drawerLayout.openDrawer(GravityCompat.START);
         });
     snackbar.setActionTextColor(Color.WHITE);
     snackbar.show();
@@ -674,9 +670,9 @@ public class KiwixMobileActivity extends AppCompatActivity {
     contentFrame.addView(mWebViews.get(position));
     tabDrawerAdapter.setSelected(currentWebViewIndex);
 
-    if (leftDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+    if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
       final Handler handler = new Handler();
-      handler.postDelayed(() -> leftDrawerLayout.closeDrawers(), 150);
+      handler.postDelayed(() -> drawerLayout.closeDrawers(), 150);
     }
     loadPrefs();
     if (menu != null) {
@@ -949,12 +945,12 @@ public class KiwixMobileActivity extends AppCompatActivity {
       toolbar.setNavigationOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-          if (rightDrawerLayout.isDrawerOpen(GravityCompat.END)) {
-            rightDrawerLayout.closeDrawer(GravityCompat.END);
-          } else if (leftDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            leftDrawerLayout.closeDrawer(GravityCompat.START);
+          if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+            drawerLayout.closeDrawer(GravityCompat.END);
+          } else if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
           } else {
-            leftDrawerLayout.openDrawer(GravityCompat.START);
+            drawerLayout.openDrawer(GravityCompat.START);
           }
         }
       });
@@ -1132,7 +1128,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   private void contentsDrawerHint() {
-    leftDrawerLayout.postDelayed(() -> leftDrawerLayout.openDrawer(GravityCompat.END), 500);
+    drawerLayout.postDelayed(() -> drawerLayout.openDrawer(GravityCompat.END), 500);
 
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setMessage(getString(R.string.hint_contents_drawer_message))
@@ -1469,12 +1465,12 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   public void refreshNavigationButtons() {
-    ImageView back = (ImageView) leftDrawerLayout.findViewById(R.id.action_back_button);
-    ImageView forward = (ImageView) leftDrawerLayout.findViewById(R.id.action_forward_button);
+    ImageView back = (ImageView) drawerLayout.findViewById(R.id.action_back_button);
+    ImageView forward = (ImageView) drawerLayout.findViewById(R.id.action_forward_button);
     toggleImageViewGrayFilter(back, getCurrentWebView().canGoBack());
     toggleImageViewGrayFilter(forward, getCurrentWebView().canGoForward());
-    leftDrawerLayout.findViewById(R.id.action_back).setEnabled(getCurrentWebView().canGoBack());
-    leftDrawerLayout.findViewById(R.id.action_forward)
+    drawerLayout.findViewById(R.id.action_back).setEnabled(getCurrentWebView().canGoBack());
+    drawerLayout.findViewById(R.id.action_forward)
         .setEnabled(getCurrentWebView().canGoForward());
   }
 
