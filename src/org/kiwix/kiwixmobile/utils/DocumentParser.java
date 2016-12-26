@@ -6,13 +6,15 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import java.util.ArrayList;
 import java.util.List;
-import org.kiwix.kiwixmobile.KiwixMobileActivity.DocumentSection;
+import org.kiwix.kiwixmobile.TableDrawerAdapter;
+
+import static org.kiwix.kiwixmobile.TableDrawerAdapter.*;
 
 public class DocumentParser {
 
   private String title;
   private SectionsListener listener;
-  private List<DocumentSection> sections;
+  private List<TableDrawerAdapter.DocumentSection> sections;
 
   public DocumentParser(SectionsListener listener) {
     this.listener = listener;

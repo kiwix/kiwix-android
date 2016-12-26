@@ -13,13 +13,11 @@ import butterknife.ButterKnife;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.kiwix.kiwixmobile.KiwixMobileActivity.DocumentSection;
-
 public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   private TableClickListener listener;
   private String title;
-  private List<KiwixMobileActivity.DocumentSection> sections;
+  private List<DocumentSection> sections;
 
   private int selectedPosition = 0;
 
@@ -101,7 +99,7 @@ public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     this.title = title;
   }
 
-  public void setSections(List<KiwixMobileActivity.DocumentSection> sections) {
+  public void setSections(List<DocumentSection> sections) {
     this.selectedPosition = 0;
     this.sections = sections;
   }
@@ -133,5 +131,11 @@ public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public SectionViewHolder(View v) {
       super(v);
     }
+  }
+
+  public static class DocumentSection {
+    public int level;
+    public String title;
+    public String id;
   }
 }

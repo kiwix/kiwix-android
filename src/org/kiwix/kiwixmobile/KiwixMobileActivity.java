@@ -99,6 +99,7 @@ import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
 import org.kiwix.kiwixmobile.views.KiwixWebView;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+import static org.kiwix.kiwixmobile.TableDrawerAdapter.*;
 
 public class KiwixMobileActivity extends AppCompatActivity {
 
@@ -158,7 +159,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   public ImageButton exitFullscreenButton;
 
-  public List<DocumentSection> documentSections;
+  public List<TableDrawerAdapter.DocumentSection> documentSections;
 
   public DrawerLayout mRightDrawerLayout;
 
@@ -360,7 +361,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
     TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter();
     mRightDrawerList.setAdapter(tableDrawerAdapter);
-    tableDrawerAdapter.setTableClickListener(new TableDrawerAdapter.TableClickListener() {
+    tableDrawerAdapter.setTableClickListener(new TableClickListener() {
       @Override public void onHeaderClick(View view) {
         getCurrentWebView().setScrollY(0);
         mRightDrawerLayout.closeDrawer(GravityCompat.END);
@@ -607,20 +608,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private KiwixWebView newTab(String url) {
     KiwixWebView webView = new KiwixWebView(KiwixMobileActivity.this);
-    webView.setWebViewClient(new KiwixWebViewClient(KiwixMobileActivity.this, tabDrawerAdapter) {
-      @Override
-      public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        // onClick
-        if (isFirstRun) {
-          contentsDrawerHint();
-          SharedPreferences.Editor editor = settings.edit();
-          editor.putBoolean("isFirstRun", false); // It is no longer the first run
-          isFirstRun = false;
-          editor.apply();
-        }
-        return super.shouldOverrideUrlLoading(view, url);
-      }
-    });
+    webView.setWebViewClient(new KiwixWebViewClient(KiwixMobileActivity.this, tabDrawerAdapter));
     webView.setWebChromeClient(new KiwixWebChromeClient());
     webView.loadUrl(url);
     webView.loadPrefs();
@@ -1716,12 +1704,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
         "onPause Save currentzimfile to preferences:" + ZimContentProvider.getZimFile());
   }
 
-  public static class DocumentSection {
-    public int level;
-    public String title;
-    public String id;
-  }
-
   private class KiwixWebViewClient extends WebViewClient {
 
     private HashMap<String, String> documentTypes = new HashMap<String, String>() {{
@@ -1742,6 +1724,14 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
+      if (isFirstRun) {
+        contentsDrawerHint();
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("isFirstRun", false); // It is no longer the first run
+        isFirstRun = false;
+        editor.apply();
+      }
+
       if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
 
         String extension = MimeTypeMap.getFileExtensionFromUrl(url);
