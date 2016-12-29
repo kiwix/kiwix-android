@@ -152,7 +152,7 @@ public class DownloadFragment extends Fragment {
       ProgressBar downloadProgress = (ProgressBar) convertView.findViewById(R.id.downloadProgress);
       ImageView pause = (ImageView) convertView.findViewById(R.id.pause);
 
-      if (LibraryFragment.mService.downloadProgress.get(mKeys[position]) != null) {
+      if (LibraryFragment.mService.downloadProgress.get(mKeys[position]) != -1) {
         downloadProgress.setProgress(LibraryFragment.mService.downloadProgress.get(mKeys[position]));
         if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == 1) {
           LibraryFragment.mService.pauseDownload(mKeys[position]);
@@ -214,8 +214,7 @@ public class DownloadFragment extends Fragment {
   public Bitmap StringToBitMap(String encodedString) {
     try {
       byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-      Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-      return bitmap;
+      return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
     } catch (Exception e) {
       e.getMessage();
       return null;

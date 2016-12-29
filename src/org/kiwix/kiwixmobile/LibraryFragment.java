@@ -87,7 +87,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
         // Don't use this method, it's handled by inflater.inflate() above :
         // setContentView(R.layout.activity_layout);
       ButterKnife.bind(this, llLayout);
-      mService.setDownloadFragment(faActivity.mSectionsPagerAdapter.getDownloadFragment());
+      DownloadService.setDownloadFragment(faActivity.mSectionsPagerAdapter.getDownloadFragment());
       kiwixService = ((KiwixApplication) super.getActivity().getApplication()).getKiwixService();
       conMan = (ConnectivityManager) super.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
       NetworkInfo network = conMan.getActiveNetworkInfo();
