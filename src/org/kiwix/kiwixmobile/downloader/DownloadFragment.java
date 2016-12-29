@@ -30,8 +30,8 @@ import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 
 public class DownloadFragment extends Fragment {
 
-  public static LinkedHashMap<Integer, LibraryNetworkEntity.Book> mDownloads = new LinkedHashMap<Integer, LibraryNetworkEntity.Book>();
-  public static LinkedHashMap<Integer, String> mDownloadFiles = new LinkedHashMap<Integer, String>();
+  public static LinkedHashMap<Integer, LibraryNetworkEntity.Book> mDownloads = new LinkedHashMap<>();
+  public static LinkedHashMap<Integer, String> mDownloadFiles = new LinkedHashMap<>();
   public RelativeLayout relLayout;
   public static ListView listView;
   public static DownloadAdapter downloadAdapter;

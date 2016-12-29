@@ -32,12 +32,18 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.LinkedList;
+
+import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.downloader.DownloadIntent;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
+import org.kiwix.kiwixmobile.utils.StorageUtils;
+
 import rx.android.schedulers.AndroidSchedulers;
+
+import static org.kiwix.kiwixmobile.downloader.DownloadService.KIWIX_ROOT;
 
 public class LibraryFragment extends Fragment implements AdapterView.OnItemClickListener {
 
@@ -163,8 +169,13 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
       return;
     }
     if (isWiFi()){
-      downloadFile((LibraryNetworkEntity.Book) parent.getAdapter().getItem(position));
-      libraryAdapter.getFilter().filter(((ZimManageActivity) super.getActivity()).searchView.getQuery());
+      if (DownloadFragment.mDownloadFiles
+              .containsValue(KIWIX_ROOT + StorageUtils.getFileNameFromUrl(((LibraryNetworkEntity.Book) parent.getAdapter().getItem(position)).getUrl()))) {
+        Toast.makeText(super.getActivity(), "Zim is already downloading", Toast.LENGTH_LONG).show();
+      } else {
+        downloadFile((LibraryNetworkEntity.Book) parent.getAdapter().getItem(position));
+        libraryAdapter.getFilter().filter(((ZimManageActivity) super.getActivity()).searchView.getQuery());
+      }
     } else {
       mobileDownloadDialog(position, parent);
     }
@@ -239,8 +250,8 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
     super.getActivity().startService(service);
     mConnection = new DownloadServiceConnection();
     super.getActivity().bindService(service, mConnection.downloadServiceInterface, Context.BIND_AUTO_CREATE);
-    ZimManageActivity manange = (ZimManageActivity) super.getActivity();
-    manange.displayDownloadInterface();
+    ZimManageActivity manage = (ZimManageActivity) super.getActivity();
+    manage.displayDownloadInterface();
   }
 
   public long getSpaceAvailable() {
