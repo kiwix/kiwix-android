@@ -146,7 +146,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
     progressBar.setVisibility(View.INVISIBLE);
     progressBarLayout.setVisibility(View.VISIBLE);
     progressBarMessage.setVisibility(View.VISIBLE);
-    progressBarMessage.setText("No network connection");
+    progressBarMessage.setText(R.string.no_network_msg);
   }
 
   @Override
@@ -162,45 +162,38 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-    if (getSpaceAvailable() < Long.parseLong( ((LibraryNetworkEntity.Book)(parent.getAdapter().getItem(position))).getSize()) * 1024f){
+    if (getSpaceAvailable() < Long.parseLong(((LibraryNetworkEntity.Book) (parent.getAdapter().getItem(position))).getSize()) * 1024f) {
       Toast.makeText(super.getActivity(), getString(R.string.download_no_space)
-          + "\n" + getString(R.string.space_available)+ " "
-          + bytesToHuman(getSpaceAvailable()), Toast.LENGTH_LONG).show();
+              + "\n" + getString(R.string.space_available) + " "
+              + bytesToHuman(getSpaceAvailable()), Toast.LENGTH_LONG).show();
       return;
     }
-    if (isWiFi()){
-      if (DownloadFragment.mDownloadFiles
-              .containsValue(KIWIX_ROOT + StorageUtils.getFileNameFromUrl(((LibraryNetworkEntity.Book) parent.getAdapter().getItem(position)).getUrl()))) {
-        Toast.makeText(super.getActivity(), "Zim is already downloading", Toast.LENGTH_LONG).show();
-      } else {
+
+    if (DownloadFragment.mDownloadFiles
+            .containsValue(KIWIX_ROOT + StorageUtils.getFileNameFromUrl(((LibraryNetworkEntity.Book) parent.getAdapter().getItem(position)).getUrl()))) {
+      Toast.makeText(super.getActivity(), getString(R.string.zim_already_downloading), Toast.LENGTH_LONG).show();
+    } else {
+      if (isWiFi()) {
         downloadFile((LibraryNetworkEntity.Book) parent.getAdapter().getItem(position));
         libraryAdapter.getFilter().filter(((ZimManageActivity) super.getActivity()).searchView.getQuery());
-      }
-    } else {
+      } else{
       mobileDownloadDialog(position, parent);
     }
+  }
   }
 
   public boolean isWiFi(){
     if (Build.VERSION.SDK_INT >= 23) {
       NetworkInfo network = conMan.getActiveNetworkInfo();
-      if (network.getType() != ConnectivityManager.TYPE_WIFI){
-        return false;
-      } else {
-        return true;
-      }
+      return network.getType() == ConnectivityManager.TYPE_WIFI;
     } else {
       NetworkInfo wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-      if (!wifi.isConnected()){
-        return false;
-      } else {
-        return true;
-      }
+      return wifi.isConnected();
     }
   }
 
   public static String bytesToHuman(long size) {
-    long KB = 1 * 1024;
+    long KB = 1024;
     long MB = KB * 1024;
     long GB = MB * 1024;
     long TB = GB * 1024;

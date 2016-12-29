@@ -152,4 +152,6 @@
   <string name="tts_stop">stop</string>
   <string name="internal_storage">Internal</string>
   <string name="external_storage">External</string>
+  <string name="zim_already_downloading">Zim is already downloading</string>
+  <string name="no_network_msg">No network connection</string>
 </resources>
