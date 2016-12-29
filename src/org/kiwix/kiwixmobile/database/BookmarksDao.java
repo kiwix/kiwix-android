@@ -53,8 +53,11 @@ public class BookmarksDao {
   }
 
   /**
-   * Save {@code searchString} as the most recent search.
-   */
+   * Save bookmark by:
+   * @param articleUrl
+   * @param articleTitle
+   * @param ZimId
+     */
   public void saveBookmark(String articleUrl, String articleTitle, String ZimId) {
     if (articleUrl != null) {
       mDb.persist(new Bookmarks().setBookmarkUrl(articleUrl).setBookmarkTitle(articleTitle).setZimId(ZimId));
@@ -64,11 +67,14 @@ public class BookmarksDao {
   }
 
   /**
-   * Delete all entries that exactly matches {@code searchString}
-   */
+   * Delete bookmark satisfying:
+   * @param favArticle - the article url
+   * @param ZimId - zim containing article
+     */
   public void deleteBookmark(String favArticle, String ZimId) {
     mDb.deleteWhere(Bookmarks.class, Bookmarks.BOOKMARK_URL.eq(favArticle).and(Bookmarks.ZIM_ID.eq(ZimId)) );
   }
+
 
   public void deleteAll(){
     mDb.clear();

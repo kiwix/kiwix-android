@@ -55,7 +55,7 @@ public class DownloadService extends Service {
   private NotificationManager notificationManager;
   public SparseIntArray downloadStatus = new SparseIntArray();
   public SparseIntArray downloadProgress = new SparseIntArray();
-  public static Object pauseLock = new Object();
+  public static final Object pauseLock = new Object();
   public static BookDao bookDao;
   private static DownloadFragment downloadFragment;
   Handler handler = new Handler(Looper.getMainLooper());

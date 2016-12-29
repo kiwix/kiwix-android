@@ -99,7 +99,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     if (allHistoryCleared) {
       Intent data = new Intent();
       data.putExtra("webviewsList", allHistoryCleared);
-      setResult(this.RESULT_HISTORY_CLEARED, data);
+      setResult(RESULT_HISTORY_CLEARED, data);
     }
     super.onBackPressed();
   }
