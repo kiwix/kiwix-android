@@ -244,6 +244,10 @@ public class ZimManageActivity extends AppCompatActivity {
 
     private DownloadFragment downloadFragment = new DownloadFragment();
 
+    public DownloadFragment getDownloadFragment() {
+      return downloadFragment;
+    }
+
     public SectionsPagerAdapter(FragmentManager fm) {
       super(fm);
     }

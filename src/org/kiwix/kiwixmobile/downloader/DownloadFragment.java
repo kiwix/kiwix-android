@@ -33,11 +33,11 @@ public class DownloadFragment extends Fragment {
   public static LinkedHashMap<Integer, LibraryNetworkEntity.Book> mDownloads = new LinkedHashMap<>();
   public static LinkedHashMap<Integer, String> mDownloadFiles = new LinkedHashMap<>();
   public RelativeLayout relLayout;
-  public static ListView listView;
+  public  ListView listView;
   public static DownloadAdapter downloadAdapter;
   private ZimManageActivity zimManageActivity;
   CoordinatorLayout mainLayout;
-  private static FragmentActivity faActivity;
+  private FragmentActivity faActivity;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class DownloadFragment extends Fragment {
     updateNoDownloads();
   }
 
-  private static void updateNoDownloads() {
+  private void updateNoDownloads() {
     TextView noDownloadsText = (TextView) faActivity.findViewById(R.id.download_management_no_downloads);
     if (noDownloadsText == null) return;
     if (listView.getCount() == 0) {
@@ -204,7 +204,7 @@ public class DownloadFragment extends Fragment {
 
   }
 
-  public static void addDownload(int position, LibraryNetworkEntity.Book book, String fileName) {
+  public void addDownload(int position, LibraryNetworkEntity.Book book, String fileName) {
     mDownloads.put(position, book);
     mDownloadFiles.put(position, fileName);
     downloadAdapter.notifyDataSetChanged();

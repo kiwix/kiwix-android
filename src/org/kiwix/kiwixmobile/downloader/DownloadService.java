@@ -61,16 +61,20 @@ public class DownloadService extends Service {
   private static String SD_CARD;
   public static String KIWIX_ROOT;
   public static int notificationCount = 1;
-  public static ArrayList<String> notifications = new ArrayList<String>();
+  public static ArrayList<String> notifications = new ArrayList<>();
   public String notificationTitle;
   private HashMap<Integer, NotificationCompat.Builder> notification = new HashMap<>();
   private NotificationManager notificationManager;
-  public HashMap<Integer, Integer> downloadStatus = new HashMap<Integer, Integer>();
-  public HashMap<Integer, Integer> downloadProgress = new HashMap<Integer, Integer>();
+  public HashMap<Integer, Integer> downloadStatus = new HashMap<>();
+  public HashMap<Integer, Integer> downloadProgress = new HashMap<>();
   public static Object pauseLock = new Object();
   public static BookDao bookDao;
-
+  private static DownloadFragment downloadFragment;
   Handler handler = new Handler(Looper.getMainLooper());
+
+  public static void setDownloadFragment(DownloadFragment dFragment) {
+    downloadFragment = dFragment;
+  }
 
   @Override
   public void onCreate() {
@@ -158,7 +162,7 @@ public class DownloadService extends Service {
   }
 
   private void downloadBook(String url, int notificationID, LibraryNetworkEntity.Book book) {
-    DownloadFragment.addDownload(notificationID, book, KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
+    downloadFragment.addDownload(notificationID, book, KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
     kiwixService.getMetaLinks(url)
         .subscribeOn(AndroidSchedulers.mainThread())
         .flatMap(metaLink -> getMetaLinkContentLength(metaLink.getRelevantUrl().getValue()))
