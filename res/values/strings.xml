@@ -92,7 +92,7 @@
   <string name="search_widget_text">Search Kiwix</string>
   <string name="speech_prompt_text">Speak to search %s</string>
   <string name="speech_not_supported">Sorry! Your device does not support speech input</string>
-  <string name="download_started_library">Download started...</string>
+  <string name="download_started_library">Download started…</string>
   <string name="menu_library">Download content files</string>
   <string name="local_zims">Device</string>
   <string name="remote_zims">Online</string>
