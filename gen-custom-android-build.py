@@ -586,12 +586,17 @@ def usage(arg0, exit=None):
         if idx > 0 and idx % 3 == 0:
             usage_txt += "\n\t\t\t\t\t\t"
         usage_txt += " [--{}]".format(step)
-    print(usage_txt)
+    print(usage_txt, '\n')
     print("\tjson_file:\t\tmandatory parameter holder (cf. source for sample)")
     print("\t--step:\t\t\trun this step. if none specified, all are run.")
-    print("\t--override-[FIELD]=[VALUE]...-[FIELD]=[VALUE]\t\t\tuse for info.json dynamic fields change()")
+    print("\t--override-[FIELD]=[VALUE]...-[FIELD]=[VALUE]\tuse for info.json dynamic fields change()\n")
     if exit is not None:
         sys.exit(exit)
+
+
+def json_override_usage():
+    logger.error('not valid use of \'override\'. Exiting.\n')
+    usage(sys.argv[0], 1)
 
 
 def main(jspath, **options):
@@ -615,7 +620,7 @@ def main(jspath, **options):
         for index, key in enumerate(json_fields_updates):
             if jsdata.get(key):
                 jsdata.update({key: json_fields_updates[key]})
-                if index == (len(json_fields_updates)-1):
+                if index == (len(json_fields_updates) - 1):
                     print(key, ' = ', jsdata.get(key), '\n\n')
                 else:
                     print(key, ' = ', jsdata.get(key), ',', end="")
@@ -704,11 +709,14 @@ if __name__ == '__main__':
                 if len(fields_to_change) > 0:
                     for field in fields_to_change:
                         field_value = field.split('=')
-                        field_value_dict[field_value[0]] = field_value[1]
+                        if len(field_value) == 2 and len(field_value[0]) > 0 and len(field_value[1]) > 0:
+                            field_value_dict[field_value[0]] = field_value[1]
+                        else:
+                            json_override_usage()
                     options.update({'json_fields_update': field_value_dict})
                 else:
-                    logger.error('not valid use of \'override\'. Exiting.')
-                    usage(sys.argv[0], 1)
+                    json_override_usage()
+
     if len(args) != 0:
         for arg in args:
             step_name = re.sub(r'^\-\-', '', arg)
