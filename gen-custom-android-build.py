@@ -262,6 +262,7 @@ def step_prepare_launcher_icons(jsdata, **options):
                                           'drawable',
                                           'kiwix_icon_with_title.png')))
 
+
 def step_update_branding_xml(jsdata, **options):
     """ change app_name value in branding.xml """
 
@@ -588,6 +589,7 @@ def usage(arg0, exit=None):
     print(usage_txt)
     print("\tjson_file:\t\tmandatory parameter holder (cf. source for sample)")
     print("\t--step:\t\t\trun this step. if none specified, all are run.")
+    print("\t--override-[FIELD]=[VALUE]...-[FIELD]=[VALUE]\t\t\tuse for info.json dynamic fields change()")
     if exit is not None:
         sys.exit(exit)
 
@@ -597,6 +599,7 @@ def main(jspath, **options):
 
     # parse the json file
     jsdata = copy.copy(DEFAULT_JSDATA)
+
     try:
         jsdata.update(json.load(fd))
     except Exception as e:
@@ -605,6 +608,19 @@ def main(jspath, **options):
         logger.exception(e)
         sys.exit(1)
 
+    # update json if necessary
+    json_fields_updates = options.get('json_fields_update')
+    if json_fields_updates:
+        print('updating info.json ...\nupdated fields:')
+        for index, key in enumerate(json_fields_updates):
+            if jsdata.get(key):
+                jsdata.update({key: json_fields_updates[key]})
+                if index == (len(json_fields_updates)-1):
+                    print(key, ' = ', jsdata.get(key), '\n\n')
+                else:
+                    print(key, ' = ', jsdata.get(key), ',', end="")
+
+        print()
     # ensure required properties are present
     for key in REQUIRED_FIELDS:
         if key not in jsdata.keys():
@@ -677,6 +693,22 @@ if __name__ == '__main__':
     if (len(args) == 0) or full:
         options = OrderedDict([('do_{}'.format(step), True)
                                for step in ARGS_MATRIX.keys()])
+
+    if len(args) != 0:
+        for arg in args:
+            opt_name = re.sub(r'^\-\-', '', arg)
+            if opt_name not in ARGS_MATRIX.keys() and opt_name.startswith('override-'):
+                opt_name = opt_name.replace('override-', '')
+                fields_to_change = opt_name.split('-')
+                field_value_dict = {}
+                if len(fields_to_change) > 0:
+                    for field in fields_to_change:
+                        field_value = field.split('=')
+                        field_value_dict[field_value[0]] = field_value[1]
+                    options.update({'json_fields_update': field_value_dict})
+                else:
+                    logger.error('not valid use of \'override\'. Exiting.')
+                    usage(sys.argv[0], 1)
     if len(args) != 0:
         for arg in args:
             step_name = re.sub(r'^\-\-', '', arg)
@@ -684,12 +716,13 @@ if __name__ == '__main__':
                 if step_name.startswith('on='):
                     rarch = step_name.split('=', 1)[1]
                     architectures.append(rarch)
+                elif step_name.startswith('override'):
+                    # do nothing just ignore
+                    continue
                 else:
                     logger.error("{} not a valid step. Exiting.".format(step_name))
                     usage(sys.argv[0], 1)
             else:
                 options.update({'do_{}'.format(step_name): True})
-
-
 
     main(jspath, **options)
