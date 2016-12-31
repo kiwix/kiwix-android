@@ -1644,7 +1644,6 @@ public class KiwixMobileActivity extends AppCompatActivity {
                     intent.setData(Uri.parse(market_uri));
                     startActivity(intent);
                     activity.finish();
-                    System.exit(0);
                   }
                 });
             zimFileMissingBuilder.setCancelable(false);
