@@ -51,16 +51,13 @@ public class KiwixTextToSpeech {
   }
 
   private void initTTS(final OnInitSucceedListener onInitSucceedListener) {
-    tts = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
-      @Override
-      public void onInit(int status) {
-        if (status == TextToSpeech.SUCCESS) {
-          Log.d(TAG_KIWIX, "TextToSpeech was initialized successfully.");
-          initialized = true;
-          onInitSucceedListener.onInitSucceed();
-        } else {
-          Log.e(TAG_KIWIX, "Initilization of TextToSpeech Failed!");
-        }
+    tts = new TextToSpeech(context, status -> {
+      if (status == TextToSpeech.SUCCESS) {
+        Log.d(TAG_KIWIX, "TextToSpeech was initialized successfully.");
+        initialized = true;
+        onInitSucceedListener.onInitSucceed();
+      } else {
+        Log.e(TAG_KIWIX, "Initilization of TextToSpeech Failed!");
       }
     });
   }

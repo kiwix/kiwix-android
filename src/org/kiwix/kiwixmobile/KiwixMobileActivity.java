@@ -522,9 +522,9 @@ public class KiwixMobileActivity extends AppCompatActivity {
   }
 
   private void setUpTTS() {
-    tts = new KiwixTextToSpeech(this, new KiwixTextToSpeech.OnInitSucceedListener() {
-      @Override
-      public void onInitSucceed() {
+    tts = new KiwixTextToSpeech(this, () -> {
+      if (menu != null) {
+        menu.findItem(R.id.menu_read_aloud).setVisible(true);
       }
     }, new KiwixTextToSpeech.OnSpeakingListener() {
       @Override
@@ -555,21 +555,18 @@ public class KiwixMobileActivity extends AppCompatActivity {
       }
     });
 
-    pauseTTSButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        if (tts.currentTTSTask == null) {
-          tts.stop();
-          return;
-        }
+    pauseTTSButton.setOnClickListener(view -> {
+      if (tts.currentTTSTask == null) {
+        tts.stop();
+        return;
+      }
 
-        if (tts.currentTTSTask.paused) {
-          tts.pauseOrResume();
-          pauseTTSButton.setText(R.string.tts_pause);
-        } else {
-          tts.pauseOrResume();
-          pauseTTSButton.setText(R.string.tts_resume);
-        }
+      if (tts.currentTTSTask.paused) {
+        tts.pauseOrResume();
+        pauseTTSButton.setText(R.string.tts_pause);
+      } else {
+        tts.pauseOrResume();
+        pauseTTSButton.setText(R.string.tts_resume);
       }
     });
 
