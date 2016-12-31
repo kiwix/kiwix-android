@@ -62,11 +62,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.webkit.MimeTypeMap;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -78,7 +76,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import org.json.JSONArray;
@@ -102,7 +99,7 @@ import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.TableClickListener;
 
-public class KiwixMobileActivity extends AppCompatActivity {
+public class KiwixMobileActivity extends AppCompatActivity implements WebViewCallback {
 
   public static final int REQUEST_FILE_SEARCH = 1236;
 
@@ -599,8 +596,8 @@ public class KiwixMobileActivity extends AppCompatActivity {
 
   private KiwixWebView newTab(String url) {
     KiwixWebView webView = new KiwixWebView(KiwixMobileActivity.this);
-    webView.setWebViewClient(new KiwixWebViewClient(tabDrawerAdapter));
-    webView.setWebChromeClient(new KiwixWebChromeClient());
+    webView.setWebViewClient(new KiwixWebViewClient(this));
+    webView.setWebChromeClient(new KiwixWebChromeClient(this));
     webView.loadUrl(url);
     webView.loadPrefs();
 
@@ -802,8 +799,17 @@ public class KiwixMobileActivity extends AppCompatActivity {
     isFullscreenOpened = false;
   }
 
-  public void showWelcome() {
+  @Override  public void showWelcomePage() {
     getCurrentWebView().loadUrl("file:///android_res/raw/welcome.html");
+  }
+
+  @Override public void openExternalUrl(Intent intent) {
+    if (intent.resolveActivity(getPackageManager()) != null) {
+      startActivity(intent);
+    } else {
+      String error = getString(R.string.no_reader_application_installed);
+      Toast.makeText(this, error, Toast.LENGTH_LONG).show();
+    }
   }
 
   public void showHelp() {
@@ -839,14 +845,14 @@ public class KiwixMobileActivity extends AppCompatActivity {
         } else {
           Toast.makeText(this, getResources().getString(R.string.error_fileinvalid),
               Toast.LENGTH_LONG).show();
-          showWelcome();
+          showWelcomePage();
         }
       } else {
         Log.e(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
 
         Toast.makeText(this, getResources().getString(R.string.error_filenotfound), Toast.LENGTH_LONG)
             .show();
-        showWelcome();
+        showWelcomePage();
       }
       return false;
     } else {
@@ -1655,7 +1661,7 @@ public class KiwixMobileActivity extends AppCompatActivity {
         } else {
           Log.d(TAG_KIWIX,
               " Kiwix normal start, no zimFile loaded last time  -> display welcome page");
-          showWelcome();
+          showWelcomePage();
         }
       }
     }
@@ -1672,103 +1678,24 @@ public class KiwixMobileActivity extends AppCompatActivity {
         "onPause Save currentzimfile to preferences:" + ZimContentProvider.getZimFile());
   }
 
-  private class KiwixWebViewClient extends WebViewClient {
-
-    private HashMap<String, String> documentTypes = new HashMap<String, String>() {{
-      put("epub", "application/epub+zip");
-      put("pdf", "application/pdf");
-    }};
-
-    private LinearLayout help;
-
-    private TabDrawerAdapter mAdapter;
-
-    public KiwixWebViewClient(TabDrawerAdapter adapter) {
-      mAdapter = adapter;
+  @Override public void webViewUrlLoading() {
+    if (isFirstRun) {
+      contentsDrawerHint();
+      SharedPreferences.Editor editor = settings.edit();
+      editor.putBoolean("isFirstRun", false); // It is no longer the first run
+      isFirstRun = false;
+      editor.apply();
     }
+  }
 
-    @Override
-    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-      if (isFirstRun) {
-        contentsDrawerHint();
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean("isFirstRun", false); // It is no longer the first run
-        isFirstRun = false;
-        editor.apply();
-      }
+  @Override public void webViewUrlFinishedLoading() {
+    updateTableOfContents();
+    tabDrawerAdapter.notifyDataSetChanged();
+  }
 
-      if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
-
-        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-        if (documentTypes.containsKey(extension)) {
-          Intent intent = new Intent(Intent.ACTION_VIEW);
-          Uri uri = Uri.parse(url);
-          intent.setDataAndType(uri, documentTypes.get(extension));
-          intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-          try {
-            startActivity(intent);
-          } catch (ActivityNotFoundException e) {
-            Toast.makeText(KiwixMobileActivity.this,
-                getString(R.string.no_reader_application_installed), Toast.LENGTH_LONG).show();
-          }
-
-          return true;
-        }
-
-        return false;
-      } else if (url.startsWith("file://")) {
-        // To handle help page (loaded from resources)
-        return true;
-      } else if (url.startsWith("javascript:")) {
-        // Allow javascript for HTML functions and code execution (EX: night mode)
-        return true;
-      } else if (url.startsWith(ZimContentProvider.UI_URI.toString())) {
-        // To handle links which access user interface (i.p. used in help page)
-        if (url.equals(ZimContentProvider.UI_URI.toString() + "selectzimfile")) {
-          manageZimFiles(1);
-        } else {
-          Log.e(TAG_KIWIX, "UI Url " + url + " not supported.");
-        }
-        return true;
-      }
-
-      // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
-      Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-
-      startActivity(intent);
-
-      return true;
-    }
-
-    @Override
-    public void onReceivedError(WebView view, int errorCode, String description,
-        String failingUrl) {
-
-      String errorString =
-          String.format(getResources().getString(R.string.error_articleurlnotfound), failingUrl);
-      // TODO apparently screws up back/forward
-      getCurrentWebView().loadDataWithBaseURL("file://error",
-          "<html><body>" + errorString + "</body></html>", "text/html", "utf-8", failingUrl);
-      String title = getResources().getString(R.string.app_name);
-      updateTitle(title);
-    }
-
-    @Override
-    public void onPageFinished(WebView view, String url) {
-      if ((url.equals("content://org.kiwix.zim.base/null")) && !Constants.IS_CUSTOM_APP) {
-        showWelcome();
-        return;
-      }
-      if (!url.equals("file:///android_res/raw/welcome.html")) {
-        view.removeView(help);
-      } else if (!Constants.IS_CUSTOM_APP) {
-        help = (LinearLayout) getLayoutInflater().inflate(R.layout.help, null);
-        help.findViewById(R.id.get_content_card).setOnClickListener(card -> manageZimFiles(1));
-        view.addView(help);
-      }
-      mAdapter.notifyDataSetChanged();
-      updateTableOfContents();
-    }
+  @Override public void webViewFailedLoading(String url) {
+    String error = String.format(getString(R.string.error_articleurlnotfound), url);
+    Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
   }
 
   private class KiwixWebChromeClient extends WebChromeClient {

@@ -1,4 +1,17 @@
 package org.kiwix.kiwixmobile;
 
-public class WebViewCallback {
+import android.content.Intent;
+
+public interface WebViewCallback {
+  void webViewUrlLoading();
+
+  void webViewUrlFinishedLoading();
+
+  void webViewFailedLoading(String failingUrl);
+
+  void showWelcomePage();
+
+  void openExternalUrl(Intent intent);
+
+  void manageZimFiles(int tab);
 }
