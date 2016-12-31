@@ -66,11 +66,11 @@ DEFAULT_JSDATA = {
     'tablet10_screenshot': None,
     'category': '',
     'rating': 'everyone',
-    'website': "http://kiwix.org",
-    'email': "kelson@kiwix.org",
+    'website': "http://www.kiwix.org",
+    'email': "contact+android@kiwix.org",
 
     # help page content
-    'support_email': "kelson@kiwix.org",
+    'support_email': "contact+android@kiwix.org",
 }
 
 SIZE_MATRIX = {
@@ -586,10 +586,11 @@ def usage(arg0, exit=None):
         if idx > 0 and idx % 3 == 0:
             usage_txt += "\n\t\t\t\t\t\t"
         usage_txt += " [--{}]".format(step)
+    usage_txt += "\n\t\t\t\t\t\t [--override-<field>=<value>]"
     print(usage_txt, '\n')
-    print("\tjson_file:\t\tmandatory parameter holder (cf. source for sample)")
-    print("\t--step:\t\t\trun this step. if none specified, all are run.")
-    print("\t--override-[FIELD]=[VALUE]...-[FIELD]=[VALUE]\tuse for info.json dynamic fields change()\n")
+    print("\t<json_file>:\t\t\tjson_file path with custom app properties (mandatory)")
+    print("\t--<step>:\t\t\tRun this step. if none specified, all are run")
+    print("\t--override-<field>=<value>:\tOverride json_file values (can be use multiple times)\n")
     if exit is not None:
         sys.exit(exit)
 
