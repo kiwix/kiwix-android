@@ -19,8 +19,6 @@
 
 package org.kiwix.kiwixmobile.views;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.ColorMatrixColorFilter;
@@ -30,24 +28,22 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Toast;
-
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.utils.files.FileUtils;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.KiwixWebChromeClient;
+import org.kiwix.kiwixmobile.KiwixWebViewClient;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.WebViewCallback;
 
 public class KiwixWebView extends WebView {
 
@@ -61,6 +57,7 @@ public class KiwixWebView extends WebView {
       0, 0, -1.0f, 0, 255, // blue
       0, 0, 0, 1.0f, 0 // alpha
   };
+  private WebViewCallback callback;
 
   private OnPageChangeListener mChangeListener;
 
@@ -87,7 +84,8 @@ public class KiwixWebView extends WebView {
 
         File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP && kiwixMobileActivity.getExternalMediaDirs().length > 0) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP
+            && kiwixMobileActivity.getExternalMediaDirs().length > 0) {
           root = kiwixMobileActivity.getExternalMediaDirs()[0];
         }
 
@@ -125,16 +123,11 @@ public class KiwixWebView extends WebView {
     }
   };
 
-  public KiwixWebView(Context context) {
+  public KiwixWebView(Context context, WebViewCallback callback) {
     super(context);
-  }
-
-  public KiwixWebView(Context context, AttributeSet attrs) {
-    super(context, attrs);
-  }
-
-  public KiwixWebView(Context context, AttributeSet attrs, int defStyle) {
-    super(context, attrs, defStyle);
+    this.callback = callback;
+    setWebViewClient(new KiwixWebViewClient(callback));
+    setWebChromeClient(new KiwixWebChromeClient(callback));
   }
 
   public void loadPrefs() {

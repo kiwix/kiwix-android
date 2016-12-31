@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import java.util.HashMap;
 import org.kiwix.kiwixmobile.settings.Constants;
 
-class KiwixWebViewClient extends WebViewClient {
+public class KiwixWebViewClient extends WebViewClient {
 
   private static final HashMap<String, String> DOCUMENT_TYPES = new HashMap<String, String>() {{
     put("epub", "application/epub+zip");
@@ -72,7 +72,8 @@ class KiwixWebViewClient extends WebViewClient {
     } else if (!Constants.IS_CUSTOM_APP) {
       LayoutInflater inflater = LayoutInflater.from(view.getContext());
       help = (LinearLayout) inflater.inflate(R.layout.help, null);
-      help.findViewById(R.id.get_content_card).setOnClickListener(card -> callback.manageZimFiles(1));
+      help.findViewById(R.id.get_content_card)
+          .setOnClickListener(card -> callback.manageZimFiles(1));
       view.addView(help);
     }
     callback.webViewUrlFinishedLoading();

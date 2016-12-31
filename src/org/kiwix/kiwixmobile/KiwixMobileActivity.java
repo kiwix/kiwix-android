@@ -594,9 +594,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
   }
 
   private KiwixWebView newTab(String url) {
-    KiwixWebView webView = new KiwixWebView(KiwixMobileActivity.this);
-    webView.setWebViewClient(new KiwixWebViewClient(this));
-    webView.setWebChromeClient(new KiwixWebChromeClient(this));
+    KiwixWebView webView = new KiwixWebView(KiwixMobileActivity.this, this);
     webView.loadUrl(url);
     webView.loadPrefs();
 
@@ -609,14 +607,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
   }
 
   private void newTabInBackground(String url) {
-    KiwixWebView webView = new KiwixWebView(KiwixMobileActivity.this);
-    webView.setWebChromeClient(new KiwixWebChromeClient(this) {
-      @Override
-      public void onReceivedTitle(WebView view, String sTitle) {
-        super.onReceivedTitle(view, sTitle);
-        tabDrawerAdapter.notifyDataSetChanged();
-      }
-    });
+    KiwixWebView webView = new KiwixWebView(KiwixMobileActivity.this, this);
     webView.loadUrl(url);
     webView.loadPrefs();
     mWebViews.add(webView);
@@ -1530,6 +1521,10 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
 
       Log.d(KiwixMobileActivity.TAG_KIWIX, "Loaded URL: " + getCurrentWebView().getUrl());
     }
+  }
+
+  @Override public void webViewTitleUpdated(String title) {
+    tabDrawerAdapter.notifyDataSetChanged();
   }
 
   public void selectSettings() {

@@ -3,7 +3,7 @@ package org.kiwix.kiwixmobile;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
-class KiwixWebChromeClient extends WebChromeClient {
+public class KiwixWebChromeClient extends WebChromeClient {
 
   private WebViewCallback callback;
 
@@ -14,5 +14,10 @@ class KiwixWebChromeClient extends WebChromeClient {
   @Override
   public void onProgressChanged(WebView view, int progress) {
     callback.webViewProgressChanged(progress);
+  }
+
+  @Override public void onReceivedTitle(WebView view, String title) {
+    super.onReceivedTitle(view, title);
+    callback.webViewTitleUpdated(title);
   }
 }

@@ -16,4 +16,6 @@ public interface WebViewCallback {
   void manageZimFiles(int tab);
 
   void webViewProgressChanged(int progress);
+
+  void webViewTitleUpdated(String title);
 }
