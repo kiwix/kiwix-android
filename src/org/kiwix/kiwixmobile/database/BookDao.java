@@ -23,8 +23,8 @@ public class BookDao {
   private KiwixDatabase mDb;
 
 
-  public BookDao(KiwixDatabase kiwikDatabase) {
-    this.mDb = kiwikDatabase;
+  public BookDao(KiwixDatabase kiwixDatabase) {
+    this.mDb = kiwixDatabase;
   }
 
 

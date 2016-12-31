@@ -1,7 +1,5 @@
 package org.kiwix.kiwixmobile.downloader;
 
-import android.app.DownloadManager;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -9,39 +7,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Binder;
-import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
-import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import android.util.Pair;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.widget.Toast;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okio.BufferedSource;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
-import org.kiwix.kiwixmobile.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.ZimManageActivity;
 import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
@@ -49,8 +28,16 @@ import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okio.BufferedSource;
 import rx.Observable;
-import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 
 public class DownloadService extends Service {
@@ -61,16 +48,21 @@ public class DownloadService extends Service {
   private static String SD_CARD;
   public static String KIWIX_ROOT;
   public static int notificationCount = 1;
-  public static ArrayList<String> notifications = new ArrayList<String>();
+  public static ArrayList<String> notifications = new ArrayList<>();
   public String notificationTitle;
-  private HashMap<Integer, NotificationCompat.Builder> notification = new HashMap<>();
-  private NotificationManager notificationManager;
-  public HashMap<Integer, Integer> downloadStatus = new HashMap<Integer, Integer>();
-  public HashMap<Integer, Integer> downloadProgress = new HashMap<Integer, Integer>();
-  public static Object pauseLock = new Object();
-  public static BookDao bookDao;
 
+  private SparseArray<NotificationCompat.Builder> notification = new SparseArray<>();
+  private NotificationManager notificationManager;
+  public SparseIntArray downloadStatus = new SparseIntArray();
+  public SparseIntArray downloadProgress = new SparseIntArray();
+  public static final Object pauseLock = new Object();
+  public static BookDao bookDao;
+  private static DownloadFragment downloadFragment;
   Handler handler = new Handler(Looper.getMainLooper());
+
+  public static void setDownloadFragment(DownloadFragment dFragment) {
+    downloadFragment = dFragment;
+  }
 
   @Override
   public void onCreate() {
@@ -158,7 +150,7 @@ public class DownloadService extends Service {
   }
 
   private void downloadBook(String url, int notificationID, LibraryNetworkEntity.Book book) {
-    DownloadFragment.addDownload(notificationID, book, KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
+    downloadFragment.addDownload(notificationID, book, KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
     kiwixService.getMetaLinks(url)
         .subscribeOn(AndroidSchedulers.mainThread())
         .flatMap(metaLink -> getMetaLinkContentLength(metaLink.getRelevantUrl().getValue()))
@@ -200,11 +192,9 @@ public class DownloadService extends Service {
   private void updateForeground() {
     // Allow notification to be dismissible while ensuring integrity of service if active downloads
     stopForeground(true);
-    Iterator it = downloadStatus.entrySet().iterator();
-    while (it.hasNext()){
-      Map.Entry pair = (Map.Entry) it.next();
-      if ((int) pair.getValue() != 4 && (int) pair.getValue() != 2 ){
-        startForeground( (int) pair.getKey(), notification.get(pair.getKey()).build());
+    for(int i = 0; i < downloadStatus.size(); i++) {
+      if (downloadStatus.get(i) != 4 && downloadStatus.get(i) != 2 ){
+        startForeground( downloadStatus.keyAt(i), notification.get(downloadStatus.keyAt(i)).build());
       }
     }
   }

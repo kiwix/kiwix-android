@@ -33,11 +33,11 @@ public class DownloadFragment extends Fragment {
   public static LinkedHashMap<Integer, LibraryNetworkEntity.Book> mDownloads = new LinkedHashMap<>();
   public static LinkedHashMap<Integer, String> mDownloadFiles = new LinkedHashMap<>();
   public RelativeLayout relLayout;
-  public static ListView listView;
+  public  ListView listView;
   public static DownloadAdapter downloadAdapter;
   private ZimManageActivity zimManageActivity;
   CoordinatorLayout mainLayout;
-  private static FragmentActivity faActivity;
+  private FragmentActivity faActivity;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class DownloadFragment extends Fragment {
     updateNoDownloads();
   }
 
-  private static void updateNoDownloads() {
+  private void updateNoDownloads() {
     TextView noDownloadsText = (TextView) faActivity.findViewById(R.id.download_management_no_downloads);
     if (noDownloadsText == null) return;
     if (listView.getCount() == 0) {
@@ -152,7 +152,7 @@ public class DownloadFragment extends Fragment {
       ProgressBar downloadProgress = (ProgressBar) convertView.findViewById(R.id.downloadProgress);
       ImageView pause = (ImageView) convertView.findViewById(R.id.pause);
 
-      if (LibraryFragment.mService.downloadProgress.get(mKeys[position]) != null) {
+      if (LibraryFragment.mService.downloadProgress.get(mKeys[position]) != -1) {
         downloadProgress.setProgress(LibraryFragment.mService.downloadProgress.get(mKeys[position]));
         if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == 1) {
           LibraryFragment.mService.pauseDownload(mKeys[position]);
@@ -204,7 +204,7 @@ public class DownloadFragment extends Fragment {
 
   }
 
-  public static void addDownload(int position, LibraryNetworkEntity.Book book, String fileName) {
+  public void addDownload(int position, LibraryNetworkEntity.Book book, String fileName) {
     mDownloads.put(position, book);
     mDownloadFiles.put(position, fileName);
     downloadAdapter.notifyDataSetChanged();
@@ -214,8 +214,7 @@ public class DownloadFragment extends Fragment {
   public Bitmap StringToBitMap(String encodedString) {
     try {
       byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-      Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-      return bitmap;
+      return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
     } catch (Exception e) {
       e.getMessage();
       return null;

@@ -4,7 +4,7 @@ import com.yahoo.squidb.annotations.ColumnSpec;
 import com.yahoo.squidb.annotations.TableModelSpec;
 
 /**
- * Squidb spec for recent searches.
+ * Squidb spec for saved bookmarks.
  */
 @TableModelSpec(className = "Bookmarks", tableName = "Bookmarks")
 public class BookmarksSpec {
