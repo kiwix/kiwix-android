@@ -62,7 +62,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -611,7 +610,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
 
   private void newTabInBackground(String url) {
     KiwixWebView webView = new KiwixWebView(KiwixMobileActivity.this);
-    webView.setWebChromeClient(new KiwixWebChromeClient() {
+    webView.setWebChromeClient(new KiwixWebChromeClient(this) {
       @Override
       public void onReceivedTitle(WebView view, String sTitle) {
         super.onReceivedTitle(view, sTitle);
@@ -811,6 +810,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
       Toast.makeText(this, error, Toast.LENGTH_LONG).show();
     }
   }
+
 
   public void showHelp() {
     newTab();
@@ -1517,6 +1517,21 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     startActivityForResult(target, REQUEST_FILE_SELECT);
   }
 
+  @Override public void webViewProgressChanged(int progress) {
+    progressBar.setProgress(progress);
+    if (progress == 100) {
+      Log.d(KiwixMobileActivity.TAG_KIWIX, "Loading article finished.");
+      if (requestClearHistoryAfterLoad) {
+        Log.d(KiwixMobileActivity.TAG_KIWIX,
+            "Loading article finished and requestClearHistoryAfterLoad -> clearHistory");
+        getCurrentWebView().clearHistory();
+        requestClearHistoryAfterLoad = false;
+      }
+
+      Log.d(KiwixMobileActivity.TAG_KIWIX, "Loaded URL: " + getCurrentWebView().getUrl());
+    }
+  }
+
   public void selectSettings() {
     final String zimFile = ZimContentProvider.getZimFile();
     Intent i = new Intent(this, KiwixSettingsActivity.class);
@@ -1696,25 +1711,5 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
   @Override public void webViewFailedLoading(String url) {
     String error = String.format(getString(R.string.error_articleurlnotfound), url);
     Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
-  }
-
-  private class KiwixWebChromeClient extends WebChromeClient {
-
-    @Override
-    public void onProgressChanged(WebView view, int progress) {
-      progressBar.setProgress(progress);
-
-      if (progress == 100) {
-        Log.d(TAG_KIWIX, "Loading article finished.");
-        if (requestClearHistoryAfterLoad) {
-          Log.d(TAG_KIWIX,
-              "Loading article finished and requestClearHistoryAfterLoad -> clearHistory");
-          getCurrentWebView().clearHistory();
-          requestClearHistoryAfterLoad = false;
-        }
-
-        Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView().getUrl());
-      }
-    }
   }
 }
