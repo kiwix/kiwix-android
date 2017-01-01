@@ -790,7 +790,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
   }
 
   public void showHelpPage() {
-    getCurrentWebView().loadUrl("file:///android_res/raw/welcome.html");
+    getCurrentWebView().loadUrl("file:///android_res/raw/help.html");
   }
 
   @Override public void openExternalUrl(Intent intent) {
@@ -1348,7 +1348,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     if (menu.findItem(R.id.menu_bookmarks) != null &&
         getCurrentWebView().getUrl() != null &&
         ZimContentProvider.getId() != null &&
-        !getCurrentWebView().getUrl().equals("file:///android_res/raw/welcome.html")) {
+        !getCurrentWebView().getUrl().equals("file:///android_res/raw/help.html")) {
 
       menu.findItem(R.id.menu_bookmarks).setVisible(true);
       if (bookmarks.contains(getCurrentWebView().getUrl())) {
@@ -1568,7 +1568,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
           }
         } else {
           Log.d(TAG_KIWIX,
-              " Kiwix normal start, no zimFile loaded last time  -> display welcome page");
+              " Kiwix normal start, no zimFile loaded last time  -> display help page");
           showHelpPage();
         }
       }
