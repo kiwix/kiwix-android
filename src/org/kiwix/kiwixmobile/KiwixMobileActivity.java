@@ -896,7 +896,6 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
 
   private void initAllMenuItems() {
     try {
-
       menu.findItem(R.id.menu_bookmarks).setVisible(true);
       menu.findItem(R.id.menu_fullscreen).setVisible(true);
       menu.findItem(R.id.menu_home).setVisible(true);
@@ -1034,30 +1033,32 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
       }
     }
 
-    if (getIntent().getAction() != null && getIntent().getAction().equals(Intent.ACTION_PROCESS_TEXT)) {
+    Intent intent = getIntent();
+    if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_PROCESS_TEXT)) {
       final String zimFile = ZimContentProvider.getZimFile();
       saveTabStates();
       Intent i = new Intent(KiwixMobileActivity.this, SearchActivity.class);
       i.putExtra("zimFile", zimFile);
-      i.putExtra(Intent.EXTRA_PROCESS_TEXT, getIntent().getStringExtra(Intent.EXTRA_PROCESS_TEXT));
-      getIntent().setAction("");
+      i.putExtra(Intent.EXTRA_PROCESS_TEXT, intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT));
+      intent.setAction("");
       startActivityForResult(i, REQUEST_FILE_SEARCH);
     }
 
 
-    boolean IS_WIDGET_SEARCH_INTENT = getIntent().getBooleanExtra("isWidgetSearch", false);
-    boolean IS_WIDGET_VOICE_SEARCH = getIntent().getBooleanExtra("isWidgetVoice", false);
-    boolean IS_WIDGET_STAR = getIntent().getBooleanExtra("isWidgetStar", false);
-    getIntent().removeExtra("isWidgetSearch");
-    getIntent().removeExtra("isWidgetVoice");
-    getIntent().removeExtra("isWidgetStar");
-    if (IS_WIDGET_STAR && ZimContentProvider.getId() != null) {
+    boolean isWidgetSearch = intent.getBooleanExtra("isWidgetSearch", false);
+    boolean isWidgetVoiceSearch = intent.getBooleanExtra("isWidgetVoice", false);
+    boolean isWidgetStar = intent.getBooleanExtra("isWidgetStar", false);
+    intent.removeExtra("isWidgetSearch");
+    intent.removeExtra("isWidgetVoice");
+    intent.removeExtra("isWidgetStar");
+
+    if (isWidgetStar && ZimContentProvider.getId() != null) {
       goToBookmarks();
-    } else if (IS_WIDGET_SEARCH_INTENT && ZimContentProvider.getId() != null) {
+    } else if (isWidgetSearch && ZimContentProvider.getId() != null) {
       goToSearch(false);
-    } else if (IS_WIDGET_VOICE_SEARCH && ZimContentProvider.getId() != null) {
+    } else if (isWidgetVoiceSearch && ZimContentProvider.getId() != null) {
       goToSearch(true);
-    } else if (IS_WIDGET_STAR || IS_WIDGET_SEARCH_INTENT || IS_WIDGET_VOICE_SEARCH) {
+    } else if (isWidgetStar || isWidgetSearch || isWidgetVoiceSearch) {
       manageZimFiles(0);
     }
     updateWidgets(this);
@@ -1110,14 +1111,11 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
 
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setMessage(getString(R.string.hint_contents_drawer_message))
-        .setPositiveButton(getString(R.string.got_it), new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int id) {
-          }
-        })
+        .setPositiveButton(getString(R.string.got_it), (dialog, id) -> {})
         .setTitle(getString(R.string.did_you_know))
         .setIcon(R.drawable.icon_question);
     AlertDialog alert = builder.create();
-    alert.show();//showing the dialog
+    alert.show();
   }
 
   private boolean openArticle(String articleUrl) {
