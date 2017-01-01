@@ -1177,82 +1177,6 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     // However, it must notify the bookmark system when a page is finished loading
     // so that it can refresh the menu.
 
-    getCurrentWebView().setOnPageChangedListener(new KiwixWebView.OnPageChangeListener() {
-
-      @Override
-      public void onPageChanged(int page, int maxPages) {
-        if (isBackToTopEnabled) {
-          if (getCurrentWebView().getScrollY() > 200) {
-            if (backToTopButton.getVisibility() == View.INVISIBLE && TTSControls.getVisibility() == View.GONE ) {
-              backToTopButton.setText(R.string.button_backtotop);
-              backToTopButton.setVisibility(View.VISIBLE);
-
-              backToTopButton.startAnimation(
-                  AnimationUtils.loadAnimation(KiwixMobileActivity.this, android.R.anim.fade_in));
-              backToTopButton.setVisibility(View.INVISIBLE);
-              Animation fadeAnimation =
-                  AnimationUtils.loadAnimation(KiwixMobileActivity.this, android.R.anim.fade_out);
-              fadeAnimation.setStartOffset(1200);
-              backToTopButton.startAnimation(fadeAnimation);
-            }
-          } else {
-            if (backToTopButton.getVisibility() == View.VISIBLE) {
-              backToTopButton.setVisibility(View.INVISIBLE);
-
-              backToTopButton.clearAnimation();
-              backToTopButton.startAnimation(
-                  AnimationUtils.loadAnimation(KiwixMobileActivity.this, android.R.anim.fade_out));
-            } else {
-              backToTopButton.clearAnimation();
-            }
-          }
-        }
-      }
-    });
-
-    getCurrentWebView().setOnLongClickListener(new KiwixWebView.OnLongClickListener() {
-
-      @Override
-      public void onLongClick(final String url) {
-        boolean handleEvent = false;
-        if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
-          // This is my web site, so do not override; let my WebView load the page
-          handleEvent = true;
-        } else if (url.startsWith("file://") && !url.contains("selectzimfile")) {
-          // To handle help page (loaded from resources)
-          handleEvent = true;
-        } else if (url.startsWith(ZimContentProvider.UI_URI.toString()) && !url.contains("selectzimfile")) {
-          handleEvent = true;
-        }
-
-        if (handleEvent) {
-          AlertDialog.Builder builder = new AlertDialog.Builder(KiwixMobileActivity.this);
-
-          builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-              if (isOpenNewTabInBackground) {
-                newTabInBackground(url);
-                Snackbar snackbar = Snackbar.make(snackbarLayout,
-                    getString(R.string.new_tab_snackbar),
-                    Snackbar.LENGTH_LONG)
-                    .setAction(getString(R.string.open), v -> {
-                      if (mWebViews.size() > 1) selectTab(mWebViews.size() - 1);
-                    });
-                snackbar.setActionTextColor(getResources().getColor(R.color.white));
-                snackbar.show();
-              } else {
-                newTab(url);
-              }
-            }
-          });
-          builder.setNegativeButton(android.R.string.no, null);
-          builder.setMessage(getString(R.string.open_in_new_tab));
-          AlertDialog dialog = builder.create();
-          dialog.show();
-        }
-      }
-    });
-
     backToTopButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
@@ -1525,6 +1449,75 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
 
   @Override public void webViewTitleUpdated(String title) {
     tabDrawerAdapter.notifyDataSetChanged();
+  }
+
+
+  @Override public void webViewPageChanged(int page, int maxPages) {
+    if (isBackToTopEnabled) {
+      if (getCurrentWebView().getScrollY() > 200) {
+        if (backToTopButton.getVisibility() == View.INVISIBLE && TTSControls.getVisibility() == View.GONE ) {
+          backToTopButton.setText(R.string.button_backtotop);
+          backToTopButton.setVisibility(View.VISIBLE);
+
+          backToTopButton.startAnimation(
+              AnimationUtils.loadAnimation(KiwixMobileActivity.this, android.R.anim.fade_in));
+          backToTopButton.setVisibility(View.INVISIBLE);
+          Animation fadeAnimation =
+              AnimationUtils.loadAnimation(KiwixMobileActivity.this, android.R.anim.fade_out);
+          fadeAnimation.setStartOffset(1200);
+          backToTopButton.startAnimation(fadeAnimation);
+        }
+      } else {
+        if (backToTopButton.getVisibility() == View.VISIBLE) {
+          backToTopButton.setVisibility(View.INVISIBLE);
+
+          backToTopButton.clearAnimation();
+          backToTopButton.startAnimation(
+              AnimationUtils.loadAnimation(KiwixMobileActivity.this, android.R.anim.fade_out));
+        } else {
+          backToTopButton.clearAnimation();
+        }
+      }
+    }
+  }
+
+  @Override public void webViewLongClick(final String url) {
+    boolean handleEvent = false;
+    if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
+      // This is my web site, so do not override; let my WebView load the page
+      handleEvent = true;
+    } else if (url.startsWith("file://") && !url.contains("selectzimfile")) {
+      // To handle help page (loaded from resources)
+      handleEvent = true;
+    } else if (url.startsWith(ZimContentProvider.UI_URI.toString()) && !url.contains("selectzimfile")) {
+      handleEvent = true;
+    }
+
+    if (handleEvent) {
+      AlertDialog.Builder builder = new AlertDialog.Builder(KiwixMobileActivity.this);
+
+      builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int id) {
+          if (isOpenNewTabInBackground) {
+            newTabInBackground(url);
+            Snackbar snackbar = Snackbar.make(snackbarLayout,
+                getString(R.string.new_tab_snackbar),
+                Snackbar.LENGTH_LONG)
+                .setAction(getString(R.string.open), v -> {
+                  if (mWebViews.size() > 1) selectTab(mWebViews.size() - 1);
+                });
+            snackbar.setActionTextColor(getResources().getColor(R.color.white));
+            snackbar.show();
+          } else {
+            newTab(url);
+          }
+        }
+      });
+      builder.setNegativeButton(android.R.string.no, null);
+      builder.setMessage(getString(R.string.open_in_new_tab));
+      AlertDialog dialog = builder.create();
+      dialog.show();
+    }
   }
 
   public void selectSettings() {

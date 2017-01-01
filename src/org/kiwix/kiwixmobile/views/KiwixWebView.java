@@ -59,10 +59,6 @@ public class KiwixWebView extends WebView {
   };
   private WebViewCallback callback;
 
-  private OnPageChangeListener mChangeListener;
-
-  private OnLongClickListener mOnLongClickListener;
-
   @Override
   public void loadUrl(String url) {
     super.loadUrl(url);
@@ -161,7 +157,7 @@ public class KiwixWebView extends WebView {
     HitTestResult result = getHitTestResult();
 
     if (result.getType() == HitTestResult.SRC_ANCHOR_TYPE) {
-      mOnLongClickListener.onLongClick(result.getExtra());
+      callback.webViewLongClick(result.getExtra());
       return true;
     }
     return super.performLongClick();
@@ -197,33 +193,12 @@ public class KiwixWebView extends WebView {
     int pages = getContentHeight() / windowHeight;
     int page = t / windowHeight;
 
-    // Alert the listener
-    if (mChangeListener != null) {
-      mChangeListener.onPageChanged(page, pages);
-    }
+    callback.webViewPageChanged(page, pages);
   }
 
   public void disableZoomControls() {
     getSettings().setBuiltInZoomControls(true);
     getSettings().setDisplayZoomControls(false);
-  }
-
-  public void setOnPageChangedListener(OnPageChangeListener listener) {
-    mChangeListener = listener;
-  }
-
-  public void setOnLongClickListener(OnLongClickListener listener) {
-    mOnLongClickListener = listener;
-  }
-
-  public interface OnPageChangeListener {
-
-    void onPageChanged(int page, int maxPages);
-  }
-
-  public interface OnLongClickListener {
-
-    void onLongClick(String url);
   }
 }
 
