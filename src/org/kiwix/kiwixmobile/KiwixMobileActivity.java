@@ -1432,94 +1432,6 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     startActivityForResult(target, REQUEST_FILE_SELECT);
   }
 
-  @Override public void webViewProgressChanged(int progress) {
-    progressBar.setProgress(progress);
-    if (progress == 100) {
-      Log.d(KiwixMobileActivity.TAG_KIWIX, "Loading article finished.");
-      if (requestClearHistoryAfterLoad) {
-        Log.d(KiwixMobileActivity.TAG_KIWIX,
-            "Loading article finished and requestClearHistoryAfterLoad -> clearHistory");
-        getCurrentWebView().clearHistory();
-        requestClearHistoryAfterLoad = false;
-      }
-
-      Log.d(KiwixMobileActivity.TAG_KIWIX, "Loaded URL: " + getCurrentWebView().getUrl());
-    }
-  }
-
-  @Override public void webViewTitleUpdated(String title) {
-    tabDrawerAdapter.notifyDataSetChanged();
-  }
-
-
-  @Override public void webViewPageChanged(int page, int maxPages) {
-    if (isBackToTopEnabled) {
-      if (getCurrentWebView().getScrollY() > 200) {
-        if (backToTopButton.getVisibility() == View.INVISIBLE && TTSControls.getVisibility() == View.GONE ) {
-          backToTopButton.setText(R.string.button_backtotop);
-          backToTopButton.setVisibility(View.VISIBLE);
-
-          backToTopButton.startAnimation(
-              AnimationUtils.loadAnimation(KiwixMobileActivity.this, android.R.anim.fade_in));
-          backToTopButton.setVisibility(View.INVISIBLE);
-          Animation fadeAnimation =
-              AnimationUtils.loadAnimation(KiwixMobileActivity.this, android.R.anim.fade_out);
-          fadeAnimation.setStartOffset(1200);
-          backToTopButton.startAnimation(fadeAnimation);
-        }
-      } else {
-        if (backToTopButton.getVisibility() == View.VISIBLE) {
-          backToTopButton.setVisibility(View.INVISIBLE);
-
-          backToTopButton.clearAnimation();
-          backToTopButton.startAnimation(
-              AnimationUtils.loadAnimation(KiwixMobileActivity.this, android.R.anim.fade_out));
-        } else {
-          backToTopButton.clearAnimation();
-        }
-      }
-    }
-  }
-
-  @Override public void webViewLongClick(final String url) {
-    boolean handleEvent = false;
-    if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
-      // This is my web site, so do not override; let my WebView load the page
-      handleEvent = true;
-    } else if (url.startsWith("file://")) {
-      // To handle help page (loaded from resources)
-      handleEvent = true;
-    } else if (url.startsWith(ZimContentProvider.UI_URI.toString())) {
-      handleEvent = true;
-    }
-
-    if (handleEvent) {
-      AlertDialog.Builder builder = new AlertDialog.Builder(KiwixMobileActivity.this);
-
-      builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-        public void onClick(DialogInterface dialog, int id) {
-          if (isOpenNewTabInBackground) {
-            newTabInBackground(url);
-            Snackbar snackbar = Snackbar.make(snackbarLayout,
-                getString(R.string.new_tab_snackbar),
-                Snackbar.LENGTH_LONG)
-                .setAction(getString(R.string.open), v -> {
-                  if (mWebViews.size() > 1) selectTab(mWebViews.size() - 1);
-                });
-            snackbar.setActionTextColor(getResources().getColor(R.color.white));
-            snackbar.show();
-          } else {
-            newTab(url);
-          }
-        }
-      });
-      builder.setNegativeButton(android.R.string.no, null);
-      builder.setMessage(getString(R.string.open_in_new_tab));
-      AlertDialog dialog = builder.create();
-      dialog.show();
-    }
-  }
-
   public void selectSettings() {
     final String zimFile = ZimContentProvider.getZimFile();
     Intent i = new Intent(this, KiwixSettingsActivity.class);
@@ -1699,5 +1611,93 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
   @Override public void webViewFailedLoading(String url) {
     String error = String.format(getString(R.string.error_articleurlnotfound), url);
     Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+  }
+
+  @Override public void webViewProgressChanged(int progress) {
+    progressBar.setProgress(progress);
+    if (progress == 100) {
+      Log.d(KiwixMobileActivity.TAG_KIWIX, "Loading article finished.");
+      if (requestClearHistoryAfterLoad) {
+        Log.d(KiwixMobileActivity.TAG_KIWIX,
+            "Loading article finished and requestClearHistoryAfterLoad -> clearHistory");
+        getCurrentWebView().clearHistory();
+        requestClearHistoryAfterLoad = false;
+      }
+
+      Log.d(KiwixMobileActivity.TAG_KIWIX, "Loaded URL: " + getCurrentWebView().getUrl());
+    }
+  }
+
+  @Override public void webViewTitleUpdated(String title) {
+    tabDrawerAdapter.notifyDataSetChanged();
+  }
+
+
+  @Override public void webViewPageChanged(int page, int maxPages) {
+    if (isBackToTopEnabled) {
+      if (getCurrentWebView().getScrollY() > 200) {
+        if (backToTopButton.getVisibility() == View.INVISIBLE && TTSControls.getVisibility() == View.GONE ) {
+          backToTopButton.setText(R.string.button_backtotop);
+          backToTopButton.setVisibility(View.VISIBLE);
+
+          backToTopButton.startAnimation(
+              AnimationUtils.loadAnimation(KiwixMobileActivity.this, android.R.anim.fade_in));
+          backToTopButton.setVisibility(View.INVISIBLE);
+          Animation fadeAnimation =
+              AnimationUtils.loadAnimation(KiwixMobileActivity.this, android.R.anim.fade_out);
+          fadeAnimation.setStartOffset(1200);
+          backToTopButton.startAnimation(fadeAnimation);
+        }
+      } else {
+        if (backToTopButton.getVisibility() == View.VISIBLE) {
+          backToTopButton.setVisibility(View.INVISIBLE);
+
+          backToTopButton.clearAnimation();
+          backToTopButton.startAnimation(
+              AnimationUtils.loadAnimation(KiwixMobileActivity.this, android.R.anim.fade_out));
+        } else {
+          backToTopButton.clearAnimation();
+        }
+      }
+    }
+  }
+
+  @Override public void webViewLongClick(final String url) {
+    boolean handleEvent = false;
+    if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
+      // This is my web site, so do not override; let my WebView load the page
+      handleEvent = true;
+    } else if (url.startsWith("file://")) {
+      // To handle help page (loaded from resources)
+      handleEvent = true;
+    } else if (url.startsWith(ZimContentProvider.UI_URI.toString())) {
+      handleEvent = true;
+    }
+
+    if (handleEvent) {
+      AlertDialog.Builder builder = new AlertDialog.Builder(KiwixMobileActivity.this);
+
+      builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int id) {
+          if (isOpenNewTabInBackground) {
+            newTabInBackground(url);
+            Snackbar snackbar = Snackbar.make(snackbarLayout,
+                getString(R.string.new_tab_snackbar),
+                Snackbar.LENGTH_LONG)
+                .setAction(getString(R.string.open), v -> {
+                  if (mWebViews.size() > 1) selectTab(mWebViews.size() - 1);
+                });
+            snackbar.setActionTextColor(getResources().getColor(R.color.white));
+            snackbar.show();
+          } else {
+            newTab(url);
+          }
+        }
+      });
+      builder.setNegativeButton(android.R.string.no, null);
+      builder.setMessage(getString(R.string.open_in_new_tab));
+      AlertDialog dialog = builder.create();
+      dialog.show();
+    }
   }
 }
