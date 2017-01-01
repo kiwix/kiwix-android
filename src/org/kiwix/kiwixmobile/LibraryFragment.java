@@ -108,26 +108,14 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
       this.getContext().registerReceiver(new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
-          permissionButton.setVisibility(View.GONE);
-          permissionText.setVisibility(View.GONE);
-          progressBar.setVisibility(View.INVISIBLE);
-          progressBarLayout.setVisibility(View.GONE);
-          progressBarMessage.setVisibility(View.GONE);
-
           NetworkInfo network = conMan.getActiveNetworkInfo();
 
-          if (network != null && network.isConnected()) {
-            if (books == null) {
+          if (books == null && network != null && network.isConnected()) {
               if (isWiFi()) {
                 getLibraryData();
               } else {
                 displayNetworkConfirmation();
               }
-            }
-          } else {
-            books = null;
-            noNetworkConnection();
           }
         }
       }, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
@@ -169,6 +157,8 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
   }
 
   public void displayNetworkConfirmation(){
+    progressBar.setVisibility(View.GONE);
+    progressBarMessage.setVisibility(View.GONE);
     permissionText.setVisibility(View.VISIBLE);
     permissionButton.setVisibility(View.VISIBLE);
     permissionButton.setOnClickListener(new View.OnClickListener() {
@@ -212,6 +202,13 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
             .containsValue(KIWIX_ROOT + StorageUtils.getFileNameFromUrl(((LibraryNetworkEntity.Book) parent.getAdapter().getItem(position)).getUrl()))) {
       Toast.makeText(super.getActivity(), getString(R.string.zim_already_downloading), Toast.LENGTH_LONG).show();
     } else {
+
+      NetworkInfo network = conMan.getActiveNetworkInfo();
+      if (network == null || !network.isConnected()) {
+        Toast.makeText(super.getActivity(), getString(R.string.no_network_connection), Toast.LENGTH_LONG).show();
+        return;
+      }
+
       if (isWiFi()) {
         downloadFile((LibraryNetworkEntity.Book) parent.getAdapter().getItem(position));
         libraryAdapter.getFilter().filter(((ZimManageActivity) super.getActivity()).searchView.getQuery());
