@@ -40,6 +40,8 @@ public class BookDataSource {
 
   public String url;
 
+  public String remoteUrl;
+
   public String articleCount;
 
   public String mediaCount;

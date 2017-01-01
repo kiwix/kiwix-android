@@ -39,7 +39,7 @@ import org.kiwix.kiwixmobile.database.entity.RecentSearch;
 
 public class KiwixDatabase extends SquidDatabase {
 
-  private static final int VERSION = 11;
+  private static final int VERSION = 12;
   private Context context;
   private static KiwixDatabase instance = null;
 
@@ -116,6 +116,9 @@ public class KiwixDatabase extends SquidDatabase {
     }
     if (newVersion >= 11) {
       tryCreateTable(RecentSearch.TABLE);
+    }
+    if (newVersion >= 12) {
+      tryAddColumn(BookDatabaseEntity.REMOTE_URL);
     }
     return true;
   }
