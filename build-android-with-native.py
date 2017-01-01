@@ -438,8 +438,8 @@ for arch in ARCHS:
         shutil.copy('libz.a', os.path.join(platform, 'lib', 'gcc', arch_full, COMPILER_VERSION, 'libz.a'))
         os.chdir('../e2fsprogs-1.42')
         print("Fetching latest compile.sub...")
-        shutil.copy(os.path.join("..", "xapian-core-1.4.1", "config.guess"), os.path.join("config", "config.guess"))
-        shutil.copy(os.path.join("..", "xapian-core-1.4.1", "config.sub"), os.path.join("config", "config.sub"))
+        shutil.copy(os.path.join("..", "xapian-core-1.4.2", "config.guess"), os.path.join("config", "config.guess"))
+        shutil.copy(os.path.join("..", "xapian-core-1.4.2", "config.sub"), os.path.join("config", "config.sub"))
         if os.path.exists("Makefile"):
             syscall('make clean')
         syscall('./configure --host=%s --prefix=%s' % (arch_full, platform))
@@ -460,7 +460,7 @@ for arch in ARCHS:
         shutil.copy('uuid.h', os.path.join(platform, 'include', 'c++', COMPILER_VERSION, 'uuid', 'uuid.h'))
         shutil.copy('libuuid.a', os.path.join(platform, 'lib', 'gcc', arch_full, COMPILER_VERSION, 'libuuid.a'))
         shutil.copy('libuuid.a', os.path.join(platform, 'lib', 'libuuid.a'))
-        os.chdir('../../../xapian-core-1.4.1')
+        os.chdir('../../../xapian-core-1.4.2')
         if os.path.exists("Makefile"):
             syscall('make clean')
 
@@ -502,7 +502,7 @@ for arch in ARCHS:
             pass
 
         syscall('make')
-        shutil.copy(os.path.join(curdir, '..', 'src', 'dependencies', 'xapian-core-1.4.1', '.libs', 'libxapian.a'), os.path.join(platform, 'lib', 'libxapian.a'))
+        shutil.copy(os.path.join(curdir, '..', 'src', 'dependencies', 'xapian-core-1.4.2', '.libs', 'libxapian.a'), os.path.join(platform, 'lib', 'libxapian.a'))
         os.chdir(curdir)
 
     # check that the step went well
