@@ -1486,10 +1486,10 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
       // This is my web site, so do not override; let my WebView load the page
       handleEvent = true;
-    } else if (url.startsWith("file://") && !url.contains("selectzimfile")) {
+    } else if (url.startsWith("file://")) {
       // To handle help page (loaded from resources)
       handleEvent = true;
-    } else if (url.startsWith(ZimContentProvider.UI_URI.toString()) && !url.contains("selectzimfile")) {
+    } else if (url.startsWith(ZimContentProvider.UI_URI.toString())) {
       handleEvent = true;
     }
 
