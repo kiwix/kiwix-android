@@ -1030,17 +1030,17 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
   @Override
   protected void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
-    boolean IS_WIDGET_SEARCH_INTENT = intent.getBooleanExtra("isWidgetSearch", false);
-    boolean IS_WIDGET_VOICE_SEARCH = intent.getBooleanExtra("isWidgetVoice", false);
-    boolean IS_WIDGET_STAR = intent.getBooleanExtra("isWidgetStar", false);
+    boolean isWidgetSearch = intent.getBooleanExtra("isWidgetSearch", false);
+    boolean isWidgetVoiceSearch = intent.getBooleanExtra("isWidgetVoice", false);
+    boolean isWidgetStar = intent.getBooleanExtra("isWidgetStar", false);
 
-    if (IS_WIDGET_STAR && ZimContentProvider.getId() != null) {
+    if (isWidgetStar && ZimContentProvider.getId() != null) {
       goToBookmarks();
-    } else if (IS_WIDGET_SEARCH_INTENT && ZimContentProvider.getId() != null) {
+    } else if (isWidgetSearch && ZimContentProvider.getId() != null) {
       goToSearch(false);
-    } else if (IS_WIDGET_VOICE_SEARCH && ZimContentProvider.getId() != null) {
+    } else if (isWidgetVoiceSearch && ZimContentProvider.getId() != null) {
       goToSearch(true);
-    } else if (IS_WIDGET_STAR || IS_WIDGET_SEARCH_INTENT || IS_WIDGET_VOICE_SEARCH) {
+    } else if (isWidgetStar || isWidgetSearch || isWidgetVoiceSearch) {
       manageZimFiles(0);
     }
   }
