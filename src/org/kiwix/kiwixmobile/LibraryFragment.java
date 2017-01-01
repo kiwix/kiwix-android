@@ -172,7 +172,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
   }
 
   public void noNetworkConnection() {
-    progressBar.setVisibility(View.INVISIBLE);
+    progressBar.setVisibility(View.GONE);
     progressBarLayout.setVisibility(View.VISIBLE);
     progressBarMessage.setVisibility(View.VISIBLE);
     progressBarMessage.setText(R.string.no_network_msg);
