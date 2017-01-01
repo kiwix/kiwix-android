@@ -26,6 +26,7 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.ZimFileSelectFragment;
 import org.kiwix.kiwixmobile.ZimManageActivity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
 
 public class DownloadFragment extends Fragment {
@@ -111,7 +112,7 @@ public class DownloadFragment extends Fragment {
         if (progress == 100) {
           ImageView pause = (ImageView) viewGroup.findViewById(R.id.pause);
           pause.setEnabled(false);
-          String fileName = mDownloadFiles.get(mKeys[position]);
+          String fileName = FileUtils.getFileName(mDownloadFiles.get(mKeys[position]));
           {
             Snackbar completeSnack = Snackbar.make(mainLayout, getResources().getString(R.string.download_complete_snackbar), Snackbar.LENGTH_LONG);
             completeSnack.setAction(getResources().getString(R.string.open), new View.OnClickListener() {

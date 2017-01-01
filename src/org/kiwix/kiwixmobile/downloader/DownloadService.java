@@ -39,6 +39,7 @@ import okhttp3.Response;
 import okio.BufferedSource;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.observables.ConnectableObservable;
 
 public class DownloadService extends Service {
 
@@ -70,6 +71,14 @@ public class DownloadService extends Service {
     client = ((KiwixApplication) getApplication()).getOkHttpClient();
     notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
+    SD_CARD = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+        .getString(KiwixMobileActivity.PREF_STORAGE,Environment.getExternalStorageDirectory().getPath());
+    KIWIX_ROOT = SD_CARD + "/Kiwix/";
+
+    KIWIX_ROOT = checkWritable(KIWIX_ROOT);
+
+
+
     super.onCreate();
   }
 
@@ -91,6 +100,7 @@ public class DownloadService extends Service {
     final Intent target = new Intent(this, KiwixMobileActivity.class);
     target.putExtra("library", true);
     bookDao = new BookDao(KiwixDatabase.getInstance(this));
+
     PendingIntent pendingIntent = PendingIntent.getActivity
         (getBaseContext(), 0,
         target, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -168,6 +178,7 @@ public class DownloadService extends Service {
                 (getBaseContext(), 0,
                     target, PendingIntent.FLAG_CANCEL_CURRENT);
             book.downloaded = true;
+            bookDao.deleteBook(book.id);
             notification.get(notificationID).setContentIntent(pendingIntent);
             updateForeground();
           } else if (progress == 0) {
@@ -229,11 +240,30 @@ public class DownloadService extends Service {
         // Create chuck file
         File file = new File(KIWIX_ROOT, chunk.getFileName());
         file.getParentFile().mkdirs();
-        file.createNewFile();
+        File fullFile = new File(file.getPath().substring(0, file.getPath().length() - 5));
+
+        long downloaded = Long.parseLong(chunk.getRangeHeader().split("-")[0]);
+        if (fullFile.exists() && fullFile.length() == chunk.getSize()) {
+          // Mark chuck status as downloaded
+          chunk.isDownloaded = true;
+          subscriber.onCompleted();
+          return;
+        } else if (!file.exists()) {
+          file.createNewFile();
+        }
+
         RandomAccessFile output = new RandomAccessFile(file, "rw");
+        output.seek(output.length());
+        downloaded += output.length();
+
+        if (chunk.getStartByte() == 0) {
+          LibraryNetworkEntity.Book book = DownloadFragment.mDownloads.get(chunk.getNotificationID());
+          book.remoteUrl = book.getUrl();
+          book.file = fullFile;
+          bookDao.saveBook(book);
+        }
 
         byte[] buffer = new byte[2048];
-        long downloaded = Long.parseLong(chunk.getRangeHeader().split("-")[0]);
         int read;
         int timeout = 100;
         int attempts = 0;
@@ -243,10 +273,7 @@ public class DownloadService extends Service {
         // Keep attempting to download chuck despite network errors
         while (attempts < timeout) {
           try {
-            String rangeHeader = chunk.getRangeHeader();
-            if (attempts > 0) {
-              rangeHeader = String.format("%d-%d", downloaded, chunk.getEndByte());
-            }
+            String rangeHeader = String.format("%d-%d", downloaded, chunk.getEndByte());
 
             // Build request with up to date range
             Response response = client.newCall(

@@ -194,4 +194,36 @@ public class FileUtils {
     String[] csvArray = csv.split(",");
     return new ArrayList<>(Arrays.asList(csvArray));
   }
+
+  public static boolean hasPart(File file) {
+    if (file.getPath().endsWith(".zim")) {
+      return false;
+    }
+    if (file.getPath().endsWith(".part")) {
+      return true;
+    }
+    String path = file.getPath();
+
+    for (char alphabetFirst = 'a'; alphabetFirst <= 'z'; alphabetFirst++) {
+      for (char alphabetSecond = 'a'; alphabetSecond <= 'z'; alphabetSecond++) {
+        String chunkPath = path.substring(0, path.length() - 2) + alphabetFirst + alphabetSecond;
+        File fileChunk = new File(chunkPath + ".part");
+        if (fileChunk.exists()) {
+          return true;
+        } else if (!new File(chunkPath).exists()) {
+          return false;
+        }
+      }
+    }
+    return false;
+  }
+
+  public static String getFileName (String fileName) {
+    if (new File(fileName).exists()) {
+      return fileName;
+    } else {
+      return fileName += "aa";
+    }
+  }
+
 }

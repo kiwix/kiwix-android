@@ -42,4 +42,6 @@ public class Chunk {
   public long getStartByte(){ return startByte; }
 
   public long getEndByte(){ return endByte; }
+
+  public long getSize() { return 1 + endByte - startByte; }
 }

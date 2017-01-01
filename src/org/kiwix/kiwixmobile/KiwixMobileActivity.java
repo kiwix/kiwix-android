@@ -411,7 +411,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
       getCurrentWebView().loadUrl(i.getStringExtra("choseXTitle"));
     }
     if (i.hasExtra("zimFile")) {
-      File file = new File(i.getStringExtra("zimFile"));
+      File file = new File(FileUtils.getFileName(i.getStringExtra("zimFile")));
       LibraryFragment.mService.cancelNotification(i.getIntExtra("notificationID", 0));
       Uri uri = Uri.fromFile(file);
 
