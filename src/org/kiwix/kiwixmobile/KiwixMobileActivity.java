@@ -333,39 +333,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
       }
     });
 
-    final ActionBarDrawerToggle drawerToggle =
-        new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0) {
-
-          @Override
-          public void onDrawerSlide(View drawerView, float slideOffset) {
-            // Make sure it was the navigation drawer
-            if (drawerView.getId() == R.id.left_drawer) {
-              super.onDrawerSlide(drawerView, slideOffset);
-            }
-          }
-
-          @Override
-          public void onDrawerOpened(View drawerView) {
-            // Make sure it was the navigation drawer
-            if (drawerView.getId() == R.id.left_drawer) {
-              super.onDrawerOpened(drawerView);
-              drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED,GravityCompat.END);
-            } else {
-              drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, GravityCompat.START);
-            }
-          }
-
-          @Override
-          public void onDrawerClosed(View drawerView) {
-            // Make sure it was the navigation drawer
-            if (drawerView.getId() == R.id.left_drawer) {
-              super.onDrawerClosed(drawerView);
-              drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.END);
-            } else {
-              drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, GravityCompat.START);
-            }
-          }
-        };
+    ActionBarDrawerToggle drawerToggle = new KiwixActionBarDrawerToggle(this, drawerLayout, toolbar);
 
     drawerLayout.addDrawerListener(drawerToggle);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
