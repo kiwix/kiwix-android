@@ -78,6 +78,7 @@ public class KiwixTextToSpeech {
       currentTTSTask = null;
     } else if (tts.isSpeaking()) {
       if (tts.stop() == TextToSpeech.SUCCESS) {
+        tts.setOnUtteranceProgressListener(null);
         onSpeakingListener.onSpeakingEnded();
       }
     } else {
@@ -113,6 +114,7 @@ public class KiwixTextToSpeech {
   public void stop() {
     if (tts.stop() == TextToSpeech.SUCCESS) {
       currentTTSTask = null;
+      tts.setOnUtteranceProgressListener(null);
       onSpeakingListener.onSpeakingEnded();
     }
   }
@@ -186,6 +188,7 @@ public class KiwixTextToSpeech {
     public void pause() {
       paused = true;
       currentPiece.decrementAndGet();
+      tts.setOnUtteranceProgressListener(null);
       tts.stop();
     }
 
