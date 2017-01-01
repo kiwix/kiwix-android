@@ -1,5 +1,6 @@
 2.2
 FIX: Text To Speech issues on earlier Android versions
+FIX: Download reslience
 
 2.1
 FIX: Display of storage devices
