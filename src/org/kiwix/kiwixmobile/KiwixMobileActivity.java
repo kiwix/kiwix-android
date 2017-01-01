@@ -706,7 +706,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
         break;
 
       case R.id.menu_help:
-        showHelp();
+        showHelpPage();
         break;
 
       case R.id.menu_openfile:
@@ -789,7 +789,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     isFullscreenOpened = false;
   }
 
-  @Override  public void showWelcomePage() {
+  public void showHelpPage() {
     getCurrentWebView().loadUrl("file:///android_res/raw/welcome.html");
   }
 
@@ -802,11 +802,6 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     }
   }
 
-
-  public void showHelp() {
-    newTab();
-    getCurrentWebView().loadUrl("file:///android_res/raw/welcome.html");
-  }
 
   public boolean openZimFile(File file, boolean clearHistory) {
     if (file.canRead() || Build.VERSION.SDK_INT < 19 || (Constants.IS_CUSTOM_APP
@@ -836,14 +831,14 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
         } else {
           Toast.makeText(this, getResources().getString(R.string.error_fileinvalid),
               Toast.LENGTH_LONG).show();
-          showWelcomePage();
+          showHelpPage();
         }
       } else {
         Log.e(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
 
         Toast.makeText(this, getResources().getString(R.string.error_filenotfound), Toast.LENGTH_LONG)
             .show();
-        showWelcomePage();
+        showHelpPage();
       }
       return false;
     } else {
@@ -1574,7 +1569,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
         } else {
           Log.d(TAG_KIWIX,
               " Kiwix normal start, no zimFile loaded last time  -> display welcome page");
-          showWelcomePage();
+          showHelpPage();
         }
       }
     }

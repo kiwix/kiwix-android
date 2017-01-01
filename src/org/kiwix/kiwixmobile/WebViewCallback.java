@@ -9,7 +9,7 @@ public interface WebViewCallback {
 
   void webViewFailedLoading(String failingUrl);
 
-  void showWelcomePage();
+  void showHelpPage();
 
   void openExternalUrl(Intent intent);
 

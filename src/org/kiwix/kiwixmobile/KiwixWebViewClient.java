@@ -64,7 +64,7 @@ public class KiwixWebViewClient extends WebViewClient {
   @Override
   public void onPageFinished(WebView view, String url) {
     if ((url.equals("content://org.kiwix.zim.base/null")) && !Constants.IS_CUSTOM_APP) {
-      callback.showWelcomePage();
+      callback.showHelpPage();
       return;
     }
     if (!url.equals("file:///android_res/raw/welcome.html")) {
