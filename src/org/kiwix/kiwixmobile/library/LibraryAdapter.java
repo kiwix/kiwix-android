@@ -165,6 +165,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
     @Override
     protected FilterResults performFiltering(CharSequence s) {
       ArrayList<Book> filteredBooks = new ArrayList<Book>();
+      ArrayList<Book> books = bookDao.getBooks();
       if (s.length() == 0) {
         LinkedList<Book> booksCopy = new LinkedList<LibraryNetworkEntity.Book>(allBooks);
         LinkedList<Book> booksAdditions = new LinkedList<LibraryNetworkEntity.Book>();
@@ -179,7 +180,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
             booksCopy.remove(b);
           } else {
             // Check file doesn't exist locally
-            for (Book book : bookDao.getBooks()) {
+            for (Book book : books) {
               if (book.getId().equals(b.getId())) {
                 booksCopy.remove(b);
                 contains = false;
@@ -205,7 +206,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
         // Check file doesn't exist locally
         for (Book b : allBooks) {
           Boolean exits = false;
-          for (Book book : bookDao.getBooks()) {
+          for (Book book : books) {
             if (book.getId().equals(b.getId())) {
               exits = true;
               break;
