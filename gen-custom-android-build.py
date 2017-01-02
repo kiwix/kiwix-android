@@ -43,7 +43,7 @@ PY3 = sys.version_info.major >= 3
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-architectures = [];
+architectures = []
 
 DEFAULT_JSDATA = {
     # mandatory fields
