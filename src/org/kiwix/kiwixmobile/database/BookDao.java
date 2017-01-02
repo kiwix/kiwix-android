@@ -90,7 +90,6 @@ public class BookDao {
   }
 
   public void saveBooks(ArrayList<Book> books) {
-    mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.ID.isNotNull());
     for (Book book : books) {
       BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
       bookDatabaseEntity.setBookId(book.getId());

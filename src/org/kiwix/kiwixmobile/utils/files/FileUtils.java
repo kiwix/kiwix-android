@@ -196,6 +196,7 @@ public class FileUtils {
   }
 
   public static boolean hasPart(File file) {
+    file = new File(getFileName(file.getPath()));
     if (file.getPath().endsWith(".zim")) {
       return false;
     }
@@ -221,8 +222,10 @@ public class FileUtils {
   public static String getFileName (String fileName) {
     if (new File(fileName).exists()) {
       return fileName;
+    } else if (new File(fileName + ".part").exists()) {
+      return fileName + ".part";
     } else {
-      return fileName += "aa";
+      return fileName + "aa";
     }
   }
 
