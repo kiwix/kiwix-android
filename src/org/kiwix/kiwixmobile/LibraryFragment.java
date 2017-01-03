@@ -122,8 +122,10 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
 
       BookDao bookDao = new BookDao(KiwixDatabase.getInstance(getActivity()));
       for (LibraryNetworkEntity.Book book : bookDao.getDownloadingBooks()) {
-        book.url = book.remoteUrl;
-        downloadFile(book);
+        if (!DownloadFragment.mDownloads.containsValue(book)) {
+          book.url = book.remoteUrl;
+          downloadFile(book);
+        }
       }
         // The FragmentActivity doesn't contain the layout directly so we must use our instance of     LinearLayout :
         //llLayout.findViewById(R.id.someGuiElement);
