@@ -153,40 +153,33 @@ public class DownloadFragment extends Fragment {
       ProgressBar downloadProgress = (ProgressBar) convertView.findViewById(R.id.downloadProgress);
       ImageView pause = (ImageView) convertView.findViewById(R.id.pause);
 
-      if (LibraryFragment.mService.downloadProgress.get(mKeys[position]) != -1) {
+      if (LibraryFragment.mService.downloadProgress.get(mKeys[position]) != 0) {
         downloadProgress.setProgress(LibraryFragment.mService.downloadProgress.get(mKeys[position]));
-        if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == 1) {
-          LibraryFragment.mService.pauseDownload(mKeys[position]);
+        if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PAUSE) {
           pause.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
         }
       }
 
-      pause.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == 0) {
-            LibraryFragment.mService.pauseDownload(mKeys[position]);
-            pause.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
-          } else {
-            LibraryFragment.mService.playDownload(mKeys[position]);
-            pause.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_black_24dp));
-          }
+      pause.setOnClickListener(v -> {
+        if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY) {
+          LibraryFragment.mService.pauseDownload(mKeys[position]);
+          pause.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+        } else {
+          LibraryFragment.mService.playDownload(mKeys[position]);
+          pause.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_black_24dp));
         }
       });
 
 
       ImageView stop = (ImageView) convertView.findViewById(R.id.stop);
-      stop.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          LibraryFragment.mService.stopDownload(mKeys[position]);
-          mDownloads.remove(mKeys[position]);
-          mDownloadFiles.remove(mKeys[position]);
-          downloadAdapter.notifyDataSetChanged();
-          updateNoDownloads();
-          LibraryFragment.libraryAdapter.getFilter().filter(((ZimManageActivity) getActivity()).searchView.getQuery());
+      stop.setOnClickListener(v -> {
+        LibraryFragment.mService.stopDownload(mKeys[position]);
+        mDownloads.remove(mKeys[position]);
+        mDownloadFiles.remove(mKeys[position]);
+        downloadAdapter.notifyDataSetChanged();
+        updateNoDownloads();
+        LibraryFragment.libraryAdapter.getFilter().filter(((ZimManageActivity) getActivity()).searchView.getQuery());
 
-        }
       });
 
       // Return the completed view to render on screen

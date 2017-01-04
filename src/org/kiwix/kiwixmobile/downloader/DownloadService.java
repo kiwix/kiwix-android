@@ -48,6 +48,10 @@ public class DownloadService extends Service {
 
   private static String SD_CARD;
   public static String KIWIX_ROOT;
+  public static final int PLAY = 1;
+  public static final int PAUSE = 2;
+  public static final int FINISH = 3;
+  public static final int CANCEL = 4;
   public static int notificationCount = 1;
   public static ArrayList<String> notifications = new ArrayList<>();
   public String notificationTitle;
@@ -113,19 +117,19 @@ public class DownloadService extends Service {
         .setContentIntent(pendingIntent)
         .setOngoing(true));
 
-    downloadStatus.put(notificationCount, 0);
+    downloadStatus.put(notificationCount, PLAY);
     String url = intent.getExtras().getString(DownloadIntent.DOWNLOAD_URL_PARAMETER);
     downloadBook(url, notificationCount, book);
     return START_STICKY;
   }
 
   public void stopDownload(int notificationID) {
-    downloadStatus.put(notificationID, 2);
+    downloadStatus.put(notificationID, CANCEL);
     synchronized (pauseLock) {
       pauseLock.notify();
     }
-    notificationManager.cancel(notificationID);
     updateForeground();
+    notificationManager.cancel(notificationID);
   }
 
   public void cancelNotification(int notificationID) {
@@ -149,11 +153,11 @@ public class DownloadService extends Service {
   }
 
   public void pauseDownload(int notificationID) {
-    downloadStatus.put(notificationID, 1);
+    downloadStatus.put(notificationID, PAUSE);
   }
 
   public void playDownload(int notificationID) {
-    downloadStatus.put(notificationID, 0);
+    downloadStatus.put(notificationID, PLAY);
     synchronized (pauseLock) {
       pauseLock.notify();
     }
@@ -204,7 +208,7 @@ public class DownloadService extends Service {
     // Allow notification to be dismissible while ensuring integrity of service if active downloads
     stopForeground(true);
     for(int i = 0; i < downloadStatus.size(); i++) {
-      if (downloadStatus.get(i) != 4 && downloadStatus.get(i) != 2 ){
+      if (downloadStatus.get(i) == PLAY && downloadStatus.get(i) == PAUSE ){
         startForeground( downloadStatus.keyAt(i), notification.get(downloadStatus.keyAt(i)).build());
       }
     }
@@ -232,7 +236,7 @@ public class DownloadService extends Service {
       if (subscriber.isUnsubscribed()) return;
       try {
         // Stop if download is completed or download canceled
-        if (chunk.isDownloaded || downloadStatus.get(chunk.getNotificationID()) == 2) {
+        if (chunk.isDownloaded || downloadStatus.get(chunk.getNotificationID()) == CANCEL) {
           subscriber.onCompleted();
           return;
         }
@@ -269,10 +273,10 @@ public class DownloadService extends Service {
         int attempts = 0;
         BufferedSource input = null;
 
-
         // Keep attempting to download chuck despite network errors
         while (attempts < timeout) {
           try {
+
             String rangeHeader = String.format("%d-%d", downloaded, chunk.getEndByte());
 
             // Build request with up to date range
@@ -287,11 +291,11 @@ public class DownloadService extends Service {
 
             // Start streaming data
             while ((read = input.read(buffer)) != -1) {
-              if (downloadStatus.get(chunk.getNotificationID()) == 2) {
+              if (downloadStatus.get(chunk.getNotificationID()) == CANCEL) {
                 attempts = timeout;
                 break;
               }
-              if (downloadStatus.get(chunk.getNotificationID()) == 1) {
+              if (downloadStatus.get(chunk.getNotificationID()) == PAUSE) {
                 synchronized (pauseLock) {
                   try {
                     // Calling wait() will block this thread until another thread
@@ -307,7 +311,7 @@ public class DownloadService extends Service {
               int progress = (int) ((100 * downloaded) / chunk.getContentLength());
               downloadProgress.put(chunk.getNotificationID(), progress);
               if (progress == 100){
-                downloadStatus.put(chunk.getNotificationID(), 4);
+                downloadStatus.put(chunk.getNotificationID(), FINISH);
               }
               subscriber.onNext(progress);
             }
@@ -326,7 +330,7 @@ public class DownloadService extends Service {
           input.close();
         }
         // If download is canceled clean up else remove .part from file name
-        if (downloadStatus.get(chunk.getNotificationID()) == 2) {
+        if (downloadStatus.get(chunk.getNotificationID()) == CANCEL) {
           String path = file.getPath();
           if (path.substring(path.length() - 8).equals("zim.part")) {
             path = path.substring(0, path.length() - 5);
