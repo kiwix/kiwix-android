@@ -95,13 +95,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
       kiwixService = ((KiwixApplication) super.getActivity().getApplication()).getKiwixService();
       conMan = (ConnectivityManager) super.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
       NetworkInfo network = conMan.getActiveNetworkInfo();
-      if (network != null && network.isConnected()) {
-        if (isWiFi()) {
-          getLibraryData();
-        } else {
-          displayNetworkConfirmation();
-        }
-      } else {
+      if (network == null || !network.isConnected()) {
         noNetworkConnection();
       }
 
@@ -145,7 +139,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
         .subscribe(library -> {
           books = library.getBooks();
           if (active) {
-            libraryAdapter = new LibraryAdapter(super.getActivity(), new ArrayList<LibraryNetworkEntity.Book>(books));
+            libraryAdapter = new LibraryAdapter(super.getActivity(), new ArrayList<>(books));
             libraryList.setAdapter(libraryAdapter);
           }
         },error -> {

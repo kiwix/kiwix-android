@@ -200,7 +200,9 @@ public class ZimFileSelectFragment extends Fragment
           }
         }
 
-        if (LibraryFragment.libraryAdapter != null && context.searchView != null) {
+        boolean cached = mFiles.containsAll(bookDao.getBooks()) && bookDao.getBooks().containsAll(mFiles);
+
+        if (!cached && LibraryFragment.libraryAdapter != null && context.searchView != null) {
           LibraryFragment.libraryAdapter.getFilter().filter(context.searchView.getQuery());
         }
 
