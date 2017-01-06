@@ -1007,18 +1007,19 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
           i.putExtra(Intent.EXTRA_PROCESS_TEXT, intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT));
         }
-        intent.setAction("");
         startActivityForResult(i, REQUEST_FILE_SEARCH);
       } else if (intent.getAction().equals(KiwixSearchWidget.TEXT_CLICKED)){
+        intent.setAction("");
         goToSearch(false);
       } else if (intent.getAction().equals(KiwixSearchWidget.STAR_CLICKED)) {
+        intent.setAction("");
         goToBookmarks();
       } else if (intent.getAction().equals(KiwixSearchWidget.MIC_CLICKED)) {
+        intent.setAction("");
         goToSearch(true);
       }
 
     }
-
     updateWidgets(this);
   }
 
