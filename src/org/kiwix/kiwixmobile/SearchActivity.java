@@ -26,6 +26,8 @@ import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.database.RecentSearchDao;
 import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 
+import static android.provider.Settings.System.ALWAYS_FINISH_ACTIVITIES;
+
 public class SearchActivity extends AppCompatActivity
     implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
@@ -78,7 +80,6 @@ public class SearchActivity extends AppCompatActivity
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.menu_search, menu);
     MenuItem searchMenuItem = menu.findItem(R.id.menu_search);
     MenuItemCompat.expandActionView(searchMenuItem);
