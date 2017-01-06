@@ -997,33 +997,28 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     }
 
     Intent intent = getIntent();
-    if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_PROCESS_TEXT)) {
-      final String zimFile = ZimContentProvider.getZimFile();
-      saveTabStates();
-      Intent i = new Intent(KiwixMobileActivity.this, SearchActivity.class);
-      i.putExtra("zimFile", zimFile);
-      i.putExtra(Intent.EXTRA_PROCESS_TEXT, intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT));
-      intent.setAction("");
-      startActivityForResult(i, REQUEST_FILE_SEARCH);
+    if (intent.getAction() != null) {
+
+      if (intent.getAction().equals(Intent.ACTION_PROCESS_TEXT)) {
+        final String zimFile = ZimContentProvider.getZimFile();
+        saveTabStates();
+        Intent i = new Intent(KiwixMobileActivity.this, SearchActivity.class);
+        i.putExtra("zimFile", zimFile);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+          i.putExtra(Intent.EXTRA_PROCESS_TEXT, intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT));
+        }
+        intent.setAction("");
+        startActivityForResult(i, REQUEST_FILE_SEARCH);
+      } else if (intent.getAction().equals(KiwixSearchWidget.TEXT_CLICKED)){
+        goToSearch(false);
+      } else if (intent.getAction().equals(KiwixSearchWidget.STAR_CLICKED)) {
+        goToBookmarks();
+      } else if (intent.getAction().equals(KiwixSearchWidget.MIC_CLICKED)) {
+        goToSearch(true);
+      }
+
     }
 
-
-    boolean isWidgetSearch = intent.getBooleanExtra("isWidgetSearch", false);
-    boolean isWidgetVoiceSearch = intent.getBooleanExtra("isWidgetVoice", false);
-    boolean isWidgetStar = intent.getBooleanExtra("isWidgetStar", false);
-    intent.removeExtra("isWidgetSearch");
-    intent.removeExtra("isWidgetVoice");
-    intent.removeExtra("isWidgetStar");
-
-    if (isWidgetStar && ZimContentProvider.getId() != null) {
-      goToBookmarks();
-    } else if (isWidgetSearch && ZimContentProvider.getId() != null) {
-      goToSearch(false);
-    } else if (isWidgetVoiceSearch && ZimContentProvider.getId() != null) {
-      goToSearch(true);
-    } else if (isWidgetStar || isWidgetSearch || isWidgetVoiceSearch) {
-      manageZimFiles(0);
-    }
     updateWidgets(this);
   }
 
