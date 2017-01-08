@@ -90,24 +90,26 @@ public class BookDao {
   }
 
   public void saveBooks(ArrayList<Book> books) {
-    books.stream().filter(book -> book != null).forEach(book -> {
-      BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
-      bookDatabaseEntity.setBookId(book.getId());
-      bookDatabaseEntity.setTitle(book.getTitle());
-      bookDatabaseEntity.setDescription(book.getDescription());
-      bookDatabaseEntity.setLanguage(book.getLanguage());
-      bookDatabaseEntity.setBookCreator(book.getCreator());
-      bookDatabaseEntity.setPublisher(book.getPublisher());
-      bookDatabaseEntity.setDate(book.getDate());
-      bookDatabaseEntity.setUrl(book.file.getPath());
-      bookDatabaseEntity.setArticleCount(book.getArticleCount());
-      bookDatabaseEntity.setMediaCount(book.getMediaCount());
-      bookDatabaseEntity.setSize(book.getSize());
-      bookDatabaseEntity.setFavicon(book.getFavicon());
-      String filePath = book.file.getPath();
-      mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(filePath));
-      mDb.persist(bookDatabaseEntity);
-    });
+    for (Book book : books) {
+      if (book != null) {
+        BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
+        bookDatabaseEntity.setBookId(book.getId());
+        bookDatabaseEntity.setTitle(book.getTitle());
+        bookDatabaseEntity.setDescription(book.getDescription());
+        bookDatabaseEntity.setLanguage(book.getLanguage());
+        bookDatabaseEntity.setBookCreator(book.getCreator());
+        bookDatabaseEntity.setPublisher(book.getPublisher());
+        bookDatabaseEntity.setDate(book.getDate());
+        bookDatabaseEntity.setUrl(book.file.getPath());
+        bookDatabaseEntity.setArticleCount(book.getArticleCount());
+        bookDatabaseEntity.setMediaCount(book.getMediaCount());
+        bookDatabaseEntity.setSize(book.getSize());
+        bookDatabaseEntity.setFavicon(book.getFavicon());
+        String filePath = book.file.getPath();
+        mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(filePath));
+        mDb.persist(bookDatabaseEntity);
+      }
+    }
   }
 
   public void saveBook(Book book) {
