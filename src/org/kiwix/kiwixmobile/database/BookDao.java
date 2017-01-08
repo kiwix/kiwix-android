@@ -90,7 +90,7 @@ public class BookDao {
   }
 
   public void saveBooks(ArrayList<Book> books) {
-    for (Book book : books) {
+    books.stream().filter(book -> book != null).forEach(book -> {
       BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
       bookDatabaseEntity.setBookId(book.getId());
       bookDatabaseEntity.setTitle(book.getTitle());
@@ -107,7 +107,7 @@ public class BookDao {
       String filePath = book.file.getPath();
       mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(filePath));
       mDb.persist(bookDatabaseEntity);
-    }
+    });
   }
 
   public void saveBook(Book book) {
