@@ -276,7 +276,6 @@ public class DownloadService extends Service {
         // Keep attempting to download chuck despite network errors
         while (attempts < timeout) {
           try {
-
             String rangeHeader = String.format("%d-%d", downloaded, chunk.getEndByte());
 
             // Build request with up to date range
@@ -286,6 +285,11 @@ public class DownloadService extends Service {
                     .header("Range", "bytes=" + rangeHeader)
                     .build()
             ).execute();
+
+            // Check that the server is sending us the right file
+            if (Math.abs(chunk.getEndByte() - downloaded - response.body().contentLength()) > 10) {
+              throw new Exception("Server broadcasting wrong size");
+            }
 
             input = response.body().source();
 
