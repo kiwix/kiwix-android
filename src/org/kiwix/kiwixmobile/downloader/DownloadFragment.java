@@ -185,7 +185,9 @@ public class DownloadFragment extends Fragment {
                   mDownloadFiles.remove(mKeys[position]);
                   downloadAdapter.notifyDataSetChanged();
                   updateNoDownloads();
-                  LibraryFragment.libraryAdapter.getFilter().filter(((ZimManageActivity) getActivity()).searchView.getQuery());
+                  if (LibraryFragment.libraryAdapter != null) {
+                    LibraryFragment.libraryAdapter.getFilter().filter(((ZimManageActivity) getActivity()).searchView.getQuery());
+                  }
                 })
                 .setNegativeButton(R.string.no, null)
                 .show();
