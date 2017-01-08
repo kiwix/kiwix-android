@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -165,7 +166,7 @@ public class DownloadService extends Service {
 
   private void downloadBook(String url, int notificationID, LibraryNetworkEntity.Book book) {
     downloadFragment.addDownload(notificationID, book, KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
-    kiwixService.getMetaLinks(url)
+    kiwixService.getMetaLinks(url).retryWhen(errors -> errors.flatMap(error -> Observable.timer(5, TimeUnit.SECONDS)))
         .subscribeOn(AndroidSchedulers.mainThread())
         .flatMap(metaLink -> getMetaLinkContentLength(metaLink.getRelevantUrl().getValue()))
         .flatMap(pair -> Observable.from(ChunkUtils.getChunks(pair.first, pair.second, notificationID)))
