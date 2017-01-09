@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.downloader;
 
 
+import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -19,8 +20,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+
 import org.kiwix.kiwixmobile.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.ZimFileSelectFragment;
@@ -34,7 +37,7 @@ public class DownloadFragment extends Fragment {
   public static LinkedHashMap<Integer, LibraryNetworkEntity.Book> mDownloads = new LinkedHashMap<>();
   public static LinkedHashMap<Integer, String> mDownloadFiles = new LinkedHashMap<>();
   public RelativeLayout relLayout;
-  public  ListView listView;
+  public ListView listView;
   public static DownloadAdapter downloadAdapter;
   private ZimManageActivity zimManageActivity;
   CoordinatorLayout mainLayout;
@@ -173,13 +176,21 @@ public class DownloadFragment extends Fragment {
 
       ImageView stop = (ImageView) convertView.findViewById(R.id.stop);
       stop.setOnClickListener(v -> {
-        LibraryFragment.mService.stopDownload(mKeys[position]);
-        mDownloads.remove(mKeys[position]);
-        mDownloadFiles.remove(mKeys[position]);
-        downloadAdapter.notifyDataSetChanged();
-        updateNoDownloads();
-        LibraryFragment.libraryAdapter.getFilter().filter(((ZimManageActivity) getActivity()).searchView.getQuery());
-
+        new AlertDialog.Builder(getContext())
+                .setTitle(R.string.confirm_stop_download_title)
+                .setMessage(R.string.confirm_stop_download_msg)
+                .setPositiveButton(R.string.yes, (dialog, i) -> {
+                  LibraryFragment.mService.stopDownload(mKeys[position]);
+                  mDownloads.remove(mKeys[position]);
+                  mDownloadFiles.remove(mKeys[position]);
+                  downloadAdapter.notifyDataSetChanged();
+                  updateNoDownloads();
+                  if (LibraryFragment.libraryAdapter != null) {
+                    LibraryFragment.libraryAdapter.getFilter().filter(((ZimManageActivity) getActivity()).searchView.getQuery());
+                  }
+                })
+                .setNegativeButton(R.string.no, null)
+                .show();
       });
 
       // Return the completed view to render on screen

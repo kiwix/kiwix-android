@@ -91,22 +91,24 @@ public class BookDao {
 
   public void saveBooks(ArrayList<Book> books) {
     for (Book book : books) {
-      BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
-      bookDatabaseEntity.setBookId(book.getId());
-      bookDatabaseEntity.setTitle(book.getTitle());
-      bookDatabaseEntity.setDescription(book.getDescription());
-      bookDatabaseEntity.setLanguage(book.getLanguage());
-      bookDatabaseEntity.setBookCreator(book.getCreator());
-      bookDatabaseEntity.setPublisher(book.getPublisher());
-      bookDatabaseEntity.setDate(book.getDate());
-      bookDatabaseEntity.setUrl(book.file.getPath());
-      bookDatabaseEntity.setArticleCount(book.getArticleCount());
-      bookDatabaseEntity.setMediaCount(book.getMediaCount());
-      bookDatabaseEntity.setSize(book.getSize());
-      bookDatabaseEntity.setFavicon(book.getFavicon());
-      String filePath = book.file.getPath();
-      mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(filePath));
-      mDb.persist(bookDatabaseEntity);
+      if (book != null) {
+        BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
+        bookDatabaseEntity.setBookId(book.getId());
+        bookDatabaseEntity.setTitle(book.getTitle());
+        bookDatabaseEntity.setDescription(book.getDescription());
+        bookDatabaseEntity.setLanguage(book.getLanguage());
+        bookDatabaseEntity.setBookCreator(book.getCreator());
+        bookDatabaseEntity.setPublisher(book.getPublisher());
+        bookDatabaseEntity.setDate(book.getDate());
+        bookDatabaseEntity.setUrl(book.file.getPath());
+        bookDatabaseEntity.setArticleCount(book.getArticleCount());
+        bookDatabaseEntity.setMediaCount(book.getMediaCount());
+        bookDatabaseEntity.setSize(book.getSize());
+        bookDatabaseEntity.setFavicon(book.getFavicon());
+        String filePath = book.file.getPath();
+        mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(filePath));
+        mDb.persist(bookDatabaseEntity);
+      }
     }
   }
 

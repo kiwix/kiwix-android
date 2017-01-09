@@ -154,4 +154,8 @@
   <string name="external_storage">External</string>
   <string name="zim_already_downloading">Zim is already downloading</string>
   <string name="no_network_msg">No network connection</string>
+  <string name="yes">Yes</string>
+  <string name="no">No</string>
+  <string name="confirm_stop_download_title">Stop download?</string>
+  <string name="confirm_stop_download_msg">Are you sure you want to stop this download?</string>
 </resources>
