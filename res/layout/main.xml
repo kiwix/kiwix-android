@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/linearlayout_main">
-
-  <include layout="@layout/toolbar"/>
+    android:id="@+id/snackbar_layout">
 
   <android.support.v4.widget.DrawerLayout
       android:id="@+id/drawer_layout"
@@ -108,4 +106,7 @@
     <include layout="@layout/drawer_right"/>
 
   </android.support.v4.widget.DrawerLayout>
-</LinearLayout>
+
+  <include layout="@layout/toolbar"/>
+
+</RelativeLayout>

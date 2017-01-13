@@ -59,6 +59,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -82,6 +83,7 @@ import org.kiwix.kiwixmobile.database.BookmarksDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.settings.Constants;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
+import org.kiwix.kiwixmobile.utils.DimenUtils;
 import org.kiwix.kiwixmobile.utils.DocumentParser;
 import org.kiwix.kiwixmobile.utils.KiwixSearchWidget;
 import org.kiwix.kiwixmobile.utils.KiwixTextToSpeech;
@@ -92,7 +94,8 @@ import org.kiwix.kiwixmobile.utils.files.FileReader;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
 import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
-import org.kiwix.kiwixmobile.views.KiwixWebView;
+import org.kiwix.kiwixmobile.views.web.KiwixWebView;
+import org.kiwix.kiwixmobile.views.web.ToolbarScrollingKiwixWebView;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.DocumentSection;
@@ -128,6 +131,8 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
 
   private static final String PREF_BACK_TO_TOP = "pref_backtotop";
 
+  private static final String PREF_HIDE_TOOLBAR = "pref_hidetoolbar";
+
   private static final String PREF_ZOOM = "pref_zoom_slider";
 
   private static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
@@ -145,6 +150,10 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
   public static boolean isFullscreenOpened;
 
   private boolean isBackToTopEnabled = false;
+
+  private boolean wasHideToolbar = false;
+
+  private boolean isHideToolbar = false;
 
   private boolean isSpeaking = false;
 
@@ -214,7 +223,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
 
   @BindView(R.id.FullscreenControlButton) ImageButton exitFullscreenButton;
 
-  @BindView(R.id.linearlayout_main) LinearLayout snackbarLayout;
+  @BindView(R.id.snackbar_layout) RelativeLayout snackbarLayout;
 
   @BindView(R.id.new_tab_button) RelativeLayout newTabButton;
 
@@ -283,6 +292,9 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
 
     initPlayStoreUri();
 
+    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+    isHideToolbar = sharedPreferences.getBoolean(PREF_HIDE_TOOLBAR, false);
+
     FileReader fileReader = new FileReader();
     documentParserJs = fileReader.readFile("js/documentParser.js", this);
 
@@ -320,6 +332,10 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
         drawerLayout.closeDrawers();
       }
     });
+
+    // account for status bar height if translucent
+    final int statusBarHeight = DimenUtils.getTranslucentStatusBarHeight(this);
+    tableDrawerRight.setPadding(0, statusBarHeight, 0, 0);
 
     tableDrawerAdapter.notifyDataSetChanged();
 
@@ -393,6 +409,8 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
         }
       });
     }
+
+    wasHideToolbar = isHideToolbar;
   }
 
   private void initPlayStoreUri() {
@@ -445,7 +463,17 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
 
 
   private void setUpToolbar() {
-    toolbar.setPadding(0, 0, 0, 0);
+    int statusBarHeight = DimenUtils.getTranslucentStatusBarHeight(this);
+
+    LayoutParams toolbarContainerParams = toolbarContainer.getLayoutParams();
+    toolbarContainerParams.height += statusBarHeight;
+    toolbarContainer.setLayoutParams(toolbarContainerParams);
+
+    LayoutParams toolbarParams = toolbar.getLayoutParams();
+    toolbarParams.height += statusBarHeight;
+    toolbar.setLayoutParams(toolbarParams);
+
+    toolbar.setPadding(0, statusBarHeight, 0, 0);
     toolbar.setContentInsetsAbsolute(0, 0);
     setSupportActionBar(toolbar);
   }
@@ -555,6 +583,19 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     getCurrentWebView().loadUrl("javascript:(" + documentParserJs + ")()");
   }
 
+  private KiwixWebView getWebView(String url) {
+    KiwixWebView webView;
+    if (isHideToolbar) {
+      webView = new ToolbarScrollingKiwixWebView(KiwixMobileActivity.this, this, toolbarContainer);
+    } else {
+      webView = new KiwixWebView(KiwixMobileActivity.this, this);
+    }
+    webView.loadUrl(url);
+    webView.loadPrefs();
+
+    return webView;
+  }
+
   private KiwixWebView newTab() {
     String mainPage =
         Uri.parse(ZimContentProvider.CONTENT_URI + ZimContentProvider.getMainPage()).toString();
@@ -562,10 +603,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
   }
 
   private KiwixWebView newTab(String url) {
-    KiwixWebView webView = new KiwixWebView(KiwixMobileActivity.this, this);
-    webView.loadUrl(url);
-    webView.loadPrefs();
-
+    KiwixWebView webView = getWebView(url);
     mWebViews.add(webView);
     selectTab(mWebViews.size() - 1);
     tabDrawerAdapter.notifyDataSetChanged();
@@ -575,9 +613,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
   }
 
   private void newTabInBackground(String url) {
-    KiwixWebView webView = new KiwixWebView(KiwixMobileActivity.this, this);
-    webView.loadUrl(url);
-    webView.loadPrefs();
+    KiwixWebView webView = getWebView(url);
     mWebViews.add(webView);
     tabDrawerAdapter.notifyDataSetChanged();
     setUpWebView();
@@ -977,6 +1013,17 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
   public void onResume() {
     super.onResume();
 
+    if (wasHideToolbar != isHideToolbar) {
+      wasHideToolbar = isHideToolbar;
+
+      List<KiwixWebView> newWebViews = new ArrayList<>();
+      for (int i = 0; i < mWebViews.size(); i++) {
+        KiwixWebView newView = getWebView(mWebViews.get(i).getUrl());
+        newWebViews.add(i, newView);
+      }
+      mWebViews = newWebViews;
+      selectTab(currentWebViewIndex);
+    }
     if (refresh) {
       for (KiwixWebView kiwixWebView : mWebViews) {
         kiwixWebView.reload();
@@ -1347,6 +1394,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     nightMode = sharedPreferences.getBoolean(PREF_NIGHT_MODE, false);
     isBackToTopEnabled = sharedPreferences.getBoolean(PREF_BACK_TO_TOP, false);
+    isHideToolbar = sharedPreferences.getBoolean(PREF_HIDE_TOOLBAR, false);
     isFullscreenOpened = sharedPreferences.getBoolean(PREF_FULLSCREEN, false);
     boolean isZoomEnabled = sharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
     isOpenNewTabInBackground = sharedPreferences.getBoolean(PREF_NEW_TAB_BACKGROUND, false);

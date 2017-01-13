@@ -9,7 +9,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import java.util.List;
-import org.kiwix.kiwixmobile.views.KiwixWebView;
+import org.kiwix.kiwixmobile.views.web.KiwixWebView;
 
 public class TabDrawerAdapter extends RecyclerView.Adapter<TabDrawerAdapter.ViewHolder> {
   private TabClickListener listener;

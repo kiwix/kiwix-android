@@ -7,7 +7,8 @@
   android:background="?attr/drawerBackground"
   android:clickable="true"
   android:fitsSystemWindows="true"
-  android:orientation="vertical">
+  android:orientation="vertical"
+  android:layout_marginTop="?actionBarSize">
 
   <android.support.v7.widget.RecyclerView
     android:id="@+id/right_drawer_list"
