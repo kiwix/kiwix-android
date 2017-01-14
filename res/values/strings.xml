@@ -102,10 +102,10 @@
   <string name="delete_specific_zim_toast">File deleted</string>
   <string name="zim_file_downloading">Downloading</string>
   <string name="zim_file_downloaded">Downloaded</string>
-  <string name="download_pause">pause</string>
-  <string name="download_play">play</string>
-  <string name="download_stop">stop</string>
-  <string name="download_close">close</string>
+  <string name="download_pause">Pause</string>
+  <string name="download_play">Play</string>
+  <string name="download_stop">Stop</string>
+  <string name="download_close">Close</string>
   <string name="no_downloads_here">No downloads here</string>
   <string name="no_files_here">No files here</string>
   <string name="download_complete_snackbar">Download complete</string>
