@@ -41,28 +41,30 @@ public class ToolbarScrollingKiwixWebView extends KiwixWebView {
 
   @Override
   protected void onScrollChanged(int l, int t, int oldl, int oldt) {
-    moveToolbar(t, oldt);
     super.onScrollChanged(l, t, oldl, oldt);
   }
 
-  protected void moveToolbar(int t, int oldt) {
+  protected boolean moveToolbar(int t, int oldt) {
     if (!isZooming) {
-      int animMargin = 0;
+      float animMargin = 0;
       int toolbarHeight = DimenUtils.getToolbarHeight(getContext()) +
               DimenUtils.getTranslucentStatusBarHeight(getContext());
       int scrollDelta = t - oldt;
       if (oldt > t) {
         // scroll up
-        animMargin = Math.min(0, (int) toolbarView.getTranslationY() - scrollDelta);
+        animMargin = Math.min(0, toolbarView.getTranslationY() - scrollDelta);
       } else {
         // scroll down
-        animMargin = Math.max(-toolbarHeight,
-                (int) toolbarView.getTranslationY() - scrollDelta);
+        animMargin = Math.max(-toolbarHeight, toolbarView.getTranslationY() - scrollDelta);
       }
 
       toolbarView.setTranslationY(animMargin);
-      if (getScrollY() == 0) this.setTranslationY(toolbarView.getY() + toolbarHeight);
+      this.setTranslationY(toolbarView.getY() + toolbarHeight);
+      if (toolbarHeight + animMargin != 0 && animMargin != 0) {
+        return true;
+      }
     }
+    return false;
   }
 
   @Override
@@ -78,9 +80,12 @@ public class ToolbarScrollingKiwixWebView extends KiwixWebView {
         // Filter out zooms since we don't want to affect the toolbar when zooming
         if (event.getPointerCount() > 1) isZooming = true;
         // Handle toolbar appearance when the KiwixWebView has reached the top
-        else if (this.getScrollY() == 0) {
+        else {
           int diffY = (int) (event.getRawY() - startY);
-          moveToolbar(0, diffY);
+          startY = event.getRawY();
+          if (moveToolbar(0, diffY)) {
+            return false;
+          }
         }
         break;
       // If the toolbar is half-visible,
