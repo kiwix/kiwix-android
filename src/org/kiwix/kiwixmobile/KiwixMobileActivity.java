@@ -37,7 +37,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -383,15 +382,10 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
       LibraryFragment.mService.cancelNotification(i.getIntExtra("notificationID", 0));
       Uri uri = Uri.fromFile(file);
 
-      new Handler(Looper.getMainLooper()).post(new Runnable() {
-        @Override
-        public void run() {
-          finish();
-          Intent newZimFile = new Intent(KiwixMobileActivity.this, KiwixMobileActivity.class);
-          newZimFile.setData(uri);
-          startActivity(newZimFile);
-        }
-      });
+      finish();
+      Intent zimFile = new Intent(KiwixMobileActivity.this, KiwixMobileActivity.class);
+      zimFile.setData(uri);
+      startActivity(zimFile);
     }
   }
 
@@ -625,8 +619,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     tabDrawerAdapter.setSelected(currentWebViewIndex);
 
     if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-      final Handler handler = new Handler();
-      handler.postDelayed(() -> drawerLayout.closeDrawers(), 150);
+      new Handler().postDelayed(() -> drawerLayout.closeDrawers(), 150);
     }
     loadPrefs();
     if (menu != null) {
@@ -636,7 +629,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
   }
 
   public KiwixWebView getCurrentWebView() {
-    if (mWebViews.size() == 0) { return newTab(); }
+    if (mWebViews.size() == 0) return newTab();
     if (currentWebViewIndex < mWebViews.size()) {
       return mWebViews.get(currentWebViewIndex);
     } else {
@@ -669,6 +662,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
       case R.id.menu_bookmarks_list:
         goToBookmarks();
         break;
+
       case R.id.menu_randomarticle:
         openRandomArticle();
         break;
@@ -1007,6 +1001,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
           i.putExtra(Intent.EXTRA_PROCESS_TEXT, intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT));
         }
+        intent.setAction("");
         startActivityForResult(i, REQUEST_FILE_SEARCH);
       } else if (intent.getAction().equals(KiwixSearchWidget.TEXT_CLICKED)){
         intent.setAction("");
@@ -1211,15 +1206,10 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
             return;
           }
 
-          new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-              finish();
-              Intent newZimFile = new Intent(KiwixMobileActivity.this, KiwixMobileActivity.class);
-              newZimFile.setData(uri);
-              startActivity(newZimFile);
-            }
-          });
+          finish();
+          Intent zimFile = new Intent(KiwixMobileActivity.this, KiwixMobileActivity.class);
+          zimFile.setData(uri);
+          startActivity(zimFile);
         }
         break;
       case REQUEST_FILE_SEARCH:

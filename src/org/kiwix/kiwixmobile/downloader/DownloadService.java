@@ -53,6 +53,9 @@ public class DownloadService extends Service {
   public static final int PAUSE = 2;
   public static final int FINISH = 3;
   public static final int CANCEL = 4;
+  public static final String ACTION_PAUSE = "PAUSE";
+  public static final String ACTION_STOP = "STOP";
+  public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
   public static int notificationCount = 1;
   public static ArrayList<String> notifications = new ArrayList<>();
   public String notificationTitle;
@@ -89,10 +92,20 @@ public class DownloadService extends Service {
 
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
-    DownloadService.notificationCount++;
     if (intent == null) {
       return START_NOT_STICKY;
     }
+    if (intent.hasExtra(NOTIFICATION_ID) && intent.getAction().equals(ACTION_STOP)) {
+      stopDownload(intent.getIntExtra(NOTIFICATION_ID, 0));
+      return START_NOT_STICKY;
+    }
+    if (intent.hasExtra(NOTIFICATION_ID) && intent.getAction().equals(ACTION_PAUSE)) {
+      toggleDownload(intent.getIntExtra(NOTIFICATION_ID, 0));
+      return START_NOT_STICKY;
+    }
+
+
+    DownloadService.notificationCount++;
     SD_CARD = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
         .getString(KiwixMobileActivity.PREF_STORAGE,Environment.getExternalStorageDirectory().getPath());
     KIWIX_ROOT = SD_CARD + "/Kiwix/";
@@ -110,12 +123,22 @@ public class DownloadService extends Service {
         (getBaseContext(), 0,
         target, PendingIntent.FLAG_CANCEL_CURRENT);
 
+    Intent pauseIntent = new Intent(this, this.getClass()).setAction(ACTION_PAUSE).putExtra(NOTIFICATION_ID, notificationCount);
+    Intent stopIntent = new Intent(this, this.getClass()).setAction(ACTION_STOP).putExtra(NOTIFICATION_ID, notificationCount);;
+    PendingIntent pausePending = PendingIntent.getService(getBaseContext(), 0, pauseIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+    PendingIntent stopPending = PendingIntent.getService(getBaseContext(), 0, stopIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+    NotificationCompat.Action pause = new NotificationCompat.Action(R.drawable.ic_pause_black_24dp, getString(R.string.download_pause), pausePending);
+    NotificationCompat.Action stop = new NotificationCompat.Action(R.drawable.ic_stop_black_24dp, getString(R.string.download_stop), stopPending);
+
     notification.put(notificationCount , new NotificationCompat.Builder(this)
         .setContentTitle(getResources().getString(R.string.zim_file_downloading) + " " + notificationTitle)
         .setProgress(100, 0, false)
         .setSmallIcon(R.drawable.kiwix_notification)
         .setColor(Color.BLACK)
         .setContentIntent(pendingIntent)
+        .addAction(pause)
+        .addAction(stop)
         .setOngoing(true));
 
     downloadStatus.put(notificationCount, PLAY);
@@ -129,6 +152,9 @@ public class DownloadService extends Service {
     synchronized (pauseLock) {
       pauseLock.notify();
     }
+    downloadFragment.mDownloads.remove(notificationID);
+    downloadFragment.mDownloadFiles.remove(notificationID);
+    downloadFragment.downloadAdapter.notifyDataSetChanged();
     updateForeground();
     notificationManager.cancel(notificationID);
   }
@@ -153,8 +179,21 @@ public class DownloadService extends Service {
     }
   }
 
+  public void toggleDownload (int notificationID) {
+    if (downloadStatus.get(notificationID) == PAUSE) {
+      playDownload(notificationID);
+    } else {
+      pauseDownload(notificationID);
+    }
+  }
+
   public void pauseDownload(int notificationID) {
     downloadStatus.put(notificationID, PAUSE);
+    notification.get(notificationID).mActions.get(0).title =  getString(R.string.download_play);
+    notification.get(notificationID).mActions.get(0).icon = R.drawable.ic_play_arrow_black_24dp;
+    notificationManager.notify(notificationID, notification.get(notificationID).build());
+    downloadFragment.downloadAdapter.notifyDataSetChanged();
+    downloadFragment.listView.invalidateViews();
   }
 
   public void playDownload(int notificationID) {
@@ -162,6 +201,11 @@ public class DownloadService extends Service {
     synchronized (pauseLock) {
       pauseLock.notify();
     }
+    notification.get(notificationID).mActions.get(0).title = getString(R.string.download_pause);
+    notification.get(notificationID).mActions.get(0).icon = R.drawable.ic_pause_black_24dp;
+    notificationManager.notify(notificationID, notification.get(notificationID).build());
+    downloadFragment.downloadAdapter.notifyDataSetChanged();
+    downloadFragment.listView.invalidateViews();
   }
 
   private void downloadBook(String url, int notificationID, LibraryNetworkEntity.Book book) {
