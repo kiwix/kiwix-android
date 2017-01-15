@@ -64,7 +64,7 @@ public class ZimFileSelectFragment extends Fragment
   private static final int LOADER_ID = 0x02;
   public static ZimManageActivity context;
   public RelativeLayout llLayout;
-  // Adapter of the Data populated by recanning the Filesystem by ourselves
+  // Adapter of the Data populated by rescanning the Filesystem by ourselves
   private RescanDataAdapter mRescanAdapter;
   private ArrayList<LibraryNetworkEntity.Book> mFiles;
   private ListView mZimFileList;
@@ -110,7 +110,6 @@ public class ZimFileSelectFragment extends Fragment
     mFiles.clear();
 
     mFiles.addAll(books);
-
     mZimFileList.setAdapter(mRescanAdapter);
     mRescanAdapter.notifyDataSetChanged();
     checkEmpty();
@@ -172,6 +171,8 @@ public class ZimFileSelectFragment extends Fragment
       return;
 
     mZimFileList.addFooterView(progressBar);
+    mZimFileList.setAdapter(mRescanAdapter);
+
     checkEmpty();
 
     new FileSearch(context, new FileSearch.ResultListener() {
@@ -231,7 +232,6 @@ public class ZimFileSelectFragment extends Fragment
         } else if (grantResults.length != 0) {
           super.getActivity().finish();
         }
-        return;
       }
 
     }
