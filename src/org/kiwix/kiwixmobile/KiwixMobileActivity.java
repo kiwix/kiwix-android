@@ -1291,6 +1291,13 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     toggleActionItemsConfig();
     refreshBookmarkSymbol(menu);
     refreshNavigationButtons();
+
+    if (getCurrentWebView().getUrl() == null || getCurrentWebView().getUrl().equals("file:///android_res/raw/help.html")) {
+      menu.findItem(R.id.menu_read_aloud).setVisible(false);
+    } else {
+      menu.findItem(R.id.menu_read_aloud).setVisible(true);
+    }
+
     return true;
   }
 
@@ -1553,6 +1560,9 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
   @Override public void webViewUrlFinishedLoading() {
     updateTableOfContents();
     tabDrawerAdapter.notifyDataSetChanged();
+
+    if (menu != null)
+      refreshBookmarkSymbol(menu);
   }
 
   @Override public void webViewFailedLoading(String url) {
