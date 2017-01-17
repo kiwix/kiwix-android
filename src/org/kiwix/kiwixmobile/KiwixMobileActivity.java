@@ -59,6 +59,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -228,6 +229,10 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
   @BindView(R.id.new_tab_button) RelativeLayout newTabButton;
 
   @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
+
+  @BindView(R.id.left_drawer) LinearLayout tabDrawerLeftContainer;
+
+  @BindView(R.id.right_drawer) LinearLayout tableDrawerRightContainer;
 
   @BindView(R.id.left_drawer_list) RecyclerView tabDrawerLeft;
 
@@ -461,7 +466,6 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
         .show();
   }
 
-
   private void setUpToolbar() {
     int statusBarHeight = DimenUtils.getTranslucentStatusBarHeight(this);
 
@@ -587,6 +591,30 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     KiwixWebView webView;
     if (isHideToolbar) {
       webView = new ToolbarScrollingKiwixWebView(KiwixMobileActivity.this, this, toolbarContainer);
+      ((ToolbarScrollingKiwixWebView) webView).setOnToolbarVisibilityChangeListener(
+          new ToolbarScrollingKiwixWebView.OnToolbarVisibilityChangeListener() {
+            @Override
+            public void onToolbarDisplayed() {
+              ViewGroup.MarginLayoutParams leftLayoutMargins = (ViewGroup.MarginLayoutParams) tabDrawerLeftContainer.getLayoutParams(),
+                  rightLayoutMargins = (ViewGroup.MarginLayoutParams) tableDrawerRightContainer.getLayoutParams();
+
+              leftLayoutMargins.topMargin = DimenUtils.getToolbarHeight(KiwixMobileActivity.this);
+              rightLayoutMargins.topMargin = DimenUtils.getToolbarHeight(KiwixMobileActivity.this);
+              tabDrawerLeftContainer.setLayoutParams(leftLayoutMargins);
+              tableDrawerRightContainer.setLayoutParams(rightLayoutMargins);
+            }
+
+            @Override
+            public void onToolbarHidden() {
+              ViewGroup.MarginLayoutParams leftLayoutMargins = (ViewGroup.MarginLayoutParams) tabDrawerLeftContainer.getLayoutParams(),
+                  rightLayoutMargins = (ViewGroup.MarginLayoutParams) tableDrawerRightContainer.getLayoutParams();
+              leftLayoutMargins.topMargin = 0;
+              rightLayoutMargins.topMargin = 0;
+              tabDrawerLeftContainer.setLayoutParams(leftLayoutMargins);
+              tableDrawerRightContainer.setLayoutParams(rightLayoutMargins);
+            }
+          }
+      );
     } else {
       webView = new KiwixWebView(KiwixMobileActivity.this, this);
     }

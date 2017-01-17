@@ -29,8 +29,7 @@ import org.kiwix.kiwixmobile.utils.DimenUtils;
 public class ToolbarScrollingKiwixWebView extends KiwixWebView {
 
   private View toolbarView;
-
-  private boolean isZooming = false;
+  private OnToolbarVisibilityChangeListener listener;
   private float startY;
 
   public ToolbarScrollingKiwixWebView(Context context, WebViewCallback callback, View toolbarView) {
@@ -39,37 +38,34 @@ public class ToolbarScrollingKiwixWebView extends KiwixWebView {
     this.toolbarView = toolbarView;
   }
 
-  @Override
-  protected void onScrollChanged(int l, int t, int oldl, int oldt) {
-    super.onScrollChanged(l, t, oldl, oldt);
-  }
-
   protected boolean moveToolbar(int t, int oldt) {
-    if (!isZooming) {
-      float animMargin = 0;
-      int toolbarHeight = DimenUtils.getToolbarHeight(getContext()) +
-              DimenUtils.getTranslucentStatusBarHeight(getContext());
-      int scrollDelta = t - oldt;
-      if (oldt > t) {
-        // scroll up
-        animMargin = Math.min(0, toolbarView.getTranslationY() - scrollDelta);
-      } else {
-        // scroll down
-        animMargin = Math.max(-toolbarHeight, toolbarView.getTranslationY() - scrollDelta);
-      }
+    float animMargin = 0;
+    int toolbarHeight = DimenUtils.getToolbarHeight(getContext()) +
+            DimenUtils.getTranslucentStatusBarHeight(getContext());
+    int scrollDelta = t - oldt;
+    if (oldt > t) {
+      // scroll up
+      animMargin = Math.min(0, toolbarView.getTranslationY() - scrollDelta);
+    } else {
+      // scroll down
+      animMargin = Math.max(-toolbarHeight, toolbarView.getTranslationY() - scrollDelta);
+    }
 
-      toolbarView.setTranslationY(animMargin);
-      this.setTranslationY(toolbarView.getY() + toolbarHeight);
-      if (toolbarHeight + animMargin != 0 && animMargin != 0) {
-        return true;
+    toolbarView.setTranslationY(animMargin);
+    this.setTranslationY(toolbarView.getY() + toolbarHeight);
+    if (listener != null) {
+      if (toolbarView.getTranslationY() == -toolbarHeight) {
+        listener.onToolbarHidden();
+      } else if (toolbarView.getTranslationY() == 0) {
+        listener.onToolbarDisplayed();
       }
     }
-    return false;
+
+    return toolbarHeight + animMargin != 0 && animMargin != 0;
   }
 
   @Override
   public boolean onTouchEvent(MotionEvent event) {
-    isZooming = false;
     int transY = (int) toolbarView.getTranslationY();
 
     switch (event.getActionMasked()) {
@@ -78,9 +74,7 @@ public class ToolbarScrollingKiwixWebView extends KiwixWebView {
         break;
       case MotionEvent.ACTION_MOVE:
         // Filter out zooms since we don't want to affect the toolbar when zooming
-        if (event.getPointerCount() > 1) isZooming = true;
-        // Handle toolbar appearance when the KiwixWebView has reached the top
-        else {
+        if (event.getPointerCount() == 1) {
           int diffY = (int) (event.getRawY() - startY);
           startY = event.getRawY();
           if (moveToolbar(0, diffY)) {
@@ -92,7 +86,8 @@ public class ToolbarScrollingKiwixWebView extends KiwixWebView {
       // either open or close it entirely depending on how far it is visible
       case MotionEvent.ACTION_UP:
       case MotionEvent.ACTION_CANCEL:
-        int height = DimenUtils.getToolbarHeight(getContext());
+        int height = DimenUtils.getToolbarHeight(getContext()) +
+            DimenUtils.getTranslucentStatusBarHeight(getContext());
         if (transY != 0 && transY > -height) {
           if (transY > -height / 2) {
             ensureToolbarDisplayed();
@@ -114,5 +109,14 @@ public class ToolbarScrollingKiwixWebView extends KiwixWebView {
 
   public void ensureToolbarHidden() {
     moveToolbar(DimenUtils.getToolbarHeight(getContext()), 0);
+  }
+
+  public void setOnToolbarVisibilityChangeListener(OnToolbarVisibilityChangeListener listener) {
+    this.listener = listener;
+  }
+
+  public interface OnToolbarVisibilityChangeListener {
+    void onToolbarDisplayed();
+    void onToolbarHidden();
   }
 }
