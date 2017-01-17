@@ -11,9 +11,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -41,7 +44,14 @@ public class SearchActivity extends AppCompatActivity
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.search);
+    View contentView = LayoutInflater.from(this).inflate(R.layout.search, null);
+
+    Animation mLoadAnimation = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_in);
+    mLoadAnimation.setDuration(700);
+    contentView.startAnimation(mLoadAnimation);
+
+    setContentView(contentView);
+
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
@@ -74,7 +84,7 @@ public class SearchActivity extends AppCompatActivity
       startActivity(intent);
     } else {
       super.finish();
-      overridePendingTransition(0, 0);
+      overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
     }
   }
 
