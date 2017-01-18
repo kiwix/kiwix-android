@@ -445,8 +445,8 @@ def step_update_android_manifest(jsdata, **options):
                         content.replace('org.kiwix.kiwixmobile',
                                         jsdata.get('package'))
                             .replace('org.kiwix.zim.base',
-                                     'org.kiwix.zim.{}'
-                                     .format(package_tail[10:])))
+                                     '{}.base'
+                                     .format(jsdata.get('package'))))
 
 
 def step_update_kiwix_cpp(jsdata, **options):
