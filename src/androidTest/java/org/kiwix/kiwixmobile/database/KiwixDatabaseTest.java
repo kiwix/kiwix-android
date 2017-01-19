@@ -68,7 +68,7 @@ public class KiwixDatabaseTest {
 
     kiwixDatabase.migrateBookmarks();
     BookmarksDao bookmarksDao = new BookmarksDao(kiwixDatabase);
-    ArrayList<String> b = bookmarksDao.getBookmarkTitles(testId);
+    ArrayList<String> b = bookmarksDao.getBookmarkTitles(testId, "");
     assertArrayEquals(testBookmarks,b.toArray());
 
   }

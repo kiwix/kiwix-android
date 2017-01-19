@@ -786,7 +786,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
           //Bookmarks
           bookmarks = new ArrayList<>();
           bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
-          bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId());
+          bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
 
           openMainPage();
           refreshBookmarks();
@@ -1042,18 +1042,18 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
       bookmarks.clear();
     }
     if (bookmarksDao != null) {
-      bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId());
+      bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
     }
   }
 
   // TODO: change saving bookbark by zim name not id
   private void saveBookmark(String articleUrl, String articleTitle) {
-    bookmarksDao.saveBookmark(articleUrl, articleTitle, ZimContentProvider.getId());
+    bookmarksDao.saveBookmark(articleUrl, articleTitle, ZimContentProvider.getId(), ZimContentProvider.getName());
     refreshBookmarks();
   }
 
   private void deleteBookmark(String article) {
-    bookmarksDao.deleteBookmark(article, ZimContentProvider.getId());
+    bookmarksDao.deleteBookmark(article, ZimContentProvider.getId(), ZimContentProvider.getName());
     refreshBookmarks();
   }
 
@@ -1240,7 +1240,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
 
           //Bookmarks
           bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
-          bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId());
+          bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
 
           if (itemClicked) {
             String bookmarkChosen;
@@ -1305,7 +1305,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
   public void refreshBookmarkSymbol(Menu menu) { // Checks if current webview is in bookmarks array
     if (bookmarks == null || bookmarks.size() == 0) {
       bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
-      bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId());
+      bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
     }
     if (menu.findItem(R.id.menu_bookmarks) != null &&
         getCurrentWebView().getUrl() != null &&

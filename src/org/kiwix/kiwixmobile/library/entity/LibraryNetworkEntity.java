@@ -149,6 +149,10 @@ public class LibraryNetworkEntity {
       return this.mediaCount;
     }
 
+    public String getName() {
+      return this.bookName;
+    }
+
     public String getSize() {
       return this.size;
     }

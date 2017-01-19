@@ -48,6 +48,7 @@ public class BookDao {
       book.mediaCount = bookCursor.get(BookDatabaseEntity.MEDIA_COUNT);
       book.size = bookCursor.get(BookDatabaseEntity.SIZE);
       book.favicon = bookCursor.get(BookDatabaseEntity.FAVICON);
+      book.bookName = bookCursor.get(BookDatabaseEntity.NAME);
       if (!FileUtils.hasPart(book.file)) {
         if (book.file.exists()) {
           books.add(book);
@@ -81,6 +82,7 @@ public class BookDao {
       book.size = bookCursor.get(BookDatabaseEntity.SIZE);
       book.favicon = bookCursor.get(BookDatabaseEntity.FAVICON);
       book.remoteUrl = bookCursor.get(BookDatabaseEntity.REMOTE_URL);
+      book.bookName = bookCursor.get(BookDatabaseEntity.NAME);
       if (FileUtils.hasPart(book.file)) {
         books.add(book);
       }
@@ -105,6 +107,7 @@ public class BookDao {
         bookDatabaseEntity.setMediaCount(book.getMediaCount());
         bookDatabaseEntity.setSize(book.getSize());
         bookDatabaseEntity.setFavicon(book.getFavicon());
+        bookDatabaseEntity.setName(book.getName());
         String filePath = book.file.getPath();
         mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(filePath));
         mDb.persist(bookDatabaseEntity);
@@ -127,6 +130,7 @@ public class BookDao {
     bookDatabaseEntity.setSize(book.getSize());
     bookDatabaseEntity.setFavicon(book.getFavicon());
     bookDatabaseEntity.setRemoteUrl(book.remoteUrl);
+    bookDatabaseEntity.setName(book.getName());
     String filePath = book.file.getPath();
     mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(filePath));
     mDb.persist(bookDatabaseEntity);

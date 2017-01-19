@@ -11,6 +11,7 @@ public class BookmarksSpec {
 
   @ColumnSpec(constraints = "NOT NULL")
   public String ZimId;
+  public String ZimName;
   public String bookmarkUrl;
   public String bookmarkTitle;
 

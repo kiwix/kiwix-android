@@ -18,10 +18,10 @@ public class BookmarksDao {
     this.mDb = kiwikDatabase;
   }
 
-  public ArrayList<String> getBookmarks(String ZimId) {
+  public ArrayList<String> getBookmarks(String ZimId, String ZimName) {
     SquidCursor<Bookmarks> bookmarkCursor = mDb.query(
         Bookmarks.class,
-        Query.selectDistinct(Bookmarks.BOOKMARK_URL).where(Bookmarks.ZIM_ID.eq(ZimId))
+        Query.selectDistinct(Bookmarks.BOOKMARK_URL).where(Bookmarks.ZIM_ID.eq(ZimId).or(Bookmarks.ZIM_NAME.eq(ZimName)))
             .orderBy(Bookmarks.ID.asc()));
     ArrayList<String> result = new ArrayList<>();
     try {
@@ -34,10 +34,10 @@ public class BookmarksDao {
     return result;
   }
 
-  public ArrayList<String> getBookmarkTitles(String ZimId) {
+  public ArrayList<String> getBookmarkTitles(String ZimId, String ZimName) {
     SquidCursor<Bookmarks> bookmarkCursor = mDb.query(
         Bookmarks.class,
-        Query.selectDistinct(Bookmarks.BOOKMARK_TITLE).where(Bookmarks.ZIM_ID.eq(ZimId))
+        Query.selectDistinct(Bookmarks.BOOKMARK_TITLE).where(Bookmarks.ZIM_ID.eq(ZimId).or(Bookmarks.ZIM_NAME.eq(ZimName)))
             .orderBy(Bookmarks.ID.asc()));
     ArrayList<String> result = new ArrayList<>();
     try {
@@ -58,11 +58,11 @@ public class BookmarksDao {
    * @param articleTitle
    * @param ZimId
      */
-  public void saveBookmark(String articleUrl, String articleTitle, String ZimId) {
+  public void saveBookmark(String articleUrl, String articleTitle, String ZimId, String ZimName) {
     if (articleUrl != null) {
-      mDb.persist(new Bookmarks().setBookmarkUrl(articleUrl).setBookmarkTitle(articleTitle).setZimId(ZimId));
+      mDb.persist(new Bookmarks().setBookmarkUrl(articleUrl).setBookmarkTitle(articleTitle).setZimId(ZimId).setZimName(ZimName));
     } else {
-      mDb.persist(new Bookmarks().setBookmarkUrl("null").setBookmarkTitle(articleTitle).setZimId(ZimId));
+      mDb.persist(new Bookmarks().setBookmarkUrl("null").setBookmarkTitle(articleTitle).setZimId(ZimId).setZimName(ZimName));
     }
   }
 
@@ -71,8 +71,8 @@ public class BookmarksDao {
    * @param favArticle - the article url
    * @param ZimId - zim containing article
      */
-  public void deleteBookmark(String favArticle, String ZimId) {
-    mDb.deleteWhere(Bookmarks.class, Bookmarks.BOOKMARK_URL.eq(favArticle).and(Bookmarks.ZIM_ID.eq(ZimId)) );
+  public void deleteBookmark(String favArticle, String ZimId, String ZimName) {
+    mDb.deleteWhere(Bookmarks.class, Bookmarks.BOOKMARK_URL.eq(favArticle).and(Bookmarks.ZIM_ID.eq(ZimId).or(Bookmarks.ZIM_NAME.eq(ZimName))) );
   }
 
 

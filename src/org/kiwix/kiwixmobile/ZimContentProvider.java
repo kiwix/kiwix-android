@@ -172,6 +172,19 @@ public class ZimContentProvider extends ContentProvider {
     }
   }
 
+  public static String getName() {
+    if (jniKiwix == null || zimFileName == null) {
+      return null;
+    } else {
+      String name = jniKiwix.getName();
+      if (name.equals("")) {
+        return getId();
+      } else {
+        return name;
+      }
+    }
+  }
+
   public static String getDate() {
     if (jniKiwix == null || zimFileName == null) {
       return null;

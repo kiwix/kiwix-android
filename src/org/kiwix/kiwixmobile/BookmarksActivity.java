@@ -70,8 +70,8 @@ public class BookmarksActivity extends AppCompatActivity
 
 
     bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
-    bookmarks = bookmarksDao.getBookmarkTitles(ZimContentProvider.getId());
-    bookmarkUrls = bookmarksDao.getBookmarks(ZimContentProvider.getId());
+    bookmarks = bookmarksDao.getBookmarkTitles(ZimContentProvider.getId(), ZimContentProvider.getName());
+    bookmarkUrls = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
 
     adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.bookmarks_row, R.id.bookmark_title, bookmarks);
     bookmarksList.setAdapter(adapter);
@@ -175,7 +175,7 @@ public class BookmarksActivity extends AppCompatActivity
   }
 
   private void deleteBookmark(String article) {
-    bookmarksDao.deleteBookmark(article, ZimContentProvider.getId());
+    bookmarksDao.deleteBookmark(article, ZimContentProvider.getId(), ZimContentProvider.getName());
   }
 
   /*private void refreshBookmarksList() {

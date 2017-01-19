@@ -33,13 +33,14 @@ import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.ZimContentProvider;
 import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.Bookmarks;
+import org.kiwix.kiwixmobile.database.entity.BookmarksSpec;
 import org.kiwix.kiwixmobile.database.entity.LibraryDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.RecentSearch;
 
 public class KiwixDatabase extends SquidDatabase {
 
-  private static final int VERSION = 12;
+  private static final int VERSION = 13;
   private Context context;
   private static KiwixDatabase instance = null;
 
@@ -120,6 +121,10 @@ public class KiwixDatabase extends SquidDatabase {
     if (newVersion >= 12) {
       tryAddColumn(BookDatabaseEntity.REMOTE_URL);
     }
+    if (newVersion >= 13) {
+      tryAddColumn(BookDatabaseEntity.NAME);
+      tryAddColumn(Bookmarks.ZIM_NAME);
+    }
     return true;
   }
 
@@ -141,7 +146,7 @@ public class KiwixDatabase extends SquidDatabase {
           if (stream != null) {
             BufferedReader read = new BufferedReader(new InputStreamReader(stream));
             while ((in = read.readLine()) != null) {
-              bookmarksDao.saveBookmark(null, in, idName);
+              bookmarksDao.saveBookmark(null, in, idName, idName);
             }
             context.deleteFile(id);
             Log.d(KiwixMobileActivity.TAG_KIWIX, "Switched to bookmarkfile " + ZimContentProvider.getId());
