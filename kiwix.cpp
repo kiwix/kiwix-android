@@ -163,6 +163,24 @@ JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getPublisher(JNIEn
   return publisher;
 }
 
+JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getName(JNIEnv *env, jobject obj) {
+  jstring name;
+  
+  pthread_mutex_lock(&readerLock);
+  if (reader != NULL) {
+    try {
+      std::string cName = reader->getName();
+      name = c2jni(cName, env);
+    } catch (...) {
+      std::cerr << "Unable to get ZIM name" << std::endl;
+    }
+  }
+  pthread_mutex_unlock(&readerLock);
+  
+  return name;
+}
+
+
 JNIEXPORT jstring JNICALL Java_org_kiwix_kiwixmobile_JNIKiwix_getFavicon(JNIEnv *env, jobject obj) {
   jstring favicon;
   

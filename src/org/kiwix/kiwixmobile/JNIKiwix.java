@@ -57,6 +57,8 @@ public class JNIKiwix {
 
   public native String getPublisher();
 
+  public native String getName();
+
   public native int getFileSize();
 
   public native int getArticleCount();
