@@ -14,6 +14,7 @@ public class KiwixWebChromeClient extends WebChromeClient {
   @Override
   public void onProgressChanged(WebView view, int progress) {
     callback.webViewProgressChanged(progress);
+    ((KiwixMobileActivity) view.getContext()).supportInvalidateOptionsMenu();
   }
 
   @Override public void onReceivedTitle(WebView view, String title) {
