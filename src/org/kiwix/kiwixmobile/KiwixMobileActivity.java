@@ -590,7 +590,8 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     int selectedPosition = tabDrawerAdapter.getSelectedPosition();
     int newSelectedPosition = selectedPosition;
 
-    if (index < selectedPosition) newSelectedPosition = selectedPosition - 1;
+    if (index <= selectedPosition) newSelectedPosition = selectedPosition - 1;
+    if (index == 0) newSelectedPosition = 0;
     if (mWebViews.size() == 1) newTab();
 
     mWebViews.remove(index);
