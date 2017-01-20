@@ -28,4 +28,9 @@ public class DimenUtils {
     context.getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, t, true);
     return context.getResources().getDimensionPixelSize(t.resourceId);
   }
+
+  public static int getToolbarAndStatusBarHeight(Context context) {
+    return DimenUtils.getToolbarHeight(context) +
+        DimenUtils.getTranslucentStatusBarHeight(context);
+  }
 }

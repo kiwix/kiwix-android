@@ -14,7 +14,7 @@ public class ToolbarStaticKiwixWebView extends KiwixWebView {
   public ToolbarStaticKiwixWebView(Context context, WebViewCallback callback) {
     super(context, callback);
 
-    float heightDifference = DimenUtils.getToolbarHeight(context) + DimenUtils.getTranslucentStatusBarHeight(context);
+    float heightDifference = DimenUtils.getToolbarAndStatusBarHeight(context);
     setTranslationY(heightDifference);
 
     ViewGroup.LayoutParams layoutParams = getLayoutParams();

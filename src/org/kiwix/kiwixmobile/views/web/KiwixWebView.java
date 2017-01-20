@@ -132,7 +132,7 @@ public class KiwixWebView extends WebView {
     setWebViewClient(new KiwixWebViewClient(callback));
     setWebChromeClient(new KiwixWebChromeClient(callback));
 
-    setTranslationY(DimenUtils.getToolbarHeight(context) + DimenUtils.getTranslucentStatusBarHeight(context));
+    setTranslationY(DimenUtils.getToolbarAndStatusBarHeight(context));
   }
 
   public void loadPrefs() {

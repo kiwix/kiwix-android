@@ -685,7 +685,9 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     currentWebViewIndex = position;
     tabDrawerAdapter.setSelected(position);
     contentFrame.removeAllViews();
-    contentFrame.addView(mWebViews.get(position));
+
+    KiwixWebView webView = mWebViews.get(position);
+    contentFrame.addView(webView);
     tabDrawerAdapter.setSelected(currentWebViewIndex);
 
     if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -697,6 +699,10 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
       refreshBookmarkSymbol(menu);
     }
     updateTableOfContents();
+
+    if (isHideToolbar) {
+      ((ToolbarScrollingKiwixWebView) webView).ensureToolbarDisplayed();
+    }
   }
 
   public KiwixWebView getCurrentWebView() {
