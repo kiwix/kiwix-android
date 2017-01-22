@@ -14,7 +14,8 @@
       android:id="@+id/library_list"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:paddingBottom="60dp" />
+      android:paddingBottom="60dp"
+      android:divider="@null"/>
 
     <TextView
       android:id="@+id/network_permission_text"

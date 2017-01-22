@@ -29,7 +29,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
         android:paddingBottom="60dp"
-        android:footerDividersEnabled="false">
+        android:divider="@null">
     </ListView>
 
     <TextView

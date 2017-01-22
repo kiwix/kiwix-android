@@ -7,6 +7,6 @@
       />
 
   <solid
-      android:color="@color/accent_material_light"
+      android:color="@color/accent"
       />
 </shape>
