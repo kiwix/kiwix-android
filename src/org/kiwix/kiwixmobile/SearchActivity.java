@@ -45,11 +45,6 @@ public class SearchActivity extends AppCompatActivity
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     View contentView = LayoutInflater.from(this).inflate(R.layout.search, null);
-
-    Animation mLoadAnimation = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_in);
-    mLoadAnimation.setDuration(700);
-    contentView.startAnimation(mLoadAnimation);
-
     setContentView(contentView);
 
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
