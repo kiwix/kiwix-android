@@ -73,6 +73,8 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
   public static final String PREF_NIGHTMODE = "pref_nightmode";
 
+  public static final String PREF_HIDETOOLBAR = "pref_hidetoolbar";
+
   public static String zimFile;
 
   public static boolean allHistoryCleared = false;
@@ -206,6 +208,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
             // Request a restart when the user returns to the Activity, that called this Activity
             restartActivity();
           }
+
           return true;
         }
       });

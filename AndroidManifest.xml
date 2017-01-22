@@ -40,7 +40,7 @@
     <activity
       android:name=".KiwixMobileActivity"
       android:configChanges="orientation|keyboardHidden|screenSize|locale"
-      android:theme="@style/AppTheme"
+      android:theme="@style/AppTheme.Main"
       android:label="@string/app_name">
 
       <intent-filter>

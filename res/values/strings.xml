@@ -47,6 +47,8 @@
   <string name="pref_nightmode_summary">Show articles with inverted colors</string>
   <string name="pref_backtotop">Back to Top</string>
   <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
+  <string name="pref_hidetoolbar">Hide toolbar when scrolling</string>
+  <string name="pref_hidetoolbar_summary">Hide the toolbar when the page is scrolled down</string>
   <string name="pref_language_title">Language</string>
   <string name="pref_language_chooser">Choose a language</string>
   <string name="pref_credits">Contributors and Licenses</string>
