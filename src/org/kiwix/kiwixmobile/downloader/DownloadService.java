@@ -120,13 +120,13 @@ public class DownloadService extends Service {
     bookDao = new BookDao(KiwixDatabase.getInstance(this));
 
     PendingIntent pendingIntent = PendingIntent.getActivity
-        (getBaseContext(), 0,
+        (getBaseContext(), notificationCount,
         target, PendingIntent.FLAG_CANCEL_CURRENT);
 
     Intent pauseIntent = new Intent(this, this.getClass()).setAction(ACTION_PAUSE).putExtra(NOTIFICATION_ID, notificationCount);
     Intent stopIntent = new Intent(this, this.getClass()).setAction(ACTION_STOP).putExtra(NOTIFICATION_ID, notificationCount);;
-    PendingIntent pausePending = PendingIntent.getService(getBaseContext(), 0, pauseIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-    PendingIntent stopPending = PendingIntent.getService(getBaseContext(), 0, stopIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+    PendingIntent pausePending = PendingIntent.getService(getBaseContext(), notificationCount, pauseIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+    PendingIntent stopPending = PendingIntent.getService(getBaseContext(), notificationCount, stopIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
     NotificationCompat.Action pause = new NotificationCompat.Action(R.drawable.ic_pause_black_24dp, getString(R.string.download_pause), pausePending);
     NotificationCompat.Action stop = new NotificationCompat.Action(R.drawable.ic_stop_black_24dp, getString(R.string.download_stop), stopPending);
