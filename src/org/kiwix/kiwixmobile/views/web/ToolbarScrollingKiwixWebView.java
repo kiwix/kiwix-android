@@ -77,7 +77,8 @@ public class ToolbarScrollingKiwixWebView extends KiwixWebView {
           int diffY = (int) (event.getRawY() - startY);
           startY = event.getRawY();
           if (moveToolbar(-diffY)) {
-            return false;
+            event.offsetLocation(0, -diffY);
+            return super.onTouchEvent(event);
           }
         }
         break;
