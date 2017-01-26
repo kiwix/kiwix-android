@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.downloader;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,8 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import android.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -42,7 +42,7 @@ public class DownloadFragment extends Fragment {
   public static DownloadAdapter downloadAdapter;
   private ZimManageActivity zimManageActivity;
   CoordinatorLayout mainLayout;
-  private FragmentActivity faActivity;
+  private Activity faActivity;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -141,7 +141,7 @@ public class DownloadFragment extends Fragment {
       // Get the data item for this position
       // Check if an existing view is being reused, otherwise inflate the view
       if (convertView == null) {
-        convertView = LayoutInflater.from(getContext()).inflate(R.layout.download_item, parent, false);
+        convertView = LayoutInflater.from(faActivity).inflate(R.layout.download_item, parent, false);
       }
       mKeys = mData.keySet().toArray(new Integer[mData.size()]);
       // Lookup view for data population
@@ -180,7 +180,7 @@ public class DownloadFragment extends Fragment {
 
       ImageView stop = (ImageView) convertView.findViewById(R.id.stop);
       stop.setOnClickListener(v -> {
-        new AlertDialog.Builder(getContext())
+        new AlertDialog.Builder(faActivity)
                 .setTitle(R.string.confirm_stop_download_title)
                 .setMessage(R.string.confirm_stop_download_msg)
                 .setPositiveButton(R.string.yes, (dialog, i) -> {

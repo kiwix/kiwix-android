@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile;
 
+import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -7,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -14,7 +17,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
+import android.support.design.widget.Snackbar;
+import android.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,11 +50,13 @@ import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
 
+import eu.mhutti1.utils.storage.StorageDevice;
+import eu.mhutti1.utils.storage.StorageSelectDialog;
 import rx.android.schedulers.AndroidSchedulers;
 
 import static org.kiwix.kiwixmobile.downloader.DownloadService.KIWIX_ROOT;
 
-public class LibraryFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class LibraryFragment extends Fragment implements AdapterView.OnItemClickListener, StorageSelectDialog.OnSelectListener {
 
   public @BindView(R.id.library_list) ListView libraryList;
   @BindView(R.id.progressBar) ProgressBar progressBar;
@@ -99,7 +106,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
         noNetworkConnection();
       }
 
-      this.getContext().registerReceiver(new BroadcastReceiver() {
+      faActivity.registerReceiver(new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
           NetworkInfo network = conMan.getActiveNetworkInfo();

@@ -27,7 +27,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -334,7 +334,7 @@ public class ZimFileSelectFragment extends Fragment
       ViewHolder holder;
       LibraryNetworkEntity.Book book = getItem(position);
         if (convertView == null) {
-          convertView = View.inflate(getContext(), R.layout.library_item, null);
+          convertView = View.inflate(context, R.layout.library_item, null);
           holder = new ViewHolder();
           holder.title = (TextView) convertView.findViewById(R.id.title);
           holder.description = (TextView) convertView.findViewById(R.id.description);
