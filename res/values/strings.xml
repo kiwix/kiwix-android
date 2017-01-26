@@ -112,7 +112,7 @@
   <string name="no_files_here">No files here</string>
   <string name="download_complete_snackbar">Download complete</string>
   <string name="download_over_network">Are you sure you want to start the download without WiFi?</string>
-  <string name="download_no_space">Insufficient space to download this file (You can change the default storage device in settings)</string>
+  <string name="download_no_space">Insufficient space to download this file.</string>
   <string name="space_available">Space Available:</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_nopic">No Pictures</string>
@@ -160,4 +160,5 @@
   <string name="no">No</string>
   <string name="confirm_stop_download_title">Stop download?</string>
   <string name="confirm_stop_download_msg">Are you sure you want to stop this download?</string>
+  <string name="download_change_storage">Storage device selector</string>
 </resources>

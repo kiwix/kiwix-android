@@ -198,6 +198,21 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
       Toast.makeText(super.getActivity(), getString(R.string.download_no_space)
               + "\n" + getString(R.string.space_available) + " "
               + bytesToHuman(getSpaceAvailable()), Toast.LENGTH_LONG).show();
+      Snackbar snackbar = Snackbar.make(libraryList,
+          getString(R.string.download_change_storage),
+          Snackbar.LENGTH_LONG)
+          .setAction(getString(R.string.open), v -> {
+            FragmentManager fm = getFragmentManager();
+            StorageSelectDialog dialogFragment = new StorageSelectDialog();
+            Bundle b = new Bundle();
+            b.putString("INTERNAL", getResources().getString(R.string.internal_storage));
+            b.putString("EXTERNAL", getResources().getString(R.string.external_storage));
+            dialogFragment.setArguments(b);
+            dialogFragment.setOnSelectListener(this);
+            dialogFragment.show(fm, getResources().getString(R.string.pref_storage));
+          });
+      snackbar.setActionTextColor(Color.WHITE);
+      snackbar.show();
       return;
     }
 
@@ -289,6 +304,19 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
   public long getSpaceAvailable() {
     return new File(PreferenceManager.getDefaultSharedPreferences(super.getActivity())
         .getString(KiwixMobileActivity.PREF_STORAGE,Environment.getExternalStorageDirectory().getPath())).getFreeSpace();
+  }
+
+  @Override
+  public void selectionCallback(StorageDevice storageDevice) {
+    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+    SharedPreferences.Editor editor = sharedPreferences.edit();
+    editor.putString(KiwixMobileActivity.PREF_STORAGE, storageDevice.getName());
+    if (storageDevice.isInternal()) {
+      editor.putString(KiwixMobileActivity.PREF_STORAGE_TITLE, getResources().getString(R.string.internal_storage));
+    } else {
+      editor.putString(KiwixMobileActivity.PREF_STORAGE_TITLE, getResources().getString(R.string.external_storage));
+    }
+    editor.apply();
   }
 
   public class DownloadServiceConnection {
