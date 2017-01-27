@@ -39,6 +39,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
@@ -55,6 +56,7 @@ import eu.mhutti1.utils.storage.StorageSelectDialog;
 import rx.android.schedulers.AndroidSchedulers;
 
 import static org.kiwix.kiwixmobile.downloader.DownloadService.KIWIX_ROOT;
+import static org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.*;
 
 public class LibraryFragment extends Fragment implements AdapterView.OnItemClickListener, StorageSelectDialog.OnSelectListener {
 
@@ -85,6 +87,8 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
   private ConnectivityManager conMan;
 
   private ZimManageActivity faActivity;
+
+  public static List<Book> downloadingBooks = new ArrayList();
 
 
     @Override
@@ -122,7 +126,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
       }, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
       BookDao bookDao = new BookDao(KiwixDatabase.getInstance(getActivity()));
-      for (LibraryNetworkEntity.Book book : bookDao.getDownloadingBooks()) {
+      for (Book book : bookDao.getDownloadingBooks()) {
         if (!DownloadFragment.mDownloads.containsValue(book)) {
           book.url = book.remoteUrl;
           downloadFile(book);
@@ -194,7 +198,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-    if (getSpaceAvailable() < Long.parseLong(((LibraryNetworkEntity.Book) (parent.getAdapter().getItem(position))).getSize()) * 1024f) {
+    if (getSpaceAvailable() < Long.parseLong(((Book) (parent.getAdapter().getItem(position))).getSize()) * 1024f) {
       Toast.makeText(super.getActivity(), getString(R.string.download_no_space)
               + "\n" + getString(R.string.space_available) + " "
               + bytesToHuman(getSpaceAvailable()), Toast.LENGTH_LONG).show();
@@ -217,7 +221,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
     }
 
     if (DownloadFragment.mDownloadFiles
-            .containsValue(KIWIX_ROOT + StorageUtils.getFileNameFromUrl(((LibraryNetworkEntity.Book) parent.getAdapter().getItem(position)).getUrl()))) {
+            .containsValue(KIWIX_ROOT + StorageUtils.getFileNameFromUrl(((Book) parent.getAdapter().getItem(position)).getUrl()))) {
       Toast.makeText(super.getActivity(), getString(R.string.zim_already_downloading), Toast.LENGTH_LONG).show();
     } else {
 
@@ -228,8 +232,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
       }
 
       if (isWiFi()) {
-        downloadFile((LibraryNetworkEntity.Book) parent.getAdapter().getItem(position));
-        libraryAdapter.getFilter().filter(((ZimManageActivity) super.getActivity()).searchView.getQuery());
+        downloadFile((Book) parent.getAdapter().getItem(position));
       } else{
       mobileDownloadDialog(position, parent);
     }
@@ -277,8 +280,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
         .setMessage(getString(R.string.download_over_network))
         .setPositiveButton(getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int which) {
-            downloadFile((LibraryNetworkEntity.Book) parent.getAdapter().getItem(position));
-            libraryAdapter.getFilter().filter(faActivity.searchView.getQuery());
+            downloadFile((Book) parent.getAdapter().getItem(position));
           }
         })
         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -288,7 +290,9 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
         .show();
   }
 
-  public void downloadFile(LibraryNetworkEntity.Book book) {
+  private void downloadFile(Book book) {
+    downloadingBooks.add(book);
+    libraryAdapter.getFilter().filter(faActivity.searchView.getQuery());
     Toast.makeText(super.getActivity(), getString(R.string.download_started_library), Toast.LENGTH_LONG).show();
     Intent service = new Intent(super.getActivity(), DownloadService.class);
     service.putExtra(DownloadIntent.DOWNLOAD_URL_PARAMETER, book.getUrl());

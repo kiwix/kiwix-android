@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
@@ -142,6 +143,7 @@ public class DownloadService extends Service {
         .setOngoing(true));
 
     downloadStatus.put(notificationCount, PLAY);
+    LibraryFragment.downloadingBooks.remove(book);
     String url = intent.getExtras().getString(DownloadIntent.DOWNLOAD_URL_PARAMETER);
     downloadBook(url, notificationCount, book);
     return START_STICKY;

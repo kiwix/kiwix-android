@@ -36,11 +36,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+
+import org.kiwix.kiwixmobile.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.ZimManageActivity;
 import org.kiwix.kiwixmobile.database.BookDao;
@@ -181,7 +185,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
           } else {
             // Check file doesn't exist locally
             for (Book book : books) {
-              if (book.getId().equals(b.getId())) {
+              if (book.equals(b)) {
                 booksCopy.remove(b);
                 contains = false;
                 break;
@@ -189,11 +193,11 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
             }
             if (contains) {
               // Check file isn't being downloaded
-              Iterator it = DownloadFragment.mDownloads.entrySet().iterator();
-              while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry) it.next();
-                Book book = (Book) pair.getValue();
-                if (book.getId().equals(b.getId())) {
+              Set<Book> downloading = new HashSet<>();
+              downloading.addAll(DownloadFragment.mDownloads.values());
+              downloading.addAll(LibraryFragment.downloadingBooks);
+              for (Book book : downloading) {
+                if (book.equals(b)) {
                   booksCopy.remove(b);
                   break;
                 }
@@ -207,7 +211,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
         for (Book b : allBooks) {
           Boolean exits = false;
           for (Book book : books) {
-            if (book.getId().equals(b.getId())) {
+            if (book.equals(b)) {
               exits = true;
               break;
             }
@@ -216,11 +220,11 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
             continue;
 
           // Check file isn't being downloaded
-          Iterator it = DownloadFragment.mDownloads.entrySet().iterator();
-          while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
-            Book book = (Book) pair.getValue();
-            if (book.getId().equals(b.getId())) {
+          Set<Book> downloading = new HashSet<>();
+          downloading.addAll(DownloadFragment.mDownloads.values());
+          downloading.addAll(LibraryFragment.downloadingBooks);
+          for (Book book : downloading) {
+            if (book.equals(b)) {
               exits = true;
               break;
             }
