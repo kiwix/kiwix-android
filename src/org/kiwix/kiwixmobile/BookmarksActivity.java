@@ -21,8 +21,11 @@
 package org.kiwix.kiwixmobile;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -54,16 +57,20 @@ public class BookmarksActivity extends AppCompatActivity
   private ArrayAdapter adapter;
   private ArrayList<String> selected;
   private int numOfSelected;
-  private LinearLayout snackbarLayout;
+  private CoordinatorLayout snackbarLayout;
   private LinearLayout noBookmarksLayout;
   private BookmarksDao bookmarksDao;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+    if (sharedPreferences.getBoolean(KiwixMobileActivity.PREF_NIGHT_MODE, false)) {
+      setTheme(R.style.AppTheme_Night);
+    }
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_bookmarks);
     setUpToolbar();
-    snackbarLayout = (LinearLayout) findViewById(R.id.bookmarks_activity_layout);
+    snackbarLayout = (CoordinatorLayout) findViewById(R.id.bookmarks_activity_layout);
     selected = new ArrayList<>();
     bookmarksList = (ListView) findViewById(R.id.bookmarks_list);
     noBookmarksLayout = (LinearLayout) findViewById(R.id.bookmarks_none_linlayout);

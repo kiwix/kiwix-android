@@ -81,6 +81,10 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
+    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+    if (sharedPreferences.getBoolean(KiwixMobileActivity.PREF_NIGHT_MODE, false)) {
+      setTheme(R.style.AppTheme_Night);
+    }
     super.onCreate(savedInstanceState);
     setContentView(R.layout.settings);
 
@@ -252,6 +256,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       }
       if (key.equals(PREF_NIGHTMODE)) {
         KiwixMobileActivity.refresh = true;
+        getActivity().recreate();
       }
 
     }

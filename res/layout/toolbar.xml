@@ -18,7 +18,7 @@
       android:layout_width="match_parent"
       android:layout_height="3dp"
       android:layout_alignParentBottom="true"
-      app:backgroundColor="@color/primary_dark"
+      app:backgroundColor="?attr/progressBackgroundColor"
       app:bidirectionalAnimate="false"
       app:progressColor="@color/accent"/>
 

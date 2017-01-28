@@ -2,7 +2,9 @@ package org.kiwix.kiwixmobile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.design.widget.TabLayout;
 import android.app.Fragment;
@@ -60,6 +62,10 @@ public class ZimManageActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+    if (sharedPreferences.getBoolean(KiwixMobileActivity.PREF_NIGHT_MODE, false)) {
+      setTheme(R.style.AppTheme_Night);
+    }
     super.onCreate(savedInstanceState);
     setContentView(R.layout.zim_manager);
 

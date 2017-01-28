@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:orientation="vertical">
+  android:orientation="vertical"
+  android:background="?attr/listBackground">
 
   <TextView
     android:id="@+id/download_management_no_downloads"
@@ -20,6 +21,7 @@
   <ListView
     android:id="@+id/zim_downloader_list"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
+    android:layout_height="wrap_content"
+    android:background="?attr/listBackground"/>
 
 </RelativeLayout>

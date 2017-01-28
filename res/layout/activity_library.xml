@@ -8,14 +8,16 @@
 
   <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/listBackground">
 
     <ListView
       android:id="@+id/library_list"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:paddingBottom="60dp"
-      android:divider="@null"/>
+      android:divider="@null"
+      android:background="?attr/listBackground"/>
 
     <TextView
       android:id="@+id/network_permission_text"

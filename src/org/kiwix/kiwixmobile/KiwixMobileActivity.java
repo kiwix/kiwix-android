@@ -125,7 +125,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
 
   private static final String TAG_CURRENT_TAB = "currenttab";
 
-  private static final String PREF_NIGHT_MODE = "pref_nightmode";
+  public static final String PREF_NIGHT_MODE = "pref_nightmode";
 
   private static final String PREF_KIWIX_MOBILE = "kiwix-mobile";
 
@@ -285,6 +285,11 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
+    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+    nightMode = sharedPreferences.getBoolean(PREF_NIGHT_MODE, false);
+    if (nightMode) {
+      setTheme(R.style.AppTheme_Night);
+    }
     super.onCreate(savedInstanceState);
     handleLocaleCheck();
     setContentView(R.layout.main);
@@ -296,7 +301,6 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
 
     initPlayStoreUri();
 
-    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     isHideToolbar = sharedPreferences.getBoolean(PREF_HIDE_TOOLBAR, false);
 
     FileReader fileReader = new FileReader();
@@ -1054,10 +1058,8 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
       selectTab(currentWebViewIndex);
     }
     if (refresh) {
-      for (KiwixWebView kiwixWebView : mWebViews) {
-        kiwixWebView.reload();
-      }
       refresh = false;
+      recreate();
     }
     if (menu != null) {
       refreshBookmarkSymbol(menu);
