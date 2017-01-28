@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.downloader;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -231,6 +232,7 @@ public class DownloadService extends Service {
             book.downloaded = true;
             bookDao.deleteBook(book.id);
             notification.get(notificationID).setContentIntent(pendingIntent);
+            notification.get(notificationID).mActions.clear();
             updateForeground();
           } else if (progress == 0) {
             // Tells android to not kill the service
