@@ -1392,14 +1392,16 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
         getCurrentWebView().getUrl() != null &&
         ZimContentProvider.getId() != null &&
         !getCurrentWebView().getUrl().equals("file:///android_res/raw/help.html")) {
-
-      menu.findItem(R.id.menu_bookmarks).setVisible(true);
-      if (bookmarks.contains(getCurrentWebView().getUrl())) {
-        menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmark_active);
-      } else {
-        menu.findItem(R.id.menu_bookmarks).setIcon(R.drawable.action_bookmark);
-      }
-    } else { menu.findItem(R.id.menu_bookmarks).setVisible(false); }
+      menu.findItem(R.id.menu_bookmarks)
+              .setEnabled(true)
+              .setIcon(bookmarks.contains(getCurrentWebView().getUrl()) ? R.drawable.action_bookmark_active : R.drawable.action_bookmark)
+              .getIcon().setAlpha(255);
+    } else {
+      menu.findItem(R.id.menu_bookmarks)
+              .setEnabled(false)
+              .setIcon(R.drawable.action_bookmark)
+              .getIcon().setAlpha(130);
+    }
   }
 
   public void refreshNavigationButtons() {
