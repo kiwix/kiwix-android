@@ -30,7 +30,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.google.common.collect.ImmutableList;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,6 +57,8 @@ import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
+import rx.Observable;
+
 public class LibraryAdapter extends ArrayAdapter<Book> {
 
   public static Map<String, Locale> mLocaleMap;
@@ -71,14 +75,15 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
     allBooks = ImmutableList.copyOf(books);
     mActivity = (ZimManageActivity) context;
     networkLanguageDao = new NetworkLanguageDao(KiwixDatabase.getInstance(mActivity));
-    bookDao = new BookDao( KiwixDatabase.getInstance(context));
+    bookDao = new BookDao(KiwixDatabase.getInstance(context));
     initLanguageMap();
     getLanguages();
     getFilter().filter(mActivity.searchView.getQuery());
   }
 
 
-  @Override public View getView(int position, View convertView, ViewGroup parent) {
+  @Override
+  public View getView(int position, View convertView, ViewGroup parent) {
     ViewHolder holder;
     if (convertView == null) {
       convertView = View.inflate(getContext(), R.layout.library_item, null);
@@ -149,112 +154,67 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
     return convertView;
   }
 
-  public static String parseURL(String url){
+  public static String parseURL(String url) {
     String details;
     try {
-      details = url.substring(url.lastIndexOf("/") + 1,url.length() - 10);
+      details = url.substring(url.lastIndexOf("/") + 1, url.length() - 10);
       details = details.substring(details.indexOf("_", details.indexOf("_") + 1) + 1, details.lastIndexOf("_"));
       details = details.replaceAll("_", " ");
-      details = details.replaceAll("all","");
+      details = details.replaceAll("all", "");
       details = details.replaceAll("nopic", mActivity.getString(R.string.zim_nopic));
       details = details.replaceAll("simple", mActivity.getString(R.string.zim_simple));
       details = details.trim().replaceAll(" +", " ");
       return details;
-    } catch (Exception e ){
-      return  "";
+    } catch (Exception e) {
+      return "";
+    }
+  }
+
+  public static boolean langaugeActive(Book book) {
+    return Observable.from(mLanguages)
+        .takeFirst(language -> language.languageCode.equals(book.getLanguage()))
+        .map(language -> language.active).toBlocking().firstOrDefault(false);
+  }
+
+  public static Observable<Book> getMatches(Book b, String s) {
+    StringBuffer text = new StringBuffer();
+    text.append(b.getTitle() + "|" + b.getDescription() + "|" + parseURL(b.getUrl()) + "|");
+    if (mLocaleMap.containsKey(b.getLanguage())) {
+      text.append(mLocaleMap.get(b.getLanguage()).getDisplayLanguage() + "|");
+    }
+    String[] words = s.toString().toLowerCase().split("\\s+");
+    b.searchMatches = Observable.from(words).filter(text.toString().toLowerCase()::contains).count().toBlocking().first();
+    if (b.searchMatches > 0) {
+      return Observable.just(b);
+    } else {
+      return Observable.empty();
     }
   }
 
   private class BookFilter extends Filter {
     @Override
     protected FilterResults performFiltering(CharSequence s) {
-      ArrayList<Book> filteredBooks = new ArrayList<Book>();
       ArrayList<Book> books = bookDao.getBooks();
+      List<Book> finalBooks;
       if (s.length() == 0) {
-        LinkedList<Book> booksCopy = new LinkedList<LibraryNetworkEntity.Book>(allBooks);
-        LinkedList<Book> booksAdditions = new LinkedList<LibraryNetworkEntity.Book>();
-        for (Book b : allBooks){
-          Boolean contains = false;
-          for (Language language : mLanguages){
-            if (language.languageCode.equals(b.getLanguage()) && language.active == true){
-              contains = true;
-            }
-          }
-          if (!contains) {
-            booksCopy.remove(b);
-          } else {
-            // Check file doesn't exist locally
-            for (Book book : books) {
-              if (book.equals(b)) {
-                booksCopy.remove(b);
-                contains = false;
-                break;
-              }
-            }
-            if (contains) {
-              // Check file isn't being downloaded
-              Set<Book> downloading = new HashSet<>();
-              downloading.addAll(DownloadFragment.mDownloads.values());
-              downloading.addAll(LibraryFragment.downloadingBooks);
-              for (Book book : downloading) {
-                if (book.equals(b)) {
-                  booksCopy.remove(b);
-                  break;
-                }
-              }
-            }
-          }
-        }
-        filteredBooks.addAll(booksCopy);
+        finalBooks = Observable.from(allBooks)
+            .filter(LibraryAdapter::langaugeActive)
+            .filter(book -> !books.contains(book))
+            .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
+            .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
+            .toList().toBlocking().single();
       } else {
-        // Check file doesn't exist locally
-        for (Book b : allBooks) {
-          Boolean exits = false;
-          for (Book book : books) {
-            if (book.equals(b)) {
-              exits = true;
-              break;
-            }
-          }
-          if (exits)
-            continue;
-
-          // Check file isn't being downloaded
-          Set<Book> downloading = new HashSet<>();
-          downloading.addAll(DownloadFragment.mDownloads.values());
-          downloading.addAll(LibraryFragment.downloadingBooks);
-          for (Book book : downloading) {
-            if (book.equals(b)) {
-              exits = true;
-              break;
-            }
-          }
-          if (exits)
-            continue;
-
-          StringBuffer text = new StringBuffer();
-          text.append(b.getTitle() + "|" + b.getDescription() + "|" + parseURL(b.getUrl()) + "|");
-          if (mLocaleMap.containsKey(b.getLanguage())) {
-            text.append(mLocaleMap.get(b.getLanguage()).getDisplayLanguage());
-            text.append("|");
-          }
-          String[] words = s.toString().toLowerCase().split("\\s+");
-          for (String word : words){
-            if (text.toString().toLowerCase().contains(word)){
-              if (filteredBooks.size() == 0 || filteredBooks.get(filteredBooks.size() - 1).id != b.id) {
-                b.searchMatches++;
-                filteredBooks.add(b);
-              } else {
-                filteredBooks.get(filteredBooks.size() - 1).searchMatches++;
-              }
-            }
-          }
-        }
-        Collections.sort(filteredBooks, new BookMatchComparator());
+        finalBooks = Observable.from(allBooks)
+            .filter(book -> !books.contains(book))
+            .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
+            .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
+            .flatMap(book -> getMatches(book, s.toString()))
+            .toList().toBlocking().single();
+        Collections.sort(finalBooks, new BookMatchComparator());
       }
       FilterResults results = new FilterResults();
-      results.values = filteredBooks;
-      results.count = filteredBooks.size();
+      results.values = finalBooks;
+      results.count = finalBooks.size();
       return results;
     }
 
@@ -263,6 +223,9 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
       List<Book> filtered = (List<Book>) results.values;
       LibraryAdapter.this.clear();
       if (filtered != null) {
+        if (filtered.isEmpty()) {
+          filtered.addAll(allBooks);
+        }
         LibraryAdapter.this.addAll(filtered);
       }
       notifyDataSetChanged();
@@ -285,45 +248,45 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
   public static void initLanguageMap() {
     String[] languages = Locale.getISOLanguages();
     bookLanguages = new ArrayList<>();
-      mLocaleMap = new HashMap<>(languages.length);
-      for (String language : languages) {
-        Locale locale = new Locale(language);
-        mLocaleMap.put(locale.getISO3Language(), locale);
-      }
+    mLocaleMap = new HashMap<>(languages.length);
+    for (String language : languages) {
+      Locale locale = new Locale(language);
+      mLocaleMap.put(locale.getISO3Language(), locale);
+    }
   }
 
-  public static void updateNetworklanguages(){
+  public static void updateNetworklanguages() {
     new saveNetworkLanguages().execute(mLanguages);
   }
 
   public static void getLanguages() {
-    if (mLanguages.size() > 0){
+    if (mLanguages.size() > 0) {
       return;
     }
 
-    if (networkLanguageDao.getFilteredLanguages().size() > 0){
+    if (networkLanguageDao.getFilteredLanguages().size() > 0) {
       mLanguages = networkLanguageDao.getFilteredLanguages();
       return;
     }
 
     String[] languages = Locale.getISOLanguages();
-      for (Book book : LibraryAdapter.allBooks){
-        if (!bookLanguages.contains(book.getLanguage())){
-          bookLanguages.add(book.getLanguage());
+    for (Book book : LibraryAdapter.allBooks) {
+      if (!bookLanguages.contains(book.getLanguage())) {
+        bookLanguages.add(book.getLanguage());
+      }
+    }
+    mLanguages = new ArrayList<>();
+    for (String language : languages) {
+      Locale locale = new Locale(language);
+      if (bookLanguages.contains(locale.getISO3Language())) {
+        if (locale.getISO3Language().equals(mActivity.getResources().getConfiguration().locale.getISO3Language())) {
+          mLanguages.add(new Language(locale, true));
+        } else {
+          mLanguages.add(new Language(locale, false));
         }
       }
-      mLanguages = new ArrayList<>();
-      for (String language : languages) {
-        Locale locale = new Locale(language);
-        if (bookLanguages.contains(locale.getISO3Language())) {
-          if (locale.getISO3Language().equals(mActivity.getResources().getConfiguration().locale.getISO3Language())){
-            mLanguages.add(new Language(locale, true));
-          } else {
-            mLanguages.add(new Language(locale, false));
-          }
-        }
-      }
-      new saveNetworkLanguages().execute(mLanguages);
+    }
+    new saveNetworkLanguages().execute(mLanguages);
   }
 
   // Get the language from the language codes of the parsed xml stream
@@ -359,7 +322,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
       return "";
     }
 
-    final String[] units = new String[] { "KB", "MB", "GB", "TB" };
+    final String[] units = new String[]{"KB", "MB", "GB", "TB"};
     int conversion = (int) (Math.log10(size) / Math.log10(1024));
     return new DecimalFormat("#,##0.#")
         .format(size / Math.pow(1024, conversion))
@@ -400,6 +363,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
 
     ImageView favicon;
   }
+
   class BookMatchComparator implements Comparator<Book> {
     public int compare(Book book1, Book book2) {
       return book2.searchMatches - book1.searchMatches;
@@ -410,21 +374,25 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
     public String language;
     public String languageCode;
     public Boolean active;
-    public Language(Locale locale, Boolean active){
+
+    public Language(Locale locale, Boolean active) {
       this.language = locale.getDisplayLanguage();
       this.active = active;
       this.languageCode = locale.getISO3Language();
     }
-    public Language(String languageCode, Boolean active){
+
+    public Language(String languageCode, Boolean active) {
       this.language = new Locale(languageCode).getDisplayLanguage();
       this.active = active;
       this.languageCode = languageCode;
     }
+
     @Override
     public boolean equals(Object obj) {
-      return ((Language)obj).language.equals(language) && ((Language)obj).active == ((Language) obj).active;
+      return ((Language) obj).language.equals(language) && ((Language) obj).active == ((Language) obj).active;
     }
   }
+
   private static class saveNetworkLanguages extends AsyncTask<ArrayList<Language>, Object, Void> {
     @Override
     protected Void doInBackground(ArrayList<Language>... params) {
