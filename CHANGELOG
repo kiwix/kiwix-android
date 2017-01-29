@@ -5,6 +5,7 @@ FIX: Sporadic transparent menu
 FIX: library weaknesses around download
 FIX: Download resilience
 FIX: Few problems with icon positions
+FIX: "Night mode" for pictures
 NEW: UI "night mode"
 NEW: UI colors
 NEW: Autohide app toolbar
