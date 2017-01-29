@@ -292,7 +292,9 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
 
   private void downloadFile(Book book) {
     downloadingBooks.add(book);
-    libraryAdapter.getFilter().filter(faActivity.searchView.getQuery());
+    if (libraryAdapter != null) {
+      libraryAdapter.getFilter().filter(faActivity.searchView.getQuery());
+    }
     Toast.makeText(super.getActivity(), getString(R.string.download_started_library), Toast.LENGTH_LONG).show();
     Intent service = new Intent(super.getActivity(), DownloadService.class);
     service.putExtra(DownloadIntent.DOWNLOAD_URL_PARAMETER, book.getUrl());
