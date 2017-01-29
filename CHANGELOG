@@ -2,8 +2,7 @@
 FIX: Text To Speech issues on earlier Android versions
 FIX: SD card detection in a few edge cases
 FIX: Sporadic transparent menu
-FIX: library weaknesses around download
-FIX: Download resilience
+FIX: Download resilience and experience
 FIX: Few problems with icon positions
 FIX: "Night mode" for pictures
 NEW: UI "night mode"
