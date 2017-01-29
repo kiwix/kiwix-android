@@ -1,6 +1,14 @@
 2.2
 FIX: Text To Speech issues on earlier Android versions
-FIX: Download reslience
+FIX: SD card detection in a few edge cases
+FIX: Sporadic transparent menu
+FIX: library weaknesses around download
+FIX: Download resilience
+FIX: Few problems with icon positions
+NEW: UI "night mode"
+NEW: UI colors
+NEW: Autohide app toolbar
+NEW: Keep bookmarks over data updates
 
 2.1
 FIX: Display of storage devices
