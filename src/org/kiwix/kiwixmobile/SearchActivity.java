@@ -22,6 +22,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.Locale;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.database.RecentSearchDao;
+import org.kiwix.kiwixmobile.utils.DimenUtils;
 import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 
 import static android.provider.Settings.System.ALWAYS_FINISH_ACTIVITIES;
@@ -54,6 +56,8 @@ public class SearchActivity extends AppCompatActivity
     setContentView(contentView);
 
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    RelativeLayout toolbarContainer = (RelativeLayout) findViewById(R.id.toolbar_layout);
+    DimenUtils.resizeToolbar(this, toolbar, toolbarContainer);
     setSupportActionBar(toolbar);
     getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
     getSupportActionBar().setHomeButtonEnabled(true);

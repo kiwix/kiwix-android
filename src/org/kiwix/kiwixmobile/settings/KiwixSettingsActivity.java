@@ -38,6 +38,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.webkit.WebView;
 import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import eu.mhutti1.utils.storage.StorageDevice;
 import eu.mhutti1.utils.storage.StorageSelectDialog;
@@ -48,6 +49,7 @@ import org.kiwix.kiwixmobile.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.database.RecentSearchDao;
+import org.kiwix.kiwixmobile.utils.DimenUtils;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.views.SliderPreference;
 
@@ -112,6 +114,8 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
   private void setUpToolbar() {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    RelativeLayout toolbarContainer = (RelativeLayout) findViewById(R.id.toolbar_layout);
+    DimenUtils.resizeToolbar(this, toolbar, toolbarContainer);
     setSupportActionBar(toolbar);
     getSupportActionBar().setTitle(getString(R.string.menu_settings));
     getSupportActionBar().setHomeButtonEnabled(true);

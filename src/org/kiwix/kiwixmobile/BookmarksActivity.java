@@ -31,18 +31,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.database.BookmarksDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
+import org.kiwix.kiwixmobile.utils.DimenUtils;
 
 import java.util.ArrayList;
 
@@ -75,12 +80,20 @@ public class BookmarksActivity extends AppCompatActivity
     bookmarksList = (ListView) findViewById(R.id.bookmarks_list);
     noBookmarksLayout = (LinearLayout) findViewById(R.id.bookmarks_none_linlayout);
 
-
     bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
     bookmarks = bookmarksDao.getBookmarkTitles(ZimContentProvider.getId(), ZimContentProvider.getName());
     bookmarkUrls = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
 
-    adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.bookmarks_row, R.id.bookmark_title, bookmarks);
+    adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.bookmarks_row, R.id.bookmark_title, bookmarks)  {
+      @Override
+      public View getView(int position, View convertView, ViewGroup parent) {
+        if(convertView == null){
+          LayoutInflater inflater = getLayoutInflater();
+          convertView = inflater.inflate(R.layout.bookmarks_row, null);
+        }
+        return super.getView(position, convertView, parent);
+      }
+    };
     bookmarksList.setAdapter(adapter);
     setNoBookmarksState();
 
@@ -194,6 +207,8 @@ public class BookmarksActivity extends AppCompatActivity
 
   private void setUpToolbar() {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    RelativeLayout toolbarContainer = (RelativeLayout) findViewById(R.id.toolbar_layout);
+    DimenUtils.resizeToolbar(this, toolbar, toolbarContainer);
     toolbar.setTitle(getString(R.string.menu_bookmarks_list));
     setSupportActionBar(toolbar);
     getSupportActionBar().setHomeButtonEnabled(true);

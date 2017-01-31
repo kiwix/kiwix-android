@@ -46,6 +46,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuBuilder;
+import android.support.v7.view.menu.MenuItemImpl;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -71,6 +73,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -96,6 +99,7 @@ import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
 import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
 import org.kiwix.kiwixmobile.views.web.KiwixWebView;
 import org.kiwix.kiwixmobile.views.web.ToolbarScrollingKiwixWebView;
+import org.w3c.dom.Text;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.DocumentSection;
@@ -465,18 +469,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
   }
 
   private void setUpToolbar() {
-    int statusBarHeight = DimenUtils.getTranslucentStatusBarHeight(this);
-
-    LayoutParams toolbarContainerParams = toolbarContainer.getLayoutParams();
-    toolbarContainerParams.height += statusBarHeight;
-    toolbarContainer.setLayoutParams(toolbarContainerParams);
-
-    LayoutParams toolbarParams = toolbar.getLayoutParams();
-    toolbarParams.height += statusBarHeight;
-    toolbar.setLayoutParams(toolbarParams);
-
-    toolbar.setPadding(0, statusBarHeight, 0, 0);
-    toolbar.setContentInsetsAbsolute(0, 0);
+    DimenUtils.resizeToolbar(this, toolbar, toolbarContainer);
     setSupportActionBar(toolbar);
   }
 
@@ -1045,7 +1038,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
   @Override
   public void onResume() {
     super.onResume();
-
+    invalidateOptionsMenu();
     if (wasHideToolbar != isHideToolbar) {
       wasHideToolbar = isHideToolbar;
 
@@ -1375,6 +1368,15 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     toggleActionItemsConfig();
     refreshBookmarkSymbol(menu);
     refreshNavigationButtons();
+
+    if (nightMode) {
+      ArrayList<MenuItemImpl> menuItems =  ((MenuBuilder) menu).getNonActionItems();
+      for (int i = 0; i < menuItems.size(); i++) {
+        SpannableString styledMenuTitle = new SpannableString(menuItems.get(i).getTitle());
+        styledMenuTitle.setSpan(new ForegroundColorSpan(Color.WHITE), 0, menuItems.get(i).getTitle().length(), 0);
+        menuItems.get(i).setTitle(styledMenuTitle);
+      }
+    }
 
     if (getCurrentWebView().getUrl() == null || getCurrentWebView().getUrl().equals("file:///android_res/raw/help.html")) {
       menu.findItem(R.id.menu_read_aloud).setVisible(false);

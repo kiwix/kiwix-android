@@ -1,9 +1,11 @@
 package org.kiwix.kiwixmobile;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,8 @@ public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
   private TableClickListener listener;
   private String title;
   private List<DocumentSection> sections;
+  private int primary;
+  private int secondary;
 
   private int selectedPosition = 0;
 
@@ -36,6 +40,13 @@ public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     Context context = parent.getContext();
     View v = LayoutInflater.from(context).inflate(resource, parent, false);
 
+    TypedValue typedValue = new TypedValue();
+    Resources.Theme theme = context.getTheme();
+    theme.resolveAttribute(android.R.attr.textColorPrimary, typedValue, true);
+    primary = typedValue.data;
+    theme.resolveAttribute(android.R.attr.textColorSecondary, typedValue, true);
+    secondary = typedValue.data;
+
     if (viewType == 0) return new HeaderViewHolder(v);
     return new SectionViewHolder(v);
   }
@@ -49,7 +60,7 @@ public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     if (position == 0) {
       vh.title.setTypeface(Typeface.DEFAULT_BOLD);
-      vh.title.setTextColor(Color.BLACK);
+      vh.title.setTextColor(primary);
       if (title != null) {
         vh.title.setText(title);
       } else {
@@ -69,7 +80,7 @@ public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     float density = context.getResources().getDisplayMetrics().density;
     int padding = (int) (((documentSection.level - 1) * 16) * density);
     vh.title.setPadding(padding, 0, 0, 0);
-    vh.title.setTextColor((documentSection.level) % 2 == 0 ? Color.BLACK : Color.GRAY);
+    vh.title.setTextColor((documentSection.level) % 2 == 0 ? primary : secondary);
     vh.title.setText(sections.get(sectionPosition).title);
     vh.itemView.setOnClickListener(v -> {
       updateSelection(vh.getAdapterPosition());

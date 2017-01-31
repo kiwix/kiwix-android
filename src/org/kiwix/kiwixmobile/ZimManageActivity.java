@@ -24,11 +24,13 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
+import org.kiwix.kiwixmobile.utils.DimenUtils;
 
 public class ZimManageActivity extends AppCompatActivity {
 
@@ -125,6 +127,8 @@ public class ZimManageActivity extends AppCompatActivity {
 
   private void setUpToolbar() {
     toolbar = (Toolbar) findViewById(R.id.toolbar);
+    RelativeLayout toolbarContainer = (RelativeLayout) findViewById(R.id.toolbar_layout);
+    DimenUtils.resizeToolbar(this, toolbar, toolbarContainer);
     setSupportActionBar(toolbar);
     // Don't use this method, it's handled by inflater.inflate() above :
     // setContentView(R.layout.activity_lay out);
