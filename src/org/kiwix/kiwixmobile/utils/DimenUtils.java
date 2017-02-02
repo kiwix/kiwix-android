@@ -2,6 +2,7 @@ package org.kiwix.kiwixmobile.utils;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.design.widget.TabLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ public class DimenUtils {
         DimenUtils.getTranslucentStatusBarHeight(context);
   }
 
-  public static void resizeToolbar(Context context, Toolbar toolbar, RelativeLayout toolbarContainer) {
+  public static void resizeToolbar(Context context, Toolbar toolbar, ViewGroup toolbarContainer) {
     int statusBarHeight = DimenUtils.getTranslucentStatusBarHeight(context);
 
     ViewGroup.LayoutParams toolbarContainerParams = toolbarContainer.getLayoutParams();
@@ -49,6 +50,5 @@ public class DimenUtils {
     toolbar.setLayoutParams(toolbarParams);
 
     toolbar.setPadding(0, statusBarHeight, 0, 0);
-    toolbar.setContentInsetsAbsolute(0, 0);
   }
 }

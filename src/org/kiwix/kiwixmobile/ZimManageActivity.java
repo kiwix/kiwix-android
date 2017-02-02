@@ -127,7 +127,7 @@ public class ZimManageActivity extends AppCompatActivity {
 
   private void setUpToolbar() {
     toolbar = (Toolbar) findViewById(R.id.toolbar);
-    RelativeLayout toolbarContainer = (RelativeLayout) findViewById(R.id.toolbar_layout);
+    ViewGroup toolbarContainer = (ViewGroup) findViewById(R.id.toolbar_layout);
     DimenUtils.resizeToolbar(this, toolbar, toolbarContainer);
     setSupportActionBar(toolbar);
     // Don't use this method, it's handled by inflater.inflate() above :
