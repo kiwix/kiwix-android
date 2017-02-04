@@ -28,30 +28,30 @@ import org.kiwix.kiwixmobile.utils.DimenUtils;
 
 public class ToolbarScrollingKiwixWebView extends KiwixWebView {
 
-  private final int toolbarHeight = DimenUtils.getToolbarAndStatusBarHeight(getContext());
+  private final int statusBarHeight = DimenUtils.getTranslucentStatusBarHeight(getContext());
+  private final int toolbarHeight = DimenUtils.getToolbarHeight(getContext());
   private View toolbarView;
   private OnToolbarVisibilityChangeListener listener;
   private float startY;
 
   public ToolbarScrollingKiwixWebView(Context context, WebViewCallback callback, View toolbarView) {
     super(context, callback);
-
     this.toolbarView = toolbarView;
   }
 
   protected boolean moveToolbar(int scrollDelta) {
     float newTranslation = 0,
-        originalTranslation = toolbarView.getTranslationY();
-    if (scrollDelta < 0) {
+        originalTranslation = toolbarView.getTranslationY() - statusBarHeight;
+    if (scrollDelta > 0) {
+      // scroll down
+      newTranslation = Math.max(-statusBarHeight - toolbarHeight, originalTranslation - scrollDelta);
+    } else {
       // scroll up
       newTranslation = Math.min(0, originalTranslation - scrollDelta);
-    } else {
-      // scroll down
-      newTranslation = Math.max(-toolbarHeight, originalTranslation - scrollDelta);
     }
 
-    toolbarView.setTranslationY(newTranslation);
-    this.setTranslationY(toolbarView.getY() + toolbarHeight);
+    toolbarView.setTranslationY(newTranslation + statusBarHeight);
+    this.setTranslationY(newTranslation + toolbarHeight + statusBarHeight);
     if (listener != null && newTranslation != originalTranslation) {
       if (newTranslation == -toolbarHeight) {
         listener.onToolbarHidden();
@@ -87,7 +87,7 @@ public class ToolbarScrollingKiwixWebView extends KiwixWebView {
       case MotionEvent.ACTION_UP:
       case MotionEvent.ACTION_CANCEL:
         if (transY != 0 && transY > -toolbarHeight) {
-          if (transY > -toolbarHeight / 2) {
+          if (transY > (-toolbarHeight) / 2) {
             ensureToolbarDisplayed();
           } else {
             ensureToolbarHidden();

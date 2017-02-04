@@ -11,14 +11,18 @@ import org.kiwix.kiwixmobile.utils.DimenUtils;
  */
 
 public class ToolbarStaticKiwixWebView extends KiwixWebView {
-  public ToolbarStaticKiwixWebView(Context context, WebViewCallback callback) {
+
+  private int heightDifference;
+
+  public ToolbarStaticKiwixWebView(Context context, WebViewCallback callback, ViewGroup toolbarLayout) {
     super(context, callback);
-
-    float heightDifference = DimenUtils.getToolbarAndStatusBarHeight(context);
+    toolbarLayout.setTranslationY(DimenUtils.getTranslucentStatusBarHeight(context));
+    heightDifference = DimenUtils.getToolbarAndStatusBarHeight(context);
     setTranslationY(heightDifference);
+  }
 
-    ViewGroup.LayoutParams layoutParams = getLayoutParams();
-    layoutParams.height -= heightDifference;
-    setLayoutParams(layoutParams);
+  @Override
+  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    super.onMeasure(widthMeasureSpec, heightMeasureSpec - heightDifference);
   }
 }

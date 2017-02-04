@@ -5,6 +5,7 @@
   android:id="@+id/bookmarks_activity_layout"
   android:layout_width="fill_parent"
   android:layout_height="fill_parent"
+  android:fitsSystemWindows="true"
   tools:context=".BookmarksActivity">
 
   <LinearLayout

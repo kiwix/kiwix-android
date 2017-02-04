@@ -57,7 +57,6 @@ public class SearchActivity extends AppCompatActivity
 
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     RelativeLayout toolbarContainer = (RelativeLayout) findViewById(R.id.toolbar_layout);
-    DimenUtils.resizeToolbar(this, toolbar, toolbarContainer);
     setSupportActionBar(toolbar);
     getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
     getSupportActionBar().setHomeButtonEnabled(true);

@@ -5,6 +5,7 @@
   android:id="@+id/zim_manager_main_activity"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:fitsSystemWindows="true"
   tools:context=".ZimManageActivity">
 
   <android.support.design.widget.AppBarLayout
@@ -17,6 +18,7 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
       android:id="@+id/toolbar_layout"
+      app:layout_scrollFlags="scroll|enterAlways"
       android:layout_width="match_parent"
       android:layout_height="?actionBarSize">
 
@@ -25,7 +27,6 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:layout_scrollFlags="scroll|enterAlways"
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
       </android.support.v7.widget.Toolbar>

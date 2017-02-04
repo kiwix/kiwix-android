@@ -38,6 +38,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -99,6 +100,7 @@ import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
 import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
 import org.kiwix.kiwixmobile.views.web.KiwixWebView;
 import org.kiwix.kiwixmobile.views.web.ToolbarScrollingKiwixWebView;
+import org.kiwix.kiwixmobile.views.web.ToolbarStaticKiwixWebView;
 import org.w3c.dom.Text;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
@@ -227,7 +229,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
 
   @BindView(R.id.FullscreenControlButton) ImageButton exitFullscreenButton;
 
-  @BindView(R.id.snackbar_layout) RelativeLayout snackbarLayout;
+  @BindView(R.id.snackbar_layout) CoordinatorLayout snackbarLayout;
 
   @BindView(R.id.new_tab_button) RelativeLayout newTabButton;
 
@@ -469,7 +471,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
   }
 
   private void setUpToolbar() {
-    DimenUtils.resizeToolbar(this, toolbar, toolbarContainer);
+
     setSupportActionBar(toolbar);
   }
 
@@ -607,7 +609,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
           }
       );
     } else {
-      webView = new KiwixWebView(KiwixMobileActivity.this, this);
+      webView = new ToolbarStaticKiwixWebView(KiwixMobileActivity.this, this, toolbarContainer);
     }
     webView.loadUrl(url);
     webView.loadPrefs();

@@ -72,6 +72,7 @@ public class ZimManageActivity extends AppCompatActivity {
     setContentView(R.layout.zim_manager);
 
     setUpToolbar();
+
     // Create the adapter that will return a fragment for each of the three
     // primary sections of the activity.
     mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
@@ -128,10 +129,8 @@ public class ZimManageActivity extends AppCompatActivity {
   private void setUpToolbar() {
     toolbar = (Toolbar) findViewById(R.id.toolbar);
     ViewGroup toolbarContainer = (ViewGroup) findViewById(R.id.toolbar_layout);
-    DimenUtils.resizeToolbar(this, toolbar, toolbarContainer);
+
     setSupportActionBar(toolbar);
-    // Don't use this method, it's handled by inflater.inflate() above :
-    // setContentView(R.layout.activity_lay out);
 
     getSupportActionBar().setHomeButtonEnabled(true);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -167,6 +166,15 @@ public class ZimManageActivity extends AppCompatActivity {
       super.onBackPressed();  // optional depending on your needs
     }
 
+  }
+
+  @Override
+  public void finish() {
+    if (LibraryFragment.isReceiverRegistered) {
+      unregisterReceiver(LibraryFragment.networkBroadcastReceiver);
+      LibraryFragment.isReceiverRegistered = false;
+    }
+    super.finish();
   }
 
   @Override

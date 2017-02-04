@@ -208,7 +208,7 @@ public class BookmarksActivity extends AppCompatActivity
   private void setUpToolbar() {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     RelativeLayout toolbarContainer = (RelativeLayout) findViewById(R.id.toolbar_layout);
-    DimenUtils.resizeToolbar(this, toolbar, toolbarContainer);
+
     toolbar.setTitle(getString(R.string.menu_bookmarks_list));
     setSupportActionBar(toolbar);
     getSupportActionBar().setHomeButtonEnabled(true);
