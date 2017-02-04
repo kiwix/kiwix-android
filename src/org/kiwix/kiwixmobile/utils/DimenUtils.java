@@ -40,4 +40,18 @@ public class DimenUtils {
     return DimenUtils.getToolbarHeight(context) +
         DimenUtils.getTranslucentStatusBarHeight(context);
   }
+
+  public static void resizeToolbar(Context context, Toolbar toolbar, ViewGroup toolbarContainer) {
+    int statusBarHeight = DimenUtils.getTranslucentStatusBarHeight(context);
+
+    ViewGroup.LayoutParams toolbarContainerParams = toolbarContainer.getLayoutParams();
+    toolbarContainerParams.height += statusBarHeight;
+    toolbarContainer.setLayoutParams(toolbarContainerParams);
+
+    ViewGroup.LayoutParams toolbarParams = toolbar.getLayoutParams();
+    toolbarParams.height += statusBarHeight;
+    toolbar.setLayoutParams(toolbarParams);
+
+    toolbar.setPadding(0, statusBarHeight, 0, 0);
+  }
 }
