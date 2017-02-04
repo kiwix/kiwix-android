@@ -2,17 +2,27 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:orientation="horizontal"
-    >
+     android:layout_height="wrap_content"
+    android:background="@drawable/bookmark_row_selector">
 
-  <TextView
-      android:id="@+id/bookmark_title"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:layout_margin="15dp"
-      android:textSize="15sp"
-      />
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="?attr/selectableItemBackground">
+
+    <TextView
+        android:id="@+id/bookmark_title"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_margin="15dp"
+        android:textSize="15sp"
+        />
+
+
+  </LinearLayout>
+
 
 
 </LinearLayout>

@@ -28,22 +28,19 @@ import android.provider.Settings;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.SparseBooleanArray;
-import android.view.ActionMode;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
+
+import com.mikepenz.fastadapter.FastAdapter;
+import com.mikepenz.fastadapter.adapters.ItemAdapter;
+import com.mikepenz.fastadapter_extensions.ActionModeHelper;
 
 import org.kiwix.kiwixmobile.database.BookmarksDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
@@ -51,203 +48,201 @@ import org.kiwix.kiwixmobile.utils.DimenUtils;
 
 import java.util.ArrayList;
 
-public class BookmarksActivity extends AppCompatActivity
-    implements AdapterView.OnItemClickListener {
+public class BookmarksActivity extends AppCompatActivity {
+    private ArrayList<String> bookmarksTitles;
+    private ArrayList<String> bookmarkUrls;
+    private RecyclerView bookmarksRecyclerview;
+    private CoordinatorLayout snackbarLayout;
+    private LinearLayout noBookmarksLayout;
+    private BookmarksDao bookmarksDao;
+    FastAdapter<BookmarkItem> fastAdapter;
+    ItemAdapter<BookmarkItem> bookmarkItemAdapter;
+    private ArrayList<BookmarkItem> bookmarkItems;
+    private ActionModeHelper actionModeHelper;
 
-  private SparseBooleanArray sparseBooleanArray;
-  private ArrayList<String> bookmarks;
-  private ArrayList<String> bookmarkUrls;
-  private ArrayList<String> tempContents;
-  private ListView bookmarksList;
-  private ArrayAdapter adapter;
-  private ArrayList<String> selected;
-  private int numOfSelected;
-  private CoordinatorLayout snackbarLayout;
-  private LinearLayout noBookmarksLayout;
-  private BookmarksDao bookmarksDao;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sharedPreferences.getBoolean(KiwixMobileActivity.PREF_NIGHT_MODE, false)) {
+            setTheme(R.style.AppTheme_Night);
+        }
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_bookmarks);
+        setUpToolbar();
+        snackbarLayout = (CoordinatorLayout) findViewById(R.id.bookmarks_activity_layout);
+        noBookmarksLayout = (LinearLayout) findViewById(R.id.bookmarks_none_linlayout);
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-    if (sharedPreferences.getBoolean(KiwixMobileActivity.PREF_NIGHT_MODE, false)) {
-      setTheme(R.style.AppTheme_Night);
+        setUpFastAdapter(savedInstanceState);
     }
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_bookmarks);
-    setUpToolbar();
-    snackbarLayout = (CoordinatorLayout) findViewById(R.id.bookmarks_activity_layout);
-    selected = new ArrayList<>();
-    bookmarksList = (ListView) findViewById(R.id.bookmarks_list);
-    noBookmarksLayout = (LinearLayout) findViewById(R.id.bookmarks_none_linlayout);
 
-    bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
-    bookmarks = bookmarksDao.getBookmarkTitles(ZimContentProvider.getId(), ZimContentProvider.getName());
-    bookmarkUrls = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
+    private void setUpFastAdapter(Bundle savedInstanceState) {
+        bookmarkItems = new ArrayList<>();
+        bookmarkItemAdapter = new ItemAdapter<>();
+        fastAdapter = new FastAdapter<>();
+        fastAdapter.withSavedInstanceState(savedInstanceState);
 
-    adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.bookmarks_row, R.id.bookmark_title, bookmarks)  {
-      @Override
-      public View getView(int position, View convertView, ViewGroup parent) {
-        if(convertView == null){
-          LayoutInflater inflater = getLayoutInflater();
-          convertView = inflater.inflate(R.layout.bookmarks_row, null);
+        ActionBarCallBack actionBarCallBack = new ActionBarCallBack();
+        actionModeHelper = new ActionModeHelper(fastAdapter, R.menu.menu_bookmarks, actionBarCallBack );
+
+        fastAdapter.withSelectable(true);
+        fastAdapter.withSelectOnLongClick(true);
+        fastAdapter.withMultiSelect(true);
+        fastAdapter.withSelectOnLongClick(true);
+        fastAdapter.withOnPreClickListener((v, adapter, item, position) -> {
+            Boolean res = actionModeHelper.onClick(item);
+            return res != null && !res;
+        });
+        fastAdapter.withOnClickListener((v, adapter, item, position) -> {
+            if (actionModeHelper.getActionMode() == null) {
+                goToBookmark(position);
+            } else {
+                actionModeHelper.getActionMode().setTitle(Integer.toString(fastAdapter.getSelectedItems().size()));
+            }
+            return false;
+        });
+
+        fastAdapter.withOnPreLongClickListener((v, adapter12, item, position) -> {
+            ActionMode actionMode = actionModeHelper.onLongClick(BookmarksActivity.this, position);
+            if (actionMode!=null){
+                actionModeHelper.getActionMode().setTitle(Integer.toString(fastAdapter.getSelectedItems().size()));
+            }
+            return actionMode != null;
+        });
+
+
+        bookmarksRecyclerview = (RecyclerView) findViewById(R.id.bookmarks_list);
+        bookmarksRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+
+
+        bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
+        bookmarksTitles = bookmarksDao.getBookmarkTitles(ZimContentProvider.getId(), ZimContentProvider.getName());
+        bookmarkUrls = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
+
+        bookmarksRecyclerview.setAdapter(bookmarkItemAdapter.wrap(fastAdapter));
+        addDataToBookmarkItems();
+        setNoBookmarksState();
+
+    }
+
+    private void goToBookmark(int position) {
+        Intent intent = new Intent(this, KiwixMobileActivity.class);
+        if (!bookmarkItems.get(position).getUrl().equals("null")) {
+            intent.putExtra("choseXURL", bookmarkItems.get(position).getUrl());
+        } else {
+            intent.putExtra("choseXTitle", bookmarkItems.get(position).getTitle());
         }
-        return super.getView(position, convertView, parent);
-      }
-    };
-    bookmarksList.setAdapter(adapter);
-    setNoBookmarksState();
-
-    bookmarksList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
-    bookmarksList.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-      @Override
-      public void onItemCheckedStateChanged(ActionMode mode, int position, long id,
-                                            boolean checked) {
-        if (checked) {
-          selected.add(bookmarks.get(position));
-          numOfSelected++;
-          mode.setTitle(Integer.toString(numOfSelected));
-        } else if (selected.contains(bookmarks.get(position))) {
-          selected.remove(bookmarks.get(position));
-          numOfSelected--;
-          if (numOfSelected == 0) {
-            mode.finish();
-          } else {
-            mode.setTitle(Integer.toString(numOfSelected));
-          }
+        intent.putExtra("bookmarkClicked", true);
+        int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
+        if (value == 1) {
+            startActivity(intent);
+            finish();
+        } else {
+            setResult(RESULT_OK, intent);
+            finish();
         }
-      }
+    }
 
-      @Override
-      public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        MenuInflater inflater = mode.getMenuInflater();
-        inflater.inflate(R.menu.menu_bookmarks, menu);
-        numOfSelected = 0;
-        return true;
-      }
 
-      @Override
-      public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        return false;
-      }
+    private void addDataToBookmarkItems() {
+        for (int i = 0; i < bookmarksTitles.size(); i++) {
+            bookmarkItems.add(new BookmarkItem(bookmarksTitles.get(i), bookmarkUrls.get(i)).withSelectable(true));
+        }
+        bookmarkItemAdapter.add(bookmarkItems);
+        bookmarkItemAdapter.notifyDataSetChanged();
+    }
 
-      @Override
-      public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 
-        switch (item.getItemId()) {
-          case R.id.menu_bookmarks_delete:
+    private void setNoBookmarksState() {
+        if (fastAdapter.getItemCount() == 0) {
+            noBookmarksLayout.setVisibility(View.VISIBLE);
+        } else {
+            noBookmarksLayout.setVisibility(View.GONE);
+        }
+    }
+
+    private void popDeleteBookmarksSnackbar(int numOfSelected) {
+        Snackbar bookmarkDeleteSnackbar =
+                Snackbar.make(snackbarLayout, numOfSelected + " " + getString(R.string.deleted_message), Snackbar.LENGTH_LONG);
+
+        bookmarkDeleteSnackbar.setActionTextColor(getResources().getColor(R.color.white));
+        bookmarkDeleteSnackbar.show();
+    }
+
+
+    private void deleteSelectedItems() {
+        for (BookmarkItem item: fastAdapter.getSelectedItems()) {
+            deleteBookmark(item.getUrl());
+            bookmarkItems.remove(item);
+        }
+        bookmarkItemAdapter.clear();
+        bookmarkItemAdapter.add(bookmarkItems);
+        fastAdapter.notifyDataSetChanged();
+        setNoBookmarksState();
+    }
+
+    private void deleteBookmark(String article) {
+        bookmarksDao.deleteBookmark(article, ZimContentProvider.getId(), ZimContentProvider.getName());
+    }
+
+
+    private void setUpToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        RelativeLayout toolbarContainer = (RelativeLayout) findViewById(R.id.toolbar_layout);
+        DimenUtils.resizeToolbar(this, toolbar, toolbarContainer);
+        toolbar.setTitle(getString(R.string.menu_bookmarks_list));
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //add the values which need to be saved from the adapter to the bundle
+        outState = fastAdapter.saveInstanceState(outState);
+        super.onSaveInstanceState(outState);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
+        Intent startIntent = new Intent(this, KiwixMobileActivity.class);
+        startIntent.putExtra("bookmarkClicked", false);
+
+        if (value == 1) { // means there's only 1 activity in stack so start new
+            startActivity(startIntent);
+
+        } else { // we have a parent activity waiting...
+            setResult(RESULT_OK, startIntent);
+            finish();
+        }
+    }
+
+
+    class ActionBarCallBack implements ActionMode.Callback {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            return true;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             deleteSelectedItems();
-            popDeleteBookmarksSnackbar();
             mode.finish();
             return true;
-          default:
+        }
+
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             return false;
         }
-      }
-
-      @Override
-      public void onDestroyActionMode(ActionMode mode) {
-
-      }
-    });
-    bookmarksList.setOnItemClickListener(this);
-  }
-
-  private void setNoBookmarksState() {
-    if (bookmarksList.getCount() == 0) {
-      noBookmarksLayout.setVisibility(View.VISIBLE);
-    } else {
-      noBookmarksLayout.setVisibility(View.GONE);
     }
-  }
-
-  private void popDeleteBookmarksSnackbar() {
-    Snackbar bookmarkDeleteSnackbar =
-        Snackbar.make(snackbarLayout, numOfSelected + " " + getString(R.string.deleted_message), Snackbar.LENGTH_LONG);
-//            .setAction(ShortcutUtils.stringsGetter(R.string.undo, this), v -> {
-//              restoreBookmarks();
-//              setNoBookmarksState();
-//              Toast.makeText(getApplicationContext(), ShortcutUtils.stringsGetter(R.string.bookmarks_restored, getBaseContext()), Toast.LENGTH_SHORT)
-//                  .show();
-//            });
-
-    bookmarkDeleteSnackbar.setActionTextColor(getResources().getColor(R.color.white));
-    bookmarkDeleteSnackbar.show();
-  }
-
-  /*private void restoreBookmarks() {
-    bookmarksDao.resetBookmarksToPrevious(tempContents);
-    bookmarks = bookmarksDao.getBookmarks();
-    adapter.notifyDataSetChanged();
-    setNoBookmarksState();
-    refreshBookmarksList();
-  }*/
-
-  private void deleteSelectedItems() {
-    sparseBooleanArray = bookmarksList.getCheckedItemPositions();
-    tempContents = new ArrayList<>(bookmarks);
-    for (int i = sparseBooleanArray.size() - 1; i >= 0; i--) {
-      deleteBookmark(bookmarkUrls.get(sparseBooleanArray.keyAt(i)));
-      bookmarks.remove(sparseBooleanArray.keyAt(i));
-      bookmarkUrls.remove(sparseBooleanArray.keyAt(i));
-    }
-    adapter.notifyDataSetChanged();
-    setNoBookmarksState();
-  }
-
-  private void deleteBookmark(String article) {
-    bookmarksDao.deleteBookmark(article, ZimContentProvider.getId(), ZimContentProvider.getName());
-  }
-
-  /*private void refreshBookmarksList() {
-    bookmarks.clear();
-    bookmarks = bookmarksDao.getBookmarks();
-    adapter.notifyDataSetChanged();
-    setNoBookmarksState();
-  }*/
-
-  private void setUpToolbar() {
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    RelativeLayout toolbarContainer = (RelativeLayout) findViewById(R.id.toolbar_layout);
-    DimenUtils.resizeToolbar(this, toolbar, toolbarContainer);
-    toolbar.setTitle(getString(R.string.menu_bookmarks_list));
-    setSupportActionBar(toolbar);
-    getSupportActionBar().setHomeButtonEnabled(true);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    toolbar.setNavigationOnClickListener(v -> onBackPressed());
-  }
-
-  @Override
-  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-    Intent intent = new Intent(this, KiwixMobileActivity.class);
-    if (!bookmarkUrls.get(position).equals("null")) {
-      intent.putExtra("choseXURL", bookmarkUrls.get(position));
-    } else {
-      intent.putExtra("choseXTitle", bookmarks.get(position));
-    }
-    intent.putExtra("bookmarkClicked", true);
-    int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
-    if (value == 1) {
-      startActivity(intent);
-      finish();
-    } else {
-      setResult(RESULT_OK, intent);
-      finish();
-    }
-  }
-
-  @Override
-  public void onBackPressed() {
-    int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
-    Intent startIntent = new Intent(this, KiwixMobileActivity.class);
-    startIntent.putExtra("bookmarkClicked", false);
-
-    if (value == 1) { // means there's only 1 activity in stack so start new
-      startActivity(startIntent);
-
-    } else { // we have a parent activity waiting...
-      setResult(RESULT_OK,startIntent );
-      finish();
-    }
-  }
 
 }
