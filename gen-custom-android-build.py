@@ -341,28 +341,31 @@ def step_update_xml_nodes(jsdata, **options):
     # rename settings.SliderPreference node in res/xml/preferences.xml
     preferences_xml = os.path.join(ANDROID_PATH, 'res', 'xml',
                                    'preferences.xml')
-    soup = soup = BeautifulSoup(open(preferences_xml, 'r'),
-                                'xml', from_encoding='utf-8')
-    item = soup.find('org.kiwix.kiwixmobile.views.SliderPreference')
-    item.name = '{}.views.SliderPreference'.format(jsdata.get('package'))
-    flushxml(soup, 'PreferenceScreen', preferences_xml, head=False)
+    if os.path.isfile(preferences_xml):
+        soup = BeautifulSoup(open(preferences_xml, 'r'),
+                             'xml', from_encoding='utf-8')
+        item = soup.find('org.kiwix.kiwixmobile.views.SliderPreference')
+        item.name = '{}.views.SliderPreference'.format(jsdata.get('package'))
+        flushxml(soup, 'PreferenceScreen', preferences_xml, head=False)
 
     # rename settings.CustomSwitchPreference node in res/xml/preferences.xml
     preferences_xml = os.path.join(ANDROID_PATH, 'res', 'xml',
                                    'preferences.xml')
-    soup = soup = BeautifulSoup(open(preferences_xml, 'r'),
-                                'xml', from_encoding='utf-8')
-    for item in soup.findAll('org.kiwix.kiwixmobile.settings.CustomSwitchPreference'):
-        item.name = '{}.settings.CustomSwitchPreference'.format(jsdata.get('package'))
-    flushxml(soup, 'PreferenceScreen', preferences_xml, head=False)
+    if os.path.isfile(preferences_xml):
+        soup = BeautifulSoup(open(preferences_xml, 'r'),
+                             'xml', from_encoding='utf-8')
+        for item in soup.findAll('org.kiwix.kiwixmobile.settings.CustomSwitchPreference'):
+            item.name = '{}.settings.CustomSwitchPreference'.format(jsdata.get('package'))
+        flushxml(soup, 'PreferenceScreen', preferences_xml, head=False)
 
     # rename AnimatedProgressBar node in res/layout/toolbar.xml
     toolbar_xml = os.path.join(ANDROID_PATH, 'res', 'layout', 'toolbar.xml')
-    soup = soup = BeautifulSoup(open(toolbar_xml, 'r'),
-                                'xml', from_encoding='utf-8')
-    item = soup.find('org.kiwix.kiwixmobile.views.AnimatedProgressBar')
-    item.name = '{}.views.AnimatedProgressBar'.format(jsdata.get('package'))
-    flushxml(soup, 'RelativeLayout', toolbar_xml, head=False)
+    if os.path.isfile(toolbar_xml):
+        soup = BeautifulSoup(open(toolbar_xml, 'r'),
+                             'xml', from_encoding='utf-8')
+        item = soup.find('org.kiwix.kiwixmobile.views.AnimatedProgressBar')
+        item.name = '{}.views.AnimatedProgressBar'.format(jsdata.get('package'))
+        flushxml(soup, 'RelativeLayout', toolbar_xml, head=False)
 
 
 def step_update_gradle(jsdata, **options):
