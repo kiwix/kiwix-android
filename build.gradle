@@ -53,14 +53,7 @@ dependencies {
   compile 'eu.mhutti1.utils.storage:android-storage-devices:0.4.7'
   compile 'com.jakewharton:butterknife:8.0.1'
   apt 'com.jakewharton:butterknife-compiler:8.0.1'
-
-  // fast adapter
-//  compile('com.mikepenz:fastadapter:2.1.6@aar') {
-    compile('com.mikepenz:fastadapter:1.6.0@aar') {
-      transitive = true
-    }
-    compile 'com.mikepenz:fastadapter-extensions:1.8.0@aar'
-
+  
     compile files("$buildDir/native-libs/native-libs.jar")
     compile group: 'com.google.guava', name: 'guava', version: '19.0'
 

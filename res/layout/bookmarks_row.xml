@@ -3,8 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="horizontal"
-    android:layout_height="wrap_content"
-    android:background="@drawable/bookmark_row_selector">
+    android:layout_height="wrap_content">
 
 
   <LinearLayout
@@ -17,6 +16,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_margin="15dp"
+        android:textColor="@drawable/bookmarks_selector"
         android:textSize="15sp"
         />
 

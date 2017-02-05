@@ -6,6 +6,7 @@
     android:id="@+id/bookmarks_activity_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:fitsSystemWindows="true"
     tools:context=".BookmarksActivity">
 
     <LinearLayout
@@ -32,12 +33,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.v7.widget.RecyclerView
+            <ListView
                 android:id="@+id/bookmarks_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="?android:attr/selectableItemBackground"
-                />
+                android:background="?attr/listBackground"/>
 
 
             <LinearLayout
@@ -58,6 +58,7 @@
                     style="@android:style/TextAppearance.Large"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:gravity="center"
                     android:paddingBottom="15dp"
                     android:paddingLeft="10dp"
