@@ -135,7 +135,7 @@
   <string name="help_12">How to use large ZIM files?</string>
   <string name="help_13">If your ZIM file is larger than 4GB, you might not be able to store it on your SD card due to filesystem limitations.</string>
   <string name="help_14">Downloading in-app automaticaly handles larger files, splitting them up for you.</string>
-  <string name="help_15">If however you are downloading on another device, you may need to split the ZIM file up using the fololwing software:</string>
+  <string name="help_15">If however you are downloading on another device, you may need to split the ZIM file up using the following software:</string>
   <string name="help_16">\u2022 On Microsoft Windows: HJ-Split</string>
   <string name="help_17">\u2022 On Apple Mac OSX: Split and Concat</string>
   <string name="help_18">\u2022 On GNU/Linux and with the console: split --bytes=4000M my_big_file.zim</string>
