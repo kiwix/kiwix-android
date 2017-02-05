@@ -357,16 +357,14 @@ def step_update_xml_nodes(jsdata, **options):
             item.name = '{}.settings.CustomSwitchPreference'.format(jsdata.get('package'))
         flushxml(soup, 'PreferenceScreen', preferences_xml, head=False)
 
-        # rename AnimatedProgressBar node in res/layout/toolbar.xml
-        toolbar_xml = os.path.join(ANDROID_PATH, 'res', 'layout', 'toolbar.xml')
-        soup = BeautifulSoup(open(toolbar_xml, 'r'),
-                             'xml', from_encoding='utf-8')
-        item = soup.find('org.kiwix.kiwixmobile.views.AnimatedProgressBar')
-        item.name = '{}.views.AnimatedProgressBar'.format(jsdata.get('package'))
-        flushxml(soup, 'RelativeLayout', toolbar_xml, head=False)
-
+	main_xml = os.path.join(ANDROID_PATH, 'res', 'layout', 'main.xml')
+    	soup = soup = BeautifulSoup(open(main_xml, 'r'),
+                                'xml', from_encoding='utf-8')
+    	item = soup.find('org.kiwix.kiwixmobile.views.AnimatedProgressBar')
+    	item.name = '{}.views.AnimatedProgressBar'.format(jsdata.get('package'))
+    	flushxml(soup, 'RelativeLayout', main_xml, head=False)
     except:
-        logger.error('BeautifulSoup could not open file in res/xml')
+    	logger.error('BeautifulSoup could not open file in res/xml')
 
 
 def step_update_gradle(jsdata, **options):
