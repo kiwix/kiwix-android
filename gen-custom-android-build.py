@@ -356,14 +356,12 @@ def step_update_xml_nodes(jsdata, **options):
         item.name = '{}.settings.CustomSwitchPreference'.format(jsdata.get('package'))
     flushxml(soup, 'PreferenceScreen', preferences_xml, head=False)
 
-    # rename AnimatedProgressBar node in res/layout/toolbar.xml
-    toolbar_xml = os.path.join(ANDROID_PATH, 'res', 'layout', 'toolbar.xml')
-    soup = soup = BeautifulSoup(open(toolbar_xml, 'r'),
+    main_xml = os.path.join(ANDROID_PATH, 'res', 'layout', 'main.xml')
+    soup = soup = BeautifulSoup(open(main_xml, 'r'),
                                 'xml', from_encoding='utf-8')
     item = soup.find('org.kiwix.kiwixmobile.views.AnimatedProgressBar')
     item.name = '{}.views.AnimatedProgressBar'.format(jsdata.get('package'))
-    flushxml(soup, 'RelativeLayout', toolbar_xml, head=False)
-
+    flushxml(soup, 'RelativeLayout', main_xml, head=False)
 
 def step_update_gradle(jsdata, **options):
     """ uncomment compiling the content-libs.jar file into the APK """
