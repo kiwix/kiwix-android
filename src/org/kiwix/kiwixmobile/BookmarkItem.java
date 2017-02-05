@@ -40,10 +40,9 @@ public class BookmarkItem extends AbstractItem<BookmarkItem,BookmarkItem.ViewHol
         return R.layout.bookmarks_row;
     }
 
-
     @Override
-    public void bindView(ViewHolder holder, List<Object> payloads) {
-        super.bindView(holder, payloads);
+    public void bindView(ViewHolder holder) {
+        super.bindView(holder);
         holder.titleTextView.setText(title);
     }
 

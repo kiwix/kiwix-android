@@ -55,73 +55,74 @@ dependencies {
   apt 'com.jakewharton:butterknife-compiler:8.0.1'
 
   // fast adapter
-  compile('com.mikepenz:fastadapter:2.1.6@aar') {
-  compile('com.mikepenz:fastadapter:1.6.0@aar') {
-    transitive = true
-  }
-  compile 'com.mikepenz:fastadapter-extensions:1.8.0@aar'
+//  compile('com.mikepenz:fastadapter:2.1.6@aar') {
+    compile('com.mikepenz:fastadapter:1.6.0@aar') {
+      transitive = true
+    }
+    compile 'com.mikepenz:fastadapter-extensions:1.8.0@aar'
 
-  compile files("$buildDir/native-libs/native-libs.jar")
-  compile group: 'com.google.guava', name: 'guava', version: '19.0'
+    compile files("$buildDir/native-libs/native-libs.jar")
+    compile group: 'com.google.guava', name: 'guava', version: '19.0'
 
-  // compile fileTree(dir: '.', include: 'content-libs.jar') // DO NOT REMOVE !!
-  testCompile 'junit:junit:4.12'
-  androidTestCompile 'junit:junit:4.12'
-  compile 'com.android.support.test:runner:0.5'
-  compile 'junit:junit:4.12'
-}
-
-android {
-  compileSdkVersion 24
-  buildToolsVersion "24.0.1"
-
-  defaultConfig {
-    minSdkVersion 14
-    targetSdkVersion 24
-    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    // compile fileTree(dir: '.', include: 'content-libs.jar') // DO NOT REMOVE !!
+    testCompile 'junit:junit:4.12'
+    androidTestCompile 'junit:junit:4.12'
+    compile 'com.android.support.test:runner:0.5'
+    compile 'junit:junit:4.12'
   }
 
-  lintOptions {
-    abortOnError false
-  }
+  android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
 
-  compileOptions {
-    encoding = "UTF-8"
-
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
-  }
-
-
-  sourceSets {
-    main {
-      manifest.srcFile 'AndroidManifest.xml'
-      java.srcDirs = ['src']
-      resources.srcDirs = ['src']
-      aidl.srcDirs = ['src']
-      renderscript.srcDirs = ['src']
-      res.srcDirs = ['res']
-      assets.srcDirs = ['assets']
+    defaultConfig {
+      minSdkVersion 14
+      targetSdkVersion 24
+      testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
-    test {
-      java.srcDirs = ['test']
-      resources.srcDirs = ['test']
+    lintOptions {
+      abortOnError false
+    }
+
+    compileOptions {
+      encoding = "UTF-8"
+
+      sourceCompatibility JavaVersion.VERSION_1_8
+      targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+    sourceSets {
+      main {
+        manifest.srcFile 'AndroidManifest.xml'
+        java.srcDirs = ['src']
+        resources.srcDirs = ['src']
+        aidl.srcDirs = ['src']
+        renderscript.srcDirs = ['src']
+        res.srcDirs = ['res']
+        assets.srcDirs = ['assets']
+      }
+
+      test {
+        java.srcDirs = ['test']
+        resources.srcDirs = ['test']
+      }
     }
   }
-}
 
-task wrapper(type: Wrapper) {
-  gradleVersion = '2.4'
-}
+  task wrapper(type: Wrapper) {
+    gradleVersion = '2.4'
+  }
 
-task nativeLibsToJar(type: Zip) {
-  destinationDir file("$buildDir/native-libs")
-  baseName 'native-libs'
-  extension 'jar'
-  from fileTree(dir: 'libs', include: '**/*.so')
-  into 'lib/'
-}
+  task nativeLibsToJar(type: Zip) {
+    destinationDir file("$buildDir/native-libs")
+    baseName 'native-libs'
+    extension 'jar'
+    from fileTree(dir: 'libs', include: '**/*.so')
+    into 'lib/'
+  }
 
-tasks.withType(JavaCompile) { compileTask -> compileTask.dependsOn(nativeLibsToJar)
-}
+  tasks.withType(JavaCompile) { compileTask -> compileTask.dependsOn(nativeLibsToJar)
+  }
+
