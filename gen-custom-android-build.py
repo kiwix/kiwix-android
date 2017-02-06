@@ -362,7 +362,7 @@ def step_update_xml_nodes(jsdata, **options):
                                 'xml', from_encoding='utf-8')
     	item = soup.find('org.kiwix.kiwixmobile.views.AnimatedProgressBar')
     	item.name = '{}.views.AnimatedProgressBar'.format(jsdata.get('package'))
-    	flushxml(soup, 'RelativeLayout', main_xml, head=False)
+    	flushxml(soup, 'android.support.design.widget.CoordinatorLayout', main_xml, head=False)
     except:
     	logger.error('BeautifulSoup could not open file in res/xml')
 
