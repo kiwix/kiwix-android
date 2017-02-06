@@ -575,6 +575,25 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     getCurrentWebView().loadUrl("javascript:(" + documentParserJs + ")()");
   }
 
+  private void shrinkDrawers() {
+    ViewGroup.MarginLayoutParams leftLayoutMargins = (ViewGroup.MarginLayoutParams) tabDrawerLeftContainer.getLayoutParams(),
+        rightLayoutMargins = (ViewGroup.MarginLayoutParams) tableDrawerRightContainer.getLayoutParams();
+
+    leftLayoutMargins.topMargin = DimenUtils.getToolbarHeight(KiwixMobileActivity.this);
+    rightLayoutMargins.topMargin = DimenUtils.getToolbarHeight(KiwixMobileActivity.this);
+    tabDrawerLeftContainer.setLayoutParams(leftLayoutMargins);
+    tableDrawerRightContainer.setLayoutParams(rightLayoutMargins);
+  }
+
+  private void expandDrawers() {
+    ViewGroup.MarginLayoutParams leftLayoutMargins = (ViewGroup.MarginLayoutParams) tabDrawerLeftContainer.getLayoutParams(),
+        rightLayoutMargins = (ViewGroup.MarginLayoutParams) tableDrawerRightContainer.getLayoutParams();
+    leftLayoutMargins.topMargin = 0;
+    rightLayoutMargins.topMargin = 0;
+    tabDrawerLeftContainer.setLayoutParams(leftLayoutMargins);
+    tableDrawerRightContainer.setLayoutParams(rightLayoutMargins);
+  }
+
   private KiwixWebView getWebView(String url) {
     KiwixWebView webView;
     if (isHideToolbar) {
@@ -583,23 +602,12 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
           new ToolbarScrollingKiwixWebView.OnToolbarVisibilityChangeListener() {
             @Override
             public void onToolbarDisplayed() {
-              ViewGroup.MarginLayoutParams leftLayoutMargins = (ViewGroup.MarginLayoutParams) tabDrawerLeftContainer.getLayoutParams(),
-                  rightLayoutMargins = (ViewGroup.MarginLayoutParams) tableDrawerRightContainer.getLayoutParams();
-
-              leftLayoutMargins.topMargin = DimenUtils.getToolbarHeight(KiwixMobileActivity.this);
-              rightLayoutMargins.topMargin = DimenUtils.getToolbarHeight(KiwixMobileActivity.this);
-              tabDrawerLeftContainer.setLayoutParams(leftLayoutMargins);
-              tableDrawerRightContainer.setLayoutParams(rightLayoutMargins);
+              shrinkDrawers();
             }
 
             @Override
             public void onToolbarHidden() {
-              ViewGroup.MarginLayoutParams leftLayoutMargins = (ViewGroup.MarginLayoutParams) tabDrawerLeftContainer.getLayoutParams(),
-                  rightLayoutMargins = (ViewGroup.MarginLayoutParams) tableDrawerRightContainer.getLayoutParams();
-              leftLayoutMargins.topMargin = 0;
-              rightLayoutMargins.topMargin = 0;
-              tabDrawerLeftContainer.setLayoutParams(leftLayoutMargins);
-              tableDrawerRightContainer.setLayoutParams(rightLayoutMargins);
+              expandDrawers();
             }
           }
       );
@@ -783,10 +791,6 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
 
     toolbarContainer.setVisibility(View.GONE);
     exitFullscreenButton.setVisibility(View.VISIBLE);
-    if (menu != null) {
-      menu.findItem(R.id.menu_fullscreen)
-          .setTitle(getResources().getString(R.string.menu_exitfullscreen));
-    }
     int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
     int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
     getWindow().addFlags(fullScreenFlag);
@@ -795,15 +799,13 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     SharedPreferences.Editor editor = settings.edit();
     editor.putBoolean(PREF_FULLSCREEN, true);
     editor.apply();
+    expandDrawers();
     isFullscreenOpened = true;
+    getCurrentWebView().requestLayout();
   }
 
   private void closeFullScreen() {
     toolbarContainer.setVisibility(View.VISIBLE);
-    if (menu != null) {
-      menu.findItem(R.id.menu_fullscreen)
-          .setTitle(getResources().getString(R.string.menu_fullscreen));
-    }
     exitFullscreenButton.setVisibility(View.INVISIBLE);
     int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
     int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
@@ -813,7 +815,9 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     SharedPreferences.Editor editor = settings.edit();
     editor.putBoolean(PREF_FULLSCREEN, false);
     editor.apply();
+    shrinkDrawers();
     isFullscreenOpened = false;
+    getCurrentWebView().requestLayout();
   }
 
   public void showHelpPage() {
@@ -923,11 +927,6 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
       menu.findItem(R.id.menu_home).setVisible(true);
       menu.findItem(R.id.menu_randomarticle).setVisible(true);
       menu.findItem(R.id.menu_searchintext).setVisible(true);
-
-      if (isFullscreenOpened) {
-        menu.findItem(R.id.menu_fullscreen)
-            .setTitle(getResources().getString(R.string.menu_exitfullscreen));
-      }
 
       MenuItem searchItem = menu.findItem(R.id.menu_search);
       searchItem.setVisible(true);
