@@ -346,10 +346,6 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
       }
     });
 
-    // account for status bar height if translucent
-    final int statusBarHeight = DimenUtils.getTranslucentStatusBarHeight(this);
-    tableDrawerRight.setPadding(0, statusBarHeight, 0, 0);
-
     tableDrawerAdapter.notifyDataSetChanged();
 
     tabDrawerAdapter.setTabClickListener(new TabDrawerAdapter.TabClickListener() {
