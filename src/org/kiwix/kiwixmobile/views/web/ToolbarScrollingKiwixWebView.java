@@ -53,7 +53,7 @@ public class ToolbarScrollingKiwixWebView extends KiwixWebView {
     toolbarView.setTranslationY(newTranslation + statusBarHeight);
     this.setTranslationY(newTranslation + toolbarHeight + statusBarHeight);
     if (listener != null && newTranslation != originalTranslation) {
-      if (newTranslation == -toolbarHeight) {
+      if (newTranslation == -toolbarHeight -statusBarHeight) {
         listener.onToolbarHidden();
       } else if (newTranslation == 0) {
         listener.onToolbarDisplayed();

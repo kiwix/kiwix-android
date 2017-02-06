@@ -10,6 +10,12 @@
   android:orientation="vertical"
   android:layout_marginTop="?actionBarSize">
 
+  <View
+    android:id="@+id/view"
+    android:layout_width="fill_parent"
+    android:layout_height="1dp"
+    android:background="?attr/dividerColor"/>
+
   <android.support.v7.widget.RecyclerView
     android:id="@+id/right_drawer_list"
     android:layout_width="match_parent"
