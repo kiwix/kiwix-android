@@ -52,6 +52,8 @@ def syscall(args, shell=False, with_print=True):
         args = ' '.join(args)
     call(args, shell=shell)
 
+def move_to_current_folder():
+    os.chdir(CURRENT_PATH)
 
 def get_remote_content(url):
     ''' file descriptor from remote file using GET '''
@@ -155,6 +157,21 @@ def upload_to_play_store(jsdata, channel=None):
     version_name = jsdata['version_name']
     apk_file = os.path.join(CURRENT_PATH, 'build', 'outputs', 'apk',
                             '{}-{}.apk'.format(package_name, version_name))
+
+    json_file_dir = os.path.abspath(os.path.dirname(jspath))
+
+    # download remote zim file
+    if is_remote_path(jsdata.get('zim_file')):
+        zimfile_url = jsdata.get('zim_file')
+        remote_filename = get_remote_file_name(zimfile_url)
+        local_file_path = os.path.join(json_file_dir, remote_filename)
+        download_remote_file(zimfile_url, local_file_path)
+        jsdata.update({'zim_file': local_file_path})
+
+    # update relative paths to absolute
+    os.chdir(json_file_dir)
+    jsdata.update({'zim_file': os.path.abspath(jsdata.get('zim_file'))})
+    move_to_current_folder()
 
     if not jsdata.get('embed_zim', False):
         comp_file = tempfile.NamedTemporaryFile(suffix='.a').name

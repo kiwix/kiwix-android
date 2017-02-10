@@ -1,7 +1,7 @@
 {
   "app_name": "PhET",
   "package": "org.kiwix.kiwixcustomphet",
-  "version_name": "2017-01",
+  "version_name": "2017-02",
   "version_code": "3",
   "zim_file": "content.zim",
   "embed_zim": false,
