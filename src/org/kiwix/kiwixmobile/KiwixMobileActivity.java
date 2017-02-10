@@ -518,7 +518,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
           @Override
           public void run() {
             menu.findItem(R.id.menu_read_aloud)
-                .setTitle(getResources().getString(R.string.menu_read_aloud_stop));
+                .setTitle(createMenuItem(getResources().getString(R.string.menu_read_aloud_stop)));
             TTSControls.setVisibility(View.VISIBLE);
           }
         });
@@ -531,7 +531,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
           @Override
           public void run() {
             menu.findItem(R.id.menu_read_aloud)
-                .setTitle(getResources().getString(R.string.menu_read_aloud));
+                .setTitle(createMenuItem(getResources().getString(R.string.menu_read_aloud)));
             TTSControls.setVisibility(View.GONE);
             pauseTTSButton.setText(R.string.tts_pause);
           }
@@ -920,12 +920,21 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
 
   // Workaround for popup bottom menu on older devices
   private void StyleMenuButtons(Menu m) {
-    // Find each menu item and set its text colour to black
+    // Find each menu item and set its text colour
     for (int i = 0; i < m.size(); i++) {
-      SpannableString s = new SpannableString(m.getItem(i).getTitle());
-      s.setSpan(new ForegroundColorSpan(Color.BLACK), 0, s.length(), 0);
-      m.getItem(i).setTitle(s);
+      m.getItem(i).setTitle(createMenuItem(m.getItem(i).getTitle().toString()));
     }
+  }
+
+  // Create a correctly colored title for menu items
+  private SpannableString createMenuItem(String title){
+    SpannableString s = new SpannableString(title);
+    if (nightMode) {
+      s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
+    } else {
+      s.setSpan(new ForegroundColorSpan(Color.BLACK), 0, s.length(), 0);
+    }
+    return s;
   }
 
   private void initAllMenuItems() {
@@ -976,7 +985,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
         menu.findItem(R.id.menu_read_aloud).setVisible(true);
         if (isSpeaking) {
           menu.findItem(R.id.menu_read_aloud)
-              .setTitle(getResources().getString(R.string.menu_read_aloud_stop));
+              .setTitle(createMenuItem(getResources().getString(R.string.menu_read_aloud_stop)));
         }
       }
     } catch (Exception e) {
@@ -1372,15 +1381,6 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     toggleActionItemsConfig();
     refreshBookmarkSymbol(menu);
     refreshNavigationButtons();
-
-    if (nightMode) {
-      ArrayList<MenuItemImpl> menuItems =  ((MenuBuilder) menu).getNonActionItems();
-      for (int i = 0; i < menuItems.size(); i++) {
-        SpannableString styledMenuTitle = new SpannableString(menuItems.get(i).getTitle());
-        styledMenuTitle.setSpan(new ForegroundColorSpan(Color.WHITE), 0, menuItems.get(i).getTitle().length(), 0);
-        menuItems.get(i).setTitle(styledMenuTitle);
-      }
-    }
 
     if (getCurrentWebView().getUrl() == null || getCurrentWebView().getUrl().equals("file:///android_res/raw/help.html")) {
       menu.findItem(R.id.menu_read_aloud).setVisible(false);
