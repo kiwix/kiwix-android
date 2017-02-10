@@ -802,6 +802,10 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     expandDrawers();
     isFullscreenOpened = true;
     getCurrentWebView().requestLayout();
+    if (isHideToolbar) {
+      toolbarContainer.setTranslationY(0);
+      this.getCurrentWebView().setTranslationY(0);
+    }
   }
 
   private void closeFullScreen() {
@@ -818,6 +822,10 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     shrinkDrawers();
     isFullscreenOpened = false;
     getCurrentWebView().requestLayout();
+    if (isHideToolbar) {
+      toolbarContainer.setTranslationY(DimenUtils.getTranslucentStatusBarHeight(this));
+      this.getCurrentWebView().setTranslationY(DimenUtils.getToolbarAndStatusBarHeight(this));
+    }
   }
 
   public void showHelpPage() {
