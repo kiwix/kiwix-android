@@ -161,4 +161,5 @@
   <string name="confirm_stop_download_title">Stop download?</string>
   <string name="confirm_stop_download_msg">Are you sure you want to stop this download?</string>
   <string name="download_change_storage">Storage device selector</string>
+  <string name="tts_not_enabled">Text to speech is not enabled for this ZIM file</string>
 </resources>

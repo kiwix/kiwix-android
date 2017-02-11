@@ -84,11 +84,19 @@ public class KiwixTextToSpeech {
     } else {
       Locale locale = LanguageUtils.ISO3ToLocale(ZimContentProvider.getLanguage());
       int result;
+      if (ZimContentProvider.getLanguage().equals("mul")) {
+        Log.d(TAG_KIWIX, "TextToSpeech: disabled " +
+            ZimContentProvider.getLanguage());
+        Toast.makeText(context,
+            context.getResources().getString(R.string.tts_not_enabled),
+            Toast.LENGTH_LONG).show();
+        return;
+      }
       if (locale == null
           || (result = tts.isLanguageAvailable(locale)) == TextToSpeech.LANG_MISSING_DATA
           || result == TextToSpeech.LANG_NOT_SUPPORTED) {
         Log.d(TAG_KIWIX, "TextToSpeech: language not supported: " +
-            ZimContentProvider.getLanguage() + " (" + locale.getLanguage() + ")");
+            ZimContentProvider.getLanguage());
         Toast.makeText(context,
             context.getResources().getString(R.string.tts_lang_not_supported),
             Toast.LENGTH_LONG).show();
