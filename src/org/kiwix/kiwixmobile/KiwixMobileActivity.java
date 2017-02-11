@@ -499,7 +499,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
 
   private void updateTitle(String zimFileTitle) {
     if (zimFileTitle == null || zimFileTitle.trim().isEmpty()) {
-      getSupportActionBar().setTitle(getString(R.string.app_name));
+      getSupportActionBar().setTitle(createMenuItem(getString(R.string.app_name)));
     } else {
       getSupportActionBar().setTitle(zimFileTitle);
     }
