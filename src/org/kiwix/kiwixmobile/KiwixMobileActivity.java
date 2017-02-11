@@ -499,9 +499,9 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
 
   private void updateTitle(String zimFileTitle) {
     if (zimFileTitle == null || zimFileTitle.trim().isEmpty()) {
-      getSupportActionBar().setTitle(createMenuItem(getString(R.string.app_name)));
+      getSupportActionBar().setTitle(createMenuText(getString(R.string.app_name)));
     } else {
-      getSupportActionBar().setTitle(zimFileTitle);
+      getSupportActionBar().setTitle(createMenuText(zimFileTitle));
     }
   }
 
@@ -934,6 +934,13 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     } else {
       s.setSpan(new ForegroundColorSpan(Color.BLACK), 0, s.length(), 0);
     }
+    return s;
+  }
+
+  // Create a correctly colored title for menu items
+  private SpannableString createMenuText(String title){
+    SpannableString s = new SpannableString(title);
+    s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
     return s;
   }
 
