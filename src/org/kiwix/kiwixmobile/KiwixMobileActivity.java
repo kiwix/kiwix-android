@@ -47,6 +47,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.view.menu.MenuItemImpl;
 import android.support.v7.widget.LinearLayoutManager;
@@ -985,6 +986,20 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
           } else {
             drawerLayout.openDrawer(GravityCompat.START);
           }
+        }
+      });
+
+      new Handler().post(new Runnable() {
+        @Override
+        public void run() {
+          ActionMenuItemView m = (ActionMenuItemView) findViewById(R.id.menu_bookmarks);
+          if (m == null) {
+            return;
+          }
+          findViewById(R.id.menu_bookmarks).setOnLongClickListener(view -> {
+            goToBookmarks();
+            return false;
+          });
         }
       });
 
