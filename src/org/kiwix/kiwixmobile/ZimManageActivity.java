@@ -32,6 +32,8 @@ import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
 
+import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
+
 public class ZimManageActivity extends AppCompatActivity {
 
   public static final String TAB_EXTRA = "TAB";
@@ -240,7 +242,7 @@ public class ZimManageActivity extends AppCompatActivity {
     }
     LanguageArrayAdapter languageArrayAdapter = new LanguageArrayAdapter(this, 0, LibraryAdapter.mLanguages);
     listView.setAdapter(languageArrayAdapter);
-    new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog_Alert)
+    new AlertDialog.Builder(this, dialogStyle())
         .setView(view)
         .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
           LibraryAdapter.updateNetworklanguages();

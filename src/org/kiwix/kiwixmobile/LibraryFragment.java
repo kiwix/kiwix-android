@@ -57,6 +57,7 @@ import rx.android.schedulers.AndroidSchedulers;
 
 import static org.kiwix.kiwixmobile.downloader.DownloadService.KIWIX_ROOT;
 import static org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.*;
+import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class LibraryFragment extends Fragment implements AdapterView.OnItemClickListener, StorageSelectDialog.OnSelectListener {
 
@@ -269,7 +270,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
 
 
   public void mobileDownloadDialog(int position, AdapterView<?> parent) {
-    new AlertDialog.Builder(super.getActivity())
+    new AlertDialog.Builder(super.getActivity(), dialogStyle())
         .setMessage(getString(R.string.download_over_network))
         .setPositiveButton(getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int which) {

@@ -32,6 +32,8 @@ import org.kiwix.kiwixmobile.ZimManageActivity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
+import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
+
 
 public class DownloadFragment extends Fragment {
 
@@ -183,7 +185,7 @@ public class DownloadFragment extends Fragment {
 
       ImageView stop = (ImageView) convertView.findViewById(R.id.stop);
       stop.setOnClickListener(v -> {
-        new AlertDialog.Builder(faActivity)
+        new AlertDialog.Builder(faActivity, dialogStyle())
                 .setTitle(R.string.confirm_stop_download_title)
                 .setMessage(R.string.confirm_stop_download_msg)
                 .setPositiveButton(R.string.yes, (dialog, i) -> {

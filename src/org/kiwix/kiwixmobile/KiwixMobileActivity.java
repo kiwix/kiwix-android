@@ -106,6 +106,7 @@ import org.w3c.dom.Text;
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.TableClickListener;
+import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class KiwixMobileActivity extends AppCompatActivity implements WebViewCallback {
 
@@ -448,7 +449,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     String negative = getString(R.string.rate_dialog_negative);
     String neutral = getString(R.string.rate_dialog_neutral);
 
-    new AlertDialog.Builder(this)
+    new AlertDialog.Builder(this, dialogStyle())
         .setTitle(title)
         .setMessage(message)
         .setPositiveButton(positive, (dialog, id) -> {
@@ -909,7 +910,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
           newZimFile.setData(Uri.fromFile(file));
           startActivity(newZimFile);
         } else {
-          AlertDialog.Builder builder = new AlertDialog.Builder(this);
+          AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
           builder.setMessage(getResources().getString(R.string.reboot_message));
           AlertDialog dialog = builder.create();
           dialog.show();
@@ -1175,7 +1176,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
   private void contentsDrawerHint() {
     drawerLayout.postDelayed(() -> drawerLayout.openDrawer(GravityCompat.END), 500);
 
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
     builder.setMessage(getString(R.string.hint_contents_drawer_message))
         .setPositiveButton(getString(R.string.got_it), (dialog, id) -> {})
         .setTitle(getString(R.string.did_you_know))
@@ -1621,7 +1622,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
 
           if (!FileUtils.doesFileExist(filePath, Constants.CUSTOM_APP_ZIM_FILE_SIZE, false)) {
 
-            AlertDialog.Builder zimFileMissingBuilder = new AlertDialog.Builder(this);
+            AlertDialog.Builder zimFileMissingBuilder = new AlertDialog.Builder(this, dialogStyle());
             zimFileMissingBuilder.setTitle(R.string.app_name);
             zimFileMissingBuilder.setMessage(R.string.customapp_missing_content);
             zimFileMissingBuilder.setIcon(R.mipmap.kiwix_icon);
@@ -1747,7 +1748,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     }
 
     if (handleEvent) {
-      AlertDialog.Builder builder = new AlertDialog.Builder(KiwixMobileActivity.this);
+      AlertDialog.Builder builder = new AlertDialog.Builder(KiwixMobileActivity.this, dialogStyle());
 
       builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int id) {

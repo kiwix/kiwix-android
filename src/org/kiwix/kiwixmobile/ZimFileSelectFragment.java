@@ -56,6 +56,8 @@ import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
+import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
+
 public class ZimFileSelectFragment extends Fragment
     implements OnItemClickListener, AdapterView.OnItemLongClickListener {
 
@@ -279,7 +281,7 @@ public class ZimFileSelectFragment extends Fragment
   }
 
   public void deleteSpecificZimDialog(int position) {
-    new AlertDialog.Builder(super.getActivity())
+    new AlertDialog.Builder(super.getActivity(), dialogStyle())
         .setMessage(getString(R.string.delete_specific_zim))
         .setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int which) {

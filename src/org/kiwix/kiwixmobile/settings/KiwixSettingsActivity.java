@@ -53,6 +53,8 @@ import org.kiwix.kiwixmobile.utils.DimenUtils;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.views.SliderPreference;
 
+import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
+
 public class KiwixSettingsActivity extends AppCompatActivity {
 
   public static final int RESULT_RESTART = 1236;
@@ -265,7 +267,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     }
 
     private void clearAllHistoryDialog() {
-      new AlertDialog.Builder(getActivity())
+      new AlertDialog.Builder(getActivity(), dialogStyle())
           .setTitle(getResources().getString(R.string.clear_all_history_dialog_title))
           .setMessage(getResources().getString(R.string.clear_recent_and_tabs_history_dialog))
           .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -287,7 +289,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     public void openCredits(){
       WebView view = (WebView) LayoutInflater.from(getActivity()).inflate(R.layout.credits_webview, null);
       view.loadUrl("file:///android_res/raw/credits.html");
-      AlertDialog mAlertDialog = new AlertDialog.Builder(getActivity(), R.style.Theme_AppCompat_Light_Dialog_Alert)
+      AlertDialog mAlertDialog = new AlertDialog.Builder(getActivity(), dialogStyle())
           .setView(view)
           .setPositiveButton(android.R.string.ok, null)
           .show();

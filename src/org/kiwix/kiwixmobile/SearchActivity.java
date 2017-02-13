@@ -34,6 +34,7 @@ import org.kiwix.kiwixmobile.utils.DimenUtils;
 import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 
 import static android.provider.Settings.System.ALWAYS_FINISH_ACTIVITIES;
+import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class SearchActivity extends AppCompatActivity
     implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
@@ -169,7 +170,7 @@ public class SearchActivity extends AppCompatActivity
   }
 
   private void deleteSpecificSearchDialog(final String search) {
-    new AlertDialog.Builder(this)
+    new AlertDialog.Builder(this, dialogStyle())
         .setMessage(getString(R.string.delete_recent_search_item))
         .setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int which) {
