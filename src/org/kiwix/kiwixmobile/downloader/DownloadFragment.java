@@ -157,7 +157,10 @@ public class DownloadFragment extends Fragment {
       ProgressBar downloadProgress = (ProgressBar) convertView.findViewById(R.id.downloadProgress);
       ImageView pause = (ImageView) convertView.findViewById(R.id.pause);
 
-      if (LibraryFragment.mService.downloadProgress.get(mKeys[position]) != 0) {
+      if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == 0) {
+        downloadProgress.setProgress(0);
+        pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
+      } else {
         downloadProgress.setProgress(LibraryFragment.mService.downloadProgress.get(mKeys[position]));
         if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PAUSE) {
           pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black_24dp));
@@ -170,10 +173,10 @@ public class DownloadFragment extends Fragment {
       pause.setOnClickListener(v -> {
         if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY) {
           LibraryFragment.mService.pauseDownload(mKeys[position]);
-          pause.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+          pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black_24dp));
         } else {
           LibraryFragment.mService.playDownload(mKeys[position]);
-          pause.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_black_24dp));
+          pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
         }
       });
 

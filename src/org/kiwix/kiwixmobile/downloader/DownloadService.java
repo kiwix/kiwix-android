@@ -143,6 +143,7 @@ public class DownloadService extends Service {
         .addAction(stop)
         .setOngoing(true));
 
+    notificationManager.notify(notificationCount, notification.get(notificationCount).build());
     downloadStatus.put(notificationCount, PLAY);
     LibraryFragment.downloadingBooks.remove(book);
     String url = intent.getExtras().getString(DownloadIntent.DOWNLOAD_URL_PARAMETER);
@@ -234,12 +235,13 @@ public class DownloadService extends Service {
             notification.get(notificationID).setContentIntent(pendingIntent);
             notification.get(notificationID).mActions.clear();
             updateForeground();
-          } else if (progress == 0) {
-            // Tells android to not kill the service
-            startForeground(notificationCount, notification.get(notificationCount).build());
           }
           notification.get(notificationID).setProgress(100, progress, false);
           notificationManager.notify(notificationID, notification.get(notificationID).build());
+          if (progress == 0) {
+            // Tells android to not kill the service
+          updateForeground();
+          }
           if (DownloadFragment.mDownloads != null && DownloadFragment.mDownloads.get(notificationID) != null) {
             handler.post(new Runnable() {
               @Override
@@ -314,6 +316,8 @@ public class DownloadService extends Service {
           book.remoteUrl = book.getUrl();
           book.file = fullFile;
           bookDao.saveBook(book);
+          downloadStatus.put(chunk.getNotificationID(), PLAY);
+          downloadProgress.put(chunk.getNotificationID(), 0);
         }
 
         byte[] buffer = new byte[2048];
