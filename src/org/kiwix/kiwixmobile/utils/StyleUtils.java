@@ -20,14 +20,13 @@
 package org.kiwix.kiwixmobile.utils;
 
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
-import org.kiwix.kiwixmobile.R;
 
 public class StyleUtils {
   public static int dialogStyle() {
     if (KiwixMobileActivity.nightMode) {
-      return android.R.style.Theme_Material_Dialog;
+      return android.R.style.Theme_Holo_Dialog;
     } else {
-      return android.R.style.Theme_Material_Light_Dialog;
+      return android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert;
     }
   }
 }
