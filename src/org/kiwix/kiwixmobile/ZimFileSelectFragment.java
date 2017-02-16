@@ -119,9 +119,12 @@ public class ZimFileSelectFragment extends Fragment
   }
 
   public void addBook(String path) {
-    mFiles.add(FileSearch.fileToBook(path));
-    mRescanAdapter.notifyDataSetChanged();
-    bookDao.saveBooks(mFiles);
+    LibraryNetworkEntity.Book book = FileSearch.fileToBook(path);
+    if (book != null) {
+      mFiles.add(FileSearch.fileToBook(path));
+      mRescanAdapter.notifyDataSetChanged();
+      bookDao.saveBooks(mFiles);
+    }
   }
 
   @Override
