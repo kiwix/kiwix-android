@@ -51,6 +51,7 @@ import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.database.RecentSearchDao;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
+import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.views.SliderPreference;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
@@ -261,6 +262,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       }
       if (key.equals(PREF_NIGHTMODE)) {
         KiwixMobileActivity.refresh = true;
+        KiwixMobileActivity.nightMode = sharedPreferences.getBoolean(PREF_NIGHTMODE, false);
         getActivity().recreate();
       }
 
@@ -312,8 +314,9 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       FragmentManager fm = getFragmentManager();
       StorageSelectDialog dialogFragment = new StorageSelectDialog();
       Bundle b = new Bundle();
-      b.putString("INTERNAL", getResources().getString(R.string.internal_storage));
-      b.putString("EXTERNAL", getResources().getString(R.string.external_storage));
+      b.putString(StorageSelectDialog.STORAGE_DIALOG_INTERNAL, getResources().getString(R.string.internal_storage));
+      b.putString(StorageSelectDialog.STORAGE_DIALOG_EXTERNAL, getResources().getString(R.string.external_storage));
+      b.putInt(StorageSelectDialog.STORAGE_DIALOG_THEME, StyleUtils.dialogStyle());
       dialogFragment.setArguments(b);
       dialogFragment.setOnSelectListener(this);
       dialogFragment.show(fm, getResources().getString(R.string.pref_storage));

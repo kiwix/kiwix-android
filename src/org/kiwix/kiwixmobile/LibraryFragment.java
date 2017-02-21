@@ -50,6 +50,7 @@ import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
+import org.kiwix.kiwixmobile.utils.StyleUtils;
 
 import eu.mhutti1.utils.storage.StorageDevice;
 import eu.mhutti1.utils.storage.StorageSelectDialog;
@@ -203,8 +204,9 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
             FragmentManager fm = getFragmentManager();
             StorageSelectDialog dialogFragment = new StorageSelectDialog();
             Bundle b = new Bundle();
-            b.putString("INTERNAL", getResources().getString(R.string.internal_storage));
-            b.putString("EXTERNAL", getResources().getString(R.string.external_storage));
+            b.putString(StorageSelectDialog.STORAGE_DIALOG_INTERNAL, getResources().getString(R.string.internal_storage));
+            b.putString(StorageSelectDialog.STORAGE_DIALOG_EXTERNAL, getResources().getString(R.string.external_storage));
+            b.putInt(StorageSelectDialog.STORAGE_DIALOG_THEME, StyleUtils.dialogStyle());
             dialogFragment.setArguments(b);
             dialogFragment.setOnSelectListener(this);
             dialogFragment.show(fm, getResources().getString(R.string.pref_storage));
