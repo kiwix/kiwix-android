@@ -177,7 +177,7 @@ public class ZimContentProvider extends ContentProvider {
       return null;
     } else {
       String name = jniKiwix.getName();
-      if (name.equals("")) {
+      if (name == null || name.equals("")) {
         return getId();
       } else {
         return name;
