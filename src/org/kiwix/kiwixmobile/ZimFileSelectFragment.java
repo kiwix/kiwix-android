@@ -355,6 +355,10 @@ public class ZimFileSelectFragment extends Fragment
           holder = (ViewHolder) convertView.getTag();
         }
 
+        if (book == null) {
+          return convertView;
+        }
+
         holder.title.setText(book.getTitle());
         holder.description.setText(book.getDescription());
         holder.language.setText(LibraryAdapter.getLanguage(book.getLanguage()));
