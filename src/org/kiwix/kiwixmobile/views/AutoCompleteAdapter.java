@@ -13,7 +13,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
-import org.kiwix.kiwixmobile.JNIKiwix;
+import org.kiwix.kiwixlib.JNIKiwix;
 
 import java.util.ArrayList;
 import java.util.List;

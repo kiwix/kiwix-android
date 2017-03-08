@@ -38,6 +38,9 @@ import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
+import org.kiwix.kiwixlib.JNIKiwix;
+import org.kiwix.kiwixlib.JNIKiwixString;
+import org.kiwix.kiwixlib.JNIKiwixInt;
 
 public class ZimContentProvider extends ContentProvider {
 
