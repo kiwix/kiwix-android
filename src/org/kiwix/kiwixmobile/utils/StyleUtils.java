@@ -19,7 +19,14 @@
 
 package org.kiwix.kiwixmobile.utils;
 
+import android.content.Context;
+import android.support.annotation.XmlRes;
+import android.util.AttributeSet;
+import android.util.Xml;
+
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.R;
+import org.xmlpull.v1.XmlPullParser;
 
 public class StyleUtils {
   public static int dialogStyle() {
@@ -28,5 +35,17 @@ public class StyleUtils {
     } else {
       return android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert;
     }
+  }
+
+  public static AttributeSet getAttributes(Context context, @XmlRes int xml) {
+    XmlPullParser parser = context.getResources().getXml(R.xml.webview);
+    try {
+      parser.next();
+      parser.nextTag();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return Xml.asAttributeSet(parser);
   }
 }

@@ -19,8 +19,6 @@
 
 package org.kiwix.kiwixmobile.views.web;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.ColorMatrixColorFilter;
@@ -30,27 +28,25 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.webkit.WebView;
 import android.widget.Toast;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.KiwixWebChromeClient;
 import org.kiwix.kiwixmobile.KiwixWebViewClient;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.WebViewCallback;
-import org.kiwix.kiwixmobile.utils.DimenUtils;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class KiwixWebView extends WebView {
 
@@ -126,8 +122,8 @@ public class KiwixWebView extends WebView {
     }
   };
 
-  public KiwixWebView(Context context, WebViewCallback callback) {
-    super(context);
+  public KiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs) {
+    super(context, attrs);
     this.callback = callback;
     setWebViewClient(new KiwixWebViewClient(callback));
     setWebChromeClient(new KiwixWebChromeClient(callback));
@@ -207,5 +203,7 @@ public class KiwixWebView extends WebView {
     getSettings().setBuiltInZoomControls(true);
     getSettings().setDisplayZoomControls(false);
   }
+
+
 }
 

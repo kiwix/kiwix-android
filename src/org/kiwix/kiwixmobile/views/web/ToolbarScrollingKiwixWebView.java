@@ -20,6 +20,7 @@
 package org.kiwix.kiwixmobile.views.web;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -35,8 +36,8 @@ public class ToolbarScrollingKiwixWebView extends KiwixWebView {
   private OnToolbarVisibilityChangeListener listener;
   private float startY;
 
-  public ToolbarScrollingKiwixWebView(Context context, WebViewCallback callback, View toolbarView) {
-    super(context, callback);
+  public ToolbarScrollingKiwixWebView(Context context, WebViewCallback callback, View toolbarView, AttributeSet attrs) {
+    super(context, callback, attrs);
     this.toolbarView = toolbarView;
   }
 

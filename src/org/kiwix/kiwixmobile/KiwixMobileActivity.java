@@ -48,13 +48,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.ActionMenuItemView;
-import android.support.v7.view.menu.MenuBuilder;
-import android.support.v7.view.menu.MenuItemImpl;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.KeyEvent;
@@ -74,14 +73,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.database.BookmarksDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
@@ -94,6 +87,7 @@ import org.kiwix.kiwixmobile.utils.KiwixTextToSpeech;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.RateAppCounter;
+import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.files.FileReader;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
@@ -101,7 +95,14 @@ import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
 import org.kiwix.kiwixmobile.views.web.KiwixWebView;
 import org.kiwix.kiwixmobile.views.web.ToolbarScrollingKiwixWebView;
 import org.kiwix.kiwixmobile.views.web.ToolbarStaticKiwixWebView;
-import org.w3c.dom.Text;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.DocumentSection;
@@ -597,9 +598,10 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
   }
 
   private KiwixWebView getWebView(String url) {
+    AttributeSet attrs = StyleUtils.getAttributes(this, R.xml.webview);
     KiwixWebView webView;
     if (isHideToolbar) {
-      webView = new ToolbarScrollingKiwixWebView(KiwixMobileActivity.this, this, toolbarContainer);
+      webView = new ToolbarScrollingKiwixWebView(KiwixMobileActivity.this, this, toolbarContainer, attrs);
       ((ToolbarScrollingKiwixWebView) webView).setOnToolbarVisibilityChangeListener(
           new ToolbarScrollingKiwixWebView.OnToolbarVisibilityChangeListener() {
             @Override
@@ -614,7 +616,7 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
           }
       );
     } else {
-      webView = new ToolbarStaticKiwixWebView(KiwixMobileActivity.this, this, toolbarContainer);
+      webView = new ToolbarStaticKiwixWebView(KiwixMobileActivity.this, this, toolbarContainer, attrs);
     }
     webView.loadUrl(url);
     webView.loadPrefs();

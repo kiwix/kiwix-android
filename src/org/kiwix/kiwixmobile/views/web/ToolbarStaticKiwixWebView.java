@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.views.web;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.view.ViewGroup;
 
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
@@ -17,8 +18,8 @@ public class ToolbarStaticKiwixWebView extends KiwixWebView {
   private int statusBarHeight;
   private ViewGroup viewGroup;
 
-  public ToolbarStaticKiwixWebView(Context context, WebViewCallback callback, ViewGroup toolbarLayout) {
-    super(context, callback);
+  public ToolbarStaticKiwixWebView(Context context, WebViewCallback callback, ViewGroup toolbarLayout, AttributeSet attrs) {
+    super(context, callback, attrs);
     statusBarHeight = DimenUtils.getTranslucentStatusBarHeight(context);
     viewGroup = toolbarLayout;
     viewGroup.setTranslationY(statusBarHeight);
