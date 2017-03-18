@@ -5,7 +5,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.2.3'
+    classpath 'com.android.tools.build:gradle:2.3.0'
     classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
     classpath 'me.tatarka:gradle-retrolambda:3.2.5'
   }
@@ -26,7 +26,7 @@ dependencies {
   compile 'com.android.support:support-v13:24.1.0'
   compile 'com.android.support:support-v4:24.1.0'
   compile 'com.android.support:design:24.1.0'
-  compile 'com.android.support:cardview-v7:21.0.+'
+  compile 'com.android.support:cardview-v7:24.1.0'
 
 
   androidTestCompile 'com.android.support:support-annotations:24.1.0'
@@ -66,7 +66,7 @@ dependencies {
 
   android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
       minSdkVersion 14
