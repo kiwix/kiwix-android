@@ -8,12 +8,12 @@ if [ "x$1" != "x" ];
 	PACKAGE=$1
 fi
 
-if [ -f build/outputs/apk/${PACKAGE}-debug-unaligned.apk ]
+if [ -f build/outputs/apk/${PACKAGE}-debug.apk ]
 then
     echo "Uninstalling old Kiwix APK..."
-    ../src/dependencies/android-sdk/platform-tools/adb uninstall ${PACKAGE} ;
+    ${ANDROID_HOME}/platform-tools/adb uninstall ${PACKAGE} ;
     echo "Installing new Kiwix APK..."
-    ../src/dependencies/android-sdk/platform-tools/adb install build/outputs/apk/${PACKAGE}-debug-unaligned.apk
+    ${ANDROID_HOME}/platform-tools/adb install build/outputs/apk/${PACKAGE}-debug.apk
 else
     echo "No APK file available for package ${PACKAGE} !"
 fi

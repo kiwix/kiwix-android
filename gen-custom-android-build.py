@@ -490,6 +490,16 @@ def step_build_apk(jsdata, **options):
     syscall('./gradlew build --stacktrace')
 
 
+    # rename APKs for better listing
+    folder_name = os.path.split(ANDROID_PATH)[-1]
+    for variant in ('debug', 'release-unsigned'):
+        shutil.move(os.path.join('build', 'outputs', 'apk',
+                                 "{}-{}.apk".format(folder_name, variant)),
+                    os.path.join('build', 'outputs', 'apk',
+                                 "{}-{}.apk".format(jsdata.get('package'), variant)))
+
+
+
 def step_move_apk_to_destination(jsdata, **options):
     """ place and rename built APKs to main output directory """
 
@@ -501,7 +511,7 @@ def step_move_apk_to_destination(jsdata, **options):
     except OSError:
         pass
     # move generated APK to satisfy other scripts
-    for variant in ('debug', 'debug-unaligned', 'release-unsigned'):
+    for variant in ('debug', 'release-unsigned'):
         shutil.move(os.path.join(ANDROID_PATH, 'build', 'outputs', 'apk',
                                  "{}-{}.apk"
                                  .format(jsdata.get('package'), variant)),
