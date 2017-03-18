@@ -56,7 +56,7 @@ DEFAULT_JSDATA = {
     'content_version_code': 0,
 
     # main icon source & store icon
-    'ic_launcher': os.path.abspath(os.path.join('android',
+    'ic_launcher': os.path.abspath(os.path.join('kiwix-android',
                                                 'Kiwix_icon_transparent_512x512.png')),
 
     # store listing
@@ -228,7 +228,7 @@ def step_create_android_placeholder(jsdata, **options):
     shutil.rmtree(ANDROID_PATH)
 
     # copy the whole android tree
-    shutil.copytree(os.path.join(PARENT_PATH, 'android'),
+    shutil.copytree(os.path.join(PARENT_PATH, 'kiwix-android'),
                     ANDROID_PATH, symlinks=True)
 
 
@@ -451,41 +451,7 @@ def step_update_android_manifest(jsdata, **options):
                                      .format(jsdata.get('package'))))
 
 
-def step_update_kiwix_cpp(jsdata, **options):
-    """ rewrite imports in JNI/C to match new package """
 
-    move_to_android_placeholder()
-
-    # rewrite kiwix.cpp for JNI
-    fpath = os.path.join(ANDROID_PATH, 'kiwix.cpp')
-    content = open(fpath, 'r').read()
-    with open(fpath, 'w') as f:
-        f.write(content.replace('org_kiwix_kiwixmobile',
-                                "_".join(jsdata.get('package').split('.'))))
-
-
-def step_compile_libkiwix(jsdata, **options):
-    """ launch the native libkiwix script without building an APK """
-
-    move_to_android_placeholder()
-
-    if not architectures:
-        # compile libkiwix and all dependencies
-        syscall('./build-android-with-native.py '
-                '--toolchain '
-                '--lzma '
-                '--icu '
-                '--zim '
-                '--kiwix '
-                '--strip '
-                '--locales ')
-    else:
-        command = './build-android-with-native.py --toolchain --lzma --icu --zim --kiwix --strip --locales '
-
-        for arch in architectures:
-            command += "--on=" + arch
-
-        syscall(command)
 
 
 def step_embed_zimfile(jsdata, **options):
@@ -520,9 +486,8 @@ def step_build_apk(jsdata, **options):
     move_to_android_placeholder()
 
     # compile KiwixAndroid
-    syscall('./build-android-with-native.py '
-            '--apk '
-            '--clean ')
+    syscall('./gradlew clean assemble')
+    syscall('./gradlew build --stacktrace')
 
 
 def step_move_apk_to_destination(jsdata, **options):
@@ -571,8 +536,6 @@ ARGS_MATRIX = OrderedDict([
     ('menu', step_update_main_menu_xml),
     ('xmlnodes', step_update_xml_nodes),
     ('manifest', step_update_android_manifest),
-    ('jni', step_update_kiwix_cpp),
-    ('libkiwix', step_compile_libkiwix),
     ('embed', step_embed_zimfile),
     ('gradle', step_update_gradle),
     ('build', step_build_apk),
