@@ -85,7 +85,10 @@ dependencies {
       targetCompatibility JavaVersion.VERSION_1_8
     }
 
-
+    dexOptions {
+      javaMaxHeapSize "4g"
+    }
+    
     sourceSets {
       main {
         manifest.srcFile 'AndroidManifest.xml'
