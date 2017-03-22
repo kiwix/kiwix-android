@@ -20,7 +20,11 @@
 package org.kiwix.kiwixmobile.utils;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.XmlRes;
+import android.text.Html;
+import android.text.Spanned;
+import android.text.SpannedString;
 import android.util.AttributeSet;
 import android.util.Xml;
 
@@ -47,5 +51,18 @@ public class StyleUtils {
     }
 
     return Xml.asAttributeSet(parser);
+  }
+
+  public static Spanned highlightUrl(String text, String url) {
+    return fromHtml(text.replaceAll(url,"<u><font color='blue'>" + url + "</font></u>"));
+  }
+
+  @SuppressWarnings("deprecation")
+  public static Spanned fromHtml(String source) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+      return Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY);
+    } else {
+      return Html.fromHtml(source);
+    }
   }
 }

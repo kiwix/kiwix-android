@@ -11,6 +11,8 @@ public interface WebViewCallback {
 
   void showHelpPage();
 
+  void sendContactEmail();
+
   void openExternalUrl(Intent intent);
 
   void manageZimFiles(int tab);

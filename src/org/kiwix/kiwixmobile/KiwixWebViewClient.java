@@ -4,12 +4,16 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import java.util.HashMap;
 import org.kiwix.kiwixmobile.settings.Constants;
+import org.kiwix.kiwixmobile.utils.StyleUtils;
 
 public class KiwixWebViewClient extends WebViewClient {
 
@@ -75,6 +79,12 @@ public class KiwixWebViewClient extends WebViewClient {
       help.findViewById(R.id.get_content_card)
           .setOnClickListener(card -> callback.manageZimFiles(1));
       view.addView(help);
+      TextView contact = (TextView) help.findViewById(R.id.welcome21);
+      contact.setText(StyleUtils.highlightUrl(contact.getText().toString(),
+          KiwixMobileActivity.contactEmailAddress));
+      contact.setOnClickListener(v -> {
+        callback.sendContactEmail();
+      });
     }
     callback.webViewUrlFinishedLoading();
   }

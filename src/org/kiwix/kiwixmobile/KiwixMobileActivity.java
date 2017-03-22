@@ -155,6 +155,8 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
 
   public static final String PREF_STORAGE_TITLE = "pref_selected_title";
 
+  public static final String contactEmailAddress = "android@kiwix.org";
+
   public static boolean isFullscreenOpened;
 
   private boolean isBackToTopEnabled = false;
@@ -836,7 +838,17 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     getCurrentWebView().loadUrl("file:///android_res/raw/help.html");
   }
 
-  @Override public void openExternalUrl(Intent intent) {
+  public void sendContactEmail() {
+    Intent intent = new Intent(Intent.ACTION_SEND);
+    intent.setType("plain/text");
+    intent.putExtra(Intent.EXTRA_EMAIL, new String[] { contactEmailAddress });
+    intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback in " +
+        LanguageUtils.getCurrentLocale(this).getDisplayLanguage());
+    startActivity(Intent.createChooser(intent, ""));
+  }
+
+  @Override
+  public void openExternalUrl(Intent intent) {
     if (intent.resolveActivity(getPackageManager()) != null) {
       startActivity(intent);
     } else {

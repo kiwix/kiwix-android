@@ -141,7 +141,7 @@
   <string name="help_18">\u2022 On GNU/Linux and with the console: split --bytes=4000M my_big_file.zim</string>
   <string name="help_19">Note: your resulting files must be named my_big_file.zimaa, my_big_file.zimab, etc.</string>
   <string name="help_20">Thank you for choosing Kiwix!</string>
-  <string name="help_21">We are glad to have you on board and would appreciate any feedback or suggestions.</string>
+  <string name="help_21">We are glad to have you on board and would appreciate any feedback or suggestions at android@kiwix.org.</string>
   <string name="pref_storage">Storage</string>
   <string name="pref_current_folder">Current Folder</string>
   <string name="path_not_writable">Can not access desired directory, using default. To fix this reselect the desired directory in app settings.</string>

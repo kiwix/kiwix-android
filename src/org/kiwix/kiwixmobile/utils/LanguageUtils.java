@@ -19,6 +19,7 @@
 
 package org.kiwix.kiwixmobile.utils;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -105,6 +106,16 @@ public class LanguageUtils {
       }
     }
     return mLocaleMap.get(iso3.toUpperCase());
+  }
+
+  @TargetApi(Build.VERSION_CODES.N)
+  public static Locale getCurrentLocale(Context context){
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+      return context.getResources().getConfiguration().getLocales().get(0);
+    } else{
+      //noinspection deprecation
+      return context.getResources().getConfiguration().locale;
+    }
   }
 
   // Read the language codes, that are supported in this app from the locales.txt file
