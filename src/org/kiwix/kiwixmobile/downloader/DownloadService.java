@@ -234,11 +234,10 @@ public class DownloadService extends Service {
             bookDao.deleteBook(book.id);
             notification.get(notificationID).setContentIntent(pendingIntent);
             notification.get(notificationID).mActions.clear();
-            updateForeground();
           }
           notification.get(notificationID).setProgress(100, progress, false);
           notificationManager.notify(notificationID, notification.get(notificationID).build());
-          if (progress == 0) {
+          if (progress == 0 || progress == 100) {
             // Tells android to not kill the service
           updateForeground();
           }
