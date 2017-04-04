@@ -21,7 +21,7 @@ public class MetaLinkNetworkEntityTest {
     Serializer serializer = new Persister();
     final MetaLinkNetworkEntity result = serializer.read(
       MetaLinkNetworkEntity.class,
-      MetaLinkNetworkEntityTest.class.getResourceAsStream(
+      MetaLinkNetworkEntityTest.class.getClassLoader().getResourceAsStream(
         "wikipedia_af_all_nopic_2016-05.zim.meta4"
       ));
     Assert.assertThat(result.getUrls().size(), CoreMatchers.is(5));

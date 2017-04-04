@@ -103,12 +103,12 @@ dependencies {
 
       test {
         java.srcDirs = ['src/test/java']
-        resources.srcDirs = ['src/test']
+        resources.srcDirs = ['src/test/resources']
       }
 
       androidTest {
         java.srcDirs = ['src/androidTest/java']
-        resources.srcDirs = ['src/androidTest']
+        resources.srcDirs = ['src/androidTest/resources']
       }
     }
   }
