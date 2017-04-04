@@ -72,6 +72,7 @@ dependencies {
       minSdkVersion 14
       targetSdkVersion 24
       testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+      multiDexEnabled = true
     }
 
     lintOptions {
