@@ -1,4 +1,4 @@
-package test.java.org.kiwix.kiwixmobile.library.entity;
+package org.kiwix.kiwixmobile.library.entity;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
@@ -9,9 +9,6 @@ import org.junit.Test;
 import org.kiwix.kiwixmobile.library.entity.MetaLinkNetworkEntity;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
 
 public class MetaLinkNetworkEntityTest {
   private static Matcher<MetaLinkNetworkEntity.Url> url(
