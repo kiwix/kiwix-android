@@ -1,6 +1,8 @@
 package org.kiwix.kiwixmobile;
 
 import android.app.Application;
+import android.support.multidex.MultiDexApplication;
+
 import okhttp3.OkHttpClient;
 import org.kiwix.kiwixmobile.network.KiwixService;
 import retrofit2.Retrofit;
@@ -8,7 +10,7 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import rx.schedulers.Schedulers;
 
-public class KiwixApplication extends Application {
+public class KiwixApplication extends MultiDexApplication {
 
   private static KiwixService service;
   private static OkHttpClient client = new OkHttpClient().newBuilder().followRedirects(true).followSslRedirects(true).build();

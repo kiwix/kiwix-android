@@ -27,6 +27,8 @@ dependencies {
   compile 'com.android.support:support-v4:24.1.0'
   compile 'com.android.support:design:24.1.0'
   compile 'com.android.support:cardview-v7:24.1.0'
+  compile 'com.android.support:multidex:1.0.1'
+
 
 
   androidTestCompile 'com.android.support:support-annotations:24.1.0'
@@ -93,8 +95,8 @@ dependencies {
     sourceSets {
       main {
         manifest.srcFile 'src/main/AndroidManifest.xml'
-        java.srcDirs = ['src']
-        resources.srcDirs = ['src']
+        java.srcDirs = ['src/main/java']
+        resources.srcDirs = ['src/main/resources']
         aidl.srcDirs = ['src']
         renderscript.srcDirs = ['src']
         res.srcDirs = ['src/main/res']
