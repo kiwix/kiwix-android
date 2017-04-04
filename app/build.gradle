@@ -137,6 +137,6 @@ dependencies {
 
 if (System.env.TRAVIS == 'true') {
   allprojects {
-      groovyOptions.fork = false
-  }
+    maxParallelForks = 2
+    minHeapSize = '128m'  }
 }
