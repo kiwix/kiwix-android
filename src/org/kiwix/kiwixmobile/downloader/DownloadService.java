@@ -1,10 +1,8 @@
 package org.kiwix.kiwixmobile.downloader;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Binder;
@@ -18,7 +16,16 @@ import android.util.Pair;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.widget.Toast;
-
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+import javax.inject.Inject;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okio.BufferedSource;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.LibraryFragment;
@@ -29,25 +36,14 @@ import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okio.BufferedSource;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.observables.ConnectableObservable;
 
 public class DownloadService extends Service {
 
-  private KiwixService kiwixService;
-  private OkHttpClient client;
+  @Inject KiwixService kiwixService;
+  @Inject OkHttpClient httpClient;
+  @Inject NotificationManager notificationManager;
 
   private static String SD_CARD;
   public static String KIWIX_ROOT;
@@ -63,7 +59,6 @@ public class DownloadService extends Service {
   public String notificationTitle;
 
   private SparseArray<NotificationCompat.Builder> notification = new SparseArray<>();
-  private NotificationManager notificationManager;
   public SparseIntArray downloadStatus = new SparseIntArray();
   public SparseIntArray downloadProgress = new SparseIntArray();
   public static final Object pauseLock = new Object();
@@ -75,19 +70,20 @@ public class DownloadService extends Service {
     downloadFragment = dFragment;
   }
 
+  private void setupDagger(){
+    KiwixApplication.getInstance().getApplicationComponent().inject(this);
+  }
+
+
   @Override
   public void onCreate() {
-    kiwixService = ((KiwixApplication) getApplication()).getKiwixService();
-    client = ((KiwixApplication) getApplication()).getOkHttpClient();
-    notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    setupDagger();
 
     SD_CARD = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
         .getString(KiwixMobileActivity.PREF_STORAGE,Environment.getExternalStorageDirectory().getPath());
     KIWIX_ROOT = SD_CARD + "/Kiwix/";
 
     KIWIX_ROOT = checkWritable(KIWIX_ROOT);
-
-
 
     super.onCreate();
   }
@@ -269,7 +265,7 @@ public class DownloadService extends Service {
       if (subscriber.isUnsubscribed()) return;
       try {
         Request request = new Request.Builder().url(url).head().build();
-        Response response = client.newCall(request).execute();
+        Response response = httpClient.newCall(request).execute();
         String LengthHeader = response.headers().get("Content-Length");
         long contentLength = LengthHeader == null ? 0 : Long.parseLong(LengthHeader);
         subscriber.onNext(new Pair<>(url, contentLength));
@@ -331,7 +327,7 @@ public class DownloadService extends Service {
             String rangeHeader = String.format("%d-%d", downloaded, chunk.getEndByte());
 
             // Build request with up to date range
-            Response response = client.newCall(
+            Response response = httpClient.newCall(
                 new Request.Builder()
                     .url(chunk.getUrl())
                     .header("Range", "bytes=" + rangeHeader)

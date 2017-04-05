@@ -46,7 +46,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -74,10 +73,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import javax.inject.Inject;
+import okhttp3.OkHttpClient;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.database.BookmarksDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
+import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
 import org.kiwix.kiwixmobile.settings.Constants;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
@@ -96,20 +103,12 @@ import org.kiwix.kiwixmobile.views.web.KiwixWebView;
 import org.kiwix.kiwixmobile.views.web.ToolbarScrollingKiwixWebView;
 import org.kiwix.kiwixmobile.views.web.ToolbarStaticKiwixWebView;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.TableClickListener;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
-public class KiwixMobileActivity extends AppCompatActivity implements WebViewCallback {
+public class KiwixMobileActivity extends BaseActivity implements WebViewCallback {
 
   public static final int REQUEST_FILE_SEARCH = 1236;
 
@@ -256,6 +255,8 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
   @BindView(R.id.action_back) View tabBackButtonContainer;
 
   @BindView(R.id.action_forward) View tabForwardButtonContainer;
+
+  @Inject OkHttpClient okHttpClient;
 
 
   @Override
@@ -574,6 +575,10 @@ public class KiwixMobileActivity extends AppCompatActivity implements WebViewCal
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(this);
     tts.shutdown();
+  }
+
+  @Override protected void setupDagger(ApplicationComponent appComponent) {
+    appComponent.inject(this);
   }
 
   private void updateTableOfContents() {

@@ -1,40 +1,32 @@
 package org.kiwix.kiwixmobile;
 
 import android.app.Application;
-import okhttp3.OkHttpClient;
-import org.kiwix.kiwixmobile.network.KiwixService;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
-import rx.schedulers.Schedulers;
+import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
+import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
+import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
 
 public class KiwixApplication extends Application {
 
-  private static KiwixService service;
-  private static OkHttpClient client = new OkHttpClient().newBuilder().followRedirects(true).followSslRedirects(true).build();
+  private static KiwixApplication application;
+  private ApplicationComponent applicationComponent;
+
+  public static KiwixApplication getInstance() {
+    return application;
+  }
 
   @Override public void onCreate() {
     super.onCreate();
-    createRetrofitService();
-
+    application = this;
+    initializeInjector();
   }
 
-  private void createRetrofitService() {
-    Retrofit retrofit = new Retrofit.Builder()
-        .baseUrl("http://download.kiwix.org/")
-        .client(client)
-        .addConverterFactory(SimpleXmlConverterFactory.create())
-        .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
+  private void initializeInjector() {
+    this.applicationComponent = DaggerApplicationComponent.builder()
+        .applicationModule(new ApplicationModule(this))
         .build();
-
-    service = retrofit.create(KiwixService.class);
   }
 
-  public KiwixService getKiwixService() {
-    return service;
-  }
-
-  public OkHttpClient getOkHttpClient() {
-    return client;
+  public ApplicationComponent getApplicationComponent() {
+    return this.applicationComponent;
   }
 }
