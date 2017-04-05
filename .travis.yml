@@ -8,10 +8,6 @@ before_script:
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
 
-env:
-   global:
-     - GRADLE_OPTS="-Xmx128m"
-
 install:
   - echo y | android update sdk -u -a -t tools
   - echo y | android update sdk -u -a -t platform-tools
