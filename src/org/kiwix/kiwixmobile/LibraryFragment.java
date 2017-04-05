@@ -96,42 +96,44 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
 
   public static boolean isReceiverRegistered = false;
 
-  @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        faActivity  = (ZimManageActivity)    super.getActivity();
-        // Replace LinearLayout by the type of the root element of the layout you're trying to load
-        llLayout    = (LinearLayout)    inflater.inflate(R.layout.activity_library, container, false);
-        // Of course you will want to faActivity and llLayout in the class and not this method to access them in the rest of
-        // the class, just initialize them here
+  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
 
-        // Don't use this method, it's handled by inflater.inflate() above :
-        // setContentView(R.layout.activity_layout);
-      ButterKnife.bind(this, llLayout);
-      DownloadService.setDownloadFragment(faActivity.mSectionsPagerAdapter.getDownloadFragment());
-      kiwixService = ((KiwixApplication) super.getActivity().getApplication()).getKiwixService();
-      conMan = (ConnectivityManager) super.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-      NetworkInfo network = conMan.getActiveNetworkInfo();
-      if (network == null || !network.isConnected()) {
-        noNetworkConnection();
-      }
+    faActivity = (ZimManageActivity) super.getActivity();
+    // Replace LinearLayout by the type of the root element of the layout you're trying to load
+    llLayout = (LinearLayout) inflater.inflate(R.layout.activity_library, container, false);
+    // Of course you will want to faActivity and llLayout in the class and not this method to access them in the rest of
+    // the class, just initialize them here
 
-      networkBroadcastReceiver = new NetworkBroadcastReceiver();
-      faActivity.registerReceiver(networkBroadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-      isReceiverRegistered = true;
-
-      BookDao bookDao = new BookDao(KiwixDatabase.getInstance(getActivity()));
-      for (Book book : bookDao.getDownloadingBooks()) {
-        if (!DownloadFragment.mDownloads.containsValue(book)) {
-          book.url = book.remoteUrl;
-          downloadFile(book);
-        }
-      }
-        // The FragmentActivity doesn't contain the layout directly so we must use our instance of     LinearLayout :
-        //llLayout.findViewById(R.id.someGuiElement);
-        // Instead of :
-        // findViewById(R.id.someGuiElement);
-        return llLayout; // We must return the loaded Layout
+    // Don't use this method, it's handled by inflater.inflate() above :
+    // setContentView(R.layout.activity_layout);
+    ButterKnife.bind(this, llLayout);
+    DownloadService.setDownloadFragment(faActivity.mSectionsPagerAdapter.getDownloadFragment());
+    kiwixService = ((KiwixApplication) super.getActivity().getApplication()).getKiwixService();
+    conMan =
+        (ConnectivityManager) super.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+    NetworkInfo network = conMan.getActiveNetworkInfo();
+    if (network == null || !network.isConnected()) {
+      noNetworkConnection();
     }
+
+    networkBroadcastReceiver = new NetworkBroadcastReceiver();
+    faActivity.registerReceiver(networkBroadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    isReceiverRegistered = true;
+
+    BookDao bookDao = new BookDao(KiwixDatabase.getInstance(getActivity()));
+    for (Book book : bookDao.getDownloadingBooks()) {
+      if (!DownloadFragment.mDownloads.containsValue(book)) {
+        book.url = book.remoteUrl;
+        downloadFile(book);
+      }
+    }
+    // The FragmentActivity doesn't contain the layout directly so we must use our instance of     LinearLayout :
+    //llLayout.findViewById(R.id.someGuiElement);
+    // Instead of :
+    // findViewById(R.id.someGuiElement);
+    return llLayout; // We must return the loaded Layout
+  }
 
 
   public void getLibraryData(){
