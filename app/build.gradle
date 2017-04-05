@@ -134,8 +134,3 @@ dependencies {
 
   tasks.withType(JavaCompile) { compileTask -> compileTask.dependsOn(nativeLibsToJar)
   }
-
-if (System.env.TRAVIS == 'true') {
-  allprojects {
-    minHeapSize = '128m'  }
-}
