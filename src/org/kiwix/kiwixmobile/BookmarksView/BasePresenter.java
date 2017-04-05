@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile.BookmarksView;
+package org.kiwix.kiwixmobile.bookmarksView;
 
 /**
  * Created by EladKeyshawn on 05/04/2017.
@@ -7,7 +7,6 @@ package org.kiwix.kiwixmobile.BookmarksView;
 public class BasePresenter<T extends ViewCallback> implements Presenter<T> {
 
     private T mMvpView;
-    private BaseActivity activity;
     @Override
     public void attachView(T mvpView) {
         this.mMvpView = mvpView;

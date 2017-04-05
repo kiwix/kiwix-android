@@ -1,6 +1,4 @@
-package org.kiwix.kiwixmobile.BookmarksView;
-
-import android.widget.ArrayAdapter;
+package org.kiwix.kiwixmobile.bookmarksView;
 
 import java.util.ArrayList;
 

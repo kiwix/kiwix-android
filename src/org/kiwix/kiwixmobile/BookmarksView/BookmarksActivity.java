@@ -18,7 +18,7 @@
  */
 
 
-package org.kiwix.kiwixmobile.BookmarksView;
+package org.kiwix.kiwixmobile.bookmarksView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,7 +29,6 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
@@ -44,62 +43,60 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
+import org.kiwix.kiwixmobile.BaseActivity;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.ZimContentProvider;
-import org.kiwix.kiwixmobile.database.BookmarksDao;
-import org.kiwix.kiwixmobile.database.KiwixDatabase;
-import org.kiwix.kiwixmobile.database.entity.Bookmarks;
-import org.kiwix.kiwixmobile.utils.DimenUtils;
+import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class BookmarksActivity extends BaseActivity
         implements AdapterView.OnItemClickListener, BookmarksViewCallback {
 
     private ArrayList<String> bookmarks;
     private ArrayList<String> bookmarkUrls;
-    private ListView bookmarksList;
+    @BindView(R.id.bookmarks_list) ListView bookmarksList;
     private BookmarksArrayAdapter adapter;
-    private CoordinatorLayout snackbarLayout;
-    private LinearLayout noBookmarksLayout;
-    private BookmarksDao bookmarksDao;
-    private BookmarksPresenter presenter;
+    @BindView(R.id.bookmarks_activity_layout) CoordinatorLayout snackbarLayout;
+    @BindView(R.id.bookmarks_none_linlayout) LinearLayout noBookmarksLayout;
+    @Inject BookmarksPresenter presenter;
     private ActionModeListener actionModeListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        presenter = new BookmarksPresenter();
-
-        actionModeListener = new ActionModeListener();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (sharedPreferences.getBoolean(KiwixMobileActivity.PREF_NIGHT_MODE, false)) {
             setTheme(R.style.AppTheme_Night);
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bookmarks);
+        ButterKnife.bind(this);
+
         setUpToolbar();
-        snackbarLayout = (CoordinatorLayout) findViewById(R.id.bookmarks_activity_layout);
         bookmarks = new ArrayList<>();
         bookmarkUrls = new ArrayList<>();
-        bookmarksList = (ListView) findViewById(R.id.bookmarks_list);
-        noBookmarksLayout = (LinearLayout) findViewById(R.id.bookmarks_none_linlayout);
 
-
+        actionModeListener = new ActionModeListener();
         adapter = new BookmarksArrayAdapter(getApplicationContext(), R.layout.bookmarks_row, R.id.bookmark_title, bookmarks);
-
         bookmarksList.setAdapter(adapter);
-
-        presenter.attachView(this);
-
         bookmarksList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
         bookmarksList.setMultiChoiceModeListener(actionModeListener);
         bookmarksList.setOnItemClickListener(this);
 
+        presenter.attachView(this);
         presenter.loadBookmarks(this);
+    }
+
+    @Override
+    protected void setupDagger(ApplicationComponent appComponent) {
+        appComponent.inject(this);
     }
 
 
@@ -202,6 +199,10 @@ public class BookmarksActivity extends BaseActivity
     class ActionModeListener implements AbsListView.MultiChoiceModeListener {
         private ArrayList<String> selected = new ArrayList<>();
         private int numOfSelected = 0;
+
+        public ActionModeListener() {
+
+        }
 
         public int getNumOfSelected() {
             return numOfSelected;

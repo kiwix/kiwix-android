@@ -146,7 +146,7 @@
 
     <activity android:name=".settings.KiwixSettingsActivity" />
     <activity android:name=".SearchActivity" />
-    <activity android:name=".BookmarksView.BookmarksActivity" />
+    <activity android:name=".bookmarksView.BookmarksActivity" />
 
     <provider
       android:name=".ZimContentProvider"
