@@ -137,6 +137,5 @@ dependencies {
 
 if (System.env.TRAVIS == 'true') {
   allprojects {
-    maxParallelForks = 2
     minHeapSize = '128m'  }
 }
