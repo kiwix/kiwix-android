@@ -18,13 +18,15 @@
  */
 
 
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.BookmarksView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -45,29 +47,34 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.ZimContentProvider;
 import org.kiwix.kiwixmobile.database.BookmarksDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
+import org.kiwix.kiwixmobile.database.entity.Bookmarks;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class BookmarksActivity extends AppCompatActivity
-        implements AdapterView.OnItemClickListener {
+public class BookmarksActivity extends BaseActivity
+        implements AdapterView.OnItemClickListener, BookmarksViewCallback {
 
-    private SparseBooleanArray sparseBooleanArray;
     private ArrayList<String> bookmarks;
     private ArrayList<String> bookmarkUrls;
-    private ArrayList<String> tempContents;
     private ListView bookmarksList;
-    private ArrayAdapter adapter;
-    private ArrayList<String> selected;
-    private int numOfSelected;
+    private BookmarksArrayAdapter adapter;
     private CoordinatorLayout snackbarLayout;
     private LinearLayout noBookmarksLayout;
     private BookmarksDao bookmarksDao;
-
+    private BookmarksPresenter presenter;
+    private ActionModeListener actionModeListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        presenter = new BookmarksPresenter();
+
+        actionModeListener = new ActionModeListener();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (sharedPreferences.getBoolean(KiwixMobileActivity.PREF_NIGHT_MODE, false)) {
             setTheme(R.style.AppTheme_Night);
@@ -76,81 +83,25 @@ public class BookmarksActivity extends AppCompatActivity
         setContentView(R.layout.activity_bookmarks);
         setUpToolbar();
         snackbarLayout = (CoordinatorLayout) findViewById(R.id.bookmarks_activity_layout);
-        selected = new ArrayList<>();
+        bookmarks = new ArrayList<>();
+        bookmarkUrls = new ArrayList<>();
         bookmarksList = (ListView) findViewById(R.id.bookmarks_list);
         noBookmarksLayout = (LinearLayout) findViewById(R.id.bookmarks_none_linlayout);
 
-        bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
-        bookmarks = bookmarksDao.getBookmarkTitles(ZimContentProvider.getId(), ZimContentProvider.getName());
-        bookmarkUrls = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
 
-        adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.bookmarks_row, R.id.bookmark_title, bookmarks)  {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                if(convertView == null){
-                    LayoutInflater inflater = getLayoutInflater();
-                    convertView = inflater.inflate(R.layout.bookmarks_row, null);
-                }
-                return super.getView(position, convertView, parent);
-            }
-        };
+        adapter = new BookmarksArrayAdapter(getApplicationContext(), R.layout.bookmarks_row, R.id.bookmark_title, bookmarks);
+
         bookmarksList.setAdapter(adapter);
-        setNoBookmarksState();
+
+        presenter.attachView(this);
 
         bookmarksList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
-        bookmarksList.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-            @Override
-            public void onItemCheckedStateChanged(ActionMode mode, int position, long id,
-                                                  boolean checked) {
-                if (checked) {
-                    selected.add(bookmarks.get(position));
-                    numOfSelected++;
-                    mode.setTitle(Integer.toString(numOfSelected));
-                } else if (selected.contains(bookmarks.get(position))) {
-                    selected.remove(bookmarks.get(position));
-                    numOfSelected--;
-                    if (numOfSelected == 0) {
-                        mode.finish();
-                    } else {
-                        mode.setTitle(Integer.toString(numOfSelected));
-                    }
-                }
-            }
-
-            @Override
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                MenuInflater inflater = mode.getMenuInflater();
-                inflater.inflate(R.menu.menu_bookmarks, menu);
-                numOfSelected = 0;
-                return true;
-            }
-
-            @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return false;
-            }
-
-            @Override
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-
-                switch (item.getItemId()) {
-                    case R.id.menu_bookmarks_delete:
-                        deleteSelectedItems();
-                        popDeleteBookmarksSnackbar();
-                        mode.finish();
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-
-            @Override
-            public void onDestroyActionMode(ActionMode mode) {
-
-            }
-        });
+        bookmarksList.setMultiChoiceModeListener(actionModeListener);
         bookmarksList.setOnItemClickListener(this);
+
+        presenter.loadBookmarks(this);
     }
+
 
     private void setNoBookmarksState() {
         if (bookmarksList.getCount() == 0) {
@@ -160,31 +111,9 @@ public class BookmarksActivity extends AppCompatActivity
         }
     }
 
-    private void popDeleteBookmarksSnackbar() {
-        Snackbar bookmarkDeleteSnackbar =
-                Snackbar.make(snackbarLayout, numOfSelected + " " + getString(R.string.deleted_message), Snackbar.LENGTH_LONG);
-//            .setAction(ShortcutUtils.stringsGetter(R.string.undo, this), v -> {
-//              restoreBookmarks();
-//              setNoBookmarksState();
-//              Toast.makeText(getApplicationContext(), ShortcutUtils.stringsGetter(R.string.bookmarks_restored, getBaseContext()), Toast.LENGTH_SHORT)
-//                  .show();
-//            });
-
-        bookmarkDeleteSnackbar.setActionTextColor(getResources().getColor(R.color.white));
-        bookmarkDeleteSnackbar.show();
-    }
-
-  /*private void restoreBookmarks() {
-    bookmarksDao.resetBookmarksToPrevious(tempContents);
-    bookmarks = bookmarksDao.getBookmarks();
-    adapter.notifyDataSetChanged();
-    setNoBookmarksState();
-    refreshBookmarksList();
-  }*/
 
     private void deleteSelectedItems() {
-        sparseBooleanArray = bookmarksList.getCheckedItemPositions();
-        tempContents = new ArrayList<>(bookmarks);
+        SparseBooleanArray sparseBooleanArray = bookmarksList.getCheckedItemPositions();
         for (int i = sparseBooleanArray.size() - 1; i >= 0; i--) {
             deleteBookmark(bookmarkUrls.get(sparseBooleanArray.keyAt(i)));
             bookmarks.remove(sparseBooleanArray.keyAt(i));
@@ -195,15 +124,9 @@ public class BookmarksActivity extends AppCompatActivity
     }
 
     private void deleteBookmark(String article) {
-        bookmarksDao.deleteBookmark(article, ZimContentProvider.getId(), ZimContentProvider.getName());
+        presenter.deleteBookmark(article);
     }
 
-  /*private void refreshBookmarksList() {
-    bookmarks.clear();
-    bookmarks = bookmarksDao.getBookmarks();
-    adapter.notifyDataSetChanged();
-    setNoBookmarksState();
-  }*/
 
     private void setUpToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -243,8 +166,113 @@ public class BookmarksActivity extends AppCompatActivity
             startActivity(startIntent);
 
         } else { // we have a parent activity waiting...
-            setResult(RESULT_OK,startIntent );
+            setResult(RESULT_OK, startIntent);
             finish();
+        }
+    }
+
+    @Override
+    public void showBookmarks(ArrayList<String> bookmarks, ArrayList<String> bookmarkUrls) {
+        this.bookmarks.clear();
+        this.bookmarkUrls.clear();
+        this.bookmarks.addAll(bookmarks);
+        this.bookmarkUrls.addAll(bookmarkUrls);
+        adapter.notifyDataSetChanged();
+        setNoBookmarksState();
+    }
+
+
+    @Override
+    public void updateAdapter() {
+        adapter.notifyDataSetChanged();
+        setNoBookmarksState();
+    }
+
+    @Override
+    public void popDeleteBookmarksSnackbar() {
+        Snackbar bookmarkDeleteSnackbar =
+                Snackbar.make(snackbarLayout, actionModeListener.getNumOfSelected() + " " + getString(R.string.deleted_message), Snackbar.LENGTH_LONG);
+
+
+        bookmarkDeleteSnackbar.setActionTextColor(getResources().getColor(R.color.white));
+        bookmarkDeleteSnackbar.show();
+    }
+
+
+    class ActionModeListener implements AbsListView.MultiChoiceModeListener {
+        private ArrayList<String> selected = new ArrayList<>();
+        private int numOfSelected = 0;
+
+        public int getNumOfSelected() {
+            return numOfSelected;
+        }
+
+        @Override
+        public void onItemCheckedStateChanged(ActionMode mode, int position, long id,
+                                              boolean checked) {
+            if (checked) {
+                selected.add(bookmarks.get(position));
+                numOfSelected++;
+                mode.setTitle(Integer.toString(numOfSelected));
+            } else if (selected.contains(bookmarks.get(position))) {
+                selected.remove(bookmarks.get(position));
+                numOfSelected--;
+                if (numOfSelected == 0) {
+                    mode.finish();
+                } else {
+                    mode.setTitle(Integer.toString(numOfSelected));
+                }
+            }
+        }
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            MenuInflater inflater = mode.getMenuInflater();
+            inflater.inflate(R.menu.menu_bookmarks, menu);
+            numOfSelected = 0;
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
+            switch (item.getItemId()) {
+                case R.id.menu_bookmarks_delete:
+                    deleteSelectedItems();
+                    popDeleteBookmarksSnackbar();
+                    mode.finish();
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+
+        }
+    }
+
+
+    class BookmarksArrayAdapter extends ArrayAdapter<String> {
+
+        public BookmarksArrayAdapter(Context context, int resource, int textViewResourceId, List<String> objects) {
+            super(context, resource, textViewResourceId, objects);
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if(convertView == null){
+                LayoutInflater inflater = getLayoutInflater();
+                convertView = inflater.inflate(R.layout.bookmarks_row, null);
+            }
+            return super.getView(position, convertView, parent);
         }
     }
 
