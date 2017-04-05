@@ -45,6 +45,7 @@ public class DownloadFragment extends Fragment {
   private ZimManageActivity zimManageActivity;
   CoordinatorLayout mainLayout;
   private Activity faActivity;
+  private boolean hasArtificiallyPaused;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -138,6 +139,16 @@ public class DownloadFragment extends Fragment {
       }
     }
 
+    private void setPlayState(ImageView pauseButton, int position, int newPlayState) {
+        if(newPlayState == DownloadService.PLAY) { //Playing
+            LibraryFragment.mService.playDownload(mKeys[position]);
+            pauseButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
+        } else { //Pausing
+            LibraryFragment.mService.pauseDownload(mKeys[position]);
+            pauseButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black_24dp));
+        }
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
       // Get the data item for this position
@@ -173,18 +184,15 @@ public class DownloadFragment extends Fragment {
       }
 
       pause.setOnClickListener(v -> {
-        if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY) {
-          LibraryFragment.mService.pauseDownload(mKeys[position]);
-          pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black_24dp));
-        } else {
-          LibraryFragment.mService.playDownload(mKeys[position]);
-          pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
-        }
+        int newPlayPauseState = LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY ? DownloadService.PAUSE : DownloadService.PLAY;
+        setPlayState(pause, position, newPlayPauseState);
       });
 
 
       ImageView stop = (ImageView) convertView.findViewById(R.id.stop);
       stop.setOnClickListener(v -> {
+        hasArtificiallyPaused = LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY;
+        setPlayState(pause, position, DownloadService.PAUSE);
         new AlertDialog.Builder(faActivity, dialogStyle())
                 .setTitle(R.string.confirm_stop_download_title)
                 .setMessage(R.string.confirm_stop_download_msg)
@@ -198,7 +206,12 @@ public class DownloadFragment extends Fragment {
                     LibraryFragment.libraryAdapter.getFilter().filter(((ZimManageActivity) getActivity()).searchView.getQuery());
                   }
                 })
-                .setNegativeButton(R.string.no, null)
+                .setNegativeButton(R.string.no, (dialog, i) -> {
+                    if(hasArtificiallyPaused) {
+                        hasArtificiallyPaused = false;
+                        setPlayState(pause, position, DownloadService.PLAY);
+                    }
+                })
                 .show();
       });
 
