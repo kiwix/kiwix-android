@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -18,8 +19,6 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
-import android.app.Fragment;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,13 +33,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import eu.mhutti1.utils.storage.StorageDevice;
+import eu.mhutti1.utils.storage.StorageSelectDialog;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
@@ -51,26 +52,23 @@ import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
-
-import eu.mhutti1.utils.storage.StorageDevice;
-import eu.mhutti1.utils.storage.StorageSelectDialog;
 import rx.android.schedulers.AndroidSchedulers;
 
 import static org.kiwix.kiwixmobile.downloader.DownloadService.KIWIX_ROOT;
-import static org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.*;
+import static org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
-public class LibraryFragment extends Fragment implements AdapterView.OnItemClickListener, StorageSelectDialog.OnSelectListener {
+public class LibraryFragment extends Fragment
+    implements AdapterView.OnItemClickListener, StorageSelectDialog.OnSelectListener {
 
   public @BindView(R.id.library_list) ListView libraryList;
+  public @BindView(R.id.progressbar_layout) RelativeLayout progressBarLayout;
   @BindView(R.id.progressBar) ProgressBar progressBar;
   @BindView(R.id.progressbar_message) TextView progressBarMessage;
-  public @BindView(R.id.progressbar_layout) RelativeLayout progressBarLayout;
   @BindView(R.id.network_permission_text) TextView permissionText;
   @BindView(R.id.network_permission_button) Button permissionButton;
 
-
-  private KiwixService kiwixService;
+  @Inject KiwixService kiwixService;
 
   public LinearLayout llLayout;
 
@@ -96,8 +94,14 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
 
   public static boolean isReceiverRegistered = false;
 
+  private void setupDagger() {
+    KiwixApplication.getInstance().getApplicationComponent().inject(this);
+  }
+
   @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
+
+    setupDagger();
 
     faActivity = (ZimManageActivity) super.getActivity();
     // Replace LinearLayout by the type of the root element of the layout you're trying to load
@@ -109,7 +113,6 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
     // setContentView(R.layout.activity_layout);
     ButterKnife.bind(this, llLayout);
     DownloadService.setDownloadFragment(faActivity.mSectionsPagerAdapter.getDownloadFragment());
-    kiwixService = ((KiwixApplication) super.getActivity().getApplication()).getKiwixService();
     conMan =
         (ConnectivityManager) super.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
     NetworkInfo network = conMan.getActiveNetworkInfo();
@@ -135,8 +138,7 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
     return llLayout; // We must return the loaded Layout
   }
 
-
-  public void getLibraryData(){
+  public void getLibraryData() {
     progressBar.setVisibility(View.VISIBLE);
     progressBarMessage.setVisibility(View.VISIBLE);
     progressBarLayout.setVisibility(View.VISIBLE);
@@ -150,17 +152,16 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
             libraryAdapter = new LibraryAdapter(super.getActivity(), new ArrayList<>(books));
             libraryList.setAdapter(libraryAdapter);
           }
-        },error -> {
+        }, error -> {
           noNetworkConnection();
         });
-
 
     libraryList.setOnItemClickListener(this);
 
     active = true;
   }
 
-  public void displayNetworkConfirmation(){
+  public void displayNetworkConfirmation() {
     progressBar.setVisibility(View.GONE);
     progressBarMessage.setVisibility(View.GONE);
     permissionText.setVisibility(View.VISIBLE);
@@ -195,10 +196,11 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-    if (getSpaceAvailable() < Long.parseLong(((Book) (parent.getAdapter().getItem(position))).getSize()) * 1024f) {
+    if (getSpaceAvailable()
+        < Long.parseLong(((Book) (parent.getAdapter().getItem(position))).getSize()) * 1024f) {
       Toast.makeText(super.getActivity(), getString(R.string.download_no_space)
-              + "\n" + getString(R.string.space_available) + " "
-              + bytesToHuman(getSpaceAvailable()), Toast.LENGTH_LONG).show();
+          + "\n" + getString(R.string.space_available) + " "
+          + bytesToHuman(getSpaceAvailable()), Toast.LENGTH_LONG).show();
       Snackbar snackbar = Snackbar.make(libraryList,
           getString(R.string.download_change_storage),
           Snackbar.LENGTH_LONG)
@@ -219,25 +221,28 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
     }
 
     if (DownloadFragment.mDownloadFiles
-            .containsValue(KIWIX_ROOT + StorageUtils.getFileNameFromUrl(((Book) parent.getAdapter().getItem(position)).getUrl()))) {
-      Toast.makeText(super.getActivity(), getString(R.string.zim_already_downloading), Toast.LENGTH_LONG).show();
+        .containsValue(KIWIX_ROOT + StorageUtils.getFileNameFromUrl(((Book) parent.getAdapter()
+            .getItem(position)).getUrl()))) {
+      Toast.makeText(super.getActivity(), getString(R.string.zim_already_downloading), Toast.LENGTH_LONG)
+          .show();
     } else {
 
       NetworkInfo network = conMan.getActiveNetworkInfo();
       if (network == null || !network.isConnected()) {
-        Toast.makeText(super.getActivity(), getString(R.string.no_network_connection), Toast.LENGTH_LONG).show();
+        Toast.makeText(super.getActivity(), getString(R.string.no_network_connection), Toast.LENGTH_LONG)
+            .show();
         return;
       }
 
       if (isWiFi()) {
         downloadFile((Book) parent.getAdapter().getItem(position));
-      } else{
-      mobileDownloadDialog(position, parent);
+      } else {
+        mobileDownloadDialog(position, parent);
+      }
     }
   }
-  }
 
-  public boolean isWiFi(){
+  public boolean isWiFi() {
     if (Build.VERSION.SDK_INT >= 23) {
       NetworkInfo network = conMan.getActiveNetworkInfo();
       return network.getType() == ConnectivityManager.TYPE_WIFI;
@@ -266,12 +271,11 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
     return "???";
   }
 
-  public static String round3SF(double size){
+  public static String round3SF(double size) {
     BigDecimal bd = new BigDecimal(size);
     bd = bd.round(new MathContext(3));
     return String.valueOf(bd.doubleValue());
   }
-
 
   public void mobileDownloadDialog(int position, AdapterView<?> parent) {
     new AlertDialog.Builder(super.getActivity(), dialogStyle())
@@ -293,26 +297,30 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
     if (libraryAdapter != null) {
       libraryAdapter.getFilter().filter(faActivity.searchView.getQuery());
     }
-    Toast.makeText(super.getActivity(), getString(R.string.download_started_library), Toast.LENGTH_LONG).show();
+    Toast.makeText(super.getActivity(), getString(R.string.download_started_library), Toast.LENGTH_LONG)
+        .show();
     Intent service = new Intent(super.getActivity(), DownloadService.class);
     service.putExtra(DownloadIntent.DOWNLOAD_URL_PARAMETER, book.getUrl());
     service.putExtra(DownloadIntent.DOWNLOAD_ZIM_TITLE, book.getTitle());
     service.putExtra("Book", book);
     super.getActivity().startService(service);
     mConnection = new DownloadServiceConnection();
-    super.getActivity().bindService(service, mConnection.downloadServiceInterface, Context.BIND_AUTO_CREATE);
+    super.getActivity()
+        .bindService(service, mConnection.downloadServiceInterface, Context.BIND_AUTO_CREATE);
     ZimManageActivity manage = (ZimManageActivity) super.getActivity();
     manage.displayDownloadInterface();
   }
 
   public long getSpaceAvailable() {
     return new File(PreferenceManager.getDefaultSharedPreferences(super.getActivity())
-        .getString(KiwixMobileActivity.PREF_STORAGE,Environment.getExternalStorageDirectory().getPath())).getFreeSpace();
+        .getString(KiwixMobileActivity.PREF_STORAGE, Environment.getExternalStorageDirectory()
+            .getPath())).getFreeSpace();
   }
 
   @Override
   public void selectionCallback(StorageDevice storageDevice) {
-    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+    SharedPreferences sharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(getActivity());
     SharedPreferences.Editor editor = sharedPreferences.edit();
     editor.putString(KiwixMobileActivity.PREF_STORAGE, storageDevice.getName());
     if (storageDevice.isInternal()) {
@@ -346,10 +354,9 @@ public class LibraryFragment extends Fragment implements AdapterView.OnItemClick
         bound = false;
       }
     }
-
   }
 
-  public class NetworkBroadcastReceiver extends BroadcastReceiver{
+  public class NetworkBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
       NetworkInfo network = conMan.getActiveNetworkInfo();
