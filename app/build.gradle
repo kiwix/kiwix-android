@@ -90,38 +90,35 @@ dependencies {
 
       }
       custom {
+        def jsonFile = ""
         if (project.hasProperty('jsonFile')) {
-          def jsonFile = file(project.property('jsonFile'))
-          def parsedJson = new groovy.json.JsonSlurper().parseText(jsonFile.text)
-          applicationId "$parsedJson.package"
-          buildConfigField "boolean", "IS_CUSTOM_APP", "true"
-          buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "$parsedJson.embed_zim"
-          if (parsedJson.zim_file.lastIndexOf('/') >= 0) {
-            buildConfigField "String", "ZIM_FILE_NAME", parsedJson.zim_file.substring(parsedJson.zim_file.lastIndexOf('/'))
-          } else {
-            buildConfigField "String", "ZIM_FILE_NAME", "\"$parsedJson.zim_file\""
-          }
-          File file = new File(parsedJson.zim_file)
-          long length = file.length()
-          buildConfigField "long", "ZIM_FILE_SIZE", "$length"
-          if (parsedJson.content_version_code != null) {
-            buildConfigField "int", "CONTENT_VERSION_CODE", "$parsedJson.content_version_code"
-          } else {
-            buildConfigField "int", "CONTENT_VERSION_CODE", "$parsedJson.version_code"
-          }
-          buildConfigField "String", "ENFORCED_LANG", "\"$parsedJson.enforced_lang\""
-          resValue "string", "app_name", "$parsedJson.app_name"
-          resValue "string", "app_search_string", 'Search ' + "$parsedJson.app_name"
+          jsonFile = file(project.property('jsonFile'))
+
         } else {
-          buildConfigField "boolean", "IS_CUSTOM_APP", "false"
-          buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "false"
-          buildConfigField "String", "ZIM_FILE_NAME", "\"\""
-          buildConfigField "long", "ZIM_FILE_SIZE", "0"
-          buildConfigField "int", "CONTENT_VERSION_CODE", "0"
-          buildConfigField "String", "ENFORCED_LANG", "\"\""
-          resValue "string", "app_name", "Custom"
-          resValue "string", "app_search_string", "Search Custom"
+          jsonFile = file('src/custom/test.json')
         }
+        def parsedJson = new groovy.json.JsonSlurper().parseText(jsonFile.text)
+        applicationId "$parsedJson.package"
+        buildConfigField "boolean", "IS_CUSTOM_APP", "true"
+        buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "$parsedJson.embed_zim"
+        def name = ""
+        if (parsedJson.zim_file.lastIndexOf('/') >= 0) {
+          name = parsedJson.zim_file.substring(parsedJson.zim_file.lastIndexOf('/') + 1)
+        } else {
+          name = $parsedJson.zim_file
+        }
+        buildConfigField "String", "ZIM_FILE_NAME", "\"$name\""
+        def File file = new File(parsedJson.zim_file)
+        long length = file.length()
+        buildConfigField "long", "ZIM_FILE_SIZE", "$length"
+        if (parsedJson.content_version_code != null) {
+          buildConfigField "int", "CONTENT_VERSION_CODE", "$parsedJson.content_version_code"
+        } else {
+          buildConfigField "int", "CONTENT_VERSION_CODE", "$parsedJson.version_code"
+        }
+        buildConfigField "String", "ENFORCED_LANG", "\"$parsedJson.enforced_lang\""
+        resValue "string", "app_name", "$parsedJson.app_name"
+        resValue "string", "app_search_string", 'Search ' + "$parsedJson.app_name"
       }
     }
 
