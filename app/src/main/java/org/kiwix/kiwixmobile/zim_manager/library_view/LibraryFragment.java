@@ -68,7 +68,7 @@ import static org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class LibraryFragment extends Fragment
-    implements AdapterView.OnItemClickListener, StorageSelectDialog.OnSelectListener {
+    implements AdapterView.OnItemClickListener, StorageSelectDialog.OnSelectListener, LibraryViewCallback {
 
   public
   @BindView(R.id.library_list)
@@ -108,10 +108,11 @@ public class LibraryFragment extends Fragment
 
   public static NetworkBroadcastReceiver networkBroadcastReceiver;
 
-  public static List<Book> downloadingBooks = new ArrayList();
+  public static List<Book> downloadingBooks = new ArrayList<>();
 
   public static boolean isReceiverRegistered = false;
 
+  @Inject LibraryPresenter presenter;
   private void setupDagger() {
     KiwixApplication.getInstance().getApplicationComponent().inject(this);
   }
@@ -121,7 +122,7 @@ public class LibraryFragment extends Fragment
                            Bundle savedInstanceState) {
 
     setupDagger();
-
+    presenter.attachView(this);
     faActivity = (ZimManageActivity) super.getActivity();
     // Replace LinearLayout by the type of the root element of the layout you're trying to load
     llLayout = (LinearLayout) inflater.inflate(R.layout.activity_library, container, false);
@@ -157,28 +158,49 @@ public class LibraryFragment extends Fragment
     return llLayout; // We must return the loaded Layout
   }
 
-  public void getLibraryData() {
+
+  @Override
+  public void showBooks(LinkedList<Book> books) {
+    active = true;
+
+      libraryAdapter = new LibraryAdapter(super.getActivity(), new ArrayList<>(books));
+      libraryList.setAdapter(libraryAdapter);
+
+    libraryList.setOnItemClickListener(this);
+
+
+    stopScanningContent();
+  }
+
+  @Override
+  public void displayNoNetworkConnection() {
+    progressBar.setVisibility(View.GONE);
+    progressBarLayout.setVisibility(View.VISIBLE);
+    progressBarMessage.setVisibility(View.VISIBLE);
+    progressBarMessage.setText(R.string.no_network_msg);
+  }
+
+  @Override
+  public void displayScanningContent() {
     progressBar.setVisibility(View.VISIBLE);
     progressBarMessage.setVisibility(View.VISIBLE);
     progressBarLayout.setVisibility(View.VISIBLE);
     progressBarMessage.setText(R.string.rescan_fs_warning);
     libraryList.setVisibility(View.GONE);
-    kiwixService.getLibrary()
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(library -> {
-          books = library.getBooks();
-          if (active) {
-            libraryAdapter = new LibraryAdapter(super.getActivity(), new ArrayList<>(books));
-            libraryList.setAdapter(libraryAdapter);
-          }
-        }, error -> {
-          noNetworkConnection();
-        });
-
-    libraryList.setOnItemClickListener(this);
-
-    active = true;
   }
+
+
+
+  @Override
+  public void stopScanningContent() {
+    progressBar.setVisibility(View.GONE);
+    progressBarMessage.setVisibility(View.GONE);
+    progressBarLayout.setVisibility(View.GONE);
+    libraryList.setVisibility(View.VISIBLE);
+  }
+
+
+
 
   public void displayNetworkConfirmation() {
     progressBar.setVisibility(View.GONE);
@@ -188,7 +210,7 @@ public class LibraryFragment extends Fragment
     permissionButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        getLibraryData();
+        presenter.loadBooks();
         permissionButton.setVisibility(View.GONE);
         permissionText.setVisibility(View.GONE);
       }
@@ -326,6 +348,8 @@ public class LibraryFragment extends Fragment
     editor.apply();
   }
 
+
+
   public class DownloadServiceConnection {
     public DownloadServiceInterface downloadServiceInterface;
     public boolean bound;
@@ -358,7 +382,7 @@ public class LibraryFragment extends Fragment
 
       if (books == null && network != null && network.isConnected()) {
         if (isWiFi()) {
-          getLibraryData();
+          presenter.loadBooks();
         } else {
           displayNetworkConfirmation();
         }

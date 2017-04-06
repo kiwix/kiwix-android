@@ -13,8 +13,9 @@ public interface LibraryViewCallback extends ViewCallback {
 
   void showBooks(LinkedList<LibraryNetworkEntity.Book> books);
 
-
   void displayNoNetworkConnection();
 
   void displayScanningContent();
+
+  void stopScanningContent();
 }
