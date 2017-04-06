@@ -31,16 +31,19 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import eu.mhutti1.utils.storage.StorageDevice;
 import eu.mhutti1.utils.storage.StorageSelectDialog;
+
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
 import javax.inject.Inject;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
@@ -67,14 +70,23 @@ import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 public class LibraryFragment extends Fragment
     implements AdapterView.OnItemClickListener, StorageSelectDialog.OnSelectListener {
 
-  public @BindView(R.id.library_list) ListView libraryList;
-  public @BindView(R.id.progressbar_layout) RelativeLayout progressBarLayout;
-  @BindView(R.id.progressBar) ProgressBar progressBar;
-  @BindView(R.id.progressbar_message) TextView progressBarMessage;
-  @BindView(R.id.network_permission_text) TextView permissionText;
-  @BindView(R.id.network_permission_button) Button permissionButton;
+  public
+  @BindView(R.id.library_list)
+  ListView libraryList;
+  public
+  @BindView(R.id.progressbar_layout)
+  RelativeLayout progressBarLayout;
+  @BindView(R.id.progressBar)
+  ProgressBar progressBar;
+  @BindView(R.id.progressbar_message)
+  TextView progressBarMessage;
+  @BindView(R.id.network_permission_text)
+  TextView permissionText;
+  @BindView(R.id.network_permission_button)
+  Button permissionButton;
 
-  @Inject KiwixService kiwixService;
+  @Inject
+  KiwixService kiwixService;
 
   public LinearLayout llLayout;
 
@@ -104,8 +116,9 @@ public class LibraryFragment extends Fragment
     KiwixApplication.getInstance().getApplicationComponent().inject(this);
   }
 
-  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                           Bundle savedInstanceState) {
 
     setupDagger();
 
@@ -266,13 +279,27 @@ public class LibraryFragment extends Fragment
     long PB = TB * 1024;
     long EB = PB * 1024;
 
-    if (size < KB) { return size + " Bytes"; }
-    if (size >= KB && size < MB) { return round3SF((double) size / KB) + " KB"; }
-    if (size >= MB && size < GB) { return round3SF((double) size / MB) + " MB"; }
-    if (size >= GB && size < TB) { return round3SF((double) size / GB) + " GB"; }
-    if (size >= TB && size < PB) { return round3SF((double) size / TB) + " TB"; }
-    if (size >= PB && size < EB) { return round3SF((double) size / PB) + " PB"; }
-    if (size >= EB) { return round3SF((double) size / EB) + " EB"; }
+    if (size < KB) {
+      return size + " Bytes";
+    }
+    if (size >= KB && size < MB) {
+      return round3SF((double) size / KB) + " KB";
+    }
+    if (size >= MB && size < GB) {
+      return round3SF((double) size / MB) + " MB";
+    }
+    if (size >= GB && size < TB) {
+      return round3SF((double) size / GB) + " GB";
+    }
+    if (size >= TB && size < PB) {
+      return round3SF((double) size / TB) + " TB";
+    }
+    if (size >= PB && size < EB) {
+      return round3SF((double) size / PB) + " PB";
+    }
+    if (size >= EB) {
+      return round3SF((double) size / EB) + " EB";
+    }
 
     return "???";
   }

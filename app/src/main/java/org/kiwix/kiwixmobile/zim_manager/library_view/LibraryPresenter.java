@@ -13,7 +13,8 @@ import rx.android.schedulers.AndroidSchedulers;
 
 public class LibraryPresenter extends BasePresenter<LibraryViewCallback> {
 
-  @Inject KiwixService kiwixService;
+  @Inject
+  KiwixService kiwixService;
 
   @Inject
   public LibraryPresenter() {
@@ -25,7 +26,7 @@ public class LibraryPresenter extends BasePresenter<LibraryViewCallback> {
     kiwixService.getLibrary()
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(library -> {
-         getMvpView().showBooks(library.getBooks());
+          getMvpView().showBooks(library.getBooks());
         }, error -> {
           getMvpView().displayNoNetworkConnection();
         });

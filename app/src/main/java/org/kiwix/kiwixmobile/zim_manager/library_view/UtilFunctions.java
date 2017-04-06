@@ -20,13 +20,27 @@ public class UtilFunctions {
     long PB = TB * 1024;
     long EB = PB * 1024;
 
-    if (size < KB) { return size + " Bytes"; }
-    if (size >= KB && size < MB) { return round3SF((double) size / KB) + " KB"; }
-    if (size >= MB && size < GB) { return round3SF((double) size / MB) + " MB"; }
-    if (size >= GB && size < TB) { return round3SF((double) size / GB) + " GB"; }
-    if (size >= TB && size < PB) { return round3SF((double) size / TB) + " TB"; }
-    if (size >= PB && size < EB) { return round3SF((double) size / PB) + " PB"; }
-    if (size >= EB) { return round3SF((double) size / EB) + " EB"; }
+    if (size < KB) {
+      return size + " Bytes";
+    }
+    if (size >= KB && size < MB) {
+      return round3SF((double) size / KB) + " KB";
+    }
+    if (size >= MB && size < GB) {
+      return round3SF((double) size / MB) + " MB";
+    }
+    if (size >= GB && size < TB) {
+      return round3SF((double) size / GB) + " GB";
+    }
+    if (size >= TB && size < PB) {
+      return round3SF((double) size / TB) + " TB";
+    }
+    if (size >= PB && size < EB) {
+      return round3SF((double) size / PB) + " PB";
+    }
+    if (size >= EB) {
+      return round3SF((double) size / EB) + " EB";
+    }
 
     return "???";
   }
