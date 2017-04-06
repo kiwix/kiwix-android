@@ -159,7 +159,7 @@ public class LibraryFragment extends Fragment
   @Override
   public void showBooks(LinkedList<Book> books) {
     active = true;
-
+    this.books = books;
     libraryAdapter = new LibraryAdapter(super.getActivity(), new ArrayList<>(books));
     libraryList.setAdapter(libraryAdapter);
 
