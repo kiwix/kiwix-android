@@ -76,6 +76,27 @@ dependencies {
       testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
+
+    productFlavors {
+      kiwix {
+        buildConfigField "boolean", "IS_CUSTOM_APP", "false"
+        buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "false"
+        buildConfigField "String", "ZIM_FILE_NAME", "\"\""
+        buildConfigField "long", "ZIM_FILE_SIZE", "0"
+        buildConfigField "int", "CONTENT_VERSION_CODE", "0"
+        buildConfigField "String", "ENFORCED_LANG", "\"\""
+      }
+      custom {
+        applicationId "org.kiwix.kiwixcustomtest"
+        buildConfigField "boolean", "IS_CUSTOM_APP", "true"
+        buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "false"
+        buildConfigField "String", "ZIM_FILE_NAME", "\"\""
+        buildConfigField "long", "ZIM_FILE_SIZE", "0"
+        buildConfigField "int", "CONTENT_VERSION_CODE", "0"
+        buildConfigField "String", "ENFORCED_LANG", "\"\""
+      }
+    }
+
     lintOptions {
       abortOnError false
     }

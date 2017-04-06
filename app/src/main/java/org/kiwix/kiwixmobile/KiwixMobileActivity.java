@@ -85,7 +85,6 @@ import org.json.JSONArray;
 import org.kiwix.kiwixmobile.database.BookmarksDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
-import org.kiwix.kiwixmobile.settings.Constants;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
 import org.kiwix.kiwixmobile.utils.DocumentParser;
@@ -864,7 +863,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
 
   public boolean openZimFile(File file, boolean clearHistory) {
-    if (file.canRead() || Build.VERSION.SDK_INT < 19 || (Constants.IS_CUSTOM_APP
+    if (file.canRead() || Build.VERSION.SDK_INT < 19 || (BuildConfig.IS_CUSTOM_APP
         && Build.VERSION.SDK_INT != 23)) {
       if (file.exists()) {
         if (ZimContentProvider.setZimFile(file.getAbsolutePath()) != null) {
@@ -906,7 +905,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       ActivityCompat.requestPermissions(this,
           new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
           KiwixMobileActivity.REQUEST_STORAGE_PERMISSION);
-      if (Constants.IS_CUSTOM_APP && Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
+      if (BuildConfig.IS_CUSTOM_APP && Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
         Toast.makeText(this, getResources().getString(R.string.request_storage_custom), Toast.LENGTH_LONG)
             .show();
       } else {
@@ -1403,7 +1402,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     inflater.inflate(R.menu.menu_main, menu);
     this.menu = menu;
     StyleMenuButtons(menu);
-    if (Constants.IS_CUSTOM_APP) {
+    if (BuildConfig.IS_CUSTOM_APP) {
       menu.findItem(R.id.menu_help).setVisible(false);
     }
 
@@ -1599,22 +1598,22 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
         // fits better normal android behavior if after closing app ("back" button) state is not maintained.
       } else {
 
-        if (Constants.IS_CUSTOM_APP) {
+        if (BuildConfig.IS_CUSTOM_APP) {
           Log.d(TAG_KIWIX, "Kiwix Custom App starting for the first time. Check Companion ZIM.");
 
           String currentLocaleCode = Locale.getDefault().toString();
           // Custom App recommends to start off a specific language
-          if (Constants.CUSTOM_APP_ENFORCED_LANG.length() > 0 && !Constants.CUSTOM_APP_ENFORCED_LANG
+          if (BuildConfig.ENFORCED_LANG.length() > 0 && !BuildConfig.ENFORCED_LANG
               .equals(currentLocaleCode)) {
 
             // change the locale machinery
-            LanguageUtils.handleLocaleChange(this, Constants.CUSTOM_APP_ENFORCED_LANG);
+            LanguageUtils.handleLocaleChange(this, BuildConfig.ENFORCED_LANG);
 
             // save new locale into preferences for next startup
             SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("pref_language_chooser", Constants.CUSTOM_APP_ENFORCED_LANG);
+            editor.putString("pref_language_chooser", BuildConfig.ENFORCED_LANG);
             editor.apply();
 
             // restart activity for new locale to take effect
@@ -1624,22 +1623,22 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
           }
 
           String filePath = "";
-          if (Constants.CUSTOM_APP_HAS_EMBEDDED_ZIM) {
+          if (BuildConfig.HAS_EMBEDDED_ZIM) {
             String appPath = getPackageResourcePath();
             File libDir = new File(appPath.substring(0, appPath.lastIndexOf("/")) + "/lib/");
             if (libDir.exists() && libDir.listFiles().length > 0) {
-              filePath = libDir.listFiles()[0].getPath() + "/" + Constants.CUSTOM_APP_ZIM_FILE_NAME;
+              filePath = libDir.listFiles()[0].getPath() + "/" + BuildConfig.ZIM_FILE_NAME;
             }
             if (filePath.isEmpty() || !new File(filePath).exists()) {
-              filePath = String.format("/data/data/%s/lib/%s", Constants.CUSTOM_APP_ID,
-                  Constants.CUSTOM_APP_ZIM_FILE_NAME);
+              filePath = String.format("/data/data/%s/lib/%s", BuildConfig.APPLICATION_ID,
+                  BuildConfig.ZIM_FILE_NAME);
             }
           } else {
             String fileName = FileUtils.getExpansionAPKFileName(true);
             filePath = FileUtils.generateSaveFileName(fileName);
           }
 
-          if (!FileUtils.doesFileExist(filePath, Constants.CUSTOM_APP_ZIM_FILE_SIZE, false)) {
+          if (!FileUtils.doesFileExist(filePath, BuildConfig.ZIM_FILE_SIZE, false)) {
 
             AlertDialog.Builder zimFileMissingBuilder = new AlertDialog.Builder(this, dialogStyle());
             zimFileMissingBuilder.setTitle(R.string.app_name);
@@ -1649,7 +1648,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
             zimFileMissingBuilder.setPositiveButton(getString(R.string.go_to_play_store),
                 new DialogInterface.OnClickListener() {
                   public void onClick(DialogInterface dialog, int which) {
-                    String market_uri = "market://details?id=" + Constants.CUSTOM_APP_ID;
+                    String market_uri = "market://details?id=" + BuildConfig.APPLICATION_ID;
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse(market_uri));
                     startActivity(intent);
