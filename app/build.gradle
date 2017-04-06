@@ -91,12 +91,12 @@ dependencies {
       javaMaxHeapSize "4g"
     }
 
-    buildTypes {
+    /*buildTypes {
       release {
         minifyEnabled true
         proguardFiles getDefaultProguardFile('proguard-android.txt')
       }
-    }
+    }*/
     
     sourceSets {
       main {
