@@ -1,9 +1,5 @@
 package org.kiwix.kiwixmobile.zim_manager.library_view;
 
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Build;
-
 import java.math.BigDecimal;
 import java.math.MathContext;
 
@@ -11,7 +7,7 @@ import java.math.MathContext;
  * Created by EladKeyshawn on 06/04/2017.
  */
 
-public class UtilFunctions {
+public class LibraryUtils {
   public static String bytesToHuman(long size) {
     long KB = 1024;
     long MB = KB * 1024;
