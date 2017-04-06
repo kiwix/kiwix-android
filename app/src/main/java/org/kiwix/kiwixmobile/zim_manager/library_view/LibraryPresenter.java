@@ -1,6 +1,12 @@
 package org.kiwix.kiwixmobile.zim_manager.library_view;
 
+import android.content.Context;
+
 import org.kiwix.kiwixmobile.BasePresenter;
+import org.kiwix.kiwixmobile.database.BookDao;
+import org.kiwix.kiwixmobile.database.KiwixDatabase;
+import org.kiwix.kiwixmobile.downloader.DownloadFragment;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
 
 import javax.inject.Inject;
@@ -30,6 +36,17 @@ public class LibraryPresenter extends BasePresenter<LibraryViewCallback> {
         }, error -> {
           getMvpView().displayNoNetworkConnection();
         });
+  }
+
+
+  void loadRunningDownloadsFromDb(Context context) {
+    BookDao bookDao = new BookDao(KiwixDatabase.getInstance(context));
+    for (LibraryNetworkEntity.Book book : bookDao.getDownloadingBooks()) {
+      if (!DownloadFragment.mDownloads.containsValue(book)) {
+        book.url = book.remoteUrl;
+        getMvpView().downloadFile(book);
+      }
+    }
   }
 
   @Override

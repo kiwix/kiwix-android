@@ -112,7 +112,9 @@ public class LibraryFragment extends Fragment
 
   public static boolean isReceiverRegistered = false;
 
-  @Inject LibraryPresenter presenter;
+  @Inject
+  LibraryPresenter presenter;
+
   private void setupDagger() {
     KiwixApplication.getInstance().getApplicationComponent().inject(this);
   }
@@ -144,13 +146,8 @@ public class LibraryFragment extends Fragment
     faActivity.registerReceiver(networkBroadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     isReceiverRegistered = true;
 
-    BookDao bookDao = new BookDao(KiwixDatabase.getInstance(getActivity()));
-    for (Book book : bookDao.getDownloadingBooks()) {
-      if (!DownloadFragment.mDownloads.containsValue(book)) {
-        book.url = book.remoteUrl;
-        downloadFile(book);
-      }
-    }
+    presenter.loadRunningDownloadsFromDb(getActivity());
+
     // The FragmentActivity doesn't contain the layout directly so we must use our instance of     LinearLayout :
     //llLayout.findViewById(R.id.someGuiElement);
     // Instead of :
@@ -163,8 +160,8 @@ public class LibraryFragment extends Fragment
   public void showBooks(LinkedList<Book> books) {
     active = true;
 
-      libraryAdapter = new LibraryAdapter(super.getActivity(), new ArrayList<>(books));
-      libraryList.setAdapter(libraryAdapter);
+    libraryAdapter = new LibraryAdapter(super.getActivity(), new ArrayList<>(books));
+    libraryList.setAdapter(libraryAdapter);
 
     libraryList.setOnItemClickListener(this);
 
@@ -190,7 +187,6 @@ public class LibraryFragment extends Fragment
   }
 
 
-
   @Override
   public void stopScanningContent() {
     progressBar.setVisibility(View.GONE);
@@ -198,8 +194,6 @@ public class LibraryFragment extends Fragment
     progressBarLayout.setVisibility(View.GONE);
     libraryList.setVisibility(View.VISIBLE);
   }
-
-
 
 
   public void displayNetworkConfirmation() {
@@ -309,7 +303,8 @@ public class LibraryFragment extends Fragment
         .show();
   }
 
-  private void downloadFile(Book book) {
+  @Override
+  public void downloadFile(Book book) {
     downloadingBooks.add(book);
     if (libraryAdapter != null) {
       libraryAdapter.getFilter().filter(faActivity.searchView.getQuery());
@@ -347,7 +342,6 @@ public class LibraryFragment extends Fragment
     }
     editor.apply();
   }
-
 
 
   public class DownloadServiceConnection {

@@ -18,4 +18,6 @@ public interface LibraryViewCallback extends ViewCallback {
   void displayScanningContent();
 
   void stopScanningContent();
+
+  void downloadFile(LibraryNetworkEntity.Book book);
 }
