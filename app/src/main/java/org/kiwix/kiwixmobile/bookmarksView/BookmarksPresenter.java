@@ -17,40 +17,36 @@ import javax.inject.Inject;
 public class BookmarksPresenter extends BasePresenter<BookmarksViewCallback> {
 
 
-    private BookmarksDao bookmarksDao;
-    private ArrayList<String> bookmarks;
-    private ArrayList<String> bookmarkUrls;
+  private BookmarksDao bookmarksDao;
+  private ArrayList<String> bookmarks;
+  private ArrayList<String> bookmarkUrls;
 
-    @Inject
-    public BookmarksPresenter() {
-    }
+  @Inject
+  public BookmarksPresenter() {
+  }
 
-    public void loadBookmarks(Context context) {
-        bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(context));
-        bookmarks = bookmarksDao.getBookmarkTitles(ZimContentProvider.getId(), ZimContentProvider.getName());
-        bookmarkUrls = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
-        getMvpView().showBookmarks(bookmarks,bookmarkUrls);
-    }
-
-
-    public void deleteBookmark(String article) {
-        bookmarksDao.deleteBookmark(article, ZimContentProvider.getId(), ZimContentProvider.getName());
-    }
+  public void loadBookmarks(Context context) {
+    bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(context));
+    bookmarks = bookmarksDao.getBookmarkTitles(ZimContentProvider.getId(), ZimContentProvider.getName());
+    bookmarkUrls = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
+    getMvpView().showBookmarks(bookmarks, bookmarkUrls);
+  }
 
 
-
-    @Override
-    public void attachView(BookmarksViewCallback mvpView) {
-        super.attachView(mvpView);
-    }
-
-    @Override
-    public void detachView() {
-        super.detachView();
-    }
+  public void deleteBookmark(String article) {
+    bookmarksDao.deleteBookmark(article, ZimContentProvider.getId(), ZimContentProvider.getName());
+  }
 
 
+  @Override
+  public void attachView(BookmarksViewCallback mvpView) {
+    super.attachView(mvpView);
+  }
 
+  @Override
+  public void detachView() {
+    super.detachView();
+  }
 
 
 }

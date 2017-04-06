@@ -5,7 +5,7 @@ package org.kiwix.kiwixmobile.bookmarksView;
  */
 public interface Presenter<V extends ViewCallback> {
 
-    void attachView(V mvpView);
+  void attachView(V mvpView);
 
-    void detachView();
+  void detachView();
 }

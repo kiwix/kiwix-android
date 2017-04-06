@@ -6,9 +6,10 @@ import java.util.ArrayList;
  * Created by EladKeyshawn on 05/04/2017.
  */
 
-public interface BookmarksViewCallback extends ViewCallback{
-    void showBookmarks(ArrayList<String> bookmarks, ArrayList<String> bookmarkUrls);
-    void updateAdapter();
+public interface BookmarksViewCallback extends ViewCallback {
+  void showBookmarks(ArrayList<String> bookmarks, ArrayList<String> bookmarkUrls);
 
-    void popDeleteBookmarksSnackbar();
+  void updateAdapter();
+
+  void popDeleteBookmarksSnackbar();
 }
