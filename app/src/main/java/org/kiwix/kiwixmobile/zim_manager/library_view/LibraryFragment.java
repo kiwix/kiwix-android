@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.zim_manager.library_view;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -42,6 +42,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import javax.inject.Inject;
+
+import org.kiwix.kiwixmobile.KiwixApplication;
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
@@ -52,6 +56,8 @@ import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
+import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
+
 import rx.android.schedulers.AndroidSchedulers;
 
 import static org.kiwix.kiwixmobile.downloader.DownloadService.KIWIX_ROOT;

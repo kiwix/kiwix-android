@@ -102,6 +102,8 @@ import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
 import org.kiwix.kiwixmobile.views.web.KiwixWebView;
 import org.kiwix.kiwixmobile.views.web.ToolbarScrollingKiwixWebView;
 import org.kiwix.kiwixmobile.views.web.ToolbarStaticKiwixWebView;
+import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
+import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.DocumentSection;

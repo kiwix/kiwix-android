@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.zim_manager;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,13 +24,16 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
+
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.ZimFileSelectFragment;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
-import org.kiwix.kiwixmobile.utils.DimenUtils;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
