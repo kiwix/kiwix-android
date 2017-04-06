@@ -109,6 +109,15 @@ dependencies {
         }
         buildConfigField "String", "ZIM_FILE_NAME", "\"$name\""
         def File file = new File(parsedJson.zim_file)
+        if (parsedJson.zim_file.contains("://")) {
+          file = new File(System.getProperty("user.dir") + "/app/" + name)
+          if (!file.exists()) {
+            ant.get(src: "$parsedJson.zim_file", dest: file)
+          }
+        }
+        if (!file.getAbsoluteFile().exists()) {
+          throw new FileNotFoundException()
+        }
         long length = file.length()
         buildConfigField "long", "ZIM_FILE_SIZE", "$length"
         if (parsedJson.content_version_code != null) {
