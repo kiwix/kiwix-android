@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.kiwix.kiwixmobile.settings.Constants;
+import org.kiwix.kiwixmobile.BuildConfig;
 
 public class FileUtils {
 
@@ -79,8 +79,8 @@ public class FileUtils {
    * @return String the file name of the expansion file
    */
   public static String getExpansionAPKFileName(boolean mainFile) {
-    return (mainFile ? "main." : "patch.") + Constants.CUSTOM_APP_CONTENT_VERSION_CODE + "."
-        + Constants.CUSTOM_APP_ID + ".obb";
+    return (mainFile ? "main." : "patch.") + BuildConfig.CONTENT_VERSION_CODE + "."
+        + BuildConfig.APPLICATION_ID + ".obb";
   }
 
   /**
@@ -93,7 +93,7 @@ public class FileUtils {
   static public String getSaveFilePath() {
     String obbFolder = File.separator + "Android" + File.separator + "obb" + File.separator;
     File root = Environment.getExternalStorageDirectory();
-    return root.toString() + obbFolder + Constants.CUSTOM_APP_ID;
+    return root.toString() + obbFolder + BuildConfig.APPLICATION_ID;
   }
 
   /**

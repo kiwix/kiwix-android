@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper
+
 buildscript {
   repositories {
     mavenCentral()
@@ -59,87 +61,138 @@ dependencies {
   compile('com.mikepenz:fastadapter:2.1.7@aar') {
     transitive = true
   }
-
-  compile 'eu.mhutti1.utils.storage:android-storage-devices:0.4.8'
+  compile 'eu.mhutti1.utils.storage:android-storage-devices:0.5.0'
   compile 'com.jakewharton:butterknife:8.0.1'
   apt 'com.jakewharton:butterknife-compiler:8.0.1'
-  
-    compile files("$buildDir/native-libs/native-libs.jar")
-    compile group: 'com.google.guava', name: 'guava', version: '19.0'
+  compile group: 'com.google.guava', name: 'guava', version: '19.0'
 
-    // compile fileTree(dir: '.', include: 'content-libs.jar') // DO NOT REMOVE !!
-    testCompile 'junit:junit:4.12'
-    androidTestCompile 'junit:junit:4.12'
-    compile 'com.android.support.test:runner:0.5'
-    compile 'junit:junit:4.12'
+  testCompile 'junit:junit:4.12'
+  androidTestCompile 'junit:junit:4.12'
+  compile 'com.android.support.test:runner:0.5'
+  compile 'junit:junit:4.12'
+
+}
+
+android {
+  compileSdkVersion 24
+  buildToolsVersion '25.0.0'
+
+  defaultConfig {
+    minSdkVersion 14
+    targetSdkVersion 24
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
 
-  android {
-    compileSdkVersion 24
-    buildToolsVersion '25.0.0'
 
-    defaultConfig {
-      minSdkVersion 14
-      targetSdkVersion 24
-      testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  productFlavors {
+    // Vanilla Kiwix app
+    kiwix {
+      println "Building Kiwix"
+      // Set vanilla config
+      buildConfigField "boolean", "IS_CUSTOM_APP", "false"
+      buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "false"
+      buildConfigField "String", "ZIM_FILE_NAME", "\"\""
+      buildConfigField "long", "ZIM_FILE_SIZE", "0"
+      buildConfigField "int", "CONTENT_VERSION_CODE", "0"
+      buildConfigField "String", "ENFORCED_LANG", "\"\""
+      resValue "string", "app_name", "Kiwix"
+      resValue "string", "app_search_string", "Search Kiwix"
     }
-
-    lintOptions {
-      abortOnError false
-    }
-
-    compileOptions {
-      encoding = "UTF-8"
-
-      sourceCompatibility JavaVersion.VERSION_1_8
-      targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    dexOptions {
-      javaMaxHeapSize "4g"
-    }
-
-    buildTypes {
-      release {
-        minifyEnabled true
-        proguardFiles getDefaultProguardFile('proguard-android.txt')
+    // Custom apps built from a json file, zim file and icon set
+    singlezim {
+      println "Building Custom"
+      def jsonFile = ""
+      if (project.hasProperty('jsonFile')) {
+        // Read json file from properties e.g command line
+        jsonFile = file(project.property('jsonFile'))
+      } else {
+        // If no file provided use the test file
+        jsonFile = file('src/custom/test.json')
       }
+      def parsedJson = new JsonSlurper().parseText(jsonFile.text)
+      def File zimfile = new File(parsedJson.zim_file)
+      if (parsedJson.embed_zim) {
+        // Place content in each lib directory for embeded zims
+        file("src/main/jniLibs").eachDir() { folder ->
+          copy {
+            from parsedJson.zim_file
+            into file("src/custom/jniLibs/" + folder.name)
+            rename { String name -> "libcontent.so" }
+          }
+        }
+        parsedJson.zim_file = "libcontent.so"
+      }
+      // Set custom config from json
+      applicationId "$parsedJson.package"
+      buildConfigField "boolean", "IS_CUSTOM_APP", "true"
+      buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "$parsedJson.embed_zim"
+      def name = ""
+      if (parsedJson.zim_file.lastIndexOf('/') >= 0) {
+        name = parsedJson.zim_file.substring(parsedJson.zim_file.lastIndexOf('/') + 1)
+      } else {
+        name = parsedJson.zim_file
+      }
+      buildConfigField "String", "ZIM_FILE_NAME", "\"$name\""
+      long length = zimfile.length()
+      buildConfigField "long", "ZIM_FILE_SIZE", "$length"
+      if (parsedJson.content_version_code != null) {
+        buildConfigField "int", "CONTENT_VERSION_CODE", "$parsedJson.content_version_code"
+      } else {
+        buildConfigField "int", "CONTENT_VERSION_CODE", "$parsedJson.version_code"
+      }
+      buildConfigField "String", "ENFORCED_LANG", "\"$parsedJson.enforced_lang\""
+      resValue "string", "app_name", "$parsedJson.app_name"
+      resValue "string", "app_search_string", 'Search ' + "$parsedJson.app_name"
     }
-    
-    sourceSets {
-      main {
-        manifest.srcFile 'src/main/AndroidManifest.xml'
-        java.srcDirs = ['src/main/java']
-        resources.srcDirs = ['src/main/resources']
-        aidl.srcDirs = ['src']
-        renderscript.srcDirs = ['src']
-        res.srcDirs = ['src/main/res']
-        assets.srcDirs = ['src/main/assets']
-      }
+  }
 
-      test {
-        java.srcDirs = ['src/test/java']
-        resources.srcDirs = ['src/test/resources']
-      }
+  lintOptions {
+    abortOnError false
+  }
 
-      androidTest {
-        java.srcDirs = ['src/androidTest/java']
-        resources.srcDirs = ['src/androidTest/resources']
-      }
+  compileOptions {
+    encoding = "UTF-8"
+
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  dexOptions {
+    javaMaxHeapSize "4g"
+  }
+
+  /* Add back once proguard is configured
+  buildTypes {
+    release {
+      minifyEnabled true
+      proguardFiles getDefaultProguardFile('proguard-android.txt')
+    }
+  }*/
+
+  // Set project structure
+  sourceSets {
+    main {
+      manifest.srcFile 'src/main/AndroidManifest.xml'
+      java.srcDirs = ['src/main/java']
+      resources.srcDirs = ['src/main/resources']
+      aidl.srcDirs = ['src']
+      renderscript.srcDirs = ['src']
+      res.srcDirs = ['src/main/res']
+      assets.srcDirs = ['src/main/assets']
+    }
+
+    test {
+      java.srcDirs = ['src/test/java']
+      resources.srcDirs = ['src/test/resources']
+    }
+
+    androidTest {
+      java.srcDirs = ['src/androidTest/java']
+      resources.srcDirs = ['src/androidTest/resources']
     }
   }
+}
 
-  task wrapper(type: Wrapper) {
-    gradleVersion = '2.4'
-  }
-
-  task nativeLibsToJar(type: Zip) {
-    destinationDir file("$buildDir/native-libs")
-    baseName 'native-libs'
-    extension 'jar'
-    from fileTree(dir: 'libs', include: '**/*.so')
-    into 'lib/'
-  }
-
-  tasks.withType(JavaCompile) { compileTask -> compileTask.dependsOn(nativeLibsToJar)
-  }
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.4'
+}

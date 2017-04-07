@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.zim_manager;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.design.widget.TabLayout;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -24,13 +24,16 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
+
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
-import org.kiwix.kiwixmobile.utils.DimenUtils;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
@@ -77,7 +80,7 @@ public class ZimManageActivity extends AppCompatActivity {
 
     // Create the adapter that will return a fragment for each of the three
     // primary sections of the activity.
-    mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
+    mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
     // Set up the ViewPager with the sections adapter.
     mViewPager = (ViewPager) findViewById(R.id.container);

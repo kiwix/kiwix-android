@@ -44,15 +44,16 @@ import eu.mhutti1.utils.storage.StorageDevice;
 import eu.mhutti1.utils.storage.StorageSelectDialog;
 import java.io.File;
 import java.util.Locale;
+import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
-import org.kiwix.kiwixmobile.LibraryFragment;
+import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.database.RecentSearchDao;
-import org.kiwix.kiwixmobile.utils.DimenUtils;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.views.SliderPreference;
+import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryUtils;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
@@ -137,7 +138,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       super.onCreate(savedInstanceState);
       addPreferencesFromResource(R.xml.preferences);
 
-      if (Constants.CUSTOM_APP_ENFORCED_LANG.equals("")) {
+      if (BuildConfig.ENFORCED_LANG.equals("")) {
         setUpLanguageChooser(PREF_LANG);
       } else {
         getPreferenceScreen().removePreference(getPrefrence("pref_language"));
@@ -156,7 +157,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     }
 
     private void setStorage(){
-      if (Constants.IS_CUSTOM_APP){
+      if (BuildConfig.IS_CUSTOM_APP){
         getPreferenceScreen().removePreference(getPrefrence("pref_storage"));
       } else {
         if (Environment.isExternalStorageEmulated()) {
@@ -166,7 +167,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
           getPrefrence(PREF_STORAGE).setTitle(PreferenceManager.getDefaultSharedPreferences(getActivity())
               .getString(KiwixMobileActivity.PREF_STORAGE_TITLE, "External"));
         }
-        getPrefrence(PREF_STORAGE).setSummary(LibraryFragment.bytesToHuman( new File(PreferenceManager.getDefaultSharedPreferences(getActivity())
+        getPrefrence(PREF_STORAGE).setSummary(LibraryUtils.bytesToHuman( new File(PreferenceManager.getDefaultSharedPreferences(getActivity())
             .getString(KiwixMobileActivity.PREF_STORAGE, Environment.getExternalStorageDirectory().getPath())).getFreeSpace()));
       }
     }

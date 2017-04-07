@@ -28,7 +28,7 @@ import okhttp3.Response;
 import okio.BufferedSource;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
-import org.kiwix.kiwixmobile.LibraryFragment;
+import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;

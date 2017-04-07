@@ -244,21 +244,21 @@ def step_prepare_launcher_icons(jsdata, **options):
         syscall("convert {inf} -resize {p}x{p} {outf}"
                 .format(inf=os.path.join(ANDROID_PATH, 'ic_launcher_512.png'),
                         p=pixels,
-                        outf=os.path.join(ANDROID_PATH, 'res',
+                        outf=os.path.join(ANDROID_PATH, 'app', 'src', 'main', 'res',
                                           'mipmap-{}'.format(density),
                                           'kiwix_icon.png')))
 
         syscall("convert {inf} -resize {p}x{p} {outf}"
                 .format(inf=os.path.join(ANDROID_PATH, 'ic_launcher_512.png'),
                         p=pixels,
-                        outf=os.path.join(ANDROID_PATH, 'res',
+                        outf=os.path.join(ANDROID_PATH, 'app', 'src', 'main', 'res',
                                           'drawable-{}'.format(density),
                                           'ic_kiwix_widget.png')))
 
         syscall("convert {inf} -resize {p}x{p} {outf}"
                 .format(inf=os.path.join(ANDROID_PATH, 'ic_launcher_512.png'),
                         p=256,
-                        outf=os.path.join(ANDROID_PATH, 'res',
+                        outf=os.path.join(ANDROID_PATH, 'app', 'src', 'main', 'res',
                                           'drawable',
                                           'kiwix_icon_with_title.png')))
 
@@ -269,7 +269,7 @@ def step_update_branding_xml(jsdata, **options):
     move_to_android_placeholder()
 
     # copy and rewrite res/values/branding.xml
-    branding_xml = os.path.join(ANDROID_PATH, 'res', 'values', 'branding.xml')
+    branding_xml = os.path.join(ANDROID_PATH, 'app', 'src', 'main', 'res', 'values', 'branding.xml')
     soup = soup = BeautifulSoup(open(branding_xml, 'r'),
                                 'xml', from_encoding='utf-8')
     for elem in soup.findAll('string'):
@@ -278,9 +278,9 @@ def step_update_branding_xml(jsdata, **options):
     flushxml(soup, 'resources', branding_xml)
 
     # remove all non-default branding.xml files
-    for folder in os.listdir(os.path.join(ANDROID_PATH, 'res')):
+    for folder in os.listdir(os.path.join(ANDROID_PATH, 'app', 'src', 'main', 'res')):
         if re.match(r'^values\-[a-z]{2}$', folder):
-            lbx = os.path.join(ANDROID_PATH, 'res', folder, 'branding.xml')
+            lbx = os.path.join(ANDROID_PATH, 'app', 'src', 'main', 'res', folder, 'branding.xml')
             if os.path.exists(lbx):
                 os.remove(lbx)
 
@@ -303,9 +303,9 @@ def step_gen_constants_java(jsdata, **options):
 
     # copy template to actual location
     shutil.copy(os.path.join(ANDROID_PATH, 'templates', 'Constants.java'),
-                os.path.join(ANDROID_PATH, 'src', 'org', 'kiwix',
+                os.path.join(ANDROID_PATH, 'app', 'src', 'main', 'java', 'org', 'kiwix',
                              'kiwixmobile', 'settings', 'Constants.java'))
-    cpath = os.path.join(ANDROID_PATH, 'src', 'org', 'kiwix',
+    cpath = os.path.join(ANDROID_PATH, 'app', 'src', 'main', 'java', 'org', 'kiwix',
                          'kiwixmobile', 'settings', 'Constants.java')
     content = open(cpath, 'r').read()
 
@@ -323,7 +323,7 @@ def step_update_main_menu_xml(jsdata, **options):
     move_to_android_placeholder()
 
     # Parse and edit res/menu/main.xml
-    menu_xml = os.path.join(ANDROID_PATH, 'res', 'menu', 'menu_main.xml')
+    menu_xml = os.path.join(ANDROID_PATH, 'app', 'src', 'main', 'res', 'menu', 'menu_main.xml')
     soup = soup = BeautifulSoup(open(menu_xml, 'r'),
                                 'xml', from_encoding='utf-8')
     for elem in soup.findAll('item'):
@@ -339,7 +339,7 @@ def step_update_xml_nodes(jsdata, **options):
     move_to_android_placeholder()
 
     # rename settings.SliderPreference node in res/xml/preferences.xml
-    preferences_xml = os.path.join(ANDROID_PATH, 'res', 'xml',
+    preferences_xml = os.path.join(ANDROID_PATH, 'app', 'src', 'main', 'res', 'xml',
                                    'preferences.xml')
     try:
         soup = BeautifulSoup(open(preferences_xml, 'r'),
@@ -349,7 +349,7 @@ def step_update_xml_nodes(jsdata, **options):
         flushxml(soup, 'PreferenceScreen', preferences_xml, head=False)
 
         # rename settings.CustomSwitchPreference node in res/xml/preferences.xml
-        preferences_xml = os.path.join(ANDROID_PATH, 'res', 'xml',
+        preferences_xml = os.path.join(ANDROID_PATH, 'app', 'src', 'main', 'res', 'xml',
                                        'preferences.xml')
         soup = BeautifulSoup(open(preferences_xml, 'r'),
                              'xml', from_encoding='utf-8')
@@ -357,7 +357,7 @@ def step_update_xml_nodes(jsdata, **options):
             item.name = '{}.settings.CustomSwitchPreference'.format(jsdata.get('package'))
         flushxml(soup, 'PreferenceScreen', preferences_xml, head=False)
 
-	main_xml = os.path.join(ANDROID_PATH, 'res', 'layout', 'main.xml')
+	main_xml = os.path.join(ANDROID_PATH, 'app', 'src', 'main', 'res', 'layout', 'main.xml')
     	soup = soup = BeautifulSoup(open(main_xml, 'r'),
                                 'xml', from_encoding='utf-8')
     	item = soup.find('org.kiwix.kiwixmobile.views.AnimatedProgressBar')
@@ -394,7 +394,7 @@ def step_update_android_manifest(jsdata, **options):
     move_to_android_placeholder()
 
     # Parse and edit AndroidManifest.xml
-    manif_xml = os.path.join(ANDROID_PATH, 'AndroidManifest.xml')
+    manif_xml = os.path.join(ANDROID_PATH, 'app', 'src', 'main', 'AndroidManifest.xml')
     soup = soup = BeautifulSoup(open(manif_xml, 'r'),
                                 'xml', from_encoding='utf-8')
 
@@ -424,16 +424,16 @@ def step_update_android_manifest(jsdata, **options):
     package_tail = jsdata.get('package').split('.')[-1]
     package_path = jsdata.get('package').split('.')
     shutil.move(
-        os.path.join(ANDROID_PATH, 'src', 'org', 'kiwix', 'kiwixmobile'),
-        os.path.join(ANDROID_PATH, 'src', *package_path))
+        os.path.join(ANDROID_PATH, 'app', 'src', 'main', 'java', 'org', 'kiwix', 'kiwixmobile'),
+        os.path.join(ANDROID_PATH, 'app', 'src', 'main', 'java',  *package_path))
 
     shutil.move(
-        os.path.join(ANDROID_PATH, 'src', 'test', 'java', 'org', 'kiwix', 'kiwixmobile'),
-        os.path.join(ANDROID_PATH, 'src', 'test', 'java', *package_path))
+        os.path.join(ANDROID_PATH, 'app', 'src', 'test', 'java', 'org', 'kiwix', 'kiwixmobile'),
+        os.path.join(ANDROID_PATH, 'app', 'src', 'test', 'java', *package_path))
 
     shutil.move(
-        os.path.join(ANDROID_PATH, 'src', 'androidTest', 'java', 'org', 'kiwix', 'kiwixmobile'),
-        os.path.join(ANDROID_PATH, 'src', 'androidTest', 'java', *package_path))
+        os.path.join(ANDROID_PATH, 'app', 'src', 'androidTest', 'java', 'org', 'kiwix', 'kiwixmobile'),
+        os.path.join(ANDROID_PATH, 'app', 'src', 'androidTest', 'java', *package_path))
 
     # replace package in every file
     for dirpath, dirnames, filenames in os.walk(ANDROID_PATH):
@@ -463,7 +463,7 @@ def step_embed_zimfile(jsdata, **options):
     move_to_android_placeholder()
     # create content-libs.jar
     tmpd = tempfile.mkdtemp()
-    archs = os.listdir('libs')
+    archs = os.listdir(os.path.join('app',  'libs'))
     for arch in archs:
         os.makedirs(os.path.join(tmpd, 'lib', arch))
         # shutil.copy(os.path.join('libs', arch, 'libkiwix.so'),
@@ -491,11 +491,10 @@ def step_build_apk(jsdata, **options):
 
 
     # rename APKs for better listing
-    folder_name = os.path.split(ANDROID_PATH)[-1]
     for variant in ('debug', 'release-unsigned'):
-        shutil.move(os.path.join('build', 'outputs', 'apk',
-                                 "{}-{}.apk".format(folder_name, variant)),
-                    os.path.join('build', 'outputs', 'apk',
+        shutil.move(os.path.join('app', 'build', 'outputs', 'apk',
+                                 "{}-{}.apk".format('app', variant)),
+                    os.path.join('app', 'build', 'outputs', 'apk',
                                  "{}-{}.apk".format(jsdata.get('package'), variant)))
 
 
@@ -512,10 +511,10 @@ def step_move_apk_to_destination(jsdata, **options):
         pass
     # move generated APK to satisfy other scripts
     for variant in ('debug', 'release-unsigned'):
-        shutil.move(os.path.join(ANDROID_PATH, 'build', 'outputs', 'apk',
+        shutil.move(os.path.join(ANDROID_PATH, 'app', 'build', 'outputs', 'apk',
                                  "{}-{}.apk"
                                  .format(jsdata.get('package'), variant)),
-                    os.path.join(CURRENT_PATH, 'build', 'outputs', 'apk',
+                    os.path.join(CURRENT_PATH, 'app', 'build', 'outputs', 'apk',
                                  "{}-{}.apk"
                                  .format(jsdata.get('package'), variant)))
 
@@ -534,7 +533,7 @@ def step_list_output_apk(jsdata, **options):
 
     move_to_current_folder()
 
-    syscall('ls -lh build/outputs/apk/{}-*'
+    syscall('ls -lh app/build/outputs/apk/{}-*'
             .format(jsdata.get('package')), shell=True)
 
 
