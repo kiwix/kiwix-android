@@ -34,7 +34,7 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import eu.mhutti1.utils.storage.StorageDevice;
-import eu.mhutti1.utils.storage.StorageSelectDialog;
+import eu.mhutti1.utils.storage.support.StorageSelectDialog;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -213,7 +213,7 @@ public class LibraryFragment extends Fragment
             b.putInt(StorageSelectDialog.STORAGE_DIALOG_THEME, StyleUtils.dialogStyle());
             dialogFragment.setArguments(b);
             dialogFragment.setOnSelectListener(this);
-            dialogFragment.show(\, getResources().getString(R.string.pref_storage));
+            dialogFragment.show(fm, getResources().getString(R.string.pref_storage));
           });
       snackbar.setActionTextColor(Color.WHITE);
       snackbar.show();
