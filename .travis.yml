@@ -20,18 +20,18 @@ android:
     - extra-android-m2repository
 
 
-  before_cache:
+before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 
-  cache:
-    directories:
-      - $HOME/.gradle/caches/
-      - $HOME/.gradle/wrapper/
-      - $HOME/.android/build-cache
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
 
-  licenses:
-    - '.+'
+licenses:
+  - '.+'
 
-  script:
-    - ./gradlew build  
+script:
+  - ./gradlew build  
