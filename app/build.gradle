@@ -92,7 +92,7 @@ android {
       resValue "string", "app_search_string", "Search Kiwix"
     }
     // Custom apps built from a json file, zim file and icon set
-    custom {
+    singlezim {
       println "Building Custom"
       def jsonFile = ""
       if (project.hasProperty('jsonFile')) {
