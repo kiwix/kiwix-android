@@ -41,6 +41,7 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -85,7 +86,14 @@ import org.json.JSONArray;
 import org.kiwix.kiwixmobile.bookmarksView.BookmarksActivity;
 import org.kiwix.kiwixmobile.database.BookmarksDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
+import org.kiwix.kiwixmobile.database.ReadingListFolderDao;
 import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
+import org.kiwix.kiwixmobile.new_bookmarks.AddToReadingListDialog;
+import org.kiwix.kiwixmobile.new_bookmarks.ReadingListManagerActivity;
+import org.kiwix.kiwixmobile.new_bookmarks.entities.BookmarkArticle;
+import org.kiwix.kiwixmobile.new_bookmarks.entities.ReadinglistFolder;
+import org.kiwix.kiwixmobile.settings.Constants;
+
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
 import org.kiwix.kiwixmobile.utils.DocumentParser;
@@ -157,6 +165,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   public static final String PREF_STORAGE_TITLE = "pref_selected_title";
 
   public static final String contactEmailAddress = "android@kiwix.org";
+  private static final String BOTTOM_SHEET_FRAGMENT_TAG = "framgent-tag";
 
   public static boolean isFullscreenOpened;
 
@@ -795,7 +804,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   private void goToBookmarks() {
     saveTabStates();
-    Intent intentBookmarks = new Intent(getBaseContext(), BookmarksActivity.class);
+    Intent intentBookmarks = new Intent(getBaseContext(), ReadingListManagerActivity.class);
     intentBookmarks.putExtra("bookmark_contents", bookmarks);
     startActivityForResult(intentBookmarks, BOOKMARK_CHOSEN_REQUEST);
   }
@@ -1019,6 +1028,15 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
             return;
           }
           findViewById(R.id.menu_bookmarks).setOnLongClickListener(view -> {
+            ReadingListFolderDao readinglistFoldersDao = new ReadingListFolderDao(KiwixDatabase.getInstance(getBaseContext()));
+            readinglistFoldersDao.saveFolder(new ReadinglistFolder("Hello"));
+            readinglistFoldersDao.saveFolder(new ReadinglistFolder("Hello1"));
+            readinglistFoldersDao.saveFolder(new ReadinglistFolder("Hello2"));
+
+            readinglistFoldersDao.saveBookmark(new BookmarkArticle("article 1","article 1", "Hello1","shit1","shit1"));
+            readinglistFoldersDao.saveBookmark(new BookmarkArticle("article 1","article 1", "Hello1","shit1","shit1"));
+
+
             goToBookmarks();
             return false;
           });
@@ -1060,17 +1078,23 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   public void toggleBookmark() {
     //Check maybe need refresh
-    String article = getCurrentWebView().getUrl();
-    boolean isBookmark = false;
-    if (article != null && !bookmarks.contains(article)) {
-      saveBookmark(article, getCurrentWebView().getTitle());
-      isBookmark = true;
-    } else if (article != null) {
-      deleteBookmark(article);
-      isBookmark = false;
-    }
-    popBookmarkSnackbar(isBookmark);
-    supportInvalidateOptionsMenu();
+
+    FragmentManager fm = getSupportFragmentManager();
+    AddToReadingListDialog addToReadingListDialog = AddToReadingListDialog.newInstance("Hello");
+    addToReadingListDialog.show(fm, BOTTOM_SHEET_FRAGMENT_TAG);
+
+
+//    String article = getCurrentWebView().getUrl();
+//    boolean isBookmark = false;
+//    if (article != null && !bookmarks.contains(article)) {
+//      saveBookmark(article, getCurrentWebView().getTitle());
+//      isBookmark = true;
+//    } else if (article != null) {
+//      deleteBookmark(article);
+//      isBookmark = false;
+//    }
+//    popBookmarkSnackbar(isBookmark);
+//    supportInvalidateOptionsMenu();
   }
 
   private void popBookmarkSnackbar(boolean isBookmark) {

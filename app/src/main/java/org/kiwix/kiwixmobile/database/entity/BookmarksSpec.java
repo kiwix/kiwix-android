@@ -14,5 +14,6 @@ public class BookmarksSpec {
   public String ZimName;
   public String bookmarkUrl;
   public String bookmarkTitle;
+  public String parentReadinglist;
 
 }
