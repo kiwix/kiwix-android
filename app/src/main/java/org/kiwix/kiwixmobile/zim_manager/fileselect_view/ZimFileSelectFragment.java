@@ -17,7 +17,7 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.zim_manager.fileselect_view;
 
 import android.Manifest;
 import android.content.Context;
@@ -48,6 +48,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import org.kiwix.kiwixmobile.KiwixApplication;
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.ZimContentProvider;
 import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
@@ -55,18 +60,21 @@ import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
+import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
+import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+
+import javax.inject.Inject;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class ZimFileSelectFragment extends Fragment
-    implements OnItemClickListener, AdapterView.OnItemLongClickListener {
+    implements OnItemClickListener, AdapterView.OnItemLongClickListener, ZimFileSelectViewCallback{
 
   public static final String TAG_KIWIX = "kiwix";
 
   private static final int LOADER_ID = 0x02;
   public static ZimManageActivity context;
   public RelativeLayout llLayout;
-  // Adapter of the Data populated by rescanning the Filesystem by ourselves
   private RescanDataAdapter mRescanAdapter;
   private ArrayList<LibraryNetworkEntity.Book> mFiles;
   private ListView mZimFileList;
@@ -74,6 +82,38 @@ public class ZimFileSelectFragment extends Fragment
   private TextView mFileMessage;
 
   private BookDao bookDao;
+
+  @Inject ZimFileSelectPresenter presenter;
+
+  private void setupDagger() {
+    KiwixApplication.getInstance().getApplicationComponent().inject(this);
+  }
+
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    context = (ZimManageActivity) super.getActivity();
+    setupDagger();
+    presenter.attachView(this);
+    // Replace LinearLayout by the type of the root element of the layout you're trying to load
+    llLayout = (RelativeLayout) inflater.inflate(R.layout.zim_list, container, false);
+    new LanguageUtils(super.getActivity()).changeFont(super.getActivity().getLayoutInflater());
+
+    mFileMessage = (TextView) llLayout.findViewById(R.id.file_management_no_files);
+    mZimFileList = (ListView)  llLayout.findViewById(R.id.zimfilelist);
+
+    mFiles = new ArrayList<>();
+    progressBar = (RelativeLayout) super.getActivity().getLayoutInflater().inflate(R.layout.progress_bar, null);
+
+    mRescanAdapter = new RescanDataAdapter(ZimFileSelectFragment.context, 0, mFiles);
+
+    // Allow temporary use of ZimContentProvider to query books
+    ZimContentProvider.canIterate = true;
+
+    presenter.loadLocalZimFileFromDb(context);
+     bookDao = new BookDao(KiwixDatabase.getInstance(context));
+
+    return llLayout; // We must return the loaded Layout
+  }
 
 
   public static void finishResult(String path) {
@@ -92,13 +132,34 @@ public class ZimFileSelectFragment extends Fragment
 
   @Override
   public void onResume() {
-    refreshFragment();
+    presenter.loadLocalZimFileFromDb(context);
     super.onResume();
   }
 
+
+  @Override
+  public void showFiles(ArrayList<LibraryNetworkEntity.Book> books) {
+    if (mZimFileList == null)
+      return;
+
+    mZimFileList.setOnItemClickListener(this);
+    mZimFileList.setOnItemLongClickListener(this);
+    Collections.sort(books, new fileComparator());
+    mFiles.clear();
+    mFiles.addAll(books);
+    mZimFileList.setAdapter(mRescanAdapter);
+    mRescanAdapter.notifyDataSetChanged();
+    checkEmpty();
+    checkPermissions();
+  }
+
+  @Override
+  public void updateFilesAdapter() {
+
+  }
+
   public void refreshFragment(){
-    // Of course you will want to faActivity and llLayout in the class and not this method to access them in the rest of
-    // the class, just initialize them here
+
     if (mZimFileList == null)
       return;
 
@@ -121,34 +182,13 @@ public class ZimFileSelectFragment extends Fragment
   public void addBook(String path) {
     LibraryNetworkEntity.Book book = FileSearch.fileToBook(path);
     if (book != null) {
-      mFiles.add(FileSearch.fileToBook(path));
+      mFiles.add(book);
       mRescanAdapter.notifyDataSetChanged();
       bookDao.saveBooks(mFiles);
     }
   }
 
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    context = (ZimManageActivity) super.getActivity();
-    // Replace LinearLayout by the type of the root element of the layout you're trying to load
-    llLayout = (RelativeLayout) inflater.inflate(R.layout.zim_list, container, false);
-    new LanguageUtils(super.getActivity()).changeFont(super.getActivity().getLayoutInflater());
 
-    mFileMessage = (TextView) llLayout.findViewById(R.id.file_management_no_files);
-    mZimFileList = (ListView)  llLayout.findViewById(R.id.zimfilelist);
-
-    mFiles = new ArrayList<>();
-    progressBar = (RelativeLayout) super.getActivity().getLayoutInflater().inflate(R.layout.progress_bar, null);
-
-    mRescanAdapter = new RescanDataAdapter(ZimFileSelectFragment.context, 0, mFiles);
-
-    // Allow temporary use of ZimContentProvider to query books
-    ZimContentProvider.canIterate = true;
-
-    refreshFragment();
-
-    return llLayout; // We must return the loaded Layout
-  }
 
   private class fileComparator implements Comparator<LibraryNetworkEntity.Book> {
     @Override
@@ -411,9 +451,6 @@ public class ZimFileSelectFragment extends Fragment
 
     }
 
-    // We are using the ViewHolder pattern in order to optimize the ListView by reusing
-    // Views and saving them to this mLibrary class, and not inlating the layout every time
-    // we need to create a row.
     private class ViewHolder {
       TextView title;
 
