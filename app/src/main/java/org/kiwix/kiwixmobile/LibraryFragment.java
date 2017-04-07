@@ -1,7 +1,7 @@
 package org.kiwix.kiwixmobile;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -34,7 +34,7 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import eu.mhutti1.utils.storage.StorageDevice;
-import eu.mhutti1.utils.storage.StorageSelectDialog;
+import eu.mhutti1.utils.storage.support.StorageSelectDialog;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.MathContext;
