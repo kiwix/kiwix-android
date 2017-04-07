@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper
+
 buildscript {
   repositories {
     mavenCentral()
@@ -55,15 +57,13 @@ dependencies {
   compile 'eu.mhutti1.utils.storage:android-storage-devices:0.4.8'
   compile 'com.jakewharton:butterknife:8.0.1'
   apt 'com.jakewharton:butterknife-compiler:8.0.1'
-  
-    compile files("$buildDir/native-libs/native-libs.jar")
-    compile group: 'com.google.guava', name: 'guava', version: '19.0'
+     compile group: 'com.google.guava', name: 'guava', version: '19.0'
 
-    // compile fileTree(dir: '.', include: 'content-libs.jar') // DO NOT REMOVE !!
     testCompile 'junit:junit:4.12'
     androidTestCompile 'junit:junit:4.12'
     compile 'com.android.support.test:runner:0.5'
     compile 'junit:junit:4.12'
+
   }
 
   android {
@@ -79,6 +79,7 @@ dependencies {
 
     productFlavors {
       kiwix {
+        println "building kiwix"
         buildConfigField "boolean", "IS_CUSTOM_APP", "false"
         buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "false"
         buildConfigField "String", "ZIM_FILE_NAME", "\"\""
@@ -87,9 +88,9 @@ dependencies {
         buildConfigField "String", "ENFORCED_LANG", "\"\""
         resValue "string", "app_name", "Kiwix"
         resValue "string", "app_search_string", "Search Kiwix"
-
       }
       custom {
+        println "building custom"
         def jsonFile = ""
         if (project.hasProperty('jsonFile')) {
           jsonFile = file(project.property('jsonFile'))
@@ -97,7 +98,18 @@ dependencies {
         } else {
           jsonFile = file('src/custom/test.json')
         }
-        def parsedJson = new groovy.json.JsonSlurper().parseText(jsonFile.text)
+        def parsedJson = new JsonSlurper().parseText(jsonFile.text)
+        def File zimfile = new File(parsedJson.zim_file)
+        if (parsedJson.embed_zim) {
+          file("src/main/jniLibs").eachDir() { folder ->
+            copy {
+              from parsedJson.zim_file
+              into file("src/custom/jniLibs/" + folder.name)
+              rename { String name -> "libcontent.so" }
+            }
+          }
+          parsedJson.zim_file = "libcontent.so"
+        }
         applicationId "$parsedJson.package"
         buildConfigField "boolean", "IS_CUSTOM_APP", "true"
         buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "$parsedJson.embed_zim"
@@ -105,20 +117,10 @@ dependencies {
         if (parsedJson.zim_file.lastIndexOf('/') >= 0) {
           name = parsedJson.zim_file.substring(parsedJson.zim_file.lastIndexOf('/') + 1)
         } else {
-          name = $parsedJson.zim_file
+          name = parsedJson.zim_file
         }
         buildConfigField "String", "ZIM_FILE_NAME", "\"$name\""
-        def File file = new File(parsedJson.zim_file)
-        if (parsedJson.zim_file.contains("://")) {
-          file = new File(System.getProperty("user.dir") + "/app/" + name)
-          if (!file.exists()) {
-            ant.get(src: "$parsedJson.zim_file", dest: file)
-          }
-        }
-        if (!file.getAbsoluteFile().exists()) {
-          throw new FileNotFoundException()
-        }
-        long length = file.length()
+        long length = zimfile.length()
         buildConfigField "long", "ZIM_FILE_SIZE", "$length"
         if (parsedJson.content_version_code != null) {
           buildConfigField "int", "CONTENT_VERSION_CODE", "$parsedJson.content_version_code"
@@ -178,15 +180,4 @@ dependencies {
 
   task wrapper(type: Wrapper) {
     gradleVersion = '2.4'
-  }
-
-  task nativeLibsToJar(type: Zip) {
-    destinationDir file("$buildDir/native-libs")
-    baseName 'native-libs'
-    extension 'jar'
-    from fileTree(dir: 'libs', include: '**/*.so')
-    into 'lib/'
-  }
-
-  tasks.withType(JavaCompile) { compileTask -> compileTask.dependsOn(nativeLibsToJar)
   }

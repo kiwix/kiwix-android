@@ -1,9 +1,9 @@
 {
-  "app_name": "Medical Wikipedia",
-  "package": "org.kiwix.kiwixcustomwikimed",
+  "app_name": "Test Custom App",
+  "package": "org.kiwix.kiwixcustomtest",
   "version_name": "2016-09",
   "version_code": "7",
-  "zim_file": "http://download.kiwix.org/zim/wikipedia/wikipedia_en_ray_charles_2013-03.zim",
+  "zim_file": "wikipedia_en_ray_charles_2013-03.zim",
   "embed_zim": true,
   "ic_launcher": "icon.png",
   "enforced_lang": "en"
