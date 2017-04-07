@@ -16,13 +16,6 @@ import rx.schedulers.Schedulers;
   }
 
   @Provides @Singleton KiwixService provideKiwixService(OkHttpClient okHttpClient) {
-    Retrofit retrofit = new Retrofit.Builder()
-        .baseUrl("http://download.kiwix.org/")
-        .client(okHttpClient)
-        .addConverterFactory(SimpleXmlConverterFactory.create())
-        .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
-        .build();
-
-    return retrofit.create(KiwixService.class);
+    return KiwixService.ServiceCreator.newHacklistService(okHttpClient);
   }
 }
