@@ -38,22 +38,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
-import org.kiwix.kiwixmobile.LibraryFragment;
+import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.ZimManageActivity;
+import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.database.NetworkLanguageDao;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 

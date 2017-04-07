@@ -45,14 +45,14 @@ import eu.mhutti1.utils.storage.StorageSelectDialog;
 import java.io.File;
 import java.util.Locale;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
-import org.kiwix.kiwixmobile.LibraryFragment;
+import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.database.RecentSearchDao;
-import org.kiwix.kiwixmobile.utils.DimenUtils;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.views.SliderPreference;
+import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryUtils;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
@@ -166,7 +166,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
           getPrefrence(PREF_STORAGE).setTitle(PreferenceManager.getDefaultSharedPreferences(getActivity())
               .getString(KiwixMobileActivity.PREF_STORAGE_TITLE, "External"));
         }
-        getPrefrence(PREF_STORAGE).setSummary(LibraryFragment.bytesToHuman( new File(PreferenceManager.getDefaultSharedPreferences(getActivity())
+        getPrefrence(PREF_STORAGE).setSummary(LibraryUtils.bytesToHuman( new File(PreferenceManager.getDefaultSharedPreferences(getActivity())
             .getString(KiwixMobileActivity.PREF_STORAGE, Environment.getExternalStorageDirectory().getPath())).getFreeSpace()));
       }
     }
