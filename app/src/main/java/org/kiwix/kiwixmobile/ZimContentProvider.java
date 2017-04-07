@@ -46,7 +46,7 @@ public class ZimContentProvider extends ContentProvider {
 
   public static final String TAG_KIWIX = "kiwix";
 
-  public static final Uri CONTENT_URI = Uri.parse("content://org.kiwix.zim.base/");
+  public static final Uri CONTENT_URI = Uri.parse("content://" + BuildConfig.APPLICATION_ID + ".zim.base/");
 
   public static final Uri UI_URI = Uri.parse("content://org.kiwix.ui/");
 

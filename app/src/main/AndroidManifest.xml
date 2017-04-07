@@ -150,7 +150,7 @@
 
     <provider
       android:name=".ZimContentProvider"
-      android:authorities="org.kiwix.zim.base"
+      android:authorities="${applicationId}.zim.base"
       android:exported="true" />
 
     <receiver android:name=".utils.KiwixSearchWidget">

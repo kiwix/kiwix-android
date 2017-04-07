@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -12,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.HashMap;
-import org.kiwix.kiwixmobile.settings.Constants;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 
 public class KiwixWebViewClient extends WebViewClient {
@@ -67,13 +65,13 @@ public class KiwixWebViewClient extends WebViewClient {
 
   @Override
   public void onPageFinished(WebView view, String url) {
-    if ((url.equals("content://org.kiwix.zim.base/null")) && !Constants.IS_CUSTOM_APP) {
+    if ((url.equals("content://" + BuildConfig.APPLICATION_ID + ".zim.base/null")) && !BuildConfig.IS_CUSTOM_APP) {
       callback.showHelpPage();
       return;
     }
     if (!url.equals("file:///android_res/raw/help.html")) {
       view.removeView(help);
-    } else if (!Constants.IS_CUSTOM_APP) {
+    } else if (!BuildConfig.IS_CUSTOM_APP) {
       LayoutInflater inflater = LayoutInflater.from(view.getContext());
       help = (LinearLayout) inflater.inflate(R.layout.help, null);
       help.findViewById(R.id.get_content_card)
