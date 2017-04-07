@@ -2,7 +2,7 @@ package org.kiwix.kiwixmobile.zim_manager.library_view;
 
 import android.content.Context;
 
-import org.kiwix.kiwixmobile.BasePresenter;
+import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;

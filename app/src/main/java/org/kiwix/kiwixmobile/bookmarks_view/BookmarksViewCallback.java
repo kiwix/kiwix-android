@@ -1,4 +1,6 @@
-package org.kiwix.kiwixmobile.bookmarksView;
+package org.kiwix.kiwixmobile.bookmarks_view;
+
+import org.kiwix.kiwixmobile.base.ViewCallback;
 
 import java.util.ArrayList;
 
