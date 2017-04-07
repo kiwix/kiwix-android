@@ -162,4 +162,7 @@
   <string name="confirm_stop_download_msg">Are you sure you want to stop this download?</string>
   <string name="download_change_storage">Storage device selector</string>
   <string name="tts_not_enabled">Text to speech is not enabled for this ZIM file</string>
+  <string name="reading_list_save_to">Save to reading list</string>
+  <string name="dialog_close_description">close</string>
+  <string name="reading_list_create_new">Create new</string>
 </resources>

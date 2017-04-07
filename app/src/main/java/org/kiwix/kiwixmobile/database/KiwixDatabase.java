@@ -36,11 +36,12 @@ import org.kiwix.kiwixmobile.database.entity.Bookmarks;
 import org.kiwix.kiwixmobile.database.entity.BookmarksSpec;
 import org.kiwix.kiwixmobile.database.entity.LibraryDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.NetworkLanguageDatabaseEntity;
+import org.kiwix.kiwixmobile.database.entity.ReadingListFolders;
 import org.kiwix.kiwixmobile.database.entity.RecentSearch;
 
 public class KiwixDatabase extends SquidDatabase {
 
-  private static final int VERSION = 13;
+  private static final int VERSION = 14;
   private Context context;
   private static KiwixDatabase instance = null;
 
@@ -68,7 +69,9 @@ public class KiwixDatabase extends SquidDatabase {
         LibraryDatabaseEntity.TABLE,
         RecentSearch.TABLE,
         Bookmarks.TABLE,
-        NetworkLanguageDatabaseEntity.TABLE
+        NetworkLanguageDatabaseEntity.TABLE,
+        ReadingListFolders.TABLE
+
     };
   }
 
@@ -124,6 +127,11 @@ public class KiwixDatabase extends SquidDatabase {
     if (newVersion >= 13) {
       tryAddColumn(BookDatabaseEntity.NAME);
       tryAddColumn(Bookmarks.ZIM_NAME);
+    }
+    if (newVersion >= 14) {
+      tryDropTable(Bookmarks.TABLE);
+      tryCreateTable(Bookmarks.TABLE);
+      tryCreateTable(ReadingListFolders.TABLE);
     }
     return true;
   }

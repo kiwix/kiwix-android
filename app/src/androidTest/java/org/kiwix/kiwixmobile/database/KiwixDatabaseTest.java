@@ -28,6 +28,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.database.BookmarksDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
+import org.kiwix.kiwixmobile.new_bookmarks.entities.BookmarkArticle;
+import org.kiwix.kiwixmobile.new_bookmarks.entities.ReadinglistFolder;
 
 
 import java.io.BufferedWriter;
@@ -70,6 +72,20 @@ public class KiwixDatabaseTest {
     BookmarksDao bookmarksDao = new BookmarksDao(kiwixDatabase);
     ArrayList<String> b = bookmarksDao.getBookmarkTitles(testId, "");
     assertArrayEquals(testBookmarks,b.toArray());
+
+  }
+
+  @Test
+  public void testNewReadingListScheme() {
+    KiwixDatabase kiwixDatabase = KiwixDatabase.getInstance(mContext);
+    ReadingListFolderDao folderDao = new ReadingListFolderDao(kiwixDatabase);
+    ArrayList<BookmarkArticle> articles = new ArrayList<>();
+
+    articles = folderDao.getArticlesOfFolder(new ReadinglistFolder("Hello1"));
+
+    System.out.println("article of folder 'hello': " + articles);
+
+    assertTrue(articles.size() == 2);
 
   }
 }
