@@ -84,6 +84,11 @@ android {
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
 
+  buildTypes {
+    debug {
+      testCoverageEnabled true
+    }
+  }
 
   productFlavors {
     // Vanilla Kiwix app
