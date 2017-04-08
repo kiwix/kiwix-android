@@ -41,60 +41,6 @@ public class BasicTest {
 
   @Test
   public void basicTest() {
-    openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-
-    ViewInteraction textView = onView(
-        allOf(withId(R.id.title), withText("Bookmarks"),
-            childAtPosition(
-                childAtPosition(
-                    IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-                    0),
-                0),
-            isDisplayed()));
-    textView.check(matches(withText("Bookmarks")));
-
-    ViewInteraction textView2 = onView(
-        allOf(withId(R.id.title), withText("Get Content"),
-            childAtPosition(
-                childAtPosition(
-                    IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-                    0),
-                0),
-            isDisplayed()));
-    textView2.check(matches(withText("Get Content")));
-
-    ViewInteraction textView3 = onView(
-        allOf(withId(R.id.title), withText("Help"),
-            childAtPosition(
-                childAtPosition(
-                    IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-                    0),
-                0),
-            isDisplayed()));
-    textView3.check(matches(withText("Help")));
-
-    ViewInteraction textView5 = onView(
-        allOf(withId(R.id.title), withText("Settings"),
-            childAtPosition(
-                childAtPosition(
-                    IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-                    0),
-                0),
-            isDisplayed()));
-    textView5.check(matches(withText("Settings")));
-
-    ViewInteraction textView6 = onView(
-        allOf(withId(R.id.title), withText("Settings"),
-            childAtPosition(
-                childAtPosition(
-                    IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-                    0),
-                0),
-            isDisplayed()));
-    textView6.check(matches(withText("Settings")));
-
-    pressBack();
-
     ViewInteraction imageButton = onView(
         allOf(withClassName(is("android.widget.ImageButton")),
             withParent(allOf(withId(R.id.toolbar),
