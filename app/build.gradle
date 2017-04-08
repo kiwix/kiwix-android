@@ -39,6 +39,7 @@ dependencies {
   androidTestCompile 'com.android.support.test:rules:0.5'
 
   compile 'com.google.dagger:dagger:2.0.2'
+  compile project(":kiwixlib")
   apt "com.google.dagger:dagger-compiler:2.0.2"
 
   compile 'com.yahoo.squidb:squidb:2.0.0'
@@ -113,7 +114,7 @@ android {
       def File zimfile = new File(parsedJson.zim_file)
       if (parsedJson.embed_zim) {
         // Place content in each lib directory for embeded zims
-        file("src/main/jniLibs").eachDir() { folder ->
+        file("../kiwixlib/src/main/jniLibs").eachDir() { folder ->
           copy {
             from parsedJson.zim_file
             into file("src/custom/jniLibs/" + folder.name)
