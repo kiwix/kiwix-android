@@ -89,7 +89,13 @@ android {
 
   lintOptions {
     abortOnError true
+    // Hardcoded strings in xml
     error 'HardcodedText'
+    // Hardcoded strings in setText
+    error 'SetTextI18n'
+    // Strings.xml issues
+    warning 'ExtraTranslation'
+    warning 'MissingTranslation'
   }
 
   buildTypes {
