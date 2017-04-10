@@ -1,7 +1,7 @@
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.zim_manager.library_view;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -31,17 +31,23 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import eu.mhutti1.utils.storage.StorageDevice;
-import eu.mhutti1.utils.storage.StorageSelectDialog;
+import eu.mhutti1.utils.storage.support.StorageSelectDialog;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
 import javax.inject.Inject;
+
+import org.kiwix.kiwixmobile.KiwixApplication;
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
@@ -52,6 +58,8 @@ import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
+import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
+
 import rx.android.schedulers.AndroidSchedulers;
 
 import static org.kiwix.kiwixmobile.downloader.DownloadService.KIWIX_ROOT;
@@ -59,16 +67,25 @@ import static org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class LibraryFragment extends Fragment
-    implements AdapterView.OnItemClickListener, StorageSelectDialog.OnSelectListener {
+    implements AdapterView.OnItemClickListener, StorageSelectDialog.OnSelectListener, LibraryViewCallback {
 
-  public @BindView(R.id.library_list) ListView libraryList;
-  public @BindView(R.id.progressbar_layout) RelativeLayout progressBarLayout;
-  @BindView(R.id.progressBar) ProgressBar progressBar;
-  @BindView(R.id.progressbar_message) TextView progressBarMessage;
-  @BindView(R.id.network_permission_text) TextView permissionText;
-  @BindView(R.id.network_permission_button) Button permissionButton;
+  public
+  @BindView(R.id.library_list)
+  ListView libraryList;
+  public
+  @BindView(R.id.progressbar_layout)
+  RelativeLayout progressBarLayout;
+  @BindView(R.id.progressBar)
+  ProgressBar progressBar;
+  @BindView(R.id.progressbar_message)
+  TextView progressBarMessage;
+  @BindView(R.id.network_permission_text)
+  TextView permissionText;
+  @BindView(R.id.network_permission_button)
+  Button permissionButton;
 
-  @Inject KiwixService kiwixService;
+  @Inject
+  KiwixService kiwixService;
 
   public LinearLayout llLayout;
 
@@ -90,19 +107,23 @@ public class LibraryFragment extends Fragment
 
   public static NetworkBroadcastReceiver networkBroadcastReceiver;
 
-  public static List<Book> downloadingBooks = new ArrayList();
+  public static List<Book> downloadingBooks = new ArrayList<>();
 
   public static boolean isReceiverRegistered = false;
+
+  @Inject
+  LibraryPresenter presenter;
 
   private void setupDagger() {
     KiwixApplication.getInstance().getApplicationComponent().inject(this);
   }
 
-  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                           Bundle savedInstanceState) {
 
     setupDagger();
-
+    presenter.attachView(this);
     faActivity = (ZimManageActivity) super.getActivity();
     // Replace LinearLayout by the type of the root element of the layout you're trying to load
     llLayout = (LinearLayout) inflater.inflate(R.layout.activity_library, container, false);
@@ -124,13 +145,8 @@ public class LibraryFragment extends Fragment
     faActivity.registerReceiver(networkBroadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     isReceiverRegistered = true;
 
-    BookDao bookDao = new BookDao(KiwixDatabase.getInstance(getActivity()));
-    for (Book book : bookDao.getDownloadingBooks()) {
-      if (!DownloadFragment.mDownloads.containsValue(book)) {
-        book.url = book.remoteUrl;
-        downloadFile(book);
-      }
-    }
+    presenter.loadRunningDownloadsFromDb(getActivity());
+
     // The FragmentActivity doesn't contain the layout directly so we must use our instance of     LinearLayout :
     //llLayout.findViewById(R.id.someGuiElement);
     // Instead of :
@@ -138,28 +154,46 @@ public class LibraryFragment extends Fragment
     return llLayout; // We must return the loaded Layout
   }
 
-  public void getLibraryData() {
+
+  @Override
+  public void showBooks(LinkedList<Book> books) {
+    active = true;
+    this.books = books;
+    libraryAdapter = new LibraryAdapter(super.getActivity(), new ArrayList<>(books));
+    libraryList.setAdapter(libraryAdapter);
+
+    libraryList.setOnItemClickListener(this);
+
+
+    stopScanningContent();
+  }
+
+  @Override
+  public void displayNoNetworkConnection() {
+    progressBar.setVisibility(View.GONE);
+    progressBarLayout.setVisibility(View.VISIBLE);
+    progressBarMessage.setVisibility(View.VISIBLE);
+    progressBarMessage.setText(R.string.no_network_msg);
+  }
+
+  @Override
+  public void displayScanningContent() {
     progressBar.setVisibility(View.VISIBLE);
     progressBarMessage.setVisibility(View.VISIBLE);
     progressBarLayout.setVisibility(View.VISIBLE);
     progressBarMessage.setText(R.string.rescan_fs_warning);
     libraryList.setVisibility(View.GONE);
-    kiwixService.getLibrary()
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(library -> {
-          books = library.getBooks();
-          if (active) {
-            libraryAdapter = new LibraryAdapter(super.getActivity(), new ArrayList<>(books));
-            libraryList.setAdapter(libraryAdapter);
-          }
-        }, error -> {
-          noNetworkConnection();
-        });
-
-    libraryList.setOnItemClickListener(this);
-
-    active = true;
   }
+
+
+  @Override
+  public void stopScanningContent() {
+    progressBar.setVisibility(View.GONE);
+    progressBarMessage.setVisibility(View.GONE);
+    progressBarLayout.setVisibility(View.GONE);
+    libraryList.setVisibility(View.VISIBLE);
+  }
+
 
   public void displayNetworkConfirmation() {
     progressBar.setVisibility(View.GONE);
@@ -169,7 +203,7 @@ public class LibraryFragment extends Fragment
     permissionButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        getLibraryData();
+        presenter.loadBooks();
         permissionButton.setVisibility(View.GONE);
         permissionText.setVisibility(View.GONE);
       }
@@ -200,7 +234,7 @@ public class LibraryFragment extends Fragment
         < Long.parseLong(((Book) (parent.getAdapter().getItem(position))).getSize()) * 1024f) {
       Toast.makeText(super.getActivity(), getString(R.string.download_no_space)
           + "\n" + getString(R.string.space_available) + " "
-          + bytesToHuman(getSpaceAvailable()), Toast.LENGTH_LONG).show();
+          + LibraryUtils.bytesToHuman(getSpaceAvailable()), Toast.LENGTH_LONG).show();
       Snackbar snackbar = Snackbar.make(libraryList,
           getString(R.string.download_change_storage),
           Snackbar.LENGTH_LONG)
@@ -252,30 +286,6 @@ public class LibraryFragment extends Fragment
     }
   }
 
-  public static String bytesToHuman(long size) {
-    long KB = 1024;
-    long MB = KB * 1024;
-    long GB = MB * 1024;
-    long TB = GB * 1024;
-    long PB = TB * 1024;
-    long EB = PB * 1024;
-
-    if (size < KB) { return size + " Bytes"; }
-    if (size >= KB && size < MB) { return round3SF((double) size / KB) + " KB"; }
-    if (size >= MB && size < GB) { return round3SF((double) size / MB) + " MB"; }
-    if (size >= GB && size < TB) { return round3SF((double) size / GB) + " GB"; }
-    if (size >= TB && size < PB) { return round3SF((double) size / TB) + " TB"; }
-    if (size >= PB && size < EB) { return round3SF((double) size / PB) + " PB"; }
-    if (size >= EB) { return round3SF((double) size / EB) + " EB"; }
-
-    return "???";
-  }
-
-  public static String round3SF(double size) {
-    BigDecimal bd = new BigDecimal(size);
-    bd = bd.round(new MathContext(3));
-    return String.valueOf(bd.doubleValue());
-  }
 
   public void mobileDownloadDialog(int position, AdapterView<?> parent) {
     new AlertDialog.Builder(super.getActivity(), dialogStyle())
@@ -292,7 +302,8 @@ public class LibraryFragment extends Fragment
         .show();
   }
 
-  private void downloadFile(Book book) {
+  @Override
+  public void downloadFile(Book book) {
     downloadingBooks.add(book);
     if (libraryAdapter != null) {
       libraryAdapter.getFilter().filter(faActivity.searchView.getQuery());
@@ -331,6 +342,7 @@ public class LibraryFragment extends Fragment
     editor.apply();
   }
 
+
   public class DownloadServiceConnection {
     public DownloadServiceInterface downloadServiceInterface;
     public boolean bound;
@@ -363,7 +375,7 @@ public class LibraryFragment extends Fragment
 
       if (books == null && network != null && network.isConnected()) {
         if (isWiFi()) {
-          getLibraryData();
+          presenter.loadBooks();
         } else {
           displayNetworkConfirmation();
         }

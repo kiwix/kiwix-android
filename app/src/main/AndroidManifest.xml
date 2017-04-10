@@ -122,7 +122,7 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".ZimManageActivity"
+      android:name=".zim_manager.ZimManageActivity"
       android:label="@string/choose_file">
 
       <!-- TODO -->
@@ -146,11 +146,11 @@
 
     <activity android:name=".settings.KiwixSettingsActivity" />
     <activity android:name=".SearchActivity" />
-    <activity android:name=".BookmarksActivity" />
+    <activity android:name=".bookmarks_view.BookmarksActivity" />
 
     <provider
       android:name=".ZimContentProvider"
-      android:authorities="org.kiwix.zim.base"
+      android:authorities="${applicationId}.zim.base"
       android:exported="true" />
 
     <receiver android:name=".utils.KiwixSearchWidget">
