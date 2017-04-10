@@ -19,6 +19,7 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'checkstyle'
 apply plugin: 'testdroid'
 
 
