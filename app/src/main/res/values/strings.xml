@@ -163,4 +163,6 @@
   <string name="download_change_storage">Storage device selector</string>
   <string name="tts_not_enabled">Text to speech is not enabled for this ZIM file</string>
   <string name="delete_tab">Delete Tab</string>
+  <string name="next">Next</string>
+  <string name="previous">Previous</string>
 </resources>

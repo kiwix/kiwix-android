@@ -96,6 +96,9 @@ android {
     // Strings.xml issues
     warning 'ExtraTranslation'
     warning 'MissingTranslation'
+
+    // Warnings
+    warning 'InvalidPackage'
   }
 
   buildTypes {
