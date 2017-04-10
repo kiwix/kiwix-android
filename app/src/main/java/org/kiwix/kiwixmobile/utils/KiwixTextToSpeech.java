@@ -1,7 +1,10 @@
 package org.kiwix.kiwixmobile.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
@@ -78,7 +81,9 @@ public class KiwixTextToSpeech {
       currentTTSTask = null;
     } else if (tts.isSpeaking()) {
       if (tts.stop() == TextToSpeech.SUCCESS) {
-        tts.setOnUtteranceProgressListener(null);
+        if (VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+          tts.setOnUtteranceProgressListener(null);
+        }
         onSpeakingListener.onSpeakingEnded();
       }
     } else {
@@ -122,7 +127,9 @@ public class KiwixTextToSpeech {
   public void stop() {
     if (tts.stop() == TextToSpeech.SUCCESS) {
       currentTTSTask = null;
-      tts.setOnUtteranceProgressListener(null);
+      if (VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+        tts.setOnUtteranceProgressListener(null);
+      }
       onSpeakingListener.onSpeakingEnded();
     }
   }
@@ -196,10 +203,13 @@ public class KiwixTextToSpeech {
     public void pause() {
       paused = true;
       currentPiece.decrementAndGet();
-      tts.setOnUtteranceProgressListener(null);
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+        tts.setOnUtteranceProgressListener(null);
+      }
       tts.stop();
     }
 
+    @SuppressLint("NewApi")
     public void start() {
       if (!paused)
         return;

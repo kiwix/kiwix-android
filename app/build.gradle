@@ -99,6 +99,7 @@ android {
 
     // Warnings
     warning 'InvalidPackage'
+    warning 'StringFormatInvalid'
   }
 
   buildTypes {
