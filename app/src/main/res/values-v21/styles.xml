@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+  <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+    <item name="colorPrimary">@color/primary</item>
+    <item name="colorPrimaryDark">@color/primary_dark</item>
+    <item name="colorAccent">@color/accent</item>
+    <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    <item name="searchViewStyle">@style/SearchViewStyle</item>
+    <item name="android:textCursorDrawable">@null</item>
+    <item name="windowNoTitle">true</item>
+    <item name="windowActionBar">false</item>
+    <item name="progressBackgroundColor">@color/primary_dark</item>
+    <item name="listBackground">@drawable/list_bg</item>
+    <item name="android:windowContentOverlay">@null</item>
+    <item name="windowActionModeOverlay">true</item>
+    <item name="arrowBackDrawable">@drawable/ic_action_back</item>
+    <item name="arrowForwardDrawable">@drawable/ic_action_forward</item>
+    <item name="drawerBackground">@color/drawer_background_day</item>
+    <item name="plusDrawable">@drawable/ic_action_plus</item>
+    <item name="deleteDrawable">@drawable/ic_action_delete</item>
+    <item name="dividerColor">@color/divider_light</item>
+    <item name="selectedBackground">@drawable/list_bg_light</item>
+    <item name="android:itemBackground">@color/primary_light</item>
+    <item name="android:textColorPrimary">@color/primary</item>
+    <item name="android:textColorSecondary">@color/primary</item>
+    <item name="android:textColorTertiary">@color/primary</item>
+    <item name="android:windowTranslucentStatus" tools:targetApi="22">true</item>
+    <item name="colorControlNormal">@color/white</item>
+    <item name="android:progressBackgroundTint">@color/greyed_out_selected</item>
+  </style>
+</resources>

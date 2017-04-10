@@ -29,7 +29,7 @@
       android:layout_centerVertical="true"
       android:layout_marginRight="4dp"
       android:background="?attr/actionBarItemBackground"
-      android:contentDescription="Delete Tab"
+      android:contentDescription="@string/delete_tab"
       android:gravity="center_vertical"
       android:padding="12dp"
       android:src="?attr/deleteDrawable">

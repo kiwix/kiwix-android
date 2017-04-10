@@ -7,7 +7,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.3.0'
+    classpath 'com.android.tools.build:gradle:2.3.1'
     classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
     classpath 'me.tatarka:gradle-retrolambda:3.2.5'
     classpath 'com.testdroid:gradle:1.4.0'
@@ -58,6 +58,9 @@ dependencies {
   compile 'io.reactivex:rxandroid:1.1.0'
   compile 'io.reactivex:rxjava:1.1.3'
 
+  testCompile "org.mockito:mockito-core:2.7.22"
+  androidTestCompile "org.mockito:mockito-android:2.7.22"
+
   compile 'eu.mhutti1.utils.storage:android-storage-devices:0.5.0'
   compile 'com.jakewharton:butterknife:8.0.1'
   apt 'com.jakewharton:butterknife-compiler:8.0.1'
@@ -84,6 +87,26 @@ android {
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
 
+  lintOptions {
+    abortOnError true
+    // Hardcoded strings in xml
+    error 'HardcodedText'
+    // Hardcoded strings in setText
+    error 'SetTextI18n'
+    // Strings.xml issues
+    warning 'ExtraTranslation'
+    warning 'MissingTranslation'
+
+    // Warnings
+    warning 'InvalidPackage'
+    warning 'StringFormatInvalid'
+  }
+
+  buildTypes {
+    debug {
+      testCoverageEnabled true
+    }
+  }
 
   productFlavors {
     // Vanilla Kiwix app
@@ -145,10 +168,6 @@ android {
       resValue "string", "app_name", "$parsedJson.app_name"
       resValue "string", "app_search_string", 'Search ' + "$parsedJson.app_name"
     }
-  }
-
-  lintOptions {
-    abortOnError false
   }
 
   compileOptions {
