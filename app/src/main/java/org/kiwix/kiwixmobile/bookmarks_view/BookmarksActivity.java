@@ -18,7 +18,7 @@
  */
 
 
-package org.kiwix.kiwixmobile.bookmarksView;
+package org.kiwix.kiwixmobile.bookmarks_view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -44,7 +44,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import org.kiwix.kiwixmobile.BaseActivity;
+import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.di.components.ApplicationComponent;

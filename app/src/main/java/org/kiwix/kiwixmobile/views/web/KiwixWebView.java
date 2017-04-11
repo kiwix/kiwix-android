@@ -127,6 +127,7 @@ public class KiwixWebView extends WebView {
     this.callback = callback;
     setWebViewClient(new KiwixWebViewClient(callback));
     setWebChromeClient(new KiwixWebChromeClient(callback));
+    getSettings().setDomStorageEnabled(true);
   }
 
   public void loadPrefs() {
