@@ -1,0 +1,169 @@
+package org.kiwix.kiwixmobile.utils;
+
+
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.espresso.Espresso.onData;
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.action.ViewActions.swipeLeft;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withParent;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static android.support.test.espresso.web.assertion.WebViewAssertions.webMatches;
+import static android.support.test.espresso.web.sugar.Web.onWebView;
+import static android.support.test.espresso.web.webdriver.DriverAtoms.findElement;
+import static android.support.test.espresso.web.webdriver.DriverAtoms.getText;
+import static android.support.test.espresso.web.webdriver.DriverAtoms.webClick;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasToString;
+import static org.hamcrest.core.StringStartsWith.startsWith;
+import static org.kiwix.kiwixmobile.library.LibraryAdapter.parseURL;
+
+import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.action.ViewActions;
+import android.support.test.espresso.contrib.DrawerActions;
+import android.support.test.espresso.matcher.BoundedMatcher;
+import android.support.test.espresso.web.webdriver.Locator;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
+import android.test.suitebuilder.annotation.LargeTest;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
+import java.util.Map;
+import net.bytebuddy.matcher.StringMatcher;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.library.LibraryAdapter;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+import org.kiwix.kiwixmobile.testutils.TestUtils;
+
+@LargeTest
+@RunWith(AndroidJUnit4.class)
+public class ZimTest {
+
+  @Rule
+  public ActivityTestRule<SplashActivity> mActivityTestRule = new ActivityTestRule<>(
+      SplashActivity.class);
+
+  @Test
+  public void zimTest() {
+    ViewInteraction appCompatButton = onView(
+        allOf(withId(R.id.get_content_card), withText("Get Content")));
+    appCompatButton.perform(scrollTo(), click());
+
+    TestUtils.allowPermissionsIfNeeded();
+
+    ViewInteraction appCompatTextView = onView(
+        allOf(withText("Device"), isDisplayed()));
+    appCompatTextView.perform(click());
+
+    try {
+      Thread.sleep(5000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+
+    onData(withContent("ray charles")).inAdapterView(withId(R.id.zimfilelist)).perform(click());
+
+    onWebView().withElement(findElement(Locator.LINK_TEXT, "A Fool for You"));
+
+    onView(withId(R.id.drawer_layout)).perform(DrawerActions.open(Gravity.RIGHT));
+
+    ViewInteraction textView = onView(
+        allOf(withId(R.id.titleText), withText("Summary"),
+            childAtPosition(
+                childAtPosition(
+                    withId(R.id.right_drawer_list),
+                    0),
+                0),
+            isDisplayed()));
+    textView.check(matches(withText("Summary")));
+
+    onView(withId(R.id.drawer_layout)).perform(DrawerActions.close(Gravity.RIGHT));
+
+    onWebView().withElement(findElement(Locator.LINK_TEXT, "A Fool for You")).perform(webClick());
+
+    onView(withId(R.id.drawer_layout)).perform(DrawerActions.open(Gravity.RIGHT));
+
+    ViewInteraction textView2 = onView(
+        allOf(withId(R.id.titleText), withText("A Fool for You"),
+            childAtPosition(
+                childAtPosition(
+                    withId(R.id.right_drawer_list),
+                    0),
+                0),
+            isDisplayed()));
+    textView2.check(matches(withText("A Fool for You")));
+
+    ViewInteraction textView3 = onView(
+        allOf(withId(R.id.titleText), withText("Personnel"),
+            childAtPosition(
+                childAtPosition(
+                    withId(R.id.right_drawer_list),
+                    1),
+                0),
+            isDisplayed()));
+    textView3.check(matches(withText("Personnel")));
+
+    ViewInteraction textView4 = onView(
+        allOf(withId(R.id.titleText), withText("Covers"),
+            childAtPosition(
+                childAtPosition(
+                    withId(R.id.right_drawer_list),
+                    2),
+                0),
+            isDisplayed()));
+    textView4.check(matches(withText("Covers")));
+
+    openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+
+    onView(withText("Help"))
+        .perform(click());
+  }
+
+  private static Matcher<View> childAtPosition(
+      final Matcher<View> parentMatcher, final int position) {
+
+    return new TypeSafeMatcher<View>() {
+      @Override
+      public void describeTo(Description description) {
+        description.appendText("Child at position " + position + " in parent ");
+        parentMatcher.describeTo(description);
+      }
+
+      @Override
+      public boolean matchesSafely(View view) {
+        ViewParent parent = view.getParent();
+        return parent instanceof ViewGroup && parentMatcher.matches(parent)
+            && view.equals(((ViewGroup) parent).getChildAt(position));
+      }
+    };
+  }
+
+  public static Matcher<Object> withContent(final String content) {
+    return new BoundedMatcher<Object, Book>(Book.class) {
+      @Override
+      public boolean matchesSafely(Book myObj) {
+        return parseURL(myObj.file.getPath()).equals(content);
+      }
+
+      @Override
+      public void describeTo(Description description) {
+        description.appendText("with content '" + content + "'");
+      }
+    };
+  }
+}

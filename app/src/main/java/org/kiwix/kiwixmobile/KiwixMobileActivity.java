@@ -442,7 +442,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
     if (tempVisitCount >= 5
         && !visitCounterPref.getNoThanksState()
-        && NetworkUtils.isNetworkAvailable(this)) {
+        && NetworkUtils.isNetworkAvailable(this) && !BuildConfig.DEBUG) {
       showRateDialog();
     }
   }
@@ -1686,7 +1686,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   }
 
   @Override public void webViewUrlLoading() {
-    if (isFirstRun) {
+    if (isFirstRun && !BuildConfig.DEBUG) {
       contentsDrawerHint();
       SharedPreferences.Editor editor = settings.edit();
       editor.putBoolean("isFirstRun", false); // It is no longer the first run
