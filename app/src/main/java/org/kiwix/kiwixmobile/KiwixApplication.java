@@ -41,7 +41,6 @@ public class KiwixApplication extends Application {
   }
 
   public void setApplicationComponent(ApplicationComponent applicationComponent) {
-    Log.d("test", applicationComponent.toString());
     this.applicationComponent = applicationComponent;
   }
 }

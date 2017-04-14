@@ -105,26 +105,6 @@ public class ZimTest {
     onView(withText("Home"))
         .perform(click());
 
-    /*ViewInteraction appCompatButton = onView(
-        allOf(withId(R.id.get_content_card), withText("Get Content")));
-    appCompatButton.perform(scrollTo(), click());
-
-    TestUtils.allowPermissionsIfNeeded();
-
-    ViewInteraction appCompatTextView = onView(
-        allOf(withText("Device"), isDisplayed()));
-    appCompatTextView.perform(click());
-
-    try {
-      Thread.sleep(5000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-
-    onData(withContent("ray charles")).inAdapterView(withId(R.id.zimfilelist)).perform(click());*/
-
-
-
     onWebView().withElement(findElement(Locator.LINK_TEXT, "A Fool for You"));
 
     onView(withId(R.id.drawer_layout)).perform(DrawerActions.open(Gravity.RIGHT));
@@ -196,20 +176,6 @@ public class ZimTest {
         ViewParent parent = view.getParent();
         return parent instanceof ViewGroup && parentMatcher.matches(parent)
             && view.equals(((ViewGroup) parent).getChildAt(position));
-      }
-    };
-  }
-
-  public static Matcher<Object> withContent(final String content) {
-    return new BoundedMatcher<Object, Book>(Book.class) {
-      @Override
-      public boolean matchesSafely(Book myObj) {
-        return parseURL(getInstrumentation().getTargetContext(), myObj.file.getPath()).equals(content);
-      }
-
-      @Override
-      public void describeTo(Description description) {
-        description.appendText("with content '" + content + "'");
       }
     };
   }
