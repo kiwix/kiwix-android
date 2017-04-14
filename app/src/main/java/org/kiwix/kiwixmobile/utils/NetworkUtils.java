@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import java.util.UUID;
+import org.kiwix.kiwixmobile.R;
 
 public class NetworkUtils {
 
@@ -41,5 +42,21 @@ public class NetworkUtils {
     }
 
     return filename;
+  }
+
+  public static String parseURL(Context context, String url) {
+    String details;
+    try {
+      details = url.substring(url.lastIndexOf("/") + 1, url.length() - 10);
+      details = details.substring(details.indexOf("_", details.indexOf("_") + 1) + 1, details.lastIndexOf("_"));
+      details = details.replaceAll("_", " ");
+      details = details.replaceAll("all", "");
+      details = details.replaceAll("nopic", context.getString(R.string.zim_nopic));
+      details = details.replaceAll("simple", context.getString(R.string.zim_simple));
+      details = details.trim().replaceAll(" +", " ");
+      return details;
+    } catch (Exception e) {
+      return "";
+    }
   }
 }
