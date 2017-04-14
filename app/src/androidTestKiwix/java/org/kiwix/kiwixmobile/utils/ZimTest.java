@@ -22,8 +22,11 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.core.StringStartsWith.startsWith;
-import static org.kiwix.kiwixmobile.library.LibraryAdapter.parseURL;
+import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.contrib.DrawerActions;
@@ -36,7 +39,10 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
+import javax.inject.Inject;
 import net.bytebuddy.matcher.StringMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -45,7 +51,15 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.kiwix.kiwixmobile.KiwixApplication;
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.ZimContentProvider;
+import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
+import org.kiwix.kiwixmobile.di.components.DaggerTestComponent;
+import org.kiwix.kiwixmobile.di.components.TestComponent;
+import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
+import org.kiwix.kiwixmobile.di.modules.TestModule;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.testutils.TestUtils;
@@ -54,13 +68,44 @@ import org.kiwix.kiwixmobile.testutils.TestUtils;
 @RunWith(AndroidJUnit4.class)
 public class ZimTest {
 
+  @Inject
+  Context context;
+
   @Rule
-  public ActivityTestRule<SplashActivity> mActivityTestRule = new ActivityTestRule<>(
-      SplashActivity.class);
+  public ActivityTestRule<KiwixMobileActivity> mActivityTestRule = new ActivityTestRule<>(
+      KiwixMobileActivity.class, false, false);
+
+  @Before public void setUp() {
+    TestComponent component = DaggerTestComponent.builder().applicationModule
+        (new ApplicationModule(
+            (KiwixApplication) getInstrumentation().getTargetContext().getApplicationContext())).build();
+
+    ((KiwixApplication) getInstrumentation().getTargetContext().getApplicationContext()).setApplicationComponent(component);
+
+    component.inject(this);
+    new ZimContentProvider().setupDagger();
+  }
+
 
   @Test
   public void zimTest() {
-    ViewInteraction appCompatButton = onView(
+    Intent intent = new Intent();
+    File file = new File(context.getFilesDir(), "test.zim");
+    try {
+      file.createNewFile();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    intent.setData(Uri.fromFile(file));
+
+    mActivityTestRule.launchActivity(intent);
+
+    openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+
+    onView(withText("Home"))
+        .perform(click());
+
+    /*ViewInteraction appCompatButton = onView(
         allOf(withId(R.id.get_content_card), withText("Get Content")));
     appCompatButton.perform(scrollTo(), click());
 
@@ -76,7 +121,9 @@ public class ZimTest {
       e.printStackTrace();
     }
 
-    onData(withContent("ray charles")).inAdapterView(withId(R.id.zimfilelist)).perform(click());
+    onData(withContent("ray charles")).inAdapterView(withId(R.id.zimfilelist)).perform(click());*/
+
+
 
     onWebView().withElement(findElement(Locator.LINK_TEXT, "A Fool for You"));
 
@@ -157,7 +204,7 @@ public class ZimTest {
     return new BoundedMatcher<Object, Book>(Book.class) {
       @Override
       public boolean matchesSafely(Book myObj) {
-        return parseURL(myObj.file.getPath()).equals(content);
+        return parseURL(getInstrumentation().getTargetContext(), myObj.file.getPath()).equals(content);
       }
 
       @Override

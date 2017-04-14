@@ -39,7 +39,7 @@ public class JNIKiwix {
 
   public native boolean loadZIM(String path);
 
-    public native boolean loadFulltextIndex(String path);
+  public native boolean loadFulltextIndex(String path);
     
   public native byte[] getContent(String url, JNIKiwixString mimeType, JNIKiwixInt size);
 
@@ -73,5 +73,5 @@ public class JNIKiwix {
 
   public native void setDataDirectory(String icuDataDir);
 
-  public static native String indexedQuery(String db, int count);
+  public native String indexedQuery(String db, int count);
 }
