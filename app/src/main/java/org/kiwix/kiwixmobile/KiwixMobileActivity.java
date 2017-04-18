@@ -1582,7 +1582,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     if (getIntent().getData() != null) {
       String filePath = FileUtils.getLocalFilePathByUri(getApplicationContext(), getIntent().getData());
 
-      if (filePath == null) {
+      if (filePath == null || !new File(filePath).exists()) {
         Toast.makeText(KiwixMobileActivity.this, getString(R.string.error_filenotfound), Toast.LENGTH_LONG).show();
         return;
       }

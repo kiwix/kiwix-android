@@ -30,11 +30,18 @@ public class TestNetworkModule {
   @Provides @Singleton
   MockWebServer provideMockWebServer() {
     MockWebServer mockWebServer = new MockWebServer();
-    try {
-      mockWebServer.start();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    Thread thread = new Thread() {
+      @Override
+      public void run() {
+        try {
+          mockWebServer.start();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    };
+    thread.start();
+
     return mockWebServer;
   }
 }
