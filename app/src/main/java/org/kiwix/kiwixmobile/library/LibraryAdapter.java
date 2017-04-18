@@ -109,7 +109,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
     holder.date.setText(book.getDate());
     holder.size.setText(createGbString(book.getSize()));
     holder.fileName.setText(parseURL(mActivity, book.getUrl()));
-    holder.favicon.setImageBitmap(createBitmapFromEncodedString(book.getFavicon()));
+    holder.favicon.setImageBitmap(createBitmapFromEncodedString(book.getFavicon(), mActivity));
 
     // Check if no value is empty. Set the view to View.GONE, if it is. To View.VISIBLE, if not.
     if (book.getTitle() == null || book.getTitle().isEmpty()) {
@@ -312,7 +312,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
   }
 
   // Decode and create a Bitmap from the 64-Bit encoded favicon string
-  public static Bitmap createBitmapFromEncodedString(String encodedString) {
+  public static Bitmap createBitmapFromEncodedString(String encodedString, Context context) {
 
     try {
       byte[] decodedString = Base64.decode(encodedString, Base64.DEFAULT);
@@ -321,7 +321,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
       e.printStackTrace();
     }
 
-    return BitmapFactory.decodeResource(mActivity.getResources(), R.mipmap.kiwix_icon);
+    return BitmapFactory.decodeResource(context.getResources(), R.mipmap.kiwix_icon);
   }
 
   private static class ViewHolder {

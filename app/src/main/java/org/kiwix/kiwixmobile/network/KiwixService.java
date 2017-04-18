@@ -21,9 +21,9 @@ public interface KiwixService {
   /******** Helper class that sets up new services *******/
   class ServiceCreator {
 
-    public static KiwixService newHacklistService(OkHttpClient okHttpClient) {
+    public static KiwixService newHacklistService(OkHttpClient okHttpClient, String baseUrl) {
       Retrofit retrofit = new Retrofit.Builder()
-          .baseUrl("http://download.kiwix.org/")
+          .baseUrl(baseUrl)
           .client(okHttpClient)
           .addConverterFactory(SimpleXmlConverterFactory.create())
           .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))

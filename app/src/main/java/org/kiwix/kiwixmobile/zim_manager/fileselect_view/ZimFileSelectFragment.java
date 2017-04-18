@@ -408,7 +408,7 @@ public class ZimFileSelectFragment extends Fragment
         holder.date.setText(book.getDate());
         holder.size.setText(LibraryAdapter.createGbString(book.getSize()));
         holder.fileName.setText(parseURL(getActivity(), book.file.getPath()));
-        holder.favicon.setImageBitmap(LibraryAdapter.createBitmapFromEncodedString(book.getFavicon()));
+        holder.favicon.setImageBitmap(LibraryAdapter.createBitmapFromEncodedString(book.getFavicon(), context));
 
 
         //// Check if no value is empty. Set the view to View.GONE, if it is. To View.VISIBLE, if not.

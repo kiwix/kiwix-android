@@ -5,7 +5,10 @@ import dagger.Component;
 import javax.inject.Singleton;
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
 import org.kiwix.kiwixmobile.di.modules.NetworkModule;
-import org.kiwix.kiwixmobile.di.modules.TestModule;
+import org.kiwix.kiwixmobile.di.modules.TestJNIModule;
+import org.kiwix.kiwixmobile.di.modules.TestJNIModule;
+import org.kiwix.kiwixmobile.di.modules.TestNetworkModule;
+import org.kiwix.kiwixmobile.utils.NetworkTest;
 import org.kiwix.kiwixmobile.utils.ZimTest;
 
 /**
@@ -15,10 +18,12 @@ import org.kiwix.kiwixmobile.utils.ZimTest;
 @Singleton
 @Component(modules = {
     ApplicationModule.class,
-    NetworkModule.class,
-    TestModule.class,
+    TestNetworkModule.class,
+    TestJNIModule.class,
 })
 public interface TestComponent extends ApplicationComponent {
 
   void inject(ZimTest zimTest);
+
+  void inject(NetworkTest networkTest);
 }
