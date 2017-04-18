@@ -139,7 +139,17 @@ android {
 
   buildTypes {
     debug {
+      // True breaks local variables being shown in breakpoints
+      testCoverageEnabled false
+    }
+
+    coverage {
+      initWith debug
       testCoverageEnabled true
+    }
+
+    release {
+
     }
   }
 
