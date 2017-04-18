@@ -8,6 +8,7 @@ import javax.inject.Singleton;
 import okhttp3.OkHttpClient;
 import okhttp3.mockwebserver.MockWebServer;
 import org.kiwix.kiwixmobile.network.KiwixService;
+import org.kiwix.kiwixmobile.utils.TestNetworkInterceptor;
 
 /**
  * Created by mhutti1 on 14/04/17.
@@ -18,7 +19,7 @@ public class TestNetworkModule {
   @Provides
   @Singleton
   OkHttpClient provideOkHttpClient() {
-    return new OkHttpClient().newBuilder().followRedirects(true).followSslRedirects(true).build();
+    return new OkHttpClient().newBuilder().followRedirects(true).followSslRedirects(true).addInterceptor(new TestNetworkInterceptor()).build();
   }
 
   @Provides @Singleton

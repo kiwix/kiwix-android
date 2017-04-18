@@ -10,6 +10,7 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import okio.Buffer;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Rule;
@@ -45,14 +46,20 @@ public class NetworkTest {
 
     new ZimContentProvider().setupDagger();
     component.inject(this);
-    InputStream inStream = NetworkTest.class.getClassLoader().getResourceAsStream("library.xml");
+    InputStream library = NetworkTest.class.getClassLoader().getResourceAsStream("library.xml");
+    InputStream metalinks = NetworkTest.class.getClassLoader().getResourceAsStream("wikipedia_af_all_nopic_2016-05.zim.meta4");
     try {
-      byte[] summary = IOUtils.toByteArray(inStream);
-      mockWebServer.enqueue(new MockResponse().setBody(new String(summary)));
-      mockWebServer.enqueue(new MockResponse().setBody(new String(summary)));
-      mockWebServer.enqueue(new MockResponse().setBody(new String(summary)));
-      mockWebServer.enqueue(new MockResponse().setBody(new String(summary)));
-      mockWebServer.enqueue(new MockResponse().setBody(new String(summary)));
+      byte[] libraryBytes = IOUtils.toByteArray(library);
+      mockWebServer.enqueue(new MockResponse().setBody(new String(libraryBytes)));
+      byte[] metalinkBytes = IOUtils.toByteArray(metalinks);
+      mockWebServer.enqueue(new MockResponse().setBody(new String(metalinkBytes)));
+      mockWebServer.enqueue(new MockResponse().setHeader("Content-Length", 63973123));
+      Buffer buffer = new Buffer();
+      buffer.write(new byte[63973123]);
+      buffer.close();
+      mockWebServer.enqueue(new MockResponse().setBody(buffer));
+      mockWebServer.enqueue(new MockResponse().setBody(buffer));
+      mockWebServer.enqueue(new MockResponse().setBody(buffer));
 
     } catch (IOException e) {
       e.printStackTrace();

@@ -9,6 +9,7 @@ import org.kiwix.kiwixmobile.di.modules.TestJNIModule;
 import org.kiwix.kiwixmobile.di.modules.TestJNIModule;
 import org.kiwix.kiwixmobile.di.modules.TestNetworkModule;
 import org.kiwix.kiwixmobile.utils.NetworkTest;
+import org.kiwix.kiwixmobile.utils.TestNetworkInterceptor;
 import org.kiwix.kiwixmobile.utils.ZimTest;
 
 /**
@@ -26,4 +27,6 @@ public interface TestComponent extends ApplicationComponent {
   void inject(ZimTest zimTest);
 
   void inject(NetworkTest networkTest);
+
+  void inject(TestNetworkInterceptor testNetworkInterceptor);
 }
