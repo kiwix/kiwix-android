@@ -1,7 +1,6 @@
-package org.kiwix.kiwixmobile.utils;
+package org.kiwix.kiwixmobile.tests;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -14,7 +13,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
@@ -24,7 +22,6 @@ import android.view.ViewParent;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.inject.Inject;
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -88,7 +85,7 @@ public class NetworkTest {
 
 
   @Test
-  public void zimTest() {
+  public void networkTest() {
 
     mActivityTestRule.launchActivity(null);
 

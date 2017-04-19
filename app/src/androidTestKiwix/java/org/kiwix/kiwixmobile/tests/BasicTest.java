@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile.utils;
+package org.kiwix.kiwixmobile.tests;
 
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
@@ -32,6 +32,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.utils.SplashActivity;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)

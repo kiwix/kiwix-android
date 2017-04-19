@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile.utils;
+package org.kiwix.kiwixmobile.tests;
 
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
