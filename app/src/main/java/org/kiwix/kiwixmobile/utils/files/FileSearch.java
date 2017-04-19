@@ -56,26 +56,22 @@ public class FileSearch {
   }
 
   public void scan() {
-
-    new Thread(new Runnable() {
-      @Override
-      public void run() {
-        scanFileSystem();
-        fileSystemScanCompleted = true;
-        checkCompleted();
-      }
+    // Start custom file search
+    new Thread(() -> {
+      scanFileSystem();
+      fileSystemScanCompleted = true;
+      checkCompleted();
     }).start();
 
-    new Thread(new Runnable() {
-      @Override
-      public void run() {
-        scanMediaStore();
-        mediaStoreScanCompleted = true;
-        checkCompleted();
-      }
+    // Star mediastore search
+    new Thread(() -> {
+      scanMediaStore();
+      mediaStoreScanCompleted = true;
+      checkCompleted();
     }).start();
   }
 
+  // If both searches are complete callback
   private synchronized void checkCompleted() {
     if (mediaStoreScanCompleted && fileSystemScanCompleted)
       listener.onScanCompleted();
@@ -117,17 +113,12 @@ public class FileSearch {
 
     int i = 0;
     for (final String extension : zimFiles) {
-      filter[i] = new FilenameFilter() {
-        public boolean accept(File dir, String name) {
-          return name.endsWith("." + extension);
-        }
-      };
+      filter[i] = (dir, name) -> name.endsWith("." + extension);
       i++;
     }
 
     String dirNamePrimary = new File(
             Environment.getExternalStorageDirectory().getAbsolutePath()).toString();
-    //        addFilesToFileList(dirNamePrimary, filter, fileList);
 
     for (final String dirName : tempRoots) {
       if (dirNamePrimary.equals(dirName)) {
@@ -216,6 +207,7 @@ public class FileSearch {
     }
   }
 
+  // Callback that a new file has been found
   public void onFileFound(String filePath) {
     LibraryNetworkEntity.Book book = fileToBook(filePath);
 
