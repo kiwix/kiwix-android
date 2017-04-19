@@ -22,11 +22,15 @@ package org.kiwix.kiwixmobile.database;
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import org.kiwix.kiwixmobile.database.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 
 
 import java.util.ArrayList;
+import org.kiwix.kiwixmobile.library.LibraryAdapter.Language;
 
 public class NetworkLanguageDao {
   private KiwixDatabase mDb;
@@ -52,8 +56,9 @@ public class NetworkLanguageDao {
     return result;
   }
 
-  public void saveFilteredLanguages(ArrayList<LibraryAdapter.Language> languages){
+  public void saveFilteredLanguages(List<Language> languages){
     mDb.deleteAll(NetworkLanguageDatabaseEntity.class);
+    Collections.sort(languages, (language, t1) -> language.language.compareTo(t1.language));
     for (LibraryAdapter.Language language : languages){
       NetworkLanguageDatabaseEntity networkLanguageDatabaseEntity = new NetworkLanguageDatabaseEntity();
       networkLanguageDatabaseEntity.setLanguageISO3(language.languageCode);

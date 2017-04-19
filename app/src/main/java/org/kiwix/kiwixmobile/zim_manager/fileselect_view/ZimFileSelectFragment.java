@@ -56,6 +56,7 @@ import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.utils.BookUtils;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
@@ -82,6 +83,7 @@ public class ZimFileSelectFragment extends Fragment
   private BookDao bookDao;
 
   @Inject ZimFileSelectPresenter presenter;
+  @Inject BookUtils bookUtils;
 
   private void setupDagger() {
     KiwixApplication.getInstance().getApplicationComponent().inject(this);
@@ -228,8 +230,8 @@ public class ZimFileSelectFragment extends Fragment
         boolean cached = mFiles.containsAll(bookDao.getBooks()) && bookDao.getBooks().containsAll(mFiles);
 
         // If content changed then update the list of downloadable books
-        if (!cached && LibraryFragment.libraryAdapter != null && context.searchView != null) {
-          LibraryFragment.libraryAdapter.getFilter().filter(context.searchView.getQuery());
+        if (!cached && context.mSectionsPagerAdapter.libraryFragment.libraryAdapter != null && context.searchView != null) {
+          context.mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(context.searchView.getQuery());
         }
 
         // Save the current list of books
@@ -320,8 +322,8 @@ public class ZimFileSelectFragment extends Fragment
     mFiles.remove(position);
     mRescanAdapter.notifyDataSetChanged();
     checkEmpty();
-    if (LibraryFragment.libraryAdapter != null) {
-      LibraryFragment.libraryAdapter.getFilter().filter(context.searchView.getQuery());
+    if (context.mSectionsPagerAdapter.libraryFragment.libraryAdapter != null) {
+      context.mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(context.searchView.getQuery());
     }
     return true;
   }
@@ -338,7 +340,6 @@ public class ZimFileSelectFragment extends Fragment
 
     public RescanDataAdapter(Context context, int textViewResourceId, List<LibraryNetworkEntity.Book> objects) {
       super(context, textViewResourceId, objects);
-      LibraryAdapter.initLanguageMap();
     }
 
     @Override
@@ -369,7 +370,7 @@ public class ZimFileSelectFragment extends Fragment
 
         holder.title.setText(book.getTitle());
         holder.description.setText(book.getDescription());
-        holder.language.setText(LibraryAdapter.getLanguage(book.getLanguage()));
+        holder.language.setText(bookUtils.getLanguage(book.getLanguage()));
         holder.creator.setText(book.getCreator());
         holder.publisher.setText(book.getPublisher());
         holder.date.setText(book.getDate());

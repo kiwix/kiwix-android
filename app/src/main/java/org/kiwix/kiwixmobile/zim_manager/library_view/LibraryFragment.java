@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.Filter.FilterListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -37,8 +38,6 @@ import butterknife.ButterKnife;
 import eu.mhutti1.utils.storage.StorageDevice;
 import eu.mhutti1.utils.storage.support.StorageSelectDialog;
 import java.io.File;
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,19 +47,15 @@ import javax.inject.Inject;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.database.BookDao;
-import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.downloader.DownloadIntent;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
+import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
-
-import rx.android.schedulers.AndroidSchedulers;
 
 import static org.kiwix.kiwixmobile.downloader.DownloadService.KIWIX_ROOT;
 import static org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
@@ -69,27 +64,21 @@ import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 public class LibraryFragment extends Fragment
     implements AdapterView.OnItemClickListener, StorageSelectDialog.OnSelectListener, LibraryViewCallback {
 
-  public
+
   @BindView(R.id.library_list)
   ListView libraryList;
-  public
-  @BindView(R.id.progressbar_layout)
-  RelativeLayout progressBarLayout;
-  @BindView(R.id.progressBar)
-  ProgressBar progressBar;
-  @BindView(R.id.progressbar_message)
-  TextView progressBarMessage;
   @BindView(R.id.network_permission_text)
-  TextView permissionText;
+  TextView networkText;
   @BindView(R.id.network_permission_button)
   Button permissionButton;
+  private RelativeLayout progressBar;
 
   @Inject
   KiwixService kiwixService;
 
   public LinearLayout llLayout;
 
-  private LinkedList<LibraryNetworkEntity.Book> books;
+  private ArrayList<Book> books = new ArrayList<>();
 
   public static DownloadService mService = new DownloadService();
 
@@ -97,7 +86,7 @@ public class LibraryFragment extends Fragment
 
   private boolean active;
 
-  public static LibraryAdapter libraryAdapter;
+  public LibraryAdapter libraryAdapter;
 
   private DownloadServiceConnection mConnection = new DownloadServiceConnection();
 
@@ -111,6 +100,12 @@ public class LibraryFragment extends Fragment
 
   public static boolean isReceiverRegistered = false;
 
+  private static TestingUtils.IdleListener callback;
+
+  public static void registerIdleCallback(TestingUtils.IdleListener listListener) {
+    callback = listListener;
+  }
+
   @Inject
   LibraryPresenter presenter;
 
@@ -122,17 +117,22 @@ public class LibraryFragment extends Fragment
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
 
+
     setupDagger();
-    presenter.attachView(this);
-    faActivity = (ZimManageActivity) super.getActivity();
+
+    if (callback != null) {
+      callback.startTask();
+    }
+
     // Replace LinearLayout by the type of the root element of the layout you're trying to load
     llLayout = (LinearLayout) inflater.inflate(R.layout.activity_library, container, false);
-    // Of course you will want to faActivity and llLayout in the class and not this method to access them in the rest of
-    // the class, just initialize them here
-
-    // Don't use this method, it's handled by inflater.inflate() above :
-    // setContentView(R.layout.activity_layout);
     ButterKnife.bind(this, llLayout);
+    progressBar = (RelativeLayout) inflater.inflate(R.layout.progress_bar, null);
+    libraryAdapter = new LibraryAdapter(super.getContext());
+    libraryList.setAdapter(libraryAdapter);
+    presenter.attachView(this);
+    faActivity = (ZimManageActivity) super.getActivity();
+
     DownloadService.setDownloadFragment(faActivity.mSectionsPagerAdapter.getDownloadFragment());
     conMan =
         (ConnectivityManager) super.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -158,63 +158,54 @@ public class LibraryFragment extends Fragment
   @Override
   public void showBooks(LinkedList<Book> books) {
     active = true;
-    this.books = books;
-    libraryAdapter = new LibraryAdapter(super.getActivity(), new ArrayList<>(books));
-    libraryList.setAdapter(libraryAdapter);
-
+    libraryAdapter.setAllBooks(books);
+    libraryAdapter.getFilter().filter(
+        ((ZimManageActivity) super.getActivity()).searchView.getQuery(), i -> stopScanningContent());
+    libraryAdapter.notifyDataSetChanged();
     libraryList.setOnItemClickListener(this);
-
-
-    stopScanningContent();
   }
 
   @Override
   public void displayNoNetworkConnection() {
-    progressBar.setVisibility(View.GONE);
-    progressBarLayout.setVisibility(View.VISIBLE);
-    progressBarMessage.setVisibility(View.VISIBLE);
-    progressBarMessage.setText(R.string.no_network_msg);
+    libraryList.removeFooterView(progressBar);
+    networkText.setText(R.string.no_network_msg);
+    networkText.setVisibility(View.VISIBLE);
+    permissionButton.setVisibility(View.GONE);
   }
 
   @Override
   public void displayScanningContent() {
-    progressBar.setVisibility(View.VISIBLE);
-    progressBarMessage.setVisibility(View.VISIBLE);
-    progressBarLayout.setVisibility(View.VISIBLE);
-    progressBarMessage.setText(R.string.rescan_fs_warning);
-    libraryList.setVisibility(View.GONE);
+    networkText.setVisibility(View.GONE);
+    permissionButton.setVisibility(View.GONE);
+    libraryList.addFooterView(progressBar);
   }
 
 
   @Override
   public void stopScanningContent() {
-    progressBar.setVisibility(View.GONE);
-    progressBarMessage.setVisibility(View.GONE);
-    progressBarLayout.setVisibility(View.GONE);
-    libraryList.setVisibility(View.VISIBLE);
+    networkText.setVisibility(View.GONE);
+    permissionButton.setVisibility(View.GONE);
+    libraryList.removeFooterView(progressBar);
+    if (callback != null) {
+      callback.finishTask();
+    }
   }
 
 
   public void displayNetworkConfirmation() {
-    progressBar.setVisibility(View.GONE);
-    progressBarMessage.setVisibility(View.GONE);
-    permissionText.setVisibility(View.VISIBLE);
+    libraryList.removeFooterView(progressBar);
+    networkText.setText(R.string.download_over_network);
+    networkText.setVisibility(View.VISIBLE);
     permissionButton.setVisibility(View.VISIBLE);
-    permissionButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        presenter.loadBooks();
-        permissionButton.setVisibility(View.GONE);
-        permissionText.setVisibility(View.GONE);
-      }
+    permissionButton.setOnClickListener(view -> {
+      presenter.loadBooks();
+      permissionButton.setVisibility(View.GONE);
+      networkText.setVisibility(View.GONE);
     });
   }
 
   public void noNetworkConnection() {
-    progressBar.setVisibility(View.GONE);
-    progressBarLayout.setVisibility(View.VISIBLE);
-    progressBarMessage.setVisibility(View.VISIBLE);
-    progressBarMessage.setText(R.string.no_network_msg);
+    displayNoNetworkConnection();
   }
 
   @Override
@@ -373,7 +364,7 @@ public class LibraryFragment extends Fragment
     public void onReceive(Context context, Intent intent) {
       NetworkInfo network = conMan.getActiveNetworkInfo();
 
-      if (books == null && network != null && network.isConnected()) {
+      if ((books == null || books.isEmpty()) && network != null && network.isConnected()) {
         if (isWiFi()) {
           presenter.loadBooks();
         } else {

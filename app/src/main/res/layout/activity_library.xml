@@ -16,63 +16,26 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:paddingBottom="60dp"
-      android:divider="@null"
-      android:background="?attr/listBackground"/>
+      android:background="?attr/listBackground"
+      android:divider="@null"/>
 
     <TextView
       android:id="@+id/network_permission_text"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_centerHorizontal="true"
       android:layout_marginTop="200dp"
+      android:layout_centerHorizontal="true"
       android:text="@string/get_library_over_network"
-      android:visibility="gone" />
+      android:visibility="gone"/>
 
     <Button
       android:id="@+id/network_permission_button"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_centerHorizontal="true"
       android:layout_marginTop="230dp"
+      android:layout_centerHorizontal="true"
       android:text="@string/proceed"
-      android:visibility="gone" />
+      android:visibility="gone"/>
 
-    <RelativeLayout
-      android:id="@+id/progressbar_layout"
-      android:layout_width="wrap_content"
-      android:layout_height="match_parent"
-      android:layout_centerInParent="true"
-      android:layout_gravity="center_vertical"
-      android:gravity="center_vertical"
-      android:orientation="vertical"
-      android:paddingBottom="75dp"
-      android:visibility="gone">
-
-      <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:paddingBottom="10px"></ProgressBar>
-
-      <TextView
-        android:id="@+id/progressbar_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/progressBar"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_gravity="center_vertical"
-        android:layout_margin="10dp"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:text="@string/rescan_fs_warning"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:visibility="gone" />
-
-
-    </RelativeLayout>
   </RelativeLayout>
 </LinearLayout>

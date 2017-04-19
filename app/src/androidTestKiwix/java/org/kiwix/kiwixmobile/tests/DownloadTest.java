@@ -14,11 +14,16 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.core.Is.is;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.Espresso;
 import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
@@ -31,12 +36,17 @@ import javax.inject.Inject;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.library.LibraryAdapter;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+import org.kiwix.kiwixmobile.utils.LibraryIdlingResource;
 import org.kiwix.kiwixmobile.utils.SplashActivity;
+import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -46,17 +56,16 @@ public class DownloadTest {
   public ActivityTestRule<SplashActivity> mActivityTestRule = new ActivityTestRule<>(
       SplashActivity.class);
 
+  @Before
+  public void setUp() {
+    Espresso.registerIdlingResources(new LibraryIdlingResource());
+  }
+
   @Test
   public void donwloadTest() {
     ViewInteraction appCompatButton = onView(
         allOf(withId(R.id.get_content_card), withText("Get Content")));
     appCompatButton.perform(scrollTo(), click());
-
-    try {
-      Thread.sleep(10000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
 
     ViewInteraction appCompatTextView = onView(
         allOf(withText("Device"), isDisplayed()));
