@@ -13,10 +13,11 @@ public class KiwixIdlingResource implements IdlingResource, IdleListener {
   private static KiwixIdlingResource kiwixIdlingResource;
 
   public static KiwixIdlingResource getInstance() {
-    TestingUtils.registerIdleCallback(kiwixIdlingResource);
     if (kiwixIdlingResource == null) {
       kiwixIdlingResource = new KiwixIdlingResource();
     }
+    kiwixIdlingResource.idle = true;
+    TestingUtils.registerIdleCallback(kiwixIdlingResource);
     return kiwixIdlingResource;
   }
 

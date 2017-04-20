@@ -38,6 +38,7 @@ public class TestingUtils {
   }
 
   public static void registerIdleCallback(TestingUtils.IdleListener listListener) {
+    resources.clear();
     callback = listListener;
   }
 }

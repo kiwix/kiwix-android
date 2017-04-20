@@ -100,6 +100,11 @@ public class NetworkTest {
 
     TestUtils.allowPermissionsIfNeeded();
 
+    try {
+      onView(withId(R.id.network_permission_button)).perform(click());
+    } catch (RuntimeException e) {
+    }
+
     ViewInteraction linearLayout = onView(
         allOf(childAtPosition(
             withId(R.id.library_list),
@@ -107,26 +112,14 @@ public class NetworkTest {
             isDisplayed()));
     linearLayout.perform(click());
 
-    ViewInteraction viewPager = onView(
-        allOf(withId(R.id.container),
-            withParent(allOf(withId(R.id.zim_manager_main_activity),
-                withParent(withId(android.R.id.content)))),
-            isDisplayed()));
-    viewPager.perform(swipeLeft());
+    try {
+      onView(withId(android.R.id.button1)).perform(click());
+    } catch (RuntimeException e) {
+    }
 
-    ViewInteraction viewPager2 = onView(
-        allOf(withId(R.id.container),
-            withParent(allOf(withId(R.id.zim_manager_main_activity),
-                withParent(withId(android.R.id.content)))),
-            isDisplayed()));
-    viewPager2.perform(swipeRight());
 
-    ViewInteraction viewPager3 = onView(
-        allOf(withId(R.id.container),
-            withParent(allOf(withId(R.id.zim_manager_main_activity),
-                withParent(withId(android.R.id.content)))),
-            isDisplayed()));
-    viewPager3.perform(swipeRight());
+    onView(withText(R.string.local_zims))
+        .perform(click());
 
     onView(withId(R.id.menu_rescan_fs))
         .perform(click());
@@ -141,7 +134,7 @@ public class NetworkTest {
 
     openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
 
-    onView(withText("Get Content"))
+    onView(withText(R.string.menu_zim_manager))
         .perform(click());
 
     ViewInteraction linearLayout4 = onView(

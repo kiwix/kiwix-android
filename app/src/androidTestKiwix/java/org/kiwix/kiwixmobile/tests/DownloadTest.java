@@ -69,6 +69,11 @@ public class DownloadTest {
         allOf(withText("Online"), isDisplayed()));
     appCompatTextView2.perform(click());
 
+    try {
+      onView(withId(R.id.network_permission_button)).perform(click());
+    } catch (RuntimeException e) {
+    }
+
     ViewInteraction viewPager2 = onView(
         allOf(withId(R.id.container),
             withParent(allOf(withId(R.id.zim_manager_main_activity),
@@ -76,6 +81,11 @@ public class DownloadTest {
             isDisplayed()));
 
     onData(withContent("ray_charles")).inAdapterView(withId(R.id.library_list)).perform(click());
+
+    try {
+      onView(withId(android.R.id.button1)).perform(click());
+    } catch (RuntimeException e) {
+    }
 
     ViewInteraction appCompatTextView3 = onView(
         allOf(withText("Device"), isDisplayed()));
