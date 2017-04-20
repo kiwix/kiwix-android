@@ -231,7 +231,7 @@ public class LibraryAdapter extends BaseAdapter {
       List<Book> filtered = (List<Book>) results.values;
       if (filtered != null) {
         if (filtered.isEmpty()) {
-
+          filteredBooks = allBooks;
         } else {
           filteredBooks.clear();
           filteredBooks.addAll(filtered);

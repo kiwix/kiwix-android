@@ -8,15 +8,20 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
  * Created by mhutti1 on 19/04/17.
  */
 
-public class LibraryIdlingResource implements IdlingResource, IdleListener {
+public class KiwixIdlingResource implements IdlingResource, IdleListener {
+
+  private static KiwixIdlingResource kiwixIdlingResource;
+
+  public static KiwixIdlingResource getInstance() {
+    TestingUtils.registerIdleCallback(kiwixIdlingResource);
+    if (kiwixIdlingResource == null) {
+      kiwixIdlingResource = new KiwixIdlingResource();
+    }
+    return kiwixIdlingResource;
+  }
 
   private boolean idle = true;
   private ResourceCallback resourceCallback;
-
-
-  public LibraryIdlingResource() {
-    LibraryFragment.registerIdleCallback(this);
-  }
 
   @Override
   public String getName() {
@@ -41,6 +46,8 @@ public class LibraryIdlingResource implements IdlingResource, IdleListener {
   @Override
   public void finishTask() {
     idle = true;
-    resourceCallback.onTransitionToIdle();
+    if (resourceCallback != null) {
+      resourceCallback.onTransitionToIdle();
+    }
   }
 }

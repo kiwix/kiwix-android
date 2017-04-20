@@ -14,6 +14,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
+import android.support.test.espresso.Espresso;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.view.View;
@@ -30,6 +31,7 @@ import org.apache.commons.io.IOUtils;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -41,6 +43,7 @@ import org.kiwix.kiwixmobile.di.components.DaggerTestComponent;
 import org.kiwix.kiwixmobile.di.components.TestComponent;
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
 import org.kiwix.kiwixmobile.testutils.TestUtils;
+import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
 
 /**
  * Created by mhutti1 on 14/04/17.
@@ -58,6 +61,8 @@ public class NetworkTest {
 
   @Before
   public void setUp() {
+    Espresso.registerIdlingResources(KiwixIdlingResource.getInstance());
+
     TestComponent component = DaggerTestComponent.builder().applicationModule
         (new ApplicationModule(
             (KiwixApplication) getInstrumentation().getTargetContext().getApplicationContext())).build();
@@ -95,26 +100,12 @@ public class NetworkTest {
 
     TestUtils.allowPermissionsIfNeeded();
 
-
-    try {
-      Thread.sleep(1000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-
     ViewInteraction linearLayout = onView(
         allOf(childAtPosition(
             withId(R.id.library_list),
             0),
             isDisplayed()));
     linearLayout.perform(click());
-
-
-    try {
-      Thread.sleep(16000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
 
     ViewInteraction viewPager = onView(
         allOf(withId(R.id.container),
@@ -140,11 +131,6 @@ public class NetworkTest {
     onView(withId(R.id.menu_rescan_fs))
         .perform(click());
 
-    try {
-      Thread.sleep(10000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
 
     ViewInteraction linearLayout2 = onView(
         allOf(childAtPosition(
@@ -158,12 +144,6 @@ public class NetworkTest {
     onView(withText("Get Content"))
         .perform(click());
 
-    try {
-      Thread.sleep(6000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-
     ViewInteraction linearLayout4 = onView(
         allOf(childAtPosition(
             withId(R.id.zimfilelist),
@@ -172,6 +152,12 @@ public class NetworkTest {
     linearLayout2.perform(longClick());
     onView(withId(android.R.id.button1)).perform(click());
   }
+
+  @After
+  public void finish() {
+    Espresso.unregisterIdlingResources(KiwixIdlingResource.getInstance());
+  }
+
 
   private static Matcher<View> childAtPosition(
       final Matcher<View> parentMatcher, final int position) {

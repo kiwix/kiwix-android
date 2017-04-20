@@ -100,12 +100,6 @@ public class LibraryFragment extends Fragment
 
   public static boolean isReceiverRegistered = false;
 
-  private static TestingUtils.IdleListener callback;
-
-  public static void registerIdleCallback(TestingUtils.IdleListener listListener) {
-    callback = listListener;
-  }
-
   @Inject
   LibraryPresenter presenter;
 
@@ -120,9 +114,7 @@ public class LibraryFragment extends Fragment
 
     setupDagger();
 
-    if (callback != null) {
-      callback.startTask();
-    }
+    TestingUtils.bindResource(LibraryFragment.class);
 
     // Replace LinearLayout by the type of the root element of the layout you're trying to load
     llLayout = (LinearLayout) inflater.inflate(R.layout.activity_library, container, false);
@@ -171,6 +163,7 @@ public class LibraryFragment extends Fragment
     networkText.setText(R.string.no_network_msg);
     networkText.setVisibility(View.VISIBLE);
     permissionButton.setVisibility(View.GONE);
+    TestingUtils.unbindResource(LibraryFragment.class);
   }
 
   @Override
@@ -186,9 +179,7 @@ public class LibraryFragment extends Fragment
     networkText.setVisibility(View.GONE);
     permissionButton.setVisibility(View.GONE);
     libraryList.removeFooterView(progressBar);
-    if (callback != null) {
-      callback.finishTask();
-    }
+    TestingUtils.unbindResource(LibraryFragment.class);
   }
 
 

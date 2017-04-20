@@ -58,6 +58,7 @@ import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.BookUtils;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
+import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
@@ -199,6 +200,7 @@ public class ZimFileSelectFragment extends Fragment
     if (mZimFileList.getFooterViewsCount() != 0)
       return;
 
+    TestingUtils.bindResource(ZimFileSelectFragment.class);
     mZimFileList.addFooterView(progressBar);
     mZimFileList.setAdapter(mRescanAdapter);
 
@@ -240,6 +242,7 @@ public class ZimFileSelectFragment extends Fragment
           bookDao.saveBooks(mFiles);
           mZimFileList.removeFooterView(progressBar);
           checkEmpty();
+          TestingUtils.unbindResource(ZimFileSelectFragment.class);
         });
       }
     }).scan();
