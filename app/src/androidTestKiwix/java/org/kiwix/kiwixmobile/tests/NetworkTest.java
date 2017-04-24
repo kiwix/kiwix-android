@@ -15,6 +15,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
 import android.support.test.espresso.Espresso;
+import android.support.test.espresso.IdlingPolicies;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.view.View;
@@ -22,6 +23,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import okhttp3.OkHttpClient;
 import okhttp3.mockwebserver.MockResponse;
@@ -33,6 +35,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.kiwix.kiwixmobile.KiwixApplication;
@@ -59,6 +62,12 @@ public class NetworkTest {
   public ActivityTestRule<KiwixMobileActivity> mActivityTestRule = new ActivityTestRule<>(
       KiwixMobileActivity.class, false, false);
 
+  @BeforeClass
+  public static void beforeClass() {
+    IdlingPolicies.setMasterPolicyTimeout(15, TimeUnit.SECONDS);
+    IdlingPolicies.setIdlingResourceTimeout(15, TimeUnit.SECONDS);
+  }
+
   @Before
   public void setUp() {
     Espresso.registerIdlingResources(KiwixIdlingResource.getInstance());
@@ -73,14 +82,15 @@ public class NetworkTest {
     component.inject(this);
     InputStream library = NetworkTest.class.getClassLoader().getResourceAsStream("library.xml");
     InputStream metalinks = NetworkTest.class.getClassLoader().getResourceAsStream("test.zim.meta4");
+    InputStream testzim = NetworkTest.class.getClassLoader().getResourceAsStream("testzim.zim");
     try {
       byte[] libraryBytes = IOUtils.toByteArray(library);
       mockWebServer.enqueue(new MockResponse().setBody(new String(libraryBytes)));
       byte[] metalinkBytes = IOUtils.toByteArray(metalinks);
       mockWebServer.enqueue(new MockResponse().setBody(new String(metalinkBytes)));
-      mockWebServer.enqueue(new MockResponse().setHeader("Content-Length", 63973123));
+      mockWebServer.enqueue(new MockResponse().setHeader("Content-Length", 357269));
       Buffer buffer = new Buffer();
-      buffer.write(new byte[63973123]);
+      buffer.write(IOUtils.toByteArray(testzim));
       buffer.close();
       mockWebServer.enqueue(new MockResponse().setBody(buffer));
     } catch (IOException e) {

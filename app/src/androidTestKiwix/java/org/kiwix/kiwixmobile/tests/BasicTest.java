@@ -44,20 +44,6 @@ public class BasicTest {
 
   @Test
   public void basicTest() {
-    ViewInteraction imageButton = onView(
-        allOf(withClassName(is("android.widget.ImageButton")),
-            withParent(allOf(withId(R.id.toolbar),
-                withParent(withId(R.id.toolbar_layout)))),
-            isDisplayed()));
-    imageButton.perform(click());
-
-    ViewInteraction imageButton2 = onView(
-        allOf(withClassName(is("android.widget.ImageButton")),
-            withParent(allOf(withId(R.id.toolbar),
-                withParent(withId(R.id.toolbar_layout)))),
-            isDisplayed()));
-    imageButton2.perform(click());
-
     onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
 
 
@@ -91,12 +77,7 @@ public class BasicTest {
             isDisplayed()));
     imageView2.check(matches(isDisplayed()));
 
-    ViewInteraction imageButton4 = onView(
-        allOf(withClassName(is("android.widget.ImageButton")),
-            withParent(allOf(withId(R.id.toolbar),
-                withParent(withId(R.id.toolbar_layout)))),
-            isDisplayed()));
-    imageButton4.perform(click());
+    onView(withId(R.id.drawer_layout)).perform(DrawerActions.close());
   }
 
   @Test

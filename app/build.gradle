@@ -10,7 +10,7 @@ buildscript {
     classpath 'com.android.tools.build:gradle:2.3.1'
     classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
     classpath 'me.tatarka:gradle-retrolambda:3.2.5'
-    classpath 'com.testdroid:gradle:1.4.0'
+    classpath 'com.testdroid:gradle:1.5.0'
     classpath 'org.apache.httpcomponents:httpclient-android:4.3.3'
   }
 }
@@ -29,13 +29,13 @@ repositories {
 }
 
 dependencies {
-  compile 'com.android.support:appcompat-v7:24.1.0'
-  compile 'com.android.support:support-v13:24.1.0'
-  compile 'com.android.support:support-v4:24.1.0'
-  compile 'com.android.support:design:24.1.0'
-  compile 'com.android.support:cardview-v7:24.1.0'
+  compile 'com.android.support:appcompat-v7:25.3.1'
+  compile 'com.android.support:support-v13:25.3.1'
+  compile 'com.android.support:support-v4:25.3.1'
+  compile 'com.android.support:design:25.3.1'
+  compile 'com.android.support:cardview-v7:25.3.1'
 
-  androidTestCompile 'com.android.support:support-annotations:24.1.0'
+  androidTestCompile 'com.android.support:support-annotations:25.3.1'
   androidTestCompile 'com.android.support.test:runner:0.5'
   androidTestCompile 'com.android.support.test:rules:0.5'
 
@@ -71,7 +71,8 @@ dependencies {
   compile 'eu.mhutti1.utils.storage:android-storage-devices:0.5.0'
   compile 'com.jakewharton:butterknife:8.0.1'
   apt 'com.jakewharton:butterknife-compiler:8.0.1'
-  compile group: 'com.google.guava', name: 'guava', version: '19.0'
+  compile group: 'com.google.guava', name: 'guava', version: '20.0'
+  compile 'com.android.support:multidex:1.0.1'
 
   testCompile 'junit:junit:4.12'
   androidTestCompile 'junit:junit:4.12'
@@ -141,6 +142,8 @@ android {
     debug {
       // True breaks local variables being shown in breakpoints
       testCoverageEnabled false
+      // Needed for instrumentation tests on Pre 5.0
+      multiDexKeepProguard file('multidex-instrumentation-config.pro')
     }
 
     coverage {
@@ -152,7 +155,7 @@ android {
 
     }
   }
-
+  
   productFlavors {
 
     // Vanilla Kiwix app
@@ -254,6 +257,9 @@ testdroid {
   username System.getenv('TESTDROID_USERNAME')
   password System.getenv('TESTDROID_PASSWORD')
   deviceGroup 'Kiwix'
-  mode "FULL_RUN"
   projectName "Kiwix"
+
+  fullRunConfig {
+    instrumentationRunner =  "android.support.test.runner.AndroidJUnitRunner"
+  }
 }
