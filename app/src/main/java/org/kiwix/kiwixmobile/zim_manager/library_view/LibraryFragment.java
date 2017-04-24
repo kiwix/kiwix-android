@@ -120,6 +120,7 @@ public class LibraryFragment extends Fragment
     llLayout = (LinearLayout) inflater.inflate(R.layout.activity_library, container, false);
     ButterKnife.bind(this, llLayout);
     progressBar = (RelativeLayout) inflater.inflate(R.layout.progress_bar, null);
+    displayScanningContent();
     libraryAdapter = new LibraryAdapter(super.getContext());
     libraryList.setAdapter(libraryAdapter);
     presenter.attachView(this);
@@ -172,10 +173,12 @@ public class LibraryFragment extends Fragment
 
   @Override
   public void displayScanningContent() {
-    networkText.setVisibility(View.GONE);
-    permissionButton.setVisibility(View.GONE);
-    libraryList.addFooterView(progressBar);
-    TestingUtils.bindResource(LibraryFragment.class);
+    if (libraryList.getFooterViewsCount() == 0) {
+      networkText.setVisibility(View.GONE);
+      permissionButton.setVisibility(View.GONE);
+      libraryList.addFooterView(progressBar);
+      TestingUtils.bindResource(LibraryFragment.class);
+    }
   }
 
 
