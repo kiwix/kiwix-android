@@ -2,6 +2,7 @@ package org.kiwix.kiwixmobile.utils;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.Build.VERSION_CODES;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.ViewGroup;
@@ -13,7 +14,7 @@ import android.view.ViewGroup;
 public class DimenUtils {
 
   private static boolean isStatusBarTranslucent() {
-    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+    return Build.VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP;
   }
 
   /**
