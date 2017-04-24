@@ -91,6 +91,9 @@ public class DownloadTest {
         allOf(withText("Device"), isDisplayed()));
     appCompatTextView3.perform(click());
 
+    onView(withId(R.id.menu_rescan_fs))
+        .perform(click());
+
     onData(withContent("ray_charles")).inAdapterView(withId(R.id.zimfilelist)).perform(click());
 
     openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
