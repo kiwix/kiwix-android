@@ -34,4 +34,5 @@ licenses:
   - '.+'
 
 script:
-  - ./gradlew build  
+  - ./gradlew build testdroidUploadKiwix
+  - ./testdroid.py
