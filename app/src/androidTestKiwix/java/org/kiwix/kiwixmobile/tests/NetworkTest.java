@@ -64,7 +64,7 @@ public class NetworkTest {
 
   @BeforeClass
   public static void beforeClass() {
-    IdlingPolicies.setMasterPolicyTimeout(20, TimeUnit.SECONDS);
+    IdlingPolicies.setMasterPolicyTimeout(350, TimeUnit.SECONDS);
     IdlingPolicies.setIdlingResourceTimeout(350, TimeUnit.SECONDS);
   }
 
