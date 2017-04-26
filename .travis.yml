@@ -3,7 +3,7 @@ language: android
 jdk: oraclejdk8
 
 install:
-  - pip install requests
+  - pip install --user requests
 
 android:
   components:
