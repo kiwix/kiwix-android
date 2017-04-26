@@ -2,6 +2,9 @@ language: android
 
 jdk: oraclejdk8
 
+install:
+  - pip install requests
+
 android:
   components:
     # Uncomment the lines below if you want to
