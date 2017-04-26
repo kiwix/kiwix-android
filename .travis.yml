@@ -2,11 +2,8 @@ language: android
 
 jdk: oraclejdk8
 
-python:
-  - "3.5"
-
 install:
-  - pip install --user requests
+  - pip install --user 'requests[security]'
 
 android:
   components:
