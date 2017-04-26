@@ -2,6 +2,8 @@ language: android
 
 jdk: oraclejdk8
 
+fail_fast: true
+
 install:
   - pip install --user 'requests[security]'
 
