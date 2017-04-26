@@ -2,8 +2,6 @@ language: android
 
 jdk: oraclejdk8
 
-fail_fast: true
-
 install:
   - pip install --user 'requests[security]'
 
@@ -38,4 +36,4 @@ cache:
 licenses:
   - '.+'
 
-script: ./gradlew build testdroidUploadKiwix && ./testdroid.py
+script: ./gradlew testdroidUploadKiwix && ./testdroid.py
