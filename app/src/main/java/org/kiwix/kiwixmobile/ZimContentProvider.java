@@ -37,6 +37,7 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixlib.JNIKiwix;
 import org.kiwix.kiwixlib.JNIKiwixString;
@@ -60,7 +61,15 @@ public class ZimContentProvider extends ContentProvider {
 
   public static String zimFileName;
 
-  private static JNIKiwix jniKiwix;
+  @Inject public static JNIKiwix jniKiwix;
+
+  @Inject public static Context context;
+
+  public void setupDagger() {
+    KiwixApplication.getInstance().getApplicationComponent().inject(this);
+    setIcuDataDirectory();
+  }
+
 
   private static String getFulltextIndexPath(String file){
     String[] names = {file, file};
@@ -313,12 +322,9 @@ public class ZimContentProvider extends ContentProvider {
     return filePath;
   }
 
-
-
   @Override
   public boolean onCreate() {
-    jniKiwix = new JNIKiwix();
-    setIcuDataDirectory();
+    setupDagger();
     return true;
   }
 
@@ -425,8 +431,8 @@ public class ZimContentProvider extends ContentProvider {
   }
 
   private void setIcuDataDirectory() {
-    File workingDir = this.getContext().getFilesDir();
-    String icuDirPath = loadICUData(this.getContext(), workingDir);
+    File workingDir = context.getFilesDir();
+    String icuDirPath = loadICUData(context, workingDir);
 
     if (icuDirPath != null) {
       Log.d(TAG_KIWIX, "Setting the ICU directory path to " + icuDirPath);
@@ -461,7 +467,7 @@ public class ZimContentProvider extends ContentProvider {
         JNIKiwixString mime = new JNIKiwixString();
         JNIKiwixInt size = new JNIKiwixInt();
         byte[] data = jniKiwix.getContent(articleZimUrl, mime, size);
-        if (mime.value.equals("text/css") && KiwixMobileActivity.nightMode) {
+        if (mime.value != null && mime.value.equals("text/css") && KiwixMobileActivity.nightMode) {
           out.write(("img { \n" +
               " -webkit-filter: invert(1); \n" +
               " filter: invert(1); \n" +

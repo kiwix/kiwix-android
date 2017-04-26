@@ -19,6 +19,8 @@
 
 package org.kiwix.kiwixmobile.library;
 
+import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -106,7 +108,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
     holder.publisher.setText(book.getPublisher());
     holder.date.setText(book.getDate());
     holder.size.setText(createGbString(book.getSize()));
-    holder.fileName.setText(parseURL(book.getUrl()));
+    holder.fileName.setText(parseURL(mActivity, book.getUrl()));
     holder.favicon.setImageBitmap(createBitmapFromEncodedString(book.getFavicon()));
 
     // Check if no value is empty. Set the view to View.GONE, if it is. To View.VISIBLE, if not.
@@ -149,22 +151,6 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
     return convertView;
   }
 
-  public static String parseURL(String url) {
-    String details;
-    try {
-      details = url.substring(url.lastIndexOf("/") + 1, url.length() - 10);
-      details = details.substring(details.indexOf("_", details.indexOf("_") + 1) + 1, details.lastIndexOf("_"));
-      details = details.replaceAll("_", " ");
-      details = details.replaceAll("all", "");
-      details = details.replaceAll("nopic", mActivity.getString(R.string.zim_nopic));
-      details = details.replaceAll("simple", mActivity.getString(R.string.zim_simple));
-      details = details.trim().replaceAll(" +", " ");
-      return details;
-    } catch (Exception e) {
-      return "";
-    }
-  }
-
   public static boolean langaugeActive(Book book) {
     return Observable.from(mLanguages)
         .takeFirst(language -> language.languageCode.equals(book.getLanguage()))
@@ -173,7 +159,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
 
   public static Observable<Book> getMatches(Book b, String s) {
     StringBuffer text = new StringBuffer();
-    text.append(b.getTitle() + "|" + b.getDescription() + "|" + parseURL(b.getUrl()) + "|");
+    text.append(b.getTitle() + "|" + b.getDescription() + "|" + parseURL(mActivity, b.getUrl()) + "|");
     if (mLocaleMap.containsKey(b.getLanguage())) {
       text.append(mLocaleMap.get(b.getLanguage()).getDisplayLanguage() + "|");
     }

@@ -37,17 +37,14 @@ public class ContentTest {
   public ActivityTestRule<SplashActivity> mActivityTestRule = new ActivityTestRule<>(
       SplashActivity.class);
 
-  @Before
-  public void permissions() {
-    TestUtils.preGrantStorage();
-  }
-
   @Test
   public void contentTest() {
     ViewInteraction appCompatButton = onView(
         allOf(withId(R.id.get_content_card), withText("Get Content")
         ));
     appCompatButton.perform(scrollTo(), click());
+
+    TestUtils.allowPermissionsIfNeeded();
 
     ViewInteraction textView2 = onView(
         allOf(withId(R.id.action_search), withContentDescription("Search"),

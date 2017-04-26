@@ -16,9 +16,11 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
 import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -55,12 +57,8 @@ public class BasicTest {
             isDisplayed()));
     imageButton2.perform(click());
 
-    ViewInteraction imageButton3 = onView(
-        allOf(withClassName(is("android.widget.ImageButton")),
-            withParent(allOf(withId(R.id.toolbar),
-                withParent(withId(R.id.toolbar_layout)))),
-            isDisplayed()));
-    imageButton3.perform(click());
+    onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
+
 
     ViewInteraction textView7 = onView(
         allOf(withId(R.id.titleText), withText("Help"),
@@ -92,6 +90,28 @@ public class BasicTest {
             isDisplayed()));
     imageView2.check(matches(isDisplayed()));
 
+    ViewInteraction imageButton4 = onView(
+        allOf(withClassName(is("android.widget.ImageButton")),
+            withParent(allOf(withId(R.id.toolbar),
+                withParent(withId(R.id.toolbar_layout)))),
+            isDisplayed()));
+    imageButton4.perform(click());
+  }
+
+  @Test
+  public void testRightDrawer() {
+    onView(withId(R.id.drawer_layout)).perform(DrawerActions.open(Gravity.RIGHT));
+
+    ViewInteraction textView = onView(
+        allOf(withId(R.id.titleText), withText("No Content Headers Found"),
+            childAtPosition(
+                childAtPosition(
+                    withId(R.id.right_drawer_list),
+                    0),
+                0),
+            isDisplayed()));
+    textView.check(matches(withText("No Content Headers Found")));
+    onView(withId(R.id.drawer_layout)).perform(DrawerActions.close(Gravity.RIGHT));
   }
 
   private static Matcher<View> childAtPosition(

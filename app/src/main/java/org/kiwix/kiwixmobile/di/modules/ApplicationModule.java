@@ -5,6 +5,7 @@ import android.content.Context;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
+import org.kiwix.kiwixlib.JNIKiwix;
 import org.kiwix.kiwixmobile.KiwixApplication;
 
 @Module public class ApplicationModule {

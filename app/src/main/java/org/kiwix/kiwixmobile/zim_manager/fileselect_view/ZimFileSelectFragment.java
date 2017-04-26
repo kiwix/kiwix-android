@@ -65,6 +65,7 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
 import javax.inject.Inject;
 
+import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class ZimFileSelectFragment extends Fragment
@@ -406,7 +407,7 @@ public class ZimFileSelectFragment extends Fragment
         holder.publisher.setText(book.getPublisher());
         holder.date.setText(book.getDate());
         holder.size.setText(LibraryAdapter.createGbString(book.getSize()));
-        holder.fileName.setText(LibraryAdapter.parseURL(book.file.getPath()));
+        holder.fileName.setText(parseURL(getActivity(), book.file.getPath()));
         holder.favicon.setImageBitmap(LibraryAdapter.createBitmapFromEncodedString(book.getFavicon()));
 
 
@@ -446,7 +447,7 @@ public class ZimFileSelectFragment extends Fragment
         } else {
           holder.size.setVisibility(View.VISIBLE);
         }
-      
+
       return convertView;
 
     }
