@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -57,7 +56,9 @@ import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.utils.BookUtils;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
+import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
@@ -72,8 +73,6 @@ public class ZimFileSelectFragment extends Fragment
     implements OnItemClickListener, AdapterView.OnItemLongClickListener, ZimFileSelectViewCallback{
 
   public static final String TAG_KIWIX = "kiwix";
-
-  private static final int LOADER_ID = 0x02;
   public static ZimManageActivity context;
   public RelativeLayout llLayout;
   private RescanDataAdapter mRescanAdapter;
@@ -85,6 +84,7 @@ public class ZimFileSelectFragment extends Fragment
   private BookDao bookDao;
 
   @Inject ZimFileSelectPresenter presenter;
+  @Inject BookUtils bookUtils;
 
   private void setupDagger() {
     KiwixApplication.getInstance().getApplicationComponent().inject(this);
@@ -116,7 +116,7 @@ public class ZimFileSelectFragment extends Fragment
     return llLayout; // We must return the loaded Layout
   }
 
-
+  // Set zim file and return
   public static void finishResult(String path) {
     ZimManageActivity zimManageActivity = context;
     if (path != null) {
@@ -138,6 +138,7 @@ public class ZimFileSelectFragment extends Fragment
   }
 
 
+  // Show files from database
   @Override
   public void showFiles(ArrayList<LibraryNetworkEntity.Book> books) {
     if (mZimFileList == null)
@@ -145,7 +146,7 @@ public class ZimFileSelectFragment extends Fragment
 
     mZimFileList.setOnItemClickListener(this);
     mZimFileList.setOnItemLongClickListener(this);
-    Collections.sort(books, new fileComparator());
+    Collections.sort(books, new FileComparator());
     mFiles.clear();
     mFiles.addAll(books);
     mZimFileList.setAdapter(mRescanAdapter);
@@ -160,26 +161,12 @@ public class ZimFileSelectFragment extends Fragment
   }
 
   public void refreshFragment(){
-
     if (mZimFileList == null)
       return;
-
-    mZimFileList.setOnItemClickListener(this);
-    mZimFileList.setOnItemLongClickListener(this);
-
-    bookDao = new BookDao(KiwixDatabase.getInstance(context));
-    ArrayList<LibraryNetworkEntity.Book> books = bookDao.getBooks();
-    Collections.sort(books, new fileComparator());
-
-    mFiles.clear();
-
-    mFiles.addAll(books);
-    mZimFileList.setAdapter(mRescanAdapter);
-    mRescanAdapter.notifyDataSetChanged();
-    checkEmpty();
-    checkPermissions();
+    presenter.loadLocalZimFileFromDb(context);
   }
 
+  // Add book after download
   public void addBook(String path) {
     LibraryNetworkEntity.Book book = FileSearch.fileToBook(path);
     if (book != null) {
@@ -189,9 +176,7 @@ public class ZimFileSelectFragment extends Fragment
     }
   }
 
-
-
-  private class fileComparator implements Comparator<LibraryNetworkEntity.Book> {
+  private class FileComparator implements Comparator<LibraryNetworkEntity.Book> {
     @Override
     public int compare(LibraryNetworkEntity.Book b1, LibraryNetworkEntity.Book b2) {
       return b1.getTitle().compareTo(b2.getTitle());
@@ -206,16 +191,16 @@ public class ZimFileSelectFragment extends Fragment
           .show();
         requestPermissions( new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
             KiwixMobileActivity.REQUEST_STORAGE_PERMISSION);
-
     } else {
       getFiles();
     }
   }
 
-  public void getFiles(){
+  public void getFiles() {
     if (mZimFileList.getFooterViewsCount() != 0)
       return;
 
+    TestingUtils.bindResource(ZimFileSelectFragment.class);
     mZimFileList.addFooterView(progressBar);
     mZimFileList.setAdapter(mRescanAdapter);
 
@@ -225,21 +210,18 @@ public class ZimFileSelectFragment extends Fragment
       @Override
       public void onBookFound(LibraryNetworkEntity.Book book) {
         if (!mFiles.contains(book)) {
-          context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-              Log.i("Scanner", "Found "+book.title);
-              mFiles.add(book);
-              mRescanAdapter.notifyDataSetChanged();
-              checkEmpty();
-            }
+          context.runOnUiThread(() -> {
+            Log.i("Scanner", "Found "+book.title);
+            mFiles.add(book);
+            mRescanAdapter.notifyDataSetChanged();
+            checkEmpty();
           });
         }
       }
 
       @Override
       public void onScanCompleted() {
-        //filter deleted files
+        // Remove non-existent books
         ArrayList<LibraryNetworkEntity.Book> books = new ArrayList<>(mFiles);
         for (LibraryNetworkEntity.Book book : books) {
           if (book.file == null || !book.file.canRead()) {
@@ -249,19 +231,18 @@ public class ZimFileSelectFragment extends Fragment
 
         boolean cached = mFiles.containsAll(bookDao.getBooks()) && bookDao.getBooks().containsAll(mFiles);
 
-        if (!cached && LibraryFragment.libraryAdapter != null && context.searchView != null) {
-          LibraryFragment.libraryAdapter.getFilter().filter(context.searchView.getQuery());
+        // If content changed then update the list of downloadable books
+        if (!cached && context.mSectionsPagerAdapter.libraryFragment.libraryAdapter != null && context.searchView != null) {
+          context.mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(context.searchView.getQuery());
         }
 
-        context.runOnUiThread(new Runnable() {
-          @Override
-          public void run() {
-            mRescanAdapter.notifyDataSetChanged();
-
-            bookDao.saveBooks(mFiles);
-            mZimFileList.removeFooterView(progressBar);
-            checkEmpty();
-          }
+        // Save the current list of books
+        context.runOnUiThread(() -> {
+          mRescanAdapter.notifyDataSetChanged();
+          bookDao.saveBooks(mFiles);
+          mZimFileList.removeFooterView(progressBar);
+          checkEmpty();
+          TestingUtils.unbindResource(ZimFileSelectFragment.class);
         });
       }
     }).scan();
@@ -285,14 +266,9 @@ public class ZimFileSelectFragment extends Fragment
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-
     switch (item.getItemId()) {
       case R.id.menu_rescan_fs:
-        // Execute our AsyncTask, that scans the file system for the actual data
        getFiles();
-
-        // Make sure, that we set mNeedsUpdate to true and to false, after the MediaStore has been
-        // updated. Otherwise it will result in a endless loop.
     }
 
     return super.onOptionsItemSelected(item);
@@ -319,7 +295,6 @@ public class ZimFileSelectFragment extends Fragment
 
   @Override
   public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-    String file = mZimFileList.getItemAtPosition(position).toString();
     deleteSpecificZimDialog(position);
     return true;
   }
@@ -327,19 +302,15 @@ public class ZimFileSelectFragment extends Fragment
   public void deleteSpecificZimDialog(int position) {
     new AlertDialog.Builder(super.getActivity(), dialogStyle())
         .setMessage(getString(R.string.delete_specific_zim))
-        .setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int which) {
-            if (deleteSpecificZimFile(position)) {
-              Toast.makeText(context, getResources().getString(R.string.delete_specific_zim_toast), Toast.LENGTH_SHORT).show();
-            } else {
-              Toast.makeText(context, getResources().getString(R.string.delete_zim_failed), Toast.LENGTH_SHORT).show();
-            }
+        .setPositiveButton(getResources().getString(R.string.delete), (dialog, which) -> {
+          if (deleteSpecificZimFile(position)) {
+            Toast.makeText(context, getResources().getString(R.string.delete_specific_zim_toast), Toast.LENGTH_SHORT).show();
+          } else {
+            Toast.makeText(context, getResources().getString(R.string.delete_zim_failed), Toast.LENGTH_SHORT).show();
           }
         })
-        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int which) {
-            // do nothing
-          }
+        .setNegativeButton(android.R.string.no, (dialog, which) -> {
+          // do nothing
         })
         .show();
   }
@@ -350,11 +321,12 @@ public class ZimFileSelectFragment extends Fragment
     if (file.exists()) {
       return false;
     }
+    bookDao.deleteBook(mFiles.get(position).getId());
     mFiles.remove(position);
     mRescanAdapter.notifyDataSetChanged();
     checkEmpty();
-    if (LibraryFragment.libraryAdapter != null) {
-      LibraryFragment.libraryAdapter.getFilter().filter(context.searchView.getQuery());
+    if (context.mSectionsPagerAdapter.libraryFragment.libraryAdapter != null) {
+      context.mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(context.searchView.getQuery());
     }
     return true;
   }
@@ -371,7 +343,6 @@ public class ZimFileSelectFragment extends Fragment
 
     public RescanDataAdapter(Context context, int textViewResourceId, List<LibraryNetworkEntity.Book> objects) {
       super(context, textViewResourceId, objects);
-      LibraryAdapter.initLanguageMap();
     }
 
     @Override
@@ -402,13 +373,13 @@ public class ZimFileSelectFragment extends Fragment
 
         holder.title.setText(book.getTitle());
         holder.description.setText(book.getDescription());
-        holder.language.setText(LibraryAdapter.getLanguage(book.getLanguage()));
+        holder.language.setText(bookUtils.getLanguage(book.getLanguage()));
         holder.creator.setText(book.getCreator());
         holder.publisher.setText(book.getPublisher());
         holder.date.setText(book.getDate());
         holder.size.setText(LibraryAdapter.createGbString(book.getSize()));
         holder.fileName.setText(parseURL(getActivity(), book.file.getPath()));
-        holder.favicon.setImageBitmap(LibraryAdapter.createBitmapFromEncodedString(book.getFavicon()));
+        holder.favicon.setImageBitmap(LibraryAdapter.createBitmapFromEncodedString(book.getFavicon(), context));
 
 
         //// Check if no value is empty. Set the view to View.GONE, if it is. To View.VISIBLE, if not.

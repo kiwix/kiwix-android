@@ -96,6 +96,7 @@ import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.RateAppCounter;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
+import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.utils.files.FileReader;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
@@ -104,6 +105,7 @@ import org.kiwix.kiwixmobile.views.web.KiwixWebView;
 import org.kiwix.kiwixmobile.views.web.ToolbarScrollingKiwixWebView;
 import org.kiwix.kiwixmobile.views.web.ToolbarStaticKiwixWebView;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
@@ -1582,7 +1584,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     if (getIntent().getData() != null) {
       String filePath = FileUtils.getLocalFilePathByUri(getApplicationContext(), getIntent().getData());
 
-      if (filePath == null) {
+      if (filePath == null || !new File(filePath).exists()) {
         Toast.makeText(KiwixMobileActivity.this, getString(R.string.error_filenotfound), Toast.LENGTH_LONG).show();
         return;
       }

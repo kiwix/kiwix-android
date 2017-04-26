@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile.utils;
+package org.kiwix.kiwixmobile.tests;
 
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
@@ -59,7 +59,6 @@ import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
 import org.kiwix.kiwixmobile.di.components.DaggerTestComponent;
 import org.kiwix.kiwixmobile.di.components.TestComponent;
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
-import org.kiwix.kiwixmobile.di.modules.TestModule;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.testutils.TestUtils;

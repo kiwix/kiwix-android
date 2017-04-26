@@ -14,6 +14,7 @@ import rx.schedulers.Schedulers;
 
 @Module public class NetworkModule {
 
+  public static String KIWIX_DOWNLOAD_URL = "http://download.kiwix.org/";
   private final static String useragent = "kiwix-android-version:" + BuildConfig.VERSION_CODE;
 
   @Provides @Singleton OkHttpClient provideOkHttpClient() {
@@ -22,6 +23,6 @@ import rx.schedulers.Schedulers;
   }
 
   @Provides @Singleton KiwixService provideKiwixService(OkHttpClient okHttpClient) {
-    return KiwixService.ServiceCreator.newHacklistService(okHttpClient);
+    return KiwixService.ServiceCreator.newHacklistService(okHttpClient, KIWIX_DOWNLOAD_URL);
   }
 }

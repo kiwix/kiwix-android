@@ -19,16 +19,16 @@ import org.mockito.Mockito;
  */
 
 @Module
-public class TestModule{
+public class TestJNIModule{
 
   @Provides
   @Singleton
   public JNIKiwix providesJNIKiwix(Context context) {
     JNIKiwix jniKiwix = Mockito.mock(JNIKiwix.class);
     try {
-      InputStream inStream = TestModule.class.getClassLoader().getResourceAsStream("summary");
+      InputStream inStream = TestJNIModule.class.getClassLoader().getResourceAsStream("summary");
       byte[] summary = IOUtils.toByteArray(inStream);
-      InputStream inStream2 = TestModule.class.getClassLoader().getResourceAsStream("testpage");
+      InputStream inStream2 = TestJNIModule.class.getClassLoader().getResourceAsStream("testpage");
       byte[] fool = IOUtils.toByteArray(inStream2);
       doReturn(summary).when(jniKiwix).getContent(eq("A/index.htm"),any(),any());
       doReturn(fool).when(jniKiwix).getContent(eq("A/A_Fool_for_You.html"),any(),any());

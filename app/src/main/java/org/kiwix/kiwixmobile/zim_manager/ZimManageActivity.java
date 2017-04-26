@@ -28,7 +28,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 
+import java.util.List;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.library.LibraryAdapter.Language;
+import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
@@ -165,7 +168,7 @@ public class ZimManageActivity extends AppCompatActivity {
     int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
     if (value == 1) {
       Intent startIntent = new Intent(this, KiwixMobileActivity.class);
-//      startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      // startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       startActivity(startIntent);
     } else {
       super.onBackPressed();  // optional depending on your needs
@@ -206,8 +209,8 @@ public class ZimManageActivity extends AppCompatActivity {
 
       @Override
       public boolean onQueryTextChange(String s) {
-        if (LibraryFragment.libraryAdapter != null) {
-          LibraryFragment.libraryAdapter.getFilter().filter(s);
+        if (mSectionsPagerAdapter.libraryFragment.libraryAdapter != null) {
+          mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(s);
         }
         mViewPager.setCurrentItem(1);
         return true;
@@ -239,17 +242,24 @@ public class ZimManageActivity extends AppCompatActivity {
   private void showLanguageSelect() {
     LinearLayout view = (LinearLayout) getLayoutInflater().inflate(R.layout.language_selection, null);
     ListView listView = (ListView) view.findViewById(R.id.language_check_view);
-    if (LibraryAdapter.mLanguages.size() == 0) {
+    int size = 0;
+    try {
+      size = mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages.size();
+    } catch (NullPointerException e) {
       Toast.makeText(this, getResources().getString(R.string.wait_for_load), Toast.LENGTH_LONG).show();
       return;
     }
-    LanguageArrayAdapter languageArrayAdapter = new LanguageArrayAdapter(this, 0, LibraryAdapter.mLanguages);
+    if (size == 0) {
+      Toast.makeText(this, getResources().getString(R.string.wait_for_load), Toast.LENGTH_LONG).show();
+      return;
+    }
+    LanguageArrayAdapter languageArrayAdapter = new LanguageArrayAdapter(this, 0, mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages);
     listView.setAdapter(languageArrayAdapter);
     new AlertDialog.Builder(this, dialogStyle())
         .setView(view)
         .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
-          LibraryAdapter.updateNetworklanguages();
-          LibraryFragment.libraryAdapter.getFilter().filter("");
+          mSectionsPagerAdapter.libraryFragment.libraryAdapter.updateNetworklanguages();
+          mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter("");
         })
         .show();
   }
@@ -312,7 +322,7 @@ public class ZimManageActivity extends AppCompatActivity {
 
   private class LanguageArrayAdapter extends ArrayAdapter<LibraryAdapter.Language> {
 
-    public LanguageArrayAdapter(Context context, int textViewResourceId, ArrayList<LibraryAdapter.Language> languages) {
+    public LanguageArrayAdapter(Context context, int textViewResourceId, List<Language> languages) {
       super(context, textViewResourceId, languages);
     }
 

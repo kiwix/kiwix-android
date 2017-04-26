@@ -28,6 +28,7 @@ import okhttp3.Response;
 import okio.BufferedSource;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.database.BookDao;
@@ -210,6 +211,7 @@ public class DownloadService extends Service {
 
   private void downloadBook(String url, int notificationID, LibraryNetworkEntity.Book book) {
     downloadFragment.addDownload(notificationID, book, KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
+    TestingUtils.bindResource(DownloadService.class);
     kiwixService.getMetaLinks(url).retryWhen(errors -> errors.flatMap(error -> Observable.timer(5, TimeUnit.SECONDS)))
         .subscribeOn(AndroidSchedulers.mainThread())
         .flatMap(metaLink -> getMetaLinkContentLength(metaLink.getRelevantUrl().getValue()))
@@ -230,6 +232,7 @@ public class DownloadService extends Service {
             bookDao.deleteBook(book.id);
             notification.get(notificationID).setContentIntent(pendingIntent);
             notification.get(notificationID).mActions.clear();
+            TestingUtils.unbindResource(DownloadService.class);
           }
           notification.get(notificationID).setProgress(100, progress, false);
           notificationManager.notify(notificationID, notification.get(notificationID).build());

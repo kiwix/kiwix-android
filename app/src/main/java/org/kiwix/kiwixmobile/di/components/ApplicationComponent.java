@@ -7,6 +7,7 @@ import javax.inject.Singleton;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.ZimContentProvider;
 import org.kiwix.kiwixmobile.di.modules.JNIModule;
+import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
 import org.kiwix.kiwixmobile.bookmarks_view.BookmarksActivity;
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
@@ -32,4 +33,6 @@ public interface ApplicationComponent {
   void inject(ZimFileSelectFragment zimFileSelectFragment);
 
   void inject(ZimContentProvider zimContentProvider);
+
+  void inject(LibraryAdapter libraryAdapter);
 }

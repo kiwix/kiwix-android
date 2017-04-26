@@ -19,6 +19,8 @@
 
 package org.kiwix.kiwixmobile.library;
 
+import static android.support.test.InstrumentationRegistry.getContext;
+
 import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
 
 import android.content.Context;
@@ -26,9 +28,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Base64;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,51 +42,74 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
+import javax.inject.Inject;
+import org.kiwix.kiwixmobile.KiwixApplication;
+import org.kiwix.kiwixmobile.utils.BookUtils;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.database.NetworkLanguageDao;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
-import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
 import rx.Observable;
+import rx.functions.Func2;
 
-public class LibraryAdapter extends ArrayAdapter<Book> {
+public class LibraryAdapter extends BaseAdapter {
 
-  public static Map<String, Locale> mLocaleMap;
-  public static ArrayList<Language> mLanguages = new ArrayList<>();
-  private static ImmutableList<Book> allBooks;
-  private BookFilter filter;
-  private static ZimManageActivity mActivity;
-  private static ArrayList<String> bookLanguages;
-  private static NetworkLanguageDao networkLanguageDao;
-  private static BookDao bookDao;
+  private ImmutableList<Book> allBooks;
+  private List<Book> filteredBooks = new ArrayList<>();
+  private final Context context;
+  public List<Language> languages = new ArrayList<>();
+  private final NetworkLanguageDao networkLanguageDao;
+  private final BookDao bookDao;
+  private final LayoutInflater layoutInflater;
+  private final BookFilter bookFilter = new BookFilter();
+  @Inject BookUtils bookUtils;
 
-  public LibraryAdapter(Context context, ArrayList<Book> books) {
-    super(context, 0, books);
-    allBooks = ImmutableList.copyOf(books);
-    mActivity = (ZimManageActivity) context;
-    networkLanguageDao = new NetworkLanguageDao(KiwixDatabase.getInstance(mActivity));
-    bookDao = new BookDao(KiwixDatabase.getInstance(context));
-    initLanguageMap();
-    getLanguages();
-    getFilter().filter(mActivity.searchView.getQuery());
+  private void setupDagger() {
+    KiwixApplication.getInstance().getApplicationComponent().inject(this);
   }
 
+
+  public LibraryAdapter(Context context) {
+    super();
+    setupDagger();
+    this.context = context;
+    layoutInflater = LayoutInflater.from(context);
+    networkLanguageDao = new NetworkLanguageDao(KiwixDatabase.getInstance(context));
+    bookDao = new BookDao(KiwixDatabase.getInstance(context));
+  }
+
+  public void setAllBooks(List<Book> books) {
+    allBooks = ImmutableList.copyOf(books);
+    getLanguages();
+  }
+
+  @Override
+  public int getCount() {
+    return filteredBooks.size();
+  }
+
+  @Override
+  public Object getItem(int i) {
+    return filteredBooks.get(i);
+  }
+
+  @Override
+  public long getItemId(int i) {
+    return i;
+  }
 
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     ViewHolder holder;
     if (convertView == null) {
-      convertView = View.inflate(getContext(), R.layout.library_item, null);
+      convertView = layoutInflater.inflate(R.layout.library_item, null);
       holder = new ViewHolder();
       holder.title = (TextView) convertView.findViewById(R.id.title);
       holder.description = (TextView) convertView.findViewById(R.id.description);
@@ -99,17 +125,17 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
       holder = (ViewHolder) convertView.getTag();
     }
 
-    Book book = getItem(position);
+    Book book = filteredBooks.get(position);
 
     holder.title.setText(book.getTitle());
     holder.description.setText(book.getDescription());
-    holder.language.setText(getLanguage(book.getLanguage()));
+    holder.language.setText(bookUtils.getLanguage(book.getLanguage()));
     holder.creator.setText(book.getCreator());
     holder.publisher.setText(book.getPublisher());
     holder.date.setText(book.getDate());
     holder.size.setText(createGbString(book.getSize()));
-    holder.fileName.setText(parseURL(mActivity, book.getUrl()));
-    holder.favicon.setImageBitmap(createBitmapFromEncodedString(book.getFavicon()));
+    holder.fileName.setText(parseURL(context, book.getUrl()));
+    holder.favicon.setImageBitmap(createBitmapFromEncodedString(book.getFavicon(), context));
 
     // Check if no value is empty. Set the view to View.GONE, if it is. To View.VISIBLE, if not.
     if (book.getTitle() == null || book.getTitle().isEmpty()) {
@@ -151,19 +177,20 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
     return convertView;
   }
 
-  public static boolean langaugeActive(Book book) {
-    return Observable.from(mLanguages)
+  private boolean langaugeActive(Book book) {
+    return Observable.from(languages)
         .takeFirst(language -> language.languageCode.equals(book.getLanguage()))
         .map(language -> language.active).toBlocking().firstOrDefault(false);
   }
 
-  public static Observable<Book> getMatches(Book b, String s) {
-    StringBuffer text = new StringBuffer();
-    text.append(b.getTitle() + "|" + b.getDescription() + "|" + parseURL(mActivity, b.getUrl()) + "|");
-    if (mLocaleMap.containsKey(b.getLanguage())) {
-      text.append(mLocaleMap.get(b.getLanguage()).getDisplayLanguage() + "|");
+  private Observable<Book> getMatches(Book b, String s) {
+    StringBuilder text = new StringBuilder();
+    text.append(b.getTitle()).append("|").append(b.getDescription()).append("|")
+        .append(parseURL(context, b.getUrl())).append("|");
+    if (bookUtils.localeMap.containsKey(b.getLanguage())) {
+      text.append(bookUtils.localeMap.get(b.getLanguage()).getDisplayLanguage()).append("|");
     }
-    String[] words = s.toString().toLowerCase().split("\\s+");
+    String[] words = s.toLowerCase().split("\\s+");
     b.searchMatches = Observable.from(words).filter(text.toString().toLowerCase()::contains).count().toBlocking().first();
     if (b.searchMatches > 0) {
       return Observable.just(b);
@@ -179,7 +206,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
       List<Book> finalBooks;
       if (s.length() == 0) {
         finalBooks = Observable.from(allBooks)
-            .filter(LibraryAdapter::langaugeActive)
+            .filter(LibraryAdapter.this::langaugeActive)
             .filter(book -> !books.contains(book))
             .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
@@ -202,92 +229,57 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
     @Override
     protected void publishResults(CharSequence constraint, FilterResults results) {
       List<Book> filtered = (List<Book>) results.values;
-      LibraryAdapter.this.clear();
       if (filtered != null) {
         if (filtered.isEmpty()) {
-          filtered.addAll(allBooks);
+          filteredBooks = allBooks;
+        } else {
+          filteredBooks.clear();
+          filteredBooks.addAll(filtered);
         }
-        LibraryAdapter.this.addAll(filtered);
       }
       notifyDataSetChanged();
-      if (mActivity.mSectionsPagerAdapter.libraryFragment.progressBarLayout != null) {
-        mActivity.mSectionsPagerAdapter.libraryFragment.progressBarLayout.setVisibility(View.GONE);
-        mActivity.mSectionsPagerAdapter.libraryFragment.libraryList.setVisibility(View.VISIBLE);
-      }
     }
   }
 
-  @Override
   public Filter getFilter() {
-    if (filter == null) {
-      filter = new BookFilter();
-    }
-    return filter;
+    return bookFilter;
   }
 
-  // Create a map of ISO 369-2 language codes
-  public static void initLanguageMap() {
-    String[] languages = Locale.getISOLanguages();
-    bookLanguages = new ArrayList<>();
-    mLocaleMap = new HashMap<>(languages.length);
-    for (String language : languages) {
-      Locale locale = new Locale(language);
-      mLocaleMap.put(locale.getISO3Language(), locale);
-    }
+  public void updateNetworklanguages() {
+    new SaveNetworkLanguages().execute(languages);
   }
 
-  public static void updateNetworklanguages() {
-    new saveNetworkLanguages().execute(mLanguages);
-  }
-
-  public static void getLanguages() {
-    if (mLanguages.size() > 0) {
+  private void getLanguages() {
+    ArrayList<String> bookLanguages = new ArrayList<>();
+    if (languages.size() > 0) {
       return;
     }
 
     if (networkLanguageDao.getFilteredLanguages().size() > 0) {
-      mLanguages = networkLanguageDao.getFilteredLanguages();
+      languages = networkLanguageDao.getFilteredLanguages();
       return;
     }
 
     String[] languages = Locale.getISOLanguages();
-    for (Book book : LibraryAdapter.allBooks) {
+    for (Book book : allBooks) {
       if (!bookLanguages.contains(book.getLanguage())) {
         bookLanguages.add(book.getLanguage());
       }
     }
-    mLanguages = new ArrayList<>();
+    this.languages = new ArrayList<>();
     for (String language : languages) {
       Locale locale = new Locale(language);
       if (bookLanguages.contains(locale.getISO3Language())) {
-        if (locale.getISO3Language().equals(mActivity.getResources().getConfiguration().locale.getISO3Language())) {
-          mLanguages.add(new Language(locale, true));
+        if (locale.getISO3Language().equals(context.getResources().getConfiguration().locale.getISO3Language())) {
+          this.languages.add(new Language(locale, true));
         } else {
-          mLanguages.add(new Language(locale, false));
+          this.languages.add(new Language(locale, false));
         }
       }
     }
-    new saveNetworkLanguages().execute(mLanguages);
+    new SaveNetworkLanguages().execute(this.languages);
   }
 
-  // Get the language from the language codes of the parsed xml stream
-  public static String getLanguage(String languageCode) {
-
-    if (languageCode == null) {
-      return "";
-    }
-
-    if (languageCode.length() == 2) {
-      return new LanguageUtils.LanguageContainer(languageCode).getLanguageName();
-    } else if (languageCode.length() == 3) {
-      try {
-        return mLocaleMap.get(languageCode).getDisplayLanguage();
-      } catch (Exception e) {
-        return "";
-      }
-    }
-    return "";
-  }
 
   // Create a string that represents the size of the zim file in a human readable way
   public static String createGbString(String megaByte) {
@@ -312,7 +304,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
   }
 
   // Decode and create a Bitmap from the 64-Bit encoded favicon string
-  public static Bitmap createBitmapFromEncodedString(String encodedString) {
+  public static Bitmap createBitmapFromEncodedString(String encodedString, Context context) {
 
     try {
       byte[] decodedString = Base64.decode(encodedString, Base64.DEFAULT);
@@ -321,7 +313,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
       e.printStackTrace();
     }
 
-    return BitmapFactory.decodeResource(mActivity.getResources(), R.mipmap.kiwix_icon);
+    return BitmapFactory.decodeResource(context.getResources(), R.mipmap.kiwix_icon);
   }
 
   private static class ViewHolder {
@@ -345,7 +337,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
     ImageView favicon;
   }
 
-  class BookMatchComparator implements Comparator<Book> {
+  private class BookMatchComparator implements Comparator<Book> {
     public int compare(Book book1, Book book2) {
       return book2.searchMatches - book1.searchMatches;
     }
@@ -356,7 +348,7 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
     public String languageCode;
     public Boolean active;
 
-    public Language(Locale locale, Boolean active) {
+    Language(Locale locale, Boolean active) {
       this.language = locale.getDisplayLanguage();
       this.active = active;
       this.languageCode = locale.getISO3Language();
@@ -374,9 +366,10 @@ public class LibraryAdapter extends ArrayAdapter<Book> {
     }
   }
 
-  private static class saveNetworkLanguages extends AsyncTask<ArrayList<Language>, Object, Void> {
+  private class SaveNetworkLanguages extends AsyncTask<List<Language>, Object, Void> {
+    @SafeVarargs
     @Override
-    protected Void doInBackground(ArrayList<Language>... params) {
+    protected final Void doInBackground(List<Language>... params) {
       networkLanguageDao.saveFilteredLanguages(params[0]);
       return null;
     }

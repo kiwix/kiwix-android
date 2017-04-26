@@ -7,6 +7,7 @@ import dagger.Provides;
 import javax.inject.Singleton;
 import org.kiwix.kiwixlib.JNIKiwix;
 import org.kiwix.kiwixmobile.KiwixApplication;
+import org.kiwix.kiwixmobile.utils.BookUtils;
 
 @Module public class ApplicationModule {
   private final KiwixApplication application;
@@ -21,5 +22,10 @@ import org.kiwix.kiwixmobile.KiwixApplication;
 
   @Provides @Singleton NotificationManager provideNotificationManager(Context context){
     return (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+  }
+
+  @Provides @Singleton
+  BookUtils provideBookUtils() {
+    return new BookUtils();
   }
 }
