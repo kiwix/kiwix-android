@@ -2,6 +2,9 @@ language: android
 
 jdk: oraclejdk8
 
+install:
+  - pip install --user 'requests[security]'
+
 android:
   components:
     # Uncomment the lines below if you want to
@@ -33,5 +36,4 @@ cache:
 licenses:
   - '.+'
 
-script:
-  - ./gradlew build  
+script: ./gradlew testdroidUploadKiwix && ./testdroid.py

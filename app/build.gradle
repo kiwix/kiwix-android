@@ -253,11 +253,14 @@ task wrapper(type: Wrapper) {
   gradleVersion = '2.4'
 }
 
+def buildNumber = System.getenv('TRAVIS_BUILD_NUMBER')
+
 testdroid {
-  username System.getenv('TESTDROID_USERNAME')
-  password System.getenv('TESTDROID_PASSWORD')
+  authorization "APIKEY"
+  apiKey System.getenv('BITBAR_API_KEY')
   deviceGroup 'Kiwix'
   projectName "Kiwix"
+  testRunName "Auto Test " + buildNumber
 
   fullRunConfig {
     instrumentationRunner =  "android.support.test.runner.AndroidJUnitRunner"
