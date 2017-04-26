@@ -38,6 +38,4 @@ cache:
 licenses:
   - '.+'
 
-script:
-  - ./gradlew build testdroidUploadKiwix
-  - ./testdroid.py
+script: ./gradlew build testdroidUploadKiwix && ./testdroid.py
