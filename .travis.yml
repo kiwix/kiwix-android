@@ -13,7 +13,7 @@ android:
 
 install:
   - pip install --user 'requests[security]'
-  - $ANDROID_HOME/tools/bin/sdkmanager --update
+  - yes | $ANDROID_HOME/tools/bin/sdkmanager --update
   - yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
 
