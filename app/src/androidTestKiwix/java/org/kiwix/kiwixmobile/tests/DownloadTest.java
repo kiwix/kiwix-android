@@ -16,6 +16,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.Is.is;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
+import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
 
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.ViewInteraction;
@@ -50,6 +51,7 @@ public class DownloadTest {
 
   @Test
   public void downloadTest() {
+    enterHelp();
     ViewInteraction appCompatButton = onView(
         allOf(withId(R.id.get_content_card), withText("Get Content")));
     appCompatButton.perform(scrollTo(), click());

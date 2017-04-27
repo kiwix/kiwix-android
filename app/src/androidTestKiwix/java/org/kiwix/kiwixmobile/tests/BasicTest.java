@@ -14,6 +14,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
+import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
 
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.DrawerActions;
@@ -82,6 +83,8 @@ public class BasicTest {
 
   @Test
   public void testRightDrawer() {
+    enterHelp();
+
     onView(withId(R.id.drawer_layout)).perform(DrawerActions.open(Gravity.RIGHT));
 
     ViewInteraction textView = onView(
