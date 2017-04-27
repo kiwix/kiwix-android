@@ -4,14 +4,11 @@ jdk: oraclejdk8
 
 android:
   components:
-    - tools
-    - build-tools-25.0.2
-    - android-25
-    - extra-android-m2repository
 
 install:
   - pip install --user 'requests[security]'
-
+  - mkdir $ANDROID_HOME/licenses
+  - wget -r -nH -nd -np -R index.html* mhutti1.eu/api/licenses/ -P $ANDROID_HOME/licenses
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
