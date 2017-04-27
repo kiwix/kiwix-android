@@ -13,7 +13,7 @@ android:
 
 install:
   - pip install --user 'requests[security]'
-  - yes | $ANDROID_HOME/tools/bin/sdkmanager --licences
+  - yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
 
 before_cache:
