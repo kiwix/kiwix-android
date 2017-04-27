@@ -2,16 +2,17 @@ language: android
 
 jdk: oraclejdk8
 
+android:
+  components:
+    - tools
+    - tools
+    - platform-tools
+    - build-tools-25.0.2
+    - android-25
+    - extra-android-m2repository
+
 install:
   - pip install --user 'requests[security]'
-  - echo y | android update sdk -u -a -t tools
-  - echo y | android update sdk -u -a -t platform-tools
-  - echo y | android update sdk -u -a -t build-tools-25.0.2
-  - echo y | android update sdk -u -a -t android-25
-  - echo y | android update sdk -u -a -t extra-google-m2repository
-  - export PATH=$PATH:$HOME/android/sdk/tools:$HOME/android/sdk/tools/bin
-  - sdkmanager --uninstall "platforms;android-24"
-  - sdkmanager --uninstall "build-tools;25.0.0"
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
