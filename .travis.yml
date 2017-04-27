@@ -9,6 +9,8 @@ install:
   - echo y | android update sdk -u -a -t build-tools-25.0.2
   - echo y | android update sdk -u -a -t android-25
   - echo y | android update sdk -u -a -t extra-google-m2repository
+  - sdkmanager --uninstall "platforms;android-24"
+  - sdkmanager --uninstall "build-tools;25.0.0"
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
