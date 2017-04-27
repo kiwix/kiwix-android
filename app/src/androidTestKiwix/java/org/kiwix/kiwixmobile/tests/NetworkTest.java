@@ -13,6 +13,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
 
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingPolicies;
@@ -103,7 +104,7 @@ public class NetworkTest {
   public void networkTest() {
 
     mActivityTestRule.launchActivity(null);
-
+    enterHelp();
     ViewInteraction appCompatButton = onView(
         allOf(withId(R.id.get_content_card), withText("Get Content")));
     appCompatButton.perform(scrollTo(), click());

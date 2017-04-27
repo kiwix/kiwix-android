@@ -10,6 +10,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
 
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
@@ -40,6 +41,7 @@ public class ContentTest {
 
   @Test
   public void contentTest() {
+    enterHelp();
     ViewInteraction appCompatButton = onView(
         allOf(withId(R.id.get_content_card), withText("Get Content")
         ));

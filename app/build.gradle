@@ -15,7 +15,6 @@ buildscript {
   }
 }
 
-//apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
@@ -29,56 +28,23 @@ repositories {
 }
 
 dependencies {
+  // Kiwixlib
+  compile project(":kiwixlib")
+
+  // Storage Devices
+  compile 'eu.mhutti1.utils.storage:android-storage-devices:0.5.0'
+
+  // Android Support
   compile 'com.android.support:appcompat-v7:25.3.1'
   compile 'com.android.support:support-v13:25.3.1'
   compile 'com.android.support:support-v4:25.3.1'
   compile 'com.android.support:design:25.3.1'
   compile 'com.android.support:cardview-v7:25.3.1'
 
-  androidTestCompile 'com.android.support:support-annotations:25.3.1'
-  androidTestCompile 'com.android.support.test:runner:0.5'
-  androidTestCompile 'com.android.support.test:rules:0.5'
-
-  compile 'com.google.dagger:dagger:2.0.2'
-  compile project(":kiwixlib")
-
-  apt "com.google.dagger:dagger-compiler:2.0.2"
-  androidTestApt "com.google.dagger:dagger-compiler:2.0.2"
-
-  compile 'com.yahoo.squidb:squidb:2.0.0'
-  compile 'com.yahoo.squidb:squidb-annotations:2.0.0'
-  apt 'com.yahoo.squidb:squidb-processor:2.0.0'
-
-  compile 'commons-io:commons-io:2.5'
-
-  androidTestCompile 'com.squareup.okhttp3:mockwebserver:3.6.0'
-
-  compile 'com.squareup.okhttp3:okhttp:3.6.0'
-  compile 'com.squareup.retrofit2:retrofit:2.1.0'
-  compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-  compile('com.squareup.retrofit2:converter-simplexml:2.1.0') {
-    exclude group: 'xpp3', module: 'xpp3'
-    exclude group: 'stax', module: 'stax-api'
-    exclude group: 'stax', module: 'stax'
-  }
-
-  compile 'io.reactivex:rxandroid:1.1.0'
-  compile 'io.reactivex:rxjava:1.1.3'
-
-  testCompile "org.mockito:mockito-core:2.7.22"
-  androidTestCompile "org.mockito:mockito-android:2.7.22"
-
-  compile 'eu.mhutti1.utils.storage:android-storage-devices:0.5.0'
-  compile 'com.jakewharton:butterknife:8.0.1'
-  apt 'com.jakewharton:butterknife-compiler:8.0.1'
-  compile group: 'com.google.guava', name: 'guava', version: '20.0'
   compile 'com.android.support:multidex:1.0.1'
-
-  testCompile 'junit:junit:4.12'
-  androidTestCompile 'junit:junit:4.12'
-  androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
   compile 'com.android.support.test:runner:0.5'
-  compile 'junit:junit:4.12'
+
+  androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
 
   androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2', {
     exclude group: 'com.android.support', module: 'support-annotations'
@@ -91,7 +57,56 @@ dependencies {
     exclude group: 'com.android.support', module: 'appcompat-v7'
     exclude group: 'com.android.support', module: 'design'
     exclude group: 'com.android.support', module: 'recyclerview-v7'
-  }}
+  }
+
+  androidTestCompile 'com.android.support:support-annotations:25.3.1'
+  androidTestCompile 'com.android.support.test:runner:0.5'
+  androidTestCompile 'com.android.support.test:rules:0.5'
+
+  // Guava
+  compile group: 'com.google.guava', name: 'guava', version: '20.0'
+
+  // Dagger
+  compile 'com.google.dagger:dagger:2.0.2'
+  apt "com.google.dagger:dagger-compiler:2.0.2"
+  androidTestApt "com.google.dagger:dagger-compiler:2.0.2"
+
+  // SquiDB
+  compile 'com.yahoo.squidb:squidb:2.0.0'
+  compile 'com.yahoo.squidb:squidb-annotations:2.0.0'
+  apt 'com.yahoo.squidb:squidb-processor:2.0.0'
+
+  // Apache
+  compile 'commons-io:commons-io:2.5'
+
+  // Square
+  compile 'com.squareup.okhttp3:okhttp:3.6.0'
+  compile 'com.squareup.retrofit2:retrofit:2.1.0'
+  compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+  compile('com.squareup.retrofit2:converter-simplexml:2.1.0') {
+    exclude group: 'xpp3', module: 'xpp3'
+    exclude group: 'stax', module: 'stax-api'
+    exclude group: 'stax', module: 'stax'
+  }
+  androidTestCompile 'com.squareup.okhttp3:mockwebserver:3.6.0'
+
+  // Butterknife
+  compile 'com.jakewharton:butterknife:8.0.1'
+  apt 'com.jakewharton:butterknife-compiler:8.0.1'
+
+  // RxJava
+  compile 'io.reactivex:rxandroid:1.1.0'
+  compile 'io.reactivex:rxjava:1.1.3'
+
+  // JUnit
+  compile 'junit:junit:4.12'
+  testCompile 'junit:junit:4.12'
+  androidTestCompile 'junit:junit:4.12'
+
+  // Mockito
+  testCompile "org.mockito:mockito-core:2.7.22"
+  androidTestCompile "org.mockito:mockito-android:2.7.22"
+}
 
 // Set custom app import directory
 def map = [:]
@@ -101,29 +116,28 @@ if (project.hasProperty('customDir')) {
 }
 
 // Set up flavours for each custom app in the directory
-custom.eachFile() { file->
+custom.eachFile() { file ->
 
   def fileName = file.getName()
-  if( fileName.contains("test") || fileName == "main" || fileName.contains("Test")) {
+  if (fileName.contains("test") || fileName == "main" || fileName.contains("Test")) {
     return
   }
   map.put(fileName, file.getAbsolutePath())
-
-
 }
 
 android {
-  compileSdkVersion 24
-  buildToolsVersion '25.0.0'
+  compileSdkVersion 25
+  buildToolsVersion '25.0.2'
 
   defaultConfig {
     minSdkVersion 14
-    targetSdkVersion 24
+    targetSdkVersion 25
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     multiDexEnabled true
   }
 
   lintOptions {
+    // Treat lint seriously
     abortOnError true
     // Hardcoded strings in xml
     error 'HardcodedText'
@@ -139,6 +153,7 @@ android {
   }
 
   buildTypes {
+    // Main build type for debugging
     debug {
       // True breaks local variables being shown in breakpoints
       testCoverageEnabled false
@@ -146,21 +161,22 @@ android {
       multiDexKeepProguard file('multidex-instrumentation-config.pro')
     }
 
+    // Used to assess code coverage
     coverage {
       initWith debug
       testCoverageEnabled true
     }
 
+    // Release Type
     release {
 
     }
   }
-  
-  productFlavors {
 
+  productFlavors {
     // Vanilla Kiwix app
     kiwix {
-      println "Building Kiwix"
+      println "Configuring Kiwix"
       // Set vanilla config
       buildConfigField "boolean", "IS_CUSTOM_APP", "false"
       buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "false"
@@ -174,53 +190,54 @@ android {
     // Custom apps built from a json file, zim file and icon set
     map.each { name, directory ->
       "$name" {
-          println "Building Custom"
-          def jsonFile = ""
-          if (project.hasProperty('jsonFile')) {
-            // Read json file from properties e.g command line
-            jsonFile = file(project.property('jsonFile'))
-          } else {
-            // If no file provided use the test file
-            jsonFile = file(directory + '/test.json')
-          }
-          def parsedJson = new JsonSlurper().parseText(jsonFile.text)
-          def File zimfile = new File(parsedJson.zim_file)
-          if (parsedJson.embed_zim) {
-            // Place content in each lib directory for embeded zims
-            file("../kiwixlib/src/main/jniLibs").eachDir() { folder ->
-              copy {
-                from parsedJson.zim_file
-                into file(directory + "/jniLibs/" + folder.name)
-                rename { String filename -> "libcontent.so" }
-              }
-            }
-            parsedJson.zim_file = "libcontent.so"
-          }
-          // Set custom config from json
-          applicationId "$parsedJson.package"
-          buildConfigField "boolean", "IS_CUSTOM_APP", "true"
-          buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "$parsedJson.embed_zim"
-          def filename = ""
-          if (parsedJson.zim_file.lastIndexOf('/') >= 0) {
-            filename = parsedJson.zim_file.substring(parsedJson.zim_file.lastIndexOf('/') + 1)
-          } else {
-            filename = parsedJson.zim_file
-          }
-          buildConfigField "String", "ZIM_FILE_NAME", "\"$filename\""
-          long length = zimfile.length()
-          buildConfigField "long", "ZIM_FILE_SIZE", "$length"
-          if (parsedJson.content_version_code != null) {
-            buildConfigField "int", "CONTENT_VERSION_CODE", "$parsedJson.content_version_code"
-          } else {
-            buildConfigField "int", "CONTENT_VERSION_CODE", "$parsedJson.version_code"
-          }
-          buildConfigField "String", "ENFORCED_LANG", "\"$parsedJson.enforced_lang\""
-          resValue "string", "app_name", "$parsedJson.app_name"
-          resValue "string", "app_search_string", 'Search ' + "$parsedJson.app_name"
+        println "Configuring $name"
+        def jsonFile = ""
+        if (project.hasProperty('jsonFile')) {
+          // Read json file from properties e.g command line
+          jsonFile = file(project.property('jsonFile'))
+        } else {
+          // If no file provided use the test file
+          jsonFile = file(directory + '/test.json')
         }
+        def parsedJson = new JsonSlurper().parseText(jsonFile.text)
+        def File zimfile = new File(parsedJson.zim_file)
+        if (parsedJson.embed_zim) {
+          // Place content in each lib directory for embeded zims
+          file("../kiwixlib/src/main/jniLibs").eachDir() { folder ->
+            copy {
+              from parsedJson.zim_file
+              into file(directory + "/jniLibs/" + folder.name)
+              rename { String filename -> "libcontent.so" }
+            }
+          }
+          parsedJson.zim_file = "libcontent.so"
+        }
+        // Set custom config from json
+        applicationId "$parsedJson.package"
+        buildConfigField "boolean", "IS_CUSTOM_APP", "true"
+        buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "$parsedJson.embed_zim"
+        def filename = ""
+        if (parsedJson.zim_file.lastIndexOf('/') >= 0) {
+          filename = parsedJson.zim_file.substring(parsedJson.zim_file.lastIndexOf('/') + 1)
+        } else {
+          filename = parsedJson.zim_file
+        }
+        buildConfigField "String", "ZIM_FILE_NAME", "\"$filename\""
+        long length = zimfile.length()
+        buildConfigField "long", "ZIM_FILE_SIZE", "$length"
+        if (parsedJson.content_version_code != null) {
+          buildConfigField "int", "CONTENT_VERSION_CODE", "$parsedJson.content_version_code"
+        } else {
+          buildConfigField "int", "CONTENT_VERSION_CODE", "$parsedJson.version_code"
+        }
+        buildConfigField "String", "ENFORCED_LANG", "\"$parsedJson.enforced_lang\""
+        resValue "string", "app_name", "$parsedJson.app_name"
+        resValue "string", "app_search_string", 'Search ' + "$parsedJson.app_name"
       }
+    }
   }
 
+  // Set each custom apps respective source directory
   sourceSets {
     map.each { name, directory ->
       "$name" {
@@ -231,7 +248,6 @@ android {
 
   compileOptions {
     encoding = "UTF-8"
-
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
   }
@@ -240,19 +256,22 @@ android {
     javaMaxHeapSize "4g"
   }
 
-  /* Add back once proguard is configured
+  /*
+  Add back once proguard is configured
   buildTypes {
     release {
       minifyEnabled true
       proguardFiles getDefaultProguardFile('proguard-android.txt')
     }
-  }*/
+  }
+  */
 }
 
 task wrapper(type: Wrapper) {
   gradleVersion = '2.4'
 }
 
+// Testdroid deployment configuration
 def buildNumber = System.getenv('TRAVIS_BUILD_NUMBER')
 
 testdroid {
@@ -263,6 +282,6 @@ testdroid {
   testRunName "Auto Test " + buildNumber
 
   fullRunConfig {
-    instrumentationRunner =  "android.support.test.runner.AndroidJUnitRunner"
+    instrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
   }
 }

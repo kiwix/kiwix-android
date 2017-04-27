@@ -16,15 +16,19 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.Is.is;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
+import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
 
 import android.support.test.espresso.Espresso;
+import android.support.test.espresso.IdlingPolicies;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
+import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,6 +47,12 @@ public class DownloadTest {
   public ActivityTestRule<SplashActivity> mActivityTestRule = new ActivityTestRule<>(
       SplashActivity.class);
 
+  @BeforeClass
+  public static void beforeClass() {
+    IdlingPolicies.setMasterPolicyTimeout(350, TimeUnit.SECONDS);
+    IdlingPolicies.setIdlingResourceTimeout(350, TimeUnit.SECONDS);
+  }
+
   @Before
   public void setUp() {
     Espresso.registerIdlingResources(KiwixIdlingResource.getInstance());
@@ -50,6 +60,7 @@ public class DownloadTest {
 
   @Test
   public void downloadTest() {
+    enterHelp();
     ViewInteraction appCompatButton = onView(
         allOf(withId(R.id.get_content_card), withText("Get Content")));
     appCompatButton.perform(scrollTo(), click());
