@@ -13,6 +13,8 @@ android:
 
 install:
   - pip install --user 'requests[security]'
+  - yes | $ANDROID_HOME/tools/bin/sdkmanager --licences
+
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
