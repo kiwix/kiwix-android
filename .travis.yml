@@ -4,21 +4,11 @@ jdk: oraclejdk8
 
 install:
   - pip install --user 'requests[security]'
-
-android:
-  components:
-    # Uncomment the lines below if you want to
-    # use the latest revision of Android SDK Tools
-    # - platform-tools
-    # The BuildTools version used by your project
-    - tools
-    - build-tools-25.0.2
-    - platform-tools
-    # The SDK version used to compile your project
-    - android-25
-    # The support library
-    - extra-android-m2repository
-
+  - echo y | android update sdk -u -a -t tools
+  - echo y | android update sdk -u -a -t platform-tools
+  - echo y | android update sdk -u -a -t build-tools-25.0.2
+  - echo y | android update sdk -u -a -t android-25
+  - echo y | android update sdk -u -a -t extra-google-m2repository
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
