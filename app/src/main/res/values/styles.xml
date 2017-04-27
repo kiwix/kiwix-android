@@ -69,7 +69,6 @@
 
   </style>
 
-
   <style name="DayMenu" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
     <item name="android:textColor">@color/primary_dark</item>
   </style>

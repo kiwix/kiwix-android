@@ -2,13 +2,12 @@ language: android
 
 jdk: oraclejdk8
 
-android:
-  components:
+sudo: required
 
 install:
   - pip install --user 'requests[security]'
-  - mkdir $ANDROID_HOME/licenses
-  - wget -r -nH -nd -np -R index.html* mhutti1.eu/api/licenses/ -P $ANDROID_HOME/licenses
+  - wget -r -nH -nd -np -R index.html* robots.txt* http://download.kiwix.org/dev/android/api/licenses/ -e robots=off -P $ANDROID_HOME/licenses || true
+
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
