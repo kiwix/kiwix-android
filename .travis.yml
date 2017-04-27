@@ -4,14 +4,12 @@ jdk: oraclejdk8
 
 android:
   components:
+    - build-tools-25.0.2
     - android-25
     - extra-android-m2repository
 
 install:
   - pip install --user 'requests[security]'
-  - yes | $ANDROID_HOME/tools/bin/sdkmanager --update
-  - yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
-
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
