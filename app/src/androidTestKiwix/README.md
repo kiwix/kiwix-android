@@ -20,6 +20,8 @@ Creating a new test is simple.
 binding your resource at the start and unbinding at the end. Espresso will pause itself while the resource is active. Call 
 TestingUtils.bindResource(MyClass.class); and TestingUtils.unbindResource(MyClass.class);
 7. Other issues may arise so test.
+8. (optional) Mock components of the app, swapping them out with dependency injection. (See NetworkTest.java and ZimTest.java)
+
 
 Once generated tests with the correct annotations (created by creation tool) should be run automatically.
 
