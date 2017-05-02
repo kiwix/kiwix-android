@@ -197,7 +197,7 @@ android {
           jsonFile = file(project.property('jsonFile'))
         } else {
           // If no file provided use the test file
-          jsonFile = file(directory + '/test.json')
+          jsonFile = file(directory + '/info.json')
         }
         def parsedJson = new JsonSlurper().parseText(jsonFile.text)
         def File zimfile = new File(parsedJson.zim_file)
