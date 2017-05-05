@@ -116,13 +116,15 @@ if (project.hasProperty('customDir')) {
 }
 
 // Set up flavours for each custom app in the directory
-custom.eachFile() { file ->
+if(custom.listFiles()) {
+  custom.eachFile() { file ->
 
-  def fileName = file.getName()
-  if (fileName.contains("test") || fileName == "main" || fileName.contains("Test")) {
-    return
+    def fileName = file.getName()
+    if (fileName.contains("test") || fileName == "main" || fileName.contains("Test")) {
+      return
+    }
+    map.put(fileName, file.getAbsolutePath())
   }
-  map.put(fileName, file.getAbsolutePath())
 }
 
 android {
