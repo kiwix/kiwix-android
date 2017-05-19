@@ -52,6 +52,7 @@ import org.kiwix.kiwixmobile.downloader.DownloadIntent;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.network.KiwixService;
+import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.TestingUtils;
@@ -259,21 +260,11 @@ public class LibraryFragment extends Fragment
         return;
       }
 
-      if (isWiFi()) {
-        downloadFile((Book) parent.getAdapter().getItem(position));
+      if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
+        Toast.makeText(getContext(), getString(R.string.wifi_only_warning), Toast.LENGTH_LONG).show();
       } else {
-        mobileDownloadDialog(position, parent);
+        downloadFile((Book) parent.getAdapter().getItem(position));
       }
-    }
-  }
-
-  public boolean isWiFi() {
-    if (Build.VERSION.SDK_INT >= 23) {
-      NetworkInfo network = conMan.getActiveNetworkInfo();
-      return network.getType() == ConnectivityManager.TYPE_WIFI;
-    } else {
-      NetworkInfo wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-      return wifi.isConnected();
     }
   }
 
@@ -296,7 +287,7 @@ public class LibraryFragment extends Fragment
   @Override
   public void downloadFile(Book book) {
     downloadingBooks.add(book);
-    if (libraryAdapter != null) {
+    if (libraryAdapter != null && faActivity != null && faActivity.searchView != null) {
       libraryAdapter.getFilter().filter(faActivity.searchView.getQuery());
     }
     Toast.makeText(super.getActivity(), getString(R.string.download_started_library), Toast.LENGTH_LONG)
@@ -365,10 +356,10 @@ public class LibraryFragment extends Fragment
       NetworkInfo network = conMan.getActiveNetworkInfo();
 
       if ((books == null || books.isEmpty()) && network != null && network.isConnected()) {
-        if (isWiFi()) {
-          presenter.loadBooks();
-        } else {
+        if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
           displayNetworkConfirmation();
+        } else {
+          presenter.loadBooks();
         }
       }
     }
