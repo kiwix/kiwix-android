@@ -12,6 +12,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -28,6 +29,7 @@ import okhttp3.Response;
 import okio.BufferedSource;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
@@ -197,7 +199,12 @@ public class DownloadService extends Service {
     downloadFragment.listView.invalidateViews();
   }
 
-  public void playDownload(int notificationID) {
+  public boolean playDownload(int notificationID) {
+    if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getApplicationContext())) {
+      Toast.makeText(this, getString(R.string.wifi_only_warning), Toast.LENGTH_LONG).show();
+      return false;
+    }
+
     downloadStatus.put(notificationID, PLAY);
     synchronized (pauseLock) {
       pauseLock.notify();
@@ -207,6 +214,8 @@ public class DownloadService extends Service {
     notificationManager.notify(notificationID, notification.get(notificationID).build());
     downloadFragment.downloadAdapter.notifyDataSetChanged();
     downloadFragment.listView.invalidateViews();
+
+    return true;
   }
 
   private void downloadBook(String url, int notificationID, LibraryNetworkEntity.Book book) {
@@ -350,6 +359,10 @@ public class DownloadService extends Service {
                 attempts = timeout;
                 break;
               }
+
+              if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getApplicationContext()))
+                pauseDownload(chunk.getNotificationID());
+
               if (downloadStatus.get(chunk.getNotificationID()) == PAUSE) {
                 synchronized (pauseLock) {
                   try {

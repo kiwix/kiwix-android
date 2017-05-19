@@ -141,8 +141,8 @@ public class DownloadFragment extends Fragment {
 
     private void setPlayState(ImageView pauseButton, int position, int newPlayState) {
         if(newPlayState == DownloadService.PLAY) { //Playing
-            LibraryFragment.mService.playDownload(mKeys[position]);
-            pauseButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
+            if (LibraryFragment.mService.playDownload(mKeys[position]))
+              pauseButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
         } else { //Pausing
             LibraryFragment.mService.pauseDownload(mKeys[position]);
             pauseButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black_24dp));
