@@ -215,10 +215,10 @@ public class DownloadService extends Service {
 
   private void downloadBook(String url, int notificationID, LibraryNetworkEntity.Book book) {
     downloadFragment.addDownload(notificationID, book, KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
+    TestingUtils.bindResource(DownloadService.class);
     if (book.file != null && (book.file.exists() || new File(book.file.getPath() + ".part").exists())) {
       // Calculate initial download progress
       int initial = (int) (getCurrentSize(book) / (Long.valueOf(book.getSize()) * BOOK_SIZE_OFFSET));
-      TestingUtils.bindResource(DownloadService.class);
       notification.get(notificationID).setProgress(100, initial, false);
       updateDownloadFragmentProgress(initial, notificationID);
       notificationManager.notify(notificationID, notification.get(notificationID).build());
