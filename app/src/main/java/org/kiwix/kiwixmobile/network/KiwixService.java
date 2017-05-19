@@ -13,7 +13,7 @@ import rx.Observable;
 import rx.schedulers.Schedulers;
 
 public interface KiwixService {
-  @GET("/library/library.xml") Observable<LibraryNetworkEntity> getLibrary();
+  @GET("/library/library_zim.xml") Observable<LibraryNetworkEntity> getLibrary();
 
   @GET Observable<MetaLinkNetworkEntity> getMetaLinks(@Url String url);
 
