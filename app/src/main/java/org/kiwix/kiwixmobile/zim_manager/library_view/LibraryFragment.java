@@ -359,7 +359,7 @@ public class LibraryFragment extends Fragment
         if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
           displayNetworkConfirmation();
         } else {
-          presenter.loadBooks();
+          displayNetworkConfirmation();
         }
       }
     }
