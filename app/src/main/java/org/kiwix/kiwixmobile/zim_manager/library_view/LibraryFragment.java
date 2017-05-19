@@ -296,7 +296,7 @@ public class LibraryFragment extends Fragment
   @Override
   public void downloadFile(Book book) {
     downloadingBooks.add(book);
-    if (libraryAdapter != null) {
+    if (libraryAdapter != null && faActivity.searchView != null) {
       libraryAdapter.getFilter().filter(faActivity.searchView.getQuery());
     }
     Toast.makeText(super.getActivity(), getString(R.string.download_started_library), Toast.LENGTH_LONG)
