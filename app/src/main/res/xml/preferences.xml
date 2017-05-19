@@ -38,6 +38,11 @@
       android:key="pref_full_text_search"
       android:title="@string/pref_full_text_search_title"
       android:summary="@string/pref_full_text_search_summary"/>
+
+      <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
+          android:defaultValue="true"
+          android:key="pref_wifi_only"
+          android:title="@string/pref_wifi_only"/>
   </PreferenceCategory>
 
   <PreferenceCategory

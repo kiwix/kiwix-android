@@ -81,6 +81,8 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
   public static final String PREF_HIDETOOLBAR = "pref_hidetoolbar";
 
+  public static final String PREF_WIFI_ONLY = "pref_wifi_only";
+
   public static String zimFile;
 
   public static boolean allHistoryCleared = false;
@@ -265,6 +267,9 @@ public class KiwixSettingsActivity extends AppCompatActivity {
         KiwixMobileActivity.refresh = true;
         KiwixMobileActivity.nightMode = sharedPreferences.getBoolean(PREF_NIGHTMODE, false);
         getActivity().recreate();
+      }
+      if (key.equals(PREF_WIFI_ONLY)) {
+        KiwixMobileActivity.wifiOnly = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
       }
 
     }
