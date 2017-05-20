@@ -261,7 +261,7 @@ public class LibraryFragment extends Fragment
       }
 
       if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
-        Toast.makeText(getContext(), getString(R.string.wifi_only_warning), Toast.LENGTH_LONG).show();
+        DownloadFragment.showNoWiFiWarning(getContext());
       } else {
         downloadFile((Book) parent.getAdapter().getItem(position));
       }
