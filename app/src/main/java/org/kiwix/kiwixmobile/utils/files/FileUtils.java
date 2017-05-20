@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import org.kiwix.kiwixmobile.BuildConfig;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
 public class FileUtils {
 
@@ -189,6 +191,32 @@ public class FileUtils {
     return readCsv(content);
   }
 
+  private static List<File> getAllZimParts(Book book) {
+    List<File> files = new ArrayList<>();
+    if(book.file.getPath().endsWith(".zim") || book.file.getPath().endsWith(".zim.part")) {
+      if(book.file.exists()) {
+        files.add(book.file);
+      } else {
+        files.add(new File(book.file + ".part"));
+      }
+      return files;
+    }
+    String path = book.file.getPath();
+    for(char alphabetFirst = 'a'; alphabetFirst <= 'z'; alphabetFirst++) {
+      for(char alphabetSecond = 'a'; alphabetSecond <= 'z'; alphabetSecond++) {
+        path = path.substring(0, path.length() - 2) + alphabetFirst + alphabetSecond;
+        if(new File(path).exists()) {
+          files.add(new File(path));
+        } else if(new File(path + ".part").exists()) {
+          files.add(new File(path + ".part"));
+        } else {
+          return files;
+        }
+      }
+    }
+    return files;
+  }
+
   private static ArrayList<String> readCsv(String csv) {
 
     String[] csvArray = csv.split(",");
@@ -227,6 +255,15 @@ public class FileUtils {
     } else {
       return fileName + "aa";
     }
+  }
+
+  public static long getCurrentSize(Book book) {
+    long size = 0;
+    List<File> files = getAllZimParts(book);
+    for (File file : files) {
+      size += file.length();
+    }
+    return size;
   }
 
 }
