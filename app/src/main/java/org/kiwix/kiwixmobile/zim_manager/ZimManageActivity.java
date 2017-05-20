@@ -30,6 +30,7 @@ import java.util.ArrayList;
 
 import java.util.List;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.library.LibraryAdapter.Language;
 import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
@@ -80,6 +81,10 @@ public class ZimManageActivity extends AppCompatActivity {
     setContentView(R.layout.zim_manager);
 
     setUpToolbar();
+
+    if (DownloadService.ACTION_NO_WIFI.equals(getIntent().getAction())) {
+      DownloadFragment.showNoWiFiWarning(this, () -> {});
+    }
 
     // Create the adapter that will return a fragment for each of the three
     // primary sections of the activity.

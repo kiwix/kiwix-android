@@ -3,6 +3,7 @@ package org.kiwix.kiwixmobile.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.util.Log;
 import java.util.UUID;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
@@ -27,6 +28,21 @@ public class NetworkUtils {
       }
     }
     return false;
+  }
+
+  public static boolean isWiFi(Context context) {
+    ConnectivityManager connectivity = (ConnectivityManager) context
+            .getSystemService(Context.CONNECTIVITY_SERVICE);
+    if (connectivity == null)
+      return false;
+
+    if (Build.VERSION.SDK_INT >= 23) {
+      NetworkInfo network = connectivity.getActiveNetworkInfo();
+      return network.getType() == ConnectivityManager.TYPE_WIFI;
+    } else {
+      NetworkInfo wifi = connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+      return wifi.isConnected();
+    }
   }
 
   public static String getFileNameFromUrl(String url) {

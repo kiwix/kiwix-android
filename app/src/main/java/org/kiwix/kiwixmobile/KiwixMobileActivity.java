@@ -181,6 +181,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   public static boolean refresh;
 
+  public static boolean wifiOnly;
+
   private static Uri KIWIX_LOCAL_MARKET_URI;
 
   private static Uri KIWIX_BROWSER_MARKET_URI;
@@ -303,6 +305,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   public void onCreate(Bundle savedInstanceState) {
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     nightMode = sharedPreferences.getBoolean(PREF_NIGHT_MODE, false);
+    wifiOnly = sharedPreferences.getBoolean(KiwixSettingsActivity.PREF_WIFI_ONLY, true);
     if (nightMode) {
       setTheme(R.style.AppTheme_Night);
     }
