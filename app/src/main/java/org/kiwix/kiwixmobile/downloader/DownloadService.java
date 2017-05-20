@@ -2,6 +2,7 @@ package org.kiwix.kiwixmobile.downloader;
 
 import static org.kiwix.kiwixmobile.utils.files.FileUtils.getCurrentSize;
 
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -33,6 +34,7 @@ import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.TestingUtils;
+import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.database.BookDao;
@@ -60,6 +62,7 @@ public class DownloadService extends Service {
   public static final int CANCEL = 4;
   public static final String ACTION_PAUSE = "PAUSE";
   public static final String ACTION_STOP = "STOP";
+  public static final String ACTION_NO_WIFI = "NO_WIFI";
   public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
   public static int notificationCount = 1;
   public static ArrayList<String> notifications = new ArrayList<>();
@@ -105,7 +108,11 @@ public class DownloadService extends Service {
       return START_NOT_STICKY;
     }
     if (intent.hasExtra(NOTIFICATION_ID) && intent.getAction().equals(ACTION_PAUSE)) {
-      toggleDownload(intent.getIntExtra(NOTIFICATION_ID, 0));
+      if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getApplicationContext())) {
+        startActivity(new Intent(this, ZimManageActivity.class).setAction(ACTION_NO_WIFI).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        this.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+      } else
+        toggleDownload(intent.getIntExtra(NOTIFICATION_ID, 0));
       return START_NOT_STICKY;
     }
 
@@ -204,11 +211,6 @@ public class DownloadService extends Service {
   }
 
   public boolean playDownload(int notificationID) {
-    if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getApplicationContext())) {
-      Toast.makeText(this, getString(R.string.wifi_only_warning), Toast.LENGTH_LONG).show();
-      return false;
-    }
-
     downloadStatus.put(notificationID, PLAY);
     synchronized (pauseLock) {
       pauseLock.notify();

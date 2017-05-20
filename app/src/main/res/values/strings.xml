@@ -165,6 +165,7 @@
   <string name="delete_tab">Delete Tab</string>
   <string name="next">Next</string>
   <string name="previous">Previous</string>
-  <string name="wifi_only_warning">Downloading via mobile network is not allowed (This behaviour can be changed in Settings)</string>
+  <string name="wifi_only_title">Allow downloading content via mobile network?</string>
+  <string name="wifi_only_msg">If you choose "Yes" you won\'t be warned in future. However, you can always change this in Settings</string>
   <string name="pref_wifi_only">Download content only via WiFi</string>
 </resources>
