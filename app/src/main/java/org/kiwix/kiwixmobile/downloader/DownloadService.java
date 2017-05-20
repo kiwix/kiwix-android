@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.downloader;
 
+import android.app.AlertDialog;
 import static org.kiwix.kiwixmobile.utils.files.FileUtils.getCurrentSize;
 
 import android.app.NotificationManager;
@@ -14,6 +15,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -30,7 +32,9 @@ import okhttp3.Response;
 import okio.BufferedSource;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.TestingUtils;
+import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.database.BookDao;
@@ -58,6 +62,7 @@ public class DownloadService extends Service {
   public static final int CANCEL = 4;
   public static final String ACTION_PAUSE = "PAUSE";
   public static final String ACTION_STOP = "STOP";
+  public static final String ACTION_NO_WIFI = "NO_WIFI";
   public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
   public static int notificationCount = 1;
   public static ArrayList<String> notifications = new ArrayList<>();
@@ -103,7 +108,11 @@ public class DownloadService extends Service {
       return START_NOT_STICKY;
     }
     if (intent.hasExtra(NOTIFICATION_ID) && intent.getAction().equals(ACTION_PAUSE)) {
-      toggleDownload(intent.getIntExtra(NOTIFICATION_ID, 0));
+      if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getApplicationContext())) {
+        startActivity(new Intent(this, ZimManageActivity.class).setAction(ACTION_NO_WIFI).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        this.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+      } else
+        toggleDownload(intent.getIntExtra(NOTIFICATION_ID, 0));
       return START_NOT_STICKY;
     }
 
@@ -201,7 +210,7 @@ public class DownloadService extends Service {
     downloadFragment.listView.invalidateViews();
   }
 
-  public void playDownload(int notificationID) {
+  public boolean playDownload(int notificationID) {
     downloadStatus.put(notificationID, PLAY);
     synchronized (pauseLock) {
       pauseLock.notify();
@@ -211,6 +220,8 @@ public class DownloadService extends Service {
     notificationManager.notify(notificationID, notification.get(notificationID).build());
     downloadFragment.downloadAdapter.notifyDataSetChanged();
     downloadFragment.listView.invalidateViews();
+
+    return true;
   }
 
   private void downloadBook(String url, int notificationID, LibraryNetworkEntity.Book book) {
@@ -365,6 +376,10 @@ public class DownloadService extends Service {
                 attempts = timeout;
                 break;
               }
+
+              if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getApplicationContext()))
+                pauseDownload(chunk.getNotificationID());
+
               if (downloadStatus.get(chunk.getNotificationID()) == PAUSE) {
                 synchronized (pauseLock) {
                   try {

@@ -3,9 +3,12 @@ package org.kiwix.kiwixmobile.downloader;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -25,6 +28,9 @@ import android.widget.TextView;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
+import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
@@ -74,6 +80,21 @@ public class DownloadFragment extends Fragment {
     } else if (listView.getCount() > 0) {
       noDownloadsText.setVisibility(View.GONE);
     }
+  }
+
+  public static void showNoWiFiWarning(Context context) {
+    new AlertDialog.Builder(context)
+            .setTitle(R.string.wifi_only_title)
+            .setMessage(R.string.wifi_only_msg)
+            .setPositiveButton(R.string.yes, (dialog, i) -> {
+              PreferenceManager.getDefaultSharedPreferences(context)
+                      .edit()
+                      .putBoolean(KiwixSettingsActivity.PREF_WIFI_ONLY, false)
+                      .apply();
+              KiwixMobileActivity.wifiOnly = false;
+            })
+            .setNegativeButton(R.string.no, (dialog, i) -> {})
+            .show();
   }
 
   public class DownloadAdapter extends BaseAdapter {
@@ -141,8 +162,8 @@ public class DownloadFragment extends Fragment {
 
     private void setPlayState(ImageView pauseButton, int position, int newPlayState) {
         if(newPlayState == DownloadService.PLAY) { //Playing
-            LibraryFragment.mService.playDownload(mKeys[position]);
-            pauseButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
+            if (LibraryFragment.mService.playDownload(mKeys[position]))
+              pauseButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
         } else { //Pausing
             LibraryFragment.mService.pauseDownload(mKeys[position]);
             pauseButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black_24dp));
@@ -185,6 +206,12 @@ public class DownloadFragment extends Fragment {
 
       pause.setOnClickListener(v -> {
         int newPlayPauseState = LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY ? DownloadService.PAUSE : DownloadService.PLAY;
+
+        if (newPlayPauseState == DownloadService.PLAY && KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
+          showNoWiFiWarning(getContext());
+          return;
+        }
+
         setPlayState(pause, position, newPlayPauseState);
       });
 
