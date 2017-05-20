@@ -52,6 +52,7 @@ import org.kiwix.kiwixmobile.downloader.DownloadIntent;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.network.KiwixService;
+import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.TestingUtils;
@@ -190,20 +191,6 @@ public class LibraryFragment extends Fragment
     TestingUtils.unbindResource(LibraryFragment.class);
   }
 
-
-  public void displayNetworkConfirmation() {
-    libraryList.removeFooterView(progressBar);
-    networkText.setText(R.string.download_over_network);
-    networkText.setVisibility(View.VISIBLE);
-    permissionButton.setVisibility(View.VISIBLE);
-    permissionButton.setOnClickListener(view -> {
-      presenter.loadBooks();
-      permissionButton.setVisibility(View.GONE);
-      networkText.setVisibility(View.GONE);
-    });
-    TestingUtils.unbindResource(LibraryFragment.class);
-  }
-
   public void noNetworkConnection() {
     displayNoNetworkConnection();
   }
@@ -259,21 +246,11 @@ public class LibraryFragment extends Fragment
         return;
       }
 
-      if (isWiFi()) {
-        downloadFile((Book) parent.getAdapter().getItem(position));
+      if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
+        DownloadFragment.showNoWiFiWarning(getContext(), () -> {downloadFile((Book) parent.getAdapter().getItem(position));});
       } else {
-        mobileDownloadDialog(position, parent);
+        downloadFile((Book) parent.getAdapter().getItem(position));
       }
-    }
-  }
-
-  public boolean isWiFi() {
-    if (Build.VERSION.SDK_INT >= 23) {
-      NetworkInfo network = conMan.getActiveNetworkInfo();
-      return network.getType() == ConnectivityManager.TYPE_WIFI;
-    } else {
-      NetworkInfo wifi = conMan.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-      return wifi.isConnected();
     }
   }
 
@@ -296,7 +273,7 @@ public class LibraryFragment extends Fragment
   @Override
   public void downloadFile(Book book) {
     downloadingBooks.add(book);
-    if (libraryAdapter != null && faActivity.searchView != null) {
+    if (libraryAdapter != null && faActivity != null && faActivity.searchView != null) {
       libraryAdapter.getFilter().filter(faActivity.searchView.getQuery());
     }
     Toast.makeText(super.getActivity(), getString(R.string.download_started_library), Toast.LENGTH_LONG)
@@ -365,11 +342,9 @@ public class LibraryFragment extends Fragment
       NetworkInfo network = conMan.getActiveNetworkInfo();
 
       if ((books == null || books.isEmpty()) && network != null && network.isConnected()) {
-        if (isWiFi()) {
-          presenter.loadBooks();
-        } else {
-          displayNetworkConfirmation();
-        }
+        presenter.loadBooks();
+        permissionButton.setVisibility(View.GONE);
+        networkText.setVisibility(View.GONE);
       }
     }
   }
