@@ -83,7 +83,7 @@ public class ZimManageActivity extends AppCompatActivity {
     setUpToolbar();
 
     if (DownloadService.ACTION_NO_WIFI.equals(getIntent().getAction())) {
-      DownloadFragment.showNoWiFiWarning(this);
+      DownloadFragment.showNoWiFiWarning(this, () -> {});
     }
 
     // Create the adapter that will return a fragment for each of the three

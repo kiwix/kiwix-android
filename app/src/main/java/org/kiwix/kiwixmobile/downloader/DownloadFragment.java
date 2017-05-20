@@ -82,7 +82,7 @@ public class DownloadFragment extends Fragment {
     }
   }
 
-  public static void showNoWiFiWarning(Context context) {
+  public static void showNoWiFiWarning(Context context, Runnable yesAction) {
     new AlertDialog.Builder(context)
             .setTitle(R.string.wifi_only_title)
             .setMessage(R.string.wifi_only_msg)
@@ -92,6 +92,7 @@ public class DownloadFragment extends Fragment {
                       .putBoolean(KiwixSettingsActivity.PREF_WIFI_ONLY, false)
                       .apply();
               KiwixMobileActivity.wifiOnly = false;
+              yesAction.run();
             })
             .setNegativeButton(R.string.no, (dialog, i) -> {})
             .show();
@@ -208,7 +209,7 @@ public class DownloadFragment extends Fragment {
         int newPlayPauseState = LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY ? DownloadService.PAUSE : DownloadService.PLAY;
 
         if (newPlayPauseState == DownloadService.PLAY && KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
-          showNoWiFiWarning(getContext());
+          showNoWiFiWarning(getContext(), () -> {setPlayState(pause, position, newPlayPauseState);});
           return;
         }
 

@@ -261,7 +261,7 @@ public class LibraryFragment extends Fragment
       }
 
       if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
-        DownloadFragment.showNoWiFiWarning(getContext());
+        DownloadFragment.showNoWiFiWarning(getContext(), () -> {downloadFile((Book) parent.getAdapter().getItem(position));});
       } else {
         downloadFile((Book) parent.getAdapter().getItem(position));
       }
