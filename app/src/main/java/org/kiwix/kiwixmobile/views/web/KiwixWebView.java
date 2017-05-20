@@ -47,6 +47,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
 public class KiwixWebView extends WebView {
 
@@ -125,6 +126,8 @@ public class KiwixWebView extends WebView {
   public KiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs) {
     super(context, attrs);
     this.callback = callback;
+    // Set the user agent to the current locale so it can be read with navigator.userAgent
+    getSettings().setUserAgentString(LanguageUtils.getCurrentLocale(context).toString());
     setWebViewClient(new KiwixWebViewClient(callback));
     setWebChromeClient(new KiwixWebChromeClient(callback));
     getSettings().setDomStorageEnabled(true);
