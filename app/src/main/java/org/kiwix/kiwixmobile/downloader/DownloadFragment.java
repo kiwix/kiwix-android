@@ -98,6 +98,20 @@ public class DownloadFragment extends Fragment {
             .show();
   }
 
+  public String toHumanReadableTime(int seconds) {
+    final double MINUTES = 60;
+    final double HOURS = 60 * MINUTES;
+    final double DAYS = 24 * HOURS;
+
+    if (Math.round(seconds / DAYS) > 0)
+      return String.format("%d %s %s", Math.round(seconds / DAYS), getString(R.string.time_day), getString(R.string.time_left));
+    if (Math.round(seconds / HOURS) > 0)
+      return String.format("%d %s %s", Math.round(seconds / HOURS), getString(R.string.time_hour), getString(R.string.time_left));
+    if (Math.round(seconds / MINUTES) > 0)
+      return String.format("%d %s %s", Math.round(seconds / MINUTES), getString(R.string.time_minute), getString(R.string.time_left));
+    return String.format("%d %s %s", seconds, getString(R.string.time_second), getString(R.string.time_left));
+  }
+
   public class DownloadAdapter extends BaseAdapter {
 
     private LinkedHashMap<Integer, LibraryNetworkEntity.Book> mData = new LinkedHashMap<Integer, LibraryNetworkEntity.Book>();
@@ -158,6 +172,10 @@ public class DownloadFragment extends Fragment {
           downloadAdapter.notifyDataSetChanged();
           updateNoDownloads();
         }
+        TextView timeRemaining = (TextView) viewGroup.findViewById(R.id.time_remaining);
+        int secLeft = LibraryFragment.mService.timeRemaining.get(mKeys[position], -1);
+        if (secLeft != -1)
+          timeRemaining.setText(toHumanReadableTime(secLeft));
       }
     }
 
@@ -184,6 +202,7 @@ public class DownloadFragment extends Fragment {
       // Populate the data into the template view using the data object
       TextView title = (TextView) convertView.findViewById(R.id.title);
       TextView description = (TextView) convertView.findViewById(R.id.description);
+      TextView timeRemaining = (TextView) convertView.findViewById(R.id.time_remaining);
       ImageView imageView = (ImageView) convertView.findViewById(R.id.favicon);
       title.setText(getItem(position).getTitle());
       description.setText(getItem(position).getDescription());
@@ -212,6 +231,8 @@ public class DownloadFragment extends Fragment {
           showNoWiFiWarning(getContext(), () -> {setPlayState(pause, position, newPlayPauseState);});
           return;
         }
+
+        timeRemaining.setText("");
 
         setPlayState(pause, position, newPlayPauseState);
       });

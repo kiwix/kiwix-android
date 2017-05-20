@@ -71,6 +71,7 @@ public class DownloadService extends Service {
   private SparseArray<NotificationCompat.Builder> notification = new SparseArray<>();
   public SparseIntArray downloadStatus = new SparseIntArray();
   public SparseIntArray downloadProgress = new SparseIntArray();
+  public SparseIntArray timeRemaining = new SparseIntArray();
   public static final Object pauseLock = new Object();
   public static BookDao bookDao;
   private static DownloadFragment downloadFragment;
@@ -370,6 +371,9 @@ public class DownloadService extends Service {
 
             input = response.body().source();
 
+            long lastTime = System.currentTimeMillis();
+            long lastSize = 0;
+
             // Start streaming data
             while ((read = input.read(buffer)) != -1) {
               if (downloadStatus.get(chunk.getNotificationID()) == CANCEL) {
@@ -383,15 +387,31 @@ public class DownloadService extends Service {
               if (downloadStatus.get(chunk.getNotificationID()) == PAUSE) {
                 synchronized (pauseLock) {
                   try {
+                    timeRemaining.put(chunk.getNotificationID(), -1);
                     // Calling wait() will block this thread until another thread
                     // calls notify() on the object.
                     pauseLock.wait();
+
+                    lastTime = System.currentTimeMillis();
+                    lastSize = downloaded;
+
                   } catch (InterruptedException e) {
                     // Happens if someone interrupts your thread.
                   }
                 }
               }
               downloaded += read;
+
+              long timeDiff = System.currentTimeMillis() - lastTime;
+              if (timeDiff >= 1000) {
+                lastTime = System.currentTimeMillis();
+                double speed = (downloaded - lastSize) / (timeDiff / 1000.0);
+                lastSize = downloaded;
+                int secondsLeft = (int) ((chunk.getContentLength() - downloaded) / speed);
+
+                timeRemaining.put(chunk.getNotificationID(), secondsLeft);
+              }
+
               output.write(buffer, 0, read);
               int progress = (int) ((100 * downloaded) / chunk.getContentLength());
               downloadProgress.put(chunk.getNotificationID(), progress);
