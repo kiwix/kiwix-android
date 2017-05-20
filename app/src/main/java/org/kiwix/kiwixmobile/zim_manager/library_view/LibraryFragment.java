@@ -191,20 +191,6 @@ public class LibraryFragment extends Fragment
     TestingUtils.unbindResource(LibraryFragment.class);
   }
 
-
-  public void displayNetworkConfirmation() {
-    libraryList.removeFooterView(progressBar);
-    networkText.setText(R.string.download_over_network);
-    networkText.setVisibility(View.VISIBLE);
-    permissionButton.setVisibility(View.VISIBLE);
-    permissionButton.setOnClickListener(view -> {
-      presenter.loadBooks();
-      permissionButton.setVisibility(View.GONE);
-      networkText.setVisibility(View.GONE);
-    });
-    TestingUtils.unbindResource(LibraryFragment.class);
-  }
-
   public void noNetworkConnection() {
     displayNoNetworkConnection();
   }
@@ -356,11 +342,9 @@ public class LibraryFragment extends Fragment
       NetworkInfo network = conMan.getActiveNetworkInfo();
 
       if ((books == null || books.isEmpty()) && network != null && network.isConnected()) {
-        if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
-          displayNetworkConfirmation();
-        } else {
-          displayNetworkConfirmation();
-        }
+        presenter.loadBooks();
+        permissionButton.setVisibility(View.GONE);
+        networkText.setVisibility(View.GONE);
       }
     }
   }
