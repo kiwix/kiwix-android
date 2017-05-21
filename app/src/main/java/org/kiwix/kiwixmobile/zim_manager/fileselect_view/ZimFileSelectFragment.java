@@ -20,12 +20,15 @@
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -123,10 +126,10 @@ public class ZimFileSelectFragment extends Fragment
       File file = new File(path);
       Uri uri = Uri.fromFile(file);
       Log.i(TAG_KIWIX, "Opening " + uri);
-      zimManageActivity.setResult(zimManageActivity.RESULT_OK, new Intent().setData(uri));
+      zimManageActivity.setResult(Activity.RESULT_OK, new Intent().setData(uri));
       zimManageActivity.finish();
     } else {
-      zimManageActivity.setResult(zimManageActivity.RESULT_CANCELED);
+      zimManageActivity.setResult(Activity.RESULT_CANCELED);
       zimManageActivity.finish();
     }
   }
@@ -245,7 +248,8 @@ public class ZimFileSelectFragment extends Fragment
           TestingUtils.unbindResource(ZimFileSelectFragment.class);
         });
       }
-    }).scan();
+    }).scan(PreferenceManager.getDefaultSharedPreferences(context)
+        .getString(KiwixMobileActivity.PREF_STORAGE, Environment.getExternalStorageDirectory().getPath()));
   }
 
   @Override

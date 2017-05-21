@@ -55,10 +55,10 @@ public class FileSearch {
     this.listener = listener;
   }
 
-  public void scan() {
+  public void scan(String defaultPath) {
     // Start custom file search
     new Thread(() -> {
-      scanFileSystem();
+      scanFileSystem(defaultPath);
       fileSystemScanCompleted = true;
       checkCompleted();
     }).start();
@@ -99,16 +99,16 @@ public class FileSearch {
   }
 
   // Scan through the file system and find all the files with .zim and .zimaa extensions
-  public void scanFileSystem() {
+  public void scanFileSystem(String defaultPath) {
     FilenameFilter[] filter = new FilenameFilter[zimFiles.length];
 
     // Search all external directories that we can find.
-    String[] tempRoots = new String[StorageDeviceUtils.getStorageDevices((Activity) context, false).size() + 1];
+    String[] tempRoots = new String[StorageDeviceUtils.getStorageDevices(context, false).size() + 2];
     int j = 0;
-    tempRoots[j] = "/mnt";
-    for (StorageDevice storageDevice : StorageDeviceUtils.getStorageDevices((Activity) context, false)) {
-      j++;
-      tempRoots[j] = storageDevice.getName();
+    tempRoots[j++] = "/mnt";
+    tempRoots[j++] = defaultPath;
+    for (StorageDevice storageDevice : StorageDeviceUtils.getStorageDevices(context, false)) {
+      tempRoots[j++] = storageDevice.getName();
     }
 
     int i = 0;
