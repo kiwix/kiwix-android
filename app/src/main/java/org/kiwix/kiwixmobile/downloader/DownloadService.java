@@ -206,6 +206,7 @@ public class DownloadService extends Service {
     downloadStatus.put(notificationID, PAUSE);
     notification.get(notificationID).mActions.get(0).title =  getString(R.string.download_play);
     notification.get(notificationID).mActions.get(0).icon = R.drawable.ic_play_arrow_black_24dp;
+    notification.get(notificationID).setContentText(getString(R.string.download_paused));
     notificationManager.notify(notificationID, notification.get(notificationID).build());
     downloadFragment.downloadAdapter.notifyDataSetChanged();
     downloadFragment.listView.invalidateViews();
@@ -218,6 +219,7 @@ public class DownloadService extends Service {
     }
     notification.get(notificationID).mActions.get(0).title = getString(R.string.download_pause);
     notification.get(notificationID).mActions.get(0).icon = R.drawable.ic_pause_black_24dp;
+    notification.get(notificationID).setContentText("");
     notificationManager.notify(notificationID, notification.get(notificationID).build());
     downloadFragment.downloadAdapter.notifyDataSetChanged();
     downloadFragment.listView.invalidateViews();
@@ -245,6 +247,7 @@ public class DownloadService extends Service {
           if (progress == 100) {
             notification.get(notificationID).setOngoing(false);
             notification.get(notificationID).setContentTitle(notificationTitle + " " + getResources().getString(R.string.zim_file_downloaded));
+            notification.get(notificationID).setContentText(getString(R.string.zim_file_downloaded));
             final Intent target = new Intent(this, KiwixMobileActivity.class);
             target.putExtra("zimFile", KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
             target.putExtra("notificationID", notificationID);
@@ -258,6 +261,8 @@ public class DownloadService extends Service {
             TestingUtils.unbindResource(DownloadService.class);
           }
           notification.get(notificationID).setProgress(100, progress, false);
+          if (progress != 100 && timeRemaining.get(notificationID) != -1)
+            notification.get(notificationID).setContentText(downloadFragment.toHumanReadableTime(timeRemaining.get(notificationID)));
           notificationManager.notify(notificationID, notification.get(notificationID).build());
           if (progress == 0 || progress == 100) {
             // Tells android to not kill the service
