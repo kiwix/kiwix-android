@@ -108,6 +108,7 @@
   <string name="download_play">Play</string>
   <string name="download_stop">Stop</string>
   <string name="download_close">Close</string>
+  <string name="download_paused">paused</string>
   <string name="no_downloads_here">No downloads here</string>
   <string name="no_files_here">No files here</string>
   <string name="download_complete_snackbar">Download complete</string>
@@ -167,4 +168,9 @@
   <string name="wifi_only_title">Allow downloading content via mobile network?</string>
   <string name="wifi_only_msg">If you choose "Yes" you won\'t be warned in future. However, you can always change this in Settings</string>
   <string name="pref_wifi_only">Download content only via WiFi</string>
+  <string name="time_day">day</string>
+  <string name="time_hour">h</string>
+  <string name="time_minute">min</string>
+  <string name="time_second">s</string>
+  <string name="time_left">left</string>
 </resources>
