@@ -204,7 +204,6 @@ android {
           jsonFile = file(directory + '/info.json')
         }
         def parsedJson = new JsonSlurper().parseText(jsonFile.text)
-        def File zimfile = new File(parsedJson.zim_file)
         if (parsedJson.embed_zim) {
           // Place content in each lib directory for embeded zims
           file("../kiwixlib/src/main/jniLibs").eachDir() { folder ->
@@ -227,8 +226,14 @@ android {
           filename = parsedJson.zim_file
         }
         buildConfigField "String", "ZIM_FILE_NAME", "\"$filename\""
-        long length = zimfile.length()
-        buildConfigField "long", "ZIM_FILE_SIZE", "$length"
+        if (project.hasProperty('zim_file_size')) {
+          def length = Long.parseLong(project.property('zim_file_size'))
+          buildConfigField "long", "ZIM_FILE_SIZE", "$length"
+        } else {
+          def File zimfile = new File(parsedJson.zim_file)
+          long length = zimfile.length()
+          buildConfigField "long", "ZIM_FILE_SIZE", "$length"
+        }
         if (project.hasProperty('version_code')) {
           def version_code = project.property('version_code')
           versionCode version_code.toInteger()
