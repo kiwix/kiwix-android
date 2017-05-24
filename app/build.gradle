@@ -7,17 +7,13 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.3.1'
-    classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-    classpath 'me.tatarka:gradle-retrolambda:3.2.5'
+    classpath 'com.android.tools.build:gradle:3.0.0-alpha1'
     classpath 'com.testdroid:gradle:1.5.0'
     classpath 'org.apache.httpcomponents:httpclient-android:4.3.3'
   }
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'checkstyle'
 apply plugin: 'testdroid'
 
@@ -29,7 +25,7 @@ repositories {
 
 dependencies {
   // Kiwixlib
-  compile project(":kiwixlib")
+  compile project(path: ':kiwixlib')
 
   // Storage Devices
   compile 'eu.mhutti1.utils.storage:android-storage-devices:0.6.1'
@@ -68,13 +64,13 @@ dependencies {
 
   // Dagger
   compile 'com.google.dagger:dagger:2.0.2'
-  apt "com.google.dagger:dagger-compiler:2.0.2"
-  androidTestApt "com.google.dagger:dagger-compiler:2.0.2"
+  annotationProcessor "com.google.dagger:dagger-compiler:2.0.2"
+  androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:2.0.2"
 
   // SquiDB
   compile 'com.yahoo.squidb:squidb:2.0.0'
   compile 'com.yahoo.squidb:squidb-annotations:2.0.0'
-  apt 'com.yahoo.squidb:squidb-processor:2.0.0'
+  annotationProcessor 'com.yahoo.squidb:squidb-processor:2.0.0'
 
   // Apache
   compile 'commons-io:commons-io:2.5'
@@ -92,7 +88,7 @@ dependencies {
 
   // Butterknife
   compile 'com.jakewharton:butterknife:8.0.1'
-  apt 'com.jakewharton:butterknife-compiler:8.0.1'
+  annotationProcessor 'com.jakewharton:butterknife-compiler:8.0.1'
 
   // RxJava
   compile 'io.reactivex:rxandroid:1.1.0'
@@ -120,7 +116,7 @@ if(custom.listFiles()) {
   custom.eachFile() { file ->
 
     def fileName = file.getName()
-    if (fileName.contains("test") || fileName == "main" || fileName.contains("Test")) {
+    if (fileName.startsWith(".") || fileName.contains("test") || fileName == "main" || fileName.contains("Test")) {
       return
     }
     map.put(fileName, file.getAbsolutePath())
@@ -175,6 +171,8 @@ android {
     }
   }
 
+  flavorDimensions("kiwix")
+
   productFlavors {
     // Vanilla Kiwix app
     kiwix {
@@ -188,6 +186,7 @@ android {
       buildConfigField "String", "ENFORCED_LANG", "\"\""
       resValue "string", "app_name", "Kiwix"
       resValue "string", "app_search_string", "Search Kiwix"
+      dimension  = "kiwix"
     }
     // Custom apps built from a json file, zim file and icon set
     map.each { name, directory ->
@@ -216,6 +215,7 @@ android {
         }
         // Set custom config from json
         applicationId "$parsedJson.package"
+        dimension  = "kiwix"
         buildConfigField "boolean", "IS_CUSTOM_APP", "true"
         buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "$parsedJson.embed_zim"
         def filename = ""
