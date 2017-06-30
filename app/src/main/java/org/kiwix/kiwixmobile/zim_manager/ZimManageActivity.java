@@ -336,6 +336,7 @@ public class ZimManageActivity extends AppCompatActivity {
       if (convertView == null) {
         convertView = View.inflate(getContext(), R.layout.language_check_item, null);
         holder = new ViewHolder();
+        holder.row = (LinearLayout) convertView.findViewById(R.id.language_row);
         holder.checkBox = (CheckBox) convertView.findViewById(R.id.language_checkbox);
         holder.language = (TextView) convertView.findViewById(R.id.language_name);
         convertView.setTag(holder);
@@ -343,19 +344,21 @@ public class ZimManageActivity extends AppCompatActivity {
         holder = (ViewHolder) convertView.getTag();
       }
 
-      holder.checkBox.setOnCheckedChangeListener(null);
       holder.language.setText(getItem(position).language);
       holder.checkBox.setChecked(getItem(position).active);
+
+      holder.row.setOnClickListener((view) -> holder.checkBox.toggle());
       holder.checkBox.setOnCheckedChangeListener((compoundButton, b) -> getItem(position).active = b);
+
       return convertView;
     }
 
     // We are using the ViewHolder pattern in order to optimize the ListView by reusing
-    // Views and saving them to this mLibrary class, and not inlating the layout every time
+    // Views and saving them to this mLibrary class, and not inflating the layout every time
     // we need to create a row.
     private class ViewHolder {
+      LinearLayout row;
       CheckBox checkBox;
-
       TextView language;
     }
   }
