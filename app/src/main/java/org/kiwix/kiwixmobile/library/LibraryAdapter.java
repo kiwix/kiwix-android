@@ -48,8 +48,12 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -62,6 +66,7 @@ public class LibraryAdapter extends BaseAdapter {
   private ImmutableList<Book> allBooks;
   private List<Book> filteredBooks = new ArrayList<>();
   private final Context context;
+  public Map<String, Integer> languageCounts = new HashMap<>();
   public List<Language> languages = new ArrayList<>();
   private final NetworkLanguageDao networkLanguageDao;
   private final BookDao bookDao;
@@ -85,7 +90,8 @@ public class LibraryAdapter extends BaseAdapter {
 
   public void setAllBooks(List<Book> books) {
     allBooks = ImmutableList.copyOf(books);
-    getLanguages();
+    updateLanguageCounts();
+    updateLanguages();
   }
 
   @Override
@@ -247,34 +253,44 @@ public class LibraryAdapter extends BaseAdapter {
     new SaveNetworkLanguages().execute(languages);
   }
 
-  private void getLanguages() {
-    ArrayList<String> bookLanguages = new ArrayList<>();
-    if (languages.size() > 0) {
-      return;
-    }
-
-    if (networkLanguageDao.getFilteredLanguages().size() > 0) {
-      languages = networkLanguageDao.getFilteredLanguages();
-      return;
-    }
-
-    String[] languages = Locale.getISOLanguages();
+  private void updateLanguageCounts() {
+    languageCounts.clear();
     for (Book book : allBooks) {
-      if (!bookLanguages.contains(book.getLanguage())) {
-        bookLanguages.add(book.getLanguage());
+      Integer cnt = languageCounts.get(book.getLanguage());
+      if (cnt == null) {
+        languageCounts.put(book.getLanguage(), 1);
+      } else {
+        languageCounts.put(book.getLanguage(), cnt + 1);
       }
     }
+  }
+
+  private void updateLanguages() {
+    // Load previously stored languages and extract which ones were enabled. The new book list might
+    // have new languages, or be missing some old ones so we want to refresh it, but retain user's
+    // selections.
+    Set<String> enabled_languages = new HashSet<>();
+    for (Language language : networkLanguageDao.getFilteredLanguages()) {
+      if (language.active) {
+        enabled_languages.add(language.languageCode);
+      }
+    }
+
+    // Populate languages with all available locales, which appear in the current list of all books.
     this.languages = new ArrayList<>();
-    for (String language : languages) {
-      Locale locale = new Locale(language);
-      if (bookLanguages.contains(locale.getISO3Language())) {
-        if (locale.getISO3Language().equals(context.getResources().getConfiguration().locale.getISO3Language())) {
+    for (String iso_language : Locale.getISOLanguages()) {
+      Locale locale = new Locale(iso_language);
+      if (languageCounts.get(locale.getISO3Language()) != null) {
+        // Enable this language either if it was enabled previously, or if it is the device language.
+        if (enabled_languages.contains(locale.getISO3Language()) ||
+            context.getResources().getConfiguration().locale.getISO3Language().equals(locale.getISO3Language())) {
           this.languages.add(new Language(locale, true));
         } else {
           this.languages.add(new Language(locale, false));
         }
       }
     }
+
     new SaveNetworkLanguages().execute(this.languages);
   }
 
@@ -343,24 +359,25 @@ public class LibraryAdapter extends BaseAdapter {
 
   public static class Language {
     public String language;
+    public String languageLocalized;
     public String languageCode;
     public Boolean active;
 
     Language(Locale locale, Boolean active) {
       this.language = locale.getDisplayLanguage();
-      this.active = active;
+      this.languageLocalized = locale.getDisplayLanguage(locale);
       this.languageCode = locale.getISO3Language();
+      this.active = active;
     }
 
     public Language(String languageCode, Boolean active) {
-      this.language = new Locale(languageCode).getDisplayLanguage();
-      this.active = active;
-      this.languageCode = languageCode;
+      this(new Locale(languageCode), active);
     }
 
     @Override
     public boolean equals(Object obj) {
-      return ((Language) obj).language.equals(language) && ((Language) obj).active == ((Language) obj).active;
+      return ((Language) obj).language.equals(language) &&
+             ((Language) obj).active.equals(active);
     }
   }
 
