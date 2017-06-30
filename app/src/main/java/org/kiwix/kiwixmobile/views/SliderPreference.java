@@ -83,11 +83,6 @@ public class SliderPreference extends DialogPreference {
   }
 
   @Override
-  public void setSummary(CharSequence summary) {
-    super.setSummary(summary);
-  }
-
-  @Override
   public void setSummary(int summaryResId) {
     try {
       //noinspection ResourceType

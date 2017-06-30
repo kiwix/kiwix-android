@@ -63,11 +63,6 @@ public class KiwixWebView extends WebView {
   };
   private WebViewCallback callback;
 
-  @Override
-  public void loadUrl(String url) {
-    super.loadUrl(url);
-  }
-
   private Handler saveHandler = new Handler() {
 
     @Override
