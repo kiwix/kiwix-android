@@ -1,14 +1,17 @@
 package org.kiwix.kiwixmobile.di.modules;
 
 
-import dagger.Module;
-import dagger.Provides;
-import java.io.IOException;
-import javax.inject.Singleton;
-import okhttp3.OkHttpClient;
-import okhttp3.mockwebserver.MockWebServer;
 import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.utils.TestNetworkInterceptor;
+
+import java.io.IOException;
+
+import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
+import okhttp3.OkHttpClient;
+import okhttp3.mockwebserver.MockWebServer;
 
 /**
  * Created by mhutti1 on 14/04/17.

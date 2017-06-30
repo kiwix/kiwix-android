@@ -32,8 +32,10 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.EditText;
-import java.lang.reflect.Method;
+
 import org.kiwix.kiwixmobile.R;
+
+import java.lang.reflect.Method;
 
 public class CompatFindActionModeCallback
     implements ActionMode.Callback, TextWatcher, View.OnClickListener {

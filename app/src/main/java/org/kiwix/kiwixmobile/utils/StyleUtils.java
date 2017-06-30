@@ -24,7 +24,6 @@ import android.os.Build;
 import android.support.annotation.XmlRes;
 import android.text.Html;
 import android.text.Spanned;
-import android.text.SpannedString;
 import android.util.AttributeSet;
 import android.util.Xml;
 

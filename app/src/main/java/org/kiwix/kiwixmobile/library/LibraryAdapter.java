@@ -19,10 +19,6 @@
 
 package org.kiwix.kiwixmobile.library;
 
-import static android.support.test.InstrumentationRegistry.getContext;
-
-import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -38,6 +34,16 @@ import android.widget.TextView;
 
 import com.google.common.collect.ImmutableList;
 
+import org.kiwix.kiwixmobile.KiwixApplication;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.database.BookDao;
+import org.kiwix.kiwixmobile.database.KiwixDatabase;
+import org.kiwix.kiwixmobile.database.NetworkLanguageDao;
+import org.kiwix.kiwixmobile.downloader.DownloadFragment;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+import org.kiwix.kiwixmobile.utils.BookUtils;
+import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,18 +52,10 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
-import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.utils.BookUtils;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.database.BookDao;
-import org.kiwix.kiwixmobile.database.KiwixDatabase;
-import org.kiwix.kiwixmobile.database.NetworkLanguageDao;
-import org.kiwix.kiwixmobile.downloader.DownloadFragment;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
 import rx.Observable;
-import rx.functions.Func2;
+
+import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
 
 public class LibraryAdapter extends BaseAdapter {
 

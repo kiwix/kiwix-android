@@ -2,10 +2,12 @@ package org.kiwix.kiwixmobile.database;
 
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
-import java.util.ArrayList;
-import java.util.List;
+
 import org.kiwix.kiwixmobile.ZimContentProvider;
 import org.kiwix.kiwixmobile.database.entity.RecentSearch;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Dao class for recent searches.
