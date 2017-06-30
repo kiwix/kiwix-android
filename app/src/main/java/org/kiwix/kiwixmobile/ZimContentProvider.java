@@ -212,7 +212,6 @@ public class ZimContentProvider extends ContentProvider {
     if (jniKiwix == null || zimFileName == null) {
       return null;
     } else {
-      JNIKiwixString descrpition = new JNIKiwixString();
       return jniKiwix.getDescription();
     }
   }
@@ -221,7 +220,6 @@ public class ZimContentProvider extends ContentProvider {
     if (jniKiwix == null || zimFileName == null) {
       return null;
     } else {
-      JNIKiwixString string = new JNIKiwixString();
       JNIKiwixString mime = new JNIKiwixString();
       mime.value = "image/x-ms-bmp";
       return jniKiwix.getFavicon();

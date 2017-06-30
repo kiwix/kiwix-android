@@ -56,7 +56,7 @@ public class DownloadService extends Service {
 
   private static String SD_CARD;
   // 1024 / 100
-  private static double BOOK_SIZE_OFFSET = 10.24;
+  private static final double BOOK_SIZE_OFFSET = 10.24;
   public static String KIWIX_ROOT;
   public static final int PLAY = 1;
   public static final int PAUSE = 2;
@@ -139,7 +139,7 @@ public class DownloadService extends Service {
         target, PendingIntent.FLAG_CANCEL_CURRENT);
 
     Intent pauseIntent = new Intent(this, this.getClass()).setAction(ACTION_PAUSE).putExtra(NOTIFICATION_ID, notificationCount);
-    Intent stopIntent = new Intent(this, this.getClass()).setAction(ACTION_STOP).putExtra(NOTIFICATION_ID, notificationCount);;
+    Intent stopIntent = new Intent(this, this.getClass()).setAction(ACTION_STOP).putExtra(NOTIFICATION_ID, notificationCount);
     PendingIntent pausePending = PendingIntent.getService(getBaseContext(), notificationCount, pauseIntent, PendingIntent.FLAG_CANCEL_CURRENT);
     PendingIntent stopPending = PendingIntent.getService(getBaseContext(), notificationCount, stopIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
@@ -169,9 +169,9 @@ public class DownloadService extends Service {
     synchronized (pauseLock) {
       pauseLock.notify();
     }
-    downloadFragment.mDownloads.remove(notificationID);
-    downloadFragment.mDownloadFiles.remove(notificationID);
-    downloadFragment.downloadAdapter.notifyDataSetChanged();
+    DownloadFragment.mDownloads.remove(notificationID);
+    DownloadFragment.mDownloadFiles.remove(notificationID);
+    DownloadFragment.downloadAdapter.notifyDataSetChanged();
     updateForeground();
     notificationManager.cancel(notificationID);
   }
@@ -210,7 +210,7 @@ public class DownloadService extends Service {
     notification.get(notificationID).mActions.get(0).icon = R.drawable.ic_play_arrow_black_24dp;
     notification.get(notificationID).setContentText(getString(R.string.download_paused));
     notificationManager.notify(notificationID, notification.get(notificationID).build());
-    downloadFragment.downloadAdapter.notifyDataSetChanged();
+    DownloadFragment.downloadAdapter.notifyDataSetChanged();
     downloadFragment.listView.invalidateViews();
   }
 
@@ -223,7 +223,7 @@ public class DownloadService extends Service {
     notification.get(notificationID).mActions.get(0).icon = R.drawable.ic_pause_black_24dp;
     notification.get(notificationID).setContentText("");
     notificationManager.notify(notificationID, notification.get(notificationID).build());
-    downloadFragment.downloadAdapter.notifyDataSetChanged();
+    DownloadFragment.downloadAdapter.notifyDataSetChanged();
     downloadFragment.listView.invalidateViews();
 
     return true;

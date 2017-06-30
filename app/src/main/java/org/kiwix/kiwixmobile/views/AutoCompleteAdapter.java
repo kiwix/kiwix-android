@@ -33,7 +33,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
   public AutoCompleteAdapter(Context context) {
     super(context, android.R.layout.simple_list_item_1);
     this.context = context;
-    mData = new ArrayList<String>();
+    mData = new ArrayList<>();
     mFilter = new KiwixFilter();
   }
 
@@ -99,7 +99,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
    	    ZimContentProvider.searchSuggestions(query, 200);
 	    String suggestion;
 	    String suggestionUrl;
-	    List<String> alreadyAdded = new ArrayList<String>();
+	    List<String> alreadyAdded = new ArrayList<>();
 	    while ((suggestion = ZimContentProvider.getNextSuggestion()) != null) {
    	      suggestionUrl = ZimContentProvider.getPageUrlFromTitle(suggestion);
 	      if (!alreadyAdded.contains(suggestionUrl)) {

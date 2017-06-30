@@ -172,7 +172,7 @@ public class KiwixTextToSpeech {
    */
   public interface OnInitSucceedListener {
 
-    public void onInitSucceed();
+    void onInitSucceed();
   }
 
   /**
@@ -183,9 +183,9 @@ public class KiwixTextToSpeech {
    */
   public interface OnSpeakingListener {
 
-    public void onSpeakingStarted();
+    void onSpeakingStarted();
 
-    public void onSpeakingEnded();
+    void onSpeakingEnded();
   }
 
   public class TTSTask {

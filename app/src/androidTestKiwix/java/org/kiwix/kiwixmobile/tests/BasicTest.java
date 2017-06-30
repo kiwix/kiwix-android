@@ -56,7 +56,7 @@ public class BasicTest {
         allOf(childAtPosition(
             allOf(withId(R.id.new_tab_button),
                 childAtPosition(
-                    IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
+                    IsInstanceOf.instanceOf(android.widget.LinearLayout.class),
                     1)),
             0),
             isDisplayed()));
@@ -66,7 +66,7 @@ public class BasicTest {
         allOf(childAtPosition(
             allOf(withId(R.id.new_tab_button),
                 childAtPosition(
-                    IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
+                    IsInstanceOf.instanceOf(android.widget.LinearLayout.class),
                     1)),
             0),
             isDisplayed()));

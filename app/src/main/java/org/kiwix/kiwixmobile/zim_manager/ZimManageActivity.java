@@ -142,7 +142,6 @@ public class ZimManageActivity extends AppCompatActivity {
 
   private void setUpToolbar() {
     toolbar = (Toolbar) findViewById(R.id.toolbar);
-    ViewGroup toolbarContainer = (ViewGroup) findViewById(R.id.toolbar_layout);
 
     setSupportActionBar(toolbar);
 
