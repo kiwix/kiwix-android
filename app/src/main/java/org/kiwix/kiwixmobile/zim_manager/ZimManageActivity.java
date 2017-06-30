@@ -344,11 +344,12 @@ public class ZimManageActivity extends AppCompatActivity {
         holder = (ViewHolder) convertView.getTag();
       }
 
-      holder.language.setText(getItem(position).language);
-      holder.checkBox.setChecked(getItem(position).active);
-
+      // Set event listeners first, since updating the default values can trigger them.
       holder.row.setOnClickListener((view) -> holder.checkBox.toggle());
       holder.checkBox.setOnCheckedChangeListener((compoundButton, b) -> getItem(position).active = b);
+
+      holder.language.setText(getItem(position).language);
+      holder.checkBox.setChecked(getItem(position).active);
 
       return convertView;
     }
