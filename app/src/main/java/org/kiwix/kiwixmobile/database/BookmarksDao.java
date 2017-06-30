@@ -3,8 +3,10 @@ package org.kiwix.kiwixmobile.database;
 
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
-import java.util.ArrayList;
+
 import org.kiwix.kiwixmobile.database.entity.Bookmarks;
+
+import java.util.ArrayList;
 
 /**
  * Dao class for bookmarks.

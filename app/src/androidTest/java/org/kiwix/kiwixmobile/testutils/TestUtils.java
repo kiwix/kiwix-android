@@ -1,11 +1,6 @@
 package org.kiwix.kiwixmobile.testutils;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static android.support.test.InstrumentationRegistry.getTargetContext;
-import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
-
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.test.InstrumentationRegistry;
@@ -15,9 +10,12 @@ import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.support.v4.content.ContextCompat;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 
 /**
  * Created by mhutti1 on 07/04/17.

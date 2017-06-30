@@ -1,8 +1,9 @@
 package org.kiwix.kiwixmobile.downloader;
 
+import org.kiwix.kiwixmobile.utils.StorageUtils;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.kiwix.kiwixmobile.utils.StorageUtils;
 
 public class ChunkUtils {
 

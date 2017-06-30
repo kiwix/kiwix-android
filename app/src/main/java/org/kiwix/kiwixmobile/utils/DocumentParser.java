@@ -4,11 +4,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
-import java.util.ArrayList;
-import java.util.List;
+
 import org.kiwix.kiwixmobile.TableDrawerAdapter;
 
-import static org.kiwix.kiwixmobile.TableDrawerAdapter.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.kiwix.kiwixmobile.TableDrawerAdapter.DocumentSection;
 
 public class DocumentParser {
 

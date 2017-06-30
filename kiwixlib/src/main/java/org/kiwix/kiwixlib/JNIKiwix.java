@@ -19,10 +19,6 @@
 
 package org.kiwix.kiwixlib;
 
-import org.kiwix.kiwixlib.JNIKiwixString;
-import org.kiwix.kiwixlib.JNIKiwixBool;
-import org.kiwix.kiwixlib.JNIKiwixInt;
-
 public class JNIKiwix {
 
   static {
