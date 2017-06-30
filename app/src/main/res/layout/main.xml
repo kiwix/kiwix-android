@@ -100,21 +100,21 @@
 
           </LinearLayout>
 
-          <org.kiwix.kiwixmobile.views.PageBottomTabLayout
-              android:id="@+id/page_bottom_tab_layout"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_gravity="bottom"
-              android:background="@color/grey"
-              app:tabSelectedTextColor="@color/grey"
-              app:tabIndicatorColor="@color/grey"
-              app:tabGravity="fill"
-              android:layout_alignParentBottom="true"
-              android:layout_centerHorizontal="true" />
-
         </RelativeLayout>
 
       </RelativeLayout>
+
+      <org.kiwix.kiwixmobile.views.PageBottomTabLayout
+          android:id="@+id/page_bottom_tab_layout"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_alignParentBottom="true"
+          android:layout_centerHorizontal="true"
+          android:layout_gravity="bottom"
+          android:background="@color/grey"
+          app:tabGravity="fill"
+          app:tabIndicatorColor="@color/grey"
+          app:tabSelectedTextColor="@color/grey"/>
 
     </RelativeLayout>
 
