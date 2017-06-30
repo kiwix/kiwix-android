@@ -250,10 +250,7 @@ public class ZimManageActivity extends AppCompatActivity {
     int size = 0;
     try {
       size = mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages.size();
-    } catch (NullPointerException e) {
-      Toast.makeText(this, getResources().getString(R.string.wait_for_load), Toast.LENGTH_LONG).show();
-      return;
-    }
+    } catch (NullPointerException e) { }
     if (size == 0) {
       Toast.makeText(this, getResources().getString(R.string.wait_for_load), Toast.LENGTH_LONG).show();
       return;
