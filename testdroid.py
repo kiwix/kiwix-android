@@ -8,7 +8,8 @@ PROJECT_ID = 116910522
 if os.environ.get('BITBAR_API_KEY') == None:
   print "Tests could not run on insecure fork"
   sys.exit(0)
-
+else:
+  print "Running tests"
 
 runID = os.environ['TRAVIS_BUILD_NUMBER']
 apiKey = os.environ['BITBAR_API_KEY']
