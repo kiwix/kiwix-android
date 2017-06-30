@@ -72,6 +72,7 @@ public class NetworkUtils {
       details = details.replaceAll("_", " ");
       details = details.replaceAll("all", "");
       details = details.replaceAll("nopic", context.getString(R.string.zim_nopic));
+      details = details.replaceAll("novid", context.getString(R.string.zim_novid));
       details = details.replaceAll("simple", context.getString(R.string.zim_simple));
       details = details.trim().replaceAll(" +", " ");
       return details;
