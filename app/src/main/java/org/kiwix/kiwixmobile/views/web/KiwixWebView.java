@@ -66,6 +66,8 @@ public class KiwixWebView extends WebView {
   @Override
   public void loadUrl(String url) {
     super.loadUrl(url);
+
+    Log.i("KIWIXTEST", "loadUrl: " + url);
   }
 
   private Handler saveHandler = new Handler() {
