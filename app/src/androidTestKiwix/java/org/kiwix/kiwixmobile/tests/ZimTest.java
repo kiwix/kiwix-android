@@ -1,36 +1,11 @@
 package org.kiwix.kiwixmobile.tests;
 
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static android.support.test.espresso.Espresso.onData;
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.action.ViewActions.swipeLeft;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static android.support.test.espresso.web.assertion.WebViewAssertions.webMatches;
-import static android.support.test.espresso.web.sugar.Web.onWebView;
-import static android.support.test.espresso.web.webdriver.DriverAtoms.findElement;
-import static android.support.test.espresso.web.webdriver.DriverAtoms.getText;
-import static android.support.test.espresso.web.webdriver.DriverAtoms.webClick;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasToString;
-import static org.hamcrest.core.StringStartsWith.startsWith;
-import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.test.espresso.ViewInteraction;
-import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.contrib.DrawerActions;
-import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.espresso.web.webdriver.Locator;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -39,11 +14,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import java.io.File;
-import java.io.IOException;
-import java.util.Map;
-import javax.inject.Inject;
-import net.bytebuddy.matcher.StringMatcher;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -55,13 +26,27 @@ import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.ZimContentProvider;
-import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
 import org.kiwix.kiwixmobile.di.components.DaggerTestComponent;
 import org.kiwix.kiwixmobile.di.components.TestComponent;
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
-import org.kiwix.kiwixmobile.library.LibraryAdapter;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
-import org.kiwix.kiwixmobile.testutils.TestUtils;
+
+import java.io.File;
+import java.io.IOException;
+
+import javax.inject.Inject;
+
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static android.support.test.espresso.web.sugar.Web.onWebView;
+import static android.support.test.espresso.web.webdriver.DriverAtoms.findElement;
+import static android.support.test.espresso.web.webdriver.DriverAtoms.webClick;
+import static org.hamcrest.Matchers.allOf;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)

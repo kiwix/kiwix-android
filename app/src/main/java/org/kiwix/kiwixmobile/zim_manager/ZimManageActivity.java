@@ -26,18 +26,17 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.util.ArrayList;
+
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.downloader.DownloadFragment;
+import org.kiwix.kiwixmobile.downloader.DownloadService;
+import org.kiwix.kiwixmobile.library.LibraryAdapter;
+import org.kiwix.kiwixmobile.library.LibraryAdapter.Language;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
+import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
 import java.util.List;
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
-import org.kiwix.kiwixmobile.downloader.DownloadService;
-import org.kiwix.kiwixmobile.library.LibraryAdapter.Language;
-import org.kiwix.kiwixmobile.utils.TestingUtils;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
-import org.kiwix.kiwixmobile.downloader.DownloadFragment;
-import org.kiwix.kiwixmobile.library.LibraryAdapter;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 

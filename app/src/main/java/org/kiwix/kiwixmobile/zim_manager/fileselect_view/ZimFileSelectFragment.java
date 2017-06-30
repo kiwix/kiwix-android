@@ -45,11 +45,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
@@ -65,7 +60,12 @@ import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.inject.Inject;
 

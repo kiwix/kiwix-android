@@ -1,23 +1,22 @@
 package org.kiwix.kiwixmobile.di.modules;
 
+import org.apache.commons.io.IOUtils;
+import org.kiwix.kiwixlib.JNIKiwix;
+import org.kiwix.kiwixlib.JNIKiwixString;
+import org.mockito.Mockito;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
-
-import android.content.Context;
-import dagger.Module;
-import dagger.Provides;
-import java.io.IOException;
-import java.io.InputStream;
-import javax.inject.Singleton;
-import org.apache.commons.io.IOUtils;
-import org.kiwix.kiwixlib.JNIKiwix;
-import org.kiwix.kiwixlib.JNIKiwixString;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 /**
  * Created by mhutti1 on 13/04/17.
