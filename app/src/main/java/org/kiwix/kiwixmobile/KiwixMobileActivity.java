@@ -77,6 +77,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
@@ -178,6 +179,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   private boolean isOpenNewTabInBackground;
 
   public static boolean nightMode;
+
+  public static boolean autoNightMode;
 
   public static boolean refresh;
 
@@ -1800,4 +1803,5 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       dialog.show();
     }
   }
+
 }

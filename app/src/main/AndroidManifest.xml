@@ -167,7 +167,6 @@
 
 
     <service android:name=".downloader.DownloadService" />
-
   </application>
 
 </manifest>
