@@ -50,8 +50,6 @@ public class CompatFindActionModeCallback
 
   private InputMethodManager mInput;
 
-  private boolean mMatchesFound;
-
   private ActionMode mActionMode;
 
   public CompatFindActionModeCallback(Context context) {
@@ -87,7 +85,6 @@ public class CompatFindActionModeCallback
     // Necessary each time we set the text, so that this will watch
     // changes to it.
     span.setSpan(this, 0, length, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-    mMatchesFound = false;
   }
 
   // Set the WebView to search.  Must be non null, and set before calling startActionMode.
@@ -119,10 +116,8 @@ public class CompatFindActionModeCallback
     CharSequence find = mEditText.getText();
     if (find.length() == 0) {
       mWebView.clearMatches();
-      mMatchesFound = false;
       mWebView.findAll(null);
     } else {
-      mMatchesFound = true;
       mWebView.findAll(find.toString());
 
       // Enable word highlighting with reflection
@@ -164,7 +159,6 @@ public class CompatFindActionModeCallback
     mActionMode = mode;
     Editable edit = mEditText.getText();
     Selection.setSelection(edit, edit.length());
-    mMatchesFound = false;
     mEditText.requestFocus();
     return true;
   }

@@ -60,8 +60,6 @@ public class ZimManageActivity extends AppCompatActivity {
    */
   private ViewPager mViewPager;
 
-  public boolean downloading = false;
-
   public  Toolbar toolbar;
 
   public MenuItem refeshItem;
@@ -160,13 +158,8 @@ public class ZimManageActivity extends AppCompatActivity {
 
 
   public void displayDownloadInterface() {
-    downloading = true;
     mSectionsPagerAdapter.notifyDataSetChanged();
     mViewPager.setCurrentItem(2);
-  }
-
-  public void displayLocalTab() {
-    mViewPager.setCurrentItem(0);
   }
 
   @Override

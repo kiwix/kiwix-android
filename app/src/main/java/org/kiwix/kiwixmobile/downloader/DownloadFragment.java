@@ -268,17 +268,6 @@ public class DownloadFragment extends Fragment {
     }
   }
 
-  public static class Download {
-    public String title;
-    public int progress;
-
-    public Download(String title) {
-      this.title = title;
-      progress = 0;
-    }
-
-  }
-
   public void addDownload(int position, LibraryNetworkEntity.Book book, String fileName) {
     mDownloads.put(position, book);
     mDownloadFiles.put(position, fileName);

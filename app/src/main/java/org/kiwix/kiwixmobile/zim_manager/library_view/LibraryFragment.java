@@ -83,8 +83,6 @@ public class LibraryFragment extends Fragment
 
   private boolean mBound;
 
-  private boolean active;
-
   public LibraryAdapter libraryAdapter;
 
   private DownloadServiceConnection mConnection = new DownloadServiceConnection();
@@ -148,7 +146,6 @@ public class LibraryFragment extends Fragment
 
   @Override
   public void showBooks(LinkedList<Book> books) {
-    active = true;
     libraryAdapter.setAllBooks(books);
     if (faActivity.searchView != null) {
       libraryAdapter.getFilter().filter(
@@ -196,7 +193,6 @@ public class LibraryFragment extends Fragment
   @Override
   public void onDestroyView() {
     super.onDestroyView();
-    active = false;
     if (mBound) {
       super.getActivity().unbindService(mConnection.downloadServiceInterface);
       mBound = false;
@@ -252,22 +248,6 @@ public class LibraryFragment extends Fragment
     }
   }
 
-
-  public void mobileDownloadDialog(int position, AdapterView<?> parent) {
-    new AlertDialog.Builder(super.getActivity(), dialogStyle())
-        .setMessage(getString(R.string.download_over_network))
-        .setPositiveButton(getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int which) {
-            downloadFile((Book) parent.getAdapter().getItem(position));
-          }
-        })
-        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int which) {
-          }
-        })
-        .show();
-  }
-
   @Override
   public void downloadFile(Book book) {
     downloadingBooks.add(book);
@@ -311,7 +291,6 @@ public class LibraryFragment extends Fragment
 
   public class DownloadServiceConnection {
     public DownloadServiceInterface downloadServiceInterface;
-    public boolean bound;
 
     public DownloadServiceConnection() {
       downloadServiceInterface = new DownloadServiceInterface();
@@ -328,9 +307,7 @@ public class LibraryFragment extends Fragment
       }
 
       @Override
-      public void onServiceDisconnected(ComponentName arg0) {
-        bound = false;
-      }
+      public void onServiceDisconnected(ComponentName arg0) { }
     }
   }
 

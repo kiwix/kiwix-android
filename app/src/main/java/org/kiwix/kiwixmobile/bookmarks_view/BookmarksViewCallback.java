@@ -11,7 +11,5 @@ import java.util.ArrayList;
 public interface BookmarksViewCallback extends ViewCallback {
   void showBookmarks(ArrayList<String> bookmarks, ArrayList<String> bookmarkUrls);
 
-  void updateAdapter();
-
   void popDeleteBookmarksSnackbar();
 }

@@ -77,9 +77,4 @@ public class BookmarksDao {
     mDb.deleteWhere(Bookmarks.class, Bookmarks.BOOKMARK_URL.eq(favArticle).and(Bookmarks.ZIM_ID.eq(ZimId).or(Bookmarks.ZIM_NAME.eq(ZimName))) );
   }
 
-
-  public void deleteAll(){
-    mDb.clear();
-  }
-
 }
