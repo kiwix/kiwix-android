@@ -11,6 +11,12 @@
 
     <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
         android:defaultValue="false"
+        android:key="pref_auto_nightmode"
+        android:summary="@string/pref_autonightmode_summary"
+        android:title="@string/pref_autonightmode"/>
+
+    <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
+        android:defaultValue="false"
         android:key="pref_backtotop"
         android:summary="@string/pref_backtotop_summary"
         android:title="@string/pref_backtotop"/>

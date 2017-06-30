@@ -52,6 +52,7 @@ import org.kiwix.kiwixmobile.views.SliderPreference;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryUtils;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.Locale;
 
 import eu.mhutti1.utils.storage.StorageDevice;
@@ -79,6 +80,8 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
   public static final String PREF_STORAGE = "pref_select_folder";
 
+  public static final String PREF_AUTONIGHTMODE = "pref_auto_nightmode";
+
   public static final String PREF_NIGHTMODE = "pref_nightmode";
 
   public static final String PREF_HIDETOOLBAR = "pref_hidetoolbar";
@@ -89,12 +92,17 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
   public static boolean allHistoryCleared = false;
 
+
+  private static final int DAWN_HOUR = 6;
+  private static final int DUSK_HOUR = 18;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-    if (sharedPreferences.getBoolean(KiwixMobileActivity.PREF_NIGHT_MODE, false)) {
+
+    if(nightMode(PreferenceManager.getDefaultSharedPreferences(this))){
       setTheme(R.style.AppTheme_Night);
     }
+
     super.onCreate(savedInstanceState);
     setContentView(R.layout.settings);
 
@@ -131,6 +139,17 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     toolbar.setNavigationOnClickListener(v -> onBackPressed());
   }
 
+  public static boolean nightMode(SharedPreferences preferences){
+    boolean autoNightMode = preferences.getBoolean(PREF_AUTONIGHTMODE, false);
+    if(autoNightMode){
+      Calendar cal = Calendar.getInstance();
+      int hour = cal.get(Calendar.HOUR_OF_DAY);
+      return hour < DAWN_HOUR || hour > DUSK_HOUR;
+    } else{
+      return preferences.getBoolean(PREF_NIGHTMODE, false);
+    }
+  }
+
   public static class PrefsFragment extends PreferenceFragment implements
       SharedPreferences.OnSharedPreferenceChangeListener, StorageSelectDialog.OnSelectListener {
 
@@ -141,6 +160,13 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       addPreferencesFromResource(R.xml.preferences);
+
+      boolean auto_night_mode = PreferenceManager.getDefaultSharedPreferences(getActivity())
+              .getBoolean(PREF_AUTONIGHTMODE, false);
+
+      if(auto_night_mode){
+        getPreferenceScreen().findPreference(PREF_NIGHTMODE).setEnabled(false);
+      }
 
       if (BuildConfig.ENFORCED_LANG.equals("")) {
         setUpLanguageChooser(PREF_LANG);
@@ -267,11 +293,14 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       }
       if (key.equals(PREF_NIGHTMODE)) {
         KiwixMobileActivity.refresh = true;
-        KiwixMobileActivity.nightMode = sharedPreferences.getBoolean(PREF_NIGHTMODE, false);
         getActivity().recreate();
       }
       if (key.equals(PREF_WIFI_ONLY)) {
         KiwixMobileActivity.wifiOnly = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
+      }
+      if(key.equals(PREF_AUTONIGHTMODE)){
+        KiwixMobileActivity.refresh = true;
+        getActivity().recreate();
       }
 
     }
