@@ -23,12 +23,6 @@ public class KiwixApplication extends MultiDexApplication {
     initializeInjector();
   }
 
-  @Override
-  public void onCreate() {
-    super.onCreate();
-
-  }
-
   private void initializeInjector() {
     setApplicationComponent(DaggerApplicationComponent.builder()
         .applicationModule(new ApplicationModule(this))
