@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="menu_zim_manager">Get Content</string>
   <string name="menu_help">Hilfe</string>
   <string name="menu_home">Startseite</string>
   <string name="menu_forward">Vorwärts</string>
@@ -32,7 +31,6 @@
   <string name="error_articlenotfound">Fehler: Das Laden des Artikels \"%1$s\" ist fehlgeschlagen.</string>
   <string name="error_articleurlnotfound">Fehler: Das Laden des Artikels (URL: %1$s) ist fehlgeschlagen.</string>
   <string name="pref_display_title">Bildschirm</string>
-  <string name="pref_zoom_sub_title">Zoom</string>
   <string name="pref_zoom_dialog">Vergrößerungsstufe</string>
   <string-array name="pref_zoom_entries">
     <item name="pref_zoom_entry_automatic">Automatisch</item>
@@ -40,8 +38,6 @@
     <item name="pref_zoom_entry_medium">Mittel</item>
     <item name="pref_zoom_entry_large">Groß</item>
   </string-array>
-  <string name="pref_info_title">Information</string>
-  <string name="pref_info_version">Version</string>
   <string name="pref_zoom_enable">Zoom-Steuerung</string>
   <string name="pref_nightmode">Nachtmodus</string>
   <string name="pref_nightmode_summary">Artikel mit umgekehrten Farben ansehen</string>
@@ -51,27 +47,12 @@
   <string name="pref_language_chooser">Eine Sprache auswählen</string>
   <string name="tts_lang_not_supported">Die Sprache dieser Seite wird nicht unterstützt oder es sind keine passenden Sprachdaten installiert. Der Artikel kann eventuell nicht ordnungsgemäß gelesen werden.</string>
   <string name="no_reader_application_installed">Es konnte keine installierte Anwendung für diesen Dateityp gefunden werden</string>
-  <string name="custom_app_missing_content">Your application is corrupted.\nThis might happen when you remove files on the SD Card.\nYou need to uninstall then reinstall the App from the Play Store.</string>
+  <string name="customapp_missing_content">Ihre Anwendung ist beschädigt.\nDies kann passieren, wenn Sie Dateien auf der SD-Karte entfernen.\nSie müssen die App deinstallieren und sie aus dem Play Store neu installieren.</string>
   <string name="go_to_play_store">Zum Play Store gehen</string>
   <string name="no_bookmarks">Keine Lesezeichen!</string>
   <string name="menu_bookmarks_list">Lesezeichen</string>
-  <string name="no_section_info">Kein Header gefunden</string>
+  <string name="no_section_info">Keine Inhaltsheader gefunden</string>
   <string name="request_storage">Um auf ZIM-Dateien zuzugreifen, müssen wir auf Ihren Speicher zugreifen.</string>
-  <string name="clear_recent_history_dialog">Are you sure you want to delete your search history?</string>
-  <string name="clear_recent_and_tabs_history_dialog">Are you sure you want to delete your search history and reset all active tabs?</string>
-  <string name="delete_recent_search_item">Delete this item?</string>
-  <string name="pref_clear_all_history_title">Clear History</string>
-  <string name="pref_clear_all_history_summary">Clear recent searches and tabs history</string>
-  <string name="all_history_cleared_toast">All History Cleared</string>
-  <string name="clear_all_history_dialog_title">Clear All History</string>
-  <string name="delete">Delete</string>
-  <string name="delete_specific_search_toast">Recent search removed</string>
-  <string name="hint_contents_drawer_message">You can swipe left to view the contents of this article</string>
-  <string name="got_it">Got it</string>
-  <string name="did_you_know">Did you know?</string>
-  <string name="undo">Undo</string>
-  <string name="tab_closed">Tab closed</string>
-  <string name="deleted_message">deleted</string>
   <string name="bookmarks_restored">Lesezeichen wiederhergestellt</string>
   <string name="bookmark_added">Lesezeichen hinzugefügt</string>
   <string name="rate_dialog_title">Bitte bewerte uns</string>
@@ -80,36 +61,6 @@
   <string name="rate_dialog_positive">Bewerten!</string>
   <string name="rate_dialog_negative">Nein danke</string>
   <string name="rate_dialog_neutral">Später</string>
-  <string name="open">Open</string>
-  <string name="bookmark_removed">Bookmark removed</string>
   <string name="pref_newtab_background_title">Neue Registerkarte im Hintergrund öffnen</string>
   <string name="pref_newtab_background_summary">Beim Öffnen einer neuen Registerkarte wird sie im Hintergrund geöffnet</string>
-  <string name="pref_extras">Extras</string>
-  <string name="new_tab_snackbar">Article opened in new tab</string>
-  <string name="search_widget_text">Search Kiwix</string>
-  <string name="speech_prompt_text">Speak to search %s</string>
-  <string name="speech_not_supported">Sorry! Your device does not support speech input</string>
-  <string name="download_started_library">Download started...</string>
-  <string name="menu_library">Download ZIM files</string>
-  <string name="local_zims">Local</string>
-  <string name="remote_zims">Remote</string>
-  <string name="zim_manager">ZIM Management</string>
-  <string name="delete_specific_zim">Delete this ZIM?</string>
-  <string name="delete_specific_zim_toast">ZIM file deleted</string>
-  <string name="zim_file_downloading">Downloading</string>
-  <string name="zim_file_downloaded">Downloaded</string>
-  <string name="download_pause">pause</string>
-  <string name="download_play">play</string>
-  <string name="download_stop">stop</string>
-  <string name="download_close">close</string>
-  <string name="no_downloads_here">No Downloads Here</string>
-  <string name="no_files_here">No Files Here</string>
-  <string name="download_complete_snackbar">Download complete</string>
-  <string name="download_over_network">Are you sure you want to start the download without WiFi?</string>
-  <string name="download_no_space">Insufficient space to download this file</string>
-  <string name="space_available">Space Available:</string>
-  <string name="zim_simple">Simple</string>
-  <string name="zim_nopic">No Pictures</string>
-  <string name="open_partial_zim">This file could be incomplete. Do you wish to attempt to open it?</string>
-  <string name="no_network_connection">No network connection</string>
 </resources>
