@@ -74,11 +74,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.google.firebase.appindexing.Action;
-import com.google.firebase.appindexing.FirebaseAppIndex;
-import com.google.firebase.appindexing.FirebaseUserActions;
-import com.google.firebase.appindexing.builders.Actions;
-import com.google.firebase.appindexing.builders.Indexables;
+
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -1232,16 +1228,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   private boolean openArticle(String articleUrl) {
 
     if (articleUrl != null) {
-      Log.i("KIWIXTEST", "Index URL: " + articleUrl);
-      FirebaseAppIndex.getInstance().update(Indexables.newSimple("kiwixtest", articleUrl))
-              .addOnCompleteListener(task -> Log.i("KIWIXTEST", "update: " + articleUrl + " " + task.isSuccessful()));
-      FirebaseUserActions.getInstance().start(
-              new Action.Builder(Action.Builder.VIEW_ACTION)
-                      .setObject("kiwixtest", articleUrl)
-                      .setMetadata(new Action.Metadata.Builder().setUpload(false))
-                      .build()
-      ).addOnCompleteListener(task -> Log.i("KIWIXTEST", "start: " + articleUrl + " " + task.isSuccessful()));
-
       getCurrentWebView().loadUrl(
           Uri.parse(ZimContentProvider.CONTENT_URI + articleUrl).toString());
     }

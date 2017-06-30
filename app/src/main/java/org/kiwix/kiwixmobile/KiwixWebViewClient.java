@@ -14,6 +14,12 @@ import org.kiwix.kiwixmobile.utils.StyleUtils;
 
 import java.util.HashMap;
 
+import com.google.firebase.appindexing.Action;
+import com.google.firebase.appindexing.FirebaseAppIndex;
+import com.google.firebase.appindexing.FirebaseUserActions;
+import com.google.firebase.appindexing.builders.Actions;
+import com.google.firebase.appindexing.builders.Indexables;
+
 public class KiwixWebViewClient extends WebViewClient {
 
   private static final HashMap<String, String> DOCUMENT_TYPES = new HashMap<String, String>() {{
@@ -66,6 +72,22 @@ public class KiwixWebViewClient extends WebViewClient {
 
   @Override
   public void onPageFinished(WebView view, String url) {
+      {
+          String title = view.getTitle();
+          // TODO: Convert to deep linked URL.
+          String deepLink = url;
+          Log.i("KIWIXTEST", "url: " + deepLink + "  title: " + title);
+
+          FirebaseAppIndex.getInstance().update(Indexables.newSimple(title, deepLink))
+                  .addOnCompleteListener(task -> Log.i("KIWIXTEST", "update: " + deepLink + " " + task.isSuccessful()));
+          FirebaseUserActions.getInstance().start(
+                  new Action.Builder(Action.Builder.VIEW_ACTION)
+                          .setObject(title, deepLink)
+                          .setMetadata(new Action.Metadata.Builder().setUpload(false))
+                          .build()
+          ).addOnCompleteListener(task -> Log.i("KIWIXTEST", "start: " + deepLink + " " + task.isSuccessful()));
+      }
+
     if ((url.equals("content://" + BuildConfig.APPLICATION_ID + ".zim.base/null")) && !BuildConfig.IS_CUSTOM_APP) {
       callback.showHelpPage();
       return;
