@@ -52,6 +52,8 @@ public class ZimContentProvider extends ContentProvider {
 
   public static final Uri CONTENT_URI = Uri.parse("content://" + BuildConfig.APPLICATION_ID + ".zim.base/");
 
+  public static final Uri APP_INDEXING_URI = Uri.parse("content://" + BuildConfig.APPLICATION_ID + ".appindexing/");
+
   public static final Uri UI_URI = Uri.parse("content://org.kiwix.ui/");
 
   public static String originalFileName = "";
@@ -409,6 +411,14 @@ public class ZimContentProvider extends ContentProvider {
     out.flush();
 
     return ParcelFileDescriptor.open(f, ParcelFileDescriptor.MODE_READ_ONLY);
+  }
+
+  public static String getAppIndexingUrl(String title) {
+    Uri.Builder builder = new Uri.Builder();
+    builder.appendPath(APP_INDEXING_URI.toString());
+    builder.appendQueryParameter("zimfile", getZimFile());
+    builder.appendQueryParameter("article", getPageUrlFromTitle(title));
+    return builder.build().toString();
   }
 
   @Override
