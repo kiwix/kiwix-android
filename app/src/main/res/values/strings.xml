@@ -112,6 +112,7 @@
   <string name="no_downloads_here">No downloads here</string>
   <string name="no_files_here">No files here</string>
   <string name="download_complete_snackbar">Download complete</string>
+  <string name="download_over_network">Are you sure you want to start the download without WiFi?</string>
   <string name="download_no_space">Insufficient space to download this file.</string>
   <string name="space_available">Space Available:</string>
   <string name="zim_simple">Simple</string>
@@ -124,7 +125,7 @@
   <string name="help_1">Kiwix allows you offline access to websites such as Wikipedia in a highly compressed form.</string>
   <string name="help_2">What does Kiwix do?</string>
   <string name="help_3">Kiwix is an offline content reader. It acts very much like a browser but instead of accessing online web pages, it reads content from a file in ZIM format.</string>
-  <string name="help_4">While Kiwix has been originaly designed to provide Wikipedia offline, it also reads other contents.</string>#
+  <string name="help_4">While Kiwix has been originaly designed to provide Wikipedia offline, it also reads other contents.</string>
   <string name="help_5">Where is the content?</string>
   <string name="help_6">Our content is hosted on the kiwix website.</string>
   <string name="help_7">They are available as ZIM files. There are a lot of them:</string>
