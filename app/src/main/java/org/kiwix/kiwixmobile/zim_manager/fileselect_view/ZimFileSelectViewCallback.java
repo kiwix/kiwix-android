@@ -10,9 +10,4 @@ import java.util.ArrayList;
  */
 public interface ZimFileSelectViewCallback extends ViewCallback {
   void showFiles(ArrayList<LibraryNetworkEntity.Book> books);
-
-  void updateFilesAdapter();
-
-
-
 }

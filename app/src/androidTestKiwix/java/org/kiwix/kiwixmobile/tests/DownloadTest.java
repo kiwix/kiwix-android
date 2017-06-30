@@ -41,9 +41,6 @@ import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
 @RunWith(AndroidJUnit4.class)
 public class DownloadTest {
 
-  @Inject KiwixIdlingResource kiwixIdlingResource;
-
-
   @Rule
   public ActivityTestRule<SplashActivity> mActivityTestRule = new ActivityTestRule<>(
       SplashActivity.class);

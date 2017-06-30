@@ -62,10 +62,6 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
     } else return a;
   }
 
-  public String getItemRaw(int index) {
-    return mData.get(index);
-  }
-
   @Override
   public Filter getFilter() {
     return mFilter;

@@ -154,23 +154,6 @@ public class ZimContentProvider extends ContentProvider {
     }
   }
 
-  public static int getArticleCount() {
-    if (jniKiwix == null || zimFileName == null) {
-      return 0;
-    } else {
-      return jniKiwix.getArticleCount();
-
-    }
-  }
-  public static int getMediaCount() {
-    if (jniKiwix == null || zimFileName == null) {
-      return 0;
-    } else {
-      return jniKiwix.getMediaCount();
-
-    }
-  }
-
   public static String getCreator() {
     if (jniKiwix == null || zimFileName == null) {
       return null;
@@ -443,8 +426,6 @@ public class ZimContentProvider extends ContentProvider {
 
   static class TransferThread extends Thread {
 
-    Uri articleUri;
-
     String articleZimUrl;
 
     OutputStream out;
@@ -452,7 +433,6 @@ public class ZimContentProvider extends ContentProvider {
     JNIKiwix jniKiwix;
 
     TransferThread(JNIKiwix jniKiwix, Uri articleUri, OutputStream out) throws IOException {
-      this.articleUri = articleUri;
       this.jniKiwix = jniKiwix;
       Log.d(TAG_KIWIX, "Retrieving: " + articleUri.toString());
 

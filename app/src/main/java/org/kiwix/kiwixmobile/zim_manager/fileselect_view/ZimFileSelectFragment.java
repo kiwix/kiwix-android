@@ -158,11 +158,6 @@ public class ZimFileSelectFragment extends Fragment
     checkPermissions();
   }
 
-  @Override
-  public void updateFilesAdapter() {
-
-  }
-
   public void refreshFragment(){
     if (mZimFileList == null)
       return;

@@ -56,7 +56,6 @@ import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
 
 public class NetworkTest {
 
-  @Inject OkHttpClient okHttpClient;
   @Inject MockWebServer mockWebServer;
 
 

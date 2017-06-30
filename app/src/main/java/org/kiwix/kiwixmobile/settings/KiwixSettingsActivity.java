@@ -84,11 +84,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
   public static final String PREF_NIGHTMODE = "pref_nightmode";
 
-  public static final String PREF_HIDETOOLBAR = "pref_hidetoolbar";
-
   public static final String PREF_WIFI_ONLY = "pref_wifi_only";
-
-  public static String zimFile;
 
   public static boolean allHistoryCleared = false;
 
@@ -107,7 +103,6 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     setContentView(R.layout.settings);
 
     allHistoryCleared = false;
-    zimFile = getIntent().getStringExtra("zim_file");
 
     getFragmentManager()
         .beginTransaction().

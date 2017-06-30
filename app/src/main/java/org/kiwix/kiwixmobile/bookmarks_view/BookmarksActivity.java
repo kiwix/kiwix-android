@@ -183,13 +183,6 @@ public class BookmarksActivity extends BaseActivity
     setNoBookmarksState();
   }
 
-
-  @Override
-  public void updateAdapter() {
-    adapter.notifyDataSetChanged();
-    setNoBookmarksState();
-  }
-
   @Override
   public void popDeleteBookmarksSnackbar() {
     Snackbar bookmarkDeleteSnackbar =

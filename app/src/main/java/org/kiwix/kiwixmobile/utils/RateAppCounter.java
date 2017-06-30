@@ -46,10 +46,6 @@ public class RateAppCounter {
     CounterEditor.apply();
   }
 
-  public SharedPreferences.Editor getEditor() {
-    return visitCounter.edit();
-  }
-
   public int getCount() {
     return visitCounter.getInt("count", 0);
   }

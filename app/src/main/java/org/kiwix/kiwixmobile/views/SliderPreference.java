@@ -92,10 +92,6 @@ public class SliderPreference extends DialogPreference {
     }
   }
 
-  public float getValue() {
-    return mSeekBarValue;
-  }
-
   public void setValue(float value) {
     if (shouldPersist()) {
       persistFloat(value);
