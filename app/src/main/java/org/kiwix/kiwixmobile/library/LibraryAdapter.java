@@ -177,7 +177,7 @@ public class LibraryAdapter extends BaseAdapter {
     return convertView;
   }
 
-  private boolean langaugeActive(Book book) {
+  private boolean languageActive(Book book) {
     return Observable.from(languages)
         .takeFirst(language -> language.languageCode.equals(book.getLanguage()))
         .map(language -> language.active).toBlocking().firstOrDefault(false);
@@ -206,7 +206,7 @@ public class LibraryAdapter extends BaseAdapter {
       List<Book> finalBooks;
       if (s.length() == 0) {
         finalBooks = Observable.from(allBooks)
-            .filter(LibraryAdapter.this::langaugeActive)
+            .filter(LibraryAdapter.this::languageActive)
             .filter(book -> !books.contains(book))
             .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
@@ -230,10 +230,10 @@ public class LibraryAdapter extends BaseAdapter {
     protected void publishResults(CharSequence constraint, FilterResults results) {
       List<Book> filtered = (List<Book>) results.values;
       if (filtered != null) {
+        filteredBooks.clear();
         if (filtered.isEmpty()) {
-          filteredBooks = allBooks;
+          filteredBooks.addAll(allBooks);
         } else {
-          filteredBooks.clear();
           filteredBooks.addAll(filtered);
         }
       }
@@ -245,7 +245,7 @@ public class LibraryAdapter extends BaseAdapter {
     return bookFilter;
   }
 
-  public void updateNetworklanguages() {
+  public void updateNetworkLanguages() {
     new SaveNetworkLanguages().execute(languages);
   }
 

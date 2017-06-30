@@ -258,12 +258,13 @@ public class ZimManageActivity extends AppCompatActivity {
       Toast.makeText(this, getResources().getString(R.string.wait_for_load), Toast.LENGTH_LONG).show();
       return;
     }
-    LanguageArrayAdapter languageArrayAdapter = new LanguageArrayAdapter(this, 0, mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages);
+    LanguageArrayAdapter languageArrayAdapter = new LanguageArrayAdapter(
+            this, 0, mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages);
     listView.setAdapter(languageArrayAdapter);
     new AlertDialog.Builder(this, dialogStyle())
         .setView(view)
         .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
-          mSectionsPagerAdapter.libraryFragment.libraryAdapter.updateNetworklanguages();
+          mSectionsPagerAdapter.libraryFragment.libraryAdapter.updateNetworkLanguages();
           mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter("");
         })
         .show();
