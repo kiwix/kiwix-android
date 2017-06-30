@@ -73,15 +73,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-import javax.inject.Inject;
-import okhttp3.OkHttpClient;
 
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.base.BaseActivity;
@@ -188,10 +179,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   private boolean isOpenNewTabInBackground;
 
-  public static boolean nightMode;
-
-  public static boolean autoNightMode;
-
   public static boolean refresh;
 
   public static boolean wifiOnly;
@@ -201,6 +188,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   private static Uri KIWIX_BROWSER_MARKET_URI;
 
   private String documentParserJs;
+
+  public static boolean nightMode;
 
   private DocumentParser documentParser;
 
@@ -317,8 +306,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   @Override
   public void onCreate(Bundle savedInstanceState) {
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-    nightMode = sharedPreferences.getBoolean(PREF_NIGHT_MODE, false);
     wifiOnly = sharedPreferences.getBoolean(KiwixSettingsActivity.PREF_WIFI_ONLY, true);
+    nightMode = KiwixSettingsActivity.nightMode(sharedPreferences);
     if (nightMode) {
       setTheme(R.style.AppTheme_Night);
     }
@@ -1496,7 +1485,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   public void loadPrefs() {
 
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-    nightMode = sharedPreferences.getBoolean(PREF_NIGHT_MODE, false);
+    nightMode = KiwixSettingsActivity.nightMode(sharedPreferences);
     isBackToTopEnabled = sharedPreferences.getBoolean(PREF_BACK_TO_TOP, false);
     isHideToolbar = sharedPreferences.getBoolean(PREF_HIDE_TOOLBAR, false);
     isFullscreenOpened = sharedPreferences.getBoolean(PREF_FULLSCREEN, false);

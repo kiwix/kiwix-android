@@ -35,7 +35,6 @@ import android.preference.PreferenceScreen;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.webkit.WebView;
 import android.widget.BaseAdapter;
@@ -93,10 +92,14 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
   public static boolean allHistoryCleared = false;
 
+
+  private static final int DAWN_HOUR = 6;
+  private static final int DUSK_HOUR = 18;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-    if (KiwixMobileActivity.nightMode) {
+
+    if(nightMode(PreferenceManager.getDefaultSharedPreferences(this))){
       setTheme(R.style.AppTheme_Night);
     }
 
@@ -136,14 +139,22 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     toolbar.setNavigationOnClickListener(v -> onBackPressed());
   }
 
+  public static boolean nightMode(SharedPreferences preferences){
+    boolean autoNightMode = preferences.getBoolean(PREF_AUTONIGHTMODE, false);
+    if(autoNightMode){
+      Calendar cal = Calendar.getInstance();
+      int hour = cal.get(Calendar.HOUR_OF_DAY);
+      return hour < DAWN_HOUR || hour > DUSK_HOUR;
+    } else{
+      return preferences.getBoolean(PREF_NIGHTMODE, false);
+    }
+  }
+
   public static class PrefsFragment extends PreferenceFragment implements
       SharedPreferences.OnSharedPreferenceChangeListener, StorageSelectDialog.OnSelectListener {
 
     private SliderPreference mSlider;
     private RecentSearchDao recentSearchDao;
-
-    private static final int DAWN_HOUR = 6;
-    private static final int DUSK_HOUR = 18;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -151,7 +162,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       addPreferencesFromResource(R.xml.preferences);
 
       boolean auto_night_mode = PreferenceManager.getDefaultSharedPreferences(getActivity())
-              .getBoolean(KiwixSettingsActivity.PREF_AUTONIGHTMODE, false);
+              .getBoolean(PREF_AUTONIGHTMODE, false);
 
       if(auto_night_mode){
         getPreferenceScreen().findPreference(PREF_NIGHTMODE).setEnabled(false);
@@ -282,36 +293,16 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       }
       if (key.equals(PREF_NIGHTMODE)) {
         KiwixMobileActivity.refresh = true;
-        KiwixMobileActivity.nightMode = sharedPreferences.getBoolean(PREF_NIGHTMODE, false);
         getActivity().recreate();
       }
       if (key.equals(PREF_WIFI_ONLY)) {
         KiwixMobileActivity.wifiOnly = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
       }
       if(key.equals(PREF_AUTONIGHTMODE)){
-        KiwixMobileActivity.autoNightMode = sharedPreferences.getBoolean(PREF_AUTONIGHTMODE, false);
-        getPreferenceScreen().findPreference(PREF_NIGHTMODE).setEnabled(!KiwixMobileActivity.autoNightMode);
-        if(KiwixMobileActivity.autoNightMode) {
-          refreshNightMode();
-        } else {
-          KiwixMobileActivity.nightMode = sharedPreferences.getBoolean(PREF_NIGHTMODE, false);
-        }
+        KiwixMobileActivity.refresh = true;
         getActivity().recreate();
       }
 
-    }
-
-    private void refreshNightMode() {
-      if (KiwixMobileActivity.autoNightMode) {
-        Calendar cal = Calendar.getInstance();
-        int hour = cal.get(Calendar.HOUR_OF_DAY);
-        boolean newNightMode = hour < DAWN_HOUR || hour > DUSK_HOUR;
-        if (newNightMode != KiwixMobileActivity.nightMode) {
-          KiwixMobileActivity.nightMode = newNightMode;
-          getActivity().recreate();
-          KiwixMobileActivity.refresh = true;
-        }
-      }
     }
 
     private void clearAllHistoryDialog() {
