@@ -1305,7 +1305,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     if (menu != null) {
       MenuItem random = menu.findItem(R.id.menu_randomarticle);
       MenuItem home = menu.findItem(R.id.menu_home);
-      MenuItem openFile = menu.findItem(R.id.menu_openfile);
       if (getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE) {
         random.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         home.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);

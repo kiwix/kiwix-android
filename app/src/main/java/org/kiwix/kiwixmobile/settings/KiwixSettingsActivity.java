@@ -130,7 +130,6 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
   private void setUpToolbar() {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    RelativeLayout toolbarContainer = (RelativeLayout) findViewById(R.id.toolbar_layout);
     setSupportActionBar(toolbar);
     getSupportActionBar().setTitle(getString(R.string.menu_settings));
     getSupportActionBar().setHomeButtonEnabled(true);
@@ -328,7 +327,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     public void openCredits(){
       WebView view = (WebView) LayoutInflater.from(getActivity()).inflate(R.layout.credits_webview, null);
       view.loadUrl("file:///android_res/raw/credits.html");
-      AlertDialog mAlertDialog = new AlertDialog.Builder(getActivity(), dialogStyle())
+      new AlertDialog.Builder(getActivity(), dialogStyle())
           .setView(view)
           .setPositiveButton(android.R.string.ok, null)
           .show();

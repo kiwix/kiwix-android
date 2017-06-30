@@ -113,7 +113,7 @@ public class DownloadFragment extends Fragment {
 
   public class DownloadAdapter extends BaseAdapter {
 
-    private LinkedHashMap<Integer, LibraryNetworkEntity.Book> mData = new LinkedHashMap<Integer, LibraryNetworkEntity.Book>();
+    private LinkedHashMap<Integer, LibraryNetworkEntity.Book> mData = new LinkedHashMap<>();
     private Integer[] mKeys;
 
     public DownloadAdapter(LinkedHashMap<Integer, LibraryNetworkEntity.Book> data) {
