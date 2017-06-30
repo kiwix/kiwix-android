@@ -38,8 +38,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -263,6 +265,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   @BindView(R.id.action_forward) View tabForwardButtonContainer;
 
+  @BindView(R.id.page_bottom_tab_layout) TabLayout pageBottomTabLayout;
+
   @Inject OkHttpClient okHttpClient;
 
 
@@ -300,6 +304,38 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
           });
     }
   }
+
+  @NonNull
+  private final TabLayout.OnTabSelectedListener pageBottomTabListener
+          = new TabLayout.OnTabSelectedListener() {
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+      PageBottomTab.of(tab.getPosition()).select(pageActionTabsCallback);
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {}
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+      onTabSelected(tab);
+    }
+  };
+
+  private PageBottomTab.Callback pageActionTabsCallback = new PageBottomTab.Callback() {
+    @Override
+    public void onBookmarksTabSelected() {
+      toggleBookmark();
+    }
+
+    @Override
+    public void onFindInPageTabSelected() {
+      compatCallback.setActive();
+      compatCallback.setWebView(getCurrentWebView());
+      startSupportActionMode(compatCallback);
+      compatCallback.showSoftInput();
+    }
+  };
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -427,6 +463,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       zimFile.setData(uri);
       startActivity(zimFile);
     }
+
+    pageBottomTabLayout.addOnTabSelectedListener(pageBottomTabListener);
 
     wasHideToolbar = isHideToolbar;
   }
