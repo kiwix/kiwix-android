@@ -26,18 +26,17 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.util.ArrayList;
+
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.downloader.DownloadFragment;
+import org.kiwix.kiwixmobile.downloader.DownloadService;
+import org.kiwix.kiwixmobile.library.LibraryAdapter;
+import org.kiwix.kiwixmobile.library.LibraryAdapter.Language;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
+import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
 import java.util.List;
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
-import org.kiwix.kiwixmobile.downloader.DownloadService;
-import org.kiwix.kiwixmobile.library.LibraryAdapter.Language;
-import org.kiwix.kiwixmobile.utils.TestingUtils;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
-import org.kiwix.kiwixmobile.downloader.DownloadFragment;
-import org.kiwix.kiwixmobile.library.LibraryAdapter;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
@@ -250,20 +249,18 @@ public class ZimManageActivity extends AppCompatActivity {
     int size = 0;
     try {
       size = mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages.size();
-    } catch (NullPointerException e) {
-      Toast.makeText(this, getResources().getString(R.string.wait_for_load), Toast.LENGTH_LONG).show();
-      return;
-    }
+    } catch (NullPointerException e) { }
     if (size == 0) {
       Toast.makeText(this, getResources().getString(R.string.wait_for_load), Toast.LENGTH_LONG).show();
       return;
     }
-    LanguageArrayAdapter languageArrayAdapter = new LanguageArrayAdapter(this, 0, mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages);
+    LanguageArrayAdapter languageArrayAdapter = new LanguageArrayAdapter(
+            this, 0, mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages);
     listView.setAdapter(languageArrayAdapter);
     new AlertDialog.Builder(this, dialogStyle())
         .setView(view)
         .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
-          mSectionsPagerAdapter.libraryFragment.libraryAdapter.updateNetworklanguages();
+          mSectionsPagerAdapter.libraryFragment.libraryAdapter.updateNetworkLanguages();
           mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter("");
         })
         .show();
@@ -338,6 +335,7 @@ public class ZimManageActivity extends AppCompatActivity {
       if (convertView == null) {
         convertView = View.inflate(getContext(), R.layout.language_check_item, null);
         holder = new ViewHolder();
+        holder.row = (LinearLayout) convertView.findViewById(R.id.language_row);
         holder.checkBox = (CheckBox) convertView.findViewById(R.id.language_checkbox);
         holder.language = (TextView) convertView.findViewById(R.id.language_name);
         convertView.setTag(holder);
@@ -345,19 +343,22 @@ public class ZimManageActivity extends AppCompatActivity {
         holder = (ViewHolder) convertView.getTag();
       }
 
-      holder.checkBox.setOnCheckedChangeListener(null);
+      // Set event listeners first, since updating the default values can trigger them.
+      holder.row.setOnClickListener((view) -> holder.checkBox.toggle());
+      holder.checkBox.setOnCheckedChangeListener((compoundButton, b) -> getItem(position).active = b);
+
       holder.language.setText(getItem(position).language);
       holder.checkBox.setChecked(getItem(position).active);
-      holder.checkBox.setOnCheckedChangeListener((compoundButton, b) -> getItem(position).active = b);
+
       return convertView;
     }
 
     // We are using the ViewHolder pattern in order to optimize the ListView by reusing
-    // Views and saving them to this mLibrary class, and not inlating the layout every time
+    // Views and saving them to this mLibrary class, and not inflating the layout every time
     // we need to create a row.
     private class ViewHolder {
+      LinearLayout row;
       CheckBox checkBox;
-
       TextView language;
     }
   }

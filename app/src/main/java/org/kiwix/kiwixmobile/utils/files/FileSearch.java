@@ -19,7 +19,6 @@
 
 package org.kiwix.kiwixmobile.utils.files;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -27,14 +26,17 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import eu.mhutti1.utils.storage.StorageDevice;
-import eu.mhutti1.utils.storage.StorageDeviceUtils;
+
+import org.kiwix.kiwixmobile.ZimContentProvider;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Collection;
 import java.util.Vector;
-import org.kiwix.kiwixmobile.ZimContentProvider;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+
+import eu.mhutti1.utils.storage.StorageDevice;
+import eu.mhutti1.utils.storage.StorageDeviceUtils;
 
 public class FileSearch {
 

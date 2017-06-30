@@ -6,10 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.kiwix.kiwixmobile.views.web.KiwixWebView;
+
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import java.util.List;
-import org.kiwix.kiwixmobile.views.web.KiwixWebView;
 
 public class TabDrawerAdapter extends RecyclerView.Adapter<TabDrawerAdapter.ViewHolder> {
   private TabClickListener listener;

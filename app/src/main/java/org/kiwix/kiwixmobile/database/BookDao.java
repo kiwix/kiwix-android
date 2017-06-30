@@ -4,14 +4,9 @@ package org.kiwix.kiwixmobile.database;
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
 
-import org.kiwix.kiwixmobile.database.entity.BookDataSource;
 import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
-import org.kiwix.kiwixmobile.database.entity.Bookmarks;
-import org.kiwix.kiwixmobile.database.entity.RecentSearch;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
-
 
 import java.io.File;
 import java.util.ArrayList;

@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
 import org.kiwix.kiwixmobile.R;
 
 public class SliderPreference extends DialogPreference {

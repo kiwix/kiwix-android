@@ -22,15 +22,13 @@ package org.kiwix.kiwixmobile.database;
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 import org.kiwix.kiwixmobile.database.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
-
+import org.kiwix.kiwixmobile.library.LibraryAdapter.Language;
 
 import java.util.ArrayList;
-import org.kiwix.kiwixmobile.library.LibraryAdapter.Language;
+import java.util.Collections;
+import java.util.List;
 
 public class NetworkLanguageDao {
   private KiwixDatabase mDb;
