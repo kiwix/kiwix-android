@@ -24,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -254,8 +255,8 @@ public class ZimManageActivity extends AppCompatActivity {
       Toast.makeText(this, getResources().getString(R.string.wait_for_load), Toast.LENGTH_LONG).show();
       return;
     }
-    LanguageArrayAdapter languageArrayAdapter = new LanguageArrayAdapter(
-            this, 0, mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages);
+    LanguageArrayAdapter languageArrayAdapter =
+            new LanguageArrayAdapter(this, 0, mSectionsPagerAdapter.libraryFragment.libraryAdapter);
     listView.setAdapter(languageArrayAdapter);
     new AlertDialog.Builder(this, dialogStyle())
         .setView(view)
@@ -324,8 +325,9 @@ public class ZimManageActivity extends AppCompatActivity {
 
   private class LanguageArrayAdapter extends ArrayAdapter<LibraryAdapter.Language> {
 
-    public LanguageArrayAdapter(Context context, int textViewResourceId, List<Language> languages) {
-      super(context, textViewResourceId, languages);
+    public LanguageArrayAdapter(Context context, int textViewResourceId, LibraryAdapter library_adapter) {
+      super(context, textViewResourceId, library_adapter.languages);
+      this.library_adapter = library_adapter;
     }
 
     @Override
@@ -335,9 +337,11 @@ public class ZimManageActivity extends AppCompatActivity {
       if (convertView == null) {
         convertView = View.inflate(getContext(), R.layout.language_check_item, null);
         holder = new ViewHolder();
-        holder.row = (LinearLayout) convertView.findViewById(R.id.language_row);
+        holder.row = (ViewGroup) convertView.findViewById(R.id.language_row);
         holder.checkBox = (CheckBox) convertView.findViewById(R.id.language_checkbox);
         holder.language = (TextView) convertView.findViewById(R.id.language_name);
+        holder.languageLocalized = (TextView) convertView.findViewById(R.id.language_name_localized);
+        holder.languageEntriesCount = (TextView) convertView.findViewById(R.id.language_entries_count);
         convertView.setTag(holder);
       } else {
         holder = (ViewHolder) convertView.getTag();
@@ -347,19 +351,25 @@ public class ZimManageActivity extends AppCompatActivity {
       holder.row.setOnClickListener((view) -> holder.checkBox.toggle());
       holder.checkBox.setOnCheckedChangeListener((compoundButton, b) -> getItem(position).active = b);
 
-      holder.language.setText(getItem(position).language);
-      holder.checkBox.setChecked(getItem(position).active);
+      Language language = getItem(position);
+      holder.language.setText(language.language);
+      holder.languageLocalized.setText(language.languageLocalized);
+      holder.languageEntriesCount.setText("(" + library_adapter.languageCounts.get(language.languageCode) + ")");
+      holder.checkBox.setChecked(language.active);
 
       return convertView;
     }
 
+    private LibraryAdapter library_adapter;
     // We are using the ViewHolder pattern in order to optimize the ListView by reusing
     // Views and saving them to this mLibrary class, and not inflating the layout every time
     // we need to create a row.
     private class ViewHolder {
-      LinearLayout row;
+      ViewGroup row;
       CheckBox checkBox;
       TextView language;
+      TextView languageLocalized;
+      TextView languageEntriesCount;
     }
   }
 }
