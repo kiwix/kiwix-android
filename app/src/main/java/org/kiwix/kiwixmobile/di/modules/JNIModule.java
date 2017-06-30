@@ -1,9 +1,11 @@
 package org.kiwix.kiwixmobile.di.modules;
 
+import org.kiwix.kiwixlib.JNIKiwix;
+
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
-import org.kiwix.kiwixlib.JNIKiwix;
 
 /**
  * Created by mhutti1 on 14/04/17.

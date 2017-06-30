@@ -18,15 +18,13 @@
  */
 package org.kiwix.kiwixmobile.library.entity;
 
-import java.io.File;
-import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
+
+import java.io.File;
+import java.io.Serializable;
+import java.util.LinkedList;
 
 @Root(name = "library", strict = false)
 public class LibraryNetworkEntity {

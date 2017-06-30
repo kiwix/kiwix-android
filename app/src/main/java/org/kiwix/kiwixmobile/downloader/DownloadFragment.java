@@ -4,7 +4,6 @@ package org.kiwix.kiwixmobile.downloader;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -25,18 +24,18 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
-import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
+import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
+import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
