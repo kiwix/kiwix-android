@@ -28,6 +28,12 @@ import android.os.ParcelFileDescriptor;
 import android.os.ParcelFileDescriptor.AutoCloseOutputStream;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+
+import org.kiwix.kiwixlib.JNIKiwix;
+import org.kiwix.kiwixlib.JNIKiwixInt;
+import org.kiwix.kiwixlib.JNIKiwixString;
+import org.kiwix.kiwixmobile.utils.files.FileUtils;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -37,11 +43,8 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.inject.Inject;
-import org.kiwix.kiwixmobile.utils.files.FileUtils;
-import org.kiwix.kiwixlib.JNIKiwix;
-import org.kiwix.kiwixlib.JNIKiwixString;
-import org.kiwix.kiwixlib.JNIKiwixInt;
 
 public class ZimContentProvider extends ContentProvider {
 

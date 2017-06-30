@@ -10,8 +10,9 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.HashMap;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
+
+import java.util.HashMap;
 
 public class KiwixWebViewClient extends WebViewClient {
 

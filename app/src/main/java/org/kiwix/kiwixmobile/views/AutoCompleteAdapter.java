@@ -11,14 +11,14 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
-import javax.inject.Inject;
 import org.kiwix.kiwixlib.JNIKiwix;
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.ZimContentProvider;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
-import org.kiwix.kiwixmobile.ZimContentProvider;
+import javax.inject.Inject;
 
 public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 

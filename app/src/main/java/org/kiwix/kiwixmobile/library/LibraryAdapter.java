@@ -19,10 +19,6 @@
 
 package org.kiwix.kiwixmobile.library;
 
-import static android.support.test.InstrumentationRegistry.getContext;
-
-import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -38,6 +34,16 @@ import android.widget.TextView;
 
 import com.google.common.collect.ImmutableList;
 
+import org.kiwix.kiwixmobile.KiwixApplication;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.database.BookDao;
+import org.kiwix.kiwixmobile.database.KiwixDatabase;
+import org.kiwix.kiwixmobile.database.NetworkLanguageDao;
+import org.kiwix.kiwixmobile.downloader.DownloadFragment;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+import org.kiwix.kiwixmobile.utils.BookUtils;
+import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,18 +52,10 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
-import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.utils.BookUtils;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.database.BookDao;
-import org.kiwix.kiwixmobile.database.KiwixDatabase;
-import org.kiwix.kiwixmobile.database.NetworkLanguageDao;
-import org.kiwix.kiwixmobile.downloader.DownloadFragment;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
 import rx.Observable;
-import rx.functions.Func2;
+
+import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
 
 public class LibraryAdapter extends BaseAdapter {
 
@@ -177,7 +175,7 @@ public class LibraryAdapter extends BaseAdapter {
     return convertView;
   }
 
-  private boolean langaugeActive(Book book) {
+  private boolean languageActive(Book book) {
     return Observable.from(languages)
         .takeFirst(language -> language.languageCode.equals(book.getLanguage()))
         .map(language -> language.active).toBlocking().firstOrDefault(false);
@@ -206,7 +204,7 @@ public class LibraryAdapter extends BaseAdapter {
       List<Book> finalBooks;
       if (s.length() == 0) {
         finalBooks = Observable.from(allBooks)
-            .filter(LibraryAdapter.this::langaugeActive)
+            .filter(LibraryAdapter.this::languageActive)
             .filter(book -> !books.contains(book))
             .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
@@ -230,10 +228,10 @@ public class LibraryAdapter extends BaseAdapter {
     protected void publishResults(CharSequence constraint, FilterResults results) {
       List<Book> filtered = (List<Book>) results.values;
       if (filtered != null) {
+        filteredBooks.clear();
         if (filtered.isEmpty()) {
-          filteredBooks = allBooks;
+          filteredBooks.addAll(allBooks);
         } else {
-          filteredBooks.clear();
           filteredBooks.addAll(filtered);
         }
       }
@@ -245,7 +243,7 @@ public class LibraryAdapter extends BaseAdapter {
     return bookFilter;
   }
 
-  public void updateNetworklanguages() {
+  public void updateNetworkLanguages() {
     new SaveNetworkLanguages().execute(languages);
   }
 

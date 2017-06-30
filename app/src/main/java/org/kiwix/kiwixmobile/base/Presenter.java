@@ -1,7 +1,5 @@
 package org.kiwix.kiwixmobile.base;
 
-import org.kiwix.kiwixmobile.base.ViewCallback;
-
 /**
  * Created by EladKeyshawn on 05/04/2017.
  */
