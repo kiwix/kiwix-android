@@ -324,8 +324,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   private PageBottomTab.Callback pageActionTabsCallback = new PageBottomTab.Callback() {
     @Override
-    public void onBookmarksTabSelected() {
-      toggleBookmark();
+    public void onHomeTabSelected() {
+      openMainPage();
     }
 
     @Override
@@ -334,6 +334,20 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       compatCallback.setWebView(getCurrentWebView());
       startSupportActionMode(compatCallback);
       compatCallback.showSoftInput();
+    }
+
+    @Override
+    public void onFullscreenTabSelected() {
+      if (isFullscreenOpened) {
+        closeFullScreen();
+      } else {
+        openFullScreen();
+      }
+    }
+
+    @Override
+    public void onRandomArticleTabSelected() {
+      openRandomArticle();
     }
   };
 
@@ -773,28 +787,12 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     KiwixWebView webView = getCurrentWebView();
     switch (item.getItemId()) {
 
-      case R.id.menu_home:
-      case android.R.id.home:
-        openMainPage();
-        break;
-
-      case R.id.menu_searchintext:
-        compatCallback.setActive();
-        compatCallback.setWebView(webView);
-        startSupportActionMode(compatCallback);
-        compatCallback.showSoftInput();
-        break;
-
       case R.id.menu_bookmarks:
         toggleBookmark();
         break;
 
       case R.id.menu_bookmarks_list:
         goToBookmarks();
-        break;
-
-      case R.id.menu_randomarticle:
-        openRandomArticle();
         break;
 
       case R.id.menu_help:
@@ -820,14 +818,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
           }
         }
         readAloud();
-        break;
-
-      case R.id.menu_fullscreen:
-        if (isFullscreenOpened) {
-          closeFullScreen();
-        } else {
-          openFullScreen();
-        }
         break;
 
       default:
@@ -1014,10 +1004,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   private void initAllMenuItems() {
     try {
       menu.findItem(R.id.menu_bookmarks).setVisible(true);
-      menu.findItem(R.id.menu_fullscreen).setVisible(true);
-      menu.findItem(R.id.menu_home).setVisible(true);
-      menu.findItem(R.id.menu_randomarticle).setVisible(true);
-      menu.findItem(R.id.menu_searchintext).setVisible(true);
 
       MenuItem searchItem = menu.findItem(R.id.menu_search);
       searchItem.setVisible(true);
@@ -1334,22 +1320,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   @Override
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
-    toggleActionItemsConfig();
-  }
-
-  void toggleActionItemsConfig() {
-    if (menu != null) {
-      MenuItem random = menu.findItem(R.id.menu_randomarticle);
-      MenuItem home = menu.findItem(R.id.menu_home);
-      MenuItem openFile = menu.findItem(R.id.menu_openfile);
-      if (getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE) {
-        random.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        home.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-      } else {
-        random.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        home.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-      }
-    }
   }
 
   public void searchForTitle(String title) {
@@ -1466,7 +1436,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   @Override
   public boolean onPrepareOptionsMenu(Menu menu) {
     super.onPrepareOptionsMenu(menu);
-    toggleActionItemsConfig();
     refreshBookmarkSymbol(menu);
     refreshNavigationButtons();
 
