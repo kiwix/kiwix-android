@@ -10,6 +10,7 @@ if os.environ.get('BITBAR_API_KEY') == None:
   sys.exit(0)
 else:
   print "Running tests"
+  sys.stdout.flush()
 
 runID = os.environ['TRAVIS_BUILD_NUMBER']
 apiKey = os.environ['BITBAR_API_KEY']
@@ -27,5 +28,6 @@ for x in range(0, 50):
       raise AssertionError("Success ratio only: {}".format(ratio))
   else:
     print "Waiting for results"
+    sys.stdout.flush()
     time.sleep(30)
 raise TimeoutError("Test not found/complete")
