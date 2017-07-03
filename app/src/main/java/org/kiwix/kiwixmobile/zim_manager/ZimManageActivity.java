@@ -347,7 +347,8 @@ public class ZimManageActivity extends AppCompatActivity {
       Language language = getItem(position);
       holder.language.setText(language.language);
       holder.languageLocalized.setText(language.languageLocalized);
-      holder.languageEntriesCount.setText("(" + library_adapter.languageCounts.get(language.languageCode) + ")");
+      holder.languageEntriesCount.setText(
+          getString(R.string.language_count, library_adapter.languageCounts.get(language.languageCode)));
       holder.checkBox.setChecked(language.active);
 
       return convertView;
