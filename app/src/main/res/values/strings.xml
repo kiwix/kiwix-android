@@ -128,7 +128,7 @@
   <string name="help_3">Kiwix is an offline content reader. It acts very much like a browser but instead of accessing online web pages, it reads content from a file in ZIM format.</string>
   <string name="help_4">While Kiwix has been originaly designed to provide Wikipedia offline, it also reads other contents.</string>
   <string name="help_5">Where is the content?</string>
-  <string name="help_6">Our content is hosted on the kiwix website.</string>
+  <string name="help_6">Our content is hosted on the Kiwix website.</string>
   <string name="help_7">They are available as ZIM files. There are a lot of them:</string>
   <string name="help_8">\u2022 Wikipedia is available separately for each language</string>
   <string name="help_9">\u2022 Other contents like Wikileaks or Wikisource are also available</string>
