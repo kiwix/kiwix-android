@@ -1,6 +1,11 @@
 android {
   def f = file(buildscript.sourceFile.parent + "/wikipedia_fr_test_2017-07.zim");
   if (!f.exists()) {
-    new URL('http://mirror.download.kiwix.org/zim/wikipedia/wikipedia_fr_test_2017-07.zim').withInputStream{ i -> f.withOutputStream{ it << i }}
+    URLConnection urlConnection = new URL('http://download.kiwix.org/zim/wikipedia_fr_test.zim').openConnection()
+    urlConnection.connect()
+    urlConnection.getInputStream()
+    String url = urlConnection.getHeaderField("Location")
+    url = url.replace("https", "http")
+    new URL(url).withInputStream{ i -> f.withOutputStream{ it << i }}
   }
 }
