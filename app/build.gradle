@@ -194,6 +194,9 @@ android {
     map.each { name, directory ->
       "$name" {
         println "Configuring $name"
+        if (file(directory + "/build.gradle").exists()) {
+          apply from: directory + "/build.gradle"
+        }
         def jsonFile = ""
         if (project.hasProperty('jsonFile')) {
           // Read json file from properties e.g command line
