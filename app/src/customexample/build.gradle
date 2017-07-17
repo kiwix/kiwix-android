@@ -1,6 +1,6 @@
 android {
   def f = file(buildscript.sourceFile.parent + "/wikipedia_fr_test_2017-07.zim");
   if (!f.exists()) {
-    new URL('http://mirrors.dotsrc.org/kiwix/zim/wikipedia/wikipedia_fr_test_2017-07.zim').withInputStream{ i -> f.withOutputStream{ it << i }}
+    new URL('http://mirror.download.kiwix.org/zim/wikipedia/wikipedia_fr_test_2017-07.zim').withInputStream{ i -> f.withOutputStream{ it << i }}
   }
 }
