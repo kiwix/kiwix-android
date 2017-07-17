@@ -257,15 +257,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
     private void setAppVersionNumber() {
       String version;
-
-      try {
-        version = getActivity().getPackageManager()
-            .getPackageInfo("org.kiwix.kiwixmobile", 0).versionName + " Build: " +
-            getActivity().getPackageManager()
-            .getPackageInfo("org.kiwix.kiwixmobile", 0).versionCode;
-      } catch (PackageManager.NameNotFoundException e) {
-        return;
-      }
+      version = BuildConfig.VERSION_NAME + " Build: " + BuildConfig.VERSION_CODE;
       EditTextPreference versionPref = (EditTextPreference) PrefsFragment.this
           .findPreference(PREF_VERSION);
       versionPref.setSummary(version);
