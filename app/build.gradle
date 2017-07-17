@@ -237,9 +237,13 @@ android {
         if (project.hasProperty('version_code')) {
           def version_code = project.property('version_code')
           versionCode version_code.toInteger()
-          versionName "$version_code"
         } else {
           versionCode parsedJson.version_code.toInteger()
+        }
+        if (project.hasProperty('version_name')) {
+          versionName project.property('version_name')
+        } else {
+          versionName parsedJson.version_name
         }
         if (project.hasProperty('content_version_code')) {
           def content_version_code = project.property('content_version_code')
