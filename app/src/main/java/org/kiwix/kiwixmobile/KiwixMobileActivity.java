@@ -850,7 +850,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   }
 
   public void showHelpPage() {
-    getCurrentWebView().loadUrl("file:///android_res/raw/help.html");
+    getCurrentWebView().loadUrl("file:///android_asset/help.html");
   }
 
   public void sendContactEmail() {
@@ -1433,7 +1433,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     refreshBookmarkSymbol(menu);
     refreshNavigationButtons();
 
-    if (getCurrentWebView().getUrl() == null || getCurrentWebView().getUrl().equals("file:///android_res/raw/help.html")) {
+    if (getCurrentWebView().getUrl() == null || getCurrentWebView().getUrl().equals("file:///android_asset/help.html")) {
       menu.findItem(R.id.menu_read_aloud).setVisible(false);
     } else {
       menu.findItem(R.id.menu_read_aloud).setVisible(true);
@@ -1450,7 +1450,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     if (menu.findItem(R.id.menu_bookmarks) != null &&
         getCurrentWebView().getUrl() != null &&
         ZimContentProvider.getId() != null &&
-        !getCurrentWebView().getUrl().equals("file:///android_res/raw/help.html")) {
+        !getCurrentWebView().getUrl().equals("file:///android_asset/help.html")) {
       menu.findItem(R.id.menu_bookmarks)
               .setEnabled(true)
               .setIcon(bookmarks.contains(getCurrentWebView().getUrl()) ? R.drawable.action_bookmark_active : R.drawable.action_bookmark)

@@ -313,7 +313,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
     public void openCredits(){
       WebView view = (WebView) LayoutInflater.from(getActivity()).inflate(R.layout.credits_webview, null);
-      view.loadUrl("file:///android_res/raw/credits.html");
+      view.loadUrl("file:///android_asset/credits.html");
       new AlertDialog.Builder(getActivity(), dialogStyle())
           .setView(view)
           .setPositiveButton(android.R.string.ok, null)

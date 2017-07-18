@@ -70,7 +70,7 @@ public class KiwixWebViewClient extends WebViewClient {
       callback.showHelpPage();
       return;
     }
-    if (!url.equals("file:///android_res/raw/help.html")) {
+    if (!url.equals("file:///android_asset/help.html")) {
       view.removeView(help);
     } else if (!BuildConfig.IS_CUSTOM_APP) {
       if (view.findViewById(R.id.get_content_card) == null) {
