@@ -28,8 +28,13 @@ repositories {
 }
 
 dependencies {
-  // Kiwixlib
-  compile project(":kiwixlib")
+
+  // Get kiwixlib online if it is not populated locally
+  if (file("../kiwixlib/src/main").list().length == 1) {
+    compile 'org.kiwix.kiwixlib:kiwixlib:0.0.4'
+  } else {
+    compile project(':kiwixlib')
+  }
 
   // Storage Devices
   compile 'eu.mhutti1.utils.storage:android-storage-devices:0.6.2'
@@ -126,6 +131,8 @@ if(custom.listFiles()) {
   }
 }
 
+def archs = ['arm64-v8a', 'armeabi', 'mips', 'mips64', 'x86', 'x86_64']
+
 android {
   compileSdkVersion 25
   buildToolsVersion '25.0.2'
@@ -208,16 +215,15 @@ android {
         def parsedJson = new JsonSlurper().parseText(jsonFile.text)
         def sourceFile = file(directory + "/" + parsedJson.zim_file)
         if (parsedJson.embed_zim) {
-
-          // Place content in each lib directory for embeded zims
-          file("../kiwixlib/src/main/jniLibs").eachDir() { folder ->
-            copy {
-              from sourceFile
-              into file(directory + "/jniLibs/" + folder.name)
-              rename { String filename -> "libcontent.so" }
-            }
-          }
-          parsedJson.zim_file = "libcontent.so"
+         // Place content in each lib directory for embeded zims
+          archs.forEach() { archName ->
+           copy {
+             from sourceFile
+             into file(directory + "/jniLibs/" + archName)
+             rename { String filename -> "libcontent.so" }
+           }
+         }
+         parsedJson.zim_file = "libcontent.so"
         }
         // Set custom config from json
         applicationId "$parsedJson.package"
@@ -304,6 +310,10 @@ task wrapper(type: Wrapper) {
 
 // Testdroid deployment configuration
 def buildNumber = System.getenv('TRAVIS_BUILD_NUMBER')
+
+def findJar(prefix) {
+  configurations.runtime.filter { it.name.startsWith(prefix) }
+}
 
 testdroid {
   authorization "APIKEY"
