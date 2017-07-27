@@ -49,8 +49,8 @@ public class TestJNIModule{
       byte[] summary = IOUtils.toByteArray(inStream);
       InputStream inStream2 = TestJNIModule.class.getClassLoader().getResourceAsStream("testpage");
       byte[] fool = IOUtils.toByteArray(inStream2);
-      doReturn(summary).when(jniKiwix).getContent(eq("A/index.htm"),any(),any());
-      doReturn(fool).when(jniKiwix).getContent(eq("A/A_Fool_for_You.html"),any(),any());
+      doReturn(summary).when(jniKiwix).getContent(eq("A/index.htm"),any(),any(),any());
+      doReturn(fool).when(jniKiwix).getContent(eq("A/A_Fool_for_You.html"),any(),any(),any());
     } catch (IOException e) {
       e.printStackTrace();
     }
