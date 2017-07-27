@@ -4,8 +4,11 @@ android {
     URLConnection urlConnection = new URL('http://download.kiwix.org/zim/wikipedia_fr_test.zim').openConnection()
     urlConnection.connect()
     urlConnection.getInputStream()
-    String url = urlConnection.getHeaderField("Location")
-    url = url.replace("https", "http")
+    String url = urlConnection.getURL().toString()
+    if (urlConnection.getHeaderField("Location") != null) {
+      url = urlConnection.getHeaderField("Location")
+      url = url.replace("https", "http")
+    }
     new URL(url).withInputStream{ i -> f.withOutputStream{ it << i }}
   }
 }
