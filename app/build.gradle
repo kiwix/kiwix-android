@@ -27,6 +27,8 @@ repositories {
   jcenter()
 }
 
+String[] archs = ['arm64-v8a', 'armeabi', 'mips', 'mips64', 'x86', 'x86_64']
+
 dependencies {
 
   // Get kiwixlib online if it is not populated locally
@@ -34,6 +36,7 @@ dependencies {
     compile 'org.kiwix.kiwixlib:kiwixlib:0.0.4'
   } else {
     compile project(':kiwixlib')
+    archs = file("../kiwixlib/src/main/jniLibs").list()
   }
 
   // Storage Devices
@@ -131,8 +134,6 @@ if(custom.listFiles()) {
   }
 }
 
-def archs = ['arm64-v8a', 'armeabi', 'mips', 'mips64', 'x86', 'x86_64']
-
 android {
   compileSdkVersion 25
   buildToolsVersion '25.0.2'
@@ -216,7 +217,7 @@ android {
         def sourceFile = file(directory + "/" + parsedJson.zim_file)
         if (parsedJson.embed_zim) {
          // Place content in each lib directory for embeded zims
-          archs.forEach() { archName ->
+          for (String archName : archs) {
            copy {
              from sourceFile
              into file(directory + "/jniLibs/" + archName)
