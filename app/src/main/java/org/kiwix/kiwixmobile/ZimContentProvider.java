@@ -384,8 +384,9 @@ public class ZimContentProvider extends ContentProvider {
     File f = new File(FileUtils.getFileCacheDir(getContext()), fileName);
 
     JNIKiwixString mime = new JNIKiwixString();
+    JNIKiwixString title = new JNIKiwixString();
     JNIKiwixInt size = new JNIKiwixInt();
-    byte[] data = jniKiwix.getContent(filePath, mime, size);
+    byte[] data = jniKiwix.getContent(filePath, title, mime, size);
 
     FileOutputStream out = new FileOutputStream(f);
 
@@ -449,8 +450,9 @@ public class ZimContentProvider extends ContentProvider {
     public void run() {
       try {
         JNIKiwixString mime = new JNIKiwixString();
+        JNIKiwixString title = new JNIKiwixString();
         JNIKiwixInt size = new JNIKiwixInt();
-        byte[] data = jniKiwix.getContent(articleZimUrl, mime, size);
+        byte[] data = jniKiwix.getContent(articleZimUrl, title, mime, size);
         if (mime.value != null && mime.value.equals("text/css") && KiwixMobileActivity.nightMode) {
           out.write(("img { \n" +
               " -webkit-filter: invert(1); \n" +
