@@ -32,7 +32,7 @@ dependencies {
   compile project(":kiwixlib")
 
   // Storage Devices
-  compile 'eu.mhutti1.utils.storage:android-storage-devices:0.6.1'
+  compile 'eu.mhutti1.utils.storage:android-storage-devices:0.6.2'
 
   // Android Support
   compile 'com.android.support:appcompat-v7:25.3.1'
