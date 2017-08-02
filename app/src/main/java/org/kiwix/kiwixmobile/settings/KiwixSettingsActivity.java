@@ -29,6 +29,7 @@ import android.os.Environment;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
@@ -169,7 +170,8 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       }
 
       if (BuildConfig.IS_CUSTOM_APP) {
-        getPreferenceScreen().removePreference(getPrefrence("pref_wifi_only"));
+        PreferenceCategory notificationsCategory = (PreferenceCategory) findPreference("pref_extras");
+        notificationsCategory.removePreference(getPrefrence("pref_wifi_only"));
       }
 
       mSlider = (SliderPreference) getPrefrence(PREF_ZOOM);
