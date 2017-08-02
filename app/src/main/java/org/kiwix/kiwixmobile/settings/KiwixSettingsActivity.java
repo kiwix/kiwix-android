@@ -167,6 +167,11 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       } else {
         getPreferenceScreen().removePreference(getPrefrence("pref_language"));
       }
+
+      if (BuildConfig.IS_CUSTOM_APP) {
+        getPreferenceScreen().removePreference(getPrefrence("pref_wifi_only"));
+      }
+
       mSlider = (SliderPreference) getPrefrence(PREF_ZOOM);
       setSliderState();
       setStorage();
@@ -181,7 +186,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     }
 
     private void setStorage(){
-      if (BuildConfig.IS_CUSTOM_APP){
+      if (BuildConfig.IS_CUSTOM_APP) {
         getPreferenceScreen().removePreference(getPrefrence("pref_storage"));
       } else {
         if (Environment.isExternalStorageEmulated()) {
