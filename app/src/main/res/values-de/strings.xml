@@ -135,7 +135,7 @@
   <string name="help_14">Das Herunterladen in der App verwaltet automatisch größere Dateien und teilt sie für Sie auf.</string>
   <string name="help_15">Falls Sie jedoch den Download auf einem anderen Gerät durchführen, müssen Sie die ZIM-Datei mithilfe der folgenden Software aufteilen:</string>
   <string name="help_16">\u2022 Auf Microsoft Windows: HJ-Split</string>
-  <string name="help_17">\u2022 Auf Apple Mac OSX: Split & Concat</string>
+  <string name="help_17">\u2022 Auf Apple Mac OSX: Split &amp; Concat</string>
   <string name="help_19">Hinweis: Ihre Dateien müssen meine_große_datei.zimaa, meine_große_datei.zimab etc. heißen.</string>
   <string name="help_20">Vielen Dank, dass Sie Kiwix ausgewählt haben!</string>
   <string name="help_21">Wir sind froh, dass wir Sie an Bord haben und schätzen jede Rückmeldung und jeden Vorschlag unter android@kiwix.org.</string>
