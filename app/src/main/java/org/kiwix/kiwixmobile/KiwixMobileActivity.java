@@ -668,7 +668,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     AttributeSet attrs = StyleUtils.getAttributes(this, R.xml.webview);
     KiwixWebView webView;
     if (isHideToolbar) {
-      webView = new ToolbarScrollingKiwixWebView(KiwixMobileActivity.this, this, toolbarContainer, attrs);
+      webView = new ToolbarScrollingKiwixWebView(KiwixMobileActivity.this, this, toolbarContainer, pageBottomTabLayout , attrs);
       ((ToolbarScrollingKiwixWebView) webView).setOnToolbarVisibilityChangeListener(
           new ToolbarScrollingKiwixWebView.OnToolbarVisibilityChangeListener() {
             @Override
