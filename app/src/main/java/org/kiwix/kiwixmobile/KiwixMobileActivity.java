@@ -837,6 +837,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   private void openFullScreen() {
 
     toolbarContainer.setVisibility(View.GONE);
+    pageBottomTabLayout.setVisibility(View.GONE);
     exitFullscreenButton.setVisibility(View.VISIBLE);
     int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
     int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
@@ -857,6 +858,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   private void closeFullScreen() {
     toolbarContainer.setVisibility(View.VISIBLE);
+    pageBottomTabLayout.setVisibility(View.VISIBLE);
     exitFullscreenButton.setVisibility(View.INVISIBLE);
     int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
     int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
