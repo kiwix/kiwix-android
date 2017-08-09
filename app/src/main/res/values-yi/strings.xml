@@ -1,42 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="menu_help">הילף</string>
-  <string name="menu_home">היימבלאַט</string>
-  <string name="menu_forward">ווײַטער</string>
-  <string name="menu_back">צוריק</string>
-  <string name="menu_settings">פרעפֿערענצן</string>
-  <string name="menu_search">זוכן</string>
-  <string name="menu_searchintext">זוכן אין טעקסט</string>
-  <string name="menu_bookmarks">ליין־צייכנס</string>
-  <string name="menu_randomarticle">צופֿעליגער ארטיקל</string>
-  <string name="menu_fullscreen">פֿולער עקראן</string>
-  <string name="menu_exitfullscreen">אוועקגיין פון פולן עקראן</string>
-  <string name="menu_read_aloud">לייענען הויך</string>
-  <string name="menu_read_aloud_stop">אויפהיטן לייענען הויך</string>
-  <string name="save_media">שפייכלערן מעדיעוויקי ווי…</string>
-  <string name="save_media_error">א טעות האט פאסירט ביים אויפהיטן די מעדיע!</string>
-  <string name="save_media_saved">מעדיע אויפגעהיטן ווי %1$s אין אײַער בילדער־טעקע</string>
-  <string name="button_backtotop">צוריק אויבן</string>
-  <string name="search_label">זוכן</string>
-  <string name="add_bookmark">מארקירן דעם בלאט</string>
-  <string name="remove_bookmark">אוממארקירן אויסגעוויילטע</string>
-  <string name="open_in_new_tab">עפענען לינק אין א נײַעם טאב?</string>
-  <string name="error_articlenotfound">טעות: לאדן ארטיקל  \"%1$s\" דורגעפאלן.</string>
-  <string name="error_articleurlnotfound">טעות: לאדן ארטיקל (Url: %1$s) דורכגעפאלן.</string>
-  <string name="pref_display_title">אויסשטעלונג</string>
-  <string name="pref_zoom_dialog">פארגרעסערונג ניווא</string>
   <string-array name="pref_zoom_entries">
-    <item name="pref_zoom_entry_automatic">אויטאמאטיש</item>
-    <item name="pref_zoom_entry_small">קליין</item>
-    <item name="pref_zoom_entry_medium">מיטל</item>
-    <item name="pref_zoom_entry_large">גרויס</item>
   </string-array>
-  <string name="pref_info_title">אינפֿארמאציע</string>
-  <string name="pref_info_version">ווערסיע</string>
-  <string name="pref_zoom_enable">זום־קאנטראלן</string>
-  <string name="pref_nightmode">נאכטמאדע</string>
-  <string name="pref_backtotop">צוריק אויבן</string>
-  <string name="pref_language_title">שפראַך</string>
-  <string name="pref_language_chooser">קלויבט א שפראך</string>
-  <string name="menu_bookmarks_list">ליין־צייכנס</string>
 </resources>
