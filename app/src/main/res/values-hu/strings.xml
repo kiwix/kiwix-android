@@ -51,7 +51,7 @@
   <string name="no_reader_application_installed">Nem található telepített alkalmazás ehhez a fájltípushoz</string>
   <string name="customapp_missing_content">Az alkalmazás sérült.\nEz megtörténhet olyankor, ha eltávolítsz fájlokat az SD-kártyán.\nEl kell távolítanod, majd újra kell telepítened az alkalmazást a Play Áruházból.</string>
   <string name="go_to_play_store">Play Áruház megnyitása</string>
-  <string name="no_bookmarks">Nincs könyvjelző!</string>
+  <string name="no_bookmarks">Nincsenek könyvjelzők!</string>
   <string name="menu_bookmarks_list">Könyvjelzők</string>
   <string name="no_section_info">Nem található tartalomfejléc</string>
   <string name="request_storage">A ZIM-fájlok eléréséhez szükségünk van hozzáférésre a tárhelyedhez</string>

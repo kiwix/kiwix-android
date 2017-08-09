@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="menu_help">सहायता</string>
-  <string name="menu_home">होम</string>
+  <string name="menu_home">घर</string>
   <string name="menu_forward">आगे जाएँ</string>
-  <string name="menu_back">पीछे जाएँ</string>
-  <string name="menu_settings">प्राथमिकताएँ</string>
-  <string name="menu_search">खोजें</string>
-  <string name="menu_searchintext">पाठ में खोजें</string>
-  <string name="menu_bookmarks">बुकमार्क्स</string>
-  <string name="menu_randomarticle">रैन्डम लेख</string>
+  <string name="menu_back">पीछे</string>
+  <string name="menu_settings">पसंद</string>
+  <string name="menu_search">लेख खोजें</string>
+  <string name="menu_searchintext">पृष्ठ में ढूंढें</string>
+  <string name="menu_bookmarks">बूकमार्क</string>
+  <string name="menu_randomarticle">कोई भी लेख</string>
   <string name="menu_fullscreen">पूरा स्क्रीन</string>
   <string name="menu_exitfullscreen">पूरे स्क्रीन से बाहर निकलें</string>
   <string name="menu_read_aloud">पढ़ा कर सुनें</string>
@@ -18,11 +18,11 @@
   <string name="save_media_error">मीडिया को सहेजते समय एक त्रुटि आयी।</string>
   <string name="save_media_saved">मीडिया को %1$s के रूप में अपने चित्र निदेशिका में सहेजें</string>
   <string name="rescan_fs_warning">ZIM फ़ाइलों के लिए स्कैन किया जा रहा है, कृपया प्रतीक्षा करें...</string>
-  <string name="button_backtotop">वापस शीर्ष पे जाएँ</string>
+  <string name="button_backtotop">वापस ऊपर जायें</string>
   <string name="search_label">खोजें</string>
   <string name="articlesearch_hint">लेख तलाश करने के लिए लिखें</string>
-  <string name="choose_file">एक ZIM कान्टेन्ट फ़ाइल (*.zim) का चयन करें</string>
-  <string name="add_bookmark">इस पृष्ठ को चिह्नित करें</string>
+  <string name="choose_file">सामग्री फ़ाइल चुनें (*.zim)</string>
+  <string name="add_bookmark">बूकमार्क जोड़ें</string>
   <string name="remove_bookmark">चयनित अचिह्नित करें</string>
   <string name="open_in_new_tab">नए टैब में लिंक खोलें?</string>
   <string name="error_nozimfilesfound">आपकी डिवाइस पर कोई ZIM फ़ाइल नही मिली।\nKiwix मे कान्टेन्ट लोड करने के बारे मे जानने के लिए हेल्प पृष्ठ देखें।\nयदि आपने अपने डिवाइस/इक्स्टर्नल स्टोरिज पर ZIM फ़ाइल डाली है, तो फिर से इक मिनिट मे प्रयास करें, या फिर डिवाइस पुनरारंभ करें।</string>
@@ -47,5 +47,25 @@
   <string name="pref_backtotop_summary">उपर तक स्क्रॉल करने के लिए पृष्ठ के अंत में एक बटन दिखाएँ</string>
   <string name="pref_language_title">भाषा</string>
   <string name="pref_language_chooser">भाषा चुनें</string>
-  <string name="menu_bookmarks_list">बुकमार्क्स</string>
+  <string name="pref_credits_title">श्रेय</string>
+  <string name="menu_bookmarks_list">बूकमार्क</string>
+  <string name="pref_clear_all_history_title">इतिहास साफ़ करें</string>
+  <string name="all_history_cleared_toast">सभी इतिहास मिट गया</string>
+  <string name="clear_all_history_dialog_title">पूरा इतिहास मिटायें</string>
+  <string name="did_you_know">क्या आप जानते हैं?</string>
+  <string name="bookmark_added">बूकमार्क जोड़ा गया</string>
+  <string name="rate_dialog_negative">नहीं, धन्यवाद</string>
+  <string name="rate_dialog_neutral">बाद में</string>
+  <string name="open">खोलें</string>
+  <string name="bookmark_removed">बूकमार्क हटाया गया</string>
+  <string name="local_zims">डिवाइस</string>
+  <string name="remote_zims">ऑनलाइन</string>
+  <string name="delete_specific_zim">इस फ़ाइल को हटाएँ?</string>
+  <string name="download_close">बंद करें</string>
+  <string name="no_files_here">कोई फ़ाइल नहीं है</string>
+  <string name="pref_current_folder">वर्तमान फोल्डर</string>
+  <string name="yes">हाँ</string>
+  <string name="no">नहीं</string>
+  <string name="next">अगला</string>
+  <string name="time_day">दिन</string>
 </resources>
