@@ -26,8 +26,9 @@ import android.content.SharedPreferences;
 
 public class RateAppCounter {
 
-  private String MASTER_NAME = "visitCounter";
-  private String NOTHANKS_CLICKED = "clickedNoThanks";
+  private static final String MASTER_NAME = "visitCounter";
+  private static final String NOTHANKS_CLICKED = "clickedNoThanks";
+
   private SharedPreferences visitCounter;
 
   public RateAppCounter(Context context) {
@@ -43,10 +44,6 @@ public class RateAppCounter {
     SharedPreferences.Editor CounterEditor = visitCounter.edit();
     CounterEditor.putBoolean(NOTHANKS_CLICKED, val);
     CounterEditor.apply();
-  }
-
-  public SharedPreferences.Editor getEditor() {
-    return visitCounter.edit();
   }
 
   public int getCount() {

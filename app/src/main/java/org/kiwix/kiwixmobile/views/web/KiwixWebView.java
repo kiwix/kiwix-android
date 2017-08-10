@@ -41,13 +41,13 @@ import org.kiwix.kiwixmobile.KiwixWebChromeClient;
 import org.kiwix.kiwixmobile.KiwixWebViewClient;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.WebViewCallback;
+import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
 public class KiwixWebView extends WebView {
 
@@ -62,11 +62,6 @@ public class KiwixWebView extends WebView {
       0, 0, 0, 1.0f, 0 // alpha
   };
   private WebViewCallback callback;
-
-  @Override
-  public void loadUrl(String url) {
-    super.loadUrl(url);
-  }
 
   private Handler saveHandler = new Handler() {
 

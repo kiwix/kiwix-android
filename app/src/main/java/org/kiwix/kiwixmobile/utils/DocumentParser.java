@@ -4,11 +4,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
-import java.util.ArrayList;
-import java.util.List;
+
 import org.kiwix.kiwixmobile.TableDrawerAdapter;
 
-import static org.kiwix.kiwixmobile.TableDrawerAdapter.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.kiwix.kiwixmobile.TableDrawerAdapter.DocumentSection;
 
 public class DocumentParser {
 
@@ -30,11 +32,11 @@ public class DocumentParser {
     @SuppressWarnings("unused")
     public void parse(final String sectionTitle, final String element, final String id) {
       if (element.equals("H1")) {
-        title = sectionTitle;
+        title = sectionTitle.trim();
         return;
       }
       DocumentSection section = new DocumentSection();
-      section.title = sectionTitle;
+      section.title = sectionTitle.trim();
       section.id = id;
       int level;
       try {

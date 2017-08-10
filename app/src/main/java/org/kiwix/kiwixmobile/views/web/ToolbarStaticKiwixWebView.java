@@ -15,14 +15,11 @@ import org.kiwix.kiwixmobile.utils.DimenUtils;
 public class ToolbarStaticKiwixWebView extends KiwixWebView {
 
   private int heightDifference;
-  private int statusBarHeight;
-  private ViewGroup viewGroup;
 
   public ToolbarStaticKiwixWebView(Context context, WebViewCallback callback, ViewGroup toolbarLayout, AttributeSet attrs) {
     super(context, callback, attrs);
-    statusBarHeight = DimenUtils.getTranslucentStatusBarHeight(context);
-    viewGroup = toolbarLayout;
-    viewGroup.setTranslationY(statusBarHeight);
+    int statusBarHeight = DimenUtils.getTranslucentStatusBarHeight(context);
+    toolbarLayout.setTranslationY(statusBarHeight);
     heightDifference = DimenUtils.getToolbarAndStatusBarHeight(context);
     setTranslationY(heightDifference);
   }

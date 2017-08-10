@@ -75,14 +75,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import javax.inject.Inject;
-import okhttp3.OkHttpClient;
+
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmarks_view.BookmarksActivity;
@@ -98,7 +91,6 @@ import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.RateAppCounter;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
-import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.utils.files.FileReader;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.views.AnimatedProgressBar;
@@ -107,8 +99,18 @@ import org.kiwix.kiwixmobile.views.web.KiwixWebView;
 import org.kiwix.kiwixmobile.views.web.ToolbarScrollingKiwixWebView;
 import org.kiwix.kiwixmobile.views.web.ToolbarStaticKiwixWebView;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import okhttp3.OkHttpClient;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.DocumentSection;
@@ -179,8 +181,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   private boolean isOpenNewTabInBackground;
 
-  public static boolean nightMode;
-
   public static boolean refresh;
 
   public static boolean wifiOnly;
@@ -190,6 +190,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   private static Uri KIWIX_BROWSER_MARKET_URI;
 
   private String documentParserJs;
+
+  public static boolean nightMode;
 
   private DocumentParser documentParser;
 
@@ -354,8 +356,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   @Override
   public void onCreate(Bundle savedInstanceState) {
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-    nightMode = sharedPreferences.getBoolean(PREF_NIGHT_MODE, false);
     wifiOnly = sharedPreferences.getBoolean(KiwixSettingsActivity.PREF_WIFI_ONLY, true);
+    nightMode = KiwixSettingsActivity.nightMode(sharedPreferences);
     if (nightMode) {
       setTheme(R.style.AppTheme_Night);
     }
@@ -787,12 +789,28 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     KiwixWebView webView = getCurrentWebView();
     switch (item.getItemId()) {
 
+      case R.id.menu_home:
+      case android.R.id.home:
+        openMainPage();
+        break;
+
+      case R.id.menu_searchintext:
+        compatCallback.setActive();
+        compatCallback.setWebView(webView);
+        startSupportActionMode(compatCallback);
+        compatCallback.showSoftInput();
+        break;
+
       case R.id.menu_bookmarks:
         toggleBookmark();
         break;
 
       case R.id.menu_bookmarks_list:
         goToBookmarks();
+        break;
+
+      case R.id.menu_randomarticle:
+        openRandomArticle();
         break;
 
       case R.id.menu_help:
@@ -818,6 +836,14 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
           }
         }
         readAloud();
+        break;
+
+      case R.id.menu_fullscreen:
+        if (isFullscreenOpened) {
+          closeFullScreen();
+        } else {
+          openFullScreen();
+        }
         break;
 
       default:
@@ -880,7 +906,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   }
 
   public void showHelpPage() {
-    getCurrentWebView().loadUrl("file:///android_res/raw/help.html");
+    getCurrentWebView().loadUrl("file:///android_asset/help.html");
   }
 
   public void sendContactEmail() {
@@ -1008,6 +1034,10 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   private void initAllMenuItems() {
     try {
       menu.findItem(R.id.menu_bookmarks).setVisible(true);
+      menu.findItem(R.id.menu_fullscreen).setVisible(true);
+      menu.findItem(R.id.menu_home).setVisible(true);
+      menu.findItem(R.id.menu_randomarticle).setVisible(true);
+      menu.findItem(R.id.menu_searchintext).setVisible(true);
 
       MenuItem searchItem = menu.findItem(R.id.menu_search);
       searchItem.setVisible(true);
@@ -1330,6 +1360,21 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   @Override
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
+    toggleActionItemsConfig();
+  }
+
+  void toggleActionItemsConfig() {
+    if (menu != null) {
+      MenuItem random = menu.findItem(R.id.menu_randomarticle);
+      MenuItem home = menu.findItem(R.id.menu_home);
+      if (getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE) {
+        random.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        home.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+      } else {
+        random.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        home.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+      }
+    }
   }
 
   public void searchForTitle(String title) {
@@ -1446,10 +1491,11 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   @Override
   public boolean onPrepareOptionsMenu(Menu menu) {
     super.onPrepareOptionsMenu(menu);
+    toggleActionItemsConfig();
     refreshBookmarkSymbol(menu);
     refreshNavigationButtons();
 
-    if (getCurrentWebView().getUrl() == null || getCurrentWebView().getUrl().equals("file:///android_res/raw/help.html")) {
+    if (getCurrentWebView().getUrl() == null || getCurrentWebView().getUrl().equals("file:///android_asset/help.html")) {
       menu.findItem(R.id.menu_read_aloud).setVisible(false);
     } else {
       menu.findItem(R.id.menu_read_aloud).setVisible(true);
@@ -1466,7 +1512,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     if (menu.findItem(R.id.menu_bookmarks) != null &&
         getCurrentWebView().getUrl() != null &&
         ZimContentProvider.getId() != null &&
-        !getCurrentWebView().getUrl().equals("file:///android_res/raw/help.html")) {
+        !getCurrentWebView().getUrl().equals("file:///android_asset/help.html")) {
       menu.findItem(R.id.menu_bookmarks)
               .setEnabled(true)
               .setIcon(bookmarks.contains(getCurrentWebView().getUrl()) ? R.drawable.action_bookmark_active : R.drawable.action_bookmark)
@@ -1500,7 +1546,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   public void loadPrefs() {
 
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-    nightMode = sharedPreferences.getBoolean(PREF_NIGHT_MODE, false);
+    nightMode = KiwixSettingsActivity.nightMode(sharedPreferences);
     isBackToTopEnabled = sharedPreferences.getBoolean(PREF_BACK_TO_TOP, false);
     isHideToolbar = sharedPreferences.getBoolean(PREF_HIDE_TOOLBAR, false);
     isFullscreenOpened = sharedPreferences.getBoolean(PREF_FULLSCREEN, false);
@@ -1817,4 +1863,5 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       dialog.show();
     }
   }
+
 }

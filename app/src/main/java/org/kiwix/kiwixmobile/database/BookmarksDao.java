@@ -3,8 +3,10 @@ package org.kiwix.kiwixmobile.database;
 
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
-import java.util.ArrayList;
+
 import org.kiwix.kiwixmobile.database.entity.Bookmarks;
+
+import java.util.ArrayList;
 
 /**
  * Dao class for bookmarks.
@@ -73,11 +75,6 @@ public class BookmarksDao {
      */
   public void deleteBookmark(String favArticle, String ZimId, String ZimName) {
     mDb.deleteWhere(Bookmarks.class, Bookmarks.BOOKMARK_URL.eq(favArticle).and(Bookmarks.ZIM_ID.eq(ZimId).or(Bookmarks.ZIM_NAME.eq(ZimName))) );
-  }
-
-
-  public void deleteAll(){
-    mDb.clear();
   }
 
 }

@@ -26,7 +26,6 @@ public class LibraryPresenter extends BasePresenter<LibraryViewCallback> {
   public LibraryPresenter() {
   }
 
-
   void loadBooks() {
     getMvpView().displayScanningContent();
     kiwixService.getLibrary()
@@ -37,7 +36,6 @@ public class LibraryPresenter extends BasePresenter<LibraryViewCallback> {
           getMvpView().displayNoNetworkConnection();
         });
   }
-
 
   void loadRunningDownloadsFromDb(Context context) {
     BookDao bookDao = new BookDao(KiwixDatabase.getInstance(context));
@@ -53,11 +51,5 @@ public class LibraryPresenter extends BasePresenter<LibraryViewCallback> {
   public void attachView(LibraryViewCallback view) {
     super.attachView(view);
   }
-
-  @Override
-  public void detachView() {
-    super.detachView();
-  }
-
 
 }

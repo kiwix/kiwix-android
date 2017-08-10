@@ -1,11 +1,10 @@
 package org.kiwix.kiwixmobile.zim_manager.library_view;
 
-import java.util.ArrayList;
 import org.kiwix.kiwixmobile.base.ViewCallback;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
 import java.util.LinkedList;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
 /**
  * Created by EladKeyshawn on 06/04/2017.

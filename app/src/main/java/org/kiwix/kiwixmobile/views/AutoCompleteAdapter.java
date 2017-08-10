@@ -11,14 +11,14 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
-import javax.inject.Inject;
 import org.kiwix.kiwixlib.JNIKiwix;
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.ZimContentProvider;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
-import org.kiwix.kiwixmobile.ZimContentProvider;
+import javax.inject.Inject;
 
 public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 
@@ -33,7 +33,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
   public AutoCompleteAdapter(Context context) {
     super(context, android.R.layout.simple_list_item_1);
     this.context = context;
-    mData = new ArrayList<String>();
+    mData = new ArrayList<>();
     mFilter = new KiwixFilter();
   }
 
@@ -60,10 +60,6 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
       trim = trim.substring(0, trim.length() - 5);
       return trim.replace("_", " ");
     } else return a;
-  }
-
-  public String getItemRaw(int index) {
-    return mData.get(index);
   }
 
   @Override
@@ -99,7 +95,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
    	    ZimContentProvider.searchSuggestions(query, 200);
 	    String suggestion;
 	    String suggestionUrl;
-	    List<String> alreadyAdded = new ArrayList<String>();
+	    List<String> alreadyAdded = new ArrayList<>();
 	    while ((suggestion = ZimContentProvider.getNextSuggestion()) != null) {
    	      suggestionUrl = ZimContentProvider.getPageUrlFromTitle(suggestion);
 	      if (!alreadyAdded.contains(suggestionUrl)) {

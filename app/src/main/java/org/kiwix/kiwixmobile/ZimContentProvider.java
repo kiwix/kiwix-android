@@ -28,6 +28,12 @@ import android.os.ParcelFileDescriptor;
 import android.os.ParcelFileDescriptor.AutoCloseOutputStream;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+
+import org.kiwix.kiwixlib.JNIKiwix;
+import org.kiwix.kiwixlib.JNIKiwixInt;
+import org.kiwix.kiwixlib.JNIKiwixString;
+import org.kiwix.kiwixmobile.utils.files.FileUtils;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -37,11 +43,8 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.inject.Inject;
-import org.kiwix.kiwixmobile.utils.files.FileUtils;
-import org.kiwix.kiwixlib.JNIKiwix;
-import org.kiwix.kiwixlib.JNIKiwixString;
-import org.kiwix.kiwixlib.JNIKiwixInt;
 
 public class ZimContentProvider extends ContentProvider {
 
@@ -151,23 +154,6 @@ public class ZimContentProvider extends ContentProvider {
     }
   }
 
-  public static int getArticleCount() {
-    if (jniKiwix == null || zimFileName == null) {
-      return 0;
-    } else {
-      return jniKiwix.getArticleCount();
-
-    }
-  }
-  public static int getMediaCount() {
-    if (jniKiwix == null || zimFileName == null) {
-      return 0;
-    } else {
-      return jniKiwix.getMediaCount();
-
-    }
-  }
-
   public static String getCreator() {
     if (jniKiwix == null || zimFileName == null) {
       return null;
@@ -209,7 +195,6 @@ public class ZimContentProvider extends ContentProvider {
     if (jniKiwix == null || zimFileName == null) {
       return null;
     } else {
-      JNIKiwixString descrpition = new JNIKiwixString();
       return jniKiwix.getDescription();
     }
   }
@@ -218,7 +203,6 @@ public class ZimContentProvider extends ContentProvider {
     if (jniKiwix == null || zimFileName == null) {
       return null;
     } else {
-      JNIKiwixString string = new JNIKiwixString();
       JNIKiwixString mime = new JNIKiwixString();
       mime.value = "image/x-ms-bmp";
       return jniKiwix.getFavicon();
@@ -281,24 +265,27 @@ public class ZimContentProvider extends ContentProvider {
   }
 
   private static String loadICUData(Context context, File workingDir) {
-    String icuFileName = "icudt.dat";
     try {
       File icuDir = new File(workingDir, "icu");
       if (!icuDir.exists()) {
         icuDir.mkdirs();
       }
-      File icuDataFile = new File(icuDir, icuFileName);
-      if (!icuDataFile.exists()) {
-        InputStream in = context.getAssets().open(icuFileName);
-        OutputStream out = new FileOutputStream(icuDataFile);
-        byte[] buf = new byte[1024];
-        int len;
-        while ((len = in.read(buf)) > 0) {
-          out.write(buf, 0, len);
-        }
-        in.close();
-        out.flush();
-        out.close();
+      String[] icuFileNames = context.getAssets().list("icu");
+      for (int i=0; i<icuFileNames.length; i++) {
+          String icuFileName = icuFileNames[i];
+          File icuDataFile = new File(icuDir, icuFileName);
+          if (!icuDataFile.exists()) {
+              InputStream in = context.getAssets().open("icu/"+icuFileName);
+              OutputStream out = new FileOutputStream(icuDataFile);
+              byte[] buf = new byte[1024];
+              int len;
+              while ((len = in.read(buf)) > 0) {
+                  out.write(buf, 0, len);
+              }
+              in.close();
+              out.flush();
+              out.close();
+          }
       }
       return icuDir.getAbsolutePath();
     } catch (Exception e) {
@@ -397,8 +384,9 @@ public class ZimContentProvider extends ContentProvider {
     File f = new File(FileUtils.getFileCacheDir(getContext()), fileName);
 
     JNIKiwixString mime = new JNIKiwixString();
+    JNIKiwixString title = new JNIKiwixString();
     JNIKiwixInt size = new JNIKiwixInt();
-    byte[] data = jniKiwix.getContent(filePath, mime, size);
+    byte[] data = jniKiwix.getContent(filePath, title, mime, size);
 
     FileOutputStream out = new FileOutputStream(f);
 
@@ -442,8 +430,6 @@ public class ZimContentProvider extends ContentProvider {
 
   static class TransferThread extends Thread {
 
-    Uri articleUri;
-
     String articleZimUrl;
 
     OutputStream out;
@@ -451,7 +437,6 @@ public class ZimContentProvider extends ContentProvider {
     JNIKiwix jniKiwix;
 
     TransferThread(JNIKiwix jniKiwix, Uri articleUri, OutputStream out) throws IOException {
-      this.articleUri = articleUri;
       this.jniKiwix = jniKiwix;
       Log.d(TAG_KIWIX, "Retrieving: " + articleUri.toString());
 
@@ -465,8 +450,9 @@ public class ZimContentProvider extends ContentProvider {
     public void run() {
       try {
         JNIKiwixString mime = new JNIKiwixString();
+        JNIKiwixString title = new JNIKiwixString();
         JNIKiwixInt size = new JNIKiwixInt();
-        byte[] data = jniKiwix.getContent(articleZimUrl, mime, size);
+        byte[] data = jniKiwix.getContent(articleZimUrl, title, mime, size);
         if (mime.value != null && mime.value.equals("text/css") && KiwixMobileActivity.nightMode) {
           out.write(("img { \n" +
               " -webkit-filter: invert(1); \n" +

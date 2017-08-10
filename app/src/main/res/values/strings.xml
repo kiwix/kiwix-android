@@ -112,10 +112,12 @@
   <string name="no_downloads_here">No downloads here</string>
   <string name="no_files_here">No files here</string>
   <string name="download_complete_snackbar">Download complete</string>
+  <string name="download_over_network">Are you sure you want to start the download without WiFi?</string>
   <string name="download_no_space">Insufficient space to download this file.</string>
   <string name="space_available">Space Available:</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_nopic">No Pictures</string>
+  <string name="zim_novid">No Videos</string>
   <string name="open_partial_zim">This file could be incomplete. Do you wish to attempt to open it?</string>
   <string name="no_network_connection">No network connection</string>
   <string name="get_library_over_network">Use network to download content list. (Approximately 6MB)</string>
@@ -124,9 +126,9 @@
   <string name="help_1">Kiwix allows you offline access to websites such as Wikipedia in a highly compressed form.</string>
   <string name="help_2">What does Kiwix do?</string>
   <string name="help_3">Kiwix is an offline content reader. It acts very much like a browser but instead of accessing online web pages, it reads content from a file in ZIM format.</string>
-  <string name="help_4">While Kiwix has been originaly designed to provide Wikipedia offline, it also reads other contents.</string>#
+  <string name="help_4">While Kiwix has been originaly designed to provide Wikipedia offline, it also reads other contents.</string>
   <string name="help_5">Where is the content?</string>
-  <string name="help_6">Our content is hosted on the kiwix website.</string>
+  <string name="help_6">Our content is hosted on the Kiwix website.</string>
   <string name="help_7">They are available as ZIM files. There are a lot of them:</string>
   <string name="help_8">\u2022 Wikipedia is available separately for each language</string>
   <string name="help_9">\u2022 Other contents like Wikileaks or Wikisource are also available</string>
@@ -175,4 +177,7 @@
   <string name="time_left">left</string>
   <string name="pref_bottomtoolbar">Enable bottom toolbar</string>
   <string name="pref_bottomtoolbar_summary">Display a toolbar with quick actions at the bottom of the screen</string>
+  <string name="pref_autonightmode_summary">Automatically switch between day and night mode.</string>
+  <string name="pref_autonightmode">Automated night mode</string>
+  <string name="language_count">(%1$d)</string>
 </resources>

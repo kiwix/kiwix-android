@@ -1,7 +1,5 @@
 package org.kiwix.kiwixmobile.zim_manager.library_view;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -13,36 +11,24 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.Filter.FilterListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import eu.mhutti1.utils.storage.StorageDevice;
-import eu.mhutti1.utils.storage.support.StorageSelectDialog;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.inject.Inject;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
@@ -57,6 +43,18 @@ import org.kiwix.kiwixmobile.utils.StorageUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import eu.mhutti1.utils.storage.StorageDevice;
+import eu.mhutti1.utils.storage.support.StorageSelectDialog;
 
 import static org.kiwix.kiwixmobile.downloader.DownloadService.KIWIX_ROOT;
 import static org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
@@ -84,8 +82,6 @@ public class LibraryFragment extends Fragment
   public static DownloadService mService = new DownloadService();
 
   private boolean mBound;
-
-  private boolean active;
 
   public LibraryAdapter libraryAdapter;
 
@@ -150,7 +146,6 @@ public class LibraryFragment extends Fragment
 
   @Override
   public void showBooks(LinkedList<Book> books) {
-    active = true;
     libraryAdapter.setAllBooks(books);
     if (faActivity.searchView != null) {
       libraryAdapter.getFilter().filter(
@@ -198,7 +193,6 @@ public class LibraryFragment extends Fragment
   @Override
   public void onDestroyView() {
     super.onDestroyView();
-    active = false;
     if (mBound) {
       super.getActivity().unbindService(mConnection.downloadServiceInterface);
       mBound = false;
@@ -254,22 +248,6 @@ public class LibraryFragment extends Fragment
     }
   }
 
-
-  public void mobileDownloadDialog(int position, AdapterView<?> parent) {
-    new AlertDialog.Builder(super.getActivity(), dialogStyle())
-        .setMessage(getString(R.string.download_over_network))
-        .setPositiveButton(getResources().getString(android.R.string.yes), new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int which) {
-            downloadFile((Book) parent.getAdapter().getItem(position));
-          }
-        })
-        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int which) {
-          }
-        })
-        .show();
-  }
-
   @Override
   public void downloadFile(Book book) {
     downloadingBooks.add(book);
@@ -313,7 +291,6 @@ public class LibraryFragment extends Fragment
 
   public class DownloadServiceConnection {
     public DownloadServiceInterface downloadServiceInterface;
-    public boolean bound;
 
     public DownloadServiceConnection() {
       downloadServiceInterface = new DownloadServiceInterface();
@@ -330,9 +307,7 @@ public class LibraryFragment extends Fragment
       }
 
       @Override
-      public void onServiceDisconnected(ComponentName arg0) {
-        bound = false;
-      }
+      public void onServiceDisconnected(ComponentName arg0) { }
     }
   }
 

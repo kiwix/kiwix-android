@@ -34,6 +34,9 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
+import org.kiwix.kiwixmobile.utils.files.FileUtils;
+
 import java.lang.reflect.Field;
 import java.text.Collator;
 import java.util.ArrayList;
@@ -43,7 +46,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
-import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
 public class LanguageUtils {
 
@@ -55,8 +57,8 @@ public class LanguageUtils {
 
   public LanguageUtils(Context context) {
     mContext = context;
-    mLanguageList = new ArrayList<LanguageContainer>();
-    mLocaleLanguageCodes = new ArrayList<String>();
+    mLanguageList = new ArrayList<>();
+    mLocaleLanguageCodes = new ArrayList<>();
     getLanguageCodesFromAssets();
     setupLanguageList();
     sortLanguageList(context.getResources().getConfiguration().locale);
@@ -96,7 +98,7 @@ public class LanguageUtils {
   public static Locale ISO3ToLocale(String iso3) {
     if (mLocaleMap == null) {
       Locale[] locales = Locale.getAvailableLocales();
-      mLocaleMap = new HashMap<String, Locale>();
+      mLocaleMap = new HashMap<>();
       for (Locale locale : locales) {
         try {
           mLocaleMap.put(locale.getISO3Language().toUpperCase(), locale);

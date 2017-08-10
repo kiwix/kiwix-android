@@ -4,7 +4,6 @@ package org.kiwix.kiwixmobile.downloader;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -25,18 +24,18 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
-import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
+import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
+import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
@@ -114,7 +113,7 @@ public class DownloadFragment extends Fragment {
 
   public class DownloadAdapter extends BaseAdapter {
 
-    private LinkedHashMap<Integer, LibraryNetworkEntity.Book> mData = new LinkedHashMap<Integer, LibraryNetworkEntity.Book>();
+    private LinkedHashMap<Integer, LibraryNetworkEntity.Book> mData = new LinkedHashMap<>();
     private Integer[] mKeys;
 
     public DownloadAdapter(LinkedHashMap<Integer, LibraryNetworkEntity.Book> data) {
@@ -267,17 +266,6 @@ public class DownloadFragment extends Fragment {
       // Return the completed view to render on screen
       return convertView;
     }
-  }
-
-  public static class Download {
-    public String title;
-    public int progress;
-
-    public Download(String title) {
-      this.title = title;
-      progress = 0;
-    }
-
   }
 
   public void addDownload(int position, LibraryNetworkEntity.Book book, String fileName) {

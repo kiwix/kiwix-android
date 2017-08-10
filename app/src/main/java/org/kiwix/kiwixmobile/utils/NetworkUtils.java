@@ -5,9 +5,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.util.Log;
-import java.util.UUID;
+
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
+
+import java.util.UUID;
 
 public class NetworkUtils {
 
@@ -19,9 +21,9 @@ public class NetworkUtils {
     } else {
       NetworkInfo[] info = connectivity.getAllNetworkInfo();
       if (info != null) {
-        for (int i = 0; i < info.length; i++) {
-          if (info[i].getState() == NetworkInfo.State.CONNECTED
-              || info[i].getState() == NetworkInfo.State.CONNECTING) {
+        for (NetworkInfo anInfo : info) {
+          if (anInfo.getState() == NetworkInfo.State.CONNECTED
+                  || anInfo.getState() == NetworkInfo.State.CONNECTING) {
             return true;
           }
         }
@@ -70,6 +72,7 @@ public class NetworkUtils {
       details = details.replaceAll("_", " ");
       details = details.replaceAll("all", "");
       details = details.replaceAll("nopic", context.getString(R.string.zim_nopic));
+      details = details.replaceAll("novid", context.getString(R.string.zim_novid));
       details = details.replaceAll("simple", context.getString(R.string.zim_simple));
       details = details.trim().replaceAll(" +", " ");
       return details;

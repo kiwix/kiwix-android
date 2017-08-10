@@ -44,8 +44,8 @@ public class ToolbarScrollingKiwixWebView extends KiwixWebView {
   }
 
   protected boolean moveToolbar(int scrollDelta) {
-    float newTranslation = 0,
-        originalTranslation = toolbarView.getTranslationY() - statusBarHeight;
+    float newTranslation;
+    float originalTranslation = toolbarView.getTranslationY() - statusBarHeight;
     if (scrollDelta > 0) {
       // scroll down
       newTranslation = Math.max(-statusBarHeight - toolbarHeight, originalTranslation - scrollDelta);

@@ -21,9 +21,35 @@
         app:showAsAction="never"/>
 
   <item
+      android:id="@+id/menu_home"
+      android:title="@string/menu_home"
+      android:icon="@drawable/action_home"
+      android:visible="false"
+      app:showAsAction="always"/>
+
+  <item
+      android:id="@+id/menu_randomarticle"
+      android:icon="@drawable/action_randomarticle"
+      android:title="@string/menu_randomarticle"
+      android:visible="false"
+      app:showAsAction="never"/>
+
+  <item
       android:id="@+id/menu_openfile"
       android:title="@string/menu_zim_manager"
       android:icon="@drawable/action_open_file"
+      app:showAsAction="never"/>
+
+  <item
+      android:id="@+id/menu_searchintext"
+      android:title="@string/menu_searchintext"
+      android:visible="false"
+      app:showAsAction="never"/>
+
+  <item
+      android:id="@+id/menu_fullscreen"
+      android:title="@string/menu_fullscreen"
+      android:visible="false"
       app:showAsAction="never"/>
 
   <item
