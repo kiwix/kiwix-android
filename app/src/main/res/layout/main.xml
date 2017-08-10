@@ -105,16 +105,17 @@
       </RelativeLayout>
 
       <org.kiwix.kiwixmobile.views.PageBottomTabLayout
-          android:id="@+id/page_bottom_tab_layout"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_alignParentBottom="true"
-          android:layout_centerHorizontal="true"
-          android:layout_gravity="bottom"
-          android:background="@color/grey"
-          app:tabGravity="fill"
-          app:tabIndicatorColor="@color/grey"
-          app:tabSelectedTextColor="@color/grey"/>
+        android:id="@+id/page_bottom_tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="bottom"
+        android:background="@color/grey"
+        android:visibility="gone"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/grey"
+        app:tabSelectedTextColor="@color/grey"/>
 
     </RelativeLayout>
 
