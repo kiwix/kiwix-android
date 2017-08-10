@@ -175,6 +175,8 @@
   <string name="time_minute">min</string>
   <string name="time_second">s</string>
   <string name="time_left">left</string>
+  <string name="pref_bottomtoolbar">Enable bottom toolbar</string>
+  <string name="pref_bottomtoolbar_summary">Display a toolbar with quick actions at the bottom of the screen</string>
   <string name="pref_autonightmode_summary">Automatically switch between day and night mode.</string>
   <string name="pref_autonightmode">Automated night mode</string>
   <string name="language_count">(%1$d)</string>

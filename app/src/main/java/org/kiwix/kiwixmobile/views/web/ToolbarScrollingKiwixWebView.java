@@ -33,12 +33,14 @@ public class ToolbarScrollingKiwixWebView extends KiwixWebView {
   private final int statusBarHeight = DimenUtils.getTranslucentStatusBarHeight(getContext());
   private final int toolbarHeight = DimenUtils.getToolbarHeight(getContext());
   private View toolbarView;
+  private View bottombarView;
   private OnToolbarVisibilityChangeListener listener;
   private float startY;
 
-  public ToolbarScrollingKiwixWebView(Context context, WebViewCallback callback, View toolbarView, AttributeSet attrs) {
+  public ToolbarScrollingKiwixWebView(Context context, WebViewCallback callback, View toolbarView, View bottombarView, AttributeSet attrs) {
     super(context, callback, attrs);
     this.toolbarView = toolbarView;
+    this.bottombarView = bottombarView;
   }
 
   protected boolean moveToolbar(int scrollDelta) {
@@ -53,6 +55,7 @@ public class ToolbarScrollingKiwixWebView extends KiwixWebView {
     }
 
     toolbarView.setTranslationY(newTranslation + statusBarHeight);
+    bottombarView.setTranslationY(newTranslation * -1 * (bottombarView.getHeight() / (float) (statusBarHeight + toolbarHeight)));
     this.setTranslationY(newTranslation + toolbarHeight + statusBarHeight);
     if (listener != null && newTranslation != originalTranslation) {
       if (newTranslation == -toolbarHeight -statusBarHeight) {

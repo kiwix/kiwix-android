@@ -38,8 +38,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -265,6 +267,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   @BindView(R.id.action_forward) View tabForwardButtonContainer;
 
+  @BindView(R.id.page_bottom_tab_layout) TabLayout pageBottomTabLayout;
+
   @Inject OkHttpClient okHttpClient;
 
 
@@ -302,6 +306,52 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
           });
     }
   }
+
+  @NonNull
+  private final TabLayout.OnTabSelectedListener pageBottomTabListener
+          = new TabLayout.OnTabSelectedListener() {
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+      PageBottomTab.of(tab.getPosition()).select(pageActionTabsCallback);
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {}
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+      onTabSelected(tab);
+    }
+  };
+
+  private PageBottomTab.Callback pageActionTabsCallback = new PageBottomTab.Callback() {
+    @Override
+    public void onHomeTabSelected() {
+      openMainPage();
+    }
+
+    @Override
+    public void onFindInPageTabSelected() {
+      compatCallback.setActive();
+      compatCallback.setWebView(getCurrentWebView());
+      startSupportActionMode(compatCallback);
+      compatCallback.showSoftInput();
+    }
+
+    @Override
+    public void onFullscreenTabSelected() {
+      if (isFullscreenOpened) {
+        closeFullScreen();
+      } else {
+        openFullScreen();
+      }
+    }
+
+    @Override
+    public void onRandomArticleTabSelected() {
+      openRandomArticle();
+    }
+  };
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -429,6 +479,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       zimFile.setData(uri);
       startActivity(zimFile);
     }
+
+    pageBottomTabLayout.addOnTabSelectedListener(pageBottomTabListener);
 
     wasHideToolbar = isHideToolbar;
   }
@@ -618,7 +670,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     AttributeSet attrs = StyleUtils.getAttributes(this, R.xml.webview);
     KiwixWebView webView;
     if (isHideToolbar) {
-      webView = new ToolbarScrollingKiwixWebView(KiwixMobileActivity.this, this, toolbarContainer, attrs);
+      webView = new ToolbarScrollingKiwixWebView(KiwixMobileActivity.this, this, toolbarContainer, pageBottomTabLayout , attrs);
       ((ToolbarScrollingKiwixWebView) webView).setOnToolbarVisibilityChangeListener(
           new ToolbarScrollingKiwixWebView.OnToolbarVisibilityChangeListener() {
             @Override
@@ -811,6 +863,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   private void openFullScreen() {
 
     toolbarContainer.setVisibility(View.GONE);
+    pageBottomTabLayout.setVisibility(View.GONE);
     exitFullscreenButton.setVisibility(View.VISIBLE);
     int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
     int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
@@ -831,6 +884,9 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   private void closeFullScreen() {
     toolbarContainer.setVisibility(View.VISIBLE);
+    if (settings.getBoolean(KiwixSettingsActivity.PREF_BOTTOM_TOOLBAR, false)) {
+      pageBottomTabLayout.setVisibility(View.VISIBLE);
+    }
     exitFullscreenButton.setVisibility(View.INVISIBLE);
     int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
     int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
@@ -1130,6 +1186,12 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       if (menu != null) {
         menu.getItem(4).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
       }
+    }
+
+    if (settings.getBoolean(KiwixSettingsActivity.PREF_BOTTOM_TOOLBAR, false)) {
+      pageBottomTabLayout.setVisibility(View.VISIBLE);
+    } else {
+      pageBottomTabLayout.setVisibility(View.GONE);
     }
 
     Intent intent = getIntent();
