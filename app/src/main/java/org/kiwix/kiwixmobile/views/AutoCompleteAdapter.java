@@ -28,7 +28,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
 
   private Context context;
 
-  @Inject JNIKiwix jniKiwix;
+  @Inject JNIKiwix currentJNIReader;
 
   public AutoCompleteAdapter(Context context) {
     super(context, android.R.layout.simple_list_item_1);
@@ -83,12 +83,13 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
 	  /* Fulltex search */
           SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
           if (sharedPreferences.getBoolean(KiwixMobileActivity.PREF_FULL_TEXT_SEARCH, false)) {
-            String[] results = jniKiwix.indexedQuery(query, 200).split("\n");
-            for (String result : results) {
-		if (!result.trim().isEmpty())
-		    data.add(result);
+            ZimContentProvider.jniSearcher.search(query, 200);
+            while (ZimContentProvider.jniSearcher.hasMoreResult()) {
+              String result = ZimContentProvider.jniSearcher.getNextResult().getTitle();
+		          if (!result.trim().isEmpty())
+		            data.add(result);
+              }
             }
-          }
 
 	  /* Suggestion search if no fulltext results */
 	  if (data.size() == 0) {
