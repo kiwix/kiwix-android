@@ -195,8 +195,17 @@ android {
       buildConfigField "String", "ENFORCED_LANG", "\"\""
       resValue "string", "app_name", "Kiwix"
       resValue "string", "app_search_string", "Search Kiwix"
-      versionCode 54
-      versionName "2.3"
+      if (project.hasProperty('version_code')) {
+        def version_code = project.property('version_code')
+        versionCode version_code.toInteger()
+      } else {
+        versionCode 55
+      }
+      if (project.hasProperty('version_name')) {
+        versionName project.property('version_name')
+      } else {
+        versionName "2.3"
+      }
     }
     // Custom apps built from a json file, zim file and icon set
     map.each { name, directory ->
