@@ -3,6 +3,7 @@ package org.kiwix.kiwixmobile.downloader;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,6 +25,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.Locale;
+import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
@@ -97,18 +100,26 @@ public class DownloadFragment extends Fragment {
             .show();
   }
 
-  public String toHumanReadableTime(int seconds) {
+  public static String toHumanReadableTime(int seconds) {
     final double MINUTES = 60;
     final double HOURS = 60 * MINUTES;
     final double DAYS = 24 * HOURS;
 
     if (Math.round(seconds / DAYS) > 0)
-      return String.format("%d %s %s", Math.round(seconds / DAYS), getString(R.string.time_day), getString(R.string.time_left));
+      return String.format(Locale.getDefault(), "%d %s %s", Math.round(seconds / DAYS),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_day),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_left));
     if (Math.round(seconds / HOURS) > 0)
-      return String.format("%d %s %s", Math.round(seconds / HOURS), getString(R.string.time_hour), getString(R.string.time_left));
+      return String.format(Locale.getDefault(), "%d %s %s", Math.round(seconds / HOURS),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_hour),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_left));
     if (Math.round(seconds / MINUTES) > 0)
-      return String.format("%d %s %s", Math.round(seconds / MINUTES), getString(R.string.time_minute), getString(R.string.time_left));
-    return String.format("%d %s %s", seconds, getString(R.string.time_second), getString(R.string.time_left));
+      return String.format(Locale.getDefault(), "%d %s %s", Math.round(seconds / MINUTES),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_minute),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_left));
+    return String.format(Locale.getDefault(), "%d %s %s", seconds,
+        KiwixApplication.getInstance().getResources().getString(R.string.time_second),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_left));
   }
 
   public class DownloadAdapter extends BaseAdapter {

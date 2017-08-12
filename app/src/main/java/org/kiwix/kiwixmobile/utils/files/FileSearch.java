@@ -88,6 +88,10 @@ public class FileSearch {
 
     Cursor query = contentResolver.query(uri, projection, selection, new String[]{"%."+zimFiles[0], "%."+zimFiles[1]}, null);
 
+    if (query == null) {
+      return;
+    }
+
     try {
       while (query.moveToNext()) {
         File file = new File(query.getString(0));
