@@ -161,7 +161,7 @@ public class DownloadService extends Service {
     LibraryFragment.downloadingBooks.remove(book);
     String url = intent.getExtras().getString(DownloadIntent.DOWNLOAD_URL_PARAMETER);
     downloadBook(url, notificationCount, book);
-    return START_STICKY;
+    return START_REDELIVER_INTENT;
   }
 
   public void stopDownload(int notificationID) {
@@ -169,9 +169,11 @@ public class DownloadService extends Service {
     synchronized (pauseLock) {
       pauseLock.notify();
     }
-    DownloadFragment.mDownloads.remove(notificationID);
-    DownloadFragment.mDownloadFiles.remove(notificationID);
-    DownloadFragment.downloadAdapter.notifyDataSetChanged();
+    if (!DownloadFragment.mDownloads.isEmpty()) {
+      DownloadFragment.mDownloads.remove(notificationID);
+      DownloadFragment.mDownloadFiles.remove(notificationID);
+      DownloadFragment.downloadAdapter.notifyDataSetChanged();
+    }
     updateForeground();
     notificationManager.cancel(notificationID);
   }
@@ -210,8 +212,10 @@ public class DownloadService extends Service {
     notification.get(notificationID).mActions.get(0).icon = R.drawable.ic_play_arrow_black_24dp;
     notification.get(notificationID).setContentText(getString(R.string.download_paused));
     notificationManager.notify(notificationID, notification.get(notificationID).build());
-    DownloadFragment.downloadAdapter.notifyDataSetChanged();
-    downloadFragment.listView.invalidateViews();
+    if (DownloadFragment.downloadAdapter != null) {
+      DownloadFragment.downloadAdapter.notifyDataSetChanged();
+      downloadFragment.listView.invalidateViews();
+    }
   }
 
   public boolean playDownload(int notificationID) {
@@ -223,14 +227,19 @@ public class DownloadService extends Service {
     notification.get(notificationID).mActions.get(0).icon = R.drawable.ic_pause_black_24dp;
     notification.get(notificationID).setContentText("");
     notificationManager.notify(notificationID, notification.get(notificationID).build());
-    DownloadFragment.downloadAdapter.notifyDataSetChanged();
-    downloadFragment.listView.invalidateViews();
+    if (DownloadFragment.downloadAdapter != null) {
+      DownloadFragment.downloadAdapter.notifyDataSetChanged();
+      downloadFragment.listView.invalidateViews();
+    }
 
     return true;
   }
 
   private void downloadBook(String url, int notificationID, LibraryNetworkEntity.Book book) {
-    downloadFragment.addDownload(notificationID, book, KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
+    if (downloadFragment != null) {
+      downloadFragment.addDownload(notificationID, book,
+          KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
+    }
     TestingUtils.bindResource(DownloadService.class);
     if (book.file != null && (book.file.exists() || new File(book.file.getPath() + ".part").exists())) {
       // Calculate initial download progress
@@ -264,7 +273,7 @@ public class DownloadService extends Service {
           }
           notification.get(notificationID).setProgress(100, progress, false);
           if (progress != 100 && timeRemaining.get(notificationID) != -1)
-            notification.get(notificationID).setContentText(downloadFragment.toHumanReadableTime(timeRemaining.get(notificationID)));
+            notification.get(notificationID).setContentText(DownloadFragment.toHumanReadableTime(timeRemaining.get(notificationID)));
           notificationManager.notify(notificationID, notification.get(notificationID).build());
           if (progress == 0 || progress == 100) {
             // Tells android to not kill the service
@@ -344,10 +353,13 @@ public class DownloadService extends Service {
         downloaded += output.length();
 
         if (chunk.getStartByte() == 0) {
-          LibraryNetworkEntity.Book book = DownloadFragment.mDownloads.get(chunk.getNotificationID());
-          book.remoteUrl = book.getUrl();
-          book.file = fullFile;
-          bookDao.saveBook(book);
+          if (!DownloadFragment.mDownloads.isEmpty()) {
+            LibraryNetworkEntity.Book book = DownloadFragment.mDownloads
+                .get(chunk.getNotificationID());
+            book.remoteUrl = book.getUrl();
+            book.file = fullFile;
+            bookDao.saveBook(book);
+          }
           downloadStatus.put(chunk.getNotificationID(), PLAY);
           downloadProgress.put(chunk.getNotificationID(), 0);
         }
