@@ -1,9 +1,9 @@
 2.3
-FIX: External SD cards sporadic problems
-FIX: Few translations of the UI
+FIX: External SD card problems
+FIX: Some UI translation
 FIX: Download manager process sporadic problems
-NEW: Display download time estination
-NEW: Many improvments of the fulltext search
+NEW: Display download time estimation
+NEW: Many improvments in fulltext search
 NEW: Allow manual update of storage location
 NEW: Sort Bookmarks alphabetically
 NEW: Option to download only via WIFI
