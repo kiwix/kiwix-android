@@ -1,3 +1,13 @@
+2.3
+FIX: External SD cards sporadic problems
+FIX: Few translations of the UI
+FIX: Download manager process sporadic problems
+NEW: Display download time estination
+NEW: Many improvments of the fulltext search
+NEW: Allow manual update of storage location
+NEW: Sort Bookmarks alphabetically
+NEW: Option to download only via WIFI
+
 2.2
 FIX: Text To Speech issues on earlier Android versions
 FIX: SD card detection in a few edge cases
