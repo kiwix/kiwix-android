@@ -76,42 +76,27 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
 
       if (constraint != null) {
         try {
-	    
-	  /* Get search request */
-	  final String query = constraint.toString();
-	  
-	  /* Fulltex search */
-          SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-          if (sharedPreferences.getBoolean(KiwixMobileActivity.PREF_FULL_TEXT_SEARCH, false)) {
-            String[] results = jniKiwix.indexedQuery(query, 200).split("\n");
-            for (String result : results) {
-		if (!result.trim().isEmpty())
-		    data.add(result);
+          final String query = constraint.toString();
+
+          ZimContentProvider.searchSuggestions(query, 200);
+          String suggestion;
+          String suggestionUrl;
+          List<String> alreadyAdded = new ArrayList<>();
+          while ((suggestion = ZimContentProvider.getNextSuggestion()) != null) {
+            suggestionUrl = ZimContentProvider.getPageUrlFromTitle(suggestion);
+            if (!alreadyAdded.contains(suggestionUrl)) {
+              alreadyAdded.add(suggestionUrl);
+              data.add(suggestion);
             }
           }
 
-	  /* Suggestion search if no fulltext results */
-	  if (data.size() == 0) {
-   	    ZimContentProvider.searchSuggestions(query, 200);
-	    String suggestion;
-	    String suggestionUrl;
-	    List<String> alreadyAdded = new ArrayList<>();
-	    while ((suggestion = ZimContentProvider.getNextSuggestion()) != null) {
-   	      suggestionUrl = ZimContentProvider.getPageUrlFromTitle(suggestion);
-	      if (!alreadyAdded.contains(suggestionUrl)) {
-		alreadyAdded.add(suggestionUrl);
-		data.add(suggestion);
-	      }
-	    }
-	  }
-	  
         } catch (Exception e) {
           e.printStackTrace();
         }
 
 	/* Return results */
-	filterResults.values = data;
-        filterResults.count  = data.size();
+        filterResults.values = data;
+        filterResults.count = data.size();
       }
       return filterResults;
     }
