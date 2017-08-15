@@ -2,6 +2,7 @@ package org.kiwix.kiwixmobile.di.modules;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.net.ConnectivityManager;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.utils.BookUtils;
@@ -22,7 +23,7 @@ import dagger.Provides;
     return this.application;
   }
 
-  @Provides @Singleton NotificationManager provideNotificationManager(Context context){
+  @Provides @Singleton NotificationManager provideNotificationManager(Context context) {
     return (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
   }
 

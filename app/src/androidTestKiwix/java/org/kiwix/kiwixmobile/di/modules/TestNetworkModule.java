@@ -1,8 +1,13 @@
 package org.kiwix.kiwixmobile.di.modules;
 
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.utils.TestNetworkInterceptor;
+import org.mockito.Mockito;
 
 import java.io.IOException;
 
@@ -12,6 +17,8 @@ import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
 import okhttp3.mockwebserver.MockWebServer;
+
+import static org.mockito.Mockito.doReturn;
 
 /**
  * Created by mhutti1 on 14/04/17.
@@ -47,4 +54,14 @@ public class TestNetworkModule {
 
     return mockWebServer;
   }
+
+  @Provides @Singleton
+  ConnectivityManager provideConnectivityManager(Context context) {
+    ConnectivityManager connectivityManager = Mockito.mock(ConnectivityManager.class);
+    NetworkInfo networkInfo = Mockito.mock(NetworkInfo.class);
+    doReturn(true).when(networkInfo).isConnected();
+    doReturn(networkInfo).when(connectivityManager).getActiveNetworkInfo();
+    return connectivityManager;
+  }
+
 }
