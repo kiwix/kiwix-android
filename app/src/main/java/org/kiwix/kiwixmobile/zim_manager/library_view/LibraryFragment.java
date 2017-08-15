@@ -87,7 +87,7 @@ public class LibraryFragment extends Fragment
 
   private DownloadServiceConnection mConnection = new DownloadServiceConnection();
 
-  private ConnectivityManager conMan;
+  @Inject ConnectivityManager conMan;
 
   private ZimManageActivity faActivity;
 
@@ -123,8 +123,7 @@ public class LibraryFragment extends Fragment
     presenter.attachView(this);
 
     DownloadService.setDownloadFragment(faActivity.mSectionsPagerAdapter.getDownloadFragment());
-    conMan =
-        (ConnectivityManager) super.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
     NetworkInfo network = conMan.getActiveNetworkInfo();
     if (network == null || !network.isConnected()) {
       noNetworkConnection();

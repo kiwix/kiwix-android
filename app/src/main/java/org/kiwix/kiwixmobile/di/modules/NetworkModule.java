@@ -1,5 +1,8 @@
 package org.kiwix.kiwixmobile.di.modules;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.network.UserAgentInterceptor;
@@ -23,4 +26,10 @@ import okhttp3.OkHttpClient;
   @Provides @Singleton KiwixService provideKiwixService(OkHttpClient okHttpClient) {
     return KiwixService.ServiceCreator.newHacklistService(okHttpClient, KIWIX_DOWNLOAD_URL);
   }
+
+  @Provides @Singleton
+  ConnectivityManager provideConnectivityManager(Context context) {
+    return (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+  }
+
 }
