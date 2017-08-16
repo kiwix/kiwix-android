@@ -40,7 +40,7 @@ import okio.Buffer;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static android.support.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -143,7 +143,7 @@ public class NetworkTest {
             isDisplayed()));
     linearLayout2.perform(click());
 
-    openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+    openContextualActionModeOverflowMenu();
 
     onView(withText(R.string.menu_zim_manager))
         .perform(click());

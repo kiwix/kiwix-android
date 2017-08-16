@@ -37,7 +37,7 @@ import javax.inject.Inject;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static android.support.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -84,7 +84,7 @@ public class ZimTest {
 
     mActivityTestRule.launchActivity(intent);
 
-    openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+    openContextualActionModeOverflowMenu();
 
     onView(withText("Home"))
         .perform(click());
@@ -139,7 +139,7 @@ public class ZimTest {
             isDisplayed()));
     textView4.check(matches(withText("Covers")));
 
-    openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+    openContextualActionModeOverflowMenu();
 
     onView(withText("Help"))
         .perform(click());

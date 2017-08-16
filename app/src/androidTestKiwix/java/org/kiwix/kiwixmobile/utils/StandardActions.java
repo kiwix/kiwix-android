@@ -1,8 +1,7 @@
 package org.kiwix.kiwixmobile.utils;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static android.support.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
@@ -13,7 +12,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 public class StandardActions {
 
   public static void enterHelp() {
-    openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+    openContextualActionModeOverflowMenu();
 
     onView(withText("Help"))
         .perform(click());
