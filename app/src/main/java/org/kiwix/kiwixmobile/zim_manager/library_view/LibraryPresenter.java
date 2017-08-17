@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.zim_manager.library_view;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.database.BookDao;
@@ -33,6 +34,7 @@ public class LibraryPresenter extends BasePresenter<LibraryViewCallback> {
         .subscribe(library -> {
           getMvpView().showBooks(library.getBooks());
         }, error -> {
+          Log.w("kiwixLibrary", error.getLocalizedMessage());
           getMvpView().displayNoNetworkConnection();
         });
   }
