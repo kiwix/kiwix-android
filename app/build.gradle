@@ -162,12 +162,24 @@ android {
   }
 
   buildTypes {
+
     // Main build type for debugging
     debug {
+      buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://download.kiwix.org/\""
       // True breaks local variables being shown in breakpoints
       testCoverageEnabled false
       // Needed for instrumentation tests on Pre 5.0
       multiDexKeepProguard file('multidex-instrumentation-config.pro')
+    }
+
+    mock_network {
+      initWith(buildTypes.debug)
+      // TODO add DI for the mock network
+    }
+
+    local_download_server {
+      initWith(buildTypes.debug)
+      buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://192.168.1.55/\""
     }
 
     // Used to assess code coverage
@@ -178,8 +190,9 @@ android {
 
     // Release Type
     release {
-
+      buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://download.kiwix.org/\""
     }
+
   }
 
   productFlavors {

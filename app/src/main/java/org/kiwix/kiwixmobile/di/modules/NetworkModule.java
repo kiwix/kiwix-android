@@ -15,7 +15,7 @@ import okhttp3.OkHttpClient;
 
 @Module public class NetworkModule {
 
-  public static String KIWIX_DOWNLOAD_URL = "http://download.kiwix.org/";
+  public static String KIWIX_DOWNLOAD_URL = BuildConfig.KIWIX_DOWNLOAD_URL; //"http://download.kiwix.org/";
   private final static String useragent = "kiwix-android-version:" + BuildConfig.VERSION_CODE;
 
   @Provides @Singleton OkHttpClient provideOkHttpClient() {
