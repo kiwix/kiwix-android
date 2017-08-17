@@ -34,7 +34,8 @@ public class LibraryPresenter extends BasePresenter<LibraryViewCallback> {
         .subscribe(library -> {
           getMvpView().showBooks(library.getBooks());
         }, error -> {
-          Log.w("kiwixLibrary", error.getLocalizedMessage());
+          String msg = error.getLocalizedMessage();
+          Log.w("kiwixLibrary", "Error:" + (msg != null ? msg : "(null)"));
           getMvpView().displayNoNetworkConnection();
         });
   }
