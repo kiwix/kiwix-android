@@ -75,6 +75,9 @@ public class DownloadFragment extends Fragment {
   }
 
   private void updateNoDownloads() {
+    if (faActivity == null) {
+      return;
+    }
     TextView noDownloadsText = (TextView) faActivity.findViewById(R.id.download_management_no_downloads);
     if (noDownloadsText == null) return;
     if (listView.getCount() == 0) {

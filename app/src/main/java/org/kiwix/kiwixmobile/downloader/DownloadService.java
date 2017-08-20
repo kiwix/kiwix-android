@@ -12,6 +12,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -66,7 +67,6 @@ public class DownloadService extends Service {
   public static final String ACTION_STOP = "STOP";
   public static final String ACTION_NO_WIFI = "NO_WIFI";
   public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
-  public static int notificationCount = 1;
   public static ArrayList<String> notifications = new ArrayList<>();
   public String notificationTitle;
 
@@ -106,11 +106,17 @@ public class DownloadService extends Service {
     if (intent == null) {
       return START_NOT_STICKY;
     }
+    String log = intent.getAction();
+    log += "   :   ";
+    if (intent.hasExtra(NOTIFICATION_ID)) {
+      log += intent.getIntExtra(NOTIFICATION_ID, -3);
+    }
+    Log.d("kiwixdownloadservice", log);
     if (intent.hasExtra(NOTIFICATION_ID) && intent.getAction().equals(ACTION_STOP)) {
       stopDownload(intent.getIntExtra(NOTIFICATION_ID, 0));
       return START_NOT_STICKY;
     }
-    if (intent.hasExtra(NOTIFICATION_ID) && intent.getAction().equals(ACTION_PAUSE)) {
+    if (intent.hasExtra(NOTIFICATION_ID) && (intent.getAction().equals(ACTION_PAUSE))) {
       if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getApplicationContext())) {
         startActivity(new Intent(this, ZimManageActivity.class).setAction(ACTION_NO_WIFI).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         this.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
@@ -120,7 +126,6 @@ public class DownloadService extends Service {
     }
 
 
-    DownloadService.notificationCount++;
     SD_CARD = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
         .getString(KiwixMobileActivity.PREF_STORAGE,Environment.getExternalStorageDirectory().getPath());
     KIWIX_ROOT = SD_CARD + "/Kiwix/";
@@ -129,24 +134,30 @@ public class DownloadService extends Service {
 
     notificationTitle = intent.getExtras().getString(DownloadIntent.DOWNLOAD_ZIM_TITLE);
     LibraryNetworkEntity.Book book = (LibraryNetworkEntity.Book) intent.getSerializableExtra("Book");
+    int notificationID = book.getId().hashCode();
+
+    if ( downloadStatus.get(notificationID, -1) == PAUSE || downloadStatus.get(notificationID, -1) == PLAY ) {
+      return START_NOT_STICKY;
+    }
+
     notifications.add(notificationTitle);
     final Intent target = new Intent(this, KiwixMobileActivity.class);
     target.putExtra("library", true);
     bookDao = new BookDao(KiwixDatabase.getInstance(this));
 
     PendingIntent pendingIntent = PendingIntent.getActivity
-        (getBaseContext(), notificationCount,
+        (getBaseContext(), notificationID,
         target, PendingIntent.FLAG_CANCEL_CURRENT);
 
-    Intent pauseIntent = new Intent(this, this.getClass()).setAction(ACTION_PAUSE).putExtra(NOTIFICATION_ID, notificationCount);
-    Intent stopIntent = new Intent(this, this.getClass()).setAction(ACTION_STOP).putExtra(NOTIFICATION_ID, notificationCount);
-    PendingIntent pausePending = PendingIntent.getService(getBaseContext(), notificationCount, pauseIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-    PendingIntent stopPending = PendingIntent.getService(getBaseContext(), notificationCount, stopIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+    Intent pauseIntent = new Intent(this, this.getClass()).setAction(ACTION_PAUSE).putExtra(NOTIFICATION_ID, notificationID);
+    Intent stopIntent = new Intent(this, this.getClass()).setAction(ACTION_STOP).putExtra(NOTIFICATION_ID, notificationID);
+    PendingIntent pausePending = PendingIntent.getService(getBaseContext(), notificationID, pauseIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+    PendingIntent stopPending = PendingIntent.getService(getBaseContext(), notificationID, stopIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
     NotificationCompat.Action pause = new NotificationCompat.Action(R.drawable.ic_pause_black_24dp, getString(R.string.download_pause), pausePending);
     NotificationCompat.Action stop = new NotificationCompat.Action(R.drawable.ic_stop_black_24dp, getString(R.string.download_stop), stopPending);
 
-    notification.put(notificationCount , new NotificationCompat.Builder(this)
+    notification.put(notificationID , new NotificationCompat.Builder(this)
         .setContentTitle(getResources().getString(R.string.zim_file_downloading) + " " + notificationTitle)
         .setProgress(100, 0, false)
         .setSmallIcon(R.drawable.kiwix_notification)
@@ -156,11 +167,11 @@ public class DownloadService extends Service {
         .addAction(stop)
         .setOngoing(true));
 
-    notificationManager.notify(notificationCount, notification.get(notificationCount).build());
-    downloadStatus.put(notificationCount, PLAY);
+    notificationManager.notify(notificationID, notification.get(notificationID).build());
+    downloadStatus.put(notificationID, PLAY);
     LibraryFragment.downloadingBooks.remove(book);
     String url = intent.getExtras().getString(DownloadIntent.DOWNLOAD_URL_PARAMETER);
-    downloadBook(url, notificationCount, book);
+    downloadBook(url, notificationID, book);
     return START_REDELIVER_INTENT;
   }
 
@@ -280,6 +291,9 @@ public class DownloadService extends Service {
           updateForeground();
           }
           updateDownloadFragmentProgress(progress, notificationID);
+          if (progress == 100) {
+            stopSelf();
+          }
         }, Throwable::printStackTrace);
   }
 

@@ -20,12 +20,9 @@ import org.kiwix.kiwixmobile.utils.SplashActivity;
 
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
-
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static android.support.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
@@ -105,7 +102,7 @@ public class DownloadTest {
 
     onData(withContent("ray_charles")).inAdapterView(withId(R.id.zimfilelist)).perform(click());
 
-    openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+    openContextualActionModeOverflowMenu();
 
     onView(withText("Get Content"))
         .perform(click());
