@@ -347,14 +347,14 @@ public class DownloadService extends Service {
           return;
         }
 
-        // Create chuck file
+        // Create chunk file
         File file = new File(KIWIX_ROOT, chunk.getFileName());
         file.getParentFile().mkdirs();
         File fullFile = new File(file.getPath().substring(0, file.getPath().length() - 5));
 
         long downloaded = Long.parseLong(chunk.getRangeHeader().split("-")[0]);
         if (fullFile.exists() && fullFile.length() == chunk.getSize()) {
-          // Mark chuck status as downloaded
+          // Mark chunk status as downloaded
           chunk.isDownloaded = true;
           subscriber.onCompleted();
           return;
@@ -384,7 +384,7 @@ public class DownloadService extends Service {
         int attempts = 0;
         BufferedSource input = null;
 
-        // Keep attempting to download chuck despite network errors
+        // Keep attempting to download chunk despite network errors
         while (attempts < timeout) {
           try {
             String rangeHeader = String.format("%d-%d", downloaded, chunk.getEndByte());
@@ -480,7 +480,7 @@ public class DownloadService extends Service {
         } else {
           file.renameTo(new File(file.getPath().replace(".part", "")));
         }
-        // Mark chuck status as downloaded
+        // Mark chunk status as downloaded
         chunk.isDownloaded = true;
         subscriber.onCompleted();
       } catch (IOException e) {
