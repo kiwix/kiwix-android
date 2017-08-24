@@ -1194,6 +1194,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       pageBottomTabLayout.setVisibility(View.GONE);
     }
 
+    Log.d(TAG_KIWIX, "action" + getIntent().getAction());
     Intent intent = getIntent();
     if (intent.getAction() != null) {
 
@@ -1216,6 +1217,14 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       } else if (intent.getAction().equals(KiwixSearchWidget.MIC_CLICKED)) {
         intent.setAction("");
         goToSearch(true);
+      } else if (intent.getAction().equals(Intent.ACTION_VIEW)) {
+        final String zimFile = ZimContentProvider.getZimFile();
+        saveTabStates();
+        Intent i = new Intent(KiwixMobileActivity.this, SearchActivity.class);
+        i.putExtra("zimFile", zimFile);
+        i.putExtra("search", intent.getData().getLastPathSegment());
+        intent.setAction("");
+        startActivityForResult(i, REQUEST_FILE_SEARCH);
       }
 
     }
