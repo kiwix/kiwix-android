@@ -1,12 +1,15 @@
 package org.kiwix.kiwixmobile.tests;
 
 
+import android.Manifest;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingPolicies;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.rule.GrantPermissionRule;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.util.Log;
 
 import org.junit.After;
 import org.junit.Before;
@@ -41,6 +44,10 @@ public class DownloadTest {
   @Rule
   public ActivityTestRule<SplashActivity> mActivityTestRule = new ActivityTestRule<>(
       SplashActivity.class);
+  @Rule
+  public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+  @Rule
+  public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @BeforeClass
   public static void beforeClass() {
@@ -51,6 +58,7 @@ public class DownloadTest {
   @Before
   public void setUp() {
     Espresso.registerIdlingResources(KiwixIdlingResource.getInstance());
+
   }
 
   @Test
@@ -77,7 +85,9 @@ public class DownloadTest {
 
     try {
       onView(withId(R.id.network_permission_button)).perform(click());
+      Log.d("kiwixDownloadTest", "Clicked Network Permission Button");
     } catch (RuntimeException e) {
+      Log.d("kiwixDownloadTest", "Failed to click Network Permission Button", e);
     }
 
     ViewInteraction viewPager2 = onView(
