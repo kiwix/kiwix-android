@@ -60,7 +60,7 @@ public class KiwixTextToSpeech {
         initialized = true;
         onInitSucceedListener.onInitSucceed();
       } else {
-        Log.e(TAG_KIWIX, "Initilization of TextToSpeech Failed!");
+        Log.w(TAG_KIWIX, "Initilization of TextToSpeech Failed!");
       }
     });
   }
@@ -249,7 +249,7 @@ public class KiwixTextToSpeech {
 
           @Override
           public void onError(String s) {
-            Log.e(TAG_KIWIX, "TextToSpeech: " + s);
+            Log.w(TAG_KIWIX, "TextToSpeech Error: " + s);
           }
         });
       }
