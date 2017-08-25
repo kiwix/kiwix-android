@@ -50,6 +50,7 @@ public class KiwixWebViewClient extends WebViewClient {
       return true;
     } else if (url.startsWith(ZimContentProvider.UI_URI.toString())) {
       Log.e("KiwixWebViewClient", "UI Url " + url + " not supported.");
+      //TODO: Document this code - what's a UI_URL?
       return true;
     }
 

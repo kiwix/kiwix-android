@@ -209,7 +209,7 @@ public class ZimFileSelectFragment extends Fragment
       public void onBookFound(LibraryNetworkEntity.Book book) {
         if (!mFiles.contains(book)) {
           context.runOnUiThread(() -> {
-            Log.i("Scanner", "File Search: Found Book "+book.title);
+            Log.i("Scanner", "File Search: Found Book " + book.title);
             mFiles.add(book);
             mRescanAdapter.notifyDataSetChanged();
             checkEmpty();

@@ -1648,7 +1648,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       }
       selectTab(currentTab);
     } catch (Exception e) {
-      Log.w(TAG_KIWIX, " Kiwix sharedpreferences corrupted");
+      Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e);
       //TODO: Show to user
     }
   }
@@ -1663,7 +1663,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
         return;
       }
 
-      Log.d(TAG_KIWIX, " Kiwix started from a filemanager. Intent filePath: "
+      Log.d(TAG_KIWIX, "Kiwix started from a filemanager. Intent filePath: "
           + filePath
           + " -> open this zimfile and load menu_main page");
       openZimFile(new File(filePath), false);
@@ -1672,14 +1672,14 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       String zimFile = settings.getString(TAG_CURRENT_FILE, null);
       if (zimFile != null && new File(zimFile).exists()) {
         Log.d(TAG_KIWIX,
-            " Kiwix normal start, zimFile loaded last time -> Open last used zimFile " + zimFile);
+            "Kiwix normal start, zimFile loaded last time -> Open last used zimFile " + zimFile);
         restoreTabStates();
         // Alternative would be to restore webView state. But more effort to implement, and actually
         // fits better normal android behavior if after closing app ("back" button) state is not maintained.
       } else {
 
         if (BuildConfig.IS_CUSTOM_APP) {
-          Log.d(TAG_KIWIX, "Kiwix Custom App starting for the first time. Check Companion ZIM: " + BuildConfig.ZIM_FILE_NAME);
+          Log.d(TAG_KIWIX, "Kiwix Custom App starting for the first time. Checking Companion ZIM: " + BuildConfig.ZIM_FILE_NAME);
 
           String currentLocaleCode = Locale.getDefault().toString();
           // Custom App recommends to start off a specific language
@@ -1742,8 +1742,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
             openZimFile(new File(filePath), true);
           }
         } else {
-          Log.d(TAG_KIWIX,
-              " Kiwix normal start, no zimFile loaded last time  -> display help page");
+          Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display help page");
           showHelpPage();
         }
       }
@@ -1757,8 +1756,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     saveTabStates();
     refreshBookmarks();
 
-    Log.d(TAG_KIWIX,
-        "onPause Save currentzimfile to preferences:" + ZimContentProvider.getZimFile());
+    Log.d(TAG_KIWIX, "onPause Save currentzimfile to preferences: " + ZimContentProvider.getZimFile());
   }
 
   @Override public void webViewUrlLoading() {

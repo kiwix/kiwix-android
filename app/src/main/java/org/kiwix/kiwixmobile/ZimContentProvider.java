@@ -98,7 +98,7 @@ public class ZimContentProvider extends ContentProvider {
     
   public synchronized static String setZimFile(String fileName) {
     if (!jniKiwix.loadZIM(fileName)) {
-      Log.w(TAG_KIWIX, "Unable to open the ZIM file " + fileName);
+      Log.e(TAG_KIWIX, "Unable to open the ZIM file " + fileName);
       zimFileName = null;
     } else {
       Log.i(TAG_KIWIX, "Opening ZIM file " + fileName);
@@ -107,7 +107,7 @@ public class ZimContentProvider extends ContentProvider {
       /* Try to open the corresponding fulltext index */
       String fullText = getFulltextIndexPath(fileName);
       if (!jniKiwix.loadFulltextIndex(fullText)) {
-	    Log.w(TAG_KIWIX, "Unable to open the ZIM fulltext index " + fullText);
+        Log.e(TAG_KIWIX, "Unable to open the ZIM fulltext index " + fullText);
       }
     }
     return zimFileName;
@@ -464,13 +464,13 @@ public class ZimContentProvider extends ContentProvider {
         Log.d(TAG_KIWIX, "reading  " + articleZimUrl
             + "(mime: " + mime.value + ", size: " + size.value + ") finished.");
       } catch (IOException | NullPointerException e) {
-        Log.w(TAG_KIWIX, "Exception reading article " + articleZimUrl + " from zim file",
+        Log.e(TAG_KIWIX, "Exception reading article " + articleZimUrl + " from zim file",
             e);
       } finally {
         try {
           out.close();
         } catch (IOException e) {
-          Log.w(TAG_KIWIX,
+          Log.e(TAG_KIWIX,
               "Custom exception by closing out stream for article " + articleZimUrl,
               e);
         }
