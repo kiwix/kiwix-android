@@ -35,7 +35,7 @@ public class LibraryPresenter extends BasePresenter<LibraryViewCallback> {
           getMvpView().showBooks(library.getBooks());
         }, error -> {
           String msg = error.getLocalizedMessage();
-          Log.w("kiwixLibrary", "Error:" + (msg != null ? msg : "(null)"));
+          Log.w("kiwixLibrary", "Error loading books:" + (msg != null ? msg : "(null)"));
           getMvpView().displayNoNetworkConnection();
         });
   }

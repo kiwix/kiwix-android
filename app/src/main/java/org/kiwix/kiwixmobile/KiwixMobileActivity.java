@@ -296,7 +296,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
           .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-              Log.i(TAG_KIWIX, "Speaking selection.");
               tts.readSelection(getCurrentWebView());
               if (actionMode != null) {
                 actionMode.finish();
@@ -960,7 +959,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
           showHelpPage();
         }
       } else {
-        Log.e(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
+        Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
 
         Toast.makeText(this, getResources().getString(R.string.error_filenotfound), Toast.LENGTH_LONG)
             .show();
@@ -1578,7 +1577,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     }
 
     // Night mode status
-    Log.d(TAG_KIWIX, "nightMode value (" + nightMode + ")");
     if (nightMode) {
       getCurrentWebView().toggleNightMode();
     } else {
@@ -1650,7 +1648,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       }
       selectTab(currentTab);
     } catch (Exception e) {
-      Log.d(TAG_KIWIX, " Kiwix sharedpreferences corrupted");
+      Log.w(TAG_KIWIX, " Kiwix sharedpreferences corrupted");
+      //TODO: Show to user
     }
   }
 
@@ -1680,7 +1679,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       } else {
 
         if (BuildConfig.IS_CUSTOM_APP) {
-          Log.d(TAG_KIWIX, "Kiwix Custom App starting for the first time. Check Companion ZIM.");
+          Log.d(TAG_KIWIX, "Kiwix Custom App starting for the first time. Check Companion ZIM: " + BuildConfig.ZIM_FILE_NAME);
 
           String currentLocaleCode = Locale.getDefault().toString();
           // Custom App recommends to start off a specific language
@@ -1788,7 +1787,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   @Override public void webViewProgressChanged(int progress) {
     progressBar.setProgress(progress);
     if (progress == 100) {
-      Log.d(KiwixMobileActivity.TAG_KIWIX, "Loading article finished.");
       if (requestClearHistoryAfterLoad) {
         Log.d(KiwixMobileActivity.TAG_KIWIX,
             "Loading article finished and requestClearHistoryAfterLoad -> clearHistory");

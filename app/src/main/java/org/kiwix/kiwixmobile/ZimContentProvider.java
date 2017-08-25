@@ -98,16 +98,16 @@ public class ZimContentProvider extends ContentProvider {
     
   public synchronized static String setZimFile(String fileName) {
     if (!jniKiwix.loadZIM(fileName)) {
-      Log.e(TAG_KIWIX, "Unable to open the ZIM file " + fileName);
+      Log.w(TAG_KIWIX, "Unable to open the ZIM file " + fileName);
       zimFileName = null;
     } else {
-      Log.d(TAG_KIWIX, "Opening ZIM file " + fileName);
+      Log.i(TAG_KIWIX, "Opening ZIM file " + fileName);
       zimFileName = fileName;
 
       /* Try to open the corresponding fulltext index */
       String fullText = getFulltextIndexPath(fileName);
       if (!jniKiwix.loadFulltextIndex(fullText)) {
-	  Log.e(TAG_KIWIX, "Unable to open the ZIM fulltext index " + fullText);
+	    Log.w(TAG_KIWIX, "Unable to open the ZIM fulltext index " + fullText);
       }
     }
     return zimFileName;
@@ -289,7 +289,8 @@ public class ZimContentProvider extends ContentProvider {
       }
       return icuDir.getAbsolutePath();
     } catch (Exception e) {
-      Log.e(TAG_KIWIX, "Error copying icu data file", e);
+      Log.w(TAG_KIWIX, "Error copying icu data file", e);
+      //TODO: Consider surfacing to user
       return null;
     }
   }
@@ -368,7 +369,6 @@ public class ZimContentProvider extends ContentProvider {
       pipe = ParcelFileDescriptor.createPipe();
       new TransferThread(jniKiwix, uri, new AutoCloseOutputStream(pipe[1])).start();
     } catch (IOException e) {
-      Log.e(TAG_KIWIX, "Exception opening pipe", e);
       throw new FileNotFoundException("Could not open pipe for: "
           + uri.toString());
     }
@@ -438,7 +438,6 @@ public class ZimContentProvider extends ContentProvider {
 
     TransferThread(JNIKiwix jniKiwix, Uri articleUri, OutputStream out) throws IOException {
       this.jniKiwix = jniKiwix;
-      Log.d(TAG_KIWIX, "Retrieving: " + articleUri.toString());
 
       String filePath = getFilePath(articleUri);
 
@@ -465,13 +464,13 @@ public class ZimContentProvider extends ContentProvider {
         Log.d(TAG_KIWIX, "reading  " + articleZimUrl
             + "(mime: " + mime.value + ", size: " + size.value + ") finished.");
       } catch (IOException | NullPointerException e) {
-        Log.e(TAG_KIWIX, "Exception reading article " + articleZimUrl + " from zim file",
+        Log.w(TAG_KIWIX, "Exception reading article " + articleZimUrl + " from zim file",
             e);
       } finally {
         try {
           out.close();
         } catch (IOException e) {
-          Log.e(TAG_KIWIX,
+          Log.w(TAG_KIWIX,
               "Custom exception by closing out stream for article " + articleZimUrl,
               e);
         }

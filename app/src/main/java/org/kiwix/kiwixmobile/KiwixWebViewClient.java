@@ -49,7 +49,7 @@ public class KiwixWebViewClient extends WebViewClient {
       // Allow javascript for HTML functions and code execution (EX: night mode)
       return true;
     } else if (url.startsWith(ZimContentProvider.UI_URI.toString())) {
-      Log.e("KiwixWevViewClient", "UI Url " + url + " not supported.");
+      Log.e("KiwixWebViewClient", "UI Url " + url + " not supported.");
       return true;
     }
 
