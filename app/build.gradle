@@ -20,7 +20,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'checkstyle'
 apply plugin: 'testdroid'
-
+apply plugin: 'spoon'
 
 repositories {
   mavenCentral()
@@ -100,6 +100,7 @@ dependencies {
     exclude group: 'stax', module: 'stax'
   }
   androidTestCompile 'com.squareup.okhttp3:mockwebserver:3.6.0'
+  androidTestCompile 'com.squareup.spoon:spoon-client:1.7.1'
 
   // Butterknife
   compile 'com.jakewharton:butterknife:8.0.1'

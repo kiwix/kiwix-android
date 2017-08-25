@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.web.webdriver.Locator;
@@ -48,6 +49,7 @@ import static android.support.test.espresso.web.sugar.Web.onWebView;
 import static android.support.test.espresso.web.webdriver.DriverAtoms.findElement;
 import static android.support.test.espresso.web.webdriver.DriverAtoms.webClick;
 import static org.hamcrest.Matchers.allOf;
+import static org.kiwix.kiwixmobile.utils.MenuUtilities.withMenuIdOrText;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -85,10 +87,14 @@ public class ZimTest {
 
     mActivityTestRule.launchActivity(intent);
 
-    openContextualActionModeOverflowMenu();
+    try {
+      onView(withId(R.id.menu_home)).perform(click());
+    } catch (NoMatchingViewException e) {
+      openContextualActionModeOverflowMenu();
+      onView(withText("Home")).perform(click());
+    }
 
-    onView(withText("Home"))
-        .perform(click());
+    onView(withMenuIdOrText(R.id.menu_home, R.string.menu_home)).perform(click());
 
     onWebView().withElement(findElement(Locator.LINK_TEXT, "A Fool for You"));
 
