@@ -369,6 +369,7 @@ public class ZimContentProvider extends ContentProvider {
       pipe = ParcelFileDescriptor.createPipe();
       new TransferThread(jniKiwix, uri, new AutoCloseOutputStream(pipe[1])).start();
     } catch (IOException e) {
+      //TODO: Why do we narrow the exception? We can't be sure the file isn't found
       throw new FileNotFoundException("Could not open pipe for: "
           + uri.toString());
     }
