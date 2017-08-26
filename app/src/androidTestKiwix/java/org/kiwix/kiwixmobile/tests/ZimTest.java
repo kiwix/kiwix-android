@@ -49,7 +49,6 @@ import static android.support.test.espresso.web.sugar.Web.onWebView;
 import static android.support.test.espresso.web.webdriver.DriverAtoms.findElement;
 import static android.support.test.espresso.web.webdriver.DriverAtoms.webClick;
 import static org.hamcrest.Matchers.allOf;
-import static org.kiwix.kiwixmobile.utils.MenuUtilities.withMenuIdOrText;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -93,9 +92,7 @@ public class ZimTest {
       openContextualActionModeOverflowMenu();
       onView(withText("Home")).perform(click());
     }
-
-    onView(withMenuIdOrText(R.id.menu_home, R.string.menu_home)).perform(click());
-
+    
     onWebView().withElement(findElement(Locator.LINK_TEXT, "A Fool for You"));
 
     onView(withId(R.id.drawer_layout)).perform(DrawerActions.open(Gravity.RIGHT));
