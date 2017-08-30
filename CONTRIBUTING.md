@@ -4,7 +4,7 @@ We love improvements to our tools! There are a few key ways you can help us impr
 
 ### Submitting Feedback, Requests, and Bugs
 
-Our process for submitting feedback, feature requests, and reporting bugs usually begins by discussion on [our chat](https://github.com/kiwix/kiwix-android/issues) and, after initial clarification, through [GitHub issues](https://help.github.com/articles/about-issues/). Each project repository generally maintains its own set of issues:
+Our process for submitting feedback, feature requests, and reporting bugs usually begins by discussion on [our chat](http://wiki.kiwix.org/wiki/Communication#Chat) and, after initial clarification, through [GitHub issues](https://help.github.com/articles/about-issues/). Each project repository generally maintains its own set of issues:
 
         https://github.com/kiwix/<repository-name>/issues
 
