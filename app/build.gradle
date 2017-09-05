@@ -242,7 +242,10 @@ android {
           jsonFile = file(directory + '/info.json')
         }
         def parsedJson = new JsonSlurper().parseText(jsonFile.text)
-        def sourceFile = file(directory + "/" + parsedJson.zim_file)
+        def sourceFile = file(parsedJson.zim_file)
+        if (!sourceFile.exists()) {
+          sourceFile = file(directory + "/" + parsedJson.zim_file)
+        }
         if (parsedJson.embed_zim) {
          // Place content in each lib directory for embeded zims
           for (String archName : archs) {
