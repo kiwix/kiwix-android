@@ -16,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -83,6 +84,7 @@ public class ZimManageActivity extends AppCompatActivity {
 
     if (DownloadService.ACTION_NO_WIFI.equals(getIntent().getAction())) {
       DownloadFragment.showNoWiFiWarning(this, () -> {});
+      Log.i("kiwix", "No WiFi, showing warning");
     }
 
     // Create the adapter that will return a fragment for each of the three
@@ -114,6 +116,8 @@ public class ZimManageActivity extends AppCompatActivity {
 
       }
     });
+
+    Log.i("kiwik", "ZimManageActivity successfully bootstrapped");
   }
 
   private void updateMenu(int position) {
