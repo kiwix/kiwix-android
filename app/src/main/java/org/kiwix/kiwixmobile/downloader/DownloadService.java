@@ -118,10 +118,12 @@ public class DownloadService extends Service {
     }
     if (intent.hasExtra(NOTIFICATION_ID) && (intent.getAction().equals(ACTION_PAUSE))) {
       if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getApplicationContext())) {
+        Log.i("kiwixdownloadservice", "Not connected to WiFi, and wifiOnly is enabled");
         startActivity(new Intent(this, ZimManageActivity.class).setAction(ACTION_NO_WIFI).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         this.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
-      } else
+      } else {
         toggleDownload(intent.getIntExtra(NOTIFICATION_ID, 0));
+      }
       return START_NOT_STICKY;
     }
 
@@ -131,6 +133,8 @@ public class DownloadService extends Service {
     KIWIX_ROOT = SD_CARD + "/Kiwix/";
 
     KIWIX_ROOT = checkWritable(KIWIX_ROOT);
+
+    Log.i("kiwixdownloadservice", "Using Kiwix Root: " + KIWIX_ROOT);
 
     notificationTitle = intent.getExtras().getString(DownloadIntent.DOWNLOAD_ZIM_TITLE);
     LibraryNetworkEntity.Book book = (LibraryNetworkEntity.Book) intent.getSerializableExtra("Book");
@@ -176,6 +180,7 @@ public class DownloadService extends Service {
   }
 
   public void stopDownload(int notificationID) {
+    Log.i("kiwixdownloadservice", "Stopping ZIM Download");
     downloadStatus.put(notificationID, CANCEL);
     synchronized (pauseLock) {
       pauseLock.notify();
@@ -218,6 +223,7 @@ public class DownloadService extends Service {
   }
 
   public void pauseDownload(int notificationID) {
+    Log.i("kiwixdownloadservice", "Pausing ZIM Download");
     downloadStatus.put(notificationID, PAUSE);
     notification.get(notificationID).mActions.get(0).title =  getString(R.string.download_play);
     notification.get(notificationID).mActions.get(0).icon = R.drawable.ic_play_arrow_black_24dp;
@@ -230,6 +236,7 @@ public class DownloadService extends Service {
   }
 
   public boolean playDownload(int notificationID) {
+    Log.i("kiwixdownloadservice", "Starting ZIM Download");
     downloadStatus.put(notificationID, PLAY);
     synchronized (pauseLock) {
       pauseLock.notify();
@@ -259,7 +266,8 @@ public class DownloadService extends Service {
       updateDownloadFragmentProgress(initial, notificationID);
       notificationManager.notify(notificationID, notification.get(notificationID).build());
     }
-    kiwixService.getMetaLinks(url).retryWhen(errors -> errors.flatMap(error -> Observable.timer(5, TimeUnit.SECONDS)))
+    kiwixService.getMetaLinks(url)
+        .retryWhen(errors -> errors.flatMap(error -> Observable.timer(5, TimeUnit.SECONDS)))
         .subscribeOn(AndroidSchedulers.mainThread())
         .flatMap(metaLink -> getMetaLinkContentLength(metaLink.getRelevantUrl().getValue()))
         .flatMap(pair -> Observable.from(ChunkUtils.getChunks(pair.first, pair.second, notificationID)))
@@ -288,7 +296,7 @@ public class DownloadService extends Service {
           notificationManager.notify(notificationID, notification.get(notificationID).build());
           if (progress == 0 || progress == 100) {
             // Tells android to not kill the service
-          updateForeground();
+            updateForeground();
           }
           updateDownloadFragmentProgress(progress, notificationID);
           if (progress == 100) {
@@ -404,6 +412,8 @@ public class DownloadService extends Service {
 
             input = response.body().source();
 
+            Log.d("kiwixdownloadservice", "Got valid chunk");
+
             long lastTime = System.currentTimeMillis();
             long lastSize = 0;
 
@@ -414,8 +424,9 @@ public class DownloadService extends Service {
                 break;
               }
 
-              if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getApplicationContext()))
+              if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getApplicationContext())) {
                 pauseDownload(chunk.getNotificationID());
+              }
 
               if (downloadStatus.get(chunk.getNotificationID()) == PAUSE) {
                 synchronized (pauseLock) {
@@ -457,6 +468,7 @@ public class DownloadService extends Service {
           } catch (Exception e) {
             // Retry on network error
             attempts++;
+            Log.d("kiwixdownloadservice", "Download Attempt Failed [" + attempts + "] times", e);
             try {
               Thread.sleep(1000 * attempts); // The more unsuccessful attempts the longer the wait
             } catch (InterruptedException ex) {
@@ -469,6 +481,7 @@ public class DownloadService extends Service {
         }
         // If download is canceled clean up else remove .part from file name
         if (downloadStatus.get(chunk.getNotificationID()) == CANCEL) {
+          Log.i("kiwixdownloadservice", "Download Cancelled, deleting .part file");
           String path = file.getPath();
           if (path.substring(path.length() - 8).equals("zim.part")) {
             path = path.substring(0, path.length() - 5);
@@ -478,6 +491,7 @@ public class DownloadService extends Service {
             FileUtils.deleteZimFile(path);
           }
         } else {
+          Log.i("kiwixdownloadservice", "Download completed, renaming file (.zim.part -> .zim)");
           file.renameTo(new File(file.getPath().replace(".part", "")));
         }
         // Mark chunk status as downloaded

@@ -1414,9 +1414,9 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
             }
           }
           if (file == null) {
+            Log.i(TAG_KIWIX, "Could not find file");
             return;
           }
-
           finish();
           Intent zimFile = new Intent(KiwixMobileActivity.this, KiwixMobileActivity.class);
           zimFile.setData(uri);
@@ -1428,6 +1428,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
           String title =
               data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
           searchForTitle(title);
+        } else { //TODO: Inform the User
+          Log.w(TAG_KIWIX, "Unhandled search failure");
         }
         break;
       case REQUEST_PREFERENCES:
