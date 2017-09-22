@@ -71,6 +71,8 @@ public class ZimManageActivity extends AppCompatActivity {
 
   public SearchView searchView;
 
+  private static String KIWIX_TAG = "kiwix";
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -84,7 +86,7 @@ public class ZimManageActivity extends AppCompatActivity {
 
     if (DownloadService.ACTION_NO_WIFI.equals(getIntent().getAction())) {
       DownloadFragment.showNoWiFiWarning(this, () -> {});
-      Log.i("kiwix", "No WiFi, showing warning");
+      Log.i(KIWIX_TAG, "No WiFi, showing warning");
     }
 
     // Create the adapter that will return a fragment for each of the three
@@ -117,7 +119,7 @@ public class ZimManageActivity extends AppCompatActivity {
       }
     });
 
-    Log.i("kiwik", "ZimManageActivity successfully bootstrapped");
+    Log.i(KIWIX_TAG, "ZimManageActivity successfully bootstrapped");
   }
 
   private void updateMenu(int position) {
