@@ -89,6 +89,7 @@
   <string name="bookmark_removed">Marcador borrado</string>
   <string name="pref_newtab_background_title">Abrir una pestaña nueva en segundo plano</string>
   <string name="pref_newtab_background_summary">Al abrir una pestaña nueva se abrirá en segundo plano</string>
+  <string name="pref_extras">Extras</string>
   <string name="new_tab_snackbar">Artículo abierto en una pestaña nueva</string>
   <string name="search_widget_text">Buscar en Kiwix</string>
   <string name="speech_prompt_text">Habla para buscar %s</string>
@@ -114,6 +115,7 @@
   <string name="download_over_network">¿Seguro quieres iniciar la descarga sin WiFi?</string>
   <string name="download_no_space">Espacio insuficiente para descargar este archivo.</string>
   <string name="space_available">Espacio disponible:</string>
+  <string name="zim_simple">Simple</string>
   <string name="zim_nopic">Ninguna imagen</string>
   <string name="zim_novid">Ningún video</string>
   <string name="open_partial_zim">Puede que este archivo esté incompleto. ¿Quieres intentar abrirlo?</string>
@@ -138,6 +140,7 @@
   <string name="help_15">Sin embargo, si estás descargando en otro dispositivo, puede que necesites dividir el archivo ZIM utilizando el siguiente software:</string>
   <string name="help_16">\u2022 En Microsoft Windows: HJ-Split</string>
   <string name="help_17">\u2022 En Apple Mac OSX: Split y Concat</string>
+  <string name="help_18">\u2022 En GNU/Linux y con la consola: split --bytes=4000M mi_gran_archivo.zim</string>
   <string name="help_19">Nota: los archivos resultantes deben llamares mi_gran_archivo.zimaa, mi_gran_archivo.zimab, etc.</string>
   <string name="help_20">¡Gracias por elegir Kiwix!</string>
   <string name="help_21">Estamos felices de tenerte a bordo y apreciaríamos cualquier comentario o sugerencias en android@kiwix.org.</string>
@@ -156,6 +159,7 @@
   <string name="zim_already_downloading">El zim ya se está descargando</string>
   <string name="no_network_msg">Ninguna conexión de red</string>
   <string name="yes">Sí</string>
+  <string name="no">No</string>
   <string name="confirm_stop_download_title">¿Detener descarga?</string>
   <string name="confirm_stop_download_msg">¿Seguro quieres detener esta descarga?</string>
   <string name="download_change_storage">Selector de dispositivo de almacenamiento</string>
@@ -167,7 +171,11 @@
   <string name="wifi_only_msg">Si eliges "Sí", no se te advertirá en el futuro. Sin embargo, siempre puedes cambiar esto en Configuración</string>
   <string name="pref_wifi_only">Descargar contenido sólo mediante WiFi</string>
   <string name="time_day">día</string>
+  <string name="time_hour">h</string>
+  <string name="time_minute">min</string>
+  <string name="time_second">s</string>
   <string name="time_left">faltan</string>
   <string name="pref_autonightmode_summary">Cambiar automáticamente entre el modo diurno y el nocturno</string>
   <string name="pref_autonightmode">Modo nocturno automatizado</string>
+  <string name="language_count">(%1$d)</string>
 </resources>
