@@ -165,7 +165,7 @@
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">¿Permitir descargar contenido mediante la red móvil?</string>
   <string name="wifi_only_msg">Si eliges "Sí", no se te advertirá en el futuro. Sin embargo, siempre puedes cambiar esto en Configuración</string>
-  <string name="pref_wifi_only">Descargar contenido sólo mediante WiFi</string>
+  <string name="pref_wifi_only">Descargar contenido solo mediante wifi</string>
   <string name="time_day">día</string>
   <string name="time_left">faltan</string>
   <string name="pref_autonightmode_summary">Cambiar automáticamente entre el modo diurno y el nocturno</string>

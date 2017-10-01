@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="menu_help">لارښود</string>
+  <string name="menu_help">مرسته</string>
   <string name="menu_home">کور</string>
   <string name="menu_forward">پر مخ</string>
   <string name="menu_back">پر شا</string>
@@ -55,6 +55,8 @@
   <string name="menu_bookmarks_list">کتاب نخښې</string>
   <string name="no_section_info">هېڅ نيوليک سرليکونه نشته</string>
   <string name="request_storage">ZIM دوتنو ته د لاسرسي لپاره موږ بايد ستاسې زېرمتون ته لاسرسی ومومو</string>
+  <string name="undo">پريښودل</string>
+  <string name="tab_closed">ټب تړل شوی</string>
   <string name="bookmarks_restored">کتاب نښه بياپرځايول</string>
   <string name="bookmark_added">کتاب نښه ورگډه شوه</string>
   <string name="rate_dialog_title">لطفاً زموږ ارزونه وکړئ</string>
@@ -65,4 +67,28 @@
   <string name="rate_dialog_neutral">وروسته</string>
   <string name="pref_newtab_background_title">نوې کړکۍ په شاځمکه کې پرانيستل</string>
   <string name="pref_newtab_background_summary">کله چې يوه نوې کړکۍ پرانيزئ هغه به په شاځمکه کې پرانيستل شي</string>
+  <string name="search_widget_text">کيويس پلټل</string>
+  <string name="speech_prompt_text">خبري د لټون لپاره %s</string>
+  <string name="speech_not_supported">وبخښي! ستاسو وسیله د بیان انډول ملاتړ نه کوي</string>
+  <string name="zim_manager">د منځپانګې مدیریت</string>
+  <string name="zim_file_downloading">ډاونلوډيږي</string>
+  <string name="zim_file_downloaded">ډاونلوډ سو</string>
+  <string name="space_available">ځای شتون لري:</string>
+  <string name="zim_simple">اسان</string>
+  <string name="zim_nopic">هيڅ دوتنه نشته</string>
+  <string name="zim_novid">هيڅ ويډيو نسته</string>
+  <string name="wait_for_load">منځپانګې تر وسه هم حرکت کوي</string>
+  <string name="tts_pause">تفریحي درونه</string>
+  <string name="tts_resume">انتظارول</string>
+  <string name="tts_stop">درول</string>
+  <string name="zim_already_downloading">زيم له مخې نه را ډاونلوډيږي</string>
+  <string name="yes">هو</string>
+  <string name="tts_not_enabled">د زيم دوتنې لپاره متن ته د وینا متن ندی فعال شوی</string>
+  <string name="wifi_only_title">د ګرځنده شبکې له لارې د منځپانګې ډاونلوډ ته اجازه ورکړئ؟</string>
+  <string name="wifi_only_msg">که تاسو "هو" انتخاب کړئ نو تاسو به په راتلونکی کې خبرداری ورنکړئ. په هرصورت، تاسو کولی شئ دا په ترتیباتو کې بدل کړئ</string>
+  <string name="time_day">ورځ</string>
+  <string name="time_hour">ح</string>
+  <string name="time_minute">مين</string>
+  <string name="time_second">س</string>
+  <string name="time_left">کيڼ</string>
 </resources>
