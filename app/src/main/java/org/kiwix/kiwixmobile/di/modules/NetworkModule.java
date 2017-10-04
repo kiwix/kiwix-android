@@ -12,6 +12,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 @Module public class NetworkModule {
 
@@ -19,7 +20,11 @@ import okhttp3.OkHttpClient;
   private final static String useragent = "kiwix-android-version:" + BuildConfig.VERSION_CODE;
 
   @Provides @Singleton OkHttpClient provideOkHttpClient() {
+    HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+    logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+
     return new OkHttpClient().newBuilder().followRedirects(true).followSslRedirects(true)
+        .addNetworkInterceptor(logging)
         .addNetworkInterceptor(new UserAgentInterceptor(useragent)).build();
   }
 
