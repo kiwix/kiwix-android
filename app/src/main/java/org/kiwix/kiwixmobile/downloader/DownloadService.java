@@ -273,7 +273,7 @@ public class DownloadService extends Service {
         .flatMap(metaLink -> getMetaLinkContentLength(metaLink.getRelevantUrl().getValue()))
         .flatMap(pair -> Observable.from(ChunkUtils.getChunks(pair.first, pair.second, notificationID)))
         .concatMap(this::downloadChunk)
-        .distinctUntilChanged()
+        .distinctUntilChanged().doOnCompleted(() -> {updateDownloadFragmentComplete(notificationID);})
         .subscribe(progress -> {
           if (progress == 100) {
             notification.get(notificationID).setOngoing(false);
@@ -313,6 +313,19 @@ public class DownloadService extends Service {
         public void run() {
           if (DownloadFragment.mDownloads.get(notificationID) != null) {
             DownloadFragment.downloadAdapter.updateProgress(progress, notificationID);
+          }
+        }
+      });
+    }
+  }
+
+  private void updateDownloadFragmentComplete(int notificationID) {
+    if (DownloadFragment.mDownloads != null && DownloadFragment.mDownloads.get(notificationID) != null) {
+      handler.post(new Runnable() {
+        @Override
+        public void run() {
+          if (DownloadFragment.mDownloads.get(notificationID) != null) {
+            DownloadFragment.downloadAdapter.complete(notificationID);
           }
         }
       });
