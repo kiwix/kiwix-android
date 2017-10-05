@@ -454,7 +454,7 @@ public class ZimContentProvider extends ContentProvider {
         JNIKiwixInt size = new JNIKiwixInt();
         byte[] data = jniKiwix.getContent(articleZimUrl, title, mime, size);
         if (mime.value != null && mime.value.equals("text/css") && KiwixMobileActivity.nightMode) {
-          out.write(("img { \n" +
+          out.write(("img, video { \n" +
               " -webkit-filter: invert(1); \n" +
               " filter: invert(1); \n" +
               "} \n").getBytes(Charset.forName("UTF-8")));

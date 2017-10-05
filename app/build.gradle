@@ -36,7 +36,7 @@ dependencies {
 
   // Get kiwixlib online if it is not populated locally
   if (file("../kiwixlib/src/main").list().length == 1) {
-    compile 'org.kiwix.kiwixlib:kiwixlib:0.0.6'
+    compile 'org.kiwix.kiwixlib:kiwixlib:0.1.0'
   } else {
     compile project(':kiwixlib')
     archs = file("../kiwixlib/src/main/jniLibs").list()
@@ -61,6 +61,7 @@ dependencies {
   }
 
   androidTestCompile 'com.android.support.test.espresso:espresso-web:3.0.0'
+  androidTestCompile 'com.android.support.test.espresso:espresso-intents:3.0.0'
   androidTestCompile 'com.android.support.test.espresso:espresso-idling-resource:3.0.0'
   androidTestCompile 'com.android.support.test.espresso:espresso-contrib:3.0.0', {
     exclude group: 'com.android.support', module: 'support-v4'
@@ -91,6 +92,7 @@ dependencies {
 
   // Square
   compile 'com.squareup.okhttp3:okhttp:3.6.0'
+  compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
   compile 'com.squareup.retrofit2:retrofit:2.1.0'
   compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
   compile('com.squareup.retrofit2:converter-simplexml:2.1.0') {
