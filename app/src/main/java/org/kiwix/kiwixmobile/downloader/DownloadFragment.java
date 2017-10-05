@@ -150,41 +150,44 @@ public class DownloadFragment extends Fragment {
       return arg0;
     }
 
+    public void complete(int notificationID) {
+      int position = Arrays.asList(mKeys).indexOf(notificationID);
+      ViewGroup viewGroup = (ViewGroup) listView.getChildAt(position - listView.getFirstVisiblePosition());
+      if (viewGroup == null) {
+          mDownloads.remove(mKeys[position]);
+          mDownloadFiles.remove(mKeys[position]);
+          downloadAdapter.notifyDataSetChanged();
+          updateNoDownloads();
+      }
+      ImageView pause = (ImageView) viewGroup.findViewById(R.id.pause);
+      pause.setEnabled(false);
+      String fileName = FileUtils.getFileName(mDownloadFiles.get(mKeys[position]));
+      {
+        Snackbar completeSnack = Snackbar.make(mainLayout, getResources().getString(R.string.download_complete_snackbar), Snackbar.LENGTH_LONG);
+        completeSnack.setAction(getResources().getString(R.string.open), new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            ZimFileSelectFragment.finishResult(fileName);
+          }
+        }).setActionTextColor(getResources().getColor(R.color.white)).show();
+      }
+      ZimFileSelectFragment zimFileSelectFragment = (ZimFileSelectFragment) zimManageActivity.mSectionsPagerAdapter.getItem(0);
+      zimFileSelectFragment.addBook(fileName);
+      mDownloads.remove(mKeys[position]);
+      mDownloadFiles.remove(mKeys[position]);
+      downloadAdapter.notifyDataSetChanged();
+      updateNoDownloads();
+    }
+
     public void updateProgress(int progress, int notificationID) {
       if (isAdded()) {
         int position = Arrays.asList(mKeys).indexOf(notificationID);
         ViewGroup viewGroup = (ViewGroup) listView.getChildAt(position - listView.getFirstVisiblePosition());
         if (viewGroup == null) {
-          if (progress == 100) {
-            mDownloads.remove(mKeys[position]);
-            mDownloadFiles.remove(mKeys[position]);
-            downloadAdapter.notifyDataSetChanged();
-            updateNoDownloads();
-          }
           return;
         }
         ProgressBar downloadProgress = (ProgressBar) viewGroup.findViewById(R.id.downloadProgress);
         downloadProgress.setProgress(progress);
-        if (progress == 100) {
-          ImageView pause = (ImageView) viewGroup.findViewById(R.id.pause);
-          pause.setEnabled(false);
-          String fileName = FileUtils.getFileName(mDownloadFiles.get(mKeys[position]));
-          {
-            Snackbar completeSnack = Snackbar.make(mainLayout, getResources().getString(R.string.download_complete_snackbar), Snackbar.LENGTH_LONG);
-            completeSnack.setAction(getResources().getString(R.string.open), new View.OnClickListener() {
-              @Override
-              public void onClick(View v) {
-                ZimFileSelectFragment.finishResult(fileName);
-              }
-            }).setActionTextColor(getResources().getColor(R.color.white)).show();
-          }
-          ZimFileSelectFragment zimFileSelectFragment = (ZimFileSelectFragment) zimManageActivity.mSectionsPagerAdapter.getItem(0);
-          zimFileSelectFragment.addBook(fileName);
-          mDownloads.remove(mKeys[position]);
-          mDownloadFiles.remove(mKeys[position]);
-          downloadAdapter.notifyDataSetChanged();
-          updateNoDownloads();
-        }
         TextView timeRemaining = (TextView) viewGroup.findViewById(R.id.time_remaining);
         int secLeft = LibraryFragment.mService.timeRemaining.get(mKeys[position], -1);
         if (secLeft != -1)
