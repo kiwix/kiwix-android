@@ -1,3 +1,11 @@
+2.3
+FIX: Download resilience and experience
+FIX: SD card detection in a few edge cases
+NEW: Download time estimation
+NEW: Hide toolbar when scrolling option
+NEW: Auto day/night mode
+NEW: Download content only on WiFi
+
 2.2
 FIX: Text To Speech issues on earlier Android versions
 FIX: SD card detection in a few edge cases
