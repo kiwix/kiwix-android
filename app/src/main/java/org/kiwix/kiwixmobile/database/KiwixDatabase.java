@@ -42,7 +42,7 @@ import java.io.InputStreamReader;
 
 public class KiwixDatabase extends SquidDatabase {
 
-  private static final int VERSION = 13;
+  private static final int VERSION = 14;
   private Context context;
   private static KiwixDatabase instance = null;
 
@@ -126,6 +126,10 @@ public class KiwixDatabase extends SquidDatabase {
     if (newVersion >= 13) {
       tryAddColumn(BookDatabaseEntity.NAME);
       tryAddColumn(Bookmarks.ZIM_NAME);
+    }
+    if (newVersion >= 14 && oldVersion < 14) {
+      tryDropTable(BookDatabaseEntity.TABLE);
+      tryCreateTable(BookDatabaseEntity.TABLE);
     }
     return true;
   }
