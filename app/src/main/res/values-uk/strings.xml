@@ -117,6 +117,7 @@
   <string name="space_available">Доступний простір:</string>
   <string name="zim_simple">Простий</string>
   <string name="zim_nopic">Без зображень</string>
+  <string name="zim_novid">Немає відео</string>
   <string name="open_partial_zim">Цей файл може бути неповним. Хочете спробувати відкрити його?</string>
   <string name="no_network_connection">Відсутнє з\'єднання з мережею</string>
   <string name="get_library_over_network">Скористатись мережею, щоб завантажити список контенту (приблизно 6MБ)</string>
@@ -173,4 +174,6 @@
   <string name="time_minute">хв</string>
   <string name="time_second">с</string>
   <string name="time_left">залишилось</string>
+  <string name="pref_autonightmode_summary">Автоматично перемикатися між денним та нічним режимами.</string>
+  <string name="pref_autonightmode">Автоматичний нічний режим</string>
 </resources>

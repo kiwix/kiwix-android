@@ -161,7 +161,7 @@
   <string name="wifi_only_msg">Si vous choisissez « Oui », vous ne serez plus alerté. Cependant, vous pouvez toujours modifier cela dans les paramètres</string>
   <string name="pref_wifi_only">Télécharger le contenu uniquement via WiFi</string>
   <string name="time_day">jour</string>
-  <string name="time_left">gauche</string>
+  <string name="time_left">à attendre</string>
   <string name="pref_autonightmode_summary">Basculer automatiquement entre les modes jour et nuit.</string>
   <string name="pref_autonightmode">Mode nuit automatisé</string>
 </resources>
