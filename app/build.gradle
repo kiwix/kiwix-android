@@ -7,17 +7,13 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.3.3'
-    classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-    classpath 'me.tatarka:gradle-retrolambda:3.2.5'
+    classpath 'com.android.tools.build:gradle:3.0.1'
     classpath 'com.testdroid:gradle:1.5.0'
     classpath 'org.apache.httpcomponents:httpclient-android:4.3.3'
   }
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'checkstyle'
 apply plugin: 'testdroid'
 apply plugin: 'spoon'
@@ -28,6 +24,7 @@ repositories {
   maven {
     url 'https://maven.google.com'
   }
+  google()
 }
 
 String[] archs = ['arm64-v8a', 'armeabi', 'mips', 'mips64', 'x86', 'x86_64']
@@ -36,88 +33,88 @@ dependencies {
 
   // Get kiwixlib online if it is not populated locally
   if (file("../kiwixlib/src/main").list().length == 1) {
-    compile 'org.kiwix.kiwixlib:kiwixlib:0.1.0'
+    implementation 'org.kiwix.kiwixlib:kiwixlib:0.1.0'
   } else {
-    compile project(':kiwixlib')
+    implementation project(':kiwixlib')
     archs = file("../kiwixlib/src/main/jniLibs").list()
   }
 
   // Storage Devices
-  compile 'eu.mhutti1.utils.storage:android-storage-devices:0.6.2'
+  implementation 'eu.mhutti1.utils.storage:android-storage-devices:0.6.2'
 
   // Android Support
-  compile "com.android.support:appcompat-v7:$supportLibraryVersion"
-  compile "com.android.support:support-v13:$supportLibraryVersion"
-  compile "com.android.support:support-v4:$supportLibraryVersion"
-  compile "com.android.support:design:$supportLibraryVersion"
-  compile "com.android.support:cardview-v7:$supportLibraryVersion"
-  compile 'com.android.support:multidex:1.0.1'
+  implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
+  implementation "com.android.support:support-v13:$supportLibraryVersion"
+  implementation "com.android.support:support-v4:$supportLibraryVersion"
+  implementation "com.android.support:design:$supportLibraryVersion"
+  implementation "com.android.support:cardview-v7:$supportLibraryVersion"
+  implementation 'com.android.support:multidex:1.0.2'
 
 
-  androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+  androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
 
-  androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.0', {
+  androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.0', {
     exclude group: 'com.android.support', module: 'support-annotations'
   }
 
-  androidTestCompile 'com.android.support.test.espresso:espresso-web:3.0.0'
-  androidTestCompile 'com.android.support.test.espresso:espresso-intents:3.0.0'
-  androidTestCompile 'com.android.support.test.espresso:espresso-idling-resource:3.0.0'
-  androidTestCompile 'com.android.support.test.espresso:espresso-contrib:3.0.0', {
+  androidTestImplementation 'com.android.support.test.espresso:espresso-web:3.0.1'
+  androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.1'
+  androidTestImplementation 'com.android.support.test.espresso:espresso-idling-resource:3.0.1'
+  androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.0', {
     exclude group: 'com.android.support', module: 'support-v4'
     exclude group: 'com.android.support', module: 'appcompat-v7'
     exclude group: 'com.android.support', module: 'design'
     exclude group: 'com.android.support', module: 'recyclerview-v7'
   }
 
-  androidTestCompile "com.android.support:support-annotations:$supportLibraryVersion"
-  androidTestCompile 'com.android.support.test:runner:1.0.0'
-  androidTestCompile 'com.android.support.test:rules:1.0.0'
+  androidTestImplementation "com.android.support:support-annotations:$supportLibraryVersion"
+  androidTestImplementation 'com.android.support.test:runner:1.0.1'
+  androidTestImplementation 'com.android.support.test:rules:1.0.1'
 
   // Guava
-  compile group: 'com.google.guava', name: 'guava', version: '20.0'
+  implementation group: 'com.google.guava', name: 'guava', version: '21.0'
 
   // Dagger
-  compile 'com.google.dagger:dagger:2.0.2'
-  apt "com.google.dagger:dagger-compiler:2.0.2"
-  androidTestApt "com.google.dagger:dagger-compiler:2.0.2"
+  implementation 'com.google.dagger:dagger:2.0.2'
+  annotationProcessor "com.google.dagger:dagger-compiler:2.0.2"
+  androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:2.0.2"
 
   // SquiDB
-  compile 'com.yahoo.squidb:squidb:2.0.0'
-  compile 'com.yahoo.squidb:squidb-annotations:2.0.0'
-  apt 'com.yahoo.squidb:squidb-processor:2.0.0'
+  implementation 'com.yahoo.squidb:squidb:2.0.0'
+  implementation 'com.yahoo.squidb:squidb-annotations:2.0.0'
+  annotationProcessor 'com.yahoo.squidb:squidb-processor:2.0.0'
 
   // Apache
-  compile 'commons-io:commons-io:2.5'
+  implementation 'commons-io:commons-io:2.5'
 
   // Square
-  compile 'com.squareup.okhttp3:okhttp:3.6.0'
-  compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
-  compile 'com.squareup.retrofit2:retrofit:2.1.0'
-  compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-  compile('com.squareup.retrofit2:converter-simplexml:2.1.0') {
+  implementation 'com.squareup.okhttp3:okhttp:3.7.0'
+  implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+  implementation 'com.squareup.retrofit2:retrofit:2.1.0'
+  implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+  implementation('com.squareup.retrofit2:converter-simplexml:2.1.0') {
     exclude group: 'xpp3', module: 'xpp3'
     exclude group: 'stax', module: 'stax-api'
     exclude group: 'stax', module: 'stax'
   }
-  androidTestCompile 'com.squareup.okhttp3:mockwebserver:3.6.0'
-  androidTestCompile 'com.squareup.spoon:spoon-client:1.7.1'
+  androidTestImplementation 'com.squareup.okhttp3:mockwebserver:3.6.0'
+  androidTestImplementation 'com.squareup.spoon:spoon-client:1.7.1'
 
   // Butterknife
-  compile 'com.jakewharton:butterknife:8.0.1'
-  apt 'com.jakewharton:butterknife-compiler:8.0.1'
+  implementation 'com.jakewharton:butterknife:8.0.1'
+  annotationProcessor 'com.jakewharton:butterknife-compiler:8.0.1'
 
   // RxJava
-  compile 'io.reactivex:rxandroid:1.1.0'
-  compile 'io.reactivex:rxjava:1.1.3'
+  implementation 'io.reactivex:rxandroid:1.1.0'
+  implementation 'io.reactivex:rxjava:1.1.5'
 
   // JUnit
-  testCompile 'junit:junit:4.12'
-  androidTestCompile 'junit:junit:4.12'
+  testImplementation 'junit:junit:4.12'
+  androidTestImplementation 'junit:junit:4.12'
 
   // Mockito
-  testCompile "org.mockito:mockito-core:2.7.22"
-  androidTestCompile "org.mockito:mockito-android:2.7.22"
+  testImplementation "org.mockito:mockito-core:2.7.22"
+  androidTestImplementation "org.mockito:mockito-android:2.7.22"
 }
 
 // Set custom app import directory
@@ -140,8 +137,7 @@ if(custom.listFiles()) {
 }
 
 android {
-  compileSdkVersion 25
-  buildToolsVersion '25.0.2'
+  compileSdkVersion 26
 
   defaultConfig {
     minSdkVersion 14
@@ -167,6 +163,8 @@ android {
     warning 'InvalidPackage'
     warning 'StringFormatInvalid'
   }
+
+  flavorDimensions "default"
 
   buildTypes {
 
