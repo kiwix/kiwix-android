@@ -78,7 +78,11 @@ public class KiwixWebViewClient extends WebViewClient {
         LayoutInflater inflater = LayoutInflater.from(view.getContext());
         help = (LinearLayout) inflater.inflate(R.layout.help, null);
         help.findViewById(R.id.get_content_card)
-            .setOnClickListener(card -> callback.manageZimFiles(1));
+            .setOnClickListener(card -> {
+                  help.findViewById(R.id.get_content_card).setEnabled(false);
+                  callback.manageZimFiles(1);
+            }
+            );
         view.addView(help);
         TextView contact = (TextView) help.findViewById(R.id.welcome21);
         contact.setText(StyleUtils.highlightUrl(contact.getText().toString(),

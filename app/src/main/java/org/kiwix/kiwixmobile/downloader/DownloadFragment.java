@@ -151,6 +151,9 @@ public class DownloadFragment extends Fragment {
     }
 
     public void complete(int notificationID) {
+      if (!isAdded()) {
+        return;
+      }
       int position = Arrays.asList(mKeys).indexOf(notificationID);
       ViewGroup viewGroup = (ViewGroup) listView.getChildAt(position - listView.getFirstVisiblePosition());
       if (viewGroup == null) {
@@ -164,12 +167,7 @@ public class DownloadFragment extends Fragment {
       String fileName = FileUtils.getFileName(mDownloadFiles.get(mKeys[position]));
       {
         Snackbar completeSnack = Snackbar.make(mainLayout, getResources().getString(R.string.download_complete_snackbar), Snackbar.LENGTH_LONG);
-        completeSnack.setAction(getResources().getString(R.string.open), new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-            ZimFileSelectFragment.finishResult(fileName);
-          }
-        }).setActionTextColor(getResources().getColor(R.color.white)).show();
+        completeSnack.setAction(getResources().getString(R.string.open), v -> ZimFileSelectFragment.finishResult(fileName)).setActionTextColor(getResources().getColor(R.color.white)).show();
       }
       ZimFileSelectFragment zimFileSelectFragment = (ZimFileSelectFragment) zimManageActivity.mSectionsPagerAdapter.getItem(0);
       zimFileSelectFragment.addBook(fileName);
