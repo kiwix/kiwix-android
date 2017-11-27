@@ -54,6 +54,8 @@ import static org.hamcrest.Matchers.allOf;
 @RunWith(AndroidJUnit4.class)
 public class ZimTest {
 
+  /*
+  Temporary Disabled
   @Inject
   Context context;
 
@@ -167,4 +169,5 @@ public class ZimTest {
       }
     };
   }
+  */
 }

@@ -30,7 +30,7 @@ public class TestJNIModule{
   public JNIKiwix providesJNIKiwix() {
     JNIKiwix jniKiwix = Mockito.mock(JNIKiwix.class);
 
-    doReturn("A/index.htm").when(jniKiwix).getMainPage();
+    /*doReturn("A/index.htm").when(jniKiwix).getMainPage();
     doReturn(true).when(jniKiwix).loadZIM(any());
     doReturn(true).when(jniKiwix).loadFulltextIndex(any());
     doReturn("mockid").when(jniKiwix).getId();
@@ -53,7 +53,7 @@ public class TestJNIModule{
       doReturn(fool).when(jniKiwix).getContent(eq("A/A_Fool_for_You.html"),any(),any(),any());
     } catch (IOException e) {
       e.printStackTrace();
-    }
+    }*/
 
     return jniKiwix;
   }
