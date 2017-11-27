@@ -2,6 +2,7 @@ package org.kiwix.kiwixmobile.views;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.ResultReceiver;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import org.kiwix.kiwixlib.JNIKiwix;
+import org.kiwix.kiwixlib.JNIKiwixSearcher;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.ZimContentProvider;
 
@@ -76,20 +78,23 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
 
       if (constraint != null) {
         try {
-	    
+
 	  /* Get search request */
 	  final String query = constraint.toString();
-	  
-	  /* Fulltex search */
+
+          /* Fulltex search */
           SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
           if (sharedPreferences.getBoolean(KiwixMobileActivity.PREF_FULL_TEXT_SEARCH, false)) {
             ZimContentProvider.jniSearcher.search(query, 200);
-            while (ZimContentProvider.jniSearcher.hasMoreResult()) {
-              String result = ZimContentProvider.jniSearcher.getNextResult().getTitle();
-		          if (!result.trim().isEmpty())
-		            data.add(result);
+            JNIKiwixSearcher.Result result = ZimContentProvider.jniSearcher.getNextResult();
+            while (result != null) {
+              if (!result.getTitle().trim().isEmpty()) {
+                data.add(result.getTitle());
               }
+              result = ZimContentProvider.jniSearcher.getNextResult();
+
             }
+          }
 
 	  /* Suggestion search if no fulltext results */
 	  if (data.size() == 0) {
@@ -105,7 +110,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
 	      }
 	    }
 	  }
-	  
+
         } catch (Exception e) {
           e.printStackTrace();
         }

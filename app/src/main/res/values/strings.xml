@@ -180,4 +180,6 @@
   <string name="pref_autonightmode_summary">Automatically switch between day and night mode.</string>
   <string name="pref_autonightmode">Automated night mode</string>
   <string name="language_count">(%1$d)</string>
+  <string name="pref_multi_search_title">MultiZim Search</string>
+  <string name="pref_multi_search_summary">Allow app to search the across ZIM files (Warning Very Experimental).</string>
 </resources>

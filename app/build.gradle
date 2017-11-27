@@ -33,7 +33,7 @@ dependencies {
 
   // Get kiwixlib online if it is not populated locally
   if (file("../kiwixlib/src/main").list().length == 1) {
-    compile 'org.kiwix.kiwixlib:kiwixlib:0.0.22'
+    compile 'org.kiwix.kiwixlib:kiwixlib:1.0.2'
   } else {
     compile project(':kiwixlib')
     archs = file("../kiwixlib/src/main/jniLibs").list()

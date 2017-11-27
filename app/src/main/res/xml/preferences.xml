@@ -49,8 +49,8 @@
     <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
       android:defaultValue="false"
       android:key="pref_full_text_search"
-      android:title="@string/pref_full_text_search_title"
-      android:summary="@string/pref_full_text_search_summary"/>
+      android:title="@string/pref_multi_search_title"
+      android:summary="@string/pref_multi_search_summary"/>
 
       <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
           android:defaultValue="true"
