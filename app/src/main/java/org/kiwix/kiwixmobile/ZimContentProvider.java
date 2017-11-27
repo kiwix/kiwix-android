@@ -112,13 +112,8 @@ public class ZimContentProvider extends ContentProvider {
     } else {
       Log.i(TAG_KIWIX, "Opening ZIM file " + fileName);
       zimFileName = fileName;
-
-      /* Try to open the corresponding fulltext index */
-      String fullText = getFulltextIndexPath(fileName);
-      if (!jniKiwix.loadFulltextIndex(fullText)) {
-        Log.e(TAG_KIWIX, "Unable to open the ZIM fulltext index " + fullText);
-      }
     }
+    currentJNIReader = reader;
     return zimFileName;
   }
 
