@@ -296,7 +296,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
           .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-              Log.i(TAG_KIWIX, "Speaking selection.");
               tts.readSelection(getCurrentWebView());
               if (actionMode != null) {
                 actionMode.finish();
@@ -960,7 +959,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
           showHelpPage();
         }
       } else {
-        Log.e(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
+        Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
 
         Toast.makeText(this, getResources().getString(R.string.error_filenotfound), Toast.LENGTH_LONG)
             .show();
@@ -1188,12 +1187,19 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       }
     }
 
+    if (!mWebViews.isEmpty() && mWebViews.get(currentWebViewIndex).getUrl() != null &&
+        mWebViews.get(currentWebViewIndex).getUrl().equals("file:///android_asset/help.html") &&
+        mWebViews.get(currentWebViewIndex).findViewById(R.id.get_content_card) != null) {
+      mWebViews.get(currentWebViewIndex).findViewById(R.id.get_content_card).setEnabled(true);
+    }
+
     if (settings.getBoolean(KiwixSettingsActivity.PREF_BOTTOM_TOOLBAR, false)) {
       pageBottomTabLayout.setVisibility(View.VISIBLE);
     } else {
       pageBottomTabLayout.setVisibility(View.GONE);
     }
 
+    Log.d(TAG_KIWIX, "action" + getIntent().getAction());
     Intent intent = getIntent();
     if (intent.getAction() != null) {
 
@@ -1216,6 +1222,14 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       } else if (intent.getAction().equals(KiwixSearchWidget.MIC_CLICKED)) {
         intent.setAction("");
         goToSearch(true);
+      } else if (intent.getAction().equals(Intent.ACTION_VIEW)) {
+        final String zimFile = ZimContentProvider.getZimFile();
+        saveTabStates();
+        Intent i = new Intent(KiwixMobileActivity.this, SearchActivity.class);
+        i.putExtra("zimFile", zimFile);
+        i.putExtra("search", intent.getData().getLastPathSegment());
+        intent.setAction("");
+        startActivityForResult(i, REQUEST_FILE_SEARCH);
       }
 
     }
@@ -1406,9 +1420,9 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
             }
           }
           if (file == null) {
+            Log.i(TAG_KIWIX, "Could not find file");
             return;
           }
-
           finish();
           Intent zimFile = new Intent(KiwixMobileActivity.this, KiwixMobileActivity.class);
           zimFile.setData(uri);
@@ -1420,6 +1434,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
           String title =
               data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
           searchForTitle(title);
+        } else { //TODO: Inform the User
+          Log.w(TAG_KIWIX, "Unhandled search failure");
         }
         break;
       case REQUEST_PREFERENCES:
@@ -1569,7 +1585,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     }
 
     // Night mode status
-    Log.d(TAG_KIWIX, "nightMode value (" + nightMode + ")");
     if (nightMode) {
       getCurrentWebView().toggleNightMode();
     } else {
@@ -1641,7 +1656,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       }
       selectTab(currentTab);
     } catch (Exception e) {
-      Log.d(TAG_KIWIX, " Kiwix sharedpreferences corrupted");
+      Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e);
+      //TODO: Show to user
     }
   }
 
@@ -1655,7 +1671,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
         return;
       }
 
-      Log.d(TAG_KIWIX, " Kiwix started from a filemanager. Intent filePath: "
+      Log.d(TAG_KIWIX, "Kiwix started from a filemanager. Intent filePath: "
           + filePath
           + " -> open this zimfile and load menu_main page");
       openZimFile(new File(filePath), false);
@@ -1664,14 +1680,14 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       String zimFile = settings.getString(TAG_CURRENT_FILE, null);
       if (zimFile != null && new File(zimFile).exists()) {
         Log.d(TAG_KIWIX,
-            " Kiwix normal start, zimFile loaded last time -> Open last used zimFile " + zimFile);
+            "Kiwix normal start, zimFile loaded last time -> Open last used zimFile " + zimFile);
         restoreTabStates();
         // Alternative would be to restore webView state. But more effort to implement, and actually
         // fits better normal android behavior if after closing app ("back" button) state is not maintained.
       } else {
 
         if (BuildConfig.IS_CUSTOM_APP) {
-          Log.d(TAG_KIWIX, "Kiwix Custom App starting for the first time. Check Companion ZIM.");
+          Log.d(TAG_KIWIX, "Kiwix Custom App starting for the first time. Checking Companion ZIM: " + BuildConfig.ZIM_FILE_NAME);
 
           String currentLocaleCode = Locale.getDefault().toString();
           // Custom App recommends to start off a specific language
@@ -1734,8 +1750,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
             openZimFile(new File(filePath), true);
           }
         } else {
-          Log.d(TAG_KIWIX,
-              " Kiwix normal start, no zimFile loaded last time  -> display help page");
+          Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display help page");
           showHelpPage();
         }
       }
@@ -1749,8 +1764,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     saveTabStates();
     refreshBookmarks();
 
-    Log.d(TAG_KIWIX,
-        "onPause Save currentzimfile to preferences:" + ZimContentProvider.getZimFile());
+    Log.d(TAG_KIWIX, "onPause Save currentzimfile to preferences: " + ZimContentProvider.getZimFile());
   }
 
   @Override public void webViewUrlLoading() {
@@ -1779,7 +1793,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   @Override public void webViewProgressChanged(int progress) {
     progressBar.setProgress(progress);
     if (progress == 100) {
-      Log.d(KiwixMobileActivity.TAG_KIWIX, "Loading article finished.");
       if (requestClearHistoryAfterLoad) {
         Log.d(KiwixMobileActivity.TAG_KIWIX,
             "Loading article finished and requestClearHistoryAfterLoad -> clearHistory");

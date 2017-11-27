@@ -195,7 +195,7 @@ public class LanguageUtils {
       field.setBoolean(layoutInflater, false);
       layoutInflater.setFactory(new LayoutInflaterFactory(mContext, layoutInflater));
     } catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
-      Log.e(TAG_KIWIX, "could not access private field of the LayoutInflater");
+      Log.w(TAG_KIWIX, "Font Change Failed: Could not access private field of the LayoutInflater", e);
     }
   }
 
@@ -264,8 +264,7 @@ public class LanguageUtils {
 
           return view;
         } catch (InflateException | ClassNotFoundException e) {
-          Log.e(TAG_KIWIX,
-              "Could not apply the custom font to " + name + " " + e.getMessage());
+          Log.w(TAG_KIWIX, "Could not apply the custom font to " + name, e);
         }
       }
 

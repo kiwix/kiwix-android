@@ -133,6 +133,10 @@ public class SearchActivity extends AppCompatActivity
       searchView.setQuery(getIntent().getStringExtra(Intent.EXTRA_PROCESS_TEXT), true);
     }
 
+    if (getIntent().hasExtra("search")) {
+      searchView.setQuery(getIntent().getStringExtra("search"), true);
+    }
+
     return true;
   }
 

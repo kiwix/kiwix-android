@@ -109,7 +109,7 @@ public class KiwixWebView extends WebView {
           String imageSaved = getResources().getString(R.string.save_media_saved);
           toastText = String.format(imageSaved, newUrl);
         } catch (IOException e) {
-          Log.d("kiwix", "Couldn't save image", e);
+          Log.w("kiwix", "Couldn't save image", e);
           toastText = getResources().getString(R.string.save_media_error);
         }
 

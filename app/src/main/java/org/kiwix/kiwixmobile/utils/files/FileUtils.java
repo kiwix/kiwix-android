@@ -47,6 +47,7 @@ public class FileUtils {
     if (path.substring(path.length() - 5).equals(".part")) {
       path = path.substring(0, path.length() - 5);
     }
+    Log.i("kiwix", "Deleting file: " + path);
     File file = new File(path);
     if (!file.getPath().substring(file.getPath().length() - 3).equals("zim")) {
       fileloop:

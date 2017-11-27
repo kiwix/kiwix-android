@@ -116,8 +116,8 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
         }
 
 	/* Return results */
-	filterResults.values = data;
-        filterResults.count  = data.size();
+        filterResults.values = data;
+        filterResults.count = data.size();
       }
       return filterResults;
     }

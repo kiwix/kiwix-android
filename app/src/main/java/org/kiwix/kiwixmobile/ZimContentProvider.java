@@ -110,17 +110,14 @@ public class ZimContentProvider extends ContentProvider {
       Log.e(TAG_KIWIX, "Unable to open the ZIM file " + fileName);
       zimFileName = null;
     } else {
-      currentJNIReader = reader;
-      Log.d(TAG_KIWIX, "Opening ZIM file " + fileName);
+      Log.i(TAG_KIWIX, "Opening ZIM file " + fileName);
       zimFileName = fileName;
 
       /* Try to open the corresponding fulltext index */
       String fullText = getFulltextIndexPath(fileName);
-      ////////////////////////////////todo
-      //if (!currentJNIReader) {
-        //new JNIKiwixSearcher().add_reader();
-	  Log.e(TAG_KIWIX, "Unable to open the ZIM fulltext index " + fullText);
-      //}
+      if (!jniKiwix.loadFulltextIndex(fullText)) {
+        Log.e(TAG_KIWIX, "Unable to open the ZIM fulltext index " + fullText);
+      }
     }
     return zimFileName;
   }
@@ -301,7 +298,8 @@ public class ZimContentProvider extends ContentProvider {
       }
       return icuDir.getAbsolutePath();
     } catch (Exception e) {
-      Log.e(TAG_KIWIX, "Error copying icu data file", e);
+      Log.w(TAG_KIWIX, "Error copying icu data file", e);
+      //TODO: Consider surfacing to user
       return null;
     }
   }
@@ -380,7 +378,7 @@ public class ZimContentProvider extends ContentProvider {
       pipe = ParcelFileDescriptor.createPipe();
       new TransferThread(currentJNIReader, uri, new AutoCloseOutputStream(pipe[1])).start();
     } catch (IOException e) {
-      Log.e(TAG_KIWIX, "Exception opening pipe", e);
+      //TODO: Why do we narrow the exception? We can't be sure the file isn't found
       throw new FileNotFoundException("Could not open pipe for: "
           + uri.toString());
     }
@@ -466,7 +464,7 @@ public class ZimContentProvider extends ContentProvider {
         JNIKiwixInt size = new JNIKiwixInt();
         byte[] data = currentJNIReader.getContent(articleZimUrl, title, mime, size);
         if (mime.value != null && mime.value.equals("text/css") && KiwixMobileActivity.nightMode) {
-          out.write(("img { \n" +
+          out.write(("img, video { \n" +
               " -webkit-filter: invert(1); \n" +
               " filter: invert(1); \n" +
               "} \n").getBytes(Charset.forName("UTF-8")));

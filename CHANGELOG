@@ -1,10 +1,12 @@
 2.3
-FIX: Download resilience and experience
-FIX: SD card detection in a few edge cases
-NEW: Download time estimation
-NEW: Hide toolbar when scrolling option
-NEW: Auto day/night mode
-NEW: Download content only on WiFi
+FIX: External SD card problems
+FIX: Some UI translation
+FIX: Download manager process sporadic problems
+NEW: Display download time estimation
+NEW: Many improvments in fulltext search
+NEW: Allow manual update of storage location
+NEW: Sort Bookmarks alphabetically
+NEW: Option to download only via WIFI
 
 2.2
 FIX: Text To Speech issues on earlier Android versions

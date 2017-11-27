@@ -52,6 +52,7 @@
       android:title="@string/pref_multi_search_title"
       android:summary="@string/pref_multi_search_summary"/>
 
+
       <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
           android:defaultValue="true"
           android:key="pref_wifi_only"

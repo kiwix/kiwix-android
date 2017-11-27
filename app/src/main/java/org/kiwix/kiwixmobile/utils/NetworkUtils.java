@@ -77,7 +77,7 @@ public class NetworkUtils {
       details = details.trim().replaceAll(" +", " ");
       return details;
     } catch (Exception e) {
-      Log.d(KiwixMobileActivity.TAG_KIWIX, "Context invalid url");
+      Log.d(KiwixMobileActivity.TAG_KIWIX, "Context invalid url: " + url, e);
       return "";
     }
   }

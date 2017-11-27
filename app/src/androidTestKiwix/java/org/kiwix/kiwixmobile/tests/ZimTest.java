@@ -1,15 +1,17 @@
 package org.kiwix.kiwixmobile.tests;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
+import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.web.webdriver.Locator;
+import android.support.test.filters.LargeTest;
+import android.support.test.filters.SdkSuppress;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +39,7 @@ import javax.inject.Inject;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static android.support.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -70,8 +72,8 @@ public class ZimTest {
     new ZimContentProvider().setupDagger();
   }
 
-
   @Test
+  @SdkSuppress(minSdkVersion = Build.VERSION_CODES.KITKAT)
   public void zimTest() {
     Intent intent = new Intent();
     File file = new File(context.getFilesDir(), "test.zim");
@@ -84,11 +86,13 @@ public class ZimTest {
 
     mActivityTestRule.launchActivity(intent);
 
-    openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-
-    onView(withText("Home"))
-        .perform(click());
-
+    try {
+      onView(withId(R.id.menu_home)).perform(click());
+    } catch (NoMatchingViewException e) {
+      openContextualActionModeOverflowMenu();
+      onView(withText("Home")).perform(click());
+    }
+    
     onWebView().withElement(findElement(Locator.LINK_TEXT, "A Fool for You"));
 
     onView(withId(R.id.drawer_layout)).perform(DrawerActions.open(Gravity.RIGHT));
@@ -139,7 +143,7 @@ public class ZimTest {
             isDisplayed()));
     textView4.check(matches(withText("Covers")));
 
-    openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+    openContextualActionModeOverflowMenu();
 
     onView(withText("Help"))
         .perform(click());

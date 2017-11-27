@@ -125,7 +125,7 @@ public class ZimFileSelectFragment extends Fragment
     if (path != null) {
       File file = new File(path);
       Uri uri = Uri.fromFile(file);
-      Log.i(TAG_KIWIX, "Opening " + uri);
+      Log.i(TAG_KIWIX, "Opening Zim File: " + uri);
       zimManageActivity.setResult(Activity.RESULT_OK, new Intent().setData(uri));
       zimManageActivity.finish();
     } else {
@@ -209,7 +209,7 @@ public class ZimFileSelectFragment extends Fragment
       public void onBookFound(LibraryNetworkEntity.Book book) {
         if (!mFiles.contains(book)) {
           context.runOnUiThread(() -> {
-            Log.i("Scanner", "Found "+book.title);
+            Log.i("Scanner", "File Search: Found Book " + book.title);
             mFiles.add(book);
             mRescanAdapter.notifyDataSetChanged();
             checkEmpty();
@@ -276,7 +276,6 @@ public class ZimFileSelectFragment extends Fragment
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-    Log.d(TAG_KIWIX, " mZimFileList.onItemClick");
     // Stop file search from accessing content provider potentially opening wrong file
     ZimContentProvider.canIterate = false;
 
