@@ -159,7 +159,7 @@ public class LibraryNetworkEntity {
     @Override
     public boolean equals (Object obj) {
       if (obj instanceof Book) {
-        if (((Book) obj).getId().equals(getId()) ) {
+        if (((Book) obj).getId() != null && ((Book) obj).getId().equals(getId())) {
           return true;
         }
       }

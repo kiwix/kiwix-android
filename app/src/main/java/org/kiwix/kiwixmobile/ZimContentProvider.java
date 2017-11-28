@@ -97,10 +97,11 @@ public class ZimContentProvider extends ContentProvider {
   }
     
   public synchronized static String setZimFile(String fileName) {
-    if (!new File(fileName).exists() || !jniKiwix.loadZIM(fileName)) {
+    if (!new File(fileName).exists()) {
       Log.e(TAG_KIWIX, "Unable to open the ZIM file " + fileName);
       zimFileName = null;
     } else {
+      jniKiwix.loadZIM(fileName);
       Log.i(TAG_KIWIX, "Opening ZIM file " + fileName);
       zimFileName = fileName;
 

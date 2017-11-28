@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.di.components;
 
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
+import org.kiwix.kiwixmobile.di.modules.JNIModule;
 import org.kiwix.kiwixmobile.di.modules.TestJNIModule;
 import org.kiwix.kiwixmobile.di.modules.TestNetworkModule;
 import org.kiwix.kiwixmobile.tests.NetworkTest;
@@ -19,7 +20,7 @@ import dagger.Component;
 @Component(modules = {
     ApplicationModule.class,
     TestNetworkModule.class,
-    TestJNIModule.class,
+    JNIModule.class,
 })
 public interface TestComponent extends ApplicationComponent {
 
