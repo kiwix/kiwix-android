@@ -39,6 +39,7 @@ import okhttp3.mockwebserver.MockWebServer;
 import okio.Buffer;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -48,6 +49,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
 
 /**
@@ -67,11 +69,11 @@ public class NetworkTest {
   public static void beforeClass() {
     IdlingPolicies.setMasterPolicyTimeout(350, TimeUnit.SECONDS);
     IdlingPolicies.setIdlingResourceTimeout(350, TimeUnit.SECONDS);
+    Espresso.registerIdlingResources(KiwixIdlingResource.getInstance());
   }
 
   @Before
   public void setUp() {
-    Espresso.registerIdlingResources(KiwixIdlingResource.getInstance());
 
     TestComponent component = DaggerTestComponent.builder().applicationModule
         (new ApplicationModule(
@@ -116,12 +118,8 @@ public class NetworkTest {
     } catch (RuntimeException e) {
     }
 
-    ViewInteraction linearLayout = onView(
-        allOf(childAtPosition(
-            withId(R.id.library_list),
-            0),
-            isDisplayed()));
-    linearLayout.perform(click());
+    onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.library_list)).perform(click());
+
 
     try {
       onView(withId(android.R.id.button1)).perform(click());
@@ -136,24 +134,16 @@ public class NetworkTest {
         .perform(click());
 
 
-    ViewInteraction linearLayout2 = onView(
-        allOf(childAtPosition(
-            withId(R.id.zimfilelist),
-            0),
-            isDisplayed()));
-    linearLayout2.perform(click());
+    onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist)).perform(click());
+
 
     openContextualActionModeOverflowMenu();
 
     onView(withText(R.string.menu_zim_manager))
         .perform(click());
 
-    ViewInteraction linearLayout4 = onView(
-        allOf(childAtPosition(
-            withId(R.id.zimfilelist),
-            0),
-            isDisplayed()));
-    linearLayout2.perform(longClick());
+    onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist)).perform(longClick());
+
     onView(withId(android.R.id.button1)).perform(click());
   }
 

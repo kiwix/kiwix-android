@@ -2,10 +2,13 @@ Kiwix is an offline reader for Web content. One of its main purposes is to make 
 
 Production releases of the app should be built with our companion build repository [kiwix-build](https://github.com/kiwix/kiwix-build).
 
-To build this repository alone for development purposes you can simply run the command:
-```./gradlew build ``` from the root directory of the project or alternatively import the project into Android Studio and build using that.
+To build this repository alone for development purposes you can simply import the project into Android Studio and the hard work will be done for you. If you prefer to build without Android Studio you must first set up the Android SDK and then run the command:
+```./gradlew build ``` from the root directory of the project.
 
-Kiwix Android can be built on Linux, Windows or Mac.
+Before contributing be sure to check out https://github.com/kiwix/kiwix-android/blob/master/CONTRIBUTING.md.
+
+We currently have a series of automated Unit and Integration tests. These can be run locally and are also run when submitting a pull request.
+
 
 
 *********************************************************************

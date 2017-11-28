@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metalink xmlns="urn:ietf:params:xml:ns:metalink">
   <generator>MirrorBrain/2.18.1</generator>
-  <origin dynamic="true">http://download.kiwix.org/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim.meta4</origin>
+  <origin dynamic="true">http://download.kiwix.org/zim/wikipedia/wikipedia_ab_all_2017-03.zim.meta4</origin>
   <published>2016-06-08T08:59:18Z</published>
   <publisher>
     <name>Kiwix project</name>
@@ -95,10 +95,10 @@
     <!-- Mirrors in the same continent (unknown): -->
 
     <!-- Mirrors in the rest of the world: -->
-    <url location="us" priority="1">http://ftpmirror.your.org/pub/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim</url>
-    <url location="gb" priority="2">http://www.mirrorservice.org/sites/download.kiwix.org/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim</url>
-    <url location="us" priority="3">http://download.wikimedia.org/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim</url>
-    <url location="de" priority="4">http://mirror.netcologne.de/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim</url>
-    <url location="fr" priority="5">http://mirror3.kiwix.org/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim</url>
+    <url location="us" priority="1">http://ftpmirror.your.org/pub/kiwix/zim/wikipedia/wikipedia_ab_all_2017-03.zim</url>
+    <url location="gb" priority="2">http://www.mirrorservice.org/sites/download.kiwix.org/zim/wikipedia/wikipedia_ab_all_2017-03.zim</url>
+    <url location="us" priority="3">http://download.wikimedia.org/kiwix/zim/wikipedia/wikipedia_ab_all_2017-03.zim</url>
+    <url location="de" priority="4">http://mirror.netcologne.de/kiwix/zim/wikipedia/wikipedia_ab_all_2017-03.zim</url>
+    <url location="fr" priority="5">http://mirror3.kiwix.org/zim/wikipedia/wikipedia_ab_all_2017-03.zim</url>
   </file>
 </metalink>
