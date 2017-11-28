@@ -56,6 +56,7 @@ public class KiwixWebViewClient extends WebViewClient {
 
     // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+    intent.putExtra("external_link", true);
     callback.openExternalUrl(intent);
     return true;
   }
