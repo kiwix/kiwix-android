@@ -31,6 +31,8 @@ import android.webkit.MimeTypeMap;
 
 import org.kiwix.kiwixlib.JNIKiwix;
 import org.kiwix.kiwixlib.JNIKiwixInt;
+import org.kiwix.kiwixlib.JNIKiwixReader;
+import org.kiwix.kiwixlib.JNIKiwixSearcher;
 import org.kiwix.kiwixlib.JNIKiwixString;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
@@ -66,11 +68,16 @@ public class ZimContentProvider extends ContentProvider {
 
   @Inject public static JNIKiwix jniKiwix;
 
+  public static JNIKiwixReader currentJNIReader;
+
+  public static JNIKiwixSearcher jniSearcher;
+
   @Inject public static Context context;
 
   public void setupDagger() {
     KiwixApplication.getInstance().getApplicationComponent().inject(this);
     setIcuDataDirectory();
+    jniSearcher = new JNIKiwixSearcher();
   }
 
 
@@ -97,20 +104,16 @@ public class ZimContentProvider extends ContentProvider {
   }
     
   public synchronized static String setZimFile(String fileName) {
-    if (!new File(fileName).exists()) {
+    JNIKiwixReader reader = new JNIKiwixReader(fileName);
+    jniSearcher.addKiwixReader(reader);
+    if (!new File(fileName).exists() || reader == null) {
       Log.e(TAG_KIWIX, "Unable to open the ZIM file " + fileName);
       zimFileName = null;
     } else {
-      jniKiwix.loadZIM(fileName);
       Log.i(TAG_KIWIX, "Opening ZIM file " + fileName);
       zimFileName = fileName;
-
-      /* Try to open the corresponding fulltext index */
-      String fullText = getFulltextIndexPath(fileName);
-      if (!jniKiwix.loadFulltextIndex(fullText)) {
-        Log.e(TAG_KIWIX, "Unable to open the ZIM fulltext index " + fullText);
-      }
     }
+    currentJNIReader = reader;
     return zimFileName;
   }
 
@@ -119,12 +122,12 @@ public class ZimContentProvider extends ContentProvider {
   }
 
   public static String getZimFileTitle() {
-    if (jniKiwix == null || zimFileName == null) {
+    if (currentJNIReader == null || zimFileName == null) {
       return null;
     } else {
-      JNIKiwixString title = new JNIKiwixString();
-      if (jniKiwix.getTitle(title)) {
-        return title.value;
+      String title = currentJNIReader.getTitle();
+      if (title != null) {
+        return title;
       } else {
         return "No Title Found";
       }
@@ -132,50 +135,50 @@ public class ZimContentProvider extends ContentProvider {
   }
 
   public static String getMainPage() {
-    if (jniKiwix == null || zimFileName == null) {
+    if (currentJNIReader == null || zimFileName == null) {
       return null;
     } else {
-      return jniKiwix.getMainPage();
+      return currentJNIReader.getMainPage();
     }
   }
 
   public static String getId() {
-    if (jniKiwix == null || zimFileName == null) {
+    if (currentJNIReader == null || zimFileName == null) {
       return null;
     } else {
-      return jniKiwix.getId();
+      return currentJNIReader.getId();
     }
   }
 
   public static int getFileSize() {
-    if (jniKiwix == null || zimFileName == null) {
+    if (currentJNIReader == null || zimFileName == null) {
       return 0;
     } else {
-      return jniKiwix.getFileSize();
+      return currentJNIReader.getFileSize();
     }
   }
 
   public static String getCreator() {
-    if (jniKiwix == null || zimFileName == null) {
+    if (currentJNIReader == null || zimFileName == null) {
       return null;
     } else {
-      return jniKiwix.getCreator();
+      return currentJNIReader.getCreator();
     }
   }
 
   public static String getPublisher() {
-    if (jniKiwix == null || zimFileName == null) {
+    if (currentJNIReader == null || zimFileName == null) {
       return null;
     } else {
-      return jniKiwix.getPublisher();
+      return currentJNIReader.getPublisher();
     }
   }
 
   public static String getName() {
-    if (jniKiwix == null || zimFileName == null) {
+    if (currentJNIReader == null || zimFileName == null) {
       return null;
     } else {
-      String name = jniKiwix.getName();
+      String name = currentJNIReader.getName();
       if (name == null || name.equals("")) {
         return getId();
       } else {
@@ -185,53 +188,53 @@ public class ZimContentProvider extends ContentProvider {
   }
 
   public static String getDate() {
-    if (jniKiwix == null || zimFileName == null) {
+    if (currentJNIReader == null || zimFileName == null) {
       return null;
     } else {
-      return jniKiwix.getDate();
+      return currentJNIReader.getDate();
     }
   }
 
   public static String getDescription() {
-    if (jniKiwix == null || zimFileName == null) {
+    if (currentJNIReader == null || zimFileName == null) {
       return null;
     } else {
-      return jniKiwix.getDescription();
+      return currentJNIReader.getDescription();
     }
   }
 
   public static String getFavicon() {
-    if (jniKiwix == null || zimFileName == null) {
+    if (currentJNIReader == null || zimFileName == null) {
       return null;
     } else {
       JNIKiwixString mime = new JNIKiwixString();
       mime.value = "image/x-ms-bmp";
-      return jniKiwix.getFavicon();
+      return currentJNIReader.getFavicon();
     }
   }
 
   public static String getLanguage() {
-    if (jniKiwix == null || zimFileName == null) {
+    if (currentJNIReader == null || zimFileName == null) {
       return null;
     } else {
-      return jniKiwix.getLanguage();
+      return currentJNIReader.getLanguage();
     }
   }
 
   public static boolean searchSuggestions(String prefix, int count) {
-    if (jniKiwix == null || zimFileName == null) {
+    if (currentJNIReader == null || zimFileName == null) {
       return false;
     } else {
-      return jniKiwix.searchSuggestions(prefix, count);
+      return currentJNIReader.searchSuggestions(prefix, count);
     }
   }
 
   public static String getNextSuggestion() {
-    if (jniKiwix == null || zimFileName == null) {
+    if (currentJNIReader == null || zimFileName == null) {
       return null;
     } else {
       JNIKiwixString title = new JNIKiwixString();
-      if (jniKiwix.getNextSuggestion(title)) {
+      if (currentJNIReader.getNextSuggestion(title)) {
         return title.value;
       } else {
         return null;
@@ -240,11 +243,11 @@ public class ZimContentProvider extends ContentProvider {
   }
 
   public static String getPageUrlFromTitle(String title) {
-    if (jniKiwix == null || zimFileName == null) {
+    if (currentJNIReader == null || zimFileName == null) {
       return null;
     } else {
       JNIKiwixString url = new JNIKiwixString();
-      if (jniKiwix.getPageUrlFromTitle(title, url)) {
+      if (currentJNIReader.getPageUrlFromTitle(title, url)) {
         return url.value;
       } else {
         return null;
@@ -253,11 +256,11 @@ public class ZimContentProvider extends ContentProvider {
   }
 
   public static String getRandomArticleUrl() {
-    if (jniKiwix == null || zimFileName == null) {
+    if (currentJNIReader == null || zimFileName == null) {
       return null;
     } else {
       JNIKiwixString url = new JNIKiwixString();
-      if (jniKiwix.getRandomPage(url)) {
+      if (currentJNIReader.getRandomPage(url)) {
         return url.value;
       } else {
         return null;
@@ -340,7 +343,7 @@ public class ZimContentProvider extends ContentProvider {
         t = t.substring(0, pos);
       }
 
-      mimeType = jniKiwix.getMimeType(t);
+      mimeType = currentJNIReader.getMimeType(t);
 
       // Truncate mime-type (everything after the first space
       mimeType = mimeType.replaceAll("^([^ ]+).*$", "$1");
@@ -368,7 +371,7 @@ public class ZimContentProvider extends ContentProvider {
     ParcelFileDescriptor[] pipe;
     try {
       pipe = ParcelFileDescriptor.createPipe();
-      new TransferThread(jniKiwix, uri, new AutoCloseOutputStream(pipe[1])).start();
+      new TransferThread(currentJNIReader, uri, new AutoCloseOutputStream(pipe[1])).start();
     } catch (IOException e) {
       //TODO: Why do we narrow the exception? We can't be sure the file isn't found
       throw new FileNotFoundException("Could not open pipe for: "
@@ -388,7 +391,7 @@ public class ZimContentProvider extends ContentProvider {
     JNIKiwixString mime = new JNIKiwixString();
     JNIKiwixString title = new JNIKiwixString();
     JNIKiwixInt size = new JNIKiwixInt();
-    byte[] data = jniKiwix.getContent(filePath, title, mime, size);
+    byte[] data = currentJNIReader.getContent(filePath, title, mime, size);
 
     FileOutputStream out = new FileOutputStream(f);
 
@@ -436,10 +439,11 @@ public class ZimContentProvider extends ContentProvider {
 
     OutputStream out;
 
-    JNIKiwix jniKiwix;
+    JNIKiwixReader currentJNIReader;
 
-    TransferThread(JNIKiwix jniKiwix, Uri articleUri, OutputStream out) throws IOException {
-      this.jniKiwix = jniKiwix;
+    TransferThread(JNIKiwixReader currentJNIReader, Uri articleUri, OutputStream out) throws IOException {
+      this.currentJNIReader = currentJNIReader;
+      Log.d(TAG_KIWIX, "Retrieving: " + articleUri.toString());
 
       String filePath = getFilePath(articleUri);
 
@@ -453,7 +457,7 @@ public class ZimContentProvider extends ContentProvider {
         JNIKiwixString mime = new JNIKiwixString();
         JNIKiwixString title = new JNIKiwixString();
         JNIKiwixInt size = new JNIKiwixInt();
-        byte[] data = jniKiwix.getContent(articleZimUrl, title, mime, size);
+        byte[] data = currentJNIReader.getContent(articleZimUrl, title, mime, size);
         if (mime.value != null && mime.value.equals("text/css") && KiwixMobileActivity.nightMode) {
           out.write(("img, video { \n" +
               " -webkit-filter: invert(1); \n" +

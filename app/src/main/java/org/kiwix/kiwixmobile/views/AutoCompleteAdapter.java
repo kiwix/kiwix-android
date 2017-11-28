@@ -2,6 +2,7 @@ package org.kiwix.kiwixmobile.views;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.ResultReceiver;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import org.kiwix.kiwixlib.JNIKiwix;
+import org.kiwix.kiwixlib.JNIKiwixSearcher;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.ZimContentProvider;
 
@@ -28,7 +30,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
 
   private Context context;
 
-  @Inject JNIKiwix jniKiwix;
+  @Inject JNIKiwix currentJNIReader;
 
   public AutoCompleteAdapter(Context context) {
     super(context, android.R.layout.simple_list_item_1);
@@ -76,19 +78,38 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
 
       if (constraint != null) {
         try {
-          final String query = constraint.toString();
 
-          ZimContentProvider.searchSuggestions(query, 200);
-          String suggestion;
-          String suggestionUrl;
-          List<String> alreadyAdded = new ArrayList<>();
-          while ((suggestion = ZimContentProvider.getNextSuggestion()) != null) {
-            suggestionUrl = ZimContentProvider.getPageUrlFromTitle(suggestion);
-            if (!alreadyAdded.contains(suggestionUrl)) {
-              alreadyAdded.add(suggestionUrl);
-              data.add(suggestion);
+	  /* Get search request */
+	  final String query = constraint.toString();
+
+          /* Fulltex search */
+          SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+          if (sharedPreferences.getBoolean(KiwixMobileActivity.PREF_FULL_TEXT_SEARCH, false)) {
+            ZimContentProvider.jniSearcher.search(query, 200);
+            JNIKiwixSearcher.Result result = ZimContentProvider.jniSearcher.getNextResult();
+            while (result != null) {
+              if (!result.getTitle().trim().isEmpty()) {
+                data.add(result.getTitle());
+              }
+              result = ZimContentProvider.jniSearcher.getNextResult();
+
             }
           }
+
+	  /* Suggestion search if no fulltext results */
+	  if (data.size() == 0) {
+   	    ZimContentProvider.searchSuggestions(query, 200);
+	    String suggestion;
+	    String suggestionUrl;
+	    List<String> alreadyAdded = new ArrayList<>();
+	    while ((suggestion = ZimContentProvider.getNextSuggestion()) != null) {
+   	      suggestionUrl = ZimContentProvider.getPageUrlFromTitle(suggestion);
+	      if (!alreadyAdded.contains(suggestionUrl)) {
+		alreadyAdded.add(suggestionUrl);
+		data.add(suggestion);
+	      }
+	    }
+	  }
 
         } catch (Exception e) {
           e.printStackTrace();
