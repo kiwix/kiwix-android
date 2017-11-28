@@ -95,9 +95,4 @@
   <string name="pref_wifi_only">Pobierz zawartość tylko poprzez WiFi</string>
   <string name="pref_autonightmode_summary">Przełączaj automatycznie między trybami dnia i nocy.</string>
   <string name="pref_autonightmode">Zautomatyzowany tryb nocny.</string>
-  <string name="pref_external_link_popup_title">Ostrzegaj przy zewnętrznych linkach</string>
-  <string name="pref_external_link_popup_summary">Wyświetl okienko ostrzegające o dodatkowych kosztach lub nie działającej bez Internetu stronie.</string>
-  <string name="external_link_popup_dialog_title">Wejście w Zewnętrzny Link</string>
-  <string name="external_link_popup_dialog_message">Wchodzisz w zewnętrzny link. Może to prowadzić do dodatkowych kosztów za transfer danych lub po prostu nie działającej strony, gdy nie masz Internetu. Czy chcesz kontynuować?</string>
-  <string name="do_not_ask_anymore">Nie pytaj więcej</string>
 </resources>
