@@ -182,4 +182,9 @@
   <string name="language_count">(%1$d)</string>
   <string name="pref_multi_search_title">MultiZim Search</string>
   <string name="pref_multi_search_summary">Allow app to search the across ZIM files (Warning Very Experimental).</string>
+  <string name="pref_external_link_popup_title">Warn when entering external links</string>
+  <string name="pref_external_link_popup_summary">Display popup to warn about additional costs or not working in offline links.</string>
+  <string name="external_link_popup_dialog_title">Entering External Link</string>
+  <string name="external_link_popup_dialog_message">You are entering an external link. This could lead to additional costs for data transfer or will just not work when you are offline. Do you want to continue?</string>
+  <string name="do_not_ask_anymore">Do not ask anymore</string>
 </resources>

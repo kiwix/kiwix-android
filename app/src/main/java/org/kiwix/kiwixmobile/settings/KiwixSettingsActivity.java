@@ -87,7 +87,6 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
   public static final String PREF_WIFI_ONLY = "pref_wifi_only";
 
-
   public static final String PREF_BOTTOM_TOOLBAR = "pref_bottomtoolbar";
 
   public static String zimFile;

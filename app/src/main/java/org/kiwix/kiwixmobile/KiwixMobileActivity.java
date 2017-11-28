@@ -163,6 +163,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   public static final String PREF_STORAGE_TITLE = "pref_selected_title";
 
+  public static final String PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup";
+
   public static final String contactEmailAddress = "android@kiwix.org";
 
   public static boolean isFullscreenOpened;
@@ -180,6 +182,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   protected boolean requestInitAllMenuItems = false;
 
   private boolean isOpenNewTabInBackground;
+
+  private boolean isExternalLinkPopup;
 
   public static boolean refresh;
 
@@ -920,13 +924,53 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   @Override
   public void openExternalUrl(Intent intent) {
     if (intent.resolveActivity(getPackageManager()) != null) {
-      startActivity(intent);
+      // Show popup with warning that this url is external and could lead to additional costs
+      // or may event not work when the user is offline.
+      if (intent.hasExtra("external_link")
+          && intent.getBooleanExtra("external_link", false)
+          && isExternalLinkPopup) {
+        externalLinkPopup(intent);
+      } else {
+        startActivity(intent);
+      }
     } else {
       String error = getString(R.string.no_reader_application_installed);
       Toast.makeText(this, error, Toast.LENGTH_LONG).show();
     }
   }
 
+  private void externalLinkPopup(Intent intent) {
+    new AlertDialog.Builder(this, dialogStyle())
+        .setTitle(R.string.external_link_popup_dialog_title)
+        .setMessage(R.string.external_link_popup_dialog_message)
+        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialogInterface, int i) {
+            // do nothing
+          }
+        })
+        .setNeutralButton(R.string.do_not_ask_anymore, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialogInterface, int i) {
+            PreferenceManager
+                .getDefaultSharedPreferences(KiwixMobileActivity.this)
+                .edit()
+                .putBoolean(PREF_EXTERNAL_LINK_POPUP, false)
+                .apply();
+            isExternalLinkPopup = false;
+
+            startActivity(intent);
+          }
+        })
+        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialogInterface, int i) {
+            startActivity(intent);
+          }
+        })
+        .setIcon(android.R.drawable.ic_dialog_alert)
+        .show();
+  }
 
   public boolean openZimFile(File file, boolean clearHistory) {
     if (file.canRead() || Build.VERSION.SDK_INT < 19 || (BuildConfig.IS_CUSTOM_APP
@@ -1568,6 +1612,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     isFullscreenOpened = sharedPreferences.getBoolean(PREF_FULLSCREEN, false);
     boolean isZoomEnabled = sharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
     isOpenNewTabInBackground = sharedPreferences.getBoolean(PREF_NEW_TAB_BACKGROUND, false);
+    isExternalLinkPopup = sharedPreferences.getBoolean(PREF_EXTERNAL_LINK_POPUP, true);
 
     if (isZoomEnabled) {
       int zoomScale = (int) sharedPreferences.getFloat(PREF_ZOOM, 100.0f);

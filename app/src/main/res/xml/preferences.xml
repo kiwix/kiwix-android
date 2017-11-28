@@ -47,6 +47,12 @@
         android:summary="@string/pref_newtab_background_summary"/>
 
     <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
+        android:defaultValue="true"
+        android:key="pref_external_link_popup"
+        android:title="@string/pref_external_link_popup_title"
+        android:summary="@string/pref_external_link_popup_summary"/>
+
+    <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
       android:defaultValue="false"
       android:key="pref_full_text_search"
       android:title="@string/pref_multi_search_title"
