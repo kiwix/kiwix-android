@@ -31,6 +31,7 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -78,6 +79,8 @@ public class ZimFileSelectFragment extends Fragment
   public static final String TAG_KIWIX = "kiwix";
   public static ZimManageActivity context;
   public RelativeLayout llLayout;
+  public SwipeRefreshLayout swipeRefreshLayout;
+
   private RescanDataAdapter mRescanAdapter;
   private ArrayList<LibraryNetworkEntity.Book> mFiles;
   private ListView mZimFileList;
@@ -101,6 +104,15 @@ public class ZimFileSelectFragment extends Fragment
     // Replace LinearLayout by the type of the root element of the layout you're trying to load
     llLayout = (RelativeLayout) inflater.inflate(R.layout.zim_list, container, false);
     new LanguageUtils(super.getActivity()).changeFont(super.getActivity().getLayoutInflater());
+
+    // SwipeRefreshLayout for the list view
+    swipeRefreshLayout = (SwipeRefreshLayout) llLayout.findViewById(R.id.swiperefresh);
+    swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      @Override
+      public void onRefresh() {
+        getFiles();
+      }
+    });
 
     mFileMessage = (TextView) llLayout.findViewById(R.id.file_management_no_files);
     mZimFileList = (ListView)  llLayout.findViewById(R.id.zimfilelist);
@@ -241,6 +253,9 @@ public class ZimFileSelectFragment extends Fragment
           mZimFileList.removeFooterView(progressBar);
           checkEmpty();
           TestingUtils.unbindResource(ZimFileSelectFragment.class);
+
+          // Stop swipe refresh animation
+          swipeRefreshLayout.setRefreshing(false);
         });
       }
     }).scan(PreferenceManager.getDefaultSharedPreferences(context)
@@ -261,16 +276,6 @@ public class ZimFileSelectFragment extends Fragment
       }
 
     }
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.menu_rescan_fs:
-       getFiles();
-    }
-
-    return super.onOptionsItemSelected(item);
   }
 
   @Override
