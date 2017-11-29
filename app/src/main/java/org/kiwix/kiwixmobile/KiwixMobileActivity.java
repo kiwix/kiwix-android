@@ -495,13 +495,13 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   }
 
   private void backToTopAppearDaily() {
-    backToTopButton.getBackground().setAlpha((int) (0.6 * 255));
+    backToTopButton.setAlpha(0.6f);
     backToTopButton.setBackgroundColor(getResources().getColor(R.color.back_to_top_background));
     backToTopButton.setTextColor(getResources().getColor(R.color.back_to_top_text));
   }
 
   private void backToTopAppearNightly() {
-    backToTopButton.getBackground().setAlpha((int) (0.7 * 255));
+    backToTopButton.setAlpha(0.7f);
     backToTopButton.setBackgroundColor(getResources().getColor(R.color.back_to_top_background_night));
     backToTopButton.setTextColor(getResources().getColor(R.color.back_to_top_text_night));
   }
