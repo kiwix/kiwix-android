@@ -1296,8 +1296,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
     }
     updateWidgets(this);
-
-
   }
 
   @Override
