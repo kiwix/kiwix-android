@@ -58,10 +58,10 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:alpha="0.6"
-            android:background="#DDFFFFFF"
+            android:background="@color/back_to_top_background"
             android:gravity="center"
             android:text="@string/button_backtotop"
-            android:textColor="@android:color/black"
+            android:textColor="@color/back_to_top_text"
             android:textStyle="bold"
             android:visibility="invisible" />
 
