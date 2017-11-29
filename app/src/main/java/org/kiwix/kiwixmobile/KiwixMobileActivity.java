@@ -1547,6 +1547,19 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     return true;
   }
 
+  @Override
+  public boolean onMenuOpened(int featureId, Menu menu) {
+    if (drawerLayout.isDrawerOpen(tabDrawerLeftContainer)) {
+      drawerLayout.closeDrawer(tabDrawerLeftContainer);
+    }
+
+    if (drawerLayout.isDrawerOpen(tableDrawerRightContainer)) {
+      drawerLayout.closeDrawer(tableDrawerRightContainer);
+    }
+
+    return super.onMenuOpened(featureId, menu);
+  }
+
   // This method refreshes the menu for the bookmark system.
   @Override
   public boolean onPrepareOptionsMenu(Menu menu) {
