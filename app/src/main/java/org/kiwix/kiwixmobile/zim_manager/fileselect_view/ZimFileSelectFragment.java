@@ -84,7 +84,6 @@ public class ZimFileSelectFragment extends Fragment
   private RescanDataAdapter mRescanAdapter;
   private ArrayList<LibraryNetworkEntity.Book> mFiles;
   private ListView mZimFileList;
-  private RelativeLayout progressBar;
   private TextView mFileMessage;
 
   private BookDao bookDao;
@@ -118,7 +117,6 @@ public class ZimFileSelectFragment extends Fragment
     mZimFileList = (ListView)  llLayout.findViewById(R.id.zimfilelist);
 
     mFiles = new ArrayList<>();
-    progressBar = (RelativeLayout) super.getActivity().getLayoutInflater().inflate(R.layout.progress_bar, null);
 
     mRescanAdapter = new RescanDataAdapter(ZimFileSelectFragment.context, 0, mFiles);
 
@@ -211,7 +209,6 @@ public class ZimFileSelectFragment extends Fragment
       return;
 
     TestingUtils.bindResource(ZimFileSelectFragment.class);
-    mZimFileList.addFooterView(progressBar);
     mZimFileList.setAdapter(mRescanAdapter);
 
     checkEmpty();
@@ -250,7 +247,6 @@ public class ZimFileSelectFragment extends Fragment
         context.runOnUiThread(() -> {
           mRescanAdapter.notifyDataSetChanged();
           bookDao.saveBooks(mFiles);
-          mZimFileList.removeFooterView(progressBar);
           checkEmpty();
           TestingUtils.unbindResource(ZimFileSelectFragment.class);
 

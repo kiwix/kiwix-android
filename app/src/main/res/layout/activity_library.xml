@@ -6,8 +6,7 @@
   android:orientation="vertical"
   tools:context=".zim_manager.library_view.LibraryFragment">
 
-  <android.support.v4.widget.SwipeRefreshLayout
-    android:id="@+id/swiperefresh"
+  <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/listBackground">
@@ -38,5 +37,5 @@
       android:text="@string/proceed"
       android:visibility="gone"/>
 
-  </android.support.v4.widget.SwipeRefreshLayout>
+  </RelativeLayout>
 </LinearLayout>
