@@ -179,6 +179,7 @@ public class LibraryFragment extends Fragment
     networkText.setVisibility(View.VISIBLE);
     permissionButton.setVisibility(View.GONE);
     swipeRefreshLayout.setRefreshing(false);
+    swipeRefreshLayout.setEnabled(false);
     TestingUtils.unbindResource(LibraryFragment.class);
   }
 
@@ -187,6 +188,7 @@ public class LibraryFragment extends Fragment
     if (!swipeRefreshLayout.isRefreshing()) {
       networkText.setVisibility(View.GONE);
       permissionButton.setVisibility(View.GONE);
+      swipeRefreshLayout.setEnabled(true);
       swipeRefreshLayout.setRefreshing(true);
       TestingUtils.bindResource(LibraryFragment.class);
     }
