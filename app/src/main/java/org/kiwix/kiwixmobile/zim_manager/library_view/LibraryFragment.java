@@ -18,6 +18,7 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,12 +71,13 @@ public class LibraryFragment extends Fragment
   TextView networkText;
   @BindView(R.id.network_permission_button)
   Button permissionButton;
-  private RelativeLayout progressBar;
 
   @Inject
   KiwixService kiwixService;
 
   public LinearLayout llLayout;
+
+  public SwipeRefreshLayout swipeRefreshLayout;
 
   private ArrayList<Book> books = new ArrayList<>();
 
@@ -116,7 +118,16 @@ public class LibraryFragment extends Fragment
     // Replace LinearLayout by the type of the root element of the layout you're trying to load
     llLayout = (LinearLayout) inflater.inflate(R.layout.activity_library, container, false);
     ButterKnife.bind(this, llLayout);
-    progressBar = (RelativeLayout) inflater.inflate(R.layout.progress_bar, null);
+
+    // SwipeRefreshLayout for the list view
+    swipeRefreshLayout = (SwipeRefreshLayout) llLayout.findViewById(R.id.library_swiperefresh);
+    swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      @Override
+      public void onRefresh() {
+        refreshFragment();
+      }
+    });
+
     displayScanningContent();
     libraryAdapter = new LibraryAdapter(super.getContext());
     libraryList.setAdapter(libraryAdapter);
@@ -136,7 +147,7 @@ public class LibraryFragment extends Fragment
     presenter.loadRunningDownloadsFromDb(getActivity());
 
     // The FragmentActivity doesn't contain the layout directly so we must use our instance of     LinearLayout :
-    //llLayout.findViewById(R.id.someGuiElement);
+    // llLayout.findViewById(R.id.someGuiElement);
     // Instead of :
     // findViewById(R.id.someGuiElement);
     return llLayout; // We must return the loaded Layout
@@ -159,19 +170,26 @@ public class LibraryFragment extends Fragment
 
   @Override
   public void displayNoNetworkConnection() {
-    libraryList.removeFooterView(progressBar);
+    if (books.size() != 0) {
+      Toast.makeText(super.getActivity(), R.string.no_network_connection, Toast.LENGTH_LONG).show();
+      return;
+    }
+
     networkText.setText(R.string.no_network_msg);
     networkText.setVisibility(View.VISIBLE);
     permissionButton.setVisibility(View.GONE);
+    swipeRefreshLayout.setRefreshing(false);
+    swipeRefreshLayout.setEnabled(false);
     TestingUtils.unbindResource(LibraryFragment.class);
   }
 
   @Override
   public void displayScanningContent() {
-    if (libraryList.getFooterViewsCount() == 0) {
+    if (!swipeRefreshLayout.isRefreshing()) {
       networkText.setVisibility(View.GONE);
       permissionButton.setVisibility(View.GONE);
-      libraryList.addFooterView(progressBar);
+      swipeRefreshLayout.setEnabled(true);
+      swipeRefreshLayout.setRefreshing(true);
       TestingUtils.bindResource(LibraryFragment.class);
     }
   }
@@ -181,12 +199,23 @@ public class LibraryFragment extends Fragment
   public void stopScanningContent() {
     networkText.setVisibility(View.GONE);
     permissionButton.setVisibility(View.GONE);
-    libraryList.removeFooterView(progressBar);
+    swipeRefreshLayout.setRefreshing(false);
     TestingUtils.unbindResource(LibraryFragment.class);
   }
 
   public void noNetworkConnection() {
     displayNoNetworkConnection();
+  }
+
+  public void refreshFragment() {
+    NetworkInfo network = conMan.getActiveNetworkInfo();
+    if (network == null || !network.isConnected()) {
+      Toast.makeText(super.getActivity(), R.string.no_network_connection, Toast.LENGTH_LONG).show();
+      swipeRefreshLayout.setRefreshing(false);
+      return;
+    }
+
+    networkBroadcastReceiver.onReceive(super.getActivity(), null);
   }
 
   @Override
