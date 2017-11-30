@@ -104,7 +104,7 @@ public class DownloadTest {
         allOf(withText("Device"), isDisplayed()));
     appCompatTextView3.perform(click());
 
-    onView(withId(R.id.swiperefresh))
+    onView(withId(R.id.zim_swiperefresh))
         .perform(swipeDown());
 
 /*

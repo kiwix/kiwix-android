@@ -111,7 +111,7 @@ public class ZimFileSelectFragment extends Fragment
     mFiles = new ArrayList<>();
 
     // SwipeRefreshLayout for the list view
-    swipeRefreshLayout = (SwipeRefreshLayout) llLayout.findViewById(R.id.swiperefresh);
+    swipeRefreshLayout = (SwipeRefreshLayout) llLayout.findViewById(R.id.zim_swiperefresh);
     swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
       public void onRefresh() {

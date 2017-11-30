@@ -120,7 +120,7 @@ public class LibraryFragment extends Fragment
     ButterKnife.bind(this, llLayout);
 
     // SwipeRefreshLayout for the list view
-    swipeRefreshLayout = (SwipeRefreshLayout) llLayout.findViewById(R.id.swiperefresh);
+    swipeRefreshLayout = (SwipeRefreshLayout) llLayout.findViewById(R.id.library_swiperefresh);
     swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
       public void onRefresh() {

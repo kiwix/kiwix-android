@@ -131,7 +131,7 @@ public class NetworkTest {
     onView(withText(R.string.local_zims))
         .perform(click());
 
-    onView(withId(R.id.swiperefresh))
+    onView(withId(R.id.zim_swiperefresh))
         .perform(swipeDown());
 
 
