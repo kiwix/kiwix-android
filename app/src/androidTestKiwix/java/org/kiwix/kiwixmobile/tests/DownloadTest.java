@@ -29,6 +29,7 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
+import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
@@ -103,8 +104,8 @@ public class DownloadTest {
         allOf(withText("Device"), isDisplayed()));
     appCompatTextView3.perform(click());
 
-    onView(withId(R.id.menu_rescan_fs))
-        .perform(click());
+    onView(withId(R.id.swiperefresh))
+        .perform(swipeDown());
 
 /*
 Commented out the following as it uses another Activity.

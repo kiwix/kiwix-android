@@ -45,6 +45,7 @@ import static android.support.test.espresso.Espresso.openContextualActionModeOve
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -130,8 +131,8 @@ public class NetworkTest {
     onView(withText(R.string.local_zims))
         .perform(click());
 
-    onView(withId(R.id.menu_rescan_fs))
-        .perform(click());
+    onView(withId(R.id.swiperefresh))
+        .perform(swipeDown());
 
 
     onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist)).perform(click());
