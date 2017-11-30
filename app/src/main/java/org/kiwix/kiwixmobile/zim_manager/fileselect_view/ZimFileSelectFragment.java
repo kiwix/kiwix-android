@@ -85,6 +85,7 @@ public class ZimFileSelectFragment extends Fragment
   private ArrayList<LibraryNetworkEntity.Book> mFiles;
   private ListView mZimFileList;
   private TextView mFileMessage;
+  private boolean mHasRefresh;
 
   private BookDao bookDao;
 
@@ -104,19 +105,22 @@ public class ZimFileSelectFragment extends Fragment
     llLayout = (RelativeLayout) inflater.inflate(R.layout.zim_list, container, false);
     new LanguageUtils(super.getActivity()).changeFont(super.getActivity().getLayoutInflater());
 
+    mFileMessage = (TextView) llLayout.findViewById(R.id.file_management_no_files);
+    mZimFileList = (ListView)  llLayout.findViewById(R.id.zimfilelist);
+
+    mFiles = new ArrayList<>();
+
     // SwipeRefreshLayout for the list view
     swipeRefreshLayout = (SwipeRefreshLayout) llLayout.findViewById(R.id.swiperefresh);
     swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
       public void onRefresh() {
-        getFiles();
+        refreshFragment();
       }
     });
 
-    mFileMessage = (TextView) llLayout.findViewById(R.id.file_management_no_files);
-    mZimFileList = (ListView)  llLayout.findViewById(R.id.zimfilelist);
-
-    mFiles = new ArrayList<>();
+    // A boolean to distinguish between a user refresh and a normal loading
+    mHasRefresh = false;
 
     mRescanAdapter = new RescanDataAdapter(ZimFileSelectFragment.context, 0, mFiles);
 
@@ -124,7 +128,7 @@ public class ZimFileSelectFragment extends Fragment
     ZimContentProvider.canIterate = true;
 
     presenter.loadLocalZimFileFromDb(context);
-     bookDao = new BookDao(KiwixDatabase.getInstance(context));
+    bookDao = new BookDao(KiwixDatabase.getInstance(context));
 
     return llLayout; // We must return the loaded Layout
   }
@@ -168,9 +172,13 @@ public class ZimFileSelectFragment extends Fragment
     checkPermissions();
   }
 
-  public void refreshFragment(){
-    if (mZimFileList == null)
+  public void refreshFragment() {
+    if (mZimFileList == null) {
+      swipeRefreshLayout.setRefreshing(false);
       return;
+    }
+
+    mHasRefresh = true;
     presenter.loadLocalZimFileFromDb(context);
   }
 
@@ -205,11 +213,15 @@ public class ZimFileSelectFragment extends Fragment
   }
 
   public void getFiles() {
-    if (mZimFileList.getFooterViewsCount() != 0)
+    if (swipeRefreshLayout.isRefreshing() && !mHasRefresh)
       return;
 
     TestingUtils.bindResource(ZimFileSelectFragment.class);
+    swipeRefreshLayout.setRefreshing(true);
     mZimFileList.setAdapter(mRescanAdapter);
+
+    // Set mHasRefresh to false to prevent loops
+    mHasRefresh = false;
 
     checkEmpty();
 
