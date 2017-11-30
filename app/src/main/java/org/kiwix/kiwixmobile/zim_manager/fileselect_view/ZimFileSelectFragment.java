@@ -189,6 +189,7 @@ public class ZimFileSelectFragment extends Fragment
       mFiles.add(book);
       mRescanAdapter.notifyDataSetChanged();
       bookDao.saveBooks(mFiles);
+      checkEmpty();
     }
   }
 
