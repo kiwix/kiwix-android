@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -74,10 +75,13 @@ public class ZimContentProvider extends ContentProvider {
 
   @Inject public static Context context;
 
+  private static ArrayList<String> listedEntries;
+
   public void setupDagger() {
     KiwixApplication.getInstance().getApplicationComponent().inject(this);
     setIcuDataDirectory();
     jniSearcher = new JNIKiwixSearcher();
+    entries = new ArrayList<>();
   }
 
 
@@ -102,10 +106,15 @@ public class ZimContentProvider extends ContentProvider {
      * file path itself (embedded fulltext index) */
     return file;
   }
-    
+
   public synchronized static String setZimFile(String fileName) {
     JNIKiwixReader reader = new JNIKiwixReader(fileName);
-    jniSearcher.addKiwixReader(reader);
+
+    if(!listedEntries.contains(reader.getId())) {
+      listedEntries.add(reader.getId());
+      jniSearcher.addKiwixReader(reader);
+    }
+
     if (!new File(fileName).exists() || reader == null) {
       Log.e(TAG_KIWIX, "Unable to open the ZIM file " + fileName);
       zimFileName = null;
@@ -276,20 +285,20 @@ public class ZimContentProvider extends ContentProvider {
       }
       String[] icuFileNames = context.getAssets().list("icu");
       for (int i=0; i<icuFileNames.length; i++) {
-          String icuFileName = icuFileNames[i];
-          File icuDataFile = new File(icuDir, icuFileName);
-          if (!icuDataFile.exists()) {
-              InputStream in = context.getAssets().open("icu/"+icuFileName);
-              OutputStream out = new FileOutputStream(icuDataFile);
-              byte[] buf = new byte[1024];
-              int len;
-              while ((len = in.read(buf)) > 0) {
-                  out.write(buf, 0, len);
-              }
-              in.close();
-              out.flush();
-              out.close();
+        String icuFileName = icuFileNames[i];
+        File icuDataFile = new File(icuDir, icuFileName);
+        if (!icuDataFile.exists()) {
+          InputStream in = context.getAssets().open("icu/"+icuFileName);
+          OutputStream out = new FileOutputStream(icuDataFile);
+          byte[] buf = new byte[1024];
+          int len;
+          while ((len = in.read(buf)) > 0) {
+            out.write(buf, 0, len);
           }
+          in.close();
+          out.flush();
+          out.close();
+        }
       }
       return icuDir.getAbsolutePath();
     } catch (Exception e) {
@@ -304,7 +313,7 @@ public class ZimContentProvider extends ContentProvider {
     int pos = articleUri.toString().indexOf(CONTENT_URI.toString());
     if (pos != -1) {
       filePath = articleUri.toString().substring(
-          CONTENT_URI.toString().length());
+              CONTENT_URI.toString().length());
     }
     // Remove fragment (#...) as not supported by zimlib
     pos = filePath.indexOf("#");
@@ -335,7 +344,7 @@ public class ZimContentProvider extends ContentProvider {
       int pos = uri.toString().indexOf(CONTENT_URI.toString());
       if (pos != -1) {
         t = uri.toString().substring(
-            CONTENT_URI.toString().length());
+                CONTENT_URI.toString().length());
       }
       // Remove fragment (#...) as not supported by zimlib
       pos = t.indexOf("#");
@@ -375,7 +384,7 @@ public class ZimContentProvider extends ContentProvider {
     } catch (IOException e) {
       //TODO: Why do we narrow the exception? We can't be sure the file isn't found
       throw new FileNotFoundException("Could not open pipe for: "
-          + uri.toString());
+              + uri.toString());
     }
     return (pipe[0]);
   }
@@ -460,25 +469,25 @@ public class ZimContentProvider extends ContentProvider {
         byte[] data = currentJNIReader.getContent(articleZimUrl, title, mime, size);
         if (mime.value != null && mime.value.equals("text/css") && KiwixMobileActivity.nightMode) {
           out.write(("img, video { \n" +
-              " -webkit-filter: invert(1); \n" +
-              " filter: invert(1); \n" +
-              "} \n").getBytes(Charset.forName("UTF-8")));
+                  " -webkit-filter: invert(1); \n" +
+                  " filter: invert(1); \n" +
+                  "} \n").getBytes(Charset.forName("UTF-8")));
         }
         out.write(data, 0, data.length);
         out.flush();
 
         Log.d(TAG_KIWIX, "reading  " + articleZimUrl
-            + "(mime: " + mime.value + ", size: " + size.value + ") finished.");
+                + "(mime: " + mime.value + ", size: " + size.value + ") finished.");
       } catch (IOException | NullPointerException e) {
         Log.e(TAG_KIWIX, "Exception reading article " + articleZimUrl + " from zim file",
-            e);
+                e);
       } finally {
         try {
           out.close();
         } catch (IOException e) {
           Log.e(TAG_KIWIX,
-              "Custom exception by closing out stream for article " + articleZimUrl,
-              e);
+                  "Custom exception by closing out stream for article " + articleZimUrl,
+                  e);
         }
       }
     }
