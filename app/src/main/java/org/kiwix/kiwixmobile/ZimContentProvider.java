@@ -285,20 +285,20 @@ public class ZimContentProvider extends ContentProvider {
       }
       String[] icuFileNames = context.getAssets().list("icu");
       for (int i=0; i<icuFileNames.length; i++) {
-        String icuFileName = icuFileNames[i];
-        File icuDataFile = new File(icuDir, icuFileName);
-        if (!icuDataFile.exists()) {
-          InputStream in = context.getAssets().open("icu/"+icuFileName);
-          OutputStream out = new FileOutputStream(icuDataFile);
-          byte[] buf = new byte[1024];
-          int len;
-          while ((len = in.read(buf)) > 0) {
-            out.write(buf, 0, len);
+          String icuFileName = icuFileNames[i];
+          File icuDataFile = new File(icuDir, icuFileName);
+          if (!icuDataFile.exists()) {
+            InputStream in = context.getAssets().open("icu/"+icuFileName);
+            OutputStream out = new FileOutputStream(icuDataFile);
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0) {
+              out.write(buf, 0, len);
+            }
+            in.close();
+            out.flush();
+            out.close();
           }
-          in.close();
-          out.flush();
-          out.close();
-        }
       }
       return icuDir.getAbsolutePath();
     } catch (Exception e) {
@@ -313,7 +313,7 @@ public class ZimContentProvider extends ContentProvider {
     int pos = articleUri.toString().indexOf(CONTENT_URI.toString());
     if (pos != -1) {
       filePath = articleUri.toString().substring(
-              CONTENT_URI.toString().length());
+          CONTENT_URI.toString().length());
     }
     // Remove fragment (#...) as not supported by zimlib
     pos = filePath.indexOf("#");
