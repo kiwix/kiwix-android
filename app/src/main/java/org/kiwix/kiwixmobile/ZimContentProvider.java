@@ -81,7 +81,7 @@ public class ZimContentProvider extends ContentProvider {
     KiwixApplication.getInstance().getApplicationComponent().inject(this);
     setIcuDataDirectory();
     jniSearcher = new JNIKiwixSearcher();
-    entries = new ArrayList<>();
+    listedEntries = new ArrayList<>();
   }
 
 
