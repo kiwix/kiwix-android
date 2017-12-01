@@ -43,6 +43,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -73,11 +74,14 @@ public class ZimContentProvider extends ContentProvider {
   public static JNIKiwixSearcher jniSearcher;
 
   @Inject public static Context context;
+  
+  private static ArrayList<String> listedEntries;
 
   public void setupDagger() {
     KiwixApplication.getInstance().getApplicationComponent().inject(this);
     setIcuDataDirectory();
     jniSearcher = new JNIKiwixSearcher();
+    listedEntries = new ArrayList<>();
   }
 
 
@@ -105,7 +109,12 @@ public class ZimContentProvider extends ContentProvider {
     
   public synchronized static String setZimFile(String fileName) {
     JNIKiwixReader reader = new JNIKiwixReader(fileName);
-    jniSearcher.addKiwixReader(reader);
+    
+    if(!listedEntries.contains(reader.getId())) {
+      listedEntries.add(reader.getId());
+      jniSearcher.addKiwixReader(reader);
+    }
+    
     if (!new File(fileName).exists() || reader == null) {
       Log.e(TAG_KIWIX, "Unable to open the ZIM file " + fileName);
       zimFileName = null;
