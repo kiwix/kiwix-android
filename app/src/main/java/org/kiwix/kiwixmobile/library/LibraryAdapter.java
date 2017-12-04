@@ -62,9 +62,11 @@ import rx.Observable;
 import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
 
 public class LibraryAdapter extends BaseAdapter {
+  private static final int LIST_ITEM_TYPE_BOOK = 0;
+  private static final int LIST_ITEM_TYPE_DIVIDER = 1;
 
   private ImmutableList<Book> allBooks;
-  private List<Book> filteredBooks = new ArrayList<>();
+  private List<ListItem> listItems = new ArrayList<>();
   private final Context context;
   public Map<String, Integer> languageCounts = new HashMap<>();
   public List<Language> languages = new ArrayList<>();
@@ -94,14 +96,18 @@ public class LibraryAdapter extends BaseAdapter {
     updateLanguages();
   }
 
+  public boolean isDivider(int position) {
+    return listItems.get(position).type == LIST_ITEM_TYPE_DIVIDER;
+  }
+
   @Override
   public int getCount() {
-    return filteredBooks.size();
+    return listItems.size();
   }
 
   @Override
   public Object getItem(int i) {
-    return filteredBooks.get(i);
+    return listItems.get(i);
   }
 
   @Override
@@ -112,73 +118,92 @@ public class LibraryAdapter extends BaseAdapter {
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     ViewHolder holder;
-    if (convertView == null) {
-      convertView = layoutInflater.inflate(R.layout.library_item, null);
-      holder = new ViewHolder();
-      holder.title = (TextView) convertView.findViewById(R.id.title);
-      holder.description = (TextView) convertView.findViewById(R.id.description);
-      holder.language = (TextView) convertView.findViewById(R.id.language);
-      holder.creator = (TextView) convertView.findViewById(R.id.creator);
-      holder.publisher = (TextView) convertView.findViewById(R.id.publisher);
-      holder.date = (TextView) convertView.findViewById(R.id.date);
-      holder.size = (TextView) convertView.findViewById(R.id.size);
-      holder.fileName = (TextView) convertView.findViewById(R.id.fileName);
-      holder.favicon = (ImageView) convertView.findViewById(R.id.favicon);
-      convertView.setTag(holder);
+    ListItem item = listItems.get(position);
+
+    if (item.type == LIST_ITEM_TYPE_BOOK) {
+      if (convertView != null && convertView.findViewById(R.id.title) != null) {
+        holder = (ViewHolder) convertView.getTag();
+      } else {
+        convertView = layoutInflater.inflate(R.layout.library_item, null);
+        holder = new ViewHolder();
+        holder.title = (TextView) convertView.findViewById(R.id.title);
+        holder.description = (TextView) convertView.findViewById(R.id.description);
+        holder.language = (TextView) convertView.findViewById(R.id.language);
+        holder.creator = (TextView) convertView.findViewById(R.id.creator);
+        holder.publisher = (TextView) convertView.findViewById(R.id.publisher);
+        holder.date = (TextView) convertView.findViewById(R.id.date);
+        holder.size = (TextView) convertView.findViewById(R.id.size);
+        holder.fileName = (TextView) convertView.findViewById(R.id.fileName);
+        holder.favicon = (ImageView) convertView.findViewById(R.id.favicon);
+        convertView.setTag(holder);
+      }
+
+      Book book = (Book) listItems.get(position).data;
+
+      holder.title.setText(book.getTitle());
+      holder.description.setText(book.getDescription());
+      holder.language.setText(bookUtils.getLanguage(book.getLanguage()));
+      holder.creator.setText(book.getCreator());
+      holder.publisher.setText(book.getPublisher());
+      holder.date.setText(book.getDate());
+      holder.size.setText(createGbString(book.getSize()));
+      holder.fileName.setText(parseURL(context, book.getUrl()));
+      holder.favicon.setImageBitmap(createBitmapFromEncodedString(book.getFavicon(), context));
+
+      // Check if no value is empty. Set the view to View.GONE, if it is. To View.VISIBLE, if not.
+      if (book.getTitle() == null || book.getTitle().isEmpty()) {
+        holder.title.setVisibility(View.GONE);
+      } else {
+        holder.title.setVisibility(View.VISIBLE);
+      }
+
+      if (book.getDescription() == null || book.getDescription().isEmpty()) {
+        holder.description.setVisibility(View.GONE);
+      } else {
+        holder.description.setVisibility(View.VISIBLE);
+      }
+
+      if (book.getCreator() == null || book.getCreator().isEmpty()) {
+        holder.creator.setVisibility(View.GONE);
+      } else {
+        holder.creator.setVisibility(View.VISIBLE);
+      }
+
+      if (book.getPublisher() == null || book.getPublisher().isEmpty()) {
+        holder.publisher.setVisibility(View.GONE);
+      } else {
+        holder.publisher.setVisibility(View.VISIBLE);
+      }
+
+      if (book.getDate() == null || book.getDate().isEmpty()) {
+        holder.date.setVisibility(View.GONE);
+      } else {
+        holder.date.setVisibility(View.VISIBLE);
+      }
+
+      if (book.getSize() == null || book.getSize().isEmpty()) {
+        holder.size.setVisibility(View.GONE);
+      } else {
+        holder.size.setVisibility(View.VISIBLE);
+      }
+
+      return convertView;
     } else {
-      holder = (ViewHolder) convertView.getTag();
+      if (convertView != null && convertView.findViewById(R.id.divider_text) != null) {
+        holder = (ViewHolder) convertView.getTag();
+      } else {
+        convertView = layoutInflater.inflate(R.layout.library_divider, null);
+        holder = new ViewHolder();
+        holder.title = convertView.findViewById(R.id.divider_text);
+        convertView.setTag(holder);
+      }
+
+      String dividerText = (String) listItems.get(position).data;
+
+      holder.title.setText(dividerText);
+
+      return convertView;
     }
-
-    Book book = filteredBooks.get(position);
-
-    holder.title.setText(book.getTitle());
-    holder.description.setText(book.getDescription());
-    holder.language.setText(bookUtils.getLanguage(book.getLanguage()));
-    holder.creator.setText(book.getCreator());
-    holder.publisher.setText(book.getPublisher());
-    holder.date.setText(book.getDate());
-    holder.size.setText(createGbString(book.getSize()));
-    holder.fileName.setText(parseURL(context, book.getUrl()));
-    holder.favicon.setImageBitmap(createBitmapFromEncodedString(book.getFavicon(), context));
-
-    // Check if no value is empty. Set the view to View.GONE, if it is. To View.VISIBLE, if not.
-    if (book.getTitle() == null || book.getTitle().isEmpty()) {
-      holder.title.setVisibility(View.GONE);
-    } else {
-      holder.title.setVisibility(View.VISIBLE);
-    }
-
-    if (book.getDescription() == null || book.getDescription().isEmpty()) {
-      holder.description.setVisibility(View.GONE);
-    } else {
-      holder.description.setVisibility(View.VISIBLE);
-    }
-
-    if (book.getCreator() == null || book.getCreator().isEmpty()) {
-      holder.creator.setVisibility(View.GONE);
-    } else {
-      holder.creator.setVisibility(View.VISIBLE);
-    }
-
-    if (book.getPublisher() == null || book.getPublisher().isEmpty()) {
-      holder.publisher.setVisibility(View.GONE);
-    } else {
-      holder.publisher.setVisibility(View.VISIBLE);
-    }
-
-    if (book.getDate() == null || book.getDate().isEmpty()) {
-      holder.date.setVisibility(View.GONE);
-    } else {
-      holder.date.setVisibility(View.VISIBLE);
-    }
-
-    if (book.getSize() == null || book.getSize().isEmpty()) {
-      holder.size.setVisibility(View.GONE);
-    } else {
-      holder.size.setVisibility(View.VISIBLE);
-    }
-
-    return convertView;
   }
 
   private boolean languageActive(Book book) {
@@ -207,38 +232,65 @@ public class LibraryAdapter extends BaseAdapter {
     @Override
     protected FilterResults performFiltering(CharSequence s) {
       ArrayList<Book> books = bookDao.getBooks();
-      List<Book> finalBooks;
+      listItems.clear();
       if (s.length() == 0) {
-        finalBooks = Observable.from(allBooks)
+        List<Book> selectedLanguages = Observable.from(allBooks)
             .filter(LibraryAdapter.this::languageActive)
             .filter(book -> !books.contains(book))
             .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
             .toList().toBlocking().single();
+
+        List<Book> unselectedLanguages = Observable.from(allBooks)
+            .filter(book -> !languageActive(book))
+            .filter(book -> !books.contains(book))
+            .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
+            .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
+            .toList().toBlocking().single();
+
+        listItems.add(new ListItem("In your language:", LIST_ITEM_TYPE_DIVIDER));
+        addBooks(selectedLanguages);
+        listItems.add(new ListItem("In other languages:", LIST_ITEM_TYPE_DIVIDER));
+        addBooks(unselectedLanguages);
       } else {
-        finalBooks = Observable.from(allBooks)
+        List<Book> selectedLanguages = Observable.from(allBooks)
+            .filter(LibraryAdapter.this::languageActive)
             .filter(book -> !books.contains(book))
             .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
             .flatMap(book -> getMatches(book, s.toString()))
             .toList().toBlocking().single();
-        Collections.sort(finalBooks, new BookMatchComparator());
+
+        Collections.sort(selectedLanguages, new BookMatchComparator());
+
+        List<Book> unselectedLanguages = Observable.from(allBooks)
+            .filter(book -> !languageActive(book))
+            .filter(book -> !books.contains(book))
+            .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
+            .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
+            .flatMap(book -> getMatches(book, s.toString()))
+            .toList().toBlocking().single();
+
+        Collections.sort(unselectedLanguages, new BookMatchComparator());
+
+        listItems.add(new ListItem("In your language:", LIST_ITEM_TYPE_DIVIDER));
+        addBooks(selectedLanguages);
+        listItems.add(new ListItem("In other languages:", LIST_ITEM_TYPE_DIVIDER));
+        addBooks(unselectedLanguages);
       }
+
       FilterResults results = new FilterResults();
-      results.values = finalBooks;
-      results.count = finalBooks.size();
+      results.values = listItems;
+      results.count = listItems.size();
       return results;
     }
 
     @Override
     protected void publishResults(CharSequence constraint, FilterResults results) {
-      List<Book> filtered = (List<Book>) results.values;
+      List<ListItem> filtered = (List<ListItem>) results.values;
       if (filtered != null) {
-        filteredBooks.clear();
         if (filtered.isEmpty()) {
-          filteredBooks.addAll(allBooks);
-        } else {
-          filteredBooks.addAll(filtered);
+          addBooks(allBooks);
         }
       }
       notifyDataSetChanged();
@@ -294,6 +346,11 @@ public class LibraryAdapter extends BaseAdapter {
     new SaveNetworkLanguages().execute(this.languages);
   }
 
+  private void addBooks(List<Book> books) {
+    for (Book book : books) {
+      listItems.add(new ListItem(book, LIST_ITEM_TYPE_BOOK));
+    }
+  }
 
   // Create a string that represents the size of the zim file in a human readable way
   public static String createGbString(String megaByte) {
@@ -349,6 +406,16 @@ public class LibraryAdapter extends BaseAdapter {
     TextView fileName;
 
     ImageView favicon;
+  }
+
+  private class ListItem {
+    public Object data;
+    public int type;
+
+    public ListItem(Object data, int type) {
+      this.data = data;
+      this.type = type;
+    }
   }
 
   private class BookMatchComparator implements Comparator<Book> {

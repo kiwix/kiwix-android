@@ -200,49 +200,50 @@ public class LibraryFragment extends Fragment
 
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-    if (getSpaceAvailable()
-        < Long.parseLong(((Book) (parent.getAdapter().getItem(position))).getSize()) * 1024f) {
-      Toast.makeText(super.getActivity(), getString(R.string.download_no_space)
-          + "\n" + getString(R.string.space_available) + " "
-          + LibraryUtils.bytesToHuman(getSpaceAvailable()), Toast.LENGTH_LONG).show();
-      Snackbar snackbar = Snackbar.make(libraryList,
-          getString(R.string.download_change_storage),
-          Snackbar.LENGTH_LONG)
-          .setAction(getString(R.string.open), v -> {
-            FragmentManager fm = getFragmentManager();
-            StorageSelectDialog dialogFragment = new StorageSelectDialog();
-            Bundle b = new Bundle();
-            b.putString(StorageSelectDialog.STORAGE_DIALOG_INTERNAL, getResources().getString(R.string.internal_storage));
-            b.putString(StorageSelectDialog.STORAGE_DIALOG_EXTERNAL, getResources().getString(R.string.external_storage));
-            b.putInt(StorageSelectDialog.STORAGE_DIALOG_THEME, StyleUtils.dialogStyle());
-            dialogFragment.setArguments(b);
-            dialogFragment.setOnSelectListener(this);
-            dialogFragment.show(fm, getResources().getString(R.string.pref_storage));
-          });
-      snackbar.setActionTextColor(Color.WHITE);
-      snackbar.show();
-      return;
-    }
-
-    if (DownloadFragment.mDownloadFiles
-        .containsValue(KIWIX_ROOT + StorageUtils.getFileNameFromUrl(((Book) parent.getAdapter()
-            .getItem(position)).getUrl()))) {
-      Toast.makeText(super.getActivity(), getString(R.string.zim_already_downloading), Toast.LENGTH_LONG)
-          .show();
-    } else {
-
-      NetworkInfo network = conMan.getActiveNetworkInfo();
-      if (network == null || !network.isConnected()) {
-        Toast.makeText(super.getActivity(), getString(R.string.no_network_connection), Toast.LENGTH_LONG)
-            .show();
+    if (!libraryAdapter.isDivider(position)) {
+      if (getSpaceAvailable()
+          < Long.parseLong(((Book) (parent.getAdapter().getItem(position))).getSize()) * 1024f) {
+        Toast.makeText(super.getActivity(), getString(R.string.download_no_space)
+            + "\n" + getString(R.string.space_available) + " "
+            + LibraryUtils.bytesToHuman(getSpaceAvailable()), Toast.LENGTH_LONG).show();
+        Snackbar snackbar = Snackbar.make(libraryList,
+            getString(R.string.download_change_storage),
+            Snackbar.LENGTH_LONG)
+            .setAction(getString(R.string.open), v -> {
+              FragmentManager fm = getFragmentManager();
+              StorageSelectDialog dialogFragment = new StorageSelectDialog();
+              Bundle b = new Bundle();
+              b.putString(StorageSelectDialog.STORAGE_DIALOG_INTERNAL, getResources().getString(R.string.internal_storage));
+              b.putString(StorageSelectDialog.STORAGE_DIALOG_EXTERNAL, getResources().getString(R.string.external_storage));
+              b.putInt(StorageSelectDialog.STORAGE_DIALOG_THEME, StyleUtils.dialogStyle());
+              dialogFragment.setArguments(b);
+              dialogFragment.setOnSelectListener(this);
+              dialogFragment.show(fm, getResources().getString(R.string.pref_storage));
+            });
+        snackbar.setActionTextColor(Color.WHITE);
+        snackbar.show();
         return;
       }
 
-      if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
-        DownloadFragment.showNoWiFiWarning(getContext(), () -> {downloadFile((Book) parent.getAdapter().getItem(position));});
+      if (DownloadFragment.mDownloadFiles
+          .containsValue(KIWIX_ROOT + StorageUtils.getFileNameFromUrl(((Book) parent.getAdapter()
+              .getItem(position)).getUrl()))) {
+        Toast.makeText(super.getActivity(), getString(R.string.zim_already_downloading), Toast.LENGTH_LONG)
+            .show();
       } else {
-        downloadFile((Book) parent.getAdapter().getItem(position));
+
+        NetworkInfo network = conMan.getActiveNetworkInfo();
+        if (network == null || !network.isConnected()) {
+          Toast.makeText(super.getActivity(), getString(R.string.no_network_connection), Toast.LENGTH_LONG)
+              .show();
+          return;
+        }
+
+        if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
+          DownloadFragment.showNoWiFiWarning(getContext(), () -> {downloadFile((Book) parent.getAdapter().getItem(position));});
+        } else {
+          downloadFile((Book) parent.getAdapter().getItem(position));
+        }
       }
     }
   }

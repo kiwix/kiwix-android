@@ -71,6 +71,8 @@ public class ZimManageActivity extends AppCompatActivity {
 
   public SearchView searchView;
 
+  private String searchQuery = "";
+
   private static String KIWIX_TAG = "kiwix";
 
   @Override
@@ -213,8 +215,10 @@ public class ZimManageActivity extends AppCompatActivity {
 
       @Override
       public boolean onQueryTextChange(String s) {
+        searchQuery = s;
+
         if (mSectionsPagerAdapter.libraryFragment.libraryAdapter != null) {
-          mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(s);
+          mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(searchQuery);
         }
         mViewPager.setCurrentItem(1);
         return true;
@@ -261,7 +265,7 @@ public class ZimManageActivity extends AppCompatActivity {
         .setView(view)
         .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
           mSectionsPagerAdapter.libraryFragment.libraryAdapter.updateNetworkLanguages();
-          mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter("");
+          mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(searchQuery);
         })
         .show();
   }
