@@ -63,8 +63,6 @@ public class ZimManageActivity extends AppCompatActivity {
 
   public  Toolbar toolbar;
 
-  public MenuItem refeshItem;
-
   private MenuItem searchItem;
 
   private MenuItem languageItem;
@@ -129,17 +127,14 @@ public class ZimManageActivity extends AppCompatActivity {
       return;
     switch (position) {
       case 0:
-        refeshItem.setVisible(true);
         searchItem.setVisible(false);
         languageItem.setVisible(false);
         break;
       case 1:
-        refeshItem.setVisible(false);
         searchItem.setVisible(true);
         languageItem.setVisible(true);
         break;
       case 2:
-        refeshItem.setVisible(false);
         searchItem.setVisible(false);
         languageItem.setVisible(false);
         break;
@@ -195,7 +190,6 @@ public class ZimManageActivity extends AppCompatActivity {
   public boolean onCreateOptionsMenu(Menu menu) {
     // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.menu_zim_manager, menu);
-    refeshItem = menu.findItem(R.id.menu_rescan_fs);
     searchItem = menu.findItem(R.id.action_search);
     languageItem = menu.findItem(R.id.select_language);
     searchView = (SearchView) searchItem.getActionView();
@@ -233,12 +227,6 @@ public class ZimManageActivity extends AppCompatActivity {
   public boolean onOptionsItemSelected(MenuItem item) {
 
     switch (item.getItemId()) {
-      case R.id.menu_rescan_fs: {
-        if (mViewPager.getCurrentItem() == 0) {
-          ZimFileSelectFragment fragment = (ZimFileSelectFragment) mSectionsPagerAdapter.getItem(0);
-          fragment.refreshFragment();
-        }
-      }
       case R.id.select_language:
         if (mViewPager.getCurrentItem() == 1)
           showLanguageSelect();
