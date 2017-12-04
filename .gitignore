@@ -3,6 +3,12 @@
 *.apk
 *.ap_
 
+# Zim files
+*.zim
+
+# Native libraries
+*.so
+
 # Files for the Dalvik VM
 *.dex
 
