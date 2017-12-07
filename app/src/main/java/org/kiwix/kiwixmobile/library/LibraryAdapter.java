@@ -107,7 +107,7 @@ public class LibraryAdapter extends BaseAdapter {
 
   @Override
   public Object getItem(int i) {
-    return listItems.get(i);
+    return listItems.get(i).data;
   }
 
   @Override
@@ -118,6 +118,9 @@ public class LibraryAdapter extends BaseAdapter {
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     ViewHolder holder;
+    if (position + 1 >= listItems.size()) {
+      return convertView;
+    }
     ListItem item = listItems.get(position);
 
     if (item.type == LIST_ITEM_TYPE_BOOK) {
@@ -248,9 +251,9 @@ public class LibraryAdapter extends BaseAdapter {
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
             .toList().toBlocking().single();
 
-        listItems.add(new ListItem("In your language:", LIST_ITEM_TYPE_DIVIDER));
+        listItems.add(new ListItem(context.getResources().getString(R.string.your_languages), LIST_ITEM_TYPE_DIVIDER));
         addBooks(selectedLanguages);
-        listItems.add(new ListItem("In other languages:", LIST_ITEM_TYPE_DIVIDER));
+        listItems.add(new ListItem(context.getResources().getString(R.string.other_languages), LIST_ITEM_TYPE_DIVIDER));
         addBooks(unselectedLanguages);
       } else {
         List<Book> selectedLanguages = Observable.from(allBooks)

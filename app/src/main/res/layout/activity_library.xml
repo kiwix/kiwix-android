@@ -11,14 +11,6 @@
     android:layout_height="match_parent"
     android:background="?attr/listBackground">
 
-    <ListView
-      android:id="@+id/library_list"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:paddingBottom="60dp"
-      android:background="?attr/listBackground"
-      android:divider="@null"/>
-
     <TextView
       android:id="@+id/network_permission_text"
       android:layout_width="wrap_content"
@@ -36,6 +28,21 @@
       android:layout_centerHorizontal="true"
       android:text="@string/proceed"
       android:visibility="gone"/>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+      android:id="@+id/library_swiperefresh"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content">
+
+      <ListView
+        android:id="@+id/library_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="60dp"
+        android:background="?attr/listBackground"
+        android:divider="@null"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
   </RelativeLayout>
 </LinearLayout>

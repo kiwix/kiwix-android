@@ -31,6 +31,7 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -78,11 +79,13 @@ public class ZimFileSelectFragment extends Fragment
   public static final String TAG_KIWIX = "kiwix";
   public static ZimManageActivity context;
   public RelativeLayout llLayout;
+  public SwipeRefreshLayout swipeRefreshLayout;
+
   private RescanDataAdapter mRescanAdapter;
   private ArrayList<LibraryNetworkEntity.Book> mFiles;
   private ListView mZimFileList;
-  private RelativeLayout progressBar;
   private TextView mFileMessage;
+  private boolean mHasRefresh;
 
   private BookDao bookDao;
 
@@ -106,7 +109,18 @@ public class ZimFileSelectFragment extends Fragment
     mZimFileList = (ListView)  llLayout.findViewById(R.id.zimfilelist);
 
     mFiles = new ArrayList<>();
-    progressBar = (RelativeLayout) super.getActivity().getLayoutInflater().inflate(R.layout.progress_bar, null);
+
+    // SwipeRefreshLayout for the list view
+    swipeRefreshLayout = (SwipeRefreshLayout) llLayout.findViewById(R.id.zim_swiperefresh);
+    swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      @Override
+      public void onRefresh() {
+        refreshFragment();
+      }
+    });
+
+    // A boolean to distinguish between a user refresh and a normal loading
+    mHasRefresh = false;
 
     mRescanAdapter = new RescanDataAdapter(ZimFileSelectFragment.context, 0, mFiles);
 
@@ -114,7 +128,7 @@ public class ZimFileSelectFragment extends Fragment
     ZimContentProvider.canIterate = true;
 
     presenter.loadLocalZimFileFromDb(context);
-     bookDao = new BookDao(KiwixDatabase.getInstance(context));
+    bookDao = new BookDao(KiwixDatabase.getInstance(context));
 
     return llLayout; // We must return the loaded Layout
   }
@@ -158,9 +172,13 @@ public class ZimFileSelectFragment extends Fragment
     checkPermissions();
   }
 
-  public void refreshFragment(){
-    if (mZimFileList == null)
+  public void refreshFragment() {
+    if (mZimFileList == null) {
+      swipeRefreshLayout.setRefreshing(false);
       return;
+    }
+
+    mHasRefresh = true;
     presenter.loadLocalZimFileFromDb(context);
   }
 
@@ -171,6 +189,7 @@ public class ZimFileSelectFragment extends Fragment
       mFiles.add(book);
       mRescanAdapter.notifyDataSetChanged();
       bookDao.saveBooks(mFiles);
+      checkEmpty();
     }
   }
 
@@ -195,12 +214,15 @@ public class ZimFileSelectFragment extends Fragment
   }
 
   public void getFiles() {
-    if (mZimFileList.getFooterViewsCount() != 0)
+    if (swipeRefreshLayout.isRefreshing() && !mHasRefresh)
       return;
 
     TestingUtils.bindResource(ZimFileSelectFragment.class);
-    mZimFileList.addFooterView(progressBar);
+    swipeRefreshLayout.setRefreshing(true);
     mZimFileList.setAdapter(mRescanAdapter);
+
+    // Set mHasRefresh to false to prevent loops
+    mHasRefresh = false;
 
     checkEmpty();
 
@@ -238,9 +260,11 @@ public class ZimFileSelectFragment extends Fragment
         context.runOnUiThread(() -> {
           mRescanAdapter.notifyDataSetChanged();
           bookDao.saveBooks(mFiles);
-          mZimFileList.removeFooterView(progressBar);
           checkEmpty();
           TestingUtils.unbindResource(ZimFileSelectFragment.class);
+
+          // Stop swipe refresh animation
+          swipeRefreshLayout.setRefreshing(false);
         });
       }
     }).scan(PreferenceManager.getDefaultSharedPreferences(context)
@@ -261,16 +285,6 @@ public class ZimFileSelectFragment extends Fragment
       }
 
     }
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.menu_rescan_fs:
-       getFiles();
-    }
-
-    return super.onOptionsItemSelected(item);
   }
 
   @Override

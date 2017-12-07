@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.testutils;
 
 import android.Manifest;
+import android.app.LauncherActivity;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.test.InstrumentationRegistry;
@@ -42,13 +43,17 @@ public class TestUtils {
   }
 
   public static Matcher<Object> withContent(final String content) {
-    return new BoundedMatcher<Object, Book>(Book.class) {
+    return new BoundedMatcher<Object, Object>(Object.class) {
       @Override
-      public boolean matchesSafely(Book myObj) {
-        if (myObj.getUrl() != null) {
-          return myObj.getUrl().contains(content);
+      public boolean matchesSafely(Object myObj) {
+        if (!(myObj instanceof Book)) {
+          return false;
+        }
+        Book book = (Book) myObj;
+        if (book.getUrl() != null) {
+          return book.getUrl().contains(content);
         } else {
-          return myObj.file.getPath().contains(content);
+          return book.file.getPath().contains(content);
         }
       }
 
