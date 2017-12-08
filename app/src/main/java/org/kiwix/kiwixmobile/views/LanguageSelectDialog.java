@@ -27,13 +27,12 @@ public class LanguageSelectDialog extends AlertDialog {
 		super(context);
 	}
 
-	public LanguageSelectDialog(@NonNull Context context, int themeResId) {
-		super(context, themeResId);
-	}
-
 	public static class Builder extends AlertDialog.Builder {
 		private List<LibraryAdapter.Language> languages;
 		private Map<String, Integer> languageCounts;
+		private boolean singleSelect = false;
+		private String selectedLanguage;
+		private OnLanguageSelectedListener languageSelectedListener;
 
 		public Builder(@NonNull Context context) {
 			super(context);
@@ -53,6 +52,23 @@ public class LanguageSelectDialog extends AlertDialog {
       return this;
     }
 
+    public Builder setSingleSelect(boolean singleSelect) {
+		  this.singleSelect = singleSelect;
+		  return this;
+    }
+
+    // Should only be called if setSingleSelect has previously been called with a value of false
+    public Builder setSelectedLanguage(String languageCode) {
+		  this.selectedLanguage = languageCode;
+		  return this;
+    }
+
+    // Should only be called if setSingleSelect has previously been called with a value of false
+    public Builder setOnLanguageSelectedListener(OnLanguageSelectedListener listener) {
+		  languageSelectedListener = listener;
+		  return this;
+    }
+
 		@Override
 		public AlertDialog create() {
 			LinearLayout view = (LinearLayout) View.inflate(getContext(), R.layout.language_selection, null);
@@ -60,14 +76,27 @@ public class LanguageSelectDialog extends AlertDialog {
 			int size = 0;
 			try {
 				size = languages.size();
-			} catch (NullPointerException e) {}
+			} catch (NullPointerException e) {
+			  e.printStackTrace();
+      }
 
 			if (size == 0) {
 				Toast.makeText(getContext(), getContext().getResources().getString(R.string.wait_for_load), Toast.LENGTH_LONG).show();
 			}
-			LanguageArrayAdapter languageArrayAdapter = new LanguageArrayAdapter(getContext(), 0, languages, languageCounts);
+			LanguageArrayAdapter languageArrayAdapter = new LanguageArrayAdapter(getContext(),
+                                                                           0,
+                                                                           languages,
+                                                                           languageCounts,
+                                                                           singleSelect,
+                                                                           selectedLanguage);
 			listView.setAdapter(languageArrayAdapter);
 			setView(view);
+
+      if (languageSelectedListener != null) {
+        setPositiveButton(android.R.string.ok, ((dialog, which) -> {
+          languageSelectedListener.onLanguageSelected(languageArrayAdapter.getSelectedLanguage());
+        }));
+      }
 
 			return super.create();
 		}
@@ -76,15 +105,25 @@ public class LanguageSelectDialog extends AlertDialog {
 	private static class LanguageArrayAdapter extends ArrayAdapter<LibraryAdapter.Language> {
 		private Map<String, Integer> languageCounts;
 		private Context context;
+		private boolean singleSelect;
+    private String selectedLanguage;
 
-		public LanguageArrayAdapter(Context context, int textViewResourceId, List<LibraryAdapter.Language> languages, Map<String, Integer> languageCounts) {
+    public LanguageArrayAdapter(Context context,
+                                int textViewResourceId,
+                                List<LibraryAdapter.Language> languages,
+                                Map<String, Integer> languageCounts,
+                                boolean singleSelect,
+                                String selectedLanguage) {
 			super(context, textViewResourceId, languages);
 			this.languageCounts = languageCounts;
 			this.context = context;
-		}
+			this.singleSelect = singleSelect;
+      this.selectedLanguage = selectedLanguage;
+    }
 
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		@NonNull
+    @Override
+		public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 			LanguageArrayAdapter.ViewHolder holder;
 
 			if (convertView == null) {
@@ -115,10 +154,35 @@ public class LanguageSelectDialog extends AlertDialog {
       } else {
 			  holder.languageEntriesCount.setVisibility(View.GONE);
       }
-			holder.checkBox.setChecked(language.active);
+
+      if (!singleSelect) {
+        holder.checkBox.setChecked(language.active);
+      } else {
+			  holder.checkBox.setClickable(false);
+			  holder.checkBox.setFocusable(false);
+
+			  if (getSelectedLanguage().equalsIgnoreCase(language.languageCode)) {
+			    holder.checkBox.setChecked(true);
+        } else {
+			    holder.checkBox.setChecked(false);
+        }
+
+        convertView.setOnClickListener((v -> {
+          setSelectedLanguage(language.languageCode);
+          notifyDataSetChanged();
+        }));
+      }
 
 			return convertView;
 		}
+
+    public String getSelectedLanguage() {
+      return selectedLanguage;
+    }
+
+    public void setSelectedLanguage(String selectedLanguage) {
+      this.selectedLanguage = selectedLanguage;
+    }
 
 		// We are using the ViewHolder pattern in order to optimize the ListView by reusing
 		// Views and saving them to this mLibrary class, and not inflating the layout every time
@@ -131,4 +195,8 @@ public class LanguageSelectDialog extends AlertDialog {
 			TextView languageEntriesCount;
 		}
 	}
+
+	public interface OnLanguageSelectedListener {
+	  void onLanguageSelected(String languageCode);
+  }
 }

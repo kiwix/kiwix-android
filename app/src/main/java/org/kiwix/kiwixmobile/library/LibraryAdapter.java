@@ -53,6 +53,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -437,6 +438,7 @@ public class LibraryAdapter extends BaseAdapter {
       this.language = locale.getDisplayLanguage();
       this.languageLocalized = locale.getDisplayLanguage(locale);
       this.languageCode = locale.getISO3Language();
+
       this.active = active;
     }
 
