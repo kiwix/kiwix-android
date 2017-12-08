@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
+import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -57,13 +58,13 @@ public class LanguageSelectDialog extends AlertDialog {
 		  return this;
     }
 
-    // Should only be called if setSingleSelect has previously been called with a value of false
+    // Should only be called if setSingleSelect has previously been called with a value of true
     public Builder setSelectedLanguage(String languageCode) {
 		  this.selectedLanguage = languageCode;
 		  return this;
     }
 
-    // Should only be called if setSingleSelect has previously been called with a value of false
+    // Should only be called if setSingleSelect has previously been called with a value of true
     public Builder setOnLanguageSelectedListener(OnLanguageSelectedListener listener) {
 		  languageSelectedListener = listener;
 		  return this;
@@ -161,14 +162,14 @@ public class LanguageSelectDialog extends AlertDialog {
 			  holder.checkBox.setClickable(false);
 			  holder.checkBox.setFocusable(false);
 
-			  if (getSelectedLanguage().equalsIgnoreCase(language.languageCode)) {
+			  if (getSelectedLanguage().equalsIgnoreCase(language.languageCodeISO2)) {
 			    holder.checkBox.setChecked(true);
         } else {
 			    holder.checkBox.setChecked(false);
         }
 
         convertView.setOnClickListener((v -> {
-          setSelectedLanguage(language.languageCode);
+          setSelectedLanguage(language.languageCodeISO2);
           notifyDataSetChanged();
         }));
       }

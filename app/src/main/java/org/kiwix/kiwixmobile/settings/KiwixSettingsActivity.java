@@ -23,11 +23,9 @@ import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.EditTextPreference;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
@@ -39,7 +37,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.webkit.WebView;
 import android.widget.BaseAdapter;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.BuildConfig;
@@ -347,7 +344,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
                 editor.putString(PREF_LANG, languageCode);
                 editor.apply();
 
-                LanguageUtils.handleLocaleChange(getActivity(), languageCode.toString());
+                LanguageUtils.handleLocaleChange(getActivity(), languageCode);
                 // Request a restart when the user returns to the Activity, that called this Activity
                 restartActivity();
               }))
