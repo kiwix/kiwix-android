@@ -49,6 +49,7 @@ import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.database.RecentSearchDao;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
+import org.kiwix.kiwixmobile.views.LanguageSelectDialog;
 import org.kiwix.kiwixmobile.views.SliderPreference;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryUtils;
 
@@ -236,28 +237,11 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     }
 
     private void setUpLanguageChooser(String preferenceId) {
+      Preference languagePref = getPrefrence(preferenceId);
+      SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+      String selectedLang = sharedPreferences.getString(PREF_LANG, Locale.getDefault().toString());
 
-      ListPreference languageList = (ListPreference) getPrefrence(preferenceId);
-      LanguageUtils languageUtils = new LanguageUtils(getActivity());
-
-      languageList.setTitle(Locale.getDefault().getDisplayLanguage());
-      languageList.setEntries(languageUtils.getValues().toArray(new String[0]));
-      languageList.setEntryValues(languageUtils.getKeys().toArray(new String[0]));
-      languageList.setDefaultValue(Locale.getDefault().toString());
-      languageList.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object newValue) {
-
-          if (!newValue.equals(Locale.getDefault().toString())) {
-
-            LanguageUtils.handleLocaleChange(getActivity(), newValue.toString());
-            // Request a restart when the user returns to the Activity, that called this Activity
-            restartActivity();
-          }
-
-          return true;
-        }
-      });
+      languagePref.setTitle(new Locale(selectedLang).getDisplayLanguage());
     }
 
     private void restartActivity() {
@@ -336,12 +320,38 @@ public class KiwixSettingsActivity extends AppCompatActivity {
                                          Preference preference) {
       if (preference.getKey().equalsIgnoreCase(PREF_CLEAR_ALL_HISTORY))
         clearAllHistoryDialog();
+
       if (preference.getKey().equalsIgnoreCase(PREF_CREDITS))
         openCredits();
-      if (preference.getKey().equalsIgnoreCase(PREF_STORAGE)) {
+
+      if (preference.getKey().equalsIgnoreCase(PREF_STORAGE))
         openFolderSelect();
-      }
+
+      if (preference.getKey().equalsIgnoreCase(PREF_LANG))
+        openLanguageSelect();
+
       return true;
+    }
+
+    public void openLanguageSelect() {
+      SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+      LanguageUtils languageUtils = new LanguageUtils(getActivity());
+      String selectedLang = sharedPreferences.getString(PREF_LANG, Locale.getDefault().toString());
+
+      new LanguageSelectDialog.Builder(getActivity(), dialogStyle())
+              .setLanguages(languageUtils.getLanguageList())
+              .setSingleSelect(true)
+              .setSelectedLanguage(selectedLang)
+              .setOnLanguageSelectedListener((languageCode -> {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(PREF_LANG, languageCode);
+                editor.apply();
+
+                LanguageUtils.handleLocaleChange(getActivity(), languageCode.toString());
+                // Request a restart when the user returns to the Activity, that called this Activity
+                restartActivity();
+              }))
+              .show();
     }
 
     public void openFolderSelect(){
