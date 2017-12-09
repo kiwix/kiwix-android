@@ -336,19 +336,19 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       String selectedLang = sharedPreferences.getString(PREF_LANG, Locale.getDefault().toString());
 
       new LanguageSelectDialog.Builder(getActivity(), dialogStyle())
-              .setLanguages(languageUtils.getLanguageList())
-              .setSingleSelect(true)
-              .setSelectedLanguage(selectedLang)
-              .setOnLanguageSelectedListener((languageCode -> {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(PREF_LANG, languageCode);
-                editor.apply();
+          .setLanguages(languageUtils.getLanguageList())
+          .setSingleSelect(true)
+          .setSelectedLanguage(selectedLang)
+          .setOnLanguageSelectedListener((languageCode -> {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(PREF_LANG, languageCode);
+            editor.apply();
 
-                LanguageUtils.handleLocaleChange(getActivity(), languageCode);
-                // Request a restart when the user returns to the Activity, that called this Activity
-                restartActivity();
-              }))
-              .show();
+            LanguageUtils.handleLocaleChange(getActivity(), languageCode);
+            // Request a restart when the user returns to the Activity, that called this Activity
+            restartActivity();
+          }))
+          .show();
     }
 
     public void openFolderSelect(){

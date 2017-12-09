@@ -224,13 +224,13 @@ public class ZimManageActivity extends AppCompatActivity {
 
   private void showLanguageSelect() {
     new LanguageSelectDialog.Builder(this, dialogStyle())
-            .setLanguages(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages)
-            .setLanguageCounts(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languageCounts)
-            .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
-              mSectionsPagerAdapter.libraryFragment.libraryAdapter.updateNetworkLanguages();
-              mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(searchQuery);
-            })
-            .show();
+        .setLanguages(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages)
+        .setLanguageCounts(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languageCounts)
+        .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
+          mSectionsPagerAdapter.libraryFragment.libraryAdapter.updateNetworkLanguages();
+          mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(searchQuery);
+        })
+        .show();
   }
 
   /**
