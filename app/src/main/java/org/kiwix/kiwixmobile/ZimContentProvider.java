@@ -109,17 +109,15 @@ public class ZimContentProvider extends ContentProvider {
     
   public synchronized static String setZimFile(String fileName) {
     JNIKiwixReader reader = new JNIKiwixReader(fileName);
-    
-    if(!listedEntries.contains(reader.getId())) {
-      listedEntries.add(reader.getId());
-      jniSearcher.addKiwixReader(reader);
-    }
-    
     if (!new File(fileName).exists() || reader == null) {
       Log.e(TAG_KIWIX, "Unable to open the ZIM file " + fileName);
       zimFileName = null;
     } else {
       Log.i(TAG_KIWIX, "Opening ZIM file " + fileName);
+      if(!listedEntries.contains(reader.getId())) {
+        listedEntries.add(reader.getId());
+        jniSearcher.addKiwixReader(reader);
+      }
       zimFileName = fileName;
     }
     currentJNIReader = reader;
