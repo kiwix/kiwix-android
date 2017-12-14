@@ -180,18 +180,21 @@ android {
 
     mock_network {
       initWith(buildTypes.debug)
+      matchingFallbacks = ['debug', 'release']
       // TODO add DI for the mock network
     }
 
     local_download_server {
       initWith(buildTypes.debug)
       buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://192.168.1.196/\""
+      matchingFallbacks = ['debug', 'release']
     }
 
     // Used to assess code coverage
     coverage {
       initWith debug
       testCoverageEnabled true
+      matchingFallbacks = ['debug', 'release']
     }
 
     // Release Type
