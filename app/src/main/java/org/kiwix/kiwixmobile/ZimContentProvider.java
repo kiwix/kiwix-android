@@ -29,12 +29,13 @@ import android.os.ParcelFileDescriptor.AutoCloseOutputStream;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
+import java.io.RandomAccessFile;
 import org.kiwix.kiwixlib.JNIKiwix;
 import org.kiwix.kiwixlib.JNIKiwixInt;
 import org.kiwix.kiwixlib.JNIKiwixReader;
 import org.kiwix.kiwixlib.JNIKiwixSearcher;
 import org.kiwix.kiwixlib.JNIKiwixString;
-import org.kiwix.kiwixmobile.utils.files.FileUtils;
+import org.kiwix.kiwixlib.Pair;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -366,7 +367,7 @@ public class ZimContentProvider extends ContentProvider {
     Matcher matcher = PATTERN.matcher(uri.toString());
     if (matcher.matches()) {
       try {
-        return saveVideoToCache(uri);
+        return loadVideo(uri);
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -387,25 +388,12 @@ public class ZimContentProvider extends ContentProvider {
     return (pipe[0]);
   }
 
-  private ParcelFileDescriptor saveVideoToCache(Uri uri) throws IOException {
-    String filePath = getFilePath(uri);
-
-    String fileName = uri.toString();
-    fileName = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.length());
-
-    File f = new File(FileUtils.getFileCacheDir(getContext()), fileName);
-
-    JNIKiwixString mime = new JNIKiwixString();
-    JNIKiwixString title = new JNIKiwixString();
-    JNIKiwixInt size = new JNIKiwixInt();
-    byte[] data = currentJNIReader.getContent(filePath, title, mime, size);
-
-    FileOutputStream out = new FileOutputStream(f);
-
-    out.write(data, 0, data.length);
-    out.flush();
-
-    return ParcelFileDescriptor.open(f, ParcelFileDescriptor.MODE_READ_ONLY);
+  // Return a file descriptor of the video within the ZIM file
+  private ParcelFileDescriptor loadVideo(Uri uri) throws IOException {
+    Pair pair = currentJNIReader.getDirectAccessInformation(getFilePath(uri));
+    RandomAccessFile randomAccessFile = new RandomAccessFile(pair.filename, "r");
+    randomAccessFile.seek(pair.offset);
+    return ParcelFileDescriptor.dup(randomAccessFile.getFD());
   }
 
   @Override
