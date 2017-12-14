@@ -11,7 +11,7 @@
   <color name="secondary_text">#727272</color>
   <color name="icons">#212121</color>
   <color name="divider">#304e9a</color>
-  <color name="white">#FAFAFA</color>
+  <color name="white">#fafafa</color>
   <color name="gray_list_bg">#0d000000</color>
   <color name="drawer_background_day">#ffffff</color>
   <color name="drawer_background_night">#5a5a5a</color>

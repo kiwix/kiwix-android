@@ -1,11 +1,19 @@
 package org.kiwix.kiwixmobile;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.multidex.MultiDexApplication;
+
+import com.crashlytics.android.Crashlytics;
 
 import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
 import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
+
+import java.io.Serializable;
+
+import io.fabric.sdk.android.Fabric;
 
 public class KiwixApplication extends MultiDexApplication {
 
@@ -14,6 +22,12 @@ public class KiwixApplication extends MultiDexApplication {
 
   public static KiwixApplication getInstance() {
     return application;
+  }
+
+  @Override
+  public void onCreate() {
+    super.onCreate();
+
   }
 
   @Override
