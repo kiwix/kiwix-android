@@ -57,7 +57,7 @@ public class KiwixErrorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_kiwix_error);
         ButterKnife.bind(this);
 
-        Context that = this;
+        Context context = this;
 
         Intent callingIntent = getIntent();
 
@@ -77,9 +77,9 @@ public class KiwixErrorActivity extends AppCompatActivity {
                     "The Android app crashed, here are some details to help fix it:\n\n";
 
             if(allowLogsCheckbox.isChecked()) {
-                String filename = "contacts_sid.vcf";
-                File filelocation = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), filename);
-                Uri path = Uri.fromFile(filelocation);
+                File appDirectory = new File(Environment.getExternalStorageDirectory() + "/Kiwix");
+                File logFile = new File(appDirectory, "logcat.txt");
+                Uri path = Uri.fromFile(logFile);
                 emailIntent.putExtra(Intent.EXTRA_STREAM, path);
             }
 
@@ -95,8 +95,10 @@ public class KiwixErrorActivity extends AppCompatActivity {
 
                 String allZimFiles = "";
                 for(LibraryNetworkEntity.Book book: books) {
-                    String bookString = book.toString() +
-                            "\n";
+                    String bookString = book.getTitle() +
+                            ":\nArticles: ["+ book.getArticleCount() +
+                            "]\nCreator: [" + book.getCreator() +
+                            "]\n";
 
                     allZimFiles += bookString;
                 }
