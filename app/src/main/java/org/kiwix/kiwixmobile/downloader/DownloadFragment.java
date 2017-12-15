@@ -98,19 +98,19 @@ public class DownloadFragment extends Fragment {
 
   public static void showNoWiFiWarning(Context context, Runnable yesAction) {
     new AlertDialog.Builder(context)
-            .setTitle(R.string.wifi_only_title)
-            .setMessage(R.string.wifi_only_msg)
-            .setPositiveButton(R.string.yes, (dialog, i) -> {
-              PreferenceManager.getDefaultSharedPreferences(context)
-                      .edit()
-                      .putBoolean(KiwixSettingsActivity.PREF_WIFI_ONLY, false)
-                      .apply();
-              KiwixMobileActivity.wifiOnly = false;
-              yesAction.run();
-            })
-            .setNegativeButton(R.string.no, (dialog, i) -> {
-            })
-            .show();
+        .setTitle(R.string.wifi_only_title)
+        .setMessage(R.string.wifi_only_msg)
+        .setPositiveButton(R.string.yes, (dialog, i) -> {
+          PreferenceManager.getDefaultSharedPreferences(context)
+              .edit()
+              .putBoolean(KiwixSettingsActivity.PREF_WIFI_ONLY, false)
+              .apply();
+          KiwixMobileActivity.wifiOnly = false;
+          yesAction.run();
+        })
+        .setNegativeButton(R.string.no, (dialog, i) -> {
+        })
+        .show();
   }
 
   public static String toHumanReadableTime(int seconds) {
@@ -120,19 +120,19 @@ public class DownloadFragment extends Fragment {
 
     if (Math.round(seconds / DAYS) > 0)
       return String.format(Locale.getDefault(), "%d %s %s", Math.round(seconds / DAYS),
-              KiwixApplication.getInstance().getResources().getString(R.string.time_day),
-              KiwixApplication.getInstance().getResources().getString(R.string.time_left));
+          KiwixApplication.getInstance().getResources().getString(R.string.time_day),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_left));
     if (Math.round(seconds / HOURS) > 0)
       return String.format(Locale.getDefault(), "%d %s %s", Math.round(seconds / HOURS),
-              KiwixApplication.getInstance().getResources().getString(R.string.time_hour),
-              KiwixApplication.getInstance().getResources().getString(R.string.time_left));
+          KiwixApplication.getInstance().getResources().getString(R.string.time_hour),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_left));
     if (Math.round(seconds / MINUTES) > 0)
       return String.format(Locale.getDefault(), "%d %s %s", Math.round(seconds / MINUTES),
-              KiwixApplication.getInstance().getResources().getString(R.string.time_minute),
-              KiwixApplication.getInstance().getResources().getString(R.string.time_left));
+          KiwixApplication.getInstance().getResources().getString(R.string.time_minute),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_left));
     return String.format(Locale.getDefault(), "%d %s %s", seconds,
-            KiwixApplication.getInstance().getResources().getString(R.string.time_second),
-            KiwixApplication.getInstance().getResources().getString(R.string.time_left));
+        KiwixApplication.getInstance().getResources().getString(R.string.time_second),
+        KiwixApplication.getInstance().getResources().getString(R.string.time_left));
   }
 
   public class DownloadAdapter extends BaseAdapter {
@@ -270,25 +270,25 @@ public class DownloadFragment extends Fragment {
         hasArtificiallyPaused = LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY;
         setPlayState(pause, position, DownloadService.PAUSE);
         new AlertDialog.Builder(faActivity, dialogStyle())
-                .setTitle(R.string.confirm_stop_download_title)
-                .setMessage(R.string.confirm_stop_download_msg)
-                .setPositiveButton(R.string.yes, (dialog, i) -> {
-                  LibraryFragment.mService.stopDownload(mKeys[position]);
-                  mDownloads.remove(mKeys[position]);
-                  mDownloadFiles.remove(mKeys[position]);
-                  downloadAdapter.notifyDataSetChanged();
-                  updateNoDownloads();
-                  if (zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter != null) {
-                    zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(((ZimManageActivity) getActivity()).searchView.getQuery());
-                  }
-                })
-                .setNegativeButton(R.string.no, (dialog, i) -> {
-                  if (hasArtificiallyPaused) {
-                    hasArtificiallyPaused = false;
-                    setPlayState(pause, position, DownloadService.PLAY);
-                  }
-                })
-                .show();
+            .setTitle(R.string.confirm_stop_download_title)
+            .setMessage(R.string.confirm_stop_download_msg)
+            .setPositiveButton(R.string.yes, (dialog, i) -> {
+              LibraryFragment.mService.stopDownload(mKeys[position]);
+              mDownloads.remove(mKeys[position]);
+              mDownloadFiles.remove(mKeys[position]);
+              downloadAdapter.notifyDataSetChanged();
+              updateNoDownloads();
+              if (zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter != null) {
+                zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(((ZimManageActivity) getActivity()).searchView.getQuery());
+              }
+            })
+            .setNegativeButton(R.string.no, (dialog, i) -> {
+              if (hasArtificiallyPaused) {
+                hasArtificiallyPaused = false;
+                setPlayState(pause, position, DownloadService.PLAY);
+              }
+            })
+            .show();
       });
 
       // Return the completed view to render on screen

@@ -92,7 +92,8 @@ public class LibraryFragment extends Fragment
 
   private DownloadServiceConnection mConnection = new DownloadServiceConnection();
 
-  @Inject ConnectivityManager conMan;
+  @Inject
+  ConnectivityManager conMan;
 
   private ZimManageActivity faActivity;
 
@@ -145,7 +146,7 @@ public class LibraryFragment extends Fragment
           faActivity.searchView.getQuery(),
           i -> stopScanningContent());
     } else {
-      libraryAdapter.getFilter().filter("", i -> stopScanningContent()  );
+      libraryAdapter.getFilter().filter("", i -> stopScanningContent());
     }
     libraryAdapter.notifyDataSetChanged();
     libraryList.setOnItemClickListener(this);
@@ -257,7 +258,9 @@ public class LibraryFragment extends Fragment
         }
 
         if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
-          DownloadFragment.showNoWiFiWarning(getContext(), () -> {downloadFile((Book) parent.getAdapter().getItem(position));});
+          DownloadFragment.showNoWiFiWarning(getContext(), () -> {
+            downloadFile((Book) parent.getAdapter().getItem(position));
+          });
         } else {
           downloadFile((Book) parent.getAdapter().getItem(position));
         }
@@ -323,7 +326,8 @@ public class LibraryFragment extends Fragment
       }
 
       @Override
-      public void onServiceDisconnected(ComponentName arg0) { }
+      public void onServiceDisconnected(ComponentName arg0) {
+      }
     }
   }
 
