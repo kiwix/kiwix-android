@@ -186,7 +186,7 @@ android {
 
     local_download_server {
       initWith(buildTypes.debug)
-      buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://192.168.1.196/\""
+      buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://kiwix-download-server/\""
       matchingFallbacks = ['debug', 'release']
     }
 
