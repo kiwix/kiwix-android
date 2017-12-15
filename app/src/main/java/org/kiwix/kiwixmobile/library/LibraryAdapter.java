@@ -118,7 +118,7 @@ public class LibraryAdapter extends BaseAdapter {
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     ViewHolder holder;
-    if (position + 1 >= listItems.size()) {
+    if (position >= listItems.size()) {
       return convertView;
     }
     ListItem item = listItems.get(position);
