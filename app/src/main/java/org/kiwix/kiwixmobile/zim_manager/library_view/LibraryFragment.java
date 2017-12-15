@@ -114,10 +114,11 @@ public class LibraryFragment extends Fragment
 
     setupDagger();
     TestingUtils.bindResource(LibraryFragment.class);
+    llLayout = (LinearLayout) inflater.inflate(R.layout.activity_library, container, false);
     ButterKnife.bind(this, llLayout);
     presenter.attachView(this);
+
     faActivity = (ZimManageActivity) super.getActivity();
-    llLayout = (LinearLayout) inflater.inflate(R.layout.activity_library, container, false);
     swipeRefreshLayout.setOnRefreshListener(() -> refreshFragment());
     libraryAdapter = new LibraryAdapter(super.getContext());
     libraryList.setAdapter(libraryAdapter);
@@ -169,6 +170,7 @@ public class LibraryFragment extends Fragment
     networkText.setText(R.string.no_items_msg);
     networkText.setVisibility(View.VISIBLE);
     permissionButton.setVisibility(GONE);
+    swipeRefreshLayout.setRefreshing(false);
     TestingUtils.unbindResource(LibraryFragment.class);
   }
 
