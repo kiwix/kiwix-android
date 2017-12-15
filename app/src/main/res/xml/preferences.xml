@@ -108,8 +108,7 @@
       android:key="pref_language"
       android:title="@string/pref_language_title">
 
-    <ListPreference
-        android:dialogTitle="@string/pref_language_chooser"
+    <Preference
         android:key="pref_language_chooser"
         android:summary="@string/pref_language_chooser"
         android:title="@string/pref_language_title"/>

@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.zim_manager;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -20,26 +18,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
-import org.kiwix.kiwixmobile.library.LibraryAdapter;
-import org.kiwix.kiwixmobile.library.LibraryAdapter.Language;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
+import org.kiwix.kiwixmobile.views.LanguageSelectDialog;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
-
-import java.util.List;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
@@ -236,28 +223,15 @@ public class ZimManageActivity extends AppCompatActivity {
   }
 
   private void showLanguageSelect() {
-    LinearLayout view = (LinearLayout) getLayoutInflater().inflate(R.layout.language_selection, null);
-    ListView listView = (ListView) view.findViewById(R.id.language_check_view);
-    int size = 0;
-    try {
-      size = mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages.size();
-    } catch (NullPointerException e) { }
-    if (size == 0) {
-      Toast.makeText(this, getResources().getString(R.string.wait_for_load), Toast.LENGTH_LONG).show();
-      return;
-    }
-    LanguageArrayAdapter languageArrayAdapter =
-            new LanguageArrayAdapter(this, 0, mSectionsPagerAdapter.libraryFragment.libraryAdapter);
-    listView.setAdapter(languageArrayAdapter);
-    new AlertDialog.Builder(this, dialogStyle())
-        .setView(view)
+    new LanguageSelectDialog.Builder(this, dialogStyle())
+        .setLanguages(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages)
+        .setLanguageCounts(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languageCounts)
         .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
           mSectionsPagerAdapter.libraryFragment.libraryAdapter.updateNetworkLanguages();
           mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(searchQuery);
         })
         .show();
   }
-
 
   /**
    * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -310,58 +284,6 @@ public class ZimManageActivity extends AppCompatActivity {
           return getResources().getString(R.string.zim_downloads);
       }
       return null;
-    }
-  }
-
-
-  private class LanguageArrayAdapter extends ArrayAdapter<LibraryAdapter.Language> {
-
-    public LanguageArrayAdapter(Context context, int textViewResourceId, LibraryAdapter library_adapter) {
-      super(context, textViewResourceId, library_adapter.languages);
-      this.library_adapter = library_adapter;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-      ViewHolder holder;
-      if (convertView == null) {
-        convertView = View.inflate(getContext(), R.layout.language_check_item, null);
-        holder = new ViewHolder();
-        holder.row = (ViewGroup) convertView.findViewById(R.id.language_row);
-        holder.checkBox = (CheckBox) convertView.findViewById(R.id.language_checkbox);
-        holder.language = (TextView) convertView.findViewById(R.id.language_name);
-        holder.languageLocalized = (TextView) convertView.findViewById(R.id.language_name_localized);
-        holder.languageEntriesCount = (TextView) convertView.findViewById(R.id.language_entries_count);
-        convertView.setTag(holder);
-      } else {
-        holder = (ViewHolder) convertView.getTag();
-      }
-
-      // Set event listeners first, since updating the default values can trigger them.
-      holder.row.setOnClickListener((view) -> holder.checkBox.toggle());
-      holder.checkBox.setOnCheckedChangeListener((compoundButton, b) -> getItem(position).active = b);
-
-      Language language = getItem(position);
-      holder.language.setText(language.language);
-      holder.languageLocalized.setText(language.languageLocalized);
-      holder.languageEntriesCount.setText(
-          getString(R.string.language_count, library_adapter.languageCounts.get(language.languageCode)));
-      holder.checkBox.setChecked(language.active);
-
-      return convertView;
-    }
-
-    private LibraryAdapter library_adapter;
-    // We are using the ViewHolder pattern in order to optimize the ListView by reusing
-    // Views and saving them to this mLibrary class, and not inflating the layout every time
-    // we need to create a row.
-    private class ViewHolder {
-      ViewGroup row;
-      CheckBox checkBox;
-      TextView language;
-      TextView languageLocalized;
-      TextView languageEntriesCount;
     }
   }
 }
