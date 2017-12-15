@@ -431,12 +431,15 @@ public class LibraryAdapter extends BaseAdapter {
     public String language;
     public String languageLocalized;
     public String languageCode;
+    public String languageCodeISO2;
     public Boolean active;
 
     Language(Locale locale, Boolean active) {
       this.language = locale.getDisplayLanguage();
       this.languageLocalized = locale.getDisplayLanguage(locale);
       this.languageCode = locale.getISO3Language();
+      this.languageCodeISO2 = locale.getLanguage();
+
       this.active = active;
     }
 
