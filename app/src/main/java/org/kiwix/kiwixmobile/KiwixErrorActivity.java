@@ -2,21 +2,28 @@ package org.kiwix.kiwixmobile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.crashlytics.android.Crashlytics;
-
+import org.kiwix.kiwixmobile.database.BookDao;
+import org.kiwix.kiwixmobile.database.KiwixDatabase;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.SplashActivity;
+
+import java.io.File;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.fabric.sdk.android.Fabric;
-import io.fabric.sdk.android.services.common.Crash;
+
+import static org.kiwix.kiwixmobile.utils.LanguageUtils.getCurrentLocale;
 
 public class KiwixErrorActivity extends AppCompatActivity {
 
@@ -38,6 +45,12 @@ public class KiwixErrorActivity extends AppCompatActivity {
     @BindView(R.id.allowCrash)
     CheckBox allowCrashCheckbox;
 
+    @BindView(R.id.allowLogs)
+    CheckBox allowLogsCheckbox;
+
+    @BindView(R.id.allowDeviceDetails)
+    CheckBox allowDeviceDetailsCheckbox;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,38 +64,95 @@ public class KiwixErrorActivity extends AppCompatActivity {
         Bundle extras = callingIntent.getExtras();
         Throwable exception = (Throwable) extras.getSerializable("exception");
 
-        reportButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fabric.with(that, new Crashlytics());
-                Crashlytics.logException(exception);
-                restartApp();
+        reportButton.setOnClickListener(v -> {
+
+
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+            emailIntent.setType("vnd.android.cursor.dir/email");
+            String to[] = {"joseph.reeve@googlemail.com"};
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Someone has reported a crash");
+
+            String body = "Hi Kiwix Developers!\n" +
+                    "The Android app crashed, here are some details to help fix it:\n\n";
+
+            if(allowLogsCheckbox.isChecked()) {
+                String filename = "contacts_sid.vcf";
+                File filelocation = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), filename);
+                Uri path = Uri.fromFile(filelocation);
+                emailIntent.putExtra(Intent.EXTRA_STREAM, path);
             }
+
+            if(allowCrashCheckbox.isChecked()) {
+                body += "Exception Details:\n\n" +
+                        exception.toString() +
+                "\n\n";
+            }
+
+            if(allowZimsCheckbox.isChecked()) {
+                BookDao bookDao = new BookDao(KiwixDatabase.getInstance(getApplicationContext()));
+                ArrayList<LibraryNetworkEntity.Book> books = bookDao.getBooks();
+
+                String allZimFiles = "";
+                for(LibraryNetworkEntity.Book book: books) {
+                    String bookString = book.toString() +
+                            "\n";
+
+                    allZimFiles += bookString;
+                }
+
+                String currentZimFile = ZimContentProvider.getZimFile();
+                body += "Curent Zim File:\n" +
+                        currentZimFile +
+                        "\n\nAll Zim Files in DB:\n" +
+                        allZimFiles +
+                "\n\n";
+            }
+
+            if(allowLanguageCheckbox.isChecked()) {
+                body += "Current Locale:\n" +
+                        getCurrentLocale(getApplicationContext()) +
+                "\n\n";
+            }
+
+            if(allowDeviceDetailsCheckbox.isChecked()) {
+                body += "Device Details:\n" +
+                        "Device:[" + Build.DEVICE
+                        + "]\nModel:[" + Build.MODEL
+                        + "]\nManufacturer:[" + Build.MANUFACTURER
+                        + "]\nTime:[" + Build.TIME
+                        + "]\nAndroid Version:[" + Build.VERSION.RELEASE
+                        + "]" +
+                        "\n\n";
+            }
+
+            emailIntent.putExtra(Intent.EXTRA_TEXT, body);
+
+            startActivityForResult(Intent.createChooser(emailIntent , "Send email..."), 1);
         });
 
-        restartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                restartApp();
-            }
-        });
+        restartButton.setOnClickListener(v -> restartApp());
     }
 
     void restartApp(){
-        Intent intent = new Intent(getApplicationContext(), KiwixMobileActivity.class);
+        Context context = KiwixErrorActivity.this;
+        Intent intent = new Intent(context, SplashActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-        if (intent.getComponent() != null) {
-            //If the class name has been set, we force it to simulate a Launcher launch.
-            //If we don't do this, if you restart from the error activity, then press home,
-            //and then launch the activity from the launcher, the main activity appears twice on the backstack.
-            //This will most likely not have any detrimental effect because if you set the Intent component,
-            //if will always be launched regardless of the actions specified here.
-            intent.setAction(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_LAUNCHER);
-        }
-        this.finish();
-        this.startActivity(intent);
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        context.startActivity(intent);
 
+        finish();
+        killCurrentProcess();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        restartApp();
+    }
+
+    private static void killCurrentProcess() {
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(10);
     }

@@ -7,6 +7,19 @@
     android:background="@android:color/holo_blue_dark"
     tools:context="org.kiwix.kiwixmobile.KiwixErrorActivity">
 
+    <CheckBox
+        android:id="@+id/allowDeviceDetails"
+        style="@android:style/Widget.Material.Light.CompoundButton.CheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="8dp"
+        android:checked="true"
+        android:text="Device Details"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/allowLogs" />
+
     <TextView
         android:id="@+id/messageText"
         android:layout_width="332dp"
@@ -68,6 +81,19 @@
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/allowLanguage" />
+
+    <CheckBox
+        android:id="@+id/allowLogs"
+        style="@android:style/Widget.Material.Light.CompoundButton.CheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="8dp"
+        android:checked="true"
+        android:text="App Logs"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/allowCrash" />
 
     <CheckBox
         android:id="@+id/allowCrash"

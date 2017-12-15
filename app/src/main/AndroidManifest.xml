@@ -174,7 +174,6 @@
                 android:resource="@xml/kiwix_widget_provider_info" />
         </receiver>
 
-
         <service android:name=".downloader.DownloadService" />
 
         <activity
