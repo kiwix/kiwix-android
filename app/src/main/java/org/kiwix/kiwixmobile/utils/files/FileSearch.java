@@ -181,17 +181,24 @@ public class FileSearch {
     // This is not a great solution as we shouldn't need to fully open our ZIM files to get their metadata
     if (ZimContentProvider.canIterate) {
       if (ZimContentProvider.setZimFile(filePath) != null) {
-        book = new LibraryNetworkEntity.Book();
-        book.title = ZimContentProvider.getZimFileTitle();
-        book.id = ZimContentProvider.getId();
-        book.file = new File(filePath);
-        book.size = String.valueOf(ZimContentProvider.getFileSize());
-        book.favicon = ZimContentProvider.getFavicon();
-        book.creator = ZimContentProvider.getCreator();
-        book.publisher = ZimContentProvider.getPublisher();
-        book.date = ZimContentProvider.getDate();
-        book.description = ZimContentProvider.getDescription();
-        book.language = ZimContentProvider.getLanguage();
+        try {
+          book = new LibraryNetworkEntity.Book();
+          book.title = ZimContentProvider.getZimFileTitle();
+          book.id = ZimContentProvider.getId();
+          book.file = new File(filePath);
+          book.size = String.valueOf(ZimContentProvider.getFileSize());
+          book.favicon = ZimContentProvider.getFavicon();
+          book.creator = ZimContentProvider.getCreator();
+          book.publisher = ZimContentProvider.getPublisher();
+          book.date = ZimContentProvider.getDate();
+          book.description = ZimContentProvider.getDescription();
+          book.language = ZimContentProvider.getLanguage();
+        } catch (Exception e) {
+          // TODO 20171215 Consider more elegant approaches.
+          // This is to see if we can catch the exception at all!
+          Log.e("kiwix-filesearch", "Problem parsing a book entry from the library file. ", e);
+          return null;
+        }
       }
     }
     // Return content provider to its previous state
