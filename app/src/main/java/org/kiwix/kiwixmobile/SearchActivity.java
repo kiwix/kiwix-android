@@ -13,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,6 +38,7 @@ import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 public class SearchActivity extends AppCompatActivity
     implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
+  private static final String KIWIX_SEARCH_ACTIVITY = "kiwix-search-activity";
   private final int REQ_CODE_SPEECH_INPUT = 100;
   private ListView mListView;
   private AutoCompleteAdapter mAutoAdapter;
@@ -78,6 +80,7 @@ public class SearchActivity extends AppCompatActivity
 
   @Override
   public void finish() {
+    Log.d(KIWIX_SEARCH_ACTIVITY, "finish() called");
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
@@ -104,6 +107,7 @@ public class SearchActivity extends AppCompatActivity
 
       @Override
       public boolean onQueryTextChange(String s) {
+        Log.i(KIWIX_SEARCH_ACTIVITY, "onQueryTextChanged to: [" + s + "]");
         if (s.equals("")) {
           mListView.setAdapter(mDefaultAdapter);
         } else {
@@ -148,6 +152,7 @@ public class SearchActivity extends AppCompatActivity
   }
 
   private void sendMessage(String uri) {
+    Log.d(KIWIX_SEARCH_ACTIVITY, "search term:" + uri);
     int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
     if (value == 1) {
       Intent i = new Intent(this, KiwixMobileActivity.class);

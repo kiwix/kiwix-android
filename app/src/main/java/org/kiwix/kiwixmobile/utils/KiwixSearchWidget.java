@@ -25,6 +25,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
@@ -43,6 +44,7 @@ public class KiwixSearchWidget extends AppWidgetProvider {
 
     String appName = context.getApplicationContext().getResources().getString(R.string.app_name);
 
+    Log.i("kiwix-search-widget", "onUpdate() called.");
 
     for (int id : appWidgetIds) {
       RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.kiwix_search_widget);
