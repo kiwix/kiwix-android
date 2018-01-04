@@ -49,6 +49,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.inject.Inject;
+import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
 public class ZimContentProvider extends ContentProvider {
 
@@ -391,9 +392,28 @@ public class ZimContentProvider extends ContentProvider {
   // Return a file descriptor of the video within the ZIM file
   private ParcelFileDescriptor loadVideo(Uri uri) throws IOException {
     Pair pair = currentJNIReader.getDirectAccessInformation(getFilePath(uri));
+    if (pair.filename == null || !new File(pair.filename).exists()) {
+      return loadVideoViaCache(uri);
+    }
     RandomAccessFile randomAccessFile = new RandomAccessFile(pair.filename, "r");
     randomAccessFile.seek(pair.offset);
     return ParcelFileDescriptor.dup(randomAccessFile.getFD());
+  }
+
+  // Backup mechanism to load video files between split ZIM by saving them locally
+  private ParcelFileDescriptor loadVideoViaCache(Uri uri) throws IOException {
+    String filePath = getFilePath(uri);
+    String fileName = uri.toString();
+    fileName = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.length());
+    File f = new File(FileUtils.getFileCacheDir(getContext()), fileName);
+    JNIKiwixString mime = new JNIKiwixString();
+    JNIKiwixString title = new JNIKiwixString();
+    JNIKiwixInt size = new JNIKiwixInt();
+    byte[] data = currentJNIReader.getContent(filePath, title, mime, size);
+    FileOutputStream out = new FileOutputStream(f);
+    out.write(data, 0, data.length);
+    out.flush();
+    return ParcelFileDescriptor.open(f, ParcelFileDescriptor.MODE_READ_ONLY);
   }
 
   @Override
