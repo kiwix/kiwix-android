@@ -26,6 +26,18 @@ public enum PageBottomTab {
     public void select(@NonNull Callback cb) {
       cb.onRandomArticleTabSelected();
     }
+  },
+
+  BOOKMARK() {
+    @Override
+    public void select(@NonNull Callback cb) {
+      cb.onBookmarkTabSelected();
+    }
+
+    @Override
+    public void longClick(@NonNull Callback cb) {
+      cb.onBookmarkTabLongClicked();
+    }
   };
 
 
@@ -40,6 +52,8 @@ public enum PageBottomTab {
         return FULL_SCREEN;
       case 3:
         return RANDOM_ARTICLE;
+      case 4:
+        return BOOKMARK;
       default:
         throw new IllegalArgumentException("Tab position is: " + code);
     }
@@ -47,10 +61,16 @@ public enum PageBottomTab {
 
   public abstract void select(@NonNull Callback cb);
 
+  public void longClick(@NonNull Callback cb) {
+    // Override me
+  }
+
   public interface Callback {
     void onHomeTabSelected();
     void onFindInPageTabSelected();
     void onFullscreenTabSelected();
     void onRandomArticleTabSelected();
+    void onBookmarkTabSelected();
+    void onBookmarkTabLongClicked();
   }
 }

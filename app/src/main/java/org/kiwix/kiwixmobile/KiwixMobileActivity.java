@@ -58,6 +58,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -202,6 +203,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   public List<TableDrawerAdapter.DocumentSection> documentSections;
 
   public Menu menu;
+
+  private MenuItem menuBookmarks;
 
   private ArrayList<String> bookmarks;
 
@@ -354,6 +357,16 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     public void onRandomArticleTabSelected() {
       openRandomArticle();
     }
+
+    @Override
+    public void onBookmarkTabSelected() {
+      toggleBookmark();
+    }
+
+    @Override
+    public void onBookmarkTabLongClicked() {
+      goToBookmarks();
+    }
   };
 
   @Override
@@ -484,6 +497,24 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     }
 
     pageBottomTabLayout.addOnTabSelectedListener(pageBottomTabListener);
+
+    View bookmarkTabView = LayoutInflater.from(KiwixMobileActivity.this)
+            .inflate(R.layout.bookmark_tab, null);
+    bookmarkTabView.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        PageBottomTab.of(4).select(pageActionTabsCallback);
+      }
+    });
+    bookmarkTabView.setOnLongClickListener(new View.OnLongClickListener() {
+      @Override
+      public boolean onLongClick(View view) {
+        PageBottomTab.of(4).longClick(pageActionTabsCallback);
+        return true;
+      }
+    });
+
+    pageBottomTabLayout.getTabAt(4).setCustomView(bookmarkTabView);
 
     wasHideToolbar = isHideToolbar;
 
@@ -882,9 +913,9 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   }
 
   private void openFullScreen() {
-
     toolbarContainer.setVisibility(View.GONE);
     pageBottomTabLayout.setVisibility(View.GONE);
+    menuBookmarks.setVisible(true);
     exitFullscreenButton.setVisibility(View.VISIBLE);
     int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
     int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
@@ -907,8 +938,10 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     toolbarContainer.setVisibility(View.VISIBLE);
     if (settings.getBoolean(KiwixSettingsActivity.PREF_BOTTOM_TOOLBAR, false)) {
       pageBottomTabLayout.setVisibility(View.VISIBLE);
+      menuBookmarks.setVisible(false);
     }
     exitFullscreenButton.setVisibility(View.INVISIBLE);
+
     int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
     int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
     getWindow().clearFlags(fullScreenFlag);
@@ -1139,14 +1172,13 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       new Handler().post(new Runnable() {
         @Override
         public void run() {
-          ActionMenuItemView m = (ActionMenuItemView) findViewById(R.id.menu_bookmarks);
-          if (m == null) {
-            return;
+          ActionMenuItemView m = findViewById(R.id.menu_bookmarks);
+          if (m != null) {
+            findViewById(R.id.menu_bookmarks).setOnLongClickListener(view -> {
+              goToBookmarks();
+              return false;
+            });
           }
-          findViewById(R.id.menu_bookmarks).setOnLongClickListener(view -> {
-            goToBookmarks();
-            return false;
-          });
         }
       });
 
@@ -1257,8 +1289,14 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
     if (settings.getBoolean(KiwixSettingsActivity.PREF_BOTTOM_TOOLBAR, false)) {
       pageBottomTabLayout.setVisibility(View.VISIBLE);
+      if (menuBookmarks != null) {
+        menuBookmarks.setVisible(false);
+      }
     } else {
       pageBottomTabLayout.setVisibility(View.GONE);
+      if (menuBookmarks != null) {
+        menuBookmarks.setVisible(true);
+      }
     }
 
     Log.d(TAG_KIWIX, "action" + getIntent().getAction());
@@ -1551,6 +1589,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     MenuInflater inflater = getMenuInflater();
     inflater.inflate(R.menu.menu_main, menu);
     this.menu = menu;
+    this.menuBookmarks = menu.findItem(R.id.menu_bookmarks);
     StyleMenuButtons(menu);
     if (BuildConfig.IS_CUSTOM_APP) {
       menu.findItem(R.id.menu_help).setVisible(false);
@@ -1562,6 +1601,13 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     if (isFullscreenOpened) {
       openFullScreen();
     }
+
+    if (PreferenceManager
+        .getDefaultSharedPreferences(getApplicationContext())
+        .getBoolean(KiwixSettingsActivity.PREF_BOTTOM_TOOLBAR, false)) {
+      menu.findItem(R.id.menu_bookmarks).setVisible(false);
+    }
+
     return true;
   }
 
@@ -1600,19 +1646,28 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
       bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
     }
+
+    TabLayout.Tab bookmarkTab = pageBottomTabLayout.getTabAt(4);
+
     if (menu.findItem(R.id.menu_bookmarks) != null &&
         getCurrentWebView().getUrl() != null &&
         ZimContentProvider.getId() != null &&
         !getCurrentWebView().getUrl().equals("file:///android_asset/help.html")) {
+      int icon = bookmarks.contains(getCurrentWebView().getUrl()) ? R.drawable.action_bookmark_active : R.drawable.action_bookmark;
+
       menu.findItem(R.id.menu_bookmarks)
               .setEnabled(true)
-              .setIcon(bookmarks.contains(getCurrentWebView().getUrl()) ? R.drawable.action_bookmark_active : R.drawable.action_bookmark)
+              .setIcon(icon)
               .getIcon().setAlpha(255);
+
+      bookmarkTab.getCustomView().findViewById(R.id.bookmark_tab_icon).setBackgroundResource(icon);
     } else {
       menu.findItem(R.id.menu_bookmarks)
               .setEnabled(false)
               .setIcon(R.drawable.action_bookmark)
               .getIcon().setAlpha(130);
+
+      bookmarkTab.getCustomView().findViewById(R.id.bookmark_tab_icon).setBackgroundResource(R.drawable.action_bookmark);
     }
   }
 
