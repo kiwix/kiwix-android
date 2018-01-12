@@ -24,4 +24,10 @@
       android:layout_height="wrap_content"
       android:contentDescription="@string/menu_randomarticle"
       android:icon="@drawable/action_randomarticle" />
+
+  <android.support.design.widget.TabItem
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:contentDescription="@string/menu_bookmarks"
+      android:icon="@drawable/action_bookmark_active" />
 </merge>
