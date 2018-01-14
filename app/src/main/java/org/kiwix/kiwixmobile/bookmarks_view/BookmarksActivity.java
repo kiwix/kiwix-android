@@ -58,6 +58,10 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOKMARK_CLICKED;
+import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_TITLE;
+import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_URL;
+
 public class BookmarksActivity extends BaseActivity
     implements AdapterView.OnItemClickListener, BookmarksViewCallback {
 
@@ -143,11 +147,11 @@ public class BookmarksActivity extends BaseActivity
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
     Intent intent = new Intent(this, KiwixMobileActivity.class);
     if (!bookmarkUrls.get(position).equals("null")) {
-      intent.putExtra("choseXURL", bookmarkUrls.get(position));
+      intent.putExtra(EXTRA_CHOSE_X_URL, bookmarkUrls.get(position));
     } else {
-      intent.putExtra("choseXTitle", bookmarks.get(position));
+      intent.putExtra(EXTRA_CHOSE_X_TITLE, bookmarks.get(position));
     }
-    intent.putExtra("bookmarkClicked", true);
+    intent.putExtra(EXTRA_BOOKMARK_CLICKED, true);
     int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
     if (value == 1) {
       startActivity(intent);
@@ -162,7 +166,7 @@ public class BookmarksActivity extends BaseActivity
   public void onBackPressed() {
     int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
     Intent startIntent = new Intent(this, KiwixMobileActivity.class);
-    startIntent.putExtra("bookmarkClicked", false);
+    startIntent.putExtra(EXTRA_BOOKMARK_CLICKED, false);
 
     if (value == 1) { // means there's only 1 activity in stack so start new
       startActivity(startIntent);

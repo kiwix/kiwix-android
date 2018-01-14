@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class FileUtils {
+import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
-  public static final String TAG_KIWIX = "kiwix";
+public class FileUtils {
 
   public static File getFileCacheDir(Context context) {
     boolean external = Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());

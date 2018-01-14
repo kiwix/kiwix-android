@@ -51,9 +51,9 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
-public class ZimContentProvider extends ContentProvider {
+import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
-  public static final String TAG_KIWIX = "kiwix";
+public class ZimContentProvider extends ContentProvider {
 
   public static final Uri CONTENT_URI = Uri.parse("content://" + BuildConfig.APPLICATION_ID + ".zim.base/");
 

@@ -70,13 +70,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE;
+import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_STORAGE_PERMISSION;
+import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class ZimFileSelectFragment extends Fragment
     implements OnItemClickListener, AdapterView.OnItemLongClickListener, ZimFileSelectViewCallback{
 
-  public static final String TAG_KIWIX = "kiwix";
   public static ZimManageActivity context;
   public RelativeLayout llLayout;
   public SwipeRefreshLayout swipeRefreshLayout;
@@ -207,7 +209,7 @@ public class ZimFileSelectFragment extends Fragment
       Toast.makeText(super.getActivity(), getResources().getString(R.string.request_storage), Toast.LENGTH_LONG)
           .show();
         requestPermissions( new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-            KiwixMobileActivity.REQUEST_STORAGE_PERMISSION);
+            REQUEST_STORAGE_PERMISSION);
     } else {
       getFiles();
     }
@@ -268,14 +270,14 @@ public class ZimFileSelectFragment extends Fragment
         });
       }
     }).scan(PreferenceManager.getDefaultSharedPreferences(context)
-        .getString(KiwixMobileActivity.PREF_STORAGE, Environment.getExternalStorageDirectory().getPath()));
+        .getString(PREF_STORAGE, Environment.getExternalStorageDirectory().getPath()));
   }
 
   @Override
   public void onRequestPermissionsResult(int requestCode,
                                          String permissions[], int[] grantResults) {
     switch (requestCode) {
-      case KiwixMobileActivity.REQUEST_STORAGE_PERMISSION: {
+      case REQUEST_STORAGE_PERMISSION: {
         if (grantResults.length > 0
             && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             getFiles();

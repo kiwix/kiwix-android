@@ -40,6 +40,7 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_WIFI_ONLY;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 
@@ -94,7 +95,7 @@ public class DownloadFragment extends Fragment {
             .setPositiveButton(R.string.yes, (dialog, i) -> {
               PreferenceManager.getDefaultSharedPreferences(context)
                       .edit()
-                      .putBoolean(KiwixSettingsActivity.PREF_WIFI_ONLY, false)
+                      .putBoolean(PREF_WIFI_ONLY, false)
                       .apply();
               KiwixMobileActivity.wifiOnly = false;
               yesAction.run();

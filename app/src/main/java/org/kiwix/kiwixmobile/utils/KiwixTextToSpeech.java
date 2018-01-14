@@ -21,9 +21,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class KiwixTextToSpeech {
+import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
-  public static final String TAG_KIWIX = "kiwix";
+public class KiwixTextToSpeech {
 
   private Context context;
 
