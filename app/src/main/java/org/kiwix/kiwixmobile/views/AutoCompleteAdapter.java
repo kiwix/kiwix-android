@@ -22,6 +22,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_FULL_TEXT_SEARCH;
+
 public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 
   private List<String> mData;
@@ -82,9 +84,9 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
 	  /* Get search request */
 	  final String query = constraint.toString();
 
-          /* Fulltex search */
+          /* Fulltext search */
           SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-          if (sharedPreferences.getBoolean(KiwixMobileActivity.PREF_FULL_TEXT_SEARCH, false)) {
+          if (sharedPreferences.getBoolean(PREF_FULL_TEXT_SEARCH, false)) {
             ZimContentProvider.jniSearcher.search(query, 200);
             JNIKiwixSearcher.Result result = ZimContentProvider.jniSearcher.getNextResult();
             while (result != null) {

@@ -47,6 +47,11 @@ import okio.BufferedSource;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 
+import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOK;
+import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_LIBRARY;
+import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_NOTIFICATION_ID;
+import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_ZIM_FILE;
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE;
 import static org.kiwix.kiwixmobile.utils.files.FileUtils.getCurrentSize;
 
 public class DownloadService extends Service {
@@ -94,7 +99,7 @@ public class DownloadService extends Service {
     setupDagger();
 
     SD_CARD = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-        .getString(KiwixMobileActivity.PREF_STORAGE,Environment.getExternalStorageDirectory().getPath());
+        .getString(PREF_STORAGE,Environment.getExternalStorageDirectory().getPath());
     KIWIX_ROOT = SD_CARD + "/Kiwix/";
 
     KIWIX_ROOT = checkWritable(KIWIX_ROOT);
@@ -130,7 +135,7 @@ public class DownloadService extends Service {
 
 
     SD_CARD = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-        .getString(KiwixMobileActivity.PREF_STORAGE,Environment.getExternalStorageDirectory().getPath());
+        .getString(PREF_STORAGE,Environment.getExternalStorageDirectory().getPath());
     KIWIX_ROOT = SD_CARD + "/Kiwix/";
 
     KIWIX_ROOT = checkWritable(KIWIX_ROOT);
@@ -138,7 +143,7 @@ public class DownloadService extends Service {
     Log.d(KIWIX_TAG, "Using KIWIX_ROOT: " + KIWIX_ROOT);
 
     notificationTitle = intent.getExtras().getString(DownloadIntent.DOWNLOAD_ZIM_TITLE);
-    LibraryNetworkEntity.Book book = (LibraryNetworkEntity.Book) intent.getSerializableExtra("Book");
+    LibraryNetworkEntity.Book book = (LibraryNetworkEntity.Book) intent.getSerializableExtra(EXTRA_BOOK);
     int notificationID = book.getId().hashCode();
 
     if ( downloadStatus.get(notificationID, -1) == PAUSE || downloadStatus.get(notificationID, -1) == PLAY ) {
@@ -147,7 +152,7 @@ public class DownloadService extends Service {
 
     notifications.add(notificationTitle);
     final Intent target = new Intent(this, KiwixMobileActivity.class);
-    target.putExtra("library", true);
+    target.putExtra(EXTRA_LIBRARY, true);
     bookDao = new BookDao(KiwixDatabase.getInstance(this));
 
     PendingIntent pendingIntent = PendingIntent.getActivity
@@ -280,8 +285,8 @@ public class DownloadService extends Service {
             notification.get(notificationID).setContentTitle(notificationTitle + " " + getResources().getString(R.string.zim_file_downloaded));
             notification.get(notificationID).setContentText(getString(R.string.zim_file_downloaded));
             final Intent target = new Intent(this, KiwixMobileActivity.class);
-            target.putExtra("zimFile", KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
-            target.putExtra("notificationID", notificationID);
+            target.putExtra(EXTRA_ZIM_FILE, KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
+            target.putExtra(EXTRA_NOTIFICATION_ID, notificationID);
             PendingIntent pendingIntent = PendingIntent.getActivity
                 (getBaseContext(), 0,
                     target, PendingIntent.FLAG_CANCEL_CURRENT);

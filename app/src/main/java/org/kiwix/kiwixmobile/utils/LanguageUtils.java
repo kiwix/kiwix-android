@@ -48,9 +48,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_LANG;
+import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
+
 public class LanguageUtils {
 
-  public static final String TAG_KIWIX = "kiwix";
   private static HashMap<String, Locale> mLocaleMap;
   private List<LanguageContainer> mLanguageList;
   private List<String> mLocaleLanguageCodes;
@@ -68,7 +70,7 @@ public class LanguageUtils {
   public static void handleLocaleChange(Context context) {
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-    String language = prefs.getString("pref_language_chooser", "");
+    String language = prefs.getString(PREF_LANG, "");
 
     if (language.isEmpty()) {
       return;
@@ -167,7 +169,7 @@ public class LanguageUtils {
 
       // Don't change the language, if the options hasn't been set
       SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-      String language = prefs.getString("pref_language_chooser", "");
+      String language = prefs.getString(PREF_LANG, "");
 
       if (language.isEmpty()) {
         return false;

@@ -14,6 +14,9 @@ import org.kiwix.kiwixmobile.utils.StyleUtils;
 
 import java.util.HashMap;
 
+import static org.kiwix.kiwixmobile.utils.Constants.CONTACT_EMAIL_ADDRESS;
+import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_EXTERNAL_LINK;
+
 public class KiwixWebViewClient extends WebViewClient {
 
   private static final HashMap<String, String> DOCUMENT_TYPES = new HashMap<String, String>() {{
@@ -56,7 +59,7 @@ public class KiwixWebViewClient extends WebViewClient {
 
     // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-    intent.putExtra("external_link", true);
+    intent.putExtra(EXTRA_EXTERNAL_LINK, true);
     callback.openExternalUrl(intent);
     return true;
   }
@@ -86,8 +89,7 @@ public class KiwixWebViewClient extends WebViewClient {
             );
         view.addView(help);
         TextView contact = (TextView) help.findViewById(R.id.welcome21);
-        contact.setText(StyleUtils.highlightUrl(contact.getText().toString(),
-            KiwixMobileActivity.contactEmailAddress));
+        contact.setText(StyleUtils.highlightUrl(contact.getText().toString(), CONTACT_EMAIL_ADDRESS));
         contact.setOnClickListener(v -> {
           callback.sendContactEmail();
         });
