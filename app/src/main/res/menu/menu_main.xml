@@ -15,10 +15,10 @@
       android:visible="false"
       app:showAsAction="always"/>
 
-    <item
-        android:id="@+id/menu_bookmarks_list"
-        android:title="@string/menu_bookmarks_list"
-        app:showAsAction="never"/>
+  <item
+      android:id="@+id/menu_bookmarks_list"
+      android:title="@string/menu_bookmarks_list"
+      app:showAsAction="never"/>
 
   <item
       android:id="@+id/menu_home"
