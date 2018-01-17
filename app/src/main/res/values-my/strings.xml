@@ -53,4 +53,5 @@
   <string name="bookmarks_restored">စာညှပ်မှတ်များ ပြန်သိုလှောင်ပြီး</string>
   <string name="bookmark_added">စာညှပ်မှတ် ထည့်ပေါင်းပြီး</string>
   <string name="rate_dialog_title">ကျေးဇူးပြု၍ ကျွန်ုပ်တို့အား အဆင့်သတ်မှတ်ပေးပါ</string>
+  <string name="zim_manager">မှတ်ထားမှုများ</string>
 </resources>

@@ -99,7 +99,7 @@
   <string name="local_zims">Device</string>
   <string name="remote_zims">Online</string>
   <string name="zim_downloads">Downloading</string>
-  <string name="zim_manager">Content Management</string>
+  <string name="zim_manager">Library</string>
   <string name="delete_specific_zim">Delete this file?</string>
   <string name="delete_specific_zim_toast">File deleted</string>
   <string name="zim_file_downloading">Downloading</string>

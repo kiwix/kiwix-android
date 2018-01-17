@@ -25,4 +25,5 @@
   <string name="pref_language_title">Mál</string>
   <string name="pref_language_chooser">Vel eitt mál</string>
   <string name="menu_bookmarks_list">Bókamerki</string>
+  <string name="zim_manager">Bókasavn</string>
 </resources>

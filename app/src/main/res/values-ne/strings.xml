@@ -52,6 +52,7 @@
   <string name="bookmark_added">पुस्तक चिनो थपियो</string>
   <string name="bookmark_removed">पुस्तक चिनो हटाइयो</string>
   <string name="download_started_library">डाउनलोड सुरुभयो…</string>
+  <string name="zim_manager">पुस्तकालय</string>
   <string name="download_pause">रोक्नुहोस्</string>
   <string name="download_play">बजाउनुहोस्</string>
   <string name="download_stop">रोक्नुहोस्</string>

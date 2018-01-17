@@ -39,6 +39,7 @@
   <string name="open">Buka</string>
   <string name="bookmark_removed">Markah dipupus</string>
   <string name="download_started_library">Undeur dikawit...</string>
+  <string name="zim_manager">Pabukon</string>
   <string name="delete_specific_zim">Pupus ieu berkas?</string>
   <string name="delete_specific_zim_toast">Berkas geus dipupus</string>
   <string name="download_pause">Tunda</string>

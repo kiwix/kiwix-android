@@ -74,6 +74,7 @@
   <string name="pref_newtab_background_title">Otevřít novou kartu na pozadí</string>
   <string name="pref_newtab_background_summary">Otevře novou záložku na pozadí</string>
   <string name="zim_downloads">Stahování</string>
+  <string name="zim_manager">Knihovna</string>
   <string name="delete_specific_zim">Smazat tento soubor?</string>
   <string name="zim_file_downloaded">Staženo</string>
   <string name="no_files_here">Zde nejsou žádné soubory</string>

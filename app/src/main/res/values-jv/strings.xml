@@ -25,4 +25,5 @@
   <string name="pref_language_title">Basa</string>
   <string name="pref_language_chooser">Pilih basa</string>
   <string name="menu_bookmarks_list">Tenger wacan</string>
+  <string name="zim_manager">Perpustakan</string>
 </resources>

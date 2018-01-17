@@ -38,4 +38,5 @@
   <string name="pref_backtotop_summary">Mussar in buttun a la fin da la pagina per ir enavos a l\'entschatta</string>
   <string name="pref_language_title">Lingua</string>
   <string name="menu_bookmarks_list">Segnapaginas</string>
+  <string name="zim_manager">Biblioteca</string>
 </resources>

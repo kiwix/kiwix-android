@@ -73,6 +73,7 @@
   <string name="pref_newtab_background_summary">При отварянето на нов подпрозорец, той ще се отвори във фонов режим</string>
   <string name="search_widget_text">Търсене в Kiwix</string>
   <string name="zim_downloads">Изтегляне</string>
+  <string name="zim_manager">Библиотека</string>
   <string name="delete_specific_zim_toast">Файлът е изтрит</string>
   <string name="zim_file_downloading">Изтегляне</string>
   <string name="zim_file_downloaded">Изтеглено</string>

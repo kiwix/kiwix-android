@@ -27,4 +27,5 @@
   <string name="pref_language_title">Wika</string>
   <string name="pref_language_chooser">Pumili ng wika</string>
   <string name="menu_bookmarks_list">Mga pananda</string>
+  <string name="zim_manager">Aklatan</string>
 </resources>

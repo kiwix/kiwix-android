@@ -71,6 +71,7 @@
   <string name="download_started_library">Eroflueden huet ugefaangen...</string>
   <string name="local_zims">Apparat</string>
   <string name="zim_downloads">Eroflueden</string>
+  <string name="zim_manager">Bibliothéik</string>
   <string name="delete_specific_zim">Dëse Fichier läschen?</string>
   <string name="delete_specific_zim_toast">Fichier geläscht</string>
   <string name="zim_file_downloading">Eroflueden</string>

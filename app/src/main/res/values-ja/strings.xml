@@ -42,4 +42,5 @@
   <string name="pref_language_title">言語</string>
   <string name="pref_language_chooser">言語を選択</string>
   <string name="menu_bookmarks_list">ブックマーク</string>
+  <string name="zim_manager">ライブラリ</string>
 </resources>

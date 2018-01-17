@@ -38,6 +38,7 @@
   <string name="open">Atvērt</string>
   <string name="search_widget_text">Meklēt Kiwix</string>
   <string name="zim_downloads">Lejupielādē</string>
+  <string name="zim_manager">Bibliotēka</string>
   <string name="delete_specific_zim">Dzēst šo failu?</string>
   <string name="delete_specific_zim_toast">Fails dzēsts</string>
   <string name="download_complete_snackbar">Lejupielāde pabeigta</string>
