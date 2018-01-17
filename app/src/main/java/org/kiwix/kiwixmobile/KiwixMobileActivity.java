@@ -1584,6 +1584,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     StyleMenuButtons(menu);
     if (BuildConfig.IS_CUSTOM_APP) {
       menu.findItem(R.id.menu_help).setVisible(false);
+      menu.findItem(R.id.menu_openfile).setVisible(false);
     }
 
     if (requestInitAllMenuItems) {
