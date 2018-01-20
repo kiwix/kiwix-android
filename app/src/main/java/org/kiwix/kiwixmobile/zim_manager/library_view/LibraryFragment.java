@@ -141,7 +141,7 @@ public class LibraryFragment extends Fragment
 
     NetworkInfo network = conMan.getActiveNetworkInfo();
     if (network == null || !network.isConnected()) {
-      noNetworkConnection();
+      displayNoNetworkConnection();
     }
 
     networkBroadcastReceiver = new NetworkBroadcastReceiver();
@@ -160,6 +160,11 @@ public class LibraryFragment extends Fragment
 
   @Override
   public void showBooks(LinkedList<Book> books) {
+    if (books == null) {
+      displayNoItemsAvailable();
+      return;
+    }
+
     Log.i("kiwix-showBooks", "Contains:" + books.size());
     libraryAdapter.setAllBooks(books);
     if (faActivity.searchView != null) {
@@ -180,11 +185,25 @@ public class LibraryFragment extends Fragment
       return;
     }
 
-    networkText.setText(R.string.no_network_msg);
+    networkText.setText(R.string.no_network_connection);
     networkText.setVisibility(View.VISIBLE);
     permissionButton.setVisibility(View.GONE);
     swipeRefreshLayout.setRefreshing(false);
     swipeRefreshLayout.setEnabled(false);
+    TestingUtils.unbindResource(LibraryFragment.class);
+  }
+
+  @Override
+  public void displayNoItemsAvailable() {
+    if (books.size() != 0) {
+      Toast.makeText(super.getActivity(), R.string.no_items_available, Toast.LENGTH_LONG).show();
+      return;
+    }
+
+    networkText.setText(R.string.no_items_available);
+    networkText.setVisibility(View.VISIBLE);
+    permissionButton.setVisibility(View.GONE);
+    swipeRefreshLayout.setRefreshing(false);
     TestingUtils.unbindResource(LibraryFragment.class);
   }
 
@@ -206,10 +225,6 @@ public class LibraryFragment extends Fragment
     permissionButton.setVisibility(View.GONE);
     swipeRefreshLayout.setRefreshing(false);
     TestingUtils.unbindResource(LibraryFragment.class);
-  }
-
-  public void noNetworkConnection() {
-    displayNoNetworkConnection();
   }
 
   public void refreshFragment() {
