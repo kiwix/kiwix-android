@@ -16,6 +16,8 @@ public interface LibraryViewCallback extends ViewCallback {
 
   void displayNoNetworkConnection();
 
+  void displayNoItemsAvailable();
+
   void displayScanningContent();
 
   void stopScanningContent();
