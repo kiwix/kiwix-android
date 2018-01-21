@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.views;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -141,7 +142,10 @@ public class LanguageSelectDialog extends AlertDialog {
 
       LibraryAdapter.Language language = getItem(position);
       holder.language.setText(language.language);
-      holder.languageLocalized.setText(language.languageLocalized);
+      holder.languageLocalized.setText(context.getString(R.string.language_localized,
+              language.languageLocalized));
+      holder.languageLocalized.setTypeface(Typeface.createFromAsset(context.getAssets(),
+              LanguageUtils.getTypeface(language.languageCode)));
 
       if (languageCounts != null) {
         holder.languageEntriesCount.setText(context.getString(R.string.language_count,
