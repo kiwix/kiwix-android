@@ -156,7 +156,6 @@
   <string name="internal_storage">Внутрішнє</string>
   <string name="external_storage">Зовнішні</string>
   <string name="zim_already_downloading">ZIM вже завантажується</string>
-  <string name="no_network_msg">Відсутнє з\'єднання з мережею</string>
   <string name="yes">Так</string>
   <string name="no">Ні</string>
   <string name="confirm_stop_download_title">Зупинити завантаження?</string>

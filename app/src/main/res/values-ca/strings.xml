@@ -49,4 +49,6 @@
   <string name="pref_language_chooser">Trieu un idioma</string>
   <string name="menu_bookmarks_list">Preferits</string>
   <string name="zim_manager">Biblioteca</string>
+  <string name="pref_multi_search_title">Cerca MultiZim</string>
+  <string name="your_languages">Idiomes seleccionats:</string>
 </resources>

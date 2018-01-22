@@ -66,4 +66,5 @@
   <string name="pref_newtab_background_title">فتح علامة تبويب جديدة في الخلفية</string>
   <string name="pref_newtab_background_summary">عند فتح علامة تبويب جديدة سوف تفتح في الخلفية</string>
   <string name="zim_manager">المكتبة</string>
+  <string name="your_languages">اللغات المختارة:</string>
 </resources>

@@ -156,7 +156,6 @@
   <string name="internal_storage">अन्दरूनी</string>
   <string name="external_storage">बाहरी</string>
   <string name="zim_already_downloading">Zim पहले से ही डाउनलोड हो रहा</string>
-  <string name="no_network_msg">नेटवर्क कनेक्शन नहीं</string>
   <string name="yes">हाँ</string>
   <string name="no">नहीं</string>
   <string name="confirm_stop_download_title">डाउनलोड रोकें?</string>

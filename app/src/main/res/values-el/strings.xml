@@ -85,7 +85,6 @@
   <string name="no_network_connection">Δεν υπάρχει σύνδεση στο δίκτυο</string>
   <string name="external_storage">Εξωτερική</string>
   <string name="zim_already_downloading">Το Zim εγκαθίσταται ήδη</string>
-  <string name="no_network_msg">Δεν υπάρχει σύνδεση στο δίκτυο</string>
   <string name="yes">Ναι</string>
   <string name="no">Όχι</string>
   <string name="confirm_stop_download_title">Σταμάτημα λήψης;</string>

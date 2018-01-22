@@ -98,7 +98,7 @@
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">En línea</string>
   <string name="zim_downloads">Descargando</string>
-  <string name="zim_manager">Administración de contenido</string>
+  <string name="zim_manager">Biblioteca</string>
   <string name="delete_specific_zim">¿Eliminar este archivo?</string>
   <string name="delete_specific_zim_toast">Archivo eliminado</string>
   <string name="zim_file_downloading">Descargando</string>
@@ -154,7 +154,6 @@
   <string name="internal_storage">Interno</string>
   <string name="external_storage">Externo</string>
   <string name="zim_already_downloading">El zim ya se está descargando</string>
-  <string name="no_network_msg">Ninguna conexión de red</string>
   <string name="yes">Sí</string>
   <string name="confirm_stop_download_title">¿Detener descarga?</string>
   <string name="confirm_stop_download_msg">¿Seguro quieres detener esta descarga?</string>
@@ -168,6 +167,15 @@
   <string name="pref_wifi_only">Descargar contenido solo mediante wifi</string>
   <string name="time_day">día</string>
   <string name="time_left">faltan</string>
+  <string name="pref_bottomtoolbar">Activar barra de herramientas inferior</string>
+  <string name="pref_bottomtoolbar_summary">Mostrar una barra con acciones rápidas en la parte inferior de la pantalla</string>
   <string name="pref_autonightmode_summary">Cambiar automáticamente entre el modo diurno y el nocturno</string>
   <string name="pref_autonightmode">Modo nocturno automatizado</string>
+  <string name="pref_multi_search_title">Búsqueda MultiZim</string>
+  <string name="pref_multi_search_summary">Permitir que la aplicación busque en archivos ZIM (atención: experimental).</string>
+  <string name="pref_external_link_popup_title">Advertir al seguir enlaces externos</string>
+  <string name="external_link_popup_dialog_message">Estás por seguir un enlace externo. Ello podría generar gastos por transferencia de datos o sencillamente no funcionará si no tienes conexión. ¿Quieres continuar?</string>
+  <string name="do_not_ask_anymore">No preguntar de nuevo</string>
+  <string name="your_languages">Idiomas seleccionados:</string>
+  <string name="other_languages">Otros idiomas:</string>
 </resources>

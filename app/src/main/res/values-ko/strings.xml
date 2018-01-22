@@ -99,7 +99,7 @@
   <string name="local_zims">장치</string>
   <string name="remote_zims">온라인</string>
   <string name="zim_downloads">다운로드 중</string>
-  <string name="zim_manager">내용 관리</string>
+  <string name="zim_manager">라이브러리</string>
   <string name="delete_specific_zim">이 파일을 지우시겠습니까?</string>
   <string name="delete_specific_zim_toast">파일이 삭제되었습니다</string>
   <string name="zim_file_downloading">다운로드 중</string>
@@ -156,7 +156,6 @@
   <string name="internal_storage">내부 장치</string>
   <string name="external_storage">외부 장치</string>
   <string name="zim_already_downloading">Zim이 이미 다운로드 중입니다</string>
-  <string name="no_network_msg">네트워크 연결 없음</string>
   <string name="yes">예</string>
   <string name="no">아니오</string>
   <string name="confirm_stop_download_title">다운로드를 중단하시겠습니까?</string>
@@ -176,4 +175,10 @@
   <string name="time_left">남음</string>
   <string name="pref_autonightmode_summary">야간 모드와 낮 모드를 자동으로 전환합니다.</string>
   <string name="pref_autonightmode">자동 야간 모드</string>
+  <string name="pref_multi_search_title">MultiZim 검색</string>
+  <string name="pref_external_link_popup_title">외부 링크에 진입할 때 경고합니다</string>
+  <string name="external_link_popup_dialog_title">외부 링크에 진입합니다</string>
+  <string name="do_not_ask_anymore">더 이상 묻지 않습니다</string>
+  <string name="your_languages">선택한 언어:</string>
+  <string name="other_languages">다른 언어:</string>
 </resources>

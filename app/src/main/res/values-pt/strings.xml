@@ -98,7 +98,7 @@
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">Ligado</string>
   <string name="zim_downloads">A descarregar</string>
-  <string name="zim_manager">Gestão de conteúdo</string>
+  <string name="zim_manager">Biblioteca</string>
   <string name="delete_specific_zim">Apagar este ficheiro?</string>
   <string name="delete_specific_zim_toast">Ficheiro apagado</string>
   <string name="zim_file_downloading">A descarregar</string>
@@ -155,7 +155,6 @@
   <string name="internal_storage">Interno</string>
   <string name="external_storage">Externo</string>
   <string name="zim_already_downloading">O zim já está sendo transferido</string>
-  <string name="no_network_msg">Nenhuma ligação de rede</string>
   <string name="yes">Sim</string>
   <string name="no">Não</string>
   <string name="confirm_stop_download_title">Parar download?</string>
@@ -170,6 +169,17 @@
   <string name="pref_wifi_only">Descarregar conteúdo apenas por WiFi</string>
   <string name="time_day">dia</string>
   <string name="time_left">esquerda</string>
+  <string name="pref_bottomtoolbar">Ativar a barra de ferramentas na parte inferior</string>
+  <string name="pref_bottomtoolbar_summary">Mostrar uma barra de ferramentas com as ações rápidas na parte inferior do ecrã</string>
   <string name="pref_autonightmode_summary">Alternar automaticamente entre o modo diurno e noturno.</string>
   <string name="pref_autonightmode">Modo noturno automático</string>
+  <string name="pref_multi_search_title">Procurar pelo MultiZim</string>
+  <string name="pref_multi_search_summary">Permitir que a aplicação procure ficheiros ZIM (Aviso: A funcionalidade está em modo de testes).</string>
+  <string name="pref_external_link_popup_title">Avisar quando introduzir hiperligações externas</string>
+  <string name="pref_external_link_popup_summary">Mostrar os cartões flutuantes para avisar sobre os custos adicionais ou quando não funcionar nas hiperligações quando desligadas.</string>
+  <string name="external_link_popup_dialog_title">Hiperligação externa de entrada</string>
+  <string name="external_link_popup_dialog_message">Está a introduzir uma hiperligação externa. Isto pode acarretar custos adicionais para a transferência de dados ou simplesmente não funcionará quando estiver desligado. Deseja realmente continuar?</string>
+  <string name="do_not_ask_anymore">Não perguntar mais</string>
+  <string name="your_languages">Línguas selecionadas:</string>
+  <string name="other_languages">Outras línguas:</string>
 </resources>

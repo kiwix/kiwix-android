@@ -99,7 +99,7 @@
   <string name="local_zims">Устройство</string>
   <string name="remote_zims">Онлайн</string>
   <string name="zim_downloads">Загрузка</string>
-  <string name="zim_manager">Управление содержимым</string>
+  <string name="zim_manager">Библиотека</string>
   <string name="delete_specific_zim">Удалить этот файл?</string>
   <string name="delete_specific_zim_toast">Файл удалён</string>
   <string name="zim_file_downloading">Загрузка</string>
@@ -156,7 +156,6 @@
   <string name="internal_storage">Внутренний</string>
   <string name="external_storage">Внешний</string>
   <string name="zim_already_downloading">Zim уже загружается</string>
-  <string name="no_network_msg">Отсутствует сетевое подключение</string>
   <string name="yes">Да</string>
   <string name="no">Нет</string>
   <string name="confirm_stop_download_title">Остановить загрузку?</string>
@@ -174,6 +173,14 @@
   <string name="time_minute">м</string>
   <string name="time_second">с</string>
   <string name="time_left">лево</string>
+  <string name="pref_bottomtoolbar">Включить нижнюю панель управления</string>
+  <string name="pref_bottomtoolbar_summary">Отобразить панель управления с быстрыми действиями внизу экрана</string>
   <string name="pref_autonightmode_summary">Автоматически переключать между дневным и ночным режимами.</string>
   <string name="pref_autonightmode">Автоматический ночной режим</string>
+  <string name="pref_multi_search_summary">Позволить приложению искать в файлах ZIM (Внимание: ранняя стадия разработки)</string>
+  <string name="pref_external_link_popup_title">Предупреждать когда происходит ввод внешних ссылок</string>
+  <string name="external_link_popup_dialog_title">Ввод Внешней Ссылки</string>
+  <string name="do_not_ask_anymore">Больше не спрашивай</string>
+  <string name="your_languages">Выбранные языки:</string>
+  <string name="other_languages">Другие языки:</string>
 </resources>

@@ -156,7 +156,6 @@
   <string name="internal_storage">Dahili</string>
   <string name="external_storage">Harici</string>
   <string name="zim_already_downloading">Zim zaten indiriliyor</string>
-  <string name="no_network_msg">Ağ bağlantısı yok</string>
   <string name="yes">Evet</string>
   <string name="no">Hayır</string>
   <string name="confirm_stop_download_title">İndirme durdurulsun mu?</string>

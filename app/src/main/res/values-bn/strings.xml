@@ -99,7 +99,7 @@
   <string name="local_zims">ডিভাইস</string>
   <string name="remote_zims">অনলাইন</string>
   <string name="zim_downloads">ডাউনলোড হচ্ছে</string>
-  <string name="zim_manager">বিষয়বস্তু ব্যবস্থাপনা</string>
+  <string name="zim_manager">পাঠাগার</string>
   <string name="delete_specific_zim">এই ফাইল মুছে ফেলুন?</string>
   <string name="delete_specific_zim_toast">ফাইল অপসারণ করা হয়েছে</string>
   <string name="zim_file_downloading">ডাউনলোড হচ্ছে</string>
@@ -156,7 +156,6 @@
   <string name="internal_storage">অভ্যন্তরীণ</string>
   <string name="external_storage">বহিঃস্থ</string>
   <string name="zim_already_downloading">Zim ইতিমধ্যে ডাউনলোড করা হচ্ছে</string>
-  <string name="no_network_msg">কোন নেটওয়ার্ক সংযোগ নেই</string>
   <string name="yes">হ্যাঁ</string>
   <string name="no">না</string>
   <string name="confirm_stop_download_title">ডাউনলোড বন্ধ করবেন?</string>
@@ -177,4 +176,8 @@
   <string name="pref_autonightmode_summary">স্বয়ংক্রিয়ভাবে দিন এবং রাতের মোডে স্যুইচ করুন।</string>
   <string name="pref_autonightmode">স্বয়ংক্রিয় রাত্রি মোড</string>
   <string name="language_count">(%1$dটি)</string>
+  <string name="pref_multi_search_title">MultiZim অনুসন্ধান</string>
+  <string name="do_not_ask_anymore">আর জিজ্ঞাসা করবেন না</string>
+  <string name="your_languages">নির্বাচিত ভাষা</string>
+  <string name="other_languages">অন্যান্য ভাষাসমূহ:</string>
 </resources>

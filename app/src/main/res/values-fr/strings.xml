@@ -95,7 +95,7 @@
   <string name="local_zims">Appareil</string>
   <string name="remote_zims">En ligne</string>
   <string name="zim_downloads">En cours de téléchargement</string>
-  <string name="zim_manager">Gestion de contenu</string>
+  <string name="zim_manager">Bibliothèque</string>
   <string name="delete_specific_zim">Supprimer ce fichier ?</string>
   <string name="delete_specific_zim_toast">Fichier supprimé</string>
   <string name="zim_file_downloading">En cours de téléchargement</string>
@@ -147,7 +147,6 @@
   <string name="internal_storage">Interne</string>
   <string name="external_storage">Externe</string>
   <string name="zim_already_downloading">Le Zim est déjà en cours de téléchargement</string>
-  <string name="no_network_msg">Aucune connexion réseau</string>
   <string name="yes">Oui</string>
   <string name="no">Non</string>
   <string name="confirm_stop_download_title">Arrêter le téléchargement ?</string>
@@ -162,6 +161,17 @@
   <string name="pref_wifi_only">Télécharger le contenu uniquement via WiFi</string>
   <string name="time_day">jour</string>
   <string name="time_left">à attendre</string>
+  <string name="pref_bottomtoolbar">Activer la barre d’outils en bas</string>
+  <string name="pref_bottomtoolbar_summary">Afficher une barre d’outils avec des actions rapides en bas de l’écran</string>
   <string name="pref_autonightmode_summary">Basculer automatiquement entre les modes jour et nuit.</string>
   <string name="pref_autonightmode">Mode nuit automatisé</string>
+  <string name="pref_multi_search_title">Recherche MultiZim</string>
+  <string name="pref_multi_search_summary">Autoriser l’application à rechercher dans les fichiers ZIM (Avertissement : très expérimental).</string>
+  <string name="pref_external_link_popup_title">Avertir sur l\'entrée de liens externes</string>
+  <string name="pref_external_link_popup_summary">Afficher une popup pour avertir à propos de coûts supplémentaires ou de liens ne fonctionnant pas hors connexion.</string>
+  <string name="external_link_popup_dialog_title">Entrée sur un lien externe</string>
+  <string name="external_link_popup_dialog_message">Vous accédez à un lien externe. Cela peut provoquer des coûts supplémentaires pour le transfert de données ou ne fonctionnera juste pas quand vous serez hors connexion. Voulez-vous continuer ?</string>
+  <string name="do_not_ask_anymore">Ne plus demander</string>
+  <string name="your_languages">Langues sélectionnées :</string>
+  <string name="other_languages">Autres langues :</string>
 </resources>
