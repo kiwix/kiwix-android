@@ -137,8 +137,11 @@ public class LanguageUtils {
     exceptions.put("pan", "fonts/Lohit-Punjabi.ttf");
     exceptions.put("dzo", "fonts/DDC_Uchen.ttf");
     exceptions.put("bod", "fonts/DDC_Uchen.ttf");
+    exceptions.put("sin", "fonts/Kaputa-Regular.ttf");
+
+    // http://scriptsource.org/cms/scripts/page.php?item_id=entry_detail&uid=kstzk8hbg4
+    // Link above shows that we are allowed to distribute this font
     exceptions.put("chr", "fonts/Digohweli.ttf");
-    exceptions.put("sin", "fonts/Kaputaunicode.ttf");
 
     // These scripts could be supported via more Lohit fonts if DejaVu doesn't
     // support them.  That is untested now as they aren't even in the language
