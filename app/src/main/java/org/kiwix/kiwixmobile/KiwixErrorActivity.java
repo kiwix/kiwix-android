@@ -69,7 +69,7 @@ public class KiwixErrorActivity extends AppCompatActivity {
 
             Intent emailIntent = new Intent(Intent.ACTION_SEND);
             emailIntent.setType("vnd.android.cursor.dir/email");
-            String to[] = {"joseph.reeve@googlemail.com"};
+            String to[] = {"android-crash-feedback@kiwix.org"};
             emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Someone has reported a crash");
 
