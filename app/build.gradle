@@ -149,6 +149,10 @@ android {
     multiDexEnabled true
   }
 
+  testOptions {
+    animationsDisabled = true
+  }
+
   lintOptions {
     // Treat lint seriously
     abortOnError true
