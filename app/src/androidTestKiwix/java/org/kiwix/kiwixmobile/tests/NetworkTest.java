@@ -131,6 +131,12 @@ public class NetworkTest {
     onView(withText(R.string.local_zims))
         .perform(click());
 
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+
     onView(withId(R.id.zim_swiperefresh))
         .perform(swipeDown());
 

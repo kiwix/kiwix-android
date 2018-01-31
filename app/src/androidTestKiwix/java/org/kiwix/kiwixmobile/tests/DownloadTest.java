@@ -104,6 +104,12 @@ public class DownloadTest {
         allOf(withText("Device"), isDisplayed()));
     appCompatTextView3.perform(click());
 
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+
     onView(withId(R.id.zim_swiperefresh))
         .perform(swipeDown());
 
