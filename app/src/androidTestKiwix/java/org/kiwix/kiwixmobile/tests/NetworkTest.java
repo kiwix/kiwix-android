@@ -46,6 +46,8 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -130,6 +132,8 @@ public class NetworkTest {
 
     onView(withText(R.string.local_zims))
         .perform(click());
+
+    onView(withId(R.id.zim_swiperefresh)).check(matches(isCompletelyDisplayed()));
 
     onView(withId(R.id.zim_swiperefresh))
         .perform(swipeDown());
