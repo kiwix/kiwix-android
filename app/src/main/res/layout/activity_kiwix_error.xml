@@ -86,6 +86,7 @@
         android:layout_height="233dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="17dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/reportButton"
         app:layout_constraintTop_toBottomOf="@+id/messageText"
         tools:layout_editor_absoluteX="8dp">
@@ -97,10 +98,11 @@
 
             <CheckBox
                 android:id="@+id/allowLanguage"
-                style="@android:style/Widget.Material.Light.CompoundButton.CheckBox"
+                style="@android:style/Widget.Holo.CompoundButton.CheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="100dp"
+                android:layout_marginLeft="100dp"
                 android:layout_marginTop="8dp"
                 android:checked="true"
                 android:text="@string/crash_checkbox_language"
@@ -110,10 +112,11 @@
 
             <CheckBox
                 android:id="@+id/allowLogs"
-                style="@android:style/Widget.Material.Light.CompoundButton.CheckBox"
+                style="@android:style/Widget.Holo.CompoundButton.CheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="100dp"
+                android:layout_marginLeft="100dp"
                 android:layout_marginTop="8dp"
                 android:checked="true"
                 android:text="@string/crash_checkbox_logs"
@@ -123,10 +126,11 @@
 
             <CheckBox
                 android:id="@+id/allowCrash"
-                style="@android:style/Widget.Material.Light.CompoundButton.CheckBox"
+                style="@android:style/Widget.Holo.CompoundButton.CheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="100dp"
+                android:layout_marginLeft="100dp"
                 android:layout_marginTop="8dp"
                 android:checked="true"
                 android:text="@string/crash_checkbox_exception"
@@ -136,10 +140,11 @@
 
             <CheckBox
                 android:id="@+id/allowZims"
-                style="@android:style/Widget.Material.Light.CompoundButton.CheckBox"
+                style="@android:style/Widget.Holo.CompoundButton.CheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="100dp"
+                android:layout_marginLeft="100dp"
                 android:layout_marginTop="8dp"
                 android:checked="true"
                 android:text="@string/crash_checkbox_zimfiles"
@@ -149,10 +154,11 @@
 
             <CheckBox
                 android:id="@+id/allowDeviceDetails"
-                style="@android:style/Widget.Material.Light.CompoundButton.CheckBox"
+                style="@android:style/Widget.Holo.CompoundButton.CheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="100dp"
+                android:layout_marginLeft="100dp"
                 android:layout_marginTop="8dp"
                 android:checked="true"
                 android:text="@string/crash_checkbox_device"
