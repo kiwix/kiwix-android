@@ -101,7 +101,6 @@ public class BookmarksActivity extends BaseActivity
 
     presenter.attachView(this);
     presenter.loadBookmarks(this);
-    throw new Error("Error!");
   }
 
   @Override
