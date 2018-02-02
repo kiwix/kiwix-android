@@ -31,6 +31,7 @@ import android.webkit.MimeTypeMap;
 
 import java.io.RandomAccessFile;
 import org.kiwix.kiwixlib.JNIKiwix;
+import org.kiwix.kiwixlib.JNIKiwixException;
 import org.kiwix.kiwixlib.JNIKiwixInt;
 import org.kiwix.kiwixlib.JNIKiwixReader;
 import org.kiwix.kiwixlib.JNIKiwixSearcher;
@@ -110,19 +111,24 @@ public class ZimContentProvider extends ContentProvider {
   }
     
   public synchronized static String setZimFile(String fileName) {
-    JNIKiwixReader reader = new JNIKiwixReader(fileName);
-    if (!new File(fileName).exists() || reader == null) {
-      Log.e(TAG_KIWIX, "Unable to open the ZIM file " + fileName);
+    if (!new File(fileName).exists()) {
+      Log.e(TAG_KIWIX, "Unable to find the ZIM file " + fileName);
       zimFileName = null;
-    } else {
+      return zimFileName;
+    }
+    try {
+      JNIKiwixReader reader = new JNIKiwixReader(fileName);
       Log.i(TAG_KIWIX, "Opening ZIM file " + fileName);
       if(!listedEntries.contains(reader.getId())) {
         listedEntries.add(reader.getId());
         jniSearcher.addKiwixReader(reader);
+        currentJNIReader = reader;
       }
       zimFileName = fileName;
+    } catch (JNIKiwixException e) {
+      Log.e(TAG_KIWIX, "Unable to open the ZIM file " + fileName);
+      zimFileName = null;
     }
-    currentJNIReader = reader;
     return zimFileName;
   }
 
