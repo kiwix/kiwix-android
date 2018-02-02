@@ -190,4 +190,5 @@
   <string name="do_not_ask_anymore">Do not ask anymore</string>
   <string name="your_languages">Selected languages:</string>
   <string name="other_languages">Other languages:</string>
+    <string name="no_items_msg">No items available</string>
 </resources>
