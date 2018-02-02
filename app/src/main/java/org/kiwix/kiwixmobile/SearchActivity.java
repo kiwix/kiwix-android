@@ -20,7 +20,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +31,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_IS_WIDGET_VOICE;
+import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH;
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_NIGHTMODE;
+import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class SearchActivity extends AppCompatActivity
@@ -47,7 +50,7 @@ public class SearchActivity extends AppCompatActivity
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-    if (sharedPreferences.getBoolean(KiwixMobileActivity.PREF_NIGHT_MODE, false)) {
+    if (sharedPreferences.getBoolean(PREF_NIGHTMODE, false)) {
       setTheme(R.style.AppTheme_Night);
     }
     super.onCreate(savedInstanceState);
@@ -70,7 +73,7 @@ public class SearchActivity extends AppCompatActivity
     mListView.setOnItemClickListener(this);
     mListView.setOnItemLongClickListener(this);
 
-    boolean IS_VOICE_SEARCH_INTENT = getIntent().getBooleanExtra("isWidgetVoice", false);
+    boolean IS_VOICE_SEARCH_INTENT = getIntent().getBooleanExtra(EXTRA_IS_WIDGET_VOICE, false);
     if (IS_VOICE_SEARCH_INTENT) {
       promptSpeechInput();
     }
@@ -133,8 +136,8 @@ public class SearchActivity extends AppCompatActivity
       searchView.setQuery(getIntent().getStringExtra(Intent.EXTRA_PROCESS_TEXT), true);
     }
 
-    if (getIntent().hasExtra("search")) {
-      searchView.setQuery(getIntent().getStringExtra("search"), true);
+    if (getIntent().hasExtra(EXTRA_SEARCH)) {
+      searchView.setQuery(getIntent().getStringExtra(EXTRA_SEARCH), true);
     }
 
     return true;
@@ -151,11 +154,11 @@ public class SearchActivity extends AppCompatActivity
     int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
     if (value == 1) {
       Intent i = new Intent(this, KiwixMobileActivity.class);
-      i.putExtra(KiwixMobileActivity.TAG_FILE_SEARCHED, uri);
+      i.putExtra(TAG_FILE_SEARCHED, uri);
       startActivity(i);
     } else {
       Intent i = new Intent();
-      i.putExtra(KiwixMobileActivity.TAG_FILE_SEARCHED, uri);
+      i.putExtra(TAG_FILE_SEARCHED, uri);
       setResult(RESULT_OK, i);
       finish();
     }

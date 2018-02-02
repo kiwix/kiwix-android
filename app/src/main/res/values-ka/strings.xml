@@ -57,4 +57,5 @@
   <string name="rate_dialog_positive">შეფასება!</string>
   <string name="rate_dialog_negative">არა, გმადლობთ</string>
   <string name="rate_dialog_neutral">მოგვიანებით</string>
+  <string name="zim_manager">ბიბლიოთეკა</string>
 </resources>

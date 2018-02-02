@@ -42,6 +42,7 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_WIFI_ONLY;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 
@@ -98,19 +99,18 @@ public class DownloadFragment extends Fragment {
 
   public static void showNoWiFiWarning(Context context, Runnable yesAction) {
     new AlertDialog.Builder(context)
-        .setTitle(R.string.wifi_only_title)
-        .setMessage(R.string.wifi_only_msg)
-        .setPositiveButton(R.string.yes, (dialog, i) -> {
-          PreferenceManager.getDefaultSharedPreferences(context)
-              .edit()
-              .putBoolean(KiwixSettingsActivity.PREF_WIFI_ONLY, false)
-              .apply();
-          KiwixMobileActivity.wifiOnly = false;
-          yesAction.run();
-        })
-        .setNegativeButton(R.string.no, (dialog, i) -> {
-        })
-        .show();
+            .setTitle(R.string.wifi_only_title)
+            .setMessage(R.string.wifi_only_msg)
+            .setPositiveButton(R.string.yes, (dialog, i) -> {
+              PreferenceManager.getDefaultSharedPreferences(context)
+                      .edit()
+                      .putBoolean(PREF_WIFI_ONLY, false)
+                      .apply();
+              KiwixMobileActivity.wifiOnly = false;
+              yesAction.run();
+            })
+            .setNegativeButton(R.string.no, (dialog, i) -> {})
+            .show();
   }
 
   public static String toHumanReadableTime(int seconds) {

@@ -49,6 +49,7 @@
   <string name="rate_dialog_negative">Ne, hvala</string>
   <string name="rate_dialog_neutral">Kasneje</string>
   <string name="menu_library">Prenos datotek z vsebino</string>
+  <string name="zim_manager">Knjižnica</string>
   <string name="download_complete_snackbar">Prenos končan</string>
   <string name="yes">Da</string>
   <string name="no">Ne</string>

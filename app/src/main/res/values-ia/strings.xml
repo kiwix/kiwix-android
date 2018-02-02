@@ -46,4 +46,7 @@
   <string name="pref_language_chooser">Selige un lingua</string>
   <string name="menu_bookmarks_list">Marcapaginas</string>
   <string name="request_storage">Pro acceder a files ZIM, nos require accesso a tu immagazinage.</string>
+  <string name="zim_manager">Bibliotheca</string>
+  <string name="do_not_ask_anymore">Non demandar plus</string>
+  <string name="your_languages">Linguas eligite:</string>
 </resources>

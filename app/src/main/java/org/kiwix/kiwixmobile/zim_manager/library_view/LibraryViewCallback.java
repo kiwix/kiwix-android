@@ -18,6 +18,8 @@ public interface LibraryViewCallback extends ViewCallback {
 
   void displayNoItemsFound();
 
+  void displayNoItemsAvailable();
+
   void displayScanningContent();
 
   void stopScanningContent();

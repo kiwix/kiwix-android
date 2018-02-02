@@ -97,7 +97,7 @@
   <string name="local_zims">Enhet</string>
   <string name="remote_zims">Ansluten</string>
   <string name="zim_downloads">Laddar ned</string>
-  <string name="zim_manager">Innehållshantering</string>
+  <string name="zim_manager">Bibliotek</string>
   <string name="delete_specific_zim">Radera denna fil?</string>
   <string name="delete_specific_zim_toast">Fil raderades</string>
   <string name="zim_file_downloading">Laddar ned</string>
@@ -154,7 +154,6 @@
   <string name="internal_storage">Internt</string>
   <string name="external_storage">Extern</string>
   <string name="zim_already_downloading">Zim laddas redan ned</string>
-  <string name="no_network_msg">Ingen närverksanslutning</string>
   <string name="yes">Ja</string>
   <string name="no">Nej</string>
   <string name="confirm_stop_download_title">Stoppa nedladdning?</string>
@@ -169,6 +168,17 @@
   <string name="pref_wifi_only">Ladda ned endast via WiFi</string>
   <string name="time_day">dag</string>
   <string name="time_left">kvar</string>
+  <string name="pref_bottomtoolbar">Aktivera verktygsfält i nederkant</string>
+  <string name="pref_bottomtoolbar_summary">Visa ett verktygsfält med snabbåtgärder längst ned på skärmen</string>
   <string name="pref_autonightmode_summary">Växla automatiskt mellan dag- och nattläge.</string>
   <string name="pref_autonightmode">Automatiskt nattläge</string>
+  <string name="pref_multi_search_title">MultiZim-sökning</string>
+  <string name="pref_multi_search_summary">Tillåt appen att söka igenom ZIM-filer (varning; mycket experimentellt).</string>
+  <string name="pref_external_link_popup_title">Varna vid externa länkar</string>
+  <string name="pref_external_link_popup_summary">Visar popup för att varna om ytterligare kostnader eller att det inte fungerar i offlinelänkar.</string>
+  <string name="external_link_popup_dialog_title">Går till extern länk</string>
+  <string name="external_link_popup_dialog_message">Du går till en extern länk. Detta kan leda till ytterligare dataöverföringskostnader eller kommer bara inte fungera när du är offline. Vill du fortsätta?</string>
+  <string name="do_not_ask_anymore">Fråga inte igen</string>
+  <string name="your_languages">Valda språk:</string>
+  <string name="other_languages">Andra språk:</string>
 </resources>

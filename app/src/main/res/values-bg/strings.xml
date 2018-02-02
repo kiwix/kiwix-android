@@ -16,8 +16,8 @@
   <string name="menu_rescan_fs">Повторно сканиране на SD карта</string>
   <string name="save_media">Съхраняване на медията като...</string>
   <string name="save_media_error">Възникна грешка при опита за съхранение на медийния файл!</string>
-  <string name="save_media_saved">Медийният файл е съхранен като %1$s във вашата папка с изображения</string>
-  <string name="rescan_fs_warning">Сканиране на ZIM файлове, моля, изчакайте...</string>
+  <string name="save_media_saved">Медийният файл е съхранен под името %s в Android/media/org.kiwix.../</string>
+  <string name="rescan_fs_warning">Сканиране на файлове за сваляне, моля, изчакайте...</string>
   <string name="button_backtotop">Връщане в началото</string>
   <string name="search_label">Търсене</string>
   <string name="articlesearch_hint">Въведете за търсене на статии</string>
@@ -42,7 +42,7 @@
   <string name="pref_info_version">Версия</string>
   <string name="pref_zoom_enable">Управление на мащаба</string>
   <string name="pref_nightmode">Нощен режим</string>
-  <string name="pref_nightmode_summary">Показване на статии в "нощен режим"</string>
+  <string name="pref_nightmode_summary">Показване на статии в „нощен режим“</string>
   <string name="pref_backtotop">Връщане в началото</string>
   <string name="pref_backtotop_summary">Показване на бутон в края на страницата за превъртане нагоре</string>
   <string name="pref_language_title">Език</string>
@@ -54,7 +54,7 @@
   <string name="no_bookmarks">Няма отметки</string>
   <string name="menu_bookmarks_list">Отметки</string>
   <string name="no_section_info">Не са открити заглавки на съдържанието</string>
-  <string name="request_storage">За достъп до ZIM-файлове, ни е нужен достъп до файловото Ви хранилище</string>
+  <string name="request_storage">За достъп до офлайн съдържание, ни е нужен достъп до файловото Ви хранилище</string>
   <string name="delete_recent_search_item">Изтриване на този елемент?</string>
   <string name="delete">Изтриване</string>
   <string name="did_you_know">Знаете ли, че?</string>
@@ -73,6 +73,7 @@
   <string name="pref_newtab_background_summary">При отварянето на нов подпрозорец, той ще се отвори във фонов режим</string>
   <string name="search_widget_text">Търсене в Kiwix</string>
   <string name="zim_downloads">Изтегляне</string>
+  <string name="zim_manager">Библиотека</string>
   <string name="delete_specific_zim_toast">Файлът е изтрит</string>
   <string name="zim_file_downloading">Изтегляне</string>
   <string name="zim_file_downloaded">Изтеглено</string>

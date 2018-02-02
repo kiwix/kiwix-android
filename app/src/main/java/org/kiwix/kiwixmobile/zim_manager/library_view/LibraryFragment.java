@@ -61,6 +61,9 @@ import eu.mhutti1.utils.storage.support.StorageSelectDialog;
 import static android.view.View.GONE;
 import static org.kiwix.kiwixmobile.downloader.DownloadService.KIWIX_ROOT;
 import static org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOK;
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE;
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE_TITLE;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class LibraryFragment extends Fragment
@@ -127,6 +130,12 @@ public class LibraryFragment extends Fragment
 
     DownloadService.setDownloadFragment(faActivity.mSectionsPagerAdapter.getDownloadFragment());
 
+
+    NetworkInfo network = conMan.getActiveNetworkInfo();
+    if (network == null || !network.isConnected()) {
+      displayNoNetworkConnection();
+    }
+
     networkBroadcastReceiver = new NetworkBroadcastReceiver();
     faActivity.registerReceiver(networkBroadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     isReceiverRegistered = true;
@@ -139,6 +148,11 @@ public class LibraryFragment extends Fragment
 
   @Override
   public void showBooks(LinkedList<Book> books) {
+    if (books == null) {
+      displayNoItemsAvailable();
+      return;
+    }
+
     Log.i("kiwix-showBooks", "Contains:" + books.size());
     libraryAdapter.setAllBooks(books);
     if (faActivity.searchView != null) {
@@ -159,7 +173,7 @@ public class LibraryFragment extends Fragment
       return;
     }
 
-    networkText.setText(R.string.no_network_msg);
+    networkText.setText(R.string.no_network_connection);
     networkText.setVisibility(View.VISIBLE);
     permissionButton.setVisibility(GONE);
     swipeRefreshLayout.setRefreshing(false);
@@ -173,6 +187,20 @@ public class LibraryFragment extends Fragment
     networkText.setText(R.string.no_items_msg);
     networkText.setVisibility(View.VISIBLE);
     permissionButton.setVisibility(GONE);
+    swipeRefreshLayout.setRefreshing(false);
+    TestingUtils.unbindResource(LibraryFragment.class);
+  }
+
+  @Override
+  public void displayNoItemsAvailable() {
+    if (books.size() != 0) {
+      Toast.makeText(super.getActivity(), R.string.no_items_available, Toast.LENGTH_LONG).show();
+      return;
+    }
+
+    networkText.setText(R.string.no_items_available);
+    networkText.setVisibility(View.VISIBLE);
+    permissionButton.setVisibility(View.GONE);
     swipeRefreshLayout.setRefreshing(false);
     TestingUtils.unbindResource(LibraryFragment.class);
   }
@@ -279,7 +307,7 @@ public class LibraryFragment extends Fragment
     Intent service = new Intent(super.getActivity(), DownloadService.class);
     service.putExtra(DownloadIntent.DOWNLOAD_URL_PARAMETER, book.getUrl());
     service.putExtra(DownloadIntent.DOWNLOAD_ZIM_TITLE, book.getTitle());
-    service.putExtra("Book", book);
+    service.putExtra(EXTRA_BOOK, book);
     super.getActivity().startService(service);
     mConnection = new DownloadServiceConnection();
     super.getActivity()
@@ -290,7 +318,7 @@ public class LibraryFragment extends Fragment
 
   public long getSpaceAvailable() {
     return new File(PreferenceManager.getDefaultSharedPreferences(super.getActivity())
-        .getString(KiwixMobileActivity.PREF_STORAGE, Environment.getExternalStorageDirectory()
+        .getString(PREF_STORAGE, Environment.getExternalStorageDirectory()
             .getPath())).getFreeSpace();
   }
 
@@ -299,11 +327,11 @@ public class LibraryFragment extends Fragment
     SharedPreferences sharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(getActivity());
     SharedPreferences.Editor editor = sharedPreferences.edit();
-    editor.putString(KiwixMobileActivity.PREF_STORAGE, storageDevice.getName());
+    editor.putString(PREF_STORAGE, storageDevice.getName());
     if (storageDevice.isInternal()) {
-      editor.putString(KiwixMobileActivity.PREF_STORAGE_TITLE, getResources().getString(R.string.internal_storage));
+      editor.putString(PREF_STORAGE_TITLE, getResources().getString(R.string.internal_storage));
     } else {
-      editor.putString(KiwixMobileActivity.PREF_STORAGE_TITLE, getResources().getString(R.string.external_storage));
+      editor.putString(PREF_STORAGE_TITLE, getResources().getString(R.string.external_storage));
     }
     editor.apply();
   }

@@ -82,7 +82,7 @@
   <string name="pref_newtab_background_summary">Quando si apre una nuova scheda verrà aperta in background</string>
   <string name="download_started_library">Download iniziato...</string>
   <string name="local_zims">Dispositivo</string>
-  <string name="zim_manager">Gestione dei contenuti</string>
+  <string name="zim_manager">Libreria</string>
   <string name="delete_specific_zim">Cancellare questo file?</string>
   <string name="delete_specific_zim_toast">File cancellato</string>
   <string name="download_pause">Pausa</string>
@@ -116,4 +116,6 @@
   <string name="time_day">giorno</string>
   <string name="pref_autonightmode_summary">Commuta automaticamente tra la modalità giorno e notte.</string>
   <string name="pref_autonightmode">Modalità notte automatica</string>
+  <string name="your_languages">Lingue selezionate:</string>
+  <string name="other_languages">Altre lingue:</string>
 </resources>

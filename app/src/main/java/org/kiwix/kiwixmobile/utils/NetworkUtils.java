@@ -11,6 +11,8 @@ import org.kiwix.kiwixmobile.R;
 
 import java.util.UUID;
 
+import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
+
 public class NetworkUtils {
 
   public static boolean isNetworkAvailable(Context context) {
@@ -77,7 +79,7 @@ public class NetworkUtils {
       details = details.trim().replaceAll(" +", " ");
       return details;
     } catch (Exception e) {
-      Log.d(KiwixMobileActivity.TAG_KIWIX, "Context invalid url: " + url, e);
+      Log.d(TAG_KIWIX, "Context invalid url: " + url, e);
       return "";
     }
   }

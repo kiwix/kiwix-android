@@ -99,7 +99,7 @@
   <string name="local_zims">Уред</string>
   <string name="remote_zims">На линија</string>
   <string name="zim_downloads">Преземам</string>
-  <string name="zim_manager">Раководење со содржините</string>
+  <string name="zim_manager">Библиотека</string>
   <string name="delete_specific_zim">Да ја избришам податотекава?</string>
   <string name="delete_specific_zim_toast">Податотеката е избришана</string>
   <string name="zim_file_downloading">Преземам</string>
@@ -156,7 +156,6 @@
   <string name="internal_storage">Внатрешен</string>
   <string name="external_storage">Надворешен</string>
   <string name="zim_already_downloading">Zim веќе се презема</string>
-  <string name="no_network_msg">Немате мрежна врска</string>
   <string name="yes">Да</string>
   <string name="no">Не</string>
   <string name="confirm_stop_download_title">Да го прекинам преземањето?</string>
@@ -174,6 +173,17 @@
   <string name="time_minute">мин</string>
   <string name="time_second">с</string>
   <string name="time_left">лево</string>
+  <string name="pref_bottomtoolbar">Вклучи алатник најдолу</string>
+  <string name="pref_bottomtoolbar_summary">Прикажи алатник за брзи дејства најдолу во екранот.</string>
   <string name="pref_autonightmode_summary">Автоматски префрлај меѓу дневен и ноќен режим.</string>
   <string name="pref_autonightmode">Автоматски ноќен режим</string>
+  <string name="pref_multi_search_title">Пребарување по MultiZim</string>
+  <string name="pref_multi_search_summary">Дозволи прилог за пребарување низ ZIM-податотеки (Предупредување: мошне опитно).</string>
+  <string name="pref_external_link_popup_title">Предупреди ме кога се внесуваат надворешни врски</string>
+  <string name="pref_external_link_popup_summary">Прикажи отскочници со предупредување за дополнителни трошоци или неработа во вонмрежни врски.</string>
+  <string name="external_link_popup_dialog_title">Внесување на надворешна врска</string>
+  <string name="external_link_popup_dialog_message">Внесувате надворешна врска. Ова може да доведе до дополнителни трошоци за податочен пренос или пак просто нема да работи кога не сте на линија. Дали сакате да продолжите?</string>
+  <string name="do_not_ask_anymore">Повеќе не прашувај</string>
+  <string name="your_languages">Избрани јазици:</string>
+  <string name="other_languages">Други јазици:</string>
 </resources>

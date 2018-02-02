@@ -40,6 +40,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
+
 public class KiwixDatabase extends SquidDatabase {
 
   private static final int VERSION = 14;
@@ -155,13 +157,13 @@ public class KiwixDatabase extends SquidDatabase {
               bookmarksDao.saveBookmark(null, in, idName, idName);
             }
             context.deleteFile(id);
-            Log.d(KiwixMobileActivity.TAG_KIWIX, "Switched to bookmarkfile " + ZimContentProvider.getId());
+            Log.d(TAG_KIWIX, "Switched to bookmarkfile " + ZimContentProvider.getId());
           }
         } catch (FileNotFoundException e) {
-          Log.e(KiwixMobileActivity.TAG_KIWIX, "Bookmark File ( " + id + " ) not found", e);
+          Log.e(TAG_KIWIX, "Bookmark File ( " + id + " ) not found", e);
           //TODO: Surface to user
         } catch (IOException e) {
-          Log.e(KiwixMobileActivity.TAG_KIWIX, "Can not read file " + id, e);
+          Log.e(TAG_KIWIX, "Can not read file " + id, e);
           //TODO: Surface to user
         }
       }

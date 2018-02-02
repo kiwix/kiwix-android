@@ -38,9 +38,9 @@ import java.util.Vector;
 import eu.mhutti1.utils.storage.StorageDevice;
 import eu.mhutti1.utils.storage.StorageDeviceUtils;
 
-public class FileSearch {
+import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
-  public static final String TAG_KIWIX = "kiwix";
+public class FileSearch {
 
   // Array of zim file extensions
   public static final String[] zimFiles = {"zim", "zimaa"};

@@ -55,4 +55,5 @@
   <string name="menu_bookmarks_list">Kegemaran</string>
   <string name="no_section_info">Tiada judul kandungan ditemui</string>
   <string name="request_storage">Untuk mencapai fail ZIM kami memerlukan akses kepada storan anda</string>
+  <string name="zim_manager">Perpustakaan</string>
 </resources>

@@ -155,7 +155,6 @@
   <string name="internal_storage">Interna</string>
   <string name="external_storage">Esterna</string>
   <string name="zim_already_downloading">Su Zim est giai in iscarrigamentu</string>
-  <string name="no_network_msg">Peruna connessione de retza</string>
   <string name="yes">Eja</string>
   <string name="no">Nono</string>
   <string name="confirm_stop_download_title">Firmare s\'iscarrigamentu?</string>

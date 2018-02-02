@@ -111,7 +111,6 @@
   <string name="tts_stop">arrestar</string>
   <string name="internal_storage">Intèrne</string>
   <string name="external_storage">Extèrne</string>
-  <string name="no_network_msg">Pas cap de connexion de ret</string>
   <string name="yes">Òc</string>
   <string name="no">Non</string>
   <string name="confirm_stop_download_title">Arrestar lo telecargament ?</string>

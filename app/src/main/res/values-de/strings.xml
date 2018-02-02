@@ -95,7 +95,7 @@
   <string name="menu_library">Inhaltsdateien herunterladen</string>
   <string name="local_zims">Gerät</string>
   <string name="zim_downloads">Herunterladen</string>
-  <string name="zim_manager">Inhaltsverwaltung</string>
+  <string name="zim_manager">Bibliothek</string>
   <string name="delete_specific_zim">Diese Datei löschen?</string>
   <string name="delete_specific_zim_toast">Datei gelöscht</string>
   <string name="zim_file_downloading">Herunterladen</string>
@@ -152,7 +152,6 @@
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Extern</string>
   <string name="zim_already_downloading">Zim lädt bereits</string>
-  <string name="no_network_msg">Keine Netzwerkverbindung</string>
   <string name="yes">Ja</string>
   <string name="no">Nein</string>
   <string name="confirm_stop_download_title">Herunterladen beenden?</string>
@@ -170,6 +169,17 @@
   <string name="time_minute">Minuten</string>
   <string name="time_second">Sekunden</string>
   <string name="time_left">verbleibend</string>
+  <string name="pref_bottomtoolbar">Untere Werkzeugleiste aktivieren</string>
+  <string name="pref_bottomtoolbar_summary">Eine Werkzeugleiste mit Schnellzugriffsaktionen am unteren Bildschirmrand anzeigen</string>
   <string name="pref_autonightmode_summary">Automatisch zwischen Tag- und Nachtmodus umschalten.</string>
   <string name="pref_autonightmode">Automatischer Nachtmodus</string>
+  <string name="pref_multi_search_title">MultiZim-Suche</string>
+  <string name="pref_multi_search_summary">Der App erlauben, ZIM-Dateien zu durchsuchen (Warnung: Sehr experimentell).</string>
+  <string name="pref_external_link_popup_title">Beim Einfügen von externen Links warnen</string>
+  <string name="pref_external_link_popup_summary">Popups für Warnungen über zusätzliche Kosten oder das Nichtfunktionieren von Offlinelinks anzeigen.</string>
+  <string name="external_link_popup_dialog_title">Externen Link einfügen</string>
+  <string name="external_link_popup_dialog_message">Du fügst einen externen Link ein. Dies könnte zu zusätzlichen Kosten für die Datenübermittlung führen oder wird nicht funktionieren, wenn du offline bist. Möchtest du fortfahren?</string>
+  <string name="do_not_ask_anymore">Nicht mehr fragen</string>
+  <string name="your_languages">Ausgewählte Sprachen:</string>
+  <string name="other_languages">Weitere Sprachen:</string>
 </resources>

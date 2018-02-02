@@ -71,6 +71,7 @@
   <string name="download_started_library">Eroflueden huet ugefaangen...</string>
   <string name="local_zims">Apparat</string>
   <string name="zim_downloads">Eroflueden</string>
+  <string name="zim_manager">Bibliothéik</string>
   <string name="delete_specific_zim">Dëse Fichier läschen?</string>
   <string name="delete_specific_zim_toast">Fichier geläscht</string>
   <string name="zim_file_downloading">Eroflueden</string>
@@ -97,7 +98,6 @@
   <string name="tts_stop">stopp</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Extern</string>
-  <string name="no_network_msg">Keng Verbindung mam Reseau</string>
   <string name="yes">Jo</string>
   <string name="no">Neen</string>
   <string name="confirm_stop_download_title">Erofluede stoppen?</string>
@@ -108,4 +108,9 @@
   <string name="time_day">Dag</string>
   <string name="time_minute">Minutten</string>
   <string name="time_left">lenks</string>
+  <string name="pref_external_link_popup_title">Warne wann en externe Link agi gëtt</string>
+  <string name="external_link_popup_dialog_title">Externe Link aginn</string>
+  <string name="do_not_ask_anymore">Net méi froen</string>
+  <string name="your_languages">Erausgesicht Sproochen:</string>
+  <string name="other_languages">Aner Sproochen:</string>
 </resources>

@@ -46,4 +46,5 @@
   <string name="pref_language_title">மொழி</string>
   <string name="pref_language_chooser">மொழியைத் தேர்ந்தெடு</string>
   <string name="menu_bookmarks_list">புத்தகக்குறிகள்</string>
+  <string name="zim_manager">நூலகம்</string>
 </resources>

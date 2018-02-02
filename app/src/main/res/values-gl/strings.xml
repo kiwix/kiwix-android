@@ -97,7 +97,7 @@
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">En liña</string>
   <string name="zim_downloads">Descargando</string>
-  <string name="zim_manager">Administración de contido</string>
+  <string name="zim_manager">Biblioteca</string>
   <string name="delete_specific_zim">Eliminar este ficheiro?</string>
   <string name="delete_specific_zim_toast">Ficheiro eliminado</string>
   <string name="zim_file_downloading">Descargando</string>
@@ -153,7 +153,6 @@
   <string name="internal_storage">Interno</string>
   <string name="external_storage">Externo</string>
   <string name="zim_already_downloading">O zim xa está a descargarse</string>
-  <string name="no_network_msg">Ningunha conexión de rede</string>
   <string name="yes">Si</string>
   <string name="no">Non</string>
   <string name="confirm_stop_download_title">Deter descarga?</string>
@@ -168,6 +167,17 @@
   <string name="pref_wifi_only">Descargar contido só mediante WiFi</string>
   <string name="time_day">día</string>
   <string name="time_left">esquerda</string>
+  <string name="pref_bottomtoolbar">Activar a barra de ferramentas inferior</string>
+  <string name="pref_bottomtoolbar_summary">Mostra unha barra de ferramentas con as accións rápidas na parte inferior da pantalla</string>
   <string name="pref_autonightmode_summary">Cambiar automaticamente entre o modo diurno e o nocturno</string>
   <string name="pref_autonightmode">Modo nocturno automatizado</string>
+  <string name="pref_multi_search_title">Procurar en MultiZim</string>
+  <string name="pref_multi_search_summary">Permitir á aplicación procurar em ficheiros ZIM (Atención: aínda está en desenvolvemento).</string>
+  <string name="pref_external_link_popup_title">Avisar cando introducir ligazóns externas</string>
+  <string name="pref_external_link_popup_summary">Mostra as previsualizacións de páxinas para avisar sobre os custos adicionais ou cando non funciona en ligazóns desconectadas.</string>
+  <string name="external_link_popup_dialog_title">Introducindo ligazón externa</string>
+  <string name="external_link_popup_dialog_message">Estás introducindo unha ligazón externa. Isto pode xerar gastos por transferencia de datos ou simplemente non funcionará cando está desconectado. Aínda quere continuar?</string>
+  <string name="do_not_ask_anymore">Non preguntar máis</string>
+  <string name="your_languages">Linguas escollidas:</string>
+  <string name="other_languages">Outras linguas:</string>
 </resources>

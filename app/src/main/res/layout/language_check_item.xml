@@ -3,7 +3,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/language_row"
   android:layout_width="match_parent"
-  android:layout_height="?android:attr/listPreferredItemHeight"
+  android:layout_height="?android:attr/listPreferredItemHeightSmall"
   android:gravity="center_vertical"
   android:orientation="horizontal">
 
@@ -12,10 +12,11 @@
     android:id="@+id/language_checkbox"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
+    android:layout_centerVertical="true"
+    android:layout_marginLeft="15dp"
+    android:buttonTint="@color/accent"
     android:focusable="false"
     android:focusableInTouchMode="false"
-    android:buttonTint="@color/accent"
     tools:checked="false"/>
 
   <LinearLayout
@@ -23,7 +24,7 @@
     android:layout_height="match_parent"
     android:layout_toRightOf="@id/language_checkbox"
     android:layout_centerVertical="true"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:gravity="center_vertical">
 
     <TextView
@@ -36,9 +37,10 @@
       android:id="@+id/language_name_localized"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_marginLeft="10dp"
       android:textSize="18sp"
       android:textColor="@color/grey"
-      tools:text="Deutsch"/>
+      tools:text="(Deutsch)"/>
 
   </LinearLayout>
 
@@ -48,7 +50,9 @@
     android:layout_height="wrap_content"
     android:layout_alignParentRight="true"
     android:layout_centerVertical="true"
-    android:layout_margin="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="6dp"
     android:textSize="18sp"
     android:textColor="@color/grey"
     tools:text="47"/>

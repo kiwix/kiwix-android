@@ -26,4 +26,5 @@
   <string name="rate_dialog_title">โปรดให้คะแนนเรา</string>
   <string name="rate_dialog_negative">ไม่ ขอบคุณ</string>
   <string name="rate_dialog_neutral">ทีหลัง</string>
+  <string name="zim_manager">รายการ</string>
 </resources>

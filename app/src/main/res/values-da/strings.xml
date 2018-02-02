@@ -96,7 +96,7 @@
   <string name="local_zims">Enhed</string>
   <string name="remote_zims">På nettet</string>
   <string name="zim_downloads">Henter</string>
-  <string name="zim_manager">Indholdshåndtering</string>
+  <string name="zim_manager">Bibliotek</string>
   <string name="delete_specific_zim">Slet denne fil?</string>
   <string name="delete_specific_zim_toast">Fil slettet</string>
   <string name="zim_file_downloading">Henter</string>
@@ -149,7 +149,6 @@
   <string name="internal_storage">Intern lager</string>
   <string name="external_storage">Eksternt lager</string>
   <string name="zim_already_downloading">Zim overfører allerede</string>
-  <string name="no_network_msg">Ingen netværksforbindelse</string>
   <string name="yes">Ja</string>
   <string name="no">Nej</string>
   <string name="confirm_stop_download_title">Stop overførsel</string>
@@ -165,6 +164,17 @@
   <string name="time_day">dag</string>
   <string name="time_hour">t</string>
   <string name="time_left">tilbage</string>
+  <string name="pref_bottomtoolbar">Aktiver knapværktøjslinje</string>
+  <string name="pref_bottomtoolbar_summary">Vis en værktøjslinje med hurtige handling i bunden af skærmen</string>
   <string name="pref_autonightmode_summary">Skift automatisk mellem dag- og nattilstand.</string>
   <string name="pref_autonightmode">Automatisk nattilstand</string>
+  <string name="pref_multi_search_title">MultiZim-søgning</string>
+  <string name="pref_multi_search_summary">Tillad at programmet søger på tværs af ZIM-filer (advarsel meget eksperimentel).</string>
+  <string name="pref_external_link_popup_title">Advar når man bruger eksterne henvisninger</string>
+  <string name="pref_external_link_popup_summary">Vis pop op for at advare om yderligere omkostninger eller manglende funktion uden internet i henvisninger.</string>
+  <string name="external_link_popup_dialog_title">Gå til ekstern henvisning</string>
+  <string name="external_link_popup_dialog_message">Du er på vej mod en ekstern henvisning. Det kan medføre ekstra omkostninger til dataoverførsel eller vil bare ikke fungere når du ikke er på nettet. Ønsker du at fortsætte?</string>
+  <string name="do_not_ask_anymore">Spørg ikke igen</string>
+  <string name="your_languages">Valgte sprog:</string>
+  <string name="other_languages">Andre sprog:</string>
 </resources>
