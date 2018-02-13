@@ -176,16 +176,12 @@ public class SearchActivity extends AppCompatActivity
   private void deleteSpecificSearchDialog(final String search) {
     new AlertDialog.Builder(this, dialogStyle())
         .setMessage(getString(R.string.delete_recent_search_item))
-        .setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int which) {
-            deleteSpecificSearchItem(search);
-            Toast.makeText(getBaseContext(), getResources().getString(R.string.delete_specific_search_toast), Toast.LENGTH_SHORT).show();
-          }
+        .setPositiveButton(getResources().getString(R.string.delete), (dialog, which) -> {
+          deleteSpecificSearchItem(search);
+          Toast.makeText(getBaseContext(), getResources().getString(R.string.delete_specific_search_toast), Toast.LENGTH_SHORT).show();
         })
-        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-          public void onClick(DialogInterface dialog, int which) {
-            // do nothing
-          }
+        .setNegativeButton(android.R.string.no, (dialog, which) -> {
+          // do nothing
         })
         .show();
   }

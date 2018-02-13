@@ -90,9 +90,7 @@ public class KiwixWebViewClient extends WebViewClient {
         view.addView(help);
         TextView contact = help.findViewById(R.id.welcome21);
         contact.setText(StyleUtils.highlightUrl(contact.getText().toString(), CONTACT_EMAIL_ADDRESS));
-        contact.setOnClickListener(v -> {
-          callback.sendContactEmail();
-        });
+        contact.setOnClickListener(v -> callback.sendContactEmail());
       }
     }
     callback.webViewUrlFinishedLoading();

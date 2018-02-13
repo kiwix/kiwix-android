@@ -137,12 +137,7 @@ public class ZimManageActivity extends AppCompatActivity {
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setTitle(R.string.zim_manager);
 
-    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        onBackPressed();
-      }
-    });
+    toolbar.setNavigationOnClickListener(v -> onBackPressed());
   }
 
 
@@ -181,12 +176,9 @@ public class ZimManageActivity extends AppCompatActivity {
     languageItem = menu.findItem(R.id.select_language);
     searchView = (SearchView) searchItem.getActionView();
     updateMenu(mViewPager.getCurrentItem());
-    toolbar.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        if (mViewPager.getCurrentItem() == 1)
-          MenuItemCompat.expandActionView(menu.findItem(R.id.action_search));
-      }
+    toolbar.setOnClickListener(v -> {
+      if (mViewPager.getCurrentItem() == 1)
+        MenuItemCompat.expandActionView(menu.findItem(R.id.action_search));
     });
     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
       @Override

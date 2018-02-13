@@ -173,12 +173,10 @@ public class KiwixWebView extends WebView {
         || result.getType() == HitTestResult.IMAGE_TYPE
         || result.getType() == HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
       MenuItem saveMenu = menu.add(0, 1, 0, getResources().getString(R.string.save_media));
-      saveMenu.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-        public boolean onMenuItemClick(MenuItem item) {
-          Message msg = saveHandler.obtainMessage();
-          requestFocusNodeHref(msg);
-          return true;
-        }
+      saveMenu.setOnMenuItemClickListener(item -> {
+        Message msg = saveHandler.obtainMessage();
+        requestFocusNodeHref(msg);
+        return true;
       });
     }
   }

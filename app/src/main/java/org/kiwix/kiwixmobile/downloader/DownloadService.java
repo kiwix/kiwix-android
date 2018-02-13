@@ -313,12 +313,9 @@ public class DownloadService extends Service {
 
   private void updateDownloadFragmentProgress(int progress, int notificationID) {
     if (DownloadFragment.mDownloads != null && DownloadFragment.mDownloads.get(notificationID) != null) {
-      handler.post(new Runnable() {
-        @Override
-        public void run() {
-          if (DownloadFragment.mDownloads.get(notificationID) != null) {
-            DownloadFragment.downloadAdapter.updateProgress(progress, notificationID);
-          }
+      handler.post(() -> {
+        if (DownloadFragment.mDownloads.get(notificationID) != null) {
+          DownloadFragment.downloadAdapter.updateProgress(progress, notificationID);
         }
       });
     }
@@ -326,12 +323,9 @@ public class DownloadService extends Service {
 
   private void updateDownloadFragmentComplete(int notificationID) {
     if (DownloadFragment.mDownloads != null && DownloadFragment.mDownloads.get(notificationID) != null) {
-      handler.post(new Runnable() {
-        @Override
-        public void run() {
-          if (DownloadFragment.mDownloads.get(notificationID) != null) {
-            DownloadFragment.downloadAdapter.complete(notificationID);
-          }
+      handler.post(() -> {
+        if (DownloadFragment.mDownloads.get(notificationID) != null) {
+          DownloadFragment.downloadAdapter.complete(notificationID);
         }
       });
     }

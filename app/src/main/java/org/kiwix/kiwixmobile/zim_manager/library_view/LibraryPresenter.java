@@ -31,9 +31,7 @@ public class LibraryPresenter extends BasePresenter<LibraryViewCallback> {
     getMvpView().displayScanningContent();
     kiwixService.getLibrary()
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(library -> {
-          getMvpView().showBooks(library.getBooks());
-        }, error -> {
+        .subscribe(library -> getMvpView().showBooks(library.getBooks()), error -> {
           String msg = error.getLocalizedMessage();
           Log.w("kiwixLibrary", "Error loading books:" + (msg != null ? msg : "(null)"));
           getMvpView().displayNoItemsFound();
