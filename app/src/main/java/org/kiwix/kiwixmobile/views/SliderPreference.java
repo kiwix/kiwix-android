@@ -105,9 +105,9 @@ public class SliderPreference extends DialogPreference {
   @Override
   protected View onCreateDialogView() {
     View view = super.onCreateDialogView();
-    mMessage = (TextView) view.findViewById(R.id.message);
+    mMessage = view.findViewById(R.id.message);
     mMessage.setText(String.valueOf(mSeekBarValue));
-    SeekBar seekbar = (SeekBar) view.findViewById(R.id.slider_preference_seekbar);
+    SeekBar seekbar = view.findViewById(R.id.slider_preference_seekbar);
     seekbar.setMax(SEEKBAR_MAX);
     seekbar.setProgress(mSeekBarValue);
     seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
