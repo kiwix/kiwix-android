@@ -22,7 +22,6 @@ package org.kiwix.kiwixmobile.library;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,7 +56,11 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import rx.Completable;
 import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
 
@@ -74,6 +77,7 @@ public class LibraryAdapter extends BaseAdapter {
   private final BookDao bookDao;
   private final LayoutInflater layoutInflater;
   private final BookFilter bookFilter = new BookFilter();
+  private Subscription saveNetworkLanguageSubscription;
   @Inject BookUtils bookUtils;
 
   private void setupDagger() {
@@ -305,7 +309,7 @@ public class LibraryAdapter extends BaseAdapter {
   }
 
   public void updateNetworkLanguages() {
-    new SaveNetworkLanguages().execute(languages);
+    saveNetworkLanguages();
   }
 
   private void updateLanguageCounts() {
@@ -346,7 +350,7 @@ public class LibraryAdapter extends BaseAdapter {
       }
     }
 
-    new SaveNetworkLanguages().execute(this.languages);
+    saveNetworkLanguages();
   }
 
   private void addBooks(List<Book> books) {
@@ -454,13 +458,13 @@ public class LibraryAdapter extends BaseAdapter {
     }
   }
 
-  private class SaveNetworkLanguages extends AsyncTask<List<Language>, Object, Void> {
-    @SafeVarargs
-    @Override
-    protected final Void doInBackground(List<Language>... params) {
-      networkLanguageDao.saveFilteredLanguages(params[0]);
-      return null;
+  private void saveNetworkLanguages() {
+    if (saveNetworkLanguageSubscription != null) {
+      saveNetworkLanguageSubscription.unsubscribe();
     }
+    saveNetworkLanguageSubscription = Completable.fromAction(() -> networkLanguageDao.saveFilteredLanguages(languages))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe();
   }
-
 }
