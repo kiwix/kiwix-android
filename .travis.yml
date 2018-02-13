@@ -21,4 +21,4 @@ cache:
 licenses:
   - '.+'
 
-script: ./gradlew testdroidUploadKiwix && ./testdroid.py
+script: ./gradlew assembleKiwixRelease testdroidUploadKiwix && ./testdroid.py
