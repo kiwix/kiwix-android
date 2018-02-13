@@ -5,6 +5,8 @@ Production releases of the app should be built with our companion build reposito
 To build this repository alone for development purposes you can simply import the project into Android Studio and the hard work will be done for you. If you prefer to build without Android Studio you must first set up the Android SDK and then run the command:
 ```./gradlew build ``` from the root directory of the project.
 
+<b>We utilize different build variants (flavours) to build various different versions of our app. Ensure your build variant is kiwixDebug to build the standard app.</b>
+
 Before contributing be sure to check out https://github.com/kiwix/kiwix-android/blob/master/CONTRIBUTING.md.
 
 We currently have a series of automated Unit and Integration tests. These can be run locally and are also run when submitting a pull request.
