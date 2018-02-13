@@ -64,11 +64,11 @@ public class DownloadFragment extends Fragment {
     relLayout = (RelativeLayout) inflater.inflate(R.layout.download_management, container, false);
 
     zimManageActivity = (ZimManageActivity) super.getActivity();
-    listView = (ListView) relLayout.findViewById(R.id.zim_downloader_list);
+    listView = relLayout.findViewById(R.id.zim_downloader_list);
     downloadAdapter = new DownloadAdapter(mDownloads);
     downloadAdapter.registerDataSetObserver(this);
     listView.setAdapter(downloadAdapter);
-    mainLayout = (CoordinatorLayout) faActivity.findViewById(R.id.zim_manager_main_activity);
+    mainLayout = faActivity.findViewById(R.id.zim_manager_main_activity);
     return relLayout;
   }
 
@@ -82,7 +82,7 @@ public class DownloadFragment extends Fragment {
     if (faActivity == null) {
       return;
     }
-    TextView noDownloadsText = (TextView) faActivity.findViewById(R.id.download_management_no_downloads);
+    TextView noDownloadsText = faActivity.findViewById(R.id.download_management_no_downloads);
     if (noDownloadsText == null) return;
     if (listView.getCount() == 0) {
       noDownloadsText.setVisibility(View.VISIBLE);
@@ -173,7 +173,7 @@ public class DownloadFragment extends Fragment {
         downloadAdapter.notifyDataSetChanged();
         updateNoDownloads();
       }
-      ImageView pause = (ImageView) viewGroup.findViewById(R.id.pause);
+      ImageView pause = viewGroup.findViewById(R.id.pause);
       pause.setEnabled(false);
       String fileName = FileUtils.getFileName(mDownloadFiles.get(mKeys[position]));
       {
@@ -195,9 +195,9 @@ public class DownloadFragment extends Fragment {
         if (viewGroup == null) {
           return;
         }
-        ProgressBar downloadProgress = (ProgressBar) viewGroup.findViewById(R.id.downloadProgress);
+        ProgressBar downloadProgress = viewGroup.findViewById(R.id.downloadProgress);
         downloadProgress.setProgress(progress);
-        TextView timeRemaining = (TextView) viewGroup.findViewById(R.id.time_remaining);
+        TextView timeRemaining = viewGroup.findViewById(R.id.time_remaining);
         int secLeft = LibraryFragment.mService.timeRemaining.get(mKeys[position], -1);
         if (secLeft != -1)
           timeRemaining.setText(toHumanReadableTime(secLeft));
@@ -225,16 +225,16 @@ public class DownloadFragment extends Fragment {
       // Lookup view for data population
       //downloadProgress.setProgress(download.progress);
       // Populate the data into the template view using the data object
-      TextView title = (TextView) convertView.findViewById(R.id.title);
-      TextView description = (TextView) convertView.findViewById(R.id.description);
-      TextView timeRemaining = (TextView) convertView.findViewById(R.id.time_remaining);
-      ImageView imageView = (ImageView) convertView.findViewById(R.id.favicon);
+      TextView title = convertView.findViewById(R.id.title);
+      TextView description = convertView.findViewById(R.id.description);
+      TextView timeRemaining = convertView.findViewById(R.id.time_remaining);
+      ImageView imageView = convertView.findViewById(R.id.favicon);
       title.setText(getItem(position).getTitle());
       description.setText(getItem(position).getDescription());
       imageView.setImageBitmap(StringToBitMap(getItem(position).getFavicon()));
 
-      ProgressBar downloadProgress = (ProgressBar) convertView.findViewById(R.id.downloadProgress);
-      ImageView pause = (ImageView) convertView.findViewById(R.id.pause);
+      ProgressBar downloadProgress = convertView.findViewById(R.id.downloadProgress);
+      ImageView pause = convertView.findViewById(R.id.pause);
 
       if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == 0) {
         downloadProgress.setProgress(0);
@@ -265,7 +265,7 @@ public class DownloadFragment extends Fragment {
       });
 
 
-      ImageView stop = (ImageView) convertView.findViewById(R.id.stop);
+      ImageView stop = convertView.findViewById(R.id.stop);
       stop.setOnClickListener(v -> {
         hasArtificiallyPaused = LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY;
         setPlayState(pause, position, DownloadService.PAUSE);

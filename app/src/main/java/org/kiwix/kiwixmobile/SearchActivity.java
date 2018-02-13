@@ -57,12 +57,12 @@ public class SearchActivity extends AppCompatActivity
     View contentView = LayoutInflater.from(this).inflate(R.layout.search, null);
     setContentView(contentView);
 
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
     getSupportActionBar().setHomeButtonEnabled(true);
 
-    mListView = (ListView) findViewById(R.id.search_list);
+    mListView = findViewById(R.id.search_list);
     recentSearchDao = new RecentSearchDao(KiwixDatabase.getInstance(this));
     List<String> recentSearches = recentSearchDao.getRecentSearches();
     mDefaultAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
@@ -81,7 +81,7 @@ public class SearchActivity extends AppCompatActivity
 
   @Override
   public void finish() {
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
     if (value == 1) {

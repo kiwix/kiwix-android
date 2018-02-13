@@ -114,7 +114,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
   }
 
   private void setUpToolbar() {
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     getSupportActionBar().setTitle(getString(R.string.menu_settings));
     getSupportActionBar().setHomeButtonEnabled(true);

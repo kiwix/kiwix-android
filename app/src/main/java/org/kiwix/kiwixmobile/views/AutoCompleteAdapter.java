@@ -50,7 +50,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
   public View getView(int position, View convertView, ViewGroup parent) {
     View row = super.getView(position, convertView, parent);
 
-    TextView tv = (TextView) row.findViewById(android.R.id.text1);
+    TextView tv = row.findViewById(android.R.id.text1);
     tv.setText(Html.fromHtml(getItem(position)));
 
     return row;

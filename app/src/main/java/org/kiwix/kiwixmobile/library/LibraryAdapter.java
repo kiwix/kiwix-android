@@ -129,15 +129,15 @@ public class LibraryAdapter extends BaseAdapter {
       } else {
         convertView = layoutInflater.inflate(R.layout.library_item, null);
         holder = new ViewHolder();
-        holder.title = (TextView) convertView.findViewById(R.id.title);
-        holder.description = (TextView) convertView.findViewById(R.id.description);
-        holder.language = (TextView) convertView.findViewById(R.id.language);
-        holder.creator = (TextView) convertView.findViewById(R.id.creator);
-        holder.publisher = (TextView) convertView.findViewById(R.id.publisher);
-        holder.date = (TextView) convertView.findViewById(R.id.date);
-        holder.size = (TextView) convertView.findViewById(R.id.size);
-        holder.fileName = (TextView) convertView.findViewById(R.id.fileName);
-        holder.favicon = (ImageView) convertView.findViewById(R.id.favicon);
+        holder.title = convertView.findViewById(R.id.title);
+        holder.description = convertView.findViewById(R.id.description);
+        holder.language = convertView.findViewById(R.id.language);
+        holder.creator = convertView.findViewById(R.id.creator);
+        holder.publisher = convertView.findViewById(R.id.publisher);
+        holder.date = convertView.findViewById(R.id.date);
+        holder.size = convertView.findViewById(R.id.size);
+        holder.fileName = convertView.findViewById(R.id.fileName);
+        holder.favicon = convertView.findViewById(R.id.favicon);
         convertView.setTag(holder);
       }
 

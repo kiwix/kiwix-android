@@ -135,7 +135,7 @@ public class BookmarksActivity extends BaseActivity
 
 
   private void setUpToolbar() {
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    Toolbar toolbar = findViewById(R.id.toolbar);
     toolbar.setTitle(getString(R.string.menu_bookmarks_list));
     setSupportActionBar(toolbar);
     getSupportActionBar().setHomeButtonEnabled(true);

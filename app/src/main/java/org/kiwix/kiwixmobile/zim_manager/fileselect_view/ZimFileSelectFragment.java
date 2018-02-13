@@ -107,13 +107,13 @@ public class ZimFileSelectFragment extends Fragment
     llLayout = (RelativeLayout) inflater.inflate(R.layout.zim_list, container, false);
     new LanguageUtils(super.getActivity()).changeFont(super.getActivity().getLayoutInflater());
 
-    mFileMessage = (TextView) llLayout.findViewById(R.id.file_management_no_files);
-    mZimFileList = (ListView)  llLayout.findViewById(R.id.zimfilelist);
+    mFileMessage = llLayout.findViewById(R.id.file_management_no_files);
+    mZimFileList = llLayout.findViewById(R.id.zimfilelist);
 
     mFiles = new ArrayList<>();
 
     // SwipeRefreshLayout for the list view
-    swipeRefreshLayout = (SwipeRefreshLayout) llLayout.findViewById(R.id.zim_swiperefresh);
+    swipeRefreshLayout = llLayout.findViewById(R.id.zim_swiperefresh);
     swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
       public void onRefresh() {
@@ -367,15 +367,15 @@ public class ZimFileSelectFragment extends Fragment
         if (convertView == null) {
           convertView = View.inflate(context, R.layout.library_item, null);
           holder = new ViewHolder();
-          holder.title = (TextView) convertView.findViewById(R.id.title);
-          holder.description = (TextView) convertView.findViewById(R.id.description);
-          holder.language = (TextView) convertView.findViewById(R.id.language);
-          holder.creator = (TextView) convertView.findViewById(R.id.creator);
-          holder.publisher = (TextView) convertView.findViewById(R.id.publisher);
-          holder.date = (TextView) convertView.findViewById(R.id.date);
-          holder.size = (TextView) convertView.findViewById(R.id.size);
-          holder.fileName = (TextView) convertView.findViewById(R.id.fileName);
-          holder.favicon = (ImageView) convertView.findViewById(R.id.favicon);
+          holder.title = convertView.findViewById(R.id.title);
+          holder.description = convertView.findViewById(R.id.description);
+          holder.language = convertView.findViewById(R.id.language);
+          holder.creator = convertView.findViewById(R.id.creator);
+          holder.publisher = convertView.findViewById(R.id.publisher);
+          holder.date = convertView.findViewById(R.id.date);
+          holder.size = convertView.findViewById(R.id.size);
+          holder.fileName = convertView.findViewById(R.id.fileName);
+          holder.favicon = convertView.findViewById(R.id.favicon);
           convertView.setTag(holder);
         } else {
           holder = (ViewHolder) convertView.getTag();
