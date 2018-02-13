@@ -185,12 +185,7 @@ public class LanguageUtils {
     Collator localeCollator = Collator.getInstance(locale);
     localeCollator.setStrength(Collator.SECONDARY);
 
-    Collections.sort(mLanguageList, new Comparator<LanguageContainer>() {
-      @Override
-      public int compare(LanguageContainer a, LanguageContainer b) {
-        return localeCollator.compare(a.getLanguageName(), b.getLanguageName());
-      }
-    });
+    Collections.sort(mLanguageList, (a, b) -> localeCollator.compare(a.getLanguageName(), b.getLanguageName()));
   }
 
   // Check, if the selected Locale is supported and weather we actually need to change our font.
@@ -295,19 +290,17 @@ public class LanguageUtils {
         try {
           LayoutInflater inflater = mLayoutInflater;
           final View view = inflater.createView(name, null, attrs);
-          new Handler().post(new Runnable() {
-            public void run() {
-              TextView textView = ((TextView) view);
+          new Handler().post(() -> {
+            TextView textView = ((TextView) view);
 
-              // Set the custom typeface
-              textView.setTypeface(Typeface.createFromAsset(mContext.getAssets(),
-                      getTypeface(Locale.getDefault().getLanguage())));
-              Log.d(TAG_KIWIX, "Applying custom font");
+            // Set the custom typeface
+            textView.setTypeface(Typeface.createFromAsset(mContext.getAssets(),
+                    getTypeface(Locale.getDefault().getLanguage())));
+            Log.d(TAG_KIWIX, "Applying custom font");
 
-              // Reduce the text size
-              textView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                  textView.getTextSize() - 2f);
-            }
+            // Reduce the text size
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                textView.getTextSize() - 2f);
           });
 
           return view;

@@ -281,10 +281,8 @@ public class KiwixSettingsActivity extends AppCompatActivity {
               Toast.makeText(getActivity(), getResources().getString(R.string.all_history_cleared_toast), Toast.LENGTH_SHORT).show();
             }
           })
-          .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-              // do nothing
-            }
+          .setNegativeButton(android.R.string.no, (dialog, which) -> {
+            // do nothing
           })
           .setIcon(android.R.drawable.ic_dialog_alert)
           .show();
