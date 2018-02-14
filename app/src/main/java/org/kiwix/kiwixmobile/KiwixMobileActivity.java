@@ -25,7 +25,6 @@ import android.appwidget.AppWidgetManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -83,6 +82,7 @@ import org.kiwix.kiwixmobile.bookmarks_view.BookmarksActivity;
 import org.kiwix.kiwixmobile.database.BookmarksDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
+import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
 import org.kiwix.kiwixmobile.utils.DocumentParser;
@@ -162,9 +162,9 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   private boolean isBackToTopEnabled = false;
 
-  private boolean wasHideToolbar = false;
+  private boolean wasHideToolbar = true;
 
-  private boolean isHideToolbar = false;
+  private boolean isHideToolbar = true;
 
   private boolean isSpeaking = false;
 
@@ -375,7 +375,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
     initPlayStoreUri();
 
-    isHideToolbar = sharedPreferences.getBoolean(PREF_HIDE_TOOLBAR, false);
+    isHideToolbar = sharedPreferences.getBoolean(PREF_HIDE_TOOLBAR, true);
 
     FileReader fileReader = new FileReader();
     documentParserJs = fileReader.readFile("js/documentParser.js", this);
@@ -694,7 +694,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   private KiwixWebView getWebView(String url) {
     AttributeSet attrs = StyleUtils.getAttributes(this, R.xml.webview);
     KiwixWebView webView;
-    if (isHideToolbar) {
+    if (!isHideToolbar) {
       webView = new ToolbarScrollingKiwixWebView(KiwixMobileActivity.this, this, toolbarContainer, pageBottomTabLayout , attrs);
       ((ToolbarScrollingKiwixWebView) webView).setOnToolbarVisibilityChangeListener(
           new ToolbarScrollingKiwixWebView.OnToolbarVisibilityChangeListener() {
@@ -794,7 +794,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     }
     updateTableOfContents();
 
-    if (isHideToolbar) {
+    if (!isHideToolbar) {
       ((ToolbarScrollingKiwixWebView) webView).ensureToolbarDisplayed();
     }
   }
@@ -902,7 +902,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     expandDrawers();
     isFullscreenOpened = true;
     getCurrentWebView().requestLayout();
-    if (isHideToolbar) {
+    if (!isHideToolbar) {
       toolbarContainer.setTranslationY(0);
       this.getCurrentWebView().setTranslationY(0);
     }
@@ -927,7 +927,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     shrinkDrawers();
     isFullscreenOpened = false;
     getCurrentWebView().requestLayout();
-    if (isHideToolbar) {
+    if (!isHideToolbar) {
       toolbarContainer.setTranslationY(DimenUtils.getTranslucentStatusBarHeight(this));
       this.getCurrentWebView().setTranslationY(DimenUtils.getToolbarAndStatusBarHeight(this));
     }
@@ -1626,7 +1626,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     nightMode = KiwixSettingsActivity.nightMode(sharedPreferences);
     isBackToTopEnabled = sharedPreferences.getBoolean(PREF_BACK_TO_TOP, false);
-    isHideToolbar = sharedPreferences.getBoolean(PREF_HIDE_TOOLBAR, false);
+    isHideToolbar = sharedPreferences.getBoolean(PREF_HIDE_TOOLBAR, true);
     isFullscreenOpened = sharedPreferences.getBoolean(PREF_FULLSCREEN, false);
     boolean isZoomEnabled = sharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
     isOpenNewTabInBackground = sharedPreferences.getBoolean(PREF_NEW_TAB_BACKGROUND, false);
