@@ -260,7 +260,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       if (key.equals(PREF_NIGHTMODE)) {
         KiwixMobileActivity.refresh = true;
         getActivity().finish();
-        startActivity(new Intent(getActivity(),KiwixSettingsActivity.class));
+        startActivity(new Intent(getActivity(), KiwixSettingsActivity.class));
       }
       if (key.equals(PREF_WIFI_ONLY)) {
         KiwixMobileActivity.wifiOnly = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
@@ -268,7 +268,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       if(key.equals(PREF_AUTONIGHTMODE)){
         KiwixMobileActivity.refresh = true;
         getActivity().finish();
-        startActivity(new Intent(getActivity(),KiwixSettingsActivity.class));
+        startActivity(new Intent(getActivity(), KiwixSettingsActivity.class));
       }
     }
 
