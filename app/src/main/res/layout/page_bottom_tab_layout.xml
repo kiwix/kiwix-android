@@ -1,5 +1,4 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
   <android.support.design.widget.TabItem
       android:layout_width="wrap_content"
@@ -17,7 +16,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:contentDescription="@string/menu_fullscreen"
-      android:icon="@drawable/fullscreen" />
+      android:icon="@drawable/ic_fullscreen" />
 
   <android.support.design.widget.TabItem
       android:layout_width="wrap_content"

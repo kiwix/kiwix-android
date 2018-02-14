@@ -164,8 +164,8 @@ public class DownloadService extends Service {
     PendingIntent pausePending = PendingIntent.getService(getBaseContext(), notificationID, pauseIntent, PendingIntent.FLAG_CANCEL_CURRENT);
     PendingIntent stopPending = PendingIntent.getService(getBaseContext(), notificationID, stopIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-    NotificationCompat.Action pause = new NotificationCompat.Action(R.drawable.ic_pause_black_24dp, getString(R.string.download_pause), pausePending);
-    NotificationCompat.Action stop = new NotificationCompat.Action(R.drawable.ic_stop_black_24dp, getString(R.string.download_stop), stopPending);
+    NotificationCompat.Action pause = new NotificationCompat.Action(R.drawable.ic_pause_black, getString(R.string.download_pause), pausePending);
+    NotificationCompat.Action stop = new NotificationCompat.Action(R.drawable.ic_stop_black, getString(R.string.download_stop), stopPending);
 
     notification.put(notificationID , new NotificationCompat.Builder(this)
         .setContentTitle(getResources().getString(R.string.zim_file_downloading) + " " + notificationTitle)
@@ -232,7 +232,7 @@ public class DownloadService extends Service {
     Log.i(KIWIX_TAG, "Pausing ZIM Download for notificationID: " + notificationID);
     downloadStatus.put(notificationID, PAUSE);
     notification.get(notificationID).mActions.get(0).title =  getString(R.string.download_play);
-    notification.get(notificationID).mActions.get(0).icon = R.drawable.ic_play_arrow_black_24dp;
+    notification.get(notificationID).mActions.get(0).icon = R.drawable.ic_play_arrow_black;
     notification.get(notificationID).setContentText(getString(R.string.download_paused));
     notificationManager.notify(notificationID, notification.get(notificationID).build());
     if (DownloadFragment.downloadAdapter != null) {
@@ -248,7 +248,7 @@ public class DownloadService extends Service {
       pauseLock.notify();
     }
     notification.get(notificationID).mActions.get(0).title = getString(R.string.download_pause);
-    notification.get(notificationID).mActions.get(0).icon = R.drawable.ic_pause_black_24dp;
+    notification.get(notificationID).mActions.get(0).icon = R.drawable.ic_pause_black;
     notification.get(notificationID).setContentText("");
     notificationManager.notify(notificationID, notification.get(notificationID).build());
     if (DownloadFragment.downloadAdapter != null) {

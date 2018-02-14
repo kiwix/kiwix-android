@@ -142,7 +142,8 @@ android {
 
   defaultConfig {
     minSdkVersion 14
-    targetSdkVersion 25
+    targetSdkVersion
+    vectorDrawables.useSupportLibrary = true
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     // See https://github.com/linkedin/dexmaker/issues/65 for why we need the following line.
     testInstrumentationRunnerArguments.notClass = 'com.android.dex.DexIndexOverflowException'
