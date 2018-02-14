@@ -88,7 +88,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     if(nightMode(PreferenceManager.getDefaultSharedPreferences(this))){
       setTheme(R.style.AppTheme_Night);
     }
-
+    getWindow().setWindowAnimations(R.style.WindowAnimationTransition);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.settings);
 
@@ -105,6 +105,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
   @Override
   public void onBackPressed() {
+    getWindow().setWindowAnimations(0);
     if (allHistoryCleared) {
       Intent data = new Intent();
       data.putExtra(EXTRA_WEBVIEWS_LIST, allHistoryCleared);
@@ -258,16 +259,17 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       }
       if (key.equals(PREF_NIGHTMODE)) {
         KiwixMobileActivity.refresh = true;
-        getActivity().recreate();
+        getActivity().finish();
+        startActivity(new Intent(getActivity(),KiwixSettingsActivity.class));
       }
       if (key.equals(PREF_WIFI_ONLY)) {
         KiwixMobileActivity.wifiOnly = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
       }
       if(key.equals(PREF_AUTONIGHTMODE)){
         KiwixMobileActivity.refresh = true;
-        getActivity().recreate();
+        getActivity().finish();
+        startActivity(new Intent(getActivity(),KiwixSettingsActivity.class));
       }
-
     }
 
     private void clearAllHistoryDialog() {
