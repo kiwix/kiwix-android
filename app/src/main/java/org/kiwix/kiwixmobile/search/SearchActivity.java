@@ -1,7 +1,6 @@
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.search;
 
 import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -23,13 +22,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.kiwix.kiwixmobile.database.KiwixDatabase;
-import org.kiwix.kiwixmobile.database.RecentSearchDao;
+import org.kiwix.kiwixmobile.KiwixApplication;
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_IS_WIDGET_VOICE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH;
@@ -38,14 +40,20 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class SearchActivity extends AppCompatActivity
-    implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+    implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, SearchViewCallback {
 
   private final int REQ_CODE_SPEECH_INPUT = 100;
   private ListView mListView;
   private AutoCompleteAdapter mAutoAdapter;
   private ArrayAdapter<String> mDefaultAdapter;
-  private RecentSearchDao recentSearchDao;
   private SearchView searchView;
+
+  @Inject
+  SearchPresenter searchPresenter;
+
+  private void setupDagger() {
+    KiwixApplication.getInstance().getApplicationComponent().inject(this);
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +61,7 @@ public class SearchActivity extends AppCompatActivity
     if (sharedPreferences.getBoolean(PREF_NIGHTMODE, false)) {
       setTheme(R.style.AppTheme_Night);
     }
+    setupDagger();
     super.onCreate(savedInstanceState);
     View contentView = LayoutInflater.from(this).inflate(R.layout.search, null);
     setContentView(contentView);
@@ -61,14 +70,13 @@ public class SearchActivity extends AppCompatActivity
     setSupportActionBar(toolbar);
     getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
     getSupportActionBar().setHomeButtonEnabled(true);
+    searchPresenter.attachView(this);
 
     mListView = findViewById(R.id.search_list);
-    recentSearchDao = new RecentSearchDao(KiwixDatabase.getInstance(this));
-    List<String> recentSearches = recentSearchDao.getRecentSearches();
     mDefaultAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+    searchPresenter.getRecentSearches(this);
     mListView.setAdapter(mDefaultAdapter);
-    mDefaultAdapter.addAll(recentSearches);
-    mDefaultAdapter.notifyDataSetChanged();
+
     mAutoAdapter = new AutoCompleteAdapter(this);
     mListView.setOnItemClickListener(this);
     mListView.setOnItemLongClickListener(this);
@@ -77,6 +85,12 @@ public class SearchActivity extends AppCompatActivity
     if (IS_VOICE_SEARCH_INTENT) {
       promptSpeechInput();
     }
+  }
+
+  @Override
+  public void addRecentSearches(List<String> recentSearches) {
+    mDefaultAdapter.addAll(recentSearches);
+    mDefaultAdapter.notifyDataSetChanged();
   }
 
   @Override
@@ -146,7 +160,7 @@ public class SearchActivity extends AppCompatActivity
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
     String title = ((TextView) view).getText().toString();
-    recentSearchDao.saveSearch(title);
+    searchPresenter.saveSearch(title, this);
     sendMessage(title);
   }
 
@@ -187,16 +201,14 @@ public class SearchActivity extends AppCompatActivity
   }
 
   private void deleteSpecificSearchItem(String search) {
-    recentSearchDao.deleteSearchString(search);
+    searchPresenter.deleteSearchString(search, this);
     resetAdapter();
   }
 
   private void resetAdapter() {
     mDefaultAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
     mListView.setAdapter(mDefaultAdapter);
-    List<String> recentSearches = recentSearchDao.getRecentSearches();
-    mDefaultAdapter.addAll(recentSearches);
-    mDefaultAdapter.notifyDataSetChanged();
+    searchPresenter.getRecentSearches(this);
   }
 
 

@@ -152,7 +152,7 @@
     </activity>
 
     <activity android:name=".settings.KiwixSettingsActivity" />
-    <activity android:name=".SearchActivity" />
+    <activity android:name=".search.SearchActivity" />
     <activity android:name=".bookmarks_view.BookmarksActivity" />
 
     <provider

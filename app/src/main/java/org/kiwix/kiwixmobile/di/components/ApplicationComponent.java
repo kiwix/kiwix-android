@@ -8,6 +8,7 @@ import org.kiwix.kiwixmobile.di.modules.JNIModule;
 import org.kiwix.kiwixmobile.di.modules.NetworkModule;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
+import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
@@ -35,4 +36,6 @@ public interface ApplicationComponent {
   void inject(ZimContentProvider zimContentProvider);
 
   void inject(LibraryAdapter libraryAdapter);
+
+  void inject(SearchActivity searchActivity);
 }
