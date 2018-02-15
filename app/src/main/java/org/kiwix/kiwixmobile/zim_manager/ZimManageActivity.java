@@ -106,6 +106,21 @@ public class ZimManageActivity extends AppCompatActivity {
       }
     });
 
+    // Disable scrolling for the AppBarLayout on top of the screen
+    // User can only scroll the PageViewer component
+    AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+    if (appBarLayout.getLayoutParams() != null) {
+      CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+      AppBarLayout.Behavior appBarLayoutBehaviour = new AppBarLayout.Behavior();
+      appBarLayoutBehaviour.setDragCallback(new AppBarLayout.Behavior.DragCallback() {
+        @Override
+        public boolean canDrag(@NonNull AppBarLayout appBarLayout) {
+          return false;
+        }
+      });
+      layoutParams.setBehavior(appBarLayoutBehaviour);
+    }
+
     Log.i(KIWIX_TAG, "ZimManageActivity successfully bootstrapped");
   }
 
