@@ -31,7 +31,7 @@
       android:textColorHint="@color/material_dark_foreground_hint"
       android:textColor="@android:color/white"
       android:imeOptions="actionDone|flagNoExtractUi|flagNoFullscreen"
-      android:layout_marginRight="10dip">
+      android:layout_marginRight="@dimen/webview_search_edit_text_margin_right">
 
     <requestFocus/>
   </EditText>

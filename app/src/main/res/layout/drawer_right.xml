@@ -13,7 +13,7 @@
   <View
     android:id="@+id/view"
     android:layout_width="fill_parent"
-    android:layout_height="1dp"
+    android:layout_height="@dimen/drawer_right_view_height"
     android:background="?attr/dividerColor"/>
 
   <android.support.v7.widget.RecyclerView

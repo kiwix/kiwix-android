@@ -13,24 +13,24 @@
   <View
       android:id="@+id/view"
       android:layout_width="fill_parent"
-      android:layout_height="1dp"
+      android:layout_height="@dimen/drawer_left_view_height"
       android:background="?attr/dividerColor"/>
 
   <android.support.v7.widget.RecyclerView
       android:id="@+id/left_drawer_list"
       android:layout_width="match_parent"
-      android:layout_height="0dp"
+      android:layout_height="@dimen/left_drawer_list_height"
       android:layout_weight="1"
       android:layout_gravity="start"
       android:choiceMode="singleChoice"
       android:divider="@null"
-      android:dividerHeight="0dp"
+      android:dividerHeight="@dimen/left_drawer_list_divider_height"
       android:listSelector="?attr/listBackground"/>
 
   <View
       android:id="@+id/lineView"
       android:layout_width="fill_parent"
-      android:layout_height="1dp"
+      android:layout_height="@dimen/drawer_left_line_view_height"
       android:background="?attr/dividerColor"/>
 
   <LinearLayout
@@ -52,10 +52,10 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_centerInParent="true"
-          android:paddingBottom="4dp"
-          android:paddingLeft="4dp"
-          android:paddingRight="4dp"
-          android:paddingTop="4dp"
+          android:paddingBottom="@dimen/action_back_button_padding_button"
+          android:paddingLeft="@dimen/action_back_button_padding_left"
+          android:paddingRight="@dimen/action_back_button_padding_right"
+          android:paddingTop="@dimen/action_back_button_padding_top"
           android:src="?attr/arrowBackDrawable"
           android:id="@+id/action_back_button" />
     </RelativeLayout>
@@ -72,10 +72,10 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_centerInParent="true"
-          android:paddingBottom="4dp"
-          android:paddingLeft="4dp"
-          android:paddingRight="4dp"
-          android:paddingTop="4dp"
+          android:paddingBottom="@dimen/plus_drawable_padding_bottom"
+          android:paddingLeft="@dimen/plus_drawable_padding_left"
+          android:paddingRight="@dimen/plus_drawable_padding_right"
+          android:paddingTop="@dimen/plus_drawable_padding_top"
           android:src="?attr/plusDrawable">
       </ImageView>
     </RelativeLayout>
@@ -92,10 +92,10 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_centerInParent="true"
-          android:paddingBottom="4dp"
-          android:paddingLeft="4dp"
-          android:paddingRight="4dp"
-          android:paddingTop="4dp"
+          android:paddingBottom="@dimen/action_forward_button_padding_bottom"
+          android:paddingLeft="@dimen/action_forward_button_padding_left"
+          android:paddingRight="@dimen/action_forward_button_padding_right"
+          android:paddingTop="@dimen/action_forward_button_padding_top"
           android:src="?attr/arrowForwardDrawable"
           android:id="@+id/action_forward_button" />
     </RelativeLayout>

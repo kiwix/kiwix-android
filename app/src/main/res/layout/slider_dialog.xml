@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingBottom="8dp"
-    android:paddingTop="8dp">
+    android:paddingLeft="@dimen/dimen_big_padding"
+    android:paddingRight="@dimen/dimen_big_padding"
+    android:paddingBottom="@dimen/dimen_medium_padding"
+    android:paddingTop="@dimen/dimen_medium_padding">
 
   <TextView
       android:id="@+id/message"
@@ -20,7 +20,7 @@
       android:id="@+id/slider_preference_seekbar"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
-      android:paddingBottom="12dp"
-      android:paddingTop="12dp"/>
+      android:paddingBottom="@dimen/slider_preference_seekbar_padding_bottom"
+      android:paddingTop="@dimen/slider_preference_seekbar_padding_top"/>
 
 </LinearLayout>

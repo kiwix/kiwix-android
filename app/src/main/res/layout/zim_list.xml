@@ -6,7 +6,6 @@
     android:orientation="vertical"
     android:background="?attr/listBackground">
 
-
   <TextView
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
@@ -16,8 +15,8 @@
     android:layout_gravity="center_vertical"
     android:gravity="center_vertical"
     android:orientation="vertical"
-    android:paddingBottom="75dp"
-    android:textSize="20sp"
+    android:paddingBottom="@dimen/file_management_no_files_padding_bottom"
+    android:textSize="@dimen/file_management_no_files_text_size"
     android:visibility="gone"/>
 
   <android.support.v4.widget.SwipeRefreshLayout
@@ -30,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
-        android:paddingBottom="60dp"
+        android:paddingBottom="@dimen/zimfilelist_padding_bottom"
         android:background="?attr/listBackground"
         android:divider="@null">
     </ListView>
@@ -40,10 +39,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@android:style/TextAppearance.Large"
-        android:paddingBottom="15dp"
-        android:paddingTop="15dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:paddingBottom="@dimen/zimfilelist_nozimfilesfound_view_padding_bottom"
+        android:paddingTop="@dimen/zimfilelist_nozimfilesfound_view_padding_top"
+        android:paddingLeft="@dimen/zimfilelist_nozimfilesfound_view_padding_left"
+        android:paddingRight="@dimen/zimfilelist_nozimfilesfound_view_padding_right"
         android:text="@string/error_nozimfilesfound"
         android:visibility="gone"/>
   </android.support.v4.widget.SwipeRefreshLayout>

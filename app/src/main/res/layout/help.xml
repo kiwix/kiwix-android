@@ -21,10 +21,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        card_view:cardCornerRadius="4dp"
-        card_view:cardElevation="2dp"
+        android:paddingLeft="@dimen/help_cardview_padding_left"
+        android:paddingRight="@dimen/help_cardview_padding_right"
+        card_view:cardCornerRadius="@dimen/help_cardview_corner_radius"
+        card_view:cardElevation="@dimen/help_cardview_card_elevation"
         card_view:cardUseCompatPadding="true">
 
         <LinearLayout
@@ -47,10 +47,10 @@
             android:id="@+id/welcome1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp"
+            android:paddingBottom="@dimen/welcome_padding_bottom"
+            android:paddingLeft="@dimen/welcome_padding_left"
+            android:paddingRight="@dimen/welcome_padding_right"
+            android:paddingTop="@dimen/welcome_padding_top"
             android:text="@string/help_1"
             android:textColor="@color/primary_dark"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
@@ -62,22 +62,22 @@
         android:id="@+id/get_content_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="3dp"
+        android:layout_margin="@dimen/get_content_card_margin"
         android:background="@drawable/get_content_btn_shape"
         android:text="@string/menu_zim_manager"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="20sp"/>
+        android:textSize="@dimen/get_content_card_text_size"/>
 
       <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        card_view:cardCornerRadius="4dp"
-        card_view:cardElevation="2dp"
+        android:paddingLeft="@dimen/help_cardview_padding_left"
+        android:paddingRight="@dimen/help_cardview_padding_right"
+        card_view:cardCornerRadius="@dimen/help_cardview_corner_radius"
+        card_view:cardElevation="@dimen/help_cardview_card_elevation"
         card_view:cardUseCompatPadding="true">
 
         <LinearLayout
@@ -88,10 +88,10 @@
             android:id="@+id/welcome2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp"
+            android:paddingBottom="@dimen/welcome_padding_bottom"
+            android:paddingLeft="@dimen/welcome_padding_left"
+            android:paddingRight="@dimen/welcome_padding_right"
+            android:paddingTop="@dimen/welcome_padding_top"
             android:textColor="@color/primary_dark"
             android:text="@string/help_2"
             android:textAppearance="?android:attr/textAppearanceLarge"/>
@@ -100,8 +100,8 @@
             android:id="@+id/welcome3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="@dimen/welcome_padding_left"
+            android:paddingRight="@dimen/welcome_padding_right"
             android:textColor="@color/primary_dark"
             android:text="@string/help_3"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
@@ -110,10 +110,10 @@
             android:id="@+id/welcome4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
+            android:paddingBottom="@dimen/welcome_padding_bottom"
             android:textColor="@color/primary_dark"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="@dimen/welcome_padding_left"
+            android:paddingRight="@dimen/welcome_padding_right"
             android:text="@string/help_4"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
         </LinearLayout>
@@ -124,10 +124,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        card_view:cardCornerRadius="4dp"
-        card_view:cardElevation="2dp"
+        android:paddingLeft="@dimen/help_cardview_padding_left"
+        android:paddingRight="@dimen/help_cardview_padding_right"
+        card_view:cardCornerRadius="@dimen/help_cardview_corner_radius"
+        card_view:cardElevation="@dimen/help_cardview_card_elevation"
         card_view:cardUseCompatPadding="true">
 
         <LinearLayout
@@ -138,11 +138,11 @@
             android:id="@+id/welcome5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
+            android:paddingBottom="@dimen/welcome_padding_bottom"
+            android:paddingLeft="@dimen/welcome_padding_left"
             android:textColor="@color/primary_dark"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp"
+            android:paddingRight="@dimen/welcome_padding_right"
+            android:paddingTop="@dimen/welcome_padding_top"
             android:text="@string/help_5"
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
@@ -150,9 +150,9 @@
             android:id="@+id/welcome6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
+            android:paddingLeft="@dimen/welcome_padding_left"
             android:textColor="@color/primary_dark"
-            android:paddingRight="10dp"
+            android:paddingRight="@dimen/welcome_padding_right"
             android:text="@string/help_6"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -160,9 +160,9 @@
             android:id="@+id/welcome7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
+            android:paddingLeft="@dimen/welcome_padding_left"
             android:textColor="@color/primary_dark"
-            android:paddingRight="10dp"
+            android:paddingRight="@dimen/welcome_padding_right"
             android:text="@string/help_7"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -170,10 +170,10 @@
             android:id="@+id/welcome8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
+            android:paddingLeft="@dimen/welcome_padding_left"
             android:textColor="@color/primary_dark"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp"
+            android:paddingRight="@dimen/welcome_padding_right"
+            android:paddingTop="@dimen/welcome_padding_top"
             android:text="@string/help_8"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -181,10 +181,10 @@
             android:id="@+id/welcome9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
+            android:paddingBottom="@dimen/welcome_padding_bottom"
             android:textColor="@color/primary_dark"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="@dimen/welcome_padding_left"
+            android:paddingRight="@dimen/welcome_padding_right"
             android:text="@string/help_9"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -192,9 +192,9 @@
             android:id="@+id/welcome10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
+            android:paddingLeft="@dimen/welcome_padding_left"
             android:textColor="@color/primary_dark"
-            android:paddingRight="10dp"
+            android:paddingRight="@dimen/welcome_padding_right"
             android:text="@string/help_10"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -202,10 +202,10 @@
             android:id="@+id/welcome11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
+            android:paddingBottom="@dimen/welcome_padding_bottom"
+            android:paddingLeft="@dimen/welcome_padding_left"
             android:textColor="@color/primary_dark"
-            android:paddingRight="10dp"
+            android:paddingRight="@dimen/welcome_padding_right"
             android:text="@string/help_11"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
         </LinearLayout>
@@ -216,10 +216,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        card_view:cardCornerRadius="4dp"
-        card_view:cardElevation="2dp"
+        android:paddingLeft="@dimen/help_cardview_padding_left"
+        android:paddingRight="@dimen/help_cardview_padding_right"
+        card_view:cardCornerRadius="@dimen/help_cardview_corner_radius"
+        card_view:cardElevation="@dimen/help_cardview_card_elevation"
         card_view:cardUseCompatPadding="true">
 
         <LinearLayout
@@ -230,11 +230,11 @@
             android:id="@+id/welcome12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
+            android:paddingBottom="@dimen/welcome_padding_bottom"
             android:textColor="@color/primary_dark"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp"
+            android:paddingLeft="@dimen/welcome_padding_left"
+            android:paddingRight="@dimen/welcome_padding_right"
+            android:paddingTop="@dimen/welcome_padding_top"
             android:text="@string/help_12"
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
@@ -242,9 +242,9 @@
             android:id="@+id/welcome13"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
+            android:paddingLeft="@dimen/welcome_padding_left"
             android:textColor="@color/primary_dark"
-            android:paddingRight="10dp"
+            android:paddingRight="@dimen/welcome_padding_right"
             android:text="@string/help_13"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -253,8 +253,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/primary_dark"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="@dimen/welcome_padding_left"
+            android:paddingRight="@dimen/welcome_padding_right"
             android:text="@string/help_14"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -262,9 +262,9 @@
             android:id="@+id/welcome15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
+            android:paddingLeft="@dimen/welcome_padding_left"
             android:textColor="@color/primary_dark"
-            android:paddingRight="10dp"
+            android:paddingRight="@dimen/welcome_padding_right"
             android:text="@string/help_15"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -272,10 +272,10 @@
             android:id="@+id/welcome16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="@dimen/welcome_padding_left"
+            android:paddingRight="@dimen/welcome_padding_right"
             android:textColor="@color/primary_dark"
-            android:paddingTop="10dp"
+            android:paddingTop="@dimen/welcome_padding_top"
             android:text="@string/help_16"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -283,9 +283,9 @@
             android:id="@+id/welcome17"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
+            android:paddingLeft="@dimen/welcome_padding_left"
             android:textColor="@color/primary_dark"
-            android:paddingRight="10dp"
+            android:paddingRight="@dimen/welcome_padding_right"
             android:text="@string/help_17"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -293,10 +293,10 @@
             android:id="@+id/welcome18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
+            android:paddingBottom="@dimen/welcome_padding_bottom"
+            android:paddingLeft="@dimen/welcome_padding_left"
             android:textColor="@color/primary_dark"
-            android:paddingRight="10dp"
+            android:paddingRight="@dimen/welcome_padding_right"
             android:text="@string/help_18"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
@@ -304,9 +304,9 @@
             android:id="@+id/welcome19"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingBottom="@dimen/welcome_padding_bottom"
+            android:paddingLeft="@dimen/welcome_padding_left"
+            android:paddingRight="@dimen/welcome_padding_right"
             android:textColor="@color/primary_dark"
             android:text="@string/help_19"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
@@ -318,10 +318,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        card_view:cardCornerRadius="4dp"
-        card_view:cardElevation="2dp"
+        android:paddingLeft="@dimen/help_cardview_padding_left"
+        android:paddingRight="@dimen/help_cardview_padding_right"
+        card_view:cardCornerRadius="@dimen/help_cardview_corner_radius"
+        card_view:cardElevation="@dimen/help_cardview_card_elevation"
         card_view:cardUseCompatPadding="true">
 
         <LinearLayout
@@ -333,10 +333,10 @@
             android:id="@+id/welcome20"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="10dp"
+            android:paddingBottom="@dimen/welcome_padding_bottom"
+            android:paddingLeft="@dimen/welcome_padding_left"
+            android:paddingRight="@dimen/welcome_padding_right"
+            android:paddingTop="@dimen/welcome_padding_top"
             android:textColor="@color/primary_dark"
             android:text="@string/help_20"
             android:textAppearance="?android:attr/textAppearanceLarge"/>
@@ -345,10 +345,10 @@
             android:id="@+id/welcome21"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
+            android:paddingBottom="@dimen/welcome_padding_bottom"
             android:textColor="@color/primary_dark"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="@dimen/welcome_padding_left"
+            android:paddingRight="@dimen/welcome_padding_right"
             android:text="@string/help_21"
             android:textAppearance="?android:attr/textAppearanceMedium"/>
         </LinearLayout>

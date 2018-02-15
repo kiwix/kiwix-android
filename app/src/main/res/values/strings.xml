@@ -191,4 +191,5 @@
   <string name="your_languages">Selected languages:</string>
   <string name="other_languages">Other languages:</string>
     <string name="no_items_msg">No items available</string>
+    <string name="language_entries_count_text">47</string>
 </resources>

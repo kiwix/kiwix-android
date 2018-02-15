@@ -13,7 +13,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_centerVertical="true"
-    android:layout_marginLeft="15dp"
+    android:layout_marginLeft="@dimen/language_check_item_checkbox_margin_left"
     android:buttonTint="@color/accent"
     android:focusable="false"
     android:focusableInTouchMode="false"
@@ -31,14 +31,14 @@
       android:id="@+id/language_name"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textSize="18sp"
+      android:textSize="@dimen/language_name_text_size"
       tools:text="German"/>
     <TextView
       android:id="@+id/language_name_localized"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="10dp"
-      android:textSize="18sp"
+      android:layout_marginLeft="@dimen/language_name_localized_margin_left"
+      android:textSize="@dimen/language_name_localized_text_size"
       android:textColor="@color/grey"
       tools:text="(Deutsch)"/>
 
@@ -50,11 +50,11 @@
     android:layout_height="wrap_content"
     android:layout_alignParentRight="true"
     android:layout_centerVertical="true"
-    android:layout_marginRight="16dp"
-    android:layout_marginTop="6dp"
-    android:layout_marginBottom="6dp"
-    android:textSize="18sp"
+    android:layout_marginRight="@dimen/language_entries_count_margin_right"
+    android:layout_marginTop="@dimen/language_entries_count_margin_top"
+    android:layout_marginBottom="@dimen/language_entries_count_margin_bottom"
+    android:textSize="@dimen/language_entries_count_text_size"
     android:textColor="@color/grey"
-    tools:text="47"/>
+    tools:text="@string/language_entries_count_text"/>
 
 </RelativeLayout>
