@@ -13,7 +13,7 @@
   <dimen name="abc_search_view_text_min_width">160dip</dimen>
   <dimen name="abc_dropdownitem_text_padding_left">8dip</dimen>
   <dimen name="abc_dropdownitem_text_padding_right">8dip</dimen>
-    <dimen name="ic_star_yellow_width">100dp</dimen>
+  <dimen name="ic_star_yellow_width">100dp</dimen>
   <dimen name="ic_star_yellow_height">100dp</dimen>
   <dimen name="activity_bookmarks_bottom_padding">15dp</dimen>
   <dimen name="activity_bookmarks_padding_left">10dp</dimen>
