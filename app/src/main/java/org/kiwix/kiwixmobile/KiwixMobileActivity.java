@@ -840,6 +840,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
                 shareIntent.putExtra(Intent.EXTRA_TEXT, "Kiwix is a free app that allows you to search and read Wikipedia without an Internet connection. https://play.google.com/store/apps/details?id=org.kiwix.kiwixmobile");
                 shareIntent.setType("text/plain");
                 startActivity(shareIntent);
+                break;
+
 
             case R.id.menu_settings:
                 selectSettings();
