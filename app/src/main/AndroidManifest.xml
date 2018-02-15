@@ -21,13 +21,13 @@
       android:hardwareAccelerated="true"
       android:icon="@mipmap/kiwi_icon"
       android:label="@string/app_name"
-      android:theme="@style/AppTheme"
-      android:supportsRtl="true">
+      android:supportsRtl="true"
+      android:theme="@style/AppTheme">
 
     <activity
       android:name=".utils.SplashActivity"
-      android:theme="@style/AppTheme.Launcher"
-      android:label="@string/app_name">
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme.Launcher">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
@@ -118,8 +118,10 @@
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="kiwix"
-          android:host="search" />
+
+          <data
+              android:host="search"
+              android:scheme="kiwix" />
       </intent-filter>
 
       <intent-filter android:label="@string/app_search_string">
