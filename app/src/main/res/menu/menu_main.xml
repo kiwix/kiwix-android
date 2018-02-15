@@ -1,73 +1,78 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-  <item
-      android:id="@+id/menu_search"
-      android:icon="@drawable/action_search"
-      android:title="@string/menu_search"
-      android:visible="false"
-      app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_search"
+        android:icon="@drawable/action_search"
+        android:title="@string/menu_search"
+        android:visible="false"
+        app:showAsAction="always" />
 
-  <item
-      android:id="@+id/menu_bookmarks"
-      android:icon="@drawable/action_bookmark_active"
-      android:title="@string/menu_bookmarks"
-      android:visible="false"
-      app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_bookmarks"
+        android:icon="@drawable/action_bookmark_active"
+        android:title="@string/menu_bookmarks"
+        android:visible="false"
+        app:showAsAction="always" />
 
-  <item
-      android:id="@+id/menu_bookmarks_list"
-      android:title="@string/menu_bookmarks_list"
-      app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_bookmarks_list"
+        android:title="@string/menu_bookmarks_list"
+        app:showAsAction="never" />
 
-  <item
-      android:id="@+id/menu_home"
-      android:title="@string/menu_home"
-      android:icon="@drawable/action_home"
-      android:visible="false"
-      app:showAsAction="always"/>
+    <item
+        android:id="@+id/menu_home"
+        android:icon="@drawable/action_home"
+        android:title="@string/menu_home"
+        android:visible="false"
+        app:showAsAction="always" />
 
-  <item
-      android:id="@+id/menu_randomarticle"
-      android:icon="@drawable/action_randomarticle"
-      android:title="@string/menu_randomarticle"
-      android:visible="false"
-      app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_randomarticle"
+        android:icon="@drawable/action_randomarticle"
+        android:title="@string/menu_randomarticle"
+        android:visible="false"
+        app:showAsAction="never" />
 
-  <item
-      android:id="@+id/menu_openfile"
-      android:title="@string/menu_zim_manager"
-      android:icon="@drawable/action_open_file"
-      app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_openfile"
+        android:icon="@drawable/action_open_file"
+        android:title="@string/menu_zim_manager"
+        app:showAsAction="never" />
 
-  <item
-      android:id="@+id/menu_searchintext"
-      android:title="@string/menu_searchintext"
-      android:visible="false"
-      app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_searchintext"
+        android:title="@string/menu_searchintext"
+        android:visible="false"
+        app:showAsAction="never" />
 
-  <item
-      android:id="@+id/menu_fullscreen"
-      android:title="@string/menu_fullscreen"
-      android:visible="false"
-      app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_fullscreen"
+        android:title="@string/menu_fullscreen"
+        android:visible="false"
+        app:showAsAction="never" />
 
-  <item
-      android:id="@+id/menu_read_aloud"
-      android:title="@string/menu_read_aloud"
-      android:visible="false"
-      app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_read_aloud"
+        android:title="@string/menu_read_aloud"
+        android:visible="false"
+        app:showAsAction="never" />
 
-  <item
-      android:id="@+id/menu_help"
-      android:title="@string/menu_help"
-      android:icon="@drawable/action_help"
-      app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_help"
+        android:icon="@drawable/action_help"
+        android:title="@string/menu_help"
+        app:showAsAction="never" />
 
-  <item
-      android:id="@+id/menu_settings"
-      android:title="@string/menu_settings"
-      android:icon="@drawable/navigation_forward"
-      app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_share"
+        android:title="@string/menu_shar"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_settings"
+        android:icon="@drawable/navigation_forward"
+        android:title="@string/menu_settings"
+        app:showAsAction="never" />
 
 </menu>

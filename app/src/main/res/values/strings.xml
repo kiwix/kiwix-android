@@ -191,4 +191,6 @@
   <string name="your_languages">Selected languages:</string>
   <string name="other_languages">Other languages:</string>
     <string name="no_items_msg">No items available</string>
+    <string name="menu_share">menu_share</string>
+  <string name="menu_shar">Share app</string>
 </resources>
