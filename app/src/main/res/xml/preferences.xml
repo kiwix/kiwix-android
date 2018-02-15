@@ -83,7 +83,6 @@
     <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
         android:defaultValue="false"
         android:key="pref_zoom_enabled"
-
         android:title="@string/pref_zoom_enable"/>
 
     <org.kiwix.kiwixmobile.views.SliderPreference

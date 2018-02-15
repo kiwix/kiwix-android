@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="50dp"
@@ -30,20 +31,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/search_widget_star"
-        android:src="@drawable/ic_stars_black_24dp"
+        app:srcCompat="@drawable/ic_stars_black"
         android:layout_weight="0.1"/>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/search_widget_mic"
-        android:src="@drawable/ic_mic_black_24dp"
+        app:srcCompat="@drawable/ic_mic_black"
         android:layout_weight="0.1"/>
-
-
-
-
-
-
 
 </LinearLayout>

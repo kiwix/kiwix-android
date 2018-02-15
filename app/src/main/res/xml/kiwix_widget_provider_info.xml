@@ -9,7 +9,4 @@
                     android:initialLayout="@layout/kiwix_search_widget"
                     android:resizeMode="horizontal|vertical">
 
-
-
-
 </appwidget-provider>

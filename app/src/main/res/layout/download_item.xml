@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
   android:orientation="horizontal"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
@@ -79,7 +80,7 @@
       android:minWidth="35dp"
       android:layout_gravity="center_vertical"
       android:text="@string/download_pause"
-      android:src="@drawable/ic_pause_black_24dp"
+      app:srcCompat="@drawable/ic_pause_black"
       android:layout_weight="0.5"/>
 
     <ImageView
@@ -91,7 +92,7 @@
       android:minWidth="35dp"
       android:layout_gravity="center_vertical"
       android:text="@string/download_stop"
-      android:src="@drawable/ic_stop_black_24dp"
+      app:srcCompat="@drawable/ic_stop_black"
       android:layout_weight="0.5"
       android:layout_marginLeft="8dp"
       android:layout_marginRight="8dp"

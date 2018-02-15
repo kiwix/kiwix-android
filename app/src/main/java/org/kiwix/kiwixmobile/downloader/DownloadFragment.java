@@ -207,10 +207,10 @@ public class DownloadFragment extends Fragment {
     private void setPlayState(ImageView pauseButton, int position, int newPlayState) {
       if (newPlayState == DownloadService.PLAY) { //Playing
         if (LibraryFragment.mService.playDownload(mKeys[position]))
-          pauseButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
+          pauseButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black));
       } else { //Pausing
         LibraryFragment.mService.pauseDownload(mKeys[position]);
-        pauseButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black_24dp));
+        pauseButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black));
       }
     }
 
@@ -238,14 +238,14 @@ public class DownloadFragment extends Fragment {
 
       if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == 0) {
         downloadProgress.setProgress(0);
-        pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
+        pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black));
       } else {
         downloadProgress.setProgress(LibraryFragment.mService.downloadProgress.get(mKeys[position]));
         if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PAUSE) {
-          pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black_24dp));
+          pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black));
         }
         if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY) {
-          pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
+          pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black));
         }
       }
 

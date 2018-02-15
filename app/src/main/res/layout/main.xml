@@ -38,18 +38,16 @@
           android:layout_height="fill_parent"
           android:orientation="vertical">
 
-
           <ImageButton
             android:id="@+id/FullscreenControlButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_margin="7dp"
-            android:background="#DDFFFFFF"
+            android:background="@null"
             android:hint="@string/menu_exitfullscreen"
-            android:src="@drawable/fullscreen_exit"
+            app:srcCompat="@drawable/ic_fullscreen_exit"
             android:visibility="invisible" />
-
 
           <Button
             android:id="@+id/button_backtotop"
@@ -64,7 +62,6 @@
             android:textColor="@color/back_to_top_text"
             android:textStyle="bold"
             android:visibility="invisible" />
-
 
           <LinearLayout
             android:id="@+id/tts_controls"
