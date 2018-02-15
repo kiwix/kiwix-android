@@ -116,6 +116,7 @@ dependencies {
   // Mockito
   testImplementation "org.mockito:mockito-core:2.7.22"
   androidTestImplementation "org.mockito:mockito-android:2.7.22"
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 }
 
 // Set custom app import directory
