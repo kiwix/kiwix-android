@@ -83,10 +83,6 @@ public class LanguageSelectDialog extends AlertDialog {
         e.printStackTrace();
       }
 
-      if (size == 0) {
-        Toast.makeText(getContext(), getContext().getResources().getString(R.string.wait_for_load),
-            Toast.LENGTH_LONG).show();
-      }
       LanguageArrayAdapter languageArrayAdapter = new LanguageArrayAdapter(getContext(), 0,
           languages, languageCounts, singleSelect, selectedLanguage);
       listView.setAdapter(languageArrayAdapter);
