@@ -6,7 +6,6 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.util.Log;
 
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 
 import java.util.UUID;
