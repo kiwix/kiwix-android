@@ -15,6 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
@@ -210,8 +212,13 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
 
     switch (item.getItemId()) {
       case R.id.select_language:
-        if (mViewPager.getCurrentItem() == 1)
-          showLanguageSelect();
+        if (mViewPager.getCurrentItem() == 1) {
+          if(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages.size() == 0) {
+            Toast.makeText(this, R.string.wait_for_load, Toast.LENGTH_LONG).show();
+          } else {
+            showLanguageSelect();
+          }
+        }
       default:
         return super.onOptionsItemSelected(item);
     }
