@@ -213,12 +213,12 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
     switch (item.getItemId()) {
       case R.id.select_language:
         if (mViewPager.getCurrentItem() == 1) {
-         if(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages.size() == 0) {
-           Toast.makeText(this, R.string.wait_for_load, Toast.LENGTH_LONG).show();
-         }
-         else {
-           showLanguageSelect();
-         }
+          if(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages.size() == 0) {
+            Toast.makeText(this, R.string.wait_for_load, Toast.LENGTH_LONG).show();
+          }
+          else {
+            showLanguageSelect();
+          }
         }
       default:
         return super.onOptionsItemSelected(item);
