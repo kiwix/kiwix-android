@@ -47,7 +47,7 @@
             android:layout_margin="7dp"
             android:background="#DDFFFFFF"
             android:hint="@string/menu_exitfullscreen"
-              android:src="@drawable/fullscreen_exit"
+            android:src="@drawable/fullscreen_exit"
             android:visibility="invisible" />
 
 
