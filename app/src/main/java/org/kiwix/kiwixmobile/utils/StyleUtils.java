@@ -36,7 +36,7 @@ public class StyleUtils {
     if (KiwixMobileActivity.nightMode) {
       return android.R.style.Theme_Holo_Dialog;
     } else {
-      return android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert;
+      return R.style.AppTheme_Dialog;
     }
   }
 
