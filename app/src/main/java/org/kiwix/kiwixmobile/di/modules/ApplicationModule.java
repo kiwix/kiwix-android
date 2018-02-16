@@ -2,7 +2,6 @@ package org.kiwix.kiwixmobile.di.modules;
 
 import android.app.NotificationManager;
 import android.content.Context;
-import android.net.ConnectivityManager;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.utils.BookUtils;
