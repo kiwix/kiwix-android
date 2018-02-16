@@ -12,6 +12,16 @@ To build this repository alone for development purposes you can simply import th
 
 We utilize different build variants (flavours) to build various different versions of our app. Ensure your build variant is **kiwixDebug** to build the standard app.
 
+## Libraries Used
+
+- [Dagger](https://github.com/google/dagger)
+- [Guava](https://github.com/google/guava)
+- [SquiDb](https://github.com/yahoo/squidb)
+- [Retrofit](http://square.github.io/retrofit/)
+- [Butterknife](http://jakewharton.github.io/butterknife/)
+- [RxJava1](https://github.com/ReactiveX/RxJava)
+- [Mockito](https://github.com/mockito/mockito)
+
 ## Contributing
 
 Before contributing be sure to check out the [CONTRIBUTION](https://github.com/kiwix/kiwix-android/blob/master/CONTRIBUTING.md) guidelines.
