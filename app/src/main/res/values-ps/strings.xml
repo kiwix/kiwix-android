@@ -2,7 +2,7 @@
 <resources>
   <string name="menu_help">مرسته</string>
   <string name="menu_home">کور</string>
-    <string name="menu_settings">غوره توبونه</string>
+  <string name="menu_settings">غوره توبونه</string>
   <string name="menu_search">پلټل</string>
   <string name="menu_searchintext">په متن کې موندل</string>
   <string name="menu_bookmarks">کتاب نخښې</string>
@@ -11,21 +11,21 @@
   <string name="menu_exitfullscreen">بشپړ پردې څخه وتل</string>
   <string name="menu_read_aloud">په جگ غږ لوستل</string>
   <string name="menu_read_aloud_stop">په جگ غږ لوستل درول</string>
-    <string name="save_media">رسنۍ ساتل لکه...</string>
+  <string name="save_media">رسنۍ ساتل لکه...</string>
   <string name="save_media_error">د رسنۍ په ساتلو کې يوه تېروتنه رامنځ ته شوه!</string>
   <string name="save_media_saved">رسنۍ خپل د انځورونو په ټولگه کې د %1$s په نوم ساتل</string>
   <string name="rescan_fs_warning">د ZIM دوتنو لپاره ځيرڅارنه، لطفاً تم شئ...</string>
   <string name="button_backtotop">بېرته سر ته</string>
   <string name="search_label">پلټل</string>
-    <string name="choose_file">د ZIM مېنځپانگې يوه دوتنه ټاکل (*.zim)</string>
-    <string name="open_in_new_tab">تړنه په نوې کړکۍ کې پرانيستل</string>
+  <string name="choose_file">د ZIM مېنځپانگې يوه دوتنه ټاکل (*.zim)</string>
+  <string name="open_in_new_tab">تړنه په نوې کړکۍ کې پرانيستل</string>
   <string name="error_nozimfilesfound">ستاسې په وزلې هېڅ کومه ZIM دوتنه و نه موندل شوه.\nکيويکس کې د مېنځپانگې د برسېرولو لپاره د لارښود مخ ولولئ.\nکه تاسې په خپلې وزلې کې يو ZIM دوتنه نه وي ايښې، نو تاسې کولی شی چې يوه دقيقه وروسته يې بيا وآزمويئ او يا هم خپله وزله سر له نوي ولگوئ او بيا هڅه وکړئ.</string>
   <string name="error_filenotfound">تېروتنه: ستاسې ټاکلې ZIM دوتنه و نه موندل شوه.</string>
   <string name="error_fileinvalid">تېروتنه: ستاسې ټاکلې دوتنه يوه کره ZIM دوتنه نه ده.</string>
-    <string name="error_articleurlnotfound">تېروتنه: ليکنه برسېرېدنه (يو آر ال: %1$s) نابريالئ شوه.</string>
+  <string name="error_articleurlnotfound">تېروتنه: ليکنه برسېرېدنه (يو آر ال: %1$s) نابريالئ شوه.</string>
   <string name="pref_display_title">ښکارېدنه</string>
   <string name="pref_zoom_dialog">لوډېرولو کچه</string>
-    <string name="pref_info_title">مالومات</string>
+  <string name="pref_info_title">مالومات</string>
   <string name="pref_info_version">بڼه</string>
   <string name="pref_zoom_enable">لوډېرولو مهارونې</string>
   <string name="pref_nightmode">د شپې بڼه</string>
@@ -44,7 +44,7 @@
   <string name="request_storage">ZIM دوتنو ته د لاسرسي لپاره موږ بايد ستاسې زېرمتون ته لاسرسی ومومو</string>
   <string name="undo">پريښودل</string>
   <string name="tab_closed">ټب تړل شوی</string>
-    <string name="bookmark_added">کتاب نښه ورگډه شوه</string>
+  <string name="bookmark_added">کتاب نښه ورگډه شوه</string>
   <string name="rate_dialog_title">لطفاً زموږ ارزونه وکړئ</string>
   <string name="rate_dialog_msg_1">که تاسې يې په کارولو خوند اخيستی وي</string>
   <string name="rate_dialog_msg_2">، نو مهرباني وکړئ يوه شېبه وخت مو د دې په ارزولو کې ولگوئ. ستاسې له ملاتړ څخه مننه!</string>
