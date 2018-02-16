@@ -39,6 +39,8 @@ public class BasicTest {
 
   @Test
   public void basicTest() {
+    enterHelp();
+
     onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
 
 
