@@ -11,7 +11,6 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
