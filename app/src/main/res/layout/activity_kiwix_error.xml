@@ -24,7 +24,7 @@
 
     <Button
         android:id="@+id/reportButton"
-        style="@android:style/Widget.Material.Light.Button"
+        style="@style/Widget.AppCompat.Button"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
@@ -40,7 +40,7 @@
 
     <Button
         android:id="@+id/restartButton"
-        style="@android:style/Widget.Material.Light.Button.Borderless"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
