@@ -50,8 +50,8 @@
                 android:visibility="gone">
 
                 <ImageView
-                    android:layout_width="@dimen/ic_star_yellow_width"
-                    android:layout_height="@dimen/ic_star_yellow_height"
+                    android:layout_width="@dimen/dimen_100dp"
+                    android:layout_height="@dimen/dimen_100dp"
                     android:src="@drawable/ic_star_yellow"/>
 
                 <TextView
@@ -60,10 +60,10 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:gravity="center"
-                    android:paddingBottom="@dimen/activity_bookmarks_bottom_padding"
-                    android:paddingLeft="@dimen/activity_bookmarks_padding_left"
-                    android:paddingRight="@dimen/activity_bookmarks_padding_right"
-                    android:paddingTop="@dimen/activity_bookmarks_padding_top"
+                    android:paddingBottom="@dimen/dimen_15dp"
+                    android:paddingLeft="@dimen/dimen_10dp"
+                    android:paddingRight="@dimen/dimen_10dp"
+                    android:paddingTop="@dimen/dimen_15dp"
                     android:text="@string/no_bookmarks"
                     android:visibility="visible"/>
 

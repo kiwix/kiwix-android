@@ -6,10 +6,10 @@
     android:layout_height="@dimen/kiwix_search_widget_layout_id_height"
     android:id="@+id/kiwix_search_widget_layout_id"
     android:background="@drawable/search_widget_background"
-    android:padding="@dimen/widget_margin"
+    android:padding="@dimen/dimen_0dp"
     android:gravity="center_vertical"
-    android:layout_marginRight="@dimen/kiwix_search_widget_layout_id_margin_right"
-    android:layout_marginLeft="@dimen/kiwix_search_widget_layout_id_margin_left">
+    android:layout_marginRight="@dimen/dimen_1dp"
+    android:layout_marginLeft="@dimen/dimen_1dp">
 
     <ImageView
         android:layout_width="wrap_content"

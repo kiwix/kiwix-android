@@ -15,7 +15,7 @@
   <ProgressBar
     android:id="@+id/progressBar"
     style="?android:attr/progressBarStyleLarge"
-    android:padding="@dimen/progress_bar_padding"
+    android:padding="@dimen/dimen_20dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_centerHorizontal="true" />
@@ -27,7 +27,7 @@
     android:layout_below="@id/progressBar"
     android:layout_centerHorizontal="true"
     android:layout_centerVertical="true"
-    android:paddingTop="@dimen/progressbar_message_padding_top"
+    android:paddingTop="@dimen/dimen_10dp"
     android:text="@string/rescan_fs_warning"
     android:textStyle="bold" />
 

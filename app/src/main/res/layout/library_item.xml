@@ -11,7 +11,7 @@
   android:paddingRight="@dimen/activity_horizontal_margin">
 
   <ImageView
-      android:layout_width="@dimen/favicon_width"
+      android:layout_width="@dimen/dimen_48dp"
       android:layout_height="wrap_content"
       android:layout_marginRight="@dimen/dimen_medium_padding"
       android:adjustViewBounds="true"

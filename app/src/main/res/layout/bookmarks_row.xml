@@ -15,7 +15,7 @@
         android:id="@+id/bookmark_title"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_margin="@dimen/bookmark_title_margin"
+        android:layout_margin="@dimen/dimen_15dp"
         android:textColor="@drawable/bookmarks_selector"
         android:textSize="@dimen/bookmark_title_text_size"
         />

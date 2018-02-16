@@ -39,10 +39,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@android:style/TextAppearance.Large"
-        android:paddingBottom="@dimen/zimfilelist_nozimfilesfound_view_padding_bottom"
-        android:paddingTop="@dimen/zimfilelist_nozimfilesfound_view_padding_top"
-        android:paddingLeft="@dimen/zimfilelist_nozimfilesfound_view_padding_left"
-        android:paddingRight="@dimen/zimfilelist_nozimfilesfound_view_padding_right"
+        android:paddingBottom="@dimen/dimen_15dp"
+        android:paddingTop="@dimen/dimen_15dp"
+        android:paddingLeft="@dimen/dimen_10dp"
+        android:paddingRight="@dimen/dimen_10dp"
         android:text="@string/error_nozimfilesfound"
         android:visibility="gone"/>
   </android.support.v4.widget.SwipeRefreshLayout>

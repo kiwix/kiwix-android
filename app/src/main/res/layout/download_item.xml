@@ -10,7 +10,7 @@
   android:paddingRight="@dimen/activity_horizontal_margin">
 
   <ImageView
-    android:layout_width="@dimen/favicon_width"
+    android:layout_width="@dimen/dimen_48dp"
     android:layout_height="wrap_content"
     android:layout_marginRight="@dimen/dimen_medium_padding"
     android:adjustViewBounds="true"
@@ -22,7 +22,7 @@
 
   <LinearLayout
     android:orientation="vertical"
-    android:layout_width="@dimen/download_item_linear_layout_width"
+    android:layout_width="@dimen/dimen_0dp"
     android:layout_weight="1"
     android:layout_height="wrap_content"
     android:gravity="center"
@@ -52,7 +52,7 @@
       android:indeterminate="false"
       android:layout_alignParentStart="true"
       android:layout_alignParentLeft="true"
-      android:padding="@dimen/download_progress_padding"/>
+      android:padding="@dimen/dimen_1dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -75,8 +75,8 @@
       android:id="@+id/pause"
       android:layout_alignParentEnd="true"
       android:layout_alignParentRight="true"
-      android:minHeight="@dimen/pause_min_height"
-      android:minWidth="@dimen/pause_min_width"
+      android:minHeight="@dimen/dimen_35dp"
+      android:minWidth="@dimen/dimen_35dp"
       android:layout_gravity="center_vertical"
       android:text="@string/download_pause"
       android:src="@drawable/ic_pause_black_24dp"
@@ -87,14 +87,14 @@
       android:layout_height="wrap_content"
       android:id="@+id/stop"
       android:layout_alignParentEnd="true"
-      android:minHeight="@dimen/stop_min_height"
-      android:minWidth="@dimen/stop_min_width"
+      android:minHeight="@dimen/dimen_35dp"
+      android:minWidth="@dimen/dimen_35dp"
       android:layout_gravity="center_vertical"
       android:text="@string/download_stop"
       android:src="@drawable/ic_stop_black_24dp"
       android:layout_weight="0.5"
-      android:layout_marginLeft="@dimen/stop_margin_left"
-      android:layout_marginRight="@dimen/stop_margin_right"
+      android:layout_marginLeft="@dimen/dimen_medium_padding"
+      android:layout_marginRight="@dimen/dimen_medium_padding"
       android:layout_alignParentRight="true"/>
   </LinearLayout>
 </LinearLayout>
