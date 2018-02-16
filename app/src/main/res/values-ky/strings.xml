@@ -2,9 +2,7 @@
 <resources>
   <string name="menu_help">Жардам</string>
   <string name="menu_home">Башкы</string>
-  <string name="menu_forward">Алдыга</string>
-  <string name="menu_back">Артка</string>
-  <string name="menu_settings">Параметрлер</string>
+    <string name="menu_settings">Параметрлер</string>
   <string name="menu_search">Издөө</string>
   <string name="menu_searchintext">Тексттен табуу</string>
   <string name="menu_bookmarks">Чөп каттар</string>
@@ -18,16 +16,8 @@
   <string name="save_media_saved">Медиафайл %1$ түрүндө Сүрөт папкаңызга сакталды</string>
   <string name="button_backtotop">Жогоруга кайтуу</string>
   <string name="search_label">Издөө</string>
-  <string name="add_bookmark">Бул баракты белгилөө</string>
-  <string name="remove_bookmark">Тандалгандардан белгисин алып салуу</string>
-  <string name="pref_display_title">Көрсөтүү</string>
-  <string-array name="pref_zoom_entries">
-    <item name="pref_zoom_entry_automatic">Автоматтуу түрдө</item>
-    <item name="pref_zoom_entry_small">Кичине</item>
-    <item name="pref_zoom_entry_medium">Орточо</item>
-    <item name="pref_zoom_entry_large">Чоң</item>
-  </string-array>
-  <string name="pref_info_title">Маалымат</string>
+    <string name="pref_display_title">Көрсөтүү</string>
+    <string name="pref_info_title">Маалымат</string>
   <string name="pref_info_version">Версия</string>
   <string name="pref_backtotop">Жогоруга кайтуу</string>
   <string name="pref_language_title">Тил</string>

@@ -70,11 +70,7 @@
     <item name="actionMenuTextColor">@android:color/white</item>
   </style>
 
-  <style name="DayMenu" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
-    <item name="android:textColor">@color/primary_dark</item>
-  </style>
-
-  <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
     <item name="colorAccent">@color/accent</item>
     <item name="android:textColorPrimary">@color/accent</item>
   </style>
