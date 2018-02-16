@@ -4,6 +4,7 @@ package org.kiwix.kiwixmobile.downloader;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -214,83 +215,82 @@ public class DownloadFragment extends Fragment {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-      // Get the data item for this position
-      // Check if an existing view is being reused, otherwise inflate the view
-      if (convertView == null) {
-        convertView = LayoutInflater.from(faActivity).inflate(R.layout.download_item, parent, false);
-      }
-      mKeys = mData.keySet().toArray(new Integer[mData.size()]);
-      // Lookup view for data population
-      //downloadProgress.setProgress(download.progress);
-      // Populate the data into the template view using the data object
-      TextView title = convertView.findViewById(R.id.title);
-      TextView description = convertView.findViewById(R.id.description);
-      TextView timeRemaining = convertView.findViewById(R.id.time_remaining);
-      ImageView imageView = convertView.findViewById(R.id.favicon);
-      title.setText(getItem(position).getTitle());
-      description.setText(getItem(position).getDescription());
-      imageView.setImageBitmap(StringToBitMap(getItem(position).getFavicon()));
-
-      ProgressBar downloadProgress = convertView.findViewById(R.id.downloadProgress);
-      ImageView pause = convertView.findViewById(R.id.pause);
-
-      if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == 0) {
-        downloadProgress.setProgress(0);
-        pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
-      } else {
-        downloadProgress.setProgress(LibraryFragment.mService.downloadProgress.get(mKeys[position]));
-        if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PAUSE) {
-          pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black_24dp));
+        // Get the data item for this position
+        // Check if an existing view is being reused, otherwise inflate the view
+        if (convertView == null) {
+            convertView = LayoutInflater.from(faActivity).inflate(R.layout.download_item, parent, false);
         }
-        if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY) {
-          pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
+        mKeys = mData.keySet().toArray(new Integer[mData.size()]);
+        // Lookup view for data population
+        //downloadProgress.setProgress(download.progress);
+        // Populate the data into the template view using the data object
+        TextView title = convertView.findViewById(R.id.title);
+        TextView description = convertView.findViewById(R.id.description);
+        TextView timeRemaining = convertView.findViewById(R.id.time_remaining);
+        ImageView imageView = convertView.findViewById(R.id.favicon);
+        title.setText(getItem(position).getTitle());
+        description.setText(getItem(position).getDescription());
+        imageView.setImageBitmap(StringToBitMap(getItem(position).getFavicon()));
+
+        ProgressBar downloadProgress = convertView.findViewById(R.id.downloadProgress);
+        ImageView pause = convertView.findViewById(R.id.pause);
+
+        if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == 0) {
+            downloadProgress.setProgress(0);
+            pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
+        } else {
+            downloadProgress.setProgress(LibraryFragment.mService.downloadProgress.get(mKeys[position]));
+            if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PAUSE) {
+                pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black_24dp));
+            }
+            if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY) {
+                pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
+            }
         }
-      }
 
-      pause.setOnClickListener(v -> {
-        int newPlayPauseState = LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY ? DownloadService.PAUSE : DownloadService.PLAY;
+        pause.setOnClickListener(v -> {
+            int newPlayPauseState = LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY ? DownloadService.PAUSE : DownloadService.PLAY;
 
-        if (newPlayPauseState == DownloadService.PLAY && KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
-          showNoWiFiWarning(getContext(), () -> {
+            if (newPlayPauseState == DownloadService.PLAY && KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
+                showNoWiFiWarning(getContext(), () -> {
+                    setPlayState(pause, position, newPlayPauseState);
+                });
+                return;
+            }
+
+            timeRemaining.setText("");
+
             setPlayState(pause, position, newPlayPauseState);
-          });
-          return;
-        }
-
-        timeRemaining.setText("");
-
-        setPlayState(pause, position, newPlayPauseState);
-      });
+        });
 
 
-      ImageView stop = convertView.findViewById(R.id.stop);
-      stop.setOnClickListener(v -> {
-        hasArtificiallyPaused = LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY;
-        setPlayState(pause, position, DownloadService.PAUSE);
-        new AlertDialog.Builder(faActivity, dialogStyle())
-            .setTitle(R.string.confirm_stop_download_title)
-            .setMessage(R.string.confirm_stop_download_msg)
-            .setPositiveButton(R.string.yes, (dialog, i) -> {
-              LibraryFragment.mService.stopDownload(mKeys[position]);
-              mDownloads.remove(mKeys[position]);
-              mDownloadFiles.remove(mKeys[position]);
-              downloadAdapter.notifyDataSetChanged();
-              updateNoDownloads();
-              if (zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter != null) {
-                zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(((ZimManageActivity) getActivity()).searchView.getQuery());
-              }
+        ImageView stop = convertView.findViewById(R.id.stop);
+        stop.setOnClickListener((View v) -> {
+            hasArtificiallyPaused = LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY;
+            setPlayState(pause, position, DownloadService.PAUSE);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(faActivity, dialogStyle());
+            alertDialogBuilder.setTitle(R.string.confirm_stop_download_title)
+                              .setMessage(R.string.confirm_stop_download_msg)
+                              .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
+                LibraryFragment.mService.stopDownload(mKeys[position]);
+                mDownloads.remove(mKeys[position]);
+                mDownloadFiles.remove(mKeys[position]);
+                downloadAdapter.notifyDataSetChanged();
+                updateNoDownloads();
+                if (zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter != null) {
+                    zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(((ZimManageActivity) getActivity()).searchView.getQuery());
+                }
             })
-            .setNegativeButton(R.string.no, (dialog, i) -> {
-              if (hasArtificiallyPaused) {
-                hasArtificiallyPaused = false;
-                setPlayState(pause, position, DownloadService.PLAY);
-              }
-            })
-            .show();
-      });
-
-      // Return the completed view to render on screen
-      return convertView;
+                              .setNegativeButton(R.string.no, (dialogInterface, i) -> {
+                if (hasArtificiallyPaused) {
+                    hasArtificiallyPaused = false;
+                    setPlayState(pause, position, DownloadService.PLAY);
+                }
+            });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        });
+        return convertView;
     }
 
     public void registerDataSetObserver(DownloadFragment downloadFragment) {
