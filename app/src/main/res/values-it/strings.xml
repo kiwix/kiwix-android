@@ -2,7 +2,7 @@
 <resources>
   <string name="menu_help">Aiuto</string>
   <string name="menu_home">Pagina principale</string>
-    <string name="menu_settings">Impostazioni</string>
+  <string name="menu_settings">Impostazioni</string>
   <string name="menu_search">Ricerca</string>
   <string name="menu_searchintext">Trova nella pagina</string>
   <string name="menu_bookmarks">Segnalibri</string>
@@ -11,21 +11,21 @@
   <string name="menu_exitfullscreen">Esci dalla modalità a tutto schermo</string>
   <string name="menu_read_aloud">Leggi a voce alta</string>
   <string name="menu_read_aloud_stop">Interrompi lettura a voce alta</string>
-    <string name="save_media">Salva file multimediale come...</string>
+  <string name="save_media">Salva file multimediale come...</string>
   <string name="save_media_error">Si è verificato un errore durante il salvataggio del file multimediale!</string>
   <string name="save_media_saved">Salvato file multimediale come %s in Android/media/org.kiwix.../</string>
   <string name="rescan_fs_warning">Scansione dei contenuti scaricabili, attendi...</string>
   <string name="button_backtotop">Torna all\'inizio</string>
   <string name="search_label">Ricerca</string>
-    <string name="choose_file">Seleziona un file di contenuto (*.zim)</string>
-    <string name="open_in_new_tab">Apri il collegamento in una nuova scheda?</string>
+  <string name="choose_file">Seleziona un file di contenuto (*.zim)</string>
+  <string name="open_in_new_tab">Apri il collegamento in una nuova scheda?</string>
   <string name="error_nozimfilesfound">Nessun contenuto trovato sul tuo dispositivo.\nLeggi la pagina di aiuto per ottenere indicazioni su come caricare il contenuto in Kiwix.\nSe ha inserito un file ZIM sul tuo dispositivo, potresti ritentare fra un minuto o riavviare il dispositivo.</string>
   <string name="error_filenotfound">Errore: il file ZIM selezionato non è stato trovato.</string>
   <string name="error_fileinvalid">Errore: il file selezionato non è un file ZIM valido.</string>
-    <string name="error_articleurlnotfound">Errore: caricamento della voce (url: %1$s) non riuscito.</string>
+  <string name="error_articleurlnotfound">Errore: caricamento della voce (url: %1$s) non riuscito.</string>
   <string name="pref_display_title">Visualizza</string>
   <string name="pref_zoom_dialog">Livello di zoom</string>
-    <string name="pref_info_title">Informazioni</string>
+  <string name="pref_info_title">Informazioni</string>
   <string name="pref_info_version">Versione</string>
   <string name="pref_zoom_enable">Controlli zoom</string>
   <string name="pref_nightmode">Modalità notte</string>
@@ -43,7 +43,7 @@
   <string name="menu_bookmarks_list">Segnalibri</string>
   <string name="no_section_info">Nessun intestazione di contenuto trovata</string>
   <string name="request_storage">Per accedere al contenuto offline è necessario l\'accesso al tuo spazio di archiviazione</string>
-    <string name="clear_recent_and_tabs_history_dialog">Sei sicuro di voler cancellare la tua cronologia di ricerca e resettare tutte le tab attive?</string>
+  <string name="clear_recent_and_tabs_history_dialog">Sei sicuro di voler cancellare la tua cronologia di ricerca e resettare tutte le tab attive?</string>
   <string name="delete_recent_search_item">Elimina questo elemento?</string>
   <string name="pref_clear_all_history_title">Cancella la cronologia</string>
   <string name="all_history_cleared_toast">Tutta la cronologia è stata cancellata</string>
@@ -54,7 +54,7 @@
   <string name="did_you_know">Lo sapevi?</string>
   <string name="undo">Annulla</string>
   <string name="deleted_message">cancellato</string>
-    <string name="bookmark_added">Segnalibro aggiunto</string>
+  <string name="bookmark_added">Segnalibro aggiunto</string>
   <string name="rate_dialog_title">Valutaci</string>
   <string name="rate_dialog_msg_1">Se ti piace usare</string>
   <string name="rate_dialog_msg_2">, prenditi un momento per valutarla. Grazie per il tuo sostegno!</string>
@@ -73,10 +73,10 @@
   <string name="download_pause">Pausa</string>
   <string name="download_play">Riproduci</string>
   <string name="download_stop">Ferma</string>
-    <string name="download_paused">in pausa</string>
+  <string name="download_paused">in pausa</string>
   <string name="no_files_here">Nessun file qui</string>
   <string name="download_complete_snackbar">Il download è completo</string>
-    <string name="download_no_space">Lo spazio è insufficiente per scaricare questo file.</string>
+  <string name="download_no_space">Lo spazio è insufficiente per scaricare questo file.</string>
   <string name="space_available">Spazio disponibile:</string>
   <string name="get_library_over_network">Usa un network per scaricare la lista dei contenuti. (Circa 6 MB)</string>
   <string name="help_10">Puoi sia scaricare i tuoi file ZIM in-app selezionati o selezionare attentamente quello/i che desideri e scaricarli attraverso il Desktop di un computer prima di trasferire i file ZIM sulla tua memoria SD.</string>

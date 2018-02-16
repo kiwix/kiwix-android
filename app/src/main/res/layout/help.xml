@@ -33,7 +33,7 @@
           android:orientation="vertical">
 
           <ImageView
-              android:layout_width="match_parent"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:adjustViewBounds="true"
@@ -43,7 +43,7 @@
 
 
           <TextView
-              android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
             android:paddingLeft="10dp"
@@ -83,7 +83,7 @@
           android:layout_height="wrap_content"
           android:orientation="vertical">
           <TextView
-              android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
             android:paddingLeft="10dp"
@@ -94,7 +94,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
           <TextView
-              android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
@@ -103,7 +103,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-              android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
             android:textColor="@color/primary_dark"
@@ -130,7 +130,7 @@
           android:layout_height="wrap_content"
           android:orientation="vertical">
           <TextView
-              android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
             android:paddingLeft="10dp"
@@ -141,7 +141,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
           <TextView
-              android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:textColor="@color/primary_dark"
@@ -150,7 +150,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-              android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:textColor="@color/primary_dark"
@@ -159,7 +159,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-              android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:textColor="@color/primary_dark"
@@ -169,7 +169,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-              android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
             android:textColor="@color/primary_dark"
@@ -179,7 +179,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-              android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:textColor="@color/primary_dark"
@@ -188,7 +188,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-              android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
             android:paddingLeft="10dp"
@@ -215,7 +215,7 @@
           android:layout_height="wrap_content"
           android:orientation="vertical">
           <TextView
-              android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
             android:textColor="@color/primary_dark"
@@ -226,7 +226,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
           <TextView
-              android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:textColor="@color/primary_dark"
@@ -235,7 +235,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-              android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/primary_dark"
             android:paddingLeft="10dp"
@@ -244,7 +244,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-              android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:textColor="@color/primary_dark"
@@ -253,7 +253,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-              android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
@@ -263,7 +263,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-              android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:textColor="@color/primary_dark"
@@ -272,7 +272,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-              android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
             android:paddingLeft="10dp"
@@ -282,7 +282,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-              android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
             android:paddingLeft="10dp"
@@ -310,7 +310,7 @@
           android:orientation="vertical">
 
           <TextView
-              android:layout_width="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
             android:paddingLeft="10dp"
