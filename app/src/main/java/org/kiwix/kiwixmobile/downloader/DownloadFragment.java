@@ -267,26 +267,28 @@ public class DownloadFragment extends Fragment {
       stop.setOnClickListener(v -> {
         hasArtificiallyPaused = LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY;
         setPlayState(pause, position, DownloadService.PAUSE);
-        new AlertDialog.Builder(faActivity, dialogStyle())
-            .setTitle(R.string.confirm_stop_download_title)
-            .setMessage(R.string.confirm_stop_download_msg)
-            .setPositiveButton(R.string.yes, (dialog, i) -> {
-              LibraryFragment.mService.stopDownload(mKeys[position]);
-              mDownloads.remove(mKeys[position]);
-              mDownloadFiles.remove(mKeys[position]);
-              downloadAdapter.notifyDataSetChanged();
-              updateNoDownloads();
-              if (zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter != null) {
-                zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(((ZimManageActivity) getActivity()).searchView.getQuery());
-              }
-            })
-            .setNegativeButton(R.string.no, (dialog, i) -> {
-              if (hasArtificiallyPaused) {
-                hasArtificiallyPaused = false;
-                setPlayState(pause, position, DownloadService.PLAY);
-              }
-            })
-            .show();
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(faActivity,dialogStyle());
+        alertDialogBuilder
+                .setTitle(R.string.confirm_stop_download_title)
+                .setMessage(R.string.confirm_stop_download_msg)
+                .setPositiveButton(R.string.yes,(dialogInterface, i) -> {
+                    LibraryFragment.mService.stopDownload(mKeys[position]);
+                    mDownloads.remove(mKeys[position]);
+                    mDownloadFiles.remove(mKeys[position]);
+                    downloadAdapter.notifyDataSetChanged();
+                    updateNoDownloads();
+                    if (zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter != null) {
+                        zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter
+                        .getFilter().filter(((ZimManageActivity) getActivity()).searchView.getQuery());
+                     }
+                })
+                .setNegativeButton(R.string.no, (dialogInterface, i) -> {
+                         if (hasArtificiallyPaused) {
+                           hasArtificiallyPaused = false;
+                           setPlayState(pause, position, DownloadService.PLAY);
+                         }
+                });
+        alertDialogBuilder.create().show();
       });
 
       // Return the completed view to render on screen
