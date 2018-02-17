@@ -1,48 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical"
-  tools:context=".zim_manager.library_view.LibraryFragment">
-
-  <RelativeLayout
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/listBackground">
+    android:orientation="vertical"
+    tools:context=".zim_manager.library_view.LibraryFragment"
+    android:id="@+id/relativeLayout">
+
 
     <TextView
-      android:id="@+id/network_permission_text"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="200dp"
-      android:layout_centerHorizontal="true"
-      android:text="@string/get_library_over_network"
-      android:visibility="gone"/>
+        android:id="@+id/network_permission_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/get_library_over_network"
+        android:textAlignment="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-      android:id="@+id/network_permission_button"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="230dp"
-      android:layout_centerHorizontal="true"
-      android:text="@string/proceed"
-      android:visibility="gone"/>
+        android:id="@+id/network_permission_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/proceed"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/network_permission_text" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
-      android:id="@+id/library_swiperefresh"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content">
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/library_swiperefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-      <ListView
-        android:id="@+id/library_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="60dp"
-        android:background="?attr/listBackground"
-        android:divider="@null"/>
+            <ListView
+                android:id="@+id/library_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="60dp"
+                android:background="?attr/listBackground"
+                android:divider="@null"/>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+        </android.support.v4.widget.SwipeRefreshLayout>
 
-  </RelativeLayout>
-</LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
