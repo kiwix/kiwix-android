@@ -123,7 +123,7 @@ public class LibraryFragment extends Fragment
     ButterKnife.bind(this, llLayout);
     presenter.attachView(this);
 
-    networkText = (TextView) llLayout.findViewById(R.id.network_text);
+    networkText = llLayout.findViewById(R.id.network_text);
 
     faActivity = (ZimManageActivity) super.getActivity();
     swipeRefreshLayout.setOnRefreshListener(() -> refreshFragment());
