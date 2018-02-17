@@ -259,6 +259,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       }
       if (key.equals(PREF_NIGHTMODE)) {
         KiwixMobileActivity.refresh = true;
+        KiwixMobileActivity.nightMode = nightMode(sharedPreferences);
         getActivity().finish();
         startActivity(new Intent(getActivity(), KiwixSettingsActivity.class));
       }
@@ -267,6 +268,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       }
       if(key.equals(PREF_AUTONIGHTMODE)){
         KiwixMobileActivity.refresh = true;
+        KiwixMobileActivity.nightMode = nightMode(sharedPreferences);
         getActivity().finish();
         startActivity(new Intent(getActivity(), KiwixSettingsActivity.class));
       }
