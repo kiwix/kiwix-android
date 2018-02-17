@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
@@ -57,8 +57,6 @@ public class KiwixErrorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_kiwix_error);
         ButterKnife.bind(this);
 
-        Context context = this;
-
         Intent callingIntent = getIntent();
 
         Bundle extras = callingIntent.getExtras();
@@ -79,7 +77,8 @@ public class KiwixErrorActivity extends AppCompatActivity {
             if(allowLogsCheckbox.isChecked()) {
                 File appDirectory = new File(Environment.getExternalStorageDirectory() + "/Kiwix");
                 File logFile = new File(appDirectory, "logcat.txt");
-                Uri path = Uri.fromFile(logFile);
+                Uri path = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", logFile);
+                emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 emailIntent.putExtra(Intent.EXTRA_STREAM, path);
             }
 
@@ -93,15 +92,16 @@ public class KiwixErrorActivity extends AppCompatActivity {
                 BookDao bookDao = new BookDao(KiwixDatabase.getInstance(getApplicationContext()));
                 ArrayList<LibraryNetworkEntity.Book> books = bookDao.getBooks();
 
-                String allZimFiles = "";
+                StringBuilder sb = new StringBuilder();
                 for(LibraryNetworkEntity.Book book: books) {
                     String bookString = book.getTitle() +
                             ":\nArticles: ["+ book.getArticleCount() +
                             "]\nCreator: [" + book.getCreator() +
                             "]\n";
 
-                    allZimFiles += bookString;
+                    sb.append(bookString);
                 }
+                String allZimFiles = sb.toString();
 
                 String currentZimFile = ZimContentProvider.getZimFile();
                 body += "Curent Zim File:\n" +
