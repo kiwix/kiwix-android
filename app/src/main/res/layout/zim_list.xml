@@ -36,7 +36,6 @@
     </ListView>
 
     <TextView
-        android:id="@+id/zimfilelist_nozimfilesfound_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@android:style/TextAppearance.Large"
