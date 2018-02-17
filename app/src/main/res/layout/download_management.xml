@@ -13,9 +13,8 @@
     android:layout_gravity="center_vertical"
     android:gravity="center_vertical"
     android:orientation="vertical"
-    android:paddingBottom="75dp"
-    android:text="@string/no_downloads_here"
-    android:textSize="20sp"
+    android:paddingBottom="@dimen/library_textview_padding"
+    android:textSize="@dimen/library_font_size"
     android:visibility="gone" />
 
   <ListView
