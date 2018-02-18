@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="@dimen/kiwix_search_widget_layout_id_height"
     android:id="@+id/kiwix_search_widget_layout_id"
     android:background="@drawable/search_widget_background"
-    android:padding="@dimen/widget_margin"
+    android:padding="@dimen/dimen_0dp"
     android:gravity="center_vertical"
-    android:layout_marginRight="1dp"
-    android:layout_marginLeft="1dp">
+    android:layout_marginRight="@dimen/dimen_1dp"
+    android:layout_marginLeft="@dimen/dimen_1dp">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -39,11 +39,5 @@
         android:id="@+id/search_widget_mic"
         android:src="@drawable/ic_mic_black_24dp"
         android:layout_weight="0.1"/>
-
-
-
-
-
-
 
 </LinearLayout>
