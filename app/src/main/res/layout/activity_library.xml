@@ -11,6 +11,19 @@
     android:layout_height="match_parent"
     android:background="?attr/listBackground">
 
+
+    <TextView
+      android:id="@+id/network_text"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_centerInParent="true"
+      android:layout_gravity="center_vertical"
+      android:gravity="center_vertical"
+      android:orientation="vertical"
+      android:paddingBottom="@dimen/library_textview_padding"
+      android:textSize="@dimen/library_font_size"
+      android:visibility="gone" />
+
     <TextView
       android:id="@+id/network_permission_text"
       android:layout_width="wrap_content"
@@ -38,7 +51,7 @@
         android:id="@+id/library_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="@dimen/library_list_padding_bottom"
+        android:paddingBottom="@dimen/library_article_list_padding"
         android:background="?attr/listBackground"
         android:divider="@null"/>
 

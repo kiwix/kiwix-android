@@ -11,7 +11,6 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
@@ -83,10 +82,6 @@ public class LanguageSelectDialog extends AlertDialog {
         e.printStackTrace();
       }
 
-      if (size == 0) {
-        Toast.makeText(getContext(), getContext().getResources().getString(R.string.wait_for_load),
-            Toast.LENGTH_LONG).show();
-      }
       LanguageArrayAdapter languageArrayAdapter = new LanguageArrayAdapter(getContext(), 0,
           languages, languageCounts, singleSelect, selectedLanguage);
       listView.setAdapter(languageArrayAdapter);

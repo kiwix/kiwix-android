@@ -25,9 +25,11 @@
   <dimen name="abc_search_view_text_min_width">160dip</dimen>
   <dimen name="abc_dropdownitem_text_padding_left">8dip</dimen>
   <dimen name="abc_dropdownitem_text_padding_right">8dip</dimen>
+  <dimen name="library_textview_padding">75dp</dimen>
+  <dimen name="library_font_size">20sp</dimen>
+  <dimen name="library_article_list_padding">60dp</dimen>
   <dimen name="network_permission_text_margin_top">200dp</dimen>
   <dimen name="network_permission_button_margin_top">230dp</dimen>
-  <dimen name="library_list_padding_bottom">60dp</dimen>
   <dimen name="bookmark_title_text_size">15sp</dimen>
   <dimen name="download_management_no_downloads_padding_bottom">75dp</dimen>
   <dimen name="help_cardview_card_elevation">2dp</dimen>
