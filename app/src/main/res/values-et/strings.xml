@@ -1,30 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="menu_help">Abi</string>
-  <string name="menu_home">Koduleht</string>
-  <string name="menu_forward">Edasi</string>
-  <string name="menu_back">Tagasi</string>
-  <string name="menu_settings">Eelistused</string>
-  <string name="menu_search">Otsi</string>
-  <string name="menu_searchintext">Otsi tekstist</string>
-  <string name="menu_bookmarks">Järjehoidjad</string>
-  <string name="menu_randomarticle">Juhuslik artikkel</string>
-  <string name="menu_fullscreen">Täisekraan</string>
-  <string name="menu_exitfullscreen">Välju täisekraani režiimist</string>
-  <string name="search_label">Otsi</string>
-  <string name="add_bookmark">Märgi see lehekülg</string>
-  <string name="remove_bookmark">Eemalda valitud märgitute seast</string>
-  <string name="pref_display_title">Vaade</string>
-  <string-array name="pref_zoom_entries">
-    <item name="pref_zoom_entry_automatic">Automaatne</item>
-    <item name="pref_zoom_entry_small">Väike</item>
-    <item name="pref_zoom_entry_medium">Keskmine</item>
-    <item name="pref_zoom_entry_large">Suur</item>
-  </string-array>
-  <string name="pref_info_title">Teave</string>
-  <string name="pref_info_version">Versioon</string>
-  <string name="pref_language_title">Keel</string>
-  <string name="pref_language_chooser">Vali keel</string>
-  <string name="menu_bookmarks_list">Järjehoidjad</string>
-  <string name="zim_manager">Raamatukogu</string>
+    <string name="menu_help">Abi</string>
+    <string name="menu_home">Koduleht</string>
+    <string name="menu_settings">Eelistused</string>
+    <string name="menu_search">Otsi</string>
+    <string name="menu_searchintext">Otsi tekstist</string>
+    <string name="menu_bookmarks">Järjehoidjad</string>
+    <string name="menu_randomarticle">Juhuslik artikkel</string>
+    <string name="menu_fullscreen">Täisekraan</string>
+    <string name="menu_exitfullscreen">Välju täisekraani režiimist</string>
+    <string name="search_label">Otsi</string>
+    <string name="pref_display_title">Vaade</string>
+    <string name="pref_info_title">Teave</string>
+    <string name="pref_info_version">Versioon</string>
+    <string name="pref_language_title">Keel</string>
+    <string name="pref_language_chooser">Vali keel</string>
+    <string name="menu_bookmarks_list">Järjehoidjad</string>
+    <string name="zim_manager">Raamatukogu</string>
 </resources>

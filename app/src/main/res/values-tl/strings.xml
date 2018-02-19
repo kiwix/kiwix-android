@@ -1,31 +1,22 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="menu_help">Tulong</string>
-  <string name="menu_home">Tahanan</string>
-  <string name="menu_forward">Isulong</string>
-  <string name="menu_back">Magbalik</string>
-  <string name="menu_settings">Mga nais</string>
-  <string name="menu_search">Humanap</string>
-  <string name="menu_searchintext">Hanapin sa teksto</string>
-  <string name="menu_bookmarks">Mga pananda</string>
-  <string name="menu_randomarticle">Alin mang artikulo</string>
-  <string name="menu_fullscreen">Buong panooran</string>
-  <string name="menu_exitfullscreen">Huwag buong panooran</string>
-  <string name="search_label">Humanap</string>
-  <string name="add_bookmark">Markahan ang pahinang ito</string>
-  <string name="remove_bookmark">Pinili ang hindi pagmamarka</string>
-  <string name="pref_display_title">Palitawin</string>
-  <string-array name="pref_zoom_entries">
-    <item name="pref_zoom_entry_automatic">Awtomatiko</item>
-    <item name="pref_zoom_entry_small">Maliit</item>
-    <item name="pref_zoom_entry_large">Malaki</item>
-  </string-array>
-  <string name="pref_info_title">Kabatiran</string>
-  <string name="pref_info_version">Bersyon</string>
-  <string name="pref_backtotop">Bumalik sa itaas</string>
-  <string name="pref_backtotop_summary">Maglagay ng buton sa dulo ng pahina upang makagapang paitaas</string>
-  <string name="pref_language_title">Wika</string>
-  <string name="pref_language_chooser">Pumili ng wika</string>
-  <string name="menu_bookmarks_list">Mga pananda</string>
-  <string name="zim_manager">Aklatan</string>
+    <string name="menu_help">Tulong</string>
+    <string name="menu_home">Tahanan</string>
+    <string name="menu_settings">Mga nais</string>
+    <string name="menu_search">Humanap</string>
+    <string name="menu_searchintext">Hanapin sa teksto</string>
+    <string name="menu_bookmarks">Mga pananda</string>
+    <string name="menu_randomarticle">Alin mang artikulo</string>
+    <string name="menu_fullscreen">Buong panooran</string>
+    <string name="menu_exitfullscreen">Huwag buong panooran</string>
+    <string name="search_label">Humanap</string>
+    <string name="pref_display_title">Palitawin</string>
+    <string name="pref_info_title">Kabatiran</string>
+    <string name="pref_info_version">Bersyon</string>
+    <string name="pref_backtotop">Bumalik sa itaas</string>
+    <string name="pref_backtotop_summary">Maglagay ng buton sa dulo ng pahina upang makagapang paitaas</string>
+    <string name="pref_language_title">Wika</string>
+    <string name="pref_language_chooser">Pumili ng wika</string>
+    <string name="menu_bookmarks_list">Mga pananda</string>
+    <string name="zim_manager">Aklatan</string>
 </resources>

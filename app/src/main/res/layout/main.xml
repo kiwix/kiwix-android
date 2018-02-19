@@ -1,153 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:id="@+id/snackbar_layout"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:fitsSystemWindows="false"
-  android:orientation="vertical">
-
-
-  <android.support.v4.widget.DrawerLayout
-    android:id="@+id/drawer_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/snackbar_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="false"
+    android:orientation="vertical">
 
-    <android.support.design.internal.ScrimInsetsFrameLayout
-      android:id="@+id/content_frame"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:fitsSystemWindows="true"
-      android:orientation="vertical" />
 
-    <RelativeLayout
-      android:id="@+id/MainLayout"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:orientation="vertical">
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
-      <RelativeLayout
-        android:id="@+id/FullscreenButtonLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        <android.support.design.internal.ScrimInsetsFrameLayout
+            android:id="@+id/content_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            android:orientation="vertical" />
 
         <RelativeLayout
-          android:id="@+id/ElementsLayout"
-          android:layout_width="fill_parent"
-          android:layout_height="fill_parent"
-          android:orientation="vertical">
-
-
-          <ImageButton
-            android:id="@+id/FullscreenControlButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_margin="@dimen/fullscreen_control_button_margin"
-            android:background="@color/back_to_top_background"
-            android:hint="@string/menu_exitfullscreen"
-            android:src="@drawable/fullscreen_exit"
-            android:visibility="invisible" />
-
-
-          <Button
-            android:id="@+id/button_backtotop"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:alpha="0.6"
-            android:background="@color/back_to_top_background"
-            android:gravity="center"
-            android:text="@string/button_backtotop"
-            android:textColor="@color/back_to_top_text"
-            android:textStyle="bold"
-            android:visibility="invisible" />
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical">
 
 
-          <LinearLayout
-            android:id="@+id/tts_controls"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:visibility="gone"
-            android:weightSum="1.0">
+                    <ImageButton
+                        android:id="@+id/FullscreenControlButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_margin="@dimen/fullscreen_control_button_margin"
+                        android:background="@color/back_to_top_background"
+                        android:hint="@string/menu_exitfullscreen"
+                        android:src="@drawable/fullscreen_exit"
+                        android:visibility="invisible" />
 
-            <Button
-              android:id="@+id/button_pause_tts"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_weight=".5"
-              android:alpha="0.6"
-              android:background="@color/back_to_top_background"
-              android:gravity="center"
-              android:text="@string/tts_pause"
-              android:textColor="@android:color/black"
-              android:textStyle="bold" />
 
-            <Button
-              android:id="@+id/button_stop_tts"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_weight=".5"
-              android:alpha="0.6"
-              android:background="@color/back_to_top_background"
-              android:gravity="center"
-              android:text="@string/tts_stop"
-              android:textColor="@android:color/black"
-              android:textStyle="bold" />
+                    <Button
+                        android:id="@+id/button_backtotop"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:alpha="0.6"
+                        android:background="@color/back_to_top_background"
+                        android:gravity="center"
+                        android:text="@string/button_backtotop"
+                        android:textColor="@color/back_to_top_text"
+                        android:textStyle="bold"
+                        android:visibility="invisible" />
 
-          </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/tts_controls"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:visibility="gone"
+                        android:weightSum="1.0">
+
+                        <Button
+                            android:id="@+id/button_pause_tts"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".5"
+                            android:alpha="0.6"
+                            android:background="@color/back_to_top_background"
+                            android:gravity="center"
+                            android:text="@string/tts_pause"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold" />
+
+                        <Button
+                            android:id="@+id/button_stop_tts"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".5"
+                            android:alpha="0.6"
+                            android:background="@color/back_to_top_background"
+                            android:gravity="center"
+                            android:text="@string/tts_stop"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <org.kiwix.kiwixmobile.views.PageBottomTabLayout
+                android:id="@+id/page_bottom_tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="bottom"
+                android:background="@color/grey"
+                android:visibility="gone"
+                app:tabGravity="fill"
+                app:tabIndicatorColor="@color/grey"
+                app:tabSelectedTextColor="@color/grey" />
 
         </RelativeLayout>
 
-      </RelativeLayout>
+        <include layout="@layout/drawer_left" />
 
-      <org.kiwix.kiwixmobile.views.PageBottomTabLayout
-        android:id="@+id/page_bottom_tab_layout"
+        <include layout="@layout/drawer_right" />
+
+    </android.support.v4.widget.DrawerLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="bottom"
-        android:background="@color/grey"
-        android:visibility="gone"
-        app:tabGravity="fill"
-        app:tabIndicatorColor="@color/grey"
-        app:tabSelectedTextColor="@color/grey"/>
+        android:layout_height="?actionBarSize">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="?colorPrimaryDark"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:theme="@style/AppTheme.AppBarOverlay" />
+
+        <org.kiwix.kiwixmobile.views.AnimatedProgressBar
+            android:id="@+id/progress_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_3dp"
+            android:layout_alignParentBottom="true"
+            app:backgroundColor="?attr/progressBackgroundColor"
+            app:bidirectionalAnimate="false"
+            app:progressColor="@color/accent" />
 
     </RelativeLayout>
-
-    <include layout="@layout/drawer_left" />
-
-    <include layout="@layout/drawer_right" />
-
-  </android.support.v4.widget.DrawerLayout>
-
-  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/toolbar_layout"
-    android:layout_width="match_parent"
-    android:layout_height="?actionBarSize">
-
-    <android.support.v7.widget.Toolbar
-      android:id="@+id/toolbar"
-      android:layout_width="match_parent"
-      android:layout_height="?actionBarSize"
-      android:background="?colorPrimaryDark"
-      app:popupTheme="@style/AppTheme.PopupOverlay"
-      app:theme="@style/AppTheme.AppBarOverlay" />
-
-    <org.kiwix.kiwixmobile.views.AnimatedProgressBar
-      android:id="@+id/progress_view"
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/dimen_3dp"
-      android:layout_alignParentBottom="true"
-      app:backgroundColor="?attr/progressBackgroundColor"
-      app:bidirectionalAnimate="false"
-      app:progressColor="@color/accent" />
-
-  </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

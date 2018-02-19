@@ -1,24 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="menu_help">Ndihmë</string>
-  <string name="menu_home">Faqja Krzesore</string>
-  <string name="menu_forward">Përpara</string>
-  <string name="menu_back">Prapa</string>
-  <string name="menu_settings">Parapëlqimet</string>
-  <string name="menu_search">Kërko</string>
-  <string name="menu_searchintext">Kërko në tekst</string>
-  <string name="menu_bookmarks">Faqe-shenjues</string>
-  <string name="menu_randomarticle">Artikull i  rastit</string>
-  <string name="menu_fullscreen">Ekran i plotë</string>
-  <string name="menu_exitfullscreen">Dil nga mënyra Sa Krejt Ekrani</string>
-  <string name="search_label">Kërko</string>
-  <string name="add_bookmark">Shenjoje këtë faqe</string>
-  <string name="remove_bookmark">Çshenjoje të zgjedhurën</string>
-  <string name="pref_display_title">Shfaq</string>
-  <string-array name="pref_zoom_entries">
-  </string-array>
-  <string name="pref_info_title">Informacione</string>
-  <string name="pref_language_title">Gjuha</string>
-  <string name="menu_bookmarks_list">Faqe-shenjues</string>
-  <string name="zim_manager">Bibloteka</string>
+    <string name="menu_help">Ndihmë</string>
+    <string name="menu_home">Faqja Krzesore</string>
+    <string name="menu_settings">Parapëlqimet</string>
+    <string name="menu_search">Kërko</string>
+    <string name="menu_searchintext">Kërko në tekst</string>
+    <string name="menu_bookmarks">Faqe-shenjues</string>
+    <string name="menu_randomarticle">Artikull i  rastit</string>
+    <string name="menu_fullscreen">Ekran i plotë</string>
+    <string name="menu_exitfullscreen">Dil nga mënyra Sa Krejt Ekrani</string>
+    <string name="search_label">Kërko</string>
+    <string name="pref_display_title">Shfaq</string>
+    <string name="pref_info_title">Informacione</string>
+    <string name="pref_language_title">Gjuha</string>
+    <string name="menu_bookmarks_list">Faqe-shenjues</string>
+    <string name="zim_manager">Bibloteka</string>
 </resources>

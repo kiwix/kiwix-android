@@ -1,30 +1,21 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="menu_help">Għajnuna</string>
-  <string name="menu_home">Daħla</string>
-  <string name="menu_forward">\'Il quddiem</string>
-  <string name="menu_back">Lura</string>
-  <string name="menu_settings">Preferenzi</string>
-  <string name="menu_search">Fittex</string>
-  <string name="menu_searchintext">Sib fit-test</string>
-  <string name="menu_bookmarks">Werrejja</string>
-  <string name="menu_randomarticle">Artiklu kwalunkwe</string>
-  <string name="menu_fullscreen">Skrin sħiħ</string>
-  <string name="menu_exitfullscreen">Oħroġ mill-modalità ta\' skrin sħiħ</string>
-  <string name="save_media_error">Sar żball meta kont qed tipprova tissejvja l-fajl multimedjali!</string>
-  <string name="search_label">Fittex</string>
-  <string name="add_bookmark">Żid din il-paġna mal-werrejja</string>
-  <string name="remove_bookmark">Neħħi din il-paġna mill-werrejja</string>
-  <string name="pref_display_title">Viżwal</string>
-  <string-array name="pref_zoom_entries">
-    <item name="pref_zoom_entry_small">Żgħir</item>
-    <item name="pref_zoom_entry_medium">Medju</item>
-    <item name="pref_zoom_entry_large">Kbir</item>
-  </string-array>
-  <string name="pref_info_title">Informazzjoni</string>
-  <string name="pref_info_version">Verżjoni</string>
-  <string name="pref_language_title">Lingwa</string>
-  <string name="pref_language_chooser">Agħżel lingwa</string>
-  <string name="menu_bookmarks_list">Werrejja</string>
-  <string name="zim_manager">Librerija</string>
+    <string name="menu_help">Għajnuna</string>
+    <string name="menu_home">Daħla</string>
+    <string name="menu_settings">Preferenzi</string>
+    <string name="menu_search">Fittex</string>
+    <string name="menu_searchintext">Sib fit-test</string>
+    <string name="menu_bookmarks">Werrejja</string>
+    <string name="menu_randomarticle">Artiklu kwalunkwe</string>
+    <string name="menu_fullscreen">Skrin sħiħ</string>
+    <string name="menu_exitfullscreen">Oħroġ mill-modalità ta\' skrin sħiħ</string>
+    <string name="save_media_error">Sar żball meta kont qed tipprova tissejvja l-fajl multimedjali!</string>
+    <string name="search_label">Fittex</string>
+    <string name="pref_display_title">Viżwal</string>
+    <string name="pref_info_title">Informazzjoni</string>
+    <string name="pref_info_version">Verżjoni</string>
+    <string name="pref_language_title">Lingwa</string>
+    <string name="pref_language_chooser">Agħżel lingwa</string>
+    <string name="menu_bookmarks_list">Werrejja</string>
+    <string name="zim_manager">Librerija</string>
 </resources>

@@ -1,28 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="menu_help">Yanapa</string>
-  <string name="menu_home">Qallarina</string>
-  <string name="menu_forward">Qatiqman</string>
-  <string name="menu_back">Ñawpaqman</string>
-  <string name="menu_settings">Allinkachinakuna</string>
-  <string name="menu_search">Maskay</string>
-  <string name="menu_searchintext">Qillqapi maskay</string>
-  <string name="menu_bookmarks">Yuyana unanchakuna</string>
-  <string name="menu_randomarticle">Mayninpi p\'anqa</string>
-  <string name="menu_fullscreen">Hunt\'a qhawana pampa</string>
-  <string name="menu_exitfullscreen">Hunt\'a qhawana pampamanta lluqsiy</string>
-  <string name="search_label">Maskay</string>
-  <string name="add_bookmark">Kay p\'anqata sananchay</string>
-  <string name="remove_bookmark">Akllasqata amaña sananchaychu</string>
-  <string name="pref_display_title">Qhawachiy</string>
-  <string-array name="pref_zoom_entries">
-    <item name="pref_zoom_entry_small">Huch\'uy</item>
-    <item name="pref_zoom_entry_large">Hatun</item>
-  </string-array>
-  <string name="pref_info_title">Willay</string>
-  <string name="pref_info_version">Musuqchasqa</string>
-  <string name="pref_nightmode">Tuta laya</string>
-  <string name="pref_language_title">Rimay</string>
-  <string name="menu_bookmarks_list">Yuyana unanchakuna</string>
-  <string name="zim_manager">Qillqakunantin</string>
+    <string name="menu_help">Yanapa</string>
+    <string name="menu_home">Qallarina</string>
+    <string name="menu_settings">Allinkachinakuna</string>
+    <string name="menu_search">Maskay</string>
+    <string name="menu_searchintext">Qillqapi maskay</string>
+    <string name="menu_bookmarks">Yuyana unanchakuna</string>
+    <string name="menu_randomarticle">Mayninpi p\'anqa</string>
+    <string name="menu_fullscreen">Hunt\'a qhawana pampa</string>
+    <string name="menu_exitfullscreen">Hunt\'a qhawana pampamanta lluqsiy</string>
+    <string name="search_label">Maskay</string>
+    <string name="pref_display_title">Qhawachiy</string>
+    <string name="pref_info_title">Willay</string>
+    <string name="pref_info_version">Musuqchasqa</string>
+    <string name="pref_nightmode">Tuta laya</string>
+    <string name="pref_language_title">Rimay</string>
+    <string name="menu_bookmarks_list">Yuyana unanchakuna</string>
+    <string name="zim_manager">Qillqakunantin</string>
 </resources>

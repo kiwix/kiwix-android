@@ -1,26 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="menu_help">Ìrànwọ́</string>
-  <string name="menu_home">Ibùdó</string>
-  <string name="menu_forward">Síwájú</string>
-  <string name="menu_back">Ṣẹ́yìn</string>
-  <string name="menu_settings">Àwọn ìfẹ́ràn</string>
-  <string name="menu_search">Àwárí</string>
-  <string name="menu_searchintext">Ìwárí nínú ìkọ</string>
-  <string name="menu_bookmarks">Àwọn ojúewé àdápamọ́</string>
-  <string name="menu_randomarticle">Àyọkà àrìnnàkò</string>
-  <string name="menu_fullscreen">Ojúìran kíkúnrẹ́rẹ́</string>
-  <string name="menu_exitfullscreen">Ìjáde kúrò ní ojúìran kíkúnrẹ́rẹ́</string>
-  <string name="search_label">Àwárí</string>
-  <string name="add_bookmark">Ṣàmì ojúewé yìí</string>
-  <string name="remove_bookmark">Múlà kúrò nínú àṣàyàn</string>
-  <string name="pref_display_title">Ìmúhàn</string>
-  <string-array name="pref_zoom_entries">
-    <item name="pref_zoom_entry_small">Kékeré</item>
-  </string-array>
-  <string name="pref_info_title">Ìfitọ́nilétí</string>
-  <string name="pref_info_version">Àtẹ̀jáde</string>
-  <string name="pref_language_title">Èdè</string>
-  <string name="menu_bookmarks_list">Àwọn ojúewé àdápamọ́</string>
-  <string name="zim_manager">Ibiàmúlò</string>
+    <string name="menu_help">Ìrànwọ́</string>
+    <string name="menu_home">Ibùdó</string>
+    <string name="menu_settings">Àwọn ìfẹ́ràn</string>
+    <string name="menu_search">Àwárí</string>
+    <string name="menu_searchintext">Ìwárí nínú ìkọ</string>
+    <string name="menu_bookmarks">Àwọn ojúewé àdápamọ́</string>
+    <string name="menu_randomarticle">Àyọkà àrìnnàkò</string>
+    <string name="menu_fullscreen">Ojúìran kíkúnrẹ́rẹ́</string>
+    <string name="menu_exitfullscreen">Ìjáde kúrò ní ojúìran kíkúnrẹ́rẹ́</string>
+    <string name="search_label">Àwárí</string>
+    <string name="pref_display_title">Ìmúhàn</string>
+    <string name="pref_info_title">Ìfitọ́nilétí</string>
+    <string name="pref_info_version">Àtẹ̀jáde</string>
+    <string name="pref_language_title">Èdè</string>
+    <string name="menu_bookmarks_list">Àwọn ojúewé àdápamọ́</string>
+    <string name="zim_manager">Ibiàmúlò</string>
 </resources>

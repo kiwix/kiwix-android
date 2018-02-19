@@ -1,27 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="menu_help">ಸಹಾಯ</string>
-  <string name="menu_home">ಮುಖ್ಯಪುಟ</string>
-  <string name="menu_forward">ಮುಂದಿನ</string>
-  <string name="menu_back">ಹಿಂದಕ್ಕೆ</string>
-  <string name="menu_settings">ಪ್ರಾಶಸ್ತ್ಯಗಳು</string>
-  <string name="menu_search">ಅನ್ವೇಷಿಸಿ</string>
-  <string name="menu_searchintext">ಪಠ್ಯದಲ್ಲಿ ಹುಡುಕಿ</string>
-  <string name="menu_bookmarks">ಓದುಗುರುತುಗಳು</string>
-  <string name="menu_randomarticle">ಯಾವುದಾದರೊಂದು ಲೇಖನ</string>
-  <string name="menu_fullscreen">ಪೂರ್ಣಪರದೆ</string>
-  <string name="menu_exitfullscreen">ಪೂರ್ಣ ತೆರೆಯನ್ನು ನಿರ್ಗಮಿಸಿ</string>
-  <string name="search_label">ಅನ್ವೇಷಿಸಿ</string>
-  <string name="add_bookmark">ಈ ಪುಟವನ್ನು ಗುರುತು ಮಾಡಿ</string>
-  <string name="remove_bookmark">ಗುರುತಿಲ್ಲದ್ದನ್ನು ಆಯ್ಕೆ ಮಾಡಿ</string>
-  <string name="pref_display_title">ಪ್ರದರ್ಶಿಸು</string>
-  <string-array name="pref_zoom_entries">
-    <item name="pref_zoom_entry_large">ದೊಡ್ಡದು</item>
-  </string-array>
-  <string name="pref_info_title">ಮಾಹಿತಿ</string>
-  <string name="pref_info_version">ಆವೃತ್ತಿ</string>
-  <string name="pref_language_title">ಭಾಷೆ</string>
-  <string name="pref_language_chooser">ಭಾಷೆ ಆಯ್ದುಕೊಳ್ಳಿ</string>
-  <string name="menu_bookmarks_list">ಓದುಗುರುತುಗಳು</string>
-  <string name="zim_manager">ಗ್ರಂಥಾಲಯ</string>
+    <string name="menu_help">ಸಹಾಯ</string>
+    <string name="menu_home">ಮುಖ್ಯಪುಟ</string>
+    <string name="menu_settings">ಪ್ರಾಶಸ್ತ್ಯಗಳು</string>
+    <string name="menu_search">ಅನ್ವೇಷಿಸಿ</string>
+    <string name="menu_searchintext">ಪಠ್ಯದಲ್ಲಿ ಹುಡುಕಿ</string>
+    <string name="menu_bookmarks">ಓದುಗುರುತುಗಳು</string>
+    <string name="menu_randomarticle">ಯಾವುದಾದರೊಂದು ಲೇಖನ</string>
+    <string name="menu_fullscreen">ಪೂರ್ಣಪರದೆ</string>
+    <string name="menu_exitfullscreen">ಪೂರ್ಣ ತೆರೆಯನ್ನು ನಿರ್ಗಮಿಸಿ</string>
+    <string name="search_label">ಅನ್ವೇಷಿಸಿ</string>
+    <string name="pref_display_title">ಪ್ರದರ್ಶಿಸು</string>
+    <string name="pref_info_title">ಮಾಹಿತಿ</string>
+    <string name="pref_info_version">ಆವೃತ್ತಿ</string>
+    <string name="pref_language_title">ಭಾಷೆ</string>
+    <string name="pref_language_chooser">ಭಾಷೆ ಆಯ್ದುಕೊಳ್ಳಿ</string>
+    <string name="menu_bookmarks_list">ಓದುಗುರುತುಗಳು</string>
+    <string name="zim_manager">ಗ್ರಂಥಾಲಯ</string>
 </resources>

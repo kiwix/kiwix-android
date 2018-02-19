@@ -4,7 +4,6 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="@dimen/kiwix_search_widget_layout_id_height"
-    android:id="@+id/kiwix_search_widget_layout_id"
     android:background="@drawable/search_widget_background"
     android:padding="@dimen/dimen_0dp"
     android:gravity="center_vertical"

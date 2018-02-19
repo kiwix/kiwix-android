@@ -1,24 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="menu_help">সহায়</string>
-  <string name="menu_home">বেটুপাত</string>
-  <string name="menu_forward">আগলৈ যাওক</string>
-  <string name="menu_back">পিছফালে যাওক</string>
-  <string name="menu_settings">পছন্দসমূহ</string>
-  <string name="menu_search">সন্ধান কৰক</string>
-  <string name="menu_searchintext">লিখনীত বিচাৰক</string>
-  <string name="menu_bookmarks">পত্ৰচিহ্নসমূহ</string>
-  <string name="menu_randomarticle">যাদৃচ্ছিক ৰচনা</string>
-  <string name="menu_fullscreen">পূর্ণাঙ্গ স্ক্রিন</string>
-  <string name="menu_exitfullscreen">পূৰ্ণাঙ্গ স্ক্ৰীণ বন্ধ কৰক</string>
-  <string name="search_label">সন্ধান কৰক</string>
-  <string name="add_bookmark">এই পৃষ্ঠা চিহ্নিত কৰক</string>
-  <string name="remove_bookmark">নিৰ্বাচিতৰ পৰা চিহ্ন আতৰাওক</string>
-  <string name="pref_display_title">প্রদর্শন</string>
-  <string-array name="pref_zoom_entries">
-  </string-array>
-  <string name="pref_info_title">বিবৰণ</string>
-  <string name="pref_language_title">ভাষা</string>
-  <string name="menu_bookmarks_list">পত্ৰচিহ্নসমূহ</string>
-  <string name="zim_manager">পুথিভৰাল</string>
+    <string name="menu_help">সহায়</string>
+    <string name="menu_home">বেটুপাত</string>
+    <string name="menu_settings">পছন্দসমূহ</string>
+    <string name="menu_search">সন্ধান কৰক</string>
+    <string name="menu_searchintext">লিখনীত বিচাৰক</string>
+    <string name="menu_bookmarks">পত্ৰচিহ্নসমূহ</string>
+    <string name="menu_randomarticle">যাদৃচ্ছিক ৰচনা</string>
+    <string name="menu_fullscreen">পূর্ণাঙ্গ স্ক্রিন</string>
+    <string name="menu_exitfullscreen">পূৰ্ণাঙ্গ স্ক্ৰীণ বন্ধ কৰক</string>
+    <string name="search_label">সন্ধান কৰক</string>
+    <string name="pref_display_title">প্রদর্শন</string>
+    <string name="pref_info_title">বিবৰণ</string>
+    <string name="pref_language_title">ভাষা</string>
+    <string name="menu_bookmarks_list">পত্ৰচিহ্নসমূহ</string>
+    <string name="zim_manager">পুথিভৰাল</string>
 </resources>
