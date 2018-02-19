@@ -104,7 +104,7 @@
 
       </RelativeLayout>
 
-      <org.kiwix.kiwixmobile.views.PageBottomTabLayout
+      <org.kiwix.kiwixmobile.common.views.bottom_tab.PageBottomTabLayout
         android:id="@+id/page_bottom_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -139,7 +139,7 @@
       app:popupTheme="@style/AppTheme.PopupOverlay"
       app:theme="@style/AppTheme.AppBarOverlay" />
 
-    <org.kiwix.kiwixmobile.views.AnimatedProgressBar
+    <org.kiwix.kiwixmobile.common.views.AnimatedProgressBar
       android:id="@+id/progress_view"
       android:layout_width="match_parent"
       android:layout_height="@dimen/dimen_3dp"

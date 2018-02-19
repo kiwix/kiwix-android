@@ -20,8 +20,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
-import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
+import org.kiwix.kiwixmobile.common.utils.KiwixIdlingResource;
+import org.kiwix.kiwixmobile.modules.zim_manager.ZimManageActivity;
 
 import java.util.concurrent.TimeUnit;
 

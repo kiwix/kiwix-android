@@ -19,7 +19,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.utils.SplashActivity;
+import org.kiwix.kiwixmobile.modules.main.SplashActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -27,7 +27,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
+import static org.kiwix.kiwixmobile.common.utils.StandardActions.enterHelp;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)

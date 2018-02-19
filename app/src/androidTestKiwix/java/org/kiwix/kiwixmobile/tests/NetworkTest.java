@@ -20,12 +20,12 @@ import org.junit.Test;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.ZimContentProvider;
-import org.kiwix.kiwixmobile.di.components.DaggerTestComponent;
-import org.kiwix.kiwixmobile.di.components.TestComponent;
-import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
+import org.kiwix.kiwixmobile.common.data.content_provider.ZimContentProvider;
+import org.kiwix.kiwixmobile.common.di.components.DaggerTestComponent;
+import org.kiwix.kiwixmobile.common.di.components.TestComponent;
+import org.kiwix.kiwixmobile.common.di.modules.ApplicationModule;
 import org.kiwix.kiwixmobile.testutils.TestUtils;
-import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
+import org.kiwix.kiwixmobile.common.utils.KiwixIdlingResource;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,7 +33,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import okhttp3.OkHttpClient;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okio.Buffer;
@@ -46,12 +45,11 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.swipeDown;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
-import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
+import static org.kiwix.kiwixmobile.common.utils.StandardActions.enterHelp;
 
 /**
  * Created by mhutti1 on 14/04/17.

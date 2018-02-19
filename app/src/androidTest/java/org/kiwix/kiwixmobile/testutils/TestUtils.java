@@ -1,7 +1,6 @@
 package org.kiwix.kiwixmobile.testutils;
 
 import android.Manifest;
-import android.app.LauncherActivity;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.test.InstrumentationRegistry;
@@ -14,7 +13,7 @@ import android.support.v4.content.ContextCompat;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+import org.kiwix.kiwixmobile.modules.library.entity.LibraryNetworkEntity.Book;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 
