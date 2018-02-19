@@ -17,10 +17,13 @@ We utilize different build variants (flavours) to build various different versio
 - [Dagger](https://github.com/google/dagger)
 - [Guava](https://github.com/google/guava)
 - [SquiDb](https://github.com/yahoo/squidb)
+- [Apache](https://github.com/apache/commons-io)
 - [Retrofit](http://square.github.io/retrofit/)
+- [OkHttp](https://github.com/square/okhttp)
 - [Butterknife](http://jakewharton.github.io/butterknife/)
-- [RxJava1](https://github.com/ReactiveX/RxJava)
+- [RxJava](https://github.com/ReactiveX/RxJava)
 - [Mockito](https://github.com/mockito/mockito)
+
 
 ## Contributing
 
@@ -50,4 +53,4 @@ For more information, please refer to [http://wiki.kiwix.org/wiki/Communication]
 
 ## LEGAL & DISCLAIMER
 
-Read '../COPYING' file
+Please refer to [COPYING](COPYING).
