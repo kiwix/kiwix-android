@@ -30,3 +30,16 @@ More... http://wiki.kiwix.org/wiki/Communication
 *********************************************************************
 
 Read '../COPYING' file
+
+### Libraries:
+- [Guava](https://github.com/google/guava)
+- [Dagger](https://github.com/google/dagger)
+- [SquiDB](https://github.com/yahoo/squidb)
+- [Apache](https://github.com/apache/commons-io)
+- [RxJava](https://github.com/ReactiveX/RxAndroid)
+- [ButterKnife](https://github.com/JakeWharton/butterknife)
+- [Retrofit](https://github.com/square/retrofit) + [OkHttp](https://github.com/square/okhttp)
+- Testing:
+  - [JUnit4](https://github.com/junit-team/junit4)
+  - [Mockito](https://github.com/mockito/mockito)
+
