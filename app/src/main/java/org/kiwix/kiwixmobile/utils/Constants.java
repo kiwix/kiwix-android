@@ -68,6 +68,8 @@ public final class Constants {
 
     public static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
 
+    public static final String PREF_TEXT_SIZE = "pref_text_size";
+
     public static final String PREF_FULLSCREEN = "pref_fullscreen";
 
     public static final String PREF_NEW_TAB_BACKGROUND = "pref_newtab_background";

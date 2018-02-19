@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -29,6 +30,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -37,6 +39,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -63,6 +66,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -74,6 +78,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.Toast;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.base.BaseActivity;
@@ -210,6 +215,10 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   private int tempVisitCount;
 
   private boolean isFirstRun;
+
+  private Dialog textSizeDialog;
+
+  private SeekBar textSizeSeekBar;
 
   @BindView(R.id.toolbar) Toolbar toolbar;
 
@@ -374,6 +383,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
     isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
 
+    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+
     FileReader fileReader = new FileReader();
     documentParserJs = fileReader.readFile("js/documentParser.js", this);
 
@@ -505,6 +516,43 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       backToTopAppearNightly();
     } else {
       backToTopAppearDaily();
+    }
+
+    textSizeDialog = new Dialog(this);
+    LayoutInflater inflater1 = (LayoutInflater)this.getSystemService(LAYOUT_INFLATER_SERVICE);
+    View layout = inflater1.inflate(R.layout.dialogbox_seekbar, (ViewGroup)findViewById(R.id.dialog));
+    textSizeDialog.setContentView(layout);
+
+    //Fixing the dialog size
+    Window window = textSizeDialog.getWindow();
+    window.setLayout(Resources.getSystem().getDisplayMetrics().widthPixels,270);
+
+    textSizeSeekBar = (SeekBar)layout.findViewById(R.id.your_dialog_seekbar);
+    textSizeSeekBar.setMax(3);
+    WebSettings webSettings = getCurrentWebView().getSettings();
+    //Setting text-size and the corrosponding seekbar progress.
+    switch (settings.getInt("text_size",2)) {
+
+      case 0:
+        webSettings.setTextSize(WebSettings.TextSize.SMALLEST);
+        textSizeSeekBar.setProgress(0);
+        break;
+      case 1:
+        webSettings.setTextSize(WebSettings.TextSize.SMALLER);
+        textSizeSeekBar.setProgress(1);
+        break;
+      case 2:
+        webSettings.setTextSize(WebSettings.TextSize.NORMAL);
+        textSizeSeekBar.setProgress(2);
+        break;
+      case 3:
+        webSettings.setTextSize(WebSettings.TextSize.LARGER);
+        textSizeSeekBar.setProgress(3);
+        break;
+      default:
+        webSettings.setTextSize(WebSettings.TextSize.NORMAL);
+        textSizeSeekBar.setProgress(2);
+        break;
     }
   }
 
@@ -1289,6 +1337,55 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
     }
     updateWidgets(this);
+
+    boolean shouldShowDialog = getIntent().getBooleanExtra("shouldShowDialog", false);
+
+    if (shouldShowDialog) {
+
+      SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+      textSizeDialog.show();
+      textSizeSeekBar.setProgress(settings.getInt("text_size",2));
+
+      textSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+          WebSettings webSettings = getCurrentWebView().getSettings();
+
+          switch (i){
+
+            case 0:
+              webSettings.setTextSize(WebSettings.TextSize.SMALLEST);
+              settings.edit().putInt("text_size", 0).commit();
+              break;
+            case 1:
+              webSettings.setTextSize(WebSettings.TextSize.SMALLER);
+              settings.edit().putInt("text_size", 1).commit();
+              break;
+            case 2:
+              webSettings.setTextSize(WebSettings.TextSize.NORMAL);
+              settings.edit().putInt("text_size", 2).commit();
+              break;
+            case 3:
+              webSettings.setTextSize(WebSettings.TextSize.LARGER);
+              settings.edit().putInt("text_size", 3).commit();
+              break;
+          }
+
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+          Log.d(TAG_KIWIX, "Kiwix text size seekbar started tracking user touch");
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+          Log.d(TAG_KIWIX, "Kiwix text size seekbar stopped tracking user touch");
+        }
+      });
+
+      getIntent().putExtra("shouldShowDialog", false);
+    }
   }
 
   @Override

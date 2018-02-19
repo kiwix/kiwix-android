@@ -66,6 +66,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.PREF_CREDITS;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_LANG;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_NIGHTMODE;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE;
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_TEXT_SIZE;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_VERSION;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_WIFI_ONLY;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_ZOOM;
@@ -328,6 +329,13 @@ public class KiwixSettingsActivity extends BaseActivity {
           .show();
     }
 
+    public void openTextSeekbar(){
+      Intent intentToMobileActivity = new Intent(getActivity(), KiwixMobileActivity.class);
+      intentToMobileActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+      intentToMobileActivity.putExtra("shouldShowDialog", true);
+      startActivity(intentToMobileActivity);
+    }
+
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
                                          Preference preference) {
@@ -339,6 +347,9 @@ public class KiwixSettingsActivity extends BaseActivity {
 
       if (preference.getKey().equalsIgnoreCase(PREF_STORAGE))
         openFolderSelect();
+
+      if (preference.getKey().equalsIgnoreCase(PREF_TEXT_SIZE))
+        openTextSeekbar();
 
       return true;
     }

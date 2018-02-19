@@ -181,4 +181,6 @@
   <string name="crash_checkbox_device">Device Details</string>
   <string name="crash_button_confirm">SEND DETAILS</string>
   <string name="crash_button_decline">NO THANKS</string>
+  <string name="text_size">Text size</string>
+  <string name="set_text_size">Set text size</string>
 </resources>

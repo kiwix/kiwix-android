@@ -98,6 +98,10 @@
       android:title="@string/pref_zoom_dialog" />
   </PreferenceCategory>
 
+  <Preference
+    android:key="pref_text_size"
+    android:title="@string/text_size"/>
+
   <PreferenceCategory
     android:key="pref_history"
     android:title="History">
