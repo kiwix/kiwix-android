@@ -33,7 +33,6 @@
           android:orientation="vertical">
 
           <ImageView
-            android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
@@ -44,7 +43,6 @@
 
 
           <TextView
-            android:id="@+id/welcome1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dimen_10dp"
@@ -85,7 +83,6 @@
           android:layout_height="wrap_content"
           android:orientation="vertical">
           <TextView
-            android:id="@+id/welcome2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dimen_10dp"
@@ -97,7 +94,6 @@
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
           <TextView
-            android:id="@+id/welcome3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dimen_10dp"
@@ -107,7 +103,6 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-            android:id="@+id/welcome4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dimen_10dp"
@@ -135,7 +130,6 @@
           android:layout_height="wrap_content"
           android:orientation="vertical">
           <TextView
-            android:id="@+id/welcome5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dimen_10dp"
@@ -147,7 +141,6 @@
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
           <TextView
-            android:id="@+id/welcome6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dimen_10dp"
@@ -157,7 +150,6 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-            android:id="@+id/welcome7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dimen_10dp"
@@ -167,7 +159,6 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-            android:id="@+id/welcome8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dimen_10dp"
@@ -178,7 +169,6 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-            android:id="@+id/welcome9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dimen_10dp"
@@ -189,7 +179,6 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-            android:id="@+id/welcome10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dimen_10dp"
@@ -199,7 +188,6 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-            android:id="@+id/welcome11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dimen_10dp"
@@ -227,7 +215,6 @@
           android:layout_height="wrap_content"
           android:orientation="vertical">
           <TextView
-            android:id="@+id/welcome12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dimen_10dp"
@@ -239,7 +226,6 @@
             android:textAppearance="?android:attr/textAppearanceLarge"/>
 
           <TextView
-            android:id="@+id/welcome13"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dimen_10dp"
@@ -249,7 +235,6 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-            android:id="@+id/welcome14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/primary_dark"
@@ -259,7 +244,6 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-            android:id="@+id/welcome15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dimen_10dp"
@@ -269,7 +253,6 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-            android:id="@+id/welcome16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dimen_10dp"
@@ -280,7 +263,6 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-            android:id="@+id/welcome17"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dimen_10dp"
@@ -290,7 +272,6 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-            android:id="@+id/welcome18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dimen_10dp"
@@ -301,7 +282,6 @@
             android:textAppearance="?android:attr/textAppearanceMedium"/>
 
           <TextView
-            android:id="@+id/welcome19"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dimen_10dp"
@@ -330,7 +310,6 @@
           android:orientation="vertical">
 
           <TextView
-            android:id="@+id/welcome20"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dimen_10dp"

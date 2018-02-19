@@ -1,23 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="menu_help">Pomoć</string>
-  <string name="menu_home">Početna</string>
-  <string name="menu_forward">Naprijed</string>
-  <string name="menu_back">Nazad</string>
-  <string name="menu_settings">Postavke</string>
-  <string name="menu_search">Traži</string>
-  <string name="menu_searchintext">Pronađi u tekstu</string>
-  <string name="menu_bookmarks">Oznake</string>
-  <string name="menu_randomarticle">Slučajni članak</string>
-  <string name="menu_fullscreen">Cijeli ekran</string>
-  <string name="search_label">Traži</string>
-  <string name="add_bookmark">Označi ovu stranicu</string>
-  <string name="remove_bookmark">Odoznači izabrano</string>
-  <string name="pref_display_title">Prikaži</string>
-  <string-array name="pref_zoom_entries">
-  </string-array>
-  <string name="pref_info_title">Informacija</string>
-  <string name="pref_info_version">Verzija</string>
-  <string name="pref_language_title">Jezik</string>
-  <string name="menu_bookmarks_list">Oznake</string>
+    <string name="menu_help">Pomoć</string>
+    <string name="menu_home">Početna</string>
+    <string name="menu_settings">Postavke</string>
+    <string name="menu_search">Traži</string>
+    <string name="menu_searchintext">Pronađi u tekstu</string>
+    <string name="menu_bookmarks">Oznake</string>
+    <string name="menu_randomarticle">Slučajni članak</string>
+    <string name="menu_fullscreen">Cijeli ekran</string>
+    <string name="search_label">Traži</string>
+    <string name="pref_display_title">Prikaži</string>
+    <string name="pref_info_title">Informacija</string>
+    <string name="pref_info_version">Verzija</string>
+    <string name="pref_language_title">Jezik</string>
+    <string name="menu_bookmarks_list">Oznake</string>
 </resources>

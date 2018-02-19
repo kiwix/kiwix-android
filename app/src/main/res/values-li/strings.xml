@@ -1,22 +1,16 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="menu_help">Hölp</string>
-  <string name="menu_home">Huidmenu</string>
-  <string name="menu_forward">Veuroet</string>
-  <string name="menu_back">Trök</string>
-  <string name="menu_settings">Veurkäöre</string>
-  <string name="menu_search">Zeuk</string>
-  <string name="menu_searchintext">Zeuk in teks</string>
-  <string name="menu_bookmarks">Blaadwiezers</string>
-  <string name="menu_randomarticle">Willekäörig artikel</string>
-  <string name="menu_fullscreen">Volledig sjirm</string>
-  <string name="search_label">Zeuk</string>
-  <string name="add_bookmark">Pagina markere</string>
-  <string name="remove_bookmark">Markering veur \'t geselekteerde ewegsjaffe</string>
-  <string name="pref_display_title">Bild</string>
-  <string-array name="pref_zoom_entries">
-  </string-array>
-  <string name="pref_info_title">Infermasie</string>
-  <string name="pref_language_title">Sjpraok</string>
-  <string name="menu_bookmarks_list">Blaadwiezers</string>
+    <string name="menu_help">Hölp</string>
+    <string name="menu_home">Huidmenu</string>
+    <string name="menu_settings">Veurkäöre</string>
+    <string name="menu_search">Zeuk</string>
+    <string name="menu_searchintext">Zeuk in teks</string>
+    <string name="menu_bookmarks">Blaadwiezers</string>
+    <string name="menu_randomarticle">Willekäörig artikel</string>
+    <string name="menu_fullscreen">Volledig sjirm</string>
+    <string name="search_label">Zeuk</string>
+    <string name="pref_display_title">Bild</string>
+    <string name="pref_info_title">Infermasie</string>
+    <string name="pref_language_title">Sjpraok</string>
+    <string name="menu_bookmarks_list">Blaadwiezers</string>
 </resources>

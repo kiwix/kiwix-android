@@ -1,50 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="?attr/listBackground">
-
-  <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:id="@+id/file_management_no_files"
-    android:text="@string/no_files_here"
-    android:layout_centerInParent="true"
-    android:layout_gravity="center_vertical"
-    android:gravity="center_vertical"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/file_management_no_files_padding_bottom"
-    android:textSize="@dimen/file_management_no_files_text_size"
-    android:visibility="gone"/>
-
-  <android.support.v4.widget.SwipeRefreshLayout
-      android:id="@+id/zim_swiperefresh"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content">
-
-    <ListView
-        android:id="@+id/zimfilelist"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        android:paddingBottom="@dimen/zimfilelist_padding_bottom"
-        android:background="?attr/listBackground"
-        android:divider="@null">
-    </ListView>
+    android:background="?attr/listBackground"
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/zimfilelist_nozimfilesfound_view"
+        android:id="@+id/file_management_no_files"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@android:style/TextAppearance.Large"
-        android:paddingBottom="@dimen/dimen_15dp"
-        android:paddingTop="@dimen/dimen_15dp"
-        android:paddingLeft="@dimen/dimen_10dp"
-        android:paddingRight="@dimen/dimen_10dp"
-        android:text="@string/error_nozimfilesfound"
-        android:visibility="gone"/>
-  </android.support.v4.widget.SwipeRefreshLayout>
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/file_management_no_files_padding_bottom"
+        android:text="@string/no_files_here"
+        android:textSize="@dimen/file_management_no_files_text_size"
+        android:visibility="gone" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/zim_swiperefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ListView
+            android:id="@+id/zimfilelist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar"
+            android:background="?attr/listBackground"
+            android:divider="@null"
+            android:paddingBottom="@dimen/zimfilelist_padding_bottom" />
+
+        <TextView
+            style="@android:style/TextAppearance.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dimen_15dp"
+            android:paddingLeft="@dimen/dimen_10dp"
+            android:paddingRight="@dimen/dimen_10dp"
+            android:paddingTop="@dimen/dimen_15dp"
+            android:text="@string/error_nozimfilesfound"
+            android:visibility="gone" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

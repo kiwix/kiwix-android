@@ -1,22 +1,16 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="menu_help">帮助</string>
-  <string name="menu_home">主页</string>
-  <string name="menu_forward">前进</string>
-  <string name="menu_back">后退</string>
-  <string name="menu_settings">首选项</string>
-  <string name="menu_search">搜索</string>
-  <string name="menu_searchintext">在文本中查找</string>
-  <string name="menu_bookmarks">书签</string>
-  <string name="menu_randomarticle">随机页面</string>
-  <string name="menu_fullscreen">全屏</string>
-  <string name="search_label">搜索</string>
-  <string name="add_bookmark">标记本页</string>
-  <string name="remove_bookmark">取消标记</string>
-  <string name="pref_display_title">显示</string>
-  <string-array name="pref_zoom_entries">
-  </string-array>
-  <string name="pref_info_title">信息</string>
-  <string name="pref_language_title">语言</string>
-  <string name="menu_bookmarks_list">书签</string>
+    <string name="menu_help">帮助</string>
+    <string name="menu_home">主页</string>
+    <string name="menu_settings">首选项</string>
+    <string name="menu_search">搜索</string>
+    <string name="menu_searchintext">在文本中查找</string>
+    <string name="menu_bookmarks">书签</string>
+    <string name="menu_randomarticle">随机页面</string>
+    <string name="menu_fullscreen">全屏</string>
+    <string name="search_label">搜索</string>
+    <string name="pref_display_title">显示</string>
+    <string name="pref_info_title">信息</string>
+    <string name="pref_language_title">语言</string>
+    <string name="menu_bookmarks_list">书签</string>
 </resources>

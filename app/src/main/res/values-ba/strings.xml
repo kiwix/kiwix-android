@@ -1,28 +1,22 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="menu_help">Ярҙам</string>
-  <string name="menu_home">Төп Бит</string>
-  <string name="menu_forward">Алға</string>
-  <string name="menu_back">Артҡа</string>
-  <string name="menu_settings">Көйләүҙәр</string>
-  <string name="menu_search">Эҙләү</string>
-  <string name="menu_searchintext">Текста табырға</string>
-  <string name="menu_bookmarks">Һалынмалар</string>
-  <string name="menu_randomarticle">Осраҡлы мәҡәлә</string>
-  <string name="menu_fullscreen">Тулы экран</string>
-  <string name="menu_exitfullscreen">Тулы экран режимынан сығырға</string>
-  <string name="save_media">Медиа файлды һаҡлау форматы</string>
-  <string name="search_label">Эҙләү</string>
-  <string name="add_bookmark">Был битте билдәләргә</string>
-  <string name="remove_bookmark">Һайланған биттән билдәне алырға</string>
-  <string name="pref_display_title">Күрһәтергә</string>
-  <string-array name="pref_zoom_entries">
-  </string-array>
-  <string name="pref_info_title">Мәғлүмәт</string>
-  <string name="pref_info_version">Версия</string>
-  <string name="pref_language_title">Тел</string>
-  <string name="menu_bookmarks_list">Һалынмалар</string>
-  <string name="rate_dialog_positive">Баһаларға!</string>
-  <string name="rate_dialog_negative">Юҡ, рәхмәт</string>
-  <string name="zim_manager">Китапхана</string>
+    <string name="menu_help">Ярҙам</string>
+    <string name="menu_home">Төп Бит</string>
+    <string name="menu_settings">Көйләүҙәр</string>
+    <string name="menu_search">Эҙләү</string>
+    <string name="menu_searchintext">Текста табырға</string>
+    <string name="menu_bookmarks">Һалынмалар</string>
+    <string name="menu_randomarticle">Осраҡлы мәҡәлә</string>
+    <string name="menu_fullscreen">Тулы экран</string>
+    <string name="menu_exitfullscreen">Тулы экран режимынан сығырға</string>
+    <string name="save_media">Медиа файлды һаҡлау форматы</string>
+    <string name="search_label">Эҙләү</string>
+    <string name="pref_display_title">Күрһәтергә</string>
+    <string name="pref_info_title">Мәғлүмәт</string>
+    <string name="pref_info_version">Версия</string>
+    <string name="pref_language_title">Тел</string>
+    <string name="menu_bookmarks_list">Һалынмалар</string>
+    <string name="rate_dialog_positive">Баһаларға!</string>
+    <string name="rate_dialog_negative">Юҡ, рәхмәт</string>
+    <string name="zim_manager">Китапхана</string>
 </resources>

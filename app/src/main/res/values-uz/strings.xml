@@ -1,27 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="menu_help">Yordam</string>
-  <string name="menu_home">Boshiga</string>
-  <string name="menu_forward">Oldinga</string>
-  <string name="menu_back">Orqaga</string>
-  <string name="menu_settings">Moslamalar</string>
-  <string name="menu_search">Qidiruv</string>
-  <string name="menu_searchintext">Matndan qidirish</string>
-  <string name="menu_bookmarks">Xatchoʻplar</string>
-  <string name="menu_randomarticle">Tasodifiy sahifa</string>
-  <string name="menu_fullscreen">Toʻliq ekran</string>
-  <string name="menu_exitfullscreen">Toʻliq ekran tartibidan chiqish</string>
-  <string name="search_label">Qidiruv</string>
-  <string name="add_bookmark">Ushbu sahifani belgilash</string>
-  <string name="remove_bookmark">Tanlangandan belgini olib tashlash</string>
-  <string name="pref_display_title">Koʻrsatish</string>
-  <string-array name="pref_zoom_entries">
-    <item name="pref_zoom_entry_small">Kichik</item>
-    <item name="pref_zoom_entry_large">Katta</item>
-  </string-array>
-  <string name="pref_info_title">Axborot</string>
-  <string name="pref_info_version">Versiya</string>
-  <string name="pref_language_title">Til</string>
-  <string name="menu_bookmarks_list">Xatchoʻplar</string>
-  <string name="zim_manager">Kutubxona</string>
+    <string name="menu_help">Yordam</string>
+    <string name="menu_home">Boshiga</string>
+    <string name="menu_settings">Moslamalar</string>
+    <string name="menu_search">Qidiruv</string>
+    <string name="menu_searchintext">Matndan qidirish</string>
+    <string name="menu_bookmarks">Xatchoʻplar</string>
+    <string name="menu_randomarticle">Tasodifiy sahifa</string>
+    <string name="menu_fullscreen">Toʻliq ekran</string>
+    <string name="menu_exitfullscreen">Toʻliq ekran tartibidan chiqish</string>
+    <string name="search_label">Qidiruv</string>
+    <string name="pref_display_title">Koʻrsatish</string>
+    <string name="pref_info_title">Axborot</string>
+    <string name="pref_info_version">Versiya</string>
+    <string name="pref_language_title">Til</string>
+    <string name="menu_bookmarks_list">Xatchoʻplar</string>
+    <string name="zim_manager">Kutubxona</string>
 </resources>

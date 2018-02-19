@@ -1,30 +1,23 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="menu_help">วิธีใช้</string>
-  <string name="menu_home">หน้าแรก</string>
-  <string name="menu_forward">ถัดไป</string>
-  <string name="menu_back">ย้อนกลับ</string>
-  <string name="menu_settings">การตั้งค่า</string>
-  <string name="menu_search">ค้นหา</string>
-  <string name="menu_searchintext">ค้นหาในข้อความ</string>
-  <string name="menu_bookmarks">ที่คั่นหน้าเว็บ</string>
-  <string name="menu_randomarticle">สุ่มบทความ</string>
-  <string name="menu_fullscreen">เต็มหน้าจอ</string>
-  <string name="menu_exitfullscreen">ออกจากโหมดเต็มหน้าจอ</string>
-  <string name="search_label">ค้นหา</string>
-  <string name="add_bookmark">ทำเครื่องหมายหน้านี้</string>
-  <string name="remove_bookmark">ไม่ทำเครื่องหมายที่เลือก</string>
-  <string name="pref_display_title">แสดงผล</string>
-  <string-array name="pref_zoom_entries">
-    <item name="pref_zoom_entry_small">เล็ก</item>
-  </string-array>
-  <string name="pref_info_title">ข้อมูล</string>
-  <string name="pref_info_version">รุ่น</string>
-  <string name="pref_language_title">ภาษา</string>
-  <string name="menu_bookmarks_list">ที่คั่นหน้าเว็บ</string>
-  <string name="bookmark_added">เพิ่มบุ๊คมาร์ค</string>
-  <string name="rate_dialog_title">โปรดให้คะแนนเรา</string>
-  <string name="rate_dialog_negative">ไม่ ขอบคุณ</string>
-  <string name="rate_dialog_neutral">ทีหลัง</string>
-  <string name="zim_manager">รายการ</string>
+    <string name="menu_help">วิธีใช้</string>
+    <string name="menu_home">หน้าแรก</string>
+    <string name="menu_settings">การตั้งค่า</string>
+    <string name="menu_search">ค้นหา</string>
+    <string name="menu_searchintext">ค้นหาในข้อความ</string>
+    <string name="menu_bookmarks">ที่คั่นหน้าเว็บ</string>
+    <string name="menu_randomarticle">สุ่มบทความ</string>
+    <string name="menu_fullscreen">เต็มหน้าจอ</string>
+    <string name="menu_exitfullscreen">ออกจากโหมดเต็มหน้าจอ</string>
+    <string name="search_label">ค้นหา</string>
+    <string name="pref_display_title">แสดงผล</string>
+    <string name="pref_info_title">ข้อมูล</string>
+    <string name="pref_info_version">รุ่น</string>
+    <string name="pref_language_title">ภาษา</string>
+    <string name="menu_bookmarks_list">ที่คั่นหน้าเว็บ</string>
+    <string name="bookmark_added">เพิ่มบุ๊คมาร์ค</string>
+    <string name="rate_dialog_title">โปรดให้คะแนนเรา</string>
+    <string name="rate_dialog_negative">ไม่ ขอบคุณ</string>
+    <string name="rate_dialog_neutral">ทีหลัง</string>
+    <string name="zim_manager">รายการ</string>
 </resources>

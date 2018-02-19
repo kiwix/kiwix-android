@@ -149,6 +149,10 @@ android {
     multiDexEnabled true
   }
 
+  aaptOptions {
+    cruncherEnabled true
+  }
+
   lintOptions {
     // Treat lint seriously
     abortOnError true

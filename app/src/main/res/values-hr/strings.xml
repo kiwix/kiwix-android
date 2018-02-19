@@ -1,29 +1,22 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="menu_help">Pomoć</string>
-  <string name="menu_home">Početna stranica</string>
-  <string name="menu_forward">Naprijed</string>
-  <string name="menu_back">Natrag</string>
-  <string name="menu_settings">Postavke</string>
-  <string name="menu_search">Traži</string>
-  <string name="menu_searchintext">Nađi u tekstu</string>
-  <string name="menu_bookmarks">Bilješke</string>
-  <string name="menu_randomarticle">Slučajni članak</string>
-  <string name="menu_fullscreen">Preko cijelog zaslona</string>
-  <string name="menu_exitfullscreen">Izađi iz prikaza preko cijelog zaslona</string>
-  <string name="menu_read_aloud">Pročitaj naglas</string>
-  <string name="button_backtotop">Natrag na vrh</string>
-  <string name="search_label">Traži</string>
-  <string name="add_bookmark">Označi ovu stranicu</string>
-  <string name="remove_bookmark">Odznači izabrano</string>
-  <string name="pref_display_title">Prikaz</string>
-  <string-array name="pref_zoom_entries">
-    <item name="pref_zoom_entry_automatic">Automatski</item>
-  </string-array>
-  <string name="pref_info_title">Informacije</string>
-  <string name="pref_info_version">Verzija</string>
-  <string name="pref_language_title">Jezik</string>
-  <string name="pref_language_chooser">Odaberite jezik</string>
-  <string name="menu_bookmarks_list">Bilješke</string>
-  <string name="zim_manager">Knjižnica</string>
+    <string name="menu_help">Pomoć</string>
+    <string name="menu_home">Početna stranica</string>
+    <string name="menu_settings">Postavke</string>
+    <string name="menu_search">Traži</string>
+    <string name="menu_searchintext">Nađi u tekstu</string>
+    <string name="menu_bookmarks">Bilješke</string>
+    <string name="menu_randomarticle">Slučajni članak</string>
+    <string name="menu_fullscreen">Preko cijelog zaslona</string>
+    <string name="menu_exitfullscreen">Izađi iz prikaza preko cijelog zaslona</string>
+    <string name="menu_read_aloud">Pročitaj naglas</string>
+    <string name="button_backtotop">Natrag na vrh</string>
+    <string name="search_label">Traži</string>
+    <string name="pref_display_title">Prikaz</string>
+    <string name="pref_info_title">Informacije</string>
+    <string name="pref_info_version">Verzija</string>
+    <string name="pref_language_title">Jezik</string>
+    <string name="pref_language_chooser">Odaberite jezik</string>
+    <string name="menu_bookmarks_list">Bilješke</string>
+    <string name="zim_manager">Knjižnica</string>
 </resources>

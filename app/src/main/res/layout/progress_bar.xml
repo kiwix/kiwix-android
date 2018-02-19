@@ -1,34 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/progressbar_layout"
-  android:layout_width="wrap_content"
-  android:layout_height="match_parent"
-  android:layout_centerInParent="true"
-  android:layout_marginTop="@dimen/progressbar_layout_margin_top">
-  <View
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?android:attr/listDivider"
-    android:layout_marginTop="-1dp"
-    />
-
-  <ProgressBar
-    android:id="@+id/progressBar"
-    style="?android:attr/progressBarStyleLarge"
-    android:padding="@dimen/dimen_20dp"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_centerHorizontal="true" />
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true"
+    android:layout_marginTop="@dimen/progressbar_layout_margin_top">
 
-  <TextView
-    android:id="@+id/progressbar_message"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@id/progressBar"
-    android:layout_centerHorizontal="true"
-    android:layout_centerVertical="true"
-    android:paddingTop="@dimen/dimen_10dp"
-    android:text="@string/rescan_fs_warning"
-    android:textStyle="bold" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-1dp"
+        android:background="?android:attr/listDivider" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:padding="@dimen/dimen_20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/progressBar"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:paddingTop="@dimen/dimen_10dp"
+        android:text="@string/rescan_fs_warning"
+        android:textStyle="bold" />
 
 </RelativeLayout>
