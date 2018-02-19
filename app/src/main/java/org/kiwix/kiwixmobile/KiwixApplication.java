@@ -3,9 +3,9 @@ package org.kiwix.kiwixmobile;
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 
-import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
-import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
-import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
+import org.kiwix.kiwixmobile.common.di.components.ApplicationComponent;
+import org.kiwix.kiwixmobile.common.di.components.DaggerApplicationComponent;
+import org.kiwix.kiwixmobile.common.di.modules.ApplicationModule;
 
 public class KiwixApplication extends MultiDexApplication {
 

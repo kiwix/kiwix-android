@@ -1,0 +1,30 @@
+package org.kiwix.kiwixmobile.modules.zim_manager;
+
+import android.content.Context;
+import android.util.Log;
+
+import org.kiwix.kiwixmobile.common.base.BasePresenter;
+import org.kiwix.kiwixmobile.modules.downloader.DownloadFragment;
+import org.kiwix.kiwixmobile.modules.downloader.DownloadService;
+import org.kiwix.kiwixmobile.modules.zim_manager.contract.ZimManageViewCallback;
+
+import javax.inject.Inject;
+
+import static org.kiwix.kiwixmobile.modules.zim_manager.ZimManageActivity.KIWIX_TAG;
+
+/**
+ * Created by srv_twry on 15/2/18.
+ */
+
+public class ZimManagePresenter extends BasePresenter<ZimManageViewCallback> {
+
+    @Inject
+    public ZimManagePresenter() {}
+
+    void showNoWifiWarning(Context context, String action) {
+        if (DownloadService.ACTION_NO_WIFI.equals(action)) {
+            DownloadFragment.showNoWiFiWarning(context, () -> {});
+            Log.i(KIWIX_TAG, "No WiFi, showing warning");
+        }
+    }
+}
