@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.MenuItemCompat;
@@ -15,6 +18,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
@@ -109,6 +114,21 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
       }
     });
 
+    // Disable scrolling for the AppBarLayout on top of the screen
+    // User can only scroll the PageViewer component
+    AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+    if (appBarLayout.getLayoutParams() != null) {
+      CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+      AppBarLayout.Behavior appBarLayoutBehaviour = new AppBarLayout.Behavior();
+      appBarLayoutBehaviour.setDragCallback(new AppBarLayout.Behavior.DragCallback() {
+        @Override
+        public boolean canDrag(@NonNull AppBarLayout appBarLayout) {
+          return false;
+        }
+      });
+      layoutParams.setBehavior(appBarLayoutBehaviour);
+    }
+
     Log.i(KIWIX_TAG, "ZimManageActivity successfully bootstrapped");
   }
 
@@ -181,8 +201,7 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
     updateMenu(mViewPager.getCurrentItem());
     toolbar.setOnClickListener(v -> {
       if (mViewPager.getCurrentItem() == 1)
-        //MenuItemCompat.expandActionView(menu.findItem(R.id.action_search));
-        (menu.findItem(R.id.action_search)).expandActionView();
+        menu.findItem(R.id.action_search).expandActionView();
     });
     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
       @Override
@@ -211,8 +230,13 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
 
     switch (item.getItemId()) {
       case R.id.select_language:
-        if (mViewPager.getCurrentItem() == 1)
-          showLanguageSelect();
+        if (mViewPager.getCurrentItem() == 1) {
+          if(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages.size() == 0) {
+            Toast.makeText(this, R.string.wait_for_load, Toast.LENGTH_LONG).show();
+          } else {
+            showLanguageSelect();
+          }
+        }
       default:
         return super.onOptionsItemSelected(item);
     }
@@ -220,12 +244,12 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
 
   private void showLanguageSelect() {
     new LanguageSelectDialog.Builder(this, dialogStyle())
-        .setLanguages(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages)
-        .setLanguageCounts(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languageCounts)
-        .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
-          mSectionsPagerAdapter.libraryFragment.libraryAdapter.updateNetworkLanguages();
-          mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(searchQuery);
-        })
-        .show();
+            .setLanguages(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages)
+            .setLanguageCounts(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languageCounts)
+            .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
+              mSectionsPagerAdapter.libraryFragment.libraryAdapter.updateNetworkLanguages();
+              mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(searchQuery);
+            })
+            .show();
   }
 }
