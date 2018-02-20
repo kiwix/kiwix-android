@@ -50,8 +50,8 @@
                 android:visibility="gone">
 
                 <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="@dimen/dimen_100dp"
+                    android:layout_height="@dimen/dimen_100dp"
                     android:src="@drawable/ic_star_yellow"/>
 
                 <TextView
@@ -60,10 +60,10 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:gravity="center"
-                    android:paddingBottom="15dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="15dp"
+                    android:paddingBottom="@dimen/dimen_15dp"
+                    android:paddingLeft="@dimen/dimen_10dp"
+                    android:paddingRight="@dimen/dimen_10dp"
+                    android:paddingTop="@dimen/dimen_15dp"
                     android:text="@string/no_bookmarks"
                     android:visibility="visible"/>
 

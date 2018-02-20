@@ -5,7 +5,7 @@
 	android:layout_height="wrap_content"
 	android:minHeight="?android:attr/listPreferredItemHeight"
 	android:paddingTop="@dimen/activity_vertical_margin"
-	android:paddingBottom="8dp"
+	android:paddingBottom="@dimen/dimen_medium_padding"
 	android:paddingLeft="@dimen/activity_horizontal_margin"
 	android:paddingRight="@dimen/activity_horizontal_margin">
 

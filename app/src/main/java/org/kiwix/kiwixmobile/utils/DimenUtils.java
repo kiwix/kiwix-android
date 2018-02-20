@@ -3,9 +3,7 @@ package org.kiwix.kiwixmobile.utils;
 import android.content.Context;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
-import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
-import android.view.ViewGroup;
 
 /**
  * Created by gmon on 1/13/17.

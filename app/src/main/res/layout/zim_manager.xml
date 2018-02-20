@@ -12,7 +12,7 @@
     android:id="@+id/appbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/appbar_padding_top"
+    android:paddingTop="@dimen/dimen_medium_padding"
     android:theme="@style/AppTheme.AppBarOverlay">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"

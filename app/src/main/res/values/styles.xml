@@ -58,23 +58,25 @@
   <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
     <item name="spinBars">true</item>
   </style>
-
   <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView" />
 
   <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
     <item name="android:textColorPrimary">@color/primary_light</item>
     <item name="actionMenuTextColor">@android:color/white</item>
-
   </style>
 
   <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat">
     <item name="android:textColorPrimary">@color/primary_light</item>
     <item name="actionMenuTextColor">@android:color/white</item>
-
   </style>
 
   <style name="DayMenu" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
     <item name="android:textColor">@color/primary_dark</item>
+  </style>
+
+  <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <item name="colorAccent">@color/accent</item>
+    <item name="android:textColorPrimary">@color/primary_dark</item>
   </style>
 
 </resources>

@@ -9,8 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -21,19 +19,20 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.downloader.DownloadFragment;
-import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.views.LanguageSelectDialog;
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+
+import javax.inject.Inject;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
-public class ZimManageActivity extends AppCompatActivity {
+public class ZimManageActivity extends AppCompatActivity implements ZimManageViewCallback {
 
   public static final String TAB_EXTRA = "TAB";
   /**
@@ -61,7 +60,14 @@ public class ZimManageActivity extends AppCompatActivity {
 
   private String searchQuery = "";
 
-  private static String KIWIX_TAG = "kiwix";
+  static String KIWIX_TAG = "kiwix";
+
+  @Inject
+  ZimManagePresenter zimManagePresenter;
+
+  private void setupDagger() {
+    KiwixApplication.getInstance().getApplicationComponent().inject(this);
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -71,24 +77,23 @@ public class ZimManageActivity extends AppCompatActivity {
     }
     super.onCreate(savedInstanceState);
     setContentView(R.layout.zim_manager);
+    setupDagger();
 
     setUpToolbar();
+    zimManagePresenter.attachView(this);
 
-    if (DownloadService.ACTION_NO_WIFI.equals(getIntent().getAction())) {
-      DownloadFragment.showNoWiFiWarning(this, () -> {});
-      Log.i(KIWIX_TAG, "No WiFi, showing warning");
-    }
+    zimManagePresenter.showNoWifiWarning(this, getIntent().getAction());
 
     // Create the adapter that will return a fragment for each of the three
     // primary sections of the activity.
-    mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+    mSectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
 
     // Set up the ViewPager with the sections adapter.
-    mViewPager = (ViewPager) findViewById(R.id.container);
+    mViewPager = findViewById(R.id.container);
     mViewPager.setAdapter(mSectionsPagerAdapter);
     mViewPager.setOffscreenPageLimit(2);
 
-    TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+    TabLayout tabLayout = findViewById(R.id.tabs);
     tabLayout.setupWithViewPager(mViewPager);
 
     mViewPager.setCurrentItem(getIntent().getIntExtra(TAB_EXTRA,0));
@@ -147,7 +152,7 @@ public class ZimManageActivity extends AppCompatActivity {
   }
 
   private void setUpToolbar() {
-    toolbar = (Toolbar) findViewById(R.id.toolbar);
+    toolbar = findViewById(R.id.toolbar);
 
     setSupportActionBar(toolbar);
 
@@ -225,8 +230,13 @@ public class ZimManageActivity extends AppCompatActivity {
 
     switch (item.getItemId()) {
       case R.id.select_language:
-        if (mViewPager.getCurrentItem() == 1)
-          showLanguageSelect();
+        if (mViewPager.getCurrentItem() == 1) {
+          if(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages.size() == 0) {
+            Toast.makeText(this, R.string.wait_for_load, Toast.LENGTH_LONG).show();
+          } else {
+            showLanguageSelect();
+          }
+        }
       default:
         return super.onOptionsItemSelected(item);
     }
@@ -241,59 +251,5 @@ public class ZimManageActivity extends AppCompatActivity {
           mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(searchQuery);
         })
         .show();
-  }
-
-  /**
-   * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-   * one of the sections/tabs/pages.
-   */
-  public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-    private ZimFileSelectFragment zimFileSelectFragment = new ZimFileSelectFragment();
-
-    public LibraryFragment libraryFragment = new LibraryFragment();
-
-    private DownloadFragment downloadFragment = new DownloadFragment();
-
-    public DownloadFragment getDownloadFragment() {
-      return downloadFragment;
-    }
-
-    public SectionsPagerAdapter(FragmentManager fm) {
-      super(fm);
-    }
-
-    @Override
-    public Fragment getItem(int position) {
-      // getItem is called to instantiate the fragment for the given page.
-      switch (position) {
-        case 0:
-          return zimFileSelectFragment;
-        case 1:
-          return libraryFragment;
-        case 2:
-          return downloadFragment;
-        default:
-          return null;
-      }
-    }
-    @Override
-    public int getCount() {
-      // Show 3 total pages.
-      return 3;
-    }
-
-    @Override
-    public CharSequence getPageTitle(int position) {
-      switch (position) {
-        case 0:
-          return getResources().getString(R.string.local_zims);
-        case 1:
-          return getResources().getString(R.string.remote_zims);
-        case 2:
-          return getResources().getString(R.string.zim_downloads);
-      }
-      return null;
-    }
   }
 }
