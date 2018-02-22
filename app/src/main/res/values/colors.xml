@@ -21,4 +21,6 @@
   <color name="back_to_top_text">@android:color/black</color>
   <color name="back_to_top_background_night">#FF000000</color>
   <color name="back_to_top_text_night">#FFFFFFFF</color>
+  <color name="welcome_color1">#7CB342</color>
+  <color name="welcome_color2">#FFC107</color>
 </resources>

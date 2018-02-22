@@ -170,4 +170,14 @@
   <string name="your_languages">Selected languages:</string>
   <string name="other_languages">Other languages:</string>
   <string name="no_items_msg">No items available</string>
+  <string name="welcome_message_title1">Welcome to the family</string>
+  <string name="desc_text1">Human kind\'s knowledge, on your phone</string>
+  <string name="welcome_message_title2">Get Some Knowledge</string>
+  <string name="desc_text2">Tap a file to start downloading</string>
+  <string name="welcome_message_title3">Read Some Knowledge</string>
+  <string name="desc_text3">Get files for different fields</string>
+  <string name="welcome_message_title4">Share Some Knowledge</string>
+  <string name="desc_text4">Be sure to share it with your friends</string>
+  <string name="skip">Skip</string>
+  <string name="proceed_button">Proceed</string>
 </resources>
