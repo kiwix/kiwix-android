@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <color name="primary">#000000</color>
-    <color name="primary_night">#ff212121</color>
-    <color name="primary_dark">#000000</color>
-    <color name="primary_dark_night">#ff212121</color>
-    <color name="primary_light">#ffffff</color>
-    <color name="accent">#304e9a</color>
-    <color name="white">#FAFAFA</color>
-    <color name="gray_list_bg">#0d000000</color>
-    <color name="drawer_background_day">#ffffff</color>
-    <color name="drawer_background_night">#5a5a5a</color>
-    <color name="selected_light">#0F000000</color>
-    <color name="divider_light">#2b3f6a</color>
-    <color name="greyed_out_selected">#BDBDBD</color>
-    <color name="black_regular_mat_design">#212121</color>
-    <color name="grey">#5a5a5a</color>
-    <color name="blue_grey">#ECEFF1</color>
-    <color name="foreground_material_dark">@android:color/white</color>
-    <color name="back_to_top_background">#DDFFFFFF</color>
-    <color name="back_to_top_text">@android:color/black</color>
-    <color name="back_to_top_background_night">#FF000000</color>
-    <color name="back_to_top_text_night">#FFFFFFFF</color>
+  <color name="primary">#000000</color>
+  <color name="primary_night">#ff212121</color>
+  <color name="primary_dark">#000000</color>
+  <color name="primary_dark_night">#ff212121</color>
+  <color name="primary_light">#ffffff</color>
+  <color name="accent">#304e9a</color>
+  <color name="white">#FAFAFA</color>
+  <color name="gray_list_bg">#0d000000</color>
+  <color name="drawer_background_day">#ffffff</color>
+  <color name="drawer_background_night">#5a5a5a</color>
+  <color name="selected_light">#0F000000</color>
+  <color name="divider_light">#2b3f6a</color>
+  <color name="greyed_out_selected">#BDBDBD</color>
+  <color name="black_regular_mat_design">#212121</color>
+  <color name="grey">#5a5a5a</color>
+  <color name="blue_grey">#ECEFF1</color>
+  <color name="foreground_material_dark">@android:color/white</color>
+  <color name="back_to_top_background">#DDFFFFFF</color>
+  <color name="back_to_top_text">@android:color/black</color>
+  <color name="back_to_top_background_night">#FF000000</color>
+  <color name="back_to_top_text_night">#FFFFFFFF</color>
 </resources>

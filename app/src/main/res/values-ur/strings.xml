@@ -1,20 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="menu_help">معاونت</string>
-    <string name="menu_home">صفحہ اول</string>
-    <string name="menu_settings">ترجیحات</string>
-    <string name="menu_search">تلاش</string>
-    <string name="menu_searchintext">متن میں تلاش کریں</string>
-    <string name="menu_bookmarks">نشانزدہ</string>
-    <string name="menu_randomarticle">تصادفی مقالہ</string>
-    <string name="menu_fullscreen">مکمل تظاہرہ</string>
-    <string name="menu_exitfullscreen">مکمل اسکرین ختم کریں</string>
-    <string name="search_label">تلاش</string>
-    <string name="pref_display_title">تظاہرہ</string>
-    <string name="pref_info_title">معلومات</string>
-    <string name="pref_info_version">ورژن</string>
-    <string name="pref_language_title">زبان</string>
-    <string name="pref_language_chooser">ایک زبان کا انتخاب کریں</string>
-    <string name="menu_bookmarks_list">نشانزدہ</string>
-    <string name="zim_manager">مکتبہ</string>
+  <string name="menu_help">معاونت</string>
+  <string name="menu_home">صفحہ اول</string>
+  <string name="menu_settings">ترجیحات</string>
+  <string name="menu_search">تلاش</string>
+  <string name="menu_searchintext">متن میں تلاش کریں</string>
+  <string name="menu_bookmarks">نشانزدہ</string>
+  <string name="menu_randomarticle">تصادفی مقالہ</string>
+  <string name="menu_fullscreen">مکمل تظاہرہ</string>
+  <string name="menu_exitfullscreen">مکمل اسکرین ختم کریں</string>
+  <string name="search_label">تلاش</string>
+  <string name="pref_display_title">تظاہرہ</string>
+  <string name="pref_info_title">معلومات</string>
+  <string name="pref_info_version">ورژن</string>
+  <string name="pref_language_title">زبان</string>
+  <string name="pref_language_chooser">ایک زبان کا انتخاب کریں</string>
+  <string name="menu_bookmarks_list">نشانزدہ</string>
+  <string name="zim_manager">مکتبہ</string>
 </resources>

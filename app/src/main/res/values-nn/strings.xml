@@ -1,16 +1,16 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="menu_help">Hjelp</string>
-    <string name="menu_home">Heim</string>
-    <string name="menu_settings">Innstillingar</string>
-    <string name="menu_search">Søk</string>
-    <string name="menu_searchintext">Finn i tekst</string>
-    <string name="menu_bookmarks">Bokmerke</string>
-    <string name="menu_randomarticle">Tilfeldig artikkel</string>
-    <string name="menu_fullscreen">Fullskjerm</string>
-    <string name="search_label">Søk</string>
-    <string name="pref_display_title">Skjerm</string>
-    <string name="pref_info_title">Informasjon</string>
-    <string name="pref_language_title">Språk</string>
-    <string name="menu_bookmarks_list">Bokmerke</string>
+  <string name="menu_help">Hjelp</string>
+  <string name="menu_home">Heim</string>
+  <string name="menu_settings">Innstillingar</string>
+  <string name="menu_search">Søk</string>
+  <string name="menu_searchintext">Finn i tekst</string>
+  <string name="menu_bookmarks">Bokmerke</string>
+  <string name="menu_randomarticle">Tilfeldig artikkel</string>
+  <string name="menu_fullscreen">Fullskjerm</string>
+  <string name="search_label">Søk</string>
+  <string name="pref_display_title">Skjerm</string>
+  <string name="pref_info_title">Informasjon</string>
+  <string name="pref_language_title">Språk</string>
+  <string name="menu_bookmarks_list">Bokmerke</string>
 </resources>
