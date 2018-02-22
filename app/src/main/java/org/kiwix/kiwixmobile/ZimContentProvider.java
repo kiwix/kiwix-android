@@ -122,8 +122,8 @@ public class ZimContentProvider extends ContentProvider {
       if(!listedEntries.contains(reader.getId())) {
         listedEntries.add(reader.getId());
         jniSearcher.addKiwixReader(reader);
-        currentJNIReader = reader;
       }
+      currentJNIReader = reader;
       zimFileName = fileName;
     } catch (JNIKiwixException e) {
       Log.e(TAG_KIWIX, "Unable to open the ZIM file " + fileName);
