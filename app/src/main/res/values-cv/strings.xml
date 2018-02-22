@@ -1,19 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="menu_help">Пулăшу</string>
-    <string name="menu_home">Тĕпел</string>
-    <string name="menu_settings">Ĕнерлев</string>
-    <string name="menu_search">Шырав</string>
-    <string name="menu_searchintext">Текстра шыра</string>
-    <string name="menu_bookmarks">Картсем</string>
-    <string name="menu_randomarticle">Ăнсăртран илнĕ статья</string>
-    <string name="menu_fullscreen">Тулли экран</string>
-    <string name="menu_exitfullscreen">Тулли мар экран</string>
-    <string name="search_label">Шырав</string>
-    <string name="pref_display_title">Кăтарт</string>
-    <string name="pref_info_title">Тӗплӗнрех</string>
-    <string name="pref_info_version">Верси</string>
-    <string name="pref_language_title">Чĕлхе</string>
-    <string name="menu_bookmarks_list">Картсем</string>
-    <string name="zim_manager">Вулавăш</string>
+  <string name="menu_help">Пулăшу</string>
+  <string name="menu_home">Тĕпел</string>
+  <string name="menu_settings">Ĕнерлев</string>
+  <string name="menu_search">Шырав</string>
+  <string name="menu_searchintext">Текстра шыра</string>
+  <string name="menu_bookmarks">Картсем</string>
+  <string name="menu_randomarticle">Ăнсăртран илнĕ статья</string>
+  <string name="menu_fullscreen">Тулли экран</string>
+  <string name="menu_exitfullscreen">Тулли мар экран</string>
+  <string name="search_label">Шырав</string>
+  <string name="pref_display_title">Кăтарт</string>
+  <string name="pref_info_title">Тӗплӗнрех</string>
+  <string name="pref_info_version">Верси</string>
+  <string name="pref_language_title">Чĕлхе</string>
+  <string name="menu_bookmarks_list">Картсем</string>
+  <string name="zim_manager">Вулавăш</string>
 </resources>

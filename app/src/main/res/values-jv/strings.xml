@@ -1,20 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="menu_help">Pitulung</string>
-    <string name="menu_home">Latar</string>
-    <string name="menu_settings">Pilihan</string>
-    <string name="menu_search">Golèk</string>
-    <string name="menu_searchintext">Temukna nèng teks</string>
-    <string name="menu_bookmarks">Tenger wacan</string>
-    <string name="menu_randomarticle">Waton artikel</string>
-    <string name="menu_fullscreen">Layar wutuh</string>
-    <string name="menu_exitfullscreen">Metu saka modé layar kebak</string>
-    <string name="search_label">Golèk</string>
-    <string name="pref_display_title">Pajangan</string>
-    <string name="pref_info_title">Informasi</string>
-    <string name="pref_info_version">Vèrsi</string>
-    <string name="pref_language_title">Basa</string>
-    <string name="pref_language_chooser">Pilih basa</string>
-    <string name="menu_bookmarks_list">Tenger wacan</string>
-    <string name="zim_manager">Perpustakan</string>
+  <string name="menu_help">Pitulung</string>
+  <string name="menu_home">Latar</string>
+  <string name="menu_settings">Pilihan</string>
+  <string name="menu_search">Golèk</string>
+  <string name="menu_searchintext">Temukna nèng teks</string>
+  <string name="menu_bookmarks">Tenger wacan</string>
+  <string name="menu_randomarticle">Waton artikel</string>
+  <string name="menu_fullscreen">Layar wutuh</string>
+  <string name="menu_exitfullscreen">Metu saka modé layar kebak</string>
+  <string name="search_label">Golèk</string>
+  <string name="pref_display_title">Pajangan</string>
+  <string name="pref_info_title">Informasi</string>
+  <string name="pref_info_version">Vèrsi</string>
+  <string name="pref_language_title">Basa</string>
+  <string name="pref_language_chooser">Pilih basa</string>
+  <string name="menu_bookmarks_list">Tenger wacan</string>
+  <string name="zim_manager">Perpustakan</string>
 </resources>

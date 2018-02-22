@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="menu_help">እርዳታ</string>
-    <string name="menu_home">መኖርያ ገጽ</string>
-    <string name="menu_settings">ምርጫዎች</string>
-    <string name="menu_search">ፍለጋ</string>
-    <string name="menu_randomarticle">መጣጥፍ በነሲብ</string>
-    <string name="menu_fullscreen">ሙሉ መጋረጃ</string>
-    <string name="search_label">ፍለጋ</string>
-    <string name="pref_language_title">ቋንቋ</string>
+  <string name="menu_help">እርዳታ</string>
+  <string name="menu_home">መኖርያ ገጽ</string>
+  <string name="menu_settings">ምርጫዎች</string>
+  <string name="menu_search">ፍለጋ</string>
+  <string name="menu_randomarticle">መጣጥፍ በነሲብ</string>
+  <string name="menu_fullscreen">ሙሉ መጋረጃ</string>
+  <string name="search_label">ፍለጋ</string>
+  <string name="pref_language_title">ቋንቋ</string>
 </resources>

@@ -1,20 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="menu_help">Abi</string>
-    <string name="menu_home">Koduleht</string>
-    <string name="menu_settings">Eelistused</string>
-    <string name="menu_search">Otsi</string>
-    <string name="menu_searchintext">Otsi tekstist</string>
-    <string name="menu_bookmarks">Järjehoidjad</string>
-    <string name="menu_randomarticle">Juhuslik artikkel</string>
-    <string name="menu_fullscreen">Täisekraan</string>
-    <string name="menu_exitfullscreen">Välju täisekraani režiimist</string>
-    <string name="search_label">Otsi</string>
-    <string name="pref_display_title">Vaade</string>
-    <string name="pref_info_title">Teave</string>
-    <string name="pref_info_version">Versioon</string>
-    <string name="pref_language_title">Keel</string>
-    <string name="pref_language_chooser">Vali keel</string>
-    <string name="menu_bookmarks_list">Järjehoidjad</string>
-    <string name="zim_manager">Raamatukogu</string>
+  <string name="menu_help">Abi</string>
+  <string name="menu_home">Koduleht</string>
+  <string name="menu_settings">Eelistused</string>
+  <string name="menu_search">Otsi</string>
+  <string name="menu_searchintext">Otsi tekstist</string>
+  <string name="menu_bookmarks">Järjehoidjad</string>
+  <string name="menu_randomarticle">Juhuslik artikkel</string>
+  <string name="menu_fullscreen">Täisekraan</string>
+  <string name="menu_exitfullscreen">Välju täisekraani režiimist</string>
+  <string name="search_label">Otsi</string>
+  <string name="pref_display_title">Vaade</string>
+  <string name="pref_info_title">Teave</string>
+  <string name="pref_info_version">Versioon</string>
+  <string name="pref_language_title">Keel</string>
+  <string name="pref_language_chooser">Vali keel</string>
+  <string name="menu_bookmarks_list">Järjehoidjad</string>
+  <string name="zim_manager">Raamatukogu</string>
 </resources>

@@ -1,20 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="menu_help">Hjálp</string>
-    <string name="menu_home">Heim</string>
-    <string name="menu_settings">Innstillingar</string>
-    <string name="menu_search">Leita</string>
-    <string name="menu_searchintext">Finn í teksti</string>
-    <string name="menu_bookmarks">Bókamerki</string>
-    <string name="menu_randomarticle">Tilvildarlig grein</string>
-    <string name="menu_fullscreen">Fullan skerm</string>
-    <string name="menu_exitfullscreen">Far burtur frá fullum skermi</string>
-    <string name="search_label">Leita</string>
-    <string name="pref_display_title">Vís</string>
-    <string name="pref_info_title">Kunning</string>
-    <string name="pref_info_version">Versjón</string>
-    <string name="pref_language_title">Mál</string>
-    <string name="pref_language_chooser">Vel eitt mál</string>
-    <string name="menu_bookmarks_list">Bókamerki</string>
-    <string name="zim_manager">Bókasavn</string>
+  <string name="menu_help">Hjálp</string>
+  <string name="menu_home">Heim</string>
+  <string name="menu_settings">Innstillingar</string>
+  <string name="menu_search">Leita</string>
+  <string name="menu_searchintext">Finn í teksti</string>
+  <string name="menu_bookmarks">Bókamerki</string>
+  <string name="menu_randomarticle">Tilvildarlig grein</string>
+  <string name="menu_fullscreen">Fullan skerm</string>
+  <string name="menu_exitfullscreen">Far burtur frá fullum skermi</string>
+  <string name="search_label">Leita</string>
+  <string name="pref_display_title">Vís</string>
+  <string name="pref_info_title">Kunning</string>
+  <string name="pref_info_version">Versjón</string>
+  <string name="pref_language_title">Mál</string>
+  <string name="pref_language_chooser">Vel eitt mál</string>
+  <string name="menu_bookmarks_list">Bókamerki</string>
+  <string name="zim_manager">Bókasavn</string>
 </resources>
