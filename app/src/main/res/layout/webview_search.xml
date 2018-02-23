@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,25 +14,25 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="horizontal">
 
   <EditText
-      android:id="@+id/edit"
-      android:layout_width="0dip"
-      android:layout_weight="1"
-      android:layout_height="wrap_content"
-      android:scrollHorizontally="true"
-      android:inputType="text"
-      android:hint="@string/search_label"
-      android:focusableInTouchMode="true"
-      android:textColorHint="@color/material_dark_foreground_hint"
-      android:textColor="@android:color/white"
-      android:imeOptions="actionDone|flagNoExtractUi|flagNoFullscreen"
-      android:layout_marginRight="@dimen/webview_search_edit_text_margin_right">
+    android:id="@+id/edit"
+    android:layout_width="0dip"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="@dimen/webview_search_edit_text_margin_right"
+    android:layout_weight="1"
+    android:focusableInTouchMode="true"
+    android:hint="@string/search_label"
+    android:imeOptions="actionDone|flagNoExtractUi|flagNoFullscreen"
+    android:inputType="text"
+    android:scrollHorizontally="true"
+    android:textColor="@android:color/white"
+    android:textColorHint="@color/material_dark_foreground_hint">
 
-    <requestFocus/>
+    <requestFocus />
   </EditText>
 
 </LinearLayout>

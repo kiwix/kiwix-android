@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:card_view="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="wrap_content">
@@ -16,8 +15,7 @@
       android:layout_height="wrap_content"
       android:orientation="vertical">
 
-      <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+      <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
@@ -39,7 +37,7 @@
             android:adjustViewBounds="true"
             android:longClickable="false"
             android:src="@drawable/kiwix_welcome"
-            android:visibility="visible"/>
+            android:visibility="visible" />
 
 
           <TextView
@@ -50,8 +48,8 @@
             android:paddingRight="@dimen/dimen_10dp"
             android:paddingTop="@dimen/dimen_10dp"
             android:text="@string/help_1"
-            android:textColor="@color/primary_dark"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/primary_dark" />
 
         </LinearLayout>
       </android.support.v7.widget.CardView>
@@ -65,10 +63,9 @@
         android:text="@string/menu_zim_manager"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="@dimen/dimen_20sp"/>
+        android:textSize="@dimen/dimen_20sp" />
 
-      <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+      <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
@@ -82,6 +79,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="vertical">
+
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -89,33 +87,32 @@
             android:paddingLeft="@dimen/dimen_10dp"
             android:paddingRight="@dimen/dimen_10dp"
             android:paddingTop="@dimen/dimen_10dp"
-            android:textColor="@color/primary_dark"
             android:text="@string/help_2"
-            android:textAppearance="?android:attr/textAppearanceLarge"/>
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/primary_dark" />
 
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dimen_10dp"
             android:paddingRight="@dimen/dimen_10dp"
-            android:textColor="@color/primary_dark"
             android:text="@string/help_3"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/primary_dark" />
 
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dimen_10dp"
-            android:textColor="@color/primary_dark"
             android:paddingLeft="@dimen/dimen_10dp"
             android:paddingRight="@dimen/dimen_10dp"
             android:text="@string/help_4"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/primary_dark" />
         </LinearLayout>
       </android.support.v7.widget.CardView>
 
-      <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+      <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
@@ -129,78 +126,78 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="vertical">
+
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dimen_10dp"
             android:paddingLeft="@dimen/dimen_10dp"
-            android:textColor="@color/primary_dark"
             android:paddingRight="@dimen/dimen_10dp"
             android:paddingTop="@dimen/dimen_10dp"
             android:text="@string/help_5"
-            android:textAppearance="?android:attr/textAppearanceLarge"/>
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/primary_dark" />
 
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dimen_10dp"
-            android:textColor="@color/primary_dark"
             android:paddingRight="@dimen/dimen_10dp"
             android:text="@string/help_6"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/primary_dark" />
 
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dimen_10dp"
-            android:textColor="@color/primary_dark"
             android:paddingRight="@dimen/dimen_10dp"
             android:text="@string/help_7"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/primary_dark" />
 
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dimen_10dp"
-            android:textColor="@color/primary_dark"
             android:paddingRight="@dimen/dimen_10dp"
             android:paddingTop="@dimen/dimen_10dp"
             android:text="@string/help_8"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/primary_dark" />
 
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dimen_10dp"
-            android:textColor="@color/primary_dark"
             android:paddingLeft="@dimen/dimen_10dp"
             android:paddingRight="@dimen/dimen_10dp"
             android:text="@string/help_9"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/primary_dark" />
 
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dimen_10dp"
-            android:textColor="@color/primary_dark"
             android:paddingRight="@dimen/dimen_10dp"
             android:text="@string/help_10"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/primary_dark" />
 
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dimen_10dp"
             android:paddingLeft="@dimen/dimen_10dp"
-            android:textColor="@color/primary_dark"
             android:paddingRight="@dimen/dimen_10dp"
             android:text="@string/help_11"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/primary_dark" />
         </LinearLayout>
       </android.support.v7.widget.CardView>
 
-      <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+      <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
@@ -214,72 +211,73 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="vertical">
+
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dimen_10dp"
-            android:textColor="@color/primary_dark"
             android:paddingLeft="@dimen/dimen_10dp"
             android:paddingRight="@dimen/dimen_10dp"
             android:paddingTop="@dimen/dimen_10dp"
             android:text="@string/help_12"
-            android:textAppearance="?android:attr/textAppearanceLarge"/>
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/primary_dark" />
 
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dimen_10dp"
-            android:textColor="@color/primary_dark"
             android:paddingRight="@dimen/dimen_10dp"
             android:text="@string/help_13"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/primary_dark" />
 
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/primary_dark"
             android:paddingLeft="@dimen/dimen_10dp"
             android:paddingRight="@dimen/dimen_10dp"
             android:text="@string/help_14"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/primary_dark" />
 
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dimen_10dp"
-            android:textColor="@color/primary_dark"
             android:paddingRight="@dimen/dimen_10dp"
             android:text="@string/help_15"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/primary_dark" />
 
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dimen_10dp"
             android:paddingRight="@dimen/dimen_10dp"
-            android:textColor="@color/primary_dark"
             android:paddingTop="@dimen/dimen_10dp"
             android:text="@string/help_16"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/primary_dark" />
 
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/dimen_10dp"
-            android:textColor="@color/primary_dark"
             android:paddingRight="@dimen/dimen_10dp"
             android:text="@string/help_17"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/primary_dark" />
 
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dimen_10dp"
             android:paddingLeft="@dimen/dimen_10dp"
-            android:textColor="@color/primary_dark"
             android:paddingRight="@dimen/dimen_10dp"
             android:text="@string/help_18"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/primary_dark" />
 
           <TextView
             android:layout_width="wrap_content"
@@ -287,14 +285,13 @@
             android:paddingBottom="@dimen/dimen_10dp"
             android:paddingLeft="@dimen/dimen_10dp"
             android:paddingRight="@dimen/dimen_10dp"
-            android:textColor="@color/primary_dark"
             android:text="@string/help_19"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/primary_dark" />
         </LinearLayout>
       </android.support.v7.widget.CardView>
 
-      <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+      <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
@@ -316,20 +313,20 @@
             android:paddingLeft="@dimen/dimen_10dp"
             android:paddingRight="@dimen/dimen_10dp"
             android:paddingTop="@dimen/dimen_10dp"
-            android:textColor="@color/primary_dark"
             android:text="@string/help_20"
-            android:textAppearance="?android:attr/textAppearanceLarge"/>
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/primary_dark" />
 
           <TextView
             android:id="@+id/welcome21"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/dimen_10dp"
-            android:textColor="@color/primary_dark"
             android:paddingLeft="@dimen/dimen_10dp"
             android:paddingRight="@dimen/dimen_10dp"
             android:text="@string/help_21"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/primary_dark" />
         </LinearLayout>
       </android.support.v7.widget.CardView>
     </LinearLayout>
