@@ -201,7 +201,7 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
     updateMenu(mViewPager.getCurrentItem());
     toolbar.setOnClickListener(v -> {
       if (mViewPager.getCurrentItem() == 1)
-        MenuItemCompat.expandActionView(menu.findItem(R.id.action_search));
+        menu.findItem(R.id.action_search).expandActionView();
     });
     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
       @Override
