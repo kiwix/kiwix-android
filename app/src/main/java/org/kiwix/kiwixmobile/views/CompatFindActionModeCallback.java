@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.R;
 
@@ -47,6 +48,8 @@ public class CompatFindActionModeCallback
 
   private EditText mEditText;
 
+  private TextView mFindResultsTextView;
+
   private WebView mWebView;
 
   private InputMethodManager mInput;
@@ -57,6 +60,7 @@ public class CompatFindActionModeCallback
     mCustomView = LayoutInflater.from(context).inflate(R.layout.webview_search, null);
     mEditText = mCustomView.findViewById(R.id.edit);
     mEditText.setOnClickListener(this);
+    mFindResultsTextView = mCustomView.findViewById(R.id.find_results);
     mInput = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
     mIsActive = false;
     setText("");
@@ -95,6 +99,22 @@ public class CompatFindActionModeCallback
           "WebView supplied to CompatFindActionModeCallback cannot be null");
     }
     mWebView = webView;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+      mFindResultsTextView.setVisibility(View.VISIBLE);
+      mWebView.setFindListener((activeMatchOrdinal, numberOfMatches, isDoneCounting) -> {
+        String result;
+        if (mEditText.getText().toString().isEmpty()) {
+          result = "";
+        } else if (numberOfMatches == 0) {
+          result = "0/0";
+        } else {
+          result = (activeMatchOrdinal + 1) + "/" + numberOfMatches;
+        }
+        mFindResultsTextView.setText(result);
+      });
+    } else {
+      mFindResultsTextView.setVisibility(View.GONE);
+    }
   }
 
   // Move the highlight to the next match.
