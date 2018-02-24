@@ -6,18 +6,17 @@
 
 ## Bug Report
 
-### Step 1: Are you ready to report ?
+### Step 1: Are you ready to report?
    - Your issue may already be reported! Please search on the [issue track](../) before creating one.
-   - [ ] I have test with the last (dev) version of the software?  ( If not, and if possible, run your test again with the most recent version available.)
+   - [ ] I have tested with the last (dev) version of the software.  ( If not, and if possible, run your test again with the most recent version available.)
 
-### Step 2 : What is your environment ?
-  * browser / app : _____
+### Step 2: What is your environment?
   * version of the software you use : _____
   * device / operating system : _____
   
 ### Step 3: Describe the problem:
 
-  * What do you obtain? A copy of the error message or a screenshot is always useful
+  * What do you obtain? A copy of the error message or a screenshot is always useful.
 
   * When does this occur? 
 
