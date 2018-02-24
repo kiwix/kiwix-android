@@ -20,6 +20,7 @@
 package org.kiwix.kiwixmobile.views;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v7.view.ActionMode;
 import android.text.Editable;
 import android.text.Selection;
@@ -116,9 +117,17 @@ public class CompatFindActionModeCallback
     CharSequence find = mEditText.getText();
     if (find.length() == 0) {
       mWebView.clearMatches();
-      mWebView.findAll(null);
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        mWebView.findAllAsync(null);
+      } else {
+        mWebView.findAll(null);
+      }
     } else {
-      mWebView.findAll(find.toString());
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        mWebView.findAllAsync(find.toString());
+      } else {
+        mWebView.findAll(find.toString());
+      }
 
       // Enable word highlighting with reflection
       try {
