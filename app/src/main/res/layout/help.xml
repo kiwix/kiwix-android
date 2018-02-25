@@ -63,7 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dimen_3dp"
-        android:background="@drawable/get_content_btn_shape"
+        android:background="@drawable/ripple_effect"
         android:text="@string/menu_zim_manager"
         android:textAllCaps="false"
         android:textColor="@color/white"
