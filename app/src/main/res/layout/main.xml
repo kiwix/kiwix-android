@@ -44,7 +44,7 @@
             android:layout_margin="@dimen/fullscreen_control_button_margin"
             android:background="@color/back_to_top_background"
             android:hint="@string/menu_exitfullscreen"
-            android:src="@drawable/fullscreen_exit"
+            app:srcCompat="@drawable/fullscreen_exit"
             android:visibility="invisible" />
 
 
