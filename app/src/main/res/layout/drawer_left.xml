@@ -1,103 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/left_drawer"
-    android:layout_width="@dimen/navigation_width"
-    android:layout_height="match_parent"
-    android:layout_gravity="start"
-    android:background="?attr/drawerBackground"
-    android:clickable="true"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    android:layout_marginTop="?actionBarSize">
+  android:id="@+id/left_drawer"
+  android:layout_width="@dimen/navigation_width"
+  android:layout_height="match_parent"
+  android:layout_gravity="start"
+  android:layout_marginTop="?actionBarSize"
+  android:background="?attr/drawerBackground"
+  android:clickable="true"
+  android:fitsSystemWindows="true"
+  android:orientation="vertical">
 
   <View
-      android:id="@+id/view"
-      android:layout_width="fill_parent"
-      android:layout_height="@dimen/dimen_1dp"
-      android:background="?attr/dividerColor"/>
+    android:layout_width="fill_parent"
+    android:layout_height="@dimen/dimen_1dp"
+    android:background="?attr/dividerColor" />
 
   <android.support.v7.widget.RecyclerView
-      android:id="@+id/left_drawer_list"
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/dimen_0dp"
-      android:layout_weight="1"
-      android:layout_gravity="start"
-      android:choiceMode="singleChoice"
-      android:divider="@null"
-      android:dividerHeight="@dimen/dimen_0dp"
-      android:listSelector="?attr/listBackground"/>
+    android:id="@+id/left_drawer_list"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dimen_0dp"
+    android:layout_gravity="start"
+    android:layout_weight="1"
+    android:choiceMode="singleChoice"
+    android:divider="@null"
+    android:dividerHeight="@dimen/dimen_0dp"
+    android:listSelector="?attr/listBackground" />
 
   <View
-      android:id="@+id/lineView"
-      android:layout_width="fill_parent"
-      android:layout_height="@dimen/dimen_1dp"
-      android:background="?attr/dividerColor"/>
+    android:layout_width="fill_parent"
+    android:layout_height="@dimen/dimen_1dp"
+    android:background="?attr/dividerColor" />
 
   <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:weightSum="3">
+
+    <RelativeLayout
+      android:id="@+id/action_back"
       android:layout_width="match_parent"
-      android:layout_height="?attr/actionBarSize"
-      android:baselineAligned="false"
-      android:orientation="horizontal"
-      android:weightSum="3">
-
-    <RelativeLayout
-        android:id="@+id/action_back"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="?attr/listBackground"
-        android:clickable="true">
+      android:layout_height="match_parent"
+      android:layout_weight="1"
+      android:background="?attr/listBackground"
+      android:clickable="true">
 
       <ImageView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerInParent="true"
-          android:paddingBottom="@dimen/dimen_small_padding"
-          android:paddingLeft="@dimen/dimen_small_padding"
-          android:paddingRight="@dimen/dimen_small_padding"
-          android:paddingTop="@dimen/dimen_small_padding"
-          android:src="?attr/arrowBackDrawable"
-          android:id="@+id/action_back_button" />
+        android:id="@+id/action_back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:paddingBottom="@dimen/dimen_small_padding"
+        android:paddingLeft="@dimen/dimen_small_padding"
+        android:paddingRight="@dimen/dimen_small_padding"
+        android:paddingTop="@dimen/dimen_small_padding"
+        android:src="?attr/arrowBackDrawable" />
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/new_tab_button"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="?attr/listBackground"
-        android:clickable="true">
+      android:id="@+id/new_tab_button"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_weight="1"
+      android:background="?attr/listBackground"
+      android:clickable="true">
 
       <ImageView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerInParent="true"
-          android:paddingBottom="@dimen/dimen_small_padding"
-          android:paddingLeft="@dimen/dimen_small_padding"
-          android:paddingRight="@dimen/dimen_small_padding"
-          android:paddingTop="@dimen/dimen_small_padding"
-          android:src="?attr/plusDrawable">
-      </ImageView>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:paddingBottom="@dimen/dimen_small_padding"
+        android:paddingLeft="@dimen/dimen_small_padding"
+        android:paddingRight="@dimen/dimen_small_padding"
+        android:paddingTop="@dimen/dimen_small_padding"
+        android:src="?attr/plusDrawable"></ImageView>
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/action_forward"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="?attr/listBackground"
-        android:clickable="true">
+      android:id="@+id/action_forward"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_weight="1"
+      android:background="?attr/listBackground"
+      android:clickable="true">
 
       <ImageView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerInParent="true"
-          android:paddingBottom="@dimen/dimen_small_padding"
-          android:paddingLeft="@dimen/dimen_small_padding"
-          android:paddingRight="@dimen/dimen_small_padding"
-          android:paddingTop="@dimen/dimen_small_padding"
-          android:src="?attr/arrowForwardDrawable"
-          android:id="@+id/action_forward_button" />
+        android:id="@+id/action_forward_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:paddingBottom="@dimen/dimen_small_padding"
+        android:paddingLeft="@dimen/dimen_small_padding"
+        android:paddingRight="@dimen/dimen_small_padding"
+        android:paddingTop="@dimen/dimen_small_padding"
+        android:src="?attr/arrowForwardDrawable" />
     </RelativeLayout>
   </LinearLayout>
 
