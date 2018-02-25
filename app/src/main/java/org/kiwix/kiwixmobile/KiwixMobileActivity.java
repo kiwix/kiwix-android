@@ -216,7 +216,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   private boolean isFirstRun;
 
-  private Dialog textSizeDialog;
+  private AlertDialog.Builder textSizeDialog;
 
   private SeekBar textSizeSeekBar;
 
@@ -518,17 +518,12 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       backToTopAppearDaily();
     }
 
-    textSizeDialog = new Dialog(this);
-    LayoutInflater inflater1 = (LayoutInflater)this.getSystemService(LAYOUT_INFLATER_SERVICE);
-    View layout = inflater1.inflate(R.layout.dialogbox_seekbar, (ViewGroup)findViewById(R.id.dialog));
-    textSizeDialog.setContentView(layout);
+    textSizeDialog = new AlertDialog.Builder(this);
 
-    //Fixing the dialog size
-    Window window = textSizeDialog.getWindow();
-    window.setLayout(Resources.getSystem().getDisplayMetrics().widthPixels,270);
-
-    textSizeSeekBar = (SeekBar)layout.findViewById(R.id.your_dialog_seekbar);
+    textSizeSeekBar = new SeekBar(this);
     textSizeSeekBar.setMax(3);
+    textSizeDialog.setTitle("Set text size");
+    textSizeDialog.setView(textSizeSeekBar);
     WebSettings webSettings = getCurrentWebView().getSettings();
     //Setting text-size and the corrosponding seekbar progress.
     switch (settings.getInt("text_size",2)) {
