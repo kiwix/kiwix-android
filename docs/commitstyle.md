@@ -15,13 +15,14 @@ The title consists of the subject and type of the commit message.
 ### Type
 The type is contained within the title and can be one of the following types:
 
-* **feat:** a new feature
-* **fix:** a bug fix
-* **docs:** changes to documentation
-* **style:** formatting, missing semi-colons, etc; no code change
-* **refactor:** refactoring production code
-* **test:** adding tests, refactoring test; no production code change
-* **chore:** updating build tasks, package manager configs, etc; no production code change
+* **Implement:** Implemented a new feature
+* **Fix:** a bug fix
+* **Docs:** changes to documentation
+* **Remove:** removed redundant code
+* **Style:** formatting, missing semi-colons, etc; no code change
+* **Refactor:** refactoring production code
+* **Test:** adding tests, refactoring test; no production code change
+* **Chore:** updating build tasks, package manager configs, etc; no production code change
 
 ### Subject
 The subject is a single short line summarising the change. It should be no greater than 50 characters, should begin with a capital letter and do not end with a period.
@@ -29,10 +30,9 @@ The subject is a single short line summarising the change. It should be no great
 Use an imperative tone to describe what a commit does, rather than what it did. For example, use fix; not fixed or fixes or fixing.
 
 For example:
-- fix: Typo in Commit Style guidelines
-- feat: Update UI of SearchActivity
-- fix: Remove deprecated methods
-- refactor: Implement SearchActivity using MVP pattern
+- Fix: Typo in Commit Style guidelines
+- Implement: Add crash reporting via e-mail
+- Refactor: Implement SearchActivity using MVP pattern
 instead of writing the following:
 - Fixed bug with Y
 - Changing behaviour of X
