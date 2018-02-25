@@ -3,8 +3,6 @@
   <string name="menu_zim_manager">Iegūt saturu</string>
   <string name="menu_help">Palīdzība</string>
   <string name="menu_home">Sākums</string>
-  <string name="menu_forward">Uz priekšu</string>
-  <string name="menu_back">Atpakaļ</string>
   <string name="menu_settings">Izvēles</string>
   <string name="menu_search">Meklēt</string>
   <string name="menu_searchintext">Atrast tekstā</string>
@@ -14,15 +12,7 @@
   <string name="menu_exitfullscreen">Iziet no pilnekrāna</string>
   <string name="button_backtotop">Atpakaļ uz augšu</string>
   <string name="search_label">Meklēt</string>
-  <string name="add_bookmark">Pievienot grāmatzīmi</string>
-  <string name="remove_bookmark">Atcelt atzīmēšanu</string>
   <string name="pref_display_title">Displejs</string>
-  <string-array name="pref_zoom_entries">
-    <item name="pref_zoom_entry_automatic">Automātiskā</item>
-    <item name="pref_zoom_entry_small">Mazs</item>
-    <item name="pref_zoom_entry_medium">Vidējs</item>
-    <item name="pref_zoom_entry_large">Liels</item>
-  </string-array>
   <string name="pref_info_title">Informācija</string>
   <string name="pref_info_version">Versija</string>
   <string name="pref_nightmode">Nakts režīms</string>

@@ -18,9 +18,9 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
       android:id="@+id/toolbar_layout"
-      app:layout_scrollFlags="scroll|enterAlways"
       android:layout_width="match_parent"
-      android:layout_height="?actionBarSize">
+      android:layout_height="?actionBarSize"
+      app:layout_scrollFlags="scroll|enterAlways">
 
       <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -30,13 +30,14 @@
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
       </android.support.v7.widget.Toolbar>
- </RelativeLayout>
+    </RelativeLayout>
+
     <android.support.design.widget.TabLayout
       android:id="@+id/tabs"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      app:tabMaxWidth="0dp"
-      app:tabGravity="fill" />
+      app:tabGravity="fill"
+      app:tabMaxWidth="0dp" />
 
   </android.support.design.widget.AppBarLayout>
 

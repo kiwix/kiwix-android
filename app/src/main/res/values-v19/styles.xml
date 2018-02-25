@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
   <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorPrimary">@color/primary</item>
     <item name="colorPrimaryDark">@color/primary_dark</item>
@@ -25,9 +24,7 @@
     <item name="android:textColorPrimary">@color/primary</item>
     <item name="android:textColorSecondary">@color/primary</item>
     <item name="android:textColorTertiary">@color/primary</item>
-    <item name="android:windowTranslucentStatus">true</item>
     <item name="colorControlNormal">@color/white</item>
-    <item name="android:progressBackgroundTint">@color/greyed_out_selected</item>
-    <item name="android:statusBarColor">@android:color/transparent</item>
-  </style>
+    <item name="android:windowTranslucentStatus">true</item>
+    </style>
 </resources>
