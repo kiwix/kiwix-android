@@ -84,6 +84,7 @@ public class DownloadService extends Service {
   public static BookDao bookDao;
   private static DownloadFragment downloadFragment;
   Handler handler = new Handler(Looper.getMainLooper());
+  ArrayList<String> filesList = new ArrayList<>();
 
   public static void setDownloadFragment(DownloadFragment dFragment) {
     downloadFragment = dFragment;
@@ -281,6 +282,7 @@ public class DownloadService extends Service {
         .distinctUntilChanged().doOnCompleted(() -> {updateDownloadFragmentComplete(notificationID);})
         .subscribe(progress -> {
           if (progress == 100) {
+            renameChunks();
             notification.get(notificationID).setOngoing(false);
             notification.get(notificationID).setContentTitle(notificationTitle + " " + getResources().getString(R.string.zim_file_downloaded));
             notification.get(notificationID).setContentText(getString(R.string.zim_file_downloaded));
@@ -376,6 +378,7 @@ public class DownloadService extends Service {
         long downloaded = Long.parseLong(chunk.getRangeHeader().split("-")[0]);
         if (fullFile.exists() && fullFile.length() == chunk.getSize()) {
           // Mark chunk status as downloaded
+          filesList.add(fullFile.getPath());
           chunk.isDownloaded = true;
           subscriber.onCompleted();
           return;
@@ -492,29 +495,40 @@ public class DownloadService extends Service {
         if (input != null) {
           input.close();
         }
-        // If download is canceled clean up else remove .part from file name
+        // If download is canceled clean up else remove .part.part from file name
         if (downloadStatus.get(chunk.getNotificationID()) == CANCEL) {
           String path = file.getPath();
           Log.i(KIWIX_TAG, "Download Cancelled, deleting file: " + path);
-          if (path.substring(path.length() - 8).equals("zim.part")) {
-            path = path.substring(0, path.length() - 5);
+          if (path.substring(path.length() - 13).equals("zim.part.part")) {
+            path = path.substring(0, path.length() - 10);
             FileUtils.deleteZimFile(path);
           } else {
-            path = path.substring(0, path.length() - 7) + "aa";
+            path = path.substring(0, path.length() - 12) + "aa";
             FileUtils.deleteZimFile(path);
           }
         } else {
-          Log.i(KIWIX_TAG, "Download completed, renaming file ([" + file.getPath() + "] -> .zim)");
-          file.renameTo(new File(file.getPath().replace(".part", "")));
+          Log.i(KIWIX_TAG, "Download completed, renaming file ([" + file.getPath() + "] -> .zim.part)");
+          file.renameTo(new File(file.getPath().replace(".part.part", ".part")));
         }
         // Mark chunk status as downloaded
         chunk.isDownloaded = true;
+        filesList.add(file.getPath());
         subscriber.onCompleted();
       } catch (IOException e) {
         // Catch unforeseen file system errors
         subscriber.onError(e);
       }
     });
+  }
+
+  private void renameChunks() {
+    if (filesList.isEmpty()) {
+      return;
+    }
+    for (int i = 0; i < filesList.size(); i++) {
+      File file = getFileStreamPath(filesList.get(i));
+      file.renameTo(new File(file.getPath().replace(".part", "")));
+    }
   }
 
   private final IBinder mBinder = new LocalBinder();

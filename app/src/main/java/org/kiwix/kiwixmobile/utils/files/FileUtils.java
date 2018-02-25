@@ -44,7 +44,9 @@ public class FileUtils {
   }
 
   public static synchronized void deleteZimFile(String path) {
-    if (path.substring(path.length() - 5).equals(".part")) {
+    if (path.substring(path.length() - 10).equals(".part.part")) {
+      path = path.substring(0, path.length() - 10);
+    } else if (path.substring(path.length() - 5).equals(".part")) {
       path = path.substring(0, path.length() - 5);
     }
     Log.i("kiwix", "Deleting file: " + path);
@@ -53,7 +55,7 @@ public class FileUtils {
       fileloop:
       for (char alphabetFirst = 'a'; alphabetFirst <= 'z'; alphabetFirst++) {
         for (char alphabetSecond = 'a'; alphabetSecond <= 'z'; alphabetSecond++) {
-          String chunkPath = path.substring(0, path.length() - 2) + alphabetFirst + alphabetSecond;
+          String chunkPath = path.substring(0, path.length() - 2) + alphabetFirst + alphabetSecond + ".part";
           File fileChunk = new File(chunkPath);
           if (fileChunk.exists()) {
             fileChunk.delete();
