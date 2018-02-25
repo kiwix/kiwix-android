@@ -2,8 +2,6 @@
 <resources>
   <string name="menu_help">Auxilie</string>
   <string name="menu_home">Principal</string>
-  <string name="menu_forward">Avansat</string>
-  <string name="menu_back">Retornar</string>
   <string name="menu_settings">Preferenties</string>
   <string name="menu_search">Sercha</string>
   <string name="menu_searchintext">Constatar in textu</string>
@@ -13,11 +11,7 @@
   <string name="menu_exitfullscreen">Cluder plen-scren</string>
   <string name="button_backtotop">Retro a supra</string>
   <string name="search_label">Sercha</string>
-  <string name="add_bookmark">Marcar ti págine</string>
-  <string name="remove_bookmark">Desmarcar selectet</string>
   <string name="pref_display_title">Exposition</string>
-  <string-array name="pref_zoom_entries">
-  </string-array>
   <string name="pref_backtotop">Retro a supra</string>
   <string name="pref_backtotop_summary">Monstra un taste in li fin del págine por saltar a supra.</string>
   <string name="pref_language_title">Lingue</string>
