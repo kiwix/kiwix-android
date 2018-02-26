@@ -377,6 +377,11 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
     initPlayStoreUri();
 
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP){
+    } else{
+      snackbarLayout.setFitsSystemWindows(true);
+    }
+
     isHideToolbar = sharedPreferences.getBoolean(PREF_HIDE_TOOLBAR, true);
 
     FileReader fileReader = new FileReader();
