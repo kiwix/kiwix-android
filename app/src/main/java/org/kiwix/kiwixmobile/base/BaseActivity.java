@@ -14,14 +14,40 @@ public abstract class BaseActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setupDagger(KiwixApplication.getInstance().getApplicationComponent());
     //attachPresenter();
+    View decorView = getWindow().getDecorView();
+    decorView.setOnSystemUiVisibilityChangeListener
+            (new View.OnSystemUiVisibilityChangeListener() {
+              @Override
+              public void onSystemUiVisibilityChange(int visibility) {
+                // Note that system bars will only be "visible" if none of the
+                // LOW_PROFILE, HIDE_NAVIGATION, or FULLSCREEN flags are set.
+                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                  View decorView = getWindow().getDecorView();
+// Hide both the navigation bar and the status bar.
+                  int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                          | View.SYSTEM_UI_FLAG_FULLSCREEN;
+                  decorView.setSystemUiVisibility(uiOptions);
+                } 
+              }
+            });
   }
 
   @Override protected void onStart() {
+    View decorView = getWindow().getDecorView();
+    int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            | View.SYSTEM_UI_FLAG_FULLSCREEN;
+    decorView.setSystemUiVisibility(uiOptions);
     super.onStart();
     //presenter.onStart();
   }
 
   @Override protected void onResume() {
+    // Hide Navigation Activity added in onResume() method so that whenever the app is closed via home button and then opened again
+    // then also the navigation bar remains transparent
+    View decorView = getWindow().getDecorView();
+    int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            | View.SYSTEM_UI_FLAG_FULLSCREEN;
+    decorView.setSystemUiVisibility(uiOptions);
     super.onResume();
     //presenter.onResume();
   }
