@@ -54,6 +54,7 @@ import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
@@ -302,7 +303,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   @NonNull
   private final TabLayout.OnTabSelectedListener pageBottomTabListener
-          = new TabLayout.OnTabSelectedListener() {
+      = new TabLayout.OnTabSelectedListener() {
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
       PageBottomTab.of(tab.getPosition()).select(pageActionTabsCallback);
@@ -400,6 +401,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       }
     });
 
+
     documentSections = new ArrayList<>();
     tabDrawerAdapter = new TabDrawerAdapter(mWebViews);
     tabDrawerLeft.setLayoutManager(new LinearLayoutManager(this));
@@ -423,6 +425,11 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       }
     });
 
+    textSizeDialog = new AlertDialog.Builder(this, dialogStyle());
+    textSizeSeekBar = new SeekBar(this);
+    textSizeSeekBar.setMax(3);
+    textSizeDialog.setTitle("Set text size");
+    textSizeDialog.setView(textSizeSeekBar);
     tableDrawerAdapter.notifyDataSetChanged();
 
     tabDrawerAdapter.setTabClickListener(new TabDrawerAdapter.TabClickListener() {
@@ -501,7 +508,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     pageBottomTabLayout.addOnTabSelectedListener(pageBottomTabListener);
 
     View bookmarkTabView = LayoutInflater.from(KiwixMobileActivity.this)
-            .inflate(R.layout.bookmark_tab, null);
+        .inflate(R.layout.bookmark_tab, null);
     bookmarkTabView.setOnClickListener(view -> PageBottomTab.of(4).select(pageActionTabsCallback));
     bookmarkTabView.setOnLongClickListener(view -> {
       PageBottomTab.of(4).longClick(pageActionTabsCallback);
@@ -518,15 +525,9 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       backToTopAppearDaily();
     }
 
-    textSizeDialog = new AlertDialog.Builder(this);
-
-    textSizeSeekBar = new SeekBar(this);
-    textSizeSeekBar.setMax(3);
-    textSizeDialog.setTitle("Set text size");
-    textSizeDialog.setView(textSizeSeekBar);
     WebSettings webSettings = getCurrentWebView().getSettings();
     //Setting text-size and the corrosponding seekbar progress.
-    switch (settings.getInt("text_size",2)) {
+    switch (settings.getInt("text_size", 2)) {
 
       case 0:
         webSettings.setTextSize(WebSettings.TextSize.SMALLEST);
@@ -755,7 +756,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     AttributeSet attrs = StyleUtils.getAttributes(this, R.xml.webview);
     KiwixWebView webView;
     if (!isHideToolbar) {
-      webView = new ToolbarScrollingKiwixWebView(KiwixMobileActivity.this, this, toolbarContainer, pageBottomTabLayout , attrs);
+      webView = new ToolbarScrollingKiwixWebView(KiwixMobileActivity.this, this, toolbarContainer, pageBottomTabLayout, attrs);
       ((ToolbarScrollingKiwixWebView) webView).setOnToolbarVisibilityChangeListener(
           new ToolbarScrollingKiwixWebView.OnToolbarVisibilityChangeListener() {
             @Override
@@ -785,12 +786,38 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   }
 
   private KiwixWebView newTab(String url) {
+    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
     KiwixWebView webView = getWebView(url);
     mWebViews.add(webView);
     selectTab(mWebViews.size() - 1);
     tabDrawerAdapter.notifyDataSetChanged();
     setUpWebView();
     documentParser.initInterface(webView);
+    WebSettings webSettings = getCurrentWebView().getSettings();
+    //Setting text-size and the corrosponding seekbar progress.
+    switch (settings.getInt("text_size", 2)) {
+
+      case 0:
+        webSettings.setTextSize(WebSettings.TextSize.SMALLEST);
+        textSizeSeekBar.setProgress(0);
+        break;
+      case 1:
+        webSettings.setTextSize(WebSettings.TextSize.SMALLER);
+        textSizeSeekBar.setProgress(1);
+        break;
+      case 2:
+        webSettings.setTextSize(WebSettings.TextSize.NORMAL);
+        textSizeSeekBar.setProgress(2);
+        break;
+      case 3:
+        webSettings.setTextSize(WebSettings.TextSize.LARGER);
+        textSizeSeekBar.setProgress(3);
+        break;
+      default:
+        webSettings.setTextSize(WebSettings.TextSize.NORMAL);
+        textSizeSeekBar.setProgress(2);
+        break;
+    }
     return webView;
   }
 
@@ -841,9 +868,35 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     tabDrawerAdapter.setSelected(position);
     contentFrame.removeAllViews();
 
+    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
     KiwixWebView webView = mWebViews.get(position);
     contentFrame.addView(webView);
     tabDrawerAdapter.setSelected(currentWebViewIndex);
+    WebSettings webSettings = getCurrentWebView().getSettings();
+    //Setting text-size and the corrosponding seekbar progress.
+    switch (settings.getInt("text_size", 2)) {
+
+      case 0:
+        webSettings.setTextSize(WebSettings.TextSize.SMALLEST);
+        textSizeSeekBar.setProgress(0);
+        break;
+      case 1:
+        webSettings.setTextSize(WebSettings.TextSize.SMALLER);
+        textSizeSeekBar.setProgress(1);
+        break;
+      case 2:
+        webSettings.setTextSize(WebSettings.TextSize.NORMAL);
+        textSizeSeekBar.setProgress(2);
+        break;
+      case 3:
+        webSettings.setTextSize(WebSettings.TextSize.LARGER);
+        textSizeSeekBar.setProgress(3);
+        break;
+      default:
+        webSettings.setTextSize(WebSettings.TextSize.NORMAL);
+        textSizeSeekBar.setProgress(2);
+        break;
+    }
 
     if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
       new Handler().postDelayed(() -> drawerLayout.closeDrawers(), 150);
@@ -1092,7 +1145,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   @Override
   public void onRequestPermissionsResult(int requestCode,
-      String permissions[], int[] grantResults) {
+                                         String permissions[], int[] grantResults) {
     switch (requestCode) {
       case REQUEST_STORAGE_PERMISSION: {
         if (grantResults.length > 0
@@ -1339,14 +1392,14 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
       SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
       textSizeDialog.show();
-      textSizeSeekBar.setProgress(settings.getInt("text_size",2));
+      textSizeSeekBar.setProgress(settings.getInt("text_size", 2));
 
       textSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
           WebSettings webSettings = getCurrentWebView().getSettings();
 
-          switch (i){
+          switch (i) {
 
             case 0:
               webSettings.setTextSize(WebSettings.TextSize.SMALLEST);
@@ -1694,16 +1747,16 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       int icon = bookmarks.contains(getCurrentWebView().getUrl()) ? R.drawable.action_bookmark_active : R.drawable.action_bookmark;
 
       menu.findItem(R.id.menu_bookmarks)
-              .setEnabled(true)
-              .setIcon(icon)
-              .getIcon().setAlpha(255);
+          .setEnabled(true)
+          .setIcon(icon)
+          .getIcon().setAlpha(255);
 
       bookmarkTab.getCustomView().findViewById(R.id.bookmark_tab_icon).setBackgroundResource(icon);
     } else {
       menu.findItem(R.id.menu_bookmarks)
-              .setEnabled(false)
-              .setIcon(R.drawable.action_bookmark)
-              .getIcon().setAlpha(130);
+          .setEnabled(false)
+          .setIcon(R.drawable.action_bookmark)
+          .getIcon().setAlpha(130);
 
       bookmarkTab.getCustomView().findViewById(R.id.bookmark_tab_icon).setBackgroundResource(R.drawable.action_bookmark);
     }
@@ -1899,13 +1952,13 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
             zimFileMissingBuilder.setIcon(R.mipmap.kiwix_icon);
             final Activity activity = this;
             zimFileMissingBuilder.setPositiveButton(getString(R.string.go_to_play_store),
-                    (dialog, which) -> {
-                      String market_uri = "market://details?id=" + BuildConfig.APPLICATION_ID;
-                      Intent intent = new Intent(Intent.ACTION_VIEW);
-                      intent.setData(Uri.parse(market_uri));
-                      startActivity(intent);
-                      activity.finish();
-                    });
+                (dialog, which) -> {
+                  String market_uri = "market://details?id=" + BuildConfig.APPLICATION_ID;
+                  Intent intent = new Intent(Intent.ACTION_VIEW);
+                  intent.setData(Uri.parse(market_uri));
+                  startActivity(intent);
+                  activity.finish();
+                });
             zimFileMissingBuilder.setCancelable(false);
             AlertDialog zimFileMissingDialog = zimFileMissingBuilder.create();
             zimFileMissingDialog.show();
