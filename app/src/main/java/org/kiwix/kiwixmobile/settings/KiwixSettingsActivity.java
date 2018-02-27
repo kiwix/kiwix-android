@@ -277,7 +277,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     private void clearAllHistoryDialog() {
       int warningResId;
       if(nightMode(PreferenceManager.getDefaultSharedPreferences(getActivity())))
-        warningResId = android.R.drawable.ic_dialog_alert;
+        warningResId = R.drawable.ic_warning_white;
       else
         warningResId = R.drawable.ic_warning_black;
       new AlertDialog.Builder(getActivity(), dialogStyle())
