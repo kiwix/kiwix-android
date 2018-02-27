@@ -75,5 +75,10 @@
     <item name="android:textColorPrimary">@color/primary_dark</item>
   </style>
 
+  <style name="AppTheme.Dialog.Night" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <item name="colorAccent">@color/accent</item>
+    <item name="android:textColorPrimary">@color/white</item>
+    <item name="android:colorBackground">@color/cardview_dark_background</item>
+  </style>
 </resources>
 
