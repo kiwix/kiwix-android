@@ -1,6 +1,6 @@
 # Code Style Guidelines for Kiwix-Android
 
-Our code style guidelines is based on the [Android Code Style Guidelines for Contributors](https://source.android.com/source/code-style.html).
+Our code style guidelines is based on the [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html).
 
 Do take some time to read it.
 
