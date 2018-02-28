@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:orientation="vertical"
-  android:background="?attr/listBackground">
+  android:background="?attr/listBackground"
+  android:orientation="vertical">
 
   <TextView
     android:id="@+id/download_management_no_downloads"
@@ -13,15 +13,15 @@
     android:layout_gravity="center_vertical"
     android:gravity="center_vertical"
     android:orientation="vertical"
-    android:paddingBottom="75dp"
+    android:paddingBottom="@dimen/download_management_no_downloads_padding_bottom"
     android:text="@string/no_downloads_here"
-    android:textSize="20sp"
+    android:textSize="@dimen/dimen_20sp"
     android:visibility="gone" />
 
   <ListView
     android:id="@+id/zim_downloader_list"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/listBackground"/>
+    android:background="?attr/listBackground" />
 
 </RelativeLayout>

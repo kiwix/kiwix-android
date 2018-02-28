@@ -28,5 +28,6 @@
     <item name="android:windowTranslucentStatus">true</item>
     <item name="colorControlNormal">@color/white</item>
     <item name="android:progressBackgroundTint">@color/greyed_out_selected</item>
+    <item name="android:statusBarColor">@android:color/transparent</item>
   </style>
 </resources>

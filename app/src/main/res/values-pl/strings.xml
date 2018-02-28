@@ -2,8 +2,6 @@
 <resources>
   <string name="menu_help">Pomoc</string>
   <string name="menu_home">Strona główna</string>
-  <string name="menu_forward">Ponów</string>
-  <string name="menu_back">Wstecz</string>
   <string name="menu_settings">Ustawienia</string>
   <string name="menu_search">Wyszukaj artykuł</string>
   <string name="menu_searchintext">Znajdź w tekście</string>
@@ -13,32 +11,21 @@
   <string name="menu_exitfullscreen">Wyjdź z trybu pełnego ekranu</string>
   <string name="menu_read_aloud">Czytaj na głos</string>
   <string name="menu_read_aloud_stop">Zatrzymaj czytanie na głos</string>
-  <string name="menu_rescan_fs">Powtórz wyszukiwanie na karcie SD</string>
   <string name="save_media">Zapisz plik multimedialny jako...</string>
   <string name="save_media_error">Wystąpił błąd przy zapisywanie plików multimedialnych!</string>
   <string name="save_media_saved">Zapisano plik multimedialny jako %1$s w folderze Zdjęcia.</string>
   <string name="rescan_fs_warning">Skanowanie plików ZIM, proszę czekać...</string>
   <string name="button_backtotop">Powrót do góry</string>
   <string name="search_label">Szukaj</string>
-  <string name="articlesearch_hint">Wpisz do wyszukiwania artykułów</string>
   <string name="choose_file">Wybierz plik zawartości ZIM (*.zim)</string>
-  <string name="add_bookmark">Zaznacz bieżącą stronę</string>
-  <string name="remove_bookmark">Odznacz wybrane</string>
   <string name="open_in_new_tab">Otwórz odnośnik na nowej karcie</string>
   <string name="error_nozimfilesfound">Nie znaleziono żadnej zawartości na twoim urządzeniu. Zobacz stronę pomocy, aby uzyskać wskazówki jak pobierać zawartość na Kiwix. Jeśli plik ZIM jest umieszczony na urządzeniu/zewnętrznej pamięci masowej, spróbuj za chwilę lub uruchom ponownie urządzenie.</string>
   <string name="error_filenotfound">Błąd: Wybrany plik ZIM nie został znaleziony.</string>
   <string name="error_fileinvalid">Błąd: Wybrany plik nie jest prawidłowym plikiem ZIM.</string>
-  <string name="error_articlenotfound">Błąd: Ładowanie artykułu \ " %1$s \" się nie powiodło.</string>
   <string name="error_articleurlnotfound">Błąd: Ładowanie artykułu (Url:  %1$s ) się nie powiodło.</string>
   <string name="pref_display_title">Widok</string>
   <string name="pref_zoom_sub_title">Powiększenie</string>
   <string name="pref_zoom_dialog">Poziom powiększenia</string>
-  <string-array name="pref_zoom_entries">
-    <item name="pref_zoom_entry_automatic">Automatycznie</item>
-    <item name="pref_zoom_entry_small">Mały</item>
-    <item name="pref_zoom_entry_medium">Średni</item>
-    <item name="pref_zoom_entry_large">Duży</item>
-  </string-array>
   <string name="pref_info_title">Informacje</string>
   <string name="pref_info_version">Wersja</string>
   <string name="pref_zoom_enable">Zarządzanie skali</string>
@@ -62,7 +49,6 @@
   <string name="pref_clear_all_history_summary">Wyczyść historię ostatnich wyszukiwań i kart</string>
   <string name="got_it">Wszystko jasne</string>
   <string name="did_you_know">Czy wiesz, że?</string>
-  <string name="bookmarks_restored">Zakładki przywrócone</string>
   <string name="bookmark_added">Dodano zakładkę</string>
   <string name="rate_dialog_title">Prosimy nas ocenić</string>
   <string name="rate_dialog_msg_1">Jeśli podoba ci się korzystanie z</string>
