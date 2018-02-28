@@ -347,9 +347,9 @@ public class ZimFileSelectFragment extends Fragment
 
   public void checkEmpty(){
     if (mZimFileList.getCount() == 0){
-      mFileMessage.setVisibility(View.VISIBLE);
+        mFileMessage.setVisibility(View.VISIBLE);
     } else
-      mFileMessage.setVisibility(View.GONE);
+        mFileMessage.setVisibility(View.GONE);
   }
 
   // The Adapter for the ListView for when the ListView is populated with the rescanned files
