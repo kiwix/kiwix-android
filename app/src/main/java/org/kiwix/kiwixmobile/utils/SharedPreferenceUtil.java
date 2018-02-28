@@ -31,113 +31,112 @@ import static org.kiwix.kiwixmobile.utils.Constants.PREF_ZOOM_ENABLED;
 
 @Singleton
 public class SharedPreferenceUtil {
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
+  private SharedPreferences sharedPreferences;
+  private SharedPreferences.Editor editor;
 
-    @Inject
-    public SharedPreferenceUtil(Context context) {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        editor = sharedPreferences.edit();
-    }
+  @Inject
+  public SharedPreferenceUtil(Context context) {
+      sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+      editor = sharedPreferences.edit();
+  }
 
-    public void remove(String key) {
-        editor.remove(key).apply();
-    }
+  public void remove(String key) {
+      editor.remove(key).apply();
+  }
 
-    //Getters
+  //Getters
 
-    public boolean getPrefWifiOnly() {
-        return sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
-    }
+  public boolean getPrefWifiOnly() {
+      return sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
+  }
 
-    public boolean getPrefHideToolbar() {
-        return sharedPreferences.getBoolean(PREF_HIDE_TOOLBAR, true);
-    }
+  public boolean getPrefHideToolbar() {
+      return sharedPreferences.getBoolean(PREF_HIDE_TOOLBAR, true);
+  }
 
-    public boolean getPrefIsFirstRun() {
-        return sharedPreferences.getBoolean(PREF_IS_FIRST_RUN, true);
-    }
+  public boolean getPrefIsFirstRun() {
+      return sharedPreferences.getBoolean(PREF_IS_FIRST_RUN, true);
+  }
 
-    public boolean getPrefFullScreen() {
-        return sharedPreferences.getBoolean(PREF_FULLSCREEN, false);
-    }
+  public boolean getPrefFullScreen() {
+      return sharedPreferences.getBoolean(PREF_FULLSCREEN, false);
+  }
 
-    public boolean getPrefBottomToolbar() {
-        return sharedPreferences.getBoolean(PREF_BOTTOM_TOOLBAR, false);
-    }
+  public boolean getPrefBottomToolbar() {
+      return sharedPreferences.getBoolean(PREF_BOTTOM_TOOLBAR, false);
+  }
 
-    public boolean getPrefBackToTop() {
-        return sharedPreferences.getBoolean(PREF_BACK_TO_TOP, false);
-    }
+  public boolean getPrefBackToTop() {
+      return sharedPreferences.getBoolean(PREF_BACK_TO_TOP, false);
+  }
 
-    public boolean getPrefZoomEnabled() {
-        return sharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
-    }
+  public boolean getPrefZoomEnabled() {
+      return sharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
+  }
 
-    public boolean getPrefNewTabBackground() {
-        return sharedPreferences.getBoolean(PREF_NEW_TAB_BACKGROUND, false);
-    }
+  public boolean getPrefNewTabBackground() {
+      return sharedPreferences.getBoolean(PREF_NEW_TAB_BACKGROUND, false);
+  }
 
-    public boolean getPrefExternalLinkPopup() {
-        return sharedPreferences.getBoolean(PREF_EXTERNAL_LINK_POPUP, true);
-    }
+  public boolean getPrefExternalLinkPopup() {
+      return sharedPreferences.getBoolean(PREF_EXTERNAL_LINK_POPUP, true);
+  }
 
-    public float getPrefZoom() {
-        return sharedPreferences.getFloat(PREF_ZOOM, 100.0f);
-    }
+  public float getPrefZoom() {
+      return sharedPreferences.getFloat(PREF_ZOOM, 100.0f);
+  }
 
-    public String getPrefLanguage(String defaultLanguage) {
-        return sharedPreferences.getString(PREF_LANG, defaultLanguage);
-    }
+  public String getPrefLanguage(String defaultLanguage) {
+      return sharedPreferences.getString(PREF_LANG, defaultLanguage);
+  }
 
-    public String getPrefStorage() {
-        return sharedPreferences.getString(PREF_STORAGE, Environment.getExternalStorageDirectory().getPath());
-    }
+  public String getPrefStorage() {
+      return sharedPreferences.getString(PREF_STORAGE, Environment.getExternalStorageDirectory().getPath());
+  }
 
-    public boolean getPrefNightMode() {
-        return sharedPreferences.getBoolean(PREF_NIGHTMODE, false);
-    }
+  public boolean getPrefNightMode() {
+      return sharedPreferences.getBoolean(PREF_NIGHTMODE, false);
+  }
 
-    public boolean getPrefAutoNightMode() {
-        return sharedPreferences.getBoolean(PREF_AUTONIGHTMODE, false);
-    }
+  public boolean getPrefAutoNightMode() {
+      return sharedPreferences.getBoolean(PREF_AUTONIGHTMODE, false);
+  }
 
-    public String getPrefStorageTitle(String defaultTitle) {
-        return sharedPreferences.getString(PREF_STORAGE_TITLE, defaultTitle);
-    }
+  public String getPrefStorageTitle(String defaultTitle) {
+      return sharedPreferences.getString(PREF_STORAGE_TITLE, defaultTitle);
+  }
 
-    public boolean getPrefFullTextSearch() {
-        return sharedPreferences.getBoolean(PREF_FULL_TEXT_SEARCH, false);
-    }
+  public boolean getPrefFullTextSearch() {
+      return sharedPreferences.getBoolean(PREF_FULL_TEXT_SEARCH, false);
+  }
 
-    // Setters
+  // Setters
 
-    public void putPrefLanguage(String language) {
+  public void putPrefLanguage(String language) {
         editor.putString(PREF_LANG, language).apply();
     }
 
-    public void putPrefIsFirstRun(boolean isFirstRun) {
-        editor.putBoolean(PREF_IS_FIRST_RUN, isFirstRun);
-    }
+  public void putPrefIsFirstRun(boolean isFirstRun) {
+      editor.putBoolean(PREF_IS_FIRST_RUN, isFirstRun);
+  }
 
-    public void putPrefWifiOnly(boolean wifiOnly) {
-        editor.putBoolean(PREF_WIFI_ONLY, wifiOnly).apply();
-    }
+  public void putPrefWifiOnly(boolean wifiOnly) {
+      editor.putBoolean(PREF_WIFI_ONLY, wifiOnly).apply();
+  }
 
-    public void putPrefStorageTitle(String storageTitle) {
-        editor.putString(PREF_STORAGE_TITLE, storageTitle).apply();
-    }
+  public void putPrefStorageTitle(String storageTitle) {
+      editor.putString(PREF_STORAGE_TITLE, storageTitle).apply();
+  }
 
-    public void putPrefStorage(String storage) {
-        editor.putString(PREF_STORAGE, storage).apply();
-    }
+  public void putPrefStorage(String storage) {
+      editor.putString(PREF_STORAGE, storage).apply();
+  }
 
-    public void putPrefFullScreen(boolean fullScreen) {
-        editor.putBoolean(PREF_FULLSCREEN, fullScreen).apply();
-    }
+  public void putPrefFullScreen(boolean fullScreen) {
+      editor.putBoolean(PREF_FULLSCREEN, fullScreen).apply();
+  }
 
-    public void putPrefExternalLinkPopup(boolean externalLinkPopup) {
-        editor.putBoolean(PREF_EXTERNAL_LINK_POPUP, externalLinkPopup).apply();
-    }
-
+  public void putPrefExternalLinkPopup(boolean externalLinkPopup) {
+      editor.putBoolean(PREF_EXTERNAL_LINK_POPUP, externalLinkPopup).apply();
+  }
 }
