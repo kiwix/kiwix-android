@@ -434,7 +434,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     ActionBarDrawerToggle drawerToggle = new KiwixActionBarDrawerToggle(this, drawerLayout, toolbar);
 
     Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
-            .getBoolean("isFirstRun", true);
+        .getBoolean("isFirstRun", true);
 
     if (isFirstRun) {
       startActivity(new Intent(KiwixMobileActivity.this, WelcomeActivity.class));

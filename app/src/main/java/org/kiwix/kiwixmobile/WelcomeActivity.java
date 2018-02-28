@@ -19,8 +19,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
   private ViewPager viewPager;
   private int[] layouts;
-  private TextView[] dots;
-  private LinearLayout dotsLayout;
   private Button next;
   private Button skip;
   private Button prev;
@@ -32,7 +30,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
     setContentView(R.layout.welcome_main);
     viewPager = (ViewPager) findViewById(R.id.view_pager);
-    dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
     skip = (Button) findViewById(R.id.btn_skip);
     next = (Button) findViewById(R.id.btn_next);
     prev = (Button) findViewById(R.id.btn_prev);
@@ -41,7 +38,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
     layouts = new int[]{R.layout.welcome_detail1, R.layout.welcome_detail2, R.layout.welcome_detail3, R.layout.welcome_detail4};
 
-    addBottomDots(0);
     viewPagerAdapter = new ViewPagerAdapter();
     viewPager.setAdapter(viewPagerAdapter);
     viewPager.addOnPageChangeListener(viewListener);
@@ -83,21 +79,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
   }
 
-  private void addBottomDots(int position) {
-
-    dots = new TextView[layouts.length];
-    dotsLayout.removeAllViews();
-    for (int i = 0; i < layouts.length; i++) {
-      dots[i] = new TextView(this);
-      dots[i].setText(Html.fromHtml("&#8226;"));
-      dots[i].setTextSize(35);
-      dots[i].setTextColor(getResources().getColor(R.color.primary));
-    }
-    if (dots.length > 0)
-      dots[position].setTextColor(getResources().getColor(R.color.primary));
-
-  }
-
   private int getItem(int i) {
     return viewPager.getCurrentItem() + i;
   }
@@ -111,7 +92,6 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     public void onPageSelected(int position) {
 
-      addBottomDots(position);
       if (position == layouts.length - 1) {
         next.setText(R.string.proceed_button);
         skip.setVisibility(View.GONE);
