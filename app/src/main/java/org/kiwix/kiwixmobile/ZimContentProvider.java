@@ -52,6 +52,8 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
+import ly.count.android.sdk.Countly;
+
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
 public class ZimContentProvider extends ContentProvider {
@@ -403,6 +405,7 @@ public class ZimContentProvider extends ContentProvider {
     }
     RandomAccessFile randomAccessFile = new RandomAccessFile(pair.filename, "r");
     randomAccessFile.seek(pair.offset);
+    Countly.sharedInstance().recordEvent("Loaded Video");
     return ParcelFileDescriptor.dup(randomAccessFile.getFD());
   }
 

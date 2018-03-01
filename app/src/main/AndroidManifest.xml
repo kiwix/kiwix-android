@@ -10,10 +10,12 @@
     android:resizeable="true"
     android:smallScreens="true" />
 
+  <permission android:name="org.kiwix.kiwixmobile.permission.C2D_MESSAGE" android:protectionLevel="signature" />
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="org.kiwix.kiwixmobile.permission.C2D_MESSAGE" />
 
   <application
       android:name=".KiwixApplication"
@@ -173,6 +175,18 @@
         android:name="android.appwidget.provider"
         android:resource="@xml/kiwix_widget_provider_info" />
     </receiver>
+
+    <receiver android:name="ly.count.android.sdk.ReferrerReceiver" android:exported="true">
+      <intent-filter>
+        <action android:name="com.android.vending.INSTALL_REFERRER" />
+      </intent-filter>
+    </receiver>
+
+    <service android:name="org.openudid.OpenUDID_service">
+      <intent-filter>
+        <action android:name="org.openudid.GETUDID" />
+      </intent-filter>
+    </service>
 
 
     <service android:name=".downloader.DownloadService" />

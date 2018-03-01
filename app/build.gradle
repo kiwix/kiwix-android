@@ -116,6 +116,8 @@ dependencies {
   // Mockito
   testImplementation "org.mockito:mockito-core:2.7.22"
   androidTestImplementation "org.mockito:mockito-android:2.7.22"
+
+  compile 'ly.count.android:sdk-messaging:18.01'
 }
 
 // Set custom app import directory

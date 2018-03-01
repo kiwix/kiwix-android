@@ -111,6 +111,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ly.count.android.sdk.Countly;
 import okhttp3.OkHttpClient;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
@@ -981,10 +982,13 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
               .putBoolean(PREF_EXTERNAL_LINK_POPUP, false)
               .apply();
           isExternalLinkPopup = false;
-
+          Countly.sharedInstance().recordEvent("Visiting External Link");
           startActivity(intent);
         })
-        .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> startActivity(intent))
+        .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> {
+          Countly.sharedInstance().recordEvent("Visiting External Link");
+          startActivity(intent);
+        })
         .setIcon(android.R.drawable.ic_dialog_alert)
         .show();
   }
@@ -1865,6 +1869,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
         requestClearHistoryAfterLoad = false;
       }
 
+      Countly.sharedInstance().recordEvent("loadedWebViewPage", 1);
       Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView().getUrl());
     }
   }
@@ -1939,5 +1944,4 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       dialog.show();
     }
   }
-
 }

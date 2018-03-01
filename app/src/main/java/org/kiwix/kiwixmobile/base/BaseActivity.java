@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
 
+import ly.count.android.sdk.Countly;
+
 public abstract class BaseActivity extends AppCompatActivity {
 
 
@@ -19,6 +21,7 @@ public abstract class BaseActivity extends AppCompatActivity {
   @Override protected void onStart() {
     super.onStart();
     //presenter.onStart();
+    Countly.sharedInstance().onStart(this);
   }
 
   @Override protected void onResume() {
@@ -34,6 +37,7 @@ public abstract class BaseActivity extends AppCompatActivity {
   @Override protected void onStop() {
     super.onStop();
     //presenter.onStop();
+    Countly.sharedInstance().onStop();
   }
 
   @Override protected void onDestroy() {
