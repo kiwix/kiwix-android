@@ -6,6 +6,7 @@
   <color name="primary_dark_night">#ff212121</color>
   <color name="primary_light">#ffffff</color>
   <color name="accent">#304e9a</color>
+  <color name="accent_night">#689AC7</color>
   <color name="white">#FAFAFA</color>
   <color name="gray_list_bg">#0d000000</color>
   <color name="drawer_background_day">#ffffff</color>

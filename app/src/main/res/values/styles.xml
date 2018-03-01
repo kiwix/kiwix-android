@@ -33,7 +33,7 @@
   <style name="AppTheme.Night" parent="AppTheme.Base">
     <item name="colorPrimary">@color/primary_night</item>
     <item name="colorPrimaryDark">@color/primary_dark_night</item>
-    <item name="colorAccent">@color/accent</item>
+    <item name="colorAccent">@color/accent_night</item>
     <item name="progressBackgroundColor">@color/primary_dark_night</item>
     <item name="drawerBackground">@color/drawer_background_night</item>
     <item name="listBackground">@color/grey</item>
