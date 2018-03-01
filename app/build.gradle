@@ -89,10 +89,10 @@ dependencies {
   implementation 'commons-io:commons-io:2.5'
 
   // Square
-  implementation 'com.squareup.okhttp3:okhttp:3.7.0'
-  implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
-  implementation 'com.squareup.retrofit2:retrofit:2.1.0'
-  implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+  implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+  implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+  implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+  implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
   implementation('com.squareup.retrofit2:converter-simplexml:2.1.0') {
     exclude group: 'xpp3', module: 'xpp3'
     exclude group: 'stax', module: 'stax-api'
@@ -106,8 +106,8 @@ dependencies {
   annotationProcessor 'com.jakewharton:butterknife-compiler:8.0.1'
 
   // RxJava
-  implementation 'io.reactivex:rxandroid:1.1.0'
-  implementation 'io.reactivex:rxjava:1.1.5'
+  implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+  implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 
   // JUnit
   testImplementation 'junit:junit:4.12'
