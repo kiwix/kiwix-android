@@ -20,17 +20,20 @@
     tools:checked="false" />
 
   <LinearLayout
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerVertical="true"
+    android:layout_toLeftOf="@id/language_entries_count"
     android:layout_toRightOf="@id/language_checkbox"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <TextView
       android:id="@+id/language_name"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_marginLeft="@dimen/dimen_10dp"
+      android:textColor="@color/primary"
       android:textSize="@dimen/dimen_18sp"
       tools:text="German" />
 
@@ -40,7 +43,7 @@
       android:layout_height="wrap_content"
       android:layout_marginLeft="@dimen/dimen_10dp"
       android:textColor="@color/grey"
-      android:textSize="@dimen/dimen_18sp"
+      android:textSize="@dimen/dimen_14sp"
       tools:text="(Deutsch)" />
 
   </LinearLayout>
