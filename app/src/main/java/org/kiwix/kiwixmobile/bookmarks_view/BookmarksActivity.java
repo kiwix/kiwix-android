@@ -57,6 +57,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ly.count.android.sdk.Countly;
 
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOKMARK_CLICKED;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_TITLE;
@@ -152,6 +153,7 @@ public class BookmarksActivity extends BaseActivity
       intent.putExtra(EXTRA_CHOSE_X_TITLE, bookmarks.get(position));
     }
     intent.putExtra(EXTRA_BOOKMARK_CLICKED, true);
+    Countly.sharedInstance().recordEvent("Bookmark Clicked", 1);
     int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
     if (value == 1) {
       startActivity(intent);

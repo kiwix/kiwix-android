@@ -19,6 +19,8 @@ import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import java.util.List;
 import java.util.Map;
 
+import ly.count.android.sdk.Countly;
+
 /**
  * Created by judebrauer on 12/6/17
  */
@@ -79,6 +81,7 @@ public class LanguageSelectDialog extends AlertDialog {
       try {
         size = languages.size();
       } catch (NullPointerException e) {
+        Countly.sharedInstance().logException(e);
         e.printStackTrace();
       }
 

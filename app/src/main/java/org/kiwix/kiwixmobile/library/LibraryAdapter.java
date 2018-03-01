@@ -56,6 +56,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import ly.count.android.sdk.Countly;
 import rx.Completable;
 import rx.Observable;
 import rx.Subscription;
@@ -388,6 +389,7 @@ public class LibraryAdapter extends BaseAdapter {
       byte[] decodedString = Base64.decode(encodedString, Base64.DEFAULT);
       return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     } catch (Exception e) {
+      Countly.sharedInstance().logException(e);
       e.printStackTrace();
     }
 

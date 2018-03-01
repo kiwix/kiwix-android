@@ -33,6 +33,8 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import ly.count.android.sdk.Countly;
+
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_IS_WIDGET_VOICE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_NIGHTMODE;
@@ -223,6 +225,7 @@ public class SearchActivity extends AppCompatActivity
     try {
       startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
     } catch (ActivityNotFoundException a) {
+      Countly.sharedInstance().logException(a);
       Toast.makeText(getApplicationContext(),
           getString(R.string.speech_not_supported),
           Toast.LENGTH_SHORT).show();

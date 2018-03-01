@@ -114,6 +114,7 @@ public class ZimContentProvider extends ContentProvider {
     
   public synchronized static String setZimFile(String fileName) {
     if (!new File(fileName).exists()) {
+      Countly.sharedInstance().recordEvent("Error Logged");
       Log.e(TAG_KIWIX, "Unable to find the ZIM file " + fileName);
       zimFileName = null;
       return zimFileName;
@@ -128,6 +129,7 @@ public class ZimContentProvider extends ContentProvider {
       currentJNIReader = reader;
       zimFileName = fileName;
     } catch (JNIKiwixException e) {
+      Countly.sharedInstance().logException(e);
       Log.e(TAG_KIWIX, "Unable to open the ZIM file " + fileName);
       zimFileName = null;
     }

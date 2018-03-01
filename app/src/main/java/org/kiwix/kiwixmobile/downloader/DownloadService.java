@@ -40,6 +40,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import ly.count.android.sdk.Countly;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -353,6 +354,7 @@ public class DownloadService extends Service {
         subscriber.onCompleted();
         if (!response.isSuccessful()) subscriber.onError(new Exception(response.message()));
       } catch (IOException e) {
+        Countly.sharedInstance().logException(e);
         subscriber.onError(e);
       }
     });

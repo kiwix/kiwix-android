@@ -49,6 +49,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import ly.count.android.sdk.Countly;
+
 public class KiwixWebView extends WebView {
 
   private static final String PREF_ZOOM = "pref_zoom_slider";
@@ -109,6 +111,7 @@ public class KiwixWebView extends WebView {
           String imageSaved = getResources().getString(R.string.save_media_saved);
           toastText = String.format(imageSaved, newUrl);
         } catch (IOException e) {
+          Countly.sharedInstance().logException(e);
           Log.w("kiwix", "Couldn't save image", e);
           toastText = getResources().getString(R.string.save_media_error);
         }

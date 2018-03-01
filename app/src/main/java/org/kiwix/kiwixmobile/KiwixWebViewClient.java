@@ -14,6 +14,8 @@ import org.kiwix.kiwixmobile.utils.StyleUtils;
 
 import java.util.HashMap;
 
+import ly.count.android.sdk.Countly;
+
 import static org.kiwix.kiwixmobile.utils.Constants.CONTACT_EMAIL_ADDRESS;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_EXTERNAL_LINK;
 
@@ -67,6 +69,7 @@ public class KiwixWebViewClient extends WebViewClient {
   @Override
   public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
     callback.webViewFailedLoading(failingUrl);
+    Countly.sharedInstance().recordEvent("Failed to load a resource", 1);
   }
 
   @Override

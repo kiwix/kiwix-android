@@ -1193,11 +1193,13 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       Snackbar bookmarkSnackbar =
           Snackbar.make(snackbarLayout, getString(R.string.bookmark_added), Snackbar.LENGTH_LONG)
               .setAction(getString(R.string.open), v -> goToBookmarks());
+      Countly.sharedInstance().recordEvent("Added Bookmark", 1);
       bookmarkSnackbar.setActionTextColor(getResources().getColor(R.color.white));
       bookmarkSnackbar.show();
     } else {
       Snackbar bookmarkSnackbar =
           Snackbar.make(snackbarLayout, getString(R.string.bookmark_removed), Snackbar.LENGTH_LONG);
+      Countly.sharedInstance().recordEvent("Removed Bookmark", 1);
       bookmarkSnackbar.show();
     }
   }
@@ -1869,7 +1871,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
         requestClearHistoryAfterLoad = false;
       }
 
-      Countly.sharedInstance().recordEvent("loadedWebViewPage", 1);
+      Countly.sharedInstance().recordEvent("Open Page Within WebView", 1);
       Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView().getUrl());
     }
   }
