@@ -611,7 +611,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
         isSpeaking = true;
         runOnUiThread(() -> {
           menu.findItem(R.id.menu_read_aloud)
-                  .setTitle(createMenuItem(getResources().getString(R.string.menu_read_aloud_stop)));
+              .setTitle(createMenuItem(getResources().getString(R.string.menu_read_aloud_stop)));
           TTSControls.setVisibility(View.VISIBLE);
         });
       }
@@ -621,7 +621,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
         isSpeaking = false;
         runOnUiThread(() -> {
           menu.findItem(R.id.menu_read_aloud)
-                  .setTitle(createMenuItem(getResources().getString(R.string.menu_read_aloud)));
+              .setTitle(createMenuItem(getResources().getString(R.string.menu_read_aloud)));
           TTSControls.setVisibility(View.GONE);
           pauseTTSButton.setText(R.string.tts_pause);
         });
