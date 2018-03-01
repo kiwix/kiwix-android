@@ -16,6 +16,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setupDagger(KiwixApplication.getInstance().getApplicationComponent());
     //attachPresenter();
+
+    Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+      @Override
+      public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
+        Countly.sharedInstance().logException(new Exception(paramThrowable));
+        System.exit(2);
+      }
+    });
   }
 
   @Override protected void onStart() {
