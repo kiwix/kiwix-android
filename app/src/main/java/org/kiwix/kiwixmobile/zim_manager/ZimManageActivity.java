@@ -30,6 +30,8 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
 import javax.inject.Inject;
 
+import ly.count.android.sdk.Countly;
+
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class ZimManageActivity extends AppCompatActivity implements ZimManageViewCallback {
@@ -137,14 +139,17 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
       return;
     switch (position) {
       case 0:
+        Countly.sharedInstance().recordEvent("View Local ZimFiles");
         searchItem.setVisible(false);
         languageItem.setVisible(false);
         break;
       case 1:
+        Countly.sharedInstance().recordEvent("View Online ZimFiles");
         searchItem.setVisible(true);
         languageItem.setVisible(true);
         break;
       case 2:
+        Countly.sharedInstance().recordEvent("View Downloading ZimFiles");
         searchItem.setVisible(false);
         languageItem.setVisible(false);
         break;
@@ -234,6 +239,7 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
           if(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages.size() == 0) {
             Toast.makeText(this, R.string.wait_for_load, Toast.LENGTH_LONG).show();
           } else {
+            Countly.sharedInstance().recordEvent("Selecting ZIM Download Language");
             showLanguageSelect();
           }
         }

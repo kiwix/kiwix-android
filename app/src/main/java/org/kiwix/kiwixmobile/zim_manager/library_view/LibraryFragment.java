@@ -57,6 +57,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import eu.mhutti1.utils.storage.StorageDevice;
 import eu.mhutti1.utils.storage.support.StorageSelectDialog;
+import ly.count.android.sdk.Countly;
 
 import static android.view.View.GONE;
 import static org.kiwix.kiwixmobile.downloader.DownloadService.KIWIX_ROOT;
@@ -250,6 +251,7 @@ public class LibraryFragment extends Fragment
     if (!libraryAdapter.isDivider(position)) {
       if (getSpaceAvailable()
           < Long.parseLong(((Book) (parent.getAdapter().getItem(position))).getSize()) * 1024f) {
+        Countly.sharedInstance().recordEvent("Insufficient space to download Zim file");
         Toast.makeText(super.getActivity(), getString(R.string.download_no_space)
             + "\n" + getString(R.string.space_available) + " "
             + LibraryUtils.bytesToHuman(getSpaceAvailable()), Toast.LENGTH_LONG).show();
@@ -281,10 +283,12 @@ public class LibraryFragment extends Fragment
 
         NetworkInfo network = conMan.getActiveNetworkInfo();
         if (network == null || !network.isConnected()) {
+          Countly.sharedInstance().recordEvent("No Network Connection");
           Toast.makeText(super.getActivity(), getString(R.string.no_network_connection), Toast.LENGTH_LONG)
               .show();
           return;
         }
+
 
         if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
           DownloadFragment.showNoWiFiWarning(getContext(), () -> {
@@ -305,6 +309,7 @@ public class LibraryFragment extends Fragment
     }
     Toast.makeText(super.getActivity(), getString(R.string.download_started_library), Toast.LENGTH_LONG)
         .show();
+    Countly.sharedInstance().recordEvent("Started Zim File Download");
     Intent service = new Intent(super.getActivity(), DownloadService.class);
     service.putExtra(DownloadIntent.DOWNLOAD_URL_PARAMETER, book.getUrl());
     service.putExtra(DownloadIntent.DOWNLOAD_ZIM_TITLE, book.getTitle());

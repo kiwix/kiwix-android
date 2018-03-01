@@ -40,6 +40,8 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 
+import ly.count.android.sdk.Countly;
+
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_WIFI_ONLY;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
@@ -175,6 +177,7 @@ public class DownloadFragment extends Fragment {
       pause.setEnabled(false);
       String fileName = FileUtils.getFileName(mDownloadFiles.get(mKeys[position]));
       {
+        Countly.sharedInstance().recordEvent("Successfully Downloaded Zim File");
         Snackbar completeSnack = Snackbar.make(mainLayout, getResources().getString(R.string.download_complete_snackbar), Snackbar.LENGTH_LONG);
         completeSnack.setAction(getResources().getString(R.string.open), v -> ZimFileSelectFragment.finishResult(fileName)).setActionTextColor(getResources().getColor(R.color.white)).show();
       }
@@ -204,9 +207,11 @@ public class DownloadFragment extends Fragment {
 
     private void setPlayState(ImageView pauseButton, int position, int newPlayState) {
       if (newPlayState == DownloadService.PLAY) { //Playing
+        Countly.sharedInstance().recordEvent("Resumed Zim File Download");
         if (LibraryFragment.mService.playDownload(mKeys[position]))
           pauseButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
       } else { //Pausing
+        Countly.sharedInstance().recordEvent("Paused Zim File Download");
         LibraryFragment.mService.pauseDownload(mKeys[position]);
         pauseButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black_24dp));
       }
@@ -271,6 +276,7 @@ public class DownloadFragment extends Fragment {
             .setTitle(R.string.confirm_stop_download_title)
             .setMessage(R.string.confirm_stop_download_msg)
             .setPositiveButton(R.string.yes, (dialog, i) -> {
+              Countly.sharedInstance().recordEvent("Stopped Zim File Download");
               LibraryFragment.mService.stopDownload(mKeys[position]);
               mDownloads.remove(mKeys[position]);
               mDownloadFiles.remove(mKeys[position]);

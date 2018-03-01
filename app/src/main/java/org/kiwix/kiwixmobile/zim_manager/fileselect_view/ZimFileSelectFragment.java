@@ -70,6 +70,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import ly.count.android.sdk.Countly;
+
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE;
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_STORAGE_PERMISSION;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
@@ -300,10 +302,12 @@ public class ZimFileSelectFragment extends Fragment
     file = data.file.getPath();
 
     if (!data.file.canRead()) {
+      Countly.sharedInstance().recordEvent("Failed to read ZIM File");
       Toast.makeText(context, getString(R.string.error_filenotfound), Toast.LENGTH_LONG).show();
       return;
     }
 
+    Countly.sharedInstance().recordEvent("Loading Downloaded ZIM File");
     finishResult(file);
   }
 
@@ -318,8 +322,10 @@ public class ZimFileSelectFragment extends Fragment
         .setMessage(getString(R.string.delete_specific_zim))
         .setPositiveButton(getResources().getString(R.string.delete), (dialog, which) -> {
           if (deleteSpecificZimFile(position)) {
+            Countly.sharedInstance().recordEvent("Deleted ZIM File");
             Toast.makeText(context, getResources().getString(R.string.delete_specific_zim_toast), Toast.LENGTH_SHORT).show();
           } else {
+            Countly.sharedInstance().recordEvent("Failed to delete ZIM File");
             Toast.makeText(context, getResources().getString(R.string.delete_zim_failed), Toast.LENGTH_SHORT).show();
           }
         })
