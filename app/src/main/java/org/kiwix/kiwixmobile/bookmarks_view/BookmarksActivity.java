@@ -30,6 +30,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -62,6 +63,8 @@ import butterknife.ButterKnife;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOKMARK_CLICKED;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_TITLE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_URL;
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.N;
 
 public class BookmarksActivity extends BaseActivity
     implements AdapterView.OnItemClickListener, BookmarksViewCallback {
@@ -145,6 +148,24 @@ public class BookmarksActivity extends BaseActivity
     toolbar.setNavigationOnClickListener(v -> onBackPressed());
   }
 
+  public ArrayList<String> stripHtml(ArrayList<String> html) {
+    ArrayList<String> parsed = new ArrayList<>();
+    if (html.size() != 0) {
+      if (SDK_INT >= N) {
+        for (int i = 0; i < html.size(); i++) {
+          parsed.add(i, Html.fromHtml(html.get(i), Html.FROM_HTML_MODE_LEGACY).toString());
+        }
+      } else {
+        for (int i = 0; i < html.size(); i++) {
+          parsed.add(i, Html.fromHtml(html.get(i)).toString());
+        }
+      }
+      return parsed;
+    } else {
+      return null;
+    }
+  }
+
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
     Intent intent = new Intent(this, KiwixMobileActivity.class);
@@ -183,7 +204,9 @@ public class BookmarksActivity extends BaseActivity
   public void showBookmarks(ArrayList<String> bookmarks, ArrayList<String> bookmarkUrls) {
     this.bookmarks.clear();
     this.bookmarkUrls.clear();
-    this.bookmarks.addAll(bookmarks);
+    ArrayList<String> parsedBookmarks = new ArrayList<>();
+    parsedBookmarks = stripHtml(bookmarks);
+    this.bookmarks.addAll(parsedBookmarks);
     this.bookmarkUrls.addAll(bookmarkUrls);
     adapter.notifyDataSetChanged();
     setNoBookmarksState();
