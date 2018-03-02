@@ -244,6 +244,7 @@ public class LibraryFragment extends Fragment
       super.getActivity().unbindService(mConnection.downloadServiceInterface);
       mBound = false;
     }
+    faActivity.unregisterReceiver(networkBroadcastReceiver);
   }
 
   @Override
