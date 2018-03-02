@@ -3,7 +3,6 @@ package org.kiwix.kiwixmobile.zim_manager.library_view;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -19,7 +18,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +26,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,50 +62,35 @@ import static org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOK;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE_TITLE;
-import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class LibraryFragment extends Fragment
     implements AdapterView.OnItemClickListener, StorageSelectDialog.OnSelectListener, LibraryViewCallback {
 
 
+  public static DownloadService mService = new DownloadService();
+  public static List<Book> downloadingBooks = new ArrayList<>();
+  public LinearLayout llLayout;
+  public LibraryAdapter libraryAdapter;
   @BindView(R.id.library_list)
   ListView libraryList;
   @BindView(R.id.network_permission_text)
   TextView networkText;
   @BindView(R.id.network_permission_button)
   Button permissionButton;
-
   @Inject
   KiwixService kiwixService;
-
-  public LinearLayout llLayout;
-
   @BindView(R.id.library_swiperefresh)
   SwipeRefreshLayout swipeRefreshLayout;
-
-  private ArrayList<Book> books = new ArrayList<>();
-
-  public static DownloadService mService = new DownloadService();
-
-  private boolean mBound;
-
-  public LibraryAdapter libraryAdapter;
-
-  private DownloadServiceConnection mConnection = new DownloadServiceConnection();
-
   @Inject
   ConnectivityManager conMan;
-
-  private ZimManageActivity faActivity;
-
-  public static NetworkBroadcastReceiver networkBroadcastReceiver;
-
-  public static List<Book> downloadingBooks = new ArrayList<>();
-
-  public static boolean isReceiverRegistered = false;
-
   @Inject
   LibraryPresenter presenter;
+  private NetworkBroadcastReceiver networkBroadcastReceiver;
+  private boolean isReceiverRegistered = false;
+  private ArrayList<Book> books = new ArrayList<>();
+  private boolean mBound;
+  private DownloadServiceConnection mConnection = new DownloadServiceConnection();
+  private ZimManageActivity faActivity;
 
   private void setupDagger() {
     KiwixApplication.getInstance().getApplicationComponent().inject(this);
@@ -234,7 +216,10 @@ public class LibraryFragment extends Fragment
       swipeRefreshLayout.setRefreshing(false);
       return;
     }
-    networkBroadcastReceiver.onReceive(super.getActivity(), null);
+    if (isReceiverRegistered) {
+      networkBroadcastReceiver.onReceive(super.getActivity(), null);
+      isReceiverRegistered = false;
+    }
   }
 
   @Override
@@ -244,6 +229,7 @@ public class LibraryFragment extends Fragment
       super.getActivity().unbindService(mConnection.downloadServiceInterface);
       mBound = false;
     }
+    faActivity.unregisterReceiver(networkBroadcastReceiver);
   }
 
   @Override
