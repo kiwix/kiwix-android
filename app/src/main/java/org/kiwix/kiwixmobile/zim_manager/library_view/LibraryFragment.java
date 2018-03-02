@@ -394,6 +394,8 @@ public class LibraryFragment extends Fragment
         permissionButton.setVisibility(GONE);
         networkText.setVisibility(GONE);
         libraryList.setVisibility(View.VISIBLE);
+      }else{
+        stopScanningContent();
       }
 
     }
