@@ -37,6 +37,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -433,16 +434,14 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
     ActionBarDrawerToggle drawerToggle = new KiwixActionBarDrawerToggle(this, drawerLayout, toolbar);
 
-    Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
-        .getBoolean("isFirstRun", true);
+    SharedPreferences firstRunPref = PreferenceManager.getDefaultSharedPreferences(this);
+    Boolean isFirstRun = firstRunPref.getBoolean("isFirstRun", true);
 
     if (isFirstRun) {
       startActivity(new Intent(KiwixMobileActivity.this, WelcomeActivity.class));
     }
 
-
-    getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit()
-            .putBoolean("isFirstRun", false).commit();
+    firstRunPref.edit().putBoolean("isFirstRun", false).commit();
 
     drawerLayout.addDrawerListener(drawerToggle);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);

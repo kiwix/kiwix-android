@@ -76,7 +76,6 @@ public class WelcomeActivity extends AppCompatActivity {
         }
       }
     });
-
   }
 
   private int getItem(int i) {
@@ -91,7 +90,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
     @Override
     public void onPageSelected(int position) {
-
       if (position == layouts.length - 1) {
         next.setText(R.string.proceed_button);
         skip.setVisibility(View.GONE);
@@ -140,5 +138,4 @@ public class WelcomeActivity extends AppCompatActivity {
       container.removeView(v);
     }
   }
-
 }
