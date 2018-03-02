@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.N;
 
 public class TabDrawerAdapter extends RecyclerView.Adapter<TabDrawerAdapter.ViewHolder> {
   private TabClickListener listener;
@@ -50,7 +54,7 @@ public class TabDrawerAdapter extends RecyclerView.Adapter<TabDrawerAdapter.View
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
     KiwixWebView webView = webViews.get(position);
-    holder.title.setText(webView.getTitle());
+    holder.title.setText(stripHtml(webView.getTitle()));
     holder.exit.setOnClickListener(v -> listener.onCloseTab(v, position));
     holder.itemView.setOnClickListener(v -> {
       listener.onSelectTab(v, position);
@@ -91,6 +95,14 @@ public class TabDrawerAdapter extends RecyclerView.Adapter<TabDrawerAdapter.View
     public ViewHolder(View v) {
       super(v);
       ButterKnife.bind(this, v);
+    }
+  }
+
+  public String stripHtml(String html) {
+    if (SDK_INT >= N) {
+      return Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY).toString();
+    } else {
+      return Html.fromHtml(html).toString();
     }
   }
 }
