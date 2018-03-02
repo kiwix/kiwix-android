@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.R;
@@ -74,7 +75,7 @@ public class LanguageSelectDialog extends AlertDialog {
     public AlertDialog create() {
       LinearLayout view = (LinearLayout) View
           .inflate(getContext(), R.layout.language_selection, null);
-      ListView listView = view.findViewById(R.id.language_check_view);
+      RecyclerView recyclerView = view.findViewById(R.id.language_check_view);
       int size = 0;
       try {
         size = languages.size();
@@ -84,7 +85,7 @@ public class LanguageSelectDialog extends AlertDialog {
 
       LanguageArrayAdapter languageArrayAdapter = new LanguageArrayAdapter(getContext(), 0,
           languages, languageCounts, singleSelect, selectedLanguage);
-      listView.setAdapter(languageArrayAdapter);
+      recyclerView.setAdapter(languageArrayAdapter);
       setView(view);
 
       if (languageSelectedListener != null) {

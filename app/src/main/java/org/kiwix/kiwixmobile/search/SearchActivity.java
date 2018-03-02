@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,7 +44,7 @@ public class SearchActivity extends AppCompatActivity
     implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, SearchViewCallback {
 
   private final int REQ_CODE_SPEECH_INPUT = 100;
-  private ListView mListView;
+  private RecyclerView mRecyclerView;
   private AutoCompleteAdapter mAutoAdapter;
   private ArrayAdapter<String> mDefaultAdapter;
   private SearchView searchView;
@@ -72,14 +73,14 @@ public class SearchActivity extends AppCompatActivity
     getSupportActionBar().setHomeButtonEnabled(true);
     searchPresenter.attachView(this);
 
-    mListView = findViewById(R.id.search_list);
+    mRecyclerView = findViewById(R.id.search_list);
     mDefaultAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
     searchPresenter.getRecentSearches(this);
-    mListView.setAdapter(mDefaultAdapter);
+    mRecyclerView.setAdapter(mDefaultAdapter);
 
     mAutoAdapter = new AutoCompleteAdapter(this);
-    mListView.setOnItemClickListener(this);
-    mListView.setOnItemLongClickListener(this);
+    mRecyclerView.setOnItemClickListener(this);
+    mRecyclerView.setOnItemLongClickListener(this);
 
     boolean IS_VOICE_SEARCH_INTENT = getIntent().getBooleanExtra(EXTRA_IS_WIDGET_VOICE, false);
     if (IS_VOICE_SEARCH_INTENT) {
@@ -122,9 +123,9 @@ public class SearchActivity extends AppCompatActivity
       @Override
       public boolean onQueryTextChange(String s) {
         if (s.equals("")) {
-          mListView.setAdapter(mDefaultAdapter);
+          mRecyclerView.setAdapter(mDefaultAdapter);
         } else {
-          mListView.setAdapter(mAutoAdapter);
+          mRecyclerView.setAdapter(mAutoAdapter);
           mAutoAdapter.getFilter().filter(s.toLowerCase());
         }
 
@@ -181,7 +182,7 @@ public class SearchActivity extends AppCompatActivity
   @Override
   public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
     if (parent.getAdapter() == mDefaultAdapter) {
-      String searched = mListView.getItemAtPosition(position).toString();
+      String searched = mRecyclerView.getItemAtPosition(position).toString();
       deleteSpecificSearchDialog(searched);
     }
     return true;
@@ -207,7 +208,7 @@ public class SearchActivity extends AppCompatActivity
 
   private void resetAdapter() {
     mDefaultAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
-    mListView.setAdapter(mDefaultAdapter);
+    mRecyclerView.setAdapter(mDefaultAdapter);
     searchPresenter.getRecentSearches(this);
   }
 

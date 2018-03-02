@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.support.v7.widget.RecyclerView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -49,7 +50,7 @@ public class DownloadFragment extends Fragment {
   public static LinkedHashMap<Integer, LibraryNetworkEntity.Book> mDownloads = new LinkedHashMap<>();
   public static LinkedHashMap<Integer, String> mDownloadFiles = new LinkedHashMap<>();
   public RelativeLayout relLayout;
-  public ListView listView;
+  public RecyclerView recyclerView;
   public static DownloadAdapter downloadAdapter;
   private ZimManageActivity zimManageActivity;
   CoordinatorLayout mainLayout;
@@ -62,10 +63,10 @@ public class DownloadFragment extends Fragment {
     relLayout = (RelativeLayout) inflater.inflate(R.layout.download_management, container, false);
 
     zimManageActivity = (ZimManageActivity) super.getActivity();
-    listView = relLayout.findViewById(R.id.zim_downloader_list);
+    recyclerView = relLayout.findViewById(R.id.zim_downloader_list);
     downloadAdapter = new DownloadAdapter(mDownloads);
     downloadAdapter.registerDataSetObserver(this);
-    listView.setAdapter(downloadAdapter);
+    recyclerView.setAdapter(downloadAdapter);
     mainLayout = faActivity.findViewById(R.id.zim_manager_main_activity);
     return relLayout;
   }
@@ -82,9 +83,9 @@ public class DownloadFragment extends Fragment {
     }
     TextView noDownloadsText = faActivity.findViewById(R.id.download_management_no_downloads);
     if (noDownloadsText == null) return;
-    if (listView.getCount() == 0) {
+    if (recyclerView.getCount() == 0) {
       noDownloadsText.setVisibility(View.VISIBLE);
-    } else if (listView.getCount() > 0) {
+    } else if (recyclerView.getCount() > 0) {
       noDownloadsText.setVisibility(View.GONE);
     }
   }
@@ -164,7 +165,7 @@ public class DownloadFragment extends Fragment {
         return;
       }
       int position = Arrays.asList(mKeys).indexOf(notificationID);
-      ViewGroup viewGroup = (ViewGroup) listView.getChildAt(position - listView.getFirstVisiblePosition());
+      ViewGroup viewGroup = (ViewGroup) recyclerView.getChildAt(position - recyclerView.getFirstVisiblePosition());
       if (viewGroup == null) {
         mDownloads.remove(mKeys[position]);
         mDownloadFiles.remove(mKeys[position]);
@@ -189,7 +190,7 @@ public class DownloadFragment extends Fragment {
     public void updateProgress(int progress, int notificationID) {
       if (isAdded()) {
         int position = Arrays.asList(mKeys).indexOf(notificationID);
-        ViewGroup viewGroup = (ViewGroup) listView.getChildAt(position - listView.getFirstVisiblePosition());
+        ViewGroup viewGroup = (ViewGroup) recyclerView.getChildAt(position - recyclerView.getFirstVisiblePosition());
         if (viewGroup == null) {
           return;
         }
