@@ -19,6 +19,6 @@
   <color name="foreground_material_dark">@android:color/white</color>
   <color name="back_to_top_background">#DDFFFFFF</color>
   <color name="back_to_top_text">@android:color/black</color>
-  <color name="back_to_top_background_night">#FF000000</color>
+  <color name="back_to_top_background_night">#DDFFFFFF</color>
   <color name="back_to_top_text_night">#FFFFFFFF</color>
 </resources>

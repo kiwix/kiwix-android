@@ -515,7 +515,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   private void backToTopAppearNightly() {
     backToTopButton.setAlpha(0.7f);
     backToTopButton.setBackgroundColor(getResources().getColor(R.color.back_to_top_background_night));
-    backToTopButton.setTextColor(getResources().getColor(R.color.back_to_top_text_night));
+    //backToTopButton.setTextColor(getResources().getColor(R.color.back_to_top_text_night));
   }
 
   private void initPlayStoreUri() {
@@ -1878,7 +1878,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     if (isBackToTopEnabled) {
       if (getCurrentWebView().getScrollY() > 200) {
         if (backToTopButton.getVisibility() == View.INVISIBLE && TTSControls.getVisibility() == View.GONE ) {
-          backToTopButton.setText(R.string.button_backtotop);
+          //backToTopButton.setText(R.string.button_backtotop);
           backToTopButton.setVisibility(View.VISIBLE);
 
           backToTopButton.startAnimation(

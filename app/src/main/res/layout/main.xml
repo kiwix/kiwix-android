@@ -49,18 +49,19 @@
 
 
           <Button
-            android:id="@+id/button_backtotop"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:alpha="0.6"
-            android:background="@color/back_to_top_background"
-            android:gravity="center"
-            android:text="@string/button_backtotop"
-            android:textColor="@color/back_to_top_text"
-            android:textStyle="bold"
-            android:visibility="invisible" />
+              android:id="@+id/button_backtotop"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:layout_alignLeft="@+id/FullscreenControlButton"
+              android:layout_alignParentBottom="true"
+              android:layout_alignStart="@+id/FullscreenControlButton"
+              android:alpha="0.6"
+              android:background="@color/back_to_top_background"
+              android:drawableRight="@drawable/ic_eject_black_48dp"
+              android:gravity="end"
+              android:textColor="@color/back_to_top_text"
+              android:textStyle="bold"
+              android:visibility="invisible" />
 
 
           <LinearLayout
