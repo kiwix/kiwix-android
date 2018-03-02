@@ -938,10 +938,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   public void showHelpPage() {
     getCurrentWebView().loadUrl("file:///android_asset/help.html");
-    /*
-     * Passing null to update the title to "Kiwix" with
-     * appropriate translations
-     */
+    // Passing null sets the title to "Kiwix"
     updateTitle(null);
   }
 
@@ -1360,9 +1357,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   public boolean openMainPage() {
     String articleUrl = ZimContentProvider.getMainPage();
-    /*
-     * Update the title according to ZimContentProvider
-     */
     updateTitle(ZimContentProvider.getZimFileTitle());
     return openArticle(articleUrl);
   }
