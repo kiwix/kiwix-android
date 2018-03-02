@@ -159,41 +159,12 @@ public class LibraryAdapter extends BaseAdapter {
       holder.favicon.setImageBitmap(createBitmapFromEncodedString(book.getFavicon(), context));
 
       // Check if no value is empty. Set the view to View.GONE, if it is. To View.VISIBLE, if not.
-      if (book.getTitle() == null || book.getTitle().isEmpty()) {
-        holder.title.setVisibility(View.GONE);
-      } else {
-        holder.title.setVisibility(View.VISIBLE);
-      }
-
-      if (book.getDescription() == null || book.getDescription().isEmpty()) {
-        holder.description.setVisibility(View.GONE);
-      } else {
-        holder.description.setVisibility(View.VISIBLE);
-      }
-
-      if (book.getCreator() == null || book.getCreator().isEmpty()) {
-        holder.creator.setVisibility(View.GONE);
-      } else {
-        holder.creator.setVisibility(View.VISIBLE);
-      }
-
-      if (book.getPublisher() == null || book.getPublisher().isEmpty()) {
-        holder.publisher.setVisibility(View.GONE);
-      } else {
-        holder.publisher.setVisibility(View.VISIBLE);
-      }
-
-      if (book.getDate() == null || book.getDate().isEmpty()) {
-        holder.date.setVisibility(View.GONE);
-      } else {
-        holder.date.setVisibility(View.VISIBLE);
-      }
-
-      if (book.getSize() == null || book.getSize().isEmpty()) {
-        holder.size.setVisibility(View.GONE);
-      } else {
-        holder.size.setVisibility(View.VISIBLE);
-      }
+      hideIfEmpty(book.getTitle(), holder.title);
+      hideIfEmpty(book.getDescription(), holder.description);
+      hideIfEmpty(book.getCreator(), holder.creator);
+      hideIfEmpty(book.getPublisher(), holder.publisher);
+      hideIfEmpty(book.getDate(), holder.date);
+      hideIfEmpty(book.getSize(), holder.size);
 
       return convertView;
     } else {
@@ -212,6 +183,10 @@ public class LibraryAdapter extends BaseAdapter {
 
       return convertView;
     }
+  }
+
+  private void hideIfEmpty(String s, View v) {
+    v.setVisibility((s == null || s.isEmpty()) ? View.GONE : View.VISIBLE);
   }
 
   private boolean languageActive(Book book) {
