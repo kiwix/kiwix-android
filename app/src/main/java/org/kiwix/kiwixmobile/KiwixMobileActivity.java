@@ -379,9 +379,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
     initPlayStoreUri();
 
-    if (SDK_INT > VERSION_CODES.LOLLIPOP){
-
-    } else{
+    if (SDK_INT <= VERSION_CODES.LOLLIPOP) {
       snackbarLayout.setFitsSystemWindows(true);
     }
 
