@@ -2,8 +2,6 @@
 <resources>
   <string name="menu_help">Ohje</string>
   <string name="menu_home">Etusivu</string>
-  <string name="menu_forward">Seuraava</string>
-  <string name="menu_back">Edellinen</string>
   <string name="menu_settings">Asetukset</string>
   <string name="menu_search">Haku</string>
   <string name="menu_searchintext">Etsi tekstissä</string>
@@ -13,7 +11,6 @@
   <string name="menu_exitfullscreen">Poistu koko näytöstä</string>
   <string name="menu_read_aloud">Lue ääneen</string>
   <string name="menu_read_aloud_stop">Lopeta ääneen lukeminen</string>
-  <string name="menu_rescan_fs">Skannaa SD-kortti uudelleen</string>
   <string name="save_media">Tallenna media nimellä...</string>
   <string name="save_media_error">Tapahtui virhe mediaa tallentaessa!</string>
   <string name="save_media_saved">Tallennettu media %1$s kuvakansiossasi</string>
@@ -21,22 +18,13 @@
   <string name="button_backtotop">Takaisin alkuun</string>
   <string name="search_label">Haku</string>
   <string name="choose_file">Valitse ZIM-sisältötiedosto (*.zim)</string>
-  <string name="add_bookmark">Merkitse tämä sivu</string>
-  <string name="remove_bookmark">Poista merkintä valituista</string>
   <string name="open_in_new_tab">Avaa linkki uudessa välilehdessä?</string>
   <string name="error_nozimfilesfound">ZIM-tiedostoja ei löytynyt laitteestasi.\nKatso Ohje-sivua saadaksesi ohjeet siitä, miten ladata sisältöä Kiwixiin.\nJos et laita ZIM-tiedostoa laitteeseen/ulkoiseen tallennistilaan, saatat joutua yrittämään uudelleen hetken kuluttua tai käynnistämään laitteesi uudelleen.</string>
   <string name="error_filenotfound">Virhe: valittua ZIM-tiedostoa ei löytynyt.</string>
   <string name="error_fileinvalid">Virhe: valittu tiedosto ei ole kelvollinen ZIM-tiedosto.</string>
-  <string name="error_articlenotfound">Virhe: Artikkelin \"%1$s\" lataus epäonnistui.</string>
   <string name="error_articleurlnotfound">Virhe: Artikkelin (Url: %1$s) lataus epäonnistui.</string>
   <string name="pref_display_title">Näytä</string>
   <string name="pref_zoom_dialog">Zoomaustaso</string>
-  <string-array name="pref_zoom_entries">
-    <item name="pref_zoom_entry_automatic">Automaattinen</item>
-    <item name="pref_zoom_entry_small">Pieni</item>
-    <item name="pref_zoom_entry_medium">Keskikokoinen</item>
-    <item name="pref_zoom_entry_large">Suuri</item>
-  </string-array>
   <string name="pref_info_title">Tiedot</string>
   <string name="pref_info_version">Versio</string>
   <string name="pref_zoom_enable">Zoomaussäätimet</string>
@@ -54,7 +42,6 @@
   <string name="menu_bookmarks_list">Kirjanmerkit</string>
   <string name="no_section_info">Sisältö otsikoita ei löydy</string>
   <string name="request_storage">Käyttääksemme ZIM-tiedostoja, tarvitsemme pääsyn muistiisi</string>
-  <string name="bookmarks_restored">Kirjanmerkit palautettu</string>
   <string name="bookmark_added">Kirjanmerkki lisätty</string>
   <string name="rate_dialog_title">Arvioi meitä</string>
   <string name="rate_dialog_msg_1">Jos nautit</string>

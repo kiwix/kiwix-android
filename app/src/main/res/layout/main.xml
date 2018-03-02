@@ -22,18 +22,15 @@
       android:orientation="vertical" />
 
     <RelativeLayout
-      android:id="@+id/MainLayout"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
       android:orientation="vertical">
 
       <RelativeLayout
-        android:id="@+id/FullscreenButtonLayout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
         <RelativeLayout
-          android:id="@+id/ElementsLayout"
           android:layout_width="fill_parent"
           android:layout_height="fill_parent"
           android:orientation="vertical">
@@ -115,7 +112,7 @@
         android:visibility="gone"
         app:tabGravity="fill"
         app:tabIndicatorColor="@color/grey"
-        app:tabSelectedTextColor="@color/grey"/>
+        app:tabSelectedTextColor="@color/grey" />
 
     </RelativeLayout>
 

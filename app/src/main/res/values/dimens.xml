@@ -22,7 +22,6 @@
   <dimen name="dimen_18sp">18sp</dimen>
   <dimen name="dimen_20sp">20sp</dimen>
   <dimen name="navigation_width">260dp</dimen>
-  <dimen name="abc_search_view_text_min_width">160dip</dimen>
   <dimen name="abc_dropdownitem_text_padding_left">8dip</dimen>
   <dimen name="abc_dropdownitem_text_padding_right">8dip</dimen>
   <dimen name="library_textview_padding">75dp</dimen>
@@ -38,12 +37,6 @@
   <dimen name="file_management_no_files_text_size">20sp</dimen>
   <dimen name="zimfilelist_padding_bottom">60dp</dimen>
   <dimen name="webview_search_edit_text_margin_right">10dip</dimen>
-  <dimen name="search_badge_margin_bottom">2dip</dimen>
-  <dimen name="search_edit_frame_margin_top">4dip</dimen>
-  <dimen name="search_edit_frame_margin_bottom">4dip</dimen>
-  <dimen name="search_edit_frame_margin_left">8dip</dimen>
-  <dimen name="search_edit_frame_margin_right">8dip</dimen>
-  <dimen name="search_src_text_height">36dip</dimen>
   <dimen name="progressbar_layout_margin_top">300dp</dimen>
   <dimen name="fullscreen_control_button_margin">7dp</dimen>
   <!-- Workaround to store floats in dimen -->
