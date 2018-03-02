@@ -43,6 +43,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.support.v7.widget.RecyclerView;
 
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
@@ -68,7 +69,7 @@ public class BookmarksActivity extends BaseActivity
   private ArrayList<String> bookmarks;
   private ArrayList<String> bookmarkUrls;
   @BindView(R.id.bookmarks_list)
-  ListView bookmarksList;
+  RecyclerView bookmarksList;
   private BookmarksArrayAdapter adapter;
   @BindView(R.id.bookmarks_activity_layout)
   CoordinatorLayout snackbarLayout;

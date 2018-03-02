@@ -28,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.support.v7.widget.RecyclerView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -71,7 +72,7 @@ public class LibraryFragment extends Fragment
 
 
   @BindView(R.id.library_list)
-  ListView libraryList;
+  RecyclerView libraryList;
   @BindView(R.id.network_permission_text)
   TextView networkText;
   @BindView(R.id.network_permission_button)

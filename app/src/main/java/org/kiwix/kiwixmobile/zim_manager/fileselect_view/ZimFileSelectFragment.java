@@ -43,6 +43,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.support.v7.widget.RecyclerView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -85,7 +86,7 @@ public class ZimFileSelectFragment extends Fragment
 
   private RescanDataAdapter mRescanAdapter;
   private ArrayList<LibraryNetworkEntity.Book> mFiles;
-  private ListView mZimFileList;
+  private RecyclerView mZimFileList;
   private TextView mFileMessage;
   private boolean mHasRefresh;
 
