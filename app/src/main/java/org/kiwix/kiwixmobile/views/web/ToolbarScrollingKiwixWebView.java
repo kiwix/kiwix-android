@@ -30,7 +30,6 @@ import org.kiwix.kiwixmobile.utils.DimenUtils;
 
 public class ToolbarScrollingKiwixWebView extends KiwixWebView {
 
-  private final int statusBarHeight = DimenUtils.getTranslucentStatusBarHeight(getContext());
   private final int toolbarHeight = DimenUtils.getToolbarHeight(getContext());
   private View toolbarView;
   private View bottombarView;
@@ -45,27 +44,27 @@ public class ToolbarScrollingKiwixWebView extends KiwixWebView {
 
   protected boolean moveToolbar(int scrollDelta) {
     float newTranslation;
-    float originalTranslation = toolbarView.getTranslationY() - statusBarHeight;
+    float originalTranslation = toolbarView.getTranslationY();
     if (scrollDelta > 0) {
       // scroll down
-      newTranslation = Math.max(-statusBarHeight - toolbarHeight, originalTranslation - scrollDelta);
+      newTranslation = Math.max(-toolbarHeight, originalTranslation - scrollDelta);
     } else {
       // scroll up
       newTranslation = Math.min(0, originalTranslation - scrollDelta);
     }
 
-    toolbarView.setTranslationY(newTranslation + statusBarHeight);
-    bottombarView.setTranslationY(newTranslation * -1 * (bottombarView.getHeight() / (float) (statusBarHeight + toolbarHeight)));
-    this.setTranslationY(newTranslation + toolbarHeight + statusBarHeight);
+    toolbarView.setTranslationY(newTranslation);
+    bottombarView.setTranslationY(newTranslation * -1 * (bottombarView.getHeight() / (float) (toolbarHeight)));
+    this.setTranslationY(newTranslation + toolbarHeight);
     if (listener != null && newTranslation != originalTranslation) {
-      if (newTranslation == -toolbarHeight -statusBarHeight) {
+      if (newTranslation == -toolbarHeight) {
         listener.onToolbarHidden();
       } else if (newTranslation == 0) {
         listener.onToolbarDisplayed();
       }
     }
 
-    return toolbarHeight + newTranslation != 0 && newTranslation != 0;
+    return newTranslation != -toolbarHeight && newTranslation != 0;
   }
 
   @Override

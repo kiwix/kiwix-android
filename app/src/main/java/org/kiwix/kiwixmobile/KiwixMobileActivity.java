@@ -931,8 +931,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     isFullscreenOpened = false;
     getCurrentWebView().requestLayout();
     if (!isHideToolbar) {
-      toolbarContainer.setTranslationY(DimenUtils.getTranslucentStatusBarHeight(this));
-      this.getCurrentWebView().setTranslationY(DimenUtils.getToolbarAndStatusBarHeight(this));
+      this.getCurrentWebView().setTranslationY(DimenUtils.getToolbarHeight(this));
     }
   }
 
