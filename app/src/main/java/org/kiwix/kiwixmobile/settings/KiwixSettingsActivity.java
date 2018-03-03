@@ -26,7 +26,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.EditTextPreference;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
@@ -47,12 +46,12 @@ import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.database.RecentSearchDao;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
+import org.kiwix.kiwixmobile.views.LanguageSelectDialog;
 import org.kiwix.kiwixmobile.views.SliderPreference;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryUtils;
 
 import java.io.File;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 import eu.mhutti1.utils.storage.StorageDevice;
@@ -76,6 +75,8 @@ import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class KiwixSettingsActivity extends AppCompatActivity {
 
+  public static String zimFile;
+
   public static boolean allHistoryCleared = false;
 
   private static final int DAWN_HOUR = 6;
@@ -84,7 +85,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
 
-    if (nightMode(PreferenceManager.getDefaultSharedPreferences(this))) {
+    if(nightMode(PreferenceManager.getDefaultSharedPreferences(this))){
       setTheme(R.style.AppTheme_Night);
     }
     getWindow().setWindowAnimations(R.style.WindowAnimationTransition);
@@ -123,13 +124,13 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     toolbar.setNavigationOnClickListener(v -> onBackPressed());
   }
 
-  public static boolean nightMode(SharedPreferences preferences) {
+  public static boolean nightMode(SharedPreferences preferences){
     boolean autoNightMode = preferences.getBoolean(PREF_AUTONIGHTMODE, false);
-    if (autoNightMode) {
+    if(autoNightMode){
       Calendar cal = Calendar.getInstance();
       int hour = cal.get(Calendar.HOUR_OF_DAY);
       return hour < DAWN_HOUR || hour > DUSK_HOUR;
-    } else {
+    } else{
       return preferences.getBoolean(PREF_NIGHTMODE, false);
     }
   }
@@ -146,24 +147,24 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       addPreferencesFromResource(R.xml.preferences);
 
       boolean auto_night_mode = PreferenceManager.getDefaultSharedPreferences(getActivity())
-          .getBoolean(PREF_AUTONIGHTMODE, false);
+              .getBoolean(PREF_AUTONIGHTMODE, false);
 
-      if (auto_night_mode) {
+      if(auto_night_mode){
         getPreferenceScreen().findPreference(PREF_NIGHTMODE).setEnabled(false);
       }
 
       if (BuildConfig.ENFORCED_LANG.equals("")) {
         setUpLanguageChooser(PREF_LANG);
       } else {
-        getPreferenceScreen().removePreference(findPreference("pref_language"));
+        getPreferenceScreen().removePreference(getPrefrence("pref_language"));
       }
 
       if (BuildConfig.IS_CUSTOM_APP) {
         PreferenceCategory notificationsCategory = (PreferenceCategory) findPreference("pref_extras");
-        notificationsCategory.removePreference(findPreference("pref_wifi_only"));
+        notificationsCategory.removePreference(getPrefrence("pref_wifi_only"));
       }
 
-      mSlider = (SliderPreference) findPreference(PREF_ZOOM);
+      mSlider = (SliderPreference) getPrefrence(PREF_ZOOM);
       setSliderState();
       setStorage();
       setUpSettings();
@@ -176,18 +177,18 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       recentSearchDao.deleteSearchHistory();
     }
 
-    private void setStorage() {
+    private void setStorage(){
       if (BuildConfig.IS_CUSTOM_APP) {
-        getPreferenceScreen().removePreference(findPreference("pref_storage"));
+        getPreferenceScreen().removePreference(getPrefrence("pref_storage"));
       } else {
         if (Environment.isExternalStorageEmulated()) {
-          findPreference(PREF_STORAGE).setTitle(PreferenceManager.getDefaultSharedPreferences(getActivity())
+          getPrefrence(PREF_STORAGE).setTitle(PreferenceManager.getDefaultSharedPreferences(getActivity())
               .getString(PREF_STORAGE_TITLE, "Internal"));
         } else {
-          findPreference(PREF_STORAGE).setTitle(PreferenceManager.getDefaultSharedPreferences(getActivity())
+          getPrefrence(PREF_STORAGE).setTitle(PreferenceManager.getDefaultSharedPreferences(getActivity())
               .getString(PREF_STORAGE_TITLE, "External"));
         }
-        findPreference(PREF_STORAGE).setSummary(LibraryUtils.bytesToHuman(new File(PreferenceManager.getDefaultSharedPreferences(getActivity())
+        getPrefrence(PREF_STORAGE).setSummary(LibraryUtils.bytesToHuman( new File(PreferenceManager.getDefaultSharedPreferences(getActivity())
             .getString(PREF_STORAGE, Environment.getExternalStorageDirectory().getPath())).getFreeSpace()));
       }
     }
@@ -221,32 +222,11 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     }
 
     private void setUpLanguageChooser(String preferenceId) {
-      ListPreference languagePref = (ListPreference) findPreference(preferenceId);
+      Preference languagePref = getPrefrence(preferenceId);
       SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-      String selectedLang = sharedPreferences.getString(PREF_LANG, Locale.getDefault().getLanguage());
-      List<String> languageCodeList = new LanguageUtils(getActivity()).getKeys();
-      selectedLang = languageCodeList.contains(selectedLang) ? selectedLang : "en";
-      String code[] = languageCodeList.toArray(new String[languageCodeList.size()]);
-      String[] entries = new String[code.length];
-      for (int index = 0; index < code.length; index++) {
-        Locale locale = new Locale(code[index]);
-        entries[index] = locale.getDisplayLanguage() + " (" + locale.getDisplayLanguage(locale) + ") ";
-      }
-      languagePref.setEntries(entries);
-      languagePref.setEntryValues(code);
-      languagePref.setDefaultValue(selectedLang);
-      languagePref.setValue(selectedLang);
+      String selectedLang = sharedPreferences.getString(PREF_LANG, Locale.getDefault().toString());
+
       languagePref.setTitle(new Locale(selectedLang).getDisplayLanguage());
-      languagePref.setOnPreferenceChangeListener((preference, newValue) -> {
-        String languageCode = (String) newValue;
-        LanguageUtils.handleLocaleChange(getActivity(), languageCode);
-        preference.setTitle(new Locale(languageCode).getLanguage());
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(PREF_LANG, languageCode);
-        editor.apply();
-        restartActivity();
-        return true;
-      });
     }
 
     private void restartActivity() {
@@ -261,6 +241,10 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       EditTextPreference versionPref = (EditTextPreference) PrefsFragment.this
           .findPreference(PREF_VERSION);
       versionPref.setSummary(version);
+    }
+
+    private Preference getPrefrence(String preferenceId) {
+      return PrefsFragment.this.findPreference(preferenceId);
     }
 
     @Override
@@ -282,7 +266,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       if (key.equals(PREF_WIFI_ONLY)) {
         KiwixMobileActivity.wifiOnly = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
       }
-      if (key.equals(PREF_AUTONIGHTMODE)) {
+      if(key.equals(PREF_AUTONIGHTMODE)){
         KiwixMobileActivity.refresh = true;
         KiwixMobileActivity.nightMode = nightMode(sharedPreferences);
         getActivity().finish();
@@ -308,7 +292,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
           .show();
     }
 
-    public void openCredits() {
+    public void openCredits(){
       WebView view = (WebView) LayoutInflater.from(getActivity()).inflate(R.layout.credits_webview, null);
       view.loadUrl("file:///android_asset/credits.html");
       new AlertDialog.Builder(getActivity(), dialogStyle())
@@ -329,10 +313,34 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       if (preference.getKey().equalsIgnoreCase(PREF_STORAGE))
         openFolderSelect();
 
+      if (preference.getKey().equalsIgnoreCase(PREF_LANG))
+        openLanguageSelect();
+
       return true;
     }
 
-    public void openFolderSelect() {
+    public void openLanguageSelect() {
+      SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+      LanguageUtils languageUtils = new LanguageUtils(getActivity());
+      String selectedLang = sharedPreferences.getString(PREF_LANG, Locale.getDefault().toString());
+
+      new LanguageSelectDialog.Builder(getActivity(), dialogStyle())
+          .setLanguages(languageUtils.getLanguageList())
+          .setSingleSelect(true)
+          .setSelectedLanguage(selectedLang)
+          .setOnLanguageSelectedListener((languageCode -> {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(PREF_LANG, languageCode);
+            editor.apply();
+
+            LanguageUtils.handleLocaleChange(getActivity(), languageCode);
+            // Request a restart when the user returns to the Activity, that called this Activity
+            restartActivity();
+          }))
+          .show();
+    }
+
+    public void openFolderSelect(){
       FragmentManager fm = getFragmentManager();
       StorageSelectDialog dialogFragment = new StorageSelectDialog();
       Bundle b = new Bundle();
@@ -350,7 +358,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       findPreference(PREF_STORAGE).setSummary(storageDevice.getSize());
       SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
       SharedPreferences.Editor editor = sharedPreferences.edit();
-      editor.putString(PREF_STORAGE, storageDevice.getName());
+      editor.putString(PREF_STORAGE,storageDevice.getName());
       if (storageDevice.isInternal()) {
         findPreference(PREF_STORAGE).setTitle(getResources().getString(R.string.internal_storage));
         editor.putString(PREF_STORAGE_TITLE, getResources().getString(R.string.internal_storage));

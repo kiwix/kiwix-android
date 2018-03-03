@@ -12,9 +12,9 @@
 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
   <item android:state_enabled="true"
-    android:state_pressed="true"
-    android:alpha="@dimen/material_dark_hint_pressed_alpha"
-    android:color="@color/foreground_material_dark" />
+      android:state_pressed="true"
+      android:alpha="@dimen/material_dark_hint_pressed_alpha"
+      android:color="@color/foreground_material_dark" />
   <item android:alpha="@dimen/material_light_hint_alpha"
-    android:color="@color/foreground_material_dark" />
+      android:color="@color/foreground_material_dark" />
 </selector>

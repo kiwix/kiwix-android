@@ -28,19 +28,19 @@
       android:id="@+id/network_permission_text"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_centerHorizontal="true"
       android:layout_marginTop="@dimen/network_permission_text_margin_top"
+      android:layout_centerHorizontal="true"
       android:text="@string/get_library_over_network"
-      android:visibility="gone" />
+      android:visibility="gone"/>
 
     <Button
       android:id="@+id/network_permission_button"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_centerHorizontal="true"
       android:layout_marginTop="@dimen/network_permission_button_margin_top"
+      android:layout_centerHorizontal="true"
       android:text="@string/proceed"
-      android:visibility="gone" />
+      android:visibility="gone"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
       android:id="@+id/library_swiperefresh"
@@ -51,9 +51,9 @@
         android:id="@+id/library_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="@dimen/library_article_list_padding"
         android:background="?attr/listBackground"
-        android:divider="@null"
-        android:paddingBottom="@dimen/library_article_list_padding" />
+        android:divider="@null"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

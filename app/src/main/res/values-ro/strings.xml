@@ -2,6 +2,8 @@
 <resources>
   <string name="menu_help">Ajutor</string>
   <string name="menu_home">Acasă</string>
+  <string name="menu_forward">Înainte</string>
+  <string name="menu_back">Înapoi</string>
   <string name="menu_settings">Preferințe</string>
   <string name="menu_search">Căutare</string>
   <string name="menu_searchintext">Caută în text</string>
@@ -11,20 +13,31 @@
   <string name="menu_exitfullscreen">Ieșire din ecran complet</string>
   <string name="menu_read_aloud">Citește cu voce tare</string>
   <string name="menu_read_aloud_stop">Oprește citirea cu voce tare</string>
+  <string name="menu_rescan_fs">Rescanează cardul SD</string>
   <string name="save_media">Salvează multimedia ca...</string>
   <string name="save_media_error">A apărut o eroare în încercarea de a salva fișierul media!</string>
   <string name="save_media_saved">Fișierul media salvat ca %1$s în folderul Imagini</string>
   <string name="rescan_fs_warning">Se caută fișiere ZIM; vă rugăm să așteptați...</string>
   <string name="button_backtotop">Începutul paginii</string>
   <string name="search_label">Căutare</string>
+  <string name="articlesearch_hint">Tastați pentru a căuta articole</string>
   <string name="choose_file">Alegeți un fișier cu conținut ZIM (*.zim)</string>
+  <string name="add_bookmark">Marchează această pagină</string>
+  <string name="remove_bookmark">Șterge marcajul selectat</string>
   <string name="open_in_new_tab">Deschideți legătura într-o filă nouă?</string>
   <string name="error_nozimfilesfound">Nu s-au găsit fișiere ZIM pe dispozitivul dumneavoastră.\nConsultați pagina de ajutor pentru detalii despre încărcarea conținutului în Kiwix.\nDacă totuși ați stocat un fișier ZIM pe dispozitivul dv./stocarea dv. externă, puteți reîncerca peste un minut sau puteți reporni dispozitivul.</string>
   <string name="error_filenotfound">Eroare: Fișierul ZIM selectat nu poate fi găsit.</string>
   <string name="error_fileinvalid">Eroare: Fișierul selectat nu este un fișier ZIM valid.</string>
+  <string name="error_articlenotfound">Eroare: Încărcarea articolului \"%1$s\" nu a reușit.</string>
   <string name="error_articleurlnotfound">Eroare: Încărcarea articolului (Url: %1$s) nu a reușit.</string>
   <string name="pref_display_title">Afișare</string>
   <string name="pref_zoom_dialog">Nivel de zoom</string>
+  <string-array name="pref_zoom_entries">
+    <item name="pref_zoom_entry_automatic">Automat</item>
+    <item name="pref_zoom_entry_small">Scăzut</item>
+    <item name="pref_zoom_entry_medium">Mediu</item>
+    <item name="pref_zoom_entry_large">Ridicat</item>
+  </string-array>
   <string name="pref_info_title">Informații</string>
   <string name="pref_info_version">Versiune</string>
   <string name="pref_zoom_enable">Controale de zoom</string>
@@ -42,6 +55,7 @@
   <string name="menu_bookmarks_list">Semne de carte</string>
   <string name="no_section_info">Nu s-a găsit niciun antet de conținut</string>
   <string name="request_storage">Pentru a accesa fișiere ZIM, avem nevoie acces la spațiul de stocare</string>
+  <string name="bookmarks_restored">Marcaje restaurate</string>
   <string name="bookmark_added">Marcaj adăugat</string>
   <string name="rate_dialog_title">Vă rugăm să ne evaluați</string>
   <string name="rate_dialog_msg_1">Dacă v-a plăcut</string>
