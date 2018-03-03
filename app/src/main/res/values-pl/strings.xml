@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Pomoc</string>
   <string name="menu_home">Strona główna</string>
   <string name="menu_settings">Ustawienia</string>
@@ -11,10 +11,10 @@
   <string name="menu_exitfullscreen">Wyjdź z trybu pełnego ekranu</string>
   <string name="menu_read_aloud">Czytaj na głos</string>
   <string name="menu_read_aloud_stop">Zatrzymaj czytanie na głos</string>
-  <string name="save_media">Zapisz plik multimedialny jako...</string>
+  <string name="save_media" tools:ignore="TypographyEllipsis">Zapisz plik multimedialny jako...</string>
   <string name="save_media_error">Wystąpił błąd przy zapisywanie plików multimedialnych!</string>
   <string name="save_media_saved">Zapisano plik multimedialny jako %1$s w folderze Zdjęcia.</string>
-  <string name="rescan_fs_warning">Skanowanie plików ZIM, proszę czekać...</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">Skanowanie plików ZIM, proszę czekać...</string>
   <string name="button_backtotop">Powrót do góry</string>
   <string name="search_label">Szukaj</string>
   <string name="choose_file">Wybierz plik zawartości ZIM (*.zim)</string>

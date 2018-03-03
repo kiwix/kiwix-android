@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.search;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -63,7 +64,7 @@ public class SearchActivity extends AppCompatActivity
     }
     setupDagger();
     super.onCreate(savedInstanceState);
-    View contentView = LayoutInflater.from(this).inflate(R.layout.search, null);
+    @SuppressLint("InflateParams") View contentView = LayoutInflater.from(this).inflate(R.layout.search, null);
     setContentView(contentView);
 
     Toolbar toolbar = findViewById(R.id.toolbar);
@@ -107,11 +108,13 @@ public class SearchActivity extends AppCompatActivity
     }
   }
 
+  @SuppressLint("InlinedApi")
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu_search, menu);
     MenuItem searchMenuItem = menu.findItem(R.id.menu_search);
-    MenuItemCompat.expandActionView(searchMenuItem);
+      //noinspection deprecation
+      MenuItemCompat.expandActionView(searchMenuItem);
     searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
       @Override
@@ -132,7 +135,8 @@ public class SearchActivity extends AppCompatActivity
       }
     });
 
-    MenuItemCompat.setOnActionExpandListener(searchMenuItem,
+      //noinspection deprecation,deprecation
+      MenuItemCompat.setOnActionExpandListener(searchMenuItem,
         new MenuItemCompat.OnActionExpandListener() {
           @Override
           public boolean onMenuItemActionExpand(MenuItem item) {

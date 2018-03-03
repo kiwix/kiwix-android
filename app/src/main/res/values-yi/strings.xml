@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">הילף</string>
   <string name="menu_home">היים</string>
   <string name="menu_settings">פרעפֿערענצן</string>
@@ -13,7 +13,7 @@
   <string name="menu_read_aloud_stop">אויפהיטן לייענען הויך</string>
   <string name="save_media">שפייכלערן מעדיעוויקי ווי…</string>
   <string name="save_media_error">א טעות האט פאסירט ביים אויפהיטן די מעדיע!</string>
-  <string name="save_media_saved">מעדיע אויפֿגעהיטן ווי %s צו Android/media/org.kiwix.../</string>
+  <string name="save_media_saved" tools:ignore="TypographyEllipsis">מעדיע אויפֿגעהיטן ווי %s צו Android/media/org.kiwix.../</string>
   <string name="button_backtotop">צוריק אויבן</string>
   <string name="search_label">זוכן</string>
   <string name="open_in_new_tab">עפענען לינק אין א נײַעם טאב?</string>

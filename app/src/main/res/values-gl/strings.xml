@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_zim_manager">Obter contido</string>
   <string name="menu_help">Axuda</string>
   <string name="menu_home">Inicio</string>
@@ -14,7 +14,7 @@
   <string name="menu_read_aloud_stop">Deixar de ler en voz alta</string>
   <string name="save_media">Gardar multimedia</string>
   <string name="save_media_error">Houbo un erro ao intentar gardar o multimedia!</string>
-  <string name="save_media_saved">Multimedia gardado como %s en Android/media/org.kiwix.../</string>
+  <string name="save_media_saved" tools:ignore="TypographyEllipsis">Multimedia gardado como %s en Android/media/org.kiwix.../</string>
   <string name="rescan_fs_warning">Procurando contido descargable; espere…</string>
   <string name="button_backtotop">Volver ao inicio</string>
   <string name="search_label">Procurar</string>
@@ -58,7 +58,7 @@
   <string name="delete_specific_search_toast">Procuras recentes eliminadas</string>
   <string name="hint_contents_drawer_message">Podes deslizar á esquerda para ver os contidos deste artigo</string>
   <string name="got_it">Entendido</string>
-  <string name="did_you_know">Sabía que...?</string>
+  <string name="did_you_know" tools:ignore="TypographyEllipsis">Sabía que...?</string>
   <string name="undo">Desfacer</string>
   <string name="tab_closed">Lapela pechada</string>
   <string name="deleted_message">borrado</string>

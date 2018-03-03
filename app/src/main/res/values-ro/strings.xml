@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Ajutor</string>
   <string name="menu_home">Acasă</string>
   <string name="menu_settings">Preferințe</string>
@@ -11,10 +11,10 @@
   <string name="menu_exitfullscreen">Ieșire din ecran complet</string>
   <string name="menu_read_aloud">Citește cu voce tare</string>
   <string name="menu_read_aloud_stop">Oprește citirea cu voce tare</string>
-  <string name="save_media">Salvează multimedia ca...</string>
+  <string name="save_media" tools:ignore="TypographyEllipsis">Salvează multimedia ca...</string>
   <string name="save_media_error">A apărut o eroare în încercarea de a salva fișierul media!</string>
   <string name="save_media_saved">Fișierul media salvat ca %1$s în folderul Imagini</string>
-  <string name="rescan_fs_warning">Se caută fișiere ZIM; vă rugăm să așteptați...</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">Se caută fișiere ZIM; vă rugăm să așteptați...</string>
   <string name="button_backtotop">Începutul paginii</string>
   <string name="search_label">Căutare</string>
   <string name="choose_file">Alegeți un fișier cu conținut ZIM (*.zim)</string>

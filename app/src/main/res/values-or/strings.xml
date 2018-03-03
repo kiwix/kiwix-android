@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">ସହଯୋଗ</string>
   <string name="menu_home">ମୂଳ ଜାଗା</string>
   <string name="menu_settings">ପସନ୍ଦସବୁ</string>
@@ -14,7 +14,7 @@
   <string name="save_media">ମେଡ଼ିଅକୁ ସାଇତିବେ</string>
   <string name="save_media_error">ମିଡ଼ିଆ ସାଇତିଲା ବେଳେ ଅସୁବିଧା ହେଲା!</string>
   <string name="save_media_saved">ମେଡ଼ିଆକୁ %1$ ଭାବେ ଆପଣଙ୍କ ଛବି ଫୋଲ୍ଡରରେ ରଖାଗଲା</string>
-  <string name="rescan_fs_warning">ଜିମ ଫାଇଲ ସ୍କାନ କରୁଛୁ, ଦୟାକରି ଅପେକ୍ଷା କରନ୍ତୁ...</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">ଜିମ ଫାଇଲ ସ୍କାନ କରୁଛୁ, ଦୟାକରି ଅପେକ୍ଷା କରନ୍ତୁ...</string>
   <string name="button_backtotop">ଉପରକୁ ଫେରନ୍ତୁ</string>
   <string name="search_label">ଖୋଜିବେ</string>
   <string name="choose_file">ଜିମ ବିଷୟବସ୍ତୁ ଥିବା (*.zim) ଫାଇଲ ବାଛନ୍ତୁ</string>

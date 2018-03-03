@@ -20,6 +20,7 @@
 
 package org.kiwix.kiwixmobile.bookmarks_view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -268,6 +269,7 @@ public class BookmarksActivity extends BaseActivity
       super(context, resource, textViewResourceId, objects);
     }
 
+    @SuppressLint("InflateParams")
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

@@ -19,6 +19,7 @@
 
 package org.kiwix.kiwixmobile.library;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -119,6 +120,7 @@ public class LibraryAdapter extends BaseAdapter {
     return i;
   }
 
+  @SuppressLint("InflateParams")
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     ViewHolder holder;

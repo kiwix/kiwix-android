@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_zim_manager">বিষয়বস্তু পান</string>
   <string name="menu_help">সাহায্য</string>
   <string name="menu_home">প্রধান পাতা</string>
@@ -14,8 +14,8 @@
   <string name="menu_read_aloud_stop">জোরে পড়া বন্ধ করুন</string>
   <string name="save_media">মিডিয়া সংরক্ষণ করুন</string>
   <string name="save_media_error">মিডিয়া সংরক্ষণের চেষ্টা করার সময় একটি ত্রুটি ঘটেছে!</string>
-  <string name="save_media_saved">%s হিসাবে Android/media/org.kiwix.../ এ মিডিয়া সংরক্ষিত হয়েছে</string>
-  <string name="rescan_fs_warning">ডাউনলোডযোগ্য বিষয়বস্তুর জন্য স্ক্যান করা হচ্ছে, দয়া করে অপেক্ষা করুন...</string>
+  <string name="save_media_saved" tools:ignore="TypographyEllipsis">%s হিসাবে Android/media/org.kiwix.../ এ মিডিয়া সংরক্ষিত হয়েছে</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">ডাউনলোডযোগ্য বিষয়বস্তুর জন্য স্ক্যান করা হচ্ছে, দয়া করে অপেক্ষা করুন...</string>
   <string name="button_backtotop">উপরে ফিরুন</string>
   <string name="search_label">অনুসন্ধান</string>
   <string name="choose_file">একটি বিষয়বস্তুর ফাইল নির্বাচন করুন (*.zim)</string>
@@ -79,7 +79,7 @@
   <string name="search_widget_text">কিউইক্স অনুসন্ধান</string>
   <string name="speech_prompt_text">%s অনুসন্ধান করতে কথা বলুন</string>
   <string name="speech_not_supported">দুঃখিত! আপনার ডিভাইস কথ্য ইনপুট সমর্থন করে না</string>
-  <string name="download_started_library">ডাউনলোড শুরু হয়েছে...</string>
+  <string name="download_started_library" tools:ignore="TypographyEllipsis">ডাউনলোড শুরু হয়েছে...</string>
   <string name="local_zims">ডিভাইস</string>
   <string name="remote_zims">অনলাইন</string>
   <string name="zim_downloads">ডাউনলোড হচ্ছে</string>

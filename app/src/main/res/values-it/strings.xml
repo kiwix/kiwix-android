@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Aiuto</string>
   <string name="menu_home">Pagina principale</string>
   <string name="menu_settings">Impostazioni</string>
@@ -11,10 +11,10 @@
   <string name="menu_exitfullscreen">Esci dalla modalità a tutto schermo</string>
   <string name="menu_read_aloud">Leggi a voce alta</string>
   <string name="menu_read_aloud_stop">Interrompi lettura a voce alta</string>
-  <string name="save_media">Salva file multimediale come...</string>
+  <string name="save_media" tools:ignore="TypographyEllipsis">Salva file multimediale come...</string>
   <string name="save_media_error">Si è verificato un errore durante il salvataggio del file multimediale!</string>
-  <string name="save_media_saved">Salvato file multimediale come %s in Android/media/org.kiwix.../</string>
-  <string name="rescan_fs_warning">Scansione dei contenuti scaricabili, attendi...</string>
+  <string name="save_media_saved" tools:ignore="TypographyEllipsis">Salvato file multimediale come %s in Android/media/org.kiwix.../</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">Scansione dei contenuti scaricabili, attendi...</string>
   <string name="button_backtotop">Torna all\'inizio</string>
   <string name="search_label">Ricerca</string>
   <string name="choose_file">Seleziona un file di contenuto (*.zim)</string>
@@ -65,7 +65,7 @@
   <string name="bookmark_removed">Segnalibro rimosso</string>
   <string name="pref_newtab_background_title">Apri nuova scheda in background</string>
   <string name="pref_newtab_background_summary">Quando si apre una nuova scheda verrà aperta in background</string>
-  <string name="download_started_library">Download iniziato...</string>
+  <string name="download_started_library" tools:ignore="TypographyEllipsis">Download iniziato...</string>
   <string name="local_zims">Dispositivo</string>
   <string name="zim_manager">Libreria</string>
   <string name="delete_specific_zim">Cancellare questo file?</string>

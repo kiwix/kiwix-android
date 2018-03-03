@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">مرسته</string>
   <string name="menu_home">کور</string>
   <string name="menu_settings">غوره توبونه</string>
@@ -11,10 +11,10 @@
   <string name="menu_exitfullscreen">بشپړ پردې څخه وتل</string>
   <string name="menu_read_aloud">په جگ غږ لوستل</string>
   <string name="menu_read_aloud_stop">په جگ غږ لوستل درول</string>
-  <string name="save_media">رسنۍ ساتل لکه...</string>
+  <string name="save_media" tools:ignore="TypographyEllipsis">رسنۍ ساتل لکه...</string>
   <string name="save_media_error">د رسنۍ په ساتلو کې يوه تېروتنه رامنځ ته شوه!</string>
   <string name="save_media_saved">رسنۍ خپل د انځورونو په ټولگه کې د %1$s په نوم ساتل</string>
-  <string name="rescan_fs_warning">د ZIM دوتنو لپاره ځيرڅارنه، لطفاً تم شئ...</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">د ZIM دوتنو لپاره ځيرڅارنه، لطفاً تم شئ...</string>
   <string name="button_backtotop">بېرته سر ته</string>
   <string name="search_label">پلټل</string>
   <string name="choose_file">د ZIM مېنځپانگې يوه دوتنه ټاکل (*.zim)</string>

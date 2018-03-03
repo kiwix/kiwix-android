@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.downloader;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -82,6 +83,7 @@ public class DownloadService extends Service {
   public SparseIntArray timeRemaining = new SparseIntArray();
   public static final Object pauseLock = new Object();
   public static BookDao bookDao;
+  @SuppressLint("StaticFieldLeak")
   private static DownloadFragment downloadFragment;
   Handler handler = new Handler(Looper.getMainLooper());
 
@@ -107,6 +109,7 @@ public class DownloadService extends Service {
     super.onCreate();
   }
 
+  @SuppressLint("IconColors")
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
     if (intent == null) {
@@ -167,7 +170,8 @@ public class DownloadService extends Service {
     NotificationCompat.Action pause = new NotificationCompat.Action(R.drawable.ic_pause_black_24dp, getString(R.string.download_pause), pausePending);
     NotificationCompat.Action stop = new NotificationCompat.Action(R.drawable.ic_stop_black_24dp, getString(R.string.download_stop), stopPending);
 
-    notification.put(notificationID , new NotificationCompat.Builder(this)
+      //noinspection deprecation
+      notification.put(notificationID , new NotificationCompat.Builder(this)
         .setContentTitle(getResources().getString(R.string.zim_file_downloading) + " " + notificationTitle)
         .setProgress(100, 0, false)
         .setSmallIcon(R.drawable.kiwix_notification)
@@ -408,7 +412,7 @@ public class DownloadService extends Service {
         // Keep attempting to download chunk despite network errors
         while (attempts < timeout) {
           try {
-            String rangeHeader = String.format("%d-%d", downloaded, chunk.getEndByte());
+            @SuppressLint("DefaultLocale") String rangeHeader = String.format("%d-%d", downloaded, chunk.getEndByte());
 
             // Build request with up to date range
             Response response = httpClient.newCall(

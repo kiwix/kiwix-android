@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.views.web;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import org.kiwix.kiwixmobile.utils.DimenUtils;
  * Created by gmon on 1/14/17.
  */
 
+@SuppressLint("ViewConstructor")
 public class ToolbarStaticKiwixWebView extends KiwixWebView {
 
   private int heightDifference;

@@ -19,6 +19,7 @@
 
 package org.kiwix.kiwixmobile.database;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 
@@ -45,6 +46,7 @@ public class KiwixDatabase extends SquidDatabase {
 
   private static final int VERSION = 14;
   private Context context;
+  @SuppressLint("StaticFieldLeak")
   private static KiwixDatabase instance = null;
 
   protected KiwixDatabase(Context context) {

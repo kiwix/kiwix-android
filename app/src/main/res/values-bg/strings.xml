@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Помощ</string>
   <string name="menu_home">Начална страница</string>
   <string name="menu_settings">Настройки</string>
@@ -11,10 +11,10 @@
   <string name="menu_exitfullscreen">Изход от цял екран</string>
   <string name="menu_read_aloud">Четене на глас</string>
   <string name="menu_read_aloud_stop">Спиране четенето на глас</string>
-  <string name="save_media">Съхраняване на медията като...</string>
+  <string name="save_media" tools:ignore="TypographyEllipsis">Съхраняване на медията като...</string>
   <string name="save_media_error">Възникна грешка при опита за съхранение на медийния файл!</string>
-  <string name="save_media_saved">Медийният файл е съхранен под името %s в Android/media/org.kiwix.../</string>
-  <string name="rescan_fs_warning">Сканиране на файлове за сваляне, моля, изчакайте...</string>
+  <string name="save_media_saved" tools:ignore="TypographyEllipsis">Медийният файл е съхранен под името %s в Android/media/org.kiwix.../</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">Сканиране на файлове за сваляне, моля, изчакайте...</string>
   <string name="button_backtotop">Връщане в началото</string>
   <string name="search_label">Търсене</string>
   <string name="choose_file">Изберете файл със съдържание (*.zim)</string>

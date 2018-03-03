@@ -1,5 +1,7 @@
 package org.kiwix.kiwixmobile.downloader;
 
+import android.annotation.SuppressLint;
+
 import org.kiwix.kiwixmobile.utils.StorageUtils;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ public class ChunkUtils {
     return generateChunks(contentLength, url, fileNames, notificationID);
   }
 
+  @SuppressLint("DefaultLocale")
   private static List<Chunk> generateChunks(long contentLength, String url, String[] fileNames, int notificationID) {
     List<Chunk> chunks = new ArrayList<>();
     long currentRange = 0;

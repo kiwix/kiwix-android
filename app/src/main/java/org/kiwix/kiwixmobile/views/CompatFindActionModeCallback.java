@@ -19,6 +19,7 @@
 
 package org.kiwix.kiwixmobile.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.support.v7.view.ActionMode;
@@ -56,6 +57,7 @@ public class CompatFindActionModeCallback
 
   private ActionMode mActionMode;
 
+  @SuppressLint("InflateParams")
   public CompatFindActionModeCallback(Context context) {
     mCustomView = LayoutInflater.from(context).inflate(R.layout.webview_search, null);
     mEditText = mCustomView.findViewById(R.id.edit);
@@ -140,13 +142,15 @@ public class CompatFindActionModeCallback
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
         mWebView.findAllAsync(null);
       } else {
-        mWebView.findAll(null);
+          //noinspection deprecation
+          mWebView.findAll(null);
       }
     } else {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
         mWebView.findAllAsync(find.toString());
       } else {
-        mWebView.findAll(find.toString());
+          //noinspection deprecation
+          mWebView.findAll(find.toString());
       }
 
       // Enable word highlighting with reflection

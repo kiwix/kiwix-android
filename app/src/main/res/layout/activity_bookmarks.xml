@@ -46,12 +46,14 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
           android:layout_width="@dimen/dimen_100dp"
           android:layout_height="@dimen/dimen_100dp"
-          android:src="@drawable/ic_star_yellow" />
+          android:src="@drawable/ic_star_yellow"
+          tools:ignore="ContentDescription" />
 
         <TextView
           style="@android:style/TextAppearance.Large"
@@ -64,7 +66,8 @@
           android:paddingRight="@dimen/dimen_10dp"
           android:paddingTop="@dimen/dimen_15dp"
           android:text="@string/no_bookmarks"
-          android:visibility="visible" />
+          android:visibility="visible"
+          tools:ignore="ObsoleteLayoutParam" />
 
       </LinearLayout>
 

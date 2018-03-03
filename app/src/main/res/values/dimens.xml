@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
   <!-- Default screen margins, per the Android Design guidelines. -->
   <dimen name="activity_horizontal_margin">16dp</dimen>
@@ -22,8 +22,8 @@
   <dimen name="dimen_18sp">18sp</dimen>
   <dimen name="dimen_20sp">20sp</dimen>
   <dimen name="navigation_width">260dp</dimen>
-  <dimen name="abc_dropdownitem_text_padding_left">8dip</dimen>
-  <dimen name="abc_dropdownitem_text_padding_right">8dip</dimen>
+  <dimen name="abc_dropdownitem_text_padding_left" tools:ignore="PrivateResource">8dip</dimen>
+  <dimen name="abc_dropdownitem_text_padding_right" tools:ignore="PrivateResource">8dip</dimen>
   <dimen name="library_textview_padding">75dp</dimen>
   <dimen name="library_font_size">20sp</dimen>
   <dimen name="library_article_list_padding">60dp</dimen>

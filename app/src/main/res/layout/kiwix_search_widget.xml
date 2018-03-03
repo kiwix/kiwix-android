@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="@dimen/kiwix_search_widget_layout_id_height"
   android:layout_marginLeft="@dimen/dimen_1dp"
@@ -14,7 +15,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_weight="0.1"
-    android:src="@drawable/ic_kiwix_widget" />
+    android:src="@drawable/ic_kiwix_widget"
+    tools:ignore="ContentDescription" />
 
   <TextView
     android:id="@+id/search_widget_text"
@@ -29,13 +31,15 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_weight="0.1"
-    android:src="@drawable/ic_stars_black_24dp" />
+    android:src="@drawable/ic_stars_black_24dp"
+    tools:ignore="ContentDescription" />
 
   <ImageView
     android:id="@+id/search_widget_mic"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_weight="0.1"
-    android:src="@drawable/ic_mic_black_24dp" />
+    android:src="@drawable/ic_mic_black_24dp"
+    tools:ignore="ContentDescription" />
 
 </LinearLayout>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">راهنما</string>
   <string name="menu_home">خانه</string>
   <string name="menu_settings">ترجیحات</string>
@@ -14,7 +14,7 @@
   <string name="save_media">ذخیره رسانه با نام ....</string>
   <string name="save_media_error">در زمان ذخیره رسانه خطایی به وجود آمد!</string>
   <string name="save_media_saved">ذخیره کردن رسانه  با عنوان %1$s در پوشه تصویر شما</string>
-  <string name="rescan_fs_warning">چستچو برای پرونده‌های ZIM، لطفاً صبر کنید...</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">چستچو برای پرونده‌های ZIM، لطفاً صبر کنید...</string>
   <string name="button_backtotop">بازگشت به بالای صفحه</string>
   <string name="search_label">جستجو</string>
   <string name="choose_file">یک پروندهٔ محتوایی ZIM را انتخاب کنید (*.zim)</string>

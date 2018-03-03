@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.utils;
 
+import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Looper;
 import android.webkit.JavascriptInterface;
@@ -22,6 +23,7 @@ public class DocumentParser {
     this.listener = listener;
   }
 
+  @SuppressLint("AddJavascriptInterface")
   public void initInterface(WebView webView) {
     webView.addJavascriptInterface(new ParserCallback(), "DocumentParser");
   }

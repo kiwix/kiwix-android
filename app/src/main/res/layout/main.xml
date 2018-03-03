@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/snackbar_layout"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
@@ -33,7 +34,8 @@
         <RelativeLayout
           android:layout_width="fill_parent"
           android:layout_height="fill_parent"
-          android:orientation="vertical">
+          android:orientation="vertical"
+          tools:ignore="UselessParent">
 
 
           <ImageButton
@@ -45,7 +47,8 @@
             android:background="@color/back_to_top_background"
             android:hint="@string/menu_exitfullscreen"
             android:src="@drawable/fullscreen_exit"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            tools:ignore="ContentDescription,RtlHardcoded" />
 
 
           <Button
@@ -81,7 +84,8 @@
               android:gravity="center"
               android:text="@string/tts_pause"
               android:textColor="@android:color/black"
-              android:textStyle="bold" />
+              android:textStyle="bold"
+              tools:ignore="ButtonStyle" />
 
             <Button
               android:id="@+id/button_stop_tts"
@@ -93,7 +97,8 @@
               android:gravity="center"
               android:text="@string/tts_stop"
               android:textColor="@android:color/black"
-              android:textStyle="bold" />
+              android:textStyle="bold"
+              tools:ignore="ButtonStyle" />
 
           </LinearLayout>
 

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_zim_manager">İçerik al</string>
   <string name="menu_help">Yardım</string>
   <string name="menu_home">Anasayfa</string>
@@ -14,8 +14,8 @@
   <string name="menu_read_aloud_stop">Yüksek sesle okumayı sonlandır</string>
   <string name="save_media">Ortam Dosyasını Kaydet</string>
   <string name="save_media_error">Medya kaydedilmeye çalışılırken bir hata oluştu!</string>
-  <string name="save_media_saved">Medyayı %s olarak şuraya kaydet Android/media/org.kiwix.../</string>
-  <string name="rescan_fs_warning">İndirilebilir içerik aranıyor, lütfen bekleyin...</string>
+  <string name="save_media_saved" tools:ignore="TypographyEllipsis">Medyayı %s olarak şuraya kaydet Android/media/org.kiwix.../</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">İndirilebilir içerik aranıyor, lütfen bekleyin...</string>
   <string name="button_backtotop">Başa dön</string>
   <string name="search_label">Ara</string>
   <string name="choose_file">Bir İçerik Dosyası seçin (*.zim)</string>
@@ -79,7 +79,7 @@
   <string name="search_widget_text">Kiwix\'i Ara</string>
   <string name="speech_prompt_text">%s aramak için konuşun</string>
   <string name="speech_not_supported">Üzgünüz! Cihazınız konuşma girdisini desteklemiyor</string>
-  <string name="download_started_library">İndirme başlatıldı...</string>
+  <string name="download_started_library" tools:ignore="TypographyEllipsis">İndirme başlatıldı...</string>
   <string name="local_zims">Cihaz</string>
   <string name="remote_zims">Çevrimiçi</string>
   <string name="zim_downloads">İndiriliyor</string>
@@ -111,7 +111,7 @@
   <string name="help_5">İçerik nerededir?</string>
   <string name="help_6">İçeriğimiz Kiwix web sayfasındadır.</string>
   <string name="help_7">ZIM dosyaları olarak kullanılabilir durumdadırlar. Onlardan çok sayıda vardır:</string>
-  <string name="help_8">\u2022 Vikipedi her dil için ayrı ayrı kullanılabilir durumdadır.</string>
+  <string name="help_8" tools:ignore="Typos">\u2022 Vikipedi her dil için ayrı ayrı kullanılabilir durumdadır.</string>
   <string name="help_9">\u2022 Wikileaks veya Vikikaynak gibi diğer kaynaklarımız da kullanılabilir durumdadır</string>
   <string name="help_10">Seçtiğiniz ZIM dosyalarını uygulama içerisinden indirebilir veya istediklerinizi seçerek SD kartınıza aktarmadan önce bir Masaüstü bilgisayarından indirebilirsiniz.</string>
   <string name="help_11">Uygulama içinden indirilen ZIM dosyaları harici depolama aygıtındaki Kiwix başlıklı bir klasördedir.</string>

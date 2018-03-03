@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.DialogPreference;
@@ -82,6 +83,7 @@ public class SliderPreference extends DialogPreference {
     mSummaries = summaries;
   }
 
+  @SuppressLint("ResourceType")
   @Override
   public void setSummary(int summaryResId) {
     try {

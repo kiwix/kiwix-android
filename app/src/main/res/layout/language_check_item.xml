@@ -17,7 +17,8 @@
     android:buttonTint="@color/accent"
     android:focusable="false"
     android:focusableInTouchMode="false"
-    tools:checked="false" />
+    tools:checked="false"
+    tools:ignore="RtlHardcoded,UnusedAttribute" />
 
   <LinearLayout
     android:layout_width="wrap_content"
@@ -25,7 +26,8 @@
     android:layout_centerVertical="true"
     android:layout_toRightOf="@id/language_checkbox"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    tools:ignore="RtlHardcoded">
 
     <TextView
       android:id="@+id/language_name"
@@ -41,7 +43,8 @@
       android:layout_marginLeft="@dimen/dimen_10dp"
       android:textColor="@color/grey"
       android:textSize="@dimen/dimen_18sp"
-      tools:text="(Deutsch)" />
+      tools:text="(Deutsch)"
+      tools:ignore="RtlHardcoded" />
 
   </LinearLayout>
 
@@ -55,6 +58,7 @@
     android:layout_marginRight="@dimen/dimen_16dp"
     android:layout_marginTop="@dimen/dimen_6dp"
     android:textColor="@color/grey"
-    android:textSize="@dimen/dimen_18sp" />
+    android:textSize="@dimen/dimen_18sp"
+    tools:ignore="RelativeOverlap,RtlHardcoded" />
 
 </RelativeLayout>

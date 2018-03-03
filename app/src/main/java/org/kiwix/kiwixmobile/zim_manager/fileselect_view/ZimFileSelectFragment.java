@@ -20,6 +20,7 @@
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -79,6 +80,7 @@ import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 public class ZimFileSelectFragment extends Fragment
     implements OnItemClickListener, AdapterView.OnItemLongClickListener, ZimFileSelectViewCallback{
 
+  @SuppressLint("StaticFieldLeak")
   public static ZimManageActivity context;
   public RelativeLayout llLayout;
   public SwipeRefreshLayout swipeRefreshLayout;

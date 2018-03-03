@@ -18,7 +18,8 @@
     android:adjustViewBounds="true"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:scaleType="fitCenter"
-    android:src="@mipmap/kiwix_icon" />
+    android:src="@mipmap/kiwix_icon"
+    tools:ignore="ContentDescription,RtlHardcoded" />
 
   <LinearLayout
     android:layout_width="@dimen/dimen_0dp"
@@ -26,7 +27,7 @@
     android:layout_weight="1"
     android:gravity="center"
     android:orientation="vertical"
-    tools:ignore="HardcodedText">
+    tools:ignore="HardcodedText,InefficientWeight">
 
     <TextView
       android:id="@+id/title"
@@ -34,7 +35,8 @@
       android:layout_height="wrap_content"
       android:layout_gravity="left"
       android:text="Title"
-      android:textAppearance="?android:attr/textAppearanceListItem" />
+      android:textAppearance="?android:attr/textAppearanceListItem"
+      tools:ignore="RtlHardcoded" />
 
     <TextView
       android:id="@+id/description"
@@ -42,7 +44,8 @@
       android:layout_height="wrap_content"
       android:layout_gravity="left"
       android:text="Description"
-      android:textAppearance="?android:attr/textAppearanceSmall" />
+      android:textAppearance="?android:attr/textAppearanceSmall"
+      tools:ignore="RtlHardcoded" />
 
     <ProgressBar
       android:id="@+id/downloadProgress"
@@ -52,14 +55,16 @@
       android:layout_alignParentLeft="true"
       android:layout_alignParentStart="true"
       android:indeterminate="false"
-      android:padding="@dimen/dimen_1dp" />
+      android:padding="@dimen/dimen_1dp"
+      tools:ignore="ObsoleteLayoutParam" />
 
     <TextView
       android:id="@+id/time_remaining"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="right"
-      android:textAppearance="?android:attr/textAppearanceSmall" />
+      android:textAppearance="?android:attr/textAppearanceSmall"
+      tools:ignore="RtlHardcoded" />
   </LinearLayout>
 
   <LinearLayout
@@ -67,7 +72,8 @@
     android:layout_height="match_parent"
     android:layout_alignParentEnd="true"
     android:layout_alignParentRight="true"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    tools:ignore="ObsoleteLayoutParam">
 
     <ImageView
       android:id="@+id/pause"
@@ -80,7 +86,8 @@
       android:minHeight="@dimen/dimen_35dp"
       android:minWidth="@dimen/dimen_35dp"
       android:src="@drawable/ic_pause_black_24dp"
-      android:text="@string/download_pause" />
+      android:text="@string/download_pause"
+      tools:ignore="ContentDescription,ObsoleteLayoutParam" />
 
     <ImageView
       android:id="@+id/stop"
@@ -95,6 +102,7 @@
       android:minHeight="@dimen/dimen_35dp"
       android:minWidth="@dimen/dimen_35dp"
       android:src="@drawable/ic_stop_black_24dp"
-      android:text="@string/download_stop" />
+      android:text="@string/download_stop"
+      tools:ignore="ContentDescription,ObsoleteLayoutParam" />
   </LinearLayout>
 </LinearLayout>
