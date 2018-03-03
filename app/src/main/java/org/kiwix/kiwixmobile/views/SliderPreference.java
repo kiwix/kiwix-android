@@ -2,6 +2,7 @@ package org.kiwix.kiwixmobile.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.R;
+
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_ZOOM_ENABLED;
 
 public class SliderPreference extends DialogPreference {
 
@@ -137,5 +140,22 @@ public class SliderPreference extends DialogPreference {
       setValue(mSeekBarValue);
     }
     super.onDialogClosed(positiveResult);
+  }
+
+  @Override
+  protected void onBindView(View view) {
+    super.onBindView(view);
+    setGrayState(view);
+  }
+
+  private void setGrayState(View view) {
+    boolean enabled = getPreferenceManager().getSharedPreferences().getBoolean(
+            PREF_ZOOM_ENABLED, false);
+    if (!enabled) {
+      TextView titleView = (TextView) view.findViewById(android.R.id.title);
+      titleView.setTextColor(Color.GRAY);
+      TextView summaryTV = (TextView) view.findViewById(android.R.id.summary);
+      summaryTV.setTextColor(Color.GRAY);
+    }
   }
 }
