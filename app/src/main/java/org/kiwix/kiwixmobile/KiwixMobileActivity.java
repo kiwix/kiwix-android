@@ -158,6 +158,8 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_CURRENT_TAB;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES;
 
 public class KiwixMobileActivity extends BaseActivity implements WebViewCallback {
 
@@ -378,6 +380,10 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     checkForRateDialog();
 
     initPlayStoreUri();
+
+    if (SDK_INT <= VERSION_CODES.LOLLIPOP) {
+      snackbarLayout.setFitsSystemWindows(true);
+    }
 
     isHideToolbar = sharedPreferences.getBoolean(PREF_HIDE_TOOLBAR, true);
 
