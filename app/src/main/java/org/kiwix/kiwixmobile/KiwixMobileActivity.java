@@ -629,14 +629,14 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     }, new AudioManager.OnAudioFocusChangeListener() {
       @Override
       public void onAudioFocusChange(int focusChange) {
-        Log.d("Focus has changed", String.valueOf(focusChange));
+        Log.d(TAG_KIWIX, "Focus change: " + String.valueOf(focusChange));
         if (tts.currentTTSTask == null) {
           tts.stop();
           return;
         }
         switch (focusChange) {
           case (AudioManager.AUDIOFOCUS_LOSS):
-            if(!tts.currentTTSTask.paused) tts.pauseOrResume();
+            if (!tts.currentTTSTask.paused) tts.pauseOrResume();
             pauseTTSButton.setText(R.string.tts_resume);
             break;
           case (AudioManager.AUDIOFOCUS_GAIN):
