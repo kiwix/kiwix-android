@@ -40,6 +40,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.test.espresso.idling.CountingIdlingResource;
@@ -80,6 +81,7 @@ public class LibraryFragment extends BaseFragment
   public static final CountingIdlingResource IDLING_RESOURCE =
       new CountingIdlingResource("Library Fragment Idling Resource");
   public static final List<Book> downloadingBooks = new ArrayList<>();
+  private static final String EXTRA_BOOKS_ONLINE = "books_online";
   public static DownloadService mService = new DownloadService();
   private static NetworkBroadcastReceiver networkBroadcastReceiver;
   private static boolean isReceiverRegistered = false;
@@ -98,6 +100,7 @@ public class LibraryFragment extends BaseFragment
   LibraryPresenter presenter;
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
+  private LinkedList<Book> books;
   private boolean mBound;
   private DownloadServiceConnection mConnection = new DownloadServiceConnection();
   private ZimManageActivity activity;
@@ -151,7 +154,7 @@ public class LibraryFragment extends BaseFragment
       IDLING_RESOURCE.decrement();
       return;
     }
-
+    this.books = books;
     Log.i("kiwix-showBooks", "Contains:" + books.size());
     libraryAdapter.setAllBooks(books);
     if (activity.searchView != null) {
@@ -331,6 +334,22 @@ public class LibraryFragment extends BaseFragment
     }
   }
 
+  @Override
+  public void onSaveInstanceState(@NonNull Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putSerializable(EXTRA_BOOKS_ONLINE, books);
+  }
+
+  @Override
+  public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+    super.onViewStateRestored(savedInstanceState);
+    if ((savedInstanceState != null && savedInstanceState.containsKey(EXTRA_BOOKS_ONLINE))) {
+      //noinspection unchecked
+      books = (LinkedList<Book>) savedInstanceState.getSerializable(EXTRA_BOOKS_ONLINE);
+      showBooks(books);
+    }
+  }
+
   class DownloadServiceConnection {
     final DownloadServiceInterface downloadServiceInterface;
 
@@ -369,6 +388,8 @@ public class LibraryFragment extends BaseFragment
         permissionButton.setVisibility(GONE);
         networkText.setVisibility(GONE);
         libraryList.setVisibility(View.VISIBLE);
+      } else {
+        stopScanningContent();
       }
     }
   }
