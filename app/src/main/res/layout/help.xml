@@ -53,17 +53,24 @@
 
         </LinearLayout>
       </android.support.v7.widget.CardView>
-
-      <Button
-        android:id="@+id/get_content_card"
+      
+      <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dimen_3dp"
-        android:background="@drawable/get_content_btn_shape"
-        android:text="@string/menu_zim_manager"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="@dimen/dimen_20sp" />
+        android:layout_height="match_parent"
+        android:layout_marginRight="@dimen/dimen_3dp"
+        android:layout_marginLeft="@dimen/dimen_3dp"
+        android:background="@drawable/get_content_btn_shape">
+        <Button
+          android:id="@+id/get_content_card"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/dimen_3dp"
+          android:background="?attr/selectableItemBackground"
+          android:text="@string/menu_zim_manager"
+          android:textAllCaps="false"
+          android:textColor="@color/white"
+          android:textSize="@dimen/dimen_20sp"/>
+       </LinearLayout>
 
       <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"

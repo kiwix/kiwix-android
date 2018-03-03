@@ -28,7 +28,6 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_below="@id/toolbar"
-      android:background="?attr/listBackground"
       android:divider="@null"
       android:paddingBottom="@dimen/zimfilelist_padding_bottom" />
 
