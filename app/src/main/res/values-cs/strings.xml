@@ -3,6 +3,8 @@
   <string name="menu_zim_manager">Získat obsah</string>
   <string name="menu_help">Nápověda</string>
   <string name="menu_home">Domů</string>
+  <string name="menu_forward">Vpřed</string>
+  <string name="menu_back">Zpět</string>
   <string name="menu_settings">Možnosti</string>
   <string name="menu_search">Vyhledávání</string>
   <string name="menu_searchintext">Najít v textu</string>
@@ -12,20 +14,31 @@
   <string name="menu_exitfullscreen">Ukončit celou obrazovku</string>
   <string name="menu_read_aloud">Číst nahlas</string>
   <string name="menu_read_aloud_stop">Zastavit čtení nahlas</string>
+  <string name="menu_rescan_fs">Znovu načíst SD kartu</string>
   <string name="save_media">Uložit médium jako...</string>
   <string name="save_media_error">Došlo k chybě při pokusu o uložení média!</string>
   <string name="save_media_saved">Multimediální soubory uložené jako %s ve složce Android/media/org.kiwix.../</string>
   <string name="rescan_fs_warning">Probíhá hledání obsahu ke stažení, prosím čekejte…</string>
   <string name="button_backtotop">Zpět na začátek</string>
   <string name="search_label">Vyhledávání</string>
+  <string name="articlesearch_hint">Pro vyhledání článků pište</string>
   <string name="choose_file">Vyberte obsahový soubor (*.zim)</string>
+  <string name="add_bookmark">Přidat záložku</string>
+  <string name="remove_bookmark">Odznačit vybrané</string>
   <string name="open_in_new_tab">Otevřít odkaz v nové záložce?</string>
   <string name="error_nozimfilesfound">Na zařízení nebyl nalezen žádný obsah.\nPro pokyny, jak nahrávat do Kiwixu obsah, se podívejte na stránku nápovědy.\nPokud jste na své zařízení nebo externí paměť opravdu nahráli soubor ZIM, můžete zkusit načtení za minutu opakovat nebo restartovat zařízení.</string>
   <string name="error_filenotfound">Chyba: Nelze najít vybraný soubor ZIM.</string>
   <string name="error_fileinvalid">Chyba: Vybraný soubor není platným souborem ZIM.</string>
+  <string name="error_articlenotfound">Chyba: Načtení článku \"%1$s\" se nezdařilo.</string>
   <string name="error_articleurlnotfound">Chyba: Načtení článku (Url: %1$s ) se nezdařilo.</string>
   <string name="pref_display_title">Zobrazení</string>
   <string name="pref_zoom_dialog">Úroveň zvětšení</string>
+  <string-array name="pref_zoom_entries">
+    <item name="pref_zoom_entry_automatic">Automatický</item>
+    <item name="pref_zoom_entry_small">Malý</item>
+    <item name="pref_zoom_entry_medium">Střední</item>
+    <item name="pref_zoom_entry_large">Velký</item>
+  </string-array>
   <string name="pref_info_title">Informace</string>
   <string name="pref_info_version">Verze</string>
   <string name="pref_zoom_enable">Ovládání přiblížení</string>
@@ -49,6 +62,7 @@
   <string name="delete_recent_search_item">Smazat tuto položku?</string>
   <string name="did_you_know">Věděli jste, že...?</string>
   <string name="undo">Zpět</string>
+  <string name="bookmarks_restored">Záložky obnoveny</string>
   <string name="bookmark_added">Záložka přidána</string>
   <string name="rate_dialog_title">Prosím ohodnoťte nás</string>
   <string name="rate_dialog_msg_1">Pokud jste si užili používání</string>
@@ -69,6 +83,7 @@
   <string name="help_16">\u2022 v Microsoft Windows: HJ-Split</string>
   <string name="help_20">Děkujeme, že jste si vybrali Kiwix!</string>
   <string name="help_21">Děkujeme, že jste s námi, a oceníme, když nám napíšete jakoukoli zpětnou vazbu nebo návrhy na android@kiwix.org.</string>
+  <string name="pref_full_text_search_summary">Povolit aplikaci vyhledávat v textu uvnitř článků. Pozor, může to vyhledávání značně zpomalit.</string>
   <string name="tts_pause">Pozastavit</string>
   <string name="tts_resume">Obnovit</string>
   <string name="zim_already_downloading">Zim už se stahuje</string>
