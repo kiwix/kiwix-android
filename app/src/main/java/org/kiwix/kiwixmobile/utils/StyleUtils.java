@@ -19,17 +19,23 @@
 
 package org.kiwix.kiwixmobile.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.XmlRes;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.AttributeSet;
 import android.util.Xml;
+import android.view.Window;
 
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.xmlpull.v1.XmlPullParser;
+
+import static android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
+import static android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
 
 public class StyleUtils {
   public static int dialogStyle() {
@@ -62,6 +68,24 @@ public class StyleUtils {
       return Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY);
     } else {
       return Html.fromHtml(source);
+    }
+  }
+
+  /**
+   * This method clears the {@link android.view.WindowManager.LayoutParams#FLAG_TRANSLUCENT_STATUS
+   * FLAG_TRANSLUCENT_STATUS} for kitkat and above devices so that the action bar doesn't overlaps
+   * with the status bar and the color of status bar is not white.
+   * For post lollipop devices, this method colors the status bar with colorPrimaryDark.
+   * @param activity The activity to style.
+   */
+  public static void styleStatusBar(Activity activity) {
+    Window window = activity.getWindow();
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+      window.clearFlags(FLAG_TRANSLUCENT_STATUS);
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      window.addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+      window.setStatusBarColor(ContextCompat.getColor(activity, R.color.primary_dark));
     }
   }
 }

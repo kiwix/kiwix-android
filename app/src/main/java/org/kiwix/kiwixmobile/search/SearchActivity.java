@@ -25,6 +25,7 @@ import android.widget.Toast;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ public class SearchActivity extends AppCompatActivity
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    StyleUtils.styleStatusBar(this);
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     if (sharedPreferences.getBoolean(PREF_NIGHTMODE, false)) {
       setTheme(R.style.AppTheme_Night);

@@ -49,6 +49,7 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
+import org.kiwix.kiwixmobile.utils.StyleUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +81,7 @@ public class BookmarksActivity extends BaseActivity
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    StyleUtils.styleStatusBar(this);
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     if (KiwixSettingsActivity.nightMode(sharedPreferences)) {
       setTheme(R.style.AppTheme_Night);

@@ -25,6 +25,7 @@ import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
+import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.views.LanguageSelectDialog;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
@@ -75,6 +76,7 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
     if (KiwixSettingsActivity.nightMode(sharedPreferences)) {
       setTheme(R.style.AppTheme_Night);
     }
+    StyleUtils.styleStatusBar(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.zim_manager);
     setupDagger();
