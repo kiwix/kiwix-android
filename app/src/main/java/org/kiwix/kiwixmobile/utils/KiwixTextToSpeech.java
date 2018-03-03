@@ -37,9 +37,9 @@ public class KiwixTextToSpeech {
 
   public TTSTask currentTTSTask = null;
 
-  private AudioManager audioManager;
+  private AudioManager am;
 
-  final Object mFocusLock;
+  final Object focuslock;
 
   private OnAudioFocusChangeListener onAudioFocusChangeListener;
 
@@ -59,8 +59,8 @@ public class KiwixTextToSpeech {
     this.context = context;
     this.onSpeakingListener = onSpeakingListener;
     this.onAudioFocusChangeListener = onAudioFocusChangeListener;
-    audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-    mFocusLock = new Object();
+    am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+    focuslock = new Object();
     initTTS(onInitSucceedListener);
   }
 
@@ -120,10 +120,8 @@ public class KiwixTextToSpeech {
       } else {
         tts.setLanguage(locale);
 
-        if(requestAudioFocus() == true) {
+        if (requestAudioFocus()) {
           loadURL(webView);
-        } else {
-          return;
         }
       }
     }
@@ -155,18 +153,17 @@ public class KiwixTextToSpeech {
   }
 
   public Boolean requestAudioFocus() {
-    Log.d("Request for audio Focus", "Focus Requested");
-    int audioFocusRequest = audioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+    int audioFocusRequest = am.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
-    synchronized (mFocusLock) {
-      if(audioFocusRequest == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+    Log.d(TAG_KIWIX, "Audio Focus Requested");
+
+    synchronized (focuslock) {
+      if (audioFocusRequest == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
         return true;
-      } else if(audioFocusRequest == AudioManager.AUDIOFOCUS_REQUEST_FAILED) {
+      } else {
         return false;
       }
     }
-
-    return false;
   }
 
   public void pauseOrResume() {
@@ -174,7 +171,7 @@ public class KiwixTextToSpeech {
       return;
 
     if (currentTTSTask.paused) {
-      if(!requestAudioFocus()) return;
+      if (!requestAudioFocus()) return;
       currentTTSTask.start();
     }
     else {
