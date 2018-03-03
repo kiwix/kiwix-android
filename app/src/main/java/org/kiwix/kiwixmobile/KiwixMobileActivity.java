@@ -116,6 +116,7 @@ import okhttp3.OkHttpClient;
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.TableClickListener;
+import static org.kiwix.kiwixmobile.search.SearchActivity.EXTRA_SEARCH_IN_TEXT;
 import static org.kiwix.kiwixmobile.utils.Constants.BOOKMARK_CHOSEN_REQUEST;
 import static org.kiwix.kiwixmobile.utils.Constants.CONTACT_EMAIL_ADDRESS;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOKMARK_CLICKED;
@@ -1473,7 +1474,19 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
         if (resultCode == RESULT_OK) {
           String title =
               data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
-          searchForTitle(title);
+          boolean isSearchInText = data.getBooleanExtra(EXTRA_SEARCH_IN_TEXT, false);
+          if(isSearchInText) {
+            //if the search is localized trigger find in page UI.
+            KiwixWebView webView = getCurrentWebView();
+            compatCallback.setActive();
+            compatCallback.setWebView(webView);
+            startSupportActionMode(compatCallback);
+            compatCallback.setText(title);
+            compatCallback.findAll();
+            compatCallback.showSoftInput();
+          } else {
+            searchForTitle(title);
+          }
         } else { //TODO: Inform the User
           Log.w(TAG_KIWIX, "Unhandled search failure");
         }
