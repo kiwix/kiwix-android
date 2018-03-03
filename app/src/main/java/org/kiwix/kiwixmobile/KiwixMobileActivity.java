@@ -573,7 +573,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   }
 
   private void setUpToolbar() {
-
     setSupportActionBar(toolbar);
   }
 

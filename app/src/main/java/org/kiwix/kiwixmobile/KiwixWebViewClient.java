@@ -8,6 +8,7 @@ import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.utils.StyleUtils;
@@ -87,10 +88,14 @@ public class KiwixWebViewClient extends WebViewClient {
                   callback.manageZimFiles(1);
             }
             );
-        view.addView(help);
         TextView contact = help.findViewById(R.id.welcome21);
         contact.setText(StyleUtils.highlightUrl(contact.getText().toString(), CONTACT_EMAIL_ADDRESS));
         contact.setOnClickListener(v -> callback.sendContactEmail());
+        view.addView(help);
+        //help.addView(view);
+        //TextView contact = help.findViewById(R.id.welcome21);
+        //contact.setText(StyleUtils.highlightUrl(contact.getText().toString(), CONTACT_EMAIL_ADDRESS));
+        //contact.setOnClickListener(v -> callback.sendContactEmail());
       }
     }
     callback.webViewUrlFinishedLoading();
