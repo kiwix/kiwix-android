@@ -114,6 +114,8 @@ import butterknife.ButterKnife;
 import okhttp3.OkHttpClient;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+import static android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
+import static android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.TableClickListener;
 import static org.kiwix.kiwixmobile.utils.Constants.BOOKMARK_CHOSEN_REQUEST;
@@ -359,6 +361,12 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   @Override
   public void onCreate(Bundle savedInstanceState) {
     getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      getWindow().clearFlags(FLAG_TRANSLUCENT_STATUS);
+      getWindow().addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+      getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.primary_dark));
+    }
 
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     wifiOnly = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
