@@ -331,16 +331,15 @@ android {
   dexOptions {
     javaMaxHeapSize "4g"
   }
-
-  /*
-  Add back once proguard is configured
+  
   buildTypes {
     release {
       minifyEnabled true
-      proguardFiles getDefaultProguardFile('proguard-android.txt')
+      shrinkResources true
+        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
   }
-  */
+
 }
 
 // Testdroid deployment configuration
