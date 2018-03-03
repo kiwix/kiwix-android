@@ -15,7 +15,6 @@
       android:layout_centerVertical="true"
       android:layout_marginLeft="@dimen/dimen_10dp"
       android:layout_marginRight="@dimen/dimen_10dp"
-      android:background="@color/back_to_top_background_night"
       android:focusable="false"
       android:focusableInTouchMode="false"
       android:textColor="@color/accent"
