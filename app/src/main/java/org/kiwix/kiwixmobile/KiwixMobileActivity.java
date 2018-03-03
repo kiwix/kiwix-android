@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -39,6 +40,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -226,7 +228,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   @BindView(R.id.toolbar) Toolbar toolbar;
 
-  @BindView(R.id.button_backtotop) Button backToTopButton;
+  @BindView(R.id.backtotop_fab)  FloatingActionButton backtoTopFab;
 
   @BindView(R.id.button_stop_tts) Button stopTTSButton;
 
@@ -507,15 +509,11 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   }
 
   private void backToTopAppearDaily() {
-    backToTopButton.setAlpha(0.6f);
-    backToTopButton.setBackgroundColor(getResources().getColor(R.color.back_to_top_background));
-    backToTopButton.setTextColor(getResources().getColor(R.color.back_to_top_text));
+    backtoTopFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(KiwixMobileActivity.this, R.color.white)));
   }
 
   private void backToTopAppearNightly() {
-    backToTopButton.setAlpha(0.7f);
-    backToTopButton.setBackgroundColor(getResources().getColor(R.color.back_to_top_background_night));
-    backToTopButton.setTextColor(getResources().getColor(R.color.back_to_top_text_night));
+    backtoTopFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(KiwixMobileActivity.this, R.color.back_to_top_background_night)));
   }
 
   private void initPlayStoreUri() {
@@ -855,11 +853,11 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       case R.id.menu_read_aloud:
         if (TTSControls.getVisibility() == View.GONE) {
           if (isBackToTopEnabled) {
-            backToTopButton.setVisibility(View.INVISIBLE);
+            backtoTopFab.setVisibility(View.INVISIBLE);
           }
         } else if (TTSControls.getVisibility() == View.VISIBLE) {
           if (isBackToTopEnabled) {
-            backToTopButton.setVisibility(View.VISIBLE);
+            backtoTopFab.setVisibility(View.VISIBLE);
           }
         }
         readAloud();
@@ -1396,7 +1394,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     // However, it must notify the bookmark system when a page is finished loading
     // so that it can refresh the menu.
 
-    backToTopButton.setOnClickListener(view -> KiwixMobileActivity.this.runOnUiThread(() -> getCurrentWebView().pageUp(true)));
+    backtoTopFab.setOnClickListener(view -> KiwixMobileActivity.this.runOnUiThread(() -> getCurrentWebView().pageUp(true)));
     tts.initWebView(getCurrentWebView());
   }
 
@@ -1643,7 +1641,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     }
 
     if (!isBackToTopEnabled) {
-      backToTopButton.setVisibility(View.INVISIBLE);
+      backtoTopFab.setVisibility(View.INVISIBLE);
     }
 
     if (isFullscreenOpened) {
@@ -1877,27 +1875,26 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   @Override public void webViewPageChanged(int page, int maxPages) {
     if (isBackToTopEnabled) {
       if (getCurrentWebView().getScrollY() > 200) {
-        if (backToTopButton.getVisibility() == View.INVISIBLE && TTSControls.getVisibility() == View.GONE ) {
-          backToTopButton.setText(R.string.button_backtotop);
-          backToTopButton.setVisibility(View.VISIBLE);
+        if (backtoTopFab.getVisibility() == View.INVISIBLE && TTSControls.getVisibility() == View.GONE ) {
+          backtoTopFab.setVisibility(View.VISIBLE);
 
-          backToTopButton.startAnimation(
+          backtoTopFab.startAnimation(
               AnimationUtils.loadAnimation(KiwixMobileActivity.this, android.R.anim.fade_in));
-          backToTopButton.setVisibility(View.INVISIBLE);
+          backtoTopFab.setVisibility(View.INVISIBLE);
           Animation fadeAnimation =
               AnimationUtils.loadAnimation(KiwixMobileActivity.this, android.R.anim.fade_out);
           fadeAnimation.setStartOffset(1200);
-          backToTopButton.startAnimation(fadeAnimation);
+          backtoTopFab.startAnimation(fadeAnimation);
         }
       } else {
-        if (backToTopButton.getVisibility() == View.VISIBLE) {
-          backToTopButton.setVisibility(View.INVISIBLE);
+        if (backtoTopFab.getVisibility() == View.VISIBLE) {
+          backtoTopFab.setVisibility(View.INVISIBLE);
 
-          backToTopButton.clearAnimation();
-          backToTopButton.startAnimation(
+          backtoTopFab.clearAnimation();
+          backtoTopFab.startAnimation(
               AnimationUtils.loadAnimation(KiwixMobileActivity.this, android.R.anim.fade_out));
         } else {
-          backToTopButton.clearAnimation();
+          backtoTopFab.clearAnimation();
         }
       }
     }
