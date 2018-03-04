@@ -244,7 +244,7 @@ public class LibraryFragment extends Fragment
       mBound = false;
     }
     if (isReceiverRegistered) {
-      faActivity.unregisterReceiver(LibraryFragment.networkBroadcastReceiver);
+      faActivity.unregisterReceiver(networkBroadcastReceiver);
       isReceiverRegistered = false;
     }
   }
