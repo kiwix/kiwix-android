@@ -47,6 +47,7 @@ public class SearchActivity extends AppCompatActivity
   private AutoCompleteAdapter mAutoAdapter;
   private ArrayAdapter<String> mDefaultAdapter;
   private SearchView searchView;
+  private String searchText;
 
   @Inject
   SearchPresenter searchPresenter;
@@ -66,12 +67,14 @@ public class SearchActivity extends AppCompatActivity
     View contentView = LayoutInflater.from(this).inflate(R.layout.search, null);
     setContentView(contentView);
 
+    if (savedInstanceState != null) {
+      searchText = savedInstanceState.getString("text");
+    }
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
     getSupportActionBar().setHomeButtonEnabled(true);
     searchPresenter.attachView(this);
-
     mListView = findViewById(R.id.search_list);
     mDefaultAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
     searchPresenter.getRecentSearches(this);
@@ -113,6 +116,11 @@ public class SearchActivity extends AppCompatActivity
     MenuItem searchMenuItem = menu.findItem(R.id.menu_search);
     MenuItemCompat.expandActionView(searchMenuItem);
     searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+    if (searchText != null) {
+      searchView.setQuery(searchText, Boolean.FALSE);
+      mListView.setAdapter(mAutoAdapter);
+      mAutoAdapter.getFilter().filter(searchText.toLowerCase());
+    }
     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
       @Override
       public boolean onQueryTextSubmit(String s) {
@@ -248,5 +256,11 @@ public class SearchActivity extends AppCompatActivity
 
   private void searchViaVoice(String search) {
     searchView.setQuery(search, false);
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putString("text", searchView.getQuery().toString());
   }
 }
