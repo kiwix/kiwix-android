@@ -3,6 +3,7 @@ package org.kiwix.kiwixmobile.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
@@ -13,6 +14,9 @@ import java.util.UUID;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
 public class NetworkUtils {
+
+  public static Uri KIWIX_LOCAL_MARKET_URI;
+  public static Uri KIWIX_BROWSER_MARKET_URI;
 
   public static boolean isNetworkAvailable(Context context) {
     ConnectivityManager connectivity = (ConnectivityManager) context

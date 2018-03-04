@@ -182,10 +182,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   public static boolean wifiOnly;
 
-  private static Uri KIWIX_LOCAL_MARKET_URI;
-
-  private static Uri KIWIX_BROWSER_MARKET_URI;
-
   private String documentParserJs;
 
   public static boolean nightMode;
@@ -525,8 +521,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   }
 
   private void initPlayStoreUri() {
-    KIWIX_LOCAL_MARKET_URI = Uri.parse("market://details?id=" + getPackageName());
-    KIWIX_BROWSER_MARKET_URI =
+    NetworkUtils.KIWIX_LOCAL_MARKET_URI = Uri.parse("market://details?id=" + getPackageName());
+    NetworkUtils.KIWIX_BROWSER_MARKET_URI =
         Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName());
   }
 
@@ -590,7 +586,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   private void goToRateApp() {
 
-    Intent goToMarket = new Intent(Intent.ACTION_VIEW, KIWIX_LOCAL_MARKET_URI);
+    Intent goToMarket = new Intent(Intent.ACTION_VIEW, NetworkUtils.KIWIX_LOCAL_MARKET_URI);
 
     goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
         Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET |
@@ -600,7 +596,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       startActivity(goToMarket);
     } catch (ActivityNotFoundException e) {
       startActivity(new Intent(Intent.ACTION_VIEW,
-          KIWIX_BROWSER_MARKET_URI));
+          NetworkUtils.KIWIX_BROWSER_MARKET_URI));
     }
   }
 
@@ -1318,7 +1314,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     }
   }
 
-  // TODO: change saving bookbark by zim name not id
+  // TODO: change saving bookmark by zim name not id
   private void saveBookmark(String articleUrl, String articleTitle) {
     bookmarksDao.saveBookmark(articleUrl, articleTitle, ZimContentProvider.getId(), ZimContentProvider.getName());
     refreshBookmarks();

@@ -254,7 +254,7 @@ android {
           sourceFile = file(directory + "/" + parsedJson.zim_file)
         }
         if (parsedJson.embed_zim) {
-         // Place content in each lib directory for embeded zims
+         // Place content in each lib directory for embedded zims
           for (String archName : archs) {
            copy {
              from sourceFile
