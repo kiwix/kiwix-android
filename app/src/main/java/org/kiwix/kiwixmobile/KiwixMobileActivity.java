@@ -1398,8 +1398,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     // However, it must notify the bookmark system when a page is finished loading
     // so that it can refresh the menu.
 
-    backToTopButton.setOnClickListener(view -> KiwixMobileActivity.this.
-            runOnUiThread(() -> getCurrentWebView().pageUp(true)));
+    backToTopButton.setOnClickListener(view -> KiwixMobileActivity.this.runOnUiThread(() -> getCurrentWebView().pageUp(true)));
     tts.initWebView(getCurrentWebView());
   }
 
@@ -1469,8 +1468,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       case REQUEST_FILE_SEARCH:
         if (resultCode == RESULT_OK) {
           String title =
-              data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>",
-                      "");
+              data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
           searchForTitle(title);
         } else { //TODO: Inform the User
           Log.w(TAG_KIWIX, "Unhandled search failure");
@@ -1738,8 +1736,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       String filePath = FileUtils.getLocalFilePathByUri(getApplicationContext(), getIntent().getData());
 
       if (filePath == null || !new File(filePath).exists()) {
-        Toast.makeText(KiwixMobileActivity.this, getString(R.string.error_filenotfound),
-                Toast.LENGTH_LONG).show();
+        Toast.makeText(KiwixMobileActivity.this, getString(R.string.error_filenotfound), Toast.LENGTH_LONG).show();
         return;
       }
 
@@ -1759,8 +1756,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       } else {
 
         if (BuildConfig.IS_CUSTOM_APP) {
-          Log.d(TAG_KIWIX, "Kiwix Custom App starting for the first time. Checking Companion ZIM: "
-                  + BuildConfig.ZIM_FILE_NAME);
+          Log.d(TAG_KIWIX, "Kiwix Custom App starting for the first time. Checking Companion ZIM: " + BuildConfig.ZIM_FILE_NAME);
 
           String currentLocaleCode = Locale.getDefault().toString();
           // Custom App recommends to start off a specific language
