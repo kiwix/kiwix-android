@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
@@ -47,7 +48,7 @@ public class FileUtils {
     if (path.substring(path.length() - 5).equals(".part")) {
       path = path.substring(0, path.length() - 5);
     }
-    Log.i("kiwix", "Deleting file: " + path);
+    Log.i("RISHABHRAWAT", "Deleting file: " + path);
     File file = new File(path);
     if (!file.getPath().substring(file.getPath().length() - 3).equals("zim")) {
       fileloop:

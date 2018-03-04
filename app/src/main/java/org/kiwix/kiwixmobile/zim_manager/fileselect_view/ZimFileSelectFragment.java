@@ -22,13 +22,16 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -60,6 +63,7 @@ import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
+import org.kiwix.kiwixmobile.wifip2p.WifiPeerListTransferActivity;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 
 import java.io.File;
@@ -315,23 +319,62 @@ public class ZimFileSelectFragment extends Fragment
 
   public void deleteSpecificZimDialog(int position) {
     new AlertDialog.Builder(super.getActivity(), dialogStyle())
-        .setMessage(getString(R.string.delete_specific_zim))
-        .setPositiveButton(getResources().getString(R.string.delete), (dialog, which) -> {
-          if (deleteSpecificZimFile(position)) {
-            Toast.makeText(context, getResources().getString(R.string.delete_specific_zim_toast), Toast.LENGTH_SHORT).show();
-          } else {
-            Toast.makeText(context, getResources().getString(R.string.delete_zim_failed), Toast.LENGTH_SHORT).show();
-          }
-        })
-        .setNegativeButton(android.R.string.no, (dialog, which) -> {
-          // do nothing
-        })
-        .show();
+            .setMessage(getString(R.string.delete_specific_zim))
+            .setPositiveButton(getResources().getString(R.string.delete), (dialog, which) -> {
+              if (deleteSpecificZimFile(position)) {
+                Toast.makeText(context, getResources().getString(R.string.delete_specific_zim_toast), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "file path"+filesenderwifipath(position), Toast.LENGTH_SHORT).show();
+              } else {
+                Toast.makeText(context, getResources().getString(R.string.delete_zim_failed), Toast.LENGTH_SHORT).show();
+              }
+            })
+            .setNegativeButton(android.R.string.no, (dialog, which) -> {
+              // do nothing
+            }).setNeutralButton("Send", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int i) {
+        //check the wifi is enable or not
+        WifiManager manager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        if (manager.isWifiEnabled()) {
+          Intent intent = new Intent(getActivity(), WifiPeerListTransferActivity.class);
+          intent.putExtra("FILEPATH",filesenderwifipath(position));
+          Log.d("Rishabh i AM HERO",filesenderwifipath(position));
+          startActivity(intent);
+        } else {
+          AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+          dialog.setCancelable(false);
+          dialog.setTitle("Message...");
+          dialog.setMessage("Your wifi is not enable");
+          dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+              dialog.dismiss();
+            }
+          });
+          dialog.setButton(AlertDialog.BUTTON_POSITIVE, "Enable", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+              startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+            }
+          });
+          dialog.show();
+        }
+
+      }
+    })
+            .show();
+  }
+
+  private String filesenderwifipath(int position)
+  {
+    File file=mFiles.get(position).file;
+    return file.getPath();
   }
 
   public boolean deleteSpecificZimFile(int position) {
     File file = mFiles.get(position).file;
     FileUtils.deleteZimFile(file.getPath());
+    Log.d("RISHABH",file.getPath());
     if (file.exists()) {
       return false;
     }
