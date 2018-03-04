@@ -1308,7 +1308,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     }
   }
 
-  // TODO: change saving bookmark by zim name not id
+  // TODO: change saving bookbark by zim name not id
   private void saveBookmark(String articleUrl, String articleTitle) {
     bookmarksDao.saveBookmark(articleUrl, articleTitle, ZimContentProvider.getId(), ZimContentProvider.getName());
     refreshBookmarks();
