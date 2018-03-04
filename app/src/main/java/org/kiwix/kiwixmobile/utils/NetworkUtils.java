@@ -37,6 +37,12 @@ public class NetworkUtils {
     return false;
   }
 
+  public static void initPlayStoreUri(String packageName) {
+        NetworkUtils.KIWIX_LOCAL_MARKET_URI = Uri.parse("market://details?id=" + packageName);
+        NetworkUtils.KIWIX_BROWSER_MARKET_URI =
+                Uri.parse("http://play.google.com/store/apps/details?id=" + packageName);
+    }
+
   public static boolean isWiFi(Context context) {
     ConnectivityManager connectivity = (ConnectivityManager) context
             .getSystemService(Context.CONNECTIVITY_SERVICE);

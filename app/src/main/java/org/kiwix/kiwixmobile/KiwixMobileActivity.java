@@ -373,7 +373,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
     checkForRateDialog();
 
-    initPlayStoreUri();
+    NetworkUtils.initPlayStoreUri(getPackageName());
 
     if (SDK_INT <= VERSION_CODES.LOLLIPOP) {
       snackbarLayout.setFitsSystemWindows(true);
@@ -518,12 +518,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     backToTopButton.setAlpha(0.7f);
     backToTopButton.setBackgroundColor(getResources().getColor(R.color.back_to_top_background_night));
     backToTopButton.setTextColor(getResources().getColor(R.color.back_to_top_text_night));
-  }
-
-  private void initPlayStoreUri() {
-    NetworkUtils.KIWIX_LOCAL_MARKET_URI = Uri.parse("market://details?id=" + getPackageName());
-    NetworkUtils.KIWIX_BROWSER_MARKET_URI =
-        Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName());
   }
 
   private void checkForRateDialog() {
