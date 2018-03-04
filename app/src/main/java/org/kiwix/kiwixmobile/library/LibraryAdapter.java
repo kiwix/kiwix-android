@@ -23,6 +23,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +63,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static android.content.ContentValues.TAG;
 import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
 
 public class LibraryAdapter extends BaseAdapter {
@@ -126,7 +128,6 @@ public class LibraryAdapter extends BaseAdapter {
       return convertView;
     }
     ListItem item = listItems.get(position);
-
     if (item.type == LIST_ITEM_TYPE_BOOK) {
       if (convertView != null && convertView.findViewById(R.id.title) != null) {
         holder = (ViewHolder) convertView.getTag();
