@@ -17,7 +17,6 @@
       android:layout_marginRight="@dimen/dimen_10dp"
       android:focusable="false"
       android:focusableInTouchMode="false"
-      android:textColor="@color/accent"
       tools:checked="false" />
 
   <LinearLayout
@@ -40,7 +39,6 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginLeft="@dimen/dimen_10dp"
-      android:textColor="@color/grey"
       android:textSize="@dimen/dimen_18sp"
       tools:text="(Deutsch)" />
 
@@ -55,7 +53,6 @@
     android:layout_marginBottom="@dimen/dimen_6dp"
     android:layout_marginRight="@dimen/dimen_16dp"
     android:layout_marginTop="@dimen/dimen_6dp"
-    android:textColor="@color/grey"
     android:textSize="@dimen/dimen_18sp" />
 
 </RelativeLayout>
