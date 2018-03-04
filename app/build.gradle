@@ -89,9 +89,9 @@ dependencies {
   implementation 'commons-io:commons-io:2.5'
 
   // Square
-  implementation 'com.squareup.okhttp3:okhttp:3.7.0'
+  implementation 'com.squareup.okhttp3:okhttp:3.8.0'
   implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
-  implementation 'com.squareup.retrofit2:retrofit:2.1.0'
+  implementation 'com.squareup.retrofit2:retrofit:2.3.0'
   implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
   implementation('com.squareup.retrofit2:converter-simplexml:2.1.0') {
     exclude group: 'xpp3', module: 'xpp3'
@@ -102,8 +102,8 @@ dependencies {
   androidTestImplementation 'com.squareup.spoon:spoon-client:1.7.1'
 
   // Butterknife
-  implementation 'com.jakewharton:butterknife:8.0.1'
-  annotationProcessor 'com.jakewharton:butterknife-compiler:8.0.1'
+  implementation 'com.jakewharton:butterknife:8.6.0'
+  annotationProcessor 'com.jakewharton:butterknife-compiler:8.6.0'
 
   // RxJava
   implementation 'io.reactivex:rxandroid:1.1.0'
@@ -254,7 +254,7 @@ android {
           sourceFile = file(directory + "/" + parsedJson.zim_file)
         }
         if (parsedJson.embed_zim) {
-         // Place content in each lib directory for embeded zims
+         // Place content in each lib directory for embedded zims
           for (String archName : archs) {
            copy {
              from sourceFile

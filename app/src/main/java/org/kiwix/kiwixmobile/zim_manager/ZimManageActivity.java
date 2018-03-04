@@ -10,7 +10,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -18,7 +17,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
@@ -116,7 +114,7 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
 
     // Disable scrolling for the AppBarLayout on top of the screen
     // User can only scroll the PageViewer component
-    AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+    AppBarLayout appBarLayout = findViewById(R.id.appbar);
     if (appBarLayout.getLayoutParams() != null) {
       CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
       AppBarLayout.Behavior appBarLayoutBehaviour = new AppBarLayout.Behavior();

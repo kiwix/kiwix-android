@@ -182,10 +182,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   public static boolean wifiOnly;
 
-  private static Uri KIWIX_LOCAL_MARKET_URI;
-
-  private static Uri KIWIX_BROWSER_MARKET_URI;
-
   private String documentParserJs;
 
   public static boolean nightMode;
@@ -525,8 +521,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   }
 
   private void initPlayStoreUri() {
-    KIWIX_LOCAL_MARKET_URI = Uri.parse("market://details?id=" + getPackageName());
-    KIWIX_BROWSER_MARKET_URI =
+    NetworkUtils.KIWIX_LOCAL_MARKET_URI = Uri.parse("market://details?id=" + getPackageName());
+    NetworkUtils.KIWIX_BROWSER_MARKET_URI =
         Uri.parse("http://play.google.com/store/apps/details?id=" + getPackageName());
   }
 
@@ -590,7 +586,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   private void goToRateApp() {
 
-    Intent goToMarket = new Intent(Intent.ACTION_VIEW, KIWIX_LOCAL_MARKET_URI);
+    Intent goToMarket = new Intent(Intent.ACTION_VIEW, NetworkUtils.KIWIX_LOCAL_MARKET_URI);
 
     goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
         Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET |
@@ -600,7 +596,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       startActivity(goToMarket);
     } catch (ActivityNotFoundException e) {
       startActivity(new Intent(Intent.ACTION_VIEW,
-          KIWIX_BROWSER_MARKET_URI));
+          NetworkUtils.KIWIX_BROWSER_MARKET_URI));
     }
   }
 
@@ -1318,7 +1314,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     }
   }
 
-  // TODO: change saving bookbark by zim name not id
+  // TODO: change saving bookmark by zim name not id
   private void saveBookmark(String articleUrl, String articleTitle) {
     bookmarksDao.saveBookmark(articleUrl, articleTitle, ZimContentProvider.getId(), ZimContentProvider.getName());
     refreshBookmarks();
@@ -1402,7 +1398,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     // However, it must notify the bookmark system when a page is finished loading
     // so that it can refresh the menu.
 
-    backToTopButton.setOnClickListener(view -> KiwixMobileActivity.this.runOnUiThread(() -> getCurrentWebView().pageUp(true)));
+    backToTopButton.setOnClickListener(view -> KiwixMobileActivity.this.
+            runOnUiThread(() -> getCurrentWebView().pageUp(true)));
     tts.initWebView(getCurrentWebView());
   }
 
@@ -1472,7 +1469,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       case REQUEST_FILE_SEARCH:
         if (resultCode == RESULT_OK) {
           String title =
-              data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
+              data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>",
+                      "");
           searchForTitle(title);
         } else { //TODO: Inform the User
           Log.w(TAG_KIWIX, "Unhandled search failure");
@@ -1740,7 +1738,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       String filePath = FileUtils.getLocalFilePathByUri(getApplicationContext(), getIntent().getData());
 
       if (filePath == null || !new File(filePath).exists()) {
-        Toast.makeText(KiwixMobileActivity.this, getString(R.string.error_filenotfound), Toast.LENGTH_LONG).show();
+        Toast.makeText(KiwixMobileActivity.this, getString(R.string.error_filenotfound),
+                Toast.LENGTH_LONG).show();
         return;
       }
 
@@ -1760,7 +1759,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       } else {
 
         if (BuildConfig.IS_CUSTOM_APP) {
-          Log.d(TAG_KIWIX, "Kiwix Custom App starting for the first time. Checking Companion ZIM: " + BuildConfig.ZIM_FILE_NAME);
+          Log.d(TAG_KIWIX, "Kiwix Custom App starting for the first time. Checking Companion ZIM: "
+                  + BuildConfig.ZIM_FILE_NAME);
 
           String currentLocaleCode = Locale.getDefault().toString();
           // Custom App recommends to start off a specific language
