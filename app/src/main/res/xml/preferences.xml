@@ -109,7 +109,7 @@
     android:key="pref_language"
     android:title="@string/pref_language_title">
 
-    <Preference
+    <ListPreference
       android:key="pref_language_chooser"
       android:summary="@string/pref_language_chooser"
       android:title="@string/pref_language_title" />
