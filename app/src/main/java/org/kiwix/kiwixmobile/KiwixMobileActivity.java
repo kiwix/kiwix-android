@@ -210,6 +210,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   private TableDrawerAdapter tableDrawerAdapter;
 
+  private View bookmarkTabView;
+
   private int currentWebViewIndex = 0;
 
   private File file;
@@ -390,35 +392,13 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     FileReader fileReader = new FileReader();
     documentParserJs = fileReader.readFile("js/documentParser.js", this);
 
-    newTabButton.setOnClickListener((View view) -> newTab());
-    tabForwardButtonContainer.setOnClickListener((View view) -> {
-      if (getCurrentWebView().canGoForward()) {
-        getCurrentWebView().goForward();
-      }
-    });
-    tabBackButtonContainer.setOnClickListener((View view) -> {
-      if (getCurrentWebView().canGoBack()) {
-        getCurrentWebView().goBack();
-      }
-    });
+    setUpTabButtons();
 
     documentSections = new ArrayList<>();
-    tabDrawerAdapter = new TabDrawerAdapter(mWebViews);
-    tabDrawerLeft.setLayoutManager(new LinearLayoutManager(this));
-    tabDrawerLeft.setAdapter(tabDrawerAdapter);
-    tableDrawerRight.setLayoutManager(new LinearLayoutManager(this));
+
 
     setUpTableDrawerAdapter();
-
-    tabDrawerAdapter.setTabClickListener(new TabDrawerAdapter.TabClickListener() {
-      @Override public void onSelectTab(View view, int position) {
-        selectTab(position);
-      }
-
-      @Override public void onCloseTab(View view, int position) {
-        closeTab(position);
-      }
-    });
+    setUpTabDrawerAdapter();
 
     ActionBarDrawerToggle drawerToggle = new KiwixActionBarDrawerToggle(this, drawerLayout, toolbar);
 
@@ -465,13 +445,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
     pageBottomTabLayout.addOnTabSelectedListener(pageBottomTabListener);
 
-    View bookmarkTabView = LayoutInflater.from(KiwixMobileActivity.this)
-            .inflate(R.layout.bookmark_tab, null);
-    bookmarkTabView.setOnClickListener(view -> PageBottomTab.of(4).select(pageActionTabsCallback));
-    bookmarkTabView.setOnLongClickListener(view -> {
-      PageBottomTab.of(4).longClick(pageActionTabsCallback);
-      return true;
-    });
+    setUpBookmarkTabView();
 
     pageBottomTabLayout.getTabAt(4).setCustomView(bookmarkTabView);
 
@@ -482,6 +456,20 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     } else {
       backToTopAppearDaily();
     }
+  }
+
+  private void setUpTabButtons() {
+    newTabButton.setOnClickListener((View view) -> newTab());
+    tabForwardButtonContainer.setOnClickListener((View view) -> {
+      if (getCurrentWebView().canGoForward()) {
+        getCurrentWebView().goForward();
+      }
+    });
+    tabBackButtonContainer.setOnClickListener((View view) -> {
+      if (getCurrentWebView().canGoBack()) {
+        getCurrentWebView().goBack();
+      }
+    });
   }
 
   private void setUpTableDrawerAdapter() {
@@ -503,6 +491,33 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     });
 
     tableDrawerAdapter.notifyDataSetChanged();
+  }
+
+  private void setUpBookmarkTabView() {
+    bookmarkTabView = LayoutInflater.from(KiwixMobileActivity.this)
+            .inflate(R.layout.bookmark_tab, null);
+    bookmarkTabView.setOnClickListener(view -> PageBottomTab.of(4).select(pageActionTabsCallback));
+    bookmarkTabView.setOnLongClickListener(view -> {
+      PageBottomTab.of(4).longClick(pageActionTabsCallback);
+      return true;
+    });
+  }
+
+  private void setUpTabDrawerAdapter() {
+    tabDrawerAdapter = new TabDrawerAdapter(mWebViews);
+    tabDrawerLeft.setLayoutManager(new LinearLayoutManager(this));
+    tabDrawerLeft.setAdapter(tabDrawerAdapter);
+    tableDrawerRight.setLayoutManager(new LinearLayoutManager(this));
+
+    tabDrawerAdapter.setTabClickListener(new TabDrawerAdapter.TabClickListener() {
+      @Override public void onSelectTab(View view, int position) {
+        selectTab(position);
+      }
+
+      @Override public void onCloseTab(View view, int position) {
+        closeTab(position);
+      }
+    });
   }
 
   private void setUpDocumentParser() {
