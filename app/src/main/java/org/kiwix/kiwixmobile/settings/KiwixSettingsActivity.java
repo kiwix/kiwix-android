@@ -266,7 +266,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
       if (key.equals(PREF_WIFI_ONLY)) {
         KiwixMobileActivity.wifiOnly = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
       }
-      if(key.equals(PREF_AUTONIGHTMODE)){
+      if (key.equals(PREF_AUTONIGHTMODE)){
         KiwixMobileActivity.refresh = true;
         KiwixMobileActivity.nightMode = nightMode(sharedPreferences);
         getActivity().finish();
@@ -276,10 +276,12 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
     private void clearAllHistoryDialog() {
       int warningResId;
-      if(nightMode(PreferenceManager.getDefaultSharedPreferences(getActivity())))
+      if (nightMode(PreferenceManager.getDefaultSharedPreferences(getActivity()))) {
         warningResId = R.drawable.ic_warning_white;
-      else
+      }
+      else {
         warningResId = R.drawable.ic_warning_black;
+      }
       new AlertDialog.Builder(getActivity(), dialogStyle())
           .setTitle(getResources().getString(R.string.clear_all_history_dialog_title))
           .setMessage(getResources().getString(R.string.clear_recent_and_tabs_history_dialog))
