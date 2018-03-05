@@ -21,12 +21,10 @@ package org.kiwix.kiwixmobile.utils;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -66,10 +64,8 @@ public class LanguageUtils {
     sortLanguageList(context.getResources().getConfiguration().locale);
   }
 
-  public static void handleLocaleChange(Context context) {
-
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-    String language = prefs.getString(PREF_LANG, "");
+  public static void handleLocaleChange(Context context, SharedPreferenceUtil sharedPreferenceUtil) {
+    String language = sharedPreferenceUtil.getPrefLanguage("");
 
     if (language.isEmpty()) {
       return;
@@ -189,7 +185,7 @@ public class LanguageUtils {
 
   // Check, if the selected Locale is supported and weather we actually need to change our font.
   // We do this by checking, if our Locale is available in the List, that Locale.getAvailableLocales() returns.
-  private boolean haveToChangeFont() {
+  private boolean haveToChangeFont(SharedPreferenceUtil sharedPreferenceUtil) {
 
     for (Locale s : Locale.getAvailableLocales()) {
       if (s.getLanguage().equals(Locale.getDefault().toString())) {
@@ -197,8 +193,7 @@ public class LanguageUtils {
       }
 
       // Don't change the language, if the options hasn't been set
-      SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-      String language = prefs.getString(PREF_LANG, "");
+      String language = sharedPreferenceUtil.getPrefLanguage("");
 
       if (language.isEmpty()) {
         return false;
@@ -215,9 +210,9 @@ public class LanguageUtils {
   // which also sets a Factory on the LayoutInflator, we have to access the private field of the
   // LayoutInflater, that handles this restriction via Java's reflection API
   // and make it accessible set it to false again.
-  public void changeFont(LayoutInflater layoutInflater) {
+  public void changeFont(LayoutInflater layoutInflater, SharedPreferenceUtil sharedPreferenceUtil) {
 
-    if (!haveToChangeFont()) {
+    if (!haveToChangeFont(sharedPreferenceUtil)) {
       return;
     }
 
