@@ -11,6 +11,7 @@ import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
+import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 import org.kiwix.kiwixmobile.views.web.KiwixWebView;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
@@ -52,4 +53,6 @@ public interface ApplicationComponent {
   void inject(KiwixSettingsActivity.PrefsFragment prefsFragment);
 
   void inject(DownloadFragment downloadFragment);
+
+  void inject(AutoCompleteAdapter autoCompleteAdapter);
 }
