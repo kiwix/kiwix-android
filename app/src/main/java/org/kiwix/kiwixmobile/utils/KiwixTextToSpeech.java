@@ -167,14 +167,12 @@ public class KiwixTextToSpeech {
   }
 
   public void pauseOrResume() {
-    if (currentTTSTask == null)
+    if (currentTTSTask == null) {
       return;
-
-    if (currentTTSTask.paused) {
+    } else if (currentTTSTask.paused) {
       if (!requestAudioFocus()) return;
       currentTTSTask.start();
-    }
-    else {
+    } else {
       currentTTSTask.pause();
     }
   }
