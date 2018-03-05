@@ -208,6 +208,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   private TabDrawerAdapter tabDrawerAdapter;
 
+  private TableDrawerAdapter tableDrawerAdapter;
+
   private int currentWebViewIndex = 0;
 
   private File file;
@@ -406,24 +408,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     tabDrawerLeft.setAdapter(tabDrawerAdapter);
     tableDrawerRight.setLayoutManager(new LinearLayoutManager(this));
 
-    TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter();
-    tableDrawerRight.setAdapter(tableDrawerAdapter);
-    tableDrawerAdapter.setTableClickListener(new TableClickListener() {
-      @Override public void onHeaderClick(View view) {
-        getCurrentWebView().setScrollY(0);
-        drawerLayout.closeDrawer(GravityCompat.END);
-      }
-
-      @Override public void onSectionClick(View view, int position) {
-        getCurrentWebView().loadUrl("javascript:document.getElementById('"
-            + documentSections.get(position).id
-            + "').scrollIntoView();");
-
-        drawerLayout.closeDrawers();
-      }
-    });
-
-    tableDrawerAdapter.notifyDataSetChanged();
+    setUpTableDrawerAdapter();
 
     tabDrawerAdapter.setTabClickListener(new TabDrawerAdapter.TabClickListener() {
       @Override public void onSelectTab(View view, int position) {
@@ -444,20 +429,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
     compatCallback = new CompatFindActionModeCallback(this);
     setUpTTS();
-    documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
-      @Override
-      public void sectionsLoaded(String title, List<DocumentSection> sections) {
-        documentSections.addAll(sections);
-        tableDrawerAdapter.setTitle(title);
-        tableDrawerAdapter.setSections(documentSections);
-        tableDrawerAdapter.notifyDataSetChanged();
-      }
-
-      @Override public void clearSections() {
-        documentSections.clear();
-        tableDrawerAdapter.notifyDataSetChanged();
-      }
-    });
+    setUpDocumentParser();
 
     manageExternalLaunchAndRestoringViewState();
     setUpExitFullscreenButton();
@@ -510,6 +482,44 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     } else {
       backToTopAppearDaily();
     }
+  }
+
+  private void setUpTableDrawerAdapter() {
+    tableDrawerAdapter = new TableDrawerAdapter();
+    tableDrawerRight.setAdapter(tableDrawerAdapter);
+    tableDrawerAdapter.setTableClickListener(new TableClickListener() {
+      @Override public void onHeaderClick(View view) {
+        getCurrentWebView().setScrollY(0);
+        drawerLayout.closeDrawer(GravityCompat.END);
+      }
+
+      @Override public void onSectionClick(View view, int position) {
+        getCurrentWebView().loadUrl("javascript:document.getElementById('"
+                + documentSections.get(position).id
+                + "').scrollIntoView();");
+
+        drawerLayout.closeDrawers();
+      }
+    });
+
+    tableDrawerAdapter.notifyDataSetChanged();
+  }
+
+  private void setUpDocumentParser() {
+    documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
+      @Override
+      public void sectionsLoaded(String title, List<DocumentSection> sections) {
+        documentSections.addAll(sections);
+        tableDrawerAdapter.setTitle(title);
+        tableDrawerAdapter.setSections(documentSections);
+        tableDrawerAdapter.notifyDataSetChanged();
+      }
+
+      @Override public void clearSections() {
+        documentSections.clear();
+        tableDrawerAdapter.notifyDataSetChanged();
+      }
+    });
   }
 
   private void backToTopAppearDaily() {
