@@ -1137,6 +1137,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
         case KeyEvent.KEYCODE_BACK:
           if (getCurrentWebView().canGoBack()) {
             getCurrentWebView().goBack();
+          } else if (isFullscreenOpened) {
+            closeFullScreen();
           } else {
             finish();
           }
