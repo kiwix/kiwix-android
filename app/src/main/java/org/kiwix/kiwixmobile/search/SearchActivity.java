@@ -74,10 +74,10 @@ public class SearchActivity extends AppCompatActivity
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    setupDagger();
     if (sharedPreferenceUtil.getPrefNightMode()) {
       setTheme(R.style.AppTheme_Night);
     }
-    setupDagger();
     super.onCreate(savedInstanceState);
     View contentView = LayoutInflater.from(this).inflate(R.layout.search, null);
     setContentView(contentView);
