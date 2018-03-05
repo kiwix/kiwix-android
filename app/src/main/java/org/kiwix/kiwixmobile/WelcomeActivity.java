@@ -35,47 +35,58 @@ public class WelcomeActivity extends AppCompatActivity {
     prev = (Button) findViewById(R.id.btn_prev);
     prev.setVisibility(View.GONE);
 
-
     layouts = new int[]{R.layout.welcome_detail1, R.layout.welcome_detail2, R.layout.welcome_detail3, R.layout.welcome_detail4};
 
-    viewPagerAdapter = new ViewPagerAdapter();
+    viewPagerAdapter = new ViewPagerAdapter(layouts,this);
     viewPager.setAdapter(viewPagerAdapter);
     viewPager.addOnPageChangeListener(viewListener);
 
     skip.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Intent i = new Intent(WelcomeActivity.this, KiwixMobileActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
-        finish();
+        skipClicked();
       }
     });
 
     next.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        int current = getItem(+1);
-        if (current < layouts.length) {
-          viewPager.setCurrentItem(current);
-        } else {
-          Intent i = new Intent(WelcomeActivity.this, KiwixMobileActivity.class);
-          i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-          startActivity(i);
-          finish();
-        }
+        nextClicked();
       }
     });
 
     prev.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        int current = getItem(-1);
-        if (current >= 0) {
-          viewPager.setCurrentItem(current);
-        }
+        prevClicked();
       }
     });
+  }
+
+  public void skipClicked(){
+    Intent i = new Intent(WelcomeActivity.this, KiwixMobileActivity.class);
+    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    startActivity(i);
+    finish();
+  }
+
+  public void nextClicked(){
+    int current = getItem(+1);
+    if (current < layouts.length) {
+      viewPager.setCurrentItem(current);
+    } else {
+      Intent i = new Intent(WelcomeActivity.this, KiwixMobileActivity.class);
+      i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+      startActivity(i);
+      finish();
+    }
+  }
+
+  public void prevClicked(){
+    int current = getItem(-1);
+    if (current >= 0) {
+      viewPager.setCurrentItem(current);
+    }
   }
 
   private int getItem(int i) {
@@ -105,37 +116,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
     @Override
     public void onPageScrollStateChanged(int state) {
-
+      //No implementation
     }
   };
-
-
-  public class ViewPagerAdapter extends PagerAdapter {
-
-    private LayoutInflater layoutInflater;
-
-    @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-      layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-      View v = layoutInflater.inflate(layouts[position], container, false);
-      container.addView(v);
-      return v;
-    }
-
-    @Override
-    public int getCount() {
-      return layouts.length;
-    }
-
-    @Override
-    public boolean isViewFromObject(View view, Object object) {
-      return view == object;
-    }
-
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-      View v = (View) object;
-      container.removeView(v);
-    }
-  }
 }
