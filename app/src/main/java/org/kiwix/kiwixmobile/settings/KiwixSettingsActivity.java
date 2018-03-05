@@ -301,7 +301,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
 
     private void clearAllHistoryDialog() {
       int warningResId;
-      if (nightMode(PreferenceManager.getDefaultSharedPreferences(getActivity()))) {
+      if (nightMode(sharedPreferenceUtil)) {
         warningResId = R.drawable.ic_warning_white;
       }
       else {
