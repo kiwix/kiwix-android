@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import org.kiwix.kiwixlib.JNIKiwix;
 import org.kiwix.kiwixlib.JNIKiwixSearcher;
+import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
@@ -48,11 +49,16 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
 
+  private void setupDagger() {
+    KiwixApplication.getInstance().getApplicationComponent().inject(this);
+  }
+
   public AutoCompleteAdapter(Context context) {
     super(context, android.R.layout.simple_list_item_1);
     this.context = context;
     mData = new ArrayList<>();
     mFilter = new KiwixFilter();
+    setupDagger();
   }
 
   @Override
