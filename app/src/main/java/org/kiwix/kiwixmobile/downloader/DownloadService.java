@@ -26,6 +26,7 @@ import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
 import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
@@ -85,6 +86,9 @@ public class DownloadService extends Service {
   private static DownloadFragment downloadFragment;
   Handler handler = new Handler(Looper.getMainLooper());
 
+  @Inject
+  SharedPreferenceUtil sharedPreferenceUtil;
+
   public static void setDownloadFragment(DownloadFragment dFragment) {
     downloadFragment = dFragment;
   }
@@ -98,8 +102,7 @@ public class DownloadService extends Service {
   public void onCreate() {
     setupDagger();
 
-    SD_CARD = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-        .getString(PREF_STORAGE,Environment.getExternalStorageDirectory().getPath());
+    SD_CARD = sharedPreferenceUtil.getPrefStorage();
     KIWIX_ROOT = SD_CARD + "/Kiwix/";
 
     KIWIX_ROOT = checkWritable(KIWIX_ROOT);
@@ -134,8 +137,7 @@ public class DownloadService extends Service {
     }
 
 
-    SD_CARD = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-        .getString(PREF_STORAGE,Environment.getExternalStorageDirectory().getPath());
+    SD_CARD = sharedPreferenceUtil.getPrefStorage();
     KIWIX_ROOT = SD_CARD + "/Kiwix/";
 
     KIWIX_ROOT = checkWritable(KIWIX_ROOT);

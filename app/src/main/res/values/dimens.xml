@@ -19,6 +19,7 @@
   <dimen name="dimen_24dp">24dp</dimen>
   <dimen name="dimen_100dp">100dp</dimen>
   <dimen name="dimen_0dp">0dp</dimen>
+  <dimen name="dimen_14sp">14sp</dimen>
   <dimen name="dimen_18sp">18sp</dimen>
   <dimen name="dimen_20sp">20sp</dimen>
   <dimen name="navigation_width">260dp</dimen>
