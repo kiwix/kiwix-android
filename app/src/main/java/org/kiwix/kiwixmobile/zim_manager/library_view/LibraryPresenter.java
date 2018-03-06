@@ -29,7 +29,7 @@ import org.kiwix.kiwixmobile.network.KiwixService;
 
 import javax.inject.Inject;
 
-import rx.android.schedulers.AndroidSchedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by EladKeyshawn on 06/04/2017.

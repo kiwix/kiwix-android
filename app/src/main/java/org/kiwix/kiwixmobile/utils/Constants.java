@@ -78,6 +78,8 @@ public final class Constants {
 
     public static final String PREF_EXTERNAL_LINK_POPUP = "pref_external_link_popup";
 
+    public static final String PREF_IS_FIRST_RUN = "isFirstRun";
+
     // Tags
     public static final String TAG_FILE_SEARCHED = "searchedarticle";
 

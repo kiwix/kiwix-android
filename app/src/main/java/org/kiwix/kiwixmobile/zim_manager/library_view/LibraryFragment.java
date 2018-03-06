@@ -20,23 +20,18 @@ package org.kiwix.kiwixmobile.zim_manager.library_view;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +40,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +52,7 @@ import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.TestingUtils;
@@ -79,9 +74,6 @@ import static android.view.View.GONE;
 import static org.kiwix.kiwixmobile.downloader.DownloadService.KIWIX_ROOT;
 import static org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOK;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE_TITLE;
-import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class LibraryFragment extends Fragment
     implements AdapterView.OnItemClickListener, StorageSelectDialog.OnSelectListener, LibraryViewCallback {
@@ -125,6 +117,9 @@ public class LibraryFragment extends Fragment
 
   @Inject
   LibraryPresenter presenter;
+
+  @Inject
+  SharedPreferenceUtil sharedPreferenceUtil;
 
   private void setupDagger() {
     KiwixApplication.getInstance().getApplicationComponent().inject(this);
@@ -335,23 +330,17 @@ public class LibraryFragment extends Fragment
   }
 
   public long getSpaceAvailable() {
-    return new File(PreferenceManager.getDefaultSharedPreferences(super.getActivity())
-        .getString(PREF_STORAGE, Environment.getExternalStorageDirectory()
-            .getPath())).getFreeSpace();
+    return new File(sharedPreferenceUtil.getPrefStorage()).getFreeSpace();
   }
 
   @Override
   public void selectionCallback(StorageDevice storageDevice) {
-    SharedPreferences sharedPreferences =
-        PreferenceManager.getDefaultSharedPreferences(getActivity());
-    SharedPreferences.Editor editor = sharedPreferences.edit();
-    editor.putString(PREF_STORAGE, storageDevice.getName());
+    sharedPreferenceUtil.putPrefStorage(storageDevice.getName());
     if (storageDevice.isInternal()) {
-      editor.putString(PREF_STORAGE_TITLE, getResources().getString(R.string.internal_storage));
+      sharedPreferenceUtil.putPrefStorageTitle(getResources().getString(R.string.internal_storage));
     } else {
-      editor.putString(PREF_STORAGE_TITLE, getResources().getString(R.string.external_storage));
+      sharedPreferenceUtil.putPrefStorageTitle(getResources().getString(R.string.external_storage));
     }
-    editor.apply();
   }
 
   public class DownloadServiceConnection {

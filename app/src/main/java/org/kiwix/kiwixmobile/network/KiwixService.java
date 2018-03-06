@@ -20,14 +20,14 @@ package org.kiwix.kiwixmobile.network;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.library.entity.MetaLinkNetworkEntity;
 
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Url;
-import rx.Observable;
-import rx.schedulers.Schedulers;
 
 public interface KiwixService {
   @GET("/library/library_zim.xml") Observable<LibraryNetworkEntity> getLibrary();
@@ -43,7 +43,7 @@ public interface KiwixService {
           .baseUrl(baseUrl)
           .client(okHttpClient)
           .addConverterFactory(SimpleXmlConverterFactory.create())
-          .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
+          .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
           .build();
 
       return retrofit.create(KiwixService.class);

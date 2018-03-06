@@ -49,6 +49,7 @@ import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
@@ -56,6 +57,8 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+
+import javax.inject.Inject;
 
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_WIFI_ONLY;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
@@ -73,8 +76,15 @@ public class DownloadFragment extends Fragment {
   private Activity faActivity;
   private boolean hasArtificiallyPaused;
 
+  @Inject static SharedPreferenceUtil sharedPreferenceUtil;
+
+  private void setupDagger() {
+    KiwixApplication.getInstance().getApplicationComponent().inject(this);
+  }
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    setupDagger();
     faActivity = super.getActivity();
     relLayout = (RelativeLayout) inflater.inflate(R.layout.download_management, container, false);
 
@@ -117,10 +127,7 @@ public class DownloadFragment extends Fragment {
             .setTitle(R.string.wifi_only_title)
             .setMessage(R.string.wifi_only_msg)
             .setPositiveButton(R.string.yes, (dialog, i) -> {
-              PreferenceManager.getDefaultSharedPreferences(context)
-                      .edit()
-                      .putBoolean(PREF_WIFI_ONLY, false)
-                      .apply();
+                      sharedPreferenceUtil.putPrefWifiOnly(false);
               KiwixMobileActivity.wifiOnly = false;
               yesAction.run();
             })
