@@ -139,7 +139,7 @@
     <org.kiwix.kiwixmobile.views.AnimatedProgressBar
       android:id="@+id/progress_view"
       android:layout_width="match_parent"
-      android:layout_height="@dimen/dimen_3dp"
+      android:layout_height="@dimen/progress_view_height"
       android:layout_alignParentBottom="true"
       app:backgroundColor="?attr/progressBackgroundColor"
       app:bidirectionalAnimate="false"
