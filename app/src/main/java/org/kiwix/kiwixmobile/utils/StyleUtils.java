@@ -71,21 +71,4 @@ public class StyleUtils {
     }
   }
 
-  /**
-   * This method clears the {@link android.view.WindowManager.LayoutParams#FLAG_TRANSLUCENT_STATUS
-   * FLAG_TRANSLUCENT_STATUS} for kitkat and above devices so that the action bar doesn't overlaps
-   * with the status bar and the color of status bar is not white.
-   * For post lollipop devices, this method colors the status bar with colorPrimaryDark.
-   * @param activity The activity to style.
-   */
-  public static void styleStatusBar(Activity activity) {
-    Window window = activity.getWindow();
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-      window.clearFlags(FLAG_TRANSLUCENT_STATUS);
-    }
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      window.addFlags(FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-      window.setStatusBarColor(ContextCompat.getColor(activity, R.color.primary_dark));
-    }
-  }
 }

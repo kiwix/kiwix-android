@@ -76,7 +76,6 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
     if (KiwixSettingsActivity.nightMode(sharedPreferences)) {
       setTheme(R.style.AppTheme_Night);
     }
-    StyleUtils.styleStatusBar(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.zim_manager);
     setupDagger();

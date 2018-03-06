@@ -361,7 +361,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   @Override
   public void onCreate(Bundle savedInstanceState) {
     getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-    StyleUtils.styleStatusBar(this);
 
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     wifiOnly = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);

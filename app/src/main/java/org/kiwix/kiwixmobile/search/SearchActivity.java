@@ -58,7 +58,6 @@ public class SearchActivity extends AppCompatActivity
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    StyleUtils.styleStatusBar(this);
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     if (sharedPreferences.getBoolean(PREF_NIGHTMODE, false)) {
       setTheme(R.style.AppTheme_Night);

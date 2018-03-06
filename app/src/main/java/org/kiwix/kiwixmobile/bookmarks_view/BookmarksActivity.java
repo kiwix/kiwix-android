@@ -81,7 +81,6 @@ public class BookmarksActivity extends BaseActivity
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    StyleUtils.styleStatusBar(this);
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     if (KiwixSettingsActivity.nightMode(sharedPreferences)) {
       setTheme(R.style.AppTheme_Night);

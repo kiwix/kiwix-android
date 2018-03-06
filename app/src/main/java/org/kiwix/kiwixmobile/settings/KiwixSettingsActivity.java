@@ -85,7 +85,6 @@ public class KiwixSettingsActivity extends AppCompatActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
 
-    StyleUtils.styleStatusBar(this);
     if(nightMode(PreferenceManager.getDefaultSharedPreferences(this))){
       setTheme(R.style.AppTheme_Night);
     }
