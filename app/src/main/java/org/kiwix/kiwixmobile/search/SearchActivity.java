@@ -113,7 +113,7 @@ public class SearchActivity extends AppCompatActivity
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu_search, menu);
     MenuItem searchMenuItem = menu.findItem(R.id.menu_search);
-    searchMenuItem.expandActionView();//replaced deprecated method
+    searchMenuItem.expandActionView();
     searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
       @Override
@@ -134,7 +134,6 @@ public class SearchActivity extends AppCompatActivity
       }
     });
 
-    //replaced deprecated method
     searchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
       @Override
       public boolean onMenuItemActionExpand(MenuItem item) {
