@@ -85,8 +85,13 @@ public class NetworkUtils {
   public static String parseURL(Context context, String url) {
     String details;
     try {
-      details = url.substring(url.lastIndexOf("/") + 1, url.length() - 10);
-      details = details.substring(details.indexOf("_", details.indexOf("_") + 1) + 1, details.lastIndexOf("_"));
+      details = url.substring(url.lastIndexOf("/") + 1);
+      int beginIndex = details.indexOf("_", details.indexOf("_") + 1) + 1;
+      int endIndex = details.lastIndexOf("_");
+      if (beginIndex < 0 || endIndex > details.length() || beginIndex > endIndex) {
+        return "";
+      }
+      details = details.substring(beginIndex, endIndex);
       details = details.replaceAll("_", " ");
       details = details.replaceAll("all", "");
       details = details.replaceAll("nopic", context.getString(R.string.zim_nopic));
