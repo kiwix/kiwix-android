@@ -26,7 +26,7 @@
     <item name="android:textColorSecondary">@color/primary</item>
     <item name="android:textColorTertiary">@color/primary</item>
     <item name="android:windowTranslucentStatus">true</item>
-    <item name="colorControlNormal">@color/white</item>
+    <item name="colorControlNormal">@color/accent</item>
     <item name="android:progressBackgroundTint">@color/greyed_out_selected</item>
     <item name="android:statusBarColor">@android:color/transparent</item>
   </style>
