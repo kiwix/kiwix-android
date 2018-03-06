@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
-  android:layout_height="@dimen/dimen_56dp"
+  android:layout_height="@dimen/tabs_list_height"
   android:background="?attr/selectedBackground"
   android:gravity="center_vertical"
   android:orientation="horizontal">
@@ -11,8 +11,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerVertical="true"
-    android:layout_marginLeft="@dimen/dimen_16dp"
-    android:layout_marginRight="@dimen/dimen_16dp"
+    android:layout_marginLeft="@dimen/title_text_margin"
+    android:layout_marginRight="@dimen/title_text_margin"
     android:layout_toLeftOf="@+id/exitButton"
     android:ellipsize="end"
     android:fontFamily="sans-serif-light"
@@ -23,15 +23,15 @@
 
   <ImageView
     android:id="@+id/exitButton"
-    android:layout_width="@dimen/dimen_48dp"
-    android:layout_height="@dimen/dimen_48dp"
+    android:layout_width="@dimen/exit_button_width"
+    android:layout_height="@dimen/exit_button_height"
     android:layout_alignParentRight="true"
     android:layout_centerVertical="true"
-    android:layout_marginRight="@dimen/dimen_small_padding"
+    android:layout_marginRight="@dimen/exit_button_margin_right"
     android:background="?attr/actionBarItemBackground"
     android:contentDescription="@string/delete_tab"
     android:gravity="center_vertical"
-    android:padding="@dimen/dimen_12dp"
-    android:src="?attr/deleteDrawable"></ImageView>
+    android:padding="@dimen/exit_button_padding"
+    android:src="?attr/deleteDrawable" />
 
 </RelativeLayout>

@@ -18,7 +18,7 @@
   <android.support.v7.widget.RecyclerView
     android:id="@+id/left_drawer_list"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dimen_0dp"
+    android:layout_height="@dimen/left_drawer_list_height"
     android:layout_gravity="start"
     android:layout_weight="1"
     android:choiceMode="singleChoice"
@@ -74,7 +74,7 @@
         android:paddingLeft="@dimen/dimen_small_padding"
         android:paddingRight="@dimen/dimen_small_padding"
         android:paddingTop="@dimen/dimen_small_padding"
-        android:src="?attr/plusDrawable"></ImageView>
+        android:src="?attr/plusDrawable" />
     </RelativeLayout>
 
     <RelativeLayout

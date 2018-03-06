@@ -22,9 +22,7 @@ package org.kiwix.kiwixmobile.bookmarks_view;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -49,7 +47,8 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
-import org.kiwix.kiwixmobile.utils.StyleUtils;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,15 +76,16 @@ public class BookmarksActivity extends BaseActivity
   LinearLayout noBookmarksLayout;
   @Inject
   BookmarksPresenter presenter;
+  @Inject
+  SharedPreferenceUtil sharedPreferenceUtil;
   private ActionModeListener actionModeListener;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-    if (KiwixSettingsActivity.nightMode(sharedPreferences)) {
+    super.onCreate(savedInstanceState);
+    if (KiwixSettingsActivity.nightMode(sharedPreferenceUtil)) {
       setTheme(R.style.AppTheme_Night);
     }
-    super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_bookmarks);
     ButterKnife.bind(this);
 
