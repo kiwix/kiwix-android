@@ -17,6 +17,10 @@ buildscript {
 
 ext {
     supportLibraryVersion = '27.0.2'
+    rxJavaVersion = '2.1.9'
+    rxAndroidVersion = '2.0.2'
+    okHttpVersion = '3.9.1'
+    retrofitVersion = '2.3.0'
 }
 
 allprojects {
