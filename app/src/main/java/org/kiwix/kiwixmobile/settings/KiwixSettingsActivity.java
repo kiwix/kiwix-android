@@ -300,6 +300,13 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     }
 
     private void clearAllHistoryDialog() {
+      int warningResId;
+      if (nightMode(sharedPreferenceUtil)) {
+        warningResId = R.drawable.ic_warning_white;
+      }
+      else {
+        warningResId = R.drawable.ic_warning_black;
+      }
       new AlertDialog.Builder(getActivity(), dialogStyle())
           .setTitle(getResources().getString(R.string.clear_all_history_dialog_title))
           .setMessage(getResources().getString(R.string.clear_recent_and_tabs_history_dialog))
@@ -311,7 +318,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
           .setNegativeButton(android.R.string.no, (dialog, which) -> {
             // do nothing
           })
-          .setIcon(android.R.drawable.ic_dialog_alert)
+          .setIcon(warningResId)
           .show();
     }
 
