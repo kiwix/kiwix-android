@@ -32,6 +32,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -625,7 +626,25 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
           pauseTTSButton.setText(R.string.tts_pause);
         });
       }
-    });
+    }, new AudioManager.OnAudioFocusChangeListener() {
+      @Override
+      public void onAudioFocusChange(int focusChange) {
+        Log.d(TAG_KIWIX, "Focus change: " + String.valueOf(focusChange));
+        if (tts.currentTTSTask == null) {
+          tts.stop();
+          return;
+        }
+        switch (focusChange) {
+          case (AudioManager.AUDIOFOCUS_LOSS):
+            if (!tts.currentTTSTask.paused) tts.pauseOrResume();
+            pauseTTSButton.setText(R.string.tts_resume);
+            break;
+          case (AudioManager.AUDIOFOCUS_GAIN):
+            pauseTTSButton.setText(R.string.tts_pause);
+            break;
+        }
+      }
+  });
 
     pauseTTSButton.setOnClickListener(view -> {
       if (tts.currentTTSTask == null) {
@@ -1137,6 +1156,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
         case KeyEvent.KEYCODE_BACK:
           if (getCurrentWebView().canGoBack()) {
             getCurrentWebView().goBack();
+          } else if (isFullscreenOpened) {
+            closeFullScreen();
           } else {
             finish();
           }
