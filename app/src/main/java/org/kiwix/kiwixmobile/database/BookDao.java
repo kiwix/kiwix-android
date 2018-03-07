@@ -24,7 +24,7 @@ public class BookDao {
   }
 
   
-  public void bookDetails(Book book, SquidCursor<BookDatabaseEntity> bookCursor) {
+  public void setBookDetails(Book book, SquidCursor<BookDatabaseEntity> bookCursor) {
     book.id = bookCursor.get(BookDatabaseEntity.BOOK_ID);
     book.title = bookCursor.get(BookDatabaseEntity.TITLE);
     book.description = bookCursor.get(BookDatabaseEntity.DESCRIPTION);
@@ -40,7 +40,7 @@ public class BookDao {
     book.bookName = bookCursor.get(BookDatabaseEntity.NAME);
   }
   
-  public void setBook(Book book, BookDatabaseEntity bookDatabaseEntity) {
+  public void setBookDatabaseEntity(Book book, BookDatabaseEntity bookDatabaseEntity) {
       bookDatabaseEntity.setBookId(book.getId());
       bookDatabaseEntity.setTitle(book.getTitle());
       bookDatabaseEntity.setDescription(book.getDescription());
@@ -66,7 +66,7 @@ public class BookDao {
     ArrayList<Book> books = new ArrayList<>();
     while (bookCursor.moveToNext()) {
       Book book = new Book();
-      bookDetails(book, bookCursor);
+      setBookDetails(book, bookCursor);
       if (!FileUtils.hasPart(book.file)) {
         if (book.file.exists()) {
           books.add(book);
@@ -86,7 +86,7 @@ public class BookDao {
     ArrayList<Book> books = new ArrayList<>();
     while (bookCursor.moveToNext()) {
       Book book = new Book();
-      bookDetails(book, bookCursor);
+      setBookDetails(book, bookCursor);
       book.remoteUrl = bookCursor.get(BookDatabaseEntity.REMOTE_URL);
       if (FileUtils.hasPart(book.file)) {
         books.add(book);
@@ -100,7 +100,7 @@ public class BookDao {
     for (Book book : books) {
       if (book != null) {
         BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
-        setBook(book, bookDatabaseEntity);
+        setBookDatabaseEntity(book, bookDatabaseEntity);
       }
     }
   }
@@ -108,7 +108,7 @@ public class BookDao {
   public void saveBook(Book book) {
     BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
     bookDatabaseEntity.setRemoteUrl(book.remoteUrl);
-    setBook(book, bookDatabaseEntity);
+    setBookDatabaseEntity(book, bookDatabaseEntity);
   }
 
   public void deleteBook(String id) {
