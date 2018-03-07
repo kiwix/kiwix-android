@@ -22,15 +22,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -89,7 +94,7 @@ public class SearchActivity extends AppCompatActivity
     searchPresenter.attachView(this);
 
     mListView = findViewById(R.id.search_list);
-    mDefaultAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+    mDefaultAdapter = getDefaultAdapter();
     searchPresenter.getRecentSearches(this);
     mListView.setAdapter(mDefaultAdapter);
 
@@ -175,7 +180,15 @@ public class SearchActivity extends AppCompatActivity
 
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-    String title = ((TextView) view).getText().toString();
+    CharSequence text = ((TextView) view).getText();
+    String title;
+    if (text instanceof Spanned) {
+      title = Html.toHtml((Spanned) text);
+      // To remove the "ltr style information" from spanned text
+      title = title.substring(title.indexOf(">") + 1, title.lastIndexOf("<"));
+    } else {
+      title = text.toString();
+    }
     searchPresenter.saveSearch(title, this);
     sendMessage(title);
   }
@@ -222,9 +235,29 @@ public class SearchActivity extends AppCompatActivity
   }
 
   private void resetAdapter() {
-    mDefaultAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+    mDefaultAdapter = getDefaultAdapter();
     mListView.setAdapter(mDefaultAdapter);
     searchPresenter.getRecentSearches(this);
+  }
+
+  private ArrayAdapter<String> getDefaultAdapter() {
+    return new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1) {
+      @NonNull
+      @Override
+      public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        View row;
+
+        if (convertView == null) {
+          row = LayoutInflater.from(parent.getContext())
+                  .inflate(android.R.layout.simple_list_item_1, null);
+        } else {
+          row = convertView;
+        }
+
+        ((TextView) row).setText(Html.fromHtml(getItem(position)));
+        return row;
+      }
+    };
   }
 
 
