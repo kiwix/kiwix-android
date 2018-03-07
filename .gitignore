@@ -12,6 +12,9 @@
 # Files for the Dalvik VM
 *.dex
 
+header.txt
+app/header.bash
+
 # Java class files
 *.class
 

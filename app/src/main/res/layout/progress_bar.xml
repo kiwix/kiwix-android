@@ -17,7 +17,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_centerHorizontal="true"
-    android:padding="@dimen/dimen_20dp" />
+    android:padding="@dimen/progressbar_padding" />
 
   <TextView
     android:layout_width="wrap_content"
@@ -25,7 +25,7 @@
     android:layout_below="@id/progressBar"
     android:layout_centerHorizontal="true"
     android:layout_centerVertical="true"
-    android:paddingTop="@dimen/dimen_10dp"
+    android:paddingTop="@dimen/progressbar_textview_vertical_padding"
     android:text="@string/rescan_fs_warning"
     android:textStyle="bold" />
 
