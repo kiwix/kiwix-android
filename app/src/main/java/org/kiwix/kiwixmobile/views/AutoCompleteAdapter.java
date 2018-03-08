@@ -1,9 +1,23 @@
+/*
+ * Kiwix Android
+ * Copyright (C) 2018  Kiwix <android.kiwix.org>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.kiwix.kiwixmobile.views;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.ResultReceiver;
-import android.preference.PreferenceManager;
 import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +28,13 @@ import android.widget.TextView;
 
 import org.kiwix.kiwixlib.JNIKiwix;
 import org.kiwix.kiwixlib.JNIKiwixSearcher;
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.ZimContentProvider;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_FULL_TEXT_SEARCH;
 
 public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
 
@@ -33,6 +45,8 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
   private Context context;
 
   @Inject JNIKiwix currentJNIReader;
+  @Inject
+  SharedPreferenceUtil sharedPreferenceUtil;
 
   public AutoCompleteAdapter(Context context) {
     super(context, android.R.layout.simple_list_item_1);
@@ -85,8 +99,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
 	  final String query = constraint.toString();
 
           /* Fulltext search */
-          SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-          if (sharedPreferences.getBoolean(PREF_FULL_TEXT_SEARCH, false)) {
+          if (sharedPreferenceUtil.getPrefFullTextSearch()) {
             ZimContentProvider.jniSearcher.search(query, 200);
             JNIKiwixSearcher.Result result = ZimContentProvider.jniSearcher.getNextResult();
             while (result != null) {

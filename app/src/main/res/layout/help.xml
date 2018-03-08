@@ -19,9 +19,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:paddingLeft="@dimen/dimen_20dp"
-        android:paddingRight="@dimen/dimen_20dp"
-        card_view:cardCornerRadius="@dimen/dimen_small_padding"
+        android:paddingLeft="@dimen/help_cardview_horizontal_padding"
+        android:paddingRight="@dimen/help_cardview_horizontal_padding"
+        card_view:cardCornerRadius="@dimen/help_cardview_card_corner_radius"
         card_view:cardElevation="@dimen/help_cardview_card_elevation"
         card_view:cardUseCompatPadding="true">
 
@@ -43,10 +43,10 @@
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/dimen_10dp"
-            android:paddingLeft="@dimen/dimen_10dp"
-            android:paddingRight="@dimen/dimen_10dp"
-            android:paddingTop="@dimen/dimen_10dp"
+            android:paddingBottom="@dimen/help_textview_padding"
+            android:paddingLeft="@dimen/help_textview_padding"
+            android:paddingRight="@dimen/help_textview_padding"
+            android:paddingTop="@dimen/help_textview_padding"
             android:text="@string/help_1"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/primary_dark" />
@@ -57,28 +57,28 @@
       <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginRight="@dimen/dimen_3dp"
-        android:layout_marginLeft="@dimen/dimen_3dp"
+        android:layout_marginRight="@dimen/get_content_card_margin"
+        android:layout_marginLeft="@dimen/get_content_card_margin"
         android:background="@drawable/get_content_btn_shape">
         <Button
           android:id="@+id/get_content_card"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_margin="@dimen/dimen_3dp"
+          android:layout_margin="@dimen/get_content_card_margin"
           android:background="?attr/selectableItemBackground"
           android:text="@string/menu_zim_manager"
           android:textAllCaps="false"
           android:textColor="@color/white"
-          android:textSize="@dimen/dimen_20sp"/>
-       </LinearLayout>
+          android:textSize="@dimen/get_content_card_text_size"/>
+      </LinearLayout>
 
       <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:paddingLeft="@dimen/dimen_20dp"
-        android:paddingRight="@dimen/dimen_20dp"
-        card_view:cardCornerRadius="@dimen/dimen_small_padding"
+        android:paddingLeft="@dimen/help_cardview_horizontal_padding"
+        android:paddingRight="@dimen/help_cardview_horizontal_padding"
+        card_view:cardCornerRadius="@dimen/help_cardview_card_corner_radius"
         card_view:cardElevation="@dimen/help_cardview_card_elevation"
         card_view:cardUseCompatPadding="true">
 
@@ -90,10 +90,10 @@
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/dimen_10dp"
-            android:paddingLeft="@dimen/dimen_10dp"
-            android:paddingRight="@dimen/dimen_10dp"
-            android:paddingTop="@dimen/dimen_10dp"
+            android:paddingBottom="@dimen/help_textview_padding"
+            android:paddingLeft="@dimen/help_textview_padding"
+            android:paddingRight="@dimen/help_textview_padding"
+            android:paddingTop="@dimen/help_textview_padding"
             android:text="@string/help_2"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/primary_dark" />
@@ -101,8 +101,8 @@
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/dimen_10dp"
-            android:paddingRight="@dimen/dimen_10dp"
+            android:paddingLeft="@dimen/help_textview_padding"
+            android:paddingRight="@dimen/help_textview_padding"
             android:text="@string/help_3"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/primary_dark" />
@@ -110,9 +110,9 @@
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/dimen_10dp"
-            android:paddingLeft="@dimen/dimen_10dp"
-            android:paddingRight="@dimen/dimen_10dp"
+            android:paddingBottom="@dimen/help_textview_padding"
+            android:paddingLeft="@dimen/help_textview_padding"
+            android:paddingRight="@dimen/help_textview_padding"
             android:text="@string/help_4"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/primary_dark" />
@@ -123,9 +123,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:paddingLeft="@dimen/dimen_20dp"
-        android:paddingRight="@dimen/dimen_20dp"
-        card_view:cardCornerRadius="@dimen/dimen_small_padding"
+        android:paddingLeft="@dimen/help_cardview_horizontal_padding"
+        android:paddingRight="@dimen/help_cardview_horizontal_padding"
+        card_view:cardCornerRadius="@dimen/help_cardview_card_corner_radius"
         card_view:cardElevation="@dimen/help_cardview_card_elevation"
         card_view:cardUseCompatPadding="true">
 
@@ -137,10 +137,10 @@
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/dimen_10dp"
-            android:paddingLeft="@dimen/dimen_10dp"
-            android:paddingRight="@dimen/dimen_10dp"
-            android:paddingTop="@dimen/dimen_10dp"
+            android:paddingBottom="@dimen/help_textview_padding"
+            android:paddingLeft="@dimen/help_textview_padding"
+            android:paddingRight="@dimen/help_textview_padding"
+            android:paddingTop="@dimen/help_textview_padding"
             android:text="@string/help_5"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/primary_dark" />
@@ -148,8 +148,8 @@
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/dimen_10dp"
-            android:paddingRight="@dimen/dimen_10dp"
+            android:paddingLeft="@dimen/help_textview_padding"
+            android:paddingRight="@dimen/help_textview_padding"
             android:text="@string/help_6"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/primary_dark" />
@@ -157,8 +157,8 @@
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/dimen_10dp"
-            android:paddingRight="@dimen/dimen_10dp"
+            android:paddingLeft="@dimen/help_textview_padding"
+            android:paddingRight="@dimen/help_textview_padding"
             android:text="@string/help_7"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/primary_dark" />
@@ -166,9 +166,9 @@
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/dimen_10dp"
-            android:paddingRight="@dimen/dimen_10dp"
-            android:paddingTop="@dimen/dimen_10dp"
+            android:paddingLeft="@dimen/help_textview_padding"
+            android:paddingRight="@dimen/help_textview_padding"
+            android:paddingTop="@dimen/help_textview_padding"
             android:text="@string/help_8"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/primary_dark" />
@@ -176,9 +176,9 @@
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/dimen_10dp"
-            android:paddingLeft="@dimen/dimen_10dp"
-            android:paddingRight="@dimen/dimen_10dp"
+            android:paddingBottom="@dimen/help_textview_padding"
+            android:paddingLeft="@dimen/help_textview_padding"
+            android:paddingRight="@dimen/help_textview_padding"
             android:text="@string/help_9"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/primary_dark" />
@@ -186,8 +186,8 @@
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/dimen_10dp"
-            android:paddingRight="@dimen/dimen_10dp"
+            android:paddingLeft="@dimen/help_textview_padding"
+            android:paddingRight="@dimen/help_textview_padding"
             android:text="@string/help_10"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/primary_dark" />
@@ -195,9 +195,9 @@
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/dimen_10dp"
-            android:paddingLeft="@dimen/dimen_10dp"
-            android:paddingRight="@dimen/dimen_10dp"
+            android:paddingBottom="@dimen/help_textview_padding"
+            android:paddingLeft="@dimen/help_textview_padding"
+            android:paddingRight="@dimen/help_textview_padding"
             android:text="@string/help_11"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/primary_dark" />
@@ -208,9 +208,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:paddingLeft="@dimen/dimen_20dp"
-        android:paddingRight="@dimen/dimen_20dp"
-        card_view:cardCornerRadius="@dimen/dimen_small_padding"
+        android:paddingLeft="@dimen/help_cardview_horizontal_padding"
+        android:paddingRight="@dimen/help_cardview_horizontal_padding"
+        card_view:cardCornerRadius="@dimen/help_cardview_card_corner_radius"
         card_view:cardElevation="@dimen/help_cardview_card_elevation"
         card_view:cardUseCompatPadding="true">
 
@@ -222,10 +222,10 @@
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/dimen_10dp"
-            android:paddingLeft="@dimen/dimen_10dp"
-            android:paddingRight="@dimen/dimen_10dp"
-            android:paddingTop="@dimen/dimen_10dp"
+            android:paddingBottom="@dimen/help_textview_padding"
+            android:paddingLeft="@dimen/help_textview_padding"
+            android:paddingRight="@dimen/help_textview_padding"
+            android:paddingTop="@dimen/help_textview_padding"
             android:text="@string/help_12"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/primary_dark" />
@@ -233,8 +233,8 @@
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/dimen_10dp"
-            android:paddingRight="@dimen/dimen_10dp"
+            android:paddingLeft="@dimen/help_textview_padding"
+            android:paddingRight="@dimen/help_textview_padding"
             android:text="@string/help_13"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/primary_dark" />
@@ -242,8 +242,8 @@
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/dimen_10dp"
-            android:paddingRight="@dimen/dimen_10dp"
+            android:paddingLeft="@dimen/help_textview_padding"
+            android:paddingRight="@dimen/help_textview_padding"
             android:text="@string/help_14"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/primary_dark" />
@@ -251,8 +251,8 @@
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/dimen_10dp"
-            android:paddingRight="@dimen/dimen_10dp"
+            android:paddingLeft="@dimen/help_textview_padding"
+            android:paddingRight="@dimen/help_textview_padding"
             android:text="@string/help_15"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/primary_dark" />
@@ -260,9 +260,9 @@
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/dimen_10dp"
-            android:paddingRight="@dimen/dimen_10dp"
-            android:paddingTop="@dimen/dimen_10dp"
+            android:paddingLeft="@dimen/help_textview_padding"
+            android:paddingRight="@dimen/help_textview_padding"
+            android:paddingTop="@dimen/help_textview_padding"
             android:text="@string/help_16"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/primary_dark" />
@@ -270,8 +270,8 @@
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/dimen_10dp"
-            android:paddingRight="@dimen/dimen_10dp"
+            android:paddingLeft="@dimen/help_textview_padding"
+            android:paddingRight="@dimen/help_textview_padding"
             android:text="@string/help_17"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/primary_dark" />
@@ -279,9 +279,9 @@
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/dimen_10dp"
-            android:paddingLeft="@dimen/dimen_10dp"
-            android:paddingRight="@dimen/dimen_10dp"
+            android:paddingBottom="@dimen/help_textview_padding"
+            android:paddingLeft="@dimen/help_textview_padding"
+            android:paddingRight="@dimen/help_textview_padding"
             android:text="@string/help_18"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/primary_dark" />
@@ -289,9 +289,9 @@
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/dimen_10dp"
-            android:paddingLeft="@dimen/dimen_10dp"
-            android:paddingRight="@dimen/dimen_10dp"
+            android:paddingBottom="@dimen/help_textview_padding"
+            android:paddingLeft="@dimen/help_textview_padding"
+            android:paddingRight="@dimen/help_textview_padding"
             android:text="@string/help_19"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/primary_dark" />
@@ -302,9 +302,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:paddingLeft="@dimen/dimen_20dp"
-        android:paddingRight="@dimen/dimen_20dp"
-        card_view:cardCornerRadius="@dimen/dimen_small_padding"
+        android:paddingLeft="@dimen/help_cardview_horizontal_padding"
+        android:paddingRight="@dimen/help_cardview_horizontal_padding"
+        card_view:cardCornerRadius="@dimen/help_cardview_card_corner_radius"
         card_view:cardElevation="@dimen/help_cardview_card_elevation"
         card_view:cardUseCompatPadding="true">
 
@@ -316,10 +316,10 @@
           <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/dimen_10dp"
-            android:paddingLeft="@dimen/dimen_10dp"
-            android:paddingRight="@dimen/dimen_10dp"
-            android:paddingTop="@dimen/dimen_10dp"
+            android:paddingBottom="@dimen/help_textview_padding"
+            android:paddingLeft="@dimen/help_textview_padding"
+            android:paddingRight="@dimen/help_textview_padding"
+            android:paddingTop="@dimen/help_textview_padding"
             android:text="@string/help_20"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/primary_dark" />
@@ -328,9 +328,9 @@
             android:id="@+id/welcome21"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/dimen_10dp"
-            android:paddingLeft="@dimen/dimen_10dp"
-            android:paddingRight="@dimen/dimen_10dp"
+            android:paddingBottom="@dimen/help_textview_padding"
+            android:paddingLeft="@dimen/help_textview_padding"
+            android:paddingRight="@dimen/help_textview_padding"
             android:text="@string/help_21"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/primary_dark" />

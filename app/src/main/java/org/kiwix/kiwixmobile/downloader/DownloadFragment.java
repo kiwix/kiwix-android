@@ -1,3 +1,20 @@
+/*
+ * Kiwix Android
+ * Copyright (C) 2018  Kiwix <android.kiwix.org>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.kiwix.kiwixmobile.downloader;
 
 
@@ -32,6 +49,7 @@ import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
@@ -39,6 +57,8 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+
+import javax.inject.Inject;
 
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_WIFI_ONLY;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
@@ -56,8 +76,15 @@ public class DownloadFragment extends Fragment {
   private Activity faActivity;
   private boolean hasArtificiallyPaused;
 
+  @Inject static SharedPreferenceUtil sharedPreferenceUtil;
+
+  private void setupDagger() {
+    KiwixApplication.getInstance().getApplicationComponent().inject(this);
+  }
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    setupDagger();
     faActivity = super.getActivity();
     relLayout = (RelativeLayout) inflater.inflate(R.layout.download_management, container, false);
 
@@ -100,10 +127,7 @@ public class DownloadFragment extends Fragment {
             .setTitle(R.string.wifi_only_title)
             .setMessage(R.string.wifi_only_msg)
             .setPositiveButton(R.string.yes, (dialog, i) -> {
-              PreferenceManager.getDefaultSharedPreferences(context)
-                      .edit()
-                      .putBoolean(PREF_WIFI_ONLY, false)
-                      .apply();
+                      sharedPreferenceUtil.putPrefWifiOnly(false);
               KiwixMobileActivity.wifiOnly = false;
               yesAction.run();
             })

@@ -20,14 +20,12 @@
 package org.kiwix.kiwixmobile.views.web;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -36,18 +34,22 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.Toast;
 
+import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.KiwixWebChromeClient;
 import org.kiwix.kiwixmobile.KiwixWebViewClient;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.WebViewCallback;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import javax.inject.Inject;
 
 public class KiwixWebView extends WebView {
 
@@ -62,6 +64,7 @@ public class KiwixWebView extends WebView {
       0, 0, 0, 1.0f, 0 // alpha
   };
   private WebViewCallback callback;
+  @Inject SharedPreferenceUtil sharedPreferenceUtil;
 
   private Handler saveHandler = new Handler() {
 
@@ -121,6 +124,7 @@ public class KiwixWebView extends WebView {
   public KiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs) {
     super(context, attrs);
     this.callback = callback;
+    setupDagger();
     // Set the user agent to the current locale so it can be read with navigator.userAgent
     getSettings().setUserAgentString(LanguageUtils.getCurrentLocale(context).toString());
     setWebViewClient(new KiwixWebViewClient(callback));
@@ -128,15 +132,17 @@ public class KiwixWebView extends WebView {
     getSettings().setDomStorageEnabled(true);
   }
 
+  private void setupDagger() {
+    KiwixApplication.getInstance().getApplicationComponent().inject(this);
+  }
+
   public void loadPrefs() {
     disableZoomControls();
 
-    SharedPreferences sharedPreferences =
-        PreferenceManager.getDefaultSharedPreferences(getContext());
-    boolean zoomEnabled = sharedPreferences.getBoolean(PREF_ZOOM_ENABLED, false);
+    boolean zoomEnabled = sharedPreferenceUtil.getPrefZoomEnabled();
 
     if (zoomEnabled) {
-      int zoomScale = (int) sharedPreferences.getFloat(PREF_ZOOM, 100.0f);
+      int zoomScale = (int) sharedPreferenceUtil.getPrefZoom();
       setInitialScale(zoomScale);
     } else {
       setInitialScale(0);
