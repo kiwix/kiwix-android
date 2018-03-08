@@ -48,6 +48,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.menu.ActionMenuItemView;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -1213,6 +1214,22 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   @Override
   public void onResume() {
     super.onResume();
+    CardView cardView=(CardView)findViewById(R.id.feedback_card);
+
+      if (settings.getBoolean(PREF_BOTTOM_TOOLBAR, false)) {
+    if(cardView!=null) {
+      LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+      params.setMargins(0, 0, 0, 56);
+      cardView.setLayoutParams(params);
+    }
+      }else{
+        if(cardView!=null) {
+          LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+          params.setMargins(0, 0, 0, 0);
+          cardView.setLayoutParams(params);
+        }
+      }
+
     invalidateOptionsMenu();
     if (wasHideToolbar != isHideToolbar) {
       wasHideToolbar = isHideToolbar;

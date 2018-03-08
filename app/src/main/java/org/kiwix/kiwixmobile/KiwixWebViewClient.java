@@ -18,15 +18,21 @@
 package org.kiwix.kiwixmobile;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 
@@ -34,6 +40,7 @@ import java.util.HashMap;
 
 import static org.kiwix.kiwixmobile.utils.Constants.CONTACT_EMAIL_ADDRESS;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_EXTERNAL_LINK;
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_BOTTOM_TOOLBAR;
 
 public class KiwixWebViewClient extends WebViewClient {
 
@@ -89,6 +96,8 @@ public class KiwixWebViewClient extends WebViewClient {
 
   @Override
   public void onPageFinished(WebView view, String url) {
+    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(view.getContext());
+
     if ((url.equals("content://" + BuildConfig.APPLICATION_ID + ".zim.base/null")) && !BuildConfig.IS_CUSTOM_APP) {
       callback.showHelpPage();
       return;
@@ -98,7 +107,19 @@ public class KiwixWebViewClient extends WebViewClient {
     } else if (!BuildConfig.IS_CUSTOM_APP) {
       if (view.findViewById(R.id.get_content_card) == null) {
         LayoutInflater inflater = LayoutInflater.from(view.getContext());
+
         help = (LinearLayout) inflater.inflate(R.layout.help, null);
+
+        CardView cardView=help.findViewById(R.id.feedback_card);
+        if (settings.getBoolean(PREF_BOTTOM_TOOLBAR, false)) {
+          LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+          params.setMargins(0,0,0,56);
+          cardView.setLayoutParams(params);
+        }else{
+          LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+          params.setMargins(0,0,0,0);
+          cardView.setLayoutParams(params);
+        }
         help.findViewById(R.id.get_content_card)
             .setOnClickListener(card -> {
                   help.findViewById(R.id.get_content_card).setEnabled(false);
@@ -106,6 +127,7 @@ public class KiwixWebViewClient extends WebViewClient {
             }
             );
         view.addView(help);
+
         ImageView welcome_image = help.findViewById(R.id.welcome_image);
         if (KiwixMobileActivity.nightMode) {
           welcome_image.setImageResource(R.drawable.kiwix_welcome_night);

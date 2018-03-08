@@ -301,9 +301,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+<<<<<<< HEAD
         android:paddingLeft="@dimen/help_cardview_horizontal_padding"
         android:paddingRight="@dimen/help_cardview_horizontal_padding"
         card_view:cardCornerRadius="@dimen/help_cardview_card_corner_radius"
+=======
+        android:paddingLeft="@dimen/dimen_20dp"
+        android:paddingRight="@dimen/dimen_20dp" android:id="@+id/feedback_card"
+        card_view:cardCornerRadius="@dimen/dimen_small_padding"
+>>>>>>> Bottom toolbar hide text on help screen fixed
         card_view:cardElevation="@dimen/help_cardview_card_elevation"
         card_view:cardUseCompatPadding="true">
 
