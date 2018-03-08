@@ -1475,7 +1475,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
           String title =
               data.getStringExtra(TAG_FILE_SEARCHED).replace("<b>", "").replace("</b>", "");
           boolean isSearchInText = data.getBooleanExtra(EXTRA_SEARCH_IN_TEXT, false);
-          if(isSearchInText) {
+          if (isSearchInText) {
             //if the search is localized trigger find in page UI.
             KiwixWebView webView = getCurrentWebView();
             compatCallback.setActive();
