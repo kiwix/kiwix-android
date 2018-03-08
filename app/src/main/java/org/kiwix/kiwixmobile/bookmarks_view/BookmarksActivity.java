@@ -150,20 +150,16 @@ public class BookmarksActivity extends BaseActivity
 
   public ArrayList<String> stripHtml(ArrayList<String> html) {
     ArrayList<String> parsed = new ArrayList<>();
-    if (html.size() != 0) {
-      if (SDK_INT >= N) {
-        for (int i = 0; i < html.size(); i++) {
-          parsed.add(i, Html.fromHtml(html.get(i), Html.FROM_HTML_MODE_LEGACY).toString());
-        }
-      } else {
-        for (int i = 0; i < html.size(); i++) {
-          parsed.add(i, Html.fromHtml(html.get(i)).toString());
-        }
+    if (SDK_INT >= N) {
+      for (int i = 0; i < html.size(); i++) {
+        parsed.add(i, Html.fromHtml(html.get(i), Html.FROM_HTML_MODE_LEGACY).toString());
       }
-      return parsed;
     } else {
-      return null;
+      for (int i = 0; i < html.size(); i++) {
+        parsed.add(i, Html.fromHtml(html.get(i)).toString());
+      }
     }
+    return parsed;
   }
 
   @Override
