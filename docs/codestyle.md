@@ -30,6 +30,7 @@ Try to remove as much warnings as possible, It's not completely possible to remo
 
 ### Some **DONT's**
 
+- Don't use Hungarian Notation like `mContext` `mCount` etc
 - Don't use underscores in variable names
 - All constants should be CAPS. e.g `MINIMUM_TIMEOUT_ERROR_EXTERNAL`
 - Always use `Locale.ENGLISH` when using `String.format()` unless the format itself is locale dependent e.g. `String query = String.format(Locale.ENGLISH,...`
