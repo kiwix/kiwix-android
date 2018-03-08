@@ -207,6 +207,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+          android:id="@+id/feedback_card"
         android:paddingLeft="@dimen/help_cardview_horizontal_padding"
         android:paddingRight="@dimen/help_cardview_horizontal_padding"
         card_view:cardCornerRadius="@dimen/help_cardview_card_corner_radius"

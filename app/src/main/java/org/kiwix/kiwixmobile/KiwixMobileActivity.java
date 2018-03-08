@@ -134,6 +134,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_NOTIFICATION_ID;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_ZIM_FILE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_ZIM_FILE_2;
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_BOTTOM_TOOLBAR;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_KIWIX_MOBILE;
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_FILE_SEARCH;
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_FILE_SELECT;
@@ -1214,9 +1215,9 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   @Override
   public void onResume() {
     super.onResume();
+    SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
     CardView cardView=(CardView)findViewById(R.id.feedback_card);
-
-      if (settings.getBoolean(PREF_BOTTOM_TOOLBAR, false)) {
+     if (settings.getBoolean(PREF_BOTTOM_TOOLBAR, false)) {
     if(cardView!=null) {
       LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
       params.setMargins(0, 0, 0, 56);
