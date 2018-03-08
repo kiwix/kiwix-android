@@ -37,6 +37,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_IS_WIDGET_VOICE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_NIGHTMODE;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
+import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH_TEXT;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class SearchActivity extends AppCompatActivity
@@ -68,7 +69,7 @@ public class SearchActivity extends AppCompatActivity
     setContentView(contentView);
 
     if (savedInstanceState != null) {
-      searchText = savedInstanceState.getString("text");
+      searchText = savedInstanceState.getString(EXTRA_SEARCH_TEXT);
     }
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
@@ -117,7 +118,7 @@ public class SearchActivity extends AppCompatActivity
     MenuItemCompat.expandActionView(searchMenuItem);
     searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
     if (searchText != null) {
-      searchView.setQuery(searchText, Boolean.FALSE);
+      searchView.setQuery(searchText, false);
       mListView.setAdapter(mAutoAdapter);
       mAutoAdapter.getFilter().filter(searchText.toLowerCase());
     }
@@ -261,6 +262,6 @@ public class SearchActivity extends AppCompatActivity
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
-    outState.putString("text", searchView.getQuery().toString());
+    outState.putString(EXTRA_SEARCH_TEXT, searchView.getQuery().toString());
   }
 }

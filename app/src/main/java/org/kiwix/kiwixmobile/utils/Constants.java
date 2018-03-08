@@ -102,4 +102,6 @@ public final class Constants {
     public static final String EXTRA_WEBVIEWS_LIST = "webviewsList";
 
     public static final String EXTRA_BOOKMARK_CONTENTS = "bookmark_contents";
+
+    public static final String EXTRA_SEARCH_TEXT = "searchText";
 }
