@@ -19,23 +19,17 @@
 
 package org.kiwix.kiwixmobile.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.XmlRes;
-import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.AttributeSet;
 import android.util.Xml;
-import android.view.Window;
 
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.xmlpull.v1.XmlPullParser;
-
-import static android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
-import static android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
 
 public class StyleUtils {
   public static int dialogStyle() {
@@ -70,5 +64,4 @@ public class StyleUtils {
       return Html.fromHtml(source);
     }
   }
-
 }
