@@ -49,7 +49,6 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.ZimContentProvider;
 import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
-import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.BookUtils;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
@@ -58,6 +57,7 @@ import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
+import org.kiwix.kiwixmobile.library.LibraryRecyclerViewAdapter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -251,8 +251,8 @@ public class ZimFileSelectFragment extends Fragment
         boolean cached = mFiles.containsAll(bookDao.getBooks()) && bookDao.getBooks().containsAll(mFiles);
 
         // If content changed then update the list of downloadable books
-        if (!cached && context.mSectionsPagerAdapter.libraryFragment.libraryAdapter != null && context.searchView != null) {
-          context.mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(context.searchView.getQuery());
+        if (!cached && context.mSectionsPagerAdapter.libraryFragment.libraryRecyclerViewAdapter != null && context.searchView != null) {
+          context.mSectionsPagerAdapter.libraryFragment.libraryRecyclerViewAdapter.getFilter().filter(context.searchView.getQuery());
         }
 
         // Save the current list of books
@@ -335,8 +335,8 @@ public class ZimFileSelectFragment extends Fragment
     mFiles.remove(position);
     mRescanAdapter.notifyDataSetChanged();
     checkEmpty();
-    if (context.mSectionsPagerAdapter.libraryFragment.libraryAdapter != null) {
-      context.mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(context.searchView.getQuery());
+    if (context.mSectionsPagerAdapter.libraryFragment.libraryRecyclerViewAdapter != null) {
+      context.mSectionsPagerAdapter.libraryFragment.libraryRecyclerViewAdapter.getFilter().filter(context.searchView.getQuery());
     }
     return true;
   }
@@ -387,9 +387,9 @@ public class ZimFileSelectFragment extends Fragment
         holder.creator.setText(book.getCreator());
         holder.publisher.setText(book.getPublisher());
         holder.date.setText(book.getDate());
-        holder.size.setText(LibraryAdapter.createGbString(book.getSize()));
+        holder.size.setText(LibraryRecyclerViewAdapter.createGbString(book.getSize()));
         holder.fileName.setText(parseURL(getActivity(), book.file.getPath()));
-        holder.favicon.setImageBitmap(LibraryAdapter.createBitmapFromEncodedString(book.getFavicon(), context));
+        holder.favicon.setImageBitmap(LibraryRecyclerViewAdapter.createBitmapFromEncodedString(book.getFavicon(), context));
 
 
         //// Check if no value is empty. Set the view to View.GONE, if it is. To View.VISIBLE, if not.

@@ -25,7 +25,7 @@ import org.kiwix.kiwixmobile.di.modules.JNIModule;
 import org.kiwix.kiwixmobile.di.modules.NetworkModule;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
-import org.kiwix.kiwixmobile.library.LibraryAdapter;
+import org.kiwix.kiwixmobile.library.LibraryDividerRecyclerViewHolder;
 import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
@@ -33,6 +33,8 @@ import org.kiwix.kiwixmobile.views.web.KiwixWebView;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+import org.kiwix.kiwixmobile.library.LibraryRecyclerViewAdapter;
+import org.kiwix.kiwixmobile.library.LibraryBookRecyclerViewHolder;
 
 import javax.inject.Singleton;
 
@@ -57,8 +59,6 @@ public interface ApplicationComponent {
 
   void inject(ZimContentProvider zimContentProvider);
 
-  void inject(LibraryAdapter libraryAdapter);
-
   void inject(SearchActivity searchActivity);
 
   void inject(ZimManageActivity zimManageActivity);
@@ -72,4 +72,10 @@ public interface ApplicationComponent {
   void inject(DownloadFragment downloadFragment);
 
   void inject(AutoCompleteAdapter autoCompleteAdapter);
+
+  void inject(LibraryRecyclerViewAdapter libraryRecyclerViewAdapter);
+
+  void inject(LibraryBookRecyclerViewHolder libraryBookRecyclerViewHolder);
+
+  void inject(LibraryDividerRecyclerViewHolder libraryDividerRecyclerViewHolder);
 }

@@ -33,7 +33,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import org.kiwix.kiwixmobile.library.LibraryAdapter;
+import org.kiwix.kiwixmobile.library.LibraryRecyclerViewAdapter;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
 import java.lang.reflect.Field;
@@ -238,11 +238,11 @@ public class LanguageUtils {
     return values;
   }
 
-  public List<LibraryAdapter.Language> getLanguageList() {
-    List<LibraryAdapter.Language> values = new ArrayList<>();
+  public List<LibraryRecyclerViewAdapter.Language> getLanguageList() {
+    List<LibraryRecyclerViewAdapter.Language> values = new ArrayList<>();
 
     for (LanguageContainer value : mLanguageList) {
-      values.add(new LibraryAdapter.Language(value.getLanguageCode(), false));
+      values.add(new LibraryRecyclerViewAdapter.Language(value.getLanguageCode(), false));
     }
 
     return values;

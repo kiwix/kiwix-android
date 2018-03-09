@@ -31,15 +31,16 @@ import android.os.IBinder;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,7 +50,8 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.downloader.DownloadIntent;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
-import org.kiwix.kiwixmobile.library.LibraryAdapter;
+import org.kiwix.kiwixmobile.library.LibraryRecyclerViewAdapter;
+import org.kiwix.kiwixmobile.library.contract.ILibraryItemClickListener;
 import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
@@ -75,12 +77,14 @@ import static org.kiwix.kiwixmobile.downloader.DownloadService.KIWIX_ROOT;
 import static org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOK;
 
+
+
 public class LibraryFragment extends Fragment
-    implements AdapterView.OnItemClickListener, StorageSelectDialog.OnSelectListener, LibraryViewCallback {
+    implements ILibraryItemClickListener, StorageSelectDialog.OnSelectListener, LibraryViewCallback {
 
 
   @BindView(R.id.library_list)
-  ListView libraryList;
+  RecyclerView libraryRecyclerView;
   @BindView(R.id.network_permission_text)
   TextView networkText;
   @BindView(R.id.network_permission_button)
@@ -100,7 +104,7 @@ public class LibraryFragment extends Fragment
 
   private boolean mBound;
 
-  public LibraryAdapter libraryAdapter;
+  public LibraryRecyclerViewAdapter libraryRecyclerViewAdapter;
 
   private DownloadServiceConnection mConnection = new DownloadServiceConnection();
 
@@ -133,17 +137,16 @@ public class LibraryFragment extends Fragment
     TestingUtils.bindResource(LibraryFragment.class);
     llLayout = (LinearLayout) inflater.inflate(R.layout.activity_library, container, false);
     ButterKnife.bind(this, llLayout);
+    ViewCompat.setNestedScrollingEnabled(libraryRecyclerView, false);
     presenter.attachView(this);
 
     networkText = llLayout.findViewById(R.id.network_text);
 
     faActivity = (ZimManageActivity) super.getActivity();
     swipeRefreshLayout.setOnRefreshListener(() -> refreshFragment());
-    libraryAdapter = new LibraryAdapter(super.getContext());
-    libraryList.setAdapter(libraryAdapter);
+    setupLibraryRecyclerView();
 
     DownloadService.setDownloadFragment(faActivity.mSectionsPagerAdapter.getDownloadFragment());
-
 
     NetworkInfo network = conMan.getActiveNetworkInfo();
     if (network == null || !network.isConnected()) {
@@ -158,6 +161,12 @@ public class LibraryFragment extends Fragment
     return llLayout;
   }
 
+  private void setupLibraryRecyclerView() {
+    libraryRecyclerViewAdapter = new LibraryRecyclerViewAdapter(super.getContext(), this);
+    libraryRecyclerView.setLayoutManager(new LinearLayoutManager(super.getContext()));
+    libraryRecyclerView.setAdapter(libraryRecyclerViewAdapter);
+  }
+
 
   @Override
   public void showBooks(LinkedList<Book> books) {
@@ -167,16 +176,15 @@ public class LibraryFragment extends Fragment
     }
 
     Log.i("kiwix-showBooks", "Contains:" + books.size());
-    libraryAdapter.setAllBooks(books);
+    libraryRecyclerViewAdapter.setAllBooks(books);
     if (faActivity.searchView != null) {
-      libraryAdapter.getFilter().filter(
+      libraryRecyclerViewAdapter.getFilter().filter(
           faActivity.searchView.getQuery(),
           i -> stopScanningContent());
     } else {
-      libraryAdapter.getFilter().filter("", i -> stopScanningContent());
+      libraryRecyclerViewAdapter.getFilter().filter("", i -> stopScanningContent());
     }
-    libraryAdapter.notifyDataSetChanged();
-    libraryList.setOnItemClickListener(this);
+    libraryRecyclerViewAdapter.notifyDataSetChanged();
   }
 
   @Override
@@ -191,7 +199,7 @@ public class LibraryFragment extends Fragment
     permissionButton.setVisibility(GONE);
     swipeRefreshLayout.setRefreshing(false);
     swipeRefreshLayout.setEnabled(false);
-    libraryList.setVisibility(View.INVISIBLE);
+    libraryRecyclerView.setVisibility(View.INVISIBLE);
     TestingUtils.unbindResource(LibraryFragment.class);
   }
 
@@ -258,14 +266,14 @@ public class LibraryFragment extends Fragment
   }
 
   @Override
-  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-    if (!libraryAdapter.isDivider(position)) {
+  public void onLibraryItemClick(int position) {
+    if (!libraryRecyclerViewAdapter.isDivider(position)) {
       if (getSpaceAvailable()
-          < Long.parseLong(((Book) (parent.getAdapter().getItem(position))).getSize()) * 1024f) {
+          < Long.parseLong(((Book) (libraryRecyclerViewAdapter.getListItems().get(position).data)).getSize()) * 1024f) {
         Toast.makeText(super.getActivity(), getString(R.string.download_no_space)
             + "\n" + getString(R.string.space_available) + " "
             + LibraryUtils.bytesToHuman(getSpaceAvailable()), Toast.LENGTH_LONG).show();
-        Snackbar snackbar = Snackbar.make(libraryList,
+        Snackbar snackbar = Snackbar.make(libraryRecyclerView,
             getString(R.string.download_change_storage),
             Snackbar.LENGTH_LONG)
             .setAction(getString(R.string.open), v -> {
@@ -285,8 +293,8 @@ public class LibraryFragment extends Fragment
       }
 
       if (DownloadFragment.mDownloadFiles
-          .containsValue(KIWIX_ROOT + StorageUtils.getFileNameFromUrl(((Book) parent.getAdapter()
-              .getItem(position)).getUrl()))) {
+          .containsValue(KIWIX_ROOT + StorageUtils.getFileNameFromUrl(((Book) libraryRecyclerViewAdapter
+              .getListItems().get(position).data).getUrl()))) {
         Toast.makeText(super.getActivity(), getString(R.string.zim_already_downloading), Toast.LENGTH_LONG)
             .show();
       } else {
@@ -300,10 +308,10 @@ public class LibraryFragment extends Fragment
 
         if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
           DownloadFragment.showNoWiFiWarning(getContext(), () -> {
-            downloadFile((Book) parent.getAdapter().getItem(position));
+            downloadFile((Book) libraryRecyclerViewAdapter.getListItems().get(position).data);
           });
         } else {
-          downloadFile((Book) parent.getAdapter().getItem(position));
+          downloadFile((Book) libraryRecyclerViewAdapter.getListItems().get(position).data);
         }
       }
     }
@@ -312,8 +320,8 @@ public class LibraryFragment extends Fragment
   @Override
   public void downloadFile(Book book) {
     downloadingBooks.add(book);
-    if (libraryAdapter != null && faActivity != null && faActivity.searchView != null) {
-      libraryAdapter.getFilter().filter(faActivity.searchView.getQuery());
+    if (libraryRecyclerViewAdapter != null && faActivity != null && faActivity.searchView != null) {
+      libraryRecyclerViewAdapter.getFilter().filter(faActivity.searchView.getQuery());
     }
     Toast.makeText(super.getActivity(), getString(R.string.download_started_library), Toast.LENGTH_LONG)
         .show();
@@ -379,7 +387,7 @@ public class LibraryFragment extends Fragment
         presenter.loadBooks();
         permissionButton.setVisibility(GONE);
         networkText.setVisibility(GONE);
-        libraryList.setVisibility(View.VISIBLE);
+        libraryRecyclerView.setVisibility(View.VISIBLE);
       }
 
     }

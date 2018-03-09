@@ -300,8 +300,8 @@ public class DownloadFragment extends Fragment {
               mDownloadFiles.remove(mKeys[position]);
               downloadAdapter.notifyDataSetChanged();
               updateNoDownloads();
-              if (zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter != null) {
-                zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(((ZimManageActivity) getActivity()).searchView.getQuery());
+              if (zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryRecyclerViewAdapter != null) {
+                zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryRecyclerViewAdapter.getFilter().filter(((ZimManageActivity) getActivity()).searchView.getQuery());
               }
             })
             .setNegativeButton(R.string.no, (dialog, i) -> {

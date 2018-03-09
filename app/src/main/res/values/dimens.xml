@@ -72,6 +72,7 @@
   <dimen name="language_name_localized_margin_left">10dp</dimen>
   <dimen name="help_textview_padding">10dp</dimen>
   <dimen name="progressbar_textview_vertical_padding">10dp</dimen>
+  <dimen name="library_favicon_width">48dp</dimen>
   <!-- Workaround to store floats in dimen -->
   <item format="float" name="material_light_hint_alpha" type="dimen">0.38</item>
   <item format="float" name="material_dark_hint_pressed_alpha" type="dimen">0.70</item>

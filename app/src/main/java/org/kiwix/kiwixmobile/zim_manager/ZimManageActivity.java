@@ -228,8 +228,8 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
       public boolean onQueryTextChange(String s) {
         searchQuery = s;
 
-        if (mSectionsPagerAdapter.libraryFragment.libraryAdapter != null) {
-          mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(searchQuery);
+        if (mSectionsPagerAdapter.libraryFragment.libraryRecyclerViewAdapter != null) {
+          mSectionsPagerAdapter.libraryFragment.libraryRecyclerViewAdapter.getFilter().filter(searchQuery);
         }
         mViewPager.setCurrentItem(1);
         return true;
@@ -246,7 +246,7 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
     switch (item.getItemId()) {
       case R.id.select_language:
         if (mViewPager.getCurrentItem() == 1) {
-          if(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages.size() == 0) {
+          if(mSectionsPagerAdapter.libraryFragment.libraryRecyclerViewAdapter.languages.size() == 0) {
             Toast.makeText(this, R.string.wait_for_load, Toast.LENGTH_LONG).show();
           } else {
             showLanguageSelect();
@@ -259,11 +259,11 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
 
   private void showLanguageSelect() {
     new LanguageSelectDialog.Builder(this, dialogStyle())
-        .setLanguages(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages)
-        .setLanguageCounts(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languageCounts)
+        .setLanguages(mSectionsPagerAdapter.libraryFragment.libraryRecyclerViewAdapter.languages)
+        .setLanguageCounts(mSectionsPagerAdapter.libraryFragment.libraryRecyclerViewAdapter.languageCounts)
         .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
-          mSectionsPagerAdapter.libraryFragment.libraryAdapter.updateNetworkLanguages();
-          mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(searchQuery);
+          mSectionsPagerAdapter.libraryFragment.libraryRecyclerViewAdapter.updateNetworkLanguages();
+          mSectionsPagerAdapter.libraryFragment.libraryRecyclerViewAdapter.getFilter().filter(searchQuery);
         })
         .show();
   }
