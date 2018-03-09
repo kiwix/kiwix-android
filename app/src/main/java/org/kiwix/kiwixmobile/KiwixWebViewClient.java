@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -105,6 +106,12 @@ public class KiwixWebViewClient extends WebViewClient {
             }
             );
         view.addView(help);
+        ImageView welcome_image = help.findViewById(R.id.welcome_image);
+        if (KiwixMobileActivity.nightMode) {
+          welcome_image.setImageResource(R.drawable.kiwix_welcome_night);
+        } else {
+          welcome_image.setImageResource(R.drawable.kiwix_welcome);
+        }
         TextView contact = help.findViewById(R.id.welcome21);
         contact.setText(StyleUtils.highlightUrl(contact.getText().toString(), CONTACT_EMAIL_ADDRESS));
         contact.setOnClickListener(v -> callback.sendContactEmail());

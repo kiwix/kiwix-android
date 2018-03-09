@@ -31,14 +31,13 @@
           android:orientation="vertical">
 
           <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:adjustViewBounds="true"
-            android:longClickable="false"
-            android:src="@drawable/kiwix_welcome"
-            android:visibility="visible" />
-
+              android:id="@+id/welcome_image"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_gravity="center_horizontal"
+              android:adjustViewBounds="true"
+              android:longClickable="false"
+              android:visibility="visible" />
 
           <TextView
             android:layout_width="wrap_content"
