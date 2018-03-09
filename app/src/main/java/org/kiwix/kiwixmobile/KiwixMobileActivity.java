@@ -384,8 +384,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
     isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
 
-    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-
     FileReader fileReader = new FileReader();
     documentParserJs = fileReader.readFile("js/documentParser.js", this);
 
@@ -526,8 +524,11 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     }
 
     WebSettings webSettings = getCurrentWebView().getSettings();
-    //Setting text-size and the corrosponding seekbar progress.
-    switch (settings.getInt("text_size", 2)) {
+    setTextSizeSeekerProgress(webSettings);
+  }
+
+  private void setTextSizeSeekerProgress(WebSettings webSettings) {
+    switch (sharedPreferenceUtil.getPrefTextSize()) {
 
       case 0:
         webSettings.setTextSize(WebSettings.TextSize.SMALLEST);
@@ -786,7 +787,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   }
 
   private KiwixWebView newTab(String url) {
-    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
     KiwixWebView webView = getWebView(url);
     mWebViews.add(webView);
     selectTab(mWebViews.size() - 1);
@@ -794,30 +794,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     setUpWebView();
     documentParser.initInterface(webView);
     WebSettings webSettings = getCurrentWebView().getSettings();
-    //Setting text-size and the corrosponding seekbar progress.
-    switch (settings.getInt("text_size", 2)) {
-
-      case 0:
-        webSettings.setTextSize(WebSettings.TextSize.SMALLEST);
-        textSizeSeekBar.setProgress(0);
-        break;
-      case 1:
-        webSettings.setTextSize(WebSettings.TextSize.SMALLER);
-        textSizeSeekBar.setProgress(1);
-        break;
-      case 2:
-        webSettings.setTextSize(WebSettings.TextSize.NORMAL);
-        textSizeSeekBar.setProgress(2);
-        break;
-      case 3:
-        webSettings.setTextSize(WebSettings.TextSize.LARGER);
-        textSizeSeekBar.setProgress(3);
-        break;
-      default:
-        webSettings.setTextSize(WebSettings.TextSize.NORMAL);
-        textSizeSeekBar.setProgress(2);
-        break;
-    }
+    setTextSizeSeekerProgress(webSettings);
     return webView;
   }
 
@@ -868,35 +845,11 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     tabDrawerAdapter.setSelected(position);
     contentFrame.removeAllViews();
 
-    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
     KiwixWebView webView = mWebViews.get(position);
     contentFrame.addView(webView);
     tabDrawerAdapter.setSelected(currentWebViewIndex);
     WebSettings webSettings = getCurrentWebView().getSettings();
-    //Setting text-size and the corrosponding seekbar progress.
-    switch (settings.getInt("text_size", 2)) {
-
-      case 0:
-        webSettings.setTextSize(WebSettings.TextSize.SMALLEST);
-        textSizeSeekBar.setProgress(0);
-        break;
-      case 1:
-        webSettings.setTextSize(WebSettings.TextSize.SMALLER);
-        textSizeSeekBar.setProgress(1);
-        break;
-      case 2:
-        webSettings.setTextSize(WebSettings.TextSize.NORMAL);
-        textSizeSeekBar.setProgress(2);
-        break;
-      case 3:
-        webSettings.setTextSize(WebSettings.TextSize.LARGER);
-        textSizeSeekBar.setProgress(3);
-        break;
-      default:
-        webSettings.setTextSize(WebSettings.TextSize.NORMAL);
-        textSizeSeekBar.setProgress(2);
-        break;
-    }
+    setTextSizeSeekerProgress(webSettings);
 
     if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
       new Handler().postDelayed(() -> drawerLayout.closeDrawers(), 150);
@@ -1145,7 +1098,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   @Override
   public void onRequestPermissionsResult(int requestCode,
-                                         String permissions[], int[] grantResults) {
+      String permissions[], int[] grantResults) {
     switch (requestCode) {
       case REQUEST_STORAGE_PERMISSION: {
         if (grantResults.length > 0
@@ -1390,9 +1343,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
     if (shouldShowDialog) {
 
-      SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
       textSizeDialog.show();
-      textSizeSeekBar.setProgress(settings.getInt("text_size", 2));
+      textSizeSeekBar.setProgress(sharedPreferenceUtil.getPrefTextSize());
 
       textSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
         @Override
@@ -1403,19 +1355,19 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
             case 0:
               webSettings.setTextSize(WebSettings.TextSize.SMALLEST);
-              settings.edit().putInt("text_size", 0).commit();
+              sharedPreferenceUtil.putPrefTextSize(0);
               break;
             case 1:
               webSettings.setTextSize(WebSettings.TextSize.SMALLER);
-              settings.edit().putInt("text_size", 1).commit();
+              sharedPreferenceUtil.putPrefTextSize(1);
               break;
             case 2:
               webSettings.setTextSize(WebSettings.TextSize.NORMAL);
-              settings.edit().putInt("text_size", 2).commit();
+              sharedPreferenceUtil.putPrefTextSize(2);
               break;
             case 3:
               webSettings.setTextSize(WebSettings.TextSize.LARGER);
-              settings.edit().putInt("text_size", 3).commit();
+              sharedPreferenceUtil.putPrefTextSize(3);
               break;
           }
 

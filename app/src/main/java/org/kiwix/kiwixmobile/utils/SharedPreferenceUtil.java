@@ -21,6 +21,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.PREF_NEW_TAB_BACKGROUND;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_NIGHTMODE;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE_TITLE;
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_TEXT_SIZE;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_WIFI_ONLY;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_ZOOM;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_ZOOM_ENABLED;
@@ -111,6 +112,10 @@ public class SharedPreferenceUtil {
     //return sharedPreferences.getBoolean(PREF_FULL_TEXT_SEARCH, false);
   }
 
+  public int getPrefTextSize() {
+    return sharedPreferences.getInt(PREF_TEXT_SIZE, 2);
+  }
+
   // Setters
 
   public void putPrefLanguage(String language) {
@@ -139,5 +144,9 @@ public class SharedPreferenceUtil {
 
   public void putPrefExternalLinkPopup(boolean externalLinkPopup) {
     editor.putBoolean(PREF_EXTERNAL_LINK_POPUP, externalLinkPopup).apply();
+  }
+
+  public void putPrefTextSize(int textsize) {
+    editor.putInt(PREF_TEXT_SIZE, textsize).apply();
   }
 }
