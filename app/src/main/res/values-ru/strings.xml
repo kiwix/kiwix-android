@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_zim_manager">Получить Контент</string>
   <string name="menu_help">Помощь</string>
   <string name="menu_home">Главная</string>
@@ -14,7 +14,7 @@
   <string name="menu_read_aloud_stop">Остановить чтение вслух</string>
   <string name="save_media">Сохранить Медиа-файлы</string>
   <string name="save_media_error">Произошла ошибка при сохранении медиа-файла!</string>
-  <string name="save_media_saved">Медиа-файл сохранён как %s в Android/media/org.kiwix.../</string>
+  <string name="save_media_saved" tools:ignore="TypographyEllipsis">Медиа-файл сохранён как %s в Android/media/org.kiwix.../</string>
   <string name="rescan_fs_warning">Поиск загружаемого контента, пожалуйста, подождите…</string>
   <string name="button_backtotop">Вернуться наверх</string>
   <string name="search_label">Поиск</string>
@@ -79,7 +79,7 @@
   <string name="search_widget_text">Поиск Kiwix</string>
   <string name="speech_prompt_text">Говорите, чтобы искать %s</string>
   <string name="speech_not_supported">Приносим извинения! Ваше устройство не поддерживает ввод речи.</string>
-  <string name="download_started_library">Загрузка началась...</string>
+  <string name="download_started_library" tools:ignore="TypographyEllipsis">Загрузка началась...</string>
   <string name="local_zims">Устройство</string>
   <string name="remote_zims">Онлайн</string>
   <string name="zim_downloads">Загрузка</string>

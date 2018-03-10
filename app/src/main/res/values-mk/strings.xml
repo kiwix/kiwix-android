@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_zim_manager">Дај содржини</string>
   <string name="menu_help">Помош</string>
   <string name="menu_home">Почетна</string>
@@ -14,8 +14,8 @@
   <string name="menu_read_aloud_stop">Запри читање на глас</string>
   <string name="save_media">Зачувај медиум</string>
   <string name="save_media_error">Настана грешка при зачувувањето на податотеката!</string>
-  <string name="save_media_saved">Податотеката е зачувана како %s во Android/media/org.kiwix.../</string>
-  <string name="rescan_fs_warning">Пребарувам преземлива содржина. Почекајте...</string>
+  <string name="save_media_saved" tools:ignore="TypographyEllipsis">Податотеката е зачувана како %s во Android/media/org.kiwix.../</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">Пребарувам преземлива содржина. Почекајте...</string>
   <string name="button_backtotop">Најгоре</string>
   <string name="search_label">Пребарај</string>
   <string name="choose_file">Изберете содржинска податотека (*.zim)</string>
@@ -79,7 +79,7 @@
   <string name="search_widget_text">Пребарај по Kiwix</string>
   <string name="speech_prompt_text">Гласовно пребарајте го %s</string>
   <string name="speech_not_supported">Жалиме! Вашиот уред не поддржува гласовно внесување</string>
-  <string name="download_started_library">Преземањето започна...</string>
+  <string name="download_started_library" tools:ignore="TypographyEllipsis">Преземањето започна...</string>
   <string name="local_zims">Уред</string>
   <string name="remote_zims">На линија</string>
   <string name="zim_downloads">Преземам</string>

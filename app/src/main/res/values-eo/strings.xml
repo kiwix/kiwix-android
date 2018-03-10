@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Helpo</string>
   <string name="menu_home">Hejmo</string>
   <string name="menu_settings">Agordoj</string>
@@ -11,10 +11,10 @@
   <string name="menu_exitfullscreen">Eliri plenekranon</string>
   <string name="menu_read_aloud">Laŭtlegi</string>
   <string name="menu_read_aloud_stop">Ĉesi laŭtlegadon</string>
-  <string name="save_media">Konservi plurmediaĵon kiel...</string>
+  <string name="save_media" tools:ignore="TypographyEllipsis">Konservi plurmediaĵon kiel...</string>
   <string name="save_media_error">Eraro okazis dum provo konservi la plurmediaĵon!</string>
   <string name="save_media_saved">Plumediaĵoj konservitaj kiel %1$s en via dosierujo Bildoj</string>
-  <string name="rescan_fs_warning">Daŭras serĉado de ZIM-dosieroj, bonvolu atendi...</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">Daŭras serĉado de ZIM-dosieroj, bonvolu atendi...</string>
   <string name="button_backtotop">Reiri al Supro</string>
   <string name="search_label">Serĉi</string>
   <string name="choose_file">Elektu enhavan dosieron ZIM (*.zim)</string>

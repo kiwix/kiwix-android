@@ -19,6 +19,7 @@
 
 package org.kiwix.kiwixmobile.views.web;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
@@ -49,7 +50,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+
+@SuppressLint("ViewConstructor")
+
 import javax.inject.Inject;
+
 
 public class KiwixWebView extends WebView {
 
@@ -66,8 +71,10 @@ public class KiwixWebView extends WebView {
   private WebViewCallback callback;
   @Inject SharedPreferenceUtil sharedPreferenceUtil;
 
+  @SuppressLint("HandlerLeak")
   private Handler saveHandler = new Handler() {
 
+    @SuppressLint("StringFormatInvalid")
     @Override
     public void handleMessage(Message msg) {
       KiwixMobileActivity kiwixMobileActivity = (KiwixMobileActivity) getContext();

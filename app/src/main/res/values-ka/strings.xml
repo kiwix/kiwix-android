@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">დახმარება</string>
   <string name="menu_home">მთავარი</string>
   <string name="menu_settings">კონფიგურაცია</string>
@@ -11,9 +11,9 @@
   <string name="menu_exitfullscreen">მთლიანი ეკრანიდან გამოსვლა</string>
   <string name="menu_read_aloud">ხმამაღლა კითხვა</string>
   <string name="menu_read_aloud_stop">ხმამაღლა კითხვის შეჩერება</string>
-  <string name="save_media">მედიის შენახვა როგორც...</string>
+  <string name="save_media" tools:ignore="TypographyEllipsis">მედიის შენახვა როგორც...</string>
   <string name="save_media_error">მედია-ფაილის შენახვისას მოხდა შეცდომა!</string>
-  <string name="save_media_saved">მედია-ფაილის თქვენი სურათების საქაღალდეში შენახვა როგორც %1$</string>
+  <string name="save_media_saved" tools:ignore="StringFormatCount,StringFormatInvalid">მედია-ფაილის თქვენი სურათების საქაღალდეში შენახვა როგორც %1$</string>
   <string name="rescan_fs_warning">ZIM-ფაილების ძიება, გთხოვთ, მოიცადოთ…</string>
   <string name="button_backtotop">თავში დაბრუნება</string>
   <string name="search_label">ძიება</string>

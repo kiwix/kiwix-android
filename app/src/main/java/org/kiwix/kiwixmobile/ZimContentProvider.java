@@ -19,6 +19,7 @@
 
 package org.kiwix.kiwixmobile;
 
+import android.annotation.SuppressLint;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
@@ -76,6 +77,7 @@ public class ZimContentProvider extends ContentProvider {
 
   public static JNIKiwixSearcher jniSearcher;
 
+  @SuppressLint("StaticFieldLeak")
   @Inject public static Context context;
   
   private static ArrayList<String> listedEntries;

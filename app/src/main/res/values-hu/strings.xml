@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Súgó</string>
   <string name="menu_home">Kezdőlap</string>
   <string name="menu_settings">Beállítások</string>
@@ -11,10 +11,10 @@
   <string name="menu_exitfullscreen">Kilépés a teljes képernyőből</string>
   <string name="menu_read_aloud">Hangosan felolvas</string>
   <string name="menu_read_aloud_stop">Felolvasás megállítása</string>
-  <string name="save_media">Média mentése másként...</string>
+  <string name="save_media" tools:ignore="TypographyEllipsis">Média mentése másként...</string>
   <string name="save_media_error">Hiba történt a média mentése közben!</string>
   <string name="save_media_saved">Média elmentve %1s néven a Fényképek mappába</string>
-  <string name="rescan_fs_warning">ZIM-fájlok beolvasása, kis türelmet...</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">ZIM-fájlok beolvasása, kis türelmet...</string>
   <string name="button_backtotop">Vissza a lap tetejére</string>
   <string name="search_label">Keresés</string>
   <string name="choose_file">ZIM-tartalomfájl kiválasztása (*.zim)</string>

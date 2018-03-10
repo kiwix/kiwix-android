@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">အ​ကူ​အ​ညီ​</string>
   <string name="menu_home">ပင်မ</string>
   <string name="menu_settings">ကြိုတင်စီစဉ်မှုများ</string>
@@ -14,7 +14,7 @@
   <string name="save_media">မီဒီယာဖိုင်ကို ဤသို့သိမ်းရန်..</string>
   <string name="save_media_error">မီဒီယာဖိုင်ကို သိမ်းရန်ကြိုးစားနေစဉ် အမှားတစ်ခု ဖြစ်ပေါ်သွားသည်။</string>
   <string name="save_media_saved">သင့် Pictures ဖိုင်တွဲထဲတွင် မီဒီယာဖိုင်ကို %1$s အဖြစ် သိမ်းပြီးဖြစ်သည်။</string>
-  <string name="rescan_fs_warning">ZIM ဖိုင်များကို ရှာဖတ်နေသည်။ တစ်ဆိတ်လောက် စောင့်ပါ...</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">ZIM ဖိုင်များကို ရှာဖတ်နေသည်။ တစ်ဆိတ်လောက် စောင့်ပါ...</string>
   <string name="button_backtotop">ထိပ်ဆုံးသို့ ပြန်သွားရန်</string>
   <string name="search_label">ရှာဖွေရန်</string>
   <string name="choose_file">ZIM အချက်အလက်ဖိုင်တစ်ခုကို ရွေးချယ်ပါ (*.zim)</string>

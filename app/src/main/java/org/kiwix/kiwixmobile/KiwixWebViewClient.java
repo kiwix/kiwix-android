@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
@@ -86,6 +87,7 @@ public class KiwixWebViewClient extends WebViewClient {
     callback.webViewFailedLoading(failingUrl);
   }
 
+  @SuppressLint("InflateParams")
   @Override
   public void onPageFinished(WebView view, String url) {
     if ((url.equals("content://" + BuildConfig.APPLICATION_ID + ".zim.base/null")) && !BuildConfig.IS_CUSTOM_APP) {

@@ -194,6 +194,7 @@ public class KiwixTextToSpeech {
     }
   }
 
+  @SuppressLint("AddJavascriptInterface")
   public void initWebView(WebView webView) {
     webView.addJavascriptInterface(new TTSJavaScriptInterface(), "tts");
   }

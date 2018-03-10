@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Pagalba</string>
   <string name="menu_home">Pradžia</string>
   <string name="menu_settings">Nustatymai</string>
@@ -11,10 +11,10 @@
   <string name="menu_exitfullscreen">Išeiti iš viso ekrano režimo</string>
   <string name="menu_read_aloud">Skaityk garsiai</string>
   <string name="menu_read_aloud_stop">Nustok garsiai skaityti</string>
-  <string name="save_media">Išsaugoti duomenis kaip...</string>
+  <string name="save_media" tools:ignore="TypographyEllipsis">Išsaugoti duomenis kaip...</string>
   <string name="save_media_error">Įvyko klaida bandant išsaugoti duomenis!</string>
   <string name="save_media_saved">Duomenys išsaugoti jūsų Paveikslėlių aplanke kaip %1$s</string>
-  <string name="rescan_fs_warning">Ieškoma ZIM failų, prašome palaukti...</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">Ieškoma ZIM failų, prašome palaukti...</string>
   <string name="button_backtotop">Atgal į viršų</string>
   <string name="search_label">Paieška</string>
   <string name="choose_file">Pasirinkite ZIM Turinio Failą (*.zim)</string>

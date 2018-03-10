@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Pomoč</string>
   <string name="menu_home">Domov</string>
   <string name="menu_settings">Nastavitve</string>
@@ -9,8 +9,8 @@
   <string name="menu_randomarticle">Naključni članek</string>
   <string name="menu_fullscreen">Celoten zaslon</string>
   <string name="menu_exitfullscreen">Izhod iz celozaslonskega načina</string>
-  <string name="save_media">Shrani predstavnost kot ...</string>
-  <string name="rescan_fs_warning">Iskanje vsebin za prenos; prosimo, počakajte ...</string>
+  <string name="save_media" tools:ignore="TypographyEllipsis">Shrani predstavnost kot ...</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">Iskanje vsebin za prenos; prosimo, počakajte ...</string>
   <string name="button_backtotop">Nazaj na vrh</string>
   <string name="search_label">Iskanje</string>
   <string name="choose_file">Izberite datoteko z vsebino (*.zim)</string>

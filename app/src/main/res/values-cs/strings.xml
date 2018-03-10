@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_zim_manager">Získat obsah</string>
   <string name="menu_help">Nápověda</string>
   <string name="menu_home">Domů</string>
@@ -12,9 +12,9 @@
   <string name="menu_exitfullscreen">Ukončit celou obrazovku</string>
   <string name="menu_read_aloud">Číst nahlas</string>
   <string name="menu_read_aloud_stop">Zastavit čtení nahlas</string>
-  <string name="save_media">Uložit médium jako...</string>
+  <string name="save_media" tools:ignore="TypographyEllipsis">Uložit médium jako...</string>
   <string name="save_media_error">Došlo k chybě při pokusu o uložení média!</string>
-  <string name="save_media_saved">Multimediální soubory uložené jako %s ve složce Android/media/org.kiwix.../</string>
+  <string name="save_media_saved" tools:ignore="TypographyEllipsis">Multimediální soubory uložené jako %s ve složce Android/media/org.kiwix.../</string>
   <string name="rescan_fs_warning">Probíhá hledání obsahu ke stažení, prosím čekejte…</string>
   <string name="button_backtotop">Zpět na začátek</string>
   <string name="search_label">Vyhledávání</string>
@@ -47,7 +47,7 @@
   <string name="request_storage">Pro přístup k obsahu offline potřebujeme přístup k vašemu úložišti.</string>
   <string name="clear_recent_and_tabs_history_dialog">Jste si jistí, že chcete smazat svou historii vyhledávání a resetovat všechny aktivní záložky?</string>
   <string name="delete_recent_search_item">Smazat tuto položku?</string>
-  <string name="did_you_know">Věděli jste, že...?</string>
+  <string name="did_you_know" tools:ignore="TypographyEllipsis">Věděli jste, že...?</string>
   <string name="undo">Zpět</string>
   <string name="bookmark_added">Záložka přidána</string>
   <string name="rate_dialog_title">Prosím ohodnoťte nás</string>

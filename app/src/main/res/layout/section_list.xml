@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="@dimen/section_list_height"
   android:background="?attr/selectedBackground"
   android:clickable="false"
   android:focusable="false"
   android:gravity="center_vertical"
-  android:orientation="horizontal">
+  android:orientation="horizontal"
+  tools:ignore="Overdraw">
 
   <TextView
     android:id="@+id/titleText"
@@ -20,7 +22,11 @@
     android:gravity="center_vertical"
     android:maxLines="1"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
+    android:paddingLeft="@dimen/dimen_16dp"
+    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+    tools:ignore="RtlHardcoded,RtlSymmetry,UnusedAttribute" />
     android:paddingLeft="@dimen/title_text_padding"
     android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+
 
 </RelativeLayout>

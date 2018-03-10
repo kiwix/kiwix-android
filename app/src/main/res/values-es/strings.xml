@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_zim_manager">Obtener contenido</string>
   <string name="menu_help">Ayuda</string>
   <string name="menu_home">Inicio</string>
@@ -14,7 +14,7 @@
   <string name="menu_read_aloud_stop">Dejar de leer en voz alta</string>
   <string name="save_media">Guardar multimedia</string>
   <string name="save_media_error">¡Se produjo un error al intentar guardar los medios!</string>
-  <string name="save_media_saved">Multimedia guardado como %s en Android/media/org.kiwix.../</string>
+  <string name="save_media_saved" tools:ignore="TypographyEllipsis">Multimedia guardado como %s en Android/media/org.kiwix.../</string>
   <string name="rescan_fs_warning">Buscando contenido descargable; espera…</string>
   <string name="button_backtotop">Volver al principio</string>
   <string name="search_label">Buscar</string>

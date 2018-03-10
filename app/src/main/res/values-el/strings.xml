@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_zim_manager">Λάβετε περιεχόμενο</string>
   <string name="menu_help">Βοήθεια</string>
   <string name="menu_home">Αρχική</string>
@@ -12,10 +12,10 @@
   <string name="menu_exitfullscreen">Έξοδος από πλήρη οθόνη</string>
   <string name="menu_read_aloud">Διάβασε δυνατά</string>
   <string name="menu_read_aloud_stop">Σταμάτα να διαβάζεις δυνατά</string>
-  <string name="save_media">Αποθήκευση αρχείου πολυμέσου ως...</string>
+  <string name="save_media" tools:ignore="TypographyEllipsis">Αποθήκευση αρχείου πολυμέσου ως...</string>
   <string name="save_media_error">Προέκυψε σφάλμα κατά την προσπάθεια αποθήκευσης του αρχείου πολυμέσων!</string>
   <string name="save_media_saved">Αποθήκευση αρχείων πολυμέσων ως το %1$s  στο φάκελο Εικόνες</string>
-  <string name="rescan_fs_warning">Σάρωση για αρχεία ZIM, παρακαλώ περιμένετε...</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">Σάρωση για αρχεία ZIM, παρακαλώ περιμένετε...</string>
   <string name="button_backtotop">Επιστροφή στην κορυφή</string>
   <string name="search_label">Αναζήτηση</string>
   <string name="choose_file">Επιλογή ZIM Content File (*.zim)</string>
@@ -48,12 +48,12 @@
   <string name="bookmark_added">Προστέθηκε σελιδοδείκτης</string>
   <string name="bookmark_removed">Αφαιρέθηκε σελιδοδείκτης</string>
   <string name="new_tab_snackbar">Άρθρο άνοιξε σε νέα καρτέλα</string>
-  <string name="download_started_library">Η λήψη ξεκίνησε...</string>
-  <string name="zim_downloads">Λήψη...</string>
+  <string name="download_started_library" tools:ignore="TypographyEllipsis">Η λήψη ξεκίνησε...</string>
+  <string name="zim_downloads" tools:ignore="TypographyEllipsis">Λήψη...</string>
   <string name="zim_manager">Διαχείριση περιεχομένου</string>
   <string name="delete_specific_zim">Διαγραφή αυτού του αρχείου;</string>
   <string name="delete_specific_zim_toast">Το αρχείο διαγράφηκε</string>
-  <string name="zim_file_downloading">Λήψη...</string>
+  <string name="zim_file_downloading" tools:ignore="TypographyEllipsis">Λήψη...</string>
   <string name="zim_file_downloaded">Εγκατεστημένο</string>
   <string name="download_pause">Παύση</string>
   <string name="download_play">Αναπαραγωγή</string>

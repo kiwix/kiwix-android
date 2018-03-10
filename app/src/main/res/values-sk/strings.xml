@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Pomocník</string>
   <string name="menu_home">Domov</string>
   <string name="menu_settings">Nastavenia</string>
@@ -11,10 +11,10 @@
   <string name="menu_exitfullscreen">Ukončiť režim celej obrazovky</string>
   <string name="menu_read_aloud">Čítať nahlas</string>
   <string name="menu_read_aloud_stop">Zastaviť čítanie nahlas</string>
-  <string name="save_media">Uložiť médiá ako...</string>
+  <string name="save_media" tools:ignore="TypographyEllipsis">Uložiť médiá ako...</string>
   <string name="save_media_error">Pri ukladaní došlo k chybe!</string>
   <string name="save_media_saved">Médiá uložené ako %1$s v priečinku Obrázky</string>
-  <string name="rescan_fs_warning">Vyhľadávanie ZIM súborov, čakajte prosím...</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">Vyhľadávanie ZIM súborov, čakajte prosím...</string>
   <string name="button_backtotop">Späť na začiatok</string>
   <string name="search_label">Hľadať</string>
   <string name="choose_file">Vyberte súbor so ZIM obsahom (*.zim)</string>

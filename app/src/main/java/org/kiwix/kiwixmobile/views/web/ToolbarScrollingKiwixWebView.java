@@ -19,6 +19,7 @@
 
 package org.kiwix.kiwixmobile.views.web;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -28,6 +29,7 @@ import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.WebViewCallback;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
 
+@SuppressLint("ViewConstructor")
 public class ToolbarScrollingKiwixWebView extends KiwixWebView {
 
   private final int statusBarHeight = DimenUtils.getTranslucentStatusBarHeight(getContext());
@@ -68,6 +70,7 @@ public class ToolbarScrollingKiwixWebView extends KiwixWebView {
     return toolbarHeight + newTranslation != 0 && newTranslation != 0;
   }
 
+  @SuppressLint("ClickableViewAccessibility")
   @Override
   public boolean onTouchEvent(MotionEvent event) {
     int transY = (int) toolbarView.getTranslationY();

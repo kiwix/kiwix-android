@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">సహాయం</string>
   <string name="menu_home">ముంగిలి</string>
   <string name="menu_settings">అభిరుచులు</string>
@@ -11,10 +11,10 @@
   <string name="menu_exitfullscreen">నిండుతెరను చాలించు</string>
   <string name="menu_read_aloud">బయటకి చదువు</string>
   <string name="menu_read_aloud_stop">బయటకి చదవడం ఆపివేయి</string>
-  <string name="save_media">మీడియాని ఇలా భద్రపరచండి...</string>
+  <string name="save_media" tools:ignore="TypographyEllipsis">మీడియాని ఇలా భద్రపరచండి...</string>
   <string name="save_media_error">మీడియాను భద్రపరచడంలో తప్పు జరిగింది.</string>
   <string name="save_media_saved">మీడియాని మీ బొమ్మల సంచయంలోని %1$s వద్ద భద్రపరచాము</string>
-  <string name="rescan_fs_warning">ZIM దస్త్రాలను స్కాన్ చేస్తున్నాం, దయచేసి వేచి ఉండండి...</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">ZIM దస్త్రాలను స్కాన్ చేస్తున్నాం, దయచేసి వేచి ఉండండి...</string>
   <string name="button_backtotop">తిరిగి పైకి</string>
   <string name="search_label">వెతుకు</string>
   <string name="choose_file">ZIM విషయ దస్త్రాన్ని ఎంచుకోండి (*.zim)</string>

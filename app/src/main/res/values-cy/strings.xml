@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Cymorth</string>
   <string name="menu_home">Hafan</string>
   <string name="menu_settings">Dewisiadau</string>
@@ -11,10 +11,10 @@
   <string name="menu_exitfullscreen">Gadael modd sgrin-llawn</string>
   <string name="menu_read_aloud">Darllenwch yn uchel</string>
   <string name="menu_read_aloud_stop">Stopiwch ddarllen yn uchel</string>
-  <string name="save_media">Cadw\'r cyfrwng fel...</string>
+  <string name="save_media" tools:ignore="TypographyEllipsis">Cadw\'r cyfrwng fel...</string>
   <string name="save_media_error">Gwall wrth geisio achub y cyfryngau!</string>
   <string name="save_media_saved">Arbedwyd cyfryngau fel  %1$s  yn eich ffolder Lluniau</string>
-  <string name="rescan_fs_warning">Sganio am ffeiliau ZIM, dal dy ddŵr...</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">Sganio am ffeiliau ZIM, dal dy ddŵr...</string>
   <string name="button_backtotop">Nôl i\'r brig</string>
   <string name="search_label">Chwilio</string>
   <string name="choose_file">Dewisiwch Ffeil ZIM Content (*.zim)</string>

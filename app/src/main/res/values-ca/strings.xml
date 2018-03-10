@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Ajuda</string>
   <string name="menu_home">Pàgina d\'inici</string>
   <string name="menu_settings">Preferències</string>
@@ -14,7 +14,7 @@
   <string name="save_media">Anomena i desa el fitxer…</string>
   <string name="save_media_error">S\'ha produït un error en mirar de desar el fitxer!</string>
   <string name="save_media_saved">El fitxer s\'ha desat amb el nom %1$s a la vostra carpeta d\'imatges</string>
-  <string name="rescan_fs_warning">Buscant arxius ZIM. Espereu...</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">Buscant arxius ZIM. Espereu...</string>
   <string name="button_backtotop">Tornar a dalt</string>
   <string name="search_label">Cercar</string>
   <string name="choose_file">Seleccioneu un fitxer de contingut ZIM (*.zim)</string>

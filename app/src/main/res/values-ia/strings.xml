@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Adjuta</string>
   <string name="menu_home">Initio</string>
   <string name="menu_settings">Preferentias</string>
@@ -14,7 +14,7 @@
   <string name="save_media">Salveguardar multimedia como…</string>
   <string name="save_media_error">Un error occurreva durante le salveguarda del file multimedial!</string>
   <string name="save_media_saved">File multimedial salveguardate como %1$s in tu dossier de imagines</string>
-  <string name="rescan_fs_warning">Cerca files ZIM, per favor attende...</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">Cerca files ZIM, per favor attende...</string>
   <string name="button_backtotop">Initio del pagina</string>
   <string name="search_label">Cercar</string>
   <string name="choose_file">Selige un file de contento ZIM (*.zim)</string>

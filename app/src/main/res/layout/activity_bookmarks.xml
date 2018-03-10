@@ -46,12 +46,20 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
+
+          android:layout_width="@dimen/dimen_100dp"
+          android:layout_height="@dimen/dimen_100dp"
+          android:src="@drawable/ic_star_yellow"
+          tools:ignore="ContentDescription" />
+
           android:layout_width="@dimen/activity_bookmarks_img_width"
           android:layout_height="@dimen/activity_bookmarks_img_height"
           android:src="@drawable/ic_star_yellow" />
+
 
         <TextView
           style="@android:style/TextAppearance.Large"
@@ -64,7 +72,8 @@
           android:paddingRight="@dimen/activity_bookmarks_horizontal_padding"
           android:paddingTop="@dimen/activity_bookmarks_vertical_padding"
           android:text="@string/no_bookmarks"
-          android:visibility="visible" />
+          android:visibility="visible"
+          tools:ignore="ObsoleteLayoutParam" />
 
       </LinearLayout>
 

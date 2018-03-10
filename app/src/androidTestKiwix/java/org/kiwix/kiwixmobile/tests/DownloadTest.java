@@ -70,7 +70,8 @@ public class DownloadTest {
   public static void beforeClass() {
     IdlingPolicies.setMasterPolicyTimeout(350, TimeUnit.SECONDS);
     IdlingPolicies.setIdlingResourceTimeout(350, TimeUnit.SECONDS);
-    Espresso.registerIdlingResources(KiwixIdlingResource.getInstance());
+      //noinspection deprecation
+      Espresso.registerIdlingResources(KiwixIdlingResource.getInstance());
   }
 
   @Before
@@ -146,7 +147,8 @@ this functionality in the tests.
 
   @After
   public void finish() {
-    Espresso.unregisterIdlingResources(KiwixIdlingResource.getInstance());
+      //noinspection deprecation
+      Espresso.unregisterIdlingResources(KiwixIdlingResource.getInstance());
   }
 
 }

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">ヘルプ</string>
   <string name="menu_home">ホーム</string>
   <string name="menu_settings">設定</string>
@@ -9,9 +9,9 @@
   <string name="menu_randomarticle">ランダム記事</string>
   <string name="menu_fullscreen">全画面表示</string>
   <string name="menu_exitfullscreen">全画面表示を終了</string>
-  <string name="save_media">メディアに名前を付けて保存...</string>
+  <string name="save_media" tools:ignore="TypographyEllipsis">メディアに名前を付けて保存...</string>
   <string name="save_media_error">メディアを保存しようとした際にエラーが発生しました!</string>
-  <string name="rescan_fs_warning">ZIM ファイルをスキャンしています。お待ちください...</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">ZIM ファイルをスキャンしています。お待ちください...</string>
   <string name="button_backtotop">トップに戻る</string>
   <string name="search_label">検索</string>
   <string name="open_in_new_tab">リンクを新しいタブで開きますか?</string>

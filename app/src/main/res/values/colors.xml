@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <color name="primary">#000000</color>
   <color name="primary_night">#ff212121</color>
   <color name="primary_dark">#000000</color>
@@ -16,7 +16,7 @@
   <color name="black_regular_mat_design">#212121</color>
   <color name="grey">#5a5a5a</color>
   <color name="blue_grey">#ECEFF1</color>
-  <color name="foreground_material_dark">@android:color/white</color>
+  <color name="foreground_material_dark" tools:ignore="PrivateResource">@android:color/white</color>
   <color name="back_to_top_background">#DDFFFFFF</color>
   <color name="back_to_top_text">@android:color/black</color>
   <color name="back_to_top_background_night">#FF000000</color>

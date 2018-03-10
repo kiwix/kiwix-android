@@ -20,6 +20,7 @@
 package org.kiwix.kiwixmobile;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.ActivityNotFoundException;
@@ -348,6 +349,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     }
   };
 
+  @SuppressLint("InlinedApi")
   @Override
   public void onCreate(Bundle savedInstanceState) {
     getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
@@ -482,7 +484,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
     pageBottomTabLayout.addOnTabSelectedListener(pageBottomTabListener);
 
-    View bookmarkTabView = LayoutInflater.from(KiwixMobileActivity.this)
+    @SuppressLint("InflateParams") View bookmarkTabView = LayoutInflater.from(KiwixMobileActivity.this)
             .inflate(R.layout.bookmark_tab, null);
     bookmarkTabView.setOnClickListener(view -> PageBottomTab.of(4).select(pageActionTabsCallback));
     bookmarkTabView.setOnLongClickListener(view -> {
@@ -1202,6 +1204,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     }
   }
 
+  @SuppressLint("AlwaysShowAction")
   @Override
   public void onResume() {
     super.onResume();
@@ -1366,6 +1369,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     tts.readAloud(getCurrentWebView());
   }
 
+  @SuppressLint("ObsoleteSdkInt")
   public static void updateWidgets(Context context) {
     Intent intent = new Intent(context.getApplicationContext(), KiwixSearchWidget.class);
     intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
@@ -1382,6 +1386,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     }
   }
 
+  @SuppressLint("SetJavaScriptEnabled")
   private void setUpWebView() {
 
     getCurrentWebView().getSettings().setJavaScriptEnabled(true);
@@ -1415,6 +1420,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     toggleActionItemsConfig();
   }
 
+  @SuppressLint("AlwaysShowAction")
   void toggleActionItemsConfig() {
     if (menu != null) {
       MenuItem random = menu.findItem(R.id.menu_randomarticle);
@@ -1729,6 +1735,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     }
   }
 
+  @SuppressLint("SdCardPath")
   private void manageExternalLaunchAndRestoringViewState() {
 
     if (getIntent().getData() != null) {

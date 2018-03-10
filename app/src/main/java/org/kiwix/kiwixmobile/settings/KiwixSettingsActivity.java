@@ -19,6 +19,7 @@
 
 package org.kiwix.kiwixmobile.settings;
 
+import android.annotation.SuppressLint;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -323,7 +324,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     }
 
     public void openCredits() {
-      WebView view = (WebView) LayoutInflater.from(getActivity()).inflate(R.layout.credits_webview, null);
+      @SuppressLint("InflateParams") WebView view = (WebView) LayoutInflater.from(getActivity()).inflate(R.layout.credits_webview, null);
       view.loadUrl("file:///android_asset/credits.html");
       new AlertDialog.Builder(getActivity(), dialogStyle())
           .setView(view)

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Hulp</string>
   <string name="menu_home">Startpagina</string>
   <string name="menu_settings">Voorkeuren</string>
@@ -11,10 +11,10 @@
   <string name="menu_exitfullscreen">Volledig schermmodus verlaten</string>
   <string name="menu_read_aloud">Voorlezen</string>
   <string name="menu_read_aloud_stop">Stoppen met voorlezen</string>
-  <string name="save_media">Media opslaan als...</string>
+  <string name="save_media" tools:ignore="TypographyEllipsis">Media opslaan als...</string>
   <string name="save_media_error">Er is een fout opgetreden bij het opslaan van de media!</string>
   <string name="save_media_saved">Het bestand is opgeslagen als %1$s in uw afbeeldingenmap</string>
-  <string name="rescan_fs_warning">Zoeken naar ZIM-bestanden. Even geduld...</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">Zoeken naar ZIM-bestanden. Even geduld...</string>
   <string name="button_backtotop">Terug naar boven</string>
   <string name="search_label">Zoeken</string>
   <string name="choose_file">Selecteer een ZIM inhoudsbestand (*.zim)</string>

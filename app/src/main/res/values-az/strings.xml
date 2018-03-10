@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Kömək</string>
   <string name="menu_home">Ana səhifə</string>
   <string name="menu_settings">Nizamlamalar</string>
@@ -9,7 +9,7 @@
   <string name="menu_randomarticle">Təsadüfi məqalə</string>
   <string name="menu_fullscreen">Tam ekran</string>
   <string name="menu_exitfullscreen">Tam ekran rejimini bağla</string>
-  <string name="rescan_fs_warning">ZIM fayllar axtarılır, xahiş edirik, gözləyin...</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">ZIM fayllar axtarılır, xahiş edirik, gözləyin...</string>
   <string name="button_backtotop">Əvvələ qayıt</string>
   <string name="search_label">Axtar</string>
   <string name="choose_file">ZIM məzmunlu fayl seç (*.zim)</string>

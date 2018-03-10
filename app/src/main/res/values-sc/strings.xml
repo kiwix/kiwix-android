@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_zim_manager">Iscàrriga cuntenutos</string>
   <string name="menu_help">Agiudu</string>
   <string name="menu_home">Pàgina printzipale</string>
@@ -15,7 +15,7 @@
   <string name="save_media">Sarba su mèdia</string>
   <string name="save_media_error">B\'est istadu un\'errore durante su tentativu de sarvamentu de su mèdia!</string>
   <string name="save_media_saved">Mèdia sarvadu comente %1$s in sa cartella tua de sas immàgines</string>
-  <string name="rescan_fs_warning">Iscansinde pro documentos ZIM, pro praghere iseta...</string>
+  <string name="rescan_fs_warning" tools:ignore="TypographyEllipsis">Iscansinde pro documentos ZIM, pro praghere iseta...</string>
   <string name="button_backtotop">Torra a su cumintzu</string>
   <string name="search_label">Chirca</string>
   <string name="choose_file">Ischerta unu documentu de cuntenutu ZIM (*.zim)</string>
@@ -78,7 +78,7 @@
   <string name="search_widget_text">Chirca in Kiwix</string>
   <string name="speech_prompt_text">Chistiona pro chircare %s</string>
   <string name="speech_not_supported">Làstima! Su dispositivu tuo non suportat sa sintetizatzione vocale</string>
-  <string name="download_started_library">Iscarrigamentu incumintzadu...</string>
+  <string name="download_started_library" tools:ignore="TypographyEllipsis">Iscarrigamentu incumintzadu...</string>
   <string name="local_zims">Dispositivu</string>
   <string name="remote_zims">In lìnia</string>
   <string name="zim_downloads">Iscarrighende</string>

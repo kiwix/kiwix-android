@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="menu_help">Жардам</string>
   <string name="menu_home">Башкы</string>
   <string name="menu_settings">Параметрлер</string>
@@ -11,7 +11,7 @@
   <string name="menu_exitfullscreen">Толук көрүнүштөн чыгуу</string>
   <string name="menu_read_aloud">Үн чыгарып окуу</string>
   <string name="menu_read_aloud_stop">Үн чыгарып окууну токтотуу</string>
-  <string name="save_media">Медиафайлды мындай түрдө сактоо...</string>
+  <string name="save_media" tools:ignore="TypographyEllipsis">Медиафайлды мындай түрдө сактоо...</string>
   <string name="save_media_error">Медиафайлды сактоодо катачылыктар кетти!</string>
   <string name="save_media_saved">Медиафайл %1$ түрүндө Сүрөт папкаңызга сакталды</string>
   <string name="button_backtotop">Жогоруга кайтуу</string>
