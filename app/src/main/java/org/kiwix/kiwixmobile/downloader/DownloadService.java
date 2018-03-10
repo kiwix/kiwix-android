@@ -1,3 +1,20 @@
+/*
+ * Kiwix Android
+ * Copyright (C) 2018  Kiwix <android.kiwix.org>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.kiwix.kiwixmobile.downloader;
 
 import android.annotation.SuppressLint;
@@ -27,6 +44,7 @@ import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
 import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
@@ -41,12 +59,12 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okio.BufferedSource;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
 
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOK;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_LIBRARY;
@@ -87,6 +105,9 @@ public class DownloadService extends Service {
   private static DownloadFragment downloadFragment;
   Handler handler = new Handler(Looper.getMainLooper());
 
+  @Inject
+  SharedPreferenceUtil sharedPreferenceUtil;
+
   public static void setDownloadFragment(DownloadFragment dFragment) {
     downloadFragment = dFragment;
   }
@@ -100,8 +121,7 @@ public class DownloadService extends Service {
   public void onCreate() {
     setupDagger();
 
-    SD_CARD = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-        .getString(PREF_STORAGE,Environment.getExternalStorageDirectory().getPath());
+    SD_CARD = sharedPreferenceUtil.getPrefStorage();
     KIWIX_ROOT = SD_CARD + "/Kiwix/";
 
     KIWIX_ROOT = checkWritable(KIWIX_ROOT);
@@ -137,8 +157,7 @@ public class DownloadService extends Service {
     }
 
 
-    SD_CARD = PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-        .getString(PREF_STORAGE,Environment.getExternalStorageDirectory().getPath());
+    SD_CARD = sharedPreferenceUtil.getPrefStorage();
     KIWIX_ROOT = SD_CARD + "/Kiwix/";
 
     KIWIX_ROOT = checkWritable(KIWIX_ROOT);
@@ -280,9 +299,9 @@ public class DownloadService extends Service {
         .retryWhen(errors -> errors.flatMap(error -> Observable.timer(5, TimeUnit.SECONDS)))
         .subscribeOn(AndroidSchedulers.mainThread())
         .flatMap(metaLink -> getMetaLinkContentLength(metaLink.getRelevantUrl().getValue()))
-        .flatMap(pair -> Observable.from(ChunkUtils.getChunks(pair.first, pair.second, notificationID)))
+        .flatMap(pair -> Observable.fromIterable(ChunkUtils.getChunks(pair.first, pair.second, notificationID)))
         .concatMap(this::downloadChunk)
-        .distinctUntilChanged().doOnCompleted(() -> {updateDownloadFragmentComplete(notificationID);})
+        .distinctUntilChanged().doOnComplete(() -> updateDownloadFragmentComplete(notificationID))
         .subscribe(progress -> {
           if (progress == 100) {
             notification.get(notificationID).setOngoing(false);
@@ -347,14 +366,13 @@ public class DownloadService extends Service {
 
   private Observable<Pair<String, Long>> getMetaLinkContentLength(String url) {
     return Observable.create(subscriber -> {
-      if (subscriber.isUnsubscribed()) return;
       try {
         Request request = new Request.Builder().url(url).head().build();
         Response response = httpClient.newCall(request).execute();
         String LengthHeader = response.headers().get("Content-Length");
         long contentLength = LengthHeader == null ? 0 : Long.parseLong(LengthHeader);
         subscriber.onNext(new Pair<>(url, contentLength));
-        subscriber.onCompleted();
+        subscriber.onComplete();
         if (!response.isSuccessful()) subscriber.onError(new Exception(response.message()));
       } catch (IOException e) {
         subscriber.onError(e);
@@ -364,11 +382,10 @@ public class DownloadService extends Service {
 
   private Observable<Integer> downloadChunk(Chunk chunk) {
     return Observable.create(subscriber -> {
-      if (subscriber.isUnsubscribed()) return;
       try {
         // Stop if download is completed or download canceled
         if (chunk.isDownloaded || downloadStatus.get(chunk.getNotificationID()) == CANCEL) {
-          subscriber.onCompleted();
+          subscriber.onComplete();
           return;
         }
 
@@ -381,7 +398,7 @@ public class DownloadService extends Service {
         if (fullFile.exists() && fullFile.length() == chunk.getSize()) {
           // Mark chunk status as downloaded
           chunk.isDownloaded = true;
-          subscriber.onCompleted();
+          subscriber.onComplete();
           return;
         } else if (!file.exists()) {
           file.createNewFile();
@@ -513,7 +530,7 @@ public class DownloadService extends Service {
         }
         // Mark chunk status as downloaded
         chunk.isDownloaded = true;
-        subscriber.onCompleted();
+        subscriber.onComplete();
       } catch (IOException e) {
         // Catch unforeseen file system errors
         subscriber.onError(e);

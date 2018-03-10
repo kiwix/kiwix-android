@@ -28,15 +28,12 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -49,7 +46,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.ZimContentProvider;
 import org.kiwix.kiwixmobile.database.BookDao;
@@ -58,6 +54,7 @@ import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.BookUtils;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
@@ -71,7 +68,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE;
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_STORAGE_PERMISSION;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
@@ -95,6 +91,7 @@ public class ZimFileSelectFragment extends Fragment
 
   @Inject ZimFileSelectPresenter presenter;
   @Inject BookUtils bookUtils;
+  @Inject SharedPreferenceUtil sharedPreferenceUtil;
 
   private void setupDagger() {
     KiwixApplication.getInstance().getApplicationComponent().inject(this);
@@ -107,7 +104,7 @@ public class ZimFileSelectFragment extends Fragment
     presenter.attachView(this);
     // Replace LinearLayout by the type of the root element of the layout you're trying to load
     llLayout = (RelativeLayout) inflater.inflate(R.layout.zim_list, container, false);
-    new LanguageUtils(super.getActivity()).changeFont(super.getActivity().getLayoutInflater());
+    new LanguageUtils(super.getActivity()).changeFont(super.getActivity().getLayoutInflater(), sharedPreferenceUtil);
 
     mFileMessage = llLayout.findViewById(R.id.file_management_no_files);
     mZimFileList = llLayout.findViewById(R.id.zimfilelist);
@@ -271,8 +268,7 @@ public class ZimFileSelectFragment extends Fragment
           swipeRefreshLayout.setRefreshing(false);
         });
       }
-    }).scan(PreferenceManager.getDefaultSharedPreferences(context)
-        .getString(PREF_STORAGE, Environment.getExternalStorageDirectory().getPath()));
+    }).scan(sharedPreferenceUtil.getPrefStorage());
   }
 
   @Override

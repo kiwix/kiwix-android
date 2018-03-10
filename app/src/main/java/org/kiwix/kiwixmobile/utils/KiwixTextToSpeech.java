@@ -1,7 +1,26 @@
+/*
+ * Kiwix Android
+ * Copyright (C) 2018  Kiwix <android.kiwix.org>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.kiwix.kiwixmobile.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.media.AudioManager;
+import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
@@ -35,6 +54,12 @@ public class KiwixTextToSpeech {
 
   public TTSTask currentTTSTask = null;
 
+  private AudioManager am;
+
+  final Object focuslock;
+
+  private OnAudioFocusChangeListener onAudioFocusChangeListener;
+
   /**
    * Constructor.
    *
@@ -46,10 +71,13 @@ public class KiwixTextToSpeech {
    */
   public KiwixTextToSpeech(Context context,
       final OnInitSucceedListener onInitSucceedListener,
-      final OnSpeakingListener onSpeakingListener) {
+      final OnSpeakingListener onSpeakingListener, final OnAudioFocusChangeListener onAudioFocusChangeListener) {
     Log.d(TAG_KIWIX, "Initializing TextToSpeech");
     this.context = context;
     this.onSpeakingListener = onSpeakingListener;
+    this.onAudioFocusChangeListener = onAudioFocusChangeListener;
+    am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+    focuslock = new Object();
     initTTS(onInitSucceedListener);
   }
 
@@ -109,9 +137,17 @@ public class KiwixTextToSpeech {
       } else {
         tts.setLanguage(locale);
 
-        // We use JavaScript to get the content of the page conveniently, earlier making some
-        // changes in the page
-        webView.loadUrl("javascript:" +
+        if (requestAudioFocus()) {
+          loadURL(webView);
+        }
+      }
+    }
+  }
+
+  public void loadURL(WebView webView) {
+    // We use JavaScript to get the content of the page conveniently, earlier making some
+    // changes in the page
+    webView.loadUrl("javascript:" +
             "body = document.getElementsByTagName('body')[0].cloneNode(true);" +
             // Remove some elements that are shouldn't be read (table of contents,
             // references numbers, thumbnail captions, duplicated title, etc.)
@@ -121,8 +157,6 @@ public class KiwixTextToSpeech {
             "    elem.parentElement.removeChild(elem);" +
             "});" +
             "tts.speakAloud(body.innerText);");
-      }
-    }
   }
 
   public void stop() {
@@ -135,14 +169,29 @@ public class KiwixTextToSpeech {
     }
   }
 
-  public void pauseOrResume() {
-    if (currentTTSTask == null)
-      return;
+  public Boolean requestAudioFocus() {
+    int audioFocusRequest = am.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
-    if (currentTTSTask.paused)
+    Log.d(TAG_KIWIX, "Audio Focus Requested");
+
+    synchronized (focuslock) {
+      if (audioFocusRequest == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  public void pauseOrResume() {
+    if (currentTTSTask == null) {
+      return;
+    } else if (currentTTSTask.paused) {
+      if (!requestAudioFocus()) return;
       currentTTSTask.start();
-    else
+    } else {
       currentTTSTask.pause();
+    }
   }
 
   @SuppressLint("AddJavascriptInterface")

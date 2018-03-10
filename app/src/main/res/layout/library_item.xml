@@ -12,10 +12,10 @@
 
   <ImageView
     android:id="@+id/favicon"
-    android:layout_width="@dimen/dimen_48dp"
+    android:layout_width="@dimen/favicon_width"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_marginRight="@dimen/dimen_medium_padding"
+    android:layout_marginRight="@dimen/favicon_margin_right"
     android:adjustViewBounds="true"
     android:scaleType="fitCenter"
     android:src="@mipmap/kiwix_icon"

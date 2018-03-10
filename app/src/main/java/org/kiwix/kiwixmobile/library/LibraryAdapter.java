@@ -57,11 +57,11 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import rx.Completable;
-import rx.Observable;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Completable;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
 
@@ -78,7 +78,7 @@ public class LibraryAdapter extends BaseAdapter {
   private final BookDao bookDao;
   private final LayoutInflater layoutInflater;
   private final BookFilter bookFilter = new BookFilter();
-  private Subscription saveNetworkLanguageSubscription;
+  private Disposable saveNetworkLanguageDisposable;
   @Inject BookUtils bookUtils;
 
   private void setupDagger() {
@@ -216,9 +216,11 @@ public class LibraryAdapter extends BaseAdapter {
   }
 
   private boolean languageActive(Book book) {
-    return Observable.from(languages)
-        .takeFirst(language -> language.languageCode.equals(book.getLanguage()))
-        .map(language -> language.active).toBlocking().firstOrDefault(false);
+    return Observable.fromIterable(languages)
+        .filter(language -> language.languageCode.equals(book.getLanguage()))
+        .firstElement()
+        .map(language -> language.active)
+        .blockingGet(false);
   }
 
   private Observable<Book> getMatches(Book b, String s) {
@@ -229,7 +231,11 @@ public class LibraryAdapter extends BaseAdapter {
       text.append(bookUtils.localeMap.get(b.getLanguage()).getDisplayLanguage()).append("|");
     }
     String[] words = s.toLowerCase().split("\\s+");
-    b.searchMatches = Observable.from(words).filter(text.toString().toLowerCase()::contains).count().toBlocking().first();
+    b.searchMatches = Observable.fromArray(words)
+        .filter(text.toString().toLowerCase()::contains)
+        .count()
+        .blockingGet()
+        .intValue();
     if (b.searchMatches > 0) {
       return Observable.just(b);
     } else {
@@ -243,42 +249,46 @@ public class LibraryAdapter extends BaseAdapter {
       ArrayList<Book> books = bookDao.getBooks();
       listItems.clear();
       if (s.length() == 0) {
-        List<Book> selectedLanguages = Observable.from(allBooks)
+        List<Book> selectedLanguages = Observable.fromIterable(allBooks)
             .filter(LibraryAdapter.this::languageActive)
             .filter(book -> !books.contains(book))
             .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
-            .toList().toBlocking().single();
+            .toList()
+            .blockingGet();
 
-        List<Book> unselectedLanguages = Observable.from(allBooks)
+        List<Book> unselectedLanguages = Observable.fromIterable(allBooks)
             .filter(book -> !languageActive(book))
             .filter(book -> !books.contains(book))
             .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
-            .toList().toBlocking().single();
+            .toList()
+            .blockingGet();
 
         listItems.add(new ListItem(context.getResources().getString(R.string.your_languages), LIST_ITEM_TYPE_DIVIDER));
         addBooks(selectedLanguages);
         listItems.add(new ListItem(context.getResources().getString(R.string.other_languages), LIST_ITEM_TYPE_DIVIDER));
         addBooks(unselectedLanguages);
       } else {
-        List<Book> selectedLanguages = Observable.from(allBooks)
+        List<Book> selectedLanguages = Observable.fromIterable(allBooks)
             .filter(LibraryAdapter.this::languageActive)
             .filter(book -> !books.contains(book))
             .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
             .flatMap(book -> getMatches(book, s.toString()))
-            .toList().toBlocking().single();
+            .toList()
+            .blockingGet();
 
         Collections.sort(selectedLanguages, new BookMatchComparator());
 
-        List<Book> unselectedLanguages = Observable.from(allBooks)
+        List<Book> unselectedLanguages = Observable.fromIterable(allBooks)
             .filter(book -> !languageActive(book))
             .filter(book -> !books.contains(book))
             .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
             .flatMap(book -> getMatches(book, s.toString()))
-            .toList().toBlocking().single();
+            .toList()
+            .blockingGet();
 
         Collections.sort(unselectedLanguages, new BookMatchComparator());
 
@@ -456,17 +466,17 @@ public class LibraryAdapter extends BaseAdapter {
     @Override
     public boolean equals(Object obj) {
       return ((Language) obj).language.equals(language) &&
-             ((Language) obj).active.equals(active);
+          ((Language) obj).active.equals(active);
     }
   }
 
   private void saveNetworkLanguages() {
-    if (saveNetworkLanguageSubscription != null) {
-      saveNetworkLanguageSubscription.unsubscribe();
+    if (saveNetworkLanguageDisposable != null && !saveNetworkLanguageDisposable.isDisposed()) {
+      saveNetworkLanguageDisposable.dispose();
     }
-    saveNetworkLanguageSubscription = Completable.fromAction(() -> networkLanguageDao.saveFilteredLanguages(languages))
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe();
+    saveNetworkLanguageDisposable = Completable.fromAction(() -> networkLanguageDao.saveFilteredLanguages(languages))
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe();
   }
 }

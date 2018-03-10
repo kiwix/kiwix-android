@@ -11,10 +11,10 @@
 
   <ImageView
     android:id="@+id/favicon"
-    android:layout_width="@dimen/dimen_48dp"
+    android:layout_width="@dimen/favicon_width"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_marginRight="@dimen/dimen_medium_padding"
+    android:layout_marginRight="@dimen/favicon_margin_right"
     android:adjustViewBounds="true"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:scaleType="fitCenter"
@@ -22,7 +22,7 @@
     tools:ignore="ContentDescription,RtlHardcoded" />
 
   <LinearLayout
-    android:layout_width="@dimen/dimen_0dp"
+    android:layout_width="@dimen/download_item_layout_width"
     android:layout_height="wrap_content"
     android:layout_weight="1"
     android:gravity="center"
@@ -58,6 +58,9 @@
       android:padding="@dimen/dimen_1dp"
       tools:ignore="ObsoleteLayoutParam" />
 
+      android:padding="@dimen/download_progress_padding" />
+
+
     <TextView
       android:id="@+id/time_remaining"
       android:layout_width="wrap_content"
@@ -83,8 +86,8 @@
       android:layout_alignParentRight="true"
       android:layout_gravity="center_vertical"
       android:layout_weight="0.5"
-      android:minHeight="@dimen/dimen_35dp"
-      android:minWidth="@dimen/dimen_35dp"
+      android:minHeight="@dimen/pause_min_height"
+      android:minWidth="@dimen/pause_min_width"
       android:src="@drawable/ic_pause_black_24dp"
       android:text="@string/download_pause"
       tools:ignore="ContentDescription,ObsoleteLayoutParam" />
@@ -96,11 +99,11 @@
       android:layout_alignParentEnd="true"
       android:layout_alignParentRight="true"
       android:layout_gravity="center_vertical"
-      android:layout_marginLeft="@dimen/dimen_medium_padding"
-      android:layout_marginRight="@dimen/dimen_medium_padding"
+      android:layout_marginLeft="@dimen/stop_horizontal_margin"
+      android:layout_marginRight="@dimen/stop_horizontal_margin"
       android:layout_weight="0.5"
-      android:minHeight="@dimen/dimen_35dp"
-      android:minWidth="@dimen/dimen_35dp"
+      android:minHeight="@dimen/stop_min_height"
+      android:minWidth="@dimen/stop_min_width"
       android:src="@drawable/ic_stop_black_24dp"
       android:text="@string/download_stop"
       tools:ignore="ContentDescription,ObsoleteLayoutParam" />

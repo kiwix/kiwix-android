@@ -50,10 +50,16 @@
         tools:ignore="UseCompoundDrawables">
 
         <ImageView
+
           android:layout_width="@dimen/dimen_100dp"
           android:layout_height="@dimen/dimen_100dp"
           android:src="@drawable/ic_star_yellow"
           tools:ignore="ContentDescription" />
+
+          android:layout_width="@dimen/activity_bookmarks_img_width"
+          android:layout_height="@dimen/activity_bookmarks_img_height"
+          android:src="@drawable/ic_star_yellow" />
+
 
         <TextView
           style="@android:style/TextAppearance.Large"
@@ -61,10 +67,10 @@
           android:layout_height="wrap_content"
           android:layout_centerInParent="true"
           android:gravity="center"
-          android:paddingBottom="@dimen/dimen_15dp"
-          android:paddingLeft="@dimen/dimen_10dp"
-          android:paddingRight="@dimen/dimen_10dp"
-          android:paddingTop="@dimen/dimen_15dp"
+          android:paddingBottom="@dimen/activity_bookmarks_vertical_padding"
+          android:paddingLeft="@dimen/activity_bookmarks_horizontal_padding"
+          android:paddingRight="@dimen/activity_bookmarks_horizontal_padding"
+          android:paddingTop="@dimen/activity_bookmarks_vertical_padding"
           android:text="@string/no_bookmarks"
           android:visibility="visible"
           tools:ignore="ObsoleteLayoutParam" />
