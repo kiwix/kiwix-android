@@ -28,6 +28,10 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -40,7 +44,6 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
-import org.kiwix.kiwixmobile.views.LanguageSelectDialog;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
 import java.io.File;
@@ -110,7 +113,7 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
     TabLayout tabLayout = findViewById(R.id.tabs);
     tabLayout.setupWithViewPager(mViewPager);
 
-    mViewPager.setCurrentItem(getIntent().getIntExtra(TAB_EXTRA,0));
+    mViewPager.setCurrentItem(getIntent().getIntExtra(TAB_EXTRA, 0));
     mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
       @Override
       public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -169,10 +172,12 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
     toolbar = findViewById(R.id.toolbar);
 
     setSupportActionBar(toolbar);
-
-    getSupportActionBar().setHomeButtonEnabled(true);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    getSupportActionBar().setTitle(R.string.zim_manager);
+    ActionBar actionBar = getSupportActionBar();
+    if (actionBar != null) {
+      actionBar.setHomeButtonEnabled(true);
+      actionBar.setDisplayHomeAsUpEnabled(true);
+      actionBar.setTitle(R.string.zim_manager);
+    }
 
     toolbar.setNavigationOnClickListener(v -> onBackPressed());
   }
@@ -271,11 +276,18 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
   }
 
   private void showLanguageSelect() {
-    new LanguageSelectDialog.Builder(this, dialogStyle())
-        .setLanguages(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages)
-        .setLanguageCounts(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languageCounts)
+    LanguageSelectAdapter adapter = new LanguageSelectAdapter(
+        mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages,
+        mSectionsPagerAdapter.libraryFragment.libraryAdapter.languageCounts
+    );
+    RecyclerView recyclerView = new RecyclerView(this);
+    recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    recyclerView.setAdapter(adapter);
+    new AlertDialog.Builder(this, dialogStyle())
+        .setView(recyclerView)
         .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
-          mSectionsPagerAdapter.libraryFragment.libraryAdapter.updateNetworkLanguages();
+          mSectionsPagerAdapter.libraryFragment.libraryAdapter
+              .updateNetworkLanguages(adapter.getFilteredLanguages());
           mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(searchQuery);
         })
         .show();
