@@ -76,7 +76,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmarks_view.BookmarksActivity;
 import org.kiwix.kiwixmobile.database.BookmarksDao;
@@ -112,9 +111,16 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.SingleOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.TableClickListener;
 import static org.kiwix.kiwixmobile.utils.Constants.BOOKMARK_CHOSEN_REQUEST;
@@ -132,6 +138,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_NOTIFICATION_ID;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_ZIM_FILE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_ZIM_FILE_2;
+import static org.kiwix.kiwixmobile.utils.Constants.KEY_SAVED_STATE_BUNDLE;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_KIWIX_MOBILE;
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_FILE_SEARCH;
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_FILE_SELECT;
@@ -139,15 +146,11 @@ import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_PREFERENCES;
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_STORAGE_PERMISSION;
 import static org.kiwix.kiwixmobile.utils.Constants.RESULT_HISTORY_CLEARED;
 import static org.kiwix.kiwixmobile.utils.Constants.RESULT_RESTART;
-import static org.kiwix.kiwixmobile.utils.Constants.TAG_CURRENT_ARTICLES;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_CURRENT_FILE;
-import static org.kiwix.kiwixmobile.utils.Constants.TAG_CURRENT_POSITIONS;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_CURRENT_TAB;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES;
 
 public class KiwixMobileActivity extends BaseActivity implements WebViewCallback {
 
@@ -450,7 +453,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
     manageExternalLaunchAndRestoringViewState();
     setUpExitFullscreenButton();
-    loadPrefs();
     updateTitle(ZimContentProvider.getZimFileTitle());
 
     Intent i = getIntent();
@@ -738,6 +740,37 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     return newTab(mainPage);
   }
 
+  private KiwixWebView newTab(Bundle state) {
+    AttributeSet attrs = StyleUtils.getAttributes(this, R.xml.webview);
+    KiwixWebView webView;
+    if (!isHideToolbar) {
+      webView = new ToolbarScrollingKiwixWebView(KiwixMobileActivity.this, this, toolbarContainer, pageBottomTabLayout, attrs);
+      ((ToolbarScrollingKiwixWebView) webView).setOnToolbarVisibilityChangeListener(
+              new ToolbarScrollingKiwixWebView.OnToolbarVisibilityChangeListener() {
+                @Override
+                public void onToolbarDisplayed() {
+                  shrinkDrawers();
+                }
+
+                @Override
+                public void onToolbarHidden() {
+                  expandDrawers();
+                }
+              }
+      );
+    } else {
+      webView = new ToolbarStaticKiwixWebView(KiwixMobileActivity.this, this, toolbarContainer, attrs);
+    }
+    webView.restoreState(state);
+    webView.loadPrefs();
+    mWebViews.add(webView);
+    selectTab(mWebViews.size() - 1);
+    tabDrawerAdapter.notifyDataSetChanged();
+    setUpWebView();
+    documentParser.initInterface(webView);
+    return webView;
+  }
+
   private KiwixWebView newTab(String url) {
     KiwixWebView webView = getWebView(url);
     mWebViews.add(webView);
@@ -991,7 +1024,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
         .show();
   }
 
-  public boolean openZimFile(File file, boolean clearHistory) {
+  public boolean openZimFile(File file, boolean clearHistory, boolean openMainPage) {
     if (file.canRead() || Build.VERSION.SDK_INT < 19 || (BuildConfig.IS_CUSTOM_APP
         && Build.VERSION.SDK_INT != 23)) {
       if (file.exists()) {
@@ -1013,7 +1046,9 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
           bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
           bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
 
-          openMainPage();
+          if (openMainPage) {
+            openMainPage();
+          }
           refreshBookmarks();
           return true;
         } else {
@@ -1685,48 +1720,41 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   public void saveTabStates() {
     SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
     SharedPreferences.Editor editor = settings.edit();
-
-    JSONArray urls = new JSONArray();
-    JSONArray positions = new JSONArray();
-    for (KiwixWebView view : mWebViews) {
-      if (view.getUrl() == null) continue;
-      urls.put(view.getUrl());
-      positions.put(view.getScrollY());
-    }
-
     editor.putString(TAG_CURRENT_FILE, ZimContentProvider.getZimFile());
-    editor.putString(TAG_CURRENT_ARTICLES, urls.toString());
-    editor.putString(TAG_CURRENT_POSITIONS, positions.toString());
     editor.putInt(TAG_CURRENT_TAB, currentWebViewIndex);
-
     editor.apply();
+
+    Bundle outState = new Bundle(ClassLoader.getSystemClassLoader());
+    for (int i = 0; i < mWebViews.size(); i++) {
+      KiwixWebView webView = mWebViews.get(i);
+      Bundle webViewState = new Bundle(ClassLoader.getSystemClassLoader());
+      webView.saveState(webViewState);
+      outState.putBundle(KEY_SAVED_STATE_BUNDLE + i, webViewState);
+    }
+    FileUtils.writeBundleToStorage(getApplication(), outState);
   }
 
   public void restoreTabStates() {
     SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
     String zimFile = settings.getString(TAG_CURRENT_FILE, null);
-    String zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null);
-    String zimPositions = settings.getString(TAG_CURRENT_POSITIONS, null);
-
     int currentTab = settings.getInt(TAG_CURRENT_TAB, 0);
 
-    openZimFile(new File(zimFile), false);
-    try {
-      JSONArray urls = new JSONArray(zimArticles);
-      JSONArray positions = new JSONArray(zimPositions);
-      int i = 0;
-      getCurrentWebView().loadUrl(urls.getString(i));
-      getCurrentWebView().setScrollY(positions.getInt(i));
-      i++;
-      for (; i < urls.length(); i++) {
-        newTab(urls.getString(i));
-        getCurrentWebView().setScrollY(positions.getInt(i));
-      }
-      selectTab(currentTab);
-    } catch (Exception e) {
-      Log.w(TAG_KIWIX, "Kiwix shared preferences corrupted", e);
-      //TODO: Show to user
-    }
+    openZimFile(new File(zimFile), false, false);
+    Single.create((SingleOnSubscribe<Bundle>) e -> {
+      e.onSuccess(FileUtils.readBundleFromStorage(getApplication()));
+      FileUtils.deleteBundleInStorage(getApplication());
+    }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            .subscribe(savedState -> {
+              if (!savedState.isEmpty()) {
+                Observable.fromIterable(savedState.keySet())
+                        .filter(s -> s.startsWith(KEY_SAVED_STATE_BUNDLE))
+                        .map(savedState::getBundle)
+                        .subscribe(this::newTab, t -> {}, () -> selectTab(currentTab));
+              } else {
+                newTab();
+              }
+              loadPrefs();
+            });
   }
 
   private void manageExternalLaunchAndRestoringViewState() {
@@ -1742,7 +1770,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       Log.d(TAG_KIWIX, "Kiwix started from a filemanager. Intent filePath: "
           + filePath
           + " -> open this zimfile and load menu_main page");
-      openZimFile(new File(filePath), false);
+      openZimFile(new File(filePath), false, true);
+      loadPrefs();
     } else {
       SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
       String zimFile = settings.getString(TAG_CURRENT_FILE, null);
@@ -1750,8 +1779,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
         Log.d(TAG_KIWIX,
             "Kiwix normal start, zimFile loaded last time -> Open last used zimFile " + zimFile);
         restoreTabStates();
-        // Alternative would be to restore webView state. But more effort to implement, and actually
-        // fits better normal android behavior if after closing app ("back" button) state is not maintained.
       } else {
 
         if (BuildConfig.IS_CUSTOM_APP) {
@@ -1809,12 +1836,13 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
             AlertDialog zimFileMissingDialog = zimFileMissingBuilder.create();
             zimFileMissingDialog.show();
           } else {
-            openZimFile(new File(filePath), true);
+            openZimFile(new File(filePath), true, true);
           }
         } else {
           Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display help page");
           showHelpPage();
         }
+        loadPrefs();
       }
     }
   }
