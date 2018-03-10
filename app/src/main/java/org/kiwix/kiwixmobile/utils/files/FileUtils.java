@@ -17,28 +17,41 @@
  */
 package org.kiwix.kiwixmobile.utils.files;
 
+import android.app.Application;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcel;
 import android.provider.DocumentsContract;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
+
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
 public class FileUtils {
+
+  // the name of the file to store the bundle in.
+  private static final String BUNDLE_STORAGE = "SAVED_WEB_VIEW.parcel";
 
   public static File getFileCacheDir(Context context) {
     boolean external = Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
@@ -284,6 +297,101 @@ public class FileUtils {
       size += file.length();
     }
     return size;
+  }
+
+  /**
+   * Reads a bundle from the file with the specified
+   * name in the persistent storage files directory.
+   * This method is a blocking operation and should be used
+   * in a io thread.
+   *
+   * @param app  the application needed to obtain the files directory.
+   * @return a valid Bundle loaded using the system class loader
+   * or null if the method was unable to read the Bundle from storage.
+   */
+  @NonNull
+  public static Bundle readBundleFromStorage(@NonNull Application app) {
+    File inputFile = new File(app.getFilesDir(), BUNDLE_STORAGE);
+    FileInputStream inputStream = null;
+    try {
+      inputStream = new FileInputStream(inputFile);
+      Parcel parcel = Parcel.obtain();
+      byte[] data = new byte[(int) inputStream.getChannel().size()];
+
+      //noinspection ResultOfMethodCallIgnored
+      inputStream.read(data, 0, data.length);
+      parcel.unmarshall(data, 0, data.length);
+      parcel.setDataPosition(0);
+      Bundle out = parcel.readBundle(ClassLoader.getSystemClassLoader());
+      out.putAll(out);
+      parcel.recycle();
+      return out;
+    } catch (FileNotFoundException e) {
+      Log.e(TAG_KIWIX, "Unable to read bundle from storage");
+    } catch (IOException e) {
+      Log.e(TAG_KIWIX, "Unable to read bundle from storage", e);
+    } finally {
+      if (inputStream != null) {
+        //noinspection ResultOfMethodCallIgnored
+        inputFile.delete();
+        try {
+          inputStream.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return new Bundle();
+  }
+
+  /**
+   * Writes a bundle to persistent storage in the files directory
+   * using the specified file name. This method is runs blocking operations
+   * on io thread.
+   *
+   * @param app    the application needed to obtain the file directory.
+   * @param writeBundle the bundle to store in persistent storage.
+   */
+  public static void writeBundleToStorage(final @NonNull Application app, Bundle writeBundle) {
+    Observable.just(writeBundle)
+            .observeOn(Schedulers.io())
+            .subscribe(bundle -> {
+              File outputFile = new File(app.getFilesDir(), BUNDLE_STORAGE);
+              FileOutputStream outputStream = null;
+              try {
+                outputStream = new FileOutputStream(outputFile);
+                Parcel parcel = Parcel.obtain();
+                parcel.writeBundle(bundle);
+                outputStream.write(parcel.marshall());
+                outputStream.flush();
+                parcel.recycle();
+              } catch (IOException e) {
+                Log.e(TAG_KIWIX, "Unable to write bundle to storage");
+              } finally {
+                if (outputStream != null) {
+                  try {
+                    outputStream.close();
+                  } catch (IOException e) {
+                    e.printStackTrace();
+                  }
+                }
+              }
+            });
+  }
+
+  /**
+   * Use this method to delete the bundle with the specified name.
+   * This is a blocking call and should be used within a io
+   * thread.
+   *
+   * @param app  the application object needed to get the file.
+   */
+  public static void deleteBundleInStorage(final @NonNull Application app) {
+    File outputFile = new File(app.getFilesDir(), BUNDLE_STORAGE);
+    if (outputFile.exists()) {
+      //noinspection ResultOfMethodCallIgnored
+      outputFile.delete();
+    }
   }
 
 }

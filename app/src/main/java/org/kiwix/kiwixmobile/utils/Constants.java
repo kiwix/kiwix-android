@@ -85,10 +85,6 @@ public final class Constants {
 
     public static final String TAG_CURRENT_FILE = "currentzimfile";
 
-    public static final String TAG_CURRENT_ARTICLES = "currentarticles";
-
-    public static final String TAG_CURRENT_POSITIONS = "currentpositions";
-
     public static final String TAG_CURRENT_TAB = "currenttab";
 
     // Extras
@@ -121,4 +117,7 @@ public final class Constants {
     public static final String EXTRA_WEBVIEWS_LIST = "webviewsList";
 
     public static final String EXTRA_BOOKMARK_CONTENTS = "bookmark_contents";
+
+    // Keys
+    public static final String KEY_SAVED_STATE_BUNDLE = "bookmark_contents";
 }
