@@ -1,21 +1,41 @@
+/*
+ * Kiwix Android
+ * Copyright (C) 2018  Kiwix <android.kiwix.org>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.kiwix.kiwixmobile.search;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -25,6 +45,7 @@ import android.widget.Toast;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 
 import java.util.ArrayList;
@@ -35,7 +56,6 @@ import javax.inject.Inject;
 
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_IS_WIDGET_VOICE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_NIGHTMODE;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH_TEXT;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
@@ -52,6 +72,8 @@ public class SearchActivity extends AppCompatActivity
 
   @Inject
   SearchPresenter searchPresenter;
+  @Inject
+  SharedPreferenceUtil sharedPreferenceUtil;
 
   private void setupDagger() {
     KiwixApplication.getInstance().getApplicationComponent().inject(this);
@@ -59,11 +81,10 @@ public class SearchActivity extends AppCompatActivity
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-    if (sharedPreferences.getBoolean(PREF_NIGHTMODE, false)) {
+    setupDagger();
+    if (sharedPreferenceUtil.getPrefNightMode()) {
       setTheme(R.style.AppTheme_Night);
     }
-    setupDagger();
     super.onCreate(savedInstanceState);
     View contentView = LayoutInflater.from(this).inflate(R.layout.search, null);
     setContentView(contentView);
@@ -77,7 +98,7 @@ public class SearchActivity extends AppCompatActivity
     getSupportActionBar().setHomeButtonEnabled(true);
     searchPresenter.attachView(this);
     mListView = findViewById(R.id.search_list);
-    mDefaultAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+    mDefaultAdapter = getDefaultAdapter();
     searchPresenter.getRecentSearches(this);
     mListView.setAdapter(mDefaultAdapter);
 
@@ -168,7 +189,15 @@ public class SearchActivity extends AppCompatActivity
 
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-    String title = ((TextView) view).getText().toString();
+    CharSequence text = ((TextView) view).getText();
+    String title;
+    if (text instanceof Spanned) {
+      title = Html.toHtml((Spanned) text);
+      // To remove the "ltr style information" from spanned text
+      title = title.substring(title.indexOf(">") + 1, title.lastIndexOf("<"));
+    } else {
+      title = text.toString();
+    }
     searchPresenter.saveSearch(title, this);
     sendMessage(title);
   }
@@ -215,9 +244,29 @@ public class SearchActivity extends AppCompatActivity
   }
 
   private void resetAdapter() {
-    mDefaultAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+    mDefaultAdapter = getDefaultAdapter();
     mListView.setAdapter(mDefaultAdapter);
     searchPresenter.getRecentSearches(this);
+  }
+
+  private ArrayAdapter<String> getDefaultAdapter() {
+    return new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1) {
+      @NonNull
+      @Override
+      public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        View row;
+
+        if (convertView == null) {
+          row = LayoutInflater.from(parent.getContext())
+                  .inflate(android.R.layout.simple_list_item_1, null);
+        } else {
+          row = convertView;
+        }
+
+        ((TextView) row).setText(Html.fromHtml(getItem(position)));
+        return row;
+      }
+    };
   }
 
 
