@@ -24,14 +24,20 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -53,6 +59,7 @@ import javax.inject.Inject;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_IS_WIDGET_VOICE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
+import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH_TEXT;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class SearchActivity extends AppCompatActivity
@@ -65,6 +72,7 @@ public class SearchActivity extends AppCompatActivity
   private AutoCompleteAdapter mAutoAdapter;
   private ArrayAdapter<String> mDefaultAdapter;
   private SearchView searchView;
+  private String searchText;
 
   @Inject
   SearchPresenter searchPresenter;
@@ -77,22 +85,24 @@ public class SearchActivity extends AppCompatActivity
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    setupDagger();
     if (sharedPreferenceUtil.getPrefNightMode()) {
       setTheme(R.style.AppTheme_Night);
     }
-    setupDagger();
     super.onCreate(savedInstanceState);
     View contentView = LayoutInflater.from(this).inflate(R.layout.search, null);
     setContentView(contentView);
 
+    if (savedInstanceState != null) {
+      searchText = savedInstanceState.getString(EXTRA_SEARCH_TEXT);
+    }
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
     getSupportActionBar().setHomeButtonEnabled(true);
     searchPresenter.attachView(this);
-
     mListView = findViewById(R.id.search_list);
-    mDefaultAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+    mDefaultAdapter = getDefaultAdapter();
     searchPresenter.getRecentSearches(this);
     mListView.setAdapter(mDefaultAdapter);
 
@@ -132,6 +142,11 @@ public class SearchActivity extends AppCompatActivity
     MenuItem searchMenuItem = menu.findItem(R.id.menu_search);
     searchMenuItem.expandActionView();
     searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+    if (searchText != null) {
+      searchView.setQuery(searchText, false);
+      mListView.setAdapter(mAutoAdapter);
+      mAutoAdapter.getFilter().filter(searchText.toLowerCase());
+    }
     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
       @Override
       public boolean onQueryTextSubmit(String s) {
@@ -199,7 +214,15 @@ public class SearchActivity extends AppCompatActivity
 
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-    String title = ((TextView) view).getText().toString();
+    CharSequence text = ((TextView) view).getText();
+    String title;
+    if (text instanceof Spanned) {
+      title = Html.toHtml((Spanned) text);
+      // To remove the "ltr style information" from spanned text
+      title = title.substring(title.indexOf(">") + 1, title.lastIndexOf("<"));
+    } else {
+      title = text.toString();
+    }
     searchPresenter.saveSearch(title, this);
     sendMessage(title);
   }
@@ -261,9 +284,29 @@ public class SearchActivity extends AppCompatActivity
   }
 
   private void resetAdapter() {
-    mDefaultAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+    mDefaultAdapter = getDefaultAdapter();
     mListView.setAdapter(mDefaultAdapter);
     searchPresenter.getRecentSearches(this);
+  }
+
+  private ArrayAdapter<String> getDefaultAdapter() {
+    return new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1) {
+      @NonNull
+      @Override
+      public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        View row;
+
+        if (convertView == null) {
+          row = LayoutInflater.from(parent.getContext())
+                  .inflate(android.R.layout.simple_list_item_1, null);
+        } else {
+          row = convertView;
+        }
+
+        ((TextView) row).setText(Html.fromHtml(getItem(position)));
+        return row;
+      }
+    };
   }
 
 
@@ -303,5 +346,11 @@ public class SearchActivity extends AppCompatActivity
 
   private void searchViaVoice(String search) {
     searchView.setQuery(search, false);
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putString(EXTRA_SEARCH_TEXT, searchView.getQuery().toString());
   }
 }
