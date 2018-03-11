@@ -19,6 +19,8 @@ package org.kiwix.kiwixmobile.search;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
@@ -62,6 +64,8 @@ import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class SearchActivity extends AppCompatActivity
     implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, SearchViewCallback {
+
+  public static final String EXTRA_SEARCH_IN_TEXT = "bool_searchintext";
 
   private final int REQ_CODE_SPEECH_INPUT = 100;
   private ListView mListView;
@@ -136,7 +140,7 @@ public class SearchActivity extends AppCompatActivity
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu_search, menu);
     MenuItem searchMenuItem = menu.findItem(R.id.menu_search);
-    MenuItemCompat.expandActionView(searchMenuItem);
+    searchMenuItem.expandActionView();
     searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
     if (searchText != null) {
       searchView.setQuery(searchText, false);
@@ -162,19 +166,18 @@ public class SearchActivity extends AppCompatActivity
       }
     });
 
-    MenuItemCompat.setOnActionExpandListener(searchMenuItem,
-        new MenuItemCompat.OnActionExpandListener() {
-          @Override
-          public boolean onMenuItemActionExpand(MenuItem item) {
-            return false;
-          }
+    searchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+      @Override
+      public boolean onMenuItemActionExpand(MenuItem item) {
+        return false;
+      }
 
-          @Override
-          public boolean onMenuItemActionCollapse(MenuItem item) {
-            finish();
-            return true;
-          }
-        });
+      @Override
+      public boolean onMenuItemActionCollapse(MenuItem item) {
+        finish();
+        return false;
+      }
+    });
 
     if (getIntent().hasExtra(Intent.EXTRA_PROCESS_TEXT)) {
       searchView.setQuery(getIntent().getStringExtra(Intent.EXTRA_PROCESS_TEXT), true);
@@ -185,6 +188,28 @@ public class SearchActivity extends AppCompatActivity
     }
 
     return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.menu_searchintext:
+        String queryText = "";
+        if(searchView != null) {
+          queryText = searchView.getQuery().toString();
+        }
+        Intent resultIntent = new Intent(this, KiwixMobileActivity.class);
+        resultIntent.putExtra(EXTRA_SEARCH_IN_TEXT, true);
+        resultIntent.putExtra(TAG_FILE_SEARCHED, queryText);
+        if(shouldStartNewActivity() != 1) {
+          setResult(RESULT_OK, resultIntent);
+          finish();
+        } else {
+          startActivity(resultIntent);
+        }
+        return true;
+    }
+    return super.onOptionsItemSelected(item);
   }
 
   @Override
@@ -203,7 +228,7 @@ public class SearchActivity extends AppCompatActivity
   }
 
   private void sendMessage(String uri) {
-    int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
+    int value = shouldStartNewActivity();
     if (value == 1) {
       Intent i = new Intent(this, KiwixMobileActivity.class);
       i.putExtra(TAG_FILE_SEARCHED, uri);
@@ -214,6 +239,21 @@ public class SearchActivity extends AppCompatActivity
       setResult(RESULT_OK, i);
       finish();
     }
+  }
+
+  /**
+   * Checks if the ActivityManager is set to aggressively reclaim Activities.
+   * @return 1 if the above setting is true.
+   */
+  private int shouldStartNewActivity() {
+    int value;
+    if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+      //deprecated in API 17
+      value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
+    } else {
+      value = Settings.System.getInt(getContentResolver(), Settings.Global.ALWAYS_FINISH_ACTIVITIES, 0);
+    }
+    return value;
   }
 
   @Override
