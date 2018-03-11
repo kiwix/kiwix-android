@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 
 import java.util.UUID;
@@ -14,9 +15,6 @@ import java.util.UUID;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
 public class NetworkUtils {
-
-  public static Uri KIWIX_LOCAL_MARKET_URI;
-  public static Uri KIWIX_BROWSER_MARKET_URI;
 
   public static boolean isNetworkAvailable(Context context) {
     ConnectivityManager connectivity = (ConnectivityManager) context
@@ -38,8 +36,8 @@ public class NetworkUtils {
   }
 
   public static void initPlayStoreUri(String packageName) {
-        NetworkUtils.KIWIX_LOCAL_MARKET_URI = Uri.parse("market://details?id=" + packageName);
-        NetworkUtils.KIWIX_BROWSER_MARKET_URI =
+        KiwixMobileActivity.KIWIX_LOCAL_MARKET_URI = Uri.parse("market://details?id=" + packageName);
+        KiwixMobileActivity.KIWIX_BROWSER_MARKET_URI =
                 Uri.parse("http://play.google.com/store/apps/details?id=" + packageName);
     }
 

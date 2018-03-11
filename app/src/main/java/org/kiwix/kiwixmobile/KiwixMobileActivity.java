@@ -182,6 +182,10 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   public static boolean wifiOnly;
 
+  public static Uri KIWIX_LOCAL_MARKET_URI;
+
+  public static Uri KIWIX_BROWSER_MARKET_URI;
+
   private String documentParserJs;
 
   public static boolean nightMode;
@@ -580,7 +584,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   private void goToRateApp() {
 
-    Intent goToMarket = new Intent(Intent.ACTION_VIEW, NetworkUtils.KIWIX_LOCAL_MARKET_URI);
+    Intent goToMarket = new Intent(Intent.ACTION_VIEW, KIWIX_LOCAL_MARKET_URI);
 
     goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
         Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET |
@@ -590,7 +594,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       startActivity(goToMarket);
     } catch (ActivityNotFoundException e) {
       startActivity(new Intent(Intent.ACTION_VIEW,
-          NetworkUtils.KIWIX_BROWSER_MARKET_URI));
+          KIWIX_BROWSER_MARKET_URI));
     }
   }
 
