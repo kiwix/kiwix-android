@@ -472,8 +472,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
       @Override public void onSectionClick(View view, int position) {
         getCurrentWebView().loadUrl("javascript:document.getElementById('"
-                + documentSections.get(position).id
-                + "').scrollIntoView();");
+            + documentSections.get(position).id
+            + "').scrollIntoView();");
 
         drawerLayout.closeDrawers();
       }
