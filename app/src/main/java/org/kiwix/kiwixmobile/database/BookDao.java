@@ -58,22 +58,22 @@ public class BookDao {
   }
   
   public void setBookDatabaseEntity(Book book, BookDatabaseEntity bookDatabaseEntity) {
-      bookDatabaseEntity.setBookId(book.getId());
-      bookDatabaseEntity.setTitle(book.getTitle());
-      bookDatabaseEntity.setDescription(book.getDescription());
-      bookDatabaseEntity.setLanguage(book.getLanguage());
-      bookDatabaseEntity.setBookCreator(book.getCreator());
-      bookDatabaseEntity.setPublisher(book.getPublisher());
-      bookDatabaseEntity.setDate(book.getDate());
-      bookDatabaseEntity.setUrl(book.file.getPath());
-      bookDatabaseEntity.setArticleCount(book.getArticleCount());
-      bookDatabaseEntity.setMediaCount(book.getMediaCount());
-      bookDatabaseEntity.setSize(book.getSize());
-      bookDatabaseEntity.setFavicon(book.getFavicon());
-      bookDatabaseEntity.setName(book.getName());
-      String filePath = book.file.getPath();
-      mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(filePath));
-      mDb.persist(bookDatabaseEntity);
+    bookDatabaseEntity.setBookId(book.getId());
+    bookDatabaseEntity.setTitle(book.getTitle());
+    bookDatabaseEntity.setDescription(book.getDescription());
+    bookDatabaseEntity.setLanguage(book.getLanguage());
+    bookDatabaseEntity.setBookCreator(book.getCreator());
+    bookDatabaseEntity.setPublisher(book.getPublisher());
+    bookDatabaseEntity.setDate(book.getDate());
+    bookDatabaseEntity.setUrl(book.file.getPath());
+    bookDatabaseEntity.setArticleCount(book.getArticleCount());
+    bookDatabaseEntity.setMediaCount(book.getMediaCount());
+    bookDatabaseEntity.setSize(book.getSize());
+    bookDatabaseEntity.setFavicon(book.getFavicon());
+    bookDatabaseEntity.setName(book.getName());
+    String filePath = book.file.getPath();
+    mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(filePath));
+    mDb.persist(bookDatabaseEntity);
   }
   
   public ArrayList<Book> getBooks() {
