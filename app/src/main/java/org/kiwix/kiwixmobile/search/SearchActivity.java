@@ -19,18 +19,25 @@ package org.kiwix.kiwixmobile.search;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -52,16 +59,20 @@ import javax.inject.Inject;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_IS_WIDGET_VOICE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
+import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH_TEXT;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class SearchActivity extends AppCompatActivity
     implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, SearchViewCallback {
+
+  public static final String EXTRA_SEARCH_IN_TEXT = "bool_searchintext";
 
   private final int REQ_CODE_SPEECH_INPUT = 100;
   private ListView mListView;
   private AutoCompleteAdapter mAutoAdapter;
   private ArrayAdapter<String> mDefaultAdapter;
   private SearchView searchView;
+  private String searchText;
 
   @Inject
   SearchPresenter searchPresenter;
@@ -82,14 +93,16 @@ public class SearchActivity extends AppCompatActivity
     View contentView = LayoutInflater.from(this).inflate(R.layout.search, null);
     setContentView(contentView);
 
+    if (savedInstanceState != null) {
+      searchText = savedInstanceState.getString(EXTRA_SEARCH_TEXT);
+    }
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
     getSupportActionBar().setHomeButtonEnabled(true);
     searchPresenter.attachView(this);
-
     mListView = findViewById(R.id.search_list);
-    mDefaultAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+    mDefaultAdapter = getDefaultAdapter();
     searchPresenter.getRecentSearches(this);
     mListView.setAdapter(mDefaultAdapter);
 
@@ -127,8 +140,13 @@ public class SearchActivity extends AppCompatActivity
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu_search, menu);
     MenuItem searchMenuItem = menu.findItem(R.id.menu_search);
-    MenuItemCompat.expandActionView(searchMenuItem);
+    searchMenuItem.expandActionView();
     searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+    if (searchText != null) {
+      searchView.setQuery(searchText, false);
+      mListView.setAdapter(mAutoAdapter);
+      mAutoAdapter.getFilter().filter(searchText.toLowerCase());
+    }
     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
       @Override
       public boolean onQueryTextSubmit(String s) {
@@ -148,19 +166,18 @@ public class SearchActivity extends AppCompatActivity
       }
     });
 
-    MenuItemCompat.setOnActionExpandListener(searchMenuItem,
-        new MenuItemCompat.OnActionExpandListener() {
-          @Override
-          public boolean onMenuItemActionExpand(MenuItem item) {
-            return false;
-          }
+    searchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+      @Override
+      public boolean onMenuItemActionExpand(MenuItem item) {
+        return false;
+      }
 
-          @Override
-          public boolean onMenuItemActionCollapse(MenuItem item) {
-            finish();
-            return true;
-          }
-        });
+      @Override
+      public boolean onMenuItemActionCollapse(MenuItem item) {
+        finish();
+        return false;
+      }
+    });
 
     if (getIntent().hasExtra(Intent.EXTRA_PROCESS_TEXT)) {
       searchView.setQuery(getIntent().getStringExtra(Intent.EXTRA_PROCESS_TEXT), true);
@@ -174,14 +191,44 @@ public class SearchActivity extends AppCompatActivity
   }
 
   @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.menu_searchintext:
+        String queryText = "";
+        if(searchView != null) {
+          queryText = searchView.getQuery().toString();
+        }
+        Intent resultIntent = new Intent(this, KiwixMobileActivity.class);
+        resultIntent.putExtra(EXTRA_SEARCH_IN_TEXT, true);
+        resultIntent.putExtra(TAG_FILE_SEARCHED, queryText);
+        if(shouldStartNewActivity() != 1) {
+          setResult(RESULT_OK, resultIntent);
+          finish();
+        } else {
+          startActivity(resultIntent);
+        }
+        return true;
+    }
+    return super.onOptionsItemSelected(item);
+  }
+
+  @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-    String title = ((TextView) view).getText().toString();
+    CharSequence text = ((TextView) view).getText();
+    String title;
+    if (text instanceof Spanned) {
+      title = Html.toHtml((Spanned) text);
+      // To remove the "ltr style information" from spanned text
+      title = title.substring(title.indexOf(">") + 1, title.lastIndexOf("<"));
+    } else {
+      title = text.toString();
+    }
     searchPresenter.saveSearch(title, this);
     sendMessage(title);
   }
 
   private void sendMessage(String uri) {
-    int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
+    int value = shouldStartNewActivity();
     if (value == 1) {
       Intent i = new Intent(this, KiwixMobileActivity.class);
       i.putExtra(TAG_FILE_SEARCHED, uri);
@@ -192,6 +239,21 @@ public class SearchActivity extends AppCompatActivity
       setResult(RESULT_OK, i);
       finish();
     }
+  }
+
+  /**
+   * Checks if the ActivityManager is set to aggressively reclaim Activities.
+   * @return 1 if the above setting is true.
+   */
+  private int shouldStartNewActivity() {
+    int value;
+    if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+      //deprecated in API 17
+      value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
+    } else {
+      value = Settings.System.getInt(getContentResolver(), Settings.Global.ALWAYS_FINISH_ACTIVITIES, 0);
+    }
+    return value;
   }
 
   @Override
@@ -222,9 +284,29 @@ public class SearchActivity extends AppCompatActivity
   }
 
   private void resetAdapter() {
-    mDefaultAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+    mDefaultAdapter = getDefaultAdapter();
     mListView.setAdapter(mDefaultAdapter);
     searchPresenter.getRecentSearches(this);
+  }
+
+  private ArrayAdapter<String> getDefaultAdapter() {
+    return new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1) {
+      @NonNull
+      @Override
+      public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        View row;
+
+        if (convertView == null) {
+          row = LayoutInflater.from(parent.getContext())
+                  .inflate(android.R.layout.simple_list_item_1, null);
+        } else {
+          row = convertView;
+        }
+
+        ((TextView) row).setText(Html.fromHtml(getItem(position)));
+        return row;
+      }
+    };
   }
 
 
@@ -264,5 +346,11 @@ public class SearchActivity extends AppCompatActivity
 
   private void searchViaVoice(String search) {
     searchView.setQuery(search, false);
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putString(EXTRA_SEARCH_TEXT, searchView.getQuery().toString());
   }
 }

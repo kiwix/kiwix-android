@@ -9,5 +9,11 @@
     android:visible="false"
     app:actionViewClass="android.support.v7.widget.SearchView"
     app:iconifiedByDefault="false"
-    app:showAsAction="always|collapseActionView" />
+    app:showAsAction="ifRoom|collapseActionView" />
+
+  <item
+    android:id="@+id/menu_searchintext"
+    android:title="@string/menu_searchintext"
+    app:showAsAction="ifRoom|withText" />
+
 </menu>
