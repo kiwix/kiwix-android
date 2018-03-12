@@ -1,5 +1,3 @@
-//Main Activity of the project
-
 /*
  * Copyright 2013 Rashiq Ahmad <rashiq.z@gmail.com>
  *
@@ -260,7 +258,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   @BindView(R.id.content_frame) FrameLayout contentFrame;
 
-  //Point of interest
   @BindView(R.id.action_back_button) ImageView tabBackButton;
 
   @BindView(R.id.action_forward_button) ImageView tabForwardButton;
@@ -392,8 +389,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     documentParserJs = fileReader.readFile("js/documentParser.js", this);
 
     newTabButton.setOnClickListener((View view) -> newTab());
-
-
     tabForwardButtonContainer.setOnClickListener((View view) -> {
       if (getCurrentWebView().canGoForward()) {
         getCurrentWebView().goForward();
@@ -1624,7 +1619,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     }
   }
 
-  //POI $$$
   public void refreshNavigationButtons() {
     toggleImageViewGrayFilter(tabBackButton, getCurrentWebView().canGoBack());
     toggleImageViewGrayFilter(tabForwardButton, getCurrentWebView().canGoForward());
