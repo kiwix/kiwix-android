@@ -42,7 +42,6 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginLeft="@dimen/language_name_localized_margin_left"
-      android:textColor="@color/grey"
       android:textSize="@dimen/language_name_localized_text_size"
       tools:text="(Deutsch)" />
 
@@ -57,7 +56,6 @@
     android:layout_marginBottom="@dimen/language_entries_count_vertical_margin"
     android:layout_marginRight="@dimen/language_entries_count_margin_right"
     android:layout_marginTop="@dimen/language_entries_count_vertical_margin"
-    android:textColor="@color/grey"
     android:textSize="@dimen/language_check_item_text_size" />
 
 </RelativeLayout>
