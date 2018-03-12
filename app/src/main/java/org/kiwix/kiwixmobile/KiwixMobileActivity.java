@@ -1,3 +1,5 @@
+//Main Activity of the project
+
 /*
  * Copyright 2013 Rashiq Ahmad <rashiq.z@gmail.com>
  *
@@ -258,6 +260,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   @BindView(R.id.content_frame) FrameLayout contentFrame;
 
+  //Point of interest
   @BindView(R.id.action_back_button) ImageView tabBackButton;
 
   @BindView(R.id.action_forward_button) ImageView tabForwardButton;
@@ -389,6 +392,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     documentParserJs = fileReader.readFile("js/documentParser.js", this);
 
     newTabButton.setOnClickListener((View view) -> newTab());
+
+
     tabForwardButtonContainer.setOnClickListener((View view) -> {
       if (getCurrentWebView().canGoForward()) {
         getCurrentWebView().goForward();
@@ -428,6 +433,13 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     tabDrawerAdapter.setTabClickListener(new TabDrawerAdapter.TabClickListener() {
       @Override public void onSelectTab(View view, int position) {
         selectTab(position);
+
+        /* Bug Fix
+         * Issue #592 in which the navigational history of the previously open tab (WebView) was
+         * carried forward to the newly selected/opened tab; causing erroneous enabling of
+         * navigational buttons.
+         */
+        refreshNavigationButtons();
       }
 
       @Override public void onCloseTab(View view, int position) {
@@ -1612,6 +1624,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     }
   }
 
+  //POI $$$
   public void refreshNavigationButtons() {
     toggleImageViewGrayFilter(tabBackButton, getCurrentWebView().canGoBack());
     toggleImageViewGrayFilter(tabForwardButton, getCurrentWebView().canGoForward());
