@@ -13,34 +13,37 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_centerVertical="true"
-    android:layout_marginLeft="@dimen/dimen_15dp"
+    android:layout_marginLeft="@dimen/language_checkbox_margin_left"
     android:buttonTint="@color/accent"
     android:focusable="false"
     android:focusableInTouchMode="false"
     tools:checked="false" />
 
   <LinearLayout
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerVertical="true"
+    android:layout_toLeftOf="@id/language_entries_count"
     android:layout_toRightOf="@id/language_checkbox"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <TextView
       android:id="@+id/language_name"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textSize="@dimen/dimen_18sp"
+      android:textSize="@dimen/language_check_item_text_size"
+      android:layout_marginLeft="@dimen/language_name_margin_left"
+      android:textColor="@color/primary"
       tools:text="German" />
 
     <TextView
       android:id="@+id/language_name_localized"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="@dimen/dimen_10dp"
+      android:layout_marginLeft="@dimen/language_name_localized_margin_left"
       android:textColor="@color/grey"
-      android:textSize="@dimen/dimen_18sp"
+      android:textSize="@dimen/language_name_localized_text_size"
       tools:text="(Deutsch)" />
 
   </LinearLayout>
@@ -51,10 +54,10 @@
     android:layout_height="wrap_content"
     android:layout_alignParentRight="true"
     android:layout_centerVertical="true"
-    android:layout_marginBottom="@dimen/dimen_6dp"
-    android:layout_marginRight="@dimen/dimen_16dp"
-    android:layout_marginTop="@dimen/dimen_6dp"
+    android:layout_marginBottom="@dimen/language_entries_count_vertical_margin"
+    android:layout_marginRight="@dimen/language_entries_count_margin_right"
+    android:layout_marginTop="@dimen/language_entries_count_vertical_margin"
     android:textColor="@color/grey"
-    android:textSize="@dimen/dimen_18sp" />
+    android:textSize="@dimen/language_check_item_text_size" />
 
 </RelativeLayout>

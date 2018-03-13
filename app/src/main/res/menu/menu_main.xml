@@ -60,13 +60,11 @@
 
   <item
     android:id="@+id/menu_help"
-    android:icon="@drawable/action_help"
     android:title="@string/menu_help"
     app:showAsAction="never" />
 
   <item
     android:id="@+id/menu_settings"
-    android:icon="@drawable/navigation_forward"
     android:title="@string/menu_settings"
     app:showAsAction="never" />
 
