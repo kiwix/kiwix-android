@@ -108,7 +108,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="bottom"
-        android:background="@color/grey"
+        android:background="@color/dark_grey"
         android:visibility="gone"
         app:tabGravity="fill"
         app:tabIndicatorColor="@color/grey"
