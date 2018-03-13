@@ -117,7 +117,7 @@ public class SharedPreferenceUtil {
   }
 
   public void putPrefIsFirstRun(boolean isFirstRun) {
-    editor.putBoolean(PREF_IS_FIRST_RUN, isFirstRun);
+    editor.putBoolean(PREF_IS_FIRST_RUN, isFirstRun).apply();
   }
 
   public void putPrefWifiOnly(boolean wifiOnly) {
