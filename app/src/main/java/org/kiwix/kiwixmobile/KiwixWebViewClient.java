@@ -19,13 +19,14 @@ package org.kiwix.kiwixmobile;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.utils.StyleUtils;
@@ -41,7 +42,7 @@ public class KiwixWebViewClient extends WebViewClient {
     put("epub", "application/epub+zip");
     put("pdf", "application/pdf");
   }};
-  private LinearLayout help;
+  private RelativeLayout help;
   private WebViewCallback callback;
 
   public KiwixWebViewClient(WebViewCallback callback) {
@@ -98,7 +99,7 @@ public class KiwixWebViewClient extends WebViewClient {
     } else if (!BuildConfig.IS_CUSTOM_APP) {
       if (view.findViewById(R.id.get_content_card) == null) {
         LayoutInflater inflater = LayoutInflater.from(view.getContext());
-        help = (LinearLayout) inflater.inflate(R.layout.help, null);
+        help = (RelativeLayout) inflater.inflate(R.layout.help, null);
         help.findViewById(R.id.get_content_card)
             .setOnClickListener(card -> {
                   help.findViewById(R.id.get_content_card).setEnabled(false);
@@ -113,7 +114,15 @@ public class KiwixWebViewClient extends WebViewClient {
           welcome_image.setImageResource(R.drawable.kiwix_welcome);
         }
         TextView contact = help.findViewById(R.id.welcome21);
-        contact.setText(StyleUtils.highlightUrl(contact.getText().toString(), CONTACT_EMAIL_ADDRESS));
+        FloatingActionButton share = help.findViewById(R.id.share);
+        share.setOnClickListener(shareview-> {
+          Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+          sharingIntent.setType("text/plain");
+          sharingIntent.putExtra(Intent.EXTRA_SUBJECT, shareview.getContext().getString(R.string.sharing_message) );
+          sharingIntent.putExtra(Intent.EXTRA_TEXT, shareview.getContext().getString(R.string.sharing_body));
+          shareview.getContext().startActivity(Intent.createChooser(sharingIntent, shareview.getContext().getString(R.string.share_intent_message)));
+        });
+        contact.setText(StyleUtils.highlightUrl(contact.getText().toString(),CONTACT_EMAIL_ADDRESS));
         contact.setOnClickListener(v -> callback.sendContactEmail());
       }
     }
