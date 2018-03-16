@@ -78,10 +78,12 @@
   <style name="AppTheme.Dialog.Night" parent="Theme.AppCompat.DayNight.Dialog.Alert">
     <item name="colorAccent">@color/accent</item>
     <item name="android:textColorPrimary">@color/white</item>
-    <item name="android:colorBackground">@color/cardview_dark_background</item>
     <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
     <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+    <item name ="android:windowBackground">@color/cardview_dark_background</item>
+    <item name="android:textColorSecondary">@color/primary_light</item>
   </style>
+  
   <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
     <item name="android:textColor">@color/accent</item>
   </style>
