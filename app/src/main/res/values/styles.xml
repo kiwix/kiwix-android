@@ -44,6 +44,7 @@
     <item name="android:textColorPrimary">@color/primary_light</item>
     <item name="android:textColorSecondary">@color/primary_light</item>
     <item name="android:textColorTertiary">@color/primary_light</item>
+    <item name="android:alertDialogTheme">@style/AppTheme.Dialog.Night</item>
     <item name="colorControlNormal">@color/accent</item>
   </style>
 
@@ -82,6 +83,7 @@
     <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
     <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
     <item name="buttonBarNeutralButtonStyle">@style/NeutralButtonStyle</item>
+    <item name="android:textColorAlertDialogListItem">@color/white</item>
     <item name="android:windowBackground">@color/cardview_dark_background</item>
     <item name="android:textColorSecondary">@color/primary_light</item>
   </style>
