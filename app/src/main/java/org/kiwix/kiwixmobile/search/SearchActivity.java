@@ -134,6 +134,7 @@ public class SearchActivity extends BaseActivity
     MenuItem searchMenuItem = menu.findItem(R.id.menu_search);
     searchMenuItem.expandActionView();
     searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+    searchView.setMaxWidth(Integer.MAX_VALUE);
     if (searchText != null) {
       searchView.setQuery(searchText, false);
       activateAutoAdapter();
