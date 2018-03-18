@@ -297,24 +297,15 @@ public class DownloadService extends Service {
         .flatMap(metaLink -> getMetaLinkContentLength(metaLink.getRelevantUrl().getValue()))
         .flatMap(pair -> Observable.fromIterable(ChunkUtils.getChunks(pair.first, pair.second, notificationID)))
         .concatMap(this::downloadChunk)
-        .distinctUntilChanged().doOnComplete(() -> updateDownloadFragmentComplete(notificationID))
+        .distinctUntilChanged()
+        .doOnComplete(() -> {
+          // firstly, delete the downloaded item view
+          updateDownloadFragmentComplete(notificationID);
+          // clear the notification
+          updateDownloadNotificationComplete(notificationID, book);
+          TestingUtils.unbindResource(DownloadService.class);
+        })
         .subscribe(progress -> {
-          if (progress == 100) {
-            notification.get(notificationID).setOngoing(false);
-            notification.get(notificationID).setContentTitle(notificationTitle + " " + getResources().getString(R.string.zim_file_downloaded));
-            notification.get(notificationID).setContentText(getString(R.string.zim_file_downloaded));
-            final Intent target = new Intent(this, KiwixMobileActivity.class);
-            target.putExtra(EXTRA_ZIM_FILE, KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
-            target.putExtra(EXTRA_NOTIFICATION_ID, notificationID);
-            PendingIntent pendingIntent = PendingIntent.getActivity
-                (getBaseContext(), 0,
-                    target, PendingIntent.FLAG_CANCEL_CURRENT);
-            book.downloaded = true;
-            bookDao.deleteBook(book.id);
-            notification.get(notificationID).setContentIntent(pendingIntent);
-            notification.get(notificationID).mActions.clear();
-            TestingUtils.unbindResource(DownloadService.class);
-          }
           notification.get(notificationID).setProgress(100, progress, false);
           if (progress != 100 && timeRemaining.get(notificationID) != -1)
             notification.get(notificationID).setContentText(DownloadFragment.toHumanReadableTime(timeRemaining.get(notificationID)));
@@ -324,9 +315,7 @@ public class DownloadService extends Service {
             updateForeground();
           }
           updateDownloadFragmentProgress(progress, notificationID);
-          if (progress == 100) {
-            stopSelf();
-          }
+
         }, Throwable::printStackTrace);
   }
 
@@ -338,6 +327,24 @@ public class DownloadService extends Service {
         }
       });
     }
+  }
+
+  private void updateDownloadNotificationComplete(int notificationID, LibraryNetworkEntity.Book book) {
+    notification.get(notificationID).setOngoing(false);
+    notification.get(notificationID).setContentTitle(notificationTitle + " " + getResources().getString(R.string.zim_file_downloaded));
+    notification.get(notificationID).setContentText(getString(R.string.zim_file_downloaded));
+    final Intent target = new Intent(this, KiwixMobileActivity.class);
+    target.putExtra(EXTRA_ZIM_FILE, KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
+    target.putExtra(EXTRA_NOTIFICATION_ID, notificationID);
+    PendingIntent pendingIntent = PendingIntent.getActivity
+            (getBaseContext(), 0,
+                    target, PendingIntent.FLAG_CANCEL_CURRENT);
+    book.downloaded = true;
+    bookDao.deleteBook(book.id);
+    notification.get(notificationID).setContentIntent(pendingIntent);
+    notification.get(notificationID).mActions.clear();
+
+    stopSelf();
   }
 
   private void updateDownloadFragmentComplete(int notificationID) {
