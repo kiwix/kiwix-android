@@ -451,7 +451,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       }
     });
 
-    manageExternalLaunchAndRestoringViewState();
+    loadZimFile();
     setUpExitFullscreenButton();
     loadPrefs();
     updateTitle(ZimContentProvider.getZimFileTitle());
@@ -1740,91 +1740,86 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     }
   }
 
-  private void manageExternalLaunchAndRestoringViewState() {
+  private void loadZimFile() {
 
+    // opened through a file manager
     if (getIntent().getData() != null) {
-      String filePath = FileUtils.getLocalFilePathByUri(getApplicationContext(), getIntent().getData());
+      String filePath = FileUtils.getLocalFilePathByUri(this, getIntent().getData());
 
       if (filePath == null || !new File(filePath).exists()) {
-        Toast.makeText(KiwixMobileActivity.this, getString(R.string.error_filenotfound), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.error_filenotfound), Toast.LENGTH_LONG).show();
         return;
       }
-
-      Log.d(TAG_KIWIX, "Kiwix started from a filemanager. Intent filePath: "
-          + filePath
-          + " -> open this zimfile and load menu_main page");
       openZimFile(new File(filePath), false);
-    } else {
-      SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
-      String zimFile = settings.getString(TAG_CURRENT_FILE, null);
-      if (zimFile != null && new File(zimFile).exists()) {
-        Log.d(TAG_KIWIX,
-            "Kiwix normal start, zimFile loaded last time -> Open last used zimFile " + zimFile);
-        restoreTabStates();
-        // Alternative would be to restore webView state. But more effort to implement, and actually
-        // fits better normal android behavior if after closing app ("back" button) state is not maintained.
-      } else {
-
-        if (BuildConfig.IS_CUSTOM_APP) {
-          Log.d(TAG_KIWIX, "Kiwix Custom App starting for the first time. Checking Companion ZIM: " + BuildConfig.ZIM_FILE_NAME);
-
-          String currentLocaleCode = Locale.getDefault().toString();
-          // Custom App recommends to start off a specific language
-          if (BuildConfig.ENFORCED_LANG.length() > 0 && !BuildConfig.ENFORCED_LANG
-              .equals(currentLocaleCode)) {
-
-            // change the locale machinery
-            LanguageUtils.handleLocaleChange(this, BuildConfig.ENFORCED_LANG);
-
-            // save new locale into preferences for next startup
-            sharedPreferenceUtil.putPrefLanguage(BuildConfig.ENFORCED_LANG);
-
-            // restart activity for new locale to take effect
-            this.setResult(1236);
-            this.finish();
-            this.startActivity(new Intent(this, this.getClass()));
-          }
-
-          String filePath = "";
-          if (BuildConfig.HAS_EMBEDDED_ZIM) {
-            String appPath = getPackageResourcePath();
-            File libDir = new File(appPath.substring(0, appPath.lastIndexOf("/")) + "/lib/");
-            if (libDir.exists() && libDir.listFiles().length > 0) {
-              filePath = libDir.listFiles()[0].getPath() + "/" + BuildConfig.ZIM_FILE_NAME;
-            }
-            if (filePath.isEmpty() || !new File(filePath).exists()) {
-              filePath = String.format("/data/data/%s/lib/%s", BuildConfig.APPLICATION_ID,
-                  BuildConfig.ZIM_FILE_NAME);
-            }
-          } else {
-            String fileName = FileUtils.getExpansionAPKFileName(true);
-            filePath = FileUtils.generateSaveFileName(fileName);
-          }
-
-          if (!FileUtils.doesFileExist(filePath, BuildConfig.ZIM_FILE_SIZE, false)) {
-
-            new AlertDialog.Builder(this, dialogStyle())
-                .setTitle(R.string.app_name)
-                .setMessage(R.string.customapp_missing_content)
-                .setIcon(R.mipmap.kiwix_icon)
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.go_to_play_store), (dialog, which) -> {
-                  String market_uri = "market://details?id=" + BuildConfig.APPLICATION_ID;
-                  Intent intent = new Intent(Intent.ACTION_VIEW);
-                  intent.setData(Uri.parse(market_uri));
-                  startActivity(intent);
-                  finish();
-                })
-                .show();
-          } else {
-            openZimFile(new File(filePath), true);
-          }
-        } else {
-          Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display help page");
-          showHelpPage();
-        }
-      }
+      return;
     }
+
+    // open zim file from last time
+    SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
+    String zimFile = settings.getString(TAG_CURRENT_FILE, null);
+    if (zimFile != null && new File(zimFile).exists()) {
+      restoreTabStates();
+      return;
+    }
+
+    // check if a custom app & needs to load companion file
+    if (BuildConfig.IS_CUSTOM_APP) {
+      String currentLocale = Locale.getDefault().toString();
+      // Custom App recommends to start off a specific language
+      String enforcedLang = BuildConfig.ENFORCED_LANG;
+      if (enforcedLang.length() > 0 && !enforcedLang.equals(currentLocale)) {
+
+        // change the locale machinery
+        LanguageUtils.handleLocaleChange(this, enforcedLang);
+
+        // save new locale into preferences for next startup
+        sharedPreferenceUtil.putPrefLanguage(enforcedLang);
+
+        // restart activity for new locale to take effect
+        setResult(RESULT_RESTART);
+        finish();
+        startActivity(new Intent(this, KiwixMobileActivity.class));
+      }
+
+      String filePath = "";
+      if (BuildConfig.HAS_EMBEDDED_ZIM) {
+        String appPath = getPackageResourcePath();
+        File libDir = new File(appPath.substring(0, appPath.lastIndexOf("/")) + "/lib/");
+        if (libDir.exists() && libDir.listFiles().length > 0) {
+          filePath = libDir.listFiles()[0].getPath() + "/" + BuildConfig.ZIM_FILE_NAME;
+        }
+        if (filePath.isEmpty() || !new File(filePath).exists()) {
+          filePath = String.format("/data/data/%s/lib/%s", BuildConfig.APPLICATION_ID,
+              BuildConfig.ZIM_FILE_NAME);
+        }
+      } else {
+        String fileName = FileUtils.getExpansionAPKFileName(true);
+        filePath = FileUtils.generateSaveFileName(fileName);
+      }
+
+      if (!FileUtils.doesValidFileExist(filePath, BuildConfig.ZIM_FILE_SIZE, false)) {
+
+        new AlertDialog.Builder(this, dialogStyle())
+            .setTitle(R.string.app_name)
+            .setMessage(R.string.customapp_missing_content)
+            .setIcon(R.mipmap.kiwix_icon)
+            .setCancelable(false)
+            .setPositiveButton(getString(R.string.go_to_play_store), (dialog, which) -> {
+              String market_uri = "market://details?id=" + BuildConfig.APPLICATION_ID;
+              Intent intent = new Intent(Intent.ACTION_VIEW);
+              intent.setData(Uri.parse(market_uri));
+              startActivity(intent);
+              finish();
+            })
+            .show();
+        return;
+      }
+      openZimFile(new File(filePath), true);
+      return;
+    }
+
+    // first ever start; show help page
+    showHelpPage();
   }
 
   @Override

@@ -126,7 +126,7 @@ public class FileUtils {
    * @param deleteFileOnMismatch if the file sizes do not match, delete the file
    * @return true if it does exist, false otherwise
    */
-  static public boolean doesFileExist(String fileName, long fileSize,
+  static public boolean doesValidFileExist(String fileName, long fileSize,
                                       boolean deleteFileOnMismatch) {
 
     Log.d(TAG_KIWIX, "Looking for '" + fileName + "' with size=" + fileSize);
