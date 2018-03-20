@@ -1376,13 +1376,9 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     // since it seems the onUpdate() is only fired on that:
     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
     int[] ids = widgetManager.getAppWidgetIds(new ComponentName(context, KiwixSearchWidget.class));
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-      widgetManager.notifyAppWidgetViewDataChanged(ids, android.R.id.list);
-
-      intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-      context.sendBroadcast(intent);
-    }
+    widgetManager.notifyAppWidgetViewDataChanged(ids, android.R.id.list);
+    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+    context.sendBroadcast(intent);
   }
 
   private void setUpWebView() {
