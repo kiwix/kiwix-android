@@ -20,7 +20,6 @@
 package org.kiwix.kiwixmobile;
 
 import android.Manifest;
-import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -75,7 +74,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import javax.inject.Inject;
+import okhttp3.OkHttpClient;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmarks_view.BookmarksActivity;
@@ -103,18 +109,9 @@ import org.kiwix.kiwixmobile.views.web.ToolbarStaticKiwixWebView;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import okhttp3.OkHttpClient;
-
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.TableClickListener;
 import static org.kiwix.kiwixmobile.search.SearchActivity.EXTRA_SEARCH_IN_TEXT;
@@ -147,8 +144,6 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_CURRENT_TAB;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES;
 
 public class KiwixMobileActivity extends BaseActivity implements WebViewCallback {
 
