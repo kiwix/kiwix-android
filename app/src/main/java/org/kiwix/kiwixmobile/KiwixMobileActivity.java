@@ -418,6 +418,13 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     tabDrawerAdapter.setTabClickListener(new TabDrawerAdapter.TabClickListener() {
       @Override public void onSelectTab(View view, int position) {
         selectTab(position);
+
+        /* Bug Fix
+         * Issue #592 in which the navigational history of the previously open tab (WebView) was
+         * carried forward to the newly selected/opened tab; causing erroneous enabling of
+         * navigational buttons.
+         */
+        refreshNavigationButtons();
       }
 
       @Override public void onCloseTab(View view, int position) {

@@ -3,7 +3,7 @@
 <a href='https://play.google.com/store/apps/details?id=org.kiwix.kiwixmobile' target='_blank' align="right"><img align="right" height='36' src='https://s20.postimg.org/muzx3w4jh/google_play_badge.png' /></a>
 # Kiwix-Android
 
-Kiwix is an offline reader for Web content. One of its main purposes is to make Wikipedia available offline. This is done by reading the content of a file in the ZIM format, a high compressed open format with additional meta-data.
+Kiwix is an offline reader for Web content. One of its main purposes is to make Wikipedia available offline. This is done by reading the content of a file in the ZIM format, a highly compressed open format with additional meta-data.
 
 [![Build Status](https://travis-ci.org/kiwix/kiwix-android.svg?branch=master)](https://travis-ci.org/kiwix/kiwix-android)
 [![IRC Web](https://img.shields.io/badge/chat-on%20freenode-brightgreen.svg)](http://chat.kiwix.org)

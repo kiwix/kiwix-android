@@ -35,5 +35,12 @@ public class StandardActions {
         .perform(click());
   }
 
+  public static void enterSettings() {
+    openContextualActionModeOverflowMenu();
+
+    onView(withText("Settings"))
+        .perform(click());
+  }
+
 
 }
