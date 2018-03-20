@@ -1803,22 +1803,19 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
           if (!FileUtils.doesFileExist(filePath, BuildConfig.ZIM_FILE_SIZE, false)) {
 
-            AlertDialog.Builder zimFileMissingBuilder = new AlertDialog.Builder(this, dialogStyle());
-            zimFileMissingBuilder.setTitle(R.string.app_name);
-            zimFileMissingBuilder.setMessage(R.string.customapp_missing_content);
-            zimFileMissingBuilder.setIcon(R.mipmap.kiwix_icon);
-            final Activity activity = this;
-            zimFileMissingBuilder.setPositiveButton(getString(R.string.go_to_play_store),
-                    (dialog, which) -> {
-                      String market_uri = "market://details?id=" + BuildConfig.APPLICATION_ID;
-                      Intent intent = new Intent(Intent.ACTION_VIEW);
-                      intent.setData(Uri.parse(market_uri));
-                      startActivity(intent);
-                      activity.finish();
-                    });
-            zimFileMissingBuilder.setCancelable(false);
-            AlertDialog zimFileMissingDialog = zimFileMissingBuilder.create();
-            zimFileMissingDialog.show();
+            new AlertDialog.Builder(this, dialogStyle())
+                .setTitle(R.string.app_name)
+                .setMessage(R.string.customapp_missing_content)
+                .setIcon(R.mipmap.kiwix_icon)
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.go_to_play_store), (dialog, which) -> {
+                  String market_uri = "market://details?id=" + BuildConfig.APPLICATION_ID;
+                  Intent intent = new Intent(Intent.ACTION_VIEW);
+                  intent.setData(Uri.parse(market_uri));
+                  startActivity(intent);
+                  finish();
+                })
+                .show();
           } else {
             openZimFile(new File(filePath), true);
           }
