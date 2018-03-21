@@ -207,6 +207,15 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
   }
 
   @Override
+  protected void onStop() {
+    if (LibraryFragment.isReceiverRegistered) {
+      unregisterReceiver(LibraryFragment.networkBroadcastReceiver);
+      LibraryFragment.isReceiverRegistered = false;
+    }
+    super.onStop();
+  }
+
+  @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.menu_zim_manager, menu);
