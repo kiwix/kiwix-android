@@ -507,6 +507,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     } else {
       backToTopAppearDaily();
     }
+
+    handleIntent(getIntent());
   }
 
   private void backToTopAppearDaily() {
@@ -1259,9 +1261,17 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
         menuBookmarks.setVisible(true);
       }
     }
+  }
 
-    Log.d(TAG_KIWIX, "action" + getIntent().getAction());
-    Intent intent = getIntent();
+  /**
+   * Handle incoming intent, specially widget intent.
+   * When widget button is clicked, handleIntent method do what user want.
+   *
+   * @param intent: incoming intent
+   * @return return result that intent is handled or not
+   */
+  private boolean handleIntent(Intent intent) {
+    Log.d(TAG_KIWIX, "action" + intent.getAction());
     if (intent.getAction() != null) {
 
       if (intent.getAction().equals(Intent.ACTION_PROCESS_TEXT)) {
@@ -1272,16 +1282,16 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
           i.putExtra(Intent.EXTRA_PROCESS_TEXT, intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT));
         }
-        intent.setAction("");
+        intent.setAction(null);
         startActivityForResult(i, REQUEST_FILE_SEARCH);
-      } else if (intent.getAction().equals(KiwixSearchWidget.TEXT_CLICKED)){
-        intent.setAction("");
+      } else if (intent.getAction().equals(KiwixSearchWidget.TEXT_CLICKED)) {
+        intent.setAction(null);
         goToSearch(false);
       } else if (intent.getAction().equals(KiwixSearchWidget.STAR_CLICKED)) {
-        intent.setAction("");
+        intent.setAction(null);
         goToBookmarks();
       } else if (intent.getAction().equals(KiwixSearchWidget.MIC_CLICKED)) {
-        intent.setAction("");
+        intent.setAction(null);
         goToSearch(true);
       } else if (intent.getAction().equals(Intent.ACTION_VIEW)) {
         final String zimFile = ZimContentProvider.getZimFile();
@@ -1292,14 +1302,21 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
         intent.setAction("");
         startActivityForResult(i, REQUEST_FILE_SEARCH);
       }
-
+      updateWidgets(this);
+      return true;
     }
-    updateWidgets(this);
+    return false;
   }
 
   @Override
   protected void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
+
+    boolean handled = handleIntent(intent);
+    if (handled) {
+      return;
+    }
+
     boolean isWidgetSearch = intent.getBooleanExtra(EXTRA_IS_WIDGET_SEARCH, false);
     boolean isWidgetVoiceSearch = intent.getBooleanExtra(EXTRA_IS_WIDGET_VOICE, false);
     boolean isWidgetStar = intent.getBooleanExtra(EXTRA_IS_WIDGET_STAR, false);

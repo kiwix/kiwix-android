@@ -47,25 +47,30 @@ public class KiwixSearchWidget extends AppWidgetProvider {
     for (int id : appWidgetIds) {
       RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.kiwix_search_widget);
       views.setTextViewText(R.id.search_widget_text, "Search " + appName);
+
       /** Search Kiwix intent **/
       Intent mainIntent = new Intent(context, KiwixMobileActivity.class);
       mainIntent.setAction(TEXT_CLICKED);
+      mainIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
       PendingIntent searchPendingIntent = PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE), mainIntent, 0);
 
       /** Kiwix icon intent to main app **/
       Intent kiwixIconIntent = new Intent(context, KiwixMobileActivity.class);
       kiwixIconIntent.setAction(ICON_CLICKED);
+      mainIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
       PendingIntent mainAppPendingIntent = PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE), kiwixIconIntent, 0);
 
       /** Star icon intent to bookmarks **/
       Intent starIntent = new Intent(context, KiwixMobileActivity.class);
       starIntent.setAction(STAR_CLICKED);
+      mainIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
       PendingIntent starPendingIntent = PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE), starIntent, 0);
 
 
       /** Microphone icon intent for voice search **/
       Intent voiceIntent = new Intent(context, KiwixMobileActivity.class);
       voiceIntent.setAction(MIC_CLICKED);
+      mainIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
       PendingIntent voicePendingIntent = PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE), voiceIntent, 0);
 
       views.setOnClickPendingIntent(R.id.search_widget_text, searchPendingIntent);
