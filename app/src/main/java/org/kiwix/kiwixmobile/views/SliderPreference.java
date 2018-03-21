@@ -8,6 +8,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES;
 
 import org.kiwix.kiwixmobile.R;
 
@@ -151,11 +153,17 @@ public class SliderPreference extends DialogPreference {
   private void setGrayState(View view) {
     boolean enabled = getPreferenceManager().getSharedPreferences().getBoolean(
             PREF_ZOOM_ENABLED, false);
+    TextView titleView = (TextView) view.findViewById(android.R.id.title);
+    TextView summaryTV = (TextView) view.findViewById(android.R.id.summary);
     if (!enabled) {
-      TextView titleView = (TextView) view.findViewById(android.R.id.title);
       titleView.setTextColor(Color.GRAY);
-      TextView summaryTV = (TextView) view.findViewById(android.R.id.summary);
       summaryTV.setTextColor(Color.GRAY);
+    }
+    else {
+      if (SDK_INT >= VERSION_CODES.O) {
+        titleView.setTextAppearance(android.R.style.TextAppearance_DeviceDefault_Widget_TextView_PopupMenu);
+        summaryTV.setTextAppearance(android.R.style.TextAppearance_DeviceDefault);
+      }
     }
   }
 }
