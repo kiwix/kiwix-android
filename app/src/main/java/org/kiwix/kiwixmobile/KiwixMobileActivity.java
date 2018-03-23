@@ -338,7 +338,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
     @Override
     public void onBookmarkTabSelected() {
-      toggleBookmark();
+      if (!getCurrentWebView().getUrl().equals("file:///android_asset/help.html"))
+        toggleBookmark();
     }
 
     @Override
