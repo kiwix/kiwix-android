@@ -21,6 +21,8 @@ import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 import android.support.v7.app.AppCompatDelegate;
 
+import com.squareup.leakcanary.LeakCanary;
+
 import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
 import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
@@ -37,6 +39,17 @@ public class KiwixApplication extends MultiDexApplication {
 
   public static KiwixApplication getInstance() {
     return application;
+  }
+
+  @Override
+  public void onCreate() {
+    super.onCreate();
+    if (LeakCanary.isInAnalyzerProcess(this)) {
+      // This process is dedicated to LeakCanary for heap analysis.
+      // You should not init your app in this process.
+      return;
+    }
+    LeakCanary.install(this);
   }
 
   @Override
