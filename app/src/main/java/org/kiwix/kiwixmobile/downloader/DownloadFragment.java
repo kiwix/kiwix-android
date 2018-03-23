@@ -20,6 +20,8 @@ package org.kiwix.kiwixmobile.downloader;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Bitmap;
@@ -30,8 +32,10 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +45,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -60,6 +65,7 @@ import java.util.LinkedHashMap;
 
 import javax.inject.Inject;
 
+import static android.content.ContentValues.TAG;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_WIFI_ONLY;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
@@ -219,6 +225,11 @@ public class DownloadFragment extends Fragment {
         }
         ProgressBar downloadProgress = viewGroup.findViewById(R.id.downloadProgress);
         downloadProgress.setProgress(progress);
+
+
+
+
+
         TextView timeRemaining = viewGroup.findViewById(R.id.time_remaining);
         int secLeft = LibraryFragment.mService.timeRemaining.get(mKeys[position], -1);
         if (secLeft != -1)
@@ -252,7 +263,13 @@ public class DownloadFragment extends Fragment {
       TextView timeRemaining = convertView.findViewById(R.id.time_remaining);
       ImageView imageView = convertView.findViewById(R.id.favicon);
       title.setText(getItem(position).getTitle());
-      description.setText(getItem(position).getDescription());
+      String desc = getItem(position).getDescription();
+      String dots = "...";
+      if(desc.length()>30){
+          desc = desc.substring(0,29);
+          desc = desc.concat(dots);
+      }
+      description.setText(desc);
       imageView.setImageBitmap(StringToBitMap(getItem(position).getFavicon()));
 
       ProgressBar downloadProgress = convertView.findViewById(R.id.downloadProgress);

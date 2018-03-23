@@ -148,13 +148,39 @@ public class LibraryAdapter extends BaseAdapter {
       Book book = (Book) listItems.get(position).data;
 
       holder.title.setText(book.getTitle());
-      holder.description.setText(book.getDescription());
-      holder.language.setText(bookUtils.getLanguage(book.getLanguage()));
-      holder.creator.setText(book.getCreator());
-      holder.publisher.setText(book.getPublisher());
+      String desc = book.getDescription();
+      String dots = "...";
+      if(desc!=null && desc.length()>40){
+        desc = desc.substring(0,39);
+        desc = desc.concat(dots);
+      }
+      String author = book.getCreator();
+      if(author.length()>10){
+        author = author.substring(0,9);
+        author = author.concat(dots);
+      }
+      String pub = book.getPublisher();
+      if(pub.length()>10){
+        pub = pub.substring(0,9);
+        pub = pub.concat(dots);
+      }
+      String lang = bookUtils.getLanguage(book.getLanguage());
+      if(lang.length()>10){
+        lang = lang.substring(0,9);
+        lang = lang.concat(dots);
+      }
+      String fname = parseURL(context, book.getUrl());
+      if(fname.length()>10){
+        fname = fname.substring(0,9);
+        fname = fname.concat(dots);
+      }
+      holder.description.setText(desc);
+      holder.language.setText(lang);
+      holder.creator.setText(author);
+      holder.publisher.setText(pub);
       holder.date.setText(book.getDate());
       holder.size.setText(createGbString(book.getSize()));
-      holder.fileName.setText(parseURL(context, book.getUrl()));
+      holder.fileName.setText(fname);
       holder.favicon.setImageBitmap(createBitmapFromEncodedString(book.getFavicon(), context));
 
       // Check if no value is empty. Set the view to View.GONE, if it is. To View.VISIBLE, if not.
@@ -263,9 +289,9 @@ public class LibraryAdapter extends BaseAdapter {
             .toList()
             .blockingGet();
 
-        listItems.add(new ListItem(context.getResources().getString(R.string.your_languages), LIST_ITEM_TYPE_DIVIDER));
+        //listItems.add(new ListItem(context.getResources().getString(R.string.your_languages), LIST_ITEM_TYPE_DIVIDER));
         addBooks(selectedLanguages);
-        listItems.add(new ListItem(context.getResources().getString(R.string.other_languages), LIST_ITEM_TYPE_DIVIDER));
+        //listItems.add(new ListItem(context.getResources().getString(R.string.other_languages), LIST_ITEM_TYPE_DIVIDER));
         addBooks(unselectedLanguages);
       } else {
         List<Book> selectedLanguages = Observable.fromIterable(allBooks)
