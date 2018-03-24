@@ -37,6 +37,9 @@ import java.util.Vector;
 
 import eu.mhutti1.utils.storage.StorageDevice;
 import eu.mhutti1.utils.storage.StorageDeviceUtils;
+import io.reactivex.Completable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
@@ -58,19 +61,17 @@ public class FileSearch {
   }
 
   public void scan(String defaultPath) {
-    // Start custom file search
-    new Thread(() -> {
+    // Start custom file search followed by mediastore search
+    Completable.fromAction(() -> {
       scanFileSystem(defaultPath);
       fileSystemScanCompleted = true;
-      checkCompleted();
-    }).start();
-
-    // Star mediastore search
-    new Thread(() -> {
+    }).andThen(Completable.fromAction(() -> {
       scanMediaStore();
       mediaStoreScanCompleted = true;
-      checkCompleted();
-    }).start();
+    })).doOnComplete(this::checkCompleted)
+      .subscribeOn(Schedulers.io())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe();
   }
 
   // If both searches are complete callback
