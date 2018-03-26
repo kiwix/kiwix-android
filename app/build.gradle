@@ -122,8 +122,19 @@ dependencies {
   // Leak canary
   debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
   releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
-  testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 }
+
+// Ensure the no-op dependency is always used in JVM tests.
+configurations.all { config ->
+  if (config.name.contains('UnitTest') || config.name.contains('AndroidTest')) {
+    config.resolutionStrategy.eachDependency { details ->
+      if (details.requested.group == 'com.squareup.leakcanary' && details.requested.name == 'leakcanary-android') {
+        details.useTarget(group: details.requested.group, name: 'leakcanary-android-no-op', version: details.requested.version)
+      }
+    }
+  }
+}
+
 
 // Set custom app import directory
 def map = [:]
