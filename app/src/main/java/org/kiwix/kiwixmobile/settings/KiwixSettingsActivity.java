@@ -31,7 +31,6 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.webkit.WebView;
@@ -42,12 +41,12 @@ import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.database.RecentSearchDao;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
-import org.kiwix.kiwixmobile.views.LanguageSelectDialog;
 import org.kiwix.kiwixmobile.views.SliderPreference;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryUtils;
 
@@ -76,7 +75,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.RESULT_HISTORY_CLEARED;
 import static org.kiwix.kiwixmobile.utils.Constants.RESULT_RESTART;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
-public class KiwixSettingsActivity extends AppCompatActivity {
+public class KiwixSettingsActivity extends BaseActivity {
 
   public static boolean allHistoryCleared = false;
 
@@ -86,18 +85,13 @@ public class KiwixSettingsActivity extends AppCompatActivity {
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
 
-  private void setupDagger() {
-    KiwixApplication.getInstance().getApplicationComponent().inject(this);
-  }
-
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    setupDagger();
-    if(nightMode(sharedPreferenceUtil)){
-      setTheme(R.style.AppTheme_Night);
-    }
     getWindow().setWindowAnimations(R.style.WindowAnimationTransition);
     super.onCreate(savedInstanceState);
+    if (nightMode(sharedPreferenceUtil)) {
+      setTheme(R.style.AppTheme_Night);
+    }
     setContentView(R.layout.settings);
 
     allHistoryCleared = false;
@@ -152,7 +146,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
     @Inject SharedPreferenceUtil sharedPreferenceUtil;
 
     void setupDagger() {
-      KiwixApplication.getInstance().getApplicationComponent().inject(this);
+      KiwixApplication.getApplicationComponent().inject(this);
     }
 
     @Override
@@ -200,7 +194,7 @@ public class KiwixSettingsActivity extends AppCompatActivity {
         } else {
           findPreference(PREF_STORAGE).setTitle(sharedPreferenceUtil.getPrefStorageTitle("External"));
         }
-        findPreference(PREF_STORAGE).setSummary(LibraryUtils.bytesToHuman( new File(sharedPreferenceUtil.getPrefStorage()).getFreeSpace()));
+        findPreference(PREF_STORAGE).setSummary(LibraryUtils.bytesToHuman(new File(sharedPreferenceUtil.getPrefStorage()).getFreeSpace()));
       }
     }
 

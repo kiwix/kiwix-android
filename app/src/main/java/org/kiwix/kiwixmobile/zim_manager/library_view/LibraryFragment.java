@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.zim_manager.library_view;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -29,7 +30,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -46,11 +46,11 @@ import android.widget.Toast;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.base.BaseFragment;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.downloader.DownloadIntent;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
-import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
@@ -75,7 +75,7 @@ import static org.kiwix.kiwixmobile.downloader.DownloadService.KIWIX_ROOT;
 import static org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOK;
 
-public class LibraryFragment extends Fragment
+public class LibraryFragment extends BaseFragment
     implements AdapterView.OnItemClickListener, StorageSelectDialog.OnSelectListener, LibraryViewCallback {
 
 
@@ -85,9 +85,6 @@ public class LibraryFragment extends Fragment
   TextView networkText;
   @BindView(R.id.network_permission_button)
   Button permissionButton;
-
-  @Inject
-  KiwixService kiwixService;
 
   public LinearLayout llLayout;
 
@@ -121,15 +118,10 @@ public class LibraryFragment extends Fragment
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
 
-  private void setupDagger() {
-    KiwixApplication.getInstance().getApplicationComponent().inject(this);
-  }
-
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
-
-    setupDagger();
+    KiwixApplication.getApplicationComponent().inject(this);
     TestingUtils.bindResource(LibraryFragment.class);
     llLayout = (LinearLayout) inflater.inflate(R.layout.activity_library, container, false);
     ButterKnife.bind(this, llLayout);
@@ -299,9 +291,17 @@ public class LibraryFragment extends Fragment
         }
 
         if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
-          DownloadFragment.showNoWiFiWarning(getContext(), () -> {
-            downloadFile((Book) parent.getAdapter().getItem(position));
-          });
+          new AlertDialog.Builder(getContext())
+              .setTitle(R.string.wifi_only_title)
+              .setMessage(R.string.wifi_only_msg)
+              .setPositiveButton(R.string.yes, (dialog, i) -> {
+                sharedPreferenceUtil.putPrefWifiOnly(false);
+                KiwixMobileActivity.wifiOnly = false;
+                downloadFile((Book) parent.getAdapter().getItem(position));
+              })
+              .setNegativeButton(R.string.no, (dialog, i) -> {
+              })
+              .show();
         } else {
           downloadFile((Book) parent.getAdapter().getItem(position));
         }

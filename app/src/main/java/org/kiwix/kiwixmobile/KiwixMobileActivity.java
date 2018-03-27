@@ -81,7 +81,6 @@ import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmarks_view.BookmarksActivity;
 import org.kiwix.kiwixmobile.database.BookmarksDao;
 import org.kiwix.kiwixmobile.database.KiwixDatabase;
-import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
 import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
@@ -115,6 +114,8 @@ import butterknife.ButterKnife;
 import okhttp3.OkHttpClient;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.TableClickListener;
 import static org.kiwix.kiwixmobile.search.SearchActivity.EXTRA_SEARCH_IN_TEXT;
@@ -147,8 +148,6 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_CURRENT_TAB;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES;
 
 public class KiwixMobileActivity extends BaseActivity implements WebViewCallback {
 
@@ -684,10 +683,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(this);
     tts.shutdown();
-  }
-
-  @Override protected void setupDagger(ApplicationComponent appComponent) {
-    appComponent.inject(this);
   }
 
   private void updateTableOfContents() {
@@ -1382,12 +1377,9 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
     int[] ids = widgetManager.getAppWidgetIds(new ComponentName(context, KiwixSearchWidget.class));
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-      widgetManager.notifyAppWidgetViewDataChanged(ids, android.R.id.list);
-
-      intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-      context.sendBroadcast(intent);
-    }
+    widgetManager.notifyAppWidgetViewDataChanged(ids, android.R.id.list);
+    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+    context.sendBroadcast(intent);
   }
 
   private void setUpWebView() {

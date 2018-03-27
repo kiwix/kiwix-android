@@ -76,11 +76,13 @@ dependencies {
   implementation group: 'com.google.guava', name: 'guava', version: '21.0'
 
   // Dagger
-  implementation 'com.google.dagger:dagger:2.0.2'
-  annotationProcessor "com.google.dagger:dagger-compiler:2.0.2"
-  androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:2.0.2"
   compileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
   androidTestCompileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
+  implementation "com.google.dagger:dagger:$daggerVersion"
+  implementation "com.google.dagger:dagger-android:$daggerVersion"
+  annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+  annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
+  androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
 
   // SquiDB
   implementation 'com.yahoo.squidb:squidb:2.0.0'
