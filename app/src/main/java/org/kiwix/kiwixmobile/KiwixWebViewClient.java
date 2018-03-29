@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
@@ -113,7 +114,7 @@ public class KiwixWebViewClient extends WebViewClient {
         CardView cardView=help.findViewById(R.id.feedback_card);
         if (settings.getBoolean(PREF_BOTTOM_TOOLBAR, false)) {
           LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-          params.setMargins(0,0,0,56);
+          params.setMargins(0,0,0,dpToPx(56));
           cardView.setLayoutParams(params);
         }else{
           LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -140,5 +141,9 @@ public class KiwixWebViewClient extends WebViewClient {
       }
     }
     callback.webViewUrlFinishedLoading();
+  }
+  public static int dpToPx(int dp)
+  {
+    return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
   }
 }

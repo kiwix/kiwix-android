@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -1212,15 +1213,18 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     }
   }
 
+  public static int dpToPx(int dp)
+  {
+    return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+  }
   @Override
   public void onResume() {
     super.onResume();
-    SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
-    CardView cardView=(CardView)findViewById(R.id.feedback_card);
-     if (settings.getBoolean(PREF_BOTTOM_TOOLBAR, false)) {
+      CardView cardView=(CardView)findViewById(R.id.feedback_card);
+     if (sharedPreferenceUtil.getPrefBottomToolbar()) {
     if(cardView!=null) {
       LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-      params.setMargins(0, 0, 0, 56);
+      params.setMargins(0, 0, 0, dpToPx(56));
       cardView.setLayoutParams(params);
     }
       }else{
