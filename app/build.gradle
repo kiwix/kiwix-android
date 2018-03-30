@@ -30,6 +30,12 @@ repositories {
 
 String[] archs = ['arm64-v8a', 'armeabi', 'mips', 'mips64', 'x86', 'x86_64']
 
+configurations {
+  mock_networkImplementation
+  local_download_serverImplementation
+  coverageImplementation
+}
+
 dependencies {
 
   // Get kiwixlib online if it is not populated locally
@@ -120,8 +126,12 @@ dependencies {
   androidTestImplementation "org.mockito:mockito-android:2.7.22"
 
   // Leak canary
-  implementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
-  releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+  debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
+  mock_networkImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
+  local_download_serverImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
+  coverageImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
+  releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+  testImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
 }
 
 // Ensure the no-op dependency is always used in JVM tests.
