@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.zim_manager;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -44,6 +46,8 @@ import org.kiwix.kiwixmobile.views.LanguageSelectDialog;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -271,12 +275,32 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
   }
 
   private void showLanguageSelect() {
-    new LanguageSelectDialog.Builder(this, dialogStyle())
+    List<Boolean> originalActive = new ArrayList<Boolean>();
+    for (int i = 0; i < mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages.size(); ++i) {
+      originalActive.add(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages.get(i).active);
+    }
+    LanguageSelectDialog.Builder languageSelectDialog = new LanguageSelectDialog.Builder(this, dialogStyle());
+    languageSelectDialog
         .setLanguages(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages)
         .setLanguageCounts(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languageCounts)
         .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
           mSectionsPagerAdapter.libraryFragment.libraryAdapter.updateNetworkLanguages();
           mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(searchQuery);
+        })
+        .setOnKeyListener(new DialogInterface.OnKeyListener() {
+          @Override
+          public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+            if (keyCode == KeyEvent.KEYCODE_BACK &&
+                event.getAction() == KeyEvent.ACTION_UP &&
+                !event.isCanceled()) {
+              for (int i = 0; i < mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages.size(); ++i) {
+                mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages.get(i).active = originalActive.get(i);
+              }
+              dialog.cancel();
+              return true;
+            }
+            return false;
+          }
         })
         .show();
   }
