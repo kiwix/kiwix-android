@@ -30,3 +30,5 @@ licenses:
   - '.+'
 
 script: ./gradlew assembleKiwixRelease testdroidUploadKiwix && ./testdroid.py
+
+# Random comment to see travis build for resloving issue
