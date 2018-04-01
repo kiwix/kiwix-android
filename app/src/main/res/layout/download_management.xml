@@ -19,9 +19,12 @@
     android:visibility="gone" />
 
   <ListView
-    android:id="@+id/zim_downloader_list"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/listBackground" />
+      android:id="@+id/zim_downloader_list"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="?attr/listBackground"
+      android:divider="@null"
+      android:dividerHeight="0dp"
+      android:paddingBottom="@dimen/library_article_list_padding" />
 
 </RelativeLayout>
