@@ -120,9 +120,19 @@ dependencies {
   androidTestImplementation "org.mockito:mockito-android:2.7.22"
 
   // Leak canary
-  debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
-  releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
-  testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+  implementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+  // Only enable leak canary in debug builds
+  configurations.all { config ->
+    if (config.name.contains('debug') || config.name.contains("Debug")) {
+      config.resolutionStrategy.eachDependency { details ->
+        if (details.requested.group == 'com.squareup.leakcanary' &&
+            details.requested.name == 'leakcanary-android-no-op') {
+          details.useTarget(group: details.requested.group, name: 'leakcanary-android',
+              version: details.requested.version)
+        }
+      }
+    }
+  }
 }
 
 // Set custom app import directory
