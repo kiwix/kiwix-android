@@ -38,7 +38,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 
   @Provides @Singleton OkHttpClient provideOkHttpClient() {
     HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-    logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+    logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
     return new OkHttpClient().newBuilder().followRedirects(true).followSslRedirects(true)
         .addNetworkInterceptor(logging)
