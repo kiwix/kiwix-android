@@ -110,6 +110,12 @@ public class DownloadTest {
             isDisplayed()));
     Spoon.screenshot(mActivityTestRule.getActivity(), "After-the-check-completed");
 
+    try {
+      Thread.sleep(20000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+
     onData(withContent("ray_charles")).inAdapterView(withId(R.id.library_list)).perform(click());
 
     try {

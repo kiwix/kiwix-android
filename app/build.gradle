@@ -8,7 +8,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.0.1'
+    classpath 'com.android.tools.build:gradle:3.1.0'
     classpath 'com.testdroid:gradle:1.5.0'
     classpath 'org.apache.httpcomponents:httpclient-android:4.3.3'
   }
@@ -79,6 +79,8 @@ dependencies {
   implementation 'com.google.dagger:dagger:2.0.2'
   annotationProcessor "com.google.dagger:dagger-compiler:2.0.2"
   androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:2.0.2"
+  compileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
+  androidTestCompileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
 
   // SquiDB
   implementation 'com.yahoo.squidb:squidb:2.0.0'
@@ -116,6 +118,11 @@ dependencies {
   // Mockito
   testImplementation "org.mockito:mockito-core:2.7.22"
   androidTestImplementation "org.mockito:mockito-android:2.7.22"
+
+  // Leak canary
+  debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+  releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+  testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 }
 
 // Set custom app import directory
