@@ -216,6 +216,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   private BookmarksDao bookmarksDao;
 
+  private static boolean backPressedOnce = false;
+
   @BindView(R.id.toolbar) Toolbar toolbar;
 
   @BindView(R.id.button_backtotop) Button backToTopButton;
@@ -1167,7 +1169,20 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
           } else if (isFullscreenOpened) {
             closeFullScreen();
           } else {
-            finish();
+            if (!backPressedOnce){
+              backPressedOnce = true;
+              Toast.makeText(this,"Please click BACK again to exit.", Toast.LENGTH_SHORT).show();
+
+              new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                  backPressedOnce = false;
+                }
+              }, 2000);
+            } else {
+              finish();
+            }
           }
           if (compatCallback.mIsActive) {
             compatCallback.finish();
