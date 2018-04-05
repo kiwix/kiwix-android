@@ -124,7 +124,6 @@ public class NetworkTest {
 
     onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.library_list)).perform(click());
 
-
     try {
       onView(withId(android.R.id.button1)).perform(click());
     } catch (RuntimeException e) {
@@ -134,8 +133,11 @@ public class NetworkTest {
     onView(withText(R.string.local_zims))
         .perform(click());
 
-    onView(withId(R.id.zim_swiperefresh))
+    try {
+      onView(withId(R.id.zim_swiperefresh))
         .perform(swipeDown());
+    } catch (RuntimeException e) {
+    }
 
 
     // Commented out the following which assumes only 1 match - not always safe to assume as there may
@@ -151,7 +153,7 @@ public class NetworkTest {
       openContextualActionModeOverflowMenu();
 
       onView(withText(R.string.menu_zim_manager))
-              .perform(click());
+        .perform(click());
 
       DataInteraction dataInteraction1 = onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist));
       dataInteraction1.atPosition(0).perform(longClick()); // to delete the zim file
@@ -181,7 +183,7 @@ public class NetworkTest {
       public boolean matchesSafely(View view) {
         ViewParent parent = view.getParent();
         return parent instanceof ViewGroup && parentMatcher.matches(parent)
-            && view.equals(((ViewGroup) parent).getChildAt(position));
+          && view.equals(((ViewGroup) parent).getChildAt(position));
       }
     };
   }
