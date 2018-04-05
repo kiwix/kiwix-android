@@ -68,11 +68,11 @@ public class DownloadTest {
         allOf(withText("Device"), isDisplayed()));
     appCompatTextView.perform(click());
 
-    try {
+    try { // Delete ray_charles ZIM if it exists
       onData(withContent("ray_charles")).inAdapterView(withId(R.id.zimfilelist)).perform(longClick());
       onView(withId(android.R.id.button1)).perform(click());
     } catch (RuntimeException e) {
-      Log.w(KIWIX_DOWNLOAD_TEST, "failed to long-click on ray_charles, continuing blindly...");
+      // Otherwise continue with download
     }
 
     ViewInteraction appCompatTextView2 = onView(
@@ -99,7 +99,7 @@ public class DownloadTest {
     try {
       onView(withId(android.R.id.button1)).perform(click());
     } catch (RuntimeException e) {
-      Log.w(KIWIX_DOWNLOAD_TEST, "failed to click on the button, continuing blindly...");
+      // Confirmation not shown
     }
 
     ViewInteraction appCompatTextView3 = onView(
@@ -107,11 +107,10 @@ public class DownloadTest {
     appCompatTextView3.perform(click());
 
     try {
-      onView(withId(R.id.zim_swiperefresh))
-              .perform(swipeDown());
+      onData(allOf(withId(R.id.zim_swiperefresh)))
+        .perform(swipeDown());
     } catch (RuntimeException e) {
-      Log.w(KIWIX_DOWNLOAD_TEST, "failed to perform swipeDown: " + e.getLocalizedMessage());
-      onData(withId(R.id.zim_swiperefresh)).perform(swipeDown());
+      Log.w(KIWIX_DOWNLOAD_TEST, "Failed to refresh ZIM list: " + e.getLocalizedMessage());
     }
 
 /*
