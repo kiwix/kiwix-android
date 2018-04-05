@@ -41,6 +41,7 @@ import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 @RunWith(AndroidJUnit4.class)
 public class DownloadTest {
 
+  public static final String KIWIX_DOWNLOAD_TEST = "kiwixDownloadTest";
   @Rule
   public ActivityTestRule<ZimManageActivity> mActivityTestRule = new ActivityTestRule<>(
       ZimManageActivity.class);
@@ -71,7 +72,7 @@ public class DownloadTest {
       onData(withContent("ray_charles")).inAdapterView(withId(R.id.zimfilelist)).perform(longClick());
       onView(withId(android.R.id.button1)).perform(click());
     } catch (RuntimeException e) {
-
+      Log.w(KIWIX_DOWNLOAD_TEST, "failed to long-click on ray_charles, continuing blindly...");
     }
 
     ViewInteraction appCompatTextView2 = onView(
@@ -80,9 +81,9 @@ public class DownloadTest {
 
     try {
       onView(withId(R.id.network_permission_button)).perform(click());
-      Log.d("kiwixDownloadTest", "Clicked Network Permission Button");
+      Log.d(KIWIX_DOWNLOAD_TEST, "Clicked Network Permission Button");
     } catch (RuntimeException e) {
-      Log.d("kiwixDownloadTest", "Failed to click Network Permission Button", e);
+      Log.d(KIWIX_DOWNLOAD_TEST, "Failed to click Network Permission Button", e);
     }
 
     Spoon.screenshot(mActivityTestRule.getActivity(), "Before-checking-for-ZimManager-Main-Activity");
@@ -98,14 +99,20 @@ public class DownloadTest {
     try {
       onView(withId(android.R.id.button1)).perform(click());
     } catch (RuntimeException e) {
+      Log.w(KIWIX_DOWNLOAD_TEST, "failed to click on the button, continuing blindly...");
     }
 
     ViewInteraction appCompatTextView3 = onView(
         allOf(withText("Device"), isDisplayed()));
     appCompatTextView3.perform(click());
 
-    onView(withId(R.id.zim_swiperefresh))
-        .perform(swipeDown());
+    try {
+      onView(withId(R.id.zim_swiperefresh))
+              .perform(swipeDown());
+    } catch (RuntimeException e) {
+      Log.w(KIWIX_DOWNLOAD_TEST, "failed to perform swipeDown: " + e.getLocalizedMessage());
+      onData(withId(R.id.zim_swiperefresh)).perform(swipeDown());
+    }
 
 /*
 Commented out the following as it uses another Activity.

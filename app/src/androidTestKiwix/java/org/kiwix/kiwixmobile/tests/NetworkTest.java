@@ -1,9 +1,11 @@
 package org.kiwix.kiwixmobile.tests;
 
+import android.support.test.espresso.DataInteraction;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingPolicies;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -58,6 +60,7 @@ import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
  */
 
 public class NetworkTest {
+  private static String NETWORK_TEST_TAG = "KiwixNetworkTest";
 
   @Inject MockWebServer mockWebServer;
 
@@ -135,17 +138,27 @@ public class NetworkTest {
         .perform(swipeDown());
 
 
-    onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist)).perform(click());
+    // Commented out the following which assumes only 1 match - not always safe to assume as there may
+    // already be a similar file on the device.
+    // onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist)).perform(click());
 
+    // Find matching zim files on the device
+    try {
+      DataInteraction dataInteraction = onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist));
+      // TODO how can we get a count of the items matching the dataInteraction?
+      dataInteraction.atPosition(0).perform(click());
 
-    openContextualActionModeOverflowMenu();
+      openContextualActionModeOverflowMenu();
 
-    onView(withText(R.string.menu_zim_manager))
-        .perform(click());
+      onView(withText(R.string.menu_zim_manager))
+              .perform(click());
 
-    onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist)).perform(longClick());
-
-    onView(withId(android.R.id.button1)).perform(click());
+      DataInteraction dataInteraction1 = onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist));
+      dataInteraction1.atPosition(0).perform(longClick()); // to delete the zim file
+      onView(withId(android.R.id.button1)).perform(click());
+    } catch (Exception e) {
+      Log.w(NETWORK_TEST_TAG, "failed to interact with local ZIM file: " + e.getLocalizedMessage());
+    }
   }
 
   @After
