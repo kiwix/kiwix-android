@@ -48,8 +48,7 @@ public class DownloadTest {
 
   public static final String KIWIX_DOWNLOAD_TEST = "kiwixDownloadTest";
   @Rule
-  public ActivityTestRule<SplashActivity> mActivityTestRule = new ActivityTestRule(
-          SplashActivity.class);
+  public ActivityTestRule<SplashActivity> mActivityTestRule = new ActivityTestRule<>(SplashActivity.class);
   @Rule
   public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule
