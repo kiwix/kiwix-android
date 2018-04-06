@@ -1,22 +1,28 @@
 package org.kiwix.kiwixmobile.testutils;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.LauncherActivity;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.NoMatchingViewException;
+import android.support.test.espresso.ViewAssertion;
 import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 
 /**
  * Created by mhutti1 on 07/04/17.
@@ -25,9 +31,9 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
 public class TestUtils {
   public static boolean hasStoragePermission() {
     return ContextCompat.checkSelfPermission(InstrumentationRegistry.getTargetContext(),
-        Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-        ContextCompat.checkSelfPermission(InstrumentationRegistry.getTargetContext(),
-        Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+            Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(InstrumentationRegistry.getTargetContext(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
   }
 
   public static void allowPermissionsIfNeeded() {
@@ -40,6 +46,17 @@ public class TestUtils {
         } catch (UiObjectNotFoundException e) {}
       }
     }
+  }
+
+  public static Activity getCurrentActivity() { // https://stackoverflow.com/a/41415288
+    final Activity[] activity = new Activity[1];
+    onView(isRoot()).check(new ViewAssertion() {
+      @Override
+      public void check(View view, NoMatchingViewException noViewFoundException) {
+        activity[0] = (Activity) view.getContext();
+      }
+    });
+    return activity[0];
   }
 
   public static Matcher<Object> withContent(final String content) {
@@ -64,3 +81,4 @@ public class TestUtils {
     };
   }
 }
+
