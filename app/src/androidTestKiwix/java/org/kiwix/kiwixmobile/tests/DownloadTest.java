@@ -6,9 +6,12 @@ import android.app.Activity;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingPolicies;
 import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.core.internal.deps.guava.collect.Iterables;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.rule.GrantPermissionRule;
+import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
+import android.support.test.runner.lifecycle.Stage;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.util.Log;
 
@@ -66,7 +69,7 @@ public class DownloadTest {
   }
 
   @Test
-  public void downloadTest() {
+  public void downloadTest() throws Throwable {
     enterHelp();
     onView(withText("Get Content")).perform(click());
 
@@ -74,9 +77,9 @@ public class DownloadTest {
             allOf(withText("Device"), isDisplayed()));
     appCompatTextView.perform(click());
 
-    Activity currentActivity = getCurrentActivity();
-
     allowPermissionsIfNeeded();
+
+    Activity currentActivity = getCurrentActivity(mActivityTestRule);
 
     deleteZimIfExists("ray_charles", R.id.zimfilelist);
 

@@ -8,7 +8,11 @@ import android.os.Build;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.ViewAssertion;
+import android.support.test.espresso.core.internal.deps.guava.collect.Iterables;
 import android.support.test.espresso.matcher.BoundedMatcher;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
+import android.support.test.runner.lifecycle.Stage;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
@@ -48,12 +52,13 @@ public class TestUtils {
     }
   }
 
-  public static Activity getCurrentActivity() { // https://stackoverflow.com/a/41415288
+  public static Activity getCurrentActivity(ActivityTestRule mActivityTestRule) throws Throwable { // https://stackoverflow.com/a/41415288
     final Activity[] activity = new Activity[1];
-    onView(isRoot()).check(new ViewAssertion() {
+    mActivityTestRule.runOnUiThread(new Runnable() {
       @Override
-      public void check(View view, NoMatchingViewException noViewFoundException) {
-        activity[0] = (Activity) view.getContext();
+      public void run() {
+        java.util.Collection<Activity> activities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED);
+        activity[0] = Iterables.getOnlyElement(activities);
       }
     });
     return activity[0];
