@@ -116,9 +116,6 @@ dependencies {
   // Mockito
   testImplementation "org.mockito:mockito-core:2.7.22"
   androidTestImplementation "org.mockito:mockito-android:2.7.22"
-
-  // Crash Handler
-  implementation 'cat.ereza:customactivityoncrash:2.2.0'
 }
 
 // Set custom app import directory
