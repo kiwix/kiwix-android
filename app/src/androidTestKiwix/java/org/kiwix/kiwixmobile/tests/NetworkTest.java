@@ -1,10 +1,12 @@
 package org.kiwix.kiwixmobile.tests;
 
+import android.Manifest;
 import android.support.test.espresso.DataInteraction;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingPolicies;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.rule.GrantPermissionRule;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +70,10 @@ public class NetworkTest {
   @Rule
   public ActivityTestRule<KiwixMobileActivity> mActivityTestRule = new ActivityTestRule<>(
       KiwixMobileActivity.class, false, false);
+  @Rule
+  public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+  @Rule
+  public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @BeforeClass
   public static void beforeClass() {
