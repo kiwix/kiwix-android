@@ -133,6 +133,13 @@ public class NetworkTest {
   public void networkTest() {
 
     mActivityTestRule.launchActivity(null);
+
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+
     enterHelp();
     ViewInteraction appCompatButton = onView(
         allOf(withId(R.id.get_content_card), withText("Get Content")));
@@ -157,7 +164,8 @@ public class NetworkTest {
         .perform(click());
 
     try {
-      onView(withId(R.id.zim_swiperefresh))
+      onData(allOf(withId(R.id.zim_swiperefresh)))
+        .perform(swipeDown());
       Thread.sleep(500);
     } catch (InterruptedException e) {
       e.printStackTrace();

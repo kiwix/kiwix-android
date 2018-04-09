@@ -24,7 +24,10 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.NoMatchingViewException;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.ViewAssertion;
+import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.core.internal.deps.guava.collect.Iterables;
 import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.rule.ActivityTestRule;
@@ -40,6 +43,8 @@ import android.view.View;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+
+import java.util.concurrent.TimeoutException;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
@@ -101,6 +106,28 @@ public class TestUtils {
         description.appendText("with content '" + content + "'");
       }
     };
+  }
+
+
+  public static ViewInteraction waitFor(final Matcher matcher, final int waitTimeoutMillis, final int retryRate) throws Throwable {
+    try {
+      return onView(matcher);
+    } catch (Throwable e) {
+      Thread.sleep(retryRate);
+      if(waitTimeoutMillis > 0 && (waitTimeoutMillis - retryRate > 0)) {
+        return waitFor(matcher, waitTimeoutMillis - retryRate, retryRate);
+      } else {
+        throw new TimeoutException("Timed out waiting for matcher: " + matcher.toString());
+      }
+    }
+  }
+
+  public static ViewInteraction waitFor(final Matcher matcher, final int waitTimeoutMillis) throws Throwable {
+    return waitFor(matcher, waitTimeoutMillis, waitTimeoutMillis / 4);
+  }
+
+  public static ViewInteraction waitFor(final Matcher matcher) throws Throwable {
+    return waitFor(matcher, 1000, 1000 / 4);
   }
 }
 

@@ -19,13 +19,16 @@ package org.kiwix.kiwixmobile.utils;
 
 import org.kiwix.kiwixmobile.R;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.waitFor;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 
 /**
@@ -35,9 +38,31 @@ import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 public class StandardActions {
 
   public static void enterHelp() {
+    try {
+      Thread.sleep(250);
+    } catch (Throwable e) {
+    }
+
+    openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+
+    try {
+      waitFor(withText("Help"))
+        .perform(click());
+    } catch (Throwable throwable) {
+      throwable.printStackTrace();
+    }
+
+  }
+
+  public static void enterSettings() {
+    try {
+      Thread.sleep(250);
+    } catch (Throwable e) {
+    }
+
     openContextualActionModeOverflowMenu();
 
-    onView(withText("Help"))
+    onView(withText("Settings"))
             .perform(click());
   }
 
@@ -48,14 +73,7 @@ public class StandardActions {
     } catch (RuntimeException e) {
       // Otherwise continue with download
     }
-  }
-  
-  public static void enterSettings() {
-    openContextualActionModeOverflowMenu();
 
-    onView(withText("Settings"))
-        .perform(click());
   }
-  
 }
 
