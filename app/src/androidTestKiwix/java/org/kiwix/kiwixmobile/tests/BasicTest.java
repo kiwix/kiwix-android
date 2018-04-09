@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.tests;
 
-
 import android.Manifest;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.DrawerActions;
