@@ -57,8 +57,8 @@ public class DownloadTest {
 
   @BeforeClass
   public static void beforeClass() {
-    IdlingPolicies.setMasterPolicyTimeout(350, TimeUnit.SECONDS);
-    IdlingPolicies.setIdlingResourceTimeout(350, TimeUnit.SECONDS);
+    IdlingPolicies.setMasterPolicyTimeout(40, TimeUnit.SECONDS);
+    IdlingPolicies.setIdlingResourceTimeout(40, TimeUnit.SECONDS);
     Espresso.registerIdlingResources(KiwixIdlingResource.getInstance());
   }
 

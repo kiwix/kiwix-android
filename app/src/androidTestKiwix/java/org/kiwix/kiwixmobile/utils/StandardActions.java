@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.utils;
 
 import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
+import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.action.ViewActions.longClick;
@@ -32,10 +33,12 @@ import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 public class StandardActions {
 
   public static void enterHelp() {
+    BaristaSleepInteractions.sleep(250);
     BaristaMenuClickInteractions.clickMenu("Help");
   }
 
   public static void enterSettings() {
+    BaristaSleepInteractions.sleep(250);
     BaristaMenuClickInteractions.clickMenu("Settings");
   }
 
