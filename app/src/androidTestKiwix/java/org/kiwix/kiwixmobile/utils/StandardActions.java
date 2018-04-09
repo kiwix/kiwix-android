@@ -17,18 +17,12 @@
  */
 package org.kiwix.kiwixmobile.utils;
 
-import org.kiwix.kiwixmobile.R;
+import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
-import static android.support.test.espresso.Espresso.openContextualActionModeOverflowMenu;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.kiwix.kiwixmobile.testutils.TestUtils.waitFor;
+import static com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 
 /**
@@ -38,42 +32,20 @@ import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 public class StandardActions {
 
   public static void enterHelp() {
-    try {
-      Thread.sleep(250);
-    } catch (Throwable e) {
-    }
-
-    openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-
-    try {
-      waitFor(withText("Help"))
-        .perform(click());
-    } catch (Throwable throwable) {
-      throwable.printStackTrace();
-    }
-
+    BaristaMenuClickInteractions.clickMenu("Help");
   }
 
   public static void enterSettings() {
-    try {
-      Thread.sleep(250);
-    } catch (Throwable e) {
-    }
-
-    openContextualActionModeOverflowMenu();
-
-    onView(withText("Settings"))
-            .perform(click());
+    BaristaMenuClickInteractions.clickMenu("Settings");
   }
 
   public static void deleteZimIfExists(String zimName, Integer adapterId) {
-    try { // Delete ray_charles ZIM if it exists
+    try {
       onData(withContent(zimName)).inAdapterView(withId(adapterId)).perform(longClick());
-      onView(withId(android.R.id.button1)).perform(click());
+      clickDialogPositiveButton();
     } catch (RuntimeException e) {
-      // Otherwise continue with download
-    }
 
+    }
   }
 }
 

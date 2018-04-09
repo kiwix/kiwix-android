@@ -54,7 +54,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import okhttp3.OkHttpClient;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okio.Buffer;
@@ -62,14 +61,13 @@ import okio.Buffer;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.action.ViewActions.swipeDown;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
+import static com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
+import static com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions.clickMenu;
+import static com.schibsted.spain.barista.interaction.BaristaSwipeRefreshInteractions.refresh;
 import static org.hamcrest.Matchers.allOf;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
@@ -134,16 +132,8 @@ public class NetworkTest {
 
     mActivityTestRule.launchActivity(null);
 
-    try {
-      Thread.sleep(500);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-
     enterHelp();
-    ViewInteraction appCompatButton = onView(
-        allOf(withId(R.id.get_content_card), withText("Get Content")));
-    appCompatButton.perform(scrollTo(), click());
+    clickOn("Get Content");
 
     TestUtils.allowPermissionsIfNeeded();
 
@@ -159,13 +149,11 @@ public class NetworkTest {
     } catch (RuntimeException e) {
     }
 
-
-    onView(withText(R.string.local_zims))
-        .perform(click());
+    clickOn(R.string.local_zims);
 
     try {
-      onData(allOf(withId(R.id.zim_swiperefresh)))
-        .perform(swipeDown());
+      onData(allOf(withId(R.id.zim_swiperefresh)));
+      refresh(R.id.zim_swiperefresh);
       Thread.sleep(500);
     } catch (InterruptedException e) {
       e.printStackTrace();
@@ -182,14 +170,11 @@ public class NetworkTest {
       // TODO how can we get a count of the items matching the dataInteraction?
       dataInteraction.atPosition(0).perform(click());
 
-      openContextualActionModeOverflowMenu();
-
-      onView(withText(R.string.menu_zim_manager))
-        .perform(click());
+      clickMenu(R.string.menu_zim_manager);
 
       DataInteraction dataInteraction1 = onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist));
       dataInteraction1.atPosition(0).perform(longClick()); // to delete the zim file
-      onView(withId(android.R.id.button1)).perform(click());
+      clickDialogPositiveButton();
     } catch (Exception e) {
       Log.w(NETWORK_TEST_TAG, "failed to interact with local ZIM file: " + e.getLocalizedMessage());
     }
@@ -198,25 +183,5 @@ public class NetworkTest {
   @After
   public void finish() {
     Espresso.unregisterIdlingResources(KiwixIdlingResource.getInstance());
-  }
-
-
-  private static Matcher<View> childAtPosition(
-      final Matcher<View> parentMatcher, final int position) {
-
-    return new TypeSafeMatcher<View>() {
-      @Override
-      public void describeTo(Description description) {
-        description.appendText("Child at position " + position + " in parent ");
-        parentMatcher.describeTo(description);
-      }
-
-      @Override
-      public boolean matchesSafely(View view) {
-        ViewParent parent = view.getParent();
-        return parent instanceof ViewGroup && parentMatcher.matches(parent)
-          && view.equals(((ViewGroup) parent).getChildAt(position));
-      }
-    };
   }
 }

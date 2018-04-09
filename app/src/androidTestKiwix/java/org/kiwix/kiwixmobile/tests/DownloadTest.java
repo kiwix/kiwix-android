@@ -6,12 +6,9 @@ import android.app.Activity;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingPolicies;
 import android.support.test.espresso.ViewInteraction;
-import android.support.test.espresso.core.internal.deps.guava.collect.Iterables;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.rule.GrantPermissionRule;
-import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
-import android.support.test.runner.lifecycle.Stage;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.util.Log;
 
@@ -32,12 +29,13 @@ import java.util.concurrent.TimeUnit;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.longClick;
-import static android.support.test.espresso.action.ViewActions.swipeDown;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
+import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
+import static com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
+import static com.schibsted.spain.barista.interaction.BaristaSwipeRefreshInteractions.refresh;
 import static org.hamcrest.Matchers.allOf;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.allowPermissionsIfNeeded;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
@@ -71,11 +69,9 @@ public class DownloadTest {
   @Test
   public void downloadTest() throws Throwable {
     enterHelp();
-    onView(withText("Get Content")).perform(click());
+    clickOn("Get Content");
 
-    ViewInteraction appCompatTextView = onView(
-            allOf(withText("Device"), isDisplayed()));
-    appCompatTextView.perform(click());
+    clickOn("Device");
 
     allowPermissionsIfNeeded();
 
@@ -83,13 +79,10 @@ public class DownloadTest {
 
     deleteZimIfExists("ray_charles", R.id.zimfilelist);
 
-    ViewInteraction appCompatTextView2 = onView(
-            allOf(withText("Online"), isDisplayed()));
-    appCompatTextView2.perform(click());
+    clickOn("Online");
 
     try {
-      onView(withId(R.id.network_permission_button)).perform(click());
-      Log.d(KIWIX_DOWNLOAD_TEST, "Clicked Network Permission Button");
+      clickOn(R.id.network_permission_button);
     } catch (RuntimeException e) {
       Log.d(KIWIX_DOWNLOAD_TEST, "Failed to click Network Permission Button", e);
     }
@@ -105,18 +98,16 @@ public class DownloadTest {
     onData(withContent("ray_charles")).inAdapterView(withId(R.id.library_list)).perform(click());
 
     try {
-      onView(withId(android.R.id.button1)).perform(click());
+      clickDialogPositiveButton();
     } catch (RuntimeException e) {
       // Confirmation not shown
     }
 
-    ViewInteraction appCompatTextView3 = onView(
-            allOf(withText("Device"), isDisplayed()));
-    appCompatTextView3.perform(click());
+    assertDisplayed("Device");
+    clickOn("Device");
 
     try {
-      onData(allOf(withId(R.id.zim_swiperefresh)))
-              .perform(swipeDown());
+      refresh(R.id.zim_swiperefresh);
     } catch (RuntimeException e) {
       Log.w(KIWIX_DOWNLOAD_TEST, "Failed to refresh ZIM list: " + e.getLocalizedMessage());
     }
@@ -131,8 +122,7 @@ this functionality in the tests.
     onView(withText("Get Content")).perform(click());
 */
 
-    onData(withContent("ray_charles")).inAdapterView(withId(R.id.zimfilelist)).perform(longClick());
-    onView(withId(android.R.id.button1)).perform(click());
+    deleteZimIfExists("ray_charles", R.id.zimfilelist);
   }
 
   @After
