@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 import android.support.v7.app.AppCompatDelegate;
@@ -27,23 +28,49 @@ import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
 import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
 
-public class KiwixApplication extends MultiDexApplication {
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.HasActivityInjector;
+
+public class KiwixApplication extends MultiDexApplication implements HasActivityInjector {
 
   private static KiwixApplication application;
+  private static ApplicationComponent applicationComponent;
 
   static {
     AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
   }
 
-  private ApplicationComponent applicationComponent;
+  @Inject
+  DispatchingAndroidInjector<Activity> activityInjector;
 
   public static KiwixApplication getInstance() {
     return application;
   }
 
+  public static ApplicationComponent getApplicationComponent() {
+    return applicationComponent;
+  }
+
+  public static void setApplicationComponent(ApplicationComponent applicationComponent) {
+    KiwixApplication.applicationComponent = applicationComponent;
+  }
+
+  @Override
+  protected void attachBaseContext(Context base) {
+    super.attachBaseContext(base);
+    application = this;
+    setApplicationComponent(DaggerApplicationComponent.builder()
+        .applicationModule(new ApplicationModule(this))
+        .build());
+  }
+
   @Override
   public void onCreate() {
     super.onCreate();
+    applicationComponent.inject(this);
     if (LeakCanary.isInAnalyzerProcess(this)) {
       // This process is dedicated to LeakCanary for heap analysis.
       // You should not init your app in this process.
@@ -53,23 +80,7 @@ public class KiwixApplication extends MultiDexApplication {
   }
 
   @Override
-  protected void attachBaseContext(Context base) {
-    super.attachBaseContext(base);
-    application = this;
-    initializeInjector();
-  }
-
-  private void initializeInjector() {
-    setApplicationComponent(DaggerApplicationComponent.builder()
-        .applicationModule(new ApplicationModule(this))
-        .build());
-  }
-
-  public ApplicationComponent getApplicationComponent() {
-    return this.applicationComponent;
-  }
-
-  public void setApplicationComponent(ApplicationComponent applicationComponent) {
-    this.applicationComponent = applicationComponent;
+  public AndroidInjector<Activity> activityInjector() {
+    return activityInjector;
   }
 }

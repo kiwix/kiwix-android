@@ -27,8 +27,10 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import dagger.android.AndroidInjectionModule;
 
-@Module public class ApplicationModule {
+@Module(includes = {ActivityBindingModule.class, AndroidInjectionModule.class})
+public class ApplicationModule {
   private final KiwixApplication application;
 
   public ApplicationModule(KiwixApplication application) {

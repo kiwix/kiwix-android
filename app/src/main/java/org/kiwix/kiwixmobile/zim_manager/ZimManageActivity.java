@@ -17,7 +17,9 @@
  */
 package org.kiwix.kiwixmobile.zim_manager;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -26,7 +28,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -34,19 +35,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.views.LanguageSelectDialog;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
+import java.io.File;
+
 import javax.inject.Inject;
 
+import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
-public class ZimManageActivity extends AppCompatActivity implements ZimManageViewCallback {
+public class ZimManageActivity extends BaseActivity implements ZimManageViewCallback {
 
   public static final String TAB_EXTRA = "TAB";
   /**
@@ -81,17 +85,12 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
 
-  private void setupDagger() {
-    KiwixApplication.getInstance().getApplicationComponent().inject(this);
-  }
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    setupDagger();
+    super.onCreate(savedInstanceState);
     if (KiwixSettingsActivity.nightMode(sharedPreferenceUtil)) {
       setTheme(R.style.AppTheme_Night);
     }
-    super.onCreate(savedInstanceState);
     setContentView(R.layout.zim_manager);
 
     setUpToolbar();
@@ -131,7 +130,7 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
 
     // Disable scrolling for the AppBarLayout on top of the screen
     // User can only scroll the PageViewer component
-    AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+    AppBarLayout appBarLayout = findViewById(R.id.appbar);
     if (appBarLayout.getLayoutParams() != null) {
       CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
       AppBarLayout.Behavior appBarLayoutBehaviour = new AppBarLayout.Behavior();
@@ -254,6 +253,20 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
         }
       default:
         return super.onOptionsItemSelected(item);
+    }
+  }
+
+  // Set zim file and return
+  public void finishResult(String path) {
+    if (path != null) {
+      File file = new File(path);
+      Uri uri = Uri.fromFile(file);
+      Log.i(TAG_KIWIX, "Opening Zim File: " + uri);
+      setResult(Activity.RESULT_OK, new Intent().setData(uri));
+      finish();
+    } else {
+      setResult(Activity.RESULT_CANCELED);
+      finish();
     }
   }
 
