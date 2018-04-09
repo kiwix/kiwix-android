@@ -18,7 +18,15 @@ cache:
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
 
+android:
+  components:
+    - tools
+    - platform-tools
+    - tools
+    - build-tools-27.0.3
+    - android-27
+
 licenses:
   - '.+'
 
-script: ./gradlew testdroidUploadKiwix && ./testdroid.py
+script: ./gradlew assembleKiwixRelease testdroidUploadKiwix && ./testdroid.py

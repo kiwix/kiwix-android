@@ -30,10 +30,12 @@ import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import org.kiwix.kiwixlib.JNIKiwix;
+import org.kiwix.kiwixlib.JNIKiwixException;
 import org.kiwix.kiwixlib.JNIKiwixInt;
 import org.kiwix.kiwixlib.JNIKiwixReader;
 import org.kiwix.kiwixlib.JNIKiwixSearcher;
 import org.kiwix.kiwixlib.JNIKiwixString;
+import org.kiwix.kiwixlib.Pair;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
 import java.io.File;
@@ -42,6 +44,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -49,9 +52,9 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
-public class ZimContentProvider extends ContentProvider {
+import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
-  public static final String TAG_KIWIX = "kiwix";
+public class ZimContentProvider extends ContentProvider {
 
   public static final Uri CONTENT_URI = Uri.parse("content://" + BuildConfig.APPLICATION_ID + ".zim.base/");
 
@@ -67,18 +70,17 @@ public class ZimContentProvider extends ContentProvider {
 
   public static String zimFileName;
 
-  @Inject public static JNIKiwix jniKiwix;
+  @Inject
+  public JNIKiwix jniKiwix;
 
   public static JNIKiwixReader currentJNIReader;
 
   public static JNIKiwixSearcher jniSearcher;
 
-  @Inject public static Context context;
-  
   private static ArrayList<String> listedEntries;
 
   public void setupDagger() {
-    KiwixApplication.getInstance().getApplicationComponent().inject(this);
+    KiwixApplication.getApplicationComponent().inject(this);
     setIcuDataDirectory();
     jniSearcher = new JNIKiwixSearcher();
     listedEntries = new ArrayList<>();
@@ -106,21 +108,26 @@ public class ZimContentProvider extends ContentProvider {
      * file path itself (embedded fulltext index) */
     return file;
   }
-    
+
   public synchronized static String setZimFile(String fileName) {
-    JNIKiwixReader reader = new JNIKiwixReader(fileName);
-    if (!new File(fileName).exists() || reader == null) {
-      Log.e(TAG_KIWIX, "Unable to open the ZIM file " + fileName);
+    if (!new File(fileName).exists()) {
+      Log.e(TAG_KIWIX, "Unable to find the ZIM file " + fileName);
       zimFileName = null;
-    } else {
+      return zimFileName;
+    }
+    try {
+      JNIKiwixReader reader = new JNIKiwixReader(fileName);
       Log.i(TAG_KIWIX, "Opening ZIM file " + fileName);
       if(!listedEntries.contains(reader.getId())) {
         listedEntries.add(reader.getId());
         jniSearcher.addKiwixReader(reader);
       }
+      currentJNIReader = reader;
       zimFileName = fileName;
+    } catch (JNIKiwixException e) {
+      Log.e(TAG_KIWIX, "Unable to open the ZIM file " + fileName);
+      zimFileName = null;
     }
-    currentJNIReader = reader;
     return zimFileName;
   }
 
@@ -366,7 +373,7 @@ public class ZimContentProvider extends ContentProvider {
     Matcher matcher = PATTERN.matcher(uri.toString());
     if (matcher.matches()) {
       try {
-        return saveVideoToCache(uri);
+        return loadVideo(uri);
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -387,24 +394,30 @@ public class ZimContentProvider extends ContentProvider {
     return (pipe[0]);
   }
 
-  private ParcelFileDescriptor saveVideoToCache(Uri uri) throws IOException {
-    String filePath = getFilePath(uri);
+  // Return a file descriptor of the video within the ZIM file
+  private ParcelFileDescriptor loadVideo(Uri uri) throws IOException {
+    Pair pair = currentJNIReader.getDirectAccessInformation(getFilePath(uri));
+    if (pair.filename == null || !new File(pair.filename).exists()) {
+      return loadVideoViaCache(uri);
+    }
+    RandomAccessFile randomAccessFile = new RandomAccessFile(pair.filename, "r");
+    randomAccessFile.seek(pair.offset);
+    return ParcelFileDescriptor.dup(randomAccessFile.getFD());
+  }
 
+  // Backup mechanism to load video files between split ZIM by saving them locally
+  private ParcelFileDescriptor loadVideoViaCache(Uri uri) throws IOException {
+    String filePath = getFilePath(uri);
     String fileName = uri.toString();
     fileName = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.length());
-
     File f = new File(FileUtils.getFileCacheDir(getContext()), fileName);
-
     JNIKiwixString mime = new JNIKiwixString();
     JNIKiwixString title = new JNIKiwixString();
     JNIKiwixInt size = new JNIKiwixInt();
     byte[] data = currentJNIReader.getContent(filePath, title, mime, size);
-
     FileOutputStream out = new FileOutputStream(f);
-
     out.write(data, 0, data.length);
     out.flush();
-
     return ParcelFileDescriptor.open(f, ParcelFileDescriptor.MODE_READ_ONLY);
   }
 
@@ -431,8 +444,8 @@ public class ZimContentProvider extends ContentProvider {
   }
 
   private void setIcuDataDirectory() {
-    File workingDir = context.getFilesDir();
-    String icuDirPath = loadICUData(context, workingDir);
+    File workingDir = KiwixApplication.getInstance().getFilesDir();
+    String icuDirPath = loadICUData(KiwixApplication.getInstance(), workingDir);
 
     if (icuDirPath != null) {
       Log.d(TAG_KIWIX, "Setting the ICU directory path to " + icuDirPath);

@@ -3,8 +3,6 @@
   <string name="menu_zim_manager">Get Content</string>
   <string name="menu_help">Help</string>
   <string name="menu_home">Home</string>
-  <string name="menu_forward">Forward</string>
-  <string name="menu_back">Back</string>
   <string name="menu_settings">Settings</string>
   <string name="menu_search">Search article</string>
   <string name="menu_searchintext">Find in page</string>
@@ -14,32 +12,21 @@
   <string name="menu_exitfullscreen">Exit full screen</string>
   <string name="menu_read_aloud">Read aloud</string>
   <string name="menu_read_aloud_stop">Stop reading aloud</string>
-  <string name="menu_rescan_fs">Rescan SD card</string>
   <string name="save_media">Save Media</string>
   <string name="save_media_error">An error occurred when trying to save the media!</string>
   <string name="save_media_saved">Saved media as %s to Android/media/org.kiwix.../</string>
   <string name="rescan_fs_warning">Scanning for downloadable content, please wait…</string>
   <string name="button_backtotop">Back to Top</string>
   <string name="search_label">Search</string>
-  <string name="articlesearch_hint">Type to lookup articles</string>
   <string name="choose_file">Select a Content File (*.zim)</string>
-  <string name="add_bookmark">Add bookmark</string>
-  <string name="remove_bookmark">Remove bookmark</string>
   <string name="open_in_new_tab">Open link in new tab?</string>
   <string name="error_nozimfilesfound">No content found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
   <string name="error_filenotfound">Error: The selected ZIM file could not be found.</string>
   <string name="error_fileinvalid">Error: The selected file is not a valid ZIM file.</string>
-  <string name="error_articlenotfound">Error: Loading article \"%1$s\" failed.</string>
   <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
   <string name="pref_display_title">Display</string>
   <string name="pref_zoom_sub_title">Zoom</string>
   <string name="pref_zoom_dialog">Zoom level</string>
-  <string-array name="pref_zoom_entries">
-    <item name="pref_zoom_entry_automatic">Automatic</item>
-    <item name="pref_zoom_entry_small">Small</item>
-    <item name="pref_zoom_entry_medium">Medium</item>
-    <item name="pref_zoom_entry_large">Large</item>
-  </string-array>
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
   <string name="pref_zoom_enable">Zoom controls</string>
@@ -47,8 +34,8 @@
   <string name="pref_nightmode_summary">Show articles with inverted colors</string>
   <string name="pref_backtotop">Back to Top</string>
   <string name="pref_backtotop_summary">Display a button at the end of the page to scroll up to the top</string>
-  <string name="pref_hidetoolbar">Hide toolbar when scrolling</string>
-  <string name="pref_hidetoolbar_summary">Hide the toolbar when the page is scrolled down</string>
+  <string name="pref_hidetoolbar">Keep Toolbar Visible</string>
+  <string name="pref_hidetoolbar_summary">Keeps the toolbar from scrolling out of view when browsing content</string>
   <string name="pref_language_title">Language</string>
   <string name="pref_language_chooser">Choose a language</string>
   <string name="pref_credits">Contributors and Licenses</string>
@@ -62,7 +49,6 @@
   <string name="no_section_info">No Content Headers Found</string>
   <string name="request_storage">To access offline content we need access to your storage</string>
   <string name="request_storage_custom">If you see a screen overlay warning simply restart your device to fix.</string>
-  <string name="clear_recent_history_dialog">Are you sure you want to delete your search history?</string>
   <string name="clear_recent_and_tabs_history_dialog">Are you sure you want to delete your search history and reset all active tabs?</string>
   <string name="delete_recent_search_item">Delete this item?</string>
   <string name="pref_clear_all_history_title">Clear history</string>
@@ -77,7 +63,6 @@
   <string name="undo">Undo</string>
   <string name="tab_closed">Tab closed</string>
   <string name="deleted_message">deleted</string>
-  <string name="bookmarks_restored">Bookmarks restored</string>
   <string name="bookmark_added">Bookmark added</string>
   <string name="rate_dialog_title">Please Rate Us</string>
   <string name="rate_dialog_msg_1">If you enjoy using</string>
@@ -95,11 +80,10 @@
   <string name="speech_prompt_text">Speak to search %s</string>
   <string name="speech_not_supported">Sorry! Your device does not support speech input</string>
   <string name="download_started_library">Download started…</string>
-  <string name="menu_library">Download content files</string>
   <string name="local_zims">Device</string>
   <string name="remote_zims">Online</string>
   <string name="zim_downloads">Downloading</string>
-  <string name="zim_manager">Content Management</string>
+  <string name="zim_manager">Library</string>
   <string name="delete_specific_zim">Delete this file?</string>
   <string name="delete_specific_zim_toast">File deleted</string>
   <string name="zim_file_downloading">Downloading</string>
@@ -107,19 +91,17 @@
   <string name="download_pause">Pause</string>
   <string name="download_play">Play</string>
   <string name="download_stop">Stop</string>
-  <string name="download_close">Close</string>
   <string name="download_paused">paused</string>
   <string name="no_downloads_here">No downloads here</string>
   <string name="no_files_here">No files here</string>
   <string name="download_complete_snackbar">Download complete</string>
-  <string name="download_over_network">Are you sure you want to start the download without WiFi?</string>
   <string name="download_no_space">Insufficient space to download this file.</string>
   <string name="space_available">Space Available:</string>
   <string name="zim_simple">Simple</string>
   <string name="zim_nopic">No Pictures</string>
   <string name="zim_novid">No Videos</string>
-  <string name="open_partial_zim">This file could be incomplete. Do you wish to attempt to open it?</string>
   <string name="no_network_connection">No network connection</string>
+  <string name="no_items_available">No items available to download</string>
   <string name="get_library_over_network">Use network to download content list. (Approximately 6MB)</string>
   <string name="proceed">Proceed</string>
   <string name="wait_for_load">Content Still Loading</string>
@@ -147,8 +129,6 @@
   <string name="pref_storage">Storage</string>
   <string name="pref_current_folder">Current Folder</string>
   <string name="path_not_writable">Can not access desired directory, using default. To fix this reselect the desired directory in app settings.</string>
-  <string name="pref_full_text_search_title">Fulltext Search</string>
-  <string name="pref_full_text_search_summary">Allow app to search the text within articles. Caution this can slow search down considerably.</string>
   <string name="reboot_message">Due to a bug in android 6.0 we require you to reboot your device to continue without granting us the storage permission. We are sorry for any inconvenience this may cause.</string>
   <string name="delete_zim_failed">Sorry we were unable to delete this file. You should try using a file manager instead.</string>
   <string name="tts_pause">pause</string>
@@ -157,7 +137,6 @@
   <string name="internal_storage">Internal</string>
   <string name="external_storage">External</string>
   <string name="zim_already_downloading">Zim is already downloading</string>
-  <string name="no_network_msg">No network connection</string>
   <string name="yes">Yes</string>
   <string name="no">No</string>
   <string name="confirm_stop_download_title">Stop download?</string>
@@ -180,6 +159,7 @@
   <string name="pref_autonightmode_summary">Automatically switch between day and night mode.</string>
   <string name="pref_autonightmode">Automated night mode</string>
   <string name="language_count">(%1$d)</string>
+  <string name="language_localized">(%s)</string>
   <string name="pref_multi_search_title">MultiZim Search</string>
   <string name="pref_multi_search_summary">Allow app to search the across ZIM files (Warning Very Experimental).</string>
   <string name="pref_external_link_popup_title">Warn when entering external links</string>
@@ -189,4 +169,5 @@
   <string name="do_not_ask_anymore">Do not ask anymore</string>
   <string name="your_languages">Selected languages:</string>
   <string name="other_languages">Other languages:</string>
+  <string name="no_items_msg">No items available</string>
 </resources>

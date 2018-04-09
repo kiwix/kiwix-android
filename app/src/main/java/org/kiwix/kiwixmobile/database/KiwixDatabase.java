@@ -26,7 +26,6 @@ import com.yahoo.squidb.data.SquidDatabase;
 import com.yahoo.squidb.data.adapter.SQLiteDatabaseWrapper;
 import com.yahoo.squidb.sql.Table;
 
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.ZimContentProvider;
 import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.Bookmarks;
@@ -39,6 +38,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
 public class KiwixDatabase extends SquidDatabase {
 
@@ -155,13 +156,13 @@ public class KiwixDatabase extends SquidDatabase {
               bookmarksDao.saveBookmark(null, in, idName, idName);
             }
             context.deleteFile(id);
-            Log.d(KiwixMobileActivity.TAG_KIWIX, "Switched to bookmarkfile " + ZimContentProvider.getId());
+            Log.d(TAG_KIWIX, "Switched to bookmarkfile " + ZimContentProvider.getId());
           }
         } catch (FileNotFoundException e) {
-          Log.e(KiwixMobileActivity.TAG_KIWIX, "Bookmark File ( " + id + " ) not found", e);
+          Log.e(TAG_KIWIX, "Bookmark File ( " + id + " ) not found", e);
           //TODO: Surface to user
         } catch (IOException e) {
-          Log.e(KiwixMobileActivity.TAG_KIWIX, "Can not read file " + id, e);
+          Log.e(TAG_KIWIX, "Can not read file " + id, e);
           //TODO: Surface to user
         }
       }

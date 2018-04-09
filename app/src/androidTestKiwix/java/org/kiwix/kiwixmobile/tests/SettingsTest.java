@@ -1,0 +1,135 @@
+package org.kiwix.kiwixmobile.tests;
+
+import android.preference.Preference;
+import android.support.test.filters.LargeTest;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.utils.SplashActivity;
+
+import static android.support.test.espresso.Espresso.onData;
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.PreferenceMatchers.withKey;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.kiwix.kiwixmobile.utils.StandardActions.enterSettings;
+
+@LargeTest
+@RunWith(AndroidJUnit4.class)
+public class SettingsTest {
+  @Rule
+  public ActivityTestRule<SplashActivity> mActivityTestRule = new ActivityTestRule<>(
+      SplashActivity.class);
+
+  @Test
+  public void testToggle() {
+    enterSettings();
+    onData(allOf(
+        is(instanceOf(Preference.class)),
+        withKey("pref_nightmode")))
+        .perform(click());
+
+    onData(allOf(
+        is(instanceOf(Preference.class)),
+        withKey("pref_auto_nightmode")))
+        .perform(click());
+
+    onData(allOf(
+        is(instanceOf(Preference.class)),
+        withKey("pref_backtotop")))
+        .perform(click());
+
+    onData(allOf(
+        is(instanceOf(Preference.class)),
+        withKey("pref_hidetoolbar")))
+        .perform(click());
+
+    onData(allOf(
+        is(instanceOf(Preference.class)),
+        withKey("pref_bottomtoolbar")))
+        .perform(click());
+
+    onData(allOf(
+        is(instanceOf(Preference.class)),
+        withKey("pref_newtab_background")))
+        .perform(click());
+
+    onData(allOf(
+        is(instanceOf(Preference.class)),
+        withKey("pref_external_link_popup")))
+        .perform(click());
+
+    onData(allOf(
+        is(instanceOf(Preference.class)),
+        withKey("pref_full_text_search")))
+        .perform(click());
+
+    onData(allOf(
+        is(instanceOf(Preference.class)),
+        withKey("pref_wifi_only")))
+        .perform(click());
+
+    onData(allOf(
+        is(instanceOf(Preference.class)),
+        withKey("pref_zoom_enabled")))
+        .perform(click());
+  }
+
+  @Test
+  public void testZoomDialog() {
+    enterSettings();
+    onData(allOf(
+        is(instanceOf(Preference.class)),
+        withKey("pref_zoom_enabled")))
+        .perform(click());
+
+    onData(allOf(
+        is(instanceOf(Preference.class)),
+        withKey("pref_zoom_slider")))
+        .perform(click());
+
+    onView(withText(R.string.pref_zoom_dialog)).check(matches(isDisplayed()));
+  }
+
+  @Test
+  public void testLanguageDialog() {
+    enterSettings();
+    onData(allOf(
+        is(instanceOf(Preference.class)),
+        withKey("pref_language_chooser")))
+        .perform(click());
+
+    onView(withText(R.string.pref_language_title)).check(matches(isDisplayed()));
+  }
+
+  @Test
+  public void testStorageDialog() {
+    enterSettings();
+    onData(allOf(
+        is(instanceOf(Preference.class)),
+        withKey("pref_select_folder")))
+        .perform(click());
+
+    onView(withText(R.string.pref_storage)).check(matches(isDisplayed()));
+  }
+
+  @Test
+  public void testHistoryDialog() {
+    enterSettings();
+    onData(allOf(
+        is(instanceOf(Preference.class)),
+        withKey("pref_clear_all_history")))
+        .perform(click());
+
+    onView(withText(R.string.clear_all_history_dialog_title)).check(matches(isDisplayed()));
+  }
+}

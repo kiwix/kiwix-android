@@ -2,8 +2,6 @@
 <resources>
   <string name="menu_help">Даведка</string>
   <string name="menu_home">Дадому</string>
-  <string name="menu_forward">Наперад</string>
-  <string name="menu_back">Назад</string>
   <string name="menu_settings">Настройкі</string>
   <string name="menu_search">Пошук</string>
   <string name="menu_searchintext">Знайсці ў тэксце</string>
@@ -13,31 +11,20 @@
   <string name="menu_exitfullscreen">Выйсці з рэжыму поўнага экрану</string>
   <string name="menu_read_aloud">Чытаць уголас</string>
   <string name="menu_read_aloud_stop">Спыніць чытанне ўголас</string>
-  <string name="menu_rescan_fs">Перасканаваць SD-картку</string>
   <string name="save_media">Захаваць медыя як…</string>
   <string name="save_media_error">Узнікла памылка пры захаванні медыя-файла!</string>
   <string name="save_media_saved">Медыя захавана як %1$s у тэчцы вашых выяваў</string>
   <string name="rescan_fs_warning">Пошук сярод ZIM-файлаў. Калі ласка, пачакайце…</string>
   <string name="button_backtotop">Вярнуцца ўверх</string>
   <string name="search_label">Пошук</string>
-  <string name="articlesearch_hint">Увядзіце для пошуку артыкулаў</string>
   <string name="choose_file">Абярыце ZIM-файл (*.zim)</string>
-  <string name="add_bookmark">Адзначыць гэтую старонку</string>
-  <string name="remove_bookmark">Зняць адметку з выбранага</string>
   <string name="open_in_new_tab">Адкрыць спасылку ў новым вакенцы?</string>
   <string name="error_nozimfilesfound">ZIM-файлы не знойдзеныя на Вашай прыладзе.\nПаглядзіце на старонцы даведкі як загружаць змест у Kiwix.\nКалі вы размясцілі файл на вашай прыладзе або вонкавым сховішчы, магчыма, варта паспрабаваць яшчэ раз праз некалькі хвілін або перазагрузіць прыладу.</string>
   <string name="error_filenotfound">Памылка: абраны ZIM-файл ня знойдзены.</string>
   <string name="error_fileinvalid">Памылка: абраны файл не з\'яўляецца слушным ZIM-файлам.</string>
-  <string name="error_articlenotfound">Памылка: не атрымалася загрузіць артыкул \"%1$s\".</string>
   <string name="error_articleurlnotfound">Памылка: загрузка артыкула не атрымалася (Url: %1$s).</string>
   <string name="pref_display_title">Паказаць</string>
   <string name="pref_zoom_dialog">Маштаб</string>
-  <string-array name="pref_zoom_entries">
-    <item name="pref_zoom_entry_automatic">Аўтаматычна</item>
-    <item name="pref_zoom_entry_small">Дробны</item>
-    <item name="pref_zoom_entry_medium">Сярэдні</item>
-    <item name="pref_zoom_entry_large">Вялікі</item>
-  </string-array>
   <string name="pref_info_title">Інфармацыя</string>
   <string name="pref_info_version">Версія</string>
   <string name="pref_zoom_enable">Кіраванне маштабам</string>
@@ -55,7 +42,6 @@
   <string name="menu_bookmarks_list">Закладкі</string>
   <string name="no_section_info">Ня знойдзеныя загалоўкі кантэнту</string>
   <string name="request_storage">Каб атрымаць доступ да ZIM-файлаў, нам трэба мець доступ да вашага сховішча</string>
-  <string name="bookmarks_restored">Закладкі адноўленыя</string>
   <string name="bookmark_added">Закладка дададзеная</string>
   <string name="rate_dialog_title">Калі ласка, ацаніце нас</string>
   <string name="rate_dialog_msg_1">Калі вам падабаецца</string>
@@ -65,4 +51,5 @@
   <string name="rate_dialog_neutral">Пазней</string>
   <string name="pref_newtab_background_title">Адкрыць новае вакенца на фоне</string>
   <string name="pref_newtab_background_summary">Пры адкрыцці новага вакенца, яно будзе адкрытае ў фоне</string>
+  <string name="zim_manager">Бібліятэка</string>
 </resources>

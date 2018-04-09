@@ -34,9 +34,9 @@ import org.xmlpull.v1.XmlPullParser;
 public class StyleUtils {
   public static int dialogStyle() {
     if (KiwixMobileActivity.nightMode) {
-      return android.R.style.Theme_Holo_Dialog;
+      return R.style.AppTheme_Dialog_Night;
     } else {
-      return android.support.v7.appcompat.R.style.Theme_AppCompat_Light_Dialog_Alert;
+      return R.style.AppTheme_Dialog;
     }
   }
 

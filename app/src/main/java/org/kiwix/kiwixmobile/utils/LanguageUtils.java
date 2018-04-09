@@ -21,12 +21,10 @@ package org.kiwix.kiwixmobile.utils;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -42,15 +40,16 @@ import java.lang.reflect.Field;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_LANG;
+import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
+
 public class LanguageUtils {
 
-  public static final String TAG_KIWIX = "kiwix";
   private static HashMap<String, Locale> mLocaleMap;
   private List<LanguageContainer> mLanguageList;
   private List<String> mLocaleLanguageCodes;
@@ -65,10 +64,8 @@ public class LanguageUtils {
     sortLanguageList(context.getResources().getConfiguration().locale);
   }
 
-  public static void handleLocaleChange(Context context) {
-
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-    String language = prefs.getString("pref_language_chooser", "");
+  public static void handleLocaleChange(Context context, SharedPreferenceUtil sharedPreferenceUtil) {
+    String language = sharedPreferenceUtil.getPrefLanguage("");
 
     if (language.isEmpty()) {
       return;
@@ -121,6 +118,41 @@ public class LanguageUtils {
     }
   }
 
+  // This method will determine which font will be applied to the not-supported-locale.
+  // You can define exceptions to the default DejaVu font in the 'exceptions' Hashmap:
+  public static String getTypeface(String languageCode) {
+
+    // Define the exceptions to the rule. The font has to be placed in the assets folder.
+    // Key: the language code; Value: the name of the font.
+    HashMap<String, String> exceptions = new HashMap<>();
+    exceptions.put("km", "fonts/KhmerOS.ttf");
+    exceptions.put("my", "fonts/Parabaik.ttf");
+    exceptions.put("guj", "fonts/Lohit-Gujarati.ttf");
+    exceptions.put("ori", "fonts/Lohit-Odia.ttf");
+    exceptions.put("pan", "fonts/Lohit-Punjabi.ttf");
+    exceptions.put("dzo", "fonts/DDC_Uchen.ttf");
+    exceptions.put("bod", "fonts/DDC_Uchen.ttf");
+    exceptions.put("sin", "fonts/Kaputa-Regular.ttf");
+
+    // http://scriptsource.org/cms/scripts/page.php?item_id=entry_detail&uid=kstzk8hbg4
+    // Link above shows that we are allowed to distribute this font
+    exceptions.put("chr", "fonts/Digohweli.ttf");
+
+    // These scripts could be supported via more Lohit fonts if DejaVu doesn't
+    // support them.  That is untested now as they aren't even in the language
+    // menu:
+    //  * (no ISO code?) (Devanagari/Nagari) -- at 0% in translatewiki
+    //  * mr (Marathi) -- at 21% in translatewiki
+
+    // Check, if an exception applies to our current locale
+    if (exceptions.containsKey(languageCode)) {
+      return exceptions.get(languageCode);
+    }
+
+    // Return the default font
+    return "fonts/DejaVuSansCondensed.ttf";
+  }
+
   // Read the language codes, that are supported in this app from the locales.txt file
   private void getLanguageCodesFromAssets() {
 
@@ -148,17 +180,12 @@ public class LanguageUtils {
     Collator localeCollator = Collator.getInstance(locale);
     localeCollator.setStrength(Collator.SECONDARY);
 
-    Collections.sort(mLanguageList, new Comparator<LanguageContainer>() {
-      @Override
-      public int compare(LanguageContainer a, LanguageContainer b) {
-        return localeCollator.compare(a.getLanguageName(), b.getLanguageName());
-      }
-    });
+    Collections.sort(mLanguageList, (a, b) -> localeCollator.compare(a.getLanguageName(), b.getLanguageName()));
   }
 
   // Check, if the selected Locale is supported and weather we actually need to change our font.
   // We do this by checking, if our Locale is available in the List, that Locale.getAvailableLocales() returns.
-  private boolean haveToChangeFont() {
+  private boolean haveToChangeFont(SharedPreferenceUtil sharedPreferenceUtil) {
 
     for (Locale s : Locale.getAvailableLocales()) {
       if (s.getLanguage().equals(Locale.getDefault().toString())) {
@@ -166,8 +193,7 @@ public class LanguageUtils {
       }
 
       // Don't change the language, if the options hasn't been set
-      SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-      String language = prefs.getString("pref_language_chooser", "");
+      String language = sharedPreferenceUtil.getPrefLanguage("");
 
       if (language.isEmpty()) {
         return false;
@@ -184,9 +210,9 @@ public class LanguageUtils {
   // which also sets a Factory on the LayoutInflator, we have to access the private field of the
   // LayoutInflater, that handles this restriction via Java's reflection API
   // and make it accessible set it to false again.
-  public void changeFont(LayoutInflater layoutInflater) {
+  public void changeFont(LayoutInflater layoutInflater, SharedPreferenceUtil sharedPreferenceUtil) {
 
-    if (!haveToChangeFont()) {
+    if (!haveToChangeFont(sharedPreferenceUtil)) {
       return;
     }
 
@@ -258,19 +284,17 @@ public class LanguageUtils {
         try {
           LayoutInflater inflater = mLayoutInflater;
           final View view = inflater.createView(name, null, attrs);
-          new Handler().post(new Runnable() {
-            public void run() {
-              TextView textView = ((TextView) view);
+          new Handler().post(() -> {
+            TextView textView = ((TextView) view);
 
-              // Set the custom typeface
-              textView.setTypeface(
-                  Typeface.createFromAsset(mContext.getAssets(), getTypeface()));
-              Log.d(TAG_KIWIX, "Applying custom font");
+            // Set the custom typeface
+            textView.setTypeface(Typeface.createFromAsset(mContext.getAssets(),
+                    getTypeface(Locale.getDefault().getLanguage())));
+            Log.d(TAG_KIWIX, "Applying custom font");
 
-              // Reduce the text size
-              textView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
-                  textView.getTextSize() - 2f);
-            }
+            // Reduce the text size
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                textView.getTextSize() - 2f);
           });
 
           return view;
@@ -280,34 +304,6 @@ public class LanguageUtils {
       }
 
       return null;
-    }
-
-    // This method will determine which font will be applied to the not-supported-locale.
-    // You can define exceptions to the default DejaVu font in the 'exceptions' Hashmap:
-
-    private String getTypeface() {
-
-      // Define the exceptions to the rule. The font has to be placed in the assets folder.
-      // Key: the language code; Value: the name of the font.
-      HashMap<String, String> exceptions = new HashMap<>();
-      exceptions.put("km", "fonts/KhmerOS.ttf");
-      exceptions.put("gu", "fonts/Lohit-Gujarati.ttf");
-      exceptions.put("my", "fonts/Parabaik.ttf");
-      exceptions.put("or", "fonts/Lohit-Odia.ttf");
-      // These scripts could be supported via more Lohit fonts if DejaVu doesn't
-      // support them.  That is untested now as they aren't even in the language
-      // menu:
-      //  * (no ISO code?) (Devanagari/Nagari) -- at 0% in translatewiki
-      //  * mr (Marathi) -- at 21% in translatewiki
-      //  * pa (Punjabi) -- at 3% in translatewiki
-
-      // Check, if an exception applies to our current locale
-      if (exceptions.containsKey(Locale.getDefault().getLanguage())) {
-        return exceptions.get(Locale.getDefault().getLanguage());
-      }
-
-      // Return the default font
-      return "fonts/DejaVuSansCondensed.ttf";
     }
   }
 

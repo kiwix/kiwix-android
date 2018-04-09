@@ -11,23 +11,36 @@
     android:layout_height="match_parent"
     android:background="?attr/listBackground">
 
+
+    <TextView
+      android:id="@+id/network_text"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_centerInParent="true"
+      android:layout_gravity="center_vertical"
+      android:gravity="center_vertical"
+      android:orientation="vertical"
+      android:paddingBottom="@dimen/library_textview_padding"
+      android:textSize="@dimen/library_font_size"
+      android:visibility="gone" />
+
     <TextView
       android:id="@+id/network_permission_text"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="200dp"
       android:layout_centerHorizontal="true"
+      android:layout_marginTop="@dimen/network_permission_text_margin_top"
       android:text="@string/get_library_over_network"
-      android:visibility="gone"/>
+      android:visibility="gone" />
 
     <Button
       android:id="@+id/network_permission_button"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginTop="230dp"
       android:layout_centerHorizontal="true"
+      android:layout_marginTop="@dimen/network_permission_button_margin_top"
       android:text="@string/proceed"
-      android:visibility="gone"/>
+      android:visibility="gone" />
 
     <android.support.v4.widget.SwipeRefreshLayout
       android:id="@+id/library_swiperefresh"
@@ -38,9 +51,9 @@
         android:id="@+id/library_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="60dp"
         android:background="?attr/listBackground"
-        android:divider="@null"/>
+        android:divider="@null"
+        android:paddingBottom="@dimen/library_article_list_padding" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

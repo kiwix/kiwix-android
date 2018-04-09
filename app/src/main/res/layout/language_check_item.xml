@@ -3,7 +3,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/language_row"
   android:layout_width="match_parent"
-  android:layout_height="?android:attr/listPreferredItemHeight"
+  android:layout_height="?android:attr/listPreferredItemHeightSmall"
   android:gravity="center_vertical"
   android:orientation="horizontal">
 
@@ -12,33 +12,39 @@
     android:id="@+id/language_checkbox"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
+    android:layout_centerVertical="true"
+    android:layout_marginLeft="@dimen/language_checkbox_margin_left"
+    android:buttonTint="@color/accent"
     android:focusable="false"
     android:focusableInTouchMode="false"
-    android:buttonTint="@color/accent"
-    tools:checked="false"/>
+    tools:checked="false" />
 
   <LinearLayout
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_toRightOf="@id/language_checkbox"
     android:layout_centerVertical="true"
-    android:orientation="vertical"
-    android:gravity="center_vertical">
+    android:layout_toLeftOf="@id/language_entries_count"
+    android:layout_toRightOf="@id/language_checkbox"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
 
     <TextView
       android:id="@+id/language_name"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textSize="18sp"
-      tools:text="German"/>
+      android:textSize="@dimen/language_check_item_text_size"
+      android:layout_marginLeft="@dimen/language_name_margin_left"
+      android:textColor="@color/primary"
+      tools:text="German" />
+
     <TextView
       android:id="@+id/language_name_localized"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:textSize="18sp"
+      android:layout_marginLeft="@dimen/language_name_localized_margin_left"
       android:textColor="@color/grey"
-      tools:text="Deutsch"/>
+      android:textSize="@dimen/language_name_localized_text_size"
+      tools:text="(Deutsch)" />
 
   </LinearLayout>
 
@@ -48,9 +54,10 @@
     android:layout_height="wrap_content"
     android:layout_alignParentRight="true"
     android:layout_centerVertical="true"
-    android:layout_margin="16dp"
-    android:textSize="18sp"
+    android:layout_marginBottom="@dimen/language_entries_count_vertical_margin"
+    android:layout_marginRight="@dimen/language_entries_count_margin_right"
+    android:layout_marginTop="@dimen/language_entries_count_vertical_margin"
     android:textColor="@color/grey"
-    tools:text="47"/>
+    android:textSize="@dimen/language_check_item_text_size" />
 
 </RelativeLayout>

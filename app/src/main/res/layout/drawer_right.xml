@@ -4,22 +4,21 @@
   android:layout_width="@dimen/navigation_width"
   android:layout_height="match_parent"
   android:layout_gravity="end"
+  android:layout_marginTop="?actionBarSize"
   android:background="?attr/drawerBackground"
   android:clickable="true"
   android:fitsSystemWindows="true"
-  android:orientation="vertical"
-  android:layout_marginTop="?actionBarSize">
+  android:orientation="vertical">
 
   <View
-    android:id="@+id/view"
     android:layout_width="fill_parent"
-    android:layout_height="1dp"
-    android:background="?attr/dividerColor"/>
+    android:layout_height="@dimen/dimen_1dp"
+    android:background="?attr/dividerColor" />
 
   <android.support.v7.widget.RecyclerView
     android:id="@+id/right_drawer_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="end"/>
+    android:layout_gravity="end" />
 
 </LinearLayout>

@@ -1,3 +1,20 @@
+/*
+ * Kiwix Android
+ * Copyright (C) 2018  Kiwix <android.kiwix.org>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.kiwix.kiwixmobile;
 
 import android.content.Intent;
@@ -7,12 +24,16 @@ import android.view.LayoutInflater;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 
 import java.util.HashMap;
+
+import static org.kiwix.kiwixmobile.utils.Constants.CONTACT_EMAIL_ADDRESS;
+import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_EXTERNAL_LINK;
 
 public class KiwixWebViewClient extends WebViewClient {
 
@@ -56,7 +77,7 @@ public class KiwixWebViewClient extends WebViewClient {
 
     // Otherwise, the link is not for a page on my site, so launch another Activity that handles URLs
     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-    intent.putExtra("external_link", true);
+    intent.putExtra(EXTRA_EXTERNAL_LINK, true);
     callback.openExternalUrl(intent);
     return true;
   }
@@ -85,12 +106,15 @@ public class KiwixWebViewClient extends WebViewClient {
             }
             );
         view.addView(help);
-        TextView contact = (TextView) help.findViewById(R.id.welcome21);
-        contact.setText(StyleUtils.highlightUrl(contact.getText().toString(),
-            KiwixMobileActivity.contactEmailAddress));
-        contact.setOnClickListener(v -> {
-          callback.sendContactEmail();
-        });
+        ImageView welcome_image = help.findViewById(R.id.welcome_image);
+        if (KiwixMobileActivity.nightMode) {
+          welcome_image.setImageResource(R.drawable.kiwix_welcome_night);
+        } else {
+          welcome_image.setImageResource(R.drawable.kiwix_welcome);
+        }
+        TextView contact = help.findViewById(R.id.welcome21);
+        contact.setText(StyleUtils.highlightUrl(contact.getText().toString(), CONTACT_EMAIL_ADDRESS));
+        contact.setOnClickListener(v -> callback.sendContactEmail());
       }
     }
     callback.webViewUrlFinishedLoading();
