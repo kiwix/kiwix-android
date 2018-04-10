@@ -45,7 +45,6 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.ZimContentProvider;
 import org.kiwix.kiwixmobile.base.BaseFragment;
 import org.kiwix.kiwixmobile.database.BookDao;
-import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.BookUtils;
@@ -81,11 +80,11 @@ public class ZimFileSelectFragment extends BaseFragment
   private TextView mFileMessage;
   private boolean mHasRefresh;
 
-  private BookDao bookDao;
-
   @Inject ZimFileSelectPresenter presenter;
   @Inject BookUtils bookUtils;
   @Inject SharedPreferenceUtil sharedPreferenceUtil;
+  @Inject
+  BookDao bookDao;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -112,16 +111,12 @@ public class ZimFileSelectFragment extends BaseFragment
 
     // Allow temporary use of ZimContentProvider to query books
     ZimContentProvider.canIterate = true;
-
-    presenter.loadLocalZimFileFromDb(zimManageActivity);
-    bookDao = new BookDao(KiwixDatabase.getInstance(zimManageActivity));
-
     return llLayout; // We must return the loaded Layout
   }
 
   @Override
   public void onResume() {
-    presenter.loadLocalZimFileFromDb(zimManageActivity);
+    presenter.loadLocalZimFileFromDb();
     super.onResume();
   }
 
@@ -150,7 +145,7 @@ public class ZimFileSelectFragment extends BaseFragment
     }
 
     mHasRefresh = true;
-    presenter.loadLocalZimFileFromDb(zimManageActivity);
+    presenter.loadLocalZimFileFromDb();
   }
 
   // Add book after download

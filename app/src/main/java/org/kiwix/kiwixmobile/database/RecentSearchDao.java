@@ -26,6 +26,8 @@ import org.kiwix.kiwixmobile.database.entity.RecentSearch;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 /**
  * Dao class for recent searches.
  */
@@ -34,6 +36,7 @@ public class RecentSearchDao {
   private static final int NUM_RECENT_RESULTS = 5;
   private KiwixDatabase mDb;
 
+  @Inject
   public RecentSearchDao(KiwixDatabase kiwixDatabase) {
     this.mDb = kiwixDatabase;
   }

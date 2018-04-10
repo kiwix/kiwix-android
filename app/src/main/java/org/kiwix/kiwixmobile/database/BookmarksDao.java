@@ -25,6 +25,8 @@ import org.kiwix.kiwixmobile.database.entity.Bookmarks;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 /**
  * Dao class for bookmarks.
  */
@@ -32,9 +34,9 @@ import java.util.ArrayList;
 public class BookmarksDao {
   private KiwixDatabase mDb;
 
-
-  public BookmarksDao(KiwixDatabase kiwikDatabase) {
-    this.mDb = kiwikDatabase;
+  @Inject
+  public BookmarksDao(KiwixDatabase kiwixDatabase) {
+    this.mDb = kiwixDatabase;
   }
 
   public ArrayList<String> getBookmarks(String ZimId, String ZimName) {

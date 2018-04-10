@@ -146,7 +146,7 @@ public class LibraryFragment extends BaseFragment
     faActivity.registerReceiver(networkBroadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     isReceiverRegistered = true;
 
-    presenter.loadRunningDownloadsFromDb(getActivity());
+    presenter.loadRunningDownloadsFromDb();
     return llLayout;
   }
 

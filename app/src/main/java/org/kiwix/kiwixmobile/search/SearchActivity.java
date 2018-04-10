@@ -94,7 +94,7 @@ public class SearchActivity extends BaseActivity
     searchPresenter.attachView(this);
     mListView = findViewById(R.id.search_list);
     mDefaultAdapter = getDefaultAdapter();
-    searchPresenter.getRecentSearches(this);
+    searchPresenter.getRecentSearches();
     mListView.setAdapter(mDefaultAdapter);
 
     mAutoAdapter = new AutoCompleteAdapter(this);
@@ -214,7 +214,7 @@ public class SearchActivity extends BaseActivity
     } else {
       title = text.toString();
     }
-    searchPresenter.saveSearch(title, this);
+    searchPresenter.saveSearch(title);
     sendMessage(title);
   }
 
@@ -270,14 +270,14 @@ public class SearchActivity extends BaseActivity
   }
 
   private void deleteSpecificSearchItem(String search) {
-    searchPresenter.deleteSearchString(search, this);
+    searchPresenter.deleteSearchString(search);
     resetAdapter();
   }
 
   private void resetAdapter() {
     mDefaultAdapter = getDefaultAdapter();
     mListView.setAdapter(mDefaultAdapter);
-    searchPresenter.getRecentSearches(this);
+    searchPresenter.getRecentSearches();
   }
 
   private ArrayAdapter<String> getDefaultAdapter() {
