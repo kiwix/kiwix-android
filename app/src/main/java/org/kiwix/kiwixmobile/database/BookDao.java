@@ -28,6 +28,8 @@ import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 /**
  * Dao class for books
  */
@@ -35,7 +37,7 @@ import java.util.ArrayList;
 public class BookDao {
   private KiwixDatabase mDb;
 
-
+  @Inject
   public BookDao(KiwixDatabase kiwixDatabase) {
     this.mDb = kiwixDatabase;
   }

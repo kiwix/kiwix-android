@@ -17,10 +17,7 @@
  */
 package org.kiwix.kiwixmobile.search;
 
-import android.content.Context;
-
 import org.kiwix.kiwixmobile.base.BasePresenter;
-import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.database.RecentSearchDao;
 
 import javax.inject.Inject;
@@ -32,6 +29,9 @@ import javax.inject.Inject;
 public class SearchPresenter extends BasePresenter<SearchViewCallback> {
 
     @Inject
+    RecentSearchDao recentSearchDao;
+
+    @Inject
     public SearchPresenter() {}
 
     @Override
@@ -39,18 +39,15 @@ public class SearchPresenter extends BasePresenter<SearchViewCallback> {
         super.attachView(searchViewCallback);
     }
 
-    void getRecentSearches(Context context) {
-        RecentSearchDao recentSearchDao = new RecentSearchDao(KiwixDatabase.getInstance(context));
+    void getRecentSearches() {
         getMvpView().addRecentSearches(recentSearchDao.getRecentSearches());
     }
 
-    void saveSearch(String title, Context context) {
-        RecentSearchDao recentSearchDao = new RecentSearchDao(KiwixDatabase.getInstance(context));
+    void saveSearch(String title) {
         recentSearchDao.saveSearch(title);
     }
 
-    void deleteSearchString(String search, Context context) {
-        RecentSearchDao recentSearchDao = new RecentSearchDao(KiwixDatabase.getInstance(context));
+    void deleteSearchString(String search) {
         recentSearchDao.deleteSearchString(search);
     }
 }
