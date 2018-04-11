@@ -79,7 +79,7 @@ public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     if (position == 0) {
       vh.title.setTypeface(Typeface.DEFAULT_BOLD);
       vh.title.setTextColor(primary);
-      if (title != null) {
+      if (title != null && !title.isEmpty()) {
         vh.title.setText(title);
       } else {
         String empty = context.getString(R.string.no_section_info);
