@@ -7,6 +7,7 @@
   <dimen name="dimen_medium_padding">8dp</dimen>
   <dimen name="dimen_1dp">1dp</dimen>
   <dimen name="dimen_0dp">0dp</dimen>
+  <dimen name="dimen_16dp">16dp</dimen>
   <dimen name="language_name_localized_text_size">14sp</dimen>
   <dimen name="language_name_margin_left">10dp</dimen>
   <dimen name="navigation_width">260dp</dimen>
