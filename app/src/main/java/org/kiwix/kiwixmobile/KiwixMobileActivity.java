@@ -37,6 +37,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -432,6 +433,11 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     });
 
     ActionBarDrawerToggle drawerToggle = new KiwixActionBarDrawerToggle(this, drawerLayout, toolbar);
+
+    if (sharedPreferenceUtil.getPrefIsFirstRun()) {
+      sharedPreferenceUtil.putPrefIsFirstRun(false);
+      startActivity(new Intent(KiwixMobileActivity.this, WelcomeActivity.class));
+    }
 
     drawerLayout.addDrawerListener(drawerToggle);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
