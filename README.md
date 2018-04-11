@@ -1,8 +1,13 @@
+<img src="https://github.com/kiwix/kiwix-android/blob/master/Kiwix_icon_transparent_512x512.png" align="left" height='250'>
+
+<a href='https://play.google.com/store/apps/details?id=org.kiwix.kiwixmobile' target='_blank' align="right"><img align="right" height='36' src='https://s20.postimg.org/muzx3w4jh/google_play_badge.png' /></a>
 # Kiwix-Android
 
-[![Build Status](https://travis-ci.org/kiwix/kiwix-android.svg?branch=master)](https://travis-ci.org/kiwix/kiwix-android)
+Kiwix is an offline reader for Web content. One of its main purposes is to make Wikipedia available offline. This is done by reading the content of a file in the ZIM format, a highly compressed open format with additional meta-data.
 
-Kiwix is an offline reader for Web content. One of its main purposes is to make Wikipedia available offline. This is done by reading the content of a file in the ZIM format, a high compressed open format with additional meta-data.
+[![Build Status](https://travis-ci.org/kiwix/kiwix-android.svg?branch=master)](https://travis-ci.org/kiwix/kiwix-android)
+[![IRC Web](https://img.shields.io/badge/chat-on%20freenode-brightgreen.svg)](http://chat.kiwix.org)
+---
 
 ## Build Instructions
 
@@ -14,15 +19,16 @@ We utilize different build variants (flavours) to build various different versio
 
 ## Libraries Used
 
-- [Dagger](https://github.com/google/dagger)
-- [Guava](https://github.com/google/guava)
-- [SquiDb](https://github.com/yahoo/squidb)
-- [Apache](https://github.com/apache/commons-io)
-- [Retrofit](http://square.github.io/retrofit/)
-- [OkHttp](https://github.com/square/okhttp)
-- [Butterknife](http://jakewharton.github.io/butterknife/)
-- [RxJava](https://github.com/ReactiveX/RxJava)
-- [Mockito](https://github.com/mockito/mockito)
+- [Dagger 2](https://github.com/google/dagger) - A fast dependency injector for Android and Java
+- [SquiDb](https://github.com/yahoo/squidb) - SquiDB is a SQLite database library for Android and iOS
+- [Retrofit](http://square.github.io/retrofit/) - Retrofit turns your REST API into a Java interface
+- [OkHttp](https://github.com/square/okhttp) - An HTTP+SPDY client for Android and Java applications
+- [Butterknife](http://jakewharton.github.io/butterknife/) - View "injection" library for Android
+- [Mockito](https://github.com/mockito/mockito) - Most popular Mocking framework for unit tests written in Java 
+- [Guava](https://github.com/google/guava) - Collections, caching, primitives support, concurrency libraries, common annotations, string processing, I/O, and so forth.
+- [Apache](https://github.com/apache/commons-io) - The Apache Commons IO library contains utility classes, stream implementations, file filters, file comparators, endian transformation classes, and much more.
+- [RxJava](https://github.com/ReactiveX/RxJava) - Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.
+
 
 
 ## Contributing
