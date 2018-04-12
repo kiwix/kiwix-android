@@ -69,6 +69,7 @@ public class DocumentParser {
     @JavascriptInterface
     @SuppressWarnings("unused")
     public void start() {
+      title = "";
       sections = new ArrayList<>();
       new Handler(Looper.getMainLooper()).post(() -> listener.clearSections());
     }
