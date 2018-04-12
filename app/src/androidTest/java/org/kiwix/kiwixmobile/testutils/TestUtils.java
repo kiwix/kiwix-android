@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.testutils;
 import android.Manifest;
 import android.app.Activity;
 import android.app.LauncherActivity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.test.InstrumentationRegistry;
@@ -106,6 +107,11 @@ public class TestUtils {
         description.appendText("with content '" + content + "'");
       }
     };
+  }
+
+  public static String getResourceString(int id) {
+    Context targetContext = InstrumentationRegistry.getTargetContext();
+    return targetContext.getResources().getString(id);
   }
 
 

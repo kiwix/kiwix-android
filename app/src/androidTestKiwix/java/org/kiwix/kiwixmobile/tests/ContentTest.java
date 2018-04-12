@@ -31,6 +31,7 @@ import org.kiwix.kiwixmobile.utils.SplashActivity;
 import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.schibsted.spain.barista.interaction.BaristaScrollInteractions.scrollTo;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
 import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
 
 @LargeTest
@@ -45,8 +46,8 @@ public class ContentTest {
   public void contentTest() {
     enterHelp();
 
-    scrollTo("Get Content");
-    clickOn("Get Content");
+    scrollTo(R.string.local_zims);
+    clickOn(R.string.local_zims);
 
     TestUtils.allowPermissionsIfNeeded();
 

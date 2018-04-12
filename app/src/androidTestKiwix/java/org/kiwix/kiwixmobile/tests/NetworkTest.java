@@ -133,7 +133,7 @@ public class NetworkTest {
     mActivityTestRule.launchActivity(null);
 
     enterHelp();
-    clickOn("Get Content");
+    clickOn(R.string.menu_zim_manager);
 
     TestUtils.allowPermissionsIfNeeded();
 

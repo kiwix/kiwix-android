@@ -59,7 +59,7 @@ public class BasicTest {
     assertDrawerIsOpen();
 
     assertDisplayed(R.id.titleText);
-    assertDisplayed("Help");
+    assertDisplayed(R.string.menu_help);
     assertDisplayed(R.id.left_drawer_list);
     assertDisplayed(R.id.new_tab_button);
 
@@ -75,7 +75,7 @@ public class BasicTest {
     openDrawerWithGravity(R.id.drawer_layout, Gravity.RIGHT);
     assertDrawerIsOpenWithGravity(R.id.drawer_layout, Gravity.RIGHT);
 
-    assertDisplayed("No Content Headers Found");
+    assertDisplayed(R.string.no_section_info);
 
     closeDrawerWithGravity(R.id.drawer_layout, Gravity.RIGHT);
     assertDrawerIsClosedWithGravity(R.id.drawer_layout, Gravity.RIGHT);

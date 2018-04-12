@@ -38,6 +38,7 @@ import static com.schibsted.spain.barista.interaction.BaristaDialogInteractions.
 import static com.schibsted.spain.barista.interaction.BaristaSwipeRefreshInteractions.refresh;
 import static org.hamcrest.Matchers.allOf;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.allowPermissionsIfNeeded;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.getCurrentActivity;
 import static org.kiwix.kiwixmobile.utils.StandardActions.deleteZimIfExists;
@@ -69,9 +70,9 @@ public class DownloadTest {
   @Test
   public void downloadTest() throws Throwable {
     enterHelp();
-    clickOn("Get Content");
+    clickOn(R.string.menu_zim_manager);
 
-    clickOn("Device");
+    clickOn(R.string.local_zims);
 
     allowPermissionsIfNeeded();
 
@@ -79,7 +80,7 @@ public class DownloadTest {
 
     deleteZimIfExists("ray_charles", R.id.zimfilelist);
 
-    clickOn("Online");
+    clickOn(R.string.remote_zims);
 
     try {
       clickOn(R.id.network_permission_button);
@@ -103,8 +104,8 @@ public class DownloadTest {
       // Confirmation not shown
     }
 
-    assertDisplayed("Device");
-    clickOn("Device");
+    assertDisplayed(R.string.local_zims);
+    clickOn(R.string.local_zims);
 
     try {
       refresh(R.id.zim_swiperefresh);

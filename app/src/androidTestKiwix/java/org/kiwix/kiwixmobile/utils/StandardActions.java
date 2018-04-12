@@ -20,10 +20,13 @@ package org.kiwix.kiwixmobile.utils;
 import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 
+import org.kiwix.kiwixmobile.R;
+
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 
 /**
@@ -34,12 +37,12 @@ public class StandardActions {
 
   public static void enterHelp() {
     BaristaSleepInteractions.sleep(250);
-    BaristaMenuClickInteractions.clickMenu("Help");
+    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_help));
   }
 
   public static void enterSettings() {
     BaristaSleepInteractions.sleep(250);
-    BaristaMenuClickInteractions.clickMenu("Settings");
+    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_settings));
   }
 
   public static void deleteZimIfExists(String zimName, Integer adapterId) {
