@@ -27,7 +27,7 @@
     <item name="android:textColorPrimary">@color/primary</item>
     <item name="android:textColorSecondary">@color/primary</item>
     <item name="android:textColorTertiary">@color/primary</item>
-    <item name="colorControlNormal">@color/white</item>
+    <item name="colorControlNormal">@color/accent</item>
   </style>
 
   <style name="AppTheme.Night" parent="AppTheme.Base">
@@ -43,7 +43,7 @@
     <item name="android:textColorPrimary">@color/primary_light</item>
     <item name="android:textColorSecondary">@color/primary_light</item>
     <item name="android:textColorTertiary">@color/primary_light</item>
-    <item name="colorControlNormal">@color/white</item>
+    <item name="colorControlNormal">@color/accent</item>
   </style>
 
   <style name="WindowAnimationTransition">
@@ -70,14 +70,24 @@
     <item name="actionMenuTextColor">@android:color/white</item>
   </style>
 
-  <style name="DayMenu" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
-    <item name="android:textColor">@color/primary_dark</item>
-  </style>
-
   <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
     <item name="colorAccent">@color/accent</item>
-    <item name="android:textColorPrimary">@color/accent</item>
+    <item name="android:textColorPrimary">@color/primary_dark</item>
   </style>
 
+  <style name="AppTheme.Dialog.Night" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+    <item name="colorAccent">@color/accent</item>
+    <item name="android:textColorPrimary">@color/white</item>
+    <item name="android:colorBackground">@color/cardview_dark_background</item>
+    <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+    <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+  </style>
+  <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+    <item name="android:textColor">@color/accent</item>
+  </style>
+
+  <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+    <item name="android:textColor">@color/accent</item>
+  </style>
 </resources>
 

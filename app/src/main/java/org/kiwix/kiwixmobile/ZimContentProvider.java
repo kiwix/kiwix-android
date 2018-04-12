@@ -29,7 +29,6 @@ import android.os.ParcelFileDescriptor.AutoCloseOutputStream;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
-import java.io.RandomAccessFile;
 import org.kiwix.kiwixlib.JNIKiwix;
 import org.kiwix.kiwixlib.JNIKiwixException;
 import org.kiwix.kiwixlib.JNIKiwixInt;
@@ -37,6 +36,7 @@ import org.kiwix.kiwixlib.JNIKiwixReader;
 import org.kiwix.kiwixlib.JNIKiwixSearcher;
 import org.kiwix.kiwixlib.JNIKiwixString;
 import org.kiwix.kiwixlib.Pair;
+import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,13 +44,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.inject.Inject;
-import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
@@ -70,18 +70,17 @@ public class ZimContentProvider extends ContentProvider {
 
   public static String zimFileName;
 
-  @Inject public static JNIKiwix jniKiwix;
+  @Inject
+  public JNIKiwix jniKiwix;
 
   public static JNIKiwixReader currentJNIReader;
 
   public static JNIKiwixSearcher jniSearcher;
 
-  @Inject public static Context context;
-  
   private static ArrayList<String> listedEntries;
 
   public void setupDagger() {
-    KiwixApplication.getInstance().getApplicationComponent().inject(this);
+    KiwixApplication.getApplicationComponent().inject(this);
     setIcuDataDirectory();
     jniSearcher = new JNIKiwixSearcher();
     listedEntries = new ArrayList<>();
@@ -109,7 +108,7 @@ public class ZimContentProvider extends ContentProvider {
      * file path itself (embedded fulltext index) */
     return file;
   }
-    
+
   public synchronized static String setZimFile(String fileName) {
     if (!new File(fileName).exists()) {
       Log.e(TAG_KIWIX, "Unable to find the ZIM file " + fileName);
@@ -122,8 +121,8 @@ public class ZimContentProvider extends ContentProvider {
       if(!listedEntries.contains(reader.getId())) {
         listedEntries.add(reader.getId());
         jniSearcher.addKiwixReader(reader);
-        currentJNIReader = reader;
       }
+      currentJNIReader = reader;
       zimFileName = fileName;
     } catch (JNIKiwixException e) {
       Log.e(TAG_KIWIX, "Unable to open the ZIM file " + fileName);
@@ -445,8 +444,8 @@ public class ZimContentProvider extends ContentProvider {
   }
 
   private void setIcuDataDirectory() {
-    File workingDir = context.getFilesDir();
-    String icuDirPath = loadICUData(context, workingDir);
+    File workingDir = KiwixApplication.getInstance().getFilesDir();
+    String icuDirPath = loadICUData(KiwixApplication.getInstance(), workingDir);
 
     if (icuDirPath != null) {
       Log.d(TAG_KIWIX, "Setting the ICU directory path to " + icuDirPath);

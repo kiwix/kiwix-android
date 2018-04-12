@@ -1,25 +1,37 @@
+/*
+ * Kiwix Android
+ * Copyright (C) 2018  Kiwix <android.kiwix.org>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.kiwix.kiwixmobile.zim_manager.library_view;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,19 +40,19 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.base.BaseFragment;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.downloader.DownloadIntent;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
-import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.TestingUtils;
@@ -62,11 +74,8 @@ import static android.view.View.GONE;
 import static org.kiwix.kiwixmobile.downloader.DownloadService.KIWIX_ROOT;
 import static org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOK;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE_TITLE;
-import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
-public class LibraryFragment extends Fragment
+public class LibraryFragment extends BaseFragment
     implements AdapterView.OnItemClickListener, StorageSelectDialog.OnSelectListener, LibraryViewCallback {
 
 
@@ -76,9 +85,6 @@ public class LibraryFragment extends Fragment
   TextView networkText;
   @BindView(R.id.network_permission_button)
   Button permissionButton;
-
-  @Inject
-  KiwixService kiwixService;
 
   public LinearLayout llLayout;
 
@@ -109,15 +115,13 @@ public class LibraryFragment extends Fragment
   @Inject
   LibraryPresenter presenter;
 
-  private void setupDagger() {
-    KiwixApplication.getInstance().getApplicationComponent().inject(this);
-  }
+  @Inject
+  SharedPreferenceUtil sharedPreferenceUtil;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
-
-    setupDagger();
+    KiwixApplication.getApplicationComponent().inject(this);
     TestingUtils.bindResource(LibraryFragment.class);
     llLayout = (LinearLayout) inflater.inflate(R.layout.activity_library, container, false);
     ButterKnife.bind(this, llLayout);
@@ -287,9 +291,17 @@ public class LibraryFragment extends Fragment
         }
 
         if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
-          DownloadFragment.showNoWiFiWarning(getContext(), () -> {
-            downloadFile((Book) parent.getAdapter().getItem(position));
-          });
+          new AlertDialog.Builder(getContext())
+              .setTitle(R.string.wifi_only_title)
+              .setMessage(R.string.wifi_only_msg)
+              .setPositiveButton(R.string.yes, (dialog, i) -> {
+                sharedPreferenceUtil.putPrefWifiOnly(false);
+                KiwixMobileActivity.wifiOnly = false;
+                downloadFile((Book) parent.getAdapter().getItem(position));
+              })
+              .setNegativeButton(R.string.no, (dialog, i) -> {
+              })
+              .show();
         } else {
           downloadFile((Book) parent.getAdapter().getItem(position));
         }
@@ -318,23 +330,17 @@ public class LibraryFragment extends Fragment
   }
 
   public long getSpaceAvailable() {
-    return new File(PreferenceManager.getDefaultSharedPreferences(super.getActivity())
-        .getString(PREF_STORAGE, Environment.getExternalStorageDirectory()
-            .getPath())).getFreeSpace();
+    return new File(sharedPreferenceUtil.getPrefStorage()).getFreeSpace();
   }
 
   @Override
   public void selectionCallback(StorageDevice storageDevice) {
-    SharedPreferences sharedPreferences =
-        PreferenceManager.getDefaultSharedPreferences(getActivity());
-    SharedPreferences.Editor editor = sharedPreferences.edit();
-    editor.putString(PREF_STORAGE, storageDevice.getName());
+    sharedPreferenceUtil.putPrefStorage(storageDevice.getName());
     if (storageDevice.isInternal()) {
-      editor.putString(PREF_STORAGE_TITLE, getResources().getString(R.string.internal_storage));
+      sharedPreferenceUtil.putPrefStorageTitle(getResources().getString(R.string.internal_storage));
     } else {
-      editor.putString(PREF_STORAGE_TITLE, getResources().getString(R.string.external_storage));
+      sharedPreferenceUtil.putPrefStorageTitle(getResources().getString(R.string.external_storage));
     }
-    editor.apply();
   }
 
   public class DownloadServiceConnection {

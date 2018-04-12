@@ -1,69 +1,69 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
   <PreferenceCategory
-      android:key="pref_display"
-      android:title="@string/pref_display_title">
+    android:key="pref_display"
+    android:title="@string/pref_display_title">
 
     <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
-        android:defaultValue="false"
-        android:key="pref_nightmode"
-        android:summary="@string/pref_nightmode_summary"
-        android:title="@string/pref_nightmode"/>
+      android:defaultValue="false"
+      android:key="pref_nightmode"
+      android:summary="@string/pref_nightmode_summary"
+      android:title="@string/pref_nightmode" />
 
     <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
-        android:defaultValue="false"
-        android:key="pref_auto_nightmode"
-        android:summary="@string/pref_autonightmode_summary"
-        android:title="@string/pref_autonightmode"/>
+      android:defaultValue="false"
+      android:key="pref_auto_nightmode"
+      android:summary="@string/pref_autonightmode_summary"
+      android:title="@string/pref_autonightmode" />
 
     <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
-        android:defaultValue="false"
-        android:key="pref_backtotop"
-        android:summary="@string/pref_backtotop_summary"
-        android:title="@string/pref_backtotop"/>
+      android:defaultValue="false"
+      android:key="pref_backtotop"
+      android:summary="@string/pref_backtotop_summary"
+      android:title="@string/pref_backtotop" />
 
     <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
-        android:defaultValue="false"
-        android:key="pref_hidetoolbar"
-        android:summary="@string/pref_hidetoolbar_summary"
-        android:title="@string/pref_hidetoolbar"/>
+      android:defaultValue="false"
+      android:key="pref_hidetoolbar"
+      android:summary="@string/pref_hidetoolbar_summary"
+      android:title="@string/pref_hidetoolbar" />
 
     <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
       android:defaultValue="false"
       android:key="pref_bottomtoolbar"
       android:summary="@string/pref_bottomtoolbar_summary"
-      android:title="@string/pref_bottomtoolbar"/>
+      android:title="@string/pref_bottomtoolbar" />
 
 
   </PreferenceCategory>
 
   <PreferenceCategory
-      android:key="pref_extras"
-      android:title="@string/pref_extras">
+    android:key="pref_extras"
+    android:title="@string/pref_extras">
 
     <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
-        android:defaultValue="false"
-        android:key="pref_newtab_background"
-        android:title="@string/pref_newtab_background_title"
-        android:summary="@string/pref_newtab_background_summary"/>
+      android:defaultValue="false"
+      android:key="pref_newtab_background"
+      android:summary="@string/pref_newtab_background_summary"
+      android:title="@string/pref_newtab_background_title" />
 
     <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
-        android:defaultValue="true"
-        android:key="pref_external_link_popup"
-        android:title="@string/pref_external_link_popup_title"
-        android:summary="@string/pref_external_link_popup_summary"/>
+      android:defaultValue="true"
+      android:key="pref_external_link_popup"
+      android:summary="@string/pref_external_link_popup_summary"
+      android:title="@string/pref_external_link_popup_title" />
 
     <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
       android:defaultValue="false"
       android:key="pref_full_text_search"
-      android:title="@string/pref_multi_search_title"
-      android:summary="@string/pref_multi_search_summary"/>
+      android:summary="@string/pref_multi_search_summary"
+      android:title="@string/pref_multi_search_title" />
 
 
-      <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
-          android:defaultValue="true"
-          android:key="pref_wifi_only"
-          android:title="@string/pref_wifi_only"
-          android:summary="@string/pref_wifi_only"/>
+    <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
+      android:defaultValue="true"
+      android:key="pref_wifi_only"
+      android:summary="@string/pref_wifi_only"
+      android:title="@string/pref_wifi_only" />
   </PreferenceCategory>
 
   <PreferenceCategory
@@ -72,66 +72,66 @@
 
     <Preference
       android:key="pref_select_folder"
-      android:title="@string/pref_current_folder"/>
+      android:title="@string/pref_current_folder" />
 
   </PreferenceCategory>
 
   <PreferenceCategory
-      android:key="pref_zoom_sub"
-      android:title="@string/pref_zoom_sub_title">
+    android:key="pref_zoom_sub"
+    android:title="@string/pref_zoom_sub_title">
 
     <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
-        android:defaultValue="false"
-        android:key="pref_zoom_enabled"
+      android:defaultValue="false"
+      android:key="pref_zoom_enabled"
 
-        android:title="@string/pref_zoom_enable"/>
+      android:title="@string/pref_zoom_enable" />
 
     <org.kiwix.kiwixmobile.views.SliderPreference
-        android:defaultValue="250.0"
-        android:dialogMessage="0"
-        android:enabled="false"
-        android:key="pref_zoom_slider"
-        android:summary="@array/pref_zoom_entryvalues"
-        android:title="@string/pref_zoom_dialog"/>
+      android:defaultValue="250.0"
+      android:dialogMessage="0"
+      android:enabled="false"
+      android:key="pref_zoom_slider"
+      android:summary="@array/pref_zoom_entryvalues"
+      android:title="@string/pref_zoom_dialog" />
   </PreferenceCategory>
 
   <PreferenceCategory
-      android:key="pref_history"
-      android:title="History">
+    android:key="pref_history"
+    android:title="History">
 
     <Preference
-        android:key="pref_clear_all_history"
-        android:summary="@string/pref_clear_all_history_summary"
-        android:title="@string/pref_clear_all_history_title"/>
+      android:key="pref_clear_all_history"
+      android:summary="@string/pref_clear_all_history_summary"
+      android:title="@string/pref_clear_all_history_title" />
 
   </PreferenceCategory>
   <PreferenceCategory
-      android:key="pref_language"
-      android:title="@string/pref_language_title">
+    android:key="pref_language"
+    android:title="@string/pref_language_title">
 
-    <Preference
-        android:key="pref_language_chooser"
-        android:summary="@string/pref_language_chooser"
-        android:title="@string/pref_language_title"/>
+    <ListPreference
+      android:key="pref_language_chooser"
+      android:summary="@string/pref_language_chooser"
+      android:title="@string/pref_language_title" />
 
   </PreferenceCategory>
 
   <PreferenceCategory
-      android:key="pref_info"
-      android:title="@string/pref_info_title">
+    android:key="pref_info"
+    android:title="@string/pref_info_title">
 
     <EditTextPreference
-        android:enabled="false"
-        android:key="pref_version"
-        android:persistent="false"
-        android:selectable="true"
-        android:shouldDisableView="false"
-        android:title="@string/pref_info_version"/>
+      android:enabled="false"
+      android:key="pref_version"
+      android:persistent="false"
+      android:selectable="true"
+      android:shouldDisableView="false"
+      android:title="@string/pref_info_version" />
 
     <Preference
       android:key="pref_credits"
       android:summary="@string/pref_credits"
-      android:title="@string/pref_credits_title"/>
+      android:title="@string/pref_credits_title" />
 
   </PreferenceCategory>
 
