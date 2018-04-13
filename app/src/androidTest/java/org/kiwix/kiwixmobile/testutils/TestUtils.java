@@ -19,16 +19,10 @@ package org.kiwix.kiwixmobile.testutils;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.LauncherActivity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.NoMatchingViewException;
-import android.support.test.espresso.UiController;
-import android.support.test.espresso.ViewAction;
-import android.support.test.espresso.ViewAssertion;
-import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.core.internal.deps.guava.collect.Iterables;
 import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.rule.ActivityTestRule;
@@ -39,17 +33,12 @@ import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.support.v4.content.ContextCompat;
-import android.view.View;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
-import java.util.concurrent.TimeoutException;
-
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 
 /**
  * Created by mhutti1 on 07/04/17.
@@ -113,6 +102,6 @@ public class TestUtils {
     Context targetContext = InstrumentationRegistry.getTargetContext();
     return targetContext.getResources().getString(id);
   }
-  
+
 }
 
