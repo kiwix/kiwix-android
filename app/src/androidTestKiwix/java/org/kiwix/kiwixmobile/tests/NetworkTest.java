@@ -85,8 +85,8 @@ public class NetworkTest {
 
   @BeforeClass
   public static void beforeClass() {
-    IdlingPolicies.setMasterPolicyTimeout(350, TimeUnit.SECONDS);
-    IdlingPolicies.setIdlingResourceTimeout(350, TimeUnit.SECONDS);
+    IdlingPolicies.setMasterPolicyTimeout(180, TimeUnit.SECONDS);
+    IdlingPolicies.setIdlingResourceTimeout(180, TimeUnit.SECONDS);
     Espresso.registerIdlingResources(KiwixIdlingResource.getInstance());
   }
 
