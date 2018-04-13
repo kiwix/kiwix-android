@@ -21,6 +21,8 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
+import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,8 +32,6 @@ import org.kiwix.kiwixmobile.utils.SplashActivity;
 
 import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
-import static com.schibsted.spain.barista.interaction.BaristaScrollInteractions.scrollTo;
-import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
 import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
 
 @LargeTest
@@ -47,12 +47,13 @@ public class ContentTest {
     enterHelp();
 
     clickOn(R.string.menu_zim_manager);
-    clickOn(R.string.local_zims);
 
     TestUtils.allowPermissionsIfNeeded();
 
     assertDisplayed(R.id.action_search);
 
-    clickOn(R.id.action_search);
+    clickOn(R.string.local_zims);
+
+    assertDisplayed(R.string.zim_manager);
   }
 }
