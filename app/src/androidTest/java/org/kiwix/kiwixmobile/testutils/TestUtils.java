@@ -70,7 +70,9 @@ public class TestUtils {
     mActivityTestRule.runOnUiThread(new Runnable() {
       @Override
       public void run() {
-        java.util.Collection<Activity> activities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED);
+        java.util.Collection<Activity> activities = ActivityLifecycleMonitorRegistry
+          .getInstance()
+          .getActivitiesInStage(Stage.RESUMED);
         activity[0] = Iterables.getOnlyElement(activities);
       }
     });
