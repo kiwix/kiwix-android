@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.core.internal.deps.guava.collect.Iterables;
 import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
@@ -33,6 +32,8 @@ import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.support.v4.content.ContextCompat;
+
+import com.google.common.collect.Iterables;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
