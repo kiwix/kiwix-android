@@ -18,26 +18,32 @@
 package org.kiwix.kiwixmobile.testutils;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
+import android.os.Environment;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.matcher.BoundedMatcher;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
-import android.support.test.runner.lifecycle.Stage;
+import android.support.test.runner.screenshot.Screenshot;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
-import com.google.common.collect.Iterables;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 
@@ -46,6 +52,8 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
  */
 
 public class TestUtils {
+  private static String TAG = "TESTUTILS";
+
   public static boolean hasStoragePermission() {
     return ContextCompat.checkSelfPermission(InstrumentationRegistry.getTargetContext(),
             Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
@@ -65,18 +73,54 @@ public class TestUtils {
     }
   }
 
-  public static Activity getCurrentActivity(ActivityTestRule mActivityTestRule) throws Throwable { // https://stackoverflow.com/a/41415288
-    final Activity[] activity = new Activity[1];
-    mActivityTestRule.runOnUiThread(new Runnable() {
-      @Override
-      public void run() {
-        java.util.Collection<Activity> activities = ActivityLifecycleMonitorRegistry
-          .getInstance()
-          .getActivitiesInStage(Stage.RESUMED);
-        activity[0] = Iterables.getOnlyElement(activities);
+  public static void captureAndSaveScreenshot(String name){
+    storeImage(
+        getOutputMediaFile(name),
+        Screenshot.capture().getBitmap()
+    );
+  }
+
+  // https://stackoverflow.com/questions/15662258/how-to-save-a-bitmap-on-internal-storage#15662384
+  private static void storeImage(File pictureFile, Bitmap image) {
+    if (pictureFile == null) {
+      Log.d(TAG,
+              "Error creating media file, check storage permissions: ");// e.getMessage());
+      return;
+    }
+    try {
+      FileOutputStream fos = new FileOutputStream(pictureFile);
+      image.compress(Bitmap.CompressFormat.PNG, 90, fos);
+      fos.close();
+    } catch (FileNotFoundException e) {
+      Log.d(TAG, "File not found: " + e.getMessage());
+    } catch (IOException e) {
+      Log.d(TAG, "Error accessing file: " + e.getMessage());
+    }
+  }
+
+  private static File getOutputMediaFile(String name){
+    // To be safe, you should check that the SDCard is mounted
+    // using Environment.getExternalStorageState() before doing this.
+    File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
+            + "/Android/data/"
+            + "KIWIXTEST"
+            + "/Files");
+
+    // This location works best if you want the created images to be shared
+    // between applications and persist after your app has been uninstalled.
+
+    // Create the storage directory if it does not exist
+    if (! mediaStorageDir.exists()){
+      if (! mediaStorageDir.mkdirs()){
+        return null;
       }
-    });
-    return activity[0];
+    }
+    // Create a media file name
+    String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmm").format(new Date());
+    File mediaFile;
+    String mImageName = "MI_" + timeStamp + "_" + name + ".jpg";
+    mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
+    return mediaFile;
   }
 
   public static Matcher<Object> withContent(final String content) {

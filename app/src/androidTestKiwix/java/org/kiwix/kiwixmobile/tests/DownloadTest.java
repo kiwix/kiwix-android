@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.tests;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingPolicies;
 import android.support.test.espresso.ViewInteraction;
@@ -29,8 +28,6 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.test.rule.GrantPermissionRule;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.util.Log;
-
-import com.squareup.spoon.Spoon;
 
 import org.junit.After;
 import org.junit.Before;
@@ -56,9 +53,8 @@ import static com.schibsted.spain.barista.interaction.BaristaDialogInteractions.
 import static com.schibsted.spain.barista.interaction.BaristaSwipeRefreshInteractions.refresh;
 import static org.hamcrest.Matchers.allOf;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.allowPermissionsIfNeeded;
-import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.captureAndSaveScreenshot;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
-import static org.kiwix.kiwixmobile.testutils.TestUtils.getCurrentActivity;
 import static org.kiwix.kiwixmobile.utils.StandardActions.deleteZimIfExists;
 import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
 
@@ -94,8 +90,6 @@ public class DownloadTest {
 
     allowPermissionsIfNeeded();
 
-    Activity currentActivity = getCurrentActivity(mActivityTestRule);
-
     deleteZimIfExists("ray_charles", R.id.zimfilelist);
 
     clickOn(R.string.remote_zims);
@@ -106,13 +100,13 @@ public class DownloadTest {
       Log.d(KIWIX_DOWNLOAD_TEST, "Failed to click Network Permission Button", e);
     }
 
-    Spoon.screenshot(currentActivity, "Before-checking-for-ZimManager-Main-Activity");
+    captureAndSaveScreenshot("Before-checking-for-ZimManager-Main-Activity");
     ViewInteraction viewPager2 = onView(
             allOf(withId(R.id.container),
                     withParent(allOf(withId(R.id.zim_manager_main_activity),
                             withParent(withId(android.R.id.content)))),
                     isDisplayed()));
-    Spoon.screenshot(currentActivity, "After-the-check-completed");
+    captureAndSaveScreenshot("After-the-check-completed");
 
     onData(withContent("ray_charles")).inAdapterView(withId(R.id.library_list)).perform(click());
 
