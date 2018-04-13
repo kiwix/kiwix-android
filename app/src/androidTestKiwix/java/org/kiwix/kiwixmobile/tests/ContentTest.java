@@ -46,7 +46,7 @@ public class ContentTest {
   public void contentTest() {
     enterHelp();
 
-    scrollTo(R.string.local_zims);
+    clickOn(R.string.menu_zim_manager);
     clickOn(R.string.local_zims);
 
     TestUtils.allowPermissionsIfNeeded();
