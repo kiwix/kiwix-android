@@ -113,27 +113,6 @@ public class TestUtils {
     Context targetContext = InstrumentationRegistry.getTargetContext();
     return targetContext.getResources().getString(id);
   }
-
-
-  public static ViewInteraction waitFor(final Matcher matcher, final int waitTimeoutMillis, final int retryRate) throws Throwable {
-    try {
-      return onView(matcher);
-    } catch (Throwable e) {
-      Thread.sleep(retryRate);
-      if(waitTimeoutMillis > 0 && (waitTimeoutMillis - retryRate > 0)) {
-        return waitFor(matcher, waitTimeoutMillis - retryRate, retryRate);
-      } else {
-        throw new TimeoutException("Timed out waiting for matcher: " + matcher.toString());
-      }
-    }
-  }
-
-  public static ViewInteraction waitFor(final Matcher matcher, final int waitTimeoutMillis) throws Throwable {
-    return waitFor(matcher, waitTimeoutMillis, waitTimeoutMillis / 4);
-  }
-
-  public static ViewInteraction waitFor(final Matcher matcher) throws Throwable {
-    return waitFor(matcher, 1000, 1000 / 4);
-  }
+  
 }
 
