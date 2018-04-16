@@ -170,4 +170,6 @@
   <string name="your_languages">Selected languages:</string>
   <string name="other_languages">Other languages:</string>
   <string name="no_items_msg">No items available</string>
+  <string name="ongoing_download_channel_name">Ongoing Downloads</string>
+  <string name="ongoing_download_channel_desc">Category for ongoing zim file downloads.</string>
 </resources>
