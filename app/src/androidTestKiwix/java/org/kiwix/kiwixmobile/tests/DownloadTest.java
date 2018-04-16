@@ -29,6 +29,8 @@ import android.support.test.rule.GrantPermissionRule;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.util.Log;
 
+import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -52,6 +54,7 @@ import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.c
 import static com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
 import static com.schibsted.spain.barista.interaction.BaristaSwipeRefreshInteractions.refresh;
 import static org.hamcrest.Matchers.allOf;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.allowPermissionsIfNeeded;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.captureAndSaveScreenshot;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
@@ -108,14 +111,9 @@ public class DownloadTest {
                     isDisplayed()));
     captureAndSaveScreenshot("After-the-check-completed");
 
-    onData(withContent("ray_charles")).inAdapterView(withId(R.id.library_list)).perform(click());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
-    try {
-      clickDialogPositiveButton();
-    } catch (RuntimeException e) {
-      Log.i(KIWIX_DOWNLOAD_TEST,
-        "Permission dialog was not shown, we probably already have required permissions");
-    }
+    deleteZimIfExists("ray_charles", R.id.library_list);
 
     assertDisplayed(R.string.local_zims);
     clickOn(R.string.local_zims);
