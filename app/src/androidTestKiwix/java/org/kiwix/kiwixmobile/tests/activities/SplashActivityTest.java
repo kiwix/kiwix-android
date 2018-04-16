@@ -45,6 +45,17 @@ public class SplashActivityTest {
         enterHelp();
     }
 
+    /*
+    This file contains various instances of:
+        BaristaSleepInteractions.sleep(250);
+    The number 250 is fairly arbitrary. I found 100 to be insufficient, and 250 seems to work on all
+    devices I've tried.
+
+    The line combats an intermittent issue caused by tests executing before the app/activity is ready.
+    This isn't necessary on all devices (particularly more recent ones), however I'm unsure if
+    it's speed related, or Android Version related.
+     */
+
     @Test
     public void navigateSettings() {
         mActivityTestRule.launchActivity();

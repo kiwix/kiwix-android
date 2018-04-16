@@ -113,7 +113,8 @@ public class DownloadTest {
     try {
       clickDialogPositiveButton();
     } catch (RuntimeException e) {
-      // Confirmation not shown
+      Log.i(KIWIX_DOWNLOAD_TEST,
+        "Permission dialog was not shown, we probably already have required permissions");
     }
 
     assertDisplayed(R.string.local_zims);

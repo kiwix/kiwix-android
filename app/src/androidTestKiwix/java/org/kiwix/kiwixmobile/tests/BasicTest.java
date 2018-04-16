@@ -18,8 +18,6 @@
 package org.kiwix.kiwixmobile.tests;
 
 import android.Manifest;
-import android.support.test.espresso.ViewInteraction;
-import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
