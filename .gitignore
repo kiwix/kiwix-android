@@ -49,3 +49,6 @@ gen-external-apklibs
 ic_launcher_512_*.png
 
 glassify
+
+.project
+.classpath

@@ -117,14 +117,15 @@ public class DownloadTest {
     try {
         onData(withContent("ray_charles")).inAdapterView(withId(R.id.library_list));
     } catch (Exception e) {
-        fail("Couldn't find downloaded file 'ray_charles'");
+        fail("Couldn't find downloaded file 'ray_charles'\n\nOriginal Exception:\n" +
+            e.getLocalizedMessage() + "\n\n" );
     }
 
     deleteZimIfExists("ray_charles", R.id.library_list);
 
     assertDisplayed(R.string.local_zims);
     clickOn(R.string.local_zims);
-
+.
     try {
       refresh(R.id.zim_swiperefresh);
     } catch (RuntimeException e) {
