@@ -17,7 +17,6 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'checkstyle'
 apply plugin: 'testdroid'
-apply plugin: 'spoon'
 
 repositories {
   mavenCentral()
@@ -68,6 +67,10 @@ dependencies {
     exclude group: 'com.android.support', module: 'recyclerview-v7'
   }
 
+  androidTestCompile('com.schibsted.spain:barista:2.4.0') {
+    exclude group: 'com.android.support'
+  }
+
   androidTestImplementation "com.android.support:support-annotations:$supportLibraryVersion"
   androidTestImplementation 'com.android.support.test:runner:1.0.1'
   androidTestImplementation 'com.android.support.test:rules:1.0.1'
@@ -103,7 +106,6 @@ dependencies {
     exclude group: 'stax', module: 'stax'
   }
   androidTestImplementation 'com.squareup.okhttp3:mockwebserver:3.6.0'
-  androidTestImplementation 'com.squareup.spoon:spoon-client:1.7.1'
 
   // Butterknife
   implementation 'com.jakewharton:butterknife:8.0.1'
