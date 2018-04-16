@@ -82,7 +82,7 @@ public class DownloadTest {
   }
 
   @Test
-  public void downloadTest() throws Throwable {
+  public void downloadTest() {
     enterHelp();
     clickOn(R.string.menu_zim_manager);
 

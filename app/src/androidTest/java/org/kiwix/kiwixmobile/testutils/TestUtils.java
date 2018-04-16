@@ -74,53 +74,36 @@ public class TestUtils {
   }
 
   public static void captureAndSaveScreenshot(String name){
-    storeImage(
-        getOutputMediaFile(name),
-        Screenshot.capture().getBitmap()
-    );
-  }
+    File screenshotDir = new File(
+      Environment.getExternalStorageDirectory() +
+      "/Android/data/KIWIXTEST/Screenshots");
 
-  // https://stackoverflow.com/questions/15662258/how-to-save-a-bitmap-on-internal-storage#15662384
-  private static void storeImage(File pictureFile, Bitmap image) {
-    if (pictureFile == null) {
-      Log.d(TAG,
-              "Error creating media file, check storage permissions: ");// e.getMessage());
-      return;
-    }
-    try {
-      FileOutputStream fos = new FileOutputStream(pictureFile);
-      image.compress(Bitmap.CompressFormat.PNG, 90, fos);
-      fos.close();
-    } catch (FileNotFoundException e) {
-      Log.d(TAG, "File not found: " + e.getMessage());
-    } catch (IOException e) {
-      Log.d(TAG, "Error accessing file: " + e.getMessage());
-    }
-  }
-
-  private static File getOutputMediaFile(String name){
-    // To be safe, you should check that the SDCard is mounted
-    // using Environment.getExternalStorageState() before doing this.
-    File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
-            + "/Android/data/"
-            + "KIWIXTEST"
-            + "/Files");
-
-    // This location works best if you want the created images to be shared
-    // between applications and persist after your app has been uninstalled.
-
-    // Create the storage directory if it does not exist
-    if (! mediaStorageDir.exists()){
-      if (! mediaStorageDir.mkdirs()){
-        return null;
+    if (!screenshotDir.exists()){
+      if (!screenshotDir.mkdirs()){
+        return;
       }
     }
-    // Create a media file name
-    String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmm").format(new Date());
-    File mediaFile;
-    String mImageName = "MI_" + timeStamp + "_" + name + ".jpg";
-    mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
-    return mediaFile;
+
+    String timestamp = new SimpleDateFormat("ddMMyyyy_HHmm").format(new Date());
+    String fileName = String.format("TEST_%s_%s.png", timestamp, name);
+
+    File outFile = new File(screenshotDir.getPath() + File.separator + fileName);
+
+    Bitmap screenshot = Screenshot.capture().getBitmap();
+
+    if(screenshot == null) {
+      return;
+    }
+
+    try {
+      FileOutputStream fos = new FileOutputStream(outFile);
+      screenshot.compress(Bitmap.CompressFormat.PNG, 90, fos);
+      fos.close();
+    } catch (FileNotFoundException e) {
+      Log.w(TAG, "Failed to save Screenshot", e);
+    } catch (IOException e) {
+      Log.w(TAG, "Failed to save Screenshot", e);
+    }
   }
 
   public static Matcher<Object> withContent(final String content) {
