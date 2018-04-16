@@ -25,7 +25,7 @@ public class BookmarksActivityTest {
     public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
     @Test
-    public void empty() {
+    public void BookmarksActivitySimple() {
 
     }
 
