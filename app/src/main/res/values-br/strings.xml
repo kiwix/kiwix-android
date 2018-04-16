@@ -2,8 +2,6 @@
 <resources>
   <string name="menu_help">Skoazell</string>
   <string name="menu_home">Degemer</string>
-  <string name="menu_forward">Da-heul</string>
-  <string name="menu_back">Distreiñ</string>
   <string name="menu_settings">Penndibaboù</string>
   <string name="menu_search">Klask</string>
   <string name="menu_searchintext">Kavout en destenn</string>
@@ -13,31 +11,20 @@
   <string name="menu_exitfullscreen">Kuitaat ar skramm leun</string>
   <string name="menu_read_aloud">Lenn a vouezh uhel</string>
   <string name="menu_read_aloud_stop">Paouez da lenn a vouezh uhel</string>
-  <string name="menu_rescan_fs">Adskannañ ar gartenn SD</string>
   <string name="save_media">Enrollañ ar media evel...</string>
   <string name="save_media_error">Ur fazi zo bet e-ser klask enrollañ ar media !</string>
   <string name="save_media_saved">Media enrollet evel %1$s en ho teuliad Skeudennoù</string>
   <string name="rescan_fs_warning">O tielfennañ restroù ZIM. Gortozit, mar plij</string>
   <string name="button_backtotop">Penn-krec\'h ar bajenn</string>
   <string name="search_label">Klask</string>
-  <string name="articlesearch_hint">Skrivañ evit klask pennadoù</string>
   <string name="choose_file">Dibab ur restr endac\'h ZIM (*.zim)</string>
-  <string name="add_bookmark">Merkañ ar bajenn-mañ</string>
-  <string name="remove_bookmark">Diverkañ ar sined diuzet</string>
   <string name="open_in_new_tab">Digeriñ al liamm en un ivinell nevez ?</string>
   <string name="error_nozimfilesfound">N\'eus bet kavet restr ZIM ebet en hoc\'h urzhiataer.\nTaolit ur sell ouzh ar bajenn skoazell evit deskiñ penaos kargañ endalc\'hadoù e Kiwix. M\'ho peus lakaet ur restr Kiwix en hoc\'h ardivink stokañ diabarzh pe diavaez e c\'hallit klask en-dro a-benn ur vutunenn pe adloc\'hit hoc\'h urzhiataer.</string>
   <string name="error_filenotfound">Fazi : N\'eus ket bet gallet kavout ar restr ZIM diuzet.</string>
   <string name="error_fileinvalid">Fazi : Ar restr diuzet n\'eo ket ur restr ZIM reizh.</string>
-  <string name="error_articlenotfound">Fazi : N\'eus ket bet gallet kargañ an draezenn \"%1$s\"</string>
   <string name="error_articleurlnotfound">Fazi : N\'eus ket bet gallet kargañ ar pennad \"%1$s\"</string>
   <string name="pref_display_title">Diskwel</string>
   <string name="pref_zoom_dialog">Live zoum</string>
-  <string-array name="pref_zoom_entries">
-    <item name="pref_zoom_entry_automatic">Emgefre</item>
-    <item name="pref_zoom_entry_small">Bihan</item>
-    <item name="pref_zoom_entry_medium">Etre</item>
-    <item name="pref_zoom_entry_large">Bras</item>
-  </string-array>
   <string name="pref_info_title">Titouroù</string>
   <string name="pref_info_version">Stumm</string>
   <string name="pref_zoom_enable">Kontrolloù ar zoum</string>
@@ -55,7 +42,6 @@
   <string name="menu_bookmarks_list">Sinedoù</string>
   <string name="no_section_info">N\'eus bet kavet talbenn endalc\'h ebet</string>
   <string name="request_storage">Evit tizhout ar restroù ZIM hon eus ezhomm da dizhout ho lec\'h stokañ</string>
-  <string name="bookmarks_restored">Sinedoù adsavet</string>
   <string name="bookmark_added">Sined ouzhpennet</string>
   <string name="rate_dialog_title">Notennit ac\'hanomp, mar plij</string>
   <string name="rate_dialog_msg_1">Ma plij deoc\'h implijout</string>

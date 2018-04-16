@@ -1,23 +1,20 @@
-**Is it a ?**
+# Fill out this template with your issue then delete these lines only leaving the titles and your responses.
 
-- [ ] Bug Report
-
-- [ ] Feature Request
+# For a Bug Report:
 
 ## Bug Report
 
-### Step 1: Are you ready to report ?
+### Are you ready to report?
    - Your issue may already be reported! Please search on the [issue track](../) before creating one.
-   - [ ] I have test with the last (dev) version of the software?  ( If not, and if possible, run your test again with the most recent version available.)
+   - Ensure you have tested with the last (dev) version of the software.  (If not, and if possible, run your test again with the most recent version available.)
 
-### Step 2 : What is your environment ?
-  * browser / app : _____
+### Environment
   * version of the software you use : _____
   * device / operating system : _____
   
-### Step 3: Describe the problem:
+### The Bug:
 
-  * What do you obtain? A copy of the error message or a screenshot is always useful
+  * What do you obtain? A copy of the error message or a screenshot is always useful.
 
   * When does this occur? 
 
@@ -31,12 +28,14 @@
   * What should be the behaviour from your point of view? How do you expect the service to work?
 
 
-### Step 4 (optional) : Other Comments:
+### Other Comments:
   * What is the context of this ticket? If not obvious, explain why you need to do this.
  
   * If you have an idea about the technical background of the ticket, please share it.
   
   
+# For a Feature Request:
+
 ## Feature Request
 
 #### Feature Description

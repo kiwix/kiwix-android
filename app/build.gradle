@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.1.0'
         classpath 'com.testdroid:gradle:1.5.0'
         classpath 'org.apache.httpcomponents:httpclient-android:4.3.3'
     }
@@ -49,7 +49,6 @@ dependencies {
     implementation "com.android.support:support-v4:$supportLibraryVersion"
     implementation "com.android.support:design:$supportLibraryVersion"
     implementation "com.android.support:cardview-v7:$supportLibraryVersion"
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.android.support:multidex:1.0.2'
 
 
@@ -77,9 +76,13 @@ dependencies {
     implementation group: 'com.google.guava', name: 'guava', version: '21.0'
 
     // Dagger
-    implementation 'com.google.dagger:dagger:2.0.2'
-    annotationProcessor "com.google.dagger:dagger-compiler:2.0.2"
-    androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:2.0.2"
+    compileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
+    androidTestCompileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    implementation "com.google.dagger:dagger-android:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
+    androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
 
     // SquiDB
     implementation 'com.yahoo.squidb:squidb:2.0.0'
@@ -90,10 +93,10 @@ dependencies {
     implementation 'commons-io:commons-io:2.5'
 
     // Square
-    implementation 'com.squareup.okhttp3:okhttp:3.7.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
     implementation('com.squareup.retrofit2:converter-simplexml:2.1.0') {
         exclude group: 'xpp3', module: 'xpp3'
         exclude group: 'stax', module: 'stax-api'
@@ -107,8 +110,8 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.0.1'
 
     // RxJava
-    implementation 'io.reactivex:rxandroid:1.1.0'
-    implementation 'io.reactivex:rxjava:1.1.5'
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 
     // JUnit
     testImplementation 'junit:junit:4.12'
@@ -117,6 +120,21 @@ dependencies {
     // Mockito
     testImplementation "org.mockito:mockito-core:2.7.22"
     androidTestImplementation "org.mockito:mockito-android:2.7.22"
+
+    // Leak canary
+    implementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+    // Only enable leak canary in debug builds
+    configurations.all { config ->
+        if (config.name.contains('debug') || config.name.contains("Debug")) {
+            config.resolutionStrategy.eachDependency { details ->
+                if (details.requested.group == 'com.squareup.leakcanary' &&
+                        details.requested.name == 'leakcanary-android-no-op') {
+                    details.useTarget(group: details.requested.group, name: 'leakcanary-android',
+                            version: details.requested.version)
+                }
+            }
+        }
+    }
 }
 
 // Set custom app import directory
@@ -139,15 +157,20 @@ if(custom.listFiles()) {
 }
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 27
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         // See https://github.com/linkedin/dexmaker/issues/65 for why we need the following line.
         testInstrumentationRunnerArguments.notClass = 'com.android.dex.DexIndexOverflowException'
         multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    aaptOptions {
+        cruncherEnabled true
     }
 
     lintOptions {
@@ -237,7 +260,7 @@ android {
                 if (file(directory + "/build.gradle").exists()) {
                     apply from: directory + "/build.gradle"
                 }
-                def jsonFile = ""
+                def jsonFile
                 if (project.hasProperty('jsonFile')) {
                     // Read json file from properties e.g command line
                     jsonFile = file(project.property('jsonFile'))
@@ -265,7 +288,7 @@ android {
                 applicationId "$parsedJson.package"
                 buildConfigField "boolean", "IS_CUSTOM_APP", "true"
                 buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "$parsedJson.embed_zim"
-                def filename = ""
+                def filename
                 if (parsedJson.zim_file.lastIndexOf('/') >= 0) {
                     filename = parsedJson.zim_file.substring(parsedJson.zim_file.lastIndexOf('/') + 1)
                 } else {
@@ -338,10 +361,6 @@ android {
       }
     }
     */
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.4'
 }
 
 // Testdroid deployment configuration

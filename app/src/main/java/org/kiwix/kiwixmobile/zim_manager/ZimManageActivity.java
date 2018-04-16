@@ -1,35 +1,56 @@
+/*
+ * Kiwix Android
+ * Copyright (C) 2018  Kiwix <android.kiwix.org>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.kiwix.kiwixmobile.zim_manager;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
-import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.views.LanguageSelectDialog;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
+import java.io.File;
+
 import javax.inject.Inject;
 
+import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
-public class ZimManageActivity extends AppCompatActivity implements ZimManageViewCallback {
+public class ZimManageActivity extends BaseActivity implements ZimManageViewCallback {
 
   public static final String TAB_EXTRA = "TAB";
   /**
@@ -61,20 +82,16 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
 
   @Inject
   ZimManagePresenter zimManagePresenter;
-
-  private void setupDagger() {
-    KiwixApplication.getInstance().getApplicationComponent().inject(this);
-  }
+  @Inject
+  SharedPreferenceUtil sharedPreferenceUtil;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-    if (KiwixSettingsActivity.nightMode(sharedPreferences)) {
+    super.onCreate(savedInstanceState);
+    if (KiwixSettingsActivity.nightMode(sharedPreferenceUtil)) {
       setTheme(R.style.AppTheme_Night);
     }
-    super.onCreate(savedInstanceState);
     setContentView(R.layout.zim_manager);
-    setupDagger();
 
     setUpToolbar();
     zimManagePresenter.attachView(this);
@@ -110,6 +127,21 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
 
       }
     });
+
+    // Disable scrolling for the AppBarLayout on top of the screen
+    // User can only scroll the PageViewer component
+    AppBarLayout appBarLayout = findViewById(R.id.appbar);
+    if (appBarLayout.getLayoutParams() != null) {
+      CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+      AppBarLayout.Behavior appBarLayoutBehaviour = new AppBarLayout.Behavior();
+      appBarLayoutBehaviour.setDragCallback(new AppBarLayout.Behavior.DragCallback() {
+        @Override
+        public boolean canDrag(@NonNull AppBarLayout appBarLayout) {
+          return false;
+        }
+      });
+      layoutParams.setBehavior(appBarLayoutBehaviour);
+    }
 
     Log.i(KIWIX_TAG, "ZimManageActivity successfully bootstrapped");
   }
@@ -183,7 +215,7 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
     updateMenu(mViewPager.getCurrentItem());
     toolbar.setOnClickListener(v -> {
       if (mViewPager.getCurrentItem() == 1)
-        MenuItemCompat.expandActionView(menu.findItem(R.id.action_search));
+        menu.findItem(R.id.action_search).expandActionView();
     });
     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
       @Override
@@ -221,6 +253,20 @@ public class ZimManageActivity extends AppCompatActivity implements ZimManageVie
         }
       default:
         return super.onOptionsItemSelected(item);
+    }
+  }
+
+  // Set zim file and return
+  public void finishResult(String path) {
+    if (path != null) {
+      File file = new File(path);
+      Uri uri = Uri.fromFile(file);
+      Log.i(TAG_KIWIX, "Opening Zim File: " + uri);
+      setResult(Activity.RESULT_OK, new Intent().setData(uri));
+      finish();
+    } else {
+      setResult(Activity.RESULT_CANCELED);
+      finish();
     }
   }
 
