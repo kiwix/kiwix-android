@@ -170,4 +170,7 @@
   <string name="your_languages">Selected languages:</string>
   <string name="other_languages">Other languages:</string>
   <string name="no_items_msg">No items available</string>
+  <string name="sharing_message">The app is a lightweight piece of software reading bigger files stored on your device or SD card: once it is installed, you can select which additional content you would like to download (Wikipedia, Wiktionary, TED talks, etc.) and be ready for when your internet connection is bad. Download Kiwix Now:https://play.google.com/store/apps/details?id=org.kiwix.kiwixmobile </string>
+  <string name="sharing_body">Download Kiwix , The whole of Wikipedia will be on your device!</string>
+  <string name="share_intent_message">Share via</string>
 </resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:card_view="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="wrap_content">
@@ -337,4 +337,18 @@
       </android.support.v7.widget.CardView>
     </LinearLayout>
   </ScrollView>
-</LinearLayout>
+  <android.support.design.widget.FloatingActionButton
+    android:id="@+id/share"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentRight="true"
+    android:layout_marginBottom="20dp"
+    android:layout_marginEnd="24dp"
+    android:layout_marginRight="24dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:src="@drawable/ic_share_white_24dp" />
+</RelativeLayout>
+
