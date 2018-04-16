@@ -53,6 +53,7 @@ import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.
 import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
 import static com.schibsted.spain.barista.interaction.BaristaSwipeRefreshInteractions.refresh;
+import static junit.framework.Assert.fail;
 import static org.hamcrest.Matchers.allOf;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.allowPermissionsIfNeeded;
@@ -112,6 +113,12 @@ public class DownloadTest {
     captureAndSaveScreenshot("After-the-check-completed");
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
+    try {
+        onData(withContent("ray_charles")).inAdapterView(withId(R.id.library_list));
+    } catch (Exception e) {
+        fail("Couldn't find downloaded file 'ray_charles'");
+    }
 
     deleteZimIfExists("ray_charles", R.id.library_list);
 
