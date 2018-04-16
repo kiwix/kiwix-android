@@ -125,7 +125,7 @@ public class DownloadTest {
 
     assertDisplayed(R.string.local_zims);
     clickOn(R.string.local_zims);
-.
+
     try {
       refresh(R.id.zim_swiperefresh);
     } catch (RuntimeException e) {
