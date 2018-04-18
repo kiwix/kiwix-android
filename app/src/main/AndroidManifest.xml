@@ -4,11 +4,11 @@
   android:installLocation="auto">
 
   <supports-screens
-  android:anyDensity="true"
-  android:largeScreens="true"
-  android:normalScreens="true"
-  android:resizeable="true"
-  android:smallScreens="true" />
+    android:anyDensity="true"
+    android:largeScreens="true"
+    android:normalScreens="true"
+    android:resizeable="true"
+    android:smallScreens="true" />
 
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -16,179 +16,182 @@
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
   <application
-  android:name=".KiwixApplication"
-  android:allowBackup="true"
-  android:hardwareAccelerated="true"
-  android:icon="@mipmap/kiwix_icon"
-  android:label="@string/app_name"
-  android:theme="@style/AppTheme"
-  android:supportsRtl="true">
+      android:name=".KiwixApplication"
+      android:allowBackup="true"
+      android:hardwareAccelerated="true"
+      android:icon="@mipmap/kiwix_icon"
+      android:label="@string/app_name"
+      android:theme="@style/AppTheme"
+      android:supportsRtl="true">
 
-  <activity
-    android:name=".utils.SplashActivity"
-    android:theme="@style/AppTheme.Launcher"
-    android:label="@string/app_name">
-    <intent-filter>
-    <action android:name="android.intent.action.MAIN" />
-    <category android:name="android.intent.category.LAUNCHER" />
-    </intent-filter>
-  </activity>
+    <activity
+      android:name=".utils.SplashActivity"
+      android:theme="@style/AppTheme.Launcher"
+      android:label="@string/app_name">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
 
-  <activity
-    android:name=".KiwixMobileActivity"
-    android:configChanges="orientation|keyboardHidden|screenSize|locale"
-    android:label="@string/app_name"
-    android:windowSoftInputMode="adjustPan">
+    <activity
+      android:name=".KiwixMobileActivity"
+      android:configChanges="orientation|keyboardHidden|screenSize|locale"
+      android:label="@string/app_name"
+      android:windowSoftInputMode="adjustPan">
 
-    <intent-filter>
-    <action android:name="android.intent.action.VIEW" />
-    <category android:name="android.intent.category.DEFAULT" />
+      <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
 
-    <data android:scheme="content" />
-    <data android:mimeType="application/octet-stream"/>
-    </intent-filter>
+            <data android:scheme="content" />
+            <data android:mimeType="application/octet-stream"/>
+      </intent-filter>
 
-    <intent-filter>
-    <action android:name="android.intent.action.VIEW" />
-    <category android:name="android.intent.category.DEFAULT" />
-    <category android:name="android.intent.category.BROWSABLE" />
-    <data android:scheme="file" />
-    <data android:mimeType="*/*" />
-    <data android:pathPattern=".*\\.zim" />
-    <data android:pathPattern=".*\\..*\\.zim" />
-    <data android:pathPattern=".*\\..*\\..*\\.zim" />
-    <data android:pathPattern=".*\\..*\\..*\\..*\\.zim" />
-    <data android:host="*" />
-    </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="file" />
+        <data android:mimeType="*/*" />
+        <data android:pathPattern=".*\\.zim" />
+        <data android:pathPattern=".*\\..*\\.zim" />
+        <data android:pathPattern=".*\\..*\\..*\\.zim" />
+        <data android:pathPattern=".*\\..*\\..*\\..*\\.zim" />
+        <data android:host="*" />
+      </intent-filter>
 
-    <intent-filter>
-    <action android:name="android.intent.action.VIEW" />
-    <category android:name="android.intent.category.DEFAULT" />
-    <category android:name="android.intent.category.BROWSABLE" />
-    <data android:scheme="file" />
-    <data android:mimeType="*/*" />
-    <data android:pathPattern=".*\\.zimaa" />
-    <data android:pathPattern=".*\\..*\\.zimaa" />
-    <data android:pathPattern=".*\\..*\\..*\\.zimaa" />
-    <data android:pathPattern=".*\\..*\\..*\\..*\\.zimaa" />
-    <data android:host="*" />
-    </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="file" />
+        <data android:mimeType="*/*" />
+        <data android:pathPattern=".*\\.zimaa" />
+        <data android:pathPattern=".*\\..*\\.zimaa" />
+        <data android:pathPattern=".*\\..*\\..*\\.zimaa" />
+        <data android:pathPattern=".*\\..*\\..*\\..*\\.zimaa" />
+        <data android:host="*" />
+      </intent-filter>
+      
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
 
-    <intent-filter>
-    <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
 
-    <category android:name="android.intent.category.DEFAULT" />
-    <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="http" />
+        <data android:host="*" />
+        <data android:pathPattern=".*\\.zim(aa|)" />
+        <data android:pathPattern=".*\\..*\\.zim(aa|)" />
+        <data android:pathPattern=".*\\..*\\..*\\.zim(aa|)" />
+        <data android:pathPattern=".*\\..*\\..*\\..*\\.zim(aa|)" />
+      </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
 
-    <data android:scheme="http" />
-    <data android:host="*" />
-    <data android:pathPattern=".*\\.zim(aa|)" />
-    <data android:pathPattern=".*\\..*\\.zim(aa|)" />
-    <data android:pathPattern=".*\\..*\\..*\\.zim(aa|)" />
-    <data android:pathPattern=".*\\..*\\..*\\..*\\.zim(aa|)" />
-    </intent-filter>
-    <intent-filter>
-    <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
 
-    <category android:name="android.intent.category.DEFAULT" />
-    <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="https" />
+        <data android:host="*" />
+        <data android:pathPattern=".*\\.zim(aa|)" />
+        <data android:pathPattern=".*\\..*\\.zim(aa|)" />
+        <data android:pathPattern=".*\\..*\\..*\\.zim(aa|)" />
+        <data android:pathPattern=".*\\..*\\..*\\..*\\.zim(aa|)" />
+      </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
 
-    <data android:scheme="https" />
-    <data android:host="*" />
-    <data android:pathPattern=".*\\.zim(aa|)" />
-    <data android:pathPattern=".*\\..*\\.zim(aa|)" />
-    <data android:pathPattern=".*\\..*\\..*\\.zim(aa|)" />
-    <data android:pathPattern=".*\\..*\\..*\\..*\\.zim(aa|)" />
-    </intent-filter>
-    <intent-filter>
-    <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
 
-    <category android:name="android.intent.category.DEFAULT" />
-    <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="content" />
+        <data android:host="*" />
+        <data android:pathPattern=".*\\.zim(aa|)" />
+        <data android:pathPattern=".*\\..*\\.zim(aa|)" />
+        <data android:pathPattern=".*\\..*\\..*\\.zim(aa|)" />
+        <data android:pathPattern=".*\\..*\\..*\\..*\\.zim(aa|)" />
+      </intent-filter>
 
-    <data android:scheme="content" />
-    <data android:host="*" />
-    <data android:pathPattern=".*\\.zim(aa|)" />
-    <data android:pathPattern=".*\\..*\\.zim(aa|)" />
-    <data android:pathPattern=".*\\..*\\..*\\.zim(aa|)" />
-    <data android:pathPattern=".*\\..*\\..*\\..*\\.zim(aa|)" />
-    </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="kiwix"
+          android:host="search" />
+      </intent-filter>
 
-    <intent-filter>
-    <action android:name="android.intent.action.VIEW" />
-    <category android:name="android.intent.category.DEFAULT" />
-    <category android:name="android.intent.category.BROWSABLE" />
-    <data android:scheme="kiwix"
-      android:host="search" />
-    </intent-filter>
+      <intent-filter android:label="@string/app_search_string">
+        <action android:name="android.intent.action.PROCESS_TEXT"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <data android:mimeType="text/plain"/>
+      </intent-filter>
+    </activity>
+    <activity
+      android:name=".zim_manager.ZimManageActivity"
+      android:label="@string/choose_file">
 
-    <intent-filter android:label="@string/app_search_string">
-    <action android:name="android.intent.action.PROCESS_TEXT"/>
-    <category android:name="android.intent.category.DEFAULT"/>
-    <data android:mimeType="text/plain"/>
-    </intent-filter>
-  </activity>
-  <activity
-    android:name=".zim_manager.ZimManageActivity"
-    android:label="@string/choose_file">
+      <!-- TODO -->
+      <intent-filter>
+        <action android:name="android.intent.action.GET_CONTENT" />
 
-    <!-- TODO -->
-    <intent-filter>
-    <action android:name="android.intent.action.GET_CONTENT" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.OPENABLE" />
 
-    <category android:name="android.intent.category.DEFAULT" />
-    <category android:name="android.intent.category.OPENABLE" />
+        <data android:mimeType="*/*" />
+      </intent-filter>
 
-    <data android:mimeType="*/*" />
-    </intent-filter>
+      <intent-filter>
+        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.TEXT_CLICKED" />
+        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.ICON_CLICKED" />
+        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.MIC_CLICKED" />
+        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.STAR_CLICKED" />
+      </intent-filter>
 
-    <intent-filter>
-    <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.TEXT_CLICKED" />
-    <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.ICON_CLICKED" />
-    <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.MIC_CLICKED" />
-    <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.STAR_CLICKED" />
-    </intent-filter>
+    </activity>
 
-  </activity>
+    <activity android:name=".settings.KiwixSettingsActivity" />
+    <activity android:name=".search.SearchActivity" />
+    <activity android:name=".bookmarks_view.BookmarksActivity" />
 
-  <activity android:name=".settings.KiwixSettingsActivity" />
-  <activity android:name=".search.SearchActivity" />
-  <activity android:name=".bookmarks_view.BookmarksActivity" />
+    <provider
+      android:name=".ZimContentProvider"
+      android:authorities="${applicationId}.zim.base"
+      android:exported="true" />
 
-  <provider
-    android:name=".ZimContentProvider"
-    android:authorities="${applicationId}.zim.base"
-    android:exported="true" />
+    <receiver android:name=".utils.KiwixSearchWidget">
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.TEXT_CLICKED" />
+        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.ICON_CLICKED" />
+        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.MIC_CLICKED" />
+        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.STAR_CLICKED" />
+      </intent-filter>
 
-  <receiver android:name=".utils.KiwixSearchWidget">
-    <intent-filter>
-    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-    <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.TEXT_CLICKED" />
-    <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.ICON_CLICKED" />
-    <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.MIC_CLICKED" />
-    <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.STAR_CLICKED" />
-    </intent-filter>
+      <meta-data
+        android:name="android.appwidget.provider"
+        android:resource="@xml/kiwix_widget_provider_info" />
+    </receiver>
 
-    <meta-data
-    android:name="android.appwidget.provider"
-    android:resource="@xml/kiwix_widget_provider_info" />
-  </receiver>
 
-  <service android:name=".downloader.DownloadService" />
+    <service android:name=".downloader.DownloadService" />
 
-  <activity
-    android:name=".KiwixErrorActivity"
-    android:process=":error_activity" />
-  
-  <provider
-    android:name="android.support.v4.content.FileProvider"
-    android:authorities="${applicationId}.provider"
-    android:exported="false"
-    android:grantUriPermissions="true">
+    <activity
+      android:name=".KiwixErrorActivity"
+      android:process=":error_activity" />
+
+    <provider
+      android:name="android.support.v4.content.FileProvider"
+      android:authorities="${applicationId}.provider"
+      android:exported="false"
+      android:grantUriPermissions="true">
+
       <meta-data
         android:name="android.support.FILE_PROVIDER_PATHS"
-        android:resource="@xml/provider_paths"/>
-  </provider>
+        android:resource="@xml/provider_paths" />
+    </provider>
+
   </application>
 
 </manifest>
