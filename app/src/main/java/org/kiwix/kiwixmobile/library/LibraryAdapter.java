@@ -78,7 +78,8 @@ public class LibraryAdapter extends BaseAdapter {
   private final LayoutInflater layoutInflater;
   private final BookFilter bookFilter = new BookFilter();
   private Disposable saveNetworkLanguageDisposable;
-  @Inject BookUtils bookUtils;
+  @Inject
+  BookUtils bookUtils;
 
   private void setupDagger() {
     KiwixApplication.getInstance().getApplicationComponent().inject(this);
@@ -318,8 +319,16 @@ public class LibraryAdapter extends BaseAdapter {
     return bookFilter;
   }
 
-  public void updateNetworkLanguages() {
-    saveNetworkLanguages();
+  public void updateNetworkLanguages(List<Language> filteredLanguages) {
+    if (saveNetworkLanguageDisposable != null && !saveNetworkLanguageDisposable.isDisposed()) {
+      saveNetworkLanguageDisposable.dispose();
+    }
+    saveNetworkLanguageDisposable = Completable.fromAction(() -> networkLanguageDao
+        .saveFilteredLanguages(filteredLanguages))
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe();
+    notifyDataSetChanged();
   }
 
   private void updateLanguageCounts() {
