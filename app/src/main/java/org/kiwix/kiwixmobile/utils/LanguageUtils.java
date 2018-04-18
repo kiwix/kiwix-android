@@ -340,4 +340,17 @@ public class LanguageUtils {
       return mLanguageName;
     }
   }
+
+  public static String getStringOrResource(Context appContext, String str){
+    if(str.contains("REPLACE_")) {
+      int resourceId = appContext.getResources()
+              .getIdentifier(
+                      str.replace("REPLACE_", ""),
+                      "string",
+                      appContext.getPackageName()
+              );
+      return appContext.getResources().getString(resourceId);
+    }
+    return str;
+  }
 }

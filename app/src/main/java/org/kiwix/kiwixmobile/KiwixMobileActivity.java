@@ -147,6 +147,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_CURRENT_POSITIONS;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_CURRENT_TAB;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
+import static org.kiwix.kiwixmobile.utils.LanguageUtils.getStringOrResource;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class KiwixMobileActivity extends BaseActivity implements WebViewCallback {
@@ -390,7 +391,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     });
 
     documentSections = new ArrayList<>();
-    tabDrawerAdapter = new TabDrawerAdapter(mWebViews);
+    tabDrawerAdapter = new TabDrawerAdapter(mWebViews, getApplicationContext());
     tabDrawerLeft.setLayoutManager(new LinearLayoutManager(this));
     tabDrawerLeft.setAdapter(tabDrawerAdapter);
     tableDrawerRight.setLayoutManager(new LinearLayoutManager(this));
@@ -443,8 +444,11 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
       @Override
       public void sectionsLoaded(String title, List<DocumentSection> sections) {
+        for (DocumentSection section : sections) {
+          section.title = getStringOrResource(getApplicationContext(), section.title);
+        }
         documentSections.addAll(sections);
-        tableDrawerAdapter.setTitle(title);
+        tableDrawerAdapter.setTitle(getStringOrResource(getApplicationContext(), title));
         tableDrawerAdapter.setSections(documentSections);
         tableDrawerAdapter.notifyDataSetChanged();
       }
