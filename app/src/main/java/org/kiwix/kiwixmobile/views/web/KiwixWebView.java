@@ -35,7 +35,6 @@ import android.webkit.WebView;
 import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.KiwixWebChromeClient;
 import org.kiwix.kiwixmobile.KiwixWebViewClient;
 import org.kiwix.kiwixmobile.R;
@@ -66,11 +65,10 @@ public class KiwixWebView extends WebView {
   private WebViewCallback callback;
   @Inject SharedPreferenceUtil sharedPreferenceUtil;
 
-  private Handler saveHandler = new Handler() {
+  static class SaveHandler extends Handler {
 
     @Override
     public void handleMessage(Message msg) {
-      KiwixMobileActivity kiwixMobileActivity = (KiwixMobileActivity) getContext();
       String url = (String) msg.getData().get("url");
       String src = (String) msg.getData().get("src");
 
@@ -83,8 +81,8 @@ public class KiwixWebView extends WebView {
         File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP
-            && kiwixMobileActivity.getExternalMediaDirs().length > 0) {
-          root = kiwixMobileActivity.getExternalMediaDirs()[0];
+            && KiwixApplication.getInstance().getExternalMediaDirs().length > 0) {
+          root = KiwixApplication.getInstance().getExternalMediaDirs()[0];
         }
 
         File storageDir = new File(root, url);
@@ -98,7 +96,7 @@ public class KiwixWebView extends WebView {
         String toastText;
 
         try {
-          InputStream input = getContext().getContentResolver().openInputStream(source);
+          InputStream input = KiwixApplication.getInstance().getContentResolver().openInputStream(source);
           OutputStream output = new FileOutputStream(storageDir);
 
           byte[] buffer = new byte[1024];
@@ -109,31 +107,27 @@ public class KiwixWebView extends WebView {
           input.close();
           output.close();
 
-          String imageSaved = getResources().getString(R.string.save_media_saved);
+          String imageSaved = KiwixApplication.getInstance().getString(R.string.save_media_saved);
           toastText = String.format(imageSaved, newUrl);
         } catch (IOException e) {
           Log.w("kiwix", "Couldn't save image", e);
-          toastText = getResources().getString(R.string.save_media_error);
+          toastText = KiwixApplication.getInstance().getString(R.string.save_media_error);
         }
 
-        Toast.makeText(getContext(), toastText, Toast.LENGTH_LONG).show();
+        Toast.makeText(KiwixApplication.getInstance(), toastText, Toast.LENGTH_LONG).show();
       }
     }
-  };
+  }
 
   public KiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs) {
     super(context, attrs);
     this.callback = callback;
-    setupDagger();
+    KiwixApplication.getApplicationComponent().inject(this);
     // Set the user agent to the current locale so it can be read with navigator.userAgent
     getSettings().setUserAgentString(LanguageUtils.getCurrentLocale(context).toString());
     setWebViewClient(new KiwixWebViewClient(callback));
     setWebChromeClient(new KiwixWebChromeClient(callback));
     getSettings().setDomStorageEnabled(true);
-  }
-
-  private void setupDagger() {
-    KiwixApplication.getInstance().getApplicationComponent().inject(this);
   }
 
   public void loadPrefs() {
@@ -180,7 +174,7 @@ public class KiwixWebView extends WebView {
         || result.getType() == HitTestResult.SRC_IMAGE_ANCHOR_TYPE) {
       MenuItem saveMenu = menu.add(0, 1, 0, getResources().getString(R.string.save_media));
       saveMenu.setOnMenuItemClickListener(item -> {
-        Message msg = saveHandler.obtainMessage();
+        Message msg = new SaveHandler().obtainMessage();
         requestFocusNodeHref(msg);
         return true;
       });

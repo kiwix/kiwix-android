@@ -79,7 +79,6 @@ import org.json.JSONArray;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmarks_view.BookmarksActivity;
 import org.kiwix.kiwixmobile.database.BookmarksDao;
-import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
@@ -212,8 +211,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   private boolean isFirstRun;
 
-  private BookmarksDao bookmarksDao;
-
   @BindView(R.id.toolbar) Toolbar toolbar;
 
   @BindView(R.id.button_backtotop) Button backToTopButton;
@@ -259,6 +256,9 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   @Inject OkHttpClient okHttpClient;
 
   @Inject SharedPreferenceUtil sharedPreferenceUtil;
+
+  @Inject
+  BookmarksDao bookmarksDao;
 
   @Override
   public void onActionModeStarted(ActionMode mode) {
@@ -1013,7 +1013,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
           //Bookmarks
           bookmarks = new ArrayList<>();
-          bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
           bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
 
           openMainPage();
@@ -1507,7 +1506,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
           if (ZimContentProvider.getId() == null) return;
 
           //Bookmarks
-          bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
           bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
 
           if (itemClicked) {
@@ -1592,7 +1590,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   public void refreshBookmarkSymbol(Menu menu) { // Checks if current webview is in bookmarks array
     if (bookmarks == null || bookmarks.size() == 0) {
-      bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
       bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
     }
 

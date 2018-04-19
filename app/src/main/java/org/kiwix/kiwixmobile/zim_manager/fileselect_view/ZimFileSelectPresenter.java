@@ -17,11 +17,8 @@
  */
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view;
 
-import android.content.Context;
-
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.database.BookDao;
-import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 
 import java.util.ArrayList;
@@ -34,6 +31,9 @@ import javax.inject.Inject;
 public class ZimFileSelectPresenter extends BasePresenter<ZimFileSelectViewCallback> {
 
   @Inject
+  BookDao bookDao;
+
+  @Inject
   public ZimFileSelectPresenter() {
   }
 
@@ -42,8 +42,7 @@ public class ZimFileSelectPresenter extends BasePresenter<ZimFileSelectViewCallb
     super.attachView(mvpView);
   }
 
-  public void loadLocalZimFileFromDb(Context context){
-    BookDao bookDao = new BookDao(KiwixDatabase.getInstance(context));
+  public void loadLocalZimFileFromDb() {
     ArrayList<LibraryNetworkEntity.Book> books = bookDao.getBooks();
     getMvpView().showFiles(books);
   }

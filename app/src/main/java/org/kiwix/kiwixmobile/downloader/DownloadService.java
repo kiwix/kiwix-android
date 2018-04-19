@@ -39,7 +39,6 @@ import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.database.BookDao;
-import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
@@ -100,25 +99,22 @@ public class DownloadService extends Service {
   public SparseIntArray downloadProgress = new SparseIntArray();
   public SparseIntArray timeRemaining = new SparseIntArray();
   public static final Object pauseLock = new Object();
-  public static BookDao bookDao;
   private static DownloadFragment downloadFragment;
   Handler handler = new Handler(Looper.getMainLooper());
 
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
 
+  @Inject
+  BookDao bookDao;
+
   public static void setDownloadFragment(DownloadFragment dFragment) {
     downloadFragment = dFragment;
   }
 
-  private void setupDagger(){
-    KiwixApplication.getInstance().getApplicationComponent().inject(this);
-  }
-
-
   @Override
   public void onCreate() {
-    setupDagger();
+    KiwixApplication.getApplicationComponent().inject(this);
 
     SD_CARD = sharedPreferenceUtil.getPrefStorage();
     KIWIX_ROOT = SD_CARD + "/Kiwix/";
@@ -173,7 +169,6 @@ public class DownloadService extends Service {
     notifications.add(notificationTitle);
     final Intent target = new Intent(this, KiwixMobileActivity.class);
     target.putExtra(EXTRA_LIBRARY, true);
-    bookDao = new BookDao(KiwixDatabase.getInstance(this));
 
     PendingIntent pendingIntent = PendingIntent.getActivity
         (getBaseContext(), notificationID,
