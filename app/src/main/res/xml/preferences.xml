@@ -52,11 +52,14 @@
       android:summary="@string/pref_external_link_popup_summary"
       android:title="@string/pref_external_link_popup_title" />
 
+    <!--
+    Disabled for 2.4
     <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
       android:defaultValue="false"
       android:key="pref_full_text_search"
       android:summary="@string/pref_multi_search_summary"
       android:title="@string/pref_multi_search_title" />
+      -->
 
 
     <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
