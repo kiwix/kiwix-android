@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.downloader;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -41,6 +42,7 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
+import org.kiwix.kiwixmobile.utils.Constants;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
@@ -70,6 +72,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOK;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_LIBRARY;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_NOTIFICATION_ID;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_ZIM_FILE;
+import static org.kiwix.kiwixmobile.utils.Constants.ONGOING_DOWNLOAD_CHANNEL_ID;
 import static org.kiwix.kiwixmobile.utils.files.FileUtils.getCurrentSize;
 
 public class DownloadService extends Service {
@@ -120,6 +123,8 @@ public class DownloadService extends Service {
     KIWIX_ROOT = SD_CARD + "/Kiwix/";
 
     KIWIX_ROOT = checkWritable(KIWIX_ROOT);
+
+    createOngoingDownloadChannel();
 
     super.onCreate();
   }
@@ -182,7 +187,7 @@ public class DownloadService extends Service {
     NotificationCompat.Action pause = new NotificationCompat.Action(R.drawable.ic_pause_black_24dp, getString(R.string.download_pause), pausePending);
     NotificationCompat.Action stop = new NotificationCompat.Action(R.drawable.ic_stop_black_24dp, getString(R.string.download_stop), stopPending);
 
-    notification.put(notificationID , new NotificationCompat.Builder(this)
+    notification.put(notificationID , new NotificationCompat.Builder(this, ONGOING_DOWNLOAD_CHANNEL_ID)
         .setContentTitle(getResources().getString(R.string.zim_file_downloading) + " " + notificationTitle)
         .setProgress(100, 0, false)
         .setSmallIcon(R.drawable.kiwix_notification)
@@ -549,6 +554,24 @@ public class DownloadService extends Service {
         subscriber.onError(e);
       }
     });
+  }
+
+  /**
+   * Creates and registers notification channel with system for notifications of
+   * type: download in progress.
+   */
+  private void createOngoingDownloadChannel () {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      CharSequence name = getString(R.string.ongoing_download_channel_name);
+      String description = getString(R.string.ongoing_download_channel_desc);
+      int importance = NotificationManager.IMPORTANCE_DEFAULT;
+      NotificationChannel ongoingDownloadsChannel = new NotificationChannel(
+          Constants.ONGOING_DOWNLOAD_CHANNEL_ID, name, importance);
+      ongoingDownloadsChannel.setDescription(description);
+      NotificationManager notificationManager = (NotificationManager) getSystemService(
+          NOTIFICATION_SERVICE);
+      notificationManager.createNotificationChannel(ongoingDownloadsChannel);
+    }
   }
 
   private final IBinder mBinder = new LocalBinder();
