@@ -40,7 +40,6 @@ import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.database.BookDao;
-import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.utils.Constants;
@@ -55,6 +54,8 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -101,25 +102,22 @@ public class DownloadService extends Service {
   public SparseIntArray downloadProgress = new SparseIntArray();
   public SparseIntArray timeRemaining = new SparseIntArray();
   public static final Object pauseLock = new Object();
-  public static BookDao bookDao;
   private static DownloadFragment downloadFragment;
   Handler handler = new Handler(Looper.getMainLooper());
 
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
 
+  @Inject
+  BookDao bookDao;
+
   public static void setDownloadFragment(DownloadFragment dFragment) {
     downloadFragment = dFragment;
   }
 
-  private void setupDagger(){
-    KiwixApplication.getInstance().getApplicationComponent().inject(this);
-  }
-
-
   @Override
   public void onCreate() {
-    setupDagger();
+    KiwixApplication.getApplicationComponent().inject(this);
 
     SD_CARD = sharedPreferenceUtil.getPrefStorage();
     KIWIX_ROOT = SD_CARD + "/Kiwix/";
@@ -176,7 +174,6 @@ public class DownloadService extends Service {
     notifications.add(notificationTitle);
     final Intent target = new Intent(this, KiwixMobileActivity.class);
     target.putExtra(EXTRA_LIBRARY, true);
-    bookDao = new BookDao(KiwixDatabase.getInstance(this));
 
     PendingIntent pendingIntent = PendingIntent.getActivity
         (getBaseContext(), notificationID,
@@ -365,19 +362,40 @@ public class DownloadService extends Service {
   }
 
   private Observable<Pair<String, Long>> getMetaLinkContentLength(String url) {
+    Log.d("KiwixDownloadSSL","url=" + url);
+    final String urlToUse = UseHttpOnAndroidVersion4(url);
     return Observable.create(subscriber -> {
       try {
-        Request request = new Request.Builder().url(url).head().build();
+        Request request = new Request.Builder().url(urlToUse).head().build();
         Response response = httpClient.newCall(request).execute();
         String LengthHeader = response.headers().get("Content-Length");
         long contentLength = LengthHeader == null ? 0 : Long.parseLong(LengthHeader);
-        subscriber.onNext(new Pair<>(url, contentLength));
+        subscriber.onNext(new Pair<>(urlToUse, contentLength));
         subscriber.onComplete();
         if (!response.isSuccessful()) subscriber.onError(new Exception(response.message()));
       } catch (IOException e) {
         subscriber.onError(e);
       }
     });
+  }
+
+  private String UseHttpOnAndroidVersion4(String sourceUrl) {
+
+    // Simply return the current URL on newer builds of Android
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      return sourceUrl;
+    }
+
+    // Otherwise replace https with http to bypass Android 4.x devices having older certificates
+    // See https://github.com/kiwix/kiwix-android/issues/510 for details
+    try {
+      URL tempURL = new URL(sourceUrl);
+      String androidV4URL = "http" + sourceUrl.substring(tempURL.getProtocol().length());
+      Log.d("KiwixDownloadSSL", "replacement_url=" + androidV4URL);
+      return androidV4URL;
+    } catch (MalformedURLException e) {
+      return sourceUrl;
+    }
   }
 
   private Observable<Integer> downloadChunk(Chunk chunk) {

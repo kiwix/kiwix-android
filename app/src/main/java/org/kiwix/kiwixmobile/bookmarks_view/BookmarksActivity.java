@@ -57,11 +57,11 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.N;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOKMARK_CLICKED;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_TITLE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_URL;
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.N;
 
 public class BookmarksActivity extends BaseActivity
     implements AdapterView.OnItemClickListener, BookmarksViewCallback {
@@ -102,7 +102,7 @@ public class BookmarksActivity extends BaseActivity
     bookmarksList.setOnItemClickListener(this);
 
     presenter.attachView(this);
-    presenter.loadBookmarks(this);
+    presenter.loadBookmarks();
   }
 
   private void setNoBookmarksState() {

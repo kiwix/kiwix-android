@@ -7,8 +7,6 @@ buildscript {
   }
   dependencies {
       classpath 'com.android.tools.build:gradle:3.1.0'
-      classpath 'com.squareup.spoon:spoon-runner:1.7.1'
-      classpath 'com.stanfy.spoon:spoon-gradle-plugin:1.2.2'
 
     // NOTE: Do not place your application dependencies here; they belong
     // in the individual module build.gradle files

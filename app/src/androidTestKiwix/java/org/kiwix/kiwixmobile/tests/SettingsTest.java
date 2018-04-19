@@ -12,12 +12,9 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.utils.SplashActivity;
 
 import static android.support.test.espresso.Espresso.onData;
-import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.PreferenceMatchers.withKey;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -68,10 +65,10 @@ public class SettingsTest {
         withKey("pref_external_link_popup")))
         .perform(click());
 
-    onData(allOf(
+    /*onData(allOf(
         is(instanceOf(Preference.class)),
         withKey("pref_full_text_search")))
-        .perform(click());
+        .perform(click());*/
 
     onData(allOf(
         is(instanceOf(Preference.class)),
@@ -97,7 +94,7 @@ public class SettingsTest {
         withKey("pref_zoom_slider")))
         .perform(click());
 
-    onView(withText(R.string.pref_zoom_dialog)).check(matches(isDisplayed()));
+    assertDisplayed(R.string.pref_zoom_dialog);
   }
 
   @Test
@@ -108,7 +105,7 @@ public class SettingsTest {
         withKey("pref_language_chooser")))
         .perform(click());
 
-    onView(withText(R.string.pref_language_title)).check(matches(isDisplayed()));
+    assertDisplayed(R.string.pref_language_title);
   }
 
   @Test
@@ -119,7 +116,7 @@ public class SettingsTest {
         withKey("pref_select_folder")))
         .perform(click());
 
-    onView(withText(R.string.pref_storage)).check(matches(isDisplayed()));
+    assertDisplayed(R.string.pref_storage);
   }
 
   @Test
@@ -130,6 +127,6 @@ public class SettingsTest {
         withKey("pref_clear_all_history")))
         .perform(click());
 
-    onView(withText(R.string.clear_all_history_dialog_title)).check(matches(isDisplayed()));
+    assertDisplayed(R.string.clear_all_history_dialog_title);
   }
 }

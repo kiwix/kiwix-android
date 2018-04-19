@@ -32,7 +32,7 @@
 
           <ImageView
             android:id="@+id/welcome_image"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:adjustViewBounds="true"
