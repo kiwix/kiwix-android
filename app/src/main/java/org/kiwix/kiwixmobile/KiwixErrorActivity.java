@@ -20,12 +20,17 @@ import org.kiwix.kiwixmobile.utils.SplashActivity;
 import java.io.File;
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static org.kiwix.kiwixmobile.utils.LanguageUtils.getCurrentLocale;
 
 public class KiwixErrorActivity extends AppCompatActivity {
+
+  @Inject
+  BookDao bookDao;
 
   @BindView(R.id.messageText)
   TextView messageText;
@@ -89,7 +94,6 @@ public class KiwixErrorActivity extends AppCompatActivity {
       }
 
       if(allowZimsCheckbox.isChecked()) {
-        BookDao bookDao = new BookDao(KiwixDatabase.getInstance(getApplicationContext()));
         ArrayList<LibraryNetworkEntity.Book> books = bookDao.getBooks();
 
         StringBuilder sb = new StringBuilder();
