@@ -75,7 +75,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmarks_view.BookmarksActivity;
@@ -358,6 +357,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     if (nightMode) {
       setTheme(R.style.AppTheme_Night);
     }
+
     handleLocaleCheck();
     setContentView(R.layout.main);
     ButterKnife.bind(this);

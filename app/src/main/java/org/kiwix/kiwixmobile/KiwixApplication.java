@@ -19,14 +19,17 @@ package org.kiwix.kiwixmobile;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Environment;
 import android.support.multidex.MultiDexApplication;
+import android.util.Log;
 import android.support.v7.app.AppCompatDelegate;
-
 import com.squareup.leakcanary.LeakCanary;
-
 import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
 import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
+
+import java.io.File;
+import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -38,6 +41,8 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
 
   private static KiwixApplication application;
   private static ApplicationComponent applicationComponent;
+
+  private File logFile;
 
   static {
     AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -70,6 +75,37 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
   @Override
   public void onCreate() {
     super.onCreate();
+    if (isExternalStorageWritable()) {
+      File appDirectory = new File(Environment.getExternalStorageDirectory() + "/Kiwix");
+      logFile = new File(appDirectory, "logcat.txt");
+      Log.d("KIWIX","Writing all logs into [" + logFile.getPath() + "]");
+
+      // create app folder
+      if (!appDirectory.exists()) {
+        appDirectory.mkdir();
+      }
+
+      // create log folder
+      if (!appDirectory.exists()) {
+        appDirectory.mkdir();
+      }
+
+      if (logFile.exists() && logFile.isFile()) {
+        logFile.delete();
+      }
+
+      // clear the previous logcat and then write the new one to the file
+      try {
+        logFile.createNewFile();
+        Process process = Runtime.getRuntime().exec("logcat -c");
+        process = Runtime.getRuntime().exec("logcat -f " + logFile.getPath() + " -s kiwix");
+      } catch (IOException e) {
+        Log.e("KIWIX", "Error while writing logcat.txt", e);
+      }
+    }
+
+    Log.d("KIWIX", "Started KiwixApplication");
+
     applicationComponent.inject(this);
     if (LeakCanary.isInAnalyzerProcess(this)) {
       // This process is dedicated to LeakCanary for heap analysis.
@@ -77,6 +113,12 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
       return;
     }
     LeakCanary.install(this);
+  }
+
+  /* Checks if external storage is available for read and write */
+  public boolean isExternalStorageWritable() {
+    String state = Environment.getExternalStorageState();
+    return Environment.MEDIA_MOUNTED.equals(state);
   }
 
   @Override
