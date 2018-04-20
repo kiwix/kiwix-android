@@ -7,13 +7,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.TextView;
 
+import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.database.BookDao;
-import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.SplashActivity;
 
@@ -27,13 +25,10 @@ import butterknife.ButterKnife;
 
 import static org.kiwix.kiwixmobile.utils.LanguageUtils.getCurrentLocale;
 
-public class KiwixErrorActivity extends AppCompatActivity {
+public class KiwixErrorActivity extends BaseActivity {
 
   @Inject
   BookDao bookDao;
-
-  @BindView(R.id.messageText)
-  TextView messageText;
 
   @BindView(R.id.reportButton)
   Button reportButton;
