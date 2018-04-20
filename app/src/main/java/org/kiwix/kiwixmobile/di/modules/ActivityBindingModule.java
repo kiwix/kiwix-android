@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.di.modules;
 
+import org.kiwix.kiwixmobile.KiwixErrorActivity;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.bookmarks_view.BookmarksActivity;
 import org.kiwix.kiwixmobile.di.PerActivity;
@@ -37,4 +38,8 @@ public abstract class ActivityBindingModule {
   @PerActivity
   @ContributesAndroidInjector
   public abstract BookmarksActivity provideBookmarksActivity();
+
+  @PerActivity
+  @ContributesAndroidInjector
+  public abstract KiwixErrorActivity provideKiwixErrorActivity();
 }
