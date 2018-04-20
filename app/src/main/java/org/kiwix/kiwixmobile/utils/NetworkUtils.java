@@ -58,6 +58,9 @@ public class NetworkUtils {
 
     if (Build.VERSION.SDK_INT >= 23) {
       NetworkInfo network = connectivity.getActiveNetworkInfo();
+      if (network == null) {
+        return false;
+      }
       return network.getType() == ConnectivityManager.TYPE_WIFI;
     } else {
       NetworkInfo wifi = connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
