@@ -205,6 +205,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
 
   private boolean isFirstRun;
 
+  private static final String NEW_TAB = "NEW_TAB";
+
   @BindView(R.id.toolbar) Toolbar toolbar;
 
   @BindView(R.id.button_backtotop) Button backToTopButton;
@@ -1251,33 +1253,44 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
     Intent intent = getIntent();
     if (intent.getAction() != null) {
 
-      if (intent.getAction().equals(Intent.ACTION_PROCESS_TEXT)) {
-        final String zimFile = ZimContentProvider.getZimFile();
-        saveTabStates();
-        Intent i = new Intent(MainActivity.this, SearchActivity.class);
-        i.putExtra(EXTRA_ZIM_FILE, zimFile);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-          i.putExtra(Intent.EXTRA_PROCESS_TEXT, intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT));
+      switch (intent.getAction()) {
+        case Intent.ACTION_PROCESS_TEXT: {
+          final String zimFile = ZimContentProvider.getZimFile();
+          saveTabStates();
+          Intent i = new Intent(MainActivity.this, SearchActivity.class);
+          i.putExtra(EXTRA_ZIM_FILE, zimFile);
+          if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
+            i.putExtra(Intent.EXTRA_PROCESS_TEXT, intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT));
+          }
+          intent.setAction("");
+          startActivityForResult(i, REQUEST_FILE_SEARCH);
+          break;
         }
-        intent.setAction("");
-        startActivityForResult(i, REQUEST_FILE_SEARCH);
-      } else if (intent.getAction().equals(KiwixSearchWidget.TEXT_CLICKED)){
-        intent.setAction("");
-        goToSearch(false);
-      } else if (intent.getAction().equals(KiwixSearchWidget.STAR_CLICKED)) {
-        intent.setAction("");
-        goToBookmarks();
-      } else if (intent.getAction().equals(KiwixSearchWidget.MIC_CLICKED)) {
-        intent.setAction("");
-        goToSearch(true);
-      } else if (intent.getAction().equals(Intent.ACTION_VIEW)) {
-        final String zimFile = ZimContentProvider.getZimFile();
-        saveTabStates();
-        Intent i = new Intent(MainActivity.this, SearchActivity.class);
-        i.putExtra(EXTRA_ZIM_FILE, zimFile);
-        i.putExtra(EXTRA_SEARCH, intent.getData().getLastPathSegment());
-        intent.setAction("");
-        startActivityForResult(i, REQUEST_FILE_SEARCH);
+        case KiwixSearchWidget.TEXT_CLICKED:
+          intent.setAction("");
+          goToSearch(false);
+          break;
+        case KiwixSearchWidget.STAR_CLICKED:
+          intent.setAction("");
+          goToBookmarks();
+          break;
+        case KiwixSearchWidget.MIC_CLICKED:
+          intent.setAction("");
+          goToSearch(true);
+          break;
+        case Intent.ACTION_VIEW: {
+          final String zimFile = ZimContentProvider.getZimFile();
+          saveTabStates();
+          Intent i = new Intent(MainActivity.this, SearchActivity.class);
+          i.putExtra(EXTRA_ZIM_FILE, zimFile);
+          i.putExtra(EXTRA_SEARCH, intent.getData().getLastPathSegment());
+          intent.setAction("");
+          startActivityForResult(i, REQUEST_FILE_SEARCH);
+          break;
+        }
+        case NEW_TAB:
+          newTab();
+          break;
       }
 
     }

@@ -181,4 +181,7 @@
   <string name="crash_checkbox_device">Device Details</string>
   <string name="crash_button_confirm">SEND DETAILS</string>
   <string name="crash_button_decline">NO THANKS</string>
+  <string name="shortcut_disabled_message">Shortcut not available</string>
+  <string name="new_tab_shortcut_label">New tab</string>
+  <string name="get_content_shortcut_label">Get content</string>
 </resources>
