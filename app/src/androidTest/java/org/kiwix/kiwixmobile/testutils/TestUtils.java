@@ -18,20 +18,32 @@
 package org.kiwix.kiwixmobile.testutils;
 
 import android.Manifest;
-import android.app.LauncherActivity;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
+import android.os.Environment;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.matcher.BoundedMatcher;
+import android.support.test.runner.screenshot.Screenshot;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
+
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 
@@ -40,11 +52,24 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
  */
 
 public class TestUtils {
+  private static String TAG = "TESTUTILS";
+  public static int TEST_PAUSE_MS = 250;
+  /*
+    TEST_PAUSE_MS is used as such:
+        BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    The number 250 is fairly arbitrary. I found 100 to be insufficient, and 250 seems to work on all
+    devices I've tried.
+
+    The sleep combats an intermittent issue caused by tests executing before the app/activity is ready.
+    This isn't necessary on all devices (particularly more recent ones), however I'm unsure if
+    it's speed related, or Android Version related.
+   */
+
   public static boolean hasStoragePermission() {
     return ContextCompat.checkSelfPermission(InstrumentationRegistry.getTargetContext(),
-        Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-        ContextCompat.checkSelfPermission(InstrumentationRegistry.getTargetContext(),
-        Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+            Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(InstrumentationRegistry.getTargetContext(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
   }
 
   public static void allowPermissionsIfNeeded() {
@@ -56,6 +81,39 @@ public class TestUtils {
           allowPermissions.click();
         } catch (UiObjectNotFoundException e) {}
       }
+    }
+  }
+
+  public static void captureAndSaveScreenshot(String name){
+    File screenshotDir = new File(
+      Environment.getExternalStorageDirectory() +
+      "/Android/data/KIWIXTEST/Screenshots");
+
+    if (!screenshotDir.exists()){
+      if (!screenshotDir.mkdirs()){
+        return;
+      }
+    }
+
+    String timestamp = new SimpleDateFormat("ddMMyyyy_HHmm").format(new Date());
+    String fileName = String.format("TEST_%s_%s.png", timestamp, name);
+
+    File outFile = new File(screenshotDir.getPath() + File.separator + fileName);
+
+    Bitmap screenshot = Screenshot.capture().getBitmap();
+
+    if(screenshot == null) {
+      return;
+    }
+
+    try {
+      FileOutputStream fos = new FileOutputStream(outFile);
+      screenshot.compress(Bitmap.CompressFormat.PNG, 90, fos);
+      fos.close();
+    } catch (FileNotFoundException e) {
+      Log.w(TAG, "Failed to save Screenshot", e);
+    } catch (IOException e) {
+      Log.w(TAG, "Failed to save Screenshot", e);
     }
   }
 
@@ -80,4 +138,11 @@ public class TestUtils {
       }
     };
   }
+
+  public static String getResourceString(int id) {
+    Context targetContext = InstrumentationRegistry.getTargetContext();
+    return targetContext.getResources().getString(id);
+  }
+
 }
+

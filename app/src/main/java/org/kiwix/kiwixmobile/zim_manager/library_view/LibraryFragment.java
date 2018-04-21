@@ -146,10 +146,18 @@ public class LibraryFragment extends BaseFragment
     faActivity.registerReceiver(networkBroadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     isReceiverRegistered = true;
 
-    presenter.loadRunningDownloadsFromDb(getActivity());
+    presenter.loadRunningDownloadsFromDb();
     return llLayout;
   }
 
+  @Override
+  public void onStop() {
+    if (isReceiverRegistered) {
+      faActivity.unregisterReceiver(networkBroadcastReceiver);
+      isReceiverRegistered = false;
+    }
+    super.onStop();
+  }
 
   @Override
   public void showBooks(LinkedList<Book> books) {
