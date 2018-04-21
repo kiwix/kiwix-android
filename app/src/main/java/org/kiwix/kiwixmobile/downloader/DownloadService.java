@@ -187,21 +187,25 @@ public class DownloadService extends Service {
     NotificationCompat.Action pause = new NotificationCompat.Action(R.drawable.ic_pause_black_24dp, getString(R.string.download_pause), pausePending);
     NotificationCompat.Action stop = new NotificationCompat.Action(R.drawable.ic_stop_black_24dp, getString(R.string.download_stop), stopPending);
 
-    notification.put(notificationID , new NotificationCompat.Builder(this, ONGOING_DOWNLOAD_CHANNEL_ID)
-        .setContentTitle(getResources().getString(R.string.zim_file_downloading) + " " + notificationTitle)
-        .setProgress(100, 0, false)
-        .setSmallIcon(R.drawable.kiwix_notification)
-        .setColor(Color.BLACK)
-        .setContentIntent(pendingIntent)
-        .addAction(pause)
-        .addAction(stop)
-        .setOngoing(true));
-
-    notificationManager.notify(notificationID, notification.get(notificationID).build());
-    downloadStatus.put(notificationID, PLAY);
-    LibraryFragment.downloadingBooks.remove(book);
-    String url = intent.getExtras().getString(DownloadIntent.DOWNLOAD_URL_PARAMETER);
-    downloadBook(url, notificationID, book);
+    if(flags == START_FLAG_REDELIVERY && book.file == null) {
+      return START_NOT_STICKY;
+    } else {
+      notification.put(notificationID , new NotificationCompat.Builder(this, ONGOING_DOWNLOAD_CHANNEL_ID)
+          .setContentTitle(getResources().getString(R.string.zim_file_downloading) + " " + notificationTitle)
+          .setProgress(100, 0, false)
+          .setSmallIcon(R.drawable.kiwix_notification)
+          .setColor(Color.BLACK)
+          .setContentIntent(pendingIntent)
+          .addAction(pause)
+          .addAction(stop)
+          .setOngoing(true));
+      
+      notificationManager.notify(notificationID, notification.get(notificationID).build());
+      downloadStatus.put(notificationID, PLAY);
+      LibraryFragment.downloadingBooks.remove(book);
+      String url = intent.getExtras().getString(DownloadIntent.DOWNLOAD_URL_PARAMETER);
+      downloadBook(url, notificationID, book);
+    }
     return START_REDELIVER_INTENT;
   }
 
