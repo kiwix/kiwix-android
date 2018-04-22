@@ -35,7 +35,7 @@ import butterknife.ButterKnife;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.N;
-import static org.kiwix.kiwixmobile.utils.LanguageUtils.getStringOrResource;
+import static org.kiwix.kiwixmobile.utils.LanguageUtils.getResourceString;
 
 public class TabDrawerAdapter extends RecyclerView.Adapter<TabDrawerAdapter.ViewHolder> {
   private TabClickListener listener;
@@ -58,7 +58,10 @@ public class TabDrawerAdapter extends RecyclerView.Adapter<TabDrawerAdapter.View
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
     KiwixWebView webView = webViews.get(position);
-    String webViewTitle = getStringOrResource(appContext, stripHtml(webView.getTitle()));
+    String webViewTitle = stripHtml(webView.getTitle());
+    if(webViewTitle.contains("REPLACE_")) {
+      webViewTitle = getResourceString(appContext, webViewTitle);
+    }
     holder.title.setText(webViewTitle);
     holder.exit.setOnClickListener(v -> listener.onCloseTab(v, position));
     holder.itemView.setOnClickListener(v -> {

@@ -147,7 +147,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_CURRENT_POSITIONS;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_CURRENT_TAB;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
-import static org.kiwix.kiwixmobile.utils.LanguageUtils.getStringOrResource;
+import static org.kiwix.kiwixmobile.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class KiwixMobileActivity extends BaseActivity implements WebViewCallback {
@@ -445,10 +445,16 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       @Override
       public void sectionsLoaded(String title, List<DocumentSection> sections) {
         for (DocumentSection section : sections) {
-          section.title = getStringOrResource(getApplicationContext(), section.title);
+          if(section.title.contains("REPLACE_")) {
+            section.title = getResourceString(getApplicationContext(), section.title);
+          }
         }
         documentSections.addAll(sections);
-        tableDrawerAdapter.setTitle(getStringOrResource(getApplicationContext(), title));
+        if(title.contains("REPLACE_")) {
+          tableDrawerAdapter.setTitle(getResourceString(getApplicationContext(), title));
+        } else {
+          tableDrawerAdapter.setTitle(title);
+        }
         tableDrawerAdapter.setSections(documentSections);
         tableDrawerAdapter.notifyDataSetChanged();
       }

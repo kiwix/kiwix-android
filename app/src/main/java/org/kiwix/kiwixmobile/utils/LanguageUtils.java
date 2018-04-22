@@ -341,16 +341,20 @@ public class LanguageUtils {
     }
   }
 
-  public static String getStringOrResource(Context appContext, String str){
-    if(str.contains("REPLACE_")) {
-      int resourceId = appContext.getResources()
-              .getIdentifier(
-                      str.replace("REPLACE_", ""),
-                      "string",
-                      appContext.getPackageName()
-              );
-      return appContext.getResources().getString(resourceId);
+
+
+  public static String getResourceString(Context appContext, String str){
+    String resourceName = str;
+    if(resourceName.contains("REPLACE_")) {
+      resourceName = resourceName.replace("REPLACE_", "");
     }
-    return str;
+    int resourceId = appContext.getResources()
+      .getIdentifier(
+        resourceName,
+        "string",
+        appContext.getPackageName()
+      );
+    String resourceString = appContext.getResources().getString(resourceId);
+    return resourceString != null ? resourceString : str;
   }
 }
