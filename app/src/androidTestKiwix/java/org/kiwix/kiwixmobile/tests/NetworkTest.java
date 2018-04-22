@@ -17,18 +17,15 @@
  */
 package org.kiwix.kiwixmobile.tests;
 
+import android.Manifest;
+import android.support.test.espresso.DataInteraction;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingPolicies;
-import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
+import android.support.test.rule.GrantPermissionRule;
+import android.util.Log;
 
 import org.apache.commons.io.IOUtils;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -50,7 +47,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import okhttp3.OkHttpClient;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okio.Buffer;
@@ -58,14 +54,13 @@ import okio.Buffer;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.longClick;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.action.ViewActions.swipeDown;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
+import static com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
+import static com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions.clickMenu;
+import static com.schibsted.spain.barista.interaction.BaristaSwipeRefreshInteractions.refresh;
 import static org.hamcrest.Matchers.allOf;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
@@ -75,6 +70,7 @@ import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
  */
 
 public class NetworkTest {
+  private static String NETWORK_TEST_TAG = "KiwixNetworkTest";
 
   @Inject MockWebServer mockWebServer;
 
@@ -82,11 +78,15 @@ public class NetworkTest {
   @Rule
   public ActivityTestRule<KiwixMobileActivity> mActivityTestRule = new ActivityTestRule<>(
       KiwixMobileActivity.class, false, false);
+  @Rule
+  public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+  @Rule
+  public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @BeforeClass
   public static void beforeClass() {
-    IdlingPolicies.setMasterPolicyTimeout(350, TimeUnit.SECONDS);
-    IdlingPolicies.setIdlingResourceTimeout(350, TimeUnit.SECONDS);
+    IdlingPolicies.setMasterPolicyTimeout(180, TimeUnit.SECONDS);
+    IdlingPolicies.setIdlingResourceTimeout(180, TimeUnit.SECONDS);
     Espresso.registerIdlingResources(KiwixIdlingResource.getInstance());
   }
 
@@ -124,75 +124,59 @@ public class NetworkTest {
   public void networkTest() {
 
     mActivityTestRule.launchActivity(null);
+
     enterHelp();
-    ViewInteraction appCompatButton = onView(
-        allOf(withId(R.id.get_content_card), withText("Get Content")));
-    appCompatButton.perform(scrollTo(), click());
+    clickOn(R.string.menu_zim_manager);
 
     TestUtils.allowPermissionsIfNeeded();
 
     try {
       onView(withId(R.id.network_permission_button)).perform(click());
     } catch (RuntimeException e) {
+      Log.i(NETWORK_TEST_TAG,
+        "Permission dialog was not shown, we probably already have required permissions");
     }
 
     onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.library_list)).perform(click());
-
 
     try {
       onView(withId(android.R.id.button1)).perform(click());
     } catch (RuntimeException e) {
     }
 
-
-    onView(withText(R.string.local_zims))
-        .perform(click());
+    clickOn(R.string.local_zims);
 
     try {
+      onData(allOf(withId(R.id.zim_swiperefresh)));
+      refresh(R.id.zim_swiperefresh);
       Thread.sleep(500);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
 
-    onView(withId(R.id.zim_swiperefresh))
-        .perform(swipeDown());
 
+    // Commented out the following which assumes only 1 match - not always safe to assume as there may
+    // already be a similar file on the device.
+    // onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist)).perform(click());
 
-    onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist)).perform(click());
+    // Find matching zim files on the device
+    try {
+      DataInteraction dataInteraction = onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist));
+      // TODO how can we get a count of the items matching the dataInteraction?
+      dataInteraction.atPosition(0).perform(click());
 
+      clickMenu(R.string.menu_zim_manager);
 
-    openContextualActionModeOverflowMenu();
-
-    onView(withText(R.string.menu_zim_manager))
-        .perform(click());
-
-    onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist)).perform(longClick());
-
-    onView(withId(android.R.id.button1)).perform(click());
+      DataInteraction dataInteraction1 = onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.zimfilelist));
+      dataInteraction1.atPosition(0).perform(longClick()); // to delete the zim file
+      clickDialogPositiveButton();
+    } catch (Exception e) {
+      Log.w(NETWORK_TEST_TAG, "failed to interact with local ZIM file: " + e.getLocalizedMessage());
+    }
   }
 
   @After
   public void finish() {
     Espresso.unregisterIdlingResources(KiwixIdlingResource.getInstance());
-  }
-
-
-  private static Matcher<View> childAtPosition(
-      final Matcher<View> parentMatcher, final int position) {
-
-    return new TypeSafeMatcher<View>() {
-      @Override
-      public void describeTo(Description description) {
-        description.appendText("Child at position " + position + " in parent ");
-        parentMatcher.describeTo(description);
-      }
-
-      @Override
-      public boolean matchesSafely(View view) {
-        ViewParent parent = view.getParent();
-        return parent instanceof ViewGroup && parentMatcher.matches(parent)
-            && view.equals(((ViewGroup) parent).getChildAt(position));
-      }
-    };
   }
 }

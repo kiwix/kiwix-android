@@ -107,7 +107,8 @@ public class SharedPreferenceUtil {
   }
 
   public boolean getPrefFullTextSearch() {
-    return sharedPreferences.getBoolean(PREF_FULL_TEXT_SEARCH, false);
+    return false; // Temporarily disable multizim for 2.4
+    //return sharedPreferences.getBoolean(PREF_FULL_TEXT_SEARCH, false);
   }
 
   // Setters

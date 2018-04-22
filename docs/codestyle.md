@@ -1,8 +1,8 @@
 # Code Style Guidelines for Kiwix-Android
 
-Our code style guidelines is based on the [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html).
+Our code style guidelines is based on the [Square's Android Style Guide](https://github.com/square/java-code-styles/blob/master/configs/codestyles/SquareAndroid.xml).
 
-Do take some time to read it.
+Download the xml file and [import it](https://user-images.githubusercontent.com/1624385/37678878-9b61b562-2c7f-11e8-9733-d1d593f0aa67.png) in IntelliJ/Android Studio.
 
 ### For XML files
 

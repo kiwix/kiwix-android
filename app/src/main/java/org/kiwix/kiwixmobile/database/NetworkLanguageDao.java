@@ -22,6 +22,7 @@ package org.kiwix.kiwixmobile.database;
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
 
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.database.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.LibraryAdapter.Language;
@@ -33,6 +34,7 @@ import java.util.List;
 public class NetworkLanguageDao {
   private KiwixDatabase mDb;
 
+  @Inject
   public NetworkLanguageDao(KiwixDatabase kiwikDatabase) {
     this.mDb = kiwikDatabase;
   }

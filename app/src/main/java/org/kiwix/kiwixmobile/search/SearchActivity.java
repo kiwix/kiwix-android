@@ -19,16 +19,13 @@ package org.kiwix.kiwixmobile.search;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -44,9 +41,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 
@@ -58,11 +55,11 @@ import javax.inject.Inject;
 
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_IS_WIDGET_VOICE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH;
-import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH_TEXT;
+import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
-public class SearchActivity extends AppCompatActivity
+public class SearchActivity extends BaseActivity
     implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, SearchViewCallback {
 
   public static final String EXTRA_SEARCH_IN_TEXT = "bool_searchintext";
@@ -79,19 +76,13 @@ public class SearchActivity extends AppCompatActivity
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
 
-  private void setupDagger() {
-    KiwixApplication.getInstance().getApplicationComponent().inject(this);
-  }
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    setupDagger();
+    super.onCreate(savedInstanceState);
     if (sharedPreferenceUtil.getPrefNightMode()) {
       setTheme(R.style.AppTheme_Night);
     }
-    super.onCreate(savedInstanceState);
-    View contentView = LayoutInflater.from(this).inflate(R.layout.search, null);
-    setContentView(contentView);
+    setContentView(R.layout.search);
 
     if (savedInstanceState != null) {
       searchText = savedInstanceState.getString(EXTRA_SEARCH_TEXT);
@@ -103,7 +94,7 @@ public class SearchActivity extends AppCompatActivity
     searchPresenter.attachView(this);
     mListView = findViewById(R.id.search_list);
     mDefaultAdapter = getDefaultAdapter();
-    searchPresenter.getRecentSearches(this);
+    searchPresenter.getRecentSearches();
     mListView.setAdapter(mDefaultAdapter);
 
     mAutoAdapter = new AutoCompleteAdapter(this);
@@ -223,7 +214,7 @@ public class SearchActivity extends AppCompatActivity
     } else {
       title = text.toString();
     }
-    searchPresenter.saveSearch(title, this);
+    searchPresenter.saveSearch(title);
     sendMessage(title);
   }
 
@@ -279,14 +270,14 @@ public class SearchActivity extends AppCompatActivity
   }
 
   private void deleteSpecificSearchItem(String search) {
-    searchPresenter.deleteSearchString(search, this);
+    searchPresenter.deleteSearchString(search);
     resetAdapter();
   }
 
   private void resetAdapter() {
     mDefaultAdapter = getDefaultAdapter();
     mListView.setAdapter(mDefaultAdapter);
-    searchPresenter.getRecentSearches(this);
+    searchPresenter.getRecentSearches();
   }
 
   private ArrayAdapter<String> getDefaultAdapter() {

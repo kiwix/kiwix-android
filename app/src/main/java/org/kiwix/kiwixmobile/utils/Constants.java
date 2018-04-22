@@ -123,4 +123,8 @@ public final class Constants {
     public static final String EXTRA_BOOKMARK_CONTENTS = "bookmark_contents";
 
     public static final String EXTRA_SEARCH_TEXT = "searchText";
+
+    // Notification Channel Constants
+    public static final String ONGOING_DOWNLOAD_CHANNEL_ID = "ongoing_downloads_channel_id";
+
 }
