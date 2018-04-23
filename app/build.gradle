@@ -92,6 +92,9 @@ dependencies {
     //radar button library
     implementation 'pl.bclogic:pulsator4droid:1.0.3'
 
+    //Arc progress library
+    compile 'com.github.lzyzsd:circleprogress:1.2.1'
+
     // Square
     implementation 'com.squareup.okhttp3:okhttp:3.7.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'

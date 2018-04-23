@@ -9,6 +9,7 @@
   <color name="white">#FAFAFA</color>
   <color name="gray_list_bg">#0d000000</color>
   <color name="drawer_background_day">#ffffff</color>
+  <color name="progresscolor">#214193</color>
   <color name="drawer_background_night">#5a5a5a</color>
   <color name="selected_light">#0F000000</color>
   <color name="divider_light">#2b3f6a</color>

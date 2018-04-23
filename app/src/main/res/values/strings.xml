@@ -170,4 +170,8 @@
     <string name="your_languages">Selected languages:</string>
     <string name="other_languages">Other languages:</string>
     <string name="no_items_msg">No items available</string>
+    <string name="receving">Receiving ZIM</string>
+    <string name="warnig">Warning</string>
+    <string name="warnmessage">Are you sure you want to close or stop receving file?</string>
+    <string name="warnmessage1">Are you sure you want to close ot stop transferring file?</string>
 </resources>

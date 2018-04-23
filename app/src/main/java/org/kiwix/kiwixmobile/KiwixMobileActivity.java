@@ -20,11 +20,13 @@
 package org.kiwix.kiwixmobile;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -32,11 +34,14 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -99,6 +104,7 @@ import org.kiwix.kiwixmobile.views.CompatFindActionModeCallback;
 import org.kiwix.kiwixmobile.views.web.KiwixWebView;
 import org.kiwix.kiwixmobile.views.web.ToolbarScrollingKiwixWebView;
 import org.kiwix.kiwixmobile.views.web.ToolbarStaticKiwixWebView;
+import org.kiwix.kiwixmobile.wifip2p.WifiPeerListReciverActivity;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
@@ -159,6 +165,8 @@ import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES;
 
 public class KiwixMobileActivity extends BaseActivity implements WebViewCallback {
+
+  private Context context;
 
   public static boolean isFullscreenOpened;
 
@@ -361,6 +369,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   @Override
   public void onCreate(Bundle savedInstanceState) {
     getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+    context=KiwixMobileActivity.this;
 
     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
     wifiOnly = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
@@ -878,11 +888,46 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
         }
         break;
 
+      case R.id.reciveing:
+        checkandopenactivity();
+        break;
+
       default:
         break;
     }
 
     return super.onOptionsItemSelected(item);
+  }
+
+  private void checkandopenactivity()
+  {
+
+    WifiManager manager=(WifiManager)context.getSystemService(Context.WIFI_SERVICE);
+
+    if(manager.isWifiEnabled())
+    {
+      startActivity(new Intent(KiwixMobileActivity.this, WifiPeerListReciverActivity.class));
+    }
+    else
+    {
+      AlertDialog.Builder dialog=new AlertDialog.Builder(KiwixMobileActivity.this);
+      dialog.setTitle("Message..");
+      dialog.setMessage("Your Wifi not enable..");
+      dialog.setCancelable(false);
+      dialog.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+
+        }
+      });
+      dialog.setPositiveButton("Enable", new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+          startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+        }
+      });
+      dialog.show();
+    }
   }
 
   private void goToBookmarks() {

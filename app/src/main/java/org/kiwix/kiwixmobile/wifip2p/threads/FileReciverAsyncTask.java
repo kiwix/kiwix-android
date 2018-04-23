@@ -1,6 +1,9 @@
 package org.kiwix.kiwixmobile.wifip2p.threads;
 
+import android.content.Context;
 import android.os.AsyncTask;
+
+import com.github.lzyzsd.circleprogress.ArcProgress;
 
 /**
  * Created by Rishabh Rawat on 3/4/2018.
@@ -8,8 +11,14 @@ import android.os.AsyncTask;
 
 public class FileReciverAsyncTask extends AsyncTask<String,Integer,String>{
 
-    public FileReciverAsyncTask() {
+    private int port;
+    private Context context;
+    private ArcProgress progress;
+    public FileReciverAsyncTask(int port, Context context, ArcProgress progress) {
         super();
+        this.port=port;
+        this.context=context;
+        this.progress=progress;
     }
 
     @Override

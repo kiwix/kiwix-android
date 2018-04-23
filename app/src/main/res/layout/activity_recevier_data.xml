@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/recevilayout"
+    android:background="@color/progresscolor"
+    android:layout_height="match_parent"
+    tools:context="org.kiwix.kiwixmobile.wifip2p.RecevierDataActivity">
+
+
+    <com.github.lzyzsd.circleprogress.ArcProgress xmlns:custom="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/arc_progress"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        custom:arc_stroke_width="16dp"
+        android:background="@color/progresscolor"
+        custom:arc_bottom_text="RECEIVING ZIM"
+        custom:arc_progress="10"
+        custom:arc_text_size="70dp"
+        custom:arc_bottom_text_size="20dp"
+        custom:arc_suffix_text_size="35dp"
+        custom:layout_constraintBottom_toBottomOf="parent"
+        custom:layout_constraintHorizontal_bias="0.498"
+        custom:layout_constraintLeft_toLeftOf="parent"
+        custom:layout_constraintRight_toRightOf="parent"
+        custom:layout_constraintTop_toTopOf="parent"
+        custom:layout_constraintVertical_bias="0.398" />
+
+</android.support.constraint.ConstraintLayout>

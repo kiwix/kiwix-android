@@ -180,14 +180,26 @@
 
         <service android:name=".downloader.DownloadService" />
 
-
         <receiver
             android:name=".wifip2p.broadcast.WifiP2PBroadCastReceiver"
             android:enabled="true"
             android:exported="true" />
 
         <activity android:name=".wifip2p.WifiPeerListTransferActivity" />
-        <activity android:name=".wifip2p.WifiPeerListReciverActivity"></activity>
+        <activity android:name=".wifip2p.WifiPeerListReciverActivity" />
+
+        <receiver
+            android:name=".wifip2p.broadcast.WifiP2PReciverBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".wifip2p.TransmitDataActivity" />
+        <activity android:name=".wifip2p.RecevierDataActivity" />
+
+        <receiver
+            android:name=".wifip2p.broadcast.WifiTxRxBroadcastRecevier"
+            android:enabled="true"
+            android:exported="true"></receiver>
     </application>
 
 </manifest>
