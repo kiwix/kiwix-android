@@ -1160,11 +1160,10 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
             getCurrentWebView().goBack();
           } else if (isFullscreenOpened) {
             closeFullScreen();
+          } else if (compatCallback.mIsActive) {
+            compatCallback.finish();
           } else {
             finish();
-          }
-          if (compatCallback.mIsActive) {
-            compatCallback.finish();
           }
           return true;
         case KeyEvent.KEYCODE_MENU:
