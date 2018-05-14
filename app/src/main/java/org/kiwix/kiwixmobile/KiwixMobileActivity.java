@@ -84,7 +84,7 @@ import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
 import org.kiwix.kiwixmobile.utils.DocumentParser;
 import org.kiwix.kiwixmobile.search.KiwixSearchWidget;
-import org.kiwix.kiwixmobile.utils.KiwixTextToSpeech;
+import org.kiwix.kiwixmobile.text_to_speech.KiwixTextToSpeech;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.RateAppCounter;
