@@ -160,7 +160,7 @@
       android:authorities="${applicationId}.zim.base"
       android:exported="true" />
 
-    <receiver android:name=".utils.KiwixSearchWidget">
+    <receiver android:name=".search.KiwixSearchWidget">
       <intent-filter>
         <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
         <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.TEXT_CLICKED" />

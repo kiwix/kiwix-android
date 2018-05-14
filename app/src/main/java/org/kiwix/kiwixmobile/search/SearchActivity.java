@@ -44,6 +44,7 @@ import android.widget.Toast;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
+import org.kiwix.kiwixmobile.search.contract.SearchViewCallback;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 
@@ -60,7 +61,8 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class SearchActivity extends BaseActivity
-    implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, SearchViewCallback {
+    implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,
+    SearchViewCallback {
 
   public static final String EXTRA_SEARCH_IN_TEXT = "bool_searchintext";
 

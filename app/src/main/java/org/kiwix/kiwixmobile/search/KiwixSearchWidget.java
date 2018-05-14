@@ -18,7 +18,7 @@
  */
 
 
-package org.kiwix.kiwixmobile.utils;
+package org.kiwix.kiwixmobile.search;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -32,10 +32,10 @@ import org.kiwix.kiwixmobile.R;
 
 public class KiwixSearchWidget extends AppWidgetProvider {
 
-  public static final String TEXT_CLICKED ="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.TEXT_CLICKED";
-  public static final String ICON_CLICKED ="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.ICON_CLICKED";
-  public static final String MIC_CLICKED = "org.kiwix.kiwixmobile.utils.KiwixSearchWidget.MIC_CLICKED";
-  public static final String STAR_CLICKED ="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.STAR_CLICKED";
+  public static final String TEXT_CLICKED ="org.kiwix.kiwixmobile.search.KiwixSearchWidget.TEXT_CLICKED";
+  public static final String ICON_CLICKED ="org.kiwix.kiwixmobile.search.KiwixSearchWidget.ICON_CLICKED";
+  public static final String MIC_CLICKED = "org.kiwix.kiwixmobile.search.KiwixSearchWidget.MIC_CLICKED";
+  public static final String STAR_CLICKED ="org.kiwix.kiwixmobile.search.KiwixSearchWidget.STAR_CLICKED";
 
 
   @Override

@@ -21,6 +21,7 @@ import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.database.RecentSearchDao;
 
 import javax.inject.Inject;
+import org.kiwix.kiwixmobile.search.contract.SearchViewCallback;
 
 /**
  * Created by srv_twry on 14/2/18.

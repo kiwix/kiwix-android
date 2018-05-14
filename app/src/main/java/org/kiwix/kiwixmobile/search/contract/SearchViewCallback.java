@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.search;
+package org.kiwix.kiwixmobile.search.contract;
 
 import org.kiwix.kiwixmobile.base.ViewCallback;
 
