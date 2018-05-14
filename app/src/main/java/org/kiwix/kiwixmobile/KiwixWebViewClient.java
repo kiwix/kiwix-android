@@ -31,6 +31,7 @@ import android.widget.TextView;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 
 import java.util.HashMap;
+import org.kiwix.kiwixmobile.views.web.WebViewCallback;
 
 import static org.kiwix.kiwixmobile.utils.Constants.CONTACT_EMAIL_ADDRESS;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_EXTERNAL_LINK;

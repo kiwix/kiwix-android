@@ -38,7 +38,6 @@ import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixWebChromeClient;
 import org.kiwix.kiwixmobile.KiwixWebViewClient;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.WebViewCallback;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 

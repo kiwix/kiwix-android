@@ -15,30 +15,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.views.bottom_tab;
 
-import android.content.Intent;
+import android.content.Context;
+import android.support.design.widget.TabLayout;
+import android.util.AttributeSet;
 
-public interface WebViewCallback {
-  void webViewUrlLoading();
+import org.kiwix.kiwixmobile.R;
 
-  void webViewUrlFinishedLoading();
+import butterknife.ButterKnife;
 
-  void webViewFailedLoading(String failingUrl);
+public class PageBottomTabLayout extends TabLayout {
 
-  void showHelpPage();
+  public PageBottomTabLayout(Context context) {
+    this(context, null);
+  }
 
-  void sendContactEmail();
+  public PageBottomTabLayout(Context context, AttributeSet attrs) {
+    this(context, attrs, 0);
+  }
 
-  void openExternalUrl(Intent intent);
-
-  void manageZimFiles(int tab);
-
-  void webViewProgressChanged(int progress);
-
-  void webViewTitleUpdated(String title);
-
-  void webViewPageChanged(int page, int maxPages);
-
-  void webViewLongClick(String url);
+  public PageBottomTabLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    super(context, attrs, defStyleAttr);
+    inflate(getContext(), R.layout.page_bottom_tab_layout, this);
+    ButterKnife.bind(this);
+  }
 }

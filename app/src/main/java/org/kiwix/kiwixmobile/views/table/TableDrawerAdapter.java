@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.views.table;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -32,6 +32,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import org.kiwix.kiwixmobile.R;
 
 public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

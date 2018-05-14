@@ -22,12 +22,12 @@ import android.os.Looper;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
-import org.kiwix.kiwixmobile.TableDrawerAdapter;
+import org.kiwix.kiwixmobile.views.table.TableDrawerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.kiwix.kiwixmobile.TableDrawerAdapter.DocumentSection;
+import static org.kiwix.kiwixmobile.views.table.TableDrawerAdapter.DocumentSection;
 
 public class DocumentParser {
 

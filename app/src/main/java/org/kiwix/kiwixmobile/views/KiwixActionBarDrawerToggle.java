@@ -15,13 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.views;
 
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.R;
 
 public class KiwixActionBarDrawerToggle extends ActionBarDrawerToggle {
 

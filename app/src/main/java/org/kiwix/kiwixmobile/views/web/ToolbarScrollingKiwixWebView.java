@@ -25,7 +25,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
-import org.kiwix.kiwixmobile.WebViewCallback;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
 
 public class ToolbarScrollingKiwixWebView extends KiwixWebView {

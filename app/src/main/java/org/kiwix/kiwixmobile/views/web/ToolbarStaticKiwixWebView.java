@@ -22,7 +22,6 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
-import org.kiwix.kiwixmobile.WebViewCallback;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
 
 /**
