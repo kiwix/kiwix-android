@@ -13,7 +13,7 @@ import android.widget.CheckBox;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
-import org.kiwix.kiwixmobile.utils.SplashActivity;
+import org.kiwix.kiwixmobile.main.SplashActivity;
 
 import java.io.File;
 import java.util.ArrayList;

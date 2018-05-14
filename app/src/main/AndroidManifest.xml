@@ -25,7 +25,7 @@
       android:supportsRtl="true">
 
     <activity
-      android:name=".utils.SplashActivity"
+      android:name=".main.SplashActivity"
       android:theme="@style/AppTheme.Launcher"
       android:label="@string/app_name">
       <intent-filter>

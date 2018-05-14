@@ -39,7 +39,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
-import org.kiwix.kiwixmobile.utils.SplashActivity;
+import org.kiwix.kiwixmobile.main.SplashActivity;
 
 import java.util.concurrent.TimeUnit;
 
@@ -51,7 +51,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
-import static com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
 import static com.schibsted.spain.barista.interaction.BaristaSwipeRefreshInteractions.refresh;
 import static junit.framework.Assert.fail;
 import static org.hamcrest.Matchers.allOf;
