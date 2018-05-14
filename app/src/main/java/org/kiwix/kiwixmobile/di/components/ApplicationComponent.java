@@ -18,7 +18,7 @@
 package org.kiwix.kiwixmobile.di.components;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.ZimContentProvider;
+import org.kiwix.kiwixmobile.data.content_provider.ZimContentProvider;
 import org.kiwix.kiwixmobile.base.BaseFragment;
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
 import org.kiwix.kiwixmobile.di.modules.JNIModule;

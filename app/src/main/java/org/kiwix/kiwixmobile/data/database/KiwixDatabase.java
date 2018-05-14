@@ -17,7 +17,7 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile.database;
+package org.kiwix.kiwixmobile.data.database;
 
 import android.content.Context;
 import android.util.Log;
@@ -26,12 +26,12 @@ import com.yahoo.squidb.data.SquidDatabase;
 import com.yahoo.squidb.data.adapter.SQLiteDatabaseWrapper;
 import com.yahoo.squidb.sql.Table;
 
-import org.kiwix.kiwixmobile.ZimContentProvider;
-import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
-import org.kiwix.kiwixmobile.database.entity.Bookmarks;
-import org.kiwix.kiwixmobile.database.entity.LibraryDatabaseEntity;
-import org.kiwix.kiwixmobile.database.entity.NetworkLanguageDatabaseEntity;
-import org.kiwix.kiwixmobile.database.entity.RecentSearch;
+import org.kiwix.kiwixmobile.data.content_provider.ZimContentProvider;
+import org.kiwix.kiwixmobile.data.database.entity.BookDatabaseEntity;
+import org.kiwix.kiwixmobile.data.database.entity.Bookmarks;
+import org.kiwix.kiwixmobile.data.database.entity.LibraryDatabaseEntity;
+import org.kiwix.kiwixmobile.data.database.entity.NetworkLanguageDatabaseEntity;
+import org.kiwix.kiwixmobile.data.database.entity.RecentSearch;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

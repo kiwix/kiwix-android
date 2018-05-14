@@ -18,7 +18,7 @@
 package org.kiwix.kiwixmobile.search;
 
 import org.kiwix.kiwixmobile.base.BasePresenter;
-import org.kiwix.kiwixmobile.database.RecentSearchDao;
+import org.kiwix.kiwixmobile.data.database.RecentSearchDao;
 
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.search.contract.SearchViewCallback;

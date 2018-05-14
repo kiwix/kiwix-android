@@ -17,7 +17,7 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile.database;
+package org.kiwix.kiwixmobile.data.database;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -32,7 +32,7 @@ import android.webkit.WebView;
 import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.ZimContentProvider;
+import org.kiwix.kiwixmobile.data.content_provider.ZimContentProvider;
 
 import java.util.ArrayList;
 import java.util.HashMap;

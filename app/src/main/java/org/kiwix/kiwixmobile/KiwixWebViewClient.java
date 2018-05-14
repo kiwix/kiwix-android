@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.kiwix.kiwixmobile.data.content_provider.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 
 import java.util.HashMap;

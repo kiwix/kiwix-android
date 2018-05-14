@@ -17,13 +17,13 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile.database;
+package org.kiwix.kiwixmobile.data.database;
 
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
 
 import javax.inject.Inject;
-import org.kiwix.kiwixmobile.database.entity.NetworkLanguageDatabaseEntity;
+import org.kiwix.kiwixmobile.data.database.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.LibraryAdapter.Language;
 

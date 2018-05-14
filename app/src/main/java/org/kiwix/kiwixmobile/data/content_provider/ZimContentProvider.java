@@ -17,7 +17,7 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.data.content_provider;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -36,6 +36,9 @@ import org.kiwix.kiwixlib.JNIKiwixReader;
 import org.kiwix.kiwixlib.JNIKiwixSearcher;
 import org.kiwix.kiwixlib.JNIKiwixString;
 import org.kiwix.kiwixlib.Pair;
+import org.kiwix.kiwixmobile.BuildConfig;
+import org.kiwix.kiwixmobile.KiwixApplication;
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
 import java.io.File;

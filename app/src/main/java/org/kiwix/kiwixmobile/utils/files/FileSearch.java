@@ -27,7 +27,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import org.kiwix.kiwixmobile.ZimContentProvider;
+import org.kiwix.kiwixmobile.data.content_provider.ZimContentProvider;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 
 import java.io.File;

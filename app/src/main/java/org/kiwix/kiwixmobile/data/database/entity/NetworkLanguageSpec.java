@@ -1,5 +1,5 @@
 /*
- * Copyright 2016
+ * Copyright 2016 Isaac Hutt <mhutti1@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU  General Public License as published by
@@ -17,41 +17,12 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile.database.entity;
+package org.kiwix.kiwixmobile.data.database.entity;
 
 import com.yahoo.squidb.annotations.TableModelSpec;
 
-@TableModelSpec(className = "BookDatabaseEntity", tableName = "book")
-public class BookDataSource {
-
-  public String bookId;
-
-  public String title;
-
-  public String description;
-
-  public String language;
-
-  public String bookCreator;
-
-  public String publisher;
-
-  public String date;
-
-  public String url;
-
-  public String remoteUrl;
-
-  public String articleCount;
-
-  public String mediaCount;
-
-  public String size;
-
-  public String favicon;
-
-  public String name;
-
-  public boolean downloaded;
-
+@TableModelSpec(className = "NetworkLanguageDatabaseEntity", tableName = "networkLanguages")
+public class NetworkLanguageSpec {
+  public String languageISO3;
+  public boolean enabled;
 }

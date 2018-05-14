@@ -35,8 +35,8 @@ import com.google.common.collect.ImmutableList;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.database.BookDao;
-import org.kiwix.kiwixmobile.database.NetworkLanguageDao;
+import org.kiwix.kiwixmobile.data.database.BookDao;
+import org.kiwix.kiwixmobile.data.database.NetworkLanguageDao;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.utils.BookUtils;

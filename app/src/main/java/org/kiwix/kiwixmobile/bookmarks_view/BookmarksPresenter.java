@@ -17,10 +17,10 @@
  */
 package org.kiwix.kiwixmobile.bookmarks_view;
 
-import org.kiwix.kiwixmobile.ZimContentProvider;
+import org.kiwix.kiwixmobile.data.content_provider.ZimContentProvider;
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.bookmarks_view.contract.BookmarksViewCallback;
-import org.kiwix.kiwixmobile.database.BookmarksDao;
+import org.kiwix.kiwixmobile.data.database.BookmarksDao;
 
 import java.util.ArrayList;
 

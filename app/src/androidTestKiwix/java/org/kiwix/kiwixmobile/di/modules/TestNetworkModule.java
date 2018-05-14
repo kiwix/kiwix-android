@@ -22,7 +22,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import org.kiwix.kiwixmobile.network.KiwixService;
+import org.kiwix.kiwixmobile.data.network.KiwixService;
 import org.kiwix.kiwixmobile.utils.TestNetworkInterceptor;
 import org.mockito.Mockito;
 

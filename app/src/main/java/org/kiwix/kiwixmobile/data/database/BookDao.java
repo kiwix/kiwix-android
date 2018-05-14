@@ -15,13 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.database;
+package org.kiwix.kiwixmobile.data.database;
 
 
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
 
-import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
+import org.kiwix.kiwixmobile.data.database.entity.BookDatabaseEntity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 

@@ -156,7 +156,7 @@
     <activity android:name=".bookmarks_view.BookmarksActivity" />
 
     <provider
-      android:name=".ZimContentProvider"
+      android:name=".data.content_provider.ZimContentProvider"
       android:authorities="${applicationId}.zim.base"
       android:exported="true" />
 

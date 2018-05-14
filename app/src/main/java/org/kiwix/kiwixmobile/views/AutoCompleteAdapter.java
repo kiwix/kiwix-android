@@ -29,7 +29,7 @@ import android.widget.TextView;
 import org.kiwix.kiwixlib.JNIKiwix;
 import org.kiwix.kiwixlib.JNIKiwixSearcher;
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.ZimContentProvider;
+import org.kiwix.kiwixmobile.data.content_provider.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 import java.util.ArrayList;
