@@ -24,6 +24,7 @@ import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
+import org.kiwix.kiwixmobile.zim_manager.library_view.contract.LibraryViewCallback;
 
 import javax.inject.Inject;
 

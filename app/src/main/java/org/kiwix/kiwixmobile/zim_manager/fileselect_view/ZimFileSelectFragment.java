@@ -54,6 +54,7 @@ import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.contract.ZimFileSelectViewCallback;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -68,7 +69,7 @@ import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class ZimFileSelectFragment extends BaseFragment
-    implements OnItemClickListener, AdapterView.OnItemLongClickListener, ZimFileSelectViewCallback{
+    implements OnItemClickListener, AdapterView.OnItemLongClickListener, ZimFileSelectViewCallback {
 
   public RelativeLayout llLayout;
   public SwipeRefreshLayout swipeRefreshLayout;

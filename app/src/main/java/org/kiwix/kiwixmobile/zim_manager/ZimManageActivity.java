@@ -41,6 +41,7 @@ import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.views.LanguageSelectDialog;
+import org.kiwix.kiwixmobile.zim_manager.contract.ZimManageViewCallback;
 
 import java.io.File;
 

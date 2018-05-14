@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view;
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.contract.ZimFileSelectViewCallback;
 
 import java.util.ArrayList;
 

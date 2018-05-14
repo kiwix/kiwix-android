@@ -15,16 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.zim_manager.fileselect_view;
+package org.kiwix.kiwixmobile.zim_manager.contract;
 
 import org.kiwix.kiwixmobile.base.ViewCallback;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
-
-import java.util.ArrayList;
 
 /**
- * Created by EladKeyshawn on 06/04/2017.
+ * Created by srv_twry on 15/2/18.
  */
-public interface ZimFileSelectViewCallback extends ViewCallback {
-  void showFiles(ArrayList<LibraryNetworkEntity.Book> books);
+
+public interface ZimManageViewCallback extends ViewCallback {
 }
