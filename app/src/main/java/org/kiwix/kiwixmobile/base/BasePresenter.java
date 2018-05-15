@@ -17,6 +17,9 @@
  */
 package org.kiwix.kiwixmobile.base;
 
+import org.kiwix.kiwixmobile.base.contract.Presenter;
+import org.kiwix.kiwixmobile.base.contract.ViewCallback;
+
 /**
  * Created by EladKeyshawn on 05/04/2017.
  */

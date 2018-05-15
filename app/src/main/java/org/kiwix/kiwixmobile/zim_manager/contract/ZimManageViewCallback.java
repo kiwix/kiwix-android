@@ -17,7 +17,7 @@
  */
 package org.kiwix.kiwixmobile.zim_manager.contract;
 
-import org.kiwix.kiwixmobile.base.ViewCallback;
+import org.kiwix.kiwixmobile.base.contract.ViewCallback;
 
 /**
  * Created by srv_twry on 15/2/18.

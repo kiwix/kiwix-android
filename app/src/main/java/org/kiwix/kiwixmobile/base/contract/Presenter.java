@@ -15,10 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.base;
+package org.kiwix.kiwixmobile.base.contract;
+
+import org.kiwix.kiwixmobile.base.contract.ViewCallback;
 
 /**
  * Created by EladKeyshawn on 05/04/2017.
  */
-public interface ViewCallback {
+public interface Presenter<V extends ViewCallback> {
+
+  void attachView(V mvpView);
+
+  void detachView();
 }

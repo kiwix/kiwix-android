@@ -17,7 +17,7 @@
  */
 package org.kiwix.kiwixmobile.zim_manager.library_view.contract;
 
-import org.kiwix.kiwixmobile.base.ViewCallback;
+import org.kiwix.kiwixmobile.base.contract.ViewCallback;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 

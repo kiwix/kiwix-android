@@ -15,10 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.clients;
 
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.views.web.WebViewCallback;
 
 public class KiwixWebChromeClient extends WebChromeClient {

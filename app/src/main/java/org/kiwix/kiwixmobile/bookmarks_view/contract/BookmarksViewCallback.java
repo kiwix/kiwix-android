@@ -17,7 +17,7 @@
  */
 package org.kiwix.kiwixmobile.bookmarks_view.contract;
 
-import org.kiwix.kiwixmobile.base.ViewCallback;
+import org.kiwix.kiwixmobile.base.contract.ViewCallback;
 
 import java.util.ArrayList;
 

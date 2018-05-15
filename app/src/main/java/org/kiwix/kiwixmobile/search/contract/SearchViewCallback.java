@@ -17,7 +17,7 @@
  */
 package org.kiwix.kiwixmobile.search.contract;
 
-import org.kiwix.kiwixmobile.base.ViewCallback;
+import org.kiwix.kiwixmobile.base.contract.ViewCallback;
 
 import java.util.List;
 
