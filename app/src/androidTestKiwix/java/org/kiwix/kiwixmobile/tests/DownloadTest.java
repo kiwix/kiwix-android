@@ -39,7 +39,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
-import org.kiwix.kiwixmobile.main.SplashActivity;
+import org.kiwix.kiwixmobile.splash.SplashActivity;
 
 import java.util.concurrent.TimeUnit;
 

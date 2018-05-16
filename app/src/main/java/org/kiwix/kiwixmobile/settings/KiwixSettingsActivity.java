@@ -47,7 +47,7 @@ import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.views.SliderPreference;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryUtils;
+import org.kiwix.kiwixmobile.zimmanager.library_view.LibraryUtils;
 
 import java.io.File;
 import java.util.Calendar;

@@ -18,7 +18,7 @@
 package org.kiwix.kiwixmobile.di.components;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.data.content_provider.ZimContentProvider;
+import org.kiwix.kiwixmobile.data.contentprovider.ZimContentProvider;
 import org.kiwix.kiwixmobile.base.BaseFragment;
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
 import org.kiwix.kiwixmobile.di.modules.JNIModule;
@@ -28,8 +28,8 @@ import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 import org.kiwix.kiwixmobile.views.web.KiwixWebView;
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+import org.kiwix.kiwixmobile.zimmanager.fileselect_view.ZimFileSelectFragment;
+import org.kiwix.kiwixmobile.zimmanager.library_view.LibraryFragment;
 
 import javax.inject.Singleton;
 

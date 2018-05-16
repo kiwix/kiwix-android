@@ -31,7 +31,7 @@ import android.widget.TextView;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.data.content_provider.ZimContentProvider;
+import org.kiwix.kiwixmobile.data.contentprovider.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 
 import java.util.HashMap;

@@ -9,7 +9,7 @@ import android.test.suitebuilder.annotation.LargeTest;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
+import org.kiwix.kiwixmobile.zimmanager.ZimManageActivity;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)

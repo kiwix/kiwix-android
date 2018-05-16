@@ -25,7 +25,7 @@
       android:supportsRtl="true">
 
     <activity
-      android:name=".main.SplashActivity"
+      android:name=".splash.SplashActivity"
       android:theme="@style/AppTheme.Launcher"
       android:label="@string/app_name">
       <intent-filter>
@@ -129,7 +129,7 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".zim_manager.ZimManageActivity"
+      android:name=".zimmanager.ZimManageActivity"
       android:label="@string/choose_file">
 
       <!-- TODO -->
@@ -153,10 +153,10 @@
 
     <activity android:name=".settings.KiwixSettingsActivity" />
     <activity android:name=".search.SearchActivity" />
-    <activity android:name=".bookmarks_view.BookmarksActivity" />
+    <activity android:name=".bookmarksview.BookmarksActivity" />
 
     <provider
-      android:name=".data.content_provider.ZimContentProvider"
+      android:name=".data.contentprovider.ZimContentProvider"
       android:authorities="${applicationId}.zim.base"
       android:exported="true" />
 

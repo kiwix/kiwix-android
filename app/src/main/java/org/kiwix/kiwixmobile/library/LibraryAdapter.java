@@ -40,7 +40,7 @@ import org.kiwix.kiwixmobile.data.database.NetworkLanguageDao;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.utils.BookUtils;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+import org.kiwix.kiwixmobile.zimmanager.library_view.LibraryFragment;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

@@ -26,7 +26,7 @@ import com.yahoo.squidb.data.SquidDatabase;
 import com.yahoo.squidb.data.adapter.SQLiteDatabaseWrapper;
 import com.yahoo.squidb.sql.Table;
 
-import org.kiwix.kiwixmobile.data.content_provider.ZimContentProvider;
+import org.kiwix.kiwixmobile.data.contentprovider.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.database.entity.BookDatabaseEntity;
 import org.kiwix.kiwixmobile.data.database.entity.Bookmarks;
 import org.kiwix.kiwixmobile.data.database.entity.LibraryDatabaseEntity;

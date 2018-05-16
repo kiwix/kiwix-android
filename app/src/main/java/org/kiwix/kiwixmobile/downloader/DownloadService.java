@@ -48,8 +48,8 @@ import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
 import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
-import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+import org.kiwix.kiwixmobile.zimmanager.ZimManageActivity;
+import org.kiwix.kiwixmobile.zimmanager.library_view.LibraryFragment;
 
 import java.io.File;
 import java.io.IOException;

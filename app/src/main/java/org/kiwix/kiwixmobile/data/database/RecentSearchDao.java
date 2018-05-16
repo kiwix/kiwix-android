@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.data.database;
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
 
-import org.kiwix.kiwixmobile.data.content_provider.ZimContentProvider;
+import org.kiwix.kiwixmobile.data.contentprovider.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.database.entity.RecentSearch;
 
 import java.util.ArrayList;

@@ -101,7 +101,7 @@
 
       </RelativeLayout>
 
-      <org.kiwix.kiwixmobile.views.bottom_tab.PageBottomTabLayout
+      <org.kiwix.kiwixmobile.views.bottomtab.PageBottomTabLayout
         android:id="@+id/page_bottom_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

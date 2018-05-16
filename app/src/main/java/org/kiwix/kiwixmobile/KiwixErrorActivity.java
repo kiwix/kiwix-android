@@ -11,10 +11,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 
 import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.data.content_provider.ZimContentProvider;
+import org.kiwix.kiwixmobile.data.contentprovider.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.database.BookDao;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
-import org.kiwix.kiwixmobile.main.SplashActivity;
+import org.kiwix.kiwixmobile.splash.SplashActivity;
 
 import java.io.File;
 import java.util.ArrayList;
