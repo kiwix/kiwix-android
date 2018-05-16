@@ -21,7 +21,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
 
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.main.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.downloader.DownloadService;

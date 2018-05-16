@@ -27,7 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.main.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 
 public class KiwixSearchWidget extends AppWidgetProvider {

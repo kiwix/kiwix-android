@@ -37,7 +37,7 @@ import android.util.SparseIntArray;
 import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.main.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.database.BookDao;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;

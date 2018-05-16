@@ -19,7 +19,7 @@ package org.kiwix.kiwixmobile.clients;
 
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.main.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.views.web.WebViewCallback;
 
 public class KiwixWebChromeClient extends WebChromeClient {

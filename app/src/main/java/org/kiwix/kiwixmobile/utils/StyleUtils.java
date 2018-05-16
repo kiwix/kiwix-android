@@ -27,7 +27,7 @@ import android.text.Spanned;
 import android.util.AttributeSet;
 import android.util.Xml;
 
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.main.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.xmlpull.v1.XmlPullParser;
 

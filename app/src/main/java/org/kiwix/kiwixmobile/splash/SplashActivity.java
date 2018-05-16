@@ -22,8 +22,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import org.kiwix.kiwixmobile.KiwixErrorActivity;
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.error.KiwixErrorActivity;
+import org.kiwix.kiwixmobile.main.KiwixMobileActivity;
 
 import java.io.Serializable;
 

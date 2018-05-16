@@ -17,7 +17,7 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.main;
 
 import android.Manifest;
 import android.app.Activity;
@@ -76,6 +76,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import org.json.JSONArray;
+import org.kiwix.kiwixmobile.BuildConfig;
+import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmarksview.BookmarksActivity;
 import org.kiwix.kiwixmobile.data.contentprovider.ZimContentProvider;
