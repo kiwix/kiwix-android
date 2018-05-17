@@ -11,11 +11,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.data.contentprovider.ZimContentProvider;
-import org.kiwix.kiwixmobile.data.database.BookDao;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
-import org.kiwix.kiwixmobile.splash.SplashActivity;
+import org.kiwix.kiwixmobile.common.base.BaseActivity;
+import org.kiwix.kiwixmobile.common.data.contentprovider.ZimContentProvider;
+import org.kiwix.kiwixmobile.common.data.database.BookDao;
+import org.kiwix.kiwixmobile.modules.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.modules.splash.SplashActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static org.kiwix.kiwixmobile.utils.LanguageUtils.getCurrentLocale;
+import static org.kiwix.kiwixmobile.common.utils.LanguageUtils.getCurrentLocale;
 
 public class KiwixErrorActivity extends BaseActivity {
 

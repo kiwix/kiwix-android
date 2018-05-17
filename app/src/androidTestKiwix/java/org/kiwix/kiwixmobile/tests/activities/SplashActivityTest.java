@@ -13,13 +13,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.splash.SplashActivity;
+import org.kiwix.kiwixmobile.modules.splash.SplashActivity;
 
 import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
-import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
-import static org.kiwix.kiwixmobile.utils.StandardActions.enterSettings;
+import static org.kiwix.kiwixmobile.common.utils.StandardActions.enterHelp;
+import static org.kiwix.kiwixmobile.common.utils.StandardActions.enterSettings;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)

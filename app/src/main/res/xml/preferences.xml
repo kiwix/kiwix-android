@@ -3,31 +3,31 @@
     android:key="pref_display"
     android:title="@string/pref_display_title">
 
-    <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
+    <org.kiwix.kiwixmobile.common.settings.CustomSwitchPreference
       android:defaultValue="false"
       android:key="pref_nightmode"
       android:summary="@string/pref_nightmode_summary"
       android:title="@string/pref_nightmode" />
 
-    <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
+    <org.kiwix.kiwixmobile.common.settings.CustomSwitchPreference
       android:defaultValue="false"
       android:key="pref_auto_nightmode"
       android:summary="@string/pref_autonightmode_summary"
       android:title="@string/pref_autonightmode" />
 
-    <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
+    <org.kiwix.kiwixmobile.common.settings.CustomSwitchPreference
       android:defaultValue="false"
       android:key="pref_backtotop"
       android:summary="@string/pref_backtotop_summary"
       android:title="@string/pref_backtotop" />
 
-    <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
+    <org.kiwix.kiwixmobile.common.settings.CustomSwitchPreference
       android:defaultValue="false"
       android:key="pref_hidetoolbar"
       android:summary="@string/pref_hidetoolbar_summary"
       android:title="@string/pref_hidetoolbar" />
 
-    <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
+    <org.kiwix.kiwixmobile.common.settings.CustomSwitchPreference
       android:defaultValue="false"
       android:key="pref_bottomtoolbar"
       android:summary="@string/pref_bottomtoolbar_summary"
@@ -40,13 +40,13 @@
     android:key="pref_extras"
     android:title="@string/pref_extras">
 
-    <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
+    <org.kiwix.kiwixmobile.common.settings.CustomSwitchPreference
       android:defaultValue="false"
       android:key="pref_newtab_background"
       android:summary="@string/pref_newtab_background_summary"
       android:title="@string/pref_newtab_background_title" />
 
-    <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
+    <org.kiwix.kiwixmobile.common.settings.CustomSwitchPreference
       android:defaultValue="true"
       android:key="pref_external_link_popup"
       android:summary="@string/pref_external_link_popup_summary"
@@ -54,7 +54,7 @@
 
     <!--
     Disabled for 2.4
-    <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
+ org.kiwix.kiwixmobile.common.settingsings.CustomSwitchPreference
       android:defaultValue="false"
       android:key="pref_full_text_search"
       android:summary="@string/pref_multi_search_summary"
@@ -62,7 +62,7 @@
       -->
 
 
-    <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
+    <org.kiwix.kiwixmobile.common.settings.CustomSwitchPreference
       android:defaultValue="true"
       android:key="pref_wifi_only"
       android:summary="@string/pref_wifi_only"
@@ -83,13 +83,13 @@
     android:key="pref_zoom_sub"
     android:title="@string/pref_zoom_sub_title">
 
-    <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
+    <org.kiwix.kiwixmobile.common.settings.CustomSwitchPreference
       android:defaultValue="false"
       android:key="pref_zoom_enabled"
 
       android:title="@string/pref_zoom_enable" />
 
-    <org.kiwix.kiwixmobile.views.SliderPreference
+    <org.kiwix.kiwixmobile.common.views.SliderPreference
       android:defaultValue="250.0"
       android:dialogMessage="0"
       android:enabled="false"

@@ -25,7 +25,7 @@
       android:supportsRtl="true">
 
     <activity
-      android:name=".splash.SplashActivity"
+      android:name=".modules.splash.SplashActivity"
       android:theme="@style/AppTheme.Launcher"
       android:label="@string/app_name">
       <intent-filter>
@@ -129,7 +129,7 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".zimmanager.ZimManageActivity"
+      android:name=".modules.zimmanager.ZimManageActivity"
       android:label="@string/choose_file">
 
       <!-- TODO -->
@@ -143,30 +143,30 @@
       </intent-filter>
 
       <intent-filter>
-        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.TEXT_CLICKED" />
-        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.ICON_CLICKED" />
-        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.MIC_CLICKED" />
-        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.STAR_CLICKED" />
+        <action android:name="org.kiwix.kiwixmobile.common.utils.KiwixSearchWidget.TEXT_CLICKED" />
+        <action android:name="org.kiwix.kiwixmobile.common.utils.KiwixSearchWidget.ICON_CLICKED" />
+        <action android:name="org.kiwix.kiwixmobile.common.utils.KiwixSearchWidget.MIC_CLICKED" />
+        <action android:name="org.kiwix.kiwixmobile.common.utils.KiwixSearchWidget.STAR_CLICKED" />
       </intent-filter>
 
     </activity>
 
-    <activity android:name=".settings.KiwixSettingsActivity" />
-    <activity android:name=".search.SearchActivity" />
-    <activity android:name=".bookmarksview.BookmarksActivity" />
+    <activity android:name=".common.settings.KiwixSettingsActivity" />
+    <activity android:name=".modules.search.SearchActivity" />
+    <activity android:name=".modules.bookmarksview.BookmarksActivity" />
 
     <provider
-      android:name=".data.contentprovider.ZimContentProvider"
+      android:name=".common.data.contentprovider.ZimContentProvider"
       android:authorities="${applicationId}.zim.base"
       android:exported="true" />
 
-    <receiver android:name=".search.KiwixSearchWidget">
+    <receiver android:name=".modules.search.KiwixSearchWidget">
       <intent-filter>
         <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.TEXT_CLICKED" />
-        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.ICON_CLICKED" />
-        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.MIC_CLICKED" />
-        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.STAR_CLICKED" />
+        <action android:name="org.kiwix.kiwixmobile.common.utils.KiwixSearchWidget.TEXT_CLICKED" />
+        <action android:name="org.kiwix.kiwixmobile.common.utils.KiwixSearchWidget.ICON_CLICKED" />
+        <action android:name="org.kiwix.kiwixmobile.common.utils.KiwixSearchWidget.MIC_CLICKED" />
+        <action android:name="org.kiwix.kiwixmobile.common.utils.KiwixSearchWidget.STAR_CLICKED" />
       </intent-filter>
 
       <meta-data
@@ -175,7 +175,7 @@
     </receiver>
 
 
-    <service android:name=".downloader.DownloadService" />
+    <service android:name=".modules.downloader.DownloadService" />
 
     <activity
       android:name=".error.KiwixErrorActivity"

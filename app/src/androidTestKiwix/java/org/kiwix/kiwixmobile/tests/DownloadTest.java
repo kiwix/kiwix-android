@@ -38,8 +38,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
-import org.kiwix.kiwixmobile.splash.SplashActivity;
+import org.kiwix.kiwixmobile.common.utils.KiwixIdlingResource;
+import org.kiwix.kiwixmobile.modules.splash.SplashActivity;
 
 import java.util.concurrent.TimeUnit;
 
@@ -58,8 +58,8 @@ import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.allowPermissionsIfNeeded;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.captureAndSaveScreenshot;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
-import static org.kiwix.kiwixmobile.utils.StandardActions.deleteZimIfExists;
-import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
+import static org.kiwix.kiwixmobile.common.utils.StandardActions.deleteZimIfExists;
+import static org.kiwix.kiwixmobile.common.utils.StandardActions.enterHelp;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)

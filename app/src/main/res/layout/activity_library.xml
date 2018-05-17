@@ -4,7 +4,7 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical"
-  tools:context=".zimmanager.library_view.LibraryFragment">
+  tools:context=".modules.zimmanager.library_view.LibraryFragment">
 
   <RelativeLayout
     android:layout_width="match_parent"
