@@ -21,7 +21,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 
-import org.kiwix.kiwixmobile.main.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.common.utils.DimenUtils;
 
 /**
@@ -42,7 +42,7 @@ public class ToolbarStaticKiwixWebView extends KiwixWebView {
 
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    if ((KiwixMobileActivity.isFullscreenOpened)) {
+    if ((MainActivity.isFullscreenOpened)) {
       setTranslationY(0);
       super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     } else {

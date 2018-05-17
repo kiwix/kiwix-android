@@ -27,7 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
-import org.kiwix.kiwixmobile.main.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.R;
 
 public class KiwixSearchWidget extends AppWidgetProvider {
@@ -48,23 +48,23 @@ public class KiwixSearchWidget extends AppWidgetProvider {
       RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.kiwix_search_widget);
       views.setTextViewText(R.id.search_widget_text, "Search " + appName);
       /** Search Kiwix intent **/
-      Intent mainIntent = new Intent(context, KiwixMobileActivity.class);
+      Intent mainIntent = new Intent(context, MainActivity.class);
       mainIntent.setAction(TEXT_CLICKED);
       PendingIntent searchPendingIntent = PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE), mainIntent, 0);
 
       /** Kiwix icon intent to main app **/
-      Intent kiwixIconIntent = new Intent(context, KiwixMobileActivity.class);
+      Intent kiwixIconIntent = new Intent(context, MainActivity.class);
       kiwixIconIntent.setAction(ICON_CLICKED);
       PendingIntent mainAppPendingIntent = PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE), kiwixIconIntent, 0);
 
       /** Star icon intent to bookmarks **/
-      Intent starIntent = new Intent(context, KiwixMobileActivity.class);
+      Intent starIntent = new Intent(context, MainActivity.class);
       starIntent.setAction(STAR_CLICKED);
       PendingIntent starPendingIntent = PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE), starIntent, 0);
 
 
       /** Microphone icon intent for voice search **/
-      Intent voiceIntent = new Intent(context, KiwixMobileActivity.class);
+      Intent voiceIntent = new Intent(context, MainActivity.class);
       voiceIntent.setAction(MIC_CLICKED);
       PendingIntent voicePendingIntent = PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE), voiceIntent, 0);
 

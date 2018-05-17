@@ -23,7 +23,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import org.kiwix.kiwixmobile.error.KiwixErrorActivity;
-import org.kiwix.kiwixmobile.main.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.main.MainActivity;
 
 import java.io.Serializable;
 
@@ -54,7 +54,7 @@ public class SplashActivity extends AppCompatActivity {
       }
     });
 
-    Intent intent = new Intent(this, KiwixMobileActivity.class);
+    Intent intent = new Intent(this, MainActivity.class);
     startActivity(intent);
     finish();
   }

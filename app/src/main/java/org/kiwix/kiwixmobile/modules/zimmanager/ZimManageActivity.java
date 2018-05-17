@@ -35,7 +35,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import org.kiwix.kiwixmobile.main.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.common.base.BaseActivity;
 import org.kiwix.kiwixmobile.common.settings.KiwixSettingsActivity;
@@ -187,7 +187,7 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
   public void onBackPressed() {
     int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
     if (value == 1) {
-      Intent startIntent = new Intent(this, KiwixMobileActivity.class);
+      Intent startIntent = new Intent(this, MainActivity.class);
       // startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       startActivity(startIntent);
     } else {

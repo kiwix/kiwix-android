@@ -19,7 +19,7 @@ package org.kiwix.kiwixmobile.modules.clients;
 
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import org.kiwix.kiwixmobile.main.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.common.views.web.WebViewCallback;
 
 public class KiwixWebChromeClient extends WebChromeClient {
@@ -33,7 +33,7 @@ public class KiwixWebChromeClient extends WebChromeClient {
   @Override
   public void onProgressChanged(WebView view, int progress) {
     callback.webViewProgressChanged(progress);
-    ((KiwixMobileActivity) view.getContext()).supportInvalidateOptionsMenu();
+    ((MainActivity) view.getContext()).supportInvalidateOptionsMenu();
   }
 
   @Override public void onReceivedTitle(WebView view, String title) {

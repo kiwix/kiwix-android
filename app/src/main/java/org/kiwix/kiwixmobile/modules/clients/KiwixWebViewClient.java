@@ -29,7 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.BuildConfig;
-import org.kiwix.kiwixmobile.main.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.common.data.contentprovider.ZimContentProvider;
 import org.kiwix.kiwixmobile.common.utils.StyleUtils;
@@ -112,7 +112,7 @@ public class KiwixWebViewClient extends WebViewClient {
             );
         view.addView(help);
         ImageView welcome_image = help.findViewById(R.id.welcome_image);
-        if (KiwixMobileActivity.nightMode) {
+        if (MainActivity.nightMode) {
           welcome_image.setImageResource(R.drawable.kiwix_welcome_night);
         } else {
           welcome_image.setImageResource(R.drawable.kiwix_welcome);

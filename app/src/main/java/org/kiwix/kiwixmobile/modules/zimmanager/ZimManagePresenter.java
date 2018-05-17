@@ -21,7 +21,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
 
-import org.kiwix.kiwixmobile.main.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.common.base.BasePresenter;
 import org.kiwix.kiwixmobile.modules.downloader.DownloadService;
@@ -52,7 +52,7 @@ class ZimManagePresenter extends BasePresenter<ZimManageViewCallback> {
           .setMessage(R.string.wifi_only_msg)
           .setPositiveButton(R.string.yes, (dialog, i) -> {
             mSharedPreferenceUtil.putPrefWifiOnly(false);
-            KiwixMobileActivity.wifiOnly = false;
+            MainActivity.wifiOnly = false;
           })
           .setNegativeButton(R.string.no, (dialog, i) -> {
           })

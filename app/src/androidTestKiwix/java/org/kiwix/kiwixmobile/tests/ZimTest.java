@@ -33,8 +33,8 @@ public class ZimTest {
   Context context;
 
   @Rule
-  public ActivityTestRule<KiwixMobileActivity> mActivityTestRule = new ActivityTestRule<>(
-      KiwixMobileActivity.class, false, false);
+  public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(
+      MainActivity.class, false, false);
 
   @Before public void setUp() {
     TestComponent component = DaggerTestComponent.builder().applicationModule

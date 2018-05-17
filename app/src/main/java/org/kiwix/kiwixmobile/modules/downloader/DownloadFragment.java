@@ -41,7 +41,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.main.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.common.base.BaseFragment;
 import org.kiwix.kiwixmobile.modules.library.entity.LibraryNetworkEntity;
@@ -120,7 +120,7 @@ public class DownloadFragment extends BaseFragment {
             .setMessage(R.string.wifi_only_msg)
             .setPositiveButton(R.string.yes, (dialog, i) -> {
                       sharedPreferenceUtil.putPrefWifiOnly(false);
-              KiwixMobileActivity.wifiOnly = false;
+              MainActivity.wifiOnly = false;
               yesAction.run();
             })
             .setNegativeButton(R.string.no, (dialog, i) -> {})
@@ -266,7 +266,7 @@ public class DownloadFragment extends BaseFragment {
       pause.setOnClickListener(v -> {
         int newPlayPauseState = LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY ? DownloadService.PAUSE : DownloadService.PLAY;
 
-        if (newPlayPauseState == DownloadService.PLAY && KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
+        if (newPlayPauseState == DownloadService.PLAY && MainActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
           showNoWiFiWarning(getContext(), () -> {
             setPlayState(pause, position, newPlayPauseState);
           });

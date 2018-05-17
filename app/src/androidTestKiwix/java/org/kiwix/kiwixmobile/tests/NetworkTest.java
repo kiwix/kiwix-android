@@ -32,7 +32,7 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.main.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.common.data.contentprovider.ZimContentProvider;
 import org.kiwix.kiwixmobile.common.di.components.DaggerTestComponent;
@@ -76,8 +76,8 @@ public class NetworkTest {
 
 
   @Rule
-  public ActivityTestRule<KiwixMobileActivity> mActivityTestRule = new ActivityTestRule<>(
-      KiwixMobileActivity.class, false, false);
+  public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(
+      MainActivity.class, false, false);
   @Rule
   public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule

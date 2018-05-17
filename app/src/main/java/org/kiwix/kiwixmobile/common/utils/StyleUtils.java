@@ -27,13 +27,13 @@ import android.text.Spanned;
 import android.util.AttributeSet;
 import android.util.Xml;
 
-import org.kiwix.kiwixmobile.main.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.R;
 import org.xmlpull.v1.XmlPullParser;
 
 public class StyleUtils {
   public static int dialogStyle() {
-    if (KiwixMobileActivity.nightMode) {
+    if (MainActivity.nightMode) {
       return R.style.AppTheme_Dialog_Night;
     } else {
       return R.style.AppTheme_Dialog;
