@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile.settings;
+package org.kiwix.kiwixmobile.common.settings;
 
 public class Constants {
   public static final boolean IS_CUSTOM_APP = true;

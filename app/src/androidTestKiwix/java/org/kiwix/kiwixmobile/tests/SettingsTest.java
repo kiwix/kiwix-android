@@ -9,7 +9,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.utils.SplashActivity;
+import org.kiwix.kiwixmobile.modules.splash.SplashActivity;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -18,7 +18,7 @@ import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.kiwix.kiwixmobile.utils.StandardActions.enterSettings;
+import static org.kiwix.kiwixmobile.common.utils.StandardActions.enterSettings;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)

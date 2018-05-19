@@ -9,8 +9,7 @@ import android.test.suitebuilder.annotation.LargeTest;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
-import org.kiwix.kiwixmobile.bookmarks_view.BookmarksActivity;
+import org.kiwix.kiwixmobile.modules.bookmarksview.BookmarksActivity;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)

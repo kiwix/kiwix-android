@@ -24,9 +24,9 @@ import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 import android.support.v7.app.AppCompatDelegate;
 import com.squareup.leakcanary.LeakCanary;
-import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
-import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
-import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
+import org.kiwix.kiwixmobile.common.di.components.ApplicationComponent;
+import org.kiwix.kiwixmobile.common.di.components.DaggerApplicationComponent;
+import org.kiwix.kiwixmobile.common.di.modules.ApplicationModule;
 
 import java.io.File;
 import java.io.IOException;

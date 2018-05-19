@@ -9,15 +9,15 @@ import android.test.suitebuilder.annotation.LargeTest;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.main.MainActivity;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class KiwixMobileActivityTest {
 
     @Rule
-    public ActivityTestRule<KiwixMobileActivity> mActivityTestRule = new ActivityTestRule<>(
-            KiwixMobileActivity.class);
+    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(
+            MainActivity.class);
     @Rule
     public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
     @Rule

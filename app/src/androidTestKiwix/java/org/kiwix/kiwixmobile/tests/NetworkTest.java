@@ -32,14 +32,14 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.ZimContentProvider;
-import org.kiwix.kiwixmobile.di.components.DaggerTestComponent;
-import org.kiwix.kiwixmobile.di.components.TestComponent;
-import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
+import org.kiwix.kiwixmobile.common.data.contentprovider.ZimContentProvider;
+import org.kiwix.kiwixmobile.common.di.components.DaggerTestComponent;
+import org.kiwix.kiwixmobile.common.di.components.TestComponent;
+import org.kiwix.kiwixmobile.common.di.modules.ApplicationModule;
 import org.kiwix.kiwixmobile.testutils.TestUtils;
-import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
+import org.kiwix.kiwixmobile.common.utils.KiwixIdlingResource;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,7 +63,7 @@ import static com.schibsted.spain.barista.interaction.BaristaMenuClickInteractio
 import static com.schibsted.spain.barista.interaction.BaristaSwipeRefreshInteractions.refresh;
 import static org.hamcrest.Matchers.allOf;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
-import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
+import static org.kiwix.kiwixmobile.common.utils.StandardActions.enterHelp;
 
 /**
  * Created by mhutti1 on 14/04/17.
@@ -76,8 +76,8 @@ public class NetworkTest {
 
 
   @Rule
-  public ActivityTestRule<KiwixMobileActivity> mActivityTestRule = new ActivityTestRule<>(
-      KiwixMobileActivity.class, false, false);
+  public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(
+      MainActivity.class, false, false);
   @Rule
   public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule

@@ -36,7 +36,7 @@ import android.util.Log;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+import org.kiwix.kiwixmobile.modules.library.entity.LibraryNetworkEntity.Book;
 
 import java.io.File;
 import java.io.FileNotFoundException;
