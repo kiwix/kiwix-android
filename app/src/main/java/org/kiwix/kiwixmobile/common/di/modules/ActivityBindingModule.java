@@ -1,6 +1,6 @@
 package org.kiwix.kiwixmobile.common.di.modules;
 
-import org.kiwix.kiwixmobile.error.KiwixErrorActivity;
+import org.kiwix.kiwixmobile.error.ErrorActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.modules.bookmarksview.BookmarksActivity;
 import org.kiwix.kiwixmobile.common.di.PerActivity;
@@ -41,5 +41,5 @@ public abstract class ActivityBindingModule {
 
   @PerActivity
   @ContributesAndroidInjector
-  public abstract KiwixErrorActivity provideKiwixErrorActivity();
+  public abstract ErrorActivity provideKiwixErrorActivity();
 }

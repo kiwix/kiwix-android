@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 
 import static org.kiwix.kiwixmobile.common.utils.LanguageUtils.getCurrentLocale;
 
-public class KiwixErrorActivity extends BaseActivity {
+public class ErrorActivity extends BaseActivity {
 
   @Inject
   BookDao bookDao;
@@ -138,7 +138,7 @@ public class KiwixErrorActivity extends BaseActivity {
   }
 
   void restartApp(){
-    Context context = KiwixErrorActivity.this;
+    Context context = ErrorActivity.this;
     Intent intent = new Intent(context, SplashActivity.class);
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
     intent.setAction(Intent.ACTION_MAIN);
