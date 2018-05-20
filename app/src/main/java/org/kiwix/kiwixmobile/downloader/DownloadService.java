@@ -627,6 +627,7 @@ public class DownloadService extends Service {
       NotificationChannel ongoingDownloadsChannel = new NotificationChannel(
           Constants.ONGOING_DOWNLOAD_CHANNEL_ID, name, importance);
       ongoingDownloadsChannel.setDescription(description);
+      ongoingDownloadsChannel.setSound(null, null);
       NotificationManager notificationManager = (NotificationManager) getSystemService(
           NOTIFICATION_SERVICE);
       notificationManager.createNotificationChannel(ongoingDownloadsChannel);
