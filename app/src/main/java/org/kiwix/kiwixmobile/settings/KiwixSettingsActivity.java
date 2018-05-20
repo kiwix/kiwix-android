@@ -88,6 +88,7 @@ public class KiwixSettingsActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     getWindow().setWindowAnimations(R.style.WindowAnimationTransition);
     super.onCreate(savedInstanceState);
+    LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil);
     if (nightMode(sharedPreferenceUtil)) {
       setTheme(R.style.AppTheme_Night);
     }
