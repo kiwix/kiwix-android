@@ -246,6 +246,7 @@ public class LibraryAdapter extends BaseAdapter {
             .filter(book -> !books.contains(book))
             .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
+            .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
             .toList()
             .blockingGet();
 
@@ -254,6 +255,7 @@ public class LibraryAdapter extends BaseAdapter {
             .filter(book -> !books.contains(book))
             .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
+            .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
             .toList()
             .blockingGet();
 
@@ -267,6 +269,7 @@ public class LibraryAdapter extends BaseAdapter {
             .filter(book -> !books.contains(book))
             .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
+            .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
             .flatMap(book -> getMatches(book, s.toString()))
             .toList()
             .blockingGet();
@@ -278,6 +281,7 @@ public class LibraryAdapter extends BaseAdapter {
             .filter(book -> !books.contains(book))
             .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
+            .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
             .flatMap(book -> getMatches(book, s.toString()))
             .toList()
             .blockingGet();
