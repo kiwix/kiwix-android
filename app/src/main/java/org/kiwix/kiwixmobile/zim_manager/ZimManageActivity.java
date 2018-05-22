@@ -79,6 +79,8 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
 
   static String KIWIX_TAG = "kiwix";
 
+  private static final String GET_CONTENT = "GET_CONTENT";
+
   @Inject
   ZimManagePresenter zimManagePresenter;
   @Inject
@@ -109,7 +111,13 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
     TabLayout tabLayout = findViewById(R.id.tabs);
     tabLayout.setupWithViewPager(mViewPager);
 
-    mViewPager.setCurrentItem(getIntent().getIntExtra(TAB_EXTRA,0));
+    String getContentAction = getIntent().getAction();
+
+    if (getContentAction != null && getContentAction.equals(GET_CONTENT)) {
+      mViewPager.setCurrentItem(1);
+    } else {
+      mViewPager.setCurrentItem(getIntent().getIntExtra(TAB_EXTRA, 0));
+    }
     mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
       @Override
       public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

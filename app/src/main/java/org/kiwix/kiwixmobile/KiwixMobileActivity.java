@@ -75,6 +75,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmarks_view.BookmarksActivity;
@@ -210,6 +211,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   private int tempVisitCount;
 
   private boolean isFirstRun;
+
+  private static final String NEW_TAB = "NEW_TAB";
 
   @BindView(R.id.toolbar) Toolbar toolbar;
 
@@ -505,6 +508,11 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       backToTopAppearNightly();
     } else {
       backToTopAppearDaily();
+    }
+
+    String newTabAction = getIntent().getAction();
+    if (newTabAction != null && newTabAction.equals(NEW_TAB)) {
+      newTab();
     }
   }
 
