@@ -27,8 +27,11 @@ import org.mockito.junit.MockitoRule;
 
 public class BookUtilsTest {
   @Mock LanguageUtils.LanguageContainer container;
-  @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
+  @Rule public MockitoRule mockitoRule;
 
+  public BookUtilsTest() {
+    mockitoRule = MockitoJUnit.rule();
+  }
 
   @Test
   public void testStandardCase(){
