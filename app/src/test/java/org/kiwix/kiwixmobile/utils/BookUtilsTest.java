@@ -18,20 +18,7 @@
 
 package org.kiwix.kiwixmobile.utils;
 
-import static org.mockito.Mockito.*;
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import static org.junit.Assert.assertEquals;
-import org.junit.Before;
-import static org.hamcrest.MatcherAssert.assertThat;
-//import static org.hamcrest.Matchers.is;
-//import static org.hamcrest.Matchers.equalTo;
-import org.junit.runner.JUnitCore;
-import org.junit.runner.Result;
-import org.junit.runner.notification.Failure;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
