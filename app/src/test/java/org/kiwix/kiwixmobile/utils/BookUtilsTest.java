@@ -19,19 +19,11 @@
 package org.kiwix.kiwixmobile.utils;
 
 import static org.junit.Assert.assertEquals;
-import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 
 public class BookUtilsTest {
   @Mock LanguageUtils.LanguageContainer container;
-  @Rule public MockitoRule mockitoRule;
-
-  public BookUtilsTest() {
-    mockitoRule = MockitoJUnit.rule();
-  }
 
   @Test
   public void testStandardCase(){
