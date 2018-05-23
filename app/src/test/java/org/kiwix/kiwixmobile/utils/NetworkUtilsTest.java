@@ -31,7 +31,7 @@ public class NetworkUtilsTest {
   @Test
   public void testingParsedUrl(){
     assertEquals("empty string", "", NetworkUtils.parseURL(context, ""));
-    //will be adding more test cases soon
+    //TODO: add more test cases
   }
 
   @Test
@@ -39,5 +39,6 @@ public class NetworkUtilsTest {
     //test that the uuid matches the default UUID Regex.
     //assertTrue(NetworkUtils.getFileNameFromUrl("").matches("[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}");
     //TODO: find a way to assert regex matching via JUnit
+    //TODO: add more test cases
   }
 }
