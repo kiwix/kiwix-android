@@ -18,10 +18,65 @@
 
 package org.kiwix.kiwixmobile.utils;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.os.Build;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
+
+@RunWith(MockitoJUnitRunner.class)
 public class DimenUtilsTest {
 
-  //TODO : check if correct Translucent bar height is returned
+  DimenUtils t = new DimenUtils();
+  @Mock Context context;
+  @Mock Resources resources;
 
-  //TODO : check if correct toolbar hieght is returned
 
+  public static void setFinalStatic(Field field, Object newValue) throws Exception {
+    field.setAccessible(true);
+
+    Field modifiersField = Field.class.getDeclaredField("modifiers");
+    modifiersField.setAccessible(true);
+    modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+
+    field.set(null, newValue);
+  }
+
+  @Test
+  public void checkTranslucentBarheight(){
+
+    when(context.getResources()).thenReturn(resources);
+    when(resources.getIdentifier("status_bar_height", "dimen", "android")).thenReturn(0);
+    try{
+      setFinalStatic(Build.VERSION.class.getField("SDK_INT"), 15);
+      assertEquals("",0,t.getTranslucentStatusBarHeight(context));
+    }catch (Exception e){
+      //do nothing
+    }
+
+
+    when(context.getResources()).thenReturn(resources);
+    when(resources.getIdentifier("status_bar_height", "dimen", "android")).thenReturn(3);
+    when(resources.getDimensionPixelSize(anyInt())).thenReturn(100);
+    try{
+      setFinalStatic(Build.VERSION.class.getField("SDK_INT"), 44);
+      assertEquals("",100,t.getTranslucentStatusBarHeight(context));
+    }catch (Exception e){
+      //do nothing
+    }
+    //TODO : make more indepth case analysis for each possible test case
+  }
+
+  @Test
+  public void testToolBarHeight(){
+    //TODO : check if correct toolbar hieght is returned
+  }
 }
