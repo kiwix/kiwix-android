@@ -21,24 +21,36 @@ package org.kiwix.kiwixmobile.utils;
 import static org.junit.Assert.assertEquals;
 import android.content.Context;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
+@RunWith(MockitoJUnitRunner.class)
 public class NetworkUtilsTest {
 
   @Mock Context context;
 
+  //TODO : Add tests for checking network availability
 
-  @Test
-  public void testingParsedUrl(){
-    assertEquals("empty string", "", NetworkUtils.parseURL(context, ""));
-    //TODO: add more test cases
-  }
+  //TODO : Add tests for checking wifi connectivity
 
+  /*
+   * test that the file name returned for a given url is correct
+   */
   @Test
   public void testingFilenameFromUrl(){
     //test that the uuid matches the default UUID Regex.
     //assertTrue(NetworkUtils.getFileNameFromUrl("").matches("[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}");
     //TODO: find a way to assert regex matching via JUnit
+    //TODO: add more test cases
+  }
+
+  /*
+   * Test the parsed URL
+   */
+  @Test
+  public void testingParsedUrl(){
+    assertEquals("empty string", "", NetworkUtils.parseURL(context, ""));
     //TODO: add more test cases
   }
 }

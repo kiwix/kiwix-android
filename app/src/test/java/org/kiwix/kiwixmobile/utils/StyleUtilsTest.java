@@ -18,21 +18,10 @@
 
 package org.kiwix.kiwixmobile.utils;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
-import org.mockito.Mock;
+public class StyleUtilsTest {
 
-public class BookUtilsTest {
-  @Mock LanguageUtils.LanguageContainer container;
+  //TODO : test if night mode is applied properly
 
-  /*
-   * Test that the language returned for the given language code is correct
-   */
-  @Test
-  public void testLanguageFromCode() {
-    BookUtils t = new BookUtils(container);
-    assertEquals("empty string", "", "");
-    assertEquals("code length more than 2", "", t.getLanguage("abc"));
-    //TODO: add more test cases
-  }
+  //TODO : test url highlighting
+
 }

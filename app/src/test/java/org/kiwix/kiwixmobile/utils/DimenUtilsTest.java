@@ -18,21 +18,10 @@
 
 package org.kiwix.kiwixmobile.utils;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
-import org.mockito.Mock;
+public class DimenUtilsTest {
 
-public class BookUtilsTest {
-  @Mock LanguageUtils.LanguageContainer container;
+  //TODO : check if correct Translucent bar height is returned
 
-  /*
-   * Test that the language returned for the given language code is correct
-   */
-  @Test
-  public void testLanguageFromCode() {
-    BookUtils t = new BookUtils(container);
-    assertEquals("empty string", "", "");
-    assertEquals("code length more than 2", "", t.getLanguage("abc"));
-    //TODO: add more test cases
-  }
+  //TODO : check if correct toolbar hieght is returned
+
 }

@@ -18,21 +18,14 @@
 
 package org.kiwix.kiwixmobile.utils;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
-import org.mockito.Mock;
+public class RateAppCounterTest {
 
-public class BookUtilsTest {
-  @Mock LanguageUtils.LanguageContainer container;
+  //TODO : test whether get no thanks state retures correct value
 
-  /*
-   * Test that the language returned for the given language code is correct
-   */
-  @Test
-  public void testLanguageFromCode() {
-    BookUtils t = new BookUtils(container);
-    assertEquals("empty string", "", "");
-    assertEquals("code length more than 2", "", t.getLanguage("abc"));
-    //TODO: add more test cases
-  }
+  //TODO : test whether set no thanks state updates the sharedpreferences database
+
+  //TODO : test whether get count returns the correct value
+
+  //TODO : test whether set count updates the sharedpreferences database
+
 }
