@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.utils;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import java.lang.reflect.Field;
@@ -38,7 +39,6 @@ public class DimenUtilsTest {
   DimenUtils t = new DimenUtils();
   @Mock Context context;
   @Mock Resources resources;
-
 
   public static void setFinalStatic(Field field, Object newValue) throws Exception {
     field.setAccessible(true);
