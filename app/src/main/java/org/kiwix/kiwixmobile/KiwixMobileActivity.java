@@ -352,6 +352,9 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
     super.onCreate(savedInstanceState);
+
+    new WebView(this).destroy(); // Workaround for buggy webviews see #710
+
     wifiOnly = sharedPreferenceUtil.getPrefWifiOnly();
     nightMode = KiwixSettingsActivity.nightMode(sharedPreferenceUtil);
     if (nightMode) {

@@ -39,6 +39,7 @@ import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
+import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.views.LanguageSelectDialog;
 
@@ -87,6 +88,8 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil);
+
     if (KiwixSettingsActivity.nightMode(sharedPreferenceUtil)) {
       setTheme(R.style.AppTheme_Night);
     }
