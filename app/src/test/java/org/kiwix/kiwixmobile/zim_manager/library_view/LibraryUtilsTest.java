@@ -18,22 +18,21 @@
 
 package org.kiwix.kiwixmobile.zim_manager.library_view;
 
-import android.content.Context;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.os.Build;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
 public class LibraryUtilsTest {
-  //TODO : check whether the rounding off to 3 significant figures is done correctly
+
+  /*
+   * Test rounding off to 3 significant figures
+   */
+  @Test
+  public void testRoundingOff(){
+    assertEquals("Test round down","3.46",LibraryUtils.round3SF(3.462999));
+    assertEquals("Test no decimal","7980.0",LibraryUtils.round3SF(7980));
+    assertEquals("Test round up","3.47",LibraryUtils.round3SF(3.46701));
+    assertEquals("Test round down edge case","3.46",LibraryUtils.round3SF(3.464999));
+    assertEquals("Test round up edge case","3.47",LibraryUtils.round3SF(3.465001));
+    assertEquals("Test round off middle case","3.46",LibraryUtils.round3SF(3.46500));
+  }
 }
