@@ -28,9 +28,12 @@ public class LibraryUtilsTest {
    */
   @Test
   public void testRoundingOff(){
-    assertEquals("Test round down","3.46",LibraryUtils.round3SF(3.462999));
-    assertEquals("Test no decimal","7980.0",LibraryUtils.round3SF(7980));
-    assertEquals("Test round up","3.47",LibraryUtils.round3SF(3.46701));
+    assertEquals("Test round down (standard case)","3.46",LibraryUtils.round3SF(3.462999));
+    assertEquals("Test round up (standard case)","3.47",LibraryUtils.round3SF(3.46701));
+    assertEquals("Test no decimal (and number having less than 3 SF)","7.0",LibraryUtils.round3SF(7));
+    assertEquals("Test single decimal (and number having less than 3 SF)","80.4",LibraryUtils.round3SF(80.4));
+    assertEquals("Test no decimal (and number having more than 3 SF)","7410.0",LibraryUtils.round3SF(7405));
+    assertEquals("Test single decimal (and number having more than 3 SF)","8060.0",LibraryUtils.round3SF(8055.4));
     assertEquals("Test round down edge case","3.46",LibraryUtils.round3SF(3.464999));
     assertEquals("Test round up edge case","3.47",LibraryUtils.round3SF(3.465001));
     assertEquals("Test round off middle case","3.46",LibraryUtils.round3SF(3.46500));
