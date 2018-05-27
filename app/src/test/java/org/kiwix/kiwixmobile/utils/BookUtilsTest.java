@@ -19,6 +19,9 @@
 package org.kiwix.kiwixmobile.utils;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -34,10 +37,23 @@ public class BookUtilsTest {
   @Test
   public void testLanguageFromCode() {
     BookUtils t = new BookUtils(container);
-    assertEquals("empty string", "", "");
-    assertEquals("code length more than 2", "", t.getLanguage("abc"));
-    //TODO : fix this test
-    //assertEquals("code length more than 2", "en", t.getLanguage("en"));
-    //TODO: add more test cases
+
+    //testing trivial cases
+    assertEquals("null is passed", "", t.getLanguage(null));
+    assertEquals("empty string passed", "", t.getLanguage(""));
+    assertEquals("code length more than 3", "", t.getLanguage("english"));
+
+    //testing the hashmap created inside the BookUtils class
+    assertEquals("code length equals 3 (English)", "English", t.getLanguage("eng"));
+    assertEquals("code length equals 3 (Hindi)", "Hindi", t.getLanguage("hin"));
+    assertEquals("code length equals 3 (French)", "French", t.getLanguage("fra"));
+    assertEquals("code length equals 3 (Akan)", "Akan", t.getLanguage("aka"));
+    assertEquals("code length equals 3 (Burmese)", "Burmese", t.getLanguage("mya"));
+    assertEquals("code length equals 3 (Catalan)", "Catalan", t.getLanguage("cat"));
+
+    //this case uses the result from the container nested class inside LanguageUtils. It will be tested in LanguageUtilsTest
+    when(container.findLanguageName(anyString())).thenReturn(container);
+    when(container.getLanguageName()).thenReturn("English");
+    assertEquals("code length equals 2 (dummy)", "English", t.getLanguage("en"));
   }
 }
