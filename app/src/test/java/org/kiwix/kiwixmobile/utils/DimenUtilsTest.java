@@ -19,9 +19,9 @@
 package org.kiwix.kiwixmobile.utils;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
+import android.util.Log;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import org.junit.Test;
@@ -36,47 +36,41 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class DimenUtilsTest {
 
-  DimenUtils t = new DimenUtils();
   @Mock Context context;
   @Mock Resources resources;
 
-  public static void setFinalStatic(Field field, Object newValue) throws Exception {
-    field.setAccessible(true);
+  //Test the Translucent bar height returned
+  @Test
+  public void checkTranslucentBarheight(){
+    when(context.getResources()).thenReturn(resources);
+    when(resources.getIdentifier("status_bar_height", "dimen", "android")).thenReturn(10);
+    when(resources.getDimensionPixelSize(anyInt())).thenReturn(100);
 
+    //Case 1 :build SDK version < Lollipop
+    //(status bar height is 100px but it's not translucent)
+    try{
+      SetSDKVersion(Build.VERSION.class.getField("SDK_INT"), 20);
+    }catch (Exception e){
+      Log.d("DimenUtilsTest", "Unable to set Build SDK Version");
+    }
+    assertEquals("",0,DimenUtils.getTranslucentStatusBarHeight(context));
+
+    //Case 2 :build SDK version >= Lollipop
+    //(status bar height is 100px and it's translucent)
+    try{
+      SetSDKVersion(Build.VERSION.class.getField("SDK_INT"), 21);
+      assertEquals("",100,DimenUtils.getTranslucentStatusBarHeight(context));
+    }catch (Exception e){
+      Log.d("DimenUtilsTest", "Unable to set Build SDK Version");
+    }
+  }
+
+  //Sets the Build SDK version
+  public static void SetSDKVersion(Field field, Object newValue) throws Exception {
+    field.setAccessible(true);
     Field modifiersField = Field.class.getDeclaredField("modifiers");
     modifiersField.setAccessible(true);
     modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-
     field.set(null, newValue);
-  }
-
-  @Test
-  public void checkTranslucentBarheight(){
-
-    when(context.getResources()).thenReturn(resources);
-    when(resources.getIdentifier("status_bar_height", "dimen", "android")).thenReturn(0);
-    try{
-      setFinalStatic(Build.VERSION.class.getField("SDK_INT"), 15);
-      assertEquals("",0,t.getTranslucentStatusBarHeight(context));
-    }catch (Exception e){
-      //do nothing
-    }
-
-
-    when(context.getResources()).thenReturn(resources);
-    when(resources.getIdentifier("status_bar_height", "dimen", "android")).thenReturn(3);
-    when(resources.getDimensionPixelSize(anyInt())).thenReturn(100);
-    try{
-      setFinalStatic(Build.VERSION.class.getField("SDK_INT"), 44);
-      assertEquals("",100,t.getTranslucentStatusBarHeight(context));
-    }catch (Exception e){
-      //do nothing
-    }
-    //TODO : make more indepth case analysis for each possible test case
-  }
-
-  @Test
-  public void testToolBarHeight(){
-    //TODO : check if correct toolbar hieght is returned
   }
 }
