@@ -20,8 +20,12 @@ package org.kiwix.kiwixmobile.utils;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import java.util.Random;
 import java.util.UUID;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +38,29 @@ import java.util.regex.Pattern;
 @RunWith(MockitoJUnitRunner.class)
 public class NetworkUtilsTest {
 
+  private static final boolean RESULT = new Random().nextBoolean();
+
   @Mock Context context;
+  //@Mock NetworkInfo networkInfo;
+  //@Mock ConnectivityManager connectivity;
+
+  //public void testIsConnected() {
+  //  when(context.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(connectivity);
+  //  when(connectivity.getActiveNetworkInfo()).thenReturn(networkInfo);
+  //  when(networkInfo.isConnected()).thenReturn(RESULT);
+  //
+  //  assertEquals(RESULT, NetworkUtils.isNetworkAvailable(context));
+  //
+  //  verify(networkInfo).isConnected();
+  //}
+
+  //public void testIsConnectedReturnsFalseWhenActiveNetworkInfoIsNull() {
+  //  when(context.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(connectivity);
+  //  when(connectivity.getActiveNetworkInfo()).thenReturn(null);
+  //
+  //  assertEquals(false, Connectivity.isConnected(context));
+  //}
+
 
   //TODO : Add tests for checking network availability
 
