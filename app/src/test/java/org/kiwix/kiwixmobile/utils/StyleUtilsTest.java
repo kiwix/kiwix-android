@@ -20,8 +20,6 @@ package org.kiwix.kiwixmobile.utils;
 
 public class StyleUtilsTest {
 
-  //TODO : test if night mode is applied properly
-
-  //TODO : test url highlighting
+  //TODO : test Attribute parsing from R.xml.webview
 
 }
