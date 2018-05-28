@@ -48,24 +48,21 @@ public class NetworkUtilsTest {
     String defaultUUIDRegex = "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$";
     Pattern pattern = Pattern.compile(defaultUUIDRegex);
 
-    // Case : Empty string passed
-    // File Name is a random UUID
+    // URL is an Empty String
     Matcher matcher = pattern.matcher(NetworkUtils.getFileNameFromUrl(""));
     if(!matcher.matches()) assertEquals("filename doesn't match UUID regex (for empty string URL)", 0, 1);
 
-    // Case : When the URL contains no '?' character but has '/' characters
-    // File Name is the substring from the last '/' character till the end of the string
+    // URL contains no '?' character but has '/' characters
     assertEquals("File Name from URL (no '?' character)", "q=kiwix+android", NetworkUtils.getFileNameFromUrl("https://github.com/search/q=kiwix+android"));
-    // Unless '/' is also the last character in the URL (in which case its a default UUID)
+    // and ends with a '/' character
     matcher = pattern.matcher(NetworkUtils.getFileNameFromUrl("https://github.com/search/q=kiwix+android/"));
     if(!matcher.matches()) assertEquals("filename doesn't match UUID regex (for no '?' and '/' in end)", 0, 1);
 
-    // Case : Empty string between last '?' and preceding '/'
-    // File Name is a random UUID
+    // Empty string between last '?' and preceding '/'
     matcher = pattern.matcher(NetworkUtils.getFileNameFromUrl("https://github.com/search/?q=kiwix+android"));
     if(!matcher.matches()) assertEquals("filename doesn't match UUID regex (for consecutive '/?')", 0, 1);
 
-    // Case : standard case
+    // Standard case
     // Here the Method should return the substring between the first '?' character and the nearest '/' character preceeding it
     assertEquals("File Name from URL standard case", "search", NetworkUtils.getFileNameFromUrl("https://www.google.com/search?source=hp&ei=zs4LW6W1E5n6rQH65Z-wDQ&q=kiwix+android&oq=kiwix+android&gs_l=psy-ab.3...2590.6259.0.6504.14.12.0.0.0.0.263.485.2-2.2.0....0...1c.1.64.psy-ab..12.2.485.0..0j35i39k1.0.WSlGY7hWzTo"));
     assertEquals("File Name from URL standard case", "Special:Search", NetworkUtils.getFileNameFromUrl("https://en.wikipedia.org/wiki/Special:Search?search=kiwix+android&go=Go&searchToken=3zrcxw8fltdcij99zvoh5c6wy"));
