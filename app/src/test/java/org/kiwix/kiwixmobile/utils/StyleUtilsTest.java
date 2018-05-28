@@ -18,8 +18,33 @@
 
 package org.kiwix.kiwixmobile.utils;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.support.annotation.XmlRes;
+import android.util.AttributeSet;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.kiwix.kiwixmobile.R;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
+
+@RunWith(MockitoJUnitRunner.class)
 public class StyleUtilsTest {
 
-  //TODO : test Attribute parsing from R.xml.webview
+  //@Mock Context context;
+  //@Mock Resources resources;
+
+  //test Attribute parsing from R.xml.webview
+  @Test
+  public void testParsedXML(){
+    //when(context.getResources()).thenReturn(resources);
+    //doReturn(R.xml.webview).when(resources).getXml(anyInt());
+    //AttributeSet t = StyleUtils.getAttributes(context, R.xml.webview);
+    //TODO : find a way do get the xml resource
+  }
 
 }
