@@ -18,6 +18,12 @@
 
 package org.kiwix.kiwixmobile.utils;
 
+import org.junit.Test;
+
 public class StorageUtilsTest {
-  //TODO : test the file name generated from the url
+  //test the file name generated from the url
+  @Test
+  public void testFileNameFromURL(){
+    //TODO: find a way to assert regex matching via JUnit
+  }
 }
