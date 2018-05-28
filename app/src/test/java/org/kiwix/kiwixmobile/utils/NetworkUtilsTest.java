@@ -27,6 +27,8 @@ import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NetworkUtilsTest {
@@ -39,16 +41,24 @@ public class NetworkUtilsTest {
 
   //test that the file name returned for a given url is correct
   @Test
-  public void testingFilenameFromUrl(){
+  public void testingFilenameFromUrl() {
     //test that the uuid matches the default UUID Regex.
-    //assertTrue(NetworkUtils.getFileNameFromUrl("").matches("[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}");
-    //TODO: find a way to assert regex matching via JUnit
+    //TODO: find a way to assert regex matching via JUnit and rewrite the test
+    String defaultUUIDRegex = "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$";
+    Pattern pattern = Pattern.compile(defaultUUIDRegex);
+    Matcher matcher = pattern.matcher(NetworkUtils.getFileNameFromUrl(""));
+
+    if(matcher.matches()) {
+      assertEquals("default filename doesn't match UUID regex",0,0);
+    } else {
+      assertEquals("default filename doesn't match UUID regex",0,1);
+    }
     //TODO: add more test cases
   }
 
   //Test the parsed URL
   @Test
-  public void testingParsedUrl(){
+  public void testingParsedUrl() {
     when(context.getString(R.string.zim_nopic)).thenReturn(Integer.toString(R.string.zim_nopic));
     when(context.getString(R.string.zim_novid)).thenReturn(Integer.toString(R.string.zim_novid));
     when(context.getString(R.string.zim_simple)).thenReturn(Integer.toString(R.string.zim_simple));
