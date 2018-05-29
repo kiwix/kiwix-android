@@ -37,10 +37,10 @@ import android.util.SparseIntArray;
 import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.utils.Constants;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
@@ -145,7 +145,7 @@ public class DownloadService extends Service {
       return START_NOT_STICKY;
     }
     if (intent.hasExtra(NOTIFICATION_ID) && (intent.getAction().equals(ACTION_PAUSE))) {
-      if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getApplicationContext())) {
+      if (MainActivity.wifiOnly && !NetworkUtils.isWiFi(getApplicationContext())) {
         Log.i(KIWIX_TAG, "Not connected to WiFi, and wifiOnly is enabled");
         startActivity(new Intent(this, ZimManageActivity.class).setAction(ACTION_NO_WIFI).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         this.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
@@ -172,7 +172,7 @@ public class DownloadService extends Service {
     }
 
     notifications.add(notificationTitle);
-    final Intent target = new Intent(this, KiwixMobileActivity.class);
+    final Intent target = new Intent(this, MainActivity.class);
     target.putExtra(EXTRA_LIBRARY, true);
 
     PendingIntent pendingIntent = PendingIntent.getActivity
@@ -308,7 +308,7 @@ public class DownloadService extends Service {
             notification.get(notificationID).setOngoing(false);
             notification.get(notificationID).setContentTitle(notificationTitle + " " + getResources().getString(R.string.zim_file_downloaded));
             notification.get(notificationID).setContentText(getString(R.string.zim_file_downloaded));
-            final Intent target = new Intent(this, KiwixMobileActivity.class);
+            final Intent target = new Intent(this, MainActivity.class);
             target.putExtra(EXTRA_ZIM_FILE, KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
             target.putExtra(EXTRA_NOTIFICATION_ID, notificationID);
             PendingIntent pendingIntent = PendingIntent.getActivity
@@ -480,7 +480,7 @@ public class DownloadService extends Service {
                 break;
               }
 
-              if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getApplicationContext())) {
+              if (MainActivity.wifiOnly && !NetworkUtils.isWiFi(getApplicationContext())) {
                 pauseDownload(chunk.getNotificationID());
               }
 

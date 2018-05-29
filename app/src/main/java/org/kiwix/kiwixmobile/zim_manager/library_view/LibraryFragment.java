@@ -44,13 +44,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseFragment;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.downloader.DownloadIntent;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
@@ -298,13 +298,13 @@ public class LibraryFragment extends BaseFragment
           return;
         }
 
-        if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
+        if (MainActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
           new AlertDialog.Builder(getContext())
               .setTitle(R.string.wifi_only_title)
               .setMessage(R.string.wifi_only_msg)
               .setPositiveButton(R.string.yes, (dialog, i) -> {
                 sharedPreferenceUtil.putPrefWifiOnly(false);
-                KiwixMobileActivity.wifiOnly = false;
+                MainActivity.wifiOnly = false;
                 downloadFile((Book) parent.getAdapter().getItem(position));
               })
               .setNegativeButton(R.string.no, (dialog, i) -> {

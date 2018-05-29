@@ -15,19 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.utils;
+package org.kiwix.kiwixmobile.main;
 
 import android.os.Handler;
 import android.os.Looper;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
-import org.kiwix.kiwixmobile.TableDrawerAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.kiwix.kiwixmobile.TableDrawerAdapter.DocumentSection;
+import static org.kiwix.kiwixmobile.main.TableDrawerAdapter.DocumentSection;
 
 public class DocumentParser {
 
@@ -35,7 +33,7 @@ public class DocumentParser {
   private SectionsListener listener;
   private List<TableDrawerAdapter.DocumentSection> sections;
 
-  public DocumentParser(SectionsListener listener) {
+  DocumentParser(SectionsListener listener) {
     this.listener = listener;
   }
 

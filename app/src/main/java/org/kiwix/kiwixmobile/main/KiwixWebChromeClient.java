@@ -15,30 +15,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.main;
 
-import android.content.Intent;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
 
-public interface WebViewCallback {
-  void webViewUrlLoading();
+public class KiwixWebChromeClient extends WebChromeClient {
 
-  void webViewUrlFinishedLoading();
+  private WebViewCallback callback;
 
-  void webViewFailedLoading(String failingUrl);
+  public KiwixWebChromeClient(WebViewCallback callback) {
+    this.callback = callback;
+  }
 
-  void showHelpPage();
+  @Override
+  public void onProgressChanged(WebView view, int progress) {
+    callback.webViewProgressChanged(progress);
+    ((MainActivity) view.getContext()).supportInvalidateOptionsMenu();
+  }
 
-  void sendContactEmail();
-
-  void openExternalUrl(Intent intent);
-
-  void manageZimFiles(int tab);
-
-  void webViewProgressChanged(int progress);
-
-  void webViewTitleUpdated(String title);
-
-  void webViewPageChanged(int page, int maxPages);
-
-  void webViewLongClick(String url);
+  @Override public void onReceivedTitle(WebView view, String title) {
+    super.onReceivedTitle(view, title);
+    callback.webViewTitleUpdated(title);
+  }
 }

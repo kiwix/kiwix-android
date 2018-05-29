@@ -17,7 +17,7 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile.views;
+package org.kiwix.kiwixmobile.main;
 
 import android.content.Context;
 import android.os.Build;
@@ -56,7 +56,7 @@ public class CompatFindActionModeCallback
 
   private ActionMode mActionMode;
 
-  public CompatFindActionModeCallback(Context context) {
+  CompatFindActionModeCallback(Context context) {
     mCustomView = LayoutInflater.from(context).inflate(R.layout.webview_search, null);
     mEditText = mCustomView.findViewById(R.id.edit);
     mEditText.setOnClickListener(this);

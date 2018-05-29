@@ -36,6 +36,7 @@ import org.kiwix.kiwixlib.JNIKiwixReader;
 import org.kiwix.kiwixlib.JNIKiwixSearcher;
 import org.kiwix.kiwixlib.JNIKiwixString;
 import org.kiwix.kiwixlib.Pair;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
 import java.io.File;
@@ -478,7 +479,7 @@ public class ZimContentProvider extends ContentProvider {
         JNIKiwixString title = new JNIKiwixString();
         JNIKiwixInt size = new JNIKiwixInt();
         byte[] data = currentJNIReader.getContent(articleZimUrl, title, mime, size);
-        if (mime.value != null && mime.value.equals("text/css") && KiwixMobileActivity.nightMode) {
+        if (mime.value != null && mime.value.equals("text/css") && MainActivity.nightMode) {
           out.write(("img, video { \n" +
               " -webkit-filter: invert(1); \n" +
               " filter: invert(1); \n" +

@@ -39,10 +39,10 @@ import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.database.RecentSearchDao;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
@@ -276,17 +276,17 @@ public class KiwixSettingsActivity extends BaseActivity {
         ((BaseAdapter) getPreferenceScreen().getRootAdapter()).notifyDataSetChanged();
       }
       if (key.equals(PREF_NIGHTMODE)) {
-        KiwixMobileActivity.refresh = true;
-        KiwixMobileActivity.nightMode = nightMode(sharedPreferenceUtil);
+        MainActivity.refresh = true;
+        MainActivity.nightMode = nightMode(sharedPreferenceUtil);
         getActivity().finish();
         startActivity(new Intent(getActivity(), KiwixSettingsActivity.class));
       }
       if (key.equals(PREF_WIFI_ONLY)) {
-        KiwixMobileActivity.wifiOnly = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
+        MainActivity.wifiOnly = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
       }
       if (key.equals(PREF_AUTONIGHTMODE)) {
-        KiwixMobileActivity.refresh = true;
-        KiwixMobileActivity.nightMode = nightMode(sharedPreferenceUtil);
+        MainActivity.refresh = true;
+        MainActivity.nightMode = nightMode(sharedPreferenceUtil);
         getActivity().finish();
         startActivity(new Intent(getActivity(), KiwixSettingsActivity.class));
       }

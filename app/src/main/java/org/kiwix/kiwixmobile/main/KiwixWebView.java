@@ -17,7 +17,7 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile.views.web;
+package org.kiwix.kiwixmobile.main;
 
 import android.content.Context;
 import android.graphics.ColorMatrixColorFilter;
@@ -35,10 +35,7 @@ import android.webkit.WebView;
 import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.KiwixWebChromeClient;
-import org.kiwix.kiwixmobile.KiwixWebViewClient;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.WebViewCallback;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
