@@ -21,8 +21,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 
 import org.kiwix.kiwixmobile.BuildConfig;
-import org.kiwix.kiwixmobile.network.KiwixService;
-import org.kiwix.kiwixmobile.network.UserAgentInterceptor;
+import org.kiwix.kiwixmobile.data.remote.KiwixService;
+import org.kiwix.kiwixmobile.data.remote.UserAgentInterceptor;
 
 import javax.inject.Singleton;
 

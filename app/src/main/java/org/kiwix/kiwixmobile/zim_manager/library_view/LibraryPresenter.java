@@ -20,10 +20,10 @@ package org.kiwix.kiwixmobile.zim_manager.library_view;
 import android.util.Log;
 
 import org.kiwix.kiwixmobile.base.BasePresenter;
-import org.kiwix.kiwixmobile.database.BookDao;
+import org.kiwix.kiwixmobile.data.local.dao.BookDao;
+import org.kiwix.kiwixmobile.data.remote.KiwixService;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
-import org.kiwix.kiwixmobile.network.KiwixService;
 
 import javax.inject.Inject;
 

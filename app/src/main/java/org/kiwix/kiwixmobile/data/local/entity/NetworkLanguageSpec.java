@@ -17,7 +17,7 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile.database.entity;
+package org.kiwix.kiwixmobile.data.local.entity;
 
 import com.yahoo.squidb.annotations.TableModelSpec;
 

@@ -17,11 +17,41 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile.database.entity;
+package org.kiwix.kiwixmobile.data.local.entity;
 
 import com.yahoo.squidb.annotations.TableModelSpec;
 
-@TableModelSpec(className = "LibraryDatabaseEntity", tableName = "library")
-public class LibraryDataSource {
-  public String libraryVersion;
+@TableModelSpec(className = "BookDatabaseEntity", tableName = "book")
+public class BookDataSource {
+
+  public String bookId;
+
+  public String title;
+
+  public String description;
+
+  public String language;
+
+  public String bookCreator;
+
+  public String publisher;
+
+  public String date;
+
+  public String url;
+
+  public String remoteUrl;
+
+  public String articleCount;
+
+  public String mediaCount;
+
+  public String size;
+
+  public String favicon;
+
+  public String name;
+
+  public boolean downloaded;
+
 }

@@ -15,29 +15,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.network;
+package org.kiwix.kiwixmobile.data.local.entity;
 
-import java.io.IOException;
-
-import okhttp3.Interceptor;
-import okhttp3.Request;
-import okhttp3.Response;
+import com.yahoo.squidb.annotations.ColumnSpec;
+import com.yahoo.squidb.annotations.TableModelSpec;
 
 /**
- * Created by mhutti1 on 20/04/17.
+ * Squidb spec for saved bookmarks.
  */
+@TableModelSpec(className = "Bookmarks", tableName = "Bookmarks")
+public class BookmarksSpec {
 
-public class UserAgentInterceptor implements Interceptor{
-  public final String useragent;
+  @ColumnSpec(constraints = "NOT NULL")
+  public String ZimId;
+  public String ZimName;
+  public String bookmarkUrl;
+  public String bookmarkTitle;
 
-  public UserAgentInterceptor(String useragent) {
-    this.useragent = useragent;
-  }
-
-  @Override
-  public Response intercept(Chain chain) throws IOException {
-    Request originalRequest = chain.request();
-    Request newUserAgent = originalRequest.newBuilder().header("User-Agent", useragent).build();
-    return chain.proceed(newUserAgent);
-  }
 }

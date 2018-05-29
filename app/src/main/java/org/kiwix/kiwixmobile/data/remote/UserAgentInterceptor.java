@@ -15,22 +15,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.database.entity;
+package org.kiwix.kiwixmobile.data.remote;
 
-import com.yahoo.squidb.annotations.ColumnSpec;
-import com.yahoo.squidb.annotations.TableModelSpec;
+import java.io.IOException;
+
+import okhttp3.Interceptor;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
- * Squidb spec for recent searches.
+ * Created by mhutti1 on 20/04/17.
  */
-@TableModelSpec(className = "RecentSearch", tableName = "recentSearches")
-public class RecentSearchSpec {
 
-  @ColumnSpec(constraints = "NOT NULL")
-  public String searchString;
+public class UserAgentInterceptor implements Interceptor{
+  public final String useragent;
 
-  @ColumnSpec(constraints = "NOT NULL")
-  public String zimID;
+  public UserAgentInterceptor(String useragent) {
+    this.useragent = useragent;
+  }
 
-
+  @Override
+  public Response intercept(Chain chain) throws IOException {
+    Request originalRequest = chain.request();
+    Request newUserAgent = originalRequest.newBuilder().header("User-Agent", useragent).build();
+    return chain.proceed(newUserAgent);
+  }
 }

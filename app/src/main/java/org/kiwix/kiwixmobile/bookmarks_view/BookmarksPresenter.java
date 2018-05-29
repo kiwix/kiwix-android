@@ -19,7 +19,7 @@ package org.kiwix.kiwixmobile.bookmarks_view;
 
 import org.kiwix.kiwixmobile.ZimContentProvider;
 import org.kiwix.kiwixmobile.base.BasePresenter;
-import org.kiwix.kiwixmobile.database.BookmarksDao;
+import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
 
 import java.util.ArrayList;
 
