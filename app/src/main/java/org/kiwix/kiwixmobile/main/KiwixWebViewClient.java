@@ -30,7 +30,7 @@ import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.ZimContentProvider;
+import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 
 import java.util.HashMap;
