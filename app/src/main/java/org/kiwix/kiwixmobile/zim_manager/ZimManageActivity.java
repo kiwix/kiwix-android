@@ -40,7 +40,6 @@ import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
-import org.kiwix.kiwixmobile.views.LanguageSelectDialog;
 
 import java.io.File;
 

@@ -89,7 +89,7 @@
 
       android:title="@string/pref_zoom_enable" />
 
-    <org.kiwix.kiwixmobile.views.SliderPreference
+    <org.kiwix.kiwixmobile.settings.SliderPreference
       android:defaultValue="250.0"
       android:dialogMessage="0"
       android:enabled="false"
