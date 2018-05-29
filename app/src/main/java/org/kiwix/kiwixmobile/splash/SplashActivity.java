@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.utils;
+package org.kiwix.kiwixmobile.splash;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,8 +25,6 @@ import android.support.v7.app.AppCompatActivity;
 import org.kiwix.kiwixmobile.error.ErrorActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
 
-import java.io.Serializable;
-
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -35,23 +33,20 @@ public class SplashActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
 
     Context appContext = this;
-    Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-      @Override
-      public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
+    Thread.setDefaultUncaughtExceptionHandler((paramThread, paramThrowable) -> {
 
-        final Intent intent = new Intent(appContext, ErrorActivity.class);
+      final Intent intent = new Intent(appContext, ErrorActivity.class);
 
-        Bundle extras = new Bundle();
-        extras.putSerializable("exception", (Serializable) paramThrowable);
+      Bundle extras = new Bundle();
+      extras.putSerializable("exception", paramThrowable);
 
-        intent.putExtras(extras);
+      intent.putExtras(extras);
 
-        appContext.startActivity(intent);
+      appContext.startActivity(intent);
 
-        finish();
-        android.os.Process.killProcess(android.os.Process.myPid());
-        System.exit(10);
-      }
+      finish();
+      android.os.Process.killProcess(android.os.Process.myPid());
+      System.exit(10);
     });
 
     Intent intent = new Intent(this, MainActivity.class);

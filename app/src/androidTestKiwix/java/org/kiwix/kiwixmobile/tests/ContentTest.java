@@ -25,8 +25,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.splash.SplashActivity;
 import org.kiwix.kiwixmobile.testutils.TestUtils;
-import org.kiwix.kiwixmobile.utils.SplashActivity;
 
 import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;

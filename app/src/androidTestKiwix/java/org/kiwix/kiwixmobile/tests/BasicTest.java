@@ -28,12 +28,18 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.utils.SplashActivity;
+import org.kiwix.kiwixmobile.splash.SplashActivity;
 
+import static com.schibsted.spain.barista.assertion.BaristaDrawerAssertions.assertDrawerIsClosed;
+import static com.schibsted.spain.barista.assertion.BaristaDrawerAssertions.assertDrawerIsClosedWithGravity;
+import static com.schibsted.spain.barista.assertion.BaristaDrawerAssertions.assertDrawerIsOpen;
+import static com.schibsted.spain.barista.assertion.BaristaDrawerAssertions.assertDrawerIsOpenWithGravity;
+import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
+import static com.schibsted.spain.barista.interaction.BaristaDrawerInteractions.closeDrawer;
+import static com.schibsted.spain.barista.interaction.BaristaDrawerInteractions.closeDrawerWithGravity;
+import static com.schibsted.spain.barista.interaction.BaristaDrawerInteractions.openDrawer;
+import static com.schibsted.spain.barista.interaction.BaristaDrawerInteractions.openDrawerWithGravity;
 import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
-import static com.schibsted.spain.barista.interaction.BaristaDrawerInteractions.*;
-import static com.schibsted.spain.barista.assertion.BaristaDrawerAssertions.*;
-import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.*;
 
 
 @LargeTest
