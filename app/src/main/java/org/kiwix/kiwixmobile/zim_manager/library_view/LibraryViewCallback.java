@@ -17,7 +17,7 @@
  */
 package org.kiwix.kiwixmobile.zim_manager.library_view;
 
-import org.kiwix.kiwixmobile.base.ViewCallback;
+import org.kiwix.kiwixmobile.base.BaseContract;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
@@ -27,7 +27,7 @@ import java.util.LinkedList;
  * Created by EladKeyshawn on 06/04/2017.
  */
 
-public interface LibraryViewCallback extends ViewCallback {
+public interface LibraryViewCallback extends BaseContract.View {
 
   void showBooks(LinkedList<Book> books);
 

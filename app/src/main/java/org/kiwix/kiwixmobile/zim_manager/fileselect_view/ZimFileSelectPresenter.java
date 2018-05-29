@@ -34,7 +34,7 @@ public class ZimFileSelectPresenter extends BasePresenter<ZimFileSelectViewCallb
   BookDao bookDao;
 
   @Inject
-  public ZimFileSelectPresenter() {
+  ZimFileSelectPresenter() {
   }
 
   @Override
@@ -44,7 +44,7 @@ public class ZimFileSelectPresenter extends BasePresenter<ZimFileSelectViewCallb
 
   public void loadLocalZimFileFromDb() {
     ArrayList<LibraryNetworkEntity.Book> books = bookDao.getBooks();
-    getMvpView().showFiles(books);
+    view.showFiles(books);
   }
 
 }

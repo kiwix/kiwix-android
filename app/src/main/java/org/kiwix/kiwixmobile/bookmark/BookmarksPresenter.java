@@ -34,13 +34,13 @@ public class BookmarksPresenter extends BasePresenter<BookmarksViewCallback> {
   BookmarksDao bookmarksDao;
 
   @Inject
-  public BookmarksPresenter() {
+  BookmarksPresenter() {
   }
 
   public void loadBookmarks() {
     ArrayList<String> bookmarks = bookmarksDao.getBookmarkTitles(ZimContentProvider.getId(), ZimContentProvider.getName());
     ArrayList<String> bookmarkUrls = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
-    getMvpView().showBookmarks(bookmarks, bookmarkUrls);
+    view.showBookmarks(bookmarks, bookmarkUrls);
   }
 
 

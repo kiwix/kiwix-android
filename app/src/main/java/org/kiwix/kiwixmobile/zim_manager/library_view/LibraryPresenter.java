@@ -42,17 +42,17 @@ public class LibraryPresenter extends BasePresenter<LibraryViewCallback> {
   BookDao bookDao;
 
   @Inject
-  public LibraryPresenter() {
+  LibraryPresenter() {
   }
 
   void loadBooks() {
-    getMvpView().displayScanningContent();
+    view.displayScanningContent();
     kiwixService.getLibrary()
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(library -> getMvpView().showBooks(library.getBooks()), error -> {
+        .subscribe(library -> view.showBooks(library.getBooks()), error -> {
           String msg = error.getLocalizedMessage();
           Log.w("kiwixLibrary", "Error loading books:" + (msg != null ? msg : "(null)"));
-          getMvpView().displayNoItemsFound();
+          view.displayNoItemsFound();
         });
   }
 
@@ -60,7 +60,7 @@ public class LibraryPresenter extends BasePresenter<LibraryViewCallback> {
     for (LibraryNetworkEntity.Book book : bookDao.getDownloadingBooks()) {
       if (!DownloadFragment.mDownloads.containsValue(book)) {
         book.url = book.remoteUrl;
-        getMvpView().downloadFile(book);
+        view.downloadFile(book);
       }
     }
   }

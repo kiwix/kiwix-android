@@ -17,7 +17,7 @@
  */
 package org.kiwix.kiwixmobile.bookmark;
 
-import org.kiwix.kiwixmobile.base.ViewCallback;
+import org.kiwix.kiwixmobile.base.BaseContract;
 
 import java.util.ArrayList;
 
@@ -25,7 +25,7 @@ import java.util.ArrayList;
  * Created by EladKeyshawn on 05/04/2017.
  */
 
-public interface BookmarksViewCallback extends ViewCallback {
+public interface BookmarksViewCallback extends BaseContract.View {
   void showBookmarks(ArrayList<String> bookmarks, ArrayList<String> bookmarkUrls);
 
   void popDeleteBookmarksSnackbar();
