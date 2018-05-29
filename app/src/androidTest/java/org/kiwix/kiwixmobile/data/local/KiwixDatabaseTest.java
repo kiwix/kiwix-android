@@ -17,7 +17,7 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile.database;
+package org.kiwix.kiwixmobile.data.local;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -26,6 +26,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
 
 import java.io.BufferedWriter;
 import java.io.File;

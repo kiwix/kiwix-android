@@ -17,19 +17,21 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile.database;
+package org.kiwix.kiwixmobile.data.local.dao;
 
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
 
-import javax.inject.Inject;
-import org.kiwix.kiwixmobile.database.entity.NetworkLanguageDatabaseEntity;
+import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
+import org.kiwix.kiwixmobile.data.local.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.LibraryAdapter.Language;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import javax.inject.Inject;
 
 public class NetworkLanguageDao {
   private KiwixDatabase mDb;

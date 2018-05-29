@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 
 import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.database.BookDao;
+import org.kiwix.kiwixmobile.data.local.dao.BookDao;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.SplashActivity;
 
