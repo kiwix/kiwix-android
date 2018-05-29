@@ -18,7 +18,7 @@
  */
 
 
-package org.kiwix.kiwixmobile.bookmarks_view;
+package org.kiwix.kiwixmobile.bookmark;
 
 import android.content.Context;
 import android.content.Intent;
