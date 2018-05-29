@@ -1,7 +1,7 @@
 package org.kiwix.kiwixmobile.di.modules;
 
 import org.kiwix.kiwixmobile.KiwixErrorActivity;
-import org.kiwix.kiwixmobile.bookmarks_view.BookmarksActivity;
+import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.di.PerActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.search.SearchActivity;
