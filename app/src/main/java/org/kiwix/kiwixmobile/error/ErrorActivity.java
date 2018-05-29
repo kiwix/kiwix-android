@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.error;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,7 @@ import android.support.v4.content.FileProvider;
 import android.widget.Button;
 import android.widget.CheckBox;
 
+import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.dao.BookDao;
@@ -26,7 +27,7 @@ import butterknife.ButterKnife;
 
 import static org.kiwix.kiwixmobile.utils.LanguageUtils.getCurrentLocale;
 
-public class KiwixErrorActivity extends BaseActivity {
+public class ErrorActivity extends BaseActivity {
 
   @Inject
   BookDao bookDao;
@@ -137,7 +138,7 @@ public class KiwixErrorActivity extends BaseActivity {
   }
 
   void restartApp(){
-    Context context = KiwixErrorActivity.this;
+    Context context = ErrorActivity.this;
     Intent intent = new Intent(context, SplashActivity.class);
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
     intent.setAction(Intent.ACTION_MAIN);
