@@ -18,7 +18,7 @@
  */
 
 
-package org.kiwix.kiwixmobile.utils;
+package org.kiwix.kiwixmobile.main;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -31,7 +31,7 @@ public class RateAppCounter {
 
   private SharedPreferences visitCounter;
 
-  public RateAppCounter(Context context) {
+  RateAppCounter(Context context) {
     visitCounter = context.getSharedPreferences(MASTER_NAME, 0);
     visitCounter = context.getSharedPreferences(NOTHANKS_CLICKED, 0);
   }

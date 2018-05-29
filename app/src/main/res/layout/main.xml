@@ -136,7 +136,7 @@
       app:popupTheme="@style/AppTheme.PopupOverlay"
       app:theme="@style/AppTheme.AppBarOverlay" />
 
-    <org.kiwix.kiwixmobile.views.AnimatedProgressBar
+    <org.kiwix.kiwixmobile.main.AnimatedProgressBar
       android:id="@+id/progress_view"
       android:layout_width="match_parent"
       android:layout_height="@dimen/progress_view_height"

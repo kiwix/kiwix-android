@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.utils;
+package org.kiwix.kiwixmobile.main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.ZimContentProvider;
+import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,7 +70,7 @@ public class KiwixTextToSpeech {
    * @param onSpeakingListener listener that receives an event when speaking just started or
    * ended
    */
-  public KiwixTextToSpeech(Context context,
+  KiwixTextToSpeech(Context context,
       final OnInitSucceedListener onInitSucceedListener,
       final OnSpeakingListener onSpeakingListener, final OnAudioFocusChangeListener onAudioFocusChangeListener) {
     Log.d(TAG_KIWIX, "Initializing TextToSpeech");

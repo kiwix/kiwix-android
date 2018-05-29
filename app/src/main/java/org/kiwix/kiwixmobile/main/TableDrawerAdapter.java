@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.main;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -26,6 +26,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import org.kiwix.kiwixmobile.R;
 
 import java.util.ArrayList;
 import java.util.List;

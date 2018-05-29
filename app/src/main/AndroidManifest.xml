@@ -35,7 +35,7 @@
     </activity>
 
     <activity
-      android:name=".KiwixMobileActivity"
+      android:name=".main.MainActivity"
       android:configChanges="orientation|keyboardHidden|screenSize|locale"
       android:label="@string/app_name"
       android:windowSoftInputMode="adjustPan">
@@ -160,7 +160,7 @@
       android:authorities="${applicationId}.zim.base"
       android:exported="true" />
 
-    <receiver android:name=".utils.KiwixSearchWidget">
+    <receiver android:name=".main.KiwixSearchWidget">
       <intent-filter>
         <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
         <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.TEXT_CLICKED" />

@@ -1,9 +1,9 @@
 package org.kiwix.kiwixmobile.di.modules;
 
 import org.kiwix.kiwixmobile.KiwixErrorActivity;
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.bookmarks_view.BookmarksActivity;
 import org.kiwix.kiwixmobile.di.PerActivity;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
@@ -21,7 +21,7 @@ import dagger.android.ContributesAndroidInjector;
 public abstract class ActivityBindingModule {
   @PerActivity
   @ContributesAndroidInjector
-  public abstract KiwixMobileActivity provideKiwixMobileActivity();
+  public abstract MainActivity provideKiwixMobileActivity();
 
   @PerActivity
   @ContributesAndroidInjector

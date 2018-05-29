@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile;
+package org.kiwix.kiwixmobile.main;
 
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -25,7 +25,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.kiwix.kiwixmobile.views.web.KiwixWebView;
+import org.kiwix.kiwixmobile.R;
 
 import java.util.List;
 

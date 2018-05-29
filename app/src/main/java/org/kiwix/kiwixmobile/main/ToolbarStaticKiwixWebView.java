@@ -15,14 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.views.web;
+package org.kiwix.kiwixmobile.main;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
-import org.kiwix.kiwixmobile.WebViewCallback;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
 
 /**
@@ -43,7 +41,7 @@ public class ToolbarStaticKiwixWebView extends KiwixWebView {
 
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    if ((KiwixMobileActivity.isFullscreenOpened)) {
+    if ((MainActivity.isFullscreenOpened)) {
       setTranslationY(0);
       super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     } else {
