@@ -33,7 +33,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.ZimContentProvider;
+import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.di.components.DaggerTestComponent;
 import org.kiwix.kiwixmobile.di.components.TestComponent;
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule;

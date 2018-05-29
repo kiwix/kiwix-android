@@ -17,8 +17,8 @@
  */
 package org.kiwix.kiwixmobile.bookmark;
 
-import org.kiwix.kiwixmobile.ZimContentProvider;
 import org.kiwix.kiwixmobile.base.BasePresenter;
+import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
 
 import java.util.ArrayList;
