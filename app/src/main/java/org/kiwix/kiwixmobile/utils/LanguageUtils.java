@@ -79,9 +79,11 @@ public class LanguageUtils {
     Locale locale = new Locale(language);
     Locale.setDefault(locale);
     Configuration config = new Configuration();
-    config.locale = locale;
     if (Build.VERSION.SDK_INT >= 17) {
+      config.setLocale(locale);
       config.setLayoutDirection(locale);
+    } else {
+      config.locale = locale;
     }
     context.getResources()
         .updateConfiguration(config, context.getResources().getDisplayMetrics());
@@ -108,7 +110,6 @@ public class LanguageUtils {
     return mLocaleMap.get(iso3.toUpperCase());
   }
 
-  @TargetApi(Build.VERSION_CODES.N)
   public static Locale getCurrentLocale(Context context){
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
       return context.getResources().getConfiguration().getLocales().get(0);
@@ -170,7 +171,7 @@ public class LanguageUtils {
   private void setupLanguageList() {
 
     for (String languageCode : mLocaleLanguageCodes) {
-      mLanguageList.add(new LanguageContainer(languageCode));
+      mLanguageList.add(new LanguageContainer().findLanguageName(languageCode));
     }
   }
 
@@ -316,7 +317,7 @@ public class LanguageUtils {
     // This constructor will take care of creating a language name for the given ISO 639-1 language code.
     // The language name will always be in english to ensure user friendliness and to prevent
     // possible incompatibilities, since not all language names are available in all languages.
-    public LanguageContainer(String languageCode) {
+    public LanguageContainer findLanguageName(String languageCode) {
       mLanguageCode = languageCode;
 
       try {
@@ -327,8 +328,10 @@ public class LanguageUtils {
         if (mLanguageName.length() == 2) {
           mLanguageName = new Locale(languageCode).getDisplayLanguage(new Locale("en"));
         }
+        return this;
       } catch (Exception e) {
         mLanguageName = "";
+        return this;
       }
     }
 
