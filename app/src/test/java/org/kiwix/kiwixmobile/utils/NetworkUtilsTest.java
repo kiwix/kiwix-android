@@ -19,14 +19,23 @@
 package org.kiwix.kiwixmobile.utils;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.anyListOf;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
+import android.util.Log;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
@@ -38,37 +47,77 @@ import java.util.regex.Pattern;
 @RunWith(MockitoJUnitRunner.class)
 public class NetworkUtilsTest {
 
-  private static final boolean RESULT = new Random().nextBoolean();
-
   @Mock Context context;
-  //@Mock NetworkInfo networkInfo;
-  //@Mock ConnectivityManager connectivity;
+  @Mock ConnectivityManager connectivity;
+  @Mock NetworkInfo networkInfo1;
+  @Mock NetworkInfo networkInfo2;
 
-  //public void testIsConnected() {
-  //  when(context.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(connectivity);
-  //  when(connectivity.getActiveNetworkInfo()).thenReturn(networkInfo);
-  //  when(networkInfo.isConnected()).thenReturn(RESULT);
-  //
-  //  assertEquals(RESULT, NetworkUtils.isNetworkAvailable(context));
-  //
-  //  verify(networkInfo).isConnected();
-  //}
+  public void testNetworkAvailability() {
+    NetworkInfo[] info = {networkInfo1,networkInfo2};
+    when(context.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(connectivity);
+    when(connectivity.getAllNetworkInfo()).thenReturn(info);
 
-  //public void testIsConnectedReturnsFalseWhenActiveNetworkInfoIsNull() {
-  //  when(context.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(connectivity);
-  //  when(connectivity.getActiveNetworkInfo()).thenReturn(null);
-  //
-  //  assertEquals(false, Connectivity.isConnected(context));
-  //}
+    //one network is connected
+    when(networkInfo1.getState()).thenReturn(NetworkInfo.State.CONNECTED);
+    when(networkInfo2.getState()).thenReturn(NetworkInfo.State.DISCONNECTING);
+    assertEquals("",true,NetworkUtils.isNetworkAvailable(context));
 
+    //one network is connecting
+    when(networkInfo1.getState()).thenReturn(NetworkInfo.State.DISCONNECTING);
+    when(networkInfo2.getState()).thenReturn(NetworkInfo.State.CONNECTING);
+    assertEquals("",true,NetworkUtils.isNetworkAvailable(context));
 
-  //TODO : Add tests for checking network availability
+    //no network is available
+    when(networkInfo1.getState()).thenReturn(NetworkInfo.State.DISCONNECTED);
+    when(networkInfo2.getState()).thenReturn(NetworkInfo.State.DISCONNECTED);
+    assertEquals("",false,NetworkUtils.isNetworkAvailable(context));
+  }
 
-  //TODO : Add tests for checking wifi connectivity
+  public void testWifiAvailability(){
+    when(context.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(connectivity);
+    when(connectivity.getActiveNetworkInfo()).thenReturn(networkInfo);
 
-  //test that the file name returned for a given url is correct
+    //SDK >= 23
+    try{
+      SetSDKVersion(Build.VERSION.class.getField("SDK_INT"), 23);
+    }catch (Exception e){
+      Log.d("NetworkUtilsTest", "Unable to set Build SDK Version");
+    }
+
+    //on Mobile Data
+    when(networkInfo.getType()).thenReturn(ConnectivityManager.TYPE_MOBILE);
+    assertEquals(false,NetworkUtils.isWiFi(context));
+    //verify that the correct methods are used according to build SDK version
+    verify(connectivity).getActiveNetworkInfo();
+    verify(networkInfo).getType();
+
+    //on WIFI
+    when(networkInfo.getType()).thenReturn(ConnectivityManager.TYPE_WIFI);
+    assertEquals(true,NetworkUtils.isWiFi(context));
+    verify(connectivity).getActiveNetworkInfo();
+
+    //SDK < 23
+    try{
+      SetSDKVersion(Build.VERSION.class.getField("SDK_INT"), 22);
+    }catch (Exception e){
+      Log.d("NetworkUtilsTest", "Unable to set Build SDK Version");
+    }
+
+    //WIFI connected
+    when(connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI)).thenReturn(networkInfo);
+    when(networkInfo.isConnected()).thenReturn(true);
+    assertEquals(true,NetworkUtils.isWiFi(context));
+    verify(connectivity).getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+    //WIFI disconnected
+    when(connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI)).thenReturn(networkInfo);
+    when(networkInfo.isConnected()).thenReturn(false);
+    assertEquals(false,NetworkUtils.isWiFi(context));
+    verify(connectivity).getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+  }
+
   @Test
-  public void testingFilenameFromUrl() {
+  public void testFilenameFromUrl() {
     // TODO: find a way to assert regex matching via JUnit and rewrite the test
 
     String defaultUUIDRegex = "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$";
@@ -95,9 +144,8 @@ public class NetworkUtilsTest {
     assertEquals("File Name from URL standard case", "search", NetworkUtils.getFileNameFromUrl("https://github.com/search?q=kiwix+android"));
   }
 
-  // Test the parsed URL
   @Test
-  public void testingParsedUrl() {
+  public void testParsedURL() {
     when(context.getString(R.string.zim_nopic)).thenReturn("No Pictures");
     when(context.getString(R.string.zim_novid)).thenReturn("No Videos");
     when(context.getString(R.string.zim_simple)).thenReturn("Simple");
@@ -110,5 +158,14 @@ public class NetworkUtilsTest {
     assertEquals("URL Parsing", "Simple", NetworkUtils.parseURL(context, "http://download.wikimedia.org/kiwix/zim/wikipedia/wikipedia_af_all_simple_2016-05.zim"));
     assertEquals("URL Parsing", "No Pictures", NetworkUtils.parseURL(context, "http://mirror.netcologne.de/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"));
     assertEquals("URL Parsing", "Simple", NetworkUtils.parseURL(context, "http://mirror3.kiwix.org/zim/wikipedia/wikipedia_af_all_simple_2016-05.zim"));
+  }
+
+  //Sets the Build SDK version
+  public static void SetSDKVersion(Field field, Object newValue) throws Exception {
+    field.setAccessible(true);
+    Field modifiersField = Field.class.getDeclaredField("modifiers");
+    modifiersField.setAccessible(true);
+    modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+    field.set(null, newValue);
   }
 }
