@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.utils;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyListOf;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 
@@ -91,11 +92,13 @@ public class NetworkUtilsTest {
     //verify that the correct methods are used according to build SDK version
     verify(connectivity).getActiveNetworkInfo();
     verify(networkInfo).getType();
+    verify(connectivity, never()).getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
     //on WIFI
     when(networkInfo.getType()).thenReturn(ConnectivityManager.TYPE_WIFI);
     assertEquals(true,NetworkUtils.isWiFi(context));
     verify(connectivity).getActiveNetworkInfo();
+    verify(connectivity, never()).getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
     //SDK < 23
     try{
