@@ -36,6 +36,7 @@ import org.kiwix.kiwixmobile.data.local.entity.LibraryDatabaseEntity;
 import org.kiwix.kiwixmobile.data.local.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.data.local.entity.RecentSearch;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.utils.UpdateUtils;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -52,7 +53,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 @Singleton
 public class KiwixDatabase extends SquidDatabase {
 
-  private static final int VERSION = 16;
+  private static final int VERSION = 17;
   private final Context context;
 
   @Inject
@@ -125,6 +126,8 @@ public class KiwixDatabase extends SquidDatabase {
         tryAddColumn(Bookmark.ZIM_FILE_PATH);
         tryAddColumn(Bookmark.FAVICON);
         migrateBookmarksVersion16();
+      case 16:
+        new BookmarksDao(this).processBookmark(UpdateUtils::reformatProviderUrl);
     }
     return true;
   }
