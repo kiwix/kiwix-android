@@ -18,78 +18,8 @@
 
 package org.kiwix.kiwixmobile.utils;
 
-import android.content.Context;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.os.Build;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.Locale;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-
-@RunWith(MockitoJUnitRunner.class)
 public class LanguageUtilsTest {
-
-  @Mock Context context;
-  @Mock Resources resources;
-  @Mock Configuration configuration;
-  //@Mock SharedPreferenceUtil sharedPreferenceUtil;
-
-
-  @Before
-  public void executeBefore(){
-    Locale locale = new Locale("en");
-
-    //when(context.getResources()).thenReturn(resources);
-    //when(resources.getConfiguration()).thenReturn(configuration);
-    //when(configuration.locale).thenReturn(locale);
-    //TODO : fix the exception: when() requires an argument which has to be 'a method call on a mock'in the previous line
-    //LanguageUtils t = new LanguageUtils(context);
-  }
-
-
-  /*
-   * test whether the UI is updated if preffered language is different
-   */
-  @Test
-  public void test(){
-  //  when(context.getResources()).thenReturn(resources);
-  //  when(resources.getConfiguration()).thenReturn(configuration);
-  //  when(sharedPreferenceUtil.getPrefLanguage(anyString())).thenReturn("he");
-  //  try{
-  //    setFinalStatic(Build.VERSION.class.getField("SDK_INT"), 17);
-  //    t.handleLocaleChange(context,sharedPreferenceUtil);
-  //    verify(resources).updateConfiguration(any(), any());
-  //
-  //  }catch (Exception e){
-  //    //do nothing
-  //  }
-  //
-  //  assertEquals("","","");
-  //
-  }
+  //TODO : test whether the UI is updated if preffered language is different
 
   //TODO : test whether the UI is updated on locale change
-
-  //TODO : test font changes on UI elements
-
-
-  public static void setFinalStatic(Field field, Object newValue) throws Exception {
-    field.setAccessible(true);
-    Field modifiersField = Field.class.getDeclaredField("modifiers");
-    modifiersField.setAccessible(true);
-    modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-    field.set(null, newValue);
-  }
 }

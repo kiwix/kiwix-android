@@ -35,15 +35,8 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class StyleUtilsTest {
 
-  //@Mock Context context;
-  //@Mock Resources resources;
-
-  //test Attribute parsing from R.xml.webview
   @Test
   public void testParsedXML(){
-    //when(context.getResources()).thenReturn(resources);
-    //doReturn(R.xml.webview).when(resources).getXml(anyInt());
-    //AttributeSet t = StyleUtils.getAttributes(context, R.xml.webview);
     //TODO : find a way do get the xml resource
   }
 
