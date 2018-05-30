@@ -1280,7 +1280,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       } else if (intent.getAction().equals(KiwixSearchWidget.MIC_CLICKED)) {
         intent.setAction("");
         goToSearch(true);
-      } else if (intent.getAction().equals(Intent.ACTION_VIEW)) {
+      } else if (intent.getAction().equals(Intent.ACTION_VIEW)
+          && (intent.getType() == null || !intent.getType().equals("application/octet-stream"))) {
         final String zimFile = ZimContentProvider.getZimFile();
         saveTabStates();
         Intent i = new Intent(KiwixMobileActivity.this, SearchActivity.class);
