@@ -146,6 +146,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_CURRENT_TAB;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
+import static org.kiwix.kiwixmobile.utils.UpdateUtils.reformatProviderUrl;
 
 public class KiwixMobileActivity extends BaseActivity implements WebViewCallback {
 
@@ -1726,11 +1727,11 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       JSONArray urls = new JSONArray(zimArticles);
       JSONArray positions = new JSONArray(zimPositions);
       int i = 0;
-      getCurrentWebView().loadUrl(urls.getString(i));
+      getCurrentWebView().loadUrl(reformatProviderUrl(urls.getString(i)));
       getCurrentWebView().setScrollY(positions.getInt(i));
       i++;
       for (; i < urls.length(); i++) {
-        newTab(urls.getString(i));
+        newTab(reformatProviderUrl(urls.getString(i)));
         getCurrentWebView().setScrollY(positions.getInt(i));
       }
       selectTab(currentTab);

@@ -32,6 +32,7 @@ import org.kiwix.kiwixmobile.database.entity.Bookmarks;
 import org.kiwix.kiwixmobile.database.entity.LibraryDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.RecentSearch;
+import org.kiwix.kiwixmobile.utils.UpdateUtils;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -47,7 +48,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 @Singleton
 public class KiwixDatabase extends SquidDatabase {
 
-  private static final int VERSION = 14;
+  private static final int VERSION = 15;
   private Context context;
 
   @Inject
@@ -129,6 +130,9 @@ public class KiwixDatabase extends SquidDatabase {
       tryDropTable(BookDatabaseEntity.TABLE);
       tryCreateTable(BookDatabaseEntity.TABLE);
     }
+    if (newVersion >= 15 && oldVersion < 15) {
+      reformatBookmarks();
+    }
     return true;
   }
 
@@ -164,6 +168,12 @@ public class KiwixDatabase extends SquidDatabase {
         }
       }
     }
+  }
+
+  // Reformat bookmark urls to use correct provider
+  private void reformatBookmarks() {
+    BookmarksDao bookmarksDao = new BookmarksDao(this);
+    bookmarksDao.processBookmark(UpdateUtils::reformatProviderUrl);
   }
 }
 
