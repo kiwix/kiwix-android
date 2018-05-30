@@ -49,6 +49,7 @@ public class NetworkUtilsTest {
 
   @Mock Context context;
   @Mock ConnectivityManager connectivity;
+  @Mock NetworkInfo networkInfo;
   @Mock NetworkInfo networkInfo1;
   @Mock NetworkInfo networkInfo2;
 
