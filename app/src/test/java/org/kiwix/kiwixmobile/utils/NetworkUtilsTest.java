@@ -158,7 +158,7 @@ public class NetworkUtilsTest {
   }
 
   //Sets the Build SDK version
-  public static void SetSDKVersion(Field field, Object newValue) throws Exception {
+  private static void SetSDKVersion(Field field, Object newValue) throws Exception {
     field.setAccessible(true);
     Field modifiersField = Field.class.getDeclaredField("modifiers");
     modifiersField.setAccessible(true);
