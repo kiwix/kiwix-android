@@ -28,6 +28,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import dagger.android.AndroidInjectionModule;
+import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
 @Module(includes = {ActivityBindingModule.class, AndroidInjectionModule.class})
 public class ApplicationModule {
@@ -45,8 +46,11 @@ public class ApplicationModule {
     return (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
   }
 
-  @Provides @Singleton
-  BookUtils provideBookUtils() {
-    return new BookUtils();
+  @Provides @Singleton BookUtils provideBookUtils(LanguageUtils.LanguageContainer container) {
+    return new BookUtils(container);
+  }
+
+  @Provides @Singleton LanguageUtils.LanguageContainer provideLanguageContainer(){
+    return new LanguageUtils.LanguageContainer();
   }
 }
