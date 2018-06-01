@@ -17,12 +17,9 @@
  */
 package org.kiwix.kiwixmobile.bookmarks_view;
 
-import android.content.Context;
-
 import org.kiwix.kiwixmobile.ZimContentProvider;
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.database.BookmarksDao;
-import org.kiwix.kiwixmobile.database.KiwixDatabase;
 
 import java.util.ArrayList;
 
@@ -33,14 +30,14 @@ import javax.inject.Inject;
  */
 public class BookmarksPresenter extends BasePresenter<BookmarksViewCallback> {
 
-  private BookmarksDao bookmarksDao;
+  @Inject
+  BookmarksDao bookmarksDao;
 
   @Inject
   public BookmarksPresenter() {
   }
 
-  public void loadBookmarks(Context context) {
-    bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(context));
+  public void loadBookmarks() {
     ArrayList<String> bookmarks = bookmarksDao.getBookmarkTitles(ZimContentProvider.getId(), ZimContentProvider.getName());
     ArrayList<String> bookmarkUrls = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
     getMvpView().showBookmarks(bookmarks, bookmarkUrls);

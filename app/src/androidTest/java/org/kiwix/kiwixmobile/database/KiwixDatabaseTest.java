@@ -50,7 +50,7 @@ public class KiwixDatabaseTest {
 
   @Test
   public void testMigrateDatabase() throws IOException {
-    KiwixDatabase kiwixDatabase = KiwixDatabase.getInstance(mContext);
+    KiwixDatabase kiwixDatabase = new KiwixDatabase(mContext);
     kiwixDatabase.recreate();
     String testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c";
     String[] testBookmarks = new String[] {"Test1","Test2","Test3"};

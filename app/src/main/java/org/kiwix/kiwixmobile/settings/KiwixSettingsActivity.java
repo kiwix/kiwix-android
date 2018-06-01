@@ -42,7 +42,6 @@ import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.database.RecentSearchDao;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
@@ -89,6 +88,7 @@ public class KiwixSettingsActivity extends BaseActivity {
   public void onCreate(Bundle savedInstanceState) {
     getWindow().setWindowAnimations(R.style.WindowAnimationTransition);
     super.onCreate(savedInstanceState);
+    LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil);
     if (nightMode(sharedPreferenceUtil)) {
       setTheme(R.style.AppTheme_Night);
     }
@@ -141,7 +141,9 @@ public class KiwixSettingsActivity extends BaseActivity {
       SharedPreferences.OnSharedPreferenceChangeListener, StorageSelectDialog.OnSelectListener {
 
     private SliderPreference mSlider;
-    private RecentSearchDao recentSearchDao;
+
+    @Inject
+    RecentSearchDao recentSearchDao;
 
     @Inject SharedPreferenceUtil sharedPreferenceUtil;
 
@@ -177,8 +179,6 @@ public class KiwixSettingsActivity extends BaseActivity {
       setStorage();
       setUpSettings();
       new LanguageUtils(getActivity()).changeFont(getActivity().getLayoutInflater(), sharedPreferenceUtil);
-      recentSearchDao = new RecentSearchDao(KiwixDatabase.getInstance(getActivity()));
-
     }
 
     private void deleteSearchHistoryFromDb() {

@@ -50,6 +50,7 @@ dependencies {
   implementation "com.android.support:cardview-v7:$supportLibraryVersion"
   implementation 'com.android.support:multidex:1.0.2'
 
+  compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
   androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
 

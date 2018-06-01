@@ -65,10 +65,10 @@ public class SettingsTest {
         withKey("pref_external_link_popup")))
         .perform(click());
 
-    onData(allOf(
+    /*onData(allOf(
         is(instanceOf(Preference.class)),
         withKey("pref_full_text_search")))
-        .perform(click());
+        .perform(click());*/
 
     onData(allOf(
         is(instanceOf(Preference.class)),

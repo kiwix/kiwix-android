@@ -82,7 +82,10 @@ public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
       if (title != null && !title.isEmpty()) {
         vh.title.setText(title);
       } else {
-        String empty = context.getString(R.string.menu_help);
+        String empty = context.getString(R.string.no_section_info);
+        if (context instanceof KiwixMobileActivity) {
+          empty = ((KiwixMobileActivity) context).getCurrentWebView().getTitle();
+        }
         vh.title.setText(empty);
       }
       vh.itemView.setOnClickListener(v -> {

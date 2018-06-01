@@ -75,12 +75,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmarks_view.BookmarksActivity;
 import org.kiwix.kiwixmobile.database.BookmarksDao;
-import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
@@ -149,6 +147,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
+import static org.kiwix.kiwixmobile.utils.UpdateUtils.reformatProviderUrl;
 
 public class KiwixMobileActivity extends BaseActivity implements WebViewCallback {
 
@@ -214,8 +213,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   private boolean isFirstRun;
 
-  private BookmarksDao bookmarksDao;
-
   @BindView(R.id.toolbar) Toolbar toolbar;
 
   @BindView(R.id.button_backtotop) Button backToTopButton;
@@ -261,6 +258,9 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   @Inject OkHttpClient okHttpClient;
 
   @Inject SharedPreferenceUtil sharedPreferenceUtil;
+
+  @Inject
+  BookmarksDao bookmarksDao;
 
   @Override
   public void onActionModeStarted(ActionMode mode) {
@@ -354,11 +354,15 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
     super.onCreate(savedInstanceState);
+
+    new WebView(this).destroy(); // Workaround for buggy webviews see #710
+
     wifiOnly = sharedPreferenceUtil.getPrefWifiOnly();
     nightMode = KiwixSettingsActivity.nightMode(sharedPreferenceUtil);
     if (nightMode) {
       setTheme(R.style.AppTheme_Night);
     }
+
     handleLocaleCheck();
     setContentView(R.layout.main);
     ButterKnife.bind(this);
@@ -1023,7 +1027,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
           //Bookmarks
           bookmarks = new ArrayList<>();
-          bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
           bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
 
           openMainPage();
@@ -1171,11 +1174,10 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
             getCurrentWebView().goBack();
           } else if (isFullscreenOpened) {
             closeFullScreen();
+          } else if (compatCallback.mIsActive) {
+            compatCallback.finish();
           } else {
             finish();
-          }
-          if (compatCallback.mIsActive) {
-            compatCallback.finish();
           }
           return true;
         case KeyEvent.KEYCODE_MENU:
@@ -1288,7 +1290,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       } else if (intent.getAction().equals(KiwixSearchWidget.MIC_CLICKED)) {
         intent.setAction("");
         goToSearch(true);
-      } else if (intent.getAction().equals(Intent.ACTION_VIEW)) {
+      } else if (intent.getAction().equals(Intent.ACTION_VIEW)
+          && (intent.getType() == null || !intent.getType().equals("application/octet-stream"))) {
         final String zimFile = ZimContentProvider.getZimFile();
         saveTabStates();
         Intent i = new Intent(KiwixMobileActivity.this, SearchActivity.class);
@@ -1517,7 +1520,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
           if (ZimContentProvider.getId() == null) return;
 
           //Bookmarks
-          bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
           bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
 
           if (itemClicked) {
@@ -1602,7 +1604,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   public void refreshBookmarkSymbol(Menu menu) { // Checks if current webview is in bookmarks array
     if (bookmarks == null || bookmarks.size() == 0) {
-      bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
       bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
     }
 
@@ -1737,11 +1738,11 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       JSONArray urls = new JSONArray(zimArticles);
       JSONArray positions = new JSONArray(zimPositions);
       int i = 0;
-      getCurrentWebView().loadUrl(urls.getString(i));
+      getCurrentWebView().loadUrl(reformatProviderUrl(urls.getString(i)));
       getCurrentWebView().setScrollY(positions.getInt(i));
       i++;
       for (; i < urls.length(); i++) {
-        newTab(urls.getString(i));
+        newTab(reformatProviderUrl(urls.getString(i)));
         getCurrentWebView().setScrollY(positions.getInt(i));
       }
       selectTab(currentTab);

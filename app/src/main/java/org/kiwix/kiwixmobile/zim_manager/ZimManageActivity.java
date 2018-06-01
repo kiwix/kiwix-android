@@ -39,9 +39,9 @@ import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
+import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.views.LanguageSelectDialog;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
 import java.io.File;
 
@@ -88,6 +88,8 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil);
+
     if (KiwixSettingsActivity.nightMode(sharedPreferenceUtil)) {
       setTheme(R.style.AppTheme_Night);
     }
@@ -194,15 +196,6 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
       super.onBackPressed();  // optional depending on your needs
     }
 
-  }
-
-  @Override
-  public void finish() {
-    if (LibraryFragment.isReceiverRegistered) {
-      unregisterReceiver(LibraryFragment.networkBroadcastReceiver);
-      LibraryFragment.isReceiverRegistered = false;
-    }
-    super.finish();
   }
 
   @Override

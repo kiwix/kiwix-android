@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.downloader;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -39,9 +40,9 @@ import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.database.BookDao;
-import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
+import org.kiwix.kiwixmobile.utils.Constants;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
@@ -71,6 +72,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOK;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_LIBRARY;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_NOTIFICATION_ID;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_ZIM_FILE;
+import static org.kiwix.kiwixmobile.utils.Constants.ONGOING_DOWNLOAD_CHANNEL_ID;
 import static org.kiwix.kiwixmobile.utils.files.FileUtils.getCurrentSize;
 
 public class DownloadService extends Service {
@@ -100,30 +102,29 @@ public class DownloadService extends Service {
   public SparseIntArray downloadProgress = new SparseIntArray();
   public SparseIntArray timeRemaining = new SparseIntArray();
   public static final Object pauseLock = new Object();
-  public static BookDao bookDao;
   private static DownloadFragment downloadFragment;
   Handler handler = new Handler(Looper.getMainLooper());
 
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
 
+  @Inject
+  BookDao bookDao;
+
   public static void setDownloadFragment(DownloadFragment dFragment) {
     downloadFragment = dFragment;
   }
 
-  private void setupDagger(){
-    KiwixApplication.getInstance().getApplicationComponent().inject(this);
-  }
-
-
   @Override
   public void onCreate() {
-    setupDagger();
+    KiwixApplication.getApplicationComponent().inject(this);
 
     SD_CARD = sharedPreferenceUtil.getPrefStorage();
     KIWIX_ROOT = SD_CARD + "/Kiwix/";
 
     KIWIX_ROOT = checkWritable(KIWIX_ROOT);
+
+    createOngoingDownloadChannel();
 
     super.onCreate();
   }
@@ -173,7 +174,6 @@ public class DownloadService extends Service {
     notifications.add(notificationTitle);
     final Intent target = new Intent(this, KiwixMobileActivity.class);
     target.putExtra(EXTRA_LIBRARY, true);
-    bookDao = new BookDao(KiwixDatabase.getInstance(this));
 
     PendingIntent pendingIntent = PendingIntent.getActivity
         (getBaseContext(), notificationID,
@@ -187,21 +187,25 @@ public class DownloadService extends Service {
     NotificationCompat.Action pause = new NotificationCompat.Action(R.drawable.ic_pause_black_24dp, getString(R.string.download_pause), pausePending);
     NotificationCompat.Action stop = new NotificationCompat.Action(R.drawable.ic_stop_black_24dp, getString(R.string.download_stop), stopPending);
 
-    notification.put(notificationID , new NotificationCompat.Builder(this)
-        .setContentTitle(getResources().getString(R.string.zim_file_downloading) + " " + notificationTitle)
-        .setProgress(100, 0, false)
-        .setSmallIcon(R.drawable.kiwix_notification)
-        .setColor(Color.BLACK)
-        .setContentIntent(pendingIntent)
-        .addAction(pause)
-        .addAction(stop)
-        .setOngoing(true));
-
-    notificationManager.notify(notificationID, notification.get(notificationID).build());
-    downloadStatus.put(notificationID, PLAY);
-    LibraryFragment.downloadingBooks.remove(book);
-    String url = intent.getExtras().getString(DownloadIntent.DOWNLOAD_URL_PARAMETER);
-    downloadBook(url, notificationID, book);
+    if(flags == START_FLAG_REDELIVERY && book.file == null) {
+      return START_NOT_STICKY;
+    } else {
+      notification.put(notificationID , new NotificationCompat.Builder(this, ONGOING_DOWNLOAD_CHANNEL_ID)
+          .setContentTitle(getResources().getString(R.string.zim_file_downloading) + " " + notificationTitle)
+          .setProgress(100, 0, false)
+          .setSmallIcon(R.drawable.kiwix_notification)
+          .setColor(Color.BLACK)
+          .setContentIntent(pendingIntent)
+          .addAction(pause)
+          .addAction(stop)
+          .setOngoing(true));
+      
+      notificationManager.notify(notificationID, notification.get(notificationID).build());
+      downloadStatus.put(notificationID, PLAY);
+      LibraryFragment.downloadingBooks.remove(book);
+      String url = intent.getExtras().getString(DownloadIntent.DOWNLOAD_URL_PARAMETER);
+      downloadBook(url, notificationID, book);
+    }
     return START_REDELIVER_INTENT;
   }
 
@@ -554,6 +558,25 @@ public class DownloadService extends Service {
         subscriber.onError(e);
       }
     });
+  }
+
+  /**
+   * Creates and registers notification channel with system for notifications of
+   * type: download in progress.
+   */
+  private void createOngoingDownloadChannel () {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      CharSequence name = getString(R.string.ongoing_download_channel_name);
+      String description = getString(R.string.ongoing_download_channel_desc);
+      int importance = NotificationManager.IMPORTANCE_DEFAULT;
+      NotificationChannel ongoingDownloadsChannel = new NotificationChannel(
+          Constants.ONGOING_DOWNLOAD_CHANNEL_ID, name, importance);
+      ongoingDownloadsChannel.setDescription(description);
+      ongoingDownloadsChannel.setSound(null, null);
+      NotificationManager notificationManager = (NotificationManager) getSystemService(
+          NOTIFICATION_SERVICE);
+      notificationManager.createNotificationChannel(ongoingDownloadsChannel);
+    }
   }
 
   private final IBinder mBinder = new LocalBinder();

@@ -47,6 +47,7 @@ import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
+import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 import java.util.ArrayList;
@@ -57,11 +58,11 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES.N;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOKMARK_CLICKED;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_TITLE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_URL;
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.N;
 
 public class BookmarksActivity extends BaseActivity
     implements AdapterView.OnItemClickListener, BookmarksViewCallback {
@@ -84,6 +85,8 @@ public class BookmarksActivity extends BaseActivity
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil);
+
     if (KiwixSettingsActivity.nightMode(sharedPreferenceUtil)) {
       setTheme(R.style.AppTheme_Night);
     }
@@ -102,7 +105,7 @@ public class BookmarksActivity extends BaseActivity
     bookmarksList.setOnItemClickListener(this);
 
     presenter.attachView(this);
-    presenter.loadBookmarks(this);
+    presenter.loadBookmarks();
   }
 
   private void setNoBookmarksState() {
