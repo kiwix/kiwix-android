@@ -58,6 +58,7 @@
   <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
     <item name="spinBars">true</item>
   </style>
+
   <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView" />
 
   <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -82,6 +83,7 @@
     <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
     <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
   </style>
+
   <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
     <item name="android:textColor">@color/accent</item>
   </style>
@@ -89,5 +91,45 @@
   <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
     <item name="android:textColor">@color/accent</item>
   </style>
+
+  <style name="AppTheme.Dark" parent="@style/Theme.AppCompat.NoActionBar">
+    <item name="colorPrimary">@color/primary</item>
+    <item name="colorPrimaryDark">@color/primary_dark</item>
+    <item name="colorAccent">@color/accent</item>
+  </style>
+
+  <style name="AppTheme.Translucent" parent="@style/AppTheme">
+    <item name="android:windowBackground">@color/window_background</item>
+  </style>
+
+  <style name="AppTheme.Translucent.Light" parent="@style/AppTheme.Translucent">
+    <item name="tabSwitcherThemeGlobal">@style/LightTabSwitcher</item>
+  </style>
+
+  <style name="AppTheme.Translucent.Dark" parent="@style/AppTheme.Translucent">
+    <item name="tabSwitcherThemeGlobal">@style/DarkTabSwitcher</item>
+  </style>
+
+  <style name="LightTabSwitcher" parent="@style/TabSwitcher.Light">
+    <item name="tabSwitcherTabIconTint">#ff666666</item>
+    <item name="tabSwitcherToolbarNavigationIconTint">@android:color/white</item>
+    <item name="toolbarTheme">@style/LightToolbar</item>
+  </style>
+
+  <style name="DarkTabSwitcher" parent="@style/TabSwitcher">
+    <item name="tabSwitcherTabIconTint">@android:color/white</item>
+    <item name="tabSwitcherToolbarNavigationIconTint">@android:color/white</item>
+    <item name="toolbarTheme">@style/DarkToolbar</item>
+  </style>
+
+  <style name="LightToolbar" parent="@style/ThemeOverlay.AppCompat.Light">
+    <item name="android:textColorPrimary">?android:attr/textColorSecondary</item>
+  </style>
+
+  <style name="DarkToolbar" parent="@style/ThemeOverlay.AppCompat.Light">
+    <item name="android:textColorPrimary">@android:color/white</item>
+    <item name="android:textColorSecondary">@android:color/white</item>
+  </style>
+
 </resources>
 

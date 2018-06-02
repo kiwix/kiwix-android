@@ -116,6 +116,9 @@ dependencies {
   implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
   implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 
+  // Tab switcher
+  implementation "com.github.michael-rapp:chrome-like-tab-switcher:$tabSwitcherVersion"
+
   // JUnit
   testImplementation 'junit:junit:4.12'
   androidTestImplementation 'junit:junit:4.12'

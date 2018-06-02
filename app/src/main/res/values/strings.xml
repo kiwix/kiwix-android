@@ -181,6 +181,14 @@
   <string name="crash_checkbox_device">Device Details</string>
   <string name="crash_button_confirm">SEND DETAILS</string>
   <string name="crash_button_decline">NO THANKS</string>
+  <string name="toggle_tab_switcher_menu_item">Switch tabs</string>
+  <string name="clear_tabs_menu_item">Close all tabs</string>
+  <string name="settings_menu_item">Settings</string>
+  <string name="add_tab_menu_item">New tab</string>
+  <string name="tab_title">Tab %1$d</string>
+  <string name="removed_tab_snackbar">Closed %1$s</string>
+  <string name="cleared_tabs_snackbar">%d tabs closed</string>
+  <string name="contents">CONTENTS</string>
   <string name="shortcut_disabled_message">Shortcut not available</string>
   <string name="new_tab_shortcut_label">New tab</string>
   <string name="get_content_shortcut_label">Get content</string>

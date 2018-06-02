@@ -2,18 +2,29 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <item
+    android:id="@+id/toggle_tab_switcher_menu_item"
+    android:title="@string/toggle_tab_switcher_menu_item"
+    app:actionLayout="@layout/tab_switcher_menu_item"
+    app:showAsAction="ifRoom" />
+
+  <item
+    android:id="@+id/add_tab_menu_item"
+    android:title="@string/add_tab_menu_item"
+    app:showAsAction="never" />
+
+  <item
     android:id="@+id/menu_search"
     android:icon="@drawable/action_search"
     android:title="@string/menu_search"
     android:visible="false"
-    app:showAsAction="always" />
+    app:showAsAction="never" />
 
   <item
     android:id="@+id/menu_bookmarks"
     android:icon="@drawable/action_bookmark_active"
     android:title="@string/menu_bookmarks"
     android:visible="false"
-    app:showAsAction="always" />
+    app:showAsAction="never" />
 
   <item
     android:id="@+id/menu_bookmarks_list"
@@ -25,7 +36,7 @@
     android:icon="@drawable/action_home"
     android:title="@string/menu_home"
     android:visible="false"
-    app:showAsAction="always" />
+    app:showAsAction="never" />
 
   <item
     android:id="@+id/menu_randomarticle"
