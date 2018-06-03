@@ -53,13 +53,13 @@ public class DimenUtilsTest {
     }catch (Exception e){
       Log.d("DimenUtilsTest", "Unable to set Build SDK Version");
     }
-    assertEquals("",0,DimenUtils.getTranslucentStatusBarHeight(context));
+    assertEquals("", 0, DimenUtils.getTranslucentStatusBarHeight(context));
 
     //Case 2 :build SDK version >= Lollipop
     //(status bar height is 100px and it's translucent)
     try{
       SetSDKVersion(Build.VERSION.class.getField("SDK_INT"), 21);
-      assertEquals("",100,DimenUtils.getTranslucentStatusBarHeight(context));
+      assertEquals("", 100, DimenUtils.getTranslucentStatusBarHeight(context));
     }catch (Exception e){
       Log.d("DimenUtilsTest", "Unable to set Build SDK Version");
     }
