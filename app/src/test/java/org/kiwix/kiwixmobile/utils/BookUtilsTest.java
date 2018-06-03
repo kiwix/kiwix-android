@@ -31,9 +31,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class BookUtilsTest {
   @Mock private LanguageUtils.LanguageContainer container;
 
-  /*
-   * Test that the language returned for the given language code is correct
-   */
+  //Test that the language returned for the given language code is correct
   @Test
   public void testLanguageFromCode() {
     BookUtils t = new BookUtils(container);
