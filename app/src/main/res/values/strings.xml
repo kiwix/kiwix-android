@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="kiwi">Kiwi</string>
   <string name="menu_zim_manager">Get Content</string>
   <string name="menu_help">Help</string>
   <string name="menu_home">Home</string>
@@ -184,4 +185,15 @@
   <string name="shortcut_disabled_message">Shortcut not available</string>
   <string name="new_tab_shortcut_label">New tab</string>
   <string name="get_content_shortcut_label">Get content</string>
+  <string name="get_started">Get started</string>
+  <string name="human_kind_knowledge">Human kind\'s knowledge, on your phone.</string>
+  <string name="welcome_to_the_family">Welcome to the family</string>
+  <string name="get_internet_content_message">Wherever you go, get internet content without internet access.</string>
+  <string name="save_books_offline">Save books offline</string>
+  <string name="download_books_message">Download books and read wherever you are.</string>
+  <string name="find_something_to_read">Find something to read</string>
+  <string name="stack_exchange">Stack exchange</string>
+  <string name="ted">TED</string>
+  <string name="wikivoyage">Wikivoyage</string>
+  <string name="wikipedia">Wikipedia</string>
 </resources>

@@ -13,12 +13,12 @@ import static org.kiwix.kiwixmobile.utils.Constants.PREF_BACK_TO_TOP;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_BOTTOM_TOOLBAR;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_EXTERNAL_LINK_POPUP;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_FULLSCREEN;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_FULL_TEXT_SEARCH;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_HIDE_TOOLBAR;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_IS_FIRST_RUN;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_LANG;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_NEW_TAB_BACKGROUND;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_NIGHTMODE;
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_SHOW_INTRO;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE_TITLE;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_WIFI_ONLY;
@@ -139,5 +139,13 @@ public class SharedPreferenceUtil {
 
   public void putPrefExternalLinkPopup(boolean externalLinkPopup) {
     editor.putBoolean(PREF_EXTERNAL_LINK_POPUP, externalLinkPopup).apply();
+  }
+
+  public boolean showIntro() {
+    return sharedPreferences.getBoolean(PREF_SHOW_INTRO, true);
+  }
+
+  public void setIntroShown() {
+    editor.putBoolean(PREF_SHOW_INTRO, false).apply();
   }
 }
