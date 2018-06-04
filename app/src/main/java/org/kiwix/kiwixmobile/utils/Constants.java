@@ -80,6 +80,8 @@ public final class Constants {
 
     public static final String PREF_IS_FIRST_RUN = "isFirstRun";
 
+    static final String PREF_SHOW_INTRO = "showIntro";
+
     // Tags
     public static final String TAG_FILE_SEARCHED = "searchedarticle";
 

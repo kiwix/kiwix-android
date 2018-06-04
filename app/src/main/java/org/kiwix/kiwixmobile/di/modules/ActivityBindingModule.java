@@ -3,9 +3,11 @@ package org.kiwix.kiwixmobile.di.modules;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.di.PerActivity;
 import org.kiwix.kiwixmobile.error.ErrorActivity;
+import org.kiwix.kiwixmobile.intro.IntroActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
+import org.kiwix.kiwixmobile.splash.SplashActivity;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 
 import dagger.Module;
@@ -42,4 +44,12 @@ public abstract class ActivityBindingModule {
   @PerActivity
   @ContributesAndroidInjector
   public abstract ErrorActivity provideErrorActivity();
+
+  @PerActivity
+  @ContributesAndroidInjector
+  public abstract IntroActivity provideIntroActivity();
+
+  @PerActivity
+  @ContributesAndroidInjector
+  public abstract SplashActivity provideSplashActivity();
 }

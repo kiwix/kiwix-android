@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/root"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <ImageView
+    android:id="@+id/ic_stack_exchange"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:contentDescription="@string/stack_exchange"
+    app:layout_constraintCircle="@id/ic_wikipedia"
+    app:layout_constraintCircleAngle="235"
+    app:layout_constraintCircleRadius="56dp"
+    app:srcCompat="@drawable/ic_stack_exchange" />
+
+  <ImageView
+    android:id="@+id/ic_ted"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:contentDescription="@string/ted"
+    app:layout_constraintCircle="@id/ic_wikipedia"
+    app:layout_constraintCircleAngle="90"
+    app:layout_constraintCircleRadius="145dp"
+    app:srcCompat="@drawable/ic_ted" />
+
+  <ImageView
+    android:id="@+id/ic_wikivoyage"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:contentDescription="@string/wikivoyage"
+    app:layout_constraintCircle="@id/ic_wikipedia"
+    app:layout_constraintCircleAngle="45"
+    app:layout_constraintCircleRadius="92dp"
+    app:srcCompat="@drawable/ic_wikivoyage" />
+
+  <ImageView
+    android:id="@+id/ic_wikipedia"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:contentDescription="@string/wikipedia"
+    android:src="@drawable/ic_wikipedia"
+    app:layout_constraintBottom_toTopOf="@id/heading"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <TextView
+    android:id="@+id/heading"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/activity_vertical_margin"
+    android:text="@string/find_something_to_read"
+    android:textAlignment="center"
+    android:textColor="@android:color/black"
+    android:textSize="24sp"
+    android:textStyle="bold"
+    app:layout_constraintBottom_toTopOf="@id/subheading"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent" />
+
+  <android.support.constraint.Guideline
+    android:id="@+id/guideline"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingEnd="24dp"
+    android:paddingStart="24dp"
+    app:layout_constraintGuide_end="80dp" />
+
+  <TextView
+    android:id="@+id/subheading"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingEnd="24dp"
+    android:paddingStart="24dp"
+    android:text="@string/get_internet_content_message"
+    android:textAlignment="center"
+    android:textColor="@color/secondary_text"
+    android:textSize="15sp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/guideline" />
+</android.support.constraint.ConstraintLayout>
