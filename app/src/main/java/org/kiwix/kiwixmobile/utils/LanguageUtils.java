@@ -341,4 +341,21 @@ public class LanguageUtils {
       return mLanguageName;
     }
   }
+
+
+
+  public static String getResourceString(Context appContext, String str){
+    String resourceName = str;
+    if(resourceName.contains("REPLACE_")) {
+      resourceName = resourceName.replace("REPLACE_", "");
+    }
+    int resourceId = appContext.getResources()
+      .getIdentifier(
+        resourceName,
+        "string",
+        appContext.getPackageName()
+      );
+    String resourceString = appContext.getResources().getString(resourceId);
+    return resourceString != null ? resourceString : str;
+  }
 }
