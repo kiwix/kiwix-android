@@ -20,5 +20,5 @@ package org.kiwix.kiwixmobile.data.local;
 
 public class BookmarksDatabaseTest {
   //TODO : test internal logic for getBookmarks()
-  //TODO : test bookmarks are saved properly in MainActivity
+  //TODO : test bookmarks are saved properly in MainActivit
 }
