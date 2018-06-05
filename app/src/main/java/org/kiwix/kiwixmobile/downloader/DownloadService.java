@@ -71,6 +71,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okio.BufferedSource;
 
+import static org.kiwix.kiwixmobile.downloader.ChunkUtils.ALPHABET;
+import static org.kiwix.kiwixmobile.downloader.ChunkUtils.PART;
+import static org.kiwix.kiwixmobile.downloader.ChunkUtils.ZIM_EXTENSION;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOK;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_LIBRARY;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_NOTIFICATION_ID;
@@ -322,6 +325,35 @@ public class DownloadService extends Service {
               notification.get(notificationID).setContentText(getString(R.string.zim_file_downloaded));
               final Intent target = new Intent(DownloadService.this, MainActivity.class);
               target.putExtra(EXTRA_ZIM_FILE, KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
+              //Remove the extra ".part" from files
+              String filename = book.file.getPath();
+              if (filename.endsWith(ZIM_EXTENSION)) {
+                filename = filename + PART;
+                File partFile = new File(filename);
+                if (partFile.exists()) {
+                  partFile.renameTo(new File(partFile.getPath().replaceAll(".part", "")));
+                }
+              } else {
+                for (int i = 0; true; i++) {
+                  char first = ALPHABET.charAt(i / 26);
+                  char second = ALPHABET.charAt(i % 26);
+                  String chunkExtension = String.valueOf(first) + second;
+                  filename = book.file.getPath();
+                  filename = filename.replaceAll(".zim([a-z][a-z]){0,1}$", ".zim");
+                  filename = filename + chunkExtension + ".part";
+                  File partFile = new File(filename);
+                  if (partFile.exists()) {
+                    partFile.renameTo(new File(partFile.getPath().replaceAll(".part$", "")));
+                  } else {
+                    File lastChunkFile = new File(filename + ".part");
+                    if (lastChunkFile.exists()) {
+                      lastChunkFile.renameTo(new File(partFile.getPath().replaceAll(".part", "")));
+                    } else {
+                      break;
+                    }
+                  }
+                }
+              }
               target.putExtra(EXTRA_NOTIFICATION_ID, notificationID);
               PendingIntent pendingIntent = PendingIntent.getActivity
                   (getBaseContext(), 0,
@@ -453,7 +485,7 @@ public class DownloadService extends Service {
         // Create chunk file
         File file = new File(KIWIX_ROOT, chunk.getFileName());
         file.getParentFile().mkdirs();
-        File fullFile = new File(file.getPath().substring(0, file.getPath().length() - 5));
+        File fullFile = new File(file.getPath().substring(0, file.getPath().length() - PART.length()));
 
         long downloaded = Long.parseLong(chunk.getRangeHeader().split("-")[0]);
         if (fullFile.exists() && fullFile.length() == chunk.getSize()) {
@@ -594,16 +626,16 @@ public class DownloadService extends Service {
         if (downloadStatus.get(chunk.getNotificationID()) == CANCEL) {
           String path = file.getPath();
           Log.i(KIWIX_TAG, "Download Cancelled, deleting file: " + path);
-          if (path.substring(path.length() - 8).equals("zim.part")) {
-            path = path.substring(0, path.length() - 5);
+          if (path.substring(path.length() - (ZIM_EXTENSION + PART).length()).equals(ZIM_EXTENSION + PART)) {
+            path = path.substring(0, path.length() - PART.length() + 1);
             FileUtils.deleteZimFile(path);
           } else {
-            path = path.substring(0, path.length() - 7) + "aa";
+            path = path.substring(0, path.length() - (ZIM_EXTENSION + PART).length() + 2) + "aa";
             FileUtils.deleteZimFile(path);
           }
         } else {
-          Log.i(KIWIX_TAG, "Download completed, renaming file ([" + file.getPath() + "] -> .zim)");
-          file.renameTo(new File(file.getPath().replace(".part", "")));
+          Log.i(KIWIX_TAG, "Download completed, renaming file ([" + file.getPath() + "] -> .zim.part)");
+          file.renameTo(new File(file.getPath().replaceAll(".part$", "")));
         }
         // Mark chunk status as downloaded
         chunk.isDownloaded = true;
