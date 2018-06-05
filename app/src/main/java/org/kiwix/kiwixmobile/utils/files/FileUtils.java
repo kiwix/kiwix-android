@@ -27,6 +27,7 @@ import android.provider.DocumentsContract;
 import android.util.Log;
 
 import org.kiwix.kiwixmobile.BuildConfig;
+import org.kiwix.kiwixmobile.downloader.ChunkUtils;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
 import java.io.File;
@@ -61,8 +62,8 @@ public class FileUtils {
   }
 
   public static synchronized void deleteZimFile(String path) {
-    if (path.substring(path.length() - 5).equals(".part")) {
-      path = path.substring(0, path.length() - 5);
+    if (path.substring(path.length() - ChunkUtils.PART.length()).equals(ChunkUtils.PART)) {
+      path = path.substring(0, path.length() - ChunkUtils.PART.length());
     }
     Log.i("kiwix", "Deleting file: " + path);
     File file = new File(path);
@@ -86,10 +87,16 @@ public class FileUtils {
   }
 
   private static synchronized boolean deleteZimFileParts(String path) {
-    File file = new File(path + ".part");
+    File file = new File(path + ChunkUtils.PART);
     if (file.exists()) {
       file.delete();
       return true;
+    } else {
+      File singlePart = new File(path + ".part");
+      if (singlePart.exists()) {
+        singlePart.delete();
+        return true;
+      }
     }
     return false;
   }
