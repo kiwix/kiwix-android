@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.kiwix.kiwixmobile.data.local.dao;
+package org.kiwix.kiwixmobile.data.local;
 
 import android.support.test.runner.AndroidJUnit4;
 import org.junit.runner.RunWith;
