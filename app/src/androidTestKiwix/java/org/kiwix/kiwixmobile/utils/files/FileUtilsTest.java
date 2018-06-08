@@ -16,24 +16,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.kiwix.kiwixmobile.data.local;
+package org.kiwix.kiwixmobile.utils.files;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
+import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.data.local.dao.BookDao;
-import org.kiwix.kiwixmobile.data.local.entity.BookDatabaseEntity;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-
-@RunWith(AndroidJUnit4.class)
-public class BookmarksDatabaseTest {
+@RunWith(MockitoJUnitRunner.class)
+public class FileUtilsTest {
 
   private boolean mockInitialized = false;
   private Context context;
@@ -47,18 +48,5 @@ public class BookmarksDatabaseTest {
     context = InstrumentationRegistry.getTargetContext();
   }
 
-
-  //TODO : test internal logic for getBookmarks()
-
-
-
-
-  //TODO : test bookmarks are saved properly in MainActivit
-  @Test
-  public void testBookmarksSavedInMainActivity(){
-
-  }
-
-
-  //TODO : test getFiles
+  //TODO : Test getAllZimParts and getCurrentSize methods
 }
