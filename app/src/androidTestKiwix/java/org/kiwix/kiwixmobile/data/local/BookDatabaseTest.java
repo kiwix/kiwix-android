@@ -87,7 +87,7 @@ public class BookDatabaseTest {
 
   //TODO : test book is deleted from database on deleting a specific zim file
 
-  //TODO : test the getBooks() method
+
   @Test
   public void testGetBooks() throws IOException{
 
@@ -106,16 +106,11 @@ public class BookDatabaseTest {
     ArrayList<Book> booksRetrieved = bookDao.filterBookResults(booksToAdd);
 
     //test whether the correct books are returned
-    Book book_1 = booksToAdd.get(0);
-    Book book_2 = booksToAdd.get(1);
-    Book book_3 = booksToAdd.get(2);
-    Book book_4 = booksToAdd.get(3);
-    Book book_5 = booksToAdd.get(4);
-
-    //assertEquals("",book_1.file.getPath());
-    //if(!booksRetrieved.contains(book_1) || !booksRetrieved.contains(book_4)) {
-    //  assertEquals("not saving files with .zim extension","0","1");
-    //}
+    if(booksRetrieved.contains(booksToAdd.get(0))) assertEquals(".zim", 0, 1);
+    if(booksRetrieved.contains(booksToAdd.get(1))) assertEquals(".zim",0, 1);
+    if(booksRetrieved.contains(booksToAdd.get(2))) assertEquals(".zim",0, 1);
+    if(booksRetrieved.contains(booksToAdd.get(3))) assertEquals(".zim",0, 1);
+    if(booksRetrieved.contains(booksToAdd.get(4))) assertEquals(".zim",0, 1);
   }
 
   private ArrayList<Book> getFakeData(String baseFileName){
@@ -126,13 +121,12 @@ public class BookDatabaseTest {
       book.id = "Test ID " + Integer.toString(i);
       String fileName = baseFileName + Integer.toString(i);
       switch (i){
-        case 0: fileName = fileName + ".zim"; break;
-        case 1: fileName = fileName + ".part"; break;
-        case 2: fileName = fileName + ".txt"; break;
-        case 3: fileName = fileName + ".zim"; break;
-        case 4: fileName = fileName + ".part"; break;
+        case 0: book.file = new File(fileName + ".zim"); break;
+        case 1: book.file = new File(fileName + ".part"); break;
+        case 2: book.file = new File(fileName + ".txt"); break;
+        case 3: book.file = new File(fileName + ".mp4"); break;
+        case 4: book.file = new File(""); break;
       }
-      book.file = new File(fileName);
       books.add(book);
     }
     return books;
