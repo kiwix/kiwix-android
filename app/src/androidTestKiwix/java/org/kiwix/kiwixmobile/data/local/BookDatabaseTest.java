@@ -164,13 +164,8 @@ public class BookDatabaseTest {
     }
   }
 
-  //public void SaveBook(Book book) {
-  //  BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
-  //  setBookDatabaseEntity(book, bookDatabaseEntity);
-  //  saveEntryToDatabase(bookDatabaseEntity);
-  //}
-
-  public void setBookDatabaseEntity(Book book, BookDatabaseEntity bookDatabaseEntity) {
+  public void saveBookToDatabase(Book book){
+    BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
     bookDatabaseEntity.setBookId(book.getId());
     bookDatabaseEntity.setTitle(book.getTitle());
     bookDatabaseEntity.setDescription(book.getDescription());
@@ -184,11 +179,6 @@ public class BookDatabaseTest {
     bookDatabaseEntity.setSize(book.getSize());
     bookDatabaseEntity.setFavicon(book.getFavicon());
     bookDatabaseEntity.setName(book.getName());
-  }
-
-  public void saveBookToDatabase(Book book){
-    BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
-    setBookDatabaseEntity(book, bookDatabaseEntity);
-    kiwixDatabase.persist(bookDatabaseEntity);
+    bookDao.mDb.persist(bookDatabaseEntity);
   }
 }
