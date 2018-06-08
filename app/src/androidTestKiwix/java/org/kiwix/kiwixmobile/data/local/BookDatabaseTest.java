@@ -49,7 +49,6 @@ public class BookDatabaseTest {
 
   private Context context;
   private KiwixDatabase kiwixDatabase;
-  private BookDatabaseEntity bookDatabaseEntity;
   private BookDao bookDao;
   private boolean mockInitialized = false;
 
@@ -63,7 +62,6 @@ public class BookDatabaseTest {
     context = InstrumentationRegistry.getTargetContext();
     kiwixDatabase = new KiwixDatabase(context);
     //when(kiwixDatabase.deleteWhere(any(),any())).thenReturn(0);
-    bookDatabaseEntity = new BookDatabaseEntity();
     bookDao = new BookDao(kiwixDatabase);
     //when(bookDao.mDb.deleteWhere(any(),any())).thenReturn(0);
 
@@ -102,7 +100,7 @@ public class BookDatabaseTest {
 
     //retrieve the fake data
     ArrayList<Book> booksRetrieved = bookDao.getBooks();
-
+    if(false) ;
     //test whether the correct books are returned
     Book book_1 = booksToAdd.get(0);
     Book book_2 = booksToAdd.get(1);
@@ -131,8 +129,7 @@ public class BookDatabaseTest {
         case 3: fileName = fileName + ".zim"; break;
         case 4: fileName = fileName + ".part"; break;
       }
-      File f = new File(fileName);
-      book.file = f;
+      book.file = new File(fileName);
       books.add(book);
     }
     return books;
@@ -149,10 +146,6 @@ public class BookDatabaseTest {
       books.add(book);
     }
     bookDao.saveBooks(books);
-  }
-
-  private void retrieveFakeData(){
-
   }
 
   public void saveBookToDatabase(Book book){
