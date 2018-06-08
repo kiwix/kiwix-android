@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.data.local;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,13 +43,14 @@ import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyListOf;
 import static org.mockito.Mockito.when;
 
+
 @RunWith(AndroidJUnit4.class)
 public class BookDatabaseTest {
 
   private Context context;
   private KiwixDatabase kiwixDatabase;
   private BookDatabaseEntity bookDatabaseEntity;
-  private @Mock BookDao bookDao;
+  private BookDao bookDao;
   private boolean mockInitialized = false;
 
   @Before
@@ -89,12 +91,30 @@ public class BookDatabaseTest {
   //TODO : test the getBooks() method
   @Test
   public void testGetBooks() throws IOException{
+
+    //save the fake data to test
     String testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c";
     String fileName = context.getFilesDir().getAbsolutePath() + File.separator + testId;
-    ArrayList<Book> books = getFakeData(fileName);
-    for(Book book : books){
+    ArrayList<Book> booksToAdd = getFakeData(fileName);
+    for(Book book : booksToAdd){
       saveBookToDatabase(book);
     }
+
+    //retrieve the fake data
+    ArrayList<Book> booksRetrieved = bookDao.getBooks();
+
+    //test whether the correct books are returned
+    Book book_1 = booksToAdd.get(0);
+    Book book_2 = booksToAdd.get(1);
+    Book book_3 = booksToAdd.get(2);
+    Book book_4 = booksToAdd.get(3);
+    Book book_5 = booksToAdd.get(4);
+
+    //assertEquals("",book_1.file.getPath());
+    Log.d("this is siddharth", booksRetrieved.toString());
+    //if(!booksRetrieved.contains(book_1) || !booksRetrieved.contains(book_4)) {
+    //  assertEquals("not saving files with .zim extension","0","1");
+    //}
   }
 
   private ArrayList<Book> getFakeData(String baseFileName){
