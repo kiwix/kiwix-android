@@ -168,11 +168,6 @@ public class KiwixDatabase extends SquidDatabase {
       }
     }
   }
-  //
-  //@Override public int deleteWhere(Class<? extends TableModel> modelClass, Criterion where) {
-  //  int result = super.deleteWhere(modelClass, where);
-  //  return result;
-  //}
 }
 
 

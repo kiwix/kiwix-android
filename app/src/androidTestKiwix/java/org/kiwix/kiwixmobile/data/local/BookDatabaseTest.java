@@ -22,6 +22,7 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,6 +38,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyListOf;
 import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
@@ -59,6 +62,11 @@ public class BookDatabaseTest {
     bookDatabaseEntity = new BookDatabaseEntity();
     bookDao = new BookDao(kiwixDatabase);
     when(bookDao.mDb.deleteWhere(any(),any())).thenReturn(0);
+
+  //set methods for the mocked DAO class
+
+
+
   }
 
   //TODO : test books are saved in the Database after download
@@ -78,13 +86,11 @@ public class BookDatabaseTest {
 
   //TODO : test the getBooks() method
   @Test
-  public void testGetBooks(){
-    //prepare different cases
-    //Book b1 = new Book();
-    //Book b2 = new Book();
-    //Book b3 = new Book();
-    //Book b4 = new Book();
-    //Book b5 = new Book();
+  public void testGetBooks() throws IOException{
+    String testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c";
+    String fileName = context.getFilesDir().getAbsolutePath() + File.separator + testId + ".txt";
+    File f = new File(fileName);
+    f.createNewFile();
 
 
   }
@@ -106,6 +112,21 @@ public class BookDatabaseTest {
 
   }
 
+  public void SaveBooks(ArrayList<Book> books) {
+    for (Book book : books) {
+      if (book != null) {
+        BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
+        setBookDatabaseEntity(book, bookDatabaseEntity);
+      }
+    }
+  }
+
+  public void SaveBook(Book book) {
+    BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
+    setBookDatabaseEntity(book, bookDatabaseEntity);
+    saveEntryToDatabase(bookDatabaseEntity);
+  }
+
   public void setBookDatabaseEntity(Book book, BookDatabaseEntity bookDatabaseEntity) {
     bookDatabaseEntity.setBookId(book.getId());
     bookDatabaseEntity.setTitle(book.getTitle());
@@ -121,7 +142,10 @@ public class BookDatabaseTest {
     bookDatabaseEntity.setFavicon(book.getFavicon());
     bookDatabaseEntity.setName(book.getName());
     String filePath = book.file.getPath();
-    //mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(filePath));
-    mDb.persist(bookDatabaseEntity);
+    saveEntryToDatabase(bookDatabaseEntity);
+  }
+
+  public void saveEntryToDatabase(BookDatabaseEntity bookDatabaseEntity){
+    kiwixDatabase.persist(bookDatabaseEntity);
   }
 }
