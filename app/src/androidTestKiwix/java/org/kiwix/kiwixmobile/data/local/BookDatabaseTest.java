@@ -59,17 +59,9 @@ public class BookDatabaseTest {
       MockitoAnnotations.initMocks(this);
       mockInitialized = true;
     }
-
     context = InstrumentationRegistry.getTargetContext();
-    //kiwixDatabase = new KiwixDatabase(context);
-    //when(kiwixDatabase.deleteWhere(any(),any())).thenReturn(0);
-    //bookDao = new BookDao(kiwixDatabase);
-    //when(bookDao.mDb.deleteWhere(any(),any())).thenReturn(0);
-
-  //set methods for the mocked DAO class
-
-
-
+    kiwixDatabase = new KiwixDatabase(context);
+    bookDao = new BookDao(kiwixDatabase);
   }
 
   //TODO : test books are saved in the Database after download
@@ -90,13 +82,6 @@ public class BookDatabaseTest {
 
   @Test
   public void testGetBooks() throws IOException{
-
-    //create mock KiwixDatabase and stub the deletewhere methods
-    KiwixDatabase mockDB = mock(KiwixDatabase.class);
-    BookDao bookDao = new BookDao(mockDB);
-    when(mockDB.deleteWhere(any(),any())).thenReturn(0);
-
-
     //save the fake data to test
     String testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c";
     String fileName = context.getFilesDir().getAbsolutePath() + File.separator + testId;
