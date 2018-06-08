@@ -155,15 +155,6 @@ public class BookDatabaseTest {
 
   }
 
-  public void SaveBooks(ArrayList<Book> books) {
-    for (Book book : books) {
-      if (book != null) {
-        BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
-        setBookDatabaseEntity(book, bookDatabaseEntity);
-      }
-    }
-  }
-
   public void saveBookToDatabase(Book book){
     BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
     bookDatabaseEntity.setBookId(book.getId());
