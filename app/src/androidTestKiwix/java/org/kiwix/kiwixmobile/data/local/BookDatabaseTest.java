@@ -57,11 +57,13 @@ public class BookDatabaseTest {
       MockitoAnnotations.initMocks(this);
       mockInitialized = true;
     }
+
     context = InstrumentationRegistry.getTargetContext();
-    when(kiwixDatabase.deleteWhere(any(),any())).thenReturn(0);
+    kiwixDatabase = new KiwixDatabase(context);
+    //when(kiwixDatabase.deleteWhere(any(),any())).thenReturn(0);
     bookDatabaseEntity = new BookDatabaseEntity();
     bookDao = new BookDao(kiwixDatabase);
-    when(bookDao.mDb.deleteWhere(any(),any())).thenReturn(0);
+    //when(bookDao.mDb.deleteWhere(any(),any())).thenReturn(0);
 
   //set methods for the mocked DAO class
 
@@ -76,10 +78,10 @@ public class BookDatabaseTest {
   //}
 
   //TODO : test books are saved after downloading the list of available zim files
-  @Test
-  public void testBooksSavedAfterDownloadingListOfAvailableZimFiles(){
-
-  }
+  //@Test
+  //public void testBooksSavedAfterDownloadingListOfAvailableZimFiles(){
+  //
+  //}
 
 
   //TODO : test book is deleted from database on deleting a specific zim file
@@ -88,11 +90,32 @@ public class BookDatabaseTest {
   @Test
   public void testGetBooks() throws IOException{
     String testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c";
-    String fileName = context.getFilesDir().getAbsolutePath() + File.separator + testId + ".txt";
-    File f = new File(fileName);
-    f.createNewFile();
+    String fileName = context.getFilesDir().getAbsolutePath() + File.separator + testId;
+    ArrayList<Book> books = getFakeData(fileName);
+    for(Book book : books){
+      saveBookToDatabase(book);
+    }
+  }
 
-
+  private ArrayList<Book> getFakeData(String baseFileName){
+    ArrayList<Book> books = new ArrayList<>();
+    for(int i = 0; i < 5; i++){
+      Book book = new Book();
+      book.bookName = "Test Copy " + Integer.toString(i);
+      book.id = "Test ID " + Integer.toString(i);
+      String fileName = baseFileName + Integer.toString(i);
+      switch (i){
+        case 0: fileName = fileName + ".zim"; break;
+        case 1: fileName = fileName + ".part"; break;
+        case 2: fileName = fileName + ".txt"; break;
+        case 3: fileName = fileName + ".zim"; break;
+        case 4: fileName = fileName + ".part"; break;
+      }
+      File f = new File(fileName);
+      book.file = f;
+      books.add(book);
+    }
+    return books;
   }
 
   private void insertFakeData(){
@@ -121,11 +144,11 @@ public class BookDatabaseTest {
     }
   }
 
-  public void SaveBook(Book book) {
-    BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
-    setBookDatabaseEntity(book, bookDatabaseEntity);
-    saveEntryToDatabase(bookDatabaseEntity);
-  }
+  //public void SaveBook(Book book) {
+  //  BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
+  //  setBookDatabaseEntity(book, bookDatabaseEntity);
+  //  saveEntryToDatabase(bookDatabaseEntity);
+  //}
 
   public void setBookDatabaseEntity(Book book, BookDatabaseEntity bookDatabaseEntity) {
     bookDatabaseEntity.setBookId(book.getId());
@@ -141,11 +164,11 @@ public class BookDatabaseTest {
     bookDatabaseEntity.setSize(book.getSize());
     bookDatabaseEntity.setFavicon(book.getFavicon());
     bookDatabaseEntity.setName(book.getName());
-    String filePath = book.file.getPath();
-    saveEntryToDatabase(bookDatabaseEntity);
   }
 
-  public void saveEntryToDatabase(BookDatabaseEntity bookDatabaseEntity){
+  public void saveBookToDatabase(Book book){
+    BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
+    setBookDatabaseEntity(book, bookDatabaseEntity);
     kiwixDatabase.persist(bookDatabaseEntity);
   }
 }
