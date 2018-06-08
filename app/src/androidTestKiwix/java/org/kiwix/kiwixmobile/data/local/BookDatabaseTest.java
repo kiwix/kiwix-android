@@ -41,6 +41,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyListOf;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
@@ -60,9 +61,9 @@ public class BookDatabaseTest {
     }
 
     context = InstrumentationRegistry.getTargetContext();
-    kiwixDatabase = new KiwixDatabase(context);
+    //kiwixDatabase = new KiwixDatabase(context);
     //when(kiwixDatabase.deleteWhere(any(),any())).thenReturn(0);
-    bookDao = new BookDao(kiwixDatabase);
+    //bookDao = new BookDao(kiwixDatabase);
     //when(bookDao.mDb.deleteWhere(any(),any())).thenReturn(0);
 
   //set methods for the mocked DAO class
@@ -90,17 +91,20 @@ public class BookDatabaseTest {
   @Test
   public void testGetBooks() throws IOException{
 
+    //create mock KiwixDatabase and stub the deletewhere methods
+    KiwixDatabase mockDB = mock(KiwixDatabase.class);
+    BookDao bookDao = new BookDao(mockDB);
+    when(mockDB.deleteWhere(any(),any())).thenReturn(0);
+
+
     //save the fake data to test
     String testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c";
     String fileName = context.getFilesDir().getAbsolutePath() + File.separator + testId;
     ArrayList<Book> booksToAdd = getFakeData(fileName);
-    for(Book book : booksToAdd){
-      saveBookToDatabase(book);
-    }
 
-    //retrieve the fake data
-    ArrayList<Book> booksRetrieved = bookDao.getBooks();
-    if(false) ;
+    //get the filtered book list from the database (using the internal selection logic in BookDao)
+    ArrayList<Book> booksRetrieved = bookDao.filterBookResults(booksToAdd);
+
     //test whether the correct books are returned
     Book book_1 = booksToAdd.get(0);
     Book book_2 = booksToAdd.get(1);
@@ -109,7 +113,6 @@ public class BookDatabaseTest {
     Book book_5 = booksToAdd.get(4);
 
     //assertEquals("",book_1.file.getPath());
-    Log.d("this is siddharth", booksRetrieved.toString());
     //if(!booksRetrieved.contains(book_1) || !booksRetrieved.contains(book_4)) {
     //  assertEquals("not saving files with .zim extension","0","1");
     //}
