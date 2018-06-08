@@ -18,7 +18,44 @@
 
 package org.kiwix.kiwixmobile.data.local;
 
+import android.content.Context;
+import android.content.res.Configuration;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.kiwix.kiwixmobile.data.local.dao.BookDao;
+import org.kiwix.kiwixmobile.data.local.entity.BookDatabaseEntity;
+import org.mockito.MockitoAnnotations;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+@RunWith(AndroidJUnit4.class)
 public class BookmarksDatabaseTest {
+
+  private boolean mockInitialized = false;
+  private Context context;
+
+  @Before
+  public void executeBefore(){
+    if (!mockInitialized) {
+      MockitoAnnotations.initMocks(this);
+      mockInitialized = true;
+    }
+    context = InstrumentationRegistry.getTargetContext();
+  }
+
+
   //TODO : test internal logic for getBookmarks()
+
+
+
+
   //TODO : test bookmarks are saved properly in MainActivit
+  @Test
+  public void testBookmarksSavedInMainActivity(){
+
+  }
 }

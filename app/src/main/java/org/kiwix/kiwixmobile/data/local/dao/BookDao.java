@@ -36,7 +36,7 @@ import javax.inject.Inject;
  */
 
 public class BookDao {
-  private KiwixDatabase mDb;
+  public KiwixDatabase mDb;
 
   @Inject
   public BookDao(KiwixDatabase kiwixDatabase) {
