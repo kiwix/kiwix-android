@@ -50,9 +50,12 @@ public class RecentSearchDatabaseTest {
     recentSearchDao = new RecentSearchDao(kiwixDatabase);
   }
 
+  // verify the correct database query was called
   @Test
   public void testGetRecentSearches(){
     recentSearchDao.getRecentSearches();
+
+    // verify ordering is in descending order of search ID and the results are limited to 5 only
     verify(kiwixDatabase).query(any(), eq(Query.selectDistinct(RecentSearch.SEARCH_STRING).where(RecentSearch.ZIM_I_D.eq(
         ZimContentProvider.getId()))
         .orderBy(RecentSearch.ID.desc())
