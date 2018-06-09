@@ -26,6 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.data.local.dao.BookDao;
+import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
 import org.kiwix.kiwixmobile.data.local.entity.BookDatabaseEntity;
 import org.mockito.MockitoAnnotations;
 
@@ -37,28 +38,25 @@ public class BookmarksDatabaseTest {
 
   private boolean mockInitialized = false;
   private Context context;
+  private KiwixDatabase kiwixDatabase;
+  private BookmarksDao bookmarksDao;
 
   @Before
-  public void executeBefore(){
+  public void executeBefore() {
     if (!mockInitialized) {
       MockitoAnnotations.initMocks(this);
       mockInitialized = true;
     }
     context = InstrumentationRegistry.getTargetContext();
+    kiwixDatabase = new KiwixDatabase(context);
+    bookmarksDao = new BookmarksDao(kiwixDatabase);
   }
-
 
   //TODO : test internal logic for getBookmarks()
-
-
-
-
   //TODO : test bookmarks are saved properly in MainActivit
+
   @Test
-  public void testBookmarksSavedInMainActivity(){
+  public void RandomTestSoThatTravisStillWorksOnThisFile() {
 
   }
-
-
-  //TODO : test getFiles
 }

@@ -40,8 +40,9 @@ public class RecentSearchDatabaseTest {
   private RecentSearchDao recentSearchDao;
   private boolean mockInitialized = false;
   @Mock private SquidCursor<AbstractModel> mockedCursor;
+
   @Before
-  public void executeBefore(){
+  public void executeBefore() {
     if (!mockInitialized) {
       MockitoAnnotations.initMocks(this);
       mockInitialized = true;
@@ -52,7 +53,7 @@ public class RecentSearchDatabaseTest {
 
   // verify the correct database query was called
   @Test
-  public void testGetRecentSearches(){
+  public void testGetRecentSearches() {
     recentSearchDao.getRecentSearches();
 
     // verify ordering is in descending order of search ID and the results are limited to 5 only

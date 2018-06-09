@@ -54,7 +54,7 @@ public class BookDatabaseTest {
   private boolean mockInitialized = false;
 
   @Before
-  public void executeBefore(){
+  public void executeBefore() {
     if (!mockInitialized) {
       MockitoAnnotations.initMocks(this);
       mockInitialized = true;
@@ -81,7 +81,7 @@ public class BookDatabaseTest {
 
 
   @Test
-  public void testGetBooks() throws IOException{
+  public void testGetBooks() throws IOException {
     //save the fake data to test
     String testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c";
     String fileName = context.getFilesDir().getAbsolutePath() + File.separator + testId;
@@ -98,14 +98,14 @@ public class BookDatabaseTest {
     if(booksRetrieved.contains(booksToAdd.get(4))) assertEquals(".zim",0, 1);
   }
 
-  private ArrayList<Book> getFakeData(String baseFileName){
+  private ArrayList<Book> getFakeData(String baseFileName) {
     ArrayList<Book> books = new ArrayList<>();
     for(int i = 0; i < 5; i++){
       Book book = new Book();
       book.bookName = "Test Copy " + Integer.toString(i);
       book.id = "Test ID " + Integer.toString(i);
       String fileName = baseFileName + Integer.toString(i);
-      switch (i){
+      switch (i) {
         case 0: book.file = new File(fileName + ".zim"); break;
         case 1: book.file = new File(fileName + ".part"); break;
         case 2: book.file = new File(fileName + ".txt"); break;
@@ -117,7 +117,7 @@ public class BookDatabaseTest {
     return books;
   }
 
-  private void insertFakeData(){
+  private void insertFakeData() {
     ArrayList<Book> books = new ArrayList<>();
     for(int i = 0; i<5 ; i++){
       Book book = new Book();
@@ -130,7 +130,7 @@ public class BookDatabaseTest {
     bookDao.saveBooks(books);
   }
 
-  public void saveBookToDatabase(Book book){
+  public void saveBookToDatabase(Book book) {
     BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
     bookDatabaseEntity.setBookId(book.getId());
     bookDatabaseEntity.setTitle(book.getTitle());
