@@ -51,6 +51,8 @@ public class FileUtilsTest {
     //fileUtils = new FileUtils();
   }
 
+  //TODO : add more test cases and improve test
+
   @Test
   public void testGetAllZimParts(){
     String testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c";
