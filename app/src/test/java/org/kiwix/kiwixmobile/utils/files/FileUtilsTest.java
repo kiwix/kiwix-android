@@ -22,15 +22,27 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.util.List;
+import org.junit.Before;
 import org.junit.Test;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 
+@PrepareForTest(File.class)
 public class FileUtilsTest {
 
-  //TODO : add more test cases and improve test
+  @Before
+  public void executeBefore() throws Exception {
+    File myFile = PowerMockito.mock(File.class);
+    PowerMockito.whenNew(File.class).withAnyArguments().thenReturn(myFile);
+    Mockito.when(myFile.exists()).thenReturn(true);
+
+    // TODO : fix this code with powermock and add cases in testGetAllZimParts when file.exists()returns true
+  }
 
   @Test
-  public void testGetAllZimParts(){
+  public void testGetAllZimParts() {
     String testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c";
     String fileName = "/data/user/0/org.kiwix.kiwixmobile/files" + File.separator + testId;
     List<File> files;
@@ -54,8 +66,6 @@ public class FileUtilsTest {
     book3.file = new File(fileName + ".zimab");
     files = FileUtils.getAllZimParts(book3);
     assertEquals("Return no files in case no file exists at both 'path', and 'path.part'", 0, files.size());
-
-    // TODO : find a way to stub the file.exist() method and add more tests
   }
-
 }
+// TODO : test deleteZimFile and getLocalFilePathByUrl
