@@ -211,7 +211,7 @@ public class FileUtils {
     return readCsv(content);
   }
 
-  public static List<File> getAllZimParts(Book book) {
+  private static List<File> getAllZimParts(Book book) {
     List<File> files = new ArrayList<>();
     if(book.file.getPath().endsWith(".zim") || book.file.getPath().endsWith(".zim.part")) {
       if(book.file.exists()) {
