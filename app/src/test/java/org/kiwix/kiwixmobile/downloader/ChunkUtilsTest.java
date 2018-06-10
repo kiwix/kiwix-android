@@ -23,21 +23,35 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.booleanThat;
 import static org.mockito.Mockito.when;
 
+import org.junit.Before;
+import org.kiwix.kiwixmobile.utils.StorageUtils;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.kiwix.kiwixmobile.downloader.ChunkUtils;
+import org.powermock.modules.junit4.PowerMockRunner;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(StorageUtils.class)
 public class ChunkUtilsTest {
+
+  private String URL = "http://mirror.netcologne.de/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim";
+
+  @Before
+  public void executeBefore(){
+    PowerMockito.mockStatic(StorageUtils.class);
+    when(StorageUtils.getFileNameFromUrl(URL)).thenReturn("TestFileName");
+    when(StorageUtils.getFileNameFromUrl("TestURL")).thenReturn("TestFileName.xml");
+  }
 
   @Test
   public void TestGetChunks() {
     List<Chunk> listReturned;
     long size;
-    String URL = "http://mirror.netcologne.de/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim";
 
     // When the file size is exactly equal to CHUNK_SIZE
     size = ChunkUtils.CHUNK_SIZE;
@@ -46,8 +60,7 @@ public class ChunkUtilsTest {
     assertEquals("verify that the list contains correct number of chunks", 1, listReturned.size());
     assertEquals("verify that the range format is correct", "0-", listReturned.get(0).getRangeHeader());
     assertEquals("verify that the same notificationID is passed to the chunk", 27, listReturned.get(0).getNotificationID());
-    assertEquals("verify that the file name ending is correctly assigned in case of a single file",
-        ".part", listReturned.get(0).getFileName().substring(listReturned.get(0).getFileName().length() - 5));
+    assertEquals("verify that the file name is correctly assigned in case of a single file", "TestFileName.part", listReturned.get(0).getFileName());
     assertEquals("verify that the same URL is passed on to the chunk", URL, listReturned.get(0).getUrl());
 
     // When the file size is more than CHUNK_SIZE
@@ -64,11 +77,11 @@ public class ChunkUtilsTest {
 
     assertEquals("verify that the same notificationID is passed on to each chunk",
         true, listReturned.get(0).getUrl() == URL
-        && listReturned.get(1).getUrl() == URL
-        && listReturned.get(2).getUrl() == URL
-        && listReturned.get(3).getUrl() == URL
-        && listReturned.get(4).getUrl() == URL
-        && listReturned.get(5).getUrl() == URL);
+        && listReturned.get(1).getUrl().equals(URL)
+        && listReturned.get(2).getUrl().equals(URL)
+        && listReturned.get(3).getUrl().equals(URL)
+        && listReturned.get(4).getUrl().equals(URL)
+        && listReturned.get(5).getUrl().equals(URL));
 
     assertEquals("verify that the same URL is passed on to each chunk",
         true, listReturned.get(0).getNotificationID() == 56
@@ -101,13 +114,17 @@ public class ChunkUtilsTest {
     assertEquals("verify that the list contains correct number of chunks", 1, listReturned.size());
     assertEquals("verify that the range format is correct", "0-", listReturned.get(0).getRangeHeader());
     assertEquals("verify that the same notificationID is passed to the chunk", 37, listReturned.get(0).getNotificationID());
-    assertEquals("verify that the file name ending is correctly assigned in case of a single file",
-        ".part", listReturned.get(0).getFileName().substring(listReturned.get(0).getFileName().length() - 5));
+    assertEquals("verify that the file name is correctly assigned in case of a single file", "TestFileName.part", listReturned.get(0).getFileName());
     assertEquals("verify that the same URL is passed on to the chunk", URL, listReturned.get(0).getUrl());
-  }
-    //TODO : use powermock to mock the StorageUtils.getFileNamefromURL for the next test
-    // verify that filename is correctly generated"
-    //assertEquals("verify that previous extension in the filename (if any) is removed in case of files having more than 1 chunk", "", "");
-    //assertEquals("verify that previous extension in the filename (if any) is NOT removed in case of files having 1 chunk", "", "");
 
+    // verify that filename is correctly generated"
+    size = ChunkUtils.CHUNK_SIZE;
+    listReturned = ChunkUtils.getChunks("TestURL", size, 0);
+    assertEquals("verify that previous extension in the filename (if any) is removed in case of files having 1 chunk", "TestFileName.xml.part", listReturned.get(0).getFileName());
+
+    size = ChunkUtils.CHUNK_SIZE * (long) 2;
+    listReturned = ChunkUtils.getChunks("TestURL", size, 0);
+    assertEquals("verify that previous extension in the filename (if any) is removed in case of files having more than 1 chunk", "TestFileName.zimaa.part", listReturned.get(0).getFileName());
+    assertEquals("verify that previous extension in the filename (if any) is removed in case of files having more than 1 chunk", "TestFileName.zimab.part", listReturned.get(1).getFileName());
+  }
 }
