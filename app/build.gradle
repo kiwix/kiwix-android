@@ -121,8 +121,13 @@ dependencies {
   androidTestImplementation 'junit:junit:4.12'
 
   // Mockito
-  testImplementation "org.mockito:mockito-core:2.7.22"
+  testImplementation "org.mockito:mockito-core:2.8.9"
   androidTestImplementation "org.mockito:mockito-android:2.7.22"
+
+  // PowerMockito
+  testImplementation 'org.powermock:powermock:1.6.5'
+  testImplementation 'org.powermock:powermock-module-junit4:1.7.3'
+  testImplementation 'org.powermock:powermock-api-mockito2:1.7.3'
 
   // Leak canary
   implementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
