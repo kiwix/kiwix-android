@@ -19,20 +19,15 @@
 package org.kiwix.kiwixmobile.downloader;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.booleanThat;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 import org.junit.Before;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.kiwix.kiwixmobile.downloader.ChunkUtils;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
@@ -43,7 +38,7 @@ public class ChunkUtilsTest {
 
   @Before
   public void executeBefore(){
-    PowerMockito.mockStatic(StorageUtils.class);
+    mockStatic(StorageUtils.class);
     when(StorageUtils.getFileNameFromUrl(URL)).thenReturn("TestFileName");
     when(StorageUtils.getFileNameFromUrl("TestURL")).thenReturn("TestFileName.xml");
   }
@@ -68,15 +63,11 @@ public class ChunkUtilsTest {
     listReturned = ChunkUtils.getChunks(URL, size, 56);
 
     assertEquals("verify that the list contains correct number of chunks", 6, listReturned.size());
-
-    assertEquals("verify that the rangehandler for the last chunk is correct",
-        "10737418245-", listReturned.get(listReturned.size() - 1).getRangeHeader());
-
-    assertEquals("verify that the rangehandler for the first chunk is corect",
-        "0-2147483648", listReturned.get(0).getRangeHeader());
+    assertEquals("verify that the rangehandler for the last chunk is correct", "10737418245-", listReturned.get(listReturned.size() - 1).getRangeHeader());
+    assertEquals("verify that the rangehandler for the first chunk is corect", "0-2147483648", listReturned.get(0).getRangeHeader());
 
     assertEquals("verify that the same notificationID is passed on to each chunk",
-        true, listReturned.get(0).getUrl() == URL
+        true, listReturned.get(0).getUrl().equals(URL)
         && listReturned.get(1).getUrl().equals(URL)
         && listReturned.get(2).getUrl().equals(URL)
         && listReturned.get(3).getUrl().equals(URL)
@@ -85,14 +76,11 @@ public class ChunkUtilsTest {
 
     assertEquals("verify that the same URL is passed on to each chunk",
         true, listReturned.get(0).getNotificationID() == 56
-            && listReturned.get(1).getNotificationID() == 56
-            && listReturned.get(2).getNotificationID() == 56
-            && listReturned.get(3).getNotificationID() == 56
-            && listReturned.get(4).getNotificationID() == 56
-            && listReturned.get(5).getNotificationID() == 56);
-
-    // verify that previous extension in the filename (if any) is removed"
-    assertEquals("verify that previous extension in the filename (if any) is removed", "", "");
+        && listReturned.get(1).getNotificationID() == 56
+        && listReturned.get(2).getNotificationID() == 56
+        && listReturned.get(3).getNotificationID() == 56
+        && listReturned.get(4).getNotificationID() == 56
+        && listReturned.get(5).getNotificationID() == 56);
 
     // test assignment of file names
     boolean test = true;
