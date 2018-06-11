@@ -26,7 +26,6 @@ import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.BuildConfig;
@@ -102,7 +101,7 @@ public class KiwixWebViewClient extends WebViewClient {
     } else if (url.equals("file:///android_asset/help.html") && !BuildConfig.IS_CUSTOM_APP) {
       if (view.findViewById(R.id.get_content_card) == null) {
         LayoutInflater inflater = LayoutInflater.from(view.getContext());
-        help = (LinearLayout) inflater.inflate(R.layout.help, null);
+        help = inflater.inflate(R.layout.help, view, false);
         help.findViewById(R.id.get_content_card)
             .setOnClickListener(card -> {
                   help.findViewById(R.id.get_content_card).setEnabled(false);

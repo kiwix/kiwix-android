@@ -188,4 +188,8 @@
   <string name="pic">Pic</string>
   <string name="vid">Vid</string>
   <string name="articleCount">%s articles</string>
+  <string name="get_started">Get started</string>
+  <string name="find_offline_books_and_enjoy_reading">Find offline books and enjoy reading.</string>
+  <string name="download_books">Download books</string>
+  <string name="book_shelf">Book shelf</string>
 </resources>

@@ -5,6 +5,66 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
+  <android.support.v7.widget.CardView
+    android:id="@+id/content_main_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:visibility="gone"
+    app:cardCornerRadius="4dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <android.support.constraint.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+      <ImageView
+        android:id="@+id/content_main_card_image_books"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:background="@color/blue800"
+        android:contentDescription="@string/book_shelf"
+        android:scaleType="centerInside"
+        app:srcCompat="@drawable/ic_books" />
+
+      <TextView
+        android:id="@+id/content_main_card_get_started"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/get_started"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/content_main_card_image_books" />
+
+      <TextView
+        android:id="@+id/content_main_card_offline_book"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/find_offline_books_and_enjoy_reading"
+        android:textColor="@color/secondary_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/content_main_card_get_started" />
+
+      <android.support.v7.widget.AppCompatButton
+        android:id="@+id/content_main_card_download_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/download_books"
+        android:textColor="@android:color/white"
+        app:backgroundTint="#1565c0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/content_main_card_offline_book" />
+    </android.support.constraint.ConstraintLayout>
+  </android.support.v7.widget.CardView>
+
   <android.support.v7.widget.RecyclerView
     android:id="@+id/recycler_view"
     android:layout_width="0dp"

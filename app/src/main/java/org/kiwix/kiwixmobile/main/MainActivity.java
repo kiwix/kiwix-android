@@ -48,6 +48,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.menu.ActionMenuItemView;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -212,6 +214,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private BooksAdapter booksAdapter;
   private List<LibraryNetworkEntity.Book> books = new ArrayList<>();
   private RecyclerView homeRecyclerView;
+  private CardView emptyStateCardView;
+  private AppCompatButton downloadBookButton;
 
   @BindView(R.id.toolbar) Toolbar toolbar;
 
@@ -690,6 +694,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   @Override
   protected void onDestroy() {
     presenter.detachView();
+    if (downloadBookButton != null) {
+      downloadBookButton.setOnClickListener(null);
+    }
     super.onDestroy();
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(this);
@@ -963,6 +970,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @Override
   public void showHelpPage() {
+    getCurrentWebView().removeAllViews();
     getCurrentWebView().loadUrl("file:///android_asset/help.html");
   }
 
@@ -1978,6 +1986,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     homeRecyclerView = view.findViewById(R.id.recycler_view);
     presenter.showHome();
     homeRecyclerView.setAdapter(booksAdapter);
+    emptyStateCardView = view.findViewById(R.id.content_main_card);
+    downloadBookButton = view.findViewById(R.id.content_main_card_download_button);
   }
 
   @Override
@@ -1991,10 +2001,16 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @Override
   public void addBooks(List<LibraryNetworkEntity.Book> books) {
+    this.books.clear();
     this.books.addAll(books);
-    if (this.books.size()==0) {
+    if (this.books.size() == 0) {
       homeRecyclerView.setVisibility(View.GONE);
+      emptyStateCardView.setVisibility(View.VISIBLE);
+      downloadBookButton.setOnClickListener(view -> manageZimFiles(1));
     } else {
+      homeRecyclerView.setVisibility(View.VISIBLE);
+      emptyStateCardView.setVisibility(View.GONE);
+      downloadBookButton.setOnClickListener(null);
       booksAdapter.notifyDataSetChanged();
     }
   }
