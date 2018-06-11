@@ -27,6 +27,7 @@
     android:layout_height="wrap_content"
     android:layout_marginEnd="@dimen/activity_horizontal_margin"
     android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:textColor="@color/primary_text"
     android:textSize="16sp"
     app:layout_constraintStart_toEndOf="@id/item_book_icon"
     tools:text="Wikipedia" />
@@ -35,6 +36,7 @@
     android:id="@+id/item_book_date"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:textColor="@color/secondary_text"
     app:layout_constraintStart_toStartOf="@id/item_book_title"
     app:layout_constraintTop_toBottomOf="@id/item_book_title"
     tools:text="1 Jan 2018" />
@@ -45,6 +47,7 @@
     android:layout_height="wrap_content"
     android:layout_marginEnd="@dimen/activity_horizontal_margin"
     android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:textColor="@color/secondary_text"
     app:layout_constraintStart_toEndOf="@id/item_book_date"
     app:layout_constraintTop_toTopOf="@id/item_book_date"
     tools:text="20 GB" />
@@ -55,6 +58,7 @@
     android:layout_height="wrap_content"
     android:layout_marginEnd="@dimen/activity_horizontal_margin"
     android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:textColor="@color/secondary_text"
     app:layout_constraintStart_toEndOf="@id/item_book_size"
     app:layout_constraintTop_toTopOf="@id/item_book_size"
     tools:text="10.1 K articles" />
@@ -63,6 +67,7 @@
     android:id="@+id/item_book_description"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:textColor="@color/secondary_text"
     app:layout_constraintStart_toStartOf="@id/item_book_title"
     app:layout_constraintTop_toBottomOf="@id/item_book_date"
     tools:text="All wikipedia articles" />
@@ -99,7 +104,7 @@
     android:layout_width="0dp"
     android:layout_height="1dp"
     android:layout_marginTop="@dimen/activity_vertical_margin"
-    android:background="?attr/dividerVertical"
+    android:background="?android:attr/dividerVertical"
     app:layout_constraintStart_toStartOf="@id/item_book_title"
     app:layout_constraintTop_toBottomOf="@id/item_book_label_picture" />
 

@@ -213,7 +213,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   private BooksAdapter booksAdapter;
   private List<LibraryNetworkEntity.Book> books = new ArrayList<>();
-  private RecyclerView homeRecyclerView;
   private CardView emptyStateCardView;
   private AppCompatButton downloadBookButton;
 
@@ -647,25 +646,22 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           pauseTTSButton.setText(R.string.tts_pause);
         });
       }
-    }, new AudioManager.OnAudioFocusChangeListener() {
-      @Override
-      public void onAudioFocusChange(int focusChange) {
-        Log.d(TAG_KIWIX, "Focus change: " + String.valueOf(focusChange));
-        if (tts.currentTTSTask == null) {
-          tts.stop();
-          return;
-        }
-        switch (focusChange) {
-          case (AudioManager.AUDIOFOCUS_LOSS):
-            if (!tts.currentTTSTask.paused) tts.pauseOrResume();
-            pauseTTSButton.setText(R.string.tts_resume);
-            break;
-          case (AudioManager.AUDIOFOCUS_GAIN):
-            pauseTTSButton.setText(R.string.tts_pause);
-            break;
-        }
+    }, focusChange -> {
+      Log.d(TAG_KIWIX, "Focus change: " + String.valueOf(focusChange));
+      if (tts.currentTTSTask == null) {
+        tts.stop();
+        return;
       }
-  });
+      switch (focusChange) {
+        case (AudioManager.AUDIOFOCUS_LOSS):
+          if (!tts.currentTTSTask.paused) tts.pauseOrResume();
+          pauseTTSButton.setText(R.string.tts_resume);
+          break;
+        case (AudioManager.AUDIOFOCUS_GAIN):
+          pauseTTSButton.setText(R.string.tts_pause);
+          break;
+      }
+    });
 
     pauseTTSButton.setOnClickListener(view -> {
       if (tts.currentTTSTask == null) {
@@ -965,6 +961,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @Override
   public void showHomePage() {
+    getCurrentWebView().removeAllViews();
     getCurrentWebView().loadUrl("file:///android_asset/home.html");
   }
 
@@ -1318,7 +1315,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           break;
         }
         case NEW_TAB:
-          newTab();
+          newTab("file:///android_asset/home.html");
           break;
       }
 
@@ -1983,11 +1980,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @Override
   public void setHomePage(View view) {
-    homeRecyclerView = view.findViewById(R.id.recycler_view);
+    RecyclerView homeRecyclerView = view.findViewById(R.id.recycler_view);
     presenter.showHome();
     homeRecyclerView.setAdapter(booksAdapter);
     emptyStateCardView = view.findViewById(R.id.content_main_card);
     downloadBookButton = view.findViewById(R.id.content_main_card_download_button);
+    downloadBookButton.setOnClickListener(v -> manageZimFiles(1));
   }
 
   @Override
@@ -2003,15 +2001,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   public void addBooks(List<LibraryNetworkEntity.Book> books) {
     this.books.clear();
     this.books.addAll(books);
-    if (this.books.size() == 0) {
-      homeRecyclerView.setVisibility(View.GONE);
-      emptyStateCardView.setVisibility(View.VISIBLE);
-      downloadBookButton.setOnClickListener(view -> manageZimFiles(1));
-    } else {
-      homeRecyclerView.setVisibility(View.VISIBLE);
-      emptyStateCardView.setVisibility(View.GONE);
-      downloadBookButton.setOnClickListener(null);
-      booksAdapter.notifyDataSetChanged();
+    booksAdapter.notifyDataSetChanged();
+    if (nightMode) {
+      ImageView cardImage = emptyStateCardView.findViewById(R.id.content_main_card_image);
+      cardImage.setImageResource(R.drawable.kiwix_welcome_night);
     }
   }
 }
