@@ -19,33 +19,42 @@
 package org.kiwix.kiwixmobile.utils.files;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
 
 import java.io.File;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+@RunWith(PowerMockRunner.class)
 @PrepareForTest(File.class)
 public class FileUtilsTest {
 
   @Before
   public void executeBefore() throws Exception {
-    File myFile = PowerMockito.mock(File.class);
-    PowerMockito.whenNew(File.class).withAnyArguments().thenReturn(myFile);
-    Mockito.when(myFile.exists()).thenReturn(true);
+
 
     // TODO : fix this code with powermock and add cases in testGetAllZimParts when file.exists()returns true
   }
 
   @Test
-  public void testGetAllZimParts() {
+  public void testGetAllZimParts() throws Exception {
+
     String testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c";
     String fileName = "/data/user/0/org.kiwix.kiwixmobile/files" + File.separator + testId;
     List<File> files;
+
+    // Set up PowerMockito
+    File myFile = PowerMockito.mock(File.class);
+    PowerMockito.whenNew(File.class).withParameterTypes(String.class).withArguments("sid").thenReturn(myFile);
+    PowerMockito.when(myFile.getPath()).thenReturn(fileName);
+    PowerMockito.when(myFile.exists()).thenReturn(false);
 
     // Filename ends with .zim
     Book book1 = new Book();
