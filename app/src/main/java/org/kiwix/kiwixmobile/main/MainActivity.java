@@ -83,6 +83,7 @@ import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
@@ -141,7 +142,8 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
-public class MainActivity extends BaseActivity implements WebViewCallback {
+public class MainActivity extends BaseActivity implements WebViewCallback,
+    MainContract.View, BooksAdapter.OnItemClickListener {
 
   public static boolean isFullscreenOpened;
 
@@ -207,6 +209,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
 
   private static final String NEW_TAB = "NEW_TAB";
 
+  private BooksAdapter booksAdapter;
+  private List<LibraryNetworkEntity.Book> books = new ArrayList<>();
+  private RecyclerView homeRecyclerView;
+
   @BindView(R.id.toolbar) Toolbar toolbar;
 
   @BindView(R.id.button_backtotop) Button backToTopButton;
@@ -255,6 +261,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
 
   @Inject
   BookmarksDao bookmarksDao;
+
+  @Inject
+  MainContract.Presenter presenter;
+
 
   @Override
   public void onActionModeStarted(ActionMode mode) {
@@ -348,6 +358,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
     getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
     super.onCreate(savedInstanceState);
+    presenter.attachView(this);
     wifiOnly = sharedPreferenceUtil.getPrefWifiOnly();
     nightMode = KiwixSettingsActivity.nightMode(sharedPreferenceUtil);
     if (nightMode) {
@@ -373,7 +384,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
     FileReader fileReader = new FileReader();
     documentParserJs = fileReader.readFile("js/documentParser.js", this);
 
-    newTabButton.setOnClickListener((View view) -> newTab());
+    newTabButton.setOnClickListener((View view) -> newTab("file:///android_asset/home.html"));
     tabForwardButtonContainer.setOnClickListener((View view) -> {
       if (getCurrentWebView().canGoForward()) {
         getCurrentWebView().goForward();
@@ -502,6 +513,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
     } else {
       backToTopAppearDaily();
     }
+
+    booksAdapter = new BooksAdapter(books, this);
+
   }
 
   private void backToTopAppearDaily() {
@@ -675,6 +689,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
 
   @Override
   protected void onDestroy() {
+    presenter.detachView();
     super.onDestroy();
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(this);
@@ -941,6 +956,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
     }
   }
 
+  @Override
+  public void showHomePage() {
+    getCurrentWebView().loadUrl("file:///android_asset/home.html");
+  }
+
+  @Override
   public void showHelpPage() {
     getCurrentWebView().loadUrl("file:///android_asset/help.html");
   }
@@ -1017,14 +1038,14 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
         } else {
           Toast.makeText(this, getResources().getString(R.string.error_fileinvalid),
               Toast.LENGTH_LONG).show();
-          showHelpPage();
+          showHomePage();
         }
       } else {
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
 
         Toast.makeText(this, getResources().getString(R.string.error_filenotfound), Toast.LENGTH_LONG)
             .show();
-        showHelpPage();
+        showHomePage();
       }
       return false;
     } else {
@@ -1585,7 +1606,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
     refreshBookmarkSymbol(menu);
     refreshNavigationButtons();
 
-    if (getCurrentWebView().getUrl() == null || getCurrentWebView().getUrl().equals("file:///android_asset/help.html")) {
+    if (getCurrentWebView().getUrl() == null ||
+        getCurrentWebView().getUrl().equals("file:///android_asset/help.html") ||
+        getCurrentWebView().getUrl().equals("file:///android_asset/home.html")) {
       menu.findItem(R.id.menu_read_aloud).setVisible(false);
     } else {
       menu.findItem(R.id.menu_read_aloud).setVisible(true);
@@ -1828,7 +1851,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
           }
         } else {
           Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display help page");
-          showHelpPage();
+          showHomePage();
         }
       }
     }
@@ -1950,4 +1973,29 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
     }
   }
 
+  @Override
+  public void setHomePage(View view) {
+    homeRecyclerView = view.findViewById(R.id.recycler_view);
+    presenter.showHome();
+    homeRecyclerView.setAdapter(booksAdapter);
+  }
+
+  @Override
+  public void openFile(String url) {
+    File file = new File(url);
+    Intent zimFile = new Intent(MainActivity.this, MainActivity.class);
+    zimFile.setData(Uri.fromFile(file));
+    startActivity(zimFile);
+    finish();
+  }
+
+  @Override
+  public void addBooks(List<LibraryNetworkEntity.Book> books) {
+    this.books.addAll(books);
+    if (this.books.size()==0) {
+      homeRecyclerView.setVisibility(View.GONE);
+    } else {
+      booksAdapter.notifyDataSetChanged();
+    }
+  }
 }

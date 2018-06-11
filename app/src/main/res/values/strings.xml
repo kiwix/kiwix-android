@@ -184,4 +184,8 @@
   <string name="shortcut_disabled_message">Shortcut not available</string>
   <string name="new_tab_shortcut_label">New tab</string>
   <string name="get_content_shortcut_label">Get content</string>
+  <string name="favicon">Favicon</string>
+  <string name="pic">Pic</string>
+  <string name="vid">Vid</string>
+  <string name="articleCount">%s articles</string>
 </resources>

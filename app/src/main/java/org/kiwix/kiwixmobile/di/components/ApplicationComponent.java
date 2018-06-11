@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.di.components;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.base.BaseFragment;
+import org.kiwix.kiwixmobile.data.DataModule;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
 import org.kiwix.kiwixmobile.di.modules.JNIModule;
@@ -40,6 +41,7 @@ import dagger.Component;
     ApplicationModule.class,
     NetworkModule.class,
     JNIModule.class,
+    DataModule.class
 })
 public interface ApplicationComponent {
   void inject(KiwixApplication application);

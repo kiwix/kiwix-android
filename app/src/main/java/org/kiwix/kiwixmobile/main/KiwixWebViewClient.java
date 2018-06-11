@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -44,7 +45,7 @@ public class KiwixWebViewClient extends WebViewClient {
     put("epub", "application/epub+zip");
     put("pdf", "application/pdf");
   }};
-  private LinearLayout help;
+  private View help;
   private WebViewCallback callback;
 
   public KiwixWebViewClient(WebViewCallback callback) {
@@ -93,12 +94,12 @@ public class KiwixWebViewClient extends WebViewClient {
   @Override
   public void onPageFinished(WebView view, String url) {
     if ((url.equals("content://" + BuildConfig.APPLICATION_ID + ".zim.base/null")) && !BuildConfig.IS_CUSTOM_APP) {
-      callback.showHelpPage();
+      callback.showHomePage();
       return;
     }
-    if (!url.equals("file:///android_asset/help.html")) {
+    if (!url.equals("file:///android_asset/home.html") && !url.equals("file:///android_asset/help.html")) {
       view.removeView(help);
-    } else if (!BuildConfig.IS_CUSTOM_APP) {
+    } else if (url.equals("file:///android_asset/help.html") && !BuildConfig.IS_CUSTOM_APP) {
       if (view.findViewById(R.id.get_content_card) == null) {
         LayoutInflater inflater = LayoutInflater.from(view.getContext());
         help = (LinearLayout) inflater.inflate(R.layout.help, null);
@@ -106,7 +107,7 @@ public class KiwixWebViewClient extends WebViewClient {
             .setOnClickListener(card -> {
                   help.findViewById(R.id.get_content_card).setEnabled(false);
                   callback.manageZimFiles(1);
-            }
+                }
             );
         view.addView(help);
         ImageView welcome_image = help.findViewById(R.id.welcome_image);
@@ -118,6 +119,13 @@ public class KiwixWebViewClient extends WebViewClient {
         TextView contact = help.findViewById(R.id.welcome21);
         contact.setText(StyleUtils.highlightUrl(contact.getText().toString(), CONTACT_EMAIL_ADDRESS));
         contact.setOnClickListener(v -> callback.sendContactEmail());
+      }
+    } else if (!BuildConfig.IS_CUSTOM_APP) {
+      if (view.findViewById(R.id.get_content_card) == null) {
+        LayoutInflater inflater = LayoutInflater.from(view.getContext());
+        help = inflater.inflate(R.layout.content_main, view, false);
+        callback.setHomePage(help);
+        view.addView(help);
       }
     }
     callback.webViewUrlFinishedLoading();
