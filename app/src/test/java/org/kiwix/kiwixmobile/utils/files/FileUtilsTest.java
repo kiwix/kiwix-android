@@ -73,7 +73,7 @@ public class FileUtilsTest {
     PowerMockito.when(myFile.exists()).thenReturn(false);
 
     files = FileUtils.getAllZimParts(testBook);
-    assertEquals("Only a single book is returned in case the file has extension .zim", 1, files.size());
+    assertEquals("Only a single book is returned in case the file has extension .zim.part", 1, files.size());
     assertEquals("The filename is appended with .part", testBook.file + ".part", files.get(0).getPath());
 
     // Filename ends with .zim.part and file exists at the location
@@ -81,8 +81,47 @@ public class FileUtilsTest {
     PowerMockito.when(myFile.exists()).thenReturn(true);
 
     files = FileUtils.getAllZimParts(testBook);
-    assertEquals("Only a single book is returned in case the file has extension .zim", 1, files.size());
+    assertEquals("Only a single book is returned in case the file has extension .zim.part", 1, files.size());
     assertEquals("The filename retained as such", testBook.file.getPath(), files.get(0).getPath());
+
+    // Filename ends with .zimXX and no such file exists at any such location
+    PowerMockito.when(myFile.getPath()).thenReturn(fileName + ".zimab");
+    PowerMockito.when(myFile.exists()).thenReturn(false);
+
+    files = FileUtils.getAllZimParts(testBook);
+    assertEquals("Nothing is returned in this case", 0, files.size());
+
+    // Filename ends with .zimXX and the files "filename.zimaa" to "filename.zimfp" exists
+    PowerMockito.when(myFile.getPath()).thenReturn(fileName + ".zimcd");
+    PowerMockito.when(myFile.exists()).thenReturn(true);
+
+    String newPath = myFile.getPath();
+
+    // This file will return true whenever the File.exists() method is called
+    File fileExists = PowerMockito.mock(File.class);
+    PowerMockito.when(fileExists.exists()).thenReturn(true);
+
+    // This file will return false whenever the File.exists() method is called
+    File fileDoesNotExist = PowerMockito.mock(File.class);
+    PowerMockito.when(fileDoesNotExist.exists()).thenReturn(false);
+    Book b = new Book();
+    b.file = new File(fileName);
+    for(char firstChar = 'a'; firstChar <= 'f'; firstChar++) {
+      for(char secondChar = 'a'; secondChar <= 'z'; secondChar++) {
+        newPath = newPath.substring(0, newPath.length() - 2) + firstChar + secondChar;
+        PowerMockito.whenNew(File.class).withParameterTypes(String.class).withArguments(newPath).thenReturn(fileExists);
+        if(firstChar == 'f' && secondChar == 'p'){
+          break;
+        }
+      }
     }
+    newPath = newPath.substring(0, newPath.length() - 2) + 'f' + 'q';
+    PowerMockito.whenNew(File.class).withParameterTypes(String.class).withArguments(newPath).thenReturn(fileDoesNotExist);
+
+    files = FileUtils.getAllZimParts(b);
+    assertEquals("Only a single book is returned in case the file has extension .zim", 0, files.size());
+    assertEquals("The filename retained as such", b.file.getPath(), files.get(0).getPath());
+
+  }
 }
 // TODO : test deleteZimFile and getLocalFilePathByUrl

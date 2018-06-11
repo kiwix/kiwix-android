@@ -105,7 +105,7 @@ public class ChunkUtilsTest {
     assertEquals("verify that the file name is correctly assigned in case of a single file", "TestFileName.part", listReturned.get(0).getFileName());
     assertEquals("verify that the same URL is passed on to the chunk", URL, listReturned.get(0).getUrl());
 
-    // verify that filename is correctly generated"
+    // verify that filename is correctly generated
     size = ChunkUtils.CHUNK_SIZE;
     listReturned = ChunkUtils.getChunks("TestURL", size, 0);
     assertEquals("verify that previous extension in the filename (if any) is removed in case of files having 1 chunk", "TestFileName.xml.part", listReturned.get(0).getFileName());
