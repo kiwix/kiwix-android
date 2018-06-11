@@ -19,15 +19,12 @@
 package org.kiwix.kiwixmobile.utils.files;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
 
 import java.io.File;
 import java.util.List;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
-import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -92,4 +89,3 @@ public class FileUtilsTest {
     assertEquals("Nothing is returned in this case", 0, files.size());
   }
 }
-// TODO : test deleteZimFile and getLocalFilePathByUrl
