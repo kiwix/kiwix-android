@@ -65,20 +65,8 @@ public class BookDatabaseTest {
   }
 
   //TODO : test books are saved in the Database after download
-  //@Test
-  //public void testBooksSavedInDatabaseAfterDownload() {
-  //  DownloadFragment downloadFragment = new DownloadFragment();
-  //}
-
   //TODO : test books are saved after downloading the list of available zim files
-  //@Test
-  //public void testBooksSavedAfterDownloadingListOfAvailableZimFiles(){
-  //
-  //}
-
-
   //TODO : test book is deleted from database on deleting a specific zim file
-
 
   @Test
   public void testGetBooks() throws IOException {
@@ -115,36 +103,5 @@ public class BookDatabaseTest {
       books.add(book);
     }
     return books;
-  }
-
-  private void insertFakeData() {
-    ArrayList<Book> books = new ArrayList<>();
-    for(int i = 0; i<5 ; i++){
-      Book book = new Book();
-      book.id = "TestID_" + Integer.toString(i);
-      book.creator = "TestCreator";
-      book.bookName = "TestBook_" + Integer.toString(i);
-      book.file = new File("/sd/emulated/0/kiwix/test/");
-      books.add(book);
-    }
-    bookDao.saveBooks(books);
-  }
-
-  public void saveBookToDatabase(Book book) {
-    BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
-    bookDatabaseEntity.setBookId(book.getId());
-    bookDatabaseEntity.setTitle(book.getTitle());
-    bookDatabaseEntity.setDescription(book.getDescription());
-    bookDatabaseEntity.setLanguage(book.getLanguage());
-    bookDatabaseEntity.setBookCreator(book.getCreator());
-    bookDatabaseEntity.setPublisher(book.getPublisher());
-    bookDatabaseEntity.setDate(book.getDate());
-    bookDatabaseEntity.setUrl(book.file.getPath());
-    bookDatabaseEntity.setArticleCount(book.getArticleCount());
-    bookDatabaseEntity.setMediaCount(book.getMediaCount());
-    bookDatabaseEntity.setSize(book.getSize());
-    bookDatabaseEntity.setFavicon(book.getFavicon());
-    bookDatabaseEntity.setName(book.getName());
-    bookDao.mDb.persist(bookDatabaseEntity);
   }
 }
