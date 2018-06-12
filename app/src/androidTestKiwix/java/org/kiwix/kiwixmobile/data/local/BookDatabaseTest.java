@@ -62,6 +62,16 @@ public class BookDatabaseTest {
     context = InstrumentationRegistry.getTargetContext();
     kiwixDatabase = new KiwixDatabase(context);
     bookDao = new BookDao(kiwixDatabase);
+
+    File testDir = context.getDir("testDir", context.MODE_PRIVATE);
+    //assertEquals("file path", "", testDir.getPath());
+    File newTestFile = new File(testDir.getPath() + "/newTestFile");
+    try {
+      newTestFile.createNewFile();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    assertEquals("assert file exists", true, newTestFile.exists());
   }
 
   //TODO : test books are saved in the Database after download
@@ -79,7 +89,7 @@ public class BookDatabaseTest {
     ArrayList<Book> booksRetrieved = bookDao.filterBookResults(booksToAdd);
 
     //test whether the correct books are returned
-    if(booksRetrieved.contains(booksToAdd.get(0))) assertEquals(".zim", 0, 1);
+    if(booksRetrieved.contains(booksToAdd.get(0))) assertEquals(".part", 0, 1);
     if(booksRetrieved.contains(booksToAdd.get(1))) assertEquals(".zim",0, 1);
     if(booksRetrieved.contains(booksToAdd.get(2))) assertEquals(".zim",0, 1);
     if(booksRetrieved.contains(booksToAdd.get(3))) assertEquals(".zim",0, 1);
