@@ -72,6 +72,9 @@ public class BookDatabaseTest {
       e.printStackTrace();
     }
     assertEquals("assert file exists", true, newTestFile.exists());
+
+    File newTestFile2 = new File(newTestFile.getPath());
+    assertEquals("assert file exists", true, newTestFile2.exists());
   }
 
   //TODO : test books are saved in the Database after download
