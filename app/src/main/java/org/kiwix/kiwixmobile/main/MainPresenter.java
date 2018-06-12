@@ -48,4 +48,10 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
           }
         });
   }
+
+  @Override
+  public void saveBooks(List<LibraryNetworkEntity.Book> book) {
+    dataSource.saveBooks(book);
+    showHome();
+  }
 }

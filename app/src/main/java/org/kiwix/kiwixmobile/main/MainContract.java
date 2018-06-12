@@ -17,5 +17,7 @@ class MainContract {
 
   interface Presenter extends BaseContract.Presenter<View> {
     void showHome();
+
+    void saveBooks(List<LibraryNetworkEntity.Book> books);
   }
 }

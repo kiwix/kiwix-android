@@ -3,6 +3,7 @@ package org.kiwix.kiwixmobile.data;
 import org.kiwix.kiwixmobile.data.local.dao.BookDao;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -56,5 +57,10 @@ public class Repository implements DataSource {
         })
         .subscribeOn(io)
         .observeOn(mainThread);
+  }
+
+  @Override
+  public void saveBooks(List<LibraryNetworkEntity.Book> books) {
+    bookDao.saveBooks((ArrayList<LibraryNetworkEntity.Book>) books);
   }
 }

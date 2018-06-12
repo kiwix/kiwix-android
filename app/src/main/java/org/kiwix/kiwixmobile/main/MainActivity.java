@@ -37,6 +37,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -93,6 +94,7 @@ import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
+import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
@@ -148,6 +150,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     MainContract.View, BooksAdapter.OnItemClickListener {
 
   public static boolean isFullscreenOpened;
+  private static final int REQUEST_READ_STORAGE_PERMISSION = 2;
 
   private boolean isBackToTopEnabled = false;
 
@@ -215,6 +218,23 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private List<LibraryNetworkEntity.Book> books = new ArrayList<>();
   private CardView emptyStateCardView;
   private AppCompatButton downloadBookButton;
+  private FileSearch fileSearch = new FileSearch(this, new FileSearch.ResultListener() {
+    List<LibraryNetworkEntity.Book> newBooks = new ArrayList<>();
+
+    @Override
+    public void onBookFound(LibraryNetworkEntity.Book book) {
+      runOnUiThread(() -> {
+        if (!books.contains(book)) {
+          newBooks.add(book);
+        }
+      });
+    }
+
+    @Override
+    public void onScanCompleted() {
+      presenter.saveBooks(newBooks);
+    }
+  });
 
   @BindView(R.id.toolbar) Toolbar toolbar;
 
@@ -519,6 +539,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     booksAdapter = new BooksAdapter(books, this);
 
+    searchFiles();
   }
 
   private void backToTopAppearDaily() {
@@ -569,9 +590,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           visitCounterPref.setNoThanksState(true);
           goToRateApp();
         })
-        .setNegativeButton(negative, (dialog, id) -> {
-          visitCounterPref.setNoThanksState(true);
-        })
+        .setNegativeButton(negative, (dialog, id) -> visitCounterPref.setNoThanksState(true))
         .setNeutralButton(neutral, (dialog, id) -> {
           tempVisitCount = 0;
           visitCounterPref.setCount(tempVisitCount);
@@ -1071,7 +1090,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @Override
   public void onRequestPermissionsResult(int requestCode,
-      String permissions[], int[] grantResults) {
+                                         @NonNull String permissions[], @NonNull int[] grantResults) {
     switch (requestCode) {
       case REQUEST_STORAGE_PERMISSION: {
         if (grantResults.length > 0
@@ -1085,7 +1104,23 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           builder.setMessage(getResources().getString(R.string.reboot_message));
           AlertDialog dialog = builder.create();
           dialog.show();
-          finish();
+        }
+        break;
+      }
+
+      case REQUEST_READ_STORAGE_PERMISSION: {
+        if (grantResults.length > 0
+            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+          fileSearch.scan(sharedPreferenceUtil.getPrefStorage());
+        } else {
+          Snackbar.make(snackbarLayout, R.string.request_storage, Snackbar.LENGTH_LONG)
+              .setAction(R.string.menu_settings, view -> {
+                Intent intent = new Intent();
+                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                intent.setData(uri);
+                startActivity(intent);
+              }).show();
         }
       }
     }
@@ -2005,6 +2040,27 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     if (nightMode) {
       ImageView cardImage = emptyStateCardView.findViewById(R.id.content_main_card_image);
       cardImage.setImageResource(R.drawable.kiwix_welcome_night);
+    }
+  }
+
+  void searchFiles() {
+    if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
+      if (ContextCompat.checkSelfPermission(this,
+          Manifest.permission.READ_EXTERNAL_STORAGE)
+          != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+            Manifest.permission.READ_EXTERNAL_STORAGE)) {
+          Toast.makeText(this, R.string.request_storage,
+              Toast.LENGTH_LONG).show();
+        }
+        ActivityCompat.requestPermissions(this,
+            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+            REQUEST_READ_STORAGE_PERMISSION);
+      } else {
+        fileSearch.scan(sharedPreferenceUtil.getPrefStorage());
+      }
+    } else {
+      fileSearch.scan(sharedPreferenceUtil.getPrefStorage());
     }
   }
 }

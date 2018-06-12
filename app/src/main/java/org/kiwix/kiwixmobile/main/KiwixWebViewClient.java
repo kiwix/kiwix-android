@@ -93,7 +93,7 @@ public class KiwixWebViewClient extends WebViewClient {
   @Override
   public void onPageFinished(WebView view, String url) {
     if ((url.equals("content://" + BuildConfig.APPLICATION_ID + ".zim.base/null")) && !BuildConfig.IS_CUSTOM_APP) {
-      callback.showHomePage();
+      inflateHomeView(view);
       return;
     }
     if (!url.equals("file:///android_asset/home.html") && !url.equals("file:///android_asset/help.html")) {
@@ -120,13 +120,15 @@ public class KiwixWebViewClient extends WebViewClient {
         contact.setOnClickListener(v -> callback.sendContactEmail());
       }
     } else if (!BuildConfig.IS_CUSTOM_APP) {
-      if (view.findViewById(R.id.get_content_card) == null) {
-        LayoutInflater inflater = LayoutInflater.from(view.getContext());
-        help = inflater.inflate(R.layout.content_main, view, false);
-        callback.setHomePage(help);
-        view.addView(help);
-      }
+      inflateHomeView(view);
     }
     callback.webViewUrlFinishedLoading();
+  }
+
+  private void inflateHomeView(WebView view) {
+    LayoutInflater inflater = LayoutInflater.from(view.getContext());
+    help = inflater.inflate(R.layout.content_main, view, false);
+    callback.setHomePage(help);
+    view.addView(help);
   }
 }
