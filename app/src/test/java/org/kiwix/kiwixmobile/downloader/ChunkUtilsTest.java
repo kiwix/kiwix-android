@@ -37,7 +37,7 @@ public class ChunkUtilsTest {
   private String URL = "http://mirror.netcologne.de/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim";
 
   @Before
-  public void executeBefore(){
+  public void executeBefore() {
     mockStatic(StorageUtils.class);
     when(StorageUtils.getFileNameFromUrl(URL)).thenReturn("TestFileName");
     when(StorageUtils.getFileNameFromUrl("TestURL")).thenReturn("TestFileName.xml");
