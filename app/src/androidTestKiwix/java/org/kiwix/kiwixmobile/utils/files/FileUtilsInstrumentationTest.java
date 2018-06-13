@@ -56,14 +56,13 @@ public class FileUtilsInstrumentationTest {
         break;
       }
     }
-    assertEquals("siddhartj", 121, index);
-    // Test begins here
+
     Book book = new Book();
     book.file = new File(testDir.getPath() + fileName + "bg");
     //assertEquals("verify that the file has been created properly", true, book.file.exists());
     List<File> files = FileUtils.getAllZimParts(book);
 
-    // Checking all the values returned
+    // Testing the data returned
     assertEquals("26 * 4 + 18 = 122 files should be returned", 122, files.size());
 
     for (index = 0; index < 122; index++) {
@@ -119,7 +118,7 @@ public class FileUtilsInstrumentationTest {
       }
     }
 
-    assertEquals("", false, FileUtils.hasPart(testCall));
+    assertEquals(false, FileUtils.hasPart(testCall));
 
     // Case : FileName.zim is the calling file, but neither FileName.zim, nor FileName.zim.part exist
     // In this case the answer will be the same as that in the previous (FileName.zimXX) case
