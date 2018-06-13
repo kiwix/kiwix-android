@@ -2039,7 +2039,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     booksAdapter.notifyDataSetChanged();
     if (nightMode) {
       ImageView cardImage = emptyStateCardView.findViewById(R.id.content_main_card_image);
-      cardImage.setImageResource(R.drawable.kiwix_welcome_night);
+      cardImage.setImageResource(R.drawable.ic_home_card_night);
     }
   }
 
