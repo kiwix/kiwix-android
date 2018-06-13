@@ -25,6 +25,7 @@ import android.util.Log;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,6 +53,7 @@ public class BookDatabaseTest {
   private KiwixDatabase kiwixDatabase;
   private BookDao bookDao;
   private boolean mockInitialized = false;
+  private File testDir;
 
   @Before
   public void executeBefore() {
@@ -63,18 +65,8 @@ public class BookDatabaseTest {
     kiwixDatabase = new KiwixDatabase(context);
     bookDao = new BookDao(kiwixDatabase);
 
-    File testDir = context.getDir("testDir", context.MODE_PRIVATE);
-    //assertEquals("file path", "", testDir.getPath());
-    File newTestFile = new File(testDir.getPath() + "/newTestFile");
-    try {
-      newTestFile.createNewFile();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    assertEquals("assert file exists", true, newTestFile.exists());
-
-    File newTestFile2 = new File(newTestFile.getPath());
-    assertEquals("assert file exists", true, newTestFile2.exists());
+    // Create a temporary directory where all the test files will be saved
+    testDir = context.getDir("testDir", context.MODE_PRIVATE);
   }
 
   //TODO : test books are saved in the Database after download
@@ -84,8 +76,8 @@ public class BookDatabaseTest {
   @Test
   public void testGetBooks() throws IOException {
     //save the fake data to test
-    String testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c";
-    String fileName = context.getFilesDir().getAbsolutePath() + File.separator + testId;
+    String testId = "6qq5301d-2cr0-ebg5-474h-6db70j52864p";
+    String fileName = testDir.getPath() + "/" + testId + "testFile";
     ArrayList<Book> booksToAdd = getFakeData(fileName);
 
     //get the filtered book list from the database (using the internal selection logic in BookDao)
@@ -99,7 +91,7 @@ public class BookDatabaseTest {
     if(booksRetrieved.contains(booksToAdd.get(4))) assertEquals(".zim",0, 1);
   }
 
-  private ArrayList<Book> getFakeData(String baseFileName) {
+  private ArrayList<Book> getFakeData(String baseFileName) throws IOException {
     ArrayList<Book> books = new ArrayList<>();
     for(int i = 0; i < 5; i++){
       Book book = new Book();
@@ -107,14 +99,22 @@ public class BookDatabaseTest {
       book.id = "Test ID " + Integer.toString(i);
       String fileName = baseFileName + Integer.toString(i);
       switch (i) {
-        case 0: book.file = new File(fileName + ".zim"); break;
-        case 1: book.file = new File(fileName + ".part"); break;
-        case 2: book.file = new File(fileName + ".txt"); break;
-        case 3: book.file = new File(fileName + ".mp4"); break;
-        case 4: book.file = new File(""); break;
+        case 0: book.file = new File(fileName + ".zim"); book.file.createNewFile(); break;
+        case 1: book.file = new File(fileName + ".part"); book.file.createNewFile(); break;
+        case 2: book.file = new File(fileName + ".txt"); book.file.createNewFile(); break;
+        case 3: book.file = new File(fileName + ".mp4"); book.file.createNewFile(); break;
+        case 4: book.file = new File(fileName); book.file.createNewFile(); break;
       }
       books.add(book);
     }
     return books;
+  }
+
+  @After
+  public void RemoveTestDirectory() {
+    for(File child : testDir.listFiles()) {
+      child.delete();
+    }
+    testDir.delete();
   }
 }
