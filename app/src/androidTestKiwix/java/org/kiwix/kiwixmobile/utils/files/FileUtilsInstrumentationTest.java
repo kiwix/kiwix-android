@@ -17,7 +17,6 @@ public class FileUtilsInstrumentationTest {
 
   private Context context;
   private File testDir;
-  private String testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c";
 
   @Before
   public void executeBefore() {
@@ -30,6 +29,7 @@ public class FileUtilsInstrumentationTest {
 
     // Filename ends with .zimXX and the files up till "FileName.zimer" exist
     // i.e. 26 * 4 + 18 = 122 files exist
+    String testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c";
     String fileName = "/" + testId + "testfile.zim";
     String fileNameWithExtension;
     Random r = new Random();
@@ -77,29 +77,51 @@ public class FileUtilsInstrumentationTest {
 
   @Test
   public void testHasPart() throws IOException {
+    String testId = "8ce5775a-10a9-bbf3-178a-9df69f23263d";
     String baseName = "/" + testId + "testFile";
 
     // FileName ends with .zim
-    File file1 = new File(testDir + baseName + ".zim");
+    File file1 = new File(testDir + baseName + "1" + ".zim");
     file1.createNewFile();
     assertEquals("if the fileName ends with .zim and exists in memory, return false",
         false, FileUtils.hasPart(file1));
 
     // FileName ends with .part
-    File file2 = new File(testDir + baseName + ".zim");
+    File file2 = new File(testDir + baseName + "2" + ".zim");
     file2.createNewFile();
     assertEquals("if the fileName ends with .part and exists in memory, return true",
         false, FileUtils.hasPart(file2));
 
     // FileName ends with .zim, however, only the FileName.zim.part file exists in memory
-    File file3 = new File(testDir + baseName + ".zim" + "part");
+    File file3 = new File(testDir + baseName + "3" + ".zim" + ".part");
     file3.createNewFile();
-    File file4 = new File(testDir + baseName + ".zim");
+    File file4 = new File(testDir + baseName + "3" + ".zim");
     assertEquals("if the fileName ends with .zim, but instead the .zim.part file exists in memory",
         true, FileUtils.hasPart(file4));
 
-    // In case the fileName ends with .zimXX
-    File file = new File(testDir + baseName + ".zimcj");
+    // FileName ends with .zimXX
+    File testCall = new File(testDir + baseName + ".zimcj");
+
+    // Case : FileName.zimXX does not exist for any value of "XX" from "aa" till "bl", but FileName.zimXX.part exists for all "XX" from "aa', till "bk", then it does not exist
+    for (char char1 = 'a'; char1 <= 'z'; char1++) {
+      for (char char2 = 'a'; char2 <= 'z'; char2++) {
+        File file = new File(testDir.getPath() + baseName + ".zim" + char1 + char2 + ".part");
+        file.createNewFile();
+        if(char1 == 'b' && char2 == 'k') {
+          break;
+        }
+      }
+      if(char1 == 'b') {
+        break;
+      }
+    }
+
+    assertEquals("", false, FileUtils.hasPart(testCall));
+
+    // Case : FileName.zimXX exists for some "XX" between "aa" till "bl", and FileName.zimXX.part exists for all "XX" from "aa', till "bk", then it does not exist
+    File file = new File(testDir + baseName + ".zimav");
+    file.createNewFile();
+    assertEquals("", true, FileUtils.hasPart(testCall));
     
   }
 }
