@@ -138,7 +138,7 @@ public class FileUtilsInstrumentationTest {
 
   @After
   public void RemoveTestDirectory() {
-    for(File child : testDir.listFiles()){
+    for(File child : testDir.listFiles()) {
       child.delete();
     }
     testDir.delete();
