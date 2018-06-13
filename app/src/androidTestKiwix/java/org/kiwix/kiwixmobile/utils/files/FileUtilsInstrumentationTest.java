@@ -59,7 +59,7 @@ public class FileUtilsInstrumentationTest {
 
     Book book = new Book();
     book.file = new File(testDir.getPath() + fileName + "bg");
-    //assertEquals("verify that the file has been created properly", true, book.file.exists());
+    
     List<File> files = FileUtils.getAllZimParts(book);
 
     // Testing the data returned
