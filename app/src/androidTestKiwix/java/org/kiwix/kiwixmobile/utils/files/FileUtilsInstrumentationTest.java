@@ -17,6 +17,7 @@ public class FileUtilsInstrumentationTest {
 
   private Context context;
   private File testDir;
+  private String testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c";
 
   @Before
   public void executeBefore() {
@@ -26,17 +27,6 @@ public class FileUtilsInstrumentationTest {
 
   @Test
   public void testGetAllZimParts() throws IOException{
-    // set Constants
-    String testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c";
-
-    //assertEquals("file path", "", testDir.getPath());
-    //File testFile = new File(testDir.getPath() + "/newTestFile");
-    //try {
-    //  testFile.createNewFile();
-    //} catch (IOException e) {
-    //  e.printStackTrace();
-    //}
-    //assertEquals("verify that the file was created properly", true, testFile.exists());
 
     // Filename ends with .zimXX and the files up till "FileName.zimer" exist
     // i.e. 26 * 4 + 18 = 122 files exist
@@ -75,14 +65,41 @@ public class FileUtilsInstrumentationTest {
 
     for(index = 0; index < 122; index++ ) {
       if(bool[index]) {
-        assertEquals("if the file fileName.zimXX exists, then no need to add the .part extension at the end", false, files.get(index).getPath().endsWith(".part"));
+        assertEquals("if the file fileName.zimXX exists, then no need to add the .part extension at the end",
+            false, files.get(index).getPath().endsWith(".part"));
       } else {
-        //assertEquals("if the file fileName.zimXX.part exists, then the file returned should also have the same ending .zimXX.part", true, files.get(index).getPath().endsWith(".part"));
+        //assertEquals("if the file fileName.zimXX.part exists, then the file returned should also have the same ending .zimXX.part",
+        //    true, files.get(index).getPath().endsWith(".part"));
       }
     }
 
-    // Deleting the Files
+  }
 
+  @Test
+  public void testHasPart() throws IOException {
+    String baseName = "/" + testId + "testFile";
 
+    // FileName ends with .zim
+    File file1 = new File(testDir + baseName + ".zim");
+    file1.createNewFile();
+    assertEquals("if the fileName ends with .zim and exists in memory, return false",
+        false, FileUtils.hasPart(file1));
+
+    // FileName ends with .part
+    File file2 = new File(testDir + baseName + ".zim");
+    file2.createNewFile();
+    assertEquals("if the fileName ends with .part and exists in memory, return true",
+        false, FileUtils.hasPart(file2));
+
+    // FileName ends with .zim, however, only the FileName.zim.part file exists in memory
+    File file3 = new File(testDir + baseName + ".zim" + "part");
+    file3.createNewFile();
+    File file4 = new File(testDir + baseName + ".zim");
+    assertEquals("if the fileName ends with .zim, but instead the .zim.part file exists in memory",
+        true, FileUtils.hasPart(file4));
+
+    // In case the fileName ends with .zimXX
+    File file = new File(testDir + baseName + ".zimcj");
+    
   }
 }
