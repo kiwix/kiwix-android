@@ -43,6 +43,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyListOf;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
@@ -87,16 +89,27 @@ public class BookDatabaseTest {
     ArrayList<Book> booksRetrieved = bookDao.filterBookResults(booksToAdd);
 
     // Test whether the correct books are returned
-    if(!booksRetrieved.contains(booksToAdd.get(0))) assertEquals("filename ends with .zim and the file exists in memory",
-        0, 1);
-    if(booksRetrieved.contains(booksToAdd.get(1))) assertEquals("filename ends with .part and the file exists in memory",
-        0, 1);
-    if(booksRetrieved.contains(booksToAdd.get(2))) assertEquals("filename ends with .zim, however only the .zim.part file exists in memory",
-        0, 1);
-    if(booksRetrieved.contains(booksToAdd.get(3))) assertEquals("filename ends with .zim but neither the .zim, nor the .zim.part file exists in memory",
-        0, 1);
-    if(booksRetrieved.contains(booksToAdd.get(3))) assertEquals("filename ends with .zim and both the .zim, and the .zim.part files exists in memory",
-        0, 1);
+
+    // Filename ends with .zim and the file exists in memory
+    if(!booksRetrieved.contains(booksToAdd.get(0))) assertEquals(0, 1);
+    verify(kiwixDatabase, never()).deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(booksToAdd.get(0).file.getPath()));
+
+    // Filename ends with .part and the file exists in memory
+    if(booksRetrieved.contains(booksToAdd.get(1))) assertEquals(0, 1);
+    verify(kiwixDatabase, never()).deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(booksToAdd.get(1).file.getPath()));
+
+    // Filename ends with .zim, however only the .zim.part file exists in memory
+    if(booksRetrieved.contains(booksToAdd.get(2))) assertEquals(0, 1);
+    verify(kiwixDatabase, never()).deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(booksToAdd.get(2).file.getPath()));
+
+    // Filename ends with .zim but neither the .zim, nor the .zim.part file exists in memory
+    if(booksRetrieved.contains(booksToAdd.get(3))) assertEquals(0, 1);
+    verify(kiwixDatabase).deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(booksToAdd.get(3).file.getPath()));
+
+    // Filename ends with .zim and both the .zim, and the .zim.part files exists in memory
+    if(booksRetrieved.contains(booksToAdd.get(3))) assertEquals(0, 1);
+
+    // If the filename ends with .zimXX, then the file is not included unless the file exists and ..
     if(!booksRetrieved.contains(booksToAdd.get(4))) assertEquals(".zimXX",
         0, 1);
     if(!booksRetrieved.contains(booksToAdd.get(5))) assertEquals(".zimXX",
