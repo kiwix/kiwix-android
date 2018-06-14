@@ -47,7 +47,7 @@ public class RecentSearchDatabaseTest {
       MockitoAnnotations.initMocks(this);
       mockInitialized = true;
     }
-    when(kiwixDatabase.query(any(),any())).thenReturn(mockedCursor);
+    when(kiwixDatabase.query(any(), any())).thenReturn(mockedCursor);
     recentSearchDao = new RecentSearchDao(kiwixDatabase);
   }
 

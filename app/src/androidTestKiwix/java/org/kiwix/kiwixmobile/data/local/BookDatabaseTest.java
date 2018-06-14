@@ -151,7 +151,7 @@ public class BookDatabaseTest {
     return books;
   }
 
-  private void setupCase1(String fileName) throws IOException{
+  private void setupCase1(String fileName) throws IOException {
     for (char char1 = 'a'; char1 <= 'z'; char1++) {
       for (char char2 = 'a'; char2 <= 'z'; char2++) {
         File file = new File(fileName + ".zim" + char1 + char2);
@@ -166,7 +166,7 @@ public class BookDatabaseTest {
     }
   }
 
-  private void setupCase2(String fileName) throws IOException{
+  private void setupCase2(String fileName) throws IOException {
     for (char char1 = 'a'; char1 <= 'z'; char1++) {
       for (char char2 = 'a'; char2 <= 'z'; char2++) {
         File file = new File(fileName + ".zim" + char1 + char2);
