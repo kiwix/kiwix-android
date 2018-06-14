@@ -982,6 +982,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   public void showHomePage() {
     getCurrentWebView().removeAllViews();
     getCurrentWebView().loadUrl("file:///android_asset/home.html");
+    if (getSupportActionBar() != null) {
+      getSupportActionBar().setTitle(createMenuText(getString(R.string.app_name)));
+    }
   }
 
   @Override
@@ -2039,7 +2042,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     booksAdapter.notifyDataSetChanged();
     if (nightMode) {
       ImageView cardImage = emptyStateCardView.findViewById(R.id.content_main_card_image);
-      cardImage.setImageResource(R.drawable.ic_home_card_night);
+      cardImage.setImageResource(R.drawable.ic_home_kiwix_banner_night);
     }
   }
 
