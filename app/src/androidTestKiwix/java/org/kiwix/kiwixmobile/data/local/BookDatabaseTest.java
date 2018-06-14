@@ -50,7 +50,7 @@ import static org.mockito.Mockito.when;
 public class BookDatabaseTest {
 
   private Context context;
-  private KiwixDatabase kiwixDatabase;
+  private @Mock KiwixDatabase kiwixDatabase;
   private BookDao bookDao;
   private boolean mockInitialized = false;
   private File testDir;
@@ -62,7 +62,7 @@ public class BookDatabaseTest {
       mockInitialized = true;
     }
     context = InstrumentationRegistry.getTargetContext();
-    kiwixDatabase = new KiwixDatabase(context);
+    //kiwixDatabase = new KiwixDatabase(context);
     bookDao = new BookDao(kiwixDatabase);
 
     // Create a temporary directory where all the test files will be saved
@@ -75,20 +75,28 @@ public class BookDatabaseTest {
 
   @Test
   public void testGetBooks() throws IOException {
-    //save the fake data to test
+    // Save the fake data to test
     String testId = "6qq5301d-2cr0-ebg5-474h-6db70j52864p";
     String fileName = testDir.getPath() + "/" + testId + "testFile";
     ArrayList<Book> booksToAdd = getFakeData(fileName);
 
-    //get the filtered book list from the database (using the internal selection logic in BookDao)
+    // Set up the mocks
+    when(kiwixDatabase.deleteWhere(any(), any())).thenReturn(0);
+
+    // Get the filtered book list from the database (using the internal selection logic in BookDao)
     ArrayList<Book> booksRetrieved = bookDao.filterBookResults(booksToAdd);
 
-    //test whether the correct books are returned
-    if(booksRetrieved.contains(booksToAdd.get(0))) assertEquals(".part", 0, 1);
-    if(booksRetrieved.contains(booksToAdd.get(1))) assertEquals(".zim",0, 1);
-    if(booksRetrieved.contains(booksToAdd.get(2))) assertEquals(".zim",0, 1);
-    if(booksRetrieved.contains(booksToAdd.get(3))) assertEquals(".zim",0, 1);
-    if(booksRetrieved.contains(booksToAdd.get(4))) assertEquals(".zim",0, 1);
+    // Test whether the correct books are returned
+    if(!booksRetrieved.contains(booksToAdd.get(0))) assertEquals("filename ends with .zim and the file exists in memory",
+        0, 1);
+    if(booksRetrieved.contains(booksToAdd.get(1))) assertEquals("filename ends with .part and the file exists in memory",
+        0, 1);
+    if(booksRetrieved.contains(booksToAdd.get(2))) assertEquals("filename ends with .zim, however only the .zim.part file exists in memory",
+        0, 1);
+    if(booksRetrieved.contains(booksToAdd.get(3))) assertEquals("filename ends with .zim but neither the .zim, nor the .zim.part file exists in memory",
+        0, 1);
+    if(!booksRetrieved.contains(booksToAdd.get(4))) assertEquals(".zim",
+        0, 1);
   }
 
   private ArrayList<Book> getFakeData(String baseFileName) throws IOException {
@@ -99,11 +107,12 @@ public class BookDatabaseTest {
       book.id = "Test ID " + Integer.toString(i);
       String fileName = baseFileName + Integer.toString(i);
       switch (i) {
-        case 0: book.file = new File(fileName + ".zim"); book.file.createNewFile(); break;
-        case 1: book.file = new File(fileName + ".part"); book.file.createNewFile(); break;
-        case 2: book.file = new File(fileName + ".txt"); book.file.createNewFile(); break;
-        case 3: book.file = new File(fileName + ".mp4"); book.file.createNewFile(); break;
-        case 4: book.file = new File(fileName); book.file.createNewFile(); break;
+        case 0: book.file = new File(fileName + Integer.toString(i) + ".zim"); book.file.createNewFile(); break;
+        case 1: book.file = new File(fileName + Integer.toString(i) + ".part"); book.file.createNewFile(); break;
+        case 2: book.file = new File(fileName + Integer.toString(i) + ".zim.part");
+                File t = new File(fileName + Integer.toString(i) + ".zim.part"); t.createNewFile(); break;
+        case 3: book.file = new File(fileName + Integer.toString(i) + ".zim"); break;
+        case 4: book.file = new File(fileName + Integer.toString(i) + ".zimaa"); book.file.createNewFile(); break;
       }
       books.add(book);
     }
