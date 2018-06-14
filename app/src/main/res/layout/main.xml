@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/snackbar_layout"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
@@ -44,8 +45,8 @@
             android:layout_margin="@dimen/fullscreen_control_button_margin"
             android:background="@color/back_to_top_background"
             android:hint="@string/menu_exitfullscreen"
-            app:srcCompat="@drawable/fullscreen_exit"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            app:srcCompat="@drawable/fullscreen_exit" />
 
 
           <Button
@@ -101,19 +102,73 @@
 
       </RelativeLayout>
 
-      <org.kiwix.kiwixmobile.main.PageBottomTabLayout
-        android:id="@+id/page_bottom_tab_layout"
+      <android.support.v7.widget.CardView
+        android:id="@+id/bottom_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_gravity="bottom"
-        android:background="@color/grey"
         android:visibility="gone"
-        app:tabGravity="fill"
-        app:tabIndicatorColor="@color/grey"
-        app:tabSelectedTextColor="@color/grey" />
+        app:cardElevation="8dp"
+        tools:visibility="visible">
 
+        <android.support.constraint.ConstraintLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="@color/primary">
+
+          <ImageView
+            android:id="@+id/bottom_toolbar_arrow_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/bottom_toolbar_arrow_forward"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_keyboard_arrow_left_24dp" />
+
+          <ImageView
+            android:id="@+id/bottom_toolbar_arrow_forward"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/bottom_toolbar_home"
+            app:layout_constraintStart_toEndOf="@id/bottom_toolbar_arrow_back"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_keyboard_arrow_right_24dp" />
+
+          <ImageView
+            android:id="@+id/bottom_toolbar_home"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/bottom_toolbar_bookmark"
+            app:layout_constraintStart_toEndOf="@id/bottom_toolbar_arrow_forward"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/action_home" />
+
+          <ImageView
+            android:id="@+id/bottom_toolbar_bookmark"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/bottom_toolbar_toc"
+            app:layout_constraintStart_toEndOf="@id/bottom_toolbar_home"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_bookmark_border_24dp" />
+
+          <ImageView
+            android:id="@+id/bottom_toolbar_toc"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/bottom_toolbar_bookmark"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_toc_24dp" />
+        </android.support.constraint.ConstraintLayout>
+      </android.support.v7.widget.CardView>
     </RelativeLayout>
 
     <include layout="@layout/drawer_left" />
