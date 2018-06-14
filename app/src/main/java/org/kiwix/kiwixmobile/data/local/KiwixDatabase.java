@@ -23,9 +23,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.yahoo.squidb.data.SquidDatabase;
-import com.yahoo.squidb.data.TableModel;
 import com.yahoo.squidb.data.adapter.SQLiteDatabaseWrapper;
-import com.yahoo.squidb.sql.Criterion;
 import com.yahoo.squidb.sql.Table;
 
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
