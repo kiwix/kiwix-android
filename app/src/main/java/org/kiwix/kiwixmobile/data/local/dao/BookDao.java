@@ -36,7 +36,7 @@ import javax.inject.Inject;
  */
 
 public class BookDao {
-  private KiwixDatabase mDb;
+  public KiwixDatabase mDb;
 
   @Inject
   public BookDao(KiwixDatabase kiwixDatabase) {
@@ -87,16 +87,25 @@ public class BookDao {
     while (bookCursor.moveToNext()) {
       Book book = new Book();
       setBookDetails(book, bookCursor);
+      books.add(book);
+    }
+    bookCursor.close();
+    ArrayList<Book> FinalList = filterBookResults(books);
+    return FinalList;
+  }
+
+  public ArrayList<Book> filterBookResults(ArrayList<Book> books) {
+    ArrayList<Book> filteredBookList = new ArrayList<>();
+    for (Book book : books){
       if (!FileUtils.hasPart(book.file)) {
         if (book.file.exists()) {
-          books.add(book);
+          filteredBookList.add(book);
         } else {
           mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(book.file.getPath()));
         }
       }
     }
-    bookCursor.close();
-    return books;
+    return filteredBookList;
   }
 
   public ArrayList<Book> getDownloadingBooks() {
