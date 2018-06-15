@@ -27,7 +27,7 @@ public class CustomViewPager extends ViewPager {
   }
 
   /**
-   * Override the Scroller instance with our own class so we can change the
+   * Override the {@link Scroller} instance with our own class so we can change the
    * duration
    */
   private void postInitViewPager() {

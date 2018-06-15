@@ -1,14 +1,11 @@
 package org.kiwix.kiwixmobile.intro;
 
-import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
 import com.pixelcan.inkpageindicator.InkPageIndicator;
@@ -20,7 +17,6 @@ import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -36,9 +32,6 @@ public class IntroActivity extends BaseActivity {
   @Inject
   SharedPreferenceUtil preferences;
 
-  private ValueAnimator tedAnimator;
-  private ValueAnimator stackExchangeAnimator;
-  private ValueAnimator wikivoyageAnimator;
   private ImageView airPlane;
   private Handler handler = new Handler();
   private Timer timer = new Timer();
@@ -51,7 +44,7 @@ public class IntroActivity extends BaseActivity {
 
     @Override
     public void onPageSelected(int position) {
-      if (position == 2) {
+      if (position == 1) {
         airPlane.setVisibility(View.VISIBLE);
         airPlane.animate()
             .translationX(airPlane.getWidth())
@@ -80,25 +73,13 @@ public class IntroActivity extends BaseActivity {
     LayoutInflater layoutInflater = getLayoutInflater();
     views = new View[]{
         layoutInflater.inflate(R.layout.item_intro_1, viewPager, false),
-        layoutInflater.inflate(R.layout.item_intro_2, viewPager, false),
-        layoutInflater.inflate(R.layout.item_intro_3, viewPager, false)
+        layoutInflater.inflate(R.layout.item_intro_2, viewPager, false)
     };
     IntroPagerAdapter introPagerAdapter = new IntroPagerAdapter(views);
     viewPager.setAdapter(introPagerAdapter);
     tabIndicator.setViewPager(viewPager);
 
-    stackExchangeAnimator = animateImage(views[1].findViewById(R.id.ic_stack_exchange),
-        TimeUnit.SECONDS.toMillis(6));
-    wikivoyageAnimator = animateImage(views[1].findViewById(R.id.ic_wikivoyage),
-        TimeUnit.SECONDS.toMillis(9));
-    tedAnimator = animateImage(views[1].findViewById(R.id.ic_ted),
-        TimeUnit.SECONDS.toMillis(12));
-
-    tedAnimator.start();
-    stackExchangeAnimator.start();
-    wikivoyageAnimator.start();
-
-    airPlane = views[2].findViewById(R.id.airplane);
+    airPlane = views[1].findViewById(R.id.airplane);
     viewPager.addOnPageChangeListener(pageChangeListener);
 
     timer.schedule(new TimerTask() {
@@ -121,9 +102,6 @@ public class IntroActivity extends BaseActivity {
   @Override
   protected void onDestroy() {
     super.onDestroy();
-    tedAnimator.end();
-    wikivoyageAnimator.end();
-    stackExchangeAnimator.end();
     handler.removeCallbacksAndMessages(null);
     timer.cancel();
     for (View view : views) {
@@ -142,21 +120,5 @@ public class IntroActivity extends BaseActivity {
   private void dismissAutoRotate() {
     handler.removeCallbacksAndMessages(null);
     timer.cancel();
-  }
-
-  private ValueAnimator animateImage(ImageView imageView, long orbitDuration) {
-    ValueAnimator anim = ValueAnimator.ofInt(0, 359);
-    anim.addUpdateListener(valueAnimator -> {
-      int val = (Integer) valueAnimator.getAnimatedValue();
-      ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) imageView.getLayoutParams();
-      layoutParams.circleAngle = val;
-      imageView.setLayoutParams(layoutParams);
-    });
-    anim.setDuration(orbitDuration);
-    anim.setInterpolator(new LinearInterpolator());
-    anim.setRepeatMode(ValueAnimator.RESTART);
-    anim.setRepeatCount(ValueAnimator.INFINITE);
-
-    return anim;
   }
 }
