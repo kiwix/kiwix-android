@@ -97,7 +97,7 @@ public class NetworkTest {
         (new ApplicationModule(
             (KiwixApplication) getInstrumentation().getTargetContext().getApplicationContext())).build();
 
-    ((KiwixApplication) getInstrumentation().getTargetContext().getApplicationContext()).setApplicationComponent(component);
+    KiwixApplication.setApplicationComponent(component);
 
     new ZimContentProvider().setupDagger();
     component.inject(this);

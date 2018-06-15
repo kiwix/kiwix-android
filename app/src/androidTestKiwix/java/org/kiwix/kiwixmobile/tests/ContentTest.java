@@ -25,7 +25,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.splash.SplashActivity;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.testutils.TestUtils;
 
 import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
@@ -37,8 +37,7 @@ import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
 public class ContentTest {
 
   @Rule
-  public ActivityTestRule<SplashActivity> mActivityTestRule = new ActivityTestRule<>(
-      SplashActivity.class);
+  public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
 
   @Test
   public void contentTest() {

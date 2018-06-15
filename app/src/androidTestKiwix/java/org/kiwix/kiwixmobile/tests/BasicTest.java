@@ -28,7 +28,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.splash.SplashActivity;
+import org.kiwix.kiwixmobile.main.MainActivity;
 
 import static com.schibsted.spain.barista.assertion.BaristaDrawerAssertions.assertDrawerIsClosed;
 import static com.schibsted.spain.barista.assertion.BaristaDrawerAssertions.assertDrawerIsClosedWithGravity;
@@ -47,8 +47,7 @@ import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
 public class BasicTest {
 
   @Rule
-  public ActivityTestRule<SplashActivity> mActivityTestRule = new ActivityTestRule<>(
-      SplashActivity.class);
+  public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
   @Rule
   public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule
