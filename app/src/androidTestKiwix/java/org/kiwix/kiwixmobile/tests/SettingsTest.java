@@ -9,7 +9,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.splash.SplashActivity;
+import org.kiwix.kiwixmobile.main.MainActivity;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -24,8 +24,7 @@ import static org.kiwix.kiwixmobile.utils.StandardActions.enterSettings;
 @RunWith(AndroidJUnit4.class)
 public class SettingsTest {
   @Rule
-  public ActivityTestRule<SplashActivity> mActivityTestRule = new ActivityTestRule<>(
-      SplashActivity.class);
+  public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
 
   @Test
   public void testToggle() {
