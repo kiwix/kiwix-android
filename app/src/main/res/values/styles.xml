@@ -91,9 +91,5 @@
   <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
     <item name="android:textColor">@color/accent</item>
   </style>
-
-  <style name="WhiteButton" parent="Base.TextAppearance.AppCompat.Button">
-    <item name="backgroundTint">@android:color/white</item>
-  </style>
 </resources>
 
