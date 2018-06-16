@@ -13,14 +13,14 @@
     app:layout_constraintBottom_toTopOf="@id/get_started"
     app:layout_constraintTop_toTopOf="parent" />
 
-  <Button
+  <android.support.v7.widget.AppCompatButton
     android:id="@+id/get_started"
-    style="@style/WhiteButton"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginBottom="32dp"
     android:text="@string/get_started"
     android:textColor="@color/blue800"
+    app:backgroundTint="@android:color/white"
     app:layout_constraintBottom_toTopOf="@id/tab_indicator"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent" />
