@@ -356,7 +356,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
 
     handleLocaleCheck();
     setContentView(R.layout.main);
-    ButterKnife.bind(this);
 
     setUpToolbar();
 

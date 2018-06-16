@@ -42,4 +42,8 @@ public abstract class ActivityBindingModule {
   @PerActivity
   @ContributesAndroidInjector
   public abstract ErrorActivity provideErrorActivity();
+
+  @PerActivity
+  @ContributesAndroidInjector
+  public abstract org.kiwix.kiwixmobile.main2.MainActivity provideMainActivity();
 }

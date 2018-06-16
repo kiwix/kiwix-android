@@ -8,8 +8,8 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.1.0'
-    classpath 'com.testdroid:gradle:1.5.0'
+    classpath 'com.android.tools.build:gradle:3.1.3'
+    classpath 'com.testdroid:gradle:2.49.1'
     classpath 'org.apache.httpcomponents:httpclient-android:4.3.3'
   }
 }
@@ -48,9 +48,9 @@ dependencies {
   implementation "com.android.support:support-v4:$supportLibraryVersion"
   implementation "com.android.support:design:$supportLibraryVersion"
   implementation "com.android.support:cardview-v7:$supportLibraryVersion"
-  implementation 'com.android.support:multidex:1.0.2'
+  implementation "com.android.support:multidex:$multidexVersion"
 
-  compile 'com.android.support.constraint:constraint-layout:1.0.2'
+  implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
 
   androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
 
@@ -58,23 +58,24 @@ dependencies {
     exclude group: 'com.android.support', module: 'support-annotations'
   }
 
-  androidTestImplementation 'com.android.support.test.espresso:espresso-web:3.0.1'
-  androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.1'
-  androidTestImplementation 'com.android.support.test.espresso:espresso-idling-resource:3.0.1'
-  androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.0', {
+  androidTestImplementation "com.android.support.test.espresso:espresso-web:$espressoVersion"
+  androidTestImplementation "com.android.support.test.espresso:espresso-intents:$espressoVersion"
+  androidTestImplementation "com.android.support.test.espresso:espresso-idling-resource:$espressoVersion"
+  androidTestImplementation("com.android.support.test.espresso:espresso-contrib:$espressoVersion") {
     exclude group: 'com.android.support', module: 'support-v4'
     exclude group: 'com.android.support', module: 'appcompat-v7'
     exclude group: 'com.android.support', module: 'design'
     exclude group: 'com.android.support', module: 'recyclerview-v7'
   }
 
-  androidTestCompile('com.schibsted.spain:barista:2.4.0') {
+  androidTestImplementation('com.schibsted.spain:barista:2.4.0') {
     exclude group: 'com.android.support'
   }
 
   androidTestImplementation "com.android.support:support-annotations:$supportLibraryVersion"
-  androidTestImplementation 'com.android.support.test:runner:1.0.1'
-  androidTestImplementation 'com.android.support.test:rules:1.0.1'
+  androidTestImplementation "com.android.support.test:runner:$testRunnerVersion"
+  androidTestImplementation "com.android.support.test:rules:$testRunnerVersion"
+  androidTestUtil "com.android.support.test:orchestrator:$testRunnerVersion"
 
   // Guava
   implementation group: 'com.google.guava', name: 'guava', version: '21.0'
@@ -94,7 +95,7 @@ dependencies {
   annotationProcessor 'com.yahoo.squidb:squidb-processor:2.0.0'
 
   // Apache
-  implementation 'commons-io:commons-io:2.5'
+  androidTestImplementation "commons-io:commons-io:$apacheCommonsVersion"
 
   // Square
   implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
@@ -108,13 +109,16 @@ dependencies {
   }
   androidTestImplementation 'com.squareup.okhttp3:mockwebserver:3.6.0'
 
-  // Butterknife
-  implementation 'com.jakewharton:butterknife:8.0.1'
-  annotationProcessor 'com.jakewharton:butterknife-compiler:8.0.1'
+  // ButterKnife
+  implementation "com.jakewharton:butterknife:$butterKnifeVersion"
+  annotationProcessor "com.jakewharton:butterknife-compiler:$butterKnifeVersion"
 
   // RxJava
   implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
   implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+
+  // Tab switcher
+  implementation "com.github.michael-rapp:chrome-like-tab-switcher:$tabSwitcherVersion"
 
   // JUnit
   testImplementation 'junit:junit:4.12'
@@ -153,7 +157,7 @@ if (project.hasProperty('customDir')) {
 }
 
 // Set up flavours for each custom app in the directory
-if(custom.listFiles()) {
+if (custom.listFiles()) {
   custom.eachFile() { file ->
 
     def fileName = file.getName()
@@ -173,8 +177,13 @@ android {
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     // See https://github.com/linkedin/dexmaker/issues/65 for why we need the following line.
     testInstrumentationRunnerArguments.notClass = 'com.android.dex.DexIndexOverflowException'
+    testInstrumentationRunnerArguments clearPackageData: 'true'
     multiDexEnabled true
     vectorDrawables.useSupportLibrary = true
+  }
+
+  testOptions {
+    execution 'ANDROID_TEST_ORCHESTRATOR'
   }
 
   aaptOptions {
@@ -282,15 +291,15 @@ android {
           sourceFile = file(directory + "/" + parsedJson.zim_file)
         }
         if (parsedJson.embed_zim) {
-         // Place content in each lib directory for embeded zims
+          // Place content in each lib directory for embeded zims
           for (String archName : archs) {
-           copy {
-             from sourceFile
-             into file(directory + "/jniLibs/" + archName)
-             rename { String filename -> "libcontent.so" }
-           }
-         }
-         parsedJson.zim_file = "libcontent.so"
+            copy {
+              from sourceFile
+              into file(directory + "/jniLibs/" + archName)
+              rename { String filename -> "libcontent.so" }
+            }
+          }
+          parsedJson.zim_file = "libcontent.so"
         }
         // Set custom config from json
         applicationId "$parsedJson.package"
@@ -326,7 +335,7 @@ android {
           buildConfigField "int", "CONTENT_VERSION_CODE", "$content_version_code"
         } else if (parsedJson.content_version_code != null) {
           buildConfigField "int", "CONTENT_VERSION_CODE", "$parsedJson.content_version_code"
-        } else if (project.hasProperty('version_code'))  {
+        } else if (project.hasProperty('version_code')) {
           def version_code = project.property('version_code')
           buildConfigField "int", "CONTENT_VERSION_CODE", "$version_code"
         } else if (parsedJson.version_code != null) {

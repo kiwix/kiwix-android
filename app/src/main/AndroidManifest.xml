@@ -76,7 +76,7 @@
         <data android:pathPattern=".*\\..*\\..*\\..*\\.zimaa" />
         <data android:host="*" />
       </intent-filter>
-      
+
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
 
@@ -183,6 +183,9 @@
     <activity
       android:name=".error.ErrorActivity"
       android:process=":error_activity" />
+    <activity
+      android:name=".main2.MainActivity"
+      android:theme="@style/AppTheme.Translucent.Light" />
 
     <provider
       android:name="android.support.v4.content.FileProvider"

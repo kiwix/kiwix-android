@@ -25,4 +25,5 @@
   <color name="back_to_top_text">@android:color/black</color>
   <color name="back_to_top_background_night">#FF000000</color>
   <color name="back_to_top_text_night">#FFFFFFFF</color>
+  <color name="window_background">@color/phone_tab_switcher_background_color</color>
 </resources>

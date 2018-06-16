@@ -23,4 +23,6 @@
     <attr name="bidirectionalAnimate" format="boolean"/>
   </declare-styleable>
 
+  <attr name="toolbarTheme" format="reference" />
+
 </resources>

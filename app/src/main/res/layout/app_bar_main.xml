@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/app_bar_main"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context=".main2.MainActivity">
+
+  <android.support.constraint.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+    <de.mrapp.android.util.view.UnfocusableToolbar
+      android:id="@+id/toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      android:background="@android:color/white"
+      android:focusable="false"
+      android:theme="?attr/toolbarTheme"
+      app:layout_constraintTop_toTopOf="parent"
+      app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <de.mrapp.android.tabswitcher.TabSwitcher
+      android:id="@+id/tab_switcher"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+  </android.support.constraint.ConstraintLayout>
+
+</android.support.design.widget.CoordinatorLayout>
