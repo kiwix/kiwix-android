@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixErrorActivity;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 
@@ -35,21 +36,23 @@ public class SplashActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
 
     Context appContext = getApplicationContext();
-    Thread.setDefaultUncaughtExceptionHandler((paramThread, paramThrowable) -> {
+    if (BuildConfig.KIWIX_ERROR_ACTIVITY) {
+      Thread.setDefaultUncaughtExceptionHandler((paramThread, paramThrowable) -> {
 
-      final Intent intent = new Intent(appContext, KiwixErrorActivity.class);
+        final Intent intent = new Intent(appContext, KiwixErrorActivity.class);
 
-      Bundle extras = new Bundle();
-      extras.putSerializable("exception", paramThrowable);
+        Bundle extras = new Bundle();
+        extras.putSerializable("exception", paramThrowable);
 
-      intent.putExtras(extras);
+        intent.putExtras(extras);
 
-      appContext.startActivity(intent);
+        appContext.startActivity(intent);
 
-      finish();
-      android.os.Process.killProcess(android.os.Process.myPid());
-      System.exit(10);
-    });
+        finish();
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(10);
+      });
+    }
 
     Intent intent = new Intent(this, KiwixMobileActivity.class);
     startActivity(intent);
