@@ -199,6 +199,7 @@ android {
     // Main build type for debugging
     debug {
       buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://download.kiwix.org/\""
+      buildConfigField "boolean", "KIWIX_ERROR_ACTIVITY", "false"
       // True breaks local variables being shown in breakpoints
       testCoverageEnabled false
       // Needed for instrumentation tests on Pre 5.0
@@ -227,6 +228,7 @@ android {
     // Release Type
     release {
       buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://download.kiwix.org/\""
+      buildConfigField "boolean", "KIWIX_ERROR_ACTIVITY", "true"
     }
 
   }
