@@ -4,6 +4,7 @@ import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.di.PerActivity;
 import org.kiwix.kiwixmobile.error.ErrorActivity;
 import org.kiwix.kiwixmobile.intro.IntroActivity;
+import org.kiwix.kiwixmobile.intro.IntroModule;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
@@ -46,7 +47,7 @@ public abstract class ActivityBindingModule {
   public abstract ErrorActivity provideErrorActivity();
 
   @PerActivity
-  @ContributesAndroidInjector
+  @ContributesAndroidInjector(modules = IntroModule.class)
   public abstract IntroActivity provideIntroActivity();
 
   @PerActivity
