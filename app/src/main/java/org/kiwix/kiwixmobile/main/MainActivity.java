@@ -205,6 +205,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   CardView bottomToolbar;
   @BindView(R.id.bottom_toolbar_bookmark)
   ImageView bookmark;
+  @BindView(R.id.bottom_toolbar_arrow_back)
+  ImageView bottomToolbarArrowBack;
+  @BindView(R.id.bottom_toolbar_arrow_forward)
+  ImageView bottomToolbarArrowForward;
   @Inject
   OkHttpClient okHttpClient;
   @Inject
@@ -470,6 +474,19 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   void goForward() {
     if (getCurrentWebView().canGoForward()) {
       getCurrentWebView().goForward();
+    }
+  }
+
+  private void updateBottomToolbarArrowsAlpha() {
+    if (getCurrentWebView().canGoForward()) {
+      bottomToolbarArrowForward.setAlpha(1f);
+    } else {
+      bottomToolbarArrowForward.setAlpha(0.6f);
+    }
+    if (getCurrentWebView().canGoBack()) {
+      bottomToolbarArrowBack.setAlpha(1f);
+    } else {
+      bottomToolbarArrowBack.setAlpha(0.6f);
     }
   }
 
@@ -1855,8 +1872,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     updateTableOfContents();
     tabDrawerAdapter.notifyDataSetChanged();
 
-    if (menu != null)
+    if (menu != null) {
       refreshBookmarkSymbol(menu);
+    }
+    updateBottomToolbarArrowsAlpha();
   }
 
   @Override
