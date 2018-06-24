@@ -37,6 +37,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -48,6 +49,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.menu.ActionMenuItemView;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -83,6 +86,7 @@ import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
@@ -90,6 +94,7 @@ import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
+import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
@@ -141,9 +146,11 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
-public class MainActivity extends BaseActivity implements WebViewCallback {
+public class MainActivity extends BaseActivity implements WebViewCallback,
+    MainContract.View, BooksAdapter.OnItemClickListener {
 
   public static boolean isFullscreenOpened;
+  private static final int REQUEST_READ_STORAGE_PERMISSION = 2;
 
   private boolean isBackToTopEnabled = false;
 
@@ -207,6 +214,28 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
 
   private static final String NEW_TAB = "NEW_TAB";
 
+  private BooksAdapter booksAdapter;
+  private List<LibraryNetworkEntity.Book> books = new ArrayList<>();
+  private CardView emptyStateCardView;
+  private AppCompatButton downloadBookButton;
+  private FileSearch fileSearch = new FileSearch(this, new FileSearch.ResultListener() {
+    List<LibraryNetworkEntity.Book> newBooks = new ArrayList<>();
+
+    @Override
+    public void onBookFound(LibraryNetworkEntity.Book book) {
+      runOnUiThread(() -> {
+        if (!books.contains(book)) {
+          newBooks.add(book);
+        }
+      });
+    }
+
+    @Override
+    public void onScanCompleted() {
+      presenter.saveBooks(newBooks);
+    }
+  });
+
   @BindView(R.id.toolbar) Toolbar toolbar;
 
   @BindView(R.id.button_backtotop) Button backToTopButton;
@@ -255,6 +284,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
 
   @Inject
   BookmarksDao bookmarksDao;
+
+  @Inject
+  MainContract.Presenter presenter;
+
 
   @Override
   public void onActionModeStarted(ActionMode mode) {
@@ -348,6 +381,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
     getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
     super.onCreate(savedInstanceState);
+    presenter.attachView(this);
     wifiOnly = sharedPreferenceUtil.getPrefWifiOnly();
     nightMode = KiwixSettingsActivity.nightMode(sharedPreferenceUtil);
     if (nightMode) {
@@ -373,7 +407,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
     FileReader fileReader = new FileReader();
     documentParserJs = fileReader.readFile("js/documentParser.js", this);
 
-    newTabButton.setOnClickListener((View view) -> newTab());
+    newTabButton.setOnClickListener((View view) -> newTab("file:///android_asset/home.html"));
     tabForwardButtonContainer.setOnClickListener((View view) -> {
       if (getCurrentWebView().canGoForward()) {
         getCurrentWebView().goForward();
@@ -502,6 +536,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
     } else {
       backToTopAppearDaily();
     }
+
+    booksAdapter = new BooksAdapter(books, this);
+
+    searchFiles();
   }
 
   private void backToTopAppearDaily() {
@@ -552,9 +590,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
           visitCounterPref.setNoThanksState(true);
           goToRateApp();
         })
-        .setNegativeButton(negative, (dialog, id) -> {
-          visitCounterPref.setNoThanksState(true);
-        })
+        .setNegativeButton(negative, (dialog, id) -> visitCounterPref.setNoThanksState(true))
         .setNeutralButton(neutral, (dialog, id) -> {
           tempVisitCount = 0;
           visitCounterPref.setCount(tempVisitCount);
@@ -629,25 +665,22 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
           pauseTTSButton.setText(R.string.tts_pause);
         });
       }
-    }, new AudioManager.OnAudioFocusChangeListener() {
-      @Override
-      public void onAudioFocusChange(int focusChange) {
-        Log.d(TAG_KIWIX, "Focus change: " + String.valueOf(focusChange));
-        if (tts.currentTTSTask == null) {
-          tts.stop();
-          return;
-        }
-        switch (focusChange) {
-          case (AudioManager.AUDIOFOCUS_LOSS):
-            if (!tts.currentTTSTask.paused) tts.pauseOrResume();
-            pauseTTSButton.setText(R.string.tts_resume);
-            break;
-          case (AudioManager.AUDIOFOCUS_GAIN):
-            pauseTTSButton.setText(R.string.tts_pause);
-            break;
-        }
+    }, focusChange -> {
+      Log.d(TAG_KIWIX, "Focus change: " + String.valueOf(focusChange));
+      if (tts.currentTTSTask == null) {
+        tts.stop();
+        return;
       }
-  });
+      switch (focusChange) {
+        case (AudioManager.AUDIOFOCUS_LOSS):
+          if (!tts.currentTTSTask.paused) tts.pauseOrResume();
+          pauseTTSButton.setText(R.string.tts_resume);
+          break;
+        case (AudioManager.AUDIOFOCUS_GAIN):
+          pauseTTSButton.setText(R.string.tts_pause);
+          break;
+      }
+    });
 
     pauseTTSButton.setOnClickListener(view -> {
       if (tts.currentTTSTask == null) {
@@ -675,6 +708,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
 
   @Override
   protected void onDestroy() {
+    presenter.detachView();
+    if (downloadBookButton != null) {
+      downloadBookButton.setOnClickListener(null);
+    }
     super.onDestroy();
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(this);
@@ -941,7 +978,18 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
     }
   }
 
+  @Override
+  public void showHomePage() {
+    getCurrentWebView().removeAllViews();
+    getCurrentWebView().loadUrl("file:///android_asset/home.html");
+    if (getSupportActionBar() != null) {
+      getSupportActionBar().setTitle(createMenuText(getString(R.string.app_name)));
+    }
+  }
+
+  @Override
   public void showHelpPage() {
+    getCurrentWebView().removeAllViews();
     getCurrentWebView().loadUrl("file:///android_asset/help.html");
   }
 
@@ -1017,14 +1065,14 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
         } else {
           Toast.makeText(this, getResources().getString(R.string.error_fileinvalid),
               Toast.LENGTH_LONG).show();
-          showHelpPage();
+          showHomePage();
         }
       } else {
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
 
         Toast.makeText(this, getResources().getString(R.string.error_filenotfound), Toast.LENGTH_LONG)
             .show();
-        showHelpPage();
+        showHomePage();
       }
       return false;
     } else {
@@ -1045,7 +1093,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
 
   @Override
   public void onRequestPermissionsResult(int requestCode,
-      String permissions[], int[] grantResults) {
+                                         @NonNull String permissions[], @NonNull int[] grantResults) {
     switch (requestCode) {
       case REQUEST_STORAGE_PERMISSION: {
         if (grantResults.length > 0
@@ -1059,7 +1107,23 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
           builder.setMessage(getResources().getString(R.string.reboot_message));
           AlertDialog dialog = builder.create();
           dialog.show();
-          finish();
+        }
+        break;
+      }
+
+      case REQUEST_READ_STORAGE_PERMISSION: {
+        if (grantResults.length > 0
+            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+          fileSearch.scan(sharedPreferenceUtil.getPrefStorage());
+        } else {
+          Snackbar.make(snackbarLayout, R.string.request_storage, Snackbar.LENGTH_LONG)
+              .setAction(R.string.menu_settings, view -> {
+                Intent intent = new Intent();
+                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                intent.setData(uri);
+                startActivity(intent);
+              }).show();
         }
       }
     }
@@ -1289,7 +1353,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
           break;
         }
         case NEW_TAB:
-          newTab();
+          newTab("file:///android_asset/home.html");
           break;
       }
 
@@ -1585,7 +1649,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
     refreshBookmarkSymbol(menu);
     refreshNavigationButtons();
 
-    if (getCurrentWebView().getUrl() == null || getCurrentWebView().getUrl().equals("file:///android_asset/help.html")) {
+    if (getCurrentWebView().getUrl() == null ||
+        getCurrentWebView().getUrl().equals("file:///android_asset/help.html") ||
+        getCurrentWebView().getUrl().equals("file:///android_asset/home.html")) {
       menu.findItem(R.id.menu_read_aloud).setVisible(false);
     } else {
       menu.findItem(R.id.menu_read_aloud).setVisible(true);
@@ -1828,7 +1894,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
           }
         } else {
           Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display help page");
-          showHelpPage();
+          showHomePage();
         }
       }
     }
@@ -1950,4 +2016,54 @@ public class MainActivity extends BaseActivity implements WebViewCallback {
     }
   }
 
+  @Override
+  public void setHomePage(View view) {
+    RecyclerView homeRecyclerView = view.findViewById(R.id.recycler_view);
+    presenter.showHome();
+    homeRecyclerView.setAdapter(booksAdapter);
+    emptyStateCardView = view.findViewById(R.id.content_main_card);
+    downloadBookButton = view.findViewById(R.id.content_main_card_download_button);
+    downloadBookButton.setOnClickListener(v -> manageZimFiles(1));
+  }
+
+  @Override
+  public void openFile(String url) {
+    File file = new File(url);
+    Intent zimFile = new Intent(MainActivity.this, MainActivity.class);
+    zimFile.setData(Uri.fromFile(file));
+    startActivity(zimFile);
+    finish();
+  }
+
+  @Override
+  public void addBooks(List<LibraryNetworkEntity.Book> books) {
+    this.books.clear();
+    this.books.addAll(books);
+    booksAdapter.notifyDataSetChanged();
+    if (nightMode) {
+      ImageView cardImage = emptyStateCardView.findViewById(R.id.content_main_card_image);
+      cardImage.setImageResource(R.drawable.ic_home_kiwix_banner_night);
+    }
+  }
+
+  void searchFiles() {
+    if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
+      if (ContextCompat.checkSelfPermission(this,
+          Manifest.permission.READ_EXTERNAL_STORAGE)
+          != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+            Manifest.permission.READ_EXTERNAL_STORAGE)) {
+          Toast.makeText(this, R.string.request_storage,
+              Toast.LENGTH_LONG).show();
+        }
+        ActivityCompat.requestPermissions(this,
+            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+            REQUEST_READ_STORAGE_PERMISSION);
+      } else {
+        fileSearch.scan(sharedPreferenceUtil.getPrefStorage());
+      }
+    } else {
+      fileSearch.scan(sharedPreferenceUtil.getPrefStorage());
+    }
+  }
 }

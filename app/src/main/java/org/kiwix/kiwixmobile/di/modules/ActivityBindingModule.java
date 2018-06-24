@@ -5,6 +5,7 @@ import org.kiwix.kiwixmobile.di.PerActivity;
 import org.kiwix.kiwixmobile.error.ErrorActivity;
 import org.kiwix.kiwixmobile.intro.IntroActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
+import org.kiwix.kiwixmobile.main.MainModule;
 import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.splash.SplashActivity;
@@ -22,8 +23,8 @@ import dagger.android.ContributesAndroidInjector;
 @Module
 public abstract class ActivityBindingModule {
   @PerActivity
-  @ContributesAndroidInjector
-  public abstract MainActivity provideKiwixMobileActivity();
+  @ContributesAndroidInjector(modules = MainModule.class)
+  public abstract MainActivity provideMainActivity();
 
   @PerActivity
   @ContributesAndroidInjector

@@ -25,6 +25,8 @@
   <color name="back_to_top_text">@android:color/black</color>
   <color name="back_to_top_background_night">#FF000000</color>
   <color name="back_to_top_text_night">#FFFFFFFF</color>
+  <color name="picture_label">#fb8c00</color>
+  <color name="video_label">#651FFF</color>
   <color name="blue800">#1565c0</color>
   <color name="blueTransparent">#962e7ac4</color>
 </resources>
