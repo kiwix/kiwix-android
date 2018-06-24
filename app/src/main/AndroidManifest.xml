@@ -195,6 +195,7 @@
         android:resource="@xml/provider_paths" />
     </provider>
 
+    <activity android:name=".intro.IntroActivity" />
   </application>
 
 </manifest>

@@ -76,6 +76,9 @@ dependencies {
   androidTestImplementation 'com.android.support.test:runner:1.0.1'
   androidTestImplementation 'com.android.support.test:rules:1.0.1'
 
+  // Tab indicator
+  implementation "com.pacioianu.david:ink-page-indicator:$inkPageIndicatorVersion"
+
   // Guava
   implementation group: 'com.google.guava', name: 'guava', version: '21.0'
 

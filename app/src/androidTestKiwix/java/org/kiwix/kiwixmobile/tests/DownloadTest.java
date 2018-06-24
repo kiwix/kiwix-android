@@ -38,7 +38,7 @@ package org.kiwix.kiwixmobile.tests;
  import org.junit.Test;
  import org.junit.runner.RunWith;
  import org.kiwix.kiwixmobile.R;
- import org.kiwix.kiwixmobile.splash.SplashActivity;
+ import org.kiwix.kiwixmobile.main.MainActivity;
  import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
 
  import java.util.concurrent.TimeUnit;
@@ -64,9 +64,9 @@ package org.kiwix.kiwixmobile.tests;
 @RunWith(AndroidJUnit4.class)
 public class DownloadTest {
 
-  public static final String KIWIX_DOWNLOAD_TEST = "kiwixDownloadTest";
+  private static final String KIWIX_DOWNLOAD_TEST = "kiwixDownloadTest";
   @Rule
-  public ActivityTestRule<SplashActivity> mActivityTestRule = new ActivityTestRule<>(SplashActivity.class);
+  public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
   @Rule
   public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule
