@@ -201,4 +201,11 @@
   <string name="go_to_previous_page">Go to previous page</string>
   <string name="go_to_next_page">Go to next page</string>
   <string name="table_of_contents">Table of contents</string>
+  <string name="select_languages">Select languages</string>
+  <string name="save_languages">Save languages</string>
+  <string name="languages_saved">Languages saved</string>
+  <plurals name="books_count">
+    <item quantity="one">%d book</item>
+    <item quantity="other">%d books</item>
+  </plurals>
 </resources>

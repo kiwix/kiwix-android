@@ -25,15 +25,8 @@ import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.error.ErrorActivity;
 import org.kiwix.kiwixmobile.intro.IntroActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
-import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
-
-import javax.inject.Inject;
-
 
 public class SplashActivity extends BaseActivity {
-
-  @Inject
-  SharedPreferenceUtil preferences;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +50,7 @@ public class SplashActivity extends BaseActivity {
     });
 
     Intent intent;
-    if (!preferences.showIntro()) {
+    if (!sharedPreferenceUtil.showIntro()) {
       intent = new Intent(this, MainActivity.class);
     } else {
       intent = new Intent(this, IntroActivity.class);

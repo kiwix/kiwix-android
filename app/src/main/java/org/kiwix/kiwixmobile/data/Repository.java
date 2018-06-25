@@ -1,7 +1,9 @@
 package org.kiwix.kiwixmobile.data;
 
 import org.kiwix.kiwixmobile.data.local.dao.BookDao;
+import org.kiwix.kiwixmobile.data.local.dao.NetworkLanguageDao;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.models.Language;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.Locale;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.Single;
@@ -22,14 +25,17 @@ import io.reactivex.Single;
 public class Repository implements DataSource {
 
   private BookDao bookDao;
+  private NetworkLanguageDao languageDao;
   private Scheduler io;
   private Scheduler mainThread;
 
   @Inject
-  Repository(@IO Scheduler io, @MainThread Scheduler mainThread, BookDao bookDao) {
+  Repository(@IO Scheduler io, @MainThread Scheduler mainThread, BookDao bookDao,
+             NetworkLanguageDao languageDao) {
     this.io = io;
     this.mainThread = mainThread;
     this.bookDao = bookDao;
+    this.languageDao = languageDao;
   }
 
   @Override
@@ -62,5 +68,10 @@ public class Repository implements DataSource {
   @Override
   public void saveBooks(List<LibraryNetworkEntity.Book> books) {
     bookDao.saveBooks((ArrayList<LibraryNetworkEntity.Book>) books);
+  }
+
+  @Override
+  public Completable saveLanguages(List<Language> languages) {
+    return Completable.fromAction(() -> languageDao.saveFilteredLanguages(languages));
   }
 }

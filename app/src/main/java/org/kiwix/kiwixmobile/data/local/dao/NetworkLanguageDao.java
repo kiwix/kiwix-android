@@ -24,8 +24,7 @@ import com.yahoo.squidb.sql.Query;
 
 import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
 import org.kiwix.kiwixmobile.data.local.entity.NetworkLanguageDatabaseEntity;
-import org.kiwix.kiwixmobile.library.LibraryAdapter;
-import org.kiwix.kiwixmobile.library.LibraryAdapter.Language;
+import org.kiwix.kiwixmobile.models.Language;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,31 +36,28 @@ public class NetworkLanguageDao {
   private KiwixDatabase mDb;
 
   @Inject
-  public NetworkLanguageDao(KiwixDatabase kiwikDatabase) {
-    this.mDb = kiwikDatabase;
+  public NetworkLanguageDao(KiwixDatabase kiwixDatabase) {
+    this.mDb = kiwixDatabase;
   }
 
-  public ArrayList<LibraryAdapter.Language> getFilteredLanguages() {
-    SquidCursor<NetworkLanguageDatabaseEntity> languageCursor = mDb.query(
+  public ArrayList<Language> getFilteredLanguages() {
+    ArrayList<Language> result = new ArrayList<>();
+    try (SquidCursor<NetworkLanguageDatabaseEntity> languageCursor = mDb.query(
         NetworkLanguageDatabaseEntity.class,
-        Query.select());
-    ArrayList<LibraryAdapter.Language> result = new ArrayList<>();
-    try {
+        Query.select())) {
       while (languageCursor.moveToNext()) {
         String languageCode = languageCursor.get(NetworkLanguageDatabaseEntity.LANGUAGE_I_S_O_3);
         boolean enabled = languageCursor.get(NetworkLanguageDatabaseEntity.ENABLED);
-        result.add(new LibraryAdapter.Language(languageCode, enabled));
+        result.add(new Language(languageCode, enabled));
       }
-    } finally {
-      languageCursor.close();
     }
     return result;
   }
 
-  public void saveFilteredLanguages(List<Language> languages){
+  public void saveFilteredLanguages(List<Language> languages) {
     mDb.deleteAll(NetworkLanguageDatabaseEntity.class);
     Collections.sort(languages, (language, t1) -> language.language.compareTo(t1.language));
-    for (LibraryAdapter.Language language : languages){
+    for (Language language : languages) {
       NetworkLanguageDatabaseEntity networkLanguageDatabaseEntity = new NetworkLanguageDatabaseEntity();
       networkLanguageDatabaseEntity.setLanguageISO3(language.languageCode);
       networkLanguageDatabaseEntity.setIsEnabled(language.active);

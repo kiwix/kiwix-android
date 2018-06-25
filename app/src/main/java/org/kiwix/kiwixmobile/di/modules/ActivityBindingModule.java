@@ -4,6 +4,8 @@ import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.di.PerActivity;
 import org.kiwix.kiwixmobile.error.ErrorActivity;
 import org.kiwix.kiwixmobile.intro.IntroActivity;
+import org.kiwix.kiwixmobile.language.LanguageActivity;
+import org.kiwix.kiwixmobile.language.LanguageModule;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.main.MainModule;
 import org.kiwix.kiwixmobile.search.SearchActivity;
@@ -53,4 +55,8 @@ public abstract class ActivityBindingModule {
   @PerActivity
   @ContributesAndroidInjector
   public abstract SplashActivity provideSplashActivity();
+
+  @PerActivity
+  @ContributesAndroidInjector(modules = LanguageModule.class)
+  public abstract LanguageActivity provideLanguageActivity();
 }
