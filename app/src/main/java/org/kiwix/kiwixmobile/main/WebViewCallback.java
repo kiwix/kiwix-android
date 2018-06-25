@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.main;
 
 import android.content.Intent;
+import android.view.View;
 
 public interface WebViewCallback {
   void webViewUrlLoading();
@@ -27,6 +28,8 @@ public interface WebViewCallback {
   void webViewFailedLoading(String failingUrl);
 
   void showHelpPage();
+
+  void showHomePage();
 
   void sendContactEmail();
 
@@ -41,4 +44,6 @@ public interface WebViewCallback {
   void webViewPageChanged(int page, int maxPages);
 
   void webViewLongClick(String url);
+
+  void setHomePage(View view);
 }

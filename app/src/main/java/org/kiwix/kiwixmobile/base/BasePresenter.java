@@ -17,6 +17,8 @@
  */
 package org.kiwix.kiwixmobile.base;
 
+import io.reactivex.disposables.CompositeDisposable;
+
 /**
  * All presenters should inherit from this presenter.
  */
@@ -24,6 +26,7 @@ package org.kiwix.kiwixmobile.base;
 public abstract class BasePresenter<T extends BaseContract.View> implements BaseContract.Presenter<T> {
 
   protected T view;
+  protected CompositeDisposable compositeDisposable = new CompositeDisposable();
 
   @Override
   public void attachView(T view) {
@@ -33,5 +36,8 @@ public abstract class BasePresenter<T extends BaseContract.View> implements Base
   @Override
   public void detachView() {
     view = null;
+    if (!compositeDisposable.isDisposed()) {
+      compositeDisposable.dispose();
+    }
   }
 }
