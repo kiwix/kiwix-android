@@ -41,33 +41,27 @@ public class BookmarksDao {
   }
 
   public ArrayList<String> getBookmarks(String ZimId, String ZimName) {
-    SquidCursor<Bookmarks> bookmarkCursor = mDb.query(
+    ArrayList<String> result = new ArrayList<>();
+    try (SquidCursor<Bookmarks> bookmarkCursor = mDb.query(
         Bookmarks.class,
         Query.selectDistinct(Bookmarks.BOOKMARK_URL).where(Bookmarks.ZIM_ID.eq(ZimId).or(Bookmarks.ZIM_NAME.eq(ZimName)))
-            .orderBy(Bookmarks.BOOKMARK_TITLE.asc()));
-    ArrayList<String> result = new ArrayList<>();
-    try {
+            .orderBy(Bookmarks.BOOKMARK_TITLE.asc()))) {
       while (bookmarkCursor.moveToNext()) {
         result.add(bookmarkCursor.get(Bookmarks.BOOKMARK_URL));
       }
-    } finally {
-      bookmarkCursor.close();
     }
     return result;
   }
 
   public ArrayList<String> getBookmarkTitles(String ZimId, String ZimName) {
-    SquidCursor<Bookmarks> bookmarkCursor = mDb.query(
+    ArrayList<String> result = new ArrayList<>();
+    try (SquidCursor<Bookmarks> bookmarkCursor = mDb.query(
         Bookmarks.class,
         Query.selectDistinct(Bookmarks.BOOKMARK_TITLE).where(Bookmarks.ZIM_ID.eq(ZimId).or(Bookmarks.ZIM_NAME.eq(ZimName)))
-            .orderBy(Bookmarks.BOOKMARK_TITLE.asc()));
-    ArrayList<String> result = new ArrayList<>();
-    try {
+            .orderBy(Bookmarks.BOOKMARK_TITLE.asc()))) {
       while (bookmarkCursor.moveToNext()) {
         result.add(bookmarkCursor.get(Bookmarks.BOOKMARK_TITLE));
       }
-    } finally {
-      bookmarkCursor.close();
     }
 
 
@@ -76,9 +70,9 @@ public class BookmarksDao {
 
   /**
    * Save bookmark by:
-   * @param articleUrl
-   * @param articleTitle
-   * @param ZimId
+   * @param articleUrl Url of the article
+   * @param articleTitle Title of the article
+   * @param ZimId Id of zim file containing article
      */
   public void saveBookmark(String articleUrl, String articleTitle, String ZimId, String ZimName) {
     if (articleUrl != null) {

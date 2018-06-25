@@ -197,4 +197,8 @@
   <string name="welcome_to_the_family">Welcome to the family</string>
   <string name="save_books_offline">Save books offline</string>
   <string name="download_books_message">Download books and read wherever you are.</string>
+  <string name="unable_to_add_to_bookmarks">Unable to add to bookmarks</string>
+  <string name="go_to_previous_page">Go to previous page</string>
+  <string name="go_to_next_page">Go to next page</string>
+  <string name="table_of_contents">Table of contents</string>
 </resources>

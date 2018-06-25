@@ -10,7 +10,7 @@
 
   <item
     android:id="@+id/menu_bookmarks"
-    android:icon="@drawable/action_bookmark_active"
+    android:icon="@drawable/ic_bookmark_24dp"
     android:title="@string/menu_bookmarks"
     android:visible="false"
     app:showAsAction="always" />
