@@ -168,11 +168,11 @@ public class ZimFileSelectFragment extends BaseFragment
 
   public void checkPermissions(){
     if (ContextCompat.checkSelfPermission(super.getActivity(),
-        Manifest.permission.READ_EXTERNAL_STORAGE)
+        Manifest.permission.WRITE_EXTERNAL_STORAGE)
         != PackageManager.PERMISSION_GRANTED && Build.VERSION.SDK_INT > 18) {
       Toast.makeText(super.getActivity(), getResources().getString(R.string.request_storage), Toast.LENGTH_LONG)
           .show();
-        requestPermissions( new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+        requestPermissions( new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
             REQUEST_STORAGE_PERMISSION);
     } else {
       getFiles();
