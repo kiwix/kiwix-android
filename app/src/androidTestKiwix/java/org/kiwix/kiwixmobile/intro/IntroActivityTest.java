@@ -92,6 +92,7 @@ public class IntroActivityTest {
       } catch (Exception e) {
         // Do Nothing
       }
+      i++;
     }
     assertEquals("siddharth", true, found1);
 
