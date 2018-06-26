@@ -19,5 +19,7 @@ class MainContract {
     void showHome();
 
     void saveBooks(List<LibraryNetworkEntity.Book> books);
+
+    void saveHistory(String file, String favicon, String url, String title, long time);
   }
 }
