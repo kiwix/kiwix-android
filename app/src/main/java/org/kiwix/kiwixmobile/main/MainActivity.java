@@ -84,6 +84,7 @@ import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
+import org.kiwix.kiwixmobile.history.HistoryActivity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
@@ -148,6 +149,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     MainContract.View, BooksAdapter.OnItemClickListener {
 
   private static final int REQUEST_READ_STORAGE_PERMISSION = 2;
+  private static final int REQUEST_HISTORY_ITEM_CHOSEN = 99;
   private static final String NEW_TAB = "NEW_TAB";
   public static boolean isFullscreenOpened;
   public static boolean refresh;
@@ -864,6 +866,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         }
         break;
 
+      case R.id.menu_history:
+        startActivityForResult(new Intent(this, HistoryActivity.class), REQUEST_HISTORY_ITEM_CHOSEN);
+        return true;
+
       default:
         break;
     }
@@ -1534,6 +1540,33 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           }
         }
         break;
+
+      case REQUEST_HISTORY_ITEM_CHOSEN:
+        if (resultCode == RESULT_OK) {
+          if (data.getData() != null) {
+            final Uri uri = data.getData();
+            File file = null;
+            if (uri != null) {
+              String path = uri.getPath();
+              if (path != null) {
+                file = new File(path);
+              }
+            }
+            if (file == null) {
+              Toast.makeText(this, R.string.error_filenotfound, Toast.LENGTH_LONG).show();
+              return;
+            }
+            Intent zimFile = new Intent(MainActivity.this, MainActivity.class);
+            zimFile.setData(uri);
+            zimFile.putExtra(EXTRA_CHOSE_X_URL, data.getStringExtra(EXTRA_CHOSE_X_URL));
+            startActivity(zimFile);
+            finish();
+            return;
+          }
+          newTab();
+          getCurrentWebView().loadUrl(data.getStringExtra(EXTRA_CHOSE_X_URL));
+        }
+        return;
       default:
         break;
     }
@@ -1866,6 +1899,13 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       refreshBookmarkSymbol(menu);
     }
     updateBottomToolbarArrowsAlpha();
+    String url = getCurrentWebView().getUrl();
+    if (url != null && !url.equals("file:///android_asset/home.html") &&
+        !url.equals("file:///android_asset/help.html")) {
+      presenter.saveHistory(ZimContentProvider.getZimFile(),
+          ZimContentProvider.getFavicon(), getCurrentWebView().getUrl(),
+          getCurrentWebView().getTitle(), System.currentTimeMillis());
+    }
   }
 
   @Override
