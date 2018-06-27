@@ -12,13 +12,12 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.models.Language;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.ViewHolder> {
-  private ArrayList<Language> languages;
+  private final ArrayList<Language> languages;
 
   LanguageAdapter(ArrayList<Language> languages) {
     this.languages = languages;
@@ -56,11 +55,6 @@ class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.ViewHolder> {
   @Override
   public int getItemCount() {
     return languages.size();
-  }
-
-  public void setLanguages(List<Language> languages) {
-    this.languages.clear();
-    this.languages.addAll(languages);
   }
 
   class ViewHolder extends RecyclerView.ViewHolder {

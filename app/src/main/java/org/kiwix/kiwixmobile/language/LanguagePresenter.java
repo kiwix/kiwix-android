@@ -22,10 +22,10 @@ import io.reactivex.disposables.Disposable;
 
 @PerActivity
 class LanguagePresenter extends BasePresenter<LanguageContract.View> implements LanguageContract.Presenter {
-  private Scheduler mainThread;
-  private Scheduler computation;
-  private Scheduler io;
-  private DataSource dataSource;
+  private final Scheduler mainThread;
+  private final Scheduler computation;
+  private final Scheduler io;
+  private final DataSource dataSource;
 
   @Inject
   LanguagePresenter(DataSource dataSource, @Computation Scheduler computation, @MainThread Scheduler mainThread,

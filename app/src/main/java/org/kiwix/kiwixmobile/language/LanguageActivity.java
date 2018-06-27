@@ -24,6 +24,8 @@ import butterknife.BindView;
 public class LanguageActivity extends BaseActivity implements LanguageContract.View {
 
   public static final String LANGUAGE_LIST = "languages";
+  private final ArrayList<Language> languages = new ArrayList<>();
+  private final ArrayList<Language> allLanguages = new ArrayList<>();
 
   @BindView(R.id.activity_language_toolbar)
   Toolbar toolbar;
@@ -32,8 +34,6 @@ public class LanguageActivity extends BaseActivity implements LanguageContract.V
   @Inject
   LanguageContract.Presenter presenter;
 
-  private ArrayList<Language> languages = new ArrayList<>();
-  private ArrayList<Language> allLanguages;
   private LanguageAdapter languageAdapter;
 
   @Override
@@ -53,7 +53,7 @@ public class LanguageActivity extends BaseActivity implements LanguageContract.V
     Intent intent = getIntent();
 
     languages.addAll(intent.getParcelableArrayListExtra(LANGUAGE_LIST));
-    allLanguages = new ArrayList<>(languages);
+    allLanguages.addAll(languages);
     languageAdapter = new LanguageAdapter(languages);
     recyclerView.setAdapter(languageAdapter);
 
@@ -103,7 +103,8 @@ public class LanguageActivity extends BaseActivity implements LanguageContract.V
 
   @Override
   public void notifyLanguagesFiltered(List<Language> languages) {
-    languageAdapter.setLanguages(languages);
+    this.languages.clear();
+    this.languages.addAll(languages);
     languageAdapter.notifyDataSetChanged();
   }
 
