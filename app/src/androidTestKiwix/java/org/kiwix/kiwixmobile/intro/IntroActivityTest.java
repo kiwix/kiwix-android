@@ -48,20 +48,20 @@ public class IntroActivityTest {
   public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @Test
-  public void testUIHierarchy(){
+  public void testUI(){
     activityTestRule.launchActivity();
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    ViewInteraction customViewPager = onView(withId(R.id.view_pager));
+    ViewInteraction viewPager = onView(withId(R.id.view_pager));
 
     // Verify that the sliding view is working properly
-    customViewPager.perform(swipeLeft());
+    viewPager.perform(swipeLeft());
     onView(allOf(withId(R.id.heading), withText(R.string.save_books_offline), isDisplayed()))
         .check(matches(notNullValue()));
     onView(allOf(withId(R.id.subheading), withText(R.string.download_books_message), isDisplayed()))
         .check(matches(notNullValue()));
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    customViewPager.perform(swipeRight());
+    viewPager.perform(swipeRight());
     onView(allOf(withId(R.id.heading), withText(R.string.welcome_to_the_family), isDisplayed()))
         .check(matches(notNullValue()));
     onView(allOf(withId(R.id.subheading), withText(R.string.human_kind_knowledge), isDisplayed()))
@@ -76,7 +76,7 @@ public class IntroActivityTest {
 
     // Verify that the button is there
     onView(withId(R.id.get_started)).check(matches(notNullValue()));
-    onView(withId(R.id.get_started)).check(matches(withText("Get started")));
+    onView(withId(R.id.get_started)).check(matches(withText(R.string.get_started)));
     onView(withId(R.id.get_started)).perform(click());
 
     // Test the intent generated for MainActivity
