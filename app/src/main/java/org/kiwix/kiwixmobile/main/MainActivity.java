@@ -349,25 +349,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     tableDrawerRight.setLayoutManager(new LinearLayoutManager(this));
 
-    TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter();
+    TableDrawerAdapter tableDrawerAdapter = setupTableDrawerAdapter();
     tableDrawerRight.setAdapter(tableDrawerAdapter);
-    tableDrawerAdapter.setTableClickListener(new TableClickListener() {
-      @Override
-      public void onHeaderClick(View view) {
-        getCurrentWebView().setScrollY(0);
-        drawerLayout.closeDrawer(GravityCompat.END);
-      }
-
-      @Override
-      public void onSectionClick(View view, int position) {
-        getCurrentWebView().loadUrl("javascript:document.getElementById('"
-            + documentSections.get(position).id
-            + "').scrollIntoView();");
-
-        drawerLayout.closeDrawers();
-      }
-    });
-
     tableDrawerAdapter.notifyDataSetChanged();
 
     tabsAdapter.setTabClickListener(new TabsAdapter.TabClickListener() {
@@ -453,6 +436,26 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     searchFiles();
     tabRecyclerView.setAdapter(tabsAdapter);
     new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
+  }
+
+  private TableDrawerAdapter setupTableDrawerAdapter() {
+    TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter();
+    tableDrawerAdapter.setTableClickListener(new TableClickListener() {
+      @Override
+      public void onHeaderClick(View view) {
+        getCurrentWebView().setScrollY(0);
+        drawerLayout.closeDrawer(GravityCompat.END);
+      }
+
+      @Override
+      public void onSectionClick(View view, int position) {
+        getCurrentWebView().loadUrl("javascript:document.getElementById('"
+            + documentSections.get(position).id
+            + "').scrollIntoView();");
+        drawerLayout.closeDrawers();
+      }
+    });
+    return tableDrawerAdapter;
   }
 
   private void showTabSwitcher() {
