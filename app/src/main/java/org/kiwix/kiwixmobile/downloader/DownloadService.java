@@ -512,7 +512,7 @@ public class DownloadService extends Service {
               }
 
               if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getApplicationContext()) ||
-                      NetworkUtils.isNetworkAvailable(getApplicationContext())) {
+                      !NetworkUtils.isNetworkAvailable(getApplicationContext())) {
                 pauseDownload(chunk.getNotificationID());
               }
 
