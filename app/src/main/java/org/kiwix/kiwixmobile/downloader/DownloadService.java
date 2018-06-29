@@ -137,8 +137,7 @@ public class DownloadService extends Service {
     if (intent == null) {
       return START_NOT_STICKY;
     }
-    String log = intent.getAction();
-    log += "   :   ";
+    String log = intent.getAction() + "   :   ";
     if (intent.hasExtra(NOTIFICATION_ID)) {
       log += intent.getIntExtra(NOTIFICATION_ID, -3);
     }
@@ -202,7 +201,7 @@ public class DownloadService extends Service {
           .addAction(pause)
           .addAction(stop)
           .setOngoing(true));
-      
+
       notificationManager.notify(notificationID, notification.get(notificationID).build());
       downloadStatus.put(notificationID, PLAY);
       LibraryFragment.downloadingBooks.remove(book);
@@ -512,7 +511,8 @@ public class DownloadService extends Service {
                 break;
               }
 
-              if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getApplicationContext())) {
+              if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getApplicationContext()) ||
+                      NetworkUtils.isNetworkAvailable(getApplicationContext())) {
                 pauseDownload(chunk.getNotificationID());
               }
 
