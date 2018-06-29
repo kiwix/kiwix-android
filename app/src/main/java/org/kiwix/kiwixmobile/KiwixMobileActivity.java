@@ -402,6 +402,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
     TableDrawerAdapter tableDrawerAdapter = setupTableDrawerAdapter();
     tableDrawerRight.setAdapter(tableDrawerAdapter);
+    tableDrawerAdapter.notifyDataSetChanged();
 
     tabDrawerAdapter.setTabClickListener(new TabDrawerAdapter.TabClickListener() {
       @Override public void onSelectTab(View view, int position) {
@@ -523,8 +524,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
         drawerLayout.closeDrawers();
       }
     });
-
-    tableDrawerAdapter.notifyDataSetChanged();
 
     return tableDrawerAdapter;
   }
