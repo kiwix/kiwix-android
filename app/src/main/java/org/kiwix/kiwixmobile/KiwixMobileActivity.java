@@ -400,24 +400,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     tabDrawerLeft.setAdapter(tabDrawerAdapter);
     tableDrawerRight.setLayoutManager(new LinearLayoutManager(this));
 
-    TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter();
+    TableDrawerAdapter tableDrawerAdapter = setupTableDrawerAdapter();
     tableDrawerRight.setAdapter(tableDrawerAdapter);
-    tableDrawerAdapter.setTableClickListener(new TableClickListener() {
-      @Override public void onHeaderClick(View view) {
-        getCurrentWebView().setScrollY(0);
-        drawerLayout.closeDrawer(GravityCompat.END);
-      }
-
-      @Override public void onSectionClick(View view, int position) {
-        getCurrentWebView().loadUrl("javascript:document.getElementById('"
-            + documentSections.get(position).id
-            + "').scrollIntoView();");
-
-        drawerLayout.closeDrawers();
-      }
-    });
-
-    tableDrawerAdapter.notifyDataSetChanged();
 
     tabDrawerAdapter.setTabClickListener(new TabDrawerAdapter.TabClickListener() {
       @Override public void onSelectTab(View view, int position) {
@@ -520,6 +504,29 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     } else {
       backToTopAppearDaily();
     }
+  }
+
+  private TableDrawerAdapter setupTableDrawerAdapter() {
+    TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter();
+
+    tableDrawerAdapter.setTableClickListener(new TableClickListener() {
+      @Override public void onHeaderClick(View view) {
+        getCurrentWebView().setScrollY(0);
+        drawerLayout.closeDrawer(GravityCompat.END);
+      }
+
+      @Override public void onSectionClick(View view, int position) {
+        getCurrentWebView().loadUrl("javascript:document.getElementById('"
+                + documentSections.get(position).id
+                + "').scrollIntoView();");
+
+        drawerLayout.closeDrawers();
+      }
+    });
+
+    tableDrawerAdapter.notifyDataSetChanged();
+
+    return tableDrawerAdapter;
   }
 
   private void backToTopAppearDaily() {
