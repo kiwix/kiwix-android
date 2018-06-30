@@ -20,9 +20,11 @@ package org.kiwix.kiwixmobile.splash;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.test.espresso.intent.Intents;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
@@ -87,7 +89,7 @@ public class SplashActivityTest {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     // Verify that the SplashActivity is followed by MainActivity
-    //intended(hasComponent(MainActivity.class.getName()));
+    intended(hasComponent(MainActivity.class.getName()));
     Intents.release();
   }
 }
