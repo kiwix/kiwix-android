@@ -5,7 +5,6 @@
   <item
     android:id="@+id/menu_history_search"
     android:icon="@drawable/action_search"
-    android:queryHint="Search History"
     android:title="@string/search_label"
     app:actionViewClass="android.support.v7.widget.SearchView"
     app:iconifiedByDefault="true"

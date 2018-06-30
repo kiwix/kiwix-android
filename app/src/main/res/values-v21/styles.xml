@@ -11,6 +11,7 @@
     <item name="windowNoTitle">true</item>
     <item name="windowActionBar">false</item>
     <item name="progressBackgroundColor">@color/primary_dark</item>
+    <item name="actionModeBackground">@color/actionModeBackground</item>
     <item name="listBackground">@drawable/list_bg</item>
     <item name="android:windowContentOverlay">@null</item>
     <item name="windowActionModeOverlay">true</item>

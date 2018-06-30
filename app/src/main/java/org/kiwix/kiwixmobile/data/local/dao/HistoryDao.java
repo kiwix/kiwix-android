@@ -8,6 +8,7 @@ import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
 import org.kiwix.kiwixmobile.data.local.entity.History;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -24,7 +25,7 @@ public class HistoryDao {
         .setHistoryUrl(url).setHistoryTitle(title).setTimeStamp(timeStamp));
   }
 
-  public ArrayList<History> getHistoryList(boolean showHistoryCurrentBook) {
+  public List<History> getHistoryList(boolean showHistoryCurrentBook) {
     ArrayList<History> histories = new ArrayList<>();
     Query query = Query.select();
     if (showHistoryCurrentBook) {
@@ -43,5 +44,11 @@ public class HistoryDao {
       }
     }
     return histories;
+  }
+
+  public void deleteHistory(List<History> historyList) {
+    for (History history : historyList) {
+      kiwixDatabase.deleteWhere(History.class, History.TIME_STAMP.eq(history.getTimeStamp()));
+    }
   }
 }

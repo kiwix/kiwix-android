@@ -12,6 +12,7 @@
     <item name="android:textCursorDrawable">@null</item>
     <item name="windowNoTitle">true</item>
     <item name="windowActionBar">false</item>
+    <item name="actionModeBackground">@color/actionModeBackground</item>
     <item name="progressBackgroundColor">@color/primary_dark</item>
     <item name="listBackground">@drawable/list_bg</item>
     <item name="android:windowContentOverlay">@null</item>
@@ -62,13 +63,12 @@
   <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView" />
 
   <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-    <item name="android:textColorPrimary">@color/primary_light</item>
-    <item name="actionMenuTextColor">@android:color/white</item>
+
   </style>
 
   <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat">
-    <item name="android:textColorPrimary">@color/primary_light</item>
-    <item name="actionMenuTextColor">@android:color/white</item>
+    <item name="android:textColorPrimary">@color/primary_text</item>
+    <item name="actionMenuTextColor">@color/primary_text</item>
   </style>
 
   <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">

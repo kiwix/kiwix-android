@@ -1,5 +1,9 @@
 package org.kiwix.kiwixmobile.data;
 
+import org.kiwix.kiwixmobile.di.qualifiers.Computation;
+import org.kiwix.kiwixmobile.di.qualifiers.IO;
+import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
