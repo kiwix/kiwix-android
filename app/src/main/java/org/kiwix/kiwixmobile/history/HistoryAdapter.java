@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.history;
 
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +11,8 @@ import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.local.entity.History;
-import org.kiwix.kiwixmobile.library.LibraryAdapter;
 
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -21,12 +20,17 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-  private static int TYPE_ITEM = 1;
-  private List<History> historyList = new ArrayList<>();
-  private OnItemClickListener itemClickListener;
+import static org.kiwix.kiwixmobile.library.LibraryAdapter.createBitmapFromEncodedString;
 
-  HistoryAdapter(OnItemClickListener itemClickListener) {
+class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+  private static final int TYPE_ITEM = 1;
+  private final List<History> historyList;
+  private final OnItemClickListener itemClickListener;
+  private final List<History> deleteList;
+
+  HistoryAdapter(List<History> historyList, List<History> deleteList, OnItemClickListener itemClickListener) {
+    this.historyList = historyList;
+    this.deleteList = deleteList;
     this.itemClickListener = itemClickListener;
   }
 
@@ -48,10 +52,16 @@ class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
       History history = historyList.get(position);
       Item item = (Item) holder;
       item.title.setText(history.getHistoryTitle());
-      item.favicon.setImageBitmap(LibraryAdapter.createBitmapFromEncodedString(history.getFavicon(),
-          item.favicon.getContext()));
-      item.itemView.setOnClickListener(v -> itemClickListener
-          .openHistoryUrl(history.getHistoryUrl(), history.getZimFile()));
+      if (deleteList.contains(history)) {
+        item.favicon.setImageDrawable(ContextCompat.getDrawable(item.favicon.getContext(),
+            R.drawable.ic_check_circle_blue_24dp));
+      } else {
+        item.favicon.setImageBitmap(createBitmapFromEncodedString(history.getFavicon(),
+            item.favicon.getContext()));
+      }
+      item.itemView.setOnClickListener(v -> itemClickListener.onItemClick(item.favicon, history));
+      item.itemView.setOnLongClickListener(v ->
+          itemClickListener.onItemLongClick(item.favicon, history));
     } else {
       DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
       ((Category) holder).date.setText(dateFormat.format(new Date(historyList.get(position + 1)
@@ -69,13 +79,10 @@ class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     return historyList.size();
   }
 
-  public void setHistoryList(List<History> historyList) {
-    this.historyList = historyList;
-    notifyDataSetChanged();
-  }
-
   interface OnItemClickListener {
-    void openHistoryUrl(String historyUrl, String zimFile);
+    void onItemClick(ImageView favicon, History history);
+
+    boolean onItemLongClick(ImageView favicon, History history);
   }
 
   class Item extends RecyclerView.ViewHolder {

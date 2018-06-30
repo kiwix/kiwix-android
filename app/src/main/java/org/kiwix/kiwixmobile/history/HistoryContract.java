@@ -16,5 +16,7 @@ interface HistoryContract {
     void loadHistory(boolean showHistoryCurrentBook);
 
     void filterHistory(List<History> historyList, String newText);
+
+    void deleteHistory(List<History> deleteList);
   }
 }

@@ -4,6 +4,8 @@ import org.kiwix.kiwixmobile.data.local.dao.BookDao;
 import org.kiwix.kiwixmobile.data.local.dao.HistoryDao;
 import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.data.local.dao.NetworkLanguageDao;
+import org.kiwix.kiwixmobile.di.qualifiers.IO;
+import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.models.Language;
 
@@ -108,11 +110,20 @@ public class Repository implements DataSource {
             history = histories.get(position);
           }
           return histories;
-        });
+        })
+        .subscribeOn(io)
+        .observeOn(mainThread);
   }
 
   @Override
-  public void saveHistory(String file, String favicon, String url, String title, long timeStamp) {
-    historyDao.saveHistory(file, favicon, url, title, timeStamp);
+  public Completable saveHistory(String file, String favicon, String url, String title, long timeStamp) {
+    return Completable.fromAction(() -> historyDao.saveHistory(file, favicon, url, title, timeStamp))
+        .subscribeOn(io);
+  }
+
+  @Override
+  public Completable deleteHistory(List<History> historyList) {
+    return Completable.fromAction(() -> historyDao.deleteHistory(historyList))
+        .subscribeOn(io);
   }
 }
