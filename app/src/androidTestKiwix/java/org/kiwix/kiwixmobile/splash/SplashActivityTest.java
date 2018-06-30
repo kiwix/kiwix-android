@@ -80,8 +80,8 @@ public class SplashActivityTest {
   @Test
   public void testNormalRun() {
     Intents.init();
-    //SharedPreferences.Editor preferencesEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
-    //preferencesEditor.putBoolean(PREF_SHOW_INTRO, false).apply();
+    SharedPreferences.Editor preferencesEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+    preferencesEditor.putBoolean(PREF_SHOW_INTRO, false).apply();
 
     activityTestRule.launchActivity();
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
