@@ -88,10 +88,6 @@ public class SplashActivityTest {
 
     // Verify that the SplashActivity is followed by MainActivity
     intended(hasComponent(MainActivity.class.getName()));
+    Intents.release();
   }
-
-  //@After
-  //public void ss(){
-  //
-  //}
 }
