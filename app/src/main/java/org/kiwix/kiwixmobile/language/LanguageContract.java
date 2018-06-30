@@ -8,8 +8,6 @@ import java.util.List;
 interface LanguageContract {
   interface View extends BaseContract.View<Presenter> {
     void notifyLanguagesFiltered(List<Language> languages);
-
-    void finishActivity();
   }
 
   interface Presenter extends BaseContract.Presenter<View> {

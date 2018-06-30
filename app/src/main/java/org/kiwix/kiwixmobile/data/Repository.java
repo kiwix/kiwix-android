@@ -72,6 +72,7 @@ public class Repository implements DataSource {
 
   @Override
   public Completable saveLanguages(List<Language> languages) {
-    return Completable.fromAction(() -> languageDao.saveFilteredLanguages(languages));
+    return Completable.fromAction(() -> languageDao.saveFilteredLanguages(languages))
+        .subscribeOn(io);
   }
 }

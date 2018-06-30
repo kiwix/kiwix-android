@@ -47,12 +47,10 @@ public class LanguageActivity extends BaseActivity implements LanguageContract.V
     if (actionBar != null) {
       actionBar.setDisplayHomeAsUpEnabled(true);
       actionBar.setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp);
-      actionBar.setTitle(getString(R.string.select_languages));
+      actionBar.setTitle(R.string.select_languages);
     }
 
-    Intent intent = getIntent();
-
-    languages.addAll(intent.getParcelableArrayListExtra(LANGUAGE_LIST));
+    languages.addAll(getIntent().getParcelableArrayListExtra(LANGUAGE_LIST));
     allLanguages.addAll(languages);
     languageAdapter = new LanguageAdapter(languages);
     recyclerView.setAdapter(languageAdapter);
@@ -90,6 +88,12 @@ public class LanguageActivity extends BaseActivity implements LanguageContract.V
         languages.clear();
         languages.addAll(allLanguages);
         presenter.saveLanguages(languages);
+
+        Toast.makeText(this, getString(R.string.languages_saved), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent();
+        intent.putParcelableArrayListExtra(LANGUAGE_LIST, languages);
+        setResult(RESULT_OK, intent);
+        finish();
         return true;
     }
     return super.onOptionsItemSelected(item);
@@ -106,14 +110,5 @@ public class LanguageActivity extends BaseActivity implements LanguageContract.V
     this.languages.clear();
     this.languages.addAll(languages);
     languageAdapter.notifyDataSetChanged();
-  }
-
-  @Override
-  public void finishActivity() {
-    Toast.makeText(this, getString(R.string.languages_saved), Toast.LENGTH_SHORT).show();
-    Intent intent = new Intent();
-    intent.putParcelableArrayListExtra(LANGUAGE_LIST, languages);
-    setResult(RESULT_OK, intent);
-    finish();
   }
 }
