@@ -60,7 +60,7 @@ public class IntroActivityTest {
   public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @Test
-  public void testUI(){
+  public void testIntroActivity(){
     Intents.init();
     activityTestRule.launchActivity();
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);

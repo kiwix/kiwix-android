@@ -72,21 +72,21 @@ public class SplashActivityTest {
     intended(hasComponent(IntroActivity.class.getName()));
 
     // Verify that the value of the "intro shown" boolean inside the SharedPreferences Database is not changed until the "Get started" button is pressed
-    //SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-    //assertEquals("verify that 'intro shown' boolean value is not changed in the ",
-    //    true, preferences.getBoolean(PREF_SHOW_INTRO, true));
+    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+    assertEquals(true, preferences.getBoolean(PREF_SHOW_INTRO, true));
+    Intents.release();
   }
 
   @Test
   public void testNormalRun() {
-    //SharedPreferences.Editor preferencesEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
-    //preferencesEditor.putBoolean(PREF_SHOW_INTRO, false).apply();
+    SharedPreferences.Editor preferencesEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+    preferencesEditor.putBoolean(PREF_SHOW_INTRO, false).apply();
 
     activityTestRule.launchActivity();
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     // Verify that the SplashActivity is followed by MainActivity
-    //intended(hasComponent(MainActivity.class.getName()));
+    intended(hasComponent(MainActivity.class.getName()));
   }
 
   //@After
