@@ -6,6 +6,7 @@ import org.kiwix.kiwixmobile.error.ErrorActivity;
 import org.kiwix.kiwixmobile.intro.IntroActivity;
 import org.kiwix.kiwixmobile.language.LanguageActivity;
 import org.kiwix.kiwixmobile.language.LanguageModule;
+import org.kiwix.kiwixmobile.intro.IntroModule;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.main.MainModule;
 import org.kiwix.kiwixmobile.search.SearchActivity;
@@ -49,7 +50,7 @@ public abstract class ActivityBindingModule {
   public abstract ErrorActivity provideErrorActivity();
 
   @PerActivity
-  @ContributesAndroidInjector
+  @ContributesAndroidInjector(modules = IntroModule.class)
   public abstract IntroActivity provideIntroActivity();
 
   @PerActivity

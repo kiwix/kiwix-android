@@ -13,7 +13,6 @@ import com.pixelcan.inkpageindicator.InkPageIndicator;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
-import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -23,14 +22,14 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class IntroActivity extends BaseActivity {
+public class IntroActivity extends BaseActivity implements IntroContract.View {
 
   @BindView(R.id.view_pager)
   ViewPager viewPager;
   @BindView(R.id.tab_indicator)
   InkPageIndicator tabIndicator;
   @Inject
-  SharedPreferenceUtil preferences;
+  IntroContract.Presenter presenter;
 
   private ImageView airPlane;
   private Handler handler = new Handler();
@@ -113,7 +112,7 @@ public class IntroActivity extends BaseActivity {
   void startMainActivity() {
     dismissAutoRotate();
     startActivity(new Intent(this, MainActivity.class));
-    preferences.setIntroShown();
+    presenter.setIntroShown();
     finish();
   }
 
