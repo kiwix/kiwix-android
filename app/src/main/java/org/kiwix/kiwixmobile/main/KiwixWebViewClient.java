@@ -29,8 +29,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.BuildConfig;
+import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 
 import java.util.HashMap;
@@ -129,6 +131,11 @@ public class KiwixWebViewClient extends WebViewClient {
     LayoutInflater inflater = LayoutInflater.from(view.getContext());
     help = inflater.inflate(R.layout.content_main, view, false);
     callback.setHomePage(help);
+    SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(KiwixApplication.getInstance());
+    if (sharedPreferenceUtil.nightMode()) {
+      ImageView cardImage = help.findViewById(R.id.content_main_card_image);
+      cardImage.setImageResource(R.drawable.ic_home_kiwix_banner_night);
+    }
     view.addView(help);
   }
 }

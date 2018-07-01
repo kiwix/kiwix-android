@@ -46,8 +46,6 @@ import android.widget.ListView;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
-import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
-import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,16 +75,11 @@ public class BookmarksActivity extends BaseActivity
   LinearLayout noBookmarksLayout;
   @Inject
   BookmarksPresenter presenter;
-  @Inject
-  SharedPreferenceUtil sharedPreferenceUtil;
   private ActionModeListener actionModeListener;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    if (KiwixSettingsActivity.nightMode(sharedPreferenceUtil)) {
-      setTheme(R.style.AppTheme_Night);
-    }
     setContentView(R.layout.activity_bookmarks);
     ButterKnife.bind(this);
 

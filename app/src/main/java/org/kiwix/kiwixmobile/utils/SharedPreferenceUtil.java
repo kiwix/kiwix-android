@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 
+import java.util.Calendar;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -94,7 +96,7 @@ public class SharedPreferenceUtil {
     return sharedPreferences.getString(PREF_STORAGE, Environment.getExternalStorageDirectory().getPath());
   }
 
-  public boolean getPrefNightMode() {
+  private boolean getPrefNightMode() {
     return sharedPreferences.getBoolean(PREF_NIGHTMODE, false);
   }
 
@@ -147,5 +149,16 @@ public class SharedPreferenceUtil {
 
   public void setIntroShown() {
     editor.putBoolean(PREF_SHOW_INTRO, false).apply();
+  }
+
+  public boolean nightMode() {
+    boolean autoNightMode = getPrefAutoNightMode();
+    if (autoNightMode) {
+      Calendar cal = Calendar.getInstance();
+      int hour = cal.get(Calendar.HOUR_OF_DAY);
+      return hour < 6 || hour > 18;
+    } else {
+      return getPrefNightMode();
+    }
   }
 }
