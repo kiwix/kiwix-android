@@ -8,7 +8,7 @@ import javax.inject.Inject;
 
 @PerActivity
 class IntroPresenter extends BasePresenter<IntroContract.View> implements IntroContract.Presenter {
-  private SharedPreferenceUtil preferences;
+  private final SharedPreferenceUtil preferences;
 
   @Inject
   IntroPresenter(SharedPreferenceUtil preferences) {

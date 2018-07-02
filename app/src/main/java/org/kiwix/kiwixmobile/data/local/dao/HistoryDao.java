@@ -13,7 +13,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class HistoryDao {
-  private KiwixDatabase kiwixDatabase;
+  private final KiwixDatabase kiwixDatabase;
 
   @Inject
   HistoryDao(KiwixDatabase kiwixDatabase) {

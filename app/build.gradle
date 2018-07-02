@@ -120,8 +120,8 @@ dependencies {
   implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 
   // JUnit
-  testImplementation 'junit:junit:4.12'
-  androidTestImplementation 'junit:junit:4.12'
+  testImplementation "junit:junit:$jUnitVersion"
+  androidTestImplementation "junit:junit:$jUnitVersion"
 
   // Mockito
   testImplementation "org.mockito:mockito-core:2.8.9"
