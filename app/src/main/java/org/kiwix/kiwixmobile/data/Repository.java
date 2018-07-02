@@ -2,8 +2,8 @@ package org.kiwix.kiwixmobile.data;
 
 import org.kiwix.kiwixmobile.data.local.dao.BookDao;
 import org.kiwix.kiwixmobile.data.local.dao.HistoryDao;
-import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.data.local.dao.NetworkLanguageDao;
+import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.di.qualifiers.IO;
 import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
@@ -30,11 +30,11 @@ import io.reactivex.Single;
 @Singleton
 public class Repository implements DataSource {
 
-  private BookDao bookDao;
-  private NetworkLanguageDao languageDao;
-  private HistoryDao historyDao;
-  private Scheduler io;
-  private Scheduler mainThread;
+  private final BookDao bookDao;
+  private final NetworkLanguageDao languageDao;
+  private final HistoryDao historyDao;
+  private final Scheduler io;
+  private final Scheduler mainThread;
 
   @Inject
   Repository(@IO Scheduler io, @MainThread Scheduler mainThread,

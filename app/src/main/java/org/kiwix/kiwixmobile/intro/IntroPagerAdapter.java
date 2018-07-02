@@ -5,8 +5,8 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class IntroPagerAdapter extends PagerAdapter {
-  private View views[];
+class IntroPagerAdapter extends PagerAdapter {
+  private final View[] views;
 
   IntroPagerAdapter(View views[]) {
     this.views = views;
