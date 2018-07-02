@@ -8,5 +8,6 @@ public class HistorySpec {
   public String favicon;
   public String historyUrl;
   public String historyTitle;
+  public String date;
   public long timeStamp;
 }

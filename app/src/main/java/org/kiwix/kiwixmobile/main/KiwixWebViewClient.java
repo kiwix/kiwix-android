@@ -37,7 +37,6 @@ import org.kiwix.kiwixmobile.utils.StyleUtils;
 
 import java.util.HashMap;
 
-import static org.kiwix.kiwixmobile.main.MainActivity.nightMode;
 import static org.kiwix.kiwixmobile.utils.Constants.CONTACT_EMAIL_ADDRESS;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_EXTERNAL_LINK;
 
@@ -47,6 +46,7 @@ public class KiwixWebViewClient extends WebViewClient {
     put("epub", "application/epub+zip");
     put("pdf", "application/pdf");
   }};
+  private final SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(KiwixApplication.getInstance());
   private View help;
   private WebViewCallback callback;
 
@@ -113,7 +113,7 @@ public class KiwixWebViewClient extends WebViewClient {
             );
         view.addView(help);
         ImageView welcome_image = help.findViewById(R.id.welcome_image);
-        if (nightMode) {
+        if (sharedPreferenceUtil.nightMode()) {
           welcome_image.setImageResource(R.drawable.kiwix_welcome_night);
         } else {
           welcome_image.setImageResource(R.drawable.kiwix_welcome);
@@ -131,12 +131,7 @@ public class KiwixWebViewClient extends WebViewClient {
   private void inflateHomeView(WebView view) {
     LayoutInflater inflater = LayoutInflater.from(view.getContext());
     help = inflater.inflate(R.layout.content_main, view, false);
-    if (nightMode) {
-      ImageView cardImage = help.findViewById(R.id.content_main_card_image);
-      cardImage.setImageResource(R.drawable.ic_home_kiwix_banner_night);
-    }
     callback.setHomePage(help);
-    SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(KiwixApplication.getInstance());
     if (sharedPreferenceUtil.nightMode()) {
       ImageView cardImage = help.findViewById(R.id.content_main_card_image);
       cardImage.setImageResource(R.drawable.ic_home_kiwix_banner_night);

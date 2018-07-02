@@ -12,10 +12,7 @@ import android.widget.TextView;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.local.entity.History;
 
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,9 +60,7 @@ class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
       item.itemView.setOnLongClickListener(v ->
           itemClickListener.onItemLongClick(item.favicon, history));
     } else {
-      DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
-      ((Category) holder).date.setText(dateFormat.format(new Date(historyList.get(position + 1)
-          .getTimeStamp())));
+      ((Category) holder).date.setText(historyList.get(position + 1).getDate());
     }
   }
 

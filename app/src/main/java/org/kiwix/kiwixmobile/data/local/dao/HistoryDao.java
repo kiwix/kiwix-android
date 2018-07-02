@@ -1,5 +1,7 @@
 package org.kiwix.kiwixmobile.data.local.dao;
 
+import android.content.Context;
+
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
 
@@ -7,22 +9,29 @@ import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
 import org.kiwix.kiwixmobile.data.local.entity.History;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 
 public class HistoryDao {
+  private final Context context;
   private final KiwixDatabase kiwixDatabase;
 
   @Inject
-  HistoryDao(KiwixDatabase kiwixDatabase) {
+  HistoryDao(Context context, KiwixDatabase kiwixDatabase) {
+    this.context = context;
     this.kiwixDatabase = kiwixDatabase;
   }
 
   public void saveHistory(String file, String favicon, String url, String title, long timeStamp) {
+    DateFormat dateFormat = android.text.format.DateFormat.getMediumDateFormat(context);
+    String date = dateFormat.format(new Date(timeStamp));
+    kiwixDatabase.deleteWhere(History.class, History.HISTORY_URL.eq(url).and(History.DATE.eq(date)));
     kiwixDatabase.persist(new History().setZimFile(file).setFavicon(favicon)
-        .setHistoryUrl(url).setHistoryTitle(title).setTimeStamp(timeStamp));
+        .setHistoryUrl(url).setHistoryTitle(title).setTimeStamp(timeStamp).setDate(date));
   }
 
   public List<History> getHistoryList(boolean showHistoryCurrentBook) {
@@ -35,6 +44,7 @@ public class HistoryDao {
         .query(History.class, query.orderBy(History.TIME_STAMP.desc()))) {
       while (historySquidCursor.moveToNext()) {
         History history = new History();
+        history.setDate(historySquidCursor.get(History.DATE));
         history.setFavicon(historySquidCursor.get(History.FAVICON));
         history.setHistoryTitle(historySquidCursor.get(History.HISTORY_TITLE));
         history.setHistoryUrl(historySquidCursor.get(History.HISTORY_URL));

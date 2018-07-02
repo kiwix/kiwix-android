@@ -10,8 +10,6 @@ import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.models.Language;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -94,18 +92,9 @@ public class Repository implements DataSource {
             histories.add(0, null);
           }
           for (int position = 2; position < histories.size(); position++) {
-            if (history != null && histories.get(position) != null) {
-
-              Calendar calendar1 = Calendar.getInstance();
-              calendar1.setTime(new Date(history.getTimeStamp()));
-
-              Calendar calendar2 = Calendar.getInstance();
-              calendar2.setTime(new Date(histories.get(position).getTimeStamp()));
-
-              if (calendar1.get(Calendar.YEAR) != calendar2.get(Calendar.YEAR) ||
-                  calendar1.get(Calendar.DAY_OF_YEAR) != calendar2.get(Calendar.DAY_OF_YEAR)) {
-                histories.add(position, null);
-              }
+            if (history != null && histories.get(position) != null &&
+                !history.getDate().equals(histories.get(position).getDate())) {
+              histories.add(position, null);
             }
             history = histories.get(position);
           }
