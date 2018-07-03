@@ -22,7 +22,7 @@ public interface DataSource {
 
   Single<List<History>> getDateCategorizedHistory(boolean showHistoryCurrentBook);
 
-  Completable saveHistory(String file, String favicon, String url, String title, long timeStamp);
+  Completable saveHistory(History history);
 
   Completable deleteHistory(List<History> historyList);
 }

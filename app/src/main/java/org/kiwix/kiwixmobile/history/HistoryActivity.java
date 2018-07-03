@@ -192,8 +192,8 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     if (actionMode == null) {
       Intent intent = new Intent(this, MainActivity.class);
       intent.putExtra(EXTRA_CHOSE_X_URL, history.getHistoryUrl());
-      if (!history.getZimFile().equals(ZimContentProvider.getZimFile())) {
-        intent.setData(Uri.fromFile(new File(history.getZimFile())));
+      if (!history.getZimFilePath().equals(ZimContentProvider.getZimFile())) {
+        intent.setData(Uri.fromFile(new File(history.getZimFilePath())));
       }
       if (Settings.System.getInt(getContentResolver(), Settings.Global.ALWAYS_FINISH_ACTIVITIES, 0) == 1) {
         startActivity(intent);

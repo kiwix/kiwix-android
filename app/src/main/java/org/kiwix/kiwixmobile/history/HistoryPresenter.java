@@ -84,8 +84,8 @@ class HistoryPresenter extends BasePresenter<HistoryContract.View> implements Hi
           }
 
           @Override
-          public void onSuccess(List<History> languages) {
-            view.notifyHistoryListFiltered(languages);
+          public void onSuccess(List<History> historyList1) {
+            view.notifyHistoryListFiltered(historyList1);
           }
 
           @Override

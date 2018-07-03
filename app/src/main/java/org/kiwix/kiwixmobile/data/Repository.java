@@ -105,8 +105,8 @@ public class Repository implements DataSource {
   }
 
   @Override
-  public Completable saveHistory(String file, String favicon, String url, String title, long timeStamp) {
-    return Completable.fromAction(() -> historyDao.saveHistory(file, favicon, url, title, timeStamp))
+  public Completable saveHistory(History history) {
+    return Completable.fromAction(() -> historyDao.saveHistory(history))
         .subscribeOn(io);
   }
 

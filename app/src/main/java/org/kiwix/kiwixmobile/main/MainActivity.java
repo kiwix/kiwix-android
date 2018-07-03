@@ -84,6 +84,7 @@ import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
+import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.history.HistoryActivity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.search.SearchActivity;
@@ -1902,9 +1903,15 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     String url = getCurrentWebView().getUrl();
     if (url != null && !url.equals("file:///android_asset/home.html") &&
         !url.equals("file:///android_asset/help.html")) {
-      presenter.saveHistory(ZimContentProvider.getZimFile(),
-          ZimContentProvider.getFavicon(), getCurrentWebView().getUrl(),
-          getCurrentWebView().getTitle(), System.currentTimeMillis());
+      History history = new History();
+      history.setZimId(ZimContentProvider.getId())
+          .setZimName(ZimContentProvider.getName())
+          .setZimFilePath(ZimContentProvider.getZimFile())
+          .setFavicon(ZimContentProvider.getFavicon())
+          .setHistoryTitle(getCurrentWebView().getTitle())
+          .setHistoryUrl(getCurrentWebView().getUrl())
+          .setTimeStamp(System.currentTimeMillis());
+      presenter.saveHistory(history);
     }
   }
 

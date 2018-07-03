@@ -4,7 +4,9 @@ import com.yahoo.squidb.annotations.TableModelSpec;
 
 @TableModelSpec(className = "History", tableName = "History")
 public class HistorySpec {
-  public String zimFile;
+  public String zimId;
+  public String zimName;
+  public String zimFilePath;
   public String favicon;
   public String historyUrl;
   public String historyTitle;
