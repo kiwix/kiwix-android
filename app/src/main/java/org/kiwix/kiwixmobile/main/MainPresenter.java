@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.data.DataSource;
+import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.di.PerActivity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 
@@ -57,8 +58,8 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
   }
 
   @Override
-  public void saveHistory(String file, String favicon, String url, String title, long timeStamp) {
-    dataSource.saveHistory(file, favicon, url, title, timeStamp)
+  public void saveHistory(History history) {
+    dataSource.saveHistory(history)
         .subscribe(new CompletableObserver() {
           @Override
           public void onSubscribe(Disposable d) {

@@ -26,19 +26,28 @@ public class HistoryDao {
     this.kiwixDatabase = kiwixDatabase;
   }
 
-  public void saveHistory(String file, String favicon, String url, String title, long timeStamp) {
+  public void saveHistory(History history) {
     DateFormat dateFormat = android.text.format.DateFormat.getMediumDateFormat(context);
-    String date = dateFormat.format(new Date(timeStamp));
-    kiwixDatabase.deleteWhere(History.class, History.HISTORY_URL.eq(url).and(History.DATE.eq(date)));
-    kiwixDatabase.persist(new History().setZimFile(file).setFavicon(favicon)
-        .setHistoryUrl(url).setHistoryTitle(title).setTimeStamp(timeStamp).setDate(date));
+    String date = dateFormat.format(new Date(history.getTimeStamp()));
+    kiwixDatabase.deleteWhere(History.class, History.HISTORY_URL.eq(history.getHistoryUrl())
+        .and(History.DATE.eq(date)));
+    kiwixDatabase.persist(new History()
+        .setZimId(history.getZimId())
+        .setZimName(history.getZimName())
+        .setZimFilePath(history.getZimFilePath())
+        .setFavicon(history.getFavicon())
+        .setHistoryUrl(history.getHistoryUrl())
+        .setHistoryTitle(history.getHistoryTitle())
+        .setDate(date)
+        .setTimeStamp(history.getTimeStamp()));
   }
 
   public List<History> getHistoryList(boolean showHistoryCurrentBook) {
     ArrayList<History> histories = new ArrayList<>();
-    Query query = Query.select();
+    Query query = Query.select(History.ZIM_FILE_PATH, History.FAVICON, History.DATE,
+        History.HISTORY_TITLE, History.HISTORY_URL, History.TIME_STAMP);
     if (showHistoryCurrentBook) {
-      query = query.where(History.ZIM_FILE.eq(ZimContentProvider.getZimFile()));
+      query = query.where(History.ZIM_FILE_PATH.eq(ZimContentProvider.getZimFile()));
     }
     try (SquidCursor<History> historySquidCursor = kiwixDatabase
         .query(History.class, query.orderBy(History.TIME_STAMP.desc()))) {
@@ -49,7 +58,7 @@ public class HistoryDao {
         history.setHistoryTitle(historySquidCursor.get(History.HISTORY_TITLE));
         history.setHistoryUrl(historySquidCursor.get(History.HISTORY_URL));
         history.setTimeStamp(historySquidCursor.get(History.TIME_STAMP));
-        history.setZimFile(historySquidCursor.get(History.ZIM_FILE));
+        history.setZimFilePath(historySquidCursor.get(History.ZIM_FILE_PATH));
         histories.add(history);
       }
     }
