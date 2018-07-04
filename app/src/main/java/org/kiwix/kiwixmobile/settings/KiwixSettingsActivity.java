@@ -49,7 +49,6 @@ import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryUtils;
 
 import java.io.File;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -77,19 +76,10 @@ public class KiwixSettingsActivity extends BaseActivity {
 
   public static boolean allHistoryCleared = false;
 
-  private static final int DAWN_HOUR = 6;
-  private static final int DUSK_HOUR = 18;
-
-  @Inject
-  SharedPreferenceUtil sharedPreferenceUtil;
-
   @Override
   public void onCreate(Bundle savedInstanceState) {
     getWindow().setWindowAnimations(R.style.WindowAnimationTransition);
     super.onCreate(savedInstanceState);
-    if (nightMode(sharedPreferenceUtil)) {
-      setTheme(R.style.AppTheme_Night);
-    }
     setContentView(R.layout.settings);
 
     allHistoryCleared = false;
@@ -122,17 +112,6 @@ public class KiwixSettingsActivity extends BaseActivity {
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     toolbar.setNavigationOnClickListener(v -> onBackPressed());
-  }
-
-  public static boolean nightMode(SharedPreferenceUtil sharedPreferenceUtil){
-    boolean autoNightMode = sharedPreferenceUtil.getPrefAutoNightMode();
-    if(autoNightMode){
-      Calendar cal = Calendar.getInstance();
-      int hour = cal.get(Calendar.HOUR_OF_DAY);
-      return hour < DAWN_HOUR || hour > DUSK_HOUR;
-    } else{
-      return sharedPreferenceUtil.getPrefNightMode();
-    }
   }
 
   public static class PrefsFragment extends PreferenceFragment implements
@@ -276,7 +255,7 @@ public class KiwixSettingsActivity extends BaseActivity {
       }
       if (key.equals(PREF_NIGHTMODE)) {
         MainActivity.refresh = true;
-        MainActivity.nightMode = nightMode(sharedPreferenceUtil);
+        MainActivity.nightMode = sharedPreferenceUtil.nightMode();
         getActivity().finish();
         startActivity(new Intent(getActivity(), KiwixSettingsActivity.class));
       }
@@ -285,7 +264,7 @@ public class KiwixSettingsActivity extends BaseActivity {
       }
       if (key.equals(PREF_AUTONIGHTMODE)) {
         MainActivity.refresh = true;
-        MainActivity.nightMode = nightMode(sharedPreferenceUtil);
+        MainActivity.nightMode = sharedPreferenceUtil.nightMode();
         getActivity().finish();
         startActivity(new Intent(getActivity(), KiwixSettingsActivity.class));
       }
@@ -293,7 +272,7 @@ public class KiwixSettingsActivity extends BaseActivity {
 
     private void clearAllHistoryDialog() {
       int warningResId;
-      if (nightMode(sharedPreferenceUtil)) {
+      if (sharedPreferenceUtil.nightMode()) {
         warningResId = R.drawable.ic_warning_white;
       }
       else {
@@ -317,7 +296,7 @@ public class KiwixSettingsActivity extends BaseActivity {
     public void openCredits() {
       WebView view = (WebView) LayoutInflater.from(getActivity()).inflate(R.layout.credits_webview, null);
       view.loadUrl("file:///android_asset/credits.html");
-      if(nightMode(sharedPreferenceUtil)) {
+      if (sharedPreferenceUtil.nightMode()) {
         view.getSettings().setJavaScriptEnabled(true);
         view.setBackgroundColor(0);
       }

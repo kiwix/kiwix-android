@@ -7,5 +7,5 @@ import javax.inject.Qualifier;
 
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)
-@interface MainThread {
+public @interface MainThread {
 }

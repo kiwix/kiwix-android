@@ -26,7 +26,7 @@ import io.reactivex.disposables.CompositeDisposable;
 public abstract class BasePresenter<T extends BaseContract.View> implements BaseContract.Presenter<T> {
 
   protected T view;
-  protected CompositeDisposable compositeDisposable = new CompositeDisposable();
+  protected final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
   @Override
   public void attachView(T view) {

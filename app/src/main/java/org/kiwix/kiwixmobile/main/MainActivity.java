@@ -90,7 +90,6 @@ import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
-import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
@@ -108,7 +107,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
-import okhttp3.OkHttpClient;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static android.os.Build.VERSION.SDK_INT;
@@ -210,10 +208,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   @BindView(R.id.bottom_toolbar_arrow_forward)
   ImageView bottomToolbarArrowForward;
   @Inject
-  OkHttpClient okHttpClient;
-  @Inject
-  SharedPreferenceUtil sharedPreferenceUtil;
-  @Inject
   BookmarksDao bookmarksDao;
   @Inject
   MainContract.Presenter presenter;
@@ -240,7 +234,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private boolean isFirstRun;
   private BooksAdapter booksAdapter;
   private List<LibraryNetworkEntity.Book> books = new ArrayList<>();
-  private CardView emptyStateCardView;
   private AppCompatButton downloadBookButton;
   private FileSearch fileSearch = new FileSearch(this, new FileSearch.ResultListener() {
     List<LibraryNetworkEntity.Book> newBooks = new ArrayList<>();
@@ -311,10 +304,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     super.onCreate(savedInstanceState);
     presenter.attachView(this);
     wifiOnly = sharedPreferenceUtil.getPrefWifiOnly();
-    nightMode = KiwixSettingsActivity.nightMode(sharedPreferenceUtil);
-    if (nightMode) {
-      setTheme(R.style.AppTheme_Night);
-    }
+    nightMode = sharedPreferenceUtil.nightMode();
 
     handleLocaleCheck();
     setContentView(R.layout.main);
@@ -1657,7 +1647,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   public void loadPrefs() {
 
-    nightMode = KiwixSettingsActivity.nightMode(sharedPreferenceUtil);
+    nightMode = sharedPreferenceUtil.nightMode();
     isBackToTopEnabled = sharedPreferenceUtil.getPrefBackToTop();
     isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
     isFullscreenOpened = sharedPreferenceUtil.getPrefFullScreen();
@@ -1978,7 +1968,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     RecyclerView homeRecyclerView = view.findViewById(R.id.recycler_view);
     presenter.showHome();
     homeRecyclerView.setAdapter(booksAdapter);
-    emptyStateCardView = view.findViewById(R.id.content_main_card);
     downloadBookButton = view.findViewById(R.id.content_main_card_download_button);
     downloadBookButton.setOnClickListener(v -> manageZimFiles(1));
   }
@@ -1997,10 +1986,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     this.books.clear();
     this.books.addAll(books);
     booksAdapter.notifyDataSetChanged();
-    if (nightMode) {
-      ImageView cardImage = emptyStateCardView.findViewById(R.id.content_main_card_image);
-      cardImage.setImageResource(R.drawable.ic_home_kiwix_banner_night);
-    }
   }
 
   void searchFiles() {

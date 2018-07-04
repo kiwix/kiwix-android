@@ -27,4 +27,10 @@ public class DataModule {
   public Scheduler provideMainThread() {
     return AndroidSchedulers.mainThread();
   }
+
+  @Computation
+  @Provides
+  public Scheduler provideComputationThread() {
+    return Schedulers.computation();
+  }
 }

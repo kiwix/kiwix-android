@@ -44,7 +44,6 @@ import android.widget.Toast;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
-import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,15 +71,10 @@ public class SearchActivity extends BaseActivity
 
   @Inject
   SearchPresenter searchPresenter;
-  @Inject
-  SharedPreferenceUtil sharedPreferenceUtil;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    if (sharedPreferenceUtil.getPrefNightMode()) {
-      setTheme(R.style.AppTheme_Night);
-    }
     setContentView(R.layout.search);
 
     if (savedInstanceState != null) {

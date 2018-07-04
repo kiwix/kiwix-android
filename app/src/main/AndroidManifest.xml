@@ -16,18 +16,18 @@
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
   <application
-      android:name=".KiwixApplication"
-      android:allowBackup="true"
-      android:hardwareAccelerated="true"
-      android:icon="@mipmap/kiwix_icon"
-      android:label="@string/app_name"
-      android:theme="@style/AppTheme"
-      android:supportsRtl="true">
+    android:name=".KiwixApplication"
+    android:allowBackup="true"
+    android:hardwareAccelerated="true"
+    android:icon="@mipmap/kiwix_icon"
+    android:label="@string/app_name"
+    android:supportsRtl="true"
+    android:theme="@style/AppTheme">
 
     <activity
       android:name=".splash.SplashActivity"
-      android:theme="@style/AppTheme.Launcher"
-      android:label="@string/app_name">
+      android:label="@string/app_name"
+      android:theme="@style/AppTheme.Launcher">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
@@ -44,17 +44,19 @@
       android:windowSoftInputMode="adjustPan">
 
       <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
-            <category android:name="android.intent.category.DEFAULT" />
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
 
-            <data android:scheme="content" />
-            <data android:mimeType="application/octet-stream"/>
+        <data android:scheme="content" />
+        <data android:mimeType="application/octet-stream" />
       </intent-filter>
 
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
+
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
+
         <data android:scheme="file" />
         <data android:mimeType="*/*" />
         <data android:pathPattern=".*\\.zim" />
@@ -66,8 +68,10 @@
 
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
+
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
+
         <data android:scheme="file" />
         <data android:mimeType="*/*" />
         <data android:pathPattern=".*\\.zimaa" />
@@ -76,7 +80,7 @@
         <data android:pathPattern=".*\\..*\\..*\\..*\\.zimaa" />
         <data android:host="*" />
       </intent-filter>
-      
+
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
 
@@ -119,16 +123,19 @@
 
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
+
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="kiwix"
-          android:host="search" />
+
+        <data
+          android:host="search"
+          android:scheme="kiwix" />
       </intent-filter>
 
       <intent-filter android:label="@string/app_search_string">
-        <action android:name="android.intent.action.PROCESS_TEXT"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-        <data android:mimeType="text/plain"/>
+        <action android:name="android.intent.action.PROCESS_TEXT" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:mimeType="text/plain" />
       </intent-filter>
     </activity>
     <activity
@@ -196,6 +203,7 @@
     </provider>
 
     <activity android:name=".intro.IntroActivity" />
+    <activity android:name=".language.LanguageActivity" />
   </application>
 
 </manifest>
