@@ -79,6 +79,7 @@ public class newtest {
         .atPosition(5);
     linearLayout.perform(click());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
     pressBack();
 
     // Verify that the bottom toolbar and all its buttons are present
@@ -90,7 +91,6 @@ public class newtest {
     onView(withId(R.id.bottom_toolbar_arrow_forward)).check(matches(notNullValue()));
     onView(withId(R.id.bottom_toolbar_toc)).check(matches(notNullValue()));
 
-    /*
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     ViewInteraction appCompatImageView = onView(
