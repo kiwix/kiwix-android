@@ -1,13 +1,17 @@
 package org.kiwix.kiwixmobile.splash;
 
+import android.Manifest;
 import android.support.test.espresso.DataInteraction;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
+import com.schibsted.spain.barista.rule.BaristaRule;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -16,6 +20,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.main.MainActivity;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
@@ -34,54 +39,27 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class newtest {
 
   @Rule
-  public ActivityTestRule<SplashActivity> mActivityTestRule =
-      new ActivityTestRule<>(SplashActivity.class);
+  public BaristaRule<SplashActivity> activityTestRule = BaristaRule.create(SplashActivity.class);
+  @Rule
+  public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+  @Rule
+  public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @Test
   public void newtest() {
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(5000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    activityTestRule.launchActivity();
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
-    ViewInteraction customViewPager = onView(
-        allOf(withId(R.id.view_pager),
-            childAtPosition(
-                childAtPosition(
-                    withId(android.R.id.content),
-                    0),
-                0),
-            isDisplayed()));
-    customViewPager.perform(swipeLeft());
-
-    ViewInteraction appCompatButton = onView(
-        allOf(withId(R.id.get_started), withText("Get started"),
-            childAtPosition(
-                childAtPosition(
-                    withId(android.R.id.content),
-                    0),
-                1),
-            isDisplayed()));
-    appCompatButton.perform(click());
-
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(10000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    onView(withId(R.id.get_started)).perform(click());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     ViewInteraction recyclerView = onView(
         allOf(withId(R.id.recycler_view),
@@ -90,35 +68,24 @@ public class newtest {
                 1)));
     recyclerView.perform(actionOnItemAtPosition(1, click()));
 
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(20000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
 
-    ViewInteraction appCompatTextView = onView(
-        allOf(withId(R.id.title), withText("Settings"),
-            childAtPosition(
-                childAtPosition(
-                    withClassName(is("android.support.v7.view.menu.ListMenuItemView")),
-                    0),
-                0),
-            isDisplayed()));
-    appCompatTextView.perform(click());
+    onView(allOf(withId(R.id.title), withText("Settings"))).perform(click());
 
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(20000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    //ViewInteraction appCompatTextView = onView(
+    //    allOf(withId(R.id.title), withText("Settings"),
+    //        childAtPosition(
+    //            childAtPosition(
+    //                withClassName(is("android.support.v7.view.menu.ListMenuItemView")),
+    //                0),
+    //            0),
+    //        isDisplayed()));
+    //appCompatTextView.perform(click());
+
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
 
     DataInteraction linearLayout = onData(anything())
         .inAdapterView(allOf(withId(android.R.id.list),
@@ -127,86 +94,79 @@ public class newtest {
                 0)))
         .atPosition(5);
     linearLayout.perform(click());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     pressBack();
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    onView(withId(R.id.bottom_toolbar)).check(matches(notNullValue()));
+    onView(withId(R.id.bottom_toolbar_bookmark)).check(matches(notNullValue()));
+    onView(withId(R.id.bottom_toolbar_arrow_back)).check(matches(notNullValue()));
+    onView(withId(R.id.bottom_toolbar_home)).check(matches(notNullValue()));
+    onView(withId(R.id.bottom_toolbar_arrow_forward)).check(matches(notNullValue()));
+    onView(withId(R.id.bottom_toolbar_toc)).check(matches(notNullValue()));
 
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(40000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
 
-    ViewInteraction imageView = onView(
-        allOf(withId(R.id.bottom_toolbar_bookmark), withContentDescription("Bookmarks"),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.bottom_toolbar),
-                    0),
-                0),
-            isDisplayed()));
-    imageView.check(matches(isDisplayed()));
+    //ViewInteraction imageView = onView(
+    //    allOf(withId(R.id.bottom_toolbar_bookmark), withContentDescription("Bookmarks"),
+    //        childAtPosition(
+    //            childAtPosition(
+    //                withId(R.id.bottom_toolbar),
+    //                0),
+    //            0),
+    //        isDisplayed()));
+    //imageView.check(matches(isDisplayed()));
+    //
+    //ViewInteraction imageView2 = onView(
+    //    allOf(withId(R.id.bottom_toolbar_arrow_back), withContentDescription("Go to previous page"),
+    //        childAtPosition(
+    //            childAtPosition(
+    //                withId(R.id.bottom_toolbar),
+    //                0),
+    //            1),
+    //        isDisplayed()));
+    //imageView2.check(matches(isDisplayed()));
+    //
+    //ViewInteraction imageView3 = onView(
+    //    allOf(withId(R.id.bottom_toolbar_home), withContentDescription("Home"),
+    //        childAtPosition(
+    //            childAtPosition(
+    //                withId(R.id.bottom_toolbar),
+    //                0),
+    //            2),
+    //        isDisplayed()));
+    //imageView3.check(matches(isDisplayed()));
+    //
+    //ViewInteraction imageView4 = onView(
+    //    allOf(withId(R.id.bottom_toolbar_arrow_forward), withContentDescription("Go to next page"),
+    //        childAtPosition(
+    //            childAtPosition(
+    //                withId(R.id.bottom_toolbar),
+    //                0),
+    //            3),
+    //        isDisplayed()));
+    //imageView4.check(matches(isDisplayed()));
+    //
+    //ViewInteraction imageView5 = onView(
+    //    allOf(withId(R.id.bottom_toolbar_toc), withContentDescription("Table of contents"),
+    //        childAtPosition(
+    //            childAtPosition(
+    //                withId(R.id.bottom_toolbar),
+    //                0),
+    //            4),
+    //        isDisplayed()));
+    //imageView5.check(matches(isDisplayed()));
+    //
+    //ViewInteraction imageView6 = onView(
+    //    allOf(withId(R.id.bottom_toolbar_toc), withContentDescription("Table of contents"),
+    //        childAtPosition(
+    //            childAtPosition(
+    //                withId(R.id.bottom_toolbar),
+    //                0),
+    //            4),
+    //        isDisplayed()));
+    //imageView6.check(matches(isDisplayed()));
 
-    ViewInteraction imageView2 = onView(
-        allOf(withId(R.id.bottom_toolbar_arrow_back), withContentDescription("Go to previous page"),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.bottom_toolbar),
-                    0),
-                1),
-            isDisplayed()));
-    imageView2.check(matches(isDisplayed()));
-
-    ViewInteraction imageView3 = onView(
-        allOf(withId(R.id.bottom_toolbar_home), withContentDescription("Home"),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.bottom_toolbar),
-                    0),
-                2),
-            isDisplayed()));
-    imageView3.check(matches(isDisplayed()));
-
-    ViewInteraction imageView4 = onView(
-        allOf(withId(R.id.bottom_toolbar_arrow_forward), withContentDescription("Go to next page"),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.bottom_toolbar),
-                    0),
-                3),
-            isDisplayed()));
-    imageView4.check(matches(isDisplayed()));
-
-    ViewInteraction imageView5 = onView(
-        allOf(withId(R.id.bottom_toolbar_toc), withContentDescription("Table of contents"),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.bottom_toolbar),
-                    0),
-                4),
-            isDisplayed()));
-    imageView5.check(matches(isDisplayed()));
-
-    ViewInteraction imageView6 = onView(
-        allOf(withId(R.id.bottom_toolbar_toc), withContentDescription("Table of contents"),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.bottom_toolbar),
-                    0),
-                4),
-            isDisplayed()));
-    imageView6.check(matches(isDisplayed()));
-
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(80000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     ViewInteraction appCompatImageView = onView(
         allOf(withId(R.id.bottom_toolbar_home), withContentDescription("Home"),
