@@ -64,32 +64,12 @@ public class newtest {
 
     // Open the Zim file from Assets
     onView(withId(R.id.recycler_view)).perform(actionOnItemAtPosition(1, click()));
-
-    //ViewInteraction recyclerView = onView(
-    //    allOf(withId(R.id.recycler_view),
-    //        childAtPosition(
-    //            withId(R.id.get_content_card),
-    //            1)));
-    //recyclerView.perform(actionOnItemAtPosition(1, click()));
-
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     // Set up the bottom bar
     openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
     onView(allOf(withId(R.id.title), withText("Settings"))).perform(click());
-
-    //ViewInteraction appCompatTextView = onView(
-    //    allOf(withId(R.id.title), withText("Settings"),
-    //        childAtPosition(
-    //            childAtPosition(
-    //                withClassName(is("android.support.v7.view.menu.ListMenuItemView")),
-    //                0),
-    //            0),
-    //        isDisplayed()));
-    //appCompatTextView.perform(click());
-
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-
 
     DataInteraction linearLayout = onData(anything())
         .inAdapterView(allOf(withId(android.R.id.list),
@@ -98,10 +78,10 @@ public class newtest {
                 0)))
         .atPosition(5);
     linearLayout.perform(click());
-
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-
     pressBack();
+
+    // Verify that the bottom toolbar and all its buttons are present
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     onView(withId(R.id.bottom_toolbar)).check(matches(notNullValue()));
     onView(withId(R.id.bottom_toolbar_bookmark)).check(matches(notNullValue()));
@@ -109,68 +89,6 @@ public class newtest {
     onView(withId(R.id.bottom_toolbar_home)).check(matches(notNullValue()));
     onView(withId(R.id.bottom_toolbar_arrow_forward)).check(matches(notNullValue()));
     onView(withId(R.id.bottom_toolbar_toc)).check(matches(notNullValue()));
-
-
-    //ViewInteraction imageView = onView(
-    //    allOf(withId(R.id.bottom_toolbar_bookmark), withContentDescription("Bookmarks"),
-    //        childAtPosition(
-    //            childAtPosition(
-    //                withId(R.id.bottom_toolbar),
-    //                0),
-    //            0),
-    //        isDisplayed()));
-    //imageView.check(matches(isDisplayed()));
-    //
-    //ViewInteraction imageView2 = onView(
-    //    allOf(withId(R.id.bottom_toolbar_arrow_back), withContentDescription("Go to previous page"),
-    //        childAtPosition(
-    //            childAtPosition(
-    //                withId(R.id.bottom_toolbar),
-    //                0),
-    //            1),
-    //        isDisplayed()));
-    //imageView2.check(matches(isDisplayed()));
-    //
-    //ViewInteraction imageView3 = onView(
-    //    allOf(withId(R.id.bottom_toolbar_home), withContentDescription("Home"),
-    //        childAtPosition(
-    //            childAtPosition(
-    //                withId(R.id.bottom_toolbar),
-    //                0),
-    //            2),
-    //        isDisplayed()));
-    //imageView3.check(matches(isDisplayed()));
-    //
-    //ViewInteraction imageView4 = onView(
-    //    allOf(withId(R.id.bottom_toolbar_arrow_forward), withContentDescription("Go to next page"),
-    //        childAtPosition(
-    //            childAtPosition(
-    //                withId(R.id.bottom_toolbar),
-    //                0),
-    //            3),
-    //        isDisplayed()));
-    //imageView4.check(matches(isDisplayed()));
-    //
-    //ViewInteraction imageView5 = onView(
-    //    allOf(withId(R.id.bottom_toolbar_toc), withContentDescription("Table of contents"),
-    //        childAtPosition(
-    //            childAtPosition(
-    //                withId(R.id.bottom_toolbar),
-    //                0),
-    //            4),
-    //        isDisplayed()));
-    //imageView5.check(matches(isDisplayed()));
-    //
-    //ViewInteraction imageView6 = onView(
-    //    allOf(withId(R.id.bottom_toolbar_toc), withContentDescription("Table of contents"),
-    //        childAtPosition(
-    //            childAtPosition(
-    //                withId(R.id.bottom_toolbar),
-    //                0),
-    //            4),
-    //        isDisplayed()));
-    //imageView6.check(matches(isDisplayed()));
-
 
     /*
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
