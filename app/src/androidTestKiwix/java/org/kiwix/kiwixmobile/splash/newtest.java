@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.main.MainActivity;
+import android.webkit.WebView;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
@@ -41,6 +42,13 @@ import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
+import static android.support.test.espresso.web.assertion.WebViewAssertions.webMatches;
+import static android.support.test.espresso.web.sugar.Web.onWebView;
+import static android.support.test.espresso.web.webdriver.DriverAtoms.clearElement;
+import static android.support.test.espresso.web.webdriver.DriverAtoms.findElement;
+import static android.support.test.espresso.web.webdriver.DriverAtoms.getText;
+import static android.support.test.espresso.web.webdriver.DriverAtoms.webClick;
+import static org.hamcrest.Matchers.containsString;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -81,6 +89,7 @@ public class newtest {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     pressBack();
+    onWebView().forceJavascriptEnabled();
 
     // Verify that the bottom toolbar and all its buttons are present
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
@@ -93,6 +102,18 @@ public class newtest {
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
+    // Test the Home Button
+
+
+    // Test the back and the forward buttons
+
+    // Test the Bookmarks button
+    // Test adding a bookMark
+    // Test removing a bookmark
+
+    // Test the right drawer button
+
+    /*
     ViewInteraction appCompatImageView = onView(
         allOf(withId(R.id.bottom_toolbar_home), withContentDescription("Home"),
             childAtPosition(
