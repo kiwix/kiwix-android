@@ -55,23 +55,27 @@ public class newtest {
 
   @Test
   public void newtest() {
+    // Launch the app, starting with the Splash Activity
     activityTestRule.launchActivity();
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     onView(withId(R.id.get_started)).perform(click());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
-    ViewInteraction recyclerView = onView(
-        allOf(withId(R.id.recycler_view),
-            childAtPosition(
-                withId(R.id.get_content_card),
-                1)));
-    recyclerView.perform(actionOnItemAtPosition(1, click()));
+    // Open the Zim file from Assets
+    onView(withId(R.id.recycler_view)).perform(actionOnItemAtPosition(1, click()));
+
+    //ViewInteraction recyclerView = onView(
+    //    allOf(withId(R.id.recycler_view),
+    //        childAtPosition(
+    //            withId(R.id.get_content_card),
+    //            1)));
+    //recyclerView.perform(actionOnItemAtPosition(1, click()));
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
+    // Set up the bottom bar
     openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-
     onView(allOf(withId(R.id.title), withText("Settings"))).perform(click());
 
     //ViewInteraction appCompatTextView = onView(
@@ -94,6 +98,7 @@ public class newtest {
                 0)))
         .atPosition(5);
     linearLayout.perform(click());
+
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     pressBack();
@@ -166,6 +171,8 @@ public class newtest {
     //        isDisplayed()));
     //imageView6.check(matches(isDisplayed()));
 
+
+    /*
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     ViewInteraction appCompatImageView = onView(
@@ -504,6 +511,7 @@ public class newtest {
                 1),
             isDisplayed()));
     appCompatImageButton3.perform(click());
+    */
   }
 
   private static Matcher<View> childAtPosition(
