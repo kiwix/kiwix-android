@@ -89,16 +89,28 @@ public class newtest {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     pressBack();
-    onWebView().forceJavascriptEnabled();
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
-    // Verify that the bottom toolbar and all its buttons are present
+    //onWebView().forceJavascriptEnabled();
+
+    // Verify that the bottom toolbar and all its buttons are present and assigned correct content description
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     onView(withId(R.id.bottom_toolbar)).check(matches(notNullValue()));
+
     onView(withId(R.id.bottom_toolbar_bookmark)).check(matches(notNullValue()));
+    //onView(withId(R.id.bottom_toolbar_bookmark)).check(matches(withText(R.string.menu_bookmarks)));
+
     onView(withId(R.id.bottom_toolbar_arrow_back)).check(matches(notNullValue()));
+    //onView(withId(R.id.bottom_toolbar_arrow_back)).check(matches(withText(R.string.go_to_previous_page)));
+
     onView(withId(R.id.bottom_toolbar_home)).check(matches(notNullValue()));
+    //onView(withId(R.id.bottom_toolbar_home)).check(matches(withText(R.string.menu_home)));
+
     onView(withId(R.id.bottom_toolbar_arrow_forward)).check(matches(notNullValue()));
+    //onView(withId(R.id.bottom_toolbar_arrow_forward)).check(matches(withText(R.string.go_to_next_page)));
+
     onView(withId(R.id.bottom_toolbar_toc)).check(matches(notNullValue()));
+    //onView(withId(R.id.bottom_toolbar_toc)).check(matches(withText(R.string.table_of_contents)));
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
