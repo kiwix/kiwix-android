@@ -3,6 +3,7 @@ package org.kiwix.kiwixmobile.splash;
 import android.Manifest;
 import android.support.test.espresso.DataInteraction;
 import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.web.webdriver.Locator;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import com.schibsted.spain.barista.rule.BaristaRule;
+import com.schibsted.spain.barista.rule.flaky.AllowFlaky;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -62,6 +64,7 @@ public class newtest {
   public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @Test
+  @AllowFlaky(attempts = 5)
   public void newtest() {
     // Launch the app, starting with the Splash Activity
     activityTestRule.launchActivity();
@@ -76,6 +79,8 @@ public class newtest {
 
     // Set up the bottom bar
     openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
     onView(allOf(withId(R.id.title), withText("Settings"))).perform(click());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
@@ -114,7 +119,14 @@ public class newtest {
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
+/*        onWebView()
+            .withElement(findElement(Locator.LINK_TEXT, "link_2")) // similar to onView(withId(...))
+            .perform(webClick()) // Similar to perform(click())
+*/
     // Test the Home Button
+    onWebView()
+        .withElement(findElement(Locator.PARTIAL_LINK_TEXT, "Fool"))
+        .perform(webClick());
 
 
     // Test the back and the forward buttons
@@ -123,7 +135,8 @@ public class newtest {
     // Test adding a bookMark
     // Test removing a bookmark
 
-    // Test the right drawer button
+    // Test the Table of Contents button
+
 
     /*
     ViewInteraction appCompatImageView = onView(
