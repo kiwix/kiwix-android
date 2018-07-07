@@ -67,7 +67,9 @@ public class HistoryDao {
 
   public void deleteHistory(List<History> historyList) {
     for (History history : historyList) {
-      kiwixDatabase.deleteWhere(History.class, History.TIME_STAMP.eq(history.getTimeStamp()));
+      if (history != null) {
+        kiwixDatabase.deleteWhere(History.class, History.TIME_STAMP.eq(history.getTimeStamp()));
+      }
     }
   }
 }

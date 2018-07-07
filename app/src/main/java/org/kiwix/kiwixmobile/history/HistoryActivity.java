@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
@@ -158,10 +159,19 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
       case android.R.id.home:
         onBackPressed();
         return true;
+
       case R.id.menu_history_toggle:
         item.setChecked(!item.isChecked());
         sharedPreferenceUtil.setShowHistoryCurrentBook(item.isChecked());
         presenter.loadHistory(sharedPreferenceUtil.getShowHistoryCurrentBook());
+        return true;
+
+      case R.id.menu_history_clear:
+        presenter.deleteHistory(new ArrayList<>(fullHistory));
+        fullHistory.clear();
+        historyList.clear();
+        historyAdapter.notifyDataSetChanged();
+        Toast.makeText(this, R.string.all_history_cleared_toast, Toast.LENGTH_SHORT).show();
         return true;
     }
     return super.onOptionsItemSelected(item);

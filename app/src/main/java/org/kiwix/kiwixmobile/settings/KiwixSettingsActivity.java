@@ -41,7 +41,6 @@ import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.data.local.dao.RecentSearchDao;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
@@ -115,23 +114,20 @@ public class KiwixSettingsActivity extends BaseActivity {
   }
 
   public static class PrefsFragment extends PreferenceFragment implements
+      SettingsContract.View,
       SharedPreferences.OnSharedPreferenceChangeListener, StorageSelectDialog.OnSelectListener {
+
+    @Inject
+    SettingsPresenter presenter;
+    @Inject
+    SharedPreferenceUtil sharedPreferenceUtil;
 
     private SliderPreference mSlider;
 
-    @Inject
-    RecentSearchDao recentSearchDao;
-
-    @Inject SharedPreferenceUtil sharedPreferenceUtil;
-
-    void setupDagger() {
-      KiwixApplication.getApplicationComponent().inject(this);
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
+      KiwixApplication.getApplicationComponent().inject(this);
       super.onCreate(savedInstanceState);
-      setupDagger();
       addPreferencesFromResource(R.xml.preferences);
 
       boolean auto_night_mode = sharedPreferenceUtil.getPrefAutoNightMode();
@@ -156,10 +152,6 @@ public class KiwixSettingsActivity extends BaseActivity {
       setStorage();
       setUpSettings();
       new LanguageUtils(getActivity()).changeFont(getActivity().getLayoutInflater(), sharedPreferenceUtil);
-    }
-
-    private void deleteSearchHistoryFromDb() {
-      recentSearchDao.deleteSearchHistory();
     }
 
     private void setStorage() {
@@ -274,15 +266,14 @@ public class KiwixSettingsActivity extends BaseActivity {
       int warningResId;
       if (sharedPreferenceUtil.nightMode()) {
         warningResId = R.drawable.ic_warning_white;
-      }
-      else {
+      } else {
         warningResId = R.drawable.ic_warning_black;
       }
       new AlertDialog.Builder(getActivity(), dialogStyle())
           .setTitle(getResources().getString(R.string.clear_all_history_dialog_title))
           .setMessage(getResources().getString(R.string.clear_recent_and_tabs_history_dialog))
           .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-            deleteSearchHistoryFromDb();
+            presenter.clearHistory();
             allHistoryCleared = true;
             Toast.makeText(getActivity(), getResources().getString(R.string.all_history_cleared_toast), Toast.LENGTH_SHORT).show();
           })
@@ -321,7 +312,7 @@ public class KiwixSettingsActivity extends BaseActivity {
       return true;
     }
 
-    public void openFolderSelect(){
+    public void openFolderSelect() {
       FragmentManager fm = getFragmentManager();
       StorageSelectDialog dialogFragment = new StorageSelectDialog();
       Bundle b = new Bundle();
