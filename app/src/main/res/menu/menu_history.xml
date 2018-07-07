@@ -15,4 +15,9 @@
     android:checkable="true"
     android:title="@string/history_from_current_book"
     app:showAsAction="never" />
+
+  <item
+    android:id="@+id/menu_history_clear"
+    android:title="@string/pref_clear_all_history_title"
+    app:showAsAction="never" />
 </menu>

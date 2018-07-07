@@ -25,4 +25,6 @@ public interface DataSource {
   Completable saveHistory(History history);
 
   Completable deleteHistory(List<History> historyList);
+
+  Completable clearHistory();
 }
