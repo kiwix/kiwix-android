@@ -64,7 +64,7 @@ public class newtest {
   public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @Test
-  @AllowFlaky(attempts = 5)
+  @AllowFlaky(attempts = 10)
   public void newtest() {
     // Launch the app, starting with the Splash Activity
     activityTestRule.launchActivity();
@@ -117,6 +117,9 @@ public class newtest {
     onView(withId(R.id.bottom_toolbar_toc)).check(matches(notNullValue()));
     //onView(withId(R.id.bottom_toolbar_toc)).check(matches(withText(R.string.table_of_contents)));
 
+
+    //onWebView(allOf(isDisplayed())).forceJavascriptEnabled();
+
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
 /*        onWebView()
@@ -124,7 +127,13 @@ public class newtest {
             .perform(webClick()) // Similar to perform(click())
 */
     // Test the Home Button
-    onWebView()
+    onWebView(allOf(childAtPosition(
+        allOf(withId(R.id.content_frame),
+            childAtPosition(
+                withId(R.id.drawer_layout),
+                0)),
+        0),
+        isDisplayed()))
         .withElement(findElement(Locator.PARTIAL_LINK_TEXT, "Fool"))
         .perform(webClick());
 
