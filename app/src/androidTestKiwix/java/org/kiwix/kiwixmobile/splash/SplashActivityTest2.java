@@ -1,12 +1,16 @@
 package org.kiwix.kiwixmobile.splash;
 
+import android.Manifest;
 import android.support.test.espresso.ViewInteraction;
+import android.support.test.filters.FlakyTest;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import com.schibsted.spain.barista.rule.flaky.AllowFlaky;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -33,7 +37,13 @@ public class SplashActivityTest2 {
   public ActivityTestRule<SplashActivity> mActivityTestRule =
       new ActivityTestRule<>(SplashActivity.class);
 
+  @Rule
+  public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+  @Rule
+  public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
   @Test
+  @AllowFlaky(attempts = 5)
   public void splashActivityTest2() {
     // Added a sleep statement to match the app's execution delay.
     // The recommended way to handle such scenarios is to use Espresso idling resources:

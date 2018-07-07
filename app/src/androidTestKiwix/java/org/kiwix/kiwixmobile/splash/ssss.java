@@ -1,12 +1,15 @@
 package org.kiwix.kiwixmobile.splash;
 
+import android.Manifest;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import com.android.dx.command.Main;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -14,6 +17,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.main.MainActivity;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
@@ -32,49 +36,15 @@ import static org.hamcrest.Matchers.allOf;
 public class ssss {
 
   @Rule
-  public ActivityTestRule<SplashActivity> mActivityTestRule =
-      new ActivityTestRule<>(SplashActivity.class);
+  public ActivityTestRule<MainActivity> mActivityTestRule =
+      new ActivityTestRule<>(MainActivity.class);
+  @Rule
+  public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+  @Rule
+  public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @Test
   public void ssss() {
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(5000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-
-    ViewInteraction customViewPager = onView(
-        allOf(withId(R.id.view_pager),
-            childAtPosition(
-                childAtPosition(
-                    withId(android.R.id.content),
-                    0),
-                0),
-            isDisplayed()));
-    customViewPager.perform(swipeLeft());
-
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(10000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-
-    ViewInteraction appCompatButton = onView(
-        allOf(withId(R.id.get_started), withText("Get started"),
-            childAtPosition(
-                childAtPosition(
-                    withId(android.R.id.content),
-                    0),
-                1),
-            isDisplayed()));
-    appCompatButton.perform(click());
-
     // Added a sleep statement to match the app's execution delay.
     // The recommended way to handle such scenarios is to use Espresso idling resources:
     // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
