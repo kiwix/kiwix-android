@@ -17,10 +17,20 @@
  */
 package org.kiwix.kiwixmobile.utils;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openContextualActionModeOverflowMenu;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import android.util.Log;
+
+import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
+import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
+
+import org.kiwix.kiwixmobile.R;
+
+import static android.support.test.espresso.Espresso.onData;
+import static android.support.test.espresso.action.ViewActions.longClick;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 
 /**
  * Created by mhutti1 on 27/04/17.
@@ -29,18 +39,24 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 public class StandardActions {
 
   public static void enterHelp() {
-    openContextualActionModeOverflowMenu();
-
-    onView(withText("Help"))
-        .perform(click());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_help));
   }
 
   public static void enterSettings() {
-    openContextualActionModeOverflowMenu();
-
-    onView(withText("Settings"))
-        .perform(click());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_settings));
   }
 
-
+  public static void deleteZimIfExists(String zimName, Integer adapterId) {
+    try {
+      onData(withContent(zimName)).inAdapterView(withId(adapterId)).perform(longClick());
+      clickDialogPositiveButton();
+      Log.i("TEST_DELETE_ZIM", "Successfully deleted ZIM file [" + zimName + "]");
+    } catch (RuntimeException e) {
+      Log.i("TEST_DELETE_ZIM", "Failed to delete ZIM file [" + zimName + "]... " +
+              "Probably because it doesn't exist");
+    }
+  }
 }
+

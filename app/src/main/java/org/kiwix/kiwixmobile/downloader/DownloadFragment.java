@@ -25,11 +25,9 @@ import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -42,11 +40,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.Locale;
-
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.base.BaseFragment;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
@@ -57,14 +54,13 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_WIFI_ONLY;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
-
-public class DownloadFragment extends Fragment {
+public class DownloadFragment extends BaseFragment {
 
   public static LinkedHashMap<Integer, LibraryNetworkEntity.Book> mDownloads = new LinkedHashMap<>();
   public static LinkedHashMap<Integer, String> mDownloadFiles = new LinkedHashMap<>();
@@ -76,15 +72,11 @@ public class DownloadFragment extends Fragment {
   private Activity faActivity;
   private boolean hasArtificiallyPaused;
 
-  @Inject static SharedPreferenceUtil sharedPreferenceUtil;
-
-  private void setupDagger() {
-    KiwixApplication.getInstance().getApplicationComponent().inject(this);
-  }
+  @Inject
+  SharedPreferenceUtil sharedPreferenceUtil;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    setupDagger();
     faActivity = super.getActivity();
     relLayout = (RelativeLayout) inflater.inflate(R.layout.download_management, container, false);
 
@@ -122,7 +114,7 @@ public class DownloadFragment extends Fragment {
     downloadAdapter.unRegisterDataSetObserver();
   }
 
-  public static void showNoWiFiWarning(Context context, Runnable yesAction) {
+  public void showNoWiFiWarning(Context context, Runnable yesAction) {
     new AlertDialog.Builder(context)
             .setTitle(R.string.wifi_only_title)
             .setMessage(R.string.wifi_only_msg)
@@ -200,7 +192,7 @@ public class DownloadFragment extends Fragment {
       String fileName = FileUtils.getFileName(mDownloadFiles.get(mKeys[position]));
       {
         Snackbar completeSnack = Snackbar.make(mainLayout, getResources().getString(R.string.download_complete_snackbar), Snackbar.LENGTH_LONG);
-        completeSnack.setAction(getResources().getString(R.string.open), v -> ZimFileSelectFragment.finishResult(fileName)).setActionTextColor(getResources().getColor(R.color.white)).show();
+        completeSnack.setAction(getResources().getString(R.string.open), v -> zimManageActivity.finishResult(fileName)).setActionTextColor(getResources().getColor(R.color.white)).show();
       }
       ZimFileSelectFragment zimFileSelectFragment = (ZimFileSelectFragment) zimManageActivity.mSectionsPagerAdapter.getItem(0);
       zimFileSelectFragment.addBook(fileName);

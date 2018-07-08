@@ -170,4 +170,15 @@
   <string name="your_languages">Selected languages:</string>
   <string name="other_languages">Other languages:</string>
   <string name="no_items_msg">No items available</string>
+  <string name="ongoing_download_channel_name">Ongoing Downloads</string>
+  <string name="ongoing_download_channel_desc">Category for ongoing zim file downloads.</string>
+  <string name="crash_title">Well... This is Embarrassing</string>
+  <string name="crash_description">It looks like we crashed.\n\nWould you mind helping us fix this problem by sending the following information?</string>
+  <string name="crash_checkbox_language">Your Language Settings</string>
+  <string name="crash_checkbox_zimfiles">A List of Your Zim Files</string>
+  <string name="crash_checkbox_exception">Details of The Crash</string>
+  <string name="crash_checkbox_logs">Application Logs</string>
+  <string name="crash_checkbox_device">Device Details</string>
+  <string name="crash_button_confirm">SEND DETAILS</string>
+  <string name="crash_button_decline">NO THANKS</string>
 </resources>

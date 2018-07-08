@@ -79,9 +79,11 @@ public class LanguageUtils {
     Locale locale = new Locale(language);
     Locale.setDefault(locale);
     Configuration config = new Configuration();
-    config.locale = locale;
     if (Build.VERSION.SDK_INT >= 17) {
+      config.setLocale(locale);
       config.setLayoutDirection(locale);
+    } else {
+      config.locale = locale;
     }
     context.getResources()
         .updateConfiguration(config, context.getResources().getDisplayMetrics());
@@ -108,7 +110,6 @@ public class LanguageUtils {
     return mLocaleMap.get(iso3.toUpperCase());
   }
 
-  @TargetApi(Build.VERSION_CODES.N)
   public static Locale getCurrentLocale(Context context){
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
       return context.getResources().getConfiguration().getLocales().get(0);
@@ -339,5 +340,22 @@ public class LanguageUtils {
     public String getLanguageName() {
       return mLanguageName;
     }
+  }
+
+
+
+  public static String getResourceString(Context appContext, String str){
+    String resourceName = str;
+    if(resourceName.contains("REPLACE_")) {
+      resourceName = resourceName.replace("REPLACE_", "");
+    }
+    int resourceId = appContext.getResources()
+      .getIdentifier(
+        resourceName,
+        "string",
+        appContext.getPackageName()
+      );
+    String resourceString = appContext.getResources().getString(resourceId);
+    return resourceString != null ? resourceString : str;
   }
 }

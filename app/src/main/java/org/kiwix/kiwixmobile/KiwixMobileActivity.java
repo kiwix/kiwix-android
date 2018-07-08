@@ -75,13 +75,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmarks_view.BookmarksActivity;
 import org.kiwix.kiwixmobile.database.BookmarksDao;
-import org.kiwix.kiwixmobile.database.KiwixDatabase;
-import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
 import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
@@ -115,6 +112,8 @@ import butterknife.ButterKnife;
 import okhttp3.OkHttpClient;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Build.VERSION_CODES;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.TableDrawerAdapter.TableClickListener;
 import static org.kiwix.kiwixmobile.search.SearchActivity.EXTRA_SEARCH_IN_TEXT;
@@ -146,9 +145,9 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_CURRENT_POSITIONS;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_CURRENT_TAB;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
+import static org.kiwix.kiwixmobile.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES;
+import static org.kiwix.kiwixmobile.utils.UpdateUtils.reformatProviderUrl;
 
 public class KiwixMobileActivity extends BaseActivity implements WebViewCallback {
 
@@ -214,8 +213,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   private boolean isFirstRun;
 
-  private BookmarksDao bookmarksDao;
-
   @BindView(R.id.toolbar) Toolbar toolbar;
 
   @BindView(R.id.button_backtotop) Button backToTopButton;
@@ -261,6 +258,9 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
   @Inject OkHttpClient okHttpClient;
 
   @Inject SharedPreferenceUtil sharedPreferenceUtil;
+
+  @Inject
+  BookmarksDao bookmarksDao;
 
   @Override
   public void onActionModeStarted(ActionMode mode) {
@@ -354,11 +354,15 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
     super.onCreate(savedInstanceState);
+
+    new WebView(this).destroy(); // Workaround for buggy webviews see #710
+
     wifiOnly = sharedPreferenceUtil.getPrefWifiOnly();
     nightMode = KiwixSettingsActivity.nightMode(sharedPreferenceUtil);
     if (nightMode) {
       setTheme(R.style.AppTheme_Night);
     }
+
     handleLocaleCheck();
     setContentView(R.layout.main);
     ButterKnife.bind(this);
@@ -391,28 +395,13 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     });
 
     documentSections = new ArrayList<>();
-    tabDrawerAdapter = new TabDrawerAdapter(mWebViews);
+    tabDrawerAdapter = new TabDrawerAdapter(mWebViews, getApplicationContext());
     tabDrawerLeft.setLayoutManager(new LinearLayoutManager(this));
     tabDrawerLeft.setAdapter(tabDrawerAdapter);
     tableDrawerRight.setLayoutManager(new LinearLayoutManager(this));
 
-    TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter();
+    TableDrawerAdapter tableDrawerAdapter = setupTableDrawerAdapter();
     tableDrawerRight.setAdapter(tableDrawerAdapter);
-    tableDrawerAdapter.setTableClickListener(new TableClickListener() {
-      @Override public void onHeaderClick(View view) {
-        getCurrentWebView().setScrollY(0);
-        drawerLayout.closeDrawer(GravityCompat.END);
-      }
-
-      @Override public void onSectionClick(View view, int position) {
-        getCurrentWebView().loadUrl("javascript:document.getElementById('"
-            + documentSections.get(position).id
-            + "').scrollIntoView();");
-
-        drawerLayout.closeDrawers();
-      }
-    });
-
     tableDrawerAdapter.notifyDataSetChanged();
 
     tabDrawerAdapter.setTabClickListener(new TabDrawerAdapter.TabClickListener() {
@@ -444,8 +433,17 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
       @Override
       public void sectionsLoaded(String title, List<DocumentSection> sections) {
+        for (DocumentSection section : sections) {
+          if(section.title.contains("REPLACE_")) {
+            section.title = getResourceString(getApplicationContext(), section.title);
+          }
+        }
         documentSections.addAll(sections);
-        tableDrawerAdapter.setTitle(title);
+        if(title.contains("REPLACE_")) {
+          tableDrawerAdapter.setTitle(getResourceString(getApplicationContext(), title));
+        } else {
+          tableDrawerAdapter.setTitle(title);
+        }
         tableDrawerAdapter.setSections(documentSections);
         tableDrawerAdapter.notifyDataSetChanged();
       }
@@ -507,6 +505,27 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     } else {
       backToTopAppearDaily();
     }
+  }
+
+  private TableDrawerAdapter setupTableDrawerAdapter() {
+    TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter();
+
+    tableDrawerAdapter.setTableClickListener(new TableClickListener() {
+      @Override public void onHeaderClick(View view) {
+        getCurrentWebView().setScrollY(0);
+        drawerLayout.closeDrawer(GravityCompat.END);
+      }
+
+      @Override public void onSectionClick(View view, int position) {
+        getCurrentWebView().loadUrl("javascript:document.getElementById('"
+                + documentSections.get(position).id
+                + "').scrollIntoView();");
+
+        drawerLayout.closeDrawers();
+      }
+    });
+
+    return tableDrawerAdapter;
   }
 
   private void backToTopAppearDaily() {
@@ -684,10 +703,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(this);
     tts.shutdown();
-  }
-
-  @Override protected void setupDagger(ApplicationComponent appComponent) {
-    appComponent.inject(this);
   }
 
   private void updateTableOfContents() {
@@ -1018,7 +1033,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
           //Bookmarks
           bookmarks = new ArrayList<>();
-          bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
           bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
 
           openMainPage();
@@ -1166,11 +1180,10 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
             getCurrentWebView().goBack();
           } else if (isFullscreenOpened) {
             closeFullScreen();
+          } else if (compatCallback.mIsActive) {
+            compatCallback.finish();
           } else {
             finish();
-          }
-          if (compatCallback.mIsActive) {
-            compatCallback.finish();
           }
           return true;
         case KeyEvent.KEYCODE_MENU:
@@ -1283,7 +1296,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       } else if (intent.getAction().equals(KiwixSearchWidget.MIC_CLICKED)) {
         intent.setAction("");
         goToSearch(true);
-      } else if (intent.getAction().equals(Intent.ACTION_VIEW)) {
+      } else if (intent.getAction().equals(Intent.ACTION_VIEW)
+          && (intent.getType() == null || !intent.getType().equals("application/octet-stream"))) {
         final String zimFile = ZimContentProvider.getZimFile();
         saveTabStates();
         Intent i = new Intent(KiwixMobileActivity.this, SearchActivity.class);
@@ -1382,12 +1396,9 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
     int[] ids = widgetManager.getAppWidgetIds(new ComponentName(context, KiwixSearchWidget.class));
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-      widgetManager.notifyAppWidgetViewDataChanged(ids, android.R.id.list);
-
-      intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-      context.sendBroadcast(intent);
-    }
+    widgetManager.notifyAppWidgetViewDataChanged(ids, android.R.id.list);
+    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+    context.sendBroadcast(intent);
   }
 
   private void setUpWebView() {
@@ -1515,7 +1526,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
           if (ZimContentProvider.getId() == null) return;
 
           //Bookmarks
-          bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
           bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
 
           if (itemClicked) {
@@ -1600,7 +1610,6 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   public void refreshBookmarkSymbol(Menu menu) { // Checks if current webview is in bookmarks array
     if (bookmarks == null || bookmarks.size() == 0) {
-      bookmarksDao = new BookmarksDao(KiwixDatabase.getInstance(this));
       bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
     }
 
@@ -1735,11 +1744,11 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       JSONArray urls = new JSONArray(zimArticles);
       JSONArray positions = new JSONArray(zimPositions);
       int i = 0;
-      getCurrentWebView().loadUrl(urls.getString(i));
+      getCurrentWebView().loadUrl(reformatProviderUrl(urls.getString(i)));
       getCurrentWebView().setScrollY(positions.getInt(i));
       i++;
       for (; i < urls.length(); i++) {
-        newTab(urls.getString(i));
+        newTab(reformatProviderUrl(urls.getString(i)));
         getCurrentWebView().setScrollY(positions.getInt(i));
       }
       selectTab(currentTab);
