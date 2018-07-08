@@ -191,6 +191,8 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
   private ArrayList<String> bookmarks;
 
+  private boolean bookmarkTabEnabled;
+
   private List<KiwixWebView> mWebViews = new ArrayList<>();
 
   private KiwixTextToSpeech tts;
@@ -340,7 +342,9 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
 
     @Override
     public void onBookmarkTabSelected() {
-      toggleBookmark();
+      if (bookmarkTabEnabled) {
+        toggleBookmark();
+      }
     }
 
     @Override
@@ -1627,13 +1631,15 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
               .getIcon().setAlpha(255);
 
       bookmarkTab.getCustomView().findViewById(R.id.bookmark_tab_icon).setBackgroundResource(icon);
+      bookmarkTabEnabled = true;
     } else {
       menu.findItem(R.id.menu_bookmarks)
-              .setEnabled(false)
-              .setIcon(R.drawable.action_bookmark)
-              .getIcon().setAlpha(130);
+          .setEnabled(false)
+          .setIcon(R.drawable.action_bookmark)
+          .getIcon().setAlpha(130);
 
       bookmarkTab.getCustomView().findViewById(R.id.bookmark_tab_icon).setBackgroundResource(R.drawable.action_bookmark);
+      bookmarkTabEnabled = false;
     }
   }
 
