@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.kiwix.kiwixmobile.main;
+package org.kiwix.kiwixmobile.language;
 
 public class LanguageActivityTest {
   // TODO: make sure the it is only possible to open the activity after the network call is finished and book list is updated
@@ -25,5 +25,5 @@ public class LanguageActivityTest {
   // TODO: make sure selecting new languages does not generate a new network request
   // TODO: verify all the correct books are displayed and are displayed correctly
   // TODO: test selecting no language is allowed
-  
+
 }
