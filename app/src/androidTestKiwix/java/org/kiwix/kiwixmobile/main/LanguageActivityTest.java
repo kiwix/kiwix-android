@@ -19,7 +19,11 @@
 package org.kiwix.kiwixmobile.main;
 
 public class LanguageActivityTest {
-  // TODO: test that default language is english
-  // TODO: test selecting no language is allowed
+  // TODO: make sure the it is only possible to open the activity after the network call is finished and book list is updated
+  // TODO: test that default language is based on device locale
   // TODO: test selecting language updates UI
+  // TODO: make sure selecting new languages does not generate a new network request
+  // TODO: verify all the correct books are displayed and are displayed correctly
+  // TODO: test selecting no language is allowed
+  
 }
