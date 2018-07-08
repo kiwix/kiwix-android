@@ -32,6 +32,7 @@ import org.kiwix.kiwixmobile.database.entity.Bookmarks;
 import org.kiwix.kiwixmobile.database.entity.LibraryDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.RecentSearch;
+import org.kiwix.kiwixmobile.utils.UpdateUtils;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -39,24 +40,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
+@Singleton
 public class KiwixDatabase extends SquidDatabase {
 
-  private static final int VERSION = 14;
+  private static final int VERSION = 15;
   private Context context;
-  private static KiwixDatabase instance = null;
 
-  protected KiwixDatabase(Context context) {
+  @Inject
+  public KiwixDatabase(Context context) {
     super(context);
     this.context = context;
-  }
-
-  public static KiwixDatabase getInstance(Context context) {
-    if(instance == null) {
-      instance = new KiwixDatabase(context);
-    }
-    return instance;
   }
 
   @Override
@@ -132,6 +130,9 @@ public class KiwixDatabase extends SquidDatabase {
       tryDropTable(BookDatabaseEntity.TABLE);
       tryCreateTable(BookDatabaseEntity.TABLE);
     }
+    if (newVersion >= 15 && oldVersion < 15) {
+      reformatBookmarks();
+    }
     return true;
   }
 
@@ -167,6 +168,12 @@ public class KiwixDatabase extends SquidDatabase {
         }
       }
     }
+  }
+
+  // Reformat bookmark urls to use correct provider
+  private void reformatBookmarks() {
+    BookmarksDao bookmarksDao = new BookmarksDao(this);
+    bookmarksDao.processBookmark(UpdateUtils::reformatProviderUrl);
   }
 }
 

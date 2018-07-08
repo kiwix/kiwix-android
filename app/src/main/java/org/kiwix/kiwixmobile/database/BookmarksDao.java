@@ -20,10 +20,13 @@ package org.kiwix.kiwixmobile.database;
 
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
+import com.yahoo.squidb.sql.Update;
 
 import org.kiwix.kiwixmobile.database.entity.Bookmarks;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 /**
  * Dao class for bookmarks.
@@ -32,9 +35,9 @@ import java.util.ArrayList;
 public class BookmarksDao {
   private KiwixDatabase mDb;
 
-
-  public BookmarksDao(KiwixDatabase kiwikDatabase) {
-    this.mDb = kiwikDatabase;
+  @Inject
+  public BookmarksDao(KiwixDatabase kiwixDatabase) {
+    this.mDb = kiwixDatabase;
   }
 
   public ArrayList<String> getBookmarks(String ZimId, String ZimName) {
@@ -94,4 +97,26 @@ public class BookmarksDao {
     mDb.deleteWhere(Bookmarks.class, Bookmarks.BOOKMARK_URL.eq(favArticle).and(Bookmarks.ZIM_ID.eq(ZimId).or(Bookmarks.ZIM_NAME.eq(ZimName))) );
   }
 
+  public void processBookmark(StringOperation operation) {
+    SquidCursor<Bookmarks> bookmarkCursor = mDb.query(
+        Bookmarks.class,
+        Query.select(Bookmarks.ID, Bookmarks.BOOKMARK_URL));
+    try {
+      while (bookmarkCursor.moveToNext()) {
+        String url = bookmarkCursor.get(Bookmarks.BOOKMARK_URL);
+        url = operation.apply(url);
+        if (url != null) {
+          mDb.update(Update.table(Bookmarks.TABLE)
+              .where(Bookmarks.ID.eq(bookmarkCursor.get(Bookmarks.ID)))
+              .set(Bookmarks.BOOKMARK_URL, url));
+        }
+      }
+    } finally {
+      bookmarkCursor.close();
+    }
+  }
+
+  public interface StringOperation {
+    String apply(String string);
+  }
 }

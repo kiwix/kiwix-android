@@ -17,30 +17,46 @@
  */
 package org.kiwix.kiwixmobile.zim_manager;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
 
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BasePresenter;
-import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 import javax.inject.Inject;
 
 import static org.kiwix.kiwixmobile.zim_manager.ZimManageActivity.KIWIX_TAG;
 
 /**
- * Created by srv_twry on 15/2/18.
+ * Presenter for {@link ZimManageActivity}
  */
 
-public class ZimManagePresenter extends BasePresenter<ZimManageViewCallback> {
+class ZimManagePresenter extends BasePresenter<ZimManageViewCallback> {
 
-    @Inject
-    public ZimManagePresenter() {}
+  @Inject
+  SharedPreferenceUtil mSharedPreferenceUtil;
 
-    void showNoWifiWarning(Context context, String action) {
-        if (DownloadService.ACTION_NO_WIFI.equals(action)) {
-            DownloadFragment.showNoWiFiWarning(context, () -> {});
-            Log.i(KIWIX_TAG, "No WiFi, showing warning");
-        }
+  @Inject
+  ZimManagePresenter() {
+  }
+
+  void showNoWifiWarning(Context context, String action) {
+    if (DownloadService.ACTION_NO_WIFI.equals(action)) {
+      new AlertDialog.Builder(context)
+          .setTitle(R.string.wifi_only_title)
+          .setMessage(R.string.wifi_only_msg)
+          .setPositiveButton(R.string.yes, (dialog, i) -> {
+            mSharedPreferenceUtil.putPrefWifiOnly(false);
+            KiwixMobileActivity.wifiOnly = false;
+          })
+          .setNegativeButton(R.string.no, (dialog, i) -> {
+          })
+          .show();
+      Log.i(KIWIX_TAG, "No WiFi, showing warning");
     }
+  }
 }

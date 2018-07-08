@@ -36,7 +36,6 @@ import com.google.common.collect.ImmutableList;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.database.BookDao;
-import org.kiwix.kiwixmobile.database.KiwixDatabase;
 import org.kiwix.kiwixmobile.database.NetworkLanguageDao;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
@@ -73,25 +72,20 @@ public class LibraryAdapter extends BaseAdapter {
   private final Context context;
   public Map<String, Integer> languageCounts = new HashMap<>();
   public List<Language> languages = new ArrayList<>();
-  private final NetworkLanguageDao networkLanguageDao;
-  private final BookDao bookDao;
   private final LayoutInflater layoutInflater;
   private final BookFilter bookFilter = new BookFilter();
   private Disposable saveNetworkLanguageDisposable;
   @Inject BookUtils bookUtils;
-
-  private void setupDagger() {
-    KiwixApplication.getInstance().getApplicationComponent().inject(this);
-  }
-
+  @Inject
+  NetworkLanguageDao networkLanguageDao;
+  @Inject
+  BookDao bookDao;
 
   public LibraryAdapter(Context context) {
     super();
-    setupDagger();
+    KiwixApplication.getApplicationComponent().inject(this);
     this.context = context;
     layoutInflater = LayoutInflater.from(context);
-    networkLanguageDao = new NetworkLanguageDao(KiwixDatabase.getInstance(context));
-    bookDao = new BookDao(KiwixDatabase.getInstance(context));
   }
 
   public void setAllBooks(List<Book> books) {
@@ -252,6 +246,7 @@ public class LibraryAdapter extends BaseAdapter {
             .filter(book -> !books.contains(book))
             .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
+            .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
             .toList()
             .blockingGet();
 
@@ -260,6 +255,7 @@ public class LibraryAdapter extends BaseAdapter {
             .filter(book -> !books.contains(book))
             .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
+            .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
             .toList()
             .blockingGet();
 
@@ -273,6 +269,7 @@ public class LibraryAdapter extends BaseAdapter {
             .filter(book -> !books.contains(book))
             .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
+            .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
             .flatMap(book -> getMatches(book, s.toString()))
             .toList()
             .blockingGet();
@@ -284,6 +281,7 @@ public class LibraryAdapter extends BaseAdapter {
             .filter(book -> !books.contains(book))
             .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
+            .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
             .flatMap(book -> getMatches(book, s.toString()))
             .toList()
             .blockingGet();
