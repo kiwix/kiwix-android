@@ -58,6 +58,7 @@ public class StyleUtils {
 
   @SuppressWarnings("deprecation")
   public static Spanned fromHtml(String source) {
+    if (source == null) source = "";
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
       return Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY);
     } else {

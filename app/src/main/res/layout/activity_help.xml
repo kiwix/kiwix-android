@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="?attr/listBackground"
+  android:fitsSystemWindows="true"
+  tools:context=".help.HelpActivity">
+
+  <android.support.design.widget.AppBarLayout
+    android:id="@+id/activity_help_appbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/AppTheme.AppBarOverlay"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <android.support.v7.widget.Toolbar
+      android:id="@+id/activity_help_toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      android:theme="@style/AppTheme.AppBarOverlay"
+      app:popupTheme="@style/AppTheme.PopupOverlay" />
+  </android.support.design.widget.AppBarLayout>
+
+  <ImageView
+    android:id="@+id/activity_help_feedback_image_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:contentDescription="@string/send_feedback"
+    android:padding="@dimen/activity_horizontal_margin"
+    app:layout_constraintTop_toBottomOf="@id/activity_help_appbar"
+    app:srcCompat="@drawable/ic_feedback_blue_24dp" />
+
+  <TextView
+    android:id="@+id/activity_help_feedback_text_view"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:drawablePadding="@dimen/activity_horizontal_margin"
+    android:text="@string/send_feedback"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    app:layout_constraintBottom_toBottomOf="@id/activity_help_feedback_image_view"
+    app:layout_constraintStart_toEndOf="@id/activity_help_feedback_image_view"
+    app:layout_constraintTop_toTopOf="@id/activity_help_feedback_image_view" />
+
+  <View
+    android:id="@+id/activity_help_feedback_divider"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="?android:attr/listDivider"
+    app:layout_constraintTop_toBottomOf="@id/activity_help_feedback_image_view" />
+
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/activity_help_recycler_view"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/activity_help_feedback_divider" />
+</android.support.constraint.ConstraintLayout>
