@@ -3,12 +3,13 @@ package org.kiwix.kiwixmobile.di.modules;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.di.PerActivity;
 import org.kiwix.kiwixmobile.error.ErrorActivity;
+import org.kiwix.kiwixmobile.help.HelpActivity;
 import org.kiwix.kiwixmobile.history.HistoryActivity;
 import org.kiwix.kiwixmobile.history.HistoryModule;
 import org.kiwix.kiwixmobile.intro.IntroActivity;
+import org.kiwix.kiwixmobile.intro.IntroModule;
 import org.kiwix.kiwixmobile.language.LanguageActivity;
 import org.kiwix.kiwixmobile.language.LanguageModule;
-import org.kiwix.kiwixmobile.intro.IntroModule;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.main.MainModule;
 import org.kiwix.kiwixmobile.search.SearchActivity;
@@ -66,4 +67,8 @@ public abstract class ActivityBindingModule {
   @PerActivity
   @ContributesAndroidInjector(modules = HistoryModule.class)
   public abstract HistoryActivity provideHistoryActivity();
+
+  @PerActivity
+  @ContributesAndroidInjector
+  public abstract HelpActivity provideHelpActivity();
 }

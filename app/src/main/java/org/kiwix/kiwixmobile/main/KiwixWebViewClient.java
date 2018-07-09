@@ -26,18 +26,15 @@ import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
-import org.kiwix.kiwixmobile.utils.StyleUtils;
 
 import java.util.HashMap;
 
-import static org.kiwix.kiwixmobile.utils.Constants.CONTACT_EMAIL_ADDRESS;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_EXTERNAL_LINK;
 
 public class KiwixWebViewClient extends WebViewClient {
@@ -47,10 +44,10 @@ public class KiwixWebViewClient extends WebViewClient {
     put("pdf", "application/pdf");
   }};
   private final SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(KiwixApplication.getInstance());
-  private View help;
-  private WebViewCallback callback;
+  private final WebViewCallback callback;
+  private View home;
 
-  public KiwixWebViewClient(WebViewCallback callback) {
+  KiwixWebViewClient(WebViewCallback callback) {
     this.callback = callback;
   }
 
@@ -70,7 +67,7 @@ public class KiwixWebViewClient extends WebViewClient {
       }
       return false;
     } else if (url.startsWith("file://")) {
-      // To handle help page (loaded from resources)
+      // To handle home page (loaded from resources)
       return true;
     } else if (url.startsWith("javascript:")) {
       // Allow javascript for HTML functions and code execution (EX: night mode)
@@ -99,29 +96,8 @@ public class KiwixWebViewClient extends WebViewClient {
       inflateHomeView(view);
       return;
     }
-    if (!url.equals("file:///android_asset/home.html") && !url.equals("file:///android_asset/help.html")) {
-      view.removeView(help);
-    } else if (url.equals("file:///android_asset/help.html") && !BuildConfig.IS_CUSTOM_APP) {
-      if (view.findViewById(R.id.get_content_card) == null) {
-        LayoutInflater inflater = LayoutInflater.from(view.getContext());
-        help = inflater.inflate(R.layout.help, view, false);
-        help.findViewById(R.id.get_content_card)
-            .setOnClickListener(card -> {
-                  help.findViewById(R.id.get_content_card).setEnabled(false);
-                  callback.manageZimFiles(1);
-                }
-            );
-        view.addView(help);
-        ImageView welcome_image = help.findViewById(R.id.welcome_image);
-        if (sharedPreferenceUtil.nightMode()) {
-          welcome_image.setImageResource(R.drawable.kiwix_welcome_night);
-        } else {
-          welcome_image.setImageResource(R.drawable.kiwix_welcome);
-        }
-        TextView contact = help.findViewById(R.id.welcome21);
-        contact.setText(StyleUtils.highlightUrl(contact.getText().toString(), CONTACT_EMAIL_ADDRESS));
-        contact.setOnClickListener(v -> callback.sendContactEmail());
-      }
+    if (!url.equals("file:///android_asset/home.html")) {
+      view.removeView(home);
     } else if (!BuildConfig.IS_CUSTOM_APP) {
       inflateHomeView(view);
     }
@@ -130,12 +106,13 @@ public class KiwixWebViewClient extends WebViewClient {
 
   private void inflateHomeView(WebView view) {
     LayoutInflater inflater = LayoutInflater.from(view.getContext());
-    help = inflater.inflate(R.layout.content_main, view, false);
-    callback.setHomePage(help);
+    home = inflater.inflate(R.layout.content_main, view, false);
+    callback.setHomePage(home);
     if (sharedPreferenceUtil.nightMode()) {
-      ImageView cardImage = help.findViewById(R.id.content_main_card_image);
+      ImageView cardImage = home.findViewById(R.id.content_main_card_image);
       cardImage.setImageResource(R.drawable.ic_home_kiwix_banner_night);
     }
-    view.addView(help);
+    view.removeAllViews();
+    view.addView(home);
   }
 }

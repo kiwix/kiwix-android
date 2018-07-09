@@ -23,7 +23,6 @@
     android:label="@string/app_name"
     android:supportsRtl="true"
     android:theme="@style/AppTheme">
-
     <activity
       android:name=".splash.SplashActivity"
       android:label="@string/app_name"
@@ -79,7 +78,6 @@
         <data android:pathPattern=".*\\..*\\..*\\..*\\.zimaa" />
         <data android:host="*" />
       </intent-filter>
-
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
 
@@ -131,7 +129,9 @@
       </intent-filter>
       <intent-filter android:label="@string/app_search_string">
         <action android:name="android.intent.action.PROCESS_TEXT" />
+
         <category android:name="android.intent.category.DEFAULT" />
+
         <data android:mimeType="text/plain" />
       </intent-filter>
     </activity>
@@ -197,6 +197,11 @@
     <activity android:name=".intro.IntroActivity" />
     <activity android:name=".language.LanguageActivity" />
     <activity android:name=".history.HistoryActivity" />
+    <activity android:name=".help.HelpActivity">
+      <meta-data
+        android:name="android.support.PARENT_ACTIVITY"
+        android:value="main.MainActivity" />
+    </activity>
   </application>
 
 </manifest>

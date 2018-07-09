@@ -17,8 +17,8 @@
  */
 package org.kiwix.kiwixmobile.main;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,29 +32,28 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.N;
+import static org.kiwix.kiwixmobile.utils.StyleUtils.fromHtml;
 
 public class TabDrawerAdapter extends RecyclerView.Adapter<TabDrawerAdapter.ViewHolder> {
+  private final List<KiwixWebView> webViews;
   private TabClickListener listener;
-  private List<KiwixWebView> webViews;
-
   private int selectedPosition = 0;
 
-  public TabDrawerAdapter(List<KiwixWebView> webViews) {
+  TabDrawerAdapter(List<KiwixWebView> webViews) {
     this.webViews = webViews;
   }
 
+  @NonNull
   @Override
-  public TabDrawerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  public TabDrawerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.tabs_list, parent, false);
     return new ViewHolder(v);
   }
 
   @Override
-  public void onBindViewHolder(ViewHolder holder, int position) {
+  public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     KiwixWebView webView = webViews.get(position);
-    holder.title.setText(stripHtml(webView.getTitle()));
+    holder.title.setText(fromHtml(webView.getTitle()));
     holder.exit.setOnClickListener(v -> listener.onCloseTab(v, position));
     holder.itemView.setOnClickListener(v -> {
       listener.onSelectTab(v, position);
@@ -88,21 +87,15 @@ public class TabDrawerAdapter extends RecyclerView.Adapter<TabDrawerAdapter.View
     void onCloseTab(View view, int position);
   }
 
-  public static class ViewHolder extends RecyclerView.ViewHolder {
-    public @BindView(R.id.titleText) TextView title;
-    public @BindView(R.id.exitButton) ImageView exit;
+  static class ViewHolder extends RecyclerView.ViewHolder {
+    @BindView(R.id.titleText)
+    TextView title;
+    @BindView(R.id.exitButton)
+    ImageView exit;
 
-    public ViewHolder(View v) {
+    ViewHolder(View v) {
       super(v);
       ButterKnife.bind(this, v);
-    }
-  }
-
-  public String stripHtml(String html) {
-    if (SDK_INT >= N) {
-      return Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY).toString();
-    } else {
-      return Html.fromHtml(html).toString();
     }
   }
 }

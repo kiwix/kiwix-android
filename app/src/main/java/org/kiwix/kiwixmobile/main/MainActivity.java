@@ -84,6 +84,7 @@ import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
+import org.kiwix.kiwixmobile.help.HelpActivity;
 import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.history.HistoryActivity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
@@ -117,7 +118,6 @@ import static org.kiwix.kiwixmobile.main.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.main.TableDrawerAdapter.TableClickListener;
 import static org.kiwix.kiwixmobile.search.SearchActivity.EXTRA_SEARCH_IN_TEXT;
 import static org.kiwix.kiwixmobile.utils.Constants.BOOKMARK_CHOSEN_REQUEST;
-import static org.kiwix.kiwixmobile.utils.Constants.CONTACT_EMAIL_ADDRESS;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOKMARK_CLICKED;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOKMARK_CONTENTS;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_TITLE;
@@ -835,8 +835,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         break;
 
       case R.id.menu_help:
-        showHelpPage();
-        break;
+        startActivity(new Intent(this, HelpActivity.class));
+        return true;
 
       case R.id.menu_openfile:
         manageZimFiles(0);
@@ -937,21 +937,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     if (getSupportActionBar() != null) {
       getSupportActionBar().setTitle(createMenuText(getString(R.string.app_name)));
     }
-  }
-
-  @Override
-  public void showHelpPage() {
-    getCurrentWebView().removeAllViews();
-    getCurrentWebView().loadUrl("file:///android_asset/help.html");
-  }
-
-  public void sendContactEmail() {
-    Intent intent = new Intent(Intent.ACTION_SEND);
-    intent.setType("plain/text");
-    intent.putExtra(Intent.EXTRA_EMAIL, new String[]{CONTACT_EMAIL_ADDRESS});
-    intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback in " +
-        LanguageUtils.getCurrentLocale(this).getDisplayLanguage());
-    startActivity(Intent.createChooser(intent, ""));
   }
 
   @Override
@@ -1249,7 +1234,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
 
     if (!mWebViews.isEmpty() && mWebViews.get(currentWebViewIndex).getUrl() != null &&
-        mWebViews.get(currentWebViewIndex).getUrl().equals("file:///android_asset/help.html") &&
+        mWebViews.get(currentWebViewIndex).getUrl().equals("file:///android_asset/home.html") &&
         mWebViews.get(currentWebViewIndex).findViewById(R.id.get_content_card) != null) {
       mWebViews.get(currentWebViewIndex).findViewById(R.id.get_content_card).setEnabled(true);
     }
@@ -1623,7 +1608,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     refreshNavigationButtons();
 
     if (getCurrentWebView().getUrl() == null ||
-        getCurrentWebView().getUrl().equals("file:///android_asset/help.html") ||
         getCurrentWebView().getUrl().equals("file:///android_asset/home.html")) {
       menu.findItem(R.id.menu_read_aloud).setVisible(false);
     } else {
@@ -1642,7 +1626,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     if (menu.findItem(R.id.menu_bookmarks) != null &&
         getCurrentWebView().getUrl() != null &&
         ZimContentProvider.getId() != null &&
-        !getCurrentWebView().getUrl().equals("file:///android_asset/help.html")) {
+        !getCurrentWebView().getUrl().equals("file:///android_asset/home.html")) {
       int icon = bookmarks.contains(getCurrentWebView().getUrl()) ? R.drawable.ic_bookmark_24dp : R.drawable.ic_bookmark_border_24dp;
 
       menu.findItem(R.id.menu_bookmarks)
@@ -1865,7 +1849,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
             openZimFile(new File(filePath), true);
           }
         } else {
-          Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display help page");
+          Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page");
           showHomePage();
         }
       }
@@ -1901,8 +1885,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
     updateBottomToolbarArrowsAlpha();
     String url = getCurrentWebView().getUrl();
-    if (url != null && !url.equals("file:///android_asset/home.html") &&
-        !url.equals("file:///android_asset/help.html")) {
+    if (url != null && !url.equals("file:///android_asset/home.html")) {
       History history = new History();
       history.setZimId(ZimContentProvider.getId())
           .setZimName(ZimContentProvider.getName())
