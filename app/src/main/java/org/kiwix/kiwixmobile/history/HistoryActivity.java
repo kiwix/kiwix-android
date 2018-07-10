@@ -39,20 +39,19 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
   private final List<History> fullHistory = new ArrayList<>();
   private final List<History> deleteList = new ArrayList<>();
 
-  @BindView(R.id.activity_history_toolbar)
+  @BindView(R.id.toolbar)
   Toolbar toolbar;
-  @BindView(R.id.activity_history_recycler_view)
-  RecyclerView recyclerView;
   @Inject
   HistoryContract.Presenter presenter;
-
+  @BindView(R.id.recycler_view)
+  RecyclerView recyclerView;
   private boolean refreshAdapter = true;
   private HistoryAdapter historyAdapter;
   private ActionMode actionMode;
   private final ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-      mode.getMenuInflater().inflate(R.menu.menu_context_history, menu);
+      mode.getMenuInflater().inflate(R.menu.menu_context_delete, menu);
       return true;
     }
 
@@ -65,7 +64,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
       refreshAdapter = false;
       switch (item.getItemId()) {
-        case R.id.menu_context_history_delete:
+        case R.id.menu_context_delete:
           fullHistory.removeAll(deleteList);
           for (History history : deleteList) {
             int position = historyList.indexOf(history);
@@ -107,12 +106,13 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     presenter.attachView(this);
-    setContentView(R.layout.activity_history);
+    setContentView(R.layout.activity_bookmarks_history_language);
     setSupportActionBar(toolbar);
 
     ActionBar actionBar = getSupportActionBar();
     if (actionBar != null) {
       actionBar.setDisplayHomeAsUpEnabled(true);
+      actionBar.setTitle(R.string.history);
     }
     historyAdapter = new HistoryAdapter(historyList, deleteList, this);
     recyclerView.setAdapter(historyAdapter);

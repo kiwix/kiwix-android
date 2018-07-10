@@ -27,19 +27,22 @@ import com.yahoo.squidb.data.adapter.SQLiteDatabaseWrapper;
 import com.yahoo.squidb.sql.Table;
 
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
+import org.kiwix.kiwixmobile.data.local.dao.BookDao;
 import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
 import org.kiwix.kiwixmobile.data.local.entity.BookDatabaseEntity;
-import org.kiwix.kiwixmobile.data.local.entity.Bookmarks;
+import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.data.local.entity.LibraryDatabaseEntity;
 import org.kiwix.kiwixmobile.data.local.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.data.local.entity.RecentSearch;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -49,8 +52,8 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 @Singleton
 public class KiwixDatabase extends SquidDatabase {
 
-  private static final int VERSION = 15;
-  private Context context;
+  private static final int VERSION = 16;
+  private final Context context;
 
   @Inject
   public KiwixDatabase(Context context) {
@@ -69,7 +72,7 @@ public class KiwixDatabase extends SquidDatabase {
         BookDatabaseEntity.TABLE,
         LibraryDatabaseEntity.TABLE,
         RecentSearch.TABLE,
-        Bookmarks.TABLE,
+        Bookmark.TABLE,
         NetworkLanguageDatabaseEntity.TABLE,
         History.TABLE
     };
@@ -90,7 +93,7 @@ public class KiwixDatabase extends SquidDatabase {
       tryCreateTable(RecentSearch.TABLE);
     }
     if (newVersion >= 4) {
-      tryCreateTable(Bookmarks.TABLE);
+      tryCreateTable(Bookmark.TABLE);
     }
     if (newVersion >= 5 && oldVersion < 5) {
       db.execSQL("DROP TABLE IF EXISTS book");
@@ -101,11 +104,11 @@ public class KiwixDatabase extends SquidDatabase {
     }
     if (newVersion >= 6 && oldVersion < 6) {
       db.execSQL("DROP TABLE IF EXISTS Bookmarks");
-      tryCreateTable(Bookmarks.TABLE);
-      migrateBookmarks();
+      tryCreateTable(Bookmark.TABLE);
+      migrateBookmarksVersion6();
     }
     if (newVersion >= 6) {
-      tryCreateTable(Bookmarks.TABLE);
+      tryCreateTable(Bookmark.TABLE);
     }
     if (newVersion >= 9) {
       db.execSQL("DROP TABLE IF EXISTS book");
@@ -126,7 +129,7 @@ public class KiwixDatabase extends SquidDatabase {
     }
     if (newVersion >= 13) {
       tryAddColumn(BookDatabaseEntity.NAME);
-      tryAddColumn(Bookmarks.ZIM_NAME);
+      tryAddColumn(Bookmark.ZIM_NAME);
     }
     if (newVersion >= 14 && oldVersion < 14) {
       tryDropTable(BookDatabaseEntity.TABLE);
@@ -135,7 +138,30 @@ public class KiwixDatabase extends SquidDatabase {
     if (newVersion >= 15 && oldVersion < 15) {
       tryCreateTable(History.TABLE);
     }
+    if (newVersion >= 16 && oldVersion < 16) {
+      tryAddColumn(Bookmark.ZIM_FILE_PATH);
+      tryAddColumn(Bookmark.FAVICON);
+      migrateBookmarksVersion16();
+    }
     return true;
+  }
+
+  private void migrateBookmarksVersion16() {
+    BookmarksDao bookmarksDao = new BookmarksDao(this);
+    BookDao bookDao = new BookDao(this);
+    List<Bookmark> bookmarks = bookmarksDao.getBookmarks(false);
+    List<LibraryNetworkEntity.Book> books = bookDao.getBooks();
+    for (Bookmark bookmark : bookmarks) {
+      if (bookmark.getZimId() != null) {
+        for (LibraryNetworkEntity.Book book : books) {
+          if (bookmark.getZimId().equals(book.getId())) {
+            bookmark.setZimFilePath(book.getUrl()).setFavicon(book.getFavicon());
+            bookmarksDao.saveBookmark(bookmark);
+            break;
+          }
+        }
+      }
+    }
   }
 
   @Override
@@ -143,9 +169,7 @@ public class KiwixDatabase extends SquidDatabase {
     return VERSION;
   }
 
-  public void migrateBookmarks() {
-    BookmarksDao bookmarksDao = new BookmarksDao(this);
-
+  public void migrateBookmarksVersion6() {
     String[] ids = context.fileList();
     for (String id : ids) {
       if (id.length() == 40 && id.substring(id.length() - 4).equals(".txt")) {
@@ -156,10 +180,12 @@ public class KiwixDatabase extends SquidDatabase {
           if (stream != null) {
             BufferedReader read = new BufferedReader(new InputStreamReader(stream));
             while ((in = read.readLine()) != null) {
-              bookmarksDao.saveBookmark(null, in, idName, idName);
+              Bookmark bookmark = new Bookmark();
+              bookmark.setBookmarkUrl("null").setBookmarkTitle(in).setZimId(idName).setZimName(idName);
+              persist(bookmark);
             }
             context.deleteFile(id);
-            Log.d(TAG_KIWIX, "Switched to bookmarkfile " + ZimContentProvider.getId());
+            Log.d(TAG_KIWIX, "Switched to bookmark file " + ZimContentProvider.getId());
           }
         } catch (FileNotFoundException e) {
           Log.e(TAG_KIWIX, "Bookmark File ( " + id + " ) not found", e);

@@ -6,7 +6,7 @@
   android:layout_height="64dp">
 
   <ImageView
-    android:id="@+id/item_history_favicon"
+    android:id="@+id/favicon"
     android:layout_width="40dp"
     android:layout_height="40dp"
     android:layout_marginEnd="@dimen/activity_horizontal_margin"
@@ -18,7 +18,7 @@
     tools:src="@mipmap/kiwix_icon_round" />
 
   <TextView
-    android:id="@+id/item_history_title"
+    android:id="@+id/title"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginEnd="@dimen/activity_horizontal_margin"
@@ -26,7 +26,7 @@
     android:alpha="0.87"
     android:textAppearance="?android:attr/textAppearanceMedium"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toEndOf="@id/item_history_favicon"
+    app:layout_constraintStart_toEndOf="@id/favicon"
     app:layout_constraintTop_toTopOf="parent"
     tools:text="Wikipedia - Main Page" />
 </android.support.constraint.ConstraintLayout>
