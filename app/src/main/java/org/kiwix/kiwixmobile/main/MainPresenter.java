@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.data.DataSource;
+import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.di.PerActivity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
@@ -23,7 +24,7 @@ import io.reactivex.disposables.Disposable;
 @PerActivity
 class MainPresenter extends BasePresenter<MainContract.View> implements MainContract.Presenter {
 
-  private DataSource dataSource;
+  private final DataSource dataSource;
 
   @Inject
   MainPresenter(DataSource dataSource) {
@@ -60,6 +61,54 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
   @Override
   public void saveHistory(History history) {
     dataSource.saveHistory(history)
+        .subscribe(new CompletableObserver() {
+          @Override
+          public void onSubscribe(Disposable d) {
+
+          }
+
+          @Override
+          public void onComplete() {
+
+          }
+
+          @Override
+          public void onError(Throwable e) {
+            Log.e("MainPresenter", e.toString());
+          }
+        });
+  }
+
+  @Override
+  public void loadCurrentZimBookmarksUrl() {
+    compositeDisposable.add(dataSource.getCurrentZimBookmarksUrl()
+        .subscribe(view::refreshBookmarksUrl, e -> Log.e("MainPresenter", e.toString())));
+  }
+
+  @Override
+  public void saveBookmark(Bookmark bookmark) {
+    dataSource.saveBookmark(bookmark)
+        .subscribe(new CompletableObserver() {
+          @Override
+          public void onSubscribe(Disposable d) {
+
+          }
+
+          @Override
+          public void onComplete() {
+
+          }
+
+          @Override
+          public void onError(Throwable e) {
+            Log.e("MainPresenter", e.toString());
+          }
+        });
+  }
+
+  @Override
+  public void deleteBookmark(Bookmark bookmark) {
+    dataSource.deleteBookmark(bookmark)
         .subscribe(new CompletableObserver() {
           @Override
           public void onSubscribe(Disposable d) {

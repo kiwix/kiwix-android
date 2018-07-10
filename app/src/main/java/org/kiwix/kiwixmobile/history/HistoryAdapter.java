@@ -35,7 +35,7 @@ class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   @Override
   public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     if (viewType == TYPE_ITEM) {
-      View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_history, parent, false);
+      View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_bookmark_history, parent, false);
       return new Item(view);
     } else {
       View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.header_date, parent, false);
@@ -81,9 +81,9 @@ class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   }
 
   class Item extends RecyclerView.ViewHolder {
-    @BindView(R.id.item_history_favicon)
+    @BindView(R.id.favicon)
     ImageView favicon;
-    @BindView(R.id.item_history_title)
+    @BindView(R.id.title)
     TextView title;
 
     Item(View itemView) {

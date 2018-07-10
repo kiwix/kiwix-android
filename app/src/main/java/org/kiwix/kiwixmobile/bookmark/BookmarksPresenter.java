@@ -1,56 +1,108 @@
-/*
- * Kiwix Android
- * Copyright (C) 2018  Kiwix <android.kiwix.org>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
 package org.kiwix.kiwixmobile.bookmark;
 
-import org.kiwix.kiwixmobile.base.BasePresenter;
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
-import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
+import android.util.Log;
 
-import java.util.ArrayList;
+import org.kiwix.kiwixmobile.base.BasePresenter;
+import org.kiwix.kiwixmobile.data.DataSource;
+import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
+import org.kiwix.kiwixmobile.di.PerActivity;
+import org.kiwix.kiwixmobile.di.qualifiers.Computation;
+import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
-/**
- * Created by EladKeyshawn on 05/04/2017.
- */
-public class BookmarksPresenter extends BasePresenter<BookmarksViewCallback> {
+import io.reactivex.CompletableObserver;
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
+import io.reactivex.SingleObserver;
+import io.reactivex.disposables.Disposable;
+
+@PerActivity
+class BookmarksPresenter extends BasePresenter<BookmarksContract.View> implements BookmarksContract.Presenter {
+
+  private final DataSource dataSource;
+  private final Scheduler mainThread;
+  private final Scheduler computation;
+  private Disposable disposable;
 
   @Inject
-  BookmarksDao bookmarksDao;
-
-  @Inject
-  BookmarksPresenter() {
-  }
-
-  public void loadBookmarks() {
-    ArrayList<String> bookmarks = bookmarksDao.getBookmarkTitles(ZimContentProvider.getId(), ZimContentProvider.getName());
-    ArrayList<String> bookmarkUrls = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
-    view.showBookmarks(bookmarks, bookmarkUrls);
-  }
-
-
-  public void deleteBookmark(String article) {
-    bookmarksDao.deleteBookmark(article, ZimContentProvider.getId(), ZimContentProvider.getName());
+  BookmarksPresenter(DataSource dataSource, @MainThread Scheduler mainThread,
+                     @Computation Scheduler computation) {
+    this.dataSource = dataSource;
+    this.mainThread = mainThread;
+    this.computation = computation;
   }
 
   @Override
-  public void attachView(BookmarksViewCallback mvpView) {
-    super.attachView(mvpView);
+  public void loadBookmarks(boolean showFromCurrentBookmarks) {
+    dataSource.getBookmarks(showFromCurrentBookmarks)
+        .subscribe(new SingleObserver<List<Bookmark>>() {
+          @Override
+          public void onSubscribe(Disposable d) {
+            if (disposable != null && !disposable.isDisposed()) {
+              disposable.dispose();
+            }
+            disposable = d;
+            compositeDisposable.add(d);
+          }
+
+          @Override
+          public void onSuccess(List<Bookmark> bookmarks) {
+            view.updateBookmarksList(bookmarks);
+          }
+
+          @Override
+          public void onError(Throwable e) {
+            Log.e("BookmarksPresenter", e.toString());
+          }
+        });
   }
 
+  @Override
+  public void filterBookmarks(List<Bookmark> bookmarks, String newText) {
+    Observable.fromIterable(bookmarks)
+        .filter(bookmark -> bookmark.getBookmarkTitle().toLowerCase().contains(newText.toLowerCase()))
+        .toList()
+        .subscribeOn(computation)
+        .observeOn(mainThread)
+        .subscribe(new SingleObserver<List<Bookmark>>() {
+          @Override
+          public void onSubscribe(Disposable d) {
+            compositeDisposable.add(d);
+          }
+
+          @Override
+          public void onSuccess(List<Bookmark> bookmarkList) {
+            view.notifyBookmarksListFiltered(bookmarkList);
+          }
+
+          @Override
+          public void onError(Throwable e) {
+            Log.e("BookmarksPresenter", e.toString());
+          }
+        });
+  }
+
+  @Override
+  public void deleteBookmarks(List<Bookmark> deleteList) {
+    dataSource.deleteBookmarks(deleteList)
+        .subscribe(new CompletableObserver() {
+          @Override
+          public void onSubscribe(Disposable d) {
+
+          }
+
+          @Override
+          public void onComplete() {
+
+          }
+
+          @Override
+          public void onError(Throwable e) {
+            Log.e("BookmarksPresenter", e.toString());
+          }
+        });
+  }
 }

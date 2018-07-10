@@ -3,10 +3,16 @@
   xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <item
-    android:id="@+id/menu_bookmarks_delete"
-    android:icon="@drawable/ic_delete_white_24dp"
-    android:title="@string/delete"
-    android:titleCondensed="Delete"
-    app:showAsAction="always" />
+    android:id="@+id/menu_bookmarks_search"
+    android:icon="@drawable/action_search"
+    android:title="@string/search_label"
+    app:actionViewClass="android.support.v7.widget.SearchView"
+    app:iconifiedByDefault="true"
+    app:showAsAction="ifRoom|collapseActionView" />
 
+  <item
+    android:id="@+id/menu_bookmarks_toggle"
+    android:checkable="true"
+    android:title="@string/bookmarks_from_current_book"
+    app:showAsAction="never" />
 </menu>

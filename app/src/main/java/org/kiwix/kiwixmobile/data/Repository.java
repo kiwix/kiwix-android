@@ -1,9 +1,11 @@
 package org.kiwix.kiwixmobile.data;
 
 import org.kiwix.kiwixmobile.data.local.dao.BookDao;
+import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
 import org.kiwix.kiwixmobile.data.local.dao.HistoryDao;
 import org.kiwix.kiwixmobile.data.local.dao.NetworkLanguageDao;
 import org.kiwix.kiwixmobile.data.local.dao.RecentSearchDao;
+import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.di.qualifiers.IO;
 import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
@@ -30,6 +32,7 @@ import io.reactivex.Single;
 public class Repository implements DataSource {
 
   private final BookDao bookDao;
+  private final BookmarksDao bookmarksDao;
   private final HistoryDao historyDao;
   private final NetworkLanguageDao languageDao;
   private final RecentSearchDao recentSearchDao;
@@ -39,6 +42,7 @@ public class Repository implements DataSource {
   @Inject
   Repository(@IO Scheduler io, @MainThread Scheduler mainThread,
              BookDao bookDao,
+             BookmarksDao bookmarksDao,
              HistoryDao historyDao,
              NetworkLanguageDao languageDao,
              RecentSearchDao recentSearchDao) {
@@ -46,6 +50,7 @@ public class Repository implements DataSource {
     this.mainThread = mainThread;
     this.bookDao = bookDao;
     this.languageDao = languageDao;
+    this.bookmarksDao = bookmarksDao;
     this.historyDao = historyDao;
     this.recentSearchDao = recentSearchDao;
   }
@@ -128,6 +133,38 @@ public class Repository implements DataSource {
       historyDao.deleteHistory(historyDao.getHistoryList(false));
       recentSearchDao.deleteSearchHistory();
     })
+        .subscribeOn(io);
+  }
+
+  @Override
+  public Single<List<Bookmark>> getBookmarks(boolean fromCurrentBook) {
+    return Single.just(bookmarksDao.getBookmarks(fromCurrentBook))
+        .subscribeOn(io)
+        .observeOn(mainThread);
+  }
+
+  @Override
+  public Single<List<String>> getCurrentZimBookmarksUrl() {
+    return Single.just(bookmarksDao.getCurrentZimBookmarksUrl())
+        .subscribeOn(io)
+        .observeOn(mainThread);
+  }
+
+  @Override
+  public Completable saveBookmark(Bookmark bookmark) {
+    return Completable.fromAction(() -> bookmarksDao.saveBookmark(bookmark))
+        .subscribeOn(io);
+  }
+
+  @Override
+  public Completable deleteBookmarks(List<Bookmark> bookmarks) {
+    return Completable.fromAction(() -> bookmarksDao.deleteBookmarks(bookmarks))
+        .subscribeOn(io);
+  }
+
+  @Override
+  public Completable deleteBookmark(Bookmark bookmark) {
+    return Completable.fromAction(() -> bookmarksDao.deleteBookmark(bookmark))
         .subscribeOn(io);
   }
 }
