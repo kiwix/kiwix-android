@@ -294,7 +294,7 @@ public class ZimFileSelectFragment extends BaseFragment
 
   public boolean deleteSpecificZimFile(int position) {
     File file = mFiles.get(position).file;
-    FileUtils.deleteZimFile(file.getPath());
+    FileUtils.deleteZimFile(file);
     if (file.exists()) {
       return false;
     }
