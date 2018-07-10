@@ -18,10 +18,10 @@
 package org.kiwix.kiwixmobile.tests;
 
 import android.Manifest;
+import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
 import android.view.Gravity;
 
 import org.junit.Rule;
@@ -39,8 +39,6 @@ import static com.schibsted.spain.barista.interaction.BaristaDrawerInteractions.
 import static com.schibsted.spain.barista.interaction.BaristaDrawerInteractions.closeDrawerWithGravity;
 import static com.schibsted.spain.barista.interaction.BaristaDrawerInteractions.openDrawer;
 import static com.schibsted.spain.barista.interaction.BaristaDrawerInteractions.openDrawerWithGravity;
-import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
-
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -55,14 +53,11 @@ public class BasicTest {
 
   @Test
   public void basicTest() {
-    enterHelp();
-
     openDrawer();
 
     assertDrawerIsOpen();
 
     assertDisplayed(R.id.titleText);
-    assertDisplayed(R.string.menu_help);
     assertDisplayed(R.id.left_drawer_list);
     assertDisplayed(R.id.new_tab_button);
 
@@ -73,8 +68,6 @@ public class BasicTest {
 
   @Test
   public void testRightDrawer() {
-    enterHelp();
-
     openDrawerWithGravity(R.id.drawer_layout, Gravity.RIGHT);
     assertDrawerIsOpenWithGravity(R.id.drawer_layout, Gravity.RIGHT);
 

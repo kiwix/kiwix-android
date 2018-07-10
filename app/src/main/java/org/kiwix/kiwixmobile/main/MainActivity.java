@@ -84,8 +84,8 @@ import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
-import org.kiwix.kiwixmobile.help.HelpActivity;
 import org.kiwix.kiwixmobile.data.local.entity.History;
+import org.kiwix.kiwixmobile.help.HelpActivity;
 import org.kiwix.kiwixmobile.history.HistoryActivity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.search.SearchActivity;
@@ -839,7 +839,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         return true;
 
       case R.id.menu_openfile:
-        manageZimFiles(0);
+        manageZimFiles(1);
         break;
 
       case R.id.menu_settings:

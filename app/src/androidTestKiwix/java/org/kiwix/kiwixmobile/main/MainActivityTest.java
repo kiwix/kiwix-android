@@ -19,9 +19,9 @@
 package org.kiwix.kiwixmobile.main;
 
 import android.Manifest;
+import android.support.test.filters.LargeTest;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
 
 import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
@@ -35,7 +35,6 @@ import org.kiwix.kiwixmobile.R;
 import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
-import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
 import static org.kiwix.kiwixmobile.utils.StandardActions.enterSettings;
 
 @LargeTest
@@ -57,7 +56,8 @@ public class MainActivityTest {
   @Test
   public void navigateHelp() {
     activityTestRule.launchActivity();
-    enterHelp();
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_help));
   }
 
   @Test
