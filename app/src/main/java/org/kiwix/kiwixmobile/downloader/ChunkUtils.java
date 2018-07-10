@@ -17,8 +17,11 @@
  */
 package org.kiwix.kiwixmobile.downloader;
 
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,8 +29,80 @@ public class ChunkUtils {
 
   public static final String ALPHABET = "abcdefghijklmnopqrstuvwxyz";
   public static final String ZIM_EXTENSION = ".zim";
-  public static final String PART = ".part.part";
+  // Chuck Part
+  private static final String CPART = ".cpart";
+  // Total Part
+  private static final String TPART = ".tpart";
   public static final long CHUNK_SIZE = 1024L * 1024L * 1024L * 2L;
+
+  public static String baseNameFromParts(File file) {
+    return file.getName().replace(CPART, "").replace(TPART, "")
+        .replaceAll("\\.zim..", ".zim");
+  }
+
+  public static File completedChunk(String name) {
+    return new File(name + TPART);
+  }
+
+  public static boolean isPresent(String name) {
+    return new File(name).exists() || new File(name + TPART).exists()
+        || new File(name + CPART + TPART).exists();
+  }
+
+  public static boolean hasParts(File file) {
+    return file.getParentFile().listFiles((file1, s) ->
+        s.startsWith(baseNameFromParts(file)) && s.endsWith(TPART)).length > 0;
+  }
+
+  public static String getFileName(String fileName) {
+    if (isPresent(fileName)) {
+      return fileName;
+    } else {
+      return fileName + "aa";
+    }
+  }
+
+  public static File initialChunk(String name) {
+    return new File(name + CPART + TPART);
+  }
+
+  public static void completeChunk(File chunk) {
+     chunk.renameTo(new File(chunk.getPath().replace(CPART, "")));
+  }
+
+  public static void completeDownload(File file) {
+    final String baseName = baseNameFromParts(file);
+    File directory =file.getParentFile();
+    File[] parts = directory.listFiles((file1, s) -> s.startsWith(baseName) && s.endsWith(TPART));
+    for (File part : parts) {
+      part.renameTo(new File(part.getPath().replace(TPART, "")));
+    }
+  }
+
+  public static long getCurrentSize(LibraryNetworkEntity.Book book) {
+    long size = 0;
+    File[] files = getAllZimParts(book.file);
+    for (File file : files) {
+      size += file.length();
+    }
+    return size;
+  }
+
+  private static File[] getAllZimParts(File file) {
+    final String baseName = baseNameFromParts(file);
+    File directory = new File(file.getPath()).getParentFile();
+    File[] parts = directory.listFiles((file1, s) -> s.matches(baseName + ".*"));
+    return parts;
+  }
+
+  public static void deleteAllParts(File file) {
+    final String baseName = baseNameFromParts(file);
+    File directory = file.getParentFile();
+    File[] parts = directory.listFiles((file1, s) -> s.matches(baseName + ".*"));
+    for (File part : parts) {
+      part.delete();
+    }
+  }
 
   public static List<Chunk> getChunks(String url, long contentLength, int notificationID) {
     int fileCount = getZimChunkFileCount(contentLength);
@@ -63,7 +138,7 @@ public class ChunkUtils {
 
   private static String[] getZimChunkFileNames(String fileName, int count) {
     if (count == 1) {
-      return new String[] { fileName + PART};
+      return new String[] { fileName };
     }
     int position = fileName.lastIndexOf(".");
     String baseName = position > 0 ? fileName.substring(0, position) : fileName;
@@ -73,7 +148,7 @@ public class ChunkUtils {
       char first = ALPHABET.charAt(i / 26);
       char second = ALPHABET.charAt(i % 26);
       String chunkExtension = String.valueOf(first) + second;
-      fileNames[i] = baseName + ZIM_EXTENSION + chunkExtension + PART;
+      fileNames[i] = baseName + ZIM_EXTENSION + chunkExtension;
     }
     return fileNames;
   }

@@ -58,6 +58,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import static org.kiwix.kiwixmobile.downloader.ChunkUtils.getFileName;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class DownloadFragment extends BaseFragment {
@@ -189,7 +190,7 @@ public class DownloadFragment extends BaseFragment {
       }
       ImageView pause = viewGroup.findViewById(R.id.pause);
       pause.setEnabled(false);
-      String fileName = FileUtils.getFileName(mDownloadFiles.get(mKeys[position]));
+      String fileName = getFileName(mDownloadFiles.get(mKeys[position]));
       {
         Snackbar completeSnack = Snackbar.make(mainLayout, getResources().getString(R.string.download_complete_snackbar), Snackbar.LENGTH_LONG);
         completeSnack.setAction(getResources().getString(R.string.open), v -> zimManageActivity.finishResult(fileName)).setActionTextColor(getResources().getColor(R.color.white)).show();

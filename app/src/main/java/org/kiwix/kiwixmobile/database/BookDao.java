@@ -30,6 +30,8 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
+import static org.kiwix.kiwixmobile.downloader.ChunkUtils.hasParts;
+
 /**
  * Dao class for books
  */
@@ -86,11 +88,11 @@ public class BookDao {
     while (bookCursor.moveToNext()) {
       Book book = new Book();
       setBookDetails(book, bookCursor);
-      if (!FileUtils.hasPart(book.file)) {
+      if (!hasParts(book.file)) {
         if (book.file.exists()) {
           books.add(book);
         } else {
-          mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(book.file.getPath()));
+          mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(book.file));
         }
       }
     }
@@ -107,7 +109,7 @@ public class BookDao {
       Book book = new Book();
       setBookDetails(book, bookCursor);
       book.remoteUrl = bookCursor.get(BookDatabaseEntity.REMOTE_URL);
-      if (FileUtils.hasPart(book.file)) {
+      if (hasParts(book.file)) {
         books.add(book);
       }
     }
