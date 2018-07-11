@@ -30,6 +30,7 @@ import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
 import org.kiwix.kiwixmobile.data.local.entity.BookDatabaseEntity;
 import org.kiwix.kiwixmobile.data.local.entity.Bookmarks;
+import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.data.local.entity.LibraryDatabaseEntity;
 import org.kiwix.kiwixmobile.data.local.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.data.local.entity.RecentSearch;
@@ -48,7 +49,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 @Singleton
 public class KiwixDatabase extends SquidDatabase {
 
-  private static final int VERSION = 14;
+  private static final int VERSION = 15;
   private Context context;
 
   @Inject
@@ -69,7 +70,8 @@ public class KiwixDatabase extends SquidDatabase {
         LibraryDatabaseEntity.TABLE,
         RecentSearch.TABLE,
         Bookmarks.TABLE,
-        NetworkLanguageDatabaseEntity.TABLE
+        NetworkLanguageDatabaseEntity.TABLE,
+        History.TABLE
     };
   }
 
@@ -129,6 +131,9 @@ public class KiwixDatabase extends SquidDatabase {
     if (newVersion >= 14 && oldVersion < 14) {
       tryDropTable(BookDatabaseEntity.TABLE);
       tryCreateTable(BookDatabaseEntity.TABLE);
+    }
+    if (newVersion >= 15 && oldVersion < 15) {
+      tryCreateTable(History.TABLE);
     }
     return true;
   }

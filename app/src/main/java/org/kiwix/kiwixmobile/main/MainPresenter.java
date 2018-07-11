@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.data.DataSource;
+import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.di.PerActivity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.CompletableObserver;
 import io.reactivex.SingleObserver;
 import io.reactivex.disposables.Disposable;
 
@@ -53,5 +55,26 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
   public void saveBooks(List<LibraryNetworkEntity.Book> book) {
     dataSource.saveBooks(book);
     showHome();
+  }
+
+  @Override
+  public void saveHistory(History history) {
+    dataSource.saveHistory(history)
+        .subscribe(new CompletableObserver() {
+          @Override
+          public void onSubscribe(Disposable d) {
+
+          }
+
+          @Override
+          public void onComplete() {
+
+          }
+
+          @Override
+          public void onError(Throwable e) {
+            Log.e("MainPresenter", e.toString());
+          }
+        });
   }
 }

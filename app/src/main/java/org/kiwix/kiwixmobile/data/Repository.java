@@ -1,7 +1,12 @@
 package org.kiwix.kiwixmobile.data;
 
 import org.kiwix.kiwixmobile.data.local.dao.BookDao;
+import org.kiwix.kiwixmobile.data.local.dao.HistoryDao;
 import org.kiwix.kiwixmobile.data.local.dao.NetworkLanguageDao;
+import org.kiwix.kiwixmobile.data.local.dao.RecentSearchDao;
+import org.kiwix.kiwixmobile.data.local.entity.History;
+import org.kiwix.kiwixmobile.di.qualifiers.IO;
+import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.models.Language;
 
@@ -24,18 +29,25 @@ import io.reactivex.Single;
 @Singleton
 public class Repository implements DataSource {
 
-  private BookDao bookDao;
-  private NetworkLanguageDao languageDao;
-  private Scheduler io;
-  private Scheduler mainThread;
+  private final BookDao bookDao;
+  private final HistoryDao historyDao;
+  private final NetworkLanguageDao languageDao;
+  private final RecentSearchDao recentSearchDao;
+  private final Scheduler io;
+  private final Scheduler mainThread;
 
   @Inject
-  Repository(@IO Scheduler io, @MainThread Scheduler mainThread, BookDao bookDao,
-             NetworkLanguageDao languageDao) {
+  Repository(@IO Scheduler io, @MainThread Scheduler mainThread,
+             BookDao bookDao,
+             HistoryDao historyDao,
+             NetworkLanguageDao languageDao,
+             RecentSearchDao recentSearchDao) {
     this.io = io;
     this.mainThread = mainThread;
     this.bookDao = bookDao;
     this.languageDao = languageDao;
+    this.historyDao = historyDao;
+    this.recentSearchDao = recentSearchDao;
   }
 
   @Override
@@ -73,6 +85,49 @@ public class Repository implements DataSource {
   @Override
   public Completable saveLanguages(List<Language> languages) {
     return Completable.fromAction(() -> languageDao.saveFilteredLanguages(languages))
+        .subscribeOn(io);
+  }
+
+  @Override
+  public Single<List<History>> getDateCategorizedHistory(boolean showHistoryCurrentBook) {
+    return Single.just(historyDao.getHistoryList(showHistoryCurrentBook))
+        .map(histories -> {
+          History history = null;
+          if (histories.size() >= 1) {
+            history = histories.get(0);
+            histories.add(0, null);
+          }
+          for (int position = 2; position < histories.size(); position++) {
+            if (history != null && histories.get(position) != null &&
+                !history.getDate().equals(histories.get(position).getDate())) {
+              histories.add(position, null);
+            }
+            history = histories.get(position);
+          }
+          return histories;
+        })
+        .subscribeOn(io)
+        .observeOn(mainThread);
+  }
+
+  @Override
+  public Completable saveHistory(History history) {
+    return Completable.fromAction(() -> historyDao.saveHistory(history))
+        .subscribeOn(io);
+  }
+
+  @Override
+  public Completable deleteHistory(List<History> historyList) {
+    return Completable.fromAction(() -> historyDao.deleteHistory(historyList))
+        .subscribeOn(io);
+  }
+
+  @Override
+  public Completable clearHistory() {
+    return Completable.fromAction(() -> {
+      historyDao.deleteHistory(historyDao.getHistoryList(false));
+      recentSearchDao.deleteSearchHistory();
+    })
         .subscribeOn(io);
   }
 }

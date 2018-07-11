@@ -207,4 +207,8 @@
     <item quantity="one">%d book</item>
     <item quantity="other">%d books</item>
   </plurals>
+  <string name="history">History</string>
+  <string name="history_from_current_book">History from current book</string>
+  <string name="search_history">Search history</string>
+  <string name="selected_items">%1$d selected</string>
 </resources>

@@ -33,20 +33,13 @@ import static org.kiwix.kiwixmobile.utils.Constants.PREF_ZOOM_ENABLED;
 
 @Singleton
 public class SharedPreferenceUtil {
+  private static final String PREF_SHOW_HISTORY_CURRENT_BOOK = "show_history_current_book";
   private SharedPreferences sharedPreferences;
-  private SharedPreferences.Editor editor;
 
   @Inject
   public SharedPreferenceUtil(Context context) {
     sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-    editor = sharedPreferences.edit();
   }
-
-  public void remove(String key) {
-    editor.remove(key).apply();
-  }
-
-  //Getters
 
   public boolean getPrefWifiOnly() {
     return sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
@@ -113,34 +106,32 @@ public class SharedPreferenceUtil {
     //return sharedPreferences.getBoolean(PREF_FULL_TEXT_SEARCH, false);
   }
 
-  // Setters
-
   public void putPrefLanguage(String language) {
-    editor.putString(PREF_LANG, language).apply();
+    sharedPreferences.edit().putString(PREF_LANG, language).apply();
   }
 
   public void putPrefIsFirstRun(boolean isFirstRun) {
-    editor.putBoolean(PREF_IS_FIRST_RUN, isFirstRun).apply();
+    sharedPreferences.edit().putBoolean(PREF_IS_FIRST_RUN, isFirstRun).apply();
   }
 
   public void putPrefWifiOnly(boolean wifiOnly) {
-    editor.putBoolean(PREF_WIFI_ONLY, wifiOnly).apply();
+    sharedPreferences.edit().putBoolean(PREF_WIFI_ONLY, wifiOnly).apply();
   }
 
   public void putPrefStorageTitle(String storageTitle) {
-    editor.putString(PREF_STORAGE_TITLE, storageTitle).apply();
+    sharedPreferences.edit().putString(PREF_STORAGE_TITLE, storageTitle).apply();
   }
 
   public void putPrefStorage(String storage) {
-    editor.putString(PREF_STORAGE, storage).apply();
+    sharedPreferences.edit().putString(PREF_STORAGE, storage).apply();
   }
 
   public void putPrefFullScreen(boolean fullScreen) {
-    editor.putBoolean(PREF_FULLSCREEN, fullScreen).apply();
+    sharedPreferences.edit().putBoolean(PREF_FULLSCREEN, fullScreen).apply();
   }
 
   public void putPrefExternalLinkPopup(boolean externalLinkPopup) {
-    editor.putBoolean(PREF_EXTERNAL_LINK_POPUP, externalLinkPopup).apply();
+    sharedPreferences.edit().putBoolean(PREF_EXTERNAL_LINK_POPUP, externalLinkPopup).apply();
   }
 
   public boolean showIntro() {
@@ -148,7 +139,15 @@ public class SharedPreferenceUtil {
   }
 
   public void setIntroShown() {
-    editor.putBoolean(PREF_SHOW_INTRO, false).apply();
+    sharedPreferences.edit().putBoolean(PREF_SHOW_INTRO, false).apply();
+  }
+
+  public boolean getShowHistoryCurrentBook() {
+    return sharedPreferences.getBoolean(PREF_SHOW_HISTORY_CURRENT_BOOK, true);
+  }
+
+  public void setShowHistoryCurrentBook(boolean prefShowHistoryCurrentBook) {
+    sharedPreferences.edit().putBoolean(PREF_SHOW_HISTORY_CURRENT_BOOK, prefShowHistoryCurrentBook).apply();
   }
 
   public boolean nightMode() {

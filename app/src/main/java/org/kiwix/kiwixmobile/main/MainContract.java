@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.main;
 
 import org.kiwix.kiwixmobile.base.BaseContract;
+import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 
 import java.util.List;
@@ -19,5 +20,7 @@ class MainContract {
     void showHome();
 
     void saveBooks(List<LibraryNetworkEntity.Book> books);
+
+    void saveHistory(History history);
   }
 }

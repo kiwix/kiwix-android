@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.data;
 
+import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.models.Language;
 
@@ -18,4 +19,12 @@ public interface DataSource {
   void saveBooks(List<LibraryNetworkEntity.Book> book);
 
   Completable saveLanguages(List<Language> languages);
+
+  Single<List<History>> getDateCategorizedHistory(boolean showHistoryCurrentBook);
+
+  Completable saveHistory(History history);
+
+  Completable deleteHistory(List<History> historyList);
+
+  Completable clearHistory();
 }
