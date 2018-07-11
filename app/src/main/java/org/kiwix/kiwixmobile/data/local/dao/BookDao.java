@@ -36,15 +36,14 @@ import javax.inject.Inject;
  */
 
 public class BookDao {
-  public KiwixDatabase mDb;
+  private final KiwixDatabase kiwixDatabase;
 
   @Inject
   public BookDao(KiwixDatabase kiwixDatabase) {
-    this.mDb = kiwixDatabase;
+    this.kiwixDatabase = kiwixDatabase;
   }
 
-  
-  public void setBookDetails(Book book, SquidCursor<BookDatabaseEntity> bookCursor) {
+  private void setBookDetails(Book book, SquidCursor<BookDatabaseEntity> bookCursor) {
     book.id = bookCursor.get(BookDatabaseEntity.BOOK_ID);
     book.title = bookCursor.get(BookDatabaseEntity.TITLE);
     book.description = bookCursor.get(BookDatabaseEntity.DESCRIPTION);
@@ -59,8 +58,8 @@ public class BookDao {
     book.favicon = bookCursor.get(BookDatabaseEntity.FAVICON);
     book.bookName = bookCursor.get(BookDatabaseEntity.NAME);
   }
-  
-  public void setBookDatabaseEntity(Book book, BookDatabaseEntity bookDatabaseEntity) {
+
+  private void setBookDatabaseEntity(Book book, BookDatabaseEntity bookDatabaseEntity) {
     bookDatabaseEntity.setBookId(book.getId());
     bookDatabaseEntity.setTitle(book.getTitle());
     bookDatabaseEntity.setDescription(book.getDescription());
@@ -74,34 +73,31 @@ public class BookDao {
     bookDatabaseEntity.setSize(book.getSize());
     bookDatabaseEntity.setFavicon(book.getFavicon());
     bookDatabaseEntity.setName(book.getName());
-    String filePath = book.file.getPath();
-    mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(filePath));
-    mDb.persist(bookDatabaseEntity);
+    kiwixDatabase.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.BOOK_ID.eq(book.getId()));
+    kiwixDatabase.persist(bookDatabaseEntity);
   }
-  
+
   public ArrayList<Book> getBooks() {
-    SquidCursor<BookDatabaseEntity> bookCursor = mDb.query(
-        BookDatabaseEntity.class,
-        Query.select());
     ArrayList<Book> books = new ArrayList<>();
-    while (bookCursor.moveToNext()) {
-      Book book = new Book();
-      setBookDetails(book, bookCursor);
-      books.add(book);
+    try (SquidCursor<BookDatabaseEntity> bookCursor = kiwixDatabase.query(BookDatabaseEntity.class,
+        Query.select())) {
+      while (bookCursor.moveToNext()) {
+        Book book = new Book();
+        setBookDetails(book, bookCursor);
+        books.add(book);
+      }
     }
-    bookCursor.close();
-    ArrayList<Book> FinalList = filterBookResults(books);
-    return FinalList;
+    return filterBookResults(books);
   }
 
   public ArrayList<Book> filterBookResults(ArrayList<Book> books) {
     ArrayList<Book> filteredBookList = new ArrayList<>();
-    for (Book book : books){
+    for (Book book : books) {
       if (!FileUtils.hasPart(book.file)) {
         if (book.file.exists()) {
           filteredBookList.add(book);
         } else {
-          mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(book.file.getPath()));
+          kiwixDatabase.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(book.file.getPath()));
         }
       }
     }
@@ -109,19 +105,18 @@ public class BookDao {
   }
 
   public ArrayList<Book> getDownloadingBooks() {
-    SquidCursor<BookDatabaseEntity> bookCursor = mDb.query(
-        BookDatabaseEntity.class,
-        Query.select());
     ArrayList<Book> books = new ArrayList<>();
-    while (bookCursor.moveToNext()) {
-      Book book = new Book();
-      setBookDetails(book, bookCursor);
-      book.remoteUrl = bookCursor.get(BookDatabaseEntity.REMOTE_URL);
-      if (FileUtils.hasPart(book.file)) {
-        books.add(book);
+    try (SquidCursor<BookDatabaseEntity> bookCursor = kiwixDatabase.query(BookDatabaseEntity.class,
+        Query.select())) {
+      while (bookCursor.moveToNext()) {
+        Book book = new Book();
+        setBookDetails(book, bookCursor);
+        book.remoteUrl = bookCursor.get(BookDatabaseEntity.REMOTE_URL);
+        if (FileUtils.hasPart(book.file)) {
+          books.add(book);
+        }
       }
     }
-    bookCursor.close();
     return books;
   }
 
@@ -141,6 +136,6 @@ public class BookDao {
   }
 
   public void deleteBook(String id) {
-    mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.BOOK_ID.eq(id));
+    kiwixDatabase.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.BOOK_ID.eq(id));
   }
 }
