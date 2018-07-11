@@ -144,6 +144,8 @@ public class LanguageActivityTest {
 
 
 
+    onView(withId(R.id.menu_language_save)).perform(click());
+
     // TODO: make sure the it is only possible to open the activity after the network call is finished and book list is updated
     // TODO: test that default language is based on device locale
     // TODO: test selecting language updates UI
