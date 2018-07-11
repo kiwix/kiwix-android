@@ -34,6 +34,8 @@ import java.util.Locale;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.kiwix.kiwixmobile.R;
@@ -68,10 +70,14 @@ public class LanguageActivityTest {
   @Rule
   public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-  @Test
-  public void testIntroActivity() {
+  @Before
+  public void setUp(){
     Intents.init();
     activityTestRule.launchActivity();
+  }
+
+  @Test
+  public void testIntroActivity() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     onView(withId(R.id.get_started)).perform(click());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
@@ -99,13 +105,13 @@ public class LanguageActivityTest {
     //onView(withText("Content Still Loading")).inRoot(withDecorView(not(is(activityTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
 
 
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS * 10);
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS * 20);
 
     try{
       onView(allOf(isDisplayed(), withText("Selected languages:"))).check(matches(notNullValue()));
       onView(allOf(isDisplayed(), withText("Other languages:"))).check(matches(notNullValue()));
     }catch (Exception e){
-      BaristaSleepInteractions.sleep(TEST_PAUSE_MS * 10);
+      BaristaSleepInteractions.sleep(TEST_PAUSE_MS * 80);
     }
 
     onView(allOf(isDisplayed(), withText("Selected languages:"))).check(matches(notNullValue()));
@@ -114,6 +120,8 @@ public class LanguageActivityTest {
     //Locale deflocale = getCurrentLocale(getContext());
 
     //Language defLanguage = deflocale.getLanguage();
+
+    onView(withContentDescription("Choose a language")).perform(click());
 
 
 
@@ -124,8 +132,13 @@ public class LanguageActivityTest {
     // TODO: make sure selecting new languages does not generate a new network request
     // TODO: verify all the correct books are displayed and are displayed correctly
     // TODO: test selecting no language is allowed
+  }
+
+  @After
+  public void endTest(){
     Intents.release();
   }
+
 
   Locale getCurrentLocale(Context context){
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
