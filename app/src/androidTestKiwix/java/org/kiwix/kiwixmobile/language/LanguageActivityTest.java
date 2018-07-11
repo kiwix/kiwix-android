@@ -19,6 +19,8 @@
 package org.kiwix.kiwixmobile.language;
 
 import android.Manifest;
+import android.content.Context;
+import android.os.Build;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.ActivityTestRule;
@@ -28,6 +30,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import com.schibsted.spain.barista.rule.BaristaRule;
+import java.util.Locale;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -35,8 +38,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.intro.IntroActivity;
+import org.kiwix.kiwixmobile.models.Language;
 import org.kiwix.kiwixmobile.splash.SplashActivity;
 
+import static android.support.test.InstrumentationRegistry.getContext;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
@@ -95,7 +100,21 @@ public class LanguageActivityTest {
 
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS * 10);
+
+    try{
+      onView(allOf(isDisplayed(), withText("Selected languages:"))).check(matches(notNullValue()));
+      onView(allOf(isDisplayed(), withText("Other languages:"))).check(matches(notNullValue()));
+    }catch (Exception e){
+      BaristaSleepInteractions.sleep(TEST_PAUSE_MS * 10);
+    }
+
     onView(allOf(isDisplayed(), withText("Selected languages:"))).check(matches(notNullValue()));
+    onView(allOf(isDisplayed(), withText("Other languages:"))).check(matches(notNullValue()));
+
+    //Locale deflocale = getCurrentLocale(getContext());
+
+    //Language defLanguage = deflocale.getLanguage();
+
 
 
 
@@ -106,6 +125,15 @@ public class LanguageActivityTest {
     // TODO: verify all the correct books are displayed and are displayed correctly
     // TODO: test selecting no language is allowed
     Intents.release();
+  }
+
+  Locale getCurrentLocale(Context context){
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+      return context.getResources().getConfiguration().getLocales().get(0);
+    } else{
+      //noinspection deprecation
+      return context.getResources().getConfiguration().locale;
+    }
   }
 
   private static Matcher<View> childAtPosition(
