@@ -94,7 +94,7 @@ public class LanguageActivityTest {
     //onView(withText("Content Still Loading")).inRoot(withDecorView(not(is(activityTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
 
 
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS * 100);
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS * 10);
     onView(allOf(isDisplayed(), withText("Selected languages:"))).check(matches(notNullValue()));
 
 
