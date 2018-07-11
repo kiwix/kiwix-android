@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.language;
 import android.Manifest;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.Intents;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.intro.IntroActivity;
+import org.kiwix.kiwixmobile.splash.SplashActivity;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
@@ -45,8 +47,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 
 public class LanguageActivityTest {
@@ -84,6 +89,15 @@ public class LanguageActivityTest {
     onView(withContentDescription("Choose a language")).check(matches(notNullValue()));
     onView(withContentDescription("Choose a language")).perform(click());
 
+    // TODO : figure out a way to get the refrence of the activity from the activitytestrule to test the toast
+    //onView(withText("Content Still Loading")).inRoot(withDecorView(not(activityTestRule.getActivity().getWindow().getDecorView()))).check(matches(isDisplayed()));
+    //onView(withText("Content Still Loading")).inRoot(withDecorView(not(is(activityTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+
+
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS * 100);
+    onView(allOf(isDisplayed(), withText("Selected languages:"))).check(matches(notNullValue()));
+
+
 
     // TODO: make sure the it is only possible to open the activity after the network call is finished and book list is updated
     // TODO: test that default language is based on device locale
@@ -91,6 +105,7 @@ public class LanguageActivityTest {
     // TODO: make sure selecting new languages does not generate a new network request
     // TODO: verify all the correct books are displayed and are displayed correctly
     // TODO: test selecting no language is allowed
+    Intents.release();
   }
 
   private static Matcher<View> childAtPosition(
