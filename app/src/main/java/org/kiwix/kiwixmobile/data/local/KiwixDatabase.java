@@ -80,68 +80,51 @@ public class KiwixDatabase extends SquidDatabase {
 
   @Override
   protected boolean onUpgrade(SQLiteDatabaseWrapper db, int oldVersion, int newVersion) {
-    if (newVersion >= 3 && oldVersion < 3) {
-      db.execSQL("DROP TABLE IF EXISTS recents");
-      tryCreateTable(RecentSearch.TABLE);
-    }
-    if (newVersion >= 3 && (oldVersion < 3 || oldVersion == 7 || oldVersion == 6)) {
-      db.execSQL("DROP TABLE IF EXISTS recents");
-      db.execSQL("DROP TABLE IF EXISTS recentsearches");
-      tryCreateTable(RecentSearch.TABLE);
-    }
-    if (newVersion >= 3) {
-      tryCreateTable(RecentSearch.TABLE);
-    }
-    if (newVersion >= 4) {
-      tryCreateTable(Bookmark.TABLE);
-    }
-    if (newVersion >= 5 && oldVersion < 5) {
-      db.execSQL("DROP TABLE IF EXISTS book");
-      tryCreateTable(BookDatabaseEntity.TABLE);
-    }
-    if (newVersion >= 5) {
-      tryCreateTable(BookDatabaseEntity.TABLE);
-    }
-    if (newVersion >= 6 && oldVersion < 6) {
-      db.execSQL("DROP TABLE IF EXISTS Bookmarks");
-      tryCreateTable(Bookmark.TABLE);
-      migrateBookmarksVersion6();
-    }
-    if (newVersion >= 6) {
-      tryCreateTable(Bookmark.TABLE);
-    }
-    if (newVersion >= 9) {
-      db.execSQL("DROP TABLE IF EXISTS book");
-      tryCreateTable(BookDatabaseEntity.TABLE);
-    }
-    if (newVersion >= 10) {
-      tryCreateTable(NetworkLanguageDatabaseEntity.TABLE);
-    }
-    if (newVersion >= 11 && oldVersion < 11) {
-      db.execSQL("DROP TABLE IF EXISTS recentSearches");
-      tryCreateTable(RecentSearch.TABLE);
-    }
-    if (newVersion >= 11) {
-      tryCreateTable(RecentSearch.TABLE);
-    }
-    if (newVersion >= 12) {
-      tryAddColumn(BookDatabaseEntity.REMOTE_URL);
-    }
-    if (newVersion >= 13) {
-      tryAddColumn(BookDatabaseEntity.NAME);
-      tryAddColumn(Bookmark.ZIM_NAME);
-    }
-    if (newVersion >= 14 && oldVersion < 14) {
-      tryDropTable(BookDatabaseEntity.TABLE);
-      tryCreateTable(BookDatabaseEntity.TABLE);
-    }
-    if (newVersion >= 15 && oldVersion < 15) {
-      tryCreateTable(History.TABLE);
-    }
-    if (newVersion >= 16 && oldVersion < 16) {
-      tryAddColumn(Bookmark.ZIM_FILE_PATH);
-      tryAddColumn(Bookmark.FAVICON);
-      migrateBookmarksVersion16();
+    switch (oldVersion) {
+      case 1:
+      case 2:
+        db.execSQL("DROP TABLE IF EXISTS recents");
+        db.execSQL("DROP TABLE IF EXISTS recentsearches");
+        tryCreateTable(RecentSearch.TABLE);
+      case 3:
+        tryCreateTable(Bookmark.TABLE);
+      case 4:
+        db.execSQL("DROP TABLE IF EXISTS book");
+        tryCreateTable(BookDatabaseEntity.TABLE);
+      case 5:
+        db.execSQL("DROP TABLE IF EXISTS Bookmarks");
+        tryCreateTable(Bookmark.TABLE);
+        migrateBookmarksVersion6();
+      case 6:
+        db.execSQL("DROP TABLE IF EXISTS recents");
+        db.execSQL("DROP TABLE IF EXISTS recentsearches");
+        tryCreateTable(RecentSearch.TABLE);
+      case 7:
+        db.execSQL("DROP TABLE IF EXISTS recents");
+        db.execSQL("DROP TABLE IF EXISTS recentsearches");
+        tryCreateTable(RecentSearch.TABLE);
+      case 8:
+        db.execSQL("DROP TABLE IF EXISTS book");
+        tryCreateTable(BookDatabaseEntity.TABLE);
+      case 9:
+        tryCreateTable(NetworkLanguageDatabaseEntity.TABLE);
+      case 10:
+        db.execSQL("DROP TABLE IF EXISTS recentSearches");
+        tryCreateTable(RecentSearch.TABLE);
+      case 11:
+        tryAddColumn(BookDatabaseEntity.REMOTE_URL);
+      case 12:
+        tryAddColumn(BookDatabaseEntity.NAME);
+        tryAddColumn(Bookmark.ZIM_NAME);
+      case 13:
+        tryDropTable(BookDatabaseEntity.TABLE);
+        tryCreateTable(BookDatabaseEntity.TABLE);
+      case 14:
+        tryCreateTable(History.TABLE);
+      case 15:
+        tryAddColumn(Bookmark.ZIM_FILE_PATH);
+        tryAddColumn(Bookmark.FAVICON);
+        migrateBookmarksVersion16();
     }
     return true;
   }
