@@ -3,29 +3,35 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="64dp">
+  android:layout_height="wrap_content">
 
   <ImageView
     android:id="@+id/favicon"
     android:layout_width="40dp"
     android:layout_height="40dp"
+    android:layout_marginBottom="8dp"
     android:layout_marginEnd="@dimen/activity_horizontal_margin"
     android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="8dp"
     android:contentDescription="@string/favicon"
     app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toStartOf="@id/title"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     tools:src="@mipmap/kiwix_icon_round" />
 
   <TextView
     android:id="@+id/title"
-    android:layout_width="wrap_content"
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_marginEnd="@dimen/activity_horizontal_margin"
-    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
     android:alpha="0.87"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp"
     android:textAppearance="?android:attr/textAppearanceMedium"
     app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toEndOf="@id/favicon"
     app:layout_constraintTop_toTopOf="parent"
     tools:text="Wikipedia - Main Page" />
