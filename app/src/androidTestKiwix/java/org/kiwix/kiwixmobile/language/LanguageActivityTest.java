@@ -23,6 +23,7 @@ import android.content.Context;
 import android.os.Build;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.Intents;
+import android.support.test.filters.FlakyTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.view.View;
@@ -56,9 +57,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.kiwix.kiwixmobile.utils.RecyclerViewItemCountAssertion.withItemCount;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 
 public class LanguageActivityTest {
@@ -109,13 +112,13 @@ public class LanguageActivityTest {
 
     try{
       onView(allOf(isDisplayed(), withText("Selected languages:"))).check(matches(notNullValue()));
-      onView(allOf(isDisplayed(), withText("Other languages:"))).check(matches(notNullValue()));
+      //onView(allOf(isDisplayed(), withText("Other languages:"))).check(matches(notNullValue()));
     }catch (Exception e){
-      BaristaSleepInteractions.sleep(TEST_PAUSE_MS * 80);
+      BaristaSleepInteractions.sleep(TEST_PAUSE_MS * 50);
     }
 
     onView(allOf(isDisplayed(), withText("Selected languages:"))).check(matches(notNullValue()));
-    onView(allOf(isDisplayed(), withText("Other languages:"))).check(matches(notNullValue()));
+    //onView(allOf(isDisplayed(), withText("Other languages:"))).check(matches(notNullValue()));
 
     //Locale deflocale = getCurrentLocale(getContext());
 
@@ -123,6 +126,21 @@ public class LanguageActivityTest {
 
     onView(withContentDescription("Choose a language")).perform(click());
 
+    onView(withId(R.id.activity_language_recycler_view)).check(withItemCount(greaterThan(0)));
+
+    ViewInteraction checkBox = onView(
+        allOf(withId(R.id.item_language_checkbox),
+            childAtPosition(
+                childAtPosition(
+                    withId(R.id.activity_language_recycler_view),
+                    3),
+                0),
+            isDisplayed()));
+    checkBox.perform(click());
+
+
+
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
 
 
