@@ -21,6 +21,8 @@ package org.kiwix.kiwixmobile.language;
 import android.Manifest;
 import android.content.Context;
 import android.os.Build;
+import android.support.test.espresso.UiController;
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.filters.FlakyTest;
@@ -29,9 +31,11 @@ import android.support.test.rule.GrantPermissionRule;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.Checkable;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import com.schibsted.spain.barista.rule.BaristaRule;
 import java.util.Locale;
+import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -62,6 +66,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
+import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -126,12 +131,6 @@ public class LanguageActivityTest {
     // wait for the content to get loaded
     // This is enough time to complete the download on bitbar
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS * 30);
-    // In case the internet is slow, increase time to download the list
-    try{
-      onView(allOf(isDisplayed(), withText("Selected languages:"))).check(matches(notNullValue()));
-    }catch (Exception e){
-      BaristaSleepInteractions.sleep(TEST_PAUSE_MS * 50);
-    }
 
     // Make sure that the zim list has been loaded
     onView(allOf(isDisplayed(), withText("Selected languages:"))).check(matches(notNullValue()));
@@ -147,13 +146,14 @@ public class LanguageActivityTest {
     // verify that the list of languages is present
     onView(withId(R.id.activity_language_recycler_view)).check(withItemCount(greaterThan(0)));
 
+    boolean state1, state2;
+    ViewInteraction checkBox1, checkBox2;
+
+    // Initialise Test test languages
     // Search for a particular language
     onView(withContentDescription("Search")).perform(click());
     onView(withId(R.id.search_src_text)).perform(replaceText("english"), closeSoftKeyboard());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-
-    boolean state1, state2;
-    ViewInteraction checkBox1, checkBox2;
 
     // Get a reference to the checkbox associated with the language
     checkBox1 = onView(
@@ -165,13 +165,7 @@ public class LanguageActivityTest {
                 0),
             isDisplayed()));
 
-    // Get the initial state of the checkbox
-    try{
-      checkBox1.check(matches(isChecked()));
-      state1 = true;
-    }catch (Exception e){
-      state1 = false;
-    }
+    
 
     // Click on the checkbox
     checkBox1.perform(click());
@@ -336,6 +330,38 @@ public class LanguageActivityTest {
   @After
   public void endTest(){
     Intents.release();
+  }
+
+
+  public static ViewAction setChecked(final boolean checked) {
+    return new ViewAction() {
+      @Override
+      public BaseMatcher<View> getConstraints() {
+        return new BaseMatcher<View>() {
+          @Override
+          public boolean matches(Object item) {
+            return isA(Checkable.class).matches(item);
+          }
+
+          @Override
+          public void describeMismatch(Object item, Description mismatchDescription) {}
+
+          @Override
+          public void describeTo(Description description) {}
+        };
+      }
+
+      @Override
+      public String getDescription() {
+        return null;
+      }
+
+      @Override
+      public void perform(UiController uiController, View view) {
+        Checkable checkableView = (Checkable) view;
+        checkableView.setChecked(checked);
+      }
+    };
   }
 
 
