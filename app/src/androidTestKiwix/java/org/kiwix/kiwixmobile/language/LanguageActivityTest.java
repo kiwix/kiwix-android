@@ -126,6 +126,7 @@ public class LanguageActivityTest {
 
     onView(withContentDescription("Choose a language")).perform(click());
 
+    // verify that the list of languages to select is present
     onView(withId(R.id.activity_language_recycler_view)).check(withItemCount(greaterThan(0)));
 
     ViewInteraction checkBox = onView(
