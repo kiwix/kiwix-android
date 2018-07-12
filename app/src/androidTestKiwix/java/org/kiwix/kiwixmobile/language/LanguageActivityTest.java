@@ -91,6 +91,7 @@ public class LanguageActivityTest {
     onView(withId(R.id.get_started)).perform(click());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
+    // Open the Library
     openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
     onView(withText("Get Content")).perform(click());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
@@ -105,7 +106,7 @@ public class LanguageActivityTest {
                 1),
             isDisplayed()));
 
-    // Verify that the "Choose Language" and the "Search" buttons are present only in the online tab
+    // Verify that the "Choose Language" and the "Search" buttons are present only in the "online" tab
     onView(withContentDescription("Search")).check(doesNotExist());
     onView(withContentDescription("Choose a language")).check(doesNotExist());
     viewPager.perform(swipeLeft());
@@ -203,7 +204,7 @@ public class LanguageActivityTest {
     }
 
     // Click on the checkbox
-    checkBox1.perform(click());
+    checkBox2.perform(click());
 
     // Exit from the search view to view the full list of languages
     onView(withContentDescription("Clear query")).perform(click());
@@ -306,7 +307,7 @@ public class LanguageActivityTest {
 
     onView(withContentDescription("Navigate up")).perform(click());
 
-    
+
     //
     //ViewInteraction textView10 = onView(
     //    allOf(withId(R.id.item_language_name),
@@ -329,38 +330,7 @@ public class LanguageActivityTest {
             isDisplayed()));
 
 
-    //verify that the query was actually cleared
-
-    // 59
-    //verify that the query was actually cleared
-    // 59
-
-    onView(withContentDescription("Save languages")).perform(click());
-
-    //////////////
-
-    //ViewInteraction checkBoxsid = onView(
-    //    allOf(withId(R.id.item_language_checkbox),
-    //        childAtPosition(
-    //            childAtPosition(
-    //                withId(R.id.activity_language_recycler_view),
-    //                3),
-    //            0),
-    //        isDisplayed()));
-    //checkBox.perform(click());
-
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-
-
-
-    //onView(withId(R.id.menu_language_save)).perform(click());
-
-    // TODO: make sure the it is only possible to open the activity after the network call is finished and book list is updated
-    // TODO: test that default language is based on device locale
-    // TODO: test selecting language updates UI
-    // TODO: make sure selecting new languages does not generate a new network request
-    // TODO: verify all the correct books are displayed and are displayed correctly
-    // TODO: test selecting no language is allowed
   }
 
   @After
