@@ -87,14 +87,10 @@ public class LanguageActivityTest {
 
   @Test
   public void testIntroActivity() {
-    boolean state1, state2;
-    ViewInteraction checkBox1, checkBox2;
-
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     onView(withId(R.id.get_started)).perform(click());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
-    // open the language activity
     openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
     onView(withText("Get Content")).perform(click());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
@@ -136,8 +132,10 @@ public class LanguageActivityTest {
       BaristaSleepInteractions.sleep(TEST_PAUSE_MS * 50);
     }
 
+    // Make sure that the zim list has been loaded
     onView(allOf(isDisplayed(), withText("Selected languages:"))).check(matches(notNullValue()));
 
+    // Open the Language Activity
     onView(withContentDescription("Choose a language")).perform(click());
 
     // verify that the back, search and save buttons exist
@@ -145,17 +143,102 @@ public class LanguageActivityTest {
     onView(withContentDescription("Save languages")).check(matches(notNullValue()));
     onView(withContentDescription("Search")).check(matches(notNullValue()));
 
-    // verify that the list of languages to select is present
+    // verify that the list of languages is present
     onView(withId(R.id.activity_language_recycler_view)).check(withItemCount(greaterThan(0)));
 
-    //onView(withId())
-    /////////////
-
-    // search english
+    // Search for a particular language
     onView(withContentDescription("Search")).perform(click());
     onView(withId(R.id.search_src_text)).perform(replaceText("english"), closeSoftKeyboard());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
+    boolean state1, state2;
+    ViewInteraction checkBox1, checkBox2;
+
+    // Get a reference to the checkbox associated with the language
+    checkBox1 = onView(
+        allOf(withId(R.id.item_language_checkbox),
+            childAtPosition(
+                childAtPosition(
+                    withId(R.id.activity_language_recycler_view),
+                    0),
+                0),
+            isDisplayed()));
+
+    // Get the initial state of the checkbox
+    try{
+      checkBox1.check(matches(isChecked()));
+      state1 = true;
+    }catch (Exception e){
+      state1 = false;
+    }
+
+    // Click on the checkbox
+    checkBox1.perform(click());
+
+    // Exit from the search view to view the full list of languages
+    onView(withContentDescription("Clear query")).perform(click());
+    onView(withContentDescription("Collapse")).perform(click());
+
+    // Now repeat the same process for another language
+    onView(withContentDescription("Search")).perform(click());
+    onView(withId(R.id.search_src_text)).perform(replaceText("hindi"), closeSoftKeyboard());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
+    // Get a reference to the checkbox associated with the language
+    checkBox2 = onView(
+        allOf(withId(R.id.item_language_checkbox),
+            childAtPosition(
+                childAtPosition(
+                    withId(R.id.activity_language_recycler_view),
+                    1),
+                0),
+            isDisplayed()));
+
+    // Get the initial state of the checkbox
+    try{
+      checkBox2.check(matches(isChecked()));
+      state2 = true;
+    }catch (Exception e){
+      state2 = false;
+    }
+
+    // Click on the checkbox
+    checkBox1.perform(click());
+
+    // Exit from the search view to view the full list of languages
+    onView(withContentDescription("Clear query")).perform(click());
+    onView(withContentDescription("Collapse")).perform(click());
+
+    // Verify that the languages are still selected (or unselected), even after collapsing the search list
+    onView(withContentDescription("Search")).perform(click());
+    onView(withId(R.id.search_src_text)).perform(replaceText("english"), closeSoftKeyboard());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
+    if(state1){
+      checkBox1.check(matches(not(isChecked())));
+    }else{
+      checkBox1.check(matches(isChecked()));
+    }
+
+    onView(withContentDescription("Clear query")).perform(click());
+    onView(withContentDescription("Search")).perform(click());
+    onView(withId(R.id.search_src_text)).perform(replaceText("hindi"), closeSoftKeyboard());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
+    if(state2){
+      checkBox2.check(matches(not(isChecked())));
+    }else{
+      checkBox2.check(matches(isChecked()));
+    }
+
+    onView(withContentDescription("Collapse")).perform(click());
+
+    // Verify that the state of the languages is not saved in case the "X" button is pressed
+    onView(withContentDescription("Navigate up")).perform(click());
+    onView(withContentDescription("Save languages")).perform(click());
+
+
+    //
     //ViewInteraction textView10 = onView(
     //    allOf(withId(R.id.item_language_name),
     //        childAtPosition(
@@ -167,7 +250,7 @@ public class LanguageActivityTest {
     //textView10.check(matches(withText("English")));
     //BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
-    checkBoxEnglish = onView(
+    checkBox1 = onView(
         allOf(withId(R.id.item_language_checkbox),
             childAtPosition(
                 childAtPosition(
@@ -175,34 +258,6 @@ public class LanguageActivityTest {
                     0),
                 0),
             isDisplayed()));
-
-    try{
-      stateEnglish =
-
-    }
-    checkBoxEnglish.check(matches(isChecked())).perform(click());
-
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    onView(withContentDescription("Clear query")).perform(click());
-    onView(withContentDescription("Collapse")).perform(click());
-    onView(withId(R.id.search_src_text)).perform(replaceText("english"), closeSoftKeyboard());
-
-
-    ViewInteraction checkBoxHindi = onView(
-        allOf(withId(R.id.item_language_checkbox),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.activity_language_recycler_view),
-                    1),
-                0),
-            isDisplayed()));
-    checkBoxHindi.check(matches(isChecked())).perform(click());
-
-
-
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    checkBox.check(matches(not(isChecked())));
-
 
 
     //verify that the query was actually cleared
