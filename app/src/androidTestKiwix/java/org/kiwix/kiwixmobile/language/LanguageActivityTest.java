@@ -49,8 +49,14 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
+import static android.support.test.espresso.action.ViewActions.swipeRight;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -81,10 +87,14 @@ public class LanguageActivityTest {
 
   @Test
   public void testIntroActivity() {
+    boolean state1, state2;
+    ViewInteraction checkBox1, checkBox2;
+
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     onView(withId(R.id.get_started)).perform(click());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
+    // open the language activity
     openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
     onView(withText("Get Content")).perform(click());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
@@ -98,54 +108,128 @@ public class LanguageActivityTest {
                         0)),
                 1),
             isDisplayed()));
+
+    // Verify that the "Choose Language" and the "Search" buttons are present only in the online tab
+    onView(withContentDescription("Search")).check(doesNotExist());
+    onView(withContentDescription("Choose a language")).check(doesNotExist());
     viewPager.perform(swipeLeft());
+    viewPager.perform(swipeLeft());
+    onView(withContentDescription("Search")).check(doesNotExist());
+    onView(withContentDescription("Choose a language")).check(doesNotExist());
 
+    viewPager.perform(swipeRight());
+    onView(withContentDescription("Search")).check(matches(notNullValue()));
     onView(withContentDescription("Choose a language")).check(matches(notNullValue()));
+
+    // Test that the language selection screen does not open if the "Choose language" button is clicked, while the data is being loaded
     onView(withContentDescription("Choose a language")).perform(click());
-
-    // TODO : figure out a way to get the refrence of the activity from the activitytestrule to test the toast
-    //onView(withText("Content Still Loading")).inRoot(withDecorView(not(activityTestRule.getActivity().getWindow().getDecorView()))).check(matches(isDisplayed()));
-    //onView(withText("Content Still Loading")).inRoot(withDecorView(not(is(activityTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+    // test toolbar title
 
 
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS * 20);
-
+    // wait for the content to get loaded
+    // This is enough time to complete the download on bitbar
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS * 30);
+    // In case the internet is slow, increase time to download the list
     try{
       onView(allOf(isDisplayed(), withText("Selected languages:"))).check(matches(notNullValue()));
-      //onView(allOf(isDisplayed(), withText("Other languages:"))).check(matches(notNullValue()));
     }catch (Exception e){
       BaristaSleepInteractions.sleep(TEST_PAUSE_MS * 50);
     }
 
     onView(allOf(isDisplayed(), withText("Selected languages:"))).check(matches(notNullValue()));
-    //onView(allOf(isDisplayed(), withText("Other languages:"))).check(matches(notNullValue()));
-
-    //Locale deflocale = getCurrentLocale(getContext());
-
-    //Language defLanguage = deflocale.getLanguage();
 
     onView(withContentDescription("Choose a language")).perform(click());
+
+    // verify that the back, search and save buttons exist
+    onView(withContentDescription("Navigate up")).check(matches(notNullValue()));
+    onView(withContentDescription("Save languages")).check(matches(notNullValue()));
+    onView(withContentDescription("Search")).check(matches(notNullValue()));
 
     // verify that the list of languages to select is present
     onView(withId(R.id.activity_language_recycler_view)).check(withItemCount(greaterThan(0)));
 
-    ViewInteraction checkBox = onView(
+    //onView(withId())
+    /////////////
+
+    // search english
+    onView(withContentDescription("Search")).perform(click());
+    onView(withId(R.id.search_src_text)).perform(replaceText("english"), closeSoftKeyboard());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
+    //ViewInteraction textView10 = onView(
+    //    allOf(withId(R.id.item_language_name),
+    //        childAtPosition(
+    //            childAtPosition(
+    //                withId(R.id.activity_language_recycler_view),
+    //                0),
+    //            0),
+    //        isDisplayed()));
+    //textView10.check(matches(withText("English")));
+    //BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
+    checkBoxEnglish = onView(
         allOf(withId(R.id.item_language_checkbox),
             childAtPosition(
                 childAtPosition(
                     withId(R.id.activity_language_recycler_view),
-                    3),
+                    0),
                 0),
             isDisplayed()));
-    checkBox.perform(click());
+
+    try{
+      stateEnglish =
+
+    }
+    checkBoxEnglish.check(matches(isChecked())).perform(click());
+
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    onView(withContentDescription("Clear query")).perform(click());
+    onView(withContentDescription("Collapse")).perform(click());
+    onView(withId(R.id.search_src_text)).perform(replaceText("english"), closeSoftKeyboard());
 
 
+    ViewInteraction checkBoxHindi = onView(
+        allOf(withId(R.id.item_language_checkbox),
+            childAtPosition(
+                childAtPosition(
+                    withId(R.id.activity_language_recycler_view),
+                    1),
+                0),
+            isDisplayed()));
+    checkBoxHindi.check(matches(isChecked())).perform(click());
+
+
+
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    checkBox.check(matches(not(isChecked())));
+
+
+
+    //verify that the query was actually cleared
+
+    // 59
+    //verify that the query was actually cleared
+    // 59
+
+    onView(withContentDescription("Save languages")).perform(click());
+
+    //////////////
+
+    //ViewInteraction checkBoxsid = onView(
+    //    allOf(withId(R.id.item_language_checkbox),
+    //        childAtPosition(
+    //            childAtPosition(
+    //                withId(R.id.activity_language_recycler_view),
+    //                3),
+    //            0),
+    //        isDisplayed()));
+    //checkBox.perform(click());
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
 
 
-    onView(withId(R.id.menu_language_save)).perform(click());
+    //onView(withId(R.id.menu_language_save)).perform(click());
 
     // TODO: make sure the it is only possible to open the activity after the network call is finished and book list is updated
     // TODO: test that default language is based on device locale
