@@ -233,11 +233,80 @@ public class LanguageActivityTest {
 
     onView(withContentDescription("Collapse")).perform(click());
 
-    // Verify that the state of the languages is not saved in case the "X" button is pressed
+    // Verify that the new state of the languages is not saved in case the "X" button is pressed
     onView(withContentDescription("Navigate up")).perform(click());
+    onView(withContentDescription("Choose a language")).perform(click());
+
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    onView(withContentDescription("Search")).perform(click());
+    onView(withId(R.id.search_src_text)).perform(replaceText("english"), closeSoftKeyboard());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
+    if(state1){
+      checkBox1.check(matches(isChecked()));
+    }else{
+      checkBox1.check(matches(not(isChecked())));
+    }
+
+    onView(withContentDescription("Clear query")).perform(click());
+    onView(withContentDescription("Search")).perform(click());
+    onView(withId(R.id.search_src_text)).perform(replaceText("hindi"), closeSoftKeyboard());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
+    if(state2){
+      checkBox2.check(matches(isChecked()));
+    }else{
+      checkBox2.check(matches(not(isChecked())));
+    }
+
+    onView(withContentDescription("Navigate up")).perform(click());
+
+    // Verify that the new state of the languages saved in case the "save" button is pressed
+    onView(withContentDescription("Choose a language")).perform(click());
+
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    onView(withContentDescription("Search")).perform(click());
+    onView(withId(R.id.search_src_text)).perform(replaceText("english"), closeSoftKeyboard());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
+    checkBox1.perform(click());
+
+    onView(withContentDescription("Clear query")).perform(click());
+    onView(withContentDescription("Search")).perform(click());
+    onView(withId(R.id.search_src_text)).perform(replaceText("hindi"), closeSoftKeyboard());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
+    checkBox2.perform(click());
+
     onView(withContentDescription("Save languages")).perform(click());
 
+    onView(withContentDescription("Choose a language")).perform(click());
 
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    onView(withContentDescription("Search")).perform(click());
+    onView(withId(R.id.search_src_text)).perform(replaceText("english"), closeSoftKeyboard());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
+    if(state1){
+      checkBox1.check(matches(isChecked()));
+    }else{
+      checkBox1.check(matches(not(isChecked())));
+    }
+
+    onView(withContentDescription("Clear query")).perform(click());
+    onView(withContentDescription("Search")).perform(click());
+    onView(withId(R.id.search_src_text)).perform(replaceText("hindi"), closeSoftKeyboard());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
+    if(state2){
+      checkBox2.check(matches(isChecked()));
+    }else{
+      checkBox2.check(matches(not(isChecked())));
+    }
+
+    onView(withContentDescription("Navigate up")).perform(click());
+
+    
     //
     //ViewInteraction textView10 = onView(
     //    allOf(withId(R.id.item_language_name),
