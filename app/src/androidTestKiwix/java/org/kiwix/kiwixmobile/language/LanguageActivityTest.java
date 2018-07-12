@@ -182,7 +182,7 @@ public class LanguageActivityTest {
 
     // Now repeat the same process for another language
     onView(withContentDescription("Search")).perform(click());
-    onView(withId(R.id.search_src_text)).perform(replaceText("hindi"), closeSoftKeyboard());
+    onView(withId(R.id.search_src_text)).perform(replaceText("bengali"), closeSoftKeyboard());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     // Get a reference to the checkbox associated with the language
@@ -191,7 +191,7 @@ public class LanguageActivityTest {
             childAtPosition(
                 childAtPosition(
                     withId(R.id.activity_language_recycler_view),
-                    1),
+                    0),
                 0),
             isDisplayed()));
 
@@ -223,7 +223,7 @@ public class LanguageActivityTest {
 
     onView(withContentDescription("Clear query")).perform(click());
     onView(withContentDescription("Search")).perform(click());
-    onView(withId(R.id.search_src_text)).perform(replaceText("hindi"), closeSoftKeyboard());
+    onView(withId(R.id.search_src_text)).perform(replaceText("bengali"), closeSoftKeyboard());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     if(state2){
@@ -251,7 +251,7 @@ public class LanguageActivityTest {
 
     onView(withContentDescription("Clear query")).perform(click());
     onView(withContentDescription("Search")).perform(click());
-    onView(withId(R.id.search_src_text)).perform(replaceText("hindi"), closeSoftKeyboard());
+    onView(withId(R.id.search_src_text)).perform(replaceText("bengali"), closeSoftKeyboard());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     if(state2){
@@ -274,7 +274,7 @@ public class LanguageActivityTest {
 
     onView(withContentDescription("Clear query")).perform(click());
     onView(withContentDescription("Search")).perform(click());
-    onView(withId(R.id.search_src_text)).perform(replaceText("hindi"), closeSoftKeyboard());
+    onView(withId(R.id.search_src_text)).perform(replaceText("bengali"), closeSoftKeyboard());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     checkBox2.perform(click());
@@ -296,7 +296,7 @@ public class LanguageActivityTest {
 
     onView(withContentDescription("Clear query")).perform(click());
     onView(withContentDescription("Search")).perform(click());
-    onView(withId(R.id.search_src_text)).perform(replaceText("hindi"), closeSoftKeyboard());
+    onView(withId(R.id.search_src_text)).perform(replaceText("bengali"), closeSoftKeyboard());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     if(state2){
