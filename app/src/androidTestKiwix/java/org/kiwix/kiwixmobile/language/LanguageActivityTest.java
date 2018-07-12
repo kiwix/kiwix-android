@@ -19,14 +19,10 @@
 package org.kiwix.kiwixmobile.language;
 
 import android.Manifest;
-import android.content.Context;
-import android.os.Build;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.Intents;
-import android.support.test.filters.FlakyTest;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +30,6 @@ import android.view.ViewParent;
 import android.widget.Checkable;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import com.schibsted.spain.barista.rule.BaristaRule;
-import com.schibsted.spain.barista.rule.flaky.AllowFlaky;
-import java.util.Locale;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -46,17 +40,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.intro.IntroActivity;
-import org.kiwix.kiwixmobile.models.Language;
-import org.kiwix.kiwixmobile.splash.SplashActivity;
 
-import static android.support.test.InstrumentationRegistry.getContext;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.action.ViewActions.swipeRight;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
@@ -66,12 +56,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.kiwix.kiwixmobile.utils.RecyclerViewItemCountAssertion.withItemCount;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
@@ -92,7 +80,6 @@ public class LanguageActivityTest {
   }
 
   @Test
-  @AllowFlaky(attempts = 2)
   public void testIntroActivity() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     onView(withId(R.id.get_started)).perform(click());
@@ -128,8 +115,16 @@ public class LanguageActivityTest {
     // Test that the language selection screen does not open if the "Choose language" button is clicked, while the data is being loaded
     onView(withContentDescription("Choose a language")).perform(click());
 
-    // test toolbar title
-
+    // Verify that the library is still visible
+    ViewInteraction textView = onView(
+        allOf(withText("Library"),
+            childAtPosition(
+                allOf(withId(R.id.toolbar),
+                    childAtPosition(
+                        withId(R.id.toolbar_layout),
+                        0)),
+                1),
+            isDisplayed()));
 
     // wait for the content to get loaded
     // This is enough time to complete the download on bitbar
@@ -174,11 +169,8 @@ public class LanguageActivityTest {
 
     // Initialise the language checkbox
     checkBox1.perform(setChecked(false));
-    onView(withContentDescription("Save languages")).perform(click());
 
-    //// Exit from the search view to view the full list of languages
-    //onView(withContentDescription("Clear query")).perform(click());
-    //onView(withContentDescription("Collapse")).perform(click());
+    onView(withContentDescription("Save languages")).perform(click());
 
     // Now repeat the same process for another language
     onView(withContentDescription("Choose a language")).perform(click());
@@ -198,6 +190,9 @@ public class LanguageActivityTest {
 
     // Initialise the language checkbox
     checkBox2.perform(setChecked(false));
+    onView(withContentDescription("Clear query")).perform(click());
+    // Collapse the search view to go to the full list of languages
+    onView(withContentDescription("Collapse")).perform(click());
     onView(withContentDescription("Save languages")).perform(click());
 
     // Start the Test
