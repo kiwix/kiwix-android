@@ -40,6 +40,7 @@
     android:text="@string/send_feedback"
     android:textAppearance="?android:attr/textAppearanceMedium"
     app:layout_constraintBottom_toBottomOf="@id/activity_help_feedback_image_view"
+    app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toEndOf="@id/activity_help_feedback_image_view"
     app:layout_constraintTop_toTopOf="@id/activity_help_feedback_image_view" />
 
