@@ -80,7 +80,7 @@ public class LanguageActivityTest {
   }
 
   @Test
-  public void testIntroActivity() {
+  public void testLanguageActivity() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     onView(withId(R.id.get_started)).perform(click());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
