@@ -18,6 +18,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static org.kiwix.kiwixmobile.utils.AnimationUtils.collapse;
+import static org.kiwix.kiwixmobile.utils.AnimationUtils.expand;
+
 class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.Item> {
   private final String[] titles;
   private final String[] descriptions;
@@ -67,9 +70,9 @@ class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.Item> {
     void toggleDescriptionVisibility() {
       if (description.getVisibility() == View.GONE) {
         ObjectAnimator.ofFloat(toggleDescriptionVisibility, "rotation", 0, 180).start();
-        description.setVisibility(View.VISIBLE);
+        expand(description);
       } else {
-        description.setVisibility(View.GONE);
+        collapse(description);
         ObjectAnimator.ofFloat(toggleDescriptionVisibility, "rotation", 180, 360).start();
       }
     }
