@@ -19,27 +19,21 @@
 package org.kiwix.kiwixmobile.language;
 
 import android.Manifest;
-import android.support.test.espresso.UiController;
-import android.support.test.espresso.ViewAction;
+import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.GrantPermissionRule;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
-import android.widget.Checkable;
+
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import com.schibsted.spain.barista.rule.BaristaRule;
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.intro.IntroActivity;
+import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
@@ -56,13 +50,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.isA;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.hamcrest.CoreMatchers.not;
-import static org.kiwix.kiwixmobile.utils.RecyclerViewItemCountAssertion.withItemCount;
+import static org.kiwix.kiwixmobile.testutils.Matcher.childAtPosition;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
+import static org.kiwix.kiwixmobile.testutils.ViewActions.setChecked;
+import static org.kiwix.kiwixmobile.utils.RecyclerViewItemCountAssertion.withItemCount;
 
 public class LanguageActivityTest {
 
@@ -74,13 +69,13 @@ public class LanguageActivityTest {
   public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @Before
-  public void setUp(){
+  public void setUp() {
     Intents.init();
     activityTestRule.launchActivity();
   }
 
   @Test
-  public void testIntroActivity() {
+  public void testLanguageActivity() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     onView(withId(R.id.get_started)).perform(click());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
@@ -90,17 +85,17 @@ public class LanguageActivityTest {
     onView(withText("Get Content")).perform(click());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
-    ViewInteraction viewPager = onView(
-        allOf(withId(R.id.container),
-            childAtPosition(
-                allOf(withId(R.id.zim_manager_main_activity),
-                    childAtPosition(
-                        withId(android.R.id.content),
-                        0)),
-                1),
-            isDisplayed()));
+    ViewInteraction viewPager = onView(allOf(withId(R.id.container),
+        childAtPosition(allOf(withId(R.id.zim_manager_main_activity),
+            childAtPosition(withId(android.R.id.content), 0)), 1),
+        isDisplayed()));
 
     // Verify that the "Choose Language" and the "Search" buttons are present only in the "online" tab
+    onView(withContentDescription("Search")).check(matches(notNullValue()));
+    // Test that the language selection screen does not open if the "Choose language" button is clicked, while the data is being loaded
+    onView(withContentDescription("Choose a language")).check(matches(notNullValue())).perform(click());
+
+    viewPager.perform(swipeRight());
     onView(withContentDescription("Search")).check(doesNotExist());
     onView(withContentDescription("Choose a language")).check(doesNotExist());
     viewPager.perform(swipeLeft());
@@ -109,28 +104,13 @@ public class LanguageActivityTest {
     onView(withContentDescription("Choose a language")).check(doesNotExist());
 
     viewPager.perform(swipeRight());
-    onView(withContentDescription("Search")).check(matches(notNullValue()));
-    onView(withContentDescription("Choose a language")).check(matches(notNullValue()));
-
-    // Test that the language selection screen does not open if the "Choose language" button is clicked, while the data is being loaded
-    onView(withContentDescription("Choose a language")).perform(click());
 
     // Verify that the library is still visible
-    ViewInteraction textView = onView(
-        allOf(withText("Library"),
-            childAtPosition(
-                allOf(withId(R.id.toolbar),
-                    childAtPosition(
-                        withId(R.id.toolbar_layout),
-                        0)),
-                1),
-            isDisplayed()));
-
-    // wait for the content to get loaded
-    // This is enough time to complete the download on bitbar
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS * 40);
+    onView(allOf(withText("Library"), childAtPosition(allOf(withId(R.id.toolbar),
+        childAtPosition(withId(R.id.toolbar_layout), 0)), 1), isDisplayed()));
 
     // Make sure that the zim list has been loaded
+    IdlingRegistry.getInstance().register(LibraryFragment.IDLING_RESOURCE);
     onView(allOf(isDisplayed(), withText("Selected languages:"))).check(matches(notNullValue()));
 
     // Open the Language Activity
@@ -145,7 +125,7 @@ public class LanguageActivityTest {
     onView(withId(R.id.activity_language_recycler_view)).check(withItemCount(greaterThan(0)));
 
     // languages used for testing
-    String language1 = "konkani";
+    String language1 = "kongo";
     String language2 = "bengali";
 
     // References for the checkboxes for the corresponding languages
@@ -294,61 +274,11 @@ public class LanguageActivityTest {
     onView(withContentDescription("Collapse")).perform(click());
     onView(withContentDescription("Navigate up")).perform(click());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    IdlingRegistry.getInstance().unregister(LibraryFragment.IDLING_RESOURCE);
   }
 
   @After
-  public void endTest(){
+  public void endTest() {
     Intents.release();
-  }
-
-
-  public static ViewAction setChecked(final boolean checked) {
-    return new ViewAction() {
-      @Override
-      public BaseMatcher<View> getConstraints() {
-        return new BaseMatcher<View>() {
-          @Override
-          public boolean matches(Object item) {
-            return isA(Checkable.class).matches(item);
-          }
-
-          @Override
-          public void describeMismatch(Object item, Description mismatchDescription) {}
-
-          @Override
-          public void describeTo(Description description) {}
-        };
-      }
-
-      @Override
-      public String getDescription() {
-        return null;
-      }
-
-      @Override
-      public void perform(UiController uiController, View view) {
-        Checkable checkableView = (Checkable) view;
-        checkableView.setChecked(checked);
-      }
-    };
-  }
-
-  private static Matcher<View> childAtPosition(
-      final Matcher<View> parentMatcher, final int position) {
-
-    return new TypeSafeMatcher<View>() {
-      @Override
-      public void describeTo(Description description) {
-        description.appendText("Child at position " + position + " in parent ");
-        parentMatcher.describeTo(description);
-      }
-
-      @Override
-      public boolean matchesSafely(View view) {
-        ViewParent parent = view.getParent();
-        return parent instanceof ViewGroup && parentMatcher.matches(parent)
-            && view.equals(((ViewGroup) parent).getChildAt(position));
-      }
-    };
   }
 }
