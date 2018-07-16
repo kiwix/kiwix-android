@@ -47,13 +47,13 @@ public class LibraryPresenter extends BasePresenter<LibraryViewCallback> {
 
   void loadBooks() {
     view.displayScanningContent();
-    kiwixService.getLibrary()
+    compositeDisposable.add(kiwixService.getLibrary()
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(library -> view.showBooks(library.getBooks()), error -> {
           String msg = error.getLocalizedMessage();
           Log.w("kiwixLibrary", "Error loading books:" + (msg != null ? msg : "(null)"));
           view.displayNoItemsFound();
-        });
+        }));
   }
 
   void loadRunningDownloadsFromDb() {
@@ -64,10 +64,4 @@ public class LibraryPresenter extends BasePresenter<LibraryViewCallback> {
       }
     }
   }
-
-  @Override
-  public void attachView(LibraryViewCallback view) {
-    super.attachView(view);
-  }
-
 }
