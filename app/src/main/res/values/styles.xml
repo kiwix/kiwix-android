@@ -82,7 +82,7 @@
     <item name="android:colorBackground">@color/cardview_dark_background</item>
     <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
     <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
-    <item name="buttonBarNeutralButtonStyle" tools:targetApi="lollipop">@style/NeutralButtonStyle</item>
+    <item name="buttonBarNeutralButtonStyle">@style/NeutralButtonStyle</item>
   </style>
 
   <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
