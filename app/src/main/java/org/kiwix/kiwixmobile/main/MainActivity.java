@@ -1219,7 +1219,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       refresh = false;
       recreate();
     }
-    refreshBookmarkSymbol();
+    presenter.loadCurrentZimBookmarksUrl();
     if (getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE) {
       if (menu != null) {
         menu.getItem(4).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
