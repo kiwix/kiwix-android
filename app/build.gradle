@@ -228,7 +228,7 @@ android {
     // Release Type
     release {
       buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://download.kiwix.org/\""
-      buildConfigField "boolean", "KIWIX_ERROR_ACTIVITY", "true"
+      buildConfigField "boolean", "KIWIX_ERROR_ACTIVITY", "false"
     }
 
   }
