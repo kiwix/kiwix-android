@@ -19,8 +19,8 @@
 package org.kiwix.kiwixmobile.tests;
 
 import android.Manifest;
-import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingPolicies;
+import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
@@ -76,7 +76,7 @@ public class DownloadTest {
   public static void beforeClass() {
     IdlingPolicies.setMasterPolicyTimeout(180, TimeUnit.SECONDS);
     IdlingPolicies.setIdlingResourceTimeout(180, TimeUnit.SECONDS);
-    Espresso.registerIdlingResources(KiwixIdlingResource.getInstance());
+    IdlingRegistry.getInstance().register(KiwixIdlingResource.getInstance());
   }
 
   @Before
@@ -145,7 +145,7 @@ this functionality in the tests.
 
   @After
   public void finish() {
-    Espresso.unregisterIdlingResources(KiwixIdlingResource.getInstance());
+    IdlingRegistry.getInstance().unregister(KiwixIdlingResource.getInstance());
   }
 
 }
