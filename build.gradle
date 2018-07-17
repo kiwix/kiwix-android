@@ -15,10 +15,10 @@ ext {
   androidGradlePluginVersion = '3.1.3'
   testdroidGradlePluginVersion = '2.49.1'
   supportLibraryVersion = '27.1.1'
-  rxJavaVersion = '2.1.9'
+  rxJavaVersion = '2.1.16'
   rxAndroidVersion = '2.0.2'
-  okHttpVersion = '3.9.1'
-  retrofitVersion = '2.3.0'
+  okHttpVersion = '3.11.0'
+  retrofitVersion = '2.4.0'
   javaxAnnotationVersion = '1.3.2'
   daggerVersion = '2.16'
   inkPageIndicatorVersion = '1.3.0'
@@ -28,6 +28,10 @@ ext {
   apacheCommonsVersion = '2.6'
   multidexVersion = '1.0.3'
   jUnitVersion = '4.12'
+  mockitoVersion = '2.19.1'
+  powerMockVersion = '1.6.6'
+  powerMockJUnitVersion = '1.7.4'
+  baristaVersion = '2.5.0'
 }
 
 allprojects {
