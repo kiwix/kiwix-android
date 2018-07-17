@@ -122,7 +122,7 @@ public class LanguageActivityTest {
     onView(withContentDescription("Search")).check(matches(notNullValue()));
 
     // verify that the list of languages is present
-    onView(withId(R.id.activity_language_recycler_view)).check(withItemCount(greaterThan(0)));
+    onView(withId(R.id.recycler_view)).check(withItemCount(greaterThan(0)));
 
     // languages used for testing
     String language1 = "kongo";
@@ -142,7 +142,7 @@ public class LanguageActivityTest {
         allOf(withId(R.id.item_language_checkbox),
             childAtPosition(
                 childAtPosition(
-                    withId(R.id.activity_language_recycler_view),
+                    withId(R.id.recycler_view),
                     0),
                 0),
             isDisplayed()));
@@ -163,7 +163,7 @@ public class LanguageActivityTest {
         allOf(withId(R.id.item_language_checkbox),
             childAtPosition(
                 childAtPosition(
-                    withId(R.id.activity_language_recycler_view),
+                    withId(R.id.recycler_view),
                     0),
                 0),
             isDisplayed()));
@@ -274,11 +274,11 @@ public class LanguageActivityTest {
     onView(withContentDescription("Collapse")).perform(click());
     onView(withContentDescription("Navigate up")).perform(click());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    IdlingRegistry.getInstance().unregister(LibraryFragment.IDLING_RESOURCE);
   }
 
   @After
   public void endTest() {
+    IdlingRegistry.getInstance().unregister(LibraryFragment.IDLING_RESOURCE);
     Intents.release();
   }
 }
