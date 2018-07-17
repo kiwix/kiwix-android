@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 import static org.kiwix.kiwixmobile.utils.LanguageUtils.getCurrentLocale;
 
@@ -57,8 +56,6 @@ public class ErrorActivity extends BaseActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_kiwix_error);
-    ButterKnife.bind(this);
-
     Intent callingIntent = getIntent();
 
     Bundle extras = callingIntent.getExtras();

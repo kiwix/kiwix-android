@@ -107,7 +107,6 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
 
@@ -307,8 +306,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     handleLocaleCheck();
     setContentView(R.layout.main);
-    ButterKnife.bind(this);
-
     setUpToolbar();
 
     checkForRateDialog();
