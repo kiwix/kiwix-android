@@ -7,13 +7,6 @@ import dagger.Provides;
 
 @Module
 public class MainModule {
-
-  @PerActivity
-  @Provides
-  MainContract.View provideMainView(MainActivity mainActivity) {
-    return mainActivity;
-  }
-
   @PerActivity
   @Provides
   MainContract.Presenter provideMainPresenter(MainPresenter mainPresenter) {

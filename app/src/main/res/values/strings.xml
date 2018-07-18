@@ -234,4 +234,6 @@
     <item>@string/help_18</item>
     <item>@string/help_19</item>
   </string-array>
+  <string name="bookmarks_from_current_book">Bookmarks from current book</string>
+  <string name="search_bookmarks">Search bookmarks</string>
 </resources>

@@ -19,8 +19,8 @@ package org.kiwix.kiwixmobile.tests;
 
 import android.Manifest;
 import android.support.test.espresso.DataInteraction;
-import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingPolicies;
+import android.support.test.espresso.IdlingRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.util.Log;
@@ -89,7 +89,7 @@ public class NetworkTest {
   public static void beforeClass() {
     IdlingPolicies.setMasterPolicyTimeout(180, TimeUnit.SECONDS);
     IdlingPolicies.setIdlingResourceTimeout(180, TimeUnit.SECONDS);
-    Espresso.registerIdlingResources(KiwixIdlingResource.getInstance());
+    IdlingRegistry.getInstance().register(KiwixIdlingResource.getInstance());
   }
 
   @Before
@@ -179,6 +179,6 @@ public class NetworkTest {
 
   @After
   public void finish() {
-    Espresso.unregisterIdlingResources(KiwixIdlingResource.getInstance());
+    IdlingRegistry.getInstance().unregister(KiwixIdlingResource.getInstance());
   }
 }
