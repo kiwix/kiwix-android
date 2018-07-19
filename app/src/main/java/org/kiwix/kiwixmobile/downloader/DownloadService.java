@@ -109,7 +109,6 @@ public class DownloadService extends Service {
   private SparseArray<NotificationCompat.Builder> notification = new SparseArray<>();
   public SparseIntArray downloadStatus = new SparseIntArray();
   public SparseIntArray downloadProgress = new SparseIntArray();
-  public SparseIntArray timeRemaining = new SparseIntArray();
   public static final Object pauseLock = new Object();
   private static DownloadFragment downloadFragment;
   Handler handler = new Handler(Looper.getMainLooper());
@@ -140,6 +139,7 @@ public class DownloadService extends Service {
 
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
+    Log.i(KIWIX_TAG, "Kiwix Service Start Called");
     if (intent == null) {
       return START_NOT_STICKY;
     }
@@ -301,7 +301,7 @@ public class DownloadService extends Service {
       // Calculate initial download progress
       int initial = (int) (getCurrentSize(book) / (Long.valueOf(book.getSize()) * BOOK_SIZE_OFFSET));
       notification.get(notificationID).setProgress(100, initial, false);
-      updateDownloadFragmentProgress(initial, notificationID, book);
+      updateDownloadFragmentProgress(initial, Integer.MAX_VALUE, notificationID, book);
       notificationManager.notify(notificationID, notification.get(notificationID).build());
     }
     kiwixService.getMetaLinks(url)
@@ -330,27 +330,27 @@ public class DownloadService extends Service {
           notification.get(notificationID).setProgress(100, 100, false);
           notificationManager.notify(notificationID, notification.get(notificationID).build());
           updateForeground();
-          updateDownloadFragmentProgress(100, notificationID, book);
+          updateDownloadFragmentProgress(100, 0, notificationID, book);
           stopSelf();
         }).subscribe(progress -> {
-          notification.get(notificationID).setProgress(100, progress, false);
-          if (progress != 100 && timeRemaining.get(notificationID) != -1)
-            notification.get(notificationID).setContentText(DownloadFragment.toHumanReadableTime(timeRemaining.get(notificationID)));
+          notification.get(notificationID).setProgress(100, progress.first, false);
+          if (progress.first != 100)
+            notification.get(notificationID).setContentText(DownloadFragment.toHumanReadableTime(progress.second));
           notificationManager.notify(notificationID, notification.get(notificationID).build());
-          if (progress == 0 || progress == 100) {
+          if (progress.first == 0 || progress.first == 100) {
             // Tells android to not kill the service
             updateForeground();
           }
-          updateDownloadFragmentProgress(progress, notificationID, book);
+          updateDownloadFragmentProgress(progress.first, progress.second, notificationID, book);
         }, Throwable::printStackTrace);
   }
 
-  private void updateDownloadFragmentProgress(int progress, int notificationID, LibraryNetworkEntity.Book book) {
+  private void updateDownloadFragmentProgress(int progress, int secLeft, int notificationID, LibraryNetworkEntity.Book book) {
     if (DownloadFragment.mDownloads != null) {
       if (DownloadFragment.mDownloads.get(notificationID) != null) {
         handler.post(() -> {
           if (DownloadFragment.mDownloads.get(notificationID) != null) {
-            DownloadFragment.downloadAdapter.updateProgress(progress, notificationID);
+            DownloadFragment.downloadAdapter.updateProgress(progress, secLeft, notificationID);
           }
         });
       } else {
@@ -420,8 +420,9 @@ public class DownloadService extends Service {
     }
   }
 
-  private Observable<Integer> downloadChunk(Chunk chunk) {
+  private Observable<Pair<Integer, Integer>> downloadChunk(Chunk chunk) {
     return Observable.create(subscriber -> {
+      Log.d(KIWIX_TAG, "Downloading Chucnk: " + chunk.getFileName());
       try {
         // Stop if download is completed or download canceled
         if (chunk.isDownloaded || downloadStatus.get(chunk.getNotificationID()) == CANCEL) {
@@ -464,8 +465,12 @@ public class DownloadService extends Service {
         int read;
         int timeout = 100;
         int attempts = 0;
+
+        int secondsLeft = Integer.MAX_VALUE;
+
         BufferedSource input = null;
 
+        Log.d(KIWIX_TAG, "Chunk setup complete for: " + chunk.getFileName());
         // Keep attempting to download chunk despite network errors
         while (attempts < timeout) {
           try {
@@ -493,6 +498,7 @@ public class DownloadService extends Service {
 
             // Start streaming data
             while ((read = input.read(buffer)) != -1) {
+              Log.d(KIWIX_TAG, "Streaming data for chunk: " + chunk.getFileName() + " Buffer: " + downloaded);
               if (downloadStatus.get(chunk.getNotificationID()) == CANCEL) {
                 attempts = timeout;
                 break;
@@ -506,7 +512,6 @@ public class DownloadService extends Service {
               if (downloadStatus.get(chunk.getNotificationID()) == PAUSE) {
                 synchronized (pauseLock) {
                   try {
-                    timeRemaining.put(chunk.getNotificationID(), -1);
                     // Calling wait() will block this thread until another thread
                     // calls notify() on the object.
                     pauseLock.wait();
@@ -526,8 +531,7 @@ public class DownloadService extends Service {
                 lastTime = System.currentTimeMillis();
                 double speed = (downloaded - lastSize) / (timeDiff / 1000.0);
                 lastSize = downloaded;
-                int secondsLeft = (int) ((chunk.getContentLength() - downloaded) / speed);
-                timeRemaining.put(chunk.getNotificationID(), secondsLeft);
+                secondsLeft = (int) ((chunk.getContentLength() - downloaded) / speed);
               }
 
               output.write(buffer, 0, read);
@@ -536,7 +540,7 @@ public class DownloadService extends Service {
               if (progress == 100){
                 downloadStatus.put(chunk.getNotificationID(), FINISH);
               }
-              subscriber.onNext(progress);
+              subscriber.onNext(new Pair<>(progress, secondsLeft));
             }
             attempts = timeout;
           } catch (Exception e) {

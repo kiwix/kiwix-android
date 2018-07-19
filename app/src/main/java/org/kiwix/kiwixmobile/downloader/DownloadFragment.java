@@ -203,7 +203,7 @@ public class DownloadFragment extends BaseFragment {
       updateNoDownloads();
     }
 
-    public void updateProgress(int progress, int notificationID) {
+    public void updateProgress(int progress, int secLeft, int notificationID) {
       if (isAdded()) {
         int position = Arrays.asList(mKeys).indexOf(notificationID);
         ViewGroup viewGroup = (ViewGroup) listView.getChildAt(position - listView.getFirstVisiblePosition());
@@ -213,7 +213,6 @@ public class DownloadFragment extends BaseFragment {
         ProgressBar downloadProgress = viewGroup.findViewById(R.id.downloadProgress);
         downloadProgress.setProgress(progress);
         TextView timeRemaining = viewGroup.findViewById(R.id.time_remaining);
-        int secLeft = LibraryFragment.mService.timeRemaining.get(mKeys[position], -1);
         if (secLeft != -1)
           timeRemaining.setText(toHumanReadableTime(secLeft));
       }
