@@ -68,11 +68,9 @@ public class IntroActivityTest {
     Intents.init();
     activityTestRule.launchActivity();
   }
-  
+
   @Test
   public void testIntroActivity(){
-    Intents.init();
-    activityTestRule.launchActivity();
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     ViewInteraction viewPager = onView(withId(R.id.view_pager));
 
