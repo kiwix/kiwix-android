@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.intro;
 
 import android.Manifest;
+import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.GrantPermissionRule;
@@ -28,11 +29,14 @@ import android.test.suitebuilder.annotation.LargeTest;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import com.schibsted.spain.barista.rule.BaristaRule;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.main.MainActivity;
+import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -59,6 +63,12 @@ public class IntroActivityTest {
   @Rule
   public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
+  @Before
+  public void setUp() {
+    Intents.init();
+    activityTestRule.launchActivity();
+  }
+  
   @Test
   public void testIntroActivity(){
     Intents.init();
@@ -87,6 +97,11 @@ public class IntroActivityTest {
 
     // Test the intent generated for MainActivity
     intended(hasComponent(MainActivity.class.getName()));
+  }
+
+  @After
+  public void endTest() {
+    IdlingRegistry.getInstance().unregister(LibraryFragment.IDLING_RESOURCE);
     Intents.release();
   }
 }
