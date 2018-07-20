@@ -29,6 +29,7 @@ import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import com.schibsted.spain.barista.rule.BaristaRule;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -59,6 +60,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -84,39 +87,12 @@ public class HelpActivityTest {
 
   @Test
   public void testHelpActivity() {
-
-    activityTestRule.launchActivity();
-
-
-    ViewInteraction appCompatButton = onView(
-        allOf(withId(R.id.get_started), withText("Get started"),
-            childAtPosition(
-                childAtPosition(
-                    withId(android.R.id.content),
-                    0),
-                1),
-            isDisplayed()));
-    appCompatButton.perform(click());
-
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(10000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    onView(withId(R.id.get_started)).check(matches(notNullValue()));
+    onView(withId(R.id.get_started)).perform(click());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(10000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
 
     ViewInteraction appCompatTextView = onView(
         allOf(withId(R.id.title), withText("Help"),
@@ -128,14 +104,8 @@ public class HelpActivityTest {
             isDisplayed()));
     appCompatTextView.perform(click());
 
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(20000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     ViewInteraction textView = onView(
         allOf(withText("Help"),
@@ -159,14 +129,8 @@ public class HelpActivityTest {
             isDisplayed()));
     imageButton.check(matches(isDisplayed()));
 
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(40000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
 
     ViewInteraction appCompatImageButton = onView(
         allOf(withContentDescription("Navigate up"),
@@ -179,14 +143,8 @@ public class HelpActivityTest {
             isDisplayed()));
     appCompatImageButton.perform(click());
 
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(10000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
 
     ViewInteraction textView2 = onView(
         allOf(withText("Wikipedia"),
@@ -208,14 +166,8 @@ public class HelpActivityTest {
             isDisplayed()));
     webView.check(matches(isDisplayed()));
 
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(20000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
 
     openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
 
@@ -240,14 +192,8 @@ public class HelpActivityTest {
 
     pressBack();
 
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(5000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
 
     ViewInteraction recyclerView = onView(
         allOf(withId(R.id.recycler_view),
@@ -256,25 +202,13 @@ public class HelpActivityTest {
                 1)));
     recyclerView.perform(actionOnItemAtPosition(1, click()));
 
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(10000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
 
     openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
 
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(10000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
 
     ViewInteraction appCompatTextView3 = onView(
         allOf(withId(R.id.title), withText("Help"),
@@ -286,14 +220,8 @@ public class HelpActivityTest {
             isDisplayed()));
     appCompatTextView3.perform(click());
 
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(20000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
 
     ViewInteraction textView3 = onView(
         allOf(withText("Help"),
@@ -346,14 +274,8 @@ public class HelpActivityTest {
             isDisplayed()));
     textView7.check(matches(withText("Where is the content?")));
 
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(80000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
 
     ViewInteraction appCompatImageView = onView(
         allOf(withId(R.id.item_help_toggle_expand), withContentDescription("Expand"),
@@ -365,14 +287,8 @@ public class HelpActivityTest {
             isDisplayed()));
     appCompatImageView.perform(click());
 
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(160000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
 
     ViewInteraction textView8 = onView(
         allOf(withId(R.id.item_help_description), withText(
@@ -439,14 +355,8 @@ public class HelpActivityTest {
             isDisplayed()));
     textView11.check(matches(isDisplayed()));
 
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(160000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
 
     ViewInteraction appCompatImageView4 = onView(
         allOf(withId(R.id.item_help_toggle_expand), withContentDescription("Expand"),
@@ -500,14 +410,8 @@ public class HelpActivityTest {
             isDisplayed()));
     appCompatImageView6.perform(click());
 
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(160000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
 
     ViewInteraction appCompatImageButton2 = onView(
         allOf(withContentDescription("Navigate up"),
@@ -520,14 +424,7 @@ public class HelpActivityTest {
             isDisplayed()));
     appCompatImageButton2.perform(click());
 
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(160000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     ViewInteraction textView14 = onView(
         allOf(withText("Wikipedia"),
