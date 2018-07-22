@@ -45,6 +45,7 @@ import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.splash.SplashActivity;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
+import static org.kiwix.kiwixmobile.testutils.Matcher.childAtPosition;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
@@ -428,24 +429,5 @@ public class HelpActivityTest {
   public void endTest() {
     IdlingRegistry.getInstance().unregister(LibraryFragment.IDLING_RESOURCE);
     Intents.release();
-  }
-
-  private static Matcher<View> childAtPosition(
-      final Matcher<View> parentMatcher, final int position) {
-
-    return new TypeSafeMatcher<View>() {
-      @Override
-      public void describeTo(Description description) {
-        description.appendText("Child at position " + position + " in parent ");
-        parentMatcher.describeTo(description);
-      }
-
-      @Override
-      public boolean matchesSafely(View view) {
-        ViewParent parent = view.getParent();
-        return parent instanceof ViewGroup && parentMatcher.matches(parent)
-            && view.equals(((ViewGroup) parent).getChildAt(position));
-      }
-    };
   }
 }
