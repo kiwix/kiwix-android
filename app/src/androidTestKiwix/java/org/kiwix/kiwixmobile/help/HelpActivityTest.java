@@ -93,20 +93,11 @@ public class HelpActivityTest {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-
-    ViewInteraction appCompatTextView = onView(
-        allOf(withId(R.id.title), withText("Help"),
-            childAtPosition(
-                childAtPosition(
-                    withClassName(is("android.support.v7.view.menu.ListMenuItemView")),
-                    0),
-                0),
-            isDisplayed()));
-    appCompatTextView.perform(click());
-
+    onView(withText("Help")).perform(click());
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
+    // Verify that the help Activity is opened
     ViewInteraction textView = onView(
         allOf(withText("Help"),
             childAtPosition(
@@ -118,6 +109,7 @@ public class HelpActivityTest {
             isDisplayed()));
     textView.check(matches(withText("Help")));
 
+    // Verify that the back button is displayed
     ViewInteraction imageButton = onView(
         allOf(withContentDescription("Navigate up"),
             childAtPosition(
@@ -132,6 +124,7 @@ public class HelpActivityTest {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
 
+    // Verify that going back from the help screen we go to the previous screen
     ViewInteraction appCompatImageButton = onView(
         allOf(withContentDescription("Navigate up"),
             childAtPosition(
@@ -145,7 +138,7 @@ public class HelpActivityTest {
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
-
+    // Verify that the home activity is opened
     ViewInteraction textView2 = onView(
         allOf(withText("Wikipedia"),
             childAtPosition(
@@ -181,15 +174,8 @@ public class HelpActivityTest {
             isDisplayed()));
     appCompatTextView2.perform(click());
 
-    // Added a sleep statement to match the app's execution delay.
-    // The recommended way to handle such scenarios is to use Espresso idling resources:
-    // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-    try {
-      Thread.sleep(80000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    
     pressBack();
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
