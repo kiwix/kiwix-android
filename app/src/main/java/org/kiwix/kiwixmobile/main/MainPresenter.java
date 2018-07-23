@@ -24,6 +24,7 @@ import io.reactivex.disposables.Disposable;
 @PerActivity
 class MainPresenter extends BasePresenter<MainContract.View> implements MainContract.Presenter {
 
+  private static final String TAG = "MainPresenter";
   private final DataSource dataSource;
 
   @Inject
@@ -47,15 +48,30 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
 
           @Override
           public void onError(Throwable e) {
-            Log.d("MainPresenter", e.toString());
+            Log.e(TAG, "Unable to load books", e);
           }
         });
   }
 
   @Override
   public void saveBooks(List<LibraryNetworkEntity.Book> book) {
-    dataSource.saveBooks(book);
-    showHome();
+    dataSource.saveBooks(book)
+        .subscribe(new CompletableObserver() {
+          @Override
+          public void onSubscribe(Disposable d) {
+
+          }
+
+          @Override
+          public void onComplete() {
+            showHome();
+          }
+
+          @Override
+          public void onError(Throwable e) {
+            Log.e(TAG, "Unable to save books", e);
+          }
+        });
   }
 
   @Override
@@ -74,7 +90,7 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
 
           @Override
           public void onError(Throwable e) {
-            Log.e("MainPresenter", e.toString());
+            Log.e(TAG, "Unable to save history", e);
           }
         });
   }
@@ -82,7 +98,7 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
   @Override
   public void loadCurrentZimBookmarksUrl() {
     compositeDisposable.add(dataSource.getCurrentZimBookmarksUrl()
-        .subscribe(view::refreshBookmarksUrl, e -> Log.e("MainPresenter", e.toString())));
+        .subscribe(view::refreshBookmarksUrl, e -> Log.e(TAG, "Unable to load current ZIM urls", e)));
   }
 
   @Override
@@ -101,7 +117,7 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
 
           @Override
           public void onError(Throwable e) {
-            Log.e("MainPresenter", e.toString());
+            Log.e(TAG, "Unable to save bookmark", e);
           }
         });
   }
@@ -122,7 +138,7 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
 
           @Override
           public void onError(Throwable e) {
-            Log.e("MainPresenter", e.toString());
+            Log.e(TAG, "Unable to delete bookmark", e);
           }
         });
   }

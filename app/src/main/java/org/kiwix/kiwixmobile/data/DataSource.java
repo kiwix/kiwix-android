@@ -17,7 +17,11 @@ import io.reactivex.Single;
 public interface DataSource {
   Single<List<LibraryNetworkEntity.Book>> getLanguageCategorizedBooks();
 
-  void saveBooks(List<LibraryNetworkEntity.Book> book);
+  Completable saveBook(LibraryNetworkEntity.Book book);
+
+  Completable saveBooks(List<LibraryNetworkEntity.Book> book);
+
+  Completable deleteBook(LibraryNetworkEntity.Book book);
 
   Completable saveLanguages(List<Language> languages);
 
