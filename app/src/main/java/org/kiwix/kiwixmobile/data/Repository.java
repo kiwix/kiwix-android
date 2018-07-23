@@ -83,8 +83,21 @@ public class Repository implements DataSource {
   }
 
   @Override
-  public void saveBooks(List<LibraryNetworkEntity.Book> books) {
-    bookDao.saveBooks((ArrayList<LibraryNetworkEntity.Book>) books);
+  public Completable saveBooks(List<LibraryNetworkEntity.Book> books) {
+    return Completable.fromAction(() -> bookDao.saveBooks((ArrayList<LibraryNetworkEntity.Book>) books))
+        .subscribeOn(io);
+  }
+
+  @Override
+  public Completable saveBook(LibraryNetworkEntity.Book book) {
+    return Completable.fromAction(() -> bookDao.saveBook(book))
+        .subscribeOn(io);
+  }
+
+  @Override
+  public Completable deleteBook(LibraryNetworkEntity.Book book) {
+    return Completable.fromAction(() -> bookDao.deleteBook(book.getId()))
+        .subscribeOn(io);
   }
 
   @Override
