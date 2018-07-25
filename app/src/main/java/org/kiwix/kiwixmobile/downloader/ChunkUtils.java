@@ -50,8 +50,9 @@ public class ChunkUtils {
   }
 
   public static boolean hasParts(File file) {
-    return file.getParentFile().listFiles((file1, s) ->
-        s.startsWith(baseNameFromParts(file)) && s.endsWith(TPART)).length > 0;
+    File[] files = file.getParentFile().listFiles((file1, s) ->
+        s.startsWith(baseNameFromParts(file)) && s.endsWith(TPART));
+    return files != null && files.length > 0;
   }
 
   public static String getFileName(String fileName) {
