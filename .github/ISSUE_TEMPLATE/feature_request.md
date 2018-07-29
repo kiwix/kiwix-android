@@ -5,7 +5,7 @@ about: Suggest an idea for this project
 ---
 
 <!-- Checklist for requesting a feature:
-- Check the issue tracker your feature may have already been requested.
+- Check the issue tracker. The feature you are requesting may have already been requested.
 - Check if the feature does not exists on the latest developers version.
 -->
 **Is your feature request related to a problem? Please describe.**

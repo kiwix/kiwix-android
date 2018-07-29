@@ -5,7 +5,7 @@ about: Create a report to help us improve
 ---
 
 <!-- Checklist for reporting a bug
-- Check the issue tracker your issue may have already been reported.
+- Check the issue tracker. The issue you have may have already been reported.
 - Ensure you have tested the latest developers version.
 -->
 
