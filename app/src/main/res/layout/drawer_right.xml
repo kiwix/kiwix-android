@@ -1,24 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/right_drawer"
-  android:layout_width="@dimen/navigation_width"
+<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/right_drawer_list"
+  android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:layout_gravity="end"
-  android:layout_marginTop="?actionBarSize"
   android:background="?attr/drawerBackground"
   android:clickable="true"
   android:fitsSystemWindows="true"
-  android:orientation="vertical">
-
-  <View
-    android:layout_width="fill_parent"
-    android:layout_height="@dimen/dimen_1dp"
-    android:background="?attr/dividerColor" />
-
-  <android.support.v7.widget.RecyclerView
-    android:id="@+id/right_drawer_list"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="end" />
-
-</LinearLayout>
+  android:focusable="true"
+  android:orientation="vertical" />

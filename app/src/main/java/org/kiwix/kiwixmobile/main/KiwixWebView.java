@@ -48,72 +48,18 @@ import java.io.OutputStream;
 import javax.inject.Inject;
 
 public class KiwixWebView extends WebView {
-
-  private static final String PREF_ZOOM = "pref_zoom_slider";
-
-  private static final String PREF_ZOOM_ENABLED = "pref_zoom_enabled";
-
   private static final float[] NIGHT_MODE_COLORS = {
       -1.0f, 0, 0, 0, 255, // red
       0, -1.0f, 0, 0, 255, // green
       0, 0, -1.0f, 0, 255, // blue
       0, 0, 0, 1.0f, 0 // alpha
   };
+  @Inject
+  SharedPreferenceUtil sharedPreferenceUtil;
   private WebViewCallback callback;
-  @Inject SharedPreferenceUtil sharedPreferenceUtil;
 
-  static class SaveHandler extends Handler {
-
-    @Override
-    public void handleMessage(Message msg) {
-      String url = (String) msg.getData().get("url");
-      String src = (String) msg.getData().get("src");
-
-      if (url != null || src != null) {
-        url = url == null ? src : url;
-        url = url.substring(url.lastIndexOf('/') + 1, url.length());
-        url = url.substring(url.indexOf("%3A") + 1, url.length());
-        int dotIndex = url.lastIndexOf('.');
-
-        File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP
-            && KiwixApplication.getInstance().getExternalMediaDirs().length > 0) {
-          root = KiwixApplication.getInstance().getExternalMediaDirs()[0];
-        }
-
-        File storageDir = new File(root, url);
-        String newUrl = url;
-        for (int i = 2; storageDir.exists(); i++) {
-          newUrl = url.substring(0, dotIndex) + "_" + i + url.substring(dotIndex, url.length());
-          storageDir = new File(root, newUrl);
-        }
-
-        Uri source = Uri.parse(src);
-        String toastText;
-
-        try {
-          InputStream input = KiwixApplication.getInstance().getContentResolver().openInputStream(source);
-          OutputStream output = new FileOutputStream(storageDir);
-
-          byte[] buffer = new byte[1024];
-          int len;
-          while ((len = input.read(buffer)) > 0) {
-            output.write(buffer, 0, len);
-          }
-          input.close();
-          output.close();
-
-          String imageSaved = KiwixApplication.getInstance().getString(R.string.save_media_saved);
-          toastText = String.format(imageSaved, newUrl);
-        } catch (IOException e) {
-          Log.w("kiwix", "Couldn't save image", e);
-          toastText = KiwixApplication.getInstance().getString(R.string.save_media_error);
-        }
-
-        Toast.makeText(KiwixApplication.getInstance(), toastText, Toast.LENGTH_LONG).show();
-      }
-    }
+  public KiwixWebView(Context context) {
+    super(context);
   }
 
   public KiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs) {
@@ -129,7 +75,6 @@ public class KiwixWebView extends WebView {
 
   public void loadPrefs() {
     disableZoomControls();
-
     boolean zoomEnabled = sharedPreferenceUtil.getPrefZoomEnabled();
 
     if (zoomEnabled) {
@@ -198,6 +143,59 @@ public class KiwixWebView extends WebView {
     getSettings().setDisplayZoomControls(false);
   }
 
+  static class SaveHandler extends Handler {
 
+    @Override
+    public void handleMessage(Message msg) {
+      String url = (String) msg.getData().get("url");
+      String src = (String) msg.getData().get("src");
+
+      if (url != null || src != null) {
+        url = url == null ? src : url;
+        url = url.substring(url.lastIndexOf('/') + 1, url.length());
+        url = url.substring(url.indexOf("%3A") + 1, url.length());
+        int dotIndex = url.lastIndexOf('.');
+
+        File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP
+            && KiwixApplication.getInstance().getExternalMediaDirs().length > 0) {
+          root = KiwixApplication.getInstance().getExternalMediaDirs()[0];
+        }
+
+        File storageDir = new File(root, url);
+        String newUrl = url;
+        for (int i = 2; storageDir.exists(); i++) {
+          newUrl = url.substring(0, dotIndex) + "_" + i + url.substring(dotIndex, url.length());
+          storageDir = new File(root, newUrl);
+        }
+
+        Uri source = Uri.parse(src);
+        String toastText;
+
+        try {
+          InputStream input = KiwixApplication.getInstance().getContentResolver().openInputStream(source);
+          OutputStream output = new FileOutputStream(storageDir);
+
+          byte[] buffer = new byte[1024];
+          int len;
+          if (input != null) {
+            while ((len = input.read(buffer)) > 0) {
+              output.write(buffer, 0, len);
+            }
+            input.close();
+          }
+          output.close();
+
+          String imageSaved = KiwixApplication.getInstance().getString(R.string.save_media_saved);
+          toastText = String.format(imageSaved, newUrl);
+        } catch (IOException e) {
+          Log.w("kiwix", "Couldn't save image", e);
+          toastText = KiwixApplication.getInstance().getString(R.string.save_media_error);
+        }
+
+        Toast.makeText(KiwixApplication.getInstance(), toastText, Toast.LENGTH_LONG).show();
+      }
+    }
+  }
 }
-
