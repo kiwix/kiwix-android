@@ -58,11 +58,13 @@ public class TabDrawerAdapter extends RecyclerView.Adapter<TabDrawerAdapter.View
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
     KiwixWebView webView = webViews.get(position);
-    String webViewTitle = stripHtml(webView.getTitle());
-    if(webViewTitle.contains("REPLACE_")) {
-      webViewTitle = getResourceString(appContext, webViewTitle);
+    if (webView.getTitle() != null) {
+      String webViewTitle = stripHtml(webView.getTitle());
+      if (webViewTitle.contains("REPLACE_")) {
+        webViewTitle = getResourceString(appContext, webViewTitle);
+      }
+      holder.title.setText(webViewTitle);
     }
-    holder.title.setText(webViewTitle);
     holder.exit.setOnClickListener(v -> listener.onCloseTab(v, position));
     holder.itemView.setOnClickListener(v -> {
       listener.onSelectTab(v, position);
