@@ -236,4 +236,7 @@
   </string-array>
   <string name="bookmarks_from_current_book">Bookmarks from current book</string>
   <string name="search_bookmarks">Search bookmarks</string>
+  <string name="new_tab">New tab</string>
+  <string name="switch_tabs">Switch tabs</string>
+  <string name="smiling_face">:D</string>
 </resources>

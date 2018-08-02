@@ -19,23 +19,24 @@ package org.kiwix.kiwixmobile.main;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.ViewGroup;
 
 import org.kiwix.kiwixmobile.utils.DimenUtils;
 
 /**
- * Created by gmon on 1/14/17.
+ * {@link KiwixWebView} which keeps the app bar fixed.
  */
 
 public class ToolbarStaticKiwixWebView extends KiwixWebView {
 
   private int heightDifference;
 
-  public ToolbarStaticKiwixWebView(Context context, WebViewCallback callback, ViewGroup toolbarLayout, AttributeSet attrs) {
+  public ToolbarStaticKiwixWebView(Context context) {
+    super(context);
+  }
+
+  public ToolbarStaticKiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs) {
     super(context, callback, attrs);
-    int statusBarHeight = DimenUtils.getTranslucentStatusBarHeight(context);
-    toolbarLayout.setTranslationY(statusBarHeight);
-    heightDifference = DimenUtils.getToolbarAndStatusBarHeight(context);
+    heightDifference = DimenUtils.getToolbarHeight(context);
     setTranslationY(heightDifference);
   }
 

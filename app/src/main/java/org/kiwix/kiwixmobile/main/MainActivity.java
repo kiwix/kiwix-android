@@ -30,24 +30,25 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.Group;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -65,16 +66,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -111,7 +109,6 @@ import butterknife.OnClick;
 import butterknife.OnLongClick;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
-import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES;
 import static org.kiwix.kiwixmobile.main.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.main.TableDrawerAdapter.TableClickListener;
@@ -149,6 +146,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private static final int REQUEST_READ_STORAGE_PERMISSION = 2;
   private static final int REQUEST_HISTORY_ITEM_CHOSEN = 99;
   private static final String NEW_TAB = "NEW_TAB";
+  private static final String HOME_URL = "file:///android_asset/home.html";
   public static boolean isFullscreenOpened;
   public static boolean refresh;
   public static boolean wifiOnly;
@@ -156,50 +154,31 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private static Uri KIWIX_LOCAL_MARKET_URI;
   private static Uri KIWIX_BROWSER_MARKET_URI;
   private final ArrayList<String> bookmarks = new ArrayList<>();
-  public List<DocumentSection> documentSections;
-  public Menu menu;
-  protected boolean requestClearHistoryAfterLoad = false;
-  protected boolean requestInitAllMenuItems = false;
-  @BindView(R.id.toolbar)
+  private final List<LibraryNetworkEntity.Book> books = new ArrayList<>();
+  @BindView(R.id.activity_main_root)
+  ConstraintLayout root;
+  @BindView(R.id.activity_main_toolbar)
   Toolbar toolbar;
-  @BindView(R.id.button_backtotop)
-  Button backToTopButton;
-  @BindView(R.id.button_stop_tts)
+  @BindView(R.id.activity_main_back_to_top_fab)
+  FloatingActionButton backToTopButton;
+  @BindView(R.id.activity_main_button_stop_tts)
   Button stopTTSButton;
-  @BindView(R.id.button_pause_tts)
+  @BindView(R.id.activity_main_button_pause_tts)
   Button pauseTTSButton;
-  @BindView(R.id.tts_controls)
-  LinearLayout TTSControls;
-  @BindView(R.id.toolbar_layout)
-  RelativeLayout toolbarContainer;
-  @BindView(R.id.progress_view)
+  @BindView(R.id.activity_main_tts_controls)
+  Group TTSControls;
+  @BindView(R.id.activity_main_app_bar)
+  AppBarLayout toolbarContainer;
+  @BindView(R.id.activity_main_progress_view)
   AnimatedProgressBar progressBar;
-  @BindView(R.id.FullscreenControlButton)
+  @BindView(R.id.activity_main_fullscreen_button)
   ImageButton exitFullscreenButton;
-  @BindView(R.id.snackbar_layout)
-  CoordinatorLayout snackbarLayout;
-  @BindView(R.id.new_tab_button)
-  RelativeLayout newTabButton;
-  @BindView(R.id.drawer_layout)
+  @BindView(R.id.activity_main_drawer_layout)
   DrawerLayout drawerLayout;
-  @BindView(R.id.left_drawer)
-  LinearLayout tabDrawerLeftContainer;
-  @BindView(R.id.right_drawer)
-  LinearLayout tableDrawerRightContainer;
-  @BindView(R.id.left_drawer_list)
-  RecyclerView tabDrawerLeft;
-  @BindView(R.id.right_drawer_list)
-  RecyclerView tableDrawerRight;
-  @BindView(R.id.content_frame)
+  @BindView(R.id.activity_main_nav_view)
+  NavigationView tableDrawerRightContainer;
+  @BindView(R.id.activity_main_content_frame)
   FrameLayout contentFrame;
-  @BindView(R.id.action_back_button)
-  ImageView tabBackButton;
-  @BindView(R.id.action_forward_button)
-  ImageView tabForwardButton;
-  @BindView(R.id.action_back)
-  View tabBackButtonContainer;
-  @BindView(R.id.action_forward)
-  View tabForwardButtonContainer;
   @BindView(R.id.bottom_toolbar)
   CardView bottomToolbar;
   @BindView(R.id.bottom_toolbar_bookmark)
@@ -210,6 +189,22 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   ImageView bottomToolbarArrowForward;
   @Inject
   MainContract.Presenter presenter;
+  private ImageView addTab;
+  private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
+    @Override
+    public void onTick(long millisUntilFinished) {
+
+    }
+
+    @Override
+    public void onFinish() {
+      backToTopButton.hide();
+    }
+  };
+  private List<DocumentSection> documentSections;
+  private Menu menu;
+  private boolean requestClearHistoryAfterLoad = false;
+  private boolean requestInitAllMenuItems = false;
   private boolean isBackToTopEnabled = false;
   private boolean wasHideToolbar = true;
   private boolean isHideToolbar = true;
@@ -218,11 +213,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private boolean isExternalLinkPopup;
   private String documentParserJs;
   private DocumentParser documentParser;
-  private MenuItem menuBookmarks;
   private List<KiwixWebView> mWebViews = new ArrayList<>();
   private KiwixTextToSpeech tts;
   private CompatFindActionModeCallback compatCallback;
-  private TabDrawerAdapter tabDrawerAdapter;
+  private TabsAdapter tabsAdapter;
   private int currentWebViewIndex = 0;
   private File file;
   private ActionMode actionMode = null;
@@ -231,10 +225,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private int tempVisitCount;
   private boolean isFirstRun;
   private BooksAdapter booksAdapter;
-  private List<LibraryNetworkEntity.Book> books = new ArrayList<>();
   private AppCompatButton downloadBookButton;
+  private View tabSwitcherRoot;
+  private TextView tabSwitcherIcon;
   private FileSearch fileSearch = new FileSearch(this, new FileSearch.ResultListener() {
-    List<LibraryNetworkEntity.Book> newBooks = new ArrayList<>();
+    final List<LibraryNetworkEntity.Book> newBooks = new ArrayList<>();
 
     @Override
     public void onBookFound(LibraryNetworkEntity.Book book) {
@@ -251,7 +246,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
   });
 
-  public static void updateWidgets(Context context) {
+  private static void updateWidgets(Context context) {
     Intent intent = new Intent(context.getApplicationContext(), KiwixSearchWidget.class);
     intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
     // Use an array and EXTRA_APPWIDGET_IDS instead of AppWidgetManager.EXTRA_APPWIDGET_ID,
@@ -297,46 +292,23 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-
     super.onCreate(savedInstanceState);
     presenter.attachView(this);
     wifiOnly = sharedPreferenceUtil.getPrefWifiOnly();
     nightMode = sharedPreferenceUtil.nightMode();
-
     handleLocaleCheck();
-    setContentView(R.layout.main);
-    setUpToolbar();
-
+    setContentView(R.layout.activity_main);
+    setSupportActionBar(toolbar);
+    RecyclerView tableDrawerRight = tableDrawerRightContainer.getHeaderView(0).findViewById(R.id.right_drawer_list);
     checkForRateDialog();
 
     initPlayStoreUri();
-
-    if (SDK_INT <= VERSION_CODES.LOLLIPOP) {
-      snackbarLayout.setFitsSystemWindows(true);
-    }
-
     isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
 
     FileReader fileReader = new FileReader();
     documentParserJs = fileReader.readFile("js/documentParser.js", this);
-
-    newTabButton.setOnClickListener((View view) -> newTab("file:///android_asset/home.html"));
-    tabForwardButtonContainer.setOnClickListener((View view) -> {
-      if (getCurrentWebView().canGoForward()) {
-        getCurrentWebView().goForward();
-      }
-    });
-    tabBackButtonContainer.setOnClickListener((View view) -> {
-      if (getCurrentWebView().canGoBack()) {
-        getCurrentWebView().goBack();
-      }
-    });
-
     documentSections = new ArrayList<>();
-    tabDrawerAdapter = new TabDrawerAdapter(mWebViews);
-    tabDrawerLeft.setLayoutManager(new LinearLayoutManager(this));
-    tabDrawerLeft.setAdapter(tabDrawerAdapter);
+    tabsAdapter = new TabsAdapter(this, mWebViews);
     tableDrawerRight.setLayoutManager(new LinearLayoutManager(this));
 
     TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter();
@@ -360,9 +332,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     tableDrawerAdapter.notifyDataSetChanged();
 
-    tabDrawerAdapter.setTabClickListener(new TabDrawerAdapter.TabClickListener() {
+    tabsAdapter.setTabClickListener(new TabsAdapter.TabClickListener() {
       @Override
       public void onSelectTab(View view, int position) {
+        hideTabSwitcher();
         selectTab(position);
 
         /* Bug Fix
@@ -370,7 +343,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
          * carried forward to the newly selected/opened tab; causing erroneous enabling of
          * navigational buttons.
          */
-        refreshNavigationButtons();
+        updateBottomToolbarArrowsAlpha();
       }
 
       @Override
@@ -378,14 +351,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         closeTab(position);
       }
     });
-
-    ActionBarDrawerToggle drawerToggle = new KiwixActionBarDrawerToggle(this, drawerLayout, toolbar);
-
-    drawerLayout.addDrawerListener(drawerToggle);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    getSupportActionBar().setHomeButtonEnabled(true);
-    drawerToggle.syncState();
-
     compatCallback = new CompatFindActionModeCallback(this);
     setUpTTS();
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
@@ -405,9 +370,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     });
 
     manageExternalLaunchAndRestoringViewState();
-    setUpExitFullscreenButton();
     loadPrefs();
-    updateTitle(ZimContentProvider.getZimFileTitle());
+    updateTitle();
 
     Intent i = getIntent();
     if (i.getBooleanExtra(EXTRA_LIBRARY, false)) {
@@ -437,16 +401,24 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
 
     wasHideToolbar = isHideToolbar;
-
-    if (nightMode) {
-      backToTopAppearNightly();
-    } else {
-      backToTopAppearDaily();
-    }
-
     booksAdapter = new BooksAdapter(books, this);
 
     searchFiles();
+
+    tabSwitcherRoot = getLayoutInflater().inflate(R.layout.tab_switcher, drawerLayout, false);
+    RecyclerView tabRecyclerView = tabSwitcherRoot.findViewById(R.id.tab_switcher_recycler_view);
+    addTab = tabSwitcherRoot.findViewById(R.id.tab_switcher_add_tab);
+    addTab.setOnClickListener(v -> {
+      hideTabSwitcher();
+      newTab(HOME_URL);
+    });
+    tabRecyclerView.setAdapter(tabsAdapter);
+  }
+
+  private void hideTabSwitcher() {
+    drawerLayout.removeAllViews();
+    drawerLayout.addView(root);
+    drawerLayout.addView(tableDrawerRightContainer);
   }
 
   @OnClick(R.id.bottom_toolbar_arrow_back)
@@ -476,21 +448,14 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
   }
 
+  private void showTabSwitcher() {
+    drawerLayout.removeAllViews();
+    drawerLayout.addView(tabSwitcherRoot);
+  }
+
   @OnClick(R.id.bottom_toolbar_toc)
   void openToc() {
     drawerLayout.openDrawer(GravityCompat.END);
-  }
-
-  private void backToTopAppearDaily() {
-    backToTopButton.setAlpha(0.6f);
-    backToTopButton.setBackgroundColor(getResources().getColor(R.color.back_to_top_background));
-    backToTopButton.setTextColor(getResources().getColor(R.color.back_to_top_text));
-  }
-
-  private void backToTopAppearNightly() {
-    backToTopButton.setAlpha(0.7f);
-    backToTopButton.setBackgroundColor(getResources().getColor(R.color.back_to_top_background_night));
-    backToTopButton.setTextColor(getResources().getColor(R.color.back_to_top_text_night));
   }
 
   private void initPlayStoreUri() {
@@ -513,7 +478,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
   }
 
-  public void showRateDialog() {
+  private void showRateDialog() {
     String title = getString(R.string.rate_dialog_title);
     String message = getString(R.string.rate_dialog_msg_1) + " "
         + getString(R.string.app_name)
@@ -536,11 +501,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         })
         .setIcon(ContextCompat.getDrawable(this, R.mipmap.kiwix_icon))
         .show();
-  }
-
-  private void setUpToolbar() {
-
-    setSupportActionBar(toolbar);
   }
 
   private void goToSearch(boolean isVoice) {
@@ -570,11 +530,17 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
   }
 
-  private void updateTitle(String zimFileTitle) {
-    if (zimFileTitle == null || zimFileTitle.trim().isEmpty()) {
-      getSupportActionBar().setTitle(createMenuText(getString(R.string.app_name)));
-    } else {
-      getSupportActionBar().setTitle(createMenuText(zimFileTitle));
+  private void updateTitle() {
+    String zimFileTitle = ZimContentProvider.getZimFileTitle();
+    if (zimFileTitle == null) {
+      zimFileTitle = getString(R.string.app_name);
+    }
+    if (getSupportActionBar() != null) {
+      if (zimFileTitle.trim().isEmpty() || HOME_URL.equals(getCurrentWebView().getUrl())) {
+        getSupportActionBar().setTitle(createMenuText(getString(R.string.app_name)));
+      } else {
+        getSupportActionBar().setTitle(createMenuText(zimFileTitle));
+      }
     }
   }
 
@@ -652,6 +618,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       downloadBookButton.setOnClickListener(null);
     }
     super.onDestroy();
+    downloadBookButton = null;
+    addTab.setOnClickListener(null);
+    addTab = null;
+    hideBackToTopTimer.cancel();
+    hideBackToTopTimer = null;
+    fileSearch = null;
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(this);
     tts.shutdown();
@@ -661,49 +633,16 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     getCurrentWebView().loadUrl("javascript:(" + documentParserJs + ")()");
   }
 
-  private void shrinkDrawers() {
-    ViewGroup.MarginLayoutParams leftLayoutMargins = (ViewGroup.MarginLayoutParams) tabDrawerLeftContainer.getLayoutParams(),
-        rightLayoutMargins = (ViewGroup.MarginLayoutParams) tableDrawerRightContainer.getLayoutParams();
-
-    leftLayoutMargins.topMargin = DimenUtils.getToolbarHeight(MainActivity.this);
-    rightLayoutMargins.topMargin = DimenUtils.getToolbarHeight(MainActivity.this);
-    tabDrawerLeftContainer.setLayoutParams(leftLayoutMargins);
-    tableDrawerRightContainer.setLayoutParams(rightLayoutMargins);
-  }
-
-  private void expandDrawers() {
-    ViewGroup.MarginLayoutParams leftLayoutMargins = (ViewGroup.MarginLayoutParams) tabDrawerLeftContainer.getLayoutParams(),
-        rightLayoutMargins = (ViewGroup.MarginLayoutParams) tableDrawerRightContainer.getLayoutParams();
-    leftLayoutMargins.topMargin = 0;
-    rightLayoutMargins.topMargin = 0;
-    tabDrawerLeftContainer.setLayoutParams(leftLayoutMargins);
-    tableDrawerRightContainer.setLayoutParams(rightLayoutMargins);
-  }
-
   private KiwixWebView getWebView(String url) {
     AttributeSet attrs = StyleUtils.getAttributes(this, R.xml.webview);
     KiwixWebView webView;
     if (!isHideToolbar) {
       webView = new ToolbarScrollingKiwixWebView(MainActivity.this, this, toolbarContainer, bottomToolbar, attrs);
-      ((ToolbarScrollingKiwixWebView) webView).setOnToolbarVisibilityChangeListener(
-          new ToolbarScrollingKiwixWebView.OnToolbarVisibilityChangeListener() {
-            @Override
-            public void onToolbarDisplayed() {
-              shrinkDrawers();
-            }
-
-            @Override
-            public void onToolbarHidden() {
-              expandDrawers();
-            }
-          }
-      );
     } else {
-      webView = new ToolbarStaticKiwixWebView(MainActivity.this, this, toolbarContainer, attrs);
+      webView = new ToolbarStaticKiwixWebView(MainActivity.this, this, attrs);
     }
     webView.loadUrl(url);
     webView.loadPrefs();
-
     return webView;
   }
 
@@ -717,7 +656,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     KiwixWebView webView = getWebView(url);
     mWebViews.add(webView);
     selectTab(mWebViews.size() - 1);
-    tabDrawerAdapter.notifyDataSetChanged();
+    tabsAdapter.notifyDataSetChanged();
     setUpWebView();
     documentParser.initInterface(webView);
     return webView;
@@ -726,53 +665,37 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private void newTabInBackground(String url) {
     KiwixWebView webView = getWebView(url);
     mWebViews.add(webView);
-    tabDrawerAdapter.notifyDataSetChanged();
+    tabsAdapter.notifyDataSetChanged();
     setUpWebView();
     documentParser.initInterface(webView);
   }
 
-  private void restoreTab(int index) {
-    mWebViews.add(index, tempForUndo);
-    tabDrawerAdapter.notifyDataSetChanged();
-    selectTab(index);
-    setUpWebView();
-  }
-
   private void closeTab(int index) {
     tempForUndo = mWebViews.get(index);
-    int selectedPosition = tabDrawerAdapter.getSelectedPosition();
-    int newSelectedPosition = selectedPosition;
-
-    if (index <= selectedPosition) newSelectedPosition = selectedPosition - 1;
-    if (index == 0) newSelectedPosition = 0;
-    if (mWebViews.size() == 1) newTab();
-
     mWebViews.remove(index);
-    showRestoreTabSnackbar(index);
-    selectTab(newSelectedPosition);
-    tabDrawerAdapter.notifyDataSetChanged();
-  }
-
-  private void showRestoreTabSnackbar(final int index) {
-    Snackbar snackbar = Snackbar.make(snackbarLayout,
-        getString(R.string.tab_closed),
-        Snackbar.LENGTH_LONG)
-        .setAction(getString(R.string.undo), v -> {
-          restoreTab(index);
-          drawerLayout.openDrawer(GravityCompat.START);
-        });
-    snackbar.setActionTextColor(Color.WHITE);
-    snackbar.show();
+    tabsAdapter.notifyItemRemoved(index);
+    tabsAdapter.notifyItemRangeChanged(index, mWebViews.size());
+    Snackbar.make(drawerLayout, R.string.tab_closed, Snackbar.LENGTH_LONG)
+        .setAction(R.string.undo, v -> {
+          mWebViews.add(index, tempForUndo);
+          tabsAdapter.notifyItemInserted(index);
+          setUpWebView();
+        })
+        .show();
   }
 
   private void selectTab(int position) {
     currentWebViewIndex = position;
-    tabDrawerAdapter.setSelected(position);
+    tabsAdapter.setSelected(position);
     contentFrame.removeAllViews();
 
     KiwixWebView webView = mWebViews.get(position);
+    if (webView.getParent() != null) {
+      ((ViewGroup) webView.getParent()).removeView(webView);
+    }
     contentFrame.addView(webView);
-    tabDrawerAdapter.setSelected(currentWebViewIndex);
+    tabsAdapter.setSelected(currentWebViewIndex);
+    updateBottomToolbarVisibility();
 
     if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
       new Handler().postDelayed(() -> drawerLayout.closeDrawers(), 150);
@@ -781,12 +704,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     refreshBookmarkSymbol();
     updateTableOfContents();
 
-    if (!isHideToolbar) {
+    if (!isHideToolbar && webView instanceof ToolbarScrollingKiwixWebView) {
       ((ToolbarScrollingKiwixWebView) webView).ensureToolbarDisplayed();
     }
   }
 
-  public KiwixWebView getCurrentWebView() {
+  private KiwixWebView getCurrentWebView() {
     if (mWebViews.size() == 0) return newTab();
     if (currentWebViewIndex < mWebViews.size()) {
       return mWebViews.get(currentWebViewIndex);
@@ -813,15 +736,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         compatCallback.showSoftInput();
         break;
 
-      case R.id.menu_bookmarks:
-        toggleBookmark();
-        break;
-
       case R.id.menu_bookmarks_list:
         goToBookmarks();
         break;
 
-      case R.id.menu_randomarticle:
+      case R.id.menu_random_article:
         openRandomArticle();
         break;
 
@@ -840,11 +759,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       case R.id.menu_read_aloud:
         if (TTSControls.getVisibility() == View.GONE) {
           if (isBackToTopEnabled) {
-            backToTopButton.setVisibility(View.INVISIBLE);
+            backToTopButton.hide();
           }
         } else if (TTSControls.getVisibility() == View.VISIBLE) {
           if (isBackToTopEnabled) {
-            backToTopButton.setVisibility(View.VISIBLE);
+            backToTopButton.show();
           }
         }
         readAloud();
@@ -869,6 +788,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     return super.onOptionsItemSelected(item);
   }
 
+  @SuppressWarnings("SameReturnValue")
   @OnLongClick(R.id.bottom_toolbar_bookmark)
   boolean goToBookmarks() {
     saveTabStates();
@@ -880,49 +800,49 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private void openFullScreen() {
     toolbarContainer.setVisibility(View.GONE);
     bottomToolbar.setVisibility(View.GONE);
-    if (menuBookmarks != null)
-      menuBookmarks.setVisible(true);
     exitFullscreenButton.setVisibility(View.VISIBLE);
     int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
     int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
     getWindow().addFlags(fullScreenFlag);
     getWindow().clearFlags(classicScreenFlag);
     sharedPreferenceUtil.putPrefFullScreen(true);
-    expandDrawers();
     isFullscreenOpened = true;
+    if (getCurrentWebView() instanceof ToolbarStaticKiwixWebView) {
+      contentFrame.setPadding(0, 0, 0, 0);
+    }
     getCurrentWebView().requestLayout();
     if (!isHideToolbar) {
-      toolbarContainer.setTranslationY(0);
       this.getCurrentWebView().setTranslationY(0);
     }
   }
 
-  private void closeFullScreen() {
+  @OnClick(R.id.activity_main_fullscreen_button)
+  void closeFullScreen() {
     toolbarContainer.setVisibility(View.VISIBLE);
     if (sharedPreferenceUtil.getPrefBottomToolbar()) {
       bottomToolbar.setVisibility(View.VISIBLE);
-      menuBookmarks.setVisible(false);
+      if (getCurrentWebView() instanceof ToolbarStaticKiwixWebView) {
+        contentFrame.setPadding(0, 0, 0, (int) getResources().getDimension(R.dimen.bottom_toolbar_height));
+      }
     }
-    exitFullscreenButton.setVisibility(View.INVISIBLE);
+    exitFullscreenButton.setVisibility(View.GONE);
 
     int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
     int classicScreenFlag = WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;
     getWindow().clearFlags(fullScreenFlag);
     getWindow().addFlags(classicScreenFlag);
     sharedPreferenceUtil.putPrefFullScreen(false);
-    shrinkDrawers();
     isFullscreenOpened = false;
     getCurrentWebView().requestLayout();
     if (!isHideToolbar) {
-      toolbarContainer.setTranslationY(DimenUtils.getTranslucentStatusBarHeight(this));
-      this.getCurrentWebView().setTranslationY(DimenUtils.getToolbarAndStatusBarHeight(this));
+      this.getCurrentWebView().setTranslationY(DimenUtils.getToolbarHeight(this));
     }
   }
 
   @Override
   public void showHomePage() {
     getCurrentWebView().removeAllViews();
-    getCurrentWebView().loadUrl("file:///android_asset/home.html");
+    getCurrentWebView().loadUrl(HOME_URL);
     if (getSupportActionBar() != null) {
       getSupportActionBar().setTitle(createMenuText(getString(R.string.app_name)));
     }
@@ -964,7 +884,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         .show();
   }
 
-  public boolean openZimFile(File file, boolean clearHistory) {
+  private void openZimFile(File file, boolean clearHistory) {
     if (file.canRead() || Build.VERSION.SDK_INT < 19 || (BuildConfig.IS_CUSTOM_APP
         && Build.VERSION.SDK_INT != 23)) {
       if (file.exists()) {
@@ -982,7 +902,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           }
           openMainPage();
           presenter.loadCurrentZimBookmarksUrl();
-          return true;
         } else {
           Toast.makeText(this, getResources().getString(R.string.error_fileinvalid),
               Toast.LENGTH_LONG).show();
@@ -995,7 +914,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
             .show();
         showHomePage();
       }
-      return false;
     } else {
       this.file = file;
       ActivityCompat.requestPermissions(this,
@@ -1008,7 +926,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         Toast.makeText(this, getResources().getString(R.string.request_storage), Toast.LENGTH_LONG)
             .show();
       }
-      return false;
     }
   }
 
@@ -1037,7 +954,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
             && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
           fileSearch.scan(sharedPreferenceUtil.getPrefStorage());
         } else {
-          Snackbar.make(snackbarLayout, R.string.request_storage, Snackbar.LENGTH_LONG)
+          Snackbar.make(drawerLayout, R.string.request_storage, Snackbar.LENGTH_LONG)
               .setAction(R.string.menu_settings, view -> {
                 Intent intent = new Intent();
                 intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -1078,10 +995,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   private void initAllMenuItems() {
     try {
-      menu.findItem(R.id.menu_bookmarks).setVisible(true);
       menu.findItem(R.id.menu_fullscreen).setVisible(true);
       menu.findItem(R.id.menu_home).setVisible(true);
-      menu.findItem(R.id.menu_randomarticle).setVisible(true);
+      menu.findItem(R.id.menu_random_article).setVisible(true);
       menu.findItem(R.id.menu_searchintext).setVisible(true);
 
       MenuItem searchItem = menu.findItem(R.id.menu_search);
@@ -1093,32 +1009,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         startActivityForResult(i, REQUEST_FILE_SEARCH);
         overridePendingTransition(0, 0);
         return true;
-      });
-
-      toolbar.setOnClickListener(v -> {
-        Intent i = new Intent(MainActivity.this, SearchActivity.class);
-        i.putExtra(EXTRA_ZIM_FILE, zimFile);
-        startActivityForResult(i, REQUEST_FILE_SEARCH);
-        overridePendingTransition(0, 0);
-      });
-      toolbar.setNavigationOnClickListener(v -> {
-        if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
-          drawerLayout.closeDrawer(GravityCompat.END);
-        } else if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-          drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-          drawerLayout.openDrawer(GravityCompat.START);
-        }
-      });
-
-      new Handler().post(() -> {
-        ActionMenuItemView m = findViewById(R.id.menu_bookmarks);
-        if (m != null) {
-          findViewById(R.id.menu_bookmarks).setOnLongClickListener(view -> {
-            goToBookmarks();
-            return false;
-          });
-        }
       });
 
       if (tts.isInitialized()) {
@@ -1185,15 +1075,13 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   private void popBookmarkSnackbar(boolean isBookmark) {
     if (isBookmark) {
-      Snackbar bookmarkSnackbar =
-          Snackbar.make(snackbarLayout, getString(R.string.bookmark_added), Snackbar.LENGTH_LONG)
-              .setAction(getString(R.string.open), v -> goToBookmarks());
-      bookmarkSnackbar.setActionTextColor(getResources().getColor(R.color.white));
-      bookmarkSnackbar.show();
+      Snackbar.make(drawerLayout, R.string.bookmark_added, Snackbar.LENGTH_LONG)
+          .setAction(getString(R.string.open), v -> goToBookmarks())
+          .setActionTextColor(getResources().getColor(R.color.white))
+          .show();
     } else {
-      Snackbar bookmarkSnackbar =
-          Snackbar.make(snackbarLayout, getString(R.string.bookmark_removed), Snackbar.LENGTH_LONG);
-      bookmarkSnackbar.show();
+      Snackbar.make(drawerLayout, R.string.bookmark_removed, Snackbar.LENGTH_LONG)
+          .show();
     }
   }
 
@@ -1228,22 +1116,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
 
     if (!mWebViews.isEmpty() && mWebViews.get(currentWebViewIndex).getUrl() != null &&
-        mWebViews.get(currentWebViewIndex).getUrl().equals("file:///android_asset/home.html") &&
+        mWebViews.get(currentWebViewIndex).getUrl().equals(HOME_URL) &&
         mWebViews.get(currentWebViewIndex).findViewById(R.id.get_content_card) != null) {
       mWebViews.get(currentWebViewIndex).findViewById(R.id.get_content_card).setEnabled(true);
     }
-
-    if (sharedPreferenceUtil.getPrefBottomToolbar()) {
-      bottomToolbar.setVisibility(View.VISIBLE);
-      if (menuBookmarks != null) {
-        menuBookmarks.setVisible(false);
-      }
-    } else {
-      bottomToolbar.setVisibility(View.GONE);
-      if (menuBookmarks != null) {
-        menuBookmarks.setVisible(true);
-      }
-    }
+    updateBottomToolbarVisibility();
 
     Log.d(TAG_KIWIX, "action" + getIntent().getAction());
     Intent intent = getIntent();
@@ -1279,18 +1156,34 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           saveTabStates();
           Intent i = new Intent(MainActivity.this, SearchActivity.class);
           i.putExtra(EXTRA_ZIM_FILE, zimFile);
-          i.putExtra(EXTRA_SEARCH, intent.getData().getLastPathSegment());
+          if (intent.getData() != null) {
+            i.putExtra(EXTRA_SEARCH, intent.getData().getLastPathSegment());
+          }
           intent.setAction("");
           startActivityForResult(i, REQUEST_FILE_SEARCH);
           break;
         }
         case NEW_TAB:
-          newTab("file:///android_asset/home.html");
+          newTab(HOME_URL);
           break;
       }
 
     }
     updateWidgets(this);
+  }
+
+  private void updateBottomToolbarVisibility() {
+    if (sharedPreferenceUtil.getPrefBottomToolbar() && !HOME_URL.equals(getCurrentWebView().getUrl())) {
+      bottomToolbar.setVisibility(View.VISIBLE);
+      if (getCurrentWebView() instanceof ToolbarStaticKiwixWebView && sharedPreferenceUtil.getPrefBottomToolbar()) {
+        contentFrame.setPadding(0, 0, 0, (int) getResources().getDimension(R.dimen.bottom_toolbar_height));
+      } else {
+        contentFrame.setPadding(0, 0, 0, 0);
+      }
+    } else {
+      bottomToolbar.setVisibility(View.GONE);
+      contentFrame.setPadding(0, 0, 0, 0);
+    }
   }
 
   @Override
@@ -1331,18 +1224,17 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     alert.show();
   }
 
-  private boolean openArticle(String articleUrl) {
+  private void openArticle(String articleUrl) {
     if (articleUrl != null) {
       getCurrentWebView().loadUrl(
           Uri.parse(ZimContentProvider.CONTENT_URI + articleUrl).toString());
     }
-    return true;
   }
 
-  public boolean openRandomArticle() {
+  private void openRandomArticle() {
     String articleUrl = ZimContentProvider.getRandomArticleUrl();
     Log.d(TAG_KIWIX, "openRandomArticle: " + articleUrl);
-    return openArticle(articleUrl);
+    openArticle(articleUrl);
   }
 
   @OnClick(R.id.bottom_toolbar_home)
@@ -1351,12 +1243,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     openArticle(articleUrl);
   }
 
-  public void readAloud() {
+  private void readAloud() {
     tts.readAloud(getCurrentWebView());
   }
 
   private void setUpWebView() {
-
     getCurrentWebView().getSettings().setJavaScriptEnabled(true);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
       WebView.setWebContentsDebuggingEnabled(true);
@@ -1368,18 +1259,16 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     getCurrentWebView().getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
 
     // Should basically resemble the behavior when setWebClient not done
-    // (i.p. internal urls load in webview, external urls in browser)
+    // (i.p. internal urls load in webView, external urls in browser)
     // as currently no custom setWebViewClient required it is commented
     // However, it must notify the bookmark system when a page is finished loading
     // so that it can refresh the menu.
-
-    backToTopButton.setOnClickListener(view -> MainActivity.this.runOnUiThread(() -> getCurrentWebView().pageUp(true)));
     tts.initWebView(getCurrentWebView());
   }
 
-  private void setUpExitFullscreenButton() {
-
-    exitFullscreenButton.setOnClickListener(v -> closeFullScreen());
+  @OnClick(R.id.activity_main_back_to_top_fab)
+  void backToTop() {
+    getCurrentWebView().pageUp(true);
   }
 
   @Override
@@ -1388,9 +1277,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     toggleActionItemsConfig();
   }
 
-  void toggleActionItemsConfig() {
+  private void toggleActionItemsConfig() {
     if (menu != null) {
-      MenuItem random = menu.findItem(R.id.menu_randomarticle);
+      MenuItem random = menu.findItem(R.id.menu_random_article);
       MenuItem home = menu.findItem(R.id.menu_home);
       if (getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE) {
         random.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -1402,7 +1291,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
   }
 
-  public void searchForTitle(String title) {
+  private void searchForTitle(String title) {
     String articleUrl;
 
     if (title.startsWith("A/")) {
@@ -1448,7 +1337,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         if (resultCode == RESULT_HISTORY_CLEARED) {
           mWebViews.clear();
           newTab();
-          tabDrawerAdapter.notifyDataSetChanged();
+          tabsAdapter.notifyDataSetChanged();
         }
         loadPrefs();
         break;
@@ -1503,7 +1392,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     MenuInflater inflater = getMenuInflater();
     inflater.inflate(R.menu.menu_main, menu);
     this.menu = menu;
-    this.menuBookmarks = menu.findItem(R.id.menu_bookmarks);
     StyleMenuButtons(menu);
     if (BuildConfig.IS_CUSTOM_APP) {
       menu.findItem(R.id.menu_help).setVisible(false);
@@ -1516,24 +1404,14 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     if (isFullscreenOpened) {
       openFullScreen();
     }
-
-    if (sharedPreferenceUtil.getPrefBottomToolbar()) {
-      menu.findItem(R.id.menu_bookmarks).setVisible(false);
-    }
-
     return true;
   }
 
   @Override
   public boolean onMenuOpened(int featureId, Menu menu) {
-    if (drawerLayout.isDrawerOpen(tabDrawerLeftContainer)) {
-      drawerLayout.closeDrawer(tabDrawerLeftContainer);
-    }
-
     if (drawerLayout.isDrawerOpen(tableDrawerRightContainer)) {
       drawerLayout.closeDrawer(tableDrawerRightContainer);
     }
-
     return super.onMenuOpened(featureId, menu);
   }
 
@@ -1544,63 +1422,46 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     toggleActionItemsConfig();
     this.menu = menu;
     refreshBookmarkSymbol();
-    refreshNavigationButtons();
 
     if (getCurrentWebView().getUrl() == null ||
-        getCurrentWebView().getUrl().equals("file:///android_asset/home.html")) {
+        getCurrentWebView().getUrl().equals(HOME_URL)) {
       menu.findItem(R.id.menu_read_aloud).setVisible(false);
     } else {
       menu.findItem(R.id.menu_read_aloud).setVisible(true);
     }
-
+    View tabSwitcher = menu.findItem(R.id.menu_tab_switcher).getActionView();
+    tabSwitcherIcon = tabSwitcher.findViewById(R.id.ic_tab_switcher_text);
+    updateTabSwitcherIcon();
+    tabSwitcher.setOnClickListener(v -> showTabSwitcher());
+    tabsAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+      @Override
+      public void onChanged() {
+        updateTabSwitcherIcon();
+      }
+    });
     return true;
   }
 
-  public void refreshBookmarkSymbol() {
-    if (menu == null) return;
+  private void updateTabSwitcherIcon() {
+    if (mWebViews.size() < 100) {
+      tabSwitcherIcon.setText(String.valueOf(mWebViews.size()));
+    } else {
+      tabSwitcherIcon.setText(getString(R.string.smiling_face));
+    }
+  }
 
-    if (menu.findItem(R.id.menu_bookmarks) != null &&
-        getCurrentWebView().getUrl() != null &&
+  private void refreshBookmarkSymbol() {
+    if (getCurrentWebView().getUrl() != null &&
         ZimContentProvider.getId() != null &&
-        !getCurrentWebView().getUrl().equals("file:///android_asset/home.html")) {
+        !getCurrentWebView().getUrl().equals(HOME_URL)) {
       int icon = bookmarks.contains(getCurrentWebView().getUrl()) ? R.drawable.ic_bookmark_24dp : R.drawable.ic_bookmark_border_24dp;
-
-      menu.findItem(R.id.menu_bookmarks)
-          .setEnabled(true)
-          .setIcon(icon)
-          .getIcon().setAlpha(255);
-
       bottomToolbarBookmark.setImageResource(icon);
     } else {
-      menu.findItem(R.id.menu_bookmarks)
-          .setEnabled(false)
-          .setIcon(R.drawable.ic_bookmark_border_24dp)
-          .getIcon().setAlpha(130);
-
       bottomToolbarBookmark.setImageResource(R.drawable.ic_bookmark_border_24dp);
     }
   }
 
-  public void refreshNavigationButtons() {
-    toggleImageViewGrayFilter(tabBackButton, getCurrentWebView().canGoBack());
-    toggleImageViewGrayFilter(tabForwardButton, getCurrentWebView().canGoForward());
-    tabBackButtonContainer.setEnabled(getCurrentWebView().canGoBack());
-    tabForwardButtonContainer.setEnabled(getCurrentWebView().canGoForward());
-  }
-
-  public void toggleImageViewGrayFilter(ImageView image, boolean state) {
-    Drawable originalIcon = image.getDrawable();
-    Drawable res = originalIcon.mutate();
-    if (state) {
-      res.clearColorFilter();
-    } else {
-      res.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN);
-    }
-    image.setImageDrawable(res);
-  }
-
-  public void loadPrefs() {
-
+  private void loadPrefs() {
     nightMode = sharedPreferenceUtil.nightMode();
     isBackToTopEnabled = sharedPreferenceUtil.getPrefBackToTop();
     isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
@@ -1617,7 +1478,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
 
     if (!isBackToTopEnabled) {
-      backToTopButton.setVisibility(View.INVISIBLE);
+      backToTopButton.hide();
     }
 
     if (isFullscreenOpened) {
@@ -1647,7 +1508,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     startActivityForResult(target, REQUEST_FILE_SELECT);
   }
 
-  public void selectSettings() {
+  private void selectSettings() {
     final String zimFile = ZimContentProvider.getZimFile();
     Intent i = new Intent(this, KiwixSettingsActivity.class);
     // FIXME: I think line below is redundant - it's not used anywhere
@@ -1655,7 +1516,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     startActivityForResult(i, REQUEST_PREFERENCES);
   }
 
-  public void saveTabStates() {
+  private void saveTabStates() {
     SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
     SharedPreferences.Editor editor = settings.edit();
 
@@ -1675,7 +1536,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     editor.apply();
   }
 
-  public void restoreTabStates() {
+  private void restoreTabStates() {
     SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
     String zimFile = settings.getString(TAG_CURRENT_FILE, null);
     String zimArticles = settings.getString(TAG_CURRENT_ARTICLES, null);
@@ -1683,7 +1544,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     int currentTab = settings.getInt(TAG_CURRENT_TAB, 0);
 
-    openZimFile(new File(zimFile), false);
+    if (zimFile != null) {
+      openZimFile(new File(zimFile), false);
+    } else {
+      Toast.makeText(this, "Unable to open zim file", Toast.LENGTH_SHORT).show();
+    }
     try {
       JSONArray urls = new JSONArray(zimArticles);
       JSONArray positions = new JSONArray(zimPositions);
@@ -1712,9 +1577,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         return;
       }
 
-      Log.d(TAG_KIWIX, "Kiwix started from a filemanager. Intent filePath: "
+      Log.d(TAG_KIWIX, "Kiwix started from a file manager. Intent filePath: "
           + filePath
-          + " -> open this zimfile and load menu_main page");
+          + " -> open this zim file and load menu_main page");
       openZimFile(new File(filePath), false);
     } else {
       SharedPreferences settings = getSharedPreferences(PREF_KIWIX_MOBILE, 0);
@@ -1796,7 +1661,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   public void onPause() {
     super.onPause();
     saveTabStates();
-    Log.d(TAG_KIWIX, "onPause Save currentzimfile to preferences: " + ZimContentProvider.getZimFile());
+    Log.d(TAG_KIWIX, "onPause Save current zim file to preferences: " + ZimContentProvider.getZimFile());
   }
 
   @Override
@@ -1811,11 +1676,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   @Override
   public void webViewUrlFinishedLoading() {
     updateTableOfContents();
-    tabDrawerAdapter.notifyDataSetChanged();
+    tabsAdapter.notifyDataSetChanged();
     refreshBookmarkSymbol();
     updateBottomToolbarArrowsAlpha();
     String url = getCurrentWebView().getUrl();
-    if (url != null && !url.equals("file:///android_asset/home.html")) {
+    if (url != null && !url.equals(HOME_URL)) {
       History history = new History();
       history.setZimId(ZimContentProvider.getId())
           .setZimName(ZimContentProvider.getName())
@@ -1826,6 +1691,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           .setTimeStamp(System.currentTimeMillis());
       presenter.saveHistory(history);
     }
+    updateBottomToolbarVisibility();
+    updateTitle();
   }
 
   @Override
@@ -1851,35 +1718,22 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @Override
   public void webViewTitleUpdated(String title) {
-    tabDrawerAdapter.notifyDataSetChanged();
+    tabsAdapter.notifyDataSetChanged();
   }
-
 
   @Override
   public void webViewPageChanged(int page, int maxPages) {
     if (isBackToTopEnabled) {
+      hideBackToTopTimer.cancel();
+      hideBackToTopTimer.start();
       if (getCurrentWebView().getScrollY() > 200) {
-        if (backToTopButton.getVisibility() == View.INVISIBLE && TTSControls.getVisibility() == View.GONE) {
-          backToTopButton.setText(R.string.button_backtotop);
-          backToTopButton.setVisibility(View.VISIBLE);
-
-          backToTopButton.startAnimation(
-              AnimationUtils.loadAnimation(MainActivity.this, android.R.anim.fade_in));
-          backToTopButton.setVisibility(View.INVISIBLE);
-          Animation fadeAnimation =
-              AnimationUtils.loadAnimation(MainActivity.this, android.R.anim.fade_out);
-          fadeAnimation.setStartOffset(1200);
-          backToTopButton.startAnimation(fadeAnimation);
+        if ((backToTopButton.getVisibility() == View.GONE || backToTopButton.getVisibility() == View.INVISIBLE)
+            && TTSControls.getVisibility() == View.GONE) {
+          backToTopButton.show();
         }
       } else {
         if (backToTopButton.getVisibility() == View.VISIBLE) {
-          backToTopButton.setVisibility(View.INVISIBLE);
-
-          backToTopButton.clearAnimation();
-          backToTopButton.startAnimation(
-              AnimationUtils.loadAnimation(MainActivity.this, android.R.anim.fade_out));
-        } else {
-          backToTopButton.clearAnimation();
+          backToTopButton.hide();
         }
       }
     }
@@ -1904,14 +1758,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       builder.setPositiveButton(android.R.string.yes, (dialog, id) -> {
         if (isOpenNewTabInBackground) {
           newTabInBackground(url);
-          Snackbar snackbar = Snackbar.make(snackbarLayout,
-              getString(R.string.new_tab_snackbar),
-              Snackbar.LENGTH_LONG)
+          Snackbar.make(drawerLayout, R.string.new_tab_snackbar, Snackbar.LENGTH_LONG)
               .setAction(getString(R.string.open), v -> {
                 if (mWebViews.size() > 1) selectTab(mWebViews.size() - 1);
-              });
-          snackbar.setActionTextColor(getResources().getColor(R.color.white));
-          snackbar.show();
+              })
+              .setActionTextColor(getResources().getColor(R.color.white))
+              .show();
         } else {
           newTab(url);
         }
@@ -1948,7 +1800,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     booksAdapter.notifyDataSetChanged();
   }
 
-  void searchFiles() {
+  private void searchFiles() {
     if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
       if (ContextCompat.checkSelfPermission(this,
           Manifest.permission.READ_EXTERNAL_STORAGE)
