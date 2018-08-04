@@ -19,7 +19,6 @@
 package org.kiwix.kiwixmobile.intro;
 
 import android.Manifest;
-import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.GrantPermissionRule;
@@ -36,7 +35,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.main.MainActivity;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
