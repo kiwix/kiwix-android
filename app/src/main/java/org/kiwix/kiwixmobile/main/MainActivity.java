@@ -54,6 +54,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
@@ -155,6 +156,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private static Uri KIWIX_BROWSER_MARKET_URI;
   private final ArrayList<String> bookmarks = new ArrayList<>();
   private final List<LibraryNetworkEntity.Book> books = new ArrayList<>();
+  private final List<KiwixWebView> webViewList = new ArrayList<>();
   @BindView(R.id.activity_main_root)
   ConstraintLayout root;
   @BindView(R.id.activity_main_toolbar)
@@ -213,7 +215,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private boolean isExternalLinkPopup;
   private String documentParserJs;
   private DocumentParser documentParser;
-  private List<KiwixWebView> mWebViews = new ArrayList<>();
   private KiwixTextToSpeech tts;
   private CompatFindActionModeCallback compatCallback;
   private TabsAdapter tabsAdapter;
@@ -228,6 +229,22 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private AppCompatButton downloadBookButton;
   private View tabSwitcherRoot;
   private TextView tabSwitcherIcon;
+  private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
+    @Override
+    public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+      return makeMovementFlags(0, ItemTouchHelper.UP | ItemTouchHelper.DOWN);
+    }
+
+    @Override
+    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+      return false;
+    }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+      closeTab(viewHolder.getAdapterPosition());
+    }
+  };
   private FileSearch fileSearch = new FileSearch(this, new FileSearch.ResultListener() {
     final List<LibraryNetworkEntity.Book> newBooks = new ArrayList<>();
 
@@ -308,7 +325,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     FileReader fileReader = new FileReader();
     documentParserJs = fileReader.readFile("js/documentParser.js", this);
     documentSections = new ArrayList<>();
-    tabsAdapter = new TabsAdapter(this, mWebViews);
+    tabsAdapter = new TabsAdapter(this, webViewList);
     tableDrawerRight.setLayoutManager(new LinearLayoutManager(this));
 
     TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter();
@@ -379,7 +396,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
     if (i.hasExtra(TAG_FILE_SEARCHED)) {
       searchForTitle(i.getStringExtra(TAG_FILE_SEARCHED));
-      selectTab(mWebViews.size() - 1);
+      selectTab(webViewList.size() - 1);
     }
     if (i.hasExtra(EXTRA_CHOSE_X_URL)) {
       newTab();
@@ -413,6 +430,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       newTab(HOME_URL);
     });
     tabRecyclerView.setAdapter(tabsAdapter);
+    new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
   }
 
   private void hideTabSwitcher() {
@@ -618,6 +636,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       downloadBookButton.setOnClickListener(null);
     }
     super.onDestroy();
+    tabCallback = null;
     downloadBookButton = null;
     addTab.setOnClickListener(null);
     addTab = null;
@@ -654,8 +673,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   private KiwixWebView newTab(String url) {
     KiwixWebView webView = getWebView(url);
-    mWebViews.add(webView);
-    selectTab(mWebViews.size() - 1);
+    webViewList.add(webView);
+    selectTab(webViewList.size() - 1);
     tabsAdapter.notifyDataSetChanged();
     setUpWebView();
     documentParser.initInterface(webView);
@@ -664,20 +683,20 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   private void newTabInBackground(String url) {
     KiwixWebView webView = getWebView(url);
-    mWebViews.add(webView);
+    webViewList.add(webView);
     tabsAdapter.notifyDataSetChanged();
     setUpWebView();
     documentParser.initInterface(webView);
   }
 
   private void closeTab(int index) {
-    tempForUndo = mWebViews.get(index);
-    mWebViews.remove(index);
+    tempForUndo = webViewList.get(index);
+    webViewList.remove(index);
     tabsAdapter.notifyItemRemoved(index);
-    tabsAdapter.notifyItemRangeChanged(index, mWebViews.size());
+    tabsAdapter.notifyItemRangeChanged(index, webViewList.size());
     Snackbar.make(drawerLayout, R.string.tab_closed, Snackbar.LENGTH_LONG)
         .setAction(R.string.undo, v -> {
-          mWebViews.add(index, tempForUndo);
+          webViewList.add(index, tempForUndo);
           tabsAdapter.notifyItemInserted(index);
           setUpWebView();
         })
@@ -689,7 +708,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     tabsAdapter.setSelected(position);
     contentFrame.removeAllViews();
 
-    KiwixWebView webView = mWebViews.get(position);
+    KiwixWebView webView = webViewList.get(position);
     if (webView.getParent() != null) {
       ((ViewGroup) webView.getParent()).removeView(webView);
     }
@@ -710,11 +729,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private KiwixWebView getCurrentWebView() {
-    if (mWebViews.size() == 0) return newTab();
-    if (currentWebViewIndex < mWebViews.size()) {
-      return mWebViews.get(currentWebViewIndex);
+    if (webViewList.size() == 0) return newTab();
+    if (currentWebViewIndex < webViewList.size()) {
+      return webViewList.get(currentWebViewIndex);
     } else {
-      return mWebViews.get(0);
+      return webViewList.get(0);
     }
   }
 
@@ -766,7 +785,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
             backToTopButton.show();
           }
         }
-        readAloud();
+        tts.readAloud(getCurrentWebView());
         break;
 
       case R.id.menu_fullscreen:
@@ -1091,13 +1110,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     invalidateOptionsMenu();
     if (wasHideToolbar != isHideToolbar) {
       wasHideToolbar = isHideToolbar;
-
-      List<KiwixWebView> newWebViews = new ArrayList<>();
-      for (int i = 0; i < mWebViews.size(); i++) {
-        KiwixWebView newView = getWebView(mWebViews.get(i).getUrl());
-        newWebViews.add(i, newView);
+      for (int i = 0; i < webViewList.size(); i++) {
+        webViewList.set(i, getWebView(webViewList.get(i).getUrl()));
       }
-      mWebViews = newWebViews;
       selectTab(currentWebViewIndex);
     }
     if (refresh) {
@@ -1115,10 +1130,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       }
     }
 
-    if (!mWebViews.isEmpty() && mWebViews.get(currentWebViewIndex).getUrl() != null &&
-        mWebViews.get(currentWebViewIndex).getUrl().equals(HOME_URL) &&
-        mWebViews.get(currentWebViewIndex).findViewById(R.id.get_content_card) != null) {
-      mWebViews.get(currentWebViewIndex).findViewById(R.id.get_content_card).setEnabled(true);
+    if (!webViewList.isEmpty() && webViewList.get(currentWebViewIndex).getUrl() != null &&
+        webViewList.get(currentWebViewIndex).getUrl().equals(HOME_URL) &&
+        webViewList.get(currentWebViewIndex).findViewById(R.id.get_content_card) != null) {
+      webViewList.get(currentWebViewIndex).findViewById(R.id.get_content_card).setEnabled(true);
     }
     updateBottomToolbarVisibility();
 
@@ -1243,10 +1258,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     openArticle(articleUrl);
   }
 
-  private void readAloud() {
-    tts.readAloud(getCurrentWebView());
-  }
-
   private void setUpWebView() {
     getCurrentWebView().getSettings().setJavaScriptEnabled(true);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -1335,7 +1346,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           startActivity(new Intent(MainActivity.this, MainActivity.class));
         }
         if (resultCode == RESULT_HISTORY_CLEARED) {
-          mWebViews.clear();
+          webViewList.clear();
           newTab();
           tabsAdapter.notifyDataSetChanged();
         }
@@ -1443,8 +1454,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void updateTabSwitcherIcon() {
-    if (mWebViews.size() < 100) {
-      tabSwitcherIcon.setText(String.valueOf(mWebViews.size()));
+    if (webViewList.size() < 100) {
+      tabSwitcherIcon.setText(String.valueOf(webViewList.size()));
     } else {
       tabSwitcherIcon.setText(getString(R.string.smiling_face));
     }
@@ -1522,7 +1533,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     JSONArray urls = new JSONArray();
     JSONArray positions = new JSONArray();
-    for (KiwixWebView view : mWebViews) {
+    for (KiwixWebView view : webViewList) {
       if (view.getUrl() == null) continue;
       urls.put(view.getUrl());
       positions.put(view.getScrollY());
@@ -1760,7 +1771,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           newTabInBackground(url);
           Snackbar.make(drawerLayout, R.string.new_tab_snackbar, Snackbar.LENGTH_LONG)
               .setAction(getString(R.string.open), v -> {
-                if (mWebViews.size() > 1) selectTab(mWebViews.size() - 1);
+                if (webViewList.size() > 1) selectTab(webViewList.size() - 1);
               })
               .setActionTextColor(getResources().getColor(R.color.white))
               .show();
