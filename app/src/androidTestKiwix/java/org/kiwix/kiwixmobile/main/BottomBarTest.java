@@ -1,8 +1,28 @@
-package org.kiwix.kiwixmobile.splash;
+/*
+ * Kiwix Android
+ * Copyright (C) 2018  Kiwix <android.kiwix.org>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package org.kiwix.kiwixmobile.main;
 
 import android.Manifest;
+import android.content.Context;
 import android.support.test.espresso.DataInteraction;
 import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.web.webdriver.Locator;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
@@ -18,12 +38,14 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsInstanceOf;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import android.webkit.WebView;
+import org.kiwix.kiwixmobile.splash.SplashActivity;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onData;
@@ -54,7 +76,9 @@ import static org.hamcrest.Matchers.containsString;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class newtest {
+public class BottomBarTest {
+
+  private Context context;
 
   @Rule
   public BaristaRule<SplashActivity> activityTestRule = BaristaRule.create(SplashActivity.class);
@@ -63,34 +87,36 @@ public class newtest {
   @Rule
   public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
+  @Before
+  public void setUp() {
+    Intents.init();
+    context = getInstrumentation().getTargetContext();
+    activityTestRule.launchActivity();
+  }
+
   @Test
-  @AllowFlaky(attempts = 10)
   public void newtest() {
     // Launch the app, starting with the Splash Activity
     activityTestRule.launchActivity();
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
+    onView(withId(R.id.get_started)).check(matches(notNullValue()));
     onView(withId(R.id.get_started)).perform(click());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     // Open the Zim file from Assets
-    onView(withId(R.id.recycler_view)).perform(actionOnItemAtPosition(1, click()));
+    onView(allOf(withId(R.id.recycler_view), childAtPosition(withId(R.id.get_content_card), 1))).perform(actionOnItemAtPosition(1, click()));
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     // Set up the bottom bar
-    openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+    openActionBarOverflowOrOptionsMenu(context);
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     onView(allOf(withId(R.id.title), withText("Settings"))).perform(click());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
-    DataInteraction linearLayout = onData(anything())
-        .inAdapterView(allOf(withId(android.R.id.list),
-            childAtPosition(
-                withId(android.R.id.list_container),
-                0)))
-        .atPosition(5);
-    linearLayout.perform(click());
+
+    onData(anything()).inAdapterView(allOf(withId(android.R.id.list), childAtPosition(withId(android.R.id.list_container), 0))).atPosition(5).perform(click());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     pressBack();
