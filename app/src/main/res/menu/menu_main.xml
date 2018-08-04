@@ -15,6 +15,11 @@
     app:showAsAction="always" />
 
   <item
+    android:id="@+id/menu_new_tab"
+    android:title="@string/new_tab"
+    app:showAsAction="never" />
+
+  <item
     android:id="@+id/menu_bookmarks_list"
     android:title="@string/menu_bookmarks_list"
     app:showAsAction="never" />
