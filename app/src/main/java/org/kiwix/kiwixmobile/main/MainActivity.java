@@ -83,7 +83,10 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
-import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
+import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
+import org.kiwix.kiwixmobile.data.local.entity.History;
+import org.kiwix.kiwixmobile.help.HelpActivity;
+import org.kiwix.kiwixmobile.history.HistoryActivity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
@@ -104,7 +107,6 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
 
@@ -115,9 +117,6 @@ import static org.kiwix.kiwixmobile.main.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.main.TableDrawerAdapter.TableClickListener;
 import static org.kiwix.kiwixmobile.search.SearchActivity.EXTRA_SEARCH_IN_TEXT;
 import static org.kiwix.kiwixmobile.utils.Constants.BOOKMARK_CHOSEN_REQUEST;
-import static org.kiwix.kiwixmobile.utils.Constants.CONTACT_EMAIL_ADDRESS;
-import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOKMARK_CLICKED;
-import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOKMARK_CONTENTS;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_TITLE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_URL;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_EXTERNAL_LINK;
@@ -148,6 +147,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     MainContract.View, BooksAdapter.OnItemClickListener {
 
   private static final int REQUEST_READ_STORAGE_PERMISSION = 2;
+  private static final int REQUEST_HISTORY_ITEM_CHOSEN = 99;
   private static final String NEW_TAB = "NEW_TAB";
   public static boolean isFullscreenOpened;
   public static boolean refresh;
@@ -155,6 +155,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   public static boolean nightMode;
   private static Uri KIWIX_LOCAL_MARKET_URI;
   private static Uri KIWIX_BROWSER_MARKET_URI;
+  private final ArrayList<String> bookmarks = new ArrayList<>();
   public List<DocumentSection> documentSections;
   public Menu menu;
   protected boolean requestClearHistoryAfterLoad = false;
@@ -202,13 +203,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   @BindView(R.id.bottom_toolbar)
   CardView bottomToolbar;
   @BindView(R.id.bottom_toolbar_bookmark)
-  ImageView bookmark;
+  ImageView bottomToolbarBookmark;
   @BindView(R.id.bottom_toolbar_arrow_back)
   ImageView bottomToolbarArrowBack;
   @BindView(R.id.bottom_toolbar_arrow_forward)
   ImageView bottomToolbarArrowForward;
-  @Inject
-  BookmarksDao bookmarksDao;
   @Inject
   MainContract.Presenter presenter;
   private boolean isBackToTopEnabled = false;
@@ -220,7 +219,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private String documentParserJs;
   private DocumentParser documentParser;
   private MenuItem menuBookmarks;
-  private ArrayList<String> bookmarks;
   private List<KiwixWebView> mWebViews = new ArrayList<>();
   private KiwixTextToSpeech tts;
   private CompatFindActionModeCallback compatCallback;
@@ -308,8 +306,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     handleLocaleCheck();
     setContentView(R.layout.main);
-    ButterKnife.bind(this);
-
     setUpToolbar();
 
     checkForRateDialog();
@@ -782,9 +778,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       new Handler().postDelayed(() -> drawerLayout.closeDrawers(), 150);
     }
     loadPrefs();
-    if (menu != null) {
-      refreshBookmarkSymbol(menu);
-    }
+    refreshBookmarkSymbol();
     updateTableOfContents();
 
     if (!isHideToolbar) {
@@ -832,11 +826,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         break;
 
       case R.id.menu_help:
-        showHelpPage();
-        break;
+        startActivity(new Intent(this, HelpActivity.class));
+        return true;
 
       case R.id.menu_openfile:
-        manageZimFiles(0);
+        manageZimFiles(1);
         break;
 
       case R.id.menu_settings:
@@ -864,6 +858,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         }
         break;
 
+      case R.id.menu_history:
+        startActivityForResult(new Intent(this, HistoryActivity.class), REQUEST_HISTORY_ITEM_CHOSEN);
+        return true;
+
       default:
         break;
     }
@@ -874,9 +872,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   @OnLongClick(R.id.bottom_toolbar_bookmark)
   boolean goToBookmarks() {
     saveTabStates();
-    Intent intentBookmarks = new Intent(getBaseContext(), BookmarksActivity.class);
-    // FIXME: Looks like EXTRA below isn't used anywhere?
-    intentBookmarks.putExtra(EXTRA_BOOKMARK_CONTENTS, bookmarks);
+    Intent intentBookmarks = new Intent(this, BookmarksActivity.class);
     startActivityForResult(intentBookmarks, BOOKMARK_CHOSEN_REQUEST);
     return true;
   }
@@ -933,21 +929,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   @Override
-  public void showHelpPage() {
-    getCurrentWebView().removeAllViews();
-    getCurrentWebView().loadUrl("file:///android_asset/help.html");
-  }
-
-  public void sendContactEmail() {
-    Intent intent = new Intent(Intent.ACTION_SEND);
-    intent.setType("plain/text");
-    intent.putExtra(Intent.EXTRA_EMAIL, new String[]{CONTACT_EMAIL_ADDRESS});
-    intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback in " +
-        LanguageUtils.getCurrentLocale(this).getDisplayLanguage());
-    startActivity(Intent.createChooser(intent, ""));
-  }
-
-  @Override
   public void openExternalUrl(Intent intent) {
     if (intent.resolveActivity(getPackageManager()) != null) {
       // Show popup with warning that this url is external and could lead to additional costs
@@ -999,13 +980,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
             // signal to menu create to show
             requestInitAllMenuItems = true;
           }
-
-          //Bookmarks
-          bookmarks = new ArrayList<>();
-          bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
-
           openMainPage();
-          refreshBookmarks();
+          presenter.loadCurrentZimBookmarksUrl();
           return true;
         } else {
           Toast.makeText(this, getResources().getString(R.string.error_fileinvalid),
@@ -1182,17 +1158,29 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   @OnClick(R.id.bottom_toolbar_bookmark)
   public void toggleBookmark() {
     //Check maybe need refresh
-    String article = getCurrentWebView().getUrl();
+    String articleUrl = getCurrentWebView().getUrl();
     boolean isBookmark = false;
-    if (article != null && !bookmarks.contains(article)) {
-      saveBookmark(article, getCurrentWebView().getTitle());
+    Bookmark bookmark = new Bookmark();
+    bookmark.setZimId(ZimContentProvider.getId())
+        .setZimName(ZimContentProvider.getName())
+        .setZimFilePath(ZimContentProvider.getZimFile())
+        .setBookmarkTitle(getCurrentWebView().getTitle())
+        .setBookmarkUrl(articleUrl)
+        .setFavicon(ZimContentProvider.getFavicon());
+    if (articleUrl != null && !bookmarks.contains(articleUrl)) {
+      if (ZimContentProvider.getId() != null) {
+        presenter.saveBookmark(bookmark);
+      } else {
+        Toast.makeText(this, R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT).show();
+      }
       isBookmark = true;
-    } else if (article != null) {
-      deleteBookmark(article);
+    } else if (articleUrl != null) {
+      presenter.deleteBookmark(bookmark);
       isBookmark = false;
     }
     popBookmarkSnackbar(isBookmark);
     supportInvalidateOptionsMenu();
+    presenter.loadCurrentZimBookmarksUrl();
   }
 
   private void popBookmarkSnackbar(boolean isBookmark) {
@@ -1228,9 +1216,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       refresh = false;
       recreate();
     }
-    if (menu != null) {
-      refreshBookmarkSymbol(menu);
-    }
+    presenter.loadCurrentZimBookmarksUrl();
     if (getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE) {
       if (menu != null) {
         menu.getItem(4).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -1242,7 +1228,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
 
     if (!mWebViews.isEmpty() && mWebViews.get(currentWebViewIndex).getUrl() != null &&
-        mWebViews.get(currentWebViewIndex).getUrl().equals("file:///android_asset/help.html") &&
+        mWebViews.get(currentWebViewIndex).getUrl().equals("file:///android_asset/home.html") &&
         mWebViews.get(currentWebViewIndex).findViewById(R.id.get_content_card) != null) {
       mWebViews.get(currentWebViewIndex).findViewById(R.id.get_content_card).setEnabled(true);
     }
@@ -1325,32 +1311,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
   }
 
-  private void refreshBookmarks() {
-    if (bookmarks != null) {
-      bookmarks.clear();
-    }
-    if (bookmarksDao != null) {
-      bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
-    }
-  }
-
-  // TODO: change saving bookbark by zim name not id
-  private void saveBookmark(String articleUrl, String articleTitle) {
-    if (ZimContentProvider.getId() != null) {
-      bookmarksDao.saveBookmark(articleUrl, articleTitle, ZimContentProvider.getId(), ZimContentProvider.getName());
-      refreshBookmarks();
-    } else {
-      Toast.makeText(this, R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT).show();
-    }
-  }
-
-  private void deleteBookmark(String article) {
-    bookmarksDao.deleteBookmark(article, ZimContentProvider.getId(), ZimContentProvider.getName());
-    refreshBookmarks();
-  }
-
-  public boolean openArticleFromBookmarkTitle(String bookmarkTitle) {
-    return openArticle(ZimContentProvider.getPageUrlFromTitle(bookmarkTitle));
+  @Override
+  public void refreshBookmarksUrl(List<String> urls) {
+    bookmarks.clear();
+    bookmarks.addAll(urls);
+    refreshBookmarkSymbol();
   }
 
   private void contentsDrawerHint() {
@@ -1454,27 +1419,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     Log.i(TAG_KIWIX, "Intent data: " + data);
 
     switch (requestCode) {
-      case REQUEST_FILE_SELECT:
-        if (resultCode == RESULT_OK) {
-          // The URI of the selected file
-          final Uri uri = data.getData();
-          File file = null;
-          if (uri != null) {
-            String path = uri.getPath();
-            if (path != null) {
-              file = new File(path);
-            }
-          }
-          if (file == null) {
-            Log.i(TAG_KIWIX, "Could not find file");
-            return;
-          }
-          finish();
-          Intent zimFile = new Intent(MainActivity.this, MainActivity.class);
-          zimFile.setData(uri);
-          startActivity(zimFile);
-        }
-        break;
       case REQUEST_FILE_SEARCH:
         if (resultCode == RESULT_OK) {
           String title =
@@ -1510,30 +1454,43 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         break;
 
       case BOOKMARK_CHOSEN_REQUEST:
+      case REQUEST_FILE_SELECT:
+      case REQUEST_HISTORY_ITEM_CHOSEN:
         if (resultCode == RESULT_OK) {
-          boolean itemClicked = data.getBooleanExtra(EXTRA_BOOKMARK_CLICKED, false);
-          if (ZimContentProvider.getId() == null) return;
-
-          //Bookmarks
-          bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
-
-          if (itemClicked) {
-            String bookmarkChosen;
-            if (data.getStringExtra(EXTRA_CHOSE_X_URL) != null) {
-              bookmarkChosen = data.getStringExtra(EXTRA_CHOSE_X_URL);
-              newTab();
-              getCurrentWebView().loadUrl(bookmarkChosen);
-            } else {
-              newTab();
-              bookmarkChosen = data.getStringExtra(EXTRA_CHOSE_X_TITLE);
-              openArticleFromBookmarkTitle(bookmarkChosen);
+          String title = data.getStringExtra(EXTRA_CHOSE_X_TITLE);
+          String url = data.getStringExtra(EXTRA_CHOSE_X_URL);
+          if (data.getData() != null) {
+            final Uri uri = data.getData();
+            File file = null;
+            if (uri != null) {
+              String path = uri.getPath();
+              if (path != null) {
+                file = new File(path);
+              }
             }
+            if (file == null) {
+              Toast.makeText(this, R.string.error_filenotfound, Toast.LENGTH_LONG).show();
+              return;
+            }
+            Intent zimFile = new Intent(MainActivity.this, MainActivity.class);
+            zimFile.setData(uri);
+            if (url != null) {
+              zimFile.putExtra(EXTRA_CHOSE_X_URL, url);
+            } else if (title != null) {
+              zimFile.putExtra(EXTRA_CHOSE_X_URL, ZimContentProvider.getPageUrlFromTitle(title));
+            }
+            startActivity(zimFile);
+            finish();
+            return;
           }
-          if (menu != null) {
-            refreshBookmarkSymbol(menu);
+          newTab();
+          if (url != null) {
+            getCurrentWebView().loadUrl(url);
+          } else if (title != null) {
+            getCurrentWebView().loadUrl(ZimContentProvider.getPageUrlFromTitle(title));
           }
         }
-        break;
+        return;
       default:
         break;
     }
@@ -1585,11 +1542,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   public boolean onPrepareOptionsMenu(Menu menu) {
     super.onPrepareOptionsMenu(menu);
     toggleActionItemsConfig();
-    refreshBookmarkSymbol(menu);
+    this.menu = menu;
+    refreshBookmarkSymbol();
     refreshNavigationButtons();
 
     if (getCurrentWebView().getUrl() == null ||
-        getCurrentWebView().getUrl().equals("file:///android_asset/help.html") ||
         getCurrentWebView().getUrl().equals("file:///android_asset/home.html")) {
       menu.findItem(R.id.menu_read_aloud).setVisible(false);
     } else {
@@ -1599,16 +1556,13 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     return true;
   }
 
-  public void refreshBookmarkSymbol(Menu menu) { // Checks if current webview is in bookmarks array
-    if (bookmarks == null || bookmarks.size() == 0) {
-      bookmarks = bookmarksDao.getBookmarks(ZimContentProvider.getId(), ZimContentProvider.getName());
-    }
-
+  public void refreshBookmarkSymbol() {
+    if (menu == null) return;
 
     if (menu.findItem(R.id.menu_bookmarks) != null &&
         getCurrentWebView().getUrl() != null &&
         ZimContentProvider.getId() != null &&
-        !getCurrentWebView().getUrl().equals("file:///android_asset/help.html")) {
+        !getCurrentWebView().getUrl().equals("file:///android_asset/home.html")) {
       int icon = bookmarks.contains(getCurrentWebView().getUrl()) ? R.drawable.ic_bookmark_24dp : R.drawable.ic_bookmark_border_24dp;
 
       menu.findItem(R.id.menu_bookmarks)
@@ -1616,14 +1570,14 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           .setIcon(icon)
           .getIcon().setAlpha(255);
 
-      bookmark.setImageResource(icon);
+      bottomToolbarBookmark.setImageResource(icon);
     } else {
       menu.findItem(R.id.menu_bookmarks)
           .setEnabled(false)
           .setIcon(R.drawable.ic_bookmark_border_24dp)
           .getIcon().setAlpha(130);
 
-      bookmark.setImageResource(R.drawable.ic_bookmark_border_24dp);
+      bottomToolbarBookmark.setImageResource(R.drawable.ic_bookmark_border_24dp);
     }
   }
 
@@ -1679,7 +1633,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   public void manageZimFiles(int tab) {
-    refreshBookmarks();
+    presenter.loadCurrentZimBookmarksUrl();
     final Intent target = new Intent(this, ZimManageActivity.class);
     target.setAction(Intent.ACTION_GET_CONTENT);
     // The MIME data type filter
@@ -1831,7 +1785,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
             openZimFile(new File(filePath), true);
           }
         } else {
-          Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display help page");
+          Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page");
           showHomePage();
         }
       }
@@ -1841,10 +1795,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   @Override
   public void onPause() {
     super.onPause();
-
     saveTabStates();
-    refreshBookmarks();
-
     Log.d(TAG_KIWIX, "onPause Save currentzimfile to preferences: " + ZimContentProvider.getZimFile());
   }
 
@@ -1861,11 +1812,20 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   public void webViewUrlFinishedLoading() {
     updateTableOfContents();
     tabDrawerAdapter.notifyDataSetChanged();
-
-    if (menu != null) {
-      refreshBookmarkSymbol(menu);
-    }
+    refreshBookmarkSymbol();
     updateBottomToolbarArrowsAlpha();
+    String url = getCurrentWebView().getUrl();
+    if (url != null && !url.equals("file:///android_asset/home.html")) {
+      History history = new History();
+      history.setZimId(ZimContentProvider.getId())
+          .setZimName(ZimContentProvider.getName())
+          .setZimFilePath(ZimContentProvider.getZimFile())
+          .setFavicon(ZimContentProvider.getFavicon())
+          .setHistoryTitle(getCurrentWebView().getTitle())
+          .setHistoryUrl(getCurrentWebView().getUrl())
+          .setTimeStamp(System.currentTimeMillis());
+      presenter.saveHistory(history);
+    }
   }
 
   @Override

@@ -3,10 +3,10 @@ package org.kiwix.kiwixmobile.language;
 import android.util.Log;
 
 import org.kiwix.kiwixmobile.base.BasePresenter;
-import org.kiwix.kiwixmobile.data.Computation;
 import org.kiwix.kiwixmobile.data.DataSource;
-import org.kiwix.kiwixmobile.data.MainThread;
 import org.kiwix.kiwixmobile.di.PerActivity;
+import org.kiwix.kiwixmobile.di.qualifiers.Computation;
+import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
 import org.kiwix.kiwixmobile.models.Language;
 
 import java.util.List;

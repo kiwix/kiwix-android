@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 
-
 android {
   compileSdkVersion 27
 
@@ -20,8 +19,8 @@ android {
 
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
-  androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+  androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion") {
     exclude group: 'com.android.support', module: 'support-annotations'
-  })
-  testImplementation 'junit:junit:4.12'
+  }
+  testImplementation "junit:junit:$jUnitVersion"
 }

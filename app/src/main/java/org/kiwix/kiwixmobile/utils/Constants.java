@@ -108,8 +108,6 @@ public final class Constants {
 
     public static final String EXTRA_SEARCH = "search";
 
-    public static final String EXTRA_BOOKMARK_CLICKED = "bookmarkClicked";
-
     public static final String EXTRA_BOOK = "Book";
 
     public static final String EXTRA_IS_WIDGET_VOICE = "isWidgetVoice";
@@ -121,8 +119,6 @@ public final class Constants {
     public static final String EXTRA_NOTIFICATION_ID = "notificationID";
 
     public static final String EXTRA_WEBVIEWS_LIST = "webviewsList";
-
-    public static final String EXTRA_BOOKMARK_CONTENTS = "bookmark_contents";
 
     public static final String EXTRA_SEARCH_TEXT = "searchText";
 
