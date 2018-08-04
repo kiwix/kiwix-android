@@ -93,12 +93,12 @@ public class HelpActivityTest {
       onView(withId(R.id.get_started)).check(matches(notNullValue()));
       onView(withId(R.id.get_started)).perform(click());
     }catch (Exception e){
-      // The app didn't start with the IntroActivity
+      // the app started directly at the homescreen instead of the intro activity
     }
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
+    onView(childAtPosition(withId(R.id.toolbar), 0)).check(matches(withText("Wikipedia")));
 
-    //onView(withText("Kiwix")).check(matches(notNullValue())); //TODO: verify that this is on the top toolbar
 
     openActionBarOverflowOrOptionsMenu(context);
     onView(withText("Help")).perform(click());
@@ -118,9 +118,7 @@ public class HelpActivityTest {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     // Verify that the home activity is opened
-    // TODO : fix this issue
-    //onView(withText("Wikipedia")).check(matches(notNullValue())); //TODO: verify that this is on the top toolbar
-
+    onView(childAtPosition(withId(R.id.toolbar), 0)).check(matches(withText("Wikipedia")));
     
     ViewInteraction recyclerView = onView(
         allOf(withId(R.id.recycler_view),
@@ -139,7 +137,7 @@ public class HelpActivityTest {
 
 
     // Verify that the help Activity is opened
-    onView(withText("Help")).check(matches(notNullValue())); //TODO: verify that this is on the top toolbar
+    onView(withId(R.id.title)).check(matches(withText("Help")))
 
     // Verify that the back button is displayed
     onView(withContentDescription("Navigate up")).check(matches(notNullValue()));
@@ -184,23 +182,6 @@ public class HelpActivityTest {
 
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-
-
-
-
-    onView(withContentDescription("Navigate up")).perform(click());
-
-
-    //ViewInteraction textView14 = onView(
-    //    allOf(withText("Wikipedia"),
-    //        childAtPosition(
-    //            allOf(withId(R.id.toolbar),
-    //                childAtPosition(
-    //                    withId(R.id.toolbar_layout),
-    //                    0)),
-    //            1),
-    //        isDisplayed()));
-    //textView14.check(matches(withText("Wikipedia")));
 
 
 
