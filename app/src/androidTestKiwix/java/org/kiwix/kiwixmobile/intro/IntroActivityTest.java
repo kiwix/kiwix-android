@@ -70,7 +70,7 @@ public class IntroActivityTest {
   }
 
   @Test
-  public void testIntroActivity(){
+  public void testIntroActivity() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     ViewInteraction viewPager = onView(withId(R.id.view_pager));
 
@@ -99,7 +99,6 @@ public class IntroActivityTest {
 
   @After
   public void endTest() {
-    IdlingRegistry.getInstance().unregister(LibraryFragment.IDLING_RESOURCE);
     Intents.release();
   }
 }
