@@ -46,6 +46,7 @@ import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.splash.SplashActivity;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.kiwix.kiwixmobile.testutils.Matcher.childAtPosition;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
@@ -200,7 +201,16 @@ public class HelpActivityTest {
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
-    // verify that all the headings are present:
+    String test; // To store the temporary value of the string while processing
+    // verify that the content on the page is displayed properly
+
+
+
+    onView(withText(context.getString(R.string.help_5))).perform(click());
+    test = context.getString(R.string.help_6) + "\n" + context.getString(R.string.help_7) + "\n" + context.getString(R.string.help_8) + "\n" + context.getString(R.string.help_9) + "\n" + context.getString(R.string.help_10) + "\n" + context.getString(R.string.help_11) + "\n";
+    onView(withText(test)).check(matches(notNullValue()));
+
+
     // send feedback
     onView(withText(context.getString(R.string.send_feedback))).check(matches(notNullValue()));
     //"What does Kiwix do?"
@@ -209,193 +219,42 @@ public class HelpActivityTest {
     onView(withText(context.getString(R.string.help_12))).check(matches(notNullValue()));
     //"Where is the content?"
     onView(withText(context.getString(R.string.help_5))).check(matches(notNullValue()));
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-
-
-    ViewInteraction appCompatImageView = onView(
-        allOf(withId(R.id.item_help_toggle_expand), withContentDescription("Expand"),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.activity_help_recycler_view),
-                    0),
-                1),
-            isDisplayed()));
-    appCompatImageView.perform(click());
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
-    onView(withText(context.getString(R.string.help_3))).check(matches(notNullValue()));
-    onView(withText(context.getString(R.string.help_4))).check(matches(notNullValue()));
+    onView(withText(context.getString(R.string.help_2))).perform(click());
+    test = context.getString(R.string.help_3) + "\n" + context.getString(R.string.help_4) + "\n";
+    onView(withText(test)).check(matches(notNullValue()));
+
+    onView(withText(context.getString(R.string.help_12))).perform(click());
+    test = context.getString(R.string.help_13) + "\n" + context.getString(R.string.help_14) + "\n" + context.getString(R.string.help_15) + "\n" + context.getString(R.string.help_16) + "\n" + context.getString(R.string.help_17) + "\n" + context.getString(R.string.help_18) + "\n" + context.getString(R.string.help_19) + "\n";
+    onView(withText(test)).check(matches(notNullValue()));
 
 
-    //ViewInteraction textView8 = onView(
-    //    allOf(withId(R.id.item_help_description), withText(
-    //        "Kiwix is an offline content reader. It acts very much like a browser but instead of accessing online web pages, it reads content from a file in ZIM format.\nWhile Kiwix has been originally designed to provide Wikipedia offline, it also reads other contents.\n"),
+
+
+
+    onView(withContentDescription("Navigate up")).perform(click());
+
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
+    //ViewInteraction textView14 = onView(
+    //    allOf(withText("Wikipedia"),
     //        childAtPosition(
-    //            childAtPosition(
-    //                withId(R.id.activity_help_recycler_view),
-    //                0),
+    //            allOf(withId(R.id.toolbar),
+    //                childAtPosition(
+    //                    withId(R.id.toolbar_layout),
+    //                    0)),
     //            1),
     //        isDisplayed()));
-    //textView8.check(matches(withText(
-    //    "Kiwix is an offline content reader. It acts very much like a browser but instead of accessing online web pages, it reads content from a file in ZIM format. While Kiwix has been originally designed to provide Wikipedia offline, it also reads other contents. ")));
-
-    //ViewInteraction textView9 = onView(
-    //    allOf(withId(R.id.item_help_description), withText(
-    //        "Kiwix is an offline content reader. It acts very much like a browser but instead of accessing online web pages, it reads content from a file in ZIM format.\nWhile Kiwix has been originally designed to provide Wikipedia offline, it also reads other contents.\n"),
-    //        childAtPosition(
-    //            childAtPosition(
-    //                withId(R.id.activity_help_recycler_view),
-    //                0),
-    //            1),
-    //        isDisplayed()));
-    //textView9.check(matches(isDisplayed()));
-
-    //ViewInteraction textView10 = onView(
-    //    allOf(withId(R.id.item_help_description), withText(
-    //        "Kiwix is an offline content reader. It acts very much like a browser but instead of accessing online web pages, it reads content from a file in ZIM format.\nWhile Kiwix has been originally designed to provide Wikipedia offline, it also reads other contents.\n"),
-    //        childAtPosition(
-    //            childAtPosition(
-    //                withId(R.id.activity_help_recycler_view),
-    //                0),
-    //            1),
-    //        isDisplayed()));
-    //textView10.check(doesNotExist());
-
-    ViewInteraction appCompatImageView2 = onView(
-        allOf(withId(R.id.item_help_toggle_expand), withContentDescription("Expand"),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.activity_help_recycler_view),
-                    0),
-                1),
-            isDisplayed()));
-    appCompatImageView2.perform(click());
-
-    ViewInteraction appCompatImageView3 = onView(
-        allOf(withId(R.id.item_help_toggle_expand), withContentDescription("Expand"),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.activity_help_recycler_view),
-                    1),
-                1),
-            isDisplayed()));
-    appCompatImageView3.perform(click());
+    //textView14.check(matches(withText("Wikipedia")));
 
 
-    onView(withText(context.getString(R.string.help_13))).check(matches(notNullValue()));
-    onView(withText(context.getString(R.string.help_14))).check(matches(notNullValue()));
-    onView(withText(context.getString(R.string.help_15))).check(matches(notNullValue()));
-    onView(withText(context.getString(R.string.help_16))).check(matches(notNullValue()));
-    onView(withText(context.getString(R.string.help_17))).check(matches(notNullValue()));
-    onView(withText(context.getString(R.string.help_18))).check(matches(notNullValue()));
-    onView(withText(context.getString(R.string.help_19))).check(matches(notNullValue()));
-
-    //ViewInteraction textView11 = onView(
-    //    allOf(withId(R.id.item_help_description), withText(
-    //        "If your ZIM file is larger than 4GB, you might not be able to store it on your SD card due to filesystem limitations.\nDownloading in-app automatically handles larger files, splitting them up for you.\nIf however you are downloading on another device, you may need to split the ZIM file up using the following software:\n• On Microsoft Windows: HJ-Split\n• On Apple Mac OSX: Split and Concat\n• On GNU/Linux and with the console: split --bytes=4000M my_big_file.zim\nNote: your resulting files must be named my_big_file.zimaa, my_big_file.zimab, etc.\n"),
-    //        childAtPosition(
-    //            childAtPosition(
-    //                withId(R.id.activity_help_recycler_view),
-    //                1),
-    //            1),
-    //        isDisplayed()));
-    //textView11.check(matches(isDisplayed()));
-
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-
-
-    ViewInteraction appCompatImageView4 = onView(
-        allOf(withId(R.id.item_help_toggle_expand), withContentDescription("Expand"),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.activity_help_recycler_view),
-                    2),
-                1),
-            isDisplayed()));
-    appCompatImageView4.perform(click());
-
-
-    onView(withText(context.getString(R.string.help_6))).check(matches(notNullValue()));
-
-
-
-    ViewInteraction textView12 = onView(
-        allOf(withId(R.id.item_help_description), withText(
-            "Our content is hosted on the Kiwix website.\nThey are available as ZIM files. There are a lot of them:\n• Wikipedia is available separately for each language\n• Other contents like Wikileaks or Wikisource are also available\nYou can either download your chosen ZIM files in-app or carefuly select the one(s) you want and download from a Desktop computer before transferring the ZIM files to your SD card.\nZIM files download in-app are located in the external storage directory in a folder entitled Kiwix.\n"),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.activity_help_recycler_view),
-                    1),
-                1),
-            isDisplayed()));
-    textView12.check(matches(isDisplayed()));
-
-    ViewInteraction textView13 = onView(
-        allOf(withId(R.id.item_help_description), withText(
-            "Our content is hosted on the Kiwix website.\nThey are available as ZIM files. There are a lot of them:\n• Wikipedia is available separately for each language\n• Other contents like Wikileaks or Wikisource are also available\nYou can either download your chosen ZIM files in-app or carefuly select the one(s) you want and download from a Desktop computer before transferring the ZIM files to your SD card.\nZIM files download in-app are located in the external storage directory in a folder entitled Kiwix.\n"),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.activity_help_recycler_view),
-                    1),
-                1),
-            isDisplayed()));
-    textView13.check(doesNotExist());
-
-    ViewInteraction appCompatImageView5 = onView(
-        allOf(withId(R.id.item_help_toggle_expand), withContentDescription("Expand"),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.activity_help_recycler_view),
-                    1),
-                1),
-            isDisplayed()));
-    appCompatImageView5.perform(click());
-
-    ViewInteraction appCompatImageView6 = onView(
-        allOf(withId(R.id.item_help_toggle_expand), withContentDescription("Expand"),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.activity_help_recycler_view),
-                    1),
-                1),
-            isDisplayed()));
-    appCompatImageView6.perform(click());
-
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-
-
-    ViewInteraction appCompatImageButton2 = onView(
-        allOf(withContentDescription("Navigate up"),
-            childAtPosition(
-                allOf(withId(R.id.activity_help_toolbar),
-                    childAtPosition(
-                        withId(R.id.activity_help_appbar),
-                        0)),
-                1),
-            isDisplayed()));
-    appCompatImageButton2.perform(click());
-
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-
-    ViewInteraction textView14 = onView(
-        allOf(withText("Wikipedia"),
-            childAtPosition(
-                allOf(withId(R.id.toolbar),
-                    childAtPosition(
-                        withId(R.id.toolbar_layout),
-                        0)),
-                1),
-            isDisplayed()));
-    textView14.check(matches(withText("Wikipedia")));
-
-*/
 
   }
 
   @After
   public void endTest() {
-    IdlingRegistry.getInstance().unregister(LibraryFragment.IDLING_RESOURCE);
     Intents.release();
   }
 }
