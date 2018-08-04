@@ -211,7 +211,6 @@ public class HelpActivityTest {
     onView(withText(context.getString(R.string.help_5))).check(matches(notNullValue()));
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
-    /*
 
     ViewInteraction appCompatImageView = onView(
         allOf(withId(R.id.item_help_toggle_expand), withContentDescription("Expand"),
@@ -225,40 +224,43 @@ public class HelpActivityTest {
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
+    onView(withText(context.getString(R.string.help_3))).check(matches(notNullValue()));
+    onView(withText(context.getString(R.string.help_4))).check(matches(notNullValue()));
 
-    ViewInteraction textView8 = onView(
-        allOf(withId(R.id.item_help_description), withText(
-            "Kiwix is an offline content reader. It acts very much like a browser but instead of accessing online web pages, it reads content from a file in ZIM format.\nWhile Kiwix has been originally designed to provide Wikipedia offline, it also reads other contents.\n"),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.activity_help_recycler_view),
-                    0),
-                1),
-            isDisplayed()));
-    textView8.check(matches(withText(
-        "Kiwix is an offline content reader. It acts very much like a browser but instead of accessing online web pages, it reads content from a file in ZIM format. While Kiwix has been originally designed to provide Wikipedia offline, it also reads other contents. ")));
 
-    ViewInteraction textView9 = onView(
-        allOf(withId(R.id.item_help_description), withText(
-            "Kiwix is an offline content reader. It acts very much like a browser but instead of accessing online web pages, it reads content from a file in ZIM format.\nWhile Kiwix has been originally designed to provide Wikipedia offline, it also reads other contents.\n"),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.activity_help_recycler_view),
-                    0),
-                1),
-            isDisplayed()));
-    textView9.check(matches(isDisplayed()));
+    //ViewInteraction textView8 = onView(
+    //    allOf(withId(R.id.item_help_description), withText(
+    //        "Kiwix is an offline content reader. It acts very much like a browser but instead of accessing online web pages, it reads content from a file in ZIM format.\nWhile Kiwix has been originally designed to provide Wikipedia offline, it also reads other contents.\n"),
+    //        childAtPosition(
+    //            childAtPosition(
+    //                withId(R.id.activity_help_recycler_view),
+    //                0),
+    //            1),
+    //        isDisplayed()));
+    //textView8.check(matches(withText(
+    //    "Kiwix is an offline content reader. It acts very much like a browser but instead of accessing online web pages, it reads content from a file in ZIM format. While Kiwix has been originally designed to provide Wikipedia offline, it also reads other contents. ")));
 
-    ViewInteraction textView10 = onView(
-        allOf(withId(R.id.item_help_description), withText(
-            "Kiwix is an offline content reader. It acts very much like a browser but instead of accessing online web pages, it reads content from a file in ZIM format.\nWhile Kiwix has been originally designed to provide Wikipedia offline, it also reads other contents.\n"),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.activity_help_recycler_view),
-                    0),
-                1),
-            isDisplayed()));
-    textView10.check(doesNotExist());
+    //ViewInteraction textView9 = onView(
+    //    allOf(withId(R.id.item_help_description), withText(
+    //        "Kiwix is an offline content reader. It acts very much like a browser but instead of accessing online web pages, it reads content from a file in ZIM format.\nWhile Kiwix has been originally designed to provide Wikipedia offline, it also reads other contents.\n"),
+    //        childAtPosition(
+    //            childAtPosition(
+    //                withId(R.id.activity_help_recycler_view),
+    //                0),
+    //            1),
+    //        isDisplayed()));
+    //textView9.check(matches(isDisplayed()));
+
+    //ViewInteraction textView10 = onView(
+    //    allOf(withId(R.id.item_help_description), withText(
+    //        "Kiwix is an offline content reader. It acts very much like a browser but instead of accessing online web pages, it reads content from a file in ZIM format.\nWhile Kiwix has been originally designed to provide Wikipedia offline, it also reads other contents.\n"),
+    //        childAtPosition(
+    //            childAtPosition(
+    //                withId(R.id.activity_help_recycler_view),
+    //                0),
+    //            1),
+    //        isDisplayed()));
+    //textView10.check(doesNotExist());
 
     ViewInteraction appCompatImageView2 = onView(
         allOf(withId(R.id.item_help_toggle_expand), withContentDescription("Expand"),
@@ -280,16 +282,25 @@ public class HelpActivityTest {
             isDisplayed()));
     appCompatImageView3.perform(click());
 
-    ViewInteraction textView11 = onView(
-        allOf(withId(R.id.item_help_description), withText(
-            "If your ZIM file is larger than 4GB, you might not be able to store it on your SD card due to filesystem limitations.\nDownloading in-app automatically handles larger files, splitting them up for you.\nIf however you are downloading on another device, you may need to split the ZIM file up using the following software:\n• On Microsoft Windows: HJ-Split\n• On Apple Mac OSX: Split and Concat\n• On GNU/Linux and with the console: split --bytes=4000M my_big_file.zim\nNote: your resulting files must be named my_big_file.zimaa, my_big_file.zimab, etc.\n"),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.activity_help_recycler_view),
-                    1),
-                1),
-            isDisplayed()));
-    textView11.check(matches(isDisplayed()));
+
+    onView(withText(context.getString(R.string.help_13))).check(matches(notNullValue()));
+    onView(withText(context.getString(R.string.help_14))).check(matches(notNullValue()));
+    onView(withText(context.getString(R.string.help_15))).check(matches(notNullValue()));
+    onView(withText(context.getString(R.string.help_16))).check(matches(notNullValue()));
+    onView(withText(context.getString(R.string.help_17))).check(matches(notNullValue()));
+    onView(withText(context.getString(R.string.help_18))).check(matches(notNullValue()));
+    onView(withText(context.getString(R.string.help_19))).check(matches(notNullValue()));
+
+    //ViewInteraction textView11 = onView(
+    //    allOf(withId(R.id.item_help_description), withText(
+    //        "If your ZIM file is larger than 4GB, you might not be able to store it on your SD card due to filesystem limitations.\nDownloading in-app automatically handles larger files, splitting them up for you.\nIf however you are downloading on another device, you may need to split the ZIM file up using the following software:\n• On Microsoft Windows: HJ-Split\n• On Apple Mac OSX: Split and Concat\n• On GNU/Linux and with the console: split --bytes=4000M my_big_file.zim\nNote: your resulting files must be named my_big_file.zimaa, my_big_file.zimab, etc.\n"),
+    //        childAtPosition(
+    //            childAtPosition(
+    //                withId(R.id.activity_help_recycler_view),
+    //                1),
+    //            1),
+    //        isDisplayed()));
+    //textView11.check(matches(isDisplayed()));
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
@@ -303,6 +314,11 @@ public class HelpActivityTest {
                 1),
             isDisplayed()));
     appCompatImageView4.perform(click());
+
+
+    onView(withText(context.getString(R.string.help_6))).check(matches(notNullValue()));
+
+
 
     ViewInteraction textView12 = onView(
         allOf(withId(R.id.item_help_description), withText(
