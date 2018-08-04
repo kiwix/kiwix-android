@@ -20,8 +20,6 @@ package org.kiwix.kiwixmobile.help;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
-import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -36,19 +34,17 @@ import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.intro.IntroActivity;
 
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
+import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static org.kiwix.kiwixmobile.testutils.Matcher.childAtPosition;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static android.support.test.espresso.intent.Intents.intended;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 
@@ -74,30 +70,23 @@ public class HelpActivityTest {
 
   @Test
   public void testHelpActivity() {
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    try{
-      onView(withId(R.id.get_started)).check(matches(notNullValue()));
-      onView(withId(R.id.get_started)).perform(click());
-    }catch (Exception e){
-      // the app started directly at the homescreen instead of the intro activity
-    }
+    onView(withId(R.id.get_started)).check(matches(notNullValue()));
+    onView(withId(R.id.get_started)).perform(click());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
+    // Verify that the home screen is open
     onView(childAtPosition(withId(R.id.toolbar), 0)).check(matches(withText("Wikipedia")));
 
-
+    // Open the Help screen
     openActionBarOverflowOrOptionsMenu(context);
     onView(withText("Help")).perform(click());
-
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
-    // Verify that the help Activity is opened
-    onView(withText("Help")).check(matches(notNullValue())); //TODO: verify that this is on the top toolbar
+    // Verify that the Help Activity is opened
+    onView(withText("Help")).check(matches(notNullValue()));
 
     // Verify that the back button is displayed
     onView(withContentDescription("Navigate up")).check(matches(notNullValue()));
-
-
     // Verify that going back from the help screen we go to the previous screen
     onView(withContentDescription("Navigate up")).perform(click());
 
@@ -106,69 +95,51 @@ public class HelpActivityTest {
     // Verify that the home activity is opened
     onView(childAtPosition(withId(R.id.toolbar), 0)).check(matches(withText("Wikipedia")));
 
-    ViewInteraction recyclerView = onView(
-        allOf(withId(R.id.recycler_view),
-            childAtPosition(
-                withId(R.id.get_content_card),
-                1)));
-    recyclerView.perform(actionOnItemAtPosition(1, click()));
+    onView(allOf(withId(R.id.recycler_view), childAtPosition(withId(R.id.get_content_card), 1))).perform(actionOnItemAtPosition(1, click()));
+
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-
 
     openActionBarOverflowOrOptionsMenu(context);
     onView(withText("Help")).perform(click());
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-
 
     // Verify that the help Activity is opened
-    //TODO: fix onView(withId(R.id.title)).check(matches(withText("Help")));
+    onView(withText("Help")).check(matches(notNullValue()));
 
-    // Verify that the back button is displayed
-    onView(withContentDescription("Navigate up")).check(matches(notNullValue()));
-
-
-    // Verify that going back from the help screen we go to the previous screen
+    // Verify that going back from the help screen we go back to the Zim file
     onView(withContentDescription("Navigate up")).perform(click());
-
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    onView(childAtPosition(withId(R.id.toolbar), 0)).check(matches(withText("Wikipedia")));
 
+    // Open the Help screen again
     openActionBarOverflowOrOptionsMenu(context);
     onView(withText("Help")).perform(click());
-
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
-    String test; // To store the temporary value of the string while processing
-    // verify that the content on the page is displayed properly
+    String test; // To store the temporary value of some strings while processing
 
-    //"Where is the content?"
+    // Test the layout of the screen
     onView(withText(context.getString(R.string.help_5))).check(matches(notNullValue()));
     onView(withText(context.getString(R.string.help_5))).perform(click());
     test = context.getString(R.string.help_6) + "\n" + context.getString(R.string.help_7) + "\n" + context.getString(R.string.help_8) + "\n" + context.getString(R.string.help_9) + "\n" + context.getString(R.string.help_10) + "\n" + context.getString(R.string.help_11) + "\n";
     onView(withText(test)).check(matches(notNullValue()));
 
-    //How to use large ZIM files?"
     onView(withText(context.getString(R.string.help_12))).check(matches(notNullValue()));
     onView(withText(context.getString(R.string.help_12))).perform(click());
     test = context.getString(R.string.help_13) + "\n" + context.getString(R.string.help_14) + "\n" + context.getString(R.string.help_15) + "\n" + context.getString(R.string.help_16) + "\n" + context.getString(R.string.help_17) + "\n" + context.getString(R.string.help_18) + "\n" + context.getString(R.string.help_19) + "\n";
     onView(withText(test)).check(matches(notNullValue()));
 
-    //"What does Kiwix do?"
     onView(withText(context.getString(R.string.help_2))).check(matches(notNullValue()));
     onView(withText(context.getString(R.string.help_2))).perform(click());
     test = context.getString(R.string.help_3) + "\n" + context.getString(R.string.help_4) + "\n";
     onView(withText(test)).check(matches(notNullValue()));
 
-
-    // send feedback
+    // Test the feedback intent
     onView(withText(context.getString(R.string.send_feedback))).check(matches(notNullValue()));
     onView(withText(context.getString(R.string.send_feedback))).perform(click());
-
-
-
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    intended(hasAction(Intent.ACTION_SENDTO));
+    // TODO: Find a way to test the ACTION_SENDTO intent
   }
 
   @After
