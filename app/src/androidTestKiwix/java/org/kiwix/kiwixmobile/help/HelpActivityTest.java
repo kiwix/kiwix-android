@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.help;
 
 import android.Manifest;
+import android.content.Context;
 import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.Intents;
@@ -69,20 +70,18 @@ import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 public class HelpActivityTest {
 
   @Rule
-  public ActivityTestRule<SplashActivity> mActivityTestRule =
-      new ActivityTestRule<>(SplashActivity.class);
+  public BaristaRule<IntroActivity> activityTestRule = BaristaRule.create(IntroActivity.class);
+  @Rule
+  public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+  @Rule
+  public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-
-    @Rule
-    public BaristaRule<IntroActivity> activityTestRule = BaristaRule.create(IntroActivity.class);
-    @Rule
-    public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
-    @Rule
-    public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+  private Context context;
 
   @Before
   public void setUp() {
     Intents.init();
+    context = getInstrumentation().getTargetContext();
     activityTestRule.launchActivity();
   }
 
@@ -100,7 +99,7 @@ public class HelpActivityTest {
 
     //onView(withText("Kiwix")).check(matches(notNullValue())); //TODO: verify that this is on the top toolbar
 
-    openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+    openActionBarOverflowOrOptionsMenu(context);
     onView(withText("Help")).perform(click());
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
@@ -167,7 +166,7 @@ public class HelpActivityTest {
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
-
+*/
     ViewInteraction recyclerView = onView(
         allOf(withId(R.id.recycler_view),
             childAtPosition(
@@ -178,77 +177,37 @@ public class HelpActivityTest {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
 
-    openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+    openActionBarOverflowOrOptionsMenu(context);
+    onView(withText("Help")).perform(click());
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
 
-    ViewInteraction appCompatTextView3 = onView(
-        allOf(withId(R.id.title), withText("Help"),
-            childAtPosition(
-                childAtPosition(
-                    withClassName(is("android.support.v7.view.menu.ListMenuItemView")),
-                    0),
-                0),
-            isDisplayed()));
-    appCompatTextView3.perform(click());
+    // Verify that the help Activity is opened
+    onView(withText("Help")).check(matches(notNullValue())); //TODO: verify that this is on the top toolbar
+
+    // Verify that the back button is displayed
+    onView(withContentDescription("Navigate up")).check(matches(notNullValue()));
+
+
+    // Verify that going back from the help screen we go to the previous screen
+    onView(withContentDescription("Navigate up")).perform(click());
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
-
-    ViewInteraction textView3 = onView(
-        allOf(withText("Help"),
-            childAtPosition(
-                allOf(withId(R.id.activity_help_toolbar),
-                    childAtPosition(
-                        withId(R.id.activity_help_appbar),
-                        0)),
-                1),
-            isDisplayed()));
-    textView3.check(matches(withText("Help")));
-
-    ViewInteraction textView4 = onView(
-        allOf(withId(R.id.activity_help_feedback_text_view), withText("Send feedback"),
-            childAtPosition(
-                childAtPosition(
-                    withId(android.R.id.content),
-                    0),
-                2),
-            isDisplayed()));
-    textView4.check(matches(withText("Send feedback")));
-
-    ViewInteraction textView5 = onView(
-        allOf(withId(R.id.item_help_title), withText("What does Kiwix do?"),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.activity_help_recycler_view),
-                    0),
-                0),
-            isDisplayed()));
-    textView5.check(matches(withText("What does Kiwix do?")));
-
-    ViewInteraction textView6 = onView(
-        allOf(withId(R.id.item_help_title), withText("How to use large ZIM files?"),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.activity_help_recycler_view),
-                    1),
-                0),
-            isDisplayed()));
-    textView6.check(matches(withText("How to use large ZIM files?")));
-
-    ViewInteraction textView7 = onView(
-        allOf(withId(R.id.item_help_title), withText("Where is the content?"),
-            childAtPosition(
-                childAtPosition(
-                    withId(R.id.activity_help_recycler_view),
-                    2),
-                0),
-            isDisplayed()));
-    textView7.check(matches(withText("Where is the content?")));
+    openActionBarOverflowOrOptionsMenu(context);
+    onView(withText("Help")).perform(click());
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
+    // verify that all the headings are present:
+    onView(withText("Send feedback")).check(matches(notNullValue()));
+    onView(withText("What does Kiwix do?")).check(matches(notNullValue()));
+    onView(withText("How to use large ZIM files?")).check(matches(notNullValue()));
+    onView(withText("Where is the content?")).check(matches(notNullValue()));
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
+    /*
 
     ViewInteraction appCompatImageView = onView(
         allOf(withId(R.id.item_help_toggle_expand), withContentDescription("Expand"),
@@ -410,7 +369,8 @@ public class HelpActivityTest {
             isDisplayed()));
     textView14.check(matches(withText("Wikipedia")));
 
-    */
+*/
+
   }
 
   @After
