@@ -35,7 +35,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -48,6 +47,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
@@ -191,7 +191,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   ImageView bottomToolbarArrowForward;
   @Inject
   MainContract.Presenter presenter;
-  private ImageView addTab;
+  @BindView(R.id.tab_switcher_recycler_view)
+  RecyclerView tabRecyclerView;
+  @BindView(R.id.activity_main_tab_switcher)
+  View tabSwitcherRoot;
   private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
     @Override
     public void onTick(long millisUntilFinished) {
@@ -227,7 +230,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private boolean isFirstRun;
   private BooksAdapter booksAdapter;
   private AppCompatButton downloadBookButton;
-  private View tabSwitcherRoot;
+  private ActionBar actionBar;
   private TextView tabSwitcherIcon;
   private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
     @Override
@@ -316,6 +319,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     handleLocaleCheck();
     setContentView(R.layout.activity_main);
     setSupportActionBar(toolbar);
+    actionBar = getSupportActionBar();
     RecyclerView tableDrawerRight = tableDrawerRightContainer.getHeaderView(0).findViewById(R.id.right_drawer_list);
     checkForRateDialog();
 
@@ -326,6 +330,13 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     documentParserJs = fileReader.readFile("js/documentParser.js", this);
     documentSections = new ArrayList<>();
     tabsAdapter = new TabsAdapter(this, webViewList);
+    tabsAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+      @Override
+      public void onChanged() {
+        updateTabSwitcherIcon();
+      }
+    });
+
     tableDrawerRight.setLayoutManager(new LinearLayoutManager(this));
 
     TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter();
@@ -421,22 +432,33 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     booksAdapter = new BooksAdapter(books, this);
 
     searchFiles();
-
-    tabSwitcherRoot = getLayoutInflater().inflate(R.layout.tab_switcher, drawerLayout, false);
-    RecyclerView tabRecyclerView = tabSwitcherRoot.findViewById(R.id.tab_switcher_recycler_view);
-    addTab = tabSwitcherRoot.findViewById(R.id.tab_switcher_add_tab);
-    addTab.setOnClickListener(v -> {
-      hideTabSwitcher();
-      newTab(HOME_URL);
-    });
     tabRecyclerView.setAdapter(tabsAdapter);
     new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
   }
 
+  private void showTabSwitcher() {
+    actionBar.setDisplayHomeAsUpEnabled(true);
+    actionBar.setHomeAsUpIndicator(ContextCompat.getDrawable(this, R.drawable.ic_round_add_white_36dp));
+    actionBar.setDisplayShowTitleEnabled(false);
+
+    drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    bottomToolbar.setVisibility(View.GONE);
+    contentFrame.setVisibility(View.GONE);
+    progressBar.setVisibility(View.GONE);
+    backToTopButton.hide();
+    tabSwitcherRoot.setVisibility(View.VISIBLE);
+    supportInvalidateOptionsMenu();
+  }
+
   private void hideTabSwitcher() {
-    drawerLayout.removeAllViews();
-    drawerLayout.addView(root);
-    drawerLayout.addView(tableDrawerRightContainer);
+    actionBar.setDisplayHomeAsUpEnabled(false);
+    actionBar.setDisplayShowTitleEnabled(true);
+
+    drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    tabSwitcherRoot.setVisibility(View.GONE);
+    progressBar.setVisibility(View.VISIBLE);
+    contentFrame.setVisibility(View.VISIBLE);
+    supportInvalidateOptionsMenu();
   }
 
   @OnClick(R.id.bottom_toolbar_arrow_back)
@@ -464,11 +486,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     } else {
       bottomToolbarArrowBack.setAlpha(0.6f);
     }
-  }
-
-  private void showTabSwitcher() {
-    drawerLayout.removeAllViews();
-    drawerLayout.addView(tabSwitcherRoot);
   }
 
   @OnClick(R.id.bottom_toolbar_toc)
@@ -553,12 +570,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     if (zimFileTitle == null) {
       zimFileTitle = getString(R.string.app_name);
     }
-    if (getSupportActionBar() != null) {
-      if (zimFileTitle.trim().isEmpty() || HOME_URL.equals(getCurrentWebView().getUrl())) {
-        getSupportActionBar().setTitle(createMenuText(getString(R.string.app_name)));
-      } else {
-        getSupportActionBar().setTitle(createMenuText(zimFileTitle));
-      }
+    if (zimFileTitle.trim().isEmpty() || HOME_URL.equals(getCurrentWebView().getUrl())) {
+      actionBar.setTitle(createMenuText(getString(R.string.app_name)));
+    } else {
+      actionBar.setTitle(createMenuText(zimFileTitle));
     }
   }
 
@@ -638,8 +653,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     super.onDestroy();
     tabCallback = null;
     downloadBookButton = null;
-    addTab.setOnClickListener(null);
-    addTab = null;
     hideBackToTopTimer.cancel();
     hideBackToTopTimer = null;
     fileSearch = null;
@@ -699,8 +712,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           webViewList.add(index, tempForUndo);
           tabsAdapter.notifyItemInserted(index);
           setUpWebView();
+          updateTabSwitcherIcon();
         })
         .show();
+    updateTabSwitcherIcon();
   }
 
   private void selectTab(int position) {
@@ -715,13 +730,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     contentFrame.addView(webView);
     tabsAdapter.setSelected(currentWebViewIndex);
     updateBottomToolbarVisibility();
-
-    if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-      new Handler().postDelayed(() -> drawerLayout.closeDrawers(), 150);
-    }
     loadPrefs();
     refreshBookmarkSymbol();
     updateTableOfContents();
+    updateTitle();
 
     if (!isHideToolbar && webView instanceof ToolbarScrollingKiwixWebView) {
       ((ToolbarScrollingKiwixWebView) webView).ensureToolbarDisplayed();
@@ -742,9 +754,15 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     KiwixWebView webView = getCurrentWebView();
     switch (item.getItemId()) {
+      case R.id.menu_new_tab:
+      case android.R.id.home:
+        if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
+          hideTabSwitcher();
+        }
+        newTab(HOME_URL);
+        return true;
 
       case R.id.menu_home:
-      case android.R.id.home:
         openMainPage();
         break;
 
@@ -838,12 +856,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   @OnClick(R.id.activity_main_fullscreen_button)
   void closeFullScreen() {
     toolbarContainer.setVisibility(View.VISIBLE);
-    if (sharedPreferenceUtil.getPrefBottomToolbar()) {
-      bottomToolbar.setVisibility(View.VISIBLE);
-      if (getCurrentWebView() instanceof ToolbarStaticKiwixWebView) {
-        contentFrame.setPadding(0, 0, 0, (int) getResources().getDimension(R.dimen.bottom_toolbar_height));
-      }
-    }
+    updateBottomToolbarVisibility();
     exitFullscreenButton.setVisibility(View.GONE);
 
     int fullScreenFlag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
@@ -862,9 +875,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   public void showHomePage() {
     getCurrentWebView().removeAllViews();
     getCurrentWebView().loadUrl(HOME_URL);
-    if (getSupportActionBar() != null) {
-      getSupportActionBar().setTitle(createMenuText(getString(R.string.app_name)));
-    }
   }
 
   @Override
@@ -1188,7 +1198,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void updateBottomToolbarVisibility() {
-    if (sharedPreferenceUtil.getPrefBottomToolbar() && !HOME_URL.equals(getCurrentWebView().getUrl())) {
+    if (sharedPreferenceUtil.getPrefBottomToolbar() && !HOME_URL.equals(getCurrentWebView().getUrl())
+        && tabSwitcherRoot.getVisibility() != View.VISIBLE) {
       bottomToolbar.setVisibility(View.VISIBLE);
       if (getCurrentWebView() instanceof ToolbarStaticKiwixWebView && sharedPreferenceUtil.getPrefBottomToolbar()) {
         contentFrame.setPadding(0, 0, 0, (int) getResources().getDimension(R.dimen.bottom_toolbar_height));
@@ -1315,7 +1326,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+    hideTabSwitcher();
     Log.i(TAG_KIWIX, "Intent data: " + data);
 
     switch (requestCode) {
@@ -1415,15 +1426,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     if (isFullscreenOpened) {
       openFullScreen();
     }
-    return true;
-  }
 
-  @Override
-  public boolean onMenuOpened(int featureId, Menu menu) {
-    if (drawerLayout.isDrawerOpen(tableDrawerRightContainer)) {
-      drawerLayout.closeDrawer(tableDrawerRightContainer);
-    }
-    return super.onMenuOpened(featureId, menu);
+    View tabSwitcher = menu.findItem(R.id.menu_tab_switcher).getActionView();
+    tabSwitcherIcon = tabSwitcher.findViewById(R.id.ic_tab_switcher_text);
+    updateTabSwitcherIcon();
+    tabSwitcher.setOnClickListener(v -> showTabSwitcher());
+    return true;
   }
 
   // This method refreshes the menu for the bookmark system.
@@ -1440,24 +1448,40 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     } else {
       menu.findItem(R.id.menu_read_aloud).setVisible(true);
     }
-    View tabSwitcher = menu.findItem(R.id.menu_tab_switcher).getActionView();
-    tabSwitcherIcon = tabSwitcher.findViewById(R.id.ic_tab_switcher_text);
-    updateTabSwitcherIcon();
-    tabSwitcher.setOnClickListener(v -> showTabSwitcher());
-    tabsAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-      @Override
-      public void onChanged() {
-        updateTabSwitcherIcon();
+
+    if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
+      menu.findItem(R.id.menu_search).setVisible(false);
+      menu.findItem(R.id.menu_fullscreen).setVisible(false);
+      menu.findItem(R.id.menu_home).setVisible(false);
+      menu.findItem(R.id.menu_random_article).setVisible(false);
+      menu.findItem(R.id.menu_searchintext).setVisible(false);
+      menu.findItem(R.id.menu_read_aloud).setVisible(false);
+    } else {
+      menu.findItem(R.id.menu_search).setVisible(true);
+      menu.findItem(R.id.menu_fullscreen).setVisible(true);
+      if (getCurrentWebView().getUrl() == null ||
+          getCurrentWebView().getUrl().equals(HOME_URL)) {
+        menu.findItem(R.id.menu_read_aloud).setVisible(false);
+        menu.findItem(R.id.menu_home).setVisible(false);
+        menu.findItem(R.id.menu_random_article).setVisible(false);
+        menu.findItem(R.id.menu_searchintext).setVisible(false);
+      } else {
+        menu.findItem(R.id.menu_read_aloud).setVisible(true);
+        menu.findItem(R.id.menu_home).setVisible(true);
+        menu.findItem(R.id.menu_random_article).setVisible(true);
+        menu.findItem(R.id.menu_searchintext).setVisible(true);
       }
-    });
+    }
     return true;
   }
 
   private void updateTabSwitcherIcon() {
-    if (webViewList.size() < 100) {
-      tabSwitcherIcon.setText(String.valueOf(webViewList.size()));
-    } else {
-      tabSwitcherIcon.setText(getString(R.string.smiling_face));
+    if (tabSwitcherIcon != null) {
+      if (webViewList.size() < 100) {
+        tabSwitcherIcon.setText(String.valueOf(webViewList.size()));
+      } else {
+        tabSwitcherIcon.setText(getString(R.string.smiling_face));
+      }
     }
   }
 

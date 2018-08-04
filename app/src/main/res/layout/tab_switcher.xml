@@ -12,15 +12,4 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
-
-  <ImageView
-    android:id="@+id/tab_switcher_add_tab"
-    android:layout_width="32dp"
-    android:layout_height="32dp"
-    android:layout_margin="@dimen/activity_horizontal_margin"
-    android:contentDescription="@string/new_tab"
-    android:tint="@color/white"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:srcCompat="@drawable/ic_add_blue_24dp" />
 </android.support.constraint.ConstraintLayout>

@@ -83,6 +83,7 @@
       android:text="@string/tts_pause"
       android:textColor="@android:color/black"
       android:textStyle="bold"
+      android:visibility="gone"
       app:layout_constraintBottom_toTopOf="@id/bottom_toolbar"
       app:layout_constraintEnd_toStartOf="@id/activity_main_button_stop_tts"
       app:layout_constraintHorizontal_chainStyle="packed"
@@ -97,6 +98,7 @@
       android:text="@string/tts_stop"
       android:textColor="@android:color/black"
       android:textStyle="bold"
+      android:visibility="gone"
       app:layout_constraintBottom_toTopOf="@id/bottom_toolbar"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toEndOf="@id/activity_main_button_pause_tts" />
@@ -110,6 +112,11 @@
       tools:visibility="visible" />
 
     <include layout="@layout/bottom_toolbar" />
+
+    <include
+      android:id="@+id/activity_main_tab_switcher"
+      layout="@layout/tab_switcher"
+      android:visibility="gone" />
   </android.support.constraint.ConstraintLayout>
 
   <android.support.design.widget.NavigationView
