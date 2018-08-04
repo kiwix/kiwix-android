@@ -751,8 +751,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-
-    KiwixWebView webView = getCurrentWebView();
     switch (item.getItemId()) {
       case R.id.menu_new_tab:
       case android.R.id.home:
@@ -768,7 +766,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
       case R.id.menu_searchintext:
         compatCallback.setActive();
-        compatCallback.setWebView(webView);
+        compatCallback.setWebView(getCurrentWebView());
         startSupportActionMode(compatCallback);
         compatCallback.showSoftInput();
         break;
@@ -1140,7 +1138,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       }
     }
 
-    if (!webViewList.isEmpty() && webViewList.get(currentWebViewIndex).getUrl() != null &&
+    if (!webViewList.isEmpty() && currentWebViewIndex < webViewList.size() &&
+        webViewList.get(currentWebViewIndex).getUrl() != null &&
         webViewList.get(currentWebViewIndex).getUrl().equals(HOME_URL) &&
         webViewList.get(currentWebViewIndex).findViewById(R.id.get_content_card) != null) {
       webViewList.get(currentWebViewIndex).findViewById(R.id.get_content_card).setEnabled(true);
