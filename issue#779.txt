@@ -1,0 +1,9 @@
+Add ability to share ZIM files from within the app #779
+[https://github.com/kiwix/kiwix-android/issues/779]
+
+- Feature Description
+	Long clicking a downloaded file should give the option to either delete or share via a top menu as happens in bookmarks.
+
+- Share via the standard android sharing interface (ShareActionProvider)
+
+- "Sharing a link is not really possible as it is not part of the ZIM spec. I think only sharing the file 	would be fine." -> So only apps which can share the actual ZIM file should show up in the share menu.
