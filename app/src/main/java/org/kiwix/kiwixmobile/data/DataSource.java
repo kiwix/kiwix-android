@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.data;
 
+import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.models.Language;
@@ -16,7 +17,11 @@ import io.reactivex.Single;
 public interface DataSource {
   Single<List<LibraryNetworkEntity.Book>> getLanguageCategorizedBooks();
 
-  void saveBooks(List<LibraryNetworkEntity.Book> book);
+  Completable saveBook(LibraryNetworkEntity.Book book);
+
+  Completable saveBooks(List<LibraryNetworkEntity.Book> book);
+
+  Completable deleteBook(LibraryNetworkEntity.Book book);
 
   Completable saveLanguages(List<Language> languages);
 
@@ -27,4 +32,14 @@ public interface DataSource {
   Completable deleteHistory(List<History> historyList);
 
   Completable clearHistory();
+
+  Single<List<Bookmark>> getBookmarks(boolean showFromCurrentBook);
+
+  Single<List<String>> getCurrentZimBookmarksUrl();
+
+  Completable saveBookmark(Bookmark bookmark);
+
+  Completable deleteBookmarks(List<Bookmark> bookmarks);
+
+  Completable deleteBookmark(Bookmark bookmark);
 }

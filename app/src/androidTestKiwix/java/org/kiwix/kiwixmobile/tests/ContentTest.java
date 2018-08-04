@@ -17,9 +17,11 @@
  */
 package org.kiwix.kiwixmobile.tests;
 
+import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
+
+import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,7 +32,7 @@ import org.kiwix.kiwixmobile.testutils.TestUtils;
 
 import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
-import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -41,9 +43,7 @@ public class ContentTest {
 
   @Test
   public void contentTest() {
-    enterHelp();
-
-    clickOn(R.string.menu_zim_manager);
+    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_zim_manager));
 
     TestUtils.allowPermissionsIfNeeded();
 

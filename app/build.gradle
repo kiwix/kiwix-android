@@ -10,7 +10,6 @@ buildscript {
   dependencies {
     classpath "com.android.tools.build:gradle:$androidGradlePluginVersion"
     classpath "com.testdroid:gradle:$testdroidGradlePluginVersion"
-    classpath 'org.apache.httpcomponents:httpclient-android:4.3.3'
   }
 }
 
@@ -60,7 +59,7 @@ dependencies {
 
   androidTestImplementation "com.android.support.test.espresso:espresso-web:$espressoVersion"
   androidTestImplementation "com.android.support.test.espresso:espresso-intents:$espressoVersion"
-  androidTestImplementation "com.android.support.test.espresso:espresso-idling-resource:$espressoVersion"
+  implementation "com.android.support.test.espresso:espresso-idling-resource:$espressoVersion"
   androidTestImplementation("com.android.support.test.espresso:espresso-contrib:$espressoVersion") {
     exclude group: 'com.android.support', module: 'support-v4'
     exclude group: 'com.android.support', module: 'appcompat-v7'
@@ -68,7 +67,7 @@ dependencies {
     exclude group: 'com.android.support', module: 'recyclerview-v7'
   }
 
-  androidTestImplementation('com.schibsted.spain:barista:2.4.0') {
+  androidTestImplementation("com.schibsted.spain:barista:$baristaVersion") {
     exclude group: 'com.android.support'
   }
 
@@ -104,7 +103,7 @@ dependencies {
   implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
   implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
   implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
-  implementation('com.squareup.retrofit2:converter-simplexml:2.1.0') {
+  implementation("com.squareup.retrofit2:converter-simplexml:$retrofitVersion") {
     exclude group: 'xpp3', module: 'xpp3'
     exclude group: 'stax', module: 'stax-api'
     exclude group: 'stax', module: 'stax'
@@ -124,13 +123,13 @@ dependencies {
   androidTestImplementation "junit:junit:$jUnitVersion"
 
   // Mockito
-  testImplementation "org.mockito:mockito-core:2.8.9"
-  androidTestImplementation "org.mockito:mockito-android:2.7.22"
+  testImplementation "org.mockito:mockito-core:$mockitoVersion"
+  androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
 
   // PowerMockito
-  testImplementation 'org.powermock:powermock:1.6.5'
-  testImplementation 'org.powermock:powermock-module-junit4:1.7.3'
-  testImplementation 'org.powermock:powermock-api-mockito2:1.7.3'
+  testImplementation "org.powermock:powermock:$powerMockVersion"
+  testImplementation "org.powermock:powermock-module-junit4:$powerMockJUnitVersion"
+  testImplementation "org.powermock:powermock-api-mockito2:$powerMockJUnitVersion"
 
   // Leak canary
   implementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'

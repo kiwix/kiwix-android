@@ -23,13 +23,13 @@ import com.yahoo.squidb.annotations.TableModelSpec;
 /**
  * Squidb spec for saved bookmarks.
  */
-@TableModelSpec(className = "Bookmarks", tableName = "Bookmarks")
+@TableModelSpec(className = "Bookmark", tableName = "Bookmarks")
 public class BookmarksSpec {
-
   @ColumnSpec(constraints = "NOT NULL")
   public String ZimId;
   public String ZimName;
+  public String zimFilePath;
   public String bookmarkUrl;
   public String bookmarkTitle;
-
+  public String favicon;
 }

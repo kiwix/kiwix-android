@@ -24,9 +24,12 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.yahoo.squidb.data.SquidCursor;
+import com.yahoo.squidb.sql.Query;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
+import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -38,36 +41,46 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertArrayEquals;
 
-
 @RunWith(AndroidJUnit4.class)
 @SmallTest
 public class KiwixDatabaseTest {
 
-  private Context mContext;
+  private final Context context;
 
-  public KiwixDatabaseTest (){
-    mContext = InstrumentationRegistry.getTargetContext();
+  public KiwixDatabaseTest() {
+    context = InstrumentationRegistry.getTargetContext();
   }
 
   @Test
   public void testMigrateDatabase() throws IOException {
-    KiwixDatabase kiwixDatabase = new KiwixDatabase(mContext);
+    KiwixDatabase kiwixDatabase = new KiwixDatabase(context);
     kiwixDatabase.recreate();
     String testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c";
-    String[] testBookmarks = new String[] {"Test1","Test2","Test3"};
-    String fileName = mContext.getFilesDir().getAbsolutePath() + File.separator + testId + ".txt";
+    String[] testBookmarks = new String[]{"Test1", "Test2", "Test3"};
+    String fileName = context.getFilesDir().getAbsolutePath() + File.separator + testId + ".txt";
     File f = new File(fileName);
-    f.createNewFile();
+    if (!f.createNewFile()) {
+      throw new IOException("Unable to create file for testing migration");
+    }
     Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "utf-8"));
-    for (String bookmark : testBookmarks){
+    for (String bookmark : testBookmarks) {
       writer.write(bookmark + "\n");
     }
     writer.close();
+    kiwixDatabase.migrateBookmarksVersion6();
 
-    kiwixDatabase.migrateBookmarks();
-    BookmarksDao bookmarksDao = new BookmarksDao(kiwixDatabase);
-    ArrayList<String> b = bookmarksDao.getBookmarkTitles(testId, "");
-    assertArrayEquals(testBookmarks,b.toArray());
+    ArrayList<String> bookmarkTitles = new ArrayList<>();
+    try (SquidCursor<Bookmark> bookmarkCursor = kiwixDatabase.query(Bookmark.class,
+        Query.selectDistinct(Bookmark.BOOKMARK_TITLE)
+            .where(Bookmark.ZIM_ID.eq(testId)
+                .or(Bookmark.ZIM_NAME.eq("")))
+            .orderBy(Bookmark.BOOKMARK_TITLE.asc()))) {
+      while (bookmarkCursor.moveToNext()) {
+        bookmarkTitles.add(bookmarkCursor.get(Bookmark.BOOKMARK_TITLE));
+      }
+    }
+    assertArrayEquals(testBookmarks, bookmarkTitles.toArray());
 
+    // TODO Add new migration test for version 16
   }
 }

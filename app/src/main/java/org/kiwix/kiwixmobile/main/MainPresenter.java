@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.data.DataSource;
+import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.di.PerActivity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
@@ -23,7 +24,8 @@ import io.reactivex.disposables.Disposable;
 @PerActivity
 class MainPresenter extends BasePresenter<MainContract.View> implements MainContract.Presenter {
 
-  private DataSource dataSource;
+  private static final String TAG = "MainPresenter";
+  private final DataSource dataSource;
 
   @Inject
   MainPresenter(DataSource dataSource) {
@@ -46,15 +48,30 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
 
           @Override
           public void onError(Throwable e) {
-            Log.d("MainPresenter", e.toString());
+            Log.e(TAG, "Unable to load books", e);
           }
         });
   }
 
   @Override
   public void saveBooks(List<LibraryNetworkEntity.Book> book) {
-    dataSource.saveBooks(book);
-    showHome();
+    dataSource.saveBooks(book)
+        .subscribe(new CompletableObserver() {
+          @Override
+          public void onSubscribe(Disposable d) {
+
+          }
+
+          @Override
+          public void onComplete() {
+            showHome();
+          }
+
+          @Override
+          public void onError(Throwable e) {
+            Log.e(TAG, "Unable to save books", e);
+          }
+        });
   }
 
   @Override
@@ -73,7 +90,55 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
 
           @Override
           public void onError(Throwable e) {
-            Log.e("MainPresenter", e.toString());
+            Log.e(TAG, "Unable to save history", e);
+          }
+        });
+  }
+
+  @Override
+  public void loadCurrentZimBookmarksUrl() {
+    compositeDisposable.add(dataSource.getCurrentZimBookmarksUrl()
+        .subscribe(view::refreshBookmarksUrl, e -> Log.e(TAG, "Unable to load current ZIM urls", e)));
+  }
+
+  @Override
+  public void saveBookmark(Bookmark bookmark) {
+    dataSource.saveBookmark(bookmark)
+        .subscribe(new CompletableObserver() {
+          @Override
+          public void onSubscribe(Disposable d) {
+
+          }
+
+          @Override
+          public void onComplete() {
+
+          }
+
+          @Override
+          public void onError(Throwable e) {
+            Log.e(TAG, "Unable to save bookmark", e);
+          }
+        });
+  }
+
+  @Override
+  public void deleteBookmark(Bookmark bookmark) {
+    dataSource.deleteBookmark(bookmark)
+        .subscribe(new CompletableObserver() {
+          @Override
+          public void onSubscribe(Disposable d) {
+
+          }
+
+          @Override
+          public void onComplete() {
+
+          }
+
+          @Override
+          public void onError(Throwable e) {
+            Log.e(TAG, "Unable to delete bookmark", e);
           }
         });
   }

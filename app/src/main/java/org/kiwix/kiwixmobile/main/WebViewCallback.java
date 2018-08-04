@@ -27,11 +27,7 @@ public interface WebViewCallback {
 
   void webViewFailedLoading(String failingUrl);
 
-  void showHelpPage();
-
   void showHomePage();
-
-  void sendContactEmail();
 
   void openExternalUrl(Intent intent);
 
