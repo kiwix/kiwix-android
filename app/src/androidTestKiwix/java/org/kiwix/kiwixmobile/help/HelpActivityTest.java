@@ -70,14 +70,14 @@ import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 @RunWith(AndroidJUnit4.class)
 public class HelpActivityTest {
 
+  private Context context;
+
   @Rule
   public BaristaRule<IntroActivity> activityTestRule = BaristaRule.create(IntroActivity.class);
   @Rule
   public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule
   public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-  private Context context;
 
   @Before
   public void setUp() {
@@ -121,53 +121,7 @@ public class HelpActivityTest {
     // TODO : fix this issue
     //onView(withText("Wikipedia")).check(matches(notNullValue())); //TODO: verify that this is on the top toolbar
 
-
-    /*
-    ViewInteraction textView2 = onView(
-        allOf(withText("Wikipedia"),
-            childAtPosition(
-                allOf(withId(R.id.toolbar),
-                    childAtPosition(
-                        withId(R.id.toolbar_layout),
-                        0)),
-                1),
-            isDisplayed()));
-    textView2.check(matches(withText("Wikipedia")));
-    */
-
-    /*
-    ViewInteraction webView = onView(
-        allOf(childAtPosition(
-            childAtPosition(
-                withId(R.id.content_frame),
-                0),
-            0),
-            isDisplayed()));
-    webView.check(matches(isDisplayed()));
-
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    */
-
-    /*
-    openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-
-    ViewInteraction appCompatTextView2 = onView(
-        allOf(withId(R.id.title), withText("Help"),
-            childAtPosition(
-                childAtPosition(
-                    withClassName(is("android.support.v7.view.menu.ListMenuItemView")),
-                    0),
-                0),
-            isDisplayed()));
-    appCompatTextView2.perform(click());
-
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     
-    pressBack();
-
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-
-*/
     ViewInteraction recyclerView = onView(
         allOf(withId(R.id.recycler_view),
             childAtPosition(
@@ -204,39 +158,38 @@ public class HelpActivityTest {
     String test; // To store the temporary value of the string while processing
     // verify that the content on the page is displayed properly
 
-
-
+    //"Where is the content?"
+    onView(withText(context.getString(R.string.help_5))).check(matches(notNullValue()));
     onView(withText(context.getString(R.string.help_5))).perform(click());
     test = context.getString(R.string.help_6) + "\n" + context.getString(R.string.help_7) + "\n" + context.getString(R.string.help_8) + "\n" + context.getString(R.string.help_9) + "\n" + context.getString(R.string.help_10) + "\n" + context.getString(R.string.help_11) + "\n";
+    onView(withText(test)).check(matches(notNullValue()));
+
+    //How to use large ZIM files?"
+    onView(withText(context.getString(R.string.help_12))).check(matches(notNullValue()));
+    onView(withText(context.getString(R.string.help_12))).perform(click());
+    test = context.getString(R.string.help_13) + "\n" + context.getString(R.string.help_14) + "\n" + context.getString(R.string.help_15) + "\n" + context.getString(R.string.help_16) + "\n" + context.getString(R.string.help_17) + "\n" + context.getString(R.string.help_18) + "\n" + context.getString(R.string.help_19) + "\n";
+    onView(withText(test)).check(matches(notNullValue()));
+
+    //"What does Kiwix do?"
+    onView(withText(context.getString(R.string.help_2))).check(matches(notNullValue()));
+    onView(withText(context.getString(R.string.help_2))).perform(click());
+    test = context.getString(R.string.help_3) + "\n" + context.getString(R.string.help_4) + "\n";
     onView(withText(test)).check(matches(notNullValue()));
 
 
     // send feedback
     onView(withText(context.getString(R.string.send_feedback))).check(matches(notNullValue()));
-    //"What does Kiwix do?"
-    onView(withText(context.getString(R.string.help_2))).check(matches(notNullValue()));
-    //How to use large ZIM files?"
-    onView(withText(context.getString(R.string.help_12))).check(matches(notNullValue()));
-    //"Where is the content?"
-    onView(withText(context.getString(R.string.help_5))).check(matches(notNullValue()));
+    onView(withText(context.getString(R.string.send_feedback))).perform(click());
+
+
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-
-    onView(withText(context.getString(R.string.help_2))).perform(click());
-    test = context.getString(R.string.help_3) + "\n" + context.getString(R.string.help_4) + "\n";
-    onView(withText(test)).check(matches(notNullValue()));
-
-    onView(withText(context.getString(R.string.help_12))).perform(click());
-    test = context.getString(R.string.help_13) + "\n" + context.getString(R.string.help_14) + "\n" + context.getString(R.string.help_15) + "\n" + context.getString(R.string.help_16) + "\n" + context.getString(R.string.help_17) + "\n" + context.getString(R.string.help_18) + "\n" + context.getString(R.string.help_19) + "\n";
-    onView(withText(test)).check(matches(notNullValue()));
-
 
 
 
 
     onView(withContentDescription("Navigate up")).perform(click());
 
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     //ViewInteraction textView14 = onView(
     //    allOf(withText("Wikipedia"),
