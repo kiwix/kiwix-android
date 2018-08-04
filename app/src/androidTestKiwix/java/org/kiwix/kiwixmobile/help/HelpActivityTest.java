@@ -201,10 +201,14 @@ public class HelpActivityTest {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     // verify that all the headings are present:
-    onView(withText("Send feedback")).check(matches(notNullValue()));
-    onView(withText("What does Kiwix do?")).check(matches(notNullValue()));
-    onView(withText("How to use large ZIM files?")).check(matches(notNullValue()));
-    onView(withText("Where is the content?")).check(matches(notNullValue()));
+    // send feedback
+    onView(withText(context.getString(R.string.send_feedback))).check(matches(notNullValue()));
+    //"What does Kiwix do?"
+    onView(withText(context.getString(R.string.help_2))).check(matches(notNullValue()));
+    //How to use large ZIM files?"
+    onView(withText(context.getString(R.string.help_12))).check(matches(notNullValue()));
+    //"Where is the content?"
+    onView(withText(context.getString(R.string.help_5))).check(matches(notNullValue()));
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     /*
