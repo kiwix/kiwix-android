@@ -455,6 +455,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     backToTopButton.hide();
     tabSwitcherRoot.setVisibility(View.VISIBLE);
     supportInvalidateOptionsMenu();
+    if (tabsAdapter.getSelected() < webViewList.size()) {
+      tabRecyclerView.getLayoutManager().scrollToPosition(tabsAdapter.getSelected());
+    }
   }
 
   private void hideTabSwitcher() {
@@ -1365,8 +1368,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         break;
       case REQUEST_PREFERENCES:
         if (resultCode == RESULT_RESTART) {
-          finish();
           startActivity(new Intent(MainActivity.this, MainActivity.class));
+          finish();
         }
         if (resultCode == RESULT_HISTORY_CLEARED) {
           webViewList.clear();

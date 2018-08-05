@@ -128,6 +128,10 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
     return webViews.size();
   }
 
+  int getSelected() {
+    return selectedPosition;
+  }
+
   public void setSelected(int position) {
     this.selectedPosition = position;
   }
