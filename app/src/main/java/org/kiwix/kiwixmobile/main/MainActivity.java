@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -236,6 +237,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
       return makeMovementFlags(0, ItemTouchHelper.UP | ItemTouchHelper.DOWN);
+    }
+
+    @Override
+    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+      super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+      viewHolder.itemView.setAlpha(1 - Math.abs(dY) / viewHolder.itemView.getMeasuredHeight());
     }
 
     @Override
@@ -1096,7 +1103,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       isBookmark = false;
     }
     popBookmarkSnackbar(isBookmark);
-    supportInvalidateOptionsMenu();
     presenter.loadCurrentZimBookmarksUrl();
   }
 
@@ -1439,7 +1445,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     super.onPrepareOptionsMenu(menu);
     toggleActionItemsConfig();
     this.menu = menu;
-    refreshBookmarkSymbol();
 
     if (getCurrentWebView().getUrl() == null ||
         getCurrentWebView().getUrl().equals(HOME_URL)) {
