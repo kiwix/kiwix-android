@@ -239,4 +239,5 @@
   <string name="new_tab">New tab</string>
   <string name="switch_tabs">Switch tabs</string>
   <string name="smiling_face">:D</string>
+  <string name="close_all_tabs">Close all tabs</string>
 </resources>

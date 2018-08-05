@@ -12,4 +12,16 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+
+  <android.support.design.widget.FloatingActionButton
+    android:id="@+id/tab_switcher_close_all_tabs"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="24dp"
+    android:contentDescription="@string/close_all_tabs"
+    app:backgroundTint="@android:color/black"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:srcCompat="@drawable/ic_clear_white_24dp" />
 </android.support.constraint.ConstraintLayout>

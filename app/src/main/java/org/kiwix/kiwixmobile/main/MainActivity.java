@@ -1079,6 +1079,13 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     return false;
   }
 
+  @OnClick(R.id.tab_switcher_close_all_tabs)
+  void closeAllTabs() {
+    webViewList.clear();
+    tabsAdapter.notifyDataSetChanged();
+    updateTabSwitcherIcon();
+  }
+
   @OnClick(R.id.bottom_toolbar_bookmark)
   public void toggleBookmark() {
     //Check maybe need refresh
