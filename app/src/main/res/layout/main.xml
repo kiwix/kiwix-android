@@ -48,19 +48,21 @@
             android:visibility="invisible" />
 
 
-          <Button
-            android:id="@+id/button_backtotop"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:alpha="0.6"
-            android:background="@color/back_to_top_background"
-            android:gravity="center"
-            android:text="@string/button_backtotop"
-            android:textColor="@color/back_to_top_text"
-            android:textStyle="bold"
-            android:visibility="invisible" />
+          <android.support.design.widget.FloatingActionButton
+              android:id="@+id/backtotop_fab"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="64dp"
+              android:layout_marginEnd="@dimen/dimen_16dp"
+              android:layout_marginRight="@dimen/dimen_16dp"
+              android:layout_alignParentEnd="true"
+              android:layout_alignParentRight="true"
+              android:layout_alignParentBottom="true"
+              android:src="@drawable/ic_keyboard_arrow_up_black"
+              android:scaleType="centerCrop"
+              app:fabSize="mini"
+              android:visibility="invisible"
+              app:backgroundTint="@color/white"/>
 
 
           <LinearLayout
