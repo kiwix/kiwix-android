@@ -75,7 +75,7 @@ public class HelpActivityTest {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     // Verify that the home screen is open
-    onView(childAtPosition(withId(R.id.toolbar), 0)).check(matches(notNullValue()));
+    onView(withId(R.id.toolbar)).check(matches(notNullValue()));
 
     // Open the Help screen
     openActionBarOverflowOrOptionsMenu(context);
@@ -93,7 +93,7 @@ public class HelpActivityTest {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     // Verify that the home activity is opened
-    onView(childAtPosition(withId(R.id.toolbar), 0)).check(matches(notNullValue()));
+    onView(withId(R.id.toolbar)).check(matches(notNullValue()));
 
     // Open a zim file
     onView(allOf(withId(R.id.recycler_view), childAtPosition(withId(R.id.get_content_card), 1))).perform(actionOnItemAtPosition(1, click()));
