@@ -38,6 +38,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsInstanceOf;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -53,6 +54,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.openLinkWithText;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
@@ -94,10 +96,10 @@ public class BottomBarTest {
     activityTestRule.launchActivity();
   }
 
+  @AllowFlaky(attempts = 1)
   @Test
   public void newtest() {
     // Launch the app, starting with the Splash Activity
-    activityTestRule.launchActivity();
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     onView(withId(R.id.get_started)).check(matches(notNullValue()));
@@ -107,7 +109,7 @@ public class BottomBarTest {
     // Open the Zim file from Assets
     onView(allOf(withId(R.id.recycler_view), childAtPosition(withId(R.id.get_content_card), 1))).perform(actionOnItemAtPosition(1, click()));
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-
+/*////////////////////////////
     // Set up the bottom bar
     openActionBarOverflowOrOptionsMenu(context);
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
@@ -142,7 +144,7 @@ public class BottomBarTest {
 
     onView(withId(R.id.bottom_toolbar_toc)).check(matches(notNullValue()));
     //onView(withId(R.id.bottom_toolbar_toc)).check(matches(withText(R.string.table_of_contents)));
-
+////////////////////////////*/
 
     //onWebView(allOf(isDisplayed())).forceJavascriptEnabled();
 
@@ -160,7 +162,7 @@ public class BottomBarTest {
                 0)),
         0),
         isDisplayed()))
-        .withElement(findElement(Locator.PARTIAL_LINK_TEXT, "Fool"))
+        .withElement(findElement(Locator.LINK_TEXT, "A Fool for You"))
         .perform(webClick());
 
 
@@ -511,6 +513,11 @@ public class BottomBarTest {
             isDisplayed()));
     appCompatImageButton3.perform(click());
     */
+  }
+
+  @After
+  public void endTest(){
+    Intents.release();
   }
 
   private static Matcher<View> childAtPosition(
