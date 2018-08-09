@@ -2,10 +2,11 @@ package org.kiwix.kiwixmobile.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import java.util.Locale;
 
-public class Language implements Parcelable {
+public class Language implements Parcelable, Comparable<Language> {
 
   public static final Creator<Language> CREATOR = new Creator<Language>() {
     @Override
@@ -61,5 +62,10 @@ public class Language implements Parcelable {
     dest.writeString(languageCode);
     dest.writeByte((byte) (active == null ? 0 : active ? 1 : 2));
     dest.writeInt(booksCount);
+  }
+
+  @Override
+  public int compareTo(@NonNull Language o) {
+    return language.compareTo(o.language);
   }
 }
