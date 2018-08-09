@@ -109,6 +109,7 @@ public class LanguageActivity extends BaseActivity implements LanguageContract.V
   public void notifyLanguagesFiltered(List<Language> languages) {
     this.languages.clear();
     this.languages.addAll(languages);
+    languageAdapter.categorizeLanguages();
     languageAdapter.notifyDataSetChanged();
   }
 }
