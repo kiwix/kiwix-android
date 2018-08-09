@@ -55,7 +55,7 @@ public class HelpActivityTest {
   private Context context;
 
   @Rule
-  public BaristaRule<IntroActivity> activityTestRule = BaristaRule.create(IntroActivity.class);
+  public BaristaRule<HelpActivity> activityTestRule = BaristaRule.create(HelpActivity.class);
   @Rule
   public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule
@@ -66,55 +66,11 @@ public class HelpActivityTest {
     Intents.init();
     context = getInstrumentation().getTargetContext();
     activityTestRule.launchActivity();
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
   }
 
   @Test
   public void testHelpActivity() {
-    onView(withId(R.id.get_started)).check(matches(notNullValue()));
-    onView(withId(R.id.get_started)).perform(click());
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-
-    // Verify that the home screen is open
-    //onView(withId(R.id.toolbar)).check(matches(notNullValue()));
-
-    // Open the Help screen
-    openActionBarOverflowOrOptionsMenu(context);
-    onView(withText("Help")).perform(click());
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-
-    // Verify that the Help Activity is opened
-    onView(withText("Help")).check(matches(notNullValue()));
-
-    // Verify that the back button is displayed
-    onView(withContentDescription("Navigate up")).check(matches(notNullValue()));
-    // Verify that going back from the help screen we go to the previous screen
-    onView(withContentDescription("Navigate up")).perform(click());
-
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-
-    // Verify that the home activity is opened
-    //onView(withId(R.id.toolbar)).check(matches(notNullValue()));
-
-    // Open a zim file
-    onView(allOf(withId(R.id.recycler_view), childAtPosition(withId(R.id.get_content_card), 1))).perform(actionOnItemAtPosition(1, click()));
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-
-    // Open the help activity again
-    openActionBarOverflowOrOptionsMenu(context);
-    onView(withText("Help")).perform(click());
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    onView(withText("Help")).check(matches(notNullValue()));
-
-    // Verify that going back from the help screen we go back to the Zim file
-    onView(withContentDescription("Navigate up")).perform(click());
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    onView(childAtPosition(withId(R.id.toolbar), 0)).check(matches(notNullValue()));
-
-    // Open the Help screen again
-    openActionBarOverflowOrOptionsMenu(context);
-    onView(withText("Help")).perform(click());
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-
     String test; // To store the temporary value of some strings while processing
 
     // Test the layout of the screen
