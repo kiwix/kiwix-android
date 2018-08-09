@@ -6,14 +6,18 @@
     android:icon="@drawable/action_search"
     android:title="@string/menu_search"
     android:visible="false"
+    app:showAsAction="ifRoom" />
+
+  <item
+    android:id="@+id/menu_tab_switcher"
+    android:title="@string/switch_tabs"
+    app:actionLayout="@layout/ic_tab_switcher"
     app:showAsAction="always" />
 
   <item
-    android:id="@+id/menu_bookmarks"
-    android:icon="@drawable/ic_bookmark_24dp"
-    android:title="@string/menu_bookmarks"
-    android:visible="false"
-    app:showAsAction="always" />
+    android:id="@+id/menu_new_tab"
+    android:title="@string/new_tab"
+    app:showAsAction="never" />
 
   <item
     android:id="@+id/menu_bookmarks_list"
@@ -30,10 +34,10 @@
     android:icon="@drawable/action_home"
     android:title="@string/menu_home"
     android:visible="false"
-    app:showAsAction="always" />
+    app:showAsAction="never" />
 
   <item
-    android:id="@+id/menu_randomarticle"
+    android:id="@+id/menu_random_article"
     android:icon="@drawable/action_randomarticle"
     android:title="@string/menu_randomarticle"
     android:visible="false"
