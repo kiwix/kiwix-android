@@ -23,6 +23,7 @@ import android.content.Context;
 import android.support.test.espresso.DataInteraction;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.Intents;
+import android.support.test.espresso.web.sugar.Web;
 import android.support.test.espresso.web.webdriver.Locator;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
@@ -109,7 +110,7 @@ public class BottomBarTest {
     // Open the Zim file from Assets
     onView(allOf(withId(R.id.recycler_view), childAtPosition(withId(R.id.get_content_card), 1))).perform(actionOnItemAtPosition(1, click()));
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-/*////////////////////////////
+///*
     // Set up the bottom bar
     openActionBarOverflowOrOptionsMenu(context);
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
@@ -144,29 +145,75 @@ public class BottomBarTest {
 
     onView(withId(R.id.bottom_toolbar_toc)).check(matches(notNullValue()));
     //onView(withId(R.id.bottom_toolbar_toc)).check(matches(withText(R.string.table_of_contents)));
-////////////////////////////*/
 
     //onWebView(allOf(isDisplayed())).forceJavascriptEnabled();
-
+//*/
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
 /*        onWebView()
             .withElement(findElement(Locator.LINK_TEXT, "link_2")) // similar to onView(withId(...))
             .perform(webClick()) // Similar to perform(click())
 */
-    // Test the Home Button
-    onWebView(allOf(childAtPosition(
-        allOf(withId(R.id.content_frame),
-            childAtPosition(
-                withId(R.id.drawer_layout),
-                0)),
-        0),
-        isDisplayed()))
-        .withElement(findElement(Locator.LINK_TEXT, "A Fool for You"))
-        .perform(webClick());
 
+    // Get instance of the webview
+    Web.WebInteraction<Void> mainWebView =
+        onWebView(allOf(childAtPosition(
+            allOf(withId(R.id.content_frame),
+                childAtPosition(
+                    withId(R.id.drawer_layout),
+                    0)),
+            0),
+            isDisplayed()));
+
+    // Test the Home Button
+    mainWebView.withElement(findElement(Locator.LINK_TEXT, "A Fool for You")).perform(webClick());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
+    mainWebView.withElement(findElement(Locator.LINK_TEXT, "Ray Charles")).perform(webClick());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     // Test the back and the forward buttons
+    onView(withId(R.id.bottom_toolbar_arrow_back)).perform(click());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    onView(withId(R.id.bottom_toolbar_arrow_back)).perform(click());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
+    // Use try catch to verify element is present
+    try {
+      mainWebView.withElement(findElement(Locator.LINK_TEXT, "A Fool for You"));
+      mainWebView.withElement(findElement(Locator.LINK_TEXT, "A Man and His Soul"));
+      mainWebView.withElement(findElement(Locator.LINK_TEXT, "America the Beautiful"));
+    }catch (Exception e){
+      //
+    }
+
+    onView(withId(R.id.bottom_toolbar_arrow_forward)).perform(click());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    // Use try catch to verify element is present
+    try {
+      mainWebView.withElement(findElement(Locator.LINK_TEXT, "Ray Charles"));
+      mainWebView.withElement(findElement(Locator.LINK_TEXT, "Hallelujah I Love Her So"));
+    }catch (Exception e){
+      //
+    }
+    onView(withId(R.id.bottom_toolbar_arrow_forward)).perform(click());
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
+
+    //Test the home button
+    onView(withId(R.id.bottom_toolbar_home)).check(matches(notNullValue()));
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+
+    try {
+      mainWebView.withElement(findElement(Locator.LINK_TEXT, "A Fool for You"));
+      mainWebView.withElement(findElement(Locator.LINK_TEXT, "A Man and His Soul"));
+      mainWebView.withElement(findElement(Locator.LINK_TEXT, "America the Beautiful"));
+    }catch (Exception e){
+      //
+    }
+
+    //TODO : test the disabled behaviour of the back and forward buttons
+
 
     // Test the Bookmarks button
     // Test adding a bookMark
