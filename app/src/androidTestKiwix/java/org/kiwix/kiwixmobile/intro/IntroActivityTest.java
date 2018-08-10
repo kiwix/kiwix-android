@@ -28,6 +28,8 @@ import android.test.suitebuilder.annotation.LargeTest;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import com.schibsted.spain.barista.rule.BaristaRule;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,10 +61,14 @@ public class IntroActivityTest {
   @Rule
   public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-  @Test
-  public void testIntroActivity(){
+  @Before
+  public void setUp() {
     Intents.init();
     activityTestRule.launchActivity();
+  }
+
+  @Test
+  public void testIntroActivity() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     ViewInteraction viewPager = onView(withId(R.id.view_pager));
 
@@ -87,6 +93,10 @@ public class IntroActivityTest {
 
     // Test the intent generated for MainActivity
     intended(hasComponent(MainActivity.class.getName()));
+  }
+
+  @After
+  public void endTest() {
     Intents.release();
   }
 }

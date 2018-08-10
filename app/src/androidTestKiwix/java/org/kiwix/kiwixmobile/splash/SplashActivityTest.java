@@ -20,11 +20,9 @@ package org.kiwix.kiwixmobile.splash;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.test.espresso.intent.Intents;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
@@ -61,12 +59,12 @@ public class SplashActivityTest {
 
   @Before
   public void setUp(){
+    Intents.init();
     context = getInstrumentation().getTargetContext();
   }
 
   @Test
   public void testFirstRun() {
-    Intents.init();
     activityTestRule.launchActivity();
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
@@ -76,12 +74,10 @@ public class SplashActivityTest {
     // Verify that the value of the "intro shown" boolean inside the SharedPreferences Database is not changed until the "Get started" button is pressed
     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
     assertEquals(true, preferences.getBoolean(PREF_SHOW_INTRO, true));
-    Intents.release();
   }
 
   @Test
   public void testNormalRun() {
-    Intents.init();
     SharedPreferences.Editor preferencesEditor = PreferenceManager.getDefaultSharedPreferences(context).edit();
     preferencesEditor.putBoolean(PREF_SHOW_INTRO, false).apply();
 
@@ -90,6 +86,10 @@ public class SplashActivityTest {
 
     // Verify that the SplashActivity is followed by MainActivity
     intended(hasComponent(MainActivity.class.getName()));
+  }
+
+  @After
+  public void endTest() {
     Intents.release();
   }
 }
