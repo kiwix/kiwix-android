@@ -13,8 +13,8 @@ about: Identify code liable to break and create tests to prevent software regres
 
 **Type of Test**
 <!-- Unit Test or UI Test -->
-[ ] Unit Test
-[ ] UI Test
+* [ ] Unit Test
+* [ ] UI Test
 
 **Particular area and files to be tested**
 <!--
