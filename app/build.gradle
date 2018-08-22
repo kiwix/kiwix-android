@@ -8,7 +8,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.1.0'
+    classpath 'com.android.tools.build:gradle:3.1.4'
     classpath 'com.testdroid:gradle:1.5.0'
     classpath 'org.apache.httpcomponents:httpclient-android:4.3.3'
   }
