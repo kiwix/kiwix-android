@@ -751,7 +751,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
   }
 
-  private KiwixWebView getCurrentWebView() {
+  KiwixWebView getCurrentWebView() {
     if (webViewList.size() == 0) return newTab();
     if (currentWebViewIndex < webViewList.size()) {
       return webViewList.get(currentWebViewIndex);
