@@ -1192,18 +1192,19 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           intent.setAction("");
           goToSearch(true);
           break;
-        case Intent.ACTION_VIEW: {
-          final String zimFile = ZimContentProvider.getZimFile();
-          saveTabStates();
-          Intent i = new Intent(MainActivity.this, SearchActivity.class);
-          i.putExtra(EXTRA_ZIM_FILE, zimFile);
-          if (intent.getData() != null) {
-            i.putExtra(EXTRA_SEARCH, intent.getData().getLastPathSegment());
+        case Intent.ACTION_VIEW:
+          if (intent.getType() == null || !intent.getType().equals("application/octet-stream")) {
+            final String zimFile = ZimContentProvider.getZimFile();
+            saveTabStates();
+            Intent i = new Intent(MainActivity.this, SearchActivity.class);
+            i.putExtra(EXTRA_ZIM_FILE, zimFile);
+            if (intent.getData() != null) {
+              i.putExtra(EXTRA_SEARCH, intent.getData().getLastPathSegment());
+            }
+            intent.setAction("");
+            startActivityForResult(i, REQUEST_FILE_SEARCH);
           }
-          intent.setAction("");
-          startActivityForResult(i, REQUEST_FILE_SEARCH);
           break;
-        }
         case NEW_TAB:
           newTab(HOME_URL);
           break;
