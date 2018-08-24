@@ -321,6 +321,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     presenter.attachView(this);
+    new WebView(this).destroy(); // Workaround for buggy webViews see #710
     wifiOnly = sharedPreferenceUtil.getPrefWifiOnly();
     nightMode = sharedPreferenceUtil.nightMode();
     handleLocaleCheck();
