@@ -644,23 +644,27 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           break;
       }
     });
+  }
 
-    pauseTTSButton.setOnClickListener(view -> {
-      if (tts.currentTTSTask == null) {
-        tts.stop();
-        return;
-      }
+  @OnClick(R.id.activity_main_button_pause_tts)
+  void pauseTts() {
+    if (tts.currentTTSTask == null) {
+      tts.stop();
+      return;
+    }
 
-      if (tts.currentTTSTask.paused) {
-        tts.pauseOrResume();
-        pauseTTSButton.setText(R.string.tts_pause);
-      } else {
-        tts.pauseOrResume();
-        pauseTTSButton.setText(R.string.tts_resume);
-      }
-    });
+    if (tts.currentTTSTask.paused) {
+      tts.pauseOrResume();
+      pauseTTSButton.setText(R.string.tts_pause);
+    } else {
+      tts.pauseOrResume();
+      pauseTTSButton.setText(R.string.tts_resume);
+    }
+  }
 
-    stopTTSButton.setOnClickListener((View view) -> tts.stop());
+  @OnClick(R.id.activity_main_button_stop_tts)
+  void stopTts() {
+    tts.stop();
   }
 
   // Reset the Locale and change the font of all TextViews and its subclasses, if necessary
