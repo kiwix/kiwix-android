@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -48,6 +49,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.menu.ActionMenuItemView;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -133,6 +135,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_NOTIFICATION_ID;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_ZIM_FILE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_ZIM_FILE_2;
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_BOTTOM_TOOLBAR;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_KIWIX_MOBILE;
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_FILE_SEARCH;
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_FILE_SELECT;
@@ -1228,9 +1231,28 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     }
   }
 
+  public static int dpToPx(int dp)
+  {
+    return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+  }
   @Override
   public void onResume() {
     super.onResume();
+      CardView cardView=(CardView)findViewById(R.id.feedback_card);
+     if (sharedPreferenceUtil.getPrefBottomToolbar()) {
+    if(cardView!=null) {
+      LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+      params.setMargins(0, 0, 0, dpToPx(56));
+      cardView.setLayoutParams(params);
+    }
+      }else{
+        if(cardView!=null) {
+          LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+          params.setMargins(0, 0, 0, 0);
+          cardView.setLayoutParams(params);
+        }
+      }
+
     invalidateOptionsMenu();
     if (wasHideToolbar != isHideToolbar) {
       wasHideToolbar = isHideToolbar;

@@ -303,7 +303,8 @@
         android:layout_gravity="center"
         android:paddingLeft="@dimen/help_cardview_horizontal_padding"
         android:paddingRight="@dimen/help_cardview_horizontal_padding"
-        card_view:cardCornerRadius="@dimen/help_cardview_card_corner_radius"
+          android:id="@+id/feedback_card"
+        card_view:cardCornerRadius="@dimen/dimen_small_padding"
         card_view:cardElevation="@dimen/help_cardview_card_elevation"
         card_view:cardUseCompatPadding="true">
 
