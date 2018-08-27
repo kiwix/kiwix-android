@@ -34,7 +34,7 @@ public class SplashActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
 
     if (!BuildConfig.DEBUG) {
-      Context appContext = this;
+      Context appContext = getApplicationContext();
       Thread.setDefaultUncaughtExceptionHandler((paramThread, paramThrowable) -> {
 
         final Intent intent = new Intent(appContext, ErrorActivity.class);

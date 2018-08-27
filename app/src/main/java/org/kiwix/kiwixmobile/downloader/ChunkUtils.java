@@ -26,7 +26,7 @@ public class ChunkUtils {
 
   public static final String ALPHABET = "abcdefghijklmnopqrstuvwxyz";
   public static final String ZIM_EXTENSION = ".zim";
-  public static final String PART = ".part";
+  public static final String PART = ".part.part";
   public static final long CHUNK_SIZE = 1024L * 1024L * 1024L * 2L;
 
   public static List<Chunk> getChunks(String url, long contentLength, int notificationID) {
@@ -63,7 +63,7 @@ public class ChunkUtils {
 
   private static String[] getZimChunkFileNames(String fileName, int count) {
     if (count == 1) {
-      return new String[] { fileName + PART};
+      return new String[]{fileName + PART};
     }
     int position = fileName.lastIndexOf(".");
     String baseName = position > 0 ? fileName.substring(0, position) : fileName;
