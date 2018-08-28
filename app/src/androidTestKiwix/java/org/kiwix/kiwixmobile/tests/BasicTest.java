@@ -76,7 +76,7 @@ public class BasicTest {
     openDrawerWithGravity(R.id.drawer_layout, Gravity.RIGHT);
     assertDrawerIsOpenWithGravity(R.id.drawer_layout, Gravity.RIGHT);
 
-    assertDisplayed(R.string.no_section_info);
+    assertDisplayed(R.string.menu_help);
 
     closeDrawerWithGravity(R.id.drawer_layout, Gravity.RIGHT);
     assertDrawerIsClosedWithGravity(R.id.drawer_layout, Gravity.RIGHT);*/

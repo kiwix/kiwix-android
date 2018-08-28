@@ -27,6 +27,7 @@ import android.provider.DocumentsContract;
 import android.util.Log;
 
 import org.kiwix.kiwixmobile.BuildConfig;
+import org.kiwix.kiwixmobile.downloader.ChunkUtils;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
 import java.io.File;
@@ -61,8 +62,8 @@ public class FileUtils {
   }
 
   public static synchronized void deleteZimFile(String path) {
-    if (path.substring(path.length() - 5).equals(".part")) {
-      path = path.substring(0, path.length() - 5);
+    if (path.substring(path.length() - ChunkUtils.PART.length()).equals(ChunkUtils.PART)) {
+      path = path.substring(0, path.length() - ChunkUtils.PART.length());
     }
     Log.i("kiwix", "Deleting file: " + path);
     File file = new File(path);
@@ -86,10 +87,16 @@ public class FileUtils {
   }
 
   private static synchronized boolean deleteZimFileParts(String path) {
-    File file = new File(path + ".part");
+    File file = new File(path + ChunkUtils.PART);
     if (file.exists()) {
       file.delete();
       return true;
+    } else {
+      File singlePart = new File(path + ".part");
+      if (singlePart.exists()) {
+        singlePart.delete();
+        return true;
+      }
     }
     return false;
   }
@@ -206,15 +213,16 @@ public class FileUtils {
       stream.read(buffer);
       stream.close();
       content = new String(buffer);
-    } catch (IOException ignored) { }
+    } catch (IOException ignored) {
+    }
 
     return readCsv(content);
   }
 
   public static List<File> getAllZimParts(Book book) {
     List<File> files = new ArrayList<>();
-    if(book.file.getPath().endsWith(".zim") || book.file.getPath().endsWith(".zim.part")) {
-      if(book.file.exists()) {
+    if (book.file.getPath().endsWith(".zim") || book.file.getPath().endsWith(".zim.part")) {
+      if (book.file.exists()) {
         files.add(book.file);
       } else {
         files.add(new File(book.file + ".part"));
@@ -222,12 +230,12 @@ public class FileUtils {
       return files;
     }
     String path = book.file.getPath();
-    for(char alphabetFirst = 'a'; alphabetFirst <= 'z'; alphabetFirst++) {
-      for(char alphabetSecond = 'a'; alphabetSecond <= 'z'; alphabetSecond++) {
+    for (char alphabetFirst = 'a'; alphabetFirst <= 'z'; alphabetFirst++) {
+      for (char alphabetSecond = 'a'; alphabetSecond <= 'z'; alphabetSecond++) {
         path = path.substring(0, path.length() - 2) + alphabetFirst + alphabetSecond;
-        if(new File(path).exists()) {
+        if (new File(path).exists()) {
           files.add(new File(path));
-        } else if(new File(path + ".part").exists()) {
+        } else if (new File(path + ".part").exists()) {
           files.add(new File(path + ".part"));
         } else {
           return files;
@@ -267,7 +275,7 @@ public class FileUtils {
     return false;
   }
 
-  public static String getFileName (String fileName) {
+  public static String getFileName(String fileName) {
     if (new File(fileName).exists()) {
       return fileName;
     } else if (new File(fileName + ".part").exists()) {
