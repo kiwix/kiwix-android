@@ -75,7 +75,6 @@ public class LanguageActivityTest {
     activityTestRule.launchActivity();
   }
 
-  @AllowFlaky(attempts = 1)
   @Test
   public void testLanguageActivity() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
@@ -122,9 +121,6 @@ public class LanguageActivityTest {
     onView(withContentDescription("Navigate up")).check(matches(notNullValue()));
     onView(withContentDescription("Save languages")).check(matches(notNullValue()));
     onView(withContentDescription("Search")).check(matches(notNullValue()));
-
-    // verify that the list of languages is present
-    //onView(withId(R.id.recycler_view)).check(withItemCount(greaterThan(0)));
 
     // languages used for testing
     String language1 = "kongo";
