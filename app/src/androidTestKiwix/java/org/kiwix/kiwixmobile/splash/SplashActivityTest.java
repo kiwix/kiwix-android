@@ -23,12 +23,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.test.espresso.intent.Intents;
+import android.support.test.filters.LargeTest;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
 
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import com.schibsted.spain.barista.rule.BaristaRule;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -37,18 +38,16 @@ import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.intro.IntroActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
 
-import static org.junit.Assert.assertEquals;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_SHOW_INTRO;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import static org.junit.Assert.assertEquals;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_SHOW_INTRO;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class SplashActivityTest {
-
-  private Context context;
 
   @Rule
   public BaristaRule<SplashActivity> activityTestRule = BaristaRule.create(SplashActivity.class);
@@ -56,9 +55,10 @@ public class SplashActivityTest {
   public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule
   public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+  private Context context;
 
   @Before
-  public void setUp(){
+  public void setUp() {
     Intents.init();
     context = getInstrumentation().getTargetContext();
   }
