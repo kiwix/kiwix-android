@@ -17,6 +17,9 @@
  * MA 02110-1301, USA.
  */
 
+//Fragment for list of downloaded ZIM files
+//(Lib Fragment is for list of file available online)
+
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view;
 
 import android.Manifest;
@@ -28,9 +31,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -98,6 +106,75 @@ public class ZimFileSelectFragment extends BaseFragment
     mFileMessage = llLayout.findViewById(R.id.file_management_no_files);
     mZimFileList = llLayout.findViewById(R.id.zimfilelist);
 
+    //Setting up Contextual Action Mode in response to selecting ZIM files
+    mZimFileList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+    mZimFileList.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+
+      private ArrayList<Integer> selectedViewPosition = new ArrayList<Integer>();
+
+      @Override
+      public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+
+        if(checked)
+        {
+          selectedViewPosition.add(position);
+          Toast.makeText(zimManageActivity, position + " added", Toast.LENGTH_SHORT).show();
+          mode.setTitle(selectedViewPosition.size() + " Selected");
+
+        }
+        else
+        {
+          //int index = selectedViewPosition.indexOf(position);
+          selectedViewPosition.remove(position);
+          Toast.makeText(zimManageActivity, position + " removed", Toast.LENGTH_SHORT).show();
+          mode.setTitle(selectedViewPosition.size() + " Selected");
+        }
+
+      }
+
+      @Override
+      public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+
+        MenuInflater inflater = mode.getMenuInflater();
+        inflater.inflate(R.menu.menu_zim_files_contextual, menu);
+
+        return true;
+      }
+
+      @Override
+      public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+      }
+
+      @Override
+      public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
+        switch(item.getItemId()) {
+
+          case R.id.zim_file_delete_item :
+            //TODO Shift delete functionality here
+            mode.finish(); //Action performed, so close CAB
+            return true;
+
+
+          case R.id.zim_file_share_item :
+            //TODO Add file share functionality ShareActionProvider
+            mode.finish(); //Action performed, so close CAB
+            return true;
+
+
+          default :
+            return false;
+
+        }
+      }
+
+      @Override
+      public void onDestroyActionMode(ActionMode mode) {
+        selectedViewPosition.clear();
+      }
+    });
+
     mFiles = new ArrayList<>();
 
     // SwipeRefreshLayout for the list view
@@ -128,7 +205,7 @@ public class ZimFileSelectFragment extends BaseFragment
       return;
 
     mZimFileList.setOnItemClickListener(this);
-    mZimFileList.setOnItemLongClickListener(this);
+    //mZimFileList.setOnItemLongClickListener(this);
     Collections.sort(books, new FileComparator());
     mFiles.clear();
     mFiles.addAll(books);
@@ -270,6 +347,7 @@ public class ZimFileSelectFragment extends BaseFragment
     zimManageActivity.finishResult(file);
   }
 
+  //PoI 01
   @Override
   public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
     deleteSpecificZimDialog(position);
