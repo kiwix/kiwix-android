@@ -67,6 +67,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -164,7 +165,10 @@ public class ZimFileSelectFragment extends BaseFragment
         switch(item.getItemId()) {
 
           case R.id.zim_file_delete_item :
-            //TODO Shift delete functionality here
+            //Initiate delete functionality for each selected view
+            for(int i = 0; i < selectedViewPosition.size(); i++)
+              deleteSpecificZimDialog(selectedViewPosition.get(i));
+
             mode.finish(); //Action performed, so close CAB
             return true;
 
@@ -352,13 +356,13 @@ public class ZimFileSelectFragment extends BaseFragment
   //PoI 01
   @Override
   public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-    deleteSpecificZimDialog(position);
+    //deleteSpecificZimDialog(position);
     return true;
   }
 
   public void deleteSpecificZimDialog(int position) {
     new AlertDialog.Builder(zimManageActivity, dialogStyle())
-        .setMessage(getString(R.string.delete_specific_zim))
+        .setMessage(mFiles.get(position).getTitle() + ": " + getString(R.string.delete_specific_zim))
         .setPositiveButton(getResources().getString(R.string.delete), (dialog, which) -> {
           if (deleteSpecificZimFile(position)) {
             Toast.makeText(zimManageActivity, getResources().getString(R.string.delete_specific_zim_toast), Toast.LENGTH_SHORT).show();
