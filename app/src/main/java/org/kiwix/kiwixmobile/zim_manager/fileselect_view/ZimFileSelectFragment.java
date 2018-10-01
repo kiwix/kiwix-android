@@ -106,6 +106,17 @@ public class ZimFileSelectFragment extends BaseFragment
     mFileMessage = llLayout.findViewById(R.id.file_management_no_files);
     mZimFileList = llLayout.findViewById(R.id.zimfilelist);
 
+    mFiles = new ArrayList<>();
+
+    // SwipeRefreshLayout for the list view
+    swipeRefreshLayout = llLayout.findViewById(R.id.zim_swiperefresh);
+    swipeRefreshLayout.setOnRefreshListener(this::refreshFragment);
+
+    // A boolean to distinguish between a user refresh and a normal loading
+    mHasRefresh = false;
+
+    mRescanAdapter = new RescanDataAdapter(zimManageActivity, 0, mFiles);
+
     //Setting up Contextual Action Mode in response to selecting ZIM files
     mZimFileList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
     mZimFileList.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
@@ -118,6 +129,7 @@ public class ZimFileSelectFragment extends BaseFragment
         if(checked)
         {
           selectedViewPosition.add(position);
+          //mZimFileList.set
           Toast.makeText(zimManageActivity, position + " added", Toast.LENGTH_SHORT).show();
           mode.setTitle(selectedViewPosition.size() + " Selected");
 
@@ -125,7 +137,7 @@ public class ZimFileSelectFragment extends BaseFragment
         else
         {
           //int index = selectedViewPosition.indexOf(position);
-          selectedViewPosition.remove(position);
+          selectedViewPosition.remove(Integer.valueOf(position));
           Toast.makeText(zimManageActivity, position + " removed", Toast.LENGTH_SHORT).show();
           mode.setTitle(selectedViewPosition.size() + " Selected");
         }
@@ -174,17 +186,6 @@ public class ZimFileSelectFragment extends BaseFragment
         selectedViewPosition.clear();
       }
     });
-
-    mFiles = new ArrayList<>();
-
-    // SwipeRefreshLayout for the list view
-    swipeRefreshLayout = llLayout.findViewById(R.id.zim_swiperefresh);
-    swipeRefreshLayout.setOnRefreshListener(this::refreshFragment);
-
-    // A boolean to distinguish between a user refresh and a normal loading
-    mHasRefresh = false;
-
-    mRescanAdapter = new RescanDataAdapter(zimManageActivity, 0, mFiles);
 
     // Allow temporary use of ZimContentProvider to query books
     ZimContentProvider.canIterate = true;
@@ -329,6 +330,7 @@ public class ZimFileSelectFragment extends BaseFragment
     }
   }
 
+  //PoI 02
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -400,6 +402,7 @@ public class ZimFileSelectFragment extends BaseFragment
       super(context, textViewResourceId, objects);
     }
 
+    //PoI 2
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
