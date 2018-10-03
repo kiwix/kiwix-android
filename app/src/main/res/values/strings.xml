@@ -182,4 +182,5 @@
   <string name="crash_checkbox_device">Device Details</string>
   <string name="crash_button_confirm">SEND DETAILS</string>
   <string name="crash_button_decline">NO THANKS</string>
+  <string name="selected_file_cab_app_chooser_title">Share ZIM files with:</string>
 </resources>

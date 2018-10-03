@@ -17,10 +17,9 @@
  * MA 02110-1301, USA.
  */
 
-//TODO: Cleanup extras + Add Comments + Refactor where necessary + Testing
-
-//Fragment for list of downloaded ZIM files
-//(Lib Fragment is for list of file available online)
+/**
+ * Fragment for list of downloaded ZIM files
+ */
 
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view;
 
@@ -33,10 +32,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -75,7 +72,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -96,7 +92,6 @@ public class ZimFileSelectFragment extends BaseFragment
   private ListView mZimFileList;
   private TextView mFileMessage;
   private boolean mHasRefresh;
-  private ShareActionProvider mShareActionProvider;
 
   @Inject ZimFileSelectPresenter presenter;
   @Inject BookUtils bookUtils;
@@ -127,98 +122,104 @@ public class ZimFileSelectFragment extends BaseFragment
 
     mRescanAdapter = new RescanDataAdapter(zimManageActivity, 0, mFiles);
 
-    //Setting up Contextual Action Mode in response to selecting ZIM files
+    // Allow temporary use of ZimContentProvider to query books
+    ZimContentProvider.canIterate = true;
+
+    // Setting up Contextual Action Mode in response to selection of ZIM files in the ListView
     mZimFileList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
     mZimFileList.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
 
+      // Holds positions corresponding to every selected list item in the ListView
       private ArrayList<Integer> selectedViewPosition = new ArrayList<Integer>();
 
       @Override
       public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
 
-        if(checked)
-        {
+        if(checked) { // If the item was selected
           selectedViewPosition.add(position);
-          //mZimFileList.set
-          Toast.makeText(zimManageActivity, position + " added", Toast.LENGTH_SHORT).show();
-          mode.setTitle(selectedViewPosition.size() + " Selected");
-
+          mode.setTitle("" + selectedViewPosition.size()); // Update title of the CAB
         }
-        else
-        {
-          //int index = selectedViewPosition.indexOf(position);
+        else {  // If the item was deselected
           selectedViewPosition.remove(Integer.valueOf(position));
-          Toast.makeText(zimManageActivity, position + " removed", Toast.LENGTH_SHORT).show();
-          mode.setTitle(selectedViewPosition.size() + " Selected");
+          mode.setTitle("" + selectedViewPosition.size()); // Update title of the CAB
         }
 
       }
 
       @Override
       public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-
+        // Inflate and setup the Contextual Action Bar (CAB)
         MenuInflater inflater = mode.getMenuInflater();
         inflater.inflate(R.menu.menu_zim_files_contextual, menu);
-/*
-        MenuItem fileShareItem = menu.findItem(R.id.zim_file_share_item);
-
-        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(fileShareItem);
-*/
 
         return true;
       }
 
       @Override
-      public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+      public boolean onPrepareActionMode(ActionMode mode, Menu menu) {  // Leave the default implementation as is
         return false;
       }
 
       @Override
       public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 
-        switch(item.getItemId()) {
+        switch(item.getItemId()) {  // Determine the action item clicked on in the CAB, and respond accordingly
 
+          // Initiate file deletion functionality for each selected list item (file)
           case R.id.zim_file_delete_item :
-            //Initiate delete functionality for each selected view
-            for(int i = 0; i < selectedViewPosition.size(); i++)
-              deleteSpecificZimDialog(selectedViewPosition.get(i));
 
-            mode.finish(); //Action performed, so close CAB
+            for(int i = 0; i < selectedViewPosition.size(); i++)
+              deleteSpecificZimDialog(selectedViewPosition.get(i)); // Individually confirm & initiate deletion for each selected file
+
+            mode.finish(); // Action performed, so close CAB
             return true;
 
 
+          // Initiate file sharing functionality for each selected list item (file)
           case R.id.zim_file_share_item :
 
+            // Create an implicit intent for sharing multiple selected files
             Intent selectedFileShareIntent = new Intent();
             selectedFileShareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
-            //selectedFileShareIntent.addCategory(Intent.CATEGORY_OPENABLE);
-            selectedFileShareIntent.setType("application/octet-stream");
+            selectedFileShareIntent.setType("application/octet-stream");  // ZIM files are binary data without an Android-predefined subtype
 
-            ArrayList<Uri> selectedFileContentURI = new ArrayList<Uri>();
+            ArrayList<Uri> selectedFileContentURI = new ArrayList<Uri>(); // Store Content URIs for all selected files being shared
 
             for(int i = 0; i < selectedViewPosition.size(); i++) {
 
               LibraryNetworkEntity.Book data = (LibraryNetworkEntity.Book) mZimFileList.getItemAtPosition(selectedViewPosition.get(i));
-              String sharefile = data.file.getPath();
+              String sharefile = data.file.getPath(); //Returns path to file in device storage
+
+              /**
+               * Using 'file:///' URIs directly is unsafe as it grants the intent receiving application
+               * the same file system permissions as the intent creating app.
+               *
+               * FileProvider instead offers 'content://' URIs for sharing files, which offer temporary
+               * access permissions to the file being shared (to the intent receiving application), which
+               * is fundamentally safer.
+                */
               Uri shareContentUri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".fileprovider", new File(sharefile));
-              selectedFileContentURI.add(shareContentUri);
+
+              if(shareContentUri != null)
+                selectedFileContentURI.add(shareContentUri);  // Populate with the selected file content URIs
             }
 
+            selectedFileShareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, selectedFileContentURI); // Intent Extra for storing the array list of selected file content URIs
 
-            selectedFileShareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, selectedFileContentURI);
-
-            if(selectedFileContentURI != null) {
-              //selectedFileShareIntent.setData(shareContentUri);
+            if(selectedFileContentURI != null) {  // Grant temporary access permission to the intent receiver for the content URIs
               selectedFileShareIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             }
 
-            Intent shareChooserIntent = Intent.createChooser(selectedFileShareIntent, "Share ZIM file with:");
+            /**
+             * Since a different app may be used for sharing everytime (E-mail, Cloud Upload, Wifi Sharing, etc.),
+             * so force an app chooser dialog every time some selected files are to be shared.
+              */
+            Intent shareChooserIntent = Intent.createChooser(selectedFileShareIntent, getResources().getString(R.string.selected_file_cab_app_chooser_title));
 
             if(shareChooserIntent.resolveActivity(getActivity().getPackageManager()) != null)
-              startActivity(shareChooserIntent);
+              startActivity(shareChooserIntent);  // Open the app chooser dialog
 
-            //Toast.makeText(zimManageActivity, sharefile, Toast.LENGTH_LONG).show();
-            mode.finish(); //Action performed, so close CAB
+            mode.finish(); // Action performed, so close CAB
             return true;
 
 
@@ -230,13 +231,13 @@ public class ZimFileSelectFragment extends BaseFragment
 
       @Override
       public void onDestroyActionMode(ActionMode mode) {
+        // Upon closure of the CAB, empty the array list of selected list item positions
         selectedViewPosition.clear();
       }
+
     });
 
-    // Allow temporary use of ZimContentProvider to query books
-    ZimContentProvider.canIterate = true;
-    return llLayout; // We must return the loaded Layout
+    return llLayout; // Return the loaded Layout
   }
 
   @Override
@@ -252,8 +253,8 @@ public class ZimFileSelectFragment extends BaseFragment
     if (mZimFileList == null)
       return;
 
+    // Long click response is the Contextual Action Bar (Selected file deletion & sharing)
     mZimFileList.setOnItemClickListener(this);
-    //mZimFileList.setOnItemLongClickListener(this);
     Collections.sort(books, new FileComparator());
     mFiles.clear();
     mFiles.addAll(books);
@@ -377,7 +378,6 @@ public class ZimFileSelectFragment extends BaseFragment
     }
   }
 
-  //PoI 02
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -396,17 +396,16 @@ public class ZimFileSelectFragment extends BaseFragment
     zimManageActivity.finishResult(file);
   }
 
-  //PoI 01
   @Override
   public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-    //deleteSpecificZimDialog(position);
-    return true;
+    return false;
   }
 
   public void deleteSpecificZimDialog(int position) {
     new AlertDialog.Builder(zimManageActivity, dialogStyle())
         .setMessage(mFiles.get(position).getTitle() + ": " + getString(R.string.delete_specific_zim))
         .setPositiveButton(getResources().getString(R.string.delete), (dialog, which) -> {
+          // Toast messages updated for coherence with the new manner of file deletion (from CAB)
           if (deleteSpecificZimFile(position)) {
             Toast.makeText(zimManageActivity, getResources().getString(R.string.delete_specific_zim_toast), Toast.LENGTH_SHORT).show();
           } else {
@@ -449,7 +448,6 @@ public class ZimFileSelectFragment extends BaseFragment
       super(context, textViewResourceId, objects);
     }
 
-    //PoI 2
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
