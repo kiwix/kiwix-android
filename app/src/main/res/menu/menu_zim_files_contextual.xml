@@ -19,3 +19,13 @@
 		app:showAsAction="always"/>
 
 </menu>
+
+<!--
+<item
+		android:id="@+id/zim_file_share_item"
+		android:icon="@drawable/baseline_share_white_24"
+		android:title="@string/share"
+		android:visible="true"
+		app:iconifiedByDefault="true"
+		app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+		app:showAsAction="ifRoom"/> -->

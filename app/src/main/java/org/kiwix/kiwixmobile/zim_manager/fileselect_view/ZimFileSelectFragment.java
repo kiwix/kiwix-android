@@ -17,6 +17,8 @@
  * MA 02110-1301, USA.
  */
 
+//TODO: Cleanup extras + Add Comments + Refactor where necessary + Testing
+
 //Fragment for list of downloaded ZIM files
 //(Lib Fragment is for list of file available online)
 
@@ -24,12 +26,17 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -48,6 +55,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.ZimContentProvider;
@@ -88,6 +96,7 @@ public class ZimFileSelectFragment extends BaseFragment
   private ListView mZimFileList;
   private TextView mFileMessage;
   private boolean mHasRefresh;
+  private ShareActionProvider mShareActionProvider;
 
   @Inject ZimFileSelectPresenter presenter;
   @Inject BookUtils bookUtils;
@@ -150,6 +159,11 @@ public class ZimFileSelectFragment extends BaseFragment
 
         MenuInflater inflater = mode.getMenuInflater();
         inflater.inflate(R.menu.menu_zim_files_contextual, menu);
+/*
+        MenuItem fileShareItem = menu.findItem(R.id.zim_file_share_item);
+
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(fileShareItem);
+*/
 
         return true;
       }
@@ -174,7 +188,36 @@ public class ZimFileSelectFragment extends BaseFragment
 
 
           case R.id.zim_file_share_item :
-            //TODO Add file share functionality ShareActionProvider
+
+            Intent selectedFileShareIntent = new Intent();
+            selectedFileShareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
+            //selectedFileShareIntent.addCategory(Intent.CATEGORY_OPENABLE);
+            selectedFileShareIntent.setType("application/octet-stream");
+
+            ArrayList<Uri> selectedFileContentURI = new ArrayList<Uri>();
+
+            for(int i = 0; i < selectedViewPosition.size(); i++) {
+
+              LibraryNetworkEntity.Book data = (LibraryNetworkEntity.Book) mZimFileList.getItemAtPosition(selectedViewPosition.get(i));
+              String sharefile = data.file.getPath();
+              Uri shareContentUri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".fileprovider", new File(sharefile));
+              selectedFileContentURI.add(shareContentUri);
+            }
+
+
+            selectedFileShareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, selectedFileContentURI);
+
+            if(selectedFileContentURI != null) {
+              //selectedFileShareIntent.setData(shareContentUri);
+              selectedFileShareIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
+
+            Intent shareChooserIntent = Intent.createChooser(selectedFileShareIntent, "Share ZIM file with:");
+
+            if(shareChooserIntent.resolveActivity(getActivity().getPackageManager()) != null)
+              startActivity(shareChooserIntent);
+
+            //Toast.makeText(zimManageActivity, sharefile, Toast.LENGTH_LONG).show();
             mode.finish(); //Action performed, so close CAB
             return true;
 
