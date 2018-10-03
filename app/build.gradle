@@ -176,6 +176,8 @@ android {
     cruncherEnabled true
   }
 
+  testBuildType "coverage"
+
   lintOptions {
     // Treat lint seriously
     abortOnError true
@@ -255,7 +257,7 @@ android {
       if (project.hasProperty('version_name')) {
         versionName project.property('version_name')
       } else {
-        versionName "2.3"
+        versionName "2.4"
       }
     }
     // Custom apps built from a json file, zim file and icon set
