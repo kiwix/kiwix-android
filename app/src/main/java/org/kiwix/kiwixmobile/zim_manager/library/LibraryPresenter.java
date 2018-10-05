@@ -15,15 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.zim_manager.library_view;
+package org.kiwix.kiwixmobile.zim_manager.library;
 
 import android.util.Log;
 
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.data.local.dao.BookDao;
 import org.kiwix.kiwixmobile.data.remote.KiwixService;
-import org.kiwix.kiwixmobile.downloader.DownloadFragment;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.models.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.zim_manager.download.DownloadFragment;
 
 import javax.inject.Inject;
 

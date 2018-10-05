@@ -29,8 +29,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 
-import static org.kiwix.kiwixmobile.library.LibraryAdapter.createBitmapFromEncodedString;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_URL;
+import static org.kiwix.kiwixmobile.zim_manager.library.LibraryAdapter.createBitmapFromEncodedString;
 
 public class HistoryActivity extends BaseActivity implements HistoryContract.View,
     HistoryAdapter.OnItemClickListener {

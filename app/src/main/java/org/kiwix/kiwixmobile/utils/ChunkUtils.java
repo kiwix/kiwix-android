@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.downloader;
+package org.kiwix.kiwixmobile.utils;
 
-import org.kiwix.kiwixmobile.utils.StorageUtils;
+import org.kiwix.kiwixmobile.models.Chunk;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class ChunkUtils {
   public static final String ALPHABET = "abcdefghijklmnopqrstuvwxyz";
   public static final String ZIM_EXTENSION = ".zim";
   public static final String PART = ".part.part";
-  public static final long CHUNK_SIZE = 1024L * 1024L * 1024L * 2L;
+  static final long CHUNK_SIZE = 1024L * 1024L * 1024L * 2L;
 
   public static List<Chunk> getChunks(String url, long contentLength, int notificationID) {
     int fileCount = getZimChunkFileCount(contentLength);

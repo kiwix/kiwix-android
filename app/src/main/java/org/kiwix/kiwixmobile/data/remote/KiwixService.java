@@ -17,8 +17,8 @@
  */
 package org.kiwix.kiwixmobile.data.remote;
 
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
-import org.kiwix.kiwixmobile.library.entity.MetaLinkNetworkEntity;
+import org.kiwix.kiwixmobile.models.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.models.MetaLinkNetworkEntity;
 
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;

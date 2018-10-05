@@ -7,7 +7,7 @@ import org.kiwix.kiwixmobile.data.DataSource;
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.di.PerActivity;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.models.LibraryNetworkEntity;
 
 import java.util.List;
 

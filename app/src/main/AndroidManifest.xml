@@ -155,7 +155,7 @@
         <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.STAR_CLICKED" />
       </intent-filter>
     </activity>
-    <activity android:name=".settings.KiwixSettingsActivity" />
+    <activity android:name=".settings.SettingsActivity" />
     <activity android:name=".search.SearchActivity" />
     <activity android:name=".bookmark.BookmarksActivity" />
 
@@ -178,7 +178,7 @@
         android:resource="@xml/kiwix_widget_provider_info" />
     </receiver>
 
-    <service android:name=".downloader.DownloadService" />
+    <service android:name=".zim_manager.DownloadService" />
 
     <activity
       android:name=".error.ErrorActivity"

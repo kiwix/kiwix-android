@@ -23,7 +23,6 @@ import android.util.Log;
 
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BasePresenter;
-import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 

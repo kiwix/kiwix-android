@@ -9,8 +9,8 @@ import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.di.qualifiers.IO;
 import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.models.Language;
+import org.kiwix.kiwixmobile.models.LibraryNetworkEntity;
 
 import java.util.ArrayList;
 import java.util.List;

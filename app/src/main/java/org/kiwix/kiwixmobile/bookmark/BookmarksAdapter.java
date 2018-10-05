@@ -17,7 +17,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static org.kiwix.kiwixmobile.library.LibraryAdapter.createBitmapFromEncodedString;
+import static org.kiwix.kiwixmobile.zim_manager.library.LibraryAdapter.createBitmapFromEncodedString;
 
 class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Item> {
   private final List<Bookmark> bookmarkList;

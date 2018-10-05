@@ -2,16 +2,20 @@ package org.kiwix.kiwixmobile.utils.files;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.kiwix.kiwixmobile.models.LibraryNetworkEntity.Book;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class FileUtilsInstrumentationTest {
 
@@ -23,7 +27,7 @@ public class FileUtilsInstrumentationTest {
     context = InstrumentationRegistry.getTargetContext();
 
     // Create a temporary directory where all the test files will be saved
-    testDir = context.getDir("testDir", context.MODE_PRIVATE);
+    testDir = context.getDir("testDir", Context.MODE_PRIVATE);
   }
 
   @Test
@@ -67,11 +71,9 @@ public class FileUtilsInstrumentationTest {
 
     for (index = 0; index < 122; index++) {
       if (bool[index]) {
-        assertEquals("if the file fileName.zimXX exists, then no need to add the .part extension at the end",
-            false, files.get(index).getPath().endsWith(".part"));
+        assertFalse("if the file fileName.zimXX exists, then no need to add the .part extension at the end", files.get(index).getPath().endsWith(".part"));
       } else {
-        assertEquals("if the file fileName.zimXX.part exists, then the file returned should also have the same ending .zimXX.part",
-            true, files.get(index).getPath().endsWith(".part"));
+        assertTrue("if the file fileName.zimXX.part exists, then the file returned should also have the same ending .zimXX.part", files.get(index).getPath().endsWith(".part"));
       }
     }
   }
@@ -84,21 +86,18 @@ public class FileUtilsInstrumentationTest {
     // FileName ends with .zim
     File file1 = new File(baseName + "1" + ".zim");
     file1.createNewFile();
-    assertEquals("if the fileName ends with .zim and exists in memory, return false",
-        false, FileUtils.hasPart(file1));
+    assertFalse("if the fileName ends with .zim and exists in memory, return false", FileUtils.hasPart(file1));
 
     // FileName ends with .part
     File file2 = new File(baseName + "2" + ".zim");
     file2.createNewFile();
-    assertEquals("if the fileName ends with .part and exists in memory, return true",
-        false, FileUtils.hasPart(file2));
+    assertFalse("if the fileName ends with .part and exists in memory, return true", FileUtils.hasPart(file2));
 
     // FileName ends with .zim, however, only the FileName.zim.part file exists in memory
     File file3 = new File(baseName + "3" + ".zim" + ".part");
     file3.createNewFile();
     File file4 = new File(baseName + "3" + ".zim");
-    assertEquals("if the fileName ends with .zim, but instead the .zim.part file exists in memory",
-        true, FileUtils.hasPart(file4));
+    assertTrue("if the fileName ends with .zim, but instead the .zim.part file exists in memory", FileUtils.hasPart(file4));
 
     // FileName ends with .zimXX
     File testCall = new File(baseName + ".zimcj");
@@ -118,22 +117,22 @@ public class FileUtilsInstrumentationTest {
       }
     }
 
-    assertEquals(false, FileUtils.hasPart(testCall));
+    assertFalse(FileUtils.hasPart(testCall));
 
     // Case : FileName.zim is the calling file, but neither FileName.zim, nor FileName.zim.part exist
     // In this case the answer will be the same as that in the previous (FileName.zimXX) case
     File testCall2 = new File(baseName + ".zim");
-    assertEquals(false, FileUtils.hasPart(testCall2));
+    assertFalse(FileUtils.hasPart(testCall2));
 
     // Case : FileName.zimXX.part exists for some "XX" between "aa" till "bl"
     // And FileName.zimXX exists for all "XX" from "aa', till "bk", and then it does not exist
     File t = new File(baseName + ".zimaj.part");
     t.createNewFile();
-    assertEquals(true, FileUtils.hasPart(testCall));
+    assertTrue(FileUtils.hasPart(testCall));
 
     // Case : FileName.zim is the calling file, but neither FileName.zim, nor FileName.zim.part exist
     // In this case the answer will be the same as that in the previous (FileName.zimXX) case
-    assertEquals(true, FileUtils.hasPart(testCall2));
+    assertTrue(FileUtils.hasPart(testCall2));
   }
 
   @After

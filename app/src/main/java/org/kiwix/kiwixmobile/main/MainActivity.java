@@ -87,9 +87,9 @@ import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.help.HelpActivity;
 import org.kiwix.kiwixmobile.history.HistoryActivity;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.models.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.search.SearchActivity;
-import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
+import org.kiwix.kiwixmobile.settings.SettingsActivity;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
@@ -97,7 +97,7 @@ import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+import org.kiwix.kiwixmobile.zim_manager.library.LibraryFragment;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -237,18 +237,18 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private TextView tabSwitcherIcon;
   private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
     @Override
-    public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+    public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
       return makeMovementFlags(0, ItemTouchHelper.UP | ItemTouchHelper.DOWN);
     }
 
     @Override
-    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+    public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
       super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
       viewHolder.itemView.setAlpha(1 - Math.abs(dY) / viewHolder.itemView.getMeasuredHeight());
     }
 
     @Override
-    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
       return false;
     }
 
@@ -470,7 +470,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     backToTopButton.hide();
     tabSwitcherRoot.setVisibility(View.VISIBLE);
     supportInvalidateOptionsMenu();
-    if (tabsAdapter.getSelected() < webViewList.size()) {
+    if (tabsAdapter.getSelected() < webViewList.size() && tabRecyclerView.getLayoutManager() != null) {
       tabRecyclerView.getLayoutManager().scrollToPosition(tabsAdapter.getSelected());
     }
   }
@@ -1579,7 +1579,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   private void selectSettings() {
     final String zimFile = ZimContentProvider.getZimFile();
-    Intent i = new Intent(this, KiwixSettingsActivity.class);
+    Intent i = new Intent(this, SettingsActivity.class);
     // FIXME: I think line below is redundant - it's not used anywhere
     i.putExtra(EXTRA_ZIM_FILE_2, zimFile);
     startActivityForResult(i, REQUEST_PREFERENCES);

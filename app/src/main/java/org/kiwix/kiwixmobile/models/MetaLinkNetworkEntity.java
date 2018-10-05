@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.library.entity;
+package org.kiwix.kiwixmobile.models;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -70,15 +70,15 @@ public class MetaLinkNetworkEntity {
     @Element
     private Pieces pieces;
 
-    public int getPieceLength() {
+    int getPieceLength() {
       return pieces.length;
     }
 
-    public String getPieceHashType() {
+    String getPieceHashType() {
       return pieces.hashType;
     }
 
-    public List<String> getPieceHashes() {
+    List<String> getPieceHashes() {
       return pieces.pieceHashes;
     }
 
@@ -87,7 +87,7 @@ public class MetaLinkNetworkEntity {
      * @param type Hash type as defined in metalink file
      * @return Hash value or {@code null}
      */
-    public String getHash(String type) {
+    String getHash(String type) {
       return hashes.get(type);
     }
   }
@@ -117,11 +117,11 @@ public class MetaLinkNetworkEntity {
       return value;
     }
 
-    public String getLocation() {
+    String getLocation() {
       return location;
     }
 
-    public int getPriority() {
+    int getPriority() {
       return priority;
     }
   }

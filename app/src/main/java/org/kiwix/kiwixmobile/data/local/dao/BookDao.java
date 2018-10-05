@@ -23,7 +23,7 @@ import com.yahoo.squidb.sql.Query;
 
 import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
 import org.kiwix.kiwixmobile.data.local.entity.BookDatabaseEntity;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+import org.kiwix.kiwixmobile.models.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
 import java.io.File;

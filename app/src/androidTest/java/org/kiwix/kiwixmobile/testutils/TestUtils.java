@@ -33,10 +33,9 @@ import android.support.test.uiautomator.UiSelector;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+import org.kiwix.kiwixmobile.models.LibraryNetworkEntity.Book;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,7 +51,7 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
  */
 
 public class TestUtils {
-  private static String TAG = "TESTUTILS";
+  private static final String TAG = "TESTUTILS";
   public static int TEST_PAUSE_MS = 250;
   /*
     TEST_PAUSE_MS is used as such:
@@ -65,11 +64,11 @@ public class TestUtils {
     it's speed related, or Android Version related.
    */
 
-  public static boolean hasStoragePermission() {
+  private static boolean hasStoragePermission() {
     return ContextCompat.checkSelfPermission(InstrumentationRegistry.getTargetContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-            ContextCompat.checkSelfPermission(InstrumentationRegistry.getTargetContext(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+        ContextCompat.checkSelfPermission(InstrumentationRegistry.getTargetContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
   }
 
   public static void allowPermissionsIfNeeded() {
@@ -79,18 +78,19 @@ public class TestUtils {
       if (allowPermissions.exists()) {
         try {
           allowPermissions.click();
-        } catch (UiObjectNotFoundException e) {}
+        } catch (UiObjectNotFoundException e) {
+        }
       }
     }
   }
 
-  public static void captureAndSaveScreenshot(String name){
+  public static void captureAndSaveScreenshot(String name) {
     File screenshotDir = new File(
-      Environment.getExternalStorageDirectory() +
-      "/Android/data/KIWIXTEST/Screenshots");
+        Environment.getExternalStorageDirectory() +
+            "/Android/data/KIWIXTEST/Screenshots");
 
-    if (!screenshotDir.exists()){
-      if (!screenshotDir.mkdirs()){
+    if (!screenshotDir.exists()) {
+      if (!screenshotDir.mkdirs()) {
         return;
       }
     }
@@ -102,7 +102,7 @@ public class TestUtils {
 
     Bitmap screenshot = Screenshot.capture().getBitmap();
 
-    if(screenshot == null) {
+    if (screenshot == null) {
       return;
     }
 

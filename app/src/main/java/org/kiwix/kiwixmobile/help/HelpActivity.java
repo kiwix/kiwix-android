@@ -68,11 +68,10 @@ public class HelpActivity extends BaseActivity {
   @OnClick({R.id.activity_help_feedback_text_view, R.id.activity_help_feedback_image_view})
   void sendFeedback() {
     Intent intent = new Intent(Intent.ACTION_SENDTO);
-    intent.setType("plain/text");
     String uriText = "mailto:" + Uri.encode(CONTACT_EMAIL_ADDRESS) +
         "?subject=" + Uri.encode("Feedback in " + LanguageUtils.getCurrentLocale(this).getDisplayLanguage());
     Uri uri = Uri.parse(uriText);
-    intent.setData(uri);
+    intent.setDataAndType(uri, "plain/text");
     startActivity(Intent.createChooser(intent, "Send Feedback via Email"));
   }
 

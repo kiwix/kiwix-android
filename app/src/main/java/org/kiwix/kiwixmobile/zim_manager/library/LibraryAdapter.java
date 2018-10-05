@@ -17,7 +17,7 @@
  * MA 02110-1301, USA.
  */
 
-package org.kiwix.kiwixmobile.library;
+package org.kiwix.kiwixmobile.zim_manager.library;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -39,11 +39,10 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.DataSource;
 import org.kiwix.kiwixmobile.data.local.dao.BookDao;
 import org.kiwix.kiwixmobile.data.local.dao.NetworkLanguageDao;
-import org.kiwix.kiwixmobile.downloader.DownloadFragment;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.models.Language;
+import org.kiwix.kiwixmobile.models.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.utils.BookUtils;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+import org.kiwix.kiwixmobile.zim_manager.download.DownloadFragment;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -89,13 +88,13 @@ public class LibraryAdapter extends BaseAdapter {
     layoutInflater = LayoutInflater.from(context);
   }
 
-  public void setAllBooks(List<Book> books) {
+  void setAllBooks(List<Book> books) {
     allBooks = ImmutableList.copyOf(books);
     updateLanguageCounts();
     updateLanguages();
   }
 
-  public boolean isDivider(int position) {
+  boolean isDivider(int position) {
     return listItems.get(position).type == LIST_ITEM_TYPE_DIVIDER;
   }
 
@@ -424,7 +423,7 @@ public class LibraryAdapter extends BaseAdapter {
     public Object data;
     public int type;
 
-    public ListItem(Object data, int type) {
+    ListItem(Object data, int type) {
       this.data = data;
       this.type = type;
     }

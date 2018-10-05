@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.zim_manager.library_view;
+package org.kiwix.kiwixmobile.zim_manager.library;
 
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -48,17 +48,15 @@ import android.widget.Toast;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseFragment;
-import org.kiwix.kiwixmobile.downloader.DownloadFragment;
-import org.kiwix.kiwixmobile.downloader.DownloadIntent;
-import org.kiwix.kiwixmobile.downloader.DownloadService;
-import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.TestingUtils;
+import org.kiwix.kiwixmobile.zim_manager.DownloadService;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
+import org.kiwix.kiwixmobile.zim_manager.download.DownloadFragment;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -73,9 +71,12 @@ import eu.mhutti1.utils.storage.StorageDevice;
 import eu.mhutti1.utils.storage.support.StorageSelectDialog;
 
 import static android.view.View.GONE;
-import static org.kiwix.kiwixmobile.downloader.DownloadService.KIWIX_ROOT;
-import static org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+import static org.kiwix.kiwixmobile.models.LibraryNetworkEntity.Book;
+import static org.kiwix.kiwixmobile.utils.Constants.DOWNLOAD_URL_PARAMETER;
+import static org.kiwix.kiwixmobile.utils.Constants.DOWNLOAD_ZIM_TITLE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOK;
+import static org.kiwix.kiwixmobile.utils.DimenUtils.bytesToHuman;
+import static org.kiwix.kiwixmobile.zim_manager.DownloadService.KIWIX_ROOT;
 
 public class LibraryFragment extends BaseFragment
     implements AdapterView.OnItemClickListener, StorageSelectDialog.OnSelectListener, LibraryViewCallback {
@@ -244,7 +245,7 @@ public class LibraryFragment extends BaseFragment
           < Long.parseLong(((Book) (parent.getAdapter().getItem(position))).getSize()) * 1024f) {
         Toast.makeText(super.getActivity(), getString(R.string.download_no_space)
             + "\n" + getString(R.string.space_available) + " "
-            + LibraryUtils.bytesToHuman(getSpaceAvailable()), Toast.LENGTH_LONG).show();
+            + bytesToHuman(getSpaceAvailable()), Toast.LENGTH_LONG).show();
         Snackbar snackbar = Snackbar.make(libraryList,
             getString(R.string.download_change_storage),
             Snackbar.LENGTH_LONG)
@@ -306,8 +307,8 @@ public class LibraryFragment extends BaseFragment
     Toast.makeText(super.getActivity(), getString(R.string.download_started_library), Toast.LENGTH_LONG)
         .show();
     Intent service = new Intent(super.getActivity(), DownloadService.class);
-    service.putExtra(DownloadIntent.DOWNLOAD_URL_PARAMETER, book.getUrl());
-    service.putExtra(DownloadIntent.DOWNLOAD_ZIM_TITLE, book.getTitle());
+    service.putExtra(DOWNLOAD_URL_PARAMETER, book.getUrl());
+    service.putExtra(DOWNLOAD_ZIM_TITLE, book.getTitle());
     service.putExtra(EXTRA_BOOK, book);
     activity.startService(service);
     mConnection = new DownloadServiceConnection();

@@ -21,18 +21,20 @@ package org.kiwix.kiwixmobile.data.local;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.data.local.dao.BookDao;
 import org.kiwix.kiwixmobile.data.local.entity.BookDatabaseEntity;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+import org.kiwix.kiwixmobile.models.LibraryNetworkEntity.Book;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -61,7 +63,7 @@ public class BookDatabaseTest {
     bookDao = new BookDao(kiwixDatabase);
 
     // Create a temporary directory where all the test files will be saved
-    testDir = context.getDir("testDir", context.MODE_PRIVATE);
+    testDir = context.getDir("testDir", Context.MODE_PRIVATE);
   }
 
   //TODO : test books are saved after downloading the list of available zim files

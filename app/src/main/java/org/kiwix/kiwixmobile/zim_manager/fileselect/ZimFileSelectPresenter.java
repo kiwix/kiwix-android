@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.zim_manager.fileselect_view;
+package org.kiwix.kiwixmobile.zim_manager.fileselect;
 
 import android.util.Log;
 
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.data.DataSource;
 import org.kiwix.kiwixmobile.data.local.dao.BookDao;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.models.LibraryNetworkEntity;
 
 import java.util.ArrayList;
 
@@ -52,7 +52,7 @@ public class ZimFileSelectPresenter extends BasePresenter<ZimFileSelectViewCallb
     super.attachView(mvpView);
   }
 
-  public void loadLocalZimFileFromDb() {
+  void loadLocalZimFileFromDb() {
     ArrayList<LibraryNetworkEntity.Book> books = bookDao.getBooks();
     view.showFiles(books);
   }
@@ -77,7 +77,7 @@ public class ZimFileSelectPresenter extends BasePresenter<ZimFileSelectViewCallb
         });
   }
 
-  public void deleteBook(LibraryNetworkEntity.Book book) {
+  void deleteBook(LibraryNetworkEntity.Book book) {
     dataSource.deleteBook(book)
         .subscribe(new CompletableObserver() {
           @Override

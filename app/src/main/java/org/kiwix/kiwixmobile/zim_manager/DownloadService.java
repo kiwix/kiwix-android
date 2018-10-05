@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.downloader;
+package org.kiwix.kiwixmobile.zim_manager;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -40,16 +40,18 @@ import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.DataSource;
 import org.kiwix.kiwixmobile.data.remote.KiwixService;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.main.MainActivity;
+import org.kiwix.kiwixmobile.models.Chunk;
+import org.kiwix.kiwixmobile.models.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.utils.ChunkUtils;
 import org.kiwix.kiwixmobile.utils.Constants;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
 import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
-import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+import org.kiwix.kiwixmobile.zim_manager.download.DownloadFragment;
+import org.kiwix.kiwixmobile.zim_manager.library.LibraryFragment;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,9 +73,11 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okio.BufferedSource;
 
-import static org.kiwix.kiwixmobile.downloader.ChunkUtils.ALPHABET;
-import static org.kiwix.kiwixmobile.downloader.ChunkUtils.PART;
-import static org.kiwix.kiwixmobile.downloader.ChunkUtils.ZIM_EXTENSION;
+import static org.kiwix.kiwixmobile.utils.ChunkUtils.ALPHABET;
+import static org.kiwix.kiwixmobile.utils.ChunkUtils.PART;
+import static org.kiwix.kiwixmobile.utils.ChunkUtils.ZIM_EXTENSION;
+import static org.kiwix.kiwixmobile.utils.Constants.DOWNLOAD_URL_PARAMETER;
+import static org.kiwix.kiwixmobile.utils.Constants.DOWNLOAD_ZIM_TITLE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOK;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_LIBRARY;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_NOTIFICATION_ID;
@@ -170,7 +174,7 @@ public class DownloadService extends Service {
 
     Log.d(KIWIX_TAG, "Using KIWIX_ROOT: " + KIWIX_ROOT);
 
-    notificationTitle = intent.getExtras().getString(DownloadIntent.DOWNLOAD_ZIM_TITLE);
+    notificationTitle = intent.getExtras().getString(DOWNLOAD_ZIM_TITLE);
     LibraryNetworkEntity.Book book = (LibraryNetworkEntity.Book) intent.getSerializableExtra(EXTRA_BOOK);
     int notificationID = book.getId().hashCode();
 
@@ -210,7 +214,7 @@ public class DownloadService extends Service {
       notificationManager.notify(notificationID, notification.get(notificationID).build());
       downloadStatus.put(notificationID, PLAY);
       LibraryFragment.downloadingBooks.remove(book);
-      String url = intent.getExtras().getString(DownloadIntent.DOWNLOAD_URL_PARAMETER);
+      String url = intent.getExtras().getString(DOWNLOAD_URL_PARAMETER);
       downloadBook(url, notificationID, book);
     }
     return START_REDELIVER_INTENT;

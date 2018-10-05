@@ -18,16 +18,17 @@
 
 package org.kiwix.kiwixmobile.utils.files;
 
-import static org.junit.Assert.assertEquals;
-
-import java.io.File;
-import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+import org.kiwix.kiwixmobile.models.LibraryNetworkEntity.Book;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+
+import java.io.File;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(File.class)

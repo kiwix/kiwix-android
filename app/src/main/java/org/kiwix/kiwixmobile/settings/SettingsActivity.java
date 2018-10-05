@@ -45,7 +45,6 @@ import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryUtils;
 
 import java.io.File;
 import java.util.List;
@@ -69,9 +68,10 @@ import static org.kiwix.kiwixmobile.utils.Constants.PREF_ZOOM;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_ZOOM_ENABLED;
 import static org.kiwix.kiwixmobile.utils.Constants.RESULT_HISTORY_CLEARED;
 import static org.kiwix.kiwixmobile.utils.Constants.RESULT_RESTART;
+import static org.kiwix.kiwixmobile.utils.DimenUtils.bytesToHuman;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
-public class KiwixSettingsActivity extends BaseActivity {
+public class SettingsActivity extends BaseActivity {
 
   public static boolean allHistoryCleared = false;
 
@@ -163,7 +163,7 @@ public class KiwixSettingsActivity extends BaseActivity {
         } else {
           findPreference(PREF_STORAGE).setTitle(sharedPreferenceUtil.getPrefStorageTitle("External"));
         }
-        findPreference(PREF_STORAGE).setSummary(LibraryUtils.bytesToHuman(new File(sharedPreferenceUtil.getPrefStorage()).getFreeSpace()));
+        findPreference(PREF_STORAGE).setSummary(bytesToHuman(new File(sharedPreferenceUtil.getPrefStorage()).getFreeSpace()));
       }
     }
 
@@ -200,7 +200,7 @@ public class KiwixSettingsActivity extends BaseActivity {
       String selectedLang = sharedPreferenceUtil.getPrefLanguage(Locale.getDefault().toString());
       List<String> languageCodeList = new LanguageUtils(getActivity()).getKeys();
       selectedLang = languageCodeList.contains(selectedLang) ? selectedLang : "en";
-      String code[] = languageCodeList.toArray(new String[languageCodeList.size()]);
+      String code[] = languageCodeList.toArray(new String[0]);
       String[] entries = new String[code.length];
       for (int index = 0; index < code.length; index++) {
         Locale locale = new Locale(code[index]);
@@ -249,7 +249,7 @@ public class KiwixSettingsActivity extends BaseActivity {
         MainActivity.refresh = true;
         MainActivity.nightMode = sharedPreferenceUtil.nightMode();
         getActivity().finish();
-        startActivity(new Intent(getActivity(), KiwixSettingsActivity.class));
+        startActivity(new Intent(getActivity(), SettingsActivity.class));
       }
       if (key.equals(PREF_WIFI_ONLY)) {
         MainActivity.wifiOnly = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
@@ -258,7 +258,7 @@ public class KiwixSettingsActivity extends BaseActivity {
         MainActivity.refresh = true;
         MainActivity.nightMode = sharedPreferenceUtil.nightMode();
         getActivity().finish();
-        startActivity(new Intent(getActivity(), KiwixSettingsActivity.class));
+        startActivity(new Intent(getActivity(), SettingsActivity.class));
       }
     }
 

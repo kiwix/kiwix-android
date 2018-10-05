@@ -27,14 +27,13 @@ import android.support.test.rule.GrantPermissionRule;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import com.schibsted.spain.barista.rule.BaristaRule;
 
-import com.schibsted.spain.barista.rule.flaky.AllowFlaky;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.intro.IntroActivity;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+import org.kiwix.kiwixmobile.zim_manager.library.LibraryFragment;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
@@ -53,12 +52,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.kiwix.kiwixmobile.testutils.Matcher.childAtPosition;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 import static org.kiwix.kiwixmobile.testutils.ViewActions.setChecked;
-import static org.kiwix.kiwixmobile.utils.RecyclerViewItemCountAssertion.withItemCount;
 
 public class LanguageActivityTest {
 

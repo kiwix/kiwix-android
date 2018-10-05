@@ -23,9 +23,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.downloader.DownloadFragment;
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+import org.kiwix.kiwixmobile.zim_manager.download.DownloadFragment;
+import org.kiwix.kiwixmobile.zim_manager.fileselect.ZimFileSelectFragment;
+import org.kiwix.kiwixmobile.zim_manager.library.LibraryFragment;
 
 /**
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -45,7 +45,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         return downloadFragment;
     }
 
-    public SectionsPagerAdapter(Context context, FragmentManager fm) {
+  SectionsPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
         this.context = context;
     }

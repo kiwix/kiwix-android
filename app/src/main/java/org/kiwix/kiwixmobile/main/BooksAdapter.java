@@ -11,8 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.library.LibraryAdapter;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.models.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.zim_manager.library.LibraryAdapter;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -21,7 +21,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static org.kiwix.kiwixmobile.library.LibraryAdapter.createGbString;
+import static org.kiwix.kiwixmobile.zim_manager.library.LibraryAdapter.createGbString;
 
 public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

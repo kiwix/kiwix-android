@@ -35,7 +35,7 @@ import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.data.local.entity.LibraryDatabaseEntity;
 import org.kiwix.kiwixmobile.data.local.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.data.local.entity.RecentSearch;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.models.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.UpdateUtils;
 
 import java.io.BufferedReader;
@@ -155,7 +155,7 @@ public class KiwixDatabase extends SquidDatabase {
     return VERSION;
   }
 
-  public void migrateBookmarksVersion6() {
+  void migrateBookmarksVersion6() {
     String[] ids = context.fileList();
     for (String id : ids) {
       if (id.length() == 40 && id.substring(id.length() - 4).equals(".txt")) {

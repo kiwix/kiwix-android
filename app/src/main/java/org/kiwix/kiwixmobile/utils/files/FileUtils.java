@@ -27,8 +27,8 @@ import android.provider.DocumentsContract;
 import android.util.Log;
 
 import org.kiwix.kiwixmobile.BuildConfig;
-import org.kiwix.kiwixmobile.downloader.ChunkUtils;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+import org.kiwix.kiwixmobile.models.LibraryNetworkEntity.Book;
+import org.kiwix.kiwixmobile.utils.ChunkUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -119,7 +119,7 @@ public class FileUtils {
     return getSaveFilePath() + File.separator + fileName;
   }
 
-  static public String getSaveFilePath() {
+  private static String getSaveFilePath() {
     String obbFolder = File.separator + "Android" + File.separator + "obb" + File.separator;
     File root = Environment.getExternalStorageDirectory();
     return root.toString() + obbFolder + BuildConfig.APPLICATION_ID;
@@ -185,17 +185,10 @@ public class FileUtils {
   }
 
   static private String contentQuery(Context context, Uri uri) {
-    Cursor cursor = null;
 
-    try {
-      cursor = context.getContentResolver().query(uri, new String[]{"_data"}, null, null, null);
-
+    try (Cursor cursor = context.getContentResolver().query(uri, new String[]{"_data"}, null, null, null)) {
       if (cursor != null && cursor.moveToFirst())
         return cursor.getString(cursor.getColumnIndexOrThrow("_data"));
-
-    } finally {
-      if (cursor != null)
-        cursor.close();
     }
 
     return null;
@@ -219,7 +212,7 @@ public class FileUtils {
     return readCsv(content);
   }
 
-  public static List<File> getAllZimParts(Book book) {
+  static List<File> getAllZimParts(Book book) {
     List<File> files = new ArrayList<>();
     if (book.file.getPath().endsWith(".zim") || book.file.getPath().endsWith(".zim.part")) {
       if (book.file.exists()) {

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.downloader;
+package org.kiwix.kiwixmobile.zim_manager.download;
 
 
 import android.app.Activity;
@@ -25,6 +25,7 @@ import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -43,14 +44,15 @@ import android.widget.TextView;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseFragment;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.main.MainActivity;
+import org.kiwix.kiwixmobile.models.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
+import org.kiwix.kiwixmobile.zim_manager.DownloadService;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+import org.kiwix.kiwixmobile.zim_manager.fileselect.ZimFileSelectFragment;
+import org.kiwix.kiwixmobile.zim_manager.library.LibraryFragment;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -76,7 +78,7 @@ public class DownloadFragment extends BaseFragment {
   SharedPreferenceUtil sharedPreferenceUtil;
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     faActivity = super.getActivity();
     relLayout = (RelativeLayout) inflater.inflate(R.layout.download_management, container, false);
 
@@ -90,7 +92,7 @@ public class DownloadFragment extends BaseFragment {
   }
 
   @Override
-  public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     updateNoDownloads();
   }
@@ -151,11 +153,11 @@ public class DownloadFragment extends BaseFragment {
 
   public class DownloadAdapter extends BaseAdapter {
 
-    private LinkedHashMap<Integer, LibraryNetworkEntity.Book> mData = new LinkedHashMap<>();
+    private LinkedHashMap<Integer, LibraryNetworkEntity.Book> mData;
     private Integer[] mKeys;
     private DataSetObserver dataSetObserver;
 
-    public DownloadAdapter(LinkedHashMap<Integer, LibraryNetworkEntity.Book> data) {
+    DownloadAdapter(LinkedHashMap<Integer, LibraryNetworkEntity.Book> data) {
       mData = data;
       mKeys = mData.keySet().toArray(new Integer[data.size()]);
     }
@@ -235,7 +237,7 @@ public class DownloadFragment extends BaseFragment {
       if (convertView == null) {
         convertView = LayoutInflater.from(faActivity).inflate(R.layout.download_item, parent, false);
       }
-      mKeys = mData.keySet().toArray(new Integer[mData.size()]);
+      mKeys = mData.keySet().toArray(new Integer[0]);
       // Lookup view for data population
       //downloadProgress.setProgress(download.progress);
       // Populate the data into the template view using the data object
@@ -267,9 +269,7 @@ public class DownloadFragment extends BaseFragment {
         int newPlayPauseState = LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY ? DownloadService.PAUSE : DownloadService.PLAY;
 
         if (newPlayPauseState == DownloadService.PLAY && MainActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
-          showNoWiFiWarning(getContext(), () -> {
-            setPlayState(pause, position, newPlayPauseState);
-          });
+          showNoWiFiWarning(getContext(), () -> setPlayState(pause, position, newPlayPauseState));
           return;
         }
 
@@ -309,7 +309,7 @@ public class DownloadFragment extends BaseFragment {
       return convertView;
     }
 
-    public void registerDataSetObserver(DownloadFragment downloadFragment) {
+    void registerDataSetObserver(DownloadFragment downloadFragment) {
       if (dataSetObserver == null) {
         dataSetObserver = new DataSetObserver() {
           @Override
@@ -329,7 +329,7 @@ public class DownloadFragment extends BaseFragment {
       }
     }
 
-    public void unRegisterDataSetObserver() {
+    void unRegisterDataSetObserver() {
       if (dataSetObserver != null) {
         unregisterDataSetObserver(dataSetObserver);
       }
