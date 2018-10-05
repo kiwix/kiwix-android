@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.models.LibraryNetworkEntity;
-import org.kiwix.kiwixmobile.zim_manager.library.LibraryAdapter;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -21,6 +20,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static org.kiwix.kiwixmobile.utils.ImageUtils.createBitmapFromEncodedString;
 import static org.kiwix.kiwixmobile.zim_manager.library.LibraryAdapter.createGbString;
 
 public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -29,13 +29,29 @@ public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
   private List<LibraryNetworkEntity.Book> books;
   private OnItemClickListener itemClickListener;
 
-  interface OnItemClickListener {
-    void openFile(String url);
-  }
-
   BooksAdapter(List<LibraryNetworkEntity.Book> books, OnItemClickListener itemClickListener) {
     this.books = books;
     this.itemClickListener = itemClickListener;
+  }
+
+  private static String getArticleCountString(Context context, String articleCount) {
+    if (articleCount == null || articleCount.equals("")) {
+      return "";
+    }
+    try {
+      int size = Integer.parseInt(articleCount);
+      if (size <= 0) {
+        return "";
+      }
+
+      final String[] units = new String[]{"", "K", "M", "B", "T"};
+      int conversion = (int) (Math.log10(size) / 3);
+      return context.getString(R.string.articleCount, new DecimalFormat("#,##0.#")
+          .format(size / Math.pow(1000, conversion)) + units[conversion]);
+    } catch (NumberFormatException e) {
+      Log.d("BooksAdapter", e.toString());
+      return "";
+    }
   }
 
   @NonNull
@@ -61,7 +77,7 @@ public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
       item.size.setText(createGbString(book.getSize()));
       item.articleCount.setText(getArticleCountString(item.articleCount.getContext(),
           book.getArticleCount()));
-      item.icon.setImageBitmap(LibraryAdapter.createBitmapFromEncodedString(book.getFavicon(), item.icon.getContext()));
+      item.icon.setImageBitmap(createBitmapFromEncodedString(item.icon.getContext(), book.getFavicon()));
       item.itemView.setOnClickListener(v -> itemClickListener.openFile(book.file.getPath()));
       if (book.file.getPath().contains("nopic")) {
         item.pictureLabel.setVisibility(View.GONE);
@@ -75,26 +91,6 @@ public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
   }
 
-  private static String getArticleCountString(Context context, String articleCount) {
-    if (articleCount == null || articleCount.equals("")) {
-      return "";
-    }
-    try {
-      int size = Integer.parseInt(articleCount);
-      if (size <= 0) {
-        return "";
-      }
-
-      final String[] units = new String[]{"", "K", "M", "B", "T"};
-      int conversion = (int) (Math.log10(size) / 3);
-      return context.getString(R.string.articleCount, new DecimalFormat("#,##0.#")
-          .format(size / Math.pow(1000, conversion)) + units[conversion]);
-    } catch (NumberFormatException e) {
-      Log.d("BooksAdapter", e.toString());
-      return "";
-    }
-  }
-
   @Override
   public int getItemViewType(int position) {
     return books.get(position) == null ? 0 : TYPE_ITEM;
@@ -103,6 +99,10 @@ public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
   @Override
   public int getItemCount() {
     return books.size();
+  }
+
+  interface OnItemClickListener {
+    void openFile(String url);
   }
 
   class Item extends RecyclerView.ViewHolder {

@@ -17,7 +17,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static org.kiwix.kiwixmobile.zim_manager.library.LibraryAdapter.createBitmapFromEncodedString;
+import static org.kiwix.kiwixmobile.utils.ImageUtils.createBitmapFromEncodedString;
 
 class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Item> {
   private final List<Bookmark> bookmarkList;
@@ -46,8 +46,8 @@ class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Item> {
       holder.favicon.setImageDrawable(ContextCompat.getDrawable(holder.favicon.getContext(),
           R.drawable.ic_check_circle_blue_24dp));
     } else {
-      holder.favicon.setImageBitmap(createBitmapFromEncodedString(bookmark.getFavicon(),
-          holder.favicon.getContext()));
+      holder.favicon.setImageBitmap(createBitmapFromEncodedString(holder.favicon.getContext(),
+          bookmark.getFavicon()));
     }
     holder.itemView.setOnClickListener(v -> itemClickListener.onItemClick(holder.favicon, bookmark));
     holder.itemView.setOnLongClickListener(v ->

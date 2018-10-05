@@ -64,6 +64,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_STORAGE_PERMISSION;
+import static org.kiwix.kiwixmobile.utils.ImageUtils.createBitmapFromEncodedString;
 import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
@@ -357,7 +358,7 @@ public class ZimFileSelectFragment extends BaseFragment
       holder.date.setText(book.getDate());
       holder.size.setText(LibraryAdapter.createGbString(book.getSize()));
       holder.fileName.setText(parseURL(getActivity(), book.file.getPath()));
-      holder.favicon.setImageBitmap(LibraryAdapter.createBitmapFromEncodedString(book.getFavicon(), zimManageActivity));
+      holder.favicon.setImageBitmap(createBitmapFromEncodedString(zimManageActivity, book.getFavicon()));
 
 
       //// Check if no value is empty. Set the view to View.GONE, if it is. To View.VISIBLE, if not.

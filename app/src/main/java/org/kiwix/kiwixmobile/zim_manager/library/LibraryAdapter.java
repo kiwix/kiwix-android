@@ -20,9 +20,6 @@
 package org.kiwix.kiwixmobile.zim_manager.library;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,6 +56,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
+import static org.kiwix.kiwixmobile.utils.ImageUtils.createBitmapFromEncodedString;
 import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
 
 public class LibraryAdapter extends BaseAdapter {
@@ -81,7 +79,7 @@ public class LibraryAdapter extends BaseAdapter {
   @Inject
   DataSource dataSource;
 
-  public LibraryAdapter(Context context) {
+  LibraryAdapter(Context context) {
     super();
     KiwixApplication.getApplicationComponent().inject(this);
     this.context = context;
@@ -149,7 +147,7 @@ public class LibraryAdapter extends BaseAdapter {
       holder.date.setText(book.getDate());
       holder.size.setText(createGbString(book.getSize()));
       holder.fileName.setText(parseURL(context, book.getUrl()));
-      holder.favicon.setImageBitmap(createBitmapFromEncodedString(book.getFavicon(), context));
+      holder.favicon.setImageBitmap(createBitmapFromEncodedString(context, book.getFavicon()));
 
       // Check if no value is empty. Set the view to View.GONE, if it is. To View.VISIBLE, if not.
       if (book.getTitle() == null || book.getTitle().isEmpty()) {
@@ -383,19 +381,6 @@ public class LibraryAdapter extends BaseAdapter {
         .format(size / Math.pow(1024, conversion))
         + " "
         + units[conversion];
-  }
-
-  // Decode and create a Bitmap from the 64-Bit encoded favicon string
-  public static Bitmap createBitmapFromEncodedString(String encodedString, Context context) {
-
-    try {
-      byte[] decodedString = Base64.decode(encodedString, Base64.DEFAULT);
-      return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
-    return BitmapFactory.decodeResource(context.getResources(), R.mipmap.kiwix_icon);
   }
 
   private static class ViewHolder {

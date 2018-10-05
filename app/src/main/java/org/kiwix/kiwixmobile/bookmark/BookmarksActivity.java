@@ -30,7 +30,7 @@ import butterknife.BindView;
 
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_TITLE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_URL;
-import static org.kiwix.kiwixmobile.zim_manager.library.LibraryAdapter.createBitmapFromEncodedString;
+import static org.kiwix.kiwixmobile.utils.ImageUtils.createBitmapFromEncodedString;
 
 public class BookmarksActivity extends BaseActivity implements BookmarksContract.View,
     BookmarksAdapter.OnItemClickListener {
@@ -215,7 +215,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
 
   private void toggleSelection(ImageView favicon, Bookmark bookmark) {
     if (deleteList.remove(bookmark)) {
-      favicon.setImageBitmap(createBitmapFromEncodedString(bookmark.getFavicon(), this));
+      favicon.setImageBitmap(createBitmapFromEncodedString(this, bookmark.getFavicon()));
     } else {
       favicon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_check_circle_blue_24dp));
       deleteList.add(bookmark);

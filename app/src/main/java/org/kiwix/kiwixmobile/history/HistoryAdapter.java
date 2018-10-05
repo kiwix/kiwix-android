@@ -17,7 +17,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static org.kiwix.kiwixmobile.zim_manager.library.LibraryAdapter.createBitmapFromEncodedString;
+import static org.kiwix.kiwixmobile.utils.ImageUtils.createBitmapFromEncodedString;
 
 class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   private static final int TYPE_ITEM = 1;
@@ -53,8 +53,8 @@ class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         item.favicon.setImageDrawable(ContextCompat.getDrawable(item.favicon.getContext(),
             R.drawable.ic_check_circle_blue_24dp));
       } else {
-        item.favicon.setImageBitmap(createBitmapFromEncodedString(history.getFavicon(),
-            item.favicon.getContext()));
+        item.favicon.setImageBitmap(createBitmapFromEncodedString(item.favicon.getContext(),
+            history.getFavicon()));
       }
       item.itemView.setOnClickListener(v -> itemClickListener.onItemClick(item.favicon, history));
       item.itemView.setOnLongClickListener(v ->
