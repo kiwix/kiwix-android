@@ -86,6 +86,7 @@ dependencies {
   androidTestCompileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
   implementation "com.google.dagger:dagger:$daggerVersion"
   implementation "com.google.dagger:dagger-android:$daggerVersion"
+  implementation "com.google.dagger:dagger-android-support:$daggerVersion"
   annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
   annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
   androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"

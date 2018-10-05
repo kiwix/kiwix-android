@@ -41,7 +41,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseFragment;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
@@ -90,7 +89,6 @@ public class ZimFileSelectFragment extends BaseFragment
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    KiwixApplication.getApplicationComponent().inject(this);
     zimManageActivity = (ZimManageActivity) super.getActivity();
     presenter.attachView(this);
     // Replace LinearLayout by the type of the root element of the layout you're trying to load

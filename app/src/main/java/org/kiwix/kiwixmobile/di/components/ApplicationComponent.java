@@ -18,7 +18,6 @@
 package org.kiwix.kiwixmobile.di.components;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.base.BaseFragment;
 import org.kiwix.kiwixmobile.data.DataModule;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
@@ -28,9 +27,7 @@ import org.kiwix.kiwixmobile.main.KiwixWebView;
 import org.kiwix.kiwixmobile.search.AutoCompleteAdapter;
 import org.kiwix.kiwixmobile.settings.SettingsActivity;
 import org.kiwix.kiwixmobile.zim_manager.DownloadService;
-import org.kiwix.kiwixmobile.zim_manager.fileselect.ZimFileSelectFragment;
 import org.kiwix.kiwixmobile.zim_manager.library.LibraryAdapter;
-import org.kiwix.kiwixmobile.zim_manager.library.LibraryFragment;
 
 import javax.inject.Singleton;
 
@@ -47,12 +44,6 @@ public interface ApplicationComponent {
   void inject(KiwixApplication application);
 
   void inject(DownloadService service);
-
-  void inject(LibraryFragment libraryFragment);
-
-  void inject(BaseFragment baseFragment);
-
-  void inject(ZimFileSelectFragment zimFileSelectFragment);
 
   void inject(ZimContentProvider zimContentProvider);
 

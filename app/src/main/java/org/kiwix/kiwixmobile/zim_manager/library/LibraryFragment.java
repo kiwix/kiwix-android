@@ -45,7 +45,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseFragment;
 import org.kiwix.kiwixmobile.main.MainActivity;
@@ -109,7 +108,6 @@ public class LibraryFragment extends BaseFragment
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
-    KiwixApplication.getApplicationComponent().inject(this);
     TestingUtils.bindResource(LibraryFragment.class);
     LinearLayout root = (LinearLayout) inflater.inflate(R.layout.activity_library, container, false);
     ButterKnife.bind(this, root);
