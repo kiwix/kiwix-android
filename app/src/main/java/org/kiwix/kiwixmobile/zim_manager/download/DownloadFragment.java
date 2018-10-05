@@ -18,19 +18,15 @@
 package org.kiwix.kiwixmobile.zim_manager.download;
 
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.database.DataSetObserver;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,74 +56,21 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import static org.kiwix.kiwixmobile.utils.ImageUtils.createBitmapFromEncodedString;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class DownloadFragment extends BaseFragment {
 
   public static LinkedHashMap<Integer, LibraryNetworkEntity.Book> mDownloads = new LinkedHashMap<>();
   public static LinkedHashMap<Integer, String> mDownloadFiles = new LinkedHashMap<>();
+  public static DownloadAdapter downloadAdapter;
   public RelativeLayout relLayout;
   public ListView listView;
-  public static DownloadAdapter downloadAdapter;
-  private ZimManageActivity zimManageActivity;
   CoordinatorLayout mainLayout;
-  private Activity faActivity;
-  private boolean hasArtificiallyPaused;
-
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
-
-  @Override
-  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    faActivity = super.getActivity();
-    relLayout = (RelativeLayout) inflater.inflate(R.layout.download_management, container, false);
-
-    zimManageActivity = (ZimManageActivity) super.getActivity();
-    listView = relLayout.findViewById(R.id.zim_downloader_list);
-    downloadAdapter = new DownloadAdapter(mDownloads);
-    downloadAdapter.registerDataSetObserver(this);
-    listView.setAdapter(downloadAdapter);
-    mainLayout = faActivity.findViewById(R.id.zim_manager_main_activity);
-    return relLayout;
-  }
-
-  @Override
-  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    updateNoDownloads();
-  }
-
-  private void updateNoDownloads() {
-    if (faActivity == null) {
-      return;
-    }
-    TextView noDownloadsText = faActivity.findViewById(R.id.download_management_no_downloads);
-    if (noDownloadsText == null) return;
-    if (listView.getCount() == 0) {
-      noDownloadsText.setVisibility(View.VISIBLE);
-    } else if (listView.getCount() > 0) {
-      noDownloadsText.setVisibility(View.GONE);
-    }
-  }
-
-  @Override
-  public void onDestroy() {
-    super.onDestroy();
-    downloadAdapter.unRegisterDataSetObserver();
-  }
-
-  public void showNoWiFiWarning(Context context, Runnable yesAction) {
-    new AlertDialog.Builder(context)
-            .setTitle(R.string.wifi_only_title)
-            .setMessage(R.string.wifi_only_msg)
-            .setPositiveButton(R.string.yes, (dialog, i) -> {
-                      sharedPreferenceUtil.putPrefWifiOnly(false);
-              MainActivity.wifiOnly = false;
-              yesAction.run();
-            })
-            .setNegativeButton(R.string.no, (dialog, i) -> {})
-            .show();
-  }
+  private ZimManageActivity zimManageActivity;
+  private boolean hasArtificiallyPaused;
 
   public static String toHumanReadableTime(int seconds) {
     final double MINUTES = 60;
@@ -149,6 +92,65 @@ public class DownloadFragment extends BaseFragment {
     return String.format(Locale.getDefault(), "%d %s %s", seconds,
         KiwixApplication.getInstance().getResources().getString(R.string.time_second),
         KiwixApplication.getInstance().getResources().getString(R.string.time_left));
+  }
+
+  @Override
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    relLayout = (RelativeLayout) inflater.inflate(R.layout.download_management, container, false);
+
+    zimManageActivity = (ZimManageActivity) super.getActivity();
+    listView = relLayout.findViewById(R.id.zim_downloader_list);
+    downloadAdapter = new DownloadAdapter(mDownloads);
+    downloadAdapter.registerDataSetObserver(this);
+    listView.setAdapter(downloadAdapter);
+    mainLayout = zimManageActivity.findViewById(R.id.zim_manager_main_activity);
+    return relLayout;
+  }
+
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    updateNoDownloads();
+  }
+
+  private void updateNoDownloads() {
+    if (zimManageActivity == null) {
+      return;
+    }
+    TextView noDownloadsText = zimManageActivity.findViewById(R.id.download_management_no_downloads);
+    if (noDownloadsText == null) return;
+    if (listView.getCount() == 0) {
+      noDownloadsText.setVisibility(View.VISIBLE);
+    } else if (listView.getCount() > 0) {
+      noDownloadsText.setVisibility(View.GONE);
+    }
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    downloadAdapter.unRegisterDataSetObserver();
+  }
+
+  public void showNoWiFiWarning(Context context, Runnable yesAction) {
+    new AlertDialog.Builder(context)
+        .setTitle(R.string.wifi_only_title)
+        .setMessage(R.string.wifi_only_msg)
+        .setPositiveButton(R.string.yes, (dialog, i) -> {
+          sharedPreferenceUtil.putPrefWifiOnly(false);
+          MainActivity.wifiOnly = false;
+          yesAction.run();
+        })
+        .setNegativeButton(R.string.no, (dialog, i) -> {
+        })
+        .show();
+  }
+
+  public void addDownload(int position, LibraryNetworkEntity.Book book, String fileName) {
+    mDownloads.put(position, book);
+    mDownloadFiles.put(position, fileName);
+    downloadAdapter.notifyDataSetChanged();
+    updateNoDownloads();
   }
 
   public class DownloadAdapter extends BaseAdapter {
@@ -223,10 +225,10 @@ public class DownloadFragment extends BaseFragment {
     private void setPlayState(ImageView pauseButton, int position, int newPlayState) {
       if (newPlayState == DownloadService.PLAY) { //Playing
         if (LibraryFragment.mService.playDownload(mKeys[position]))
-          pauseButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
+          pauseButton.setImageDrawable(ContextCompat.getDrawable(zimManageActivity, R.drawable.ic_pause_black_24dp));
       } else { //Pausing
         LibraryFragment.mService.pauseDownload(mKeys[position]);
-        pauseButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black_24dp));
+        pauseButton.setImageDrawable(ContextCompat.getDrawable(zimManageActivity, R.drawable.ic_play_arrow_black_24dp));
       }
     }
 
@@ -235,7 +237,7 @@ public class DownloadFragment extends BaseFragment {
       // Get the data item for this position
       // Check if an existing view is being reused, otherwise inflate the view
       if (convertView == null) {
-        convertView = LayoutInflater.from(faActivity).inflate(R.layout.download_item, parent, false);
+        convertView = LayoutInflater.from(zimManageActivity).inflate(R.layout.download_item, parent, false);
       }
       mKeys = mData.keySet().toArray(new Integer[0]);
       // Lookup view for data population
@@ -247,28 +249,28 @@ public class DownloadFragment extends BaseFragment {
       ImageView imageView = convertView.findViewById(R.id.favicon);
       title.setText(getItem(position).getTitle());
       description.setText(getItem(position).getDescription());
-      imageView.setImageBitmap(StringToBitMap(getItem(position).getFavicon()));
+      imageView.setImageBitmap(createBitmapFromEncodedString(getActivity(), getItem(position).getFavicon()));
 
       ProgressBar downloadProgress = convertView.findViewById(R.id.downloadProgress);
       ImageView pause = convertView.findViewById(R.id.pause);
 
       if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == 0) {
         downloadProgress.setProgress(0);
-        pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
+        pause.setImageDrawable(ContextCompat.getDrawable(zimManageActivity, R.drawable.ic_pause_black_24dp));
       } else {
         downloadProgress.setProgress(LibraryFragment.mService.downloadProgress.get(mKeys[position]));
         if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PAUSE) {
-          pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black_24dp));
+          pause.setImageDrawable(ContextCompat.getDrawable(zimManageActivity, R.drawable.ic_play_arrow_black_24dp));
         }
         if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY) {
-          pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
+          pause.setImageDrawable(ContextCompat.getDrawable(zimManageActivity, R.drawable.ic_pause_black_24dp));
         }
       }
 
       pause.setOnClickListener(v -> {
         int newPlayPauseState = LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY ? DownloadService.PAUSE : DownloadService.PLAY;
 
-        if (newPlayPauseState == DownloadService.PLAY && MainActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
+        if (newPlayPauseState == DownloadService.PLAY && MainActivity.wifiOnly && !NetworkUtils.isWiFi(zimManageActivity)) {
           showNoWiFiWarning(getContext(), () -> setPlayState(pause, position, newPlayPauseState));
           return;
         }
@@ -283,7 +285,7 @@ public class DownloadFragment extends BaseFragment {
       stop.setOnClickListener(v -> {
         hasArtificiallyPaused = LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY;
         setPlayState(pause, position, DownloadService.PAUSE);
-        new AlertDialog.Builder(faActivity, dialogStyle())
+        new AlertDialog.Builder(zimManageActivity, dialogStyle())
             .setTitle(R.string.confirm_stop_download_title)
             .setMessage(R.string.confirm_stop_download_msg)
             .setPositiveButton(R.string.yes, (dialog, i) -> {
@@ -293,7 +295,7 @@ public class DownloadFragment extends BaseFragment {
               downloadAdapter.notifyDataSetChanged();
               updateNoDownloads();
               if (zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter != null) {
-                zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(((ZimManageActivity) getActivity()).searchView.getQuery());
+                zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter((zimManageActivity).searchView.getQuery());
               }
             })
             .setNegativeButton(R.string.no, (dialog, i) -> {
@@ -335,22 +337,4 @@ public class DownloadFragment extends BaseFragment {
       }
     }
   }
-
-  public void addDownload(int position, LibraryNetworkEntity.Book book, String fileName) {
-    mDownloads.put(position, book);
-    mDownloadFiles.put(position, fileName);
-    downloadAdapter.notifyDataSetChanged();
-    updateNoDownloads();
-  }
-
-  public Bitmap StringToBitMap(String encodedString) {
-    try {
-      byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-      return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-    } catch (Exception e) {
-      e.getMessage();
-      return null;
-    }
-  }
-
 }
