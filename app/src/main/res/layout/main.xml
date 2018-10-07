@@ -7,11 +7,11 @@
   android:fitsSystemWindows="false"
   android:orientation="vertical">
 
-
   <android.support.v4.widget.DrawerLayout
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:fitsSystemWindows="true">
 
     <android.support.design.internal.ScrimInsetsFrameLayout
@@ -44,8 +44,8 @@
             android:layout_margin="@dimen/fullscreen_control_button_margin"
             android:background="@color/back_to_top_background"
             android:hint="@string/menu_exitfullscreen"
-            app:srcCompat="@drawable/fullscreen_exit"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            app:srcCompat="@drawable/fullscreen_exit" />
 
 
           <Button
@@ -101,19 +101,6 @@
 
       </RelativeLayout>
 
-      <org.kiwix.kiwixmobile.views.PageBottomTabLayout
-        android:id="@+id/page_bottom_tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="bottom"
-        android:background="@color/grey"
-        android:visibility="gone"
-        app:tabGravity="fill"
-        app:tabIndicatorColor="@color/grey"
-        app:tabSelectedTextColor="@color/grey" />
-
     </RelativeLayout>
 
     <include layout="@layout/drawer_left" />
@@ -121,6 +108,7 @@
     <include layout="@layout/drawer_right" />
 
   </android.support.v4.widget.DrawerLayout>
+
 
   <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -146,5 +134,19 @@
       app:progressColor="@color/accent" />
 
   </RelativeLayout>
+
+  <org.kiwix.kiwixmobile.views.PageBottomTabLayout
+    android:id="@+id/page_bottom_tab_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_centerHorizontal="true"
+    android:layout_gravity="bottom"
+    android:background="@color/grey"
+    android:visibility="gone"
+    app:layout_behavior="org.kiwix.kiwixmobile.views.PageBottomTabLayoutSnackBarBehavior"
+    app:tabGravity="fill"
+    app:tabIndicatorColor="@color/grey"
+    app:tabSelectedTextColor="@color/grey" />
 
 </android.support.design.widget.CoordinatorLayout>
