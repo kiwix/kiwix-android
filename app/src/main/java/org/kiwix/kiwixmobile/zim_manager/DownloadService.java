@@ -84,6 +84,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_LIBRARY;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_NOTIFICATION_ID;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_ZIM_FILE;
 import static org.kiwix.kiwixmobile.utils.Constants.ONGOING_DOWNLOAD_CHANNEL_ID;
+import static org.kiwix.kiwixmobile.utils.DimenUtils.toHumanReadableTime;
 import static org.kiwix.kiwixmobile.utils.files.FileUtils.getCurrentSize;
 
 public class DownloadService extends Service {
@@ -384,7 +385,7 @@ public class DownloadService extends Service {
             }
             notification.get(notificationID).setProgress(100, progress, false);
             if (progress != 100 && timeRemaining.get(notificationID) != -1)
-              notification.get(notificationID).setContentText(DownloadFragment.toHumanReadableTime(timeRemaining.get(notificationID)));
+              notification.get(notificationID).setContentText(toHumanReadableTime(timeRemaining.get(notificationID)));
             notificationManager.notify(notificationID, notification.get(notificationID).build());
             if (progress == 0 || progress == 100) {
               // Tells android to not kill the service

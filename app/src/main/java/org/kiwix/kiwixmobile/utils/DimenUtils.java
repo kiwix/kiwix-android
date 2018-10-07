@@ -22,8 +22,12 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
+import org.kiwix.kiwixmobile.KiwixApplication;
+import org.kiwix.kiwixmobile.R;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.Locale;
 
 /**
  * Created by gmon on 1/13/17.
@@ -85,5 +89,27 @@ public class DimenUtils {
     BigDecimal bd = new BigDecimal(size);
     bd = bd.round(new MathContext(3));
     return String.valueOf(bd.doubleValue());
+  }
+
+  public static String toHumanReadableTime(int seconds) {
+    final double MINUTES = 60;
+    final double HOURS = 60 * MINUTES;
+    final double DAYS = 24 * HOURS;
+
+    if (Math.round(seconds / DAYS) > 0)
+      return String.format(Locale.getDefault(), "%d %s %s", Math.round(seconds / DAYS),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_day),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_left));
+    if (Math.round(seconds / HOURS) > 0)
+      return String.format(Locale.getDefault(), "%d %s %s", Math.round(seconds / HOURS),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_hour),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_left));
+    if (Math.round(seconds / MINUTES) > 0)
+      return String.format(Locale.getDefault(), "%d %s %s", Math.round(seconds / MINUTES),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_minute),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_left));
+    return String.format(Locale.getDefault(), "%d %s %s", seconds,
+        KiwixApplication.getInstance().getResources().getString(R.string.time_second),
+        KiwixApplication.getInstance().getResources().getString(R.string.time_left));
   }
 }

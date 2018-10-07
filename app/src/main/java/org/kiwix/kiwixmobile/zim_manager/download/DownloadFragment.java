@@ -41,7 +41,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseFragment;
 import org.kiwix.kiwixmobile.main.MainActivity;
@@ -56,10 +55,10 @@ import org.kiwix.kiwixmobile.zim_manager.library.LibraryFragment;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
+import static org.kiwix.kiwixmobile.utils.DimenUtils.toHumanReadableTime;
 import static org.kiwix.kiwixmobile.utils.ImageUtils.createBitmapFromEncodedString;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
@@ -92,28 +91,6 @@ public class DownloadFragment extends BaseFragment {
           intent.getStringExtra(INTENT_EXTRA_FILE));
     }
   };
-
-  public static String toHumanReadableTime(int seconds) {
-    final double MINUTES = 60;
-    final double HOURS = 60 * MINUTES;
-    final double DAYS = 24 * HOURS;
-
-    if (Math.round(seconds / DAYS) > 0)
-      return String.format(Locale.getDefault(), "%d %s %s", Math.round(seconds / DAYS),
-          KiwixApplication.getInstance().getResources().getString(R.string.time_day),
-          KiwixApplication.getInstance().getResources().getString(R.string.time_left));
-    if (Math.round(seconds / HOURS) > 0)
-      return String.format(Locale.getDefault(), "%d %s %s", Math.round(seconds / HOURS),
-          KiwixApplication.getInstance().getResources().getString(R.string.time_hour),
-          KiwixApplication.getInstance().getResources().getString(R.string.time_left));
-    if (Math.round(seconds / MINUTES) > 0)
-      return String.format(Locale.getDefault(), "%d %s %s", Math.round(seconds / MINUTES),
-          KiwixApplication.getInstance().getResources().getString(R.string.time_minute),
-          KiwixApplication.getInstance().getResources().getString(R.string.time_left));
-    return String.format(Locale.getDefault(), "%d %s %s", seconds,
-        KiwixApplication.getInstance().getResources().getString(R.string.time_second),
-        KiwixApplication.getInstance().getResources().getString(R.string.time_left));
-  }
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
