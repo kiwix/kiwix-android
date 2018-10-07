@@ -83,7 +83,7 @@ public class LibraryFragment extends BaseFragment
   public static final CountingIdlingResource IDLING_RESOURCE =
       new CountingIdlingResource("Library Fragment Idling Resource");
   public static final List<Book> downloadingBooks = new ArrayList<>();
-  public static DownloadService mService = new DownloadService();
+  public static DownloadService downloadService = new DownloadService();
   private static NetworkBroadcastReceiver networkBroadcastReceiver;
   private static boolean isReceiverRegistered = false;
   public LibraryAdapter libraryAdapter;
@@ -96,13 +96,26 @@ public class LibraryFragment extends BaseFragment
   @BindView(R.id.library_swiperefresh)
   SwipeRefreshLayout swipeRefreshLayout;
   @Inject
-  ConnectivityManager conMan;
+  ConnectivityManager connectivityManager;
   @Inject
   LibraryPresenter presenter;
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
-  private boolean mBound;
-  private DownloadServiceConnection mConnection = new DownloadServiceConnection();
+  private boolean bound;
+  private ServiceConnection serviceConnection = new ServiceConnection() {
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+      // We've bound to LocalService, cast the IBinder and get LocalService instance
+      DownloadService.LocalBinder binder = (DownloadService.LocalBinder) service;
+      downloadService = binder.getService();
+      bound = true;
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+
+    }
+  };
   private ZimManageActivity activity;
 
   @Override
@@ -120,10 +133,7 @@ public class LibraryFragment extends BaseFragment
     libraryAdapter = new LibraryAdapter(super.getContext());
     libraryList.setAdapter(libraryAdapter);
 
-    DownloadService.setDownloadFragment(activity.mSectionsPagerAdapter.getDownloadFragment());
-
-
-    NetworkInfo network = conMan.getActiveNetworkInfo();
+    NetworkInfo network = connectivityManager.getActiveNetworkInfo();
     if (network == null || !network.isConnected()) {
       displayNoNetworkConnection();
     }
@@ -217,7 +227,7 @@ public class LibraryFragment extends BaseFragment
   }
 
   private void refreshFragment() {
-    NetworkInfo network = conMan.getActiveNetworkInfo();
+    NetworkInfo network = connectivityManager.getActiveNetworkInfo();
     if (network == null || !network.isConnected()) {
       Toast.makeText(super.getActivity(), R.string.no_network_connection, Toast.LENGTH_LONG).show();
       swipeRefreshLayout.setRefreshing(false);
@@ -230,9 +240,9 @@ public class LibraryFragment extends BaseFragment
   public void onDestroyView() {
     presenter.detachView();
     super.onDestroyView();
-    if (mBound && super.getActivity() != null) {
-      super.getActivity().unbindService(mConnection.downloadServiceInterface);
-      mBound = false;
+    if (bound && super.getActivity() != null) {
+      super.getActivity().unbindService(serviceConnection);
+      bound = false;
     }
   }
 
@@ -263,14 +273,14 @@ public class LibraryFragment extends BaseFragment
         return;
       }
 
-      if (DownloadFragment.mDownloadFiles
+      if (DownloadFragment.downloadFiles
           .containsValue(KIWIX_ROOT + StorageUtils.getFileNameFromUrl(((Book) parent.getAdapter()
               .getItem(position)).getUrl()))) {
         Toast.makeText(super.getActivity(), getString(R.string.zim_already_downloading), Toast.LENGTH_LONG)
             .show();
       } else {
 
-        NetworkInfo network = conMan.getActiveNetworkInfo();
+        NetworkInfo network = connectivityManager.getActiveNetworkInfo();
         if (network == null || !network.isConnected()) {
           Toast.makeText(super.getActivity(), getString(R.string.no_network_connection), Toast.LENGTH_LONG)
               .show();
@@ -309,8 +319,7 @@ public class LibraryFragment extends BaseFragment
     service.putExtra(DOWNLOAD_ZIM_TITLE, book.getTitle());
     service.putExtra(EXTRA_BOOK, book);
     activity.startService(service);
-    mConnection = new DownloadServiceConnection();
-    activity.bindService(service, mConnection.downloadServiceInterface, Context.BIND_AUTO_CREATE);
+    activity.bindService(service, serviceConnection, Context.BIND_AUTO_CREATE);
     activity.displayDownloadInterface();
   }
 
@@ -328,33 +337,10 @@ public class LibraryFragment extends BaseFragment
     }
   }
 
-  class DownloadServiceConnection {
-    final DownloadServiceInterface downloadServiceInterface;
-
-    DownloadServiceConnection() {
-      downloadServiceInterface = new DownloadServiceInterface();
-    }
-
-    class DownloadServiceInterface implements ServiceConnection {
-
-      @Override
-      public void onServiceConnected(ComponentName className, IBinder service) {
-        // We've bound to LocalService, cast the IBinder and get LocalService instance
-        DownloadService.LocalBinder binder = (DownloadService.LocalBinder) service;
-        mService = binder.getService();
-        mBound = true;
-      }
-
-      @Override
-      public void onServiceDisconnected(ComponentName arg0) {
-      }
-    }
-  }
-
   public class NetworkBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-      NetworkInfo network = conMan.getActiveNetworkInfo();
+      NetworkInfo network = connectivityManager.getActiveNetworkInfo();
 
       if (network == null || !network.isConnected()) {
         displayNoNetworkConnection();

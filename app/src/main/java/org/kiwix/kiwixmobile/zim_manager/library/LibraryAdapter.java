@@ -242,7 +242,7 @@ public class LibraryAdapter extends BaseAdapter {
         List<Book> selectedLanguages = Observable.fromIterable(allBooks)
             .filter(LibraryAdapter.this::languageActive)
             .filter(book -> !books.contains(book))
-            .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
+            .filter(book -> !DownloadFragment.downloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
             .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
             .toList()
@@ -251,7 +251,7 @@ public class LibraryAdapter extends BaseAdapter {
         List<Book> unselectedLanguages = Observable.fromIterable(allBooks)
             .filter(book -> !languageActive(book))
             .filter(book -> !books.contains(book))
-            .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
+            .filter(book -> !DownloadFragment.downloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
             .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
             .toList()
@@ -265,7 +265,7 @@ public class LibraryAdapter extends BaseAdapter {
         List<Book> selectedLanguages = Observable.fromIterable(allBooks)
             .filter(LibraryAdapter.this::languageActive)
             .filter(book -> !books.contains(book))
-            .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
+            .filter(book -> !DownloadFragment.downloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
             .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
             .flatMap(book -> getMatches(book, s.toString()))
@@ -277,7 +277,7 @@ public class LibraryAdapter extends BaseAdapter {
         List<Book> unselectedLanguages = Observable.fromIterable(allBooks)
             .filter(book -> !languageActive(book))
             .filter(book -> !books.contains(book))
-            .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
+            .filter(book -> !DownloadFragment.downloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
             .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
             .flatMap(book -> getMatches(book, s.toString()))
