@@ -15,12 +15,12 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       android:id="@+id/toolbar_layout"
       android:layout_width="match_parent"
-      android:layout_height="?actionBarSize">
+      android:layout_height="?android:attr/actionBarSize">
 
       <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
+        android:layout_height="?android:attr/actionBarSize"
         android:background="?colorPrimaryDark"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:theme="@style/AppTheme.AppBarOverlay" />
