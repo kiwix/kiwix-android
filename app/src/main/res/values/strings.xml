@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="kiwi">Kiwi</string>
   <string name="menu_zim_manager">Get Content</string>
   <string name="menu_help">Help</string>
   <string name="menu_home">Home</string>
@@ -14,7 +15,7 @@
   <string name="menu_read_aloud_stop">Stop reading aloud</string>
   <string name="save_media">Save Media</string>
   <string name="save_media_error">An error occurred when trying to save the media!</string>
-  <string name="save_media_saved">Saved media as %s to Android/media/org.kiwix.../</string>
+  <string name="save_media_saved">Saved media as %s to Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Scanning for downloadable content, please wait…</string>
   <string name="button_backtotop">Back to Top</string>
   <string name="search_label">Search</string>
@@ -105,20 +106,20 @@
   <string name="get_library_over_network">Use network to download content list. (Approximately 6MB)</string>
   <string name="proceed">Proceed</string>
   <string name="wait_for_load">Content Still Loading</string>
-  <string name="help_1">Kiwix allows you offline access to websites such as Wikipedia in a highly compressed form.</string>
+  <string name="help_1">Kiwix gives you offline access to websites such as Wikipedia in a highly compressed form.</string>
   <string name="help_2">What does Kiwix do?</string>
   <string name="help_3">Kiwix is an offline content reader. It acts very much like a browser but instead of accessing online web pages, it reads content from a file in ZIM format.</string>
-  <string name="help_4">While Kiwix has been originaly designed to provide Wikipedia offline, it also reads other contents.</string>
+  <string name="help_4">While Kiwix has been originally designed to provide Wikipedia offline, it also reads other contents.</string>
   <string name="help_5">Where is the content?</string>
   <string name="help_6">Our content is hosted on the Kiwix website.</string>
   <string name="help_7">They are available as ZIM files. There are a lot of them:</string>
   <string name="help_8">\u2022 Wikipedia is available separately for each language</string>
   <string name="help_9">\u2022 Other contents like Wikileaks or Wikisource are also available</string>
-  <string name="help_10">You can either download your choosen ZIM files in-app or carefuly select the one(s) you want and download from a Desktop computer before transfering the ZIM files to your SD card.</string>
+  <string name="help_10">You can either download your chosen ZIM files in-app or carefuly select the one(s) you want and download from a Desktop computer before transferring the ZIM files to your SD card.</string>
   <string name="help_11">ZIM files download in-app are located in the external storage directory in a folder entitled Kiwix.</string>
   <string name="help_12">How to use large ZIM files?</string>
   <string name="help_13">If your ZIM file is larger than 4GB, you might not be able to store it on your SD card due to filesystem limitations.</string>
-  <string name="help_14">Downloading in-app automaticaly handles larger files, splitting them up for you.</string>
+  <string name="help_14">Downloading in-app automatically handles larger files, splitting them up for you.</string>
   <string name="help_15">If however you are downloading on another device, you may need to split the ZIM file up using the following software:</string>
   <string name="help_16">\u2022 On Microsoft Windows: HJ-Split</string>
   <string name="help_17">\u2022 On Apple Mac OSX: Split and Concat</string>
@@ -172,7 +173,7 @@
   <string name="no_items_msg">No items available</string>
   <string name="ongoing_download_channel_name">Ongoing Downloads</string>
   <string name="ongoing_download_channel_desc">Category for ongoing zim file downloads.</string>
-  <string name="crash_title">Well... This is Embarrassing</string>
+  <string name="crash_title">Well… This is Embarrassing</string>
   <string name="crash_description">It looks like we crashed.\n\nWould you mind helping us fix this problem by sending the following information?</string>
   <string name="crash_checkbox_language">Your Language Settings</string>
   <string name="crash_checkbox_zimfiles">A List of Your Zim Files</string>
@@ -181,4 +182,62 @@
   <string name="crash_checkbox_device">Device Details</string>
   <string name="crash_button_confirm">SEND DETAILS</string>
   <string name="crash_button_decline">NO THANKS</string>
+  <string name="shortcut_disabled_message">Shortcut not available</string>
+  <string name="new_tab_shortcut_label">New tab</string>
+  <string name="get_content_shortcut_label">Get content</string>
+  <string name="favicon">Favicon</string>
+  <string name="pic">Pic</string>
+  <string name="vid">Vid</string>
+  <string name="articleCount">%s articles</string>
+  <string name="get_started">Get started</string>
+  <string name="find_offline_books_and_enjoy_reading">Find offline books and enjoy reading.</string>
+  <string name="download_books">Download books</string>
+  <string name="human_kind_knowledge">Human kind\'s knowledge, on your phone.</string>
+  <string name="welcome_to_the_family">Welcome to the family</string>
+  <string name="save_books_offline">Save books offline</string>
+  <string name="download_books_message">Download books and read wherever you are.</string>
+  <string name="unable_to_add_to_bookmarks">Unable to add to bookmarks</string>
+  <string name="go_to_previous_page">Go to previous page</string>
+  <string name="go_to_next_page">Go to next page</string>
+  <string name="table_of_contents">Table of contents</string>
+  <string name="select_languages">Select languages</string>
+  <string name="save_languages">Save languages</string>
+  <string name="languages_saved">Languages saved</string>
+  <string name="send_feedback">Send feedback</string>
+  <string name="expand">Expand</string>
+  <plurals name="books_count">
+    <item quantity="one">%d book</item>
+    <item quantity="other">%d books</item>
+  </plurals>
+  <string name="history">History</string>
+  <string name="history_from_current_book">History from current book</string>
+  <string name="search_history">Search history</string>
+  <string name="selected_items">%1$d selected</string>
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
+  <string name="bookmarks_from_current_book">Bookmarks from current book</string>
+  <string name="search_bookmarks">Search bookmarks</string>
+  <string name="new_tab">New tab</string>
+  <string name="switch_tabs">Switch tabs</string>
+  <string name="smiling_face">:D</string>
+  <string name="close_all_tabs">Close all tabs</string>
 </resources>

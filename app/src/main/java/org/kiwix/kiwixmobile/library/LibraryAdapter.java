@@ -23,6 +23,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,10 +36,12 @@ import com.google.common.collect.ImmutableList;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.database.BookDao;
-import org.kiwix.kiwixmobile.database.NetworkLanguageDao;
+import org.kiwix.kiwixmobile.data.DataSource;
+import org.kiwix.kiwixmobile.data.local.dao.BookDao;
+import org.kiwix.kiwixmobile.data.local.dao.NetworkLanguageDao;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+import org.kiwix.kiwixmobile.models.Language;
 import org.kiwix.kiwixmobile.utils.BookUtils;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
@@ -50,16 +53,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
 
@@ -70,8 +69,8 @@ public class LibraryAdapter extends BaseAdapter {
   private ImmutableList<Book> allBooks;
   private List<ListItem> listItems = new ArrayList<>();
   private final Context context;
-  public Map<String, Integer> languageCounts = new HashMap<>();
-  public List<Language> languages = new ArrayList<>();
+  public HashMap<String, Integer> languageCounts = new HashMap<>();
+  public ArrayList<Language> languages = new ArrayList<>();
   private final LayoutInflater layoutInflater;
   private final BookFilter bookFilter = new BookFilter();
   private Disposable saveNetworkLanguageDisposable;
@@ -80,6 +79,8 @@ public class LibraryAdapter extends BaseAdapter {
   NetworkLanguageDao networkLanguageDao;
   @Inject
   BookDao bookDao;
+  @Inject
+  DataSource dataSource;
 
   public LibraryAdapter(Context context) {
     super();
@@ -316,10 +317,6 @@ public class LibraryAdapter extends BaseAdapter {
     return bookFilter;
   }
 
-  public void updateNetworkLanguages() {
-    saveNetworkLanguages();
-  }
-
   private void updateLanguageCounts() {
     languageCounts.clear();
     for (Book book : allBooks) {
@@ -344,7 +341,7 @@ public class LibraryAdapter extends BaseAdapter {
     }
 
     // Populate languages with all available locales, which appear in the current list of all books.
-    this.languages = new ArrayList<>();
+    this.languages.clear();
     for (String iso_language : Locale.getISOLanguages()) {
       Locale locale = new Locale(iso_language);
       if (languageCounts.get(locale.getISO3Language()) != null) {
@@ -439,40 +436,12 @@ public class LibraryAdapter extends BaseAdapter {
     }
   }
 
-  public static class Language {
-    public String language;
-    public String languageLocalized;
-    public String languageCode;
-    public String languageCodeISO2;
-    public Boolean active;
-
-    Language(Locale locale, Boolean active) {
-      this.language = locale.getDisplayLanguage();
-      this.languageLocalized = locale.getDisplayLanguage(locale);
-      this.languageCode = locale.getISO3Language();
-      this.languageCodeISO2 = locale.getLanguage();
-
-      this.active = active;
-    }
-
-    public Language(String languageCode, Boolean active) {
-      this(new Locale(languageCode), active);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-      return ((Language) obj).language.equals(language) &&
-          ((Language) obj).active.equals(active);
-    }
-  }
-
   private void saveNetworkLanguages() {
     if (saveNetworkLanguageDisposable != null && !saveNetworkLanguageDisposable.isDisposed()) {
       saveNetworkLanguageDisposable.dispose();
     }
-    saveNetworkLanguageDisposable = Completable.fromAction(() -> networkLanguageDao.saveFilteredLanguages(languages))
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe();
+    saveNetworkLanguageDisposable = dataSource.saveLanguages(languages)
+        .subscribe(() -> {
+        }, throwable -> Log.d("LibraryAdapter", throwable.toString()));
   }
 }

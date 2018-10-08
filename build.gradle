@@ -1,12 +1,10 @@
-
-
 buildscript {
   repositories {
     jcenter()
-      google()
+    google()
   }
   dependencies {
-      classpath 'com.android.tools.build:gradle:3.1.4'
+    classpath "com.android.tools.build:gradle:3.1.4"
 
     // NOTE: Do not place your application dependencies here; they belong
     // in the individual module build.gradle files
@@ -14,22 +12,35 @@ buildscript {
 }
 
 ext {
-    supportLibraryVersion = '27.0.2'
-    rxJavaVersion = '2.1.9'
-    rxAndroidVersion = '2.0.2'
-    okHttpVersion = '3.9.1'
-    retrofitVersion = '2.3.0'
-    javaxAnnotationVersion = '1.3.2'
-    daggerVersion = '2.15'
+  androidGradlePluginVersion = '3.1.4'
+  testdroidGradlePluginVersion = '2.49.1'
+  supportLibraryVersion = '27.1.1'
+  rxJavaVersion = '2.2.2'
+  rxAndroidVersion = '2.1.0'
+  okHttpVersion = '3.11.0'
+  retrofitVersion = '2.4.0'
+  javaxAnnotationVersion = '1.3.2'
+  daggerVersion = '2.16'
+  inkPageIndicatorVersion = '1.3.0'
+  constraintLayoutVersion = '1.1.3'
+  butterKnifeVersion = '8.8.1'
+  espressoVersion = '3.0.2'
+  apacheCommonsVersion = '2.6'
+  multidexVersion = '1.0.3'
+  jUnitVersion = '4.12'
+  mockitoVersion = '2.19.1'
+  powerMockVersion = '1.6.6'
+  powerMockJUnitVersion = '1.7.4'
+  baristaVersion = '2.5.0'
 }
 
 allprojects {
-    repositories {
-        jcenter()
-        google()
-    }
+  repositories {
+    jcenter()
+    google()
+  }
 }
 
 task clean(type: Delete) {
-    delete rootProject.buildDir
+  delete rootProject.buildDir
 }

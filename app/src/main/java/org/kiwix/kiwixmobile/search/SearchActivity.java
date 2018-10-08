@@ -40,11 +40,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
-import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
+import org.kiwix.kiwixmobile.main.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,15 +71,10 @@ public class SearchActivity extends BaseActivity
 
   @Inject
   SearchPresenter searchPresenter;
-  @Inject
-  SharedPreferenceUtil sharedPreferenceUtil;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    if (sharedPreferenceUtil.getPrefNightMode()) {
-      setTheme(R.style.AppTheme_Night);
-    }
     setContentView(R.layout.search);
 
     if (savedInstanceState != null) {
@@ -129,7 +122,7 @@ public class SearchActivity extends BaseActivity
     setSupportActionBar(toolbar);
     int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
     if (value == 1) {
-      Intent intent = new Intent(this, KiwixMobileActivity.class);
+      Intent intent = new Intent(this, MainActivity.class);
       startActivity(intent);
     } else {
       super.finish();
@@ -199,7 +192,7 @@ public class SearchActivity extends BaseActivity
         if(searchView != null) {
           queryText = searchView.getQuery().toString();
         }
-        Intent resultIntent = new Intent(this, KiwixMobileActivity.class);
+        Intent resultIntent = new Intent(this, MainActivity.class);
         resultIntent.putExtra(EXTRA_SEARCH_IN_TEXT, true);
         resultIntent.putExtra(TAG_FILE_SEARCHED, queryText);
         if(shouldStartNewActivity() != 1) {
@@ -223,7 +216,7 @@ public class SearchActivity extends BaseActivity
   private void sendMessage(String uri) {
     int value = shouldStartNewActivity();
     if (value == 1) {
-      Intent i = new Intent(this, KiwixMobileActivity.class);
+      Intent i = new Intent(this, MainActivity.class);
       i.putExtra(TAG_FILE_SEARCHED, uri);
       startActivity(i);
     } else {

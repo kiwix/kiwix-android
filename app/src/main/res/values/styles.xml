@@ -12,6 +12,7 @@
     <item name="android:textCursorDrawable">@null</item>
     <item name="windowNoTitle">true</item>
     <item name="windowActionBar">false</item>
+    <item name="actionModeBackground">@color/actionModeBackground</item>
     <item name="progressBackgroundColor">@color/primary_dark</item>
     <item name="listBackground">@drawable/list_bg</item>
     <item name="android:windowContentOverlay">@null</item>
@@ -59,16 +60,16 @@
   <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
     <item name="spinBars">true</item>
   </style>
+
   <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView" />
 
   <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-    <item name="android:textColorPrimary">@color/primary_light</item>
-    <item name="actionMenuTextColor">@android:color/white</item>
+
   </style>
 
   <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat">
-    <item name="android:textColorPrimary">@color/primary_light</item>
-    <item name="actionMenuTextColor">@android:color/white</item>
+    <item name="android:textColorPrimary">@color/primary_text</item>
+    <item name="actionMenuTextColor">@color/primary_text</item>
   </style>
 
   <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
@@ -81,16 +82,21 @@
     <item name="android:textColorPrimary">@color/white</item>
     <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
     <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+    <item name="buttonBarNeutralButtonStyle">@style/NeutralButtonStyle</item>
     <item name="android:textColorAlertDialogListItem">@color/white</item>
-    <item name ="android:windowBackground">@color/cardview_dark_background</item>
+    <item name="android:windowBackground">@color/cardview_dark_background</item>
     <item name="android:textColorSecondary">@color/primary_light</item>
   </style>
-  
+
   <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
     <item name="android:textColor">@color/accent</item>
   </style>
 
   <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+    <item name="android:textColor">@color/accent</item>
+  </style>
+
+  <style name="NeutralButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
     <item name="android:textColor">@color/accent</item>
   </style>
 </resources>

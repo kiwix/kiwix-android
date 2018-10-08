@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:padding="@dimen/activity_horizontal_margin">
+
+  <TextView
+    android:id="@+id/item_help_title"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    app:layout_constraintEnd_toStartOf="@id/item_help_toggle_expand"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:text="@string/help_2" />
+
+  <ImageView
+    android:id="@+id/item_help_toggle_expand"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:contentDescription="@string/expand"
+    android:tint="@color/icons"
+    app:layout_constraintBottom_toBottomOf="@id/item_help_title"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="@id/item_help_title"
+    app:srcCompat="@drawable/action_find_next" />
+
+  <TextView
+    android:id="@+id/item_help_description"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:textAppearance="?android:attr/textAppearanceSmall"
+    android:visibility="gone"
+    app:layout_constraintTop_toBottomOf="@id/item_help_title"
+    tools:text="@string/help_3"
+    tools:visibility="visible" />
+</android.support.constraint.ConstraintLayout>

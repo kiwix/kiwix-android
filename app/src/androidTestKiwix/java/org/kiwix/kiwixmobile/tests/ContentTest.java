@@ -17,34 +17,33 @@
  */
 package org.kiwix.kiwixmobile.tests;
 
+import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
+
+import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.testutils.TestUtils;
-import org.kiwix.kiwixmobile.utils.SplashActivity;
 
 import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
-import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class ContentTest {
 
   @Rule
-  public ActivityTestRule<SplashActivity> mActivityTestRule = new ActivityTestRule<>(
-      SplashActivity.class);
+  public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
 
   @Test
   public void contentTest() {
-    enterHelp();
-
-    clickOn(R.string.menu_zim_manager);
+    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_zim_manager));
 
     TestUtils.allowPermissionsIfNeeded();
 

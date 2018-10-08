@@ -17,11 +17,11 @@
  */
 package org.kiwix.kiwixmobile.zim_manager;
 
-import org.kiwix.kiwixmobile.base.ViewCallback;
+import org.kiwix.kiwixmobile.base.BaseContract;
 
 /**
  * Created by srv_twry on 15/2/18.
  */
 
-public interface ZimManageViewCallback extends ViewCallback {
+interface ZimManageViewCallback extends BaseContract.View {
 }
