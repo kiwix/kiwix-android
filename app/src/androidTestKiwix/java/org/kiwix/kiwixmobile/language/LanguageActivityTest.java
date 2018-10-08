@@ -124,7 +124,7 @@ public class LanguageActivityTest {
 
     // languages used for testing
     String language1 = "kongo";
-    String language2 = "bengali";
+    String language2 = "german";
 
     // References for the checkboxes for the corresponding languages
     ViewInteraction checkBox1, checkBox2;
