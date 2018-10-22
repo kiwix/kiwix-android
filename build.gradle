@@ -13,7 +13,7 @@ buildscript {
 
 ext {
   androidGradlePluginVersion = '3.1.4'
-  testdroidGradlePluginVersion = '2.49.1'
+  testdroidGradlePluginVersion = '2.63.0'
   supportLibraryVersion = '27.1.1'
   rxJavaVersion = '2.2.2'
   rxAndroidVersion = '2.1.0'
