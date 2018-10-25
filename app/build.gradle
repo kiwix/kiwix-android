@@ -2,9 +2,9 @@ import groovy.json.JsonSlurper
 
 buildscript {
   repositories {
+    google()
     mavenCentral()
     jcenter()
-    google()
   }
 
   dependencies {
@@ -19,12 +19,12 @@ apply plugin: 'checkstyle'
 apply plugin: 'testdroid'
 
 repositories {
+  google()
   mavenCentral()
-  jcenter()
   maven {
     url 'https://maven.google.com'
   }
-  google()
+  jcenter()
 }
 
 String[] archs = ['arm64-v8a', 'armeabi', 'mips', 'mips64', 'x86', 'x86_64']
