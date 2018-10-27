@@ -40,6 +40,7 @@ public class ZimFileSelectPresenter extends BasePresenter<ZimFileSelectViewCallb
   private final DataSource dataSource;
 
   @Inject
+  private
   BookDao bookDao;
 
   @Inject

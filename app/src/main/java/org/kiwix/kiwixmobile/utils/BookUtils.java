@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.utils;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by mhutti1 on 19/04/17.
@@ -27,7 +28,7 @@ import java.util.Map;
 
 public class BookUtils {
 
-  public LanguageUtils.LanguageContainer container;
+  private final LanguageUtils.LanguageContainer container;
   public final Map<String, Locale> localeMap;
 
   // Create a map of ISO 369-2 language codes
@@ -52,7 +53,7 @@ public class BookUtils {
       return container.findLanguageName(languageCode).getLanguageName();
     } else if (languageCode.length() == 3) {
       try {
-        return localeMap.get(languageCode).getDisplayLanguage();
+        return Objects.requireNonNull(localeMap.get(languageCode)).getDisplayLanguage();
       } catch (Exception e) {
         return "";
       }

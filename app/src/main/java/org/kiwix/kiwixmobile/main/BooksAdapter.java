@@ -23,11 +23,11 @@ import butterknife.ButterKnife;
 
 import static org.kiwix.kiwixmobile.library.LibraryAdapter.createGbString;
 
-public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-  private static int TYPE_ITEM = 1;
-  private List<LibraryNetworkEntity.Book> books;
-  private OnItemClickListener itemClickListener;
+  private static final int TYPE_ITEM = 1;
+  private final List<LibraryNetworkEntity.Book> books;
+  private final OnItemClickListener itemClickListener;
 
   interface OnItemClickListener {
     void openFile(String url);
@@ -133,7 +133,7 @@ public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @BindView(R.id.header_language)
     TextView language;
 
-    public Category(View itemView) {
+    Category(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
     }

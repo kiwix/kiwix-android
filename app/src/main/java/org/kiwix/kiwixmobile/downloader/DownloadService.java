@@ -57,6 +57,7 @@ import java.io.RandomAccessFile;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -85,39 +86,44 @@ public class DownloadService extends Service {
 
   public static final int PLAY = 1;
   public static final int PAUSE = 2;
-  public static final int FINISH = 3;
-  public static final int CANCEL = 4;
-  public static final String ACTION_PAUSE = "PAUSE";
-  public static final String ACTION_STOP = "STOP";
+  private static final int FINISH = 3;
+  private static final int CANCEL = 4;
+  private static final String ACTION_PAUSE = "PAUSE";
+  private static final String ACTION_STOP = "STOP";
   public static final String ACTION_NO_WIFI = "NO_WIFI";
-  public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
-  public static final Object pauseLock = new Object();
+  private static final String NOTIFICATION_ID = "NOTIFICATION_ID";
+  private static final Object pauseLock = new Object();
   // 1024 / 100
   private static final double BOOK_SIZE_OFFSET = 10.24;
   private static final String KIWIX_TAG = "kiwixdownloadservice";
   public static String KIWIX_ROOT;
-  public static ArrayList<String> notifications = new ArrayList<>();
+  private static final ArrayList<String> notifications = new ArrayList<>();
   private static String SD_CARD;
   private static DownloadFragment downloadFragment;
   private final IBinder mBinder = new LocalBinder();
-  public String notificationTitle;
-  public SparseIntArray downloadStatus = new SparseIntArray();
-  public SparseIntArray downloadProgress = new SparseIntArray();
-  public SparseIntArray timeRemaining = new SparseIntArray();
+  private String notificationTitle;
+  public final SparseIntArray downloadStatus = new SparseIntArray();
+  public final SparseIntArray downloadProgress = new SparseIntArray();
+  public final SparseIntArray timeRemaining = new SparseIntArray();
   @Inject
+  private
   KiwixService kiwixService;
   @Inject
+  private
   OkHttpClient httpClient;
   @Inject
+  private
   NotificationManager notificationManager;
-  Handler handler = new Handler(Looper.getMainLooper());
+  private final Handler handler = new Handler(Looper.getMainLooper());
 
   @Inject
+  private
   SharedPreferenceUtil sharedPreferenceUtil;
 
   @Inject
+  private
   DataSource dataSource;
-  private SparseArray<NotificationCompat.Builder> notification = new SparseArray<>();
+  private final SparseArray<NotificationCompat.Builder> notification = new SparseArray<>();
 
   public static void setDownloadFragment(DownloadFragment dFragment) {
     downloadFragment = dFragment;
@@ -147,11 +153,11 @@ public class DownloadService extends Service {
       log += intent.getIntExtra(NOTIFICATION_ID, -3);
     }
     Log.d(KIWIX_TAG, log);
-    if (intent.hasExtra(NOTIFICATION_ID) && intent.getAction().equals(ACTION_STOP)) {
+    if (intent.hasExtra(NOTIFICATION_ID) && Objects.requireNonNull(intent.getAction()).equals(ACTION_STOP)) {
       stopDownload(intent.getIntExtra(NOTIFICATION_ID, 0));
       return START_NOT_STICKY;
     }
-    if (intent.hasExtra(NOTIFICATION_ID) && (intent.getAction().equals(ACTION_PAUSE))) {
+    if (intent.hasExtra(NOTIFICATION_ID) && (Objects.requireNonNull(intent.getAction()).equals(ACTION_PAUSE))) {
       if (MainActivity.wifiOnly && !NetworkUtils.isWiFi(getApplicationContext())) {
         Log.i(KIWIX_TAG, "Not connected to WiFi, and wifiOnly is enabled");
         startActivity(new Intent(this, ZimManageActivity.class).setAction(ACTION_NO_WIFI).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -170,7 +176,7 @@ public class DownloadService extends Service {
 
     Log.d(KIWIX_TAG, "Using KIWIX_ROOT: " + KIWIX_ROOT);
 
-    notificationTitle = intent.getExtras().getString(DownloadIntent.DOWNLOAD_ZIM_TITLE);
+    notificationTitle = Objects.requireNonNull(intent.getExtras()).getString(DownloadIntent.DOWNLOAD_ZIM_TITLE);
     LibraryNetworkEntity.Book book = (LibraryNetworkEntity.Book) intent.getSerializableExtra(EXTRA_BOOK);
     int notificationID = book.getId().hashCode();
 
@@ -236,7 +242,7 @@ public class DownloadService extends Service {
       notificationManager.cancel(notificationID);
   }
 
-  public String checkWritable(String path) {
+  private String checkWritable(String path) {
     try {
       File f = new File(path);
       f.mkdir();
@@ -251,7 +257,7 @@ public class DownloadService extends Service {
     }
   }
 
-  public void toggleDownload(int notificationID) {
+  private void toggleDownload(int notificationID) {
     if (downloadStatus.get(notificationID) == PAUSE) {
       playDownload(notificationID);
     } else {
@@ -406,7 +412,7 @@ public class DownloadService extends Service {
   }
 
   private void updateDownloadFragmentProgress(int progress, int notificationID) {
-    if (DownloadFragment.mDownloads != null && DownloadFragment.mDownloads.get(notificationID) != null) {
+    if (DownloadFragment.mDownloads.get(notificationID) != null) {
       handler.post(() -> {
         if (DownloadFragment.mDownloads.get(notificationID) != null) {
           DownloadFragment.downloadAdapter.updateProgress(progress, notificationID);
@@ -416,7 +422,7 @@ public class DownloadService extends Service {
   }
 
   private void updateDownloadFragmentComplete(int notificationID) {
-    if (DownloadFragment.mDownloads != null && DownloadFragment.mDownloads.get(notificationID) != null) {
+    if (DownloadFragment.mDownloads.get(notificationID) != null) {
       handler.post(() -> {
         if (DownloadFragment.mDownloads.get(notificationID) != null) {
           DownloadFragment.downloadAdapter.complete(notificationID);
@@ -504,7 +510,7 @@ public class DownloadService extends Service {
           if (!DownloadFragment.mDownloads.isEmpty()) {
             LibraryNetworkEntity.Book book = DownloadFragment.mDownloads
                 .get(chunk.getNotificationID());
-            book.remoteUrl = book.getUrl();
+            Objects.requireNonNull(book).remoteUrl = book.getUrl();
             book.file = fullFile;
             dataSource.saveBook(book)
                 .subscribe(new CompletableObserver() {
@@ -548,7 +554,7 @@ public class DownloadService extends Service {
             ).execute();
 
             // Check that the server is sending us the right file
-            if (Math.abs(chunk.getEndByte() - downloaded - response.body().contentLength()) > 10) {
+            if (Math.abs(chunk.getEndByte() - downloaded - Objects.requireNonNull(response.body()).contentLength()) > 10) {
               throw new Exception("Server broadcasting wrong size");
             }
 

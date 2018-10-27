@@ -10,8 +10,7 @@
   <string name="menu_randomarticle">Nejaušs raksts</string>
   <string name="menu_fullscreen">Pilnekrāna režīms</string>
   <string name="menu_exitfullscreen">Iziet no pilnekrāna</string>
-  <string name="button_backtotop">Atpakaļ uz augšu</string>
-  <string name="search_label">Meklēt</string>
+    <string name="search_label">Meklēt</string>
   <string name="pref_display_title">Displejs</string>
   <string name="pref_info_title">Informācija</string>
   <string name="pref_info_version">Versija</string>

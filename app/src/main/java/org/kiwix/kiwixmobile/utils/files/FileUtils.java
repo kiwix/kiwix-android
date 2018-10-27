@@ -119,7 +119,7 @@ public class FileUtils {
     return getSaveFilePath() + File.separator + fileName;
   }
 
-  static public String getSaveFilePath() {
+  private static String getSaveFilePath() {
     String obbFolder = File.separator + "Android" + File.separator + "obb" + File.separator;
     File root = Environment.getExternalStorageDirectory();
     return root.toString() + obbFolder + BuildConfig.APPLICATION_ID;
@@ -185,18 +185,13 @@ public class FileUtils {
   }
 
   static private String contentQuery(Context context, Uri uri) {
-    Cursor cursor = null;
 
-    try {
-      cursor = context.getContentResolver().query(uri, new String[]{"_data"}, null, null, null);
+      try (Cursor cursor = context.getContentResolver().query(uri, new String[]{"_data"}, null, null, null)) {
 
-      if (cursor != null && cursor.moveToFirst())
-        return cursor.getString(cursor.getColumnIndexOrThrow("_data"));
+          if (cursor != null && cursor.moveToFirst())
+              return cursor.getString(cursor.getColumnIndexOrThrow("_data"));
 
-    } finally {
-      if (cursor != null)
-        cursor.close();
-    }
+      }
 
     return null;
   }

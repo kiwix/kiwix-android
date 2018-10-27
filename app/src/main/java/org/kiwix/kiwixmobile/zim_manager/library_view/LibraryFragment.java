@@ -80,7 +80,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOK;
 public class LibraryFragment extends BaseFragment
     implements AdapterView.OnItemClickListener, StorageSelectDialog.OnSelectListener, LibraryViewCallback {
 
-  public static final CountingIdlingResource IDLING_RESOURCE =
+  private static final CountingIdlingResource IDLING_RESOURCE =
       new CountingIdlingResource("Library Fragment Idling Resource");
   public static final List<Book> downloadingBooks = new ArrayList<>();
   public static DownloadService mService = new DownloadService();
@@ -88,18 +88,25 @@ public class LibraryFragment extends BaseFragment
   private static boolean isReceiverRegistered = false;
   public LibraryAdapter libraryAdapter;
   @BindView(R.id.library_list)
+  private
   ListView libraryList;
   @BindView(R.id.network_permission_text)
+  private
   TextView networkText;
   @BindView(R.id.network_permission_button)
+  private
   Button permissionButton;
   @BindView(R.id.library_swiperefresh)
+  private
   SwipeRefreshLayout swipeRefreshLayout;
   @Inject
+  private
   ConnectivityManager conMan;
   @Inject
+  private
   LibraryPresenter presenter;
   @Inject
+  private
   SharedPreferenceUtil sharedPreferenceUtil;
   private boolean mBound;
   private DownloadServiceConnection mConnection = new DownloadServiceConnection();

@@ -24,7 +24,6 @@ import com.yahoo.squidb.sql.Update;
 
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
-import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 
 import java.util.ArrayList;
 import java.util.List;

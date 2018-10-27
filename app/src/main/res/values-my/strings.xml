@@ -15,8 +15,7 @@
   <string name="save_media_error">မီဒီယာဖိုင်ကို သိမ်းရန်ကြိုးစားနေစဉ် အမှားတစ်ခု ဖြစ်ပေါ်သွားသည်။</string>
   <string name="save_media_saved">သင့် Pictures ဖိုင်တွဲထဲတွင် မီဒီယာဖိုင်ကို %1$s အဖြစ် သိမ်းပြီးဖြစ်သည်။</string>
   <string name="rescan_fs_warning">ZIM ဖိုင်များကို ရှာဖတ်နေသည်။ တစ်ဆိတ်လောက် စောင့်ပါ...</string>
-  <string name="button_backtotop">ထိပ်ဆုံးသို့ ပြန်သွားရန်</string>
-  <string name="search_label">ရှာဖွေရန်</string>
+    <string name="search_label">ရှာဖွေရန်</string>
   <string name="choose_file">ZIM အချက်အလက်ဖိုင်တစ်ခုကို ရွေးချယ်ပါ (*.zim)</string>
   <string name="open_in_new_tab">တဘ်အသစ်မှာ လင့်ကိုဖွင့်မလား။</string>
   <string name="error_nozimfilesfound">သင့်စက်ပေါ်တွင် ZIM ဖိုင် တစ်ခုမှ ရှာမတွေ့ပါ။\nအကူအညီစာမျက်နှာကိုကြည့်၍ ကီဝစ်ထဲသို့ အချက်အလက်များ မည်သို့ထည့်ရမည်ကို လမ်းညွှန်မှု ရယူပါ။\nအကယ်၍ ZIM ဖိုင်ကို သင့်စက်ထဲ/သိုလှောင်သိမ်းဆည်းရာ နေရာထဲ ထည့်ပြီးသည်မှာ သေချာလျှင် တစ်မိနစ်ခန့် အကြာတွက် ပြန်ကြိုးစားကြည့်ပါ၊ သို့မဟုတ် စက်ကို ရီစတတ်ချကြည့်ပါ။</string>
@@ -35,8 +34,7 @@
   <string name="pref_language_title">ဘာသာစကား</string>
   <string name="pref_language_chooser">ဘာသာစကားရွေးချယ်ရန်</string>
   <string name="go_to_play_store">Play စတိုးသို့ သွားရန်</string>
-  <string name="no_bookmarks">စာညှပ်မှတ်ထားခြင်း မရှိ!</string>
-  <string name="menu_bookmarks_list">ဖတ်ရန်မှတ်ထားမှု</string>
+    <string name="menu_bookmarks_list">ဖတ်ရန်မှတ်ထားမှု</string>
   <string name="bookmark_added">စာညှပ်မှတ် ထည့်ပေါင်းပြီး</string>
   <string name="rate_dialog_title">ကျေးဇူးပြု၍ ကျွန်ုပ်တို့အား အဆင့်သတ်မှတ်ပေးပါ</string>
   <string name="zim_manager">မှတ်ထားမှုများ</string>

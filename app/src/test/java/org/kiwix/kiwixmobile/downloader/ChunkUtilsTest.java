@@ -19,6 +19,7 @@
 package org.kiwix.kiwixmobile.downloader;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
@@ -34,7 +35,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(StorageUtils.class)
 public class ChunkUtilsTest {
 
-  private String URL = "http://mirror.netcologne.de/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim";
+  private final String URL = "http://mirror.netcologne.de/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim";
 
   @Before
   public void executeBefore() {
@@ -66,21 +67,19 @@ public class ChunkUtilsTest {
     assertEquals("verify that the rangehandler for the last chunk is correct", "10737418245-", listReturned.get(listReturned.size() - 1).getRangeHeader());
     assertEquals("verify that the rangehandler for the first chunk is corect", "0-2147483648", listReturned.get(0).getRangeHeader());
 
-    assertEquals("verify that the same notificationID is passed on to each chunk",
-        true, listReturned.get(0).getUrl().equals(URL)
-        && listReturned.get(1).getUrl().equals(URL)
-        && listReturned.get(2).getUrl().equals(URL)
-        && listReturned.get(3).getUrl().equals(URL)
-        && listReturned.get(4).getUrl().equals(URL)
-        && listReturned.get(5).getUrl().equals(URL));
+    assertTrue("verify that the same notificationID is passed on to each chunk", listReturned.get(0).getUrl().equals(URL)
+            && listReturned.get(1).getUrl().equals(URL)
+            && listReturned.get(2).getUrl().equals(URL)
+            && listReturned.get(3).getUrl().equals(URL)
+            && listReturned.get(4).getUrl().equals(URL)
+            && listReturned.get(5).getUrl().equals(URL));
 
-    assertEquals("verify that the same URL is passed on to each chunk",
-        true, listReturned.get(0).getNotificationID() == 56
-        && listReturned.get(1).getNotificationID() == 56
-        && listReturned.get(2).getNotificationID() == 56
-        && listReturned.get(3).getNotificationID() == 56
-        && listReturned.get(4).getNotificationID() == 56
-        && listReturned.get(5).getNotificationID() == 56);
+    assertTrue("verify that the same URL is passed on to each chunk", listReturned.get(0).getNotificationID() == 56
+            && listReturned.get(1).getNotificationID() == 56
+            && listReturned.get(2).getNotificationID() == 56
+            && listReturned.get(3).getNotificationID() == 56
+            && listReturned.get(4).getNotificationID() == 56
+            && listReturned.get(5).getNotificationID() == 56);
 
     // test assignment of file names
     boolean test = true;
@@ -93,7 +92,7 @@ public class ChunkUtilsTest {
         test = false;
       }
     }
-    assertEquals("verify that the file name endings are correctly assigned", true, test);
+    assertTrue("verify that the file name endings are correctly assigned", test);
 
     // When the file size is less than CHUNK_SIZE
     size = ChunkUtils.CHUNK_SIZE - (long) (1024 * 1024);

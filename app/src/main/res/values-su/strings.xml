@@ -9,8 +9,7 @@
   <string name="menu_randomarticle">Artikel acak</string>
   <string name="menu_fullscreen">Layar pinuh</string>
   <string name="menu_exitfullscreen">Kaluar ti modeu layar pinuh</string>
-  <string name="button_backtotop">Balik ka Luhur</string>
-  <string name="search_label">Paluruh</string>
+    <string name="search_label">Paluruh</string>
   <string name="choose_file">Pilih Berkas Kontén (*.zim)</string>
   <string name="error_fileinvalid">Kasalahan: Berkas nu dipilih lain berkas ZIM nu sah.</string>
   <string name="error_articleurlnotfound">Kasalahan: Pamuatan artikel (Url: %1$s) gagal.</string>
@@ -18,14 +17,12 @@
   <string name="pref_info_title">Émbaran</string>
   <string name="pref_info_version">Vérsi</string>
   <string name="pref_language_title">Basa</string>
-  <string name="no_bookmarks">Euweuh markah</string>
-  <string name="menu_bookmarks_list">Tatanda buku</string>
+    <string name="menu_bookmarks_list">Tatanda buku</string>
   <string name="all_history_cleared_toast">Sakum Jujutan Dibersihkeun</string>
   <string name="clear_all_history_dialog_title">Bersihkeun Sakum Markah</string>
   <string name="delete">Pupus</string>
   <string name="did_you_know">Nyaho teu anjeun?</string>
-  <string name="deleted_message">dipupus</string>
-  <string name="bookmark_added">Markah ditambahkeun</string>
+    <string name="bookmark_added">Markah ditambahkeun</string>
   <string name="open">Buka</string>
   <string name="bookmark_removed">Markah dipupus</string>
   <string name="download_started_library">Undeur dikawit...</string>
@@ -45,5 +42,4 @@
   <string name="no">Teu</string>
   <string name="confirm_stop_download_title">Eureunkeun undeuran?</string>
   <string name="download_change_storage">Pamilih parangkat panyimpenan</string>
-  <string name="delete_tab">Pupus Tag</string>
 </resources>

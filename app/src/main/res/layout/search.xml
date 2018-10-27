@@ -1,10 +1,12 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:fitsSystemWindows="true"
   android:layoutDirection="ltr"
-  android:orientation="vertical">
+  android:orientation="vertical"
+    tools:targetApi="jelly_bean_mr1">
 
   <LinearLayout
     android:layout_width="match_parent"
@@ -13,8 +15,7 @@
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
-      android:id="@+id/toolbar_layout"
-      android:layout_width="match_parent"
+        android:layout_width="match_parent"
       android:layout_height="?android:attr/actionBarSize">
 
       <android.support.v7.widget.Toolbar

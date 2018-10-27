@@ -14,8 +14,7 @@
   <string name="save_media">שפייכלערן מעדיעוויקי ווי…</string>
   <string name="save_media_error">א טעות האט פאסירט ביים אויפהיטן די מעדיע!</string>
   <string name="save_media_saved">מעדיע אויפֿגעהיטן ווי %s צו Android/media/org.kiwix.../</string>
-  <string name="button_backtotop">צוריק אויבן</string>
-  <string name="search_label">זוכן</string>
+    <string name="search_label">זוכן</string>
   <string name="open_in_new_tab">עפענען לינק אין א נײַעם טאב?</string>
   <string name="error_articleurlnotfound">טעות: לאדן ארטיקל (Url: %1$s) דורכגעפאלן.</string>
   <string name="pref_display_title">אויסשטעלונג</string>
@@ -32,12 +31,10 @@
   <string name="delete">אויסמעקן</string>
   <string name="did_you_know">צי האט איר געוואוסט?</string>
   <string name="undo">אַנולירן</string>
-  <string name="deleted_message">אויסגעמעקט</string>
-  <string name="zim_manager">ביבליאטעק</string>
+    <string name="zim_manager">ביבליאטעק</string>
   <string name="delete_specific_zim_toast">טעקע אויסגעמעקט</string>
   <string name="zim_file_downloaded">אַראָפגעלאָדן</string>
   <string name="download_stop">אויפֿהערן</string>
   <string name="no_files_here">קיין טעקעס דא</string>
   <string name="yes">יא</string>
-  <string name="delete_tab">אויסמעקן טאב</string>
 </resources>

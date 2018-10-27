@@ -36,7 +36,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   private TableClickListener listener;
   private String title;
@@ -146,23 +146,23 @@ public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     void onSectionClick(View view, int position);
   }
 
-  public static class ViewHolder extends RecyclerView.ViewHolder {
-    public @BindView(R.id.titleText) TextView title;
+  static class ViewHolder extends RecyclerView.ViewHolder {
+    @BindView(R.id.titleText) TextView title;
 
-    public ViewHolder(View v) {
+    ViewHolder(View v) {
       super(v);
       ButterKnife.bind(this, v);
     }
   }
 
-  public static class HeaderViewHolder extends ViewHolder {
+  static class HeaderViewHolder extends ViewHolder {
 
     HeaderViewHolder(View v) {
       super(v);
     }
   }
 
-  public static class SectionViewHolder extends ViewHolder {
+  static class SectionViewHolder extends ViewHolder {
 
     SectionViewHolder(View v) {
       super(v);

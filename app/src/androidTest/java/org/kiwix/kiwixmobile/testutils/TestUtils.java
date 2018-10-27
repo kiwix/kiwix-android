@@ -51,9 +51,8 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
  * Created by mhutti1 on 07/04/17.
  */
 
-public class TestUtils {
-  private static String TAG = "TESTUTILS";
-  public static int TEST_PAUSE_MS = 250;
+class TestUtils {
+    public static int TEST_PAUSE_MS = 250;
   /*
     TEST_PAUSE_MS is used as such:
         BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
@@ -65,7 +64,7 @@ public class TestUtils {
     it's speed related, or Android Version related.
    */
 
-  public static boolean hasStoragePermission() {
+  private static boolean hasStoragePermission() {
     return ContextCompat.checkSelfPermission(InstrumentationRegistry.getTargetContext(),
             Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
             ContextCompat.checkSelfPermission(InstrumentationRegistry.getTargetContext(),
@@ -106,7 +105,8 @@ public class TestUtils {
       return;
     }
 
-    try {
+      String TAG = "TESTUTILS";
+      try {
       FileOutputStream fos = new FileOutputStream(outFile);
       screenshot.compress(Bitmap.CompressFormat.PNG, 90, fos);
       fos.close();

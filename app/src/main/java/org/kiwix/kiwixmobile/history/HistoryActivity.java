@@ -18,7 +18,6 @@ import android.widget.Toast;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
-import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.main.MainActivity;
 
 import java.io.File;
@@ -40,10 +39,13 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
   private final List<History> deleteList = new ArrayList<>();
 
   @BindView(R.id.toolbar)
+  private
   Toolbar toolbar;
   @Inject
+  private
   HistoryContract.Presenter presenter;
   @BindView(R.id.recycler_view)
+  private
   RecyclerView recyclerView;
   private boolean refreshAdapter = true;
   private HistoryAdapter historyAdapter;

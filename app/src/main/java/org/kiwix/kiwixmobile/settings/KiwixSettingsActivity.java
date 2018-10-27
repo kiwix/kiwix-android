@@ -50,6 +50,7 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryUtils;
 import java.io.File;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -60,7 +61,6 @@ import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_WEBVIEWS_LIST;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_AUTONIGHTMODE;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_CLEAR_ALL_HISTORY;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_CREDITS;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_LANG;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_NIGHTMODE;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_VERSION;
@@ -73,7 +73,7 @@ import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class KiwixSettingsActivity extends BaseActivity {
 
-  public static boolean allHistoryCleared = false;
+  private static boolean allHistoryCleared = false;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -106,7 +106,7 @@ public class KiwixSettingsActivity extends BaseActivity {
   private void setUpToolbar() {
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
-    getSupportActionBar().setTitle(getString(R.string.menu_settings));
+    Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.menu_settings));
     getSupportActionBar().setHomeButtonEnabled(true);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -136,11 +136,7 @@ public class KiwixSettingsActivity extends BaseActivity {
         getPreferenceScreen().findPreference(PREF_NIGHTMODE).setEnabled(false);
       }
 
-      if (BuildConfig.ENFORCED_LANG.equals("")) {
-        setUpLanguageChooser(PREF_LANG);
-      } else {
-        getPreferenceScreen().removePreference(findPreference("pref_language"));
-      }
+      getPreferenceScreen().removePreference(findPreference("pref_language"));
 
       if (BuildConfig.IS_CUSTOM_APP) {
         PreferenceCategory notificationsCategory = (PreferenceCategory) findPreference("pref_extras");
@@ -191,16 +187,16 @@ public class KiwixSettingsActivity extends BaseActivity {
           .unregisterOnSharedPreferenceChangeListener(this);
     }
 
-    public void setUpSettings() {
+    void setUpSettings() {
       setAppVersionNumber();
     }
 
-    private void setUpLanguageChooser(String preferenceId) {
-      ListPreference languagePref = (ListPreference) findPreference(preferenceId);
+    private void setUpLanguageChooser() {
+      ListPreference languagePref = (ListPreference) findPreference(org.kiwix.kiwixmobile.utils.Constants.PREF_LANG);
       String selectedLang = sharedPreferenceUtil.getPrefLanguage(Locale.getDefault().toString());
       List<String> languageCodeList = new LanguageUtils(getActivity()).getKeys();
       selectedLang = languageCodeList.contains(selectedLang) ? selectedLang : "en";
-      String code[] = languageCodeList.toArray(new String[languageCodeList.size()]);
+      String code[] = languageCodeList.toArray(new String[0]);
       String[] entries = new String[code.length];
       for (int index = 0; index < code.length; index++) {
         Locale locale = new Locale(code[index]);
@@ -284,7 +280,7 @@ public class KiwixSettingsActivity extends BaseActivity {
           .show();
     }
 
-    public void openCredits() {
+    void openCredits() {
       WebView view = (WebView) LayoutInflater.from(getActivity()).inflate(R.layout.credits_webview, null);
       view.loadUrl("file:///android_asset/credits.html");
       if (sharedPreferenceUtil.nightMode()) {
@@ -312,7 +308,7 @@ public class KiwixSettingsActivity extends BaseActivity {
       return true;
     }
 
-    public void openFolderSelect() {
+    void openFolderSelect() {
       FragmentManager fm = getFragmentManager();
       StorageSelectDialog dialogFragment = new StorageSelectDialog();
       Bundle b = new Bundle();

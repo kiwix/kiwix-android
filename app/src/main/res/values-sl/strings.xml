@@ -11,8 +11,7 @@
   <string name="menu_exitfullscreen">Izhod iz celozaslonskega načina</string>
   <string name="save_media">Shrani predstavnost kot ...</string>
   <string name="rescan_fs_warning">Iskanje vsebin za prenos; prosimo, počakajte ...</string>
-  <string name="button_backtotop">Nazaj na vrh</string>
-  <string name="search_label">Iskanje</string>
+    <string name="search_label">Iskanje</string>
   <string name="choose_file">Izberite datoteko z vsebino (*.zim)</string>
   <string name="open_in_new_tab">Odprem povezavo v novem zavihku?</string>
   <string name="error_nozimfilesfound">Na vaši napravi ni bila najdena nobena datoteka ZIM.\nZa napotke v zvezi z nalaganjem vsebine v Kiwix si poglejte Stran za pomoč.\nČe ste datoteko ZIM posneli na svojo napravo/zunanji disk, lahko ponovno poskusite po kratkem čakanju ali pa svojo napravo ponovno zaženete.</string>

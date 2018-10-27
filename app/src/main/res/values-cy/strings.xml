@@ -15,8 +15,7 @@
   <string name="save_media_error">Gwall wrth geisio achub y cyfryngau!</string>
   <string name="save_media_saved">Arbedwyd cyfryngau fel  %1$s  yn eich ffolder Lluniau</string>
   <string name="rescan_fs_warning">Sganio am ffeiliau ZIM, dal dy ddŵr...</string>
-  <string name="button_backtotop">Nôl i\'r brig</string>
-  <string name="search_label">Chwilio</string>
+    <string name="search_label">Chwilio</string>
   <string name="choose_file">Dewisiwch Ffeil ZIM Content (*.zim)</string>
   <string name="open_in_new_tab">Agor y ddolen mewn tab newydd?</string>
   <string name="error_nozimfilesfound">Dim ffeiliau ZIM ar eich dyfais.\nCymrwch gip ar y Dudalen Gymorth i gael cyfarwyddiadau sut i lwytho cynnwys i Kiwix.\nOs y rhoesoch ffeil ZIM yn eich dyfais/storws allanol gallech ailgynnig mewn munud neu ailgychwyn eich dyfais.</string>

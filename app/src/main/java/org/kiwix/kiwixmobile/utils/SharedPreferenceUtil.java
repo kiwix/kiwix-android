@@ -35,7 +35,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.PREF_ZOOM_ENABLED;
 public class SharedPreferenceUtil {
   private static final String PREF_SHOW_BOOKMARKS_CURRENT_BOOK = "show_bookmarks_current_book";
   private static final String PREF_SHOW_HISTORY_CURRENT_BOOK = "show_history_current_book";
-  private SharedPreferences sharedPreferences;
+  private final SharedPreferences sharedPreferences;
 
   @Inject
   public SharedPreferenceUtil(Context context) {

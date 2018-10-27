@@ -39,20 +39,20 @@ import org.kiwix.kiwixmobile.R;
 
 import java.lang.reflect.Method;
 
-public class CompatFindActionModeCallback
+class CompatFindActionModeCallback
     implements ActionMode.Callback, TextWatcher, View.OnClickListener {
 
   public boolean mIsActive;
 
-  private View mCustomView;
+  private final View mCustomView;
 
-  private EditText mEditText;
+  private final EditText mEditText;
 
-  private TextView mFindResultsTextView;
+  private final TextView mFindResultsTextView;
 
   private WebView mWebView;
 
-  private InputMethodManager mInput;
+  private final InputMethodManager mInput;
 
   private ActionMode mActionMode;
 

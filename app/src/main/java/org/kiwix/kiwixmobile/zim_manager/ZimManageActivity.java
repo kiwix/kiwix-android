@@ -42,6 +42,7 @@ import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.models.Language;
 
 import java.io.File;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -52,7 +53,7 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
   public static final String TAB_EXTRA = "TAB";
   private static final int LANGUAGE_ACTIVITY_REQUEST_CODE = 100;
   private static final String GET_CONTENT = "GET_CONTENT";
-  static String KIWIX_TAG = "kiwix";
+  static final String KIWIX_TAG = "kiwix";
   /**
    * The {@link android.support.v4.view.PagerAdapter} that will provide
    * fragments for each of the sections. We use a
@@ -62,9 +63,10 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
    * {@link android.support.v4.app.FragmentStatePagerAdapter}.
    */
   public SectionsPagerAdapter mSectionsPagerAdapter;
-  public Toolbar toolbar;
+  private Toolbar toolbar;
   public SearchView searchView;
   @Inject
+  private
   ZimManagePresenter zimManagePresenter;
   /**
    * The {@link ViewPager} that will host the section contents.
@@ -162,7 +164,7 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
 
     setSupportActionBar(toolbar);
 
-    getSupportActionBar().setHomeButtonEnabled(true);
+    Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     getSupportActionBar().setTitle(R.string.zim_manager);
 

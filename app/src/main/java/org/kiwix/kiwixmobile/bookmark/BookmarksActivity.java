@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
-import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 import org.kiwix.kiwixmobile.main.MainActivity;
 
 import java.io.File;
@@ -40,10 +39,13 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
   private final List<Bookmark> deleteList = new ArrayList<>();
 
   @BindView(R.id.toolbar)
+  private
   Toolbar toolbar;
   @BindView(R.id.recycler_view)
+  private
   RecyclerView recyclerView;
   @Inject
+  private
   BookmarksContract.Presenter presenter;
 
   private boolean refreshAdapter = true;

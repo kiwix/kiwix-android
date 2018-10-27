@@ -22,7 +22,7 @@ package org.kiwix.kiwixmobile.data.local.entity;
 import com.yahoo.squidb.annotations.TableModelSpec;
 
 @TableModelSpec(className = "BookDatabaseEntity", tableName = "book")
-public class BookDataSource {
+class BookDataSource {
 
   public String bookId;
 

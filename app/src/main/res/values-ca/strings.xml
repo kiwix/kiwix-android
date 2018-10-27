@@ -15,8 +15,7 @@
   <string name="save_media_error">S\'ha produït un error en mirar de desar el fitxer!</string>
   <string name="save_media_saved">El fitxer s\'ha desat amb el nom %1$s a la vostra carpeta d\'imatges</string>
   <string name="rescan_fs_warning">Buscant arxius ZIM. Espereu...</string>
-  <string name="button_backtotop">Tornar a dalt</string>
-  <string name="search_label">Cercar</string>
+    <string name="search_label">Cercar</string>
   <string name="choose_file">Seleccioneu un fitxer de contingut ZIM (*.zim)</string>
   <string name="open_in_new_tab">Obrir l\'enllaç en una pestanya nova?</string>
   <string name="error_nozimfilesfound">No s\'han trobat fitxers ZIM al vostre dispositiu. A la pàgina d\'ajuda trobareu instruccions sobre com carregar contingut a Kiwix. Si realment vau col·locar un fitxer ZIM al vostre dispositiu d\'emmagatzematge extern, podeu tornar a intentar-ho d\'aquí uns moments o bé reiniciar el dispositiu.</string>
@@ -36,6 +35,5 @@
   <string name="pref_language_chooser">Trieu un idioma</string>
   <string name="menu_bookmarks_list">Preferits</string>
   <string name="zim_manager">Biblioteca</string>
-  <string name="pref_multi_search_title">Cerca MultiZim</string>
-  <string name="your_languages">Idiomes seleccionats:</string>
+    <string name="your_languages">Idiomes seleccionats:</string>
 </resources>

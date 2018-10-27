@@ -19,6 +19,8 @@
 package org.kiwix.kiwixmobile.utils;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
@@ -55,17 +57,17 @@ public class NetworkUtilsTest {
     //one network is connected
     when(networkInfo1.getState()).thenReturn(NetworkInfo.State.CONNECTED);
     when(networkInfo2.getState()).thenReturn(NetworkInfo.State.DISCONNECTING);
-    assertEquals("", true, NetworkUtils.isNetworkAvailable(context));
+      assertTrue("", NetworkUtils.isNetworkAvailable(context));
 
     //one network is connecting
     when(networkInfo1.getState()).thenReturn(NetworkInfo.State.DISCONNECTING);
     when(networkInfo2.getState()).thenReturn(NetworkInfo.State.CONNECTING);
-    assertEquals("", true, NetworkUtils.isNetworkAvailable(context));
+      assertTrue("", NetworkUtils.isNetworkAvailable(context));
 
     //no network is available
     when(networkInfo1.getState()).thenReturn(NetworkInfo.State.DISCONNECTED);
     when(networkInfo2.getState()).thenReturn(NetworkInfo.State.DISCONNECTED);
-    assertEquals("", false, NetworkUtils.isNetworkAvailable(context));
+      assertFalse("", NetworkUtils.isNetworkAvailable(context));
   }
 
   public void testWifiAvailability(){
@@ -81,7 +83,7 @@ public class NetworkUtilsTest {
 
     //on Mobile Data
     when(networkInfo.getType()).thenReturn(ConnectivityManager.TYPE_MOBILE);
-    assertEquals(false, NetworkUtils.isWiFi(context));
+      assertFalse(NetworkUtils.isWiFi(context));
     //verify that the correct methods are used according to build SDK version
     verify(connectivity).getActiveNetworkInfo();
     verify(networkInfo).getType();
@@ -89,7 +91,7 @@ public class NetworkUtilsTest {
 
     //on WIFI
     when(networkInfo.getType()).thenReturn(ConnectivityManager.TYPE_WIFI);
-    assertEquals(true, NetworkUtils.isWiFi(context));
+      assertTrue(NetworkUtils.isWiFi(context));
     verify(connectivity).getActiveNetworkInfo();
     verify(connectivity, never()).getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
@@ -103,13 +105,13 @@ public class NetworkUtilsTest {
     //WIFI connected
     when(connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI)).thenReturn(networkInfo);
     when(networkInfo.isConnected()).thenReturn(true);
-    assertEquals(true, NetworkUtils.isWiFi(context));
+      assertTrue(NetworkUtils.isWiFi(context));
     verify(connectivity).getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
     //WIFI disconnected
     when(connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI)).thenReturn(networkInfo);
     when(networkInfo.isConnected()).thenReturn(false);
-    assertEquals(false, NetworkUtils.isWiFi(context));
+      assertFalse(NetworkUtils.isWiFi(context));
     verify(connectivity).getNetworkInfo(ConnectivityManager.TYPE_WIFI);
   }
 

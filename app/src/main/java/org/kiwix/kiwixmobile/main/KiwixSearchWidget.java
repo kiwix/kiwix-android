@@ -32,7 +32,7 @@ import org.kiwix.kiwixmobile.R;
 public class KiwixSearchWidget extends AppWidgetProvider {
 
   public static final String TEXT_CLICKED = "org.kiwix.kiwixmobile.main.KiwixSearchWidget.TEXT_CLICKED";
-  public static final String ICON_CLICKED = "org.kiwix.kiwixmobile.main.KiwixSearchWidget.ICON_CLICKED";
+  private static final String ICON_CLICKED = "org.kiwix.kiwixmobile.main.KiwixSearchWidget.ICON_CLICKED";
   public static final String MIC_CLICKED = "org.kiwix.kiwixmobile.main.KiwixSearchWidget.MIC_CLICKED";
   public static final String STAR_CLICKED = "org.kiwix.kiwixmobile.main.KiwixSearchWidget.STAR_CLICKED";
 
@@ -46,13 +46,11 @@ public class KiwixSearchWidget extends AppWidgetProvider {
     for (int id : appWidgetIds) {
       RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.kiwix_search_widget);
       views.setTextViewText(R.id.search_widget_text, "Search " + appName);
-      /** Search Kiwix intent **/
-      Intent mainIntent = new Intent(context, MainActivity.class);
+        Intent mainIntent = new Intent(context, MainActivity.class);
       mainIntent.setAction(TEXT_CLICKED);
       PendingIntent searchPendingIntent = PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE), mainIntent, 0);
 
-      /** Kiwix icon intent to main app **/
-      Intent kiwixIconIntent = new Intent(context, MainActivity.class);
+        Intent kiwixIconIntent = new Intent(context, MainActivity.class);
       kiwixIconIntent.setAction(ICON_CLICKED);
       PendingIntent mainAppPendingIntent = PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE), kiwixIconIntent, 0);
 

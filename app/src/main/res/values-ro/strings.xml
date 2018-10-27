@@ -15,8 +15,7 @@
   <string name="save_media_error">A apărut o eroare în încercarea de a salva fișierul media!</string>
   <string name="save_media_saved">Fișierul media salvat ca %1$s în folderul Imagini</string>
   <string name="rescan_fs_warning">Se caută fișiere ZIM; vă rugăm să așteptați...</string>
-  <string name="button_backtotop">Începutul paginii</string>
-  <string name="search_label">Căutare</string>
+    <string name="search_label">Căutare</string>
   <string name="choose_file">Alegeți un fișier cu conținut ZIM (*.zim)</string>
   <string name="open_in_new_tab">Deschideți legătura într-o filă nouă?</string>
   <string name="error_nozimfilesfound">Nu s-au găsit fișiere ZIM pe dispozitivul dumneavoastră.\nConsultați pagina de ajutor pentru detalii despre încărcarea conținutului în Kiwix.\nDacă totuși ați stocat un fișier ZIM pe dispozitivul dv./stocarea dv. externă, puteți reîncerca peste un minut sau puteți reporni dispozitivul.</string>
@@ -38,8 +37,7 @@
   <string name="no_reader_application_installed">Nu s-a găsit nicio aplicație instalată pentru acest tip de fișier</string>
   <string name="customapp_missing_content">Aplicația este coruptă.\nAcest lucru se poate întâmpla atunci când ștergeți fișiere de pe cardul SD.\nTrebuie să dezinstalați și să reinstalați aplicația din Magazinul Play.</string>
   <string name="go_to_play_store">Mergi la Magazinul Play</string>
-  <string name="no_bookmarks">Niciun semn de carte!</string>
-  <string name="menu_bookmarks_list">Semne de carte</string>
+    <string name="menu_bookmarks_list">Semne de carte</string>
   <string name="no_section_info">Nu s-a găsit niciun antet de conținut</string>
   <string name="request_storage">Pentru a accesa fișiere ZIM, avem nevoie acces la spațiul de stocare</string>
   <string name="bookmark_added">Marcaj adăugat</string>

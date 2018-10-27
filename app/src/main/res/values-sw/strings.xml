@@ -15,8 +15,7 @@
   <string name="save_media_error">Kosa lilitokea wakati wa kuhifadhi midia!</string>
   <string name="save_media_saved">Midia imehifadhiwa kwa jina la %1$s katika kabrasha yako ya picha</string>
   <string name="rescan_fs_warning">Tafadhali subiri, faili za ZIM zatafutwa</string>
-  <string name="button_backtotop">Rudi Juu</string>
-  <string name="search_label">Tafuta</string>
+    <string name="search_label">Tafuta</string>
   <string name="choose_file">Chagua Faili ya Makala ya ZIM (*.zim)</string>
   <string name="open_in_new_tab">Fungua kiungo kwenye kivinjari kipya</string>
   <string name="error_nozimfilesfound">Hakuna Faili za ZIM zilizopatikana kwenya mtambo wako.\nTazama ukurasa wa Help Page ili kupata usaidizi jinsi ya kupakia makala kwenye Kiwix.\nIwapo uliweka failia ya ZIM kwenye mtambo wako/kiwekeo cha nje, itakubidi kujaribu baada ya dakika moja au kuanzisha mtambo wako upya</string>

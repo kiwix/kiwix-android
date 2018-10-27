@@ -15,7 +15,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_weight="0.1"
-    android:src="@drawable/ic_kiwix_widget" />
+    android:src="@drawable/ic_kiwix_widget"
+      android:contentDescription="TODO" />
 
   <TextView
     android:id="@+id/search_widget_text"
@@ -30,13 +31,15 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_weight="0.1"
-    app:srcCompat="@drawable/ic_stars_black_24dp" />
+    app:srcCompat="@drawable/ic_stars_black_24dp"
+      android:contentDescription="TODO" />
 
   <ImageView
     android:id="@+id/search_widget_mic"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_weight="0.1"
-    app:srcCompat="@drawable/ic_mic_black_24dp" />
+    app:srcCompat="@drawable/ic_mic_black_24dp"
+      android:contentDescription="TODO" />
 
 </LinearLayout>

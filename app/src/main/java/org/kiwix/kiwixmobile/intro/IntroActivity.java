@@ -25,10 +25,13 @@ import butterknife.OnClick;
 public class IntroActivity extends BaseActivity implements IntroContract.View {
 
   @BindView(R.id.view_pager)
+  private
   ViewPager viewPager;
   @BindView(R.id.tab_indicator)
+  private
   InkPageIndicator tabIndicator;
   @Inject
+  private
   IntroContract.Presenter presenter;
 
   private ImageView airPlane;

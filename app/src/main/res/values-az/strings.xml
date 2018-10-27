@@ -10,8 +10,7 @@
   <string name="menu_fullscreen">Tam ekran</string>
   <string name="menu_exitfullscreen">Tam ekran rejimini bağla</string>
   <string name="rescan_fs_warning">ZIM fayllar axtarılır, xahiş edirik, gözləyin...</string>
-  <string name="button_backtotop">Əvvələ qayıt</string>
-  <string name="search_label">Axtar</string>
+    <string name="search_label">Axtar</string>
   <string name="choose_file">ZIM məzmunlu fayl seç (*.zim)</string>
   <string name="open_in_new_tab">Linki yeni pəncərədə aç?</string>
   <string name="error_nozimfilesfound">Sizin qurğunuzda ZIM-faylları tapılmadı. Kiwix tərkibinin necə yüklənilməsi barədə göstərişlər\nməlumat səhifəsində yerləşdirilmişdir.\nƏgər siz, cihaz və ya daşıyıcı yaddaş qurğusunda ZIM-fayl yerləşdirmisinzə, proqramı və ya cihazı yenidən başladın.</string>

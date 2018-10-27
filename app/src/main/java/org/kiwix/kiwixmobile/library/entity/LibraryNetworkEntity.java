@@ -68,7 +68,7 @@ public class LibraryNetworkEntity {
     public String favicon;
 
     @Attribute(name = "faviconMimeType", required = false)
-    public String faviconMimeType;
+    String faviconMimeType;
 
     @Attribute(name = "date", required = false)
     public String date;
@@ -159,9 +159,7 @@ public class LibraryNetworkEntity {
     @Override
     public boolean equals (Object obj) {
       if (obj instanceof Book) {
-        if (((Book) obj).getId() != null && ((Book) obj).getId().equals(getId())) {
-          return true;
-        }
+          return ((Book) obj).getId() != null && ((Book) obj).getId().equals(getId());
       }
       return false;
     }

@@ -16,8 +16,7 @@
   <string name="save_media_error">Сталася помилка при спробі зберегти медіафайл!</string>
   <string name="save_media_saved">Медіафайл збережено як %$ до Android/media/org.kiwix.../</string>
   <string name="rescan_fs_warning">Сканування з метою виявлення контенту для завантаження, будь ласка, зачекайте...</string>
-  <string name="button_backtotop">Повернутись угору</string>
-  <string name="search_label">Пошук</string>
+    <string name="search_label">Пошук</string>
   <string name="choose_file">Виберіть файл вмісту (*.zim)</string>
   <string name="open_in_new_tab">Відкрити посилання в новій вкладці?</string>
   <string name="error_nozimfilesfound">На Вашому пристрої не виявлено контенту.\nПогляньте на сторінку допомогти, щоб отримати вказівки, як завантажувати вміст у Kiwix.\nЯкщо Ви поклали файл ZIM на Ваш пристрій/зовнішній носій, то можете повторити за хвилину або перезапустити пристрій.</string>
@@ -44,8 +43,7 @@
   <string name="no_reader_application_installed">Не вдалось знайти встановлений застосунок для файлу цього типу</string>
   <string name="customapp_missing_content">Ваш застосунок пошкоджено.\nЦе могло статись коли Ви вилучали файли з SD-картки.\nВам потрібно деінсталювати та перевстановити застосунок з Play Store.</string>
   <string name="go_to_play_store">Перейти до Play Store</string>
-  <string name="no_bookmarks">Немає закладок</string>
-  <string name="menu_bookmarks_list">Закладки</string>
+    <string name="menu_bookmarks_list">Закладки</string>
   <string name="no_section_info">Не знайдено заголовків вмісту</string>
   <string name="request_storage">Для доступу до офлайнового контенту нам потрібен доступ до Вашого зберігання даних</string>
   <string name="request_storage_custom">Якщо Ви побачите накладення екрана з попередженням, просто перезавантажте свій пристрій, щоб виправити це.</string>
@@ -62,8 +60,7 @@
   <string name="did_you_know">Чи знали Ви?</string>
   <string name="undo">Скасувати</string>
   <string name="tab_closed">Вкладку закрито</string>
-  <string name="deleted_message">вилучено</string>
-  <string name="bookmark_added">Додано закладку</string>
+    <string name="bookmark_added">Додано закладку</string>
   <string name="rate_dialog_title">Будь ласка, оцініть нас</string>
   <string name="rate_dialog_msg_1">Якщо Ви насолоджуєтесь використанням</string>
   <string name="rate_dialog_msg_2">, будь ласка, виділіть хвильку, щоб оцінити його. Дякуємо за Вашу підтримку!</string>
@@ -104,8 +101,7 @@
   <string name="get_library_over_network">Скористатись мережею, щоб завантажити список контенту (приблизно 6MБ)</string>
   <string name="proceed">Продовжити</string>
   <string name="wait_for_load">Контент все ще завантажується</string>
-  <string name="help_1">Kiwix надає Вам офлайновий доступ до веб-сайтів на кшталт Вікіпедії у надзвичайно стиснутій формі.</string>
-  <string name="help_2">Що робить Kiwix?</string>
+    <string name="help_2">Що робить Kiwix?</string>
   <string name="help_3">Kiwix — це офлайновий читач контенту. Він багато в чому поводиться як браузер, але замість доступу до онлайнових веб-сторінок, він зчитує контент із файлу у форматі ZIM.</string>
   <string name="help_4">Тоді як початково Kiwix було розроблено для забезпечення доступу до Вікіпедії в режимі офлайн, він також зчитує інші типи контенту.</string>
   <string name="help_5">Де саме розташований контент?</string>
@@ -122,9 +118,7 @@
   <string name="help_16">\u2022 На Microsoft Windows: HJ-Split</string>
   <string name="help_17">\u2022 На Apple Mac OSX: Split and Concat</string>
   <string name="help_19">Примітка: файли, отримані Вами в результаті, повинні мати назви my_big_file.zimaa, my_big_file.zimab тощо.</string>
-  <string name="help_20">Дякуємо Вам за те, що обрали Kiwix!</string>
-  <string name="help_21">Ми раді бачити Вас на борту і були б вдячні за будь-які відгуки чи пропозиції, надіслані на android@kiwix.org.</string>
-  <string name="pref_storage">Зберігання даних</string>
+    <string name="pref_storage">Зберігання даних</string>
   <string name="pref_current_folder">Поточна папка</string>
   <string name="path_not_writable">Не вдалося отримати доступ до бажаного каталогу, використовується стандартне налаштування. Щоб виправити це, виберіть бажану категорію в налаштуваннях програми повторно.</string>
   <string name="reboot_message">Через баг в Android 6.0 Вам треба перезавантажити свій пристрій, щоб продовжити роботу без надання нам прав на доступ до зберігання даних. Перепрошуємо за незручності, які може спричинити ця дія.</string>
@@ -141,8 +135,7 @@
   <string name="confirm_stop_download_msg">Ви впевнені, що хочете зупинити це завантаження?</string>
   <string name="download_change_storage">Селектор пристрою зберігання даних</string>
   <string name="tts_not_enabled">Читання тексту вголос не увімкнене для цього ZIM-файлу</string>
-  <string name="delete_tab">Вилучити вкладку</string>
-  <string name="next">Наступна</string>
+    <string name="next">Наступна</string>
   <string name="previous">Попереднє</string>
   <string name="wifi_only_title">Дозволити завантаження контенту через мобільну мережу?</string>
   <string name="wifi_only_msg">Якщо Ви оберете «Так», то більше не отримуватимете попереджень у майбутньому. Однак Ви завжди можете змінити це в налаштуваннях</string>

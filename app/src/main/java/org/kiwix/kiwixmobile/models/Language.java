@@ -19,9 +19,9 @@ public class Language implements Parcelable, Comparable<Language> {
       return new Language[size];
     }
   };
-  public String language;
-  public String languageLocalized;
-  public String languageCode;
+  public final String language;
+  public final String languageLocalized;
+  public final String languageCode;
   public Boolean active;
   public int booksCount;
 

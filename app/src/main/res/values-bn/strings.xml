@@ -16,8 +16,7 @@
   <string name="save_media_error">মিডিয়া সংরক্ষণের চেষ্টা করার সময় একটি ত্রুটি ঘটেছে!</string>
   <string name="save_media_saved">%s হিসাবে Android/media/org.kiwix.../ এ মিডিয়া সংরক্ষিত হয়েছে</string>
   <string name="rescan_fs_warning">ডাউনলোডযোগ্য বিষয়বস্তুর জন্য স্ক্যান করা হচ্ছে, দয়া করে অপেক্ষা করুন...</string>
-  <string name="button_backtotop">উপরে ফিরুন</string>
-  <string name="search_label">অনুসন্ধান</string>
+    <string name="search_label">অনুসন্ধান</string>
   <string name="choose_file">একটি বিষয়বস্তুর ফাইল নির্বাচন করুন (*.zim)</string>
   <string name="open_in_new_tab">নতুন ট্যাবে লিঙ্ক খোলা হবে?</string>
   <string name="error_nozimfilesfound">আপনার ডিভাইসে কোন সামগ্রী পাওয়া যায়নি।\nকিউইক্সের মধ্যে কিভাবে বিষয়বস্তু লোড করবেন তার দিকনির্দেশ পেতে সাহায্য পাতা একবার দেখে নিন।\nআপনি যদি আপনার ডিভাইস/বহিস্থিত সংগ্রহস্থলে ZIM ফাইল রেখে থাকেন, তাহলে আপনি একটি মিনিট পর পুনরায় চেষ্টা করুন বা আপনার ডিভাইসটি পুনরায় আরম্ভ করুন।</string>
@@ -44,8 +43,7 @@
   <string name="no_reader_application_installed">এই ধরনের ফাইলের জন্য একটি ইনস্টল অ্যাপ্লিকেশন খুঁজে পাওয়া যায়নি</string>
   <string name="customapp_missing_content">আপনার অ্যাপ্লিকেশন ক্ষতিগ্রস্ত। \nএটি ঘটতে পারে যখন আপনি এসডি কার্ড থেকে ফাইল সরিয়ে ফেলেন।\nআপনাকে অ্যাপটি অ-ইনস্টল করে প্লে স্টোর থেকে পুনরায় ইনস্টল করতে হবে।</string>
   <string name="go_to_play_store">প্লে স্টোরে যান</string>
-  <string name="no_bookmarks">কোন বুকমার্ক নেই</string>
-  <string name="menu_bookmarks_list">বুকমার্ক</string>
+    <string name="menu_bookmarks_list">বুকমার্ক</string>
   <string name="no_section_info">কোন বিষয়বস্তুর শিরোনাম পাওয়া যায়নি</string>
   <string name="request_storage">অফলাইন বিষয়বস্তুতে প্রবেশ করতে আমাদের আপনার সঞ্চয়স্থলে প্রবেশাধিকার প্রয়োজন</string>
   <string name="request_storage_custom">আপনি যদি দেখেন একটি পর্দা সতর্কতা দেখাচ্ছে, তবে ঠিক করার জন্য আপনার ডিভাইসটি পুনরায় চালু করুন।</string>
@@ -62,8 +60,7 @@
   <string name="did_you_know">আপনি জানেন কি?</string>
   <string name="undo">পূর্বাবস্থায় ফেরাও</string>
   <string name="tab_closed">ট্যাব বন্ধ করা হয়েছে</string>
-  <string name="deleted_message">অপসারিত</string>
-  <string name="bookmark_added">বুকমার্ক যোগ হয়েছে</string>
+    <string name="bookmark_added">বুকমার্ক যোগ হয়েছে</string>
   <string name="rate_dialog_title">দয়া করে আমাদের মূল্যায়ন করুন</string>
   <string name="rate_dialog_msg_1">যদি আপনি ব্যবহার করতে পছন্দ করেন</string>
   <string name="rate_dialog_msg_2">, দয়া করে এক মিনিট ব্যয় করে মূল্যায়ন করুন। আপনার সমর্থনের জন্য ধন্যবাদ!</string>
@@ -104,8 +101,7 @@
   <string name="get_library_over_network">বিষয়বস্তুর তালিকা ডাউনলোড করতে নেটওয়ার্ক ব্যবহার করুন (আনুমানিক ৬ MB)</string>
   <string name="proceed">অগ্রসর হোন</string>
   <string name="wait_for_load">বিষয়বস্তু এখনো লোড হচ্ছে</string>
-  <string name="help_1">কিউইক্স আপনাকে অত্যন্ত সংকুচিত আকারে উইকিপিডিয়ার মতো ওয়েবসাইটগুলিতে অফলাইনে প্রবেশ করার অনুমতি দেয়।</string>
-  <string name="help_2">কিউইক্স কি কাজ করে?</string>
+    <string name="help_2">কিউইক্স কি কাজ করে?</string>
   <string name="help_3">কিউইক্স একটি অফলাইনভিত্তিক নিবন্ধ পাঠক। এটি একটি ব্রাউজারের মত অনেকটা কাজ করে কিন্তু অনলাইনে ওয়েব পৃষ্ঠাগুলিতে ঢুকার পরিবর্তে, এটি ZIM ফরম্যাটে একটি ফাইল থেকে বিষয়বস্তু পড়ে।</string>
   <string name="help_4">কিউইক্স মূলত উইকিপিডিয়াকে অফলাইনে সরবরাহ করার জন্য নকশা করা হয়েছে, তবে এটি অন্যান্য বিষয়গুলিও পড়ে থাকে।</string>
   <string name="help_5">বিষয়বস্তু কোথায়?</string>
@@ -122,9 +118,7 @@
   <string name="help_16">\u2022 মাইক্রোসফট উইন্ডোজে: HJ-Split</string>
   <string name="help_17">\ u2022 অ্যাপল ম্যাক ওএসএক্স: বিভক্ত এবং কনক্যাট</string>
   <string name="help_19">দ্রষ্টব্য: আপনার পছন্দের ফাইলগুলি my_big_file.jimaa, my_big_file.jimab ইত্যাদি নামে হতে হবে।</string>
-  <string name="help_20">কিউইক্সকে বেছে নেওয়ার জন্য ধন্যবাদ!</string>
-  <string name="help_21">আমরা android@kiwix.org এ যে কোন প্রতিক্রিয়া বা পরামর্শ সাদরে গ্রহণ করব।</string>
-  <string name="pref_storage">সংগ্রহস্থল</string>
+    <string name="pref_storage">সংগ্রহস্থল</string>
   <string name="pref_current_folder">বর্তমান ফোল্ডার</string>
   <string name="path_not_writable">পূর্বনির্ধারিত ব্যবহার করে, প্রয়োজনীয় ডিরেক্টরিতে প্রবেশ করতে পারবেন না। এটি ঠিক করার জন্য অ্যাপ্লিকেশন সেটিংসের মধ্যে পছন্দসই ডিরেক্টরি পুনঃনির্বাচন করুন।</string>
   <string name="reboot_message">অ্যান্ড্রয়েড ৬.০ এ একটি বাগের কারণে আমাদেরকে সংগ্রহস্থলের অনুমতি প্রদান করা ছাড়াই চালিয়ে যেতে আপনার ডিভাইসটি পুনরায় চালু করতে হবে। এর ফলে সৃষ্ট অসুবিধার জন্য আমরা দুঃখিত।</string>
@@ -141,8 +135,7 @@
   <string name="confirm_stop_download_msg">আপনি কি নিশ্চিত যে আপনি এই ডাউনলোড বন্ধ করতে চান?</string>
   <string name="download_change_storage">ডিভাইসের সংগ্রহস্থল নির্বাচক</string>
   <string name="tts_not_enabled">এই জিম ফাইলের জন্য লেখা থেকে বলা সক্রিয় নয়</string>
-  <string name="delete_tab">ট্যাব অপসারণ করুন</string>
-  <string name="next">পরবর্তী</string>
+    <string name="next">পরবর্তী</string>
   <string name="previous">পূর্ববর্তী</string>
   <string name="wifi_only_title">মোবাইল নেটওয়ার্কের মাধ্যমে বিষয়বস্তু ডাউনলোড করার অনুমতি দিবেন?</string>
   <string name="wifi_only_msg">যদি আপনি "হ্যাঁ" চয়ন করেন তবে আপনাকে ভবিষ্যতে সতর্ক করা হবে না। যাইহোক, আপনি সেটিংসে যে কোন সময় এটি পরিবর্তন করতে পারবেন।</string>
@@ -154,9 +147,7 @@
   <string name="time_left">বামে</string>
   <string name="pref_autonightmode_summary">স্বয়ংক্রিয়ভাবে দিন এবং রাতের মোডে স্যুইচ করুন।</string>
   <string name="pref_autonightmode">স্বয়ংক্রিয় রাত্রি মোড</string>
-  <string name="language_count">(%1$dটি)</string>
-  <string name="pref_multi_search_title">MultiZim অনুসন্ধান</string>
-  <string name="do_not_ask_anymore">আর জিজ্ঞাসা করবেন না</string>
+    <string name="do_not_ask_anymore">আর জিজ্ঞাসা করবেন না</string>
   <string name="your_languages">নির্বাচিত ভাষা</string>
   <string name="other_languages">অন্যান্য ভাষাসমূহ:</string>
 </resources>

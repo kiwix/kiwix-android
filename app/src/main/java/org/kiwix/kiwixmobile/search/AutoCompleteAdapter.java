@@ -18,6 +18,7 @@
 package org.kiwix.kiwixmobile.search;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,22 +42,20 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
 
   private List<String> mData;
 
-  private KiwixFilter mFilter;
+  private final KiwixFilter mFilter;
 
-  private Context context;
-
-  @Inject JNIKiwix currentJNIReader;
+    @Inject JNIKiwix currentJNIReader;
   @Inject
+  private
   SharedPreferenceUtil sharedPreferenceUtil;
 
   private void setupDagger() {
-    KiwixApplication.getInstance().getApplicationComponent().inject(this);
+    KiwixApplication.getApplicationComponent().inject(this);
   }
 
   public AutoCompleteAdapter(Context context) {
     super(context, android.R.layout.simple_list_item_1);
-    this.context = context;
-    mData = new ArrayList<>();
+      mData = new ArrayList<>();
     mFilter = new KiwixFilter();
     setupDagger();
   }
@@ -66,8 +65,9 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
     return mData.size();
   }
 
+  @NonNull
   @Override
-  public View getView(int position, View convertView, ViewGroup parent) {
+  public View getView(int position, View convertView, @NonNull ViewGroup parent) {
     View row = super.getView(position, convertView, parent);
 
     TextView tv = row.findViewById(android.R.id.text1);
@@ -86,6 +86,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
     } else return a;
   }
 
+  @NonNull
   @Override
   public Filter getFilter() {
     return mFilter;

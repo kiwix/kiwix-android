@@ -28,9 +28,9 @@ public class TestingUtils {
 
   private static TestingUtils.IdleListener callback;
 
-  private static Set<Class> resources = new HashSet<>();
+  private static final Set<Class> resources = new HashSet<>();
 
-  public interface IdleListener {
+  interface IdleListener {
     void startTask();
     void finishTask();
   }

@@ -48,9 +48,9 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 public class LanguageUtils {
 
   private static HashMap<String, Locale> mLocaleMap;
-  private List<LanguageContainer> mLanguageList;
-  private List<String> mLocaleLanguageCodes;
-  private Context mContext;
+  private final List<LanguageContainer> mLanguageList;
+  private final List<String> mLocaleLanguageCodes;
+  private final Context mContext;
 
   public LanguageUtils(Context context) {
     mContext = context;
@@ -118,7 +118,7 @@ public class LanguageUtils {
 
   // This method will determine which font will be applied to the not-supported-locale.
   // You can define exceptions to the default DejaVu font in the 'exceptions' Hashmap:
-  public static String getTypeface(String languageCode) {
+  private static String getTypeface(String languageCode) {
 
     // Define the exceptions to the rule. The font has to be placed in the assets folder.
     // Key: the language code; Value: the name of the font.
@@ -263,13 +263,13 @@ public class LanguageUtils {
 
   // That's the Factory, that will handle the manipulation of all our TextView's and its subcalsses
   // while the content is being parsed
-  public static class LayoutInflaterFactory implements LayoutInflater.Factory {
+  static class LayoutInflaterFactory implements LayoutInflater.Factory {
 
-    private Context mContext;
+    private final Context mContext;
 
-    private LayoutInflater mLayoutInflater;
+    private final LayoutInflater mLayoutInflater;
 
-    public LayoutInflaterFactory(Context context, LayoutInflater layoutInflater) {
+    LayoutInflaterFactory(Context context, LayoutInflater layoutInflater) {
       mContext = context;
       mLayoutInflater = layoutInflater;
     }
@@ -283,8 +283,7 @@ public class LanguageUtils {
           || name.equalsIgnoreCase("AutoCompleteTextView")) {
 
         try {
-          LayoutInflater inflater = mLayoutInflater;
-          final View view = inflater.createView(name, null, attrs);
+            final View view = mLayoutInflater.createView(name, null, attrs);
           new Handler().post(() -> {
             TextView textView = ((TextView) view);
 
@@ -335,7 +334,7 @@ public class LanguageUtils {
       }
     }
 
-    public String getLanguageCode() {
+    String getLanguageCode() {
       return mLanguageCode;
     }
 

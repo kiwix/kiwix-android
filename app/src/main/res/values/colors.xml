@@ -9,8 +9,7 @@
   <color name="primary_text">#212121</color>
   <color name="secondary_text">#727272</color>
   <color name="icons">#212121</color>
-  <color name="divider">#304e9a</color>
-  <color name="white">#fafafa</color>
+    <color name="white">#fafafa</color>
   <color name="gray_list_bg">#0d000000</color>
   <color name="drawer_background_day">#ffffff</color>
   <color name="drawer_background_night">#5a5a5a</color>
@@ -22,10 +21,7 @@
   <color name="blue_grey">#ECEFF1</color>
   <color name="foreground_material_dark">@android:color/white</color>
   <color name="back_to_top_background">#DDFFFFFF</color>
-  <color name="back_to_top_text">@android:color/black</color>
-  <color name="back_to_top_background_night">#FF000000</color>
-  <color name="back_to_top_text_night">#FFFFFFFF</color>
-  <color name="picture_label">#fb8c00</color>
+    <color name="picture_label">#fb8c00</color>
   <color name="video_label">#651FFF</color>
   <color name="blue800">#1565c0</color>
   <color name="blueTransparent">#962e7ac4</color>

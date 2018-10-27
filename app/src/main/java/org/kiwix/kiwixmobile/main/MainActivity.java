@@ -83,8 +83,6 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
-import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
-import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.help.HelpActivity;
 import org.kiwix.kiwixmobile.history.HistoryActivity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
@@ -163,40 +161,57 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   @BindView(R.id.activity_main_root)
   ConstraintLayout root;
   @BindView(R.id.activity_main_toolbar)
+  private
   Toolbar toolbar;
   @BindView(R.id.activity_main_back_to_top_fab)
+  private
   FloatingActionButton backToTopButton;
   @BindView(R.id.activity_main_button_stop_tts)
   Button stopTTSButton;
   @BindView(R.id.activity_main_button_pause_tts)
+  private
   Button pauseTTSButton;
   @BindView(R.id.activity_main_tts_controls)
+  private
   Group TTSControls;
   @BindView(R.id.activity_main_app_bar)
+  private
   AppBarLayout toolbarContainer;
   @BindView(R.id.activity_main_progress_view)
+  private
   AnimatedProgressBar progressBar;
   @BindView(R.id.activity_main_fullscreen_button)
+  private
   ImageButton exitFullscreenButton;
   @BindView(R.id.activity_main_drawer_layout)
+  private
   DrawerLayout drawerLayout;
   @BindView(R.id.activity_main_nav_view)
+  private
   NavigationView tableDrawerRightContainer;
   @BindView(R.id.activity_main_content_frame)
+  private
   FrameLayout contentFrame;
   @BindView(R.id.bottom_toolbar)
+  private
   CardView bottomToolbar;
   @BindView(R.id.bottom_toolbar_bookmark)
+  private
   ImageView bottomToolbarBookmark;
   @BindView(R.id.bottom_toolbar_arrow_back)
+  private
   ImageView bottomToolbarArrowBack;
   @BindView(R.id.bottom_toolbar_arrow_forward)
+  private
   ImageView bottomToolbarArrowForward;
   @Inject
+  private
   MainContract.Presenter presenter;
   @BindView(R.id.tab_switcher_recycler_view)
+  private
   RecyclerView tabRecyclerView;
   @BindView(R.id.activity_main_tab_switcher)
+  private
   View tabSwitcherRoot;
   private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
     @Override
@@ -854,7 +869,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @SuppressWarnings("SameReturnValue")
   @OnLongClick(R.id.bottom_toolbar_bookmark)
-  boolean goToBookmarks() {
+  private boolean goToBookmarks() {
     saveTabStates();
     Intent intentBookmarks = new Intent(this, BookmarksActivity.class);
     startActivityForResult(intentBookmarks, BOOKMARK_CHOSEN_REQUEST);
@@ -881,7 +896,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   @OnClick(R.id.activity_main_fullscreen_button)
-  void closeFullScreen() {
+  private void closeFullScreen() {
     toolbarContainer.setVisibility(View.VISIBLE);
     updateBottomToolbarVisibility();
     exitFullscreenButton.setVisibility(View.GONE);
@@ -1299,7 +1314,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   @OnClick(R.id.bottom_toolbar_home)
-  public void openMainPage() {
+  private void openMainPage() {
     String articleUrl = ZimContentProvider.getMainPage();
     openArticle(articleUrl);
   }

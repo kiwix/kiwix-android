@@ -15,8 +15,7 @@
   <string name="save_media_error">Wystąpił błąd przy zapisywanie plików multimedialnych!</string>
   <string name="save_media_saved">Zapisano plik multimedialny jako %1$s w folderze Zdjęcia.</string>
   <string name="rescan_fs_warning">Skanowanie plików ZIM, proszę czekać...</string>
-  <string name="button_backtotop">Powrót do góry</string>
-  <string name="search_label">Szukaj</string>
+    <string name="search_label">Szukaj</string>
   <string name="choose_file">Wybierz plik zawartości ZIM (*.zim)</string>
   <string name="open_in_new_tab">Otwórz odnośnik na nowej karcie</string>
   <string name="error_nozimfilesfound">Nie znaleziono żadnej zawartości na twoim urządzeniu. Zobacz stronę pomocy, aby uzyskać wskazówki jak pobierać zawartość na Kiwix. Jeśli plik ZIM jest umieszczony na urządzeniu/zewnętrznej pamięci masowej, spróbuj za chwilę lub uruchom ponownie urządzenie.</string>
@@ -41,8 +40,7 @@
   <string name="no_reader_application_installed">Nie udało się znaleźć zainstalowanego programu dla tego typu plików</string>
   <string name="customapp_missing_content">Twoja aplikacja jest uszkodzona.\nMoże to być spowodowane usuwaniem plików z karty SD.\nNależy odinstalować i zainstalować ponownie tę aplikacje ze Sklepu Play.</string>
   <string name="go_to_play_store">Przejdź do Sklepu Play</string>
-  <string name="no_bookmarks">Brak zakładek!</string>
-  <string name="menu_bookmarks_list">Zakładki</string>
+    <string name="menu_bookmarks_list">Zakładki</string>
   <string name="no_section_info">Nie znaleziono nagłówków treści</string>
   <string name="request_storage">Aby uzyskać dostęp do plików ZIM, musimy mieć dostęp do twojego nośnika</string>
   <string name="delete_recent_search_item">Usunąć ten obiekt?</string>
@@ -72,8 +70,7 @@
   <string name="help_5">Gdzie jest zawartość?</string>
   <string name="help_11">Pliki ZIM pobrane rzez aplikacje znajdują się w zewnętrznym katalogu dysku w folderze o nazwie Kiwix.</string>
   <string name="help_13">Jeśli twój plik ZIM ma rozmiar przekraczający 4GB, możliwe, że nie będziesz miał możliwości przechowywania go na twojej karcie SD z uwagi na limity pliku systemowego.</string>
-  <string name="help_20">Dziękujemy za wybranie Kiwix!</string>
-  <string name="pref_storage">Magazyn</string>
+    <string name="pref_storage">Magazyn</string>
   <string name="pref_current_folder">Bieżący folder</string>
   <string name="tts_resume">Podsumuj</string>
   <string name="external_storage">Zewnętrzne</string>

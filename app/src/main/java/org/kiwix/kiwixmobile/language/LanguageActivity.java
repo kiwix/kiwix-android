@@ -28,10 +28,13 @@ public class LanguageActivity extends BaseActivity implements LanguageContract.V
   private final ArrayList<Language> allLanguages = new ArrayList<>();
 
   @BindView(R.id.toolbar)
+  private
   Toolbar toolbar;
   @BindView(R.id.recycler_view)
+  private
   RecyclerView recyclerView;
   @Inject
+  private
   LanguageContract.Presenter presenter;
 
   private LanguageAdapter languageAdapter;

@@ -12,8 +12,7 @@
   <string name="menu_read_aloud">ഉച്ചത്തിൽ വായിക്കുക</string>
   <string name="save_media_error">മീഡിയ സേവ് ചെയ്യാൻ ശ്രമിക്കുമ്പോൾ ഒരു പിഴവുണ്ടായി!</string>
   <string name="rescan_fs_warning">സിം ഫയലുകൾക്കായി തിരയുന്നു. ദയവായി കാത്തിരിക്കൂ..</string>
-  <string name="button_backtotop">മുകളിലേക്ക്</string>
-  <string name="search_label">തിരയുക</string>
+    <string name="search_label">തിരയുക</string>
   <string name="choose_file">ഒരു സിം കണ്ടന്റ് ഫയൽ (*.zim) തിരഞ്ഞെടുക്കൂ</string>
   <string name="open_in_new_tab">കണ്ണി പുതിയ ടാബിൽ തുറക്കണോ?</string>
   <string name="error_nozimfilesfound">താങ്കളുടെ ഉപകരണത്തിൽ സിം ഫയലുകളൊന്നുമില്ല. \nസഹായം താളുകൾ ഉപയോഗപ്പെടുത്തി കിവിക്സിൽ എങ്ങനെ ഉള്ളടക്കം ചേർക്കണമെന്ന് മനസ്സിലാക്കൂ. താങ്കൾ ഒരു സിം ഫയൽ താങ്കളുടെ ഉപകരണത്തിൽ/ബാഹ്യ സ്റ്റോറേജിൽ ഉൾപ്പെടുത്തിയെങ്കിൽ ദയവായി ഒരു മിനിറ്റ് കാത്തിരിക്കുകയോ ഉപകരണം റീസ്റ്റാർട്ട് ചെയ്യുകയോ വേണം.</string>

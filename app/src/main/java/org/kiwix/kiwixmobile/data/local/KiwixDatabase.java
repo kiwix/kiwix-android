@@ -29,12 +29,6 @@ import com.yahoo.squidb.sql.Table;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.dao.BookDao;
 import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
-import org.kiwix.kiwixmobile.data.local.entity.BookDatabaseEntity;
-import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
-import org.kiwix.kiwixmobile.data.local.entity.History;
-import org.kiwix.kiwixmobile.data.local.entity.LibraryDatabaseEntity;
-import org.kiwix.kiwixmobile.data.local.entity.NetworkLanguageDatabaseEntity;
-import org.kiwix.kiwixmobile.data.local.entity.RecentSearch;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.UpdateUtils;
 

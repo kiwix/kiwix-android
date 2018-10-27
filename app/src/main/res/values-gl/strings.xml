@@ -16,8 +16,7 @@
   <string name="save_media_error">Houbo un erro ao intentar gardar o multimedia!</string>
   <string name="save_media_saved">Multimedia gardado como %s en Android/media/org.kiwix.../</string>
   <string name="rescan_fs_warning">Procurando contido descargable; espere…</string>
-  <string name="button_backtotop">Volver ao inicio</string>
-  <string name="search_label">Procurar</string>
+    <string name="search_label">Procurar</string>
   <string name="choose_file">Seleccione un ficheiro de contido (*.zim)</string>
   <string name="open_in_new_tab">Quere abrir a ligazón nunha nova lapela?</string>
   <string name="error_nozimfilesfound">Non se atopou ningún contido no seu dispositivo.\nBote unha ollada á páxina de axuda para aprender a cargar contido no Kiwix.\nSe xa puxo o ficheiro ZIM no seu dispositivo de almacenamento interno ou externo, pode reintentalo nun minuto ou reiniciar o dispositivo.</string>
@@ -43,8 +42,7 @@
   <string name="no_reader_application_installed">Non se puido atopar unha aplicación instalada para este tipo de ficheiro</string>
   <string name="customapp_missing_content">A súa aplicación está danada.\nIsto pode suceder cando elimina ficheiros na tarxeta SD.\nDebe desinstalar e volver a instalar a aplicación desde o Play Store.</string>
   <string name="go_to_play_store">Ir á Play Store</string>
-  <string name="no_bookmarks">Non hai marcadores</string>
-  <string name="menu_bookmarks_list">Favoritos</string>
+    <string name="menu_bookmarks_list">Favoritos</string>
   <string name="no_section_info">Non se atoparon cabeceiras de contido.</string>
   <string name="request_storage">Para acceder a contido sen conexión necesitamos ter acceso ó seu almacenamento</string>
   <string name="request_storage_custom">Se ve unha advertencia na pantalla, simplemente reinicie o seu  dispositivo para amañala.</string>
@@ -61,8 +59,7 @@
   <string name="did_you_know">Sabía que...?</string>
   <string name="undo">Desfacer</string>
   <string name="tab_closed">Lapela pechada</string>
-  <string name="deleted_message">borrado</string>
-  <string name="bookmark_added">Marcador engadido</string>
+    <string name="bookmark_added">Marcador engadido</string>
   <string name="rate_dialog_title">Por favor, cualifícanos</string>
   <string name="rate_dialog_msg_1">Se gozas co uso</string>
   <string name="rate_dialog_msg_2">, por favor bote un momento para cualificala. Grazas polo seu apoio!</string>
@@ -101,8 +98,7 @@
   <string name="get_library_over_network">Usar a rede para descargar a lista de contido. (Aproximadamente 6MB)</string>
   <string name="proceed">Continuar</string>
   <string name="wait_for_load">Aínda está cargando o contido</string>
-  <string name="help_1">Kiwix permítelle acceder sen conexión a sitios web como Wikipedia dunha maneira moi compacta.</string>
-  <string name="help_2">Que fai Kiwix?</string>
+    <string name="help_2">Que fai Kiwix?</string>
   <string name="help_3">Kiwix é un lector de contido desconectado. Actúa como un navegador web, pero en vez de acceder a páxinas web en liña, le o contido dun ficheiro en formato ZIM.</string>
   <string name="help_4">Se ben Kiwix deseñouse orixinalmente para proporcionar Wikipedia sen conexión, tamén pode ler outros contidos.</string>
   <string name="help_5">Onde esta o contido?</string>
@@ -119,9 +115,7 @@
   <string name="help_16">\u2022 En Microsoft Windows: HJ-Split</string>
   <string name="help_17">\u2022 En Apple Mac OSX: Split e Concat</string>
   <string name="help_19">Nota: os ficheiros resultantes deben nomearse meu_gran_ficheiro.zimaa, meu_gran_ficheiro.zimab, etc.</string>
-  <string name="help_20">Grazas por escoller Kiwix!</string>
-  <string name="help_21">Estamos felices de telo a bordo e agradeceríamos calquera comentario ou suxestión en android@kiwix.org.</string>
-  <string name="pref_storage">Almacenamento</string>
+    <string name="pref_storage">Almacenamento</string>
   <string name="pref_current_folder">Carpeta actual</string>
   <string name="path_not_writable">Non se puido acceder ó directorio desexado; úsase o predeterminado. Para solucionar isto, volva a seleccionar o directorio desexado nas preferencias da aplicación.</string>
   <string name="reboot_message">Debido a un erro en android 6.0, requírese que reinicie o seu dispositivo para continuar sen permitirnos o acceso ó almacenamento. Lamentamos calquera inconveniente que isto poida causarlle.</string>
@@ -138,8 +132,7 @@
   <string name="confirm_stop_download_msg">Seguro que quere deter esta descarga?</string>
   <string name="download_change_storage">Selector de dispositivo de almacenamento</string>
   <string name="tts_not_enabled">A síntese vocal non está activa para este ficheiro ZIM</string>
-  <string name="delete_tab">Eliminar pestana</string>
-  <string name="next">Seguinte</string>
+    <string name="next">Seguinte</string>
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">Permitir descargar contido mediante a rede móbil?</string>
   <string name="wifi_only_msg">Se escolle "Si", non será advertido no futuro. Porén, sempre pode cambiar isto en Configuración</string>
@@ -150,9 +143,7 @@
   <string name="pref_bottomtoolbar_summary">Mostra unha barra de ferramentas con as accións rápidas na parte inferior da pantalla</string>
   <string name="pref_autonightmode_summary">Cambiar automaticamente entre o modo diurno e o nocturno</string>
   <string name="pref_autonightmode">Modo nocturno automatizado</string>
-  <string name="pref_multi_search_title">Procurar en MultiZim</string>
-  <string name="pref_multi_search_summary">Permitir á aplicación procurar em ficheiros ZIM (Atención: aínda está en desenvolvemento).</string>
-  <string name="pref_external_link_popup_title">Avisar cando introducir ligazóns externas</string>
+    <string name="pref_external_link_popup_title">Avisar cando introducir ligazóns externas</string>
   <string name="pref_external_link_popup_summary">Mostra as previsualizacións de páxinas para avisar sobre os custos adicionais ou cando non funciona en ligazóns desconectadas.</string>
   <string name="external_link_popup_dialog_title">Introducindo ligazón externa</string>
   <string name="external_link_popup_dialog_message">Estás introducindo unha ligazón externa. Isto pode xerar gastos por transferencia de datos ou simplemente non funcionará cando está desconectado. Aínda quere continuar?</string>

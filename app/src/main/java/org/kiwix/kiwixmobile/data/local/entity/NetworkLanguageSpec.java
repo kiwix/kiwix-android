@@ -22,7 +22,7 @@ package org.kiwix.kiwixmobile.data.local.entity;
 import com.yahoo.squidb.annotations.TableModelSpec;
 
 @TableModelSpec(className = "NetworkLanguageDatabaseEntity", tableName = "networkLanguages")
-public class NetworkLanguageSpec {
+class NetworkLanguageSpec {
   public String languageISO3;
   public boolean enabled;
 }

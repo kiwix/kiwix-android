@@ -15,8 +15,7 @@
   <string name="save_media_error">Eraro okazis dum provo konservi la plurmediaĵon!</string>
   <string name="save_media_saved">Plumediaĵoj konservitaj kiel %1$s en via dosierujo Bildoj</string>
   <string name="rescan_fs_warning">Daŭras serĉado de ZIM-dosieroj, bonvolu atendi...</string>
-  <string name="button_backtotop">Reiri al Supro</string>
-  <string name="search_label">Serĉi</string>
+    <string name="search_label">Serĉi</string>
   <string name="choose_file">Elektu enhavan dosieron ZIM (*.zim)</string>
   <string name="open_in_new_tab">Ĉu malfermi ligilon en nova langeto?</string>
   <string name="error_nozimfilesfound">Neniu ZIM-dosiero estas trovita en la memorilo.\nKonzultu la paĝon Helpo por trovi instrukciojn pri ŝargado de enhavo en Kiwix.\nSe vi enmetis ZIM-dosieron en la memorilon, vi povas reprovi post momento aŭ restartigi la memorilon.</string>

@@ -43,7 +43,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 public class FileSearch {
 
   // Array of zim file extensions
-  public static final String[] zimFiles = {"zim", "zimaa"};
+  private static final String[] zimFiles = {"zim", "zimaa"};
 
 
   private final Context context;
@@ -79,7 +79,7 @@ public class FileSearch {
       listener.onScanCompleted();
   }
 
-  public void scanMediaStore() {
+  private void scanMediaStore() {
     ContentResolver contentResolver = context.getContentResolver();
     Uri uri = MediaStore.Files.getContentUri("external");
 
@@ -105,7 +105,7 @@ public class FileSearch {
   }
 
   // Scan through the file system and find all the files with .zim and .zimaa extensions
-  public void scanFileSystem(String defaultPath) {
+  private void scanFileSystem(String defaultPath) {
     FilenameFilter[] filter = new FilenameFilter[zimFiles.length];
 
     // Search all external directories that we can find.
@@ -150,7 +150,7 @@ public class FileSearch {
     if (entries != null) {
       for (File entry : entries) {
         for (FilenameFilter filefilter : filter) {
-          if (filter == null || filefilter.accept(directory, entry.getName())) {
+          if (filefilter.accept(directory, entry.getName())) {
             files.add(entry);
           }
         }
@@ -164,8 +164,8 @@ public class FileSearch {
     return files;
   }
 
-  private File[] listFilesAsArray(File directory, FilenameFilter[] filter, int recurse) {
-    Collection<File> files = listFiles(directory, filter, recurse);
+  private File[] listFilesAsArray(File directory, FilenameFilter[] filter) {
+    Collection<File> files = listFiles(directory, filter, -1);
 
     File[] arr = new File[files.size()];
     return files.toArray(arr);
@@ -213,7 +213,7 @@ public class FileSearch {
   // Fill fileList with files found in the specific directory
   private void scanDirectory(String directory, FilenameFilter[] filter) {
     Log.d(TAG_KIWIX, "Searching directory " + directory);
-    File[] foundFiles = listFilesAsArray(new File(directory), filter, -1);
+    File[] foundFiles = listFilesAsArray(new File(directory), filter);
     for (File f : foundFiles) {
       Log.d(TAG_KIWIX, "Found " + f.getAbsolutePath());
       onFileFound(f.getAbsolutePath());
@@ -221,7 +221,7 @@ public class FileSearch {
   }
 
   // Callback that a new file has been found
-  public void onFileFound(String filePath) {
+  private void onFileFound(String filePath) {
     LibraryNetworkEntity.Book book = fileToBook(filePath);
 
     if (book != null)

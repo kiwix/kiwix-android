@@ -20,9 +20,9 @@ package org.kiwix.kiwixmobile.main;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
-public class KiwixWebChromeClient extends WebChromeClient {
+class KiwixWebChromeClient extends WebChromeClient {
 
-  private WebViewCallback callback;
+  private final WebViewCallback callback;
 
   public KiwixWebChromeClient(WebViewCallback callback) {
     this.callback = callback;

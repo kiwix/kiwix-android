@@ -17,7 +17,6 @@
   <string name="save_media_error">An error occurred when trying to save the media!</string>
   <string name="save_media_saved">Saved media as %s to Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Scanning for downloadable content, please wait…</string>
-  <string name="button_backtotop">Back to Top</string>
   <string name="search_label">Search</string>
   <string name="choose_file">Select a Content File (*.zim)</string>
   <string name="open_in_new_tab">Open link in new tab?</string>
@@ -45,7 +44,6 @@
   <string name="no_reader_application_installed">Could not find an installed application for this type of file</string>
   <string name="customapp_missing_content">Your application is corrupted.\nThis might happen when you remove files on the SD Card.\nYou need to uninstall then reinstall the App from the Play Store.</string>
   <string name="go_to_play_store">Go to Play Store</string>
-  <string name="no_bookmarks">No Bookmarks</string>
   <string name="menu_bookmarks_list">Bookmarks</string>
   <string name="no_section_info">No Content Headers Found</string>
   <string name="request_storage">To access offline content we need access to your storage</string>
@@ -63,7 +61,6 @@
   <string name="did_you_know">Did you know?</string>
   <string name="undo">Undo</string>
   <string name="tab_closed">Tab closed</string>
-  <string name="deleted_message">deleted</string>
   <string name="bookmark_added">Bookmark added</string>
   <string name="rate_dialog_title">Please Rate Us</string>
   <string name="rate_dialog_msg_1">If you enjoy using</string>
@@ -106,7 +103,6 @@
   <string name="get_library_over_network">Use network to download content list. (Approximately 6MB)</string>
   <string name="proceed">Proceed</string>
   <string name="wait_for_load">Content Still Loading</string>
-  <string name="help_1">Kiwix gives you offline access to websites such as Wikipedia in a highly compressed form.</string>
   <string name="help_2">What does Kiwix do?</string>
   <string name="help_3">Kiwix is an offline content reader. It acts very much like a browser but instead of accessing online web pages, it reads content from a file in ZIM format.</string>
   <string name="help_4">While Kiwix has been originally designed to provide Wikipedia offline, it also reads other contents.</string>
@@ -125,8 +121,6 @@
   <string name="help_17">\u2022 On Apple Mac OSX: Split and Concat</string>
   <string name="help_18">\u2022 On GNU/Linux and with the console: split --bytes=4000M my_big_file.zim</string>
   <string name="help_19">Note: your resulting files must be named my_big_file.zimaa, my_big_file.zimab, etc.</string>
-  <string name="help_20">Thank you for choosing Kiwix!</string>
-  <string name="help_21">We are glad to have you on board and would appreciate any feedback or suggestions at android@kiwix.org.</string>
   <string name="pref_storage">Storage</string>
   <string name="pref_current_folder">Current Folder</string>
   <string name="path_not_writable">Can not access desired directory, using default. To fix this reselect the desired directory in app settings.</string>
@@ -144,7 +138,6 @@
   <string name="confirm_stop_download_msg">Are you sure you want to stop this download?</string>
   <string name="download_change_storage">Storage device selector</string>
   <string name="tts_not_enabled">Text to speech is not enabled for this ZIM file</string>
-  <string name="delete_tab">Delete Tab</string>
   <string name="next">Next</string>
   <string name="previous">Previous</string>
   <string name="wifi_only_title">Allow downloading content via mobile network?</string>
@@ -159,10 +152,6 @@
   <string name="pref_bottomtoolbar_summary">Display a toolbar with quick actions at the bottom of the screen</string>
   <string name="pref_autonightmode_summary">Automatically switch between day and night mode.</string>
   <string name="pref_autonightmode">Automated night mode</string>
-  <string name="language_count">(%1$d)</string>
-  <string name="language_localized">(%s)</string>
-  <string name="pref_multi_search_title">MultiZim Search</string>
-  <string name="pref_multi_search_summary">Allow app to search the across ZIM files (Warning Very Experimental).</string>
   <string name="pref_external_link_popup_title">Warn when entering external links</string>
   <string name="pref_external_link_popup_summary">Display popup to warn about additional costs or not working in offline links.</string>
   <string name="external_link_popup_dialog_title">Entering External Link</string>
@@ -190,7 +179,6 @@
   <string name="vid">Vid</string>
   <string name="articleCount">%s articles</string>
   <string name="get_started">Get started</string>
-  <string name="find_offline_books_and_enjoy_reading">Find offline books and enjoy reading.</string>
   <string name="download_books">Download books</string>
   <string name="human_kind_knowledge">Human kind\'s knowledge, on your phone.</string>
   <string name="welcome_to_the_family">Welcome to the family</string>
@@ -238,6 +226,6 @@
   <string name="search_bookmarks">Search bookmarks</string>
   <string name="new_tab">New tab</string>
   <string name="switch_tabs">Switch tabs</string>
-  <string name="smiling_face">:D</string>
+  <string name="smiling_face" translatable="false">:D</string>
   <string name="close_all_tabs">Close all tabs</string>
 </resources>

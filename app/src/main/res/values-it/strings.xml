@@ -15,8 +15,7 @@
   <string name="save_media_error">Si è verificato un errore durante il salvataggio del file multimediale!</string>
   <string name="save_media_saved">Salvato file multimediale come %s in Android/media/org.kiwix.../</string>
   <string name="rescan_fs_warning">Scansione dei contenuti scaricabili, attendi...</string>
-  <string name="button_backtotop">Torna all\'inizio</string>
-  <string name="search_label">Ricerca</string>
+    <string name="search_label">Ricerca</string>
   <string name="choose_file">Seleziona un file di contenuto (*.zim)</string>
   <string name="open_in_new_tab">Apri il collegamento in una nuova scheda?</string>
   <string name="error_nozimfilesfound">Nessun contenuto trovato sul tuo dispositivo.\nLeggi la pagina di aiuto per ottenere indicazioni su come caricare il contenuto in Kiwix.\nSe ha inserito un file ZIM sul tuo dispositivo, potresti ritentare fra un minuto o riavviare il dispositivo.</string>
@@ -39,8 +38,7 @@
   <string name="no_reader_application_installed">Non è stata trovata alcuna applicazione installata per questo tipo di file</string>
   <string name="customapp_missing_content">L\'applicazione è danneggiata.\nCiò potrebbe accadere quando si rimuovono i file sulla scheda SD.\nÈ necessario disinstallare e reinstallare l\'applicazione dal Play Store.</string>
   <string name="go_to_play_store">Vai al Play Store</string>
-  <string name="no_bookmarks">Nessun segnalibro</string>
-  <string name="menu_bookmarks_list">Segnalibri</string>
+    <string name="menu_bookmarks_list">Segnalibri</string>
   <string name="no_section_info">Nessun intestazione di contenuto trovata</string>
   <string name="request_storage">Per accedere al contenuto offline è necessario l\'accesso al tuo spazio di archiviazione</string>
   <string name="clear_recent_and_tabs_history_dialog">Sei sicuro di voler cancellare la tua cronologia di ricerca e resettare tutte le tab attive?</string>
@@ -53,8 +51,7 @@
   <string name="got_it">Capito</string>
   <string name="did_you_know">Lo sapevi?</string>
   <string name="undo">Annulla</string>
-  <string name="deleted_message">cancellato</string>
-  <string name="bookmark_added">Segnalibro aggiunto</string>
+    <string name="bookmark_added">Segnalibro aggiunto</string>
   <string name="rate_dialog_title">Valutaci</string>
   <string name="rate_dialog_msg_1">Se ti piace usare</string>
   <string name="rate_dialog_msg_2">, prenditi un momento per valutarla. Grazie per il tuo sostegno!</string>
@@ -83,8 +80,7 @@
   <string name="help_11">I file ZIM scaricati nell\'applicazione sono localizzati nella directory di archiviazione esterna in una cartella chiamata Kiwix.</string>
   <string name="help_12">Come utilizzare file ZIM di grandi dimensioni?</string>
   <string name="help_13">Se il tuo file ZIM è superiore a 4GB potresti non essere in grado di archiviarlo nella tua scheda SD a causa di limitazioni nel sistema.</string>
-  <string name="help_20">Grazie per aver scelto Kiwix!</string>
-  <string name="pref_current_folder">Cartella attuale</string>
+    <string name="pref_current_folder">Cartella attuale</string>
   <string name="delete_zim_failed">Non siamo stati in grado di eliminare questo file. Dovresti provare ad usare un file amministratore.</string>
   <string name="tts_pause">pausa</string>
   <string name="external_storage">Esterno</string>
@@ -92,8 +88,7 @@
   <string name="confirm_stop_download_title">Interrompere il download?</string>
   <string name="confirm_stop_download_msg">Sei sicuro di voler interrompere il download?</string>
   <string name="download_change_storage">Selettore di strumento di archiviazione</string>
-  <string name="delete_tab">Elimina etichetta</string>
-  <string name="next">Successivo</string>
+    <string name="next">Successivo</string>
   <string name="previous">Precedente</string>
   <string name="pref_wifi_only">Scarica contenuto solo tramite WiFi</string>
   <string name="time_day">giorno</string>

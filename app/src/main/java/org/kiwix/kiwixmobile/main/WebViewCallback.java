@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.main;
 import android.content.Intent;
 import android.view.View;
 
-public interface WebViewCallback {
+interface WebViewCallback {
   void webViewUrlLoading();
 
   void webViewUrlFinishedLoading();

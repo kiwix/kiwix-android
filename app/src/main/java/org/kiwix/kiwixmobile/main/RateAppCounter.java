@@ -24,7 +24,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 
-public class RateAppCounter {
+class RateAppCounter {
 
   private static final String MASTER_NAME = "visitCounter";
   private static final String NOTHANKS_CLICKED = "clickedNoThanks";

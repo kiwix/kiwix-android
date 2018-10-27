@@ -15,8 +15,7 @@
   <string name="save_media_error">Hiba történt a média mentése közben!</string>
   <string name="save_media_saved">Média elmentve %1s néven a Fényképek mappába</string>
   <string name="rescan_fs_warning">ZIM-fájlok beolvasása, kis türelmet...</string>
-  <string name="button_backtotop">Vissza a lap tetejére</string>
-  <string name="search_label">Keresés</string>
+    <string name="search_label">Keresés</string>
   <string name="choose_file">ZIM-tartalomfájl kiválasztása (*.zim)</string>
   <string name="open_in_new_tab">Hivatkozás megnyitása új lapon?</string>
   <string name="error_nozimfilesfound">Nem található ZIM-fájl a készülékeden.\nNézd meg a súgóoldalt, ahol útmutatót találsz a Kiwix-tartalom letöltéséhez.\nHa a ZIM-fájlt már átmásoltad a készülékedre/SD-kártyádra, próbáld meg egy perc múlva ismét, vagy indítsd újra a készülékedet!</string>
@@ -38,8 +37,7 @@
   <string name="no_reader_application_installed">Nem található telepített alkalmazás ehhez a fájltípushoz</string>
   <string name="customapp_missing_content">Az alkalmazás sérült.\nEz megtörténhet olyankor, ha eltávolítsz fájlokat az SD-kártyán.\nEl kell távolítanod, majd újra kell telepítened az alkalmazást a Play Áruházból.</string>
   <string name="go_to_play_store">Play Áruház megnyitása</string>
-  <string name="no_bookmarks">Nincsenek könyvjelzők!</string>
-  <string name="menu_bookmarks_list">Könyvjelzők</string>
+    <string name="menu_bookmarks_list">Könyvjelzők</string>
   <string name="no_section_info">Nem található tartalomfejléc</string>
   <string name="request_storage">A ZIM-fájlok eléréséhez szükségünk van hozzáférésre a tárhelyedhez</string>
   <string name="bookmark_added">Könyvjelző hozzáadva</string>

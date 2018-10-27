@@ -7,7 +7,6 @@ import com.yahoo.squidb.sql.Query;
 
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
-import org.kiwix.kiwixmobile.data.local.entity.History;
 
 import java.text.DateFormat;
 import java.util.ArrayList;

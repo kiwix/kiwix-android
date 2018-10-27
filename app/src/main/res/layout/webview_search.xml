@@ -31,7 +31,10 @@
     android:inputType="text"
     android:scrollHorizontally="true"
     android:textColor="@android:color/white"
-    android:textColorHint="@color/material_dark_foreground_hint">
+    android:textColorHint="@color/material_dark_foreground_hint"
+      android:importantForAutofill="no"
+      tools:targetApi="o"
+      android:layout_marginEnd="@dimen/webview_search_edit_text_margin_right">
     <requestFocus />
   </EditText>
 

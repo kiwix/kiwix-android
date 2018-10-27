@@ -24,7 +24,7 @@ import com.yahoo.squidb.annotations.TableModelSpec;
  * Squidb spec for recent searches.
  */
 @TableModelSpec(className = "RecentSearch", tableName = "recentSearches")
-public class RecentSearchSpec {
+class RecentSearchSpec {
 
   @ColumnSpec(constraints = "NOT NULL")
   public String searchString;

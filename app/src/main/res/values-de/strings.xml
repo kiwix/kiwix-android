@@ -16,8 +16,7 @@
   <string name="save_media_error">Beim Versuch, das Medium zu speichern, ist ein Fehler aufgetreten!</string>
   <string name="save_media_saved">Medium als %s nach Android/media/org.kiwix.../ gespeichert</string>
   <string name="rescan_fs_warning">Scanne herunterladbaren Inhalt. Bitte warten …</string>
-  <string name="button_backtotop">Zurück nach oben</string>
-  <string name="search_label">Suchen</string>
+    <string name="search_label">Suchen</string>
   <string name="choose_file">Wähle eine Inhaltsdatei aus (*.zim)</string>
   <string name="open_in_new_tab">Link in neuer Registerkarte öffnen?</string>
   <string name="error_nozimfilesfound">Es wurde kein Inhalt auf Ihrem Gerät gefunden.\nSehen Sie auf den Hilfeseiten nach, um Lösungen zum Laden von Inhalt in Kiwix zu erhalten.\nFalls sich eine ZIM-Datei auf Ihrem Gerät oder externen Speicher befindet, versuchen Sie in einer Minute die Suche oder Ihr Gerät neu zu starten.</string>
@@ -42,8 +41,7 @@
   <string name="no_reader_application_installed">Es konnte keine installierte Anwendung für diesen Dateityp gefunden werden</string>
   <string name="customapp_missing_content">Ihre Anwendung ist beschädigt.\nDies kann passieren, wenn Sie Dateien auf der SD-Karte entfernen.\nSie müssen die App deinstallieren und sie aus dem Play Store neu installieren.</string>
   <string name="go_to_play_store">Zum Play Store gehen</string>
-  <string name="no_bookmarks">Keine Lesezeichen</string>
-  <string name="menu_bookmarks_list">Lesezeichen</string>
+    <string name="menu_bookmarks_list">Lesezeichen</string>
   <string name="no_section_info">Keine Inhaltsheader gefunden</string>
   <string name="request_storage">Um auf Offlineinhalt zuzugreifen, müssen wir auf Ihren Speicher zugreifen.</string>
   <string name="request_storage_custom">Falls Sie eine eingeblendete Bildschirmwarnung sehen, starten Sie zur Behebung einfach Ihr Gerät neu.</string>
@@ -60,8 +58,7 @@
   <string name="did_you_know">Schon gewusst?</string>
   <string name="undo">Rückgängig</string>
   <string name="tab_closed">Reiter geschlossen</string>
-  <string name="deleted_message">gelöscht</string>
-  <string name="bookmark_added">Lesezeichen hinzugefügt</string>
+    <string name="bookmark_added">Lesezeichen hinzugefügt</string>
   <string name="rate_dialog_title">Bitte bewerte uns</string>
   <string name="rate_dialog_msg_1">Wenn du</string>
   <string name="rate_dialog_msg_2">magst, nimm dir zur Bewertung einen Moment Zeit. Vielen Dank für deine Unterstützung!</string>
@@ -100,8 +97,7 @@
   <string name="get_library_over_network">Netzwerk verwenden, um die Inhaltsliste herunterzuladen (ungefähr 6 MB).</string>
   <string name="proceed">Fortfahren</string>
   <string name="wait_for_load">Inhalt lädt noch</string>
-  <string name="help_1">Kiwix erlaubt es Ihnen, offline auf Websites wie Wikipedia in einer stark komprimierten Form zuzugreifen.</string>
-  <string name="help_2">Was macht Kiwix?</string>
+    <string name="help_2">Was macht Kiwix?</string>
   <string name="help_3">Kiwix ist eine Lesesoftware für Offlineinhalte. Sie funktioniert wie ein Browser, aber anstatt auf Webseiten online zuzugreifen, liest sie Inhalte von einer Datei im ZIM-Format.</string>
   <string name="help_4">Obwohl Kiwix ursprünglich entwickelt wurde, um Wikipedia offline zur Verfügung zu stellen, liest es auch andere Inhalte.</string>
   <string name="help_5">Wo ist der Inhalt?</string>
@@ -118,9 +114,7 @@
   <string name="help_16">\u2022 Auf Microsoft Windows: HJ-Split</string>
   <string name="help_17">\u2022 Auf Apple Mac OSX: Split &amp; Concat</string>
   <string name="help_19">Hinweis: Ihre Dateien müssen meine_große_datei.zimaa, meine_große_datei.zimab etc. heißen.</string>
-  <string name="help_20">Vielen Dank, dass Sie Kiwix ausgewählt haben!</string>
-  <string name="help_21">Wir sind froh, dass wir Sie an Bord haben und schätzen jede Rückmeldung und jeden Vorschlag unter android@kiwix.org.</string>
-  <string name="pref_storage">Speicher</string>
+    <string name="pref_storage">Speicher</string>
   <string name="pref_current_folder">Aktueller Ordner</string>
   <string name="path_not_writable">Auf das gewünschte Verzeichnis kann nicht zugegriffen werden. Es wird das Standardverzeichnis verwendet. Um dieses Problem zu beheben, wählen Sie das gewünschte Verzeichnis in den App-Einstellungen erneut aus.</string>
   <string name="reboot_message">Aufgrund eines Softwarefehlers in Android 6.0 empfehlen wir Ihnen, das Gerät neu zu starten, um ohne unsere Speichererlaubnis fortzufahren. Wir entschuldigen uns für jede verursachte Unannehmlichkeit.</string>
@@ -137,8 +131,7 @@
   <string name="confirm_stop_download_msg">Sind Sie sicher, dass Sie diesen Download abbrechen möchten?</string>
   <string name="download_change_storage">Speichergeräteauswahl</string>
   <string name="tts_not_enabled">Text-to-Speech ist für diese ZIM-Datei nicht aktiviert</string>
-  <string name="delete_tab">Reiter löschen</string>
-  <string name="next">Nächste</string>
+    <string name="next">Nächste</string>
   <string name="previous">Vorherige</string>
   <string name="wifi_only_title">Herunterladen des Inhalts über das mobile Netzwerk erlauben?</string>
   <string name="wifi_only_msg">Falls Sie „Ja“ auswählen, werden Sie in Zukunft nicht mehr hingewiesen. Sie können dies jedoch immer in den Einstellungen ändern.</string>
@@ -152,9 +145,7 @@
   <string name="pref_bottomtoolbar_summary">Eine Werkzeugleiste mit Schnellzugriffsaktionen am unteren Bildschirmrand anzeigen</string>
   <string name="pref_autonightmode_summary">Automatisch zwischen Tag- und Nachtmodus umschalten.</string>
   <string name="pref_autonightmode">Automatischer Nachtmodus</string>
-  <string name="pref_multi_search_title">MultiZim-Suche</string>
-  <string name="pref_multi_search_summary">Der App erlauben, ZIM-Dateien zu durchsuchen (Warnung: Sehr experimentell).</string>
-  <string name="pref_external_link_popup_title">Beim Einfügen von externen Links warnen</string>
+    <string name="pref_external_link_popup_title">Beim Einfügen von externen Links warnen</string>
   <string name="pref_external_link_popup_summary">Popups für Warnungen über zusätzliche Kosten oder das Nichtfunktionieren von Offlinelinks anzeigen.</string>
   <string name="external_link_popup_dialog_title">Externen Link einfügen</string>
   <string name="external_link_popup_dialog_message">Du fügst einen externen Link ein. Dies könnte zu zusätzlichen Kosten für die Datenübermittlung führen oder wird nicht funktionieren, wenn du offline bist. Möchtest du fortfahren?</string>

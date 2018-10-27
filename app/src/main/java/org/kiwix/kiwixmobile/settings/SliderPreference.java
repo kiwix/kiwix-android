@@ -27,13 +27,14 @@ import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.R;
 
+@SuppressWarnings("ALL")
 public class SliderPreference extends DialogPreference {
 
-  protected final static int SEEKBAR_MAX = 500;
+  private final static int SEEKBAR_MAX = 500;
 
-  protected int mSeekBarValue;
+  private int mSeekBarValue;
 
-  protected CharSequence[] mSummaries;
+  private CharSequence[] mSummaries;
 
   private TextView mMessage;
 
@@ -61,7 +62,7 @@ public class SliderPreference extends DialogPreference {
     updateSummaryText(context, attrs);
   }
 
-  public void updateSummaryText(Context context, AttributeSet attrs) {
+  private void updateSummaryText(Context context, AttributeSet attrs) {
     TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SliderPreference);
     try {
       setSummary(a.getTextArray(R.styleable.SliderPreference_android_summary));
@@ -95,7 +96,7 @@ public class SliderPreference extends DialogPreference {
     }
   }
 
-  public void setSummary(CharSequence[] summaries) {
+  private void setSummary(CharSequence[] summaries) {
     mSummaries = summaries;
   }
 
@@ -109,7 +110,7 @@ public class SliderPreference extends DialogPreference {
     }
   }
 
-  public void setValue(float value) {
+  private void setValue(float value) {
     if (shouldPersist()) {
       persistFloat(value);
     }

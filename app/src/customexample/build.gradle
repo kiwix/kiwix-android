@@ -1,5 +1,5 @@
 android {
-  def f = file(buildscript.sourceFile.parent + "/wikipedia_fr_test_2017-07.zim");
+  def f = file(buildscript.sourceFile.parent + "/wikipedia_fr_test_2017-07.zim")
   if (!f.exists()) {
     URLConnection urlConnection = new URL('http://download.kiwix.org/zim/wikipedia_fr_test.zim').openConnection()
     urlConnection.connect()

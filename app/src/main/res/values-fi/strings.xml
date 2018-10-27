@@ -15,8 +15,7 @@
   <string name="save_media_error">Tapahtui virhe mediaa tallentaessa!</string>
   <string name="save_media_saved">Tallennettu media %1$s kuvakansiossasi</string>
   <string name="rescan_fs_warning">Skannataan ZIM-tiedostoja, ole hyvä ja odota...</string>
-  <string name="button_backtotop">Takaisin alkuun</string>
-  <string name="search_label">Haku</string>
+    <string name="search_label">Haku</string>
   <string name="choose_file">Valitse ZIM-sisältötiedosto (*.zim)</string>
   <string name="open_in_new_tab">Avaa linkki uudessa välilehdessä?</string>
   <string name="error_nozimfilesfound">ZIM-tiedostoja ei löytynyt laitteestasi.\nKatso Ohje-sivua saadaksesi ohjeet siitä, miten ladata sisältöä Kiwixiin.\nJos et laita ZIM-tiedostoa laitteeseen/ulkoiseen tallennistilaan, saatat joutua yrittämään uudelleen hetken kuluttua tai käynnistämään laitteesi uudelleen.</string>
@@ -38,8 +37,7 @@
   <string name="no_reader_application_installed">Ei voitu löytää asennettua sovellusta tämän tyyppiselle tiedostolle</string>
   <string name="customapp_missing_content">Sovelluksesi on viottunut.\nTämä voi tapahtua kun poistat tiedostoja SD-kortilta.\nSinun pitää poistaa ja sitten uudelleenasentaa sovellus Play-kaupasta.</string>
   <string name="go_to_play_store">Mene Play-kauppaan</string>
-  <string name="no_bookmarks">Ei kirjanmerkkejä!</string>
-  <string name="menu_bookmarks_list">Kirjanmerkit</string>
+    <string name="menu_bookmarks_list">Kirjanmerkit</string>
   <string name="no_section_info">Sisältö otsikoita ei löydy</string>
   <string name="request_storage">Käyttääksemme ZIM-tiedostoja, tarvitsemme pääsyn muistiisi</string>
   <string name="bookmark_added">Kirjanmerkki lisätty</string>

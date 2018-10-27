@@ -22,7 +22,6 @@ import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
 
 import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
-import org.kiwix.kiwixmobile.data.local.entity.BookDatabaseEntity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
@@ -90,7 +89,7 @@ public class BookDao {
     return filterBookResults(books);
   }
 
-  public ArrayList<Book> filterBookResults(ArrayList<Book> books) {
+  private ArrayList<Book> filterBookResults(ArrayList<Book> books) {
     ArrayList<Book> filteredBookList = new ArrayList<>();
     for (Book book : books) {
       if (!FileUtils.hasPart(book.file)) {

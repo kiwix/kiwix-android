@@ -1,7 +1,6 @@
 package org.kiwix.kiwixmobile.bookmark;
 
 import org.kiwix.kiwixmobile.base.BaseContract;
-import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 
 import java.util.List;
 

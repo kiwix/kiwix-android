@@ -71,15 +71,18 @@ import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 public class ZimFileSelectFragment extends BaseFragment
     implements OnItemClickListener, AdapterView.OnItemLongClickListener, ZimFileSelectViewCallback {
 
-  public RelativeLayout llLayout;
-  public SwipeRefreshLayout swipeRefreshLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;
   @Inject
+  private
   ZimFileSelectPresenter presenter;
   @Inject
+  private
   BookUtils bookUtils;
   @Inject
+  private
   SharedPreferenceUtil sharedPreferenceUtil;
   @Inject
+  private
   BookDao bookDao;
   private ZimManageActivity zimManageActivity;
   private RescanDataAdapter mRescanAdapter;
@@ -94,7 +97,7 @@ public class ZimFileSelectFragment extends BaseFragment
     zimManageActivity = (ZimManageActivity) super.getActivity();
     presenter.attachView(this);
     // Replace LinearLayout by the type of the root element of the layout you're trying to load
-    llLayout = (RelativeLayout) inflater.inflate(R.layout.zim_list, container, false);
+      RelativeLayout llLayout = (RelativeLayout) inflater.inflate(R.layout.zim_list, container, false);
     new LanguageUtils(zimManageActivity).changeFont(zimManageActivity.getLayoutInflater(), sharedPreferenceUtil);
 
     mFileMessage = llLayout.findViewById(R.id.file_management_no_files);
@@ -109,7 +112,7 @@ public class ZimFileSelectFragment extends BaseFragment
     // A boolean to distinguish between a user refresh and a normal loading
     mHasRefresh = false;
 
-    mRescanAdapter = new RescanDataAdapter(zimManageActivity, 0, mFiles);
+    mRescanAdapter = new RescanDataAdapter(zimManageActivity, mFiles);
 
     // Allow temporary use of ZimContentProvider to query books
     ZimContentProvider.canIterate = true;
@@ -140,7 +143,7 @@ public class ZimFileSelectFragment extends BaseFragment
     checkPermissions();
   }
 
-  public void refreshFragment() {
+  private void refreshFragment() {
     if (mZimFileList == null) {
       swipeRefreshLayout.setRefreshing(false);
       return;
@@ -161,7 +164,7 @@ public class ZimFileSelectFragment extends BaseFragment
     }
   }
 
-  public void checkPermissions() {
+  private void checkPermissions() {
     if (ContextCompat.checkSelfPermission(zimManageActivity,
         Manifest.permission.WRITE_EXTERNAL_STORAGE)
         != PackageManager.PERMISSION_GRANTED && Build.VERSION.SDK_INT > 18) {
@@ -174,7 +177,7 @@ public class ZimFileSelectFragment extends BaseFragment
     }
   }
 
-  public void getFiles() {
+  private void getFiles() {
     if (swipeRefreshLayout.isRefreshing() && !mHasRefresh)
       return;
 
@@ -271,7 +274,7 @@ public class ZimFileSelectFragment extends BaseFragment
     return true;
   }
 
-  public void deleteSpecificZimDialog(int position) {
+  private void deleteSpecificZimDialog(int position) {
     new AlertDialog.Builder(zimManageActivity, dialogStyle())
         .setMessage(getString(R.string.delete_specific_zim))
         .setPositiveButton(getResources().getString(R.string.delete), (dialog, which) -> {
@@ -287,7 +290,7 @@ public class ZimFileSelectFragment extends BaseFragment
         .show();
   }
 
-  public boolean deleteSpecificZimFile(int position) {
+  private boolean deleteSpecificZimFile(int position) {
     File file = mFiles.get(position).file;
     FileUtils.deleteZimFile(file.getPath());
     if (file.exists()) {
@@ -303,7 +306,7 @@ public class ZimFileSelectFragment extends BaseFragment
     return true;
   }
 
-  public void checkEmpty() {
+  private void checkEmpty() {
     if (mZimFileList.getCount() == 0) {
       mFileMessage.setVisibility(View.VISIBLE);
     } else
@@ -320,8 +323,8 @@ public class ZimFileSelectFragment extends BaseFragment
   // The Adapter for the ListView for when the ListView is populated with the rescanned files
   private class RescanDataAdapter extends ArrayAdapter<LibraryNetworkEntity.Book> {
 
-    RescanDataAdapter(Context context, int textViewResourceId, List<LibraryNetworkEntity.Book> objects) {
-      super(context, textViewResourceId, objects);
+    RescanDataAdapter(Context context, List<LibraryNetworkEntity.Book> objects) {
+      super(context, 0, objects);
     }
 
     @NonNull

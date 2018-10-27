@@ -16,8 +16,7 @@
   <string name="save_media_error">B\'est istadu un\'errore durante su tentativu de sarvamentu de su mèdia!</string>
   <string name="save_media_saved">Mèdia sarvadu comente %1$s in sa cartella tua de sas immàgines</string>
   <string name="rescan_fs_warning">Iscansinde pro documentos ZIM, pro praghere iseta...</string>
-  <string name="button_backtotop">Torra a su cumintzu</string>
-  <string name="search_label">Chirca</string>
+    <string name="search_label">Chirca</string>
   <string name="choose_file">Ischerta unu documentu de cuntenutu ZIM (*.zim)</string>
   <string name="open_in_new_tab">Aberire su ligòngiu in un\'ischeda noa?</string>
   <string name="error_nozimfilesfound">Perunu documentu ZIM agatadu in su dispositivu tuo.\nLeghe sa pàgina de agiudu pro imparare a carrigare cuntenutu intre Kiwix.\nSi as postu unu documentu ZIM in su sa memòria de su dispositivu tuo o in un\'ischeda esterna, torra a proare a pustis de unu minutu o torra a allùere su dispositivu tuo.</string>
@@ -44,8 +43,7 @@
   <string name="no_reader_application_installed">Impossìbile agatare un\'aplicatzione installada pro custa casta de documentu</string>
   <string name="customapp_missing_content">S\'aplicatzione tua est corrùmpida.\nCustu podet acontèssere cando bogas documentos dae s\'ischeda SD.\nDepes disinstallare e torrare a installare s\'aplicatzione dae su Play Store.</string>
   <string name="go_to_play_store">Bae a su Play Store</string>
-  <string name="no_bookmarks">Perunu sinnalibru!</string>
-  <string name="menu_bookmarks_list">Sinnalibros</string>
+    <string name="menu_bookmarks_list">Sinnalibros</string>
   <string name="no_section_info">Peruna intestatzione de cuntenutu agatada</string>
   <string name="request_storage">Pro atzèdere a su documentu ZIM tenimus bisòngiu de pòdere atzèdere a sa memòria tua</string>
   <string name="request_storage_custom">Si bides un\'avertimentu subrapostu in s\'ischermu torra a allùghere su dispositivu pro l\'acontzare.</string>
@@ -62,8 +60,7 @@
   <string name="did_you_know">L\'ischias?</string>
   <string name="undo">Annulla</string>
   <string name="tab_closed">Ischeda serrada</string>
-  <string name="deleted_message">iscantzelladu</string>
-  <string name="bookmark_added">Sinnalibros annantos</string>
+    <string name="bookmark_added">Sinnalibros annantos</string>
   <string name="rate_dialog_title">Pro praghere avalora·nos</string>
   <string name="rate_dialog_msg_1">Si t\'agradat impreare</string>
   <string name="rate_dialog_msg_2">, pro praghere piga·ti unu momentu pro l\'avalorare. Ti torramus gràtzias pro su suportu tuo!</string>
@@ -103,8 +100,7 @@
   <string name="get_library_over_network">Imprea sa retza pro iscarrigare sa lista de cuntenutos (pagu prus o mancu 6MB)</string>
   <string name="proceed">Sighi</string>
   <string name="wait_for_load">Cuntenutu galu in carrigamentu</string>
-  <string name="help_1">Kiwix ti permitit de atzèdere chene lìnia a sitos comente a Wikipedia cun unu formatu cumprimidu meda.</string>
-  <string name="help_2">Ite faghet Kiwix?</string>
+    <string name="help_2">Ite faghet Kiwix?</string>
   <string name="help_3">Kiwix est unu leghidore de cuntenutu non in lìnia. Funtzionat comente unu navigadore ma imbetzes de intrare in pàginas web in lìnia leghet cuntenutu dae unu documentu in formatu ZIM.</string>
   <string name="help_4">Fintzas si Kiwix est istadu creadu, in orìgine, pro lèghere Wikipèdia chene lìnia, leghet fintzas àteros cuntenutos.</string>
   <string name="help_5">In ue est su cuntenutu?</string>
@@ -121,9 +117,7 @@
   <string name="help_16">\u2022 In Microsoft Windows: HJ-Split</string>
   <string name="help_17">\u2022 In Apple Mac OSX: Split e Concat</string>
   <string name="help_19">Nota: su documentu risultante tuo depet tènnere su nùmene documentu_mannu_meu.zimaa, documentu_mannu_meu.zimab, etz.</string>
-  <string name="help_20">Gràtzias pro àere seberadu Kiwix!</string>
-  <string name="help_21">Semus cuntentos de ti tènnere intre nois e nos diat agradare a intendere cale si siat opinione o impòsitu tuo in android@kiwix.org.</string>
-  <string name="pref_storage">Memòria</string>
+    <string name="pref_storage">Memòria</string>
   <string name="pref_current_folder">Cartella atuale</string>
   <string name="path_not_writable">Impossìbile abèrrere sa cartella isseberada, impreende sas impostatziones predefinidas. Pro isòrvere su problema torra a ischertare sa cartella in sos inditos de s\'aplicatzione.</string>
   <string name="reboot_message">Pro more de un\'errore in android 6.0 depes torrare a allùghere su dispositivu pro sighire chene nos dare su permissu pro sa memòria. Nos dispraghet pro cale si siat problema custu diat pòdere causare.</string>
@@ -140,8 +134,7 @@
   <string name="confirm_stop_download_msg">Seguru ses de bòlere firmare custu iscarrigamentu?</string>
   <string name="download_change_storage">Isseberadore de dispositivu de memòria</string>
   <string name="tts_not_enabled">Sa sintetizatzione vocale no est abilitada pro custu documentu ZIM</string>
-  <string name="delete_tab">Iscantzella ischeda</string>
-  <string name="next">Imbeniente</string>
+    <string name="next">Imbeniente</string>
   <string name="previous">Antepostu</string>
   <string name="wifi_only_title">Permìtere s\'iscarrigamentu de cuntenutu pro mèdiu de retza mòbile?</string>
   <string name="wifi_only_msg">Si as a isseberare "Eja" no as a èssere avertidu in su tempus benidore. In cada manera, l\'as a pòdre semper cambiare in sos Inditos</string>

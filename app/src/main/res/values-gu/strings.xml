@@ -10,8 +10,7 @@
   <string name="menu_fullscreen">આખી સ્ક્રિન</string>
   <string name="menu_exitfullscreen">પૂર્ણ સ્ક્રીનથી બહાર નીકળો</string>
   <string name="rescan_fs_warning">ZIM ફાઇલ્સ શોધો છે, મહેરબાની કરી થોડી રાહ જુઓ...</string>
-  <string name="button_backtotop">ટોપ પર પાછા જાઓ</string>
-  <string name="search_label">શોધો</string>
+    <string name="search_label">શોધો</string>
   <string name="choose_file">ZIM માહિતી ફાઇલ (*.zim) પસંદ કરો</string>
   <string name="open_in_new_tab">કડી નવી ટેબમાં ખોલશો?</string>
   <string name="error_filenotfound">ક્ષતિ: પસંદ કરેલ ZIM ફાઇલ મળી શકી નહી.</string>

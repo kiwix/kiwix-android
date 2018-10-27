@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 
 import java.util.List;
 

@@ -55,6 +55,7 @@ public class KiwixWebView extends WebView {
       0, 0, 0, 1.0f, 0 // alpha
   };
   @Inject
+  private
   SharedPreferenceUtil sharedPreferenceUtil;
   private WebViewCallback callback;
 
@@ -62,7 +63,7 @@ public class KiwixWebView extends WebView {
     super(context);
   }
 
-  public KiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs) {
+  KiwixWebView(Context context, WebViewCallback callback, AttributeSet attrs) {
     super(context, attrs);
     this.callback = callback;
     KiwixApplication.getApplicationComponent().inject(this);
@@ -138,7 +139,7 @@ public class KiwixWebView extends WebView {
     callback.webViewPageChanged(page, pages);
   }
 
-  public void disableZoomControls() {
+  private void disableZoomControls() {
     getSettings().setBuiltInZoomControls(true);
     getSettings().setDisplayZoomControls(false);
   }

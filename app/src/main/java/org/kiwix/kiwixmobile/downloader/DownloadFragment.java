@@ -25,6 +25,7 @@ import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -55,6 +56,7 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -62,23 +64,23 @@ import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class DownloadFragment extends BaseFragment {
 
-  public static LinkedHashMap<Integer, LibraryNetworkEntity.Book> mDownloads = new LinkedHashMap<>();
-  public static LinkedHashMap<Integer, String> mDownloadFiles = new LinkedHashMap<>();
-  public RelativeLayout relLayout;
-  public ListView listView;
+  public static final LinkedHashMap<Integer, LibraryNetworkEntity.Book> mDownloads = new LinkedHashMap<>();
+  public static final LinkedHashMap<Integer, String> mDownloadFiles = new LinkedHashMap<>();
+    public ListView listView;
   public static DownloadAdapter downloadAdapter;
   private ZimManageActivity zimManageActivity;
-  CoordinatorLayout mainLayout;
+  private CoordinatorLayout mainLayout;
   private Activity faActivity;
   private boolean hasArtificiallyPaused;
 
   @Inject
+  private
   SharedPreferenceUtil sharedPreferenceUtil;
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     faActivity = super.getActivity();
-    relLayout = (RelativeLayout) inflater.inflate(R.layout.download_management, container, false);
+      RelativeLayout relLayout = (RelativeLayout) inflater.inflate(R.layout.download_management, container, false);
 
     zimManageActivity = (ZimManageActivity) super.getActivity();
     listView = relLayout.findViewById(R.id.zim_downloader_list);
@@ -90,7 +92,7 @@ public class DownloadFragment extends BaseFragment {
   }
 
   @Override
-  public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     updateNoDownloads();
   }
@@ -114,7 +116,7 @@ public class DownloadFragment extends BaseFragment {
     downloadAdapter.unRegisterDataSetObserver();
   }
 
-  public void showNoWiFiWarning(Context context, Runnable yesAction) {
+  private void showNoWiFiWarning(Context context, Runnable yesAction) {
     new AlertDialog.Builder(context)
             .setTitle(R.string.wifi_only_title)
             .setMessage(R.string.wifi_only_msg)
@@ -151,11 +153,11 @@ public class DownloadFragment extends BaseFragment {
 
   public class DownloadAdapter extends BaseAdapter {
 
-    private LinkedHashMap<Integer, LibraryNetworkEntity.Book> mData = new LinkedHashMap<>();
+    private final LinkedHashMap<Integer, LibraryNetworkEntity.Book> mData;
     private Integer[] mKeys;
     private DataSetObserver dataSetObserver;
 
-    public DownloadAdapter(LinkedHashMap<Integer, LibraryNetworkEntity.Book> data) {
+    DownloadAdapter(LinkedHashMap<Integer, LibraryNetworkEntity.Book> data) {
       mData = data;
       mKeys = mData.keySet().toArray(new Integer[data.size()]);
     }
@@ -187,7 +189,7 @@ public class DownloadFragment extends BaseFragment {
         downloadAdapter.notifyDataSetChanged();
         updateNoDownloads();
       }
-      ImageView pause = viewGroup.findViewById(R.id.pause);
+      ImageView pause = Objects.requireNonNull(viewGroup).findViewById(R.id.pause);
       pause.setEnabled(false);
       String fileName = FileUtils.getFileName(mDownloadFiles.get(mKeys[position]));
       {
@@ -221,10 +223,10 @@ public class DownloadFragment extends BaseFragment {
     private void setPlayState(ImageView pauseButton, int position, int newPlayState) {
       if (newPlayState == DownloadService.PLAY) { //Playing
         if (LibraryFragment.mService.playDownload(mKeys[position]))
-          pauseButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
+          pauseButton.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity()), R.drawable.ic_pause_black_24dp));
       } else { //Pausing
         LibraryFragment.mService.pauseDownload(mKeys[position]);
-        pauseButton.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black_24dp));
+        pauseButton.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity()), R.drawable.ic_play_arrow_black_24dp));
       }
     }
 
@@ -235,7 +237,7 @@ public class DownloadFragment extends BaseFragment {
       if (convertView == null) {
         convertView = LayoutInflater.from(faActivity).inflate(R.layout.download_item, parent, false);
       }
-      mKeys = mData.keySet().toArray(new Integer[mData.size()]);
+      mKeys = mData.keySet().toArray(new Integer[0]);
       // Lookup view for data population
       //downloadProgress.setProgress(download.progress);
       // Populate the data into the template view using the data object
@@ -252,24 +254,22 @@ public class DownloadFragment extends BaseFragment {
 
       if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == 0) {
         downloadProgress.setProgress(0);
-        pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
+        pause.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity()), R.drawable.ic_pause_black_24dp));
       } else {
         downloadProgress.setProgress(LibraryFragment.mService.downloadProgress.get(mKeys[position]));
         if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PAUSE) {
-          pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_play_arrow_black_24dp));
+          pause.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity()), R.drawable.ic_play_arrow_black_24dp));
         }
         if (LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY) {
-          pause.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_pause_black_24dp));
+          pause.setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getActivity()), R.drawable.ic_pause_black_24dp));
         }
       }
 
       pause.setOnClickListener(v -> {
         int newPlayPauseState = LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY ? DownloadService.PAUSE : DownloadService.PLAY;
 
-        if (newPlayPauseState == DownloadService.PLAY && MainActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
-          showNoWiFiWarning(getContext(), () -> {
-            setPlayState(pause, position, newPlayPauseState);
-          });
+        if (newPlayPauseState == DownloadService.PLAY && MainActivity.wifiOnly && !NetworkUtils.isWiFi(Objects.requireNonNull(getContext()))) {
+          showNoWiFiWarning(getContext(), () -> setPlayState(pause, position, newPlayPauseState));
           return;
         }
 
@@ -309,7 +309,7 @@ public class DownloadFragment extends BaseFragment {
       return convertView;
     }
 
-    public void registerDataSetObserver(DownloadFragment downloadFragment) {
+    void registerDataSetObserver(DownloadFragment downloadFragment) {
       if (dataSetObserver == null) {
         dataSetObserver = new DataSetObserver() {
           @Override
@@ -329,7 +329,7 @@ public class DownloadFragment extends BaseFragment {
       }
     }
 
-    public void unRegisterDataSetObserver() {
+    void unRegisterDataSetObserver() {
       if (dataSetObserver != null) {
         unregisterDataSetObserver(dataSetObserver);
       }
@@ -343,7 +343,7 @@ public class DownloadFragment extends BaseFragment {
     updateNoDownloads();
   }
 
-  public Bitmap StringToBitMap(String encodedString) {
+  private Bitmap StringToBitMap(String encodedString) {
     try {
       byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
       return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);

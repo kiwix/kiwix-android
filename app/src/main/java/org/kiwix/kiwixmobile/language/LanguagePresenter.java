@@ -10,6 +10,7 @@ import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
 import org.kiwix.kiwixmobile.models.Language;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -36,8 +37,8 @@ class LanguagePresenter extends BasePresenter<LanguageContract.View> implements 
   @Override
   public void filerLanguages(List<Language> languages, String query) {
     Observable.fromIterable(languages)
-        .filter(language -> language.language.toLowerCase().contains(query.toLowerCase()) ||
-            language.languageLocalized.toLowerCase().contains(query.toLowerCase()))
+        .filter(language -> Objects.requireNonNull(language.language).toLowerCase().contains(query.toLowerCase()) ||
+            Objects.requireNonNull(language.languageLocalized).toLowerCase().contains(query.toLowerCase()))
         .toList()
         .subscribeOn(computation)
         .observeOn(mainThread)

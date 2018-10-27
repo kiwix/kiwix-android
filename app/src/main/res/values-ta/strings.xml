@@ -13,8 +13,7 @@
   <string name="save_media_error">ஊடகப்பொருளை சேமிக்கும் முயற்சியில் ஒரு பிழை நேர்ந்துவிட்டது!</string>
   <string name="save_media_saved">தங்களுடைய படங்களின் கொப்புறைக்குள், ஊடகப்பொருளை இவ்வாறு %1$s சேமிக்கவும்</string>
   <string name="rescan_fs_warning">ZIM கோப்புகளுக்காக துருவி நோக்கிக்கொண்டிருக்கிறது,தயவுசெய்து காத்‌திருக்கவும்</string>
-  <string name="button_backtotop">மீண்டும் மேலே</string>
-  <string name="search_label">தேடு</string>
+    <string name="search_label">தேடு</string>
   <string name="choose_file">ZIM கோப்பை தேர்வு செய் (*.zim)</string>
   <string name="open_in_new_tab">இணைப்பை புதிய தாவலில் திறக்கவேண்டுமா?</string>
   <string name="error_nozimfilesfound">தங்கள் சாதனத்தில் ZIM கோப்புகள் எதுவும் காணப்படவில்லை. Kiwix-னுள், உட்பொருளை எவ்வாறு ஏற்றுவது என்பதற்கான வழிகாட்டுதல்களைப்பெற, உதவிப் பக்கத்‌தைக் காண்க.\nநீங்கள் ZIM கோப்பினை, தங்களுடைய இந்த சாதனத்தில் அல்லது வெளிசேமிப்பில் வைத்திருந்தீர்கள் என்றால்,\nமீண்டும் ஒருநிமிட இடைவெளியில் முயற்சி செய்யுங்கள் அல்லது சாதனத்தை அணைத்து, மறுதுவக்கம் செய்யுங்கள்.</string>

@@ -29,7 +29,6 @@ import com.yahoo.squidb.sql.Query;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 
 import java.io.BufferedWriter;
 import java.io.File;

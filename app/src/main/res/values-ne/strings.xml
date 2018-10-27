@@ -10,8 +10,7 @@
   <string name="menu_fullscreen">पूरा पर्दा</string>
   <string name="menu_exitfullscreen">पूरा पर्दाबाट बाहिरिने</string>
   <string name="rescan_fs_warning">कृपया पर्खनुहोस्, जिम फाइलहरू स्क्यान हुँदैछ</string>
-  <string name="button_backtotop">सुरुमा जानुहोस्</string>
-  <string name="search_label">खोज</string>
+    <string name="search_label">खोज</string>
   <string name="choose_file">सामग्री फाइल छान्नुहोस् (*.zim)</string>
   <string name="open_in_new_tab">लिङ्कलाइ नयाँ ट्याबमा खोल्ने?</string>
   <string name="error_nozimfilesfound">तपाईंको उपकरणमा ZIM फाइलहरू भेटिएनन्।\nकिविक्समा सामग्री कसरी खोल्ने भन्ने विषयको निर्देशनका लागि सहायता पृष्ठमा हेर्नुहोस्।\nतपाईंले उपकरण वा बाह्य भण्डारणमा ZIM फाइल राख्नुभएको थियो भने, एक मिनटमा पुनः प्रयास गर्नुहोस् अथवा उपकरण पुनः सुरू गर्नुहोस्।</string>
@@ -35,8 +34,7 @@
   <string name="delete">मेट्ने</string>
   <string name="did_you_know">के तपाईँलाई थाह छ?</string>
   <string name="undo">पूर्ववत गर्ने</string>
-  <string name="deleted_message">मेटिएको</string>
-  <string name="bookmark_added">पुस्तक चिनो थपियो</string>
+    <string name="bookmark_added">पुस्तक चिनो थपियो</string>
   <string name="bookmark_removed">पुस्तक चिनो हटाइयो</string>
   <string name="download_started_library">डाउनलोड सुरुभयो…</string>
   <string name="zim_manager">पुस्तकालय</string>
@@ -51,5 +49,4 @@
   <string name="external_storage">बाह्य</string>
   <string name="yes">हो</string>
   <string name="confirm_stop_download_title">डाउनलोड रोक्ने हो?</string>
-  <string name="delete_tab">ट्याब मेट्नुहोस्</string>
 </resources>

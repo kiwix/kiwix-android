@@ -27,8 +27,8 @@ class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.Item> {
   private final boolean nightMode;
 
   HelpAdapter(HashMap<String, String> titleDescriptionMap, boolean nightMode) {
-    this.titles = titleDescriptionMap.keySet().toArray(new String[titleDescriptionMap.size()]);
-    this.descriptions = titleDescriptionMap.values().toArray(new String[titleDescriptionMap.size()]);
+    this.titles = titleDescriptionMap.keySet().toArray(new String[0]);
+    this.descriptions = titleDescriptionMap.values().toArray(new String[0]);
     this.nightMode = nightMode;
   }
 

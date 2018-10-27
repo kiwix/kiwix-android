@@ -15,8 +15,7 @@
   <string name="save_media_error">Ur fazi zo bet e-ser klask enrollañ ar media !</string>
   <string name="save_media_saved">Media enrollet evel %1$s en ho teuliad Skeudennoù</string>
   <string name="rescan_fs_warning">O tielfennañ restroù ZIM. Gortozit, mar plij</string>
-  <string name="button_backtotop">Penn-krec\'h ar bajenn</string>
-  <string name="search_label">Klask</string>
+    <string name="search_label">Klask</string>
   <string name="choose_file">Dibab ur restr endac\'h ZIM (*.zim)</string>
   <string name="open_in_new_tab">Digeriñ al liamm en un ivinell nevez ?</string>
   <string name="error_nozimfilesfound">N\'eus bet kavet restr ZIM ebet en hoc\'h urzhiataer.\nTaolit ur sell ouzh ar bajenn skoazell evit deskiñ penaos kargañ endalc\'hadoù e Kiwix. M\'ho peus lakaet ur restr Kiwix en hoc\'h ardivink stokañ diabarzh pe diavaez e c\'hallit klask en-dro a-benn ur vutunenn pe adloc\'hit hoc\'h urzhiataer.</string>
@@ -38,8 +37,7 @@
   <string name="no_reader_application_installed">Ne c\'haller kavout arload ebet staliet evit ar seurt restr</string>
   <string name="customapp_missing_content">Brein eo hoc\'h arload.\nGallout a ra c\'hoarvezout pa lamit restroù eus ar gartenn SD. Rankout a rit distaliañ an arload hag adstaliañ anezhañ adal ar Play Store.</string>
   <string name="go_to_play_store">Mont war ar Play Store</string>
-  <string name="no_bookmarks">N\'eus sined ebet!</string>
-  <string name="menu_bookmarks_list">Sinedoù</string>
+    <string name="menu_bookmarks_list">Sinedoù</string>
   <string name="no_section_info">N\'eus bet kavet talbenn endalc\'h ebet</string>
   <string name="request_storage">Evit tizhout ar restroù ZIM hon eus ezhomm da dizhout ho lec\'h stokañ</string>
   <string name="bookmark_added">Sined ouzhpennet</string>

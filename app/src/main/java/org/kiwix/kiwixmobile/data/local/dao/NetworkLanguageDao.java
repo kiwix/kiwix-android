@@ -23,17 +23,17 @@ import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
 
 import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
-import org.kiwix.kiwixmobile.data.local.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.models.Language;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
 public class NetworkLanguageDao {
-  private KiwixDatabase mDb;
+  private final KiwixDatabase mDb;
 
   @Inject
   public NetworkLanguageDao(KiwixDatabase kiwixDatabase) {
@@ -56,7 +56,7 @@ public class NetworkLanguageDao {
 
   public void saveFilteredLanguages(List<Language> languages) {
     mDb.deleteAll(NetworkLanguageDatabaseEntity.class);
-    Collections.sort(languages, (language, t1) -> language.language.compareTo(t1.language));
+    Collections.sort(languages, (language, t1) -> Objects.requireNonNull(language.language).compareTo(Objects.requireNonNull(t1.language)));
     for (Language language : languages) {
       NetworkLanguageDatabaseEntity networkLanguageDatabaseEntity = new NetworkLanguageDatabaseEntity();
       networkLanguageDatabaseEntity.setLanguageISO3(language.languageCode);

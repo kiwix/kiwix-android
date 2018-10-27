@@ -15,8 +15,7 @@
   <string name="save_media_error">Waxaa dhacay qalad markii la doonayay in la kaydiyo!</string>
   <string name="save_media_saved">U kaydi qaab ah %1$s galka sawirka gaarka kuu ah</string>
   <string name="rescan_fs_warning">Waxaa socota Kala hufidda ee Galalka ZIM, fadlan Sug...</string>
-  <string name="button_backtotop">Ku laabo kor</string>
-  <string name="search_label">Raadi</string>
+    <string name="search_label">Raadi</string>
   <string name="choose_file">Dooro galka ZIM ee ka samaysan (*.zim)</string>
   <string name="open_in_new_tab">Fur webka qaab cusub</string>
   <string name="error_nozimfilesfound">Lagama helin wax galal ZIM ah qalabkaada.\nSoo eeg bogga caawimaadda si aad u hesho hagis gaar ah taasaa ku tusaysa sidii aad wax u galinlahad Kiwix.\nHaddii aad galisat galka ZIM qalabkaad/kaydiyaha kuu gaarka ah, waxaa laga yaabaa inaad u baahantahay inaad dib u soo shido.</string>

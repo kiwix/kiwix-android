@@ -16,8 +16,7 @@
   <string name="save_media_error">Der opstod en fejl under forsøg på at gemme mediet!</string>
   <string name="save_media_saved">Gemte medie som %s til Android/media/org.kiwix.../</string>
   <string name="rescan_fs_warning">Søger efter indhold, vent venligst ...</string>
-  <string name="button_backtotop">Tilbage til toppen</string>
-  <string name="search_label">Søg</string>
+    <string name="search_label">Søg</string>
   <string name="choose_file">Vælg en indholdsfil (*.zim)</string>
   <string name="open_in_new_tab">Åbn link i nyt faneblad?</string>
   <string name="error_nozimfilesfound">Intet indhold fundet på enheden.\nTag et kig på hjælpesiden for at få anvisninger om, hvordan man indlæser indhold i Kiwix.\nHvis du har puttet en ZIM-fil på din enhed/dit eksterne lager, så kan du prøve igen om et minut eller genstarte din enhed.</string>
@@ -41,8 +40,7 @@
   <string name="no_reader_application_installed">Kunne ikke finde et installeret program for denne filtype</string>
   <string name="customapp_missing_content">Dit program er ødelagt.\nDette kan ske hvis du fjerner filer på SD-kortet.\nDu skal afinstallere og så installere programmet igen fra Play Store.</string>
   <string name="go_to_play_store">Gå til Play Store</string>
-  <string name="no_bookmarks">Ingen bogmærker</string>
-  <string name="menu_bookmarks_list">Bogmærker</string>
+    <string name="menu_bookmarks_list">Bogmærker</string>
   <string name="no_section_info">Ingen indholdsoverskrifter fundet</string>
   <string name="request_storage">For at tilgå indholdet lokalt skal vi bruge adgang til dit lager</string>
   <string name="request_storage_custom">Hvis du ser en skærmadvarsel, så genstart din enhed for at klare problemet.</string>
@@ -59,8 +57,7 @@
   <string name="did_you_know">Vidste du?</string>
   <string name="undo">Fortryd</string>
   <string name="tab_closed">Faneblad lukket</string>
-  <string name="deleted_message">slettet</string>
-  <string name="bookmark_added">Bogmærke tilføjet</string>
+    <string name="bookmark_added">Bogmærke tilføjet</string>
   <string name="rate_dialog_title">Bedøm os venligst</string>
   <string name="rate_dialog_msg_1">Hvis du kan lide at bruge</string>
   <string name="rate_dialog_msg_2">, så brug et øjeblik til at bedømme det. Tak for din støtte!</string>
@@ -99,8 +96,7 @@
   <string name="get_library_over_network">Brug netværk til at hente indholdsliste. (Cirka 6 MB)</string>
   <string name="proceed">Fortsæt</string>
   <string name="wait_for_load">Indhold indlæses stadig</string>
-  <string name="help_1">Kiwix giver dig lokal adgang til hjemmesider såsom Wikipedia på en ekstrem komprimeret form.</string>
-  <string name="help_2">Hvad gør Kiwix?</string>
+    <string name="help_2">Hvad gør Kiwix?</string>
   <string name="help_3">Kiwix er en lokal indholdlæser. Den fungerer meget lig en browser, men i stedet for at tilgå internetsider, så læser den indhold fra en fil i ZIM-formatet.</string>
   <string name="help_4">Selvom Kiwix oprindelig blev designet for at tilbyde Wikipedia lokalt, så læser det også andet indhold.</string>
   <string name="help_5">Hvor er indholdet?</string>
@@ -117,9 +113,7 @@
   <string name="help_16">\u2022 På Microsoft Windows: HJ-Split</string>
   <string name="help_17">\u2022 På Apple Mac OSX: Split and Concat</string>
   <string name="help_19">Bemærk: Dine filer skal navngives min_store_fil.zimmaa, min_store_fil.zimab etc.</string>
-  <string name="help_20">Tak fordi du valgte Kiwix!</string>
-  <string name="help_21">Vi er glade for at have dig ombord og siger tak for enhver tilbagemelding eller forslag på android@kiwix.org.</string>
-  <string name="pref_storage">Lagring</string>
+    <string name="pref_storage">Lagring</string>
   <string name="pref_current_folder">Nuværende mappe</string>
   <string name="path_not_writable">Kan ikke tilgå ønsket mappe, bruger standarden. For at rette dette så vælg på ny den ønskede mappe under indstillinger.</string>
   <string name="reboot_message">På grund af en fejl i Android 6.0 så skal du genstarte din enhed for at fortsætte uden at tildele os lagertilladelse. Vi beklager denne ulejlighed.</string>
@@ -134,8 +128,7 @@
   <string name="confirm_stop_download_msg">Er du sikker på, at du ønsker at stoppe denne overførsel?</string>
   <string name="download_change_storage">Valg af lagerenhed</string>
   <string name="tts_not_enabled">Tekst til tale er ikke aktiveret for denne ZIM-fil</string>
-  <string name="delete_tab">Slet faneblad</string>
-  <string name="next">Næste</string>
+    <string name="next">Næste</string>
   <string name="previous">Forrige</string>
   <string name="wifi_only_title">Tillad overførsel af indhold via det mobile netværk?</string>
   <string name="wifi_only_msg">Hvis du vælger »Ja« så vil du ikke blive advaret fremover. Du kan dog aldrig ændre dette under indstillinger</string>
@@ -147,9 +140,7 @@
   <string name="pref_bottomtoolbar_summary">Vis en værktøjslinje med hurtige handling i bunden af skærmen</string>
   <string name="pref_autonightmode_summary">Skift automatisk mellem dag- og nattilstand.</string>
   <string name="pref_autonightmode">Automatisk nattilstand</string>
-  <string name="pref_multi_search_title">MultiZim-søgning</string>
-  <string name="pref_multi_search_summary">Tillad at programmet søger på tværs af ZIM-filer (advarsel meget eksperimentel).</string>
-  <string name="pref_external_link_popup_title">Advar når man bruger eksterne henvisninger</string>
+    <string name="pref_external_link_popup_title">Advar når man bruger eksterne henvisninger</string>
   <string name="pref_external_link_popup_summary">Vis pop op for at advare om yderligere omkostninger eller manglende funktion uden internet i henvisninger.</string>
   <string name="external_link_popup_dialog_title">Gå til ekstern henvisning</string>
   <string name="external_link_popup_dialog_message">Du er på vej mod en ekstern henvisning. Det kan medføre ekstra omkostninger til dataoverførsel eller vil bare ikke fungere når du ikke er på nettet. Ønsker du at fortsætte?</string>

@@ -25,6 +25,6 @@ import java.util.ArrayList;
 /**
  * Created by EladKeyshawn on 06/04/2017.
  */
-public interface ZimFileSelectViewCallback extends BaseContract.View {
+interface ZimFileSelectViewCallback extends BaseContract.View {
   void showFiles(ArrayList<LibraryNetworkEntity.Book> books);
 }

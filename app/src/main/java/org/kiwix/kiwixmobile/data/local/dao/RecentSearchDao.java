@@ -22,7 +22,6 @@ import com.yahoo.squidb.sql.Query;
 
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
-import org.kiwix.kiwixmobile.data.local.entity.RecentSearch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,7 @@ import javax.inject.Inject;
 public class RecentSearchDao {
 
   private static final int NUM_RECENT_RESULTS = 5;
-  private KiwixDatabase mDb;
+  private final KiwixDatabase mDb;
 
   @Inject
   public RecentSearchDao(KiwixDatabase kiwixDatabase) {
@@ -46,18 +45,15 @@ public class RecentSearchDao {
    * Returns a distinct enumeration of the {@code NUM_RECENT_RESULTS} most recent searches.
    */
   public List<String> getRecentSearches() {
-    SquidCursor<RecentSearch> searchCursor = mDb.query(
-        RecentSearch.class,
-        Query.selectDistinct(RecentSearch.SEARCH_STRING).where(RecentSearch.ZIM_I_D.eq(ZimContentProvider.getId()))
-            .orderBy(RecentSearch.ID.desc())
-            .limit(NUM_RECENT_RESULTS));
     List<String> result = new ArrayList<>();
-    try {
+    try (SquidCursor<RecentSearch> searchCursor = mDb.query(
+            RecentSearch.class,
+            Query.selectDistinct(RecentSearch.SEARCH_STRING).where(RecentSearch.ZIM_I_D.eq(ZimContentProvider.getId()))
+                    .orderBy(RecentSearch.ID.desc())
+                    .limit(NUM_RECENT_RESULTS))) {
       while (searchCursor.moveToNext()) {
         result.add(searchCursor.get(RecentSearch.SEARCH_STRING));
       }
-    } finally {
-      searchCursor.close();
     }
     return result;
   }

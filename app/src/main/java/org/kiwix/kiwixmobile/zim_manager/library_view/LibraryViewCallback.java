@@ -27,7 +27,7 @@ import java.util.LinkedList;
  * Created by EladKeyshawn on 06/04/2017.
  */
 
-public interface LibraryViewCallback extends BaseContract.View {
+interface LibraryViewCallback extends BaseContract.View {
 
   void showBooks(LinkedList<Book> books);
 

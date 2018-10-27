@@ -37,7 +37,7 @@ import java.util.HashMap;
 
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_EXTERNAL_LINK;
 
-public class KiwixWebViewClient extends WebViewClient {
+class KiwixWebViewClient extends WebViewClient {
 
   private static final HashMap<String, String> DOCUMENT_TYPES = new HashMap<String, String>() {{
     put("epub", "application/epub+zip");

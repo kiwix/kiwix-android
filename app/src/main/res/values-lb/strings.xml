@@ -16,8 +16,7 @@
   <string name="save_media_error">Et ass e Feeler geschitt wéi probéiert gouf d\'Medium ze späicheren!</string>
   <string name="save_media_saved">Medium als %1$s op Android/media/org.kiwix.../ gespäichert</string>
   <string name="rescan_fs_warning">Sichen no Inhalt deen erofgeluede gi kann, waart w.e.g. ...</string>
-  <string name="button_backtotop">Zréck no uewen</string>
-  <string name="search_label">Sichen</string>
+    <string name="search_label">Sichen</string>
   <string name="choose_file">Wielt eng Inhaltsdatei aus (*.zim)</string>
   <string name="open_in_new_tab">Link an engem neien Tab opmaachen?</string>
   <string name="error_nozimfilesfound">Op Ärer Maschinn gouf keen Inhalt fonnt.\nLuusst op der Hëllefssäit era fir gewuer ze ginn, wéi ee kann Inhalter a Kiwix eralueden.\nWann Dir eng ZIM-Datei op Ärer Maschinn oder Ärem externe Späicher hutt, probéiert et an enger Minutt nach eng Kéier oder maacht ee Neistart vun Ärem Apparat.</string>
@@ -37,15 +36,13 @@
   <string name="pref_language_chooser">Sicht eng Sprooch eraus</string>
   <string name="pref_credits">Auteuren a Lizenzen</string>
   <string name="go_to_play_store">An de Play Store goen</string>
-  <string name="no_bookmarks">Keng Lieszeechen!</string>
-  <string name="menu_bookmarks_list">Lieszeechen</string>
+    <string name="menu_bookmarks_list">Lieszeechen</string>
   <string name="delete_recent_search_item">Dëst Element läschen?</string>
   <string name="delete">Läschen</string>
   <string name="got_it">Verstan</string>
   <string name="did_you_know">Wousst Dir?</string>
   <string name="undo">Réckgängeg maachen</string>
-  <string name="deleted_message">geläscht</string>
-  <string name="bookmark_added">Lieszeechen derbäigesat</string>
+    <string name="bookmark_added">Lieszeechen derbäigesat</string>
   <string name="rate_dialog_positive">Bewäerten!</string>
   <string name="rate_dialog_negative">Nee, merci</string>
   <string name="rate_dialog_neutral">Méi spéit</string>
@@ -85,8 +82,7 @@
   <string name="yes">Jo</string>
   <string name="no">Neen</string>
   <string name="confirm_stop_download_title">Erofluede stoppen?</string>
-  <string name="delete_tab">Tab läschen</string>
-  <string name="next">Nächst</string>
+    <string name="next">Nächst</string>
   <string name="previous">Vireg</string>
   <string name="pref_wifi_only">Inhalt just iwwer WIFI eroflueden</string>
   <string name="time_day">Dag</string>

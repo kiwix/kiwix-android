@@ -47,6 +47,7 @@ import org.kiwix.kiwixmobile.main.MainActivity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -70,6 +71,7 @@ public class SearchActivity extends BaseActivity
   private String searchText;
 
   @Inject
+  private
   SearchPresenter searchPresenter;
 
   @Override
@@ -82,7 +84,7 @@ public class SearchActivity extends BaseActivity
     }
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
-    getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
+    Objects.requireNonNull(getSupportActionBar()).setHomeAsUpIndicator(R.drawable.ic_action_back);
     getSupportActionBar().setHomeButtonEnabled(true);
     searchPresenter.attachView(this);
     listView = findViewById(R.id.search_list);
@@ -100,12 +102,12 @@ public class SearchActivity extends BaseActivity
     }
   }
 
-  public void activateDefaultAdapter() {
+  private void activateDefaultAdapter() {
     currentAdapter = defaultAdapter;
     listView.setAdapter(currentAdapter);
   }
 
-  public void activateAutoAdapter() {
+  private void activateAutoAdapter() {
     currentAdapter = autoAdapter;
     listView.setAdapter(currentAdapter);
   }

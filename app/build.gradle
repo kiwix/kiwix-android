@@ -43,6 +43,7 @@ dependencies {
   implementation 'eu.mhutti1.utils.storage:android-storage-devices:0.6.2'
 
   // Android Support
+  //noinspection GradleDependency,GradleDependency
   implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
   implementation "com.android.support:support-v13:$supportLibraryVersion"
   implementation "com.android.support:support-v4:$supportLibraryVersion"
@@ -72,14 +73,14 @@ dependencies {
   }
 
   androidTestImplementation "com.android.support:support-annotations:$supportLibraryVersion"
-  androidTestImplementation 'com.android.support.test:runner:1.0.1'
-  androidTestImplementation 'com.android.support.test:rules:1.0.1'
+  androidTestImplementation 'com.android.support.test:runner:1.0.2'
+  androidTestImplementation 'com.android.support.test:rules:1.0.2'
 
   // Tab indicator
   implementation "com.pacioianu.david:ink-page-indicator:$inkPageIndicatorVersion"
 
   // Guava
-  implementation group: 'com.google.guava', name: 'guava', version: '21.0'
+  implementation group: 'com.google.guava', name: 'guava', version: '24.1-jre'
 
   // Dagger
   compileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"

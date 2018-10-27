@@ -16,8 +16,7 @@
   <string name="save_media_error">Medya kaydedilmeye çalışılırken bir hata oluştu!</string>
   <string name="save_media_saved">Medyayı %s olarak şuraya kaydet Android/media/org.kiwix.../</string>
   <string name="rescan_fs_warning">İndirilebilir içerik aranıyor, lütfen bekleyin...</string>
-  <string name="button_backtotop">Başa dön</string>
-  <string name="search_label">Ara</string>
+    <string name="search_label">Ara</string>
   <string name="choose_file">Bir İçerik Dosyası seçin (*.zim)</string>
   <string name="open_in_new_tab">Bağlantı yeni sekmede açılsın mı?</string>
   <string name="error_nozimfilesfound">Cihazınızda içerik bulunamadı.\nKiwix\'e içerik yükleme talimatlarını görmek için Yardım Sayfası\'na bir göz atın.\nEğer cihazınıza/harici depolama kaynağınıza bir ZIM dosyası koyduysanız, birkaç dakika içerisinde yeniden deneyebilir veya cihazınızı yeniden başlatabilirsiniz.</string>
@@ -44,8 +43,7 @@
   <string name="no_reader_application_installed">Bu dosya türü için yüklü bir uygulama bulunamadı</string>
   <string name="customapp_missing_content">Uygulamanız bozuk. Bu durum SD Kartınızdaki dosyaları kaldırmış olmanızdan kaynaklı olabilir. Uygulamayı kaldırıp Play Store\'dan yeniden indirmeniz gerekmektedir.</string>
   <string name="go_to_play_store">Play Store\'a git</string>
-  <string name="no_bookmarks">Yer imi yok</string>
-  <string name="menu_bookmarks_list">Yer imleri</string>
+    <string name="menu_bookmarks_list">Yer imleri</string>
   <string name="no_section_info">İçerik Başlığı Bulunamadı</string>
   <string name="request_storage">Çevrimdışı içeriğe erişmek için belleğinize erişmemiz gerekmektedir.</string>
   <string name="request_storage_custom">Ekranın üstünde bir uyarı görürseniz çözüm için cihazınızı yeniden başlatın.</string>
@@ -62,8 +60,7 @@
   <string name="did_you_know">Bunları biliyor muydunuz?</string>
   <string name="undo">Geri al</string>
   <string name="tab_closed">Sekme kapatıldı</string>
-  <string name="deleted_message">silindi</string>
-  <string name="bookmark_added">Yer imi eklendi</string>
+    <string name="bookmark_added">Yer imi eklendi</string>
   <string name="rate_dialog_title">Lütfen Bizi Değerlendirin</string>
   <string name="rate_dialog_msg_1">Eğer kullanırken keyif alıyorsanız</string>
   <string name="rate_dialog_msg_2">Lütfen bir dakikanızı ayırarak bunu değerlendirin. Desteğiniz için teşekkürler!</string>
@@ -104,8 +101,7 @@
   <string name="get_library_over_network">İçerik listesini indirmek için ağı kullan. (Yaklaşık 6MB)</string>
   <string name="proceed">Devam et</string>
   <string name="wait_for_load">İçerik Hâlâ Yükleniyor</string>
-  <string name="help_1">Kiwix, Vikipedi gibi web sitelerine çok yüksek boyutta sıkıştırılmış bir formda çevrimdışı olarak erişmenizi sağlar.</string>
-  <string name="help_2">Kiwix ne yapar?</string>
+    <string name="help_2">Kiwix ne yapar?</string>
   <string name="help_3">Kiwix bir çevrimdışı içerik okuyucusudur. Aynı bir ağ tarayıcısı gibi çalışır ama web sayfalarına çevrimiçi erişmek yerine içeriği ZIM formatındaki bir dosyadan okur.</string>
   <string name="help_4">Kiwix orijinalde Vikipedi\'yi çevrimdışı olarak okuması için tasarlanmış olsa da diğer içerikleri de okuyabilir.</string>
   <string name="help_5">İçerik nerededir?</string>
@@ -122,9 +118,7 @@
   <string name="help_16">\u2022 Microsoft Windows için : HJ-Split</string>
   <string name="help_17">\u2022 Apple Mac OSX için: Split and Concat</string>
   <string name="help_19">Not: çıkış dosyalarınız my_big_file.zimaa, my_big_file.zimab, vs. gibi isimlendirilmiş olmalı.</string>
-  <string name="help_20">Kiwix\'i tercih ettiğiniz için teşekkür ederiz!</string>
-  <string name="help_21">Sizi de aramızda görmekten çok mutlu olduk ve tüm geri bildirim ve önerilerinizi android@kiwix.org adresine göndermenizden memnuniyet duyacağız.</string>
-  <string name="pref_storage">Depolama</string>
+    <string name="pref_storage">Depolama</string>
   <string name="pref_current_folder">Mevcut Klasör</string>
   <string name="path_not_writable">Varsayılan kullanılarak istenen dizine erişilemiyor. Bu durumu çözmek için uygulama ayarlarından istenen dizini yeniden seçin.</string>
   <string name="reboot_message">Android 6.0 sürümündeki bir hatadan dolayı bize depolama izni vermeden devam edebilmeniz için cihazınızı yeniden başlatmanız gerekmektedir. Verdiğimiz zahmetten dolayı özür dileriz.</string>
@@ -141,8 +135,7 @@
   <string name="confirm_stop_download_msg">Bu indirmeyi durdurmak istediğinize emin misiniz?</string>
   <string name="download_change_storage">Depolama aygıtı seçicisi</string>
   <string name="tts_not_enabled">Bu ZIM dosyası için metin okuma uygulanabilir değil</string>
-  <string name="delete_tab">Sekmeyi Sil</string>
-  <string name="next">İleri</string>
+    <string name="next">İleri</string>
   <string name="previous">Önceki</string>
   <string name="wifi_only_title">İçeriğin mobil ağ kullanılarak indirilmesine izin verilsin mi?</string>
   <string name="wifi_only_msg">Eğer "Evet"i seçerseniz ileride uyarı almayacaksınız. Ancak Ayarlar kısmından her zaman bunu değiştirebilirsiniz</string>

@@ -38,6 +38,7 @@ import static org.kiwix.kiwixmobile.zim_manager.ZimManageActivity.KIWIX_TAG;
 class ZimManagePresenter extends BasePresenter<ZimManageViewCallback> {
 
   @Inject
+  private
   SharedPreferenceUtil mSharedPreferenceUtil;
 
   @Inject

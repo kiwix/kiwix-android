@@ -10,7 +10,7 @@ import org.hamcrest.Description;
 
 import static org.hamcrest.CoreMatchers.isA;
 
-public class ViewActions {
+class ViewActions {
   public static ViewAction setChecked(final boolean checked) {
     return new ViewAction() {
       @Override

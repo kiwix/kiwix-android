@@ -27,10 +27,10 @@ import java.util.List;
 
 import static org.kiwix.kiwixmobile.main.TableDrawerAdapter.DocumentSection;
 
-public class DocumentParser {
+class DocumentParser {
 
   private String title;
-  private SectionsListener listener;
+  private final SectionsListener listener;
   private List<TableDrawerAdapter.DocumentSection> sections;
 
   DocumentParser(SectionsListener listener) {
@@ -69,7 +69,7 @@ public class DocumentParser {
     public void start() {
       title = "";
       sections = new ArrayList<>();
-      new Handler(Looper.getMainLooper()).post(() -> listener.clearSections());
+      new Handler(Looper.getMainLooper()).post(listener::clearSections);
     }
 
     @JavascriptInterface

@@ -16,8 +16,7 @@
   <string name="save_media_error">Došlo k chybě při pokusu o uložení média!</string>
   <string name="save_media_saved">Multimediální soubory uložené jako %s ve složce Android/media/org.kiwix.../</string>
   <string name="rescan_fs_warning">Probíhá hledání obsahu ke stažení, prosím čekejte…</string>
-  <string name="button_backtotop">Zpět na začátek</string>
-  <string name="search_label">Vyhledávání</string>
+    <string name="search_label">Vyhledávání</string>
   <string name="choose_file">Vyberte obsahový soubor (*.zim)</string>
   <string name="open_in_new_tab">Otevřít odkaz v nové záložce?</string>
   <string name="error_nozimfilesfound">Na zařízení nebyl nalezen žádný obsah.\nPro pokyny, jak nahrávat do Kiwixu obsah, se podívejte na stránku nápovědy.\nPokud jste na své zařízení nebo externí paměť opravdu nahráli soubor ZIM, můžete zkusit načtení za minutu opakovat nebo restartovat zařízení.</string>
@@ -41,8 +40,7 @@
   <string name="no_reader_application_installed">Pro tento typ souboru nebylo možné najít nainstalovanou aplikaci</string>
   <string name="customapp_missing_content">Vaše aplikace je poškozena. To se může stát, jestliže jste {{GENDER:|odstranil|odstranila|odstranil(a)}} soubory z SD karty. Musíte aplikaci odinstalovat a pak ji znovu nainstalovat z Play Store.</string>
   <string name="go_to_play_store">Přejděte do Play Store</string>
-  <string name="no_bookmarks">Žádné záložky</string>
-  <string name="menu_bookmarks_list">Záložky</string>
+    <string name="menu_bookmarks_list">Záložky</string>
   <string name="no_section_info">Nebyly nalezeny žádné hlavičky obsahu.</string>
   <string name="request_storage">Pro přístup k obsahu offline potřebujeme přístup k vašemu úložišti.</string>
   <string name="clear_recent_and_tabs_history_dialog">Jste si jistí, že chcete smazat svou historii vyhledávání a resetovat všechny aktivní záložky?</string>
@@ -67,9 +65,7 @@
   <string name="download_no_space">Nedostatečný prostor ke stažení tohoto souboru.</string>
   <string name="help_12">Jak použít velké ZIM soubory?</string>
   <string name="help_16">\u2022 v Microsoft Windows: HJ-Split</string>
-  <string name="help_20">Děkujeme, že jste si vybrali Kiwix!</string>
-  <string name="help_21">Děkujeme, že jste s námi, a oceníme, když nám napíšete jakoukoli zpětnou vazbu nebo návrhy na android@kiwix.org.</string>
-  <string name="tts_pause">Pozastavit</string>
+    <string name="tts_pause">Pozastavit</string>
   <string name="tts_resume">Obnovit</string>
   <string name="zim_already_downloading">Zim už se stahuje</string>
   <string name="tts_not_enabled">Výstup textu na řeč není u tohoto ZIM souboru umožněn</string>

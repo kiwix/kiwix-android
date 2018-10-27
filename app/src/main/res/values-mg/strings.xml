@@ -15,8 +15,7 @@
   <string name="save_media_error">Nisy hadisoana nitranga tam-pitahirizana ny haino aman-jery!</string>
   <string name="save_media_saved">Haino aman-jery voatahiry ao amin\'ny %1$s ao amin\'ny petra-tsarinao</string>
   <string name="rescan_fs_warning">Am-pandinihana ny raktra ZIM, miandrasa azafady....</string>
-  <string name="button_backtotop">Tampon-pejy</string>
-  <string name="search_label">Hikaroka</string>
+    <string name="search_label">Hikaroka</string>
   <string name="choose_file">Hisafidy rakitra misy votoatiny (*.zim)</string>
   <string name="open_in_new_tab">Hanokatra rohy anaty sasa-joro vaovao?</string>
   <string name="error_nozimfilesfound">Tsy nahitana rakitra ZIM tao amin\'ny fitaovanao.\nJereo ny pejy fanoroana mikasika ny fampidirana votoatiny anaty Kiwix.\nRaha efa nametraka rakitra ZIM tanaty fitahirizana ivelany na anaty ianao, dia andramo afaka iray minitra ary avereno ampirehetina ny fitaovanao.</string>
@@ -38,8 +37,7 @@
   <string name="no_reader_application_installed">Tsy nahita fampiaharana napetraka ho an\'ity karazan-drakitra ity</string>
   <string name="customapp_missing_content">Simba ny fampiharanao.\nMety mitranga izany rehefa manala rakitra amin\'ny karatra SD.\nMila manala sy mamerina manetraka ilay fampiharana avy amin\'ny Play Store ianao.</string>
   <string name="go_to_play_store">Handeha any amin\'ny Play Stor</string>
-  <string name="no_bookmarks">Tsy misy marika</string>
-  <string name="menu_bookmarks_list">Marika pejy</string>
+    <string name="menu_bookmarks_list">Marika pejy</string>
   <string name="no_section_info">Tsy misy loham-botoatiny hita</string>
   <string name="request_storage">Mila ny toeram-pitahirizanao izahay raha hamaky rakitra ZIM</string>
   <string name="bookmark_added">Mari-boky nampiana</string>

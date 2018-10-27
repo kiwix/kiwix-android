@@ -25,6 +25,6 @@ import java.util.List;
  * Created by srv_twry on 14/2/18.
  */
 
-public interface SearchViewCallback extends BaseContract.View {
+interface SearchViewCallback extends BaseContract.View {
     void addRecentSearches(List<String> recentSearches);
 }

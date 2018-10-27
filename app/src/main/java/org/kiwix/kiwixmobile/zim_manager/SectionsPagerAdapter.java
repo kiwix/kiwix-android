@@ -33,13 +33,13 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    private ZimFileSelectFragment zimFileSelectFragment = new ZimFileSelectFragment();
+    private final ZimFileSelectFragment zimFileSelectFragment = new ZimFileSelectFragment();
 
-    public LibraryFragment libraryFragment = new LibraryFragment();
+    public final LibraryFragment libraryFragment = new LibraryFragment();
 
-    private DownloadFragment downloadFragment = new DownloadFragment();
+    private final DownloadFragment downloadFragment = new DownloadFragment();
 
-    private Context context;
+    private final Context context;
 
     public DownloadFragment getDownloadFragment() {
         return downloadFragment;

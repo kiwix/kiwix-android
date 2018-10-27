@@ -36,7 +36,7 @@ public class LibraryUtils {
     if (size < KB) {
       return size + " Bytes";
     }
-    if (size >= KB && size < MB) {
+    if (size < MB) {
       return round3SF((double) size / KB) + " KB";
     }
     if (size >= MB && size < GB) {

@@ -26,6 +26,8 @@ import org.junit.Test;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
+import java.util.Objects;
+
 public class MetaLinkNetworkEntityTest {
   private static Matcher<MetaLinkNetworkEntity.Url> url(
     String location, int priority, String value) {
@@ -37,7 +39,7 @@ public class MetaLinkNetworkEntityTest {
     Serializer serializer = new Persister();
     final MetaLinkNetworkEntity result = serializer.read(
       MetaLinkNetworkEntity.class,
-      MetaLinkNetworkEntityTest.class.getClassLoader().getResourceAsStream(
+      Objects.requireNonNull(MetaLinkNetworkEntityTest.class.getClassLoader()).getResourceAsStream(
         "wikipedia_af_all_nopic_2016-05.zim.meta4"
       ));
     Assert.assertThat(result.getUrls().size(), CoreMatchers.is(5));
@@ -78,11 +80,11 @@ public class MetaLinkNetworkEntityTest {
    * {@code MetaLinkNetworkEntity.Url} class itself, this Matcher should be deleted.
    */
   private static class UrlMatcher extends TypeSafeMatcher<MetaLinkNetworkEntity.Url> {
-    private String location;
-    private int priority;
-    private String value;
+    private final String location;
+    private final int priority;
+    private final String value;
 
-    public UrlMatcher(String location, int priority, String value) {
+    UrlMatcher(String location, int priority, String value) {
       this.location = location;
       this.priority = priority;
       this.value = value;

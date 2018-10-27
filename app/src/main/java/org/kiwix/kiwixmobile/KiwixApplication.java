@@ -25,7 +25,6 @@ import android.util.Log;
 import android.support.v7.app.AppCompatDelegate;
 import com.squareup.leakcanary.LeakCanary;
 import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
-import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
 
 import java.io.File;
@@ -42,13 +41,12 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
   private static KiwixApplication application;
   private static ApplicationComponent applicationComponent;
 
-  private File logFile;
-
-  static {
+    static {
     AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
   }
 
   @Inject
+  private
   DispatchingAndroidInjector<Activity> activityInjector;
 
   public static KiwixApplication getInstance() {
@@ -59,7 +57,7 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
     return applicationComponent;
   }
 
-  public static void setApplicationComponent(ApplicationComponent applicationComponent) {
+  private static void setApplicationComponent(ApplicationComponent applicationComponent) {
     KiwixApplication.applicationComponent = applicationComponent;
   }
 
@@ -77,7 +75,7 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
     super.onCreate();
     if (isExternalStorageWritable()) {
       File appDirectory = new File(Environment.getExternalStorageDirectory() + "/Kiwix");
-      logFile = new File(appDirectory, "logcat.txt");
+        File logFile = new File(appDirectory, "logcat.txt");
       Log.d("KIWIX","Writing all logs into [" + logFile.getPath() + "]");
 
       // create app folder
@@ -107,16 +105,11 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
     Log.d("KIWIX", "Started KiwixApplication");
 
     applicationComponent.inject(this);
-    if (LeakCanary.isInAnalyzerProcess(this)) {
-      // This process is dedicated to LeakCanary for heap analysis.
-      // You should not init your app in this process.
-      return;
-    }
     LeakCanary.install(this);
   }
 
   /* Checks if external storage is available for read and write */
-  public boolean isExternalStorageWritable() {
+  private boolean isExternalStorageWritable() {
     String state = Environment.getExternalStorageState();
     return Environment.MEDIA_MOUNTED.equals(state);
   }

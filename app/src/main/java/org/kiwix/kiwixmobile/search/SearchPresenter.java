@@ -29,6 +29,7 @@ import javax.inject.Inject;
 public class SearchPresenter extends BasePresenter<SearchViewCallback> {
 
     @Inject
+    private
     RecentSearchDao recentSearchDao;
 
     @Inject

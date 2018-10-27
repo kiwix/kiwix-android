@@ -33,12 +33,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
  * Created by EladKeyshawn on 06/04/2017.
  */
 
-public class LibraryPresenter extends BasePresenter<LibraryViewCallback> {
+class LibraryPresenter extends BasePresenter<LibraryViewCallback> {
 
   @Inject
+  private
   KiwixService kiwixService;
 
   @Inject
+  private
   BookDao bookDao;
 
   @Inject

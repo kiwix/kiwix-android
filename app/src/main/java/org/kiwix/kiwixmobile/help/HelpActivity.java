@@ -41,8 +41,10 @@ public class HelpActivity extends BaseActivity {
   private final HashMap<String, String> titleDescriptionMap = new HashMap<>();
 
   @BindView(R.id.activity_help_toolbar)
+  private
   Toolbar toolbar;
   @BindView(R.id.activity_help_recycler_view)
+  private
   RecyclerView recyclerView;
 
   @Override

@@ -53,6 +53,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -67,19 +68,23 @@ public class LibraryAdapter extends BaseAdapter {
   private static final int LIST_ITEM_TYPE_DIVIDER = 1;
 
   private ImmutableList<Book> allBooks;
-  private List<ListItem> listItems = new ArrayList<>();
+  private final List<ListItem> listItems = new ArrayList<>();
   private final Context context;
-  public HashMap<String, Integer> languageCounts = new HashMap<>();
+  public final HashMap<String, Integer> languageCounts = new HashMap<>();
   public ArrayList<Language> languages = new ArrayList<>();
   private final LayoutInflater layoutInflater;
   private final BookFilter bookFilter = new BookFilter();
   private Disposable saveNetworkLanguageDisposable;
-  @Inject BookUtils bookUtils;
   @Inject
+  private BookUtils bookUtils;
+  @Inject
+  private
   NetworkLanguageDao networkLanguageDao;
   @Inject
+  private
   BookDao bookDao;
   @Inject
+  private
   DataSource dataSource;
 
   public LibraryAdapter(Context context) {
@@ -221,7 +226,7 @@ public class LibraryAdapter extends BaseAdapter {
     text.append(b.getTitle()).append("|").append(b.getDescription()).append("|")
         .append(parseURL(context, b.getUrl())).append("|");
     if (bookUtils.localeMap.containsKey(b.getLanguage())) {
-      text.append(bookUtils.localeMap.get(b.getLanguage()).getDisplayLanguage()).append("|");
+      text.append(Objects.requireNonNull(bookUtils.localeMap.get(b.getLanguage())).getDisplayLanguage()).append("|");
     }
     String[] words = s.toLowerCase().split("\\s+");
     b.searchMatches = Observable.fromArray(words)
@@ -421,10 +426,10 @@ public class LibraryAdapter extends BaseAdapter {
   }
 
   private class ListItem {
-    public Object data;
-    public int type;
+    final Object data;
+    final int type;
 
-    public ListItem(Object data, int type) {
+    ListItem(Object data, int type) {
       this.data = data;
       this.type = type;
     }

@@ -24,7 +24,7 @@ import com.yahoo.squidb.annotations.TableModelSpec;
  * Squidb spec for saved bookmarks.
  */
 @TableModelSpec(className = "Bookmark", tableName = "Bookmarks")
-public class BookmarksSpec {
+class BookmarksSpec {
   @ColumnSpec(constraints = "NOT NULL")
   public String ZimId;
   public String ZimName;

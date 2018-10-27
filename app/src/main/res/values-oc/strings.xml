@@ -16,8 +16,7 @@
   <string name="save_media_error">Una error s\'es produita al moment de la temptativa d\'enregistrar lo mèdia !</string>
   <string name="save_media_saved">Mèdia enregistrat jos %1$s dins vòstre dorsièr Imatges</string>
   <string name="rescan_fs_warning">Analisi del contengut telecargable en cors, pacientatz…</string>
-  <string name="button_backtotop">Retorn en naut de la pagina</string>
-  <string name="search_label">Recercar</string>
+    <string name="search_label">Recercar</string>
   <string name="choose_file">Seleccionar un fichièr de contengut (*.zim)</string>
   <string name="open_in_new_tab">Dobrir lo ligam dins un onglet novèl ?</string>
   <string name="error_nozimfilesfound">Cap de contengut es pas estat trobat sus vòstra maquina.\nGetatz un còp d’uèlh a la pagina d’ajuda per aver d\'instruccions sul biais de cargar de contengut dins Kiwix.\nS\'avètz mes un fichièr ZIM sus vòstre emmagazinatge intèrne o extèrne, podètz tornar ensajar dins una minuta o reamodar vòstre aparelh.</string>
@@ -40,8 +39,7 @@
   <string name="no_reader_application_installed">Impossible de trobar una aplicacion d\'installada per aqueste tipe de fichièr</string>
   <string name="customapp_missing_content">Vòstra aplicacion es corrompuda.\nAquò se pòt produire quand suprimissètz de fichièrs de la carta SD. Vos cal desinstallar puèi reïnstallar l’aplicacion dempuèi lo Play Store.</string>
   <string name="go_to_play_store">Anar sul Play Store</string>
-  <string name="no_bookmarks">I a pas de signets</string>
-  <string name="menu_bookmarks_list">Marcapaginas</string>
+    <string name="menu_bookmarks_list">Marcapaginas</string>
   <string name="no_section_info">Cap d\'entèsta de contengut pas trobada</string>
   <string name="request_storage">Per accedir als fichièrs ZIM, avèm besonh d\'un accès a vòstre espaci d\'emmagazinatge</string>
   <string name="delete_recent_search_item">Suprimir aqueste element ?</string>
@@ -54,8 +52,7 @@
   <string name="did_you_know">O sabiatz ?</string>
   <string name="undo">Anullar</string>
   <string name="tab_closed">Onglet tampat</string>
-  <string name="deleted_message">suprimit</string>
-  <string name="bookmark_added">Signet apondut</string>
+    <string name="bookmark_added">Signet apondut</string>
   <string name="rate_dialog_title">Notatz-nos</string>
   <string name="rate_dialog_msg_1">Se vos agradar d\'utilizar</string>
   <string name="rate_dialog_msg_2">, prenètz un moment per l\'avalorar. Mercé per vòstre sosten !</string>
@@ -99,8 +96,7 @@
   <string name="yes">Òc</string>
   <string name="no">Non</string>
   <string name="confirm_stop_download_title">Arrestar lo telecargament ?</string>
-  <string name="delete_tab">Suprimir l’onglet</string>
-  <string name="next">Seguent</string>
+    <string name="next">Seguent</string>
   <string name="previous">Precedent</string>
   <string name="time_day">jorn</string>
   <string name="time_left">esquèrra</string>

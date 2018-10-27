@@ -19,6 +19,7 @@ import org.kiwix.kiwixmobile.splash.SplashActivity;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -29,27 +30,35 @@ import static org.kiwix.kiwixmobile.utils.LanguageUtils.getCurrentLocale;
 public class ErrorActivity extends BaseActivity {
 
   @Inject
+  private
   BookDao bookDao;
 
   @BindView(R.id.reportButton)
+  private
   Button reportButton;
 
   @BindView(R.id.restartButton)
+  private
   Button restartButton;
 
   @BindView(R.id.allowLanguage)
+  private
   CheckBox allowLanguageCheckbox;
 
   @BindView(R.id.allowZims)
+  private
   CheckBox allowZimsCheckbox;
 
   @BindView(R.id.allowCrash)
+  private
   CheckBox allowCrashCheckbox;
 
   @BindView(R.id.allowLogs)
+  private
   CheckBox allowLogsCheckbox;
 
   @BindView(R.id.allowDeviceDetails)
+  private
   CheckBox allowDeviceDetailsCheckbox;
 
   @Override
@@ -59,7 +68,7 @@ public class ErrorActivity extends BaseActivity {
     Intent callingIntent = getIntent();
 
     Bundle extras = callingIntent.getExtras();
-    Throwable exception = (Throwable) extras.getSerializable("exception");
+    Throwable exception = (Throwable) Objects.requireNonNull(extras).getSerializable("exception");
 
     reportButton.setOnClickListener(v -> {
 
@@ -83,7 +92,7 @@ public class ErrorActivity extends BaseActivity {
 
       if(allowCrashCheckbox.isChecked()) {
         body += "Exception Details:\n\n" +
-            exception.toString() +
+            Objects.requireNonNull(exception).toString() +
         "\n\n";
       }
 
@@ -134,7 +143,7 @@ public class ErrorActivity extends BaseActivity {
     restartButton.setOnClickListener(v -> restartApp());
   }
 
-  void restartApp(){
+  private void restartApp(){
     Context context = ErrorActivity.this;
     Intent intent = new Intent(context, SplashActivity.class);
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);

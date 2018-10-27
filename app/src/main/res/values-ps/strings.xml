@@ -15,8 +15,7 @@
   <string name="save_media_error">د رسنۍ په ساتلو کې يوه تېروتنه رامنځ ته شوه!</string>
   <string name="save_media_saved">رسنۍ خپل د انځورونو په ټولگه کې د %1$s په نوم ساتل</string>
   <string name="rescan_fs_warning">د ZIM دوتنو لپاره ځيرڅارنه، لطفاً تم شئ...</string>
-  <string name="button_backtotop">بېرته سر ته</string>
-  <string name="search_label">پلټل</string>
+    <string name="search_label">پلټل</string>
   <string name="choose_file">د ZIM مېنځپانگې يوه دوتنه ټاکل (*.zim)</string>
   <string name="open_in_new_tab">تړنه په نوې کړکۍ کې پرانيستل</string>
   <string name="error_nozimfilesfound">ستاسې په وزلې هېڅ کومه ZIM دوتنه و نه موندل شوه.\nکيويکس کې د مېنځپانگې د برسېرولو لپاره د لارښود مخ ولولئ.\nکه تاسې په خپلې وزلې کې يو ZIM دوتنه نه وي ايښې، نو تاسې کولی شی چې يوه دقيقه وروسته يې بيا وآزمويئ او يا هم خپله وزله سر له نوي ولگوئ او بيا هڅه وکړئ.</string>
@@ -38,8 +37,7 @@
   <string name="no_reader_application_installed">د دې ډول دوتنې لپاره يو نصب شوی کاريال و نه موندل شو</string>
   <string name="customapp_missing_content">ستاسې کاريال ناکارنده دی.\nدا کېدای شي هغه وخت راپېښ شي کله چې تاسې د SD کارت څخه دوتنې وغورځوئ.\nتاسې بايد ځانگړی کاريال له پلې سټور څخه نانصب او بيانصب کړئ.</string>
   <string name="go_to_play_store">پلې پلورنځي ته ورځه</string>
-  <string name="no_bookmarks">بې کتاب نښو!</string>
-  <string name="menu_bookmarks_list">کتاب نخښې</string>
+    <string name="menu_bookmarks_list">کتاب نخښې</string>
   <string name="no_section_info">هېڅ نيوليک سرليکونه نشته</string>
   <string name="request_storage">ZIM دوتنو ته د لاسرسي لپاره موږ بايد ستاسې زېرمتون ته لاسرسی ومومو</string>
   <string name="undo">پريښودل</string>

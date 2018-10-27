@@ -22,6 +22,6 @@ package org.kiwix.kiwixmobile.data.local.entity;
 import com.yahoo.squidb.annotations.TableModelSpec;
 
 @TableModelSpec(className = "LibraryDatabaseEntity", tableName = "library")
-public class LibraryDataSource {
+class LibraryDataSource {
   public String libraryVersion;
 }
