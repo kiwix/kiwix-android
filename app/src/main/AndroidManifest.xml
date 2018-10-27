@@ -22,7 +22,8 @@
     android:icon="@mipmap/kiwix_icon"
     android:label="@string/app_name"
     android:supportsRtl="true"
-    android:theme="@style/AppTheme">
+    android:theme="@style/AppTheme"
+      android:fullBackupContent="@xml/backup_descriptor">
     <activity
       android:name=".splash.SplashActivity"
       android:label="@string/app_name"
@@ -162,7 +163,7 @@
     <provider
       android:name=".data.ZimContentProvider"
       android:authorities="${applicationId}.zim.base"
-      android:exported="true" />
+      android:exported="false" />
 
     <receiver android:name=".main.KiwixSearchWidget">
       <intent-filter>

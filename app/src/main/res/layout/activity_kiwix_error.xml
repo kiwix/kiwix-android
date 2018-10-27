@@ -79,7 +79,8 @@
     app:layout_constraintHorizontal_bias="0.0"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/textView2"
-    app:srcCompat="@mipmap/kiwix_icon" />
+    app:srcCompat="@mipmap/kiwix_icon"
+      android:contentDescription="TODO" />
 
   <ScrollView
     android:layout_width="368dp"

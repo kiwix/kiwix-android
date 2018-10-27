@@ -18,10 +18,11 @@
     android:adjustViewBounds="true"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:scaleType="fitCenter"
-    android:src="@mipmap/kiwix_icon" />
+    android:src="@mipmap/kiwix_icon"
+      android:contentDescription="TODO" />
 
   <LinearLayout
-    android:layout_width="@dimen/download_item_layout_width"
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_weight="1"
     android:gravity="center"
@@ -49,9 +50,7 @@
       style="?android:attr/progressBarStyleHorizontal"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
-      android:layout_alignParentLeft="true"
-      android:layout_alignParentStart="true"
-      android:indeterminate="false"
+        android:indeterminate="false"
       android:padding="@dimen/download_progress_padding" />
 
     <TextView
@@ -65,36 +64,32 @@
   <LinearLayout
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:layout_alignParentEnd="true"
-    android:layout_alignParentRight="true"
-    android:orientation="horizontal">
+      android:orientation="horizontal">
 
     <ImageView
       android:id="@+id/pause"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_alignParentEnd="true"
-      android:layout_alignParentRight="true"
-      android:layout_gravity="center_vertical"
+        android:layout_gravity="center_vertical"
       android:layout_weight="0.5"
       android:minHeight="@dimen/pause_min_height"
       android:minWidth="@dimen/pause_min_width"
       android:src="@drawable/ic_pause_black_24dp"
-      android:text="@string/download_pause" />
+      android:text="@string/download_pause"
+        android:contentDescription="TODO" />
 
     <ImageView
       android:id="@+id/stop"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_alignParentEnd="true"
-      android:layout_alignParentRight="true"
-      android:layout_gravity="center_vertical"
+        android:layout_gravity="center_vertical"
       android:layout_marginLeft="@dimen/stop_horizontal_margin"
       android:layout_marginRight="@dimen/stop_horizontal_margin"
       android:layout_weight="0.5"
       android:minHeight="@dimen/stop_min_height"
       android:minWidth="@dimen/stop_min_width"
       android:src="@drawable/ic_stop_black_24dp"
-      android:text="@string/download_stop" />
+      android:text="@string/download_stop"
+        android:contentDescription="TODO" />
   </LinearLayout>
 </LinearLayout>

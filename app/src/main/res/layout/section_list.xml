@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
   android:layout_height="@dimen/section_list_height"
   android:background="?attr/selectedBackground"
   android:clickable="false"
@@ -21,6 +22,8 @@
     android:maxLines="1"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:paddingLeft="@dimen/title_text_padding"
-    android:textAppearance="?android:attr/textAppearanceListItemSmall" />
+    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+      tools:targetApi="jelly_bean"
+      android:paddingStart="@dimen/title_text_padding" />
 
 </RelativeLayout>
