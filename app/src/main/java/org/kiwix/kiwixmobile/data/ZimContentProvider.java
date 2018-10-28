@@ -259,7 +259,6 @@ public class ZimContentProvider extends ContentProvider {
     }
   }
 
-  //PoI 1
   public static String getPageUrlFromTitle(String title) {
     if (currentJNIReader == null || zimFileName == null) {
       return null;
