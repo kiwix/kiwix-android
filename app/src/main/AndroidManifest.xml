@@ -16,42 +16,46 @@
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
   <application
-      android:name=".KiwixApplication"
-      android:allowBackup="true"
-      android:hardwareAccelerated="true"
-      android:icon="@mipmap/kiwix_icon"
-      android:label="@string/app_name"
-      android:theme="@style/AppTheme"
-      android:supportsRtl="true">
-
+    android:name=".KiwixApplication"
+    android:allowBackup="true"
+    android:hardwareAccelerated="true"
+    android:icon="@mipmap/kiwix_icon"
+    android:label="@string/app_name"
+    android:supportsRtl="true"
+    android:theme="@style/AppTheme">
     <activity
-      android:name=".utils.SplashActivity"
-      android:theme="@style/AppTheme.Launcher"
-      android:label="@string/app_name">
+      android:name=".splash.SplashActivity"
+      android:label="@string/app_name"
+      android:theme="@style/AppTheme.Launcher">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
+
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
-    </activity>
 
+      <meta-data
+        android:name="android.app.shortcuts"
+        android:resource="@xml/shortcuts" />
+    </activity>
     <activity
-      android:name=".KiwixMobileActivity"
+      android:name=".main.MainActivity"
       android:configChanges="orientation|keyboardHidden|screenSize|locale"
       android:label="@string/app_name"
       android:windowSoftInputMode="adjustPan">
-
-      <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
-            <category android:name="android.intent.category.DEFAULT" />
-
-            <data android:scheme="content" />
-            <data android:mimeType="application/octet-stream"/>
-      </intent-filter>
-
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
+
+        <category android:name="android.intent.category.DEFAULT" />
+
+        <data android:scheme="content" />
+        <data android:mimeType="application/octet-stream" />
+      </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
+
         <data android:scheme="file" />
         <data android:mimeType="*/*" />
         <data android:pathPattern=".*\\.zim" />
@@ -60,11 +64,12 @@
         <data android:pathPattern=".*\\..*\\..*\\..*\\.zim" />
         <data android:host="*" />
       </intent-filter>
-
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
+
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
+
         <data android:scheme="file" />
         <data android:mimeType="*/*" />
         <data android:pathPattern=".*\\.zimaa" />
@@ -73,7 +78,6 @@
         <data android:pathPattern=".*\\..*\\..*\\..*\\.zimaa" />
         <data android:host="*" />
       </intent-filter>
-      
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
 
@@ -113,19 +117,22 @@
         <data android:pathPattern=".*\\..*\\..*\\.zim(aa|)" />
         <data android:pathPattern=".*\\..*\\..*\\..*\\.zim(aa|)" />
       </intent-filter>
-
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
+
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="kiwix"
-          android:host="search" />
-      </intent-filter>
 
+        <data
+          android:host="search"
+          android:scheme="kiwix" />
+      </intent-filter>
       <intent-filter android:label="@string/app_search_string">
-        <action android:name="android.intent.action.PROCESS_TEXT"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-        <data android:mimeType="text/plain"/>
+        <action android:name="android.intent.action.PROCESS_TEXT" />
+
+        <category android:name="android.intent.category.DEFAULT" />
+
+        <data android:mimeType="text/plain" />
       </intent-filter>
     </activity>
     <activity
@@ -141,26 +148,23 @@
 
         <data android:mimeType="*/*" />
       </intent-filter>
-
       <intent-filter>
         <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.TEXT_CLICKED" />
         <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.ICON_CLICKED" />
         <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.MIC_CLICKED" />
         <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.STAR_CLICKED" />
       </intent-filter>
-
     </activity>
-
     <activity android:name=".settings.KiwixSettingsActivity" />
     <activity android:name=".search.SearchActivity" />
-    <activity android:name=".bookmarks_view.BookmarksActivity" />
+    <activity android:name=".bookmark.BookmarksActivity" />
 
     <provider
-      android:name=".ZimContentProvider"
+      android:name=".data.ZimContentProvider"
       android:authorities="${applicationId}.zim.base"
       android:exported="true" />
 
-    <receiver android:name=".utils.KiwixSearchWidget">
+    <receiver android:name=".main.KiwixSearchWidget">
       <intent-filter>
         <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
         <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.TEXT_CLICKED" />
@@ -174,11 +178,10 @@
         android:resource="@xml/kiwix_widget_provider_info" />
     </receiver>
 
-
     <service android:name=".downloader.DownloadService" />
 
     <activity
-      android:name=".KiwixErrorActivity"
+      android:name=".error.ErrorActivity"
       android:process=":error_activity" />
 
     <provider
@@ -186,12 +189,19 @@
       android:authorities="${applicationId}.fileprovider"
       android:exported="false"
       android:grantUriPermissions="true">
-
       <meta-data
         android:name="android.support.FILE_PROVIDER_PATHS"
         android:resource="@xml/provider_paths" />
     </provider>
 
+    <activity android:name=".intro.IntroActivity" />
+    <activity android:name=".language.LanguageActivity" />
+    <activity android:name=".history.HistoryActivity" />
+    <activity android:name=".help.HelpActivity">
+      <meta-data
+        android:name="android.support.PARENT_ACTIVITY"
+        android:value="main.MainActivity" />
+    </activity>
   </application>
 
 </manifest>

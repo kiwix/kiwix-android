@@ -19,11 +19,14 @@ package org.kiwix.kiwixmobile.tests;
 
 import android.Manifest;
 import android.support.test.espresso.DataInteraction;
-import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingPolicies;
+import android.support.test.espresso.IdlingRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.GrantPermissionRule;
 import android.util.Log;
+
+import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
+import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
@@ -32,12 +35,12 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.ZimContentProvider;
+import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.di.components.DaggerTestComponent;
 import org.kiwix.kiwixmobile.di.components.TestComponent;
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.testutils.TestUtils;
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
 
@@ -61,9 +64,10 @@ import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.c
 import static com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
 import static com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions.clickMenu;
 import static com.schibsted.spain.barista.interaction.BaristaSwipeRefreshInteractions.refresh;
-import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
-import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
 
 /**
  * Created by mhutti1 on 14/04/17.
@@ -71,23 +75,21 @@ import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
 
 public class NetworkTest {
   private static String NETWORK_TEST_TAG = "KiwixNetworkTest";
-
-  @Inject MockWebServer mockWebServer;
-
-
   @Rule
-  public ActivityTestRule<KiwixMobileActivity> mActivityTestRule = new ActivityTestRule<>(
-      KiwixMobileActivity.class, false, false);
+  public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(
+      MainActivity.class, false, false);
   @Rule
   public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule
   public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+  @Inject
+  MockWebServer mockWebServer;
 
   @BeforeClass
   public static void beforeClass() {
     IdlingPolicies.setMasterPolicyTimeout(180, TimeUnit.SECONDS);
     IdlingPolicies.setIdlingResourceTimeout(180, TimeUnit.SECONDS);
-    Espresso.registerIdlingResources(KiwixIdlingResource.getInstance());
+    IdlingRegistry.getInstance().register(KiwixIdlingResource.getInstance());
   }
 
   @Before
@@ -97,7 +99,7 @@ public class NetworkTest {
         (new ApplicationModule(
             (KiwixApplication) getInstrumentation().getTargetContext().getApplicationContext())).build();
 
-    ((KiwixApplication) getInstrumentation().getTargetContext().getApplicationContext()).setApplicationComponent(component);
+    KiwixApplication.setApplicationComponent(component);
 
     new ZimContentProvider().setupDagger();
     component.inject(this);
@@ -125,8 +127,8 @@ public class NetworkTest {
 
     mActivityTestRule.launchActivity(null);
 
-    enterHelp();
-    clickOn(R.string.menu_zim_manager);
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_zim_manager));
 
     TestUtils.allowPermissionsIfNeeded();
 
@@ -134,7 +136,7 @@ public class NetworkTest {
       onView(withId(R.id.network_permission_button)).perform(click());
     } catch (RuntimeException e) {
       Log.i(NETWORK_TEST_TAG,
-        "Permission dialog was not shown, we probably already have required permissions");
+          "Permission dialog was not shown, we probably already have required permissions");
     }
 
     onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.library_list)).perform(click());
@@ -177,6 +179,6 @@ public class NetworkTest {
 
   @After
   public void finish() {
-    Espresso.unregisterIdlingResources(KiwixIdlingResource.getInstance());
+    IdlingRegistry.getInstance().unregister(KiwixIdlingResource.getInstance());
   }
 }

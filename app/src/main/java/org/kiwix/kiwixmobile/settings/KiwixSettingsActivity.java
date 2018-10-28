@@ -39,18 +39,15 @@ import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.database.RecentSearchDao;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
-import org.kiwix.kiwixmobile.views.SliderPreference;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryUtils;
 
 import java.io.File;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -78,20 +75,10 @@ public class KiwixSettingsActivity extends BaseActivity {
 
   public static boolean allHistoryCleared = false;
 
-  private static final int DAWN_HOUR = 6;
-  private static final int DUSK_HOUR = 18;
-
-  @Inject
-  SharedPreferenceUtil sharedPreferenceUtil;
-
   @Override
   public void onCreate(Bundle savedInstanceState) {
     getWindow().setWindowAnimations(R.style.WindowAnimationTransition);
     super.onCreate(savedInstanceState);
-    LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil);
-    if (nightMode(sharedPreferenceUtil)) {
-      setTheme(R.style.AppTheme_Night);
-    }
     setContentView(R.layout.settings);
 
     allHistoryCleared = false;
@@ -126,35 +113,21 @@ public class KiwixSettingsActivity extends BaseActivity {
     toolbar.setNavigationOnClickListener(v -> onBackPressed());
   }
 
-  public static boolean nightMode(SharedPreferenceUtil sharedPreferenceUtil){
-    boolean autoNightMode = sharedPreferenceUtil.getPrefAutoNightMode();
-    if(autoNightMode){
-      Calendar cal = Calendar.getInstance();
-      int hour = cal.get(Calendar.HOUR_OF_DAY);
-      return hour < DAWN_HOUR || hour > DUSK_HOUR;
-    } else{
-      return sharedPreferenceUtil.getPrefNightMode();
-    }
-  }
-
   public static class PrefsFragment extends PreferenceFragment implements
+      SettingsContract.View,
       SharedPreferences.OnSharedPreferenceChangeListener, StorageSelectDialog.OnSelectListener {
+
+    @Inject
+    SettingsPresenter presenter;
+    @Inject
+    SharedPreferenceUtil sharedPreferenceUtil;
 
     private SliderPreference mSlider;
 
-    @Inject
-    RecentSearchDao recentSearchDao;
-
-    @Inject SharedPreferenceUtil sharedPreferenceUtil;
-
-    void setupDagger() {
-      KiwixApplication.getApplicationComponent().inject(this);
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
+      KiwixApplication.getApplicationComponent().inject(this);
       super.onCreate(savedInstanceState);
-      setupDagger();
       addPreferencesFromResource(R.xml.preferences);
 
       boolean auto_night_mode = sharedPreferenceUtil.getPrefAutoNightMode();
@@ -179,10 +152,6 @@ public class KiwixSettingsActivity extends BaseActivity {
       setStorage();
       setUpSettings();
       new LanguageUtils(getActivity()).changeFont(getActivity().getLayoutInflater(), sharedPreferenceUtil);
-    }
-
-    private void deleteSearchHistoryFromDb() {
-      recentSearchDao.deleteSearchHistory();
     }
 
     private void setStorage() {
@@ -277,17 +246,17 @@ public class KiwixSettingsActivity extends BaseActivity {
         ((BaseAdapter) getPreferenceScreen().getRootAdapter()).notifyDataSetChanged();
       }
       if (key.equals(PREF_NIGHTMODE)) {
-        KiwixMobileActivity.refresh = true;
-        KiwixMobileActivity.nightMode = nightMode(sharedPreferenceUtil);
+        MainActivity.refresh = true;
+        MainActivity.nightMode = sharedPreferenceUtil.nightMode();
         getActivity().finish();
         startActivity(new Intent(getActivity(), KiwixSettingsActivity.class));
       }
       if (key.equals(PREF_WIFI_ONLY)) {
-        KiwixMobileActivity.wifiOnly = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
+        MainActivity.wifiOnly = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
       }
       if (key.equals(PREF_AUTONIGHTMODE)) {
-        KiwixMobileActivity.refresh = true;
-        KiwixMobileActivity.nightMode = nightMode(sharedPreferenceUtil);
+        MainActivity.refresh = true;
+        MainActivity.nightMode = sharedPreferenceUtil.nightMode();
         getActivity().finish();
         startActivity(new Intent(getActivity(), KiwixSettingsActivity.class));
       }
@@ -295,17 +264,16 @@ public class KiwixSettingsActivity extends BaseActivity {
 
     private void clearAllHistoryDialog() {
       int warningResId;
-      if (nightMode(sharedPreferenceUtil)) {
+      if (sharedPreferenceUtil.nightMode()) {
         warningResId = R.drawable.ic_warning_white;
-      }
-      else {
+      } else {
         warningResId = R.drawable.ic_warning_black;
       }
       new AlertDialog.Builder(getActivity(), dialogStyle())
           .setTitle(getResources().getString(R.string.clear_all_history_dialog_title))
           .setMessage(getResources().getString(R.string.clear_recent_and_tabs_history_dialog))
           .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-            deleteSearchHistoryFromDb();
+            presenter.clearHistory();
             allHistoryCleared = true;
             Toast.makeText(getActivity(), getResources().getString(R.string.all_history_cleared_toast), Toast.LENGTH_SHORT).show();
           })
@@ -319,7 +287,7 @@ public class KiwixSettingsActivity extends BaseActivity {
     public void openCredits() {
       WebView view = (WebView) LayoutInflater.from(getActivity()).inflate(R.layout.credits_webview, null);
       view.loadUrl("file:///android_asset/credits.html");
-      if(nightMode(sharedPreferenceUtil)) {
+      if (sharedPreferenceUtil.nightMode()) {
         view.getSettings().setJavaScriptEnabled(true);
         view.setBackgroundColor(0);
       }
@@ -344,7 +312,7 @@ public class KiwixSettingsActivity extends BaseActivity {
       return true;
     }
 
-    public void openFolderSelect(){
+    public void openFolderSelect() {
       FragmentManager fm = getFragmentManager();
       StorageSelectDialog dialogFragment = new StorageSelectDialog();
       Bundle b = new Bundle();

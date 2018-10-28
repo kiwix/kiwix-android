@@ -41,10 +41,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseFragment;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
@@ -58,7 +58,6 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import static org.kiwix.kiwixmobile.downloader.ChunkUtils.getFileName;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class DownloadFragment extends BaseFragment {
@@ -121,7 +120,7 @@ public class DownloadFragment extends BaseFragment {
             .setMessage(R.string.wifi_only_msg)
             .setPositiveButton(R.string.yes, (dialog, i) -> {
                       sharedPreferenceUtil.putPrefWifiOnly(false);
-              KiwixMobileActivity.wifiOnly = false;
+              MainActivity.wifiOnly = false;
               yesAction.run();
             })
             .setNegativeButton(R.string.no, (dialog, i) -> {})
@@ -190,7 +189,7 @@ public class DownloadFragment extends BaseFragment {
       }
       ImageView pause = viewGroup.findViewById(R.id.pause);
       pause.setEnabled(false);
-      String fileName = getFileName(mDownloadFiles.get(mKeys[position]));
+      String fileName = FileUtils.getFileName(mDownloadFiles.get(mKeys[position]));
       {
         Snackbar completeSnack = Snackbar.make(mainLayout, getResources().getString(R.string.download_complete_snackbar), Snackbar.LENGTH_LONG);
         completeSnack.setAction(getResources().getString(R.string.open), v -> zimManageActivity.finishResult(fileName)).setActionTextColor(getResources().getColor(R.color.white)).show();
@@ -267,7 +266,7 @@ public class DownloadFragment extends BaseFragment {
       pause.setOnClickListener(v -> {
         int newPlayPauseState = LibraryFragment.mService.downloadStatus.get(mKeys[position]) == DownloadService.PLAY ? DownloadService.PAUSE : DownloadService.PLAY;
 
-        if (newPlayPauseState == DownloadService.PLAY && KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
+        if (newPlayPauseState == DownloadService.PLAY && MainActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
           showNoWiFiWarning(getContext(), () -> {
             setPlayState(pause, position, newPlayPauseState);
           });

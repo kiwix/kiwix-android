@@ -38,11 +38,6 @@ import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 
 public class StandardActions {
 
-  public static void enterHelp() {
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_help));
-  }
-
   public static void enterSettings() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
     BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_settings));
@@ -55,7 +50,7 @@ public class StandardActions {
       Log.i("TEST_DELETE_ZIM", "Successfully deleted ZIM file [" + zimName + "]");
     } catch (RuntimeException e) {
       Log.i("TEST_DELETE_ZIM", "Failed to delete ZIM file [" + zimName + "]... " +
-              "Probably because it doesn't exist");
+          "Probably because it doesn't exist");
     }
   }
 }

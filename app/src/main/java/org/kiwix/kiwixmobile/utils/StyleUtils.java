@@ -27,13 +27,13 @@ import android.text.Spanned;
 import android.util.AttributeSet;
 import android.util.Xml;
 
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.xmlpull.v1.XmlPullParser;
 
 public class StyleUtils {
   public static int dialogStyle() {
-    if (KiwixMobileActivity.nightMode) {
+    if (MainActivity.nightMode) {
       return R.style.AppTheme_Dialog_Night;
     } else {
       return R.style.AppTheme_Dialog;
@@ -58,6 +58,7 @@ public class StyleUtils {
 
   @SuppressWarnings("deprecation")
   public static Spanned fromHtml(String source) {
+    if (source == null) source = "";
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
       return Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY);
     } else {

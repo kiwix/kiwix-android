@@ -1,11 +1,21 @@
 package org.kiwix.kiwixmobile.di.modules;
 
-import org.kiwix.kiwixmobile.KiwixErrorActivity;
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
-import org.kiwix.kiwixmobile.bookmarks_view.BookmarksActivity;
+import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
+import org.kiwix.kiwixmobile.bookmark.BookmarksModule;
 import org.kiwix.kiwixmobile.di.PerActivity;
+import org.kiwix.kiwixmobile.error.ErrorActivity;
+import org.kiwix.kiwixmobile.help.HelpActivity;
+import org.kiwix.kiwixmobile.history.HistoryActivity;
+import org.kiwix.kiwixmobile.history.HistoryModule;
+import org.kiwix.kiwixmobile.intro.IntroActivity;
+import org.kiwix.kiwixmobile.intro.IntroModule;
+import org.kiwix.kiwixmobile.language.LanguageActivity;
+import org.kiwix.kiwixmobile.language.LanguageModule;
+import org.kiwix.kiwixmobile.main.MainActivity;
+import org.kiwix.kiwixmobile.main.MainModule;
 import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
+import org.kiwix.kiwixmobile.splash.SplashActivity;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 
 import dagger.Module;
@@ -20,8 +30,8 @@ import dagger.android.ContributesAndroidInjector;
 @Module
 public abstract class ActivityBindingModule {
   @PerActivity
-  @ContributesAndroidInjector
-  public abstract KiwixMobileActivity provideKiwixMobileActivity();
+  @ContributesAndroidInjector(modules = MainModule.class)
+  public abstract MainActivity provideMainActivity();
 
   @PerActivity
   @ContributesAndroidInjector
@@ -36,10 +46,30 @@ public abstract class ActivityBindingModule {
   public abstract SearchActivity provideSearchActivity();
 
   @PerActivity
-  @ContributesAndroidInjector
+  @ContributesAndroidInjector(modules = BookmarksModule.class)
   public abstract BookmarksActivity provideBookmarksActivity();
 
   @PerActivity
   @ContributesAndroidInjector
-  public abstract KiwixErrorActivity provideKiwixErrorActivity();
+  public abstract ErrorActivity provideErrorActivity();
+
+  @PerActivity
+  @ContributesAndroidInjector(modules = IntroModule.class)
+  public abstract IntroActivity provideIntroActivity();
+
+  @PerActivity
+  @ContributesAndroidInjector
+  public abstract SplashActivity provideSplashActivity();
+
+  @PerActivity
+  @ContributesAndroidInjector(modules = LanguageModule.class)
+  public abstract LanguageActivity provideLanguageActivity();
+
+  @PerActivity
+  @ContributesAndroidInjector(modules = HistoryModule.class)
+  public abstract HistoryActivity provideHistoryActivity();
+
+  @PerActivity
+  @ContributesAndroidInjector
+  public abstract HelpActivity provideHelpActivity();
 }

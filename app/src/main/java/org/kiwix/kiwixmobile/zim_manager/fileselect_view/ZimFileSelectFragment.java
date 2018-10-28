@@ -30,6 +30,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -55,9 +56,9 @@ import android.widget.Toast;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.ZimContentProvider;
 import org.kiwix.kiwixmobile.base.BaseFragment;
-import org.kiwix.kiwixmobile.database.BookDao;
+import org.kiwix.kiwixmobile.data.ZimContentProvider;
+import org.kiwix.kiwixmobile.data.local.dao.BookDao;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.BookUtils;
@@ -81,11 +82,18 @@ import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class ZimFileSelectFragment extends BaseFragment
-    implements OnItemClickListener, AdapterView.OnItemLongClickListener, ZimFileSelectViewCallback{
+    implements OnItemClickListener, AdapterView.OnItemLongClickListener, ZimFileSelectViewCallback {
 
   public RelativeLayout llLayout;
   public SwipeRefreshLayout swipeRefreshLayout;
-
+  @Inject
+  ZimFileSelectPresenter presenter;
+  @Inject
+  BookUtils bookUtils;
+  @Inject
+  SharedPreferenceUtil sharedPreferenceUtil;
+  @Inject
+  BookDao bookDao;
   private ZimManageActivity zimManageActivity;
   private RescanDataAdapter mRescanAdapter;
   private ArrayList<LibraryNetworkEntity.Book> mFiles;
@@ -93,20 +101,14 @@ public class ZimFileSelectFragment extends BaseFragment
   private TextView mFileMessage;
   private boolean mHasRefresh;
 
-  @Inject ZimFileSelectPresenter presenter;
-  @Inject BookUtils bookUtils;
-  @Inject SharedPreferenceUtil sharedPreferenceUtil;
-  @Inject
-  BookDao bookDao;
-
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     KiwixApplication.getApplicationComponent().inject(this);
     zimManageActivity = (ZimManageActivity) super.getActivity();
     presenter.attachView(this);
     // Replace LinearLayout by the type of the root element of the layout you're trying to load
     llLayout = (RelativeLayout) inflater.inflate(R.layout.zim_list, container, false);
-    new LanguageUtils(super.getActivity()).changeFont(super.getActivity().getLayoutInflater(), sharedPreferenceUtil);
+    new LanguageUtils(zimManageActivity).changeFont(zimManageActivity.getLayoutInflater(), sharedPreferenceUtil);
 
     mFileMessage = llLayout.findViewById(R.id.file_management_no_files);
     mZimFileList = llLayout.findViewById(R.id.zimfilelist);
@@ -280,26 +282,19 @@ public class ZimFileSelectFragment extends BaseFragment
     if (book != null) {
       mFiles.add(book);
       mRescanAdapter.notifyDataSetChanged();
-      bookDao.saveBooks(mFiles);
+      presenter.saveBooks(mFiles);
       checkEmpty();
     }
   }
 
-  private class FileComparator implements Comparator<LibraryNetworkEntity.Book> {
-    @Override
-    public int compare(LibraryNetworkEntity.Book b1, LibraryNetworkEntity.Book b2) {
-      return b1.getTitle().compareTo(b2.getTitle());
-    }
-  }
-
-  public void checkPermissions(){
-    if (ContextCompat.checkSelfPermission(super.getActivity(),
+  public void checkPermissions() {
+    if (ContextCompat.checkSelfPermission(zimManageActivity,
         Manifest.permission.WRITE_EXTERNAL_STORAGE)
         != PackageManager.PERMISSION_GRANTED && Build.VERSION.SDK_INT > 18) {
       Toast.makeText(super.getActivity(), getResources().getString(R.string.request_storage), Toast.LENGTH_LONG)
           .show();
-        requestPermissions( new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-            REQUEST_STORAGE_PERMISSION);
+      requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+          REQUEST_STORAGE_PERMISSION);
     } else {
       getFiles();
     }
@@ -351,7 +346,7 @@ public class ZimFileSelectFragment extends BaseFragment
         // Save the current list of books
         zimManageActivity.runOnUiThread(() -> {
           mRescanAdapter.notifyDataSetChanged();
-          bookDao.saveBooks(mFiles);
+          presenter.saveBooks(mFiles);
           checkEmpty();
           TestingUtils.unbindResource(ZimFileSelectFragment.class);
 
@@ -364,12 +359,12 @@ public class ZimFileSelectFragment extends BaseFragment
 
   @Override
   public void onRequestPermissionsResult(int requestCode,
-                                         String permissions[], int[] grantResults) {
+                                         @NonNull String permissions[], @NonNull int[] grantResults) {
     switch (requestCode) {
       case REQUEST_STORAGE_PERMISSION: {
         if (grantResults.length > 0
             && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            getFiles();
+          getFiles();
         } else if (grantResults.length != 0) {
           zimManageActivity.finish();
         }
@@ -420,11 +415,11 @@ public class ZimFileSelectFragment extends BaseFragment
 
   public boolean deleteSpecificZimFile(int position) {
     File file = mFiles.get(position).file;
-    FileUtils.deleteZimFile(file);
+    FileUtils.deleteZimFile(file.getPath());
     if (file.exists()) {
       return false;
     }
-    bookDao.deleteBook(mFiles.get(position).getId());
+    presenter.deleteBook(mFiles.get(position));
     mFiles.remove(position);
     mRescanAdapter.notifyDataSetChanged();
     checkEmpty();
@@ -434,93 +429,101 @@ public class ZimFileSelectFragment extends BaseFragment
     return true;
   }
 
-  public void checkEmpty(){
-    if (mZimFileList.getCount() == 0){
+  public void checkEmpty() {
+    if (mZimFileList.getCount() == 0) {
       mFileMessage.setVisibility(View.VISIBLE);
     } else
       mFileMessage.setVisibility(View.GONE);
   }
 
+  private class FileComparator implements Comparator<LibraryNetworkEntity.Book> {
+    @Override
+    public int compare(LibraryNetworkEntity.Book b1, LibraryNetworkEntity.Book b2) {
+      return b1.getTitle().compareTo(b2.getTitle());
+    }
+  }
+
   // The Adapter for the ListView for when the ListView is populated with the rescanned files
   private class RescanDataAdapter extends ArrayAdapter<LibraryNetworkEntity.Book> {
 
-    public RescanDataAdapter(Context context, int textViewResourceId, List<LibraryNetworkEntity.Book> objects) {
+    RescanDataAdapter(Context context, int textViewResourceId, List<LibraryNetworkEntity.Book> objects) {
       super(context, textViewResourceId, objects);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
       ViewHolder holder;
       LibraryNetworkEntity.Book book = getItem(position);
-        if (convertView == null) {
-          convertView = View.inflate(zimManageActivity, R.layout.library_item, null);
-          holder = new ViewHolder();
-          holder.title = convertView.findViewById(R.id.title);
-          holder.description = convertView.findViewById(R.id.description);
-          holder.language = convertView.findViewById(R.id.language);
-          holder.creator = convertView.findViewById(R.id.creator);
-          holder.publisher = convertView.findViewById(R.id.publisher);
-          holder.date = convertView.findViewById(R.id.date);
-          holder.size = convertView.findViewById(R.id.size);
-          holder.fileName = convertView.findViewById(R.id.fileName);
-          holder.favicon = convertView.findViewById(R.id.favicon);
-          convertView.setTag(holder);
-        } else {
-          holder = (ViewHolder) convertView.getTag();
-        }
+      if (convertView == null) {
+        convertView = View.inflate(zimManageActivity, R.layout.library_item, null);
+        holder = new ViewHolder();
+        holder.title = convertView.findViewById(R.id.title);
+        holder.description = convertView.findViewById(R.id.description);
+        holder.language = convertView.findViewById(R.id.language);
+        holder.creator = convertView.findViewById(R.id.creator);
+        holder.publisher = convertView.findViewById(R.id.publisher);
+        holder.date = convertView.findViewById(R.id.date);
+        holder.size = convertView.findViewById(R.id.size);
+        holder.fileName = convertView.findViewById(R.id.fileName);
+        holder.favicon = convertView.findViewById(R.id.favicon);
+        convertView.setTag(holder);
+      } else {
+        holder = (ViewHolder) convertView.getTag();
+      }
 
-        if (book == null) {
-          return convertView;
-        }
+      if (book == null) {
+        return convertView;
+      }
 
-        holder.title.setText(book.getTitle());
-        holder.description.setText(book.getDescription());
-        holder.language.setText(bookUtils.getLanguage(book.getLanguage()));
-        holder.creator.setText(book.getCreator());
-        holder.publisher.setText(book.getPublisher());
-        holder.date.setText(book.getDate());
-        holder.size.setText(LibraryAdapter.createGbString(book.getSize()));
-        holder.fileName.setText(parseURL(getActivity(), book.file.getPath()));
-        holder.favicon.setImageBitmap(LibraryAdapter.createBitmapFromEncodedString(book.getFavicon(), zimManageActivity));
+      holder.title.setText(book.getTitle());
+      holder.description.setText(book.getDescription());
+      holder.language.setText(bookUtils.getLanguage(book.getLanguage()));
+      holder.creator.setText(book.getCreator());
+      holder.publisher.setText(book.getPublisher());
+      holder.date.setText(book.getDate());
+      holder.size.setText(LibraryAdapter.createGbString(book.getSize()));
+      holder.fileName.setText(parseURL(getActivity(), book.file.getPath()));
+      holder.favicon.setImageBitmap(LibraryAdapter.createBitmapFromEncodedString(book.getFavicon(), zimManageActivity));
 
 
-        //// Check if no value is empty. Set the view to View.GONE, if it is. To View.VISIBLE, if not.
-        if (book.getTitle() == null || book.getTitle().isEmpty()) {
-          holder.title.setVisibility(View.GONE);
-        } else {
-          holder.title.setVisibility(View.VISIBLE);
-        }
+      //// Check if no value is empty. Set the view to View.GONE, if it is. To View.VISIBLE, if not.
+      if (book.getTitle() == null || book.getTitle().isEmpty()) {
+        holder.title.setVisibility(View.GONE);
+      } else {
+        holder.title.setVisibility(View.VISIBLE);
+      }
 
-        if (book.getDescription() == null || book.getDescription().isEmpty()) {
-          holder.description.setVisibility(View.GONE);
-        } else {
-          holder.description.setVisibility(View.VISIBLE);
-        }
+      if (book.getDescription() == null || book.getDescription().isEmpty()) {
+        holder.description.setVisibility(View.GONE);
+      } else {
+        holder.description.setVisibility(View.VISIBLE);
+      }
 
-        if (book.getCreator() == null || book.getCreator().isEmpty()) {
-          holder.creator.setVisibility(View.GONE);
-        } else {
-          holder.creator.setVisibility(View.VISIBLE);
-        }
+      if (book.getCreator() == null || book.getCreator().isEmpty()) {
+        holder.creator.setVisibility(View.GONE);
+      } else {
+        holder.creator.setVisibility(View.VISIBLE);
+      }
 
-        if (book.getPublisher() == null || book.getPublisher().isEmpty()) {
-          holder.publisher.setVisibility(View.GONE);
-        } else {
-          holder.publisher.setVisibility(View.VISIBLE);
-        }
+      if (book.getPublisher() == null || book.getPublisher().isEmpty()) {
+        holder.publisher.setVisibility(View.GONE);
+      } else {
+        holder.publisher.setVisibility(View.VISIBLE);
+      }
 
-        if (book.getDate() == null || book.getDate().isEmpty()) {
-          holder.date.setVisibility(View.GONE);
-        } else {
-          holder.date.setVisibility(View.VISIBLE);
-        }
+      if (book.getDate() == null || book.getDate().isEmpty()) {
+        holder.date.setVisibility(View.GONE);
+      } else {
+        holder.date.setVisibility(View.VISIBLE);
+      }
 
-        if (book.getSize() == null || book.getSize().isEmpty()) {
-          holder.size.setVisibility(View.GONE);
-        } else {
-          holder.size.setVisibility(View.VISIBLE);
-        }
+      if (book.getSize() == null || book.getSize().isEmpty()) {
+        holder.size.setVisibility(View.GONE);
+      } else {
+        holder.size.setVisibility(View.VISIBLE);
+      }
 
       return convertView;
 
