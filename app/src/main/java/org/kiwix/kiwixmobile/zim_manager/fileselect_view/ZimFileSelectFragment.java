@@ -185,12 +185,12 @@ public class ZimFileSelectFragment extends BaseFragment
             selectedFileShareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
             selectedFileShareIntent.setType("application/octet-stream");  // ZIM files are binary data without an Android-predefined subtype
 
-            ArrayList<Uri> selectedFileContentURI = new ArrayList<Uri>(); // Store Content URIs for all selected files being shared
+            ArrayList<Uri> selectedFileContentURIs = new ArrayList<Uri>(); // Store Content URIs for all selected files being shared
 
             for(int i = 0; i < selectedViewPosition.size(); i++) {
 
               LibraryNetworkEntity.Book data = (LibraryNetworkEntity.Book) mZimFileList.getItemAtPosition(selectedViewPosition.get(i));
-              String sharefile = data.file.getPath(); //Returns path to file in device storage
+              String shareFilePath = data.file.getPath(); //Returns path to file in device storage
 
               /**
                * Using 'file:///' URIs directly is unsafe as it grants the intent receiving application
@@ -200,15 +200,17 @@ public class ZimFileSelectFragment extends BaseFragment
                * access permissions to the file being shared (to the intent receiving application), which
                * is fundamentally safer.
                 */
-              Uri shareContentUri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".fileprovider", new File(sharefile));
+
+              File shareFile = new File(shareFilePath);
+              Uri shareContentUri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".fileprovider", shareFile);
 
               if(shareContentUri != null)
-                selectedFileContentURI.add(shareContentUri);  // Populate with the selected file content URIs
+                selectedFileContentURIs.add(shareContentUri);  // Populate with the selected file content URIs
             }
 
-            selectedFileShareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, selectedFileContentURI); // Intent Extra for storing the array list of selected file content URIs
+            selectedFileShareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, selectedFileContentURIs); // Intent Extra for storing the array list of selected file content URIs
 
-            if(selectedFileContentURI != null) {  // Grant temporary access permission to the intent receiver for the content URIs
+            if(selectedFileContentURIs != null) {  // Grant temporary access permission to the intent receiver for the content URIs
               selectedFileShareIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             }
 
