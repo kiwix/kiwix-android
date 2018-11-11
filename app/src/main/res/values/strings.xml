@@ -56,6 +56,8 @@
   <string name="pref_clear_all_history_summary">Clear recent searches and tabs history</string>
   <string name="all_history_cleared_toast">All History Cleared</string>
   <string name="clear_all_history_dialog_title">Clear All History</string>
+  <string name="share">Share</string>
+  <string name="selected_file_cab_app_chooser_title">Share ZIM files with:</string>
   <string name="delete">Delete</string>
   <string name="delete_specific_search_toast">Recent search removed</string>
   <string name="hint_contents_drawer_message">You can swipe left to view the contents of this article</string>
