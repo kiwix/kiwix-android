@@ -69,6 +69,8 @@ public class SearchActivity extends BaseActivity
   private SearchView searchView;
   private String searchText;
 
+  private TextView errorMessage_textview;
+
   @Inject
   SearchPresenter searchPresenter;
 
@@ -89,6 +91,9 @@ public class SearchActivity extends BaseActivity
     defaultAdapter = getDefaultAdapter();
     searchPresenter.getRecentSearches();
     activateDefaultAdapter();
+
+    errorMessage_textview = (TextView) findViewById(R.id.error_search);
+    errorMessage_textview.setVisibility(View.GONE);
 
     autoAdapter = new AutoCompleteAdapter(this);
     listView.setOnItemClickListener(this);
@@ -150,12 +155,17 @@ public class SearchActivity extends BaseActivity
       @Override
       public boolean onQueryTextChange(String s) {
         if (s.equals("")) {
+          errorMessage_textview.setVisibility(View.GONE);
           activateDefaultAdapter();
-        } else {
+        } else if(s.length() > 0) {
+          errorMessage_textview.setVisibility(View.GONE);
           activateAutoAdapter();
           autoAdapter.getFilter().filter(s.toLowerCase());
+          if(currentAdapter.getCount() == 0) {
+            errorMessage_textview.setVisibility(View.VISIBLE);
+            errorMessage_textview.setBackgroundColor(R.style.AppTheme);
+          }
         }
-
         return true;
       }
     });

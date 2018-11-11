@@ -240,4 +240,5 @@
   <string name="switch_tabs">Switch tabs</string>
   <string name="smiling_face">:D</string>
   <string name="close_all_tabs">Close all tabs</string>
+    <string name="no_results_available">No Results Available</string>
 </resources>

@@ -26,6 +26,14 @@
         app:theme="@style/AppTheme.AppBarOverlay" />
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/error_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/no_results_available"
+        android:textSize="24sp"
+        android:gravity="center"/>
+
     <ListView
       android:id="@+id/search_list"
       android:layout_width="match_parent"
