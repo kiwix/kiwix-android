@@ -77,7 +77,7 @@ public class KiwixSettingsActivity extends BaseActivity {
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
-    getWindow().setWindowAnimations(R.style.WindowAnimationTransition);
+    //getWindow().setWindowAnimations(R.style.WindowAnimationTransition);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.settings);
 
