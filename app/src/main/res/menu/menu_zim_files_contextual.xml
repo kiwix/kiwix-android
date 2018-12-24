@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<item
+		android:id="@+id/zim_file_delete_item"
+		android:icon="@drawable/ic_delete_white_24dp"
+		android:title="@string/delete"
+		android:visible="true"
+		app:iconifiedByDefault="true"
+		app:showAsAction="always" />
+
+	<item
+		android:id="@+id/zim_file_share_item"
+		android:icon="@drawable/baseline_share_24"
+		android:title="@string/share"
+		android:visible="true"
+		app:iconifiedByDefault="true"
+		app:showAsAction="always"/>
+
+</menu>
+
+	<!-- Menu layout for Contextual Action Bar in response to file selection in the library (ZimFileSelectFragment.java) -->

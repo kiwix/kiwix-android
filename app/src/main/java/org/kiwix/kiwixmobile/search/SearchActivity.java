@@ -29,7 +29,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -63,9 +62,10 @@ public class SearchActivity extends BaseActivity
   public static final String EXTRA_SEARCH_IN_TEXT = "bool_searchintext";
 
   private final int REQ_CODE_SPEECH_INPUT = 100;
-  private ListView mListView;
-  private AutoCompleteAdapter mAutoAdapter;
-  private ArrayAdapter<String> mDefaultAdapter;
+  private ListView listView;
+  private ArrayAdapter<String> currentAdapter;
+  private AutoCompleteAdapter autoAdapter;
+  private ArrayAdapter<String> defaultAdapter;
   private SearchView searchView;
   private String searchText;
 
@@ -85,14 +85,14 @@ public class SearchActivity extends BaseActivity
     getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
     getSupportActionBar().setHomeButtonEnabled(true);
     searchPresenter.attachView(this);
-    mListView = findViewById(R.id.search_list);
-    mDefaultAdapter = getDefaultAdapter();
+    listView = findViewById(R.id.search_list);
+    defaultAdapter = getDefaultAdapter();
     searchPresenter.getRecentSearches();
-    mListView.setAdapter(mDefaultAdapter);
+    activateDefaultAdapter();
 
-    mAutoAdapter = new AutoCompleteAdapter(this);
-    mListView.setOnItemClickListener(this);
-    mListView.setOnItemLongClickListener(this);
+    autoAdapter = new AutoCompleteAdapter(this);
+    listView.setOnItemClickListener(this);
+    listView.setOnItemLongClickListener(this);
 
     boolean IS_VOICE_SEARCH_INTENT = getIntent().getBooleanExtra(EXTRA_IS_WIDGET_VOICE, false);
     if (IS_VOICE_SEARCH_INTENT) {
@@ -100,10 +100,20 @@ public class SearchActivity extends BaseActivity
     }
   }
 
+  public void activateDefaultAdapter() {
+    currentAdapter = defaultAdapter;
+    listView.setAdapter(currentAdapter);
+  }
+
+  public void activateAutoAdapter() {
+    currentAdapter = autoAdapter;
+    listView.setAdapter(currentAdapter);
+  }
+
   @Override
   public void addRecentSearches(List<String> recentSearches) {
-    mDefaultAdapter.addAll(recentSearches);
-    mDefaultAdapter.notifyDataSetChanged();
+    defaultAdapter.addAll(recentSearches);
+    defaultAdapter.notifyDataSetChanged();
   }
 
   @Override
@@ -128,8 +138,8 @@ public class SearchActivity extends BaseActivity
     searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
     if (searchText != null) {
       searchView.setQuery(searchText, false);
-      mListView.setAdapter(mAutoAdapter);
-      mAutoAdapter.getFilter().filter(searchText.toLowerCase());
+      activateAutoAdapter();
+      autoAdapter.getFilter().filter(searchText.toLowerCase());
     }
     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
       @Override
@@ -140,10 +150,10 @@ public class SearchActivity extends BaseActivity
       @Override
       public boolean onQueryTextChange(String s) {
         if (s.equals("")) {
-          mListView.setAdapter(mDefaultAdapter);
+          activateDefaultAdapter();
         } else {
-          mListView.setAdapter(mAutoAdapter);
-          mAutoAdapter.getFilter().filter(s.toLowerCase());
+          activateAutoAdapter();
+          autoAdapter.getFilter().filter(s.toLowerCase());
         }
 
         return true;
@@ -198,15 +208,7 @@ public class SearchActivity extends BaseActivity
 
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-    CharSequence text = ((TextView) view).getText();
-    String title;
-    if (text instanceof Spanned) {
-      title = Html.toHtml((Spanned) text);
-      // To remove the "ltr style information" from spanned text
-      title = title.substring(title.indexOf(">") + 1, title.lastIndexOf("<"));
-    } else {
-      title = text.toString();
-    }
+    String title = currentAdapter.getItem(position);
     searchPresenter.saveSearch(title);
     sendMessage(title);
   }
@@ -242,8 +244,8 @@ public class SearchActivity extends BaseActivity
 
   @Override
   public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-    if (parent.getAdapter() == mDefaultAdapter) {
-      String searched = mListView.getItemAtPosition(position).toString();
+    if (parent.getAdapter() == defaultAdapter) {
+      String searched = listView.getItemAtPosition(position).toString();
       deleteSpecificSearchDialog(searched);
     }
     return true;
@@ -268,8 +270,8 @@ public class SearchActivity extends BaseActivity
   }
 
   private void resetAdapter() {
-    mDefaultAdapter = getDefaultAdapter();
-    mListView.setAdapter(mDefaultAdapter);
+    defaultAdapter = getDefaultAdapter();
+    activateDefaultAdapter();
     searchPresenter.getRecentSearches();
   }
 

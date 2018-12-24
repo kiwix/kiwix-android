@@ -21,9 +21,9 @@ package org.kiwix.kiwixmobile.intro;
 import android.Manifest;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.intent.Intents;
+import android.support.test.filters.LargeTest;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
 
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import com.schibsted.spain.barista.rule.BaristaRule;

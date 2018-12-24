@@ -16,7 +16,7 @@ runID = os.environ['TRAVIS_BUILD_NUMBER']
 apiKey = os.environ['BITBAR_API_KEY']
 testName = "Auto Test {}".format(runID)
 
-for x in range(0, 50):
+for x in range(0, 200):
   r = requests.get('https://cloud.testdroid.com/api/me/projects/{}/runs'.format(PROJECT_ID), auth=(apiKey, ''), headers={"Accept" : "application/json"})
   result = list(filter(lambda run: run.get("displayName") == testName, r.json().get("data")))
   if len(result) > 0 and result[0].get("state") == "FINISHED":

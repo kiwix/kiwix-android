@@ -21,30 +21,25 @@ package org.kiwix.kiwixmobile.help;
 import android.Manifest;
 import android.content.Context;
 import android.support.test.espresso.intent.Intents;
+import android.support.test.filters.LargeTest;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
+
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import com.schibsted.spain.barista.rule.BaristaRule;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.intro.IntroActivity;
 
-import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
-import static org.kiwix.kiwixmobile.testutils.Matcher.childAtPosition;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 
@@ -52,14 +47,13 @@ import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 @RunWith(AndroidJUnit4.class)
 public class HelpActivityTest {
 
-  private Context context;
-
   @Rule
   public BaristaRule<HelpActivity> activityTestRule = BaristaRule.create(HelpActivity.class);
   @Rule
   public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule
   public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+  private Context context;
 
   @Before
   public void setUp() {

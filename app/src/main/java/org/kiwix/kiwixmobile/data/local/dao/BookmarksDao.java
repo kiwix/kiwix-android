@@ -20,6 +20,7 @@ package org.kiwix.kiwixmobile.data.local.dao;
 
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
+import com.yahoo.squidb.sql.Update;
 
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
@@ -106,5 +107,24 @@ public class BookmarksDao {
   public void deleteBookmark(Bookmark bookmark) {
     kiwixDatabase.deleteWhere(Bookmark.class, Bookmark.BOOKMARK_URL.eq(bookmark.getBookmarkUrl())
         .and(Bookmark.ZIM_ID.eq(bookmark.getZimId())));
+  }
+
+  public void processBookmark(StringOperation operation) {
+    try (SquidCursor<Bookmark> bookmarkCursor = kiwixDatabase.query(Bookmark.class,
+        Query.select(Bookmark.ID, Bookmark.BOOKMARK_URL))) {
+      while (bookmarkCursor.moveToNext()) {
+        String url = bookmarkCursor.get(Bookmark.BOOKMARK_URL);
+        url = operation.apply(url);
+        if (url != null) {
+          kiwixDatabase.update(Update.table(Bookmark.TABLE)
+              .where(Bookmark.ID.eq(bookmarkCursor.get(Bookmark.ID)))
+              .set(Bookmark.BOOKMARK_URL, url));
+        }
+      }
+    }
+  }
+
+  public interface StringOperation {
+    String apply(String string);
   }
 }

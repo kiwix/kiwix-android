@@ -140,7 +140,9 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_CURRENT_POSITIONS;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_CURRENT_TAB;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
+import static org.kiwix.kiwixmobile.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
+import static org.kiwix.kiwixmobile.utils.UpdateUtils.reformatProviderUrl;
 
 public class MainActivity extends BaseActivity implements WebViewCallback,
     MainContract.View, BooksAdapter.OnItemClickListener {
@@ -321,6 +323,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     presenter.attachView(this);
+    new WebView(this).destroy(); // Workaround for buggy webViews see #710
     wifiOnly = sharedPreferenceUtil.getPrefWifiOnly();
     nightMode = sharedPreferenceUtil.nightMode();
     handleLocaleCheck();
@@ -346,25 +349,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     tableDrawerRight.setLayoutManager(new LinearLayoutManager(this));
 
-    TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter();
+    TableDrawerAdapter tableDrawerAdapter = setupTableDrawerAdapter();
     tableDrawerRight.setAdapter(tableDrawerAdapter);
-    tableDrawerAdapter.setTableClickListener(new TableClickListener() {
-      @Override
-      public void onHeaderClick(View view) {
-        getCurrentWebView().setScrollY(0);
-        drawerLayout.closeDrawer(GravityCompat.END);
-      }
-
-      @Override
-      public void onSectionClick(View view, int position) {
-        getCurrentWebView().loadUrl("javascript:document.getElementById('"
-            + documentSections.get(position).id
-            + "').scrollIntoView();");
-
-        drawerLayout.closeDrawers();
-      }
-    });
-
     tableDrawerAdapter.notifyDataSetChanged();
 
     tabsAdapter.setTabClickListener(new TabsAdapter.TabClickListener() {
@@ -391,8 +377,17 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
       @Override
       public void sectionsLoaded(String title, List<DocumentSection> sections) {
+        for (DocumentSection section : sections) {
+          if (section.title.contains("REPLACE_")) {
+            section.title = getResourceString(getApplicationContext(), section.title);
+          }
+        }
         documentSections.addAll(sections);
-        tableDrawerAdapter.setTitle(title);
+        if (title.contains("REPLACE_")) {
+          tableDrawerAdapter.setTitle(getResourceString(getApplicationContext(), title));
+        } else {
+          tableDrawerAdapter.setTitle(title);
+        }
         tableDrawerAdapter.setSections(documentSections);
         tableDrawerAdapter.notifyDataSetChanged();
       }
@@ -441,6 +436,26 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     searchFiles();
     tabRecyclerView.setAdapter(tabsAdapter);
     new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
+  }
+
+  private TableDrawerAdapter setupTableDrawerAdapter() {
+    TableDrawerAdapter tableDrawerAdapter = new TableDrawerAdapter();
+    tableDrawerAdapter.setTableClickListener(new TableClickListener() {
+      @Override
+      public void onHeaderClick(View view) {
+        getCurrentWebView().setScrollY(0);
+        drawerLayout.closeDrawer(GravityCompat.END);
+      }
+
+      @Override
+      public void onSectionClick(View view, int position) {
+        getCurrentWebView().loadUrl("javascript:document.getElementById('"
+            + documentSections.get(position).id
+            + "').scrollIntoView();");
+        drawerLayout.closeDrawers();
+      }
+    });
+    return tableDrawerAdapter;
   }
 
   private void showTabSwitcher() {
@@ -629,23 +644,27 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           break;
       }
     });
+  }
 
-    pauseTTSButton.setOnClickListener(view -> {
-      if (tts.currentTTSTask == null) {
-        tts.stop();
-        return;
-      }
+  @OnClick(R.id.activity_main_button_pause_tts)
+  void pauseTts() {
+    if (tts.currentTTSTask == null) {
+      tts.stop();
+      return;
+    }
 
-      if (tts.currentTTSTask.paused) {
-        tts.pauseOrResume();
-        pauseTTSButton.setText(R.string.tts_pause);
-      } else {
-        tts.pauseOrResume();
-        pauseTTSButton.setText(R.string.tts_resume);
-      }
-    });
+    if (tts.currentTTSTask.paused) {
+      tts.pauseOrResume();
+      pauseTTSButton.setText(R.string.tts_pause);
+    } else {
+      tts.pauseOrResume();
+      pauseTTSButton.setText(R.string.tts_resume);
+    }
+  }
 
-    stopTTSButton.setOnClickListener((View view) -> tts.stop());
+  @OnClick(R.id.activity_main_button_stop_tts)
+  void stopTts() {
+    tts.stop();
   }
 
   // Reset the Locale and change the font of all TextViews and its subclasses, if necessary
@@ -750,7 +769,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
   }
 
-  private KiwixWebView getCurrentWebView() {
+  KiwixWebView getCurrentWebView() {
     if (webViewList.size() == 0) return newTab();
     if (currentWebViewIndex < webViewList.size()) {
       return webViewList.get(currentWebViewIndex);
@@ -1191,18 +1210,19 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           intent.setAction("");
           goToSearch(true);
           break;
-        case Intent.ACTION_VIEW: {
-          final String zimFile = ZimContentProvider.getZimFile();
-          saveTabStates();
-          Intent i = new Intent(MainActivity.this, SearchActivity.class);
-          i.putExtra(EXTRA_ZIM_FILE, zimFile);
-          if (intent.getData() != null) {
-            i.putExtra(EXTRA_SEARCH, intent.getData().getLastPathSegment());
+        case Intent.ACTION_VIEW:
+          if (intent.getType() == null || !intent.getType().equals("application/octet-stream")) {
+            final String zimFile = ZimContentProvider.getZimFile();
+            saveTabStates();
+            Intent i = new Intent(MainActivity.this, SearchActivity.class);
+            i.putExtra(EXTRA_ZIM_FILE, zimFile);
+            if (intent.getData() != null) {
+              i.putExtra(EXTRA_SEARCH, intent.getData().getLastPathSegment());
+            }
+            intent.setAction("");
+            startActivityForResult(i, REQUEST_FILE_SEARCH);
           }
-          intent.setAction("");
-          startActivityForResult(i, REQUEST_FILE_SEARCH);
           break;
-        }
         case NEW_TAB:
           newTab(HOME_URL);
           break;
@@ -1602,11 +1622,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       JSONArray urls = new JSONArray(zimArticles);
       JSONArray positions = new JSONArray(zimPositions);
       int i = 0;
-      getCurrentWebView().loadUrl(urls.getString(i));
+      getCurrentWebView().loadUrl(reformatProviderUrl(urls.getString(i)));
       getCurrentWebView().setScrollY(positions.getInt(i));
       i++;
       for (; i < urls.length(); i++) {
-        newTab(urls.getString(i));
+        newTab(reformatProviderUrl(urls.getString(i)));
         getCurrentWebView().setScrollY(positions.getInt(i));
       }
       selectTab(currentTab);

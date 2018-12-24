@@ -31,6 +31,7 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.widget.Toast;
 
+import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
@@ -45,45 +46,39 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
 public class KiwixTextToSpeech {
 
-  private Context context;
-
-  private OnSpeakingListener onSpeakingListener;
-
-  private TextToSpeech tts;
-
-  private boolean initialized = false;
-
+  private final Object focusLock;
+  private final Context context;
+  private final OnSpeakingListener onSpeakingListener;
+  private final AudioManager am;
+  private final OnAudioFocusChangeListener onAudioFocusChangeListener;
   public TTSTask currentTTSTask = null;
-
-  private AudioManager am;
-
-  final Object focuslock;
-
-  private OnAudioFocusChangeListener onAudioFocusChangeListener;
+  private TextToSpeech tts;
+  private boolean initialized = false;
 
   /**
    * Constructor.
    *
-   * @param context the context to create TextToSpeech with
+   * @param context               the context to create TextToSpeech with
    * @param onInitSucceedListener listener that receives event when initialization of TTS is done
-   * (and does not receive if it failed)
-   * @param onSpeakingListener listener that receives an event when speaking just started or
-   * ended
+   *                              (and does not receive if it failed)
+   * @param onSpeakingListener    listener that receives an event when speaking just started or
+   *                              ended
    */
   KiwixTextToSpeech(Context context,
-      final OnInitSucceedListener onInitSucceedListener,
-      final OnSpeakingListener onSpeakingListener, final OnAudioFocusChangeListener onAudioFocusChangeListener) {
+                    final OnInitSucceedListener onInitSucceedListener,
+                    final OnSpeakingListener onSpeakingListener,
+                    final OnAudioFocusChangeListener onAudioFocusChangeListener) {
     Log.d(TAG_KIWIX, "Initializing TextToSpeech");
     this.context = context;
     this.onSpeakingListener = onSpeakingListener;
     this.onAudioFocusChangeListener = onAudioFocusChangeListener;
     am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-    focuslock = new Object();
+    focusLock = new Object();
     initTTS(onInitSucceedListener);
   }
 
   private void initTTS(final OnInitSucceedListener onInitSucceedListener) {
-    tts = new TextToSpeech(context, status -> {
+    tts = new TextToSpeech(KiwixApplication.getInstance(), status -> {
       if (status == TextToSpeech.SUCCESS) {
         Log.d(TAG_KIWIX, "TextToSpeech was initialized successfully.");
         initialized = true;
@@ -119,7 +114,7 @@ public class KiwixTextToSpeech {
     } else {
       Locale locale = LanguageUtils.ISO3ToLocale(ZimContentProvider.getLanguage());
       int result;
-      if (ZimContentProvider.getLanguage().equals("mul")) {
+      if ("mul".equals(ZimContentProvider.getLanguage())) {
         Log.d(TAG_KIWIX, "TextToSpeech: disabled " +
             ZimContentProvider.getLanguage());
         Toast.makeText(context,
@@ -145,19 +140,19 @@ public class KiwixTextToSpeech {
     }
   }
 
-  public void loadURL(WebView webView) {
+  private void loadURL(WebView webView) {
     // We use JavaScript to get the content of the page conveniently, earlier making some
     // changes in the page
     webView.loadUrl("javascript:" +
-            "body = document.getElementsByTagName('body')[0].cloneNode(true);" +
-            // Remove some elements that are shouldn't be read (table of contents,
-            // references numbers, thumbnail captions, duplicated title, etc.)
-            "toRemove = body.querySelectorAll('sup.reference, #toc, .thumbcaption, " +
-            "    title, .navbox');" +
-            "Array.prototype.forEach.call(toRemove, function(elem) {" +
-            "    elem.parentElement.removeChild(elem);" +
-            "});" +
-            "tts.speakAloud(body.innerText);");
+        "body = document.getElementsByTagName('body')[0].cloneNode(true);" +
+        // Remove some elements that are shouldn't be read (table of contents,
+        // references numbers, thumbnail captions, duplicated title, etc.)
+        "toRemove = body.querySelectorAll('sup.reference, #toc, .thumbcaption, " +
+        "    title, .navbox');" +
+        "Array.prototype.forEach.call(toRemove, function(elem) {" +
+        "    elem.parentElement.removeChild(elem);" +
+        "});" +
+        "tts.speakAloud(body.innerText);");
   }
 
   public void stop() {
@@ -170,24 +165,21 @@ public class KiwixTextToSpeech {
     }
   }
 
-  public Boolean requestAudioFocus() {
+  private Boolean requestAudioFocus() {
     int audioFocusRequest = am.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
     Log.d(TAG_KIWIX, "Audio Focus Requested");
 
-    synchronized (focuslock) {
-      if (audioFocusRequest == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-        return true;
-      } else {
-        return false;
-      }
+    synchronized (focusLock) {
+      return audioFocusRequest == AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
     }
   }
 
   public void pauseOrResume() {
     if (currentTTSTask == null) {
       return;
-    } else if (currentTTSTask.paused) {
+    }
+    if (currentTTSTask.paused) {
       if (!requestAudioFocus()) return;
       currentTTSTask.start();
     } else {
@@ -221,7 +213,7 @@ public class KiwixTextToSpeech {
    * The listener which is notified when initialization of the TextToSpeech engine is successfully
    * done.
    */
-  public interface OnInitSucceedListener {
+  interface OnInitSucceedListener {
 
     void onInitSucceed();
   }
@@ -241,8 +233,7 @@ public class KiwixTextToSpeech {
 
   public class TTSTask {
     private final List<String> pieces;
-    private AtomicInteger currentPiece = new AtomicInteger(0);
-
+    private final AtomicInteger currentPiece = new AtomicInteger(0);
     public boolean paused = true;
 
 
@@ -251,7 +242,7 @@ public class KiwixTextToSpeech {
       //start();
     }
 
-    public void pause() {
+    void pause() {
       paused = true;
       currentPiece.decrementAndGet();
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
@@ -261,7 +252,7 @@ public class KiwixTextToSpeech {
     }
 
     @SuppressLint("NewApi")
-    public void start() {
+    void start() {
       if (!paused)
         return;
       else
@@ -307,7 +298,7 @@ public class KiwixTextToSpeech {
       }
     }
 
-    public void stop() {
+    void stop() {
       currentTTSTask = null;
       onSpeakingListener.onSpeakingEnded();
     }
@@ -317,7 +308,7 @@ public class KiwixTextToSpeech {
     @JavascriptInterface
     @SuppressWarnings("unused")
     public void speakAloud(String content) {
-      String[] splitted = content.split("[\\n\\.;]");
+      String[] splitted = content.split("[\\n.;]");
       List<String> pieces = new ArrayList<>();
 
       for (String s : splitted) {
