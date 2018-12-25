@@ -30,7 +30,6 @@ We utilize different build variants (flavours) to build various different versio
 - [RxJava](https://github.com/ReactiveX/RxJava) - Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.
 
 
-
 ## Contributing
 
 Before contributing be sure to check out the [CONTRIBUTION](https://github.com/kiwix/kiwix-android/blob/master/CONTRIBUTING.md) guidelines.
