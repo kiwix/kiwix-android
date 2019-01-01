@@ -58,6 +58,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -537,7 +538,7 @@ public class DownloadService extends Service {
         // Keep attempting to download chunk despite network errors
         while (attempts < timeout) {
           try {
-            String rangeHeader = String.format("%d-%d", downloaded, chunk.getEndByte());
+            String rangeHeader = String.format(Locale.US, "%d-%d", downloaded, chunk.getEndByte());
 
             // Build request with up to date range
             Response response = httpClient.newCall(
