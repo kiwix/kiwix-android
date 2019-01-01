@@ -1,9 +1,27 @@
+/*
+ * Kiwix Android
+ * Copyright (C) 2018  Kiwix <android.kiwix.org>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.kiwix.kiwixmobile.main;
 
 import android.Manifest;
+import android.support.test.filters.LargeTest;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
 
 import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
@@ -17,7 +35,6 @@ import org.kiwix.kiwixmobile.R;
 import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
-import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
 import static org.kiwix.kiwixmobile.utils.StandardActions.enterSettings;
 
 @LargeTest
@@ -39,7 +56,8 @@ public class MainActivityTest {
   @Test
   public void navigateHelp() {
     activityTestRule.launchActivity();
-    enterHelp();
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_help));
   }
 
   @Test

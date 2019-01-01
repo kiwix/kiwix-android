@@ -27,9 +27,9 @@ public class LanguageActivity extends BaseActivity implements LanguageContract.V
   private final ArrayList<Language> languages = new ArrayList<>();
   private final ArrayList<Language> allLanguages = new ArrayList<>();
 
-  @BindView(R.id.activity_language_toolbar)
+  @BindView(R.id.toolbar)
   Toolbar toolbar;
-  @BindView(R.id.activity_language_recycler_view)
+  @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
   @Inject
   LanguageContract.Presenter presenter;
@@ -40,7 +40,7 @@ public class LanguageActivity extends BaseActivity implements LanguageContract.V
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     presenter.attachView(this);
-    setContentView(R.layout.activity_language);
+    setContentView(R.layout.activity_bookmarks_history_language);
     setSupportActionBar(toolbar);
 
     ActionBar actionBar = getSupportActionBar();
@@ -109,6 +109,7 @@ public class LanguageActivity extends BaseActivity implements LanguageContract.V
   public void notifyLanguagesFiltered(List<Language> languages) {
     this.languages.clear();
     this.languages.addAll(languages);
+    languageAdapter.categorizeLanguages();
     languageAdapter.notifyDataSetChanged();
   }
 }

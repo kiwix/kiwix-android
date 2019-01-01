@@ -106,8 +106,7 @@
   <string name="get_library_over_network">Use network to download content list. (Approximately 6MB)</string>
   <string name="proceed">Proceed</string>
   <string name="wait_for_load">Content Still Loading</string>
-  <string name="help_1">
-    x allows you offline access to websites such as Wikipedia in a highly compressed form.</string>
+  <string name="help_1">Kiwix gives you offline access to websites such as Wikipedia in a highly compressed form.</string>
   <string name="help_2">What does Kiwix do?</string>
   <string name="help_3">Kiwix is an offline content reader. It acts very much like a browser but instead of accessing online web pages, it reads content from a file in ZIM format.</string>
   <string name="help_4">While Kiwix has been originally designed to provide Wikipedia offline, it also reads other contents.</string>
@@ -204,8 +203,41 @@
   <string name="select_languages">Select languages</string>
   <string name="save_languages">Save languages</string>
   <string name="languages_saved">Languages saved</string>
+  <string name="send_feedback">Send feedback</string>
+  <string name="expand">Expand</string>
   <plurals name="books_count">
     <item quantity="one">%d book</item>
     <item quantity="other">%d books</item>
   </plurals>
+  <string name="history">History</string>
+  <string name="history_from_current_book">History from current book</string>
+  <string name="search_history">Search history</string>
+  <string name="selected_items">%1$d selected</string>
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
+  <string name="bookmarks_from_current_book">Bookmarks from current book</string>
+  <string name="search_bookmarks">Search bookmarks</string>
+  <string name="new_tab">New tab</string>
+  <string name="switch_tabs">Switch tabs</string>
+  <string name="smiling_face">:D</string>
+  <string name="close_all_tabs">Close all tabs</string>
 </resources>

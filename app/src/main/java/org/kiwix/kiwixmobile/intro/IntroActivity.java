@@ -32,10 +32,10 @@ public class IntroActivity extends BaseActivity implements IntroContract.View {
   IntroContract.Presenter presenter;
 
   private ImageView airPlane;
-  private Handler handler = new Handler();
-  private Timer timer = new Timer();
+  private final Handler handler = new Handler();
+  private final Timer timer = new Timer();
   private int currentPage = 0;
-  private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+  private final ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 

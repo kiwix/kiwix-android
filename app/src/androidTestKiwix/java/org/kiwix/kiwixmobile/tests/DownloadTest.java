@@ -1,64 +1,64 @@
- /*
-  * Kiwix Android
-  * Copyright (C) 2018  Kiwix <android.kiwix.org>
-  *
-  * This program is free software: you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
-  * (at your option) any later version.
-  *
-  * This program is distributed in the hope that it will be useful,
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  * GNU General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License
-  * along with this program. If not, see <http://www.gnu.org/licenses/>.
-  */
+/*
+ * Kiwix Android
+ * Copyright (C) 2018  Kiwix <android.kiwix.org>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 package org.kiwix.kiwixmobile.tests;
 
+import android.Manifest;
+import android.support.test.espresso.IdlingPolicies;
+import android.support.test.espresso.IdlingRegistry;
+import android.support.test.espresso.ViewInteraction;
+import android.support.test.filters.LargeTest;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.rule.GrantPermissionRule;
+import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
- import android.Manifest;
- import android.support.test.espresso.Espresso;
- import android.support.test.espresso.IdlingPolicies;
- import android.support.test.espresso.ViewInteraction;
- import android.support.test.rule.ActivityTestRule;
- import android.support.test.rule.GrantPermissionRule;
- import android.support.test.runner.AndroidJUnit4;
- import android.test.suitebuilder.annotation.LargeTest;
- import android.util.Log;
+import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
+import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 
- import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.main.MainActivity;
+import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
 
- import org.junit.After;
- import org.junit.Before;
- import org.junit.BeforeClass;
- import org.junit.Rule;
- import org.junit.Test;
- import org.junit.runner.RunWith;
- import org.kiwix.kiwixmobile.R;
- import org.kiwix.kiwixmobile.main.MainActivity;
- import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
+import java.util.concurrent.TimeUnit;
 
- import java.util.concurrent.TimeUnit;
-
- import static android.support.test.espresso.Espresso.onData;
- import static android.support.test.espresso.Espresso.onView;
- import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
- import static android.support.test.espresso.matcher.ViewMatchers.withId;
- import static android.support.test.espresso.matcher.ViewMatchers.withParent;
- import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
- import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
- import static com.schibsted.spain.barista.interaction.BaristaSwipeRefreshInteractions.refresh;
- import static junit.framework.Assert.fail;
- import static org.hamcrest.Matchers.allOf;
- import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
- import static org.kiwix.kiwixmobile.testutils.TestUtils.allowPermissionsIfNeeded;
- import static org.kiwix.kiwixmobile.testutils.TestUtils.captureAndSaveScreenshot;
- import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
- import static org.kiwix.kiwixmobile.utils.StandardActions.deleteZimIfExists;
- import static org.kiwix.kiwixmobile.utils.StandardActions.enterHelp;
+import static android.support.test.espresso.Espresso.onData;
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withParent;
+import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
+import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
+import static com.schibsted.spain.barista.interaction.BaristaSwipeRefreshInteractions.refresh;
+import static junit.framework.Assert.fail;
+import static org.hamcrest.Matchers.allOf;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.allowPermissionsIfNeeded;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.captureAndSaveScreenshot;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
+import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
+import static org.kiwix.kiwixmobile.utils.StandardActions.deleteZimIfExists;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -76,7 +76,7 @@ public class DownloadTest {
   public static void beforeClass() {
     IdlingPolicies.setMasterPolicyTimeout(180, TimeUnit.SECONDS);
     IdlingPolicies.setIdlingResourceTimeout(180, TimeUnit.SECONDS);
-    Espresso.registerIdlingResources(KiwixIdlingResource.getInstance());
+    IdlingRegistry.getInstance().register(KiwixIdlingResource.getInstance());
   }
 
   @Before
@@ -85,8 +85,8 @@ public class DownloadTest {
 
   @Test
   public void downloadTest() {
-    enterHelp();
-    clickOn(R.string.menu_zim_manager);
+    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
+    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_zim_manager));
 
     clickOn(R.string.local_zims);
 
@@ -104,19 +104,19 @@ public class DownloadTest {
 
     captureAndSaveScreenshot("Before-checking-for-ZimManager-Main-Activity");
     ViewInteraction viewPager2 = onView(
-            allOf(withId(R.id.container),
-                    withParent(allOf(withId(R.id.zim_manager_main_activity),
-                            withParent(withId(android.R.id.content)))),
-                    isDisplayed()));
+        allOf(withId(R.id.container),
+            withParent(allOf(withId(R.id.zim_manager_main_activity),
+                withParent(withId(android.R.id.content)))),
+            isDisplayed()));
     captureAndSaveScreenshot("After-the-check-completed");
 
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     try {
-        onData(withContent("ray_charles")).inAdapterView(withId(R.id.library_list));
+      onData(withContent("ray_charles")).inAdapterView(withId(R.id.library_list));
     } catch (Exception e) {
-        fail("Couldn't find downloaded file 'ray_charles'\n\nOriginal Exception:\n" +
-            e.getLocalizedMessage() + "\n\n" );
+      fail("Couldn't find downloaded file 'ray_charles'\n\nOriginal Exception:\n" +
+          e.getLocalizedMessage() + "\n\n");
     }
 
     deleteZimIfExists("ray_charles", R.id.library_list);
@@ -145,7 +145,7 @@ this functionality in the tests.
 
   @After
   public void finish() {
-    Espresso.unregisterIdlingResources(KiwixIdlingResource.getInstance());
+    IdlingRegistry.getInstance().unregister(KiwixIdlingResource.getInstance());
   }
 
 }

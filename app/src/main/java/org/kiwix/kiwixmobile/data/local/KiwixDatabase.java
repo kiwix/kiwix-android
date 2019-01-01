@@ -27,18 +27,23 @@ import com.yahoo.squidb.data.adapter.SQLiteDatabaseWrapper;
 import com.yahoo.squidb.sql.Table;
 
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
+import org.kiwix.kiwixmobile.data.local.dao.BookDao;
 import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
 import org.kiwix.kiwixmobile.data.local.entity.BookDatabaseEntity;
-import org.kiwix.kiwixmobile.data.local.entity.Bookmarks;
+import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
+import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.data.local.entity.LibraryDatabaseEntity;
 import org.kiwix.kiwixmobile.data.local.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.data.local.entity.RecentSearch;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.utils.UpdateUtils;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -48,8 +53,8 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 @Singleton
 public class KiwixDatabase extends SquidDatabase {
 
-  private static final int VERSION = 14;
-  private Context context;
+  private static final int VERSION = 17;
+  private final Context context;
 
   @Inject
   public KiwixDatabase(Context context) {
@@ -68,69 +73,81 @@ public class KiwixDatabase extends SquidDatabase {
         BookDatabaseEntity.TABLE,
         LibraryDatabaseEntity.TABLE,
         RecentSearch.TABLE,
-        Bookmarks.TABLE,
-        NetworkLanguageDatabaseEntity.TABLE
+        Bookmark.TABLE,
+        NetworkLanguageDatabaseEntity.TABLE,
+        History.TABLE
     };
   }
 
   @Override
   protected boolean onUpgrade(SQLiteDatabaseWrapper db, int oldVersion, int newVersion) {
-    if (newVersion >= 3 && oldVersion < 3) {
-      db.execSQL("DROP TABLE IF EXISTS recents");
-      tryCreateTable(RecentSearch.TABLE);
-    }
-    if (newVersion >= 3 && (oldVersion < 3 || oldVersion == 7 || oldVersion == 6)) {
-      db.execSQL("DROP TABLE IF EXISTS recents");
-      db.execSQL("DROP TABLE IF EXISTS recentsearches");
-      tryCreateTable(RecentSearch.TABLE);
-    }
-    if (newVersion >= 3) {
-      tryCreateTable(RecentSearch.TABLE);
-    }
-    if (newVersion >= 4) {
-      tryCreateTable(Bookmarks.TABLE);
-    }
-    if (newVersion >= 5 && oldVersion < 5) {
-      db.execSQL("DROP TABLE IF EXISTS book");
-      tryCreateTable(BookDatabaseEntity.TABLE);
-    }
-    if (newVersion >= 5) {
-      tryCreateTable(BookDatabaseEntity.TABLE);
-    }
-    if (newVersion >= 6 && oldVersion < 6) {
-      db.execSQL("DROP TABLE IF EXISTS Bookmarks");
-      tryCreateTable(Bookmarks.TABLE);
-      migrateBookmarks();
-    }
-    if (newVersion >= 6) {
-      tryCreateTable(Bookmarks.TABLE);
-    }
-    if (newVersion >= 9) {
-      db.execSQL("DROP TABLE IF EXISTS book");
-      tryCreateTable(BookDatabaseEntity.TABLE);
-    }
-    if (newVersion >= 10) {
-      tryCreateTable(NetworkLanguageDatabaseEntity.TABLE);
-    }
-    if (newVersion >= 11 && oldVersion < 11) {
-      db.execSQL("DROP TABLE IF EXISTS recentSearches");
-      tryCreateTable(RecentSearch.TABLE);
-    }
-    if (newVersion >= 11) {
-      tryCreateTable(RecentSearch.TABLE);
-    }
-    if (newVersion >= 12) {
-      tryAddColumn(BookDatabaseEntity.REMOTE_URL);
-    }
-    if (newVersion >= 13) {
-      tryAddColumn(BookDatabaseEntity.NAME);
-      tryAddColumn(Bookmarks.ZIM_NAME);
-    }
-    if (newVersion >= 14 && oldVersion < 14) {
-      tryDropTable(BookDatabaseEntity.TABLE);
-      tryCreateTable(BookDatabaseEntity.TABLE);
+    switch (oldVersion) {
+      case 1:
+      case 2:
+        db.execSQL("DROP TABLE IF EXISTS recents");
+        db.execSQL("DROP TABLE IF EXISTS recentsearches");
+        tryCreateTable(RecentSearch.TABLE);
+      case 3:
+        tryCreateTable(Bookmark.TABLE);
+      case 4:
+        db.execSQL("DROP TABLE IF EXISTS book");
+        tryCreateTable(BookDatabaseEntity.TABLE);
+      case 5:
+        db.execSQL("DROP TABLE IF EXISTS Bookmarks");
+        tryCreateTable(Bookmark.TABLE);
+        migrateBookmarksVersion6();
+      case 6:
+        db.execSQL("DROP TABLE IF EXISTS recents");
+        db.execSQL("DROP TABLE IF EXISTS recentsearches");
+        tryCreateTable(RecentSearch.TABLE);
+      case 7:
+        db.execSQL("DROP TABLE IF EXISTS recents");
+        db.execSQL("DROP TABLE IF EXISTS recentsearches");
+        tryCreateTable(RecentSearch.TABLE);
+      case 8:
+        db.execSQL("DROP TABLE IF EXISTS book");
+        tryCreateTable(BookDatabaseEntity.TABLE);
+      case 9:
+        tryCreateTable(NetworkLanguageDatabaseEntity.TABLE);
+      case 10:
+        db.execSQL("DROP TABLE IF EXISTS recentSearches");
+        tryCreateTable(RecentSearch.TABLE);
+      case 11:
+        tryAddColumn(BookDatabaseEntity.REMOTE_URL);
+      case 12:
+        tryAddColumn(BookDatabaseEntity.NAME);
+        tryAddColumn(Bookmark.ZIM_NAME);
+      case 13:
+        tryDropTable(BookDatabaseEntity.TABLE);
+        tryCreateTable(BookDatabaseEntity.TABLE);
+      case 14:
+        tryCreateTable(History.TABLE);
+      case 15:
+        tryAddColumn(Bookmark.ZIM_FILE_PATH);
+        tryAddColumn(Bookmark.FAVICON);
+        migrateBookmarksVersion16();
+      case 16:
+        new BookmarksDao(this).processBookmark(UpdateUtils::reformatProviderUrl);
     }
     return true;
+  }
+
+  private void migrateBookmarksVersion16() {
+    BookmarksDao bookmarksDao = new BookmarksDao(this);
+    BookDao bookDao = new BookDao(this);
+    List<Bookmark> bookmarks = bookmarksDao.getBookmarks(false);
+    List<LibraryNetworkEntity.Book> books = bookDao.getBooks();
+    for (Bookmark bookmark : bookmarks) {
+      if (bookmark.getZimId() != null) {
+        for (LibraryNetworkEntity.Book book : books) {
+          if (bookmark.getZimId().equals(book.getId())) {
+            bookmark.setZimFilePath(book.getUrl()).setFavicon(book.getFavicon());
+            bookmarksDao.saveBookmark(bookmark);
+            break;
+          }
+        }
+      }
+    }
   }
 
   @Override
@@ -138,9 +155,7 @@ public class KiwixDatabase extends SquidDatabase {
     return VERSION;
   }
 
-  public void migrateBookmarks() {
-    BookmarksDao bookmarksDao = new BookmarksDao(this);
-
+  public void migrateBookmarksVersion6() {
     String[] ids = context.fileList();
     for (String id : ids) {
       if (id.length() == 40 && id.substring(id.length() - 4).equals(".txt")) {
@@ -151,10 +166,12 @@ public class KiwixDatabase extends SquidDatabase {
           if (stream != null) {
             BufferedReader read = new BufferedReader(new InputStreamReader(stream));
             while ((in = read.readLine()) != null) {
-              bookmarksDao.saveBookmark(null, in, idName, idName);
+              Bookmark bookmark = new Bookmark();
+              bookmark.setBookmarkUrl("null").setBookmarkTitle(in).setZimId(idName).setZimName(idName);
+              persist(bookmark);
             }
             context.deleteFile(id);
-            Log.d(TAG_KIWIX, "Switched to bookmarkfile " + ZimContentProvider.getId());
+            Log.d(TAG_KIWIX, "Switched to bookmark file " + ZimContentProvider.getId());
           }
         } catch (FileNotFoundException e) {
           Log.e(TAG_KIWIX, "Bookmark File ( " + id + " ) not found", e);

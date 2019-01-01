@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
   <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
     <item name="colorPrimary">@color/primary</item>
     <item name="colorPrimaryDark">@color/primary_dark</item>
@@ -9,6 +10,7 @@
     <item name="android:textCursorDrawable">@null</item>
     <item name="windowNoTitle">true</item>
     <item name="windowActionBar">false</item>
+    <item name="actionModeBackground">@color/actionModeBackground</item>
     <item name="progressBackgroundColor">@color/primary_dark</item>
     <item name="listBackground">@drawable/list_bg</item>
     <item name="android:windowContentOverlay">@null</item>
@@ -26,5 +28,5 @@
     <item name="android:textColorTertiary">@color/primary</item>
     <item name="colorControlNormal">@color/accent</item>
     <item name="android:windowTranslucentStatus">true</item>
-    </style>
+  </style>
 </resources>

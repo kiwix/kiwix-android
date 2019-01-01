@@ -33,7 +33,7 @@ dependencies {
 
   // Get kiwixlib online if it is not populated locally
   if (file("../kiwixlib/src/main").list().length == 1) {
-    implementation 'org.kiwix.kiwixlib:kiwixlib:1.0.8'
+    implementation 'org.kiwix.kiwixlib:kiwixlib:1.0.11'
   } else {
     implementation project(':kiwixlib')
     archs = file("../kiwixlib/src/main/jniLibs").list()
@@ -49,7 +49,6 @@ dependencies {
   implementation "com.android.support:design:$supportLibraryVersion"
   implementation "com.android.support:cardview-v7:$supportLibraryVersion"
   implementation "com.android.support:multidex:$multidexVersion"
-
   implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
 
   androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
@@ -60,7 +59,7 @@ dependencies {
 
   androidTestImplementation "com.android.support.test.espresso:espresso-web:$espressoVersion"
   androidTestImplementation "com.android.support.test.espresso:espresso-intents:$espressoVersion"
-  androidTestImplementation "com.android.support.test.espresso:espresso-idling-resource:$espressoVersion"
+  implementation "com.android.support.test.espresso:espresso-idling-resource:$espressoVersion"
   androidTestImplementation("com.android.support.test.espresso:espresso-contrib:$espressoVersion") {
     exclude group: 'com.android.support', module: 'support-v4'
     exclude group: 'com.android.support', module: 'appcompat-v7'
@@ -68,7 +67,7 @@ dependencies {
     exclude group: 'com.android.support', module: 'recyclerview-v7'
   }
 
-  androidTestImplementation('com.schibsted.spain:barista:2.4.0') {
+  androidTestImplementation("com.schibsted.spain:barista:$baristaVersion") {
     exclude group: 'com.android.support'
   }
 
@@ -101,7 +100,7 @@ dependencies {
   implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
   implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
   implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
-  implementation('com.squareup.retrofit2:converter-simplexml:2.1.0') {
+  implementation("com.squareup.retrofit2:converter-simplexml:$retrofitVersion") {
     exclude group: 'xpp3', module: 'xpp3'
     exclude group: 'stax', module: 'stax-api'
     exclude group: 'stax', module: 'stax'
@@ -117,17 +116,17 @@ dependencies {
   implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 
   // JUnit
-  testImplementation 'junit:junit:4.12'
-  androidTestImplementation 'junit:junit:4.12'
+  testImplementation "junit:junit:$jUnitVersion"
+  androidTestImplementation "junit:junit:$jUnitVersion"
 
   // Mockito
-  testImplementation "org.mockito:mockito-core:2.8.9"
-  androidTestImplementation "org.mockito:mockito-android:2.7.22"
+  testImplementation "org.mockito:mockito-core:$mockitoVersion"
+  androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
 
   // PowerMockito
-  testImplementation 'org.powermock:powermock:1.6.5'
-  testImplementation 'org.powermock:powermock-module-junit4:1.7.3'
-  testImplementation 'org.powermock:powermock-api-mockito2:1.7.3'
+  testImplementation "org.powermock:powermock:$powerMockVersion"
+  testImplementation "org.powermock:powermock-module-junit4:$powerMockJUnitVersion"
+  testImplementation "org.powermock:powermock-api-mockito2:$powerMockJUnitVersion"
 
   // Leak canary
   implementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
@@ -165,11 +164,11 @@ if (custom.listFiles()) {
 }
 
 android {
-  compileSdkVersion 27
+  compileSdkVersion 28
 
   defaultConfig {
     minSdkVersion 14
-    targetSdkVersion 27
+    targetSdkVersion 28
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     // See https://github.com/linkedin/dexmaker/issues/65 for why we need the following line.
     testInstrumentationRunnerArguments.notClass = 'com.android.dex.DexIndexOverflowException'
@@ -180,6 +179,8 @@ android {
   aaptOptions {
     cruncherEnabled true
   }
+
+  testBuildType "coverage"
 
   lintOptions {
     // Treat lint seriously
@@ -258,7 +259,7 @@ android {
       if (project.hasProperty('version_name')) {
         versionName project.property('version_name')
       } else {
-        versionName "2.3"
+        versionName "2.4"
       }
     }
     // Custom apps built from a json file, zim file and icon set
