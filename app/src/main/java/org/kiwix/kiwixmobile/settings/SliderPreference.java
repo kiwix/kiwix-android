@@ -33,7 +33,7 @@ public class SliderPreference extends DialogPreference {
 
   protected int mSeekBarValue;
 
-  protected int mInitialSeekBarValue;
+  protected int initialSeekBarValue;
 
   protected CharSequence[] mSummaries;
 
@@ -129,7 +129,7 @@ public class SliderPreference extends DialogPreference {
     SeekBar seekbar = view.findViewById(R.id.slider_preference_seekbar);
     seekbar.setMax(SEEKBAR_MAX);
     seekbar.setProgress(mSeekBarValue);
-    mInitialSeekBarValue = mSeekBarValue;
+    initialSeekBarValue = mSeekBarValue;
     seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
       @Override
@@ -156,7 +156,7 @@ public class SliderPreference extends DialogPreference {
     if (positiveResult && callChangeListener(mSeekBarValue)) {
       setValue(mSeekBarValue);
     } else {
-      mSeekBarValue = mInitialSeekBarValue;
+      mSeekBarValue = initialSeekBarValue;
     }
     super.onDialogClosed(positiveResult);
   }
