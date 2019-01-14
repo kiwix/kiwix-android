@@ -150,8 +150,12 @@ public class SearchActivity extends BaseActivity
       @Override
       public boolean onQueryTextChange(String s) {
         if (s.equals("")) {
+          View item = findViewById(R.id.menu_searchintext);
+          item.setVisibility(View.VISIBLE);
           activateDefaultAdapter();
         } else {
+          View item = findViewById(R.id.menu_searchintext);
+          item.setVisibility(View.GONE);
           activateAutoAdapter();
           autoAdapter.getFilter().filter(s.toLowerCase());
         }
