@@ -167,6 +167,10 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
         return true;
 
       case R.id.menu_history_clear:
+        if(fullHistory.size() == 0){
+          Toast.makeText(this, R.string.nothing_to_clear_toast, Toast.LENGTH_SHORT).show();
+          break;
+        }
         presenter.deleteHistory(new ArrayList<>(fullHistory));
         fullHistory.clear();
         historyList.clear();
