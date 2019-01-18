@@ -32,8 +32,6 @@ import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.common.collect.ImmutableList;
-
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.DataSource;
@@ -66,7 +64,7 @@ public class LibraryAdapter extends BaseAdapter {
   private static final int LIST_ITEM_TYPE_BOOK = 0;
   private static final int LIST_ITEM_TYPE_DIVIDER = 1;
 
-  private ImmutableList<Book> allBooks;
+  private List<Book> allBooks;
   private List<ListItem> listItems = new ArrayList<>();
   private final Context context;
   public HashMap<String, Integer> languageCounts = new HashMap<>();
@@ -90,7 +88,7 @@ public class LibraryAdapter extends BaseAdapter {
   }
 
   public void setAllBooks(List<Book> books) {
-    allBooks = ImmutableList.copyOf(books);
+    allBooks = Collections.unmodifiableList(books);
     updateLanguageCounts();
     updateLanguages();
   }
