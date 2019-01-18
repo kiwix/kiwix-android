@@ -1,6 +1,11 @@
+/**
+ * Adapter class for book-items list displayed in the home page webview
+ * Use LibraryAdapter for list items in the downloads library
+ * */
 package org.kiwix.kiwixmobile.main;
 
 import android.content.Context;
+import android.graphics.ColorMatrixColorFilter;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,9 +15,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -28,6 +35,7 @@ public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
   private static int TYPE_ITEM = 1;
   private List<LibraryNetworkEntity.Book> books;
   private OnItemClickListener itemClickListener;
+  private final SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(KiwixApplication.getInstance());
 
   interface OnItemClickListener {
     void openFile(String url);
@@ -59,9 +67,13 @@ public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
       item.date.setText(book.getDate());
       item.description.setText(book.getDescription());
       item.size.setText(createGbString(book.getSize()));
-      item.articleCount.setText(getArticleCountString(item.articleCount.getContext(),
-          book.getArticleCount()));
+      item.articleCount.setText(getArticleCountString(item.articleCount.getContext(), book.getArticleCount()));
       item.icon.setImageBitmap(LibraryAdapter.createBitmapFromEncodedString(book.getFavicon(), item.icon.getContext()));
+
+      if(sharedPreferenceUtil.nightMode()) {  ////Fix Bug #905: Launch activity (night-mode) inverts colour of icons
+        item.icon.getDrawable().mutate().setColorFilter(new ColorMatrixColorFilter(KiwixWebView.getNightModeColors()));
+      }
+
       item.itemView.setOnClickListener(v -> itemClickListener.openFile(book.file.getPath()));
       if (book.file.getPath().contains("nopic")) {
         item.pictureLabel.setVisibility(View.GONE);
