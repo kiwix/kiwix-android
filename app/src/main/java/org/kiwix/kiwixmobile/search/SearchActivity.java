@@ -23,11 +23,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -50,6 +45,12 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_IS_WIDGET_VOICE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH_TEXT;
@@ -62,15 +63,14 @@ public class SearchActivity extends BaseActivity
   public static final String EXTRA_SEARCH_IN_TEXT = "bool_searchintext";
 
   private final int REQ_CODE_SPEECH_INPUT = 100;
+  @Inject
+  SearchPresenter searchPresenter;
   private ListView listView;
   private ArrayAdapter<String> currentAdapter;
   private AutoCompleteAdapter autoAdapter;
   private ArrayAdapter<String> defaultAdapter;
   private SearchView searchView;
   private String searchText;
-
-  @Inject
-  SearchPresenter searchPresenter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +126,7 @@ public class SearchActivity extends BaseActivity
       startActivity(intent);
     } else {
       super.finish();
-      overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+      overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
   }
 
@@ -193,13 +193,13 @@ public class SearchActivity extends BaseActivity
     switch (item.getItemId()) {
       case R.id.menu_searchintext:
         String queryText = "";
-        if(searchView != null) {
+        if (searchView != null) {
           queryText = searchView.getQuery().toString();
         }
         Intent resultIntent = new Intent(this, MainActivity.class);
         resultIntent.putExtra(EXTRA_SEARCH_IN_TEXT, true);
         resultIntent.putExtra(TAG_FILE_SEARCHED, queryText);
-        if(shouldStartNewActivity() != 1) {
+        if (shouldStartNewActivity() != 1) {
           setResult(RESULT_OK, resultIntent);
           finish();
         } else {
@@ -233,11 +233,12 @@ public class SearchActivity extends BaseActivity
 
   /**
    * Checks if the ActivityManager is set to aggressively reclaim Activities.
+   *
    * @return 1 if the above setting is true.
    */
   private int shouldStartNewActivity() {
     int value;
-    if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
       //deprecated in API 17
       value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
     } else {
@@ -288,7 +289,7 @@ public class SearchActivity extends BaseActivity
 
         if (convertView == null) {
           row = LayoutInflater.from(parent.getContext())
-                  .inflate(android.R.layout.simple_list_item_1, null);
+              .inflate(android.R.layout.simple_list_item_1, null);
         } else {
           row = convertView;
         }

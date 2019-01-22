@@ -18,17 +18,23 @@
 
 package org.kiwix.kiwixmobile.utils;
 
-import android.support.test.espresso.NoMatchingViewException;
-import android.support.test.espresso.ViewAssertion;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
 import org.hamcrest.Matcher;
 
-import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.espresso.NoMatchingViewException;
+import androidx.test.espresso.ViewAssertion;
+
+import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 
 public class RecyclerViewItemCountAssertion implements ViewAssertion {
   private final Matcher<Integer> matcher;
+
+  private RecyclerViewItemCountAssertion(Matcher<Integer> matcher) {
+    this.matcher = matcher;
+  }
 
   public static RecyclerViewItemCountAssertion withItemCount(int expectedCount) {
     return withItemCount(is(expectedCount));
@@ -36,10 +42,6 @@ public class RecyclerViewItemCountAssertion implements ViewAssertion {
 
   public static RecyclerViewItemCountAssertion withItemCount(Matcher<Integer> matcher) {
     return new RecyclerViewItemCountAssertion(matcher);
-  }
-
-  private RecyclerViewItemCountAssertion(Matcher<Integer> matcher) {
-    this.matcher = matcher;
   }
 
   @Override

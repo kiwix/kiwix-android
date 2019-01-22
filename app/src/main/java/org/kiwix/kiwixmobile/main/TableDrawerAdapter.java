@@ -20,8 +20,6 @@ package org.kiwix.kiwixmobile.main;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Typeface;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +31,8 @@ import org.kiwix.kiwixmobile.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -50,7 +50,8 @@ public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     sections = new ArrayList<>();
   }
 
-  @Override public int getItemViewType(int position) {
+  @Override
+  public int getItemViewType(int position) {
     if (position == 0) return 0;
     return 1;
   }
@@ -127,7 +128,7 @@ public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     return sections.size() + 1;
   }
 
-  public void setTableClickListener(TableClickListener listener) {
+  void setTableClickListener(TableClickListener listener) {
     this.listener = listener;
   }
 
@@ -135,7 +136,7 @@ public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     this.title = title;
   }
 
-  public void setSections(List<DocumentSection> sections) {
+  void setSections(List<DocumentSection> sections) {
     this.selectedPosition = 0;
     this.sections = sections;
   }
@@ -147,7 +148,8 @@ public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder {
-    public @BindView(R.id.titleText) TextView title;
+    public @BindView(R.id.titleText)
+    TextView title;
 
     public ViewHolder(View v) {
       super(v);
@@ -170,8 +172,8 @@ public class TableDrawerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
   }
 
   public static class DocumentSection {
-    public int level;
     public String title;
     public String id;
+    int level;
   }
 }

@@ -1,12 +1,13 @@
 package org.kiwix.kiwixmobile.testutils;
 
-import android.support.test.espresso.UiController;
-import android.support.test.espresso.ViewAction;
 import android.view.View;
 import android.widget.Checkable;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
+
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
 
 import static org.hamcrest.CoreMatchers.isA;
 

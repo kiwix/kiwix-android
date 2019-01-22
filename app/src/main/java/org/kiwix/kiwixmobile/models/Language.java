@@ -2,9 +2,10 @@ package org.kiwix.kiwixmobile.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
 
 public class Language implements Parcelable, Comparable<Language> {
 

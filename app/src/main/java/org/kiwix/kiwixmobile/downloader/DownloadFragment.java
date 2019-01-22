@@ -25,10 +25,6 @@ import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +35,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
@@ -58,22 +56,47 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class DownloadFragment extends BaseFragment {
 
   public static LinkedHashMap<Integer, LibraryNetworkEntity.Book> mDownloads = new LinkedHashMap<>();
   public static LinkedHashMap<Integer, String> mDownloadFiles = new LinkedHashMap<>();
+  public static DownloadAdapter downloadAdapter;
   public RelativeLayout relLayout;
   public ListView listView;
-  public static DownloadAdapter downloadAdapter;
-  private ZimManageActivity zimManageActivity;
   CoordinatorLayout mainLayout;
+  @Inject
+  SharedPreferenceUtil sharedPreferenceUtil;
+  private ZimManageActivity zimManageActivity;
   private Activity faActivity;
   private boolean hasArtificiallyPaused;
 
-  @Inject
-  SharedPreferenceUtil sharedPreferenceUtil;
+  public static String toHumanReadableTime(int seconds) {
+    final double MINUTES = 60;
+    final double HOURS = 60 * MINUTES;
+    final double DAYS = 24 * HOURS;
+
+    if (Math.round(seconds / DAYS) > 0)
+      return String.format(Locale.getDefault(), "%d %s %s", Math.round(seconds / DAYS),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_day),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_left));
+    if (Math.round(seconds / HOURS) > 0)
+      return String.format(Locale.getDefault(), "%d %s %s", Math.round(seconds / HOURS),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_hour),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_left));
+    if (Math.round(seconds / MINUTES) > 0)
+      return String.format(Locale.getDefault(), "%d %s %s", Math.round(seconds / MINUTES),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_minute),
+          KiwixApplication.getInstance().getResources().getString(R.string.time_left));
+    return String.format(Locale.getDefault(), "%d %s %s", seconds,
+        KiwixApplication.getInstance().getResources().getString(R.string.time_second),
+        KiwixApplication.getInstance().getResources().getString(R.string.time_left));
+  }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -116,37 +139,33 @@ public class DownloadFragment extends BaseFragment {
 
   public void showNoWiFiWarning(Context context, Runnable yesAction) {
     new AlertDialog.Builder(context)
-            .setTitle(R.string.wifi_only_title)
-            .setMessage(R.string.wifi_only_msg)
-            .setPositiveButton(R.string.yes, (dialog, i) -> {
-                      sharedPreferenceUtil.putPrefWifiOnly(false);
-              MainActivity.wifiOnly = false;
-              yesAction.run();
-            })
-            .setNegativeButton(R.string.no, (dialog, i) -> {})
-            .show();
+        .setTitle(R.string.wifi_only_title)
+        .setMessage(R.string.wifi_only_msg)
+        .setPositiveButton(R.string.yes, (dialog, i) -> {
+          sharedPreferenceUtil.putPrefWifiOnly(false);
+          MainActivity.wifiOnly = false;
+          yesAction.run();
+        })
+        .setNegativeButton(R.string.no, (dialog, i) -> {
+        })
+        .show();
   }
 
-  public static String toHumanReadableTime(int seconds) {
-    final double MINUTES = 60;
-    final double HOURS = 60 * MINUTES;
-    final double DAYS = 24 * HOURS;
+  public void addDownload(int position, LibraryNetworkEntity.Book book, String fileName) {
+    mDownloads.put(position, book);
+    mDownloadFiles.put(position, fileName);
+    downloadAdapter.notifyDataSetChanged();
+    updateNoDownloads();
+  }
 
-    if (Math.round(seconds / DAYS) > 0)
-      return String.format(Locale.getDefault(), "%d %s %s", Math.round(seconds / DAYS),
-          KiwixApplication.getInstance().getResources().getString(R.string.time_day),
-          KiwixApplication.getInstance().getResources().getString(R.string.time_left));
-    if (Math.round(seconds / HOURS) > 0)
-      return String.format(Locale.getDefault(), "%d %s %s", Math.round(seconds / HOURS),
-          KiwixApplication.getInstance().getResources().getString(R.string.time_hour),
-          KiwixApplication.getInstance().getResources().getString(R.string.time_left));
-    if (Math.round(seconds / MINUTES) > 0)
-      return String.format(Locale.getDefault(), "%d %s %s", Math.round(seconds / MINUTES),
-          KiwixApplication.getInstance().getResources().getString(R.string.time_minute),
-          KiwixApplication.getInstance().getResources().getString(R.string.time_left));
-    return String.format(Locale.getDefault(), "%d %s %s", seconds,
-        KiwixApplication.getInstance().getResources().getString(R.string.time_second),
-        KiwixApplication.getInstance().getResources().getString(R.string.time_left));
+  public Bitmap StringToBitMap(String encodedString) {
+    try {
+      byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+      return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+    } catch (Exception e) {
+      e.getMessage();
+      return null;
+    }
   }
 
   public class DownloadAdapter extends BaseAdapter {
@@ -333,23 +352,6 @@ public class DownloadFragment extends BaseFragment {
       if (dataSetObserver != null) {
         unregisterDataSetObserver(dataSetObserver);
       }
-    }
-  }
-
-  public void addDownload(int position, LibraryNetworkEntity.Book book, String fileName) {
-    mDownloads.put(position, book);
-    mDownloadFiles.put(position, fileName);
-    downloadAdapter.notifyDataSetChanged();
-    updateNoDownloads();
-  }
-
-  public Bitmap StringToBitMap(String encodedString) {
-    try {
-      byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-      return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-    } catch (Exception e) {
-      e.getMessage();
-      return null;
     }
   }
 

@@ -19,9 +19,6 @@
 package org.kiwix.kiwixmobile.main;
 
 import android.Manifest;
-import android.support.test.filters.LargeTest;
-import android.support.test.rule.GrantPermissionRule;
-import android.support.test.runner.AndroidJUnit4;
 
 import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
@@ -31,6 +28,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
+
+import androidx.test.filters.LargeTest;
+import androidx.test.rule.GrantPermissionRule;
+import androidx.test.runner.AndroidJUnit4;
 
 import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;

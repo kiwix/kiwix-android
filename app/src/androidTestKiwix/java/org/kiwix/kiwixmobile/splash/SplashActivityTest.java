@@ -22,10 +22,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.test.espresso.intent.Intents;
-import android.support.test.filters.LargeTest;
-import android.support.test.rule.GrantPermissionRule;
-import android.support.test.runner.AndroidJUnit4;
 
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import com.schibsted.spain.barista.rule.BaristaRule;
@@ -38,9 +34,14 @@ import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.intro.IntroActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
 
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+import androidx.test.espresso.intent.Intents;
+import androidx.test.filters.LargeTest;
+import androidx.test.rule.GrantPermissionRule;
+import androidx.test.runner.AndroidJUnit4;
+
+import static androidx.test.InstrumentationRegistry.getInstrumentation;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static org.junit.Assert.assertEquals;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_SHOW_INTRO;
