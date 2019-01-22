@@ -1,15 +1,18 @@
 package org.kiwix.kiwixmobile.utils.files;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.Random;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Random;
+
+import androidx.test.InstrumentationRegistry;
 
 import static org.junit.Assert.assertEquals;
 
@@ -59,7 +62,7 @@ public class FileUtilsInstrumentationTest {
 
     Book book = new Book();
     book.file = new File(fileName + "bg");
-    
+
     List<File> files = FileUtils.getAllZimParts(book);
 
     // Testing the data returned
@@ -138,7 +141,7 @@ public class FileUtilsInstrumentationTest {
 
   @After
   public void RemoveTestDirectory() {
-    for(File child : testDir.listFiles()) {
+    for (File child : testDir.listFiles()) {
       child.delete();
     }
     testDir.delete();

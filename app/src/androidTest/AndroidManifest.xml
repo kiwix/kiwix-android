@@ -3,5 +3,5 @@
   xmlns:tools="http://schemas.android.com/tools"
   package="your.package.name">
 
-  <uses-sdk tools:overrideLibrary="android.support.test.uiautomator.v18"/>
+  <uses-sdk tools:overrideLibrary="android_libs.ub_uiautomator"/>
 </manifest>

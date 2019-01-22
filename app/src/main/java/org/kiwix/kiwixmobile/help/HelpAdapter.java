@@ -2,8 +2,6 @@ package org.kiwix.kiwixmobile.help;
 
 import android.animation.ObjectAnimator;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +12,8 @@ import org.kiwix.kiwixmobile.R;
 
 import java.util.HashMap;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -27,8 +27,8 @@ class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.Item> {
   private final boolean nightMode;
 
   HelpAdapter(HashMap<String, String> titleDescriptionMap, boolean nightMode) {
-    this.titles = titleDescriptionMap.keySet().toArray(new String[titleDescriptionMap.size()]);
-    this.descriptions = titleDescriptionMap.values().toArray(new String[titleDescriptionMap.size()]);
+    this.titles = titleDescriptionMap.keySet().toArray(new String[0]);
+    this.descriptions = titleDescriptionMap.values().toArray(new String[0]);
     this.nightMode = nightMode;
   }
 

@@ -3,7 +3,6 @@ package org.kiwix.kiwixmobile.intro;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,21 +18,21 @@ import java.util.TimerTask;
 
 import javax.inject.Inject;
 
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.OnClick;
 
 public class IntroActivity extends BaseActivity implements IntroContract.View {
 
+  private final Handler handler = new Handler();
+  private final Timer timer = new Timer();
   @BindView(R.id.view_pager)
   ViewPager viewPager;
   @BindView(R.id.tab_indicator)
   InkPageIndicator tabIndicator;
   @Inject
   IntroContract.Presenter presenter;
-
   private ImageView airPlane;
-  private final Handler handler = new Handler();
-  private final Timer timer = new Timer();
   private int currentPage = 0;
   private final ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
     @Override

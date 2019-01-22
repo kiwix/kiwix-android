@@ -17,10 +17,6 @@
  * MA 02110-1301, USA.
  */
 
-/**
- * Fragment for list of downloaded ZIM files
- */
-
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view;
 
 import android.Manifest;
@@ -30,11 +26,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -77,15 +68,22 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_STORAGE_PERMISSION;
 import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
+/**
+ * Fragment for list of downloaded ZIM files
+ */
 public class ZimFileSelectFragment extends BaseFragment
     implements OnItemClickListener, AdapterView.OnItemLongClickListener, ZimFileSelectViewCallback {
 
-  public RelativeLayout llLayout;
-  public SwipeRefreshLayout swipeRefreshLayout;
   @Inject
   ZimFileSelectPresenter presenter;
   @Inject
@@ -94,6 +92,7 @@ public class ZimFileSelectFragment extends BaseFragment
   SharedPreferenceUtil sharedPreferenceUtil;
   @Inject
   BookDao bookDao;
+  private SwipeRefreshLayout swipeRefreshLayout;
   private ZimManageActivity zimManageActivity;
   private RescanDataAdapter mRescanAdapter;
   private ArrayList<LibraryNetworkEntity.Book> mFiles;
@@ -107,7 +106,7 @@ public class ZimFileSelectFragment extends BaseFragment
     zimManageActivity = (ZimManageActivity) super.getActivity();
     presenter.attachView(this);
     // Replace LinearLayout by the type of the root element of the layout you're trying to load
-    llLayout = (RelativeLayout) inflater.inflate(R.layout.zim_list, container, false);
+    RelativeLayout llLayout = (RelativeLayout) inflater.inflate(R.layout.zim_list, container, false);
     new LanguageUtils(zimManageActivity).changeFont(zimManageActivity.getLayoutInflater(), sharedPreferenceUtil);
 
     mFileMessage = llLayout.findViewById(R.id.file_management_no_files);
@@ -132,16 +131,15 @@ public class ZimFileSelectFragment extends BaseFragment
     mZimFileList.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
 
       // Holds positions corresponding to every selected list item in the ListView
-      private ArrayList<Integer> selectedViewPosition = new ArrayList<Integer>();
+      private ArrayList<Integer> selectedViewPosition = new ArrayList<>();
 
       @Override
       public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
 
-        if(checked) { // If the item was selected
+        if (checked) { // If the item was selected
           selectedViewPosition.add(position);
           mode.setTitle("" + selectedViewPosition.size()); // Update title of the CAB
-        }
-        else {  // If the item was deselected
+        } else {  // If the item was deselected
           selectedViewPosition.remove(Integer.valueOf(position));
           mode.setTitle("" + selectedViewPosition.size()); // Update title of the CAB
         }
@@ -165,12 +163,12 @@ public class ZimFileSelectFragment extends BaseFragment
       @Override
       public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 
-        switch(item.getItemId()) {  // Determine the action item clicked on in the CAB, and respond accordingly
+        switch (item.getItemId()) {  // Determine the action item clicked on in the CAB, and respond accordingly
 
           // Initiate file deletion functionality for each selected list item (file)
-          case R.id.zim_file_delete_item :
+          case R.id.zim_file_delete_item:
 
-            for(int i = 0; i < selectedViewPosition.size(); i++)
+            for (int i = 0; i < selectedViewPosition.size(); i++)
               deleteSpecificZimDialog(selectedViewPosition.get(i)); // Individually confirm & initiate deletion for each selected file
 
             mode.finish(); // Action performed, so close CAB
@@ -178,16 +176,16 @@ public class ZimFileSelectFragment extends BaseFragment
 
 
           // Initiate file sharing functionality for each selected list item (file)
-          case R.id.zim_file_share_item :
+          case R.id.zim_file_share_item:
 
             // Create an implicit intent for sharing multiple selected files
             Intent selectedFileShareIntent = new Intent();
             selectedFileShareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
             selectedFileShareIntent.setType("application/octet-stream");  // ZIM files are binary data without an Android-predefined subtype
 
-            ArrayList<Uri> selectedFileContentURIs = new ArrayList<Uri>(); // Store Content URIs for all selected files being shared
+            ArrayList<Uri> selectedFileContentURIs = new ArrayList<>(); // Store Content URIs for all selected files being shared
 
-            for(int i = 0; i < selectedViewPosition.size(); i++) {
+            for (int i = 0; i < selectedViewPosition.size(); i++) {
 
               LibraryNetworkEntity.Book data = (LibraryNetworkEntity.Book) mZimFileList.getItemAtPosition(selectedViewPosition.get(i));
               String shareFilePath = data.file.getPath(); //Returns path to file in device storage
@@ -199,35 +197,35 @@ public class ZimFileSelectFragment extends BaseFragment
                * FileProvider instead offers 'content://' URIs for sharing files, which offer temporary
                * access permissions to the file being shared (to the intent receiving application), which
                * is fundamentally safer.
-                */
+               */
 
               File shareFile = new File(shareFilePath);
               Uri shareContentUri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".fileprovider", shareFile);
 
-              if(shareContentUri != null)
+              if (shareContentUri != null)
                 selectedFileContentURIs.add(shareContentUri);  // Populate with the selected file content URIs
             }
 
             selectedFileShareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, selectedFileContentURIs); // Intent Extra for storing the array list of selected file content URIs
 
-            if(selectedFileContentURIs != null) {  // Grant temporary access permission to the intent receiver for the content URIs
+            if (selectedFileContentURIs != null) {  // Grant temporary access permission to the intent receiver for the content URIs
               selectedFileShareIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             }
 
             /**
              * Since a different app may be used for sharing everytime (E-mail, Cloud Upload, Wifi Sharing, etc.),
              * so force an app chooser dialog every time some selected files are to be shared.
-              */
+             */
             Intent shareChooserIntent = Intent.createChooser(selectedFileShareIntent, getResources().getString(R.string.selected_file_cab_app_chooser_title));
 
-            if(shareChooserIntent.resolveActivity(getActivity().getPackageManager()) != null)
+            if (shareChooserIntent.resolveActivity(getActivity().getPackageManager()) != null)
               startActivity(shareChooserIntent);  // Open the app chooser dialog
 
             mode.finish(); // Action performed, so close CAB
             return true;
 
 
-          default :
+          default:
             return false;
 
         }
@@ -268,7 +266,7 @@ public class ZimFileSelectFragment extends BaseFragment
     checkPermissions();
   }
 
-  public void refreshFragment() {
+  private void refreshFragment() {
     if (mZimFileList == null) {
       swipeRefreshLayout.setRefreshing(false);
       return;
@@ -289,7 +287,7 @@ public class ZimFileSelectFragment extends BaseFragment
     }
   }
 
-  public void checkPermissions() {
+  private void checkPermissions() {
     if (ContextCompat.checkSelfPermission(zimManageActivity,
         Manifest.permission.WRITE_EXTERNAL_STORAGE)
         != PackageManager.PERMISSION_GRANTED && Build.VERSION.SDK_INT > 18) {
@@ -302,7 +300,7 @@ public class ZimFileSelectFragment extends BaseFragment
     }
   }
 
-  public void getFiles() {
+  private void getFiles() {
     if (swipeRefreshLayout.isRefreshing() && !mHasRefresh)
       return;
 
@@ -398,7 +396,7 @@ public class ZimFileSelectFragment extends BaseFragment
     return false;
   }
 
-  public void deleteSpecificZimDialog(int position) {
+  private void deleteSpecificZimDialog(int position) {
     new AlertDialog.Builder(zimManageActivity, dialogStyle())
         .setMessage(mFiles.get(position).getTitle() + ": " + getString(R.string.delete_specific_zim))
         .setPositiveButton(getResources().getString(R.string.delete), (dialog, which) -> {
@@ -415,7 +413,7 @@ public class ZimFileSelectFragment extends BaseFragment
         .show();
   }
 
-  public boolean deleteSpecificZimFile(int position) {
+  private boolean deleteSpecificZimFile(int position) {
     File file = mFiles.get(position).file;
     FileUtils.deleteZimFile(file.getPath());
     if (file.exists()) {
@@ -431,7 +429,7 @@ public class ZimFileSelectFragment extends BaseFragment
     return true;
   }
 
-  public void checkEmpty() {
+  private void checkEmpty() {
     if (mZimFileList.getCount() == 0) {
       mFileMessage.setVisibility(View.VISIBLE);
     } else

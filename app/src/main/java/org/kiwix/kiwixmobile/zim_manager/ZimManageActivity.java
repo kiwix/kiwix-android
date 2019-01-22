@@ -22,18 +22,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.tabs.TabLayout;
 
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
@@ -45,6 +40,15 @@ import java.io.File;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
 public class ZimManageActivity extends BaseActivity implements ZimManageViewCallback {
@@ -54,12 +58,12 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
   private static final String GET_CONTENT = "GET_CONTENT";
   static String KIWIX_TAG = "kiwix";
   /**
-   * The {@link android.support.v4.view.PagerAdapter} that will provide
+   * The {@link PagerAdapter} that will provide
    * fragments for each of the sections. We use a
    * {@link FragmentPagerAdapter} derivative, which will keep every
    * loaded fragment in memory. If this becomes too memory intensive, it
    * may be best to switch to a
-   * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+   * {@link FragmentStatePagerAdapter}.
    */
   public SectionsPagerAdapter mSectionsPagerAdapter;
   public Toolbar toolbar;
