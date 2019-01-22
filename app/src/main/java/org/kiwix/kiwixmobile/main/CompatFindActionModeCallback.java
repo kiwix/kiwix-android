@@ -37,6 +37,8 @@ import androidx.appcompat.view.ActionMode;
 import java.lang.reflect.Method;
 import org.kiwix.kiwixmobile.R;
 
+import androidx.appcompat.view.ActionMode;
+
 public class CompatFindActionModeCallback
     implements ActionMode.Callback, TextWatcher, View.OnClickListener {
 

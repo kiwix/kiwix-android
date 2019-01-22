@@ -7,6 +7,9 @@ import androidx.test.espresso.ViewAction;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
+
 import static org.hamcrest.CoreMatchers.isA;
 
 public class ViewActions {

@@ -5,6 +5,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.PagerAdapter;
+
 class IntroPagerAdapter extends PagerAdapter {
   private final View[] views;
 

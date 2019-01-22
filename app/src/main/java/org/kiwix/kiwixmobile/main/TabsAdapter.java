@@ -33,6 +33,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import org.kiwix.kiwixmobile.R;
 
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import static org.kiwix.kiwixmobile.utils.DimenUtils.getToolbarHeight;
 import static org.kiwix.kiwixmobile.utils.DimenUtils.getWindowHeight;
 import static org.kiwix.kiwixmobile.utils.DimenUtils.getWindowWidth;

@@ -48,6 +48,12 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_IS_WIDGET_VOICE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH_TEXT;
