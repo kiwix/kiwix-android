@@ -19,11 +19,7 @@
 package org.kiwix.kiwixmobile.data.local;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,6 +29,13 @@ import org.kiwix.kiwixmobile.data.local.entity.BookDatabaseEntity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import androidx.test.InstrumentationRegistry;
+import androidx.test.runner.AndroidJUnit4;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,7 +48,8 @@ import static org.mockito.Mockito.when;
 public class BookDatabaseTest {
 
   private Context context;
-  private @Mock KiwixDatabase kiwixDatabase;
+  private @Mock
+  KiwixDatabase kiwixDatabase;
   private BookDao bookDao;
   private boolean mockInitialized = false;
   private File testDir;
@@ -82,69 +86,96 @@ public class BookDatabaseTest {
     // Test whether the correct books are returned
 
     // Filename ends with .zim and the file exists in memory
-    if(!booksRetrieved.contains(booksToAdd.get(0))) assertEquals(0, 1);
+    if (!booksRetrieved.contains(booksToAdd.get(0))) assertEquals(0, 1);
     verify(kiwixDatabase, never()).deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(booksToAdd.get(0).file.getPath()));
 
     // Filename ends with .part and the file exists in memory
-    if(booksRetrieved.contains(booksToAdd.get(1))) assertEquals(0, 1);
+    if (booksRetrieved.contains(booksToAdd.get(1))) assertEquals(0, 1);
     verify(kiwixDatabase, never()).deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(booksToAdd.get(1).file.getPath()));
 
     // Filename ends with .zim, however only the .zim.part file exists in memory
-    if(booksRetrieved.contains(booksToAdd.get(2))) assertEquals(0, 1);
+    if (booksRetrieved.contains(booksToAdd.get(2))) assertEquals(0, 1);
     verify(kiwixDatabase, never()).deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(booksToAdd.get(2).file.getPath()));
 
     // Filename ends with .zim but neither the .zim, nor the .zim.part file exists in memory
-    if(booksRetrieved.contains(booksToAdd.get(3))) assertEquals(0, 1);
+    if (booksRetrieved.contains(booksToAdd.get(3))) assertEquals(0, 1);
     verify(kiwixDatabase).deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(booksToAdd.get(3).file.getPath()));
 
     // Filename ends with .zim and both the .zim, and the .zim.part files exists in memory
-    if(!booksRetrieved.contains(booksToAdd.get(4))) assertEquals(0, 1);
+    if (!booksRetrieved.contains(booksToAdd.get(4))) assertEquals(0, 1);
     verify(kiwixDatabase, never()).deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(booksToAdd.get(4).file.getPath()));
 
     // If the filename ends with .zimXX
 
     // FileName.zimXX.part does not exist for any value of "XX" from "aa" till "dr", but FileName.zimXX exists for all "XX" from "aa', till "ds", then it does not exist
     // Also, the file inside the BooksToAdd does exist in memory
-    if(!booksRetrieved.contains(booksToAdd.get(5))) assertEquals(0, 1);
+    if (!booksRetrieved.contains(booksToAdd.get(5))) assertEquals(0, 1);
     verify(kiwixDatabase, never()).deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(booksToAdd.get(5).file.getPath()));
 
     // FileName.zimXX.part does not exist for any value of "XX" from "aa" till "dr", but FileName.zimXX exists for all "XX" from "aa', till "ds", then it does not exist
     // Also, the file inside the BooksToAdd also not exist in memory
-    if(booksRetrieved.contains(booksToAdd.get(6))) assertEquals(0, 1);
+    if (booksRetrieved.contains(booksToAdd.get(6))) assertEquals(0, 1);
     verify(kiwixDatabase).deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(booksToAdd.get(6).file.getPath()));
 
     // FileName.zimXX.part exists for some "XX" between "aa" till "bl"
     // And FileName.zimXX exists for all "XX" from "aa', till "bk", and then it does not exist
     // Also, the file inside the BooksToAdd does exist in memory
-    if(!booksRetrieved.contains(booksToAdd.get(7))) assertEquals(0, 1);
+    if (!booksRetrieved.contains(booksToAdd.get(7))) assertEquals(0, 1);
     verify(kiwixDatabase, never()).deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(booksToAdd.get(7).file.getPath()));
 
     // FileName.zimXX.part exists for some "XX" between "aa" till "bl"
     // And FileName.zimXX exists for all "XX" from "aa', till "bk", and then it does not exist
     // Also, the file inside the BooksToAdd does not exist in memory
-    if(booksRetrieved.contains(booksToAdd.get(8))) assertEquals(0, 1);
+    if (booksRetrieved.contains(booksToAdd.get(8))) assertEquals(0, 1);
     verify(kiwixDatabase).deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(booksToAdd.get(8).file.getPath()));
   }
 
   private ArrayList<Book> getFakeData(String baseFileName) throws IOException {
     ArrayList<Book> books = new ArrayList<>();
-    for(int i = 0; i < 9; i++){
+    for (int i = 0; i < 9; i++) {
       Book book = new Book();
       book.bookName = "Test Copy " + Integer.toString(i);
       book.id = "Test ID " + Integer.toString(i);
       String fileName = baseFileName + Integer.toString(i);
       switch (i) {
-        case 0: book.file = new File(fileName + ".zim"); book.file.createNewFile(); break;
-        case 1: book.file = new File(fileName + ".part"); book.file.createNewFile(); break;
-        case 2: book.file = new File(fileName + ".zim");
-                File t2 = new File(fileName + ".zim.part"); t2.createNewFile(); break;
-        case 3: book.file = new File(fileName + ".zim"); break;
-        case 4: book.file = new File(fileName + ".zim"); book.file.createNewFile();
-                File t4 = new File(fileName + ".zim.part"); t4.createNewFile(); break;
-        case 5: book.file = new File(fileName + ".zimdg"); setupCase1(fileName); break;
-        case 6: book.file = new File(fileName + ".zimyr"); setupCase2(fileName); break;
-        case 7: book.file = new File(fileName + ".zimdg"); setupCase1(fileName); break;
-        case 8: book.file = new File(fileName + ".zimyr"); setupCase2(fileName); break;
+        case 0:
+          book.file = new File(fileName + ".zim");
+          book.file.createNewFile();
+          break;
+        case 1:
+          book.file = new File(fileName + ".part");
+          book.file.createNewFile();
+          break;
+        case 2:
+          book.file = new File(fileName + ".zim");
+          File t2 = new File(fileName + ".zim.part");
+          t2.createNewFile();
+          break;
+        case 3:
+          book.file = new File(fileName + ".zim");
+          break;
+        case 4:
+          book.file = new File(fileName + ".zim");
+          book.file.createNewFile();
+          File t4 = new File(fileName + ".zim.part");
+          t4.createNewFile();
+          break;
+        case 5:
+          book.file = new File(fileName + ".zimdg");
+          setupCase1(fileName);
+          break;
+        case 6:
+          book.file = new File(fileName + ".zimyr");
+          setupCase2(fileName);
+          break;
+        case 7:
+          book.file = new File(fileName + ".zimdg");
+          setupCase1(fileName);
+          break;
+        case 8:
+          book.file = new File(fileName + ".zimyr");
+          setupCase2(fileName);
+          break;
       }
       books.add(book);
     }
@@ -184,7 +215,7 @@ public class BookDatabaseTest {
 
   @After
   public void RemoveTestDirectory() {
-    for(File child : testDir.listFiles()) {
+    for (File child : testDir.listFiles()) {
       child.delete();
     }
     testDir.delete();

@@ -42,7 +42,7 @@
       android:text="@string/proceed"
       android:visibility="gone" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
       android:id="@+id/library_swiperefresh"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content">
@@ -55,7 +55,7 @@
         android:divider="@null"
         android:paddingBottom="@dimen/library_article_list_padding" />
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
   </RelativeLayout>
 </LinearLayout>

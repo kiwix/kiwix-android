@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
@@ -8,20 +8,20 @@
   android:fitsSystemWindows="true"
   tools:context=".help.HelpActivity">
 
-  <android.support.design.widget.AppBarLayout
+  <com.google.android.material.appbar.AppBarLayout
     android:id="@+id/activity_help_appbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:theme="@style/AppTheme.AppBarOverlay"
     app:layout_constraintTop_toTopOf="parent">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
       android:id="@+id/activity_help_toolbar"
       android:layout_width="match_parent"
       android:layout_height="?attr/actionBarSize"
       android:theme="@style/AppTheme.AppBarOverlay"
       app:popupTheme="@style/AppTheme.PopupOverlay" />
-  </android.support.design.widget.AppBarLayout>
+  </com.google.android.material.appbar.AppBarLayout>
 
   <ImageView
     android:id="@+id/activity_help_feedback_image_view"
@@ -51,13 +51,13 @@
     android:background="?android:attr/listDivider"
     app:layout_constraintTop_toBottomOf="@id/activity_help_feedback_image_view" />
 
-  <android.support.v7.widget.RecyclerView
+  <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/activity_help_recycler_view"
     android:layout_width="match_parent"
     android:layout_height="0dp"
-    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/activity_help_feedback_divider" />
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,7 +7,7 @@
     android:icon="@drawable/action_search"
     android:title="@string/search_label"
     android:visible="true"
-    app:actionViewClass="android.support.v7.widget.SearchView"
+    app:actionViewClass="androidx.appcompat.widget.SearchView"
     app:iconifiedByDefault="true"
     app:showAsAction="always|collapseActionView" />
   <item
@@ -15,6 +15,6 @@
     android:icon="@drawable/ic_language_white_24dp"
     android:title="@string/pref_language_chooser"
     android:visible="true"
-    app:showAsAction="always" />
+    app:showAsAction="ifRoom" />
 </menu>
 

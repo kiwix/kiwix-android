@@ -19,12 +19,6 @@ package org.kiwix.kiwixmobile.main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +28,13 @@ import android.widget.TextView;
 import org.kiwix.kiwixmobile.R;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import static org.kiwix.kiwixmobile.utils.DimenUtils.getToolbarHeight;
 import static org.kiwix.kiwixmobile.utils.DimenUtils.getWindowHeight;
@@ -137,11 +138,11 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
     return selectedPosition;
   }
 
-  public void setSelected(int position) {
+  void setSelected(int position) {
     this.selectedPosition = position;
   }
 
-  public void setTabClickListener(TabClickListener listener) {
+  void setTabClickListener(TabClickListener listener) {
     this.listener = listener;
   }
 

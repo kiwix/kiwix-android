@@ -1,13 +1,14 @@
 package org.kiwix.kiwixmobile.intro;
 
 import android.content.Context;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
 import java.lang.reflect.Field;
+
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * A custom implementation of {@link ViewPager} to decrease the speed of auto-scroll animation

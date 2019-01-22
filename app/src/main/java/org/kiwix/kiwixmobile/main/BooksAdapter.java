@@ -1,13 +1,7 @@
-/**
- * Adapter class for book-items list displayed in the home page webview
- * Use LibraryAdapter for list items in the downloads library
- * */
 package org.kiwix.kiwixmobile.main;
 
 import android.content.Context;
 import android.graphics.ColorMatrixColorFilter;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,25 +19,47 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static org.kiwix.kiwixmobile.library.LibraryAdapter.createGbString;
 
+/**
+ * Adapter class for book-items list displayed in the home page WebView
+ * Use LibraryAdapter for list items in the downloads library
+ */
 public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   private static int TYPE_ITEM = 1;
+  private final SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(KiwixApplication.getInstance());
   private List<LibraryNetworkEntity.Book> books;
   private OnItemClickListener itemClickListener;
-  private final SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(KiwixApplication.getInstance());
-
-  interface OnItemClickListener {
-    void openFile(String url);
-  }
 
   BooksAdapter(List<LibraryNetworkEntity.Book> books, OnItemClickListener itemClickListener) {
     this.books = books;
     this.itemClickListener = itemClickListener;
+  }
+
+  private static String getArticleCountString(Context context, String articleCount) {
+    if (articleCount == null || articleCount.equals("")) {
+      return "";
+    }
+    try {
+      int size = Integer.parseInt(articleCount);
+      if (size <= 0) {
+        return "";
+      }
+
+      final String[] units = new String[]{"", "K", "M", "B", "T"};
+      int conversion = (int) (Math.log10(size) / 3);
+      return context.getString(R.string.articleCount, new DecimalFormat("#,##0.#")
+          .format(size / Math.pow(1000, conversion)) + units[conversion]);
+    } catch (NumberFormatException e) {
+      Log.d("BooksAdapter", e.toString());
+      return "";
+    }
   }
 
   @NonNull
@@ -70,7 +86,7 @@ public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
       item.articleCount.setText(getArticleCountString(item.articleCount.getContext(), book.getArticleCount()));
       item.icon.setImageBitmap(LibraryAdapter.createBitmapFromEncodedString(book.getFavicon(), item.icon.getContext()));
 
-      if(sharedPreferenceUtil.nightMode()) {  ////Fix Bug #905: Launch activity (night-mode) inverts colour of icons
+      if (sharedPreferenceUtil.nightMode()) {  ////Fix Bug #905: Launch activity (night-mode) inverts colour of icons
         item.icon.getDrawable().mutate().setColorFilter(new ColorMatrixColorFilter(KiwixWebView.getNightModeColors()));
       }
 
@@ -87,26 +103,6 @@ public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
   }
 
-  private static String getArticleCountString(Context context, String articleCount) {
-    if (articleCount == null || articleCount.equals("")) {
-      return "";
-    }
-    try {
-      int size = Integer.parseInt(articleCount);
-      if (size <= 0) {
-        return "";
-      }
-
-      final String[] units = new String[]{"", "K", "M", "B", "T"};
-      int conversion = (int) (Math.log10(size) / 3);
-      return context.getString(R.string.articleCount, new DecimalFormat("#,##0.#")
-          .format(size / Math.pow(1000, conversion)) + units[conversion]);
-    } catch (NumberFormatException e) {
-      Log.d("BooksAdapter", e.toString());
-      return "";
-    }
-  }
-
   @Override
   public int getItemViewType(int position) {
     return books.get(position) == null ? 0 : TYPE_ITEM;
@@ -115,6 +111,10 @@ public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
   @Override
   public int getItemCount() {
     return books.size();
+  }
+
+  interface OnItemClickListener {
+    void openFile(String url);
   }
 
   class Item extends RecyclerView.ViewHolder {
