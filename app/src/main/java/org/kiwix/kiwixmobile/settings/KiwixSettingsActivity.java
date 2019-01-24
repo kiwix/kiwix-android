@@ -250,6 +250,7 @@ public class KiwixSettingsActivity extends BaseActivity {
         MainActivity.nightMode = sharedPreferenceUtil.nightMode();
         getActivity().finish();
         startActivity(new Intent(getActivity(), KiwixSettingsActivity.class));
+        getActivity().overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
       }
       if (key.equals(PREF_WIFI_ONLY)) {
         MainActivity.wifiOnly = sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
@@ -259,6 +260,7 @@ public class KiwixSettingsActivity extends BaseActivity {
         MainActivity.nightMode = sharedPreferenceUtil.nightMode();
         getActivity().finish();
         startActivity(new Intent(getActivity(), KiwixSettingsActivity.class));
+        getActivity().overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
       }
     }
 
