@@ -96,6 +96,10 @@ public class KiwixWebView extends WebView {
     setLayerType(View.LAYER_TYPE_HARDWARE, paint);
   }
 
+  public static float[] getNightModeColors() {
+    return NIGHT_MODE_COLORS;
+  }
+
   @Override
   public boolean performLongClick() {
     HitTestResult result = getHitTestResult();
