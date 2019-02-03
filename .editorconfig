@@ -10,6 +10,9 @@ indent_style = space
 indent_size = 2
 insert_final_newline = true
 charset = utf-8
+# android studio / intellij specific, also in squares android style guide:
+# https://github.com/kiwix/kiwix-android/blob/master/docs/codestyle.md
+continuation_indent_size = 4
 
 # windows command files need windows newline
 [*.{bat,cmd}]
