@@ -30,11 +30,20 @@ import java.util.UUID;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
 public class NetworkUtils {
+
+  //TODO verify if NetworkInfo.State#CONNECTING is really sufficient: Should we not check for state 'connected'?
   /**
-   * check availability of any network
-   * @return true if a network is ready to be used
+   * check network status
+   * @return true if network is considered to be ready to be used
    */
   public static boolean isNetworkAvailable(Context context) {
+    return isNetworkAvailable(context, true);
+  }
+
+  /**
+   * @param tolerateStateConnecting if true, {@link NetworkInfo.State#CONNECTING} is considered 'OK'
+   */
+  static boolean isNetworkAvailable(Context context, boolean tolerateStateConnecting) {
     ConnectivityManager connectivity = (ConnectivityManager) context
       .getSystemService(Context.CONNECTIVITY_SERVICE);
     if (connectivity == null) {
@@ -43,7 +52,7 @@ public class NetworkUtils {
       NetworkInfo[] networkInfos = connectivity.getAllNetworkInfo();
       if (networkInfos != null) {
         for (NetworkInfo networkInfo : networkInfos) {
-          if (isNetworkConnectionOK(networkInfo)) {
+          if (isNetworkConnectionOK(networkInfo, tolerateStateConnecting)) {
             return true;
           }
         }
@@ -52,17 +61,15 @@ public class NetworkUtils {
     return false;
   }
 
-  static boolean isNetworkConnectionOK(NetworkInfo networkInfo) {
-    return networkInfo.getState() == NetworkInfo.State.CONNECTED;
+  /**
+   * @see #isNetworkAvailable(Context, boolean)
+   */
+  static boolean isNetworkConnectionOK(NetworkInfo networkInfo, boolean tolerateStateConnecting) {
+    return networkInfo.getState() == NetworkInfo.State.CONNECTED
+      || (tolerateStateConnecting && networkInfo.getState() == NetworkInfo.State.CONNECTING);
   }
 
-
-  /**
-   * check if network of type WIFI is connected
-   * @param context
-   * @return true if WIFI is connected
-   */
-  //TODO method isWiFi should be renamed to isWifiConnected to express the state which is checked (postponed to refactoring deprecated android.net.* usage)
+  //TODO method isWiFi should be renamed to isWifiConnected to express the state which is checked
   public static boolean isWiFi(Context context) {
     ConnectivityManager connectivity = (ConnectivityManager) context
       .getSystemService(Context.CONNECTIVITY_SERVICE);
