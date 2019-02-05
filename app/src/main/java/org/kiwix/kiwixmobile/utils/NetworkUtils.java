@@ -22,37 +22,24 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.util.Log;
-
-import org.kiwix.kiwixmobile.R;
-
 import java.util.UUID;
+import org.kiwix.kiwixmobile.R;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
 public class NetworkUtils {
 
-  //TODO verify if NetworkInfo.State#CONNECTING is really sufficient: Should we not check for state 'connected'?
-  /**
-   * check network status
-   * @return true if network is considered to be ready to be used
-   */
   public static boolean isNetworkAvailable(Context context) {
-    return isNetworkAvailable(context, true);
-  }
-
-  /**
-   * @param tolerateStateConnecting if true, {@link NetworkInfo.State#CONNECTING} is considered 'OK'
-   */
-  static boolean isNetworkAvailable(Context context, boolean tolerateStateConnecting) {
     ConnectivityManager connectivity = (ConnectivityManager) context
-      .getSystemService(Context.CONNECTIVITY_SERVICE);
+        .getSystemService(Context.CONNECTIVITY_SERVICE);
     if (connectivity == null) {
       return false;
     } else {
-      NetworkInfo[] networkInfos = connectivity.getAllNetworkInfo();
-      if (networkInfos != null) {
-        for (NetworkInfo networkInfo : networkInfos) {
-          if (isNetworkConnectionOK(networkInfo, tolerateStateConnecting)) {
+      NetworkInfo[] info = connectivity.getAllNetworkInfo();
+      if (info != null) {
+        for (NetworkInfo anInfo : info) {
+          if (anInfo.getState() == NetworkInfo.State.CONNECTED
+              || anInfo.getState() == NetworkInfo.State.CONNECTING) {
             return true;
           }
         }
@@ -61,31 +48,22 @@ public class NetworkUtils {
     return false;
   }
 
-  /**
-   * @see #isNetworkAvailable(Context, boolean)
-   */
-  static boolean isNetworkConnectionOK(NetworkInfo networkInfo, boolean tolerateStateConnecting) {
-    return networkInfo.getState() == NetworkInfo.State.CONNECTED
-      || (tolerateStateConnecting && networkInfo.getState() == NetworkInfo.State.CONNECTING);
-  }
-
-  //TODO method isWiFi should be renamed to isWifiConnected to express the state which is checked
   public static boolean isWiFi(Context context) {
     ConnectivityManager connectivity = (ConnectivityManager) context
-      .getSystemService(Context.CONNECTIVITY_SERVICE);
+        .getSystemService(Context.CONNECTIVITY_SERVICE);
     if (connectivity == null) {
       return false;
     }
 
     if (Build.VERSION.SDK_INT >= 23) {
-      NetworkInfo networkInfo = connectivity.getActiveNetworkInfo();
-      if (networkInfo == null) {
+      NetworkInfo network = connectivity.getActiveNetworkInfo();
+      if (network == null) {
         return false;
       }
-      return networkInfo.getType() == ConnectivityManager.TYPE_WIFI && networkInfo.isConnected();
+      return network.getType() == ConnectivityManager.TYPE_WIFI;
     } else {
       NetworkInfo wifi = connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-      return wifi != null && wifi.isConnected();
+      return wifi.isConnected();
     }
   }
 
