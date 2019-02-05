@@ -30,8 +30,6 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.xmlpull.v1.XmlPullParser;
 
-import androidx.annotation.XmlRes;
-
 public class StyleUtils {
   public static int dialogStyle() {
     if (MainActivity.nightMode) {
