@@ -1,131 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/activity_main_drawer_layout"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:fitsSystemWindows="true">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main_drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    >
 
   <androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/activity_main_root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+      android:id="@+id/activity_main_root"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      >
 
     <com.google.android.material.appbar.AppBarLayout
-      android:id="@+id/activity_main_app_bar"
-      app:layout_constraintTop_toTopOf="parent"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+        android:id="@+id/activity_main_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
       <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          >
 
         <androidx.appcompat.widget.Toolbar
-          android:id="@+id/activity_main_toolbar"
-          android:layout_width="match_parent"
-          android:layout_height="?attr/actionBarSize"
-          android:background="@android:color/black"
-          android:minHeight="?attr/actionBarSize"
-          android:theme="@style/AppTheme.AppBarOverlay"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent"
-          app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:id="@+id/activity_main_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/black"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            />
 
         <org.kiwix.kiwixmobile.main.AnimatedProgressBar
-          android:id="@+id/activity_main_progress_view"
-          android:layout_width="match_parent"
-          android:layout_height="@dimen/progress_view_height"
-          app:backgroundColor="?attr/progressBackgroundColor"
-          app:bidirectionalAnimate="false"
-          app:layout_constraintBottom_toBottomOf="@id/activity_main_toolbar"
-          app:progressColor="@color/accent" />
+            android:id="@+id/activity_main_progress_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/progress_view_height"
+            app:backgroundColor="?attr/progressBackgroundColor"
+            app:bidirectionalAnimate="false"
+            app:layout_constraintBottom_toBottomOf="@id/activity_main_toolbar"
+            app:progressColor="@color/accent"
+            />
       </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
-      android:id="@+id/activity_main_content_frame"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent" />
+        android:id="@+id/activity_main_content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
     <ImageButton
-      android:id="@+id/activity_main_fullscreen_button"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_margin="@dimen/fullscreen_control_button_margin"
-      android:background="@color/back_to_top_background"
-      android:contentDescription="@string/menu_exitfullscreen"
-      android:visibility="gone"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:srcCompat="@drawable/fullscreen_exit"
-      tools:visibility="visible" />
+        android:id="@+id/activity_main_fullscreen_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fullscreen_control_button_margin"
+        android:background="@color/back_to_top_background"
+        android:contentDescription="@string/menu_exitfullscreen"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/fullscreen_exit"
+        tools:visibility="visible"
+        />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-      android:id="@+id/activity_main_back_to_top_fab"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_margin="@dimen/activity_horizontal_margin"
-      android:background="@color/back_to_top_background"
-      android:visibility="gone"
-      app:fabSize="mini"
-      app:layout_constraintBottom_toTopOf="@id/bottom_toolbar"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:srcCompat="@drawable/action_find_previous"
-      tools:visibility="visible" />
+        android:id="@+id/activity_main_back_to_top_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:background="@color/back_to_top_background"
+        android:visibility="gone"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toTopOf="@id/bottom_toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/action_find_previous"
+        tools:visibility="visible"
+        />
 
     <Button
-      android:id="@+id/activity_main_button_pause_tts"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:alpha="0.6"
-      android:background="@color/back_to_top_background"
-      android:text="@string/tts_pause"
-      android:textColor="@android:color/black"
-      android:textStyle="bold"
-      android:visibility="gone"
-      app:layout_constraintBottom_toTopOf="@id/bottom_toolbar"
-      app:layout_constraintEnd_toStartOf="@id/activity_main_button_stop_tts"
-      app:layout_constraintHorizontal_chainStyle="packed"
-      app:layout_constraintStart_toStartOf="parent" />
+        android:id="@+id/activity_main_button_pause_tts"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:alpha="0.6"
+        android:background="@color/back_to_top_background"
+        android:text="@string/tts_pause"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottom_toolbar"
+        app:layout_constraintEnd_toStartOf="@id/activity_main_button_stop_tts"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
     <Button
-      android:id="@+id/activity_main_button_stop_tts"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:alpha="0.6"
-      android:background="@color/back_to_top_background"
-      android:text="@string/tts_stop"
-      android:textColor="@android:color/black"
-      android:textStyle="bold"
-      android:visibility="gone"
-      app:layout_constraintBottom_toTopOf="@id/bottom_toolbar"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toEndOf="@id/activity_main_button_pause_tts" />
+        android:id="@+id/activity_main_button_stop_tts"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:alpha="0.6"
+        android:background="@color/back_to_top_background"
+        android:text="@string/tts_stop"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/bottom_toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/activity_main_button_pause_tts"
+        />
 
     <androidx.constraintlayout.widget.Group
-      android:id="@+id/activity_main_tts_controls"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:visibility="gone"
-      app:constraint_referenced_ids="activity_main_button_pause_tts,activity_main_button_stop_tts"
-      tools:visibility="visible" />
+        android:id="@+id/activity_main_tts_controls"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="activity_main_button_pause_tts,activity_main_button_stop_tts"
+        tools:visibility="visible"
+        />
 
-    <include layout="@layout/bottom_toolbar" />
+    <include layout="@layout/bottom_toolbar"/>
 
     <include
-      android:id="@+id/activity_main_tab_switcher"
-      layout="@layout/tab_switcher"
-      android:visibility="gone" />
+        layout="@layout/tab_switcher"
+        android:id="@+id/activity_main_tab_switcher"
+        android:visibility="gone"
+        />
   </androidx.constraintlayout.widget.ConstraintLayout>
 
   <com.google.android.material.navigation.NavigationView
-    android:id="@+id/activity_main_nav_view"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_gravity="end"
-    android:background="?attr/drawerBackground"
-    android:fitsSystemWindows="true"
-    app:headerLayout="@layout/drawer_right" />
+      android:id="@+id/activity_main_nav_view"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_gravity="end"
+      android:background="?attr/drawerBackground"
+      android:fitsSystemWindows="true"
+      app:headerLayout="@layout/drawer_right"
+      />
 </androidx.drawerlayout.widget.DrawerLayout>

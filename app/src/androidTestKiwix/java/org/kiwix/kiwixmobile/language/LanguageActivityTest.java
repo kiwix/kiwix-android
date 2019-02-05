@@ -19,10 +19,12 @@
 package org.kiwix.kiwixmobile.language;
 
 import android.Manifest;
-
+import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.intent.Intents;
+import androidx.test.rule.GrantPermissionRule;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import com.schibsted.spain.barista.rule.BaristaRule;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -30,11 +32,6 @@ import org.junit.Test;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.intro.IntroActivity;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
-
-import androidx.test.espresso.IdlingRegistry;
-import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.intent.Intents;
-import androidx.test.rule.GrantPermissionRule;
 
 import static androidx.test.InstrumentationRegistry.getInstrumentation;
 import static androidx.test.espresso.Espresso.onView;
@@ -63,9 +60,11 @@ public class LanguageActivityTest {
   @Rule
   public BaristaRule<IntroActivity> activityTestRule = BaristaRule.create(IntroActivity.class);
   @Rule
-  public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+  public GrantPermissionRule readPermissionRule =
+      GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule
-  public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+  public GrantPermissionRule writePermissionRule =
+      GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @Before
   public void setUp() {
@@ -92,7 +91,8 @@ public class LanguageActivityTest {
     // Verify that the "Choose Language" and the "Search" buttons are present only in the "online" tab
     onView(withContentDescription("Search")).check(matches(notNullValue()));
     // Test that the language selection screen does not open if the "Choose language" button is clicked, while the data is being loaded
-    onView(withContentDescription("Choose a language")).check(matches(notNullValue())).perform(click());
+    onView(withContentDescription("Choose a language")).check(matches(notNullValue()))
+        .perform(click());
 
     viewPager.perform(swipeRight());
     onView(withContentDescription("Search")).check(doesNotExist());
@@ -163,7 +163,6 @@ public class LanguageActivityTest {
     onView(withContentDescription("Search")).perform(click());
     onView(withId(R.id.search_src_text)).perform(replaceText(language2), closeSoftKeyboard());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-
 
     // Initialise the language checkbox
     checkBox2.perform(setChecked(false));

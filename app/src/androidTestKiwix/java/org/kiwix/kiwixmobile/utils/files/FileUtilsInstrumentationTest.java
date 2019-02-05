@@ -1,18 +1,15 @@
 package org.kiwix.kiwixmobile.utils.files;
 
 import android.content.Context;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
-
+import androidx.test.InstrumentationRegistry;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
-
-import androidx.test.InstrumentationRegistry;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
 import static org.junit.Assert.assertEquals;
 
@@ -70,10 +67,12 @@ public class FileUtilsInstrumentationTest {
 
     for (index = 0; index < 122; index++) {
       if (bool[index]) {
-        assertEquals("if the file fileName.zimXX exists, then no need to add the .part extension at the end",
+        assertEquals(
+            "if the file fileName.zimXX exists, then no need to add the .part extension at the end",
             false, files.get(index).getPath().endsWith(".part"));
       } else {
-        assertEquals("if the file fileName.zimXX.part exists, then the file returned should also have the same ending .zimXX.part",
+        assertEquals(
+            "if the file fileName.zimXX.part exists, then the file returned should also have the same ending .zimXX.part",
             true, files.get(index).getPath().endsWith(".part"));
       }
     }

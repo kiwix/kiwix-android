@@ -5,10 +5,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
-
-import java.lang.reflect.Field;
-
 import androidx.viewpager.widget.ViewPager;
+import java.lang.reflect.Field;
 
 /**
  * A custom implementation of {@link ViewPager} to decrease the speed of auto-scroll animation

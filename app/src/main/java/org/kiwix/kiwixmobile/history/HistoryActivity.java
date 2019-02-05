@@ -8,19 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
-import org.kiwix.kiwixmobile.data.local.entity.History;
-import org.kiwix.kiwixmobile.main.MainActivity;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.SearchView;
@@ -28,6 +15,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.base.BaseActivity;
+import org.kiwix.kiwixmobile.data.ZimContentProvider;
+import org.kiwix.kiwixmobile.data.local.entity.History;
+import org.kiwix.kiwixmobile.main.MainActivity;
 
 import static org.kiwix.kiwixmobile.library.LibraryAdapter.createBitmapFromEncodedString;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_URL;
@@ -205,7 +201,8 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
       if (!history.getZimFilePath().equals(ZimContentProvider.getZimFile())) {
         intent.setData(Uri.fromFile(new File(history.getZimFilePath())));
       }
-      if (Settings.System.getInt(getContentResolver(), Settings.Global.ALWAYS_FINISH_ACTIVITIES, 0) == 1) {
+      if (Settings.System.getInt(getContentResolver(), Settings.Global.ALWAYS_FINISH_ACTIVITIES, 0)
+          == 1) {
         startActivity(intent);
         finish();
       } else {
@@ -232,7 +229,8 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     if (deleteList.remove(history)) {
       favicon.setImageBitmap(createBitmapFromEncodedString(history.getFavicon(), this));
     } else {
-      favicon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_check_circle_blue_24dp));
+      favicon.setImageDrawable(
+          ContextCompat.getDrawable(this, R.drawable.ic_check_circle_blue_24dp));
       deleteList.add(history);
     }
     actionMode.setTitle(getString(R.string.selected_items, deleteList.size()));

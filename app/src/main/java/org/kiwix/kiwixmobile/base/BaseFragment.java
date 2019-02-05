@@ -3,10 +3,8 @@ package org.kiwix.kiwixmobile.base;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
-
-import org.kiwix.kiwixmobile.KiwixApplication;
-
 import androidx.fragment.app.Fragment;
+import org.kiwix.kiwixmobile.KiwixApplication;
 
 /**
  * All fragments should inherit from this fragment.

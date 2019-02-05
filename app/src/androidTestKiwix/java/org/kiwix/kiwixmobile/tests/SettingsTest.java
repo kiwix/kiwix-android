@@ -1,16 +1,14 @@
 package org.kiwix.kiwixmobile.tests;
 
 import android.preference.Preference;
-
+import androidx.test.filters.LargeTest;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.runner.AndroidJUnit4;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.main.MainActivity;
-
-import androidx.test.filters.LargeTest;
-import androidx.test.rule.ActivityTestRule;
-import androidx.test.runner.AndroidJUnit4;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -25,7 +23,8 @@ import static org.kiwix.kiwixmobile.utils.StandardActions.enterSettings;
 @RunWith(AndroidJUnit4.class)
 public class SettingsTest {
   @Rule
-  public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
+  public ActivityTestRule<MainActivity> activityTestRule =
+      new ActivityTestRule<>(MainActivity.class);
 
   @Test
   public void testToggle() {

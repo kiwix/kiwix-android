@@ -21,23 +21,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
-
-import com.squareup.leakcanary.LeakCanary;
-
-import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
-import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
-import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
-
-import java.io.File;
-import java.io.IOException;
-
-import javax.inject.Inject;
-
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDexApplication;
+import com.squareup.leakcanary.LeakCanary;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
+import java.io.File;
+import java.io.IOException;
+import javax.inject.Inject;
+import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
+import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
+import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
 
 public class KiwixApplication extends MultiDexApplication implements HasActivityInjector {
 

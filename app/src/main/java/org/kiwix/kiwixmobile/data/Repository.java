@@ -1,5 +1,14 @@
 package org.kiwix.kiwixmobile.data;
 
+import io.reactivex.Completable;
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
+import io.reactivex.Single;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import org.kiwix.kiwixmobile.data.local.dao.BookDao;
 import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
 import org.kiwix.kiwixmobile.data.local.dao.HistoryDao;
@@ -11,18 +20,6 @@ import org.kiwix.kiwixmobile.di.qualifiers.IO;
 import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.models.Language;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
-import io.reactivex.Completable;
-import io.reactivex.Observable;
-import io.reactivex.Scheduler;
-import io.reactivex.Single;
 
 /**
  * A central repository of data which should provide the presenters with the required data.
@@ -39,13 +36,12 @@ public class Repository implements DataSource {
   private final Scheduler io;
   private final Scheduler mainThread;
 
-  @Inject
-  Repository(@IO Scheduler io, @MainThread Scheduler mainThread,
-             BookDao bookDao,
-             BookmarksDao bookmarksDao,
-             HistoryDao historyDao,
-             NetworkLanguageDao languageDao,
-             RecentSearchDao recentSearchDao) {
+  @Inject Repository(@IO Scheduler io, @MainThread Scheduler mainThread,
+      BookDao bookDao,
+      BookmarksDao bookmarksDao,
+      HistoryDao historyDao,
+      NetworkLanguageDao languageDao,
+      RecentSearchDao recentSearchDao) {
     this.io = io;
     this.mainThread = mainThread;
     this.bookDao = bookDao;
@@ -58,9 +54,10 @@ public class Repository implements DataSource {
   @Override
   public Single<List<LibraryNetworkEntity.Book>> getLanguageCategorizedBooks() {
     return Observable.fromIterable(bookDao.getBooks())
-        .toSortedList((book1, book2) -> book1.getLanguage().compareToIgnoreCase(book2.getLanguage()) == 0 ?
-            book1.getTitle().compareToIgnoreCase(book2.getTitle()) :
-            book1.getLanguage().compareToIgnoreCase(book2.getLanguage()))
+        .toSortedList(
+            (book1, book2) -> book1.getLanguage().compareToIgnoreCase(book2.getLanguage()) == 0 ?
+                book1.getTitle().compareToIgnoreCase(book2.getTitle()) :
+                book1.getLanguage().compareToIgnoreCase(book2.getLanguage()))
         .map(books -> {
           LibraryNetworkEntity.Book book = null;
           if (books.size() >= 1) {
@@ -84,7 +81,8 @@ public class Repository implements DataSource {
 
   @Override
   public Completable saveBooks(List<LibraryNetworkEntity.Book> books) {
-    return Completable.fromAction(() -> bookDao.saveBooks((ArrayList<LibraryNetworkEntity.Book>) books))
+    return Completable.fromAction(
+        () -> bookDao.saveBooks((ArrayList<LibraryNetworkEntity.Book>) books))
         .subscribeOn(io);
   }
 

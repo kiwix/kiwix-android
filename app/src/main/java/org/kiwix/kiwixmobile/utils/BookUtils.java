@@ -27,8 +27,8 @@ import java.util.Map;
 
 public class BookUtils {
 
-  public LanguageUtils.LanguageContainer container;
   public final Map<String, Locale> localeMap;
+  public LanguageUtils.LanguageContainer container;
 
   // Create a map of ISO 369-2 language codes
   public BookUtils(LanguageUtils.LanguageContainer container) {

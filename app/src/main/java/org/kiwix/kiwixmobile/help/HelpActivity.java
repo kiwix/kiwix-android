@@ -21,18 +21,15 @@ package org.kiwix.kiwixmobile.help;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.utils.LanguageUtils;
-
-import java.util.HashMap;
-
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
+import java.util.HashMap;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.base.BaseActivity;
+import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
 import static org.kiwix.kiwixmobile.utils.Constants.CONTACT_EMAIL_ADDRESS;
 
@@ -61,16 +58,18 @@ public class HelpActivity extends BaseActivity {
     populateMap(R.string.help_12, R.array.description_help_12);
 
     recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-    HelpAdapter helpAdapter = new HelpAdapter(titleDescriptionMap, sharedPreferenceUtil.nightMode());
+    HelpAdapter helpAdapter =
+        new HelpAdapter(titleDescriptionMap, sharedPreferenceUtil.nightMode());
     recyclerView.setAdapter(helpAdapter);
   }
 
-  @OnClick({R.id.activity_help_feedback_text_view, R.id.activity_help_feedback_image_view})
+  @OnClick({ R.id.activity_help_feedback_text_view, R.id.activity_help_feedback_image_view })
   void sendFeedback() {
     Intent intent = new Intent(Intent.ACTION_SENDTO);
     intent.setType("plain/text");
     String uriText = "mailto:" + Uri.encode(CONTACT_EMAIL_ADDRESS) +
-        "?subject=" + Uri.encode("Feedback in " + LanguageUtils.getCurrentLocale(this).getDisplayLanguage());
+        "?subject=" + Uri.encode(
+        "Feedback in " + LanguageUtils.getCurrentLocale(this).getDisplayLanguage());
     Uri uri = Uri.parse(uriText);
     intent.setData(uri);
     startActivity(Intent.createChooser(intent, "Send Feedback via Email"));

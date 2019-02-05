@@ -19,7 +19,13 @@ package org.kiwix.kiwixmobile.di.modules;
 
 import android.app.NotificationManager;
 import android.content.Context;
-
+import dagger.Module;
+import dagger.Provides;
+import dagger.android.AndroidInjectionModule;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import javax.inject.Singleton;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.di.qualifiers.Computation;
 import org.kiwix.kiwixmobile.di.qualifiers.IO;
@@ -27,16 +33,7 @@ import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
 import org.kiwix.kiwixmobile.utils.BookUtils;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
-import javax.inject.Singleton;
-
-import dagger.Module;
-import dagger.Provides;
-import dagger.android.AndroidInjectionModule;
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-
-@Module(includes = {ActivityBindingModule.class, AndroidInjectionModule.class})
+@Module(includes = { ActivityBindingModule.class, AndroidInjectionModule.class })
 public class ApplicationModule {
   private final KiwixApplication application;
 

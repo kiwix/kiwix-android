@@ -1,36 +1,41 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:fitsSystemWindows="true"
-  android:layoutDirection="ltr"
-  android:orientation="vertical">
-
-  <LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:fitsSystemWindows="true"
+    android:layoutDirection="ltr"
+    android:orientation="vertical"
+    >
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      >
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
-      android:id="@+id/toolbar_layout"
-      android:layout_width="match_parent"
-      android:layout_height="?android:attr/actionBarSize">
-
-      <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar_layout"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="?colorPrimaryDark"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:theme="@style/AppTheme.AppBarOverlay" />
+        >
+
+      <androidx.appcompat.widget.Toolbar
+          android:id="@+id/toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="?android:attr/actionBarSize"
+          android:background="?colorPrimaryDark"
+          app:popupTheme="@style/AppTheme.PopupOverlay"
+          app:theme="@style/AppTheme.AppBarOverlay"
+          />
     </RelativeLayout>
 
     <ListView
-      android:id="@+id/search_list"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:background="?attr/listBackground" />
+        android:id="@+id/search_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/listBackground"
+        />
 
   </LinearLayout>
 

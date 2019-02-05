@@ -18,7 +18,6 @@
 package org.kiwix.kiwixmobile.main;
 
 import android.content.Context;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;

@@ -58,12 +58,9 @@ public class LibraryUtils {
     return "???";
   }
 
-
   public static String round3SF(double size) {
     BigDecimal bd = new BigDecimal(size);
     bd = bd.round(new MathContext(3));
     return String.valueOf(bd.doubleValue());
   }
-
-
 }
