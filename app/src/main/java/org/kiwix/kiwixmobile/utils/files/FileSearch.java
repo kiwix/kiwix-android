@@ -26,25 +26,21 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
-
+import eu.mhutti1.utils.storage.StorageDevice;
+import eu.mhutti1.utils.storage.StorageDeviceUtils;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Collection;
 import java.util.Vector;
-
-import eu.mhutti1.utils.storage.StorageDevice;
-import eu.mhutti1.utils.storage.StorageDeviceUtils;
+import org.kiwix.kiwixmobile.data.ZimContentProvider;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
 public class FileSearch {
 
   // Array of zim file extensions
-  public static final String[] zimFiles = {"zim", "zimaa"};
-
+  public static final String[] zimFiles = { "zim", "zimaa" };
 
   private final Context context;
   private final ResultListener listener;
@@ -55,6 +51,45 @@ public class FileSearch {
   public FileSearch(Context ctx, ResultListener listener) {
     this.context = ctx;
     this.listener = listener;
+  }
+
+  public static synchronized LibraryNetworkEntity.Book fileToBook(String filePath) {
+    LibraryNetworkEntity.Book book = null;
+
+    if (ZimContentProvider.zimFileName != null) {
+      ZimContentProvider.originalFileName = ZimContentProvider.zimFileName;
+    }
+    // Check a file isn't being opened and temporally use content provider to access details
+    // This is not a great solution as we shouldn't need to fully open our ZIM files to get their metadata
+    if (ZimContentProvider.canIterate) {
+      if (ZimContentProvider.setZimFile(filePath) != null) {
+        try {
+          book = new LibraryNetworkEntity.Book();
+          book.title = ZimContentProvider.getZimFileTitle();
+          book.id = ZimContentProvider.getId();
+          book.file = new File(filePath);
+          book.size = String.valueOf(ZimContentProvider.getFileSize());
+          book.favicon = ZimContentProvider.getFavicon();
+          book.creator = ZimContentProvider.getCreator();
+          book.publisher = ZimContentProvider.getPublisher();
+          book.date = ZimContentProvider.getDate();
+          book.description = ZimContentProvider.getDescription();
+          book.language = ZimContentProvider.getLanguage();
+        } catch (Exception e) {
+          // TODO 20171215 Consider more elegant approaches.
+          // This is to see if we can catch the exception at all!
+          Log.e("kiwix-filesearch", "Problem parsing a book entry from the library file. ", e);
+          return null;
+        }
+      }
+    }
+    // Return content provider to its previous state
+    if (!ZimContentProvider.originalFileName.equals("")) {
+      ZimContentProvider.setZimFile(ZimContentProvider.originalFileName);
+    }
+    ZimContentProvider.originalFileName = "";
+
+    return book;
   }
 
   public void scan(String defaultPath) {
@@ -75,18 +110,21 @@ public class FileSearch {
 
   // If both searches are complete callback
   private synchronized void checkCompleted() {
-    if (mediaStoreScanCompleted && fileSystemScanCompleted)
+    if (mediaStoreScanCompleted && fileSystemScanCompleted) {
       listener.onScanCompleted();
+    }
   }
 
   public void scanMediaStore() {
     ContentResolver contentResolver = context.getContentResolver();
     Uri uri = MediaStore.Files.getContentUri("external");
 
-    String[] projection = {MediaStore.MediaColumns.DATA};
-    String selection = MediaStore.MediaColumns.DATA + " like ? or "+MediaStore.MediaColumns.DATA +" like ? ";
+    String[] projection = { MediaStore.MediaColumns.DATA };
+    String selection =
+        MediaStore.MediaColumns.DATA + " like ? or " + MediaStore.MediaColumns.DATA + " like ? ";
 
-    Cursor query = contentResolver.query(uri, projection, selection, new String[]{"%."+zimFiles[0], "%."+zimFiles[1]}, null);
+    Cursor query = contentResolver.query(uri, projection, selection,
+        new String[] { "%." + zimFiles[0], "%." + zimFiles[1] }, null);
 
     if (query == null) {
       return;
@@ -96,8 +134,9 @@ public class FileSearch {
       while (query.moveToNext()) {
         File file = new File(query.getString(0));
 
-        if (file.canRead())
+        if (file.canRead()) {
           onFileFound(file.getAbsolutePath());
+        }
       }
     } finally {
       query.close();
@@ -109,7 +148,8 @@ public class FileSearch {
     FilenameFilter[] filter = new FilenameFilter[zimFiles.length];
 
     // Search all external directories that we can find.
-    String[] tempRoots = new String[StorageDeviceUtils.getStorageDevices(context, false).size() + 2];
+    String[] tempRoots =
+        new String[StorageDeviceUtils.getStorageDevices(context, false).size() + 2];
     int j = 0;
     tempRoots[j++] = "/mnt";
     tempRoots[j++] = defaultPath;
@@ -124,7 +164,7 @@ public class FileSearch {
     }
 
     String dirNamePrimary = new File(
-            Environment.getExternalStorageDirectory().getAbsolutePath()).toString();
+        Environment.getExternalStorageDirectory().getAbsolutePath()).toString();
 
     for (final String dirName : tempRoots) {
       if (dirNamePrimary.equals(dirName)) {
@@ -171,45 +211,6 @@ public class FileSearch {
     return files.toArray(arr);
   }
 
-  public static synchronized LibraryNetworkEntity.Book fileToBook(String filePath) {
-    LibraryNetworkEntity.Book book = null;
-
-    if (ZimContentProvider.zimFileName != null) {
-      ZimContentProvider.originalFileName = ZimContentProvider.zimFileName;
-    }
-    // Check a file isn't being opened and temporally use content provider to access details
-    // This is not a great solution as we shouldn't need to fully open our ZIM files to get their metadata
-    if (ZimContentProvider.canIterate) {
-      if (ZimContentProvider.setZimFile(filePath) != null) {
-        try {
-          book = new LibraryNetworkEntity.Book();
-          book.title = ZimContentProvider.getZimFileTitle();
-          book.id = ZimContentProvider.getId();
-          book.file = new File(filePath);
-          book.size = String.valueOf(ZimContentProvider.getFileSize());
-          book.favicon = ZimContentProvider.getFavicon();
-          book.creator = ZimContentProvider.getCreator();
-          book.publisher = ZimContentProvider.getPublisher();
-          book.date = ZimContentProvider.getDate();
-          book.description = ZimContentProvider.getDescription();
-          book.language = ZimContentProvider.getLanguage();
-        } catch (Exception e) {
-          // TODO 20171215 Consider more elegant approaches.
-          // This is to see if we can catch the exception at all!
-          Log.e("kiwix-filesearch", "Problem parsing a book entry from the library file. ", e);
-          return null;
-        }
-      }
-    }
-    // Return content provider to its previous state
-    if (!ZimContentProvider.originalFileName.equals("")) {
-      ZimContentProvider.setZimFile(ZimContentProvider.originalFileName);
-    }
-    ZimContentProvider.originalFileName = "";
-
-    return book;
-  }
-
   // Fill fileList with files found in the specific directory
   private void scanDirectory(String directory, FilenameFilter[] filter) {
     Log.d(TAG_KIWIX, "Searching directory " + directory);
@@ -224,8 +225,9 @@ public class FileSearch {
   public void onFileFound(String filePath) {
     LibraryNetworkEntity.Book book = fileToBook(filePath);
 
-    if (book != null)
+    if (book != null) {
       listener.onBookFound(book);
+    }
   }
 
   public interface ResultListener {

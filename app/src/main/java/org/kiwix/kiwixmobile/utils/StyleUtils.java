@@ -25,12 +25,10 @@ import android.text.Html;
 import android.text.Spanned;
 import android.util.AttributeSet;
 import android.util.Xml;
-
+import androidx.annotation.XmlRes;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.xmlpull.v1.XmlPullParser;
-
-import androidx.annotation.XmlRes;
 
 public class StyleUtils {
   public static int dialogStyle() {

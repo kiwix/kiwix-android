@@ -8,21 +8,17 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.widget.Button;
 import android.widget.CheckBox;
-
+import androidx.core.content.FileProvider;
+import butterknife.BindView;
+import java.io.File;
+import java.util.ArrayList;
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.dao.BookDao;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.splash.SplashActivity;
-
-import java.io.File;
-import java.util.ArrayList;
-
-import javax.inject.Inject;
-
-import androidx.core.content.FileProvider;
-import butterknife.BindView;
 
 import static org.kiwix.kiwixmobile.utils.LanguageUtils.getCurrentLocale;
 
@@ -68,10 +64,9 @@ public class ErrorActivity extends BaseActivity {
 
     reportButton.setOnClickListener(v -> {
 
-
       Intent emailIntent = new Intent(Intent.ACTION_SEND);
       emailIntent.setType("vnd.android.cursor.dir/email");
-      String to[] = {"android-crash-feedback@kiwix.org"};
+      String to[] = { "android-crash-feedback@kiwix.org" };
       emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
       emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Someone has reported a crash");
 
@@ -81,7 +76,9 @@ public class ErrorActivity extends BaseActivity {
       if (allowLogsCheckbox.isChecked()) {
         File appDirectory = new File(Environment.getExternalStorageDirectory() + "/Kiwix");
         File logFile = new File(appDirectory, "logcat.txt");
-        Uri path = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", logFile);
+        Uri path =
+            FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider",
+                logFile);
         emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         emailIntent.putExtra(Intent.EXTRA_STREAM, path);
       }
@@ -142,7 +139,9 @@ public class ErrorActivity extends BaseActivity {
   void restartApp() {
     Context context = ErrorActivity.this;
     Intent intent = new Intent(context, SplashActivity.class);
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+        | Intent.FLAG_ACTIVITY_CLEAR_TASK
+        | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
     intent.setAction(Intent.ACTION_MAIN);
     intent.addCategory(Intent.CATEGORY_LAUNCHER);
     context.startActivity(intent);

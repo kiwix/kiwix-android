@@ -1,9 +1,8 @@
 package org.kiwix.kiwixmobile.history;
 
+import java.util.List;
 import org.kiwix.kiwixmobile.base.BaseContract;
 import org.kiwix.kiwixmobile.data.local.entity.History;
-
-import java.util.List;
 
 interface HistoryContract {
   interface View extends BaseContract.View<Presenter> {

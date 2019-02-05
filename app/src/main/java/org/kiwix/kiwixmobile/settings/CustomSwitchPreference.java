@@ -26,7 +26,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Switch;
 
-
 public class CustomSwitchPreference extends SwitchPreference {
 
   /**
@@ -62,7 +61,7 @@ public class CustomSwitchPreference extends SwitchPreference {
   @Override
   protected void onBindView(View view) {
     // Clean listener before invoke SwitchPreference.onBindView
-    ViewGroup viewGroup= (ViewGroup)view;
+    ViewGroup viewGroup = (ViewGroup) view;
     clearListenerInViewGroup(viewGroup);
     super.onBindView(view);
   }
@@ -78,17 +77,16 @@ public class CustomSwitchPreference extends SwitchPreference {
     }
 
     int count = viewGroup.getChildCount();
-    for(int n = 0; n < count; ++n) {
+    for (int n = 0; n < count; ++n) {
       View childView = viewGroup.getChildAt(n);
-      if(childView instanceof Switch) {
+      if (childView instanceof Switch) {
         final Switch switchView = (Switch) childView;
         switchView.setOnCheckedChangeListener(null);
         return;
-      } else if (childView instanceof ViewGroup){
-        ViewGroup childGroup = (ViewGroup)childView;
+      } else if (childView instanceof ViewGroup) {
+        ViewGroup childGroup = (ViewGroup) childView;
         clearListenerInViewGroup(childGroup);
       }
     }
   }
-
 }

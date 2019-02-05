@@ -7,16 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.kiwix.kiwixmobile.R;
-
-import java.util.HashMap;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import java.util.HashMap;
+import org.kiwix.kiwixmobile.R;
 
 import static org.kiwix.kiwixmobile.utils.AnimationUtils.collapse;
 import static org.kiwix.kiwixmobile.utils.AnimationUtils.expand;
@@ -66,7 +63,7 @@ class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.Item> {
       ButterKnife.bind(this, itemView);
     }
 
-    @OnClick({R.id.item_help_title, R.id.item_help_toggle_expand})
+    @OnClick({ R.id.item_help_title, R.id.item_help_toggle_expand })
     void toggleDescriptionVisibility() {
       if (description.getVisibility() == View.GONE) {
         ObjectAnimator.ofFloat(toggleDescriptionVisibility, "rotation", 0, 180).start();

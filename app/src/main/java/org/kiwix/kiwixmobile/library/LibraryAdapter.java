@@ -31,7 +31,18 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.DataSource;
@@ -43,35 +54,16 @@ import org.kiwix.kiwixmobile.models.Language;
 import org.kiwix.kiwixmobile.utils.BookUtils;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-
-import javax.inject.Inject;
-
-import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
-
 import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
 
 public class LibraryAdapter extends BaseAdapter {
   private static final int LIST_ITEM_TYPE_BOOK = 0;
   private static final int LIST_ITEM_TYPE_DIVIDER = 1;
-
-  private List<Book> allBooks;
-  private List<ListItem> listItems = new ArrayList<>();
   private final Context context;
-  public HashMap<String, Integer> languageCounts = new HashMap<>();
-  public ArrayList<Language> languages = new ArrayList<>();
   private final LayoutInflater layoutInflater;
   private final BookFilter bookFilter = new BookFilter();
-  private Disposable saveNetworkLanguageDisposable;
+  public HashMap<String, Integer> languageCounts = new HashMap<>();
+  public ArrayList<Language> languages = new ArrayList<>();
   @Inject BookUtils bookUtils;
   @Inject
   NetworkLanguageDao networkLanguageDao;
@@ -79,12 +71,50 @@ public class LibraryAdapter extends BaseAdapter {
   BookDao bookDao;
   @Inject
   DataSource dataSource;
+  private List<Book> allBooks;
+  private List<ListItem> listItems = new ArrayList<>();
+  private Disposable saveNetworkLanguageDisposable;
 
   public LibraryAdapter(Context context) {
     super();
     KiwixApplication.getApplicationComponent().inject(this);
     this.context = context;
     layoutInflater = LayoutInflater.from(context);
+  }
+
+  // Create a string that represents the size of the zim file in a human readable way
+  public static String createGbString(String megaByte) {
+
+    int size = 0;
+    try {
+      size = Integer.parseInt(megaByte);
+    } catch (NumberFormatException e) {
+      e.printStackTrace();
+    }
+
+    if (size <= 0) {
+      return "";
+    }
+
+    final String[] units = new String[] { "KB", "MB", "GB", "TB" };
+    int conversion = (int) (Math.log10(size) / Math.log10(1024));
+    return new DecimalFormat("#,##0.#")
+        .format(size / Math.pow(1024, conversion))
+        + " "
+        + units[conversion];
+  }
+
+  // Decode and create a Bitmap from the 64-Bit encoded favicon string
+  public static Bitmap createBitmapFromEncodedString(String encodedString, Context context) {
+
+    try {
+      byte[] decodedString = Base64.decode(encodedString, Base64.DEFAULT);
+      return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return BitmapFactory.decodeResource(context.getResources(), R.mipmap.kiwix_icon);
   }
 
   public void setAllBooks(List<Book> books) {
@@ -234,6 +264,88 @@ public class LibraryAdapter extends BaseAdapter {
     }
   }
 
+  public Filter getFilter() {
+    return bookFilter;
+  }
+
+  private void updateLanguageCounts() {
+    languageCounts.clear();
+    for (Book book : allBooks) {
+      Integer cnt = languageCounts.get(book.getLanguage());
+      if (cnt == null) {
+        languageCounts.put(book.getLanguage(), 1);
+      } else {
+        languageCounts.put(book.getLanguage(), cnt + 1);
+      }
+    }
+  }
+
+  private void updateLanguages() {
+    // Load previously stored languages and extract which ones were enabled. The new book list might
+    // have new languages, or be missing some old ones so we want to refresh it, but retain user's
+    // selections.
+    Set<String> enabled_languages = new HashSet<>();
+    for (Language language : networkLanguageDao.getFilteredLanguages()) {
+      if (language.active) {
+        enabled_languages.add(language.languageCode);
+      }
+    }
+
+    // Populate languages with all available locales, which appear in the current list of all books.
+    this.languages.clear();
+    for (String iso_language : Locale.getISOLanguages()) {
+      Locale locale = new Locale(iso_language);
+      if (languageCounts.get(locale.getISO3Language()) != null) {
+        // Enable this language either if it was enabled previously, or if it is the device language.
+        if (enabled_languages.contains(locale.getISO3Language()) ||
+            context.getResources().getConfiguration().locale.getISO3Language()
+                .equals(locale.getISO3Language())) {
+          this.languages.add(new Language(locale, true));
+        } else {
+          this.languages.add(new Language(locale, false));
+        }
+      }
+    }
+
+    saveNetworkLanguages();
+  }
+
+  private void addBooks(List<Book> books) {
+    for (Book book : books) {
+      listItems.add(new ListItem(book, LIST_ITEM_TYPE_BOOK));
+    }
+  }
+
+  private void saveNetworkLanguages() {
+    if (saveNetworkLanguageDisposable != null && !saveNetworkLanguageDisposable.isDisposed()) {
+      saveNetworkLanguageDisposable.dispose();
+    }
+    saveNetworkLanguageDisposable = dataSource.saveLanguages(languages)
+        .subscribe(() -> {
+        }, throwable -> Log.d("LibraryAdapter", throwable.toString()));
+  }
+
+  private static class ViewHolder {
+
+    TextView title;
+
+    TextView description;
+
+    TextView language;
+
+    TextView creator;
+
+    TextView publisher;
+
+    TextView date;
+
+    TextView size;
+
+    TextView fileName;
+
+    ImageView favicon;
+  }
+
   private class BookFilter extends Filter {
     @Override
     protected FilterResults performFiltering(CharSequence s) {
@@ -258,9 +370,11 @@ public class LibraryAdapter extends BaseAdapter {
             .toList()
             .blockingGet();
 
-        listItems.add(new ListItem(context.getResources().getString(R.string.your_languages), LIST_ITEM_TYPE_DIVIDER));
+        listItems.add(new ListItem(context.getResources().getString(R.string.your_languages),
+            LIST_ITEM_TYPE_DIVIDER));
         addBooks(selectedLanguages);
-        listItems.add(new ListItem(context.getResources().getString(R.string.other_languages), LIST_ITEM_TYPE_DIVIDER));
+        listItems.add(new ListItem(context.getResources().getString(R.string.other_languages),
+            LIST_ITEM_TYPE_DIVIDER));
         addBooks(unselectedLanguages);
       } else {
         List<Book> selectedLanguages = Observable.fromIterable(allBooks)
@@ -311,113 +425,6 @@ public class LibraryAdapter extends BaseAdapter {
     }
   }
 
-  public Filter getFilter() {
-    return bookFilter;
-  }
-
-  private void updateLanguageCounts() {
-    languageCounts.clear();
-    for (Book book : allBooks) {
-      Integer cnt = languageCounts.get(book.getLanguage());
-      if (cnt == null) {
-        languageCounts.put(book.getLanguage(), 1);
-      } else {
-        languageCounts.put(book.getLanguage(), cnt + 1);
-      }
-    }
-  }
-
-  private void updateLanguages() {
-    // Load previously stored languages and extract which ones were enabled. The new book list might
-    // have new languages, or be missing some old ones so we want to refresh it, but retain user's
-    // selections.
-    Set<String> enabled_languages = new HashSet<>();
-    for (Language language : networkLanguageDao.getFilteredLanguages()) {
-      if (language.active) {
-        enabled_languages.add(language.languageCode);
-      }
-    }
-
-    // Populate languages with all available locales, which appear in the current list of all books.
-    this.languages.clear();
-    for (String iso_language : Locale.getISOLanguages()) {
-      Locale locale = new Locale(iso_language);
-      if (languageCounts.get(locale.getISO3Language()) != null) {
-        // Enable this language either if it was enabled previously, or if it is the device language.
-        if (enabled_languages.contains(locale.getISO3Language()) ||
-            context.getResources().getConfiguration().locale.getISO3Language().equals(locale.getISO3Language())) {
-          this.languages.add(new Language(locale, true));
-        } else {
-          this.languages.add(new Language(locale, false));
-        }
-      }
-    }
-
-    saveNetworkLanguages();
-  }
-
-  private void addBooks(List<Book> books) {
-    for (Book book : books) {
-      listItems.add(new ListItem(book, LIST_ITEM_TYPE_BOOK));
-    }
-  }
-
-  // Create a string that represents the size of the zim file in a human readable way
-  public static String createGbString(String megaByte) {
-
-    int size = 0;
-    try {
-      size = Integer.parseInt(megaByte);
-    } catch (NumberFormatException e) {
-      e.printStackTrace();
-    }
-
-    if (size <= 0) {
-      return "";
-    }
-
-    final String[] units = new String[]{"KB", "MB", "GB", "TB"};
-    int conversion = (int) (Math.log10(size) / Math.log10(1024));
-    return new DecimalFormat("#,##0.#")
-        .format(size / Math.pow(1024, conversion))
-        + " "
-        + units[conversion];
-  }
-
-  // Decode and create a Bitmap from the 64-Bit encoded favicon string
-  public static Bitmap createBitmapFromEncodedString(String encodedString, Context context) {
-
-    try {
-      byte[] decodedString = Base64.decode(encodedString, Base64.DEFAULT);
-      return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
-    return BitmapFactory.decodeResource(context.getResources(), R.mipmap.kiwix_icon);
-  }
-
-  private static class ViewHolder {
-
-    TextView title;
-
-    TextView description;
-
-    TextView language;
-
-    TextView creator;
-
-    TextView publisher;
-
-    TextView date;
-
-    TextView size;
-
-    TextView fileName;
-
-    ImageView favicon;
-  }
-
   private class ListItem {
     public Object data;
     public int type;
@@ -432,14 +439,5 @@ public class LibraryAdapter extends BaseAdapter {
     public int compare(Book book1, Book book2) {
       return book2.searchMatches - book1.searchMatches;
     }
-  }
-
-  private void saveNetworkLanguages() {
-    if (saveNetworkLanguageDisposable != null && !saveNetworkLanguageDisposable.isDisposed()) {
-      saveNetworkLanguageDisposable.dispose();
-    }
-    saveNetworkLanguageDisposable = dataSource.saveLanguages(languages)
-        .subscribe(() -> {
-        }, throwable -> Log.d("LibraryAdapter", throwable.toString()));
   }
 }

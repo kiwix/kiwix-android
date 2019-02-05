@@ -1,9 +1,8 @@
 package org.kiwix.kiwixmobile.bookmark;
 
+import java.util.List;
 import org.kiwix.kiwixmobile.base.BaseContract;
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
-
-import java.util.List;
 
 interface BookmarksContract {
   interface View extends BaseContract.View<Presenter> {

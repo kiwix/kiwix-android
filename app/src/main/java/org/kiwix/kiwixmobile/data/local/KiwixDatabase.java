@@ -21,11 +21,17 @@ package org.kiwix.kiwixmobile.data.local;
 
 import android.content.Context;
 import android.util.Log;
-
 import com.yahoo.squidb.data.SquidDatabase;
 import com.yahoo.squidb.data.adapter.SQLiteDatabaseWrapper;
 import com.yahoo.squidb.sql.Table;
-
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.List;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.dao.BookDao;
 import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
@@ -37,16 +43,6 @@ import org.kiwix.kiwixmobile.data.local.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.data.local.entity.RecentSearch;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.UpdateUtils;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
@@ -69,7 +65,7 @@ public class KiwixDatabase extends SquidDatabase {
 
   @Override
   protected Table[] getTables() {
-    return new Table[]{
+    return new Table[] {
         BookDatabaseEntity.TABLE,
         LibraryDatabaseEntity.TABLE,
         RecentSearch.TABLE,
@@ -167,7 +163,10 @@ public class KiwixDatabase extends SquidDatabase {
             BufferedReader read = new BufferedReader(new InputStreamReader(stream));
             while ((in = read.readLine()) != null) {
               Bookmark bookmark = new Bookmark();
-              bookmark.setBookmarkUrl("null").setBookmarkTitle(in).setZimId(idName).setZimName(idName);
+              bookmark.setBookmarkUrl("null")
+                  .setBookmarkTitle(in)
+                  .setZimId(idName)
+                  .setZimName(idName);
               persist(bookmark);
             }
             context.deleteFile(id);

@@ -1,21 +1,17 @@
 package org.kiwix.kiwixmobile.main;
 
 import android.util.Log;
-
+import io.reactivex.CompletableObserver;
+import io.reactivex.SingleObserver;
+import io.reactivex.disposables.Disposable;
+import java.util.List;
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.data.DataSource;
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.di.PerActivity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
-
-import java.util.List;
-
-import javax.inject.Inject;
-
-import io.reactivex.CompletableObserver;
-import io.reactivex.SingleObserver;
-import io.reactivex.disposables.Disposable;
 
 /**
  * Presenter for {@link MainActivity}.
@@ -27,8 +23,7 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
   private static final String TAG = "MainPresenter";
   private final DataSource dataSource;
 
-  @Inject
-  MainPresenter(DataSource dataSource) {
+  @Inject MainPresenter(DataSource dataSource) {
     this.dataSource = dataSource;
   }
 
@@ -98,7 +93,8 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
   @Override
   public void loadCurrentZimBookmarksUrl() {
     compositeDisposable.add(dataSource.getCurrentZimBookmarksUrl()
-        .subscribe(view::refreshBookmarksUrl, e -> Log.e(TAG, "Unable to load current ZIM urls", e)));
+        .subscribe(view::refreshBookmarksUrl,
+            e -> Log.e(TAG, "Unable to load current ZIM urls", e)));
   }
 
   @Override

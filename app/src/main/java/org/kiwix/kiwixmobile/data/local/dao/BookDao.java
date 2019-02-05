@@ -17,19 +17,15 @@
  */
 package org.kiwix.kiwixmobile.data.local.dao;
 
-
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
-
+import java.io.File;
+import java.util.ArrayList;
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
 import org.kiwix.kiwixmobile.data.local.entity.BookDatabaseEntity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
-
-import java.io.File;
-import java.util.ArrayList;
-
-import javax.inject.Inject;
 
 /**
  * Dao class for books
@@ -73,7 +69,8 @@ public class BookDao {
     bookDatabaseEntity.setSize(book.getSize());
     bookDatabaseEntity.setFavicon(book.getFavicon());
     bookDatabaseEntity.setName(book.getName());
-    kiwixDatabase.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.BOOK_ID.eq(book.getId()));
+    kiwixDatabase.deleteWhere(BookDatabaseEntity.class,
+        BookDatabaseEntity.BOOK_ID.eq(book.getId()));
     kiwixDatabase.persist(bookDatabaseEntity);
   }
 
@@ -97,7 +94,8 @@ public class BookDao {
         if (book.file.exists()) {
           filteredBookList.add(book);
         } else {
-          kiwixDatabase.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(book.file.getPath()));
+          kiwixDatabase.deleteWhere(BookDatabaseEntity.class,
+              BookDatabaseEntity.URL.eq(book.file.getPath()));
         }
       }
     }

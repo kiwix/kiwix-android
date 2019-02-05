@@ -17,12 +17,11 @@
  */
 package org.kiwix.kiwixmobile.data.remote;
 
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
-import org.kiwix.kiwixmobile.library.entity.MetaLinkNetworkEntity;
-
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.library.entity.MetaLinkNetworkEntity;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
@@ -33,7 +32,6 @@ public interface KiwixService {
   @GET("/library/library_zim.xml") Observable<LibraryNetworkEntity> getLibrary();
 
   @GET Observable<MetaLinkNetworkEntity> getMetaLinks(@Url String url);
-
 
   /******** Helper class that sets up new services *******/
   class ServiceCreator {

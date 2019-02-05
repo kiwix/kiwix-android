@@ -33,19 +33,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Toast;
-
-import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.utils.LanguageUtils;
-import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
 import javax.inject.Inject;
+import org.kiwix.kiwixmobile.KiwixApplication;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.utils.LanguageUtils;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 public class KiwixWebView extends WebView {
   private static final float[] NIGHT_MODE_COLORS = {
@@ -73,6 +70,10 @@ public class KiwixWebView extends WebView {
     getSettings().setDomStorageEnabled(true);
   }
 
+  public static float[] getNightModeColors() {
+    return NIGHT_MODE_COLORS;
+  }
+
   public void loadPrefs() {
     disableZoomControls();
     boolean zoomEnabled = sharedPreferenceUtil.getPrefZoomEnabled();
@@ -94,10 +95,6 @@ public class KiwixWebView extends WebView {
     ColorMatrixColorFilter filterInvert = new ColorMatrixColorFilter(NIGHT_MODE_COLORS);
     paint.setColorFilter(filterInvert);
     setLayerType(View.LAYER_TYPE_HARDWARE, paint);
-  }
-
-  public static float[] getNightModeColors() {
-    return NIGHT_MODE_COLORS;
   }
 
   @Override
@@ -178,7 +175,8 @@ public class KiwixWebView extends WebView {
         String toastText;
 
         try {
-          InputStream input = KiwixApplication.getInstance().getContentResolver().openInputStream(source);
+          InputStream input =
+              KiwixApplication.getInstance().getContentResolver().openInputStream(source);
           OutputStream output = new FileOutputStream(storageDir);
 
           byte[] buffer = new byte[1024];

@@ -6,12 +6,13 @@
  * itself.
  *
  * Each test contains:
- *  @Test
- *  public void empty() {
  *
- *  }
+ * @Test public void empty() {
  *
- * This forces JUnit to execute the ActivityRule, and then exit immediately (start and stop the Activity)
+ * }
+ *
+ * This forces JUnit to execute the ActivityRule, and then exit immediately (start and stop the
+ * Activity)
  */
 
 package org.kiwix.kiwixmobile.tests.activities;

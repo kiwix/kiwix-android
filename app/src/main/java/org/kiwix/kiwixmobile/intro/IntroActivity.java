@@ -6,21 +6,16 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-
-import com.pixelcan.inkpageindicator.InkPageIndicator;
-
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.main.MainActivity;
-
-import java.util.Timer;
-import java.util.TimerTask;
-
-import javax.inject.Inject;
-
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.OnClick;
+import com.pixelcan.inkpageindicator.InkPageIndicator;
+import java.util.Timer;
+import java.util.TimerTask;
+import javax.inject.Inject;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.base.BaseActivity;
+import org.kiwix.kiwixmobile.main.MainActivity;
 
 public class IntroActivity extends BaseActivity implements IntroContract.View {
 
@@ -34,34 +29,35 @@ public class IntroActivity extends BaseActivity implements IntroContract.View {
   IntroContract.Presenter presenter;
   private ImageView airPlane;
   private int currentPage = 0;
-  private final ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+  private final ViewPager.OnPageChangeListener pageChangeListener =
+      new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-    }
+        }
 
-    @Override
-    public void onPageSelected(int position) {
-      if (position == 1) {
-        airPlane.setVisibility(View.VISIBLE);
-        airPlane.animate()
-            .translationX(airPlane.getWidth())
-            .setDuration(800);
-      } else {
-        airPlane.setVisibility(View.INVISIBLE);
-        airPlane.animate()
-            .translationX(-airPlane.getWidth());
-      }
-      currentPage = position;
-    }
+        @Override
+        public void onPageSelected(int position) {
+          if (position == 1) {
+            airPlane.setVisibility(View.VISIBLE);
+            airPlane.animate()
+                .translationX(airPlane.getWidth())
+                .setDuration(800);
+          } else {
+            airPlane.setVisibility(View.INVISIBLE);
+            airPlane.animate()
+                .translationX(-airPlane.getWidth());
+          }
+          currentPage = position;
+        }
 
-    @Override
-    public void onPageScrollStateChanged(int state) {
-      if (state == ViewPager.SCROLL_STATE_DRAGGING) {
-        dismissAutoRotate();
-      }
-    }
-  };
+        @Override
+        public void onPageScrollStateChanged(int state) {
+          if (state == ViewPager.SCROLL_STATE_DRAGGING) {
+            dismissAutoRotate();
+          }
+        }
+      };
   private View[] views;
 
   @Override
@@ -69,7 +65,7 @@ public class IntroActivity extends BaseActivity implements IntroContract.View {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_intro);
     LayoutInflater layoutInflater = getLayoutInflater();
-    views = new View[]{
+    views = new View[] {
         layoutInflater.inflate(R.layout.item_intro_1, viewPager, false),
         layoutInflater.inflate(R.layout.item_intro_2, viewPager, false)
     };

@@ -18,18 +18,14 @@
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view;
 
 import android.util.Log;
-
+import io.reactivex.CompletableObserver;
+import io.reactivex.disposables.Disposable;
+import java.util.ArrayList;
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.data.DataSource;
 import org.kiwix.kiwixmobile.data.local.dao.BookDao;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
-
-import java.util.ArrayList;
-
-import javax.inject.Inject;
-
-import io.reactivex.CompletableObserver;
-import io.reactivex.disposables.Disposable;
 
 /**
  * Created by EladKeyshawn on 06/04/2017.
@@ -42,8 +38,7 @@ public class ZimFileSelectPresenter extends BasePresenter<ZimFileSelectViewCallb
   @Inject
   BookDao bookDao;
 
-  @Inject
-  ZimFileSelectPresenter(DataSource dataSource) {
+  @Inject ZimFileSelectPresenter(DataSource dataSource) {
     this.dataSource = dataSource;
   }
 

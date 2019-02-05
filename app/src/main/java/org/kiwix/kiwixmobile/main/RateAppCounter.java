@@ -17,12 +17,10 @@
  * MA 02110-1301, USA.
  */
 
-
 package org.kiwix.kiwixmobile.main;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 
 public class RateAppCounter {
 

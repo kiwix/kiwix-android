@@ -149,7 +149,8 @@ if (custom.listFiles()) {
   custom.eachFile() { file ->
 
     def fileName = file.getName()
-    if (fileName.startsWith(".") || fileName.contains("test") || fileName == "main" || fileName.contains("Test")) {
+    if (fileName.startsWith(".") || fileName.contains("test") ||
+        fileName == "main" || fileName.contains("Test")) {
       return
     }
     map.put(fileName, file.getAbsolutePath())
@@ -227,7 +228,6 @@ android {
     release {
       buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://download.kiwix.org/\""
     }
-
   }
 
   productFlavors {
