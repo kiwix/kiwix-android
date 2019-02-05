@@ -24,18 +24,6 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
-
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import androidx.core.content.ContextCompat;
 import androidx.test.InstrumentationRegistry;
 import androidx.test.espresso.matcher.BoundedMatcher;
@@ -44,6 +32,15 @@ import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
 import static androidx.test.InstrumentationRegistry.getInstrumentation;
 
@@ -52,8 +49,8 @@ import static androidx.test.InstrumentationRegistry.getInstrumentation;
  */
 
 public class TestUtils {
-  public static int TEST_PAUSE_MS = 250;
   private static final String TAG = "TESTUTILS";
+  public static int TEST_PAUSE_MS = 250;
   /*
     TEST_PAUSE_MS is used as such:
         BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
@@ -75,7 +72,8 @@ public class TestUtils {
   public static void allowPermissionsIfNeeded() {
     if (Build.VERSION.SDK_INT >= 23 && !hasStoragePermission()) {
       UiDevice device = UiDevice.getInstance(getInstrumentation());
-      UiObject allowPermissions = device.findObject(new UiSelector().clickable(true).checkable(false).index(1));
+      UiObject allowPermissions =
+          device.findObject(new UiSelector().clickable(true).checkable(false).index(1));
       if (allowPermissions.exists()) {
         try {
           allowPermissions.click();
@@ -144,6 +142,5 @@ public class TestUtils {
     Context targetContext = InstrumentationRegistry.getTargetContext();
     return targetContext.getResources().getString(id);
   }
-
 }
 

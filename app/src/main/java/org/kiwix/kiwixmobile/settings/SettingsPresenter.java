@@ -1,21 +1,18 @@
 package org.kiwix.kiwixmobile.settings;
 
 import android.util.Log;
-
+import io.reactivex.CompletableObserver;
+import io.reactivex.disposables.Disposable;
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.data.DataSource;
 
-import javax.inject.Inject;
-
-import io.reactivex.CompletableObserver;
-import io.reactivex.disposables.Disposable;
-
-class SettingsPresenter extends BasePresenter<SettingsContract.View> implements SettingsContract.Presenter {
+class SettingsPresenter extends BasePresenter<SettingsContract.View>
+    implements SettingsContract.Presenter {
 
   private final DataSource dataSource;
 
-  @Inject
-  SettingsPresenter(DataSource dataSource) {
+  @Inject SettingsPresenter(DataSource dataSource) {
     this.dataSource = dataSource;
   }
 

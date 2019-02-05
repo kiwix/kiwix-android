@@ -1,9 +1,8 @@
 package org.kiwix.kiwixmobile.main;
 
-import org.kiwix.kiwixmobile.di.PerActivity;
-
 import dagger.Module;
 import dagger.Provides;
+import org.kiwix.kiwixmobile.di.PerActivity;
 
 @Module
 public class MainModule {

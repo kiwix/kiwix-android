@@ -18,10 +18,8 @@
 package org.kiwix.kiwixmobile.utils;
 
 import android.util.Log;
-
 import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
-
 import org.kiwix.kiwixmobile.R;
 
 import static androidx.test.espresso.Espresso.onData;

@@ -20,21 +20,18 @@ package org.kiwix.kiwixmobile.help;
 
 import android.Manifest;
 import android.content.Context;
-
+import androidx.test.espresso.intent.Intents;
+import androidx.test.filters.LargeTest;
+import androidx.test.rule.GrantPermissionRule;
+import androidx.test.runner.AndroidJUnit4;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import com.schibsted.spain.barista.rule.BaristaRule;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
-
-import androidx.test.espresso.intent.Intents;
-import androidx.test.filters.LargeTest;
-import androidx.test.rule.GrantPermissionRule;
-import androidx.test.runner.AndroidJUnit4;
 
 import static androidx.test.InstrumentationRegistry.getInstrumentation;
 import static androidx.test.espresso.Espresso.onView;
@@ -51,9 +48,11 @@ public class HelpActivityTest {
   @Rule
   public BaristaRule<HelpActivity> activityTestRule = BaristaRule.create(HelpActivity.class);
   @Rule
-  public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+  public GrantPermissionRule readPermissionRule =
+      GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule
-  public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+  public GrantPermissionRule writePermissionRule =
+      GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
   private Context context;
 
   @Before
@@ -71,12 +70,36 @@ public class HelpActivityTest {
     // Test the layout of the screen
     onView(withText(context.getString(R.string.help_5))).check(matches(notNullValue()));
     onView(withText(context.getString(R.string.help_5))).perform(click());
-    test = context.getString(R.string.help_6) + "\n" + context.getString(R.string.help_7) + "\n" + context.getString(R.string.help_8) + "\n" + context.getString(R.string.help_9) + "\n" + context.getString(R.string.help_10) + "\n" + context.getString(R.string.help_11) + "\n";
+    test = context.getString(R.string.help_6)
+        + "\n"
+        + context.getString(R.string.help_7)
+        + "\n"
+        + context.getString(R.string.help_8)
+        + "\n"
+        + context.getString(R.string.help_9)
+        + "\n"
+        + context.getString(R.string.help_10)
+        + "\n"
+        + context.getString(R.string.help_11)
+        + "\n";
     onView(withText(test)).check(matches(notNullValue()));
 
     onView(withText(context.getString(R.string.help_12))).check(matches(notNullValue()));
     onView(withText(context.getString(R.string.help_12))).perform(click());
-    test = context.getString(R.string.help_13) + "\n" + context.getString(R.string.help_14) + "\n" + context.getString(R.string.help_15) + "\n" + context.getString(R.string.help_16) + "\n" + context.getString(R.string.help_17) + "\n" + context.getString(R.string.help_18) + "\n" + context.getString(R.string.help_19) + "\n";
+    test = context.getString(R.string.help_13)
+        + "\n"
+        + context.getString(R.string.help_14)
+        + "\n"
+        + context.getString(R.string.help_15)
+        + "\n"
+        + context.getString(R.string.help_16)
+        + "\n"
+        + context.getString(R.string.help_17)
+        + "\n"
+        + context.getString(R.string.help_18)
+        + "\n"
+        + context.getString(R.string.help_19)
+        + "\n";
     onView(withText(test)).check(matches(notNullValue()));
 
     onView(withText(context.getString(R.string.help_2))).check(matches(notNullValue()));

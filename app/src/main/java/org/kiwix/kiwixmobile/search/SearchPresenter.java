@@ -17,10 +17,9 @@
  */
 package org.kiwix.kiwixmobile.search;
 
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.data.local.dao.RecentSearchDao;
-
-import javax.inject.Inject;
 
 /**
  * Created by srv_twry on 14/2/18.
@@ -28,26 +27,26 @@ import javax.inject.Inject;
 
 public class SearchPresenter extends BasePresenter<SearchViewCallback> {
 
-    @Inject
-    RecentSearchDao recentSearchDao;
+  @Inject
+  RecentSearchDao recentSearchDao;
 
-    @Inject
-    SearchPresenter() {}
+  @Inject SearchPresenter() {
+  }
 
-    @Override
-    public void attachView(SearchViewCallback searchViewCallback) {
-        super.attachView(searchViewCallback);
-    }
+  @Override
+  public void attachView(SearchViewCallback searchViewCallback) {
+    super.attachView(searchViewCallback);
+  }
 
-    void getRecentSearches() {
-        view.addRecentSearches(recentSearchDao.getRecentSearches());
-    }
+  void getRecentSearches() {
+    view.addRecentSearches(recentSearchDao.getRecentSearches());
+  }
 
-    void saveSearch(String title) {
-        recentSearchDao.saveSearch(title);
-    }
+  void saveSearch(String title) {
+    recentSearchDao.saveSearch(title);
+  }
 
-    void deleteSearchString(String search) {
-        recentSearchDao.deleteSearchString(search);
-    }
+  void deleteSearchString(String search) {
+    recentSearchDao.deleteSearchString(search);
+  }
 }

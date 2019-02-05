@@ -1,7 +1,14 @@
 package org.kiwix.kiwixmobile.history;
 
 import android.util.Log;
-
+import io.reactivex.CompletableObserver;
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
+import io.reactivex.SingleObserver;
+import io.reactivex.disposables.Disposable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.data.DataSource;
 import org.kiwix.kiwixmobile.data.local.entity.History;
@@ -9,28 +16,17 @@ import org.kiwix.kiwixmobile.di.PerActivity;
 import org.kiwix.kiwixmobile.di.qualifiers.Computation;
 import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import io.reactivex.CompletableObserver;
-import io.reactivex.Observable;
-import io.reactivex.Scheduler;
-import io.reactivex.SingleObserver;
-import io.reactivex.disposables.Disposable;
-
 @PerActivity
-class HistoryPresenter extends BasePresenter<HistoryContract.View> implements HistoryContract.Presenter {
+class HistoryPresenter extends BasePresenter<HistoryContract.View>
+    implements HistoryContract.Presenter {
 
   private final DataSource dataSource;
   private final Scheduler mainThread;
   private final Scheduler computation;
   private Disposable disposable;
 
-  @Inject
-  HistoryPresenter(DataSource dataSource, @MainThread Scheduler mainThread,
-                   @Computation Scheduler computation) {
+  @Inject HistoryPresenter(DataSource dataSource, @MainThread Scheduler mainThread,
+      @Computation Scheduler computation) {
     this.dataSource = dataSource;
     this.mainThread = mainThread;
     this.computation = computation;

@@ -5,17 +5,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.models.Language;
-
-import java.util.ArrayList;
-import java.util.Collections;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import java.util.ArrayList;
+import java.util.Collections;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.models.Language;
 
 class LanguageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   private static final int TYPE_HEADER = 0;
@@ -48,10 +45,12 @@ class LanguageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   @Override
   public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     if (viewType == TYPE_ITEM) {
-      View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_language, parent, false);
+      View view =
+          LayoutInflater.from(parent.getContext()).inflate(R.layout.item_language, parent, false);
       return new ViewHolder(view);
     }
-    return new Header(LayoutInflater.from(parent.getContext()).inflate(R.layout.header_date, parent, false));
+    return new Header(
+        LayoutInflater.from(parent.getContext()).inflate(R.layout.header_date, parent, false));
   }
 
   @Override

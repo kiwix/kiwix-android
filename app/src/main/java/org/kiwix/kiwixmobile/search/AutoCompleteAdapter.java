@@ -25,33 +25,23 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
-
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
 import org.kiwix.kiwixlib.JNIKiwix;
 import org.kiwix.kiwixlib.JNIKiwixSearcher;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
 public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
-
-  private List<String> mData;
-
-  private KiwixFilter mFilter;
-
-  private Context context;
 
   @Inject JNIKiwix currentJNIReader;
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
-
-  private void setupDagger() {
-    KiwixApplication.getInstance().getApplicationComponent().inject(this);
-  }
+  private List<String> mData;
+  private KiwixFilter mFilter;
+  private Context context;
 
   public AutoCompleteAdapter(Context context) {
     super(context, android.R.layout.simple_list_item_1);
@@ -59,6 +49,10 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
     mData = new ArrayList<>();
     mFilter = new KiwixFilter();
     setupDagger();
+  }
+
+  private void setupDagger() {
+    KiwixApplication.getInstance().getApplicationComponent().inject(this);
   }
 
   @Override
@@ -83,7 +77,9 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
       String trim = a.substring(2);
       trim = trim.substring(0, trim.length() - 5);
       return trim.replace("_", " ");
-    } else return a;
+    } else {
+      return a;
+    }
   }
 
   @Override
@@ -101,8 +97,8 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
       if (constraint != null) {
         try {
 
-	  /* Get search request */
-	  final String query = constraint.toString();
+          /* Get search request */
+          final String query = constraint.toString();
 
           /* Fulltext search */
           if (sharedPreferenceUtil.getPrefFullTextSearch()) {
@@ -113,30 +109,28 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
                 data.add(result.getTitle());
               }
               result = ZimContentProvider.jniSearcher.getNextResult();
-
             }
           }
 
-	  /* Suggestion search if no fulltext results */
-	  if (data.size() == 0) {
-   	    ZimContentProvider.searchSuggestions(query, 200);
-	    String suggestion;
-	    String suggestionUrl;
-	    List<String> alreadyAdded = new ArrayList<>();
-	    while ((suggestion = ZimContentProvider.getNextSuggestion()) != null) {
-   	      suggestionUrl = ZimContentProvider.getPageUrlFromTitle(suggestion);
-	      if (!alreadyAdded.contains(suggestionUrl)) {
-		alreadyAdded.add(suggestionUrl);
-		data.add(suggestion);
-	      }
-	    }
-	  }
-
+          /* Suggestion search if no fulltext results */
+          if (data.size() == 0) {
+            ZimContentProvider.searchSuggestions(query, 200);
+            String suggestion;
+            String suggestionUrl;
+            List<String> alreadyAdded = new ArrayList<>();
+            while ((suggestion = ZimContentProvider.getNextSuggestion()) != null) {
+              suggestionUrl = ZimContentProvider.getPageUrlFromTitle(suggestion);
+              if (!alreadyAdded.contains(suggestionUrl)) {
+                alreadyAdded.add(suggestionUrl);
+                data.add(suggestion);
+              }
+            }
+          }
         } catch (Exception e) {
           e.printStackTrace();
         }
 
-	/* Return results */
+        /* Return results */
         filterResults.values = data;
         filterResults.count = data.size();
       }

@@ -17,9 +17,8 @@
  */
 package org.kiwix.kiwixmobile.utils;
 
-import org.kiwix.kiwixmobile.utils.TestingUtils.IdleListener;
-
 import androidx.test.espresso.IdlingResource;
+import org.kiwix.kiwixmobile.utils.TestingUtils.IdleListener;
 
 /**
  * Created by mhutti1 on 19/04/17.

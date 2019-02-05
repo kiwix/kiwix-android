@@ -8,21 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.Locale;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
-
-import java.text.DecimalFormat;
-import java.util.List;
-import java.util.Locale;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 import static org.kiwix.kiwixmobile.library.LibraryAdapter.createGbString;
 
@@ -33,7 +30,8 @@ import static org.kiwix.kiwixmobile.library.LibraryAdapter.createGbString;
 public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   private static int TYPE_ITEM = 1;
-  private final SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(KiwixApplication.getInstance());
+  private final SharedPreferenceUtil sharedPreferenceUtil =
+      new SharedPreferenceUtil(KiwixApplication.getInstance());
   private List<LibraryNetworkEntity.Book> books;
   private OnItemClickListener itemClickListener;
 
@@ -52,7 +50,7 @@ public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return "";
       }
 
-      final String[] units = new String[]{"", "K", "M", "B", "T"};
+      final String[] units = new String[] { "", "K", "M", "B", "T" };
       int conversion = (int) (Math.log10(size) / 3);
       return context.getString(R.string.articleCount, new DecimalFormat("#,##0.#")
           .format(size / Math.pow(1000, conversion)) + units[conversion]);
@@ -66,10 +64,12 @@ public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
   @Override
   public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     if (viewType == TYPE_ITEM) {
-      View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_book, parent, false);
+      View view =
+          LayoutInflater.from(parent.getContext()).inflate(R.layout.item_book, parent, false);
       return new Item(view);
     } else {
-      View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.header_language, parent, false);
+      View view =
+          LayoutInflater.from(parent.getContext()).inflate(R.layout.header_language, parent, false);
       return new Category(view);
     }
   }
@@ -83,11 +83,15 @@ public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
       item.date.setText(book.getDate());
       item.description.setText(book.getDescription());
       item.size.setText(createGbString(book.getSize()));
-      item.articleCount.setText(getArticleCountString(item.articleCount.getContext(), book.getArticleCount()));
-      item.icon.setImageBitmap(LibraryAdapter.createBitmapFromEncodedString(book.getFavicon(), item.icon.getContext()));
+      item.articleCount.setText(
+          getArticleCountString(item.articleCount.getContext(), book.getArticleCount()));
+      item.icon.setImageBitmap(
+          LibraryAdapter.createBitmapFromEncodedString(book.getFavicon(), item.icon.getContext()));
 
       if (sharedPreferenceUtil.nightMode()) {  ////Fix Bug #905: Launch activity (night-mode) inverts colour of icons
-        item.icon.getDrawable().mutate().setColorFilter(new ColorMatrixColorFilter(KiwixWebView.getNightModeColors()));
+        item.icon.getDrawable()
+            .mutate()
+            .setColorFilter(new ColorMatrixColorFilter(KiwixWebView.getNightModeColors()));
       }
 
       item.itemView.setOnClickListener(v -> itemClickListener.openFile(book.file.getPath()));

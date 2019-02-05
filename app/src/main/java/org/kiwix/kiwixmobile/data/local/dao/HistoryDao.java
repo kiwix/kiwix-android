@@ -1,20 +1,16 @@
 package org.kiwix.kiwixmobile.data.local.dao;
 
 import android.content.Context;
-
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
-
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
-import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
-import org.kiwix.kiwixmobile.data.local.entity.History;
-
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import javax.inject.Inject;
+import org.kiwix.kiwixmobile.data.ZimContentProvider;
+import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
+import org.kiwix.kiwixmobile.data.local.entity.History;
 
 import static org.kiwix.kiwixmobile.utils.LanguageUtils.getCurrentLocale;
 
@@ -22,14 +18,14 @@ public class HistoryDao {
   private final Context context;
   private final KiwixDatabase kiwixDatabase;
 
-  @Inject
-  HistoryDao(Context context, KiwixDatabase kiwixDatabase) {
+  @Inject HistoryDao(Context context, KiwixDatabase kiwixDatabase) {
     this.context = context;
     this.kiwixDatabase = kiwixDatabase;
   }
 
   public void saveHistory(History history) {
-    DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, getCurrentLocale(context));
+    DateFormat dateFormat =
+        DateFormat.getDateInstance(DateFormat.MEDIUM, getCurrentLocale(context));
     String date = dateFormat.format(new Date(history.getTimeStamp()));
     kiwixDatabase.deleteWhere(History.class, History.HISTORY_URL.eq(history.getHistoryUrl())
         .and(History.DATE.eq(date)).and(History.ZIM_ID.eq(history.getZimId())));

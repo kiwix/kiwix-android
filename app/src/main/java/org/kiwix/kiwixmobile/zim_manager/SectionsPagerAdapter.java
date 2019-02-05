@@ -18,15 +18,13 @@
 package org.kiwix.kiwixmobile.zim_manager;
 
 import android.content.Context;
-
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 
 /**
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to

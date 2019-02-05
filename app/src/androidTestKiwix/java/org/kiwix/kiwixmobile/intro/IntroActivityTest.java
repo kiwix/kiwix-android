@@ -19,10 +19,13 @@
 package org.kiwix.kiwixmobile.intro;
 
 import android.Manifest;
-
+import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.intent.Intents;
+import androidx.test.filters.LargeTest;
+import androidx.test.rule.GrantPermissionRule;
+import androidx.test.runner.AndroidJUnit4;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import com.schibsted.spain.barista.rule.BaristaRule;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -30,12 +33,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.main.MainActivity;
-
-import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.intent.Intents;
-import androidx.test.filters.LargeTest;
-import androidx.test.rule.GrantPermissionRule;
-import androidx.test.runner.AndroidJUnit4;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -58,9 +55,11 @@ public class IntroActivityTest {
   @Rule
   public BaristaRule<IntroActivity> activityTestRule = BaristaRule.create(IntroActivity.class);
   @Rule
-  public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+  public GrantPermissionRule readPermissionRule =
+      GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule
-  public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+  public GrantPermissionRule writePermissionRule =
+      GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @Before
   public void setUp() {

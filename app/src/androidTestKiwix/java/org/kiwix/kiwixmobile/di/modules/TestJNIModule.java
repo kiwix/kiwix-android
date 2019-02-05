@@ -17,30 +17,18 @@
  */
 package org.kiwix.kiwixmobile.di.modules;
 
-import org.apache.commons.io.IOUtils;
-import org.kiwix.kiwixlib.JNIKiwix;
-import org.kiwix.kiwixlib.JNIKiwixString;
-import org.mockito.Mockito;
-
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doReturn;
+import javax.inject.Singleton;
+import org.kiwix.kiwixlib.JNIKiwix;
+import org.mockito.Mockito;
 
 /**
  * Created by mhutti1 on 13/04/17.
  */
 
 @Module
-public class TestJNIModule{
+public class TestJNIModule {
 
   @Provides
   @Singleton
@@ -74,5 +62,4 @@ public class TestJNIModule{
 
     return jniKiwix;
   }
-
 }

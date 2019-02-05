@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.downloader;
 
 public class Chunk {
 
+  public boolean isDownloaded = false;
   private String rangeHeader;
   private String fileName;
   private String url;
@@ -26,9 +27,9 @@ public class Chunk {
   private int notificationID;
   private long startByte;
   private long endByte;
-  public boolean isDownloaded = false;
 
-  public Chunk(String rangeHeader, String fileName, String url, long contentLength, int notificationID , long startByte, long endByte) {
+  public Chunk(String rangeHeader, String fileName, String url, long contentLength,
+      int notificationID, long startByte, long endByte) {
     this.rangeHeader = rangeHeader;
     this.fileName = fileName;
     this.url = url;
@@ -54,11 +55,19 @@ public class Chunk {
     return url;
   }
 
-  public int getNotificationID(){ return notificationID; }
+  public int getNotificationID() {
+    return notificationID;
+  }
 
-  public long getStartByte(){ return startByte; }
+  public long getStartByte() {
+    return startByte;
+  }
 
-  public long getEndByte(){ return endByte; }
+  public long getEndByte() {
+    return endByte;
+  }
 
-  public long getSize() { return 1 + endByte - startByte; }
+  public long getSize() {
+    return 1 + endByte - startByte;
+  }
 }
