@@ -822,6 +822,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
       case R.id.menu_read_aloud:
         if (TTSControls.getVisibility() == View.GONE) {
+          tts.readAloud(getCurrentWebView());
           if (isBackToTopEnabled) {
             backToTopButton.hide();
           }
@@ -829,8 +830,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           if (isBackToTopEnabled) {
             backToTopButton.show();
           }
+         stopTts();
         }
-        tts.readAloud(getCurrentWebView());
+
         break;
 
       case R.id.menu_fullscreen:
