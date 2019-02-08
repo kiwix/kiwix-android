@@ -19,17 +19,19 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
 
-      <ImageView
-        android:id="@+id/content_main_card_image"
-        android:layout_width="0dp"
-        android:layout_height="144dp"
-        android:contentDescription="@string/kiwi"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_home_kiwix_banner"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/content_main_card_image"
+            android:layout_width="0dp"
+            android:layout_height="144dp"
+            android:contentDescription="@string/kiwi"
+            android:src="@drawable/kiwix_vertical_logo"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/content_main_card_download_button"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
       <android.support.v7.widget.AppCompatButton
         android:id="@+id/content_main_card_download_button"

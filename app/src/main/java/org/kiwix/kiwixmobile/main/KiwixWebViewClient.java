@@ -17,7 +17,9 @@
  */
 package org.kiwix.kiwixmobile.main;
 
+
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -106,7 +108,15 @@ public class KiwixWebViewClient extends WebViewClient {
 
   private void inflateHomeView(WebView view) {
     LayoutInflater inflater = LayoutInflater.from(view.getContext());
-    home = inflater.inflate(R.layout.content_main, view, false);
+    if (KiwixApplication.getInstance().getResources().getConfiguration().orientation ==
+            Configuration.ORIENTATION_PORTRAIT) {
+      Log.d("orientation","portrait");
+      home = inflater.inflate(R.layout.content_main, view, false);
+    } else if(KiwixApplication.getInstance().getResources().getConfiguration().orientation ==
+            Configuration.ORIENTATION_LANDSCAPE){
+      Log.d("orientation","landscape");
+      home = inflater.inflate(R.layout.content_main_l, view, false);
+    }
     callback.setHomePage(home);
     if (sharedPreferenceUtil.nightMode()) {
       ImageView cardImage = home.findViewById(R.id.content_main_card_image);

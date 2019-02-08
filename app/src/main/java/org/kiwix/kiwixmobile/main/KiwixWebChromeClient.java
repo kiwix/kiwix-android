@@ -24,7 +24,7 @@ public class KiwixWebChromeClient extends WebChromeClient {
 
   private WebViewCallback callback;
 
-  public KiwixWebChromeClient(WebViewCallback callback) {
+  KiwixWebChromeClient(WebViewCallback callback) {
     this.callback = callback;
   }
 
@@ -34,7 +34,8 @@ public class KiwixWebChromeClient extends WebChromeClient {
     ((MainActivity) view.getContext()).supportInvalidateOptionsMenu();
   }
 
-  @Override public void onReceivedTitle(WebView view, String title) {
+  @Override
+  public void onReceivedTitle(WebView view, String title) {
     super.onReceivedTitle(view, title);
     callback.webViewTitleUpdated(title);
   }

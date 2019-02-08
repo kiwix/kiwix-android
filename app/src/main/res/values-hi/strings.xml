@@ -145,7 +145,7 @@
   <string name="next">अगला</string>
   <string name="previous">पिछला</string>
   <string name="wifi_only_title">मोबाइल नेटवर्क के जरिए सामग्री डाउनलोड करने की अनुमति दें?</string>
-  <string name="wifi_only_msg">यदि आप "हां" चुनते हैं, तो आपको भविष्य में चेतावनी नहीं दी जाएगी। हालांकि, आप इसे हमेशा सेटिंग्स में बदल सकते हैं</string>
+  <string name="wifi_only_msg">यदि आप <b>हां</b> चुनते हैं, तो आपको भविष्य में चेतावनी नहीं दी जाएगी। हालांकि, आप इसे हमेशा सेटिंग्स में बदल सकते हैं</string>
   <string name="pref_wifi_only">केवल वाईफाई द्वारा सामग्री डाउनलोड करें</string>
   <string name="time_day">दिन</string>
   <string name="time_hour">ह्</string>

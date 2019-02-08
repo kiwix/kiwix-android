@@ -72,14 +72,14 @@ dependencies {
   }
 
   androidTestImplementation "com.android.support:support-annotations:$supportLibraryVersion"
-  androidTestImplementation 'com.android.support.test:runner:1.0.1'
-  androidTestImplementation 'com.android.support.test:rules:1.0.1'
+  androidTestImplementation 'com.android.support.test:runner:1.0.2'
+  androidTestImplementation 'com.android.support.test:rules:1.0.2'
 
   // Tab indicator
   implementation "com.pacioianu.david:ink-page-indicator:$inkPageIndicatorVersion"
 
   // Guava
-  implementation group: 'com.google.guava', name: 'guava', version: '21.0'
+  implementation group: 'com.google.guava', name: 'guava', version: '24.1-jre'
 
   // Dagger
   compileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
@@ -132,7 +132,7 @@ dependencies {
   testImplementation "org.powermock:powermock-api-mockito2:$powerMockJUnitVersion"
 
   // Leak canary
-  implementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+  implementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
   // Only enable leak canary in debug builds
   configurations.all { config ->
     if (config.name.contains('debug') || config.name.contains("Debug")) {
