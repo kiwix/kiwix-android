@@ -17,7 +17,9 @@
 
     <android.support.constraint.ConstraintLayout
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:id="@+id/constraint_main"
+      android:layout_height="wrap_content"
+      android:background="@drawable/ic_home_kiwix_banner">
 
 
         <ImageView
@@ -25,7 +27,7 @@
             android:layout_width="0dp"
             android:layout_height="144dp"
             android:contentDescription="@string/kiwi"
-            android:src="@drawable/kiwix_vertical_logo"
+            android:src="@drawable/ic_home_kiwix_ver"
             android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

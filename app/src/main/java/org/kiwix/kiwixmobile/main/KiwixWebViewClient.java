@@ -18,9 +18,15 @@
 package org.kiwix.kiwixmobile.main;
 
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
+import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,21 +112,36 @@ public class KiwixWebViewClient extends WebViewClient {
     callback.webViewUrlFinishedLoading();
   }
 
+  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
   private void inflateHomeView(WebView view) {
     LayoutInflater inflater = LayoutInflater.from(view.getContext());
+
     if (KiwixApplication.getInstance().getResources().getConfiguration().orientation ==
             Configuration.ORIENTATION_PORTRAIT) {
-      Log.d("orientation","portrait");
       home = inflater.inflate(R.layout.content_main, view, false);
     } else if(KiwixApplication.getInstance().getResources().getConfiguration().orientation ==
             Configuration.ORIENTATION_LANDSCAPE){
-      Log.d("orientation","landscape");
       home = inflater.inflate(R.layout.content_main_l, view, false);
     }
     callback.setHomePage(home);
+
     if (sharedPreferenceUtil.nightMode()) {
       ImageView cardImage = home.findViewById(R.id.content_main_card_image);
-      cardImage.setImageResource(R.drawable.ic_home_kiwix_banner_night);
+      AppCompatButton downloadButton=home.findViewById(R.id.content_main_card_download_button);
+      downloadButton.setTextColor(Color.parseColor("#000000"));
+      downloadButton.setBackgroundTintList(ColorStateList.valueOf(KiwixApplication.getInstance().getResources().getColor(R.color.complement_blue800)));
+      ConstraintLayout constraintLayout=home.findViewById(R.id.constraint_main);
+      constraintLayout.setBackgroundResource(R.drawable.ic_home_kiwix_banner_night);
+
+      if (KiwixApplication.getInstance().getResources().getConfiguration().orientation ==
+              Configuration.ORIENTATION_PORTRAIT) {
+        cardImage.setImageResource(R.drawable.ic_home_kiwix_night_ver);
+
+      } else if(KiwixApplication.getInstance().getResources().getConfiguration().orientation ==
+              Configuration.ORIENTATION_LANDSCAPE){
+        cardImage.setImageResource(R.drawable.ic_home_kiwix_night_hor);
+      }
+
     }
     view.removeAllViews();
     view.addView(home);

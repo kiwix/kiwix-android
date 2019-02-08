@@ -17,7 +17,9 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/constraint_main"
+            android:background="@drawable/ic_home_kiwix_banner">
 
 
             <ImageView
@@ -25,7 +27,7 @@
                 android:layout_width="0dp"
                 android:layout_height="144dp"
                 android:contentDescription="@string/kiwi"
-                android:src="@drawable/kiwix_horizontal"
+                android:src="@drawable/ic_home_kiwix_hor"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/content_main_card_download_button"

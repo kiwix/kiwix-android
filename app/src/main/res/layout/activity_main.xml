@@ -15,7 +15,8 @@
     <android.support.design.widget.AppBarLayout
       android:id="@+id/activity_main_app_bar"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="wrap_content"
+      app:layout_constraintTop_toTopOf="parent">
 
       <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"

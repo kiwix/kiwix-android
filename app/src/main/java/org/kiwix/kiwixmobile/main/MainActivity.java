@@ -79,7 +79,6 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.BuildConfig;
-import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
