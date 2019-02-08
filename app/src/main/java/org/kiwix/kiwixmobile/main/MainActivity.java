@@ -238,14 +238,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-      Log.d("getMovementFlags","reaching");
       return makeMovementFlags(0, ItemTouchHelper.UP | ItemTouchHelper.DOWN);
     }
 
     @Override
     public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
       super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-      Log.d("onChildDraw","reaching");
       viewHolder.itemView.setAlpha(1 - Math.abs(dY) / viewHolder.itemView.getMeasuredHeight());
     }
 
@@ -278,7 +276,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   });
 
   private static void updateWidgets(Context context) {
-    Log.d("updateWidgets","reaching");
     Intent intent = new Intent(context.getApplicationContext(), KiwixSearchWidget.class);
     intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
     // Use an array and EXTRA_APPWIDGET_IDS instead of AppWidgetManager.EXTRA_APPWIDGET_ID,
@@ -335,7 +332,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     actionBar = getSupportActionBar();
     RecyclerView tableDrawerRight = tableDrawerRightContainer.getHeaderView(0).findViewById(R.id.right_drawer_list);
     checkForRateDialog();
-    Log.d("onCreate","reaching");
 
     initPlayStoreUri();
     isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
@@ -1779,7 +1775,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @Override
   public void webViewProgressChanged(int progress) {
-    Log.d(TAG_KIWIX,"WebViewProgressChanged reaching");
     progressBar.setProgress(progress);
     if (progress == 100) {
       if (requestClearHistoryAfterLoad) {
