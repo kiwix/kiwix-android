@@ -1,21 +1,18 @@
 package org.kiwix.kiwixmobile.bookmark;
 
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
-
-import java.util.List;
-
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import java.util.List;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 
 import static org.kiwix.kiwixmobile.library.LibraryAdapter.createBitmapFromEncodedString;
 
@@ -24,7 +21,8 @@ class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Item> {
   private final OnItemClickListener itemClickListener;
   private final List<Bookmark> deleteList;
 
-  BookmarksAdapter(List<Bookmark> bookmarkList, List<Bookmark> deleteList, OnItemClickListener itemClickListener) {
+  BookmarksAdapter(List<Bookmark> bookmarkList, List<Bookmark> deleteList,
+      OnItemClickListener itemClickListener) {
     this.bookmarkList = bookmarkList;
     this.deleteList = deleteList;
     this.itemClickListener = itemClickListener;
@@ -33,9 +31,9 @@ class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Item> {
   @NonNull
   @Override
   public Item onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_bookmark_history, parent, false);
+    View view = LayoutInflater.from(parent.getContext())
+        .inflate(R.layout.item_bookmark_history, parent, false);
     return new Item(view);
-
   }
 
   @Override
@@ -49,7 +47,8 @@ class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Item> {
       holder.favicon.setImageBitmap(createBitmapFromEncodedString(bookmark.getFavicon(),
           holder.favicon.getContext()));
     }
-    holder.itemView.setOnClickListener(v -> itemClickListener.onItemClick(holder.favicon, bookmark));
+    holder.itemView.setOnClickListener(
+        v -> itemClickListener.onItemClick(holder.favicon, bookmark));
     holder.itemView.setOnLongClickListener(v ->
         itemClickListener.onItemLongClick(holder.favicon, bookmark));
   }

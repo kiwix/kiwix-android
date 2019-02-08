@@ -18,11 +18,6 @@
 
 package org.kiwix.kiwixmobile.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -30,13 +25,18 @@ import android.os.Build;
 import android.util.Log;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NetworkUtilsTest {
@@ -47,8 +47,17 @@ public class NetworkUtilsTest {
   @Mock private NetworkInfo networkInfo1;
   @Mock private NetworkInfo networkInfo2;
 
+  //Sets the Build SDK version
+  private static void SetSDKVersion(Field field, Object newValue) throws Exception {
+    field.setAccessible(true);
+    Field modifiersField = Field.class.getDeclaredField("modifiers");
+    modifiersField.setAccessible(true);
+    modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+    field.set(null, newValue);
+  }
+
   public void testNetworkAvailability() {
-    NetworkInfo[] info = {networkInfo1, networkInfo2};
+    NetworkInfo[] info = { networkInfo1, networkInfo2 };
     when(context.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(connectivity);
     when(connectivity.getAllNetworkInfo()).thenReturn(info);
 
@@ -68,14 +77,14 @@ public class NetworkUtilsTest {
     assertEquals("", false, NetworkUtils.isNetworkAvailable(context));
   }
 
-  public void testWifiAvailability(){
+  public void testWifiAvailability() {
     when(context.getSystemService(Context.CONNECTIVITY_SERVICE)).thenReturn(connectivity);
     when(connectivity.getActiveNetworkInfo()).thenReturn(networkInfo);
 
     //SDK >= 23
-    try{
+    try {
       SetSDKVersion(Build.VERSION.class.getField("SDK_INT"), 23);
-    }catch (Exception e){
+    } catch (Exception e) {
       Log.d("NetworkUtilsTest", "Unable to set Build SDK Version");
     }
 
@@ -94,9 +103,9 @@ public class NetworkUtilsTest {
     verify(connectivity, never()).getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
     //SDK < 23
-    try{
+    try {
       SetSDKVersion(Build.VERSION.class.getField("SDK_INT"), 22);
-    }catch (Exception e){
+    } catch (Exception e) {
       Log.d("NetworkUtilsTest", "Unable to set Build SDK Version");
     }
 
@@ -122,23 +131,36 @@ public class NetworkUtilsTest {
 
     // URL is an Empty String
     Matcher matcher = pattern.matcher(NetworkUtils.getFileNameFromUrl(""));
-    if(!matcher.matches()) assertEquals("filename doesn't match UUID regex (for empty string URL)", 0, 1);
+    if (!matcher.matches()) {
+      assertEquals("filename doesn't match UUID regex (for empty string URL)", 0, 1);
+    }
 
     // URL contains no '?' character but has '/' characters
-    assertEquals("File Name from URL (no '?' character)", "q=kiwix+android", NetworkUtils.getFileNameFromUrl("https://github.com/search/q=kiwix+android"));
+    assertEquals("File Name from URL (no '?' character)", "q=kiwix+android",
+        NetworkUtils.getFileNameFromUrl("https://github.com/search/q=kiwix+android"));
     // and ends with a '/' character
-    matcher = pattern.matcher(NetworkUtils.getFileNameFromUrl("https://github.com/search/q=kiwix+android/"));
-    if(!matcher.matches()) assertEquals("filename doesn't match UUID regex (for no '?' and '/' in end)", 0, 1);
+    matcher = pattern.matcher(
+        NetworkUtils.getFileNameFromUrl("https://github.com/search/q=kiwix+android/"));
+    if (!matcher.matches()) {
+      assertEquals("filename doesn't match UUID regex (for no '?' and '/' in end)", 0, 1);
+    }
 
     // Empty string between last '?' and preceding '/'
-    matcher = pattern.matcher(NetworkUtils.getFileNameFromUrl("https://github.com/search/?q=kiwix+android"));
-    if(!matcher.matches()) assertEquals("filename doesn't match UUID regex (for consecutive '/?')", 0, 1);
+    matcher = pattern.matcher(
+        NetworkUtils.getFileNameFromUrl("https://github.com/search/?q=kiwix+android"));
+    if (!matcher.matches()) {
+      assertEquals("filename doesn't match UUID regex (for consecutive '/?')", 0, 1);
+    }
 
     // Standard case
     // Here the Method should return the substring between the first '?' character and the nearest '/' character preceeding it
-    assertEquals("File Name from URL standard case", "search", NetworkUtils.getFileNameFromUrl("https://www.google.com/search?source=hp&ei=zs4LW6W1E5n6rQH65Z-wDQ&q=kiwix+android&oq=kiwix+android&gs_l=psy-ab.3...2590.6259.0.6504.14.12.0.0.0.0.263.485.2-2.2.0....0...1c.1.64.psy-ab..12.2.485.0..0j35i39k1.0.WSlGY7hWzTo"));
-    assertEquals("File Name from URL standard case", "Special:Search", NetworkUtils.getFileNameFromUrl("https://en.wikipedia.org/wiki/Special:Search?search=kiwix+android&go=Go&searchToken=3zrcxw8fltdcij99zvoh5c6wy"));
-    assertEquals("File Name from URL standard case", "search", NetworkUtils.getFileNameFromUrl("https://github.com/search?q=kiwix+android"));
+    assertEquals("File Name from URL standard case", "search", NetworkUtils.getFileNameFromUrl(
+        "https://www.google.com/search?source=hp&ei=zs4LW6W1E5n6rQH65Z-wDQ&q=kiwix+android&oq=kiwix+android&gs_l=psy-ab.3...2590.6259.0.6504.14.12.0.0.0.0.263.485.2-2.2.0....0...1c.1.64.psy-ab..12.2.485.0..0j35i39k1.0.WSlGY7hWzTo"));
+    assertEquals("File Name from URL standard case", "Special:Search",
+        NetworkUtils.getFileNameFromUrl(
+            "https://en.wikipedia.org/wiki/Special:Search?search=kiwix+android&go=Go&searchToken=3zrcxw8fltdcij99zvoh5c6wy"));
+    assertEquals("File Name from URL standard case", "search",
+        NetworkUtils.getFileNameFromUrl("https://github.com/search?q=kiwix+android"));
   }
 
   @Test
@@ -150,19 +172,15 @@ public class NetworkUtilsTest {
     assertEquals("URL Parsing on empty string", "", NetworkUtils.parseURL(context, ""));
 
     //Using the standard Kiwix Download URLs
-    assertEquals("URL Parsing", "No Pictures", NetworkUtils.parseURL(context, "http://ftpmirror.your.org/pub/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"));
-    assertEquals("URL Parsing", "No Videos", NetworkUtils.parseURL(context, "http://www.mirrorservice.org/sites/download.kiwix.org/zim/wikipedia/wikipedia_af_all_novid_2016-05.zim"));
-    assertEquals("URL Parsing", "Simple", NetworkUtils.parseURL(context, "http://download.wikimedia.org/kiwix/zim/wikipedia/wikipedia_af_all_simple_2016-05.zim"));
-    assertEquals("URL Parsing", "No Pictures", NetworkUtils.parseURL(context, "http://mirror.netcologne.de/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"));
-    assertEquals("URL Parsing", "Simple", NetworkUtils.parseURL(context, "http://mirror3.kiwix.org/zim/wikipedia/wikipedia_af_all_simple_2016-05.zim"));
-  }
-
-  //Sets the Build SDK version
-  private static void SetSDKVersion(Field field, Object newValue) throws Exception {
-    field.setAccessible(true);
-    Field modifiersField = Field.class.getDeclaredField("modifiers");
-    modifiersField.setAccessible(true);
-    modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-    field.set(null, newValue);
+    assertEquals("URL Parsing", "No Pictures", NetworkUtils.parseURL(context,
+        "http://ftpmirror.your.org/pub/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"));
+    assertEquals("URL Parsing", "No Videos", NetworkUtils.parseURL(context,
+        "http://www.mirrorservice.org/sites/download.kiwix.org/zim/wikipedia/wikipedia_af_all_novid_2016-05.zim"));
+    assertEquals("URL Parsing", "Simple", NetworkUtils.parseURL(context,
+        "http://download.wikimedia.org/kiwix/zim/wikipedia/wikipedia_af_all_simple_2016-05.zim"));
+    assertEquals("URL Parsing", "No Pictures", NetworkUtils.parseURL(context,
+        "http://mirror.netcologne.de/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"));
+    assertEquals("URL Parsing", "Simple", NetworkUtils.parseURL(context,
+        "http://mirror3.kiwix.org/zim/wikipedia/wikipedia_af_all_simple_2016-05.zim"));
   }
 }

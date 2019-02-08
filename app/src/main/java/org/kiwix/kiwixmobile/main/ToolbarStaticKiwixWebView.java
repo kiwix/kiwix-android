@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.main;
 
 import android.content.Context;
 import android.util.AttributeSet;
-
 import org.kiwix.kiwixmobile.utils.DimenUtils;
 
 /**

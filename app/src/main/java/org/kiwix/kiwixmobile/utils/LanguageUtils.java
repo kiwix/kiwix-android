@@ -31,9 +31,6 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-
-import org.kiwix.kiwixmobile.utils.files.FileUtils;
-
 import java.lang.reflect.Field;
 import java.text.Collator;
 import java.util.ArrayList;
@@ -42,6 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
@@ -61,7 +59,8 @@ public class LanguageUtils {
     sortLanguageList(context.getResources().getConfiguration().locale);
   }
 
-  public static void handleLocaleChange(Context context, SharedPreferenceUtil sharedPreferenceUtil) {
+  public static void handleLocaleChange(Context context,
+      SharedPreferenceUtil sharedPreferenceUtil) {
     String language = sharedPreferenceUtil.getPrefLanguage("");
 
     if (language.isEmpty()) {
@@ -192,7 +191,8 @@ public class LanguageUtils {
     Collator localeCollator = Collator.getInstance(locale);
     localeCollator.setStrength(Collator.SECONDARY);
 
-    Collections.sort(mLanguageList, (a, b) -> localeCollator.compare(a.getLanguageName(), b.getLanguageName()));
+    Collections.sort(mLanguageList,
+        (a, b) -> localeCollator.compare(a.getLanguageName(), b.getLanguageName()));
   }
 
   // Check, if the selected Locale is supported and weather we actually need to change our font.
@@ -234,7 +234,8 @@ public class LanguageUtils {
       field.setBoolean(layoutInflater, false);
       layoutInflater.setFactory(new LayoutInflaterFactory(mContext, layoutInflater));
     } catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
-      Log.w(TAG_KIWIX, "Font Change Failed: Could not access private field of the LayoutInflater", e);
+      Log.w(TAG_KIWIX, "Font Change Failed: Could not access private field of the LayoutInflater",
+          e);
     }
   }
 

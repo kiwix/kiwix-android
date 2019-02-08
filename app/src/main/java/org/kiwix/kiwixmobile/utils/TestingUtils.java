@@ -30,11 +30,6 @@ public class TestingUtils {
 
   private static Set<Class> resources = new HashSet<>();
 
-  public interface IdleListener {
-    void startTask();
-    void finishTask();
-  }
-
   public static void bindResource(Class bindClass) {
     if (callback != null) {
       resources.add(bindClass);
@@ -56,5 +51,11 @@ public class TestingUtils {
   public static void registerIdleCallback(TestingUtils.IdleListener listListener) {
     resources.clear();
     callback = listListener;
+  }
+
+  public interface IdleListener {
+    void startTask();
+
+    void finishTask();
   }
 }

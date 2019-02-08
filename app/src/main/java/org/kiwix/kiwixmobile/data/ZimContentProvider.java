@@ -28,7 +28,18 @@ import android.os.ParcelFileDescriptor;
 import android.os.ParcelFileDescriptor.AutoCloseOutputStream;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
-
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.RandomAccessFile;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.inject.Inject;
 import org.kiwix.kiwixlib.JNIKiwix;
 import org.kiwix.kiwixlib.JNIKiwixException;
 import org.kiwix.kiwixlib.JNIKiwixInt;
@@ -41,60 +52,30 @@ import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.RandomAccessFile;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.inject.Inject;
-
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
 public class ZimContentProvider extends ContentProvider {
 
-  public static final Uri CONTENT_URI = Uri.parse("content://" + BuildConfig.APPLICATION_ID + ".zim.base/");
+  public static final Uri CONTENT_URI =
+      Uri.parse("content://" + BuildConfig.APPLICATION_ID + ".zim.base/");
 
   public static final Uri UI_URI = Uri.parse("content://org.kiwix.ui/");
-
-  public static String originalFileName = "";
-
-  public static Boolean canIterate = true;
-
   private static final String VIDEO_PATTERN = "([^\\s]+(\\.(?i)(3gp|mp4|m4a|webm|mkv|ogg|ogv))$)";
-
   private static final Pattern PATTERN = Pattern.compile(VIDEO_PATTERN, Pattern.CASE_INSENSITIVE);
-
+  public static String originalFileName = "";
+  public static Boolean canIterate = true;
   public static String zimFileName;
-
+  public static JNIKiwixReader currentJNIReader;
+  public static JNIKiwixSearcher jniSearcher;
+  private static ArrayList<String> listedEntries;
   @Inject
   public JNIKiwix jniKiwix;
 
-  public static JNIKiwixReader currentJNIReader;
-
-  public static JNIKiwixSearcher jniSearcher;
-
-  private static ArrayList<String> listedEntries;
-
-  public void setupDagger() {
-    KiwixApplication.getApplicationComponent().inject(this);
-    setIcuDataDirectory();
-    jniSearcher = new JNIKiwixSearcher();
-    listedEntries = new ArrayList<>();
-  }
-
-
-  private static String getFulltextIndexPath(String file){
-    String[] names = {file, file};
+  private static String getFulltextIndexPath(String file) {
+    String[] names = { file, file };
 
     /* File might be a ZIM chunk like foobar.zimaa */
-    if (!names[0].substring(names[0].length() - 3).equals("zim")){
+    if (!names[0].substring(names[0].length() - 3).equals("zim")) {
       names[0] = names[0].substring(0, names[0].length() - 2);
     }
 
@@ -121,7 +102,7 @@ public class ZimContentProvider extends ContentProvider {
     try {
       JNIKiwixReader reader = new JNIKiwixReader(fileName);
       Log.i(TAG_KIWIX, "Opening ZIM file " + fileName);
-      if(!listedEntries.contains(reader.getId())) {
+      if (!listedEntries.contains(reader.getId())) {
         listedEntries.add(reader.getId());
         jniSearcher.addKiwixReader(reader);
       }
@@ -292,21 +273,21 @@ public class ZimContentProvider extends ContentProvider {
         icuDir.mkdirs();
       }
       String[] icuFileNames = context.getAssets().list("icu");
-      for (int i=0; i<icuFileNames.length; i++) {
-          String icuFileName = icuFileNames[i];
-          File icuDataFile = new File(icuDir, icuFileName);
-          if (!icuDataFile.exists()) {
-              InputStream in = context.getAssets().open("icu/"+icuFileName);
-              OutputStream out = new FileOutputStream(icuDataFile);
-              byte[] buf = new byte[1024];
-              int len;
-              while ((len = in.read(buf)) > 0) {
-                  out.write(buf, 0, len);
-              }
-              in.close();
-              out.flush();
-              out.close();
+      for (int i = 0; i < icuFileNames.length; i++) {
+        String icuFileName = icuFileNames[i];
+        File icuDataFile = new File(icuDir, icuFileName);
+        if (!icuDataFile.exists()) {
+          InputStream in = context.getAssets().open("icu/" + icuFileName);
+          OutputStream out = new FileOutputStream(icuDataFile);
+          byte[] buf = new byte[1024];
+          int len;
+          while ((len = in.read(buf)) > 0) {
+            out.write(buf, 0, len);
           }
+          in.close();
+          out.flush();
+          out.close();
+        }
       }
       return icuDir.getAbsolutePath();
     } catch (Exception e) {
@@ -329,6 +310,13 @@ public class ZimContentProvider extends ContentProvider {
       filePath = filePath.substring(0, pos);
     }
     return filePath;
+  }
+
+  public void setupDagger() {
+    KiwixApplication.getApplicationComponent().inject(this);
+    setIcuDataDirectory();
+    jniSearcher = new JNIKiwixSearcher();
+    listedEntries = new ArrayList<>();
   }
 
   @Override
@@ -426,7 +414,7 @@ public class ZimContentProvider extends ContentProvider {
 
   @Override
   public Cursor query(Uri url, String[] projection, String selection,
-                      String[] selectionArgs, String sort) {
+      String[] selectionArgs, String sort) {
     throw new RuntimeException("Operation not supported");
   }
 
@@ -437,7 +425,7 @@ public class ZimContentProvider extends ContentProvider {
 
   @Override
   public int update(Uri uri, ContentValues values, String where,
-                    String[] whereArgs) {
+      String[] whereArgs) {
     throw new RuntimeException("Operation not supported");
   }
 
@@ -464,7 +452,8 @@ public class ZimContentProvider extends ContentProvider {
 
     JNIKiwixReader currentJNIReader;
 
-    TransferThread(JNIKiwixReader currentJNIReader, Uri articleUri, OutputStream out) throws IOException {
+    TransferThread(JNIKiwixReader currentJNIReader, Uri articleUri, OutputStream out)
+        throws IOException {
       this.currentJNIReader = currentJNIReader;
       Log.d(TAG_KIWIX, "Retrieving: " + articleUri.toString());
 

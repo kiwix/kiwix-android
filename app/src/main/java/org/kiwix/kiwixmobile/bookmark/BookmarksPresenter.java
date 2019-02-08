@@ -1,7 +1,13 @@
 package org.kiwix.kiwixmobile.bookmark;
 
 import android.util.Log;
-
+import io.reactivex.CompletableObserver;
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
+import io.reactivex.SingleObserver;
+import io.reactivex.disposables.Disposable;
+import java.util.List;
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.data.DataSource;
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
@@ -9,27 +15,17 @@ import org.kiwix.kiwixmobile.di.PerActivity;
 import org.kiwix.kiwixmobile.di.qualifiers.Computation;
 import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
-import io.reactivex.CompletableObserver;
-import io.reactivex.Observable;
-import io.reactivex.Scheduler;
-import io.reactivex.SingleObserver;
-import io.reactivex.disposables.Disposable;
-
 @PerActivity
-class BookmarksPresenter extends BasePresenter<BookmarksContract.View> implements BookmarksContract.Presenter {
+class BookmarksPresenter extends BasePresenter<BookmarksContract.View>
+    implements BookmarksContract.Presenter {
 
   private final DataSource dataSource;
   private final Scheduler mainThread;
   private final Scheduler computation;
   private Disposable disposable;
 
-  @Inject
-  BookmarksPresenter(DataSource dataSource, @MainThread Scheduler mainThread,
-                     @Computation Scheduler computation) {
+  @Inject BookmarksPresenter(DataSource dataSource, @MainThread Scheduler mainThread,
+      @Computation Scheduler computation) {
     this.dataSource = dataSource;
     this.mainThread = mainThread;
     this.computation = computation;
@@ -63,7 +59,8 @@ class BookmarksPresenter extends BasePresenter<BookmarksContract.View> implement
   @Override
   public void filterBookmarks(List<Bookmark> bookmarks, String newText) {
     Observable.fromIterable(bookmarks)
-        .filter(bookmark -> bookmark.getBookmarkTitle().toLowerCase().contains(newText.toLowerCase()))
+        .filter(
+            bookmark -> bookmark.getBookmarkTitle().toLowerCase().contains(newText.toLowerCase()))
         .toList()
         .subscribeOn(computation)
         .observeOn(mainThread)

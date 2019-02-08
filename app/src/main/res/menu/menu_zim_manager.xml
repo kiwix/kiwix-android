@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <item
-    android:id="@+id/action_search"
-    android:icon="@drawable/action_search"
-    android:title="@string/search_label"
-    android:visible="true"
-    app:actionViewClass="android.support.v7.widget.SearchView"
-    app:iconifiedByDefault="true"
-    app:showAsAction="always|collapseActionView" />
+      android:id="@+id/action_search"
+      android:icon="@drawable/action_search"
+      android:title="@string/search_label"
+      android:visible="true"
+      app:actionViewClass="androidx.appcompat.widget.SearchView"
+      app:iconifiedByDefault="true"
+      app:showAsAction="always|collapseActionView"/>
   <item
-    android:id="@+id/select_language"
-    android:icon="@drawable/ic_language_white_24dp"
-    android:title="@string/pref_language_chooser"
-    android:visible="true"
-    app:showAsAction="always" />
+      android:id="@+id/select_language"
+      android:icon="@drawable/ic_language_white_24dp"
+      android:title="@string/pref_language_chooser"
+      android:visible="true"
+      app:showAsAction="ifRoom"/>
 </menu>
 

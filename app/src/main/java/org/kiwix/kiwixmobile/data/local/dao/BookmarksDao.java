@@ -17,19 +17,15 @@
  */
 package org.kiwix.kiwixmobile.data.local.dao;
 
-
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
 import com.yahoo.squidb.sql.Update;
-
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
 
 /**
  * Dao class for bookmarks.

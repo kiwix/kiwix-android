@@ -34,14 +34,12 @@ import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-
+import java.util.HashMap;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
-
-import java.util.HashMap;
 
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_EXTERNAL_LINK;
 
@@ -51,7 +49,8 @@ public class KiwixWebViewClient extends WebViewClient {
     put("epub", "application/epub+zip");
     put("pdf", "application/pdf");
   }};
-  private final SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(KiwixApplication.getInstance());
+  private final SharedPreferenceUtil sharedPreferenceUtil =
+      new SharedPreferenceUtil(KiwixApplication.getInstance());
   private final WebViewCallback callback;
   private View home;
 
@@ -100,7 +99,8 @@ public class KiwixWebViewClient extends WebViewClient {
 
   @Override
   public void onPageFinished(WebView view, String url) {
-    if ((url.equals("content://" + BuildConfig.APPLICATION_ID + ".zim.base/null")) && !BuildConfig.IS_CUSTOM_APP) {
+    if ((url.equals("content://" + BuildConfig.APPLICATION_ID + ".zim.base/null"))
+        && !BuildConfig.IS_CUSTOM_APP) {
       inflateHomeView(view);
       return;
     }

@@ -20,17 +20,11 @@
 package org.kiwix.kiwixmobile.data.local;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.filters.SmallTest;
-import android.support.test.runner.AndroidJUnit4;
-
+import androidx.test.InstrumentationRegistry;
+import androidx.test.filters.SmallTest;
+import androidx.test.runner.AndroidJUnit4;
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,6 +32,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 
 import static org.junit.Assert.assertArrayEquals;
 
@@ -56,13 +53,14 @@ public class KiwixDatabaseTest {
     KiwixDatabase kiwixDatabase = new KiwixDatabase(context);
     kiwixDatabase.recreate();
     String testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c";
-    String[] testBookmarks = new String[]{"Test1", "Test2", "Test3"};
+    String[] testBookmarks = new String[] { "Test1", "Test2", "Test3" };
     String fileName = context.getFilesDir().getAbsolutePath() + File.separator + testId + ".txt";
     File f = new File(fileName);
     if (!f.createNewFile()) {
       throw new IOException("Unable to create file for testing migration");
     }
-    Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "utf-8"));
+    Writer writer =
+        new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "utf-8"));
     for (String bookmark : testBookmarks) {
       writer.write(bookmark + "\n");
     }

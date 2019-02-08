@@ -17,8 +17,7 @@
  */
 package org.kiwix.kiwixmobile.utils;
 
-import android.support.test.espresso.IdlingResource;
-
+import androidx.test.espresso.IdlingResource;
 import org.kiwix.kiwixmobile.utils.TestingUtils.IdleListener;
 
 /**
@@ -28,6 +27,8 @@ import org.kiwix.kiwixmobile.utils.TestingUtils.IdleListener;
 public class KiwixIdlingResource implements IdlingResource, IdleListener {
 
   private static KiwixIdlingResource kiwixIdlingResource;
+  private boolean idle = true;
+  private ResourceCallback resourceCallback;
 
   public static KiwixIdlingResource getInstance() {
     if (kiwixIdlingResource == null) {
@@ -37,9 +38,6 @@ public class KiwixIdlingResource implements IdlingResource, IdleListener {
     TestingUtils.registerIdleCallback(kiwixIdlingResource);
     return kiwixIdlingResource;
   }
-
-  private boolean idle = true;
-  private ResourceCallback resourceCallback;
 
   @Override
   public String getName() {

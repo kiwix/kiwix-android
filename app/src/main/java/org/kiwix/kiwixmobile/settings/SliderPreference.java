@@ -24,7 +24,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
 import org.kiwix.kiwixmobile.R;
 
 public class SliderPreference extends DialogPreference {
@@ -32,6 +31,8 @@ public class SliderPreference extends DialogPreference {
   protected final static int SEEKBAR_MAX = 500;
 
   protected int mSeekBarValue;
+
+  protected int initialSeekBarValue;
 
   protected CharSequence[] mSummaries;
 
@@ -95,10 +96,6 @@ public class SliderPreference extends DialogPreference {
     }
   }
 
-  public void setSummary(CharSequence[] summaries) {
-    mSummaries = summaries;
-  }
-
   @Override
   public void setSummary(int summaryResId) {
     try {
@@ -107,6 +104,10 @@ public class SliderPreference extends DialogPreference {
     } catch (Exception e) {
       super.setSummary(summaryResId);
     }
+  }
+
+  public void setSummary(CharSequence[] summaries) {
+    mSummaries = summaries;
   }
 
   public void setValue(float value) {
@@ -127,6 +128,7 @@ public class SliderPreference extends DialogPreference {
     SeekBar seekbar = view.findViewById(R.id.slider_preference_seekbar);
     seekbar.setMax(SEEKBAR_MAX);
     seekbar.setProgress(mSeekBarValue);
+    initialSeekBarValue = mSeekBarValue;
     seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
       @Override
@@ -152,6 +154,8 @@ public class SliderPreference extends DialogPreference {
   protected void onDialogClosed(boolean positiveResult) {
     if (positiveResult && callChangeListener(mSeekBarValue)) {
       setValue(mSeekBarValue);
+    } else {
+      mSeekBarValue = initialSeekBarValue;
     }
     super.onDialogClosed(positiveResult);
   }

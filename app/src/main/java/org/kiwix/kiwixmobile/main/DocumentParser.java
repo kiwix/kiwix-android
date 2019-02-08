@@ -21,7 +21,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +38,12 @@ public class DocumentParser {
 
   public void initInterface(WebView webView) {
     webView.addJavascriptInterface(new ParserCallback(), "DocumentParser");
+  }
+
+  public interface SectionsListener {
+    void sectionsLoaded(String title, List<DocumentSection> sections);
+
+    void clearSections();
   }
 
   class ParserCallback {
@@ -77,12 +82,6 @@ public class DocumentParser {
     public void stop() {
       new Handler(Looper.getMainLooper()).post(() -> listener.sectionsLoaded(title, sections));
     }
-  }
-
-  public interface SectionsListener {
-    void sectionsLoaded(String title, List<DocumentSection> sections);
-
-    void clearSections();
   }
 }
 

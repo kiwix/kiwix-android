@@ -4,9 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-
 import java.util.Calendar;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -87,7 +85,8 @@ public class SharedPreferenceUtil {
   }
 
   public String getPrefStorage() {
-    return sharedPreferences.getString(PREF_STORAGE, Environment.getExternalStorageDirectory().getPath());
+    return sharedPreferences.getString(PREF_STORAGE,
+        Environment.getExternalStorageDirectory().getPath());
   }
 
   private boolean getPrefNightMode() {
@@ -148,7 +147,9 @@ public class SharedPreferenceUtil {
   }
 
   public void setShowHistoryCurrentBook(boolean prefShowHistoryCurrentBook) {
-    sharedPreferences.edit().putBoolean(PREF_SHOW_HISTORY_CURRENT_BOOK, prefShowHistoryCurrentBook).apply();
+    sharedPreferences.edit()
+        .putBoolean(PREF_SHOW_HISTORY_CURRENT_BOOK, prefShowHistoryCurrentBook)
+        .apply();
   }
 
   public boolean nightMode() {
@@ -167,6 +168,8 @@ public class SharedPreferenceUtil {
   }
 
   public void setShowBookmarksCurrentBook(boolean prefShowBookmarksFromCurrentBook) {
-    sharedPreferences.edit().putBoolean(PREF_SHOW_BOOKMARKS_CURRENT_BOOK, prefShowBookmarksFromCurrentBook).apply();
+    sharedPreferences.edit()
+        .putBoolean(PREF_SHOW_BOOKMARKS_CURRENT_BOOK, prefShowBookmarksFromCurrentBook)
+        .apply();
   }
 }

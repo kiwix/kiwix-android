@@ -23,11 +23,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,16 +34,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.main.MainActivity;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 import javax.inject.Inject;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.base.BaseActivity;
+import org.kiwix.kiwixmobile.main.MainActivity;
 
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_IS_WIDGET_VOICE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH;
@@ -57,20 +54,20 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_FILE_SEARCHED;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class SearchActivity extends BaseActivity
-    implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, SearchViewCallback {
+    implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,
+    SearchViewCallback {
 
   public static final String EXTRA_SEARCH_IN_TEXT = "bool_searchintext";
 
   private final int REQ_CODE_SPEECH_INPUT = 100;
+  @Inject
+  SearchPresenter searchPresenter;
   private ListView listView;
   private ArrayAdapter<String> currentAdapter;
   private AutoCompleteAdapter autoAdapter;
   private ArrayAdapter<String> defaultAdapter;
   private SearchView searchView;
   private String searchText;
-
-  @Inject
-  SearchPresenter searchPresenter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -120,13 +117,14 @@ public class SearchActivity extends BaseActivity
   public void finish() {
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
-    int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
+    int value =
+        Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
     if (value == 1) {
       Intent intent = new Intent(this, MainActivity.class);
       startActivity(intent);
     } else {
       super.finish();
-      overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+      overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
   }
 
@@ -150,8 +148,12 @@ public class SearchActivity extends BaseActivity
       @Override
       public boolean onQueryTextChange(String s) {
         if (s.equals("")) {
+          View item = findViewById(R.id.menu_searchintext);
+          item.setVisibility(View.VISIBLE);
           activateDefaultAdapter();
         } else {
+          View item = findViewById(R.id.menu_searchintext);
+          item.setVisibility(View.GONE);
           activateAutoAdapter();
           autoAdapter.getFilter().filter(s.toLowerCase());
         }
@@ -189,13 +191,13 @@ public class SearchActivity extends BaseActivity
     switch (item.getItemId()) {
       case R.id.menu_searchintext:
         String queryText = "";
-        if(searchView != null) {
+        if (searchView != null) {
           queryText = searchView.getQuery().toString();
         }
         Intent resultIntent = new Intent(this, MainActivity.class);
         resultIntent.putExtra(EXTRA_SEARCH_IN_TEXT, true);
         resultIntent.putExtra(TAG_FILE_SEARCHED, queryText);
-        if(shouldStartNewActivity() != 1) {
+        if (shouldStartNewActivity() != 1) {
           setResult(RESULT_OK, resultIntent);
           finish();
         } else {
@@ -229,15 +231,18 @@ public class SearchActivity extends BaseActivity
 
   /**
    * Checks if the ActivityManager is set to aggressively reclaim Activities.
+   *
    * @return 1 if the above setting is true.
    */
   private int shouldStartNewActivity() {
     int value;
-    if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
       //deprecated in API 17
-      value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
+      value =
+          Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
     } else {
-      value = Settings.System.getInt(getContentResolver(), Settings.Global.ALWAYS_FINISH_ACTIVITIES, 0);
+      value =
+          Settings.System.getInt(getContentResolver(), Settings.Global.ALWAYS_FINISH_ACTIVITIES, 0);
     }
     return value;
   }
@@ -256,7 +261,9 @@ public class SearchActivity extends BaseActivity
         .setMessage(getString(R.string.delete_recent_search_item))
         .setPositiveButton(getResources().getString(R.string.delete), (dialog, which) -> {
           deleteSpecificSearchItem(search);
-          Toast.makeText(getBaseContext(), getResources().getString(R.string.delete_specific_search_toast), Toast.LENGTH_SHORT).show();
+          Toast.makeText(getBaseContext(),
+              getResources().getString(R.string.delete_specific_search_toast), Toast.LENGTH_SHORT)
+              .show();
         })
         .setNegativeButton(android.R.string.no, (dialog, which) -> {
           // do nothing
@@ -284,7 +291,7 @@ public class SearchActivity extends BaseActivity
 
         if (convertView == null) {
           row = LayoutInflater.from(parent.getContext())
-                  .inflate(android.R.layout.simple_list_item_1, null);
+              .inflate(android.R.layout.simple_list_item_1, null);
         } else {
           row = convertView;
         }
@@ -295,13 +302,13 @@ public class SearchActivity extends BaseActivity
     };
   }
 
-
   private void promptSpeechInput() {
     String appName = getResources().getString(R.string.app_name);
     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
         RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault()); // TODO: choose selected lang on kiwix
+    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,
+        Locale.getDefault()); // TODO: choose selected lang on kiwix
     intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
         String.format(getString(R.string.speech_prompt_text), appName));
     try {
