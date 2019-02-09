@@ -24,7 +24,7 @@ public class KiwixWebChromeClient extends WebChromeClient {
 
   private WebViewCallback callback;
 
-  KiwixWebChromeClient(WebViewCallback callback) {
+  public KiwixWebChromeClient(WebViewCallback callback) {
     this.callback = callback;
   }
 
