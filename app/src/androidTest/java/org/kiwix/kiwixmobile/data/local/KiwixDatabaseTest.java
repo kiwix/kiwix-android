@@ -20,9 +20,9 @@
 package org.kiwix.kiwixmobile.data.local;
 
 import android.content.Context;
-import androidx.test.InstrumentationRegistry;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.filters.SmallTest;
-import androidx.test.runner.AndroidJUnit4;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
 import java.io.BufferedWriter;
@@ -45,7 +45,7 @@ public class KiwixDatabaseTest {
   private final Context context;
 
   public KiwixDatabaseTest() {
-    context = InstrumentationRegistry.getTargetContext();
+    context = InstrumentationRegistry.getInstrumentation().getTargetContext();
   }
 
   @Test
