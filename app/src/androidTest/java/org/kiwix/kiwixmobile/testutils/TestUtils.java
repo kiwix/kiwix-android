@@ -25,8 +25,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 import androidx.core.content.ContextCompat;
-import androidx.test.InstrumentationRegistry;
 import androidx.test.espresso.matcher.BoundedMatcher;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.runner.screenshot.Screenshot;
 import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
@@ -41,8 +41,6 @@ import java.util.Date;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
-
-import static androidx.test.InstrumentationRegistry.getInstrumentation;
 
 /**
  * Created by mhutti1 on 07/04/17.
@@ -63,15 +61,17 @@ public class TestUtils {
    */
 
   public static boolean hasStoragePermission() {
-    return ContextCompat.checkSelfPermission(InstrumentationRegistry.getTargetContext(),
+    return ContextCompat.checkSelfPermission(
+        InstrumentationRegistry.getInstrumentation().getTargetContext(),
         Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-        ContextCompat.checkSelfPermission(InstrumentationRegistry.getTargetContext(),
+        ContextCompat.checkSelfPermission(
+            InstrumentationRegistry.getInstrumentation().getTargetContext(),
             Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
   }
 
   public static void allowPermissionsIfNeeded() {
     if (Build.VERSION.SDK_INT >= 23 && !hasStoragePermission()) {
-      UiDevice device = UiDevice.getInstance(getInstrumentation());
+      UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
       UiObject allowPermissions =
           device.findObject(new UiSelector().clickable(true).checkable(false).index(1));
       if (allowPermissions.exists()) {
@@ -139,7 +139,7 @@ public class TestUtils {
   }
 
   public static String getResourceString(int id) {
-    Context targetContext = InstrumentationRegistry.getTargetContext();
+    Context targetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
     return targetContext.getResources().getString(id);
   }
 }
