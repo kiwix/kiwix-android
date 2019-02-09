@@ -14,7 +14,6 @@ buildscript {
 ext {
   androidGradlePluginVersion = '3.3.0'
   testdroidGradlePluginVersion = '2.63.0'
-  supportLibraryVersion = '28.0.0'
   appCompatVersion = '1.0.2'
   materialVersion = '1.0.0'
   annotationVersion = '1.0.0'
