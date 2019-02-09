@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.history;
 
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,11 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.List;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.local.entity.History;
@@ -17,6 +23,7 @@ import org.kiwix.kiwixmobile.data.local.entity.History;
 import static org.kiwix.kiwixmobile.library.LibraryAdapter.createBitmapFromEncodedString;
 
 class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
   private static final int TYPE_ITEM = 1;
   private final List<History> historyList;
   private final OnItemClickListener itemClickListener;
@@ -60,7 +67,26 @@ class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
       item.itemView.setOnLongClickListener(v ->
           itemClickListener.onItemLongClick(item.favicon, history));
     } else {
-      ((Category) holder).date.setText(historyList.get(position + 1).getDate());
+      String date = historyList.get(position + 1).getDate();
+      String todayDate, yesterdayDate;
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d, yyyy");
+        todayDate = LocalDate.now().format(formatter);
+        yesterdayDate = LocalDate.now().minusDays(1).format(formatter);
+      } else {
+        DateFormat df = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM);
+        todayDate = df.format(Calendar.getInstance().getTime());
+        final Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        yesterdayDate = df.format(cal.getTime());
+      }
+      if (todayDate.contentEquals(date)) {
+        ((Category) holder).date.setText(R.string.date_today);
+      } else if (yesterdayDate.contentEquals(date)) {
+        ((Category) holder).date.setText(R.string.date_yesterday);
+      } else {
+        ((Category) holder).date.setText(date);
+      }
     }
   }
 
