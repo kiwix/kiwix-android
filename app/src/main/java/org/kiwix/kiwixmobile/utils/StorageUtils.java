@@ -18,10 +18,29 @@
 package org.kiwix.kiwixmobile.utils;
 
 public class StorageUtils {
+  /**
+   * url parts matching this regex are removed by {@link #removeParts(String)}
+   */
+  private static final String REMOVE_URL_PART_REGEX = "\\.meta4";
 
+  /**
+   * transform an <code>url</code> to a filename by applying specific String replacement rules
+   * @param url the raw url to be adjusted
+   * @see #removeParts(String)
+   */
   public static String getFileNameFromUrl(String url) {
-    String filename = NetworkUtils.getFileNameFromUrl(url);
-    filename = filename.replace(".meta4","");
-    return filename;
+    return removeParts(NetworkUtils.getFileNameFromUrl(url));
+  }
+
+  /**
+   * remove parts matching {@link #REMOVE_URL_PART_REGEX} from given <code>filename</code>
+   * @param filename blank will return empty String
+   */
+  private static String removeParts(String filename) {
+    if (filename == null || "".equals(filename)) {
+      return  "";
+    }
+
+    return filename.replaceAll(REMOVE_URL_PART_REGEX,"");
   }
 }
