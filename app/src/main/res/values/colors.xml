@@ -26,4 +26,5 @@
   <color name="blue800">#1565c0</color>
   <color name="blueTransparent">#962e7ac4</color>
   <color name="actionModeBackground">#4285F4</color>
+  <color name="complement_blue800">#c06f15</color>
 </resources>

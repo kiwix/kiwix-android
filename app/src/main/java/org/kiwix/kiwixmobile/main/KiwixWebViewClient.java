@@ -18,7 +18,11 @@
 package org.kiwix.kiwixmobile.main;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,12 +30,17 @@ import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import java.util.HashMap;
+
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
+
+import java.util.HashMap;
+
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_EXTERNAL_LINK;
 
@@ -106,13 +115,38 @@ public class KiwixWebViewClient extends WebViewClient {
 
   private void inflateHomeView(WebView view) {
     LayoutInflater inflater = LayoutInflater.from(view.getContext());
-    home = inflater.inflate(R.layout.content_main, view, false);
+    if (KiwixApplication.getInstance().getResources().getConfiguration().orientation ==
+        Configuration.ORIENTATION_PORTRAIT) {
+      home = inflater.inflate(R.layout.content_main_p, view, false);
+    } else if (KiwixApplication.getInstance().getResources().getConfiguration().orientation ==
+        Configuration.ORIENTATION_LANDSCAPE) {
+      home = inflater.inflate(R.layout.content_main_l, view, false);
+    }
     callback.setHomePage(home);
     if (sharedPreferenceUtil.nightMode()) {
       ImageView cardImage = home.findViewById(R.id.content_main_card_image);
-      cardImage.setImageResource(R.drawable.ic_home_kiwix_banner_night);
+      ImageView sideImage = home.findViewById(R.id.content_side_image);
+      AppCompatButton downloadButton = home.findViewById(R.id.content_main_card_download_button);
+      downloadButton.setTextColor(Color.parseColor("#000000"));
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        downloadButton.setBackgroundTintList(ColorStateList.valueOf(KiwixApplication.getInstance().getResources().getColor(R.color.complement_blue800)));
+      }
+      ConstraintLayout constraintLayout = home.findViewById(R.id.constraint_main);
+      constraintLayout.setBackgroundResource(R.drawable.back_cover_night);
+      sideImage.setImageResource(R.drawable.home_side_cover_night);
+
+      if (KiwixApplication.getInstance().getResources().getConfiguration().orientation ==
+          Configuration.ORIENTATION_PORTRAIT) {
+        cardImage.setImageResource(R.drawable.kiwix_vertical_logo_night);
+
+      } else if (KiwixApplication.getInstance().getResources().getConfiguration().orientation ==
+          Configuration.ORIENTATION_LANDSCAPE) {
+        cardImage.setImageResource(R.drawable.kiwix_horizontal_logo_night);
+
+      }
     }
-    view.removeAllViews();
-    view.addView(home);
+      view.removeAllViews();
+      view.addView(home);
+
   }
 }

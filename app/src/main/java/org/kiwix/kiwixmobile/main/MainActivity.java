@@ -57,33 +57,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.Group;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import butterknife.BindView;
-import butterknife.OnClick;
-import butterknife.OnLongClick;
+
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import javax.inject.Inject;
+
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.R;
@@ -105,6 +84,32 @@ import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.inject.Inject;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Group;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.OnClick;
+import butterknife.OnLongClick;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static android.os.Build.VERSION_CODES;
@@ -982,7 +987,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       ActivityCompat.requestPermissions(this,
           new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
           REQUEST_STORAGE_PERMISSION);
-      if (BuildConfig.IS_CUSTOM_APP && Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
+      if (BuildConfig.IS_CUSTOM_APP && Build.VERSION.SDK_INT == VERSION_CODES.M) {
         Toast.makeText(this, getResources().getString(R.string.request_storage_custom),
             Toast.LENGTH_LONG)
             .show();
@@ -1316,7 +1321,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   private void setUpWebView() {
     getCurrentWebView().getSettings().setJavaScriptEnabled(true);
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+    if (Build.VERSION.SDK_INT >= VERSION_CODES.KITKAT) {
       WebView.setWebContentsDebuggingEnabled(true);
     }
 
@@ -1342,6 +1347,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
     toggleActionItemsConfig();
+    if(getCurrentWebView().getUrl().equalsIgnoreCase(HOME_URL))
+      showHomePage();
   }
 
   private void toggleActionItemsConfig() {
