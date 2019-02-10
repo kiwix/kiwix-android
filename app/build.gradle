@@ -66,6 +66,7 @@ dependencies {
 
   androidTestImplementation "androidx.annotation:annotation:$annotationVersion"
   androidTestImplementation "androidx.test.ext:junit:1.1.0"
+  androidTestImplementation 'androidx.test:runner:1.1.1'
   androidTestImplementation 'androidx.test:rules:1.1.1'
   androidTestImplementation 'androidx.test:core:1.1.0'
 
@@ -164,7 +165,7 @@ android {
   defaultConfig {
     minSdkVersion 14
     targetSdkVersion 28
-    testInstrumentationRunner "androidx.test.ext.runner.AndroidJUnitRunner"
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     // See https://github.com/linkedin/dexmaker/issues/65 for why we need the following line.
     testInstrumentationRunnerArguments.notClass = 'com.android.dex.DexIndexOverflowException'
     multiDexEnabled true
@@ -381,6 +382,6 @@ testdroid {
   testRunName "Auto Test " + buildNumber
 
   fullRunConfig {
-    instrumentationRunner = "androidx.test.ext.runner.AndroidJUnitRunner"
+    instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
 }
