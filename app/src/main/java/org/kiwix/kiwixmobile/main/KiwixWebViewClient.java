@@ -30,17 +30,14 @@ import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import java.util.HashMap;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
-
-import java.util.HashMap;
-
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_EXTERNAL_LINK;
 
@@ -129,7 +126,8 @@ public class KiwixWebViewClient extends WebViewClient {
       AppCompatButton downloadButton = home.findViewById(R.id.content_main_card_download_button);
       downloadButton.setTextColor(Color.parseColor("#000000"));
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        downloadButton.setBackgroundTintList(ColorStateList.valueOf(KiwixApplication.getInstance().getResources().getColor(R.color.complement_blue800)));
+        downloadButton.setBackgroundTintList(ColorStateList.valueOf(
+            KiwixApplication.getInstance().getResources().getColor(R.color.complement_blue800)));
       }
       ConstraintLayout constraintLayout = home.findViewById(R.id.constraint_main);
       constraintLayout.setBackgroundResource(R.drawable.back_cover_night);
@@ -138,15 +136,12 @@ public class KiwixWebViewClient extends WebViewClient {
       if (KiwixApplication.getInstance().getResources().getConfiguration().orientation ==
           Configuration.ORIENTATION_PORTRAIT) {
         cardImage.setImageResource(R.drawable.kiwix_vertical_logo_night);
-
       } else if (KiwixApplication.getInstance().getResources().getConfiguration().orientation ==
           Configuration.ORIENTATION_LANDSCAPE) {
         cardImage.setImageResource(R.drawable.kiwix_horizontal_logo_night);
-
       }
     }
-      view.removeAllViews();
-      view.addView(home);
-
+    view.removeAllViews();
+    view.addView(home);
   }
 }
