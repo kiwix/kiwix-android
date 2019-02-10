@@ -231,6 +231,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private AppCompatButton downloadBookButton;
   private ActionBar actionBar;
   private TextView tabSwitcherIcon;
+  private TableDrawerAdapter tableDrawerAdapter;
+  private RecyclerView tableDrawerRight;
   private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView,
@@ -330,81 +332,42 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     setContentView(R.layout.activity_main);
     setSupportActionBar(toolbar);
     actionBar = getSupportActionBar();
-    RecyclerView tableDrawerRight =
+
+    tableDrawerRight =
         tableDrawerRightContainer.getHeaderView(0).findViewById(R.id.right_drawer_list);
+
     checkForRateDialog();
 
     initPlayStoreUri();
     isHideToolbar = sharedPreferenceUtil.getPrefHideToolbar();
 
-    FileReader fileReader = new FileReader();
-    documentParserJs = fileReader.readFile("js/documentParser.js", this);
-    documentSections = new ArrayList<>();
-    tabsAdapter = new TabsAdapter(this, webViewList);
-    tabsAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-      @Override
-      public void onChanged() {
-        updateTabSwitcherIcon();
-      }
-    });
+    addFileReader();
+    setupTabsAdapter();
+    setTableDrawerInfo();
+    setTabListener();
 
-    tableDrawerRight.setLayoutManager(new LinearLayoutManager(this));
-
-    TableDrawerAdapter tableDrawerAdapter = setupTableDrawerAdapter();
-    tableDrawerRight.setAdapter(tableDrawerAdapter);
-    tableDrawerAdapter.notifyDataSetChanged();
-
-    tabsAdapter.setTabClickListener(new TabsAdapter.TabClickListener() {
-      @Override
-      public void onSelectTab(View view, int position) {
-        hideTabSwitcher();
-        selectTab(position);
-
-        /* Bug Fix
-         * Issue #592 in which the navigational history of the previously open tab (WebView) was
-         * carried forward to the newly selected/opened tab; causing erroneous enabling of
-         * navigational buttons.
-         */
-        updateBottomToolbarArrowsAlpha();
-      }
-
-      @Override
-      public void onCloseTab(View view, int position) {
-        closeTab(position);
-      }
-    });
     compatCallback = new CompatFindActionModeCallback(this);
     setUpTTS();
-    documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
-      @Override
-      public void sectionsLoaded(String title, List<DocumentSection> sections) {
-        for (DocumentSection section : sections) {
-          if (section.title.contains("REPLACE_")) {
-            section.title = getResourceString(getApplicationContext(), section.title);
-          }
-        }
-        documentSections.addAll(sections);
-        if (title.contains("REPLACE_")) {
-          tableDrawerAdapter.setTitle(getResourceString(getApplicationContext(), title));
-        } else {
-          tableDrawerAdapter.setTitle(title);
-        }
-        tableDrawerAdapter.setSections(documentSections);
-        tableDrawerAdapter.notifyDataSetChanged();
-      }
 
-      @Override
-      public void clearSections() {
-        documentSections.clear();
-        tableDrawerAdapter.notifyDataSetChanged();
-      }
-    });
+    setupDocumentParser();
 
     manageExternalLaunchAndRestoringViewState();
     loadPrefs();
     updateTitle();
 
-    Intent i = getIntent();
+    setupIntent(getIntent());
+
+    wasHideToolbar = isHideToolbar;
+    booksAdapter = new BooksAdapter(books, this);
+
+    searchFiles();
+    tabRecyclerView.setAdapter(tabsAdapter);
+    new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
+  }
+
+  //End of onCreate
+  private void setupIntent(Intent i) {
+
     if (i.getBooleanExtra(EXTRA_LIBRARY, false)) {
       manageZimFiles(2);
     }
@@ -430,13 +393,77 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       zimFile.setData(uri);
       startActivity(zimFile);
     }
+  }
 
-    wasHideToolbar = isHideToolbar;
-    booksAdapter = new BooksAdapter(books, this);
+  private void setupDocumentParser() {
+    documentParser = new DocumentParser(new DocumentParser.SectionsListener() {
+      @Override
+      public void sectionsLoaded(String title, List<DocumentSection> sections) {
+        for (DocumentSection section : sections) {
+          if (section.title.contains("REPLACE_")) {
+            section.title = getResourceString(getApplicationContext(), section.title);
+          }
+        }
+        documentSections.addAll(sections);
+        if (title.contains("REPLACE_")) {
+          tableDrawerAdapter.setTitle(getResourceString(getApplicationContext(), title));
+        } else {
+          tableDrawerAdapter.setTitle(title);
+        }
+        tableDrawerAdapter.setSections(documentSections);
+        tableDrawerAdapter.notifyDataSetChanged();
+      }
 
-    searchFiles();
-    tabRecyclerView.setAdapter(tabsAdapter);
-    new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
+      @Override
+      public void clearSections() {
+        documentSections.clear();
+        tableDrawerAdapter.notifyDataSetChanged();
+      }
+    });
+  }
+
+  private void setTabListener() {
+    tabsAdapter.setTabClickListener(new TabsAdapter.TabClickListener() {
+      @Override
+      public void onSelectTab(View view, int position) {
+        hideTabSwitcher();
+        selectTab(position);
+
+        /* Bug Fix
+         * Issue #592 in which the navigational history of the previously open tab (WebView) was
+         * carried forward to the newly selected/opened tab; causing erroneous enabling of
+         * navigational buttons.
+         */
+        updateBottomToolbarArrowsAlpha();
+      }
+
+      @Override
+      public void onCloseTab(View view, int position) {
+        closeTab(position);
+      }
+    });
+  }
+
+  private void setTableDrawerInfo() {
+    tableDrawerRight.setLayoutManager(new LinearLayoutManager(this));
+    tableDrawerAdapter = setupTableDrawerAdapter();
+    tableDrawerRight.setAdapter(tableDrawerAdapter);
+    tableDrawerAdapter.notifyDataSetChanged();
+  }
+
+  private void setupTabsAdapter() {
+    tabsAdapter = new TabsAdapter(this, webViewList);
+    tabsAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+      @Override
+      public void onChanged() {
+        updateTabSwitcherIcon();
+      }
+    });
+  }
+
+  private void addFileReader() {
+    documentParserJs = new FileReader().readFile("js/documentParser.js", this);
+    documentSections = new ArrayList<>();
   }
 
   private TableDrawerAdapter setupTableDrawerAdapter() {
