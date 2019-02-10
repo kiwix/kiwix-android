@@ -5,7 +5,7 @@ import sys
 import os
 PROJECT_ID = 116910522
 
-if os.environ.get('BITBAR_API_KEY') == None:
+if os.environ.get('TEST_BITBAR_KEY') == None:
   print "Tests could not run on insecure fork"
   sys.exit(0)
 else:
