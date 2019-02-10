@@ -6,7 +6,7 @@ Download the xml file and [import it](https://user-images.githubusercontent.com/
 
 ### For XML files
 
-Kiwix follows `2dp` for the `Indent` and `Continuous Indent` values. You can update these values using following steps:
+Kiwix follows `2 spaces` for the `Indent` and `4 spaces` for the `Continuous Indent` values. (Same as that in Square's Style Guide) You can update these values using following steps:
 
 - Go to **Settings** -> **Editor** -> **Code Style** -> **XML**
 - Update the respective values under the **Tabs and Indents** tab
