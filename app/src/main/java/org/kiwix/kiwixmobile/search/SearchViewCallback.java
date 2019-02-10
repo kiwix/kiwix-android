@@ -17,14 +17,13 @@
  */
 package org.kiwix.kiwixmobile.search;
 
-import org.kiwix.kiwixmobile.base.BaseContract;
-
 import java.util.List;
+import org.kiwix.kiwixmobile.base.BaseContract;
 
 /**
  * Created by srv_twry on 14/2/18.
  */
 
 public interface SearchViewCallback extends BaseContract.View {
-    void addRecentSearches(List<String> recentSearches);
+  void addRecentSearches(List<String> recentSearches);
 }

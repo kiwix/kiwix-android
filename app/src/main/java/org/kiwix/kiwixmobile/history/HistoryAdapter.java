@@ -1,21 +1,18 @@
 package org.kiwix.kiwixmobile.history;
 
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.data.local.entity.History;
-
-import java.util.List;
-
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import java.util.List;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.data.local.entity.History;
 
 import static org.kiwix.kiwixmobile.library.LibraryAdapter.createBitmapFromEncodedString;
 
@@ -25,7 +22,8 @@ class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   private final OnItemClickListener itemClickListener;
   private final List<History> deleteList;
 
-  HistoryAdapter(List<History> historyList, List<History> deleteList, OnItemClickListener itemClickListener) {
+  HistoryAdapter(List<History> historyList, List<History> deleteList,
+      OnItemClickListener itemClickListener) {
     this.historyList = historyList;
     this.deleteList = deleteList;
     this.itemClickListener = itemClickListener;
@@ -35,10 +33,12 @@ class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   @Override
   public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     if (viewType == TYPE_ITEM) {
-      View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_bookmark_history, parent, false);
+      View view = LayoutInflater.from(parent.getContext())
+          .inflate(R.layout.item_bookmark_history, parent, false);
       return new Item(view);
     } else {
-      View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.header_date, parent, false);
+      View view =
+          LayoutInflater.from(parent.getContext()).inflate(R.layout.header_date, parent, false);
       return new Category(view);
     }
   }

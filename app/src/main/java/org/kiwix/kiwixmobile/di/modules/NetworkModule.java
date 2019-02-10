@@ -19,21 +19,19 @@ package org.kiwix.kiwixmobile.di.modules;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
-
+import dagger.Module;
+import dagger.Provides;
+import javax.inject.Singleton;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.data.remote.KiwixService;
 import org.kiwix.kiwixmobile.data.remote.UserAgentInterceptor;
 
-import javax.inject.Singleton;
-
-import dagger.Module;
-import dagger.Provides;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-
 @Module public class NetworkModule {
 
-  private static final String KIWIX_DOWNLOAD_URL = BuildConfig.KIWIX_DOWNLOAD_URL; //"http://download.kiwix.org/";
+  private static final String KIWIX_DOWNLOAD_URL = BuildConfig.KIWIX_DOWNLOAD_URL;
+  //"http://download.kiwix.org/";
   private final static String userAgent = "kiwix-android-version:" + BuildConfig.VERSION_CODE;
 
   @Provides @Singleton OkHttpClient provideOkHttpClient() {
@@ -53,5 +51,4 @@ import okhttp3.logging.HttpLoggingInterceptor;
   ConnectivityManager provideConnectivityManager(Context context) {
     return (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
   }
-
 }

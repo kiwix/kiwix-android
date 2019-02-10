@@ -17,10 +17,6 @@
  * MA 02110-1301, USA.
  */
 
-/**
- * Fragment for list of downloaded ZIM files
- */
-
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view;
 
 import android.Manifest;
@@ -30,11 +26,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -52,7 +43,17 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
@@ -69,23 +70,16 @@ import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_STORAGE_PERMISSION;
 import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
+/**
+ * Fragment for list of downloaded ZIM files
+ */
 public class ZimFileSelectFragment extends BaseFragment
     implements OnItemClickListener, AdapterView.OnItemLongClickListener, ZimFileSelectViewCallback {
 
-  public RelativeLayout llLayout;
-  public SwipeRefreshLayout swipeRefreshLayout;
   @Inject
   ZimFileSelectPresenter presenter;
   @Inject
@@ -94,6 +88,7 @@ public class ZimFileSelectFragment extends BaseFragment
   SharedPreferenceUtil sharedPreferenceUtil;
   @Inject
   BookDao bookDao;
+  private SwipeRefreshLayout swipeRefreshLayout;
   private ZimManageActivity zimManageActivity;
   private RescanDataAdapter mRescanAdapter;
   private ArrayList<LibraryNetworkEntity.Book> mFiles;
@@ -102,13 +97,16 @@ public class ZimFileSelectFragment extends BaseFragment
   private boolean mHasRefresh;
 
   @Override
-  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
     KiwixApplication.getApplicationComponent().inject(this);
     zimManageActivity = (ZimManageActivity) super.getActivity();
     presenter.attachView(this);
     // Replace LinearLayout by the type of the root element of the layout you're trying to load
-    llLayout = (RelativeLayout) inflater.inflate(R.layout.zim_list, container, false);
-    new LanguageUtils(zimManageActivity).changeFont(zimManageActivity.getLayoutInflater(), sharedPreferenceUtil);
+    RelativeLayout llLayout =
+        (RelativeLayout) inflater.inflate(R.layout.zim_list, container, false);
+    new LanguageUtils(zimManageActivity).changeFont(zimManageActivity.getLayoutInflater(),
+        sharedPreferenceUtil);
 
     mFileMessage = llLayout.findViewById(R.id.file_management_no_files);
     mZimFileList = llLayout.findViewById(R.id.zimfilelist);
@@ -132,20 +130,19 @@ public class ZimFileSelectFragment extends BaseFragment
     mZimFileList.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
 
       // Holds positions corresponding to every selected list item in the ListView
-      private ArrayList<Integer> selectedViewPosition = new ArrayList<Integer>();
+      private ArrayList<Integer> selectedViewPosition = new ArrayList<>();
 
       @Override
-      public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+      public void onItemCheckedStateChanged(ActionMode mode, int position, long id,
+          boolean checked) {
 
-        if(checked) { // If the item was selected
+        if (checked) { // If the item was selected
           selectedViewPosition.add(position);
           mode.setTitle("" + selectedViewPosition.size()); // Update title of the CAB
-        }
-        else {  // If the item was deselected
+        } else {  // If the item was deselected
           selectedViewPosition.remove(Integer.valueOf(position));
           mode.setTitle("" + selectedViewPosition.size()); // Update title of the CAB
         }
-
       }
 
       @Override
@@ -158,38 +155,43 @@ public class ZimFileSelectFragment extends BaseFragment
       }
 
       @Override
-      public boolean onPrepareActionMode(ActionMode mode, Menu menu) {  // Leave the default implementation as is
+      public boolean onPrepareActionMode(ActionMode mode,
+          Menu menu) {  // Leave the default implementation as is
         return false;
       }
 
       @Override
       public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 
-        switch(item.getItemId()) {  // Determine the action item clicked on in the CAB, and respond accordingly
+        switch (item.getItemId()) {  // Determine the action item clicked on in the CAB, and respond accordingly
 
           // Initiate file deletion functionality for each selected list item (file)
-          case R.id.zim_file_delete_item :
+          case R.id.zim_file_delete_item:
 
-            for(int i = 0; i < selectedViewPosition.size(); i++)
-              deleteSpecificZimDialog(selectedViewPosition.get(i)); // Individually confirm & initiate deletion for each selected file
+            for (int i = 0; i < selectedViewPosition.size(); i++)
+              deleteSpecificZimDialog(selectedViewPosition.get(
+                  i)); // Individually confirm & initiate deletion for each selected file
 
             mode.finish(); // Action performed, so close CAB
             return true;
 
-
           // Initiate file sharing functionality for each selected list item (file)
-          case R.id.zim_file_share_item :
+          case R.id.zim_file_share_item:
 
             // Create an implicit intent for sharing multiple selected files
             Intent selectedFileShareIntent = new Intent();
             selectedFileShareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
-            selectedFileShareIntent.setType("application/octet-stream");  // ZIM files are binary data without an Android-predefined subtype
+            selectedFileShareIntent.setType(
+                "application/octet-stream");  // ZIM files are binary data without an Android-predefined subtype
 
-            ArrayList<Uri> selectedFileContentURIs = new ArrayList<Uri>(); // Store Content URIs for all selected files being shared
+            ArrayList<Uri> selectedFileContentURIs =
+                new ArrayList<>(); // Store Content URIs for all selected files being shared
 
-            for(int i = 0; i < selectedViewPosition.size(); i++) {
+            for (int i = 0; i < selectedViewPosition.size(); i++) {
 
-              LibraryNetworkEntity.Book data = (LibraryNetworkEntity.Book) mZimFileList.getItemAtPosition(selectedViewPosition.get(i));
+              LibraryNetworkEntity.Book data =
+                  (LibraryNetworkEntity.Book) mZimFileList.getItemAtPosition(
+                      selectedViewPosition.get(i));
               String shareFilePath = data.file.getPath(); //Returns path to file in device storage
 
               /**
@@ -199,37 +201,42 @@ public class ZimFileSelectFragment extends BaseFragment
                * FileProvider instead offers 'content://' URIs for sharing files, which offer temporary
                * access permissions to the file being shared (to the intent receiving application), which
                * is fundamentally safer.
-                */
+               */
 
               File shareFile = new File(shareFilePath);
-              Uri shareContentUri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".fileprovider", shareFile);
+              Uri shareContentUri = FileProvider.getUriForFile(getContext(),
+                  BuildConfig.APPLICATION_ID + ".fileprovider", shareFile);
 
-              if(shareContentUri != null)
-                selectedFileContentURIs.add(shareContentUri);  // Populate with the selected file content URIs
+              if (shareContentUri != null) {
+                selectedFileContentURIs.add(
+                    shareContentUri);  // Populate with the selected file content URIs
+              }
             }
 
-            selectedFileShareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, selectedFileContentURIs); // Intent Extra for storing the array list of selected file content URIs
+            selectedFileShareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM,
+                selectedFileContentURIs); // Intent Extra for storing the array list of selected file content URIs
 
-            if(selectedFileContentURIs != null) {  // Grant temporary access permission to the intent receiver for the content URIs
+            if (selectedFileContentURIs
+                != null) {  // Grant temporary access permission to the intent receiver for the content URIs
               selectedFileShareIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             }
 
             /**
              * Since a different app may be used for sharing everytime (E-mail, Cloud Upload, Wifi Sharing, etc.),
              * so force an app chooser dialog every time some selected files are to be shared.
-              */
-            Intent shareChooserIntent = Intent.createChooser(selectedFileShareIntent, getResources().getString(R.string.selected_file_cab_app_chooser_title));
+             */
+            Intent shareChooserIntent = Intent.createChooser(selectedFileShareIntent,
+                getResources().getString(R.string.selected_file_cab_app_chooser_title));
 
-            if(shareChooserIntent.resolveActivity(getActivity().getPackageManager()) != null)
+            if (shareChooserIntent.resolveActivity(getActivity().getPackageManager()) != null) {
               startActivity(shareChooserIntent);  // Open the app chooser dialog
+            }
 
             mode.finish(); // Action performed, so close CAB
             return true;
 
-
-          default :
+          default:
             return false;
-
         }
       }
 
@@ -238,7 +245,6 @@ public class ZimFileSelectFragment extends BaseFragment
         // Upon closure of the CAB, empty the array list of selected list item positions
         selectedViewPosition.clear();
       }
-
     });
 
     return llLayout; // Return the loaded Layout
@@ -250,12 +256,12 @@ public class ZimFileSelectFragment extends BaseFragment
     super.onResume();
   }
 
-
   // Show files from database
   @Override
   public void showFiles(ArrayList<LibraryNetworkEntity.Book> books) {
-    if (mZimFileList == null)
+    if (mZimFileList == null) {
       return;
+    }
 
     // Long click response is the Contextual Action Bar (Selected file deletion & sharing)
     mZimFileList.setOnItemClickListener(this);
@@ -268,7 +274,7 @@ public class ZimFileSelectFragment extends BaseFragment
     checkPermissions();
   }
 
-  public void refreshFragment() {
+  private void refreshFragment() {
     if (mZimFileList == null) {
       swipeRefreshLayout.setRefreshing(false);
       return;
@@ -289,22 +295,24 @@ public class ZimFileSelectFragment extends BaseFragment
     }
   }
 
-  public void checkPermissions() {
+  private void checkPermissions() {
     if (ContextCompat.checkSelfPermission(zimManageActivity,
         Manifest.permission.WRITE_EXTERNAL_STORAGE)
         != PackageManager.PERMISSION_GRANTED && Build.VERSION.SDK_INT > 18) {
-      Toast.makeText(super.getActivity(), getResources().getString(R.string.request_storage), Toast.LENGTH_LONG)
+      Toast.makeText(super.getActivity(), getResources().getString(R.string.request_storage),
+          Toast.LENGTH_LONG)
           .show();
-      requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+      requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
           REQUEST_STORAGE_PERMISSION);
     } else {
       getFiles();
     }
   }
 
-  public void getFiles() {
-    if (swipeRefreshLayout.isRefreshing() && !mHasRefresh)
+  private void getFiles() {
+    if (swipeRefreshLayout.isRefreshing() && !mHasRefresh) {
       return;
+    }
 
     TestingUtils.bindResource(ZimFileSelectFragment.class);
     swipeRefreshLayout.setRefreshing(true);
@@ -338,11 +346,15 @@ public class ZimFileSelectFragment extends BaseFragment
           }
         }
 
-        boolean cached = mFiles.containsAll(bookDao.getBooks()) && bookDao.getBooks().containsAll(mFiles);
+        boolean cached =
+            mFiles.containsAll(bookDao.getBooks()) && bookDao.getBooks().containsAll(mFiles);
 
         // If content changed then update the list of downloadable books
-        if (!cached && zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter != null && zimManageActivity.searchView != null) {
-          zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(zimManageActivity.searchView.getQuery());
+        if (!cached
+            && zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter != null
+            && zimManageActivity.searchView != null) {
+          zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter()
+              .filter(zimManageActivity.searchView.getQuery());
         }
 
         // Save the current list of books
@@ -361,7 +373,7 @@ public class ZimFileSelectFragment extends BaseFragment
 
   @Override
   public void onRequestPermissionsResult(int requestCode,
-                                         @NonNull String permissions[], @NonNull int[] grantResults) {
+      @NonNull String permissions[], @NonNull int[] grantResults) {
     switch (requestCode) {
       case REQUEST_STORAGE_PERMISSION: {
         if (grantResults.length > 0
@@ -371,7 +383,6 @@ public class ZimFileSelectFragment extends BaseFragment
           zimManageActivity.finish();
         }
       }
-
     }
   }
 
@@ -382,11 +393,13 @@ public class ZimFileSelectFragment extends BaseFragment
     ZimContentProvider.canIterate = false;
 
     String file;
-    LibraryNetworkEntity.Book data = (LibraryNetworkEntity.Book) mZimFileList.getItemAtPosition(position);
+    LibraryNetworkEntity.Book data =
+        (LibraryNetworkEntity.Book) mZimFileList.getItemAtPosition(position);
     file = data.file.getPath();
 
     if (!data.file.canRead()) {
-      Toast.makeText(zimManageActivity, getString(R.string.error_filenotfound), Toast.LENGTH_LONG).show();
+      Toast.makeText(zimManageActivity, getString(R.string.error_filenotfound), Toast.LENGTH_LONG)
+          .show();
       return;
     }
 
@@ -398,15 +411,19 @@ public class ZimFileSelectFragment extends BaseFragment
     return false;
   }
 
-  public void deleteSpecificZimDialog(int position) {
+  private void deleteSpecificZimDialog(int position) {
     new AlertDialog.Builder(zimManageActivity, dialogStyle())
-        .setMessage(mFiles.get(position).getTitle() + ": " + getString(R.string.delete_specific_zim))
+        .setMessage(
+            mFiles.get(position).getTitle() + ": " + getString(R.string.delete_specific_zim))
         .setPositiveButton(getResources().getString(R.string.delete), (dialog, which) -> {
           // Toast messages updated for coherence with the new manner of file deletion (from CAB)
           if (deleteSpecificZimFile(position)) {
-            Toast.makeText(zimManageActivity, getResources().getString(R.string.delete_specific_zim_toast), Toast.LENGTH_SHORT).show();
+            Toast.makeText(zimManageActivity,
+                getResources().getString(R.string.delete_specific_zim_toast), Toast.LENGTH_SHORT)
+                .show();
           } else {
-            Toast.makeText(zimManageActivity, getResources().getString(R.string.delete_zim_failed), Toast.LENGTH_SHORT).show();
+            Toast.makeText(zimManageActivity, getResources().getString(R.string.delete_zim_failed),
+                Toast.LENGTH_SHORT).show();
           }
         })
         .setNegativeButton(android.R.string.no, (dialog, which) -> {
@@ -415,7 +432,7 @@ public class ZimFileSelectFragment extends BaseFragment
         .show();
   }
 
-  public boolean deleteSpecificZimFile(int position) {
+  private boolean deleteSpecificZimFile(int position) {
     File file = mFiles.get(position).file;
     FileUtils.deleteZimFile(file.getPath());
     if (file.exists()) {
@@ -426,16 +443,18 @@ public class ZimFileSelectFragment extends BaseFragment
     mRescanAdapter.notifyDataSetChanged();
     checkEmpty();
     if (zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter != null) {
-      zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(zimManageActivity.searchView.getQuery());
+      zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter()
+          .filter(zimManageActivity.searchView.getQuery());
     }
     return true;
   }
 
-  public void checkEmpty() {
+  private void checkEmpty() {
     if (mZimFileList.getCount() == 0) {
       mFileMessage.setVisibility(View.VISIBLE);
-    } else
+    } else {
       mFileMessage.setVisibility(View.GONE);
+    }
   }
 
   private class FileComparator implements Comparator<LibraryNetworkEntity.Book> {
@@ -448,7 +467,8 @@ public class ZimFileSelectFragment extends BaseFragment
   // The Adapter for the ListView for when the ListView is populated with the rescanned files
   private class RescanDataAdapter extends ArrayAdapter<LibraryNetworkEntity.Book> {
 
-    RescanDataAdapter(Context context, int textViewResourceId, List<LibraryNetworkEntity.Book> objects) {
+    RescanDataAdapter(Context context, int textViewResourceId,
+        List<LibraryNetworkEntity.Book> objects) {
       super(context, textViewResourceId, objects);
     }
 
@@ -487,8 +507,8 @@ public class ZimFileSelectFragment extends BaseFragment
       holder.date.setText(book.getDate());
       holder.size.setText(LibraryAdapter.createGbString(book.getSize()));
       holder.fileName.setText(parseURL(getActivity(), book.file.getPath()));
-      holder.favicon.setImageBitmap(LibraryAdapter.createBitmapFromEncodedString(book.getFavicon(), zimManageActivity));
-
+      holder.favicon.setImageBitmap(
+          LibraryAdapter.createBitmapFromEncodedString(book.getFavicon(), zimManageActivity));
 
       //// Check if no value is empty. Set the view to View.GONE, if it is. To View.VISIBLE, if not.
       if (book.getTitle() == null || book.getTitle().isEmpty()) {
@@ -528,7 +548,6 @@ public class ZimFileSelectFragment extends BaseFragment
       }
 
       return convertView;
-
     }
 
     private class ViewHolder {

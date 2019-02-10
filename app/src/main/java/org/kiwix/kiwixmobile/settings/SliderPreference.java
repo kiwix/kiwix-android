@@ -24,7 +24,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
 import org.kiwix.kiwixmobile.R;
 
 public class SliderPreference extends DialogPreference {
@@ -97,10 +96,6 @@ public class SliderPreference extends DialogPreference {
     }
   }
 
-  public void setSummary(CharSequence[] summaries) {
-    mSummaries = summaries;
-  }
-
   @Override
   public void setSummary(int summaryResId) {
     try {
@@ -109,6 +104,10 @@ public class SliderPreference extends DialogPreference {
     } catch (Exception e) {
       super.setSummary(summaryResId);
     }
+  }
+
+  public void setSummary(CharSequence[] summaries) {
+    mSummaries = summaries;
   }
 
   public void setValue(float value) {

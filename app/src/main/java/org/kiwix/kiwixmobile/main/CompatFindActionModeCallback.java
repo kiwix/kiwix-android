@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.main;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.v7.view.ActionMode;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.Spannable;
@@ -34,10 +33,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import org.kiwix.kiwixmobile.R;
-
+import androidx.appcompat.view.ActionMode;
 import java.lang.reflect.Method;
+import org.kiwix.kiwixmobile.R;
 
 public class CompatFindActionModeCallback
     implements ActionMode.Callback, TextWatcher, View.OnClickListener {

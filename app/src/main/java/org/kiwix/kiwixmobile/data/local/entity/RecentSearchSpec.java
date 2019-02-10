@@ -31,6 +31,4 @@ public class RecentSearchSpec {
 
   @ColumnSpec(constraints = "NOT NULL")
   public String zimID;
-
-
 }

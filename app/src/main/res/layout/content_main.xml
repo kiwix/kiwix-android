@@ -1,56 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:id="@+id/get_content_card"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent">
-
-  <android.support.v7.widget.CardView
-    android:id="@+id/content_main_card"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/get_content_card"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="4dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
+    android:layout_height="match_parent"
+    >
 
-    <android.support.constraint.ConstraintLayout
+  <androidx.cardview.widget.CardView
+      android:id="@+id/content_main_card"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="wrap_content"
+      android:layout_margin="8dp"
+      app:cardCornerRadius="4dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
 
       <ImageView
-        android:id="@+id/content_main_card_image"
-        android:layout_width="0dp"
-        android:layout_height="144dp"
-        android:contentDescription="@string/kiwi"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_home_kiwix_banner"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+          android:id="@+id/content_main_card_image"
+          android:layout_width="0dp"
+          android:layout_height="144dp"
+          android:contentDescription="@string/kiwi"
+          android:scaleType="fitXY"
+          android:src="@drawable/ic_home_kiwix_banner"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          />
 
-      <android.support.v7.widget.AppCompatButton
-        android:id="@+id/content_main_card_download_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:text="@string/download_books"
-        android:textColor="@android:color/white"
-        app:backgroundTint="#1565c0"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-    </android.support.constraint.ConstraintLayout>
-  </android.support.v7.widget.CardView>
+      <androidx.appcompat.widget.AppCompatButton
+          android:id="@+id/content_main_card_download_button"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="@dimen/activity_horizontal_margin"
+          android:text="@string/download_books"
+          android:textColor="@android:color/white"
+          app:backgroundTint="#1565c0"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+  </androidx.cardview.widget.CardView>
 
-  <android.support.v7.widget.RecyclerView
-    android:id="@+id/recycler_view"
-    android:layout_width="0dp"
-    android:layout_height="0dp"
-    app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/content_main_card" />
-</android.support.constraint.ConstraintLayout>
+  <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/recycler_view"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/content_main_card"
+      />
+</androidx.constraintlayout.widget.ConstraintLayout>

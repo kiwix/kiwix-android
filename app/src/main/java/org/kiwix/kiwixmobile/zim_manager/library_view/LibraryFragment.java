@@ -29,11 +29,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.test.espresso.idling.CountingIdlingResource;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +39,20 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.test.espresso.idling.CountingIdlingResource;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import com.google.android.material.snackbar.Snackbar;
+import eu.mhutti1.utils.storage.StorageDevice;
+import eu.mhutti1.utils.storage.support.StorageSelectDialog;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseFragment;
@@ -60,25 +68,14 @@ import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import eu.mhutti1.utils.storage.StorageDevice;
-import eu.mhutti1.utils.storage.support.StorageSelectDialog;
-
 import static android.view.View.GONE;
 import static org.kiwix.kiwixmobile.downloader.DownloadService.KIWIX_ROOT;
 import static org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOK;
 
 public class LibraryFragment extends BaseFragment
-    implements AdapterView.OnItemClickListener, StorageSelectDialog.OnSelectListener, LibraryViewCallback {
+    implements AdapterView.OnItemClickListener, StorageSelectDialog.OnSelectListener,
+    LibraryViewCallback {
 
   public static final CountingIdlingResource IDLING_RESOURCE =
       new CountingIdlingResource("Library Fragment Idling Resource");
@@ -107,10 +104,11 @@ public class LibraryFragment extends BaseFragment
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+      Bundle savedInstanceState) {
     KiwixApplication.getApplicationComponent().inject(this);
     TestingUtils.bindResource(LibraryFragment.class);
-    LinearLayout root = (LinearLayout) inflater.inflate(R.layout.activity_library, container, false);
+    LinearLayout root =
+        (LinearLayout) inflater.inflate(R.layout.activity_library, container, false);
     ButterKnife.bind(this, root);
     presenter.attachView(this);
 
@@ -123,14 +121,14 @@ public class LibraryFragment extends BaseFragment
 
     DownloadService.setDownloadFragment(activity.mSectionsPagerAdapter.getDownloadFragment());
 
-
     NetworkInfo network = conMan.getActiveNetworkInfo();
     if (network == null || !network.isConnected()) {
       displayNoNetworkConnection();
     }
 
     networkBroadcastReceiver = new NetworkBroadcastReceiver();
-    activity.registerReceiver(networkBroadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    activity.registerReceiver(networkBroadcastReceiver,
+        new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     isReceiverRegistered = true;
 
     presenter.loadRunningDownloadsFromDb();
@@ -207,7 +205,6 @@ public class LibraryFragment extends BaseFragment
     }
   }
 
-
   @Override
   public void stopScanningContent() {
     networkText.setVisibility(GONE);
@@ -252,8 +249,10 @@ public class LibraryFragment extends BaseFragment
               FragmentManager fm = activity.getSupportFragmentManager();
               StorageSelectDialog dialogFragment = new StorageSelectDialog();
               Bundle b = new Bundle();
-              b.putString(StorageSelectDialog.STORAGE_DIALOG_INTERNAL, getResources().getString(R.string.internal_storage));
-              b.putString(StorageSelectDialog.STORAGE_DIALOG_EXTERNAL, getResources().getString(R.string.external_storage));
+              b.putString(StorageSelectDialog.STORAGE_DIALOG_INTERNAL,
+                  getResources().getString(R.string.internal_storage));
+              b.putString(StorageSelectDialog.STORAGE_DIALOG_EXTERNAL,
+                  getResources().getString(R.string.external_storage));
               b.putInt(StorageSelectDialog.STORAGE_DIALOG_THEME, StyleUtils.dialogStyle());
               dialogFragment.setArguments(b);
               dialogFragment.setOnSelectListener(this);
@@ -267,13 +266,15 @@ public class LibraryFragment extends BaseFragment
       if (DownloadFragment.mDownloadFiles
           .containsValue(KIWIX_ROOT + StorageUtils.getFileNameFromUrl(((Book) parent.getAdapter()
               .getItem(position)).getUrl()))) {
-        Toast.makeText(super.getActivity(), getString(R.string.zim_already_downloading), Toast.LENGTH_LONG)
+        Toast.makeText(super.getActivity(), getString(R.string.zim_already_downloading),
+            Toast.LENGTH_LONG)
             .show();
       } else {
 
         NetworkInfo network = conMan.getActiveNetworkInfo();
         if (network == null || !network.isConnected()) {
-          Toast.makeText(super.getActivity(), getString(R.string.no_network_connection), Toast.LENGTH_LONG)
+          Toast.makeText(super.getActivity(), getString(R.string.no_network_connection),
+              Toast.LENGTH_LONG)
               .show();
           return;
         }
@@ -303,7 +304,8 @@ public class LibraryFragment extends BaseFragment
     if (libraryAdapter != null && activity != null && activity.searchView != null) {
       libraryAdapter.getFilter().filter(activity.searchView.getQuery());
     }
-    Toast.makeText(super.getActivity(), getString(R.string.download_started_library), Toast.LENGTH_LONG)
+    Toast.makeText(super.getActivity(), getString(R.string.download_started_library),
+        Toast.LENGTH_LONG)
         .show();
     Intent service = new Intent(super.getActivity(), DownloadService.class);
     service.putExtra(DownloadIntent.DOWNLOAD_URL_PARAMETER, book.getUrl());
@@ -368,7 +370,6 @@ public class LibraryFragment extends BaseFragment
         networkText.setVisibility(GONE);
         libraryList.setVisibility(View.VISIBLE);
       }
-
     }
   }
 }

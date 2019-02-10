@@ -19,18 +19,17 @@
 package org.kiwix.kiwixmobile.tests;
 
 import android.Manifest;
-import android.support.test.espresso.IdlingPolicies;
-import android.support.test.espresso.IdlingRegistry;
-import android.support.test.espresso.ViewInteraction;
-import android.support.test.filters.LargeTest;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.rule.GrantPermissionRule;
-import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
-
+import androidx.test.espresso.IdlingPolicies;
+import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.ViewInteraction;
+import androidx.test.filters.LargeTest;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.rule.GrantPermissionRule;
+import androidx.test.runner.AndroidJUnit4;
 import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
-
+import java.util.concurrent.TimeUnit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -41,13 +40,11 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
 
-import java.util.concurrent.TimeUnit;
-
-import static android.support.test.espresso.Espresso.onData;
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
+import static androidx.test.espresso.Espresso.onData;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
 import static com.schibsted.spain.barista.interaction.BaristaSwipeRefreshInteractions.refresh;
@@ -66,11 +63,14 @@ public class DownloadTest {
 
   private static final String KIWIX_DOWNLOAD_TEST = "kiwixDownloadTest";
   @Rule
-  public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
+  public ActivityTestRule<MainActivity> activityTestRule =
+      new ActivityTestRule<>(MainActivity.class);
   @Rule
-  public GrantPermissionRule readPermissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
+  public GrantPermissionRule readPermissionRule =
+      GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
   @Rule
-  public GrantPermissionRule writePermissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+  public GrantPermissionRule writePermissionRule =
+      GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @BeforeClass
   public static void beforeClass() {
@@ -147,5 +147,4 @@ this functionality in the tests.
   public void finish() {
     IdlingRegistry.getInstance().unregister(KiwixIdlingResource.getInstance());
   }
-
 }

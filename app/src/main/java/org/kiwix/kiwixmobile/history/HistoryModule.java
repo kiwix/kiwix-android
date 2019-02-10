@@ -1,9 +1,8 @@
 package org.kiwix.kiwixmobile.history;
 
-import org.kiwix.kiwixmobile.di.PerActivity;
-
 import dagger.Module;
 import dagger.Provides;
+import org.kiwix.kiwixmobile.di.PerActivity;
 
 @Module
 public class HistoryModule {

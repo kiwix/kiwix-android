@@ -30,17 +30,15 @@ import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.widget.Toast;
-
-import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
-import org.kiwix.kiwixmobile.utils.LanguageUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.kiwix.kiwixmobile.KiwixApplication;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.data.ZimContentProvider;
+import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
@@ -58,16 +56,16 @@ public class KiwixTextToSpeech {
   /**
    * Constructor.
    *
-   * @param context               the context to create TextToSpeech with
+   * @param context the context to create TextToSpeech with
    * @param onInitSucceedListener listener that receives event when initialization of TTS is done
-   *                              (and does not receive if it failed)
-   * @param onSpeakingListener    listener that receives an event when speaking just started or
-   *                              ended
+   * (and does not receive if it failed)
+   * @param onSpeakingListener listener that receives an event when speaking just started or
+   * ended
    */
   KiwixTextToSpeech(Context context,
-                    final OnInitSucceedListener onInitSucceedListener,
-                    final OnSpeakingListener onSpeakingListener,
-                    final OnAudioFocusChangeListener onAudioFocusChangeListener) {
+      final OnInitSucceedListener onInitSucceedListener,
+      final OnSpeakingListener onSpeakingListener,
+      final OnAudioFocusChangeListener onAudioFocusChangeListener) {
     Log.d(TAG_KIWIX, "Initializing TextToSpeech");
     this.context = context;
     this.onSpeakingListener = onSpeakingListener;
@@ -166,7 +164,9 @@ public class KiwixTextToSpeech {
   }
 
   private Boolean requestAudioFocus() {
-    int audioFocusRequest = am.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+    int audioFocusRequest =
+        am.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC,
+            AudioManager.AUDIOFOCUS_GAIN);
 
     Log.d(TAG_KIWIX, "Audio Focus Requested");
 
@@ -236,7 +236,6 @@ public class KiwixTextToSpeech {
     private final AtomicInteger currentPiece = new AtomicInteger(0);
     public boolean paused = true;
 
-
     private TTSTask(List<String> pieces) {
       this.pieces = pieces;
       //start();
@@ -253,21 +252,22 @@ public class KiwixTextToSpeech {
 
     @SuppressLint("NewApi")
     void start() {
-      if (!paused)
+      if (!paused) {
         return;
-      else
+      } else {
         paused = false;
+      }
 
       HashMap<String, String> params = new HashMap<>();
       // The utterance ID isn't actually used anywhere, the param is passed only to force
       // the utterance listener to be notified
       params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "kiwixLastMessage");
 
-
-      if (currentPiece.get() < pieces.size())
+      if (currentPiece.get() < pieces.size()) {
         tts.speak(pieces.get(currentPiece.getAndIncrement()), TextToSpeech.QUEUE_ADD, params);
-      else
+      } else {
         stop();
+      }
 
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
         tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
@@ -312,14 +312,16 @@ public class KiwixTextToSpeech {
       List<String> pieces = new ArrayList<>();
 
       for (String s : splitted) {
-        if (!s.trim().isEmpty())
+        if (!s.trim().isEmpty()) {
           pieces.add(s.trim());
+        }
       }
 
       if (!pieces.isEmpty()) {
         onSpeakingListener.onSpeakingStarted();
-      } else
+      } else {
         return;
+      }
 
       currentTTSTask = new TTSTask(pieces);
       currentTTSTask.start();

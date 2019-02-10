@@ -22,28 +22,27 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.tabs.TabLayout;
+import java.io.File;
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.language.LanguageActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.models.Language;
-
-import java.io.File;
-
-import javax.inject.Inject;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
@@ -54,12 +53,12 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
   private static final String GET_CONTENT = "GET_CONTENT";
   static String KIWIX_TAG = "kiwix";
   /**
-   * The {@link android.support.v4.view.PagerAdapter} that will provide
+   * The {@link PagerAdapter} that will provide
    * fragments for each of the sections. We use a
    * {@link FragmentPagerAdapter} derivative, which will keep every
    * loaded fragment in memory. If this becomes too memory intensive, it
    * may be best to switch to a
-   * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+   * {@link FragmentStatePagerAdapter}.
    */
   public SectionsPagerAdapter mSectionsPagerAdapter;
   public Toolbar toolbar;
@@ -124,7 +123,8 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
     // User can only scroll the PageViewer component
     AppBarLayout appBarLayout = findViewById(R.id.appbar);
     if (appBarLayout.getLayoutParams() != null) {
-      CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+      CoordinatorLayout.LayoutParams layoutParams =
+          (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
       AppBarLayout.Behavior appBarLayoutBehaviour = new AppBarLayout.Behavior();
       appBarLayoutBehaviour.setDragCallback(new AppBarLayout.Behavior.DragCallback() {
         @Override
@@ -139,8 +139,9 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
   }
 
   private void updateMenu(int position) {
-    if (searchItem == null)
+    if (searchItem == null) {
       return;
+    }
     switch (position) {
       case 0:
         searchItem.setVisible(false);
@@ -169,7 +170,6 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
     toolbar.setNavigationOnClickListener(v -> onBackPressed());
   }
 
-
   public void displayDownloadInterface() {
     mSectionsPagerAdapter.notifyDataSetChanged();
     mViewPager.setCurrentItem(2);
@@ -177,7 +177,8 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
 
   @Override
   public void onBackPressed() {
-    int value = Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
+    int value =
+        Settings.System.getInt(getContentResolver(), Settings.System.ALWAYS_FINISH_ACTIVITIES, 0);
     if (value == 1) {
       Intent startIntent = new Intent(this, MainActivity.class);
       // startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -185,7 +186,6 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
     } else {
       super.onBackPressed();  // optional depending on your needs
     }
-
   }
 
   @Override
@@ -197,8 +197,9 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
     searchView = (SearchView) searchItem.getActionView();
     updateMenu(mViewPager.getCurrentItem());
     toolbar.setOnClickListener(v -> {
-      if (mViewPager.getCurrentItem() == 1)
+      if (mViewPager.getCurrentItem() == 1) {
         menu.findItem(R.id.action_search).expandActionView();
+      }
     });
     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
       @Override
@@ -217,7 +218,6 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
         return true;
       }
     });
-
 
     return true;
   }
@@ -256,16 +256,19 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
   private void showLanguageSelect() {
     Intent intent = new Intent(this, LanguageActivity.class);
     for (Language language : mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages) {
-      language.booksCount = mSectionsPagerAdapter.libraryFragment.libraryAdapter.languageCounts.get(language.languageCode);
+      language.booksCount = mSectionsPagerAdapter.libraryFragment.libraryAdapter.languageCounts.get(
+          language.languageCode);
     }
-    intent.putParcelableArrayListExtra(LanguageActivity.LANGUAGE_LIST, mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages);
+    intent.putParcelableArrayListExtra(LanguageActivity.LANGUAGE_LIST,
+        mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages);
     startActivityForResult(intent, LANGUAGE_ACTIVITY_REQUEST_CODE);
   }
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (requestCode == LANGUAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-      mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages = data.getParcelableArrayListExtra(LanguageActivity.LANGUAGE_LIST);
+      mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages =
+          data.getParcelableArrayListExtra(LanguageActivity.LANGUAGE_LIST);
       mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(searchQuery);
     }
   }

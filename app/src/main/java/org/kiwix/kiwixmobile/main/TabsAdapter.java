@@ -19,21 +19,19 @@ package org.kiwix.kiwixmobile.main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.kiwix.kiwixmobile.R;
-
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
+import org.kiwix.kiwixmobile.R;
 
 import static org.kiwix.kiwixmobile.utils.DimenUtils.getToolbarHeight;
 import static org.kiwix.kiwixmobile.utils.DimenUtils.getWindowHeight;
@@ -58,7 +56,8 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     Context context = parent.getContext();
-    final int margin16 = context.getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin);
+    final int margin16 =
+        context.getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin);
 
     ImageView contentImage = new ImageView(context);
     contentImage.setId(1);
@@ -71,37 +70,48 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
     CardView cardView = new CardView(context);
     cardView.setId(3);
     cardView.setUseCompatPadding(true);
-    cardView.addView(contentImage, new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.MATCH_PARENT));
+    cardView.addView(contentImage, new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT,
+        CardView.LayoutParams.MATCH_PARENT));
 
     ConstraintLayout constraintLayout = new ConstraintLayout(context);
     constraintLayout.setFocusableInTouchMode(true);
 
-    constraintLayout.addView(cardView, new ConstraintLayout.LayoutParams(getWindowWidth(activity) / 2,
-        -getToolbarHeight(activity) / 2 + getWindowHeight(activity) / 2));
+    constraintLayout.addView(cardView,
+        new ConstraintLayout.LayoutParams(getWindowWidth(activity) / 2,
+            -getToolbarHeight(activity) / 2 + getWindowHeight(activity) / 2));
     constraintLayout.addView(close, new ConstraintLayout.LayoutParams(margin16,
         margin16));
-    constraintLayout.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.WRAP_CONTENT, RecyclerView.LayoutParams.MATCH_PARENT));
+    constraintLayout.setLayoutParams(
+        new RecyclerView.LayoutParams(RecyclerView.LayoutParams.WRAP_CONTENT,
+            RecyclerView.LayoutParams.MATCH_PARENT));
 
     TextView textView = new TextView(context);
     textView.setId(4);
     textView.setMaxLines(1);
     textView.setEllipsize(TextUtils.TruncateAt.END);
     textView.setTextColor(activity.getResources().getColor(R.color.white));
-    constraintLayout.addView(textView, new ConstraintLayout.LayoutParams(0, ConstraintLayout.LayoutParams.WRAP_CONTENT));
+    constraintLayout.addView(textView,
+        new ConstraintLayout.LayoutParams(0, ConstraintLayout.LayoutParams.WRAP_CONTENT));
 
     ConstraintSet constraintSet = new ConstraintSet();
     constraintSet.clone(constraintLayout);
 
-    constraintSet.connect(cardView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-    constraintSet.connect(cardView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
-    constraintSet.connect(cardView.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START, margin16);
-    constraintSet.connect(cardView.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END, margin16);
+    constraintSet.connect(cardView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID,
+        ConstraintSet.TOP);
+    constraintSet.connect(cardView.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID,
+        ConstraintSet.BOTTOM);
+    constraintSet.connect(cardView.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID,
+        ConstraintSet.START, margin16);
+    constraintSet.connect(cardView.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID,
+        ConstraintSet.END, margin16);
 
     constraintSet.connect(close.getId(), ConstraintSet.END, cardView.getId(), ConstraintSet.END);
     constraintSet.connect(close.getId(), ConstraintSet.BOTTOM, cardView.getId(), ConstraintSet.TOP);
 
-    constraintSet.connect(textView.getId(), ConstraintSet.BOTTOM, cardView.getId(), ConstraintSet.TOP);
-    constraintSet.connect(textView.getId(), ConstraintSet.START, cardView.getId(), ConstraintSet.START, margin16 / 8);
+    constraintSet.connect(textView.getId(), ConstraintSet.BOTTOM, cardView.getId(),
+        ConstraintSet.TOP);
+    constraintSet.connect(textView.getId(), ConstraintSet.START, cardView.getId(),
+        ConstraintSet.START, margin16 / 8);
     constraintSet.connect(textView.getId(), ConstraintSet.END, close.getId(), ConstraintSet.START);
 
     constraintSet.applyTo(constraintLayout);
@@ -116,7 +126,8 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
     }
     String webViewTitle = fromHtml(webView.getTitle()).toString();
     if (webViewTitle.contains("REPLACE_")) {
-      webViewTitle = getResourceString(holder.title.getContext().getApplicationContext(), webViewTitle);
+      webViewTitle =
+          getResourceString(holder.title.getContext().getApplicationContext(), webViewTitle);
     }
     holder.title.setText(webViewTitle);
     holder.close.setOnClickListener(v -> listener.onCloseTab(v, holder.getAdapterPosition()));
@@ -137,11 +148,11 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
     return selectedPosition;
   }
 
-  public void setSelected(int position) {
+  void setSelected(int position) {
     this.selectedPosition = position;
   }
 
-  public void setTabClickListener(TabClickListener listener) {
+  void setTabClickListener(TabClickListener listener) {
     this.listener = listener;
   }
 

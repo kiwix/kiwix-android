@@ -18,7 +18,6 @@
 package org.kiwix.kiwixmobile.data.remote;
 
 import java.io.IOException;
-
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -27,7 +26,7 @@ import okhttp3.Response;
  * Created by mhutti1 on 20/04/17.
  */
 
-public class UserAgentInterceptor implements Interceptor{
+public class UserAgentInterceptor implements Interceptor {
   public final String useragent;
 
   public UserAgentInterceptor(String useragent) {

@@ -29,7 +29,7 @@ import android.util.TypedValue;
 public class DimenUtils {
   public static int getToolbarHeight(Context context) {
     TypedValue t = new TypedValue();
-    context.getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, t, true);
+    context.getTheme().resolveAttribute(androidx.appcompat.R.attr.actionBarSize, t, true);
     return context.getResources().getDimensionPixelSize(t.resourceId);
   }
 
