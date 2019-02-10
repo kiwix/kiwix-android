@@ -25,7 +25,6 @@
           android:layout_width="match_parent"
           android:layout_height="?android:attr/actionBarSize"
           android:background="?colorPrimaryDark"
-          android:layoutDirection="locale"
           app:popupTheme="@style/AppTheme.PopupOverlay"
           app:theme="@style/AppTheme.AppBarOverlay"
           />
