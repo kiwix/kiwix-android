@@ -174,7 +174,7 @@ android {
   defaultConfig {
     minSdkVersion 15
     targetSdkVersion 28
-    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunner "androidx.test.ext.runner.AndroidJUnitRunner"
     // See https://github.com/linkedin/dexmaker/issues/65 for why we need the following line.
     testInstrumentationRunnerArguments.notClass = 'com.android.dex.DexIndexOverflowException'
     multiDexEnabled true
