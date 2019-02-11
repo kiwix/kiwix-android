@@ -77,4 +77,9 @@
       android:title="@string/menu_settings"
       app:showAsAction="never"/>
 
+  <item
+      android:id="@+id/menu_support_kiwix"
+      android:title="@string/menu_support_kiwix"
+      app:showAsAction="never"/>
+
 </menu>
