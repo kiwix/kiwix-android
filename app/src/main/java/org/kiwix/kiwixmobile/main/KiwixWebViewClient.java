@@ -112,23 +112,21 @@ public class KiwixWebViewClient extends WebViewClient {
 
   private void inflateHomeView(WebView view) {
     LayoutInflater inflater = LayoutInflater.from(view.getContext());
-    if (KiwixApplication.getInstance().getResources().getConfiguration().orientation ==
-        Configuration.ORIENTATION_PORTRAIT) {
-      home = inflater.inflate(R.layout.content_main_p, view, false);
-    } else if (KiwixApplication.getInstance().getResources().getConfiguration().orientation ==
-        Configuration.ORIENTATION_LANDSCAPE) {
-      home = inflater.inflate(R.layout.content_main_l, view, false);
-    }
+    home = inflater.inflate(R.layout.content_main, view, false);
     callback.setHomePage(home);
+
     if (sharedPreferenceUtil.nightMode()) {
+
       ImageView cardImage = home.findViewById(R.id.content_main_card_image);
       ImageView sideImage = home.findViewById(R.id.content_side_image);
       AppCompatButton downloadButton = home.findViewById(R.id.content_main_card_download_button);
+
       downloadButton.setTextColor(Color.parseColor("#000000"));
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         downloadButton.setBackgroundTintList(ColorStateList.valueOf(
             KiwixApplication.getInstance().getResources().getColor(R.color.complement_blue800)));
       }
+
       ConstraintLayout constraintLayout = home.findViewById(R.id.constraint_main);
       constraintLayout.setBackgroundResource(R.drawable.back_cover_night);
       sideImage.setImageResource(R.drawable.home_side_cover_night);

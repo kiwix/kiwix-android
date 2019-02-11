@@ -18,16 +18,17 @@
       >
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/constraint_main"
-        android:background="@drawable/back_cover">
+        android:background="@drawable/back_cover"
+        >
 
       <ImageView
           android:id="@+id/content_side_image"
           android:layout_width="0dp"
           android:layout_height="144dp"
-          android:contentDescription="@string/side_design"
+          android:contentDescription="@null"
           android:scaleType="fitEnd"
           android:src="@drawable/home_side_cover"
           app:layout_constraintBottom_toBottomOf="parent"

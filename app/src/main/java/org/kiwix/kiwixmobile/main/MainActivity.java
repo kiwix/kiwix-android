@@ -1343,7 +1343,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   private void setUpWebView() {
     getCurrentWebView().getSettings().setJavaScriptEnabled(true);
-    if (Build.VERSION.SDK_INT >= VERSION_CODES.KITKAT) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
       WebView.setWebContentsDebuggingEnabled(true);
     }
 
