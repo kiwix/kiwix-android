@@ -39,6 +39,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.ViewCompat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -78,6 +79,7 @@ public class SearchActivity extends BaseActivity
       searchText = savedInstanceState.getString(EXTRA_SEARCH_TEXT);
     }
     Toolbar toolbar = findViewById(R.id.toolbar);
+    ViewCompat.setLayoutDirection(toolbar, ViewCompat.LAYOUT_DIRECTION_LOCALE);
     setSupportActionBar(toolbar);
     getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back);
     getSupportActionBar().setHomeButtonEnabled(true);
@@ -134,6 +136,7 @@ public class SearchActivity extends BaseActivity
     MenuItem searchMenuItem = menu.findItem(R.id.menu_search);
     searchMenuItem.expandActionView();
     searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+    searchView.setMaxWidth(Integer.MAX_VALUE);
     if (searchText != null) {
       searchView.setQuery(searchText, false);
       activateAutoAdapter();
