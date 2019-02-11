@@ -55,4 +55,5 @@
   <string name="help_6">Onze inhoud is ondergebracht op de Kiwix website</string>
   <string name="pref_autonightmode_summary">Automatisch veranderen tussen de dag- en nachtmodus</string>
   <string name="pref_autonightmode">Geautomatiseerde nachtmodus</string>
+  <string name="download_resume">hervatten</string>
 </resources>

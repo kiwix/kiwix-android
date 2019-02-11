@@ -46,4 +46,5 @@
   <string name="confirm_stop_download_title">Eureunkeun undeuran?</string>
   <string name="download_change_storage">Pamilih parangkat panyimpenan</string>
   <string name="delete_tab">Pupus Tag</string>
+  <string name="download_resume">neruskeun</string>
 </resources>

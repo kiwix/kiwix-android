@@ -36,4 +36,5 @@
   <string name="pref_language_chooser">Dewis iaith</string>
   <string name="menu_bookmarks_list">Llyfrnodau</string>
   <string name="zim_manager">Llyfrgell</string>
+  <string name="download_resume">ailddechreuasech</string>
 </resources>

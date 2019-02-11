@@ -52,4 +52,5 @@
   <string name="pref_newtab_background_title">Адкрыць новае вакенца на фоне</string>
   <string name="pref_newtab_background_summary">Пры адкрыцці новага вакенца, яно будзе адкрытае ў фоне</string>
   <string name="zim_manager">Бібліятэка</string>
+  <string name="download_resume">працягваць</string>
 </resources>

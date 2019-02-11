@@ -52,4 +52,5 @@
   <string name="pref_newtab_background_title">Deschide fila nouă în fundal</string>
   <string name="pref_newtab_background_summary">Când deschideți o filă nouă, aceasta se va deschide în fundal</string>
   <string name="zim_manager">Bibliotecă</string>
+  <string name="download_resume">relua</string>
 </resources>

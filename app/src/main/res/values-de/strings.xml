@@ -161,4 +161,5 @@
   <string name="do_not_ask_anymore">Nicht mehr fragen</string>
   <string name="your_languages">Ausgewählte Sprachen:</string>
   <string name="other_languages">Weitere Sprachen:</string>
+  <string name="download_resume">fortsetzen</string>
 </resources>

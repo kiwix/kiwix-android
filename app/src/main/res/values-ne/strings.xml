@@ -52,4 +52,5 @@
   <string name="yes">हो</string>
   <string name="confirm_stop_download_title">डाउनलोड रोक्ने हो?</string>
   <string name="delete_tab">ट्याब मेट्नुहोस्</string>
+  <string name="download_resume">फेरि थाल्नु</string>
 </resources>

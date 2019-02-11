@@ -52,4 +52,5 @@
   <string name="pref_newtab_background_title">Åpne ny fane i bakgrunnen</string>
   <string name="pref_newtab_background_summary">Når en ny fane åpnes vil den åpnes i bakgrunnen</string>
   <string name="zim_manager">Bibliotek</string>
+  <string name="download_resume">gjenoppta</string>
 </resources>

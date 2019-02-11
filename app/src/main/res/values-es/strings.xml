@@ -157,4 +157,5 @@
   <string name="do_not_ask_anymore">No preguntar de nuevo</string>
   <string name="your_languages">Idiomas seleccionados:</string>
   <string name="other_languages">Otros idiomas:</string>
+  <string name="download_resume">reanudar</string>
 </resources>

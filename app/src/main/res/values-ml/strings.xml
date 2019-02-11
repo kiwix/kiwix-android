@@ -36,4 +36,5 @@
   <string name="rate_dialog_negative">വേണ്ട, നന്ദി</string>
   <string name="rate_dialog_neutral">പിന്നീട്</string>
   <string name="zim_manager">ഗ്രന്ഥപ്പുര</string>
+  <string name="download_resume">പുനരാരംഭിക്കുക</string>
 </resources>

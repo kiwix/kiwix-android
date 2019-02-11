@@ -17,4 +17,5 @@
   <string name="pref_language_chooser">Vali keel</string>
   <string name="menu_bookmarks_list">Järjehoidjad</string>
   <string name="zim_manager">Raamatukogu</string>
+  <string name="download_resume">jätkama</string>
 </resources>

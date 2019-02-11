@@ -73,4 +73,5 @@
   <string name="confirm_stop_download_title">Σταμάτημα λήψης;</string>
   <string name="confirm_stop_download_msg">Είστε σίγουροι ότι θέλετε να σταματήσετε αυτή τη λήψη;</string>
   <string name="next">Επόμενο</string>
+  <string name="download_resume">ΒΙΟΓΡΑΦΙΚΟ</string>
 </resources>

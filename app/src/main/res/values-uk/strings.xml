@@ -154,4 +154,5 @@
   <string name="time_left">залишилось</string>
   <string name="pref_autonightmode_summary">Автоматично перемикатися між денним та нічним режимами.</string>
   <string name="pref_autonightmode">Автоматичний нічний режим</string>
+  <string name="download_resume">одержувати</string>
 </resources>

@@ -31,4 +31,5 @@
   <string name="pref_language_chooser">Хэлээ сонгоно уу</string>
   <string name="menu_bookmarks_list">Тэмдэглэсэн хуудсууд</string>
   <string name="zim_manager">Сан</string>
+  <string name="download_resume">сэргээх</string>
 </resources>

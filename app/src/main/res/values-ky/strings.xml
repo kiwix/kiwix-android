@@ -24,4 +24,5 @@
   <string name="pref_language_chooser">Тилин тандаңыз</string>
   <string name="menu_bookmarks_list">Чөп каттар</string>
   <string name="zim_manager">Китепкана</string>
+  <string name="download_resume">резюме</string>
 </resources>

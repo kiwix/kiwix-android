@@ -101,4 +101,5 @@
   <string name="pref_autonightmode">Modalità notte automatica</string>
   <string name="your_languages">Lingue selezionate:</string>
   <string name="other_languages">Altre lingue:</string>
+  <string name="download_resume">" riprendere"</string>
 </resources>

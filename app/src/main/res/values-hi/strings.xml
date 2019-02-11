@@ -154,4 +154,5 @@
   <string name="time_left">बाएँ ओर</string>
   <string name="pref_autonightmode_summary">स्वचालित रूप से दिन और रात मोड के बीच स्विच करें।</string>
   <string name="pref_autonightmode">स्वचालित रात मोड</string>
+  <string name="download_resume">फिर से शुरू करना</string>
 </resources>

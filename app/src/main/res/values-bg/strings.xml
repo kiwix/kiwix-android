@@ -70,4 +70,5 @@
   <string name="time_hour">ч.</string>
   <string name="time_minute">мин.</string>
   <string name="time_second">сек.</string>
+  <string name="download_resume">вземам отново</string>
 </resources>

@@ -40,4 +40,5 @@
   <string name="yes">Da</string>
   <string name="no">Ne</string>
   <string name="confirm_stop_download_title">Ustavi prenos?</string>
+  <string name="download_resume">zopet se lotiti</string>
 </resources>

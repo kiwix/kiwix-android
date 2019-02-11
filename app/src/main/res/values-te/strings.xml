@@ -52,4 +52,5 @@
   <string name="pref_newtab_background_title">కొత్త ట్యబ్ ను వెనుకస్థలంలో తెరవండి</string>
   <string name="pref_newtab_background_summary">ఎప్పుడైతే కొత్త ట్యాబ్ ను తెరుస్తారో అప్పుడు అది వెనుకస్థలంలో తెరుచుకుంటుంది.</string>
   <string name="zim_manager">గ్రంథాలయము</string>
+  <string name="download_resume">సంక్షిప్తము</string>
 </resources>

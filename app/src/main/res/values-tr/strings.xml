@@ -130,7 +130,7 @@
   <string name="reboot_message">Android 6.0 sürümündeki bir hatadan dolayı bize depolama izni vermeden devam edebilmeniz için cihazınızı yeniden başlatmanız gerekmektedir. Verdiğimiz zahmetten dolayı özür dileriz.</string>
   <string name="delete_zim_failed">Üzgünüz, bu dosyayı silemedik. Bir dosya yöneticisi kullanmayı denemelisiniz.</string>
   <string name="tts_pause">duraklat</string>
-  <string name="tts_resume">devam et</string>
+  <string name="tts_resume">geri almak</string>
   <string name="tts_stop">dur</string>
   <string name="internal_storage">Dahili</string>
   <string name="external_storage">Harici</string>
@@ -154,4 +154,5 @@
   <string name="time_left">sol</string>
   <string name="pref_autonightmode_summary">Gece ve gündüz modları arasında otomatik seçim.</string>
   <string name="pref_autonightmode">Otomatik gece modu</string>
+  <string name="download_resume">geri almak</string>
 </resources>

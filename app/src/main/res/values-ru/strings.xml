@@ -130,7 +130,7 @@
   <string name="reboot_message">Из-за ошибки в android 6.0, мы требуем вас перезагрузить ваше устройство, чтобы продолжить, не предоставляя нам разрешения на хранение. Мы сожалеем о неудобствах, которые могут возникнуть.</string>
   <string name="delete_zim_failed">Извините, мы не смогли удалить этот файл. Вместо этого вам стоит попробовать использовать файловый менеджер.</string>
   <string name="tts_pause">пауза</string>
-  <string name="tts_resume">продолжить</string>
+  <string name="tts_resume">возобновлять</string>
   <string name="tts_stop">остановить</string>
   <string name="internal_storage">Внутренний</string>
   <string name="external_storage">Внешний</string>
@@ -162,4 +162,5 @@
   <string name="do_not_ask_anymore">Больше не спрашивай</string>
   <string name="your_languages">Выбранные языки:</string>
   <string name="other_languages">Другие языки:</string>
+  <string name="download_resume">возобновлять</string>
 </resources>

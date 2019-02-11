@@ -17,4 +17,5 @@
   <string name="pref_language_chooser">ایک زبان کا انتخاب کریں</string>
   <string name="menu_bookmarks_list">نشانزدہ</string>
   <string name="zim_manager">مکتبہ</string>
+  <string name="download_resume">دوبارہ شروع کریں</string>
 </resources>

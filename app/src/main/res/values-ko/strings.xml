@@ -160,4 +160,5 @@
   <string name="do_not_ask_anymore">더 이상 묻지 않습니다</string>
   <string name="your_languages">선택한 언어:</string>
   <string name="other_languages">다른 언어:</string>
+  <string name="download_resume">계속하기</string>
 </resources>

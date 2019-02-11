@@ -31,4 +31,5 @@
   <string name="pref_language_chooser">Kies \'n taal</string>
   <string name="menu_bookmarks_list">Boekmerke</string>
   <string name="zim_manager">Biblioteek</string>
+  <string name="download_resume">hervat</string>
 </resources>

@@ -19,4 +19,5 @@
   <string name="pref_language_chooser">Odaberite jezik</string>
   <string name="menu_bookmarks_list">Bilješke</string>
   <string name="zim_manager">Knjižnica</string>
+  <string name="download_resume">nastaviti priču</string>
 </resources>

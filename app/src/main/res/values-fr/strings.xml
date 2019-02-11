@@ -153,4 +153,5 @@
   <string name="do_not_ask_anymore">Ne plus demander</string>
   <string name="your_languages">Langues sélectionnées :</string>
   <string name="other_languages">Autres langues :</string>
+  <string name="download_resume">reprendre</string>
 </resources>

@@ -93,6 +93,7 @@
   <string name="zim_file_downloaded">Downloaded</string>
   <string name="download_pause">Pause</string>
   <string name="download_play">Play</string>
+  <string name="download_resume">Resume</string>
   <string name="download_stop">Stop</string>
   <string name="download_paused">paused</string>
   <string name="no_downloads_here">No downloads here</string>

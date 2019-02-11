@@ -34,4 +34,5 @@
   <string name="download_complete_snackbar">Lejupielāde pabeigta</string>
   <string name="tts_resume">turpināt</string>
   <string name="no">Nē</string>
+  <string name="download_resume">atsākt</string>
 </resources>
