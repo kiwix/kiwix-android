@@ -13,6 +13,7 @@
   <string name="menu_exitfullscreen">Exit full screen</string>
   <string name="menu_read_aloud">Read aloud</string>
   <string name="menu_read_aloud_stop">Stop reading aloud</string>
+  <string name="menu_support_kiwix">Support Kiwix</string>
   <string name="save_media">Save Media</string>
   <string name="save_media_error">An error occurred when trying to save the media!</string>
   <string name="save_media_saved">Saved media as %s to Android/media/org.kiwix…/</string>

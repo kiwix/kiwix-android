@@ -878,6 +878,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
             REQUEST_HISTORY_ITEM_CHOSEN);
         return true;
 
+      case R.id.menu_support_kiwix:
+        Uri uriSupportKiwix = Uri.parse("https://www.kiwix.org/support");
+        Intent intertSupportKiwix = new Intent(Intent.ACTION_VIEW, uriSupportKiwix);
+        intertSupportKiwix.putExtra(EXTRA_EXTERNAL_LINK, true);
+        openExternalUrl(intertSupportKiwix);
+
       default:
         break;
     }
