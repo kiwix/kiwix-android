@@ -231,9 +231,9 @@ public class DownloadService extends Service {
     synchronized (pauseLock) {
       pauseLock.notify();
     }
-    if (!DownloadFragment.mDownloads.isEmpty()) {
-      DownloadFragment.mDownloads.remove(notificationID);
-      DownloadFragment.mDownloadFiles.remove(notificationID);
+    if (!DownloadFragment.downloads.isEmpty()) {
+      DownloadFragment.downloads.remove(notificationID);
+      DownloadFragment.downloadFiles.remove(notificationID);
       DownloadFragment.downloadAdapter.notifyDataSetChanged();
     }
     updateForeground();
@@ -428,10 +428,10 @@ public class DownloadService extends Service {
   }
 
   private void updateDownloadFragmentProgress(int progress, int notificationID) {
-    if (DownloadFragment.mDownloads != null
-        && DownloadFragment.mDownloads.get(notificationID) != null) {
+    if (DownloadFragment.downloads != null
+        && DownloadFragment.downloads.get(notificationID) != null) {
       handler.post(() -> {
-        if (DownloadFragment.mDownloads.get(notificationID) != null) {
+        if (DownloadFragment.downloads.get(notificationID) != null) {
           DownloadFragment.downloadAdapter.updateProgress(progress, notificationID);
         }
       });
@@ -439,10 +439,10 @@ public class DownloadService extends Service {
   }
 
   private void updateDownloadFragmentComplete(int notificationID) {
-    if (DownloadFragment.mDownloads != null
-        && DownloadFragment.mDownloads.get(notificationID) != null) {
+    if (DownloadFragment.downloads != null
+        && DownloadFragment.downloads.get(notificationID) != null) {
       handler.post(() -> {
-        if (DownloadFragment.mDownloads.get(notificationID) != null) {
+        if (DownloadFragment.downloads.get(notificationID) != null) {
           DownloadFragment.downloadAdapter.complete(notificationID);
         }
       });
@@ -526,8 +526,8 @@ public class DownloadService extends Service {
         downloaded += output.length();
 
         if (chunk.getStartByte() == 0) {
-          if (!DownloadFragment.mDownloads.isEmpty()) {
-            LibraryNetworkEntity.Book book = DownloadFragment.mDownloads
+          if (!DownloadFragment.downloads.isEmpty()) {
+            LibraryNetworkEntity.Book book = DownloadFragment.downloads
                 .get(chunk.getNotificationID());
             book.remoteUrl = book.getUrl();
             book.file = fullFile;
