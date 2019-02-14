@@ -107,7 +107,6 @@ import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
-import static android.os.Build.VERSION_CODES;
 import static org.kiwix.kiwixmobile.main.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.main.TableDrawerAdapter.TableClickListener;
 import static org.kiwix.kiwixmobile.search.SearchActivity.EXTRA_SEARCH_IN_TEXT;
@@ -1009,7 +1008,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       ActivityCompat.requestPermissions(this,
           new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
           REQUEST_STORAGE_PERMISSION);
-      if (BuildConfig.IS_CUSTOM_APP && Build.VERSION.SDK_INT == VERSION_CODES.M) {
+      if (BuildConfig.IS_CUSTOM_APP && Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
         Toast.makeText(this, getResources().getString(R.string.request_storage_custom),
             Toast.LENGTH_LONG)
             .show();
@@ -1226,7 +1225,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           saveTabStates();
           Intent i = new Intent(MainActivity.this, SearchActivity.class);
           i.putExtra(EXTRA_ZIM_FILE, zimFile);
-          if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             i.putExtra(Intent.EXTRA_PROCESS_TEXT, intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT));
           }
           intent.setAction("");
@@ -1917,7 +1916,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void searchFiles() {
-    if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       if (ContextCompat.checkSelfPermission(this,
           Manifest.permission.READ_EXTERNAL_STORAGE)
           != PackageManager.PERMISSION_GRANTED) {
