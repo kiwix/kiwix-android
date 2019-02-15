@@ -116,27 +116,18 @@ public class KiwixWebViewClient extends WebViewClient {
     callback.setHomePage(home);
 
     if (sharedPreferenceUtil.nightMode()) {
-
       ImageView cardImage = home.findViewById(R.id.content_main_card_image);
       ImageView sideImage = home.findViewById(R.id.content_side_image);
       AppCompatButton downloadButton = home.findViewById(R.id.content_main_card_download_button);
-
-      downloadButton.setTextColor(Color.parseColor("#000000"));
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        downloadButton.setBackgroundTintList(ColorStateList.valueOf(
-            KiwixApplication.getInstance().getResources().getColor(R.color.complement_blue800)));
-      }
-
       ConstraintLayout constraintLayout = home.findViewById(R.id.constraint_main);
       constraintLayout.setBackgroundResource(R.drawable.back_cover_night);
       sideImage.setImageResource(R.drawable.home_side_cover_night);
+      cardImage.setImageResource(R.drawable.kiwix_logo_night);
+      downloadButton.setTextColor(Color.parseColor("#000000"));
 
-      if (KiwixApplication.getInstance().getResources().getConfiguration().orientation ==
-          Configuration.ORIENTATION_PORTRAIT) {
-        cardImage.setImageResource(R.drawable.kiwix_vertical_logo_night);
-      } else if (KiwixApplication.getInstance().getResources().getConfiguration().orientation ==
-          Configuration.ORIENTATION_LANDSCAPE) {
-        cardImage.setImageResource(R.drawable.kiwix_horizontal_logo_night);
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        downloadButton.setBackgroundTintList(ColorStateList.valueOf(
+            KiwixApplication.getInstance().getResources().getColor(R.color.complement_blue800)));
       }
     }
     view.removeAllViews();

@@ -40,7 +40,7 @@
           android:layout_height="144dp"
           android:contentDescription="@string/kiwi"
           android:padding="15dp"
-          android:src="@drawable/kiwix_vertical_logo"
+          android:src="@drawable/kiwix_logo"
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintEnd_toStartOf="@id/content_main_card_download_button"
           app:layout_constraintStart_toStartOf="parent"
