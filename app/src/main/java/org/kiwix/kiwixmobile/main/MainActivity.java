@@ -1926,8 +1926,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           != PackageManager.PERMISSION_GRANTED) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,
             Manifest.permission.READ_EXTERNAL_STORAGE)) {
-          Toast.makeText(this, R.string.request_storage,
-              Toast.LENGTH_LONG).show();
+//          Toast.makeText(this, R.string.request_storage,
+//              Toast.LENGTH_LONG).show();
         }
         ActivityCompat.requestPermissions(this,
             new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
