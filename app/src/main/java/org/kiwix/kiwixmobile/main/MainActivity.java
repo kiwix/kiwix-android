@@ -1369,6 +1369,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   public void onConfigurationChanged(Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
     toggleActionItemsConfig();
+    if (getCurrentWebView().getUrl().equalsIgnoreCase(HOME_URL)) {
+      showHomePage();
+    }
   }
 
   private void toggleActionItemsConfig() {

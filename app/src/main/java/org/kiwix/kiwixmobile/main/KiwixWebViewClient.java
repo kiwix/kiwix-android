@@ -18,7 +18,10 @@
 package org.kiwix.kiwixmobile.main;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +29,8 @@ import android.webkit.MimeTypeMap;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import java.util.HashMap;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
@@ -109,8 +114,21 @@ public class KiwixWebViewClient extends WebViewClient {
     home = inflater.inflate(R.layout.content_main, view, false);
     callback.setHomePage(home);
     if (sharedPreferenceUtil.nightMode()) {
+      ImageView sideImage = home.findViewById(R.id.content_side_image);
       ImageView cardImage = home.findViewById(R.id.content_main_card_image);
-      cardImage.setImageResource(R.drawable.ic_home_kiwix_banner_night);
+      AppCompatButton downloadButton = home.findViewById(R.id.content_main_card_download_button);
+      ConstraintLayout constraintLayout = home.findViewById(R.id.constraint_main);
+      constraintLayout.setBackgroundResource(R.drawable.back_cover_night);
+      sideImage.setImageResource(R.drawable.home_side_cover_night);
+      cardImage.setImageResource(R.drawable.kiwix_logo_night);
+      downloadButton.setTextColor(Color.parseColor("#000000"));
+
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        downloadButton.setBackgroundTintList(ColorStateList.valueOf(
+            KiwixApplication.getInstance().getResources().getColor(R.color.complement_blue800)));
+      }
+
+
     }
     view.removeAllViews();
     view.addView(home);
