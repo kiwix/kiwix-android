@@ -22,6 +22,7 @@ package org.kiwix.kiwixmobile.settings;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.EditTextPreference;
@@ -31,6 +32,8 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.view.LayoutInflater;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
@@ -85,6 +88,13 @@ public class KiwixSettingsActivity extends BaseActivity {
         .commit();
 
     setUpToolbar();
+
+    if (Build.VERSION.SDK_INT >= 21) {
+      Window window = getWindow();
+      window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+      window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+      window.setStatusBarColor(getResources().getColor(R.color.titleBar));
+    }
   }
 
   @Override
