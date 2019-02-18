@@ -2,10 +2,13 @@ package org.kiwix.kiwixmobile.history;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
@@ -110,6 +113,14 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
       actionBar.setDisplayHomeAsUpEnabled(true);
       actionBar.setTitle(R.string.history);
     }
+
+    if (Build.VERSION.SDK_INT >= 21) {
+      Window window = getWindow();
+      window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+      window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+      window.setStatusBarColor(getResources().getColor(R.color.titleBar));
+    }
+
     historyAdapter = new HistoryAdapter(historyList, deleteList, this);
     recyclerView.setAdapter(historyAdapter);
   }
