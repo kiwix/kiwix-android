@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Binder;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
@@ -88,6 +89,7 @@ public class DownloadService extends Service {
   public static final String ACTION_STOP = "STOP";
   public static final String ACTION_NO_WIFI = "NO_WIFI";
   public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
+  public static final String NOTIFICATION_TITLE_KEY = "NOTIFICATION_TITLE_KEY";
   public static final Object pauseLock = new Object();
   // 1024 / 100
   private static final double BOOK_SIZE_OFFSET = 10.24;
@@ -215,7 +217,9 @@ public class DownloadService extends Service {
               .addAction(pause)
               .addAction(stop)
               .setOngoing(true));
-
+      Bundle bundle = new Bundle();
+      bundle.putString(NOTIFICATION_TITLE_KEY, notificationTitle);
+      notification.get(notificationID).addExtras(bundle);
       notificationManager.notify(notificationID, notification.get(notificationID).build());
       downloadStatus.put(notificationID, PLAY);
       LibraryFragment.downloadingBooks.remove(book);
@@ -335,9 +339,12 @@ public class DownloadService extends Service {
           public void onNext(Integer progress) {
             if (progress == 100) {
               notification.get(notificationID).setOngoing(false);
+              Bundle b = notification.get(notificationID).getExtras();
               notification.get(notificationID)
-                  .setContentTitle(notificationTitle + " " + getResources().getString(
-                      R.string.zim_file_downloaded));
+                  .setContentTitle(
+                      b.getString(NOTIFICATION_TITLE_KEY) + " " + getResources().getString(
+                          R.string.zim_file_downloaded));
+              notification.get(notificationID).getExtras();
               notification.get(notificationID)
                   .setContentText(getString(R.string.zim_file_downloaded));
               final Intent target = new Intent(DownloadService.this, MainActivity.class);
