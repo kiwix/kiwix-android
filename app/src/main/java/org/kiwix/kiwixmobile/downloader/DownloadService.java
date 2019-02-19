@@ -380,9 +380,10 @@ public class DownloadService extends Service {
                 }
               }
               target.putExtra(EXTRA_NOTIFICATION_ID, notificationID);
+              target.setAction(Long.toString(System.currentTimeMillis()));
               PendingIntent pendingIntent = PendingIntent.getActivity
                   (getBaseContext(), 0,
-                      target, PendingIntent.FLAG_CANCEL_CURRENT);
+                      target, PendingIntent.FLAG_ONE_SHOT);
               book.downloaded = true;
               dataSource.deleteBook(book)
                   .subscribe(new CompletableObserver() {
