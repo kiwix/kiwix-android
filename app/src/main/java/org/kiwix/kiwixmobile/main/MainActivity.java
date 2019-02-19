@@ -36,6 +36,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.provider.Settings;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -768,14 +769,24 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     webViewList.remove(index);
     tabsAdapter.notifyItemRemoved(index);
     tabsAdapter.notifyItemRangeChanged(index, webViewList.size());
-    Snackbar.make(drawerLayout, R.string.tab_closed, Snackbar.LENGTH_LONG)
+     Snackbar snackbar = Snackbar.make(drawerLayout, R.string.tab_closed, Snackbar.LENGTH_LONG)
         .setAction(R.string.undo, v -> {
           webViewList.add(index, tempForUndo);
           tabsAdapter.notifyItemInserted(index);
           setUpWebView();
           updateTabSwitcherIcon();
-        })
-        .show();
+        });
+        snackbar.show();
+
+    // if user close all tabs then default new tab added after snackbar disappear
+    // issue "https://github.com/kiwix/kiwix-android/issues/995#issuecomment-464517333"
+    new Handler().postDelayed(() -> {
+      // only add new tab if there are no tabs
+      if (webViewList.size() == 0) {
+        newTab(HOME_URL);
+      }
+    }, 3500); // 3500 time for "Snackbar.LENGTH_LONG"
+
     updateTabSwitcherIcon();
   }
 
@@ -1519,8 +1530,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     toggleActionItemsConfig();
     this.menu = menu;
 
-    if (getCurrentWebView().getUrl() == null ||
-        getCurrentWebView().getUrl().equals(HOME_URL)) {
+    // check for webViewList's size so new tab doesn't open on clicking of three dot menu
+    // issue "https://github.com/kiwix/kiwix-android/issues/995#issue-411106387"
+    if (webViewList.size() != 0 && (getCurrentWebView().getUrl() == null ||
+        getCurrentWebView().getUrl().equals(HOME_URL))) {
       menu.findItem(R.id.menu_read_aloud).setVisible(false);
     } else {
       menu.findItem(R.id.menu_read_aloud).setVisible(true);
