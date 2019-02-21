@@ -31,6 +31,24 @@
     <item name="colorControlNormal">@color/accent</item>
   </style>
 
+  // Defined new theme to fix status bar issue #890
+
+  <style name="StatusBarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <item name="colorPrimaryDark">@color/titleBar</item>
+    <item name="colorPrimary">@color/primary</item>
+    <item name="colorAccent">@color/accent</item>
+    <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    <item name="searchViewStyle">@style/SearchViewStyle</item>
+    <item name="android:textCursorDrawable">@null</item>
+    <item name="windowNoTitle">true</item>
+    <item name="windowActionBar">false</item>
+    <item name="actionModeBackground">@color/actionModeBackground</item>
+    <item name="progressBackgroundColor">@color/primary_dark</item>
+    <item name="listBackground">@drawable/list_bg</item>
+    <item name="selectedBackground">@drawable/list_bg_light</item>
+    <item name="android:itemBackground">@color/primary_light</item>
+  </style>
+
   <style name="AppTheme.Night" parent="AppTheme.Base">
     <item name="colorPrimary">@color/primary_night</item>
     <item name="colorPrimaryDark">@color/primary_dark_night</item>

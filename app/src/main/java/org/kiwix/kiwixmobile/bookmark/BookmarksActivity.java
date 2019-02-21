@@ -2,13 +2,10 @@ package org.kiwix.kiwixmobile.bookmark;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.view.ActionMode;
@@ -103,13 +100,6 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     if (actionBar != null) {
       actionBar.setDisplayHomeAsUpEnabled(true);
       actionBar.setTitle(R.string.menu_bookmarks);
-    }
-
-    if (Build.VERSION.SDK_INT >= 21) {
-      Window window = getWindow();
-      window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-      window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-      window.setStatusBarColor(getResources().getColor(R.color.titleBar));
     }
 
     bookmarksAdapter = new BookmarksAdapter(bookmarksList, deleteList, this);
