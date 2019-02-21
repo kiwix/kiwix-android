@@ -30,7 +30,6 @@ repositories {
 String[] archs = ['arm64-v8a', 'armeabi', 'mips', 'mips64', 'x86', 'x86_64']
 
 dependencies {
-
   // Get kiwixlib online if it is not populated locally
   if (file("../kiwixlib/src/main").list().length == 1) {
     implementation 'org.kiwix.kiwixlib:kiwixlib:1.0.11'

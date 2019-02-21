@@ -34,4 +34,28 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/appbar"
       />
+  <RelativeLayout
+      android:id="@+id/emptyView"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      >
+    <ImageButton
+        android:id="@+id/empty_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/ic_bookmark"
+        android:tint="@color/primary"
+        />
+    <TextView
+        android:id="@+id/empty_text_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/empty_image_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="@string/heading_emptyview"
+        />
+
+  </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

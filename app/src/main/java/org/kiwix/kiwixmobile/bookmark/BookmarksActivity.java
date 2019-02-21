@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.view.ActionMode;
@@ -39,12 +40,15 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
   Toolbar toolbar;
   @BindView(R.id.recycler_view)
   RecyclerView recyclerView;
+  @BindView(R.id.emptyView)
+  View emptyView;
   @Inject
   BookmarksContract.Presenter presenter;
 
   private boolean refreshAdapter = true;
   private BookmarksAdapter bookmarksAdapter;
   private ActionMode actionMode;
+  private RecyclerViewEmptySupport recyclerViewEmptySupport;
 
   private final ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
     @Override
@@ -71,6 +75,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
             bookmarksAdapter.notifyItemRangeChanged(position, bookmarksAdapter.getItemCount());
           }
           mode.finish();
+          recyclerViewEmptySupport.checkIfEmpty();
           return true;
       }
       return false;
@@ -103,6 +108,8 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     }
     bookmarksAdapter = new BookmarksAdapter(bookmarksList, deleteList, this);
     recyclerView.setAdapter(bookmarksAdapter);
+    recyclerViewEmptySupport = new RecyclerViewEmptySupport(this, emptyView);
+    recyclerViewEmptySupport.setAdapter(bookmarksAdapter);
   }
 
   @Override
