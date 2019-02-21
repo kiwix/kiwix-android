@@ -29,4 +29,4 @@ android:
 licenses:
 - '.+'
 
-script: ./gradlew assembleKiwixRelease testdroidUploadKiwix && ./testdroid.py
+script: ./gradlew assembleKiwixRelease kiwixtestUploadKiwix && ./testdroid.py
