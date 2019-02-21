@@ -1810,7 +1810,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       presenter.saveHistory(history);
     }
     updateBottomToolbarVisibility();
-    updateTitle();
   }
 
   @Override
