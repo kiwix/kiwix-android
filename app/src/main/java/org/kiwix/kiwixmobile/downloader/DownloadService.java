@@ -278,7 +278,7 @@ public class DownloadService extends Service {
   public void pauseDownload(int notificationID) {
     Log.i(KIWIX_TAG, "Pausing ZIM Download for notificationID: " + notificationID);
     downloadStatus.put(notificationID, PAUSE);
-    notification.get(notificationID).mActions.get(0).title = getString(R.string.download_play);
+    notification.get(notificationID).mActions.get(0).title = getString(R.string.download_resume);
     notification.get(notificationID).mActions.get(0).icon = R.drawable.ic_play_arrow_black_24dp;
     notification.get(notificationID).setContentText(getString(R.string.download_paused));
     notificationManager.notify(notificationID, notification.get(notificationID).build());
