@@ -188,6 +188,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   ImageView bottomToolbarArrowBack;
   @BindView(R.id.bottom_toolbar_arrow_forward)
   ImageView bottomToolbarArrowForward;
+  @BindView(R.id.tab_switcher_close_all_tabs)
+  FloatingActionButton closeTabsButton;
   @Inject
   MainContract.Presenter presenter;
   @BindView(R.id.tab_switcher_recycler_view)
@@ -498,6 +500,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     progressBar.setVisibility(View.GONE);
     backToTopButton.hide();
     tabSwitcherRoot.setVisibility(View.VISIBLE);
+    checkIfEmpty();
     supportInvalidateOptionsMenu();
     if (tabsAdapter.getSelected() < webViewList.size() &&
         tabRecyclerView.getLayoutManager() != null) {
@@ -676,6 +679,14 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     });
   }
 
+  private void checkIfEmpty() {
+    if (tabsAdapter.getItemCount() > 0) {
+      closeTabsButton.show();
+    } else {
+      closeTabsButton.hide();
+    }
+  }
+
   @OnClick(R.id.activity_main_button_pause_tts)
   void pauseTts() {
     if (tts.currentTTSTask == null) {
@@ -752,6 +763,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     tabsAdapter.notifyDataSetChanged();
     setUpWebView();
     documentParser.initInterface(webView);
+    checkIfEmpty();
     return webView;
   }
 
@@ -777,6 +789,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         })
         .show();
     updateTabSwitcherIcon();
+    checkIfEmpty();
   }
 
   private void selectTab(int position) {
@@ -802,7 +815,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   KiwixWebView getCurrentWebView() {
-    if (webViewList.size() == 0) return newTab();
+    if (webViewList.size() == 0) {
+      return newTab();
+    }
     if (currentWebViewIndex < webViewList.size()) {
       return webViewList.get(currentWebViewIndex);
     } else {
@@ -1147,6 +1162,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     webViewList.clear();
     tabsAdapter.notifyDataSetChanged();
     updateTabSwitcherIcon();
+    checkIfEmpty();
   }
 
   @OnClick(R.id.bottom_toolbar_bookmark)
