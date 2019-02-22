@@ -9,7 +9,6 @@ print "Running tests"
 sys.stdout.flush()
 
 runID = os.environ['TRAVIS_BUILD_NUMBER']
-apiKey = os.environ['BITBAR_API_KEY']
 resultsUrl = os.environ['TESTDROID_RUNNER_RESULTS']
 testName = "Auto Test {}".format(runID)
 
