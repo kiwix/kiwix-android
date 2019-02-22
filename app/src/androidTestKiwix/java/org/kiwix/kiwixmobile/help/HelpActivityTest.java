@@ -109,8 +109,9 @@ public class HelpActivityTest {
 
     // Test the feedback intent
     onView(withText(context.getString(R.string.send_feedback))).check(matches(notNullValue()));
-    onView(withText(context.getString(R.string.send_feedback))).perform(click());
-    // TODO: Find a way to test the ACTION_SENDTO intent
+
+    // TODO: Find a way to test the ACTION_SENDTO intent - Try mocking it?
+    //onView(withText(context.getString(R.string.send_feedback))).perform(click());
   }
 
   @After
