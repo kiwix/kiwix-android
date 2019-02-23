@@ -36,6 +36,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.provider.Settings;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -776,6 +777,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           updateTabSwitcherIcon();
         })
         .show();
+    new Handler().postDelayed(() -> {
+      if (webViewList.size() == 0) {
+        newTab(HOME_URL);
+      }
+    }, 1500);
     updateTabSwitcherIcon();
   }
 
@@ -1146,6 +1152,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   void closeAllTabs() {
     webViewList.clear();
     tabsAdapter.notifyDataSetChanged();
+    new Handler().postDelayed(() -> {
+      if (webViewList.size() == 0) {
+        newTab(HOME_URL);
+      }
+    }, 1500);
     updateTabSwitcherIcon();
   }
 
