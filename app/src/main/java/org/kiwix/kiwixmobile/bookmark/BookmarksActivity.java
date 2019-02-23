@@ -101,6 +101,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
       actionBar.setDisplayHomeAsUpEnabled(true);
       actionBar.setTitle(R.string.menu_bookmarks);
     }
+
     bookmarksAdapter = new BookmarksAdapter(bookmarksList, deleteList, this);
     recyclerView.setAdapter(bookmarksAdapter);
   }
