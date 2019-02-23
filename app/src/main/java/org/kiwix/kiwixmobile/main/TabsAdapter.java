@@ -128,6 +128,8 @@ public class TabsAdapter extends RecyclerView.Adapter<TabsAdapter.ViewHolder> {
     if (webViewTitle.contains("REPLACE_")) {
       webViewTitle =
           getResourceString(holder.title.getContext().getApplicationContext(), webViewTitle);
+    } else if (webViewTitle.contains("content://org.kiwix")) {
+      webViewTitle = activity.getString(R.string.menu_home);
     }
     holder.title.setText(webViewTitle);
     holder.close.setOnClickListener(v -> listener.onCloseTab(v, holder.getAdapterPosition()));

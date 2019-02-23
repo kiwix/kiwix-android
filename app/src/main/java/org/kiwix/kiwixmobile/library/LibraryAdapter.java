@@ -59,10 +59,11 @@ import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
 public class LibraryAdapter extends BaseAdapter {
   private static final int LIST_ITEM_TYPE_BOOK = 0;
   private static final int LIST_ITEM_TYPE_DIVIDER = 1;
+  public final HashMap<String, Integer> languageCounts = new HashMap<>();
   private final Context context;
   private final LayoutInflater layoutInflater;
   private final BookFilter bookFilter = new BookFilter();
-  public HashMap<String, Integer> languageCounts = new HashMap<>();
+  private final List<ListItem> listItems = new ArrayList<>();
   public ArrayList<Language> languages = new ArrayList<>();
   @Inject BookUtils bookUtils;
   @Inject
@@ -72,7 +73,6 @@ public class LibraryAdapter extends BaseAdapter {
   @Inject
   DataSource dataSource;
   private List<Book> allBooks;
-  private List<ListItem> listItems = new ArrayList<>();
   private Disposable saveNetworkLanguageDisposable;
 
   public LibraryAdapter(Context context) {
@@ -355,7 +355,7 @@ public class LibraryAdapter extends BaseAdapter {
         List<Book> selectedLanguages = Observable.fromIterable(allBooks)
             .filter(LibraryAdapter.this::languageActive)
             .filter(book -> !books.contains(book))
-            .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
+            .filter(book -> !DownloadFragment.downloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
             .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
             .toList()
@@ -364,7 +364,7 @@ public class LibraryAdapter extends BaseAdapter {
         List<Book> unselectedLanguages = Observable.fromIterable(allBooks)
             .filter(book -> !languageActive(book))
             .filter(book -> !books.contains(book))
-            .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
+            .filter(book -> !DownloadFragment.downloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
             .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
             .toList()
@@ -380,7 +380,7 @@ public class LibraryAdapter extends BaseAdapter {
         List<Book> selectedLanguages = Observable.fromIterable(allBooks)
             .filter(LibraryAdapter.this::languageActive)
             .filter(book -> !books.contains(book))
-            .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
+            .filter(book -> !DownloadFragment.downloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
             .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
             .flatMap(book -> getMatches(book, s.toString()))
@@ -392,7 +392,7 @@ public class LibraryAdapter extends BaseAdapter {
         List<Book> unselectedLanguages = Observable.fromIterable(allBooks)
             .filter(book -> !languageActive(book))
             .filter(book -> !books.contains(book))
-            .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
+            .filter(book -> !DownloadFragment.downloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
             .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
             .flatMap(book -> getMatches(book, s.toString()))
@@ -415,7 +415,7 @@ public class LibraryAdapter extends BaseAdapter {
 
     @Override
     protected void publishResults(CharSequence constraint, FilterResults results) {
-      List<ListItem> filtered = (List<ListItem>) results.values;
+      @SuppressWarnings("unchecked") List<ListItem> filtered = (List<ListItem>) results.values;
       if (filtered != null) {
         if (filtered.isEmpty()) {
           addBooks(allBooks);
@@ -426,10 +426,10 @@ public class LibraryAdapter extends BaseAdapter {
   }
 
   private class ListItem {
-    public Object data;
-    public int type;
+    final Object data;
+    final int type;
 
-    public ListItem(Object data, int type) {
+    ListItem(Object data, int type) {
       this.data = data;
       this.type = type;
     }
