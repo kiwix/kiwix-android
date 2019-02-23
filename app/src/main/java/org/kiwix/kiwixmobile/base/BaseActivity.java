@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.base;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
@@ -44,10 +45,18 @@ public abstract class BaseActivity extends AppCompatActivity {
   }
 
   @Override
-  public void setContentView(@LayoutRes int layoutResID) {
+  public Resources.Theme getTheme() {
+    Resources.Theme theme = super.getTheme();
     if (sharedPreferenceUtil.nightMode()) {
       setTheme(R.style.AppTheme_Night);
+    } else {
+      theme.applyStyle(R.style.StatusBarTheme, true);
     }
+    return theme;
+  }
+
+  @Override
+  public void setContentView(@LayoutRes int layoutResID) {
     super.setContentView(layoutResID);
     unbinder = ButterKnife.bind(this);
   }

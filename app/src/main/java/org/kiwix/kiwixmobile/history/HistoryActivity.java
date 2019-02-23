@@ -110,6 +110,8 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
       actionBar.setDisplayHomeAsUpEnabled(true);
       actionBar.setTitle(R.string.history);
     }
+
+
     historyAdapter = new HistoryAdapter(historyList, deleteList, this);
     recyclerView.setAdapter(historyAdapter);
   }

@@ -278,7 +278,7 @@ public class DownloadService extends Service {
   public void pauseDownload(int notificationID) {
     Log.i(KIWIX_TAG, "Pausing ZIM Download for notificationID: " + notificationID);
     downloadStatus.put(notificationID, PAUSE);
-    notification.get(notificationID).mActions.get(0).title = getString(R.string.download_play);
+    notification.get(notificationID).mActions.get(0).title = getString(R.string.download_resume);
     notification.get(notificationID).mActions.get(0).icon = R.drawable.ic_play_arrow_black_24dp;
     notification.get(notificationID).setContentText(getString(R.string.download_paused));
     notificationManager.notify(notificationID, notification.get(notificationID).build());
@@ -380,9 +380,10 @@ public class DownloadService extends Service {
                 }
               }
               target.putExtra(EXTRA_NOTIFICATION_ID, notificationID);
+              target.setAction(Long.toString(System.currentTimeMillis()));
               PendingIntent pendingIntent = PendingIntent.getActivity
                   (getBaseContext(), 0,
-                      target, PendingIntent.FLAG_CANCEL_CURRENT);
+                      target, PendingIntent.FLAG_ONE_SHOT);
               book.downloaded = true;
               dataSource.deleteBook(book)
                   .subscribe(new CompletableObserver() {
