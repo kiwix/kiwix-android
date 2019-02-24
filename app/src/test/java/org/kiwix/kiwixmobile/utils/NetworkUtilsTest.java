@@ -59,33 +59,25 @@ public class NetworkUtilsTest {
     //one network is connected
     when(networkInfo1.getState()).thenReturn(NetworkInfo.State.CONNECTED);
     when(networkInfo2.getState()).thenReturn(NetworkInfo.State.DISCONNECTING);
-    assertEquals(true, NetworkUtils.isNetworkAvailable(context, true));
+    assertEquals(true, NetworkUtils.isNetworkAvailable(context));
 
-    //one network is connecting, includeConnecting true
     when(networkInfo1.getState()).thenReturn(NetworkInfo.State.DISCONNECTING);
     when(networkInfo2.getState()).thenReturn(NetworkInfo.State.CONNECTING);
-    assertEquals(true, NetworkUtils.isNetworkAvailable(context, true));
-
-    //one network is connecting, includeConnecting false
-    when(networkInfo1.getState()).thenReturn(NetworkInfo.State.DISCONNECTING);
-    when(networkInfo2.getState()).thenReturn(NetworkInfo.State.CONNECTING);
-    assertEquals(false, NetworkUtils.isNetworkAvailable(context, false));
+    assertEquals(false, NetworkUtils.isNetworkAvailable(context));
 
     //no network is available
     when(networkInfo1.getState()).thenReturn(NetworkInfo.State.DISCONNECTED);
     when(networkInfo2.getState()).thenReturn(NetworkInfo.State.DISCONNECTED);
-    assertEquals(false, NetworkUtils.isNetworkAvailable(context, true));
+    assertEquals(false, NetworkUtils.isNetworkAvailable(context));
   }
 
   @Test
   public void test_isNetworkConnectionOK() {
     when(networkInfo2.getState()).thenReturn(NetworkInfo.State.CONNECTING);
-    assertTrue(NetworkUtils.isNetworkConnectionOK(networkInfo2, true));
-    assertFalse(NetworkUtils.isNetworkConnectionOK(networkInfo2, false));
+    assertFalse(NetworkUtils.isNetworkConnectionOK(networkInfo2));
 
     when(networkInfo2.getState()).thenReturn(NetworkInfo.State.CONNECTED);
-    assertTrue(NetworkUtils.isNetworkConnectionOK(networkInfo2, true));
-    assertTrue(NetworkUtils.isNetworkConnectionOK(networkInfo2, false));
+    assertTrue(NetworkUtils.isNetworkConnectionOK(networkInfo2));
   }
 
   @Test
