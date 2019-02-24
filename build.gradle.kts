@@ -31,7 +31,7 @@ ext {
   set("apacheCommonsVersion", "2.6")
   set("multidexVersion", "2.0.1")
   set("jUnitVersion", "4.12")
-  set("mockitoVersion", "2.19.1")
+  set("mockitoVersion", "2.24.5")
   set("powerMockVersion", "1.6.6")
   set("powerMockJUnitVersion", "1.7.4")
   set("baristaVersion", "2.7.1")
