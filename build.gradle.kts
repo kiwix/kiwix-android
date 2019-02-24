@@ -23,7 +23,7 @@ ext {
   set("okHttpVersion", "3.12.1")
   set("retrofitVersion", "2.5.0")
   set("javaxAnnotationVersion", "1.3.2")
-  set("daggerVersion", "2.16")
+  set("daggerVersion", "2.21")
   set("inkPageIndicatorVersion", "1.3.0")
   set("constraintLayoutVersion", "1.1.3")
   set("butterKnifeVersion", "10.0.0")
