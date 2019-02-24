@@ -120,7 +120,7 @@ public class ZimFileSelectFragment extends BaseFragment
     // A boolean to distinguish between a user refresh and a normal loading
     mHasRefresh = false;
 
-    mRescanAdapter = new RescanDataAdapter(zimManageActivity, 0, mFiles);
+    mRescanAdapter = new RescanDataAdapter(zimManageActivity, mFiles);
 
     // Allow temporary use of ZimContentProvider to query books
     ZimContentProvider.canIterate = true;
@@ -130,7 +130,7 @@ public class ZimFileSelectFragment extends BaseFragment
     mZimFileList.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
 
       // Holds positions corresponding to every selected list item in the ListView
-      private ArrayList<Integer> selectedViewPosition = new ArrayList<>();
+      private final ArrayList<Integer> selectedViewPosition = new ArrayList<>();
 
       @Override
       public void onItemCheckedStateChanged(ActionMode mode, int position, long id,
@@ -194,7 +194,7 @@ public class ZimFileSelectFragment extends BaseFragment
                       selectedViewPosition.get(i));
               String shareFilePath = data.file.getPath(); //Returns path to file in device storage
 
-              /**
+              /*
                * Using 'file:///' URIs directly is unsafe as it grants the intent receiving application
                * the same file system permissions as the intent creating app.
                *
@@ -204,8 +204,13 @@ public class ZimFileSelectFragment extends BaseFragment
                */
 
               File shareFile = new File(shareFilePath);
-              Uri shareContentUri = FileProvider.getUriForFile(getContext(),
-                  BuildConfig.APPLICATION_ID + ".fileprovider", shareFile);
+              Uri shareContentUri;
+              if (Build.VERSION.SDK_INT >= 24) {
+                shareContentUri = FileProvider.getUriForFile(zimManageActivity,
+                    BuildConfig.APPLICATION_ID + ".fileprovider", shareFile);
+              } else {
+                shareContentUri = Uri.fromFile(shareFile);
+              }
 
               if (shareContentUri != null) {
                 selectedFileContentURIs.add(
@@ -216,19 +221,18 @@ public class ZimFileSelectFragment extends BaseFragment
             selectedFileShareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM,
                 selectedFileContentURIs); // Intent Extra for storing the array list of selected file content URIs
 
-            if (selectedFileContentURIs
-                != null) {  // Grant temporary access permission to the intent receiver for the content URIs
-              selectedFileShareIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            }
+            // Grant temporary access permission to the intent receiver for the content URIs
+            selectedFileShareIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-            /**
+            /*
              * Since a different app may be used for sharing everytime (E-mail, Cloud Upload, Wifi Sharing, etc.),
              * so force an app chooser dialog every time some selected files are to be shared.
              */
+
             Intent shareChooserIntent = Intent.createChooser(selectedFileShareIntent,
                 getResources().getString(R.string.selected_file_cab_app_chooser_title));
 
-            if (shareChooserIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            if (shareChooserIntent.resolveActivity(zimManageActivity.getPackageManager()) != null) {
               startActivity(shareChooserIntent);  // Open the app chooser dialog
             }
 
@@ -467,9 +471,8 @@ public class ZimFileSelectFragment extends BaseFragment
   // The Adapter for the ListView for when the ListView is populated with the rescanned files
   private class RescanDataAdapter extends ArrayAdapter<LibraryNetworkEntity.Book> {
 
-    RescanDataAdapter(Context context, int textViewResourceId,
-        List<LibraryNetworkEntity.Book> objects) {
-      super(context, textViewResourceId, objects);
+    RescanDataAdapter(Context context, List<LibraryNetworkEntity.Book> objects) {
+      super(context, 0, objects);
     }
 
     @NonNull
