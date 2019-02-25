@@ -36,6 +36,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.provider.Settings;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -236,21 +237,21 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView,
-        @NonNull RecyclerView.ViewHolder viewHolder) {
+                                @NonNull RecyclerView.ViewHolder viewHolder) {
       return makeMovementFlags(0, ItemTouchHelper.UP | ItemTouchHelper.DOWN);
     }
 
     @Override
     public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
-        @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
-        boolean isCurrentlyActive) {
+                            @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState,
+                            boolean isCurrentlyActive) {
       super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
       viewHolder.itemView.setAlpha(1 - Math.abs(dY) / viewHolder.itemView.getMeasuredHeight());
     }
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView,
-        @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                          @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
       return false;
     }
 
@@ -768,14 +769,22 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     webViewList.remove(index);
     tabsAdapter.notifyItemRemoved(index);
     tabsAdapter.notifyItemRangeChanged(index, webViewList.size());
-    Snackbar.make(drawerLayout, R.string.tab_closed, Snackbar.LENGTH_LONG)
+    Snackbar snackbar = Snackbar.make(drawerLayout, R.string.tab_closed, Snackbar.LENGTH_LONG)
         .setAction(R.string.undo, v -> {
           webViewList.add(index, tempForUndo);
           tabsAdapter.notifyItemInserted(index);
           setUpWebView();
           updateTabSwitcherIcon();
-        })
-        .show();
+        });
+    snackbar.show();
+
+    new Handler().postDelayed(() -> {
+      // only add new tab if there are no tabs
+      if (webViewList.size() == 0) {
+        newTab(HOME_URL);
+      }
+    }, 3500); // 3500 time for "Snackbar.LENGTH_LONG"
+
     updateTabSwitcherIcon();
   }
 
@@ -1028,7 +1037,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @Override
   public void onRequestPermissionsResult(int requestCode,
-      @NonNull String permissions[], @NonNull int[] grantResults) {
+                                         @NonNull String permissions[], @NonNull int[] grantResults) {
     switch (requestCode) {
       case REQUEST_STORAGE_PERMISSION: {
         if (grantResults.length > 0
@@ -1519,8 +1528,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     toggleActionItemsConfig();
     this.menu = menu;
 
-    if (getCurrentWebView().getUrl() == null ||
-        getCurrentWebView().getUrl().equals(HOME_URL)) {
+    if (webViewList.size() != 0 && (getCurrentWebView().getUrl() == null ||
+        getCurrentWebView().getUrl().equals(HOME_URL))) {
       menu.findItem(R.id.menu_read_aloud).setVisible(false);
     } else {
       menu.findItem(R.id.menu_read_aloud).setVisible(true);
