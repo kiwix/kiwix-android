@@ -138,10 +138,15 @@ public class ZimFileSelectFragment extends BaseFragment
 
         if (checked) { // If the item was selected
           selectedViewPosition.add(position);
+          swipeRefreshLayout.setEnabled(false);  //disabled to stop selected items getting deselected (issue #1019)
+          swipeRefreshLayout.setRefreshing(false);
           mode.setTitle("" + selectedViewPosition.size()); // Update title of the CAB
         } else {  // If the item was deselected
           selectedViewPosition.remove(Integer.valueOf(position));
           mode.setTitle("" + selectedViewPosition.size()); // Update title of the CAB
+          if (selectedViewPosition.isEmpty()) {
+            swipeRefreshLayout.setEnabled(true);
+          }
         }
       }
 
@@ -247,6 +252,7 @@ public class ZimFileSelectFragment extends BaseFragment
       @Override
       public void onDestroyActionMode(ActionMode mode) {
         // Upon closure of the CAB, empty the array list of selected list item positions
+        swipeRefreshLayout.setEnabled(true);
         selectedViewPosition.clear();
       }
     });
