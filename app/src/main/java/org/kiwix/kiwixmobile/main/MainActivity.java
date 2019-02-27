@@ -777,14 +777,17 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           updateTabSwitcherIcon();
         })
         .show();
+    openDefaultTab();
+    updateTabSwitcherIcon();
+  }
+
+  private void openDefaultTab() {
     new Handler().postDelayed(() -> {
       if (webViewList.size() == 0) {
         newTab(HOME_URL);
       }
-    }, 1500);
-    updateTabSwitcherIcon();
+    }, 100);
   }
-
   private void selectTab(int position) {
     currentWebViewIndex = position;
     tabsAdapter.setSelected(position);
@@ -1152,11 +1155,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   void closeAllTabs() {
     webViewList.clear();
     tabsAdapter.notifyDataSetChanged();
-    new Handler().postDelayed(() -> {
-      if (webViewList.size() == 0) {
-        newTab(HOME_URL);
-      }
-    }, 1500);
+    openDefaultTab();
     updateTabSwitcherIcon();
   }
 
