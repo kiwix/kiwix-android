@@ -1832,7 +1832,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @Override
   public void webViewProgressChanged(int progress) {
-    progressBar.setProgress(progress);
+    if (progressBar != null)
+      progressBar.setProgress(progress);
     if (progress == 100) {
       if (requestClearHistoryAfterLoad) {
         Log.d(TAG_KIWIX,
