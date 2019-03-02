@@ -47,7 +47,7 @@ public abstract class BaseActivity extends AppCompatActivity {
   @Override
   public Resources.Theme getTheme() {
     Resources.Theme theme = super.getTheme();
-    if (sharedPreferenceUtil.nightMode()) {
+    if (sharedPreferenceUtil != null && sharedPreferenceUtil.nightMode()) {
       setTheme(R.style.AppTheme_Night);
     } else {
       theme.applyStyle(R.style.StatusBarTheme, true);
