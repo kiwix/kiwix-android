@@ -36,6 +36,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.provider.Settings;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -385,7 +386,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
     if (i.hasExtra(EXTRA_ZIM_FILE)) {
       File file = new File(FileUtils.getFileName(i.getStringExtra(EXTRA_ZIM_FILE)));
-      LibraryFragment.mService.cancelNotification(i.getIntExtra(EXTRA_NOTIFICATION_ID, 0));
+      LibraryFragment.downloadService.cancelNotification(i.getIntExtra(EXTRA_NOTIFICATION_ID, 0));
       Uri uri = Uri.fromFile(file);
 
       finish();
@@ -776,6 +777,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           updateTabSwitcherIcon();
         })
         .show();
+    new Handler().postDelayed(() -> {
+      if (webViewList.size() == 0) {
+        newTab(HOME_URL);
+      }
+    }, 1500);
     updateTabSwitcherIcon();
   }
 
@@ -880,9 +886,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
       case R.id.menu_support_kiwix:
         Uri uriSupportKiwix = Uri.parse("https://www.kiwix.org/support");
-        Intent intertSupportKiwix = new Intent(Intent.ACTION_VIEW, uriSupportKiwix);
-        intertSupportKiwix.putExtra(EXTRA_EXTERNAL_LINK, true);
-        openExternalUrl(intertSupportKiwix);
+        Intent intentSupportKiwix = new Intent(Intent.ACTION_VIEW, uriSupportKiwix);
+        intentSupportKiwix.putExtra(EXTRA_EXTERNAL_LINK, true);
+        openExternalUrl(intentSupportKiwix);
 
       default:
         break;
@@ -1146,6 +1152,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   void closeAllTabs() {
     webViewList.clear();
     tabsAdapter.notifyDataSetChanged();
+    new Handler().postDelayed(() -> {
+      if (webViewList.size() == 0) {
+        newTab(HOME_URL);
+      }
+    }, 1500);
     updateTabSwitcherIcon();
   }
 
