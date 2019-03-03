@@ -112,6 +112,7 @@ import static android.os.Build.VERSION_CODES;
 import static org.kiwix.kiwixmobile.main.TableDrawerAdapter.DocumentSection;
 import static org.kiwix.kiwixmobile.main.TableDrawerAdapter.TableClickListener;
 import static org.kiwix.kiwixmobile.search.SearchActivity.EXTRA_SEARCH_IN_TEXT;
+import static org.kiwix.kiwixmobile.utils.AnimationUtils.rotate;
 import static org.kiwix.kiwixmobile.utils.Constants.BOOKMARK_CHOSEN_REQUEST;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_TITLE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_URL;
@@ -195,6 +196,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   RecyclerView tabRecyclerView;
   @BindView(R.id.activity_main_tab_switcher)
   View tabSwitcherRoot;
+  @BindView(R.id.tab_switcher_close_all_tabs)
+  FloatingActionButton closeAllTabsButton;
   private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
     @Override
     public void onTick(long millisUntilFinished) {
@@ -512,6 +515,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     actionBar.setDisplayShowTitleEnabled(true);
 
     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    closeAllTabsButton.setImageDrawable(
+        ContextCompat.getDrawable(this, R.drawable.ic_close_white_24dp));
     tabSwitcherRoot.setVisibility(View.GONE);
     progressBar.setVisibility(View.VISIBLE);
     contentFrame.setVisibility(View.VISIBLE);
@@ -783,17 +788,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           updateTabSwitcherIcon();
         })
         .show();
-    openDefaultTab();
+    openHomeScreen();
     updateTabSwitcherIcon();
   }
 
-  private void openDefaultTab() {
-    new Handler().postDelayed(() -> {
-      if (webViewList.size() == 0) {
-        newTab(HOME_URL);
-      }
-    }, 100);
-  }
   private void selectTab(int position) {
     currentWebViewIndex = position;
     tabsAdapter.setSelected(position);
@@ -1159,10 +1157,21 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @OnClick(R.id.tab_switcher_close_all_tabs)
   void closeAllTabs() {
+    rotate(closeAllTabsButton);
     webViewList.clear();
     tabsAdapter.notifyDataSetChanged();
-    openDefaultTab();
+    openHomeScreen();
     updateTabSwitcherIcon();
+  }
+
+  //opens home screen when user closes all tabs
+  private void openHomeScreen() {
+    new Handler().postDelayed(() -> {
+      if (webViewList.size() == 0) {
+        newTab(HOME_URL);
+        hideTabSwitcher();
+      }
+    }, 300);
   }
 
   @OnClick(R.id.bottom_toolbar_bookmark)
