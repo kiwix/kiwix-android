@@ -3,6 +3,7 @@ package org.kiwix.kiwixmobile.bookmark;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +13,7 @@ import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import java.io.File;
@@ -34,6 +36,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
   private final List<Bookmark> bookmarksList = new ArrayList<>();
   private final List<Bookmark> allBookmarks = new ArrayList<>();
   private final List<Bookmark> deleteList = new ArrayList<>();
+  private static final String LIST_STATE_KEY = "recycler_list_state";
 
   @BindView(R.id.toolbar)
   Toolbar toolbar;
@@ -44,6 +47,8 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
 
   private boolean refreshAdapter = true;
   private BookmarksAdapter bookmarksAdapter;
+  private LinearLayoutManager layoutManager;
+  private Parcelable listState;
   private ActionMode actionMode;
 
   private final ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
@@ -104,12 +109,30 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
 
     bookmarksAdapter = new BookmarksAdapter(bookmarksList, deleteList, this);
     recyclerView.setAdapter(bookmarksAdapter);
+    layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+    recyclerView.setLayoutManager(layoutManager);
   }
 
   @Override
   protected void onResume() {
     super.onResume();
     presenter.loadBookmarks(sharedPreferenceUtil.getShowBookmarksCurrentBook());
+    if (listState != null) {
+      layoutManager.onRestoreInstanceState(listState);
+    }
+  }
+
+  protected void onSaveInstanceState(Bundle state) {
+    super.onSaveInstanceState(state);
+    listState = layoutManager.onSaveInstanceState();
+    state.putParcelable(LIST_STATE_KEY, listState);
+  }
+
+  protected void onRestoreInstanceState(Bundle state) {
+    super.onRestoreInstanceState(state);
+    if (state != null) {
+      listState = state.getParcelable(LIST_STATE_KEY);
+    }
   }
 
   @Override
