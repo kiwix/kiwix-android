@@ -1526,7 +1526,14 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     View tabSwitcher = menu.findItem(R.id.menu_tab_switcher).getActionView();
     tabSwitcherIcon = tabSwitcher.findViewById(R.id.ic_tab_switcher_text);
     updateTabSwitcherIcon();
-    tabSwitcher.setOnClickListener(v -> showTabSwitcher());
+    tabSwitcher.setOnClickListener(v -> {
+      if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
+        hideTabSwitcher();
+        selectTab(currentWebViewIndex);
+      } else {
+        showTabSwitcher();
+      }
+    });
     return true;
   }
 
