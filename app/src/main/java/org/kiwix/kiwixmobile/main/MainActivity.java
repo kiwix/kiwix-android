@@ -364,6 +364,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     searchFiles();
     tabRecyclerView.setAdapter(tabsAdapter);
     new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
+    drawerLayout.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
   }
 
   //End of onCreate
