@@ -49,6 +49,7 @@ public class KiwixSearchWidget extends AppWidgetProvider {
       /** Search Kiwix intent **/
       Intent mainIntent = new Intent(context, MainActivity.class);
       mainIntent.setAction(TEXT_CLICKED);
+      mainIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
       PendingIntent searchPendingIntent =
           PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE),
               mainIntent, 0);
@@ -56,6 +57,7 @@ public class KiwixSearchWidget extends AppWidgetProvider {
       /** Kiwix icon intent to main app **/
       Intent kiwixIconIntent = new Intent(context, MainActivity.class);
       kiwixIconIntent.setAction(ICON_CLICKED);
+      mainIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
       PendingIntent mainAppPendingIntent =
           PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE),
               kiwixIconIntent, 0);
@@ -63,6 +65,7 @@ public class KiwixSearchWidget extends AppWidgetProvider {
       /** Star icon intent to bookmarks **/
       Intent starIntent = new Intent(context, MainActivity.class);
       starIntent.setAction(STAR_CLICKED);
+      mainIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
       PendingIntent starPendingIntent =
           PendingIntent.getActivity(context, (int) (System.currentTimeMillis() % Integer.MAX_VALUE),
               starIntent, 0);

@@ -395,6 +395,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       zimFile.setData(uri);
       startActivity(zimFile);
     }
+    handleIntent(getIntent());
   }
 
   private void setupDocumentParser() {
@@ -1240,9 +1241,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       webViewList.get(currentWebViewIndex).findViewById(R.id.get_content_card).setEnabled(true);
     }
     updateBottomToolbarVisibility();
+  }
 
-    Log.d(TAG_KIWIX, "action" + getIntent().getAction());
-    Intent intent = getIntent();
+  private boolean handleIntent(Intent intent) {
+    Log.d(TAG_KIWIX, "action" + intent.getAction());
     if (intent.getAction() != null) {
 
       switch (intent.getAction()) {
@@ -1254,20 +1256,20 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
             i.putExtra(Intent.EXTRA_PROCESS_TEXT, intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT));
           }
-          intent.setAction("");
+          intent.setAction(null);
           startActivityForResult(i, REQUEST_FILE_SEARCH);
           break;
         }
         case KiwixSearchWidget.TEXT_CLICKED:
-          intent.setAction("");
+          intent.setAction(null);
           goToSearch(false);
           break;
         case KiwixSearchWidget.STAR_CLICKED:
-          intent.setAction("");
+          intent.setAction(null);
           goToBookmarks();
           break;
         case KiwixSearchWidget.MIC_CLICKED:
-          intent.setAction("");
+          intent.setAction(null);
           goToSearch(true);
           break;
         case Intent.ACTION_VIEW:
@@ -1287,8 +1289,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           newTab(HOME_URL);
           break;
       }
+      updateWidgets(this);
+      return true;
     }
-    updateWidgets(this);
+    return false;
   }
 
   private void updateBottomToolbarVisibility() {
@@ -1314,6 +1318,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   @Override
   protected void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
+    if (handleIntent(intent)) {
+      return;
+    }
     boolean isWidgetSearch = intent.getBooleanExtra(EXTRA_IS_WIDGET_SEARCH, false);
     boolean isWidgetVoiceSearch = intent.getBooleanExtra(EXTRA_IS_WIDGET_VOICE, false);
     boolean isWidgetStar = intent.getBooleanExtra(EXTRA_IS_WIDGET_STAR, false);
