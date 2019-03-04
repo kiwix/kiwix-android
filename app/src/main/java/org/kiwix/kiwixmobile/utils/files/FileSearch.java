@@ -28,6 +28,10 @@ import android.provider.MediaStore;
 import android.util.Log;
 import eu.mhutti1.utils.storage.StorageDevice;
 import eu.mhutti1.utils.storage.StorageDeviceUtils;
+import io.reactivex.Completable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Collection;
@@ -44,9 +48,6 @@ public class FileSearch {
 
   private final Context context;
   private final ResultListener listener;
-
-  private boolean fileSystemScanCompleted = false;
-  private boolean mediaStoreScanCompleted = false;
 
   public FileSearch(Context ctx, ResultListener listener) {
     this.context = ctx;
@@ -92,27 +93,22 @@ public class FileSearch {
     return book;
   }
 
+  /**
+   * Uses RxJava Completable to scan the file system and media store concurrently.
+   * Synchronizes the check and finally calls onScanCompleted after completion.
+   */
   public void scan(String defaultPath) {
-    // Start custom file search
-    new Thread(() -> {
-      scanFileSystem(defaultPath);
-      fileSystemScanCompleted = true;
-      checkCompleted();
-    }).start();
+    Completable fileSystemScanCompletable =
+        Completable.fromAction(() -> scanFileSystem(defaultPath)).subscribeOn(Schedulers.io());
 
-    // Star mediastore search
-    new Thread(() -> {
-      scanMediaStore();
-      mediaStoreScanCompleted = true;
-      checkCompleted();
-    }).start();
-  }
+    Completable mediaStoreScanCompletable =
+        Completable.fromAction(this::scanMediaStore).subscribeOn(Schedulers.io());
 
-  // If both searches are complete callback
-  private synchronized void checkCompleted() {
-    if (mediaStoreScanCompleted && fileSystemScanCompleted) {
-      listener.onScanCompleted();
-    }
+    // merge both Completables together.
+    fileSystemScanCompletable.mergeWith(mediaStoreScanCompletable)
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnComplete(listener::onScanCompleted)
+        .subscribe();
   }
 
   public void scanMediaStore() {
