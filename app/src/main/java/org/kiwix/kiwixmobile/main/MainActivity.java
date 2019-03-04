@@ -1155,6 +1155,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   void closeAllTabs() {
     webViewList.clear();
     tabsAdapter.notifyDataSetChanged();
+    new Handler().postDelayed(() -> {
+      if (webViewList.size() == 0) {
+        newTab(HOME_URL);
+      }
+    }, 1500);
     updateTabSwitcherIcon();
   }
 
@@ -1929,21 +1934,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void searchFiles() {
-    if (Build.VERSION.SDK_INT >= VERSION_CODES.M) {
-      if (ContextCompat.checkSelfPermission(this,
-          Manifest.permission.READ_EXTERNAL_STORAGE)
-          != PackageManager.PERMISSION_GRANTED) {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-            Manifest.permission.READ_EXTERNAL_STORAGE)) {
-          Toast.makeText(this, R.string.request_storage,
-              Toast.LENGTH_LONG).show();
-        }
-        ActivityCompat.requestPermissions(this,
-            new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
-            REQUEST_READ_STORAGE_PERMISSION);
-      } else {
-        fileSearch.scan(sharedPreferenceUtil.getPrefStorage());
-      }
+    if (Build.VERSION.SDK_INT >= VERSION_CODES.M && ContextCompat.checkSelfPermission(this,
+        Manifest.permission.READ_EXTERNAL_STORAGE)
+        != PackageManager.PERMISSION_GRANTED) {
+      ActivityCompat.requestPermissions(this,
+          new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
+          REQUEST_READ_STORAGE_PERMISSION);
     } else {
       fileSearch.scan(sharedPreferenceUtil.getPrefStorage());
     }
