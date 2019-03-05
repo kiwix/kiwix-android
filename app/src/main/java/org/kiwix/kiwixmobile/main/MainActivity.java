@@ -1139,7 +1139,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     if (event.getAction() == KeyEvent.ACTION_DOWN) {
       switch (keyCode) {
         case KeyEvent.KEYCODE_BACK:
-          if (getCurrentWebView().canGoBack()) {
+          if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
+            selectTab(currentWebViewIndex);
+            hideTabSwitcher();
+          } else if (getCurrentWebView().canGoBack()) {
             getCurrentWebView().goBack();
           } else if (isFullscreenOpened) {
             closeFullScreen();
