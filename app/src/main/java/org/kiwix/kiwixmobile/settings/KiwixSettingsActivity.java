@@ -274,8 +274,11 @@ public class KiwixSettingsActivity extends BaseActivity {
           .setMessage(getResources().getString(R.string.clear_recent_and_tabs_history_dialog))
           .setPositiveButton(android.R.string.yes, (dialog, which) -> {
             presenter.clearHistory();
+            if(!allHistoryCleared)
+              Toast.makeText(getActivity(), getResources().getString(R.string.all_history_cleared_toast), Toast.LENGTH_SHORT).show();
+            else
+              Toast.makeText(getActivity(), getResources().getString(R.string.nothing_to_clear_toast), Toast.LENGTH_SHORT).show();
             allHistoryCleared = true;
-            Toast.makeText(getActivity(), getResources().getString(R.string.all_history_cleared_toast), Toast.LENGTH_SHORT).show();
           })
           .setNegativeButton(android.R.string.no, (dialog, which) -> {
             // do nothing
