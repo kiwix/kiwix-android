@@ -17,12 +17,10 @@
  */
 package org.kiwix.kiwixmobile.tests;
 
-import android.support.test.filters.LargeTest;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
-
+import androidx.test.filters.LargeTest;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.runner.AndroidJUnit4;
 import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +37,8 @@ import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
 public class ContentTest {
 
   @Rule
-  public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<>(MainActivity.class);
+  public ActivityTestRule<MainActivity> activityTestRule =
+      new ActivityTestRule<>(MainActivity.class);
 
   @Test
   public void contentTest() {

@@ -19,15 +19,12 @@ package org.kiwix.kiwixmobile.data.local.dao;
 
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
-
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
 import org.kiwix.kiwixmobile.data.local.entity.RecentSearch;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
 
 /**
  * Dao class for recent searches.
@@ -48,7 +45,8 @@ public class RecentSearchDao {
   public List<String> getRecentSearches() {
     SquidCursor<RecentSearch> searchCursor = mDb.query(
         RecentSearch.class,
-        Query.selectDistinct(RecentSearch.SEARCH_STRING).where(RecentSearch.ZIM_I_D.eq(ZimContentProvider.getId()))
+        Query.selectDistinct(RecentSearch.SEARCH_STRING)
+            .where(RecentSearch.ZIM_I_D.eq(ZimContentProvider.getId()))
             .orderBy(RecentSearch.ID.desc())
             .limit(NUM_RECENT_RESULTS));
     List<String> result = new ArrayList<>();
@@ -66,7 +64,8 @@ public class RecentSearchDao {
    * Save {@code searchString} as the most recent search.
    */
   public void saveSearch(String searchString) {
-    mDb.persist(new RecentSearch().setSearchString(searchString).setZimID(ZimContentProvider.getId()));
+    mDb.persist(
+        new RecentSearch().setSearchString(searchString).setZimID(ZimContentProvider.getId()));
   }
 
   /**

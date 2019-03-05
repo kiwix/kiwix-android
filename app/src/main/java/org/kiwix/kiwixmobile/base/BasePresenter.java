@@ -23,10 +23,11 @@ import io.reactivex.disposables.CompositeDisposable;
  * All presenters should inherit from this presenter.
  */
 
-public abstract class BasePresenter<T extends BaseContract.View> implements BaseContract.Presenter<T> {
+public abstract class BasePresenter<T extends BaseContract.View>
+    implements BaseContract.Presenter<T> {
 
-  protected T view;
   protected final CompositeDisposable compositeDisposable = new CompositeDisposable();
+  protected T view;
 
   @Override
   public void attachView(T view) {

@@ -13,6 +13,7 @@
   <string name="menu_exitfullscreen">Exit full screen</string>
   <string name="menu_read_aloud">Read aloud</string>
   <string name="menu_read_aloud_stop">Stop reading aloud</string>
+  <string name="menu_support_kiwix">Support Kiwix</string>
   <string name="save_media">Save Media</string>
   <string name="save_media_error">An error occurred when trying to save the media!</string>
   <string name="save_media_saved">Saved media as %s to Android/media/org.kiwix…/</string>
@@ -93,9 +94,9 @@
   <string name="zim_file_downloading">Downloading</string>
   <string name="zim_file_downloaded">Downloaded</string>
   <string name="download_pause">Pause</string>
-  <string name="download_play">Play</string>
   <string name="download_stop">Stop</string>
   <string name="download_paused">paused</string>
+  <string name="download_resume">Resume</string>
   <string name="no_downloads_here">No downloads here</string>
   <string name="no_files_here">No files here</string>
   <string name="download_complete_snackbar">Download complete</string>

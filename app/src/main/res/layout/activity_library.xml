@@ -1,61 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical"
-  tools:context=".zim_manager.library_view.LibraryFragment">
-
-  <RelativeLayout
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/listBackground">
+    android:orientation="vertical"
+    tools:context=".zim_manager.library_view.LibraryFragment"
+    >
 
-
-    <TextView
-      android:id="@+id/network_text"
-      android:layout_width="wrap_content"
+  <RelativeLayout
+      android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_centerInParent="true"
-      android:layout_gravity="center_vertical"
-      android:gravity="center_vertical"
-      android:orientation="vertical"
-      android:paddingBottom="@dimen/library_textview_padding"
-      android:textSize="@dimen/library_font_size"
-      android:visibility="gone" />
+      android:background="?attr/listBackground"
+      >
+
 
     <TextView
-      android:id="@+id/network_permission_text"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerHorizontal="true"
-      android:layout_marginTop="@dimen/network_permission_text_margin_top"
-      android:text="@string/get_library_over_network"
-      android:visibility="gone" />
+        android:id="@+id/network_text"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/library_textview_padding"
+        android:textSize="@dimen/library_font_size"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/network_permission_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/network_permission_text_margin_top"
+        android:text="@string/get_library_over_network"
+        android:visibility="gone"
+        />
 
     <Button
-      android:id="@+id/network_permission_button"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerHorizontal="true"
-      android:layout_marginTop="@dimen/network_permission_button_margin_top"
-      android:text="@string/proceed"
-      android:visibility="gone" />
+        android:id="@+id/network_permission_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/network_permission_button_margin_top"
+        android:text="@string/proceed"
+        android:visibility="gone"
+        />
 
-    <android.support.v4.widget.SwipeRefreshLayout
-      android:id="@+id/library_swiperefresh"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/library_swiperefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
 
       <ListView
-        android:id="@+id/library_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?attr/listBackground"
-        android:divider="@null"
-        android:paddingBottom="@dimen/library_article_list_padding" />
+          android:id="@+id/library_list"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="?attr/listBackground"
+          android:divider="@null"
+          android:paddingBottom="@dimen/library_article_list_padding"
+          />
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
   </RelativeLayout>
 </LinearLayout>

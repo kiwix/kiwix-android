@@ -1,51 +1,75 @@
 package org.kiwix.kiwixmobile.main;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import android.graphics.ColorMatrixColorFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.library.LibraryAdapter;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
-
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import org.kiwix.kiwixmobile.KiwixApplication;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.library.LibraryAdapter;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 import static org.kiwix.kiwixmobile.library.LibraryAdapter.createGbString;
 
+/**
+ * Adapter class for book-items list displayed in the home page WebView
+ * Use LibraryAdapter for list items in the downloads library
+ */
 public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   private static int TYPE_ITEM = 1;
+  private final SharedPreferenceUtil sharedPreferenceUtil =
+      new SharedPreferenceUtil(KiwixApplication.getInstance());
   private List<LibraryNetworkEntity.Book> books;
   private OnItemClickListener itemClickListener;
-
-  interface OnItemClickListener {
-    void openFile(String url);
-  }
 
   BooksAdapter(List<LibraryNetworkEntity.Book> books, OnItemClickListener itemClickListener) {
     this.books = books;
     this.itemClickListener = itemClickListener;
   }
 
+  private static String getArticleCountString(Context context, String articleCount) {
+    if (articleCount == null || articleCount.equals("")) {
+      return "";
+    }
+    try {
+      int size = Integer.parseInt(articleCount);
+      if (size <= 0) {
+        return "";
+      }
+
+      final String[] units = new String[] { "", "K", "M", "B", "T" };
+      int conversion = (int) (Math.log10(size) / 3);
+      return context.getString(R.string.articleCount, new DecimalFormat("#,##0.#")
+          .format(size / Math.pow(1000, conversion)) + units[conversion]);
+    } catch (NumberFormatException e) {
+      Log.d("BooksAdapter", e.toString());
+      return "";
+    }
+  }
+
   @NonNull
   @Override
   public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     if (viewType == TYPE_ITEM) {
-      View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_book, parent, false);
+      View view =
+          LayoutInflater.from(parent.getContext()).inflate(R.layout.item_book, parent, false);
       return new Item(view);
     } else {
-      View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.header_language, parent, false);
+      View view =
+          LayoutInflater.from(parent.getContext()).inflate(R.layout.header_language, parent, false);
       return new Category(view);
     }
   }
@@ -59,9 +83,17 @@ public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
       item.date.setText(book.getDate());
       item.description.setText(book.getDescription());
       item.size.setText(createGbString(book.getSize()));
-      item.articleCount.setText(getArticleCountString(item.articleCount.getContext(),
-          book.getArticleCount()));
-      item.icon.setImageBitmap(LibraryAdapter.createBitmapFromEncodedString(book.getFavicon(), item.icon.getContext()));
+      item.articleCount.setText(
+          getArticleCountString(item.articleCount.getContext(), book.getArticleCount()));
+      item.icon.setImageBitmap(
+          LibraryAdapter.createBitmapFromEncodedString(book.getFavicon(), item.icon.getContext()));
+
+      if (sharedPreferenceUtil.nightMode()) {  ////Fix Bug #905: Launch activity (night-mode) inverts colour of icons
+        item.icon.getDrawable()
+            .mutate()
+            .setColorFilter(new ColorMatrixColorFilter(KiwixWebView.getNightModeColors()));
+      }
+
       item.itemView.setOnClickListener(v -> itemClickListener.openFile(book.file.getPath()));
       if (book.file.getPath().contains("nopic")) {
         item.pictureLabel.setVisibility(View.GONE);
@@ -75,26 +107,6 @@ public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
   }
 
-  private static String getArticleCountString(Context context, String articleCount) {
-    if (articleCount == null || articleCount.equals("")) {
-      return "";
-    }
-    try {
-      int size = Integer.parseInt(articleCount);
-      if (size <= 0) {
-        return "";
-      }
-
-      final String[] units = new String[]{"", "K", "M", "B", "T"};
-      int conversion = (int) (Math.log10(size) / 3);
-      return context.getString(R.string.articleCount, new DecimalFormat("#,##0.#")
-          .format(size / Math.pow(1000, conversion)) + units[conversion]);
-    } catch (NumberFormatException e) {
-      Log.d("BooksAdapter", e.toString());
-      return "";
-    }
-  }
-
   @Override
   public int getItemViewType(int position) {
     return books.get(position) == null ? 0 : TYPE_ITEM;
@@ -103,6 +115,10 @@ public class BooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
   @Override
   public int getItemCount() {
     return books.size();
+  }
+
+  interface OnItemClickListener {
+    void openFile(String url);
   }
 
   class Item extends RecyclerView.ViewHolder {

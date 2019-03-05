@@ -1,111 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:background="?attr/selectableItemBackground"
-  android:paddingEnd="0dp"
-  android:paddingLeft="0dp"
-  android:paddingRight="0dp"
-  android:paddingStart="@dimen/activity_horizontal_margin"
-  android:paddingTop="@dimen/activity_vertical_margin">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:paddingEnd="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingStart="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    >
 
   <ImageView
-    android:id="@+id/item_book_icon"
-    android:layout_width="40dp"
-    android:layout_height="40dp"
-    android:contentDescription="@string/favicon"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    tools:src="@mipmap/kiwix_icon_round" />
+      android:id="@+id/item_book_icon"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      android:contentDescription="@string/favicon"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:src="@mipmap/kiwix_icon_round"
+      />
 
   <TextView
-    android:id="@+id/item_book_title"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-    android:layout_marginStart="@dimen/activity_horizontal_margin"
-    android:textColor="@color/primary_text"
-    android:textSize="16sp"
-    app:layout_constraintStart_toEndOf="@id/item_book_icon"
-    tools:text="Wikipedia" />
+      android:id="@+id/item_book_title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="@dimen/activity_horizontal_margin"
+      android:layout_marginStart="@dimen/activity_horizontal_margin"
+      android:textColor="@color/primary_text"
+      android:textSize="16sp"
+      app:layout_constraintStart_toEndOf="@id/item_book_icon"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:text="Wikipedia"
+      />
 
   <TextView
-    android:id="@+id/item_book_date"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textColor="@color/secondary_text"
-    app:layout_constraintStart_toStartOf="@id/item_book_title"
-    app:layout_constraintTop_toBottomOf="@id/item_book_title"
-    tools:text="1 Jan 2018" />
+      android:id="@+id/item_book_date"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@color/secondary_text"
+      app:layout_constraintStart_toStartOf="@id/item_book_title"
+      app:layout_constraintTop_toBottomOf="@id/item_book_title"
+      tools:text="1 Jan 2018"
+      />
 
   <TextView
-    android:id="@+id/item_book_size"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-    android:layout_marginStart="@dimen/activity_horizontal_margin"
-    android:textColor="@color/secondary_text"
-    app:layout_constraintStart_toEndOf="@id/item_book_date"
-    app:layout_constraintTop_toTopOf="@id/item_book_date"
-    tools:text="20 GB" />
+      android:id="@+id/item_book_size"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="@dimen/activity_horizontal_margin"
+      android:layout_marginStart="@dimen/activity_horizontal_margin"
+      android:textColor="@color/secondary_text"
+      app:layout_constraintStart_toEndOf="@id/item_book_date"
+      app:layout_constraintTop_toTopOf="@id/item_book_date"
+      tools:text="20 GB"
+      />
 
   <TextView
-    android:id="@+id/item_book_article_count"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-    android:layout_marginStart="@dimen/activity_horizontal_margin"
-    android:textColor="@color/secondary_text"
-    app:layout_constraintStart_toEndOf="@id/item_book_size"
-    app:layout_constraintTop_toTopOf="@id/item_book_size"
-    tools:text="10.1 K articles" />
+      android:id="@+id/item_book_article_count"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="@dimen/activity_horizontal_margin"
+      android:layout_marginStart="@dimen/activity_horizontal_margin"
+      android:textColor="@color/secondary_text"
+      app:layout_constraintStart_toEndOf="@id/item_book_size"
+      app:layout_constraintTop_toTopOf="@id/item_book_size"
+      tools:text="10.1 K articles"
+      />
 
   <TextView
-    android:id="@+id/item_book_description"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textColor="@color/secondary_text"
-    app:layout_constraintStart_toStartOf="@id/item_book_title"
-    app:layout_constraintTop_toBottomOf="@id/item_book_date"
-    tools:text="All wikipedia articles" />
+      android:id="@+id/item_book_description"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@color/secondary_text"
+      app:layout_constraintStart_toStartOf="@id/item_book_title"
+      app:layout_constraintTop_toBottomOf="@id/item_book_date"
+      tools:text="All wikipedia articles"
+      />
 
   <TextView
-    android:id="@+id/item_book_label_picture"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@drawable/border_label_picture"
-    android:paddingEnd="6dp"
-    android:paddingStart="6dp"
-    android:text="@string/pic"
-    android:textAlignment="center"
-    android:textColor="@color/picture_label"
-    app:layout_constraintStart_toStartOf="@id/item_book_title"
-    app:layout_constraintTop_toBottomOf="@id/item_book_description" />
+      android:id="@+id/item_book_label_picture"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:background="@drawable/border_label_picture"
+      android:paddingEnd="6dp"
+      android:paddingStart="6dp"
+      android:text="@string/pic"
+      android:textAlignment="center"
+      android:textColor="@color/picture_label"
+      app:layout_constraintStart_toStartOf="@id/item_book_title"
+      app:layout_constraintTop_toBottomOf="@id/item_book_description"
+      />
 
   <TextView
-    android:id="@+id/item_book_label_video"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="8dp"
-    android:layout_marginStart="8dp"
-    android:background="@drawable/border_label_video"
-    android:paddingEnd="6dp"
-    android:paddingStart="6dp"
-    android:text="@string/vid"
-    android:textAlignment="center"
-    android:textColor="@color/video_label"
-    app:layout_constraintStart_toEndOf="@id/item_book_label_picture"
-    app:layout_constraintTop_toTopOf="@id/item_book_label_picture" />
+      android:id="@+id/item_book_label_video"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="8dp"
+      android:layout_marginStart="8dp"
+      android:background="@drawable/border_label_video"
+      android:paddingEnd="6dp"
+      android:paddingStart="6dp"
+      android:text="@string/vid"
+      android:textAlignment="center"
+      android:textColor="@color/video_label"
+      app:layout_constraintStart_toEndOf="@id/item_book_label_picture"
+      app:layout_constraintTop_toTopOf="@id/item_book_label_picture"
+      />
 
   <View
-    android:layout_width="0dp"
-    android:layout_height="1dp"
-    android:layout_marginTop="@dimen/activity_vertical_margin"
-    android:background="?android:attr/dividerVertical"
-    app:layout_constraintStart_toStartOf="@id/item_book_title"
-    app:layout_constraintTop_toBottomOf="@id/item_book_label_picture" />
+      android:layout_width="0dp"
+      android:layout_height="1dp"
+      android:layout_marginTop="@dimen/activity_vertical_margin"
+      android:background="?android:attr/dividerVertical"
+      app:layout_constraintStart_toStartOf="@id/item_book_title"
+      app:layout_constraintTop_toBottomOf="@id/item_book_label_picture"
+      />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

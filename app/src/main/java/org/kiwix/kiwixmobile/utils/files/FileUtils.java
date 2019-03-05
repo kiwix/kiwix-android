@@ -25,17 +25,15 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.util.Log;
-
-import org.kiwix.kiwixmobile.BuildConfig;
-import org.kiwix.kiwixmobile.downloader.ChunkUtils;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.kiwix.kiwixmobile.BuildConfig;
+import org.kiwix.kiwixmobile.downloader.ChunkUtils;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
@@ -128,13 +126,13 @@ public class FileUtils {
   /**
    * Helper function to ascertain the existence of a file and return true/false appropriately
    *
-   * @param fileName             the name (sans path) of the file to query
-   * @param fileSize             the size that the file must match
+   * @param fileName the name (sans path) of the file to query
+   * @param fileSize the size that the file must match
    * @param deleteFileOnMismatch if the file sizes do not match, delete the file
    * @return true if it does exist, false otherwise
    */
   static public boolean doesFileExist(String fileName, long fileSize,
-                                      boolean deleteFileOnMismatch) {
+      boolean deleteFileOnMismatch) {
 
     Log.d(TAG_KIWIX, "Looking for '" + fileName + "' with size=" + fileSize);
 
@@ -146,7 +144,8 @@ public class FileUtils {
         Log.d(TAG_KIWIX, "Correct file '" + fileName + "' found.");
         return true;
       } else {
-        Log.d(TAG_KIWIX, "File '" + fileName + "' found but with wrong size=" + fileForNewFile.length());
+        Log.d(TAG_KIWIX,
+            "File '" + fileName + "' found but with wrong size=" + fileForNewFile.length());
       }
 
       if (deleteFileOnMismatch) {
@@ -162,16 +161,19 @@ public class FileUtils {
 
   static public String getLocalFilePathByUri(final Context ctx, final Uri uri) {
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(ctx, uri)) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(ctx,
+        uri)) {
       if ("com.android.externalstorage.documents".equals(uri.getAuthority())) {
         String[] documentId = DocumentsContract.getDocumentId(uri).split(":");
 
-        if (documentId[0].equals("primary"))
+        if (documentId[0].equals("primary")) {
           return Environment.getExternalStorageDirectory() + "/" + documentId[1];
-
+        }
       } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
         String documentId = DocumentsContract.getDocumentId(uri);
-        Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(documentId));
+        Uri contentUri =
+            ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"),
+                Long.valueOf(documentId));
 
         return contentQuery(ctx, contentUri);
       }
@@ -188,14 +190,15 @@ public class FileUtils {
     Cursor cursor = null;
 
     try {
-      cursor = context.getContentResolver().query(uri, new String[]{"_data"}, null, null, null);
+      cursor = context.getContentResolver().query(uri, new String[] { "_data" }, null, null, null);
 
-      if (cursor != null && cursor.moveToFirst())
+      if (cursor != null && cursor.moveToFirst()) {
         return cursor.getString(cursor.getColumnIndexOrThrow("_data"));
-
+      }
     } finally {
-      if (cursor != null)
+      if (cursor != null) {
         cursor.close();
+      }
     }
 
     return null;
@@ -293,5 +296,4 @@ public class FileUtils {
     }
     return size;
   }
-
 }

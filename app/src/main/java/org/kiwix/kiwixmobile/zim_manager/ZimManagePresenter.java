@@ -20,14 +20,12 @@ package org.kiwix.kiwixmobile.zim_manager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
-
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
-
-import javax.inject.Inject;
 
 import static org.kiwix.kiwixmobile.zim_manager.ZimManageActivity.KIWIX_TAG;
 
@@ -40,8 +38,7 @@ class ZimManagePresenter extends BasePresenter<ZimManageViewCallback> {
   @Inject
   SharedPreferenceUtil mSharedPreferenceUtil;
 
-  @Inject
-  ZimManagePresenter() {
+  @Inject ZimManagePresenter() {
   }
 
   void showNoWifiWarning(Context context, String action) {

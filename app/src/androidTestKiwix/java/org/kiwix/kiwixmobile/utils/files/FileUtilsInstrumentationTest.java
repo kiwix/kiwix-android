@@ -1,7 +1,7 @@
 package org.kiwix.kiwixmobile.utils.files;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
+import androidx.test.InstrumentationRegistry;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -59,7 +59,7 @@ public class FileUtilsInstrumentationTest {
 
     Book book = new Book();
     book.file = new File(fileName + "bg");
-    
+
     List<File> files = FileUtils.getAllZimParts(book);
 
     // Testing the data returned
@@ -67,10 +67,12 @@ public class FileUtilsInstrumentationTest {
 
     for (index = 0; index < 122; index++) {
       if (bool[index]) {
-        assertEquals("if the file fileName.zimXX exists, then no need to add the .part extension at the end",
+        assertEquals(
+            "if the file fileName.zimXX exists, then no need to add the .part extension at the end",
             false, files.get(index).getPath().endsWith(".part"));
       } else {
-        assertEquals("if the file fileName.zimXX.part exists, then the file returned should also have the same ending .zimXX.part",
+        assertEquals(
+            "if the file fileName.zimXX.part exists, then the file returned should also have the same ending .zimXX.part",
             true, files.get(index).getPath().endsWith(".part"));
       }
     }
@@ -138,7 +140,7 @@ public class FileUtilsInstrumentationTest {
 
   @After
   public void RemoveTestDirectory() {
-    for(File child : testDir.listFiles()) {
+    for (File child : testDir.listFiles()) {
       child.delete();
     }
     testDir.delete();

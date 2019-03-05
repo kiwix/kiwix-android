@@ -2,24 +2,20 @@ package org.kiwix.kiwixmobile.language;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.models.Language;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import butterknife.BindView;
 
 public class LanguageActivity extends BaseActivity implements LanguageContract.View {
 
@@ -54,27 +50,27 @@ public class LanguageActivity extends BaseActivity implements LanguageContract.V
     allLanguages.addAll(languages);
     languageAdapter = new LanguageAdapter(languages);
     recyclerView.setAdapter(languageAdapter);
-
   }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu_language, menu);
     MenuItem search = menu.findItem(R.id.menu_language_search);
-    ((SearchView) search.getActionView()).setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-      @Override
-      public boolean onQueryTextSubmit(String query) {
-        return false;
-      }
+    ((SearchView) search.getActionView()).setOnQueryTextListener(
+        new SearchView.OnQueryTextListener() {
+          @Override
+          public boolean onQueryTextSubmit(String query) {
+            return false;
+          }
 
-      @Override
-      public boolean onQueryTextChange(String newText) {
-        languages.clear();
-        languages.addAll(allLanguages);
-        presenter.filerLanguages(languages, newText);
-        return true;
-      }
-    });
+          @Override
+          public boolean onQueryTextChange(String newText) {
+            languages.clear();
+            languages.addAll(allLanguages);
+            presenter.filerLanguages(languages, newText);
+            return true;
+          }
+        });
     return true;
   }
 
