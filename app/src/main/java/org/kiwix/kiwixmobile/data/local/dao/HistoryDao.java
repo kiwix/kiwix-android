@@ -3,7 +3,7 @@ package org.kiwix.kiwixmobile.data.local.dao;
 import android.content.Context;
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,9 +24,8 @@ public class HistoryDao {
   }
 
   public void saveHistory(History history) {
-    DateFormat dateFormat =
-        DateFormat.getDateInstance(DateFormat.MEDIUM, getCurrentLocale(context));
-    String date = dateFormat.format(new Date(history.getTimeStamp()));
+    SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy", getCurrentLocale(context));
+    String date = sdf.format(new Date(history.getTimeStamp()));
     kiwixDatabase.deleteWhere(History.class, History.HISTORY_URL.eq(history.getHistoryUrl())
         .and(History.DATE.eq(date)).and(History.ZIM_ID.eq(history.getZimId())));
     kiwixDatabase.persist(new History()
