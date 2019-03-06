@@ -31,8 +31,6 @@
     <item name="colorControlNormal">@color/accent</item>
   </style>
 
-  // Defined new theme to fix status bar issue #890
-
   <style name="StatusBarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
     <item name="colorPrimaryDark">@color/titleBar</item>
     <item name="colorPrimary">@color/primary</item>
@@ -45,6 +43,8 @@
     <item name="actionModeBackground">@color/actionModeBackground</item>
     <item name="progressBackgroundColor">@color/primary_dark</item>
     <item name="listBackground">@drawable/list_bg</item>
+    <item name="android:windowContentOverlay">@null</item>
+    <item name="windowActionModeOverlay">true</item>
     <item name="selectedBackground">@drawable/list_bg_light</item>
     <item name="android:itemBackground">@color/primary_light</item>
   </style>
