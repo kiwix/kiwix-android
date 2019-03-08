@@ -880,6 +880,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         break;
 
       case R.id.menu_history:
+        saveTabStates();
         startActivityForResult(new Intent(this, HistoryActivity.class),
             REQUEST_HISTORY_ITEM_CHOSEN);
         return true;
@@ -1489,6 +1490,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           } else if (title != null) {
             getCurrentWebView().loadUrl(ZimContentProvider.getPageUrlFromTitle(title));
           }
+        } else if (resultCode == RESULT_HISTORY_CLEARED) {
+          webViewList.clear();
+          tabsAdapter.notifyDataSetChanged();
+          restoreTabStates();
         }
         return;
       default:

@@ -27,6 +27,7 @@ import org.kiwix.kiwixmobile.main.MainActivity;
 
 import static org.kiwix.kiwixmobile.library.LibraryAdapter.createBitmapFromEncodedString;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_URL;
+import static org.kiwix.kiwixmobile.utils.Constants.RESULT_HISTORY_CLEARED;
 
 public class HistoryActivity extends BaseActivity implements HistoryContract.View,
     HistoryAdapter.OnItemClickListener {
@@ -34,6 +35,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
   private final List<History> historyList = new ArrayList<>();
   private final List<History> fullHistory = new ArrayList<>();
   private final List<History> deleteList = new ArrayList<>();
+  private boolean isHistoryCleared = false;
 
   @BindView(R.id.toolbar)
   Toolbar toolbar;
@@ -166,6 +168,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
 
       case R.id.menu_history_clear:
         presenter.deleteHistory(new ArrayList<>(fullHistory));
+        isHistoryCleared = true;
         fullHistory.clear();
         historyList.clear();
         historyAdapter.notifyDataSetChanged();
@@ -239,6 +242,17 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
 
     if (deleteList.size() == 0) {
       actionMode.finish();
+    }
+  }
+
+  @Override
+  public void onBackPressed() {
+    if (isHistoryCleared) {
+      Intent intent = new Intent(this, MainActivity.class);
+      setResult(RESULT_HISTORY_CLEARED, intent);
+      finish();
+    } else {
+      super.onBackPressed();
     }
   }
 }
