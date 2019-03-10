@@ -54,7 +54,7 @@ public class LibraryPresenter extends BasePresenter<LibraryViewCallback> {
 
   void loadRunningDownloadsFromDb() {
     for (LibraryNetworkEntity.Book book : bookDao.getDownloadingBooks()) {
-      if (!DownloadFragment.mDownloads.containsValue(book)) {
+      if (!DownloadFragment.downloads.containsValue(book)) {
         book.url = book.remoteUrl;
         view.downloadFile(book);
       }

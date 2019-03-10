@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Binder;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
@@ -88,6 +89,7 @@ public class DownloadService extends Service {
   public static final String ACTION_STOP = "STOP";
   public static final String ACTION_NO_WIFI = "NO_WIFI";
   public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
+  public static final String NOTIFICATION_TITLE_KEY = "NOTIFICATION_TITLE_KEY";
   public static final Object pauseLock = new Object();
   // 1024 / 100
   private static final double BOOK_SIZE_OFFSET = 10.24;
@@ -215,7 +217,9 @@ public class DownloadService extends Service {
               .addAction(pause)
               .addAction(stop)
               .setOngoing(true));
-
+      Bundle bundle = new Bundle();
+      bundle.putString(NOTIFICATION_TITLE_KEY, notificationTitle);
+      notification.get(notificationID).addExtras(bundle);
       notificationManager.notify(notificationID, notification.get(notificationID).build());
       downloadStatus.put(notificationID, PLAY);
       LibraryFragment.downloadingBooks.remove(book);
@@ -231,9 +235,9 @@ public class DownloadService extends Service {
     synchronized (pauseLock) {
       pauseLock.notify();
     }
-    if (!DownloadFragment.mDownloads.isEmpty()) {
-      DownloadFragment.mDownloads.remove(notificationID);
-      DownloadFragment.mDownloadFiles.remove(notificationID);
+    if (!DownloadFragment.downloads.isEmpty()) {
+      DownloadFragment.downloads.remove(notificationID);
+      DownloadFragment.downloadFiles.remove(notificationID);
       DownloadFragment.downloadAdapter.notifyDataSetChanged();
     }
     updateForeground();
@@ -274,7 +278,7 @@ public class DownloadService extends Service {
   public void pauseDownload(int notificationID) {
     Log.i(KIWIX_TAG, "Pausing ZIM Download for notificationID: " + notificationID);
     downloadStatus.put(notificationID, PAUSE);
-    notification.get(notificationID).mActions.get(0).title = getString(R.string.download_play);
+    notification.get(notificationID).mActions.get(0).title = getString(R.string.download_resume);
     notification.get(notificationID).mActions.get(0).icon = R.drawable.ic_play_arrow_black_24dp;
     notification.get(notificationID).setContentText(getString(R.string.download_paused));
     notificationManager.notify(notificationID, notification.get(notificationID).build());
@@ -335,9 +339,12 @@ public class DownloadService extends Service {
           public void onNext(Integer progress) {
             if (progress == 100) {
               notification.get(notificationID).setOngoing(false);
+              Bundle b = notification.get(notificationID).getExtras();
               notification.get(notificationID)
-                  .setContentTitle(notificationTitle + " " + getResources().getString(
-                      R.string.zim_file_downloaded));
+                  .setContentTitle(
+                      b.getString(NOTIFICATION_TITLE_KEY) + " " + getResources().getString(
+                          R.string.zim_file_downloaded));
+              notification.get(notificationID).getExtras();
               notification.get(notificationID)
                   .setContentText(getString(R.string.zim_file_downloaded));
               final Intent target = new Intent(DownloadService.this, MainActivity.class);
@@ -373,9 +380,10 @@ public class DownloadService extends Service {
                 }
               }
               target.putExtra(EXTRA_NOTIFICATION_ID, notificationID);
+              target.setAction(Long.toString(System.currentTimeMillis()));
               PendingIntent pendingIntent = PendingIntent.getActivity
                   (getBaseContext(), 0,
-                      target, PendingIntent.FLAG_CANCEL_CURRENT);
+                      target, PendingIntent.FLAG_ONE_SHOT);
               book.downloaded = true;
               dataSource.deleteBook(book)
                   .subscribe(new CompletableObserver() {
@@ -428,10 +436,10 @@ public class DownloadService extends Service {
   }
 
   private void updateDownloadFragmentProgress(int progress, int notificationID) {
-    if (DownloadFragment.mDownloads != null
-        && DownloadFragment.mDownloads.get(notificationID) != null) {
+    if (DownloadFragment.downloads != null
+        && DownloadFragment.downloads.get(notificationID) != null) {
       handler.post(() -> {
-        if (DownloadFragment.mDownloads.get(notificationID) != null) {
+        if (DownloadFragment.downloads.get(notificationID) != null) {
           DownloadFragment.downloadAdapter.updateProgress(progress, notificationID);
         }
       });
@@ -439,10 +447,10 @@ public class DownloadService extends Service {
   }
 
   private void updateDownloadFragmentComplete(int notificationID) {
-    if (DownloadFragment.mDownloads != null
-        && DownloadFragment.mDownloads.get(notificationID) != null) {
+    if (DownloadFragment.downloads != null
+        && DownloadFragment.downloads.get(notificationID) != null) {
       handler.post(() -> {
-        if (DownloadFragment.mDownloads.get(notificationID) != null) {
+        if (DownloadFragment.downloads.get(notificationID) != null) {
           DownloadFragment.downloadAdapter.complete(notificationID);
         }
       });
@@ -526,8 +534,8 @@ public class DownloadService extends Service {
         downloaded += output.length();
 
         if (chunk.getStartByte() == 0) {
-          if (!DownloadFragment.mDownloads.isEmpty()) {
-            LibraryNetworkEntity.Book book = DownloadFragment.mDownloads
+          if (!DownloadFragment.downloads.isEmpty()) {
+            LibraryNetworkEntity.Book book = DownloadFragment.downloads
                 .get(chunk.getNotificationID());
             book.remoteUrl = book.getUrl();
             book.file = fullFile;

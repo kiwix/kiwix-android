@@ -22,7 +22,7 @@ Our process for accepting changes operates by [Pull Request (PR)](https://help.g
 
         $ git clone git@github.com:<your-username>/<repository-name>.git
 
-    Organization members should clone the upsteam repo, instead of working from a personal fork:
+    Organization members should clone the upstream repo, instead of working from a personal fork:
 
         $ git clone git@github.com:kiwix/<repository-name>.git
 
