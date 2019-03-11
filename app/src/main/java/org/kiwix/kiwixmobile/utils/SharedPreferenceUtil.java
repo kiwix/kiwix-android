@@ -57,7 +57,7 @@ public class SharedPreferenceUtil {
   }
 
   public boolean getPrefBottomToolbar() {
-    return sharedPreferences.getBoolean(PREF_BOTTOM_TOOLBAR, false);
+    return sharedPreferences.getBoolean(PREF_BOTTOM_TOOLBAR, true);
   }
 
   public boolean getPrefBackToTop() {
