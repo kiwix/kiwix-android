@@ -141,6 +141,10 @@ import static org.kiwix.kiwixmobile.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 import static org.kiwix.kiwixmobile.utils.UpdateUtils.reformatProviderUrl;
 
+import com.microsoft.appcenter.AppCenter;
+import com.microsoft.appcenter.analytics.Analytics;
+import com.microsoft.appcenter.crashes.Crashes;
+
 public class MainActivity extends BaseActivity implements WebViewCallback,
     MainContract.View, BooksAdapter.OnItemClickListener {
 
@@ -325,6 +329,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    AppCenter.start(getApplication(), "edfb0225-e9a6-4ac8-956e-8a1fef2c7de9", Analytics.class, Crashes.class);
     presenter.attachView(this);
     new WebView(this).destroy(); // Workaround for buggy webViews see #710
     wifiOnly = sharedPreferenceUtil.getPrefWifiOnly();
