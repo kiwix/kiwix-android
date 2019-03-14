@@ -203,6 +203,7 @@
           android:name="android.support.PARENT_ACTIVITY"
           android:value="main.MainActivity"/>
     </activity>
+    <service android:name=".main.MainActivity$NotificationService" />
   </application>
 
 </manifest>

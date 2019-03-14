@@ -182,8 +182,10 @@ public class KiwixTextToSpeech {
     if (currentTTSTask.paused) {
       if (!requestAudioFocus()) return;
       currentTTSTask.start();
+      MainActivity.sendNotification(context.getString(R.string.tts_pause),context);
     } else {
       currentTTSTask.pause();
+      MainActivity.sendNotification(context.getString(R.string.tts_resume),context);
     }
   }
 

@@ -21,6 +21,10 @@ package org.kiwix.kiwixmobile.main;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -67,6 +71,8 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -148,6 +154,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private static final int REQUEST_HISTORY_ITEM_CHOSEN = 99;
   private static final String NEW_TAB = "NEW_TAB";
   private static final String HOME_URL = "file:///android_asset/home.html";
+  public static final String ACTION_STOP = "ACTION_STOP";
+  public static final String ACTION_RESUME = "ACTION_RESUME";
+  public static final String ACTION_PAUSE = "ACTION_PAUSE";
+  public static final int TTS_NOTIFICATION_ID = 001;
   public static boolean isFullscreenOpened;
   public static boolean refresh;
   public static boolean wifiOnly;
@@ -157,6 +167,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private final ArrayList<String> bookmarks = new ArrayList<>();
   private final List<LibraryNetworkEntity.Book> books = new ArrayList<>();
   private final List<KiwixWebView> webViewList = new ArrayList<>();
+  public static KiwixTextToSpeech tts;
   @BindView(R.id.activity_main_root)
   ConstraintLayout root;
   @BindView(R.id.activity_main_toolbar)
@@ -218,7 +229,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private boolean isExternalLinkPopup;
   private String documentParserJs;
   private DocumentParser documentParser;
-  private KiwixTextToSpeech tts;
   private CompatFindActionModeCallback compatCallback;
   private TabsAdapter tabsAdapter;
   private int currentWebViewIndex = 0;
@@ -675,9 +685,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         case (AudioManager.AUDIOFOCUS_LOSS):
           if (!tts.currentTTSTask.paused) tts.pauseOrResume();
           pauseTTSButton.setText(R.string.tts_resume);
+          sendNotification(getString(R.string.tts_resume),this);
           break;
         case (AudioManager.AUDIOFOCUS_GAIN):
           pauseTTSButton.setText(R.string.tts_pause);
+          sendNotification(getString(R.string.tts_pause),this);
           break;
       }
     });
@@ -1963,4 +1975,54 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   public boolean checkNull(View view) {
     return view != null;
   }
+  public static void sendNotification(String message,Context context){
+
+        Intent actionIntent_stop = new Intent(context, NotificationService.class)
+                .setAction(ACTION_STOP);
+        PendingIntent actionPendingIntent_stop = PendingIntent.getService(context, 0,
+                actionIntent_stop, PendingIntent.FLAG_ONE_SHOT);
+        Intent actionIntent_pause_play = new Intent(context, NotificationService.class)
+                .setAction(ACTION_PAUSE);
+        PendingIntent actionPendingIntent_pause_play = PendingIntent.getService(context, 0,
+                actionIntent_pause_play, PendingIntent.FLAG_ONE_SHOT);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.kiwix_icon_with_title)
+                .setContentTitle(context.getString(R.string.tts_stop))
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .addAction(R.drawable.ic_stop_black_24dp, context.getString(R.string.tts_stop),
+                        actionPendingIntent_stop)
+                .setPriority(Notification.PRIORITY_MAX);
+        if(message.equals(context.getString(R.string.tts_resume))) {
+            builder.addAction(R.drawable.ic_play_arrow_black_24dp, message,
+                    actionPendingIntent_pause_play);
+        }
+        else{
+            builder.addAction(R.drawable.ic_pause_black_24dp, message,
+                    actionPendingIntent_pause_play);
+        }
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(TTS_NOTIFICATION_ID, builder.build());
+    }
+
+    public static class NotificationService extends IntentService {
+        public NotificationService() {
+            super(NotificationService.class.getSimpleName());
+        }
+        @Override
+        protected void onHandleIntent(Intent intent) {
+            String action = intent.getAction();
+            Log.d("TAG", "onHandleIntent: ");
+            if (action.equals(ACTION_STOP)) {
+                Log.d("TAG", "onHandleIntent: match");
+                MainActivity.tts.stop();
+                NotificationManagerCompat.from(this).cancel(TTS_NOTIFICATION_ID);
+            }
+            else if (action.equals(ACTION_RESUME)) {
+                MainActivity.tts.pauseOrResume();
+            }
+            else if(action.equals(ACTION_PAUSE)){
+                MainActivity.tts.pauseOrResume();
+            }
+        }
+    }
 }
