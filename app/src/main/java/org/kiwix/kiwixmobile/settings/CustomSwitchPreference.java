@@ -19,12 +19,17 @@
 
 package org.kiwix.kiwixmobile.settings;
 
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_AUTONIGHTMODE;
+
 import android.content.Context;
+import android.graphics.Color;
 import android.preference.SwitchPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Switch;
+import android.widget.TextView;
+import org.kiwix.kiwixmobile.R;
 
 public class CustomSwitchPreference extends SwitchPreference {
 
@@ -64,6 +69,19 @@ public class CustomSwitchPreference extends SwitchPreference {
     ViewGroup viewGroup = (ViewGroup) view;
     clearListenerInViewGroup(viewGroup);
     super.onBindView(view);
+    setGrayState(view);
+  }
+
+  private void setGrayState(View view) {
+    boolean enabled = getPreferenceManager().getSharedPreferences().getBoolean(PREF_AUTONIGHTMODE, false);
+    TextView titleView = view.findViewById(android.R.id.title);
+    TextView summaryTV = view.findViewById(android.R.id.summary);
+    String nightModeText = getContext().getResources().getString(R.string.pref_nightmode);
+
+    if (enabled && titleView.getText().equals(nightModeText)) {
+      titleView.setTextColor(Color.GRAY);
+      summaryTV.setTextColor(Color.GRAY);
+    }
   }
 
   /**
