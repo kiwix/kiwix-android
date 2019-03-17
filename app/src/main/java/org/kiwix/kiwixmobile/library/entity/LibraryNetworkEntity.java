@@ -18,13 +18,12 @@
  */
 package org.kiwix.kiwixmobile.library.entity;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-
 import java.io.File;
 import java.io.Serializable;
 import java.util.LinkedList;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Root;
 
 @Root(name = "library", strict = false)
 public class LibraryNetworkEntity {
@@ -44,7 +43,7 @@ public class LibraryNetworkEntity {
   }
 
   @Root(name = "book", strict = false)
-  public static class Book implements Serializable{
+  public static class Book implements Serializable {
 
     @Attribute(name = "id", required = false)
     public String id;
@@ -91,7 +90,7 @@ public class LibraryNetworkEntity {
     @Attribute(name = "tags", required = false)
     public String tags;
 
-    public boolean downloaded =  false;
+    public boolean downloaded = false;
 
     public String remoteUrl;
 
@@ -157,7 +156,7 @@ public class LibraryNetworkEntity {
 
     // Two books are equal if their ids match
     @Override
-    public boolean equals (Object obj) {
+    public boolean equals(Object obj) {
       if (obj instanceof Book) {
         if (((Book) obj).getId() != null && ((Book) obj).getId().equals(getId())) {
           return true;

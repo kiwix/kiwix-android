@@ -1,53 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:id="@+id/root"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:padding="24dp">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    >
 
   <ImageView
-    android:id="@+id/airplane"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:alpha="1.0"
-    android:contentDescription="@string/save_books_offline"
-    android:visibility="invisible"
-    app:layout_constraintBottom_toTopOf="@id/heading"
-    app:layout_constraintEnd_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:srcCompat="@drawable/ic_airplane" />
+      android:id="@+id/airplane"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:alpha="1.0"
+      android:contentDescription="@string/save_books_offline"
+      android:visibility="invisible"
+      app:layout_constraintBottom_toTopOf="@id/heading"
+      app:layout_constraintEnd_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:srcCompat="@drawable/ic_airplane"
+      />
 
   <TextView
-    android:id="@+id/heading"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/activity_vertical_margin"
-    android:text="@string/save_books_offline"
-    android:textAlignment="center"
-    android:textColor="@android:color/black"
-    android:textSize="24sp"
-    android:textStyle="bold"
-    app:layout_constraintBottom_toTopOf="@id/subheading"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent" />
+      android:id="@+id/heading"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="@dimen/activity_vertical_margin"
+      android:text="@string/save_books_offline"
+      android:textAlignment="center"
+      android:textColor="@android:color/black"
+      android:textSize="24sp"
+      android:textStyle="bold"
+      app:layout_constraintBottom_toTopOf="@id/subheading"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      />
 
-  <android.support.constraint.Guideline
-    android:id="@+id/guideline"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    app:layout_constraintGuide_end="56dp" />
+  <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/guideline"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      app:layout_constraintGuide_end="56dp"
+      />
 
   <TextView
-    android:id="@+id/subheading"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/download_books_message"
-    android:textAlignment="center"
-    android:textColor="@color/secondary_text"
-    android:textSize="15sp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/guideline" />
-</android.support.constraint.ConstraintLayout>
+      android:id="@+id/subheading"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/download_books_message"
+      android:textAlignment="center"
+      android:textColor="@color/textDarkSecondary"
+      android:textSize="15sp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/guideline"
+      />
+</androidx.constraintlayout.widget.ConstraintLayout>

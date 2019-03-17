@@ -17,11 +17,10 @@
  */
 package org.kiwix.kiwixmobile.zim_manager.library_view;
 
+import java.util.LinkedList;
 import org.kiwix.kiwixmobile.base.BaseContract;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
-
-import java.util.LinkedList;
 
 /**
  * Created by EladKeyshawn on 06/04/2017.

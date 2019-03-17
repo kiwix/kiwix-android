@@ -22,10 +22,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.util.Log;
-
-import org.kiwix.kiwixmobile.R;
-
 import java.util.UUID;
+import org.kiwix.kiwixmobile.R;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
@@ -41,7 +39,7 @@ public class NetworkUtils {
       if (info != null) {
         for (NetworkInfo anInfo : info) {
           if (anInfo.getState() == NetworkInfo.State.CONNECTED
-                  || anInfo.getState() == NetworkInfo.State.CONNECTING) {
+              || anInfo.getState() == NetworkInfo.State.CONNECTING) {
             return true;
           }
         }
@@ -52,9 +50,10 @@ public class NetworkUtils {
 
   public static boolean isWiFi(Context context) {
     ConnectivityManager connectivity = (ConnectivityManager) context
-            .getSystemService(Context.CONNECTIVITY_SERVICE);
-    if (connectivity == null)
+        .getSystemService(Context.CONNECTIVITY_SERVICE);
+    if (connectivity == null) {
       return false;
+    }
 
     if (Build.VERSION.SDK_INT >= 23) {
       NetworkInfo network = connectivity.getActiveNetworkInfo();

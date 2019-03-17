@@ -53,5 +53,4 @@ public class BookDataSource {
   public String name;
 
   public boolean downloaded;
-
 }

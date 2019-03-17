@@ -20,29 +20,24 @@ package org.kiwix.kiwixmobile;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Environment;
-import android.support.multidex.MultiDexApplication;
 import android.util.Log;
-import android.support.v7.app.AppCompatDelegate;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.multidex.MultiDexApplication;
 import com.squareup.leakcanary.LeakCanary;
-import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
-import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
-import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
-
-import java.io.File;
-import java.io.IOException;
-
-import javax.inject.Inject;
-
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
+import java.io.File;
+import java.io.IOException;
+import javax.inject.Inject;
+import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
+import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
+import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
 
 public class KiwixApplication extends MultiDexApplication implements HasActivityInjector {
 
   private static KiwixApplication application;
   private static ApplicationComponent applicationComponent;
-
-  private File logFile;
 
   static {
     AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -50,6 +45,7 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
 
   @Inject
   DispatchingAndroidInjector<Activity> activityInjector;
+  private File logFile;
 
   public static KiwixApplication getInstance() {
     return application;
@@ -78,7 +74,7 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
     if (isExternalStorageWritable()) {
       File appDirectory = new File(Environment.getExternalStorageDirectory() + "/Kiwix");
       logFile = new File(appDirectory, "logcat.txt");
-      Log.d("KIWIX","Writing all logs into [" + logFile.getPath() + "]");
+      Log.d("KIWIX", "Writing all logs into [" + logFile.getPath() + "]");
 
       // create app folder
       if (!appDirectory.exists()) {

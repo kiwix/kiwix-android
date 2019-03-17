@@ -18,8 +18,6 @@
 
 package org.kiwix.kiwixmobile.utils.files;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.File;
 import java.util.List;
 import org.junit.Test;
@@ -28,6 +26,8 @@ import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(File.class)
@@ -43,7 +43,10 @@ public class FileUtilsTest {
 
     // Set up PowerMockito
     File myFile = PowerMockito.mock(File.class);
-    PowerMockito.whenNew(File.class).withParameterTypes(String.class).withArguments(fileName).thenReturn(myFile);
+    PowerMockito.whenNew(File.class)
+        .withParameterTypes(String.class)
+        .withArguments(fileName)
+        .thenReturn(myFile);
 
     Book testBook = new Book();
     testBook.file = new File(fileName);
@@ -54,15 +57,18 @@ public class FileUtilsTest {
     //PowerMockito.when(myFile.toString()).thenReturn(myFile.getPath());
 
     files = FileUtils.getAllZimParts(testBook);
-    assertEquals("Only a single book is returned in case the file has extension .zim", 1, files.size());
-    assertEquals("The filename is appended with .part", testBook.file + ".part", files.get(0).getPath());
+    assertEquals("Only a single book is returned in case the file has extension .zim", 1,
+        files.size());
+    assertEquals("The filename is appended with .part", testBook.file + ".part",
+        files.get(0).getPath());
 
     // Filename ends with .zim and file exists at the location
     PowerMockito.when(myFile.getPath()).thenReturn(fileName + ".zim");
     PowerMockito.when(myFile.exists()).thenReturn(true);
 
     files = FileUtils.getAllZimParts(testBook);
-    assertEquals("Only a single book is returned in case the file has extension .zim", 1, files.size());
+    assertEquals("Only a single book is returned in case the file has extension .zim", 1,
+        files.size());
     assertEquals("The filename retained as such", testBook.file.getPath(), files.get(0).getPath());
 
     // Filename ends with .zim.part and file does not exist at the location
@@ -70,15 +76,18 @@ public class FileUtilsTest {
     PowerMockito.when(myFile.exists()).thenReturn(false);
 
     files = FileUtils.getAllZimParts(testBook);
-    assertEquals("Only a single book is returned in case the file has extension .zim.part", 1, files.size());
-    assertEquals("The filename is appended with .part", testBook.file + ".part", files.get(0).getPath());
+    assertEquals("Only a single book is returned in case the file has extension .zim.part", 1,
+        files.size());
+    assertEquals("The filename is appended with .part", testBook.file + ".part",
+        files.get(0).getPath());
 
     // Filename ends with .zim.part and file exists at the location
     PowerMockito.when(myFile.getPath()).thenReturn(fileName + ".zim.part");
     PowerMockito.when(myFile.exists()).thenReturn(true);
 
     files = FileUtils.getAllZimParts(testBook);
-    assertEquals("Only a single book is returned in case the file has extension .zim.part", 1, files.size());
+    assertEquals("Only a single book is returned in case the file has extension .zim.part", 1,
+        files.size());
     assertEquals("The filename retained as such", testBook.file.getPath(), files.get(0).getPath());
 
     // Filename ends with .zimXX and no such file exists at any such location

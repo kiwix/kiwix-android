@@ -1,3 +1,11 @@
+import com.testdroid.api.APIClient
+import com.testdroid.api.APIException
+import com.testdroid.api.APIKeyClient
+import com.testdroid.api.model.APIProject
+import com.testdroid.api.model.APIUser
+import com.android.builder.testing.api.TestServer;
+import com.android.annotations.NonNull;
+
 import groovy.json.JsonSlurper
 
 buildscript {
@@ -9,14 +17,13 @@ buildscript {
 
   dependencies {
     classpath "com.android.tools.build:gradle:$androidGradlePluginVersion"
-    classpath "com.testdroid:gradle:$testdroidGradlePluginVersion"
     classpath 'org.apache.httpcomponents:httpclient-android:4.3.3'
+    classpath  "com.testdroid:testdroid-api:2.71"
   }
 }
 
 apply plugin: 'com.android.application'
 apply plugin: 'checkstyle'
-apply plugin: 'testdroid'
 
 repositories {
   google()
@@ -30,7 +37,6 @@ repositories {
 String[] archs = ['arm64-v8a', 'armeabi', 'mips', 'mips64', 'x86', 'x86_64']
 
 dependencies {
-
   // Get kiwixlib online if it is not populated locally
   if (file("../kiwixlib/src/main").list().length == 1) {
     implementation 'org.kiwix.kiwixlib:kiwixlib:1.0.11'
@@ -43,43 +49,35 @@ dependencies {
   implementation 'eu.mhutti1.utils.storage:android-storage-devices:0.6.2'
 
   // Android Support
-  implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
-  implementation "com.android.support:support-v13:$supportLibraryVersion"
-  implementation "com.android.support:support-v4:$supportLibraryVersion"
-  implementation "com.android.support:design:$supportLibraryVersion"
-  implementation "com.android.support:cardview-v7:$supportLibraryVersion"
-  implementation "com.android.support:multidex:$multidexVersion"
-  implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
+  implementation "androidx.appcompat:appcompat:$appCompatVersion"
+  implementation "com.google.android.material:material:$materialVersion"
+  implementation "androidx.cardview:cardview:$cardViewVersion"
+  implementation "androidx.multidex:multidex:$multidexVersion"
+  implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
 
-  androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
-
-  androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion") {
-    exclude group: 'com.android.support', module: 'support-annotations'
-  }
-
-  androidTestImplementation "com.android.support.test.espresso:espresso-web:$espressoVersion"
-  androidTestImplementation "com.android.support.test.espresso:espresso-intents:$espressoVersion"
-  implementation "com.android.support.test.espresso:espresso-idling-resource:$espressoVersion"
-  androidTestImplementation("com.android.support.test.espresso:espresso-contrib:$espressoVersion") {
-    exclude group: 'com.android.support', module: 'support-v4'
-    exclude group: 'com.android.support', module: 'appcompat-v7'
-    exclude group: 'com.android.support', module: 'design'
-    exclude group: 'com.android.support', module: 'recyclerview-v7'
+  implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
+  androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
+  androidTestImplementation "androidx.test.espresso:espresso-web:$espressoVersion"
+  androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
+  androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion") {
+    exclude group: 'androidx.legacy', module: 'legacy-support-core-utils'
+    exclude group: 'androidx.viewpager', module: 'viewpager'
+    exclude group: 'com.google.android.material', module: 'material'
+    exclude group: 'androidx.recyclerview', module: 'recyclerview'
   }
 
   androidTestImplementation("com.schibsted.spain:barista:$baristaVersion") {
     exclude group: 'com.android.support'
   }
 
-  androidTestImplementation "com.android.support:support-annotations:$supportLibraryVersion"
-  androidTestImplementation 'com.android.support.test:runner:1.0.1'
-  androidTestImplementation 'com.android.support.test:rules:1.0.1'
+  androidTestImplementation "androidx.annotation:annotation:$annotationVersion"
+  androidTestImplementation "androidx.test.ext:junit:1.1.0"
+  androidTestImplementation 'androidx.test:runner:1.1.1'
+  androidTestImplementation 'androidx.test:rules:1.1.1'
+  androidTestImplementation 'androidx.test:core:1.1.0'
 
   // Tab indicator
   implementation "com.pacioianu.david:ink-page-indicator:$inkPageIndicatorVersion"
-
-  // Guava
-  implementation group: 'com.google.guava', name: 'guava', version: '21.0'
 
   // Dagger
   compileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
@@ -159,7 +157,8 @@ if (custom.listFiles()) {
   custom.eachFile() { file ->
 
     def fileName = file.getName()
-    if (fileName.startsWith(".") || fileName.contains("test") || fileName == "main" || fileName.contains("Test")) {
+    if (fileName.startsWith(".") || fileName.contains("test") ||
+        fileName == "main" || fileName.contains("Test")) {
       return
     }
     map.put(fileName, file.getAbsolutePath())
@@ -168,11 +167,12 @@ if (custom.listFiles()) {
 
 android {
   compileSdkVersion 28
+  testServer new TestDroidUpload();
 
   defaultConfig {
     minSdkVersion 14
     targetSdkVersion 28
-    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     // See https://github.com/linkedin/dexmaker/issues/65 for why we need the following line.
     testInstrumentationRunnerArguments.notClass = 'com.android.dex.DexIndexOverflowException'
     multiDexEnabled true
@@ -183,7 +183,7 @@ android {
     cruncherEnabled true
   }
 
-  testBuildType "coverage"
+  testBuildType "debug"
 
   lintOptions {
     // Treat lint seriously
@@ -237,7 +237,6 @@ android {
     release {
       buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://download.kiwix.org/\""
     }
-
   }
 
   productFlavors {
@@ -375,21 +374,42 @@ android {
   */
 }
 
-// Testdroid deployment configuration
-def buildNumber = System.getenv('TRAVIS_BUILD_NUMBER')
 
-def findJar(prefix) {
-  configurations.runtime.filter { it.name.startsWith(prefix) }
-}
+public class TestDroidUpload extends TestServer{
+  def buildNumber = System.getenv('TRAVIS_BUILD_NUMBER')
+  def API_KEY = System.getenv('PUBLIC_TESTDROID_API_KEY')
+  def TESTDROID_SERVER = "https://cloud.testdroid.com";
+  def RUNNER_GATEWAY = System.getenv('TESTDROID_RUNNER_GATEWAY')
+  def accessGroup = System.getenv('ACCESS_GROUP_ID')
 
-testdroid {
-  authorization "APIKEY"
-  apiKey System.getenv('BITBAR_API_KEY')
-  deviceGroup 'Kiwix'
-  projectName "Kiwix"
-  testRunName "Auto Test " + buildNumber
+  @Override
+  String getName() {
+    return "kiwixtest";
+  }
 
-  fullRunConfig {
-    instrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+  @Override
+  void uploadApks(@NonNull String variantName, @NonNull File testApk, @Nullable File testedApk) {
+    APIUser.metaClass.shareFile { id, accessGroup ->
+      System.out.println(id)
+      try {
+        delegate.postResource(createUri(selfURI, "/files/" + id + "/share"), [accessGroupId: accessGroup], APIProject.class)
+      } catch (Exception e) {
+        System.out.println(e.getLocalizedMessage())
+      }
+    }
+
+    APIClient client = new APIKeyClient(TESTDROID_SERVER, API_KEY);
+    APIUser user = client.me();
+    String testId = user.uploadFile(testApk).getId()
+    user.shareFile(testId, accessGroup);
+    String testedId = user.uploadFile(testedApk).getId()
+    user.shareFile(testedId, accessGroup);
+
+    new URL(RUNNER_GATEWAY + "?apk=" + testedId + "&test=" + testId + "&buildno=" + buildNumber).getText()
+  }
+
+  @Override
+  boolean isConfigured() {
+    return true
   }
 }

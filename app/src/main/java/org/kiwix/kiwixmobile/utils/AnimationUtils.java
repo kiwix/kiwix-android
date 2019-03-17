@@ -30,7 +30,8 @@ public class AnimationUtils {
     };
 
     // 1dp/ms
-    animation.setDuration((int) (targetHeight / view.getContext().getResources().getDisplayMetrics().density));
+    animation.setDuration(
+        (int) (targetHeight / view.getContext().getResources().getDisplayMetrics().density));
     view.startAnimation(animation);
     view.setVisibility(View.VISIBLE);
   }
@@ -56,7 +57,8 @@ public class AnimationUtils {
     };
 
     // 1dp/ms
-    animation.setDuration((int) (initialHeight / view.getContext().getResources().getDisplayMetrics().density));
+    animation.setDuration(
+        (int) (initialHeight / view.getContext().getResources().getDisplayMetrics().density));
     view.startAnimation(animation);
   }
 }

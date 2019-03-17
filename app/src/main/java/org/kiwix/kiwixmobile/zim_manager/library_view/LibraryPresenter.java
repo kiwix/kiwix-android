@@ -18,16 +18,13 @@
 package org.kiwix.kiwixmobile.zim_manager.library_view;
 
 import android.util.Log;
-
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.data.local.dao.BookDao;
 import org.kiwix.kiwixmobile.data.remote.KiwixService;
 import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
-
-import javax.inject.Inject;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by EladKeyshawn on 06/04/2017.
@@ -41,8 +38,7 @@ public class LibraryPresenter extends BasePresenter<LibraryViewCallback> {
   @Inject
   BookDao bookDao;
 
-  @Inject
-  LibraryPresenter() {
+  @Inject LibraryPresenter() {
   }
 
   void loadBooks() {
@@ -58,7 +54,7 @@ public class LibraryPresenter extends BasePresenter<LibraryViewCallback> {
 
   void loadRunningDownloadsFromDb() {
     for (LibraryNetworkEntity.Book book : bookDao.getDownloadingBooks()) {
-      if (!DownloadFragment.mDownloads.containsValue(book)) {
+      if (!DownloadFragment.downloads.containsValue(book)) {
         book.url = book.remoteUrl;
         view.downloadFile(book);
       }

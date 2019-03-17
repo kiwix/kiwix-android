@@ -2,21 +2,18 @@ package org.kiwix.kiwixmobile.help;
 
 import android.animation.ObjectAnimator;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.kiwix.kiwixmobile.R;
-
-import java.util.HashMap;
-
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import java.util.HashMap;
+import org.kiwix.kiwixmobile.R;
 
 import static org.kiwix.kiwixmobile.utils.AnimationUtils.collapse;
 import static org.kiwix.kiwixmobile.utils.AnimationUtils.expand;
@@ -27,8 +24,8 @@ class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.Item> {
   private final boolean nightMode;
 
   HelpAdapter(HashMap<String, String> titleDescriptionMap, boolean nightMode) {
-    this.titles = titleDescriptionMap.keySet().toArray(new String[titleDescriptionMap.size()]);
-    this.descriptions = titleDescriptionMap.values().toArray(new String[titleDescriptionMap.size()]);
+    this.titles = titleDescriptionMap.keySet().toArray(new String[0]);
+    this.descriptions = titleDescriptionMap.values().toArray(new String[0]);
     this.nightMode = nightMode;
   }
 
@@ -66,7 +63,7 @@ class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.Item> {
       ButterKnife.bind(this, itemView);
     }
 
-    @OnClick({R.id.item_help_title, R.id.item_help_toggle_expand})
+    @OnClick({ R.id.item_help_title, R.id.item_help_toggle_expand })
     void toggleDescriptionVisibility() {
       if (description.getVisibility() == View.GONE) {
         ObjectAnimator.ofFloat(toggleDescriptionVisibility, "rotation", 0, 180).start();

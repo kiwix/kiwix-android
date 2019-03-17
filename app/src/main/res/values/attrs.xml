@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <resources>
 
-  <attr name="progressBackgroundColor" format="color"/>
-  <attr name="arrowBackDrawable" format="integer"/>
-  <attr name="arrowForwardDrawable" format="integer"/>
-  <attr name="listBackground" format="reference|color"/>
-  <attr name="drawerBackground" format="reference|color"/>
-  <attr name="plusDrawable" format="reference|color"/>
-  <attr name="deleteDrawable" format="reference|color"/>
-  <attr name="tabDrawable" format="reference|color"/>
-  <attr name="dividerColor" format="reference|color"/>
-  <attr name="selectedBackground" format="reference|color"/>
+  <attr format="color" name="progressBackgroundColor"/>
+  <attr format="integer" name="arrowBackDrawable"/>
+  <attr format="integer" name="arrowForwardDrawable"/>
+  <attr format="reference|color" name="listBackground"/>
+  <attr format="reference|color" name="drawerBackground"/>
+  <attr format="reference|color" name="plusDrawable"/>
+  <attr format="reference|color" name="deleteDrawable"/>
+  <attr format="reference|color" name="tabDrawable"/>
+  <attr format="reference|color" name="dividerColor"/>
+  <attr format="reference|color" name="selectedBackground"/>
 
   <declare-styleable name="SliderPreference">
     <attr name="android:summary"/>
   </declare-styleable>
 
   <declare-styleable name="AnimatedProgressBar">
-    <attr name="progressColor" format="color"/>
-    <attr name="backgroundColor" format="color"/>
-    <attr name="bidirectionalAnimate" format="boolean"/>
+    <attr format="color" name="progressColor"/>
+    <attr format="color" name="backgroundColor"/>
+    <attr format="boolean" name="bidirectionalAnimate"/>
   </declare-styleable>
 
 </resources>

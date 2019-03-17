@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
   <item
-    android:id="@+id/menu_search"
-    android:icon="@drawable/action_search"
-    android:title="@string/menu_search"
-    android:visible="false"
-    app:actionViewClass="android.support.v7.widget.SearchView"
-    app:iconifiedByDefault="false"
-    app:showAsAction="ifRoom|collapseActionView" />
+      android:id="@+id/menu_search"
+      android:icon="@drawable/action_search"
+      android:title="@string/menu_search"
+      android:visible="false"
+      app:actionViewClass="androidx.appcompat.widget.SearchView"
+      app:iconifiedByDefault="false"
+      app:showAsAction="ifRoom|collapseActionView"/>
 
   <item
-    android:id="@+id/menu_searchintext"
-    android:title="@string/menu_searchintext"
-    app:showAsAction="ifRoom|withText" />
+      android:id="@+id/menu_searchintext"
+      android:title="@string/menu_searchintext"
+      app:showAsAction="ifRoom|withText"/>
 
 </menu>

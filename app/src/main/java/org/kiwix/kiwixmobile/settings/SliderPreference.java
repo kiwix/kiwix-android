@@ -19,19 +19,24 @@ package org.kiwix.kiwixmobile.settings;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
 import org.kiwix.kiwixmobile.R;
+
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_NIGHTMODE;
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_ZOOM_ENABLED;
 
 public class SliderPreference extends DialogPreference {
 
   protected final static int SEEKBAR_MAX = 500;
 
   protected int mSeekBarValue;
+
+  protected int initialSeekBarValue;
 
   protected CharSequence[] mSummaries;
 
@@ -95,10 +100,6 @@ public class SliderPreference extends DialogPreference {
     }
   }
 
-  public void setSummary(CharSequence[] summaries) {
-    mSummaries = summaries;
-  }
-
   @Override
   public void setSummary(int summaryResId) {
     try {
@@ -107,6 +108,10 @@ public class SliderPreference extends DialogPreference {
     } catch (Exception e) {
       super.setSummary(summaryResId);
     }
+  }
+
+  public void setSummary(CharSequence[] summaries) {
+    mSummaries = summaries;
   }
 
   public void setValue(float value) {
@@ -127,6 +132,7 @@ public class SliderPreference extends DialogPreference {
     SeekBar seekbar = view.findViewById(R.id.slider_preference_seekbar);
     seekbar.setMax(SEEKBAR_MAX);
     seekbar.setProgress(mSeekBarValue);
+    initialSeekBarValue = mSeekBarValue;
     seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
       @Override
@@ -152,7 +158,34 @@ public class SliderPreference extends DialogPreference {
   protected void onDialogClosed(boolean positiveResult) {
     if (positiveResult && callChangeListener(mSeekBarValue)) {
       setValue(mSeekBarValue);
+    } else {
+      mSeekBarValue = initialSeekBarValue;
     }
     super.onDialogClosed(positiveResult);
+  }
+
+  @Override
+  protected void onBindView(View view) {
+    super.onBindView(view);
+    setGrayState(view);
+  }
+
+  private void setGrayState(View view) {
+    boolean enabled = getPreferenceManager().getSharedPreferences().getBoolean(PREF_ZOOM_ENABLED, false);
+    boolean Nightmode = getPreferenceManager().getSharedPreferences().getBoolean(PREF_NIGHTMODE, false);
+    TextView titleView = view.findViewById(android.R.id.title);
+    TextView summaryTV = view.findViewById(android.R.id.summary);
+    if (!enabled) {
+      titleView.setTextColor(Color.GRAY);
+      summaryTV.setTextColor(Color.GRAY);
+    } else {
+      if (Nightmode) {
+        titleView.setTextColor(Color.WHITE);
+        summaryTV.setTextColor(Color.WHITE);
+      } else {
+        titleView.setTextColor(Color.BLACK);
+        summaryTV.setTextColor(Color.BLACK);
+      }
+    }
   }
 }

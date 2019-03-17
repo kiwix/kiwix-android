@@ -13,6 +13,7 @@
   <string name="menu_exitfullscreen">Exit full screen</string>
   <string name="menu_read_aloud">Read aloud</string>
   <string name="menu_read_aloud_stop">Stop reading aloud</string>
+  <string name="menu_support_kiwix">Support Kiwix</string>
   <string name="save_media">Save Media</string>
   <string name="save_media_error">An error occurred when trying to save the media!</string>
   <string name="save_media_saved">Saved media as %s to Android/media/org.kiwix…/</string>
@@ -56,6 +57,8 @@
   <string name="pref_clear_all_history_summary">Clear recent searches and tabs history</string>
   <string name="all_history_cleared_toast">All History Cleared</string>
   <string name="clear_all_history_dialog_title">Clear All History</string>
+  <string name="share">Share</string>
+  <string name="selected_file_cab_app_chooser_title">Share ZIM files with:</string>
   <string name="delete">Delete</string>
   <string name="delete_specific_search_toast">Recent search removed</string>
   <string name="hint_contents_drawer_message">You can swipe left to view the contents of this article</string>
@@ -90,9 +93,9 @@
   <string name="zim_file_downloading">Downloading</string>
   <string name="zim_file_downloaded">Downloaded</string>
   <string name="download_pause">Pause</string>
-  <string name="download_play">Play</string>
   <string name="download_stop">Stop</string>
   <string name="download_paused">paused</string>
+  <string name="download_resume">Resume</string>
   <string name="no_downloads_here">No downloads here</string>
   <string name="no_files_here">No files here</string>
   <string name="download_complete_snackbar">Download complete</string>

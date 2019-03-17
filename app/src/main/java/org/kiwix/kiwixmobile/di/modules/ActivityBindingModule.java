@@ -1,5 +1,7 @@
 package org.kiwix.kiwixmobile.di.modules;
 
+import dagger.Module;
+import dagger.android.ContributesAndroidInjector;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.bookmark.BookmarksModule;
 import org.kiwix.kiwixmobile.di.PerActivity;
@@ -17,9 +19,6 @@ import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.splash.SplashActivity;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
-
-import dagger.Module;
-import dagger.android.ContributesAndroidInjector;
 
 /**
  * Dagger.Android annotation processor will create the sub-components. We also specify the modules
