@@ -47,7 +47,7 @@
       android:layout_height="wrap_content"
       android:text="@string/human_kind_knowledge"
       android:textAlignment="center"
-      android:textColor="@color/secondary_text"
+      android:textColor="@color/textDarkSecondary"
       android:textSize="15sp"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
