@@ -84,6 +84,7 @@ public final class Constants {
 
   public static final String PREF_SHOW_INTRO = "showIntro";
 
+  public static final String PREF_LAST_BOOK_OPENED = "pref_last_book_opened";
   // Tags
   public static final String TAG_FILE_SEARCHED = "searchedarticle";
 

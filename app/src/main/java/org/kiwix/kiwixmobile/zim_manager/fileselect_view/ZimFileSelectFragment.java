@@ -91,7 +91,7 @@ public class ZimFileSelectFragment extends BaseFragment
   private SwipeRefreshLayout swipeRefreshLayout;
   private ZimManageActivity zimManageActivity;
   private RescanDataAdapter mRescanAdapter;
-  private ArrayList<LibraryNetworkEntity.Book> mFiles;
+  private ArrayList<LibraryNetworkEntity.Book> files;
   private ListView mZimFileList;
   private TextView mFileMessage;
   private boolean mHasRefresh;
@@ -111,7 +111,7 @@ public class ZimFileSelectFragment extends BaseFragment
     mFileMessage = llLayout.findViewById(R.id.file_management_no_files);
     mZimFileList = llLayout.findViewById(R.id.zimfilelist);
 
-    mFiles = new ArrayList<>();
+    files = new ArrayList<>();
 
     // SwipeRefreshLayout for the list view
     swipeRefreshLayout = llLayout.findViewById(R.id.zim_swiperefresh);
@@ -120,7 +120,7 @@ public class ZimFileSelectFragment extends BaseFragment
     // A boolean to distinguish between a user refresh and a normal loading
     mHasRefresh = false;
 
-    mRescanAdapter = new RescanDataAdapter(zimManageActivity, mFiles);
+    mRescanAdapter = new RescanDataAdapter(zimManageActivity, files);
 
     // Allow temporary use of ZimContentProvider to query books
     ZimContentProvider.canIterate = true;
@@ -276,8 +276,8 @@ public class ZimFileSelectFragment extends BaseFragment
     // Long click response is the Contextual Action Bar (Selected file deletion & sharing)
     mZimFileList.setOnItemClickListener(this);
     Collections.sort(books, new FileComparator());
-    mFiles.clear();
-    mFiles.addAll(books);
+    files.clear();
+    files.addAll(books);
     mZimFileList.setAdapter(mRescanAdapter);
     mRescanAdapter.notifyDataSetChanged();
     checkEmpty();
@@ -298,9 +298,9 @@ public class ZimFileSelectFragment extends BaseFragment
   public void addBook(String path) {
     LibraryNetworkEntity.Book book = FileSearch.fileToBook(path);
     if (book != null) {
-      mFiles.add(book);
+      files.add(book);
       mRescanAdapter.notifyDataSetChanged();
-      presenter.saveBooks(mFiles);
+      presenter.saveBooks(files);
       checkEmpty();
     }
   }
@@ -336,10 +336,17 @@ public class ZimFileSelectFragment extends BaseFragment
     new FileSearch(zimManageActivity, new FileSearch.ResultListener() {
       @Override
       public void onBookFound(LibraryNetworkEntity.Book book) {
-        if (!mFiles.contains(book)) {
+        if (!files.contains(book)) {
           zimManageActivity.runOnUiThread(() -> {
-            Log.i("Scanner", "File Search: Found Book " + book.title);
-            mFiles.add(book);
+            Log.i("Scanner", "File Search: Found Book " + book.title + " " + " " + book.bookName + " " + book.id );
+            files.add(book);
+            String lastOpenedBook = sharedPreferenceUtil.getLastBookOpened();
+            for(LibraryNetworkEntity.Book mybook : files){
+                if(mybook.getId().equals(lastOpenedBook)){
+                    Collections.swap(files, files.indexOf(mybook),0);
+                    break;
+                }
+            }
             mRescanAdapter.notifyDataSetChanged();
             checkEmpty();
           });
@@ -349,15 +356,15 @@ public class ZimFileSelectFragment extends BaseFragment
       @Override
       public void onScanCompleted() {
         // Remove non-existent books
-        ArrayList<LibraryNetworkEntity.Book> books = new ArrayList<>(mFiles);
+        ArrayList<LibraryNetworkEntity.Book> books = new ArrayList<>(files);
         for (LibraryNetworkEntity.Book book : books) {
           if (book.file == null || !book.file.canRead()) {
-            mFiles.remove(book);
+            files.remove(book);
           }
         }
 
         boolean cached =
-            mFiles.containsAll(bookDao.getBooks()) && bookDao.getBooks().containsAll(mFiles);
+            files.containsAll(bookDao.getBooks()) && bookDao.getBooks().containsAll(files);
 
         // If content changed then update the list of downloadable books
         if (!cached
@@ -370,7 +377,7 @@ public class ZimFileSelectFragment extends BaseFragment
         // Save the current list of books
         zimManageActivity.runOnUiThread(() -> {
           mRescanAdapter.notifyDataSetChanged();
-          presenter.saveBooks(mFiles);
+          presenter.saveBooks(files);
           checkEmpty();
           TestingUtils.unbindResource(ZimFileSelectFragment.class);
 
@@ -412,7 +419,7 @@ public class ZimFileSelectFragment extends BaseFragment
           .show();
       return;
     }
-
+    sharedPreferenceUtil.updateLastBookOpened(data.getId());
     zimManageActivity.finishResult(file);
   }
 
@@ -424,7 +431,7 @@ public class ZimFileSelectFragment extends BaseFragment
   private void deleteSpecificZimDialog(int position) {
     new AlertDialog.Builder(zimManageActivity, dialogStyle())
         .setMessage(
-            mFiles.get(position).getTitle() + ": " + getString(R.string.delete_specific_zim))
+            files.get(position).getTitle() + ": " + getString(R.string.delete_specific_zim))
         .setPositiveButton(getResources().getString(R.string.delete), (dialog, which) -> {
           // Toast messages updated for coherence with the new manner of file deletion (from CAB)
           if (deleteSpecificZimFile(position)) {
@@ -443,13 +450,13 @@ public class ZimFileSelectFragment extends BaseFragment
   }
 
   private boolean deleteSpecificZimFile(int position) {
-    File file = mFiles.get(position).file;
+    File file = files.get(position).file;
     FileUtils.deleteZimFile(file.getPath());
     if (file.exists()) {
       return false;
     }
-    presenter.deleteBook(mFiles.get(position));
-    mFiles.remove(position);
+    presenter.deleteBook(files.get(position));
+    files.remove(position);
     mRescanAdapter.notifyDataSetChanged();
     checkEmpty();
     if (zimManageActivity.mSectionsPagerAdapter.libraryFragment.libraryAdapter != null) {

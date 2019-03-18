@@ -16,6 +16,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.PREF_FULLSCREEN;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_HIDE_TOOLBAR;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_IS_FIRST_RUN;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_LANG;
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_LAST_BOOK_OPENED;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_NEW_TAB_BACKGROUND;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_NIGHTMODE;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_SHOW_INTRO;
@@ -171,5 +172,13 @@ public class SharedPreferenceUtil {
     sharedPreferences.edit()
         .putBoolean(PREF_SHOW_BOOKMARKS_CURRENT_BOOK, prefShowBookmarksFromCurrentBook)
         .apply();
+  }
+
+  public void updateLastBookOpened(String id){
+      sharedPreferences.edit().putString(PREF_LAST_BOOK_OPENED,id).apply();
+  }
+
+  public String getLastBookOpened(){
+      return sharedPreferences.getString(PREF_LAST_BOOK_OPENED,"null");
   }
 }
