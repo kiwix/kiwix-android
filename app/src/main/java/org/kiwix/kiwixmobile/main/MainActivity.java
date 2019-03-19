@@ -364,6 +364,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     searchFiles();
     tabRecyclerView.setAdapter(tabsAdapter);
     new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
+    drawerLayout.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
   }
 
   //End of onCreate
@@ -532,15 +533,20 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void updateBottomToolbarArrowsAlpha() {
-    if (getCurrentWebView().canGoForward()) {
-      bottomToolbarArrowForward.setAlpha(1f);
-    } else {
-      bottomToolbarArrowForward.setAlpha(0.6f);
+    if (checkNull(bottomToolbarArrowBack)) {
+      if (getCurrentWebView().canGoForward()) {
+        bottomToolbarArrowForward.setAlpha(1f);
+      } else {
+        bottomToolbarArrowForward.setAlpha(0.6f);
+      }
     }
-    if (getCurrentWebView().canGoBack()) {
-      bottomToolbarArrowBack.setAlpha(1f);
-    } else {
-      bottomToolbarArrowBack.setAlpha(0.6f);
+
+    if (checkNull(bottomToolbarArrowForward)) {
+      if (getCurrentWebView().canGoBack()) {
+        bottomToolbarArrowBack.setAlpha(1f);
+      } else {
+        bottomToolbarArrowBack.setAlpha(0.6f);
+      }
     }
   }
 
@@ -777,14 +783,17 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           updateTabSwitcherIcon();
         })
         .show();
+    openDefaultTab();
+    updateTabSwitcherIcon();
+  }
+
+  private void openDefaultTab() {
     new Handler().postDelayed(() -> {
       if (webViewList.size() == 0) {
         newTab(HOME_URL);
       }
-    }, 1500);
-    updateTabSwitcherIcon();
+    }, 100);
   }
-
   private void selectTab(int position) {
     currentWebViewIndex = position;
     tabsAdapter.setSelected(position);
@@ -1155,11 +1164,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   void closeAllTabs() {
     webViewList.clear();
     tabsAdapter.notifyDataSetChanged();
-    new Handler().postDelayed(() -> {
-      if (webViewList.size() == 0) {
-        newTab(HOME_URL);
-      }
-    }, 1500);
+    openDefaultTab();
     updateTabSwitcherIcon();
   }
 
@@ -1287,20 +1292,22 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void updateBottomToolbarVisibility() {
-    if (sharedPreferenceUtil.getPrefBottomToolbar() && !HOME_URL.equals(
-        getCurrentWebView().getUrl())
-        && tabSwitcherRoot.getVisibility() != View.VISIBLE) {
-      bottomToolbar.setVisibility(View.VISIBLE);
-      if (getCurrentWebView() instanceof ToolbarStaticKiwixWebView
-          && sharedPreferenceUtil.getPrefBottomToolbar()) {
-        contentFrame.setPadding(0, 0, 0,
-            (int) getResources().getDimension(R.dimen.bottom_toolbar_height));
+    if (checkNull(bottomToolbar)) {
+      if (sharedPreferenceUtil.getPrefBottomToolbar() && !HOME_URL.equals(
+          getCurrentWebView().getUrl())
+          && tabSwitcherRoot.getVisibility() != View.VISIBLE) {
+        bottomToolbar.setVisibility(View.VISIBLE);
+        if (getCurrentWebView() instanceof ToolbarStaticKiwixWebView
+            && sharedPreferenceUtil.getPrefBottomToolbar()) {
+          contentFrame.setPadding(0, 0, 0,
+              (int) getResources().getDimension(R.dimen.bottom_toolbar_height));
+        } else {
+          contentFrame.setPadding(0, 0, 0, 0);
+        }
       } else {
+        bottomToolbar.setVisibility(View.GONE);
         contentFrame.setPadding(0, 0, 0, 0);
       }
-    } else {
-      bottomToolbar.setVisibility(View.GONE);
-      contentFrame.setPadding(0, 0, 0, 0);
     }
   }
 
@@ -1522,7 +1529,14 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     View tabSwitcher = menu.findItem(R.id.menu_tab_switcher).getActionView();
     tabSwitcherIcon = tabSwitcher.findViewById(R.id.ic_tab_switcher_text);
     updateTabSwitcherIcon();
-    tabSwitcher.setOnClickListener(v -> showTabSwitcher());
+    tabSwitcher.setOnClickListener(v -> {
+      if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
+        hideTabSwitcher();
+        selectTab(currentWebViewIndex);
+      } else {
+        showTabSwitcher();
+      }
+    });
     return true;
   }
 
@@ -1577,14 +1591,16 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void refreshBookmarkSymbol() {
-    if (getCurrentWebView().getUrl() != null &&
-        ZimContentProvider.getId() != null &&
-        !getCurrentWebView().getUrl().equals(HOME_URL)) {
-      int icon = bookmarks.contains(getCurrentWebView().getUrl()) ? R.drawable.ic_bookmark_24dp
-          : R.drawable.ic_bookmark_border_24dp;
-      bottomToolbarBookmark.setImageResource(icon);
-    } else {
-      bottomToolbarBookmark.setImageResource(R.drawable.ic_bookmark_border_24dp);
+    if (checkNull(bottomToolbarBookmark)) {
+      if (getCurrentWebView().getUrl() != null &&
+          ZimContentProvider.getId() != null &&
+          !getCurrentWebView().getUrl().equals(HOME_URL)) {
+        int icon = bookmarks.contains(getCurrentWebView().getUrl()) ? R.drawable.ic_bookmark_24dp
+            : R.drawable.ic_bookmark_border_24dp;
+        bottomToolbarBookmark.setImageResource(icon);
+      } else {
+        bottomToolbarBookmark.setImageResource(R.drawable.ic_bookmark_border_24dp);
+      }
     }
   }
 
@@ -1835,16 +1851,18 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @Override
   public void webViewProgressChanged(int progress) {
-    progressBar.setProgress(progress);
-    if (progress == 100) {
-      if (requestClearHistoryAfterLoad) {
-        Log.d(TAG_KIWIX,
-            "Loading article finished and requestClearHistoryAfterLoad -> clearHistory");
-        getCurrentWebView().clearHistory();
-        requestClearHistoryAfterLoad = false;
-      }
+    if (checkNull(progressBar)) {
+      progressBar.setProgress(progress);
+      if (progress == 100) {
+        if (requestClearHistoryAfterLoad) {
+          Log.d(TAG_KIWIX,
+              "Loading article finished and requestClearHistoryAfterLoad -> clearHistory");
+          getCurrentWebView().clearHistory();
+          requestClearHistoryAfterLoad = false;
+        }
 
-      Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView().getUrl());
+        Log.d(TAG_KIWIX, "Loaded URL: " + getCurrentWebView().getUrl());
+      }
     }
   }
 
@@ -1943,5 +1961,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     } else {
       fileSearch.scan(sharedPreferenceUtil.getPrefStorage());
     }
+  }
+
+  public boolean checkNull(View view) {
+    return view != null;
   }
 }
