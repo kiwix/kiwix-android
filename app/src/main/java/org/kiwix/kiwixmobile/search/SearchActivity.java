@@ -71,11 +71,8 @@ public class SearchActivity extends BaseActivity
   private String searchText;
 
   private TextView errorMessage_textview;
-
   @Inject
   SearchPresenter searchPresenter;
-
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
