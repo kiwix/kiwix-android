@@ -70,7 +70,6 @@ public class SearchActivity extends BaseActivity
   private SearchView searchView;
   private String searchText;
 
-
   private TextView errorMessage_textview;
 
   @Inject
