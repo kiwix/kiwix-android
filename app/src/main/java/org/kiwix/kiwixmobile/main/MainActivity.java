@@ -73,6 +73,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.AutoTransition;
+import androidx.transition.TransitionManager;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
@@ -234,6 +236,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private TextView tabSwitcherIcon;
   private TableDrawerAdapter tableDrawerAdapter;
   private RecyclerView tableDrawerRight;
+  private AutoTransition autoTransition = new AutoTransition();
   private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView,
@@ -365,6 +368,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     tabRecyclerView.setAdapter(tabsAdapter);
     new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
     drawerLayout.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+    autoTransition.setDuration(250).addTarget(tabSwitcherRoot);
   }
 
   //End of onCreate
@@ -489,6 +493,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void showTabSwitcher() {
+    TransitionManager.beginDelayedTransition(contentFrame, autoTransition);
     actionBar.setDisplayHomeAsUpEnabled(true);
     actionBar.setHomeAsUpIndicator(
         ContextCompat.getDrawable(this, R.drawable.ic_round_add_white_36dp));
@@ -508,6 +513,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void hideTabSwitcher() {
+    TransitionManager.beginDelayedTransition(contentFrame, autoTransition);
     actionBar.setDisplayHomeAsUpEnabled(false);
     actionBar.setDisplayShowTitleEnabled(true);
 
@@ -783,17 +789,20 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           updateTabSwitcherIcon();
         })
         .show();
-    openDefaultTab();
-    updateTabSwitcherIcon();
+    if (webViewList.size() == 0) {
+      openDefaultTab();
+    } else {
+      updateTabSwitcherIcon();
+    }
   }
 
   private void openDefaultTab() {
     new Handler().postDelayed(() -> {
-      if (webViewList.size() == 0) {
-        newTab(HOME_URL);
-      }
+      newTab(HOME_URL);
+      hideTabSwitcher();
     }, 100);
   }
+      
   private void selectTab(int position) {
     currentWebViewIndex = position;
     tabsAdapter.setSelected(position);
