@@ -66,19 +66,15 @@ public class HelpActivity extends BaseActivity {
 
   @OnClick({ R.id.activity_help_feedback_text_view, R.id.activity_help_feedback_image_view })
   void sendFeedback() {
-
-    String[] addresses = { CONTACT_EMAIL_ADDRESS };
-
     Intent intent = new Intent(Intent.ACTION_SENDTO);
     intent.setData(Uri.parse("mailto:"));
-    intent.putExtra(Intent.EXTRA_EMAIL, addresses);
+    intent.putExtra(Intent.EXTRA_EMAIL,{ CONTACT_EMAIL_ADDRESS });
     intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback in " + LanguageUtils.getCurrentLocale(this).getDisplayLanguage());
 
     try {
       startActivity(Intent.createChooser(intent, "Send Feedback via Email"));
     }
-    catch(android.content.ActivityNotFoundException ex)
-    {
+    catch(android.content.ActivityNotFoundException ex){
       Toast.makeText(HelpActivity.this, "No email app on device.", Toast.LENGTH_SHORT).show();
     }
   }
@@ -92,4 +88,3 @@ public class HelpActivity extends BaseActivity {
     titleDescriptionMap.put(getString(title), description.toString());
   }
 }
-
