@@ -68,7 +68,7 @@ public class HelpActivity extends BaseActivity {
   void sendFeedback() {
     Intent intent = new Intent(Intent.ACTION_SENDTO);
     intent.setData(Uri.parse("mailto:"));
-    intent.putExtra(Intent.EXTRA_EMAIL,{ CONTACT_EMAIL_ADDRESS });
+    intent.putExtra(Intent.EXTRA_EMAIL,new String[]{ CONTACT_EMAIL_ADDRESS });
     intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback in " + LanguageUtils.getCurrentLocale(this).getDisplayLanguage());
 
     try {
