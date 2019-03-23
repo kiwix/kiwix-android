@@ -22,12 +22,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
+
 import java.util.HashMap;
+
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
@@ -64,17 +67,15 @@ public class HelpActivity extends BaseActivity {
     recyclerView.setAdapter(helpAdapter);
   }
 
-  @OnClick({ R.id.activity_help_feedback_text_view, R.id.activity_help_feedback_image_view })
+  @OnClick({R.id.activity_help_feedback_text_view, R.id.activity_help_feedback_image_view})
   void sendFeedback() {
     Intent intent = new Intent(Intent.ACTION_SENDTO);
     intent.setData(Uri.parse("mailto:"));
-    intent.putExtra(Intent.EXTRA_EMAIL,new String[]{ CONTACT_EMAIL_ADDRESS });
+    intent.putExtra(Intent.EXTRA_EMAIL, new String[]{CONTACT_EMAIL_ADDRESS});
     intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback in " + LanguageUtils.getCurrentLocale(this).getDisplayLanguage());
-
     try {
       startActivity(Intent.createChooser(intent, "Send Feedback via Email"));
-    }
-    catch(android.content.ActivityNotFoundException ex){
+    } catch (android.content.ActivityNotFoundException ex) {
       Toast.makeText(HelpActivity.this, "No email app on device.", Toast.LENGTH_SHORT).show();
     }
   }
