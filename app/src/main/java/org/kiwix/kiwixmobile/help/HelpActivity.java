@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.help;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
@@ -65,14 +66,21 @@ public class HelpActivity extends BaseActivity {
 
   @OnClick({ R.id.activity_help_feedback_text_view, R.id.activity_help_feedback_image_view })
   void sendFeedback() {
+
+    String[] addresses = { CONTACT_EMAIL_ADDRESS };
+
     Intent intent = new Intent(Intent.ACTION_SENDTO);
-    intent.setType("plain/text");
-    String uriText = "mailto:" + Uri.encode(CONTACT_EMAIL_ADDRESS) +
-        "?subject=" + Uri.encode(
-        "Feedback in " + LanguageUtils.getCurrentLocale(this).getDisplayLanguage());
-    Uri uri = Uri.parse(uriText);
-    intent.setData(uri);
-    startActivity(Intent.createChooser(intent, "Send Feedback via Email"));
+    intent.setData(Uri.parse("mailto:"));
+    intent.putExtra(Intent.EXTRA_EMAIL, addresses);
+    intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback in " + LanguageUtils.getCurrentLocale(this).getDisplayLanguage());
+
+    try {
+      startActivity(Intent.createChooser(intent, "Send Feedback via Email"));
+    }
+    catch(android.content.ActivityNotFoundException ex)
+    {
+      Toast.makeText(HelpActivity.this, "No email app on device.", Toast.LENGTH_SHORT).show();
+    }
   }
 
   private void populateMap(int title, int descriptionArray) {
@@ -84,3 +92,4 @@ public class HelpActivity extends BaseActivity {
     titleDescriptionMap.put(getString(title), description.toString());
   }
 }
+
