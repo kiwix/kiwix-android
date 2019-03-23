@@ -64,7 +64,7 @@ public class HelpActivity extends BaseActivity {
     recyclerView.setAdapter(helpAdapter);
   }
 
-  @OnClick({R.id.activity_help_feedback_text_view, R.id.activity_help_feedback_image_view})
+  @OnClick({ R.id.activity_help_feedback_text_view, R.id.activity_help_feedback_image_view })
   void sendFeedback() {
     Intent intent = new Intent(Intent.ACTION_SENDTO);
     intent.setData(Uri.parse("mailto:"));
