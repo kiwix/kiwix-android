@@ -332,6 +332,19 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     handleLocaleCheck();
     setContentView(R.layout.activity_main);
     setSupportActionBar(toolbar);
+    toolbar.setOnTouchListener(new OnSwipeTouchListener(MainActivity.this) {
+      public void onSwipeLeft() {
+        if (currentWebViewIndex < webViewList.size() - 1) {
+          selectTab(currentWebViewIndex + 1);
+        }
+      }
+
+      public void onSwipeRight() {
+        if (currentWebViewIndex > 0) {
+          selectTab(currentWebViewIndex - 1);
+        }
+      }
+    });
     actionBar = getSupportActionBar();
 
     tableDrawerRight =
@@ -794,6 +807,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       }
     }, 100);
   }
+
   private void selectTab(int position) {
     currentWebViewIndex = position;
     tabsAdapter.setSelected(position);
