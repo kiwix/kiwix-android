@@ -73,6 +73,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.AutoTransition;
+import androidx.transition.TransitionManager;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
@@ -101,6 +103,7 @@ import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
+import org.kiwix.kiwixmobile.utils.OnSwipeTouchListener;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
@@ -234,6 +237,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private TextView tabSwitcherIcon;
   private TableDrawerAdapter tableDrawerAdapter;
   private RecyclerView tableDrawerRight;
+  private AutoTransition autoTransition = new AutoTransition();
   private ItemTouchHelper.Callback tabCallback = new ItemTouchHelper.Callback() {
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView,
@@ -333,6 +337,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     setContentView(R.layout.activity_main);
     setSupportActionBar(toolbar);
     actionBar = getSupportActionBar();
+    setToolbarSwipeListener();
 
     tableDrawerRight =
         tableDrawerRightContainer.getHeaderView(0).findViewById(R.id.right_drawer_list);
@@ -424,6 +429,23 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     });
   }
 
+  private void setToolbarSwipeListener() {
+    toolbar.setOnTouchListener(new OnSwipeTouchListener(toolbar.getContext()) {
+      @Override
+      public void onSwipeLeft() {
+        if (currentWebViewIndex < webViewList.size() - 1) {
+          selectTab(currentWebViewIndex + 1);
+        }
+      }
+
+      public void onSwipeRight() {
+        if (currentWebViewIndex > 0) {
+          selectTab(currentWebViewIndex - 1);
+        }
+      }
+    });
+  }
+
   private void setTabListener() {
     tabsAdapter.setTabClickListener(new TabsAdapter.TabClickListener() {
       @Override
@@ -489,6 +511,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void showTabSwitcher() {
+    TransitionManager.beginDelayedTransition(contentFrame, autoTransition);
     actionBar.setDisplayHomeAsUpEnabled(true);
     actionBar.setHomeAsUpIndicator(
         ContextCompat.getDrawable(this, R.drawable.ic_round_add_white_36dp));
@@ -508,6 +531,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void hideTabSwitcher() {
+    TransitionManager.beginDelayedTransition(contentFrame, autoTransition);
     actionBar.setDisplayHomeAsUpEnabled(false);
     actionBar.setDisplayShowTitleEnabled(true);
 
@@ -783,17 +807,20 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           updateTabSwitcherIcon();
         })
         .show();
-    openDefaultTab();
-    updateTabSwitcherIcon();
+    if (webViewList.size() == 0) {
+      openDefaultTab();
+    } else {
+      updateTabSwitcherIcon();
+    }
   }
 
   private void openDefaultTab() {
     new Handler().postDelayed(() -> {
-      if (webViewList.size() == 0) {
-        newTab(HOME_URL);
-      }
+      newTab(HOME_URL);
+      hideTabSwitcher();
     }, 100);
   }
+
   private void selectTab(int position) {
     currentWebViewIndex = position;
     tabsAdapter.setSelected(position);
