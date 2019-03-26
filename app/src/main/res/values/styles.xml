@@ -25,9 +25,9 @@
     <item name="dividerColor">@color/divider_light</item>
     <item name="selectedBackground">@drawable/list_bg_light</item>
     <item name="android:itemBackground">@color/primary_light</item>
-    <item name="android:textColorPrimary">@color/primary</item>
-    <item name="android:textColorSecondary">@color/primary</item>
-    <item name="android:textColorTertiary">@color/primary</item>
+    <item name="android:textColorPrimary">@color/textDarkPrimary</item>
+    <item name="android:textColorSecondary">@color/textDarkSecondary</item>
+    <item name="android:textColorTertiary">@color/textDarkTertiary</item>
     <item name="colorControlNormal">@color/accent</item>
   </style>
 
@@ -47,6 +47,12 @@
     <item name="windowActionModeOverlay">true</item>
     <item name="selectedBackground">@drawable/list_bg_light</item>
     <item name="android:itemBackground">@color/primary_light</item>
+    <item name="drawerBackground">@color/drawer_background_day</item>
+    <item name="dividerColor">@color/divider_light</item>
+    <item name="android:textColorPrimary">@color/textDarkPrimary</item>
+    <item name="android:textColorSecondary">@color/textDarkSecondary</item>
+    <item name="android:textColorTertiary">@color/textDarkTertiary</item>
+    <item name="colorControlNormal">@color/accent</item>
   </style>
 
   <style name="AppTheme.Night" parent="AppTheme.Base">
@@ -59,9 +65,9 @@
     <item name="android:itemBackground">@color/grey</item>
     <item name="android:itemTextAppearance">@color/grey</item>
     <item name="android:textColor">@color/primary_light</item>
-    <item name="android:textColorPrimary">@color/primary_light</item>
-    <item name="android:textColorSecondary">@color/primary_light</item>
-    <item name="android:textColorTertiary">@color/primary_light</item>
+    <item name="android:textColorPrimary">@color/textLightPrimary</item>
+    <item name="android:textColorSecondary">@color/textLightSecondary</item>
+    <item name="android:textColorTertiary">@color/textLightTertiary</item>
     <item name="android:alertDialogTheme">@style/AppTheme.Dialog.Night</item>
     <item name="colorControlNormal">@color/accent</item>
   </style>
@@ -86,8 +92,8 @@
   </style>
 
   <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat">
-    <item name="android:textColorPrimary">@color/primary_text</item>
-    <item name="actionMenuTextColor">@color/primary_text</item>
+    <item name="android:textColorPrimary">@color/textDarkPrimary</item>
+    <item name="actionMenuTextColor">@color/textDarkPrimary</item>
   </style>
 
   <style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
