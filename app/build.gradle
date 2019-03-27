@@ -183,7 +183,7 @@ android {
     cruncherEnabled true
   }
 
-  testBuildType "debug"
+  testBuildType "coverage"
 
   lintOptions {
     // Treat lint seriously
