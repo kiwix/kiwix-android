@@ -32,6 +32,7 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebSettings;
 import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -68,6 +69,18 @@ public class KiwixWebView extends WebView {
     setWebViewClient(new KiwixWebViewClient(callback));
     setWebChromeClient(new KiwixWebChromeClient(callback));
     getSettings().setDomStorageEnabled(true);
+    //=============Adding here===
+    getSettings().setJavaScriptEnabled(true);
+    getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH); 
+    getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+    getSettings().setAppCacheEnabled(true); 
+    getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+    getSettings().setUseWideViewPort(true);
+    getSettings().setSaveFormData(true);
+    getSettings().setSavePassword(true); 
+    getSettings().setEnableSmoothTransition(true); getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+    //===========================
+    
   }
 
   public static float[] getNightModeColors() {
