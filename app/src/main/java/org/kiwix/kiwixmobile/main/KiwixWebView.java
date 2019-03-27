@@ -67,7 +67,20 @@ public class KiwixWebView extends WebView {
     getSettings().setUserAgentString(LanguageUtils.getCurrentLocale(context).toString());
     setWebViewClient(new KiwixWebViewClient(callback));
     setWebChromeClient(new KiwixWebChromeClient(callback));
-    getSettings().setDomStorageEnabled(true);
+    getSettings().setDomStorageEnabled(true); 
+    
+    //=================Added some lines here====================
+    getSettings().setJavaScriptEnabled(true); 
+    getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+    getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+    getSettings().setAppCacheEnabled(true);
+    getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
+    getSettings().setUseWideViewPort(true);
+    getSettings().setSaveFormData(true);
+    getSettings().setSavePassword(true);
+    getSettings().setEnableSmoothTransition(true); 
+    getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
+    //==========================================================
   }
 
   public static float[] getNightModeColors() {
