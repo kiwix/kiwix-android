@@ -3,7 +3,11 @@ package org.kiwix.kiwixmobile.utils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.view.animation.Transformation;
+import androidx.core.content.ContextCompat;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import org.kiwix.kiwixmobile.R;
 
 public class AnimationUtils {
   public static void expand(final View view) {
@@ -60,5 +64,30 @@ public class AnimationUtils {
     animation.setDuration(
         (int) (initialHeight / view.getContext().getResources().getDisplayMetrics().density));
     view.startAnimation(animation);
+  }
+
+  //rotate animation for closeAllTabs FAB
+  public static void rotate(FloatingActionButton v) {
+    RotateAnimation wheelRotation =
+        new RotateAnimation(0.0f, 360f, v.getWidth() / 2.0f, v.getHeight() / 2.0f);
+    wheelRotation.setDuration(200);
+    wheelRotation.setRepeatCount(0);
+    wheelRotation.setInterpolator(v.getContext(), android.R.interpolator.cycle);
+    v.startAnimation(wheelRotation);
+    wheelRotation.setAnimationListener(new Animation.AnimationListener() {
+
+      public void onAnimationEnd(Animation animation) {
+        v.setImageDrawable(
+            ContextCompat.getDrawable(v.getContext(), R.drawable.ic_done_white_24dp));
+      }
+
+      public void onAnimationRepeat(Animation animation) {
+      }
+
+      public void onAnimationStart(Animation animation) {
+        v.setImageDrawable(
+            ContextCompat.getDrawable(v.getContext(), R.drawable.ic_close_white_24dp));
+      }
+    });
   }
 }
