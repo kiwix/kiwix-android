@@ -84,6 +84,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
             historyAdapter.notifyItemRemoved(position);
             historyAdapter.notifyItemRangeChanged(position, historyAdapter.getItemCount());
           }
+          presenter.deleteHistory(new ArrayList<>(deleteList));
           mode.finish();
           return true;
       }
@@ -93,7 +94,6 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     @Override
     public void onDestroyActionMode(ActionMode mode) {
       if (deleteList.size() != 0) {
-        presenter.deleteHistory(new ArrayList<>(deleteList));
         deleteList.clear();
       }
       actionMode = null;
