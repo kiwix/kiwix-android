@@ -21,10 +21,10 @@
       android:layout_height="wrap_content"
       android:layout_marginBottom="24dp"
       android:contentDescription="@string/close_all_tabs"
-      app:backgroundTint="@android:color/black"
+      app:backgroundTint="@android:color/white"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:srcCompat="@drawable/ic_clear_white_24dp"
+      app:srcCompat="@drawable/ic_close_white_24dp"
       />
 </androidx.constraintlayout.widget.ConstraintLayout>
