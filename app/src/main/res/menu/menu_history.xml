@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
   <item
       android:id="@+id/menu_history_search"
@@ -8,7 +9,8 @@
       android:title="@string/search_label"
       app:actionViewClass="androidx.appcompat.widget.SearchView"
       app:iconifiedByDefault="true"
-      app:showAsAction="ifRoom|collapseActionView"/>
+      app:showAsAction="always|collapseActionView"
+      tools:ignore="AlwaysShowAction"/>
 
   <item
       android:id="@+id/menu_history_toggle"

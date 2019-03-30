@@ -1137,7 +1137,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     if (event.getAction() == KeyEvent.ACTION_DOWN) {
       switch (keyCode) {
         case KeyEvent.KEYCODE_BACK:
-          if (getCurrentWebView().canGoBack()) {
+          if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
+            selectTab(currentWebViewIndex);
+            hideTabSwitcher();
+          } else if (getCurrentWebView().canGoBack()) {
             getCurrentWebView().goBack();
           } else if (isFullscreenOpened) {
             closeFullScreen();
@@ -1535,7 +1538,14 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     View tabSwitcher = menu.findItem(R.id.menu_tab_switcher).getActionView();
     tabSwitcherIcon = tabSwitcher.findViewById(R.id.ic_tab_switcher_text);
     updateTabSwitcherIcon();
-    tabSwitcher.setOnClickListener(v -> showTabSwitcher());
+    tabSwitcher.setOnClickListener(v -> {
+      if (tabSwitcherRoot.getVisibility() == View.VISIBLE) {
+        hideTabSwitcher();
+        selectTab(currentWebViewIndex);
+      } else {
+        showTabSwitcher();
+      }
+    });
     return true;
   }
 
@@ -1839,7 +1849,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       presenter.saveHistory(history);
     }
     updateBottomToolbarVisibility();
-    updateTitle();
   }
 
   @Override
