@@ -37,6 +37,8 @@ repositories {
 String[] archs = ['arm64-v8a', 'armeabi', 'mips', 'mips64', 'x86', 'x86_64']
 
 dependencies {
+  // use jdk8 java.time backport, as long app < Build.VERSION_CODES.O
+  implementation("com.jakewharton.threetenabp:threetenabp:1.1.1")
   // Get kiwixlib online if it is not populated locally
   if (file("../kiwixlib/src/main").list().length == 1) {
     implementation 'org.kiwix.kiwixlib:kiwixlib:1.0.11'
@@ -170,7 +172,7 @@ android {
   testServer new TestDroidUpload();
 
   defaultConfig {
-    minSdkVersion 14
+    minSdkVersion 15
     targetSdkVersion 28
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     // See https://github.com/linkedin/dexmaker/issues/65 for why we need the following line.

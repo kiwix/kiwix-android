@@ -3,6 +3,7 @@ package org.kiwix.kiwixmobile.history;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import androidx.appcompat.view.ActionMode;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import java.io.File;
@@ -34,6 +36,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
   private final List<History> historyList = new ArrayList<>();
   private final List<History> fullHistory = new ArrayList<>();
   private final List<History> deleteList = new ArrayList<>();
+  private static final String LIST_STATE_KEY = "recycler_list_state";
 
   @BindView(R.id.toolbar)
   Toolbar toolbar;
@@ -43,6 +46,8 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
   RecyclerView recyclerView;
   private boolean refreshAdapter = true;
   private HistoryAdapter historyAdapter;
+  private LinearLayoutManager layoutManager;
+  private Parcelable listState;
   private ActionMode actionMode;
   private final ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
     @Override
@@ -79,6 +84,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
             historyAdapter.notifyItemRemoved(position);
             historyAdapter.notifyItemRangeChanged(position, historyAdapter.getItemCount());
           }
+          presenter.deleteHistory(new ArrayList<>(deleteList));
           mode.finish();
           return true;
       }
@@ -88,7 +94,6 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     @Override
     public void onDestroyActionMode(ActionMode mode) {
       if (deleteList.size() != 0) {
-        presenter.deleteHistory(new ArrayList<>(deleteList));
         deleteList.clear();
       }
       actionMode = null;
@@ -111,15 +116,34 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
       actionBar.setTitle(R.string.history);
     }
 
-
     historyAdapter = new HistoryAdapter(historyList, deleteList, this);
     recyclerView.setAdapter(historyAdapter);
+    layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+    recyclerView.setLayoutManager(layoutManager);
   }
 
   @Override
   protected void onResume() {
     super.onResume();
     presenter.loadHistory(sharedPreferenceUtil.getShowHistoryCurrentBook());
+    if (listState != null) {
+      layoutManager.onRestoreInstanceState(listState);
+    }
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle state) {
+    super.onSaveInstanceState(state);
+    listState = layoutManager.onSaveInstanceState();
+    state.putParcelable(LIST_STATE_KEY, listState);
+  }
+
+  @Override
+  protected void onRestoreInstanceState(Bundle state) {
+    super.onRestoreInstanceState(state);
+    if (state != null) {
+      listState = state.getParcelable(LIST_STATE_KEY);
+    }
   }
 
   @Override
