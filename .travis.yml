@@ -6,6 +6,8 @@ sudo: required
 
 install:
 - pip install --user 'requests[security]'
+- pip install --user pyOpenSSL
+- pip install --user idna
 - wget -r -nH -nd -np -R index.html* robots.txt* http://download.kiwix.org/dev/android/api/licenses/ -e robots=off -P $ANDROID_HOME/licenses || true
 
 android:
