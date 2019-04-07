@@ -22,6 +22,7 @@ package org.kiwix.kiwixmobile.library;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -225,12 +226,19 @@ public class LibraryAdapter extends BaseAdapter {
         convertView = layoutInflater.inflate(R.layout.library_divider, null);
         holder = new ViewHolder();
         holder.title = convertView.findViewById(R.id.divider_text);
+        holder.subTitle = convertView.findViewById(R.id.divider_subtitle);
         convertView.setTag(holder);
       }
 
-      String dividerText = (String) listItems.get(position).data;
+      DividerItem dividerText = (DividerItem) listItems.get(position).data;
 
-      holder.title.setText(dividerText);
+      holder.title.setText(dividerText.title);
+      if (dividerText.subTitle != null) {
+        holder.subTitle.setText(dividerText.subTitle);
+        holder.subTitle.setVisibility(View.VISIBLE);
+      } else {
+        holder.subTitle.setVisibility(View.GONE);
+      }
 
       return convertView;
     }
@@ -328,6 +336,8 @@ public class LibraryAdapter extends BaseAdapter {
   private static class ViewHolder {
 
     TextView title;
+    
+    TextView subTitle;
 
     TextView description;
 
@@ -370,10 +380,24 @@ public class LibraryAdapter extends BaseAdapter {
             .toList()
             .blockingGet();
 
-        listItems.add(new ListItem(context.getResources().getString(R.string.your_languages),
+        // Get all selected displayed languages from books.
+        HashSet<String> selectedLanguageSet = new HashSet<>();
+        for (Book book : selectedLanguages) {
+          selectedLanguageSet.add(bookUtils.getLanguage(book.getLanguage()));
+        }
+        
+        listItems.add(
+            new ListItem(
+                new DividerItem(
+                    context.getResources().getString(R.string.your_languages),
+                    TextUtils.join(", ", selectedLanguageSet)),
             LIST_ITEM_TYPE_DIVIDER));
         addBooks(selectedLanguages);
-        listItems.add(new ListItem(context.getResources().getString(R.string.other_languages),
+
+        listItems.add(
+            new ListItem(
+                new DividerItem(
+                    context.getResources().getString(R.string.other_languages)),
             LIST_ITEM_TYPE_DIVIDER));
         addBooks(unselectedLanguages);
       } else {
@@ -401,9 +425,18 @@ public class LibraryAdapter extends BaseAdapter {
 
         Collections.sort(unselectedLanguages, new BookMatchComparator());
 
-        listItems.add(new ListItem("In your language:", LIST_ITEM_TYPE_DIVIDER));
+        listItems.add(
+            new ListItem(
+                new DividerItem(
+                    context.getString(R.string.in_your_language)),
+                LIST_ITEM_TYPE_DIVIDER));
         addBooks(selectedLanguages);
-        listItems.add(new ListItem("In other languages:", LIST_ITEM_TYPE_DIVIDER));
+
+        listItems.add(
+            new ListItem(
+                new DividerItem(
+                    context.getString(R.string.in_other_languages)),
+                LIST_ITEM_TYPE_DIVIDER));
         addBooks(unselectedLanguages);
       }
 
@@ -432,6 +465,21 @@ public class LibraryAdapter extends BaseAdapter {
     ListItem(Object data, int type) {
       this.data = data;
       this.type = type;
+    }
+  }
+  
+  // Wrapper for the divider item object.
+  private class DividerItem {
+    final String title;
+    String subTitle;
+    
+    DividerItem(String title) {
+      this.title = title;
+    }
+    
+    DividerItem(String title, String subTitle) {
+      this.title = title;
+      this.subTitle= subTitle;
     }
   }
 

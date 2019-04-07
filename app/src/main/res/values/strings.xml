@@ -245,4 +245,6 @@
   <string name="switch_tabs">Switch tabs</string>
   <string name="smiling_face">:D</string>
   <string name="close_all_tabs">Close all tabs</string>
+  <string name="in_your_language">In your language:</string>
+  <string name="in_other_languages">In other languages:</string>
 </resources>
