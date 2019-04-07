@@ -334,9 +334,8 @@ public class LibraryAdapter extends BaseAdapter {
   }
 
   private static class ViewHolder {
-
     TextView title;
-    
+
     TextView subTitle;
 
     TextView description;
@@ -383,9 +382,11 @@ public class LibraryAdapter extends BaseAdapter {
         // Get all selected displayed languages from books.
         HashSet<String> selectedLanguageSet = new HashSet<>();
         for (Book book : selectedLanguages) {
-          selectedLanguageSet.add(bookUtils.getLanguage(book.getLanguage()));
+          selectedLanguageSet.add(
+              bookUtils.getLanguage(
+                  book.getLanguage()));
         }
-        
+
         listItems.add(
             new ListItem(
                 new DividerItem(
@@ -467,16 +468,16 @@ public class LibraryAdapter extends BaseAdapter {
       this.type = type;
     }
   }
-  
+
   // Wrapper for the divider item object.
   private class DividerItem {
     final String title;
     String subTitle;
-    
+
     DividerItem(String title) {
       this.title = title;
     }
-    
+
     DividerItem(String title, String subTitle) {
       this.title = title;
       this.subTitle= subTitle;
