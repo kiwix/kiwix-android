@@ -19,7 +19,6 @@
 
 package org.kiwix.kiwixmobile.library;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -53,7 +52,6 @@ import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 import org.kiwix.kiwixmobile.models.Language;
 import org.kiwix.kiwixmobile.utils.BookUtils;
-import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
 import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
@@ -231,13 +229,11 @@ public class LibraryAdapter extends BaseAdapter {
       }
 try {
   String dividerText = (String) listItems.get(position).data;
-
   holder.title.setText(dividerText);
 }catch (IndexOutOfBoundsException e){
         e.printStackTrace();
 }
-
-      return convertView;
+     return convertView;
     }
   }
 
@@ -420,11 +416,11 @@ try {
 
     @Override
     protected void publishResults(CharSequence constraint, FilterResults results) {
-
+      
       @SuppressWarnings("unchecked") List<ListItem> filtered = (List<ListItem>) results.values;
       if (filtered != null) {
         if (filtered.isEmpty()) {
-            addBooks(allBooks);
+          addBooks(allBooks);
         }
         notifyDataSetChanged();
       }
