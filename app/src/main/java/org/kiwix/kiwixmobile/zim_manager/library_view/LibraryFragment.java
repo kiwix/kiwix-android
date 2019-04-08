@@ -28,9 +28,11 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -52,6 +54,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
@@ -120,7 +125,6 @@ public class LibraryFragment extends BaseFragment
     swipeRefreshLayout.setOnRefreshListener(this::refreshFragment);
     libraryAdapter = new LibraryAdapter(super.getContext());
     libraryList.setAdapter(libraryAdapter);
-
     DownloadService.setDownloadFragment(activity.mSectionsPagerAdapter.getDownloadFragment());
 
     NetworkInfo network = connectivityManager.getActiveNetworkInfo();
@@ -132,7 +136,7 @@ public class LibraryFragment extends BaseFragment
     activity.registerReceiver(networkBroadcastReceiver,
         new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     isReceiverRegistered = true;
-
+    toastOnRefresh();
     presenter.loadRunningDownloadsFromDb();
     return root;
   }
@@ -163,9 +167,59 @@ public class LibraryFragment extends BaseFragment
     } else {
       libraryAdapter.getFilter().filter("", i -> stopScanningContent());
     }
-    libraryAdapter.notifyDataSetChanged();
+    onRefreshDisableListClick();
+    noRefreshQueryChange();
+    notifyDatachange();
     libraryList.setOnItemClickListener(this);
   }
+
+  public  void notifyDatachange(){
+    // we will notify the update every 0.3 second as the listitem position and content changes
+    final Handler handler = new Handler();
+    handler.postDelayed( new Runnable() {
+
+      @Override
+      public void run() {
+        activity.runOnUiThread(() -> libraryAdapter.notifyDataSetChanged());
+        handler.postDelayed( this, 300 );
+      }
+    }, 300 );
+  }
+  public void onRefreshDisableListClick(){
+    //  we will disable list while refreshing to prevent it from IndexOutofBoundException & IllegalException (notifyDataSetChanged())
+    if(swipeRefreshLayout.isRefreshing()){
+      libraryList.setEnabled(true);
+    }
+    else{
+      libraryList.setEnabled(false);
+    }
+  }
+
+  public void toastOnRefresh(){
+    // we will toast whenever user refreshes the list
+    if(swipeRefreshLayout.isRefreshing()){
+      Toast.makeText(getContext(),"Please wait while Refreshing",Toast.LENGTH_LONG).show();
+    }
+  }
+  public void noRefreshQueryChange(){
+    // on every querytextchange we will disable list action for 1sec to avoid sudden Exception IllegalException( notifyDataSetChanged())
+    Timer timer = new Timer();
+    libraryList.setEnabled(false);
+    if(activity.searchView.getQuery().length()>0){
+    timer.schedule(new TimerTask() {
+
+      @Override
+      public void run() {
+        activity.runOnUiThread(new Runnable() {
+
+          @Override
+          public void run() {
+            libraryList.setEnabled(true);
+          }
+        });
+      }
+    }, 1000);
+  }}
 
   @Override
   public void displayNoNetworkConnection() {
@@ -203,6 +257,7 @@ public class LibraryFragment extends BaseFragment
       permissionButton.setVisibility(GONE);
       swipeRefreshLayout.setEnabled(true);
       swipeRefreshLayout.setRefreshing(true);
+      libraryList.setEnabled(true);
       TestingUtils.bindResource(LibraryFragment.class);
     }
   }
@@ -212,6 +267,8 @@ public class LibraryFragment extends BaseFragment
     networkText.setVisibility(GONE);
     permissionButton.setVisibility(GONE);
     swipeRefreshLayout.setRefreshing(false);
+   // swipeRefreshLayout.setEnabled(false);
+    libraryList.setEnabled(true);
     TestingUtils.unbindResource(LibraryFragment.class);
     IDLING_RESOURCE.decrement();
   }
@@ -222,6 +279,9 @@ public class LibraryFragment extends BaseFragment
       Toast.makeText(super.getActivity(), R.string.no_network_connection, Toast.LENGTH_LONG).show();
       swipeRefreshLayout.setRefreshing(false);
       return;
+    }else {
+      toastOnRefresh();
+      swipeRefreshLayout.setRefreshing(true);
     }
     networkBroadcastReceiver.onReceive(super.getActivity(), null);
   }
