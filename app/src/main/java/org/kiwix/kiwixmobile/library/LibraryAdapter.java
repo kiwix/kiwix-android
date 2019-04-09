@@ -227,13 +227,13 @@ public class LibraryAdapter extends BaseAdapter {
         holder.title = convertView.findViewById(R.id.divider_text);
         convertView.setTag(holder);
       }
-try {
-  String dividerText = (String) listItems.get(position).data;
-  holder.title.setText(dividerText);
-}catch (IndexOutOfBoundsException e){
+      try {
+        String dividerText = (String) listItems.get(position).data;
+        holder.title.setText(dividerText);
+      } catch (IndexOutOfBoundsException e){
         e.printStackTrace();
-}
-     return convertView;
+      }
+      return convertView;
     }
   }
 
@@ -416,15 +416,13 @@ try {
 
     @Override
     protected void publishResults(CharSequence constraint, FilterResults results) {
-      
       @SuppressWarnings("unchecked") List<ListItem> filtered = (List<ListItem>) results.values;
       if (filtered != null) {
         if (filtered.isEmpty()) {
-          addBooks(allBooks);
+            addBooks(allBooks);
         }
-        notifyDataSetChanged();
       }
-
+      notifyDataSetChanged();
     }
   }
 
