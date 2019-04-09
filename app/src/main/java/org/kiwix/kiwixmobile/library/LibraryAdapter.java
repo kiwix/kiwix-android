@@ -418,8 +418,8 @@ public class LibraryAdapter extends BaseAdapter {
     protected void publishResults(CharSequence constraint, FilterResults results) {
       @SuppressWarnings("unchecked") List<ListItem> filtered = (List<ListItem>) results.values;
       if (filtered != null) {
-        if (filtered.isEmpty()) {
-            addBooks(allBooks);
+        if (filtered.isEmpty()) { 
+          addBooks(allBooks);
         }
       }
       notifyDataSetChanged();
