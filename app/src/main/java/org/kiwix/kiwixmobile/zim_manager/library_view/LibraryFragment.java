@@ -133,9 +133,13 @@ public class LibraryFragment extends BaseFragment
     }
 
     networkBroadcastReceiver = new NetworkBroadcastReceiver();
-    activity.registerReceiver(networkBroadcastReceiver,
-        new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-    isReceiverRegistered = true;
+    try {
+      activity.registerReceiver(networkBroadcastReceiver,
+          new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+      isReceiverRegistered = true;
+    }catch (Exception e){
+      e.printStackTrace();
+    }
     toastOnRefresh();
     presenter.loadRunningDownloadsFromDb();
     return root;
@@ -143,11 +147,59 @@ public class LibraryFragment extends BaseFragment
 
   @Override
   public void onStop() {
-    if (isReceiverRegistered) {
+    try {
       activity.unregisterReceiver(networkBroadcastReceiver);
       isReceiverRegistered = false;
+    }catch (Exception e){
+      e.printStackTrace();
     }
     super.onStop();
+  }
+
+  @Override
+  public void onStart() {
+    try {
+      activity.registerReceiver(networkBroadcastReceiver,
+          new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+      isReceiverRegistered = true;
+    }catch (Exception e){
+      e.printStackTrace();
+    }
+    super.onStart();
+  }
+
+  @Override
+  public void onDestroy() {
+    try {
+      activity.unregisterReceiver(networkBroadcastReceiver);
+      isReceiverRegistered = false;
+    }catch (Exception e){
+      e.printStackTrace();
+    }
+    super.onDestroy();
+  }
+
+  @Override
+  public void onPause() {
+    try {
+      activity.unregisterReceiver(networkBroadcastReceiver);
+      isReceiverRegistered = false;
+    }catch (Exception e){
+      e.printStackTrace();
+    }
+    super.onPause();
+  }
+
+  @Override
+  public void onResume() {
+    try {
+      activity.registerReceiver(networkBroadcastReceiver,
+          new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+      isReceiverRegistered = true;
+    }catch (Exception e){
+      e.printStackTrace();
+    }
+    super.onResume();
   }
 
   @Override
