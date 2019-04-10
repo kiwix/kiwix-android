@@ -26,9 +26,7 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import org.kiwix.kiwixmobile.R;
-
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_NIGHTMODE;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_ZOOM_ENABLED;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 public class SliderPreference extends DialogPreference {
 
@@ -171,15 +169,17 @@ public class SliderPreference extends DialogPreference {
   }
 
   private void setGrayState(View view) {
-    boolean enabled = getPreferenceManager().getSharedPreferences().getBoolean(PREF_ZOOM_ENABLED, false);
-    boolean Nightmode = getPreferenceManager().getSharedPreferences().getBoolean(PREF_NIGHTMODE, false);
+    SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(getContext());
+    boolean enabled = sharedPreferenceUtil.getPrefZoomEnabled();
+    boolean nightMode = sharedPreferenceUtil.nightMode();
+
     TextView titleView = view.findViewById(android.R.id.title);
     TextView summaryTV = view.findViewById(android.R.id.summary);
     if (!enabled) {
       titleView.setTextColor(Color.GRAY);
       summaryTV.setTextColor(Color.GRAY);
     } else {
-      if (Nightmode) {
+      if (nightMode) {
         titleView.setTextColor(Color.WHITE);
         summaryTV.setTextColor(Color.WHITE);
       } else {
