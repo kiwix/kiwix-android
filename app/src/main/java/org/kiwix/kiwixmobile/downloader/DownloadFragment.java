@@ -63,7 +63,7 @@ public class DownloadFragment extends BaseFragment {
       new LinkedHashMap<>();
   public static LinkedHashMap<Integer, String> downloadFiles = new LinkedHashMap<>();
   static DownloadAdapter downloadAdapter;
-  public static ListView listView;
+  public static ListView listView; // this static listview prevent Crashing When listview Orientation changes [ fixed issue number #990 ]
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
   private CoordinatorLayout mainLayout;
