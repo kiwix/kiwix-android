@@ -37,6 +37,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -352,60 +353,64 @@ public class LibraryAdapter extends BaseAdapter {
     protected FilterResults performFiltering(CharSequence s) {
       ArrayList<Book> books = bookDao.getBooks();
       listItems.clear();
-      if (s.length() == 0) {
-        List<Book> selectedLanguages = Observable.fromIterable(allBooks)
-            .filter(LibraryAdapter.this::languageActive)
-            .filter(book -> !books.contains(book))
-            .filter(book -> !DownloadFragment.downloads.values().contains(book))
-            .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
-            .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
-            .toList()
-            .blockingGet();
+      try {
+        if (s.length() == 0) {
+          List<Book> selectedLanguages = Observable.fromIterable(allBooks)
+              .filter(LibraryAdapter.this::languageActive)
+              .filter(book -> !books.contains(book))
+              .filter(book -> !DownloadFragment.downloads.values().contains(book))
+              .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
+              .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
+              .toList()
+              .blockingGet();
 
-        List<Book> unselectedLanguages = Observable.fromIterable(allBooks)
-            .filter(book -> !languageActive(book))
-            .filter(book -> !books.contains(book))
-            .filter(book -> !DownloadFragment.downloads.values().contains(book))
-            .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
-            .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
-            .toList()
-            .blockingGet();
+          List<Book> unselectedLanguages = Observable.fromIterable(allBooks)
+              .filter(book -> !languageActive(book))
+              .filter(book -> !books.contains(book))
+              .filter(book -> !DownloadFragment.downloads.values().contains(book))
+              .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
+              .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
+              .toList()
+              .blockingGet();
 
-        listItems.add(new ListItem(context.getResources().getString(R.string.your_languages),
-            LIST_ITEM_TYPE_DIVIDER));
-        addBooks(selectedLanguages);
-        listItems.add(new ListItem(context.getResources().getString(R.string.other_languages),
-            LIST_ITEM_TYPE_DIVIDER));
-        addBooks(unselectedLanguages);
-      } else {
-        List<Book> selectedLanguages = Observable.fromIterable(allBooks)
-            .filter(LibraryAdapter.this::languageActive)
-            .filter(book -> !books.contains(book))
-            .filter(book -> !DownloadFragment.downloads.values().contains(book))
-            .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
-            .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
-            .flatMap(book -> getMatches(book, s.toString()))
-            .toList()
-            .blockingGet();
+          listItems.add(new ListItem(context.getResources().getString(R.string.your_languages),
+              LIST_ITEM_TYPE_DIVIDER));
+          addBooks(selectedLanguages);
+          listItems.add(new ListItem(context.getResources().getString(R.string.other_languages),
+              LIST_ITEM_TYPE_DIVIDER));
+          addBooks(unselectedLanguages);
+        } else {
+          List<Book> selectedLanguages = Observable.fromIterable(allBooks)
+              .filter(LibraryAdapter.this::languageActive)
+              .filter(book -> !books.contains(book))
+              .filter(book -> !DownloadFragment.downloads.values().contains(book))
+              .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
+              .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
+              .flatMap(book -> getMatches(book, s.toString()))
+              .toList()
+              .blockingGet();
 
-        Collections.sort(selectedLanguages, new BookMatchComparator());
+          Collections.sort(selectedLanguages, new BookMatchComparator());
 
-        List<Book> unselectedLanguages = Observable.fromIterable(allBooks)
-            .filter(book -> !languageActive(book))
-            .filter(book -> !books.contains(book))
-            .filter(book -> !DownloadFragment.downloads.values().contains(book))
-            .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
-            .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
-            .flatMap(book -> getMatches(book, s.toString()))
-            .toList()
-            .blockingGet();
+          List<Book> unselectedLanguages = Observable.fromIterable(allBooks)
+              .filter(book -> !languageActive(book))
+              .filter(book -> !books.contains(book))
+              .filter(book -> !DownloadFragment.downloads.values().contains(book))
+              .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
+              .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
+              .flatMap(book -> getMatches(book, s.toString()))
+              .toList()
+              .blockingGet();
 
-        Collections.sort(unselectedLanguages, new BookMatchComparator());
+          Collections.sort(unselectedLanguages, new BookMatchComparator());
 
-        listItems.add(new ListItem("In your language:", LIST_ITEM_TYPE_DIVIDER));
-        addBooks(selectedLanguages);
-        listItems.add(new ListItem("In other languages:", LIST_ITEM_TYPE_DIVIDER));
-        addBooks(unselectedLanguages);
+          listItems.add(new ListItem("In your language:", LIST_ITEM_TYPE_DIVIDER));
+          addBooks(selectedLanguages);
+          listItems.add(new ListItem("In other languages:", LIST_ITEM_TYPE_DIVIDER));
+          addBooks(unselectedLanguages);
+        }
+      }catch (ConcurrentModificationException e){
+        e.printStackTrace();
       }
 
       FilterResults results = new FilterResults();
