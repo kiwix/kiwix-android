@@ -226,7 +226,7 @@ public class LibraryFragment extends BaseFragment
   }
 
   public  void notifyDatachange(){
-    // we will notify the update every 0.3 second as the listitem position and content changes
+    // we will notify the update within 0.3 second whenever the listview is re-visible as the listitem position and content changes
     final Handler handler = new Handler();
     handler.postDelayed( new Runnable() {
 
