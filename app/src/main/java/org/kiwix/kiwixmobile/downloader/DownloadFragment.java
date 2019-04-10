@@ -63,7 +63,7 @@ public class DownloadFragment extends BaseFragment {
       new LinkedHashMap<>();
   public static LinkedHashMap<Integer, String> downloadFiles = new LinkedHashMap<>();
   static DownloadAdapter downloadAdapter;
-  ListView listView;
+  public static ListView listView;
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
   private CoordinatorLayout mainLayout;
@@ -98,7 +98,7 @@ public class DownloadFragment extends BaseFragment {
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
+                           Bundle savedInstanceState) {
     activity = getActivity();
     RelativeLayout relLayout =
         (RelativeLayout) inflater.inflate(R.layout.download_management, container, false);
