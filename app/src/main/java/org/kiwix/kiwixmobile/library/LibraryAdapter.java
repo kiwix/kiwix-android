@@ -234,6 +234,7 @@ public class LibraryAdapter extends BaseAdapter {
       } catch (IndexOutOfBoundsException e){
         e.printStackTrace();
       }
+      
       return convertView;
     }
   }
