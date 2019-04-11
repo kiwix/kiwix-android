@@ -2,6 +2,8 @@ language: android
 
 jdk: oraclejdk8
 
+sudo: required
+
 install:
 - pip install --user 'requests[security]'
 - wget -r -nH -nd -np -R index.html* robots.txt* http://download.kiwix.org/dev/android/api/licenses/ -e robots=off -P $ANDROID_HOME/licenses || true
