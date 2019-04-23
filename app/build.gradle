@@ -23,7 +23,10 @@ buildscript {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 apply plugin: 'checkstyle'
+apply plugin: "org.jlleitschuh.gradle.ktlint"
 
 repositories {
   google()
@@ -145,6 +148,8 @@ dependencies {
       }
     }
   }
+  implementation "androidx.core:core-ktx:1.0.1"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 // Set custom app import directory
