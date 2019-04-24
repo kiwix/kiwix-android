@@ -8,13 +8,14 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.1.0'
     classpath 'com.testdroid:gradle:1.5.0'
     classpath 'org.apache.httpcomponents:httpclient-android:4.3.3'
   }
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 apply plugin: 'checkstyle'
 apply plugin: 'testdroid'
 
@@ -138,6 +139,7 @@ dependencies {
       }
     }
   }
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 // Set custom app import directory
