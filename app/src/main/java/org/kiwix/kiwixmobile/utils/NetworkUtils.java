@@ -28,18 +28,20 @@ import org.kiwix.kiwixmobile.R;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
 public class NetworkUtils {
-
+  /**
+   * check availability of any network
+   * @return true if a network is ready to be used
+   */
   public static boolean isNetworkAvailable(Context context) {
     ConnectivityManager connectivity = (ConnectivityManager) context
-        .getSystemService(Context.CONNECTIVITY_SERVICE);
+      .getSystemService(Context.CONNECTIVITY_SERVICE);
     if (connectivity == null) {
       return false;
     } else {
-      NetworkInfo[] info = connectivity.getAllNetworkInfo();
-      if (info != null) {
-        for (NetworkInfo anInfo : info) {
-          if (anInfo.getState() == NetworkInfo.State.CONNECTED
-              || anInfo.getState() == NetworkInfo.State.CONNECTING) {
+      NetworkInfo[] networkInfos = connectivity.getAllNetworkInfo();
+      if (networkInfos != null) {
+        for (NetworkInfo networkInfo : networkInfos) {
+          if (isNetworkConnectionOK(networkInfo)) {
             return true;
           }
         }
@@ -48,22 +50,33 @@ public class NetworkUtils {
     return false;
   }
 
+  static boolean isNetworkConnectionOK(NetworkInfo networkInfo) {
+    return networkInfo.getState() == NetworkInfo.State.CONNECTED;
+  }
+
+
+  /**
+   * check if network of type WIFI is connected
+   * @param context
+   * @return true if WIFI is connected
+   */
+  //TODO method isWiFi should be renamed to isWifiConnected to express the state which is checked (postponed to refactoring deprecated android.net.* usage)
   public static boolean isWiFi(Context context) {
     ConnectivityManager connectivity = (ConnectivityManager) context
-        .getSystemService(Context.CONNECTIVITY_SERVICE);
+      .getSystemService(Context.CONNECTIVITY_SERVICE);
     if (connectivity == null) {
       return false;
     }
 
     if (Build.VERSION.SDK_INT >= 23) {
-      NetworkInfo network = connectivity.getActiveNetworkInfo();
-      if (network == null) {
+      NetworkInfo networkInfo = connectivity.getActiveNetworkInfo();
+      if (networkInfo == null) {
         return false;
       }
-      return network.getType() == ConnectivityManager.TYPE_WIFI;
+      return networkInfo.getType() == ConnectivityManager.TYPE_WIFI && networkInfo.isConnected();
     } else {
       NetworkInfo wifi = connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-      return wifi.isConnected();
+      return wifi != null && wifi.isConnected();
     }
   }
 
