@@ -8,13 +8,14 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.1.0'
     classpath 'com.testdroid:gradle:1.5.0'
     classpath 'org.apache.httpcomponents:httpclient-android:4.3.3'
   }
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 apply plugin: 'checkstyle'
 apply plugin: 'testdroid'
 
@@ -121,8 +122,8 @@ dependencies {
   androidTestImplementation 'junit:junit:4.12'
 
   // Mockito
-  testImplementation "org.mockito:mockito-core:2.7.22"
-  androidTestImplementation "org.mockito:mockito-android:2.7.22"
+  testImplementation "org.mockito:mockito-core:2.24.5"
+  androidTestImplementation "org.mockito:mockito-android:2.24.5"
 
   // Leak canary
   implementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
@@ -138,6 +139,7 @@ dependencies {
       }
     }
   }
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 // Set custom app import directory
