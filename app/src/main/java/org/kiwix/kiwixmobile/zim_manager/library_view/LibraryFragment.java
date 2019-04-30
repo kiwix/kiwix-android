@@ -19,16 +19,13 @@ package org.kiwix.kiwixmobile.zim_manager.library_view;
 
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -42,45 +39,40 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.base.BaseFragment;
-import org.kiwix.kiwixmobile.downloader.DownloadFragment;
-import org.kiwix.kiwixmobile.downloader.DownloadIntent;
-import org.kiwix.kiwixmobile.downloader.DownloadService;
-import org.kiwix.kiwixmobile.library.LibraryAdapter;
-import org.kiwix.kiwixmobile.utils.NetworkUtils;
-import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
-import org.kiwix.kiwixmobile.utils.StorageUtils;
-import org.kiwix.kiwixmobile.utils.StyleUtils;
-import org.kiwix.kiwixmobile.utils.TestingUtils;
-import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import eu.mhutti1.utils.storage.StorageDevice;
 import eu.mhutti1.utils.storage.support.StorageSelectDialog;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import javax.inject.Inject;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.base.BaseFragment;
+import org.kiwix.kiwixmobile.di.components.ActivityComponent;
+import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
+import org.kiwix.kiwixmobile.downloader.DownloadService;
+import org.kiwix.kiwixmobile.downloader.Downloader;
+import org.kiwix.kiwixmobile.library.LibraryAdapter;
+import org.kiwix.kiwixmobile.utils.NetworkUtils;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
+import org.kiwix.kiwixmobile.utils.StyleUtils;
+import org.kiwix.kiwixmobile.utils.TestingUtils;
+import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 
 import static android.view.View.GONE;
-import static org.kiwix.kiwixmobile.downloader.DownloadService.KIWIX_ROOT;
 import static org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
-import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOK;
 
 public class LibraryFragment extends BaseFragment
     implements AdapterView.OnItemClickListener, StorageSelectDialog.OnSelectListener, LibraryViewCallback {
 
-
   @BindView(R.id.library_list)
   ListView libraryList;
+
   @BindView(R.id.network_permission_text)
   TextView networkText;
   @BindView(R.id.network_permission_button)
@@ -94,15 +86,13 @@ public class LibraryFragment extends BaseFragment
   private ArrayList<Book> books = new ArrayList<>();
 
   public static DownloadService mService = new DownloadService();
-
-  private boolean mBound;
-
   public LibraryAdapter libraryAdapter;
-
-  private DownloadServiceConnection mConnection = new DownloadServiceConnection();
 
   @Inject
   ConnectivityManager conMan;
+
+  @Inject
+  Downloader downloader;
 
   private ZimManageActivity faActivity;
 
@@ -119,9 +109,13 @@ public class LibraryFragment extends BaseFragment
   SharedPreferenceUtil sharedPreferenceUtil;
 
   @Override
+  public void inject(@NotNull ActivityComponent activityComponent) {
+    activityComponent.inject(this);
+  }
+
+  @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
-    KiwixApplication.getApplicationComponent().inject(this);
     TestingUtils.bindResource(LibraryFragment.class);
     llLayout = (LinearLayout) inflater.inflate(R.layout.activity_library, container, false);
     ButterKnife.bind(this, llLayout);
@@ -134,7 +128,6 @@ public class LibraryFragment extends BaseFragment
     libraryAdapter = new LibraryAdapter(super.getContext());
     libraryList.setAdapter(libraryAdapter);
 
-    DownloadService.setDownloadFragment(faActivity.mSectionsPagerAdapter.getDownloadFragment());
 
 
     NetworkInfo network = conMan.getActiveNetworkInfo();
@@ -249,15 +242,6 @@ public class LibraryFragment extends BaseFragment
   }
 
   @Override
-  public void onDestroyView() {
-    super.onDestroyView();
-    if (mBound && super.getActivity() != null) {
-      super.getActivity().unbindService(mConnection.downloadServiceInterface);
-      mBound = false;
-    }
-  }
-
-  @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
     if (!libraryAdapter.isDivider(position)) {
       if (getSpaceAvailable()
@@ -284,19 +268,19 @@ public class LibraryFragment extends BaseFragment
         return;
       }
 
-      if (DownloadFragment.mDownloadFiles
-          .containsValue(KIWIX_ROOT + StorageUtils.getFileNameFromUrl(((Book) parent.getAdapter()
-              .getItem(position)).getUrl()))) {
-        Toast.makeText(super.getActivity(), getString(R.string.zim_already_downloading), Toast.LENGTH_LONG)
-            .show();
-      } else {
-
-        NetworkInfo network = conMan.getActiveNetworkInfo();
-        if (network == null || !network.isConnected()) {
-          Toast.makeText(super.getActivity(), getString(R.string.no_network_connection), Toast.LENGTH_LONG)
-              .show();
-          return;
-        }
+      //      if (DownloadFragment.mDownloadFiles
+      //          .containsValue(KIWIX_ROOT + StorageUtils.getFileNameFromUrl(((Book) parent.getAdapter()
+      //              .getItem(position)).getUrl()))) {
+      //        Toast.makeText(super.getActivity(), getString(R.string.zim_already_downloading), Toast.LENGTH_LONG)
+      //            .show();
+      //      } else {
+      //
+      //        NetworkInfo network = conMan.getActiveNetworkInfo();
+      //        if (network == null || !network.isConnected()) {
+      //          Toast.makeText(super.getActivity(), getString(R.string.no_network_connection), Toast.LENGTH_LONG)
+      //              .show();
+      //          return;
+      //        }
 
         if (KiwixMobileActivity.wifiOnly && !NetworkUtils.isWiFi(getContext())) {
           new AlertDialog.Builder(getContext())
@@ -315,26 +299,19 @@ public class LibraryFragment extends BaseFragment
         }
       }
     }
-  }
 
   @Override
   public void downloadFile(Book book) {
-    downloadingBooks.add(book);
-    if (libraryAdapter != null && faActivity != null && faActivity.searchView != null) {
-      libraryAdapter.getFilter().filter(faActivity.searchView.getQuery());
-    }
-    Toast.makeText(super.getActivity(), getString(R.string.download_started_library), Toast.LENGTH_LONG)
-        .show();
-    Intent service = new Intent(super.getActivity(), DownloadService.class);
-    service.putExtra(DownloadIntent.DOWNLOAD_URL_PARAMETER, book.getUrl());
-    service.putExtra(DownloadIntent.DOWNLOAD_ZIM_TITLE, book.getTitle());
-    service.putExtra(EXTRA_BOOK, book);
-    super.getActivity().startService(service);
-    mConnection = new DownloadServiceConnection();
-    super.getActivity()
-        .bindService(service, mConnection.downloadServiceInterface, Context.BIND_AUTO_CREATE);
-    ZimManageActivity manage = (ZimManageActivity) super.getActivity();
-    manage.displayDownloadInterface();
+    downloader.download(book);
+    //    downloadingBooks.add(book);
+    //    if (libraryAdapter != null && faActivity != null && faActivity.searchView != null) {
+    //      libraryAdapter.getFilter().filter(faActivity.searchView.getQuery());
+    //    }
+    //    Toast.makeText(super.getActivity(), getString(R.string.download_started_library), Toast.LENGTH_LONG)
+    //        .show();
+    //
+    //    ZimManageActivity manage = (ZimManageActivity) super.getActivity();
+    //    manage.displayDownloadInterface();
   }
 
   public long getSpaceAvailable() {
@@ -351,28 +328,6 @@ public class LibraryFragment extends BaseFragment
     }
   }
 
-  public class DownloadServiceConnection {
-    public DownloadServiceInterface downloadServiceInterface;
-
-    public DownloadServiceConnection() {
-      downloadServiceInterface = new DownloadServiceInterface();
-    }
-
-    public class DownloadServiceInterface implements ServiceConnection {
-
-      @Override
-      public void onServiceConnected(ComponentName className, IBinder service) {
-        // We've bound to LocalService, cast the IBinder and get LocalService instance
-        DownloadService.LocalBinder binder = (DownloadService.LocalBinder) service;
-        mService = binder.getService();
-        mBound = true;
-      }
-
-      @Override
-      public void onServiceDisconnected(ComponentName arg0) {
-      }
-    }
-  }
 
   public class NetworkBroadcastReceiver extends BroadcastReceiver {
     @Override

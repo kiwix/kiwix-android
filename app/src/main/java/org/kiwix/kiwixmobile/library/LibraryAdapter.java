@@ -30,18 +30,12 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.google.common.collect.ImmutableList;
-
-import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.database.BookDao;
-import org.kiwix.kiwixmobile.database.NetworkLanguageDao;
-import org.kiwix.kiwixmobile.downloader.DownloadFragment;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
-import org.kiwix.kiwixmobile.utils.BookUtils;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
-
+import io.reactivex.Completable;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,14 +46,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-
 import javax.inject.Inject;
-
-import io.reactivex.Completable;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import org.kiwix.kiwixmobile.KiwixApplication;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.database.BookDao;
+import org.kiwix.kiwixmobile.database.NetworkLanguageDao;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
+import org.kiwix.kiwixmobile.utils.BookUtils;
+import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
 import static org.kiwix.kiwixmobile.utils.NetworkUtils.parseURL;
 
@@ -81,6 +75,7 @@ public class LibraryAdapter extends BaseAdapter {
   @Inject
   BookDao bookDao;
 
+  //TODO: restore functionality of commented out code
   public LibraryAdapter(Context context) {
     super();
     KiwixApplication.getApplicationComponent().inject(this);
@@ -244,7 +239,7 @@ public class LibraryAdapter extends BaseAdapter {
         List<Book> selectedLanguages = Observable.fromIterable(allBooks)
             .filter(LibraryAdapter.this::languageActive)
             .filter(book -> !books.contains(book))
-            .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
+            //            .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
             .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
             .toList()
@@ -253,7 +248,7 @@ public class LibraryAdapter extends BaseAdapter {
         List<Book> unselectedLanguages = Observable.fromIterable(allBooks)
             .filter(book -> !languageActive(book))
             .filter(book -> !books.contains(book))
-            .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
+            //            .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
             .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
             .toList()
@@ -267,7 +262,7 @@ public class LibraryAdapter extends BaseAdapter {
         List<Book> selectedLanguages = Observable.fromIterable(allBooks)
             .filter(LibraryAdapter.this::languageActive)
             .filter(book -> !books.contains(book))
-            .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
+            //            .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
             .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
             .flatMap(book -> getMatches(book, s.toString()))
@@ -279,7 +274,7 @@ public class LibraryAdapter extends BaseAdapter {
         List<Book> unselectedLanguages = Observable.fromIterable(allBooks)
             .filter(book -> !languageActive(book))
             .filter(book -> !books.contains(book))
-            .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
+            //            .filter(book -> !DownloadFragment.mDownloads.values().contains(book))
             .filter(book -> !LibraryFragment.downloadingBooks.contains(book))
             .filter(book -> !book.url.contains("/stack_exchange/")) // Temp filter see #694
             .flatMap(book -> getMatches(book, s.toString()))

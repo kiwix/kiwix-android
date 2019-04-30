@@ -68,7 +68,7 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
     super.attachBaseContext(base);
     application = this;
     setApplicationComponent(DaggerApplicationComponent.builder()
-        .applicationModule(new ApplicationModule(this))
+        .context(this)
         .build());
   }
 

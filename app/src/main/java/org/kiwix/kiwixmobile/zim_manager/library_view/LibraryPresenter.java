@@ -18,16 +18,12 @@
 package org.kiwix.kiwixmobile.zim_manager.library_view;
 
 import android.util.Log;
-
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import javax.inject.Inject;
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.database.BookDao;
-import org.kiwix.kiwixmobile.downloader.DownloadFragment;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
-
-import javax.inject.Inject;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by EladKeyshawn on 06/04/2017.
@@ -58,16 +54,11 @@ public class LibraryPresenter extends BasePresenter<LibraryViewCallback> {
 
   void loadRunningDownloadsFromDb() {
     for (LibraryNetworkEntity.Book book : bookDao.getDownloadingBooks()) {
-      if (!DownloadFragment.mDownloads.containsValue(book)) {
+      //      if (!DownloadFragment.mDownloads.containsValue(book)) {
         book.url = book.remoteUrl;
         getMvpView().downloadFile(book);
-      }
+      //      }
     }
-  }
-
-  @Override
-  public void attachView(LibraryViewCallback view) {
-    super.attachView(view);
   }
 
 }

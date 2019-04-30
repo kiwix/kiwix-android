@@ -21,27 +21,24 @@ package org.kiwix.kiwixmobile.database;
 
 import android.content.Context;
 import android.util.Log;
-
 import com.yahoo.squidb.data.SquidDatabase;
 import com.yahoo.squidb.data.adapter.SQLiteDatabaseWrapper;
 import com.yahoo.squidb.sql.Table;
-
-import org.kiwix.kiwixmobile.ZimContentProvider;
-import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
-import org.kiwix.kiwixmobile.database.entity.Bookmarks;
-import org.kiwix.kiwixmobile.database.entity.LibraryDatabaseEntity;
-import org.kiwix.kiwixmobile.database.entity.NetworkLanguageDatabaseEntity;
-import org.kiwix.kiwixmobile.database.entity.RecentSearch;
-import org.kiwix.kiwixmobile.utils.UpdateUtils;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.kiwix.kiwixmobile.ZimContentProvider;
+import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
+import org.kiwix.kiwixmobile.database.entity.Bookmarks;
+import org.kiwix.kiwixmobile.database.entity.DownloadDatabaseEntity;
+import org.kiwix.kiwixmobile.database.entity.LibraryDatabaseEntity;
+import org.kiwix.kiwixmobile.database.entity.NetworkLanguageDatabaseEntity;
+import org.kiwix.kiwixmobile.database.entity.RecentSearch;
+import org.kiwix.kiwixmobile.utils.UpdateUtils;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
@@ -69,7 +66,8 @@ public class KiwixDatabase extends SquidDatabase {
         LibraryDatabaseEntity.TABLE,
         RecentSearch.TABLE,
         Bookmarks.TABLE,
-        NetworkLanguageDatabaseEntity.TABLE
+        NetworkLanguageDatabaseEntity.TABLE,
+        DownloadDatabaseEntity.TABLE
     };
   }
 

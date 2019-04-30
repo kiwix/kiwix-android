@@ -17,9 +17,12 @@
  */
 package org.kiwix.kiwixmobile.di.components;
 
+import android.content.Context;
+import dagger.BindsInstance;
+import dagger.Component;
+import javax.inject.Singleton;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.ZimContentProvider;
-import org.kiwix.kiwixmobile.base.BaseFragment;
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
 import org.kiwix.kiwixmobile.di.modules.JNIModule;
 import org.kiwix.kiwixmobile.di.modules.NetworkModule;
@@ -28,12 +31,6 @@ import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 import org.kiwix.kiwixmobile.views.web.KiwixWebView;
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
-
-import javax.inject.Singleton;
-
-import dagger.Component;
 
 @Singleton
 @Component(modules = {
@@ -42,15 +39,20 @@ import dagger.Component;
     JNIModule.class,
 })
 public interface ApplicationComponent {
+
+  @Component.Builder
+  interface Builder {
+
+    @BindsInstance Builder context(Context context);
+
+    ApplicationComponent build();
+  }
+
+  ActivityComponent.Builder activityComponent();
+
   void inject(KiwixApplication application);
 
   void inject(DownloadService service);
-
-  void inject(LibraryFragment libraryFragment);
-
-  void inject(BaseFragment baseFragment);
-
-  void inject(ZimFileSelectFragment zimFileSelectFragment);
 
   void inject(ZimContentProvider zimContentProvider);
 
