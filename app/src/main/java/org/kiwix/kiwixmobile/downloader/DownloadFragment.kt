@@ -33,7 +33,8 @@ import org.kiwix.kiwixmobile.base.BaseFragment
 import org.kiwix.kiwixmobile.di.components.ActivityComponent
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.utils.DialogShower
-import org.kiwix.kiwixmobile.utils.KiwixDialog
+import org.kiwix.kiwixmobile.utils.KiwixDialog.YesNoDialog.NoWifi
+import org.kiwix.kiwixmobile.utils.KiwixDialog.YesNoDialog.StopDownload
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 import javax.inject.Inject
@@ -46,7 +47,7 @@ class DownloadFragment : BaseFragment() {
   @Inject lateinit var downloader: Downloader
   lateinit var zimManageViewModel: ZimManageViewModel
   private val downloadAdapter = DownloadAdapter {
-    dialogShower.show(KiwixDialog.StopDownload, { downloader.cancelDownload(it) })
+    dialogShower.show(StopDownload, { downloader.cancelDownload(it) })
   }
 
   override fun inject(activityComponent: ActivityComponent) {
@@ -98,7 +99,7 @@ class DownloadFragment : BaseFragment() {
     context: Context?,
     yesAction: Runnable
   ) {
-    dialogShower.show(KiwixDialog.NoWifi, {
+    dialogShower.show(NoWifi, {
       sharedPreferenceUtil.putPrefWifiOnly(false)
       KiwixMobileActivity.wifiOnly = false
       yesAction.run()

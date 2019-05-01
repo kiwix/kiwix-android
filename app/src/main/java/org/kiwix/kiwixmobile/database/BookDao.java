@@ -17,18 +17,17 @@
  */
 package org.kiwix.kiwixmobile.database;
 
-
+import com.yahoo.squidb.data.SimpleDataChangedNotifier;
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
-
-import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
-import org.kiwix.kiwixmobile.utils.files.FileUtils;
-
+import io.reactivex.Flowable;
+import io.reactivex.processors.PublishProcessor;
 import java.io.File;
 import java.util.ArrayList;
-
+import java.util.List;
 import javax.inject.Inject;
+import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
 import static org.kiwix.kiwixmobile.downloader.ChunkUtils.hasParts;
 
@@ -38,14 +37,26 @@ import static org.kiwix.kiwixmobile.downloader.ChunkUtils.hasParts;
 
 public class BookDao {
   private KiwixDatabase mDb;
+  private final PublishProcessor<List<Book>> booksProcessor = PublishProcessor.create();
 
   @Inject
   public BookDao(KiwixDatabase kiwixDatabase) {
     this.mDb = kiwixDatabase;
+    kiwixDatabase.registerDataChangedNotifier(
+        new SimpleDataChangedNotifier(BookDatabaseEntity.TABLE) {
+          @Override
+          protected void onDataChanged() {
+            booksProcessor.onNext(getBooks());
+          }
+        });
   }
 
+  public Flowable<List<Book>> books() {
+    return booksProcessor.startWith(getBooks()).distinctUntilChanged();
+  }
   
   public void setBookDetails(Book book, SquidCursor<BookDatabaseEntity> bookCursor) {
+    book.databaseId = bookCursor.get(BookDatabaseEntity.ID);
     book.id = bookCursor.get(BookDatabaseEntity.BOOK_ID);
     book.title = bookCursor.get(BookDatabaseEntity.TITLE);
     book.description = bookCursor.get(BookDatabaseEntity.DESCRIPTION);
@@ -80,7 +91,7 @@ public class BookDao {
     mDb.persist(bookDatabaseEntity);
   }
   
-  public ArrayList<Book> getBooks() {
+  public List<Book> getBooks() {
     SquidCursor<BookDatabaseEntity> bookCursor = mDb.query(
         BookDatabaseEntity.class,
         Query.select());
@@ -117,7 +128,7 @@ public class BookDao {
     return books;
   }
 
-  public void saveBooks(ArrayList<Book> books) {
+  public void saveBooks(List<Book> books) {
     for (Book book : books) {
       if (book != null) {
         BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();

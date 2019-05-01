@@ -4,14 +4,19 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
+import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
+import org.kiwix.kiwixmobile.database.BookDao
 import org.kiwix.kiwixmobile.database.DownloadDao
+import org.kiwix.kiwixmobile.downloader.Downloader
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.downloader.model.DownloadState.Successful
 import org.kiwix.kiwixmobile.downloader.model.DownloadStatus
-import org.kiwix.kiwixmobile.downloader.Downloader
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver
 import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
@@ -33,19 +38,62 @@ import javax.inject.Inject
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 class ZimManageViewModel @Inject constructor(
-  val downloadDao: DownloadDao,
-  val downloader: Downloader
+  private val downloadDao: DownloadDao,
+  private val bookDao: BookDao,
+  private val downloader: Downloader,
+  private val storageObserver: StorageObserver
 ) : ViewModel() {
+
   val downloadItems: MutableLiveData<List<DownloadItem>> = MutableLiveData()
+  val bookItems: MutableLiveData<List<Book>> = MutableLiveData()
+  val checkFileSystem = PublishProcessor.create<Unit>()
+  val deviceListIsRefreshing = MutableLiveData<Boolean>()
+
   private val compositeDisposable = CompositeDisposable()
 
   init {
     val downloadStatuses = downloadStatuses()
+    val booksFromDao = books()
     compositeDisposable.addAll(
         updateDownloadItems(downloadStatuses),
-        removeCompletedDownloadsFromDb(downloadStatuses)
+        removeCompletedDownloadsFromDb(downloadStatuses),
+        updateBookItems(booksFromDao),
+        checkFileSystemForBooksOnRequest(booksFromDao)
     )
   }
+
+  private fun checkFileSystemForBooksOnRequest(booksFromDao: Flowable<List<Book>>): Disposable? {
+    return checkFileSystem
+        .doOnNext { deviceListIsRefreshing.postValue(true) }
+        .switchMap {
+          updateBookDaoFromFilesystem(booksFromDao)
+        }
+        .doOnNext { deviceListIsRefreshing.postValue(false) }
+        .subscribe(
+            bookDao::saveBooks,
+            Throwable::printStackTrace
+        )
+  }
+
+  private fun books() = bookDao.books()
+      .subscribeOn(Schedulers.io())
+      .map { it.sortedBy { book -> book.title } }
+
+  private fun updateBookDaoFromFilesystem(booksFromDao: Flowable<List<Book>>) =
+    storageObserver.booksOnFileSystem.withLatestFrom(
+        booksFromDao,
+        BiFunction<Collection<Book>, List<Book>, List<Book>> { booksFileSystem, booksDao ->
+          booksFileSystem.minus(
+              booksDao
+          )
+        })
+
+  private fun updateBookItems(booksFromDao: Flowable<List<Book>>) =
+    booksFromDao
+        .subscribe(
+            bookItems::postValue,
+            Throwable::printStackTrace
+        )
 
   private fun removeCompletedDownloadsFromDb(downloadStatuses: Flowable<List<DownloadStatus>>) =
     downloadStatuses.subscribe(

@@ -233,7 +233,7 @@ public class LibraryAdapter extends BaseAdapter {
   private class BookFilter extends Filter {
     @Override
     protected FilterResults performFiltering(CharSequence s) {
-      ArrayList<Book> books = bookDao.getBooks();
+      List<Book> books = bookDao.getBooks();
       listItems.clear();
       if (s.length() == 0) {
         List<Book> selectedLanguages = Observable.fromIterable(allBooks)

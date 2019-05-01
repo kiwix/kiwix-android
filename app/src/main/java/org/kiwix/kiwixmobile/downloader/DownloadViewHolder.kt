@@ -19,15 +19,14 @@ package org.kiwix.kiwixmobile.downloader
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.ImageView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.download_item.description
 import kotlinx.android.synthetic.main.download_item.downloadProgress
 import kotlinx.android.synthetic.main.download_item.favicon
 import kotlinx.android.synthetic.main.download_item.stop
 import kotlinx.android.synthetic.main.download_item.title
-import org.kiwix.kiwixmobile.downloader.model.Base64String
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
+import org.kiwix.kiwixmobile.extensions.setBitmap
 
 class DownloadViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
     LayoutContainer {
@@ -41,16 +40,6 @@ class DownloadViewHolder(override val containerView: View) : RecyclerView.ViewHo
     downloadProgress.progress = downloadItem.progress
     stop.setOnClickListener {
       itemClickListener.invoke(downloadItem)
-    }
-  }
-
-  private fun ImageView.setBitmap(base64String: Base64String) {
-    if (tag != base64String) {
-      base64String.toBitmap()
-          ?.let {
-            setImageBitmap(it)
-            tag = base64String
-          }
     }
   }
 }

@@ -16,15 +16,17 @@ class AlertDialogShower @Inject constructor(
   ) {
 
     AlertDialog.Builder(activity, dialogStyle())
-        .setTitle(dialog.title)
-        .setMessage(dialog.message)
-        .setPositiveButton(dialog.positiveMessage) { _, _ ->
-          clickListener.getOrNull(0)
-              ?.invoke()
-        }
-        .setNegativeButton(dialog.negativeMessage) { _, _ ->
-          clickListener.getOrNull(1)
-              ?.invoke()
+        .apply {
+          dialog.title?.let { setTitle(it) }
+          setMessage(dialog.message)
+          setPositiveButton(dialog.positiveMessage) { _, _ ->
+            clickListener.getOrNull(0)
+                ?.invoke()
+          }
+          setNegativeButton(dialog.negativeMessage) { _, _ ->
+            clickListener.getOrNull(1)
+                ?.invoke()
+          }
         }
         .show()
   }

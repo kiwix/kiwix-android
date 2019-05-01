@@ -18,13 +18,12 @@
  */
 package org.kiwix.kiwixmobile.library.entity;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-
 import java.io.File;
 import java.io.Serializable;
 import java.util.LinkedList;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Root;
 
 @Root(name = "library", strict = false)
 public class LibraryNetworkEntity {
@@ -45,6 +44,8 @@ public class LibraryNetworkEntity {
 
   @Root(name = "book", strict = false)
   public static class Book implements Serializable{
+    @Attribute(name = "databaseId", required = false)
+    public long databaseId;
 
     @Attribute(name = "id", required = false)
     public String id;

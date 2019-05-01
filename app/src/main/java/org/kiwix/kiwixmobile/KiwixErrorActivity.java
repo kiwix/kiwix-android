@@ -10,6 +10,7 @@ import android.support.v4.content.FileProvider;
 import android.widget.Button;
 import android.widget.CheckBox;
 
+import java.util.List;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.database.BookDao;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
@@ -89,7 +90,7 @@ public class KiwixErrorActivity extends BaseActivity {
       }
 
       if(allowZimsCheckbox.isChecked()) {
-        ArrayList<LibraryNetworkEntity.Book> books = bookDao.getBooks();
+        List<LibraryNetworkEntity.Book> books = bookDao.getBooks();
 
         StringBuilder sb = new StringBuilder();
         for(LibraryNetworkEntity.Book book: books) {
