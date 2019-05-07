@@ -27,6 +27,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import java.util.ArrayList;
 import org.kiwix.kiwixmobile.ZimContentProvider;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 
@@ -109,11 +110,13 @@ public class FileSearch {
     FilenameFilter[] filter = new FilenameFilter[zimFiles.length];
 
     // Search all external directories that we can find.
-    String[] tempRoots = new String[StorageDeviceUtils.getStorageDevices(context, false).size() + 2];
+    final ArrayList<StorageDevice> storageDevices =
+        StorageDeviceUtils.getStorageDevices(context, false);
+    String[] tempRoots = new String[storageDevices.size() + 2];
     int j = 0;
     tempRoots[j++] = "/mnt";
     tempRoots[j++] = defaultPath;
-    for (StorageDevice storageDevice : StorageDeviceUtils.getStorageDevices(context, false)) {
+    for (StorageDevice storageDevice : storageDevices) {
       tempRoots[j++] = storageDevice.getName();
     }
 

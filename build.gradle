@@ -14,7 +14,7 @@ buildscript {
 }
 
 ext {
-  supportLibraryVersion = '27.0.2'
+  supportLibraryVersion = '27.1.1'
   rxJavaVersion = '2.1.9'
   rxAndroidVersion = '2.0.2'
   okHttpVersion = '3.9.1'

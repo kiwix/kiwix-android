@@ -16,7 +16,7 @@ sealed class KiwixDialog(
   open class YesNoDialog(
     title: Int,
     message: Int
-  ) : KiwixDialog(title, message, R.string.yes, R.string.no){
+  ) : KiwixDialog(title, message, R.string.yes, R.string.no) {
     object NoWifi : YesNoDialog(
         R.string.wifi_only_title, R.string.wifi_only_msg
     )
@@ -25,9 +25,8 @@ sealed class KiwixDialog(
         R.string.confirm_stop_download_title, R.string.confirm_stop_download_msg
     )
 
-
+    object WifiOnly : YesNoDialog(
+        R.string.wifi_only_title, R.string.wifi_only_msg
+    )
   }
-
-
-
 }

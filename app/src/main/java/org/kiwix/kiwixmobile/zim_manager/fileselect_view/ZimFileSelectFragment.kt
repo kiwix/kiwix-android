@@ -63,8 +63,8 @@ class ZimFileSelectFragment : BaseFragment() {
 
   private lateinit var zimManageViewModel: ZimManageViewModel
 
-  private val rescanAdapter: RescanDataAdapter by lazy {
-    RescanDataAdapter(
+  private val booksAdapter: BooksAdapter by lazy {
+    BooksAdapter(
         bookUtils, this::open, this::tryToDelete
     )
   }
@@ -92,12 +92,12 @@ class ZimFileSelectFragment : BaseFragment() {
         .get(ZimManageViewModel::class.java)
     zim_swiperefresh.setOnRefreshListener(this::requestFileSystemCheck)
     zimfilelist.run {
-      adapter = rescanAdapter
+      adapter = booksAdapter
       layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
       setHasFixedSize(true)
     }
     zimManageViewModel.bookItems.observe(this, Observer {
-      rescanAdapter.itemList = it!!
+      booksAdapter.itemList = it!!
       checkEmpty(it)
     })
     zimManageViewModel.deviceListIsRefreshing.observe(this, Observer {
@@ -151,7 +151,7 @@ class ZimFileSelectFragment : BaseFragment() {
   }
 
   private fun requestFileSystemCheck() {
-    zimManageViewModel.checkFileSystem.onNext(Unit)
+    zimManageViewModel.requestFileSystemCheck.onNext(Unit)
   }
 
   private fun open(it: Book) {

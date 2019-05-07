@@ -2,9 +2,7 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view
 
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
-import android.widget.TextView
+import butterknife.internal.DebouncingOnClickListener
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.library_item.creator
 import kotlinx.android.synthetic.main.library_item.date
@@ -18,13 +16,15 @@ import kotlinx.android.synthetic.main.library_item.title
 import org.kiwix.kiwixmobile.KiwixApplication
 import org.kiwix.kiwixmobile.downloader.model.Base64String
 import org.kiwix.kiwixmobile.extensions.setBitmap
+import org.kiwix.kiwixmobile.extensions.setTextAndVisibility
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.utils.BookUtils
 import org.kiwix.kiwixmobile.utils.NetworkUtils
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.MegaByte
 
-class RescanViewHolder(
+class BooksViewHolder(
   override val containerView: View,
-  val bookUtils: BookUtils
+  private val bookUtils: BookUtils
 ) : ViewHolder(containerView),
     LayoutContainer {
   fun bind(
@@ -37,7 +37,7 @@ class RescanViewHolder(
     creator.setTextAndVisibility(book.creator)
     publisher.setTextAndVisibility(book.publisher)
     date.setTextAndVisibility(book.date)
-    size.setTextAndVisibility(book.size)
+    size.setTextAndVisibility(MegaByte(book.size).humanReadable)
     language.text = bookUtils.getLanguage(book.getLanguage())
     fileName.text = NetworkUtils.parseURL(
         KiwixApplication.getInstance(), book.file.path
@@ -52,13 +52,6 @@ class RescanViewHolder(
       return@setOnLongClickListener true
     }
   }
-
-  private fun TextView.setTextAndVisibility(title: String?) =
-    if (title != null && title.isNotEmpty()) {
-      text = title
-      visibility = VISIBLE
-    } else {
-      visibility = GONE
-    }
-
 }
+
+

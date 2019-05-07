@@ -30,7 +30,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.library.LibraryAdapter;
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
 import java.util.List;
@@ -46,7 +46,7 @@ public class LanguageSelectDialog extends AlertDialog {
   }
 
   public static class Builder extends AlertDialog.Builder {
-    private List<LibraryAdapter.Language> languages;
+    private List<Language> languages;
     private Map<String, Integer> languageCounts;
     private boolean singleSelect = false;
     private String selectedLanguage;
@@ -60,7 +60,7 @@ public class LanguageSelectDialog extends AlertDialog {
       super(context, themeResId);
     }
 
-    public Builder setLanguages(List<LibraryAdapter.Language> languages) {
+    public Builder setLanguages(List<Language> languages) {
       this.languages = languages;
       return this;
     }
@@ -114,13 +114,13 @@ public class LanguageSelectDialog extends AlertDialog {
     }
   }
 
-  private static class LanguageArrayAdapter extends ArrayAdapter<LibraryAdapter.Language> {
+  private static class LanguageArrayAdapter extends ArrayAdapter<Language> {
     private Map<String, Integer> languageCounts;
     private Context context;
     private boolean singleSelect;
     private String selectedLanguage;
 
-    public LanguageArrayAdapter(Context context, int textViewResourceId, List<LibraryAdapter.Language> languages,
+    public LanguageArrayAdapter(Context context, int textViewResourceId, List<Language> languages,
                                 Map<String, Integer> languageCounts, boolean singleSelect, String selectedLanguage) {
       super(context, textViewResourceId, languages);
       this.languageCounts = languageCounts;
@@ -150,36 +150,36 @@ public class LanguageSelectDialog extends AlertDialog {
       // Set event listeners first, since updating the default values can trigger them.
       holder.row.setOnClickListener((view) -> holder.checkBox.toggle());
       holder.checkBox
-          .setOnCheckedChangeListener((compoundButton, b) -> getItem(position).active = b);
+          .setOnCheckedChangeListener((compoundButton, b) -> getItem(position).setActive(b));
 
-      LibraryAdapter.Language language = getItem(position);
-      holder.language.setText(language.language);
+      Language language = getItem(position);
+      holder.language.setText(language.getLanguage());
       holder.languageLocalized.setText(context.getString(R.string.language_localized,
-              language.languageLocalized));
+              language.getLanguageLocalized()));
       holder.languageLocalized.setTypeface(Typeface.createFromAsset(context.getAssets(),
-              LanguageUtils.getTypeface(language.languageCode)));
+              LanguageUtils.getTypeface(language.getLanguageCode())));
 
       if (languageCounts != null) {
         holder.languageEntriesCount.setText(context.getString(R.string.language_count,
-            languageCounts.get(language.languageCode)));
+            languageCounts.get(language.getLanguageCode())));
       } else {
         holder.languageEntriesCount.setVisibility(View.GONE);
       }
 
       if (!singleSelect) {
-        holder.checkBox.setChecked(language.active);
+        holder.checkBox.setChecked(language.getActive());
       } else {
         holder.checkBox.setClickable(false);
         holder.checkBox.setFocusable(false);
 
-        if (getSelectedLanguage().equalsIgnoreCase(language.languageCodeISO2)) {
+        if (getSelectedLanguage().equalsIgnoreCase(language.getLanguageCodeISO2())) {
           holder.checkBox.setChecked(true);
         } else {
           holder.checkBox.setChecked(false);
         }
 
         convertView.setOnClickListener((v -> {
-          setSelectedLanguage(language.languageCodeISO2);
+          setSelectedLanguage(language.getLanguageCodeISO2());
           notifyDataSetChanged();
         }));
       }

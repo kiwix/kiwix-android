@@ -14,16 +14,13 @@
   <dimen name="abc_dropdownitem_text_padding_right">8dip</dimen>
   <dimen name="library_textview_padding">75dp</dimen>
   <dimen name="library_font_size">20sp</dimen>
-  <dimen name="library_article_list_padding">60dp</dimen>
   <dimen name="network_permission_text_margin_top">200dp</dimen>
   <dimen name="network_permission_button_margin_top">230dp</dimen>
   <dimen name="bookmark_title_text_size">15sp</dimen>
-  <dimen name="download_management_no_downloads_padding_bottom">75dp</dimen>
   <dimen name="help_cardview_card_elevation">2dp</dimen>
   <dimen name="kiwix_search_widget_layout_id_height">50dp</dimen>
   <dimen name="file_management_no_files_padding_bottom">75dp</dimen>
   <dimen name="file_management_no_files_text_size">20sp</dimen>
-  <dimen name="zimfilelist_padding_bottom">60dp</dimen>
   <dimen name="webview_search_edit_text_margin_right">10dip</dimen>
   <dimen name="progressbar_layout_margin_top">300dp</dimen>
   <dimen name="fullscreen_control_button_margin">7dp</dimen>

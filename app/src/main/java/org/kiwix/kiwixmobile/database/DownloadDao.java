@@ -50,8 +50,14 @@ public class DownloadDao {
   }
 
   public void insert(final DownloadModel downloadModel) {
-    kiwixDatabase.persistWithOnConflict(databaseEntity(downloadModel),
-        TableStatement.ConflictAlgorithm.REPLACE);
+    if (doesNotAlreadyExist(downloadModel)) {
+      kiwixDatabase.persistWithOnConflict(databaseEntity(downloadModel),
+          TableStatement.ConflictAlgorithm.REPLACE);
+    }
+  }
+
+  private boolean doesNotAlreadyExist(DownloadModel downloadModel) {
+    return kiwixDatabase.count(DownloadDatabaseEntity.class, DownloadDatabaseEntity.BOOK_ID.eq(downloadModel.getBookId())) == 0;
   }
 
   public void delete(@NotNull Long... downloadIds) {

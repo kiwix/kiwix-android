@@ -19,7 +19,6 @@
 
 package org.kiwix.kiwixmobile.utils;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
@@ -33,7 +32,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import org.kiwix.kiwixmobile.library.LibraryAdapter;
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
 import java.lang.reflect.Field;
@@ -45,7 +44,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_LANG;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
 public class LanguageUtils {
@@ -239,11 +237,11 @@ public class LanguageUtils {
     return values;
   }
 
-  public List<LibraryAdapter.Language> getLanguageList() {
-    List<LibraryAdapter.Language> values = new ArrayList<>();
+  public List<Language> getLanguageList() {
+    List<Language> values = new ArrayList<>();
 
     for (LanguageContainer value : mLanguageList) {
-      values.add(new LibraryAdapter.Language(value.getLanguageCode(), false));
+      values.add(new Language(value.getLanguageCode(), false));
     }
 
     return values;

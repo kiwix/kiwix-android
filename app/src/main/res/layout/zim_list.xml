@@ -11,11 +11,7 @@
   <TextView
       android:id="@+id/file_management_no_files"
       android:layout_width="wrap_content"
-      android:layout_height="match_parent"
-      android:layout_centerInParent="true"
-      android:layout_gravity="center_vertical"
-      android:gravity="center_vertical"
-      android:orientation="vertical"
+      android:layout_height="wrap_content"
       android:paddingBottom="@dimen/file_management_no_files_padding_bottom"
       android:text="@string/no_files_here"
       android:textSize="@dimen/file_management_no_files_text_size"
@@ -37,8 +33,7 @@
         android:id="@+id/zimfilelist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null"
-        android:paddingBottom="@dimen/zimfilelist_padding_bottom"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
 
   </android.support.v4.widget.SwipeRefreshLayout>

@@ -1,0 +1,232 @@
+/*
+ * Kiwix Android
+ * Copyright (C) 2018  Kiwix <android.kiwix.org>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+package org.kiwix.kiwixmobile.zim_manager.library_view
+
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
+import android.net.ConnectivityManager
+import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.view.LayoutInflater
+import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.view.ViewGroup
+import eu.mhutti1.utils.storage.StorageDevice
+import eu.mhutti1.utils.storage.support.StorageSelectDialog
+import kotlinx.android.synthetic.main.activity_library.libraryErrorText
+import kotlinx.android.synthetic.main.activity_library.libraryList
+import kotlinx.android.synthetic.main.activity_library.librarySwipeRefresh
+import org.kiwix.kiwixmobile.KiwixMobileActivity
+import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.R.string
+import org.kiwix.kiwixmobile.base.BaseFragment
+import org.kiwix.kiwixmobile.di.components.ActivityComponent
+import org.kiwix.kiwixmobile.downloader.Downloader
+import org.kiwix.kiwixmobile.extensions.snack
+import org.kiwix.kiwixmobile.extensions.toast
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.utils.BookUtils
+import org.kiwix.kiwixmobile.utils.DialogShower
+import org.kiwix.kiwixmobile.utils.KiwixDialog.YesNoDialog.WifiOnly
+import org.kiwix.kiwixmobile.utils.NetworkUtils
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
+import org.kiwix.kiwixmobile.utils.StyleUtils
+import org.kiwix.kiwixmobile.utils.TestingUtils
+import org.kiwix.kiwixmobile.zim_manager.NetworkState
+import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
+import org.kiwix.kiwixmobile.zim_manager.NetworkState.NOT_CONNECTED
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryAdapter
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryDelegate.BookDelegate
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryDelegate.DividerDelegate
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
+import java.io.File
+import javax.inject.Inject
+
+class LibraryFragment : BaseFragment() {
+
+  @Inject lateinit var conMan: ConnectivityManager
+  @Inject lateinit var downloader: Downloader
+  @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
+  @Inject lateinit var dialogShower: DialogShower
+  @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+  @Inject lateinit var bookUtils: BookUtils
+  private lateinit var zimManageViewModel: ZimManageViewModel
+
+  private val libraryAdapter: LibraryAdapter by lazy {
+    LibraryAdapter(
+        delegates = *arrayOf(BookDelegate(bookUtils, this::onBookItemClick), DividerDelegate)
+    )
+  }
+
+  private val spaceAvailable: Long
+    get() = File(sharedPreferenceUtil.prefStorage).freeSpace
+
+  private val noWifiWithWifiOnlyPreferenceSet
+    get() = sharedPreferenceUtil.prefWifiOnly && !NetworkUtils.isWiFi(context!!)
+
+  private val isNotConnected get() = conMan.activeNetworkInfo?.isConnected?.not() ?: true
+
+  override fun inject(activityComponent: ActivityComponent) {
+    activityComponent.inject(this)
+  }
+
+  override fun onAttach(context: Context?) {
+    super.onAttach(context)
+    zimManageViewModel = ViewModelProviders.of(activity!!, viewModelFactory)
+        .get(ZimManageViewModel::class.java)
+  }
+
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
+    TestingUtils.bindResource(LibraryFragment::class.java)
+    return inflater.inflate(R.layout.activity_library, container, false)
+  }
+
+  override fun onViewCreated(
+    view: View,
+    savedInstanceState: Bundle?
+  ) {
+    super.onViewCreated(view, savedInstanceState)
+    librarySwipeRefresh.setOnRefreshListener { refreshFragment() }
+    libraryList.run {
+      adapter = libraryAdapter
+      layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+      setHasFixedSize(true)
+    }
+    zimManageViewModel.libraryItems.observe(this, Observer(this::onLibraryItemsChange))
+    zimManageViewModel.libraryListIsRefreshing.observe(
+        this, Observer(this::onRefreshStateChange)
+    )
+    zimManageViewModel.networkStates.observe(this, Observer(this::onNetworkStateChange))
+  }
+
+  private fun onRefreshStateChange(isRefreshing: Boolean?) {
+    librarySwipeRefresh.isRefreshing = isRefreshing!!
+  }
+
+  private fun onNetworkStateChange(networkState: NetworkState?) {
+    when (networkState) {
+      CONNECTED -> {
+      }
+      NOT_CONNECTED -> {
+        if (libraryAdapter.itemCount > 0) {
+          context.toast(R.string.no_network_connection)
+        } else {
+          libraryErrorText.setText(R.string.no_network_connection)
+          libraryErrorText.visibility = VISIBLE
+        }
+      }
+    }
+  }
+
+  private fun onLibraryItemsChange(it: List<LibraryListItem>?) {
+    libraryAdapter.itemList = it!!
+    if (it.isEmpty()) {
+      libraryErrorText.setText(
+          if (isNotConnected) R.string.no_network_connection
+          else R.string.no_items_msg
+      )
+      libraryErrorText.visibility = VISIBLE
+      TestingUtils.unbindResource(LibraryFragment::class.java)
+    } else {
+      libraryErrorText.visibility = GONE
+    }
+  }
+
+  private fun refreshFragment() {
+    if (isNotConnected) {
+      context.toast(R.string.no_network_connection)
+    } else {
+      zimManageViewModel.requestDownloadLibrary.onNext(Unit)
+    }
+  }
+
+  private fun downloadFile(book: Book) {
+    downloader.download(book)
+  }
+
+  private fun storeDeviceInPreferences(storageDevice: StorageDevice) {
+    sharedPreferenceUtil.putPrefStorage(storageDevice.name)
+    sharedPreferenceUtil.putPrefStorageTitle(
+        getString(
+            if (storageDevice.isInternal) R.string.internal_storage
+            else R.string.external_storage
+        )
+    )
+  }
+
+  private fun onBookItemClick(item: BookItem) {
+    when {
+      notEnoughSpaceAvailable(item) -> {
+        context.toast(
+            getString(R.string.download_no_space)
+                + "\n" + getString(R.string.space_available) + " "
+                + LibraryUtils.bytesToHuman(spaceAvailable)
+        )
+        libraryList.snack(
+            R.string.download_change_storage,
+            R.string.open,
+            this::showStorageSelectDialog
+        )
+        return
+      }
+      isNotConnected -> {
+        context.toast(R.string.no_network_connection)
+        return
+      }
+      noWifiWithWifiOnlyPreferenceSet -> {
+        dialogShower.show(WifiOnly, {
+          sharedPreferenceUtil.putPrefWifiOnly(false)
+          KiwixMobileActivity.wifiOnly = false
+          downloadFile(item.book)
+        })
+        return
+      }
+      else -> downloadFile(item.book)
+    }
+  }
+
+  private fun notEnoughSpaceAvailable(item: BookItem) =
+    spaceAvailable < item.book.size.toLong() * 1024f
+
+  private fun showStorageSelectDialog() {
+    val dialogFragment = StorageSelectDialog()
+    dialogFragment.arguments = Bundle().apply {
+      putString(
+          StorageSelectDialog.STORAGE_DIALOG_INTERNAL,
+          getString(string.internal_storage)
+      )
+      putString(
+          StorageSelectDialog.STORAGE_DIALOG_EXTERNAL,
+          getString(string.external_storage)
+      )
+      putInt(StorageSelectDialog.STORAGE_DIALOG_THEME, StyleUtils.dialogStyle())
+    }
+    dialogFragment.setOnSelectListener(this::storeDeviceInPreferences)
+    dialogFragment.show(fragmentManager, getString(string.pref_storage))
+  }
+}
+

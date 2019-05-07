@@ -201,7 +201,7 @@ public class DownloadService extends Service {
 
       notificationManager.notify(notificationID, notification.get(notificationID).build());
       downloadStatus.put(notificationID, PLAY);
-      LibraryFragment.downloadingBooks.remove(book);
+      //LibraryFragment.downloadingBooks.remove(book);
       String url = intent.getExtras().getString(DownloadIntent.DOWNLOAD_URL_PARAMETER);
       downloadBook(url, notificationID, book);
     }

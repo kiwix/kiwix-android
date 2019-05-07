@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.di.modules;
 
+import android.app.Application;
 import android.app.DownloadManager;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -31,6 +32,10 @@ import org.kiwix.kiwixmobile.utils.BookUtils;
     ViewModelModule.class
 })
 public class ApplicationModule {
+
+  @Provides @Singleton Application provideApplication(Context context) {
+    return (Application) context;
+  }
 
   @Provides @Singleton NotificationManager provideNotificationManager(Context context) {
     return (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

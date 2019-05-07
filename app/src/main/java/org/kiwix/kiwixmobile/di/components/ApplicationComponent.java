@@ -27,7 +27,7 @@ import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
 import org.kiwix.kiwixmobile.di.modules.JNIModule;
 import org.kiwix.kiwixmobile.di.modules.NetworkModule;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
-import org.kiwix.kiwixmobile.library.LibraryAdapter;
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryAdapter;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 import org.kiwix.kiwixmobile.views.web.KiwixWebView;
@@ -55,8 +55,6 @@ public interface ApplicationComponent {
   void inject(DownloadService service);
 
   void inject(ZimContentProvider zimContentProvider);
-
-  void inject(LibraryAdapter libraryAdapter);
 
   void inject(KiwixWebView kiwixWebView);
 

@@ -8,11 +8,11 @@ import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.utils.BookUtils
 
 // The Adapter for the ListView for when the ListView is populated with the rescanned files
-public class RescanDataAdapter(
-  val bookUtils: BookUtils,
-  val onItemClick: (Book) -> Unit,
-  val onItemLongClick: (Book) -> Unit
-) : RecyclerView.Adapter<RescanViewHolder>() {
+class BooksAdapter(
+  private val bookUtils: BookUtils,
+  private val onItemClick: (Book) -> Unit,
+  private val onItemLongClick: (Book) -> Unit
+) : RecyclerView.Adapter<BooksViewHolder>() {
 
   init {
     setHasStableIds(true)
@@ -29,12 +29,12 @@ public class RescanDataAdapter(
   override fun onCreateViewHolder(
     parent: ViewGroup,
     viewType: Int
-  ) = RescanViewHolder(parent.inflate(layout.library_item, false), bookUtils)
+  ) = BooksViewHolder(parent.inflate(layout.library_item, false), bookUtils)
 
   override fun getItemCount() = itemList.size
 
   override fun onBindViewHolder(
-    holder: RescanViewHolder,
+    holder: BooksViewHolder,
     position: Int
   ) {
     holder.bind(itemList[position], onItemClick, onItemLongClick)

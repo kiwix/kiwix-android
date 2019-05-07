@@ -33,7 +33,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 import java.io.File;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
@@ -217,9 +216,9 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
       public boolean onQueryTextChange(String s) {
         searchQuery = s;
 
-        if (mSectionsPagerAdapter.libraryFragment.libraryAdapter != null) {
-          mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(searchQuery);
-        }
+        //if (mSectionsPagerAdapter.libraryFragment.libraryAdapter != null) {
+        //  mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(searchQuery);
+        //}
         mViewPager.setCurrentItem(1);
         return true;
       }
@@ -235,11 +234,11 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
     switch (item.getItemId()) {
       case R.id.select_language:
         if (mViewPager.getCurrentItem() == 1) {
-          if(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages.size() == 0) {
-            Toast.makeText(this, R.string.wait_for_load, Toast.LENGTH_LONG).show();
-          } else {
-            showLanguageSelect();
-          }
+          //if(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages.size() == 0) {
+          //  Toast.makeText(this, R.string.wait_for_load, Toast.LENGTH_LONG).show();
+          //} else {
+          //  showLanguageSelect();
+          //}
         }
       default:
         return super.onOptionsItemSelected(item);
@@ -262,11 +261,11 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
 
   private void showLanguageSelect() {
     new LanguageSelectDialog.Builder(this, dialogStyle())
-        .setLanguages(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages)
-        .setLanguageCounts(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languageCounts)
+        //.setLanguages(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languages)
+        //.setLanguageCounts(mSectionsPagerAdapter.libraryFragment.libraryAdapter.languageCounts)
         .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
-          mSectionsPagerAdapter.libraryFragment.libraryAdapter.updateNetworkLanguages();
-          mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(searchQuery);
+          //mSectionsPagerAdapter.libraryFragment.libraryAdapter.updateNetworkLanguages();
+          //mSectionsPagerAdapter.libraryFragment.libraryAdapter.getFilter().filter(searchQuery);
         })
         .show();
   }

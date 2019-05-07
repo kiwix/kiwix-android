@@ -29,7 +29,7 @@ import org.simpleframework.xml.Root;
 public class LibraryNetworkEntity {
 
   @ElementList(name = "book", inline = true, required = false)
-  private LinkedList<Book> book;
+  public LinkedList<Book> book;
 
   @Attribute(name = "version", required = false)
   private String version;

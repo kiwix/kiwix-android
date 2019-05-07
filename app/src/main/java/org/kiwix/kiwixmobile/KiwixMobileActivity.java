@@ -482,7 +482,7 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
     }
     if (i.hasExtra(EXTRA_ZIM_FILE)) {
       File file = new File(getFileName(i.getStringExtra(EXTRA_ZIM_FILE)));
-      LibraryFragment.mService.cancelNotification(i.getIntExtra(EXTRA_NOTIFICATION_ID, 0));
+      //LibraryFragment.mService.cancelNotification(i.getIntExtra(EXTRA_NOTIFICATION_ID, 0));
       Uri uri = Uri.fromFile(file);
 
       finish();

@@ -10,15 +10,15 @@ import org.kiwix.kiwixmobile.utils.files.FileSearch.ResultListener
 import javax.inject.Inject
 
 class StorageObserver @Inject constructor(
-  val context: Context,
-  val sharedPreferenceUtil: SharedPreferenceUtil
+  private val context: Context,
+  private val sharedPreferenceUtil: SharedPreferenceUtil
 ) {
 
   private val _booksOnFileSystem = PublishProcessor.create<Collection<Book>>()
   val booksOnFileSystem = _booksOnFileSystem.distinctUntilChanged()
       .doOnSubscribe { scanFiles() }
 
-  fun scanFiles() {
+  private fun scanFiles() {
     FileSearch(context, object : ResultListener {
       val foundBooks = mutableSetOf<Book>()
       override fun onBookFound(book: Book) {
