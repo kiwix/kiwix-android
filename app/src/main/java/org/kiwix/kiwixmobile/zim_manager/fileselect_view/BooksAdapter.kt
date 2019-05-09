@@ -7,7 +7,6 @@ import org.kiwix.kiwixmobile.extensions.inflate
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.utils.BookUtils
 
-// The Adapter for the ListView for when the ListView is populated with the rescanned files
 class BooksAdapter(
   private val bookUtils: BookUtils,
   private val onItemClick: (Book) -> Unit,

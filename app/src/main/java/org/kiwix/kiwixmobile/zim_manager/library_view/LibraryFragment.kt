@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.zim_manager.library_view
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -87,7 +86,7 @@ class LibraryFragment : BaseFragment() {
   private val noWifiWithWifiOnlyPreferenceSet
     get() = sharedPreferenceUtil.prefWifiOnly && !NetworkUtils.isWiFi(context!!)
 
-  private val isNotConnected get() = conMan.activeNetworkInfo?.isConnected?.not() ?: true
+  private val isNotConnected get() = conMan.activeNetworkInfo?.isConnected == false
 
   override fun inject(activityComponent: ActivityComponent) {
     activityComponent.inject(this)
@@ -210,19 +209,20 @@ class LibraryFragment : BaseFragment() {
     spaceAvailable < item.book.size.toLong() * 1024f
 
   private fun showStorageSelectDialog() {
-    val dialogFragment = StorageSelectDialog()
-    dialogFragment.arguments = Bundle().apply {
-      putString(
-          StorageSelectDialog.STORAGE_DIALOG_INTERNAL,
-          getString(string.internal_storage)
-      )
-      putString(
-          StorageSelectDialog.STORAGE_DIALOG_EXTERNAL,
-          getString(string.external_storage)
-      )
-      putInt(StorageSelectDialog.STORAGE_DIALOG_THEME, StyleUtils.dialogStyle())
+    StorageSelectDialog().apply {
+      arguments = Bundle().apply {
+        putString(
+            StorageSelectDialog.STORAGE_DIALOG_INTERNAL,
+            getString(string.internal_storage)
+        )
+        putString(
+            StorageSelectDialog.STORAGE_DIALOG_EXTERNAL,
+            getString(string.external_storage)
+        )
+        putInt(StorageSelectDialog.STORAGE_DIALOG_THEME, StyleUtils.dialogStyle())
+      }
+      setOnSelectListener(this@LibraryFragment::storeDeviceInPreferences)
     }
-    dialogFragment.setOnSelectListener(this::storeDeviceInPreferences)
-    dialogFragment.show(fragmentManager, getString(string.pref_storage))
+        .show(fragmentManager, getString(string.pref_storage))
   }
 }

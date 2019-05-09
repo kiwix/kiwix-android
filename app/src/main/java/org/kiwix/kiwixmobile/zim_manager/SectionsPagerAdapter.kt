@@ -30,14 +30,10 @@ class SectionsPagerAdapter(
   fm: FragmentManager
 ) : FragmentPagerAdapter(fm) {
 
-  private val zimFileSelectFragment = ZimFileSelectFragment()
-  private val libraryFragment = LibraryFragment()
-  private val downloadFragment = DownloadFragment()
-
   override fun getItem(position: Int) = when (position) {
-    0 -> zimFileSelectFragment
-    1 -> libraryFragment
-    2 -> downloadFragment
+    0 -> ZimFileSelectFragment()
+    1 -> LibraryFragment()
+    2 -> DownloadFragment()
     else -> throw  RuntimeException("No matching fragment for position: $position")
   }
 

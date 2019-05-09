@@ -34,23 +34,21 @@ class LanguageSelectDialog constructor(
   context: Context
 ) : AlertDialog(context) {
 
-  class Builder : AlertDialog.Builder,LayoutContainer {
+  class Builder : AlertDialog.Builder, LayoutContainer {
     lateinit var dialogView: View
     override val containerView: View? by lazy { dialogView }
     lateinit var onOkClicked: (List<Language>) -> Unit
     var languages: List<Language> = listOf()
 
-    constructor(context: Context) : super(context) {}
+    constructor(context: Context) : super(context)
 
     constructor(
       context: Context,
       themeResId: Int
-    ) : super(context, themeResId) {
-    }
+    ) : super(context, themeResId)
 
     override fun create(): AlertDialog {
       dialogView = View.inflate(context, R.layout.language_selection, null)
-
       val languageArrayAdapter = LanguageAdapter(languages.toMutableList())
       language_check_view.run {
         adapter = languageArrayAdapter
@@ -61,9 +59,7 @@ class LanguageSelectDialog constructor(
       setPositiveButton(android.R.string.ok) { _, _ ->
         onOkClicked.invoke(languageArrayAdapter.listItems)
       }
-
       return super.create()
     }
   }
-
 }

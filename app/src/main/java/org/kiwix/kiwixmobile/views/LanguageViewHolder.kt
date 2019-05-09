@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.language_check_item.language_entries_count
 import kotlinx.android.synthetic.main.language_check_item.language_name
 import kotlinx.android.synthetic.main.language_check_item.language_name_localized
 import kotlinx.android.synthetic.main.language_check_item.language_row
-import org.kiwix.kiwixmobile.R.string
+import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.utils.LanguageUtils
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language
 
@@ -25,7 +25,7 @@ class LanguageViewHolder(
     val context = containerView.context
     language_name.text = language.language
     language_name_localized.text = context.getString(
-        string.language_localized,
+        R.string.language_localized,
         language.languageLocalized
     )
     language_name_localized.typeface = Typeface.createFromAsset(
@@ -33,7 +33,7 @@ class LanguageViewHolder(
         LanguageUtils.getTypeface(language.languageCode)
     )
     language_entries_count.text =
-      context.getString(string.language_count, language.occurencesOfLanguage)
+      context.getString(R.string.language_count, language.occurencesOfLanguage)
     language_checkbox.setOnCheckedChangeListener(null)
     language_checkbox.isChecked = language.active
     language_checkbox.setOnCheckedChangeListener { _, _ ->
