@@ -61,7 +61,10 @@ class ZimFileSelectFragment : BaseFragment() {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var bookUtils: BookUtils
 
-  private lateinit var zimManageViewModel: ZimManageViewModel
+  private val zimManageViewModel: ZimManageViewModel by lazy {
+    ViewModelProviders.of(activity!!, viewModelFactory)
+        .get(ZimManageViewModel::class.java)
+  }
 
   private val booksAdapter: BooksAdapter by lazy {
     BooksAdapter(
@@ -78,7 +81,6 @@ class ZimFileSelectFragment : BaseFragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    // Replace LinearLayout by the type of the root element of the layout you're trying to load
     LanguageUtils(activity!!).changeFont(activity!!.layoutInflater, sharedPreferenceUtil)
     return inflater.inflate(R.layout.zim_list, container, false)
   }
@@ -88,8 +90,6 @@ class ZimFileSelectFragment : BaseFragment() {
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    zimManageViewModel = ViewModelProviders.of(activity!!, viewModelFactory)
-        .get(ZimManageViewModel::class.java)
     zim_swiperefresh.setOnRefreshListener(this::requestFileSystemCheck)
     zimfilelist.run {
       adapter = booksAdapter
@@ -110,28 +110,10 @@ class ZimFileSelectFragment : BaseFragment() {
     checkPermissions()
   }
 
-  override fun onRequestPermissionsResult(
-    requestCode: Int,
-    permissions: Array<String>,
-    grantResults: IntArray
-  ) {
-    when (requestCode) {
-      REQUEST_STORAGE_PERMISSION -> {
-        if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-          requestFileSystemCheck()
-        } else if (grantResults.size != 0) {
-          activity!!.finish()
-        }
-      }
-    }
-  }
-
   private fun checkEmpty(books: List<Book>) {
     file_management_no_files.visibility =
-      if (books.isEmpty()) {
-        View.VISIBLE
-      } else
-        View.GONE
+      if (books.isEmpty()) View.VISIBLE
+      else View.GONE
   }
 
   private fun checkPermissions() {

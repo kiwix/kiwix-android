@@ -19,55 +19,75 @@
 
 package org.kiwix.kiwixmobile.database;
 
-import com.yahoo.squidb.data.SimpleDataChangedNotifier;
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
+import com.yahoo.squidb.sql.Table;
 import io.reactivex.Flowable;
-import io.reactivex.processors.PublishProcessor;
+import io.reactivex.processors.BehaviorProcessor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
+import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.database.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language;
 
-public class NetworkLanguageDao {
-  private KiwixDatabase mDb;
-  private final PublishProcessor<List<Language>> languageProcessor =
-      PublishProcessor.create();
+public class NetworkLanguageDao extends BaseDao {
+
+  private final BehaviorProcessor<List<Language>> activeLanguageProcessor =
+      BehaviorProcessor.create();
+  private final BehaviorProcessor<List<Language>> allLanguageProcessor = BehaviorProcessor.create();
 
   @Inject
   public NetworkLanguageDao(KiwixDatabase kiwikDatabase) {
-    this.mDb = kiwikDatabase;
-    mDb.registerDataChangedNotifier(
-        new SimpleDataChangedNotifier(NetworkLanguageDatabaseEntity.TABLE) {
-          @Override
-          protected void onDataChanged() {
-            languageProcessor.onNext(getActiveLanguages());
-          }
-        });
+    super(kiwikDatabase,NetworkLanguageDatabaseEntity.TABLE);
+  }
+
+  @Override
+  protected void onUpdateToTable() {
+    activeLanguageProcessor.onNext(fetchActiveLanguages());
+    allLanguageProcessor.onNext(fetchAllLanguages());
   }
 
   public Flowable<List<Language>> activeLanguages() {
-    return languageProcessor.startWith(getActiveLanguages()).distinctUntilChanged();
+    return activeLanguageProcessor;
   }
 
-  public List<Language> getActiveLanguages() {
+  public Flowable<List<Language>> allLanguages() {
+    return allLanguageProcessor;
+  }
+
+  public List<Language> fetchAllLanguages() {
+    return fetchWith(Query.select());
+  }
+
+  public List<Language> fetchActiveLanguages() {
+    return fetchWith(Query.select().where(NetworkLanguageDatabaseEntity.ENABLED.eq(true)));
+  }
+
+  @NotNull private List<Language> fetchWith(Query query) {
     ArrayList<Language> result = new ArrayList<>();
-    try (SquidCursor<NetworkLanguageDatabaseEntity> languageCursor = mDb.query(
+    final NetworkLanguageDatabaseEntity databaseEntity =
+        new NetworkLanguageDatabaseEntity();
+    try (SquidCursor<NetworkLanguageDatabaseEntity> languageCursor = kiwixDatabase.query(
         NetworkLanguageDatabaseEntity.class,
-        Query.select().where(NetworkLanguageDatabaseEntity.ENABLED.eq(true)))) {
+        query)) {
       while (languageCursor.moveToNext()) {
-        String languageCode = languageCursor.get(NetworkLanguageDatabaseEntity.LANGUAGE_I_S_O_3);
-        boolean enabled = languageCursor.get(NetworkLanguageDatabaseEntity.ENABLED);
-        result.add(new Language(languageCode, enabled));
+        databaseEntity.readPropertiesFromCursor(languageCursor);
+        result.add(
+            new Language(
+                databaseEntity.getLanguageISO3(),
+                databaseEntity.isEnabled(),
+                databaseEntity.getNumberOfOccurences()
+            )
+        );
       }
     }
     return result;
   }
 
   public void saveFilteredLanguages(List<Language> languages) {
-    mDb.deleteAll(NetworkLanguageDatabaseEntity.class);
+    kiwixDatabase.deleteAll(NetworkLanguageDatabaseEntity.class);
     Collections.sort(languages,
         (language, t1) -> language.getLanguage().compareTo(t1.getLanguage()));
     for (Language language : languages) {
@@ -75,7 +95,8 @@ public class NetworkLanguageDao {
           new NetworkLanguageDatabaseEntity();
       networkLanguageDatabaseEntity.setLanguageISO3(language.getLanguageCode());
       networkLanguageDatabaseEntity.setIsEnabled(language.getActive());
-      mDb.persist(networkLanguageDatabaseEntity);
+      networkLanguageDatabaseEntity.setNumberOfOccurences(language.getOccurencesOfLanguage());
+      kiwixDatabase.persist(networkLanguageDatabaseEntity);
     }
   }
 }

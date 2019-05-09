@@ -105,7 +105,7 @@ public class DownloadTest {
 
     captureAndSaveScreenshot("Before-checking-for-ZimManager-Main-Activity");
     ViewInteraction viewPager2 = onView(
-            allOf(withId(R.id.container),
+            allOf(withId(R.id.manageViewPager),
                     withParent(allOf(withId(R.id.zim_manager_main_activity),
                             withParent(withId(android.R.id.content)))),
                     isDisplayed()));

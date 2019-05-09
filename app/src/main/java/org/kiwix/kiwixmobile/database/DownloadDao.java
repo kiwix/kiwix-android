@@ -17,36 +17,35 @@
  */
 package org.kiwix.kiwixmobile.database;
 
-import com.yahoo.squidb.data.SimpleDataChangedNotifier;
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.data.TableModel;
 import com.yahoo.squidb.sql.Query;
+import com.yahoo.squidb.sql.Table;
 import com.yahoo.squidb.sql.TableStatement;
 import io.reactivex.Flowable;
-import io.reactivex.processors.PublishProcessor;
+import io.reactivex.processors.BehaviorProcessor;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.database.entity.DownloadDatabaseEntity;
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 
-public class DownloadDao {
+public class DownloadDao extends BaseDao{
 
-  private final KiwixDatabase kiwixDatabase;
-  private final PublishProcessor<List<DownloadModel>> downloadsProcessor =
-      PublishProcessor.create();
+  private final BehaviorProcessor<List<DownloadModel>> downloadsProcessor =
+      BehaviorProcessor.create();
 
   @Inject
   public DownloadDao(KiwixDatabase kiwixDatabase) {
-    this.kiwixDatabase = kiwixDatabase;
-    kiwixDatabase.registerDataChangedNotifier(
-        new SimpleDataChangedNotifier(DownloadDatabaseEntity.TABLE) {
-          @Override
-          protected void onDataChanged() {
-            downloadsProcessor.onNext(getDownloads());
-          }
-        });
+    super(kiwixDatabase,DownloadDatabaseEntity.TABLE);
+  }
+
+  @Override
+  protected void onUpdateToTable() {
+    downloadsProcessor.onNext(getDownloads());
   }
 
   public void insert(final DownloadModel downloadModel) {
@@ -57,7 +56,10 @@ public class DownloadDao {
   }
 
   private boolean doesNotAlreadyExist(DownloadModel downloadModel) {
-    return kiwixDatabase.count(DownloadDatabaseEntity.class, DownloadDatabaseEntity.BOOK_ID.eq(downloadModel.getBookId())) == 0;
+    return kiwixDatabase.count(
+        DownloadDatabaseEntity.class,
+        DownloadDatabaseEntity.BOOK_ID.eq(downloadModel.getBook().getId())
+    ) == 0;
   }
 
   public void delete(@NotNull Long... downloadIds) {
@@ -68,14 +70,26 @@ public class DownloadDao {
   }
 
   public Flowable<List<DownloadModel>> downloads() {
-    return downloadsProcessor.startWith(getDownloads()).distinctUntilChanged();
+    return downloadsProcessor;
   }
 
   private TableModel databaseEntity(final DownloadModel downloadModel) {
+    final LibraryNetworkEntity.Book book = downloadModel.getBook();
     return new DownloadDatabaseEntity()
         .setDownloadId(downloadModel.getDownloadId())
-        .setBookId(downloadModel.getBookId())
-        .setFavIcon(downloadModel.getFavIcon());
+        .setBookId(book.getId())
+        .setTitle(book.getTitle())
+        .setDescription(book.getDescription())
+        .setLanguage(book.getLanguage())
+        .setBookCreator(book.getCreator())
+        .setPublisher(book.getPublisher())
+        .setDate(book.getDate())
+        .setUrl(book.getUrl())
+        .setArticleCount(book.getArticleCount())
+        .setMediaCount(book.getMediaCount())
+        .setSize(book.getSize())
+        .setName(book.getName())
+        .setFavIcon(book.getFavicon());
   }
 
   private List<DownloadModel> getDownloads() {
@@ -89,11 +103,29 @@ public class DownloadDao {
       downloadDatabaseEntity.readPropertiesFromCursor(cursor);
       downloadModels.add(new DownloadModel(
           downloadDatabaseEntity.getDownloadId(),
-          downloadDatabaseEntity.getBookId(),
-          downloadDatabaseEntity.getFavIcon()
+          toBook(downloadDatabaseEntity)
       ));
     }
     cursor.close();
     return downloadModels;
+  }
+
+  private LibraryNetworkEntity.Book toBook(DownloadDatabaseEntity downloadDatabaseEntity) {
+    final LibraryNetworkEntity.Book book = new LibraryNetworkEntity.Book();
+    book.id = downloadDatabaseEntity.getBookId();
+    book.title = downloadDatabaseEntity.getTitle();
+    book.description = downloadDatabaseEntity.getDescription();
+    book.language = downloadDatabaseEntity.getLanguage();
+    book.creator = downloadDatabaseEntity.getBookCreator();
+    book.publisher = downloadDatabaseEntity.getPublisher();
+    book.date = downloadDatabaseEntity.getDate();
+    book.url = downloadDatabaseEntity.getUrl();
+    book.file = new File(downloadDatabaseEntity.getUrl());
+    book.articleCount = downloadDatabaseEntity.getArticleCount();
+    book.mediaCount = downloadDatabaseEntity.getMediaCount();
+    book.size = downloadDatabaseEntity.getSize();
+    book.bookName = downloadDatabaseEntity.getName();
+    book.favicon = downloadDatabaseEntity.getFavIcon();
+    return book;
   }
 }

@@ -17,15 +17,17 @@
  */
 package org.kiwix.kiwixmobile.database;
 
-import com.yahoo.squidb.data.SimpleDataChangedNotifier;
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
+import com.yahoo.squidb.sql.Table;
+import com.yahoo.squidb.sql.TableStatement;
 import io.reactivex.Flowable;
-import io.reactivex.processors.PublishProcessor;
+import io.reactivex.processors.BehaviorProcessor;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
@@ -35,26 +37,23 @@ import static org.kiwix.kiwixmobile.downloader.ChunkUtils.hasParts;
  * Dao class for books
  */
 
-public class BookDao {
-  private KiwixDatabase mDb;
-  private final PublishProcessor<List<Book>> booksProcessor = PublishProcessor.create();
+public class BookDao extends BaseDao {
+  private final BehaviorProcessor<List<Book>> booksProcessor = BehaviorProcessor.create();
 
   @Inject
   public BookDao(KiwixDatabase kiwixDatabase) {
-    this.mDb = kiwixDatabase;
-    kiwixDatabase.registerDataChangedNotifier(
-        new SimpleDataChangedNotifier(BookDatabaseEntity.TABLE) {
-          @Override
-          protected void onDataChanged() {
-            booksProcessor.onNext(getBooks());
-          }
-        });
+    super(kiwixDatabase, BookDatabaseEntity.TABLE);
+  }
+
+  @Override
+  protected void onUpdateToTable() {
+    booksProcessor.onNext(getBooks());
   }
 
   public Flowable<List<Book>> books() {
-    return booksProcessor.startWith(getBooks()).distinctUntilChanged();
+    return booksProcessor;
   }
-  
+
   public void setBookDetails(Book book, SquidCursor<BookDatabaseEntity> bookCursor) {
     book.databaseId = bookCursor.get(BookDatabaseEntity.ID);
     book.id = bookCursor.get(BookDatabaseEntity.BOOK_ID);
@@ -71,28 +70,28 @@ public class BookDao {
     book.favicon = bookCursor.get(BookDatabaseEntity.FAVICON);
     book.bookName = bookCursor.get(BookDatabaseEntity.NAME);
   }
-  
+
   public void setBookDatabaseEntity(Book book, BookDatabaseEntity bookDatabaseEntity) {
-    bookDatabaseEntity.setBookId(book.getId());
-    bookDatabaseEntity.setTitle(book.getTitle());
-    bookDatabaseEntity.setDescription(book.getDescription());
-    bookDatabaseEntity.setLanguage(book.getLanguage());
-    bookDatabaseEntity.setBookCreator(book.getCreator());
-    bookDatabaseEntity.setPublisher(book.getPublisher());
-    bookDatabaseEntity.setDate(book.getDate());
-    bookDatabaseEntity.setUrl(book.file.getPath());
-    bookDatabaseEntity.setArticleCount(book.getArticleCount());
-    bookDatabaseEntity.setMediaCount(book.getMediaCount());
-    bookDatabaseEntity.setSize(book.getSize());
-    bookDatabaseEntity.setFavicon(book.getFavicon());
-    bookDatabaseEntity.setName(book.getName());
-    String filePath = book.file.getPath();
-    mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(filePath));
-    mDb.persist(bookDatabaseEntity);
+    final String path = book.file.getPath();
+    bookDatabaseEntity.setBookId(book.getId())
+        .setTitle(book.getTitle())
+        .setDescription(book.getDescription())
+        .setLanguage(book.getLanguage())
+        .setBookCreator(book.getCreator())
+        .setPublisher(book.getPublisher())
+        .setDate(book.getDate())
+        .setUrl(path)
+        .setArticleCount(book.getArticleCount())
+        .setMediaCount(book.getMediaCount())
+        .setSize(book.getSize())
+        .setFavicon(book.getFavicon())
+        .setName(book.getName());
+    kiwixDatabase.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(path));
+    kiwixDatabase.persistWithOnConflict(bookDatabaseEntity, TableStatement.ConflictAlgorithm.REPLACE);
   }
-  
+
   public List<Book> getBooks() {
-    SquidCursor<BookDatabaseEntity> bookCursor = mDb.query(
+    SquidCursor<BookDatabaseEntity> bookCursor = kiwixDatabase.query(
         BookDatabaseEntity.class,
         Query.select());
     ArrayList<Book> books = new ArrayList<>();
@@ -103,25 +102,8 @@ public class BookDao {
         if (book.file.exists()) {
           books.add(book);
         } else {
-          mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(book.file));
+          kiwixDatabase.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(book.file));
         }
-      }
-    }
-    bookCursor.close();
-    return books;
-  }
-
-  public ArrayList<Book> getDownloadingBooks() {
-    SquidCursor<BookDatabaseEntity> bookCursor = mDb.query(
-        BookDatabaseEntity.class,
-        Query.select());
-    ArrayList<Book> books = new ArrayList<>();
-    while (bookCursor.moveToNext()) {
-      Book book = new Book();
-      setBookDetails(book, bookCursor);
-      book.remoteUrl = bookCursor.get(BookDatabaseEntity.REMOTE_URL);
-      if (hasParts(book.file)) {
-        books.add(book);
       }
     }
     bookCursor.close();
@@ -137,13 +119,7 @@ public class BookDao {
     }
   }
 
-  public void saveBook(Book book) {
-    BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
-    bookDatabaseEntity.setRemoteUrl(book.remoteUrl);
-    setBookDatabaseEntity(book, bookDatabaseEntity);
-  }
-
   public void deleteBook(String id) {
-    mDb.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.BOOK_ID.eq(id));
+    kiwixDatabase.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.BOOK_ID.eq(id));
   }
 }

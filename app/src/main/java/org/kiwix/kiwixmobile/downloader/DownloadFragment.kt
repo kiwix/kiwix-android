@@ -20,7 +20,6 @@ package org.kiwix.kiwixmobile.downloader
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -28,12 +27,10 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.layout_download_management.download_management_no_downloads
 import kotlinx.android.synthetic.main.layout_download_management.zim_downloader_list
-import org.kiwix.kiwixmobile.KiwixMobileActivity
 import org.kiwix.kiwixmobile.base.BaseFragment
 import org.kiwix.kiwixmobile.di.components.ActivityComponent
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.utils.DialogShower
-import org.kiwix.kiwixmobile.utils.KiwixDialog.YesNoDialog.NoWifi
 import org.kiwix.kiwixmobile.utils.KiwixDialog.YesNoDialog.StopDownload
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
@@ -45,19 +42,17 @@ class DownloadFragment : BaseFragment() {
   @Inject lateinit var dialogShower: DialogShower
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   @Inject lateinit var downloader: Downloader
-  lateinit var zimManageViewModel: ZimManageViewModel
+
+  private val zimManageViewModel: ZimManageViewModel by lazy {
+    ViewModelProviders.of(activity!!, viewModelFactory)
+        .get(ZimManageViewModel::class.java)
+  }
   private val downloadAdapter = DownloadAdapter {
     dialogShower.show(StopDownload, { downloader.cancelDownload(it) })
   }
 
   override fun inject(activityComponent: ActivityComponent) {
     activityComponent.inject(this)
-  }
-
-  override fun onAttach(context: Context?) {
-    super.onAttach(context)
-    zimManageViewModel = ViewModelProviders.of(activity!!, viewModelFactory)
-        .get(ZimManageViewModel::class.java)
   }
 
   override fun onCreateView(
@@ -89,20 +84,7 @@ class DownloadFragment : BaseFragment() {
 
   private fun updateNoDownloads(downloadItems: List<DownloadItem>) {
     download_management_no_downloads.visibility =
-      if (downloadItems.isEmpty())
-        View.VISIBLE
-      else
-        View.GONE
-  }
-
-  fun showNoWiFiWarning(
-    context: Context?,
-    yesAction: Runnable
-  ) {
-    dialogShower.show(NoWifi, {
-      sharedPreferenceUtil.putPrefWifiOnly(false)
-      KiwixMobileActivity.wifiOnly = false
-      yesAction.run()
-    })
+      if (downloadItems.isEmpty()) View.VISIBLE
+      else View.GONE
   }
 }

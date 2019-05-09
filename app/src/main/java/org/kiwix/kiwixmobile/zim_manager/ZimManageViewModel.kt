@@ -1,38 +1,3 @@
-package org.kiwix.kiwixmobile.zim_manager
-
-import android.app.Application
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
-import io.reactivex.Flowable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
-import io.reactivex.functions.Function4
-import io.reactivex.processors.PublishProcessor
-import io.reactivex.schedulers.Schedulers
-import org.kiwix.kiwixmobile.R.string
-import org.kiwix.kiwixmobile.database.BookDao
-import org.kiwix.kiwixmobile.database.DownloadDao
-import org.kiwix.kiwixmobile.database.NetworkLanguageDao
-import org.kiwix.kiwixmobile.downloader.Downloader
-import org.kiwix.kiwixmobile.downloader.model.DownloadItem
-import org.kiwix.kiwixmobile.downloader.model.DownloadModel
-import org.kiwix.kiwixmobile.downloader.model.DownloadState.Successful
-import org.kiwix.kiwixmobile.downloader.model.DownloadStatus
-import org.kiwix.kiwixmobile.extensions.registerReceiver
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
-import org.kiwix.kiwixmobile.network.KiwixService
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.DividerItem
-import java.util.LinkedList
-import java.util.Locale
-import java.util.concurrent.TimeUnit.SECONDS
-import javax.inject.Inject
-
 /*
  * Kiwix Android
  * Copyright (C) 2018  Kiwix <android.kiwix.org>
@@ -50,6 +15,47 @@ import javax.inject.Inject
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+package org.kiwix.kiwixmobile.zim_manager
+
+import android.app.Application
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.ViewModel
+import io.reactivex.Flowable
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function5
+import io.reactivex.processors.BehaviorProcessor
+import io.reactivex.processors.PublishProcessor
+import io.reactivex.schedulers.Schedulers
+import org.kiwix.kiwixmobile.KiwixApplication
+import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.database.BookDao
+import org.kiwix.kiwixmobile.database.DownloadDao
+import org.kiwix.kiwixmobile.database.NetworkLanguageDao
+import org.kiwix.kiwixmobile.downloader.Downloader
+import org.kiwix.kiwixmobile.downloader.model.DownloadItem
+import org.kiwix.kiwixmobile.downloader.model.DownloadModel
+import org.kiwix.kiwixmobile.downloader.model.DownloadState.Successful
+import org.kiwix.kiwixmobile.downloader.model.DownloadStatus
+import org.kiwix.kiwixmobile.extensions.calculateSearchMatches
+import org.kiwix.kiwixmobile.extensions.registerReceiver
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.network.KiwixService
+import org.kiwix.kiwixmobile.utils.BookUtils
+import org.kiwix.kiwixmobile.utils.NetworkUtils
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.DividerItem
+import java.util.LinkedList
+import java.util.Locale
+import java.util.concurrent.TimeUnit.SECONDS
+import javax.inject.Inject
+
 class ZimManageViewModel @Inject constructor(
   private val downloadDao: DownloadDao,
   private val bookDao: BookDao,
@@ -58,7 +64,8 @@ class ZimManageViewModel @Inject constructor(
   private val storageObserver: StorageObserver,
   private val kiwixService: KiwixService,
   private val context: Application,
-  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver
+  private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
+  private val bookUtils: BookUtils
 ) : ViewModel() {
 
   val libraryItems: MutableLiveData<List<LibraryListItem>> = MutableLiveData()
@@ -67,15 +74,17 @@ class ZimManageViewModel @Inject constructor(
   val deviceListIsRefreshing = MutableLiveData<Boolean>()
   val libraryListIsRefreshing = MutableLiveData<Boolean>()
   val networkStates = MutableLiveData<NetworkState>()
+  val languageItems = MutableLiveData<List<Language>>()
 
   val requestFileSystemCheck = PublishProcessor.create<Unit>()
-  val requestDownloadLibrary = PublishProcessor.create<Unit>()
+  val requestDownloadLibrary = BehaviorProcessor.createDefault<Unit>(Unit)
+  val requestFiltering = BehaviorProcessor.createDefault<String>("")
+  val requestLanguagesDialog = PublishProcessor.create<Unit>()
 
   private val compositeDisposable = CompositeDisposable()
 
   init {
     compositeDisposable.addAll(*disposables())
-    requestDownloadLibrary.onNext(Unit)
     context.registerReceiver(connectivityBroadcastReceiver)
   }
 
@@ -97,9 +106,18 @@ class ZimManageViewModel @Inject constructor(
         checkFileSystemForBooksOnRequest(booksFromDao),
         updateLibraryItems(booksFromDao, downloads, library),
         updateActiveLanguages(library),
-        updateNetworkStates()
+        updateNetworkStates(),
+        updateLanguageItemsForDialog()
     )
   }
+
+  private fun updateLanguageItemsForDialog() = requestLanguagesDialog
+      .withLatestFrom(languageDao.allLanguages(),
+          BiFunction<Unit, List<Language>, List<Language>> { _, languages -> languages })
+      .subscribe(
+          languageItems::postValue,
+          Throwable::printStackTrace
+      )
 
   private fun updateNetworkStates() =
     connectivityBroadcastReceiver.networkStates.subscribe(
@@ -109,29 +127,31 @@ class ZimManageViewModel @Inject constructor(
   private fun libraryFromNetwork() =
     Flowable.combineLatest(
         requestDownloadLibrary,
-        connectivityBroadcastReceiver.networkStates.filter(
-            NetworkState.CONNECTED::equals
-        ),
+        connectivityBroadcastReceiver.networkStates.distinctUntilChanged().filter(NetworkState.CONNECTED::equals),
         BiFunction<Unit, NetworkState, Unit> { _, _ -> Unit }
     )
         .subscribeOn(Schedulers.io())
         .doOnNext { libraryListIsRefreshing.postValue(true) }
         .switchMap { kiwixService.library }
-        .doOnError(Throwable::printStackTrace)
         .onErrorResumeNext(Flowable.just(LibraryNetworkEntity().apply { book = LinkedList() }))
-        .doOnNext { libraryListIsRefreshing.postValue(false) }
+        .doOnError(Throwable::printStackTrace)
 
   private fun updateLibraryItems(
     booksFromDao: Flowable<List<Book>>,
     downloads: Flowable<MutableList<DownloadModel>>,
-    library: Flowable<LibraryNetworkEntity>?
+    library: Flowable<LibraryNetworkEntity>
   ) = Flowable.combineLatest(
       booksFromDao,
       downloads,
       languageDao.activeLanguages().filter { it.isNotEmpty() },
       library,
-      Function4(this::combineLibrarySources)
+      requestFiltering
+          .doOnNext { libraryListIsRefreshing.postValue(true) }
+          .debounce(1, SECONDS)
+          .observeOn(Schedulers.io()),
+      Function5(this::combineLibrarySources)
   )
+      .doOnNext { libraryListIsRefreshing.postValue(false) }
       .subscribeOn(Schedulers.io())
       .subscribe(
           libraryItems::postValue,
@@ -154,18 +174,24 @@ class ZimManageViewModel @Inject constructor(
     booksFromNetwork: List<Book>,
     activeLanguages: List<Language>
   ): List<Language> {
-    val languagesFromNetwork = booksFromNetwork.distinctBy { it.language }
-        .map { it.language }
+    val languageCounts = booksFromNetwork.mapNotNull { it.language }
+        .fold(
+            mutableMapOf<String, Int>(),
+            { acc, language ->
+              acc[language] = acc.getOrElse(language, { 0 }) + 1
+              acc
+            }
+        )
     return Locale.getISOLanguages()
         .map { Locale(it) }
-        .filter { languagesFromNetwork.contains(it.isO3Language) }
+        .filter { languageCounts.containsKey(it.isO3Language) }
         .map { locale ->
           Language(
               locale.isO3Language,
-              languageWasPreviouslyActiveOrIsPrimaryLanguage(activeLanguages, locale)
+              languageWasPreviouslyActiveOrIsPrimaryLanguage(activeLanguages, locale),
+              languageCounts.getOrElse(locale.isO3Language, { 0 })
           )
         }
-        .ifEmpty { listOf(Language(context.resources.configuration.locale.isO3Language, true)) }
   }
 
   private fun languageWasPreviouslyActiveOrIsPrimaryLanguage(
@@ -181,25 +207,56 @@ class ZimManageViewModel @Inject constructor(
     booksOnFileSystem: List<Book>,
     activeDownloads: List<DownloadModel>,
     activeLanguages: List<Language>,
-    libraryNetworkEntity: LibraryNetworkEntity
+    libraryNetworkEntity: LibraryNetworkEntity,
+    filter: String
   ): List<LibraryListItem> {
     val downloadedBooksIds = booksOnFileSystem.map { it.id }
-    val downloadingBookIds = activeDownloads.map { it.bookId }
+    val downloadingBookIds = activeDownloads.map { it.book.id }
     val activeLanguageCodes = activeLanguages.map { it.languageCode }
-    val booksUnfilteredByLanguage = libraryNetworkEntity.books
-        .filterNot { downloadedBooksIds.contains(it.id) }
-        .filterNot { downloadingBookIds.contains(it.id) }
-        .filterNot { it.url.contains("/stack_exchange/") }// Temp filter see #694
+    val booksUnfilteredByLanguage =
+      applyUserFilter(
+          libraryNetworkEntity.books
+              .filterNot { downloadedBooksIds.contains(it.id) }
+              .filterNot { downloadingBookIds.contains(it.id) }
+              .filterNot { it.url.contains("/stack_exchange/") },// Temp filter see #694, filter)
+          filter
+      )
+
     return listOf(
-        DividerItem(Long.MAX_VALUE, context.getString(string.your_languages)),
-        *toBookItems(
-            booksUnfilteredByLanguage.filter { activeLanguageCodes.contains(it.language) }
+        *createLibrarySection(
+            booksUnfilteredByLanguage.filter { activeLanguageCodes.contains(it.language) },
+            R.string.your_languages,
+            Long.MAX_VALUE
         ),
-        DividerItem(Long.MIN_VALUE, context.getString(string.other_languages)),
-        *toBookItems(
-            booksUnfilteredByLanguage.filterNot { activeLanguageCodes.contains(it.language) }
+        *createLibrarySection(
+            booksUnfilteredByLanguage.filterNot { activeLanguageCodes.contains(it.language) },
+            R.string.other_languages,
+            Long.MIN_VALUE
         )
     )
+  }
+
+  private fun createLibrarySection(
+    books: List<Book>,
+    sectionStringId: Int,
+    sectionId: Long
+  ) = if (books.isNotEmpty()) {
+    arrayOf(
+        DividerItem(sectionId, context.getString(sectionStringId)),
+        *toBookItems(books)
+    )
+  } else {
+    emptyArray()
+  }
+
+  private fun applyUserFilter(
+    booksUnfilteredByLanguage: List<Book>,
+    filter: String
+  ) = if (filter.isEmpty()) {
+    booksUnfilteredByLanguage
+  } else {
+    booksUnfilteredByLanguage.forEach { it.calculateSearchMatches(filter, bookUtils) }
+    booksUnfilteredByLanguage.filter { it.searchMatches > 0 }
   }
 
   private fun toBookItems(books: List<Book>) =
@@ -207,10 +264,17 @@ class ZimManageViewModel @Inject constructor(
 
   private fun checkFileSystemForBooksOnRequest(booksFromDao: Flowable<List<Book>>) =
     requestFileSystemCheck
+        .subscribeOn(Schedulers.io())
+        .observeOn(Schedulers.io())
+        .onBackpressureDrop()
         .doOnNext { deviceListIsRefreshing.postValue(true) }
-        .switchMap {
-          updateBookDaoFromFilesystem(booksFromDao)
-        }
+        .switchMap(
+            {
+              updateBookDaoFromFilesystem(booksFromDao)
+            },
+            1
+        )
+        .onBackpressureDrop()
         .doOnNext { deviceListIsRefreshing.postValue(false) }
         .subscribe(
             bookDao::saveBooks,
@@ -231,9 +295,10 @@ class ZimManageViewModel @Inject constructor(
   private fun removeBooksAlreadyInDao(
     booksFromFileSystem: Collection<Book>,
     booksFromDao: List<Book>
-  ) = booksFromFileSystem.minus(
-      booksFromDao
-  )
+  ): List<Book> {
+    val idsInDao = booksFromDao.map { it.id }
+    return booksFromFileSystem.filterNot { idsInDao.contains(it.id) }
+  }
 
   private fun updateBookItems(booksFromDao: Flowable<List<Book>>) =
     booksFromDao
@@ -243,14 +308,19 @@ class ZimManageViewModel @Inject constructor(
         )
 
   private fun removeCompletedDownloadsFromDb(downloadStatuses: Flowable<List<DownloadStatus>>) =
-    downloadStatuses.subscribe(
-        {
-          downloadDao.delete(
-              *it.filter { status -> status.state == Successful }.map { status -> status.downloadId }.toTypedArray()
-          )
-        },
-        Throwable::printStackTrace
-    )
+    downloadStatuses
+        .observeOn(Schedulers.io())
+        .subscribeOn(Schedulers.io())
+        .map { it.filter { status -> status.state == Successful } }
+        .subscribe(
+            {
+              bookDao.saveBooks(it.map { downloadStatus -> downloadStatus.toBook() })
+              downloadDao.delete(
+                  *it.map { status -> status.downloadId }.toTypedArray()
+              )
+            },
+            Throwable::printStackTrace
+        )
 
   private fun updateDownloadItems(downloadStatuses: Flowable<List<DownloadStatus>>) =
     downloadStatuses
@@ -269,4 +339,5 @@ class ZimManageViewModel @Inject constructor(
         .subscribeOn(Schedulers.io())
         .map(downloader::queryStatus)
         .distinctUntilChanged()
+
 }

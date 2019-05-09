@@ -21,6 +21,7 @@ class StorageObserver @Inject constructor(
   private fun scanFiles() {
     FileSearch(context, object : ResultListener {
       val foundBooks = mutableSetOf<Book>()
+
       override fun onBookFound(book: Book) {
         foundBooks.add(book)
         Log.i("Scanner", "File Search: Found Book " + book.title)

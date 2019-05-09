@@ -4,21 +4,22 @@ import java.util.Locale
 
 class Language constructor(
   locale: Locale,
-  var active: Boolean?,
+  var active: Boolean,
+  var occurencesOfLanguage: Int,
   var language: String = locale.displayLanguage,
   var languageLocalized: String = locale.getDisplayLanguage(locale),
   var languageCode: String = locale.isO3Language,
   var languageCodeISO2: String = locale.language
-)
-{
+) {
 
   constructor(
     languageCode: String,
-    active: Boolean?
-  ) : this(Locale(languageCode), active) {
+    active: Boolean,
+    occurrencesOfLanguage: Int
+  ) : this(Locale(languageCode), active, occurrencesOfLanguage) {
   }
 
-  override fun equals(obj: Any?): Boolean {
-    return (obj as Language).language == language && obj.active == active
+  override fun equals(other: Any?): Boolean {
+    return (other as Language).language == language && other.active == active
   }
 }

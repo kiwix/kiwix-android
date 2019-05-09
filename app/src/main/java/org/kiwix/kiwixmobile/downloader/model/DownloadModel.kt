@@ -21,16 +21,5 @@ import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
 
 data class DownloadModel(
   val downloadId: Long,
-  val bookId: String,
-  val favIcon: String
-) {
-
-  constructor(
-    downloadId: Long,
-    book: LibraryNetworkEntity.Book
-  ) : this(
-      downloadId,
-      book.id,
-      book.favicon
-  )
-}
+  val book: LibraryNetworkEntity.Book
+)

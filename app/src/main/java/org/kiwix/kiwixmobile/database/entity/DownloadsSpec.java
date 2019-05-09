@@ -24,4 +24,15 @@ public class DownloadsSpec {
   public Long downloadId;
   public String bookId;
   public String favIcon;
+  public String title;
+  public String description;
+  public String language;
+  public String bookCreator;
+  public String publisher;
+  public String date;
+  public String url;
+  public String articleCount;
+  public String mediaCount;
+  public String size;
+  public String name;
 }

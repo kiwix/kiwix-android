@@ -70,8 +70,11 @@ class LibraryFragment : BaseFragment() {
   @Inject lateinit var dialogShower: DialogShower
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var bookUtils: BookUtils
-  private lateinit var zimManageViewModel: ZimManageViewModel
 
+  private val zimManageViewModel: ZimManageViewModel by lazy {
+    ViewModelProviders.of(activity!!, viewModelFactory)
+        .get(ZimManageViewModel::class.java)
+  }
   private val libraryAdapter: LibraryAdapter by lazy {
     LibraryAdapter(
         delegates = *arrayOf(BookDelegate(bookUtils, this::onBookItemClick), DividerDelegate)
@@ -88,12 +91,6 @@ class LibraryFragment : BaseFragment() {
 
   override fun inject(activityComponent: ActivityComponent) {
     activityComponent.inject(this)
-  }
-
-  override fun onAttach(context: Context?) {
-    super.onAttach(context)
-    zimManageViewModel = ViewModelProviders.of(activity!!, viewModelFactory)
-        .get(ZimManageViewModel::class.java)
   }
 
   override fun onCreateView(
@@ -229,4 +226,3 @@ class LibraryFragment : BaseFragment() {
     dialogFragment.show(fragmentManager, getString(string.pref_storage))
   }
 }
-

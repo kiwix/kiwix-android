@@ -94,8 +94,6 @@ public class LibraryNetworkEntity {
 
     public boolean downloaded =  false;
 
-    public String remoteUrl;
-
     public int searchMatches = 0;
 
     public File file;

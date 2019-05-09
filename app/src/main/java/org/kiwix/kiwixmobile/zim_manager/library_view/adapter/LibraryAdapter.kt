@@ -28,9 +28,7 @@ class LibraryAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
   init {
-    delegates.forEach {
-      delegateManager.addDelegate(it)
-    }
+    delegates.forEach(delegateManager::addDelegate)
     setHasStableIds(true)
   }
 
@@ -60,23 +58,3 @@ class LibraryAdapter(
     delegateManager.getViewTypeFor(itemList[position])
 
 }
-
-//private Observable<Book> getMatches(Book b, String s) {
-//  StringBuilder text = new StringBuilder();
-//  text.append(b.getTitle()).append("|").append(b.getDescription()).append("|")
-//      .append(parseURL(context, b.getUrl())).append("|");
-//  if (bookUtils.localeMap.containsKey(b.getLanguage())) {
-//    text.append(bookUtils.localeMap.get(b.getLanguage()).getDisplayLanguage()).append("|");
-//  }
-//  String[] words = s.toLowerCase().split("\\s+");
-//  b.searchMatches = Observable.fromArray(words)
-//      .filter(text.toString().toLowerCase()::contains)
-//      .count()
-//      .blockingGet()
-//      .intValue();
-//  if (b.searchMatches > 0) {
-//    return Observable.just(b);
-//  } else {
-//    return Observable.empty();
-//  }
-//}}

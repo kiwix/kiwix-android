@@ -31,7 +31,7 @@ data class DownloadItem(
 
   constructor(downloadStatus: DownloadStatus) : this(
       downloadStatus.downloadId,
-      Base64String(downloadStatus.favIcon),
+      Base64String(downloadStatus.book.favicon),
       downloadStatus.title,
       downloadStatus.description,
       downloadStatus.bytesDownloadedSoFar,

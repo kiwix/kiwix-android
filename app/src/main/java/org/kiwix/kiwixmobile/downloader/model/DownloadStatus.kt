@@ -35,7 +35,10 @@ import android.app.DownloadManager.STATUS_PENDING
 import android.app.DownloadManager.STATUS_RUNNING
 import android.app.DownloadManager.STATUS_SUCCESSFUL
 import android.database.Cursor
+import android.net.Uri
 import org.kiwix.kiwixmobile.extensions.get
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
+import java.io.File
 
 class DownloadStatus(
   val downloadId: Long,
@@ -50,8 +53,12 @@ class DownloadStatus(
   val mediaProviderUri: String?,
   val mediaType: String?,
   val uri: String?,
-  val favIcon: String
+  val book: Book
 ) {
+  fun toBook() = book.also {
+    book.file = File(Uri.parse(localUri).path)
+  }
+
   constructor(
     cursor: Cursor,
     downloadModel: DownloadModel
@@ -68,7 +75,7 @@ class DownloadStatus(
       cursor[COLUMN_MEDIAPROVIDER_URI],
       cursor[COLUMN_MEDIA_TYPE],
       cursor[COLUMN_URI],
-      downloadModel.favIcon
+      downloadModel.book
   )
 }
 

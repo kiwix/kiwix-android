@@ -31,10 +31,6 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language;
-import org.kiwix.kiwixmobile.utils.files.FileUtils;
-
 import java.lang.reflect.Field;
 import java.text.Collator;
 import java.util.ArrayList;
@@ -43,6 +39,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import org.kiwix.kiwixmobile.utils.files.FileUtils;
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
@@ -241,7 +239,7 @@ public class LanguageUtils {
     List<Language> values = new ArrayList<>();
 
     for (LanguageContainer value : mLanguageList) {
-      values.add(new Language(value.getLanguageCode(), false));
+      values.add(new Language(value.getLanguageCode(), false, 0));
     }
 
     return values;
