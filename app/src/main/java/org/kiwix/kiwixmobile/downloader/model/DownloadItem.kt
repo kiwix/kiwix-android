@@ -24,8 +24,7 @@ data class DownloadItem(
   val description: String,
   val bytesDownloaded: Long,
   val totalSizeBytes: Long,
-  val downloadState: DownloadState,
-  val reason: String
+  val downloadState: DownloadState
 ) {
   val progress get() = ((bytesDownloaded.toFloat() / totalSizeBytes) * 100).toInt()
 
@@ -36,7 +35,6 @@ data class DownloadItem(
       downloadStatus.description,
       downloadStatus.bytesDownloadedSoFar,
       downloadStatus.totalSizeBytes,
-      downloadStatus.state,
-      downloadStatus.reason
+      downloadStatus.state
   )
 }

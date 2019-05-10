@@ -75,6 +75,11 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
   @Override
   public void onCreate() {
     super.onCreate();
+    if (LeakCanary.isInAnalyzerProcess(this)) {
+      // This process is dedicated to LeakCanary for heap analysis.
+      // You should not init your app in this process.
+      return;
+    }
     if (isExternalStorageWritable()) {
       File appDirectory = new File(Environment.getExternalStorageDirectory() + "/Kiwix");
       logFile = new File(appDirectory, "logcat.txt");
@@ -105,13 +110,7 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
     }
 
     Log.d("KIWIX", "Started KiwixApplication");
-
     applicationComponent.inject(this);
-    if (LeakCanary.isInAnalyzerProcess(this)) {
-      // This process is dedicated to LeakCanary for heap analysis.
-      // You should not init your app in this process.
-      return;
-    }
     LeakCanary.install(this);
   }
 

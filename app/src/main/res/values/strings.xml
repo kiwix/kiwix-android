@@ -181,4 +181,23 @@
   <string name="crash_checkbox_device">Device Details</string>
   <string name="crash_button_confirm">SEND DETAILS</string>
   <string name="crash_button_decline">NO THANKS</string>
+  <string name="pending_state">Pending</string>
+  <string name="running_state">In Progress</string>
+  <string name="successful_state">Complete</string>
+  <string name="paused_state">Paused: %s</string>
+  <string name="failed_state">Failed: %s</string>
+  <string name="paused_wifi">Waiting for Wifi</string>
+  <string name="paused_connectivity">Waiting to connect to a network</string>
+  <string name="paused_retry">Waiting to retry</string>
+  <string name="paused_unknown">Unknown</string>
+  <string name="failed_cannot_resume">Cannot resume due to unknown reason</string>
+  <string name="failed_storage_not_found">Could not find storage</string>
+  <string name="failed_file_already_exists">File already exists</string>
+  <string name="failed_unknown_file_error">Unknown file system error</string>
+  <string name="failed_http_error">HTTP data error</string>
+  <string name="failed_insufficient_space">Not enough space on storage</string>
+  <string name="failed_too_many_redirects">Too many redirects</string>
+  <string name="failed_unhandled_http_code">Unknown HTTP code received</string>
+  <string name="failed_unknown">Unknown</string>
+  <string name="failed_http_code">HTTP code %s</string>
 </resources>

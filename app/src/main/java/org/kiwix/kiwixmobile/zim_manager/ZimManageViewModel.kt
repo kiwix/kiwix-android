@@ -29,7 +29,6 @@ import io.reactivex.functions.Function5
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
-import org.kiwix.kiwixmobile.KiwixApplication
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.database.BookDao
 import org.kiwix.kiwixmobile.database.DownloadDao
@@ -45,7 +44,6 @@ import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.network.KiwixService
 import org.kiwix.kiwixmobile.utils.BookUtils
-import org.kiwix.kiwixmobile.utils.NetworkUtils
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
@@ -53,6 +51,7 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.Bo
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.DividerItem
 import java.util.LinkedList
 import java.util.Locale
+import java.util.concurrent.TimeUnit.MILLISECONDS
 import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
@@ -105,7 +104,7 @@ class ZimManageViewModel @Inject constructor(
         updateBookItems(booksFromDao),
         checkFileSystemForBooksOnRequest(booksFromDao),
         updateLibraryItems(booksFromDao, downloads, library),
-        updateActiveLanguages(library),
+        updateLanguagesInDao(library),
         updateNetworkStates(),
         updateLanguageItemsForDialog()
     )
@@ -127,14 +126,16 @@ class ZimManageViewModel @Inject constructor(
   private fun libraryFromNetwork() =
     Flowable.combineLatest(
         requestDownloadLibrary,
-        connectivityBroadcastReceiver.networkStates.distinctUntilChanged().filter(NetworkState.CONNECTED::equals),
+        connectivityBroadcastReceiver.networkStates.distinctUntilChanged().filter(
+            NetworkState.CONNECTED::equals
+        ),
         BiFunction<Unit, NetworkState, Unit> { _, _ -> Unit }
     )
         .subscribeOn(Schedulers.io())
         .doOnNext { libraryListIsRefreshing.postValue(true) }
         .switchMap { kiwixService.library }
-        .onErrorResumeNext(Flowable.just(LibraryNetworkEntity().apply { book = LinkedList() }))
         .doOnError(Throwable::printStackTrace)
+        .onErrorResumeNext(Flowable.just(LibraryNetworkEntity().apply { book = LinkedList() }))
 
   private fun updateLibraryItems(
     booksFromDao: Flowable<List<Book>>,
@@ -143,7 +144,9 @@ class ZimManageViewModel @Inject constructor(
   ) = Flowable.combineLatest(
       booksFromDao,
       downloads,
-      languageDao.activeLanguages().filter { it.isNotEmpty() },
+      languageDao.allLanguages()
+          .debounce(100, MILLISECONDS)
+          .filter { it.isNotEmpty() },
       library,
       requestFiltering
           .doOnNext { libraryListIsRefreshing.postValue(true) }
@@ -158,11 +161,13 @@ class ZimManageViewModel @Inject constructor(
           Throwable::printStackTrace
       )
 
-  private fun updateActiveLanguages(library: Flowable<LibraryNetworkEntity>) = library
+  private fun updateLanguagesInDao(
+    library: Flowable<LibraryNetworkEntity>
+  ) = library
       .subscribeOn(Schedulers.io())
       .map { it.books }
       .withLatestFrom(
-          languageDao.activeLanguages(),
+          languageDao.allLanguages(),
           BiFunction(this::combineToLanguageList)
       )
       .subscribe(
@@ -172,47 +177,68 @@ class ZimManageViewModel @Inject constructor(
 
   private fun combineToLanguageList(
     booksFromNetwork: List<Book>,
-    activeLanguages: List<Language>
+    allLanguages: List<Language>
   ): List<Language> {
-    val languageCounts = booksFromNetwork.mapNotNull { it.language }
+    val networkLanguageCounts = booksFromNetwork.mapNotNull { it.language }
         .fold(
             mutableMapOf<String, Int>(),
-            { acc, language ->
-              acc[language] = acc.getOrElse(language, { 0 }) + 1
-              acc
-            }
+            { acc, language -> acc.increment(language) }
         )
+    return when {
+      booksFromNetwork.isEmpty() && allLanguages.isEmpty() -> defaultLanguage()
+      booksFromNetwork.isEmpty() && allLanguages.isNotEmpty() -> allLanguages
+      booksFromNetwork.isNotEmpty() && allLanguages.isEmpty() ->
+        fromLocalesWithNetworkMatchesSetActiveBy(networkLanguageCounts, defaultLanguage())
+      booksFromNetwork.isNotEmpty() && allLanguages.isNotEmpty() ->
+        fromLocalesWithNetworkMatchesSetActiveBy(networkLanguageCounts, allLanguages)
+      else -> throw RuntimeException("Impossible state")
+    }
+  }
+
+  private fun <K> MutableMap<K, Int>.increment(key: K) =
+    apply { set(key, getOrElse(key, { 0 }) + 1) }
+
+  private fun fromLocalesWithNetworkMatchesSetActiveBy(
+    networkLanguageCounts: MutableMap<String, Int>,
+    listToActivateBy: List<Language>
+  ): List<Language> {
     return Locale.getISOLanguages()
         .map { Locale(it) }
-        .filter { languageCounts.containsKey(it.isO3Language) }
+        .filter { networkLanguageCounts.containsKey(it.isO3Language) }
         .map { locale ->
           Language(
               locale.isO3Language,
-              languageWasPreviouslyActiveOrIsPrimaryLanguage(activeLanguages, locale),
-              languageCounts.getOrElse(locale.isO3Language, { 0 })
+              languageIsActive(listToActivateBy, locale),
+              networkLanguageCounts.getOrElse(locale.isO3Language, { 0 })
           )
         }
   }
 
-  private fun languageWasPreviouslyActiveOrIsPrimaryLanguage(
-    activeLanguages: List<Language>,
-    locale: Locale
-  ) = activeLanguages.firstOrNull { it.languageCode == locale.isO3Language }?.let { true }
-      ?: isPrimaryLocale(locale)
+  private fun defaultLanguage() =
+    listOf(
+        Language(
+            context.resources.configuration.locale.isO3Language,
+            true,
+            1
+        )
+    )
 
-  private fun isPrimaryLocale(locale: Locale) =
-    context.resources.configuration.locale.isO3Language == locale.isO3Language
+  private fun languageIsActive(
+    allLanguages: List<Language>,
+    locale: Locale
+  ) = allLanguages.firstOrNull { it.languageCode == locale.isO3Language }?.active == true
 
   private fun combineLibrarySources(
     booksOnFileSystem: List<Book>,
     activeDownloads: List<DownloadModel>,
-    activeLanguages: List<Language>,
+    allLanguages: List<Language>,
     libraryNetworkEntity: LibraryNetworkEntity,
     filter: String
   ): List<LibraryListItem> {
     val downloadedBooksIds = booksOnFileSystem.map { it.id }
     val downloadingBookIds = activeDownloads.map { it.book.id }
-    val activeLanguageCodes = activeLanguages.map { it.languageCode }
+    val activeLanguageCodes = allLanguages.filter(Language::active)
+        .map { it.languageCode }
     val booksUnfilteredByLanguage =
       applyUserFilter(
           libraryNetworkEntity.books
@@ -341,3 +367,5 @@ class ZimManageViewModel @Inject constructor(
         .distinctUntilChanged()
 
 }
+
+

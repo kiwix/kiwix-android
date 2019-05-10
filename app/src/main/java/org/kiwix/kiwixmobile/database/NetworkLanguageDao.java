@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.database;
 
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
-import com.yahoo.squidb.sql.Table;
 import io.reactivex.Flowable;
 import io.reactivex.processors.BehaviorProcessor;
 import java.util.ArrayList;
@@ -34,8 +33,6 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language;
 
 public class NetworkLanguageDao extends BaseDao {
 
-  private final BehaviorProcessor<List<Language>> activeLanguageProcessor =
-      BehaviorProcessor.create();
   private final BehaviorProcessor<List<Language>> allLanguageProcessor = BehaviorProcessor.create();
 
   @Inject
@@ -45,12 +42,7 @@ public class NetworkLanguageDao extends BaseDao {
 
   @Override
   protected void onUpdateToTable() {
-    activeLanguageProcessor.onNext(fetchActiveLanguages());
     allLanguageProcessor.onNext(fetchAllLanguages());
-  }
-
-  public Flowable<List<Language>> activeLanguages() {
-    return activeLanguageProcessor;
   }
 
   public Flowable<List<Language>> allLanguages() {
@@ -59,10 +51,6 @@ public class NetworkLanguageDao extends BaseDao {
 
   public List<Language> fetchAllLanguages() {
     return fetchWith(Query.select());
-  }
-
-  public List<Language> fetchActiveLanguages() {
-    return fetchWith(Query.select().where(NetworkLanguageDatabaseEntity.ENABLED.eq(true)));
   }
 
   @NotNull private List<Language> fetchWith(Query query) {
