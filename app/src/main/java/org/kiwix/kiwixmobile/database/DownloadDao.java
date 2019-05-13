@@ -49,16 +49,14 @@ public class DownloadDao extends BaseDao{
   }
 
   public void insert(final DownloadModel downloadModel) {
-    if (doesNotAlreadyExist(downloadModel)) {
       kiwixDatabase.persistWithOnConflict(databaseEntity(downloadModel),
           TableStatement.ConflictAlgorithm.REPLACE);
-    }
   }
 
-  private boolean doesNotAlreadyExist(DownloadModel downloadModel) {
+  public boolean doesNotAlreadyExist(LibraryNetworkEntity.Book book) {
     return kiwixDatabase.count(
         DownloadDatabaseEntity.class,
-        DownloadDatabaseEntity.BOOK_ID.eq(downloadModel.getBook().getId())
+        DownloadDatabaseEntity.BOOK_ID.eq(book.getId())
     ) == 0;
   }
 

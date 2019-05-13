@@ -36,15 +36,18 @@ class DownloaderImpl @Inject constructor(
   override fun download(book: LibraryNetworkEntity.Book) {
     kiwixService.getMetaLinks(book.url)
         .subscribeOn(Schedulers.io())
+        .observeOn(Schedulers.io())
         .take(1)
         .subscribe(
             {
-              val downloadId = downloadRequester.enqueue(
-                  DownloadRequest(it, book)
-              )
-              downloadDao.insert(
-                  DownloadModel(downloadId, book)
-              )
+              if(downloadDao.doesNotAlreadyExist(book)){
+                val downloadId = downloadRequester.enqueue(
+                    DownloadRequest(it, book)
+                )
+                downloadDao.insert(
+                    DownloadModel(downloadId, book)
+                )
+              }
             },
             Throwable::printStackTrace
         )

@@ -101,12 +101,53 @@ class ZimManageViewModel @Inject constructor(
     return arrayOf(
         updateDownloadItems(downloadStatuses),
         removeCompletedDownloadsFromDb(downloadStatuses),
+        removeNonExistingDownloadsFromDb(downloadStatuses, downloads),
         updateBookItems(booksFromDao),
         checkFileSystemForBooksOnRequest(booksFromDao),
         updateLibraryItems(booksFromDao, downloads, library),
         updateLanguagesInDao(library),
         updateNetworkStates(),
         updateLanguageItemsForDialog()
+    )
+  }
+
+  private fun removeNonExistingDownloadsFromDb(
+    downloadStatuses: Flowable<List<DownloadStatus>>,
+    downloads: Flowable<MutableList<DownloadModel>>
+  ) = downloadStatuses
+      .withLatestFrom(
+          downloads,
+          BiFunction(this::combineToDownloadsWithoutStatuses)
+      )
+      .buffer(3, SECONDS)
+      .map(this::downloadIdsWithNoStatusesOverBufferPeriod)
+      .subscribe(
+          {
+            downloadDao.delete(*it.toTypedArray())
+          },
+          Throwable::printStackTrace
+      )
+
+  private fun downloadIdsWithNoStatusesOverBufferPeriod(it: List<MutableList<Long>>) =
+    it.flatten()
+        .fold(mutableMapOf<Long, Int>(),
+            { acc, id -> acc.increment(id) })
+        .filter { (_, value) -> value == it.size }
+        .map { (key, _) -> key }
+
+  private fun combineToDownloadsWithoutStatuses(
+    statuses: List<DownloadStatus>,
+    downloads: List<DownloadModel>
+  ): MutableList<Long> {
+    val downloadIdsWithStatuses = statuses.map { it.downloadId }
+    return downloads.fold(
+        mutableListOf(),
+        { acc, downloadModel ->
+          if (!downloadIdsWithStatuses.contains(downloadModel.downloadId)) {
+            acc.add(downloadModel.downloadId)
+          }
+          acc
+        }
     )
   }
 
@@ -144,13 +185,11 @@ class ZimManageViewModel @Inject constructor(
   ) = Flowable.combineLatest(
       booksFromDao,
       downloads,
-      languageDao.allLanguages()
-          .debounce(100, MILLISECONDS)
-          .filter { it.isNotEmpty() },
+      languageDao.allLanguages().filter { it.isNotEmpty() },
       library,
       requestFiltering
           .doOnNext { libraryListIsRefreshing.postValue(true) }
-          .debounce(1, SECONDS)
+          .debounce(500, MILLISECONDS)
           .observeOn(Schedulers.io()),
       Function5(this::combineLibrarySources)
   )
@@ -178,22 +217,26 @@ class ZimManageViewModel @Inject constructor(
   private fun combineToLanguageList(
     booksFromNetwork: List<Book>,
     allLanguages: List<Language>
-  ): List<Language> {
-    val networkLanguageCounts = booksFromNetwork.mapNotNull { it.language }
+  ) = when {
+    booksFromNetwork.isEmpty() && allLanguages.isEmpty() -> defaultLanguage()
+    booksFromNetwork.isEmpty() && allLanguages.isNotEmpty() -> emptyList()
+    booksFromNetwork.isNotEmpty() && allLanguages.isEmpty() ->
+      fromLocalesWithNetworkMatchesSetActiveBy(
+          networkLanguageCounts(booksFromNetwork), defaultLanguage()
+      )
+    booksFromNetwork.isNotEmpty() && allLanguages.isNotEmpty() ->
+      fromLocalesWithNetworkMatchesSetActiveBy(
+          networkLanguageCounts(booksFromNetwork), allLanguages
+      )
+    else -> throw RuntimeException("Impossible state")
+  }
+
+  private fun networkLanguageCounts(booksFromNetwork: List<Book>) =
+    booksFromNetwork.mapNotNull { it.language }
         .fold(
             mutableMapOf<String, Int>(),
             { acc, language -> acc.increment(language) }
         )
-    return when {
-      booksFromNetwork.isEmpty() && allLanguages.isEmpty() -> defaultLanguage()
-      booksFromNetwork.isEmpty() && allLanguages.isNotEmpty() -> allLanguages
-      booksFromNetwork.isNotEmpty() && allLanguages.isEmpty() ->
-        fromLocalesWithNetworkMatchesSetActiveBy(networkLanguageCounts, defaultLanguage())
-      booksFromNetwork.isNotEmpty() && allLanguages.isNotEmpty() ->
-        fromLocalesWithNetworkMatchesSetActiveBy(networkLanguageCounts, allLanguages)
-      else -> throw RuntimeException("Impossible state")
-    }
-  }
 
   private fun <K> MutableMap<K, Int>.increment(key: K) =
     apply { set(key, getOrElse(key, { 0 }) + 1) }
@@ -201,18 +244,16 @@ class ZimManageViewModel @Inject constructor(
   private fun fromLocalesWithNetworkMatchesSetActiveBy(
     networkLanguageCounts: MutableMap<String, Int>,
     listToActivateBy: List<Language>
-  ): List<Language> {
-    return Locale.getISOLanguages()
-        .map { Locale(it) }
-        .filter { networkLanguageCounts.containsKey(it.isO3Language) }
-        .map { locale ->
-          Language(
-              locale.isO3Language,
-              languageIsActive(listToActivateBy, locale),
-              networkLanguageCounts.getOrElse(locale.isO3Language, { 0 })
-          )
-        }
-  }
+  ) = Locale.getISOLanguages()
+      .map { Locale(it) }
+      .filter { networkLanguageCounts.containsKey(it.isO3Language) }
+      .map { locale ->
+        Language(
+            locale.isO3Language,
+            languageIsActive(listToActivateBy, locale),
+            networkLanguageCounts.getOrElse(locale.isO3Language, { 0 })
+        )
+      }
 
   private fun defaultLanguage() =
     listOf(

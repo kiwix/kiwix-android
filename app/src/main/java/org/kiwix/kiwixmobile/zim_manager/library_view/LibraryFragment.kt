@@ -213,11 +213,11 @@ class LibraryFragment : BaseFragment() {
       arguments = Bundle().apply {
         putString(
             StorageSelectDialog.STORAGE_DIALOG_INTERNAL,
-            getString(string.internal_storage)
+            this@LibraryFragment.getString(string.internal_storage)
         )
         putString(
             StorageSelectDialog.STORAGE_DIALOG_EXTERNAL,
-            getString(string.external_storage)
+            this@LibraryFragment.getString(string.external_storage)
         )
         putInt(StorageSelectDialog.STORAGE_DIALOG_THEME, StyleUtils.dialogStyle())
       }

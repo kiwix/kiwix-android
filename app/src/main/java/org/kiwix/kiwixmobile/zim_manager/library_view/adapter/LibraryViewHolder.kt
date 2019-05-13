@@ -2,7 +2,6 @@ package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import butterknife.internal.DebouncingOnClickListener
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.library_divider.divider_text
 import kotlinx.android.synthetic.main.library_item.creator
@@ -40,7 +39,7 @@ sealed class LibraryViewHolder<T : LibraryListItem>(override val containerView: 
       creator.setTextAndVisibility(item.book.creator)
       publisher.setTextAndVisibility(item.book.publisher)
       date.setTextAndVisibility(item.book.date)
-      size.setTextAndVisibility(MegaByte(item.book.size).humanReadable)
+      size.setTextAndVisibility(KiloByte(item.book.size).humanReadable)
       language.text = bookUtils.getLanguage(item.book.getLanguage())
       fileName.text = NetworkUtils.parseURL(
           KiwixApplication.getInstance(), item.book.file?.path ?: ""

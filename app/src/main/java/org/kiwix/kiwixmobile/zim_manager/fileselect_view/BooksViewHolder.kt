@@ -2,7 +2,6 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view
 
 import android.support.v7.widget.RecyclerView.ViewHolder
 import android.view.View
-import butterknife.internal.DebouncingOnClickListener
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.library_item.creator
 import kotlinx.android.synthetic.main.library_item.date
@@ -20,7 +19,7 @@ import org.kiwix.kiwixmobile.extensions.setTextAndVisibility
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.utils.BookUtils
 import org.kiwix.kiwixmobile.utils.NetworkUtils
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.MegaByte
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.KiloByte
 
 class BooksViewHolder(
   override val containerView: View,
@@ -37,7 +36,7 @@ class BooksViewHolder(
     creator.setTextAndVisibility(book.creator)
     publisher.setTextAndVisibility(book.publisher)
     date.setTextAndVisibility(book.date)
-    size.setTextAndVisibility(MegaByte(book.size).humanReadable)
+    size.setTextAndVisibility(KiloByte(book.size).humanReadable)
     language.text = bookUtils.getLanguage(book.getLanguage())
     fileName.text = NetworkUtils.parseURL(
         KiwixApplication.getInstance(), book.file.path

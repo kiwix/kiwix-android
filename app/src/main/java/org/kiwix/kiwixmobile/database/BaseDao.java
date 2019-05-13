@@ -39,8 +39,6 @@ abstract class BaseDao {
           }
         });
     updates
-        .debounce(10, TimeUnit.MILLISECONDS)
-        .onBackpressureDrop()
         .subscribeOn(Schedulers.io())
         .observeOn(Schedulers.io())
         .subscribe(unit -> {

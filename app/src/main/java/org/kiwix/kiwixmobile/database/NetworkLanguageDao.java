@@ -37,12 +37,12 @@ public class NetworkLanguageDao extends BaseDao {
 
   @Inject
   public NetworkLanguageDao(KiwixDatabase kiwikDatabase) {
-    super(kiwikDatabase,NetworkLanguageDatabaseEntity.TABLE);
+    super(kiwikDatabase, NetworkLanguageDatabaseEntity.TABLE);
   }
 
   @Override
   protected void onUpdateToTable() {
-    allLanguageProcessor.onNext(fetchAllLanguages());
+      allLanguageProcessor.onNext(fetchAllLanguages());
   }
 
   public Flowable<List<Language>> allLanguages() {
@@ -75,10 +75,13 @@ public class NetworkLanguageDao extends BaseDao {
   }
 
   public void saveFilteredLanguages(List<Language> languages) {
+    kiwixDatabase.beginTransaction();
     kiwixDatabase.deleteAll(NetworkLanguageDatabaseEntity.class);
     Collections.sort(languages,
         (language, t1) -> language.getLanguage().compareTo(t1.getLanguage()));
-    for (Language language : languages) {
+
+    for (int i = 0; i < languages.size(); i++) {
+      Language language = languages.get(i);
       NetworkLanguageDatabaseEntity networkLanguageDatabaseEntity =
           new NetworkLanguageDatabaseEntity();
       networkLanguageDatabaseEntity.setLanguageISO3(language.getLanguageCode());
@@ -86,5 +89,7 @@ public class NetworkLanguageDao extends BaseDao {
       networkLanguageDatabaseEntity.setNumberOfOccurences(language.getOccurencesOfLanguage());
       kiwixDatabase.persist(networkLanguageDatabaseEntity);
     }
+    kiwixDatabase.setTransactionSuccessful();
+    kiwixDatabase.endTransaction();
   }
 }

@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.database;
 
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
-import com.yahoo.squidb.sql.Table;
 import com.yahoo.squidb.sql.TableStatement;
 import io.reactivex.Flowable;
 import io.reactivex.processors.BehaviorProcessor;
@@ -27,7 +26,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
-import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
@@ -91,32 +89,39 @@ public class BookDao extends BaseDao {
   }
 
   public List<Book> getBooks() {
-    SquidCursor<BookDatabaseEntity> bookCursor = kiwixDatabase.query(
-        BookDatabaseEntity.class,
-        Query.select());
+    kiwixDatabase.beginTransaction();
     ArrayList<Book> books = new ArrayList<>();
-    while (bookCursor.moveToNext()) {
-      Book book = new Book();
-      setBookDetails(book, bookCursor);
-      if (!hasParts(book.file)) {
-        if (book.file.exists()) {
-          books.add(book);
-        } else {
-          kiwixDatabase.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(book.file));
+    try(SquidCursor<BookDatabaseEntity> bookCursor = kiwixDatabase.query(
+        BookDatabaseEntity.class,
+        Query.select())) {
+      while (bookCursor.moveToNext()) {
+        Book book = new Book();
+        setBookDetails(book, bookCursor);
+        if (!hasParts(book.file)) {
+          if (book.file.exists()) {
+            books.add(book);
+          } else {
+            kiwixDatabase.deleteWhere(BookDatabaseEntity.class,
+                BookDatabaseEntity.URL.eq(book.file));
+          }
         }
       }
     }
-    bookCursor.close();
+    kiwixDatabase.setTransactionSuccessful();
+    kiwixDatabase.endTransaction();
     return books;
   }
 
   public void saveBooks(List<Book> books) {
+    kiwixDatabase.beginTransaction();
     for (Book book : books) {
       if (book != null) {
         BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
         setBookDatabaseEntity(book, bookDatabaseEntity);
       }
     }
+    kiwixDatabase.setTransactionSuccessful();
+    kiwixDatabase.endTransaction();
   }
 
   public void deleteBook(String id) {
