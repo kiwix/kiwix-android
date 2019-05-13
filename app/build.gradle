@@ -248,12 +248,12 @@ android {
         def version_code = project.property('version_code')
         versionCode version_code.toInteger()
       } else {
-        versionCode 55
+        versionCode 56
       }
       if (project.hasProperty('version_name')) {
         versionName project.property('version_name')
       } else {
-        versionName "2.4"
+        versionName "2.5"
       }
     }
     // Custom apps built from a json file, zim file and icon set
