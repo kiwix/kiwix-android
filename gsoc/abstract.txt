@@ -1,0 +1,14 @@
+New Features:
+	- Local sharing of ZIMs using WiFi: Enable users to share ZIM files locally using WiFi, allowing users to easily share ZIM files with each other without the need of a computer
+	- In-app Note Keeping: Inbuilt note keeper for each ZIM file, allowing users to jot down points from within the app itself
+	- Implement #765 (& specific-article sharing): Complete the issue and use the new structure to enable users to share articles with others (link to ZIM article for Kiwix users, URL for others)
+	- User Feedback activity: To submit feedback, modelled after the contact page of the website
+
+Enhancements:
+	- Navigational drawer based UI: Help centralise and use a single point of origin for the 3 main actions on the app (View library, Download wikis, Read wiki article)
+	- Categorisation of ZIMs in Library & Auto-hide system UI bars during reading
+
+Other details:
+	- Document all the code as I write it and fix bugs that I encounter along the way
+	- Weekly blog sharing my experience to generate interest in the project and open source contribution
+	- Take on additional bugs and issues if the above work gets finished before the final deadline
