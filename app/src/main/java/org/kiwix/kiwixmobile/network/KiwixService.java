@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.network;
 
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
@@ -30,7 +31,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Url;
 
 public interface KiwixService {
-  @GET("/library/library_zim.xml") Flowable<LibraryNetworkEntity> getLibrary();
+  @GET("/library/library_zim.xml") Single<LibraryNetworkEntity> getLibrary();
 
   @GET Observable<MetaLinkNetworkEntity> getMetaLinks(@Url String url);
 

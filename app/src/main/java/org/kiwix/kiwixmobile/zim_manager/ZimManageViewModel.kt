@@ -25,7 +25,7 @@ import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
-import io.reactivex.functions.Function5
+import io.reactivex.functions.Function6
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
@@ -44,6 +44,11 @@ import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.network.KiwixService
 import org.kiwix.kiwixmobile.utils.BookUtils
+import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState
+import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CanWrite4GbFile
+import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrite4GbFile
+import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.NotEnoughSpaceFor4GbFile
+import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
@@ -64,7 +69,8 @@ class ZimManageViewModel @Inject constructor(
   private val kiwixService: KiwixService,
   private val context: Application,
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
-  private val bookUtils: BookUtils
+  private val bookUtils: BookUtils,
+  private val fat32Checker: Fat32Checker
 ) : ViewModel() {
 
   val libraryItems: MutableLiveData<List<LibraryListItem>> = MutableLiveData()
@@ -97,19 +103,43 @@ class ZimManageViewModel @Inject constructor(
     val downloads: Flowable<MutableList<DownloadModel>> = downloadDao.downloads()
     val downloadStatuses = downloadStatuses(downloads)
     val booksFromDao: Flowable<List<Book>> = books()
-    val library = libraryFromNetwork()
+    val networkLibrary = PublishProcessor.create<LibraryNetworkEntity>()
     return arrayOf(
         updateDownloadItems(downloadStatuses),
         removeCompletedDownloadsFromDb(downloadStatuses),
         removeNonExistingDownloadsFromDb(downloadStatuses, downloads),
         updateBookItems(booksFromDao),
         checkFileSystemForBooksOnRequest(booksFromDao),
-        updateLibraryItems(booksFromDao, downloads, library),
-        updateLanguagesInDao(library),
+        updateLibraryItems(booksFromDao, downloads, networkLibrary),
+        updateLanguagesInDao(networkLibrary),
         updateNetworkStates(),
-        updateLanguageItemsForDialog()
+        updateLanguageItemsForDialog(),
+        requestsAndConnectivtyChangesToLibraryRequests(networkLibrary)
     )
   }
+
+  private fun requestsAndConnectivtyChangesToLibraryRequests(library: PublishProcessor<LibraryNetworkEntity>) =
+    Flowable.combineLatest(
+        requestDownloadLibrary,
+        connectivityBroadcastReceiver.networkStates.distinctUntilChanged().filter(
+            CONNECTED::equals
+        ),
+        BiFunction<Unit, NetworkState, Unit> { _, _ -> Unit }
+    )
+        .subscribeOn(Schedulers.io())
+        .observeOn(Schedulers.io())
+        .subscribe(
+            {
+              kiwixService.library.subscribe(
+                  { library.onNext(it) },
+                  {
+                    it.printStackTrace()
+                    library.onNext(LibraryNetworkEntity().apply { book = LinkedList() })
+                  }
+              )
+            },
+            Throwable::printStackTrace
+        )
 
   private fun removeNonExistingDownloadsFromDb(
     downloadStatuses: Flowable<List<DownloadStatus>>,
@@ -164,20 +194,6 @@ class ZimManageViewModel @Inject constructor(
         networkStates::postValue, Throwable::printStackTrace
     )
 
-  private fun libraryFromNetwork() =
-    Flowable.combineLatest(
-        requestDownloadLibrary,
-        connectivityBroadcastReceiver.networkStates.distinctUntilChanged().filter(
-            NetworkState.CONNECTED::equals
-        ),
-        BiFunction<Unit, NetworkState, Unit> { _, _ -> Unit }
-    )
-        .subscribeOn(Schedulers.io())
-        .doOnNext { libraryListIsRefreshing.postValue(true) }
-        .switchMap { kiwixService.library }
-        .doOnError(Throwable::printStackTrace)
-        .onErrorResumeNext(Flowable.just(LibraryNetworkEntity().apply { book = LinkedList() }))
-
   private fun updateLibraryItems(
     booksFromDao: Flowable<List<Book>>,
     downloads: Flowable<MutableList<DownloadModel>>,
@@ -191,7 +207,8 @@ class ZimManageViewModel @Inject constructor(
           .doOnNext { libraryListIsRefreshing.postValue(true) }
           .debounce(500, MILLISECONDS)
           .observeOn(Schedulers.io()),
-      Function5(this::combineLibrarySources)
+      fat32Checker.fileSystemStates,
+      Function6(this::combineLibrarySources)
   )
       .doOnNext { libraryListIsRefreshing.postValue(false) }
       .subscribeOn(Schedulers.io())
@@ -209,6 +226,7 @@ class ZimManageViewModel @Inject constructor(
           languageDao.allLanguages(),
           BiFunction(this::combineToLanguageList)
       )
+      .map { it.sortedBy(Language::language) }
       .subscribe(
           languageDao::saveFilteredLanguages,
           Throwable::printStackTrace
@@ -274,7 +292,8 @@ class ZimManageViewModel @Inject constructor(
     activeDownloads: List<DownloadModel>,
     allLanguages: List<Language>,
     libraryNetworkEntity: LibraryNetworkEntity,
-    filter: String
+    filter: String,
+    fileSystemState: FileSystemState
   ): List<LibraryListItem> {
     val downloadedBooksIds = booksOnFileSystem.map { it.id }
     val downloadingBookIds = activeDownloads.map { it.book.id }
@@ -283,6 +302,13 @@ class ZimManageViewModel @Inject constructor(
     val booksUnfilteredByLanguage =
       applyUserFilter(
           libraryNetworkEntity.books
+              .filter {
+                when (fileSystemState) {
+                  CannotWrite4GbFile -> it.size.toLongOrNull() ?: 0L < Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES
+                  NotEnoughSpaceFor4GbFile,
+                  CanWrite4GbFile -> true
+                }
+              }
               .filterNot { downloadedBooksIds.contains(it.id) }
               .filterNot { downloadingBookIds.contains(it.id) }
               .filterNot { it.url.contains("/stack_exchange/") },// Temp filter see #694, filter)

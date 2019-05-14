@@ -99,7 +99,9 @@ class ZimManageActivity : BaseActivity() {
       LanguageSelectDialog.Builder(this, dialogStyle())
           .apply {
             onOkClicked = {
-              Flowable.fromCallable { languagesDao.saveFilteredLanguages(it) }
+              Flowable.fromCallable {
+                languagesDao.saveFilteredLanguages(it.sortedBy(Language::language))
+              }
                   .subscribeOn(Schedulers.io())
                   .subscribe()
             }

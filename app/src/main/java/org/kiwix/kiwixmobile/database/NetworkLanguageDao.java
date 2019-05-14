@@ -24,7 +24,6 @@ import com.yahoo.squidb.sql.Query;
 import io.reactivex.Flowable;
 import io.reactivex.processors.BehaviorProcessor;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +41,7 @@ public class NetworkLanguageDao extends BaseDao {
 
   @Override
   protected void onUpdateToTable() {
-      allLanguageProcessor.onNext(fetchAllLanguages());
+    allLanguageProcessor.onNext(fetchAllLanguages());
   }
 
   public Flowable<List<Language>> allLanguages() {
@@ -75,21 +74,20 @@ public class NetworkLanguageDao extends BaseDao {
   }
 
   public void saveFilteredLanguages(List<Language> languages) {
-    kiwixDatabase.beginTransaction();
-    kiwixDatabase.deleteAll(NetworkLanguageDatabaseEntity.class);
-    Collections.sort(languages,
-        (language, t1) -> language.getLanguage().compareTo(t1.getLanguage()));
-
-    for (int i = 0; i < languages.size(); i++) {
-      Language language = languages.get(i);
-      NetworkLanguageDatabaseEntity networkLanguageDatabaseEntity =
-          new NetworkLanguageDatabaseEntity();
-      networkLanguageDatabaseEntity.setLanguageISO3(language.getLanguageCode());
-      networkLanguageDatabaseEntity.setIsEnabled(language.getActive());
-      networkLanguageDatabaseEntity.setNumberOfOccurences(language.getOccurencesOfLanguage());
-      kiwixDatabase.persist(networkLanguageDatabaseEntity);
+    if (languages.size() > 0) {
+      kiwixDatabase.beginTransaction();
+      kiwixDatabase.deleteAll(NetworkLanguageDatabaseEntity.class);
+      for (int i = 0; i < languages.size(); i++) {
+        Language language = languages.get(i);
+        NetworkLanguageDatabaseEntity networkLanguageDatabaseEntity =
+            new NetworkLanguageDatabaseEntity();
+        networkLanguageDatabaseEntity.setLanguageISO3(language.getLanguageCode());
+        networkLanguageDatabaseEntity.setIsEnabled(language.getActive());
+        networkLanguageDatabaseEntity.setNumberOfOccurences(language.getOccurencesOfLanguage());
+        kiwixDatabase.persist(networkLanguageDatabaseEntity);
+      }
+      kiwixDatabase.setTransactionSuccessful();
+      kiwixDatabase.endTransaction();
     }
-    kiwixDatabase.setTransactionSuccessful();
-    kiwixDatabase.endTransaction();
   }
 }
