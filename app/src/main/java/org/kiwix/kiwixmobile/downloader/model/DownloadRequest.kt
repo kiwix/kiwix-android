@@ -22,16 +22,18 @@ import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.library.entity.MetaLinkNetworkEntity
 
 data class DownloadRequest(
-  val uri: Uri,
+  val urlString: String,
   val title: String,
   val description: String
 ) {
+
+  val uri get() = Uri.parse(urlString)
 
   constructor(
     metaLinkNetworkEntity: MetaLinkNetworkEntity,
     book: LibraryNetworkEntity.Book
   ) : this(
-      Uri.parse(metaLinkNetworkEntity.relevantUrl.value),
+      metaLinkNetworkEntity.relevantUrl.value,
       book.title,
       book.description
   )

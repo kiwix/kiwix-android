@@ -118,7 +118,7 @@ public class KiwixDatabase extends SquidDatabase {
       tryCreateTable(RecentSearch.TABLE);
     }
     if (newVersion >= 12) {
-      tryAddColumn(BookDatabaseEntity.REMOTE_URL);
+      //tryAddColumn(BookDatabaseEntity.REMOTE_URL);
     }
     if (newVersion >= 13) {
       tryAddColumn(BookDatabaseEntity.NAME);

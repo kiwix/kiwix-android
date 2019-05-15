@@ -61,14 +61,10 @@ import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
 import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
 import static org.kiwix.kiwixmobile.downloader.ChunkUtils.completeChunk;
-import static org.kiwix.kiwixmobile.downloader.ChunkUtils.completeDownload;
 import static org.kiwix.kiwixmobile.downloader.ChunkUtils.deleteAllParts;
-import static org.kiwix.kiwixmobile.downloader.ChunkUtils.getCurrentSize;
 import static org.kiwix.kiwixmobile.downloader.ChunkUtils.initialChunk;
-import static org.kiwix.kiwixmobile.downloader.ChunkUtils.isPresent;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_BOOK;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_LIBRARY;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_NOTIFICATION_ID;
@@ -186,7 +182,7 @@ public class DownloadService extends Service {
     NotificationCompat.Action pause = new NotificationCompat.Action(R.drawable.ic_pause_black_24dp, getString(R.string.download_pause), pausePending);
     NotificationCompat.Action stop = new NotificationCompat.Action(R.drawable.ic_stop_black_24dp, getString(R.string.download_stop), stopPending);
 
-    if(flags == START_FLAG_REDELIVERY && book.file == null) {
+    if (flags == START_FLAG_REDELIVERY /*&& book.file == null*/) {
       return START_NOT_STICKY;
     } else {
       notification.put(notificationID , new NotificationCompat.Builder(this, ONGOING_DOWNLOAD_CHANNEL_ID)
@@ -288,13 +284,13 @@ public class DownloadService extends Service {
     //      KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
     //}
     TestingUtils.bindResource(DownloadService.class);
-    if (book.file != null && isPresent(book.file.getPath())) {
-      // Calculate initial download progress
-      int initial = (int) (getCurrentSize(book) / (Long.valueOf(book.getSize()) * BOOK_SIZE_OFFSET));
-      notification.get(notificationID).setProgress(100, initial, false);
-      updateDownloadFragmentProgress(initial, notificationID, book);
-      notificationManager.notify(notificationID, notification.get(notificationID).build());
-    }
+    //if (book.file != null && isPresent(book.file.getPath())) {
+    //  // Calculate initial download progress
+    //  int initial = (int) (getCurrentSize(book) / (Long.valueOf(book.getSize()) * BOOK_SIZE_OFFSET));
+    //  notification.get(notificationID).setProgress(100, initial, false);
+    //  updateDownloadFragmentProgress(initial, notificationID, book);
+    //  notificationManager.notify(notificationID, notification.get(notificationID).build());
+    //}
     kiwixService.getMetaLinks(url)
         .retryWhen(errors -> errors.flatMap(error -> Observable.timer(5, TimeUnit.SECONDS)))
         .subscribeOn(AndroidSchedulers.mainThread())
@@ -307,14 +303,14 @@ public class DownloadService extends Service {
       notification.get(notificationID).setContentText(getString(R.string.zim_file_downloaded));
       final Intent target = new Intent(this, KiwixMobileActivity.class);
       target.putExtra(EXTRA_ZIM_FILE, KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
-      File filec = book.file;
-      completeDownload(filec);
+      //File filec = book.file;
+      //completeDownload(filec);
       target.putExtra(EXTRA_NOTIFICATION_ID, notificationID);
       PendingIntent pendingIntent = PendingIntent.getActivity
           (getBaseContext(), 0,
               target, PendingIntent.FLAG_CANCEL_CURRENT);
-      book.downloaded = true;
-      bookDao.deleteBook(book.id);
+      //book.downloaded = true;
+      //bookDao.deleteBook(book.id);
       notification.get(notificationID).setContentIntent(pendingIntent);
       //          notification.get(notificationID).mActions.clear();
       TestingUtils.unbindResource(DownloadService.class);

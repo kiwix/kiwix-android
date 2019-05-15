@@ -42,7 +42,7 @@ sealed class LibraryViewHolder<T : LibraryListItem>(override val containerView: 
       size.setTextAndVisibility(KiloByte(item.book.size).humanReadable)
       language.text = bookUtils.getLanguage(item.book.getLanguage())
       fileName.text = NetworkUtils.parseURL(
-          KiwixApplication.getInstance(), item.book.file?.path ?: ""
+          KiwixApplication.getInstance(), item.book.url
       )
       favicon.setBitmap(Base64String(item.book.favicon))
 

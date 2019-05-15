@@ -24,9 +24,12 @@ import io.reactivex.Flowable;
 import io.reactivex.processors.BehaviorProcessor;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
+import org.kiwix.kiwixmobile.downloader.model.BookOnDisk;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
 import static org.kiwix.kiwixmobile.downloader.ChunkUtils.hasParts;
@@ -36,7 +39,7 @@ import static org.kiwix.kiwixmobile.downloader.ChunkUtils.hasParts;
  */
 
 public class BookDao extends BaseDao {
-  private final BehaviorProcessor<List<Book>> booksProcessor = BehaviorProcessor.create();
+  private final BehaviorProcessor<List<BookOnDisk>> booksProcessor = BehaviorProcessor.create();
 
   @Inject
   public BookDao(KiwixDatabase kiwixDatabase) {
@@ -48,61 +51,49 @@ public class BookDao extends BaseDao {
     booksProcessor.onNext(getBooks());
   }
 
-  public Flowable<List<Book>> books() {
+  public Flowable<List<BookOnDisk>> books() {
     return booksProcessor;
   }
 
-  public void setBookDetails(Book book, SquidCursor<BookDatabaseEntity> bookCursor) {
-    book.databaseId = bookCursor.get(BookDatabaseEntity.ID);
-    book.id = bookCursor.get(BookDatabaseEntity.BOOK_ID);
-    book.title = bookCursor.get(BookDatabaseEntity.TITLE);
-    book.description = bookCursor.get(BookDatabaseEntity.DESCRIPTION);
-    book.language = bookCursor.get(BookDatabaseEntity.LANGUAGE);
-    book.creator = bookCursor.get(BookDatabaseEntity.BOOK_CREATOR);
-    book.publisher = bookCursor.get(BookDatabaseEntity.PUBLISHER);
-    book.date = bookCursor.get(BookDatabaseEntity.DATE);
-    book.file = new File(bookCursor.get(BookDatabaseEntity.URL));
-    book.articleCount = bookCursor.get(BookDatabaseEntity.ARTICLE_COUNT);
-    book.mediaCount = bookCursor.get(BookDatabaseEntity.MEDIA_COUNT);
-    book.size = bookCursor.get(BookDatabaseEntity.SIZE);
-    book.favicon = bookCursor.get(BookDatabaseEntity.FAVICON);
-    book.bookName = bookCursor.get(BookDatabaseEntity.NAME);
-  }
-
-  public void setBookDatabaseEntity(Book book, BookDatabaseEntity bookDatabaseEntity) {
-    final String path = book.file.getPath();
-    bookDatabaseEntity.setBookId(book.getId())
+  public void setBookDatabaseEntity(BookOnDisk bookonDisk, BookDatabaseEntity bookDatabaseEntity) {
+    final Book book = bookonDisk.getBook();
+    bookDatabaseEntity
+        .setFilePath(bookonDisk.getFile().getPath())
+        .setBookId(book.getId())
         .setTitle(book.getTitle())
         .setDescription(book.getDescription())
         .setLanguage(book.getLanguage())
         .setBookCreator(book.getCreator())
         .setPublisher(book.getPublisher())
         .setDate(book.getDate())
-        .setUrl(path)
+        .setUrl(book.getUrl())
         .setArticleCount(book.getArticleCount())
         .setMediaCount(book.getMediaCount())
         .setSize(book.getSize())
-        .setFavicon(book.getFavicon())
-        .setName(book.getName());
-    kiwixDatabase.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.URL.eq(path));
-    kiwixDatabase.persistWithOnConflict(bookDatabaseEntity, TableStatement.ConflictAlgorithm.REPLACE);
+        .setName(book.getName())
+        .setFavicon(book.getFavicon());
   }
 
-  public List<Book> getBooks() {
+  public List<BookOnDisk> getBooks() {
     kiwixDatabase.beginTransaction();
-    ArrayList<Book> books = new ArrayList<>();
+    ArrayList<BookOnDisk> books = new ArrayList<>();
+    final BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
     try(SquidCursor<BookDatabaseEntity> bookCursor = kiwixDatabase.query(
         BookDatabaseEntity.class,
         Query.select())) {
       while (bookCursor.moveToNext()) {
-        Book book = new Book();
-        setBookDetails(book, bookCursor);
-        if (!hasParts(book.file)) {
-          if (book.file.exists()) {
+        bookDatabaseEntity.readPropertiesFromCursor(bookCursor);
+        final File file = new File(bookDatabaseEntity.getFilePath());
+        BookOnDisk book = new BookOnDisk(
+            bookDatabaseEntity.getId(),
+            toBook(bookDatabaseEntity),
+            file);
+        if (!hasParts(file)) {
+          if (file.exists()) {
             books.add(book);
           } else {
             kiwixDatabase.deleteWhere(BookDatabaseEntity.class,
-                BookDatabaseEntity.URL.eq(book.file));
+                BookDatabaseEntity.FILE_PATH.eq(file.getPath()));
           }
         }
       }
@@ -112,19 +103,41 @@ public class BookDao extends BaseDao {
     return books;
   }
 
-  public void saveBooks(List<Book> books) {
+  public void saveBooks(Collection<BookOnDisk> books) {
     kiwixDatabase.beginTransaction();
-    for (Book book : books) {
+    for (BookOnDisk book : books) {
       if (book != null) {
         BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
         setBookDatabaseEntity(book, bookDatabaseEntity);
+        kiwixDatabase.deleteWhere(BookDatabaseEntity.class,
+            BookDatabaseEntity.FILE_PATH.eq(bookDatabaseEntity.getFilePath()));
+        kiwixDatabase.persistWithOnConflict(bookDatabaseEntity,
+            TableStatement.ConflictAlgorithm.REPLACE);
       }
     }
     kiwixDatabase.setTransactionSuccessful();
     kiwixDatabase.endTransaction();
   }
 
-  public void deleteBook(String id) {
-    kiwixDatabase.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.BOOK_ID.eq(id));
+  public void deleteBook(Long id) {
+    kiwixDatabase.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.ID.eq(id));
+  }
+
+  private LibraryNetworkEntity.Book toBook(BookDatabaseEntity bookDatabaseEntity) {
+    final LibraryNetworkEntity.Book book = new LibraryNetworkEntity.Book();
+    book.id = bookDatabaseEntity.getBookId();
+    book.title = bookDatabaseEntity.getTitle();
+    book.description = bookDatabaseEntity.getDescription();
+    book.language = bookDatabaseEntity.getLanguage();
+    book.creator = bookDatabaseEntity.getBookCreator();
+    book.publisher = bookDatabaseEntity.getPublisher();
+    book.date = bookDatabaseEntity.getDate();
+    book.url = bookDatabaseEntity.getUrl();
+    book.articleCount = bookDatabaseEntity.getArticleCount();
+    book.mediaCount = bookDatabaseEntity.getMediaCount();
+    book.size = bookDatabaseEntity.getSize();
+    book.bookName = bookDatabaseEntity.getName();
+    book.favicon = bookDatabaseEntity.getFavicon();
+    return book;
   }
 }

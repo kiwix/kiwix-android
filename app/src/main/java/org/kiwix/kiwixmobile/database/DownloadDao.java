@@ -23,12 +23,9 @@ import com.yahoo.squidb.sql.Query;
 import com.yahoo.squidb.sql.TableStatement;
 import io.reactivex.Flowable;
 import io.reactivex.processors.BehaviorProcessor;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
-import kotlin.collections.ArraysKt;
 import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.database.entity.DownloadDatabaseEntity;
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel;
@@ -98,7 +95,7 @@ public class DownloadDao extends BaseDao {
         .setFavIcon(book.getFavicon());
   }
 
-  private List<DownloadModel> getDownloads() {
+  public List<DownloadModel> getDownloads() {
     return toList(kiwixDatabase.query(DownloadDatabaseEntity.class, Query.select()));
   }
 
@@ -126,7 +123,6 @@ public class DownloadDao extends BaseDao {
     book.publisher = downloadDatabaseEntity.getPublisher();
     book.date = downloadDatabaseEntity.getDate();
     book.url = downloadDatabaseEntity.getUrl();
-    book.file = new File(downloadDatabaseEntity.getUrl());
     book.articleCount = downloadDatabaseEntity.getArticleCount();
     book.mediaCount = downloadDatabaseEntity.getMediaCount();
     book.size = downloadDatabaseEntity.getSize();

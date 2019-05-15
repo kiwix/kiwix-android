@@ -14,23 +14,24 @@ import kotlinx.android.synthetic.main.library_item.size
 import kotlinx.android.synthetic.main.library_item.title
 import org.kiwix.kiwixmobile.KiwixApplication
 import org.kiwix.kiwixmobile.downloader.model.Base64String
+import org.kiwix.kiwixmobile.downloader.model.BookOnDisk
 import org.kiwix.kiwixmobile.extensions.setBitmap
 import org.kiwix.kiwixmobile.extensions.setTextAndVisibility
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.utils.BookUtils
 import org.kiwix.kiwixmobile.utils.NetworkUtils
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.KiloByte
 
-class BooksViewHolder(
+class BooksOnDiskViewHolder(
   override val containerView: View,
   private val bookUtils: BookUtils
 ) : ViewHolder(containerView),
     LayoutContainer {
   fun bind(
-    book: Book,
-    clickAction: (Book) -> Unit,
-    longClickAction: (Book) -> Unit
+    bookOnDisk: BookOnDisk,
+    clickAction: (BookOnDisk) -> Unit,
+    longClickAction: (BookOnDisk) -> Unit
   ) {
+    val book = bookOnDisk.book
     title.setTextAndVisibility(book.title)
     description.setTextAndVisibility(book.description)
     creator.setTextAndVisibility(book.creator)
@@ -39,15 +40,15 @@ class BooksViewHolder(
     size.setTextAndVisibility(KiloByte(book.size).humanReadable)
     language.text = bookUtils.getLanguage(book.getLanguage())
     fileName.text = NetworkUtils.parseURL(
-        KiwixApplication.getInstance(), book.file.path
+        KiwixApplication.getInstance(), book.url
     )
     favicon.setBitmap(Base64String(book.favicon))
 
     containerView.setOnClickListener {
-      clickAction.invoke(book)
+      clickAction.invoke(bookOnDisk)
     }
     containerView.setOnLongClickListener {
-      longClickAction.invoke(book)
+      longClickAction.invoke(bookOnDisk)
       return@setOnLongClickListener true
     }
   }

@@ -79,7 +79,7 @@ class DownloadManagerRequester @Inject constructor(
     Uri.fromFile(
         File(
             "${sharedPreferenceUtil.prefStorage}/Kiwix/${
-            StorageUtils.getFileNameFromUrl(uri.toString())
+            StorageUtils.getFileNameFromUrl(urlString)
             }"
         )
     )

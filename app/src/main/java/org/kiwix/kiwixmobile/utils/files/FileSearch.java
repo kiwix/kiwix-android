@@ -26,18 +26,19 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-
-import java.util.ArrayList;
-import org.kiwix.kiwixmobile.ZimContentProvider;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
-
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.Collection;
-import java.util.Vector;
-
 import eu.mhutti1.utils.storage.StorageDevice;
 import eu.mhutti1.utils.storage.StorageDeviceUtils;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Vector;
+import org.kiwix.kiwixmobile.ZimContentProvider;
+import org.kiwix.kiwixmobile.downloader.model.BookOnDisk;
+import org.kiwix.kiwixmobile.downloader.model.DownloadModel;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.utils.StorageUtils;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
@@ -48,13 +49,15 @@ public class FileSearch {
 
 
   private final Context context;
+  private final List<DownloadModel> downloads;
   private final ResultListener listener;
 
   private boolean fileSystemScanCompleted = false;
   private boolean mediaStoreScanCompleted = false;
 
-  public FileSearch(Context ctx, ResultListener listener) {
+  public FileSearch(Context ctx, List<DownloadModel> downloads, ResultListener listener) {
     this.context = ctx;
+    this.downloads = downloads;
     this.listener = listener;
   }
 
@@ -96,7 +99,6 @@ public class FileSearch {
     try {
       while (query.moveToNext()) {
         File file = new File(query.getString(0));
-
         if (file.canRead())
           onFileFound(file.getAbsolutePath());
       }
@@ -174,7 +176,7 @@ public class FileSearch {
     return files.toArray(arr);
   }
 
-  public static synchronized LibraryNetworkEntity.Book fileToBook(String filePath) {
+  public static synchronized BookOnDisk fileToBookOnDisk(String filePath) {
     LibraryNetworkEntity.Book book = null;
 
     if (ZimContentProvider.zimFileName != null) {
@@ -188,7 +190,6 @@ public class FileSearch {
           book = new LibraryNetworkEntity.Book();
           book.title = ZimContentProvider.getZimFileTitle();
           book.id = ZimContentProvider.getId();
-          book.file = new File(filePath);
           book.size = String.valueOf(ZimContentProvider.getFileSize());
           book.favicon = ZimContentProvider.getFavicon();
           book.creator = ZimContentProvider.getCreator();
@@ -210,7 +211,7 @@ public class FileSearch {
     }
     ZimContentProvider.originalFileName = "";
 
-    return book;
+    return new BookOnDisk(null, book, new File(filePath));
   }
 
   // Fill fileList with files found in the specific directory
@@ -225,14 +226,26 @@ public class FileSearch {
 
   // Callback that a new file has been found
   public void onFileFound(String filePath) {
-    LibraryNetworkEntity.Book book = fileToBook(filePath);
+    if (fileIsDownloading(filePath)) {
+      return;
+    }
+    BookOnDisk book = fileToBookOnDisk(filePath);
 
     if (book != null)
       listener.onBookFound(book);
   }
 
+  private boolean fileIsDownloading(String filePath) {
+    for (DownloadModel download : downloads) {
+      if (filePath.endsWith(StorageUtils.getFileNameFromUrl(download.getBook().getUrl()))) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public interface ResultListener {
-    void onBookFound(LibraryNetworkEntity.Book book);
+    void onBookFound(BookOnDisk book);
 
     void onScanCompleted();
   }

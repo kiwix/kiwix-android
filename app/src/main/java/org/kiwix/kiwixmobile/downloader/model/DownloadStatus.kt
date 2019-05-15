@@ -68,9 +68,8 @@ class DownloadStatus(
   val uri: String?,
   val book: Book
 ) {
-  fun toBook() = book.also {
-    book.file = File(Uri.parse(localUri).path)
-  }
+
+  fun toBookOnDisk() = BookOnDisk(book = book, file = File(Uri.parse(localUri).path))
 
   constructor(
     cursor: Cursor,

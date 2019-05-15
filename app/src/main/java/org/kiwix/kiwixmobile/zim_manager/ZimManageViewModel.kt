@@ -34,6 +34,7 @@ import org.kiwix.kiwixmobile.database.BookDao
 import org.kiwix.kiwixmobile.database.DownloadDao
 import org.kiwix.kiwixmobile.database.NetworkLanguageDao
 import org.kiwix.kiwixmobile.downloader.Downloader
+import org.kiwix.kiwixmobile.downloader.model.BookOnDisk
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.downloader.model.DownloadState.Successful
@@ -75,7 +76,7 @@ class ZimManageViewModel @Inject constructor(
 
   val libraryItems: MutableLiveData<List<LibraryListItem>> = MutableLiveData()
   val downloadItems: MutableLiveData<List<DownloadItem>> = MutableLiveData()
-  val bookItems: MutableLiveData<List<Book>> = MutableLiveData()
+  val bookItems: MutableLiveData<List<BookOnDisk>> = MutableLiveData()
   val deviceListIsRefreshing = MutableLiveData<Boolean>()
   val libraryListIsRefreshing = MutableLiveData<Boolean>()
   val networkStates = MutableLiveData<NetworkState>()
@@ -102,7 +103,7 @@ class ZimManageViewModel @Inject constructor(
   private fun disposables(): Array<Disposable> {
     val downloads: Flowable<MutableList<DownloadModel>> = downloadDao.downloads()
     val downloadStatuses = downloadStatuses(downloads)
-    val booksFromDao: Flowable<List<Book>> = books()
+    val booksFromDao = books()
     val networkLibrary = PublishProcessor.create<LibraryNetworkEntity>()
     return arrayOf(
         updateDownloadItems(downloadStatuses),
@@ -195,7 +196,7 @@ class ZimManageViewModel @Inject constructor(
     )
 
   private fun updateLibraryItems(
-    booksFromDao: Flowable<List<Book>>,
+    booksFromDao: Flowable<List<BookOnDisk>>,
     downloads: Flowable<MutableList<DownloadModel>>,
     library: Flowable<LibraryNetworkEntity>
   ) = Flowable.combineLatest(
@@ -288,14 +289,14 @@ class ZimManageViewModel @Inject constructor(
   ) = allLanguages.firstOrNull { it.languageCode == locale.isO3Language }?.active == true
 
   private fun combineLibrarySources(
-    booksOnFileSystem: List<Book>,
+    booksOnFileSystem: List<BookOnDisk>,
     activeDownloads: List<DownloadModel>,
     allLanguages: List<Language>,
     libraryNetworkEntity: LibraryNetworkEntity,
     filter: String,
     fileSystemState: FileSystemState
   ): List<LibraryListItem> {
-    val downloadedBooksIds = booksOnFileSystem.map { it.id }
+    val downloadedBooksIds = booksOnFileSystem.map { it.book.id }
     val downloadingBookIds = activeDownloads.map { it.book.id }
     val activeLanguageCodes = allLanguages.filter(Language::active)
         .map { it.languageCode }
@@ -355,7 +356,7 @@ class ZimManageViewModel @Inject constructor(
   private fun toBookItems(books: List<Book>) =
     books.map { BookItem(it) }.toTypedArray()
 
-  private fun checkFileSystemForBooksOnRequest(booksFromDao: Flowable<List<Book>>) =
+  private fun checkFileSystemForBooksOnRequest(booksFromDao: Flowable<List<BookOnDisk>>) =
     requestFileSystemCheck
         .subscribeOn(Schedulers.io())
         .observeOn(Schedulers.io())
@@ -363,7 +364,7 @@ class ZimManageViewModel @Inject constructor(
         .doOnNext { deviceListIsRefreshing.postValue(true) }
         .switchMap(
             {
-              updateBookDaoFromFilesystem(booksFromDao)
+              booksFromStorageNotIn(booksFromDao)
             },
             1
         )
@@ -376,24 +377,23 @@ class ZimManageViewModel @Inject constructor(
 
   private fun books() = bookDao.books()
       .subscribeOn(Schedulers.io())
-      .map { it.sortedBy { book -> book.title } }
+      .map { it.sortedBy { book -> book.book.title } }
 
-  private fun updateBookDaoFromFilesystem(booksFromDao: Flowable<List<Book>>) =
+  private fun booksFromStorageNotIn(booksFromDao: Flowable<List<BookOnDisk>>) =
     storageObserver.booksOnFileSystem
         .withLatestFrom(
-            booksFromDao,
+            booksFromDao.map { it.map { bookOnDisk -> bookOnDisk.book.id } },
             BiFunction(this::removeBooksAlreadyInDao)
         )
 
   private fun removeBooksAlreadyInDao(
-    booksFromFileSystem: Collection<Book>,
-    booksFromDao: List<Book>
-  ): List<Book> {
-    val idsInDao = booksFromDao.map { it.id }
-    return booksFromFileSystem.filterNot { idsInDao.contains(it.id) }
-  }
+    booksFromFileSystem: Collection<BookOnDisk>,
+    idsInDao: List<String>
+  ) = booksFromFileSystem.filterNot { idsInDao.contains(it.book.id) }
 
-  private fun updateBookItems(booksFromDao: Flowable<List<Book>>) =
+  private fun updateBookItems(
+    booksFromDao: Flowable<List<BookOnDisk>>
+  ) =
     booksFromDao
         .subscribe(
             bookItems::postValue,
@@ -407,7 +407,7 @@ class ZimManageViewModel @Inject constructor(
         .map { it.filter { status -> status.state == Successful } }
         .subscribe(
             {
-              bookDao.saveBooks(it.map { downloadStatus -> downloadStatus.toBook() })
+              bookDao.saveBooks(it.map { downloadStatus -> downloadStatus.toBookOnDisk() })
               downloadDao.delete(
                   *it.map { status -> status.downloadId }.toTypedArray()
               )

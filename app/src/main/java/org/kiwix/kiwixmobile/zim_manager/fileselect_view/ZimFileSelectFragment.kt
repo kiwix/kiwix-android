@@ -40,8 +40,8 @@ import org.kiwix.kiwixmobile.ZimContentProvider
 import org.kiwix.kiwixmobile.base.BaseFragment
 import org.kiwix.kiwixmobile.database.BookDao
 import org.kiwix.kiwixmobile.di.components.ActivityComponent
+import org.kiwix.kiwixmobile.downloader.model.BookOnDisk
 import org.kiwix.kiwixmobile.extensions.toast
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.utils.BookUtils
 import org.kiwix.kiwixmobile.utils.Constants.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.utils.DialogShower
@@ -66,8 +66,8 @@ class ZimFileSelectFragment : BaseFragment() {
         .get(ZimManageViewModel::class.java)
   }
 
-  private val booksAdapter: BooksAdapter by lazy {
-    BooksAdapter(
+  private val booksOnDiskAdapter: BooksOnDiskAdapter by lazy {
+    BooksOnDiskAdapter(
         bookUtils, this::open, this::tryToDelete
     )
   }
@@ -92,12 +92,12 @@ class ZimFileSelectFragment : BaseFragment() {
     super.onViewCreated(view, savedInstanceState)
     zim_swiperefresh.setOnRefreshListener(this::requestFileSystemCheck)
     zimfilelist.run {
-      adapter = booksAdapter
+      adapter = booksOnDiskAdapter
       layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
       setHasFixedSize(true)
     }
     zimManageViewModel.bookItems.observe(this, Observer {
-      booksAdapter.itemList = it!!
+      booksOnDiskAdapter.itemList = it!!
       checkEmpty(it)
     })
     zimManageViewModel.deviceListIsRefreshing.observe(this, Observer {
@@ -110,7 +110,7 @@ class ZimFileSelectFragment : BaseFragment() {
     checkPermissions()
   }
 
-  private fun checkEmpty(books: List<Book>) {
+  private fun checkEmpty(books: List<BookOnDisk>) {
     file_management_no_files.visibility =
       if (books.isEmpty()) View.VISIBLE
       else View.GONE
@@ -136,7 +136,7 @@ class ZimFileSelectFragment : BaseFragment() {
     zimManageViewModel.requestFileSystemCheck.onNext(Unit)
   }
 
-  private fun open(it: Book) {
+  private fun open(it: BookOnDisk) {
     ZimContentProvider.canIterate = false
     if (!it.file.canRead()) {
       context.toast(string.error_filenotfound)
@@ -145,7 +145,7 @@ class ZimFileSelectFragment : BaseFragment() {
     }
   }
 
-  private fun tryToDelete(it: Book) {
+  private fun tryToDelete(it: BookOnDisk) {
     dialogShower.show(DeleteZim, {
       if (deleteSpecificZimFile(it)) {
         context.toast(string.delete_specific_zim_toast)
@@ -155,13 +155,13 @@ class ZimFileSelectFragment : BaseFragment() {
     })
   }
 
-  private fun deleteSpecificZimFile(book: Book): Boolean {
+  private fun deleteSpecificZimFile(book: BookOnDisk): Boolean {
     val file = book.file
     FileUtils.deleteZimFile(file)
     if (file.exists()) {
       return false
     }
-    bookDao.deleteBook(book.id)
+    bookDao.deleteBook(book.databaseId)
     return true
   }
 }

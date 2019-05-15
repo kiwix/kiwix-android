@@ -17,13 +17,10 @@
  */
 package org.kiwix.kiwixmobile.downloader;
 
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
-import org.kiwix.kiwixmobile.utils.StorageUtils;
-
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
+import org.kiwix.kiwixmobile.utils.StorageUtils;
 
 public class ChunkUtils {
 
@@ -80,14 +77,14 @@ public class ChunkUtils {
     }
   }
 
-  public static long getCurrentSize(LibraryNetworkEntity.Book book) {
-    long size = 0;
-    File[] files = getAllZimParts(book.file);
-    for (File file : files) {
-      size += file.length();
-    }
-    return size;
-  }
+  //public static long getCurrentSize(LibraryNetworkEntity.Book book) {
+  //  long size = 0;
+  //  File[] files = getAllZimParts(book.file);
+  //  for (File file : files) {
+  //    size += file.length();
+  //  }
+  //  return size;
+  //}
 
   private static File[] getAllZimParts(File file) {
     final String baseName = baseNameFromParts(file);
