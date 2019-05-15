@@ -17,17 +17,22 @@
  */
 package org.kiwix.kiwixmobile.zim_manager
 
+import android.Manifest.permission
+import android.content.pm.PackageManager
 import android.os.FileObserver
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import io.reactivex.Flowable
-import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function3
 import io.reactivex.processors.BehaviorProcessor
+import org.kiwix.kiwixmobile.KiwixApplication
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CanWrite4GbFile
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.NotEnoughSpaceFor4GbFile
 import java.io.File
 import java.io.RandomAccessFile
+import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
 class Fat32Checker @Inject constructor(sharedPreferenceUtil: SharedPreferenceUtil) {
@@ -40,7 +45,8 @@ class Fat32Checker @Inject constructor(sharedPreferenceUtil: SharedPreferenceUti
     Flowable.combineLatest(
         sharedPreferenceUtil.prefStorages.distinctUntilChanged(),
         requestCheckSystemFileType,
-        BiFunction { storage: String, _: Unit -> storage }
+        pollForExternalStoragePermissionGranted(),
+        Function3 { storage: String, _: Unit, _: Boolean -> storage }
     )
         .subscribe(
             {
@@ -52,6 +58,16 @@ class Fat32Checker @Inject constructor(sharedPreferenceUtil: SharedPreferenceUti
             Throwable::printStackTrace
         )
   }
+
+  private fun pollForExternalStoragePermissionGranted() =
+    Flowable.interval(1, SECONDS)
+        .map {
+          ContextCompat.checkSelfPermission(
+              KiwixApplication.getInstance(), permission.WRITE_EXTERNAL_STORAGE
+          ) == PackageManager.PERMISSION_GRANTED
+        }
+        .filter { it }
+        .take(1)
 
   private fun fileObserver(it: String?): FileObserver {
     return object : FileObserver(it, MOVED_FROM or DELETE) {
@@ -66,7 +82,7 @@ class Fat32Checker @Inject constructor(sharedPreferenceUtil: SharedPreferenceUti
 
   private fun toFileSystemState(it: String) =
     when {
-      File(it).freeSpace > FOUR_GIGABYTES ->
+      File(it).freeSpace > FOUR_GIGABYTES_IN_BYTES ->
         if (canCreate4GbFile(it)) CanWrite4GbFile
         else CannotWrite4GbFile
       else -> NotEnoughSpaceFor4GbFile
@@ -77,10 +93,11 @@ class Fat32Checker @Inject constructor(sharedPreferenceUtil: SharedPreferenceUti
     File(path).delete()
     try {
       RandomAccessFile(path, "rw").use {
-        it.setLength(FOUR_GIGABYTES)
+        it.setLength(FOUR_GIGABYTES_IN_BYTES)
         return true
       }
     } catch (e: Exception) {
+      e.printStackTrace()
       Log.d("Fat32Checker", e.message)
       return false
     } finally {
@@ -89,7 +106,7 @@ class Fat32Checker @Inject constructor(sharedPreferenceUtil: SharedPreferenceUti
   }
 
   companion object {
-    const val FOUR_GIGABYTES = 4L * 1024L * 1024L * 1024L
+    const val FOUR_GIGABYTES_IN_BYTES = 4L * 1024L * 1024L * 1024L
     const val FOUR_GIGABYTES_IN_KILOBYTES = 4L * 1024L * 1024L
   }
 

@@ -118,7 +118,7 @@ class ZimFileSelectFragment : BaseFragment() {
 
   private fun checkPermissions() {
     if (ContextCompat.checkSelfPermission(
-            super.getActivity()!!,
+            activity!!,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         ) != PackageManager.PERMISSION_GRANTED && Build.VERSION.SDK_INT > 18
     ) {
