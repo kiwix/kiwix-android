@@ -20,27 +20,28 @@ package org.kiwix.kiwixmobile.database;
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.data.TableModel;
 import com.yahoo.squidb.sql.Query;
-import com.yahoo.squidb.sql.Table;
 import com.yahoo.squidb.sql.TableStatement;
 import io.reactivex.Flowable;
 import io.reactivex.processors.BehaviorProcessor;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
+import kotlin.collections.ArraysKt;
 import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.database.entity.DownloadDatabaseEntity;
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 
-public class DownloadDao extends BaseDao{
+public class DownloadDao extends BaseDao {
 
   private final BehaviorProcessor<List<DownloadModel>> downloadsProcessor =
       BehaviorProcessor.create();
 
   @Inject
   public DownloadDao(KiwixDatabase kiwixDatabase) {
-    super(kiwixDatabase,DownloadDatabaseEntity.TABLE);
+    super(kiwixDatabase, DownloadDatabaseEntity.TABLE);
   }
 
   @Override
@@ -49,8 +50,8 @@ public class DownloadDao extends BaseDao{
   }
 
   public void insert(final DownloadModel downloadModel) {
-      kiwixDatabase.persistWithOnConflict(databaseEntity(downloadModel),
-          TableStatement.ConflictAlgorithm.REPLACE);
+    kiwixDatabase.persistWithOnConflict(databaseEntity(downloadModel),
+        TableStatement.ConflictAlgorithm.REPLACE);
   }
 
   public boolean doesNotAlreadyExist(LibraryNetworkEntity.Book book) {
@@ -58,6 +59,13 @@ public class DownloadDao extends BaseDao{
         DownloadDatabaseEntity.class,
         DownloadDatabaseEntity.BOOK_ID.eq(book.getId())
     ) == 0;
+  }
+
+  public boolean containsAny(@NotNull Long[] downloadIds) {
+    return kiwixDatabase.count(
+        DownloadDatabaseEntity.class,
+        DownloadDatabaseEntity.DOWNLOAD_ID.in((Object[]) downloadIds)
+    ) > 0;
   }
 
   public void delete(@NotNull Long... downloadIds) {

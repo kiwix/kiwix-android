@@ -27,10 +27,10 @@ import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
 import org.kiwix.kiwixmobile.di.modules.JNIModule;
 import org.kiwix.kiwixmobile.di.modules.NetworkModule;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryAdapter;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
 import org.kiwix.kiwixmobile.views.web.KiwixWebView;
+import org.kiwix.kiwixmobile.zim_manager.DownloadNotificationClickedReceiver;
 
 @Singleton
 @Component(modules = {
@@ -61,4 +61,6 @@ public interface ApplicationComponent {
   void inject(KiwixSettingsActivity.PrefsFragment prefsFragment);
 
   void inject(AutoCompleteAdapter autoCompleteAdapter);
+
+  void inject(DownloadNotificationClickedReceiver downloadNotificationClickedReceiver);
 }

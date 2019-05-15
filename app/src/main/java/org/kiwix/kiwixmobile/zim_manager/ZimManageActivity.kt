@@ -84,12 +84,23 @@ class ZimManageActivity : BaseActivity() {
       adapter = mSectionsPagerAdapter
       offscreenPageLimit = 2
       tabs.setupWithViewPager(this)
-      currentItem = intent.getIntExtra(TAB_EXTRA, 0)
       addOnPageChangeListener(SimplePageChangeListener(this@ZimManageActivity::updateMenu))
     }
     zimManageViewModel.languageItems.observe(this, Observer {
       onLanguageItemsForDialogUpdated(it!!)
     })
+    setViewPagerPositionFromIntent(intent)
+  }
+
+  override fun onNewIntent(intent: Intent?) {
+    super.onNewIntent(intent)
+    setViewPagerPositionFromIntent(intent)
+  }
+
+  private fun setViewPagerPositionFromIntent(intent: Intent?) {
+    if (intent?.hasExtra(TAB_EXTRA) == true) {
+      manageViewPager.currentItem = intent.getIntExtra(TAB_EXTRA, 0)
+    }
   }
 
   private fun onLanguageItemsForDialogUpdated(languages: List<Language>) {
@@ -100,7 +111,7 @@ class ZimManageActivity : BaseActivity() {
           .apply {
             onOkClicked = {
               Flowable.fromCallable {
-                languagesDao.saveFilteredLanguages(it.sortedBy(Language::language))
+                languagesDao.saveFilteredLanguages(it)
               }
                   .subscribeOn(Schedulers.io())
                   .subscribe()
