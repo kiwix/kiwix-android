@@ -92,8 +92,7 @@ public class BookDao extends BaseDao {
           if (file.exists()) {
             books.add(book);
           } else {
-            kiwixDatabase.deleteWhere(BookDatabaseEntity.class,
-                BookDatabaseEntity.FILE_PATH.eq(file.getPath()));
+            deleteBook(book.getDatabaseId());
           }
         }
       }
@@ -110,7 +109,7 @@ public class BookDao extends BaseDao {
         BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
         setBookDatabaseEntity(book, bookDatabaseEntity);
         kiwixDatabase.deleteWhere(BookDatabaseEntity.class,
-            BookDatabaseEntity.FILE_PATH.eq(bookDatabaseEntity.getFilePath()));
+            BookDatabaseEntity.BOOK_ID.eq(bookDatabaseEntity.getBookId()));
         kiwixDatabase.persistWithOnConflict(bookDatabaseEntity,
             TableStatement.ConflictAlgorithm.REPLACE);
       }

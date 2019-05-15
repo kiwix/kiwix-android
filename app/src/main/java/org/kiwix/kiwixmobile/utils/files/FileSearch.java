@@ -211,7 +211,8 @@ public class FileSearch {
     }
     ZimContentProvider.originalFileName = "";
 
-    return new BookOnDisk(null, book, new File(filePath));
+    return book == null ? null
+        : new BookOnDisk(null, book, new File(filePath));
   }
 
   // Fill fileList with files found in the specific directory
