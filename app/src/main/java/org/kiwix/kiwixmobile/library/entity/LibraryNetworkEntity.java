@@ -18,6 +18,7 @@
  */
 package org.kiwix.kiwixmobile.library.entity;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.LinkedList;
 import org.simpleframework.xml.Attribute;
@@ -89,6 +90,10 @@ public class LibraryNetworkEntity {
     public String tags;
 
     public int searchMatches = 0;
+    @Deprecated
+    public File file;
+    @Deprecated
+    public String remoteUrl;
 
     public String getId() {
       return this.id;

@@ -24,8 +24,6 @@ import com.yahoo.squidb.annotations.TableModelSpec;
 @TableModelSpec(className = "BookDatabaseEntity", tableName = "book")
 public class BookDataSource {
 
-  public String filePath;
-
   public String bookId;
 
   public String title;
@@ -41,6 +39,9 @@ public class BookDataSource {
   public String date;
 
   public String url;
+
+  public String remoteUrl;
+
   public String articleCount;
 
   public String mediaCount;
@@ -51,5 +52,6 @@ public class BookDataSource {
 
   public String name;
 
+  public boolean downloaded;
 
 }
