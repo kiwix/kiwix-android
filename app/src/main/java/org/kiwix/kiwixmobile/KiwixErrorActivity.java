@@ -15,7 +15,7 @@ import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.database.BookDao;
+import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao;
 import org.kiwix.kiwixmobile.downloader.model.BookOnDisk;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.SplashActivity;
@@ -25,7 +25,7 @@ import static org.kiwix.kiwixmobile.utils.LanguageUtils.getCurrentLocale;
 public class KiwixErrorActivity extends BaseActivity {
 
   @Inject
-  BookDao bookDao;
+  NewBookDao bookDao;
 
   @BindView(R.id.reportButton)
   Button reportButton;

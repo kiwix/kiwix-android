@@ -52,7 +52,7 @@ import okio.BufferedSource;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.KiwixMobileActivity;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.database.BookDao;
+import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.utils.Constants;
@@ -106,7 +106,7 @@ public class DownloadService extends Service {
   SharedPreferenceUtil sharedPreferenceUtil;
 
   @Inject
-  BookDao bookDao;
+  NewBookDao bookDao;
 
   public static void setDownloadFragment(DownloadFragment dFragment) {
     downloadFragment = dFragment;

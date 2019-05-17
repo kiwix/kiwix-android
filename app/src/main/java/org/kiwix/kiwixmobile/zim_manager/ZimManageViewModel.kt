@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.zim_manager
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.util.Log
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -30,9 +31,9 @@ import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.database.BookDao
-import org.kiwix.kiwixmobile.database.DownloadDao
-import org.kiwix.kiwixmobile.database.NetworkLanguageDao
+import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
+import org.kiwix.kiwixmobile.database.newdb.dao.NewDownloadDao
+import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.downloader.Downloader
 import org.kiwix.kiwixmobile.downloader.model.BookOnDisk
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
@@ -62,9 +63,9 @@ import java.util.concurrent.TimeUnit.SECONDS
 import javax.inject.Inject
 
 class ZimManageViewModel @Inject constructor(
-  private val downloadDao: DownloadDao,
-  private val bookDao: BookDao,
-  private val languageDao: NetworkLanguageDao,
+  private val downloadDao: NewDownloadDao,
+  private val bookDao: NewBookDao,
+  private val languageDao: NewLanguagesDao,
   private val downloader: Downloader,
   private val storageObserver: StorageObserver,
   private val kiwixService: KiwixService,
@@ -101,7 +102,7 @@ class ZimManageViewModel @Inject constructor(
   }
 
   private fun disposables(): Array<Disposable> {
-    val downloads: Flowable<MutableList<DownloadModel>> = downloadDao.downloads()
+    val downloads = downloadDao.downloads()
     val downloadStatuses = downloadStatuses(downloads)
     val booksFromDao = books()
     val networkLibrary = PublishProcessor.create<LibraryNetworkEntity>()
@@ -131,20 +132,23 @@ class ZimManageViewModel @Inject constructor(
         .observeOn(Schedulers.io())
         .subscribe(
             {
-              kiwixService.library.subscribe(
-                  { library.onNext(it) },
-                  {
-                    it.printStackTrace()
-                    library.onNext(LibraryNetworkEntity().apply { book = LinkedList() })
-                  }
-              )
+              kiwixService.library
+                  .timeout(10, SECONDS)
+                  .retry(5)
+                  .subscribe(
+                      { library.onNext(it) },
+                      {
+                        it.printStackTrace()
+                        library.onNext(LibraryNetworkEntity().apply { book = LinkedList() })
+                      }
+                  )
             },
             Throwable::printStackTrace
         )
 
   private fun removeNonExistingDownloadsFromDb(
     downloadStatuses: Flowable<List<DownloadStatus>>,
-    downloads: Flowable<MutableList<DownloadModel>>
+    downloads: Flowable<List<DownloadModel>>
   ) = downloadStatuses
       .withLatestFrom(
           downloads,
@@ -154,17 +158,16 @@ class ZimManageViewModel @Inject constructor(
       .map(this::downloadIdsWithNoStatusesOverBufferPeriod)
       .subscribe(
           {
-            downloadDao.delete(*it.toTypedArray())
+            downloadDao.delete(*it.toLongArray())
           },
           Throwable::printStackTrace
       )
 
-  private fun downloadIdsWithNoStatusesOverBufferPeriod(it: List<MutableList<Long>>) =
-    it.flatten()
-        .fold(mutableMapOf<Long, Int>(),
-            { acc, id -> acc.increment(id) })
-        .filter { (_, value) -> value == it.size }
-        .map { (key, _) -> key }
+  private fun downloadIdsWithNoStatusesOverBufferPeriod(noStatusIds: List<MutableList<Long>>) =
+    noStatusIds.flatten()
+        .fold(mutableMapOf<Long, Int>(), { acc, id -> acc.increment(id) })
+        .filter { (_, count) -> count == noStatusIds.size }
+        .map { (id, _) -> id }
 
   private fun combineToDownloadsWithoutStatuses(
     statuses: List<DownloadStatus>,
@@ -183,7 +186,7 @@ class ZimManageViewModel @Inject constructor(
   }
 
   private fun updateLanguageItemsForDialog() = requestLanguagesDialog
-      .withLatestFrom(languageDao.allLanguages(),
+      .withLatestFrom(languageDao.languages(),
           BiFunction<Unit, List<Language>, List<Language>> { _, languages -> languages })
       .subscribe(
           languageItems::postValue,
@@ -197,12 +200,12 @@ class ZimManageViewModel @Inject constructor(
 
   private fun updateLibraryItems(
     booksFromDao: Flowable<List<BookOnDisk>>,
-    downloads: Flowable<MutableList<DownloadModel>>,
+    downloads: Flowable<List<DownloadModel>>,
     library: Flowable<LibraryNetworkEntity>
   ) = Flowable.combineLatest(
       booksFromDao,
       downloads,
-      languageDao.allLanguages().filter { it.isNotEmpty() },
+      languageDao.languages().filter { it.isNotEmpty() },
       library,
       requestFiltering
           .doOnNext { libraryListIsRefreshing.postValue(true) }
@@ -224,12 +227,12 @@ class ZimManageViewModel @Inject constructor(
       .subscribeOn(Schedulers.io())
       .map { it.books }
       .withLatestFrom(
-          languageDao.allLanguages(),
+          languageDao.languages(),
           BiFunction(this::combineToLanguageList)
       )
       .map { it.sortedBy(Language::language) }
       .subscribe(
-          languageDao::saveFilteredLanguages,
+          languageDao::insert,
           Throwable::printStackTrace
       )
 
@@ -334,14 +337,13 @@ class ZimManageViewModel @Inject constructor(
     books: List<Book>,
     sectionStringId: Int,
     sectionId: Long
-  ) = if (books.isNotEmpty()) {
-    arrayOf(
-        DividerItem(sectionId, context.getString(sectionStringId)),
-        *toBookItems(books)
-    )
-  } else {
-    emptyArray()
-  }
+  ) =
+    if (books.isNotEmpty())
+      arrayOf(
+          DividerItem(sectionId, context.getString(sectionStringId)),
+          *toBookItems(books)
+      )
+    else emptyArray()
 
   private fun applyUserFilter(
     booksUnfilteredByLanguage: List<Book>,
@@ -370,8 +372,9 @@ class ZimManageViewModel @Inject constructor(
         )
         .onBackpressureDrop()
         .doOnNext { deviceListIsRefreshing.postValue(false) }
+        .filter { it.isNotEmpty() }
         .subscribe(
-            bookDao::saveBooks,
+            bookDao::insert,
             Throwable::printStackTrace
         )
 
@@ -405,11 +408,12 @@ class ZimManageViewModel @Inject constructor(
         .observeOn(Schedulers.io())
         .subscribeOn(Schedulers.io())
         .map { it.filter { status -> status.state == Successful } }
+        .filter { it.isNotEmpty() }
         .subscribe(
             {
-              bookDao.saveBooks(it.map { downloadStatus -> downloadStatus.toBookOnDisk() })
+              bookDao.insert(it.map { downloadStatus -> downloadStatus.toBookOnDisk() })
               downloadDao.delete(
-                  *it.map { status -> status.downloadId }.toTypedArray()
+                  *it.map { status -> status.downloadId }.toLongArray()
               )
             },
             Throwable::printStackTrace
@@ -423,7 +427,7 @@ class ZimManageViewModel @Inject constructor(
             Throwable::printStackTrace
         )
 
-  private fun downloadStatuses(downloads: Flowable<MutableList<DownloadModel>>) =
+  private fun downloadStatuses(downloads: Flowable<List<DownloadModel>>) =
     Flowable.combineLatest(
         downloads,
         Flowable.interval(1, SECONDS),

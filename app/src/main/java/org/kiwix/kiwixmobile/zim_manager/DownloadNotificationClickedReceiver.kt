@@ -20,14 +20,15 @@ package org.kiwix.kiwixmobile.zim_manager
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import org.kiwix.kiwixmobile.KiwixApplication
-import org.kiwix.kiwixmobile.database.DownloadDao
+import org.kiwix.kiwixmobile.database.newdb.dao.NewDownloadDao
 import javax.inject.Inject
 
 class DownloadNotificationClickedReceiver : BaseBroadcastReceiver() {
   override val action: String = DownloadManager.ACTION_NOTIFICATION_CLICKED
 
-  @Inject lateinit var downloadDao: DownloadDao
+  @Inject lateinit var downloadDao: NewDownloadDao
 
   override fun onIntentWithActionReceived(
     context: Context,
@@ -35,10 +36,7 @@ class DownloadNotificationClickedReceiver : BaseBroadcastReceiver() {
   ) {
     KiwixApplication.getApplicationComponent()
         .inject(this)
-    val longArray =
-      intent.extras?.getLongArray(DownloadManager.EXTRA_NOTIFICATION_CLICK_DOWNLOAD_IDS)
-          ?: longArrayOf()
-    if (downloadDao.containsAny(longArray.toTypedArray())) {
+    if (downloadDao.containsAny(*longArrayFrom(intent.extras))) {
       context.startActivity(
           Intent(context, ZimManageActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -47,4 +45,7 @@ class DownloadNotificationClickedReceiver : BaseBroadcastReceiver() {
       )
     }
   }
+
+  private fun longArrayFrom(extras: Bundle?) =
+    extras?.getLongArray(DownloadManager.EXTRA_NOTIFICATION_CLICK_DOWNLOAD_IDS) ?: longArrayOf()
 }

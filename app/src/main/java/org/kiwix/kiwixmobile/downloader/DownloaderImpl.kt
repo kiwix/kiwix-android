@@ -18,8 +18,7 @@
 
 package org.kiwix.kiwixmobile.downloader
 
-import io.reactivex.schedulers.Schedulers
-import org.kiwix.kiwixmobile.database.DownloadDao
+import org.kiwix.kiwixmobile.database.newdb.dao.NewDownloadDao
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.downloader.model.DownloadRequest
@@ -29,14 +28,12 @@ import javax.inject.Inject
 
 class DownloaderImpl @Inject constructor(
   private val downloadRequester: DownloadRequester,
-  private val downloadDao: DownloadDao,
+  private val downloadDao: NewDownloadDao,
   private val kiwixService: KiwixService
 ) : Downloader {
 
   override fun download(book: LibraryNetworkEntity.Book) {
     kiwixService.getMetaLinks(book.url)
-        .subscribeOn(Schedulers.io())
-        .observeOn(Schedulers.io())
         .take(1)
         .subscribe(
             {
@@ -45,7 +42,7 @@ class DownloaderImpl @Inject constructor(
                     DownloadRequest(it, book)
                 )
                 downloadDao.insert(
-                    DownloadModel(downloadId, book)
+                    DownloadModel(downloadId = downloadId, book = book)
                 )
               }
             },

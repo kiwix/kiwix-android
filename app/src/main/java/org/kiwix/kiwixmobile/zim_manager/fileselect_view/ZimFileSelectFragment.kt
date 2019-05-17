@@ -38,7 +38,7 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.ZimContentProvider
 import org.kiwix.kiwixmobile.base.BaseFragment
-import org.kiwix.kiwixmobile.database.BookDao
+import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
 import org.kiwix.kiwixmobile.di.components.ActivityComponent
 import org.kiwix.kiwixmobile.downloader.model.BookOnDisk
 import org.kiwix.kiwixmobile.extensions.toast
@@ -56,7 +56,7 @@ import javax.inject.Inject
 class ZimFileSelectFragment : BaseFragment() {
 
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
-  @Inject lateinit var bookDao: BookDao
+  @Inject lateinit var bookDao: NewBookDao
   @Inject lateinit var dialogShower: DialogShower
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var bookUtils: BookUtils
@@ -161,7 +161,7 @@ class ZimFileSelectFragment : BaseFragment() {
     if (file.exists()) {
       return false
     }
-    bookDao.deleteBook(book.databaseId)
+    bookDao.delete(book.databaseId!!)
     return true
   }
 }

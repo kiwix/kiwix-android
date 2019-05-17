@@ -17,9 +17,12 @@
  */
 package org.kiwix.kiwixmobile.downloader.model
 
+import android.view.WindowId
+import org.kiwix.kiwixmobile.database.newdb.entities.DownloadEntity
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
 
 data class DownloadModel(
+  val databaseId: Long? = null,
   val downloadId: Long,
   val book: LibraryNetworkEntity.Book
 )

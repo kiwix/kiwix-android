@@ -28,8 +28,11 @@ import javax.inject.Singleton;
 import org.kiwix.kiwixmobile.utils.BookUtils;
 
 @Module(includes = {
-    ActivityBindingModule.class, AndroidInjectionModule.class, DownloaderModule.class,
-    ViewModelModule.class
+    ActivityBindingModule.class,
+    AndroidInjectionModule.class,
+    DownloaderModule.class,
+    ViewModelModule.class,
+    DatabaseModule.class
 })
 public class ApplicationModule {
 

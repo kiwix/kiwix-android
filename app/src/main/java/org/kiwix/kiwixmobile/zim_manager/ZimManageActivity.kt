@@ -41,7 +41,7 @@ import org.kiwix.kiwixmobile.R.layout
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.R.style
 import org.kiwix.kiwixmobile.base.BaseActivity
-import org.kiwix.kiwixmobile.database.NetworkLanguageDao
+import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.extensions.toast
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity
 import org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX
@@ -68,7 +68,7 @@ class ZimManageActivity : BaseActivity() {
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
-  @Inject lateinit var languagesDao: NetworkLanguageDao
+  @Inject lateinit var languagesDao: NewLanguagesDao
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -111,7 +111,7 @@ class ZimManageActivity : BaseActivity() {
           .apply {
             onOkClicked = {
               Flowable.fromCallable {
-                languagesDao.saveFilteredLanguages(it)
+                languagesDao.insert(it)
               }
                   .subscribeOn(Schedulers.io())
                   .subscribe()

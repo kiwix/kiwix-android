@@ -3,7 +3,8 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view
 import android.content.Context
 import android.util.Log
 import io.reactivex.processors.PublishProcessor
-import org.kiwix.kiwixmobile.database.DownloadDao
+import io.reactivex.schedulers.Schedulers
+import org.kiwix.kiwixmobile.database.newdb.dao.NewDownloadDao
 import org.kiwix.kiwixmobile.downloader.model.BookOnDisk
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
@@ -14,14 +15,19 @@ import javax.inject.Inject
 class StorageObserver @Inject constructor(
   private val context: Context,
   private val sharedPreferenceUtil: SharedPreferenceUtil,
-  private val downloadDao: DownloadDao
+  private val downloadDao: NewDownloadDao
 ) {
 
   private val _booksOnFileSystem = PublishProcessor.create<Collection<BookOnDisk>>()
   val booksOnFileSystem = _booksOnFileSystem.distinctUntilChanged()
-      .doOnSubscribe { scanFiles(downloadDao.downloads) }
+      .doOnSubscribe {
+        downloadDao.downloads()
+            .subscribeOn(Schedulers.io())
+            .take(1)
+            .subscribe(this::scanFiles, Throwable::printStackTrace)
+      }
 
-  private fun scanFiles(downloads: MutableList<DownloadModel>) {
+  private fun scanFiles(downloads: List<DownloadModel>) {
     FileSearch(context, downloads, object : ResultListener {
       val foundBooks = mutableSetOf<BookOnDisk>()
 

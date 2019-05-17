@@ -16,8 +16,10 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'checkstyle'
 apply plugin: 'testdroid'
+apply plugin: 'io.objectbox'
 
 repositories {
   mavenCentral()
@@ -29,7 +31,6 @@ repositories {
 }
 
 String[] archs = ['arm64-v8a', 'armeabi', 'mips', 'mips64', 'x86', 'x86_64']
-
 dependencies {
 
   // Get kiwixlib online if it is not populated locally
@@ -79,14 +80,14 @@ dependencies {
   androidTestCompileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
   implementation "com.google.dagger:dagger:$daggerVersion"
   implementation "com.google.dagger:dagger-android:$daggerVersion"
-  annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
-  annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
-  androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+  kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+  kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+  kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
 
   // SquiDB
   implementation 'com.yahoo.squidb:squidb:2.0.0'
   implementation 'com.yahoo.squidb:squidb-annotations:2.0.0'
-  annotationProcessor 'com.yahoo.squidb:squidb-processor:2.0.0'
+  kapt 'com.yahoo.squidb:squidb-processor:2.0.0'
 
   // Square
   implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
@@ -102,7 +103,7 @@ dependencies {
 
   // Butterknife
   implementation 'com.jakewharton:butterknife:8.0.1'
-  annotationProcessor 'com.jakewharton:butterknife-compiler:8.0.1'
+  kapt 'com.jakewharton:butterknife-compiler:8.0.1'
 
   // RxJava
   implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
@@ -133,6 +134,8 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
   implementation 'com.android.support.constraint:constraint-layout:1.1.3'
   implementation "android.arch.lifecycle:extensions:1.1.1"
+  implementation "io.objectbox:objectbox-kotlin:$objectboxVersion"
+  implementation "io.objectbox:objectbox-rxjava:$objectboxVersion"
 }
 
 // Set custom app import directory
@@ -158,7 +161,7 @@ android {
   compileSdkVersion 27
 
   defaultConfig {
-    minSdkVersion 14
+    minSdkVersion 15
     targetSdkVersion 27
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     // See https://github.com/linkedin/dexmaker/issues/65 for why we need the following line.

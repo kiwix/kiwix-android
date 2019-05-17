@@ -34,7 +34,6 @@ import javax.inject.Singleton;
 import org.kiwix.kiwixmobile.ZimContentProvider;
 import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.Bookmarks;
-import org.kiwix.kiwixmobile.database.entity.DownloadDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.LibraryDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.RecentSearch;
@@ -67,7 +66,6 @@ public class KiwixDatabase extends SquidDatabase {
         RecentSearch.TABLE,
         Bookmarks.TABLE,
         NetworkLanguageDatabaseEntity.TABLE,
-        DownloadDatabaseEntity.TABLE
     };
   }
 
