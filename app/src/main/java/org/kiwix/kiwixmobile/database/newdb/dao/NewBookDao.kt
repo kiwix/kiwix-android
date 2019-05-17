@@ -23,6 +23,8 @@ import io.objectbox.kotlin.query
 import org.kiwix.kiwixmobile.database.newdb.entities.BookOnDiskEntity
 import org.kiwix.kiwixmobile.database.newdb.entities.BookOnDiskEntity_
 import org.kiwix.kiwixmobile.downloader.model.BookOnDisk
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
+import java.util.ArrayList
 import javax.inject.Inject
 
 class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
@@ -46,5 +48,9 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
 
   fun delete(databaseId: Long) {
     box.remove(databaseId)
+  }
+
+  fun migrationInsert(books: ArrayList<Book>) {
+    insert(books.map { BookOnDisk(book = it, file = it.file) })
   }
 }

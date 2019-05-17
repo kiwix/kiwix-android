@@ -36,7 +36,6 @@ class NewLanguagesDao @Inject constructor(private val box: Box<LanguageEntity>) 
       box.put(languages.map(::LanguageEntity))
     }
   }
-
 }
 
 internal fun <T> Box<T>.asFlowable(backpressureStrategy: BackpressureStrategy = LATEST) =

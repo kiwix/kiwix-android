@@ -12,8 +12,8 @@ data class LanguageEntity(
   @Id var id: Long = 0,
   @Convert(converter = StringToLocaleConverter::class, dbType = String::class)
   val locale: Locale = Locale.ENGLISH,
-  var active: Boolean = false,
-  var occurencesOfLanguage: Int = 0
+  val active: Boolean = false,
+  val occurencesOfLanguage: Int = 0
 ) {
 
   constructor(language: Language) : this(

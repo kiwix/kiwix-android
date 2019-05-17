@@ -22,12 +22,11 @@ package org.kiwix.kiwixmobile.database;
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.database.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language;
 
+@Deprecated
 public class NetworkLanguageDao {
   private KiwixDatabase mDb;
 
@@ -37,30 +36,16 @@ public class NetworkLanguageDao {
   }
 
   public ArrayList<Language> getFilteredLanguages() {
-    SquidCursor<NetworkLanguageDatabaseEntity> languageCursor = mDb.query(
-        NetworkLanguageDatabaseEntity.class,
-        Query.select());
     ArrayList<Language> result = new ArrayList<>();
-    try {
+    try (SquidCursor<NetworkLanguageDatabaseEntity> languageCursor = mDb.query(
+        NetworkLanguageDatabaseEntity.class,
+        Query.select())) {
       while (languageCursor.moveToNext()) {
         String languageCode = languageCursor.get(NetworkLanguageDatabaseEntity.LANGUAGE_I_S_O_3);
         boolean enabled = languageCursor.get(NetworkLanguageDatabaseEntity.ENABLED);
-        result.add(new Language(languageCode, enabled,0));
+        result.add(new Language(languageCode, enabled, 0));
       }
-    } finally {
-      languageCursor.close();
     }
     return result;
-  }
-
-  public void saveFilteredLanguages(List<Language> languages){
-    mDb.deleteAll(NetworkLanguageDatabaseEntity.class);
-    Collections.sort(languages, (language, t1) -> language.getLanguage().compareTo(t1.getLanguage()));
-    for (Language language : languages){
-      NetworkLanguageDatabaseEntity networkLanguageDatabaseEntity = new NetworkLanguageDatabaseEntity();
-      networkLanguageDatabaseEntity.setLanguageISO3(language.getLanguageCode());
-      networkLanguageDatabaseEntity.setIsEnabled(language.getActive());
-      mDb.persist(networkLanguageDatabaseEntity);
-    }
   }
 }

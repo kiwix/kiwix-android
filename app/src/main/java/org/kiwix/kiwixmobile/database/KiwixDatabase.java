@@ -21,40 +21,45 @@ package org.kiwix.kiwixmobile.database;
 
 import android.content.Context;
 import android.util.Log;
-
 import com.yahoo.squidb.data.SquidDatabase;
 import com.yahoo.squidb.data.adapter.SQLiteDatabaseWrapper;
 import com.yahoo.squidb.sql.Table;
-
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import org.kiwix.kiwixmobile.ZimContentProvider;
 import org.kiwix.kiwixmobile.database.entity.BookDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.Bookmarks;
 import org.kiwix.kiwixmobile.database.entity.LibraryDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.RecentSearch;
+import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao;
+import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.UpdateUtils;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
 @Singleton
 public class KiwixDatabase extends SquidDatabase {
 
-  private static final int VERSION = 15;
+  private static final int VERSION = 16;
   private Context context;
+  private final NewBookDao bookDao;
+  private final NewLanguagesDao languagesDao;
 
   @Inject
-  public KiwixDatabase(Context context) {
+  public KiwixDatabase(Context context, NewBookDao bookDao, NewLanguagesDao languagesDao) {
     super(context);
     this.context = context;
+    this.bookDao = bookDao;
+    this.languagesDao = languagesDao;
   }
 
   @Override
@@ -64,7 +69,7 @@ public class KiwixDatabase extends SquidDatabase {
 
   @Override
   protected Table[] getTables() {
-    return new Table[]{
+    return new Table[] {
         BookDatabaseEntity.TABLE,
         LibraryDatabaseEntity.TABLE,
         RecentSearch.TABLE,
@@ -75,6 +80,18 @@ public class KiwixDatabase extends SquidDatabase {
 
   @Override
   protected boolean onUpgrade(SQLiteDatabaseWrapper db, int oldVersion, int newVersion) {
+    if (newVersion >= 16) { //2.5 attempt reading values from old db before they get dropped
+      try {
+        bookDao.migrationInsert(new BookDao(this).getBooks());
+      } catch (Exception e){
+        e.printStackTrace();
+      }
+      try {
+        languagesDao.insert(new NetworkLanguageDao(this).getFilteredLanguages());
+      } catch (Exception e){
+        e.printStackTrace();
+      }
+    }
     if (newVersion >= 3 && oldVersion < 3) {
       db.execSQL("DROP TABLE IF EXISTS recents");
       tryCreateTable(RecentSearch.TABLE);
@@ -132,6 +149,10 @@ public class KiwixDatabase extends SquidDatabase {
     }
     if (newVersion >= 15 && oldVersion < 15) {
       reformatBookmarks();
+    }
+    if (newVersion >= 16) { //2.5 drop tables
+      tryDropTable(BookDatabaseEntity.TABLE);
+      tryDropTable(NetworkLanguageDatabaseEntity.TABLE);
     }
     return true;
   }

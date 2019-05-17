@@ -138,9 +138,33 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "4:6278838675135543734",
+      "lastPropertyId": "4:8812214350305159407",
+      "name": "LanguageEntity",
+      "properties": [
+        {
+          "id": "1:7795244654012809404",
+          "name": "id"
+        },
+        {
+          "id": "2:9116495537035444904",
+          "name": "locale"
+        },
+        {
+          "id": "3:452531964346972307",
+          "name": "active"
+        },
+        {
+          "id": "4:8812214350305159407",
+          "name": "occurencesOfLanguage"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "3:5536749840871435068",
+  "lastEntityId": "4:6278838675135543734",
   "lastIndexId": "4:4868787482832538530",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

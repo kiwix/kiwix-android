@@ -23,10 +23,6 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.SmallTest;
 import android.support.test.runner.AndroidJUnit4;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,6 +30,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertArrayEquals;
 
@@ -50,7 +48,7 @@ public class KiwixDatabaseTest {
 
   @Test
   public void testMigrateDatabase() throws IOException {
-    KiwixDatabase kiwixDatabase = new KiwixDatabase(mContext);
+    KiwixDatabase kiwixDatabase = new KiwixDatabase(mContext,null,null);
     kiwixDatabase.recreate();
     String testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c";
     String[] testBookmarks = new String[] {"Test1","Test2","Test3"};

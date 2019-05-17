@@ -40,7 +40,7 @@ class BooksOnDiskViewHolder(
     size.setTextAndVisibility(KiloByte(book.size).humanReadable)
     language.text = bookUtils.getLanguage(book.getLanguage())
     fileName.text = NetworkUtils.parseURL(
-        KiwixApplication.getInstance(), book.url
+        KiwixApplication.getInstance(), book.url ?: bookOnDisk.file.path
     )
     favicon.setBitmap(Base64String(book.favicon))
 

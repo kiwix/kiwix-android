@@ -21,7 +21,6 @@ package org.kiwix.kiwixmobile.zim_manager
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.util.Log
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -373,6 +372,7 @@ class ZimManageViewModel @Inject constructor(
         .onBackpressureDrop()
         .doOnNext { deviceListIsRefreshing.postValue(false) }
         .filter { it.isNotEmpty() }
+        .map { it.distinctBy { it.book.id } }
         .subscribe(
             bookDao::insert,
             Throwable::printStackTrace
