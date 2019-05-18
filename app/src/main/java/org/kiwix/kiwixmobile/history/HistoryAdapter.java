@@ -10,9 +10,11 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import org.threeten.bp.LocalDate;
 import java.util.List;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.local.entity.History;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import static org.kiwix.kiwixmobile.library.LibraryAdapter.createBitmapFromEncodedString;
 
@@ -60,7 +62,18 @@ class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
       item.itemView.setOnLongClickListener(v ->
           itemClickListener.onItemLongClick(item.favicon, history));
     } else {
-      ((Category) holder).date.setText(historyList.get(position + 1).getDate());
+      String date = historyList.get(position + 1).getDate();
+      String todaysDate, yesterdayDate;
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d, yyyy");
+      todaysDate = LocalDate.now().format(formatter);
+      yesterdayDate = LocalDate.now().minusDays(1).format(formatter);
+      if (todaysDate.contentEquals(date)) {
+        ((Category) holder).date.setText(R.string.time_today);
+      } else if (yesterdayDate.contentEquals(date)) {
+        ((Category) holder).date.setText(R.string.time_yesterday);
+      } else {
+        ((Category) holder).date.setText(date);
+      }
     }
   }
 

@@ -70,6 +70,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
             bookmarksAdapter.notifyItemRemoved(position);
             bookmarksAdapter.notifyItemRangeChanged(position, bookmarksAdapter.getItemCount());
           }
+          presenter.deleteBookmarks(new ArrayList<>(deleteList));
           mode.finish();
           return true;
       }
@@ -79,7 +80,6 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     @Override
     public void onDestroyActionMode(ActionMode mode) {
       if (deleteList.size() != 0) {
-        presenter.deleteBookmarks(new ArrayList<>(deleteList));
         deleteList.clear();
       }
       actionMode = null;

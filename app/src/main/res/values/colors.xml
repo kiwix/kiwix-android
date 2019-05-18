@@ -25,6 +25,8 @@
   <color name="blueTransparent">#962e7ac4</color>
   <color name="actionModeBackground">#4285F4</color>
   <color name="titleBar">#000000</color>
+  <color name="greenTick">#4CAF50</color>
+
   <!-- Dark Text Color for Light Background -->
   <color name="textDarkPrimary">#000000</color> <!-- 0% opacity-->
   <color name="textDarkSecondary">#DE000000</color> <!--DE for 87% opacity-->
