@@ -36,10 +36,6 @@ import kotlinx.android.synthetic.main.zim_manager.tabs
 import kotlinx.android.synthetic.main.zim_manager.toolbar
 import org.kiwix.kiwixmobile.KiwixMobileActivity
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.R.id
-import org.kiwix.kiwixmobile.R.layout
-import org.kiwix.kiwixmobile.R.string
-import org.kiwix.kiwixmobile.R.style
 import org.kiwix.kiwixmobile.base.BaseActivity
 import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.extensions.toast
@@ -75,9 +71,9 @@ class ZimManageActivity : BaseActivity() {
     LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil)
 
     if (KiwixSettingsActivity.nightMode(sharedPreferenceUtil)) {
-      setTheme(style.AppTheme_Night)
+      setTheme(R.style.AppTheme_Night)
     }
-    setContentView(layout.zim_manager)
+    setContentView(R.layout.zim_manager)
 
     setUpToolbar()
     manageViewPager.run {
@@ -105,7 +101,7 @@ class ZimManageActivity : BaseActivity() {
 
   private fun onLanguageItemsForDialogUpdated(languages: List<Language>) {
     if (languages.isEmpty()) {
-      toast(string.wait_for_load)
+      toast(R.string.wait_for_load)
     } else {
       LanguageSelectDialog.Builder(this, dialogStyle())
           .apply {
@@ -131,7 +127,7 @@ class ZimManageActivity : BaseActivity() {
     setSupportActionBar(toolbar)
     supportActionBar!!.setHomeButtonEnabled(true)
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-    supportActionBar!!.setTitle(string.zim_manager)
+    supportActionBar!!.setTitle(R.string.zim_manager)
     toolbar.setNavigationOnClickListener { _ -> onBackPressed() }
     toolbar.setOnClickListener { _ ->
       if (manageViewPager.currentItem == 1)
@@ -151,8 +147,8 @@ class ZimManageActivity : BaseActivity() {
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     // Inflate the menu; this adds items to the action bar if it is present.
     menuInflater.inflate(R.menu.menu_zim_manager, menu)
-    searchItem = menu.findItem(id.action_search)
-    languageItem = menu.findItem(id.select_language)
+    searchItem = menu.findItem(R.id.action_search)
+    languageItem = menu.findItem(R.id.select_language)
     val searchView = searchItem!!.actionView as SearchView
     updateMenu(manageViewPager.currentItem)
     searchView.setOnQueryTextListener(SimpleTextListener {
@@ -163,7 +159,7 @@ class ZimManageActivity : BaseActivity() {
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
-      id.select_language -> {
+      R.id.select_language -> {
         zimManageViewModel.requestLanguagesDialog.onNext(Unit)
       }
     }

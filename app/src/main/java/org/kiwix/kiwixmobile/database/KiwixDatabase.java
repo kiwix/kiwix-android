@@ -29,7 +29,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.kiwix.kiwixmobile.ZimContentProvider;
@@ -40,9 +39,7 @@ import org.kiwix.kiwixmobile.database.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.database.entity.RecentSearch;
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao;
 import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.UpdateUtils;
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
@@ -70,11 +67,8 @@ public class KiwixDatabase extends SquidDatabase {
   @Override
   protected Table[] getTables() {
     return new Table[] {
-        BookDatabaseEntity.TABLE,
-        LibraryDatabaseEntity.TABLE,
         RecentSearch.TABLE,
         Bookmarks.TABLE,
-        NetworkLanguageDatabaseEntity.TABLE
     };
   }
 
@@ -83,12 +77,12 @@ public class KiwixDatabase extends SquidDatabase {
     if (newVersion >= 16) { //2.5 attempt reading values from old db before they get dropped
       try {
         bookDao.migrationInsert(new BookDao(this).getBooks());
-      } catch (Exception e){
+      } catch (Exception e) {
         e.printStackTrace();
       }
       try {
         languagesDao.insert(new NetworkLanguageDao(this).getFilteredLanguages());
-      } catch (Exception e){
+      } catch (Exception e) {
         e.printStackTrace();
       }
     }
@@ -153,6 +147,7 @@ public class KiwixDatabase extends SquidDatabase {
     if (newVersion >= 16) { //2.5 drop tables
       tryDropTable(BookDatabaseEntity.TABLE);
       tryDropTable(NetworkLanguageDatabaseEntity.TABLE);
+      tryDropTable(LibraryDatabaseEntity.TABLE);
     }
     return true;
   }
