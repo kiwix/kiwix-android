@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+      <com.google.android.material.appbar.AppBarLayout
+
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content" >
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/add_note_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </androidx.appcompat.widget.Toolbar>
+
+      </com.google.android.material.appbar.AppBarLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:background="@android:color/transparent"
+        android:hint="Wiki Title"
+        android:textColor="#000000"
+        android:textColorHint="#000000"
+        android:textStyle="bold"
+        android:textSize="30sp"
+        android:padding="5dp"/>
+
+    <EditText
+        android:id="@+id/add_note_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:inputType="textMultiLine"
+        android:lines="10"
+        android:minLines="6"
+        android:maxLines="10"
+        android:gravity="top|left"
+        android:textSize="20sp"
+        android:scrollbars="vertical"
+        android:background="@android:color/transparent"
+        android:hint="Note"
+        android:textColor="#000000"
+        android:textColorHint="#000000"/>
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+<!--
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+  <android.support.v7.widget.Toolbar
+      android:id="@+id/add_note_toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+  </android.support.v7.widget.Toolbar>
+
+  <EditText
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:maxLines="1"
+      android:background="@android:color/transparent"
+      android:hint="Title"
+      android:textColor="#000000"
+      android:textColorHint="#000000"
+      android:textStyle="bold"
+      android:textSize="30sp"
+      android:padding="5dp"/>
+
+  <EditText
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      android:paddingBottom="5dp"
+      android:paddingLeft="5dp"
+      android:paddingRight="5dp"
+      android:inputType="textMultiLine"
+      android:lines="10"
+      android:minLines="6"
+      android:maxLines="10"
+      android:gravity="top|left"
+      android:textSize="20sp"
+      android:scrollbars="vertical"
+      android:background="@android:color/transparent"
+      android:hint="Note"
+      android:textColor="#000000"
+      android:textColorHint="#000000"/>
+
+</LinearLayout>
+-->
