@@ -407,5 +407,4 @@ class ConfirmationAlertDialogFragment extends DialogFragment {
 
     return builder.create();
   }
-
 }
