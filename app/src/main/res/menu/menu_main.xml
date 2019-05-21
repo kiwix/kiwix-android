@@ -6,13 +6,19 @@
       android:icon="@drawable/action_search"
       android:title="@string/menu_search"
       android:visible="false"
-      app:showAsAction="ifRoom"/>
+      app:showAsAction="always"/>
 
   <item
       android:id="@+id/menu_tab_switcher"
       android:title="@string/switch_tabs"
       app:actionLayout="@layout/ic_tab_switcher"
       app:showAsAction="always"/>
+
+  <item
+    android:id="@+id/menu_add_note"
+    android:title="@string/add_note"
+    android:icon="@drawable/ic_add_note"
+    app:showAsAction="always"/>
 
   <item
       android:id="@+id/menu_new_tab"

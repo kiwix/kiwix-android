@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.main;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -44,6 +45,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -70,6 +72,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -434,11 +439,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         hideTabSwitcher();
         selectTab(position);
 
-        /* Bug Fix
-         * Issue #592 in which the navigational history of the previously open tab (WebView) was
-         * carried forward to the newly selected/opened tab; causing erroneous enabling of
-         * navigational buttons.
-         */
+        /* Bug Fix #592 */
         updateBottomToolbarArrowsAlpha();
       }
 
@@ -843,6 +844,19 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         compatCallback.setWebView(getCurrentWebView());
         startSupportActionMode(compatCallback);
         compatCallback.showSoftInput();
+        break;
+
+      case R.id.menu_add_note:
+        /*TODO: Create fullscreen dialog for Note Keeper*/
+        //Toast.makeText(getApplicationContext(), "Add Note", Toast.LENGTH_SHORT).show();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("AddNoteDialog");
+        if(prev != null) {
+          fragmentTransaction.remove(prev);
+        }
+        fragmentTransaction.addToBackStack(null);
+        AddNoteDialog dialog = new AddNoteDialog();
+        dialog.show(fragmentTransaction, "AddNoteDialog");  //Adds to transaction and handles commit
         break;
 
       case R.id.menu_bookmarks_list:
@@ -1974,4 +1988,37 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   public boolean checkNull(View view) {
     return view != null;
   }
+
+  /*public class AddNoteDialog extends DialogFragment {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setStyle(DialogFragment.STYLE_NORMAL, R.style.AddNoteDialogStyle);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+      super.onCreateView(inflater, container, savedInstanceState);
+      View view = inflater.inflate(R.layout.dialog_add_note, container, false);
+
+      Toolbar toolbar = findViewById(R.id.toolbar);
+      toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+      //toolbar.setNavigationOnClickListener();
+      toolbar.setTitle("Add Note");
+
+      return view;
+    }
+
+    @Override
+    public void onStart() {
+      super.onStart();
+
+      Dialog dialog = getDialog();
+      if(dialog != null) {
+        int width = ViewGroup.LayoutParams.MATCH_PARENT;
+        int height = ViewGroup.LayoutParams.MATCH_PARENT;
+        dialog.getWindow().setLayout(width, height);
+      }
+    }
+  }*/
 }

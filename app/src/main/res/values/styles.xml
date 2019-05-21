@@ -129,5 +129,19 @@
   <style name="NeutralButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
     <item name="android:textColor">@color/accent</item>
   </style>
+
+  <style name="AddNoteDialogStyle" parent="Theme.AppCompat.Dialog">
+    <item name="android:windowNoTitle">true</item>
+    <item name="colorPrimaryDark">@color/primary_dark</item>
+    <item name="colorPrimary">@color/primary</item>
+    <item name="android:windowFullscreen">false</item>
+    <item name="android:windowIsFloating">false</item>
+    <item name="android:windowBackground">@color/white</item>
+    <!--
+    <item name="android:windowEnterAnimation">@anim/fade_in</item>
+    <item name="android:windowExitAnimation">@anim/slide_down</item>
+    -->
+  </style>
+
 </resources>
 
