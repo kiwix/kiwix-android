@@ -4,11 +4,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,13 +38,31 @@ public class AddNoteDialog extends DialogFragment {
     //toolbar.setNavigationOnClickListener();
     //toolbar.setOnMenuItemClickListener
     toolbar.setTitle("Note");
-    toolbar.inflateMenu(R.menu.menu_add_note_dialog);
     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         Dialog dialog = getDialog();
         closeKeyboard();
         dialog.dismiss();
+      }
+    });
+    toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+      @Override
+      public boolean onMenuItemClick(MenuItem item) {
+
+        switch (item.getItemId()) {
+          case R.id.share_note:
+            Toast.makeText(getContext(), "Share Note", Toast.LENGTH_SHORT).show();
+            break;
+
+          case R.id.save_note:
+            Toast.makeText(getContext(), "Save Note", Toast.LENGTH_SHORT).show();
+            break;
+        }
+
+        toolbar.inflateMenu(R.menu.menu_add_note_dialog);
+
+        return true;
       }
     });
 
@@ -79,4 +99,21 @@ public class AddNoteDialog extends DialogFragment {
       dialog.getWindow().setLayout(width, height);
     }
   }
+
+  /*@Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    super.onOptionsItemSelected(item);
+
+    switch (item.getItemId()) {
+      case R.id.share_note:
+        Toast.makeText(getContext(), "Share Note", Toast.LENGTH_SHORT).show();
+        break;
+
+      case R.id.save_note:
+        Toast.makeText(getContext(), "Save Note", Toast.LENGTH_SHORT).show();
+        break;
+    }
+
+    return true;
+  }*/
 }
