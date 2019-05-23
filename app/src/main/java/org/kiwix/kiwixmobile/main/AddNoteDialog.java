@@ -50,6 +50,8 @@ import java.io.IOException;
  * Notes are saved as text files at location: "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
  * */
 
+import java.io.File;
+
 public class AddNoteDialog extends DialogFragment {
 
   private SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(KiwixApplication.getInstance());
@@ -158,6 +160,7 @@ public class AddNoteDialog extends DialogFragment {
           case R.id.save_note:
             Toast.makeText(getContext(), "Save Note", Toast.LENGTH_SHORT).show();
             //TODO: Add code for saving note text files
+            saveNote(addNoteEditText.getText().toString());
             break;
         }
         return true;
