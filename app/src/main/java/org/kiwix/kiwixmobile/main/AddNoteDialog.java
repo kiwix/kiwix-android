@@ -160,12 +160,11 @@ public class AddNoteDialog extends DialogFragment {
             //TODO: Add code for saving note text files
             break;
         }
-
-        toolbar.inflateMenu(R.menu.menu_add_note_dialog);
-
         return true;
       }
     });
+
+    toolbar.inflateMenu(R.menu.menu_add_note_dialog);
 
     return view;
   }
