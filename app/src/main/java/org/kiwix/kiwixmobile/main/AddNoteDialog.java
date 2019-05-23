@@ -24,6 +24,8 @@ import androidx.fragment.app.FragmentTransaction;
 import org.kiwix.kiwixmobile.R;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class AddNoteDialog extends DialogFragment {
 
@@ -110,6 +112,16 @@ public class AddNoteDialog extends DialogFragment {
 
       if(folderExists) {
         File noteFile = new File(notesFolder.getAbsolutePath(), "noteFile.txt");
+
+        //TODO: Save file code
+        try {
+          FileOutputStream fileOutputStream = new FileOutputStream(noteFile);
+          fileOutputStream.write(noteText.getBytes());
+          fileOutputStream.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+
       } else {
         Toast.makeText(getContext(), "Error: Check log", Toast.LENGTH_SHORT).show();
         Log.d("AddNoteDialog", "Required folder doesn't exist/");

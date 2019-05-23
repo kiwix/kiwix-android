@@ -4,7 +4,7 @@
 	- {External Storage}/Kiwix/Notes/WikiName/ArticleName.txt
 
 Steps:
-1) Create a public directory in external storage and save file
+1) DONE: Create a public directory in external storage and save file
 2) Modify code to create path/directories as per: {External Storage}/Kiwix/Notes/WikiName/ArticleName.txt
 3) Code for reading file if it exists in the said directory (when AddNoteDialog opens)
 4) Finally,
