@@ -50,10 +50,6 @@ import java.io.IOException;
  * Notes are saved as text files at location: "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
  * */
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 public class AddNoteDialog extends DialogFragment {
 
   private SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(KiwixApplication.getInstance());
@@ -157,6 +153,10 @@ public class AddNoteDialog extends DialogFragment {
           case R.id.share_note:
             Toast.makeText(getContext(), "Share Note", Toast.LENGTH_SHORT).show();
             //TODO: Add app-chooser to intent for sharing note text file
+            /*String message = "Parent Directory - "+ ZimContentProvider.getZimFileTitle()
+                              + "\nSub Directory - " + ((MainActivity)getActivity()).getCurrentWebView().getTitle();
+            addNoteEditText.setText(message);*/
+
             break;
 
           case R.id.save_note:
