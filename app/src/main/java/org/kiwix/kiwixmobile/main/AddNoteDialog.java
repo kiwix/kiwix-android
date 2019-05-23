@@ -3,6 +3,8 @@ package org.kiwix.kiwixmobile.main;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +23,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import org.kiwix.kiwixmobile.R;
 
+import java.io.File;
+
 public class AddNoteDialog extends DialogFragment {
+
+  private EditText addNoteEditText;
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -32,6 +39,8 @@ public class AddNoteDialog extends DialogFragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     super.onCreateView(inflater, container, savedInstanceState);
     View view = inflater.inflate(R.layout.dialog_add_note, container, false);
+
+    addNoteEditText = view.findViewById(R.id.add_note_edit_text);
 
     Toolbar toolbar = view.findViewById(R.id.add_note_toolbar);
     toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
@@ -59,6 +68,7 @@ public class AddNoteDialog extends DialogFragment {
           case R.id.save_note:
             Toast.makeText(getContext(), "Save Note", Toast.LENGTH_SHORT).show();
             //TODO: Add code for saving note text files
+            saveNote(addNoteEditText.getText().toString());
             break;
         }
         return true;
@@ -74,7 +84,6 @@ public class AddNoteDialog extends DialogFragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    EditText addNoteEditText = view.findViewById(R.id.add_note_edit_text);
     addNoteEditText.requestFocus();
     showKeyboard();
   }
@@ -89,6 +98,46 @@ public class AddNoteDialog extends DialogFragment {
     inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
   }
 
+  private void saveNote(String noteText) {
+
+    if(isExternalStorageWritable()) {
+      File notesFolder = new File(Environment.getExternalStorageDirectory() + "/Kiwix/Notes");
+      boolean folderExists = true;
+
+      if(!notesFolder.exists()) {
+        folderExists = notesFolder.mkdir();
+      }
+
+      if(folderExists) {
+        File noteFile = new File(notesFolder.getAbsolutePath(), "noteFile.txt");
+      } else {
+        Toast.makeText(getContext(), "Error: Check log", Toast.LENGTH_SHORT).show();
+        Log.d("AddNoteDialog", "Required folder doesn't exist/");
+      }
+    }
+    else {
+      Toast.makeText(getContext(), "Error saving note: External storage now writable", Toast.LENGTH_LONG).show();
+    }
+
+  }
+
+  public boolean isExternalStorageWritable() {
+    String state = Environment.getExternalStorageState();
+    if(Environment.MEDIA_MOUNTED.equals(state)) {
+      return true;
+    }
+    return false;
+  }
+
+  public boolean isExternalStorageReadable() {
+    String state = Environment.getExternalStorageState();
+    if(Environment.MEDIA_MOUNTED.equals(state)
+        || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+      return true;
+    }
+    return false;
+  }
+
   @Override
   public void onStart() {
     super.onStart();
@@ -100,21 +149,4 @@ public class AddNoteDialog extends DialogFragment {
       dialog.getWindow().setLayout(width, height);
     }
   }
-
-  /*@Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    super.onOptionsItemSelected(item);
-
-    switch (item.getItemId()) {
-      case R.id.share_note:
-        Toast.makeText(getContext(), "Share Note", Toast.LENGTH_SHORT).show();
-        break;
-
-      case R.id.save_note:
-        Toast.makeText(getContext(), "Save Note", Toast.LENGTH_SHORT).show();
-        break;
-    }
-
-    return true;
-  }*/
 }
