@@ -364,6 +364,16 @@ android {
   androidExtensions {
     experimental = true
   }
+play {
+  enabled = getCurrentBranchName() == "master"
+  serviceAccountCredentials = file("../google.json")
+  track = "alpha"
+  resolutionStrategy = "fail"
+}
+
+private static String getCurrentBranchName() {
+  if (System.getenv('TRAVIS_PULL_REQUEST')!="false") System.getenv('TRAVIS_PULL_REQUEST_BRANCH')
+  else System.getenv('TRAVIS_BRANCH') ?: "local"
 }
 
 // Testdroid deployment configuration
