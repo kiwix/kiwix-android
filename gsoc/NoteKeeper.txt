@@ -1,8 +1,12 @@
 * UI as a full-screen dialog (as per material design guidelines)
-* Need to discuss back-end implementation
+* DONE: Need to discuss back-end implementation
+	- Separate note for each wiki article
+	- {Primary External Storage}/Kiwix/Notes/WikiName/ArticleName.txt
 
 Implementation:
+- Initially focus on creating necessary path directory and saving
 - For changed file, ask user confirmation before closing on dismiss
 - Disable save button for empty note files (as per Material Design)?
-- Material Design says use only one confirmation action on top right - Shift 'Share' to content area
 - Use MD guidelines for visual appearance and spacing
+- FIXED: Material Design says use only one confirmation action on top right - Shift 'Share' to content area
+	> Two buttons isn't a violation. Eg: Reddit
