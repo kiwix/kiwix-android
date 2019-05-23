@@ -1,10 +1,23 @@
 * UI as a full-screen dialog (as per material design guidelines)
 * DONE: Need to discuss back-end implementation
 	- Separate note for each wiki article
-	- {Primary External Storage}/Kiwix/Notes/WikiName/ArticleName.txt
+	- {External Storage}/Kiwix/Notes/WikiName/ArticleName.txt
+
+Steps:
+1) Create a public directory in external storage and save file
+2) Modify code to create path/directories as per: {External Storage}/Kiwix/Notes/WikiName/ArticleName.txt
+3) Code for reading file if it exists in the said directory (when AddNoteDialog opens)
+4) Finally,
+	- For changed file, ask user confirmation before closing on dismiss
+	- Disable save button for empty note files
+
 
 Implementation:
 - Initially focus on creating necessary path directory and saving
+
+	When opening note only look for readablility (writability if doesn't exist)
+	When saving, then ask for writability and inform user if don't get it
+
 - For changed file, ask user confirmation before closing on dismiss
 - Disable save button for empty note files (as per Material Design)?
 - Use MD guidelines for visual appearance and spacing
