@@ -1,51 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/zim_manager_main_activity"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:fitsSystemWindows="true"
-  tools:context=".zim_manager.ZimManageActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/zim_manager_main_activity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".zim_manager.ZimManageActivity"
+    >
 
   <android.support.design.widget.AppBarLayout
-    android:id="@+id/appbar"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="@dimen/dimen_medium_padding"
-    android:theme="@style/AppTheme.AppBarOverlay">
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
-      android:id="@+id/toolbar_layout"
-      android:layout_width="match_parent"
-      android:layout_height="?actionBarSize"
-      app:layout_scrollFlags="scroll|enterAlways">
-
-      <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:popupTheme="@style/AppTheme.PopupOverlay">
-
-      </android.support.v7.widget.Toolbar>
-    </RelativeLayout>
-
-    <android.support.design.widget.TabLayout
-      android:id="@+id/tabs"
+      android:id="@+id/appbar"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      app:tabGravity="fill"
-      app:tabMaxWidth="0dp" />
+      android:paddingTop="@dimen/zim_manage_toolbar_top_padding"
+      android:theme="@style/AppTheme.AppBarOverlay"
+      >
+
+      <android.support.v7.widget.Toolbar
+          android:id="@+id/toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"
+          android:background="?attr/colorPrimary"
+          app:layout_scrollFlags="scroll|snap|enterAlways"
+          app:popupTheme="@style/AppTheme.PopupOverlay"
+          />
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabGravity="fill"
+        app:tabMaxWidth="0dp"
+        />
 
   </android.support.design.widget.AppBarLayout>
 
   <android.support.v4.view.ViewPager
-    android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+      android:id="@+id/manageViewPager"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior"
+      />
 
 
 </android.support.design.widget.CoordinatorLayout>

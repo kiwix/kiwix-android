@@ -22,10 +22,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.util.Log;
-
-import org.kiwix.kiwixmobile.R;
-
 import java.util.UUID;
+import org.kiwix.kiwixmobile.R;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
@@ -86,9 +84,11 @@ public class NetworkUtils {
   }
 
   public static String parseURL(Context context, String url) {
-    String details;
+    if (url == null) {
+      return "";
+    }
     try {
-      details = url.substring(url.lastIndexOf("/") + 1);
+      String details = url.substring(url.lastIndexOf("/") + 1);
       int beginIndex = details.indexOf("_", details.indexOf("_") + 1) + 1;
       int endIndex = details.lastIndexOf("_");
       if (beginIndex < 0 || endIndex > details.length() || beginIndex > endIndex) {

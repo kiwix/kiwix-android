@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-
+import io.reactivex.processors.BehaviorProcessor;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -13,7 +13,6 @@ import static org.kiwix.kiwixmobile.utils.Constants.PREF_BACK_TO_TOP;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_BOTTOM_TOOLBAR;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_EXTERNAL_LINK_POPUP;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_FULLSCREEN;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_FULL_TEXT_SEARCH;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_HIDE_TOOLBAR;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_IS_FIRST_RUN;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_LANG;
@@ -33,11 +32,13 @@ import static org.kiwix.kiwixmobile.utils.Constants.PREF_ZOOM_ENABLED;
 public class SharedPreferenceUtil {
   private SharedPreferences sharedPreferences;
   private SharedPreferences.Editor editor;
+  public final BehaviorProcessor<String> prefStorages;
 
   @Inject
   public SharedPreferenceUtil(Context context) {
     sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     editor = sharedPreferences.edit();
+    prefStorages = BehaviorProcessor.createDefault(getPrefStorage());
   }
 
   public void remove(String key) {
@@ -131,6 +132,7 @@ public class SharedPreferenceUtil {
 
   public void putPrefStorage(String storage) {
     editor.putString(PREF_STORAGE, storage).apply();
+    prefStorages.onNext(storage);
   }
 
   public void putPrefFullScreen(boolean fullScreen) {

@@ -17,32 +17,35 @@
  */
 package org.kiwix.kiwixmobile.di.modules;
 
+import android.app.Application;
+import android.app.DownloadManager;
 import android.app.NotificationManager;
 import android.content.Context;
-
-import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.utils.BookUtils;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 import dagger.android.AndroidInjectionModule;
+import javax.inject.Singleton;
+import org.kiwix.kiwixmobile.utils.BookUtils;
 
-@Module(includes = {ActivityBindingModule.class, AndroidInjectionModule.class})
+@Module(includes = {
+    ActivityBindingModule.class,
+    AndroidInjectionModule.class,
+    DownloaderModule.class,
+    ViewModelModule.class,
+    DatabaseModule.class
+})
 public class ApplicationModule {
-  private final KiwixApplication application;
 
-  public ApplicationModule(KiwixApplication application) {
-    this.application = application;
-  }
-
-  @Provides @Singleton Context provideApplicationContext() {
-    return this.application;
+  @Provides @Singleton Application provideApplication(Context context) {
+    return (Application) context;
   }
 
   @Provides @Singleton NotificationManager provideNotificationManager(Context context) {
     return (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+  }
+
+  @Provides @Singleton DownloadManager provideDownloadManager(Context context) {
+    return (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
   }
 
   @Provides @Singleton

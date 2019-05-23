@@ -18,26 +18,22 @@
 package org.kiwix.kiwixmobile;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.os.Environment;
-import android.support.multidex.MultiDexApplication;
-import android.util.Log;
 import android.support.v7.app.AppCompatDelegate;
+import android.util.Log;
 import com.squareup.leakcanary.LeakCanary;
-import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
-import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
-import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
-
-import java.io.File;
-import java.io.IOException;
-
-import javax.inject.Inject;
-
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
+import java.io.File;
+import java.io.IOException;
+import javax.inject.Inject;
+import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
+import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
 
-public class KiwixApplication extends MultiDexApplication implements HasActivityInjector {
+public class KiwixApplication extends Application implements HasActivityInjector {
 
   private static KiwixApplication application;
   private static ApplicationComponent applicationComponent;
@@ -68,13 +64,18 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
     super.attachBaseContext(base);
     application = this;
     setApplicationComponent(DaggerApplicationComponent.builder()
-        .applicationModule(new ApplicationModule(this))
+        .context(this)
         .build());
   }
 
   @Override
   public void onCreate() {
     super.onCreate();
+    if (LeakCanary.isInAnalyzerProcess(this)) {
+      // This process is dedicated to LeakCanary for heap analysis.
+      // You should not init your app in this process.
+      return;
+    }
     if (isExternalStorageWritable()) {
       File appDirectory = new File(Environment.getExternalStorageDirectory() + "/Kiwix");
       logFile = new File(appDirectory, "logcat.txt");
@@ -105,13 +106,7 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
     }
 
     Log.d("KIWIX", "Started KiwixApplication");
-
     applicationComponent.inject(this);
-    if (LeakCanary.isInAnalyzerProcess(this)) {
-      // This process is dedicated to LeakCanary for heap analysis.
-      // You should not init your app in this process.
-      return;
-    }
     LeakCanary.install(this);
   }
 

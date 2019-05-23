@@ -51,7 +51,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn;
-import static com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
 import static com.schibsted.spain.barista.interaction.BaristaSwipeRefreshInteractions.refresh;
 import static junit.framework.Assert.fail;
 import static org.hamcrest.Matchers.allOf;
@@ -106,7 +105,7 @@ public class DownloadTest {
 
     captureAndSaveScreenshot("Before-checking-for-ZimManager-Main-Activity");
     ViewInteraction viewPager2 = onView(
-            allOf(withId(R.id.container),
+            allOf(withId(R.id.manageViewPager),
                     withParent(allOf(withId(R.id.zim_manager_main_activity),
                             withParent(withId(android.R.id.content)))),
                     isDisplayed()));
@@ -115,13 +114,13 @@ public class DownloadTest {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     try {
-        onData(withContent("ray_charles")).inAdapterView(withId(R.id.library_list));
+        onData(withContent("ray_charles")).inAdapterView(withId(R.id.libraryList));
     } catch (Exception e) {
         fail("Couldn't find downloaded file 'ray_charles'\n\nOriginal Exception:\n" +
             e.getLocalizedMessage() + "\n\n" );
     }
 
-    deleteZimIfExists("ray_charles", R.id.library_list);
+    deleteZimIfExists("ray_charles", R.id.libraryList);
 
     assertDisplayed(R.string.local_zims);
     clickOn(R.string.local_zims);

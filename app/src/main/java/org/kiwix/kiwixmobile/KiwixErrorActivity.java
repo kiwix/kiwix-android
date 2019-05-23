@@ -9,26 +9,23 @@ import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.widget.Button;
 import android.widget.CheckBox;
-
-import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.database.BookDao;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
-import org.kiwix.kiwixmobile.utils.SplashActivity;
-
-import java.io.File;
-import java.util.ArrayList;
-
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import java.io.File;
+import java.util.List;
+import javax.inject.Inject;
+import org.kiwix.kiwixmobile.base.BaseActivity;
+import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao;
+import org.kiwix.kiwixmobile.downloader.model.BookOnDisk;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.utils.SplashActivity;
 
 import static org.kiwix.kiwixmobile.utils.LanguageUtils.getCurrentLocale;
 
 public class KiwixErrorActivity extends BaseActivity {
 
   @Inject
-  BookDao bookDao;
+  NewBookDao bookDao;
 
   @BindView(R.id.reportButton)
   Button reportButton;
@@ -89,10 +86,11 @@ public class KiwixErrorActivity extends BaseActivity {
       }
 
       if(allowZimsCheckbox.isChecked()) {
-        ArrayList<LibraryNetworkEntity.Book> books = bookDao.getBooks();
+        List<BookOnDisk> books = bookDao.getBooks();
 
         StringBuilder sb = new StringBuilder();
-        for(LibraryNetworkEntity.Book book: books) {
+        for (BookOnDisk bookOnDisk : books) {
+          final LibraryNetworkEntity.Book book = bookOnDisk.getBook();
           String bookString = book.getTitle() +
               ":\nArticles: ["+ book.getArticleCount() +
               "]\nCreator: [" + book.getCreator() +
