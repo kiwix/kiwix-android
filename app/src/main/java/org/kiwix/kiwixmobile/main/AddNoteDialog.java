@@ -22,6 +22,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.data.ZimContentProvider;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -65,6 +66,10 @@ public class AddNoteDialog extends DialogFragment {
           case R.id.share_note:
             Toast.makeText(getContext(), "Share Note", Toast.LENGTH_SHORT).show();
             //TODO: Add app-chooser to intent for sharing note text file
+            /*String message = "Parent Directory - "+ ZimContentProvider.getZimFileTitle()
+                              + "\nSub Directory - " + ((MainActivity)getActivity()).getCurrentWebView().getTitle();
+            addNoteEditText.setText(message);*/
+
             break;
 
           case R.id.save_note:
@@ -103,7 +108,7 @@ public class AddNoteDialog extends DialogFragment {
   private void saveNote(String noteText) {
 
     if(isExternalStorageWritable()) {
-      File notesFolder = new File(Environment.getExternalStorageDirectory() + "/Kiwix/Notes");
+      File notesFolder = new File(Environment.getExternalStorageDirectory() + "/Kiwix/Notes/" + ZimContentProvider.getZimFileTitle());
       boolean folderExists = true;
 
       if(!notesFolder.exists()) {
@@ -111,7 +116,7 @@ public class AddNoteDialog extends DialogFragment {
       }
 
       if(folderExists) {
-        File noteFile = new File(notesFolder.getAbsolutePath(), "noteFile.txt");
+        File noteFile = new File(notesFolder.getAbsolutePath(), ((MainActivity)getActivity()).getCurrentWebView().getTitle() + ".txt");
 
         //TODO: Save file code
         try {
