@@ -53,10 +53,12 @@ public class AddNoteDialog extends DialogFragment {
         switch (item.getItemId()) {
           case R.id.share_note:
             Toast.makeText(getContext(), "Share Note", Toast.LENGTH_SHORT).show();
+            //TODO: Add app-chooser to intent for sharing note text file
             break;
 
           case R.id.save_note:
             Toast.makeText(getContext(), "Save Note", Toast.LENGTH_SHORT).show();
+            //TODO: Add code for saving note text files
             break;
         }
 
