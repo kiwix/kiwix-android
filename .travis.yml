@@ -9,10 +9,6 @@ env:
     - ANDROID_TARGET=android-22
     - ANDROID_ABI=arm64-v8a
 
-before_install:
-  - openssl aes-256-cbc -K $encrypted_87d19ee99c79_key -iv $encrypted_87d19ee99c79_iv -in kiwix-android.keystore.enc -out .\\kiwix-android.keystore -d
-  - openssl aes-256-cbc -K $encrypted_87d19ee99c79_key -iv $encrypted_87d19ee99c79_iv -in google.json.enc -out .\\google.json -d
-
 install:
   - pip install --user 'requests[security]'
   - wget -r -nH -nd -np -R index.html* robots.txt* http://download.kiwix.org/dev/android/api/licenses/ -e robots=off -P $ANDROID_HOME/licenses || true
