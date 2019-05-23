@@ -199,6 +199,15 @@ android {
 
   flavorDimensions "default"
 
+  signingConfigs {
+    release {
+      storeFile file("../kiwix-android.keystore")
+      storePassword System.getenv("KEY_STORE_PASSWORD")
+      keyAlias System.getenv("KEY_ALIAS")
+      keyPassword System.getenv("KEY_PASSWORD")
+    }
+  }
+
   buildTypes {
 
     // Main build type for debugging
@@ -222,6 +231,7 @@ android {
 
     // Release Type
     release {
+      signingConfig signingConfigs.release
       buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://download.kiwix.org/\""
       buildConfigField "boolean", "KIWIX_ERROR_ACTIVITY", "false"
     }
@@ -364,6 +374,26 @@ android {
   androidExtensions {
     experimental = true
   }
+
+  def abiCodes = ['x86': 1, 'x86_64': 2, 'armeabi-v7a': 3, 'arm64-v8a': 4]
+  splits {
+    abi {
+      enable true
+      reset()
+      include "x86", "x86_64", 'armeabi-v7a', "arm64-v8a"
+      universalApk true
+    }
+  }
+  applicationVariants.all { variant ->
+    variant.outputs.each { output ->
+      def baseAbiVersionCode = abiCodes.get(output.getFilter(OutputFile.ABI))
+      if (baseAbiVersionCode != null) {
+        output.versionCodeOverride = baseAbiVersionCode * 1000000 + variant.versionCode
+      }
+    }
+  }
+}
+
 play {
   enabled = getCurrentBranchName() == "master"
   serviceAccountCredentials = file("../google.json")
