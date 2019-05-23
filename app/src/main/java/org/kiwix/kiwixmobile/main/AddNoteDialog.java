@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,6 +31,7 @@ import java.io.IOException;
 
 public class AddNoteDialog extends DialogFragment {
 
+  private TextView addNoteTextView;
   private EditText addNoteEditText;
 
   @Override
@@ -43,6 +45,8 @@ public class AddNoteDialog extends DialogFragment {
     super.onCreateView(inflater, container, savedInstanceState);
     View view = inflater.inflate(R.layout.dialog_add_note, container, false);
 
+    addNoteTextView = view.findViewById(R.id.add_note_text_view);
+    addNoteTextView.setText(((MainActivity)getActivity()).getCurrentWebView().getTitle());
     addNoteEditText = view.findViewById(R.id.add_note_edit_text);
 
     Toolbar toolbar = view.findViewById(R.id.add_note_toolbar);
