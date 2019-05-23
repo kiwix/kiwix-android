@@ -145,6 +145,25 @@ public class AddNoteDialog extends DialogFragment {
       @Override
       public void afterTextChanged(Editable s) {}
     });
+    toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+      @Override
+      public boolean onMenuItemClick(MenuItem item) {
+
+        switch (item.getItemId()) {
+          case R.id.share_note:
+            Toast.makeText(getContext(), "Share Note", Toast.LENGTH_SHORT).show();
+            break;
+
+          case R.id.save_note:
+            Toast.makeText(getContext(), "Save Note", Toast.LENGTH_SHORT).show();
+            break;
+        }
+
+        toolbar.inflateMenu(R.menu.menu_add_note_dialog);
+
+        return true;
+      }
+    });
 
     return view;
   }
