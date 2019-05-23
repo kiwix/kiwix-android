@@ -7,7 +7,7 @@ sudo: required
 env:
   global:
     - ANDROID_TARGET=android-22
-    - ANDROID_ABI=arm64-v8a
+    - ANDROID_ABI=x86
 
 install:
   - pip install --user 'requests[security]'
