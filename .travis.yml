@@ -53,8 +53,9 @@ after_success:
 
 after_failure:
   - export MY_MOD="app"
-  - export MY_LOG_DIR="$(HOME)/${MY_MOD}/build/outputs/reports/androidTests/connected/"
+  - export MY_LOG_DIR="${HOME}/${MY_MOD}/build/outputs/reports/androidTests/connected/"
   - pwd && cd "${MY_LOG_DIR:-.}" && pwd && ls -al
+  - sudo apt-get update
   - sudo apt-get install -qq lynx && lynx --dump index.html > myIndex.log
   - lynx --dump com.android.builder.testing.ConnectedDevice.html > myConnectedDevice.log
   - lynx --dump com.android.builder.testing.html > myTesting.log
