@@ -13,6 +13,11 @@ install:
   - pip install --user 'requests[security]'
   - wget -r -nH -nd -np -R index.html* robots.txt* http://download.kiwix.org/dev/android/api/licenses/ -e robots=off -P $ANDROID_HOME/licenses || true
 
+addons:
+  apt:
+    packages:
+      - lynx
+
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -53,4 +58,4 @@ after_success:
   - ./gradlew testdroidUploadKiwixDebug
 
 after_failure:
-  - echo "====================="; cat ${HOME}/build/kiwix/kiwix-android/app/build/reports/androidTests/connected/flavors/KIWIX/index.html;
+  - lynx -dump ${HOME}/build/kiwix/kiwix-android/app/build/reports/androidTests/connected/flavors/KIWIX/org.kiwix.kiwixmobile.tests.BasicTest.html;
