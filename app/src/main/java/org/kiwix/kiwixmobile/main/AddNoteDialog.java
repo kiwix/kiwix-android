@@ -87,7 +87,6 @@ public class AddNoteDialog extends DialogFragment {
             break;
 
           case R.id.save_note:
-            Toast.makeText(getContext(), "Save Note", Toast.LENGTH_SHORT).show();
             //TODO: Add code for saving note text files
             saveNote(addNoteEditText.getText().toString());
             break;
@@ -125,6 +124,7 @@ public class AddNoteDialog extends DialogFragment {
 
       if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
         Log.d(TAG, "WRITE_EXTERNAL_STORAGE permission not granted");
+        Toast.makeText(getContext(), "Note save unsuccessful", Toast.LENGTH_LONG);
         return;
       }
 
@@ -143,17 +143,19 @@ public class AddNoteDialog extends DialogFragment {
           FileOutputStream fileOutputStream = new FileOutputStream(noteFile);
           fileOutputStream.write(noteText.getBytes());
           fileOutputStream.close();
+          Toast.makeText(getContext(), "Note saved", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
           e.printStackTrace();
         }
 
       } else {
-        Toast.makeText(getContext(), "Error: Check logs", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "Error: Check logs", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Note save unsuccessful", Toast.LENGTH_LONG);
         Log.d(TAG, "Required folder doesn't exist");
       }
     }
     else {
-      Toast.makeText(getContext(), "Error saving note: External storage now writable", Toast.LENGTH_LONG).show();
+      Toast.makeText(getContext(), "Error saving note:\nStorage not writable", Toast.LENGTH_LONG).show();
     }
 
   }
