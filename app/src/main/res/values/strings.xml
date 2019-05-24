@@ -247,4 +247,6 @@
   <string name="close_all_tabs">Close all tabs</string>
   <string name="add_note">Add Note</string>
   <string name="save">Save</string>
+  <string name="note">Note</string>
+  <string name="wiki_book_title">Wiki Book Title</string>
 </resources>
