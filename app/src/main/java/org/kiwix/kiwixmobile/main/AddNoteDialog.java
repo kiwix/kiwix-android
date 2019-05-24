@@ -36,12 +36,18 @@ public class AddNoteDialog extends DialogFragment {
 
   private TextView addNoteTextView;
   private EditText addNoteEditText;
+  private String zimFileTitle;
+  private String articleTitle;
+
   private final String TAG = "AddNoteDialog";
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setStyle(DialogFragment.STYLE_NORMAL, R.style.AddNoteDialogStyle);
+
+    zimFileTitle = ZimContentProvider.getZimFileTitle();
+    articleTitle = ((MainActivity)getActivity()).getCurrentWebView().getTitle();
   }
 
   @Override
@@ -50,7 +56,7 @@ public class AddNoteDialog extends DialogFragment {
     View view = inflater.inflate(R.layout.dialog_add_note, container, false);
 
     addNoteTextView = view.findViewById(R.id.add_note_text_view);
-    addNoteTextView.setText(((MainActivity)getActivity()).getCurrentWebView().getTitle());
+    addNoteTextView.setText(articleTitle);
     addNoteEditText = view.findViewById(R.id.add_note_edit_text);
 
     Toolbar toolbar = view.findViewById(R.id.add_note_toolbar);
@@ -119,9 +125,10 @@ public class AddNoteDialog extends DialogFragment {
 
       if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
         Log.d(TAG, "WRITE_EXTERNAL_STORAGE permission not granted");
+        return;
       }
 
-      File notesFolder = new File(Environment.getExternalStorageDirectory() + "/Kiwix/Notes/" + ZimContentProvider.getZimFileTitle());
+      File notesFolder = new File(Environment.getExternalStorageDirectory() + "/Kiwix/Notes/" + zimFileTitle);
       boolean folderExists = true;
 
       if(!notesFolder.exists()) {
@@ -129,7 +136,7 @@ public class AddNoteDialog extends DialogFragment {
       }
 
       if(folderExists) {
-        File noteFile = new File(notesFolder.getAbsolutePath(), ((MainActivity)getActivity()).getCurrentWebView().getTitle() + ".txt");
+        File noteFile = new File(notesFolder.getAbsolutePath(), articleTitle + ".txt");
 
         //TODO: Save file code
         try {
