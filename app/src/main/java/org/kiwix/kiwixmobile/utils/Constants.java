@@ -30,6 +30,12 @@ public final class Constants {
 
   public static final int REQUEST_STORAGE_PERMISSION = 1;
 
+  public static final int REQUEST_READ_STORAGE_PERMISSION = 2;
+
+  public static final int REQUEST_WRITE_STORAGE_PERMISSION = 3;
+
+  public static final int REQUEST_HISTORY_ITEM_CHOSEN = 99;
+
   public static final int REQUEST_FILE_SELECT = 1234;
 
   public static final int REQUEST_PREFERENCES = 1235;

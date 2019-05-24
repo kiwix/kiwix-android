@@ -1,7 +1,9 @@
 package org.kiwix.kiwixmobile.main;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -19,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -33,6 +36,7 @@ public class AddNoteDialog extends DialogFragment {
 
   private TextView addNoteTextView;
   private EditText addNoteEditText;
+  private final String TAG = "AddNoteDialog";
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -112,11 +116,16 @@ public class AddNoteDialog extends DialogFragment {
   private void saveNote(String noteText) {
 
     if(isExternalStorageWritable()) {
+
+      if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        Log.d(TAG, "WRITE_EXTERNAL_STORAGE permission not granted");
+      }
+
       File notesFolder = new File(Environment.getExternalStorageDirectory() + "/Kiwix/Notes/" + ZimContentProvider.getZimFileTitle());
       boolean folderExists = true;
 
       if(!notesFolder.exists()) {
-        folderExists = notesFolder.mkdir();
+        folderExists = notesFolder.mkdirs();
       }
 
       if(folderExists) {
@@ -132,8 +141,8 @@ public class AddNoteDialog extends DialogFragment {
         }
 
       } else {
-        Toast.makeText(getContext(), "Error: Check log", Toast.LENGTH_SHORT).show();
-        Log.d("AddNoteDialog", "Required folder doesn't exist/");
+        Toast.makeText(getContext(), "Error: Check logs", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "Required folder doesn't exist");
       }
     }
     else {

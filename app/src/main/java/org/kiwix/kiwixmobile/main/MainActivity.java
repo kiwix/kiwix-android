@@ -133,8 +133,11 @@ import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_ZIM_FILE_2;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_KIWIX_MOBILE;
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_FILE_SEARCH;
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_FILE_SELECT;
+import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_HISTORY_ITEM_CHOSEN;
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_PREFERENCES;
+import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_READ_STORAGE_PERMISSION;
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_STORAGE_PERMISSION;
+import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_WRITE_STORAGE_PERMISSION;
 import static org.kiwix.kiwixmobile.utils.Constants.RESULT_HISTORY_CLEARED;
 import static org.kiwix.kiwixmobile.utils.Constants.RESULT_RESTART;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_CURRENT_ARTICLES;
@@ -150,8 +153,6 @@ import static org.kiwix.kiwixmobile.utils.UpdateUtils.reformatProviderUrl;
 public class MainActivity extends BaseActivity implements WebViewCallback,
     MainContract.View, BooksAdapter.OnItemClickListener {
 
-  private static final int REQUEST_READ_STORAGE_PERMISSION = 2;
-  private static final int REQUEST_HISTORY_ITEM_CHOSEN = 99;
   private static final String NEW_TAB = "NEW_TAB";
   private static final String HOME_URL = "file:///android_asset/home.html";
   public static boolean isFullscreenOpened;
@@ -849,14 +850,20 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       case R.id.menu_add_note:
         /*TODO: Create fullscreen dialog for Note Keeper*/
         //Toast.makeText(getApplicationContext(), "Add Note", Toast.LENGTH_SHORT).show();
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+
+        //TODO: Check for permissions
+        if(requestExternalStorageWritePermission()) {
+          showAddNoteDialog();
+        }
+
+        /*FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         Fragment prev = getSupportFragmentManager().findFragmentByTag("AddNoteDialog");
         if(prev != null) {
           fragmentTransaction.remove(prev);
         }
         fragmentTransaction.addToBackStack(null);
         AddNoteDialog dialog = new AddNoteDialog();
-        dialog.show(fragmentTransaction, "AddNoteDialog");  //Adds to transaction and handles commit
+        dialog.show(fragmentTransaction, "AddNoteDialog");*/  //Adds to transaction and handles commit
         break;
 
       case R.id.menu_bookmarks_list:
@@ -916,6 +923,42 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
 
     return super.onOptionsItemSelected(item);
+  }
+
+  private void showAddNoteDialog() {
+    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+    Fragment prev = getSupportFragmentManager().findFragmentByTag("AddNoteDialog");
+    if(prev != null) {
+      fragmentTransaction.remove(prev);
+    }
+    fragmentTransaction.addToBackStack(null);
+    AddNoteDialog dialog = new AddNoteDialog();
+    dialog.show(fragmentTransaction, "AddNoteDialog");
+  }
+
+  boolean requestExternalStorageWritePermission() {
+    if(Build.VERSION.SDK_INT >= 23) {
+
+      if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        return true;
+
+      } else {
+        if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+          /* Returns false if
+           * 1) User has previously checked on "Don't ask me again"
+           * 2) Permission disabled on device
+           **/
+          Toast.makeText(getApplicationContext(), "Storage access is required for Notes", Toast.LENGTH_LONG).show();
+        }
+
+        requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_STORAGE_PERMISSION);
+      }
+
+    } else { //For Android versions below Marshmallow 6.0 (API 23)
+      return true; //As already requested at install time
+    }
+
+    return false;
   }
 
   @SuppressWarnings("SameReturnValue")
@@ -1087,6 +1130,21 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
                 startActivity(intent);
               }).show();
         }
+        break;
+      }
+
+      case REQUEST_WRITE_STORAGE_PERMISSION: {
+        //TODO: Handle response
+        if(grantResults.length > 0
+            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+          /**
+           * Since at present the request is being used strictly for the AddNoteDialog,
+           * thus the response to the permission being granted is simply opening the dialog*/
+          showAddNoteDialog();
+        } else {
+          Toast.makeText(getApplicationContext(), "Notes can't be used without access to storage", Toast.LENGTH_LONG);
+        }
+        break;
       }
     }
   }
