@@ -6,8 +6,8 @@ sudo: required
 
 env:
   global:
-    - ANDROID_TARGET=android-24
-    - ANDROID_ABI=arm64-v8a
+    - ANDROID_TARGET=android-21
+    - ANDROID_ABI=x86_64
 
 install:
   - pip install --user 'requests[security]'
@@ -39,24 +39,18 @@ licenses:
 script:
 #  - ./gradlew assembleKiwixDebug jacocoTestKiwixDebugUnitTestReport
   - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
-  - emulator -avd test -no-skin -no-window -logcat *:e &
+  - emulator -avd test -no-skin -no-window -no-accel -gpu swiftshader --no-boot-anim &
   - android-wait-for-emulator
   - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
   - adb shell input keyevent 82 & # unlock screen by pressing menu button
   - ./gradlew createKiwixDebugCoverageReport
-  - if [ "$TRAVIS_BRANCH" == "release" ];
-    then ./gradlew publishKiwixRelease; fi
+  - if [ "$TRAVIS_BRANCH" == "release" ];then
+      ./gradlew publishKiwixRelease;
+    fi
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   - ./gradlew testdroidUploadKiwixDebug
 
 after_failure:
-  - export MY_MOD="app"
-  - export MY_LOG_DIR="${HOME}/${MY_MOD}/build/outputs/reports/androidTests/connected/"
-  - pwd && cd "${MY_LOG_DIR:-.}" && pwd && ls -al
-  - sudo apt-get update
-  - sudo apt-get install -qq lynx && lynx --dump index.html > myIndex.log
-  - lynx --dump com.android.builder.testing.ConnectedDevice.html > myConnectedDevice.log
-  - lynx --dump com.android.builder.testing.html > myTesting.log
-  - for file in *.log; do echo "$file"; echo "====================="; cat "$file"; done || true
+  - echo "====================="; cat ${HOME}/home/travis/build/kiwix/kiwix-android/app/build/reports/androidTests/connected/flavors/KIWIX/index.html;
