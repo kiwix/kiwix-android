@@ -36,7 +36,7 @@ android:
     - android-27
     - extra-android-m2repository
     - $ANDROID_TARGET
-    - sys-img-${ANDROID_ABI}-google_apis-${ANDROID_TARGET}
+    - sys-img-${ANDROID_ABI}-google_apis-25
 
 licenses:
   - ".+"
