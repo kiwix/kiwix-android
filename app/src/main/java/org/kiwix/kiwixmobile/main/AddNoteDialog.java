@@ -6,8 +6,11 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,12 +45,14 @@ import java.nio.charset.StandardCharsets;
 
 public class AddNoteDialog extends DialogFragment {
 
+  private Toolbar toolbar;
   private TextView addNoteTextView;
   private EditText addNoteEditText;
   private String zimFileTitle;
   private String articleTitle;
   private boolean noteFileExists = false;
   private String noteFileText;
+  private boolean noteEdited = false;
 
   private final String TAG = "AddNoteDialog";
 
@@ -70,16 +75,30 @@ public class AddNoteDialog extends DialogFragment {
 
     addNoteEditText = view.findViewById(R.id.add_note_edit_text);
     //TODO: Use displayNote() to show the previously saved note if it exists
-    noteFileText = displayNote();
-    if(noteFileText != null) {
-      addNoteEditText.setText(noteFileText);
-    }
+    displayNote();
 
-    Toolbar toolbar = view.findViewById(R.id.add_note_toolbar);
+    addNoteEditText.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+      @Override
+      public void onTextChanged(CharSequence s, int start, int before, int count) {
+        noteEdited = true;
+        Toast.makeText(getContext(), "Text changed", Toast.LENGTH_SHORT).show();
+        addNoteEditText.removeTextChangedListener(this);
+        enableMenuItems();
+      }
+
+      @Override
+      public void afterTextChanged(Editable s) {}
+    });
+
+    toolbar = view.findViewById(R.id.add_note_toolbar);
     toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
     //toolbar.setNavigationOnClickListener();
     //toolbar.setOnMenuItemClickListener
     toolbar.setTitle("Note");
+
     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -88,6 +107,7 @@ public class AddNoteDialog extends DialogFragment {
         dialog.dismiss();
       }
     });
+
     toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
       @Override
       public boolean onMenuItemClick(MenuItem item) {
@@ -96,9 +116,6 @@ public class AddNoteDialog extends DialogFragment {
           case R.id.share_note:
             Toast.makeText(getContext(), "Share Note", Toast.LENGTH_SHORT).show();
             //TODO: Add app-chooser to intent for sharing note text file
-            /*String message = "Parent Directory - "+ ZimContentProvider.getZimFileTitle()
-                              + "\nSub Directory - " + ((MainActivity)getActivity()).getCurrentWebView().getTitle();
-            addNoteEditText.setText(message);*/
             break;
 
           case R.id.save_note:
@@ -111,9 +128,48 @@ public class AddNoteDialog extends DialogFragment {
     });
 
     toolbar.inflateMenu(R.menu.menu_add_note_dialog);
+    disableMenuItems();
 
     return view;
   }
+
+  private void enableMenuItems() {
+    if(toolbar.getMenu() != null) {
+      MenuItem saveItem = toolbar.getMenu().findItem(R.id.save_note);
+      saveItem.setEnabled(true);
+      saveItem.getIcon().setAlpha(255);
+
+    } else {
+      Log.d(TAG, "Toolbar without inflated menu");
+    }
+  }
+
+  private void disableMenuItems() {
+    if(toolbar.getMenu() != null) {
+      MenuItem saveItem = toolbar.getMenu().findItem(R.id.save_note);
+      saveItem.setEnabled(false);
+      saveItem.getIcon().setAlpha(130);
+
+    } else {
+      Log.d(TAG, "Toolbar without inflated menu");
+    }
+  }
+
+  /*@Override
+  public void onPrepareOptionsMenu(Menu menu) {
+
+    MenuItem item = menu.findItem(R.id.save_note);
+
+    if(noteEdited) {
+      item.setEnabled(true);
+      item.getIcon().setAlpha(255);
+    } else {
+      Toast.makeText(getContext(), "UNEDITED", Toast.LENGTH_SHORT).show();
+      item.setEnabled(false);
+      item.getIcon().setAlpha(130);
+    }
+
+  }*/
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -177,7 +233,7 @@ public class AddNoteDialog extends DialogFragment {
 
   }
 
-  private String displayNote() {
+  private void displayNote() {
 
     File noteFile = new File(Environment.getExternalStorageDirectory() + "/Kiwix/Notes/" + zimFileTitle + "/" + articleTitle + ".txt");
 
@@ -221,9 +277,9 @@ public class AddNoteDialog extends DialogFragment {
         Log.d(TAG, "Error closing BufferedReader");
       }
 
-      //addNoteEditText.setText(contents.toString());
+      addNoteEditText.setText(contents.toString());
 
-      return contents.toString();
+      //return contents.toString();
 
       /*catch (FileNotFoundException e) {
         e.printStackTrace();
@@ -235,7 +291,7 @@ public class AddNoteDialog extends DialogFragment {
 
     }
 
-    return null;
+    //return null;
   }
 
   public boolean isExternalStorageWritable() {
