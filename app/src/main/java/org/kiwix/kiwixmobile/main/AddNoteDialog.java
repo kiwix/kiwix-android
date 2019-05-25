@@ -27,10 +27,18 @@ import androidx.fragment.app.FragmentTransaction;
 
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
+import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.CharBuffer;
+import java.nio.charset.StandardCharsets;
 
 public class AddNoteDialog extends DialogFragment {
 
@@ -38,6 +46,8 @@ public class AddNoteDialog extends DialogFragment {
   private EditText addNoteEditText;
   private String zimFileTitle;
   private String articleTitle;
+  private boolean noteFileExists = false;
+  private String noteFileText;
 
   private final String TAG = "AddNoteDialog";
 
@@ -57,7 +67,13 @@ public class AddNoteDialog extends DialogFragment {
 
     addNoteTextView = view.findViewById(R.id.add_note_text_view);
     addNoteTextView.setText(articleTitle);
+
     addNoteEditText = view.findViewById(R.id.add_note_edit_text);
+    //TODO: Use displayNote() to show the previously saved note if it exists
+    noteFileText = displayNote();
+    if(noteFileText != null) {
+      addNoteEditText.setText(noteFileText);
+    }
 
     Toolbar toolbar = view.findViewById(R.id.add_note_toolbar);
     toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
@@ -83,7 +99,6 @@ public class AddNoteDialog extends DialogFragment {
             /*String message = "Parent Directory - "+ ZimContentProvider.getZimFileTitle()
                               + "\nSub Directory - " + ((MainActivity)getActivity()).getCurrentWebView().getTitle();
             addNoteEditText.setText(message);*/
-
             break;
 
           case R.id.save_note:
@@ -104,8 +119,10 @@ public class AddNoteDialog extends DialogFragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    addNoteEditText.requestFocus();
-    showKeyboard();
+    if(!noteFileExists) {
+      addNoteEditText.requestFocus();
+      showKeyboard();
+    }
   }
 
   public void showKeyboard(){
@@ -158,6 +175,67 @@ public class AddNoteDialog extends DialogFragment {
       Toast.makeText(getContext(), "Error saving note:\nStorage not writable", Toast.LENGTH_LONG).show();
     }
 
+  }
+
+  private String displayNote() {
+
+    File noteFile = new File(Environment.getExternalStorageDirectory() + "/Kiwix/Notes/" + zimFileTitle + "/" + articleTitle + ".txt");
+
+    if(noteFile.exists()) {
+      noteFileExists = true;
+      //save note in noteFileText
+      StringBuilder contents = new StringBuilder();
+      try {
+
+        BufferedReader input = new BufferedReader(new java.io.FileReader(noteFile));
+        try {
+          String line = null;
+
+          while((line = input.readLine()) != null) {
+            contents.append(line);
+            contents.append(System.getProperty("line.separator"));
+          }
+        } catch (IOException e) {
+          e.printStackTrace();
+          Log.d(TAG, "Error reading line with BufferedReader");
+        } finally {
+          input.close();
+        }
+
+        /*FileInputStream fileInputStream = new FileInputStream(noteFile);
+        long noteFileSize = noteFile.length();
+        int byteArraySize;
+        if(noteFileSize > Integer.MAX_VALUE) {
+          int offset = 0;
+          while(noteFileSize > Integer.MAX_VALUE) {
+            byte[] byteArray = new byte[Integer.MAX_VALUE];
+
+
+            noteFileText += new String(byteArray, "UTF-8");
+            //noteFileSize
+          }
+        }*/
+
+      } catch (IOException e) {
+        e.printStackTrace();
+        Log.d(TAG, "Error closing BufferedReader");
+      }
+
+      //addNoteEditText.setText(contents.toString());
+
+      return contents.toString();
+
+      /*catch (FileNotFoundException e) {
+        e.printStackTrace();
+        Log.d(TAG, "Note does not exist, not being displayed");
+      } catch (UnsupportedEncodingException e) {
+        e.printStackTrace();
+        Log.d(TAG, "Unsupported encoding exception");
+      }*/
+
+    }
+
+    return null;
   }
 
   public boolean isExternalStorageWritable() {
