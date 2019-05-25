@@ -14,6 +14,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -151,6 +152,7 @@ public class AddNoteDialog extends DialogFragment {
       @Override
       public void afterTextChanged(Editable s) {}
     });
+
     toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
       @Override
       public boolean onMenuItemClick(MenuItem item) {
@@ -159,9 +161,6 @@ public class AddNoteDialog extends DialogFragment {
           case R.id.share_note:
             Toast.makeText(getContext(), "Share Note", Toast.LENGTH_SHORT).show();
             //TODO: Add app-chooser to intent for sharing note text file
-            /*String message = "Parent Directory - "+ ZimContentProvider.getZimFileTitle()
-                              + "\nSub Directory - " + ((MainActivity)getActivity()).getCurrentWebView().getTitle();
-            addNoteEditText.setText(message);*/
             break;
 
           case R.id.save_note:
@@ -174,6 +173,7 @@ public class AddNoteDialog extends DialogFragment {
     });
 
     toolbar.inflateMenu(R.menu.menu_add_note_dialog);
+    disableMenuItems();
 
     return view;
   }
