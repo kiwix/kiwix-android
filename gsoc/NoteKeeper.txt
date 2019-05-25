@@ -6,7 +6,7 @@
 Steps:
 1) DONE: Create a public directory in external storage and save file
 2) DONE: Modify code to create path/directories as per: {External Storage}/Kiwix/Notes/WikiName/ArticleName.txt
-3) Code for reading file if it exists in the said directory (when AddNoteDialog opens)
+3) DONE: Code for reading file if it exists in the said directory (when AddNoteDialog opens)
 4) Finally,
 	- For changed file, ask user confirmation before closing on dismiss
 	- Disable save button for empty note files
@@ -27,3 +27,4 @@ Implementation:
 
 Testing:
 - Across multiple books, articles, tabs
+- Configuration change
