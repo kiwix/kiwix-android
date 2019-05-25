@@ -38,8 +38,14 @@ import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.CharBuffer;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created by @Aditya-Sood (21/05/19) as a part of GSoC 2019
@@ -156,7 +162,6 @@ public class AddNoteDialog extends DialogFragment {
             /*String message = "Parent Directory - "+ ZimContentProvider.getZimFileTitle()
                               + "\nSub Directory - " + ((MainActivity)getActivity()).getCurrentWebView().getTitle();
             addNoteEditText.setText(message);*/
-
             break;
 
           case R.id.save_note:
@@ -290,7 +295,6 @@ public class AddNoteDialog extends DialogFragment {
 
     if(noteFile.exists()) {
       noteFileExists = true;
-
       StringBuilder contents = new StringBuilder();
       try {
 
