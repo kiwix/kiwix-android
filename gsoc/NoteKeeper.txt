@@ -9,7 +9,9 @@ Steps:
 3) DONE: Code for reading file if it exists in the said directory (when AddNoteDialog opens)
 4) Finally,
 	- For changed file, ask user confirmation before closing on dismiss
-	- Disable save button for empty note files
+	- DONE: Disable save until note edited
+	- Share functionality: App chooser for sharing note
+	- Disable buttons for empty note files
 
 
 Implementation:
