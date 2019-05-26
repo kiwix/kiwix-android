@@ -30,3 +30,7 @@ Implementation:
 Testing:
 - Across multiple books, articles, tabs
 - Configuration change
+
+
+SUBSEQUENT FEATURE:
+- ZIM File Sharing using the WiFi P2P API
