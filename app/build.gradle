@@ -22,8 +22,10 @@ buildscript {
   }
 }
 
-apply plugin: "com.android.application"
-apply plugin: "checkstyle"
+plugins {
+  id("com.android.application")
+  id("checkstyle")
+}
 
 repositories {
   google()
