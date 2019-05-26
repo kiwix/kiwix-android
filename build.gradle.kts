@@ -4,7 +4,7 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath("com.android.tools.build:gradle:3.3.2")
+    classpath("com.android.tools.build:gradle:3.4.1")
 
     // NOTE: Do not place your application dependencies here; they belong
     // in the individual module build.gradle files
@@ -12,7 +12,7 @@ buildscript {
 }
 
 ext {
-  set("androidGradlePluginVersion", "3.3.0")
+  set("androidGradlePluginVersion", "3.4.1")
   set("testdroidGradlePluginVersion", "2.63.0")
   set("appCompatVersion", "1.0.2")
   set("materialVersion", "1.0.0")
