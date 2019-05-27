@@ -10,7 +10,7 @@ Steps:
 4) Finally,
 	- DONE: For changed file, ask user confirmation before closing on dismiss
 	- DONE: Disable save until note edited
-	- Share functionality: App chooser for sharing note
+	- DONE: Share functionality: App chooser for sharing note file
 	- DONE: Disable buttons for empty note files
 5) Support for Night-Mode
 
