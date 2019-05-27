@@ -388,7 +388,6 @@ public class AddNoteDialog extends DialogFragment {
       dialog.getWindow().setLayout(width, height);
     }
   }
-
 }
 
 class ConfirmationAlertDialogFragment extends DialogFragment {
