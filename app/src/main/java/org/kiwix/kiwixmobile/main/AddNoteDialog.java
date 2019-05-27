@@ -3,6 +3,7 @@ package org.kiwix.kiwixmobile.main;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -43,7 +45,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 
-public class AddNoteDialog extends DialogFragment {
+public class AddNoteDialog extends DialogFragment {//implements ConfirmationAlertDialogFragment.ConfirmationAlertDialogListener {
 
   private Toolbar toolbar;
   private TextView addNoteTextView;
@@ -53,6 +55,7 @@ public class AddNoteDialog extends DialogFragment {
   private boolean noteFileExists = false;
   private String noteFileText;
   private boolean noteEdited = false;
+  private Dialog addNoteDialog;
 
   private final String TAG = "AddNoteDialog";
 
@@ -69,6 +72,8 @@ public class AddNoteDialog extends DialogFragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     super.onCreateView(inflater, container, savedInstanceState);
     View view = inflater.inflate(R.layout.dialog_add_note, container, false);
+
+    //addNoteDialog = getDialog();
 
     addNoteTextView = view.findViewById(R.id.add_note_text_view);
     addNoteTextView.setText(articleTitle);
@@ -102,9 +107,18 @@ public class AddNoteDialog extends DialogFragment {
     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Dialog dialog = getDialog();
+        //TODO: Use AlertDialog for confirmation incase of changed note
+
         closeKeyboard();
-        dialog.dismiss();
+        if(noteEdited) {
+          DialogFragment newFragment = new ConfirmationAlertDialogFragment(getDialog());
+          newFragment.show(getActivity().getSupportFragmentManager(), "ConfirmationAlertDialog");
+
+        } else {
+          //Closing unedited dialog straightaway
+          Dialog dialog = getDialog();
+          dialog.dismiss();
+        }
       }
     });
 
@@ -322,4 +336,73 @@ public class AddNoteDialog extends DialogFragment {
       dialog.getWindow().setLayout(width, height);
     }
   }
+
+  /*@Override
+  public void onDialogPositiveClick(DialogFragment dialog) {
+    Dialog addNoteDialog = getDialog();
+    addNoteDialog.dismiss();
+  }
+
+  @Override
+  public void onDialogNegativeClick(DialogFragment dialog) {
+    //No action
+  }*/
+}
+
+class ConfirmationAlertDialogFragment extends DialogFragment {
+  /**
+   * Helper class to show the alert dialog in case the user tries to exit the
+   * AddNoteDialog with unsaved file changes
+   **/
+
+  private Dialog addNoteDialog;
+
+  public ConfirmationAlertDialogFragment(Dialog dialog) {
+    super();
+    addNoteDialog = dialog;
+  }
+
+  /*public interface ConfirmationAlertDialogListener {
+    public void onDialogPositiveClick(DialogFragment dialog);
+    public void onDialogNegativeClick(DialogFragment dialog);
+  }
+
+  ConfirmationAlertDialogListener listener;
+
+  @Override
+  public void onAttach(Context context) {
+    super.onAttach(context);
+
+    *//*try {
+      listener = (ConfirmationAlertDialogListener) context;
+    } catch (ClassCastException e) {
+      throw new ClassCastException(getActivity().toString() + " must implement ConfirmationAlertDialogListener");
+    }*//*
+  }*/
+
+  @Override
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());//, R.style.ConfirmationAlertDialogStyle);
+    builder.setMessage("Discard unsaved changes?")
+        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            //TODO: Return that user wants to dismiss dialog
+            //listener.onDialogPositiveClick(ConfirmationAlertDialogFragment.this);
+            //addNoteDialog = getDialog();
+            addNoteDialog.dismiss();
+          }
+        })
+        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            //No action to be taken in case of 'Cancel'
+            //listener.onDialogNegativeClick(ConfirmationAlertDialogFragment.this);
+          }
+        });
+
+    return builder.create();
+  }
+
 }
