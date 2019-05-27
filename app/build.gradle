@@ -165,6 +165,25 @@ tasks.withType(Test) {
   jacoco.includeNoLocationClasses = true
 }
 
+def branchName = System.getenv('TRAVIS_PULL_REQUEST') ?: "false" == "false"
+    ? System.getenv('TRAVIS_BRANCH') ?: "local"
+    : System.getenv('TRAVIS_PULL_REQUEST_BRANCH')
+def buildNumber = System.getenv('TRAVIS_BUILD_NUMBER') ?: "dev"
+
+ext{
+  versionMajor = 2
+  versionMinor = 5
+  versionPatch = 0
+}
+
+private String generateVersionName() {
+  "${ext.versionMajor}.${ext.versionMinor}.${ext.versionPatch}"
+}
+
+private Integer generateVersionCode() {
+  200000 + (ext.versionMajor * 10000) + (ext.versionMinor * 100) + (ext.versionPatch)
+}
+
 android {
   compileSdkVersion 27
 
@@ -175,6 +194,7 @@ android {
     // See https://github.com/linkedin/dexmaker/issues/65 for why we need the following line.
     testInstrumentationRunnerArguments.notClass = 'com.android.dex.DexIndexOverflowException'
     vectorDrawables.useSupportLibrary = true
+    archivesBaseName = "${branchName.replace('/', '-')}-$buildNumber"
   }
 
   aaptOptions {
@@ -201,12 +221,11 @@ android {
       // All the usual Gradle options.
       testLogging {
         events "passed", "skipped", "failed", "standardOut", "standardError"
-        outputs.upToDateWhen {false}
+        outputs.upToDateWhen { false }
         showStandardStreams = true
       }
     }
   }
-
 
   flavorDimensions "default"
 
@@ -265,12 +284,12 @@ android {
         def version_code = project.property('version_code')
         versionCode version_code.toInteger()
       } else {
-        versionCode 56
+        versionCode generateVersionCode()
       }
       if (project.hasProperty('version_name')) {
         versionName project.property('version_name')
       } else {
-        versionName "2.5"
+        versionName generateVersionName()
       }
     }
 
@@ -406,19 +425,11 @@ android {
 }
 
 play {
-  enabled = getCurrentBranchName() == "master"
+  enabled = branchName == "master"
   serviceAccountCredentials = file("../google.json")
   track = "alpha"
   resolutionStrategy = "fail"
 }
-
-private static String getCurrentBranchName() {
-  if (System.getenv('TRAVIS_PULL_REQUEST')!="false") System.getenv('TRAVIS_PULL_REQUEST_BRANCH')
-  else System.getenv('TRAVIS_BRANCH') ?: "local"
-}
-
-// Testdroid deployment configuration
-def buildNumber = System.getenv('TRAVIS_BUILD_NUMBER')
 
 def findJar(prefix) {
   configurations.runtime.filter { it.name.startsWith(prefix) }
