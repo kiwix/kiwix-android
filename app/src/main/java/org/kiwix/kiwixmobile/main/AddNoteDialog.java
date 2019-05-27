@@ -161,6 +161,7 @@ public class AddNoteDialog extends DialogFragment {
           case R.id.share_note:
             Toast.makeText(getContext(), "Share Note", Toast.LENGTH_SHORT).show();
             //TODO: Add app-chooser to intent for sharing note text file
+            shareNote();
             break;
 
           case R.id.save_note:
