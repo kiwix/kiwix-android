@@ -4,7 +4,10 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
@@ -27,9 +30,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
@@ -106,6 +111,7 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
           case R.id.share_note:
             Toast.makeText(getContext(), "Share Note", Toast.LENGTH_SHORT).show();
             //TODO: Add app-chooser to intent for sharing note text file
+            shareNote();
             break;
 
           case R.id.save_note:
@@ -321,6 +327,45 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
     }
 
     //return null;
+  }
+
+  private void shareNote() {
+    if(noteEdited) {
+     noteEdited = false;
+     saveNote(addNoteEditText.getText().toString());
+    }
+
+    File noteFile = new File(Environment.getExternalStorageDirectory() + "/Kiwix/Notes/" + zimFileTitle + "/" + articleTitle + ".txt");
+
+    Uri noteFileUri = null;
+    if(noteFile.exists()) {
+
+      if (Build.VERSION.SDK_INT >= 24) {
+        noteFileUri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID+".fileprovider", noteFile);
+
+      } else {
+        noteFileUri = Uri.fromFile(noteFile);
+      }
+
+    } else {
+      Toast.makeText(getContext(), "Note file doesn't exist", Toast.LENGTH_SHORT).show();
+    }
+
+    if(noteFileUri != null) {
+      Intent noteFileShareIntent = new Intent(Intent.ACTION_SEND);
+      //noteFileShareIntent.setDataAndType(noteFileUri, "text/plain");
+      //noteFileShareIntent.setType("text/plain");
+      noteFileShareIntent.setType("application/octet-stream");
+      noteFileShareIntent.putExtra(Intent.EXTRA_STREAM, noteFileUri);
+      noteFileShareIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+      Intent shareChooser = Intent.createChooser(noteFileShareIntent, "Share note file with:");
+      Toast.makeText(getContext(), "Intent ready", Toast.LENGTH_SHORT).show();
+
+      if(noteFileShareIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+        Toast.makeText(getContext(), "Starting activity", Toast.LENGTH_SHORT).show();
+        startActivity(shareChooser);
+      }
+    }
   }
 
   public boolean isExternalStorageWritable() {
