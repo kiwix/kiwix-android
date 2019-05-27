@@ -175,6 +175,30 @@ public class AddNoteDialog extends DialogFragment {
     toolbar.inflateMenu(R.menu.menu_add_note_dialog);
     disableMenuItems();
 
+    addNoteTextView = view.findViewById(R.id.add_note_text_view);
+    addNoteTextView.setText(articleTitle);
+
+    addNoteEditText = view.findViewById(R.id.add_note_edit_text);
+    //TODO: Use displayNote() to show the previously saved note if it exists
+    displayNote();
+
+    addNoteEditText.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+      @Override
+      public void onTextChanged(CharSequence s, int start, int before, int count) {
+        noteEdited = true;
+        Toast.makeText(getContext(), "Text changed", Toast.LENGTH_SHORT).show();
+        addNoteEditText.removeTextChangedListener(this);
+        enableSaveNoteMenuItem();
+        enableShareNoteMenuItem();
+      }
+
+      @Override
+      public void afterTextChanged(Editable s) {}
+    });
+
     return view;
   }
 
@@ -322,7 +346,6 @@ public class AddNoteDialog extends DialogFragment {
 
       enableShareNoteMenuItem(); // As note content exists which can be shared
     }
-
     // No action in case the note file for the currently open article doesn't exist
   }
 
