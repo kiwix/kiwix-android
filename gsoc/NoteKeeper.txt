@@ -12,6 +12,7 @@ Steps:
 	- DONE: Disable save until note edited
 	- Share functionality: App chooser for sharing note
 	- Disable buttons for empty note files
+5) Support for Night-Mode
 
 
 Implementation:
@@ -30,6 +31,7 @@ Implementation:
 Testing:
 - Across multiple books, articles, tabs
 - Configuration change
+- Once support added: In night mode
 
 
 SUBSEQUENT FEATURE:
