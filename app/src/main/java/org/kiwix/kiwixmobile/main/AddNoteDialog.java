@@ -190,7 +190,6 @@ public class AddNoteDialog extends DialogFragment {
       public void onTextChanged(CharSequence s, int start, int before, int count) {
         noteEdited = true;
         Toast.makeText(getContext(), "Text changed", Toast.LENGTH_SHORT).show();
-        addNoteEditText.removeTextChangedListener(this);
         enableSaveNoteMenuItem();
         enableShareNoteMenuItem();
       }
