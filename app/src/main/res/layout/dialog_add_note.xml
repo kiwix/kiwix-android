@@ -38,14 +38,14 @@
           android:textColorHint="#000000"
           android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
           android:paddingTop="10dp"
-          android:paddingLeft="10dp"
-          android:paddingRight="10dp"/>
+          android:paddingLeft="20dp"
+          android:paddingRight="20dp"/>
 
       <View
           android:layout_width="match_parent"
           android:layout_height="1dp"
-          android:layout_marginLeft="8dp"
-          android:layout_marginRight="8dp"
+          android:layout_marginLeft="15dp"
+          android:layout_marginRight="15dp"
           android:background="@color/grey"/>
 
       <EditText
@@ -54,8 +54,8 @@
           android:layout_height="wrap_content"
           android:paddingTop="5dp"
           android:paddingBottom="10dp"
-          android:paddingLeft="10dp"
-          android:paddingRight="10dp"
+          android:paddingLeft="20dp"
+          android:paddingRight="20dp"
           android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
           android:minLines="6"
           android:gravity="top|left"
