@@ -72,31 +72,7 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     super.onCreateView(inflater, container, savedInstanceState);
     View view = inflater.inflate(R.layout.dialog_add_note, container, false);
-
     //addNoteDialog = getDialog();
-
-    addNoteTextView = view.findViewById(R.id.add_note_text_view);
-    addNoteTextView.setText(articleTitle);
-
-    addNoteEditText = view.findViewById(R.id.add_note_edit_text);
-    //TODO: Use displayNote() to show the previously saved note if it exists
-    displayNote();
-
-    addNoteEditText.addTextChangedListener(new TextWatcher() {
-      @Override
-      public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-      @Override
-      public void onTextChanged(CharSequence s, int start, int before, int count) {
-        noteEdited = true;
-        Toast.makeText(getContext(), "Text changed", Toast.LENGTH_SHORT).show();
-        addNoteEditText.removeTextChangedListener(this);
-        enableMenuItems();
-      }
-
-      @Override
-      public void afterTextChanged(Editable s) {}
-    });
 
     toolbar = view.findViewById(R.id.add_note_toolbar);
     toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
@@ -144,10 +120,34 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
     toolbar.inflateMenu(R.menu.menu_add_note_dialog);
     disableMenuItems();
 
+    addNoteTextView = view.findViewById(R.id.add_note_text_view);
+    addNoteTextView.setText(articleTitle);
+
+    addNoteEditText = view.findViewById(R.id.add_note_edit_text);
+    //TODO: Use displayNote() to show the previously saved note if it exists
+    displayNote();
+
+    addNoteEditText.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+      @Override
+      public void onTextChanged(CharSequence s, int start, int before, int count) {
+        noteEdited = true;
+        Toast.makeText(getContext(), "Text changed", Toast.LENGTH_SHORT).show();
+        addNoteEditText.removeTextChangedListener(this);
+        enableSaveNoteMenuItem();
+        enableShareNoteMenuItem();
+      }
+
+      @Override
+      public void afterTextChanged(Editable s) {}
+    });
+
     return view;
   }
 
-  private void enableMenuItems() {
+  private void enableSaveNoteMenuItem() {
     if(toolbar.getMenu() != null) {
       MenuItem saveItem = toolbar.getMenu().findItem(R.id.save_note);
       saveItem.setEnabled(true);
@@ -158,11 +158,25 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
     }
   }
 
+  private void enableShareNoteMenuItem() {
+    if(toolbar.getMenu() != null) {
+      MenuItem shareItem = toolbar.getMenu().findItem(R.id.share_note);
+      shareItem.setEnabled(true);
+      shareItem.getIcon().setAlpha(255);
+
+    } else {
+      Log.d(TAG, "Toolbar without inflated menu");
+    }
+  }
+
   private void disableMenuItems() {
     if(toolbar.getMenu() != null) {
       MenuItem saveItem = toolbar.getMenu().findItem(R.id.save_note);
+      MenuItem shareItem = toolbar.getMenu().findItem(R.id.share_note);
       saveItem.setEnabled(false);
+      shareItem.setEnabled(false);
       saveItem.getIcon().setAlpha(130);
+      shareItem.getIcon().setAlpha(130);
 
     } else {
       Log.d(TAG, "Toolbar without inflated menu");
@@ -231,6 +245,7 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
           fileOutputStream.write(noteText.getBytes());
           fileOutputStream.close();
           Toast.makeText(getContext(), "Note saved", Toast.LENGTH_SHORT).show();
+          noteEdited = false;
         } catch (IOException e) {
           e.printStackTrace();
         }
@@ -292,6 +307,7 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
       }
 
       addNoteEditText.setText(contents.toString());
+      enableShareNoteMenuItem();
 
       //return contents.toString();
 
