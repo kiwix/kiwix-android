@@ -136,6 +136,14 @@ dependencies {
   implementation "android.arch.lifecycle:extensions:1.1.1"
   implementation "io.objectbox:objectbox-kotlin:$objectboxVersion"
   implementation "io.objectbox:objectbox-rxjava:$objectboxVersion"
+
+  testImplementation "org.junit.jupiter:junit-jupiter:5.4.2"
+  testImplementation "io.mockk:mockk:1.9"
+  testImplementation "org.assertj:assertj-core:3.11.1"
+  //update this with androidx
+  testImplementation 'com.jraska.livedata:testing-ktx:0.2.1'
+  testImplementation 'android.arch.core:core-testing:1.1.1'
+
 }
 
 // Set custom app import directory
@@ -363,6 +371,9 @@ android {
   */
   androidExtensions {
     experimental = true
+  }
+  testOptions {
+    unitTests.returnDefaultValues = true
   }
 }
 

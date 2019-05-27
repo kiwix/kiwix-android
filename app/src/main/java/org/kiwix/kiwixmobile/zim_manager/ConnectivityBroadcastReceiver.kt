@@ -3,8 +3,8 @@ package org.kiwix.kiwixmobile.zim_manager
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
+import io.reactivex.Flowable
 import io.reactivex.processors.BehaviorProcessor
-import io.reactivex.processors.PublishProcessor
 import org.kiwix.kiwixmobile.extensions.networkState
 import javax.inject.Inject
 
@@ -13,14 +13,14 @@ class ConnectivityBroadcastReceiver @Inject constructor(private val connectivity
 
   override val action: String = ConnectivityManager.CONNECTIVITY_ACTION
 
-  val networkStates =
-    BehaviorProcessor.createDefault(connectivityManager.networkState)
+  private val _networkStates = BehaviorProcessor.createDefault(connectivityManager.networkState)
+  val networkStates: Flowable<NetworkState> = _networkStates
 
   override fun onIntentWithActionReceived(
     context: Context,
     intent: Intent
   ) {
-    networkStates.onNext(connectivityManager.networkState)
+    _networkStates.onNext(connectivityManager.networkState)
   }
 
 }

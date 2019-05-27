@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.zim_manager
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.support.annotation.VisibleForTesting
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -39,6 +40,7 @@ import org.kiwix.kiwixmobile.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.downloader.model.DownloadState.Successful
 import org.kiwix.kiwixmobile.downloader.model.DownloadStatus
+import org.kiwix.kiwixmobile.downloader.model.UriToFileConverter
 import org.kiwix.kiwixmobile.extensions.calculateSearchMatches
 import org.kiwix.kiwixmobile.extensions.registerReceiver
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
@@ -71,7 +73,8 @@ class ZimManageViewModel @Inject constructor(
   private val context: Application,
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
   private val bookUtils: BookUtils,
-  private val fat32Checker: Fat32Checker
+  private val fat32Checker: Fat32Checker,
+  private val uriToFileConverter: UriToFileConverter
 ) : ViewModel() {
 
   val libraryItems: MutableLiveData<List<LibraryListItem>> = MutableLiveData()
@@ -92,6 +95,11 @@ class ZimManageViewModel @Inject constructor(
   init {
     compositeDisposable.addAll(*disposables())
     context.registerReceiver(connectivityBroadcastReceiver)
+  }
+
+  @VisibleForTesting
+  fun onClearedExposed() {
+    onCleared()
   }
 
   override fun onCleared() {
@@ -155,6 +163,7 @@ class ZimManageViewModel @Inject constructor(
       )
       .buffer(3, SECONDS)
       .map(this::downloadIdsWithNoStatusesOverBufferPeriod)
+      .filter { it.isNotEmpty() }
       .subscribe(
           {
             downloadDao.delete(*it.toLongArray())
@@ -411,7 +420,7 @@ class ZimManageViewModel @Inject constructor(
         .filter { it.isNotEmpty() }
         .subscribe(
             {
-              bookDao.insert(it.map { downloadStatus -> downloadStatus.toBookOnDisk() })
+              bookDao.insert(it.map { downloadStatus -> downloadStatus.toBookOnDisk(uriToFileConverter) })
               downloadDao.delete(
                   *it.map { status -> status.downloadId }.toLongArray()
               )

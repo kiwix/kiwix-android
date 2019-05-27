@@ -25,6 +25,7 @@ import dagger.Module;
 import dagger.Provides;
 import dagger.android.AndroidInjectionModule;
 import javax.inject.Singleton;
+import org.kiwix.kiwixmobile.downloader.model.UriToFileConverter;
 import org.kiwix.kiwixmobile.utils.BookUtils;
 
 @Module(includes = {
@@ -51,5 +52,10 @@ public class ApplicationModule {
   @Provides @Singleton
   BookUtils provideBookUtils() {
     return new BookUtils();
+  }
+
+  @Provides @Singleton
+  UriToFileConverter provideUriToFIleCOnverter() {
+    return new UriToFileConverter.Impl();
   }
 }
