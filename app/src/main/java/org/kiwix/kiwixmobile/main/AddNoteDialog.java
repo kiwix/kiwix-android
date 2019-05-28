@@ -14,7 +14,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,14 +38,8 @@ import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.CharBuffer;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Created by @Aditya-Sood (21/05/19) as a part of GSoC 2019
@@ -164,8 +157,7 @@ public class AddNoteDialog extends DialogFragment {
             shareNote();
             break;
 
-          case R.id.save_note:
-            //TODO: Add code for saving note text files
+          case R.id.save_note:  // Saves the note as a text file
             saveNote(addNoteEditText.getText().toString());
             break;
         }
@@ -174,13 +166,14 @@ public class AddNoteDialog extends DialogFragment {
     });
 
     toolbar.inflateMenu(R.menu.menu_add_note_dialog);
+    // 'Share' disabled for empty notes, 'Save' disabled for unedited notes
     disableMenuItems();
 
     addNoteTextView = view.findViewById(R.id.add_note_text_view);
     addNoteTextView.setText(articleTitle);
 
     addNoteEditText = view.findViewById(R.id.add_note_edit_text);
-    //TODO: Use displayNote() to show the previously saved note if it exists
+    // Show the previously saved note if it exists
     displayNote();
 
     addNoteEditText.addTextChangedListener(new TextWatcher() {
@@ -190,7 +183,6 @@ public class AddNoteDialog extends DialogFragment {
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
         noteEdited = true;
-        Toast.makeText(getContext(), "Text changed", Toast.LENGTH_SHORT).show();
         enableSaveNoteMenuItem();
         enableShareNoteMenuItem();
       }
