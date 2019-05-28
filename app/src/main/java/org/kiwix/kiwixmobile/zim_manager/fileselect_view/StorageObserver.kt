@@ -18,7 +18,7 @@ class StorageObserver @Inject constructor(
   private val downloadDao: NewDownloadDao
 ) {
 
-  private val _booksOnFileSystem = PublishProcessor.create<Collection<BookOnDisk>>()
+  private val _booksOnFileSystem = PublishProcessor.create<List<BookOnDisk>>()
   val booksOnFileSystem = _booksOnFileSystem.distinctUntilChanged()
       .doOnSubscribe {
         downloadDao.downloads()
@@ -37,7 +37,7 @@ class StorageObserver @Inject constructor(
       }
 
       override fun onScanCompleted() {
-        _booksOnFileSystem.onNext(foundBooks)
+        _booksOnFileSystem.onNext(foundBooks.toList())
 
       }
     }).scan(sharedPreferenceUtil.prefStorage)
