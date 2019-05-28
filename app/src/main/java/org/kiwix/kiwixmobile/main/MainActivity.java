@@ -1285,6 +1285,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         webViewList.set(i, getWebView(webViewList.get(i).getUrl()));
       }
       selectTab(currentWebViewIndex);
+      setUpWebView();
     }
     if (refresh) {
       refresh = false;
