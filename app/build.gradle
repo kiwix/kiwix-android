@@ -110,11 +110,9 @@ dependencies {
   implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 
   // JUnit
-  testImplementation 'junit:junit:4.12'
   androidTestImplementation 'junit:junit:4.12'
 
   // Mockito
-  testImplementation "org.mockito:mockito-core:2.24.5"
   androidTestImplementation "org.mockito:mockito-android:2.24.5"
 
   // Leak canary
