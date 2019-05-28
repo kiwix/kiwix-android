@@ -32,7 +32,7 @@ public final class Constants {
 
   public static final int REQUEST_READ_STORAGE_PERMISSION = 2;
 
-  public static final int REQUEST_WRITE_STORAGE_PERMISSION = 3;
+  public static final int REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE = 3;
 
   public static final int REQUEST_HISTORY_ITEM_CHOSEN = 99;
 
