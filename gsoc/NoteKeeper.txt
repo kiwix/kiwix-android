@@ -12,7 +12,8 @@ Steps:
 	- DONE: Disable save until note edited
 	- DONE: Share functionality: App chooser for sharing note file
 	- DONE: Disable buttons for empty note files
-5) Documentation, code-cleanup, support for Night-Mode
+5) Done: Support for Night-Mode
+6) Documentation, code-cleanup
 
 
 Implementation:
