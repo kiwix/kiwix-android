@@ -14,6 +14,7 @@ Steps:
 	- DONE: Disable buttons for empty note files
 5) Done: Support for Night-Mode
 6) Documentation, code-cleanup
+7) Extras: i) Ability to undo, redo changes to the text file
 
 
 Implementation:
