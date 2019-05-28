@@ -45,6 +45,28 @@ public class WifiHotspotManager {
     }
   }
 
+  public WIFI_AP_STATE_ENUMS getWifiApState() {
+    try {
+      Method method = wifiManager.getClass().getMethod("getWifiApState");
+
+      int tmp = ((Integer) method.invoke(wifiManager));
+
+      // Fix for Android 4
+      if (tmp >= 10) {
+        tmp = tmp - 10;
+      }
+
+      return WIFI_AP_STATE_ENUMS.class.getEnumConstants()[tmp];
+    } catch (Exception e) {
+      Log.e(this.getClass().toString(), "", e);
+      return WIFI_AP_STATE_ENUMS.WIFI_AP_STATE_FAILED;
+    }
+  }
+
+  public boolean isWifiApEnabled() {
+    return getWifiApState() == WIFI_AP_STATE_ENUMS.WIFI_AP_STATE_ENABLED;
+  }
+
   public WifiConfiguration getWifiApConfiguration() {
     try {
       Method method = wifiManager.getClass().getMethod("getWifiApConfiguration");
