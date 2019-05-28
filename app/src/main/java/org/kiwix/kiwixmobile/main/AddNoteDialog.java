@@ -35,8 +35,10 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import org.kiwix.kiwixmobile.BuildConfig;
+import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
 import java.io.BufferedReader;
@@ -50,7 +52,11 @@ import java.io.UnsupportedEncodingException;
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 
+import javax.inject.Inject;
+
 public class AddNoteDialog extends DialogFragment {//implements ConfirmationAlertDialogFragment.ConfirmationAlertDialogListener {
+
+  private SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(KiwixApplication.getInstance());
 
   private Toolbar toolbar;
   private TextView addNoteTextView;
@@ -67,7 +73,13 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setStyle(DialogFragment.STYLE_NORMAL, R.style.AddNoteDialogStyle);
+
+    if(sharedPreferenceUtil != null && sharedPreferenceUtil.nightMode()) {
+      setStyle(DialogFragment.STYLE_NORMAL, R.style.AddNoteDialogStyle_Night);
+      Toast.makeText(getContext(), "Night Mode", Toast.LENGTH_SHORT).show();
+    } else {
+      setStyle(DialogFragment.STYLE_NORMAL, R.style.AddNoteDialogStyle);
+    }
 
     zimFileTitle = ZimContentProvider.getZimFileTitle();
     articleTitle = ((MainActivity)getActivity()).getCurrentWebView().getTitle();
@@ -415,6 +427,7 @@ class ConfirmationAlertDialogFragment extends DialogFragment {
    * AddNoteDialog with unsaved file changes
    **/
 
+  private SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(KiwixApplication.getInstance());
   private Dialog addNoteDialog;
 
   public ConfirmationAlertDialogFragment(Dialog dialog) {
@@ -443,7 +456,15 @@ class ConfirmationAlertDialogFragment extends DialogFragment {
   @Override
   public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());//, R.style.ConfirmationAlertDialogStyle);
+    AlertDialog.Builder builder;
+    //, R.style.ConfirmationAlertDialogStyle);
+    if (sharedPreferenceUtil != null && sharedPreferenceUtil.nightMode()) {
+      builder = new AlertDialog.Builder(getActivity(), R.style.AppTheme_Dialog_Night);
+      Toast.makeText(getContext(), "Night Mode", Toast.LENGTH_SHORT).show();
+    } else {
+      builder = new AlertDialog.Builder(getActivity());
+      Toast.makeText(getContext(), "Light Mode", Toast.LENGTH_SHORT).show();
+    }
     builder.setMessage("Discard unsaved changes?")
         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
           @Override

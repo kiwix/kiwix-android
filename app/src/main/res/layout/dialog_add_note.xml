@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#ffffff"
+    android:background="@android:color/transparent"
     android:orientation="vertical">
 
   <com.google.android.material.appbar.AppBarLayout
@@ -34,19 +34,22 @@
           android:maxLines="1"
           android:background="@android:color/transparent"
           android:hint="@string/wiki_book_title"
-          android:textColor="#000000"
-          android:textColorHint="#000000"
           android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
           android:paddingTop="10dp"
           android:paddingLeft="20dp"
           android:paddingRight="20dp"/>
 
+      <!--android:textColor="#000000"
+          android:textColorHint="#000000"-->
+
       <View
           android:layout_width="match_parent"
           android:layout_height="1dp"
           android:layout_marginLeft="15dp"
+          android:layout_marginTop="5dp"
+          android:layout_marginBottom="5dp"
           android:layout_marginRight="15dp"
-          android:background="@color/grey"/>
+          android:background="#000000"/>
 
       <EditText
           android:id="@+id/add_note_edit_text"
@@ -62,9 +65,9 @@
           android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
           android:scrollbars="vertical"
           android:background="@android:color/transparent"
-          android:hint="@string/note"
-          android:textColor="#000000"
-          android:textColorHint="@color/textDarkTertiary"/>
+          android:hint="@string/note"/>
+          <!--android:textColor="#000000"
+          android:textColorHint="@color/textDarkTertiary"-->
     </LinearLayout>
   </ScrollView>
 </LinearLayout>
