@@ -110,6 +110,7 @@ import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
+import org.kiwix.kiwixmobile.wifi_hotspot.WifiHotspotManager;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
@@ -163,6 +164,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   public static boolean refresh;
   public static boolean wifiOnly;
   public static boolean nightMode;
+  private WifiHotspotManager wifiHotspotManager;
   private static Uri KIWIX_LOCAL_MARKET_URI;
   private static Uri KIWIX_BROWSER_MARKET_URI;
   private final ArrayList<String> bookmarks = new ArrayList<>();
@@ -383,6 +385,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     tabRecyclerView.setAdapter(tabsAdapter);
     new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
     drawerLayout.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+
+    wifiHotspotManager = new WifiHotspotManager(this);
+    wifiHotspotManager.showWritePermissionSettings(true);
   }
 
   //End of onCreate
@@ -919,6 +924,13 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         Intent intentSupportKiwix = new Intent(Intent.ACTION_VIEW, uriSupportKiwix);
         intentSupportKiwix.putExtra(EXTRA_EXTERNAL_LINK, true);
         openExternalUrl(intentSupportKiwix);
+
+      case R.id.menu_wifi_hotspot:
+        if (wifiHotspotManager.isWifiApEnabled()) {
+          wifiHotspotManager.setWifiEnabled(null, false);
+        } else {
+          wifiHotspotManager.setWifiEnabled(null, true);
+        }
 
       default:
         break;
