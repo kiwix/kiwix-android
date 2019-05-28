@@ -251,4 +251,12 @@
   <string name="wiki_book_title">Wiki Book Title</string>
   <string name="ext_storage_permission_rationale_add_note">Storage access is required for Notes</string>
   <string name="ext_storage_write_permission_denied_add_note">Notes can\'t be used without access to storage</string>
+  <string name="note_save_unsuccessful">Note save unsuccessful</string>
+  <string name="note_save_successful">Note saved</string>
+  <string name="note_save_error_storage_not_writable">Error saving note: Storage not writable</string>
+  <string name="note_share_error_file_missing">Note file doesn\'t exist</string>
+  <string name="note_share_app_chooser_title">Share note file with:</string>
+  <string name="confirmation_alert_dialog_message">Discard unsaved changes?</string>
+  <string name="confirmation_alert_dialog_positive_btn">Yes</string>
+  <string name="confirmation_alert_dialog_negative_button">Cancel</string>
 </resources>
