@@ -14,11 +14,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,46 +25,42 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
-import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.CharBuffer;
-import java.nio.charset.StandardCharsets;
 
-import javax.inject.Inject;
+/**
+ * Created by @Aditya-Sood (21/05/19) as a part of GSoC 2019
+ *
+ * AddNoteDialog extends DialogFragment and is used to display the note corresponding to a particular
+ * article (of a particular zim file/wiki/book) as a full-screen dialog fragment.
+ *
+ * Notes are saved as text files at location: "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
+ * */
 
-public class AddNoteDialog extends DialogFragment {//implements ConfirmationAlertDialogFragment.ConfirmationAlertDialogListener {
+public class AddNoteDialog extends DialogFragment {
 
   private SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(KiwixApplication.getInstance());
 
-  private Toolbar toolbar;
-  private TextView addNoteTextView;
-  private EditText addNoteEditText;
+  private Toolbar toolbar;  // Displays options for the note dialog
+  private TextView addNoteTextView; // Displays article title
+  private EditText addNoteEditText; // Displays zim file title (wiki name)
   private String zimFileTitle;
   private String articleTitle;
   private boolean noteFileExists = false;
-  private String noteFileText;
-  private boolean noteEdited = false;
-  private Dialog addNoteDialog;
+  private boolean noteEdited = false; // Keeps track of state of the note (whether edited since last save)
 
   private final String TAG = "AddNoteDialog";
 
@@ -75,8 +69,7 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
     super.onCreate(savedInstanceState);
 
     if(sharedPreferenceUtil != null && sharedPreferenceUtil.nightMode()) {
-      setStyle(DialogFragment.STYLE_NORMAL, R.style.AddNoteDialogStyle_Night);
-      Toast.makeText(getContext(), "Night Mode", Toast.LENGTH_SHORT).show();
+      setStyle(DialogFragment.STYLE_NORMAL, R.style.AddNoteDialogStyle_Night);  // Night Mode support
     } else {
       setStyle(DialogFragment.STYLE_NORMAL, R.style.AddNoteDialogStyle);
     }
@@ -89,26 +82,21 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     super.onCreateView(inflater, container, savedInstanceState);
     View view = inflater.inflate(R.layout.dialog_add_note, container, false);
-    //addNoteDialog = getDialog();
 
     toolbar = view.findViewById(R.id.add_note_toolbar);
+    toolbar.setTitle(getString(R.string.note));
     toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-    //toolbar.setNavigationOnClickListener();
-    //toolbar.setOnMenuItemClickListener
-    toolbar.setTitle("Note");
-
     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        //TODO: Use AlertDialog for confirmation incase of changed note
-
         closeKeyboard();
         if(noteEdited) {
+          // Custom AlertDialog for taking user confirmation before closing note dialog in case of unsaved changes
           DialogFragment newFragment = new ConfirmationAlertDialogFragment(getDialog());
           newFragment.show(getActivity().getSupportFragmentManager(), "ConfirmationAlertDialog");
 
         } else {
-          //Closing unedited dialog straightaway
+          // Closing unedited note dialog straightaway
           Dialog dialog = getDialog();
           dialog.dismiss();
         }
@@ -120,14 +108,11 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
       public boolean onMenuItemClick(MenuItem item) {
 
         switch (item.getItemId()) {
-          case R.id.share_note:
-            Toast.makeText(getContext(), "Share Note", Toast.LENGTH_SHORT).show();
-            //TODO: Add app-chooser to intent for sharing note text file
+          case R.id.share_note: // Opens app-chooser for sharing the note text file
             shareNote();
             break;
 
-          case R.id.save_note:
-            //TODO: Add code for saving note text files
+          case R.id.save_note:  // Saves the note as a text file
             saveNote(addNoteEditText.getText().toString());
             break;
         }
@@ -136,13 +121,14 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
     });
 
     toolbar.inflateMenu(R.menu.menu_add_note_dialog);
+    // 'Share' disabled for empty notes, 'Save' disabled for unedited notes
     disableMenuItems();
 
     addNoteTextView = view.findViewById(R.id.add_note_text_view);
     addNoteTextView.setText(articleTitle);
 
     addNoteEditText = view.findViewById(R.id.add_note_edit_text);
-    //TODO: Use displayNote() to show the previously saved note if it exists
+    // Show the previously saved note if it exists
     displayNote();
 
     addNoteEditText.addTextChangedListener(new TextWatcher() {
@@ -152,7 +138,6 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
       @Override
       public void onTextChanged(CharSequence s, int start, int before, int count) {
         noteEdited = true;
-        Toast.makeText(getContext(), "Text changed", Toast.LENGTH_SHORT).show();
         enableSaveNoteMenuItem();
         enableShareNoteMenuItem();
       }
@@ -162,6 +147,20 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
     });
 
     return view;
+  }
+
+  private void disableMenuItems() {
+    if(toolbar.getMenu() != null) {
+      MenuItem saveItem = toolbar.getMenu().findItem(R.id.save_note);
+      MenuItem shareItem = toolbar.getMenu().findItem(R.id.share_note);
+      saveItem.setEnabled(false);
+      shareItem.setEnabled(false);
+      saveItem.getIcon().setAlpha(130);
+      shareItem.getIcon().setAlpha(130);
+
+    } else {
+      Log.d(TAG, "Toolbar without inflated menu");
+    }
   }
 
   private void enableSaveNoteMenuItem() {
@@ -186,41 +185,12 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
     }
   }
 
-  private void disableMenuItems() {
-    if(toolbar.getMenu() != null) {
-      MenuItem saveItem = toolbar.getMenu().findItem(R.id.save_note);
-      MenuItem shareItem = toolbar.getMenu().findItem(R.id.share_note);
-      saveItem.setEnabled(false);
-      shareItem.setEnabled(false);
-      saveItem.getIcon().setAlpha(130);
-      shareItem.getIcon().setAlpha(130);
-
-    } else {
-      Log.d(TAG, "Toolbar without inflated menu");
-    }
-  }
-
-  /*@Override
-  public void onPrepareOptionsMenu(Menu menu) {
-
-    MenuItem item = menu.findItem(R.id.save_note);
-
-    if(noteEdited) {
-      item.setEnabled(true);
-      item.getIcon().setAlpha(255);
-    } else {
-      Toast.makeText(getContext(), "UNEDITED", Toast.LENGTH_SHORT).show();
-      item.setEnabled(false);
-      item.getIcon().setAlpha(130);
-    }
-
-  }*/
-
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
     if(!noteFileExists) {
+      // Prepare for input in case of empty/new note
       addNoteEditText.requestFocus();
       showKeyboard();
     }
@@ -238,11 +208,15 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
 
   private void saveNote(String noteText) {
 
+    /* String content of the EditText, given by noteText, is saved into the text file given by:
+     *    "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
+     * */
+
     if(isExternalStorageWritable()) {
 
       if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
         Log.d(TAG, "WRITE_EXTERNAL_STORAGE permission not granted");
-        Toast.makeText(getContext(), "Note save unsuccessful", Toast.LENGTH_LONG);
+        Toast.makeText(getContext(), getString(R.string.note_save_unsuccessful), Toast.LENGTH_LONG);
         return;
       }
 
@@ -250,42 +224,49 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
       boolean folderExists = true;
 
       if(!notesFolder.exists()) {
+        // Try creating folder if it doesn't exist
         folderExists = notesFolder.mkdirs();
       }
 
       if(folderExists) {
         File noteFile = new File(notesFolder.getAbsolutePath(), articleTitle + ".txt");
 
-        //TODO: Save file code
+        // Save note text-file code:
         try {
           FileOutputStream fileOutputStream = new FileOutputStream(noteFile);
           fileOutputStream.write(noteText.getBytes());
           fileOutputStream.close();
-          Toast.makeText(getContext(), "Note saved", Toast.LENGTH_SHORT).show();
-          noteEdited = false;
+          Toast.makeText(getContext(), getActivity().getString(R.string.note_save_successful), Toast.LENGTH_SHORT).show();
+          noteEdited = false; // As no unsaved changes remain
+
         } catch (IOException e) {
           e.printStackTrace();
+          Toast.makeText(getContext(), getActivity().getString(R.string.note_save_unsuccessful), Toast.LENGTH_LONG);
         }
 
       } else {
-        //Toast.makeText(getContext(), "Error: Check logs", Toast.LENGTH_SHORT).show();
-        Toast.makeText(getContext(), "Note save unsuccessful", Toast.LENGTH_LONG);
+        Toast.makeText(getContext(), getActivity().getString(R.string.note_save_unsuccessful), Toast.LENGTH_LONG);
         Log.d(TAG, "Required folder doesn't exist");
       }
     }
     else {
-      Toast.makeText(getContext(), "Error saving note:\nStorage not writable", Toast.LENGTH_LONG).show();
+      Toast.makeText(getContext(), getString(R.string.note_save_error_storage_not_writable), Toast.LENGTH_LONG).show();
     }
 
   }
 
   private void displayNote() {
 
+    /* String content of the note text file given at:
+     *    "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
+     * is displayed in the EditText field (note content area)
+     * */
+
     File noteFile = new File(Environment.getExternalStorageDirectory() + "/Kiwix/Notes/" + zimFileTitle + "/" + articleTitle + ".txt");
 
     if(noteFile.exists()) {
       noteFileExists = true;
-      //save note in noteFileText
+
       StringBuilder contents = new StringBuilder();
       try {
 
@@ -304,47 +285,28 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
           input.close();
         }
 
-        /*FileInputStream fileInputStream = new FileInputStream(noteFile);
-        long noteFileSize = noteFile.length();
-        int byteArraySize;
-        if(noteFileSize > Integer.MAX_VALUE) {
-          int offset = 0;
-          while(noteFileSize > Integer.MAX_VALUE) {
-            byte[] byteArray = new byte[Integer.MAX_VALUE];
-
-
-            noteFileText += new String(byteArray, "UTF-8");
-            //noteFileSize
-          }
-        }*/
-
       } catch (IOException e) {
         e.printStackTrace();
         Log.d(TAG, "Error closing BufferedReader");
       }
 
-      addNoteEditText.setText(contents.toString());
-      enableShareNoteMenuItem();
+      addNoteEditText.setText(contents.toString()); // Display the note content
 
-      //return contents.toString();
-
-      /*catch (FileNotFoundException e) {
-        e.printStackTrace();
-        Log.d(TAG, "Note does not exist, not being displayed");
-      } catch (UnsupportedEncodingException e) {
-        e.printStackTrace();
-        Log.d(TAG, "Unsupported encoding exception");
-      }*/
-
+      enableShareNoteMenuItem(); // As note content exists which can be shared
     }
 
-    //return null;
+    // No action in case the note file for the currently open article doesn't exist
   }
 
   private void shareNote() {
+
+    /* The note text file corresponding to the currently open article, given at:
+     *    "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
+     * is shared via an app-chooser intent
+     * */
+
     if(noteEdited) {
-     noteEdited = false;
-     saveNote(addNoteEditText.getText().toString());
+     saveNote(addNoteEditText.getText().toString()); // Save edited note before sharing the text file
     }
 
     File noteFile = new File(Environment.getExternalStorageDirectory() + "/Kiwix/Notes/" + zimFileTitle + "/" + articleTitle + ".txt");
@@ -353,6 +315,8 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
     if(noteFile.exists()) {
 
       if (Build.VERSION.SDK_INT >= 24) {
+        // From Nougat 7 (API 24) access to files is shared temporarily with other apps
+        // Need to use FileProvider for the same
         noteFileUri = FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID+".fileprovider", noteFile);
 
       } else {
@@ -360,21 +324,17 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
       }
 
     } else {
-      Toast.makeText(getContext(), "Note file doesn't exist", Toast.LENGTH_SHORT).show();
+      Toast.makeText(getContext(), getString(R.string.note_share_error_file_missing), Toast.LENGTH_SHORT).show();
     }
 
     if(noteFileUri != null) {
       Intent noteFileShareIntent = new Intent(Intent.ACTION_SEND);
-      //noteFileShareIntent.setDataAndType(noteFileUri, "text/plain");
-      //noteFileShareIntent.setType("text/plain");
       noteFileShareIntent.setType("application/octet-stream");
       noteFileShareIntent.putExtra(Intent.EXTRA_STREAM, noteFileUri);
       noteFileShareIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-      Intent shareChooser = Intent.createChooser(noteFileShareIntent, "Share note file with:");
-      Toast.makeText(getContext(), "Intent ready", Toast.LENGTH_SHORT).show();
+      Intent shareChooser = Intent.createChooser(noteFileShareIntent, getString(R.string.note_share_app_chooser_title));
 
       if(noteFileShareIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-        Toast.makeText(getContext(), "Starting activity", Toast.LENGTH_SHORT).show();
         startActivity(shareChooser);
       }
     }
@@ -384,17 +344,9 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
     String state = Environment.getExternalStorageState();
     if(Environment.MEDIA_MOUNTED.equals(state)) {
       return true;
+    } else {
+      return false;
     }
-    return false;
-  }
-
-  public boolean isExternalStorageReadable() {
-    String state = Environment.getExternalStorageState();
-    if(Environment.MEDIA_MOUNTED.equals(state)
-        || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-      return true;
-    }
-    return false;
   }
 
   @Override
@@ -409,16 +361,6 @@ public class AddNoteDialog extends DialogFragment {//implements ConfirmationAler
     }
   }
 
-  /*@Override
-  public void onDialogPositiveClick(DialogFragment dialog) {
-    Dialog addNoteDialog = getDialog();
-    addNoteDialog.dismiss();
-  }
-
-  @Override
-  public void onDialogNegativeClick(DialogFragment dialog) {
-    //No action
-  }*/
 }
 
 class ConfirmationAlertDialogFragment extends DialogFragment {
@@ -435,51 +377,31 @@ class ConfirmationAlertDialogFragment extends DialogFragment {
     addNoteDialog = dialog;
   }
 
-  /*public interface ConfirmationAlertDialogListener {
-    public void onDialogPositiveClick(DialogFragment dialog);
-    public void onDialogNegativeClick(DialogFragment dialog);
-  }
-
-  ConfirmationAlertDialogListener listener;
-
-  @Override
-  public void onAttach(Context context) {
-    super.onAttach(context);
-
-    *//*try {
-      listener = (ConfirmationAlertDialogListener) context;
-    } catch (ClassCastException e) {
-      throw new ClassCastException(getActivity().toString() + " must implement ConfirmationAlertDialogListener");
-    }*//*
-  }*/
-
   @Override
   public Dialog onCreateDialog(Bundle savedInstanceState) {
 
     AlertDialog.Builder builder;
-    //, R.style.ConfirmationAlertDialogStyle);
+
     if (sharedPreferenceUtil != null && sharedPreferenceUtil.nightMode()) {
+      // Night Mode support
       builder = new AlertDialog.Builder(getActivity(), R.style.AppTheme_Dialog_Night);
-      Toast.makeText(getContext(), "Night Mode", Toast.LENGTH_SHORT).show();
+
     } else {
       builder = new AlertDialog.Builder(getActivity());
-      Toast.makeText(getContext(), "Light Mode", Toast.LENGTH_SHORT).show();
+
     }
-    builder.setMessage("Discard unsaved changes?")
-        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+    builder.setMessage(getString(R.string.confirmation_alert_dialog_message))
+        .setPositiveButton(getString(R.string.confirmation_alert_dialog_positive_btn), new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
-            //TODO: Return that user wants to dismiss dialog
-            //listener.onDialogPositiveClick(ConfirmationAlertDialogFragment.this);
-            //addNoteDialog = getDialog();
+            // User sure of discarding unsaved changes and closing note dialog
             addNoteDialog.dismiss();
           }
         })
-        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        .setNegativeButton(getString(R.string.confirmation_alert_dialog_negative_button), new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
-            //No action to be taken in case of 'Cancel'
-            //listener.onDialogNegativeClick(ConfirmationAlertDialogFragment.this);
+            // No action to be taken in case of 'Cancel'
           }
         });
 
