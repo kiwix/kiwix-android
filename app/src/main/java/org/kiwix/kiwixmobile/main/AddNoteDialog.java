@@ -398,10 +398,10 @@ class ConfirmationAlertDialogFragment extends DialogFragment {
             addNoteDialog.dismiss();
           }
         })
-        .setNegativeButton(getString(R.string.confirmation_alert_dialog_negative_button), new DialogInterface.OnClickListener() {
+        .setNeutralButton(getString(R.string.confirmation_alert_dialog_neutral_btn), new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
-            // No action to be taken in case of 'Cancel'
+            // No action to be taken in case of the neutral 'Cancel' action
           }
         });
 
