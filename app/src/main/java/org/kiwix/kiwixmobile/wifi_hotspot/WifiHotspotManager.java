@@ -10,6 +10,12 @@ import android.provider.Settings;
 import android.util.Log;
 import java.lang.reflect.Method;
 
+/**
+ * WifiHotstopManager class makes use of the Android's WifiManager and WifiConfiguration class
+ * to implement the wifi hotspot feature.
+ * Created by Adeel Zafar on 28/5/2019.
+ */
+
 public class WifiHotspotManager {
   private final WifiManager wifiManager;
   private Context context;
@@ -19,6 +25,7 @@ public class WifiHotspotManager {
     wifiManager = (WifiManager) this.context.getSystemService(Context.WIFI_SERVICE);
   }
 
+  //To get write permission settings, we use this method.
   public void showWritePermissionSettings(boolean force) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       if (force || !Settings.System.canWrite(this.context)) {
@@ -32,7 +39,7 @@ public class WifiHotspotManager {
 
   public boolean setWifiEnabled(WifiConfiguration wifiConfig, boolean enabled) {
     try {
-      if (enabled) {
+      if (enabled) { //disables wifi hotspot if it's already enabled
         wifiManager.setWifiEnabled(false);
       }
 
@@ -45,6 +52,7 @@ public class WifiHotspotManager {
     }
   }
 
+  // This method returns the current state of the Wifi access point
   public WIFI_AP_STATE_ENUMS getWifiApState() {
     try {
       Method method = wifiManager.getClass().getMethod("getWifiApState");
@@ -63,10 +71,12 @@ public class WifiHotspotManager {
     }
   }
 
+  //This method returns if wifi access point is enabled or not
   public boolean isWifiApEnabled() {
     return getWifiApState() == WIFI_AP_STATE_ENUMS.WIFI_AP_STATE_ENABLED;
   }
 
+  //This method is to get the wifi ap configuration
   public WifiConfiguration getWifiApConfiguration() {
     try {
       Method method = wifiManager.getClass().getMethod("getWifiApConfiguration");
@@ -77,6 +87,7 @@ public class WifiHotspotManager {
     }
   }
 
+  //This method is to set the wifi ap configuration
   public boolean setWifiApConfiguration(WifiConfiguration wifiConfig) {
     try {
       Method method =
