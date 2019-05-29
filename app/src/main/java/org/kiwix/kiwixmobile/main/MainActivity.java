@@ -930,14 +930,18 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         openExternalUrl(intentSupportKiwix);
 
       case R.id.menu_wifi_hotspot:
-        if (wifiHotspotManager.isWifiApEnabled()) {
-          wifiHotspotManager.setWifiEnabled(null, false);
-          Toast.makeText(this, "Wifi Hotspot Disabled", Toast.LENGTH_LONG)
-              .show();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            wifiHotspotManager.turnOnHotspot();
         } else {
-          wifiHotspotManager.setWifiEnabled(null, true);
-          Toast.makeText(this, "Wifi Hotspot Enabled", Toast.LENGTH_LONG)
-              .show();
+          if (wifiHotspotManager.isWifiApEnabled()) {
+            wifiHotspotManager.setWifiEnabled(null, false);
+            Toast.makeText(this, "Wifi Hotspot Disabled", Toast.LENGTH_LONG)
+                .show();
+          } else {
+            wifiHotspotManager.setWifiEnabled(null, true);
+            Toast.makeText(this, "Wifi Hotspot Enabled", Toast.LENGTH_LONG)
+                .show();
+          }
         }
 
       default:
