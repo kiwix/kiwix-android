@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.zim_manager
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.support.annotation.VisibleForTesting
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -39,6 +40,7 @@ import org.kiwix.kiwixmobile.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.downloader.model.DownloadState.Successful
 import org.kiwix.kiwixmobile.downloader.model.DownloadStatus
+import org.kiwix.kiwixmobile.downloader.model.UriToFileConverter
 import org.kiwix.kiwixmobile.extensions.calculateSearchMatches
 import org.kiwix.kiwixmobile.extensions.registerReceiver
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
@@ -71,7 +73,9 @@ class ZimManageViewModel @Inject constructor(
   private val context: Application,
   private val connectivityBroadcastReceiver: ConnectivityBroadcastReceiver,
   private val bookUtils: BookUtils,
-  private val fat32Checker: Fat32Checker
+  private val fat32Checker: Fat32Checker,
+  private val uriToFileConverter: UriToFileConverter,
+  private val defaultLanguageProvider: DefaultLanguageProvider
 ) : ViewModel() {
 
   val libraryItems: MutableLiveData<List<LibraryListItem>> = MutableLiveData()
@@ -94,6 +98,11 @@ class ZimManageViewModel @Inject constructor(
     context.registerReceiver(connectivityBroadcastReceiver)
   }
 
+  @VisibleForTesting
+  fun onClearedExposed() {
+    onCleared()
+  }
+
   override fun onCleared() {
     compositeDisposable.clear()
     context.unregisterReceiver(connectivityBroadcastReceiver)
@@ -105,16 +114,17 @@ class ZimManageViewModel @Inject constructor(
     val downloadStatuses = downloadStatuses(downloads)
     val booksFromDao = books()
     val networkLibrary = PublishProcessor.create<LibraryNetworkEntity>()
+    val languages = languageDao.languages()
     return arrayOf(
         updateDownloadItems(downloadStatuses),
         removeCompletedDownloadsFromDb(downloadStatuses),
         removeNonExistingDownloadsFromDb(downloadStatuses, downloads),
         updateBookItems(booksFromDao),
         checkFileSystemForBooksOnRequest(booksFromDao),
-        updateLibraryItems(booksFromDao, downloads, networkLibrary),
-        updateLanguagesInDao(networkLibrary),
+        updateLibraryItems(booksFromDao, downloads, networkLibrary, languages),
+        updateLanguagesInDao(networkLibrary, languages),
         updateNetworkStates(),
-        updateLanguageItemsForDialog(),
+        updateLanguageItemsForDialog(languages),
         requestsAndConnectivtyChangesToLibraryRequests(networkLibrary)
     )
   }
@@ -155,6 +165,7 @@ class ZimManageViewModel @Inject constructor(
       )
       .buffer(3, SECONDS)
       .map(this::downloadIdsWithNoStatusesOverBufferPeriod)
+      .filter { it.isNotEmpty() }
       .subscribe(
           {
             downloadDao.delete(*it.toLongArray())
@@ -184,13 +195,15 @@ class ZimManageViewModel @Inject constructor(
     )
   }
 
-  private fun updateLanguageItemsForDialog() = requestLanguagesDialog
-      .withLatestFrom(languageDao.languages(),
-          BiFunction<Unit, List<Language>, List<Language>> { _, languages -> languages })
-      .subscribe(
-          languageItems::postValue,
-          Throwable::printStackTrace
-      )
+  private fun updateLanguageItemsForDialog(languages: Flowable<List<Language>>) =
+    requestLanguagesDialog
+        .withLatestFrom(
+            languages,
+            BiFunction<Unit, List<Language>, List<Language>> { _, languages -> languages })
+        .subscribe(
+            languageItems::postValue,
+            Throwable::printStackTrace
+        )
 
   private fun updateNetworkStates() =
     connectivityBroadcastReceiver.networkStates.subscribe(
@@ -200,11 +213,12 @@ class ZimManageViewModel @Inject constructor(
   private fun updateLibraryItems(
     booksFromDao: Flowable<List<BookOnDisk>>,
     downloads: Flowable<List<DownloadModel>>,
-    library: Flowable<LibraryNetworkEntity>
+    library: Flowable<LibraryNetworkEntity>,
+    languages: Flowable<List<Language>>
   ) = Flowable.combineLatest(
       booksFromDao,
       downloads,
-      languageDao.languages().filter { it.isNotEmpty() },
+      languages.filter { it.isNotEmpty() },
       library,
       requestFiltering
           .doOnNext { libraryListIsRefreshing.postValue(true) }
@@ -221,15 +235,17 @@ class ZimManageViewModel @Inject constructor(
       )
 
   private fun updateLanguagesInDao(
-    library: Flowable<LibraryNetworkEntity>
+    library: Flowable<LibraryNetworkEntity>,
+    languages: Flowable<List<Language>>
   ) = library
       .subscribeOn(Schedulers.io())
       .map { it.books }
       .withLatestFrom(
-          languageDao.languages(),
+          languages,
           BiFunction(this::combineToLanguageList)
       )
       .map { it.sortedBy(Language::language) }
+      .filter { it.isNotEmpty() }
       .subscribe(
           languageDao::insert,
           Throwable::printStackTrace
@@ -278,11 +294,7 @@ class ZimManageViewModel @Inject constructor(
 
   private fun defaultLanguage() =
     listOf(
-        Language(
-            context.resources.configuration.locale.isO3Language,
-            true,
-            1
-        )
+        defaultLanguageProvider.provide()
     )
 
   private fun languageIsActive(
@@ -411,7 +423,8 @@ class ZimManageViewModel @Inject constructor(
         .filter { it.isNotEmpty() }
         .subscribe(
             {
-              bookDao.insert(it.map { downloadStatus -> downloadStatus.toBookOnDisk() })
+              bookDao.insert(
+                  it.map { downloadStatus -> downloadStatus.toBookOnDisk(uriToFileConverter) })
               downloadDao.delete(
                   *it.map { status -> status.downloadId }.toLongArray()
               )
