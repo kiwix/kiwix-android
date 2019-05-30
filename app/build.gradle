@@ -16,7 +16,7 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:3.4.0"
+    classpath "com.android.tools.build:gradle:$androidGradlePluginVersion"
     classpath 'org.apache.httpcomponents:httpclient-android:4.3.3'
     classpath  "com.testdroid:testdroid-api:2.71"
   }
