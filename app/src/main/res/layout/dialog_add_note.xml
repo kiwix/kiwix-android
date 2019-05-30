@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/transparent"
     android:orientation="vertical">
 
@@ -39,9 +38,6 @@
           android:paddingLeft="20dp"
           android:paddingRight="20dp"/>
 
-      <!--android:textColor="#000000"
-          android:textColorHint="#000000"-->
-
       <View
           android:layout_width="match_parent"
           android:layout_height="1dp"
@@ -66,96 +62,7 @@
           android:scrollbars="vertical"
           android:background="@android:color/transparent"
           android:hint="@string/note"/>
-          <!--android:textColor="#000000"
-          android:textColorHint="@color/textDarkTertiary"-->
+
     </LinearLayout>
   </ScrollView>
 </LinearLayout>
-
-<!--
-In case decide to shift to single action on toolbar
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white">
-
-  <androidx.constraintlayout.widget.ConstraintLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:background="@color/white"
-      android:orientation="vertical">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-      <androidx.appcompat.widget.Toolbar
-          android:id="@+id/add_note_toolbar"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"></androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="0dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@android:color/transparent"
-        android:hint="Wiki Title"
-        android:maxLines="1"
-        android:padding="5dp"
-        android:textColor="#000000"
-        android:textColorHint="#000000"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:src="@drawable/baseline_share_24"
-        android:background="#000000"
-        app:layout_constraintBottom_toBottomOf="@+id/textView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView" />
-
-    <EditText
-        android:id="@+id/add_note_edit_text"
-        android:layout_width="0dp"
-        android:layout_height="135dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_weight="1"
-        android:background="@android:color/transparent"
-        android:gravity="top|left"
-        android:hint="Note"
-        android:inputType="textMultiLine"
-        android:lines="10"
-        android:maxLines="10"
-        android:minLines="6"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingBottom="5dp"
-        android:scrollbars="vertical"
-        android:textColor="#000000"
-        android:textColorHint="#000000"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-  </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
--->
