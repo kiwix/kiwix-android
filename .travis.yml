@@ -58,9 +58,6 @@ script:
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   - ./gradlew testdroidUploadKiwixDebug
-  - if [ $TRAVIS_TAG ] && [$TRAVIS_PULL_REQUEST == “false” ] && [ $TRAVIS_BRANCH == “release” ] || [ $TRAVIS_BRANCH  ==  “master” ]; then
-    ./gradlew  publishKiwixRelease;
-    fi
 
 after_failure:
   - export LOG_DIR = ${TRAVIS_HOME}/build/kiwix/kiwix-android/app/build/outputs/reports/androidTests/connected/flavors/KIWIX/
@@ -73,6 +70,8 @@ before_deploy:
   - export APP_CHANGELOG=$(cat app/src/kiwix/play/release-notes/en-US/default.txt)
 
 deploy:
+
+#publish on github releases
   - provider: releases
     api_key: "$GITHUB_TOKEN"
     file: app/build/outputs/apk/kiwix/release/*
@@ -83,4 +82,12 @@ deploy:
     draft: true
     on:
       tags: true
-      branch: release
+      condition:  $TRAVIS_BRANCH =~ ^release|master
+
+#publish on play store
+  - provider: script
+    skip_cleanup: true
+    script: ./gradlew publishKiwixRelease
+    on:
+      tags: true
+      condition:  $TRAVIS_BRANCH =~ ^release|master
