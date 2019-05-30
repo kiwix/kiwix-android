@@ -37,9 +37,6 @@
           android:paddingLeft="20dp"
           android:paddingRight="20dp"/>
 
-      <!--android:textColor="#000000"
-          android:textColorHint="#000000"-->
-
       <View
           android:layout_width="match_parent"
           android:layout_height="1dp"
