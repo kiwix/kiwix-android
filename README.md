@@ -25,12 +25,12 @@ We utilize different build variants (flavours) to build various different versio
 - [Retrofit](http://square.github.io/retrofit/) - Retrofit turns your REST API into a Java interface
 - [OkHttp](https://github.com/square/okhttp) - An HTTP+SPDY client for Android and Java applications
 - [Butterknife](http://jakewharton.github.io/butterknife/) - View "injection" library for Android
-- [Mockito](https://github.com/mockito/mockito) - Most popular Mocking framework for unit tests written in Java 
-- [Guava](https://github.com/google/guava) - Collections, caching, primitives support, concurrency libraries, common annotations, string processing, I/O, and so forth.
-- [Apache](https://github.com/apache/commons-io) - The Apache Commons IO library contains utility classes, stream implementations, file filters, file comparators, endian transformation classes, and much more.
+- [Mockito](https://github.com/mockito/mockito) - Most popular Mocking framework for unit tests written in Java
 - [RxJava](https://github.com/ReactiveX/RxJava) - Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.
-
-
+- [ObjectBox] (https://github.com/objectbox/objectbox-java) - Reactive NoSQL Databse to replace SquiDb
+- [MockK] (https://github.com/mockk/mockk) - Kotlin mocking library that allows mocking of final classes by default.
+- [JUnit5] (https://github.com/junit-team/junit5/) - The next generation of JUnit
+- [AssertJ] (https://github.com/joel-costigliola/assertj-core) - Fluent assertions for test code
 
 ## Contributing
 

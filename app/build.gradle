@@ -116,11 +116,9 @@ dependencies {
   implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 
   // JUnit
-  testImplementation 'junit:junit:4.12'
   androidTestImplementation 'junit:junit:4.12'
 
   // Mockito
-  testImplementation "org.mockito:mockito-core:2.24.5"
   androidTestImplementation "org.mockito:mockito-android:2.24.5"
 
   // Leak canary
@@ -143,6 +141,14 @@ dependencies {
   implementation "android.arch.lifecycle:extensions:1.1.1"
   implementation "io.objectbox:objectbox-kotlin:$objectboxVersion"
   implementation "io.objectbox:objectbox-rxjava:$objectboxVersion"
+
+  testImplementation "org.junit.jupiter:junit-jupiter:5.4.2"
+  testImplementation "io.mockk:mockk:1.9"
+  testImplementation "org.assertj:assertj-core:3.11.1"
+  //update this with androidx
+  testImplementation 'com.jraska.livedata:testing-ktx:0.2.1'
+  testImplementation 'android.arch.core:core-testing:1.1.1'
+
 }
 
 // Set custom app import directory
@@ -227,6 +233,7 @@ android {
     warning 'StringFormatInvalid'
   }
   testOptions {
+    unitTests.returnDefaultValues = true
     unitTests.all {
       testLogging {
         events "passed", "skipped", "failed", "standardOut", "standardError"

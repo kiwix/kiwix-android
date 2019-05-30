@@ -6,8 +6,8 @@ import java.io.File
 
 data class BookOnDisk(
   val databaseId: Long? = null,
-  val book: Book,
-  val file: File
+  val book: Book = Book().apply { id = "" },
+  val file: File = File("")
 ) {
   constructor(bookOnDiskEntity: BookOnDiskEntity) : this(
       bookOnDiskEntity.id,
