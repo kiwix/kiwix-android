@@ -140,10 +140,6 @@
     <item name="android:windowFullscreen">false</item>
     <item name="android:windowIsFloating">false</item>
     <item name="android:windowBackground">@color/white</item>
-    <!--
-    <item name="android:windowEnterAnimation">@anim/fade_in</item>
-    <item name="android:windowExitAnimation">@anim/slide_down</item>
-    -->
   </style>
 
   <style name="AddNoteDialogStyle.Night" parent="Theme.AppCompat.Dialog">
@@ -156,19 +152,6 @@
     <item name="android:windowFullscreen">false</item>
     <item name="android:windowIsFloating">false</item>
     <item name="android:windowBackground">@color/cardview_dark_background</item>
-    <!--
-    <item name="android:windowEnterAnimation">@anim/fade_in</item>
-    <item name="android:windowExitAnimation">@anim/slide_down</item>
-    -->
   </style>
-
-  <!--
-  <style name="ConfirmationAlertDialogStyle" parent="Theme.AppCompat.Dialog">
-    <item name="colorPrimaryDark">@color/primary_dark</item>
-    <item name="colorPrimary">@color/primary</item>
-    <item name="android:colorBackground">@color/white</item>
-  </style>
-  -->
 
 </resources>
-
