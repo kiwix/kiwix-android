@@ -54,16 +54,13 @@ script:
   #  - adb shell input keyevent 82 & # unlock screen by pressing menu button
   #  - adb -e logcat *:D > logcat.log &
   #  - ./gradlew createKiwixDebugCoverageReport
-  - if [ $TRAVIS_TAG ] && [$TRAVIS_PULL_REQUEST == “false” ] && [ $TRAVIS_BRANCH == “release” ]; then
-    ./gradlew  publish;
-    fi
-  - if  [ $TRAVIS_TAG ] && [$TRAVIS_PULL_REQUEST == “false” ] && [ $TRAVIS_BRANCH  ==  “master” ]; then
-    ./gradlew  publish;
-    fi
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   - ./gradlew testdroidUploadKiwixDebug
+  - if [ $TRAVIS_TAG ] && [$TRAVIS_PULL_REQUEST == “false” ] && [ $TRAVIS_BRANCH == “release” ] || [ $TRAVIS_BRANCH  ==  “master” ]; then
+    ./gradlew  publishKiwixRelease;
+    fi
 
 after_failure:
   - export LOG_DIR = ${TRAVIS_HOME}/build/kiwix/kiwix-android/app/build/outputs/reports/androidTests/connected/flavors/KIWIX/
