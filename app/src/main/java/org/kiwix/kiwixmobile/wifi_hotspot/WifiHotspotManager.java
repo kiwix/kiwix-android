@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import java.lang.reflect.Method;
 
@@ -23,6 +24,7 @@ public class WifiHotspotManager {
   private Context context;
   private WifiManager.LocalOnlyHotspotReservation hotspotReservation;
   private boolean oreoenabled = false;
+  private WifiConfiguration currentConfig;
 
   public WifiHotspotManager(Context context) {
     this.context = context;
@@ -59,27 +61,39 @@ public class WifiHotspotManager {
   //Workaround to turn on hotspot for Oreo versions
   @RequiresApi(api = Build.VERSION_CODES.O)
   public void turnOnHotspot() {
-    wifiManager.startLocalOnlyHotspot(new WifiManager.LocalOnlyHotspotCallback() {
+    if (!oreoenabled) {
+      wifiManager.startLocalOnlyHotspot(new WifiManager.LocalOnlyHotspotCallback() {
 
-      @Override
-      public void onStarted(WifiManager.LocalOnlyHotspotReservation reservation) {
-        super.onStarted(reservation);
-        //hotspotReservation = reservation;
-        oreoenabled = true;
-      }
+        @Override
+        public void onStarted(WifiManager.LocalOnlyHotspotReservation reservation) {
+          super.onStarted(reservation);
+          //hotspotReservation = reservation;
+          hotspotReservation = reservation;
+          currentConfig = reservation.getWifiConfiguration();
+          Toast.makeText(context, "THE PASSWORD IS: "
+              + currentConfig.preSharedKey
+              + " \n SSID is : "
+              + currentConfig.SSID, Toast.LENGTH_LONG).show();
+          Log.v("DANG", "THE PASSWORD IS: "
+              + currentConfig.preSharedKey
+              + " \n SSID is : "
+              + currentConfig.SSID);
+          oreoenabled = true;
+        }
 
-      @Override
-      public void onStopped() {
-        super.onStopped();
-        Log.v("DANG", "Local Hotspot Stopped");
-      }
+        @Override
+        public void onStopped() {
+          super.onStopped();
+          Log.v("DANG", "Local Hotspot Stopped");
+        }
 
-      @Override
-      public void onFailed(int reason) {
-        super.onFailed(reason);
-        Log.v("DANG", "Local Hotspot failed to start");
-      }
-    }, new Handler());
+        @Override
+        public void onFailed(int reason) {
+          super.onFailed(reason);
+          Log.v("DANG", "Local Hotspot failed to start");
+        }
+      }, new Handler());
+    }
   }
 
   //Workaround to turn off hotspot for Oreo versions

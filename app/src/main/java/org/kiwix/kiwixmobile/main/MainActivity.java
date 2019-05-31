@@ -28,6 +28,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -80,6 +81,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -242,6 +253,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private TabsAdapter tabsAdapter;
   private int currentWebViewIndex = 0;
   private final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
+  private Task<LocationSettingsResponse> task;
   private File file;
   private ActionMode actionMode = null;
   private KiwixWebView tempForUndo;
@@ -932,16 +944,17 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
       case R.id.menu_wifi_hotspot:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-              == PackageManager.PERMISSION_GRANTED) {
-            wifiHotspotManager.turnOnHotspot();
-          } else {
-            //Show rationale and request permission.
-            //No explanation needed; request the permission
-            ActivityCompat.requestPermissions(this,
-                new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
-                MY_PERMISSIONS_ACCESS_FINE_LOCATION);
-          }
+          //if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+          //    == PackageManager.PERMISSION_GRANTED) {
+          //  wifiHotspotManager.turnOnHotspot();
+          //} else {
+          //  //Show rationale and request permission.
+          //  //No explanation needed; request the permission
+          //  ActivityCompat.requestPermissions(this,
+          //      new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+          //      MY_PERMISSIONS_ACCESS_FINE_LOCATION);
+          //}
+          setupLocationServices();
         } else {
           if (wifiHotspotManager.isWifiApEnabled()) {
             wifiHotspotManager.setWifiEnabled(null, false);
@@ -2167,4 +2180,76 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   public boolean checkNull(View view) {
     return view != null;
   }
+
+  private void setupLocationServices() {
+    LocationRequest mLocationRequest = new LocationRequest();
+    mLocationRequest.setInterval(10);
+    mLocationRequest.setSmallestDisplacement(10);
+    mLocationRequest.setFastestInterval(10);
+    mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    LocationSettingsRequest.Builder builder = new
+        LocationSettingsRequest.Builder();
+    builder.addLocationRequest(mLocationRequest);
+
+    task = LocationServices.getSettingsClient(this).checkLocationSettings(builder.build());
+
+    task.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
+      @Override
+      public void onComplete(Task<LocationSettingsResponse> task) {
+        try {
+          LocationSettingsResponse response = task.getResult(ApiException.class);
+          // All location settings are satisfied. The client can initialize location
+          // requests here.
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            wifiHotspotManager.turnOnHotspot();
+          }
+        } catch (ApiException exception) {
+          switch (exception.getStatusCode()) {
+            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+              // Location settings are not satisfied. But could be fixed by showing the
+              // user a dialog.
+              try {
+                // Cast to a resolvable exception.
+                ResolvableApiException resolvable = (ResolvableApiException) exception;
+                // Show the dialog by calling startResolutionForResult(),
+                // and check the result in onActivityResult().
+                resolvable.startResolutionForResult(
+                    MainActivity.this,
+                    101);
+              } catch (IntentSender.SendIntentException e) {
+                // Ignore the error.
+              } catch (ClassCastException e) {
+                // Ignore, should be an impossible error.
+              }
+              break;
+            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+              // Location settings are not satisfied. However, we have no way to fix the
+              // settings so we won't show the dialog.
+              break;
+          }
+        }
+      }
+    });
+  }
+
+  //@Override
+  //protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+  //  final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
+  //  switch (requestCode) {
+  //    case 101:
+  //      switch (resultCode) {
+  //        case Activity.RESULT_OK:
+  //          // All required changes were successfully made
+  //          Toast.makeText(MainActivity.this,states.isLocationPresent()+"",Toast.LENGTH_SHORT).show();
+  //          break;
+  //        case Activity.RESULT_CANCELED:
+  //          // The user was asked to change settings, but chose not to
+  //          Toast.makeText(MainActivity.this,"Canceled",Toast.LENGTH_SHORT).show();
+  //          break;
+  //        default:
+  //          break;
+  //      }
+  //      break;
+  //  }
+  //}
 }
