@@ -35,6 +35,7 @@ import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.media.AudioManager;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -97,7 +98,9 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import java.io.File;
+
 import java.text.SimpleDateFormat;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -943,6 +946,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         openExternalUrl(intentSupportKiwix);
 
       case R.id.menu_wifi_hotspot:
+        if (isMobileDataEnabled(this)) {
+          Toast.makeText(this, "You need to disable mobile data ", Toast.LENGTH_LONG).show();
+          enableDisableMobileData();
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
           //if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
           //    == PackageManager.PERMISSION_GRANTED) {
@@ -1095,6 +1102,28 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     Intent intentBookmarks = new Intent(this, BookmarksActivity.class);
     startActivityForResult(intentBookmarks, BOOKMARK_CHOSEN_REQUEST);
     return true;
+  }
+
+  public static boolean isMobileDataEnabled(Context context) {
+    boolean enabled = false;
+    ConnectivityManager cm =
+        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    try {
+      Class cmClass = Class.forName(cm.getClass().getName());
+      Method method = cmClass.getDeclaredMethod("getMobileDataEnabled");
+      method.setAccessible(true);
+      enabled = (Boolean) method.invoke(cm);
+    } catch (Exception e) {
+      Log.e("DANG ", e.toString());
+    }
+    return enabled;
+  }
+
+  public void enableDisableMobileData() {
+    Intent intent = new Intent();
+    intent.setComponent(new ComponentName("com.android.settings",
+        "com.android.settings.Settings$DataUsageSummaryActivity"));
+    startActivity(intent);
   }
 
   private void openFullScreen() {
