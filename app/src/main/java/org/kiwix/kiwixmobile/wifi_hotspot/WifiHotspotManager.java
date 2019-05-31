@@ -22,6 +22,7 @@ public class WifiHotspotManager {
   private WifiManager wifiManager;
   private Context context;
   private WifiManager.LocalOnlyHotspotReservation hotspotReservation;
+  private boolean oreoenabled = false;
 
   public WifiHotspotManager(Context context) {
     this.context = context;
@@ -64,6 +65,7 @@ public class WifiHotspotManager {
       public void onStarted(WifiManager.LocalOnlyHotspotReservation reservation) {
         super.onStarted(reservation);
         //hotspotReservation = reservation;
+        oreoenabled = true;
       }
 
       @Override
@@ -85,6 +87,7 @@ public class WifiHotspotManager {
   public void turnOffHotspot() {
     if (hotspotReservation != null) {
       hotspotReservation.close();
+      oreoenabled = false;
     }
   }
 

@@ -241,6 +241,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private CompatFindActionModeCallback compatCallback;
   private TabsAdapter tabsAdapter;
   private int currentWebViewIndex = 0;
+  private final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
   private File file;
   private ActionMode actionMode = null;
   private KiwixWebView tempForUndo;
@@ -931,7 +932,16 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
       case R.id.menu_wifi_hotspot:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+          if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+              == PackageManager.PERMISSION_GRANTED) {
             wifiHotspotManager.turnOnHotspot();
+          } else {
+            //Show rationale and request permission.
+            //No explanation needed; request the permission
+            ActivityCompat.requestPermissions(this,
+                new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+                MY_PERMISSIONS_ACCESS_FINE_LOCATION);
+          }
         } else {
           if (wifiHotspotManager.isWifiApEnabled()) {
             wifiHotspotManager.setWifiEnabled(null, false);
