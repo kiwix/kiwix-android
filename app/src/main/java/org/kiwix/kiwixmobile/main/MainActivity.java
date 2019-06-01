@@ -943,11 +943,13 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         openExternalUrl(intentSupportKiwix);
 
       case R.id.menu_wifi_hotspot:
+        //Check if user's hotspot is enabled
         if (isMobileDataEnabled(this)) {
           Toast.makeText(this, "You need to disable mobile data ", Toast.LENGTH_LONG).show();
-          enableDisableMobileData();
+          disableMobileData();
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+          //Check if location permissions are granted
           if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
               == PackageManager.PERMISSION_GRANTED) {
             if (wifiHotspotManager.checkHotspotState()) //If hotspot is already enabled, turn it off
@@ -958,7 +960,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
               setupLocationServices();
             }
           } else {
-            //Show rationale and request permission.
+            //Show rationale and request location permission.
             //No explanation needed; request the permission
             ActivityCompat.requestPermissions(this,
                 new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
@@ -966,6 +968,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           }
 
         } else {
+          // For API<26 we use this
+          // Checks if wifi access point is already enabled then turns it off, otherwise enables it.
           if (wifiHotspotManager.isWifiApEnabled()) {
             wifiHotspotManager.setWifiEnabled(null, false);
             Toast.makeText(this, "Wifi Hotspot Disabled", Toast.LENGTH_LONG)
@@ -1107,6 +1111,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     return true;
   }
 
+  // This method checks if mobile data is enabled in user's device.
   public static boolean isMobileDataEnabled(Context context) {
     boolean enabled = false;
     ConnectivityManager cm =
@@ -1122,7 +1127,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     return enabled;
   }
 
-  public void enableDisableMobileData() {
+  //This method sends the user to data usage summary settings activity
+  public void disableMobileData() {
     Intent intent = new Intent();
     intent.setComponent(new ComponentName("com.android.settings",
         "com.android.settings.Settings$DataUsageSummaryActivity"));

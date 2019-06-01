@@ -44,6 +44,8 @@ public class WifiHotspotManager {
     }
   }
 
+  // This method enables/disables the wifi access point
+  // It is used for API<26
   public boolean setWifiEnabled(WifiConfiguration wifiConfig, boolean enabled) {
     try {
       if (enabled) { //disables wifi hotspot if it's already enabled
@@ -68,7 +70,6 @@ public class WifiHotspotManager {
         @Override
         public void onStarted(WifiManager.LocalOnlyHotspotReservation reservation) {
           super.onStarted(reservation);
-          //hotspotReservation = reservation;
           hotspotReservation = reservation;
           currentConfig = reservation.getWifiConfiguration();
           Toast.makeText(context, "THE PASSWORD IS: "
