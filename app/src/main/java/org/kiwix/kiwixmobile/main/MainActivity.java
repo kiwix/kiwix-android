@@ -63,6 +63,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
@@ -949,24 +950,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           disableMobileData();
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          //Check if location permissions are granted
-          if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-              == PackageManager.PERMISSION_GRANTED) {
-            if (wifiHotspotManager.checkHotspotState()) //If hotspot is already enabled, turn it off
-            {
-              wifiHotspotManager.turnOffHotspot();
-            } else //If hotspot is not already enabled, then turn it on.
-            {
-              setupLocationServices();
-            }
-          } else {
-            //Show rationale and request location permission.
-            //No explanation needed; request the permission
-            ActivityCompat.requestPermissions(this,
-                new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
-                MY_PERMISSIONS_ACCESS_FINE_LOCATION);
-          }
 
+          toggleHotspot();
         } else {
           // For API<26 we use this
           // Checks if wifi access point is already enabled then turns it off, otherwise enables it.
@@ -988,6 +973,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     return super.onOptionsItemSelected(item);
   }
 
+<<<<<<< HEAD
   /** Dialog to take user confirmation before deleting all notes */
   private void showClearAllNotesDialog() {
 
@@ -1100,6 +1086,36 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   private void showToast(int stringResource, int duration) {
     Toast.makeText(this, stringResource, duration).show();
+  }
+
+  @RequiresApi(api = VERSION_CODES.O)
+  private void toggleHotspot() {
+    boolean check = false;
+    //Check if location permissions are granted
+    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        == PackageManager.PERMISSION_GRANTED) {
+      if (wifiHotspotManager.checkHotspotState()) //If hotspot is already enabled, turn it off
+      {
+        wifiHotspotManager.turnOffHotspot();
+      } else //If hotspot is not already enabled, then turn it on.
+      {
+        setupLocationServices();
+      }
+    } else {
+      //This var makes sure recursion occurs only once.
+      if (!check) {
+        //Show rationale and request location permission.
+        //No explanation needed; request the permission
+        ActivityCompat.requestPermissions(this,
+            new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+            MY_PERMISSIONS_ACCESS_FINE_LOCATION);
+
+        check = true;
+
+        //Go to toggle hotspot to check if permission is granted.
+        toggleHotspot();
+      }
+    }
   }
 
   @SuppressWarnings("SameReturnValue")
