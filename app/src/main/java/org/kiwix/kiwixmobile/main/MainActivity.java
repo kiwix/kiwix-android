@@ -174,7 +174,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   private static final String NEW_TAB = "NEW_TAB";
   private static final String HOME_URL = "file:///android_asset/home.html";
-  private final String requiredPermission = "android.permission.WRITE_SETTINGS";
   public static boolean isFullscreenOpened;
   public static boolean refresh;
   public static boolean wifiOnly;
@@ -404,10 +403,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     drawerLayout.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
 
     wifiHotspotManager = new WifiHotspotManager(this);
-    int checkVal = getApplicationContext().checkCallingOrSelfPermission(requiredPermission);
-    if (checkVal == PackageManager.PERMISSION_DENIED) {
-      wifiHotspotManager.showWritePermissionSettings(true);
-    }
+    wifiHotspotManager.showWritePermissionSettings();
+
   }
 
   //End of onCreate
@@ -952,15 +949,15 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
           //if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-          //    == PackageManager.PERMISSION_GRANTED) {
-          //  wifiHotspotManager.turnOnHotspot();
-          //} else {
-          //  //Show rationale and request permission.
-          //  //No explanation needed; request the permission
-          //  ActivityCompat.requestPermissions(this,
-          //      new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
-          //      MY_PERMISSIONS_ACCESS_FINE_LOCATION);
-          //}
+          //          //    == PackageManager.PERMISSION_GRANTED) {
+          //          //  wifiHotspotManager.turnOnHotspot();
+          //          //} else {
+          //          //  //Show rationale and request permission.
+          //          //  //No explanation needed; request the permission
+          //          //  ActivityCompat.requestPermissions(this,
+          //          //      new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+          //          //      MY_PERMISSIONS_ACCESS_FINE_LOCATION);
+          //          //}
           setupLocationServices();
         } else {
           if (wifiHotspotManager.isWifiApEnabled()) {
@@ -1529,7 +1526,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
     updateWidgets(this);
 
-    wifiHotspotManager.showWritePermissionSettings(false);
+    wifiHotspotManager.showWritePermissionSettings();
   }
 
   private void updateBottomToolbarVisibility() {

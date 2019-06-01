@@ -32,9 +32,10 @@ public class WifiHotspotManager {
   }
 
   //To get write permission settings, we use this method.
-  public void showWritePermissionSettings(boolean force) {
+  public void showWritePermissionSettings() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      if (force || !Settings.System.canWrite(this.context)) {
+      if (!Settings.System.canWrite(this.context)) {
+        Log.v("DANG", " " + !Settings.System.canWrite(this.context));
         Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
         intent.setData(Uri.parse("package:" + this.context.getPackageName()));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
