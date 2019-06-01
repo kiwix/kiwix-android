@@ -948,17 +948,23 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           enableDisableMobileData();
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          //if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-          //          //    == PackageManager.PERMISSION_GRANTED) {
-          //          //  wifiHotspotManager.turnOnHotspot();
-          //          //} else {
-          //          //  //Show rationale and request permission.
-          //          //  //No explanation needed; request the permission
-          //          //  ActivityCompat.requestPermissions(this,
-          //          //      new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
-          //          //      MY_PERMISSIONS_ACCESS_FINE_LOCATION);
-          //          //}
-          setupLocationServices();
+          if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+              == PackageManager.PERMISSION_GRANTED) {
+            if (wifiHotspotManager.checkHotspotState()) //If hotspot is already enabled, turn it off
+            {
+              wifiHotspotManager.turnOffHotspot();
+            } else //If hotspot is not already enabled, then turn it on.
+            {
+              setupLocationServices();
+            }
+          } else {
+            //Show rationale and request permission.
+            //No explanation needed; request the permission
+            ActivityCompat.requestPermissions(this,
+                new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+                MY_PERMISSIONS_ACCESS_FINE_LOCATION);
+          }
+
         } else {
           if (wifiHotspotManager.isWifiApEnabled()) {
             wifiHotspotManager.setWifiEnabled(null, false);
@@ -2219,6 +2225,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     task = LocationServices.getSettingsClient(this).checkLocationSettings(builder.build());
 
+    locationSettingsResponseBuilder();
+  }
+
+  private void locationSettingsResponseBuilder() {
     task.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
       @Override
       public void onComplete(Task<LocationSettingsResponse> task) {
@@ -2226,6 +2236,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           LocationSettingsResponse response = task.getResult(ApiException.class);
           // All location settings are satisfied. The client can initialize location
           // requests here.
+
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             wifiHotspotManager.turnOnHotspot();
           }
@@ -2267,6 +2278,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   //        case Activity.RESULT_OK:
   //          // All required changes were successfully made
   //          Toast.makeText(MainActivity.this,states.isLocationPresent()+"",Toast.LENGTH_SHORT).show();
+  //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+  //            wifiHotspotManager.turnOnHotspot();
+  //          }
   //          break;
   //        case Activity.RESULT_CANCELED:
   //          // The user was asked to change settings, but chose not to

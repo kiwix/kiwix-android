@@ -102,7 +102,17 @@ public class WifiHotspotManager {
   public void turnOffHotspot() {
     if (hotspotReservation != null) {
       hotspotReservation.close();
+      hotspotReservation = null;
       oreoenabled = false;
+    }
+  }
+
+  //This method checks the state of the hostpot for devices>=Oreo
+  public boolean checkHotspotState() {
+    if (hotspotReservation != null) {
+      return true;
+    } else {
+      return false;
     }
   }
 
