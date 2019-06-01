@@ -1744,6 +1744,27 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           }
         }
         return;
+
+      //Checking the result code for LocationSettings resolution
+      case 101:
+        final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
+        switch (resultCode) {
+          case Activity.RESULT_OK:
+            // All required changes were successfully made
+            Toast.makeText(MainActivity.this, states.isLocationPresent() + "", Toast.LENGTH_SHORT)
+                .show();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+              wifiHotspotManager.turnOnHotspot();
+            }
+            break;
+          case Activity.RESULT_CANCELED:
+            // The user was asked to change settings, but chose not to
+            Toast.makeText(MainActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
+            break;
+          default:
+            break;
+        }
+        break;
       default:
         break;
     }
@@ -2268,28 +2289,4 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       }
     });
   }
-
-  //@Override
-  //protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-  //  final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
-  //  switch (requestCode) {
-  //    case 101:
-  //      switch (resultCode) {
-  //        case Activity.RESULT_OK:
-  //          // All required changes were successfully made
-  //          Toast.makeText(MainActivity.this,states.isLocationPresent()+"",Toast.LENGTH_SHORT).show();
-  //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-  //            wifiHotspotManager.turnOnHotspot();
-  //          }
-  //          break;
-  //        case Activity.RESULT_CANCELED:
-  //          // The user was asked to change settings, but chose not to
-  //          Toast.makeText(MainActivity.this,"Canceled",Toast.LENGTH_SHORT).show();
-  //          break;
-  //        default:
-  //          break;
-  //      }
-  //      break;
-  //  }
-  //}
 }
