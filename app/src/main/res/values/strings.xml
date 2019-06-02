@@ -22,6 +22,14 @@
   <string name="search_label">Search</string>
   <string name="choose_file">Select a Content File (*.zim)</string>
   <string name="open_in_new_tab">Open link in new tab?</string>
+  <string name="error_nozimfilesfound">No content found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
+  <string name="hotspot_turned_on">Hotspot turned on</string>
+  <string name="hotspot_details_message">Following are the details of your local hotspot.</string>
+  <string name="hotspot_ssid_label">SSID : </string>
+  <string name="hotspot_pass_label">Pass : </string>
+  <string name="mobile_data_enabled">Warning: Mobile data enabled</string>
+  <string name="mobile_data_message">You\'re about to turn on your wifi hotspot. This feature can work without data usage.</string>
+  <string name="mobile_data_message_confirmation">Do you want to disable your data?</string>
   <string name="error_filenotfound">Error: The selected ZIM file could not be found.</string>
   <string name="error_fileinvalid">Error: The selected file is not a valid ZIM file.</string>
   <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>

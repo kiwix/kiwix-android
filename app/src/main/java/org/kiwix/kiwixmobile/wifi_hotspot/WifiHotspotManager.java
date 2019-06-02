@@ -11,7 +11,13 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.snackbar.Snackbar;
 import java.lang.reflect.Method;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.main.MainActivity;
+
+import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 /**
  * WifiHotstopManager class makes use of the Android's WifiManager and WifiConfiguration class
@@ -72,14 +78,14 @@ public class WifiHotspotManager {
           super.onStarted(reservation);
           hotspotReservation = reservation;
           currentConfig = reservation.getWifiConfiguration();
-          Toast.makeText(context, "THE PASSWORD IS: "
-              + currentConfig.preSharedKey
-              + " \n SSID is : "
-              + currentConfig.SSID, Toast.LENGTH_LONG).show();
+
           Log.v("DANG", "THE PASSWORD IS: "
               + currentConfig.preSharedKey
               + " \n SSID is : "
               + currentConfig.SSID);
+
+          hotspotDetailsDialog();
+
           oreoenabled = true;
         }
 
@@ -162,5 +168,21 @@ public class WifiHotspotManager {
       Log.e(this.getClass().toString(), "", e);
       return false;
     }
+  }
+
+  private void hotspotDetailsDialog() {
+
+    AlertDialog.Builder builder = new AlertDialog.Builder(context, dialogStyle());
+
+    builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
+      //Do nothing
+    });
+    builder.setTitle(context.getString(R.string.hotspot_turned_on));
+    builder.setMessage(
+        context.getString(R.string.hotspot_details_message) + "\n" + context.getString(
+            R.string.hotspot_ssid_label) + " " + currentConfig.SSID + "\n" + context.getString(
+            R.string.hotspot_pass_label) + " " + currentConfig.preSharedKey);
+    AlertDialog dialog = builder.create();
+    dialog.show();
   }
 }
