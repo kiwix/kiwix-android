@@ -18,31 +18,29 @@
 package org.kiwix.kiwixmobile.zim_manager
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings.System
-import android.support.v7.widget.SearchView
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.zim_manager.manageViewPager
 import kotlinx.android.synthetic.main.zim_manager.tabs
 import kotlinx.android.synthetic.main.zim_manager.toolbar
-import org.kiwix.kiwixmobile.KiwixMobileActivity
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.base.BaseActivity
 import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.extensions.toast
-import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity
+import org.kiwix.kiwixmobile.main.MainActivity
 import org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX
 import org.kiwix.kiwixmobile.utils.LanguageUtils
-import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle
 import org.kiwix.kiwixmobile.views.LanguageSelectDialog
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language
@@ -63,14 +61,13 @@ class ZimManageActivity : BaseActivity() {
   private var languageItem: MenuItem? = null
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
-  @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   @Inject lateinit var languagesDao: NewLanguagesDao
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil)
 
-    if (KiwixSettingsActivity.nightMode(sharedPreferenceUtil)) {
+    if (sharedPreferenceUtil.nightMode()) {
       setTheme(R.style.AppTheme_Night)
     }
     setContentView(R.layout.zim_manager)
@@ -138,7 +135,7 @@ class ZimManageActivity : BaseActivity() {
   override fun onBackPressed() {
     val value = System.getInt(contentResolver, System.ALWAYS_FINISH_ACTIVITIES, 0)
     if (value == 1) {
-      startActivity(Intent(this, KiwixMobileActivity::class.java))
+      startActivity(Intent(this, MainActivity::class.java))
     } else {
       super.onBackPressed()  // optional depending on your needs
     }

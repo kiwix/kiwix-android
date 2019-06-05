@@ -1,7 +1,7 @@
 package org.kiwix.kiwixmobile;
 
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Provider;

@@ -18,12 +18,12 @@
 
 package org.kiwix.kiwixmobile.downloader
 
+import org.kiwix.kiwixmobile.data.remote.KiwixService
 import org.kiwix.kiwixmobile.database.newdb.dao.NewDownloadDao
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.downloader.model.DownloadRequest
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
-import org.kiwix.kiwixmobile.network.KiwixService
 import javax.inject.Inject
 
 class DownloaderImpl @Inject constructor(

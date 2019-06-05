@@ -20,8 +20,8 @@ package org.kiwix.kiwixmobile.zim_manager
 import android.Manifest.permission
 import android.content.pm.PackageManager
 import android.os.FileObserver
-import android.support.v4.content.ContextCompat
 import android.util.Log
+import androidx.core.content.ContextCompat
 import io.reactivex.Flowable
 import io.reactivex.functions.Function3
 import io.reactivex.processors.BehaviorProcessor

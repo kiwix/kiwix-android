@@ -1,7 +1,7 @@
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view
 
-import android.support.v7.widget.RecyclerView.ViewHolder
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.library_item.creator
 import kotlinx.android.synthetic.main.library_item.date

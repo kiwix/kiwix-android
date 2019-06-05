@@ -1,8 +1,8 @@
 package org.kiwix.kiwixmobile.extensions
 
 import android.graphics.Color
-import android.support.design.widget.Snackbar
 import android.view.View
+import com.google.android.material.snackbar.Snackbar
 
 fun View.snack(
   stringId: Int,

@@ -3,7 +3,6 @@ package org.kiwix.kiwixmobile.utils
 import android.app.Activity
 import android.app.AlertDialog
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity
 import javax.inject.Inject
 
 class AlertDialogShower @Inject constructor(
@@ -32,7 +31,7 @@ class AlertDialogShower @Inject constructor(
   }
 
   private fun dialogStyle() =
-    if (KiwixSettingsActivity.nightMode(sharedPreferenceUtil)) {
+    if (sharedPreferenceUtil.nightMode()) {
       R.style.AppTheme_Dialog_Night
     } else {
       R.style.AppTheme_Dialog

@@ -1,7 +1,8 @@
 package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
 
-import android.support.v7.widget.RecyclerView
+
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 
 /*
  * Kiwix Android
@@ -20,7 +21,8 @@ import android.view.ViewGroup
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-interface AbsDelegateAdapter<INSTANCE : SUPERTYPE, SUPERTYPE, VIEWHOLDER : RecyclerView.ViewHolder> : AdapterDelegate<SUPERTYPE> {
+interface AbsDelegateAdapter<INSTANCE : SUPERTYPE, SUPERTYPE, VIEWHOLDER : RecyclerView.ViewHolder> :
+    AdapterDelegate<SUPERTYPE> {
 
   override fun bind(
     viewHolder: RecyclerView.ViewHolder,

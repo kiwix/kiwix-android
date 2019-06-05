@@ -1,7 +1,7 @@
 package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
 
-import android.support.v7.widget.RecyclerView
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.library_divider.divider_text
 import kotlinx.android.synthetic.main.library_item.creator

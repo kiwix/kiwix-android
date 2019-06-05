@@ -18,8 +18,8 @@
 package org.kiwix.kiwixmobile.zim_manager
 
 import android.content.Context
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.downloader.DownloadFragment
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment

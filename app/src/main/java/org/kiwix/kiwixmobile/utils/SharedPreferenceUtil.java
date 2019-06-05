@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import io.reactivex.processors.BehaviorProcessor;
+import java.util.Calendar;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -18,6 +19,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.PREF_IS_FIRST_RUN;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_LANG;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_NEW_TAB_BACKGROUND;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_NIGHTMODE;
+import static org.kiwix.kiwixmobile.utils.Constants.PREF_SHOW_INTRO;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_STORAGE_TITLE;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_WIFI_ONLY;
@@ -30,22 +32,16 @@ import static org.kiwix.kiwixmobile.utils.Constants.PREF_ZOOM_ENABLED;
 
 @Singleton
 public class SharedPreferenceUtil {
+  private static final String PREF_SHOW_BOOKMARKS_CURRENT_BOOK = "show_bookmarks_current_book";
+  private static final String PREF_SHOW_HISTORY_CURRENT_BOOK = "show_history_current_book";
   private SharedPreferences sharedPreferences;
-  private SharedPreferences.Editor editor;
   public final BehaviorProcessor<String> prefStorages;
 
   @Inject
   public SharedPreferenceUtil(Context context) {
     sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-    editor = sharedPreferences.edit();
     prefStorages = BehaviorProcessor.createDefault(getPrefStorage());
   }
-
-  public void remove(String key) {
-    editor.remove(key).apply();
-  }
-
-  //Getters
 
   public boolean getPrefWifiOnly() {
     return sharedPreferences.getBoolean(PREF_WIFI_ONLY, true);
@@ -92,10 +88,11 @@ public class SharedPreferenceUtil {
   }
 
   public String getPrefStorage() {
-    return sharedPreferences.getString(PREF_STORAGE, Environment.getExternalStorageDirectory().getPath());
+    return sharedPreferences.getString(PREF_STORAGE,
+        Environment.getExternalStorageDirectory().getPath());
   }
 
-  public boolean getPrefNightMode() {
+  private boolean getPrefNightMode() {
     return sharedPreferences.getBoolean(PREF_NIGHTMODE, false);
   }
 
@@ -112,34 +109,71 @@ public class SharedPreferenceUtil {
     //return sharedPreferences.getBoolean(PREF_FULL_TEXT_SEARCH, false);
   }
 
-  // Setters
-
   public void putPrefLanguage(String language) {
-    editor.putString(PREF_LANG, language).apply();
+    sharedPreferences.edit().putString(PREF_LANG, language).apply();
   }
 
   public void putPrefIsFirstRun(boolean isFirstRun) {
-    editor.putBoolean(PREF_IS_FIRST_RUN, isFirstRun).apply();
+    sharedPreferences.edit().putBoolean(PREF_IS_FIRST_RUN, isFirstRun).apply();
   }
 
   public void putPrefWifiOnly(boolean wifiOnly) {
-    editor.putBoolean(PREF_WIFI_ONLY, wifiOnly).apply();
+    sharedPreferences.edit().putBoolean(PREF_WIFI_ONLY, wifiOnly).apply();
   }
 
   public void putPrefStorageTitle(String storageTitle) {
-    editor.putString(PREF_STORAGE_TITLE, storageTitle).apply();
+    sharedPreferences.edit().putString(PREF_STORAGE_TITLE, storageTitle).apply();
   }
 
   public void putPrefStorage(String storage) {
-    editor.putString(PREF_STORAGE, storage).apply();
+    sharedPreferences.edit().putString(PREF_STORAGE, storage).apply();
     prefStorages.onNext(storage);
   }
 
   public void putPrefFullScreen(boolean fullScreen) {
-    editor.putBoolean(PREF_FULLSCREEN, fullScreen).apply();
+    sharedPreferences.edit().putBoolean(PREF_FULLSCREEN, fullScreen).apply();
   }
 
   public void putPrefExternalLinkPopup(boolean externalLinkPopup) {
-    editor.putBoolean(PREF_EXTERNAL_LINK_POPUP, externalLinkPopup).apply();
+    sharedPreferences.edit().putBoolean(PREF_EXTERNAL_LINK_POPUP, externalLinkPopup).apply();
+  }
+
+  public boolean showIntro() {
+    return sharedPreferences.getBoolean(PREF_SHOW_INTRO, true);
+  }
+
+  public void setIntroShown() {
+    sharedPreferences.edit().putBoolean(PREF_SHOW_INTRO, false).apply();
+  }
+
+  public boolean getShowHistoryCurrentBook() {
+    return sharedPreferences.getBoolean(PREF_SHOW_HISTORY_CURRENT_BOOK, true);
+  }
+
+  public void setShowHistoryCurrentBook(boolean prefShowHistoryCurrentBook) {
+    sharedPreferences.edit()
+        .putBoolean(PREF_SHOW_HISTORY_CURRENT_BOOK, prefShowHistoryCurrentBook)
+        .apply();
+  }
+
+  public boolean nightMode() {
+    boolean autoNightMode = getPrefAutoNightMode();
+    if (autoNightMode) {
+      Calendar cal = Calendar.getInstance();
+      int hour = cal.get(Calendar.HOUR_OF_DAY);
+      return hour < 6 || hour > 18;
+    } else {
+      return getPrefNightMode();
+    }
+  }
+
+  public boolean getShowBookmarksCurrentBook() {
+    return sharedPreferences.getBoolean(PREF_SHOW_BOOKMARKS_CURRENT_BOOK, true);
+  }
+
+  public void setShowBookmarksCurrentBook(boolean prefShowBookmarksFromCurrentBook) {
+    sharedPreferences.edit()
+        .putBoolean(PREF_SHOW_BOOKMARKS_CURRENT_BOOK, prefShowBookmarksFromCurrentBook)
+        .apply();
   }
 }

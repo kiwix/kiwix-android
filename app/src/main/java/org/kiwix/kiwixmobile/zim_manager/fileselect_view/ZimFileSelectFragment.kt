@@ -20,24 +20,25 @@
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view
 
 import android.Manifest
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.zim_list.file_management_no_files
 import kotlinx.android.synthetic.main.zim_list.zim_swiperefresh
 import kotlinx.android.synthetic.main.zim_list.zimfilelist
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.R.string
-import org.kiwix.kiwixmobile.ZimContentProvider
 import org.kiwix.kiwixmobile.base.BaseFragment
+import org.kiwix.kiwixmobile.data.ZimContentProvider
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
 import org.kiwix.kiwixmobile.di.components.ActivityComponent
 import org.kiwix.kiwixmobile.downloader.model.BookOnDisk
@@ -93,7 +94,7 @@ class ZimFileSelectFragment : BaseFragment() {
     zim_swiperefresh.setOnRefreshListener(this::requestFileSystemCheck)
     zimfilelist.run {
       adapter = booksOnDiskAdapter
-      layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+      layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
     }
     zimManageViewModel.bookItems.observe(this, Observer {
@@ -157,7 +158,7 @@ class ZimFileSelectFragment : BaseFragment() {
 
   private fun deleteSpecificZimFile(book: BookOnDisk): Boolean {
     val file = book.file
-    FileUtils.deleteZimFile(file)
+    FileUtils.deleteZimFile(file.path)
     if (file.exists()) {
       return false
     }

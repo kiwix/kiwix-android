@@ -18,15 +18,13 @@
 package org.kiwix.kiwixmobile.utils;
 
 import android.util.Log;
-
 import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
-
 import org.kiwix.kiwixmobile.R;
 
-import static android.support.test.espresso.Espresso.onData;
-import static android.support.test.espresso.action.ViewActions.longClick;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.Espresso.onData;
+import static androidx.test.espresso.action.ViewActions.longClick;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static com.schibsted.spain.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.TEST_PAUSE_MS;
 import static org.kiwix.kiwixmobile.testutils.TestUtils.getResourceString;
@@ -37,11 +35,6 @@ import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
  */
 
 public class StandardActions {
-
-  public static void enterHelp() {
-    BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
-    BaristaMenuClickInteractions.clickMenu(getResourceString(R.string.menu_help));
-  }
 
   public static void enterSettings() {
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
@@ -55,7 +48,7 @@ public class StandardActions {
       Log.i("TEST_DELETE_ZIM", "Successfully deleted ZIM file [" + zimName + "]");
     } catch (RuntimeException e) {
       Log.i("TEST_DELETE_ZIM", "Failed to delete ZIM file [" + zimName + "]... " +
-              "Probably because it doesn't exist");
+          "Probably because it doesn't exist");
     }
   }
 }

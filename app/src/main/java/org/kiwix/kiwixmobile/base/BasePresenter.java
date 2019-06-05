@@ -17,41 +17,28 @@
  */
 package org.kiwix.kiwixmobile.base;
 
+import io.reactivex.disposables.CompositeDisposable;
+
 /**
- * Created by EladKeyshawn on 05/04/2017.
+ * All presenters should inherit from this presenter.
  */
 
-public class BasePresenter<T extends ViewCallback> implements Presenter<T> {
+public abstract class BasePresenter<T extends BaseContract.View>
+    implements BaseContract.Presenter<T> {
 
-  private T mMvpView;
+  protected final CompositeDisposable compositeDisposable = new CompositeDisposable();
+  protected T view;
 
   @Override
-  public void attachView(T mvpView) {
-    this.mMvpView = mvpView;
+  public void attachView(T view) {
+    this.view = view;
   }
 
   @Override
   public void detachView() {
-    mMvpView = null;
-  }
-
-  public boolean isViewAttached() {
-    return mMvpView != null;
-  }
-
-  public T getMvpView() {
-    return mMvpView;
-  }
-
-
-  public void checkViewAttached() {
-    if (!isViewAttached()) throw new MvpViewNotAttachedException();
-  }
-
-  public static class MvpViewNotAttachedException extends RuntimeException {
-    public MvpViewNotAttachedException() {
-      super("Please call Presenter.attachView(MvpView) before" +
-          " requesting data to the Presenter");
+    view = null;
+    if (!compositeDisposable.isDisposed()) {
+      compositeDisposable.dispose();
     }
   }
 }

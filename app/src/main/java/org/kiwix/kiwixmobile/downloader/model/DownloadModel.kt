@@ -17,11 +17,11 @@
  */
 package org.kiwix.kiwixmobile.downloader.model
 
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 
 data class DownloadModel(
   val databaseId: Long? = null,
   val downloadId: Long = 0,
-  val book: LibraryNetworkEntity.Book = Book().apply { id = "" }
+  val book: Book = Book().apply { id = "" }
 )
+

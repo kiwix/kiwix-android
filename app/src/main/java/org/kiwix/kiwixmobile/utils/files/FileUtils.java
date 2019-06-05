@@ -25,19 +25,16 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.util.Log;
-
-import org.kiwix.kiwixmobile.BuildConfig;
-import org.kiwix.kiwixmobile.downloader.ChunkUtils;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.kiwix.kiwixmobile.BuildConfig;
+import org.kiwix.kiwixmobile.downloader.ChunkUtils;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
-import static org.kiwix.kiwixmobile.downloader.ChunkUtils.deleteAllParts;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
 public class FileUtils {
@@ -62,8 +59,44 @@ public class FileUtils {
     }
   }
 
-  public static synchronized void deleteZimFile(File file) {
-    deleteAllParts(file);
+  public static synchronized void deleteZimFile(String path) {
+    if (path.substring(path.length() - ChunkUtils.PART.length()).equals(ChunkUtils.PART)) {
+      path = path.substring(0, path.length() - ChunkUtils.PART.length());
+    }
+    Log.i("kiwix", "Deleting file: " + path);
+    File file = new File(path);
+    if (!file.getPath().substring(file.getPath().length() - 3).equals("zim")) {
+      fileloop:
+      for (char alphabetFirst = 'a'; alphabetFirst <= 'z'; alphabetFirst++) {
+        for (char alphabetSecond = 'a'; alphabetSecond <= 'z'; alphabetSecond++) {
+          String chunkPath = path.substring(0, path.length() - 2) + alphabetFirst + alphabetSecond;
+          File fileChunk = new File(chunkPath);
+          if (fileChunk.exists()) {
+            fileChunk.delete();
+          } else if (!deleteZimFileParts(chunkPath)) {
+            break fileloop;
+          }
+        }
+      }
+    } else {
+      file.delete();
+      deleteZimFileParts(path);
+    }
+  }
+
+  private static synchronized boolean deleteZimFileParts(String path) {
+    File file = new File(path + ChunkUtils.PART);
+    if (file.exists()) {
+      file.delete();
+      return true;
+    } else {
+      File singlePart = new File(path + ".part");
+      if (singlePart.exists()) {
+        singlePart.delete();
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -93,13 +126,13 @@ public class FileUtils {
   /**
    * Helper function to ascertain the existence of a file and return true/false appropriately
    *
-   * @param fileName             the name (sans path) of the file to query
-   * @param fileSize             the size that the file must match
+   * @param fileName the name (sans path) of the file to query
+   * @param fileSize the size that the file must match
    * @param deleteFileOnMismatch if the file sizes do not match, delete the file
    * @return true if it does exist, false otherwise
    */
   static public boolean doesFileExist(String fileName, long fileSize,
-                                      boolean deleteFileOnMismatch) {
+      boolean deleteFileOnMismatch) {
 
     Log.d(TAG_KIWIX, "Looking for '" + fileName + "' with size=" + fileSize);
 
@@ -111,7 +144,8 @@ public class FileUtils {
         Log.d(TAG_KIWIX, "Correct file '" + fileName + "' found.");
         return true;
       } else {
-        Log.d(TAG_KIWIX, "File '" + fileName + "' found but with wrong size=" + fileForNewFile.length());
+        Log.d(TAG_KIWIX,
+            "File '" + fileName + "' found but with wrong size=" + fileForNewFile.length());
       }
 
       if (deleteFileOnMismatch) {
@@ -127,16 +161,19 @@ public class FileUtils {
 
   static public String getLocalFilePathByUri(final Context ctx, final Uri uri) {
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(ctx, uri)) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(ctx,
+        uri)) {
       if ("com.android.externalstorage.documents".equals(uri.getAuthority())) {
         String[] documentId = DocumentsContract.getDocumentId(uri).split(":");
 
-        if (documentId[0].equals("primary"))
+        if (documentId[0].equals("primary")) {
           return Environment.getExternalStorageDirectory() + "/" + documentId[1];
-
+        }
       } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
         String documentId = DocumentsContract.getDocumentId(uri);
-        Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(documentId));
+        Uri contentUri =
+            ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"),
+                Long.valueOf(documentId));
 
         return contentQuery(ctx, contentUri);
       }
@@ -153,14 +190,15 @@ public class FileUtils {
     Cursor cursor = null;
 
     try {
-      cursor = context.getContentResolver().query(uri, new String[]{"_data"}, null, null, null);
+      cursor = context.getContentResolver().query(uri, new String[] { "_data" }, null, null, null);
 
-      if (cursor != null && cursor.moveToFirst())
+      if (cursor != null && cursor.moveToFirst()) {
         return cursor.getString(cursor.getColumnIndexOrThrow("_data"));
-
+      }
     } finally {
-      if (cursor != null)
+      if (cursor != null) {
         cursor.close();
+      }
     }
 
     return null;
@@ -178,16 +216,84 @@ public class FileUtils {
       stream.read(buffer);
       stream.close();
       content = new String(buffer);
-    } catch (IOException ignored) { }
+    } catch (IOException ignored) {
+    }
 
     return readCsv(content);
   }
 
-
+  public static List<File> getAllZimParts(Book book) {
+    List<File> files = new ArrayList<>();
+    if (book.file.getPath().endsWith(".zim") || book.file.getPath().endsWith(".zim.part")) {
+      if (book.file.exists()) {
+        files.add(book.file);
+      } else {
+        files.add(new File(book.file + ".part"));
+      }
+      return files;
+    }
+    String path = book.file.getPath();
+    for (char alphabetFirst = 'a'; alphabetFirst <= 'z'; alphabetFirst++) {
+      for (char alphabetSecond = 'a'; alphabetSecond <= 'z'; alphabetSecond++) {
+        path = path.substring(0, path.length() - 2) + alphabetFirst + alphabetSecond;
+        if (new File(path).exists()) {
+          files.add(new File(path));
+        } else if (new File(path + ".part").exists()) {
+          files.add(new File(path + ".part"));
+        } else {
+          return files;
+        }
+      }
+    }
+    return files;
+  }
 
   private static ArrayList<String> readCsv(String csv) {
 
     String[] csvArray = csv.split(",");
     return new ArrayList<>(Arrays.asList(csvArray));
+  }
+
+  public static boolean hasPart(File file) {
+    file = new File(getFileName(file.getPath()));
+    if (file.getPath().endsWith(".zim")) {
+      return false;
+    }
+    if (file.getPath().endsWith(".part")) {
+      return true;
+    }
+    String path = file.getPath();
+
+    for (char alphabetFirst = 'a'; alphabetFirst <= 'z'; alphabetFirst++) {
+      for (char alphabetSecond = 'a'; alphabetSecond <= 'z'; alphabetSecond++) {
+        String chunkPath = path.substring(0, path.length() - 2) + alphabetFirst + alphabetSecond;
+        File fileChunk = new File(chunkPath + ".part");
+        if (fileChunk.exists()) {
+          return true;
+        } else if (!new File(chunkPath).exists()) {
+          return false;
+        }
+      }
+    }
+    return false;
+  }
+
+  public static String getFileName(String fileName) {
+    if (new File(fileName).exists()) {
+      return fileName;
+    } else if (new File(fileName + ".part").exists()) {
+      return fileName + ".part";
+    } else {
+      return fileName + "aa";
+    }
+  }
+
+  public static long getCurrentSize(Book book) {
+    long size = 0;
+    List<File> files = getAllZimParts(book);
+    for (File file : files) {
+      size += file.length();
+    }
+    return size;
   }
 }

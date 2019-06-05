@@ -23,36 +23,31 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Environment;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.matcher.BoundedMatcher;
-import android.support.test.runner.screenshot.Screenshot;
-import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.UiObject;
-import android.support.test.uiautomator.UiObjectNotFoundException;
-import android.support.test.uiautomator.UiSelector;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
-
-
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
-
+import androidx.core.content.ContextCompat;
+import androidx.test.espresso.matcher.BoundedMatcher;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.runner.screenshot.Screenshot;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject;
+import androidx.test.uiautomator.UiObjectNotFoundException;
+import androidx.test.uiautomator.UiSelector;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
 
 /**
  * Created by mhutti1 on 07/04/17.
  */
 
 public class TestUtils {
-  private static String TAG = "TESTUTILS";
+  private static final String TAG = "TESTUTILS";
   public static int TEST_PAUSE_MS = 250;
   /*
     TEST_PAUSE_MS is used as such:
@@ -66,31 +61,35 @@ public class TestUtils {
    */
 
   public static boolean hasStoragePermission() {
-    return ContextCompat.checkSelfPermission(InstrumentationRegistry.getTargetContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-            ContextCompat.checkSelfPermission(InstrumentationRegistry.getTargetContext(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    return ContextCompat.checkSelfPermission(
+        InstrumentationRegistry.getInstrumentation().getTargetContext(),
+        Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+        ContextCompat.checkSelfPermission(
+            InstrumentationRegistry.getInstrumentation().getTargetContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
   }
 
   public static void allowPermissionsIfNeeded() {
     if (Build.VERSION.SDK_INT >= 23 && !hasStoragePermission()) {
-      UiDevice device = UiDevice.getInstance(getInstrumentation());
-      UiObject allowPermissions = device.findObject(new UiSelector().clickable(true).checkable(false).index(1));
+      UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+      UiObject allowPermissions =
+          device.findObject(new UiSelector().clickable(true).checkable(false).index(1));
       if (allowPermissions.exists()) {
         try {
           allowPermissions.click();
-        } catch (UiObjectNotFoundException e) {}
+        } catch (UiObjectNotFoundException e) {
+        }
       }
     }
   }
 
-  public static void captureAndSaveScreenshot(String name){
+  public static void captureAndSaveScreenshot(String name) {
     File screenshotDir = new File(
-      Environment.getExternalStorageDirectory() +
-      "/Android/data/KIWIXTEST/Screenshots");
+        Environment.getExternalStorageDirectory() +
+            "/Android/data/KIWIXTEST/Screenshots");
 
-    if (!screenshotDir.exists()){
-      if (!screenshotDir.mkdirs()){
+    if (!screenshotDir.exists()) {
+      if (!screenshotDir.mkdirs()) {
         return;
       }
     }
@@ -102,7 +101,7 @@ public class TestUtils {
 
     Bitmap screenshot = Screenshot.capture().getBitmap();
 
-    if(screenshot == null) {
+    if (screenshot == null) {
       return;
     }
 
@@ -140,9 +139,8 @@ public class TestUtils {
   }
 
   public static String getResourceString(int id) {
-    Context targetContext = InstrumentationRegistry.getTargetContext();
+    Context targetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
     return targetContext.getResources().getString(id);
   }
-
 }
 

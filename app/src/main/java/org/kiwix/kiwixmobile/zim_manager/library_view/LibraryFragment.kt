@@ -17,23 +17,23 @@
  */
 package org.kiwix.kiwixmobile.zim_manager.library_view
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import eu.mhutti1.utils.storage.StorageDevice
 import eu.mhutti1.utils.storage.support.StorageSelectDialog
 import kotlinx.android.synthetic.main.activity_library.libraryErrorText
 import kotlinx.android.synthetic.main.activity_library.libraryList
 import kotlinx.android.synthetic.main.activity_library.librarySwipeRefresh
-import org.kiwix.kiwixmobile.KiwixMobileActivity
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.base.BaseFragment
@@ -42,6 +42,7 @@ import org.kiwix.kiwixmobile.downloader.Downloader
 import org.kiwix.kiwixmobile.extensions.snack
 import org.kiwix.kiwixmobile.extensions.toast
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.main.MainActivity
 import org.kiwix.kiwixmobile.utils.BookUtils
 import org.kiwix.kiwixmobile.utils.DialogShower
 import org.kiwix.kiwixmobile.utils.KiwixDialog.YesNoDialog.WifiOnly
@@ -109,7 +110,7 @@ class LibraryFragment : BaseFragment() {
     librarySwipeRefresh.setOnRefreshListener { refreshFragment() }
     libraryList.run {
       adapter = libraryAdapter
-      layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+      layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
     }
     zimManageViewModel.libraryItems.observe(this, Observer(this::onLibraryItemsChange))
@@ -196,7 +197,7 @@ class LibraryFragment : BaseFragment() {
       noWifiWithWifiOnlyPreferenceSet -> {
         dialogShower.show(WifiOnly, {
           sharedPreferenceUtil.putPrefWifiOnly(false)
-          KiwixMobileActivity.wifiOnly = false
+          MainActivity.wifiOnly = false
           downloadFile(item.book)
         })
         return

@@ -5,11 +5,8 @@
   <color name="primary_dark">#000000</color>
   <color name="primary_dark_night">#ff212121</color>
   <color name="primary_light">#ffffff</color>
-  <color name="accent">#304e9a</color>
-  <color name="primary_text">#212121</color>
-  <color name="secondary_text">#727272</color>
+  <color name="accent">#2196F3</color>
   <color name="icons">#212121</color>
-  <color name="divider">#304e9a</color>
   <color name="white">#fafafa</color>
   <color name="gray_list_bg">#0d000000</color>
   <color name="drawer_background_day">#ffffff</color>
@@ -22,7 +19,22 @@
   <color name="blue_grey">#ECEFF1</color>
   <color name="foreground_material_dark">@android:color/white</color>
   <color name="back_to_top_background">#DDFFFFFF</color>
-  <color name="back_to_top_text">@android:color/black</color>
-  <color name="back_to_top_background_night">#FF000000</color>
-  <color name="back_to_top_text_night">#FFFFFFFF</color>
+  <color name="picture_label">#fb8c00</color>
+  <color name="video_label">#651FFF</color>
+  <color name="blue800">#1565c0</color>
+  <color name="blueTransparent">#962e7ac4</color>
+  <color name="actionModeBackground">#4285F4</color>
+  <color name="titleBar">#000000</color>
+  <color name="greenTick">#4CAF50</color>
+
+  <!-- Dark Text Color for Light Background -->
+  <color name="textDarkPrimary">#000000</color> <!-- 0% opacity-->
+  <color name="textDarkSecondary">#DE000000</color> <!--DE for 87% opacity-->
+  <color name="textDarkTertiary">#8A000000</color> <!--8A for 54% opacity-->
+
+  <!-- White Text Color for Dark Background -->
+  <color name="textLightPrimary">#FFFFFF</color> <!--100% opacity-->
+  <color name="textLightSecondary">#B2FFFFFF</color> <!--B2 for 70% opacity-->
+  <color name="textLightTertiary">#80FFFFFF</color> <!--80 for 50% opacity-->
+
 </resources>

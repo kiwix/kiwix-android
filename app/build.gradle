@@ -1,79 +1,90 @@
+import com.android.annotations.NonNull
+import com.android.builder.testing.api.TestServer
+import com.testdroid.api.APIClient
+import com.testdroid.api.APIKeyClient
+import com.testdroid.api.model.APIProject
+import com.testdroid.api.model.APIUser
 import groovy.json.JsonSlurper
 
 buildscript {
   repositories {
+    google()
     mavenCentral()
     jcenter()
-    google()
   }
 
   dependencies {
-    classpath 'com.testdroid:gradle:1.5.0'
-    classpath 'org.apache.httpcomponents:httpclient-android:4.3.3'
+    classpath "com.android.tools.build:gradle:$androidGradlePluginVersion"
+    classpath "org.apache.httpcomponents:httpclient-android:4.3.3"
+    classpath "com.testdroid:testdroid-api:2.71"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    classpath "io.objectbox:objectbox-gradle-plugin:$objectboxVersion"
   }
 }
 
-apply plugin: 'com.android.application'
+plugins {
+  id("com.android.application")
+  id("checkstyle")
+}
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'checkstyle'
-apply plugin: 'testdroid'
 apply plugin: 'io.objectbox'
 
 repositories {
-  mavenCentral()
-  jcenter()
-  maven {
-    url 'https://maven.google.com'
-  }
   google()
+  mavenCentral()
+  maven {
+    url "https://maven.google.com"
+  }
+  jcenter()
 }
 
-String[] archs = ['arm64-v8a', 'armeabi', 'mips', 'mips64', 'x86', 'x86_64']
-dependencies {
+String[] archs = ["arm64-v8a", "armeabi", "mips", "mips64", "x86", "x86_64"]
 
+dependencies {
+  // use jdk8 java.time backport, as long app < Build.VERSION_CODES.O
+  implementation("com.jakewharton.threetenabp:threetenabp:1.1.1")
   // Get kiwixlib online if it is not populated locally
   if (file("../kiwixlib/src/main").list().length == 1) {
-    implementation 'org.kiwix.kiwixlib:kiwixlib:1.0.11'
+    implementation "org.kiwix.kiwixlib:kiwixlib:1.0.11"
   } else {
-    implementation project(':kiwixlib')
+    implementation project(":kiwixlib")
     archs = file("../kiwixlib/src/main/jniLibs").list()
   }
 
   // Storage Devices
-  implementation 'eu.mhutti1.utils.storage:android-storage-devices:0.6.2'
+  implementation "eu.mhutti1.utils.storage:android-storage-devices:0.6.2"
 
   // Android Support
-  implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
-  implementation "com.android.support:support-v13:$supportLibraryVersion"
-  implementation "com.android.support:support-v4:$supportLibraryVersion"
-  implementation "com.android.support:design:$supportLibraryVersion"
-  implementation "com.android.support:cardview-v7:$supportLibraryVersion"
+  implementation "androidx.appcompat:appcompat:$appCompatVersion"
+  implementation "com.google.android.material:material:$materialVersion"
+  implementation "androidx.cardview:cardview:$cardViewVersion"
+  implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
 
-  androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
-
-  androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1', {
-    exclude group: 'com.android.support', module: 'support-annotations'
+  implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
+  androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
+  androidTestImplementation "androidx.test.espresso:espresso-web:$espressoVersion"
+  androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
+  androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion") {
+    exclude group: "androidx.legacy", module: "legacy-support-core-utils"
+    exclude group: "androidx.viewpager", module: "viewpager"
+    exclude group: "com.google.android.material", module: "material"
+    exclude group: "androidx.recyclerview", module: "recyclerview"
   }
 
-  androidTestImplementation 'com.android.support.test.espresso:espresso-web:3.0.1'
-  androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.1'
-  androidTestImplementation 'com.android.support.test.espresso:espresso-idling-resource:3.0.1'
-  androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.0', {
-    exclude group: 'com.android.support', module: 'support-v4'
-    exclude group: 'com.android.support', module: 'appcompat-v7'
-    exclude group: 'com.android.support', module: 'design'
-    exclude group: 'com.android.support', module: 'recyclerview-v7'
+  androidTestImplementation("com.schibsted.spain:barista:$baristaVersion") {
+    exclude group: "com.android.support"
   }
 
-  androidTestCompile('com.schibsted.spain:barista:2.4.0') {
-    exclude group: 'com.android.support'
-  }
+  androidTestImplementation "androidx.annotation:annotation:$annotationVersion"
+  androidTestImplementation "androidx.test.ext:junit:1.1.0"
+  androidTestImplementation "androidx.test:runner:1.1.1"
+  androidTestImplementation "androidx.test:rules:1.1.1"
+  androidTestImplementation "androidx.test:core:1.1.0"
 
-  androidTestImplementation "com.android.support:support-annotations:$supportLibraryVersion"
-  androidTestImplementation 'com.android.support.test:runner:1.0.1'
-  androidTestImplementation 'com.android.support.test:rules:1.0.1'
+  // Tab indicator
+  implementation "com.pacioianu.david:ink-page-indicator:$inkPageIndicatorVersion"
 
   // Dagger
   compileOnly "javax.annotation:javax.annotation-api:$javaxAnnotationVersion"
@@ -94,43 +105,41 @@ dependencies {
   implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
   implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
   implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
-  implementation('com.squareup.retrofit2:converter-simplexml:2.1.0') {
-    exclude group: 'xpp3', module: 'xpp3'
-    exclude group: 'stax', module: 'stax-api'
-    exclude group: 'stax', module: 'stax'
+  implementation("com.squareup.retrofit2:converter-simplexml:$retrofitVersion") {
+    exclude group: "xpp3", module: "xpp3"
+    exclude group: "stax", module: "stax-api"
+    exclude group: "stax", module: "stax"
   }
-  androidTestImplementation 'com.squareup.okhttp3:mockwebserver:3.6.0'
+  androidTestImplementation "com.squareup.okhttp3:mockwebserver:3.6.0"
 
-  // Butterknife
-  implementation 'com.jakewharton:butterknife:8.0.1'
-  kapt 'com.jakewharton:butterknife-compiler:8.0.1'
+  // ButterKnife
+  implementation "com.jakewharton:butterknife:$butterKnifeVersion"
+  kapt "com.jakewharton:butterknife-compiler:$butterKnifeVersion"
 
   // RxJava
   implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
   implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 
-  // JUnit
-  androidTestImplementation 'junit:junit:4.12'
+  androidTestImplementation "junit:junit:$jUnitVersion"
 
   // Mockito
-  androidTestImplementation "org.mockito:mockito-android:2.24.5"
+  androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
 
   // Leak canary
   implementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
   // Only enable leak canary in debug builds
   configurations.all { config ->
-    if (config.name.contains('debug') || config.name.contains("Debug")) {
+    if (config.name.contains("debug") || config.name.contains("Debug")) {
       config.resolutionStrategy.eachDependency { details ->
-        if (details.requested.group == 'com.squareup.leakcanary' &&
-            details.requested.name == 'leakcanary-android-no-op') {
-          details.useTarget(group: details.requested.group, name: 'leakcanary-android',
+        if (details.requested.group == "com.squareup.leakcanary" &&
+            details.requested.name == "leakcanary-android-no-op") {
+          details.useTarget(group: details.requested.group, name: "leakcanary-android",
               version: details.requested.version)
         }
       }
     }
   }
-  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-  implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
   implementation "android.arch.lifecycle:extensions:1.1.1"
   implementation "io.objectbox:objectbox-kotlin:$objectboxVersion"
   implementation "io.objectbox:objectbox-rxjava:$objectboxVersion"
@@ -138,25 +147,24 @@ dependencies {
   testImplementation "org.junit.jupiter:junit-jupiter:5.4.2"
   testImplementation "io.mockk:mockk:1.9"
   testImplementation "org.assertj:assertj-core:3.11.1"
-  //update this with androidx
-  testImplementation 'com.jraska.livedata:testing-ktx:0.2.1'
-  testImplementation 'android.arch.core:core-testing:1.1.1'
-
+  testImplementation 'com.jraska.livedata:testing-ktx:1.1.0'
+  testImplementation 'androidx.arch.core:core-testing:2.0.1'
 }
 
 // Set custom app import directory
 def map = [:]
 def custom = new File("app/src")
-if (project.hasProperty('customDir')) {
-  custom = file(project.property('customDir'))
+if (project.hasProperty("customDir")) {
+  custom = file(project.property("customDir"))
 }
 
 // Set up flavours for each custom app in the directory
-if(custom.listFiles()) {
+if (custom.listFiles()) {
   custom.eachFile() { file ->
 
     def fileName = file.getName()
-    if (fileName.startsWith(".") || fileName.contains("test") || fileName == "main" || fileName.contains("Test")) {
+    if (fileName.startsWith(".") || fileName.contains("test") ||
+        fileName == "main" || fileName.contains("Test")) {
       return
     }
     map.put(fileName, file.getAbsolutePath())
@@ -164,14 +172,16 @@ if(custom.listFiles()) {
 }
 
 android {
-  compileSdkVersion 27
+  compileSdkVersion 28
+  testServer new TestDroidUpload()
 
   defaultConfig {
     minSdkVersion 15
-    targetSdkVersion 27
-    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    targetSdkVersion 28
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     // See https://github.com/linkedin/dexmaker/issues/65 for why we need the following line.
-    testInstrumentationRunnerArguments.notClass = 'com.android.dex.DexIndexOverflowException'
+    testInstrumentationRunnerArguments.notClass = "com.android.dex.DexIndexOverflowException"
+    multiDexEnabled true
     vectorDrawables.useSupportLibrary = true
   }
 
@@ -179,20 +189,22 @@ android {
     cruncherEnabled true
   }
 
+  testBuildType "debug"
+
   lintOptions {
     // Treat lint seriously
     abortOnError true
     // Hardcoded strings in xml
-    error 'HardcodedText'
+    error "HardcodedText"
     // Hardcoded strings in setText
-    error 'SetTextI18n'
+    error "SetTextI18n"
     // Strings.xml issues
-    warning 'ExtraTranslation'
-    warning 'MissingTranslation'
+    warning "ExtraTranslation"
+    warning "MissingTranslation"
 
     // Warnings
-    warning 'InvalidPackage'
-    warning 'StringFormatInvalid'
+    warning "InvalidPackage"
+    warning "StringFormatInvalid"
   }
 
   flavorDimensions "default"
@@ -202,36 +214,33 @@ android {
     // Main build type for debugging
     debug {
       buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://download.kiwix.org/\""
-      buildConfigField "boolean", "KIWIX_ERROR_ACTIVITY", "false"
       // True breaks local variables being shown in breakpoints
       testCoverageEnabled false
     }
 
     mock_network {
       initWith(buildTypes.debug)
-      matchingFallbacks = ['debug', 'release']
+      matchingFallbacks = ["debug", "release"]
       // TODO add DI for the mock network
     }
 
     local_download_server {
       initWith(buildTypes.debug)
       buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://kiwix-download-server/\""
-      matchingFallbacks = ['debug', 'release']
+      matchingFallbacks = ["debug", "release"]
     }
 
     // Used to assess code coverage
     coverage {
       initWith debug
       testCoverageEnabled true
-      matchingFallbacks = ['debug', 'release']
+      matchingFallbacks = ["debug", "release"]
     }
 
     // Release Type
     release {
       buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://download.kiwix.org/\""
-      buildConfigField "boolean", "KIWIX_ERROR_ACTIVITY", "false"
     }
-
   }
 
   productFlavors {
@@ -247,14 +256,14 @@ android {
       buildConfigField "String", "ENFORCED_LANG", "\"\""
       resValue "string", "app_name", "Kiwix"
       resValue "string", "app_search_string", "Search Kiwix"
-      if (project.hasProperty('version_code')) {
-        def version_code = project.property('version_code')
+      if (project.hasProperty("version_code")) {
+        def version_code = project.property("version_code")
         versionCode version_code.toInteger()
       } else {
         versionCode 56
       }
-      if (project.hasProperty('version_name')) {
-        versionName project.property('version_name')
+      if (project.hasProperty("version_name")) {
+        versionName project.property("version_name")
       } else {
         versionName "2.5"
       }
@@ -267,12 +276,12 @@ android {
           apply from: directory + "/build.gradle"
         }
         def jsonFile
-        if (project.hasProperty('jsonFile')) {
+        if (project.hasProperty("jsonFile")) {
           // Read json file from properties e.g command line
-          jsonFile = file(project.property('jsonFile'))
+          jsonFile = file(project.property("jsonFile"))
         } else {
           // If no file provided use the test file
-          jsonFile = file(directory + '/info.json')
+          jsonFile = file(directory + "/info.json")
         }
         def parsedJson = new JsonSlurper().parseText(jsonFile.text)
         def sourceFile = file(parsedJson.zim_file)
@@ -280,59 +289,59 @@ android {
           sourceFile = file(directory + "/" + parsedJson.zim_file)
         }
         if (parsedJson.embed_zim) {
-         // Place content in each lib directory for embeded zims
+          // Place content in each lib directory for embeded zims
           for (String archName : archs) {
-           copy {
-             from sourceFile
-             into file(directory + "/jniLibs/" + archName)
-             rename { String filename -> "libcontent.so" }
-           }
-         }
-         parsedJson.zim_file = "libcontent.so"
+            copy {
+              from sourceFile
+              into file(directory + "/jniLibs/" + archName)
+              rename { String filename -> "libcontent.so" }
+            }
+          }
+          parsedJson.zim_file = "libcontent.so"
         }
         // Set custom config from json
         applicationId "$parsedJson.package"
         buildConfigField "boolean", "IS_CUSTOM_APP", "true"
         buildConfigField "boolean", "HAS_EMBEDDED_ZIM", "$parsedJson.embed_zim"
         def filename
-        if (parsedJson.zim_file.lastIndexOf('/') >= 0) {
-          filename = parsedJson.zim_file.substring(parsedJson.zim_file.lastIndexOf('/') + 1)
+        if (parsedJson.zim_file.lastIndexOf("/") >= 0) {
+          filename = parsedJson.zim_file.substring(parsedJson.zim_file.lastIndexOf("/") + 1)
         } else {
           filename = parsedJson.zim_file
         }
         buildConfigField "String", "ZIM_FILE_NAME", "\"$filename\""
-        if (project.hasProperty('zim_file_size')) {
-          def length = Long.parseLong(project.property('zim_file_size'))
+        if (project.hasProperty("zim_file_size")) {
+          def length = Long.parseLong(project.property("zim_file_size"))
           buildConfigField "long", "ZIM_FILE_SIZE", "${length}L"
         } else {
           long length = sourceFile.length()
           buildConfigField "long", "ZIM_FILE_SIZE", "${length}L"
         }
-        if (project.hasProperty('version_code')) {
-          def version_code = project.property('version_code')
+        if (project.hasProperty("version_code")) {
+          def version_code = project.property("version_code")
           versionCode version_code.toInteger()
         } else {
           versionCode parsedJson.version_code.toInteger()
         }
-        if (project.hasProperty('version_name')) {
-          versionName project.property('version_name')
+        if (project.hasProperty("version_name")) {
+          versionName project.property("version_name")
         } else {
           versionName parsedJson.version_name
         }
-        if (project.hasProperty('content_version_code')) {
-          def content_version_code = project.property('content_version_code')
+        if (project.hasProperty("content_version_code")) {
+          def content_version_code = project.property("content_version_code")
           buildConfigField "int", "CONTENT_VERSION_CODE", "$content_version_code"
         } else if (parsedJson.content_version_code != null) {
           buildConfigField "int", "CONTENT_VERSION_CODE", "$parsedJson.content_version_code"
-        } else if (project.hasProperty('version_code'))  {
-          def version_code = project.property('version_code')
+        } else if (project.hasProperty("version_code")) {
+          def version_code = project.property("version_code")
           buildConfigField "int", "CONTENT_VERSION_CODE", "$version_code"
         } else if (parsedJson.version_code != null) {
           buildConfigField "int", "CONTENT_VERSION_CODE", "$parsedJson.version_code"
         }
         buildConfigField "String", "ENFORCED_LANG", "\"$parsedJson.enforced_lang\""
         resValue "string", "app_name", "$parsedJson.app_name"
-        resValue "string", "app_search_string", 'Search ' + "$parsedJson.app_name"
+        resValue "string", "app_search_string", "Search " + "$parsedJson.app_name"
       }
     }
   }
@@ -343,7 +352,7 @@ android {
       "$name" {
         setRoot directory
         jni.srcDirs = []
-        jniLibs.srcDir directory + '/jniLibs'
+        jniLibs.srcDir directory + "/jniLibs"
       }
     }
   }
@@ -363,7 +372,7 @@ android {
   buildTypes {
     release {
       minifyEnabled true
-      proguardFiles getDefaultProguardFile('proguard-android.txt')
+      proguardFiles getDefaultProguardFile("proguard-android.txt")
     }
   }
   */
@@ -375,21 +384,43 @@ android {
   }
 }
 
-// Testdroid deployment configuration
-def buildNumber = System.getenv('TRAVIS_BUILD_NUMBER')
+class TestDroidUpload extends TestServer {
+  def buildNumber = System.getenv("TRAVIS_BUILD_NUMBER")
+  def API_KEY = System.getenv("PUBLIC_TESTDROID_API_KEY")
+  def TESTDROID_SERVER = "https://cloud.testdroid.com"
+  def RUNNER_GATEWAY = System.getenv("TESTDROID_RUNNER_GATEWAY")
+  def accessGroup = System.getenv("ACCESS_GROUP_ID")
 
-def findJar(prefix) {
-  configurations.runtime.filter { it.name.startsWith(prefix) }
-}
+  @Override
+  String getName() {
+    return "kiwixtest"
+  }
 
-testdroid {
-  authorization "APIKEY"
-  apiKey System.getenv('BITBAR_API_KEY')
-  deviceGroup 'Kiwix'
-  projectName "Kiwix"
-  testRunName "Auto Test " + buildNumber
+  @Override
+  void uploadApks(@NonNull String variantName, @NonNull File testApk, File testedApk) {
+    APIUser.metaClass.shareFile { id, accessGroup ->
+      System.out.println(id)
+      try {
+        delegate.postResource(createUri(selfURI, "/files/" + id + "/share"),
+            [accessGroupId: accessGroup], APIProject.class)
+      } catch (Exception e) {
+        System.out.println(e.getLocalizedMessage())
+      }
+    }
 
-  fullRunConfig {
-    instrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+    APIClient client = new APIKeyClient(TESTDROID_SERVER, API_KEY)
+    APIUser user = client.me()
+    String testId = user.uploadFile(testApk).getId()
+    user.shareFile(testId, accessGroup)
+    String testedId = user.uploadFile(testedApk).getId()
+    user.shareFile(testedId, accessGroup)
+
+    new URL(RUNNER_GATEWAY + "?apk=" + testedId + "&test=" + testId + "&buildno=" + buildNumber).
+        getText()
+  }
+
+  @Override
+  boolean isConfigured() {
+    return true
   }
 }

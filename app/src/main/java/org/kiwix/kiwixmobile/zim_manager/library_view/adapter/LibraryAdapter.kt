@@ -19,8 +19,8 @@
 
 package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
 
-import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 
 class LibraryAdapter(
   private val delegateManager: AdapterDelegateManager<LibraryListItem> = AdapterDelegateManager(),

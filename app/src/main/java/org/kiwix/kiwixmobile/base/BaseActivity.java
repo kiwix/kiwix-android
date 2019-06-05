@@ -17,17 +17,55 @@
  */
 package org.kiwix.kiwixmobile.base;
 
+import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import dagger.android.AndroidInjection;
+import javax.inject.Inject;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.utils.LanguageUtils;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 public abstract class BaseActivity extends AppCompatActivity {
+
+  @Inject
+  protected SharedPreferenceUtil sharedPreferenceUtil;
+
+  private Unbinder unbinder;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     AndroidInjection.inject(this);
     super.onCreate(savedInstanceState);
+    LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil);
+  }
+
+  @Override
+  public Resources.Theme getTheme() {
+    Resources.Theme theme = super.getTheme();
+    if (sharedPreferenceUtil != null && sharedPreferenceUtil.nightMode()) {
+      setTheme(R.style.AppTheme_Night);
+    } else {
+      theme.applyStyle(R.style.StatusBarTheme, true);
+    }
+    return theme;
+  }
+
+  @Override
+  public void setContentView(@LayoutRes int layoutResID) {
+    super.setContentView(layoutResID);
+    unbinder = ButterKnife.bind(this);
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    if (unbinder != null) {
+      unbinder.unbind();
+    }
   }
 }

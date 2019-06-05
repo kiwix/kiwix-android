@@ -1,8 +1,9 @@
 package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
 
-import android.support.v4.util.SparseArrayCompat
-import android.support.v7.widget.RecyclerView
+
 import android.view.ViewGroup
+import androidx.collection.SparseArrayCompat
+import androidx.recyclerview.widget.RecyclerView
 
 class AdapterDelegateManager<T>() {
   fun addDelegate(delegate: AdapterDelegate<T>) {
@@ -12,13 +13,13 @@ class AdapterDelegateManager<T>() {
   fun createViewHolder(
     parent: ViewGroup,
     viewType: Int
-  ) = delegates[viewType].createViewHolder(parent)
+  ) = delegates[viewType]!!.createViewHolder(parent)
 
   fun onBindViewHolder(
     libraryListItem: T,
     holder: RecyclerView.ViewHolder
   ) {
-    delegates[holder.itemViewType].bind(holder, libraryListItem)
+    delegates[holder.itemViewType]!!.bind(holder, libraryListItem)
   }
 
   fun getViewTypeFor(item: T) = delegates.keyAt(getDelegateIndexFor(item))

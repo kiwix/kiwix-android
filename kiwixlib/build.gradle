@@ -1,13 +1,12 @@
 apply plugin: 'com.android.library'
 
-
 android {
-  compileSdkVersion 27
+  compileSdkVersion 28
 
   defaultConfig {
-    minSdkVersion 14
-    targetSdkVersion 27
-    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    minSdkVersion 15
+    targetSdkVersion 28
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
   }
 
   buildTypes {
@@ -20,8 +19,6 @@ android {
 
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
-  androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
-    exclude group: 'com.android.support', module: 'support-annotations'
-  })
-  testImplementation 'junit:junit:4.12'
+  androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
+  testImplementation "junit:junit:$jUnitVersion"
 }

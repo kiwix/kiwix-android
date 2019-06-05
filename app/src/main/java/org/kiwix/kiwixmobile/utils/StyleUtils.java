@@ -21,19 +21,18 @@ package org.kiwix.kiwixmobile.utils;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.XmlRes;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.AttributeSet;
 import android.util.Xml;
-
-import org.kiwix.kiwixmobile.KiwixMobileActivity;
+import androidx.annotation.XmlRes;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.main.MainActivity;
 import org.xmlpull.v1.XmlPullParser;
 
 public class StyleUtils {
   public static int dialogStyle() {
-    if (KiwixMobileActivity.nightMode) {
+    if (MainActivity.nightMode) {
       return R.style.AppTheme_Dialog_Night;
     } else {
       return R.style.AppTheme_Dialog;
@@ -41,7 +40,7 @@ public class StyleUtils {
   }
 
   public static AttributeSet getAttributes(Context context, @XmlRes int xml) {
-    XmlPullParser parser = context.getResources().getXml(R.xml.webview);
+    XmlPullParser parser = context.getResources().getXml(xml);
     try {
       parser.next();
       parser.nextTag();
@@ -53,11 +52,12 @@ public class StyleUtils {
   }
 
   public static Spanned highlightUrl(String text, String url) {
-    return fromHtml(text.replaceAll(url,"<u><font color='blue'>" + url + "</font></u>"));
+    return fromHtml(text.replaceAll(url, "<u><font color='blue'>" + url + "</font></u>"));
   }
 
   @SuppressWarnings("deprecation")
   public static Spanned fromHtml(String source) {
+    if (source == null) source = "";
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
       return Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY);
     } else {

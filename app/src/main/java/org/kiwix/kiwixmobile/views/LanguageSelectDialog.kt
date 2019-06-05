@@ -18,9 +18,10 @@
 package org.kiwix.kiwixmobile.views
 
 import android.content.Context
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.language_selection.language_check_view
 import org.kiwix.kiwixmobile.R
@@ -52,7 +53,7 @@ class LanguageSelectDialog constructor(
       val languageArrayAdapter = LanguageAdapter(languages.toMutableList())
       language_check_view.run {
         adapter = languageArrayAdapter
-        layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         setHasFixedSize(true)
       }
       setView(dialogView)

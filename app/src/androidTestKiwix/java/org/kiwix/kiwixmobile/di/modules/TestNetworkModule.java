@@ -17,23 +17,18 @@
  */
 package org.kiwix.kiwixmobile.di.modules;
 
-
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
-import org.kiwix.kiwixmobile.network.KiwixService;
-import org.kiwix.kiwixmobile.utils.TestNetworkInterceptor;
-import org.mockito.Mockito;
-
-import java.io.IOException;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
+import java.io.IOException;
+import javax.inject.Singleton;
 import okhttp3.OkHttpClient;
 import okhttp3.mockwebserver.MockWebServer;
+import org.kiwix.kiwixmobile.data.remote.KiwixService;
+import org.kiwix.kiwixmobile.utils.TestNetworkInterceptor;
+import org.mockito.Mockito;
 
 import static org.mockito.Mockito.doReturn;
 
@@ -46,12 +41,17 @@ public class TestNetworkModule {
   @Provides
   @Singleton
   OkHttpClient provideOkHttpClient() {
-    return new OkHttpClient().newBuilder().followRedirects(true).followSslRedirects(true).addInterceptor(new TestNetworkInterceptor()).build();
+    return new OkHttpClient().newBuilder()
+        .followRedirects(true)
+        .followSslRedirects(true)
+        .addInterceptor(new TestNetworkInterceptor())
+        .build();
   }
 
   @Provides @Singleton
   KiwixService provideKiwixService(OkHttpClient okHttpClient, MockWebServer mockWebServer) {
-    return KiwixService.ServiceCreator.newHacklistService(okHttpClient, mockWebServer.url("/").toString());
+    return KiwixService.ServiceCreator.newHacklistService(okHttpClient,
+        mockWebServer.url("/").toString());
   }
 
   @Provides @Singleton
@@ -80,5 +80,4 @@ public class TestNetworkModule {
     doReturn(networkInfo).when(connectivityManager).getActiveNetworkInfo();
     return connectivityManager;
   }
-
 }

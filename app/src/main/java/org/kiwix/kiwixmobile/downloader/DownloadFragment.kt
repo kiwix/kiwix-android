@@ -17,14 +17,15 @@
  */
 package org.kiwix.kiwixmobile.downloader
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.layout_download_management.download_management_no_downloads
 import kotlinx.android.synthetic.main.layout_download_management.zim_downloader_list
 import org.kiwix.kiwixmobile.base.BaseFragment
@@ -69,7 +70,7 @@ class DownloadFragment : BaseFragment() {
     super.onViewCreated(view, savedInstanceState)
     zim_downloader_list.run {
       adapter = downloadAdapter
-      layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+      layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
     }
     zimManageViewModel.downloadItems.observe(this, Observer {

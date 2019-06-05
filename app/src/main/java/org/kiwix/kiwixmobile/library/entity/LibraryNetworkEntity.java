@@ -43,7 +43,8 @@ public class LibraryNetworkEntity {
   }
 
   @Root(name = "book", strict = false)
-  public static class Book implements Serializable{
+  public static class Book implements Serializable {
+
     @Attribute(name = "id", required = false)
     public String id;
 
@@ -153,7 +154,7 @@ public class LibraryNetworkEntity {
 
     // Two books are equal if their ids match
     @Override
-    public boolean equals (Object obj) {
+    public boolean equals(Object obj) {
       if (obj instanceof Book) {
         if (((Book) obj).getId() != null && ((Book) obj).getId().equals(getId())) {
           return true;

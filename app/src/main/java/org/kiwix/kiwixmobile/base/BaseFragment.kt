@@ -1,9 +1,7 @@
 package org.kiwix.kiwixmobile.base
 
 import android.content.Context
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
-
+import androidx.fragment.app.Fragment
 import org.kiwix.kiwixmobile.KiwixApplication
 import org.kiwix.kiwixmobile.di.components.ActivityComponent
 
@@ -17,7 +15,7 @@ abstract class BaseFragment : Fragment() {
     super.onAttach(context)
     inject(
         KiwixApplication.getApplicationComponent().activityComponent()
-            .activity(activity as FragmentActivity)
+            .activity(activity!!)
             .build()
     )
   }

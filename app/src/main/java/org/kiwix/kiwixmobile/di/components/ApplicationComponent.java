@@ -22,14 +22,15 @@ import dagger.BindsInstance;
 import dagger.Component;
 import javax.inject.Singleton;
 import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.ZimContentProvider;
+import org.kiwix.kiwixmobile.data.DataModule;
+import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
 import org.kiwix.kiwixmobile.di.modules.JNIModule;
 import org.kiwix.kiwixmobile.di.modules.NetworkModule;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
+import org.kiwix.kiwixmobile.main.KiwixWebView;
+import org.kiwix.kiwixmobile.search.AutoCompleteAdapter;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
-import org.kiwix.kiwixmobile.views.AutoCompleteAdapter;
-import org.kiwix.kiwixmobile.views.web.KiwixWebView;
 import org.kiwix.kiwixmobile.zim_manager.DownloadNotificationClickedReceiver;
 
 @Singleton
@@ -37,6 +38,7 @@ import org.kiwix.kiwixmobile.zim_manager.DownloadNotificationClickedReceiver;
     ApplicationModule.class,
     NetworkModule.class,
     JNIModule.class,
+    DataModule.class
 })
 public interface ApplicationComponent {
 

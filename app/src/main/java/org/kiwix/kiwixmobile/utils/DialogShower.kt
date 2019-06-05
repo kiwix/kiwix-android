@@ -1,5 +1,3 @@
-package org.kiwix.kiwixmobile.utils
-
 /*
  * Kiwix Android
  * Copyright (C) 2018  Kiwix <android.kiwix.org>
@@ -17,6 +15,7 @@ package org.kiwix.kiwixmobile.utils
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+package org.kiwix.kiwixmobile.utils
 interface DialogShower {
   fun show(
     dialog: KiwixDialog,

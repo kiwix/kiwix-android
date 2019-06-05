@@ -21,8 +21,9 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.os.Environment;
-import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
+import androidx.appcompat.app.AppCompatDelegate;
+import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.squareup.leakcanary.LeakCanary;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
@@ -38,14 +39,13 @@ public class KiwixApplication extends Application implements HasActivityInjector
   private static KiwixApplication application;
   private static ApplicationComponent applicationComponent;
 
-  private File logFile;
-
   static {
     AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
   }
 
   @Inject
   DispatchingAndroidInjector<Activity> activityInjector;
+  private File logFile;
 
   public static KiwixApplication getInstance() {
     return application;
@@ -76,10 +76,11 @@ public class KiwixApplication extends Application implements HasActivityInjector
       // You should not init your app in this process.
       return;
     }
+    AndroidThreeTen.init(this);
     if (isExternalStorageWritable()) {
       File appDirectory = new File(Environment.getExternalStorageDirectory() + "/Kiwix");
       logFile = new File(appDirectory, "logcat.txt");
-      Log.d("KIWIX","Writing all logs into [" + logFile.getPath() + "]");
+      Log.d("KIWIX", "Writing all logs into [" + logFile.getPath() + "]");
 
       // create app folder
       if (!appDirectory.exists()) {

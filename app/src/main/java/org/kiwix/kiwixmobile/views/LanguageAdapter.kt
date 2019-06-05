@@ -1,7 +1,8 @@
 package org.kiwix.kiwixmobile.views
 
-import android.support.v7.widget.RecyclerView
+
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.extensions.inflate
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language
@@ -12,7 +13,7 @@ class LanguageAdapter(val listItems: MutableList<Language>) : RecyclerView.Adapt
     parent: ViewGroup,
     viewType: Int
   ) = LanguageViewHolder(
-      parent.inflate(R.layout.language_check_item, false),
+      parent.inflate(R.layout.item_language, false),
       this::toggleItemAt
   )
 

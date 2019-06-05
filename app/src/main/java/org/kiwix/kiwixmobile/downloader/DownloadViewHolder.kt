@@ -18,8 +18,9 @@
 package org.kiwix.kiwixmobile.downloader
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.download_item.description
 import kotlinx.android.synthetic.main.download_item.downloadProgress

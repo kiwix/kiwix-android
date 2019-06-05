@@ -1,6 +1,6 @@
 package org.kiwix.kiwixmobile.zim_manager
 
-import android.support.v4.view.ViewPager.OnPageChangeListener
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 
 class SimplePageChangeListener(val onPageSelectedAction: (Int) -> Unit) : OnPageChangeListener {
   override fun onPageScrolled(

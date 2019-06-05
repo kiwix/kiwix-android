@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+  <item
+      android:id="@+id/menu_history_search"
+      android:icon="@drawable/action_search"
+      android:title="@string/search_label"
+      app:actionViewClass="androidx.appcompat.widget.SearchView"
+      app:iconifiedByDefault="true"
+      app:showAsAction="always|collapseActionView"
+      tools:ignore="AlwaysShowAction"/>
+
+  <item
+      android:id="@+id/menu_history_toggle"
+      android:checkable="true"
+      android:title="@string/history_from_current_book"
+      app:showAsAction="never"/>
+
+  <item
+      android:id="@+id/menu_history_clear"
+      android:title="@string/pref_clear_all_history_title"
+      app:showAsAction="never"/>
+</menu>

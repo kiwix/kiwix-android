@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
@@ -60,7 +59,8 @@ public class LanguageUtils {
     sortLanguageList(context.getResources().getConfiguration().locale);
   }
 
-  public static void handleLocaleChange(Context context, SharedPreferenceUtil sharedPreferenceUtil) {
+  public static void handleLocaleChange(Context context,
+      SharedPreferenceUtil sharedPreferenceUtil) {
     String language = sharedPreferenceUtil.getPrefLanguage("");
 
     if (language.isEmpty()) {
@@ -106,10 +106,10 @@ public class LanguageUtils {
     return mLocaleMap.get(iso3.toUpperCase());
   }
 
-  public static Locale getCurrentLocale(Context context){
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+  public static Locale getCurrentLocale(Context context) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
       return context.getResources().getConfiguration().getLocales().get(0);
-    } else{
+    } else {
       //noinspection deprecation
       return context.getResources().getConfiguration().locale;
     }
@@ -150,6 +150,20 @@ public class LanguageUtils {
     return "fonts/DejaVuSansCondensed.ttf";
   }
 
+  public static String getResourceString(Context appContext, String str) {
+    String resourceName = str;
+    if (resourceName.contains("REPLACE_")) {
+      resourceName = resourceName.replace("REPLACE_", "");
+    }
+    int resourceId = appContext.getResources()
+        .getIdentifier(
+            resourceName,
+            "string",
+            appContext.getPackageName()
+        );
+    return appContext.getResources().getString(resourceId);
+  }
+
   // Read the language codes, that are supported in this app from the locales.txt file
   private void getLanguageCodesFromAssets() {
 
@@ -167,7 +181,7 @@ public class LanguageUtils {
   private void setupLanguageList() {
 
     for (String languageCode : mLocaleLanguageCodes) {
-      mLanguageList.add(new LanguageContainer(languageCode));
+      mLanguageList.add(new LanguageContainer().findLanguageName(languageCode));
     }
   }
 
@@ -177,7 +191,8 @@ public class LanguageUtils {
     Collator localeCollator = Collator.getInstance(locale);
     localeCollator.setStrength(Collator.SECONDARY);
 
-    Collections.sort(mLanguageList, (a, b) -> localeCollator.compare(a.getLanguageName(), b.getLanguageName()));
+    Collections.sort(mLanguageList,
+        (a, b) -> localeCollator.compare(a.getLanguageName(), b.getLanguageName()));
   }
 
   // Check, if the selected Locale is supported and weather we actually need to change our font.
@@ -219,7 +234,8 @@ public class LanguageUtils {
       field.setBoolean(layoutInflater, false);
       layoutInflater.setFactory(new LayoutInflaterFactory(mContext, layoutInflater));
     } catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException e) {
-      Log.w(TAG_KIWIX, "Font Change Failed: Could not access private field of the LayoutInflater", e);
+      Log.w(TAG_KIWIX, "Font Change Failed: Could not access private field of the LayoutInflater",
+          e);
     }
   }
 
@@ -231,17 +247,6 @@ public class LanguageUtils {
     for (LanguageContainer value : mLanguageList) {
       values.add(value.getLanguageName());
     }
-
-    return values;
-  }
-
-  public List<Language> getLanguageList() {
-    List<Language> values = new ArrayList<>();
-
-    for (LanguageContainer value : mLanguageList) {
-      values.add(new Language(value.getLanguageCode(), false, 0));
-    }
-
     return values;
   }
 
@@ -286,7 +291,7 @@ public class LanguageUtils {
 
             // Set the custom typeface
             textView.setTypeface(Typeface.createFromAsset(mContext.getAssets(),
-                    getTypeface(Locale.getDefault().getLanguage())));
+                getTypeface(Locale.getDefault().getLanguage())));
             Log.d(TAG_KIWIX, "Applying custom font");
 
             // Reduce the text size
@@ -313,7 +318,7 @@ public class LanguageUtils {
     // This constructor will take care of creating a language name for the given ISO 639-1 language code.
     // The language name will always be in english to ensure user friendliness and to prevent
     // possible incompatibilities, since not all language names are available in all languages.
-    public LanguageContainer(String languageCode) {
+    public LanguageContainer findLanguageName(String languageCode) {
       mLanguageCode = languageCode;
 
       try {
@@ -324,8 +329,10 @@ public class LanguageUtils {
         if (mLanguageName.length() == 2) {
           mLanguageName = new Locale(languageCode).getDisplayLanguage(new Locale("en"));
         }
+        return this;
       } catch (Exception e) {
         mLanguageName = "";
+        return this;
       }
     }
 
@@ -336,22 +343,5 @@ public class LanguageUtils {
     public String getLanguageName() {
       return mLanguageName;
     }
-  }
-
-
-
-  public static String getResourceString(Context appContext, String str){
-    String resourceName = str;
-    if(resourceName.contains("REPLACE_")) {
-      resourceName = resourceName.replace("REPLACE_", "");
-    }
-    int resourceId = appContext.getResources()
-      .getIdentifier(
-        resourceName,
-        "string",
-        appContext.getPackageName()
-      );
-    String resourceString = appContext.getResources().getString(resourceId);
-    return resourceString != null ? resourceString : str;
   }
 }

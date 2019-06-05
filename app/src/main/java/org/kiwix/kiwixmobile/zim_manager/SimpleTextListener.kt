@@ -1,6 +1,6 @@
 package org.kiwix.kiwixmobile.zim_manager
 
-import android.support.v7.widget.SearchView.OnQueryTextListener
+import androidx.appcompat.widget.SearchView.OnQueryTextListener
 
 class SimpleTextListener(val onQueryTextChangeAction: (String) -> Unit) : OnQueryTextListener {
   override fun onQueryTextSubmit(s: String): Boolean {
