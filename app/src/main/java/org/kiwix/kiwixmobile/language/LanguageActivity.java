@@ -87,7 +87,7 @@ public class LanguageActivity extends BaseActivity implements LanguageContract.V
 
         Toast.makeText(this, getString(R.string.languages_saved), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent();
-        //intent.putParcelableArrayListExtra(LANGUAGE_LIST, languages);
+        intent.putParcelableArrayListExtra(LANGUAGE_LIST, languages);
         setResult(RESULT_OK, intent);
         finish();
         return true;

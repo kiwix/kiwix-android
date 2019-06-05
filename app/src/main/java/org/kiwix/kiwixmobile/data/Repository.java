@@ -1,11 +1,10 @@
 package org.kiwix.kiwixmobile.data;
 
 import io.reactivex.Completable;
-import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.Single;
+import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.kiwix.kiwixmobile.data.local.dao.BookDao;
@@ -52,7 +51,7 @@ public class Repository implements DataSource {
 
   @Override
   public Single<List<LibraryNetworkEntity.Book>> getLanguageCategorizedBooks() {
-    return Observable.fromIterable(bookDao.getBooks())
+    return /*Observable.fromIterable(bookDao.getBooks())
         .toSortedList(
             (book1, book2) -> book1.getLanguage().compareToIgnoreCase(book2.getLanguage()) == 0 ?
                 book1.getTitle().compareToIgnoreCase(book2.getTitle()) :
@@ -73,7 +72,8 @@ public class Repository implements DataSource {
             book = books.get(position);
           }
           return books;
-        })
+        })*/
+        Single.just(Collections.<LibraryNetworkEntity.Book>emptyList())
         .subscribeOn(io)
         .observeOn(mainThread);
   }

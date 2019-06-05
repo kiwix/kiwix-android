@@ -136,6 +136,26 @@
         <data android:mimeType="text/plain"/>
       </intent-filter>
     </activity>
+    <activity
+        android:name=".zim_manager.ZimManageActivity"
+        android:label="@string/choose_file"
+        android:launchMode="singleTop">
+      <!-- TODO -->
+      <intent-filter>
+        <action android:name="android.intent.action.GET_CONTENT"/>
+
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.OPENABLE"/>
+
+        <data android:mimeType="*/*"/>
+      </intent-filter>
+      <intent-filter>
+        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.TEXT_CLICKED"/>
+        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.ICON_CLICKED"/>
+        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.MIC_CLICKED"/>
+        <action android:name="org.kiwix.kiwixmobile.utils.KiwixSearchWidget.STAR_CLICKED"/>
+      </intent-filter>
+    </activity>
     <activity android:name=".settings.KiwixSettingsActivity"/>
     <activity android:name=".search.SearchActivity"/>
     <activity android:name=".bookmark.BookmarksActivity"/>

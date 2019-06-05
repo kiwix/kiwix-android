@@ -18,11 +18,11 @@
 package org.kiwix.kiwixmobile;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.multidex.MultiDexApplication;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.squareup.leakcanary.LeakCanary;
 import dagger.android.AndroidInjector;
@@ -34,7 +34,7 @@ import javax.inject.Inject;
 import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
 import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
 
-public class KiwixApplication extends Application implements HasActivityInjector {
+public class KiwixApplication extends MultiDexApplication implements HasActivityInjector {
 
   private static KiwixApplication application;
   private static ApplicationComponent applicationComponent;

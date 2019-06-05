@@ -1,7 +1,10 @@
 package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.util.Locale
 
+@Parcelize
 data class Language constructor(
   var active: Boolean,
   var occurencesOfLanguage: Int,
@@ -9,7 +12,7 @@ data class Language constructor(
   var languageLocalized: String,
   var languageCode: String,
   var languageCodeISO2: String
-) {
+) : Parcelable {
   constructor(
     locale: Locale,
     active: Boolean,

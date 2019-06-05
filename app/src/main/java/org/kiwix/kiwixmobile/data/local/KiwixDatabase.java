@@ -72,7 +72,11 @@ public class KiwixDatabase extends SquidDatabase {
 
   @Override
   protected Table[] getTables() {
-    return new Table[] {};
+    return new Table[] {
+        RecentSearch.TABLE,
+        Bookmark.TABLE,
+        History.TABLE
+    };
   }
 
   @Override
