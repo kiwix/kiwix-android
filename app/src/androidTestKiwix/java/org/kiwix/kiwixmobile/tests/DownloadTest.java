@@ -96,12 +96,6 @@ public class DownloadTest {
 
     clickOn(R.string.remote_zims);
 
-    try {
-      clickOn(R.id.network_permission_button);
-    } catch (RuntimeException e) {
-      Log.d(KIWIX_DOWNLOAD_TEST, "Failed to click Network Permission Button", e);
-    }
-
     captureAndSaveScreenshot("Before-checking-for-ZimManager-Main-Activity");
     ViewInteraction viewPager2 = onView(
             allOf(withId(R.id.manageViewPager),

@@ -60,7 +60,11 @@ dependencies {
   implementation "androidx.appcompat:appcompat:$appCompatVersion"
   implementation "com.google.android.material:material:$materialVersion"
   implementation "androidx.cardview:cardview:$cardViewVersion"
+  implementation "androidx.multidex:multidex:$multidexVersion"
   implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+  implementation "androidx.core:core-ktx:1.0.2"
+  implementation "androidx.fragment:fragment-ktx:1.0.0"
+  implementation "androidx.collection:collection-ktx:1.0.0"
 
   implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
   androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
@@ -216,6 +220,8 @@ android {
       buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://download.kiwix.org/\""
       // True breaks local variables being shown in breakpoints
       testCoverageEnabled false
+      // Needed for instrumentation tests on Pre 5.0
+      multiDexKeepProguard file("multidex-instrumentation-config.pro")
     }
 
     mock_network {

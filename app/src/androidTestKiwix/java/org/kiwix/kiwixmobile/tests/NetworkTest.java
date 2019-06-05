@@ -127,13 +127,6 @@ public class NetworkTest {
 
     TestUtils.allowPermissionsIfNeeded();
 
-    try {
-      onView(withId(R.id.network_permission_button)).perform(click());
-    } catch (RuntimeException e) {
-      Log.i(NETWORK_TEST_TAG,
-          "Permission dialog was not shown, we probably already have required permissions");
-    }
-
     onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.libraryList)).perform(click());
 
     try {

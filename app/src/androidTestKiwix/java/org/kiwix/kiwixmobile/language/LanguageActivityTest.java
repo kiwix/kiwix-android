@@ -109,7 +109,7 @@ public class LanguageActivityTest {
         childAtPosition(withId(R.id.toolbar_layout), 0)), 1), isDisplayed()));
 
     // Make sure that the zim list has been loaded
-    IdlingRegistry.getInstance().register(LibraryFragment.IDLING_RESOURCE);
+    //IdlingRegistry.getInstance().register(LibraryFragment.IDLING_RESOURCE);
     onView(allOf(isDisplayed(), withText("Selected languages:"))).check(matches(notNullValue()));
 
     // Open the Language Activity
@@ -274,7 +274,7 @@ public class LanguageActivityTest {
 
   @After
   public void endTest() {
-    IdlingRegistry.getInstance().unregister(LibraryFragment.IDLING_RESOURCE);
+    //IdlingRegistry.getInstance().unregister(LibraryFragment.IDLING_RESOURCE);
     Intents.release();
   }
 }
