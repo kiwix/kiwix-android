@@ -63,7 +63,7 @@ after_failure:
   - export LOG_DIR = ${TRAVIS_HOME}/build/kiwix/kiwix-android/app/build/outputs/reports/androidTests/connected/flavors/KIWIX/
   - lynx --dump ${LOG_DIR}com.android.builder.testing.ConnectedDevice.html
   - lynx --dump ${LOG_DIR}com.android.builder.testing.html
-  - lynx -dump ${LOG_DIR}org.kiwix.kiwixmobile.tests.BasicTest.html;
+  - lynx --dump ${LOG_DIR}org.kiwix.kiwixmobile.tests.BasicTest.html;
   - echo " LOGCAT "; echo "========"; cat logcat.log; pkill -KILL -f adb
 
 before_deploy:
