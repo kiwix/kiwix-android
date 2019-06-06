@@ -248,7 +248,7 @@
   <string name="add_note">Add Note</string>
   <string name="save">Save</string>
   <string name="note">Note</string>
-  <string name="wiki_book_title">Wiki Book Title</string>
+  <string name="wiki_article_title">Wiki Article Title</string>
   <string name="ext_storage_permission_rationale_add_note">Storage access is required for Notes</string>
   <string name="ext_storage_write_permission_denied_add_note">Notes can\'t be used without access to storage</string>
   <string name="note_save_unsuccessful">Note save unsuccessful</string>
