@@ -2,7 +2,7 @@ package org.kiwix.kiwixmobile.language;
 
 import java.util.List;
 import org.kiwix.kiwixmobile.base.BaseContract;
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language;
+import org.kiwix.kiwixmobile.zim_manager.Language;
 
 interface LanguageContract {
   interface View extends BaseContract.View<Presenter> {

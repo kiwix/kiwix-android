@@ -4,7 +4,7 @@ import io.objectbox.annotation.Convert
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
 import io.objectbox.converter.PropertyConverter
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language
+import org.kiwix.kiwixmobile.zim_manager.Language
 import java.util.Locale
 
 @Entity
@@ -23,7 +23,8 @@ data class LanguageEntity(
       language.occurencesOfLanguage
   )
 
-  fun toLanguageModel() = Language(locale, active, occurencesOfLanguage)
+  fun toLanguageModel() =
+    Language(locale, active, occurencesOfLanguage)
 }
 
 class StringToLocaleConverter : PropertyConverter<Locale, String> {

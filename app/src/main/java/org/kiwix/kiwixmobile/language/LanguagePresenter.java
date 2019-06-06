@@ -11,7 +11,7 @@ import org.kiwix.kiwixmobile.data.DataSource;
 import org.kiwix.kiwixmobile.di.PerActivity;
 import org.kiwix.kiwixmobile.di.qualifiers.Computation;
 import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language;
+import org.kiwix.kiwixmobile.zim_manager.Language;
 
 @PerActivity
 class LanguagePresenter extends BasePresenter<LanguageContract.View>

@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
+package org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base
 
 
 import android.view.ViewGroup
@@ -21,20 +21,19 @@ import androidx.recyclerview.widget.RecyclerView
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-interface AbsDelegateAdapter<INSTANCE : SUPERTYPE, SUPERTYPE, VIEWHOLDER : RecyclerView.ViewHolder> :
+interface AbsDelegateAdapter<INSTANCE : SUPERTYPE,
+    SUPERTYPE : Any,
+    VIEWHOLDER : BaseViewHolder<INSTANCE>> :
     AdapterDelegate<SUPERTYPE> {
-
+  abstract val itemClass: Class<INSTANCE>
   override fun bind(
     viewHolder: RecyclerView.ViewHolder,
     itemToBind: SUPERTYPE
   ) {
-    onBindViewHolder(itemToBind as INSTANCE, viewHolder as VIEWHOLDER)
+    (viewHolder as VIEWHOLDER).bind(itemToBind as INSTANCE)
   }
 
-  override fun createViewHolder(parent: ViewGroup): VIEWHOLDER
+  override fun isFor(item: SUPERTYPE) = itemClass.isInstance(item)
 
-  fun onBindViewHolder(
-    item: INSTANCE,
-    holder: VIEWHOLDER
-  )
+  override fun createViewHolder(parent: ViewGroup): VIEWHOLDER
 }

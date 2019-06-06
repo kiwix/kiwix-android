@@ -31,6 +31,7 @@ import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.data.DataSource
 import org.kiwix.kiwixmobile.data.remote.KiwixService
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewDownloadDao
@@ -53,7 +54,7 @@ import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrit
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.NotEnoughSpaceFor4GbFile
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.DividerItem
@@ -75,12 +76,13 @@ class ZimManageViewModel @Inject constructor(
   private val bookUtils: BookUtils,
   private val fat32Checker: Fat32Checker,
   private val uriToFileConverter: UriToFileConverter,
-  private val defaultLanguageProvider: DefaultLanguageProvider
+  private val defaultLanguageProvider: DefaultLanguageProvider,
+  private val dataSource: DataSource
 ) : ViewModel() {
 
   val libraryItems: MutableLiveData<List<LibraryListItem>> = MutableLiveData()
   val downloadItems: MutableLiveData<List<DownloadItem>> = MutableLiveData()
-  val bookItems: MutableLiveData<List<BookOnDisk>> = MutableLiveData()
+  val bookItems: MutableLiveData<List<BooksOnDiskListItem>> = MutableLiveData()
   val deviceListIsRefreshing = MutableLiveData<Boolean>()
   val libraryListIsRefreshing = MutableLiveData<Boolean>()
   val networkStates = MutableLiveData<NetworkState>()
@@ -119,7 +121,7 @@ class ZimManageViewModel @Inject constructor(
         updateDownloadItems(downloadStatuses),
         removeCompletedDownloadsFromDb(downloadStatuses),
         removeNonExistingDownloadsFromDb(downloadStatuses, downloads),
-        updateBookItems(booksFromDao),
+        updateBookItems(),
         checkFileSystemForBooksOnRequest(booksFromDao),
         updateLibraryItems(booksFromDao, downloads, networkLibrary, languages),
         updateLanguagesInDao(networkLibrary, languages),
@@ -199,7 +201,7 @@ class ZimManageViewModel @Inject constructor(
     requestLanguagesDialog
         .withLatestFrom(
             languages,
-            BiFunction<Unit, List<Language>, List<Language>> { _, languages -> languages })
+            BiFunction<Unit, List<Language>, List<Language>> { _, langs -> langs })
         .subscribe(
             languageItems::postValue,
             Throwable::printStackTrace
@@ -406,10 +408,8 @@ class ZimManageViewModel @Inject constructor(
     idsInDao: List<String>
   ) = booksFromFileSystem.filterNot { idsInDao.contains(it.book.id) }
 
-  private fun updateBookItems(
-    booksFromDao: Flowable<List<BookOnDisk>>
-  ) =
-    booksFromDao
+  private fun updateBookItems() =
+    dataSource.booksOnDiskAsListItems()
         .subscribe(
             bookItems::postValue,
             Throwable::printStackTrace

@@ -26,6 +26,7 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.Bo
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.DividerItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryViewHolder.LibraryBookViewHolder
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryViewHolder.LibraryDividerViewHolder
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base.AbsDelegateAdapter
 
 sealed class LibraryDelegate<I : LibraryListItem, VH : LibraryViewHolder<I>> :
     AbsDelegateAdapter<I, LibraryListItem, VH> {
@@ -34,6 +35,7 @@ sealed class LibraryDelegate<I : LibraryListItem, VH : LibraryViewHolder<I>> :
     private val bookUtils: BookUtils,
     private val clickAction: (BookItem) -> Unit
   ) : LibraryDelegate<BookItem, LibraryBookViewHolder>() {
+    override val itemClass = BookItem::class.java
 
     override fun createViewHolder(parent: ViewGroup) =
       LibraryBookViewHolder(
@@ -42,27 +44,13 @@ sealed class LibraryDelegate<I : LibraryListItem, VH : LibraryViewHolder<I>> :
           clickAction
       )
 
-    override fun onBindViewHolder(
-      item: BookItem,
-      holder: LibraryBookViewHolder
-    ) {
-      holder.bind(item)
-    }
-
-    override fun isFor(item: LibraryListItem) = item is BookItem
   }
 
   object DividerDelegate : LibraryDelegate<DividerItem, LibraryDividerViewHolder>() {
+
+    override val itemClass = DividerItem::class.java
+
     override fun createViewHolder(parent: ViewGroup) =
       LibraryDividerViewHolder(parent.inflate(layout.library_divider, false))
-
-    override fun onBindViewHolder(
-      item: DividerItem,
-      holder: LibraryDividerViewHolder
-    ) {
-      holder.bind(item)
-    }
-
-    override fun isFor(item: LibraryListItem) = item is DividerItem
   }
 }

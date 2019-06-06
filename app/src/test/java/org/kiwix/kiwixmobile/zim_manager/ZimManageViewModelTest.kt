@@ -38,9 +38,16 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.kiwix.kiwixmobile.InstantExecutorExtension
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.book
+import org.kiwix.kiwixmobile.bookOnDisk
+import org.kiwix.kiwixmobile.bookOnDiskItem
+import org.kiwix.kiwixmobile.data.DataSource
+import org.kiwix.kiwixmobile.data.remote.KiwixService
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewDownloadDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.downloadModel
+import org.kiwix.kiwixmobile.downloadStatus
 import org.kiwix.kiwixmobile.downloader.Downloader
 import org.kiwix.kiwixmobile.downloader.model.BookOnDisk
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
@@ -50,7 +57,6 @@ import org.kiwix.kiwixmobile.downloader.model.DownloadStatus
 import org.kiwix.kiwixmobile.downloader.model.UriToFileConverter
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
-import org.kiwix.kiwixmobile.network.KiwixService
 import org.kiwix.kiwixmobile.utils.BookUtils
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CanWrite4GbFile
@@ -58,10 +64,11 @@ import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrit
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.NOT_CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
 import java.io.File
 import java.util.LinkedList
+import java.util.Locale
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import java.util.concurrent.TimeUnit.SECONDS
 
@@ -79,6 +86,8 @@ class ZimManageViewModelTest {
   private val bookUtils: BookUtils = mockk()
   private val fat32Checker: Fat32Checker = mockk()
   private val uriToFileConverter: UriToFileConverter = mockk()
+  private val defaultLanguageProvider: DefaultLanguageProvider = mockk()
+  private val dataSource: DataSource = mockk()
   lateinit var viewModel: ZimManageViewModel
 
   private val downloads: PublishProcessor<List<DownloadModel>> = PublishProcessor.create()
@@ -87,6 +96,8 @@ class ZimManageViewModelTest {
   private val languages: PublishProcessor<List<Language>> = PublishProcessor.create()
   private val fileSystemStates: PublishProcessor<FileSystemState> = PublishProcessor.create()
   private val networkStates: PublishProcessor<NetworkState> = PublishProcessor.create()
+  private val booksOnDiskListItems: PublishProcessor<List<BooksOnDiskListItem>> =
+    PublishProcessor.create()
 
   private val testScheduler = TestScheduler()
 
@@ -107,14 +118,14 @@ class ZimManageViewModelTest {
     RxAndroidPlugins.reset();
   }
 
-  private val defaultLanguageProvider: DefaultLanguageProvider = mockk()
+
 
   @BeforeEach
   fun init() {
     clearMocks(
         newDownloadDao, newBookDao, newLanguagesDao, downloader,
         storageObserver, kiwixService, application, connectivityBroadcastReceiver, bookUtils,
-        fat32Checker, uriToFileConverter, defaultLanguageProvider
+        fat32Checker, uriToFileConverter, defaultLanguageProvider, dataSource
     )
     every { connectivityBroadcastReceiver.action } returns "test"
     every { newDownloadDao.downloads() } returns downloads
@@ -124,10 +135,11 @@ class ZimManageViewModelTest {
     every { fat32Checker.fileSystemStates } returns fileSystemStates
     every { connectivityBroadcastReceiver.networkStates } returns networkStates
     every { application.registerReceiver(any(), any()) } returns mockk()
+    every { dataSource.booksOnDiskAsListItems() } returns booksOnDiskListItems
     viewModel = ZimManageViewModel(
         newDownloadDao, newBookDao, newLanguagesDao, downloader,
         storageObserver, kiwixService, application, connectivityBroadcastReceiver, bookUtils,
-        fat32Checker, uriToFileConverter, defaultLanguageProvider
+        fat32Checker, uriToFileConverter, defaultLanguageProvider, dataSource
     )
     testScheduler.triggerActions()
   }
@@ -155,20 +167,19 @@ class ZimManageViewModelTest {
   inner class Downloads {
     @Test
     fun `on emission from database query and render downloads`() {
-      val expectedStatus = DownloadStatus()
+      val expectedStatus = downloadStatus()
       expectStatusWith(listOf(expectedStatus))
       viewModel.downloadItems
           .test()
           .assertValue(listOf(DownloadItem(expectedStatus)))
-          .dispose()
     }
 
     @Test
     fun `on emission of successful status create a book and delete the download`() {
       every { uriToFileConverter.convert(any()) } returns File("test")
-      val expectedStatus = DownloadStatus(
+      val expectedStatus = downloadStatus(
           downloadId = 10L,
-          state = DownloadState.Successful
+          downloadState = DownloadState.Successful
       )
       expectStatusWith(listOf(expectedStatus))
       val element = expectedStatus.toBookOnDisk(uriToFileConverter)
@@ -181,8 +192,8 @@ class ZimManageViewModelTest {
     @Test
     fun `if statuses don't have a matching Id for download in db over 3 secs then delete`() {
       expectStatusWith(
-          listOf(DownloadStatus(downloadId = 1)),
-          listOf(DownloadModel(downloadId = 1), DownloadModel(downloadId = 3))
+          listOf(downloadStatus(downloadId = 1)),
+          listOf(downloadModel(downloadId = 1), downloadModel(downloadId = 3))
       )
       testScheduler.advanceTimeBy(3, SECONDS)
       testScheduler.triggerActions()
@@ -194,8 +205,8 @@ class ZimManageViewModelTest {
     @Test
     fun `if statuses do have a matching Id for download in db over 3 secs then don't delete`() {
       expectStatusWith(
-          listOf(DownloadStatus(downloadId = 1)),
-          listOf(DownloadModel(downloadId = 1))
+          listOf(downloadStatus(downloadId = 1)),
+          listOf(downloadModel(downloadId = 1))
       )
       testScheduler.advanceTimeBy(3, SECONDS)
       testScheduler.triggerActions()
@@ -207,9 +218,10 @@ class ZimManageViewModelTest {
     private fun expectStatusWith(
       expectedStatuses: List<DownloadStatus>,
       expectedDownloads: List<DownloadModel> = listOf(
-          DownloadModel()
+          downloadModel()
       )
     ) {
+      every { application.getString(any()) } returns ""
       val downloadList = expectedDownloads
       every { downloader.queryStatus(downloadList) } returns expectedStatuses
       downloads.offer(downloadList)
@@ -222,29 +234,19 @@ class ZimManageViewModelTest {
   @Nested
   inner class Books {
     @Test
-    fun `emissions from DB sorted by title and observed`() {
-      books.onNext(
-          listOf(
-              BookOnDisk().apply { book.title = "z" },
-              BookOnDisk().apply { book.title = "a" }
-          )
-      )
+    fun `emissions from dat source are observed`() {
+      val expectedList = listOf(bookOnDiskItem())
+      booksOnDiskListItems.onNext(expectedList)
       testScheduler.triggerActions()
       viewModel.bookItems.test()
-          .assertValue(
-              listOf(
-                  BookOnDisk().apply { book.title = "a" },
-                  BookOnDisk().apply { book.title = "z" }
-              )
-          )
-          .dispose()
+          .assertValue(expectedList)
     }
 
     @Test
-//    @Disabled("WithLatestFrom is not calling BiFunction removeBooksAlreadyInDao - revisit")
     fun `books found on filesystem are filtered by books already in db`() {
-      val expectedBook = BookOnDisk().apply { book.id = "1" }
-      val bookToRemove = BookOnDisk().apply { book.id = "2" }
+      every { application.getString(any()) } returns ""
+      val expectedBook = bookOnDisk(book("1"), 1L)
+      val bookToRemove = bookOnDisk(book("2"), 1L)
       testScheduler.triggerActions()
       viewModel.requestFileSystemCheck.onNext(Unit)
       testScheduler.triggerActions()
@@ -380,6 +382,7 @@ class ZimManageViewModelTest {
       dbBooks: List<Language>,
       defaultLanguage: Language
     ) {
+      every { application.getString(any()) } returns ""
       every { kiwixService.library } returns Single.just(
           LibraryNetworkEntity().apply {
             book = LinkedList(networkBooks)
@@ -398,12 +401,13 @@ class ZimManageViewModelTest {
     networkStates.offer(NOT_CONNECTED)
     viewModel.networkStates.test()
         .assertValue(NOT_CONNECTED)
-        .dispose()
   }
 
   @Test
   fun `language items for dialog observed`() {
-    val expectedValue = listOf(Language(true, 1, "e", "e", "e", "e"))
+    val expectedValue = listOf(
+        Language(true, 1, "e", "e", "e", "e")
+    )
     testScheduler.triggerActions()
     languages.onNext(expectedValue)
     testScheduler.triggerActions()
@@ -411,16 +415,17 @@ class ZimManageViewModelTest {
     testScheduler.triggerActions()
     viewModel.languageItems.test()
         .assertValue(expectedValue)
-        .dispose()
   }
 
   @Test
   fun `library update removes from sources`() {
+    every { downloader.queryStatus(any()) } returns emptyList()
     every { application.getString(R.string.your_languages) } returns "1"
     every { application.getString(R.string.other_languages) } returns "2"
     val bookAlreadyOnDisk = Book().apply {
       id = "0"
       url = ""
+      language = Locale.ENGLISH.language
     }
     val bookDownloading = Book().apply {
       id = "1"
@@ -454,8 +459,8 @@ class ZimManageViewModelTest {
         }
     )
     networkStates.onNext(CONNECTED)
-    downloads.onNext(listOf(DownloadModel(book = bookDownloading)))
-    books.onNext(listOf(BookOnDisk(book = bookAlreadyOnDisk)))
+    downloads.onNext(listOf(downloadModel(book = bookDownloading)))
+    books.onNext(listOf(bookOnDisk( book = bookAlreadyOnDisk)))
     languages.onNext(
         listOf(
             Language(true, 1, "", "", "activeLanguage", ""),
@@ -474,7 +479,6 @@ class ZimManageViewModelTest {
                 LibraryListItem.BookItem(bookWithInactiveLanguage)
             )
         )
-        .dispose()
   }
 
   @Test
@@ -492,12 +496,15 @@ class ZimManageViewModelTest {
     networkStates.onNext(CONNECTED)
     downloads.onNext(listOf())
     books.onNext(listOf())
-    languages.onNext(listOf(Language(true, 1, "", "", "activeLanguage", "")))
+    languages.onNext(
+        listOf(
+            Language(true, 1, "", "", "activeLanguage", "")
+        )
+    )
     fileSystemStates.onNext(CannotWrite4GbFile)
     testScheduler.advanceTimeBy(500, MILLISECONDS)
     testScheduler.triggerActions()
     viewModel.libraryItems.test()
         .assertValue(listOf())
-        .dispose()
   }
 }

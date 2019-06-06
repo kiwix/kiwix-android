@@ -21,7 +21,7 @@ import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 
 data class DownloadModel(
   val databaseId: Long? = null,
-  val downloadId: Long = 0,
-  val book: Book = Book().apply { id = "" }
+  val downloadId: Long ,
+  val book: Book
 )
 

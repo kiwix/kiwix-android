@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.language_selection.language_check_view
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language
+import org.kiwix.kiwixmobile.zim_manager.Language
 
 /**
  * Created by judebrauer on 12/6/17

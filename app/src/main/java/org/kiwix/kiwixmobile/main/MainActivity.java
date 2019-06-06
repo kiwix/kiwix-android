@@ -86,6 +86,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
+import kotlin.Unit;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.R;
@@ -107,6 +108,9 @@ import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static android.os.Build.VERSION_CODES;
@@ -143,7 +147,7 @@ import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 import static org.kiwix.kiwixmobile.utils.UpdateUtils.reformatProviderUrl;
 
 public class MainActivity extends BaseActivity implements WebViewCallback,
-    MainContract.View, BooksAdapter.OnItemClickListener {
+    MainContract.View{
 
   private static final int REQUEST_READ_STORAGE_PERMISSION = 2;
   private static final int REQUEST_HISTORY_ITEM_CHOSEN = 99;
@@ -156,7 +160,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private static Uri KIWIX_LOCAL_MARKET_URI;
   private static Uri KIWIX_BROWSER_MARKET_URI;
   private final ArrayList<String> bookmarks = new ArrayList<>();
-  private final List<LibraryNetworkEntity.Book> books = new ArrayList<>();
   private final List<KiwixWebView> webViewList = new ArrayList<>();
   @BindView(R.id.activity_main_root)
   ConstraintLayout root;
@@ -231,7 +234,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private RateAppCounter visitCounterPref;
   private int tempVisitCount;
   private boolean isFirstRun;
-  private BooksAdapter booksAdapter;
+  private BooksOnDiskAdapter booksAdapter;
   private AppCompatButton downloadBookButton;
   private ActionBar actionBar;
   private TextView tabSwitcherIcon;
@@ -270,9 +273,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         @Override public void onBookFound(BookOnDisk bookOnDisk) {
           runOnUiThread(() -> {
             final LibraryNetworkEntity.Book book = bookOnDisk.getBook();
-            if (!books.contains(book)) {
               newBooks.add(book);
-            }
           });
         }
 
@@ -363,7 +364,15 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     setupIntent(getIntent());
 
     wasHideToolbar = isHideToolbar;
-    booksAdapter = new BooksAdapter(books, this);
+    booksAdapter = new BooksOnDiskAdapter(
+       new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
+           bookOnDiskItem -> {
+             open(bookOnDiskItem);
+             return Unit.INSTANCE;
+           },
+           null),
+        BookOnDiskDelegate.LanguageDelegate.INSTANCE
+    );
 
     searchFiles();
     tabRecyclerView.setAdapter(tabsAdapter);
@@ -1945,20 +1954,17 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     downloadBookButton.setOnClickListener(v -> manageZimFiles(1));
   }
 
-  @Override
-  public void openFile(String url) {
-    File file = new File(url);
-    Intent zimFile = new Intent(MainActivity.this, MainActivity.class);
+  public void open(BooksOnDiskListItem.BookOnDiskItem bookOnDiskItem) {
+    File file = bookOnDiskItem.getBookOnDisk().getFile();
+    Intent zimFile = new Intent(this, MainActivity.class);
     zimFile.setData(Uri.fromFile(file));
     startActivity(zimFile);
     finish();
   }
 
   @Override
-  public void addBooks(List<LibraryNetworkEntity.Book> books) {
-    this.books.clear();
-    this.books.addAll(books);
-    booksAdapter.notifyDataSetChanged();
+  public void addBooks(List<BooksOnDiskListItem> books) {
+    booksAdapter.setItemList(books);
   }
 
   private void searchFiles() {

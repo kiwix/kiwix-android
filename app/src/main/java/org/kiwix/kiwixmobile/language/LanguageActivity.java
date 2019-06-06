@@ -15,7 +15,7 @@ import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language;
+import org.kiwix.kiwixmobile.zim_manager.Language;
 
 public class LanguageActivity extends BaseActivity implements LanguageContract.View {
 

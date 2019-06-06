@@ -19,42 +19,13 @@
 
 package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
 
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base.AdapterDelegate
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base.BaseDelegateAdapter
 
 class LibraryAdapter(
-  private val delegateManager: AdapterDelegateManager<LibraryListItem> = AdapterDelegateManager(),
   vararg delegates: AdapterDelegate<LibraryListItem>
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-  init {
-    delegates.forEach(delegateManager::addDelegate)
-    setHasStableIds(true)
-  }
-
-  var itemList: List<LibraryListItem> = mutableListOf()
-    set(value) {
-      field = value
-      notifyDataSetChanged()
-    }
-
-  override fun onCreateViewHolder(
-    parent: ViewGroup,
-    viewType: Int
-  ) = delegateManager.createViewHolder(parent, viewType)
-
-  override fun getItemCount() = itemList.size
-
-  override fun onBindViewHolder(
-    holder: RecyclerView.ViewHolder,
-    position: Int
-  ) {
-    delegateManager.onBindViewHolder(itemList[position], holder)
-  }
-
-  override fun getItemId(position: Int) = itemList[position].id
-
-  override fun getItemViewType(position: Int) =
-    delegateManager.getViewTypeFor(itemList[position])
-
+) : BaseDelegateAdapter<LibraryListItem>(
+    *delegates
+) {
+  override fun getIdFor(item: LibraryListItem) = item.id
 }

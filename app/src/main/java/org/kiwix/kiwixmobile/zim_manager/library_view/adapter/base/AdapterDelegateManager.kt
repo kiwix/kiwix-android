@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
+package org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base
 
 
 import android.view.ViewGroup

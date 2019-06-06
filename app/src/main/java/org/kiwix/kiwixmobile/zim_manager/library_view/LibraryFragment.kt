@@ -77,7 +77,7 @@ class LibraryFragment : BaseFragment() {
   }
   private val libraryAdapter: LibraryAdapter by lazy {
     LibraryAdapter(
-        delegates = *arrayOf(BookDelegate(bookUtils, this::onBookItemClick), DividerDelegate)
+        BookDelegate(bookUtils, this::onBookItemClick), DividerDelegate
     )
   }
 

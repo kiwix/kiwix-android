@@ -43,7 +43,6 @@ import org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX
 import org.kiwix.kiwixmobile.utils.LanguageUtils
 import org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle
 import org.kiwix.kiwixmobile.views.LanguageSelectDialog
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language
 import java.io.File
 import javax.inject.Inject
 

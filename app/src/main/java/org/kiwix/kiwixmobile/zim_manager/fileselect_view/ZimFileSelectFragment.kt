@@ -52,6 +52,10 @@ import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.utils.files.FileUtils
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.BookDelegate
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.LanguageDelegate
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDiskItem
 import javax.inject.Inject
 
 class ZimFileSelectFragment : BaseFragment() {
@@ -69,7 +73,8 @@ class ZimFileSelectFragment : BaseFragment() {
 
   private val booksOnDiskAdapter: BooksOnDiskAdapter by lazy {
     BooksOnDiskAdapter(
-        bookUtils, this::open, this::tryToDelete
+        BookDelegate(sharedPreferenceUtil, this::openOnClick, this::deleteOnLongClick),
+        LanguageDelegate
     )
   }
 
@@ -111,7 +116,7 @@ class ZimFileSelectFragment : BaseFragment() {
     checkPermissions()
   }
 
-  private fun checkEmpty(books: List<BookOnDisk>) {
+  private fun checkEmpty(books: List<Any>) {
     file_management_no_files.visibility =
       if (books.isEmpty()) View.VISIBLE
       else View.GONE
@@ -137,18 +142,19 @@ class ZimFileSelectFragment : BaseFragment() {
     zimManageViewModel.requestFileSystemCheck.onNext(Unit)
   }
 
-  private fun open(it: BookOnDisk) {
+  private fun openOnClick(it: BookOnDiskItem) {
+    val file = it.bookOnDisk.file
     ZimContentProvider.canIterate = false
-    if (!it.file.canRead()) {
+    if (!file.canRead()) {
       context.toast(string.error_filenotfound)
     } else {
-      (activity as ZimManageActivity).finishResult(it.file.path)
+      (activity as ZimManageActivity).finishResult(file.path)
     }
   }
 
-  private fun tryToDelete(it: BookOnDisk) {
+  private fun deleteOnLongClick(it: BookOnDiskItem) {
     dialogShower.show(DeleteZim, {
-      if (deleteSpecificZimFile(it)) {
+      if (deleteSpecificZimFile(it.bookOnDisk)) {
         context.toast(string.delete_specific_zim_toast)
       } else {
         context.toast(string.delete_zim_failed)

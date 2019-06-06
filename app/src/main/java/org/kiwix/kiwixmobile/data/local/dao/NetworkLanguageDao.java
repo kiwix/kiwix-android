@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
 import org.kiwix.kiwixmobile.data.local.entity.NetworkLanguageDatabaseEntity;
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language;
+import org.kiwix.kiwixmobile.zim_manager.Language;
 
 @Deprecated
 public class NetworkLanguageDao {

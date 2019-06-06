@@ -5,6 +5,7 @@ import org.kiwix.kiwixmobile.base.BaseContract;
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
 /**
  * The contract between {@link MainActivity} and {@link MainPresenter}.
@@ -13,7 +14,7 @@ import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 class MainContract {
 
   interface View extends BaseContract.View<Presenter> {
-    void addBooks(List<LibraryNetworkEntity.Book> books);
+    void addBooks(List<BooksOnDiskListItem> books);
 
     void refreshBookmarksUrl(List<String> urls);
   }
