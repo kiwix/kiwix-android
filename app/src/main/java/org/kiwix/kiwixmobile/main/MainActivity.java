@@ -81,8 +81,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
@@ -94,10 +96,9 @@ import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
-import org.kiwix.kiwixmobile.data.local.entity.History;
-import org.kiwix.kiwixmobile.downloader.model.BookOnDisk;
 import org.kiwix.kiwixmobile.help.HelpActivity;
 import org.kiwix.kiwixmobile.history.HistoryActivity;
+import org.kiwix.kiwixmobile.history.HistoryListItem;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
@@ -270,7 +271,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       new FileSearch(this, Collections.emptyList(), new FileSearch.ResultListener() {
         final List<LibraryNetworkEntity.Book> newBooks = new ArrayList<>();
 
-        @Override public void onBookFound(BookOnDisk bookOnDisk) {
+        @Override public void onBookFound(BooksOnDiskListItem.BookOnDisk bookOnDisk) {
           runOnUiThread(() -> {
             final LibraryNetworkEntity.Book book = bookOnDisk.getBook();
               newBooks.add(book);
@@ -1849,14 +1850,20 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     updateBottomToolbarArrowsAlpha();
     String url = getCurrentWebView().getUrl();
     if (url != null && !url.equals(HOME_URL)) {
-      History history = new History();
-      history.setZimId(ZimContentProvider.getId())
-          .setZimName(ZimContentProvider.getName())
-          .setZimFilePath(ZimContentProvider.getZimFile())
-          .setFavicon(ZimContentProvider.getFavicon())
-          .setHistoryTitle(getCurrentWebView().getTitle())
-          .setHistoryUrl(getCurrentWebView().getUrl())
-          .setTimeStamp(System.currentTimeMillis());
+      final long timeStamp = System.currentTimeMillis();
+      SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy", LanguageUtils.getCurrentLocale(this));
+      HistoryListItem.HistoryItem history = new HistoryListItem.HistoryItem(
+          0L,
+          ZimContentProvider.getId(),
+          ZimContentProvider.getName(),
+          ZimContentProvider.getZimFile(),
+          ZimContentProvider.getFavicon(),
+          getCurrentWebView().getTitle(),
+          getCurrentWebView().getUrl(),
+          sdf.format(new Date(timeStamp)),
+          timeStamp,
+          0L
+      );
       presenter.saveHistory(history);
     }
     updateBottomToolbarVisibility();
@@ -1954,8 +1961,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     downloadBookButton.setOnClickListener(v -> manageZimFiles(1));
   }
 
-  public void open(BooksOnDiskListItem.BookOnDiskItem bookOnDiskItem) {
-    File file = bookOnDiskItem.getBookOnDisk().getFile();
+  public void open(BooksOnDiskListItem.BookOnDisk bookOnDisk) {
+    File file = bookOnDisk.getFile();
     Intent zimFile = new Intent(this, MainActivity.class);
     zimFile.setData(Uri.fromFile(file));
     startActivity(zimFile);

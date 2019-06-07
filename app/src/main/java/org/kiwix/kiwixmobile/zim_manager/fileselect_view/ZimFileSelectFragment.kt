@@ -41,7 +41,6 @@ import org.kiwix.kiwixmobile.base.BaseFragment
 import org.kiwix.kiwixmobile.data.ZimContentProvider
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
 import org.kiwix.kiwixmobile.di.components.ActivityComponent
-import org.kiwix.kiwixmobile.downloader.model.BookOnDisk
 import org.kiwix.kiwixmobile.extensions.toast
 import org.kiwix.kiwixmobile.utils.BookUtils
 import org.kiwix.kiwixmobile.utils.Constants.REQUEST_STORAGE_PERMISSION
@@ -55,7 +54,7 @@ import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.BookDelegate
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.LanguageDelegate
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDiskItem
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
 
 class ZimFileSelectFragment : BaseFragment() {
@@ -142,8 +141,8 @@ class ZimFileSelectFragment : BaseFragment() {
     zimManageViewModel.requestFileSystemCheck.onNext(Unit)
   }
 
-  private fun openOnClick(it: BookOnDiskItem) {
-    val file = it.bookOnDisk.file
+  private fun openOnClick(it: BookOnDisk) {
+    val file = it.file
     ZimContentProvider.canIterate = false
     if (!file.canRead()) {
       context.toast(string.error_filenotfound)
@@ -152,9 +151,9 @@ class ZimFileSelectFragment : BaseFragment() {
     }
   }
 
-  private fun deleteOnLongClick(it: BookOnDiskItem) {
+  private fun deleteOnLongClick(it: BookOnDisk) {
     dialogShower.show(DeleteZim, {
-      if (deleteSpecificZimFile(it.bookOnDisk)) {
+      if (deleteSpecificZimFile(it)) {
         context.toast(string.delete_specific_zim_toast)
       } else {
         context.toast(string.delete_zim_failed)

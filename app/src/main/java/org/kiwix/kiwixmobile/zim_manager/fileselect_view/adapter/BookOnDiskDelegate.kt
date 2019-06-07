@@ -23,7 +23,7 @@ import org.kiwix.kiwixmobile.extensions.inflate
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskViewHolder.BookViewHolder
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskViewHolder.LanguageItemViewHolder
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDiskItem
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.LanguageItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base.AbsDelegateAdapter
 
@@ -32,11 +32,11 @@ sealed class BookOnDiskDelegate<I : BooksOnDiskListItem, VH : BookOnDiskViewHold
 
   class BookDelegate(
     val sharedPreferenceUtil: SharedPreferenceUtil,
-    val clickAction: (BookOnDiskItem) -> Unit,
-    val longClickAction: ((BookOnDiskItem) -> Unit)? = null
-  ) : BookOnDiskDelegate<BookOnDiskItem, BookViewHolder>() {
+    val clickAction: (BookOnDisk) -> Unit,
+    val longClickAction: ((BookOnDisk) -> Unit)? = null
+  ) : BookOnDiskDelegate<BookOnDisk, BookViewHolder>() {
 
-    override val itemClass = BookOnDiskItem::class.java
+    override val itemClass = BookOnDisk::class.java
 
     override fun createViewHolder(parent: ViewGroup) =
       BookViewHolder(

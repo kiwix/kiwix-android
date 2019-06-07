@@ -40,7 +40,6 @@ import org.kiwix.kiwixmobile.InstantExecutorExtension
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.book
 import org.kiwix.kiwixmobile.bookOnDisk
-import org.kiwix.kiwixmobile.bookOnDiskItem
 import org.kiwix.kiwixmobile.data.DataSource
 import org.kiwix.kiwixmobile.data.remote.KiwixService
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
@@ -49,7 +48,6 @@ import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.downloadModel
 import org.kiwix.kiwixmobile.downloadStatus
 import org.kiwix.kiwixmobile.downloader.Downloader
-import org.kiwix.kiwixmobile.downloader.model.BookOnDisk
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.downloader.model.DownloadState
@@ -65,6 +63,7 @@ import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.NOT_CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
 import java.io.File
 import java.util.LinkedList
@@ -115,10 +114,8 @@ class ZimManageViewModelTest {
   @AfterAll
   fun teardown() {
     RxJavaPlugins.reset()
-    RxAndroidPlugins.reset();
+    RxAndroidPlugins.reset()
   }
-
-
 
   @BeforeEach
   fun init() {
@@ -235,7 +232,7 @@ class ZimManageViewModelTest {
   inner class Books {
     @Test
     fun `emissions from dat source are observed`() {
-      val expectedList = listOf(bookOnDiskItem())
+      val expectedList = listOf(bookOnDisk())
       booksOnDiskListItems.onNext(expectedList)
       testScheduler.triggerActions()
       viewModel.bookItems.test()
@@ -460,7 +457,7 @@ class ZimManageViewModelTest {
     )
     networkStates.onNext(CONNECTED)
     downloads.onNext(listOf(downloadModel(book = bookDownloading)))
-    books.onNext(listOf(bookOnDisk( book = bookAlreadyOnDisk)))
+    books.onNext(listOf(bookOnDisk(book = bookAlreadyOnDisk)))
     languages.onNext(
         listOf(
             Language(true, 1, "", "", "activeLanguage", ""),

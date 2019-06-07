@@ -37,7 +37,6 @@ import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewDownloadDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.downloader.Downloader
-import org.kiwix.kiwixmobile.downloader.model.BookOnDisk
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.downloader.model.DownloadState.Successful
@@ -55,6 +54,7 @@ import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.NotEnoughS
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.DividerItem

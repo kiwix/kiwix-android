@@ -52,6 +52,7 @@ import android.net.Uri
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.extensions.get
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import java.io.File
 
 class DownloadStatus(

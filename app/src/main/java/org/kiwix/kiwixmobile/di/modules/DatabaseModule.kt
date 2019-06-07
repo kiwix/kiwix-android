@@ -24,6 +24,7 @@ import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewDownloadDao
+import org.kiwix.kiwixmobile.database.newdb.dao.HistoryDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.database.newdb.entities.MyObjectBox
 import javax.inject.Singleton
@@ -41,4 +42,7 @@ class DatabaseModule {
 
   @Provides @Singleton fun providesNewLanguagesDao(boxStore: BoxStore): NewLanguagesDao =
     NewLanguagesDao(boxStore.boxFor())
+
+  @Provides @Singleton fun providesNewHistoryDao(boxStore: BoxStore): HistoryDao =
+    HistoryDao(boxStore.boxFor())
 }

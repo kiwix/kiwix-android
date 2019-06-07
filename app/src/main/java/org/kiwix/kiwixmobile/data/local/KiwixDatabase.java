@@ -38,7 +38,6 @@ import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
 import org.kiwix.kiwixmobile.data.local.dao.NetworkLanguageDao;
 import org.kiwix.kiwixmobile.data.local.entity.BookDatabaseEntity;
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
-import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.data.local.entity.LibraryDatabaseEntity;
 import org.kiwix.kiwixmobile.data.local.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.data.local.entity.RecentSearch;
@@ -75,7 +74,6 @@ public class KiwixDatabase extends SquidDatabase {
     return new Table[] {
         RecentSearch.TABLE,
         Bookmark.TABLE,
-        History.TABLE
     };
   }
 
@@ -133,7 +131,6 @@ public class KiwixDatabase extends SquidDatabase {
         tryDropTable(BookDatabaseEntity.TABLE);
         tryCreateTable(BookDatabaseEntity.TABLE);
       case 14:
-        tryCreateTable(History.TABLE);
       case 15:
         tryAddColumn(Bookmark.ZIM_FILE_PATH);
         tryAddColumn(Bookmark.FAVICON);

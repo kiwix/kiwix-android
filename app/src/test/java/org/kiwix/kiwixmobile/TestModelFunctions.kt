@@ -17,16 +17,13 @@
  */
 package org.kiwix.kiwixmobile
 
-import org.kiwix.kiwixmobile.downloader.model.BookOnDisk
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.downloader.model.DownloadState.Pending
 import org.kiwix.kiwixmobile.downloader.model.DownloadStatus
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDiskItem
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import java.io.File
-
-fun bookOnDiskItem(bookOnDisk: BookOnDisk = bookOnDisk()) = BookOnDiskItem(bookOnDisk)
 
 fun bookOnDisk(
   book: Book = book(),

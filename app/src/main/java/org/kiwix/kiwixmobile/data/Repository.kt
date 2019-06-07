@@ -1,22 +1,23 @@
 package org.kiwix.kiwixmobile.data
 
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao
-import org.kiwix.kiwixmobile.data.local.dao.HistoryDao
 import org.kiwix.kiwixmobile.data.local.dao.RecentSearchDao
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark
-import org.kiwix.kiwixmobile.data.local.entity.History
+import org.kiwix.kiwixmobile.database.newdb.dao.HistoryDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
 import org.kiwix.kiwixmobile.di.qualifiers.IO
 import org.kiwix.kiwixmobile.di.qualifiers.MainThread
-import org.kiwix.kiwixmobile.downloader.model.BookOnDisk
+import org.kiwix.kiwixmobile.history.HistoryListItem
+import org.kiwix.kiwixmobile.history.HistoryListItem.DateItem
+import org.kiwix.kiwixmobile.history.HistoryListItem.HistoryItem
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.zim_manager.Language
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDiskItem
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.LanguageItem
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -41,27 +42,16 @@ class Repository @Inject internal constructor(
         .subscribeOn(io)
         .observeOn(mainThread)
 
-  override fun booksOnDiskAsListItems() = bookDao.books()
+  override fun booksOnDiskAsListItems(): Flowable<List<BooksOnDiskListItem>> = bookDao.books()
       .map { it.sortedBy { bookOnDisk -> bookOnDisk.book.language + bookOnDisk.book.title } }
-      .map(this::foldOverAddingLanguageItems)
+      .map {
+        foldOverAddingHeaders(
+            it,
+            { bookOnDisk -> LanguageItem(bookOnDisk.locale) },
+            { current, next -> current.locale.displayName != next.locale.displayName })
+      }
       .map { it.toList() }
 
-  private fun foldOverAddingLanguageItems(booksOnDisk: List<BookOnDisk>): MutableList<BooksOnDiskListItem> =
-    booksOnDisk.foldIndexed(mutableListOf(),
-        { index, acc, currentBook ->
-          if (index == 0) {
-            acc.add(LanguageItem(currentBook.locale))
-          }
-          acc.add(BookOnDiskItem(currentBook))
-          if (index < booksOnDisk.size - 1) {
-            val nextBook = booksOnDisk[index + 1]
-            if (currentBook.locale.displayName != nextBook.locale.displayName) {
-              acc.add(LanguageItem(nextBook.locale))
-            }
-          }
-          acc
-        }
-    )
 
   override fun saveBooks(books: List<LibraryNetworkEntity.Book>): Completable {
     return Completable.fromAction { }
@@ -79,40 +69,51 @@ class Repository @Inject internal constructor(
   override fun saveLanguages(languages: List<Language>) = Completable.fromAction { }
       .subscribeOn(io)
 
-  override fun getDateCategorizedHistory(showHistoryCurrentBook: Boolean): Single<List<History>> =
+  override fun getDateCategorizedHistory(showHistoryCurrentBook: Boolean) =
     Single.just(historyDao.getHistoryList(showHistoryCurrentBook))
-        .map { histories ->
-          var history: History? = null
-          if (histories.size >= 1) {
-            history = histories[0]
-            histories.add(0, null)
-          }
-          for (position in 2 until histories.size) {
-            if (history != null && histories[position] != null &&
-                history.date != histories[position].date
-            ) {
-              histories.add(position, null)
-            }
-            history = histories[position]
-          }
-          histories
+        .map {
+          foldOverAddingHeaders(
+              it,
+              { historyItem -> DateItem(historyItem.dateString) },
+              { current, next -> current.dateString != next.dateString })
         }
         .subscribeOn(io)
         .observeOn(mainThread)
 
-  override fun saveHistory(history: History) =
+  private fun <SUPERTYPE, ITEM : SUPERTYPE, HEADER : SUPERTYPE> foldOverAddingHeaders(
+    it: List<ITEM>,
+    headerConstructor: (ITEM) -> HEADER,
+    criteriaToAddHeader: (ITEM, ITEM) -> Boolean
+  ): MutableList<SUPERTYPE> = it.foldIndexed(mutableListOf(),
+      { index, acc, currentItem ->
+        if (index == 0) {
+          acc.add(headerConstructor.invoke(currentItem))
+        }
+        acc.add(currentItem)
+        if (index < it.size - 1) {
+          val nextItem = it[index + 1]
+          if (criteriaToAddHeader.invoke(currentItem, nextItem)) {
+            acc.add(headerConstructor.invoke(nextItem))
+          }
+        }
+        acc
+      }
+  )
+
+  override fun saveHistory(history: HistoryItem) =
     Completable.fromAction { historyDao.saveHistory(history) }
         .subscribeOn(io)
 
-  override fun deleteHistory(historyList: List<History>) =
-    Completable.fromAction { historyDao.deleteHistory(historyList) }
+  override fun deleteHistory(historyList: List<HistoryListItem>) =
+    Completable.fromAction {
+      historyDao.deleteHistory(historyList.filterIsInstance(HistoryItem::class.java))
+    }
         .subscribeOn(io)
 
   override fun clearHistory() = Completable.fromAction {
     historyDao.deleteHistory(historyDao.getHistoryList(false))
     recentSearchDao.deleteSearchHistory()
   }
-      .subscribeOn(io)
 
   override fun getBookmarks(fromCurrentBook: Boolean): Single<List<Bookmark>> =
     Single.just(bookmarksDao.getBookmarks(fromCurrentBook))

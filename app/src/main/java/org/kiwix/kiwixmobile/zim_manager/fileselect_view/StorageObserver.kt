@@ -5,11 +5,11 @@ import android.util.Log
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.database.newdb.dao.NewDownloadDao
-import org.kiwix.kiwixmobile.downloader.model.BookOnDisk
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.utils.files.FileSearch
 import org.kiwix.kiwixmobile.utils.files.FileSearch.ResultListener
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
 
 class StorageObserver @Inject constructor(

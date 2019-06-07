@@ -3,7 +3,7 @@ package org.kiwix.kiwixmobile.main;
 import java.util.List;
 import org.kiwix.kiwixmobile.base.BaseContract;
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
-import org.kiwix.kiwixmobile.data.local.entity.History;
+import org.kiwix.kiwixmobile.history.HistoryListItem;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
@@ -24,7 +24,7 @@ class MainContract {
 
     void saveBooks(List<LibraryNetworkEntity.Book> books);
 
-    void saveHistory(History history);
+    void saveHistory(HistoryListItem.HistoryItem history);
 
     void loadCurrentZimBookmarksUrl();
 

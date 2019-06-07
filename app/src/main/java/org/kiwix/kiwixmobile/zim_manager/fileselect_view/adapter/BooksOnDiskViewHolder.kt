@@ -17,7 +17,7 @@ import org.kiwix.kiwixmobile.main.KiwixWebView
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.zim_manager.KiloByte
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ArticleCount
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDiskItem
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.LanguageItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base.BaseViewHolder
 
@@ -27,12 +27,12 @@ sealed class BookOnDiskViewHolder<T : BooksOnDiskListItem>(containerView: View) 
   class BookViewHolder(
     containerView: View,
     private val sharedPreferenceUtil: SharedPreferenceUtil,
-    private val clickAction: (BookOnDiskItem) -> Unit,
-    private val longClickAction: ((BookOnDiskItem) -> Unit)?
-  ) : BookOnDiskViewHolder<BookOnDiskItem>(containerView) {
+    private val clickAction: (BookOnDisk) -> Unit,
+    private val longClickAction: ((BookOnDisk) -> Unit)?
+  ) : BookOnDiskViewHolder<BookOnDisk>(containerView) {
 
-    override fun bind(item: BookOnDiskItem) {
-      val book = item.bookOnDisk.book
+    override fun bind(item: BookOnDisk) {
+      val book = item.book
       item_book_title.text = book.getTitle()
       item_book_date.text = book.getDate()
       item_book_description.text = book.getDescription()
@@ -50,7 +50,7 @@ sealed class BookOnDiskViewHolder<T : BooksOnDiskListItem>(containerView: View) 
             .colorFilter = ColorMatrixColorFilter(KiwixWebView.NIGHT_MODE_COLORS)
       }
 
-      val path = item.bookOnDisk.file.path
+      val path = item.file.path
       if (path.contains("nopic")) {
         item_book_label_picture.visibility = View.GONE
         item_book_label_video.visibility = View.GONE

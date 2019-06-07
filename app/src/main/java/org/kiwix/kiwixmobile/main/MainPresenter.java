@@ -9,8 +9,8 @@ import javax.inject.Inject;
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.data.DataSource;
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
-import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.di.PerActivity;
+import org.kiwix.kiwixmobile.history.HistoryListItem;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
@@ -71,7 +71,7 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
   }
 
   @Override
-  public void saveHistory(History history) {
+  public void saveHistory(HistoryListItem.HistoryItem history) {
     dataSource.saveHistory(history)
         .subscribe(new CompletableObserver() {
           @Override

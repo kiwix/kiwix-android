@@ -5,7 +5,7 @@ import io.reactivex.Flowable;
 import io.reactivex.Single;
 import java.util.List;
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
-import org.kiwix.kiwixmobile.data.local.entity.History;
+import org.kiwix.kiwixmobile.history.HistoryListItem;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.zim_manager.Language;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
@@ -25,11 +25,11 @@ public interface DataSource {
 
   Completable saveLanguages(List<Language> languages);
 
-  Single<List<History>> getDateCategorizedHistory(boolean showHistoryCurrentBook);
+  Single<List<HistoryListItem>> getDateCategorizedHistory(boolean showHistoryCurrentBook);
 
-  Completable saveHistory(History history);
+  Completable saveHistory(HistoryListItem.HistoryItem history);
 
-  Completable deleteHistory(List<History> historyList);
+  Completable deleteHistory(List<HistoryListItem> historyList);
 
   Completable clearHistory();
 
