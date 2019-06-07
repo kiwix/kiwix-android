@@ -93,6 +93,7 @@ import org.json.JSONArray;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
+import org.kiwix.kiwixmobile.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
@@ -269,12 +270,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   };
   private FileSearch fileSearch =
       new FileSearch(this, Collections.emptyList(), new FileSearch.ResultListener() {
-        final List<LibraryNetworkEntity.Book> newBooks = new ArrayList<>();
+        final List<BooksOnDiskListItem.BookOnDisk> newBooks = new ArrayList<>();
 
         @Override public void onBookFound(BooksOnDiskListItem.BookOnDisk bookOnDisk) {
           runOnUiThread(() -> {
-            final LibraryNetworkEntity.Book book = bookOnDisk.getBook();
-              newBooks.add(book);
+              newBooks.add(bookOnDisk);
           });
         }
 
@@ -1193,13 +1193,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     //Check maybe need refresh
     String articleUrl = getCurrentWebView().getUrl();
     boolean isBookmark = false;
-    Bookmark bookmark = new Bookmark();
-    bookmark.setZimId(ZimContentProvider.getId())
-        .setZimName(ZimContentProvider.getName())
-        .setZimFilePath(ZimContentProvider.getZimFile())
-        .setBookmarkTitle(getCurrentWebView().getTitle())
-        .setBookmarkUrl(articleUrl)
-        .setFavicon(ZimContentProvider.getFavicon());
+    BookmarkItem bookmark = BookmarkItem.fromZimContentProvider(getCurrentWebView().getTitle(),articleUrl);
     if (articleUrl != null && !bookmarks.contains(articleUrl)) {
       if (ZimContentProvider.getId() != null) {
         presenter.saveBookmark(bookmark);

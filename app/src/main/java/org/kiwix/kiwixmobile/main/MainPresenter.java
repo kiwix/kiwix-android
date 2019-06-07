@@ -7,6 +7,7 @@ import io.reactivex.disposables.Disposable;
 import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.base.BasePresenter;
+import org.kiwix.kiwixmobile.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.data.DataSource;
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 import org.kiwix.kiwixmobile.di.PerActivity;
@@ -50,7 +51,7 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
   }
 
   @Override
-  public void saveBooks(List<LibraryNetworkEntity.Book> book) {
+  public void saveBooks(List<BooksOnDiskListItem.BookOnDisk> book) {
     dataSource.saveBooks(book)
         .subscribe(new CompletableObserver() {
           @Override
@@ -99,7 +100,7 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
   }
 
   @Override
-  public void saveBookmark(Bookmark bookmark) {
+  public void saveBookmark(BookmarkItem bookmark) {
     dataSource.saveBookmark(bookmark)
         .subscribe(new CompletableObserver() {
           @Override
@@ -120,7 +121,7 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
   }
 
   @Override
-  public void deleteBookmark(Bookmark bookmark) {
+  public void deleteBookmark(BookmarkItem bookmark) {
     dataSource.deleteBookmark(bookmark)
         .subscribe(new CompletableObserver() {
           @Override

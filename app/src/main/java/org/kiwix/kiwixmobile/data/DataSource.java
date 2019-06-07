@@ -4,6 +4,7 @@ import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 import java.util.List;
+import org.kiwix.kiwixmobile.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 import org.kiwix.kiwixmobile.history.HistoryListItem;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
@@ -17,11 +18,9 @@ import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskList
 public interface DataSource {
   Single<List<BooksOnDiskListItem>> getLanguageCategorizedBooks();
 
-  Completable saveBook(LibraryNetworkEntity.Book book);
+  Completable saveBook(BooksOnDiskListItem.BookOnDisk book);
 
-  Completable saveBooks(List<LibraryNetworkEntity.Book> book);
-
-  Completable deleteBook(LibraryNetworkEntity.Book book);
+  Completable saveBooks(List<BooksOnDiskListItem.BookOnDisk> book);
 
   Completable saveLanguages(List<Language> languages);
 
@@ -33,15 +32,15 @@ public interface DataSource {
 
   Completable clearHistory();
 
-  Single<List<Bookmark>> getBookmarks(boolean showFromCurrentBook);
+  Single<List<BookmarkItem>> getBookmarks(boolean showFromCurrentBook);
 
   Single<List<String>> getCurrentZimBookmarksUrl();
 
-  Completable saveBookmark(Bookmark bookmark);
+  Completable saveBookmark(BookmarkItem bookmark);
 
-  Completable deleteBookmarks(List<Bookmark> bookmarks);
+  Completable deleteBookmarks(List<BookmarkItem> bookmarks);
 
-  Completable deleteBookmark(Bookmark bookmark);
+  Completable deleteBookmark(BookmarkItem bookmark);
 
   Flowable<List<BooksOnDiskListItem>> booksOnDiskAsListItems();
 }

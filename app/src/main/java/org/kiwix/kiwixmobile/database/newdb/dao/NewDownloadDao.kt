@@ -1,11 +1,8 @@
 package org.kiwix.kiwixmobile.database.newdb.dao
 
-import android.util.Log
 import io.objectbox.Box
 import io.objectbox.kotlin.inValues
 import io.objectbox.kotlin.query
-import io.objectbox.rx.RxQuery
-import io.reactivex.BackpressureStrategy.LATEST
 import org.kiwix.kiwixmobile.database.newdb.entities.DownloadEntity
 import org.kiwix.kiwixmobile.database.newdb.entities.DownloadEntity_
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
