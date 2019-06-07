@@ -75,7 +75,7 @@ class FileUtilsTest {
     assertThat(files.size).isEqualTo(1)
         .withFailMessage("Only a single book is returned in case the file has extension $extension")
     if (fileExists) {
-      assertThat(testBook.file.toString()).isEqualTo(files[0].path)
+      assertThat(testBook.file).isEqualTo(files[0])
           .withFailMessage("The filename retained as such")
     } else {
       assertThat(testBook.file.toString() + ".part").isEqualTo(files[0].path)

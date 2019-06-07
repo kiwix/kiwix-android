@@ -20,9 +20,9 @@ package org.kiwix.kiwixmobile.downloader
 
 import io.mockk.every
 import io.mockk.mockkStatic
+import org.assertj.core.api.Java6Assertions.assertThat
 import org.junit.Assert.assertEquals
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.kiwix.kiwixmobile.utils.StorageUtils
 
 class ChunkUtilsTest {
@@ -30,8 +30,7 @@ class ChunkUtilsTest {
   private val URL =
     "http://mirror.netcologne.de/kiwix/zim/wikipedia/wikipedia_af_all_nopic_2016-05.zim"
 
-  @Before
-  fun executeBefore() {
+  init {
     mockkStatic("org.kiwix.kiwixmobile.utils.StorageUtils")
     every { StorageUtils.getFileNameFromUrl(URL) }.returns("TestFileName")
     every { StorageUtils.getFileNameFromUrl("TestURL") }.returns("TestFileName.xml")
@@ -59,7 +58,7 @@ class ChunkUtilsTest {
     )
     assertEquals(
         "verify that the file name is correctly assigned in case of a single file",
-        "TestFileName.part", listReturned[0].fileName
+        "TestFileName.part.part", listReturned[0].fileName
     )
     assertEquals(
         "verify that the same URL is passed on to the chunk", URL,
@@ -103,19 +102,14 @@ class ChunkUtilsTest {
     )
 
     // test assignment of file names
-    var test = true
     val ALPHABET = "abcdefghijklmnopqrstuvwxyz"
     for (i in listReturned.indices) {
-      if (listReturned[i]
-              .fileName
-              .substring(
-                  listReturned[i].fileName.length - 11
-              ) != ".zim" + ALPHABET[i / 26] + ALPHABET[i % 26] + ".part"
-      ) {
-        test = false
-      }
+      val extension = listReturned[i]
+          .fileName
+          .substringAfter('.')
+      val expectedExtension = "zim" + ALPHABET[i / 26] + ALPHABET[i % 26] + ".part.part"
+      assertThat(extension).isEqualTo(expectedExtension)
     }
-    assertEquals("verify that the file name endings are correctly assigned", true, test)
 
     // When the file size is less than CHUNK_SIZE
     size = ChunkUtils.CHUNK_SIZE - (1024 * 1024).toLong()
@@ -134,7 +128,7 @@ class ChunkUtilsTest {
     )
     assertEquals(
         "verify that the file name is correctly assigned in case of a single file",
-        "TestFileName.part", listReturned[0].fileName
+        "TestFileName.part.part", listReturned[0].fileName
     )
     assertEquals(
         "verify that the same URL is passed on to the chunk", URL,
@@ -146,18 +140,18 @@ class ChunkUtilsTest {
     listReturned = ChunkUtils.getChunks("TestURL", size, 0)
     assertEquals(
         "verify that previous extension in the filename (if any) is removed in case of files having 1 chunk",
-        "TestFileName.xml.part", listReturned[0].fileName
+        "TestFileName.xml.part.part", listReturned[0].fileName
     )
 
     size = ChunkUtils.CHUNK_SIZE * 2.toLong()
     listReturned = ChunkUtils.getChunks("TestURL", size, 0)
     assertEquals(
         "verify that previous extension in the filename (if any) is removed in case of files having more than 1 chunk",
-        "TestFileName.zimaa.part", listReturned[0].fileName
+        "TestFileName.zimaa.part.part", listReturned[0].fileName
     )
     assertEquals(
         "verify that previous extension in the filename (if any) is removed in case of files having more than 1 chunk",
-        "TestFileName.zimab.part", listReturned[1].fileName
+        "TestFileName.zimab.part.part", listReturned[1].fileName
     )
   }
 }
