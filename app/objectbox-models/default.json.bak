@@ -206,9 +206,65 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "6:2737311997994502758",
+      "lastPropertyId": "7:3805929017981932900",
+      "name": "BookmarkEntity",
+      "properties": [
+        {
+          "id": "1:6627309171741917147",
+          "name": "id"
+        },
+        {
+          "id": "2:6862771806221961183",
+          "name": "zimId"
+        },
+        {
+          "id": "3:4312769031500860715",
+          "name": "zimName"
+        },
+        {
+          "id": "4:8187716343071473669",
+          "name": "zimFilePath"
+        },
+        {
+          "id": "5:5652763871458286201",
+          "name": "bookmarkUrl"
+        },
+        {
+          "id": "6:4537799665712767375",
+          "name": "bookmarkTitle"
+        },
+        {
+          "id": "7:3805929017981932900",
+          "name": "favicon"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "7:7635075139296819361",
+      "lastPropertyId": "3:3320858395373055542",
+      "name": "RecentSearchEntity",
+      "properties": [
+        {
+          "id": "1:7759655437795315973",
+          "name": "id"
+        },
+        {
+          "id": "2:3924214186055484853",
+          "name": "searchTerm"
+        },
+        {
+          "id": "3:3320858395373055542",
+          "name": "zimID"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "5:3222423958972105425",
+  "lastEntityId": "7:7635075139296819361",
   "lastIndexId": "4:4868787482832538530",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

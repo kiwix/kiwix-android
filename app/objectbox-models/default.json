@@ -242,9 +242,29 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "7:7635075139296819361",
+      "lastPropertyId": "3:3320858395373055542",
+      "name": "RecentSearchEntity",
+      "properties": [
+        {
+          "id": "1:7759655437795315973",
+          "name": "id"
+        },
+        {
+          "id": "2:3924214186055484853",
+          "name": "searchTerm"
+        },
+        {
+          "id": "3:3320858395373055542",
+          "name": "zimId"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "6:2737311997994502758",
+  "lastEntityId": "7:7635075139296819361",
   "lastIndexId": "4:4868787482832538530",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

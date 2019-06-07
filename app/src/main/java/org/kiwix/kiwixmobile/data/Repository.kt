@@ -12,6 +12,7 @@ import org.kiwix.kiwixmobile.database.newdb.dao.HistoryDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.database.newdb.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.di.qualifiers.IO
 import org.kiwix.kiwixmobile.di.qualifiers.MainThread
 import org.kiwix.kiwixmobile.history.HistoryListItem
@@ -35,7 +36,7 @@ class Repository @Inject internal constructor(
   private val bookmarksDao: NewBookmarksDao,
   private val historyDao: HistoryDao,
   private val languageDao: NewLanguagesDao,
-  private val recentSearchDao: RecentSearchDao
+  private val recentSearchDao: NewRecentSearchDao
 ) : DataSource {
 
   override fun getLanguageCategorizedBooks() =

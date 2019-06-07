@@ -27,6 +27,7 @@ import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewDownloadDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.database.newdb.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.database.newdb.entities.MyObjectBox
 import javax.inject.Singleton
 
@@ -49,4 +50,7 @@ class DatabaseModule {
 
   @Provides @Singleton fun providesNewBookmarksDao(boxStore: BoxStore): NewBookmarksDao =
     NewBookmarksDao(boxStore.boxFor())
+
+  @Provides @Singleton fun providesNewRecentSearchDao(boxStore: BoxStore): NewRecentSearchDao =
+    NewRecentSearchDao(boxStore.boxFor())
 }

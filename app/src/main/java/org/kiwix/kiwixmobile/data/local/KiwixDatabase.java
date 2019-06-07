@@ -140,6 +140,7 @@ public class KiwixDatabase extends SquidDatabase {
         tryDropTable(LibraryDatabaseEntity.TABLE);
       case 16:
         new BookmarksDao(this).processBookmark(UpdateUtils::reformatProviderUrl);
+        //TODO MIGRATIONS BEFORE 3.0
     }
     return true;
   }
