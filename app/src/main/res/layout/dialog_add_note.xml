@@ -32,7 +32,7 @@
           android:layout_height="wrap_content"
           android:maxLines="1"
           android:background="@android:color/transparent"
-          android:hint="@string/wiki_book_title"
+          android:hint="@string/wiki_article_title"
           android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
           android:paddingTop="10dp"
           android:paddingLeft="20dp"
