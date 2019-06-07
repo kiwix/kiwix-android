@@ -90,16 +90,7 @@ public class AddNoteDialog extends DialogFragment {
       @Override
       public void onClick(View v) {
         closeKeyboard();
-        if(noteEdited) {
-          // Custom AlertDialog for taking user confirmation before closing note dialog in case of unsaved changes
-          DialogFragment newFragment = new ConfirmationAlertDialogFragment(getDialog());
-          newFragment.show(getActivity().getSupportFragmentManager(), "ConfirmationAlertDialog");
-
-        } else {
-          // Closing unedited note dialog straightaway
-          Dialog dialog = getDialog();
-          dialog.dismiss();
-        }
+        exitAddNoteDialog();
       }
     });
 
@@ -147,6 +138,31 @@ public class AddNoteDialog extends DialogFragment {
     });
 
     return view;
+  }
+
+  // Override onBackPressed() to respond to user pressing 'Back' button on navigation bar
+  @NonNull
+  @Override
+  public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+    return new Dialog(getActivity(), getTheme()) {
+      @Override
+      public void onBackPressed() {
+        exitAddNoteDialog();
+      }
+    };
+  }
+
+  private void exitAddNoteDialog() {
+    if(noteEdited) {
+      // Custom AlertDialog for taking user confirmation before closing note dialog in case of unsaved changes
+      DialogFragment newFragment = new ConfirmationAlertDialogFragment(getDialog());
+      newFragment.show(getActivity().getSupportFragmentManager(), "ConfirmationAlertDialog");
+
+    } else {
+      // Closing unedited note dialog straightaway
+      Dialog dialog = getDialog();
+      dialog.dismiss();
+    }
   }
 
   private void disableMenuItems() {
