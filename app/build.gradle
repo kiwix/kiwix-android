@@ -25,6 +25,8 @@ buildscript {
 plugins {
   id("com.android.application")
   id("checkstyle")
+  id("kotlin-android")
+  id("kotlin-android-extensions")
 }
 
 repositories {
@@ -147,6 +149,8 @@ dependencies {
       }
     }
   }
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+  compile "androidx.core:core-ktx:+"
 }
 
 // Set custom app import directory
