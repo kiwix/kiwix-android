@@ -36,6 +36,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
 import android.text.SpannableString;
@@ -851,6 +852,17 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         }
         break;
 
+      case R.id.menu_clear_notes:
+        if(requestExternalStorageWritePermissionForNotes()) {
+          // Check if notes available and clear all
+          if(clearAllNotes()) {
+            Toast.makeText(this, "Deleted entire folder", Toast.LENGTH_SHORT).show();
+          } else {
+            Toast.makeText(this, "Not entirely deleted", Toast.LENGTH_SHORT).show();
+          }
+        }
+        break;
+
       case R.id.menu_bookmarks_list:
         goToBookmarks();
         break;
@@ -908,6 +920,42 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
 
     return super.onOptionsItemSelected(item);
+  }
+
+  private boolean clearAllNotes() {
+    boolean result = true;
+
+    if(AddNoteDialog.isExternalStorageWritable()) {
+      if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        Log.d("MainActivity", "WRITE_EXTERNAL_STORAGE permission not granted");
+        Toast.makeText(this, getString(R.string.note_save_unsuccessful), Toast.LENGTH_LONG);
+        return false;
+      }
+
+      File notesParentFolder = new File(Environment.getExternalStorageDirectory() + "/Kiwix/Notes/");
+      File[] childrenOfParentFolder = notesParentFolder.listFiles();
+
+      for(File wikiFileDirectory : childrenOfParentFolder) {
+
+        if(wikiFileDirectory.isDirectory()) {
+          File[] notesInWikiDirectory = wikiFileDirectory.listFiles();
+
+          for(File noteFile : notesInWikiDirectory) {
+
+            if(noteFile.isFile()) {
+              result = result && noteFile.delete();
+            }
+
+          }
+        }
+
+        result = result && wikiFileDirectory.delete();
+      }
+
+      result = result && notesParentFolder.delete();
+    }
+
+    return result;
   }
 
   private void showAddNoteDialog() {

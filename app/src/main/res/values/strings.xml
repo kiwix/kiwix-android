@@ -259,4 +259,5 @@
   <string name="confirmation_alert_dialog_message">Discard unsaved changes?</string>
   <string name="confirmation_alert_dialog_positive_btn">Yes</string>
   <string name="confirmation_alert_dialog_neutral_btn">Cancel</string>
+  <string name="clear_all_notes">Clear All Notes</string>
 </resources>
