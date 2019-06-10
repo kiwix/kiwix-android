@@ -339,6 +339,9 @@ android {
 
   // Set each custom apps respective source directory
   sourceSets {
+    main {
+      java.srcDirs = ['src/main/java', 'build/generated/source/kapt/kiwixRelease']
+    }
     map.each { name, directory ->
       "$name" {
         setRoot directory
