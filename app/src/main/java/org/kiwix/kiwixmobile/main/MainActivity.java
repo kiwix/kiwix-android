@@ -25,6 +25,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -853,13 +854,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         break;
 
       case R.id.menu_clear_notes:
-        if(requestExternalStorageWritePermissionForNotes()) {
-          // Check if notes available and clear all
-          if(clearAllNotes()) {
-            Toast.makeText(this, "Deleted entire folder", Toast.LENGTH_SHORT).show();
-          } else {
-            Toast.makeText(this, "Not entirely deleted", Toast.LENGTH_SHORT).show();
-          }
+        if(requestExternalStorageWritePermissionForNotes()) { // Check permission since notes are stored in the public-external storage
+          showClearAllNotesDialog();
         }
         break;
 
@@ -922,44 +918,78 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     return super.onOptionsItemSelected(item);
   }
 
-  private boolean clearAllNotes() {
-    boolean result = true;
+  /** Dialog to take user confirmation before deleting all notes */
+  private void showClearAllNotesDialog() {
+
+    AlertDialog.Builder builder;
+    if (sharedPreferenceUtil != null && sharedPreferenceUtil.nightMode()) { // Night Mode support
+      builder = new AlertDialog.Builder(this, R.style.AppTheme_Dialog_Night);
+    } else {
+      builder = new AlertDialog.Builder(this);
+    }
+
+    builder.setMessage(this.getString(R.string.delete_notes_confirmation_msg))
+        .setNeutralButton(this.getString(R.string.dismiss), new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            // Do nothing
+          }
+        })
+        .setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            clearAllNotes();
+          }
+        })
+        .show();
+  }
+
+  /** Method to delete all user notes */
+  private void clearAllNotes() {
+
+    boolean result = true; // Result of all delete() calls is &&-ed to this variable
 
     if(AddNoteDialog.isExternalStorageWritable()) {
       if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
         Log.d("MainActivity", "WRITE_EXTERNAL_STORAGE permission not granted");
-        Toast.makeText(this, getString(R.string.note_save_unsuccessful), Toast.LENGTH_LONG);
-        return false;
+        Toast.makeText(this, this.getString(R.string.ext_storage_permission_not_granted), Toast.LENGTH_LONG);
+        return;
       }
 
-      File notesParentFolder = new File(Environment.getExternalStorageDirectory() + "/Kiwix/Notes/");
-      File[] childrenOfParentFolder = notesParentFolder.listFiles();
+      File notesDirectory = new File(Environment.getExternalStorageDirectory() + "/Kiwix/Notes/");
+      File[] filesInNotesDirectory = notesDirectory.listFiles();
 
-      for(File wikiFileDirectory : childrenOfParentFolder) {
+      if(filesInNotesDirectory == null) { // Notes folder doesn't exist
+        Toast.makeText(this, this.getString(R.string.notes_deletion_none_found), Toast.LENGTH_LONG).show();
+        return;
+      }
 
+      for(File wikiFileDirectory : filesInNotesDirectory) {
         if(wikiFileDirectory.isDirectory()) {
-          File[] notesInWikiDirectory = wikiFileDirectory.listFiles();
+          File[] filesInWikiDirectory = wikiFileDirectory.listFiles();
 
-          for(File noteFile : notesInWikiDirectory) {
-
+          for(File noteFile : filesInWikiDirectory) {
             if(noteFile.isFile()) {
               result = result && noteFile.delete();
             }
-
           }
         }
 
-        result = result && wikiFileDirectory.delete();
+        result = result && wikiFileDirectory.delete(); // Wiki specific notes directory deleted
       }
 
-      result = result && notesParentFolder.delete();
+      result = result && notesDirectory.delete(); // "{External Storage}/Kiwix/Notes" directory deleted
     }
 
-    return result;
+    if(result) {
+      Toast.makeText(this, this.getString(R.string.notes_deletion_successful), Toast.LENGTH_SHORT).show();
+    } else {
+      Toast.makeText(this, this.getString(R.string.notes_deletion_unsuccessful), Toast.LENGTH_SHORT).show();
+    }
   }
 
+  /** Creates the full screen AddNoteDialog, which is a DialogFragment */
   private void showAddNoteDialog() {
-    // Creates the full screen AddNoteDialog, which is a DialogFragment
     FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
     Fragment prev = getSupportFragmentManager().findFragmentByTag("AddNoteDialog");
     if(prev != null) {
