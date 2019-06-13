@@ -6,8 +6,8 @@ sudo: required
 
 env:
   global:
-#    - ANDROID_TARGET=android-24
-#    - ANDROID_ABI=arm64-v8a
+    - ANDROID_TARGET=android-22
+    - ANDROID_ABI=armeabi-v7a
 
 before_install:
   - openssl aes-256-cbc -K $encrypted_82adfa9c3806_key -iv $encrypted_82adfa9c3806_iv -in secrets.tar.enc -out secrets.tar -d
@@ -39,21 +39,21 @@ android:
     - build-tools-28.0.3
     - android-27
     - extra-android-m2repository
-#    - $ANDROID_TARGET
-#    - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
+    - $ANDROID_TARGET
+    - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
 
 licenses:
   - ".+"
 
 script:
   - ./gradlew lintKiwixDebug jacocoTestKiwixDebugUnitTestReport
-  #  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI -c 100M
-  #  - emulator -avd test -no-window &
-  #  - android-wait-for-emulator
-  #  - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
-  #  - adb shell input keyevent 82 & # unlock screen by pressing menu button
-  #  - adb -e logcat *:D > logcat.log &
-  #  - ./gradlew createKiwixDebugCoverageReport
+  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI -c 100M
+  - emulator -avd test -no-window &
+  - android-wait-for-emulator
+  - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
+  - adb shell input keyevent 82 & # unlock screen by pressing menu button
+  - adb -e logcat *:D > logcat.log &
+  - ./gradlew createKiwixDebugCoverageReport
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
@@ -71,7 +71,7 @@ before_deploy:
 
 deploy:
 
-#publish on github releases
+  #publish on github releases
   - provider: releases
     api_key: "$GITHUB_TOKEN"
     file: app/build/outputs/apk/kiwix/release/*
@@ -84,7 +84,7 @@ deploy:
       tags: true
       condition:  $TRAVIS_BRANCH =~ ^release|master
 
-#publish on play store
+  #publish on play store
   - provider: script
     skip_cleanup: true
     script: ./gradlew publishKiwixRelease

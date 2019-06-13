@@ -41,7 +41,7 @@ dependencies {
 
   // Get kiwixlib online if it is not populated locally
   if (file("../kiwixlib/src/main").list().length == 1) {
-    implementation 'org.kiwix.kiwixlib:kiwixlib:1.0.11'
+    implementation 'org.kiwix.kiwixlib:kiwixlib:1.0.12'
   } else {
     implementation project(':kiwixlib')
     archs = file("../kiwixlib/src/main/jniLibs").list()
