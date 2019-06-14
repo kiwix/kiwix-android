@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.di.modules;
 
-import org.apache.commons.io.IOUtils;
 import org.kiwix.kiwixlib.JNIKiwix;
 import org.kiwix.kiwixlib.JNIKiwixString;
 import org.mockito.Mockito;

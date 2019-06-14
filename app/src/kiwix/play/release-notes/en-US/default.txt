@@ -1,0 +1,3 @@
+NEW: Downloads are now using the DownloadManager
+NEW: Downloads/Device/Library completely rewritten
++ Lots More
