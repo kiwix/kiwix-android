@@ -40,39 +40,47 @@ Our process for accepting changes operates by [Pull Request (PR)](https://help.g
 
 1.  Once you have integrated comments, or waited for feedback, a Lieutenant should merge your changes in!
 
-### Building and BuildTypes
+### Building
 
-The default build is debug, with this variant you can use a debugger while developing. To install the application click the run button in Android Studio with the `app` configuration selected while you have a device connected.
-All other build types but release can be ignored, the release build is what gets uploaded to the play store and can be built locally with the dummy credentials/keystore provided.
+The default build is `debug`, with this variant you can use a debugger while developing. To install the application click the `run` button in Android Studio with the `app` configuration selected while you have a device connected. All other build types but `release` can be ignored, the `release` build is what gets uploaded to the Google Play store and can be built locally with the dummy credentials/keystore provided.
 
-Unit tests are located in app/src/test and to run them locally you can use the gradle command:
+### Testing
 
-        gradlew testKiwixDebugUnitTest
-        
+Unit tests are located in `app/src/test` and to run them locally you
+can use the gradle command:
+
+        $ gradlew testKiwixDebugUnitTest
+
 or the abbreviated:
 
-        gradlew tKDUT
-        
-Automated tests that require a connected device are located in app/src/androidTest & app/src/androidTestKiwix, to run them locally you can use the gradle command:
+        $ gradlew tKDUT
 
-        gradlew connectedKiwixDebugAndroidTest
-       
+Automated tests that require a connected device (UI related tests) are located in `app/src/androidTest` & `app/src/androidTestKiwix`, to run them locally you can use the gradle command:
+
+        $ gradlew connectedKiwixDebugAndroidTest
+
 or the abbreviated:
 
-        gradlew cKDAT
-        
+
+        $ gradlew cKDAT
+
+All local test results can be seen under `app/build/reports/`
+
+### Code coverage
+
 To generate coverage reports for your unit tests run:
 
-        gradlew jacocoTestKiwixDebugUnitTest    
-            
+        $ gradlew jacocoTestKiwixDebugUnitTest
+
 To generate coverage reports for your automated tests run:
 
-        gradlew createKiwixDebugCoverageReport
+        $ gradlew createKiwixDebugCoverageReport
 
-All local test results can be seen under app/build/reports/
+Code coverage results can be seen under `app/build/reports/`
 
-All PRs will have all these tests run and a combined coverage report will be attached, if coverage is to go down the PR will be marked failed.
-On Travis CI the automated tests are run on an emulator.
-To learn more about the commands run on the CI please refer to [.travis.yml](https://github.com/kiwix/kiwix-android/blob/master/.travis.yml)
+### Continous Integration
+
+All PRs will have all these tests run and a combined coverage report will be attached, if coverage is to go down the PR will be marked failed. On Travis CI the automated tests are run on an emulator. To
+learn more about the commands run on the CI please refer to [.travis.yml](https://github.com/kiwix/kiwix-android/blob/master/.travis.yml)
 
 _These guidelines are based on [Tools for Government Data Archiving](https://github.com/edgi-govdata-archiving/overview/blob/master/CONTRIBUTING.md)'s._
