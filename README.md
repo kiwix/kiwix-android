@@ -21,7 +21,6 @@ We utilize different build variants (flavours) to build various different versio
 ## Libraries Used
 
 - [Dagger 2](https://github.com/google/dagger) - A fast dependency injector for Android and Java
-- [SquiDb](https://github.com/yahoo/squidb) - SquiDB is a SQLite database library for Android and iOS
 - [Retrofit](http://square.github.io/retrofit/) - Retrofit turns your REST API into a Java interface
 - [OkHttp](https://github.com/square/okhttp) - An HTTP+SPDY client for Android and Java applications
 - [Butterknife](http://jakewharton.github.io/butterknife/) - View "injection" library for Android
