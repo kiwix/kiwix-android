@@ -82,7 +82,6 @@ deploy:
     draft: true
     on:
       tags: true
-      condition:  $TRAVIS_BRANCH =~ ^release|master
 
   #publish on play store
   - provider: script
@@ -90,4 +89,3 @@ deploy:
     script: ./gradlew publishKiwixRelease
     on:
       tags: true
-      condition:  $TRAVIS_BRANCH =~ ^release|master
