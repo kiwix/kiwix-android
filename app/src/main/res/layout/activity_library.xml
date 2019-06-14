@@ -1,61 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical"
-  tools:context=".zim_manager.library_view.LibraryFragment">
-
-  <RelativeLayout
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/listBackground">
+    android:animateLayoutChanges="true"
+    tools:context=".zim_manager.library_view.LibraryFragment"
+    >
 
-
-    <TextView
-      android:id="@+id/network_text"
-      android:layout_width="wrap_content"
-      android:layout_height="match_parent"
-      android:layout_centerInParent="true"
-      android:layout_gravity="center_vertical"
-      android:gravity="center_vertical"
-      android:orientation="vertical"
-      android:paddingBottom="@dimen/library_textview_padding"
-      android:textSize="@dimen/library_font_size"
-      android:visibility="gone" />
-
-    <TextView
-      android:id="@+id/network_permission_text"
+  <TextView
+      android:id="@+id/libraryErrorText"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_centerHorizontal="true"
-      android:layout_marginTop="@dimen/network_permission_text_margin_top"
       android:text="@string/get_library_over_network"
-      android:visibility="gone" />
+      android:visibility="gone"
+      tools:visibility="visible"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      />
 
-    <Button
-      android:id="@+id/network_permission_button"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerHorizontal="true"
-      android:layout_marginTop="@dimen/network_permission_button_margin_top"
-      android:text="@string/proceed"
-      android:visibility="gone" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
-      android:id="@+id/library_swiperefresh"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content">
+  <android.support.v4.widget.SwipeRefreshLayout
+      android:id="@+id/librarySwipeRefresh"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      >
 
-      <ListView
-        android:id="@+id/library_list"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/libraryList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/listBackground"
-        android:divider="@null"
-        android:paddingBottom="@dimen/library_article_list_padding" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+  </android.support.v4.widget.SwipeRefreshLayout>
 
-  </RelativeLayout>
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

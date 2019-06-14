@@ -18,19 +18,18 @@
  */
 package org.kiwix.kiwixmobile.library.entity;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-
 import java.io.File;
 import java.io.Serializable;
 import java.util.LinkedList;
+import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Root;
 
 @Root(name = "library", strict = false)
 public class LibraryNetworkEntity {
 
   @ElementList(name = "book", inline = true, required = false)
-  private LinkedList<Book> book;
+  public LinkedList<Book> book;
 
   @Attribute(name = "version", required = false)
   private String version;
@@ -45,7 +44,6 @@ public class LibraryNetworkEntity {
 
   @Root(name = "book", strict = false)
   public static class Book implements Serializable{
-
     @Attribute(name = "id", required = false)
     public String id;
 
@@ -91,13 +89,11 @@ public class LibraryNetworkEntity {
     @Attribute(name = "tags", required = false)
     public String tags;
 
-    public boolean downloaded =  false;
-
-    public String remoteUrl;
-
     public int searchMatches = 0;
-
+    @Deprecated
     public File file;
+    @Deprecated
+    public String remoteUrl;
 
     public String getId() {
       return this.id;

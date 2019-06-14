@@ -19,17 +19,15 @@ package org.kiwix.kiwixmobile.di.modules;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
-
+import dagger.Module;
+import dagger.Provides;
+import java.util.concurrent.TimeUnit;
+import javax.inject.Singleton;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.network.UserAgentInterceptor;
-
-import javax.inject.Singleton;
-
-import dagger.Module;
-import dagger.Provides;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 
 @Module public class NetworkModule {
 
@@ -41,6 +39,8 @@ import okhttp3.logging.HttpLoggingInterceptor;
     logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
 
     return new OkHttpClient().newBuilder().followRedirects(true).followSslRedirects(true)
+        .connectTimeout(10, TimeUnit.SECONDS)
+        .readTimeout(10, TimeUnit.SECONDS)
         .addNetworkInterceptor(logging)
         .addNetworkInterceptor(new UserAgentInterceptor(useragent)).build();
   }

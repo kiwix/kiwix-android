@@ -130,6 +130,7 @@
     </activity>
     <activity
       android:name=".zim_manager.ZimManageActivity"
+        android:launchMode="singleTop"
       android:label="@string/choose_file">
 
       <!-- TODO -->
@@ -175,8 +176,6 @@
     </receiver>
 
 
-    <service android:name=".downloader.DownloadService" />
-
     <activity
       android:name=".KiwixErrorActivity"
       android:process=":error_activity" />
@@ -192,6 +191,11 @@
         android:resource="@xml/provider_paths" />
     </provider>
 
+    <receiver android:name=".zim_manager.DownloadNotificationClickedReceiver">
+      <intent-filter>
+        <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED"/>
+      </intent-filter>
+    </receiver>
   </application>
 
 </manifest>

@@ -1,0 +1,203 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:7257718270326155947",
+      "lastPropertyId": "17:8085320504542486236",
+      "name": "DownloadEntity",
+      "properties": [
+        {
+          "id": "1:2266566996008201697",
+          "name": "id"
+        },
+        {
+          "id": "2:1953917250527765737",
+          "name": "downloadId"
+        },
+        {
+          "id": "5:6575412958851693470",
+          "name": "bookId"
+        },
+        {
+          "id": "6:1075612111256674117",
+          "name": "title"
+        },
+        {
+          "id": "7:2831524841121029990",
+          "name": "description"
+        },
+        {
+          "id": "8:2334902404590133038",
+          "name": "language"
+        },
+        {
+          "id": "9:5087250349738158996",
+          "name": "creator"
+        },
+        {
+          "id": "10:6128960350043895299",
+          "name": "publisher"
+        },
+        {
+          "id": "11:3850323036475883785",
+          "name": "date"
+        },
+        {
+          "id": "12:5288623325038033644",
+          "name": "url"
+        },
+        {
+          "id": "13:2501711400901908648",
+          "name": "articleCount"
+        },
+        {
+          "id": "14:3550975911715416030",
+          "name": "mediaCount"
+        },
+        {
+          "id": "15:8949996430663588693",
+          "name": "size"
+        },
+        {
+          "id": "16:7554483297276446029",
+          "name": "name"
+        },
+        {
+          "id": "17:8085320504542486236",
+          "name": "favIcon"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:5536749840871435068",
+      "lastPropertyId": "16:6142333908132117423",
+      "name": "BookOnDiskEntity",
+      "properties": [
+        {
+          "id": "1:4248832782795400383",
+          "name": "id"
+        },
+        {
+          "id": "2:2644395282642821815",
+          "name": "file"
+        },
+        {
+          "id": "4:3145196313443812205",
+          "name": "bookId"
+        },
+        {
+          "id": "5:597997298666253723",
+          "name": "title"
+        },
+        {
+          "id": "6:8028706022307902131",
+          "name": "description"
+        },
+        {
+          "id": "7:4257578632233656657",
+          "name": "language"
+        },
+        {
+          "id": "8:7771231471515752814",
+          "name": "creator"
+        },
+        {
+          "id": "9:892859866782486178",
+          "name": "publisher"
+        },
+        {
+          "id": "10:1925365063061602631",
+          "name": "date"
+        },
+        {
+          "id": "11:1111395522977944209",
+          "name": "url"
+        },
+        {
+          "id": "12:3765116904492031525",
+          "name": "articleCount"
+        },
+        {
+          "id": "13:5901922417972273396",
+          "name": "mediaCount"
+        },
+        {
+          "id": "14:1229023184984372602",
+          "name": "size"
+        },
+        {
+          "id": "15:6851856791814492874",
+          "name": "name"
+        },
+        {
+          "id": "16:6142333908132117423",
+          "name": "favIcon"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:6278838675135543734",
+      "lastPropertyId": "4:8812214350305159407",
+      "name": "LanguageEntity",
+      "properties": [
+        {
+          "id": "1:7795244654012809404",
+          "name": "id"
+        },
+        {
+          "id": "2:9116495537035444904",
+          "name": "locale"
+        },
+        {
+          "id": "3:452531964346972307",
+          "name": "active"
+        },
+        {
+          "id": "4:8812214350305159407",
+          "name": "occurencesOfLanguage"
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "4:6278838675135543734",
+  "lastIndexId": "4:4868787482832538530",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 4,
+  "modelVersionParserMinimum": 4,
+  "retiredEntityUids": [
+    349148274283701276
+  ],
+  "retiredIndexUids": [
+    1293695782925933448,
+    3655049272366703856,
+    7576716732364166705,
+    4868787482832538530
+  ],
+  "retiredPropertyUids": [
+    4712434661554562781,
+    1521665545502891268,
+    1831899651198481824,
+    8913656606098213241,
+    4745760836781949968,
+    9177466730609383913,
+    6985467229796102081,
+    4417830652027770707,
+    3485079785941052658,
+    2875347328622347138,
+    96906195091428769,
+    305997162787053035,
+    8804682238892773896,
+    3464301918251637220,
+    5620508895870653354,
+    7273406943564025911,
+    428251106490095982
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}
