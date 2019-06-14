@@ -66,8 +66,8 @@ after_failure:
   - lynx --dump ${LOG_DIR}org.kiwix.kiwixmobile.tests.BasicTest.html;
   - echo " LOGCAT "; echo "========"; cat logcat.log; pkill -KILL -f adb
 
-before_deploy:
-  - export APP_CHANGELOG=$(cat app/src/kiwix/play/release-notes/en-US/default.txt)
+#before_deploy:
+#  - export APP_CHANGELOG=$(cat app/src/kiwix/play/release-notes/en-US/default.txt)
 
 deploy:
 
@@ -78,7 +78,7 @@ deploy:
     file_glob: true
     skip_cleanup: true
     overwrite: true
-    body: "$APP_CHANGELOG"
+#    body: "$APP_CHANGELOG" broken because travis can't escape newlines
     draft: true
     on:
       tags: true
