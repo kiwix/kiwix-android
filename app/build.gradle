@@ -445,7 +445,7 @@ android {
 }
 
 play {
-  enabled = branchName == "master" || branchName == "release"
+  enabled = true
   serviceAccountCredentials = file("../google.json")
   track = "alpha"
   resolutionStrategy = "fail"
