@@ -27,11 +27,11 @@
         android:summary="@string/pref_hidetoolbar_summary"
         android:title="@string/pref_hidetoolbar"/>
 
-    <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
+  <!--  <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
         android:defaultValue="true"
         android:key="pref_bottomtoolbar"
         android:summary="@string/pref_bottomtoolbar_summary"
-        android:title="@string/pref_bottomtoolbar"/>
+        android:title="@string/pref_bottomtoolbar"/>-->
 
 
   </PreferenceCategory>
