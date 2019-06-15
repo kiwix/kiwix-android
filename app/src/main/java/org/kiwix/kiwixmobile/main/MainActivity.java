@@ -129,6 +129,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_NOTIFICATION_ID;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_ZIM_FILE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_ZIM_FILE_2;
+import static org.kiwix.kiwixmobile.utils.Constants.NOTES_DIRECTORY;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_KIWIX_MOBILE;
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_FILE_SEARCH;
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_FILE_SELECT;
@@ -929,13 +930,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
 
     builder.setMessage(this.getString(R.string.delete_notes_confirmation_msg))
-        .setNeutralButton(this.getString(R.string.dismiss), new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            // Do nothing
-          }
-        })
-        .setPositiveButton(this.getString(R.string.delete), new DialogInterface.OnClickListener() {
+        .setNegativeButton(this.getString(R.string.cancel), null) // Do nothing for 'Cancel' button
+        .setPositiveButton(this.getString(R.string.yes), new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
             clearAllNotes();
@@ -956,7 +952,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         return;
       }
 
-      File notesDirectory = new File(Environment.getExternalStorageDirectory() + "/Kiwix/Notes/");
+      // TODO: Replace below code with Kotlin's deleteRecursively() method
+
+      File notesDirectory = new File(NOTES_DIRECTORY);
       File[] filesInNotesDirectory = notesDirectory.listFiles();
 
       if(filesInNotesDirectory == null) { // Notes folder doesn't exist
@@ -992,14 +990,15 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private void showAddNoteDialog() {
     FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
     Fragment prev = getSupportFragmentManager().findFragmentByTag("AddNoteDialog");
-    if(prev != null) {
-      fragmentTransaction.remove(prev); // To prevent multiple instances of the DialogFragment
-    }
-    fragmentTransaction.addToBackStack(null);
 
-    AddNoteDialog dialogFragment = new AddNoteDialog();
-    // For DialogFragments, show() handles the fragment commit and display
-    dialogFragment.show(fragmentTransaction, "AddNoteDialog");
+    // To prevent multiple instances of the DialogFragment
+    if(prev != null) {
+      fragmentTransaction.show(prev); // For DialogFragments, show() handles the fragment commit and display
+    } else {
+      fragmentTransaction.addToBackStack(null);
+      AddNoteDialog dialogFragment = new AddNoteDialog();
+      dialogFragment.show(fragmentTransaction, "AddNoteDialog");
+    }
   }
 
   private boolean requestExternalStorageWritePermissionForNotes() {

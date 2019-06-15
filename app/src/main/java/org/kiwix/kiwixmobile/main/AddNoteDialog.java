@@ -41,6 +41,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import static org.kiwix.kiwixmobile.utils.Constants.NOTES_DIRECTORY;
+
 /**
  * Created by @Aditya-Sood (21/05/19) as a part of GSoC 2019
  *
@@ -68,11 +70,7 @@ public class AddNoteDialog extends DialogFragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    if(sharedPreferenceUtil != null && sharedPreferenceUtil.nightMode()) {
-      setStyle(DialogFragment.STYLE_NORMAL, R.style.AddNoteDialogStyle_Night);  // Night Mode support
-    } else {
-      setStyle(DialogFragment.STYLE_NORMAL, R.style.AddNoteDialogStyle);
-    }
+    setStyle(DialogFragment.STYLE_NORMAL, sharedPreferenceUtil.nightMode() ? R.style.AddNoteDialogStyle_Night : R.style.AddNoteDialogStyle);
 
     zimFileTitle = ZimContentProvider.getZimFileTitle();
     articleTitle = ((MainActivity)getActivity()).getCurrentWebView().getTitle();
@@ -236,7 +234,7 @@ public class AddNoteDialog extends DialogFragment {
         return;
       }
 
-      File notesFolder = new File(Environment.getExternalStorageDirectory() + "/Kiwix/Notes/" + zimFileTitle);
+      File notesFolder = new File(NOTES_DIRECTORY + zimFileTitle);
       boolean folderExists = true;
 
       if(!notesFolder.exists()) {
@@ -257,11 +255,11 @@ public class AddNoteDialog extends DialogFragment {
 
         } catch (IOException e) {
           e.printStackTrace();
-          Toast.makeText(getContext(), getActivity().getString(R.string.note_save_unsuccessful), Toast.LENGTH_LONG);
+          Toast.makeText(this.getContext(), R.string.note_save_unsuccessful, Toast.LENGTH_LONG).show();
         }
 
       } else {
-        Toast.makeText(getContext(), getActivity().getString(R.string.note_save_unsuccessful), Toast.LENGTH_LONG);
+        Toast.makeText(this.getContext(), R.string.note_save_unsuccessful, Toast.LENGTH_LONG).show();
         Log.d(TAG, "Required folder doesn't exist");
       }
     }
@@ -278,7 +276,7 @@ public class AddNoteDialog extends DialogFragment {
      * is displayed in the EditText field (note content area)
      * */
 
-    File noteFile = new File(Environment.getExternalStorageDirectory() + "/Kiwix/Notes/" + zimFileTitle + "/" + articleTitle + ".txt");
+    File noteFile = new File(NOTES_DIRECTORY + zimFileTitle + "/" + articleTitle + ".txt");
 
     if(noteFile.exists()) {
       noteFileExists = true;
@@ -325,7 +323,7 @@ public class AddNoteDialog extends DialogFragment {
      saveNote(addNoteEditText.getText().toString()); // Save edited note before sharing the text file
     }
 
-    File noteFile = new File(Environment.getExternalStorageDirectory() + "/Kiwix/Notes/" + zimFileTitle + "/" + articleTitle + ".txt");
+    File noteFile = new File(NOTES_DIRECTORY + zimFileTitle + "/" + articleTitle + ".txt");
 
     Uri noteFileUri = null;
     if(noteFile.exists()) {
@@ -357,12 +355,7 @@ public class AddNoteDialog extends DialogFragment {
   }
 
   public static boolean isExternalStorageWritable() {
-    String state = Environment.getExternalStorageState();
-    if(Environment.MEDIA_MOUNTED.equals(state)) {
-      return true;
-    } else {
-      return false;
-    }
+    return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
   }
 
   @Override
@@ -407,19 +400,14 @@ class ConfirmationAlertDialogFragment extends DialogFragment {
 
     }
     builder.setMessage(getString(R.string.confirmation_alert_dialog_message))
-        .setPositiveButton(getString(R.string.confirmation_alert_dialog_positive_btn), new DialogInterface.OnClickListener() {
+        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
             // User sure of discarding unsaved changes and closing note dialog
             addNoteDialog.dismiss();
           }
         })
-        .setNeutralButton(getString(R.string.confirmation_alert_dialog_neutral_btn), new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            // No action to be taken in case of the neutral 'Cancel' action
-          }
-        });
+        .setNegativeButton(getString(R.string.cancel), null); // Do nothing for 'Cancel' button
 
     return builder.create();
   }

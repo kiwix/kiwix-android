@@ -17,6 +17,8 @@
  */
 package org.kiwix.kiwixmobile.utils;
 
+import android.os.Environment;
+
 import org.kiwix.kiwixmobile.BuildConfig;
 
 public final class Constants {
@@ -136,4 +138,7 @@ public final class Constants {
   public static final String OLD_PROVIDER_DOMAIN = "org.kiwix.zim.base";
 
   public static final String NEW_PROVIDER_DOMAIN = BuildConfig.APPLICATION_ID + ".zim.base";
+
+  // Path Constants
+  public static final String NOTES_DIRECTORY = Environment.getExternalStorageDirectory() + "/Kiwix/Notes/";
 }
