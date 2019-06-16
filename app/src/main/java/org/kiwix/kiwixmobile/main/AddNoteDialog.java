@@ -43,10 +43,14 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 import static org.kiwix.kiwixmobile.utils.Constants.NOTES_DIRECTORY;
 
 /**
- * Created by @Aditya-Sood (21/05/19) as a part of GSoC 2019
+ * Created by @author Aditya-Sood (21/05/19) as a part of GSoC 2019
  *
  * AddNoteDialog extends DialogFragment and is used to display the note corresponding to a particular
  * article (of a particular zim file/wiki/book) as a full-screen dialog fragment.
@@ -59,9 +63,15 @@ public class AddNoteDialog extends DialogFragment {
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
 
-  private Toolbar toolbar;  // Displays options for the note dialog
-  private TextView addNoteTextView; // Displays article title
-  private EditText addNoteEditText; // Displays zim file title (wiki name)
+  @BindView(R.id.add_note_toolbar)
+  Toolbar toolbar;  // Displays options for the note dialog
+  @BindView(R.id.add_note_text_view)
+  TextView addNoteTextView; // Displays article title
+  @BindView(R.id.add_note_edit_text)
+  EditText addNoteEditText; // Displays zim file title (wiki name)
+
+  private Unbinder unbinder;
+
   private String zimFileTitle;
   private String articleTitle;
   private boolean noteFileExists = false;
@@ -88,8 +98,8 @@ public class AddNoteDialog extends DialogFragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     super.onCreateView(inflater, container, savedInstanceState);
     View view = inflater.inflate(R.layout.dialog_add_note, container, false);
+    unbinder = ButterKnife.bind(this, view);
 
-    toolbar = view.findViewById(R.id.add_note_toolbar);
     toolbar.setTitle(getString(R.string.note));
     toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -121,10 +131,8 @@ public class AddNoteDialog extends DialogFragment {
     // 'Share' disabled for empty notes, 'Save' disabled for unedited notes
     disableMenuItems();
 
-    addNoteTextView = view.findViewById(R.id.add_note_text_view);
     addNoteTextView.setText(articleTitle);
 
-    addNoteEditText = view.findViewById(R.id.add_note_edit_text);
     // Show the previously saved note if it exists
     displayNote();
 
@@ -375,6 +383,14 @@ public class AddNoteDialog extends DialogFragment {
       int width = ViewGroup.LayoutParams.MATCH_PARENT;
       int height = ViewGroup.LayoutParams.MATCH_PARENT;
       dialog.getWindow().setLayout(width, height);
+    }
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    if (unbinder != null) {
+      unbinder.unbind();
     }
   }
 
