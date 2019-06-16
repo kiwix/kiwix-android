@@ -41,6 +41,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import static org.kiwix.kiwixmobile.utils.Constants.NOTES_DIRECTORY;
 
 /**
@@ -54,7 +56,8 @@ import static org.kiwix.kiwixmobile.utils.Constants.NOTES_DIRECTORY;
 
 public class AddNoteDialog extends DialogFragment {
 
-  private SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(KiwixApplication.getInstance());
+  @Inject
+  SharedPreferenceUtil sharedPreferenceUtil;
 
   private Toolbar toolbar;  // Displays options for the note dialog
   private TextView addNoteTextView; // Displays article title
@@ -65,6 +68,11 @@ public class AddNoteDialog extends DialogFragment {
   private boolean noteEdited = false; // Keeps track of state of the note (whether edited since last save)
 
   private final String TAG = "AddNoteDialog";
+
+  public AddNoteDialog() {
+    super();
+    KiwixApplication.getApplicationComponent().inject(this);
+  }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
