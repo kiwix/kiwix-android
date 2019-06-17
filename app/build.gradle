@@ -96,6 +96,7 @@ dependencies {
   implementation "com.google.dagger:dagger-android:$daggerVersion"
   kapt "com.google.dagger:dagger-compiler:$daggerVersion"
   kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+  kaptAndroidTest "com.google.dagger:dagger-compiler:$daggerVersion"
 
   // SquiDB
   implementation 'com.yahoo.squidb:squidb:2.0.0'
