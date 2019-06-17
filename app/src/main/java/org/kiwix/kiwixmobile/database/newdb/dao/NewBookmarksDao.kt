@@ -30,7 +30,7 @@ class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) {
     return box
         .query {
           if (fromCurrentBook) {
-            equal(BookmarkEntity_.zimId, ZimContentProvider.getId())
+            equal(BookmarkEntity_.zimId, ZimContentProvider.getId() ?: "")
           }
           order(BookmarkEntity_.bookmarkTitle)
         }
@@ -39,9 +39,9 @@ class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) {
   }
 
   fun getCurrentZimBookmarksUrl() = box.query {
-    equal(BookmarkEntity_.zimId, ZimContentProvider.getId())
+    equal(BookmarkEntity_.zimId, ZimContentProvider.getId() ?: "")
         .or()
-        .equal(BookmarkEntity_.zimName, ZimContentProvider.getName())
+        .equal(BookmarkEntity_.zimName, ZimContentProvider.getName() ?: "")
     order(BookmarkEntity_.bookmarkTitle)
   }
       .property(BookmarkEntity_.bookmarkUrl)
