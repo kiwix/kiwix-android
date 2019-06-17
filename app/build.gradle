@@ -1,4 +1,5 @@
 import com.android.annotations.NonNull
+import com.android.build.OutputFile
 import com.android.builder.testing.api.TestServer
 import com.testdroid.api.APIClient
 import com.testdroid.api.APIKeyClient
@@ -25,11 +26,13 @@ buildscript {
 plugins {
   id("com.android.application")
   id("checkstyle")
+  id("com.github.triplet.play") version("2.2.1")
 }
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.objectbox'
+apply plugin: 'jacoco-android'
 
 repositories {
   google()
@@ -40,14 +43,14 @@ repositories {
   jcenter()
 }
 
-String[] archs = ["arm64-v8a", "armeabi", "mips", "mips64", "x86", "x86_64"]
+String[] archs = ['arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64']
 
 dependencies {
   // use jdk8 java.time backport, as long app < Build.VERSION_CODES.O
   implementation("com.jakewharton.threetenabp:threetenabp:1.1.1")
   // Get kiwixlib online if it is not populated locally
   if (file("../kiwixlib/src/main").list().length == 1) {
-    implementation "org.kiwix.kiwixlib:kiwixlib:1.0.11"
+    implementation 'org.kiwix.kiwixlib:kiwixlib:1.0.12'
   } else {
     implementation project(":kiwixlib")
     archs = file("../kiwixlib/src/main/jniLibs").list()
@@ -64,28 +67,24 @@ dependencies {
   implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
   implementation "androidx.core:core-ktx:1.0.2"
   implementation "androidx.fragment:fragment-ktx:1.0.0"
-  implementation "androidx.collection:collection-ktx:1.0.0"
+  implementation "androidx.collection:collection-ktx:1.1.0"
 
   implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
   androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
   androidTestImplementation "androidx.test.espresso:espresso-web:$espressoVersion"
   androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
-  androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion") {
-    exclude group: "androidx.legacy", module: "legacy-support-core-utils"
-    exclude group: "androidx.viewpager", module: "viewpager"
-    exclude group: "com.google.android.material", module: "material"
-    exclude group: "androidx.recyclerview", module: "recyclerview"
-  }
-
   androidTestImplementation("com.schibsted.spain:barista:$baristaVersion") {
     exclude group: "com.android.support"
   }
-
+  androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")
   androidTestImplementation "androidx.annotation:annotation:$annotationVersion"
-  androidTestImplementation "androidx.test.ext:junit:1.1.0"
-  androidTestImplementation "androidx.test:runner:1.1.1"
-  androidTestImplementation "androidx.test:rules:1.1.1"
-  androidTestImplementation "androidx.test:core:1.1.0"
+  androidTestImplementation "androidx.test.ext:junit:1.1.1"
+  androidTestImplementation "androidx.test:runner:1.2.0"
+  androidTestImplementation "androidx.test:rules:1.2.0"
+  androidTestImplementation "androidx.test:core:1.2.0"
+  androidTestImplementation "com.squareup.okhttp3:mockwebserver:3.6.0"
+  // Mockito
+  androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
 
   // Tab indicator
   implementation "com.pacioianu.david:ink-page-indicator:$inkPageIndicatorVersion"
@@ -114,7 +113,7 @@ dependencies {
     exclude group: "stax", module: "stax-api"
     exclude group: "stax", module: "stax"
   }
-  androidTestImplementation "com.squareup.okhttp3:mockwebserver:3.6.0"
+
 
   // ButterKnife
   implementation "com.jakewharton:butterknife:$butterKnifeVersion"
@@ -124,10 +123,7 @@ dependencies {
   implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
   implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 
-  androidTestImplementation "junit:junit:$jUnitVersion"
 
-  // Mockito
-  androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
 
   // Leak canary
   implementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
@@ -167,12 +163,41 @@ if (custom.listFiles()) {
   custom.eachFile() { file ->
 
     def fileName = file.getName()
-    if (fileName.startsWith(".") || fileName.contains("test") ||
-        fileName == "main" || fileName.contains("Test")) {
+    if (fileName.startsWith(".") ||
+        fileName.contains("test") ||
+        fileName == "main" ||
+        fileName.contains("Test")) {
       return
     }
     map.put(fileName, file.getAbsolutePath())
   }
+}
+
+jacoco {
+  toolVersion = "0.8.3"
+}
+
+tasks.withType(Test) {
+  jacoco.includeNoLocationClasses = true
+}
+
+def branchName = System.getenv('TRAVIS_PULL_REQUEST') ?: "false" == "false"
+    ? System.getenv('TRAVIS_BRANCH') ?: "local"
+    : System.getenv('TRAVIS_PULL_REQUEST_BRANCH')
+def buildNumber = System.getenv('TRAVIS_BUILD_NUMBER') ?: "dev"
+
+ext {
+  versionMajor = 2
+  versionMinor = 5
+  versionPatch = 0
+}
+
+private String generateVersionName() {
+  "${ext.versionMajor}.${ext.versionMinor}.${ext.versionPatch}"
+}
+
+private Integer generateVersionCode() {
+  200000 + (ext.versionMajor * 10000) + (ext.versionMinor * 100) + (ext.versionPatch)
 }
 
 android {
@@ -187,6 +212,7 @@ android {
     testInstrumentationRunnerArguments.notClass = "com.android.dex.DexIndexOverflowException"
     multiDexEnabled true
     vectorDrawables.useSupportLibrary = true
+    archivesBaseName = "$buildNumber"
   }
 
   aaptOptions {
@@ -210,18 +236,38 @@ android {
     warning "InvalidPackage"
     warning "StringFormatInvalid"
   }
+  testOptions {
+    unitTests.returnDefaultValues = true
+    unitTests.all {
+      useJUnitPlatform()
+      testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+        outputs.upToDateWhen { false }
+        showStandardStreams = true
+      }
+    }
+  }
 
   flavorDimensions "default"
+
+  signingConfigs {
+    release {
+      storeFile file("../kiwix-android.keystore")
+      storePassword System.getenv("KEY_STORE_PASSWORD") ?: "000000"
+      keyAlias System.getenv("KEY_ALIAS") ?: "keystore"
+      keyPassword System.getenv("KEY_PASSWORD") ?: "000000"
+    }
+  }
 
   buildTypes {
 
     // Main build type for debugging
     debug {
       buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://download.kiwix.org/\""
-      // True breaks local variables being shown in breakpoints
-      testCoverageEnabled false
       // Needed for instrumentation tests on Pre 5.0
       multiDexKeepProguard file("multidex-instrumentation-config.pro")
+      buildConfigField "boolean", "KIWIX_ERROR_ACTIVITY", "false"
+      testCoverageEnabled true
     }
 
     mock_network {
@@ -236,15 +282,9 @@ android {
       matchingFallbacks = ["debug", "release"]
     }
 
-    // Used to assess code coverage
-    coverage {
-      initWith debug
-      testCoverageEnabled true
-      matchingFallbacks = ["debug", "release"]
-    }
-
     // Release Type
     release {
+      signingConfig signingConfigs.release
       buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://download.kiwix.org/\""
     }
   }
@@ -266,18 +306,22 @@ android {
         def version_code = project.property("version_code")
         versionCode version_code.toInteger()
       } else {
-        versionCode 56
+        versionCode generateVersionCode()
       }
       if (project.hasProperty("version_name")) {
         versionName project.property("version_name")
       } else {
-        versionName "2.5"
+        versionName generateVersionName()
       }
     }
+
     // Custom apps built from a json file, zim file and icon set
     map.each { name, directory ->
       "$name" {
         println "Configuring $name"
+        if (name == "kiwix") {
+          return
+        }
         if (file(directory + "/build.gradle").exists()) {
           apply from: directory + "/build.gradle"
         }
@@ -339,8 +383,8 @@ android {
           buildConfigField "int", "CONTENT_VERSION_CODE", "$content_version_code"
         } else if (parsedJson.content_version_code != null) {
           buildConfigField "int", "CONTENT_VERSION_CODE", "$parsedJson.content_version_code"
-        } else if (project.hasProperty("version_code")) {
-          def version_code = project.property("version_code")
+        } else if (project.hasProperty('version_code')) {
+          def version_code = project.property('version_code')
           buildConfigField "int", "CONTENT_VERSION_CODE", "$version_code"
         } else if (parsedJson.version_code != null) {
           buildConfigField "int", "CONTENT_VERSION_CODE", "$parsedJson.version_code"
@@ -385,9 +429,32 @@ android {
   androidExtensions {
     experimental = true
   }
-  testOptions {
-    unitTests.returnDefaultValues = true
+
+  def abiCodes = ['arm64-v8a': 5, 'x86': 2, 'x86_64': 3, 'armeabi-v7a': 4]
+  splits {
+    abi {
+      enable true
+      reset()
+      include "x86", "x86_64", 'armeabi-v7a', "arm64-v8a"
+      universalApk false
+    }
   }
+  applicationVariants.all { variant ->
+    variant.outputs.each { output ->
+      def baseAbiVersionCode = abiCodes.get(output.getFilter(OutputFile.ABI))
+      if (baseAbiVersionCode != null) {
+        output.versionCodeOverride = baseAbiVersionCode * 1000000 + variant.versionCode
+      }
+    }
+  }
+}
+
+play {
+  enabled = true
+  serviceAccountCredentials = file("../google.json")
+  track = "alpha"
+  releaseStatus = "draft"
+  resolutionStrategy = "fail"
 }
 
 class TestDroidUpload extends TestServer {

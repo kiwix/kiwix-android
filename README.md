@@ -9,6 +9,7 @@ Kiwix is an offline reader for Web content. One of its main purposes is to make 
 
 [![Build Status](https://travis-ci.org/kiwix/kiwix-android.svg?branch=master)](https://travis-ci.org/kiwix/kiwix-android)
 [![IRC Web](https://img.shields.io/badge/chat-on%20freenode-brightgreen.svg)](http://chat.kiwix.org)
+[![codecov](https://codecov.io/gh/kiwix/kiwix-android/branch/master/graph/badge.svg)](https://codecov.io/gh/kiwix/kiwix-android)
 ---
 
 ## Build Instructions
@@ -22,7 +23,6 @@ We utilize different build variants (flavours) to build various different versio
 ## Libraries Used
 
 - [Dagger 2](https://github.com/google/dagger) - A fast dependency injector for Android and Java
-- [SquiDb](https://github.com/yahoo/squidb) - SquiDB is a SQLite database library for Android and iOS
 - [Retrofit](http://square.github.io/retrofit/) - Retrofit turns your REST API into a Java interface
 - [OkHttp](https://github.com/square/okhttp) - An HTTP+SPDY client for Android and Java applications
 - [Butterknife](http://jakewharton.github.io/butterknife/) - View "injection" library for Android
