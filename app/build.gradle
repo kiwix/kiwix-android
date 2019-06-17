@@ -211,7 +211,7 @@ android {
     testInstrumentationRunnerArguments.notClass = "com.android.dex.DexIndexOverflowException"
     multiDexEnabled true
     vectorDrawables.useSupportLibrary = true
-    archivesBaseName = "${branchName.replace('/', '-')}-$buildNumber"
+    archivesBaseName = "$buildNumber"
   }
 
   aaptOptions {
@@ -429,13 +429,13 @@ android {
     experimental = true
   }
 
-  def abiCodes = ['arm64-v8a': 1, 'x86': 2, 'x86_64': 3, 'armeabi-v7a': 4]
+  def abiCodes = ['arm64-v8a': 5, 'x86': 2, 'x86_64': 3, 'armeabi-v7a': 4]
   splits {
     abi {
       enable true
       reset()
       include "x86", "x86_64", 'armeabi-v7a', "arm64-v8a"
-      universalApk true
+      universalApk false
     }
   }
   applicationVariants.all { variant ->
@@ -449,9 +449,10 @@ android {
 }
 
 play {
-  enabled = branchName == "master" || branchName == "release"
+  enabled = true
   serviceAccountCredentials = file("../google.json")
   track = "alpha"
+  releaseStatus = "draft"
   resolutionStrategy = "fail"
 }
 
