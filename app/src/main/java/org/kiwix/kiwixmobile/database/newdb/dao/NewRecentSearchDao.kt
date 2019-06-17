@@ -27,7 +27,7 @@ import javax.inject.Inject
 class NewRecentSearchDao @Inject constructor(val box: Box<RecentSearchEntity>) {
   fun getRecentSearches() = box
       .query {
-        equal(RecentSearchEntity_.zimId, ZimContentProvider.getId())
+        equal(RecentSearchEntity_.zimId, ZimContentProvider.getId() ?: "")
         orderDesc(RecentSearchEntity_.id)
       }
       .find()
