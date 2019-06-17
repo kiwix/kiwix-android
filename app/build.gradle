@@ -425,7 +425,7 @@ android {
     experimental = true
   }
 
-  def abiCodes = ['arm64-v8a': 1, 'x86': 2, 'x86_64': 3, 'armeabi-v7a': 4]
+  def abiCodes = ['arm64-v8a': 5, 'x86': 2, 'x86_64': 3, 'armeabi-v7a': 4]
   splits {
     abi {
       enable true
