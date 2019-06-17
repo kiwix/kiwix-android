@@ -66,8 +66,9 @@ after_failure:
   - lynx --dump ${LOG_DIR}org.kiwix.kiwixmobile.tests.BasicTest.html;
   - echo " LOGCAT "; echo "========"; cat logcat.log; pkill -KILL -f adb
 
-#before_deploy:
+before_deploy:
 #  - export APP_CHANGELOG=$(cat app/src/kiwix/play/release-notes/en-US/default.txt)
+  - ./gradlew assembleKiwixRelease
 
 deploy:
 
