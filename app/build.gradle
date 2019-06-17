@@ -210,7 +210,7 @@ android {
     // See https://github.com/linkedin/dexmaker/issues/65 for why we need the following line.
     testInstrumentationRunnerArguments.notClass = 'com.android.dex.DexIndexOverflowException'
     vectorDrawables.useSupportLibrary = true
-    archivesBaseName = "${branchName.replace('/', '-')}-$buildNumber"
+    archivesBaseName = "$buildNumber"
   }
 
   aaptOptions {
@@ -448,6 +448,7 @@ play {
   enabled = true
   serviceAccountCredentials = file("../google.json")
   track = "alpha"
+  releaseStatus = "draft"
   resolutionStrategy = "fail"
 }
 
