@@ -52,21 +52,22 @@ import android.net.Uri
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.extensions.get
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import java.io.File
 
 class DownloadStatus(
-  val downloadId: Long = 0L,
-  val title: String = "",
-  val description: String = "",
-  val state: DownloadState = DownloadState.Pending,
-  val bytesDownloadedSoFar: Long = 0,
-  val totalSizeBytes: Long = 0,
-  val lastModified: String = "",
-  val localUri: String? = null,
-  val mediaProviderUri: String? = null,
-  val mediaType: String? = null,
-  val uri: String? = null,
-  val book: Book = Book().apply { id = "" }
+  val downloadId: Long,
+  val title: String,
+  val description: String ,
+  val state: DownloadState ,
+  val bytesDownloadedSoFar: Long ,
+  val totalSizeBytes: Long,
+  val lastModified: String,
+  val localUri: String?,
+  val mediaProviderUri: String? ,
+  val mediaType: String?,
+  val uri: String?,
+  val book: Book
 ) {
 
   fun toBookOnDisk(uriToFileConverter:UriToFileConverter) =

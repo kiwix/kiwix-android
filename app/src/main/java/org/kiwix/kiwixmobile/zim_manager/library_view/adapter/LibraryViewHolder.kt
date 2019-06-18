@@ -1,8 +1,6 @@
 package org.kiwix.kiwixmobile.zim_manager.library_view.adapter
 
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.library_divider.divider_text
 import kotlinx.android.synthetic.main.library_item.creator
 import kotlinx.android.synthetic.main.library_item.date
@@ -19,14 +17,13 @@ import org.kiwix.kiwixmobile.extensions.setBitmap
 import org.kiwix.kiwixmobile.extensions.setTextAndVisibility
 import org.kiwix.kiwixmobile.utils.BookUtils
 import org.kiwix.kiwixmobile.utils.NetworkUtils
+import org.kiwix.kiwixmobile.zim_manager.KiloByte
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.DividerItem
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base.BaseViewHolder
 
-sealed class LibraryViewHolder<T : LibraryListItem>(override val containerView: View) : RecyclerView.ViewHolder(
-    containerView
-), LayoutContainer {
-
-  abstract fun bind(item: T)
+sealed class LibraryViewHolder<T : LibraryListItem>(containerView: View) :
+    BaseViewHolder<T>(containerView) {
 
   class LibraryBookViewHolder(
     view: View,

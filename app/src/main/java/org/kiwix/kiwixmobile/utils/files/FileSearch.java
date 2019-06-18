@@ -35,10 +35,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
-import org.kiwix.kiwixmobile.downloader.model.BookOnDisk;
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.StorageUtils;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
@@ -218,7 +218,7 @@ public class FileSearch {
     return files.toArray(arr);
   }
 
-  public static synchronized BookOnDisk fileToBookOnDisk(String filePath) {
+  public static synchronized BooksOnDiskListItem.BookOnDisk fileToBookOnDisk(String filePath) {
     LibraryNetworkEntity.Book book = null;
 
     if (ZimContentProvider.zimFileName != null) {
@@ -254,7 +254,7 @@ public class FileSearch {
     ZimContentProvider.originalFileName = "";
 
     return book == null ? null
-        : new BookOnDisk(null, book, new File(filePath));
+        : new BooksOnDiskListItem.BookOnDisk(null, book, new File(filePath),0L);
   }
 
   // Fill fileList with files found in the specific directory
@@ -272,7 +272,7 @@ public class FileSearch {
     if (fileIsDownloading(filePath)) {
       return;
     }
-    BookOnDisk book = fileToBookOnDisk(filePath);
+    BooksOnDiskListItem.BookOnDisk book = fileToBookOnDisk(filePath);
 
     if (book != null) {
       listener.onBookFound(book);
@@ -289,7 +289,7 @@ public class FileSearch {
   }
 
   public interface ResultListener {
-    void onBookFound(BookOnDisk book);
+    void onBookFound(BooksOnDiskListItem.BookOnDisk book);
 
     void onScanCompleted();
   }

@@ -24,7 +24,6 @@ import javax.inject.Inject;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
-import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.extensions.ImageViewExtensionsKt;
 import org.kiwix.kiwixmobile.main.MainActivity;
 
@@ -33,9 +32,9 @@ import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_URL;
 public class HistoryActivity extends BaseActivity implements HistoryContract.View,
     HistoryAdapter.OnItemClickListener {
 
-  private final List<History> historyList = new ArrayList<>();
-  private final List<History> fullHistory = new ArrayList<>();
-  private final List<History> deleteList = new ArrayList<>();
+  private final List<HistoryListItem> historyList = new ArrayList<>();
+  private final List<HistoryListItem> fullHistory = new ArrayList<>();
+  private final List<HistoryListItem> deleteList = new ArrayList<>();
   private static final String LIST_STATE_KEY = "recycler_list_state";
 
   @BindView(R.id.toolbar)
@@ -67,7 +66,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
       switch (item.getItemId()) {
         case R.id.menu_context_delete:
           fullHistory.removeAll(deleteList);
-          for (History history : deleteList) {
+          for (HistoryListItem history : deleteList) {
             int position = historyList.indexOf(history);
               /*
               Delete the current category header if there are no items after the current one or
@@ -206,21 +205,21 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
   }
 
   @Override
-  public void updateHistoryList(List<History> historyList) {
+  public void updateHistoryList(List<HistoryListItem> historyList) {
     fullHistory.clear();
     fullHistory.addAll(historyList);
     notifyHistoryListFiltered(historyList);
   }
 
   @Override
-  public void notifyHistoryListFiltered(List<History> historyList) {
+  public void notifyHistoryListFiltered(List<HistoryListItem> historyList) {
     this.historyList.clear();
     this.historyList.addAll(historyList);
     historyAdapter.notifyDataSetChanged();
   }
 
   @Override
-  public void onItemClick(ImageView favicon, History history) {
+  public void onItemClick(ImageView favicon, HistoryListItem.HistoryItem history) {
     if (actionMode == null) {
       Intent intent = new Intent(this, MainActivity.class);
       intent.putExtra(EXTRA_CHOSE_X_URL, history.getHistoryUrl());
@@ -241,7 +240,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
   }
 
   @Override
-  public boolean onItemLongClick(ImageView favicon, History history) {
+  public boolean onItemLongClick(ImageView favicon, HistoryListItem.HistoryItem history) {
     if (actionMode != null) {
       return false;
     }
@@ -251,7 +250,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
     return true;
   }
 
-  private void toggleSelection(ImageView favicon, History history) {
+  private void toggleSelection(ImageView favicon, HistoryListItem.HistoryItem history) {
     if (deleteList.remove(history)) {
       ImageViewExtensionsKt.setBitmapFromString(favicon, history.getFavicon());
     } else {

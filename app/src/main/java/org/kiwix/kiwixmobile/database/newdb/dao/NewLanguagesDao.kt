@@ -23,7 +23,7 @@ import io.objectbox.rx.RxQuery
 import io.reactivex.BackpressureStrategy
 import io.reactivex.BackpressureStrategy.LATEST
 import org.kiwix.kiwixmobile.database.newdb.entities.LanguageEntity
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language
+import org.kiwix.kiwixmobile.zim_manager.Language
 import javax.inject.Inject
 
 class NewLanguagesDao @Inject constructor(private val box: Box<LanguageEntity>) {

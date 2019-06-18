@@ -22,9 +22,12 @@ import dagger.Module
 import dagger.Provides
 import io.objectbox.BoxStore
 import io.objectbox.kotlin.boxFor
+import org.kiwix.kiwixmobile.database.newdb.dao.HistoryDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
+import org.kiwix.kiwixmobile.database.newdb.dao.NewBookmarksDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewDownloadDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.database.newdb.dao.NewRecentSearchDao
 import org.kiwix.kiwixmobile.database.newdb.entities.MyObjectBox
 import javax.inject.Singleton
 
@@ -41,4 +44,13 @@ class DatabaseModule {
 
   @Provides @Singleton fun providesNewLanguagesDao(boxStore: BoxStore): NewLanguagesDao =
     NewLanguagesDao(boxStore.boxFor())
+
+  @Provides @Singleton fun providesNewHistoryDao(boxStore: BoxStore): HistoryDao =
+    HistoryDao(boxStore.boxFor())
+
+  @Provides @Singleton fun providesNewBookmarksDao(boxStore: BoxStore): NewBookmarksDao =
+    NewBookmarksDao(boxStore.boxFor())
+
+  @Provides @Singleton fun providesNewRecentSearchDao(boxStore: BoxStore): NewRecentSearchDao =
+    NewRecentSearchDao(boxStore.boxFor())
 }

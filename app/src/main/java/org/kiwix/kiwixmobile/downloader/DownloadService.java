@@ -36,7 +36,6 @@ import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
-import io.reactivex.CompletableObserver;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -388,23 +387,23 @@ public class DownloadService extends Service {
                   (getBaseContext(), 0,
                       target, PendingIntent.FLAG_ONE_SHOT);
               //book.downloaded = true;
-              dataSource.deleteBook(book)
-                  .subscribe(new CompletableObserver() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                      Log.e("DownloadService", "Unable to delete book", e);
-                    }
-                  });
+              //dataSource.deleteBook(book)
+              //    .subscribe(new CompletableObserver() {
+              //      @Override
+              //      public void onSubscribe(Disposable d) {
+              //
+              //      }
+              //
+              //      @Override
+              //      public void onComplete() {
+              //
+              //      }
+              //
+              //      @Override
+              //      public void onError(Throwable e) {
+              //        Log.e("DownloadService", "Unable to delete book", e);
+              //      }
+              //    });
               notification.get(notificationID).setContentIntent(pendingIntent);
               //notification.get(notificationID).mActions.clear();
               TestingUtils.unbindResource(DownloadService.class);

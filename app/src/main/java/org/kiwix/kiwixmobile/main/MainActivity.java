@@ -81,22 +81,25 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
+import kotlin.Unit;
 import org.json.JSONArray;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
+import org.kiwix.kiwixmobile.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
-import org.kiwix.kiwixmobile.data.local.entity.History;
-import org.kiwix.kiwixmobile.downloader.model.BookOnDisk;
 import org.kiwix.kiwixmobile.help.HelpActivity;
 import org.kiwix.kiwixmobile.history.HistoryActivity;
+import org.kiwix.kiwixmobile.history.HistoryListItem;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
@@ -107,6 +110,9 @@ import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static android.os.Build.VERSION_CODES;
@@ -143,7 +149,7 @@ import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 import static org.kiwix.kiwixmobile.utils.UpdateUtils.reformatProviderUrl;
 
 public class MainActivity extends BaseActivity implements WebViewCallback,
-    MainContract.View, BooksAdapter.OnItemClickListener {
+    MainContract.View{
 
   private static final int REQUEST_READ_STORAGE_PERMISSION = 2;
   private static final int REQUEST_HISTORY_ITEM_CHOSEN = 99;
@@ -156,7 +162,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private static Uri KIWIX_LOCAL_MARKET_URI;
   private static Uri KIWIX_BROWSER_MARKET_URI;
   private final ArrayList<String> bookmarks = new ArrayList<>();
-  private final List<LibraryNetworkEntity.Book> books = new ArrayList<>();
   private final List<KiwixWebView> webViewList = new ArrayList<>();
   @BindView(R.id.activity_main_root)
   ConstraintLayout root;
@@ -231,7 +236,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private RateAppCounter visitCounterPref;
   private int tempVisitCount;
   private boolean isFirstRun;
-  private BooksAdapter booksAdapter;
+  private BooksOnDiskAdapter booksAdapter;
   private AppCompatButton downloadBookButton;
   private ActionBar actionBar;
   private TextView tabSwitcherIcon;
@@ -265,14 +270,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   };
   private FileSearch fileSearch =
       new FileSearch(this, Collections.emptyList(), new FileSearch.ResultListener() {
-        final List<LibraryNetworkEntity.Book> newBooks = new ArrayList<>();
+        final List<BooksOnDiskListItem.BookOnDisk> newBooks = new ArrayList<>();
 
-        @Override public void onBookFound(BookOnDisk bookOnDisk) {
+        @Override public void onBookFound(BooksOnDiskListItem.BookOnDisk bookOnDisk) {
           runOnUiThread(() -> {
-            final LibraryNetworkEntity.Book book = bookOnDisk.getBook();
-            if (!books.contains(book)) {
-              newBooks.add(book);
-            }
+              newBooks.add(bookOnDisk);
           });
         }
 
@@ -363,7 +365,15 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     setupIntent(getIntent());
 
     wasHideToolbar = isHideToolbar;
-    booksAdapter = new BooksAdapter(books, this);
+    booksAdapter = new BooksOnDiskAdapter(
+       new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
+           bookOnDiskItem -> {
+             open(bookOnDiskItem);
+             return Unit.INSTANCE;
+           },
+           null),
+        BookOnDiskDelegate.LanguageDelegate.INSTANCE
+    );
 
     searchFiles();
     tabRecyclerView.setAdapter(tabsAdapter);
@@ -1183,13 +1193,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     //Check maybe need refresh
     String articleUrl = getCurrentWebView().getUrl();
     boolean isBookmark = false;
-    Bookmark bookmark = new Bookmark();
-    bookmark.setZimId(ZimContentProvider.getId())
-        .setZimName(ZimContentProvider.getName())
-        .setZimFilePath(ZimContentProvider.getZimFile())
-        .setBookmarkTitle(getCurrentWebView().getTitle())
-        .setBookmarkUrl(articleUrl)
-        .setFavicon(ZimContentProvider.getFavicon());
+    BookmarkItem bookmark = BookmarkItem.fromZimContentProvider(getCurrentWebView().getTitle(),articleUrl);
     if (articleUrl != null && !bookmarks.contains(articleUrl)) {
       if (ZimContentProvider.getId() != null) {
         presenter.saveBookmark(bookmark);
@@ -1840,14 +1844,20 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     updateBottomToolbarArrowsAlpha();
     String url = getCurrentWebView().getUrl();
     if (url != null && !url.equals(HOME_URL)) {
-      History history = new History();
-      history.setZimId(ZimContentProvider.getId())
-          .setZimName(ZimContentProvider.getName())
-          .setZimFilePath(ZimContentProvider.getZimFile())
-          .setFavicon(ZimContentProvider.getFavicon())
-          .setHistoryTitle(getCurrentWebView().getTitle())
-          .setHistoryUrl(getCurrentWebView().getUrl())
-          .setTimeStamp(System.currentTimeMillis());
+      final long timeStamp = System.currentTimeMillis();
+      SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy", LanguageUtils.getCurrentLocale(this));
+      HistoryListItem.HistoryItem history = new HistoryListItem.HistoryItem(
+          0L,
+          ZimContentProvider.getId(),
+          ZimContentProvider.getName(),
+          ZimContentProvider.getZimFile(),
+          ZimContentProvider.getFavicon(),
+          getCurrentWebView().getTitle(),
+          getCurrentWebView().getUrl(),
+          sdf.format(new Date(timeStamp)),
+          timeStamp,
+          0L
+      );
       presenter.saveHistory(history);
     }
     updateBottomToolbarVisibility();
@@ -1945,20 +1955,17 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     downloadBookButton.setOnClickListener(v -> manageZimFiles(1));
   }
 
-  @Override
-  public void openFile(String url) {
-    File file = new File(url);
-    Intent zimFile = new Intent(MainActivity.this, MainActivity.class);
+  public void open(BooksOnDiskListItem.BookOnDisk bookOnDisk) {
+    File file = bookOnDisk.getFile();
+    Intent zimFile = new Intent(this, MainActivity.class);
     zimFile.setData(Uri.fromFile(file));
     startActivity(zimFile);
     finish();
   }
 
   @Override
-  public void addBooks(List<LibraryNetworkEntity.Book> books) {
-    this.books.clear();
-    this.books.addAll(books);
-    booksAdapter.notifyDataSetChanged();
+  public void addBooks(List<BooksOnDiskListItem> books) {
+    booksAdapter.setItemList(books);
   }
 
   private void searchFiles() {

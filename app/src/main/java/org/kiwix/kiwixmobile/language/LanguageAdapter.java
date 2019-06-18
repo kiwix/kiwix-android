@@ -11,7 +11,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import java.util.ArrayList;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.Language;
+import org.kiwix.kiwixmobile.zim_manager.Language;
 
 class LanguageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   private static final int TYPE_HEADER = 0;

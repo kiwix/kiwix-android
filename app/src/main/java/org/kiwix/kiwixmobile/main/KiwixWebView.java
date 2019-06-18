@@ -45,7 +45,7 @@ import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 public class KiwixWebView extends WebView {
-  private static final float[] NIGHT_MODE_COLORS = {
+  public static final float[] NIGHT_MODE_COLORS = {
       -1.0f, 0, 0, 0, 255, // red
       0, -1.0f, 0, 0, 255, // green
       0, 0, -1.0f, 0, 255, // blue
@@ -68,10 +68,6 @@ public class KiwixWebView extends WebView {
     setWebViewClient(new KiwixWebViewClient(callback));
     setWebChromeClient(new KiwixWebChromeClient(callback));
     getSettings().setDomStorageEnabled(true);
-  }
-
-  public static float[] getNightModeColors() {
-    return NIGHT_MODE_COLORS;
   }
 
   public void loadPrefs() {

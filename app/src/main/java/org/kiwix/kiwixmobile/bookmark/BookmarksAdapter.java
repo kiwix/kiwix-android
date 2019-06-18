@@ -12,15 +12,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import java.util.List;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 import org.kiwix.kiwixmobile.extensions.ImageViewExtensionsKt;
 
 class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Item> {
-  private final List<Bookmark> bookmarkList;
+  private final List<BookmarkItem> bookmarkList;
   private final OnItemClickListener itemClickListener;
-  private final List<Bookmark> deleteList;
+  private final List<BookmarkItem> deleteList;
 
-  BookmarksAdapter(List<Bookmark> bookmarkList, List<Bookmark> deleteList,
+  BookmarksAdapter(List<BookmarkItem> bookmarkList, List<BookmarkItem> deleteList,
       OnItemClickListener itemClickListener) {
     this.bookmarkList = bookmarkList;
     this.deleteList = deleteList;
@@ -37,7 +36,7 @@ class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Item> {
 
   @Override
   public void onBindViewHolder(@NonNull Item holder, int position) {
-    Bookmark bookmark = bookmarkList.get(position);
+    BookmarkItem bookmark = bookmarkList.get(position);
     holder.title.setText(bookmark.getBookmarkTitle());
     if (deleteList.contains(bookmark)) {
       holder.favicon.setImageDrawable(ContextCompat.getDrawable(holder.favicon.getContext(),
@@ -57,9 +56,9 @@ class BookmarksAdapter extends RecyclerView.Adapter<BookmarksAdapter.Item> {
   }
 
   interface OnItemClickListener {
-    void onItemClick(ImageView favicon, Bookmark bookmark);
+    void onItemClick(ImageView favicon, BookmarkItem bookmark);
 
-    boolean onItemLongClick(ImageView favicon, Bookmark bookmark);
+    boolean onItemLongClick(ImageView favicon, BookmarkItem bookmark);
   }
 
   class Item extends RecyclerView.ViewHolder {
