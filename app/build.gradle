@@ -189,15 +189,28 @@ def buildNumber = System.getenv('TRAVIS_BUILD_NUMBER') ?: "dev"
 ext {
   versionMajor = 2
   versionMinor = 5
-  versionPatch = 0
+  versionPatch = 1
 }
 
 private String generateVersionName() {
   "${ext.versionMajor}.${ext.versionMinor}.${ext.versionPatch}"
 }
 
+/*
+* max version code: 210-0-00-00-00
+* our template    : UUU-A-ZZ-YY-XX
+* where:
+* X = patch version
+* Y = minor version
+* Z = major version (+ 20 to distinguish from previous, non semantic, versions of the app)
+* A = number representing ABI split
+* U = unused
+*/
 private Integer generateVersionCode() {
-  200000 + (ext.versionMajor * 10000) + (ext.versionMinor * 100) + (ext.versionPatch)
+  20 * 10000 +
+      (ext.versionMajor * 10000) +
+      (ext.versionMinor * 100) +
+      (ext.versionPatch)
 }
 
 android {
@@ -263,9 +276,8 @@ android {
 
     // Main build type for debugging
     debug {
-      buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://download.kiwix.org/\""
-      // Needed for instrumentation tests on Pre 5.0
       multiDexKeepProguard file("multidex-instrumentation-config.pro")
+      buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://mirror.download.kiwix.org/\""
       buildConfigField "boolean", "KIWIX_ERROR_ACTIVITY", "false"
       testCoverageEnabled true
     }
@@ -285,7 +297,8 @@ android {
     // Release Type
     release {
       signingConfig signingConfigs.release
-      buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://download.kiwix.org/\""
+      buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://mirror.download.kiwix.org/\""
+      buildConfigField "boolean", "KIWIX_ERROR_ACTIVITY", "true"
     }
   }
 
@@ -430,13 +443,13 @@ android {
     experimental = true
   }
 
-  def abiCodes = ['arm64-v8a': 5, 'x86': 2, 'x86_64': 3, 'armeabi-v7a': 4]
+  def abiCodes = ['arm64-v8a': 6, 'x86': 3, 'x86_64': 4, 'armeabi-v7a': 5]
   splits {
     abi {
       enable true
       reset()
       include "x86", "x86_64", 'armeabi-v7a', "arm64-v8a"
-      universalApk false
+      universalApk buildNumber == "dev"
     }
   }
   applicationVariants.all { variant ->
