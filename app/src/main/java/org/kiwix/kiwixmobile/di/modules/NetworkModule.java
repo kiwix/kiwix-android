@@ -25,22 +25,24 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Singleton;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.network.KiwixService;
 import org.kiwix.kiwixmobile.network.UserAgentInterceptor;
 
 @Module public class NetworkModule {
 
-  public static String KIWIX_DOWNLOAD_URL = BuildConfig.KIWIX_DOWNLOAD_URL; //"http://download.kiwix.org/";
+  public static String KIWIX_DOWNLOAD_URL = BuildConfig.KIWIX_DOWNLOAD_URL;
+      //"http://download.kiwix.org/";
   private final static String useragent = "kiwix-android-version:" + BuildConfig.VERSION_CODE;
 
   @Provides @Singleton OkHttpClient provideOkHttpClient() {
     HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-    logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+    logging.setLevel(BuildConfig.DEBUG ? Level.BODY : Level.BASIC);
 
     return new OkHttpClient().newBuilder().followRedirects(true).followSslRedirects(true)
         .connectTimeout(10, TimeUnit.SECONDS)
-        .readTimeout(10, TimeUnit.SECONDS)
+        .readTimeout(20, TimeUnit.SECONDS)
         .addNetworkInterceptor(logging)
         .addNetworkInterceptor(new UserAgentInterceptor(useragent)).build();
   }
@@ -53,5 +55,4 @@ import org.kiwix.kiwixmobile.network.UserAgentInterceptor;
   ConnectivityManager provideConnectivityManager(Context context) {
     return (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
   }
-
 }
