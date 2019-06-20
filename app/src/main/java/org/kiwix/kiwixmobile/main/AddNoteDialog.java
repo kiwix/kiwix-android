@@ -27,6 +27,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
@@ -166,9 +167,13 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
 
   private void exitAddNoteDialog() {
     if(noteEdited) {
-      // Custom AlertDialog for taking user confirmation before closing note dialog in case of unsaved changes
-      DialogFragment newFragment = new ConfirmationAlertDialogFragment(TAG, R.string.confirmation_alert_dialog_message);
-      newFragment.show(getActivity().getSupportFragmentManager(), ConfirmationAlertDialogFragment.TAG);
+      Fragment previousInstance = getActivity().getSupportFragmentManager().findFragmentByTag(ConfirmationAlertDialogFragment.TAG);
+
+      if(previousInstance == null) {
+        // Custom AlertDialog for taking user confirmation before closing note dialog in case of unsaved changes
+        DialogFragment newFragment = new ConfirmationAlertDialogFragment(TAG, R.string.confirmation_alert_dialog_message);
+        newFragment.show(getActivity().getSupportFragmentManager(), ConfirmationAlertDialogFragment.TAG);
+      }
 
     } else {
       // Closing unedited note dialog straightaway

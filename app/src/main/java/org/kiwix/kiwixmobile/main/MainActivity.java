@@ -989,15 +989,15 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   /** Creates the full screen AddNoteDialog, which is a DialogFragment */
   private void showAddNoteDialog() {
     FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-    Fragment prev = getSupportFragmentManager().findFragmentByTag(AddNoteDialog.TAG);
+    Fragment previousInstance = getSupportFragmentManager().findFragmentByTag(AddNoteDialog.TAG);
 
     // To prevent multiple instances of the DialogFragment
-    if(prev != null) {
-      fragmentTransaction.show(prev); // For DialogFragments, show() handles the fragment commit and display
-    } else {
-      fragmentTransaction.addToBackStack(null);
+    if(previousInstance == null) {
+      /* Since the DialogFragment is never added to the back-stack, so findFragmentByTag()
+      *  returning null means that the AddNoteDialog is currently not on display (as doesn't exist)
+      **/
       AddNoteDialog dialogFragment = new AddNoteDialog();
-      dialogFragment.show(fragmentTransaction, AddNoteDialog.TAG);
+      dialogFragment.show(fragmentTransaction, AddNoteDialog.TAG); // For DialogFragments, show() handles the fragment commit and display
     }
   }
 
