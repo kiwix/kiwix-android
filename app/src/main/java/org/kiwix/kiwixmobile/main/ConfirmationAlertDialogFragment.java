@@ -53,7 +53,7 @@ public class ConfirmationAlertDialogFragment extends DialogFragment {
     }
 
     builder.setMessage(stringResource)
-        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
 

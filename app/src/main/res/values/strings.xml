@@ -259,7 +259,6 @@
   <string name="confirmation_alert_dialog_message">Discard unsaved changes?</string>
   <string name="clear_all_notes">Clear All Notes</string>
   <string name="delete_notes_confirmation_msg">Delete all notes?</string>
-  <string name="cancel">Cancel</string>
   <string name="ext_storage_permission_not_granted">Error: Storage permissions not granted</string>
   <string name="notes_deletion_none_found">No notes found for deletion</string>
   <string name="notes_deletion_successful">Entire notes folder deleted</string>

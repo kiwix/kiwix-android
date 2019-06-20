@@ -929,9 +929,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       builder = new AlertDialog.Builder(this);
     }
 
-    builder.setMessage(this.getString(R.string.delete_notes_confirmation_msg))
-        .setNegativeButton(this.getString(R.string.cancel), null) // Do nothing for 'Cancel' button
-        .setPositiveButton(this.getString(R.string.yes), new DialogInterface.OnClickListener() {
+    builder.setMessage(R.string.delete_notes_confirmation_msg)
+        .setNegativeButton(android.R.string.cancel, null) // Do nothing for 'Cancel' button
+        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
             clearAllNotes();

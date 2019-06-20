@@ -98,7 +98,7 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
     View view = inflater.inflate(R.layout.dialog_add_note, container, false);
     unbinder = ButterKnife.bind(this, view);
 
-    toolbar.setTitle(getString(R.string.note));
+    toolbar.setTitle(R.string.note);
     toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
       @Override
