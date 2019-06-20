@@ -246,7 +246,7 @@ public class AddNoteDialog extends DialogFragment {
 
       if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
         Log.d(TAG, "WRITE_EXTERNAL_STORAGE permission not granted");
-        Toast.makeText(getContext(), getString(R.string.note_save_unsuccessful), Toast.LENGTH_LONG);
+        showToast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG);
         return;
       }
 
@@ -266,21 +266,21 @@ public class AddNoteDialog extends DialogFragment {
           FileOutputStream fileOutputStream = new FileOutputStream(noteFile);
           fileOutputStream.write(noteText.getBytes());
           fileOutputStream.close();
-          Toast.makeText(getContext(), getActivity().getString(R.string.note_save_successful), Toast.LENGTH_SHORT).show();
+          showToast(R.string.note_save_successful, Toast.LENGTH_SHORT);
           noteEdited = false; // As no unsaved changes remain
 
         } catch (IOException e) {
           e.printStackTrace();
-          Toast.makeText(this.getContext(), R.string.note_save_unsuccessful, Toast.LENGTH_LONG).show();
+          showToast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG);
         }
 
       } else {
-        Toast.makeText(this.getContext(), R.string.note_save_unsuccessful, Toast.LENGTH_LONG).show();
+        showToast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG);
         Log.d(TAG, "Required folder doesn't exist");
       }
     }
     else {
-      Toast.makeText(getContext(), getString(R.string.note_save_error_storage_not_writable), Toast.LENGTH_LONG).show();
+      showToast(R.string.note_save_error_storage_not_writable, Toast.LENGTH_LONG);
     }
 
   }
@@ -354,7 +354,7 @@ public class AddNoteDialog extends DialogFragment {
       }
 
     } else {
-      Toast.makeText(getContext(), getString(R.string.note_share_error_file_missing), Toast.LENGTH_SHORT).show();
+      showToast(R.string.note_share_error_file_missing, Toast.LENGTH_SHORT);
     }
 
     if(noteFileUri != null) {
@@ -372,6 +372,10 @@ public class AddNoteDialog extends DialogFragment {
 
   public static boolean isExternalStorageWritable() {
     return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+  }
+
+  private void showToast(int stringResource, int duration) {
+    Toast.makeText(getActivity(), stringResource, duration).show();
   }
 
   @Override

@@ -948,7 +948,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     if(AddNoteDialog.isExternalStorageWritable()) {
       if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
         Log.d("MainActivity", "WRITE_EXTERNAL_STORAGE permission not granted");
-        Toast.makeText(this, this.getString(R.string.ext_storage_permission_not_granted), Toast.LENGTH_LONG);
+        showToast(R.string.ext_storage_permission_not_granted, Toast.LENGTH_LONG);
         return;
       }
 
@@ -958,7 +958,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       File[] filesInNotesDirectory = notesDirectory.listFiles();
 
       if(filesInNotesDirectory == null) { // Notes folder doesn't exist
-        Toast.makeText(this, this.getString(R.string.notes_deletion_none_found), Toast.LENGTH_LONG).show();
+        showToast(R.string.notes_deletion_none_found, Toast.LENGTH_LONG);
         return;
       }
 
@@ -980,9 +980,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
 
     if(result) {
-      Toast.makeText(this, this.getString(R.string.notes_deletion_successful), Toast.LENGTH_SHORT).show();
+      showToast(R.string.notes_deletion_successful, Toast.LENGTH_SHORT);
     } else {
-      Toast.makeText(this, this.getString(R.string.notes_deletion_unsuccessful), Toast.LENGTH_SHORT).show();
+      showToast(R.string.notes_deletion_unsuccessful, Toast.LENGTH_SHORT);
     }
   }
 
@@ -1013,7 +1013,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
            *  1) User has previously checked on "Don't ask me again", and/or
            *  2) Permission has been disabled on device
            */
-          Toast.makeText(getApplicationContext(), getString(R.string.ext_storage_permission_rationale_add_note), Toast.LENGTH_LONG).show();
+          showToast(R.string.ext_storage_permission_rationale_add_note, Toast.LENGTH_LONG);
         }
 
         requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE);
@@ -1024,6 +1024,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
 
     return false;
+  }
+
+  private void showToast(int stringResource, int duration) {
+    Toast.makeText(this, stringResource, duration).show();
   }
 
   @SuppressWarnings("SameReturnValue")
