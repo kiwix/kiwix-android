@@ -5,7 +5,7 @@ buildscript {
   }
   dependencies {
     classpath("com.android.tools.build:gradle:3.4.1")
-
+    classpath("com.dicedmelon.gradle:jacoco-android:0.1.4")
     // NOTE: Do not place your application dependencies here; they belong
     // in the individual module build.gradle files
   }
@@ -35,6 +35,8 @@ ext {
   set("powerMockVersion", "1.6.6")
   set("powerMockJUnitVersion", "1.7.4")
   set("baristaVersion", "2.7.1")
+  set("kotlinVersion", "1.3.31")
+  set("objectboxVersion", "2.3.4")
 }
 
 allprojects {

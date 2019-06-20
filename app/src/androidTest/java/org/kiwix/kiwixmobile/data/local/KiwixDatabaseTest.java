@@ -20,9 +20,9 @@
 package org.kiwix.kiwixmobile.data.local;
 
 import android.content.Context;
-import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.filters.SmallTest;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.SmallTest;
+import androidx.test.platform.app.InstrumentationRegistry;
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
 import java.io.BufferedWriter;
@@ -31,6 +31,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,7 +51,7 @@ public class KiwixDatabaseTest {
 
   @Test
   public void testMigrateDatabase() throws IOException {
-    KiwixDatabase kiwixDatabase = new KiwixDatabase(context);
+    KiwixDatabase kiwixDatabase = new KiwixDatabase(context, null, null);
     kiwixDatabase.recreate();
     String testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c";
     String[] testBookmarks = new String[] { "Test1", "Test2", "Test3" };
@@ -60,7 +61,8 @@ public class KiwixDatabaseTest {
       throw new IOException("Unable to create file for testing migration");
     }
     Writer writer =
-        new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "utf-8"));
+        new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName),
+            StandardCharsets.UTF_8));
     for (String bookmark : testBookmarks) {
       writer.write(bookmark + "\n");
     }

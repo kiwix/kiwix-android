@@ -25,4 +25,5 @@ import com.yahoo.squidb.annotations.TableModelSpec;
 public class NetworkLanguageSpec {
   public String languageISO3;
   public boolean enabled;
+  public int numberOfOccurences;
 }

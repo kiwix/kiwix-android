@@ -35,12 +35,14 @@ import javax.inject.Singleton;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.dao.BookDao;
 import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao;
+import org.kiwix.kiwixmobile.data.local.dao.NetworkLanguageDao;
 import org.kiwix.kiwixmobile.data.local.entity.BookDatabaseEntity;
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
-import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.data.local.entity.LibraryDatabaseEntity;
 import org.kiwix.kiwixmobile.data.local.entity.NetworkLanguageDatabaseEntity;
 import org.kiwix.kiwixmobile.data.local.entity.RecentSearch;
+import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao;
+import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.utils.UpdateUtils;
 
@@ -51,11 +53,15 @@ public class KiwixDatabase extends SquidDatabase {
 
   private static final int VERSION = 17;
   private final Context context;
+  private final NewBookDao bookDao;
+  private final NewLanguagesDao languagesDao;
 
   @Inject
-  public KiwixDatabase(Context context) {
+  public KiwixDatabase(Context context, NewBookDao bookDao, NewLanguagesDao languagesDao) {
     super(context);
     this.context = context;
+    this.bookDao = bookDao;
+    this.languagesDao = languagesDao;
   }
 
   @Override
@@ -66,17 +72,25 @@ public class KiwixDatabase extends SquidDatabase {
   @Override
   protected Table[] getTables() {
     return new Table[] {
-        BookDatabaseEntity.TABLE,
-        LibraryDatabaseEntity.TABLE,
         RecentSearch.TABLE,
         Bookmark.TABLE,
-        NetworkLanguageDatabaseEntity.TABLE,
-        History.TABLE
     };
   }
 
   @Override
   protected boolean onUpgrade(SQLiteDatabaseWrapper db, int oldVersion, int newVersion) {
+    if (newVersion >= 16) { //2.5 attempt reading values from old db before they get dropped
+      try {
+        bookDao.migrationInsert(new BookDao(this).getBooks());
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      try {
+        languagesDao.insert(new NetworkLanguageDao(this).getFilteredLanguages());
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
     switch (oldVersion) {
       case 1:
       case 2:
@@ -117,13 +131,16 @@ public class KiwixDatabase extends SquidDatabase {
         tryDropTable(BookDatabaseEntity.TABLE);
         tryCreateTable(BookDatabaseEntity.TABLE);
       case 14:
-        tryCreateTable(History.TABLE);
       case 15:
         tryAddColumn(Bookmark.ZIM_FILE_PATH);
         tryAddColumn(Bookmark.FAVICON);
         migrateBookmarksVersion16();
+        tryDropTable(BookDatabaseEntity.TABLE);
+        tryDropTable(NetworkLanguageDatabaseEntity.TABLE);
+        tryDropTable(LibraryDatabaseEntity.TABLE);
       case 16:
         new BookmarksDao(this).processBookmark(UpdateUtils::reformatProviderUrl);
+        //TODO MIGRATIONS BEFORE 3.0
     }
     return true;
   }

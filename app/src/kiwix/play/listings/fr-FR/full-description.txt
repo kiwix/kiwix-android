@@ -1,0 +1,11 @@
+Tout Wikipédia dans votre mobile !
+
+Kiwix est un lecteur de contenus hors-ligne qui peut être utilisé pour Wikipédia ainsi que d'autres contenus (Documentation Ubuntu, WikiLeaks, WikiVoyage, WikiSource, etc).
+
+Une fois que vous avez téléchargé le fichier de contenu (potentiellement très gros), vous n'avez plus du tout besoin de connexion pour l'utiliser.
+
+Kiwix est une application légère utilisant des fichiers ZIM que vous aurez préalablement téléchargé et stocké sur la mémoire externe (carte SD).
+
+Merci de consulter les instructions d'utilisations dans l'application ainsi que sur le site web pour en savoir plus sur les contenus disponibles.
+
+Note: Kiwix est aussi disponible sur ordinateur (Windows, Mac, Linux).

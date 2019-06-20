@@ -45,7 +45,7 @@ import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 public class KiwixWebView extends WebView {
-  private static final float[] NIGHT_MODE_COLORS = {
+  public static final float[] NIGHT_MODE_COLORS = {
       -1.0f, 0, 0, 0, 255, // red
       0, -1.0f, 0, 0, 255, // green
       0, 0, -1.0f, 0, 255, // blue
@@ -68,10 +68,6 @@ public class KiwixWebView extends WebView {
     setWebViewClient(new KiwixWebViewClient(callback));
     setWebChromeClient(new KiwixWebChromeClient(callback));
     getSettings().setDomStorageEnabled(true);
-  }
-
-  public static float[] getNightModeColors() {
-    return NIGHT_MODE_COLORS;
   }
 
   public void loadPrefs() {
@@ -153,8 +149,8 @@ public class KiwixWebView extends WebView {
 
       if (url != null || src != null) {
         url = url == null ? src : url;
-        url = url.substring(url.lastIndexOf('/') + 1, url.length());
-        url = url.substring(url.indexOf("%3A") + 1, url.length());
+        url = url.substring(url.lastIndexOf('/') + 1);
+        url = url.substring(url.indexOf("%3A") + 1);
         int dotIndex = url.lastIndexOf('.');
 
         File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
@@ -167,7 +163,7 @@ public class KiwixWebView extends WebView {
         File storageDir = new File(root, url);
         String newUrl = url;
         for (int i = 2; storageDir.exists(); i++) {
-          newUrl = url.substring(0, dotIndex) + "_" + i + url.substring(dotIndex, url.length());
+          newUrl = url.substring(0, dotIndex) + "_" + i + url.substring(dotIndex);
           storageDir = new File(root, newUrl);
         }
 

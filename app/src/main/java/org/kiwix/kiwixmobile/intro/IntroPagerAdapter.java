@@ -8,7 +8,7 @@ import androidx.viewpager.widget.PagerAdapter;
 class IntroPagerAdapter extends PagerAdapter {
   private final View[] views;
 
-  IntroPagerAdapter(View views[]) {
+  IntroPagerAdapter(View[] views) {
     this.views = views;
   }
 
