@@ -40,4 +40,17 @@ Our process for accepting changes operates by [Pull Request (PR)](https://help.g
 
 1.  Once you have integrated comments, or waited for feedback, a Lieutenant should merge your changes in!
 
+### Branching
+
+Our branching strategy is based on [this article](https://nvie.com/posts/a-successful-git-branching-model/) which we suggest you read.
+
++ **master** a history of releases, once merged to from develop and tagged we create a release on the play store & GitHub releases.
++ **develop**  the actively worked on next release of the app, what we branch off of while working on new features and what we merge into upon feature completion
++ **feature/** or feature/<username>/ any branch under this directory is an actively developed feature, feature branches culminate in a PR, are merged and deleted
++ **hotfix/** or hotfix/<username>/ any branch under this directory is an urgent fix to production, once a hotfix is merged to master (and tagged for release) it must also be merged to develop before being deleted
+
+All branches should have distinct history and should be visually easy to follow, for this reason only preform merge commits when merging code either by PR or when synchronising.
+
+Rebasing should be avoided.
+
 _These guidelines are based on [Tools for Government Data Archiving](https://github.com/edgi-govdata-archiving/overview/blob/master/CONTRIBUTING.md)'s._
