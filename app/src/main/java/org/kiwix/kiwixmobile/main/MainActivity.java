@@ -989,7 +989,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   /** Creates the full screen AddNoteDialog, which is a DialogFragment */
   private void showAddNoteDialog() {
     FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-    Fragment prev = getSupportFragmentManager().findFragmentByTag("AddNoteDialog");
+    Fragment prev = getSupportFragmentManager().findFragmentByTag(AddNoteDialog.TAG);
 
     // To prevent multiple instances of the DialogFragment
     if(prev != null) {
@@ -997,7 +997,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     } else {
       fragmentTransaction.addToBackStack(null);
       AddNoteDialog dialogFragment = new AddNoteDialog();
-      dialogFragment.show(fragmentTransaction, "AddNoteDialog");
+      dialogFragment.show(fragmentTransaction, AddNoteDialog.TAG);
     }
   }
 

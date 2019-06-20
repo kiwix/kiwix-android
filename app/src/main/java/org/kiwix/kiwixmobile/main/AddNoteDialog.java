@@ -3,7 +3,6 @@ package org.kiwix.kiwixmobile.main;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -24,7 +23,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -58,7 +56,9 @@ import static org.kiwix.kiwixmobile.utils.Constants.NOTES_DIRECTORY;
  * Notes are saved as text files at location: "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
  * */
 
-public class AddNoteDialog extends DialogFragment {
+public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDialogFragment.UserClickListener {
+
+  public static String TAG = "AddNoteDialog";
 
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
@@ -76,8 +76,6 @@ public class AddNoteDialog extends DialogFragment {
   private String articleTitle;
   private boolean noteFileExists = false;
   private boolean noteEdited = false; // Keeps track of state of the note (whether edited since last save)
-
-  private final String TAG = "AddNoteDialog";
 
   public AddNoteDialog() {
     super();
@@ -169,13 +167,12 @@ public class AddNoteDialog extends DialogFragment {
   private void exitAddNoteDialog() {
     if(noteEdited) {
       // Custom AlertDialog for taking user confirmation before closing note dialog in case of unsaved changes
-      DialogFragment newFragment = new ConfirmationAlertDialogFragment(getDialog());
-      newFragment.show(getActivity().getSupportFragmentManager(), "ConfirmationAlertDialog");
+      DialogFragment newFragment = new ConfirmationAlertDialogFragment(TAG, R.string.confirmation_alert_dialog_message);
+      newFragment.show(getActivity().getSupportFragmentManager(), ConfirmationAlertDialogFragment.TAG);
 
     } else {
       // Closing unedited note dialog straightaway
-      Dialog dialog = getDialog();
-      dialog.dismiss();
+      dismissAddNoteDialog();
     }
   }
 
@@ -378,6 +375,22 @@ public class AddNoteDialog extends DialogFragment {
     Toast.makeText(getActivity(), stringResource, duration).show();
   }
 
+  // Methods from ConfirmationAlertDialogFragment.UserClickListener interface
+  @Override
+  public void onPositiveClick() {
+    dismissAddNoteDialog();
+  }
+
+  @Override
+  public void onNegativeClick() {
+    // Do nothing
+  }
+
+  private void dismissAddNoteDialog() {
+    Dialog dialog = getDialog();
+    dialog.dismiss();
+  }
+
   @Override
   public void onStart() {
     super.onStart();
@@ -396,48 +409,6 @@ public class AddNoteDialog extends DialogFragment {
     if (unbinder != null) {
       unbinder.unbind();
     }
-  }
-
-}
-
-class ConfirmationAlertDialogFragment extends DialogFragment {
-  /**
-   * Helper class to show the alert dialog in case the user tries to exit the
-   * AddNoteDialog with unsaved file changes
-   **/
-
-  private SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(KiwixApplication.getInstance());
-  private Dialog addNoteDialog;
-
-  public ConfirmationAlertDialogFragment(Dialog dialog) {
-    super();
-    addNoteDialog = dialog;
-  }
-
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-    AlertDialog.Builder builder;
-
-    if (sharedPreferenceUtil != null && sharedPreferenceUtil.nightMode()) {
-      // Night Mode support
-      builder = new AlertDialog.Builder(getActivity(), R.style.AppTheme_Dialog_Night);
-
-    } else {
-      builder = new AlertDialog.Builder(getActivity());
-
-    }
-    builder.setMessage(getString(R.string.confirmation_alert_dialog_message))
-        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            // User sure of discarding unsaved changes and closing note dialog
-            addNoteDialog.dismiss();
-          }
-        })
-        .setNegativeButton(getString(R.string.cancel), null); // Do nothing for 'Cancel' button
-
-    return builder.create();
   }
 
 }

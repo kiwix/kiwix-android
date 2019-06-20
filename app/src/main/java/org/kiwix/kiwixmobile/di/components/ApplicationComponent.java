@@ -29,6 +29,7 @@ import org.kiwix.kiwixmobile.di.modules.NetworkModule;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
 import org.kiwix.kiwixmobile.library.LibraryAdapter;
 import org.kiwix.kiwixmobile.main.AddNoteDialog;
+import org.kiwix.kiwixmobile.main.ConfirmationAlertDialogFragment;
 import org.kiwix.kiwixmobile.main.KiwixWebView;
 import org.kiwix.kiwixmobile.search.AutoCompleteAdapter;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
@@ -64,4 +65,6 @@ public interface ApplicationComponent {
   void inject(AutoCompleteAdapter autoCompleteAdapter);
 
   void inject(AddNoteDialog addNoteDialog);
+
+  void inject(ConfirmationAlertDialogFragment confirmationAlertDialogFragment);
 }
