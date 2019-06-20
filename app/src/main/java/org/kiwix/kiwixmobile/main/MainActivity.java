@@ -996,7 +996,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       /* Since the DialogFragment is never added to the back-stack, so findFragmentByTag()
       *  returning null means that the AddNoteDialog is currently not on display (as doesn't exist)
       **/
-      AddNoteDialog dialogFragment = new AddNoteDialog();
+      AddNoteDialog dialogFragment = new AddNoteDialog(sharedPreferenceUtil);
       dialogFragment.show(fragmentTransaction, AddNoteDialog.TAG); // For DialogFragments, show() handles the fragment commit and display
     }
   }

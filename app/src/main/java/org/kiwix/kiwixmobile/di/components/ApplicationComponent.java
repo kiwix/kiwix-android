@@ -64,7 +64,4 @@ public interface ApplicationComponent {
 
   void inject(AutoCompleteAdapter autoCompleteAdapter);
 
-  void inject(AddNoteDialog addNoteDialog);
-
-  void inject(ConfirmationAlertDialogFragment confirmationAlertDialogFragment);
 }

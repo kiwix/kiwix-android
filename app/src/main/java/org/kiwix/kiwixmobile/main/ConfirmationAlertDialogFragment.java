@@ -8,11 +8,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
-import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
-import javax.inject.Inject;
 
 /**
  * Created by @Aditya-Sood as a part of GSoC 2019
@@ -29,15 +27,15 @@ import javax.inject.Inject;
 public class ConfirmationAlertDialogFragment extends DialogFragment {
 
   public static String TAG = "ConfirmationAlertDialog";
-  @Inject SharedPreferenceUtil sharedPreferenceUtil;
-  private int stringResource;
+
+  private SharedPreferenceUtil sharedPreferenceUtil;
+  private int stringResourceId;
   private String parentDialogFragmentTAG;
 
-  public ConfirmationAlertDialogFragment(String dialogFragmentTAG, int resourceId) {
-    super();
-    parentDialogFragmentTAG = dialogFragmentTAG;
-    stringResource = resourceId;
-    KiwixApplication.getApplicationComponent().inject(this);
+  public ConfirmationAlertDialogFragment(SharedPreferenceUtil sharedPreferenceUtil, String parentDialogFragmentTAG, int stringResourceId) {
+    this.sharedPreferenceUtil = sharedPreferenceUtil;
+    this.parentDialogFragmentTAG = parentDialogFragmentTAG;
+    this.stringResourceId = stringResourceId;
   }
 
   @Override
@@ -52,7 +50,7 @@ public class ConfirmationAlertDialogFragment extends DialogFragment {
       builder = new AlertDialog.Builder(getActivity());
     }
 
-    builder.setMessage(stringResource)
+    builder.setMessage(stringResourceId)
         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {

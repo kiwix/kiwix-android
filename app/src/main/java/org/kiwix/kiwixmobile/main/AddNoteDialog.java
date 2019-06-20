@@ -30,7 +30,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import org.kiwix.kiwixmobile.BuildConfig;
-import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
@@ -40,7 +39,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -61,8 +59,7 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
 
   public static String TAG = "AddNoteDialog";
 
-  @Inject
-  SharedPreferenceUtil sharedPreferenceUtil;
+  private SharedPreferenceUtil sharedPreferenceUtil;
 
   @BindView(R.id.add_note_toolbar)
   Toolbar toolbar;  // Displays options for the note dialog
@@ -78,9 +75,8 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
   private boolean noteFileExists = false;
   private boolean noteEdited = false; // Keeps track of state of the note (whether edited since last save)
 
-  public AddNoteDialog() {
-    super();
-    KiwixApplication.getApplicationComponent().inject(this);
+  public AddNoteDialog(SharedPreferenceUtil sharedPreferenceUtil) {
+    this.sharedPreferenceUtil = sharedPreferenceUtil;
   }
 
   @Override
@@ -171,7 +167,7 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
 
       if(previousInstance == null) {
         // Custom AlertDialog for taking user confirmation before closing note dialog in case of unsaved changes
-        DialogFragment newFragment = new ConfirmationAlertDialogFragment(TAG, R.string.confirmation_alert_dialog_message);
+        DialogFragment newFragment = new ConfirmationAlertDialogFragment(sharedPreferenceUtil, TAG, R.string.confirmation_alert_dialog_message);
         newFragment.show(getActivity().getSupportFragmentManager(), ConfirmationAlertDialogFragment.TAG);
       }
 
