@@ -1303,12 +1303,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   private void updateBottomToolbarVisibility() {
     if (checkNull(bottomToolbar)) {
-      if (sharedPreferenceUtil.getPrefBottomToolbar() && !HOME_URL.equals(
+      if (!HOME_URL.equals(
           getCurrentWebView().getUrl())
           && tabSwitcherRoot.getVisibility() != View.VISIBLE) {
         bottomToolbar.setVisibility(View.VISIBLE);
-        if (getCurrentWebView() instanceof ToolbarStaticKiwixWebView
-            && sharedPreferenceUtil.getPrefBottomToolbar()) {
+        if (getCurrentWebView() instanceof ToolbarStaticKiwixWebView) {
           contentFrame.setPadding(0, 0, 0,
               (int) getResources().getDimension(R.dimen.bottom_toolbar_height));
         } else {
