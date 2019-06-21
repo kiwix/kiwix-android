@@ -142,7 +142,7 @@ class ZimManageViewModel @Inject constructor(
         .subscribe(
             {
               kiwixService.library
-                  .timeout(10, SECONDS)
+                  .timeout(60, SECONDS)
                   .retry(5)
                   .subscribe(
                       { library.onNext(it) },
