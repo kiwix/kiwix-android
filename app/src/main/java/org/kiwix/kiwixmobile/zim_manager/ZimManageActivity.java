@@ -43,6 +43,7 @@ import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.language.LanguageActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.models.Language;
+import org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
@@ -234,6 +235,13 @@ public class ZimManageActivity extends BaseActivity implements ZimManageViewCall
             showLanguageSelect();
           }
         }
+        return super.onOptionsItemSelected(item);
+
+      case R.id.get_zim_nearby_device:
+        Intent localFileTransferIntent = new Intent(this, LocalFileTransferActivity.class);
+        startActivity(localFileTransferIntent);
+        return true;
+
       default:
         return super.onOptionsItemSelected(item);
     }

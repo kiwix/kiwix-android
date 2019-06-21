@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".zim_manager.local_file_transfer.LocalFileTransferActivity">
+
+    <item android:id="@+id/menu_item_disconnect"
+        android:title="Disconnect"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_baseline_cancel_24px" />
+
+    <item android:id="@+id/menu_item_search_devices"
+        android:title="Search For Peers"
+        app:showAsAction="always"
+        android:icon="@drawable/action_search"/>
+</menu>
