@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -51,6 +52,8 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   private boolean isWifiP2pEnabled = false;
   private boolean retryChannel = false;
 
+  private ArrayList<Uri> fileURIArrayList;
+
   private WifiP2pManager manager;
   private final IntentFilter intentFilter = new IntentFilter();
   private WifiP2pManager.Channel channel;
@@ -62,6 +65,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_local_file_transfer);
+    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // Protect AsyncTask from orientation changes
 
         /*setContentView(R.layout.activity_local_file_transfer);
 
@@ -80,10 +84,10 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     fileUriListView.setText(uriList);*/
 
     Intent filesIntent = getIntent();
-    ArrayList<Uri> fileURIArrayList = filesIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+    fileURIArrayList = filesIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
 
     if(fileURIArrayList != null && fileURIArrayList.size() > 0) {
-      filePath = fileURIArrayList.get(0);
+      //filePath = fileURIArrayList.get(0);
       setFileSender();
     }
 
@@ -139,6 +143,10 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     }
 
     return false;
+  }
+
+  public ArrayList<Uri> getFileURIArrayList() {
+    return fileURIArrayList;
   }
 
   public boolean isWifiP2pEnabled() {
@@ -581,5 +589,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
       }
 
     });
+
+    this.finish();
   }
 }
