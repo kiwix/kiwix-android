@@ -77,6 +77,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
   private boolean fileSender = false;
   private ArrayList<Uri> fileUriList;
   private int totalFiles = -1;
+  private int totalFilesSent = 0;
   private ArrayList<String> fileNames;
 
   @Override
@@ -141,6 +142,9 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
   @Override
   public void onListItemClick(ListView l, View v, int position, long id) {
+    if(!isFileSender())
+      return;
+
     selectedPeerDevice = (WifiP2pDevice) getListAdapter().getItem(position);
     Toast.makeText(getActivity(), selectedPeerDevice.deviceName, Toast.LENGTH_SHORT).show();
 
@@ -230,6 +234,14 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
   public ArrayList<Uri> getFileUriList() {
     return fileUriList;
+  }
+
+  public void incrementTotalFilesSent() {
+    this.totalFilesSent++;
+  }
+
+  public boolean allFilesSent() {
+    return (totalFilesSent == totalFiles);
   }
 
   private void startFileTransfer() {
@@ -553,6 +565,16 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
         return "";
       }
     }
+
+    @Override
+    protected void onPostExecute(String s) {
+      //
+      deviceListFragment.incrementTotalFilesSent();
+
+      if(deviceListFragment.allFilesSent()) {
+        deviceListFragment.getActivity().finish();
+      }
+    }
   }
 
   public static class FileServerAsyncTask extends AsyncTask<Void, Void, String> {
@@ -612,6 +634,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
       super.onPostExecute(s);
       Toast.makeText(context, "File transfer complete", Toast.LENGTH_LONG).show();
       Log.d(LocalFileTransferActivity.TAG, "File transfer complete");
+      deviceListFragment.getActivity().finish();
 
       /*File recvFile = new File(filePath);
       Uri fileUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID+".fileprovider",recvFile);
