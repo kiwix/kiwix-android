@@ -268,7 +268,10 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
         if(groupInfo.isGroupOwner)  fileReceiverAddress = selectedPeerDeviceInetAddress;
         else                        fileReceiverAddress = groupInfo.groupOwnerAddress;
         for(int i = 0; i < 10000000; i++);
-        new FileSenderAsyncTask(getContext(), this, groupInfo).execute(fileUriList);
+
+        for(int i = 0; i < totalFiles; i++) {
+          new FileSenderAsyncTask(getContext(), this, groupInfo).execute(fileUriList.get(i));
+        }
       }
     }
   }
@@ -494,7 +497,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     return fileReceiverAddress;
   }
 
-  public static class FileSenderAsyncTask extends AsyncTask<ArrayList<Uri>, Void, String> {
+  public static class FileSenderAsyncTask extends AsyncTask<Uri, Void, String> {
 
     private Context context;
     private DeviceListFragment deviceListFragment;
@@ -507,9 +510,9 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     }
 
     @Override
-    protected String doInBackground(ArrayList<Uri>... fileUriList) {
+    protected String doInBackground(Uri... fileUris) {
 
-      ArrayList<Uri> uriList = fileUriList[0];
+      Uri fileUri = fileUris[0];
 
       Socket socket = new Socket();
       try {
@@ -526,7 +529,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
         Log.d(LocalFileTransferActivity.TAG, "ContentResolver obtained");
         InputStream is = null;
         try {
-          is = cr.openInputStream(uriList.get(0));
+          is = cr.openInputStream(fileUri);
           Log.d(LocalFileTransferActivity.TAG, "Opened InputStream");
         } catch (FileNotFoundException e) {
           Log.d(LocalFileTransferActivity.TAG, e.toString());
@@ -568,30 +571,35 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
       try {
         ServerSocket serverSocket = new ServerSocket(FILE_TRANSFER_PORT);
         Log.d(LocalFileTransferActivity.TAG, "Server: Socket opened at " + FILE_TRANSFER_PORT);
-        Socket client = serverSocket.accept();
-        Log.d(LocalFileTransferActivity.TAG, "Server: Client connected");
 
-        ArrayList<String> fileNames = deviceListFragment.getFileNames();
-        String incomingFileName = fileNames.get(0);
+        int totalFileCount = deviceListFragment.getTotalFiles();
+        for(int currentFile = 1; currentFile <= totalFileCount; currentFile++) {
+          Socket client = serverSocket.accept();
+          Log.d(LocalFileTransferActivity.TAG, "Server: Client connected");
 
-        // File selector, file not exists,
-        //TODO: Change to appropriate file-path
-        final File clientNoteFileLocation = new File(Environment.getExternalStorageDirectory() + "/KiwixWifi/"+incomingFileName);
-        File dirs = new File(clientNoteFileLocation.getParent());
-        if(!dirs.exists()) {
-          Log.d(LocalFileTransferActivity.TAG, "Parent creation result: "+dirs.mkdirs());
-        } else {
-          Log.d(LocalFileTransferActivity.TAG, "Parent directories exist");
+          ArrayList<String> fileNames = deviceListFragment.getFileNames();
+          String incomingFileName = fileNames.get(currentFile-1);
+
+          // File selector, file not exists,
+          //TODO: Change to appropriate file-path
+          //  Save in the Kiwix app folder
+          final File clientNoteFileLocation = new File(Environment.getExternalStorageDirectory() + "/KiwixWifi/"+incomingFileName);
+          File dirs = new File(clientNoteFileLocation.getParent());
+          if(!dirs.exists()) {
+            Log.d(LocalFileTransferActivity.TAG, "Parent creation result: "+dirs.mkdirs());
+          } else {
+            Log.d(LocalFileTransferActivity.TAG, "Parent directories exist");
+          }
+
+          Log.d(LocalFileTransferActivity.TAG, "File creation: "+clientNoteFileLocation.createNewFile());
+
+          Log.d(LocalFileTransferActivity.TAG, "Copying files");
+          InputStream inputStream = client.getInputStream();
+          copyFile(inputStream, new FileOutputStream(clientNoteFileLocation));
         }
-
-        Log.d(LocalFileTransferActivity.TAG, "File creation: "+clientNoteFileLocation.createNewFile());
-
-        Log.d(LocalFileTransferActivity.TAG, "Copying files");
-        InputStream inputStream = client.getInputStream();
-        copyFile(inputStream, new FileOutputStream(clientNoteFileLocation));
-
         serverSocket.close();
-        return clientNoteFileLocation.getAbsolutePath();
+
+        return "";
 
       } catch (IOException e) {
         Log.e(LocalFileTransferActivity.TAG, e.getMessage());
