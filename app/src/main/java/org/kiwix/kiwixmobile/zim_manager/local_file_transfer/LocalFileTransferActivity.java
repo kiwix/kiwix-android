@@ -22,6 +22,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -101,6 +102,15 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
     Toolbar actionBar = findViewById(R.id.toolbar_local_file_transfer);
     setSupportActionBar(actionBar);
+    actionBar.setTitle("Local ZIM file transfer");
+    // TODO: Fix this drawable file/colour & text colour
+    actionBar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+    actionBar.setNavigationOnClickListener(new View.OnClickListener(){
+      @Override
+      public void onClick(View v) {
+        disconnect();
+      }
+    });
 
     // Intents that the broadcast receiver will be responding to
     intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
