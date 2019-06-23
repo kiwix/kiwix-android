@@ -33,6 +33,7 @@ import org.kiwix.kiwixmobile.search.AutoCompleteAdapter;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
+import org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity;
 
 @Singleton
 @Component(modules = {
@@ -61,4 +62,6 @@ public interface ApplicationComponent {
   void inject(KiwixSettingsActivity.PrefsFragment prefsFragment);
 
   void inject(AutoCompleteAdapter autoCompleteAdapter);
+
+  void inject(LocalFileTransferActivity localFileTransferActivity);
 }

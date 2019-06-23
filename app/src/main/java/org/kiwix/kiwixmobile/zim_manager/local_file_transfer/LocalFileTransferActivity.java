@@ -33,10 +33,14 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 public class LocalFileTransferActivity extends AppCompatActivity implements WifiP2pManager.ChannelListener, DeviceListFragment.DeviceActionListener {
 
@@ -45,9 +49,12 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   *   - Handle multiple selected files
   *   */
 
-  public static final String TAG = "LocalFileTransferActvty";
+  public static final String TAG = "LocalFileTransferActvty"; // Not a typo, Tags have a length upper limit of 25 characters
   public static Uri filePath = null; // = Environment.getExternalStorageDirectory() + "/Kiwix/temp.txt";///psiram_en_all_2018-09.zim";//Notes/Granblue Fantasy Wiki/Main Page.txt";
   private final int PERMISSION_REQUEST_CODE_COARSE_LOCATION = 1;
+
+  @Inject
+  SharedPreferenceUtil sharedPreferenceUtil;
 
   private boolean isWifiP2pEnabled = false;
   private boolean retryChannel = false;
@@ -66,6 +73,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_local_file_transfer);
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // Protect AsyncTask from orientation changes
+    KiwixApplication.getApplicationComponent().inject(this);
 
         /*setContentView(R.layout.activity_local_file_transfer);
 
@@ -176,6 +184,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
       final DeviceListFragment deviceListFragment = (DeviceListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_device_list);
       deviceListFragment.onInitiateDiscovery();
+      deviceListFragment.setSharedPreferenceUtil(sharedPreferenceUtil);
       manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
         @Override
         public void onSuccess() {

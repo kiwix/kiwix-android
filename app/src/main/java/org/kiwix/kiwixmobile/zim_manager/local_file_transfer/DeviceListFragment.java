@@ -37,6 +37,7 @@ import androidx.fragment.app.ListFragment;
 
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -62,6 +63,8 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTra
 public class DeviceListFragment extends ListFragment implements WifiP2pManager.PeerListListener, WifiP2pManager.ConnectionInfoListener {
 
   public static String TAG = "DeviceListFragment";
+
+  private SharedPreferenceUtil sharedPreferenceUtil;
 
   private View fragRootView = null;
   private List<WifiP2pDevice> peerDevices = new ArrayList<WifiP2pDevice>();
@@ -205,7 +208,6 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     // TODO: Disable onclick listener (of list) for connecting to devices
   }
 
-
   public void setClientAddress(InetAddress clientAddress) {
     if(clientAddress != null) selectedPeerDeviceInetAddress = clientAddress;
 
@@ -242,6 +244,14 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
   public boolean allFilesSent() {
     return (totalFilesSent == totalFiles);
+  }
+
+  public void setSharedPreferenceUtil(SharedPreferenceUtil sharedPreferenceUtil) {
+    this.sharedPreferenceUtil = sharedPreferenceUtil;
+  }
+
+  public String getZimStorageRootPath() {
+    return (sharedPreferenceUtil.getPrefStorage() + "/Kiwix/");
   }
 
   private void startFileTransfer() {
@@ -594,6 +604,8 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
         ServerSocket serverSocket = new ServerSocket(FILE_TRANSFER_PORT);
         Log.d(LocalFileTransferActivity.TAG, "Server: Socket opened at " + FILE_TRANSFER_PORT);
 
+        final String KIWIX_ROOT = deviceListFragment.getZimStorageRootPath();
+
         int totalFileCount = deviceListFragment.getTotalFiles();
         for(int currentFile = 1; currentFile <= totalFileCount; currentFile++) {
           Socket client = serverSocket.accept();
@@ -602,10 +614,8 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
           ArrayList<String> fileNames = deviceListFragment.getFileNames();
           String incomingFileName = fileNames.get(currentFile-1);
 
-          // File selector, file not exists,
-          //TODO: Change to appropriate file-path
-          //  Save in the Kiwix app folder
-          final File clientNoteFileLocation = new File(Environment.getExternalStorageDirectory() + "/KiwixWifi/"+incomingFileName);
+          // TODO:? File selector, file not exists,
+          final File clientNoteFileLocation = new File(KIWIX_ROOT + incomingFileName);
           File dirs = new File(clientNoteFileLocation.getParent());
           if(!dirs.exists()) {
             Log.d(LocalFileTransferActivity.TAG, "Parent creation result: "+dirs.mkdirs());
