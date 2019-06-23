@@ -74,6 +74,11 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
   public static int PEER_HANDSHAKE_PORT = 8009;
   public static int FILE_TRANSFER_PORT = 8008;
 
+  private boolean fileSender = false;
+  private ArrayList<Uri> fileUriList;
+  private int totalFiles = -1;
+  private ArrayList<String> fileNames;
+
   @Override
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
@@ -104,6 +109,12 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
         }
       }
     });
+
+    if(((LocalFileTransferActivity) getActivity()).isFileSender()) {
+      fileSender = true;
+      fileUriList = ((LocalFileTransferActivity) getActivity()).getFileURIArrayList();
+      totalFiles = fileUriList.size();
+    }
   }
 
   @Override
@@ -197,14 +208,38 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     startFileTransfer();
   }
 
+  public boolean isFileSender() {
+    return fileSender;
+  }
+
+  public int getTotalFiles() {
+    return totalFiles;
+  }
+
+  public void setTotalFiles(int totalFiles) {
+    this.totalFiles = totalFiles;
+  }
+
+  public ArrayList<String> getFileNames() {
+    return fileNames;
+  }
+
+  public void setFileNames(ArrayList<String> fileNames) {
+    this.fileNames = fileNames;
+  }
+
+  public ArrayList<Uri> getFileUriList() {
+    return fileUriList;
+  }
+
   private void startFileTransfer() {
-    if(groupInfo.groupFormed && !((LocalFileTransferActivity) getActivity()).isFileSender()) {
-      new FileServerAsyncTask(getActivity()).execute();
+    if(groupInfo.groupFormed && !fileSender) {
+      new FileServerAsyncTask(getActivity(), this).execute();
       Toast.makeText(getActivity(), "File receiving device", Toast.LENGTH_SHORT).show();
 
     } else if(groupInfo.groupFormed) {
       {
-        Toast.makeText(getActivity(), "Sending file to "+selectedPeerDevice.deviceAddress+"\nSelf: "+userDevice.deviceAddress, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Sending file to "+selectedPeerDevice.deviceAddress+"\nSelf: "+userDevice.deviceAddress, Toast.LENGTH_SHORT).show();
         Log.d(LocalFileTransferActivity.TAG, "Starting file transfer");
 
         new AlertDialog.Builder(getActivity())
@@ -233,7 +268,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
         if(groupInfo.isGroupOwner)  fileReceiverAddress = selectedPeerDeviceInetAddress;
         else                        fileReceiverAddress = groupInfo.groupOwnerAddress;
         for(int i = 0; i < 10000000; i++);
-        new FileSenderAsyncTask(getContext(), this, groupInfo).execute(((LocalFileTransferActivity) getActivity()).getFileURIArrayList());
+        new FileSenderAsyncTask(getContext(), this, groupInfo).execute(fileUriList);
       }
     }
   }
@@ -342,8 +377,36 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
           if (object.getClass().equals(String.class) && ((String) object).equals("Request Kiwix File Sharing")) {
             Log.d(TAG, "Client IP address: "+ client.getInetAddress());
             //selectedPeerDeviceInetAddress = client.getInetAddress();
+
+            if(deviceListFragment.isFileSender()) {
+              ObjectOutputStream objectOutputStream = new ObjectOutputStream(client.getOutputStream());
+              objectOutputStream.writeObject(""+deviceListFragment.getTotalFiles());
+              Log.d(TAG, "### SENDER DEVICE");
+              ArrayList<Uri> fileUriList = deviceListFragment.getFileUriList();
+              for (int i = 0; i < fileUriList.size(); i++) {
+                objectOutputStream.writeObject(getFileName(fileUriList.get(i)));
+              }
+
+            } else {
+              Object totalFilesObject = objectInputStream.readObject();
+              if(totalFilesObject.getClass().equals(String.class)) {
+                int total = Integer.parseInt((String) totalFilesObject);
+                deviceListFragment.setTotalFiles(total);
+                Log.d(TAG, "### Transfer of "+ total + " files");
+                ArrayList<String> fileNames = new ArrayList<>();
+                for (int i = 0; i < total; i++) {
+                  Object fileNameObject = objectInputStream.readObject();
+                  if(fileNameObject.getClass().equals(String.class)){
+                    Log.d(TAG, "File - "+ (String) fileNameObject);
+                    fileNames.add((String) fileNameObject);
+                  }
+                }
+                deviceListFragment.setFileNames(fileNames);
+              }
+            }
           }
           return client.getInetAddress();
+
         } catch (Exception e) {
           //Log.d(TAG, e.getMessage());
           e.printStackTrace();
@@ -360,6 +423,31 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
           OutputStream os = socket.getOutputStream();
           ObjectOutputStream oos = new ObjectOutputStream(os);
           oos.writeObject(new String("Request Kiwix File Sharing"));
+          if(deviceListFragment.isFileSender()) {
+            oos.writeObject(""+deviceListFragment.getTotalFiles());
+            Log.d(TAG, "### SENDER DEVICE");
+            ArrayList<Uri> fileUriList = deviceListFragment.getFileUriList();
+            for (int i = 0; i < fileUriList.size(); i++) {
+              oos.writeObject(getFileName(fileUriList.get(i)));
+            }
+          } else {
+            ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+            Object totalFilesObject = objectInputStream.readObject();
+            if(totalFilesObject.getClass().equals(String.class)) {
+              int total = Integer.parseInt((String) totalFilesObject);
+              deviceListFragment.setTotalFiles(total);
+              Log.d(TAG, "### Transfer of "+ total + " files");
+              ArrayList<String> fileNames = new ArrayList<>();
+              for (int i = 0; i < total; i++) {
+                Object fileNameObject = objectInputStream.readObject();
+                if(fileNameObject.getClass().equals(String.class)) {
+                  Log.d(TAG, "File - "+ (String) fileNameObject);
+                  fileNames.add((String) fileNameObject);
+                }
+              }
+              deviceListFragment.setFileNames(fileNames);
+            }
+          }
           oos.close();
           os.close();
           socket.close();
@@ -385,6 +473,20 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     @Override
     protected void onPostExecute(InetAddress inetAddress) {
       (deviceListFragment).setClientAddress(inetAddress);
+    }
+
+    private String getFileName(Uri fileUri) {
+      String fileName = "";
+      String fileUriString = fileUri.toString();
+
+      // Searches for location of last slash in the file path
+      for(int loc = fileUriString.length()-1; loc >= 0; loc--) {
+        if(fileUriString.charAt(loc) == '/') {
+          return fileUriString.substring(loc+1);
+        }
+      }
+
+      return null;
     }
   }
 
@@ -453,10 +555,12 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
   public static class FileServerAsyncTask extends AsyncTask<Void, Void, String> {
 
     private Context context;
+    private DeviceListFragment deviceListFragment;
     //private View statusView
 
-    public FileServerAsyncTask(Context context) {
+    public FileServerAsyncTask(Context context, DeviceListFragment deviceListFragment) {
       this.context = context;
+      this.deviceListFragment = deviceListFragment;
     }
 
     @Override
@@ -467,9 +571,12 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
         Socket client = serverSocket.accept();
         Log.d(LocalFileTransferActivity.TAG, "Server: Client connected");
 
+        ArrayList<String> fileNames = deviceListFragment.getFileNames();
+        String incomingFileName = fileNames.get(0);
+
         // File selector, file not exists,
         //TODO: Change to appropriate file-path
-        final File clientNoteFileLocation = new File(Environment.getExternalStorageDirectory() + "/KiwixWifi/temp.zim");
+        final File clientNoteFileLocation = new File(Environment.getExternalStorageDirectory() + "/KiwixWifi/"+incomingFileName);
         File dirs = new File(clientNoteFileLocation.getParent());
         if(!dirs.exists()) {
           Log.d(LocalFileTransferActivity.TAG, "Parent creation result: "+dirs.mkdirs());
@@ -482,6 +589,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
         Log.d(LocalFileTransferActivity.TAG, "Copying files");
         InputStream inputStream = client.getInputStream();
         copyFile(inputStream, new FileOutputStream(clientNoteFileLocation));
+
         serverSocket.close();
         return clientNoteFileLocation.getAbsolutePath();
 
@@ -511,8 +619,8 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     byte buf[] = new byte[1024];
     int len;
     try {
+      Log.d(LocalFileTransferActivity.TAG, "Copying to OutputStream...");
       while ((len = inputStream.read(buf)) != -1) {
-        Log.d(LocalFileTransferActivity.TAG, "Copying to OutputStream...");
         out.write(buf, 0, len);
 
       }
