@@ -197,15 +197,17 @@ private String generateVersionName() {
 }
 
 /*
-* max version code: 210-0-00-00-00
-* our template    : UUU-A-ZZ-YY-XX
+* max version code: 21-0-0-00-00-00
+* our template    : UU-D-A-ZZ-YY-XX
 * where:
 * X = patch version
 * Y = minor version
 * Z = major version (+ 20 to distinguish from previous, non semantic, versions of the app)
 * A = number representing ABI split
+* D = number representing density split
 * U = unused
 */
+
 private Integer generateVersionCode() {
   20 * 10000 +
       (ext.versionMajor * 10000) +
@@ -444,20 +446,28 @@ android {
   }
 
   def abiCodes = ['arm64-v8a': 6, 'x86': 3, 'x86_64': 4, 'armeabi-v7a': 5]
+  def densityCodes = ['mdpi': 2, 'hdpi': 3, 'xhdpi': 4, 'xxhdpi': 5, 'xxxhdpi': 6]
   splits {
     abi {
       enable true
       reset()
       include "x86", "x86_64", 'armeabi-v7a', "arm64-v8a"
-      universalApk buildNumber == "dev"
+      universalApk true
+    }
+    density {
+      enable true
+      reset()
+      include "mdpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"
     }
   }
   applicationVariants.all { variant ->
     variant.outputs.each { output ->
-      def baseAbiVersionCode = abiCodes.get(output.getFilter(OutputFile.ABI))
-      if (baseAbiVersionCode != null) {
-        output.versionCodeOverride = baseAbiVersionCode * 1000000 + variant.versionCode
-      }
+      def baseAbiVersionCode = abiCodes.get(output.getFilter(OutputFile.ABI)) ?: 0
+      def baseDensityVersionCode = densityCodes.get(output.getFilter(OutputFile.ABI)) ?: 1
+      output.versionCodeOverride =
+          (baseDensityVersionCode * 10000000) +
+              (baseAbiVersionCode * 1000000) +
+              variant.versionCode
     }
   }
 }
