@@ -975,6 +975,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void externalLinkPopup(Intent intent) {
+    int warningResId;
+    if (sharedPreferenceUtil.nightMode()) {
+      warningResId = R.drawable.ic_warning_white;
+    } else {
+      warningResId = R.drawable.ic_warning_black;
+    }
     new AlertDialog.Builder(this, dialogStyle())
         .setTitle(R.string.external_link_popup_dialog_title)
         .setMessage(R.string.external_link_popup_dialog_message)
@@ -988,7 +994,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           startActivity(intent);
         })
         .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> startActivity(intent))
-        .setIcon(android.R.drawable.ic_dialog_alert)
+        .setIcon(warningResId)
         .show();
   }
 
@@ -1042,6 +1048,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   @Override
   public void onRequestPermissionsResult(int requestCode,
       @NonNull String permissions[], @NonNull int[] grantResults) {
+    int warningResId;
+    if (sharedPreferenceUtil.nightMode()) {
+      warningResId = R.drawable.ic_warning_white;
+    } else {
+      warningResId = R.drawable.ic_warning_black;
+    }
     switch (requestCode) {
       case REQUEST_STORAGE_PERMISSION: {
         if (grantResults.length > 0
@@ -1053,6 +1065,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         } else {
           AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
           builder.setMessage(getResources().getString(R.string.reboot_message));
+          builder.setIcon(warningResId);
           AlertDialog dialog = builder.create();
           dialog.show();
         }
@@ -1930,6 +1943,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       });
       builder.setNegativeButton(android.R.string.no, null);
       builder.setMessage(getString(R.string.open_in_new_tab));
+      builder.setIcon(R.drawable.icon_question);
       AlertDialog dialog = builder.create();
       dialog.show();
     }

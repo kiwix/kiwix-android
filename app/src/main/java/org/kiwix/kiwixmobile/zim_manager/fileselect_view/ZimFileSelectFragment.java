@@ -422,6 +422,12 @@ public class ZimFileSelectFragment extends BaseFragment
   }
 
   private void deleteSpecificZimDialog(int position) {
+    int warningResId;
+    if (sharedPreferenceUtil.nightMode()) {
+      warningResId = R.drawable.ic_warning_white;
+    } else {
+      warningResId = R.drawable.ic_warning_black;
+    }
     new AlertDialog.Builder(zimManageActivity, dialogStyle())
         .setMessage(
             mFiles.get(position).getTitle() + ": " + getString(R.string.delete_specific_zim))
@@ -436,6 +442,7 @@ public class ZimFileSelectFragment extends BaseFragment
                 Toast.LENGTH_SHORT).show();
           }
         })
+        .setIcon(warningResId)
         .setNegativeButton(android.R.string.no, (dialog, which) -> {
           // do nothing
         })

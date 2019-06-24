@@ -138,6 +138,12 @@ public class DownloadFragment extends BaseFragment {
   }
 
   private void showNoWiFiWarning(Context context, Runnable yesAction) {
+    int warningResId;
+    if (sharedPreferenceUtil.nightMode()) {
+      warningResId = R.drawable.ic_warning_white;
+    } else {
+      warningResId = R.drawable.ic_warning_black;
+    }
     new AlertDialog.Builder(context)
         .setTitle(R.string.wifi_only_title)
         .setMessage(R.string.wifi_only_msg)
@@ -146,6 +152,7 @@ public class DownloadFragment extends BaseFragment {
           MainActivity.wifiOnly = false;
           yesAction.run();
         })
+        .setIcon(warningResId)
         .setNegativeButton(R.string.no, (dialog, i) -> {
         })
         .show();

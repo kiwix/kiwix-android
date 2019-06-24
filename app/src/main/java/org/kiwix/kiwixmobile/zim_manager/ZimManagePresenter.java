@@ -42,6 +42,12 @@ class ZimManagePresenter extends BasePresenter<ZimManageViewCallback> {
   }
 
   void showNoWifiWarning(Context context, String action) {
+    int warningResId;
+    if (mSharedPreferenceUtil.nightMode()) {
+      warningResId = R.drawable.ic_warning_white;
+    } else {
+      warningResId = R.drawable.ic_warning_black;
+    }
     if (DownloadService.ACTION_NO_WIFI.equals(action)) {
       new AlertDialog.Builder(context)
           .setTitle(R.string.wifi_only_title)
@@ -50,6 +56,7 @@ class ZimManagePresenter extends BasePresenter<ZimManageViewCallback> {
             mSharedPreferenceUtil.putPrefWifiOnly(false);
             MainActivity.wifiOnly = false;
           })
+          .setIcon(warningResId)
           .setNegativeButton(R.string.no, (dialog, i) -> {
           })
           .show();
