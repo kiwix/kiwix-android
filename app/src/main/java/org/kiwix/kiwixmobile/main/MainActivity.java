@@ -516,7 +516,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     closeAllTabsButton.setImageDrawable(
-        ContextCompat.getDrawable(this, R.drawable.ic_close_white_24dp));
+        ContextCompat.getDrawable(this, R.drawable.ic_close_black_24dp));
     tabSwitcherRoot.setVisibility(View.GONE);
     progressBar.setVisibility(View.VISIBLE);
     contentFrame.setVisibility(View.VISIBLE);
