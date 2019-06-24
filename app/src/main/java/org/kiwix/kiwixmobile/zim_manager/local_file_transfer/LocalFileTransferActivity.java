@@ -350,7 +350,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
             @Override
             public void onClick(DialogInterface paramDialogInterface, int paramInt) {
               paramDialogInterface.cancel();
-              startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+              startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
             }
           })
           .setNegativeButton("No", new DialogInterface.OnClickListener() {
