@@ -8,6 +8,8 @@ env:
   global:
     - ANDROID_TARGET=android-22
     - ANDROID_ABI=armeabi-v7a
+    -
+if: type != push OR tag IS present
 
 before_install:
   - openssl aes-256-cbc -K $encrypted_82adfa9c3806_key -iv $encrypted_82adfa9c3806_iv -in secrets.tar.enc -out secrets.tar -d
@@ -79,7 +81,7 @@ deploy:
     file_glob: true
     skip_cleanup: true
     overwrite: true
-#    body: "$APP_CHANGELOG" broken because travis can't escape newlines
+    #body: "$APP_CHANGELOG" broken because travis can't escape newlines https://github.com/travis-ci/dpl/issues/155
     draft: true
     on:
       tags: true
