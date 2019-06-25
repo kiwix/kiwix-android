@@ -32,9 +32,6 @@ import org.kiwix.kiwixmobile.main.KiwixWebView;
 import org.kiwix.kiwixmobile.search.AutoCompleteAdapter;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.zim_manager.DownloadNotificationClickedReceiver;
-import org.kiwix.kiwixmobile.library.LibraryAdapter;
-import org.kiwix.kiwixmobile.main.AddNoteDialog;
-import org.kiwix.kiwixmobile.main.ConfirmationAlertDialogFragment;
 
 @Singleton
 @Component(modules = {
