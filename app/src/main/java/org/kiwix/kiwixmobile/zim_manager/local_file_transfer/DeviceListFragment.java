@@ -60,6 +60,7 @@ import java.util.List;
 
 import static android.view.View.GONE;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.DeviceListFragment.TAG;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.TO_BE_SENT;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.filePath;
 
 public class DeviceListFragment extends ListFragment implements WifiP2pManager.PeerListListener, WifiP2pManager.ConnectionInfoListener {
@@ -83,7 +84,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
   private ArrayList<Uri> fileUriList;
   private int totalFiles = -1;
   private int totalFilesSent = 0;
-  private ArrayList<String> fileNames = new ArrayList<>();
+  private ArrayList<FileItem> fileItems = new ArrayList<>();
 
   @Override
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -122,7 +123,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
       totalFiles = fileUriList.size();
 
       for(int i = 0; i < fileUriList.size(); i++)
-        fileNames.add(getFileName(fileUriList.get(i)));
+        fileItems.add(new FileItem(getFileName(fileUriList.get(i)), TO_BE_SENT));
     }
   }
 
@@ -231,12 +232,12 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     this.totalFiles = totalFiles;
   }
 
-  public ArrayList<String> getFileNames() {
-    return fileNames;
+  public ArrayList<FileItem> getFileItems() {
+    return fileItems;
   }
 
-  public void setFileNames(ArrayList<String> fileNames) {
-    this.fileNames = fileNames;
+  public void setFileItems(ArrayList<FileItem> fileItems) {
+    this.fileItems = fileItems;
   }
 
   public ArrayList<Uri> getFileUriList() {
@@ -260,7 +261,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
   }
 
   private void displayTransferProgressFragment() {
-    TransferProgressFragment fragment = new TransferProgressFragment(fileNames);
+    TransferProgressFragment fragment = new TransferProgressFragment(fileItems);
     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
     fragmentTransaction.add(R.id.container_fragment_transfer_progress, fragment)
@@ -434,15 +435,15 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
                 int total = Integer.parseInt((String) totalFilesObject);
                 deviceListFragment.setTotalFiles(total);
                 Log.d(TAG, "### Transfer of "+ total + " files");
-                ArrayList<String> fileNames = new ArrayList<>();
+                ArrayList<FileItem> fileItems = new ArrayList<>();
                 for (int i = 0; i < total; i++) {
                   Object fileNameObject = objectInputStream.readObject();
                   if(fileNameObject.getClass().equals(String.class)){
                     Log.d(TAG, "File - "+ (String) fileNameObject);
-                    fileNames.add((String) fileNameObject);
+                    fileItems.add(new FileItem((String) fileNameObject, TO_BE_SENT));
                   }
                 }
-                deviceListFragment.setFileNames(fileNames);
+                deviceListFragment.setFileItems(fileItems);
               }
             }
           }
@@ -478,15 +479,15 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
               int total = Integer.parseInt((String) totalFilesObject);
               deviceListFragment.setTotalFiles(total);
               Log.d(TAG, "### Transfer of "+ total + " files");
-              ArrayList<String> fileNames = new ArrayList<>();
+              ArrayList<FileItem> fileItems = new ArrayList<>();
               for (int i = 0; i < total; i++) {
                 Object fileNameObject = objectInputStream.readObject();
                 if(fileNameObject.getClass().equals(String.class)) {
                   Log.d(TAG, "File - "+ (String) fileNameObject);
-                  fileNames.add((String) fileNameObject);
+                  fileItems.add(new FileItem((String) fileNameObject, TO_BE_SENT));
                 }
               }
-              deviceListFragment.setFileNames(fileNames);
+              deviceListFragment.setFileItems(fileItems);
             }
           }
           oos.close();
@@ -627,8 +628,8 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
           Socket client = serverSocket.accept();
           Log.d(LocalFileTransferActivity.TAG, "Server: Client connected");
 
-          ArrayList<String> fileNames = deviceListFragment.getFileNames();
-          String incomingFileName = fileNames.get(currentFile-1);
+          ArrayList<FileItem> fileItems = deviceListFragment.getFileItems();
+          String incomingFileName = fileItems.get(currentFile-1).getFileName();
 
           // TODO:? File selector, file not exists,
           final File clientNoteFileLocation = new File(KIWIX_ROOT + incomingFileName);

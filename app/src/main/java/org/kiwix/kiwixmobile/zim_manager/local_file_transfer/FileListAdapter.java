@@ -14,12 +14,12 @@ import org.kiwix.kiwixmobile.R;
 import java.util.ArrayList;
 
 public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileViewHolder> {
-  private final ArrayList<String> fileNames;
+  private final ArrayList<FileItem> fileItems;
   private LayoutInflater layoutInflater;
 
-  public FileListAdapter(Context context, ArrayList<String> fileNames) {
+  public FileListAdapter(Context context, ArrayList<FileItem> fileItems) {
     this.layoutInflater = LayoutInflater.from(context);
-    this.fileNames = fileNames;
+    this.fileItems = fileItems;
   }
 
   @NonNull
@@ -31,13 +31,13 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
 
   @Override
   public void onBindViewHolder(@NonNull FileListAdapter.FileViewHolder holder, int position) {
-    String name = fileNames.get(position);
+    String name = fileItems.get(position).getFileName();
     holder.fileItemView.setText(name);
   }
 
   @Override
   public int getItemCount() {
-    return fileNames.size();
+    return fileItems.size();
   }
 
   class FileViewHolder extends RecyclerView.ViewHolder {

@@ -13,9 +13,9 @@ public class FileItem {
     this.fileStatus = fileStatus;
   }
 
-  public void setFileName(String fileName) {
+  /*public void setFileName(String fileName) {
     this.fileName = fileName;
-  }
+  }*/
 
   public void setFileStatus(short fileStatus) {
     this.fileStatus = fileStatus;

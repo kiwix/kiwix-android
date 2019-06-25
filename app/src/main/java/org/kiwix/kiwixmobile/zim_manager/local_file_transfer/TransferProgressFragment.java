@@ -37,7 +37,7 @@ public class TransferProgressFragment extends Fragment {
   private String mParam1;
   private String mParam2;
 
-  private ArrayList<String> fileNames;
+  private ArrayList<FileItem> fileItems;
   private RecyclerView filesRecyclerView;
   private FileListAdapter fileListAdapter;
 
@@ -47,8 +47,8 @@ public class TransferProgressFragment extends Fragment {
     // Required empty public constructor
   }
 
-  public TransferProgressFragment(ArrayList<String> fileNames) {
-    this.fileNames = fileNames;
+  public TransferProgressFragment(ArrayList<FileItem> fileItems) {
+    this.fileItems = fileItems;
   }
 
   /**
@@ -85,7 +85,7 @@ public class TransferProgressFragment extends Fragment {
     View view = inflater.inflate(R.layout.fragment_transfer_progress, container, false);
     // TODO: RECYCLERVIEW
     filesRecyclerView = view.findViewById(R.id.recycler_view_transfer_files);
-    fileListAdapter = new FileListAdapter(getActivity(), fileNames);
+    fileListAdapter = new FileListAdapter(getActivity(), fileItems);
     filesRecyclerView.setAdapter(fileListAdapter);
     filesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
