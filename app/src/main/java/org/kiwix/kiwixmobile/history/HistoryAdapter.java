@@ -10,21 +10,19 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import org.threeten.bp.LocalDate;
 import java.util.List;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.data.local.entity.History;
+import org.kiwix.kiwixmobile.extensions.ImageViewExtensionsKt;
+import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
-
-import static org.kiwix.kiwixmobile.library.LibraryAdapter.createBitmapFromEncodedString;
 
 class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   private static final int TYPE_ITEM = 1;
-  private final List<History> historyList;
+  private final List<HistoryListItem> historyList;
   private final OnItemClickListener itemClickListener;
-  private final List<History> deleteList;
+  private final List<HistoryListItem> deleteList;
 
-  HistoryAdapter(List<History> historyList, List<History> deleteList,
+  HistoryAdapter(List<HistoryListItem> historyList, List<HistoryListItem> deleteList,
       OnItemClickListener itemClickListener) {
     this.historyList = historyList;
     this.deleteList = deleteList;
@@ -48,23 +46,22 @@ class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   @Override
   public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
     if (holder instanceof Item) {
-      History history = historyList.get(position);
+      HistoryListItem.HistoryItem history = (HistoryListItem.HistoryItem) historyList.get(position);
       Item item = (Item) holder;
       item.title.setText(history.getHistoryTitle());
       if (deleteList.contains(history)) {
         item.favicon.setImageDrawable(ContextCompat.getDrawable(item.favicon.getContext(),
             R.drawable.ic_check_circle_blue_24dp));
       } else {
-        item.favicon.setImageBitmap(createBitmapFromEncodedString(history.getFavicon(),
-            item.favicon.getContext()));
+        ImageViewExtensionsKt.setBitmapFromString(item.favicon, history.getFavicon());
       }
       item.itemView.setOnClickListener(v -> itemClickListener.onItemClick(item.favicon, history));
       item.itemView.setOnLongClickListener(v ->
           itemClickListener.onItemLongClick(item.favicon, history));
     } else {
-      String date = historyList.get(position + 1).getDate();
+      String date = ((HistoryListItem.DateItem)historyList.get(position)).getDateString();
       String todaysDate, yesterdayDate;
-      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d, yyyy");
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMM yyyy");
       todaysDate = LocalDate.now().format(formatter);
       yesterdayDate = LocalDate.now().minusDays(1).format(formatter);
       if (todaysDate.contentEquals(date)) {
@@ -79,7 +76,7 @@ class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
   @Override
   public int getItemViewType(int position) {
-    return historyList.get(position) == null ? 0 : TYPE_ITEM;
+    return historyList.get(position) instanceof HistoryListItem.DateItem ? 0 : TYPE_ITEM;
   }
 
   @Override
@@ -88,9 +85,9 @@ class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   }
 
   interface OnItemClickListener {
-    void onItemClick(ImageView favicon, History history);
+    void onItemClick(ImageView favicon, HistoryListItem.HistoryItem history);
 
-    boolean onItemLongClick(ImageView favicon, History history);
+    boolean onItemLongClick(ImageView favicon, HistoryListItem.HistoryItem history);
   }
 
   class Item extends RecyclerView.ViewHolder {

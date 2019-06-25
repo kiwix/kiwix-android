@@ -11,12 +11,13 @@ import android.widget.CheckBox;
 import androidx.core.content.FileProvider;
 import butterknife.BindView;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
-import org.kiwix.kiwixmobile.data.local.dao.BookDao;
+import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.splash.SplashActivity;
 
@@ -25,7 +26,7 @@ import static org.kiwix.kiwixmobile.utils.LanguageUtils.getCurrentLocale;
 public class ErrorActivity extends BaseActivity {
 
   @Inject
-  BookDao bookDao;
+  NewBookDao bookDao;
 
   @BindView(R.id.reportButton)
   Button reportButton;
@@ -66,7 +67,7 @@ public class ErrorActivity extends BaseActivity {
 
       Intent emailIntent = new Intent(Intent.ACTION_SEND);
       emailIntent.setType("vnd.android.cursor.dir/email");
-      String to[] = { "android-crash-feedback@kiwix.org" };
+      String[] to = { "android-crash-feedback@kiwix.org" };
       emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
       emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Someone has reported a crash");
 
@@ -89,11 +90,12 @@ public class ErrorActivity extends BaseActivity {
             "\n\n";
       }
 
-      if (allowZimsCheckbox.isChecked()) {
-        ArrayList<LibraryNetworkEntity.Book> books = bookDao.getBooks();
+      if(allowZimsCheckbox.isChecked()) {
+        List<BookOnDisk> books = bookDao.getBooks();
 
         StringBuilder sb = new StringBuilder();
-        for (LibraryNetworkEntity.Book book : books) {
+        for (BookOnDisk bookOnDisk : books) {
+          final LibraryNetworkEntity.Book book = bookOnDisk.getBook();
           String bookString = book.getTitle() +
               ":\nArticles: [" + book.getArticleCount() +
               "]\nCreator: [" + book.getCreator() +

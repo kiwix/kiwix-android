@@ -1,3 +1,7 @@
+2.5
+NEW: Downloads are now using the DownloadManager
+NEW: Downloads/Device/Library completely rewritten
+
 2.4
 FIX: External SD card problems
 FIX: Some UI translation

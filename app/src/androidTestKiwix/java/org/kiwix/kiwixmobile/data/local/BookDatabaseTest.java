@@ -61,7 +61,7 @@ public class BookDatabaseTest {
     bookDao = new BookDao(kiwixDatabase);
 
     // Create a temporary directory where all the test files will be saved
-    testDir = context.getDir("testDir", context.MODE_PRIVATE);
+    testDir = context.getDir("testDir", Context.MODE_PRIVATE);
   }
 
   //TODO : test books are saved after downloading the list of available zim files
@@ -139,9 +139,9 @@ public class BookDatabaseTest {
     ArrayList<Book> books = new ArrayList<>();
     for (int i = 0; i < 9; i++) {
       Book book = new Book();
-      book.bookName = "Test Copy " + Integer.toString(i);
-      book.id = "Test ID " + Integer.toString(i);
-      String fileName = baseFileName + Integer.toString(i);
+      book.bookName = "Test Copy " + i;
+      book.id = "Test ID " + i;
+      String fileName = baseFileName + i;
       switch (i) {
         case 0:
           book.file = new File(fileName + ".zim");

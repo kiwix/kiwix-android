@@ -21,9 +21,10 @@
       android:hardwareAccelerated="true"
       android:icon="@mipmap/kiwix_icon"
       android:label="@string/app_name"
+      android:networkSecurityConfig="@xml/network_security_config"
       android:supportsRtl="true"
-      android:theme="@style/AppTheme"
-      android:networkSecurityConfig="@xml/network_security_config">
+      android:theme="@style/AppTheme">
+
     <activity
         android:name=".splash.SplashActivity"
         android:label="@string/app_name"
@@ -138,8 +139,8 @@
     </activity>
     <activity
         android:name=".zim_manager.ZimManageActivity"
-        android:label="@string/choose_file">
-
+        android:label="@string/choose_file"
+        android:launchMode="singleTop">
       <!-- TODO -->
       <intent-filter>
         <action android:name="android.intent.action.GET_CONTENT"/>
@@ -179,8 +180,6 @@
           android:resource="@xml/kiwix_widget_provider_info"/>
     </receiver>
 
-    <service android:name=".downloader.DownloadService"/>
-
     <activity
         android:name=".error.ErrorActivity"
         android:process=":error_activity"/>
@@ -195,6 +194,7 @@
           android:resource="@xml/provider_paths"/>
     </provider>
 
+
     <activity android:name=".intro.IntroActivity"/>
     <activity android:name=".language.LanguageActivity"/>
     <activity android:name=".history.HistoryActivity"/>
@@ -203,6 +203,11 @@
           android:name="android.support.PARENT_ACTIVITY"
           android:value="main.MainActivity"/>
     </activity>
-  </application>
 
+    <receiver android:name=".zim_manager.DownloadNotificationClickedReceiver">
+      <intent-filter>
+        <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED"/>
+      </intent-filter>
+    </receiver>
+  </application>
 </manifest>
