@@ -245,4 +245,7 @@
   <string name="switch_tabs">Switch tabs</string>
   <string name="smiling_face">:D</string>
   <string name="close_all_tabs">Close all tabs</string>
+
+  <!-- TODO: Remove or change this placeholder text -->
+  <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

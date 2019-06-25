@@ -518,6 +518,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     }
   }
 
+  // TODO: Remove this feature since reflection of hidden methods/fields is restricted from Pie (& will subsequently lead to exceptions)
   @Override
   public void changeDeviceName(String deviceNewName) {
     try {
