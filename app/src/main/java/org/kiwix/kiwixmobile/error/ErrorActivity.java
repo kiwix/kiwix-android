@@ -11,15 +11,17 @@ import android.widget.CheckBox;
 import androidx.core.content.FileProvider;
 import butterknife.BindView;
 import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao;
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.splash.SplashActivity;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk;
 
 import static org.kiwix.kiwixmobile.utils.LanguageUtils.getCurrentLocale;
 
@@ -77,16 +79,19 @@ public class ErrorActivity extends BaseActivity {
       if (allowLogsCheckbox.isChecked()) {
         File appDirectory = new File(Environment.getExternalStorageDirectory() + "/Kiwix");
         File logFile = new File(appDirectory, "logcat.txt");
-        Uri path =
-            FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider",
-                logFile);
-        emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        emailIntent.putExtra(Intent.EXTRA_STREAM, path);
+        if(logFile.exists()) {
+          Uri path =
+              FileProvider.getUriForFile(this,
+                  getApplicationContext().getPackageName() + ".fileprovider",
+                  logFile);
+          emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+          emailIntent.putExtra(Intent.EXTRA_STREAM, path);
+        }
       }
 
       if (allowCrashCheckbox.isChecked()) {
         body += "Exception Details:\n\n" +
-            exception.toString() +
+            toStackTraceString(exception) +
             "\n\n";
       }
 
@@ -138,8 +143,14 @@ public class ErrorActivity extends BaseActivity {
     restartButton.setOnClickListener(v -> restartApp());
   }
 
+  private String toStackTraceString(Throwable exception) {
+    StringWriter stringWriter = new StringWriter();
+    exception.printStackTrace(new PrintWriter(stringWriter));
+    return stringWriter.toString();
+  }
+
   void restartApp() {
-    Context context = ErrorActivity.this;
+    Context context = this;
     Intent intent = new Intent(context, SplashActivity.class);
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
         | Intent.FLAG_ACTIVITY_CLEAR_TASK
