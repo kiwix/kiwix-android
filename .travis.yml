@@ -47,13 +47,14 @@ android:
 licenses:
   - ".+"
 
+before_script:
+  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI -c 100M
+  - emulator -avd test -no-audio -no-window &
+
 script:
   - ./gradlew lintKiwixDebug jacocoTestKiwixDebugUnitTestReport
-  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI -c 100M
-  - emulator -avd test -no-window &
   - android-wait-for-emulator
-  - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
-  - adb shell input keyevent 82 & # unlock screen by pressing menu button
+  - adb shell input keyevent 82 &
   - adb -e logcat *:D > logcat.log &
   - ./gradlew createKiwixDebugCoverageReport
 
