@@ -108,7 +108,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     actionBar.setNavigationOnClickListener(new View.OnClickListener(){
       @Override
       public void onClick(View v) {
-        disconnect();
+        closeLocalFileTransferActivity();
       }
     });
 
@@ -591,9 +591,13 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   }
 
   @Override
-  public void disconnect() {
+  public void closeLocalFileTransferActivity() {
     fileSendingDevice = false;
+    disconnect();
+    this.finish();
+  }
 
+  public void disconnect() {
     //TODO
     manager.removeGroup(channel, new WifiP2pManager.ActionListener() {
 
@@ -609,8 +613,12 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
       }
 
     });
+  }
 
-    this.finish();
+  @Override
+  public void onBackPressed() {
+    super.onBackPressed();
+    closeLocalFileTransferActivity();
   }
 }
 /*

@@ -367,7 +367,9 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
     void connect(WifiP2pDevice peerDevice);
 
-    void disconnect();
+    //void disconnect();
+
+    void closeLocalFileTransferActivity();
   }
 
   public static class EditDeviceNameDialog extends DialogFragment {
@@ -717,7 +719,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
       super.onPostExecute(s);
       Toast.makeText(context, "File transfer complete", Toast.LENGTH_LONG).show();
       Log.d(LocalFileTransferActivity.TAG, "File transfer complete");
-      ((LocalFileTransferActivity) deviceListFragment.getActivity()).disconnect();
+      ((LocalFileTransferActivity) deviceListFragment.getActivity()).closeLocalFileTransferActivity();
 
       /*File recvFile = new File(filePath);
       Uri fileUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID+".fileprovider",recvFile);
