@@ -463,7 +463,7 @@ android {
   applicationVariants.all { variant ->
     variant.outputs.each { output ->
       def baseAbiVersionCode = abiCodes.get(output.getFilter(OutputFile.ABI)) ?: 0
-      def baseDensityVersionCode = densityCodes.get(output.getFilter(OutputFile.ABI)) ?: 1
+      def baseDensityVersionCode = densityCodes.get(output.getFilter(OutputFile.DENSITY)) ?: 1
       output.versionCodeOverride =
           (baseDensityVersionCode * 10000000) +
               (baseAbiVersionCode * 1000000) +
