@@ -23,9 +23,9 @@ We utilize different build variants (flavours) to build various different versio
 ## Libraries Used
 
 - [Dagger 2](https://github.com/google/dagger) - A fast dependency injector for Android and Java
-- [Retrofit](http://square.github.io/retrofit/) - Retrofit turns your REST API into a Java interface
+- [Retrofit](https://square.github.io/retrofit/) - Retrofit turns your REST API into a Java interface
 - [OkHttp](https://github.com/square/okhttp) - An HTTP+SPDY client for Android and Java applications
-- [Butterknife](http://jakewharton.github.io/butterknife/) - View "injection" library for Android
+- [Butterknife](https://jakewharton.github.io/butterknife/) - View "injection" library for Android
 - [Mockito](https://github.com/mockito/mockito) - Most popular Mocking framework for unit tests written in Java
 - [RxJava](https://github.com/ReactiveX/RxJava) - Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.
 - [ObjectBox] (https://github.com/objectbox/objectbox-java) - Reactive NoSQL Databse to replace SquiDb
@@ -56,8 +56,7 @@ Our other sources of communications include
 - Email: kiwix-developer@lists.sourceforge.net or contact@kiwix.org
 - Jabber: kelson@kiwix.org
 
-For more information, please refer to [http://wiki.kiwix.org/wiki/Communication](http://wiki.kiwix.org/wiki/Communication).
-
+For more information, please refer to [https://wiki.kiwix.org/wiki/Communication](https://wiki.kiwix.org/wiki/Communication).
 
 ## LEGAL & DISCLAIMER
 
