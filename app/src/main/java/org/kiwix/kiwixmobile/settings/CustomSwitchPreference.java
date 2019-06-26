@@ -25,6 +25,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Switch;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 public class CustomSwitchPreference extends SwitchPreference {
 
@@ -64,6 +65,8 @@ public class CustomSwitchPreference extends SwitchPreference {
     ViewGroup viewGroup = (ViewGroup) view;
     clearListenerInViewGroup(viewGroup);
     super.onBindView(view);
+    SharedPreferenceUtil sharedPreferenceUtil = new SharedPreferenceUtil(getContext());
+    sharedPreferenceUtil.disableNightMode(view);
   }
 
   /**

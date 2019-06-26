@@ -7,6 +7,9 @@ import android.preference.PreferenceManager;
 import java.util.Calendar;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import android.view.View;
+import android.graphics.Color;
+import android.widget.TextView;
 
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_AUTONIGHTMODE;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_BACK_TO_TOP;
@@ -160,6 +163,16 @@ public class SharedPreferenceUtil {
       return hour < 6 || hour > 18;
     } else {
       return getPrefNightMode();
+    }
+  }
+
+  public void disableNightMode(View view) {
+    boolean autoNightMode = getPrefAutoNightMode();
+    TextView title = view.findViewById(android.R.id.title);
+    TextView summary = view.findViewById(android.R.id.summary);
+    if (autoNightMode && title.getText().equals("Night mode")) {
+      title.setTextColor(Color.GRAY);
+      summary.setTextColor(Color.GRAY);
     }
   }
 
