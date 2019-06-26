@@ -633,7 +633,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
       });
 
       if(deviceListFragment.allFilesSent()) {
-        ((LocalFileTransferActivity) deviceListFragment.getActivity()).disconnect();
+        Toast.makeText(context, "All files transferred", Toast.LENGTH_SHORT).show();
       }
     }
   }
