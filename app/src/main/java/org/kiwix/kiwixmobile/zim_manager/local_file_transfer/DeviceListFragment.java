@@ -85,6 +85,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
   private int totalFiles = -1;
   private int totalFilesSent = 0;
   private ArrayList<FileItem> fileItems = new ArrayList<>();
+  private TransferProgressFragment transferProgressFragment;
 
   @Override
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -124,6 +125,8 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
       for(int i = 0; i < fileUriList.size(); i++)
         fileItems.add(new FileItem(getFileName(fileUriList.get(i)), TO_BE_SENT));
+
+      displayTransferProgressFragment();
     }
   }
 
@@ -244,8 +247,13 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     return fileUriList;
   }
 
+
   public void incrementTotalFilesSent() {
     this.totalFilesSent++;
+  }
+
+  public int getTotalFilesSent() {
+    return totalFilesSent;
   }
 
   public boolean allFilesSent() {
@@ -261,19 +269,19 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
   }
 
   private void displayTransferProgressFragment() {
-    TransferProgressFragment fragment = new TransferProgressFragment(fileItems);
+    transferProgressFragment = new TransferProgressFragment(fileItems);
     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-    fragmentTransaction.add(R.id.container_fragment_transfer_progress, fragment)
+    fragmentTransaction.add(R.id.container_fragment_transfer_progress, transferProgressFragment)
                        .commit();
   }
 
   private void startFileTransfer() {
 
-    displayTransferProgressFragment();
-
     if(groupInfo.groupFormed && !fileSender) {
-      new FileServerAsyncTask(getActivity(), this).execute();
+      displayTransferProgressFragment();
+
+      new FileServerAsyncTask(getActivity(), this, transferProgressFragment).execute();
       Toast.makeText(getActivity(), "File receiving device", Toast.LENGTH_SHORT).show();
 
     } else if(groupInfo.groupFormed) {
@@ -309,7 +317,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
         for(int i = 0; i < 10000000; i++);
 
         for(int i = 0; i < totalFiles; i++) {
-          new FileSenderAsyncTask(getContext(), this, groupInfo).execute(fileUriList.get(i));
+          new FileSenderAsyncTask(getContext(), this, groupInfo, transferProgressFragment).execute(fileUriList.get(i));
         }
       }
     }
@@ -541,11 +549,29 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     private Context context;
     private DeviceListFragment deviceListFragment;
     private WifiP2pInfo groupInfo;
+    private TransferProgressFragment transferProgressFragment;
+    private ArrayList<FileItem> fileItems;
+    private int fileItemIndex;
 
-    public FileSenderAsyncTask(Context context, DeviceListFragment deviceListFragment, WifiP2pInfo groupInfo) {
+    public FileSenderAsyncTask(Context context, DeviceListFragment deviceListFragment, WifiP2pInfo groupInfo, TransferProgressFragment transferProgressFragment) {
       this.context = context;
       this.deviceListFragment = deviceListFragment;
       this.groupInfo = groupInfo;
+      this.transferProgressFragment = transferProgressFragment;
+      this.fileItems = deviceListFragment.getFileItems();
+    }
+
+    @Override
+    protected void onPreExecute() {
+      fileItemIndex = deviceListFragment.getTotalFilesSent();
+
+      deviceListFragment.getActivity().runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+          transferProgressFragment.changeStatus(fileItemIndex, FileItem.SENDING);
+        }
+      });
+
     }
 
     @Override
@@ -598,6 +624,13 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
       //
       deviceListFragment.incrementTotalFilesSent();
 
+      deviceListFragment.getActivity().runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+          transferProgressFragment.changeStatus(fileItemIndex, FileItem.SENT);
+        }
+      });
+
       if(deviceListFragment.allFilesSent()) {
         deviceListFragment.getActivity().finish();
       }
@@ -608,11 +641,14 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
     private Context context;
     private DeviceListFragment deviceListFragment;
+    private TransferProgressFragment transferProgressFragment;
+    private int fileItemIndex;
     //private View statusView
 
-    public FileServerAsyncTask(Context context, DeviceListFragment deviceListFragment) {
+    public FileServerAsyncTask(Context context, DeviceListFragment deviceListFragment, TransferProgressFragment transferProgressFragment) {
       this.context = context;
       this.deviceListFragment = deviceListFragment;
+      this.transferProgressFragment = transferProgressFragment;
     }
 
     @Override
@@ -627,6 +663,13 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
         for(int currentFile = 1; currentFile <= totalFileCount; currentFile++) {
           Socket client = serverSocket.accept();
           Log.d(LocalFileTransferActivity.TAG, "Server: Client connected");
+          fileItemIndex = currentFile-1;
+          deviceListFragment.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+              transferProgressFragment.changeStatus(fileItemIndex, FileItem.SENDING);
+            }
+          });
 
           ArrayList<FileItem> fileItems = deviceListFragment.getFileItems();
           String incomingFileName = fileItems.get(currentFile-1).getFileName();
@@ -645,6 +688,15 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
           Log.d(LocalFileTransferActivity.TAG, "Copying files");
           InputStream inputStream = client.getInputStream();
           copyFile(inputStream, new FileOutputStream(clientNoteFileLocation));
+
+          deviceListFragment.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+              transferProgressFragment.changeStatus(fileItemIndex, FileItem.SENT);
+            }
+          });
+
+          deviceListFragment.incrementTotalFilesSent();
         }
         serverSocket.close();
 
@@ -691,4 +743,8 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     }
     return true;
   }
+
+  /*public interface UpdateProgressCallback {
+    public void changeStatus(int itemIndex, short status);
+  }*/
 }

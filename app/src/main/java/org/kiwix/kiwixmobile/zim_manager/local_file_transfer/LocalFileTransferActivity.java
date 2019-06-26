@@ -47,7 +47,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
   /*TODO
   *   - Fix activity closure upon file transfer (successful or otherwise)
-  *   - Handle multiple selected files
+  *   - Handle multiple selected files - DONE
   *   */
 
   public static final String TAG = "LocalFileTransferActvty"; // Not a typo, Tags have a length upper limit of 25 characters

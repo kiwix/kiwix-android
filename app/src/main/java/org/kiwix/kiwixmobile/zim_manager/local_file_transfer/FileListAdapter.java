@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,8 +33,21 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
 
   @Override
   public void onBindViewHolder(@NonNull FileListAdapter.FileViewHolder holder, int position) {
-    String name = fileItems.get(position).getFileName();
-    holder.fileItemView.setText(name);
+    FileItem fileItem = fileItems.get(position);
+
+    String name = fileItem.getFileName();
+    holder.fileName.setText(name);
+
+    if(fileItem.getFileStatus() == FileItem.SENDING) {
+      holder.statusImage.setVisibility(View.GONE);
+      holder.progressBar.setVisibility(View.VISIBLE);
+
+    } else if(fileItem.getFileStatus() == FileItem.SENT) {
+      holder.progressBar.setVisibility(View.GONE);
+
+      holder.statusImage.setImageResource(R.drawable.ic_baseline_check_24px);
+      holder.statusImage.setVisibility(View.VISIBLE);
+    }
   }
 
   @Override
@@ -41,12 +56,16 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
   }
 
   class FileViewHolder extends RecyclerView.ViewHolder {
-    public final TextView fileItemView;
+    public final TextView fileName;
+    public final ImageView statusImage;
+    public final ProgressBar progressBar;
     final FileListAdapter fileListAdapter;
 
     public FileViewHolder(View itemView, FileListAdapter fileListAdapter) {
       super(itemView);
-      this.fileItemView = itemView.findViewById(R.id.text_view_file_item_name);
+      this.fileName = itemView.findViewById(R.id.text_view_file_item_name);
+      this.statusImage = itemView.findViewById(R.id.image_view_file_transferred);
+      this.progressBar = itemView.findViewById(R.id.progress_bar_transferring_file);
       this.fileListAdapter = fileListAdapter;
     }
   }
