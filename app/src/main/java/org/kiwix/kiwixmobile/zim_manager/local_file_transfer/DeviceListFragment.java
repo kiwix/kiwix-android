@@ -317,7 +317,8 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
         for(int i = 0; i < 10000000; i++);
 
         for(int i = 0; i < totalFiles; i++) {
-          new FileSenderAsyncTask(getContext(), this, groupInfo, transferProgressFragment).execute(fileUriList.get(i));
+          new FileSenderAsyncTask(getContext(), this, groupInfo, transferProgressFragment, i).execute(fileUriList.get(i));
+          transferProgressFragment.changeStatus(i, FileItem.SENDING);
         }
       }
     }
@@ -553,17 +554,18 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     private ArrayList<FileItem> fileItems;
     private int fileItemIndex;
 
-    public FileSenderAsyncTask(Context context, DeviceListFragment deviceListFragment, WifiP2pInfo groupInfo, TransferProgressFragment transferProgressFragment) {
+    public FileSenderAsyncTask(Context context, DeviceListFragment deviceListFragment, WifiP2pInfo groupInfo, TransferProgressFragment transferProgressFragment, int fileItemIndex) {
       this.context = context;
       this.deviceListFragment = deviceListFragment;
       this.groupInfo = groupInfo;
       this.transferProgressFragment = transferProgressFragment;
       this.fileItems = deviceListFragment.getFileItems();
+      this.fileItemIndex = fileItemIndex;
     }
 
     @Override
     protected void onPreExecute() {
-      fileItemIndex = deviceListFragment.getTotalFilesSent();
+      //fileItemIndex = deviceListFragment.getTotalFilesSent();
 
       //TODO: Remove runnable for onPreExecute, onPostExecute, onProgressUpdate
       deviceListFragment.getActivity().runOnUiThread(new Runnable() {
@@ -634,6 +636,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
       if(deviceListFragment.allFilesSent()) {
         Toast.makeText(context, "All files transferred", Toast.LENGTH_SHORT).show();
+        deviceListFragment.getActivity().finish();
       }
     }
   }
