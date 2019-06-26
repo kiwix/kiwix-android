@@ -208,11 +208,12 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
       });
 
       return true;
-    } else if(item.getItemId() == R.id.menu_item_disconnect) {
+    } else if(item.getItemId() == R.id.menu_item_cancel_search) {
       if(manager != null) {
-        // TODO: 'cancelDisconnect', for removing the indefinite progress bar
+        // TODO: 'cancelDisconnect', for removing incorrect connections
         //removeGroupDetails();
-        disconnect();
+        //disconnect();
+        cancelSearch();
       }
 
 
@@ -556,8 +557,35 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     }*/
 
   @Override
-  public void cancelDisconnect() {
-    //TODO
+  public void cancelSearch() {
+
+    if (manager != null) {
+      final DeviceListFragment fragment = (DeviceListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_device_list);
+
+      if (fragment.getUserDevice() == null
+          || fragment.getUserDevice().status == WifiP2pDevice.CONNECTED) {
+        disconnect();
+
+      } else if (fragment.getUserDevice().status == WifiP2pDevice.AVAILABLE
+          || fragment.getUserDevice().status == WifiP2pDevice.INVITED) {
+
+        manager.cancelConnect(channel, new WifiP2pManager.ActionListener() {
+
+          @Override
+          public void onSuccess() {
+            Toast.makeText(LocalFileTransferActivity.this, "Aborting connection",
+                Toast.LENGTH_SHORT).show();
+          }
+
+          @Override
+          public void onFailure(int reasonCode) {
+            Toast.makeText(LocalFileTransferActivity.this,
+                "Connect abort request failed. Reason : " + getErrorMessage(reasonCode),
+                Toast.LENGTH_SHORT).show();
+          }
+        });
+      }
+    }
   }
 
   @Override
@@ -621,35 +649,3 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     closeLocalFileTransferActivity();
   }
 }
-/*
-@Override
-  public void disconnect() {
-    fileSendingDevice = false;
-
-    //TODO
-    manager.removeGroup(channel, new DisconnectActionListener(this));
-    Toast.makeText(this, "Disconnecting devices...", Toast.LENGTH_LONG).show();
-
-
-  }
-
-  class DisconnectActionListener implements WifiP2pManager.ActionListener {
-
-    private LocalFileTransferActivity parentActivity;
-
-    public DisconnectActionListener(LocalFileTransferActivity parentActivity) {
-      this.parentActivity = parentActivity;
-    }
-
-    @Override
-    public void onSuccess() {
-      Log.d(TAG, "Disconnect successful");
-      parentActivity.finish();
-    }
-
-    @Override
-    public void onFailure(int reasonCode) {
-      Log.d(TAG, "Disconnect failed. Reason :" + reasonCode);
-    }
-  }
-  */

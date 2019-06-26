@@ -363,7 +363,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
     /*void showDetails(WifiP2pDevice device);*/
 
-    void cancelDisconnect();
+    void cancelSearch();
 
     void connect(WifiP2pDevice peerDevice);
 

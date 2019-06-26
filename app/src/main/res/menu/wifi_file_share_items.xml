@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".zim_manager.local_file_transfer.LocalFileTransferActivity">
 
-    <item android:id="@+id/menu_item_disconnect"
-        android:title="Disconnect"
+    <item android:id="@+id/menu_item_cancel_search"
+        android:title="Cancel Search"
         app:showAsAction="always"
         android:icon="@drawable/ic_baseline_cancel_24px" />
 
