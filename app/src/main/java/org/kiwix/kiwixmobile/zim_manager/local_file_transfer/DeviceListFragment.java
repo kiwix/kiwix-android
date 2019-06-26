@@ -92,32 +92,6 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     super.onActivityCreated(savedInstanceState);
     this.setListAdapter(new WifiPeerListAdapter(getActivity(), R.layout.row_peer_device, peerDevices));
 
-    ImageButton editUserDeviceName = getActivity().findViewById(R.id.btn_edit_device_name);
-    editUserDeviceName.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        if(userDevice != null) {
-          //TODO: Dialog to take input & call this method:
-          //((DeviceActionListener) getActivity()).changeDeviceName("Sood");
-
-          if(((LocalFileTransferActivity) getActivity()).isWifiP2pEnabled()) {
-            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            Fragment prev = getActivity().getSupportFragmentManager().findFragmentByTag("EditDeviceNameDialog");
-            if (prev != null) {
-              fragmentTransaction.remove(prev); // To prevent multiple instances of the DialogFragment
-            }
-            fragmentTransaction.addToBackStack(null);
-
-            EditDeviceNameDialog dialogFragment = new EditDeviceNameDialog();
-            // For DialogFragments, show() handles the fragment commit and display
-            dialogFragment.show(fragmentTransaction, "EditDeviceNameDialog");
-          } else {
-            Toast.makeText(getActivity(), "Enable WiFi P2P to change device name", Toast.LENGTH_SHORT).show();
-          }
-        }
-      }
-    });
-
     if(((LocalFileTransferActivity) getActivity()).isFileSender()) {
       fileSender = true;
       fileUriList = ((LocalFileTransferActivity) getActivity()).getFileURIArrayList();
@@ -359,7 +333,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
   public interface DeviceActionListener {
 
-    void changeDeviceName(String deviceNewName);
+    /*void changeDeviceName(String deviceNewName);*/
 
     /*void showDetails(WifiP2pDevice device);*/
 
@@ -370,41 +344,6 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     //void disconnect();
 
     void closeLocalFileTransferActivity();
-  }
-
-  public static class EditDeviceNameDialog extends DialogFragment {
-
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-      AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-      builder.setView(R.layout.dialog_edit_device_name)
-          .setPositiveButton("Update", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-              EditText changeDeviceName = EditDeviceNameDialog.this.getDialog().findViewById(R.id.edit_text_change_device_name);
-              String deviceNewName = changeDeviceName.getText().toString();
-              //Toast.makeText(getActivity(), "Changing name to: " + deviceNewName.getText().toString(), Toast.LENGTH_SHORT).show();
-
-              if(deviceNewName != null && !deviceNewName.equals("")) {
-                ((DeviceActionListener) getActivity()).changeDeviceName(deviceNewName);
-              } else {
-                Toast.makeText(getActivity(), "Error: Empty name field", Toast.LENGTH_SHORT).show();
-              }
-
-              //dialog.cancel();
-            }
-          })
-          .setNeutralButton("Dismiss", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-          });
-
-      return builder.create();
-    }
   }
 
   public static class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {

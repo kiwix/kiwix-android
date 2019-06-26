@@ -519,30 +519,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     }
   }
 
-  // TODO: Remove this feature since reflection of hidden methods/fields is restricted from Pie (& will subsequently lead to exceptions)
-  @Override
-  public void changeDeviceName(String deviceNewName) {
-    try {
-      Method method = manager.getClass().getMethod("setDeviceName", WifiP2pManager.Channel.class, String.class, WifiP2pManager.ActionListener.class);
-      method.invoke(manager, channel, deviceNewName, new WifiP2pManager.ActionListener() {
-        @Override
-        public void onSuccess() {
-          Toast.makeText(LocalFileTransferActivity.this, "Name successfully changed", Toast.LENGTH_LONG).show();
-          resetPeers();
-        }
-
-        @Override
-        public void onFailure(int reason) {
-          Toast.makeText(LocalFileTransferActivity.this, "Request failed: " + reason, Toast.LENGTH_SHORT).show();
-          Log.d(TAG, "Name change failed: " + getErrorMessage(reason));
-        }
-      });
-
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
   public boolean isFileSender() {
     return fileSendingDevice;
   }
