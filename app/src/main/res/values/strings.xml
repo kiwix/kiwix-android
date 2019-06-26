@@ -264,4 +264,22 @@
   <string name="failed_unhandled_http_code">Unknown HTTP code received</string>
   <string name="failed_unknown">Unknown</string>
   <string name="failed_http_code">HTTP code %s</string>
+  <string name="add_note">Add Note</string>
+  <string name="save">Save</string>
+  <string name="note">Note</string>
+  <string name="wiki_article_title">Wiki Article Title</string>
+  <string name="ext_storage_permission_rationale_add_note">Storage access is required for Notes</string>
+  <string name="ext_storage_write_permission_denied_add_note">Notes can\'t be used without access to storage</string>
+  <string name="note_save_unsuccessful">Note save unsuccessful</string>
+  <string name="note_save_successful">Note saved</string>
+  <string name="note_save_error_storage_not_writable">Error saving note: Storage not writable</string>
+  <string name="note_share_error_file_missing">Note file doesn\'t exist</string>
+  <string name="note_share_app_chooser_title">Share note file with:</string>
+  <string name="confirmation_alert_dialog_message">Discard unsaved changes?</string>
+  <string name="clear_all_notes">Clear All Notes</string>
+  <string name="delete_notes_confirmation_msg">Delete all notes?</string>
+  <string name="ext_storage_permission_not_granted">Error: Storage permissions not granted</string>
+  <string name="notes_deletion_none_found">No notes found for deletion</string>
+  <string name="notes_deletion_successful">Entire notes folder deleted</string>
+  <string name="notes_deletion_unsuccessful">Some files not deleted</string>
 </resources>
