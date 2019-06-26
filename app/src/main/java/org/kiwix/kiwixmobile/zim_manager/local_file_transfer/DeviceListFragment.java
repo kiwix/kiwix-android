@@ -565,6 +565,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     protected void onPreExecute() {
       fileItemIndex = deviceListFragment.getTotalFilesSent();
 
+      //TODO: Remove runnable for onPreExecute, onPostExecute, onProgressUpdate
       deviceListFragment.getActivity().runOnUiThread(new Runnable() {
         @Override
         public void run() {
@@ -632,7 +633,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
       });
 
       if(deviceListFragment.allFilesSent()) {
-        deviceListFragment.getActivity().finish();
+        ((LocalFileTransferActivity) deviceListFragment.getActivity()).disconnect();
       }
     }
   }
@@ -713,7 +714,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
       super.onPostExecute(s);
       Toast.makeText(context, "File transfer complete", Toast.LENGTH_LONG).show();
       Log.d(LocalFileTransferActivity.TAG, "File transfer complete");
-      deviceListFragment.getActivity().finish();
+      ((LocalFileTransferActivity) deviceListFragment.getActivity()).disconnect();
 
       /*File recvFile = new File(filePath);
       Uri fileUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID+".fileprovider",recvFile);

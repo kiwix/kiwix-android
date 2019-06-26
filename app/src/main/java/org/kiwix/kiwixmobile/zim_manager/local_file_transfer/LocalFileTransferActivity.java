@@ -613,3 +613,35 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     this.finish();
   }
 }
+/*
+@Override
+  public void disconnect() {
+    fileSendingDevice = false;
+
+    //TODO
+    manager.removeGroup(channel, new DisconnectActionListener(this));
+    Toast.makeText(this, "Disconnecting devices...", Toast.LENGTH_LONG).show();
+
+
+  }
+
+  class DisconnectActionListener implements WifiP2pManager.ActionListener {
+
+    private LocalFileTransferActivity parentActivity;
+
+    public DisconnectActionListener(LocalFileTransferActivity parentActivity) {
+      this.parentActivity = parentActivity;
+    }
+
+    @Override
+    public void onSuccess() {
+      Log.d(TAG, "Disconnect successful");
+      parentActivity.finish();
+    }
+
+    @Override
+    public void onFailure(int reasonCode) {
+      Log.d(TAG, "Disconnect failed. Reason :" + reasonCode);
+    }
+  }
+  */
