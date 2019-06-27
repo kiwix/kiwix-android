@@ -52,12 +52,13 @@ import static org.kiwix.kiwixmobile.utils.Constants.NOTES_DIRECTORY;
  * AddNoteDialog extends DialogFragment and is used to display the note corresponding to a particular
  * article (of a particular zim file/wiki/book) as a full-screen dialog fragment.
  *
- * Notes are saved as text files at location: "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
+ * Notes are saved as text files at location: "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
  * */
 
 public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDialogFragment.UserClickListener {
 
-  public static String TAG = "AddNoteDialog";
+  public static final String TAG = "AddNoteDialog";
+  private static final int BeginIndexForZimNoteDirectoryName = 6;
 
   private SharedPreferenceUtil sharedPreferenceUtil;
 
@@ -72,8 +73,12 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
 
   private String zimFileTitle;
   private String articleTitle;
+  private String zimNoteDirectoryName;
+  private String articleNotefileName;
   private boolean noteFileExists = false;
   private boolean noteEdited = false; // Keeps track of state of the note (whether edited since last save)
+
+  private String ZIM_NOTES_DIRECTORY;
 
   public AddNoteDialog(SharedPreferenceUtil sharedPreferenceUtil) {
     this.sharedPreferenceUtil = sharedPreferenceUtil;
@@ -87,6 +92,77 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
 
     zimFileTitle = ZimContentProvider.getZimFileTitle();
     articleTitle = ((MainActivity)getActivity()).getCurrentWebView().getTitle();
+
+    zimNoteDirectoryName = getZimNoteDirectoryName();
+    Log.d(TAG, "Note Directory Name: " + zimNoteDirectoryName);
+
+    articleNotefileName = getArticleNotefileName();
+    Log.d(TAG, "Article Notefile Name: " + articleNotefileName);
+
+    ZIM_NOTES_DIRECTORY = NOTES_DIRECTORY + zimNoteDirectoryName + "/";
+  }
+
+  private String getZimNoteDirectoryName() {
+    //String zimFileName = ZimContentProvider.getName(); // Returns name of the form "kiwix.psiram_en_all"
+    String zimFileName = ZimContentProvider.getZimFile(); // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"
+    Log.d(TAG, "Zim name: " + zimFileName);
+    //Log.d(TAG, "Zim file name: " + ZimContentProvider.getZimFile());
+
+    //return (zimFileName.substring(BeginIndexForZimNoteDirectoryName)); // Returns "psiram_en_all" by removing "kiwix." prefix
+    String noteDirectoryName = getTextAfterLastSlashWithoutExtension(zimFileName);
+
+    if(noteDirectoryName != null) {
+      return noteDirectoryName;
+    } else {
+      return (zimFileTitle); // Incase the required ZIM file name couldn't be extracted
+    }
+  }
+
+  private String getArticleNotefileName() {
+    // Returns url of the form: "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html"
+    String articleUrl = ((MainActivity) getActivity()).getCurrentWebView().getUrl();
+
+    String notefileName = getTextAfterLastSlashWithoutExtension(articleUrl);
+
+    if(notefileName != null) {
+      return notefileName;
+    } else {
+      return (articleTitle); // Incase the required html file name couldn't be extracted
+    }
+  }
+
+  private String getTextAfterLastSlashWithoutExtension(String path) {
+    /*
+    * That's about exactly what it does.
+    *
+    * From ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim", returns "granbluefantasy_en_all_all_nopic_2018-10"
+    * From "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html", returns "Main_Page"
+    *
+    * For null input or on being unable to find said text, returns null
+    * */
+
+    if(path == null) return null;
+
+    int rightmostSlash = -1;
+    int rightmostDot = -1;
+
+    for(int i = path.length()-1; i >= 0; i--) {
+
+      if(path.charAt(i) == '.' && rightmostDot < 0) rightmostDot = i;
+
+      if(path.charAt(i) == '/') {
+        rightmostSlash = i;
+        break;
+      }
+    }
+
+    //Log.d(TAG, "Method output: " + path.substring(rightmostSlash+1, rightmostDot));
+
+    if(rightmostSlash > -1 && rightmostDot > -1) {
+      return (path.substring(rightmostSlash+1, rightmostDot));
+    }
+
+    return null;
   }
 
   @Override
@@ -248,7 +324,7 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
         return;
       }
 
-      File notesFolder = new File(NOTES_DIRECTORY + zimFileTitle);
+      File notesFolder = new File(ZIM_NOTES_DIRECTORY);
       boolean folderExists = true;
 
       if(!notesFolder.exists()) {
@@ -257,7 +333,7 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
       }
 
       if(folderExists) {
-        File noteFile = new File(notesFolder.getAbsolutePath(), articleTitle + ".txt");
+        File noteFile = new File(notesFolder.getAbsolutePath(), articleNotefileName + ".txt");
 
         // Save note text-file code:
         try {
@@ -290,7 +366,7 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
      * is displayed in the EditText field (note content area)
      * */
 
-    File noteFile = new File(NOTES_DIRECTORY + zimFileTitle + "/" + articleTitle + ".txt");
+    File noteFile = new File(ZIM_NOTES_DIRECTORY + articleNotefileName + ".txt");
 
     if(noteFile.exists()) {
       noteFileExists = true;
@@ -337,7 +413,7 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
      saveNote(addNoteEditText.getText().toString()); // Save edited note before sharing the text file
     }
 
-    File noteFile = new File(NOTES_DIRECTORY + zimFileTitle + "/" + articleTitle + ".txt");
+    File noteFile = new File(ZIM_NOTES_DIRECTORY + articleNotefileName + ".txt");
 
     Uri noteFileUri = null;
     if(noteFile.exists()) {
