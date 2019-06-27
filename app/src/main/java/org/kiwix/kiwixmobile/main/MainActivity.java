@@ -1792,15 +1792,15 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         switch (resultCode) {
           case Activity.RESULT_OK:
             // All required changes were successfully made
-            Toast.makeText(MainActivity.this, states.isLocationPresent() + "", Toast.LENGTH_SHORT)
-                .show();
+            Log.v("case 101", states.isLocationPresent() + "");
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
               wifiHotspotManager.turnOnHotspot();
             }
             break;
           case Activity.RESULT_CANCELED:
             // The user was asked to change settings, but chose not to
-            Toast.makeText(MainActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
+            Log.v("case 101", "Canceled");
             break;
           default:
             break;
