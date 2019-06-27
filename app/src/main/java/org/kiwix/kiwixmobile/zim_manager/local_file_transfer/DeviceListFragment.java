@@ -1,10 +1,8 @@
 package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 
-import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.Uri;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
@@ -12,15 +10,12 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -29,22 +24,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.FileProvider;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.ListFragment;
 
-import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -54,18 +43,14 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.view.View.GONE;
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.DeviceListFragment.TAG;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.TO_BE_SENT;
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.filePath;
 
 public class DeviceListFragment extends ListFragment implements WifiP2pManager.PeerListListener, WifiP2pManager.ConnectionInfoListener {
 
-  public static String TAG = "DeviceListFragment";
+  public static final String TAG = "DeviceListFragment";
 
   private SharedPreferenceUtil sharedPreferenceUtil;
 
@@ -134,8 +119,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     selectedPeerDevice = (WifiP2pDevice) getListAdapter().getItem(position);
     Toast.makeText(getActivity(), selectedPeerDevice.deviceName, Toast.LENGTH_SHORT).show();
 
-    // TODO: Set sender depending upon receiving file URI in activity opening intent
-    //((LocalFileTransferActivity) getActivity()).setFileSender();
+    // TODO: Set sender depending upon receiving file URI in activity opening intent - DONE
     ((DeviceActionListener) getActivity()).connect(selectedPeerDevice);
   }
 
@@ -184,7 +168,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
   public void onConnectionInfoAvailable(WifiP2pInfo info) {
     groupInfo = info;
 
-    //TODO: Show progress of file transfer process
+    //TODO: Show progress of file transfer process - DONE
 
     new PeerGroupHandshakeAsyncTask(this, groupInfo).execute();
 
@@ -260,34 +244,14 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
     } else if(groupInfo.groupFormed) {
       {
-        //Toast.makeText(getActivity(), "Sending file to "+selectedPeerDevice.deviceAddress+"\nSelf: "+userDevice.deviceAddress, Toast.LENGTH_SHORT).show();
         Log.d(LocalFileTransferActivity.TAG, "Starting file transfer");
 
-        new AlertDialog.Builder(getActivity())
-            .setMessage("Transferring file")
-            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                /*Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
-                serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);
-                serviceIntent.putExtra(FileTransferService.EXTRAS_FILE_URI, filePath.toString());//FileProvider.getUriForFile(getActivity(), BuildConfig.APPLICATION_ID+".fileprovider", new File(filePath)).toString());
-
-                if(groupInfo.isGroupOwner)  fileReceiverAddress = selectedPeerDeviceInetAddress;
-                else                        fileReceiverAddress = groupInfo.groupOwnerAddress;
-
-                serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS, fileReceiverAddress.getHostAddress());//getIPFromMac(selectedPeerDevice.deviceAddress));
-                serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, 8008);
-                getActivity().startService(serviceIntent);*/
-                /*DeviceListFragment parent = ((DeviceListFragment) getActivity().getSupportFragmentManager().findFragmentByTag(TAG));
-                if(parent != null)
-                  new FileSenderAsyncTask(getContext(), parent, parent.groupInfo).execute(((LocalFileTransferActivity) getActivity()).getFileURIArrayList());*/
-              }
-            })
-            //.setNegativeButton("No", null)
-            .show();
+        Toast.makeText(getActivity(), "Starting file transfer", Toast.LENGTH_SHORT).show();
 
         if(groupInfo.isGroupOwner)  fileReceiverAddress = selectedPeerDeviceInetAddress;
         else                        fileReceiverAddress = groupInfo.groupOwnerAddress;
+
+        //TODO: Fix this
         for(int i = 0; i < 10000000; i++);
 
         for(int i = 0; i < totalFiles; i++) {
@@ -332,16 +296,9 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
   }
 
   public interface DeviceActionListener {
-
-    /*void changeDeviceName(String deviceNewName);*/
-
-    /*void showDetails(WifiP2pDevice device);*/
-
     void cancelSearch();
 
     void connect(WifiP2pDevice peerDevice);
-
-    //void disconnect();
 
     void closeLocalFileTransferActivity();
   }
@@ -368,7 +325,6 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
           Object object = objectInputStream.readObject();
           if (object.getClass().equals(String.class) && ((String) object).equals("Request Kiwix File Sharing")) {
             Log.d(TAG, "Client IP address: "+ client.getInetAddress());
-            //selectedPeerDeviceInetAddress = client.getInetAddress();
 
             if(deviceListFragment.isFileSender()) {
               ObjectOutputStream objectOutputStream = new ObjectOutputStream(client.getOutputStream());
@@ -400,7 +356,6 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
           return client.getInetAddress();
 
         } catch (Exception e) {
-          //Log.d(TAG, e.getMessage());
           e.printStackTrace();
           return null;
         }
@@ -450,13 +405,6 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
           e.printStackTrace();
           return null;
         }
-
-            /*Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
-            serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);
-            serviceIntent.putExtra(FileTransferService.EXTRAS_FILE_PATH, Environment.getExternalStorageDirectory() + "/MainPage.txt");
-            serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS, groupInfo.groupOwnerAddress.getHostAddress());
-            serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, 8008);
-            getActivity().startService(serviceIntent);*/
       }
 
       return null;
@@ -565,7 +513,6 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
     @Override
     protected void onPostExecute(String s) {
-      //
       deviceListFragment.incrementTotalFilesSent();
 
       deviceListFragment.getActivity().runOnUiThread(new Runnable() {
@@ -588,7 +535,6 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     private DeviceListFragment deviceListFragment;
     private TransferProgressFragment transferProgressFragment;
     private int fileItemIndex;
-    //private View statusView
 
     public FileServerAsyncTask(Context context, DeviceListFragment deviceListFragment, TransferProgressFragment transferProgressFragment) {
       this.context = context;
@@ -660,13 +606,6 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
       Log.d(LocalFileTransferActivity.TAG, "File transfer complete");
       ((LocalFileTransferActivity) deviceListFragment.getActivity()).closeLocalFileTransferActivity();
 
-      /*File recvFile = new File(filePath);
-      Uri fileUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID+".fileprovider",recvFile);
-      Intent intent = new Intent();
-      intent.setAction(Intent.ACTION_VIEW);
-      intent.setDataAndType(fileUri, "text/plain");
-      intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-      context.startActivity(intent);*/
     }
   }
 
@@ -689,7 +628,4 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     return true;
   }
 
-  /*public interface UpdateProgressCallback {
-    public void changeStatus(int itemIndex, short status);
-  }*/
 }

@@ -17,7 +17,6 @@ import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -38,7 +37,6 @@ import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -46,12 +44,11 @@ import javax.inject.Inject;
 public class LocalFileTransferActivity extends AppCompatActivity implements WifiP2pManager.ChannelListener, DeviceListFragment.DeviceActionListener {
 
   /*TODO
-  *   - Fix activity closure upon file transfer (successful or otherwise)
+  *   - Fix activity closure upon file transfer (successful or otherwise) - DONE
   *   - Handle multiple selected files - DONE
   *   */
 
-  public static final String TAG = "LocalFileTransferActvty"; // Not a typo, Tags have a length upper limit of 25 characters
-  public static Uri filePath = null; // = Environment.getExternalStorageDirectory() + "/Kiwix/temp.txt";///psiram_en_all_2018-09.zim";//Notes/Granblue Fantasy Wiki/Main Page.txt";
+  public static final String TAG = "LocalFileTransferActvty"; // Not a typo, 'Log' tags have a length upper limit of 25 characters
   private final int PERMISSION_REQUEST_CODE_COARSE_LOCATION = 1;
 
   @Inject
@@ -67,7 +64,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   private WifiP2pManager.Channel channel;
   private BroadcastReceiver receiver = null;
   private Boolean fileSendingDevice = false; // True if intent has file uri
-  // TODO: Set to true if activity opening intent has the file URI
+  // TODO: Set to true if activity opening intent has the file URI- DONE
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -76,34 +73,17 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // Protect AsyncTask from orientation changes
     KiwixApplication.getApplicationComponent().inject(this);
 
-        /*setContentView(R.layout.activity_local_file_transfer);
-
-    TextView fileUriListView = findViewById(R.id.text_view_file_uris);
-
-    Intent filesIntent = getIntent();
-    ArrayList<Uri> fileURIArrayList = filesIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
-
-    String uriList = "Selected File URIs:\n\n";
-    if(fileURIArrayList != null && fileURIArrayList.size() > 0) {
-      for(int i = 0; i < fileURIArrayList.size(); i++) {
-        uriList += fileURIArrayList.get(i) + "\n\n";
-      }
-    }
-
-    fileUriListView.setText(uriList);*/
-
     Intent filesIntent = getIntent();
     fileURIArrayList = filesIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
-
     if(fileURIArrayList != null && fileURIArrayList.size() > 0) {
-      //filePath = fileURIArrayList.get(0);
       setFileSender();
     }
 
     Toolbar actionBar = findViewById(R.id.toolbar_local_file_transfer);
     setSupportActionBar(actionBar);
+    //TODO: Fix this text colour
     actionBar.setTitle("Local ZIM file transfer");
-    // TODO: Fix this drawable file/colour & text colour
+    // TODO: Fix this drawable file/colour - DONE
     actionBar.setNavigationIcon(R.drawable.ic_close_white_24dp);
     actionBar.setNavigationOnClickListener(new View.OnClickListener(){
       @Override
@@ -118,11 +98,11 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
     intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
-    //TODO: Start WiFi
+    //TODO: Start WiFi - DONE through permissions
     manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
     channel = manager.initialize(this, getMainLooper(), null);
 
-    // TODO: Add manager.removeGroup(channel, null); to remove previous groups
+    // TODO: !!!!!!!!!!!Add manager.removeGroup(channel, null); to remove previous groups
 
     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
         && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -210,9 +190,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
       return true;
     } else if(item.getItemId() == R.id.menu_item_cancel_search) {
       if(manager != null) {
-        // TODO: 'cancelDisconnect', for removing incorrect connections
-        //removeGroupDetails();
-        //disconnect();
+        // TODO: 'cancelDisconnect', for removing incorrect connections - DONE thru cancelSearch
         cancelSearch();
       }
 
@@ -221,29 +199,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     }
     else {
       return super.onOptionsItemSelected(item);
-    }
-  }
-
-  private void removeGroupDetails() {
-    try {
-      Method deletePersistentGroup = manager.getClass().getMethod("deletePersistentGroup", WifiP2pManager.Channel.class, int.class, WifiP2pManager.ActionListener.class);
-      for(int netId = 0; netId < 32; netId++) {
-        deletePersistentGroup.invoke(manager, channel, netId, new WifiP2pManager.ActionListener() {
-          @Override
-          public void onSuccess() {
-            Log.d(TAG, "WiFi Direct Group successfully deleted");
-          }
-
-          @Override
-          public void onFailure(int reason) {
-            Log.d(TAG, "Group deletion failed: "+getErrorMessage(reason));
-          }
-        });
-      }
-
-    } catch (Exception e) {
-      e.printStackTrace();
-      Log.d(TAG, "Error removing group details: " + e.getMessage());
     }
   }
 
@@ -259,11 +214,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     try {
       network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     } catch(Exception ex) {ex.printStackTrace();}
-
-        /*if(!gps_enabled && !network_enabled) {
-            // notify user
-
-        }*/
 
     return (gps_enabled || network_enabled);
   }
@@ -310,23 +260,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   }
 
   private void requestEnableWifiP2pServices() {
-
-        /*new AlertDialog.Builder(this)
-                .setMessage("Enable WiFi P2P from system settings")
-                .setPositiveButton("Open WiFi Settings", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                        paramDialogInterface.cancel();
-                        startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                })
-                .show();*/
 
     FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
     Fragment prev = getSupportFragmentManager().findFragmentByTag("WifiP2pDialog");
@@ -376,15 +309,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
         if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
           return;
         } else {
-                    /*new AlertDialog.Builder(this)
-                            .setMessage("Cannot discover peers without location services")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    //((MainActivity) getApplicationContext()).finish();
-                                }
-                            })
-                            .show();*/
           showNeutralDialog("Cannot discover peers without location services");
           //TODO: Close activity
         }
@@ -527,11 +451,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     fileSendingDevice = true;
   }
 
-    /*@Override
-    public void showDetails(WifiP2pDevice device) {
-
-    }*/
-
   @Override
   public void cancelSearch() {
 
@@ -578,7 +497,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
         /*else
             config.groupOwnerIntent = 15;*/
 
-    //TODO: Show a progress bar between starting & completion of connection
+    //TODO: Show a progress bar between starting & completion of connection - DONE
 
     manager.connect(channel, config, new WifiP2pManager.ActionListener() {
       @Override
