@@ -58,27 +58,26 @@ import static org.kiwix.kiwixmobile.utils.Constants.NOTES_DIRECTORY;
 public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDialogFragment.UserClickListener {
 
   public static final String TAG = "AddNoteDialog";
-  private static final int BeginIndexForZimNoteDirectoryName = 6;
 
   private SharedPreferenceUtil sharedPreferenceUtil;
 
   @BindView(R.id.add_note_toolbar)
-  Toolbar toolbar;  // Displays options for the note dialog
+  Toolbar toolbar;          // Displays options for the note dialog
   @BindView(R.id.add_note_text_view)
   TextView addNoteTextView; // Displays article title
   @BindView(R.id.add_note_edit_text)
-  EditText addNoteEditText; // Displays zim file title (wiki name)
+  EditText addNoteEditText; // Displays the note text
 
   private Unbinder unbinder;
 
   private String zimFileTitle;
   private String articleTitle;
-  private String zimNoteDirectoryName;
-  private String articleNotefileName;
+  private String zimNoteDirectoryName;  // Corresponds to "ZimFileName" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
+  private String articleNotefileName;   // Corresponds to "ArticleUrl" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
   private boolean noteFileExists = false;
-  private boolean noteEdited = false; // Keeps track of state of the note (whether edited since last save)
+  private boolean noteEdited = false;   // Keeps track of state of the note (whether edited since last save)
 
-  private String ZIM_NOTES_DIRECTORY;
+  private String ZIM_NOTES_DIRECTORY;   // Stores path to directory for the currently open zim's notes
 
   public AddNoteDialog(SharedPreferenceUtil sharedPreferenceUtil) {
     this.sharedPreferenceUtil = sharedPreferenceUtil;
@@ -94,75 +93,9 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
     articleTitle = ((MainActivity)getActivity()).getCurrentWebView().getTitle();
 
     zimNoteDirectoryName = getZimNoteDirectoryName();
-    Log.d(TAG, "Note Directory Name: " + zimNoteDirectoryName);
-
     articleNotefileName = getArticleNotefileName();
-    Log.d(TAG, "Article Notefile Name: " + articleNotefileName);
 
     ZIM_NOTES_DIRECTORY = NOTES_DIRECTORY + zimNoteDirectoryName + "/";
-  }
-
-  private String getZimNoteDirectoryName() {
-    //String zimFileName = ZimContentProvider.getName(); // Returns name of the form "kiwix.psiram_en_all"
-    String zimFileName = ZimContentProvider.getZimFile(); // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"
-    Log.d(TAG, "Zim name: " + zimFileName);
-    //Log.d(TAG, "Zim file name: " + ZimContentProvider.getZimFile());
-
-    //return (zimFileName.substring(BeginIndexForZimNoteDirectoryName)); // Returns "psiram_en_all" by removing "kiwix." prefix
-    String noteDirectoryName = getTextAfterLastSlashWithoutExtension(zimFileName);
-
-    if(noteDirectoryName != null) {
-      return noteDirectoryName;
-    } else {
-      return (zimFileTitle); // Incase the required ZIM file name couldn't be extracted
-    }
-  }
-
-  private String getArticleNotefileName() {
-    // Returns url of the form: "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html"
-    String articleUrl = ((MainActivity) getActivity()).getCurrentWebView().getUrl();
-
-    String notefileName = getTextAfterLastSlashWithoutExtension(articleUrl);
-
-    if(notefileName != null) {
-      return notefileName;
-    } else {
-      return (articleTitle); // Incase the required html file name couldn't be extracted
-    }
-  }
-
-  private String getTextAfterLastSlashWithoutExtension(String path) {
-    /*
-    * That's about exactly what it does.
-    *
-    * From ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim", returns "granbluefantasy_en_all_all_nopic_2018-10"
-    * From "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html", returns "Main_Page"
-    *
-    * For null input or on being unable to find said text, returns null
-    * */
-
-    if(path == null) return null;
-
-    int rightmostSlash = -1;
-    int rightmostDot = -1;
-
-    for(int i = path.length()-1; i >= 0; i--) {
-
-      if(path.charAt(i) == '.' && rightmostDot < 0) rightmostDot = i;
-
-      if(path.charAt(i) == '/') {
-        rightmostSlash = i;
-        break;
-      }
-    }
-
-    //Log.d(TAG, "Method output: " + path.substring(rightmostSlash+1, rightmostDot));
-
-    if(rightmostSlash > -1 && rightmostDot > -1) {
-      return (path.substring(rightmostSlash+1, rightmostDot));
-    }
-
-    return null;
   }
 
   @Override
@@ -223,6 +156,60 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
     });
 
     return view;
+  }
+
+  private String getZimNoteDirectoryName() {
+    String zimFileName = ZimContentProvider.getZimFile(); // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"
+
+    String noteDirectoryName = getTextAfterLastSlashWithoutExtension(zimFileName);
+
+    if(noteDirectoryName != null) {
+      return noteDirectoryName;
+    } else {
+      return (zimFileTitle); // Incase the required ZIM file name couldn't be extracted
+    }
+  }
+
+  private String getArticleNotefileName() {
+    String articleUrl = ((MainActivity) getActivity()).getCurrentWebView().getUrl(); // Returns url of the form: "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html"
+
+    String notefileName = getTextAfterLastSlashWithoutExtension(articleUrl);
+
+    if(notefileName != null) {
+      return notefileName;
+    } else {
+      return (articleTitle); // Incase the required html file name couldn't be extracted
+    }
+  }
+
+  private String getTextAfterLastSlashWithoutExtension(String path) {
+    /* That's about exactly what it does.
+     *
+     * From ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim", returns "granbluefantasy_en_all_all_nopic_2018-10"
+     * From "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html", returns "Main_Page"
+     * For null input or on being unable to find required text, returns null
+     * */
+    if(path == null) return null;
+
+    int rightmostSlash = -1;
+    int rightmostDot = -1;
+
+    for(int i = path.length()-1; i >= 0; i--) {
+
+      if(path.charAt(i) == '.' && rightmostDot < 0)
+        rightmostDot = i;
+
+      if(path.charAt(i) == '/') {
+        rightmostSlash = i;
+        break;
+      }
+    }
+
+    if(rightmostSlash > -1 && rightmostDot > -1) {
+      return (path.substring(rightmostSlash+1, rightmostDot));
+    }
+
+    return null;
   }
 
   // Override onBackPressed() to respond to user pressing 'Back' button on navigation bar
