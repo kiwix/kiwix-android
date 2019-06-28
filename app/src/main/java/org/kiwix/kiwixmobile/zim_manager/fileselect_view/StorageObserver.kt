@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.zim_manager.fileselect_view
 
-import android.util.Log
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.data.ZimContentProvider
@@ -45,18 +44,12 @@ class StorageObserver @Inject constructor(
 
   private fun convertToBookOnDisk(file: File): BookOnDisk? {
     configureZimContentProvider()
+    var bookOnDisk: BookOnDisk? = null
     if (ZimContentProvider.canIterate && ZimContentProvider.setZimFile(file.absolutePath) != null) {
-      try {
-        return BookOnDisk(book = bookFromZimContentProvider(), file = file)
-      } catch (e: Exception) {
-        // TODO 20171215 Consider more elegant approaches.
-        // This is to see if we can catch the exception at all!
-        Log.e("kiwix-filesearch", "Problem parsing a book entry from the library file. ", e)
-      } finally {
-        resetZimContentProvider()
-      }
+      bookOnDisk = BookOnDisk(book = bookFromZimContentProvider(), file = file)
     }
-    return null
+    resetZimContentProvider()
+    return bookOnDisk
   }
 
   private fun bookFromZimContentProvider() = Book().apply {
@@ -72,16 +65,16 @@ class StorageObserver @Inject constructor(
     language = ZimContentProvider.getLanguage()
   }
 
+  private fun configureZimContentProvider() {
+    if (ZimContentProvider.zimFileName != null) {
+      ZimContentProvider.originalFileName = ZimContentProvider.zimFileName
+    }
+  }
+
   private fun resetZimContentProvider() {
     if (ZimContentProvider.originalFileName != "") {
       ZimContentProvider.setZimFile(ZimContentProvider.originalFileName)
     }
     ZimContentProvider.originalFileName = ""
-  }
-
-  private fun configureZimContentProvider() {
-    if (ZimContentProvider.zimFileName != null) {
-      ZimContentProvider.originalFileName = ZimContentProvider.zimFileName
-    }
   }
 }

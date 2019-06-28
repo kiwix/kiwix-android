@@ -65,8 +65,7 @@ class FileSearch @Inject constructor(private val context: Context) {
     directoryRoots(defaultPath)
         .minus(Environment.getExternalStorageDirectory().absolutePath)
         .fold(mutableListOf<File>(), { acc, root ->
-          if (File(root).isDirectory) acc.addAll(scanDirectory(root))
-          acc
+          acc.apply { addAll(scanDirectory(root)) }
         })
 
   private fun directoryRoots(defaultPath: String) = listOf(
@@ -78,10 +77,10 @@ class FileSearch @Inject constructor(private val context: Context) {
   private fun scanDirectory(directory: String) = filesMatchingExtensions(directory) ?: emptyList()
 
   private fun filesMatchingExtensions(directory: String) = File(directory)
-      .listFiles { dir, name -> name?.endsWithAny(*zimFileExtensions) ?: false }
+      .listFiles { _, name -> name.endsWithAny(*zimFileExtensions) }
       ?.toList()
 
 }
 
 private fun String.endsWithAny(vararg suffixes: String) =
-  suffixes.fold(false, {acc, s -> acc or endsWith(s) })
+  suffixes.fold(false, { acc, s -> acc or endsWith(s) })

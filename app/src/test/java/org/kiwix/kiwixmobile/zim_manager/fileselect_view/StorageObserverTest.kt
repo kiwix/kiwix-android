@@ -22,8 +22,10 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.verify
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -32,6 +34,7 @@ import org.kiwix.kiwixmobile.bookOnDisk
 import org.kiwix.kiwixmobile.data.ZimContentProvider
 import org.kiwix.kiwixmobile.database.newdb.dao.NewDownloadDao
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.resetSchedulers
 import org.kiwix.kiwixmobile.setScheduler
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
@@ -108,15 +111,7 @@ class StorageObserverTest {
     ZimContentProvider.canIterate = true
     every { ZimContentProvider.setZimFile("This won't match") } returns ""
 
-    every { ZimContentProvider.getZimFileTitle() } returns expectedBook.title
-    every { ZimContentProvider.getId() } returns expectedBook.id
-    every { ZimContentProvider.getFileSize() } returns expectedBook.size.toInt()
-    every { ZimContentProvider.getFavicon() } returns expectedBook.favicon
-    every { ZimContentProvider.getCreator() } returns expectedBook.creator
-    every { ZimContentProvider.getPublisher() } returns expectedBook.publisher
-    every { ZimContentProvider.getDate() } returns expectedBook.date
-    every { ZimContentProvider.getDescription() } returns expectedBook.description
-    every { ZimContentProvider.getLanguage() } returns expectedBook.language
+    expect(expectedBook)
 
     storageObserver.booksOnFileSystem
         .test()
@@ -134,5 +129,36 @@ class StorageObserverTest {
 
             )
         )
+    assertThat(ZimContentProvider.originalFileName).isEqualTo("")
+  }
+
+  @Test
+  fun `zim provider sets zim file to original file name if it exists`() {
+    every { downloadModel.fileNameFromUrl } returns "test"
+    every { file.absolutePath } returns "This is not"
+
+    mockkStatic(ZimContentProvider::class)
+    every { ZimContentProvider.setZimFile(any()) } returns null
+    ZimContentProvider.zimFileName = "myZimFileName"
+    storageObserver.booksOnFileSystem
+        .test()
+        .also {
+          downloads.offer(listOf(downloadModel))
+          files.offer(listOf(file))
+        }
+        .assertValues(listOf())
+    verify { ZimContentProvider.setZimFile("myZimFileName") }
+  }
+
+  private fun expect(expectedBook: Book) {
+    every { ZimContentProvider.getZimFileTitle() } returns expectedBook.title
+    every { ZimContentProvider.getId() } returns expectedBook.id
+    every { ZimContentProvider.getFileSize() } returns expectedBook.size.toInt()
+    every { ZimContentProvider.getFavicon() } returns expectedBook.favicon
+    every { ZimContentProvider.getCreator() } returns expectedBook.creator
+    every { ZimContentProvider.getPublisher() } returns expectedBook.publisher
+    every { ZimContentProvider.getDate() } returns expectedBook.date
+    every { ZimContentProvider.getDescription() } returns expectedBook.description
+    every { ZimContentProvider.getLanguage() } returns expectedBook.language
   }
 }
