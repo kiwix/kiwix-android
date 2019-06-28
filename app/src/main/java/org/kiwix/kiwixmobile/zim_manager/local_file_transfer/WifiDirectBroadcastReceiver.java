@@ -32,9 +32,9 @@ public class WifiDirectBroadcastReceiver extends BroadcastReceiver {
 
       int wifiP2pState = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
       if(wifiP2pState == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
-        wifiActivity.setIsWifiP2pEnabled(true);
+        wifiActivity.setWifiP2pEnabled(true);
       } else {
-        wifiActivity.setIsWifiP2pEnabled(false);
+        wifiActivity.setWifiP2pEnabled(false);
         Toast.makeText(wifiActivity, "Cannot discover peers without WiFi", Toast.LENGTH_SHORT).show();
         //TODO
         wifiActivity.resetPeers();

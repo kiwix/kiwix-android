@@ -41,30 +41,42 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
+/**
+ * Created by @Aditya-Sood as a part of GSoC 2019.
+ *
+ * This activity is the starting point for the module used for sharing zims between devices.
+ *
+ * The module is used for transferring ZIM files from one device to another, from within the
+ * app. Two devices are connected to each other using WiFi Direct, followed by file transfer.
+ *
+ * The module uses this activity along with {@link DeviceListFragment} to manage connection
+ * and file transfer between the devices.
+ * */
 public class LocalFileTransferActivity extends AppCompatActivity implements WifiP2pManager.ChannelListener, DeviceListFragment.DeviceActionListener {
 
-  /*TODO
-  *   - Fix activity closure upon file transfer (successful or otherwise) - DONE
-  *   - Handle multiple selected files - DONE
-  *   */
-
   public static final String TAG = "LocalFileTransferActvty"; // Not a typo, 'Log' tags have a length upper limit of 25 characters
-  private final int PERMISSION_REQUEST_CODE_COARSE_LOCATION = 1;
+  public static final int REQUEST_ENABLE_WIFI_P2P = 1;
+  public static final int REQUEST_ENABLE_LOCATION_SERVICES = 2;
+  private static final int PERMISSION_REQUEST_CODE_COARSE_LOCATION = 1;
+  private static final int PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS = 2;
 
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
 
-  private boolean isWifiP2pEnabled = false;
-  private boolean retryChannel = false;
+  private ArrayList<Uri> fileURIArrayList;  // For sender device, stores URIs of files to be transferred
+  private Boolean fileSendingDevice = false;// Whether the device is the file sender or not
 
-  private ArrayList<Uri> fileURIArrayList;
 
-  private WifiP2pManager manager;
-  private final IntentFilter intentFilter = new IntentFilter();
-  private WifiP2pManager.Channel channel;
-  private BroadcastReceiver receiver = null;
-  private Boolean fileSendingDevice = false; // True if intent has file uri
-  // TODO: Set to true if activity opening intent has the file URI- DONE
+  /* Variables related to the WiFi P2P API */
+  private boolean wifiP2pEnabled = false; // Whether WiFi has been enabled or not
+  private boolean retryChannel = false;   // Whether channel has retried connecting previously
+
+  private WifiP2pManager manager;         // Overall manager of Wifi p2p connections for the module
+  private WifiP2pManager.Channel channel; // Connects the module to device's underlying Wifi p2p framework
+
+  private final IntentFilter intentFilter = new IntentFilter(); // For specifying broadcasts (of the P2P API) that the module needs to respond to
+  private BroadcastReceiver receiver = null; // For receiving the broadcasts given by above filter
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -73,17 +85,21 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // Protect AsyncTask from orientation changes
     KiwixApplication.getApplicationComponent().inject(this);
 
+    /*
+    * Presence of file URIs decides whether the device with the activity open is a sender or receiver:
+    * - On the sender device, this activity is started from the app chooser post selection
+    * of files to share in the Library
+    * - On the receiver device, the activity is started directly from within the 'Get Content'
+    * activity, without any file URIs
+    * */
     Intent filesIntent = getIntent();
     fileURIArrayList = filesIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
     if(fileURIArrayList != null && fileURIArrayList.size() > 0) {
-      setFileSender();
+      setDeviceAsFileSender();
     }
 
     Toolbar actionBar = findViewById(R.id.toolbar_local_file_transfer);
     setSupportActionBar(actionBar);
-    //TODO: Fix this text colour
-    actionBar.setTitle("Local ZIM file transfer");
-    // TODO: Fix this drawable file/colour - DONE
     actionBar.setNavigationIcon(R.drawable.ic_close_white_24dp);
     actionBar.setNavigationOnClickListener(new View.OnClickListener(){
       @Override
@@ -92,63 +108,25 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
       }
     });
 
+
+    /* Initialisations for using the WiFi P2P API */
+
     // Intents that the broadcast receiver will be responding to
     intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
     intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
     intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
     intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
-    //TODO: Start WiFi - DONE through permissions
     manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
     channel = manager.initialize(this, getMainLooper(), null);
 
-    // TODO: !!!!!!!!!!!Add manager.removeGroup(channel, null); to remove previous groups
 
-    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-        && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+    /* Check for permissions essential to using this module */
 
-      if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
-        showNeutralDialog("Location permission is required to locate peer devices\n\nUser location is not being tracked by the app");
-        //TODO: Close activity
-      }
-
-      requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_CODE_COARSE_LOCATION);
-    }
-
+    // Check for coarse permissions, required to search for peer devices
+    requestCoarseLocationAccessPermission();
+    // Check for write-access to external storage, to save the received files on the device
     requestExternalStorageWritePermission();
-  }
-
-  private boolean requestExternalStorageWritePermission() {
-    if(Build.VERSION.SDK_INT >= 23) { // For Marshmallow & higher API levels
-
-      if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-        return true;
-
-      } else {
-        if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-          /* shouldShowRequestPermissionRationale() returns false when:
-           *  1) User has previously checked on "Don't ask me again", and/or
-           *  2) Permission has been disabled on device
-           */
-          Toast.makeText(getApplicationContext(), "Required for file access", Toast.LENGTH_LONG).show();
-        }
-
-        requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-      }
-
-    } else { // For Android versions below Marshmallow 6.0 (API 23)
-      return true; // As already requested at install time
-    }
-
-    return false;
-  }
-
-  public ArrayList<Uri> getFileURIArrayList() {
-    return fileURIArrayList;
-  }
-
-  public boolean isWifiP2pEnabled() {
-    return isWifiP2pEnabled;
   }
 
   @Override
@@ -161,8 +139,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   public boolean onOptionsItemSelected(MenuItem item) {
     if(item.getItemId() == R.id.menu_item_search_devices) {
       // Initiate discovery
-      //TODO
-      if(!isWifiP2pEnabled) {
+      if(!isWifiP2pEnabled()) {
         requestEnableWifiP2pServices();
         return true;
       }
@@ -186,135 +163,39 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
           Toast.makeText(LocalFileTransferActivity.this, "Discovery Failed: " + getErrorMessage(reason), Toast.LENGTH_SHORT).show();
         }
       });
-
       return true;
+
     } else if(item.getItemId() == R.id.menu_item_cancel_search) {
       if(manager != null) {
-        // TODO: 'cancelDisconnect', for removing incorrect connections - DONE thru cancelSearch
         cancelSearch();
       }
-
-
       return true;
-    }
-    else {
+
+    } else {
       return super.onOptionsItemSelected(item);
     }
   }
 
-  private boolean isLocationServicesEnabled() {
-    LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-    boolean gps_enabled = false;
-    boolean network_enabled = false;
 
-    try {
-      gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-    } catch(Exception ex) {ex.printStackTrace();}
-
-    try {
-      network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-    } catch(Exception ex) {ex.printStackTrace();}
-
-    return (gps_enabled || network_enabled);
+  /* Helper methods used in the activity */
+  public void setDeviceAsFileSender() {
+    fileSendingDevice = true;
   }
 
-  private void requestEnableLocationServices() {
-
-    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-    Fragment prev = getSupportFragmentManager().findFragmentByTag("LocationDialog");
-    if(prev != null) {
-      fragmentTransaction.remove(prev); // To prevent multiple instances of the DialogFragment
-    }
-    fragmentTransaction.addToBackStack(null);
-
-    RequestEnableLocationServicesDialog dialogFragment = new RequestEnableLocationServicesDialog();
-    // For DialogFragments, show() handles the fragment commit and display
-    dialogFragment.show(fragmentTransaction, "LocationDialog");
-
+  public boolean isFileSender() {
+    return fileSendingDevice;
   }
 
-  public static class RequestEnableLocationServicesDialog extends DialogFragment {
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-
-      AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-      builder.setMessage("Enable location to allow detection of peers")
-          .setPositiveButton("Open Location Settings", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-              paramDialogInterface.cancel();
-              startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 1);
-            }
-          })
-          .setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-              //TODO: Close activity
-
-            }
-          });
-
-      return builder.create();
-    }
+  public @NonNull ArrayList<Uri> getFileURIArrayList() {
+    return fileURIArrayList;
   }
 
-  private void requestEnableWifiP2pServices() {
-
-    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-    Fragment prev = getSupportFragmentManager().findFragmentByTag("WifiP2pDialog");
-    if(prev != null) {
-      fragmentTransaction.remove(prev); // To prevent multiple instances of the DialogFragment
-    }
-    fragmentTransaction.addToBackStack(null);
-
-    RequestEnableWifiP2pServicesDialog dialogFragment = new RequestEnableWifiP2pServicesDialog();
-    // For DialogFragments, show() handles the fragment commit and display
-    dialogFragment.show(fragmentTransaction, "WifiP2pDialog");
+  public void setWifiP2pEnabled(boolean wifiP2pEnabled) {
+    this.wifiP2pEnabled = wifiP2pEnabled;
   }
 
-  public static class RequestEnableWifiP2pServicesDialog extends DialogFragment {
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-
-      AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-      builder.setMessage("Enable WiFi P2P from system settings")
-          .setPositiveButton("Open WiFi Settings", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-              paramDialogInterface.cancel();
-              startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-            }
-          })
-          .setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-              //TODO: Close activity
-            }
-          });
-
-      return builder.create();
-    }
-  }
-
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-
-    switch (requestCode) {
-      case 1: {
-        LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-
-        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-          return;
-        } else {
-          showNeutralDialog("Cannot discover peers without location services");
-          //TODO: Close activity
-        }
-
-      }
-    }
+  public boolean isWifiP2pEnabled() {
+    return wifiP2pEnabled;
   }
 
   private String getErrorMessage(int reason) {
@@ -330,49 +211,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     return error;
   }
 
-  @Override
-  public void onResume() {
-    super.onResume();
-
-        /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isLocationServicesEnabled()) {
-            requestEnableLocationServices();
-        }*/
-    //TODO
-    receiver = new WifiDirectBroadcastReceiver(manager, channel, this);
-    registerReceiver(receiver, intentFilter);
-  }
-
-  @Override
-  public void onPause() {
-    super.onPause();
-
-    //TODO
-    unregisterReceiver(receiver);
-  }
-
-  public void setIsWifiP2pEnabled(boolean isWifiP2pEnabled) {
-    this.isWifiP2pEnabled = isWifiP2pEnabled;
-  }
-
-  @Override
-  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                         @NonNull int[] grantResults) {
-    switch (requestCode) {
-      case PERMISSION_REQUEST_CODE_COARSE_LOCATION : {
-        if(grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-          Log.e(TAG, "Location permission not granted");
-
-          showNeutralDialog("Cannot locate peer devices without location permissions");
-          //TODO: Close activity
-
-          break;
-        }
-      }
-
-      case 0: break;
-    }
-  }
-
   public void resetPeers() {
     DeviceListFragment deviceListFragment = (DeviceListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_device_list);
     if(deviceListFragment != null) {
@@ -380,9 +218,18 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     }
   }
 
+  public void resetData() {
+    DeviceListFragment deviceListFragment = (DeviceListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_device_list);
+    if(deviceListFragment != null) {
+      deviceListFragment.clearPeers();
+    }
+  }
+
+
+  /* From WifiP2pManager.ChannelListener interface */
   @Override
   public void onChannelDisconnected() {
-    //TODO
+    // Upon disconnection, retry one more time
     if(manager != null && !retryChannel) {
       Toast.makeText(this, "Channel lost, trying again", Toast.LENGTH_LONG).show();
       resetData();
@@ -394,63 +241,8 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     }
   }
 
-  public void resetData() {
-    DeviceListFragment deviceListFragment = (DeviceListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_device_list);
-    if(deviceListFragment != null) {
-      deviceListFragment.clearPeers();
-    }
-  }
 
-  private void showNeutralDialog(String dialogMessage) {
-    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-    Fragment prev = getSupportFragmentManager().findFragmentByTag("NeutralDialog");
-    if(prev != null) {
-      fragmentTransaction.remove(prev); // To prevent multiple instances of the DialogFragment
-    }
-    fragmentTransaction.addToBackStack(null);
-
-    NeutralDialog dialogFragment = new NeutralDialog(dialogMessage);
-    // For DialogFragments, show() handles the fragment commit and display
-    dialogFragment.show(fragmentTransaction, "NeutralDialog");
-  }
-
-  public static class NeutralDialog extends DialogFragment {
-
-    private String dialogMessage = "";
-
-    public NeutralDialog() {
-      super();
-    }
-
-    public NeutralDialog(String message) {
-      super();
-      this.dialogMessage = message;
-    }
-
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-
-      AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-      builder.setMessage(dialogMessage)
-          .setNeutralButton("Dismiss", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-          });
-
-      return builder.create();
-    }
-  }
-
-  public boolean isFileSender() {
-    return fileSendingDevice;
-  }
-
-  public void setFileSender() {
-    fileSendingDevice = true;
-  }
-
+  /* From DeviceListFragment.DeviceActionListener interface */
   @Override
   public void cancelSearch() {
 
@@ -489,20 +281,17 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     config.deviceAddress = peerDevice.deviceAddress;
     config.wps.setup = WpsInfo.PBC;
 
-    // If self sender, then receiver will be group owner
+    /*// If self sender, then receiver will be group owner
     if(isFileSender())
       config.groupOwnerIntent = 0; // Sets inclination for own device. This way other device has got to be the owner.
     // Maybe reset the previous wifi direct group data, which is causing a fixed group owner
 
-        /*else
+        *//*else
             config.groupOwnerIntent = 15;*/
-
-    //TODO: Show a progress bar between starting & completion of connection - DONE
 
     manager.connect(channel, config, new WifiP2pManager.ActionListener() {
       @Override
       public void onSuccess() {
-        //Toast.makeText(MainActivity.this, "Connected to " + peerDevice.deviceName, Toast.LENGTH_SHORT).show();
         // UI updated from broadcast receiver
       }
 
@@ -521,13 +310,11 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   }
 
   public void disconnect() {
-    //TODO
     manager.removeGroup(channel, new WifiP2pManager.ActionListener() {
 
       @Override
       public void onFailure(int reasonCode) {
         Log.d(TAG, "Disconnect failed. Reason :" + reasonCode);
-
       }
 
       @Override
@@ -536,6 +323,216 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
       }
 
     });
+  }
+
+  /* Helper methods used in the activity */
+  private void requestCoarseLocationAccessPermission() {
+    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+        && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+      /* TODO
+      if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+        Toast.makeText(this, "Location permission is required by Android to allow the app to locate peer devices", Toast.LENGTH_LONG).show();
+      }*/
+
+      requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_CODE_COARSE_LOCATION);
+    }
+  }
+
+  private void requestExternalStorageWritePermission() {
+    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+        && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+      /* TODO
+      if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+        Toast.makeText(this, "Required for accessing and storing ZIM files", Toast.LENGTH_LONG).show();
+      }*/
+
+      requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS);
+    }
+  }
+
+  @Override
+  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                         @NonNull int[] grantResults) {
+    switch (requestCode) {
+      case PERMISSION_REQUEST_CODE_COARSE_LOCATION: {
+        if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+          Log.e(TAG, "Location permission not granted");
+
+          Toast.makeText(this, "Cannot locate peer devices without location permissions", Toast.LENGTH_LONG).show();
+          // TODO: Close activity - DONE
+          closeLocalFileTransferActivity();
+          break;
+        }
+      }
+
+      case PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS: {
+        if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+          Log.e(TAG, "Storage write permission not granted");
+
+          Toast.makeText(this, "Cannot access zim files without storage permission", Toast.LENGTH_LONG).show();
+          //TODO: Close activity - DONE
+          closeLocalFileTransferActivity();
+          break;
+        }
+      }
+    }
+  }
+
+  private boolean isLocationServicesEnabled() {
+    LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+    boolean gps_enabled = false;
+    boolean network_enabled = false;
+
+    try {
+      gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    } catch(Exception ex) {ex.printStackTrace();}
+
+    try {
+      network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    } catch(Exception ex) {ex.printStackTrace();}
+
+    return (gps_enabled || network_enabled);
+  }
+
+  private void requestEnableLocationServices() {
+    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+    Fragment prev = getSupportFragmentManager().findFragmentByTag("LocationDialog");
+
+    if(prev == null) {
+      RequestEnableLocationServicesDialog dialogFragment = new RequestEnableLocationServicesDialog();
+      dialogFragment.show(fragmentTransaction, "LocationDialog");
+    }
+  }
+
+  public static class RequestEnableLocationServicesDialog extends DialogFragment {
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+
+      AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+      builder.setMessage("Enable location to allow detection of peers")
+          .setPositiveButton("Open Location Settings", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+              paramDialogInterface.cancel();
+              startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), LocalFileTransferActivity.REQUEST_ENABLE_LOCATION_SERVICES);
+            }
+          })
+          .setNegativeButton("No", null);
+
+      return builder.create();
+    }
+  }
+
+  private void requestEnableWifiP2pServices() {
+    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+    Fragment prev = getSupportFragmentManager().findFragmentByTag("WifiP2pDialog");
+
+    if(prev == null) {
+      RequestEnableWifiP2pServicesDialog dialogFragment = new RequestEnableWifiP2pServicesDialog();
+      dialogFragment.show(fragmentTransaction, "WifiP2pDialog");
+    }
+  }
+
+  public static class RequestEnableWifiP2pServicesDialog extends DialogFragment {
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+
+      AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+      builder.setMessage("Enable WiFi P2P from system settings")
+          .setPositiveButton("Open WiFi Settings", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+              paramDialogInterface.cancel();
+              startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+            }
+          })
+          .setNegativeButton("No", null);
+
+      return builder.create();
+    }
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    switch (requestCode) {
+      case REQUEST_ENABLE_LOCATION_SERVICES: {
+        LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+
+        if(!(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))) {
+          // If neither provider is enabled
+          Toast.makeText(this, "Cannot discover peers without location services", Toast.LENGTH_LONG).show();
+        }
+        break;
+      }
+
+      case REQUEST_ENABLE_WIFI_P2P: {
+        if(!isWifiP2pEnabled()) {
+          Toast.makeText(this, "Cannot discover peers without WiFi ON", Toast.LENGTH_LONG).show();
+        }
+        break;
+      }
+    }
+  }
+
+  private void showNeutralDialog(String dialogMessage) {
+    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+    Fragment prev = getSupportFragmentManager().findFragmentByTag("NeutralDialog");
+    if(prev != null) {
+      fragmentTransaction.remove(prev); // To prevent multiple instances of the NeutralDialogs
+    }
+    fragmentTransaction.addToBackStack(null);
+
+    NeutralDialog dialogFragment = new NeutralDialog(dialogMessage);
+    // For DialogFragments, show() handles the fragment commit and display
+    dialogFragment.show(fragmentTransaction, "NeutralDialog");
+  }
+
+  public static class NeutralDialog extends DialogFragment {
+
+    private String dialogMessage = "";
+
+    public NeutralDialog() {
+      super();
+    }
+
+    public NeutralDialog(String message) {
+      super();
+      this.dialogMessage = message;
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+
+      AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+      builder.setMessage(dialogMessage)
+          .setNeutralButton("Dismiss", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+          });
+
+      return builder.create();
+    }
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    receiver = new WifiDirectBroadcastReceiver(manager, channel, this);
+    registerReceiver(receiver, intentFilter);
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    unregisterReceiver(receiver);
   }
 
   @Override
