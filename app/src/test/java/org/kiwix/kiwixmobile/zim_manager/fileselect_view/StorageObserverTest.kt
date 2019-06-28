@@ -73,29 +73,14 @@ class StorageObserverTest {
 
   @Test
   fun `books from disk are filtered by current downloads`() {
-    every { downloadModel.fileNameFromUrl } returns "test"
-    every { file.absolutePath } returns "This is a test"
-    storageObserver.booksOnFileSystem
-        .test()
-        .also {
-          downloads.offer(listOf(downloadModel))
-          files.offer(listOf(file))
-        }
-        .assertValues(listOf())
+    withFiltering()
+    booksOnFileSystem().assertValues(listOf())
   }
 
   @Test
   fun `null books from ZimContentProvider are filtered out`() {
-    every { downloadModel.fileNameFromUrl } returns "test"
-    every { file.absolutePath } returns "This won't match"
-
-    storageObserver.booksOnFileSystem
-        .test()
-        .also {
-          downloads.offer(listOf(downloadModel))
-          files.offer(listOf(file))
-        }
-        .assertValues(listOf())
+    withNoFiltering()
+    booksOnFileSystem().assertValues(listOf())
   }
 
   @Test
@@ -105,50 +90,40 @@ class StorageObserverTest {
         "description", "language"
     )
     mockkStatic(ZimContentProvider::class)
-    every { downloadModel.fileNameFromUrl } returns "test"
-    every { file.absolutePath } returns "This won't match"
-
-    ZimContentProvider.canIterate = true
+    withNoFiltering()
     every { ZimContentProvider.setZimFile("This won't match") } returns ""
-
     expect(expectedBook)
-
-    storageObserver.booksOnFileSystem
-        .test()
-        .also {
-          downloads.offer(listOf(downloadModel))
-          files.offer(listOf(file))
-        }
-        .assertValues(
-            listOf(
-                bookOnDisk(
-                    book = expectedBook,
-                    file = file,
-                    databaseId = null
-                )
-
-            )
+    booksOnFileSystem().assertValues(
+        listOf(
+            bookOnDisk(book = expectedBook, file = file, databaseId = null)
         )
+    )
     assertThat(ZimContentProvider.originalFileName).isEqualTo("")
   }
 
   @Test
   fun `zim provider sets zim file to original file name if it exists`() {
-    every { downloadModel.fileNameFromUrl } returns "test"
-    every { file.absolutePath } returns "This is not"
-
+    withNoFiltering()
     mockkStatic(ZimContentProvider::class)
     every { ZimContentProvider.setZimFile(any()) } returns null
     ZimContentProvider.zimFileName = "myZimFileName"
-    storageObserver.booksOnFileSystem
-        .test()
-        .also {
-          downloads.offer(listOf(downloadModel))
-          files.offer(listOf(file))
-        }
-        .assertValues(listOf())
+    booksOnFileSystem().assertValues(listOf())
     verify { ZimContentProvider.setZimFile("myZimFileName") }
   }
+
+  @Test
+  fun `zim provider does not read book if it can not iterate`() {
+    withNoFiltering()
+    ZimContentProvider.canIterate = false
+    booksOnFileSystem().assertValues(listOf())
+  }
+
+  private fun booksOnFileSystem() = storageObserver.booksOnFileSystem
+      .test()
+      .also {
+        downloads.offer(listOf(downloadModel))
+        files.offer(listOf(file))
+      }
 
   private fun expect(expectedBook: Book) {
     every { ZimContentProvider.getZimFileTitle() } returns expectedBook.title
@@ -160,5 +135,15 @@ class StorageObserverTest {
     every { ZimContentProvider.getDate() } returns expectedBook.date
     every { ZimContentProvider.getDescription() } returns expectedBook.description
     every { ZimContentProvider.getLanguage() } returns expectedBook.language
+  }
+
+  private fun withFiltering() {
+    every { downloadModel.fileNameFromUrl } returns "test"
+    every { file.absolutePath } returns "This is a test"
+  }
+
+  private fun withNoFiltering() {
+    every { downloadModel.fileNameFromUrl } returns "test"
+    every { file.absolutePath } returns "This won't match"
   }
 }
