@@ -20,16 +20,12 @@ package org.kiwix.kiwixmobile.zim_manager
 
 import android.app.Application
 import com.jraska.livedata.test
-import io.mockk.clearMocks
+import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.Scheduler
 import io.reactivex.Single
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.processors.PublishProcessor
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
@@ -55,6 +51,8 @@ import org.kiwix.kiwixmobile.downloader.model.DownloadStatus
 import org.kiwix.kiwixmobile.downloader.model.UriToFileConverter
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.resetSchedulers
+import org.kiwix.kiwixmobile.setScheduler
 import org.kiwix.kiwixmobile.utils.BookUtils
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CanWrite4GbFile
@@ -104,26 +102,14 @@ class ZimManageViewModelTest {
     setScheduler(testScheduler)
   }
 
-  private fun setScheduler(replacementScheduler: Scheduler) {
-    RxJavaPlugins.setIoSchedulerHandler { scheduler -> replacementScheduler }
-    RxJavaPlugins.setComputationSchedulerHandler { scheduler -> replacementScheduler }
-    RxJavaPlugins.setNewThreadSchedulerHandler { scheduler -> replacementScheduler }
-    RxAndroidPlugins.setInitMainThreadSchedulerHandler { scheduler -> Schedulers.trampoline() }
-  }
-
   @AfterAll
   fun teardown() {
-    RxJavaPlugins.reset()
-    RxAndroidPlugins.reset()
+    resetSchedulers()
   }
 
   @BeforeEach
   fun init() {
-    clearMocks(
-        newDownloadDao, newBookDao, newLanguagesDao, downloader,
-        storageObserver, kiwixService, application, connectivityBroadcastReceiver, bookUtils,
-        fat32Checker, uriToFileConverter, defaultLanguageProvider, dataSource
-    )
+    clearAllMocks()
     every { connectivityBroadcastReceiver.action } returns "test"
     every { newDownloadDao.downloads() } returns downloads
     every { newBookDao.books() } returns books

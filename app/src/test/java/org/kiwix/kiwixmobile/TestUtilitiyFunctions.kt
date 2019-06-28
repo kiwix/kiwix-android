@@ -15,16 +15,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.downloader.model
+package org.kiwix.kiwixmobile
 
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
-import org.kiwix.kiwixmobile.utils.StorageUtils
+import io.reactivex.Scheduler
+import io.reactivex.android.plugins.RxAndroidPlugins
+import io.reactivex.plugins.RxJavaPlugins
 
-data class DownloadModel(
-  val databaseId: Long? = null,
-  val downloadId: Long,
-  val book: Book
-) {
-  val fileNameFromUrl: String get() = StorageUtils.getFileNameFromUrl(book.url)
+fun setScheduler(replacementScheduler: Scheduler) {
+  RxJavaPlugins.setIoSchedulerHandler { scheduler -> replacementScheduler }
+  RxJavaPlugins.setComputationSchedulerHandler { scheduler -> replacementScheduler }
+  RxJavaPlugins.setNewThreadSchedulerHandler { scheduler -> replacementScheduler }
+  RxAndroidPlugins.setInitMainThreadSchedulerHandler { scheduler -> replacementScheduler }
 }
 
+fun resetSchedulers() {
+  RxJavaPlugins.reset()
+  RxAndroidPlugins.reset()
+}
