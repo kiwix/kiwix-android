@@ -40,10 +40,7 @@ class FileSearch @Inject constructor(private val context: Context) {
         Flowable.fromCallable { scanFileSystem(defaultPath) },
         Flowable.fromCallable(this::scanMediaStore),
         BiFunction<List<File>, List<File>, List<File>> { filesSystemFiles, mediaStoreFiles ->
-          mutableListOf<File>().apply {
-            addAll(filesSystemFiles)
-            addAll(mediaStoreFiles)
-          }
+          filesSystemFiles + mediaStoreFiles
         }
     )
 
