@@ -227,7 +227,6 @@
         -->
       </intent-filter>
     </activity>
-    <service android:enabled="true" android:name=".zim_manager.local_file_transfer.FileTransferService" />
   </application>
 
 </manifest>
