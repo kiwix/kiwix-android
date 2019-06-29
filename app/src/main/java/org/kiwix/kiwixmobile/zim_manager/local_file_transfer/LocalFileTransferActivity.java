@@ -119,14 +119,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
     manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
     channel = manager.initialize(this, getMainLooper(), null);
-
-
-    /* Check for permissions essential to using this module */
-
-    // Check for coarse permissions, required to search for peer devices
-    requestCoarseLocationAccessPermission();
-    // Check for write-access to external storage, to save the received files on the device
-    requestExternalStorageWritePermission();
   }
 
   @Override
@@ -138,6 +130,12 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     if(item.getItemId() == R.id.menu_item_search_devices) {
+
+      /* Permissions essential for this module */
+      if(!checkCoarseLocationAccessPermission()) return true;
+
+      if(!checkExternalStorageWritePermission()) return true;
+
       // Initiate discovery
       if(!isWifiP2pEnabled()) {
         requestEnableWifiP2pServices();
@@ -318,30 +316,58 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   }
 
   /* Helper methods used in the activity */
-  private void requestCoarseLocationAccessPermission() {
-    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-        && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+  private boolean checkCoarseLocationAccessPermission() { // Required by Android to detect wifi-p2p peers
+    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-      /* TODO
-      if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
-        Toast.makeText(this, "Location permission is required by Android to allow the app to locate peer devices", Toast.LENGTH_LONG).show();
-      }*/
+      if(checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-      requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_CODE_COARSE_LOCATION);
+        if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+          new AlertDialog.Builder(this)
+              .setMessage("Location permission is required by Android to allow the app to detect peer devices")
+              .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                  requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_CODE_COARSE_LOCATION);
+                }
+              })
+              .show();
+
+        } else {
+          requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_CODE_COARSE_LOCATION);
+        }
+
+        return false;
+      }
     }
+
+    return true; // Control reaches here: Either permission granted at install time, or at the time of request
   }
 
-  private void requestExternalStorageWritePermission() {
-    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-        && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+  private boolean checkExternalStorageWritePermission() { // To access and store the zims
+    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-      /* TODO
-      if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-        Toast.makeText(this, "Required for accessing and storing ZIM files", Toast.LENGTH_LONG).show();
-      }*/
+      if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
-      requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS);
+        if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+          new AlertDialog.Builder(this)
+              .setMessage("Storage permissions required for accessing and storing ZIM files")
+              .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                  requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS);
+                }
+              })
+              .show();
+
+        } else {
+          requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS);
+        }
+
+        return false;
+      }
     }
+
+    return true; // Control reaches here: Either permission granted at install time, or at the time of request
   }
 
   @Override
