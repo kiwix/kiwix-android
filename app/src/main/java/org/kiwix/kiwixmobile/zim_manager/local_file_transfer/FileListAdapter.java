@@ -15,6 +15,11 @@ import org.kiwix.kiwixmobile.R;
 
 import java.util.ArrayList;
 
+/**
+ * Helper class, part of the local file sharing module.
+ *
+ * Defines the Adapter for the list of file-items displayed in {@link TransferProgressFragment}
+ * */
 public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileViewHolder> {
   private final ArrayList<FileItem> fileItems;
   private LayoutInflater layoutInflater;
