@@ -281,14 +281,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     config.deviceAddress = peerDevice.deviceAddress;
     config.wps.setup = WpsInfo.PBC;
 
-    /*// If self sender, then receiver will be group owner
-    if(isFileSender())
-      config.groupOwnerIntent = 0; // Sets inclination for own device. This way other device has got to be the owner.
-    // Maybe reset the previous wifi direct group data, which is causing a fixed group owner
-
-        *//*else
-            config.groupOwnerIntent = 15;*/
-
     manager.connect(channel, config, new WifiP2pManager.ActionListener() {
       @Override
       public void onSuccess() {
@@ -361,7 +353,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
           Log.e(TAG, "Location permission not granted");
 
           Toast.makeText(this, "Cannot locate peer devices without location permissions", Toast.LENGTH_LONG).show();
-          // TODO: Close activity - DONE
           closeLocalFileTransferActivity();
           break;
         }
@@ -372,7 +363,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
           Log.e(TAG, "Storage write permission not granted");
 
           Toast.makeText(this, "Cannot access zim files without storage permission", Toast.LENGTH_LONG).show();
-          //TODO: Close activity - DONE
           closeLocalFileTransferActivity();
           break;
         }
@@ -420,7 +410,12 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
               startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), LocalFileTransferActivity.REQUEST_ENABLE_LOCATION_SERVICES);
             }
           })
-          .setNegativeButton("No", null);
+          .setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              Toast.makeText(getActivity(), "Cannot discover peers without location services", Toast.LENGTH_SHORT).show();
+            }
+          });
 
       return builder.create();
     }
@@ -450,7 +445,12 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
               startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
             }
           })
-          .setNegativeButton("No", null);
+          .setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              Toast.makeText(getActivity(), "Cannot discover peers without WiFi ON", Toast.LENGTH_SHORT).show();
+            }
+          });
 
       return builder.create();
     }
