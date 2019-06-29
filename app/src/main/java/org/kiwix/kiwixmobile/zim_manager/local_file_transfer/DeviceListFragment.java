@@ -24,6 +24,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.ListFragment;
 
+import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
@@ -123,7 +124,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
         .commit();
   }
 
-  public void updateUserDevice(WifiP2pDevice device) {
+  public void updateUserDevice(WifiP2pDevice device) { // Update UI with user device's details
     this.userDevice = device;
 
     if(userDevice != null) {
@@ -137,7 +138,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
   public static String getDeviceStatus(int status) {
 
-    Log.d(LocalFileTransferActivity.TAG, "Peer Status: " + status);
+    if(BuildConfig.DEBUG) Log.d(TAG, "Peer Status: " + status);
     switch (status) {
       case WifiP2pDevice.AVAILABLE : return "Available";
       case WifiP2pDevice.INVITED   : return "Invited";
@@ -149,6 +150,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     }
   }
 
+  /* From WifiP2pManager.PeerListListener callback-interface */
   @Override
   public void onPeersAvailable(WifiP2pDeviceList peers) {
 
@@ -171,25 +173,26 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     ((WifiPeerListAdapter) getListAdapter()).notifyDataSetChanged();
   }
 
-  public void onInitiateDiscovery() {
+  public void onInitiateDiscovery() { // Setup UI for searching peers
     ProgressBar searchingPeersProgressBar = deviceListFragmentRootView.findViewById(R.id.progress_bar_searching_peers);
     searchingPeersProgressBar.setVisibility(View.VISIBLE);
     FrameLayout frameLayoutPeerDevices = deviceListFragmentRootView.findViewById(R.id.frame_layout_peer_devices);
     frameLayoutPeerDevices.setVisibility(View.INVISIBLE);
   }
 
+  /* From WifiP2pManager.ConnectionInfoListener callback-interface */
   @Override
   public void onConnectionInfoAvailable(WifiP2pInfo info) {
+    /* Devices have successfully connected, and 'info' holds information about the wifi p2p group formed */
     groupInfo = info;
-
+    // Start handshake between the devices
     new PeerGroupHandshakeAsyncTask(this, groupInfo).execute();
-    // TODO: Disable onclick listener (of list) for connecting to devices - DONE using boolean startedFileTransfer
   }
 
   public void setClientAddress(InetAddress clientAddress) {
     if(clientAddress == null) {
       // null is returned only in case of a failed handshake
-      Toast.makeText(localFileTransferActivity, "Peer device not cooperating for transfer", Toast.LENGTH_LONG).show();
+      Toast.makeText(localFileTransferActivity, "Selected device not cooperating for transfer", Toast.LENGTH_LONG).show();
       localFileTransferActivity.closeLocalFileTransferActivity();
       return;
     }
