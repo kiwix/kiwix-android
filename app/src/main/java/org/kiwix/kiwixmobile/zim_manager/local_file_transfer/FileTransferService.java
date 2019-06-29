@@ -70,7 +70,7 @@ public class FileTransferService extends IntentService {
         } catch (FileNotFoundException e) {
           Log.d(LocalFileTransferActivity.TAG, e.toString());
         }
-        DeviceListFragment.copyFile(is, stream);
+        DeviceListFragment.copyToOutputStream(is, stream);
         Log.d(LocalFileTransferActivity.TAG, "Client: Data written");
       } catch (IOException e) {
         Log.e(LocalFileTransferActivity.TAG, e.getMessage());

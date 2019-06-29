@@ -42,10 +42,16 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
       holder.statusImage.setVisibility(View.GONE);
       holder.progressBar.setVisibility(View.VISIBLE);
 
-    } else if(fileItem.getFileStatus() == FileItem.SENT) {
+    } else if(fileItem.getFileStatus() != FileItem.TO_BE_SENT){ // Icon for TO_BE_SENT is assigned by default in the item layout
       holder.progressBar.setVisibility(View.GONE);
 
-      holder.statusImage.setImageResource(R.drawable.ic_baseline_check_24px);
+      switch (fileItem.getFileStatus()) {
+        case FileItem.SENT :  holder.statusImage.setImageResource(R.drawable.ic_baseline_check_24px);
+                              break;
+        case FileItem.ERROR:  holder.statusImage.setImageResource(R.drawable.ic_baseline_error_24px);
+                              break;
+      }
+
       holder.statusImage.setVisibility(View.VISIBLE);
     }
   }

@@ -63,7 +63,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
 
-  private ArrayList<Uri> fileURIArrayList;  // For sender device, stores URIs of files to be transferred
+  private ArrayList<Uri> fileUriArrayList;  // For sender device, stores Uris of files to be transferred
   private Boolean fileSendingDevice = false;// Whether the device is the file sender or not
 
 
@@ -86,15 +86,15 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     KiwixApplication.getApplicationComponent().inject(this);
 
     /*
-    * Presence of file URIs decides whether the device with the activity open is a sender or receiver:
+    * Presence of file Uris decides whether the device with the activity open is a sender or receiver:
     * - On the sender device, this activity is started from the app chooser post selection
     * of files to share in the Library
     * - On the receiver device, the activity is started directly from within the 'Get Content'
-    * activity, without any file URIs
+    * activity, without any file Uris
     * */
     Intent filesIntent = getIntent();
-    fileURIArrayList = filesIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
-    if(fileURIArrayList != null && fileURIArrayList.size() > 0) {
+    fileUriArrayList = filesIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+    if(fileUriArrayList != null && fileUriArrayList.size() > 0) {
       setDeviceAsFileSender();
     }
 
@@ -186,8 +186,8 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     return fileSendingDevice;
   }
 
-  public @NonNull ArrayList<Uri> getFileURIArrayList() {
-    return fileURIArrayList;
+  public @NonNull ArrayList<Uri> getFileUriArrayList() {
+    return fileUriArrayList;
   }
 
   public void setWifiP2pEnabled(boolean wifiP2pEnabled) {
@@ -276,7 +276,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   }
 
   @Override
-  public void connect(final WifiP2pDevice peerDevice) {
+  public void connect(@NonNull final WifiP2pDevice peerDevice) {
     WifiP2pConfig config = new WifiP2pConfig();
     config.deviceAddress = peerDevice.deviceAddress;
     config.wps.setup = WpsInfo.PBC;
