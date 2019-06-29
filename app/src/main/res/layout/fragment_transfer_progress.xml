@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/transparent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".zim_manager.local_file_transfer.TransferProgressFragment">
 
@@ -10,7 +11,7 @@
       android:id="@+id/view_file_list_boundary"
       android:layout_width="match_parent"
       android:layout_height="1dp"
-      android:background="@android:color/darker_gray"
+      android:background="@android:color/black"
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toRightOf="parent"
