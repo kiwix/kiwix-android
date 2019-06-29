@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.ListFragment;
@@ -111,9 +113,16 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
       return;
 
     selectedPeerDevice = (WifiP2pDevice) getListAdapter().getItem(position);
-    Toast.makeText(localFileTransferActivity, selectedPeerDevice.deviceName, Toast.LENGTH_SHORT).show();
-
-    ((DeviceActionListener) localFileTransferActivity).connect(selectedPeerDevice);
+    new AlertDialog.Builder(localFileTransferActivity)
+        .setMessage("Transfer files to " + selectedPeerDevice.deviceName + "?")
+        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            ((DeviceActionListener) localFileTransferActivity).connect(selectedPeerDevice);
+          }
+        })
+        .setNegativeButton(android.R.string.no, null)
+        .show();
   }
 
   private void displayTransferProgressFragment() {
