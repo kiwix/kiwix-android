@@ -158,58 +158,38 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
     return view;
   }
 
-  private String getZimNoteDirectoryName() {
+  private @NonNull String getZimNoteDirectoryName() {
     String zimFileName = ZimContentProvider.getZimFile(); // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"
 
     String noteDirectoryName = getTextAfterLastSlashWithoutExtension(zimFileName);
 
-    if(noteDirectoryName != null) {
-      return noteDirectoryName;
-    } else {
-      return (zimFileTitle); // Incase the required ZIM file name couldn't be extracted
-    }
+    return (!noteDirectoryName.isEmpty()) ? noteDirectoryName : zimFileTitle;  // Incase the required ZIM file name couldn't be extracted
   }
 
-  private String getArticleNotefileName() {
+  private @NonNull String getArticleNotefileName() {
     String articleUrl = ((MainActivity) getActivity()).getCurrentWebView().getUrl(); // Returns url of the form: "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html"
 
     String notefileName = getTextAfterLastSlashWithoutExtension(articleUrl);
 
-    if(notefileName != null) {
-      return notefileName;
-    } else {
-      return (articleTitle); // Incase the required html file name couldn't be extracted
-    }
+    return (!notefileName.isEmpty()) ? notefileName : articleTitle; // Incase the required html file name couldn't be extracted
   }
 
-  private String getTextAfterLastSlashWithoutExtension(String path) {
+  private @NonNull String getTextAfterLastSlashWithoutExtension(@NonNull String path) {
     /* That's about exactly what it does.
      *
      * From ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim", returns "granbluefantasy_en_all_all_nopic_2018-10"
      * From "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html", returns "Main_Page"
      * For null input or on being unable to find required text, returns null
      * */
-    if(path == null) return null;
 
-    int rightmostSlash = -1;
-    int rightmostDot = -1;
-
-    for(int i = path.length()-1; i >= 0; i--) {
-
-      if(path.charAt(i) == '.' && rightmostDot < 0)
-        rightmostDot = i;
-
-      if(path.charAt(i) == '/') {
-        rightmostSlash = i;
-        break;
-      }
-    }
+    int rightmostSlash = path.lastIndexOf('/');
+    int rightmostDot = path.lastIndexOf('.');
 
     if(rightmostSlash > -1 && rightmostDot > -1) {
       return (path.substring(rightmostSlash+1, rightmostDot));
     }
 
-    return null;
+    return ""; // If couldn't find the dot and/or slash
   }
 
   // Override onBackPressed() to respond to user pressing 'Back' button on navigation bar
