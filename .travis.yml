@@ -73,6 +73,7 @@ before_deploy:
 #  - export APP_CHANGELOG=$(cat app/src/kiwix/play/release-notes/en-US/default.txt)
   - export DATE = `date +%Y-%m-%d`
   - export UNIVERSAL_APK = app/build/outputs/apk/kiwix/release/*universal*.apk
+  - export SSH_KEY = travis_ci_builder_id_key
 
 deploy:
 
