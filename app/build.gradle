@@ -123,22 +123,11 @@ dependencies {
   implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
   implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 
-
-
   // Leak canary
-  implementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
-  // Only enable leak canary in debug builds
-  configurations.all { config ->
-    if (config.name.contains("debug") || config.name.contains("Debug")) {
-      config.resolutionStrategy.eachDependency { details ->
-        if (details.requested.group == "com.squareup.leakcanary" &&
-            details.requested.name == "leakcanary-android-no-op") {
-          details.useTarget(group: details.requested.group, name: "leakcanary-android",
-              version: details.requested.version)
-        }
-      }
-    }
-  }
+  releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
+  androidTestImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
+  debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
+
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
   implementation "android.arch.lifecycle:extensions:1.1.1"
   implementation "io.objectbox:objectbox-kotlin:$objectboxVersion"
@@ -280,18 +269,6 @@ android {
       buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://mirror.download.kiwix.org/\""
       buildConfigField "boolean", "KIWIX_ERROR_ACTIVITY", "false"
       testCoverageEnabled true
-    }
-
-    mock_network {
-      initWith(buildTypes.debug)
-      matchingFallbacks = ["debug", "release"]
-      // TODO add DI for the mock network
-    }
-
-    local_download_server {
-      initWith(buildTypes.debug)
-      buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://kiwix-download-server/\""
-      matchingFallbacks = ["debug", "release"]
     }
 
     // Release Type
