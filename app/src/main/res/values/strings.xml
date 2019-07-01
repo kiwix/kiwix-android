@@ -245,9 +245,6 @@
   <string name="switch_tabs">Switch tabs</string>
   <string name="smiling_face">:D</string>
   <string name="close_all_tabs">Close all tabs</string>
-
-  <!-- TODO: Remove or change this placeholder text -->
-  <string name="hello_blank_fragment">Hello blank fragment</string>
   <string name="discovery_initiated">Discovery Initiated</string>
   <string name="discovery_failed">Discovery Failed:</string>
   <string name="wifi_p2p_internal_error">Internal error</string>
@@ -257,7 +254,7 @@
   <string name="channel_lost">Channel lost, trying again</string>
   <string name="severe_loss_error">Severe! Try Disable/Re-enable WiFi P2P</string>
   <string name="abort_connection">Aborting connection</string>
-  <string name="abort_failed">Connect abort request failed. Reason :</string>
+  <string name="abort_failed">Connect abort request failed. Reason:</string>
   <string name="connection_failed">Connection failed:</string>
   <string name="permission_rationale_location">Location permission is required by Android to allow the app to detect peer devices</string>
   <string name="permission_rationale_storage">Storage permissions required for accessing and storing ZIM files</string>
@@ -291,7 +288,7 @@
   <string name="device_status">Device Status</string>
   <string name="your_device">Your Device:</string>
   <string name="nearby_devices">NEARBY DEVICES</string>
-  <string name="no_devices_found">No devices detected Tap on search button to try again</string>
+  <string name="no_devices_found">No devices detected. Tap on search button to try again</string>
   <string name="files_for_transfer">FILES FOR TRANSFER</string>
   <string name="file_name">File Name</string>
 </resources>

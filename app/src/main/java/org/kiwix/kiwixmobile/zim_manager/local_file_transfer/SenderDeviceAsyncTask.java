@@ -100,7 +100,7 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
       transferProgressFragment.changeStatus(fileItemIndex, FileItem.SENT);
     } else {
       Activity activity = deviceListFragment.getActivity();
-      showToast(activity, activity.getString(R.string.error_sending) + getFileName(deviceListFragment.getFileUriList().get(fileItemIndex)), Toast.LENGTH_SHORT);
+      showToast(activity, activity.getString(R.string.error_sending) + " " + getFileName(deviceListFragment.getFileUriList().get(fileItemIndex)), Toast.LENGTH_SHORT);
       transferProgressFragment.changeStatus(fileItemIndex, FileItem.ERROR);
     }
 
