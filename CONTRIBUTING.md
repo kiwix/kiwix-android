@@ -52,4 +52,48 @@ All branches should have distinct history and should be visually easy to follow,
 
 Rebasing should be avoided.
 
+### Building
+
+The default build is `debug`, with this variant you can use a debugger while developing. To install the application click the `run` button in Android Studio with the `app` configuration selected while you have a device connected. All other build types but `release` can be ignored, the `release` build is what gets uploaded to the Google Play store and can be built locally with the dummy credentials/keystore provided.
+
+### Testing
+
+Unit tests are located in `app/src/test` and to run them locally you
+can use the gradle command:
+
+        $ gradlew testKiwixDebugUnitTest
+
+or the abbreviated:
+
+        $ gradlew tKDUT
+
+Automated tests that require a connected device (UI related tests) are located in `app/src/androidTest` & `app/src/androidTestKiwix`, to run them locally you can use the gradle command:
+
+        $ gradlew connectedKiwixDebugAndroidTest
+
+or the abbreviated:
+
+
+        $ gradlew cKDAT
+
+All local test results can be seen under `app/build/reports/`
+
+### Code coverage
+
+To generate coverage reports for your unit tests run:
+
+        $ gradlew jacocoTestKiwixDebugUnitTest
+
+To generate coverage reports for your automated tests run:
+
+        $ gradlew createKiwixDebugCoverageReport
+
+Code coverage results can be seen under `app/build/reports/`
+
+### Continous Integration
+
+All PRs will have all these tests run and a combined coverage report will be attached, if coverage is to go down the PR will be marked failed. On Travis CI the automated tests are run on an emulator. To
+learn more about the commands run on the CI please refer to [.travis.yml](https://github.com/kiwix/kiwix-android/blob/master/.travis.yml)
+
+
 _These guidelines are based on [Tools for Government Data Archiving](https://github.com/edgi-govdata-archiving/overview/blob/master/CONTRIBUTING.md)'s._

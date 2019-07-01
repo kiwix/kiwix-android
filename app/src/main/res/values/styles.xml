@@ -129,5 +129,29 @@
   <style name="NeutralButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
     <item name="android:textColor">@color/accent</item>
   </style>
-</resources>
 
+  <style name="AddNoteDialogStyle" parent="Theme.AppCompat.Dialog">
+    <item name="android:windowNoTitle">true</item>
+    <item name="colorPrimaryDark">@color/primary_dark</item>
+    <item name="colorPrimary">@color/primary</item>
+    <item name="android:textColor">#000000</item>
+    <item name="android:editTextColor">#000000</item>
+    <item name="android:textColorHint">@color/textDarkTertiary</item>
+    <item name="android:windowFullscreen">false</item>
+    <item name="android:windowIsFloating">false</item>
+    <item name="android:windowBackground">@color/white</item>
+  </style>
+
+  <style name="AddNoteDialogStyle.Night" parent="Theme.AppCompat.Dialog">
+    <item name="android:windowNoTitle">true</item>
+    <item name="colorPrimaryDark">@color/primary_dark</item>
+    <item name="colorPrimary">@color/primary</item>
+    <item name="android:textColor">#ffffff</item>
+    <item name="android:editTextColor">#ffffff</item>
+    <item name="android:textColorHint">@color/grey</item>
+    <item name="android:windowFullscreen">false</item>
+    <item name="android:windowIsFloating">false</item>
+    <item name="android:windowBackground">@color/cardview_dark_background</item>
+  </style>
+
+</resources>

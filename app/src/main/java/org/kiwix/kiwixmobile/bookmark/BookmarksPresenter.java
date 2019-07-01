@@ -34,7 +34,7 @@ class BookmarksPresenter extends BasePresenter<BookmarksContract.View>
   @Override
   public void loadBookmarks(boolean showFromCurrentBookmarks) {
     dataSource.getBookmarks(showFromCurrentBookmarks)
-        .subscribe(new SingleObserver<List<Bookmark>>() {
+        .subscribe(new SingleObserver<List<BookmarkItem>>() {
           @Override
           public void onSubscribe(Disposable d) {
             if (disposable != null && !disposable.isDisposed()) {
@@ -45,7 +45,7 @@ class BookmarksPresenter extends BasePresenter<BookmarksContract.View>
           }
 
           @Override
-          public void onSuccess(List<Bookmark> bookmarks) {
+          public void onSuccess(List<BookmarkItem> bookmarks) {
             view.updateBookmarksList(bookmarks);
           }
 
@@ -57,21 +57,21 @@ class BookmarksPresenter extends BasePresenter<BookmarksContract.View>
   }
 
   @Override
-  public void filterBookmarks(List<Bookmark> bookmarks, String newText) {
+  public void filterBookmarks(List<BookmarkItem> bookmarks, String newText) {
     Observable.fromIterable(bookmarks)
         .filter(
             bookmark -> bookmark.getBookmarkTitle().toLowerCase().contains(newText.toLowerCase()))
         .toList()
         .subscribeOn(computation)
         .observeOn(mainThread)
-        .subscribe(new SingleObserver<List<Bookmark>>() {
+        .subscribe(new SingleObserver<List<BookmarkItem>>() {
           @Override
           public void onSubscribe(Disposable d) {
             compositeDisposable.add(d);
           }
 
           @Override
-          public void onSuccess(List<Bookmark> bookmarkList) {
+          public void onSuccess(List<BookmarkItem> bookmarkList) {
             view.notifyBookmarksListFiltered(bookmarkList);
           }
 
@@ -83,7 +83,7 @@ class BookmarksPresenter extends BasePresenter<BookmarksContract.View>
   }
 
   @Override
-  public void deleteBookmarks(List<Bookmark> deleteList) {
+  public void deleteBookmarks(List<BookmarkItem> deleteList) {
     dataSource.deleteBookmarks(deleteList)
         .subscribe(new CompletableObserver() {
           @Override

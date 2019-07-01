@@ -29,6 +29,7 @@ import org.kiwix.kiwixmobile.data.local.entity.RecentSearch;
 /**
  * Dao class for recent searches.
  */
+@Deprecated
 public class RecentSearchDao {
 
   private static final int NUM_RECENT_RESULTS = 5;

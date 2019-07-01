@@ -52,7 +52,7 @@ public class AutoCompleteAdapter extends ArrayAdapter<String> implements Filtera
   }
 
   private void setupDagger() {
-    KiwixApplication.getInstance().getApplicationComponent().inject(this);
+    KiwixApplication.getApplicationComponent().inject(this);
   }
 
   @Override

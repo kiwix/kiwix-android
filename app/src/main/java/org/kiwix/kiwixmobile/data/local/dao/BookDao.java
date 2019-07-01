@@ -31,6 +31,7 @@ import org.kiwix.kiwixmobile.utils.files.FileUtils;
  * Dao class for books
  */
 
+@Deprecated
 public class BookDao {
   private final KiwixDatabase kiwixDatabase;
 
@@ -55,24 +56,6 @@ public class BookDao {
     book.bookName = bookCursor.get(BookDatabaseEntity.NAME);
   }
 
-  private void setBookDatabaseEntity(Book book, BookDatabaseEntity bookDatabaseEntity) {
-    bookDatabaseEntity.setBookId(book.getId());
-    bookDatabaseEntity.setTitle(book.getTitle());
-    bookDatabaseEntity.setDescription(book.getDescription());
-    bookDatabaseEntity.setLanguage(book.getLanguage());
-    bookDatabaseEntity.setBookCreator(book.getCreator());
-    bookDatabaseEntity.setPublisher(book.getPublisher());
-    bookDatabaseEntity.setDate(book.getDate());
-    bookDatabaseEntity.setUrl(book.file.getPath());
-    bookDatabaseEntity.setArticleCount(book.getArticleCount());
-    bookDatabaseEntity.setMediaCount(book.getMediaCount());
-    bookDatabaseEntity.setSize(book.getSize());
-    bookDatabaseEntity.setFavicon(book.getFavicon());
-    bookDatabaseEntity.setName(book.getName());
-    kiwixDatabase.deleteWhere(BookDatabaseEntity.class,
-        BookDatabaseEntity.BOOK_ID.eq(book.getId()));
-    kiwixDatabase.persist(bookDatabaseEntity);
-  }
 
   public ArrayList<Book> getBooks() {
     ArrayList<Book> books = new ArrayList<>();
@@ -100,40 +83,5 @@ public class BookDao {
       }
     }
     return filteredBookList;
-  }
-
-  public ArrayList<Book> getDownloadingBooks() {
-    ArrayList<Book> books = new ArrayList<>();
-    try (SquidCursor<BookDatabaseEntity> bookCursor = kiwixDatabase.query(BookDatabaseEntity.class,
-        Query.select())) {
-      while (bookCursor.moveToNext()) {
-        Book book = new Book();
-        setBookDetails(book, bookCursor);
-        book.remoteUrl = bookCursor.get(BookDatabaseEntity.REMOTE_URL);
-        if (FileUtils.hasPart(book.file)) {
-          books.add(book);
-        }
-      }
-    }
-    return books;
-  }
-
-  public void saveBooks(ArrayList<Book> books) {
-    for (Book book : books) {
-      if (book != null) {
-        BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
-        setBookDatabaseEntity(book, bookDatabaseEntity);
-      }
-    }
-  }
-
-  public void saveBook(Book book) {
-    BookDatabaseEntity bookDatabaseEntity = new BookDatabaseEntity();
-    bookDatabaseEntity.setRemoteUrl(book.remoteUrl);
-    setBookDatabaseEntity(book, bookDatabaseEntity);
-  }
-
-  public void deleteBook(String id) {
-    kiwixDatabase.deleteWhere(BookDatabaseEntity.class, BookDatabaseEntity.BOOK_ID.eq(id));
   }
 }

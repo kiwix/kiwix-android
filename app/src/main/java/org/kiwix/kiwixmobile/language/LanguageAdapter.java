@@ -10,9 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import java.util.ArrayList;
-import java.util.Collections;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.models.Language;
+import org.kiwix.kiwixmobile.zim_manager.Language;
 
 class LanguageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   private static final int TYPE_HEADER = 0;
@@ -29,16 +28,16 @@ class LanguageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   void categorizeLanguages() {
     selectedLanguages.clear();
     unselectedLanguages.clear();
-    for (Language language : languages) {
-      if (language.active != null && language.active.equals(true)) {
-        selectedLanguages.add(language);
-      } else {
-        language.active = false;
-        unselectedLanguages.add(language);
-      }
-    }
-    Collections.sort(selectedLanguages);
-    Collections.sort(unselectedLanguages);
+    //for (Language language : languages) {
+    //  if (language.active != null && language.active.equals(true)) {
+    //    selectedLanguages.add(language);
+    //  } else {
+    //    language.active = false;
+    //    unselectedLanguages.add(language);
+    //  }
+    //}
+    //Collections.sort(selectedLanguages);
+    //Collections.sort(unselectedLanguages);
   }
 
   @NonNull
@@ -71,32 +70,32 @@ class LanguageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
       language = unselectedLanguages.get(position - selectedLanguages.size() - 2);
     }
     ViewHolder holder = (ViewHolder) item;
-    holder.languageName.setText(language.language);
-    holder.languageLocalizedName.setText(language.languageLocalized);
-    holder.booksCount.setText(holder.booksCount.getContext().getResources()
-        .getQuantityString(R.plurals.books_count, language.booksCount, language.booksCount));
-    if (language.active == null) {
-      language.active = false;
-    }
-    holder.checkBox.setChecked(language.active);
-    View.OnClickListener onClickListener = v -> {
-      language.active = holder.checkBox.isChecked();
-      if (language.active) {
-        unselectedLanguages.remove(language);
-        selectedLanguages.add(language);
-      } else {
-        unselectedLanguages.add(language);
-        selectedLanguages.remove(language);
-      }
-      Collections.sort(selectedLanguages);
-      Collections.sort(unselectedLanguages);
-      notifyDataSetChanged();
-    };
-    holder.itemView.setOnClickListener(v -> {
-      holder.checkBox.toggle();
-      onClickListener.onClick(v);
-    });
-    holder.checkBox.setOnClickListener(onClickListener);
+    //holder.languageName.setText(language.language);
+    //holder.languageLocalizedName.setText(language.languageLocalized);
+    //holder.booksCount.setText(holder.booksCount.getContext().getResources()
+    //    .getQuantityString(R.plurals.books_count, language.booksCount, language.booksCount));
+    //if (language.active == null) {
+    //  language.active = false;
+    //}
+    //holder.checkBox.setChecked(language.active);
+    //View.OnClickListener onClickListener = v -> {
+    //  language.active = holder.checkBox.isChecked();
+    //  if (language.active) {
+    //    unselectedLanguages.remove(language);
+    //    selectedLanguages.add(language);
+    //  } else {
+    //    unselectedLanguages.add(language);
+    //    selectedLanguages.remove(language);
+    //  }
+    //  Collections.sort(selectedLanguages);
+    //  Collections.sort(unselectedLanguages);
+    //  notifyDataSetChanged();
+    //};
+    //holder.itemView.setOnClickListener(v -> {
+    //  holder.checkBox.toggle();
+    //  onClickListener.onClick(v);
+    //});
+    //holder.checkBox.setOnClickListener(onClickListener);
   }
 
   @Override

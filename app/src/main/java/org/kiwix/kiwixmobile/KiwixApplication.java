@@ -23,6 +23,7 @@ import android.os.Environment;
 import android.util.Log;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDexApplication;
+import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.squareup.leakcanary.LeakCanary;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
@@ -32,8 +33,6 @@ import java.io.IOException;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.di.components.ApplicationComponent;
 import org.kiwix.kiwixmobile.di.components.DaggerApplicationComponent;
-import com.jakewharton.threetenabp.AndroidThreeTen;
-import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
 
 public class KiwixApplication extends MultiDexApplication implements HasActivityInjector {
 
@@ -65,13 +64,18 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
     super.attachBaseContext(base);
     application = this;
     setApplicationComponent(DaggerApplicationComponent.builder()
-        .applicationModule(new ApplicationModule(this))
+        .context(this)
         .build());
   }
 
   @Override
   public void onCreate() {
     super.onCreate();
+    if (LeakCanary.isInAnalyzerProcess(this)) {
+      // This process is dedicated to LeakCanary for heap analysis.
+      // You should not init your app in this process.
+      return;
+    }
     AndroidThreeTen.init(this);
     if (isExternalStorageWritable()) {
       File appDirectory = new File(Environment.getExternalStorageDirectory() + "/Kiwix");
@@ -103,13 +107,7 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
     }
 
     Log.d("KIWIX", "Started KiwixApplication");
-
     applicationComponent.inject(this);
-    if (LeakCanary.isInAnalyzerProcess(this)) {
-      // This process is dedicated to LeakCanary for heap analysis.
-      // You should not init your app in this process.
-      return;
-    }
     LeakCanary.install(this);
   }
 
