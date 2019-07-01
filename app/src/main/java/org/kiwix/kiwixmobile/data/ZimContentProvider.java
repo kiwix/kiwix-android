@@ -115,10 +115,17 @@ public class ZimContentProvider extends ContentProvider {
     return zimFileName;
   }
 
+  /** Returns path to the current ZIM file */
   public static String getZimFile() {
     return zimFileName;
   }
 
+  /**
+   * Returns title associated with the current ZIM file.
+   *
+   * Note that the value returned is NOT unique for each zim file. Versions of the same wiki
+   * (complete, nopic, novid, etc) may return the same title.
+   * */
   public static String getZimFileTitle() {
     if (currentJNIReader == null || zimFileName == null) {
       return null;

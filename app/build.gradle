@@ -123,22 +123,11 @@ dependencies {
   implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
   implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 
-
-
   // Leak canary
-  implementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
-  // Only enable leak canary in debug builds
-  configurations.all { config ->
-    if (config.name.contains("debug") || config.name.contains("Debug")) {
-      config.resolutionStrategy.eachDependency { details ->
-        if (details.requested.group == "com.squareup.leakcanary" &&
-            details.requested.name == "leakcanary-android-no-op") {
-          details.useTarget(group: details.requested.group, name: "leakcanary-android",
-              version: details.requested.version)
-        }
-      }
-    }
-  }
+  releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
+  androidTestImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
+  debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
+
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
   implementation "android.arch.lifecycle:extensions:1.1.1"
   implementation "io.objectbox:objectbox-kotlin:$objectboxVersion"
@@ -197,15 +186,17 @@ private String generateVersionName() {
 }
 
 /*
-* max version code: 210-0-00-00-00
-* our template    : UUU-A-ZZ-YY-XX
+* max version code: 21-0-0-00-00-00
+* our template    : UU-D-A-ZZ-YY-XX
 * where:
 * X = patch version
 * Y = minor version
 * Z = major version (+ 20 to distinguish from previous, non semantic, versions of the app)
 * A = number representing ABI split
+* D = number representing density split
 * U = unused
 */
+
 private Integer generateVersionCode() {
   20 * 10000 +
       (ext.versionMajor * 10000) +
@@ -280,18 +271,6 @@ android {
       buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://mirror.download.kiwix.org/\""
       buildConfigField "boolean", "KIWIX_ERROR_ACTIVITY", "false"
       testCoverageEnabled true
-    }
-
-    mock_network {
-      initWith(buildTypes.debug)
-      matchingFallbacks = ["debug", "release"]
-      // TODO add DI for the mock network
-    }
-
-    local_download_server {
-      initWith(buildTypes.debug)
-      buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://kiwix-download-server/\""
-      matchingFallbacks = ["debug", "release"]
     }
 
     // Release Type
@@ -444,20 +423,28 @@ android {
   }
 
   def abiCodes = ['arm64-v8a': 6, 'x86': 3, 'x86_64': 4, 'armeabi-v7a': 5]
+  def densityCodes = ['mdpi': 2, 'hdpi': 3, 'xhdpi': 4, 'xxhdpi': 5, 'xxxhdpi': 6]
   splits {
     abi {
       enable true
       reset()
       include "x86", "x86_64", 'armeabi-v7a', "arm64-v8a"
-      universalApk buildNumber == "dev"
+      universalApk true
+    }
+    density {
+      enable true
+      reset()
+      include "mdpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"
     }
   }
   applicationVariants.all { variant ->
     variant.outputs.each { output ->
-      def baseAbiVersionCode = abiCodes.get(output.getFilter(OutputFile.ABI))
-      if (baseAbiVersionCode != null) {
-        output.versionCodeOverride = baseAbiVersionCode * 1000000 + variant.versionCode
-      }
+      def baseAbiVersionCode = abiCodes.get(output.getFilter(OutputFile.ABI)) ?: 0
+      def baseDensityVersionCode = densityCodes.get(output.getFilter(OutputFile.DENSITY)) ?: 1
+      output.versionCodeOverride =
+          (baseDensityVersionCode * 10000000) +
+              (baseAbiVersionCode * 1000000) +
+              variant.versionCode
     }
   }
 }

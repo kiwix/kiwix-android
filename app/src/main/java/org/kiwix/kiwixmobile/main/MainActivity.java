@@ -25,6 +25,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -36,6 +37,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
 import android.text.SpannableString;
@@ -70,6 +72,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -131,11 +135,15 @@ import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_LIBRARY;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_SEARCH;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_ZIM_FILE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_ZIM_FILE_2;
+import static org.kiwix.kiwixmobile.utils.Constants.NOTES_DIRECTORY;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_KIWIX_MOBILE;
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_FILE_SEARCH;
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_FILE_SELECT;
+import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_HISTORY_ITEM_CHOSEN;
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_PREFERENCES;
+import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_READ_STORAGE_PERMISSION;
 import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_STORAGE_PERMISSION;
+import static org.kiwix.kiwixmobile.utils.Constants.REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE;
 import static org.kiwix.kiwixmobile.utils.Constants.RESULT_HISTORY_CLEARED;
 import static org.kiwix.kiwixmobile.utils.Constants.RESULT_RESTART;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_CURRENT_ARTICLES;
@@ -151,8 +159,6 @@ import static org.kiwix.kiwixmobile.utils.UpdateUtils.reformatProviderUrl;
 public class MainActivity extends BaseActivity implements WebViewCallback,
     MainContract.View{
 
-  private static final int REQUEST_READ_STORAGE_PERMISSION = 2;
-  private static final int REQUEST_HISTORY_ITEM_CHOSEN = 99;
   private static final String NEW_TAB = "NEW_TAB";
   private static final String HOME_URL = "file:///android_asset/home.html";
   public static boolean isFullscreenOpened;
@@ -445,11 +451,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         hideTabSwitcher();
         selectTab(position);
 
-        /* Bug Fix
-         * Issue #592 in which the navigational history of the previously open tab (WebView) was
-         * carried forward to the newly selected/opened tab; causing erroneous enabling of
-         * navigational buttons.
-         */
+        /* Bug Fix #592 */
         updateBottomToolbarArrowsAlpha();
       }
 
@@ -527,7 +529,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     closeAllTabsButton.setImageDrawable(
-        ContextCompat.getDrawable(this, R.drawable.ic_close_white_24dp));
+        ContextCompat.getDrawable(this, R.drawable.ic_close_black_24dp));
     tabSwitcherRoot.setVisibility(View.GONE);
     progressBar.setVisibility(View.VISIBLE);
     contentFrame.setVisibility(View.VISIBLE);
@@ -856,6 +858,19 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         compatCallback.showSoftInput();
         break;
 
+      case R.id.menu_add_note:
+        if(requestExternalStorageWritePermissionForNotes()) {
+          // Check permission since notes are stored in the public-external storage
+          showAddNoteDialog();
+        }
+        break;
+
+      case R.id.menu_clear_notes:
+        if(requestExternalStorageWritePermissionForNotes()) { // Check permission since notes are stored in the public-external storage
+          showClearAllNotesDialog();
+        }
+        break;
+
       case R.id.menu_bookmarks_list:
         goToBookmarks();
         break;
@@ -913,6 +928,117 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
 
     return super.onOptionsItemSelected(item);
+  }
+
+  /** Dialog to take user confirmation before deleting all notes */
+  private void showClearAllNotesDialog() {
+
+    AlertDialog.Builder builder;
+    if (sharedPreferenceUtil != null && sharedPreferenceUtil.nightMode()) { // Night Mode support
+      builder = new AlertDialog.Builder(this, R.style.AppTheme_Dialog_Night);
+    } else {
+      builder = new AlertDialog.Builder(this);
+    }
+
+    builder.setMessage(R.string.delete_notes_confirmation_msg)
+        .setNegativeButton(android.R.string.cancel, null) // Do nothing for 'Cancel' button
+        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            clearAllNotes();
+          }
+        })
+        .show();
+  }
+
+  /** Method to delete all user notes */
+  private void clearAllNotes() {
+
+    boolean result = true; // Result of all delete() calls is &&-ed to this variable
+
+    if(AddNoteDialog.isExternalStorageWritable()) {
+      if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        Log.d("MainActivity", "WRITE_EXTERNAL_STORAGE permission not granted");
+        showToast(R.string.ext_storage_permission_not_granted, Toast.LENGTH_LONG);
+        return;
+      }
+
+      // TODO: Replace below code with Kotlin's deleteRecursively() method
+
+      File notesDirectory = new File(NOTES_DIRECTORY);
+      File[] filesInNotesDirectory = notesDirectory.listFiles();
+
+      if(filesInNotesDirectory == null) { // Notes folder doesn't exist
+        showToast(R.string.notes_deletion_none_found, Toast.LENGTH_LONG);
+        return;
+      }
+
+      for(File wikiFileDirectory : filesInNotesDirectory) {
+        if(wikiFileDirectory.isDirectory()) {
+          File[] filesInWikiDirectory = wikiFileDirectory.listFiles();
+
+          for(File noteFile : filesInWikiDirectory) {
+            if(noteFile.isFile()) {
+              result = result && noteFile.delete();
+            }
+          }
+        }
+
+        result = result && wikiFileDirectory.delete(); // Wiki specific notes directory deleted
+      }
+
+      result = result && notesDirectory.delete(); // "{External Storage}/Kiwix/Notes" directory deleted
+    }
+
+    if(result) {
+      showToast(R.string.notes_deletion_successful, Toast.LENGTH_SHORT);
+    } else {
+      showToast(R.string.notes_deletion_unsuccessful, Toast.LENGTH_SHORT);
+    }
+  }
+
+  /** Creates the full screen AddNoteDialog, which is a DialogFragment */
+  private void showAddNoteDialog() {
+    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+    Fragment previousInstance = getSupportFragmentManager().findFragmentByTag(AddNoteDialog.TAG);
+
+    // To prevent multiple instances of the DialogFragment
+    if(previousInstance == null) {
+      /* Since the DialogFragment is never added to the back-stack, so findFragmentByTag()
+      *  returning null means that the AddNoteDialog is currently not on display (as doesn't exist)
+      **/
+      AddNoteDialog dialogFragment = new AddNoteDialog(sharedPreferenceUtil);
+      dialogFragment.show(fragmentTransaction, AddNoteDialog.TAG); // For DialogFragments, show() handles the fragment commit and display
+    }
+  }
+
+  private boolean requestExternalStorageWritePermissionForNotes() {
+    if(Build.VERSION.SDK_INT >= 23) { // For Marshmallow & higher API levels
+
+      if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+        return true;
+
+      } else {
+        if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+          /* shouldShowRequestPermissionRationale() returns false when:
+           *  1) User has previously checked on "Don't ask me again", and/or
+           *  2) Permission has been disabled on device
+           */
+          showToast(R.string.ext_storage_permission_rationale_add_note, Toast.LENGTH_LONG);
+        }
+
+        requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE);
+      }
+
+    } else { // For Android versions below Marshmallow 6.0 (API 23)
+      return true; // As already requested at install time
+    }
+
+    return false;
+  }
+
+  private void showToast(int stringResource, int duration) {
+    Toast.makeText(this, stringResource, duration).show();
   }
 
   @SuppressWarnings("SameReturnValue")
@@ -1084,6 +1210,20 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
                 startActivity(intent);
               }).show();
         }
+        break;
+      }
+
+      case REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE: {
+
+        if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+          // Successfully granted permission, so opening the note keeper
+          showAddNoteDialog();
+
+        } else {
+          Toast.makeText(getApplicationContext(), getString(R.string.ext_storage_write_permission_denied_add_note), Toast.LENGTH_LONG);
+        }
+
+        break;
       }
     }
   }
