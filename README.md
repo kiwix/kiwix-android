@@ -7,6 +7,8 @@
 
 Kiwix is an offline reader for Web content. One of its main purposes is to make Wikipedia available offline. This is done by reading the content of a file in the ZIM format, a highly compressed open format with additional meta-data.
 
+Kiwix is written in [Kotlin](https://kotlinlang.org/) (with a few old pieces in Java).
+
 [![Build Status](https://travis-ci.org/kiwix/kiwix-android.svg?branch=master)](https://travis-ci.org/kiwix/kiwix-android)
 [![IRC Web](https://img.shields.io/badge/chat-on%20freenode-brightgreen.svg)](http://chat.kiwix.org)
 [![codecov](https://codecov.io/gh/kiwix/kiwix-android/branch/master/graph/badge.svg)](https://codecov.io/gh/kiwix/kiwix-android)
@@ -43,7 +45,8 @@ We currently have a series of automated Unit and Integration tests. These can be
 For contributions please read the [CODESTYLE](docs/codestyle.md) carefully. Pull requests that do not match the style will be rejected.
 
 ## Commit Style
-For writing commit messages please read the [COMMITSTYLE](docs/commitstyle.md) carefully. Kindly adhere to the guidelines. Pull requests not matching the style will be rejected.  
+
+For writing commit messages please read the [COMMITSTYLE](docs/commitstyle.md) carefully. Kindly adhere to the guidelines. Pull requests not matching the style will be rejected.
 
 ## Communication
 
