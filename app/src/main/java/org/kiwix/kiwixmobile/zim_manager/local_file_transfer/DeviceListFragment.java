@@ -116,7 +116,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
     selectedPeerDevice = (WifiP2pDevice) getListAdapter().getItem(position);
     new AlertDialog.Builder(localFileTransferActivity)
-        .setMessage("Transfer files to " + selectedPeerDevice.deviceName + "?")
+        .setMessage(getString(R.string.transfer_to) + selectedPeerDevice.deviceName + "?")
         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
@@ -147,17 +147,17 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     }
   }
 
-  public static String getDeviceStatus(int status) {
+  public String getDeviceStatus(int status) {
 
     if(BuildConfig.DEBUG) Log.d(TAG, "Peer Status: " + status);
     switch (status) {
-      case WifiP2pDevice.AVAILABLE : return "Available";
-      case WifiP2pDevice.INVITED   : return "Invited";
-      case WifiP2pDevice.CONNECTED : return "Connected";
-      case WifiP2pDevice.FAILED    : return "Failed";
-      case WifiP2pDevice.UNAVAILABLE:return "Unavailable";
+      case WifiP2pDevice.AVAILABLE : return getString(R.string.available);
+      case WifiP2pDevice.INVITED   : return getString(R.string.invited);
+      case WifiP2pDevice.CONNECTED : return getString(R.string.connected);
+      case WifiP2pDevice.FAILED    : return getString(R.string.failed);
+      case WifiP2pDevice.UNAVAILABLE:return getString(R.string.unavailable);
 
-      default: return "Unknown";
+      default: return getString(R.string.unknown);
     }
   }
 
@@ -203,7 +203,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
   public void setClientAddress(InetAddress clientAddress) {
     if(clientAddress == null) {
       // null is returned only in case of a failed handshake
-      showToast(localFileTransferActivity, "Selected device not cooperating for transfer", Toast.LENGTH_LONG);
+      showToast(localFileTransferActivity, R.string.device_not_cooperating, Toast.LENGTH_LONG);
       localFileTransferActivity.closeLocalFileTransferActivity();
       return;
     }
@@ -220,13 +220,13 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
       displayTransferProgressFragment();
 
       new ReceiverDeviceAsyncTask(this, transferProgressFragment).execute();
-      showToast(localFileTransferActivity, "Preparing to receive files...", Toast.LENGTH_SHORT);
+      showToast(localFileTransferActivity, R.string.preparing_to_receive, Toast.LENGTH_SHORT);
 
     } else if(groupInfo.groupFormed) {
       {
         Log.d(LocalFileTransferActivity.TAG, "Starting file transfer");
 
-        showToast(localFileTransferActivity, "Starting file transfer...", Toast.LENGTH_SHORT);
+        showToast(localFileTransferActivity, R.string.starting_transfer, Toast.LENGTH_SHORT);
 
         if(groupInfo.isGroupOwner)  fileReceiverDeviceAddress = selectedPeerDeviceInetAddress;
         else                        fileReceiverDeviceAddress = groupInfo.groupOwnerAddress;

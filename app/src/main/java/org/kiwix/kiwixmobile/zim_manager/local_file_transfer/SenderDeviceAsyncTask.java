@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.BuildConfig;
+import org.kiwix.kiwixmobile.R;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -97,12 +99,13 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
     if(fileSendSuccessful) {
       transferProgressFragment.changeStatus(fileItemIndex, FileItem.SENT);
     } else {
-      showToast(deviceListFragment.getActivity(), "Error sending file "+ getFileName(deviceListFragment.getFileUriList().get(fileItemIndex)), Toast.LENGTH_SHORT);
+      Activity activity = deviceListFragment.getActivity();
+      showToast(activity, activity.getString(R.string.error_sending) + getFileName(deviceListFragment.getFileUriList().get(fileItemIndex)), Toast.LENGTH_SHORT);
       transferProgressFragment.changeStatus(fileItemIndex, FileItem.ERROR);
     }
 
     if(deviceListFragment.allFilesSent()) {
-      showToast(deviceListFragment.getActivity(), "All files transferred", Toast.LENGTH_SHORT);
+      showToast(deviceListFragment.getActivity(), R.string.all_files_transferred, Toast.LENGTH_SHORT);
       deviceListFragment.getActivity().finish();
     }
   }

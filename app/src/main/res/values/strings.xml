@@ -248,4 +248,40 @@
 
   <!-- TODO: Remove or change this placeholder text -->
   <string name="hello_blank_fragment">Hello blank fragment</string>
+  <string name="discovery_initiated">Discovery Initiated</string>
+  <string name="discovery_failed">Discovery Failed:</string>
+  <string name="wifi_p2p_internal_error">Internal error</string>
+  <string name="wifi_p2p_framework_busy">Framework busy, unable to service request</string>
+  <string name="wifi_p2p_unsupported">P2P unsupported on this device</string>
+  <string name="wifi_p2p_unknown_error">Unknown error code -</string>
+  <string name="channel_lost">Channel lost, trying again</string>
+  <string name="severe_loss_error">Severe! Try Disable/Re-enable WiFi P2P</string>
+  <string name="abort_connection">Aborting connection</string>
+  <string name="abort_failed">Connect abort request failed. Reason :</string>
+  <string name="connection_failed">Connection failed:</string>
+  <string name="permission_rationale_location">Location permission is required by Android to allow the app to detect peer devices</string>
+  <string name="permission_rationale_storage">Storage permissions required for accessing and storing ZIM files</string>
+  <string name="permission_refused_location">Cannot locate peer devices without location permissions</string>
+  <string name="permission_refused_storage">Cannot access zim files without storage permission</string>
+  <string name="request_enable_location">Enable location to allow detection of peers</string>
+  <string name="open_location_settings">Open Location Settings</string>
+  <string name="request_refused_location">Cannot discover peers without location services</string>
+  <string name="request_enable_wifi">Enable WiFi P2P from system settings</string>
+  <string name="open_wifi_settings">Open WiFi Settings</string>
+  <string name="request_refused_wifi">Cannot discover peers without WiFi ON</string>
+  <string name="transfer_to">Transfer files to</string>
+  <string name="available">Available</string>
+  <string name="invited">Invited</string>
+  <string name="connected">Connected</string>
+  <string name="failed">Failed</string>
+  <string name="unavailable">Unavailable</string>
+  <string name="unknown">Unknown</string>
+  <string name="device_not_cooperating">Selected device not cooperating for transfer</string>
+  <string name="preparing_to_receive">Preparing to receive files...</string>
+  <string name="starting_transfer">Starting file transfer...</string>
+  <string name="discovery_needs_wifi">Cannot discover peers without WiFi</string>
+  <string name="file_transfer_complete">File transfer complete</string>
+  <string name="error_during_transfer">An error was encountered during transfer</string>
+  <string name="error_sending">Error sending file</string>
+  <string name="all_files_transferred">All files transferred</string>
 </resources>

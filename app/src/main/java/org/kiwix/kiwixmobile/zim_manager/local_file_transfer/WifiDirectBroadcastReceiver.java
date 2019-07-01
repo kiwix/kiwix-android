@@ -44,7 +44,7 @@ public class WifiDirectBroadcastReceiver extends BroadcastReceiver {
         wifiActivity.setWifiP2pEnabled(true);
       } else {
         wifiActivity.setWifiP2pEnabled(false);
-        showToast(wifiActivity, "Cannot discover peers without WiFi", Toast.LENGTH_SHORT);
+        showToast(wifiActivity, R.string.discovery_needs_wifi, Toast.LENGTH_SHORT);
         wifiActivity.resetPeers();
       }
       Log.d(LocalFileTransferActivity.TAG, "WiFi P2P state changed - " + wifiP2pState);

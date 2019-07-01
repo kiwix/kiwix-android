@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.BuildConfig;
+import org.kiwix.kiwixmobile.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -96,9 +97,9 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Short, Boolean> {
     if(BuildConfig.DEBUG) Log.d(TAG, "File transfer complete");
 
     if(allFilesReceived) {
-      showToast(deviceListFragment.getActivity(), "File transfer complete", Toast.LENGTH_LONG);
+      showToast(deviceListFragment.getActivity(), R.string.file_transfer_complete, Toast.LENGTH_LONG);
     } else {
-      showToast(deviceListFragment.getActivity(), "An error was encountered during transfer", Toast.LENGTH_LONG);
+      showToast(deviceListFragment.getActivity(), R.string.error_during_transfer, Toast.LENGTH_LONG);
     }
 
     ((LocalFileTransferActivity) deviceListFragment.getActivity()).closeLocalFileTransferActivity();
