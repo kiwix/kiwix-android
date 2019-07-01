@@ -37,6 +37,8 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.showToast;
+
 /**
  * Part of the local file sharing module, this fragment is responsible for displaying details of
  * the user device and the list of available peer devices, and once the user taps on a particular
@@ -201,7 +203,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
   public void setClientAddress(InetAddress clientAddress) {
     if(clientAddress == null) {
       // null is returned only in case of a failed handshake
-      Toast.makeText(localFileTransferActivity, "Selected device not cooperating for transfer", Toast.LENGTH_LONG).show();
+      showToast(localFileTransferActivity, "Selected device not cooperating for transfer", Toast.LENGTH_LONG);
       localFileTransferActivity.closeLocalFileTransferActivity();
       return;
     }
@@ -218,13 +220,13 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
       displayTransferProgressFragment();
 
       new ReceiverDeviceAsyncTask(this, transferProgressFragment).execute();
-      Toast.makeText(localFileTransferActivity, "Preparing to receive files...", Toast.LENGTH_SHORT).show();
+      showToast(localFileTransferActivity, "Preparing to receive files...", Toast.LENGTH_SHORT);
 
     } else if(groupInfo.groupFormed) {
       {
         Log.d(LocalFileTransferActivity.TAG, "Starting file transfer");
 
-        Toast.makeText(localFileTransferActivity, "Starting file transfer...", Toast.LENGTH_SHORT).show();
+        showToast(localFileTransferActivity, "Starting file transfer...", Toast.LENGTH_SHORT);
 
         if(groupInfo.isGroupOwner)  fileReceiverDeviceAddress = selectedPeerDeviceInetAddress;
         else                        fileReceiverDeviceAddress = groupInfo.groupOwnerAddress;

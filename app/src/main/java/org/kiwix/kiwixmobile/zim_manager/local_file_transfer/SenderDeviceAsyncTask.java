@@ -16,6 +16,7 @@ import java.net.Socket;
 
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.DeviceListFragment.FILE_TRANSFER_PORT;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.DeviceListFragment.getFileName;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.showToast;
 
 /**
  * Helper class for the local file sharing module, used in {@link DeviceListFragment}.
@@ -96,12 +97,12 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
     if(fileSendSuccessful) {
       transferProgressFragment.changeStatus(fileItemIndex, FileItem.SENT);
     } else {
-      Toast.makeText(deviceListFragment.getActivity(), "Error sending file "+ getFileName(deviceListFragment.getFileUriList().get(fileItemIndex)), Toast.LENGTH_SHORT).show();
+      showToast(deviceListFragment.getActivity(), "Error sending file "+ getFileName(deviceListFragment.getFileUriList().get(fileItemIndex)), Toast.LENGTH_SHORT);
       transferProgressFragment.changeStatus(fileItemIndex, FileItem.ERROR);
     }
 
     if(deviceListFragment.allFilesSent()) {
-      Toast.makeText(deviceListFragment.getActivity(), "All files transferred", Toast.LENGTH_SHORT).show();
+      showToast(deviceListFragment.getActivity(), "All files transferred", Toast.LENGTH_SHORT);
       deviceListFragment.getActivity().finish();
     }
   }

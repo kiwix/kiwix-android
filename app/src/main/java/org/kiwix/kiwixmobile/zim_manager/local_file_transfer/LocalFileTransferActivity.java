@@ -153,12 +153,12 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
       manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
         @Override
         public void onSuccess() {
-          Toast.makeText(LocalFileTransferActivity.this, "Discovery Initiated", Toast.LENGTH_SHORT).show();
+          showToast(LocalFileTransferActivity.this, "Discovery Initiated", Toast.LENGTH_SHORT);
         }
 
         @Override
         public void onFailure(int reason) {
-          Toast.makeText(LocalFileTransferActivity.this, "Discovery Failed: " + getErrorMessage(reason), Toast.LENGTH_SHORT).show();
+          showToast(LocalFileTransferActivity.this, "Discovery Failed: " + getErrorMessage(reason), Toast.LENGTH_SHORT);
         }
       });
       return true;
@@ -222,6 +222,10 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
       deviceListFragment.clearPeers();
     }
   }
+  
+  static void showToast(Context context, String text, int duration) {
+    Toast.makeText(context, text, duration).show();
+  }
 
 
   /* From WifiP2pManager.ChannelListener interface */
@@ -229,13 +233,13 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   public void onChannelDisconnected() {
     // Upon disconnection, retry one more time
     if(manager != null && !retryChannel) {
-      Toast.makeText(this, "Channel lost, trying again", Toast.LENGTH_LONG).show();
+      showToast(this, "Channel lost, trying again", Toast.LENGTH_LONG);
       resetData();
       retryChannel = true;
       manager.initialize(this, getMainLooper(), this);
 
     } else {
-      Toast.makeText(this, "Severe! Try Disable/Re-enable WiFi P2P", Toast.LENGTH_LONG).show();
+      showToast(this, "Severe! Try Disable/Re-enable WiFi P2P", Toast.LENGTH_LONG);
     }
   }
 
@@ -258,15 +262,15 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
           @Override
           public void onSuccess() {
-            Toast.makeText(LocalFileTransferActivity.this, "Aborting connection",
-                Toast.LENGTH_SHORT).show();
+            showToast(LocalFileTransferActivity.this, "Aborting connection",
+                Toast.LENGTH_SHORT);
           }
 
           @Override
           public void onFailure(int reasonCode) {
-            Toast.makeText(LocalFileTransferActivity.this,
+            showToast(LocalFileTransferActivity.this,
                 "Connect abort request failed. Reason : " + getErrorMessage(reasonCode),
-                Toast.LENGTH_SHORT).show();
+                Toast.LENGTH_SHORT);
           }
         });
       }
@@ -287,7 +291,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
       @Override
       public void onFailure(int reason) {
-        Toast.makeText(LocalFileTransferActivity.this, "Connection failed: " + getErrorMessage(reason), Toast.LENGTH_LONG).show();
+        showToast(LocalFileTransferActivity.this, "Connection failed: " + getErrorMessage(reason), Toast.LENGTH_LONG);
       }
     });
   }
@@ -378,7 +382,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
         if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
           Log.e(TAG, "Location permission not granted");
 
-          Toast.makeText(this, "Cannot locate peer devices without location permissions", Toast.LENGTH_LONG).show();
+          showToast(this, "Cannot locate peer devices without location permissions", Toast.LENGTH_LONG);
           closeLocalFileTransferActivity();
           break;
         }
@@ -388,7 +392,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
         if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
           Log.e(TAG, "Storage write permission not granted");
 
-          Toast.makeText(this, "Cannot access zim files without storage permission", Toast.LENGTH_LONG).show();
+          showToast(this, "Cannot access zim files without storage permission", Toast.LENGTH_LONG);
           closeLocalFileTransferActivity();
           break;
         }
@@ -439,7 +443,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
           .setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-              Toast.makeText(getActivity(), "Cannot discover peers without location services", Toast.LENGTH_SHORT).show();
+              showToast(getActivity(), "Cannot discover peers without location services", Toast.LENGTH_SHORT);
             }
           });
 
@@ -474,7 +478,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
           .setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-              Toast.makeText(getActivity(), "Cannot discover peers without WiFi ON", Toast.LENGTH_SHORT).show();
+              showToast(getActivity(), "Cannot discover peers without WiFi ON", Toast.LENGTH_SHORT);
             }
           });
 
@@ -492,20 +496,21 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
         if(!(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))) {
           // If neither provider is enabled
-          Toast.makeText(this, "Cannot discover peers without location services", Toast.LENGTH_LONG).show();
+          showToast(this, "Cannot discover peers without location services", Toast.LENGTH_LONG);
         }
         break;
       }
 
       case REQUEST_ENABLE_WIFI_P2P: {
         if(!isWifiP2pEnabled()) {
-          Toast.makeText(this, "Cannot discover peers without WiFi ON", Toast.LENGTH_LONG).show();
+          showToast(this, "Cannot discover peers without WiFi ON", Toast.LENGTH_LONG);
         }
         break;
       }
     }
   }
 
+  //TODO: Remove
   private void showNeutralDialog(String dialogMessage) {
     FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
     Fragment prev = getSupportFragmentManager().findFragmentByTag("NeutralDialog");

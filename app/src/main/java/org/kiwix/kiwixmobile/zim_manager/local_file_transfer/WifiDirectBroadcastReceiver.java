@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.R;
 
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.showToast;
+
 /**
  * Helper class for the local file sharing module.
  *
@@ -42,7 +44,7 @@ public class WifiDirectBroadcastReceiver extends BroadcastReceiver {
         wifiActivity.setWifiP2pEnabled(true);
       } else {
         wifiActivity.setWifiP2pEnabled(false);
-        Toast.makeText(wifiActivity, "Cannot discover peers without WiFi", Toast.LENGTH_SHORT).show();
+        showToast(wifiActivity, "Cannot discover peers without WiFi", Toast.LENGTH_SHORT);
         wifiActivity.resetPeers();
       }
       Log.d(LocalFileTransferActivity.TAG, "WiFi P2P state changed - " + wifiP2pState);

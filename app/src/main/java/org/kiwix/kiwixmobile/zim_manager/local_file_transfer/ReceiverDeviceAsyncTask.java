@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.DeviceListFragment.FILE_TRANSFER_PORT;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.DeviceListFragment.copyToOutputStream;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.showToast;
 
 /**
  * Helper class for the local file sharing module, used in {@link DeviceListFragment}.
@@ -95,9 +96,9 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Short, Boolean> {
     if(BuildConfig.DEBUG) Log.d(TAG, "File transfer complete");
 
     if(allFilesReceived) {
-      Toast.makeText(deviceListFragment.getActivity(), "File transfer complete", Toast.LENGTH_LONG).show();
+      showToast(deviceListFragment.getActivity(), "File transfer complete", Toast.LENGTH_LONG);
     } else {
-      Toast.makeText(deviceListFragment.getActivity(), "An error was encountered during transfer", Toast.LENGTH_LONG).show();
+      showToast(deviceListFragment.getActivity(), "An error was encountered during transfer", Toast.LENGTH_LONG);
     }
 
     ((LocalFileTransferActivity) deviceListFragment.getActivity()).closeLocalFileTransferActivity();
