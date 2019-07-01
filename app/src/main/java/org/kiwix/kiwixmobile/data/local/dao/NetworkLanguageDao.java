@@ -22,13 +22,12 @@ package org.kiwix.kiwixmobile.data.local.dao;
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
 import org.kiwix.kiwixmobile.data.local.entity.NetworkLanguageDatabaseEntity;
-import org.kiwix.kiwixmobile.models.Language;
+import org.kiwix.kiwixmobile.zim_manager.Language;
 
+@Deprecated
 public class NetworkLanguageDao {
   private KiwixDatabase mDb;
 
@@ -45,21 +44,9 @@ public class NetworkLanguageDao {
       while (languageCursor.moveToNext()) {
         String languageCode = languageCursor.get(NetworkLanguageDatabaseEntity.LANGUAGE_I_S_O_3);
         boolean enabled = languageCursor.get(NetworkLanguageDatabaseEntity.ENABLED);
-        result.add(new Language(languageCode, enabled));
+        result.add(new Language(languageCode, enabled, 0));
       }
     }
     return result;
-  }
-
-  public void saveFilteredLanguages(List<Language> languages) {
-    mDb.deleteAll(NetworkLanguageDatabaseEntity.class);
-    Collections.sort(languages, (language, t1) -> language.language.compareTo(t1.language));
-    for (Language language : languages) {
-      NetworkLanguageDatabaseEntity networkLanguageDatabaseEntity =
-          new NetworkLanguageDatabaseEntity();
-      networkLanguageDatabaseEntity.setLanguageISO3(language.languageCode);
-      networkLanguageDatabaseEntity.setIsEnabled(language.active);
-      mDb.persist(networkLanguageDatabaseEntity);
-    }
   }
 }

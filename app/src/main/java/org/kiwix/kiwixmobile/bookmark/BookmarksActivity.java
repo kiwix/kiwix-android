@@ -21,19 +21,18 @@ import javax.inject.Inject;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
-import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
+import org.kiwix.kiwixmobile.extensions.ImageViewExtensionsKt;
 import org.kiwix.kiwixmobile.main.MainActivity;
 
-import static org.kiwix.kiwixmobile.library.LibraryAdapter.createBitmapFromEncodedString;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_TITLE;
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_CHOSE_X_URL;
 
 public class BookmarksActivity extends BaseActivity implements BookmarksContract.View,
     BookmarksAdapter.OnItemClickListener {
 
-  private final List<Bookmark> bookmarksList = new ArrayList<>();
-  private final List<Bookmark> allBookmarks = new ArrayList<>();
-  private final List<Bookmark> deleteList = new ArrayList<>();
+  private final List<BookmarkItem> bookmarksList = new ArrayList<>();
+  private final List<BookmarkItem> allBookmarks = new ArrayList<>();
+  private final List<BookmarkItem> deleteList = new ArrayList<>();
 
   @BindView(R.id.toolbar)
   Toolbar toolbar;
@@ -64,7 +63,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
       switch (item.getItemId()) {
         case R.id.menu_context_delete:
           allBookmarks.removeAll(deleteList);
-          for (Bookmark bookmark : deleteList) {
+          for (BookmarkItem bookmark : deleteList) {
             int position = bookmarksList.indexOf(bookmark);
             bookmarksList.remove(bookmark);
             bookmarksAdapter.notifyItemRemoved(position);
@@ -163,21 +162,21 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
   }
 
   @Override
-  public void updateBookmarksList(List<Bookmark> bookmarksList) {
+  public void updateBookmarksList(List<BookmarkItem> bookmarksList) {
     allBookmarks.clear();
     allBookmarks.addAll(bookmarksList);
     notifyBookmarksListFiltered(bookmarksList);
   }
 
   @Override
-  public void notifyBookmarksListFiltered(List<Bookmark> bookmarksList) {
+  public void notifyBookmarksListFiltered(List<BookmarkItem> bookmarksList) {
     this.bookmarksList.clear();
     this.bookmarksList.addAll(bookmarksList);
     bookmarksAdapter.notifyDataSetChanged();
   }
 
   @Override
-  public void onItemClick(ImageView favicon, Bookmark bookmark) {
+  public void onItemClick(ImageView favicon, BookmarkItem bookmark) {
     if (actionMode == null) {
       Intent intent = new Intent(this, MainActivity.class);
       if ("null".equals(bookmark.getBookmarkUrl())) {
@@ -202,7 +201,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
   }
 
   @Override
-  public boolean onItemLongClick(ImageView favicon, Bookmark bookmark) {
+  public boolean onItemLongClick(ImageView favicon, BookmarkItem bookmark) {
     if (actionMode != null) {
       return false;
     }
@@ -212,9 +211,9 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
     return true;
   }
 
-  private void toggleSelection(ImageView favicon, Bookmark bookmark) {
+  private void toggleSelection(ImageView favicon, BookmarkItem bookmark) {
     if (deleteList.remove(bookmark)) {
-      favicon.setImageBitmap(createBitmapFromEncodedString(bookmark.getFavicon(), this));
+      ImageViewExtensionsKt.setBitmapFromString(favicon, bookmark.getFavicon());
     } else {
       favicon.setImageDrawable(
           ContextCompat.getDrawable(this, R.drawable.ic_check_circle_blue_24dp));

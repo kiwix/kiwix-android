@@ -36,7 +36,6 @@ import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
-import io.reactivex.CompletableObserver;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -58,6 +57,7 @@ import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.DataSource;
 import org.kiwix.kiwixmobile.data.remote.KiwixService;
+import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.Constants;
@@ -67,7 +67,6 @@ import org.kiwix.kiwixmobile.utils.StorageUtils;
 import org.kiwix.kiwixmobile.utils.TestingUtils;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
-import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment;
 
 import static org.kiwix.kiwixmobile.downloader.ChunkUtils.ALPHABET;
 import static org.kiwix.kiwixmobile.downloader.ChunkUtils.PART;
@@ -79,6 +78,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_ZIM_FILE;
 import static org.kiwix.kiwixmobile.utils.Constants.ONGOING_DOWNLOAD_CHANNEL_ID;
 import static org.kiwix.kiwixmobile.utils.files.FileUtils.getCurrentSize;
 
+@Deprecated
 public class DownloadService extends Service {
 
   public static final int PLAY = 1;
@@ -114,6 +114,8 @@ public class DownloadService extends Service {
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
 
+  @Inject
+  NewBookDao bookDao;
   @Inject
   DataSource dataSource;
   private SparseArray<NotificationCompat.Builder> notification = new SparseArray<>();
@@ -222,7 +224,7 @@ public class DownloadService extends Service {
       notification.get(notificationID).addExtras(bundle);
       notificationManager.notify(notificationID, notification.get(notificationID).build());
       downloadStatus.put(notificationID, PLAY);
-      LibraryFragment.downloadingBooks.remove(book);
+      //LibraryFragment.downloadingBooks.remove(book);
       String url = intent.getExtras().getString(DownloadIntent.DOWNLOAD_URL_PARAMETER);
       downloadBook(url, notificationID, book);
     }
@@ -235,11 +237,11 @@ public class DownloadService extends Service {
     synchronized (pauseLock) {
       pauseLock.notify();
     }
-    if (!DownloadFragment.downloads.isEmpty()) {
-      DownloadFragment.downloads.remove(notificationID);
-      DownloadFragment.downloadFiles.remove(notificationID);
-      DownloadFragment.downloadAdapter.notifyDataSetChanged();
-    }
+    //if (!DownloadFragment.downloads.isEmpty()) {
+    //  DownloadFragment.downloads.remove(notificationID);
+    //  DownloadFragment.downloadFiles.remove(notificationID);
+    //  DownloadFragment.downloadAdapter.notifyDataSetChanged();
+    //}
     updateForeground();
     notificationManager.cancel(notificationID);
   }
@@ -278,14 +280,14 @@ public class DownloadService extends Service {
   public void pauseDownload(int notificationID) {
     Log.i(KIWIX_TAG, "Pausing ZIM Download for notificationID: " + notificationID);
     downloadStatus.put(notificationID, PAUSE);
-    notification.get(notificationID).mActions.get(0).title = getString(R.string.download_resume);
-    notification.get(notificationID).mActions.get(0).icon = R.drawable.ic_play_arrow_black_24dp;
+    //notification.get(notificationID).mActions.get(0).title = getString(R.string.download_resume);
+    //notification.get(notificationID).mActions.get(0).icon = R.drawable.ic_play_arrow_black_24dp;
     notification.get(notificationID).setContentText(getString(R.string.download_paused));
     notificationManager.notify(notificationID, notification.get(notificationID).build());
-    if (DownloadFragment.downloadAdapter != null) {
-      DownloadFragment.downloadAdapter.notifyDataSetChanged();
-      downloadFragment.listView.invalidateViews();
-    }
+    //    if (DownloadFragment.downloadAdapter != null) {
+    //      DownloadFragment.downloadAdapter.notifyDataSetChanged();
+    //      downloadFragment.listView.invalidateViews();
+    //    }
   }
 
   public boolean playDownload(int notificationID) {
@@ -294,23 +296,23 @@ public class DownloadService extends Service {
     synchronized (pauseLock) {
       pauseLock.notify();
     }
-    notification.get(notificationID).mActions.get(0).title = getString(R.string.download_pause);
-    notification.get(notificationID).mActions.get(0).icon = R.drawable.ic_pause_black_24dp;
+    //    notification.get(notificationID).mActions.get(0).title = getString(R.string.download_pause);
+    //    notification.get(notificationID).mActions.get(0).icon = R.drawable.ic_pause_black_24dp;
     notification.get(notificationID).setContentText("");
     notificationManager.notify(notificationID, notification.get(notificationID).build());
-    if (DownloadFragment.downloadAdapter != null) {
-      DownloadFragment.downloadAdapter.notifyDataSetChanged();
-      downloadFragment.listView.invalidateViews();
-    }
+    //    if (DownloadFragment.downloadAdapter != null) {
+    //      DownloadFragment.downloadAdapter.notifyDataSetChanged();
+    //      downloadFragment.listView.invalidateViews();
+    //    }
 
     return true;
   }
 
   private void downloadBook(String url, int notificationID, LibraryNetworkEntity.Book book) {
-    if (downloadFragment != null) {
-      downloadFragment.addDownload(notificationID, book,
-          KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
-    }
+    //if (downloadFragment != null) {
+    //  downloadFragment.addDownload(notificationID, book,
+    //      KIWIX_ROOT + StorageUtils.getFileNameFromUrl(book.getUrl()));
+    //}
     TestingUtils.bindResource(DownloadService.class);
     if (book.file != null && (book.file.exists() || new File(
         book.file.getPath() + ".part").exists())) {
@@ -384,33 +386,33 @@ public class DownloadService extends Service {
               PendingIntent pendingIntent = PendingIntent.getActivity
                   (getBaseContext(), 0,
                       target, PendingIntent.FLAG_ONE_SHOT);
-              book.downloaded = true;
-              dataSource.deleteBook(book)
-                  .subscribe(new CompletableObserver() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                      Log.e("DownloadService", "Unable to delete book", e);
-                    }
-                  });
+              //book.downloaded = true;
+              //dataSource.deleteBook(book)
+              //    .subscribe(new CompletableObserver() {
+              //      @Override
+              //      public void onSubscribe(Disposable d) {
+              //
+              //      }
+              //
+              //      @Override
+              //      public void onComplete() {
+              //
+              //      }
+              //
+              //      @Override
+              //      public void onError(Throwable e) {
+              //        Log.e("DownloadService", "Unable to delete book", e);
+              //      }
+              //    });
               notification.get(notificationID).setContentIntent(pendingIntent);
-              notification.get(notificationID).mActions.clear();
+              //notification.get(notificationID).mActions.clear();
               TestingUtils.unbindResource(DownloadService.class);
             }
             notification.get(notificationID).setProgress(100, progress, false);
             if (progress != 100 && timeRemaining.get(notificationID) != -1) {
-              notification.get(notificationID)
-                  .setContentText(
-                      DownloadFragment.toHumanReadableTime(timeRemaining.get(notificationID)));
+              //notification.get(notificationID)
+              //    .setContentText(
+              //        DownloadFragment.toHumanReadableTime(timeRemaining.get(notificationID)));
             }
             notificationManager.notify(notificationID, notification.get(notificationID).build());
             if (progress == 0 || progress == 100) {
@@ -436,25 +438,25 @@ public class DownloadService extends Service {
   }
 
   private void updateDownloadFragmentProgress(int progress, int notificationID) {
-    if (DownloadFragment.downloads != null
-        && DownloadFragment.downloads.get(notificationID) != null) {
-      handler.post(() -> {
-        if (DownloadFragment.downloads.get(notificationID) != null) {
-          DownloadFragment.downloadAdapter.updateProgress(progress, notificationID);
-        }
-      });
-    }
+    //if (DownloadFragment.downloads != null
+    //    && DownloadFragment.downloads.get(notificationID) != null) {
+    //  handler.post(() -> {
+    //    if (DownloadFragment.downloads.get(notificationID) != null) {
+    //      DownloadFragment.downloadAdapter.updateProgress(progress, notificationID);
+    //    }
+    //  });
+    //}
   }
 
   private void updateDownloadFragmentComplete(int notificationID) {
-    if (DownloadFragment.downloads != null
-        && DownloadFragment.downloads.get(notificationID) != null) {
-      handler.post(() -> {
-        if (DownloadFragment.downloads.get(notificationID) != null) {
-          DownloadFragment.downloadAdapter.complete(notificationID);
-        }
-      });
-    }
+    //if (DownloadFragment.downloads != null
+    //    && DownloadFragment.downloads.get(notificationID) != null) {
+    //  handler.post(() -> {
+    //    if (DownloadFragment.downloads.get(notificationID) != null) {
+    //      DownloadFragment.downloadAdapter.complete(notificationID);
+    //    }
+    //  });
+    //}
   }
 
   private void updateForeground() {
@@ -534,29 +536,29 @@ public class DownloadService extends Service {
         downloaded += output.length();
 
         if (chunk.getStartByte() == 0) {
-          if (!DownloadFragment.downloads.isEmpty()) {
-            LibraryNetworkEntity.Book book = DownloadFragment.downloads
-                .get(chunk.getNotificationID());
-            book.remoteUrl = book.getUrl();
-            book.file = fullFile;
-            dataSource.saveBook(book)
-                .subscribe(new CompletableObserver() {
-                  @Override
-                  public void onSubscribe(Disposable d) {
-
-                  }
-
-                  @Override
-                  public void onComplete() {
-
-                  }
-
-                  @Override
-                  public void onError(Throwable e) {
-                    Log.e("DownloadService", "Unable to save book", e);
-                  }
-                });
-          }
+          //if (!DownloadFragment.downloads.isEmpty()) {
+          //  LibraryNetworkEntity.Book book = DownloadFragment.downloads
+          //      .get(chunk.getNotificationID());
+          //  book.remoteUrl = book.getUrl();
+          //  book.file = fullFile;
+          //  dataSource.saveBook(book)
+          //      .subscribe(new CompletableObserver() {
+          //        @Override
+          //        public void onSubscribe(Disposable d) {
+          //
+          //        }
+          //
+          //        @Override
+          //        public void onComplete() {
+          //
+          //        }
+          //
+          //        @Override
+          //        public void onError(Throwable e) {
+          //          Log.e("DownloadService", "Unable to save book", e);
+          //        }
+          //      });
+          //}
           downloadStatus.put(chunk.getNotificationID(), PLAY);
           downloadProgress.put(chunk.getNotificationID(), 0);
         }

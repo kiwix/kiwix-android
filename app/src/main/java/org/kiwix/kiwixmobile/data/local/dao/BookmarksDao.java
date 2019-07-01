@@ -31,6 +31,7 @@ import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
  * Dao class for bookmarks.
  */
 
+@Deprecated
 public class BookmarksDao {
   private final KiwixDatabase kiwixDatabase;
 

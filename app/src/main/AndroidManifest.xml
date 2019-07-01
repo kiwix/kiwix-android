@@ -3,13 +3,6 @@
     package="org.kiwix.kiwixmobile"
     android:installLocation="auto">
 
-  <supports-screens
-      android:anyDensity="true"
-      android:largeScreens="true"
-      android:normalScreens="true"
-      android:resizeable="true"
-      android:smallScreens="true" />
-
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.INTERNET" />
@@ -28,6 +21,8 @@
       android:networkSecurityConfig="@xml/network_security_config"
       android:supportsRtl="true"
       android:theme="@style/AppTheme">
+
+
     <activity
         android:name=".splash.SplashActivity"
         android:label="@string/app_name"
@@ -142,8 +137,8 @@
     </activity>
     <activity
         android:name=".zim_manager.ZimManageActivity"
-        android:label="@string/choose_file">
-
+        android:label="@string/choose_file"
+        android:launchMode="singleTop">
       <!-- TODO -->
       <intent-filter>
         <action android:name="android.intent.action.GET_CONTENT" />
@@ -183,8 +178,6 @@
           android:resource="@xml/kiwix_widget_provider_info" />
     </receiver>
 
-    <service android:name=".downloader.DownloadService" />
-
     <activity
         android:name=".error.ErrorActivity"
         android:process=":error_activity" />
@@ -199,9 +192,10 @@
           android:resource="@xml/provider_paths" />
     </provider>
 
-    <activity android:name=".intro.IntroActivity" />
-    <activity android:name=".language.LanguageActivity" />
-    <activity android:name=".history.HistoryActivity" />
+
+    <activity android:name=".intro.IntroActivity"/>
+    <activity android:name=".language.LanguageActivity"/>
+    <activity android:name=".history.HistoryActivity"/>
     <activity android:name=".help.HelpActivity">
       <meta-data
           android:name="android.support.PARENT_ACTIVITY"
@@ -220,6 +214,11 @@
         <data android:host="*" />
       </intent-filter>
     </activity>
-  </application>
 
+    <receiver android:name=".zim_manager.DownloadNotificationClickedReceiver">
+      <intent-filter>
+        <action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED"/>
+      </intent-filter>
+    </receiver>
+  </application>
 </manifest>

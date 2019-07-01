@@ -1,8 +1,9 @@
 #!/usr/bin/env python
-import requests
-import time
-import sys
 import os
+import requests
+import sys
+import time
+
 PROJECT_ID = 116910522
 
 print "Running tests"

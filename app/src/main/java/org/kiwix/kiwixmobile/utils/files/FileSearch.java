@@ -30,10 +30,15 @@ import eu.mhutti1.utils.storage.StorageDevice;
 import eu.mhutti1.utils.storage.StorageDeviceUtils;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Vector;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
+import org.kiwix.kiwixmobile.downloader.model.DownloadModel;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.utils.StorageUtils;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
@@ -43,13 +48,15 @@ public class FileSearch {
   public static final String[] zimFiles = { "zim", "zimaa" };
 
   private final Context context;
+  private final List<DownloadModel> downloads;
   private final ResultListener listener;
 
   private boolean fileSystemScanCompleted = false;
   private boolean mediaStoreScanCompleted = false;
 
-  public FileSearch(Context ctx, ResultListener listener) {
+  public FileSearch(Context ctx, List<DownloadModel> downloads, ResultListener listener) {
     this.context = ctx;
+    this.downloads = downloads;
     this.listener = listener;
   }
 
@@ -133,7 +140,6 @@ public class FileSearch {
     try {
       while (query.moveToNext()) {
         File file = new File(query.getString(0));
-
         if (file.canRead()) {
           onFileFound(file.getAbsolutePath());
         }
@@ -148,12 +154,13 @@ public class FileSearch {
     FilenameFilter[] filter = new FilenameFilter[zimFiles.length];
 
     // Search all external directories that we can find.
-    String[] tempRoots =
-        new String[StorageDeviceUtils.getStorageDevices(context, false).size() + 2];
+    final ArrayList<StorageDevice> storageDevices =
+        StorageDeviceUtils.getStorageDevices(context, false);
+    String[] tempRoots = new String[storageDevices.size() + 2];
     int j = 0;
     tempRoots[j++] = "/mnt";
     tempRoots[j++] = defaultPath;
-    for (StorageDevice storageDevice : StorageDeviceUtils.getStorageDevices(context, false)) {
+    for (StorageDevice storageDevice : storageDevices) {
       tempRoots[j++] = storageDevice.getName();
     }
 
@@ -211,6 +218,45 @@ public class FileSearch {
     return files.toArray(arr);
   }
 
+  public static synchronized BooksOnDiskListItem.BookOnDisk fileToBookOnDisk(String filePath) {
+    LibraryNetworkEntity.Book book = null;
+
+    if (ZimContentProvider.zimFileName != null) {
+      ZimContentProvider.originalFileName = ZimContentProvider.zimFileName;
+    }
+    // Check a file isn't being opened and temporally use content provider to access details
+    // This is not a great solution as we shouldn't need to fully open our ZIM files to get their metadata
+    if (ZimContentProvider.canIterate) {
+      if (ZimContentProvider.setZimFile(filePath) != null) {
+        try {
+          book = new LibraryNetworkEntity.Book();
+          book.title = ZimContentProvider.getZimFileTitle();
+          book.id = ZimContentProvider.getId();
+          book.size = String.valueOf(ZimContentProvider.getFileSize());
+          book.favicon = ZimContentProvider.getFavicon();
+          book.creator = ZimContentProvider.getCreator();
+          book.publisher = ZimContentProvider.getPublisher();
+          book.date = ZimContentProvider.getDate();
+          book.description = ZimContentProvider.getDescription();
+          book.language = ZimContentProvider.getLanguage();
+        } catch (Exception e) {
+          // TODO 20171215 Consider more elegant approaches.
+          // This is to see if we can catch the exception at all!
+          Log.e("kiwix-filesearch", "Problem parsing a book entry from the library file. ", e);
+          return null;
+        }
+      }
+    }
+    // Return content provider to its previous state
+    if (!ZimContentProvider.originalFileName.equals("")) {
+      ZimContentProvider.setZimFile(ZimContentProvider.originalFileName);
+    }
+    ZimContentProvider.originalFileName = "";
+
+    return book == null ? null
+        : new BooksOnDiskListItem.BookOnDisk(null, book, new File(filePath),0L);
+  }
+
   // Fill fileList with files found in the specific directory
   private void scanDirectory(String directory, FilenameFilter[] filter) {
     Log.d(TAG_KIWIX, "Searching directory " + directory);
@@ -223,15 +269,27 @@ public class FileSearch {
 
   // Callback that a new file has been found
   public void onFileFound(String filePath) {
-    LibraryNetworkEntity.Book book = fileToBook(filePath);
+    if (fileIsDownloading(filePath)) {
+      return;
+    }
+    BooksOnDiskListItem.BookOnDisk book = fileToBookOnDisk(filePath);
 
     if (book != null) {
       listener.onBookFound(book);
     }
   }
 
+  private boolean fileIsDownloading(String filePath) {
+    for (DownloadModel download : downloads) {
+      if (filePath.endsWith(StorageUtils.getFileNameFromUrl(download.getBook().getUrl()))) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public interface ResultListener {
-    void onBookFound(LibraryNetworkEntity.Book book);
+    void onBookFound(BooksOnDiskListItem.BookOnDisk book);
 
     void onScanCompleted();
   }

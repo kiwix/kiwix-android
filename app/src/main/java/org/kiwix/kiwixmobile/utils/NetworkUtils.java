@@ -30,11 +30,12 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 public class NetworkUtils {
   /**
    * check availability of any network
+   *
    * @return true if a network is ready to be used
    */
   public static boolean isNetworkAvailable(Context context) {
     ConnectivityManager connectivity = (ConnectivityManager) context
-      .getSystemService(Context.CONNECTIVITY_SERVICE);
+        .getSystemService(Context.CONNECTIVITY_SERVICE);
     if (connectivity == null) {
       return false;
     } else {
@@ -54,16 +55,15 @@ public class NetworkUtils {
     return networkInfo.getState() == NetworkInfo.State.CONNECTED;
   }
 
-
   /**
    * check if network of type WIFI is connected
-   * @param context
+   *
    * @return true if WIFI is connected
    */
   //TODO method isWiFi should be renamed to isWifiConnected to express the state which is checked (postponed to refactoring deprecated android.net.* usage)
   public static boolean isWiFi(Context context) {
     ConnectivityManager connectivity = (ConnectivityManager) context
-      .getSystemService(Context.CONNECTIVITY_SERVICE);
+        .getSystemService(Context.CONNECTIVITY_SERVICE);
     if (connectivity == null) {
       return false;
     }
@@ -98,9 +98,11 @@ public class NetworkUtils {
   }
 
   public static String parseURL(Context context, String url) {
-    String details;
+    if (url == null) {
+      return "";
+    }
     try {
-      details = url.substring(url.lastIndexOf("/") + 1);
+      String details = url.substring(url.lastIndexOf("/") + 1);
       int beginIndex = details.indexOf("_", details.indexOf("_") + 1) + 1;
       int endIndex = details.lastIndexOf("_");
       if (beginIndex < 0 || endIndex > details.length() || beginIndex > endIndex) {
