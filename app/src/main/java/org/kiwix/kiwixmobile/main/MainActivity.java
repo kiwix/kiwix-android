@@ -125,6 +125,7 @@ import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
+import org.kiwix.kiwixmobile.wifi_hotspot.HotspotService;
 import org.kiwix.kiwixmobile.wifi_hotspot.WifiHotspotManager;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver;
@@ -175,6 +176,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   private static final String NEW_TAB = "NEW_TAB";
   private static final String HOME_URL = "file:///android_asset/home.html";
+  public static final String ACTION_TURN_ON_BEFORE_O = "Turn_on_hotspot_before_oreo";
+  public static final String ACTION_TURN_OFF_BEFORE_O = "Turn_aff_hotspot_before_oreo";
+  public static final String ACTION_TURN_ON_AFTER_O = "Turn_on_hotspot_after_oreo";
+  public static final String ACTION_TURN_OFF_AFTER_O = "Turn_off_hotspot_after_oreo";
   public static boolean isFullscreenOpened;
   public static boolean refresh;
   public static boolean wifiOnly;
@@ -184,6 +189,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private static Uri KIWIX_BROWSER_MARKET_URI;
   private final ArrayList<String> bookmarks = new ArrayList<>();
   private final List<KiwixWebView> webViewList = new ArrayList<>();
+  private Intent serviceIntent;
   @BindView(R.id.activity_main_root)
   ConstraintLayout root;
   @BindView(R.id.activity_main_toolbar)
@@ -405,6 +411,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     wifiHotspotManager = new WifiHotspotManager(this);
     wifiHotspotManager.showWritePermissionSettings();
+
+    serviceIntent = new Intent(this, HotspotService.class);
 
   }
 
@@ -1075,16 +1083,25 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   // Checks if wifi access point is already enabled then turns it off, otherwise enables it.
   private void switchHotspot() {
     if (wifiHotspotManager.isWifiApEnabled()) {
-      wifiHotspotManager.setWifiEnabled(null, false);
+      startService(ACTION_TURN_OFF_BEFORE_O);
+      //wifiHotspotManager.setWifiEnabled(null, false);
     } else {
       //Check if user's hotspot is enabled
       if (isMobileDataEnabled(this)) {
 
         mobileDataDialog();
       } else {
-        wifiHotspotManager.setWifiEnabled(null, true);
+        // potentially add data to the intent
+        //i.putExtra("TURN_ON_HOTSPOT_BEFORE_O", "turnOnHotspotBeforeO");
+        startService(ACTION_TURN_ON_BEFORE_O);
+        //wifiHotspotManager.setWifiEnabled(null, true);
       }
     }
+  }
+
+  private void startService(String ACTION) {
+    serviceIntent.setAction(ACTION);
+    this.startService(serviceIntent);
   }
 
   private void mobileDataDialog() {
@@ -2299,9 +2316,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           // All location settings are satisfied. The client can initialize location
           // requests here.
 
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            wifiHotspotManager.turnOnHotspot();
-          }
+          //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+          serviceIntent.setAction(ACTION_TURN_ON_AFTER_O);
+          getApplicationContext().startService(serviceIntent);
+          //wifiHotspotManager.turnOnHotspot();
+          //}
         } catch (ApiException exception) {
           switch (exception.getStatusCode()) {
             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:

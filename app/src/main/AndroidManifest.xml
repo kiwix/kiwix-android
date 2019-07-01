@@ -199,6 +199,9 @@
           android:resource="@xml/kiwix_widget_provider_info"/>
     </receiver>
 
+    <service android:name=".downloader.DownloadService"/>
+    <service android:name=".wifi_hotspot.HotspotService"/>
+
     <activity
         android:name=".error.ErrorActivity"
         android:process=":error_activity"/>
