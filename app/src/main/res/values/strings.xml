@@ -288,7 +288,8 @@
   <string name="device_status">Device Status</string>
   <string name="your_device">Your Device:</string>
   <string name="nearby_devices">NEARBY DEVICES</string>
-  <string name="no_devices_found">No devices detected. Tap on search button to try again</string>
+  <string name="no_devices_found">No devices detected. Tap on search button to try again.</string>
   <string name="files_for_transfer">FILES FOR TRANSFER</string>
   <string name="file_name">File Name</string>
+  <string name="preparing_files">Preparing files for transfer...</string>
 </resources>

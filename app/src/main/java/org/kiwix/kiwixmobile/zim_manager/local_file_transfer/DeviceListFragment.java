@@ -231,7 +231,8 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
         if(groupInfo.isGroupOwner)  fileReceiverDeviceAddress = selectedPeerDeviceInetAddress;
         else                        fileReceiverDeviceAddress = groupInfo.groupOwnerAddress;
 
-        //TODO: Fix this
+        // Hack for allowing slower receiver devices to setup server before sender device requests to connect
+        showToast(localFileTransferActivity, R.string.preparing_files, Toast.LENGTH_LONG);
         for(int i = 0; i < 20000000; i++);
 
         for(int i = 0; i < totalFilesForTransfer; i++) {
