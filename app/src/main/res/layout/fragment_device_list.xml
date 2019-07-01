@@ -10,11 +10,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
         android:paddingLeft="5dp"
         android:paddingTop="5dp"
         android:paddingRight="5dp"
         android:paddingBottom="1dp"
-        android:text="Your Device:"
+        android:text="@string/your_device"
         android:textSize="13sp"
         android:textStyle="italic"
         app:layout_constraintHorizontal_bias="0.0"
@@ -30,10 +31,11 @@
         app:layout_constraintTop_toBottomOf="@+id/text_view_your_device"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:text="Device Name"
+        android:hint="@string/device_name"
         android:textStyle="bold"
         android:textSize="17sp"
         android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"/>
 
@@ -45,9 +47,10 @@
         app:layout_constraintTop_toBottomOf="@+id/text_view_device_name"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:text="Status"
+        android:hint="@string/device_status"
         android:textSize="15sp"
         android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:paddingBottom="5dp"/>
@@ -67,7 +70,7 @@
         android:id="@+id/text_view_available_device"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="NEARBY DEVICES"
+        android:text="@string/nearby_devices"
         android:gravity="center"
         android:textSize="16sp"
         android:fontFamily="monospace"
@@ -89,18 +92,17 @@
             android:id="@android:id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
         </ListView>
 
         <TextView
             android:id="@android:id/empty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="No devices detected\nTap on search button to try again"
+            android:text="@string/no_devices_found"
             android:gravity="center"
             android:layout_margin="50dp"
             android:textColor="@android:color/black" />
-        <!--android:visibility="gone"-->
+
     </FrameLayout>
 
     <ProgressBar
@@ -113,8 +115,5 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:visibility="gone"/>
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

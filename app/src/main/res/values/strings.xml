@@ -284,4 +284,14 @@
   <string name="error_during_transfer">An error was encountered during transfer</string>
   <string name="error_sending">Error sending file</string>
   <string name="all_files_transferred">All files transferred</string>
+  <string name="get_content_from_nearby_device">Get content from nearby device</string>
+  <string name="cancel_search">Cancel Search</string>
+  <string name="search_for_peers">Search For Peers</string>
+  <string name="device_name">Device Name</string>
+  <string name="device_status">Device Status</string>
+  <string name="your_device">Your Device:</string>
+  <string name="nearby_devices">NEARBY DEVICES</string>
+  <string name="no_devices_found">No devices detected Tap on search button to try again</string>
+  <string name="files_for_transfer">FILES FOR TRANSFER</string>
+  <string name="file_name">File Name</string>
 </resources>

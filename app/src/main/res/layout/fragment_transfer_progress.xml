@@ -20,12 +20,11 @@
       android:layout_marginRight="5dp"
       android:layout_marginTop="10dp" />
 
-  <!-- TODO: Update blank fragment layout -->
   <TextView
       android:id="@+id/text_view_files_for_transfer"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:text="FILES FOR TRANSFER"
+      android:text="@string/files_for_transfer"
       android:textSize="16sp"
       android:fontFamily="monospace"
       android:gravity="center"
