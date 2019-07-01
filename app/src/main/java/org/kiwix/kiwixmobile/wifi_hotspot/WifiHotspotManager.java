@@ -85,7 +85,7 @@ public class WifiHotspotManager {
               + " \n SSID is : "
               + currentConfig.SSID);
 
-          hotspotDetailsDialog();
+          //hotspotDetailsDialog();
 
           oreoenabled = true;
         }
@@ -108,18 +108,23 @@ public class WifiHotspotManager {
   //Workaround to turn off hotspot for Oreo versions
   @RequiresApi(api = Build.VERSION_CODES.O)
   public void turnOffHotspot() {
+    Log.v("DANG","Turn off 4");
     if (hotspotReservation != null) {
       hotspotReservation.close();
       hotspotReservation = null;
       oreoenabled = false;
+      Log.v("DANG","Turned off hotspot");
     }
   }
 
   //This method checks the state of the hostpot for devices>=Oreo
   public boolean checkHotspotState() {
     if (hotspotReservation != null) {
+      Log.v("DANG","I'm returning true");
       return true;
     } else {
+      Log.v("DANG","I'm returning false");
+
       return false;
     }
   }
@@ -173,6 +178,8 @@ public class WifiHotspotManager {
 
   private void hotspotDetailsDialog() {
 
+    Log.v("DANG","Coming hotspot details dialog :4");
+
     AlertDialog.Builder builder = new AlertDialog.Builder(context, dialogStyle());
 
     builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
@@ -185,5 +192,7 @@ public class WifiHotspotManager {
             R.string.hotspot_pass_label) + " " + currentConfig.preSharedKey);
     AlertDialog dialog = builder.create();
     dialog.show();
+    Log.v("DANG","Coming end of hotspot details dialog :5");
+
   }
 }
