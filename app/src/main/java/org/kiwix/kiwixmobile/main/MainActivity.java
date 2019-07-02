@@ -413,7 +413,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     wifiHotspotManager.showWritePermissionSettings();
 
     serviceIntent = new Intent(this, HotspotService.class);
-
   }
 
   //End of onCreate
@@ -1128,13 +1127,13 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private void toggleHotspot() {
     boolean check = false;
     //Check if location permissions are granted
-    Log.v("DANG","Turn off -1");
+    Log.v("DANG", "Turn off -1");
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         == PackageManager.PERMISSION_GRANTED) {
-      Log.v("DANG","Turn off 0");
+      Log.v("DANG", "Turn off 0");
       if (wifiHotspotManager.checkHotspotState()) //If hotspot is already enabled, turn it off
       {
-        Log.v("DANG","Turn off 1");
+        Log.v("DANG", "Turn off 1");
         serviceIntent.setAction(ACTION_TURN_OFF_AFTER_O);
         getApplicationContext().startService(serviceIntent);
         //wifiHotspotManager.turnOffHotspot();

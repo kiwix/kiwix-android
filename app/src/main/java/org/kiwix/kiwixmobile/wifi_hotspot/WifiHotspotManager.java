@@ -28,7 +28,7 @@ import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 public class WifiHotspotManager {
   private WifiManager wifiManager;
   private Context context;
-  private WifiManager.LocalOnlyHotspotReservation hotspotReservation;
+  private WifiManager.LocalOnlyHotspotReservation hotspotReservation = null;
   private boolean oreoenabled = false;
   private WifiConfiguration currentConfig;
 
@@ -78,7 +78,7 @@ public class WifiHotspotManager {
         public void onStarted(WifiManager.LocalOnlyHotspotReservation reservation) {
           super.onStarted(reservation);
           hotspotReservation = reservation;
-          currentConfig = reservation.getWifiConfiguration();
+          currentConfig = hotspotReservation.getWifiConfiguration();
 
           Log.v("DANG", "THE PASSWORD IS: "
               + currentConfig.preSharedKey
@@ -108,24 +108,27 @@ public class WifiHotspotManager {
   //Workaround to turn off hotspot for Oreo versions
   @RequiresApi(api = Build.VERSION_CODES.O)
   public void turnOffHotspot() {
-    Log.v("DANG","Turn off 4");
+    Log.v("DANG", "Turn off 4");
     if (hotspotReservation != null) {
       hotspotReservation.close();
       hotspotReservation = null;
       oreoenabled = false;
-      Log.v("DANG","Turned off hotspot");
+      Log.v("DANG", "Turned off hotspot");
     }
   }
 
   //This method checks the state of the hostpot for devices>=Oreo
-  public boolean checkHotspotState() {
-    if (hotspotReservation != null) {
-      Log.v("DANG","I'm returning true");
-      return true;
-    } else {
-      Log.v("DANG","I'm returning false");
 
+  @RequiresApi(api = Build.VERSION_CODES.O)
+  public boolean checkHotspotState() {
+    //Log.v("DANG",(hotspotReservation.getWifiConfiguration()).SSID);
+    if (hotspotReservation == null) {
+      Log.v("DANG", "I'm returning false");
       return false;
+    } else {
+      Log.v("DANG", "I'm returning true");
+
+      return true;
     }
   }
 
@@ -178,7 +181,7 @@ public class WifiHotspotManager {
 
   private void hotspotDetailsDialog() {
 
-    Log.v("DANG","Coming hotspot details dialog :4");
+    Log.v("DANG", "Coming hotspot details dialog :4");
 
     AlertDialog.Builder builder = new AlertDialog.Builder(context, dialogStyle());
 
@@ -192,7 +195,6 @@ public class WifiHotspotManager {
             R.string.hotspot_pass_label) + " " + currentConfig.preSharedKey);
     AlertDialog dialog = builder.create();
     dialog.show();
-    Log.v("DANG","Coming end of hotspot details dialog :5");
-
+    Log.v("DANG", "Coming end of hotspot details dialog :5");
   }
 }
