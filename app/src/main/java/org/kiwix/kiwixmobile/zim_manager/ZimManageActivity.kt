@@ -45,6 +45,7 @@ import org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle
 import org.kiwix.kiwixmobile.views.LanguageSelectDialog
 import java.io.File
 import javax.inject.Inject
+import org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity;
 
 class ZimManageActivity : BaseActivity() {
 
@@ -157,6 +158,9 @@ class ZimManageActivity : BaseActivity() {
     when (item.itemId) {
       R.id.select_language -> {
         zimManageViewModel.requestLanguagesDialog.onNext(Unit)
+      }
+      R.id.get_zim_nearby_device -> {
+        startActivity(Intent(this, LocalFileTransferActivity::class.java));
       }
     }
     return super.onOptionsItemSelected(item)
