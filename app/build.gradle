@@ -226,6 +226,7 @@ android {
   testBuildType "debug"
 
   lintOptions {
+    abortOnError true
     checkAllWarnings true
     warningsAsErrors true
     baseline file("lint-baseline.xml")
