@@ -70,6 +70,7 @@ sealed class BookOnDiskViewHolder<T : BooksOnDiskListItem>(containerView: View) 
         item_book_label_video.visibility = View.GONE
       }
 
+      itemBookCheckbox.isChecked = item.isSelected
       when (selectionMode) {
         MULTI -> {
           itemBookCheckbox.visibility = View.VISIBLE
