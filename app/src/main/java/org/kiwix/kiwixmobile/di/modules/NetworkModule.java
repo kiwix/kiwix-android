@@ -40,7 +40,7 @@ import org.kiwix.kiwixmobile.data.remote.UserAgentInterceptor;
 
     return new OkHttpClient().newBuilder().followRedirects(true).followSslRedirects(true)
         .connectTimeout(10, TimeUnit.SECONDS)
-        .readTimeout(20, TimeUnit.SECONDS)
+        .readTimeout(60, TimeUnit.SECONDS)
         .addNetworkInterceptor(logging)
         .addNetworkInterceptor(new UserAgentInterceptor(userAgent)).build();
   }
