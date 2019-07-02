@@ -60,7 +60,7 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - ./gradlew kiwixtestUploadKiwix
+  - ./gradlew kiwixtestUploadKiwix assembleKiwixRelease
 
 after_failure:
   - export LOG_DIR = ${TRAVIS_HOME}/build/kiwix/kiwix-android/app/build/outputs/reports/androidTests/connected/flavors/KIWIX/
@@ -71,14 +71,16 @@ after_failure:
 
 before_deploy:
 #  - export APP_CHANGELOG=$(cat app/src/kiwix/play/release-notes/en-US/default.txt)
-  - ./gradlew assembleKiwixRelease
+  - export DATE = `date +%Y-%m-%d`
+  - export UNIVERSAL_APK = app/build/outputs/apk/kiwix/release/*universal*.apk
+  - export SSH_KEY = travis_ci_builder_id_key
 
 deploy:
 
   #publish on github releases
   - provider: releases
     api_key: "$GITHUB_TOKEN"
-    file: app/build/outputs/apk/kiwix/release/*
+    file: $UNIVERSAL_APK
     file_glob: true
     skip_cleanup: true
     overwrite: true
@@ -93,3 +95,10 @@ deploy:
     script: ./gradlew publishKiwixRelease
     on:
       tags: true
+
+  #publish on download.kiwix.org
+  - provider: script
+    skip_cleanup: true
+    script: scp -vrp -i ${SSH_KEY} -o StrictHostKeyChecking=no $UNIVERSAL_APK ci@download.kiwix.org:/data/download/nightly/$DATE
+    on:
+      branch: develop
