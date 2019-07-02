@@ -37,7 +37,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
 import android.text.SpannableString;
@@ -100,11 +99,9 @@ import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
-import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 import org.kiwix.kiwixmobile.help.HelpActivity;
 import org.kiwix.kiwixmobile.history.HistoryActivity;
 import org.kiwix.kiwixmobile.history.HistoryListItem;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
@@ -377,6 +374,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
              open(bookOnDiskItem);
              return Unit.INSTANCE;
            },
+           null,
            null),
         BookOnDiskDelegate.LanguageDelegate.INSTANCE
     );
@@ -2105,7 +2103,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @Override
   public void addBooks(List<BooksOnDiskListItem> books) {
-    booksAdapter.setItemList(books);
+    booksAdapter.setItems(books);
   }
 
   private void searchFiles() {

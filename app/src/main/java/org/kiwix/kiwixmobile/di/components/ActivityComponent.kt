@@ -23,6 +23,7 @@ import dagger.Subcomponent
 import org.kiwix.kiwixmobile.di.modules.ActivityModule
 import org.kiwix.kiwixmobile.downloader.DownloadFragment
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
 
 @Subcomponent(modules = [ActivityModule::class])
@@ -32,6 +33,8 @@ interface ActivityComponent {
   fun inject(libraryFragment: LibraryFragment)
 
   fun inject(zimFileSelectFragment: ZimFileSelectFragment)
+
+  fun inject(deleteFiles: DeleteFiles)
 
   @Subcomponent.Builder
   interface Builder {

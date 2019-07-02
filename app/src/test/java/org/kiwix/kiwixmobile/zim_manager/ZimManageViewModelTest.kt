@@ -235,7 +235,7 @@ class ZimManageViewModelTest {
       val expectedList = listOf(bookOnDisk())
       booksOnDiskListItems.onNext(expectedList)
       testScheduler.triggerActions()
-      viewModel.bookItems.test()
+      viewModel.fileSelectListStates.test()
           .assertValue(expectedList)
     }
 

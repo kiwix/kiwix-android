@@ -3,6 +3,7 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter
 import android.graphics.ColorMatrixColorFilter
 import android.view.View
 import kotlinx.android.synthetic.main.header_language.header_language
+import kotlinx.android.synthetic.main.item_book.itemBookCheckbox
 import kotlinx.android.synthetic.main.item_book.item_book_article_count
 import kotlinx.android.synthetic.main.item_book.item_book_date
 import kotlinx.android.synthetic.main.item_book.item_book_description
@@ -17,6 +18,9 @@ import org.kiwix.kiwixmobile.main.KiwixWebView
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.zim_manager.KiloByte
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ArticleCount
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.SelectionMode
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.SelectionMode.MULTI
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.SelectionMode.NORMAL
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.LanguageItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base.BaseViewHolder
@@ -28,10 +32,17 @@ sealed class BookOnDiskViewHolder<T : BooksOnDiskListItem>(containerView: View) 
     containerView: View,
     private val sharedPreferenceUtil: SharedPreferenceUtil,
     private val clickAction: (BookOnDisk) -> Unit,
-    private val longClickAction: ((BookOnDisk) -> Unit)?
+    private val longClickAction: ((BookOnDisk) -> Unit)?,
+    private val multiSelectAction: ((BookOnDisk) -> Unit)?
   ) : BookOnDiskViewHolder<BookOnDisk>(containerView) {
 
     override fun bind(item: BookOnDisk) {
+    }
+
+    fun bind(
+      item: BookOnDisk,
+      selectionMode: SelectionMode
+    ) {
       val book = item.book
       item_book_title.text = book.getTitle()
       item_book_date.text = book.getDate()
@@ -59,24 +70,29 @@ sealed class BookOnDiskViewHolder<T : BooksOnDiskListItem>(containerView: View) 
         item_book_label_video.visibility = View.GONE
       }
 
-      containerView.setOnClickListener {
-        clickAction.invoke(item)
-      }
-      containerView.setOnLongClickListener {
-        longClickAction?.invoke(item)
-        return@setOnLongClickListener true
+      when (selectionMode) {
+        MULTI -> {
+          itemBookCheckbox.visibility = View.VISIBLE
+          containerView.setOnClickListener { multiSelectAction?.invoke(item) }
+          containerView.setOnLongClickListener(null)
+        }
+        NORMAL -> {
+          itemBookCheckbox.visibility = View.GONE
+          containerView.setOnClickListener { clickAction.invoke(item) }
+          containerView.setOnLongClickListener {
+            longClickAction?.invoke(item)
+            return@setOnLongClickListener true
+          }
+        }
       }
     }
   }
-
-  class LanguageItemViewHolder(containerView: View) :
-      BookOnDiskViewHolder<LanguageItem>(containerView) {
-
-    override fun bind(item: LanguageItem) {
-      header_language.text = item.text
-    }
-  }
-
 }
 
+class LanguageItemViewHolder(containerView: View) :
+    BookOnDiskViewHolder<LanguageItem>(containerView) {
 
+  override fun bind(item: LanguageItem) {
+    header_language.text = item.text
+  }
+}
