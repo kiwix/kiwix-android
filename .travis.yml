@@ -48,19 +48,20 @@ licenses:
   - ".+"
 
 before_script:
-  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI -c 100M
-  - emulator -avd test -no-audio -no-window &
+#  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI -c 100M
+#  - emulator -avd test -no-audio -no-window &
 
 script:
-  - ./gradlew lintKiwixDebug jacocoTestKiwixDebugUnitTestReport
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
-  - adb -e logcat *:D > logcat.log &
-  - ./gradlew createKiwixDebugCoverageReport
+  - ./gradlew lintKiwixDebug
+#    jacocoTestKiwixDebugUnitTestReport
+#  - android-wait-for-emulator
+#  - adb shell input keyevent 82 &
+#  - adb -e logcat *:D > logcat.log &
+#  - ./gradlew createKiwixDebugCoverageReport
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
-  - ./gradlew kiwixtestUploadKiwix assembleKiwixRelease
+#  - bash <(curl -s https://codecov.io/bash)
+#  - ./gradlew kiwixtestUploadKiwix assembleKiwixRelease
 
 after_failure:
   - export LOG_DIR = ${TRAVIS_HOME}/build/kiwix/kiwix-android/app/build/outputs/reports/androidTests/connected/flavors/KIWIX/
