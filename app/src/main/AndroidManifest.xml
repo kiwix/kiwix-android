@@ -3,6 +3,13 @@
     android:installLocation="auto"
     package="org.kiwix.kiwixmobile">
 
+  <supports-screens
+      android:anyDensity="true"
+      android:largeScreens="true"
+      android:normalScreens="true"
+      android:resizeable="true"
+      android:smallScreens="true"/>
+
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.INTERNET"/>
