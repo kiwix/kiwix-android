@@ -6,7 +6,7 @@ sudo: required
 
 env:
   global:
-    - ANDROID_TARGET=android-22
+    - ANDROID_TARGET=android-21
     - ANDROID_ABI=armeabi-v7a
 
 if: type != push OR tag IS present
