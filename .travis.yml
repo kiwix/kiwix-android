@@ -8,7 +8,7 @@ env:
   global:
     # switch glibc to a memory conserving mode
     - MALLOC_ARENA_MAX=2
-    - ANDROID_TARGET=android-19
+    - ANDROID_TARGET=android-21
     - ANDROID_ABI=armeabi-v7a
 
 if: type != push OR tag IS present
