@@ -64,6 +64,29 @@
   </PreferenceCategory>
 
   <PreferenceCategory
+      android:key="pref_hotspot"
+      android:title="@string/pref_hotspot">
+
+    <Preference
+        android:key="pref_hotspot_ssid"
+        android:summary="@string/pref_hotspot_ssid_summary"
+        android:title="@string/pref_hotspot_ssid_title"/>
+
+    <Preference
+        android:key="pref_hotspot_pass"
+        android:summary="@string/pref_hotspot_pass_summary"
+        android:title="@string/pref_hotspot_pass_title"/>
+
+    <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
+        android:defaultValue="false"
+        android:key="pref_set_hotspot_pass"
+        android:summary="@string/pref_set_hotspot_pass_summary"
+        android:title="@string/pref_set_hotspot_pass_title"/>
+
+
+  </PreferenceCategory>
+
+  <PreferenceCategory
       android:key="pref_storage"
       android:title="@string/pref_storage">
 
