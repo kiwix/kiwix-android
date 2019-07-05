@@ -1134,8 +1134,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       if (wifiHotspotManager.checkHotspotState()) //If hotspot is already enabled, turn it off
       {
         Log.v("DANG", "Turn off 1");
-        serviceIntent.setAction(ACTION_TURN_OFF_AFTER_O);
-        getApplicationContext().startService(serviceIntent);
+        startService(ACTION_TURN_OFF_AFTER_O);
         //wifiHotspotManager.turnOffHotspot();
       } else //If hotspot is not already enabled, then turn it on.
       {
@@ -1814,10 +1813,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           case Activity.RESULT_OK:
             // All required changes were successfully made
             Log.v("case 101", states.isLocationPresent() + "");
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-              wifiHotspotManager.turnOnHotspot();
-            }
+            startService(ACTION_TURN_ON_AFTER_O);
             break;
           case Activity.RESULT_CANCELED:
             // The user was asked to change settings, but chose not to
@@ -2321,8 +2317,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           // requests here.
 
           //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          serviceIntent.setAction(ACTION_TURN_ON_AFTER_O);
-          getApplicationContext().startService(serviceIntent);
+          startService(ACTION_TURN_ON_AFTER_O);
           //wifiHotspotManager.turnOnHotspot();
           //}
         } catch (ApiException exception) {
