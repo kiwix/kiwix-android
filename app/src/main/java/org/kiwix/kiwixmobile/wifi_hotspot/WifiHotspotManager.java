@@ -85,7 +85,7 @@ public class WifiHotspotManager {
               + " \n SSID is : "
               + currentConfig.SSID);
 
-          //hotspotDetailsDialog();
+          hotspotDetailsDialog();
 
           oreoenabled = true;
         }

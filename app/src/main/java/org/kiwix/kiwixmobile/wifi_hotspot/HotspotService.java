@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.main.MainActivity;
@@ -28,14 +29,16 @@ public class HotspotService extends Service {
   public static final String ACTION_START = "hotspot_start";
   public static final String ACTION_STOP = "hotspot_stop";
   public static final String ACTION_STATUS = "hotspot_status";
-  private WifiHotspotManager wifiHotspotManager;
+  public static WifiHotspotManager hotspotManager;
   private BroadcastReceiver stopReceiver;
   private NotificationManager notificationManager;
   private NotificationCompat.Builder builder;
 
   @Override public void onCreate() {
     super.onCreate();
-    wifiHotspotManager = new WifiHotspotManager(this);
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+      hotspotManager = new WifiHotspotManager(this);
+    }
     stopReceiver = new BroadcastReceiver() {
       @Override
       public void onReceive(Context context, Intent intent) {
@@ -53,28 +56,28 @@ public class HotspotService extends Service {
   @Override public int onStartCommand(Intent intent, int flags, int startId) {
     switch (intent.getAction()) {
       case ACTION_TURN_ON_BEFORE_O:
-        if (wifiHotspotManager.setWifiEnabled(null, true)) {
+        if (hotspotManager.setWifiEnabled(null, true)) {
           updateNotification(getString(R.string.hotspot_running), true);
         }
         break;
       case ACTION_TURN_ON_AFTER_O:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
           Log.v("DANG","Coming after 3");
-          wifiHotspotManager.turnOnHotspot();
+          hotspotManager.turnOnHotspot();
           //if(it gets turned on successfully) then it goes to catch in MainActivity
           updateNotification(getString(R.string.hotspot_running), true);
           Log.v("DANG","Coming after calling updateNotification 8");
         }
         break;
       case ACTION_TURN_OFF_BEFORE_O:
-        wifiHotspotManager.setWifiEnabled(null, false);
+        hotspotManager.setWifiEnabled(null, false);
         stopForeground(true);
         stopSelf();
         break;
       case ACTION_TURN_OFF_AFTER_O:
         Log.v("DANG","Turn off 3");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          wifiHotspotManager.turnOffHotspot();
+          hotspotManager.turnOffHotspot();
         }
         stopForeground(true);
         stopSelf();
@@ -119,10 +122,10 @@ public class HotspotService extends Service {
 
   private void stopHotspot() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      wifiHotspotManager.turnOffHotspot();
+      hotspotManager.turnOffHotspot();
     } else {
       Log.v("DANG", "Coming yes");
-      wifiHotspotManager.setWifiEnabled(null, false);
+      hotspotManager.setWifiEnabled(null, false);
     }
     stopForeground(true);
     stopSelf();
@@ -148,5 +151,14 @@ public class HotspotService extends Service {
       notificationManager.createNotificationChannel(hotspotServiceChannel);
       Log.v("DANG","Building notification channel end : 1.1");
     }
+  }
+
+  @RequiresApi(api = Build.VERSION_CODES.O)
+  public static boolean checkHotspotState(Context context) {
+    if (hotspotManager == null) {
+      Log.v("DANG", "hotspotManager initialized");
+      hotspotManager = new WifiHotspotManager(context);
+    }
+    return hotspotManager.checkHotspotState();
   }
 }

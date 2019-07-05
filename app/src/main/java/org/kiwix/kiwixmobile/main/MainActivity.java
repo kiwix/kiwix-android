@@ -170,6 +170,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 import static org.kiwix.kiwixmobile.utils.UpdateUtils.reformatProviderUrl;
+import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.checkHotspotState;
 
 public class MainActivity extends BaseActivity implements WebViewCallback,
     MainContract.View {
@@ -1083,7 +1084,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private void switchHotspot() {
     if (wifiHotspotManager.isWifiApEnabled()) {
       startService(ACTION_TURN_OFF_BEFORE_O);
-      //wifiHotspotManager.setWifiEnabled(null, false);
+      //hotspotManager.setWifiEnabled(null, false);
     } else {
       //Check if user's hotspot is enabled
       if (isMobileDataEnabled(this)) {
@@ -1093,7 +1094,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         // potentially add data to the intent
         //i.putExtra("TURN_ON_HOTSPOT_BEFORE_O", "turnOnHotspotBeforeO");
         startService(ACTION_TURN_ON_BEFORE_O);
-        //wifiHotspotManager.setWifiEnabled(null, true);
+        //hotspotManager.setWifiEnabled(null, true);
       }
     }
   }
@@ -1131,11 +1132,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         == PackageManager.PERMISSION_GRANTED) {
       Log.v("DANG", "Turn off 0");
-      if (wifiHotspotManager.checkHotspotState()) //If hotspot is already enabled, turn it off
+      if (checkHotspotState(this)) //If hotspot is already enabled, turn it off
       {
         Log.v("DANG", "Turn off 1");
         startService(ACTION_TURN_OFF_AFTER_O);
-        //wifiHotspotManager.turnOffHotspot();
+        //hotspotManager.turnOffHotspot();
       } else //If hotspot is not already enabled, then turn it on.
       {
         setupLocationServices();
@@ -2318,7 +2319,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
           //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
           startService(ACTION_TURN_ON_AFTER_O);
-          //wifiHotspotManager.turnOnHotspot();
+          //hotspotManager.turnOnHotspot();
           //}
         } catch (ApiException exception) {
           switch (exception.getStatusCode()) {
