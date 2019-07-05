@@ -28,7 +28,7 @@ import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 public class WifiHotspotManager {
   private WifiManager wifiManager;
   private Context context;
-  private WifiManager.LocalOnlyHotspotReservation hotspotReservation = null;
+  private WifiManager.LocalOnlyHotspotReservation hotspotReservation;
   private boolean oreoenabled = false;
   private WifiConfiguration currentConfig;
 
