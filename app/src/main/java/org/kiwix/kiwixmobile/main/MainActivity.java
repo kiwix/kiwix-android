@@ -411,7 +411,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     drawerLayout.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
 
     wifiHotspotManager = new WifiHotspotManager(this);
-    wifiHotspotManager.showWritePermissionSettings();
 
     serviceIntent = new Intent(this, HotspotService.class);
   }
@@ -955,7 +954,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
           toggleHotspot();
         } else {
-          switchHotspot();
+          if (showWritePermissionSettings()) { //request permission and if already granted switch hotspot.
+            switchHotspot();
+          }
         }
 
       default:
@@ -1085,14 +1086,13 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     if (wifiHotspotManager.isWifiApEnabled()) {
       startService(ACTION_TURN_OFF_BEFORE_O);
     } else {
-      //Check if user's hotspot is enabled
       if (isMobileDataEnabled(this)) {
 
         mobileDataDialog();
       } else {
         startService(ACTION_TURN_ON_BEFORE_O);
       }
-    }
+      }
   }
 
   public static void startHotspotDetails() {
@@ -1152,6 +1152,22 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         toggleHotspot();
       }
     }
+  }
+
+  //To get write permission settings, we use this method.
+  private boolean showWritePermissionSettings() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+        && Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+      if (!Settings.System.canWrite(this)) {
+        Log.v("DANG", " " + !Settings.System.canWrite(this));
+        Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
+        intent.setData(Uri.parse("package:" + this.getPackageName()));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        this.startActivity(intent);
+        return false;
+      }
+    }
+    return true; //Permission already given
   }
 
   @SuppressWarnings("SameReturnValue")
@@ -1589,8 +1605,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       }
     }
     updateWidgets(this);
-
-    wifiHotspotManager.showWritePermissionSettings();
   }
 
   private void updateBottomToolbarVisibility() {
@@ -1802,7 +1816,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           }
         }
         return;
-
       //Checking the result code for LocationSettings resolution
       case 101:
         final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);

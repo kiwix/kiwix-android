@@ -1,13 +1,10 @@
 package org.kiwix.kiwixmobile.wifi_hotspot;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Handler;
-import android.provider.Settings;
 import android.util.Log;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
@@ -32,20 +29,6 @@ public class WifiHotspotManager {
   public WifiHotspotManager(Context context) {
     this.context = context;
     wifiManager = (WifiManager) this.context.getSystemService(Context.WIFI_SERVICE);
-  }
-
-  //To get write permission settings, we use this method.
-  public void showWritePermissionSettings() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-        && Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-      if (!Settings.System.canWrite(this.context)) {
-        Log.v("DANG", " " + !Settings.System.canWrite(this.context));
-        Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
-        intent.setData(Uri.parse("package:" + this.context.getPackageName()));
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        this.context.startActivity(intent);
-      }
-    }
   }
 
   // This method enables/disables the wifi access point
