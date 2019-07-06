@@ -1084,17 +1084,13 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private void switchHotspot() {
     if (wifiHotspotManager.isWifiApEnabled()) {
       startService(ACTION_TURN_OFF_BEFORE_O);
-      //hotspotManager.setWifiEnabled(null, false);
     } else {
       //Check if user's hotspot is enabled
       if (isMobileDataEnabled(this)) {
 
         mobileDataDialog();
       } else {
-        // potentially add data to the intent
-        //i.putExtra("TURN_ON_HOTSPOT_BEFORE_O", "turnOnHotspotBeforeO");
         startService(ACTION_TURN_ON_BEFORE_O);
-        //hotspotManager.setWifiEnabled(null, true);
       }
     }
   }
@@ -1132,15 +1128,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private void toggleHotspot() {
     boolean check = false;
     //Check if location permissions are granted
-    Log.v("DANG", "Turn off -1");
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         == PackageManager.PERMISSION_GRANTED) {
-      Log.v("DANG", "Turn off 0");
       if (checkHotspotState(this)) //If hotspot is already enabled, turn it off
       {
-        Log.v("DANG", "Turn off 1");
         startService(ACTION_TURN_OFF_AFTER_O);
-        //hotspotManager.turnOffHotspot();
       } else //If hotspot is not already enabled, then turn it on.
       {
         setupLocationServices();
@@ -1182,7 +1174,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       method.setAccessible(true);
       enabled = (Boolean) method.invoke(cm);
     } catch (Exception e) {
-      Log.e("DANG ", e.toString());
+      Log.e("DANG", e.toString());
     }
     return enabled;
   }
@@ -2323,7 +2315,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
           //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
           startService(ACTION_TURN_ON_AFTER_O);
-          //hotspotManager.turnOnHotspot();
           //}
         } catch (ApiException exception) {
           switch (exception.getStatusCode()) {

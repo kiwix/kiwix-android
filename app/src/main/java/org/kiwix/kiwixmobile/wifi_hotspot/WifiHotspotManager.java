@@ -9,13 +9,10 @@ import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
-import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
-import com.google.android.material.snackbar.Snackbar;
 import java.lang.reflect.Method;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.main.MainActivity;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
@@ -108,7 +105,6 @@ public class WifiHotspotManager {
   //Workaround to turn off hotspot for Oreo versions
   @RequiresApi(api = Build.VERSION_CODES.O)
   public void turnOffHotspot() {
-    Log.v("DANG", "Turn off 4");
     if (hotspotReservation != null) {
       hotspotReservation.close();
       hotspotReservation = null;
@@ -118,16 +114,11 @@ public class WifiHotspotManager {
   }
 
   //This method checks the state of the hostpot for devices>=Oreo
-
   @RequiresApi(api = Build.VERSION_CODES.O)
   public boolean checkHotspotState() {
-    //Log.v("DANG",(hotspotReservation.getWifiConfiguration()).SSID);
     if (hotspotReservation == null) {
-      Log.v("DANG", "I'm returning false");
       return false;
     } else {
-      Log.v("DANG", "I'm returning true");
-
       return true;
     }
   }
@@ -181,8 +172,6 @@ public class WifiHotspotManager {
 
   public void hotspotDetailsDialog() {
 
-    Log.v("DANG", "Coming hotspot details dialog :4");
-
     AlertDialog.Builder builder = new AlertDialog.Builder(context, dialogStyle());
 
     builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
@@ -203,6 +192,5 @@ public class WifiHotspotManager {
     }
     AlertDialog dialog = builder.create();
     dialog.show();
-    Log.v("DANG", "Coming end of hotspot details dialog :5");
   }
 }

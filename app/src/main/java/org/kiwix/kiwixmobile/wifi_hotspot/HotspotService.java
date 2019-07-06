@@ -58,18 +58,14 @@ public class HotspotService extends Service {
     switch (intent.getAction()) {
       case ACTION_TURN_ON_BEFORE_O:
         if (hotspotManager.setWifiEnabled(null, true)) {
-          Log.v("DANG", "INSIDE");
           startHotspotDetails();
           updateNotification(getString(R.string.hotspot_running), true);
         }
         break;
       case ACTION_TURN_ON_AFTER_O:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          Log.v("DANG","Coming after 3");
           hotspotManager.turnOnHotspot();
-          //if(it gets turned on successfully) then it goes to catch in MainActivity
           updateNotification(getString(R.string.hotspot_running), true);
-          Log.v("DANG","Coming after calling updateNotification 8");
         }
         break;
       case ACTION_TURN_OFF_BEFORE_O:
@@ -78,7 +74,6 @@ public class HotspotService extends Service {
         stopSelf();
         break;
       case ACTION_TURN_OFF_AFTER_O:
-        Log.v("DANG","Turn off 3");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
           hotspotManager.turnOffHotspot();
         }
@@ -127,7 +122,6 @@ public class HotspotService extends Service {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       hotspotManager.turnOffHotspot();
     } else {
-      Log.v("DANG", "Coming yes");
       hotspotManager.setWifiEnabled(null, false);
     }
     stopForeground(true);
@@ -144,7 +138,6 @@ public class HotspotService extends Service {
 
   private void hotspotNotificationChannel() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      Log.v("DANG","Building notification channel start : 1");
       NotificationChannel hotspotServiceChannel = new NotificationChannel(
           Constants.HOTSPOT_SERVICE_CHANNEL_ID, getString(R.string.hotspot_service_channel_name),
           NotificationManager.IMPORTANCE_DEFAULT);
@@ -152,7 +145,6 @@ public class HotspotService extends Service {
       hotspotServiceChannel.setSound(null, null);
       builder.setChannelId(Constants.HOTSPOT_SERVICE_CHANNEL_ID);
       notificationManager.createNotificationChannel(hotspotServiceChannel);
-      Log.v("DANG","Building notification channel end : 1.1");
     }
   }
 
