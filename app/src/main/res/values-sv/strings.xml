@@ -5,16 +5,16 @@
   <string name="menu_home">Hem</string>
   <string name="menu_settings">Inställningar</string>
   <string name="menu_search">Sök artikel</string>
-  <string name="menu_searchintext">Hitta på sida</string>
+  <string name="menu_searchintext">Hitta på sidan</string>
   <string name="menu_bookmarks">Bokmärken</string>
   <string name="menu_randomarticle">Slumpartikel</string>
   <string name="menu_fullscreen">Fullskärm</string>
-  <string name="menu_exitfullscreen">Stäng helskärm</string>
+  <string name="menu_exitfullscreen">Stäng fullskärm</string>
   <string name="menu_read_aloud">Läs upp</string>
   <string name="menu_read_aloud_stop">Sluta läsa upp</string>
   <string name="save_media">Spara media</string>
   <string name="save_media_error">Ett fel uppstod när media skulle sparas!</string>
-  <string name="save_media_saved">Sparade media som %1$s i Android/media/org.kiwix.../</string>
+  <string name="save_media_saved">Sparade media som %s i Android/media/org.kiwix.../</string>
   <string name="rescan_fs_warning">Söker efter nedladdningsbart innehåll, var god vänta...</string>
   <string name="button_backtotop">Tillbaka till början</string>
   <string name="search_label">Sök</string>
@@ -38,7 +38,7 @@
   <string name="pref_language_chooser">Välj ett språk</string>
   <string name="pref_credits">Bidragsgivare och licenser</string>
   <string name="pref_credits_title">Erkännanden</string>
-  <string name="tts_lang_not_supported">Språket på denna sida stöds inte, eller lämplig språkdata har inte installerats. Artikeln kan inte läsas på rätt sätt.</string>
+  <string name="tts_lang_not_supported">Språket på denna sida stöds inte, eller så har lämplig språkdata inte installerats. Artikeln kan kanske inte läsas på rätt sätt.</string>
   <string name="no_reader_application_installed">Kunde inte hitta ett installerat program för denna filtyp</string>
   <string name="customapp_missing_content">Din app är skadad.\nDetta kan hända när du tar bort filer på SD-kortet.\nDu måste avinstallera och sedan installera om appen från Play Store.</string>
   <string name="go_to_play_store">Gå till Play Store</string>
@@ -48,14 +48,14 @@
   <string name="request_storage">För att komma åt offlineinnehåll behöver vi tillgång till ditt lagringsutrymme</string>
   <string name="request_storage_custom">Om du ser en skärmöverläggsvarning, starta om din enhet för att åtgärda problemet.</string>
   <string name="clear_recent_and_tabs_history_dialog">Är du säker på att du vill radera din sökhistorik och återställa alla aktiva flikar?</string>
-  <string name="delete_recent_search_item">Radera detta föremål?</string>
+  <string name="delete_recent_search_item">Radera detta objekt?</string>
   <string name="pref_clear_all_history_title">Rensa historik</string>
   <string name="pref_clear_all_history_summary">Rensa senaste sökningar och flikhistorik</string>
   <string name="all_history_cleared_toast">All historik rensades</string>
   <string name="clear_all_history_dialog_title">Rensa all historik</string>
   <string name="delete">Radera</string>
   <string name="delete_specific_search_toast">Senaste sökning togs bort</string>
-  <string name="hint_contents_drawer_message">Du kan svepa åt vänster för att se innehållet för denna artikel</string>
+  <string name="hint_contents_drawer_message">Du kan svepa åt vänster för att se innehållet i denna artikel</string>
   <string name="got_it">Jag förstår</string>
   <string name="did_you_know">Visste du att?</string>
   <string name="undo">Ångra</string>
@@ -64,7 +64,7 @@
   <string name="bookmark_added">Bokmärke lades till</string>
   <string name="rate_dialog_title">Sätt betyg på oss</string>
   <string name="rate_dialog_msg_1">Om du gillar att använda</string>
-  <string name="rate_dialog_msg_2">, ta en stund och betygsätt den. Tack för ditt stöd!</string>
+  <string name="rate_dialog_msg_2">, ta dig tid att betygsätta den. Tack för ditt stöd!</string>
   <string name="rate_dialog_positive">Betygsätt!</string>
   <string name="rate_dialog_negative">Nej, tack</string>
   <string name="rate_dialog_neutral">Senare</string>
@@ -87,7 +87,6 @@
   <string name="zim_file_downloading">Laddar ned</string>
   <string name="zim_file_downloaded">Nedladdad</string>
   <string name="download_pause">Pausa</string>
-  <string name="download_play">Spela upp</string>
   <string name="download_stop">Stoppa</string>
   <string name="download_paused">pausad</string>
   <string name="no_downloads_here">Inga nedladdningar här</string>
@@ -99,13 +98,13 @@
   <string name="zim_nopic">Inga bilder</string>
   <string name="zim_novid">Inga videor</string>
   <string name="no_network_connection">Ingen nätverksanslutning</string>
-  <string name="get_library_over_network">Använd nätverk för att ladda ned innehållslistan. (Uppskattningsvis 6MB)</string>
+  <string name="get_library_over_network">Använd nätverket för att ladda ned innehållslistan. (Uppskattningsvis 6MB)</string>
   <string name="proceed">Fortsätt</string>
-  <string name="wait_for_load">Innehåll läser fortfarande in</string>
-  <string name="help_1">Kiwix ger dig offlineåtkomst till webbplatser som Wikipedia i ett högkomprimerad format.</string>
+  <string name="wait_for_load">Läser fortfarande in innehåll</string>
+  <string name="help_1">Kiwix ger dig offlineåtkomst till webbplatser som Wikipedia i ett högkomprimerat format.</string>
   <string name="help_2">Vad gör Kiwix?</string>
-  <string name="help_3">Kiwix är en innehållsläsare för offlineanvändning. Den fungerar mycket detsamma som en webbläsare, men istället för att komma åt webbsidor online läser den innehåll från en fil i ZIM-format.</string>
-  <string name="help_4">Medan Kiwix ursprungligen designades för att tillhandahålla Wikipedia offline läser den även annat innehåll.</string>
+  <string name="help_3">Kiwix är en innehållsläsare för offlineanvändning. Den fungerar som en webbläsare, men istället för att komma åt webbsidor online läser den innehåll från en fil i ZIM-format.</string>
+  <string name="help_4">Även om Kiwix ursprungligen skapades för att tillhandahålla Wikipedia offline läser den även annat innehåll.</string>
   <string name="help_5">Var finns innehållet?</string>
   <string name="help_6">Vårt innehåll lagras på Kiwix webbplats.</string>
   <string name="help_7">De finns tillgängliga som ZIM-filer. Det är många:</string>
@@ -119,14 +118,14 @@
   <string name="help_15">Om du laddar ned på en annan enhet måste du dela upp ZIM-filen med följande programvara:</string>
   <string name="help_16">\u2022 På Microsoft Windows: HJ-Split</string>
   <string name="help_17">\u2022 På Apple Mac OSX: Split och Concat</string>
-  <string name="help_19">OBS: Resultatfilerna måste heta my_big_file.zimaa, my_big_file.zimab, etc.</string>
+  <string name="help_19">OBS: Resultatfilerna måste heta min_stora_fil.zimaa, min_stora_fil.zimab, etc.</string>
   <string name="help_20">Tack för att du valde Kiwix!</string>
   <string name="help_21">Vi är glada att ha dig ombord och skulle uppskatta återkoppling eller förslag på android@kiwix.org.</string>
   <string name="pref_storage">Lagring</string>
   <string name="pref_current_folder">Nuvarande mapp</string>
   <string name="path_not_writable">Kan inte komma åt önskad katalog, använder standardplatsen. För att åtgärda detta, välj önskad katalog i appens inställningar igen.</string>
-  <string name="reboot_message">P.g.a en bugg i Android 6.0 är det nödvändigt att starta om din enhet för att fortsätta utan att bevilja behörighet för lagring. Vi beklagar eventuella besvär.</string>
-  <string name="delete_zim_failed">Tyvärr kunde vi inte radera denna fil. Du bör försöka använda en filhanterare istället.</string>
+  <string name="reboot_message">P.g.a. en bugg i Android 6.0 är det nödvändigt att starta om din enhet för att fortsätta utan att bevilja behörighet för lagring. Vi beklagar eventuella besvär.</string>
+  <string name="delete_zim_failed">Tyvärr kunde vi inte radera denna fil. Du kan försöka använda en filhanterare istället.</string>
   <string name="tts_pause">pausa</string>
   <string name="tts_resume">återuppta</string>
   <string name="tts_stop">stoppa</string>
@@ -152,12 +151,34 @@
   <string name="pref_autonightmode_summary">Växla automatiskt mellan dag- och nattläge.</string>
   <string name="pref_autonightmode">Automatiskt nattläge</string>
   <string name="pref_multi_search_title">MultiZim-sökning</string>
-  <string name="pref_multi_search_summary">Tillåt appen att söka igenom ZIM-filer (varning; mycket experimentellt).</string>
+  <string name="pref_multi_search_summary">Tillåt appen att söka igenom ZIM-filer (varning: mycket experimentellt).</string>
   <string name="pref_external_link_popup_title">Varna vid externa länkar</string>
   <string name="pref_external_link_popup_summary">Visar popup för att varna om ytterligare kostnader eller att det inte fungerar i offlinelänkar.</string>
   <string name="external_link_popup_dialog_title">Går till extern länk</string>
-  <string name="external_link_popup_dialog_message">Du går till en extern länk. Detta kan leda till ytterligare dataöverföringskostnader eller kommer bara inte fungera när du är offline. Vill du fortsätta?</string>
+  <string name="external_link_popup_dialog_message">Du går till en extern länk. Detta kan leda till ytterligare dataöverföringskostnader eller kommer helt enkelt inte fungera när du är offline. Vill du fortsätta?</string>
   <string name="do_not_ask_anymore">Fråga inte igen</string>
   <string name="your_languages">Valda språk:</string>
   <string name="other_languages">Andra språk:</string>
+  <plurals name="books_count">
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

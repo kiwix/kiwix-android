@@ -63,7 +63,6 @@
   <string name="zim_file_downloading">Eroflueden</string>
   <string name="zim_file_downloaded">Erofgelueden</string>
   <string name="download_pause">Paus</string>
-  <string name="download_play">Spillen</string>
   <string name="download_stop">Stopp</string>
   <string name="no_files_here">Keng Fichieren hei?</string>
   <string name="download_complete_snackbar">Eroflueden ofgeschloss</string>
@@ -97,4 +96,26 @@
   <string name="do_not_ask_anymore">Net méi froen</string>
   <string name="your_languages">Erausgesicht Sproochen:</string>
   <string name="other_languages">Aner Sproochen:</string>
+  <plurals name="books_count">
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

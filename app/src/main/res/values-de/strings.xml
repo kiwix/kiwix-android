@@ -85,7 +85,6 @@
   <string name="zim_file_downloading">Herunterladen</string>
   <string name="zim_file_downloaded">Heruntergeladen</string>
   <string name="download_pause">Pausieren</string>
-  <string name="download_play">Wiedergabe</string>
   <string name="download_stop">Abbrechen</string>
   <string name="download_paused">pausiert</string>
   <string name="no_downloads_here">Hier gibt es keine Downloads</string>
@@ -161,4 +160,26 @@
   <string name="do_not_ask_anymore">Nicht mehr fragen</string>
   <string name="your_languages">Ausgewählte Sprachen:</string>
   <string name="other_languages">Weitere Sprachen:</string>
+  <plurals name="books_count">
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

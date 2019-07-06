@@ -3,7 +3,7 @@
   <string name="menu_zim_manager">Iscàrriga cuntenutos</string>
   <string name="menu_help">Agiudu</string>
   <string name="menu_home">Pàgina printzipale</string>
-  <string name="menu_settings">Inditos</string>
+  <string name="menu_settings">Impostatziones</string>
   <string name="menu_search">Chirca artìculu</string>
   <string name="menu_searchintext">Agata in sa pàgina</string>
   <string name="menu_bookmarks">Sinnalibros</string>
@@ -19,7 +19,7 @@
   <string name="button_backtotop">Torra a su cumintzu</string>
   <string name="search_label">Chirca</string>
   <string name="choose_file">Ischerta unu documentu de cuntenutu ZIM (*.zim)</string>
-  <string name="open_in_new_tab">Aberire su ligòngiu in un\'ischeda noa?</string>
+  <string name="open_in_new_tab">Abèrrere su ligàmene in un\'ischeda noa?</string>
   <string name="error_nozimfilesfound">Perunu documentu ZIM agatadu in su dispositivu tuo.\nLeghe sa pàgina de agiudu pro imparare a carrigare cuntenutu intre Kiwix.\nSi as postu unu documentu ZIM in su sa memòria de su dispositivu tuo o in un\'ischeda esterna, torra a proare a pustis de unu minutu o torra a allùere su dispositivu tuo.</string>
   <string name="error_filenotfound">Errore: su documentu ZIM ischertadu no est istadu agatadu.</string>
   <string name="error_fileinvalid">Errore: su documentu ischertadu no est unu documentu ZIM vàlidu.</string>
@@ -29,7 +29,7 @@
   <string name="pref_zoom_dialog">Livellu de ismanniamentu</string>
   <string name="pref_info_title">Informatziones</string>
   <string name="pref_info_version">Versione</string>
-  <string name="pref_zoom_enable">Gestione de su zoom</string>
+  <string name="pref_zoom_enable">Gestione de s\'ismanniamentu</string>
   <string name="pref_nightmode">Modalidade pro sa note</string>
   <string name="pref_nightmode_summary">Ammustra sos artìculos cun colores furriados</string>
   <string name="pref_backtotop">Torra a su cumintzu</string>
@@ -82,13 +82,12 @@
   <string name="local_zims">Dispositivu</string>
   <string name="remote_zims">In lìnia</string>
   <string name="zim_downloads">Iscarrighende</string>
-  <string name="zim_manager">Gestione de sos cuntenutos</string>
+  <string name="zim_manager">Libreria</string>
   <string name="delete_specific_zim">Iscantzellare custu documentu?</string>
   <string name="delete_specific_zim_toast">Documentu iscantzelladu</string>
   <string name="zim_file_downloading">Iscarrighende</string>
   <string name="zim_file_downloaded">Iscarrigadu</string>
   <string name="download_pause">Pàusa</string>
-  <string name="download_play">Riprodui</string>
   <string name="download_stop">Firma</string>
   <string name="download_paused">in pàusa</string>
   <string name="no_downloads_here">Perunu iscarrigamentu inoghe</string>
@@ -145,10 +144,43 @@
   <string name="previous">Antepostu</string>
   <string name="wifi_only_title">Permìtere s\'iscarrigamentu de cuntenutu pro mèdiu de retza mòbile?</string>
   <string name="wifi_only_msg">Si as a isseberare "Eja" no as a èssere avertidu in su tempus benidore. In cada manera, l\'as a pòdre semper cambiare in sos Inditos</string>
-  <string name="pref_wifi_only">Iscàrriga cuntentu petzi tràmite WiFi</string>
+  <string name="pref_wifi_only">Iscàrriga cuntenutos petzi tràmite WiFi</string>
   <string name="time_day">die</string>
   <string name="time_hour">o</string>
   <string name="time_left">galu</string>
+  <string name="pref_bottomtoolbar">Abìlita sa barra de sas ainas in fundu</string>
+  <string name="pref_bottomtoolbar_summary">Ammustra una barra de sas ainas in fundu a s\'ischermu</string>
   <string name="pref_autonightmode_summary">Cola in manera automàtica intre sa modalidade die e note.</string>
   <string name="pref_autonightmode">Modalidade note automàtica</string>
+  <string name="pref_multi_search_title">Chirca MultiZim</string>
+  <string name="pref_multi_search_summary">Permiti a s\'aplicatzione de chircare in sos documentos ZIM (atentzione: funtzionalidade galu meda isperimentale)</string>
+  <string name="pref_external_link_popup_title">Avisa cando ses aberende unu ligàmene esternu</string>
+  <string name="pref_external_link_popup_summary">Ammustra ventaneddas pro t\'avisare de costos agiuntivos o ligàmenes chi non funtzionant chene una connessione a ìnternet.</string>
+  <string name="external_link_popup_dialog_title">Aberende unu ligàmene esternu</string>
+  <string name="external_link_popup_dialog_message">Ses aberende unu ligàmene esternu. Custu diat pòdere causare costos in prus pro s\'impreu de trasferimentu de datos o diant pòdere non funtzionare cando non ses connessu a ìnternet. Cheres sighire?</string>
+  <string name="do_not_ask_anymore">Non mi lu preguntes prus</string>
+  <string name="your_languages">Limbas ischertadas:</string>
+  <string name="other_languages">Àteras limbas:</string>
+  <plurals name="books_count">
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

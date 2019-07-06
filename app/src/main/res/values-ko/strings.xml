@@ -15,7 +15,7 @@
   <string name="save_media">미디어 저장</string>
   <string name="save_media_error">미디어 저장을 시도할 때 오류가 발생하였습니다!</string>
   <string name="save_media_saved">내 사진 폴더에 %1$s 미디어가 저장되었습니다</string>
-  <string name="rescan_fs_warning">ZIM 파일을 검색 중입니다. 기다려 주십시오...</string>
+  <string name="rescan_fs_warning">다운로드 가능한 파일을 검색 중입니다. 기다려 주십시오...</string>
   <string name="button_backtotop">맨 위로 돌아가기</string>
   <string name="search_label">검색</string>
   <string name="choose_file">내용 파일 (*.zim) 선택</string>
@@ -47,7 +47,7 @@
   <string name="no_bookmarks">북마크가 없습니다!</string>
   <string name="menu_bookmarks_list">책갈피</string>
   <string name="no_section_info">콘텐츠 헤더를 찾을 수 없습니다</string>
-  <string name="request_storage">ZIM 파일에 접근하려면 저장소에 대한 접근 권한이 필요합니다</string>
+  <string name="request_storage">오프라인 콘텐츠에 접근하려면 저장소에 대한 접근 권한이 필요합니다</string>
   <string name="request_storage_custom">화면 오버레이 경고가 보이면 해결을 위해 장치를 다시 시작하십시오.</string>
   <string name="clear_recent_and_tabs_history_dialog">검색 기록을 삭제하고 열려있는 모든 탭을 초기화하시겠습니까?</string>
   <string name="delete_recent_search_item">이 항목을 지우시겠습니까?</string>
@@ -89,7 +89,6 @@
   <string name="zim_file_downloading">다운로드 중</string>
   <string name="zim_file_downloaded">다운로드되었습니다</string>
   <string name="download_pause">일시 정지</string>
-  <string name="download_play">재생</string>
   <string name="download_stop">정지</string>
   <string name="download_paused">일시 정지함</string>
   <string name="no_downloads_here">여기에 다운로드가 없습니다</string>
@@ -152,12 +151,39 @@
   <string name="time_minute">분</string>
   <string name="time_second">초</string>
   <string name="time_left">남음</string>
+  <string name="pref_bottomtoolbar">하단 도구 모음 사용</string>
+  <string name="pref_bottomtoolbar_summary">화면 하단에 빠른 동작들이 포함된 도구 모음을 표시합니다</string>
   <string name="pref_autonightmode_summary">야간 모드와 낮 모드를 자동으로 전환합니다.</string>
   <string name="pref_autonightmode">자동 야간 모드</string>
   <string name="pref_multi_search_title">MultiZim 검색</string>
+  <string name="pref_multi_search_summary">앱이 ZIM 파일을 검색할 수 있도록 허용합니다. (경고: 매우 실험적인 기능)</string>
   <string name="pref_external_link_popup_title">외부 링크에 진입할 때 경고합니다</string>
+  <string name="pref_external_link_popup_summary">추가 비용 또는 오프라인 링크로 동작하지 않음에 대한 경고에 대한 팝업을 표시합니다.</string>
   <string name="external_link_popup_dialog_title">외부 링크에 진입합니다</string>
+  <string name="external_link_popup_dialog_message">외부 링크를 입력하고 있습니다. 추가적인 데이터 전송 비용이 들거나 오프라인일 때 동작하지 않을 수 있습니다. 계속하시겠습니까?</string>
   <string name="do_not_ask_anymore">더 이상 묻지 않습니다</string>
   <string name="your_languages">선택한 언어:</string>
   <string name="other_languages">다른 언어:</string>
+  <plurals name="books_count">
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

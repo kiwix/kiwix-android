@@ -1,29 +1,31 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="menu_zim_manager">Tartalom lekérése</string>
   <string name="menu_help">Súgó</string>
   <string name="menu_home">Kezdőlap</string>
   <string name="menu_settings">Beállítások</string>
-  <string name="menu_search">Keresés</string>
-  <string name="menu_searchintext">Keresés a szövegben</string>
+  <string name="menu_search">Cikk keresése</string>
+  <string name="menu_searchintext">Keresés a lapon</string>
   <string name="menu_bookmarks">Könyvjelzők</string>
-  <string name="menu_randomarticle">Lap találomra</string>
+  <string name="menu_randomarticle">Véletlenszerű cikk</string>
   <string name="menu_fullscreen">Teljes képernyő</string>
-  <string name="menu_exitfullscreen">Kilépés a teljes képernyőből</string>
+  <string name="menu_exitfullscreen">Kilépés a teljes képernyős nézetből</string>
   <string name="menu_read_aloud">Hangosan felolvas</string>
   <string name="menu_read_aloud_stop">Felolvasás megállítása</string>
-  <string name="save_media">Média mentése másként...</string>
+  <string name="save_media">Média mentése</string>
   <string name="save_media_error">Hiba történt a média mentése közben!</string>
-  <string name="save_media_saved">Média elmentve %1s néven a Fényképek mappába</string>
-  <string name="rescan_fs_warning">ZIM-fájlok beolvasása, kis türelmet...</string>
+  <string name="save_media_saved">Média elmentve %s néven ide: Android/media/org.kiwix.../</string>
+  <string name="rescan_fs_warning">Letölthető tartalom pásztázása, kis türelmet...</string>
   <string name="button_backtotop">Vissza a lap tetejére</string>
   <string name="search_label">Keresés</string>
-  <string name="choose_file">ZIM-tartalomfájl kiválasztása (*.zim)</string>
+  <string name="choose_file">Tartalomfájl kiválasztása (*.zim)</string>
   <string name="open_in_new_tab">Hivatkozás megnyitása új lapon?</string>
-  <string name="error_nozimfilesfound">Nem található ZIM-fájl a készülékeden.\nNézd meg a súgóoldalt, ahol útmutatót találsz a Kiwix-tartalom letöltéséhez.\nHa a ZIM-fájlt már átmásoltad a készülékedre/SD-kártyádra, próbáld meg egy perc múlva ismét, vagy indítsd újra a készülékedet!</string>
+  <string name="error_nozimfilesfound">Nem található ZIM-fájl a készülékeden.\nNézd meg a súgóoldalt, ahol útmutatót találsz a tartalom betöltéséhez a Kiwixbe.\nHa a ZIM-fájlt már átmásoltad a készülékedre/külső tárolódra, próbáld meg egy perc múlva ismét, vagy indítsd újra a készülékedet!</string>
   <string name="error_filenotfound">Hiba: A kijelölt ZIM-fájl nem található.</string>
   <string name="error_fileinvalid">Hiba: A kijelölt fájl nem érvényes ZIM-fájl.</string>
   <string name="error_articleurlnotfound">Hiba: A cikk (URL: %1$s) betöltése nem sikerült.</string>
   <string name="pref_display_title">Megjelenítés</string>
+  <string name="pref_zoom_sub_title">Kicsinyítés/nagyítás</string>
   <string name="pref_zoom_dialog">Nagyítási szint</string>
   <string name="pref_info_title">Információ</string>
   <string name="pref_info_version">Verzió</string>
@@ -32,8 +34,12 @@
   <string name="pref_nightmode_summary">Inverz színek használata a cikkek megjelenítéséhez</string>
   <string name="pref_backtotop">Vissza a lap tetejére</string>
   <string name="pref_backtotop_summary">Gomb megjelenítése a lap alján, melynek segítségével visszatérhetsz a lap tetejére</string>
+  <string name="pref_hidetoolbar">Eszköztár elrejtése görgetés esetén</string>
+  <string name="pref_hidetoolbar_summary">Eszköztár elrejtése az oldal legörgetésénél</string>
   <string name="pref_language_title">Nyelv</string>
   <string name="pref_language_chooser">Válassz nyelvet</string>
+  <string name="pref_credits">Közreműködők és licenszek</string>
+  <string name="pref_credits_title">Készítők</string>
   <string name="tts_lang_not_supported">Az oldal nyelve nem támogatott, vagy a megfelelő nyelvi adatok nincsenek telepítve. A szócikk nem biztos, hogy tökéletesen olvasható.</string>
   <string name="no_reader_application_installed">Nem található telepített alkalmazás ehhez a fájltípushoz</string>
   <string name="customapp_missing_content">Az alkalmazás sérült.\nEz megtörténhet olyankor, ha eltávolítsz fájlokat az SD-kártyán.\nEl kell távolítanod, majd újra kell telepítened az alkalmazást a Play Áruházból.</string>
@@ -41,7 +47,22 @@
   <string name="no_bookmarks">Nincsenek könyvjelzők!</string>
   <string name="menu_bookmarks_list">Könyvjelzők</string>
   <string name="no_section_info">Nem található tartalomfejléc</string>
-  <string name="request_storage">A ZIM-fájlok eléréséhez szükségünk van hozzáférésre a tárhelyedhez</string>
+  <string name="request_storage">Az offline tartalom eléréséhez hozzáférésre van szükségünk a tárhelyedhez</string>
+  <string name="request_storage_custom">Ha látsz egy képernyőt lefedő figyelmeztetést, a helyrehozáshoz egyszerűen indítsd újra az eszközöd.</string>
+  <string name="clear_recent_and_tabs_history_dialog">Biztosan törölni szeretnéd a keresési előzményeidet és visszaállítani az összes aktív lapot?</string>
+  <string name="delete_recent_search_item">Törli ezt az elemet?</string>
+  <string name="pref_clear_all_history_title">Előzmények törlése</string>
+  <string name="pref_clear_all_history_summary">Töröld a mostani kereséseket és lapelőzményeket</string>
+  <string name="all_history_cleared_toast">Az összes előzmény törölve</string>
+  <string name="clear_all_history_dialog_title">Az összes előzmény törlése</string>
+  <string name="delete">Törlés</string>
+  <string name="delete_specific_search_toast">Legutóbbi keresés eltávolítva</string>
+  <string name="hint_contents_drawer_message">Balra húzással láthatod ennek a cikknek a tartalmát</string>
+  <string name="got_it">Értettem</string>
+  <string name="did_you_know">Tudtad?</string>
+  <string name="undo">Visszavonás</string>
+  <string name="tab_closed">Fül bezárva</string>
+  <string name="deleted_message">törölve</string>
   <string name="bookmark_added">Könyvjelző hozzáadva</string>
   <string name="rate_dialog_title">Értékelj minket</string>
   <string name="rate_dialog_msg_1">Ha szereted a(z)</string>
@@ -49,7 +70,119 @@
   <string name="rate_dialog_positive">Értékelés!</string>
   <string name="rate_dialog_negative">Nem, köszönöm</string>
   <string name="rate_dialog_neutral">Később</string>
+  <string name="open">Megnyitás</string>
+  <string name="bookmark_removed">Könyvjelző eltávolítva</string>
   <string name="pref_newtab_background_title">Új lap megnyitása a háttérben</string>
   <string name="pref_newtab_background_summary">Új lap megnyitásakor a háttérben fog megnyílni</string>
+  <string name="pref_extras">Extrák</string>
+  <string name="new_tab_snackbar">A cikk megnyitva egy új fülön</string>
+  <string name="search_widget_text">Kiwix keresése</string>
+  <string name="speech_prompt_text">A kereséshez beszélj</string>
+  <string name="speech_not_supported">Sajnálom, az eszközöd nem támogatja a beszédbevitelt</string>
+  <string name="download_started_library">Letöltés elkezdve...</string>
+  <string name="local_zims">Eszköz</string>
+  <string name="remote_zims">Elérhető</string>
+  <string name="zim_downloads">A letöltés folyamatban</string>
   <string name="zim_manager">Könyvtár</string>
+  <string name="delete_specific_zim">Törli ezt a fájlt?</string>
+  <string name="delete_specific_zim_toast">Fájl törölve</string>
+  <string name="zim_file_downloading">A letöltés folyamatban</string>
+  <string name="zim_file_downloaded">Letöltve</string>
+  <string name="download_pause">Szünet</string>
+  <string name="download_paused">szüneteltetve</string>
+  <string name="no_downloads_here">Nincsenek letöltések</string>
+  <string name="no_files_here">Nincsenek fájlok</string>
+  <string name="download_complete_snackbar">Letöltés kész</string>
+  <string name="download_no_space">Elégtelen mennyiségü tárhely a fájl letöltéséhez.</string>
+  <string name="space_available">Szabad tárhely:</string>
+  <string name="zim_simple">Egyszerű</string>
+  <string name="zim_nopic">Nincsenek képek</string>
+  <string name="zim_novid">Nincsenek videók</string>
+  <string name="no_network_connection">Nincs hálózati kapcsolat</string>
+  <string name="get_library_over_network">Használd a hálózatot a tartalomlista letöltéséhez. (Körülbelül 6MB)</string>
+  <string name="proceed">Folytatás</string>
+  <string name="wait_for_load">A tartalom még töltődik</string>
+  <string name="help_1">A Kiwix offline hozzáférést enged meg olyan weboldalakhoz, mint a Wikipédia egy jól tömörített formájához.</string>
+  <string name="help_2">Mit csinál a Kiwix?</string>
+  <string name="help_3">A Kiwix egy offline tartalom olvasó. Úgy viselkedik, mint egy böngésző, de az online weboldalak betöltése helyett a tartalmát egy ZIM formátumú fájlból olvassa.</string>
+  <string name="help_4">Bár a Kiwix eredetileg az offline Wikipédia megvalósítására lett tervezve, más tartalmakat is olvas.</string>
+  <string name="help_5">Hol van a tartalom?</string>
+  <string name="help_6">A tartalmunk a Kiwix weboldalán van hosztolva.</string>
+  <string name="help_7">ZIM fájlokként érhetők el. Sok közülük itt van:</string>
+  <string name="help_8">\u2022 a Wikipédia elérhető külön minden nyelven</string>
+  <string name="help_9">\u2022 Más tartalmak, mint a Wikileaks vagy a Wikisource úgyszint elérhetőek</string>
+  <string name="help_10">Letöltheted a kiválasztott ZIM fájljaidat alkalmazáson belül vagy kiválaszthatod és letöltheted ezeket egy asztali számítógépről mielőtt átküldenéd a ZIM fájlokat az SD-kártyádra.</string>
+  <string name="help_11">Az alkalmazáson belül letöltött ZIM fájlok a külső tároló könyvtár Kiwix nevű mappájában vannak elhelyezve.</string>
+  <string name="help_12">Hogyan használnak nagy ZIM fájlokat?</string>
+  <string name="help_13">Ha a ZIM fájlod nagyobb, mint 4GB, lehet, hogy nem leszel képes tárolni az SD-kártyádon a fájlrendszer korlátozásai miatt.</string>
+  <string name="help_14">Az alkalmazáson belüli letöltések automatikusan kezelik a nagyobb fájlokat, felosztva ezt neked.</string>
+  <string name="help_15">Azonban ha másik eszközön töltöd le, fel kell oszd a ZIM fájlt, használva a következő szoftvert:</string>
+  <string name="help_16">\u2022 Microsoft Windows-on: HJ-Split</string>
+  <string name="help_17">\u2022 Apple Mac OSX-en: Split and Concat</string>
+  <string name="help_19">Megjegyzés: a kapott fájljaidat a következőképpen kell nevezni: my_big_file.zimaa, my_big_file.zimab, stb.</string>
+  <string name="help_20">Köszönjük, hogy a Kiwixet választottad!</string>
+  <string name="help_21">Örülünk, hogy jelen vagy és bármilyen visszajelzést vagy javaslatot nagyra értékelnénk az android@kiwix.org címen.</string>
+  <string name="pref_storage">Tárhely</string>
+  <string name="pref_current_folder">Aktuális folder</string>
+  <string name="path_not_writable">Nem érhető el a kívánt könyvtár, ehelyett az alapértelmezett lesz használva. Ahhoz, hogy ezt helyrehozd, válaszd ki újra a kívánt könyvtárat az alkalmazás beállításainál.</string>
+  <string name="reboot_message">Egy Android 6.0 hiba következtében megkérünk indítsd újra a készüléked, hogy folytassuk a tárolási engedélyek megadása nélkül. Elnézést e kényelmetlenségért, amit ez okozott.</string>
+  <string name="delete_zim_failed">Sajnos nem tudjuk ezt a fájlt törölni. Próbáld meg egy fájlkezelőn keresztül törölni.</string>
+  <string name="tts_pause">szünet</string>
+  <string name="tts_resume">folytat</string>
+  <string name="tts_stop">leállítás</string>
+  <string name="internal_storage">Belső</string>
+  <string name="external_storage">Külső</string>
+  <string name="zim_already_downloading">A Zim letöltése folyamatban</string>
+  <string name="yes">Igen</string>
+  <string name="no">Nem</string>
+  <string name="confirm_stop_download_title">Letöltés megállítása?</string>
+  <string name="confirm_stop_download_msg">Biztosan le szeretnéd állítani ezt a letöltést?</string>
+  <string name="download_change_storage">Tároló eszköz kiválasztó</string>
+  <string name="tts_not_enabled">A szöveg ehhez a beszédhez nincs engedélyezve ennél a ZIM fájlnál</string>
+  <string name="delete_tab">Fül törlése</string>
+  <string name="next">Következő</string>
+  <string name="previous">Előző</string>
+  <string name="wifi_only_title">Engedélyezed a tartalom letöltését mobilhálózaton keresztül?</string>
+  <string name="wifi_only_msg">Ha az "Igen"-t választod nem leszel többet figyelmeztetve. Ezt azonban bármikor meg tudod változtatni a Beállításokban</string>
+  <string name="pref_wifi_only">Tartalom letöltése csak WiFi-n keresztül</string>
+  <string name="time_day">nap</string>
+  <string name="time_hour">óra</string>
+  <string name="time_minute">perc</string>
+  <string name="time_second">másodperc</string>
+  <string name="time_left">maradt</string>
+  <string name="pref_bottomtoolbar">Alsó eszköztár engedélyezése</string>
+  <string name="pref_bottomtoolbar_summary">Jeleníts meg a képernyő alján egy eszköztárat a gyors műveleteknek</string>
+  <string name="pref_autonightmode_summary">Automatikusan vált nappali és éjszakai mód között.</string>
+  <string name="pref_autonightmode">Automatikus éjszakai mód</string>
+  <string name="pref_multi_search_title">Többszörös ZIM keresés</string>
+  <string name="pref_multi_search_summary">Alkalmazás engedélyezése a ZIM fájlok keresése között (Figyelem, többnyire kísérleti célt szolgál).</string>
+  <string name="pref_external_link_popup_title">Figyelmeztess külső hivatkozások indítása esetén</string>
+  <string name="pref_external_link_popup_summary">Felugró ablakkal való figyelmeztetés többletköltségek esetén vagy ne működjön offline hivatkozásokkal.</string>
+  <string name="external_link_popup_dialog_title">Külső hivatkozás megadása</string>
+  <string name="external_link_popup_dialog_message">Egy külső hivatkozásra mentél. Ez további adatátviteli költségekhez vezethet, vagy csak egyszerűen nem fog működni, ha offline vagy. Folytatni szeretnéd?</string>
+  <string name="do_not_ask_anymore">Ne kérdezz többször</string>
+  <string name="your_languages">Nyelvek kiválasztása:</string>
+  <string name="other_languages">További nyelvek:</string>
+  <plurals name="books_count">
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

@@ -71,7 +71,6 @@
   <string name="delete_specific_zim">Cancellare questo file?</string>
   <string name="delete_specific_zim_toast">File cancellato</string>
   <string name="download_pause">Pausa</string>
-  <string name="download_play">Riproduci</string>
   <string name="download_stop">Ferma</string>
   <string name="download_paused">in pausa</string>
   <string name="no_files_here">Nessun file qui</string>
@@ -101,4 +100,26 @@
   <string name="pref_autonightmode">Modalità notte automatica</string>
   <string name="your_languages">Lingue selezionate:</string>
   <string name="other_languages">Altre lingue:</string>
+  <plurals name="books_count">
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

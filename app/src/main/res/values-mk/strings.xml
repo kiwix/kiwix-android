@@ -89,7 +89,6 @@
   <string name="zim_file_downloading">Преземам</string>
   <string name="zim_file_downloaded">Преземено</string>
   <string name="download_pause">Паузирај</string>
-  <string name="download_play">Пушти</string>
   <string name="download_stop">Запри</string>
   <string name="download_paused">паузирано</string>
   <string name="no_downloads_here">Нема преземања</string>
@@ -165,4 +164,26 @@
   <string name="do_not_ask_anymore">Повеќе не прашувај</string>
   <string name="your_languages">Избрани јазици:</string>
   <string name="other_languages">Други јазици:</string>
+  <plurals name="books_count">
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

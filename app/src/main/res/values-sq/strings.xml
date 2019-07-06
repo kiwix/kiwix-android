@@ -1,18 +1,185 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="menu_zim_manager">Merrni Lëndë</string>
   <string name="menu_help">Ndihmë</string>
-  <string name="menu_home">Faqja Krzesore</string>
-  <string name="menu_settings">Parapëlqimet</string>
-  <string name="menu_search">Kërko</string>
-  <string name="menu_searchintext">Kërko në tekst</string>
-  <string name="menu_bookmarks">Faqe-shenjues</string>
-  <string name="menu_randomarticle">Artikull i  rastit</string>
-  <string name="menu_fullscreen">Ekran i plotë</string>
+  <string name="menu_home">Kreu</string>
+  <string name="menu_settings">Rregullime</string>
+  <string name="menu_search">Kërkoni artikull</string>
+  <string name="menu_searchintext">Gjej në faqe</string>
+  <string name="menu_bookmarks">Faqerojtës</string>
+  <string name="menu_randomarticle">Artikull kuturu</string>
+  <string name="menu_fullscreen">Sa krejt ekrani</string>
   <string name="menu_exitfullscreen">Dil nga mënyra Sa Krejt Ekrani</string>
-  <string name="search_label">Kërko</string>
-  <string name="pref_display_title">Shfaq</string>
+  <string name="menu_read_aloud">Lexoje me zë</string>
+  <string name="menu_read_aloud_stop">Ndale leximin me zë</string>
+  <string name="save_media">Ruajë Median</string>
+  <string name="save_media_error">Ndodhi një gabim teksa provohej të ruhej media!</string>
+  <string name="save_media_saved">U ruajt media si %s te Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">Po skanohet për lëndë të shkarkueshme, ju lutemi, prisni…</string>
+  <string name="button_backtotop">Mbrapsht te Kreu</string>
+  <string name="search_label">Kērko</string>
+  <string name="choose_file">Përzgjidhni një Kartelë Lënde  (*.zim)</string>
+  <string name="open_in_new_tab">Të hapet lidhja në skedë të re?</string>
+  <string name="error_nozimfilesfound">S\’u gjet lëndë në pajisjen tuaj.\nHidhini një sy Faqes së Ndihmës që të merrni ide se si të ngarkohet lëndë në Kiwix.\nNëse vendosët një kartelë ZIM në pajisjen/depozitën e jashtme tuaj, mund të riprovoni pas një minute ose të rinsni pajisjen.</string>
+  <string name="error_filenotfound">Gabim: S\’u gjet dot kartela ZIM e përzgjedhur.</string>
+  <string name="error_fileinvalid">Gabim: Kartela e përzgjedhur s’është kartelë ZIM e vlefshme.</string>
+  <string name="error_articleurlnotfound">Gabim: Dështoi ngarkimi i artikullit (Url: %1$s).</string>
+  <string name="pref_display_title">Ekran</string>
+  <string name="pref_zoom_dialog">Shkallë zmadhimi/zvogëlimi</string>
   <string name="pref_info_title">Informacione</string>
-  <string name="pref_language_title">Gjuha</string>
-  <string name="menu_bookmarks_list">Faqe-shenjues</string>
-  <string name="zim_manager">Bibloteka</string>
+  <string name="pref_zoom_enable">Kontrolle zmadhimi/zvogëlimi</string>
+  <string name="pref_nightmode">Mënyra mbrëmje</string>
+  <string name="pref_nightmode_summary">Shfaqi artikujt me ngjyra së prapthi</string>
+  <string name="pref_backtotop">Mbrapsht te Kreu</string>
+  <string name="pref_backtotop_summary">Shfaq në fund të faqes një buton për t\’u ngjitur sipër në krye</string>
+  <string name="pref_hidetoolbar">Fshihe panelin gjatë rrëshqitjesh</string>
+  <string name="pref_hidetoolbar_summary">Fshihe panelin kur rrëshqitet poshtë në faqe</string>
+  <string name="pref_language_title">Gjuhë</string>
+  <string name="pref_language_chooser">Zgjidhni një gjuhë</string>
+  <string name="pref_credits">Ndihmëtarë dhe Licenca</string>
+  <string name="pref_credits_title">Falënderime</string>
+  <string name="tts_lang_not_supported">Gjuha e kësaj faqeje nuk mbulohet, ose s’janë instaluar të dhëna të gjuhës përkatëse. Artikulli mund të mos lexohet si duhet.</string>
+  <string name="no_reader_application_installed">S\’u gjet dot ndonjë aplikacion i instaluar për këtë lloj kartele</string>
+  <string name="customapp_missing_content">Aplikacioni juaj është i cenuar.\nKjo mund të ndodhë kur hiqni kartela te Kujtesa SD.\nLypset ta çinstaloni dhe mandej ta riinstaloni Aplikacioni që nga Play Store.</string>
+  <string name="go_to_play_store">Kaloni te Play Store</string>
+  <string name="no_bookmarks">S\’ka Faqerojtës</string>
+  <string name="menu_bookmarks_list">Faqerojtës</string>
+  <string name="no_section_info">S\’u gjetën Krye Lënde</string>
+  <string name="request_storage">Që të përdorni lëndë jashtë interneti, na duhet hyrje te depoja juaj</string>
+  <string name="request_storage_custom">Nëse shihni një skenë mbishtesë sinjalizim, thjesht rinisni pajisjen tuaj që ta ndreqni këtë.</string>
+  <string name="clear_recent_and_tabs_history_dialog">Jeni i sigurt se doni të fshihet historiku juaj i kërkimeve dhe të rikthehen krejt skedat aktive?</string>
+  <string name="delete_recent_search_item">Të fshihet ky objekt?</string>
+  <string name="pref_clear_all_history_title">Pastro historikun</string>
+  <string name="pref_clear_all_history_summary">Pastro historik kërkimesh dhe skedash së fundi</string>
+  <string name="all_history_cleared_toast">U pastrua Krejt Historiku</string>
+  <string name="clear_all_history_dialog_title">Pastro Krejt Historikun</string>
+  <string name="delete">Fshije</string>
+  <string name="delete_specific_search_toast">U hoqën kërkimet së fundi</string>
+  <string name="hint_contents_drawer_message">Mund ta fërkoni kah majtas që të shihni lëndën e këtij artikulli</string>
+  <string name="got_it">E kuptova</string>
+  <string name="did_you_know">E dinit se?</string>
+  <string name="undo">Zhbëje</string>
+  <string name="tab_closed">Skeda u mbyll</string>
+  <string name="deleted_message">i fshirë</string>
+  <string name="bookmark_added">U shtua faqerojtës</string>
+  <string name="rate_dialog_title">Ju Lutemi, Vlerësonani</string>
+  <string name="rate_dialog_msg_1">Nëse ju pëlqen përdorimi i</string>
+  <string name="rate_dialog_msg_2">, ju lutemi, ndaluni një çast dhe vlerësojeni. Faleminderit për përkrahjen që na bëni!</string>
+  <string name="rate_dialog_positive">Vlerësojeni!</string>
+  <string name="rate_dialog_negative">Jo, faleminderit</string>
+  <string name="rate_dialog_neutral">Më vonë</string>
+  <string name="open">Hape</string>
+  <string name="bookmark_removed">U hoq faqerojtës</string>
+  <string name="pref_newtab_background_title">Hap skedë të re në prapaskenë</string>
+  <string name="pref_newtab_background_summary">Kur hapet një skedë e re, do të hapet në prapaskenë</string>
+  <string name="pref_extras">Ekstra</string>
+  <string name="new_tab_snackbar">Artikulli u hap në skedë të re</string>
+  <string name="search_widget_text">Kërkoni në Kiwix</string>
+  <string name="speech_prompt_text">Flisni që të kërkohet \'%s\'</string>
+  <string name="speech_not_supported">Na ndjeni! Pajisja juaj nuk mbulon input përmes të folurës</string>
+  <string name="download_started_library">Shkarkimi filloi…</string>
+  <string name="local_zims">Pajisje</string>
+  <string name="remote_zims">Në linjë</string>
+  <string name="zim_downloads">Shkarkim</string>
+  <string name="zim_manager">Bibliotekë</string>
+  <string name="delete_specific_zim">Të fshihet kjo kartelë?</string>
+  <string name="delete_specific_zim_toast">Kartela u fshi</string>
+  <string name="zim_file_downloading">Po shkarkim</string>
+  <string name="zim_file_downloaded">U shkarkua</string>
+  <string name="download_pause">Ndalesë</string>
+  <string name="download_stop">Ndale</string>
+  <string name="download_paused">i ndalur</string>
+  <string name="no_downloads_here">S\’ka shkarkime këtu</string>
+  <string name="no_files_here">S\’ka kartela këtu</string>
+  <string name="download_complete_snackbar">Shkarkim i plotësuar</string>
+  <string name="download_no_space">Hapësirë e pamjaftueshme për shkarkimin e kësaj kartele.</string>
+  <string name="space_available">Hapësirë e Përdorshme:</string>
+  <string name="zim_simple">I thjeshtë</string>
+  <string name="zim_nopic">S\’ka Foto</string>
+  <string name="zim_novid">S\’ka Video</string>
+  <string name="no_network_connection">S\’ka lidhje rrjeti</string>
+  <string name="get_library_over_network">Përdor rrjetin për shkarkim liste lënde. (Afërsisht 6MB)</string>
+  <string name="proceed">Kryeje</string>
+  <string name="wait_for_load">Lëndë Ende Në Ngarkim</string>
+  <string name="help_1">Kiwix-i ju lejon përdorim pa internet të sajteve të tillë si Wikipedia, në një format tejet të ngjeshur.</string>
+  <string name="help_2">Ç’kryen Kiwix-i?</string>
+  <string name="help_3">Kiwix është një lexues lënde pa internet. Funksionon shumë ngjashëm me një shfletues, por në vend të përdorimit\n“online” të faqeve web, lëndën e lexon që nga një kartelë në formatin ZIM.</string>
+  <string name="help_4">Edhe pse fillimisht qe konceptuar për të lejuar përdorimin pa internet të Wikipedia-s, mund të përdoret edhe për lëndë tjetër.</string>
+  <string name="help_5">Ku është lënda?</string>
+  <string name="help_6">Lënda strehohet në sajtin Kiwix.</string>
+  <string name="help_7">Janë të përdorshme në trajtë kartelash ZIM. Ka plot të tilla:</string>
+  <string name="help_8">\u2022 Wikipedia mund të kihet ndaras për çdo gjuhë</string>
+  <string name="help_9">\u2022 Ka të gatshme lëndë tjetër, të tillë si Wikileaks ose Wikisource</string>
+  <string name="help_10">Mundeni ose t\’i shkarkoni brenda aplikacionit kartelat ZIM që keni zgjedhur, ose të përzgjidhni me kujdes atë(ato) që doni dhe ta(t\’i) shkarkoni nga një kompjuter desktop përpara se të shpërngulni kartelat ZIM te kujtesa juaj SD card.</string>
+  <string name="help_11">Kartelat ZIM të shkarkuara brenda aplikacionit gjenden te drejtoria e depozitimit të jashtëm, në një dosje të quajtu Kiwix.</string>
+  <string name="help_12">Si të përdoren kartela ZIM të mëdha?</string>
+  <string name="help_13">Nëse kartela juaj ZIM është më e madhe se 4GB, mund të mos jeni në gjendje ta depozitoni te kujtesa juaj SD për shkak kufizimesh nga sistemi i kartelave.</string>
+  <string name="help_14">Shkarkimi brenda aplikacionit i trajton automatikisht kartelat e mëdha, duke i ndarë në copa për ju.</string>
+  <string name="help_15">Por nëse po shkarkoni në një tjetër pajisje, mund të donit ta ndanit kartelën ZIM në copa duke përdorur programin vijues:</string>
+  <string name="help_16">\u2022 Në Microsoft Windows: HJ-Split</string>
+  <string name="help_17">\u2022 Në Apple Mac OSX: Split and Concat</string>
+  <string name="help_19">Shënim: kartelat e prodhuara për ju duhet të emërtohen si emri_i_kartelës_time_të_madhe.zimaa, emri_i_kartelës_time_të_madhe.zimab, etj.</string>
+  <string name="help_20">Faleminderit për zgjedhjen e Kiwix-it!</string>
+  <string name="help_21">Jemi të gëzuar t\’ju kemi mes nesh dhe do ta çmonim shumë çfarëdo përshtypje apo sugjerim, dërguar te android@kiwix.org.</string>
+  <string name="pref_storage">Depozitim</string>
+  <string name="pref_current_folder">Dosja e Tanishme</string>
+  <string name="path_not_writable">S\’hyhet dot te drejtori e dëshiruar, po përdoret parazgjedhja. Që të ndreqet kjo, ripërzgjidhni drejtorinë e dëshiruar te rregullimet e aplikacionit.</string>
+  <string name="reboot_message">Për shkak të një të mete në android 6.0, ju kërkojmë të rinisni pajisjen tuaj, për të vazhduar pa na akorduar leje depozitimi. Kërkojmë ndjesë për çfarëdo sikleti që kjo mund të shkaktojë.</string>
+  <string name="delete_zim_failed">Na ndjeni, s\’qemë në gjendje ta fshinim këtë kartelë. Në vend të kësaj, duhet të provoni duke përdorur një përgjegjës kartelash.</string>
+  <string name="tts_pause">ndalesë</string>
+  <string name="tts_resume">rimerre</string>
+  <string name="tts_stop">ndale</string>
+  <string name="internal_storage">I brendshëm</string>
+  <string name="external_storage">I jashtëm</string>
+  <string name="zim_already_downloading">ZIM-i është duke shkarkuar tashmë</string>
+  <string name="yes">Po</string>
+  <string name="no">Jo</string>
+  <string name="confirm_stop_download_title">Të ndalet shkarkim?</string>
+  <string name="confirm_stop_download_msg">Jeni i sigurt se dëshironi të ndalet ky shkarkim?</string>
+  <string name="download_change_storage">Përzgjedhës pajisjeje depozitimi</string>
+  <string name="tts_not_enabled">Për këtë kartelë ZIM s’bëhet dot shndërrim nga tekst në të folur</string>
+  <string name="delete_tab">Fshije Skedën</string>
+  <string name="next">Pasuesi</string>
+  <string name="previous">E mëparshmja</string>
+  <string name="wifi_only_title">Të lejohet shkarkim lënde përmes rrjetit celular?</string>
+  <string name="wifi_only_msg">Nëse zgjidhni "Po", s’do të sinjalizoheni më në të ardhmen. Sidoqoftë, mundeni përherë ta ndryshoni këtë, te Rregullimet</string>
+  <string name="pref_wifi_only">Shkarko lëndë vetëm përmes WiFi-it</string>
+  <string name="time_day">ditë</string>
+  <string name="time_minute">min.</string>
+  <string name="time_left">edhe</string>
+  <string name="pref_bottomtoolbar">Aktivizo panel të poshtëm</string>
+  <string name="pref_bottomtoolbar_summary">Shfaq në fund të ekranit një panel me butona veprimesh të shpejta</string>
+  <string name="pref_autonightmode_summary">Mënyrat ditë dhe mbrëmje këmbeji automatikisht.</string>
+  <string name="pref_autonightmode">Mënyrë mbrëmje automatike</string>
+  <string name="pref_multi_search_title">Kërkim MultiZim</string>
+  <string name="pref_multi_search_summary">Lejoje aplikacionin të kërkojë nëpër kartela ZIM (Sinjalizoji Që Kjo Është Shumë Eksperimentale).</string>
+  <string name="pref_external_link_popup_title">Sinjalizo kur hyhet në lidhje të jashtme</string>
+  <string name="pref_external_link_popup_summary">Shfaq një flluskë për të sinjalizuar mbi kosto shtesë ose për mosfunksionim lidhjesh “offline”</string>
+  <string name="external_link_popup_dialog_title">Po hyhet Në Lidhje të Jashtme</string>
+  <string name="external_link_popup_dialog_message">Po hyni në një lidhje të jashtme. Kjo mund të sjellë kosto shtesë për shpërngulje të dhënash ose thjesht mund të mos funksionojë, nëse s’jeni i lidhur në internet. Doni të vazhdohet?</string>
+  <string name="do_not_ask_anymore">Mos pyet më</string>
+  <string name="your_languages">Gjuhë të përzgjedhura:</string>
+  <string name="other_languages">Gjuhë të tjera:</string>
+  <plurals name="books_count">
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

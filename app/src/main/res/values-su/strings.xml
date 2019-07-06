@@ -33,7 +33,6 @@
   <string name="delete_specific_zim">Pupus ieu berkas?</string>
   <string name="delete_specific_zim_toast">Berkas geus dipupus</string>
   <string name="download_pause">Tunda</string>
-  <string name="download_play">Maénkeun</string>
   <string name="download_stop">Eureun</string>
   <string name="download_paused">ditunda</string>
   <string name="no_downloads_here">Euweuh undeuran di dieu</string>
@@ -46,4 +45,26 @@
   <string name="confirm_stop_download_title">Eureunkeun undeuran?</string>
   <string name="download_change_storage">Pamilih parangkat panyimpenan</string>
   <string name="delete_tab">Pupus Tag</string>
+  <plurals name="books_count">
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

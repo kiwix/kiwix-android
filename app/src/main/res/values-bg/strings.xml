@@ -1,20 +1,21 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="menu_zim_manager">Вземете съдържание</string>
   <string name="menu_help">Помощ</string>
-  <string name="menu_home">Начална страница</string>
+  <string name="menu_home">Начало</string>
   <string name="menu_settings">Настройки</string>
-  <string name="menu_search">Търсене</string>
-  <string name="menu_searchintext">Откриване в текста</string>
+  <string name="menu_search">Търси публикация</string>
+  <string name="menu_searchintext">Търси в страницата</string>
   <string name="menu_bookmarks">Отметки</string>
   <string name="menu_randomarticle">Случайна статия</string>
   <string name="menu_fullscreen">Цял екран</string>
   <string name="menu_exitfullscreen">Изход от цял екран</string>
   <string name="menu_read_aloud">Четене на глас</string>
   <string name="menu_read_aloud_stop">Спиране четенето на глас</string>
-  <string name="save_media">Съхраняване на медията като...</string>
+  <string name="save_media">Запази медията</string>
   <string name="save_media_error">Възникна грешка при опита за съхранение на медийния файл!</string>
   <string name="save_media_saved">Медийният файл е съхранен под името %s в Android/media/org.kiwix.../</string>
-  <string name="rescan_fs_warning">Сканиране на файлове за сваляне, моля, изчакайте...</string>
+  <string name="rescan_fs_warning">Сканиране на файлове за изтегляне, моля, изчакайте...</string>
   <string name="button_backtotop">Връщане в началото</string>
   <string name="search_label">Търсене</string>
   <string name="choose_file">Изберете файл със съдържание (*.zim)</string>
@@ -23,7 +24,8 @@
   <string name="error_filenotfound">Грешка: Избраният ZIM файл не е намерен.</string>
   <string name="error_fileinvalid">Грешка: Избраният файл не е валиден ZIM файл.</string>
   <string name="error_articleurlnotfound">Грешка: Зареждането на статия (Url: %1$s) е неуспешно.</string>
-  <string name="pref_display_title">Показване</string>
+  <string name="pref_display_title">Покажете</string>
+  <string name="pref_zoom_sub_title">Увеличение</string>
   <string name="pref_zoom_dialog">Ниво на мащабиране</string>
   <string name="pref_info_title">Информация</string>
   <string name="pref_info_version">Версия</string>
@@ -32,8 +34,12 @@
   <string name="pref_nightmode_summary">Показване на статии в „нощен режим“</string>
   <string name="pref_backtotop">Връщане в началото</string>
   <string name="pref_backtotop_summary">Показване на бутон в края на страницата за превъртане нагоре</string>
+  <string name="pref_hidetoolbar">Скривайте туулбара, когато скролирате</string>
+  <string name="pref_hidetoolbar_summary">Скривайте туулбара, когато скролирате страницата надолу</string>
   <string name="pref_language_title">Език</string>
   <string name="pref_language_chooser">Избиране на език</string>
+  <string name="pref_credits">Сътрудници и лицензи</string>
+  <string name="pref_credits_title">За участниците в проекта</string>
   <string name="tts_lang_not_supported">Езикът на тази страница не се поддържа, или не е инсталиран подходящ език за данни. Статията не може да бъде разчетена правилно.</string>
   <string name="no_reader_application_installed">Не бе намерено инсталирано приложение за този тип файлове</string>
   <string name="customapp_missing_content">Приложението Ви е повредено.\nТова може да се случи, когато премахвате файлове от SD картата.\nТрябва да деинсталирате, след това да инсталирате приложението от Play Store.</string>
@@ -42,10 +48,20 @@
   <string name="menu_bookmarks_list">Отметки</string>
   <string name="no_section_info">Не са открити заглавки на съдържанието</string>
   <string name="request_storage">За достъп до офлайн съдържание, ни е нужен достъп до файловото Ви хранилище</string>
+  <string name="request_storage_custom">Ако виждате предупреждение за припокриване на екрана, просто рестартирайте своето устройство, за да коригирате проблема.</string>
+  <string name="clear_recent_and_tabs_history_dialog">Сигурни ли сте, че желаете да изтриете историята на вашите търсения и да рестартирате всички активни табове?</string>
   <string name="delete_recent_search_item">Изтриване на този елемент?</string>
+  <string name="pref_clear_all_history_title">Изтрий история</string>
+  <string name="pref_clear_all_history_summary">Изтрийте последните търсения и история на табовете</string>
+  <string name="all_history_cleared_toast">Историята е изтрита</string>
+  <string name="clear_all_history_dialog_title">Изтрий историята</string>
   <string name="delete">Изтриване</string>
+  <string name="delete_specific_search_toast">Последните търсения са изтрити</string>
+  <string name="hint_contents_drawer_message">Може да плъзнете наляво, за да прегледате съдържанието на статията</string>
+  <string name="got_it">Разбрано</string>
   <string name="did_you_know">Знаете ли, че?</string>
   <string name="undo">Отмяна</string>
+  <string name="tab_closed">Табът е затворен</string>
   <string name="deleted_message">изтрито</string>
   <string name="bookmark_added">Добавена е отметка</string>
   <string name="rate_dialog_title">Моля, оценете ни</string>
@@ -55,19 +71,119 @@
   <string name="rate_dialog_negative">Не, благодаря</string>
   <string name="rate_dialog_neutral">По-късно</string>
   <string name="open">Отваряне</string>
+  <string name="bookmark_removed">Отметката е премахната</string>
   <string name="pref_newtab_background_title">Отваряне на нов подпрозорец в заден план</string>
   <string name="pref_newtab_background_summary">При отварянето на нов подпрозорец, той ще се отвори във фонов режим</string>
+  <string name="pref_extras">Екстри</string>
+  <string name="new_tab_snackbar">Публикацията отворена в нов таб</string>
   <string name="search_widget_text">Търсене в Kiwix</string>
+  <string name="speech_prompt_text">Говорете, за да търсите %s</string>
+  <string name="speech_not_supported">Съжаляваме! Вашето устройство не поддържа  въвеждане чрез глас.</string>
+  <string name="download_started_library">Даунлоуда стартиран...</string>
+  <string name="local_zims">Устройство</string>
+  <string name="remote_zims">Онлайн</string>
   <string name="zim_downloads">Изтегляне</string>
   <string name="zim_manager">Библиотека</string>
+  <string name="delete_specific_zim">Да бъде ли изтрит този файл?</string>
   <string name="delete_specific_zim_toast">Файлът е изтрит</string>
   <string name="zim_file_downloading">Изтегляне</string>
   <string name="zim_file_downloaded">Изтеглено</string>
   <string name="download_pause">Пауза</string>
+  <string name="download_stop">Стоп</string>
+  <string name="download_paused">на пауза</string>
+  <string name="no_downloads_here">Тук няма смъкнати файлове</string>
+  <string name="no_files_here">Тук няма файлове</string>
+  <string name="download_complete_snackbar">Изтеглянето приключи</string>
+  <string name="download_no_space">Няма достатъчно място за даунлоуд на този файл.</string>
+  <string name="space_available">Налично пространство:</string>
+  <string name="zim_simple">Просто</string>
+  <string name="zim_nopic">Без картинки</string>
+  <string name="zim_novid">Без видео клипове</string>
+  <string name="no_network_connection">Няма връзка с мрежата</string>
+  <string name="get_library_over_network">Използвайте мрежата за даунлоуд на списъка със съдържанието.\n(Приблизително 6MB)</string>
+  <string name="proceed">Продължете</string>
+  <string name="wait_for_load">Съдържанието все още се зарежда</string>
+  <string name="help_1">Kiwix ви позволява офлайн достъп до уебсайтове като Уикипедия в силно компресиран вид.</string>
+  <string name="help_2">Какво прави Kiwix?</string>
+  <string name="help_3">Kiwix е офлайн четец на съдържание. Той действа като браузър, но вместо да зарежда съдържанието от онлайн уеб страници, той зарежда съдържанието от файл в ZIM формат.</string>
+  <string name="help_4">Въпреки че Kiwix е проектиран първоначално, да предоставя достъп до Уикипедия офлайн, той е способен, да предоставя достъп и до друго съдържание.</string>
+  <string name="help_5">Къде е съдържанието?</string>
+  <string name="help_6">Нашето съдържание се хоства на сайта на Kiwix.</string>
+  <string name="help_7">Те са достъпни като ZIM файлове. Съществуват много от тях:</string>
+  <string name="help_8">\u2022 Уикипедия е налична отделно за всеки език.</string>
+  <string name="help_9">\u2022 Също така е налично и съдържание от други източници, като Уикилиийкс и Уикисорс.</string>
+  <string name="help_10">Вие можете или да смъкнете избраните от вас ZIM файлове, докато сте в мобилното приложение, или да изберете внимателно желаните от вас и да ги смъкнете от десктоп компютър, след което да прехвърлите ZIM файловете във вашата SD карта.</string>
+  <string name="help_11">ZIM файловете, които са смъкнати в мобилното приложение, се намират във външната памет, в папка с име Kiwix.</string>
+  <string name="help_12">Как да използвате големи ZIM файлове?</string>
+  <string name="help_13">В случай, че вашият ZIM файл е по-голям от 4GB, е възможно да бъдете възпрепятствани да го съхраните на вашата SD  карта поради ограничения на файловата система.</string>
+  <string name="help_14">Даунлоуда в мобилното приложение автоматично обработва по-големите файлове, разделяйки ги на по-малки парчета.</string>
+  <string name="help_15">В случай обаче, че извършвате даунлоуда на друго устройство, може да се наложи да разделите ZIM файла на по-малки парчета, като за целта използвате следния софтуер:</string>
+  <string name="help_16">\u2022 Под Microsoft Windows: HJ-Split</string>
+  <string name="help_17">\u2022 Под Apple Mac OSX: Split and Concat</string>
+  <string name="help_19">Забележка: файловете, които са в резултат на разделянето трябва да са наименувани по следния начин - my_big_file.zimaa, my_big_file.zimab, и т.н.</string>
+  <string name="help_20">Благодарим Ви, че избрахте Kiwix!</string>
+  <string name="help_21">Радваме се че сте с нас и бихме оценили всякакви отзиви и предложения на адрес android@kiwix.org</string>
+  <string name="pref_storage">Съхраняване на данни</string>
+  <string name="pref_current_folder">Текуща папка</string>
+  <string name="path_not_writable">Няма достъп до желаната директория, използва се директорията по подразбиране. За да коригирате това, изберете отново желана директория в настройките на приложението.</string>
+  <string name="reboot_message">Поради бъг в Андроид 6.0, изискваме да рестартирате устройството си, за да продължите, без да ни предоставите разрешение за съхранение на данни. Извиняваме се за евентуалното неудобство.</string>
+  <string name="delete_zim_failed">За съжаление не успяхме да изтрием този файл. Необходимо е да използвате файлов мениджър за тази цел.</string>
+  <string name="tts_pause">пауза</string>
+  <string name="tts_resume">продължете</string>
+  <string name="tts_stop">стоп</string>
+  <string name="internal_storage">Вътрешни</string>
+  <string name="external_storage">Външни</string>
+  <string name="zim_already_downloading">Zim вече се смъква</string>
   <string name="yes">Да</string>
   <string name="no">Не</string>
+  <string name="confirm_stop_download_title">Да се прекрати ли даунлоуда?</string>
+  <string name="confirm_stop_download_msg">Сигурни ли сте, че желаете да прекъснете този даунлоуд?</string>
+  <string name="download_change_storage">Селектор на устройство за съхраняване на данни</string>
+  <string name="tts_not_enabled">Текст към говор не е позволен за този ZIM файл</string>
+  <string name="delete_tab">Изтрийте таб</string>
+  <string name="next">Следващи</string>
+  <string name="previous">Предишни</string>
+  <string name="wifi_only_title">Ще позволите ли смъкването на съдържание, чрез мобилната мрежа?</string>
+  <string name="wifi_only_msg">Ако изберет "Да", Вие няма да бъдете предупреждавани в бъдеще. Както и да е, Вие винаги може да промените това в Настройки</string>
+  <string name="pref_wifi_only">Смъквай съдържание само чрез  WiFi</string>
   <string name="time_day">ден</string>
   <string name="time_hour">ч.</string>
   <string name="time_minute">мин.</string>
   <string name="time_second">сек.</string>
+  <string name="time_left">остават</string>
+  <string name="pref_bottomtoolbar">Позволете туулбара от долната страна</string>
+  <string name="pref_bottomtoolbar_summary">Показва туулбар с бързи действия от долната страна на екрана</string>
+  <string name="pref_autonightmode_summary">Превключвай автоматично между дневен и нощен режим.</string>
+  <string name="pref_autonightmode">Автоматичен нощен режим.</string>
+  <string name="pref_multi_search_title">MultiZim търсене</string>
+  <string name="pref_multi_search_summary">Позволете на приложението да търси в множество ZIM файлове (Внимание, твърде експериментална опция).</string>
+  <string name="pref_external_link_popup_title">При зареждане на външни препратки</string>
+  <string name="pref_external_link_popup_summary">Показва попъп, за да предупреди за допълнителни разходи или неработещи в офлайн режим препратки.</string>
+  <string name="external_link_popup_dialog_title">Зареждане на външна препратка</string>
+  <string name="external_link_popup_dialog_message">Предстои Ви, да заредите външна препратка. Това може да доведе до допълнителни разходи за трансфер на данни или просто няма да работи, когато сте офлайн. Желаете ли да продължите?</string>
+  <string name="do_not_ask_anymore">Не питайте отново за това</string>
+  <string name="your_languages">Избрани езици:</string>
+  <string name="other_languages">Други езици:</string>
+  <plurals name="books_count">
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

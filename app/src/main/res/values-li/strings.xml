@@ -1,16 +1,143 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="menu_zim_manager">Haol inhawd op</string>
   <string name="menu_help">Hölp</string>
-  <string name="menu_home">Huidmenu</string>
-  <string name="menu_settings">Veurkäöre</string>
-  <string name="menu_search">Zeuk</string>
-  <string name="menu_searchintext">Zeuk in teks</string>
+  <string name="menu_home">Heim</string>
+  <string name="menu_settings">Instèllinge</string>
+  <string name="menu_search">Zeuk artikel</string>
+  <string name="menu_searchintext">Zeuk op pagina</string>
   <string name="menu_bookmarks">Blaadwiezers</string>
   <string name="menu_randomarticle">Willekäörig artikel</string>
-  <string name="menu_fullscreen">Volledig sjirm</string>
+  <string name="menu_fullscreen">Volstenjig sjerm</string>
+  <string name="menu_exitfullscreen">Sloet volstenjig sjerm aaf</string>
+  <string name="menu_read_aloud">Laes veur</string>
+  <string name="menu_read_aloud_stop">Sjei oet mit veurlaeze</string>
+  <string name="button_backtotop">Trök nao baove</string>
   <string name="search_label">Zeuk</string>
-  <string name="pref_display_title">Bild</string>
+  <string name="choose_file">Sillekteer \'n Inhawdsbestandj (*.zim)</string>
+  <string name="open_in_new_tab">Äöpen link in nuuj tabblaad?</string>
+  <string name="error_nozimfilesfound">Geinen inhawd gevónje op die toestèl.\nKiek efkes nao de Hölppagina veur aanwiezinge wie se inhawd mós hoeaglaje nao Kiwix.\nEs se e ZIM-bestandj op die toestèl of extern opslaagplaats höbs gezat, kins se det nao \'ne menuut oppernuuj perbere of die toestèl oppernuuj opstarte.</string>
+  <string name="error_filenotfound">Fout: \'t geselecteerd ZIM-bestandj kós neet waere gevónje.</string>
+  <string name="error_fileinvalid">Fout: \'t geselecteerd bestandj is gei geldig ZIM-bestandj.</string>
+  <string name="error_articleurlnotfound">Fout: \'t laje van de pagina (URL: %1$s) is mislök.</string>
+  <string name="pref_display_title">Waergaaf</string>
+  <string name="pref_zoom_sub_title">Zoom in</string>
+  <string name="pref_zoom_dialog">Inzoomniveau</string>
   <string name="pref_info_title">Infermasie</string>
-  <string name="pref_language_title">Sjpraok</string>
+  <string name="pref_info_version">Versie</string>
+  <string name="pref_zoom_enable">Inzoompaneel</string>
+  <string name="pref_nightmode">Nachmodus</string>
+  <string name="pref_nightmode_summary">Tuin artikele mit ómgedrejde kluuere</string>
+  <string name="pref_backtotop">Trök nao baove</string>
+  <string name="pref_backtotop_summary">Tuin \'ne knoep anen ènj vanne pagina veur trögk te gaon nao baove</string>
+  <string name="pref_language_title">Spraok</string>
+  <string name="pref_language_chooser">Kees \'n spraok</string>
+  <string name="pref_credits">Mitwirkers en Licensies</string>
+  <string name="pref_credits_title">Toesjrif</string>
+  <string name="customapp_missing_content">Dien applikaasje is verknoodj.\nDit kan zeen gebeurdj wie se bestenj van dien SD-kaart höbs aafgehaoldj.\nDoe mós de applikaasje deïnstalleren en den al oppernuuj installere vanoet de Play Store.</string>
+  <string name="go_to_play_store">Gank nao de Play Store</string>
+  <string name="no_bookmarks">Gein blaadwiezers</string>
   <string name="menu_bookmarks_list">Blaadwiezers</string>
+  <string name="no_section_info">Gein inhawdsköpkes gevónje</string>
+  <string name="clear_recent_and_tabs_history_dialog">Wèts se zeker det se dien zeukgesjiechte wils ewegsjaffen en alle aktief tabblajer oppernuuj wils instèlle?</string>
+  <string name="delete_recent_search_item">Sjaf dit deil eweg?</string>
+  <string name="pref_clear_all_history_title">Maak gesjiedenis laeg</string>
+  <string name="pref_clear_all_history_summary">Haol recènte zeukopdrachte en tabblajer eweg oete gesjiechte</string>
+  <string name="all_history_cleared_toast">Ganse gesjiechte eweggehaold</string>
+  <string name="clear_all_history_dialog_title">Maak ganse gesjiechte laeg</string>
+  <string name="delete">Sjaf eweg</string>
+  <string name="delete_specific_search_toast">Recènte zeukopdrach eweggesjaf</string>
+  <string name="hint_contents_drawer_message">Doe kans nao links vaege veur de inhawd van dit artikel te bekieke</string>
+  <string name="got_it">Verstange</string>
+  <string name="did_you_know">Wèts se det?</string>
+  <string name="deleted_message">eweggesjaf</string>
+  <string name="bookmark_added">Blaadwiezer tougeveug</string>
+  <string name="rate_dialog_title">Beoeardeil ós estebleef</string>
+  <string name="rate_dialog_msg_1">Es se blie bös mit</string>
+  <string name="rate_dialog_msg_2">, gaef den efkes \'n beoeardeiling. Danke veure stäön!</string>
+  <string name="rate_dialog_positive">Beoeardeil!</string>
+  <string name="rate_dialog_negative">Nae, danke</string>
+  <string name="open">Äöpen</string>
+  <string name="bookmark_removed">Blaadwiezer eweggehaold</string>
+  <string name="pref_newtab_background_title">Äöpen nuuj tabblaad in achtergróndj</string>
+  <string name="pref_newtab_background_summary">Wen se e nuuj tabblaad äöpens den kump det oppen achtergróndj</string>
+  <string name="pref_extras">Extra</string>
+  <string name="new_tab_snackbar">Artikel äöpent zich in nuuj tabblaad</string>
+  <string name="download_started_library">Download begós...</string>
+  <string name="local_zims">Toustèl</string>
+  <string name="delete_specific_zim">Sjaf dit bestandj eweg?</string>
+  <string name="delete_specific_zim_toast">Bestandj eweggesjaf</string>
+  <string name="download_pause">Pauseer</string>
+  <string name="download_stop">Oetgesjèd</string>
+  <string name="download_paused">gepauseerd</string>
+  <string name="no_downloads_here">Gein downloads hie</string>
+  <string name="no_files_here">Gein bestenj hie</string>
+  <string name="download_complete_snackbar">Download is aaf</string>
+  <string name="download_no_space">Neet zat ruumdje veur dit bestandj te downloade.</string>
+  <string name="no_network_connection">Gein netwerkverbinjing</string>
+  <string name="get_library_over_network">Gebroek nètwerk veur de inhawdslies te downloade. (zoeaget 6MB)</string>
+  <string name="proceed">Gank wiejer</string>
+  <string name="help_1">Kiwix bèdj dich offline-toegank aan websites wie Wikipedia in \'nen hieël samegedrökdje vorm.</string>
+  <string name="help_2">Waat doon v\'r bie Kiwix?</string>
+  <string name="help_5">Wo is d\'n inhawd?</string>
+  <string name="help_6">Ozen inhawd is óngergebrach oppe Kiwix-website.</string>
+  <string name="help_7">ZIM-bestenj zint te kriege. Väöl daovan bestaon:</string>
+  <string name="help_8">\u2022 Wikipedia is apaart besjikbaar veur eder spraok</string>
+  <string name="help_9">\u2022 Angeren inhawd wie Wikileaks or Wikisource is ouch besjikbaar</string>
+  <string name="help_12">Wie mós se groeate ZIM-bestenj gebroeke?</string>
+  <string name="help_16">\u2022 Op Microsoft Windows: HJ-Split</string>
+  <string name="help_17">\u2022 Op Apple Mac OSX: Split en Concat</string>
+  <string name="help_19">Opmirking: dien rizzelterende bestenj mótte \'t volgende heite: my_big_file.zimaa, my_big_file.zimab, etc.</string>
+  <string name="help_20">Danke det se veur Kiwix höbs gekaoze!</string>
+  <string name="pref_storage">Opslaag</string>
+  <string name="pref_current_folder">Hujige Map</string>
+  <string name="path_not_writable">Kan de gewunsjde map neet äöpene mitte standerdinstèlling. Veur dit op te losse mós se de gewunsjde map oppernuuj aanvinke inne toepassingsinstèllinge.</string>
+  <string name="delete_zim_failed">V\'r kóste dit bestandj neet ewegsjaffe. Doe mós dit noe perbere mit \'ne bestandjsbehieërder.</string>
+  <string name="internal_storage">Intern</string>
+  <string name="external_storage">Exterm</string>
+  <string name="no">Nein</string>
+  <string name="confirm_stop_download_title">Sjei oet mit downloade?</string>
+  <string name="confirm_stop_download_msg">Wèts se zeker det se dezen download wils laote oetsjeie?</string>
+  <string name="download_change_storage">Opslaagapparaatsillekteerder</string>
+  <string name="delete_tab">Sjaf tabblaad eweg</string>
+  <string name="next">Volgende</string>
+  <string name="previous">Veurige</string>
+  <string name="pref_wifi_only">Download inhawd allein via de WiFi</string>
+  <string name="time_day">daag</string>
+  <string name="time_hour">o</string>
+  <string name="time_minute">m</string>
+  <string name="time_left">links</string>
+  <string name="pref_bottomtoolbar">Zèt de gereidsjapsbalk óngeraan aan</string>
+  <string name="pref_bottomtoolbar_summary">Tuin \'ne gereidsjapsbalk mit snel hanjelinge óngeraan \'t sjerm</string>
+  <string name="pref_autonightmode_summary">Sjakel autematis tösse daag- en nachmodus</string>
+  <string name="pref_autonightmode">Automatiseerde nachmodus</string>
+  <string name="pref_multi_search_title">MultiZim-zeuk</string>
+  <string name="pref_multi_search_summary">Staon d\'n app toe te zeuke door ZIM-bestenj (Waorsjoewing: hieël experimenteel!).</string>
+  <string name="pref_external_link_popup_title">Waorsjoewing mich wen ich nao \'nen externe link gaon</string>
+  <string name="external_link_popup_dialog_title">Externe link in \'nt tikke</string>
+  <string name="external_link_popup_dialog_message">Doe bös \'nen externe link in \'nt tikke. Det kan leie toet extra köste veur \'t euverbringe van gegaeves of wirk neet wen se offline bös. Wils se doorgaon?</string>
+  <string name="do_not_ask_anymore">Vraog nimmieë</string>
+  <string name="other_languages">Anger spraoke:</string>
+  <plurals name="books_count">
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

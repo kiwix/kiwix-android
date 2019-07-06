@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
   <string name="menu_help">Msaada</string>
-  <string name="menu_home">Maskani</string>
-  <string name="menu_settings">Mapendekezo</string>
-  <string name="menu_search">Tafuta</string>
-  <string name="menu_searchintext">Tafuta katika makala</string>
+  <string name="menu_home">Mwanzo</string>
+  <string name="menu_settings">Mipangilio</string>
+  <string name="menu_search">Tafuta makala</string>
+  <string name="menu_searchintext">Tafuta katika ukurasa</string>
   <string name="menu_bookmarks">Maalamisho</string>
   <string name="menu_randomarticle">Ukurasa wa bahati</string>
   <string name="menu_fullscreen">Skrini nzima</string>
@@ -24,6 +24,7 @@
   <string name="error_fileinvalid">Hitilafu:Faili iliyochaguliwa sio faili sahihi ya ZIM.</string>
   <string name="error_articleurlnotfound">Hitilafu:Upakiaji wa makala umefeli (Url: %1$s)</string>
   <string name="pref_display_title">Onesha</string>
+  <string name="pref_zoom_sub_title">Vuta karibu/mbali</string>
   <string name="pref_zoom_dialog">Kiwango cha ukuzi</string>
   <string name="pref_info_title">Maarifa</string>
   <string name="pref_info_version">Toleo</string>
@@ -34,6 +35,45 @@
   <string name="pref_backtotop_summary">Onyesha kidude kwenye mwisho wa kurasa ili kurudi hadi sehemu ya juu</string>
   <string name="pref_language_title">Lugha</string>
   <string name="pref_language_chooser">Chagua lugha</string>
+  <string name="go_to_play_store">Enda kwa Play Store</string>
+  <string name="no_bookmarks">Hakuna maalamisho</string>
   <string name="menu_bookmarks_list">Maalamisho</string>
+  <string name="delete">Futa</string>
+  <string name="got_it">Nimeipata</string>
+  <string name="undo">Tengua</string>
+  <string name="deleted_message">imefutwa</string>
+  <string name="search_widget_text">Tafuta Kiwix</string>
+  <string name="zim_downloads">Inapakua</string>
   <string name="zim_manager">Maktaba</string>
+  <string name="zim_file_downloading">Inapakua</string>
+  <string name="zim_file_downloaded">Imepakua</string>
+  <string name="zim_nopic">Hakuna picha</string>
+  <string name="zim_novid">Hakuna video</string>
+  <string name="internal_storage">Ndani</string>
+  <string name="external_storage">Nje</string>
+  <string name="no">Hapana</string>
+  <string name="next">Ijayo</string>
+  <string name="other_languages">Lugha zingine:</string>
+  <plurals name="books_count">
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>
