@@ -179,7 +179,7 @@ public class WifiHotspotManager {
     }
   }
 
-  private void hotspotDetailsDialog() {
+  public void hotspotDetailsDialog() {
 
     Log.v("DANG", "Coming hotspot details dialog :4");
 
@@ -189,10 +189,18 @@ public class WifiHotspotManager {
       //Do nothing
     });
     builder.setTitle(context.getString(R.string.hotspot_turned_on));
-    builder.setMessage(
-        context.getString(R.string.hotspot_details_message) + "\n" + context.getString(
-            R.string.hotspot_ssid_label) + " " + currentConfig.SSID + "\n" + context.getString(
-            R.string.hotspot_pass_label) + " " + currentConfig.preSharedKey);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      builder.setMessage(
+          context.getString(R.string.hotspot_details_message) + "\n" + context.getString(
+              R.string.hotspot_ssid_label) + " " + currentConfig.SSID + "\n" + context.getString(
+              R.string.hotspot_pass_label) + " " + currentConfig.preSharedKey);
+    } else {
+      currentConfig = getWifiApConfiguration();
+      builder.setMessage(
+          context.getString(R.string.hotspot_details_message) + "\n" + context.getString(
+              R.string.hotspot_ssid_label) + " " + currentConfig.SSID + "\n" + context.getString(
+              R.string.hotspot_pass_label) + " " + currentConfig.preSharedKey);
+    }
     AlertDialog dialog = builder.create();
     dialog.show();
     Log.v("DANG", "Coming end of hotspot details dialog :5");

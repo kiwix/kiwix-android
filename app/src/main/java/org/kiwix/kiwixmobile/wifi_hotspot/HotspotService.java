@@ -23,6 +23,7 @@ import static org.kiwix.kiwixmobile.main.MainActivity.ACTION_TURN_OFF_AFTER_O;
 import static org.kiwix.kiwixmobile.main.MainActivity.ACTION_TURN_OFF_BEFORE_O;
 import static org.kiwix.kiwixmobile.main.MainActivity.ACTION_TURN_ON_AFTER_O;
 import static org.kiwix.kiwixmobile.main.MainActivity.ACTION_TURN_ON_BEFORE_O;
+import static org.kiwix.kiwixmobile.main.MainActivity.startHotspotDetails;
 
 public class HotspotService extends Service {
   private static final int HOTSPOT_NOTIFICATION_ID = 666;
@@ -57,6 +58,8 @@ public class HotspotService extends Service {
     switch (intent.getAction()) {
       case ACTION_TURN_ON_BEFORE_O:
         if (hotspotManager.setWifiEnabled(null, true)) {
+          Log.v("DANG", "INSIDE");
+          startHotspotDetails();
           updateNotification(getString(R.string.hotspot_running), true);
         }
         break;

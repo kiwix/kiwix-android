@@ -185,7 +185,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   public static boolean refresh;
   public static boolean wifiOnly;
   public static boolean nightMode;
-  private WifiHotspotManager wifiHotspotManager;
+  private static WifiHotspotManager wifiHotspotManager;
   private static Uri KIWIX_LOCAL_MARKET_URI;
   private static Uri KIWIX_BROWSER_MARKET_URI;
   private final ArrayList<String> bookmarks = new ArrayList<>();
@@ -1097,6 +1097,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         //hotspotManager.setWifiEnabled(null, true);
       }
     }
+  }
+
+  public static void startHotspotDetails() {
+    wifiHotspotManager.hotspotDetailsDialog();
   }
 
   private void startService(String ACTION) {
