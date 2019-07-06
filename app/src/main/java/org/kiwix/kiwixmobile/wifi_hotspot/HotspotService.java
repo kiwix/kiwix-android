@@ -25,6 +25,11 @@ import static org.kiwix.kiwixmobile.main.MainActivity.ACTION_TURN_ON_AFTER_O;
 import static org.kiwix.kiwixmobile.main.MainActivity.ACTION_TURN_ON_BEFORE_O;
 import static org.kiwix.kiwixmobile.main.MainActivity.startHotspotDetails;
 
+/**
+ * HotspotService is used to add a foreground service for the wifi hotspot.
+ * Created by Adeel Zafar on 07/01/2019.
+ */
+
 public class HotspotService extends Service {
   private static final int HOTSPOT_NOTIFICATION_ID = 666;
   public static final String ACTION_START = "hotspot_start";
