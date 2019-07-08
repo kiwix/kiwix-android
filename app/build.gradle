@@ -226,20 +226,13 @@ android {
   testBuildType "debug"
 
   lintOptions {
-    // Treat lint seriously
     abortOnError true
-    // Hardcoded strings in xml
-    error "HardcodedText"
-    // Hardcoded strings in setText
-    error "SetTextI18n"
-    // Strings.xml issues
-    warning "ExtraTranslation"
-    warning "MissingTranslation"
-
-    // Warnings
-    warning "InvalidPackage"
-    warning "StringFormatInvalid"
+    checkAllWarnings true
+    warningsAsErrors true
+    ignore 'MissingTranslation' //TODO stop ignoring
+    baseline file("lint-baseline.xml")
   }
+
   testOptions {
     unitTests.returnDefaultValues = true
     unitTests.all {
