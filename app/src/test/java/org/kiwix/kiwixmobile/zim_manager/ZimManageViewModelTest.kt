@@ -59,6 +59,7 @@ import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CanWrite4G
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.NOT_CONNECTED
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.FileSelectListState
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
@@ -221,8 +222,8 @@ class ZimManageViewModelTest {
       val expectedList = listOf(bookOnDisk())
       booksOnDiskListItems.onNext(expectedList)
       testScheduler.triggerActions()
-      viewModel.bookItems.test()
-          .assertValue(expectedList)
+      viewModel.fileSelectListStates.test()
+          .assertValue(FileSelectListState(expectedList))
     }
 
     @Test

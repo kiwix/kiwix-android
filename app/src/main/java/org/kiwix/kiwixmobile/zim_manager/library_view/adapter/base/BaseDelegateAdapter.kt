@@ -30,7 +30,7 @@ abstract class BaseDelegateAdapter<ITEM>(
     setHasStableIds(true)
   }
 
-  var itemList: List<ITEM> = mutableListOf()
+  var items: List<ITEM> = mutableListOf()
     set(value) {
       field = value
       notifyDataSetChanged()
@@ -41,19 +41,19 @@ abstract class BaseDelegateAdapter<ITEM>(
     viewType: Int
   ) = delegateManager.createViewHolder(parent, viewType)
 
-  override fun getItemCount() = itemList.size
+  override fun getItemCount() = items.size
   override fun onBindViewHolder(
     holder: ViewHolder,
     position: Int
   ) {
-    delegateManager.onBindViewHolder(itemList[position], holder)
+    delegateManager.onBindViewHolder(items[position], holder)
   }
 
   override fun getItemViewType(position: Int) =
-    delegateManager.getViewTypeFor(itemList[position])
+    delegateManager.getViewTypeFor(items[position])
 
   override fun getItemId(position: Int): Long {
-    return getIdFor(itemList[position])
+    return getIdFor(items[position])
   }
 
   abstract fun getIdFor(item:ITEM):Long

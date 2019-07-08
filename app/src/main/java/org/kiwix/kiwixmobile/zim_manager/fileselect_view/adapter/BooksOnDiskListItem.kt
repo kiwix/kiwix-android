@@ -6,6 +6,7 @@ import java.io.File
 import java.util.Locale
 
 sealed class BooksOnDiskListItem {
+  var isSelected: Boolean = false
   abstract val id: Long
 
   data class LanguageItem constructor(

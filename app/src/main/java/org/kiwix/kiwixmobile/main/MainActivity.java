@@ -364,6 +364,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
              open(bookOnDiskItem);
              return Unit.INSTANCE;
            },
+           null,
            null),
         BookOnDiskDelegate.LanguageDelegate.INSTANCE
     );
@@ -2098,7 +2099,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @Override
   public void addBooks(List<BooksOnDiskListItem> books) {
-    booksAdapter.setItemList(books);
+    booksAdapter.setItems(books);
   }
 
   private void searchFiles() {

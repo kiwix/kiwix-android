@@ -140,7 +140,7 @@ class LibraryFragment : BaseFragment() {
   }
 
   private fun onLibraryItemsChange(it: List<LibraryListItem>?) {
-    libraryAdapter.itemList = it!!
+    libraryAdapter.items = it!!
     if (it.isEmpty()) {
       libraryErrorText.setText(
           if (isNotConnected) R.string.no_network_connection
