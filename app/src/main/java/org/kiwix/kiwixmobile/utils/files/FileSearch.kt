@@ -82,5 +82,5 @@ class FileSearch @Inject constructor(private val context: Context) {
 
 }
 
-private fun String.endsWithAny(vararg suffixes: String) =
+internal fun String.endsWithAny(vararg suffixes: String) =
   suffixes.fold(false, { acc, s -> acc or endsWith(s) })
