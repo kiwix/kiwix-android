@@ -45,7 +45,7 @@
   <string name="confirm_stop_download_title">Eureunkeun undeuran?</string>
   <string name="download_change_storage">Pamilih parangkat panyimpenan</string>
   <string name="delete_tab">Pupus Tag</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

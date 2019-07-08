@@ -27,7 +27,7 @@
   <string name="pref_language_title">ភាសា​</string>
   <string name="menu_bookmarks_list">ការកត់ចំណាំ</string>
   <string name="zim_manager">បណ្ណាល័យ</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

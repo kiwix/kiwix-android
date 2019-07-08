@@ -52,7 +52,7 @@
   <string name="pref_newtab_background_title">Адкрыць новае вакенца на фоне</string>
   <string name="pref_newtab_background_summary">Пры адкрыцці новага вакенца, яно будзе адкрытае ў фоне</string>
   <string name="zim_manager">Бібліятэка</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

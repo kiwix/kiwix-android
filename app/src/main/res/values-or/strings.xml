@@ -36,7 +36,7 @@
   <string name="pref_language_chooser">ଭାଷା ଚୟନ କରନ୍ତୁ</string>
   <string name="menu_bookmarks_list">ବୁକମାର୍କ</string>
   <string name="zim_manager">ପାଠାଗାର</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

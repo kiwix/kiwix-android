@@ -159,7 +159,7 @@
   <string name="do_not_ask_anymore">Fråga inte igen</string>
   <string name="your_languages">Valda språk:</string>
   <string name="other_languages">Andra språk:</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

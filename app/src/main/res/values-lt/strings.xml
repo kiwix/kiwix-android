@@ -46,7 +46,7 @@
   <string name="rate_dialog_neutral">Vėliau</string>
   <string name="pref_newtab_background_title">Atidaryti naujame skirtuke</string>
   <string name="zim_manager">Biblioteka</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

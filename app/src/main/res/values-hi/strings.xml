@@ -164,7 +164,7 @@
   <string name="do_not_ask_anymore">आगे और ना पूछें</string>
   <string name="your_languages">चयनित भाषाएं</string>
   <string name="other_languages">अन्य भाषाएँ</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

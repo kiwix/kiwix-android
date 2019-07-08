@@ -36,7 +36,7 @@
   <string name="pref_language_chooser">භාෂාවක් තෝරාගන්න</string>
   <string name="menu_bookmarks_list">පොත්යොමු</string>
   <string name="zim_manager">පුස්තකාලය</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

@@ -40,7 +40,7 @@
   <string name="no_files_here">קיין טעקעס דא</string>
   <string name="yes">יא</string>
   <string name="delete_tab">אויסמעקן טאב</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

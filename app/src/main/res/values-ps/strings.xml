@@ -77,7 +77,7 @@
   <string name="time_minute">مين</string>
   <string name="time_second">س</string>
   <string name="time_left">کيڼ</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

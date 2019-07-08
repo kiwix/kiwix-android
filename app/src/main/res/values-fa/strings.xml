@@ -105,7 +105,7 @@
   <string name="do_not_ask_anymore">لطفاً دیگر درخواست نکنید</string>
   <string name="your_languages">زبان‌های انتخاب‌شده:</string>
   <string name="other_languages">زبان‌های دیگر:</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

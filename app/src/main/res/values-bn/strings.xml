@@ -158,7 +158,7 @@
   <string name="do_not_ask_anymore">আর জিজ্ঞাসা করবেন না</string>
   <string name="your_languages">নির্বাচিত ভাষা</string>
   <string name="other_languages">অন্যান্য ভাষাসমূহ:</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

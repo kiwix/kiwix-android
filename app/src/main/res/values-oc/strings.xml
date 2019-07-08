@@ -103,7 +103,7 @@
   <string name="previous">Precedent</string>
   <string name="time_day">jorn</string>
   <string name="time_left">esquèrra</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

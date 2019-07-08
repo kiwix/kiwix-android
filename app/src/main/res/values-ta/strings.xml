@@ -34,7 +34,7 @@
   <string name="pref_language_chooser">மொழியைத் தேர்ந்தெடு</string>
   <string name="menu_bookmarks_list">புத்தகக்குறிகள்</string>
   <string name="zim_manager">நூலகம்</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

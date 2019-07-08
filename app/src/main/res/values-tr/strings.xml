@@ -164,7 +164,7 @@
   <string name="do_not_ask_anymore">Artık sorma</string>
   <string name="your_languages">Seçilen diller:</string>
   <string name="other_languages">Diğer diller:</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

@@ -59,7 +59,7 @@
   <string name="external_link_popup_dialog_title">กำลังเข้าสู่ลิงค์ภายนอก</string>
   <string name="external_link_popup_dialog_message">คุณกำลังป้อนลิงก์ภายนอก ซึ่งอาจทำให้มีค่าใช้จ่ายเพิ่มเติมสำหรับการถ่ายโอนข้อมูลหรือจะไม่ทำงานเมื่อคุณออฟไลน์ คุณต้องการดำเนินการต่อหรือไม่?</string>
   <string name="do_not_ask_anymore">อย่าถามอีก</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

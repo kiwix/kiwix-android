@@ -55,7 +55,7 @@
   <string name="help_6">Onze inhoud is ondergebracht op de Kiwix website</string>
   <string name="pref_autonightmode_summary">Automatisch veranderen tussen de dag- en nachtmodus</string>
   <string name="pref_autonightmode">Geautomatiseerde nachtmodus</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

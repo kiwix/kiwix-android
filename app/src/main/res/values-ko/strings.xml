@@ -164,7 +164,7 @@
   <string name="do_not_ask_anymore">더 이상 묻지 않습니다</string>
   <string name="your_languages">선택한 언어:</string>
   <string name="other_languages">다른 언어:</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

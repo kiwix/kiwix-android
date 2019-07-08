@@ -100,7 +100,7 @@
   <string name="do_not_ask_anymore">Neptat se příště</string>
   <string name="your_languages">Vybrané jazyky:</string>
   <string name="other_languages">Jiné jazyky:</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

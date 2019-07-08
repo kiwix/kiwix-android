@@ -164,7 +164,7 @@
   <string name="do_not_ask_anymore">Не питайте отново за това</string>
   <string name="your_languages">Избрани езици:</string>
   <string name="other_languages">Други езици:</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

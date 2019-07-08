@@ -118,7 +118,7 @@
   <string name="external_link_popup_dialog_message">Doe bös \'nen externe link in \'nt tikke. Det kan leie toet extra köste veur \'t euverbringe van gegaeves of wirk neet wen se offline bös. Wils se doorgaon?</string>
   <string name="do_not_ask_anymore">Vraog nimmieë</string>
   <string name="other_languages">Anger spraoke:</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

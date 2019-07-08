@@ -34,7 +34,7 @@
   <string name="download_complete_snackbar">Lejupielāde pabeigta</string>
   <string name="tts_resume">turpināt</string>
   <string name="no">Nē</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

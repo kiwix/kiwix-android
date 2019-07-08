@@ -160,7 +160,7 @@
   <string name="do_not_ask_anymore">Não perguntar mais</string>
   <string name="your_languages">Línguas selecionadas:</string>
   <string name="other_languages">Outras línguas:</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

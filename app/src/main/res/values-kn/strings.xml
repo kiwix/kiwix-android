@@ -17,7 +17,7 @@
   <string name="pref_language_chooser">ಭಾಷೆ ಆಯ್ದುಕೊಳ್ಳಿ</string>
   <string name="menu_bookmarks_list">ಓದುಗುರುತುಗಳು</string>
   <string name="zim_manager">ಗ್ರಂಥಾಲಯ</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

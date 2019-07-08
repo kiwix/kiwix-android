@@ -19,7 +19,7 @@
   <string name="rate_dialog_positive">Баһаларға!</string>
   <string name="rate_dialog_negative">Юҡ, рәхмәт</string>
   <string name="zim_manager">Китапхана</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

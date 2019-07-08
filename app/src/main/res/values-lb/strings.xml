@@ -96,7 +96,7 @@
   <string name="do_not_ask_anymore">Net méi froen</string>
   <string name="your_languages">Erausgesicht Sproochen:</string>
   <string name="other_languages">Aner Sproochen:</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>

@@ -161,7 +161,7 @@
   <string name="do_not_ask_anymore">Chom hep goulenn ken</string>
   <string name="your_languages">Yezhoù diuzet</string>
   <string name="other_languages">Yezhoù all :</string>
-  <plurals name="books_count">
+
   <string-array name="description_help_2">
     <item>@string/help_3</item>
     <item>@string/help_4</item>
