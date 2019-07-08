@@ -27,11 +27,31 @@ import java.io.File
 
 fun bookOnDisk(
   book: Book = book(),
-  databaseId: Long = 0L,
+  databaseId: Long? = 0L,
   file: File = File("")
 ) = BookOnDisk(databaseId, book, file)
 
-fun book(id: String = "0") = Book().apply { this.id = id }
+fun book(
+  id: String = "0",
+  title: String = "",
+  size: String = "",
+  favicon: String = "",
+  creator: String = "",
+  publisher: String = "",
+  date: String = "",
+  description: String = "",
+  language: String = ""
+) = Book().apply {
+  this.id = id
+  this.title = title
+  this.size = size
+  this.favicon = favicon
+  this.creator = creator
+  this.publisher = publisher
+  this.date = date
+  this.description = description
+  this.language = language
+}
 
 fun downloadStatus(
   downloadId: Long = 0L,

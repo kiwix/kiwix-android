@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
+    android:background="?android:attr/selectableItemBackground"
     android:paddingEnd="0dp"
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
@@ -12,13 +12,25 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     >
 
+  <CheckBox
+      android:id="@+id/itemBookCheckbox"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:visibility="gone"
+      android:paddingRight="10dp"
+      android:paddingEnd="10dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      />
+
   <ImageView
       android:id="@+id/item_book_icon"
       android:layout_width="40dp"
       android:layout_height="40dp"
       android:contentDescription="@string/favicon"
       app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintStart_toEndOf="@id/itemBookCheckbox"
       app:layout_constraintTop_toTopOf="parent"
       tools:src="@mipmap/kiwix_icon_round"
       />

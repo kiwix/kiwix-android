@@ -52,9 +52,24 @@ import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CanWrite4G
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CannotWrite4GbFile
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.NotEnoughSpaceFor4GbFile
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.MultiModeFinished
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestOpen
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.FileSelectListState
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.SelectionMode.MULTI
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.SelectionMode.NORMAL
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.DeleteFiles
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.None
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.OpenFile
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.ShareFiles
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.SideEffect
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.StartMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.BookItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.DividerItem
@@ -79,16 +94,26 @@ class ZimManageViewModel @Inject constructor(
   private val defaultLanguageProvider: DefaultLanguageProvider,
   private val dataSource: DataSource
 ) : ViewModel() {
+  sealed class FileSelectActions {
+    data class RequestOpen(val bookOnDisk: BookOnDisk) : FileSelectActions()
+    data class RequestSelect(val bookOnDisk: BookOnDisk) : FileSelectActions()
+    data class RequestMultiSelection(val bookOnDisk: BookOnDisk) : FileSelectActions()
+    object RequestDeleteMultiSelection : FileSelectActions()
+    object RequestShareMultiSelection : FileSelectActions()
+    object MultiModeFinished : FileSelectActions()
+  }
 
+  val sideEffects = PublishProcessor.create<SideEffect<out Any?>>()
   val libraryItems: MutableLiveData<List<LibraryListItem>> = MutableLiveData()
   val downloadItems: MutableLiveData<List<DownloadItem>> = MutableLiveData()
-  val bookItems: MutableLiveData<List<BooksOnDiskListItem>> = MutableLiveData()
+  val fileSelectListStates: MutableLiveData<FileSelectListState> = MutableLiveData()
   val deviceListIsRefreshing = MutableLiveData<Boolean>()
   val libraryListIsRefreshing = MutableLiveData<Boolean>()
   val networkStates = MutableLiveData<NetworkState>()
   val languageItems = MutableLiveData<List<Language>>()
 
   val requestFileSystemCheck = PublishProcessor.create<Unit>()
+  val fileSelectActions = PublishProcessor.create<FileSelectActions>()
   val requestDownloadLibrary = BehaviorProcessor.createDefault<Unit>(Unit)
   val requestFiltering = BehaviorProcessor.createDefault<String>("")
   val requestLanguagesDialog = PublishProcessor.create<Unit>()
@@ -127,8 +152,72 @@ class ZimManageViewModel @Inject constructor(
         updateLanguagesInDao(networkLibrary, languages),
         updateNetworkStates(),
         updateLanguageItemsForDialog(languages),
-        requestsAndConnectivtyChangesToLibraryRequests(networkLibrary)
+        requestsAndConnectivtyChangesToLibraryRequests(networkLibrary),
+        fileSelectActions()
     )
+  }
+
+  private fun fileSelectActions() = fileSelectActions.subscribe({
+    sideEffects.offer(
+        when (it) {
+          is RequestOpen -> OpenFile(it.bookOnDisk)
+          is RequestMultiSelection -> startMultiSelectionAndSelectBook(it.bookOnDisk)
+          RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState())
+          RequestShareMultiSelection -> ShareFiles(selectionsFromState())
+          MultiModeFinished -> noSideEffectAndClearSelectionState()
+          is RequestSelect -> noSideEffectSelectBook(it.bookOnDisk)
+        }
+    )
+  }, Throwable::printStackTrace)
+
+  private fun startMultiSelectionAndSelectBook(
+    bookOnDisk: BookOnDisk
+  ): StartMultiSelection {
+    fileSelectListStates.value?.let {
+      fileSelectListStates.postValue(
+          it.copy(
+              bookOnDiskListItems = selectBook(it, bookOnDisk),
+              selectionMode = MULTI
+          )
+      )
+    }
+    return StartMultiSelection(bookOnDisk, fileSelectActions)
+  }
+
+  private fun selectBook(
+    it: FileSelectListState,
+    bookOnDisk: BookOnDisk
+  ): List<BooksOnDiskListItem> {
+    return it.bookOnDiskListItems.map { listItem ->
+      if (listItem.id == bookOnDisk.id) listItem.apply { isSelected = !isSelected }
+      else listItem
+    }
+  }
+
+  private fun noSideEffectSelectBook(bookOnDisk: BookOnDisk): SideEffect<Unit> {
+    fileSelectListStates.value?.let {
+      fileSelectListStates.postValue(
+          it.copy(bookOnDiskListItems = it.bookOnDiskListItems.map { listItem ->
+            if (listItem.id == bookOnDisk.id) listItem.apply { isSelected = !isSelected }
+            else listItem
+          })
+      )
+    }
+    return None
+  }
+
+  private fun selectionsFromState() = fileSelectListStates.value?.selectedBooks ?: emptyList()
+
+  private fun noSideEffectAndClearSelectionState(): SideEffect<Unit> {
+    fileSelectListStates.value?.let {
+      fileSelectListStates.postValue(
+          it.copy(
+              bookOnDiskListItems = it.bookOnDiskListItems.map { it.apply { isSelected = false } },
+              selectionMode = NORMAL
+          )
+      )
+    }
+    return None
   }
 
   private fun requestsAndConnectivtyChangesToLibraryRequests(library: PublishProcessor<LibraryNetworkEntity>) =
@@ -411,9 +500,26 @@ class ZimManageViewModel @Inject constructor(
   private fun updateBookItems() =
     dataSource.booksOnDiskAsListItems()
         .subscribe(
-            bookItems::postValue,
+            { newList ->
+              fileSelectListStates.postValue(
+                  fileSelectListStates.value?.let { inheritSelections(it, newList) }
+                      ?: FileSelectListState(newList)
+              )
+            },
             Throwable::printStackTrace
         )
+
+  private fun inheritSelections(
+    oldState: FileSelectListState,
+    newList: MutableList<BooksOnDiskListItem>
+  ): FileSelectListState {
+    return oldState.copy(
+        bookOnDiskListItems = newList.map { newBookOnDisk ->
+          val firstOrNull =
+            oldState.bookOnDiskListItems.firstOrNull { oldBookOnDisk -> oldBookOnDisk.id == newBookOnDisk.id }
+          newBookOnDisk.apply { isSelected = firstOrNull?.isSelected ?: false }
+        })
+  }
 
   private fun removeCompletedDownloadsFromDb(downloadStatuses: Flowable<List<DownloadStatus>>) =
     downloadStatuses
