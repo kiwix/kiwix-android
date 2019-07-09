@@ -21,8 +21,8 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
+import android.view.ActionMode
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,49 +32,49 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.zim_list.file_management_no_files
 import kotlinx.android.synthetic.main.zim_list.zim_swiperefresh
 import kotlinx.android.synthetic.main.zim_list.zimfilelist
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.R.string
 import org.kiwix.kiwixmobile.base.BaseFragment
-import org.kiwix.kiwixmobile.data.ZimContentProvider
-import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
 import org.kiwix.kiwixmobile.di.components.ActivityComponent
 import org.kiwix.kiwixmobile.extensions.toast
-import org.kiwix.kiwixmobile.utils.BookUtils
 import org.kiwix.kiwixmobile.utils.Constants.REQUEST_STORAGE_PERMISSION
-import org.kiwix.kiwixmobile.utils.DialogShower
-import org.kiwix.kiwixmobile.utils.KiwixDialog.DeleteZim
 import org.kiwix.kiwixmobile.utils.LanguageUtils
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.utils.files.FileUtils
-import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestMultiSelection
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestOpen
+import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestSelect
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.BookDelegate
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate.LanguageDelegate
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
 
 class ZimFileSelectFragment : BaseFragment() {
 
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
-  @Inject lateinit var bookDao: NewBookDao
-  @Inject lateinit var dialogShower: DialogShower
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
-  @Inject lateinit var bookUtils: BookUtils
+
+  private var actionMode: ActionMode? = null
+  val disposable = CompositeDisposable()
 
   private val zimManageViewModel: ZimManageViewModel by lazy {
     ViewModelProviders.of(activity!!, viewModelFactory)
         .get(ZimManageViewModel::class.java)
   }
 
+  private val bookDelegate: BookDelegate by lazy {
+    BookDelegate(sharedPreferenceUtil,
+        { offerAction(RequestOpen(it)) },
+        { offerAction(RequestMultiSelection(it)) },
+        { offerAction(RequestSelect(it)) })
+  }
+
   private val booksOnDiskAdapter: BooksOnDiskAdapter by lazy {
-    BooksOnDiskAdapter(
-        BookDelegate(sharedPreferenceUtil, this::openOnClick, this::deleteOnLongClick),
-        LanguageDelegate
-    )
+    BooksOnDiskAdapter(bookDelegate, LanguageDelegate)
   }
 
   override fun inject(activityComponent: ActivityComponent) {
@@ -101,13 +101,28 @@ class ZimFileSelectFragment : BaseFragment() {
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
     }
-    zimManageViewModel.bookItems.observe(this, Observer {
-      booksOnDiskAdapter.itemList = it!!
-      checkEmpty(it)
-    })
+    zimManageViewModel.fileSelectListStates.observe(this, Observer { render(it) })
+    disposable.add(sideEffects())
     zimManageViewModel.deviceListIsRefreshing.observe(this, Observer {
       zim_swiperefresh.isRefreshing = it!!
     })
+  }
+
+  private fun sideEffects() = zimManageViewModel.sideEffects.subscribe(
+      {
+        val effectResult = it.invokeWith(activity!!)
+        if (effectResult is ActionMode) {
+          actionMode = effectResult
+        }
+      }, Throwable::printStackTrace
+  )
+
+  private fun render(state: FileSelectListState) {
+    val items = state.bookOnDiskListItems
+    bookDelegate.selectionMode = state.selectionMode
+    booksOnDiskAdapter.items = items
+    actionMode?.title = String.format("%d", state.selectedBooks.size)
+    file_management_no_files.visibility = if (items.isEmpty()) View.VISIBLE else View.GONE
   }
 
   override fun onResume() {
@@ -115,17 +130,22 @@ class ZimFileSelectFragment : BaseFragment() {
     checkPermissions()
   }
 
-  private fun checkEmpty(books: List<Any>) {
-    file_management_no_files.visibility =
-      if (books.isEmpty()) View.VISIBLE
-      else View.GONE
+  override fun onDestroy() {
+    super.onDestroy()
+    disposable.clear()
+  }
+
+  private fun offerAction(
+    action: FileSelectActions
+  ) {
+    zimManageViewModel.fileSelectActions.offer(action)
   }
 
   private fun checkPermissions() {
     if (ContextCompat.checkSelfPermission(
             activity!!,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) != PackageManager.PERMISSION_GRANTED && Build.VERSION.SDK_INT > 18
+        ) != PackageManager.PERMISSION_GRANTED
     ) {
       context.toast(R.string.request_storage)
       requestPermissions(
@@ -139,35 +159,5 @@ class ZimFileSelectFragment : BaseFragment() {
 
   private fun requestFileSystemCheck() {
     zimManageViewModel.requestFileSystemCheck.onNext(Unit)
-  }
-
-  private fun openOnClick(it: BookOnDisk) {
-    val file = it.file
-    ZimContentProvider.canIterate = false
-    if (!file.canRead()) {
-      context.toast(string.error_filenotfound)
-    } else {
-      (activity as ZimManageActivity).finishResult(file.path)
-    }
-  }
-
-  private fun deleteOnLongClick(it: BookOnDisk) {
-    dialogShower.show(DeleteZim, {
-      if (deleteSpecificZimFile(it)) {
-        context.toast(string.delete_specific_zim_toast)
-      } else {
-        context.toast(string.delete_zim_failed)
-      }
-    })
-  }
-
-  private fun deleteSpecificZimFile(book: BookOnDisk): Boolean {
-    val file = book.file
-    FileUtils.deleteZimFile(file.path)
-    if (file.exists()) {
-      return false
-    }
-    bookDao.delete(book.databaseId!!)
-    return true
   }
 }

@@ -19,7 +19,9 @@ package org.kiwix.kiwixmobile;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.util.Log;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDexApplication;
@@ -109,6 +111,49 @@ public class KiwixApplication extends MultiDexApplication implements HasActivity
     Log.d("KIWIX", "Started KiwixApplication");
     applicationComponent.inject(this);
     LeakCanary.install(this);
+    if (BuildConfig.DEBUG) {
+      StrictMode.setThreadPolicy(buildThreadPolicy(new StrictMode.ThreadPolicy.Builder()));
+      StrictMode.setVmPolicy(buildVmPolicy(new StrictMode.VmPolicy.Builder()));
+    }
+  }
+
+  private StrictMode.ThreadPolicy buildThreadPolicy(StrictMode.ThreadPolicy.Builder builder) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      builder.detectResourceMismatches();
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      builder.detectUnbufferedIo();
+    }
+    return builder.detectCustomSlowCalls()
+        .detectDiskReads()
+        .detectDiskWrites()
+        .detectNetwork()
+        .penaltyFlashScreen()
+        .penaltyLog()
+        .build();
+  }
+
+  private StrictMode.VmPolicy buildVmPolicy(StrictMode.VmPolicy.Builder builder) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      builder.detectCleartextNetwork();
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      builder.detectContentUriWithoutPermission();
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+      builder.detectFileUriExposure();
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+      builder.detectLeakedRegistrationObjects();
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+      builder.detectNonSdkApiUsage();
+    }
+    return builder.detectActivityLeaks()
+        .detectLeakedClosableObjects()
+        .detectLeakedSqlLiteObjects()
+        .penaltyLog()
+        .build();
   }
 
   /* Checks if external storage is available for read and write */

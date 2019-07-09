@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat
 import io.reactivex.Flowable
 import io.reactivex.functions.Function3
 import io.reactivex.processors.BehaviorProcessor
+import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.KiwixApplication
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
 import org.kiwix.kiwixmobile.zim_manager.Fat32Checker.FileSystemState.CanWrite4GbFile
@@ -48,6 +49,7 @@ class Fat32Checker @Inject constructor(sharedPreferenceUtil: SharedPreferenceUti
         pollForExternalStoragePermissionGranted(),
         Function3 { storage: String, _: Unit, _: Boolean -> storage }
     )
+        .observeOn(Schedulers.io())
         .subscribe(
             {
               val systemState = toFileSystemState(it)
