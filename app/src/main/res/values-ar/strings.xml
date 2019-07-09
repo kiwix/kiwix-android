@@ -14,8 +14,8 @@
   <string name="menu_read_aloud_stop">توقف عن القراءة بصوت عال</string>
   <string name="save_media">حفظ الوسائل</string>
   <string name="save_media_error">حدث خطأ عند محاولة حفظ الوسائط!</string>
-  <string name="save_media_saved">حفظ الوسائط كـ%s إلى Android/media/org.kiwix.../</string>
-  <string name="rescan_fs_warning">جارٍ البحث عن محتوى قابل للتنزيل، يُرجَى الانتظار...</string>
+  <string name="save_media_saved">حفظ الوسائط كـ%s إلى Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">جارٍ البحث عن محتوى قابل للتنزيل، يُرجَى الانتظار…</string>
   <string name="button_backtotop">العودة إلى الأعلى</string>
   <string name="search_label">بحث</string>
   <string name="choose_file">حدد ملف محتوى (*.zim)</string>
@@ -79,7 +79,7 @@
   <string name="search_widget_text">بحث كيويكس</string>
   <string name="speech_prompt_text">تحدث للبحث %s</string>
   <string name="speech_not_supported">آسف! جهازك لا يدعم إدخال الكلام</string>
-  <string name="download_started_library">بدأ التنزيل...</string>
+  <string name="download_started_library">بدأ التنزيل…</string>
   <string name="local_zims">جهاز</string>
   <string name="remote_zims">على الإنترنت</string>
   <string name="zim_downloads">جارٍ التنزيل</string>
@@ -144,7 +144,7 @@
   <string name="next">التالي</string>
   <string name="previous">السابق</string>
   <string name="wifi_only_title">السماح بتنزيل المحتوى عبر شبكة المحمول؟</string>
-  <string name="wifi_only_msg">إذا اخترت "نعم"، فلن يتم تحذيرك في المستقبل، ومع ذلك، يمكنك دائما تغيير هذا في الإعدادات</string>
+  <string name="wifi_only_msg">إذا اخترت “نعم”، فلن يتم تحذيرك في المستقبل، ومع ذلك، يمكنك دائما تغيير هذا في الإعدادات</string>
   <string name="pref_wifi_only">تنزيل المحتوى عبر واي فاي فقط</string>
   <string name="time_day">يوم</string>
   <string name="time_hour">س</string>

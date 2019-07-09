@@ -11,10 +11,10 @@
   <string name="menu_exitfullscreen">Keluar dari skrin penuh</string>
   <string name="menu_read_aloud">Bacakan</string>
   <string name="menu_read_aloud_stop">Berhenti bacakan</string>
-  <string name="save_media">Simpan media sebagai...</string>
+  <string name="save_media">Simpan media sebagai…</string>
   <string name="save_media_error">Ralat berlaku ketika cubaan menyimpan media!</string>
   <string name="save_media_saved">Menyimpan media sebagai %1$s dalam folder Gambar (Pictures) anda</string>
-  <string name="rescan_fs_warning">Sedang mengimbas untuk fail ZIM, sila tunggu...</string>
+  <string name="rescan_fs_warning">Sedang mengimbas untuk fail ZIM, sila tunggu…</string>
   <string name="button_backtotop">Kembali ke Atas</string>
   <string name="search_label">Cari</string>
   <string name="choose_file">Pilih Fail Kandungan ZIM (*.zim)</string>

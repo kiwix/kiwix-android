@@ -14,8 +14,8 @@
   <string name="menu_read_aloud_stop">Зупинити читання вголос</string>
   <string name="save_media">Зберегти медіафайл</string>
   <string name="save_media_error">Сталася помилка при спробі зберегти медіафайл!</string>
-  <string name="save_media_saved">Медіафайл збережено як %$ до Android/media/org.kiwix.../</string>
-  <string name="rescan_fs_warning">Сканування з метою виявлення контенту для завантаження, будь ласка, зачекайте...</string>
+  <string name="save_media_saved">Медіафайл збережено як %$ до Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">Сканування з метою виявлення контенту для завантаження, будь ласка, зачекайте…</string>
   <string name="button_backtotop">Повернутись угору</string>
   <string name="search_label">Пошук</string>
   <string name="choose_file">Виберіть файл вмісту (*.zim)</string>
@@ -79,7 +79,7 @@
   <string name="search_widget_text">Пошук у Kiwix</string>
   <string name="speech_prompt_text">Промовте, щоб здійснити пошук %s</string>
   <string name="speech_not_supported">Вибачте! Ваш пристрій не підтримує голосове управління</string>
-  <string name="download_started_library">Завантаження почалося...</string>
+  <string name="download_started_library">Завантаження почалося…</string>
   <string name="local_zims">Пристрій</string>
   <string name="remote_zims">Онлайн</string>
   <string name="zim_downloads">Завантаження</string>

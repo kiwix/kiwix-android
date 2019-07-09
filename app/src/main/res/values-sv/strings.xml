@@ -14,8 +14,8 @@
   <string name="menu_read_aloud_stop">Sluta läsa upp</string>
   <string name="save_media">Spara media</string>
   <string name="save_media_error">Ett fel uppstod när media skulle sparas!</string>
-  <string name="save_media_saved">Sparade media som %s i Android/media/org.kiwix.../</string>
-  <string name="rescan_fs_warning">Söker efter nedladdningsbart innehåll, var god vänta...</string>
+  <string name="save_media_saved">Sparade media som %s i Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">Söker efter nedladdningsbart innehåll, var god vänta…</string>
   <string name="button_backtotop">Tillbaka till början</string>
   <string name="search_label">Sök</string>
   <string name="choose_file">Välj en innehållsfil (*.zim)</string>
@@ -77,7 +77,7 @@
   <string name="search_widget_text">Sök Kiwix</string>
   <string name="speech_prompt_text">Tala för att söka %s</string>
   <string name="speech_not_supported">Tyvärr! Din enhet stöder inte tal-till-text.</string>
-  <string name="download_started_library">Nedladdning startades...</string>
+  <string name="download_started_library">Nedladdning startades…</string>
   <string name="local_zims">Enhet</string>
   <string name="remote_zims">Ansluten</string>
   <string name="zim_downloads">Laddar ned</string>
@@ -142,7 +142,7 @@
   <string name="next">Nästa</string>
   <string name="previous">Föregående</string>
   <string name="wifi_only_title">Tillåt att ladda ned innehåll med mobildata?</string>
-  <string name="wifi_only_msg">Om du väljer "Ja" kommer du inte att varnas i framtiden. Du kan alltid ändra detta i Inställningarna</string>
+  <string name="wifi_only_msg">Om du väljer “Ja” kommer du inte att varnas i framtiden. Du kan alltid ändra detta i Inställningarna</string>
   <string name="pref_wifi_only">Ladda ned endast via WiFi</string>
   <string name="time_day">dag</string>
   <string name="time_left">kvar</string>

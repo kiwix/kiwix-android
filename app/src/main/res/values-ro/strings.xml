@@ -14,8 +14,8 @@
   <string name="menu_read_aloud_stop">Oprește citirea cu voce tare</string>
   <string name="save_media">Salvează Media</string>
   <string name="save_media_error">A apărut o eroare în încercarea de a salva fișierul media!</string>
-  <string name="save_media_saved">Media salvată %s în Android/media/org.kiwix.../</string>
-  <string name="rescan_fs_warning">Scanează pentru conținut descărcabil, vă rugăm așteptați...</string>
+  <string name="save_media_saved">Media salvată %s în Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">Scanează pentru conținut descărcabil, vă rugăm așteptați…</string>
   <string name="button_backtotop">Înapoi sus</string>
   <string name="search_label">Caută</string>
   <string name="choose_file">Alegeți un fișier cu conținut ZIM (*.zim)</string>
@@ -78,7 +78,7 @@
   <string name="search_widget_text">Caută Kiwix</string>
   <string name="speech_prompt_text">Vorbește pentru a căuta %s</string>
   <string name="speech_not_supported">Ne pare rău! Dispozitivul tău nu susține opțiunea de vorbire</string>
-  <string name="download_started_library">Descărcare începută...</string>
+  <string name="download_started_library">Descărcare începută…</string>
   <string name="local_zims">Dispozitiv</string>
   <string name="zim_downloads">Descărcare</string>
   <string name="zim_manager">Bibliotecă</string>

@@ -14,8 +14,8 @@
   <string name="menu_read_aloud_stop">Ophale mat Virliesen</string>
   <string name="save_media">Medium späicheren</string>
   <string name="save_media_error">Et ass e Feeler geschitt wéi probéiert gouf d\'Medium ze späicheren!</string>
-  <string name="save_media_saved">Medium als %1$s op Android/media/org.kiwix.../ gespäichert</string>
-  <string name="rescan_fs_warning">Sichen no Inhalt deen erofgeluede gi kann, waart w.e.g. ...</string>
+  <string name="save_media_saved">Medium als %1$s op Android/media/org.kiwix…/ gespäichert</string>
+  <string name="rescan_fs_warning">Sichen no Inhalt deen erofgeluede gi kann, waart w.e.g. …</string>
   <string name="button_backtotop">Zréck no uewen</string>
   <string name="search_label">Sichen</string>
   <string name="choose_file">Wielt eng Inhaltsdatei aus (*.zim)</string>
@@ -54,7 +54,7 @@
   <string name="pref_extras">Extraen</string>
   <string name="new_tab_snackbar">Artikel an engem neien Tab opgemaacht</string>
   <string name="search_widget_text">Op Kiwix sichen</string>
-  <string name="download_started_library">Eroflueden huet ugefaangen...</string>
+  <string name="download_started_library">Eroflueden huet ugefaangen…</string>
   <string name="local_zims">Apparat</string>
   <string name="zim_downloads">Eroflueden</string>
   <string name="zim_manager">Bibliothéik</string>

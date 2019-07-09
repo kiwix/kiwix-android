@@ -14,8 +14,8 @@
   <string name="menu_read_aloud_stop">Parar de ler em voz alta</string>
   <string name="save_media">Guardar conteúdo</string>
   <string name="save_media_error">Ocorreu um erro ao tentar guardar o conteúdo!</string>
-  <string name="save_media_saved">Conteúdo guardado como %s em Android/media/org.kiwix.../</string>
-  <string name="rescan_fs_warning">A procurar conteúdo disponível; aguarde, por favor...</string>
+  <string name="save_media_saved">Conteúdo guardado como %s em Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">A procurar conteúdo disponível; aguarde, por favor…</string>
   <string name="button_backtotop">Voltar ao Topo</string>
   <string name="search_label">Pesquisar</string>
   <string name="choose_file">Selecionar um ficheiro de conteúdo (*.zim)</string>
@@ -59,7 +59,7 @@
   <string name="delete_specific_search_toast">Pesquisa recente removida</string>
   <string name="hint_contents_drawer_message">Pode passar o dedo para a esquerda para ver o conteúdo deste artigo</string>
   <string name="got_it">Entendi</string>
-  <string name="did_you_know">Sabia que ...?</string>
+  <string name="did_you_know">Sabia que …?</string>
   <string name="undo">Desfazer</string>
   <string name="tab_closed">Separador fechado</string>
   <string name="deleted_message">apagado</string>
@@ -78,7 +78,7 @@
   <string name="search_widget_text">Procurar no Kiwix</string>
   <string name="speech_prompt_text">Falar para pesquisar %s</string>
   <string name="speech_not_supported">Desculpe! O seu dispositivo não suporta entrada de voz</string>
-  <string name="download_started_library">Download iniciado...</string>
+  <string name="download_started_library">Download iniciado…</string>
   <string name="local_zims">Dispositivo</string>
   <string name="remote_zims">Ligado</string>
   <string name="zim_downloads">A descarregar</string>
@@ -143,7 +143,7 @@
   <string name="next">Seguinte</string>
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">Permitir a transferência de conteúdo pela rede móvel?</string>
-  <string name="wifi_only_msg">Se escolheu "Sim", não será avisado no futuro. No entanto, pode sempre alterar isto nas Configurações</string>
+  <string name="wifi_only_msg">Se escolheu “Sim”, não será avisado no futuro. No entanto, pode sempre alterar isto nas Configurações</string>
   <string name="pref_wifi_only">Descarregar conteúdo apenas por WiFi</string>
   <string name="time_day">dia</string>
   <string name="time_left">esquerda</string>

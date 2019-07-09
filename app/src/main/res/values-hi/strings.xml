@@ -14,8 +14,8 @@
   <string name="menu_read_aloud_stop">पढ़ा कर सुनना रोकें</string>
   <string name="save_media">मीडिया सहेजें</string>
   <string name="save_media_error">मीडिया को सहेजते समय एक त्रुटि आयी।</string>
-  <string name="save_media_saved">सहेजे गये मीडिया को %s के रूप में Android/media/org.kiwix.../</string>
-  <string name="rescan_fs_warning">डाउनलोड करने योग्य सामग्री के लिए खोजबीन जारी, कृपया प्रतीक्षा करें ...</string>
+  <string name="save_media_saved">सहेजे गये मीडिया को %s के रूप में Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">डाउनलोड करने योग्य सामग्री के लिए खोजबीन जारी, कृपया प्रतीक्षा करें …</string>
   <string name="button_backtotop">वापस ऊपर जायें</string>
   <string name="search_label">खोजें</string>
   <string name="choose_file">सामग्री फ़ाइल चुनें (*.zim)</string>
@@ -79,7 +79,7 @@
   <string name="search_widget_text">किवीक्स खोजें</string>
   <string name="speech_prompt_text">%s को खोजने के लिए बोलें</string>
   <string name="speech_not_supported">माफ़ कीजिये! आपका उपकरण भाषण इनपुट का समर्थन नहीं करता है</string>
-  <string name="download_started_library">डाउनलोड शुरु हुआ...</string>
+  <string name="download_started_library">डाउनलोड शुरु हुआ…</string>
   <string name="local_zims">डिवाइस</string>
   <string name="remote_zims">ऑनलाइन</string>
   <string name="zim_downloads">डाउनलोड हो रहा</string>
@@ -144,7 +144,7 @@
   <string name="next">अगला</string>
   <string name="previous">पिछला</string>
   <string name="wifi_only_title">मोबाइल नेटवर्क के जरिए सामग्री डाउनलोड करने की अनुमति दें?</string>
-  <string name="wifi_only_msg">यदि आप "हां" चुनते हैं, तो आपको भविष्य में चेतावनी नहीं दी जाएगी। हालांकि, आप इसे हमेशा सेटिंग्स में बदल सकते हैं</string>
+  <string name="wifi_only_msg">यदि आप “हां” चुनते हैं, तो आपको भविष्य में चेतावनी नहीं दी जाएगी। हालांकि, आप इसे हमेशा सेटिंग्स में बदल सकते हैं</string>
   <string name="pref_wifi_only">केवल वाईफाई द्वारा सामग्री डाउनलोड करें</string>
   <string name="time_day">दिन</string>
   <string name="time_hour">ह्</string>
@@ -158,7 +158,7 @@
   <string name="pref_multi_search_title">मल्टीज़िम खोज</string>
   <string name="pref_multi_search_summary">ऍप को अक्रॉस ज़िम(ZIM) फ़ाइलों में खोजने की अनुमति दें(चेतावनी: अति प्रयोगात्मक!)</string>
   <string name="pref_external_link_popup_title">बाह्य कड़ियों में प्रवेश करने पर सावधान करें</string>
-  <string name="pref_external_link_popup_summary">"अतिरिक्त खर्च एवं ऑफलाइन होने पर काम नहीं करने वाली कड़ी" से सावधान करने हेतु पॉपअप संदेश प्रदर्शित करें।</string>
+  <string name="pref_external_link_popup_summary">“अतिरिक्त खर्च एवं ऑफलाइन होने पर काम नहीं करने वाली कड़ी” से सावधान करने हेतु पॉपअप संदेश प्रदर्शित करें।</string>
   <string name="external_link_popup_dialog_title">बहरी कड़ी में प्रवेश किया जा रहा है</string>
   <string name="external_link_popup_dialog_message">आप बहरी कड़ी में प्रवेश कर रहे हैं। इसके कारण डेटा स्थानांतरण हेतु अतिरिक्त खर्च पड़ सकता है, अथवा ऑफलाइन होने पर यह काम ही नहीं करेगा। क्या आप अभी भी आगे बढ़ना चाहते हैं?</string>
   <string name="do_not_ask_anymore">आगे और ना पूछें</string>

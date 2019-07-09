@@ -14,7 +14,7 @@
   <string name="save_media">Kaydi galka muuqaalka ah si</string>
   <string name="save_media_error">Waxaa dhacay qalad markii la doonayay in la kaydiyo!</string>
   <string name="save_media_saved">U kaydi qaab ah %1$s galka sawirka gaarka kuu ah</string>
-  <string name="rescan_fs_warning">Waxaa socota Kala hufidda ee Galalka ZIM, fadlan Sug...</string>
+  <string name="rescan_fs_warning">Waxaa socota Kala hufidda ee Galalka ZIM, fadlan Sug…</string>
   <string name="button_backtotop">Ku laabo kor</string>
   <string name="search_label">Raadi</string>
   <string name="choose_file">Dooro galka ZIM ee ka samaysan (*.zim)</string>

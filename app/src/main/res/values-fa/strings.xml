@@ -14,7 +14,7 @@
   <string name="save_media">ذخیرهٔ رسانه</string>
   <string name="save_media_error">خطایی در حین ذخیره‌سازی این رسانه رخ داد!</string>
   <string name="save_media_saved">ذخیره کردن رسانه  با عنوان %1$s در پوشه تصویر شما</string>
-  <string name="rescan_fs_warning">چستچو برای پرونده‌های ZIM، لطفاً صبر کنید...</string>
+  <string name="rescan_fs_warning">چستچو برای پرونده‌های ZIM، لطفاً صبر کنید…</string>
   <string name="button_backtotop">بازگشت به بالا</string>
   <string name="search_label">جستجو</string>
   <string name="choose_file">یک پروندهٔ محتوایی را انتخاب کنید (*.zim)</string>

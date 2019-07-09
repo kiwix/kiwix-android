@@ -11,10 +11,10 @@
   <string name="menu_exitfullscreen">Ukončiť režim celej obrazovky</string>
   <string name="menu_read_aloud">Čítať nahlas</string>
   <string name="menu_read_aloud_stop">Zastaviť čítanie nahlas</string>
-  <string name="save_media">Uložiť médiá ako...</string>
+  <string name="save_media">Uložiť médiá ako…</string>
   <string name="save_media_error">Pri ukladaní došlo k chybe!</string>
   <string name="save_media_saved">Médiá uložené ako %1$s v priečinku Obrázky</string>
-  <string name="rescan_fs_warning">Vyhľadávanie ZIM súborov, čakajte prosím...</string>
+  <string name="rescan_fs_warning">Vyhľadávanie ZIM súborov, čakajte prosím…</string>
   <string name="button_backtotop">Späť na začiatok</string>
   <string name="search_label">Hľadať</string>
   <string name="choose_file">Vyberte súbor so ZIM obsahom (*.zim)</string>

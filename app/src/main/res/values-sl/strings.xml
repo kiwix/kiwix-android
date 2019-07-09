@@ -11,8 +11,8 @@
   <string name="menu_exitfullscreen">Izhod iz celozaslonskega načina</string>
   <string name="menu_read_aloud">Beri naglas</string>
   <string name="menu_read_aloud_stop">Nehaj z branjem na glas</string>
-  <string name="save_media">Shrani predstavnost kot ...</string>
-  <string name="rescan_fs_warning">Iskanje vsebin za prenos; prosimo, počakajte ...</string>
+  <string name="save_media">Shrani predstavnost kot …</string>
+  <string name="rescan_fs_warning">Iskanje vsebin za prenos; prosimo, počakajte …</string>
   <string name="button_backtotop">Nazaj na vrh</string>
   <string name="search_label">Iskanje</string>
   <string name="choose_file">Izberite datoteko z vsebino (*.zim)</string>
@@ -56,7 +56,7 @@
   <string name="open">Odpri</string>
   <string name="bookmark_removed">Zaznamek je odstranjen</string>
   <string name="search_widget_text">Iskanje Kiwix</string>
-  <string name="download_started_library">Prenos se je začel...</string>
+  <string name="download_started_library">Prenos se je začel…</string>
   <string name="local_zims">Naprava</string>
   <string name="remote_zims">Na spletu</string>
   <string name="zim_downloads">Prenos</string>

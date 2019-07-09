@@ -14,8 +14,8 @@
   <string name="menu_read_aloud_stop">Lopeta ääneen lukeminen</string>
   <string name="save_media">Tallenna media</string>
   <string name="save_media_error">Virhe mediaa tallennettaessa!</string>
-  <string name="save_media_saved">Tallennettu media %s muodossa hakemistoon Android/media/org.kiwix.../</string>
-  <string name="rescan_fs_warning">Skannataan ladattavaa sisältöä, odota...</string>
+  <string name="save_media_saved">Tallennettu media %s muodossa hakemistoon Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">Skannataan ladattavaa sisältöä, odota…</string>
   <string name="button_backtotop">Takaisin alkuun</string>
   <string name="search_label">Hae</string>
   <string name="choose_file">Valitse sisältötiedosto (*.zim)</string>
@@ -74,7 +74,7 @@
   <string name="search_widget_text">Hae Kiwixistä</string>
   <string name="speech_prompt_text">Puhu hakeaksesi %s</string>
   <string name="speech_not_supported">Sori! Laitteesi ei tue puheensyöttöä</string>
-  <string name="download_started_library">Lataus aloitettu...</string>
+  <string name="download_started_library">Lataus aloitettu…</string>
   <string name="local_zims">Laite</string>
   <string name="zim_downloads">Ladataan</string>
   <string name="zim_manager">Kirjasto</string>

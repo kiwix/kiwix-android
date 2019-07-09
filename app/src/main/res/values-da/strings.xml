@@ -14,8 +14,8 @@
   <string name="menu_read_aloud_stop">Stop med at læse højt</string>
   <string name="save_media">Gem medie</string>
   <string name="save_media_error">Der opstod en fejl under forsøg på at gemme mediet!</string>
-  <string name="save_media_saved">Gemte medie som %s til Android/media/org.kiwix.../</string>
-  <string name="rescan_fs_warning">Søger efter indhold, vent venligst ...</string>
+  <string name="save_media_saved">Gemte medie som %s til Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">Søger efter indhold, vent venligst …</string>
   <string name="button_backtotop">Tilbage til toppen</string>
   <string name="search_label">Søg</string>
   <string name="choose_file">Vælg en indholdsfil (*.zim)</string>
@@ -76,7 +76,7 @@
   <string name="search_widget_text">Søg i Kiwix</string>
   <string name="speech_prompt_text">Tal for at søge %s</string>
   <string name="speech_not_supported">Beklager! Din enhed understøtter ikke tale</string>
-  <string name="download_started_library">Overførsel startet ...</string>
+  <string name="download_started_library">Overførsel startet …</string>
   <string name="local_zims">Enhed</string>
   <string name="remote_zims">På nettet</string>
   <string name="zim_downloads">Henter</string>

@@ -11,10 +11,10 @@
   <string name="menu_exitfullscreen">Išeiti iš viso ekrano režimo</string>
   <string name="menu_read_aloud">Skaityk garsiai</string>
   <string name="menu_read_aloud_stop">Nustok garsiai skaityti</string>
-  <string name="save_media">Išsaugoti duomenis kaip...</string>
+  <string name="save_media">Išsaugoti duomenis kaip…</string>
   <string name="save_media_error">Įvyko klaida bandant išsaugoti duomenis!</string>
   <string name="save_media_saved">Duomenys išsaugoti jūsų Paveikslėlių aplanke kaip %1$s</string>
-  <string name="rescan_fs_warning">Ieškoma ZIM failų, prašome palaukti...</string>
+  <string name="rescan_fs_warning">Ieškoma ZIM failų, prašome palaukti…</string>
   <string name="button_backtotop">Atgal į viršų</string>
   <string name="search_label">Paieška</string>
   <string name="choose_file">Pasirinkite ZIM Turinio Failą (*.zim)</string>

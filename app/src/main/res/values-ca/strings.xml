@@ -15,7 +15,7 @@
   <string name="save_media">Anomena i desa el fitxer…</string>
   <string name="save_media_error">S\'ha produït un error en mirar de desar el fitxer!</string>
   <string name="save_media_saved">El fitxer s\'ha desat amb el nom %1$s a la vostra carpeta d\'imatges</string>
-  <string name="rescan_fs_warning">Buscant arxius ZIM. Espereu...</string>
+  <string name="rescan_fs_warning">Buscant arxius ZIM. Espereu…</string>
   <string name="button_backtotop">Tornar a dalt</string>
   <string name="search_label">Cercar</string>
   <string name="choose_file">Seleccioneu un fitxer de contingut ZIM (*.zim)</string>
@@ -49,14 +49,14 @@
   <string name="delete_specific_search_toast">Les darreres cerques han estat suprimides</string>
   <string name="hint_contents_drawer_message">Podeu lliscar el dit cap a l\'esquerra per veure el contingut d\'aquest article</string>
   <string name="got_it">Entesos</string>
-  <string name="did_you_know">Sabies que...?</string>
+  <string name="did_you_know">Sabies que…?</string>
   <string name="undo">Desfer</string>
   <string name="deleted_message">esborrat</string>
   <string name="bookmark_added">Marcador afegit</string>
   <string name="open">Obrir</string>
   <string name="bookmark_removed">Marcador eliminat</string>
   <string name="new_tab_snackbar">Article obert en una pestanya nova</string>
-  <string name="download_started_library">Descàrrega iniciada...</string>
+  <string name="download_started_library">Descàrrega iniciada…</string>
   <string name="local_zims">Dispositiu</string>
   <string name="zim_manager">Biblioteca</string>
   <string name="delete_specific_zim">Esborrar aquest element?</string>

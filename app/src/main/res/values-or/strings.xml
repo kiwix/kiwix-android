@@ -14,7 +14,7 @@
   <string name="save_media">ମେଡ଼ିଅକୁ ସାଇତିବେ</string>
   <string name="save_media_error">ମିଡ଼ିଆ ସାଇତିଲା ବେଳେ ଅସୁବିଧା ହେଲା!</string>
   <string name="save_media_saved">ମେଡ଼ିଆକୁ %1$ ଭାବେ ଆପଣଙ୍କ ଛବି ଫୋଲ୍ଡରରେ ରଖାଗଲା</string>
-  <string name="rescan_fs_warning">ଜିମ ଫାଇଲ ସ୍କାନ କରୁଛୁ, ଦୟାକରି ଅପେକ୍ଷା କରନ୍ତୁ...</string>
+  <string name="rescan_fs_warning">ଜିମ ଫାଇଲ ସ୍କାନ କରୁଛୁ, ଦୟାକରି ଅପେକ୍ଷା କରନ୍ତୁ…</string>
   <string name="button_backtotop">ଉପରକୁ ଫେରନ୍ତୁ</string>
   <string name="search_label">ଖୋଜିବେ</string>
   <string name="choose_file">ଜିମ ବିଷୟବସ୍ତୁ ଥିବା (*.zim) ଫାଇଲ ବାଛନ୍ତୁ</string>

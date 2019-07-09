@@ -11,10 +11,10 @@
   <string name="menu_exitfullscreen">Wyjdź z trybu pełnoekranowego</string>
   <string name="menu_read_aloud">Czytaj na głos</string>
   <string name="menu_read_aloud_stop">Zatrzymaj czytanie na głos</string>
-  <string name="save_media">Zapisz plik multimedialny jako...</string>
+  <string name="save_media">Zapisz plik multimedialny jako…</string>
   <string name="save_media_error">Wystąpił błąd podczas próby zapisania multimediów!</string>
-  <string name="save_media_saved">Zapisano plik multimedialny jako %s w folderze Android/media/org.kiwix.../</string>
-  <string name="rescan_fs_warning">Skanowanie plików ZIM, proszę czekać...</string>
+  <string name="save_media_saved">Zapisano plik multimedialny jako %s w folderze Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">Skanowanie plików ZIM, proszę czekać…</string>
   <string name="button_backtotop">Powrót do góry</string>
   <string name="search_label">Szukaj</string>
   <string name="choose_file">Wybierz plik zawartości ZIM (*.zim)</string>
@@ -75,7 +75,7 @@
   <string name="search_widget_text">Szukaj w Kiwix</string>
   <string name="speech_prompt_text">Mów by wyszukać %s</string>
   <string name="speech_not_supported">Przepraszamy! Twoje urządzenie nie obsługuje wprowadzania głosowego</string>
-  <string name="download_started_library">Pobieranie rozpoczęte...</string>
+  <string name="download_started_library">Pobieranie rozpoczęte…</string>
   <string name="local_zims">Urządzenie</string>
   <string name="remote_zims">Dostępny</string>
   <string name="zim_downloads">Pobieranie</string>

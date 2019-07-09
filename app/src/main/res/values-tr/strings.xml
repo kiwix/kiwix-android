@@ -14,8 +14,8 @@
   <string name="menu_read_aloud_stop">Yüksek sesle okumayı sonlandır</string>
   <string name="save_media">Ortam dosyasını kaydet</string>
   <string name="save_media_error">Medya kaydedilmeye çalışılırken bir hata oluştu!</string>
-  <string name="save_media_saved">Medyayı %s olarak şuraya kaydet Android/media/org.kiwix.../</string>
-  <string name="rescan_fs_warning">İndirilebilir içerik aranıyor, lütfen bekleyin...</string>
+  <string name="save_media_saved">Medyayı %s olarak şuraya kaydet Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">İndirilebilir içerik aranıyor, lütfen bekleyin…</string>
   <string name="button_backtotop">Başa dön</string>
   <string name="search_label">Ara</string>
   <string name="choose_file">Bir İçerik Dosyası seçin (*.zim)</string>
@@ -79,7 +79,7 @@
   <string name="search_widget_text">Kiwix\'i ara</string>
   <string name="speech_prompt_text">%s aramak için konuşun</string>
   <string name="speech_not_supported">Üzgünüz! Cihazınız konuşma girdisini desteklemiyor</string>
-  <string name="download_started_library">İndirme başlatıldı...</string>
+  <string name="download_started_library">İndirme başlatıldı…</string>
   <string name="local_zims">Cihaz</string>
   <string name="remote_zims">Çevrimiçi</string>
   <string name="zim_downloads">İndiriliyor</string>
@@ -144,7 +144,7 @@
   <string name="next">İleri</string>
   <string name="previous">Önceki</string>
   <string name="wifi_only_title">İçeriğin mobil ağ kullanılarak indirilmesine izin verilsin mi?</string>
-  <string name="wifi_only_msg">Eğer "Evet"i seçerseniz ileride uyarı almayacaksınız. Ancak Ayarlar kısmından her zaman bunu değiştirebilirsiniz</string>
+  <string name="wifi_only_msg">Eğer “Evet”i seçerseniz ileride uyarı almayacaksınız. Ancak Ayarlar kısmından her zaman bunu değiştirebilirsiniz</string>
   <string name="pref_wifi_only">İçeriği yalnızca WiFi kullanarak indir</string>
   <string name="time_day">gün</string>
   <string name="time_hour">sa</string>

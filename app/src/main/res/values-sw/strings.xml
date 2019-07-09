@@ -11,7 +11,7 @@
   <string name="menu_exitfullscreen">Toka kwa modi ya Skrini nzima</string>
   <string name="menu_read_aloud">Soma kwa sauti</string>
   <string name="menu_read_aloud_stop">Simama kusoma kwa sauti</string>
-  <string name="save_media">Hifadhi midia kama...</string>
+  <string name="save_media">Hifadhi midia kama…</string>
   <string name="save_media_error">Kosa lilitokea wakati wa kuhifadhi midia!</string>
   <string name="save_media_saved">Midia imehifadhiwa kwa jina la %1$s katika kabrasha yako ya picha</string>
   <string name="rescan_fs_warning">Tafadhali subiri, faili za ZIM zatafutwa</string>

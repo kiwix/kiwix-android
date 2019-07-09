@@ -11,10 +11,10 @@
   <string name="menu_exitfullscreen">بشپړ پردې څخه وتل</string>
   <string name="menu_read_aloud">په جگ غږ لوستل</string>
   <string name="menu_read_aloud_stop">په جگ غږ لوستل درول</string>
-  <string name="save_media">رسنۍ ساتل لکه...</string>
+  <string name="save_media">رسنۍ ساتل لکه…</string>
   <string name="save_media_error">د رسنۍ په ساتلو کې يوه تېروتنه رامنځ ته شوه!</string>
   <string name="save_media_saved">رسنۍ خپل د انځورونو په ټولگه کې د %1$s په نوم ساتل</string>
-  <string name="rescan_fs_warning">د ZIM دوتنو لپاره ځيرڅارنه، لطفاً تم شئ...</string>
+  <string name="rescan_fs_warning">د ZIM دوتنو لپاره ځيرڅارنه، لطفاً تم شئ…</string>
   <string name="button_backtotop">بېرته سر ته</string>
   <string name="search_label">پلټل</string>
   <string name="choose_file">د ZIM مېنځپانگې يوه دوتنه ټاکل (*.zim)</string>
@@ -71,7 +71,7 @@
   <string name="yes">هو</string>
   <string name="tts_not_enabled">د زيم دوتنې لپاره متن ته د وینا متن ندی فعال شوی</string>
   <string name="wifi_only_title">د ګرځنده شبکې له لارې د منځپانګې ډاونلوډ ته اجازه ورکړئ؟</string>
-  <string name="wifi_only_msg">که تاسو "هو" انتخاب کړئ نو تاسو به په راتلونکی کې خبرداری ورنکړئ. په هرصورت، تاسو کولی شئ دا په ترتیباتو کې بدل کړئ</string>
+  <string name="wifi_only_msg">که تاسو “هو” انتخاب کړئ نو تاسو به په راتلونکی کې خبرداری ورنکړئ. په هرصورت، تاسو کولی شئ دا په ترتیباتو کې بدل کړئ</string>
   <string name="time_day">ورځ</string>
   <string name="time_hour">ح</string>
   <string name="time_minute">مين</string>

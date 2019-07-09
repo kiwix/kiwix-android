@@ -75,7 +75,7 @@
   <string name="pref_extras">Ekstra</string>
   <string name="new_tab_snackbar">Artikulli u hap në skedë të re</string>
   <string name="search_widget_text">Kërkoni në Kiwix</string>
-  <string name="speech_prompt_text">Flisni që të kërkohet \'%s\'</string>
+  <string name="speech_prompt_text">Flisni që të kërkohet \‘%s\’</string>
   <string name="speech_not_supported">Na ndjeni! Pajisja juaj nuk mbulon input përmes të folurës</string>
   <string name="download_started_library">Shkarkimi filloi…</string>
   <string name="local_zims">Pajisje</string>
@@ -142,7 +142,7 @@
   <string name="next">Pasuesi</string>
   <string name="previous">E mëparshmja</string>
   <string name="wifi_only_title">Të lejohet shkarkim lënde përmes rrjetit celular?</string>
-  <string name="wifi_only_msg">Nëse zgjidhni "Po", s’do të sinjalizoheni më në të ardhmen. Sidoqoftë, mundeni përherë ta ndryshoni këtë, te Rregullimet</string>
+  <string name="wifi_only_msg">Nëse zgjidhni “Po”, s’do të sinjalizoheni më në të ardhmen. Sidoqoftë, mundeni përherë ta ndryshoni këtë, te Rregullimet</string>
   <string name="pref_wifi_only">Shkarko lëndë vetëm përmes WiFi-it</string>
   <string name="time_day">ditë</string>
   <string name="time_minute">min.</string>

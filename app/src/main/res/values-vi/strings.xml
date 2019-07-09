@@ -119,7 +119,7 @@
   <string name="help_15">Tuy nhiên, nếu bạn tải về bằng thiết bị khác thì bạn có thể cần dùng các phần mềm sau để cắt tập tin ZIM ra:</string>
   <string name="help_16">\u2022 Đối với Microsoft Windows: HJ-Split</string>
   <string name="help_17">\u2022 Đối với Apple Mac OSX: Split and Concat</string>
-  <string name="help_19">Lưu ý: các tập tin kết quả phải được đặt theo dạng my_big_file.zimaa, my_big_file.zimab,...</string>
+  <string name="help_19">Lưu ý: các tập tin kết quả phải được đặt theo dạng my_big_file.zimaa, my_big_file.zimab,…</string>
   <string name="help_20">Cảm ơn bạn đã dùng Kiwix!</string>
   <string name="help_21">Chúng tôi rất vui khi có bạn đồng hành và chúng tôi rất mong muốn được nhận phản hồi hoặc góp ý tại android@kiwix.org.</string>
   <string name="pref_storage">Lưu trữ</string>
@@ -141,7 +141,7 @@
   <string name="next">Tiếp</string>
   <string name="previous">Trước</string>
   <string name="wifi_only_title">Cho phép tải về nội dung qua mạng di động?</string>
-  <string name="wifi_only_msg">Nếu chọn "Có" thì bạn sẽ không được cảnh báo sau này. Bạn luôn có thể thay đổi tuỳ chọn này trong mục Cài đặt</string>
+  <string name="wifi_only_msg">Nếu chọn “Có” thì bạn sẽ không được cảnh báo sau này. Bạn luôn có thể thay đổi tuỳ chọn này trong mục Cài đặt</string>
   <string name="pref_wifi_only">Chỉ tải về nội dung qua WiFi</string>
   <string name="time_day">ngày</string>
   <string name="time_hour">giờ</string>

@@ -14,8 +14,8 @@
   <string name="menu_read_aloud_stop">Felolvasás megállítása</string>
   <string name="save_media">Média mentése</string>
   <string name="save_media_error">Hiba történt a média mentése közben!</string>
-  <string name="save_media_saved">Média elmentve %s néven ide: Android/media/org.kiwix.../</string>
-  <string name="rescan_fs_warning">Letölthető tartalom pásztázása, kis türelmet...</string>
+  <string name="save_media_saved">Média elmentve %s néven ide: Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">Letölthető tartalom pásztázása, kis türelmet…</string>
   <string name="button_backtotop">Vissza a lap tetejére</string>
   <string name="search_label">Keresés</string>
   <string name="choose_file">Tartalomfájl kiválasztása (*.zim)</string>
@@ -79,7 +79,7 @@
   <string name="search_widget_text">Kiwix keresése</string>
   <string name="speech_prompt_text">A kereséshez beszélj</string>
   <string name="speech_not_supported">Sajnálom, az eszközöd nem támogatja a beszédbevitelt</string>
-  <string name="download_started_library">Letöltés elkezdve...</string>
+  <string name="download_started_library">Letöltés elkezdve…</string>
   <string name="local_zims">Eszköz</string>
   <string name="remote_zims">Elérhető</string>
   <string name="zim_downloads">A letöltés folyamatban</string>
@@ -143,7 +143,7 @@
   <string name="next">Következő</string>
   <string name="previous">Előző</string>
   <string name="wifi_only_title">Engedélyezed a tartalom letöltését mobilhálózaton keresztül?</string>
-  <string name="wifi_only_msg">Ha az "Igen"-t választod nem leszel többet figyelmeztetve. Ezt azonban bármikor meg tudod változtatni a Beállításokban</string>
+  <string name="wifi_only_msg">Ha az “Igen”-t választod nem leszel többet figyelmeztetve. Ezt azonban bármikor meg tudod változtatni a Beállításokban</string>
   <string name="pref_wifi_only">Tartalom letöltése csak WiFi-n keresztül</string>
   <string name="time_day">nap</string>
   <string name="time_hour">óra</string>

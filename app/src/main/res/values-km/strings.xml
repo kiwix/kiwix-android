@@ -9,7 +9,7 @@
   <string name="menu_randomarticle">អត្ថបទចៃដន្យ</string>
   <string name="menu_fullscreen">ទំហំពេញអេក្រង់</string>
   <string name="menu_exitfullscreen">ចាកចេញពីម៉ូដទំហំពេញអេក្រង់</string>
-  <string name="rescan_fs_warning">កំពុងង​ស្កេន​រក​ឯកសារ ZIM, សូម​រង់​ចាំ...</string>
+  <string name="rescan_fs_warning">កំពុងង​ស្កេន​រក​ឯកសារ ZIM, សូម​រង់​ចាំ…</string>
   <string name="button_backtotop">ត្រឡប់ទៅលើ</string>
   <string name="search_label">ស្វែងរក</string>
   <string name="choose_file">ជ្រើសរើសឯកសារមាតិកា ZIM (*.zim)</string>

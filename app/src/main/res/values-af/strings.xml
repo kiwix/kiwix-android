@@ -9,7 +9,7 @@
   <string name="menu_randomarticle">Lukrake artikel</string>
   <string name="menu_fullscreen">Volle skerm</string>
   <string name="menu_exitfullscreen">Verlaat volskerm-modus</string>
-  <string name="rescan_fs_warning">Soek ZIM-lêers. Wag asb...</string>
+  <string name="rescan_fs_warning">Soek ZIM-lêers. Wag asb…</string>
   <string name="button_backtotop">Terug na bo</string>
   <string name="search_label">Soek</string>
   <string name="choose_file">Kies \'n ZIM-inhoudslêer (*.zim)</string>

@@ -14,7 +14,7 @@
   <string name="menu_read_aloud_stop">Ĉesi laŭtlegadon</string>
   <string name="save_media">Konservi Aŭdvidaĵon</string>
   <string name="save_media_error">Eraro okazis dum provo konservi la plurmediaĵon!</string>
-  <string name="save_media_saved">Aŭdvidaĵoj konservitaj kiel %1$s en dosierujo Android/media/org.kiwix.../</string>
+  <string name="save_media_saved">Aŭdvidaĵoj konservitaj kiel %1$s en dosierujo Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Daŭras serĉado de elŝutebla enhavo, bonvolu atendi…</string>
   <string name="button_backtotop">Reiri Supren</string>
   <string name="search_label">Serĉi</string>
@@ -144,7 +144,7 @@
   <string name="next">Sekven</string>
   <string name="previous">Antaŭen</string>
   <string name="wifi_only_title">Ĉu permesi elŝutadon de enhavo per poŝaparata reto?</string>
-  <string name="wifi_only_msg">Se vi elektas "Jes", vi ne avertiĝos de nun. Tamen, vi povas ŝanĝi tion en Agordoj</string>
+  <string name="wifi_only_msg">Se vi elektas “Jes”, vi ne avertiĝos de nun. Tamen, vi povas ŝanĝi tion en Agordoj</string>
   <string name="pref_wifi_only">Elŝuti nur per vifio</string>
   <string name="time_day">tago</string>
   <string name="time_left">restas</string>

@@ -14,8 +14,8 @@
   <string name="menu_read_aloud_stop">Спиране четенето на глас</string>
   <string name="save_media">Запази медията</string>
   <string name="save_media_error">Възникна грешка при опита за съхранение на медийния файл!</string>
-  <string name="save_media_saved">Медийният файл е съхранен под името %s в Android/media/org.kiwix.../</string>
-  <string name="rescan_fs_warning">Сканиране на файлове за изтегляне, моля, изчакайте...</string>
+  <string name="save_media_saved">Медийният файл е съхранен под името %s в Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">Сканиране на файлове за изтегляне, моля, изчакайте…</string>
   <string name="button_backtotop">Връщане в началото</string>
   <string name="search_label">Търсене</string>
   <string name="choose_file">Изберете файл със съдържание (*.zim)</string>
@@ -79,7 +79,7 @@
   <string name="search_widget_text">Търсене в Kiwix</string>
   <string name="speech_prompt_text">Говорете, за да търсите %s</string>
   <string name="speech_not_supported">Съжаляваме! Вашето устройство не поддържа  въвеждане чрез глас.</string>
-  <string name="download_started_library">Даунлоуда стартиран...</string>
+  <string name="download_started_library">Даунлоуда стартиран…</string>
   <string name="local_zims">Устройство</string>
   <string name="remote_zims">Онлайн</string>
   <string name="zim_downloads">Изтегляне</string>
@@ -144,7 +144,7 @@
   <string name="next">Следващи</string>
   <string name="previous">Предишни</string>
   <string name="wifi_only_title">Ще позволите ли смъкването на съдържание, чрез мобилната мрежа?</string>
-  <string name="wifi_only_msg">Ако изберет "Да", Вие няма да бъдете предупреждавани в бъдеще. Както и да е, Вие винаги може да промените това в Настройки</string>
+  <string name="wifi_only_msg">Ако изберет “Да”, Вие няма да бъдете предупреждавани в бъдеще. Както и да е, Вие винаги може да промените това в Настройки</string>
   <string name="pref_wifi_only">Смъквай съдържание само чрез  WiFi</string>
   <string name="time_day">ден</string>
   <string name="time_hour">ч.</string>

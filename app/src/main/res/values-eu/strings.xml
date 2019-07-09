@@ -14,8 +14,8 @@
   <string name="menu_read_aloud_stop">Ozen irakurtzeari utzi</string>
   <string name="save_media">Media gorde</string>
   <string name="save_media_error">Akats bat gertatu da media gordetzen zen bitartean!</string>
-  <string name="save_media_saved">Media %s to Android/media/org.kiwix.../ bezala gordeta</string>
-  <string name="rescan_fs_warning">Deskargatu daiteken edukia eskaneatzen, itxaron mesedez...</string>
+  <string name="save_media_saved">Media %s to Android/media/org.kiwix…/ bezala gordeta</string>
+  <string name="rescan_fs_warning">Deskargatu daiteken edukia eskaneatzen, itxaron mesedez…</string>
   <string name="button_backtotop">Gora itzuli</string>
   <string name="search_label">Bilatu</string>
   <string name="choose_file">Eduki Artxibo bat Aukeratu (*.zim)</string>
@@ -78,7 +78,7 @@
   <string name="search_widget_text">Kiwix bilatu</string>
   <string name="speech_prompt_text">Hitz egin %s bilatzeko</string>
   <string name="speech_not_supported">Sentitzen dut! Zure gailuak ez du ahots bidezko sarrera onartzen.</string>
-  <string name="download_started_library">Deskarga hasi da...</string>
+  <string name="download_started_library">Deskarga hasi da…</string>
   <string name="local_zims">Gailua</string>
   <string name="remote_zims">Konektatuta</string>
   <string name="zim_downloads">Jaisten</string>
@@ -118,7 +118,7 @@
   <string name="help_14">Automatikoki artxibo handiagoak deskargatzen ditu aplikazioan, hauek zuretzat banatzen ditu.</string>
   <string name="help_15">Beste gailuren batean jaisten bazabiltza, ZIM artxiboa banatu beharko duzu hurrengo softwarea erabiltzen:</string>
   <string name="help_17">\u2022 Apple Macen OSX: Banatu eta Kontaktua</string>
-  <string name="help_19">Oharra: zure artxiboen izena my_big_file.zimaa, my_big_file.zimab... izan behar dute.</string>
+  <string name="help_19">Oharra: zure artxiboen izena my_big_file.zimaa, my_big_file.zimab… izan behar dute.</string>
   <string name="help_20">Eskerrik asko Kiwik aukeratzeagatik!</string>
   <string name="help_21">Pozten gara zu gurekin izateaz eta eskertuko genizuke iradokizunak bidaliko bazenigu hurrengo helbidera: android@kiwix.org.</string>
   <string name="pref_storage">Biltegia</string>
@@ -142,7 +142,7 @@
   <string name="next">Hurrengoa</string>
   <string name="previous">Aurrekoa</string>
   <string name="wifi_only_title">Deskarga baimendu mobil konexioaren bidez?</string>
-  <string name="wifi_only_msg">"Bai" aukeratzen baduzu, etorkizunean ez dizugu abisatuko. Baina, hau aldatu dezakezu "Doikuntza" atalean.</string>
+  <string name="wifi_only_msg">“Bai” aukeratzen baduzu, etorkizunean ez dizugu abisatuko. Baina, hau aldatu dezakezu “Doikuntza” atalean.</string>
   <string name="pref_wifi_only">Edukia WiFi-arekin baino ez deskargatu.</string>
   <string name="time_day">eguna</string>
   <string name="time_second">k</string>

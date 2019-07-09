@@ -14,7 +14,7 @@
   <string name="menu_read_aloud_stop">Dejar de leer en voz alta</string>
   <string name="save_media">Guardar multimedia</string>
   <string name="save_media_error">¡Se produjo un error al intentar guardar los medios!</string>
-  <string name="save_media_saved">Multimedia guardado como %s en Android/media/org.kiwix.../</string>
+  <string name="save_media_saved">Multimedia guardado como %s en Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Buscando contenido descargable; espera…</string>
   <string name="button_backtotop">Volver al principio</string>
   <string name="search_label">Buscar</string>
@@ -141,7 +141,7 @@
   <string name="next">Siguiente</string>
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">¿Permitir descargar contenido mediante la red móvil?</string>
-  <string name="wifi_only_msg">Si eliges "Sí", no se te advertirá en el futuro. Sin embargo, siempre puedes cambiar esto en Configuración</string>
+  <string name="wifi_only_msg">Si eliges “Sí”, no se te advertirá en el futuro. Sin embargo, siempre puedes cambiar esto en Configuración</string>
   <string name="pref_wifi_only">Descargar contenido solo mediante wifi</string>
   <string name="time_day">día</string>
   <string name="time_left">faltan</string>

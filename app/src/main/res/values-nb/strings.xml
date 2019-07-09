@@ -11,10 +11,10 @@
   <string name="menu_exitfullscreen">Avslutt fullskjerm</string>
   <string name="menu_read_aloud">Les høyt</string>
   <string name="menu_read_aloud_stop">Stopp høytlesning</string>
-  <string name="save_media">Lagre media som...</string>
+  <string name="save_media">Lagre media som…</string>
   <string name="save_media_error">En feil oppstod under lagring av mediet!</string>
   <string name="save_media_saved">Lagret media som %1$s i din bildemappe.</string>
-  <string name="rescan_fs_warning">Søker etter ZIM-filer, vennligst vent...</string>
+  <string name="rescan_fs_warning">Søker etter ZIM-filer, vennligst vent…</string>
   <string name="button_backtotop">Tilbake til toppen</string>
   <string name="search_label">Søk</string>
   <string name="choose_file">Velg en ZIM-innholdsfil (*.zim)</string>

@@ -10,7 +10,7 @@
   <string name="menu_fullscreen">Дэлгэц дүүргэн харах</string>
   <string name="menu_exitfullscreen">Бүтэн дэлгэцээр үзүүлэхийг болиулах</string>
   <string name="save_media">медиаг өөр төрлөөр хадгалах</string>
-  <string name="rescan_fs_warning">ZIM файлыг шүүж байна, түр хүлээнэ үү...</string>
+  <string name="rescan_fs_warning">ZIM файлыг шүүж байна, түр хүлээнэ үү…</string>
   <string name="button_backtotop">Хамгийн дээр Очих</string>
   <string name="search_label">Хайлт</string>
   <string name="choose_file">ZIM  агуулгын файлыг сонгох (*.zim)</string>

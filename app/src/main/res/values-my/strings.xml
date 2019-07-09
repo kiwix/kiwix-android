@@ -13,8 +13,8 @@
   <string name="menu_read_aloud_stop">ကျယ်ကျယ်ဖတ်နေခြင်းကို ရပ်တန့်ပါ</string>
   <string name="save_media">မီဒီယာဖိုင်ကို ဤသို့သိမ်းရန်..</string>
   <string name="save_media_error">မီဒီယာဖိုင်ကို သိမ်းရန်ကြိုးစားနေစဉ် အမှားတစ်ခု ဖြစ်ပေါ်သွားသည်။</string>
-  <string name="save_media_saved">မီဒီယာဖိုင်ကို %s အဖြစ် Android/media/org.kiwix.../ တွင် သိမ်းပြီးဖြစ်သည်။</string>
-  <string name="rescan_fs_warning">ဒေါင်းလုပ်ရယူနိုင်သော အကြောင်းအရာဖိုင်များကို ရှာဖတ်နေသည်။ ခေတ္တစောင့်ဆိုင်းပါ ...</string>
+  <string name="save_media_saved">မီဒီယာဖိုင်ကို %s အဖြစ် Android/media/org.kiwix…/ တွင် သိမ်းပြီးဖြစ်သည်။</string>
+  <string name="rescan_fs_warning">ဒေါင်းလုပ်ရယူနိုင်သော အကြောင်းအရာဖိုင်များကို ရှာဖတ်နေသည်။ ခေတ္တစောင့်ဆိုင်းပါ …</string>
   <string name="button_backtotop">ထိပ်ဆုံးသို့ ပြန်သွားရန်</string>
   <string name="search_label">ရှာဖွေရန်</string>
   <string name="choose_file">အကြောင်းအရာဖိုင်တစ်ခုကို ရွေးချယ်ပါ (*.zim)</string>
@@ -55,7 +55,7 @@
   <string name="rate_dialog_negative">မလိုပါ၊ ကျေးဇူးတင်ပါသည်။</string>
   <string name="rate_dialog_neutral">နောက်မှ</string>
   <string name="open">ဖွင့်ပါ</string>
-  <string name="download_started_library">ဒေါင်းလုတ် စတင်ခဲ့သည်...</string>
+  <string name="download_started_library">ဒေါင်းလုတ် စတင်ခဲ့သည်…</string>
   <string name="local_zims">စက်ပစ္စည်း</string>
   <string name="remote_zims">အွန်လိုင်း</string>
   <string name="zim_downloads">ဒေါင်းလုတ်ဆွဲနေသည်</string>
