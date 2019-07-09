@@ -70,10 +70,12 @@ after_failure:
   - echo " LOGCAT "; echo "========"; cat logcat.log; pkill -KILL -f adb
 
 before_deploy:
-#  - export APP_CHANGELOG=$(cat app/src/kiwix/play/release-notes/en-US/default.txt)
-  - export DATE = `date +%Y-%m-%d`
-  - export UNIVERSAL_APK = app/build/outputs/apk/kiwix/release/*universal*.apk
-  - export SSH_KEY = travis_ci_builder_id_key
+  #  - export APP_CHANGELOG=$(cat app/src/kiwix/play/release-notes/en-US/default.txt)
+  - export DATE=$(date +%Y-%m-%d)
+  - export OUTPUT_DIR=app/build/outputs/apk/kiwix
+  - export UNIVERSAL_RELEASE_APK=$OUTPUT_DIR/release/*universal*.apk
+  - export UNIVERSAL_DEBUG_APK=$OUTPUT_DIR/debug/*universal*.apk
+  - export SSH_KEY=travis_ci_builder_id_key
 
 deploy:
 
@@ -96,9 +98,16 @@ deploy:
     on:
       tags: true
 
-  #publish on download.kiwix.org
+  #publish release on download.kiwix.org
   - provider: script
     skip_cleanup: true
-    script: scp -vrp -i ${SSH_KEY} -o StrictHostKeyChecking=no $UNIVERSAL_APK ci@download.kiwix.org:/data/download/nightly/$DATE
+    script: scp -vrp -i ${SSH_KEY} -o StrictHostKeyChecking=no $UNIVERSAL_RELEASE_APK ci@download.kiwix.org:/data/download/release/kiwix-android/$TRAVIS_TAG
+    on:
+      tags: true
+
+  #publish debug nightly on download.kiwix.org
+  - provider: script
+    skip_cleanup: true
+    script: scp -vrp -i ${SSH_KEY} -o StrictHostKeyChecking=no $UNIVERSAL_DEBUG_APK ci@download.kiwix.org:/data/download/nightly/$DATE
     on:
       branch: develop
