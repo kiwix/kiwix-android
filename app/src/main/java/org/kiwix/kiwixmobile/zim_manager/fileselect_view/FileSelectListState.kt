@@ -15,16 +15,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.downloader.model
+package org.kiwix.kiwixmobile.zim_manager.fileselect_view
 
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
-import org.kiwix.kiwixmobile.utils.StorageUtils
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.SelectionMode.NORMAL
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 
-data class DownloadModel(
-  val databaseId: Long? = null,
-  val downloadId: Long,
-  val book: Book
+data class FileSelectListState(
+  val bookOnDiskListItems: List<BooksOnDiskListItem>,
+  val selectionMode: SelectionMode = NORMAL
 ) {
-  val fileNameFromUrl: String get() = StorageUtils.getFileNameFromUrl(book.url)
+  val selectedBooks by lazy {
+    bookOnDiskListItems.filter { it.isSelected }.filterIsInstance(BookOnDisk::class.java)
+  }
+
 }
 
+enum class SelectionMode {
+  NORMAL,
+  MULTI
+}

@@ -37,7 +37,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
 import android.text.SpannableString;
@@ -84,10 +83,10 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -100,20 +99,18 @@ import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
-import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 import org.kiwix.kiwixmobile.help.HelpActivity;
 import org.kiwix.kiwixmobile.history.HistoryActivity;
 import org.kiwix.kiwixmobile.history.HistoryListItem;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.utils.DimenUtils;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
-import org.kiwix.kiwixmobile.utils.files.FileSearch;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
@@ -201,14 +198,18 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   ImageView bottomToolbarArrowBack;
   @BindView(R.id.bottom_toolbar_arrow_forward)
   ImageView bottomToolbarArrowForward;
-  @Inject
-  MainContract.Presenter presenter;
   @BindView(R.id.tab_switcher_recycler_view)
   RecyclerView tabRecyclerView;
   @BindView(R.id.activity_main_tab_switcher)
   View tabSwitcherRoot;
   @BindView(R.id.tab_switcher_close_all_tabs)
   FloatingActionButton closeAllTabsButton;
+
+  @Inject
+  MainContract.Presenter presenter;
+  @Inject
+  StorageObserver storageObserver;
+
   private CountDownTimer hideBackToTopTimer = new CountDownTimer(1200, 1200) {
     @Override
     public void onTick(long millisUntilFinished) {
@@ -274,21 +275,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       closeTab(viewHolder.getAdapterPosition());
     }
   };
-  private FileSearch fileSearch =
-      new FileSearch(this, Collections.emptyList(), new FileSearch.ResultListener() {
-        final List<BooksOnDiskListItem.BookOnDisk> newBooks = new ArrayList<>();
 
-        @Override public void onBookFound(BooksOnDiskListItem.BookOnDisk bookOnDisk) {
-          runOnUiThread(() -> {
-              newBooks.add(bookOnDisk);
-          });
-        }
-
-        @Override
-        public void onScanCompleted() {
-          presenter.saveBooks(newBooks);
-        }
-      });
 
   private static void updateWidgets(Context context) {
     Intent intent = new Intent(context.getApplicationContext(), KiwixSearchWidget.class);
@@ -377,6 +364,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
              open(bookOnDiskItem);
              return Unit.INSTANCE;
            },
+           null,
            null),
         BookOnDiskDelegate.LanguageDelegate.INSTANCE
     );
@@ -739,7 +727,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     downloadBookButton = null;
     hideBackToTopTimer.cancel();
     hideBackToTopTimer = null;
-    fileSearch = null;
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(this);
     tts.shutdown();
@@ -1199,7 +1186,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       case REQUEST_READ_STORAGE_PERMISSION: {
         if (grantResults.length > 0
             && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-          fileSearch.scan(sharedPreferenceUtil.getPrefStorage());
+          scanStorageForZims();
         } else {
           Snackbar.make(drawerLayout, R.string.request_storage, Snackbar.LENGTH_LONG)
               .setAction(R.string.menu_settings, view -> {
@@ -1226,6 +1213,13 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         break;
       }
     }
+  }
+
+  private void scanStorageForZims() {
+    storageObserver.getBooksOnFileSystem()
+        .take(1)
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(presenter::saveBooks, Throwable::printStackTrace);
   }
 
   // Workaround for popup bottom menu on older devices
@@ -2105,7 +2099,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @Override
   public void addBooks(List<BooksOnDiskListItem> books) {
-    booksAdapter.setItemList(books);
+    booksAdapter.setItems(books);
   }
 
   private void searchFiles() {
@@ -2116,7 +2110,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
           REQUEST_READ_STORAGE_PERMISSION);
     } else {
-      fileSearch.scan(sharedPreferenceUtil.getPrefStorage());
+      scanStorageForZims();
     }
   }
 

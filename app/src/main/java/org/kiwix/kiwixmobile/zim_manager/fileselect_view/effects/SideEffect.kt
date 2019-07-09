@@ -15,16 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.downloader.model
+package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
-import org.kiwix.kiwixmobile.utils.StorageUtils
+import android.app.Activity
+import org.kiwix.kiwixmobile.KiwixApplication
 
-data class DownloadModel(
-  val databaseId: Long? = null,
-  val downloadId: Long,
-  val book: Book
-) {
-  val fileNameFromUrl: String get() = StorageUtils.getFileNameFromUrl(book.url)
+interface SideEffect<T:Any?> {
+  fun invokeWith(activity: Activity):T
+  fun activityComponent(activity: Activity) =
+    KiwixApplication.getApplicationComponent().activityComponent().activity(activity).build()
 }
 
