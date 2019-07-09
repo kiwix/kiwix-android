@@ -10,6 +10,7 @@
     android:paddingRight="0dp"
     android:paddingStart="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    tools:ignore="Overdraw"
     >
 
   <CheckBox
@@ -22,6 +23,7 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
+      tools:ignore="RtlSymmetry"
       />
 
   <ImageView
