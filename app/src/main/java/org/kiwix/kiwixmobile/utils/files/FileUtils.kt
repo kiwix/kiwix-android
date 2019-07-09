@@ -205,7 +205,7 @@ object FileUtils {
     }
   }
 
-  fun getAllZimParts(book: Book): List<File> {
+  @JvmStatic fun getAllZimParts(book: Book): List<File> {
     val files = ArrayList<File>()
     if (book.file.path.endsWith(".zim") || book.file.path.endsWith(".zim.part")) {
       if (book.file.exists()) {
