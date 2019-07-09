@@ -166,11 +166,7 @@ public class LanguageUtils {
 
   // Read the language codes, that are supported in this app from the locales.txt file
   private void getLanguageCodesFromAssets() {
-
-    List<String> locales = new ArrayList<>(FileUtils.readLocalesFromAssets(mContext));
-
-    for (String locale : locales) {
-
+    for (String locale : FileUtils.readLocalesFromAssets(mContext)) {
       if (!locale.isEmpty()) {
         mLocaleLanguageCodes.add(locale.trim());
       }

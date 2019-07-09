@@ -230,7 +230,8 @@ android {
     checkAllWarnings true
     warningsAsErrors true
     ignore 'MissingTranslation', //TODO stop ignoring
-        'CheckResult'
+        'CheckResult',
+        'LogConditional'
     baseline file("lint-baseline.xml")
   }
 
