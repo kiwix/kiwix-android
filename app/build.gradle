@@ -124,9 +124,9 @@ dependencies {
   implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 
   // Leak canary
-  releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
-  androidTestImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
-  debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
+  debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
+  androidTestImplementation "com.squareup.leakcanary:leakcanary-android-instrumentation:2.0-alpha-2"
+
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
   implementation "android.arch.lifecycle:extensions:1.1.1"
@@ -212,6 +212,7 @@ android {
     minSdkVersion 15
     targetSdkVersion 28
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunnerArgument "listener", "leakcanary.FailTestOnLeakRunListener"
     // See https://github.com/linkedin/dexmaker/issues/65 for why we need the following line.
     testInstrumentationRunnerArguments.notClass = "com.android.dex.DexIndexOverflowException"
     multiDexEnabled true
