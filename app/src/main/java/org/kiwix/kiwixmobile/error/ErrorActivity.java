@@ -11,21 +11,24 @@ import android.widget.CheckBox;
 import androidx.core.content.FileProvider;
 import butterknife.BindView;
 import java.io.File;
-import java.util.ArrayList;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
-import org.kiwix.kiwixmobile.data.local.dao.BookDao;
+import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.splash.SplashActivity;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk;
 
 import static org.kiwix.kiwixmobile.utils.LanguageUtils.getCurrentLocale;
 
 public class ErrorActivity extends BaseActivity {
 
   @Inject
-  BookDao bookDao;
+  NewBookDao bookDao;
 
   @BindView(R.id.reportButton)
   Button reportButton;
@@ -66,7 +69,7 @@ public class ErrorActivity extends BaseActivity {
 
       Intent emailIntent = new Intent(Intent.ACTION_SEND);
       emailIntent.setType("vnd.android.cursor.dir/email");
-      String to[] = { "android-crash-feedback@kiwix.org" };
+      String[] to = { "android-crash-feedback@kiwix.org" };
       emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
       emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Someone has reported a crash");
 
@@ -76,24 +79,28 @@ public class ErrorActivity extends BaseActivity {
       if (allowLogsCheckbox.isChecked()) {
         File appDirectory = new File(Environment.getExternalStorageDirectory() + "/Kiwix");
         File logFile = new File(appDirectory, "logcat.txt");
-        Uri path =
-            FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider",
-                logFile);
-        emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        emailIntent.putExtra(Intent.EXTRA_STREAM, path);
+        if(logFile.exists()) {
+          Uri path =
+              FileProvider.getUriForFile(this,
+                  getApplicationContext().getPackageName() + ".fileprovider",
+                  logFile);
+          emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+          emailIntent.putExtra(Intent.EXTRA_STREAM, path);
+        }
       }
 
       if (allowCrashCheckbox.isChecked()) {
         body += "Exception Details:\n\n" +
-            exception.toString() +
+            toStackTraceString(exception) +
             "\n\n";
       }
 
-      if (allowZimsCheckbox.isChecked()) {
-        ArrayList<LibraryNetworkEntity.Book> books = bookDao.getBooks();
+      if(allowZimsCheckbox.isChecked()) {
+        List<BookOnDisk> books = bookDao.getBooks();
 
         StringBuilder sb = new StringBuilder();
-        for (LibraryNetworkEntity.Book book : books) {
+        for (BookOnDisk bookOnDisk : books) {
+          final LibraryNetworkEntity.Book book = bookOnDisk.getBook();
           String bookString = book.getTitle() +
               ":\nArticles: [" + book.getArticleCount() +
               "]\nCreator: [" + book.getCreator() +
@@ -136,8 +143,14 @@ public class ErrorActivity extends BaseActivity {
     restartButton.setOnClickListener(v -> restartApp());
   }
 
+  private String toStackTraceString(Throwable exception) {
+    StringWriter stringWriter = new StringWriter();
+    exception.printStackTrace(new PrintWriter(stringWriter));
+    return stringWriter.toString();
+  }
+
   void restartApp() {
-    Context context = ErrorActivity.this;
+    Context context = this;
     Intent intent = new Intent(context, SplashActivity.class);
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
         | Intent.FLAG_ACTIVITY_CLEAR_TASK

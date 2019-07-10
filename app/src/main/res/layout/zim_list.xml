@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="?attr/listBackground"
     android:orientation="vertical"
     >
@@ -9,43 +11,31 @@
   <TextView
       android:id="@+id/file_management_no_files"
       android:layout_width="wrap_content"
-      android:layout_height="match_parent"
-      android:layout_centerInParent="true"
-      android:layout_gravity="center_vertical"
-      android:gravity="center_vertical"
-      android:orientation="vertical"
+      android:layout_height="wrap_content"
       android:paddingBottom="@dimen/file_management_no_files_padding_bottom"
       android:text="@string/no_files_here"
       android:textSize="@dimen/file_management_no_files_text_size"
       android:visibility="gone"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:visibility="visible"
       />
 
   <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
       android:id="@+id/zim_swiperefresh"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
       >
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/zimfilelist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        android:divider="@null"
-        android:paddingBottom="@dimen/zimfilelist_padding_bottom"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/zim_list_vertical_padding"
-        android:paddingLeft="@dimen/zim_list_horizontal_padding"
-        android:paddingRight="@dimen/zim_list_horizontal_padding"
-        android:paddingTop="@dimen/zim_list_vertical_padding"
-        android:text="@string/error_nozimfilesfound"
-        android:visibility="gone"
-        style="@android:style/TextAppearance.Large"
-        />
   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
