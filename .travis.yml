@@ -49,25 +49,24 @@ android:
 licenses:
   - ".+"
 
-script:
-  - ./gradlew assemble lintKiwixDebug jacocoTestKiwixDebugUnitTestReport
+before_script:
   - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI -c 100M
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
-  - adb -e logcat *:D > logcat.log &
-  - ./gradlew createKiwixDebugCoverageReport
+
+script:
+  - ./gradlew createKiwixDebugCoverageReport lintKiwixDebug jacocoTestKiwixDebugUnitTestReport assemble
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - ./gradlew kiwixtestUploadKiwix assembleKiwixRelease
+  - ./gradlew kiwixtestUploadKiwix
 
 after_failure:
   - export LOG_DIR = ${TRAVIS_HOME}/build/kiwix/kiwix-android/app/build/outputs/reports/androidTests/connected/flavors/KIWIX/
   - lynx --dump ${LOG_DIR}com.android.builder.testing.ConnectedDevice.html
   - lynx --dump ${LOG_DIR}com.android.builder.testing.html
   - lynx --dump ${LOG_DIR}org.kiwix.kiwixmobile.tests.BasicTest.html;
-  - echo " LOGCAT "; echo "========"; cat logcat.log; pkill -KILL -f adb
 
 before_deploy:
   #  - export APP_CHANGELOG=$(cat app/src/kiwix/play/release-notes/en-US/default.txt)
