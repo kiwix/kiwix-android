@@ -50,7 +50,7 @@ licenses:
   - ".+"
 
 script:
-  - ./gradlew lintKiwixDebug jacocoTestKiwixDebugUnitTestReport
+  - ./gradlew assemble lintKiwixDebug jacocoTestKiwixDebugUnitTestReport
   - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI -c 100M
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
