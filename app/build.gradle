@@ -83,6 +83,7 @@ dependencies {
   androidTestImplementation "androidx.test:rules:1.2.0"
   androidTestImplementation "androidx.test:core:1.2.0"
   androidTestImplementation "com.squareup.okhttp3:mockwebserver:3.6.0"
+  androidTestUtil 'androidx.test:orchestrator:1.1.0'
   // Mockito
   androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
 
@@ -236,6 +237,7 @@ android {
   }
 
   testOptions {
+    execution 'ANDROIDX_TEST_ORCHESTRATOR'
     unitTests.returnDefaultValues = true
     unitTests.all {
       useJUnitPlatform()
