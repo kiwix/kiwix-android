@@ -56,9 +56,6 @@ dependencies {
     archs = file("../kiwixlib/src/main/jniLibs").list()
   }
 
-  // Storage Devices
-  implementation "eu.mhutti1.utils.storage:android-storage-devices:0.6.2"
-
   // Android Support
   implementation "androidx.appcompat:appcompat:$appCompatVersion"
   implementation "com.google.android.material:material:$materialVersion"
