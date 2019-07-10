@@ -9,14 +9,14 @@
   <dimen name="abc_dropdownitem_text_padding_right">8dip</dimen>
   <dimen name="library_textview_padding">75dp</dimen>
   <dimen name="library_font_size">20sp</dimen>
-  <dimen name="library_article_list_padding">60dp</dimen>
   <dimen name="network_permission_text_margin_top">200dp</dimen>
   <dimen name="network_permission_button_margin_top">230dp</dimen>
   <dimen name="download_management_no_downloads_padding_bottom">75dp</dimen>
+  <dimen name="bookmark_title_text_size">15sp</dimen>
+  <dimen name="help_cardview_card_elevation">2dp</dimen>
   <dimen name="kiwix_search_widget_layout_id_height">50dp</dimen>
   <dimen name="file_management_no_files_padding_bottom">75dp</dimen>
   <dimen name="file_management_no_files_text_size">20sp</dimen>
-  <dimen name="zimfilelist_padding_bottom">60dp</dimen>
   <dimen name="webview_search_edit_text_margin_right">10dip</dimen>
   <dimen name="progressbar_layout_margin_top">300dp</dimen>
   <dimen name="fullscreen_control_button_margin">7dp</dimen>
@@ -43,6 +43,7 @@
   <dimen name="zim_list_horizontal_padding">10dp</dimen>
   <dimen name="progressbar_textview_vertical_padding">10dp</dimen>
   <dimen name="bottom_toolbar_height">48dp</dimen>
+  <dimen name="zim_manage_toolbar_top_padding">15dp</dimen>
   <!-- Workaround to store floats in dimen -->
   <item format="float" name="material_light_hint_alpha" type="dimen">0.38</item>
   <item format="float" name="material_dark_hint_pressed_alpha" type="dimen">0.70</item>

@@ -23,7 +23,7 @@ public class FileUtilsInstrumentationTest {
     context = InstrumentationRegistry.getTargetContext();
 
     // Create a temporary directory where all the test files will be saved
-    testDir = context.getDir("testDir", context.MODE_PRIVATE);
+    testDir = context.getDir("testDir", Context.MODE_PRIVATE);
   }
 
   @Test
@@ -35,7 +35,7 @@ public class FileUtilsInstrumentationTest {
     String fileName = testDir.getPath() + "/" + testId + "testfile.zim";
     String fileNameWithExtension;
     Random r = new Random();
-    boolean bool[] = new boolean[122];
+    boolean[] bool = new boolean[122];
 
     // Creating the files for the test
     int index = 0;

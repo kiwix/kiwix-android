@@ -23,80 +23,60 @@
       />
 
   <LinearLayout
-      android:layout_width="@dimen/download_item_layout_width"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_weight="1"
       android:gravity="center"
       android:orientation="vertical"
-      tools:ignore="HardcodedText"
       >
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:text="Title"
+        android:layout_gravity="start"
         android:textAppearance="?android:attr/textAppearanceListItem"
+        tools:text="Title"
         />
 
     <TextView
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:text="Description"
+        android:layout_gravity="start"
         android:textAppearance="?android:attr/textAppearanceSmall"
+        tools:text="Description"
         />
 
     <ProgressBar
         android:id="@+id/downloadProgress"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:indeterminate="false"
         android:padding="@dimen/download_progress_padding"
         style="?android:attr/progressBarStyleHorizontal"
         />
 
     <TextView
-        android:id="@+id/time_remaining"
+        android:id="@+id/downloadState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
+        android:layout_gravity="start"
         android:textAppearance="?android:attr/textAppearanceSmall"
+        tools:text="In Progress"
         />
   </LinearLayout>
 
   <LinearLayout
       android:layout_width="wrap_content"
       android:layout_height="match_parent"
-      android:layout_alignParentEnd="true"
-      android:layout_alignParentRight="true"
       android:orientation="horizontal"
       >
 
     <ImageView
-        android:id="@+id/pause"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="0.5"
-        android:minHeight="@dimen/pause_min_height"
-        android:minWidth="@dimen/pause_min_width"
-        android:src="@drawable/ic_pause_black_24dp"
-        android:text="@string/download_pause"
-        />
-
-    <ImageView
         android:id="@+id/stop"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="@dimen/stop_horizontal_margin"
         android:layout_marginRight="@dimen/stop_horizontal_margin"

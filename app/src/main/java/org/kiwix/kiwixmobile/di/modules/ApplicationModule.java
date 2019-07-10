@@ -17,6 +17,8 @@
  */
 package org.kiwix.kiwixmobile.di.modules;
 
+import android.app.Application;
+import android.app.DownloadManager;
 import android.app.NotificationManager;
 import android.content.Context;
 import dagger.Module;
@@ -26,31 +28,35 @@ import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import javax.inject.Singleton;
-import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.di.qualifiers.Computation;
 import org.kiwix.kiwixmobile.di.qualifiers.IO;
 import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
+import org.kiwix.kiwixmobile.downloader.model.UriToFileConverter;
 import org.kiwix.kiwixmobile.utils.BookUtils;
 import org.kiwix.kiwixmobile.utils.LanguageUtils;
 
-@Module(includes = { ActivityBindingModule.class, AndroidInjectionModule.class })
+@Module(includes = {
+    ActivityBindingModule.class,
+    AndroidInjectionModule.class,
+    DownloaderModule.class,
+    ViewModelModule.class,
+    DatabaseModule.class
+})
 public class ApplicationModule {
-  private final KiwixApplication application;
 
-  public ApplicationModule(KiwixApplication application) {
-    this.application = application;
-  }
+  @Provides @Singleton Application provideApplication(Context context) {
+    return (Application) context;
 
-  @Provides
-  @Singleton
-  Context provideApplicationContext() {
-    return this.application;
   }
 
   @Provides
   @Singleton
   NotificationManager provideNotificationManager(Context context) {
     return (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+  }
+
+  @Provides @Singleton DownloadManager provideDownloadManager(Context context) {
+    return (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
   }
 
   @Provides
@@ -81,5 +87,10 @@ public class ApplicationModule {
   @Provides
   public Scheduler provideComputationThread() {
     return Schedulers.computation();
+  }
+
+  @Provides @Singleton
+  UriToFileConverter provideUriToFIleCOnverter() {
+    return new UriToFileConverter.Impl();
   }
 }

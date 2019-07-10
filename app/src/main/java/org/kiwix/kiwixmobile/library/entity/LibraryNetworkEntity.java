@@ -29,7 +29,7 @@ import org.simpleframework.xml.Root;
 public class LibraryNetworkEntity {
 
   @ElementList(name = "book", inline = true, required = false)
-  private LinkedList<Book> book;
+  public LinkedList<Book> book;
 
   @Attribute(name = "version", required = false)
   private String version;
@@ -90,13 +90,11 @@ public class LibraryNetworkEntity {
     @Attribute(name = "tags", required = false)
     public String tags;
 
-    public boolean downloaded = false;
-
-    public String remoteUrl;
-
     public int searchMatches = 0;
-
+    @Deprecated
     public File file;
+    @Deprecated
+    public String remoteUrl;
 
     public String getId() {
       return this.id;
