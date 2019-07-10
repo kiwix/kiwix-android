@@ -49,25 +49,24 @@ android:
 licenses:
   - ".+"
 
-script:
-  - ./gradlew lintKiwixDebug jacocoTestKiwixDebugUnitTestReport
+before_script:
   - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI -c 100M
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
-  - adb -e logcat *:D > logcat.log &
-  - ./gradlew createKiwixDebugCoverageReport
+
+script:
+  - ./gradlew createKiwixDebugCoverageReport lintKiwixDebug jacocoTestKiwixDebugUnitTestReport assemble
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - ./gradlew kiwixtestUploadKiwix assembleKiwixRelease
+  - ./gradlew kiwixtestUploadKiwix
 
 after_failure:
   - export LOG_DIR = ${TRAVIS_HOME}/build/kiwix/kiwix-android/app/build/outputs/reports/androidTests/connected/flavors/KIWIX/
   - lynx --dump ${LOG_DIR}com.android.builder.testing.ConnectedDevice.html
   - lynx --dump ${LOG_DIR}com.android.builder.testing.html
   - lynx --dump ${LOG_DIR}org.kiwix.kiwixmobile.tests.BasicTest.html;
-  - echo " LOGCAT "; echo "========"; cat logcat.log; pkill -KILL -f adb
 
 before_deploy:
   #  - export APP_CHANGELOG=$(cat app/src/kiwix/play/release-notes/en-US/default.txt)
@@ -75,7 +74,7 @@ before_deploy:
   - export OUTPUT_DIR=app/build/outputs/apk/kiwix
   - export UNIVERSAL_RELEASE_APK=$OUTPUT_DIR/release/*universal*.apk
   - export UNIVERSAL_DEBUG_APK=$OUTPUT_DIR/debug/*universal*.apk
-  - export SSH_KEY=travis_ci_builder_id_key
+  - export SSH_KEY=travisci_builder_id_key
 
 deploy:
 
@@ -101,13 +100,19 @@ deploy:
   #publish release on download.kiwix.org
   - provider: script
     skip_cleanup: true
-    script: scp -vrp -i ${SSH_KEY} -o StrictHostKeyChecking=no $UNIVERSAL_RELEASE_APK ci@download.kiwix.org:/data/download/release/kiwix-android/$TRAVIS_TAG
+    script:
+      - mkdir $TRAVIS_TAG
+      - cp $UNIVERSAL_RELEASE_APK $TRAVIS_TAG
+      - scp -vrp -i ${SSH_KEY} -o StrictHostKeyChecking=no $TRAVIS_TAG ci@download.kiwix.org:/data/download/release/kiwix-android/
     on:
       tags: true
 
   #publish debug nightly on download.kiwix.org
   - provider: script
     skip_cleanup: true
-    script: scp -vrp -i ${SSH_KEY} -o StrictHostKeyChecking=no $UNIVERSAL_DEBUG_APK ci@download.kiwix.org:/data/download/nightly/$DATE
+    script:
+      - mkdir $DATE
+      - cp $UNIVERSAL_DEBUG_APK $DATE
+      - scp -vrp -i ${SSH_KEY} -o StrictHostKeyChecking=no $DATE ci@download.kiwix.org:/data/download/nightly/
     on:
       branch: develop
