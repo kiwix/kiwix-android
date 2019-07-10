@@ -138,8 +138,8 @@ public class NetworkTest {
           "Permission dialog was not shown, we probably already have required permissions");
     }
 
-//    onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.library_list))
-//        .perform(click());
+    onData(withContent("wikipedia_ab_all_2017-03")).inAdapterView(withId(R.id.library_list))
+        .perform(click());
 
     try {
       onView(withId(android.R.id.button1)).perform(click());

@@ -80,7 +80,7 @@ public class LanguageActivityTest {
 
     // Open the Library
     openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
-   // onView(withText("Get Content")).perform(click());
+    onView(withText("Get Content")).perform(click());
     BaristaSleepInteractions.sleep(TEST_PAUSE_MS);
 
     ViewInteraction viewPager = onView(allOf(withId(R.id.container),

@@ -85,7 +85,7 @@ public class HelpActivityTest {
     onView(withText(test)).check(matches(notNullValue()));
 
     onView(withText(context.getString(R.string.help_12))).check(matches(notNullValue()));
-  //  onView(withText(context.getString(R.string.help_12))).perform(click());
+    onView(withText(context.getString(R.string.help_12))).perform(click());
     test = context.getString(R.string.help_13)
         + "\n"
         + context.getString(R.string.help_14)
