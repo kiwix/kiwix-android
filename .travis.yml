@@ -100,19 +100,13 @@ deploy:
   #publish release on download.kiwix.org
   - provider: script
     skip_cleanup: true
-    script:
-      - mkdir $TRAVIS_TAG
-      - cp $UNIVERSAL_RELEASE_APK $TRAVIS_TAG
-      - scp -vrp -i ${SSH_KEY} -o StrictHostKeyChecking=no $TRAVIS_TAG ci@download.kiwix.org:/data/download/release/kiwix-android/
+    script: mkdir $TRAVIS_TAG && cp $UNIVERSAL_RELEASE_APK $TRAVIS_TAG && scp -vrp -i ${SSH_KEY} -o StrictHostKeyChecking=no $TRAVIS_TAG ci@download.kiwix.org:/data/download/release/kiwix-android/
     on:
       tags: true
 
   #publish debug nightly on download.kiwix.org
   - provider: script
     skip_cleanup: true
-    script:
-      - mkdir $DATE
-      - cp $UNIVERSAL_DEBUG_APK $DATE
-      - scp -vrp -i ${SSH_KEY} -o StrictHostKeyChecking=no $DATE ci@download.kiwix.org:/data/download/nightly/
+    script: mkdir $DATE && cp $UNIVERSAL_DEBUG_APK $DATE && scp -vrp -i ${SSH_KEY} -o StrictHostKeyChecking=no $DATE ci@download.kiwix.org:/data/download/nightly/
     on:
       branch: develop

@@ -11,10 +11,10 @@
   <string name="menu_exitfullscreen">සම්පූර්ණ තිරයෙන් ඉවත් වන්න</string>
   <string name="menu_read_aloud">හඬනගා කියවන්න</string>
   <string name="menu_read_aloud_stop">හඬනගා කියවීම නවත්වන්න</string>
-  <string name="save_media">මාධ්‍යය සුරකින්න...</string>
+  <string name="save_media">මාධ්‍යය සුරකින්න…</string>
   <string name="save_media_error">මාධ්‍යය ආරක්ෂණය කිරීමට යාමේදී හටගන්නා ලදී!</string>
   <string name="save_media_saved">ඔබගේ පින්තුර ගොනුවෙහි %1$s ලෙස, මාධ්‍යය සුරක්ෂිත කරන ලදී</string>
-  <string name="rescan_fs_warning">ZIM ගොනු පරීක්ෂා කෙරේ, රැඳී සිටින්න...</string>
+  <string name="rescan_fs_warning">ZIM ගොනු පරීක්ෂා කෙරේ, රැඳී සිටින්න…</string>
   <string name="button_backtotop">නැවත මුදුනට</string>
   <string name="search_label">ගවේෂණය</string>
   <string name="choose_file">ZIM වර්ගයේ ගොනුවක් තෝරාගන්න (*.zim)</string>
@@ -36,4 +36,26 @@
   <string name="pref_language_chooser">භාෂාවක් තෝරාගන්න</string>
   <string name="menu_bookmarks_list">පොත්යොමු</string>
   <string name="zim_manager">පුස්තකාලය</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

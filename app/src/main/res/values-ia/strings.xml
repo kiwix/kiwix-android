@@ -14,7 +14,7 @@
   <string name="save_media">Salveguardar multimedia como…</string>
   <string name="save_media_error">Un error occurreva durante le salveguarda del file multimedial!</string>
   <string name="save_media_saved">File multimedial salveguardate como %1$s in tu dossier de imagines</string>
-  <string name="rescan_fs_warning">Cerca files ZIM, per favor attende...</string>
+  <string name="rescan_fs_warning">Cerca files ZIM, per favor attende…</string>
   <string name="button_backtotop">Initio del pagina</string>
   <string name="search_label">Cercar</string>
   <string name="choose_file">Selige un file de contento ZIM (*.zim)</string>
@@ -37,4 +37,26 @@
   <string name="zim_manager">Bibliotheca</string>
   <string name="do_not_ask_anymore">Non demandar plus</string>
   <string name="your_languages">Linguas eligite:</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>
