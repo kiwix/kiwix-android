@@ -11,10 +11,10 @@
   <string name="menu_exitfullscreen">Volledig schermmodus verlaten</string>
   <string name="menu_read_aloud">Voorlezen</string>
   <string name="menu_read_aloud_stop">Stoppen met voorlezen</string>
-  <string name="save_media">Media opslaan als...</string>
+  <string name="save_media">Media opslaan als…</string>
   <string name="save_media_error">Er is een fout opgetreden bij het opslaan van de media!</string>
   <string name="save_media_saved">Het bestand is opgeslagen als %1$s in uw afbeeldingenmap</string>
-  <string name="rescan_fs_warning">Zoeken naar ZIM-bestanden. Even geduld...</string>
+  <string name="rescan_fs_warning">Zoeken naar ZIM-bestanden. Even geduld…</string>
   <string name="button_backtotop">Terug naar boven</string>
   <string name="search_label">Zoeken</string>
   <string name="choose_file">Selecteer een ZIM inhoudsbestand (*.zim)</string>
@@ -55,4 +55,26 @@
   <string name="help_6">Onze inhoud is ondergebracht op de Kiwix website</string>
   <string name="pref_autonightmode_summary">Automatisch veranderen tussen de dag- en nachtmodus</string>
   <string name="pref_autonightmode">Geautomatiseerde nachtmodus</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

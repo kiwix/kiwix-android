@@ -11,10 +11,10 @@
   <string name="menu_exitfullscreen">Avslutt fullskjerm</string>
   <string name="menu_read_aloud">Les høyt</string>
   <string name="menu_read_aloud_stop">Stopp høytlesning</string>
-  <string name="save_media">Lagre media som...</string>
+  <string name="save_media">Lagre media som…</string>
   <string name="save_media_error">En feil oppstod under lagring av mediet!</string>
   <string name="save_media_saved">Lagret media som %1$s i din bildemappe.</string>
-  <string name="rescan_fs_warning">Søker etter ZIM-filer, vennligst vent...</string>
+  <string name="rescan_fs_warning">Søker etter ZIM-filer, vennligst vent…</string>
   <string name="button_backtotop">Tilbake til toppen</string>
   <string name="search_label">Søk</string>
   <string name="choose_file">Velg en ZIM-innholdsfil (*.zim)</string>
@@ -52,4 +52,26 @@
   <string name="pref_newtab_background_title">Åpne ny fane i bakgrunnen</string>
   <string name="pref_newtab_background_summary">Når en ny fane åpnes vil den åpnes i bakgrunnen</string>
   <string name="zim_manager">Bibliotek</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>
