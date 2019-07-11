@@ -201,7 +201,8 @@
           android:value="main.MainActivity"/>
     </activity>
     <activity android:name=".zim_manager.local_file_transfer.LocalFileTransferActivity"
-        android:label="Send to nearby device">
+        android:label="Send to nearby device"
+        android:screenOrientation="portrait"> <!--Protect AsyncTask from orientation changes-->
       <intent-filter>
         <action android:name="android.intent.action.SEND_MULTIPLE"/>
         <category android:name="android.intent.category.DEFAULT"/>

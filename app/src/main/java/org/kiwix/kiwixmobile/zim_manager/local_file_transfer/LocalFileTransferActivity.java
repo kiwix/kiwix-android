@@ -86,7 +86,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_local_file_transfer);
-    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // Protect AsyncTask from orientation changes
     KiwixApplication.getApplicationComponent().inject(this);
     ButterKnife.bind(this);
 
