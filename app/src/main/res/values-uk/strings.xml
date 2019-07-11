@@ -14,8 +14,8 @@
   <string name="menu_read_aloud_stop">Зупинити читання вголос</string>
   <string name="save_media">Зберегти медіафайл</string>
   <string name="save_media_error">Сталася помилка при спробі зберегти медіафайл!</string>
-  <string name="save_media_saved">Медіафайл збережено як %$ до Android/media/org.kiwix.../</string>
-  <string name="rescan_fs_warning">Сканування з метою виявлення контенту для завантаження, будь ласка, зачекайте...</string>
+  <string name="save_media_saved">Медіафайл збережено як %$ до Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">Сканування з метою виявлення контенту для завантаження, будь ласка, зачекайте…</string>
   <string name="button_backtotop">Повернутись угору</string>
   <string name="search_label">Пошук</string>
   <string name="choose_file">Виберіть файл вмісту (*.zim)</string>
@@ -79,17 +79,16 @@
   <string name="search_widget_text">Пошук у Kiwix</string>
   <string name="speech_prompt_text">Промовте, щоб здійснити пошук %s</string>
   <string name="speech_not_supported">Вибачте! Ваш пристрій не підтримує голосове управління</string>
-  <string name="download_started_library">Завантаження почалося...</string>
+  <string name="download_started_library">Завантаження почалося…</string>
   <string name="local_zims">Пристрій</string>
   <string name="remote_zims">Онлайн</string>
   <string name="zim_downloads">Завантаження</string>
-  <string name="zim_manager">Управління контентом</string>
+  <string name="zim_manager">Бібліотека</string>
   <string name="delete_specific_zim">Вилучити цей файл?</string>
   <string name="delete_specific_zim_toast">Файл вилучено</string>
   <string name="zim_file_downloading">Завантаження</string>
   <string name="zim_file_downloaded">Завантажено</string>
   <string name="download_pause">Пауза</string>
-  <string name="download_play">Відтворити</string>
   <string name="download_stop">Зупинити</string>
   <string name="download_paused">призупинено</string>
   <string name="no_downloads_here">Тут немає завантажень</string>
@@ -152,6 +151,39 @@
   <string name="time_minute">хв</string>
   <string name="time_second">с</string>
   <string name="time_left">залишилось</string>
+  <string name="pref_bottomtoolbar">Увімкнути нижню панель</string>
+  <string name="pref_bottomtoolbar_summary">Відображати знизу панель з швидкими діями</string>
   <string name="pref_autonightmode_summary">Автоматично перемикатися між денним та нічним режимами.</string>
   <string name="pref_autonightmode">Автоматичний нічний режим</string>
+  <string name="pref_multi_search_title">Пошук MultiZim</string>
+  <string name="pref_multi_search_summary">Дозволити шукати у файлах ZIM (Експериментально, отже можливі проблеми).</string>
+  <string name="pref_external_link_popup_title">Попереджувати, коли введено зовнішнє посилання</string>
+  <string name="pref_external_link_popup_summary">Відображати попередження щодо проблем із зовнішніми посиланнями, як от зняття додаткових грошей або неспрацювання посилань в офлайні.</string>
+  <string name="external_link_popup_dialog_title">Введіть зовнішнє посилання</string>
+  <string name="external_link_popup_dialog_message">Ви вказали зовнішнє посилання. Будь ласка пам\'ятайте, що якщо ви офлайн, то воно не буде відкрито. Також зауважте, що відкриття цього посилання може призвести до зняття грошей мобільним оператором. Дійсно бажаєте відкрити зовнішнє посилання?</string>
+  <string name="do_not_ask_anymore">Більш не питати</string>
+  <string name="your_languages">Вибір мови:</string>
+  <string name="other_languages">Інші мови:</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

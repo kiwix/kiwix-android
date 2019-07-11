@@ -11,7 +11,7 @@
   <string name="menu_exitfullscreen">მთლიანი ეკრანიდან გამოსვლა</string>
   <string name="menu_read_aloud">ხმამაღლა კითხვა</string>
   <string name="menu_read_aloud_stop">ხმამაღლა კითხვის შეჩერება</string>
-  <string name="save_media">მედიის შენახვა როგორც...</string>
+  <string name="save_media">მედიის შენახვა როგორც…</string>
   <string name="save_media_error">მედია-ფაილის შენახვისას მოხდა შეცდომა!</string>
   <string name="save_media_saved">მედია-ფაილის თქვენი სურათების საქაღალდეში შენახვა როგორც %1$</string>
   <string name="rescan_fs_warning">ZIM-ფაილების ძიება, გთხოვთ, მოიცადოთ…</string>
@@ -44,4 +44,26 @@
   <string name="rate_dialog_negative">არა, გმადლობთ</string>
   <string name="rate_dialog_neutral">მოგვიანებით</string>
   <string name="zim_manager">ბიბლიოთეკა</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <string name="kiwi">Kiwi</string>
   <string name="menu_zim_manager">Get Content</string>
   <string name="menu_help">Help</string>
@@ -126,7 +126,7 @@
   <string name="help_15">If however you are downloading on another device, you may need to split the ZIM file up using the following software:</string>
   <string name="help_16">\u2022 On Microsoft Windows: HJ-Split</string>
   <string name="help_17">\u2022 On Apple Mac OSX: Split and Concat</string>
-  <string name="help_18">\u2022 On GNU/Linux and with the console: split --bytes=4000M my_big_file.zim</string>
+  <string name="help_18" tools:ignore="TypographyDashes">\u2022 On GNU/Linux and with the console: split --bytes=4000M my_big_file.zim</string>
   <string name="help_19">Note: your resulting files must be named my_big_file.zimaa, my_big_file.zimab, etc.</string>
   <string name="help_20">Thank you for choosing Kiwix!</string>
   <string name="help_21">We are glad to have you on board and would appreciate any feedback or suggestions at android@kiwix.org.</string>

@@ -13,7 +13,7 @@
   <string name="menu_read_aloud_stop">אויפהיטן לייענען הויך</string>
   <string name="save_media">שפייכלערן מעדיעוויקי ווי…</string>
   <string name="save_media_error">א טעות האט פאסירט ביים אויפהיטן די מעדיע!</string>
-  <string name="save_media_saved">מעדיע אויפֿגעהיטן ווי %s צו Android/media/org.kiwix.../</string>
+  <string name="save_media_saved">מעדיע אויפֿגעהיטן ווי %s צו Android/media/org.kiwix…/</string>
   <string name="button_backtotop">צוריק אויבן</string>
   <string name="search_label">זוכן</string>
   <string name="open_in_new_tab">עפענען לינק אין א נײַעם טאב?</string>
@@ -40,4 +40,26 @@
   <string name="no_files_here">קיין טעקעס דא</string>
   <string name="yes">יא</string>
   <string name="delete_tab">אויסמעקן טאב</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

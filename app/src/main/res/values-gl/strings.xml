@@ -14,7 +14,7 @@
   <string name="menu_read_aloud_stop">Deixar de ler en voz alta</string>
   <string name="save_media">Gardar multimedia</string>
   <string name="save_media_error">Houbo un erro ao intentar gardar o multimedia!</string>
-  <string name="save_media_saved">Multimedia gardado como %s en Android/media/org.kiwix.../</string>
+  <string name="save_media_saved">Multimedia gardado como %s en Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Procurando contido descargable; espere…</string>
   <string name="button_backtotop">Volver ao inicio</string>
   <string name="search_label">Procurar</string>
@@ -58,7 +58,7 @@
   <string name="delete_specific_search_toast">Procuras recentes eliminadas</string>
   <string name="hint_contents_drawer_message">Podes deslizar á esquerda para ver os contidos deste artigo</string>
   <string name="got_it">Entendido</string>
-  <string name="did_you_know">Sabía que...?</string>
+  <string name="did_you_know">Sabía que…?</string>
   <string name="undo">Desfacer</string>
   <string name="tab_closed">Lapela pechada</string>
   <string name="deleted_message">borrado</string>
@@ -87,7 +87,6 @@
   <string name="zim_file_downloading">Descargando</string>
   <string name="zim_file_downloaded">Descargado</string>
   <string name="download_pause">Pausar</string>
-  <string name="download_play">Continuar</string>
   <string name="download_stop">Deter</string>
   <string name="download_paused">en pausa</string>
   <string name="no_downloads_here">Ningunha descarga aquí</string>
@@ -142,7 +141,7 @@
   <string name="next">Seguinte</string>
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">Permitir descargar contido mediante a rede móbil?</string>
-  <string name="wifi_only_msg">Se escolle "Si", non será advertido no futuro. Porén, sempre pode cambiar isto en Configuración</string>
+  <string name="wifi_only_msg">Se escolle “Si”, non será advertido no futuro. Porén, sempre pode cambiar isto en Configuración</string>
   <string name="pref_wifi_only">Descargar contido só mediante WiFi</string>
   <string name="time_day">día</string>
   <string name="time_left">esquerda</string>
@@ -159,4 +158,26 @@
   <string name="do_not_ask_anymore">Non preguntar máis</string>
   <string name="your_languages">Linguas escollidas:</string>
   <string name="other_languages">Outras linguas:</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

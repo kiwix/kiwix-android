@@ -78,7 +78,6 @@
   <string name="zim_file_downloading">En cors de telecargament</string>
   <string name="zim_file_downloaded">Telecargat</string>
   <string name="download_pause">Pausa</string>
-  <string name="download_play">Lectura</string>
   <string name="download_stop">Arrestar</string>
   <string name="download_paused">en pausa</string>
   <string name="no_downloads_here">Pas cap de telecargament aicí</string>
@@ -104,4 +103,26 @@
   <string name="previous">Precedent</string>
   <string name="time_day">jorn</string>
   <string name="time_left">esquèrra</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>
