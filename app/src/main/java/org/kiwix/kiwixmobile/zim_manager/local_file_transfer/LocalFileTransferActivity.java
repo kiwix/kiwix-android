@@ -1,7 +1,6 @@
 package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -34,6 +33,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
@@ -64,6 +65,8 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   @Inject
   SharedPreferenceUtil sharedPreferenceUtil;
 
+  @BindView(R.id.toolbar_local_file_transfer) Toolbar actionBar;
+
   private ArrayList<Uri> fileUriArrayList;  // For sender device, stores Uris of files to be transferred
   private Boolean fileSendingDevice = false;// Whether the device is the file sender or not
 
@@ -85,6 +88,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     setContentView(R.layout.activity_local_file_transfer);
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // Protect AsyncTask from orientation changes
     KiwixApplication.getApplicationComponent().inject(this);
+    ButterKnife.bind(this);
 
     /*
     * Presence of file Uris decides whether the device with the activity open is a sender or receiver:
@@ -99,7 +103,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
       setDeviceAsFileSender();
     }
 
-    Toolbar actionBar = findViewById(R.id.toolbar_local_file_transfer);
     setSupportActionBar(actionBar);
     actionBar.setNavigationIcon(R.drawable.ic_close_white_24dp);
     actionBar.setNavigationOnClickListener(new View.OnClickListener(){

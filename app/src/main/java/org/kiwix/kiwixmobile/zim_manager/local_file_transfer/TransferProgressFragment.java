@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import org.kiwix.kiwixmobile.R;
 
 import java.util.ArrayList;
@@ -21,8 +24,10 @@ import java.util.ArrayList;
  * */
 public class TransferProgressFragment extends Fragment {
 
+  @BindView(R.id.recycler_view_transfer_files) RecyclerView filesRecyclerView;
+  private Unbinder unbinder;
+
   private ArrayList<FileItem> fileItems;
-  private RecyclerView filesRecyclerView;
   private FileListAdapter fileListAdapter;
 
   public TransferProgressFragment() {
@@ -36,8 +41,7 @@ public class TransferProgressFragment extends Fragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_transfer_progress, container, false);
-
-    filesRecyclerView = view.findViewById(R.id.recycler_view_transfer_files);
+    unbinder = ButterKnife.bind(this, view);
 
     fileListAdapter = new FileListAdapter(getActivity(), fileItems);
     filesRecyclerView.setAdapter(fileListAdapter);
@@ -45,6 +49,12 @@ public class TransferProgressFragment extends Fragment {
     filesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
     return view;
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    if(unbinder != null) unbinder.unbind();
   }
 
   public void changeStatus(int itemIndex, short status) {

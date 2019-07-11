@@ -26,6 +26,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.ListFragment;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
@@ -62,7 +65,13 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
   private LocalFileTransferActivity localFileTransferActivity;  // Parent activity, starting point of the module
   private TransferProgressFragment transferProgressFragment;    // Sibling fragment, for displaying transfer progress
 
-  private View deviceListFragmentRootView = null; // Root view corresponding to the DeviceListFragment
+  // Views part of the DeviceListFragment
+  @BindView(R.id.text_view_device_name) TextView deviceName;
+  @BindView(R.id.text_view_device_status) TextView deviceStatus;
+  @BindView(R.id.progress_bar_searching_peers) ProgressBar searchingPeersProgressBar;
+  @BindView(R.id.frame_layout_peer_devices) FrameLayout frameLayoutPeerDevices;
+
+  private Unbinder unbinder;
 
   private boolean fileSender = false; // Whether file sending device or not
   private ArrayList<Uri> fileUriList; // Uris of files to be shared, available only for the sender device
@@ -104,8 +113,16 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    deviceListFragmentRootView = inflater.inflate(R.layout.fragment_device_list, null);
-    return deviceListFragmentRootView;
+    View view = inflater.inflate(R.layout.fragment_device_list, null);
+    unbinder = ButterKnife.bind(this, view);
+
+    return view;
+  }
+
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    if(unbinder != null) unbinder.unbind();
   }
 
   @Override
@@ -139,11 +156,8 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     this.userDevice = device;
 
     if(userDevice != null) {
-      TextView deviceName = deviceListFragmentRootView.findViewById(R.id.text_view_device_name);
-      TextView deviceStatus = deviceListFragmentRootView.findViewById(R.id.text_view_device_status);
-
-      if(deviceName != null)  deviceName.setText(userDevice.deviceName);
-      if(deviceStatus != null)    deviceStatus.setText(getDeviceStatus(userDevice.status));
+      deviceName.setText(userDevice.deviceName);
+      deviceStatus.setText(getDeviceStatus(userDevice.status));
     }
   }
 
@@ -164,10 +178,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
   /* From WifiP2pManager.PeerListListener callback-interface */
   @Override
   public void onPeersAvailable(WifiP2pDeviceList peers) {
-
-    ProgressBar searchingPeersProgressBar = deviceListFragmentRootView.findViewById(R.id.progress_bar_searching_peers);
     searchingPeersProgressBar.setVisibility(View.GONE);
-    FrameLayout frameLayoutPeerDevices = deviceListFragmentRootView.findViewById(R.id.frame_layout_peer_devices);
     frameLayoutPeerDevices.setVisibility(View.VISIBLE);
 
     peerDevices.clear();
@@ -185,9 +196,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
   }
 
   public void onInitiateDiscovery() { // Setup UI for searching peers
-    ProgressBar searchingPeersProgressBar = deviceListFragmentRootView.findViewById(R.id.progress_bar_searching_peers);
     searchingPeersProgressBar.setVisibility(View.VISIBLE);
-    FrameLayout frameLayoutPeerDevices = deviceListFragmentRootView.findViewById(R.id.frame_layout_peer_devices);
     frameLayoutPeerDevices.setVisibility(View.INVISIBLE);
   }
 
@@ -326,24 +335,35 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
       View rowView = convertView;
+      ViewHolder viewHolder;
+
       if(rowView == null) {
         LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         rowView = layoutInflater.inflate(R.layout.row_peer_device, parent, false);
+        viewHolder = new ViewHolder(rowView);
+        rowView.setTag(viewHolder);
+      } else {
+        viewHolder = (ViewHolder) rowView.getTag();
       }
 
       WifiP2pDevice device = listItems.get(position);
 
       if(device != null) {
-        TextView deviceName = rowView.findViewById(R.id.row_device_name);
-        TextView deviceStatus = rowView.findViewById(R.id.row_device_status);
-
-        if(deviceName != null)      deviceName.setText(device.deviceName);
-        if(deviceStatus != null)    deviceStatus.setText(getDeviceStatus(device.status));
+        viewHolder.deviceName.setText(device.deviceName);
+        viewHolder.deviceStatus.setText(getDeviceStatus(device.status));
       }
 
       return rowView;
+    }
+  }
+
+  static class ViewHolder {
+    @BindView(R.id.row_device_name) TextView deviceName;
+    @BindView(R.id.row_device_status) TextView deviceStatus;
+
+    public ViewHolder(View view) {
+      ButterKnife.bind(this, view);
     }
   }
 
