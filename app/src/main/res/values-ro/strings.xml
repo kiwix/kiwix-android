@@ -16,11 +16,9 @@
   <string name="save_media_error">A apărut o eroare în încercarea de a salva fișierul media!</string>
   <string name="save_media_saved">Media salvată %s în Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Scanează pentru conținut descărcabil, vă rugăm așteptați…</string>
-  <string name="button_backtotop">Înapoi sus</string>
   <string name="search_label">Caută</string>
   <string name="choose_file">Alegeți un fișier cu conținut ZIM (*.zim)</string>
   <string name="open_in_new_tab">Deschideți legătura într-o filă nouă?</string>
-  <string name="error_nozimfilesfound">Nu am găsit conținut pe dispozitiv. \nIntră pe pagina de ajutor pentru a primi indicații despre cum să încarci conținut pe Kiwix. \nDacă ai pus un fișier ZIM pe dispozitivul/stocare externă, poți reîncerca într-un minut sau să repornește dispozitivul.</string>
   <string name="error_filenotfound">Eroare: Fișierul ZIM selectat nu poate fi găsit.</string>
   <string name="error_fileinvalid">Eroare: Fișierul selectat nu este un fișier ZIM valid.</string>
   <string name="error_articleurlnotfound">Eroare: Încărcarea articolului (Url: %1$s) nu a reușit.</string>
@@ -43,7 +41,6 @@
   <string name="no_reader_application_installed">Nu s-a găsit nicio aplicație instalată pentru acest tip de fișier</string>
   <string name="customapp_missing_content">Aplicația este coruptă. \nAcest lucru se poate întâmpla atunci când ștergeți fișiere de pe cardul SD.\nTrebuie să dezinstalați și să reinstalați aplicația din Magazinul Play.</string>
   <string name="go_to_play_store">Mergi la Magazinul Play</string>
-  <string name="no_bookmarks">Nici un semn de carte</string>
   <string name="menu_bookmarks_list">Semne de carte</string>
   <string name="no_section_info">Nu s-a găsit niciun antet de conținut</string>
   <string name="request_storage">Pentru a accesa conținut off-line trebuie să vă accesăm spațiul de stocare</string>
@@ -61,7 +58,6 @@
   <string name="did_you_know">Știați că?</string>
   <string name="undo">Anulează</string>
   <string name="tab_closed">Filă închisă</string>
-  <string name="deleted_message">șters</string>
   <string name="bookmark_added">Marcaj adăugat</string>
   <string name="rate_dialog_title">Vă rugăm să ne evaluați</string>
   <string name="rate_dialog_msg_1">Dacă v-a plăcut</string>
@@ -78,11 +74,9 @@
   <string name="search_widget_text">Caută Kiwix</string>
   <string name="speech_prompt_text">Vorbește pentru a căuta %s</string>
   <string name="speech_not_supported">Ne pare rău! Dispozitivul tău nu susține opțiunea de vorbire</string>
-  <string name="download_started_library">Descărcare începută…</string>
   <string name="local_zims">Dispozitiv</string>
   <string name="zim_downloads">Descărcare</string>
   <string name="zim_manager">Bibliotecă</string>
-  <string name="delete_specific_zim">Șterge această filă?</string>
   <string name="delete_specific_zim_toast">Filă ștearsă</string>
   <string name="zim_file_downloading">Descărcare</string>
   <string name="zim_file_downloaded">Descărcat</string>
@@ -90,7 +84,6 @@
   <string name="download_paused">oprită</string>
   <string name="no_downloads_here">Nici o descărcare</string>
   <string name="no_files_here">Nu sunt fișiere aici</string>
-  <string name="download_complete_snackbar">Descărcare completă</string>
   <string name="download_no_space">Spațiu insuficient pentru a descarca această filă.</string>
   <string name="space_available">Spațiu disponibil:</string>
   <string name="zim_simple">Simplu</string>
@@ -98,9 +91,7 @@
   <string name="zim_novid">Fără video</string>
   <string name="no_network_connection">Nu există conexiune de rețea</string>
   <string name="get_library_over_network">Folosește rețeaua să descarci lista de conținut. (Aproximativ 6MB)</string>
-  <string name="proceed">Continuă</string>
   <string name="wait_for_load">Conținutul încă se încarcă</string>
-  <string name="help_1">Kiwix îți permite să ai acces off-line la site-uri ca Wikipedia într-un formular foarte compact.</string>
   <string name="help_2">Ce face Kiwix?</string>
   <string name="help_3">Kiwix este un server de citit conținut off-line. Este aproape ca un browser dar în loc să acceseze paginile web online citește conținut de la un fișier în formatul ZIM.</string>
   <string name="help_4">În timp ce Kiwix a fost făcut inițial să ofere Wikipedia off-line de asemenea citește și alt conținut.</string>
@@ -117,8 +108,6 @@
   <string name="help_15">Dacă oricum descărcați pe alt dispozitiv, este posibil să trebuie să împărțiți fișierul ZIM folosind următorul software:</string>
   <string name="help_16">\u2022 Pe Microsoft Windows: HJ-Split</string>
   <string name="help_19">Notă: fișierele rezultate trebuie să fie numite my_big_file.zimaa, my_big_file.zimab, etc.</string>
-  <string name="help_20">Vă mulțumim pentru alegerea Kiwix!</string>
-  <string name="help_21">Suntem mulțumiți să vă avem la masă și am aprecia orice feedback sau sugestie la android@kiwix.org.</string>
   <string name="pref_storage">Stocare</string>
   <string name="pref_current_folder">Folder curent</string>
   <string name="path_not_writable">Nu putem accesa directorul dorit folosind implicit. Pentru a rezolva asta reselectează directorul dorit în setările aplicației.</string>
@@ -128,14 +117,12 @@
   <string name="tts_resume">rezumat</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Externă</string>
-  <string name="zim_already_downloading">ZIM se descarcă deja</string>
   <string name="yes">Da</string>
   <string name="no">Nu</string>
   <string name="confirm_stop_download_title">Oprești descărcarea?</string>
   <string name="confirm_stop_download_msg">Ești sigur că vrei să oprești această descărcare?</string>
   <string name="download_change_storage">Selectează mediul de descărcare</string>
   <string name="tts_not_enabled">Text la vorbire nu este disponibil pentru acest fișier ZIM</string>
-  <string name="delete_tab">Filă ștearsă</string>
   <string name="next">Următoarea</string>
   <string name="previous">Precedenta</string>
   <string name="wifi_only_title">Permite descărcarea conținutului prin intermediul unei rețele mobile?</string>
@@ -147,8 +134,6 @@
   <string name="pref_bottomtoolbar_summary">Arată o bară de unelte cu acțiuni rapide din partea de jos a ecranului</string>
   <string name="pref_autonightmode_summary">Schimbă automat între modul de zi și de noapte.</string>
   <string name="pref_autonightmode">Mod automat de noapte</string>
-  <string name="pref_multi_search_title">Căutare MultiZlim</string>
-  <string name="pref_multi_search_summary">Permite aplicației să caute în lungul fișierelor ZIM (Atenție Foarte Experimental)</string>
   <string name="pref_external_link_popup_title">Atenționați când introduceți legături extern</string>
   <string name="pref_external_link_popup_summary">Afișează popup pentru a avertiza în legătură cu costurile suplimentare sau care nu merg în legăturile off-line.</string>
   <string name="external_link_popup_dialog_title">Introdu legătură externă</string>

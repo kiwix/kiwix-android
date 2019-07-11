@@ -15,11 +15,9 @@
   <string name="save_media_error">Kosa lilitokea wakati wa kuhifadhi midia!</string>
   <string name="save_media_saved">Midia imehifadhiwa kwa jina la %1$s katika kabrasha yako ya picha</string>
   <string name="rescan_fs_warning">Tafadhali subiri, faili za ZIM zatafutwa</string>
-  <string name="button_backtotop">Rudi Juu</string>
   <string name="search_label">Tafuta</string>
   <string name="choose_file">Chagua Faili ya Makala ya ZIM (*.zim)</string>
   <string name="open_in_new_tab">Fungua kiungo kwenye kivinjari kipya</string>
-  <string name="error_nozimfilesfound">Hakuna Faili za ZIM zilizopatikana kwenya mtambo wako.\nTazama ukurasa wa Help Page ili kupata usaidizi jinsi ya kupakia makala kwenye Kiwix.\nIwapo uliweka failia ya ZIM kwenye mtambo wako/kiwekeo cha nje, itakubidi kujaribu baada ya dakika moja au kuanzisha mtambo wako upya</string>
   <string name="error_filenotfound">Hitilafu: Faili ya ZIM iliyochaguliwa haija patikana.</string>
   <string name="error_fileinvalid">Hitilafu:Faili iliyochaguliwa sio faili sahihi ya ZIM.</string>
   <string name="error_articleurlnotfound">Hitilafu:Upakiaji wa makala umefeli (Url: %1$s)</string>
@@ -36,12 +34,10 @@
   <string name="pref_language_title">Lugha</string>
   <string name="pref_language_chooser">Chagua lugha</string>
   <string name="go_to_play_store">Enda kwa Play Store</string>
-  <string name="no_bookmarks">Hakuna maalamisho</string>
   <string name="menu_bookmarks_list">Maalamisho</string>
   <string name="delete">Futa</string>
   <string name="got_it">Nimeipata</string>
   <string name="undo">Tengua</string>
-  <string name="deleted_message">imefutwa</string>
   <string name="search_widget_text">Tafuta Kiwix</string>
   <string name="zim_downloads">Inapakua</string>
   <string name="zim_manager">Maktaba</string>

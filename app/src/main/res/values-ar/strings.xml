@@ -16,11 +16,9 @@
   <string name="save_media_error">حدث خطأ عند محاولة حفظ الوسائط!</string>
   <string name="save_media_saved">حفظ الوسائط كـ%s إلى Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">جارٍ البحث عن محتوى قابل للتنزيل، يُرجَى الانتظار…</string>
-  <string name="button_backtotop">العودة إلى الأعلى</string>
   <string name="search_label">بحث</string>
   <string name="choose_file">حدد ملف محتوى (*.zim)</string>
   <string name="open_in_new_tab">افتح الوصلة في علامة تبويب جديدة</string>
-  <string name="error_nozimfilesfound">لا يوجد محتوى على جهازك، \nألقِ نظرة على صفحة المساعدة للحصول على الاتجاهات حول كيفية تحميل المحتوى إلى كيويكس، \nإذا كنت قد وضعت ملف ZIM على جهازك / وحدة تخزينك الخارجية، فيمكنك إعادة المحاولة خلال دقيقة واحدة أو إعادة تشغيل جهازك.</string>
   <string name="error_filenotfound">خطأ: تعذر العثور على الملف المحدد زيم (ZIM)</string>
   <string name="error_fileinvalid">خطأ: ملف زيم (ZIM) المحدد ليس ملفا صالحا.</string>
   <string name="error_articleurlnotfound">خطأ: تحميل المقالة (Url: %1$s) لم يتم بنجاح.</string>
@@ -44,7 +42,6 @@
   <string name="no_reader_application_installed">تعذر العثور على تطبيق مثبت لهذا النوع من الملفات</string>
   <string name="customapp_missing_content">تطبيقك تالف،\nقد يحدث هذا عند إزالة الملفات على بطاقة SD. \nتحتاج إلى إلغاء التثبيت ثم إعادة تثبيت التطبيق من متجر بلاي.</string>
   <string name="go_to_play_store">اذهب إلى متجر Play</string>
-  <string name="no_bookmarks">لا توجد إشارات مرجعية!</string>
   <string name="menu_bookmarks_list">العلامات</string>
   <string name="no_section_info">لم يتم العثور على عناوين محتوى</string>
   <string name="request_storage">للوصول إلى المحتوى بلا اتصال; نحتاج إلى الوصول إلى مخزنك</string>
@@ -62,7 +59,6 @@
   <string name="did_you_know">هل تعلم؟</string>
   <string name="undo">رجوع</string>
   <string name="tab_closed">تم إغلاق علامة التبويب</string>
-  <string name="deleted_message">تم الحذف</string>
   <string name="bookmark_added">إشارة مرجعية أضيفت</string>
   <string name="rate_dialog_title">يرجى تقييمنا</string>
   <string name="rate_dialog_msg_1">إذا كنت تتمتع باستخدام</string>
@@ -79,12 +75,10 @@
   <string name="search_widget_text">بحث كيويكس</string>
   <string name="speech_prompt_text">تحدث للبحث %s</string>
   <string name="speech_not_supported">آسف! جهازك لا يدعم إدخال الكلام</string>
-  <string name="download_started_library">بدأ التنزيل…</string>
   <string name="local_zims">جهاز</string>
   <string name="remote_zims">على الإنترنت</string>
   <string name="zim_downloads">جارٍ التنزيل</string>
   <string name="zim_manager">مكتبة</string>
-  <string name="delete_specific_zim">هل تريد حذف هذا الملف؟</string>
   <string name="delete_specific_zim_toast">تم حذف الملف</string>
   <string name="zim_file_downloading">جارٍ التنزيل</string>
   <string name="zim_file_downloaded">تم التنزيل</string>
@@ -93,7 +87,6 @@
   <string name="download_paused">توقف</string>
   <string name="no_downloads_here">لا توجد تنزيلات هنا</string>
   <string name="no_files_here">لا توجد ملفات هنا</string>
-  <string name="download_complete_snackbar">اكتمل التنزيل</string>
   <string name="download_no_space">مساحة غير كافية لتنزيل هذا الملف.</string>
   <string name="space_available">المساحة المتاحة:</string>
   <string name="zim_simple">بسيط</string>
@@ -101,9 +94,7 @@
   <string name="zim_novid">لا يوجد فيديو</string>
   <string name="no_network_connection">لا يوجد اتصال بالشبكة</string>
   <string name="get_library_over_network">استخدم الشبكة لتنزيل قائمة المحتويات. (حوالي 6 ميغابايت)</string>
-  <string name="proceed">تقدم</string>
   <string name="wait_for_load">لا يزال يتم تحميل المحتوى</string>
-  <string name="help_1">يتيح لك كيويكس الوصول غير المتصل بالإنترنت إلى مواقع ويب مثل ويكيبيديا بشكل مضغوط للغاية.</string>
   <string name="help_2">ماذا يفعل كيويكس؟</string>
   <string name="help_3">كيويكس قارئ محتوى غير متصل، وهو يعمل إلى حد كبير مثل المتصفح، ولكن بدلا من الوصول إلى صفحات الويب على الإنترنت، فإنه يقرأ المحتوى من ملف بتنسيق ZIM.</string>
   <string name="help_4">بينما كان كيويكس مصمما في الأصل لتوفير ويكيبيديا في وضع عدم الاتصال، فإنه يقرأ أيضا محتويات أخرى.</string>
@@ -121,8 +112,6 @@
   <string name="help_16">\u2022 في مايكروسوفت ويندوز: HJ-Split</string>
   <string name="help_17">\u2022 في أبل ماك أو إس إكس: Split and Concat</string>
   <string name="help_19">ملاحظة: يجب تسمية ملفاتك الناتجة باسم my_big_file.zimaa وmy_big_file.zimab وما إلى ذلك.</string>
-  <string name="help_20">شكرا لاختيارك كيويكس!</string>
-  <string name="help_21">نحن سعداء بوجودكم وسوف نقدر أية ردود فعل أو اقتراحات على android@kiwix.org.</string>
   <string name="pref_storage">التخزين</string>
   <string name="pref_current_folder">المجلد الحالي</string>
   <string name="path_not_writable">لا يمكن الوصول إلى الدليل المطلوب، باستخدام الافتراضي، لإصلاح هذا; قم بإعادة تحديد الدليل المرغوب في إعدادات التطبيق.</string>
@@ -133,14 +122,12 @@
   <string name="tts_stop">إيقاف</string>
   <string name="internal_storage">داخلي</string>
   <string name="external_storage">خارجي</string>
-  <string name="zim_already_downloading">يتم بالفعل تنزيل Zim</string>
   <string name="yes">نعم</string>
   <string name="no">لا</string>
   <string name="confirm_stop_download_title">وقف التنزيل؟</string>
   <string name="confirm_stop_download_msg">هل أنت متأكد من أنك تريد إيقاف هذا التنزيل؟</string>
   <string name="download_change_storage">محدد جهاز التخزين</string>
   <string name="tts_not_enabled">لم يتم تمكين النص إلى الكلام لملف ZIM هذا</string>
-  <string name="delete_tab">حذف علامة التبويب</string>
   <string name="next">التالي</string>
   <string name="previous">السابق</string>
   <string name="wifi_only_title">السماح بتنزيل المحتوى عبر شبكة المحمول؟</string>
@@ -155,8 +142,6 @@
   <string name="pref_bottomtoolbar_summary">عرض شريط أدوات بإجراءات سريعة في الجزء السفلي من الشاشة</string>
   <string name="pref_autonightmode_summary">التبديل تلقائيا بين وضع اليلي والنهاري.</string>
   <string name="pref_autonightmode">الوضع الليلي الآلي</string>
-  <string name="pref_multi_search_title">بحث متعدد Zim</string>
-  <string name="pref_multi_search_summary">السماح للتطبيق بالبحث عبر ملفات ZIM (تحذير تجريبي جدا).</string>
   <string name="pref_external_link_popup_title">التحذير عند إدخال وصلات خارجية</string>
   <string name="pref_external_link_popup_summary">عرض المنبثق للتحذير من التكاليف الإضافية أو عدم العمل في الروابط بلا اتصال.</string>
   <string name="external_link_popup_dialog_title">دخول الرابط الخارجي</string>

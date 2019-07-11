@@ -12,11 +12,9 @@
   <string name="menu_exitfullscreen">Sloet volstenjig sjerm aaf</string>
   <string name="menu_read_aloud">Laes veur</string>
   <string name="menu_read_aloud_stop">Sjei oet mit veurlaeze</string>
-  <string name="button_backtotop">Trök nao baove</string>
   <string name="search_label">Zeuk</string>
   <string name="choose_file">Sillekteer \'n Inhawdsbestandj (*.zim)</string>
   <string name="open_in_new_tab">Äöpen link in nuuj tabblaad?</string>
-  <string name="error_nozimfilesfound">Geinen inhawd gevónje op die toestèl.\nKiek efkes nao de Hölppagina veur aanwiezinge wie se inhawd mós hoeaglaje nao Kiwix.\nEs se e ZIM-bestandj op die toestèl of extern opslaagplaats höbs gezat, kins se det nao \'ne menuut oppernuuj perbere of die toestèl oppernuuj opstarte.</string>
   <string name="error_filenotfound">Fout: \'t geselecteerd ZIM-bestandj kós neet waere gevónje.</string>
   <string name="error_fileinvalid">Fout: \'t geselecteerd bestandj is gei geldig ZIM-bestandj.</string>
   <string name="error_articleurlnotfound">Fout: \'t laje van de pagina (URL: %1$s) is mislök.</string>
@@ -36,7 +34,6 @@
   <string name="pref_credits_title">Toesjrif</string>
   <string name="customapp_missing_content">Dien applikaasje is verknoodj.\nDit kan zeen gebeurdj wie se bestenj van dien SD-kaart höbs aafgehaoldj.\nDoe mós de applikaasje deïnstalleren en den al oppernuuj installere vanoet de Play Store.</string>
   <string name="go_to_play_store">Gank nao de Play Store</string>
-  <string name="no_bookmarks">Gein blaadwiezers</string>
   <string name="menu_bookmarks_list">Blaadwiezers</string>
   <string name="no_section_info">Gein inhawdsköpkes gevónje</string>
   <string name="clear_recent_and_tabs_history_dialog">Wèts se zeker det se dien zeukgesjiechte wils ewegsjaffen en alle aktief tabblajer oppernuuj wils instèlle?</string>
@@ -50,7 +47,6 @@
   <string name="hint_contents_drawer_message">Doe kans nao links vaege veur de inhawd van dit artikel te bekieke</string>
   <string name="got_it">Verstange</string>
   <string name="did_you_know">Wèts se det?</string>
-  <string name="deleted_message">eweggesjaf</string>
   <string name="bookmark_added">Blaadwiezer tougeveug</string>
   <string name="rate_dialog_title">Beoeardeil ós estebleef</string>
   <string name="rate_dialog_msg_1">Es se blie bös mit</string>
@@ -63,21 +59,16 @@
   <string name="pref_newtab_background_summary">Wen se e nuuj tabblaad äöpens den kump det oppen achtergróndj</string>
   <string name="pref_extras">Extra</string>
   <string name="new_tab_snackbar">Artikel äöpent zich in nuuj tabblaad</string>
-  <string name="download_started_library">Download begós…</string>
   <string name="local_zims">Toustèl</string>
-  <string name="delete_specific_zim">Sjaf dit bestandj eweg?</string>
   <string name="delete_specific_zim_toast">Bestandj eweggesjaf</string>
   <string name="download_pause">Pauseer</string>
   <string name="download_stop">Oetgesjèd</string>
   <string name="download_paused">gepauseerd</string>
   <string name="no_downloads_here">Gein downloads hie</string>
   <string name="no_files_here">Gein bestenj hie</string>
-  <string name="download_complete_snackbar">Download is aaf</string>
   <string name="download_no_space">Neet zat ruumdje veur dit bestandj te downloade.</string>
   <string name="no_network_connection">Gein netwerkverbinjing</string>
   <string name="get_library_over_network">Gebroek nètwerk veur de inhawdslies te downloade. (zoeaget 6MB)</string>
-  <string name="proceed">Gank wiejer</string>
-  <string name="help_1">Kiwix bèdj dich offline-toegank aan websites wie Wikipedia in \'nen hieël samegedrökdje vorm.</string>
   <string name="help_2">Waat doon v\'r bie Kiwix?</string>
   <string name="help_5">Wo is d\'n inhawd?</string>
   <string name="help_6">Ozen inhawd is óngergebrach oppe Kiwix-website.</string>
@@ -88,7 +79,6 @@
   <string name="help_16">\u2022 Op Microsoft Windows: HJ-Split</string>
   <string name="help_17">\u2022 Op Apple Mac OSX: Split en Concat</string>
   <string name="help_19">Opmirking: dien rizzelterende bestenj mótte \'t volgende heite: my_big_file.zimaa, my_big_file.zimab, etc.</string>
-  <string name="help_20">Danke det se veur Kiwix höbs gekaoze!</string>
   <string name="pref_storage">Opslaag</string>
   <string name="pref_current_folder">Hujige Map</string>
   <string name="path_not_writable">Kan de gewunsjde map neet äöpene mitte standerdinstèlling. Veur dit op te losse mós se de gewunsjde map oppernuuj aanvinke inne toepassingsinstèllinge.</string>
@@ -99,7 +89,6 @@
   <string name="confirm_stop_download_title">Sjei oet mit downloade?</string>
   <string name="confirm_stop_download_msg">Wèts se zeker det se dezen download wils laote oetsjeie?</string>
   <string name="download_change_storage">Opslaagapparaatsillekteerder</string>
-  <string name="delete_tab">Sjaf tabblaad eweg</string>
   <string name="next">Volgende</string>
   <string name="previous">Veurige</string>
   <string name="pref_wifi_only">Download inhawd allein via de WiFi</string>
@@ -111,8 +100,6 @@
   <string name="pref_bottomtoolbar_summary">Tuin \'ne gereidsjapsbalk mit snel hanjelinge óngeraan \'t sjerm</string>
   <string name="pref_autonightmode_summary">Sjakel autematis tösse daag- en nachmodus</string>
   <string name="pref_autonightmode">Automatiseerde nachmodus</string>
-  <string name="pref_multi_search_title">MultiZim-zeuk</string>
-  <string name="pref_multi_search_summary">Staon d\'n app toe te zeuke door ZIM-bestenj (Waorsjoewing: hieël experimenteel!).</string>
   <string name="pref_external_link_popup_title">Waorsjoewing mich wen ich nao \'nen externe link gaon</string>
   <string name="external_link_popup_dialog_title">Externe link in \'nt tikke</string>
   <string name="external_link_popup_dialog_message">Doe bös \'nen externe link in \'nt tikke. Det kan leie toet extra köste veur \'t euverbringe van gegaeves of wirk neet wen se offline bös. Wils se doorgaon?</string>

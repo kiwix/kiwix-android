@@ -11,11 +11,9 @@
   <string name="menu_exitfullscreen">Бүтэн дэлгэцээр үзүүлэхийг болиулах</string>
   <string name="save_media">медиаг өөр төрлөөр хадгалах</string>
   <string name="rescan_fs_warning">ZIM файлыг шүүж байна, түр хүлээнэ үү…</string>
-  <string name="button_backtotop">Хамгийн дээр Очих</string>
   <string name="search_label">Хайлт</string>
   <string name="choose_file">ZIM  агуулгын файлыг сонгох (*.zim)</string>
   <string name="open_in_new_tab">Холбоосыг өөр табд нээ</string>
-  <string name="error_nozimfilesfound">Эндээс ZIM файл олдсонгүй. \nKiwix -ын агуулгыг хэрхэн оруулах талаар Help Page -ээс харна уу.\nТа ZIM файлаа хуулсандаа итгэлтэй байгаа бол хэдэн минутын дараа ахин оролд, эсвэл төхөөрөмжөө унтрааж асаагаарай.</string>
   <string name="error_filenotfound">Алдаа: Сонгосон ZIM файл олдсонгүй.</string>
   <string name="error_fileinvalid">Алдаа: Сонгосон ZIM файл алдаатай байна.</string>
   <string name="error_articleurlnotfound">Алдаа: (Url: %1$s) нийтлэлийг уншихад алдаа.</string>
