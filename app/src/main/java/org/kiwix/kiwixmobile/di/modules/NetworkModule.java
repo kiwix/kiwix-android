@@ -36,7 +36,7 @@ import org.kiwix.kiwixmobile.data.remote.UserAgentInterceptor;
 
   @Provides @Singleton OkHttpClient provideOkHttpClient() {
     HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-    logging.setLevel(BuildConfig.DEBUG ? Level.BODY : Level.BASIC);
+    logging.setLevel(BuildConfig.DEBUG ? Level.BASIC : Level.NONE);
 
     return new OkHttpClient().newBuilder().followRedirects(true).followSslRedirects(true)
         .connectTimeout(10, TimeUnit.SECONDS)
