@@ -38,6 +38,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.TO_BE_SENT;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.showToast;
 
 /**
@@ -101,7 +102,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
       totalFilesForTransfer = fileUriList.size();
 
       for(int i = 0; i < fileUriList.size(); i++) {
-        filesToSend.add(new FileItem(getFileName(fileUriList.get(i)), FileItem.TO_BE_SENT));
+        filesToSend.add(new FileItem(getFileName(fileUriList.get(i)), TO_BE_SENT));
       }
 
       displayTransferProgressFragment();

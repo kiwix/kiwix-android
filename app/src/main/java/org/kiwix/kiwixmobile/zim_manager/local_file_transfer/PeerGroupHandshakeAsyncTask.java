@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.DeviceListFragment.PEER_HANDSHAKE_PORT;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.DeviceListFragment.getFileName;
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.TO_BE_SENT;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.TO_BE_SENT;
 
 /**
  * Helper class for the local file sharing module, used in {@link DeviceListFragment}.

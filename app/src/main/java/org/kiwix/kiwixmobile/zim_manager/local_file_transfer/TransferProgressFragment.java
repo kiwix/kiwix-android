@@ -57,7 +57,7 @@ public class TransferProgressFragment extends Fragment {
     if(unbinder != null) unbinder.unbind();
   }
 
-  public void changeStatus(int itemIndex, short status) {
+  public void changeStatus(int itemIndex, @FileItem.FileStatus int status) {
     fileItems.get(itemIndex).setFileStatus(status);
     fileListAdapter.notifyItemChanged(itemIndex);
   }

@@ -15,6 +15,8 @@ import org.kiwix.kiwixmobile.R;
 
 import java.util.ArrayList;
 
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.*;
+
 /**
  * Helper class, part of the local file sharing module.
  *
@@ -43,17 +45,17 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
     String name = fileItem.getFileName();
     holder.fileName.setText(name);
 
-    if(fileItem.getFileStatus() == FileItem.SENDING) {
+    if(fileItem.getFileStatus() == SENDING) {
       holder.statusImage.setVisibility(View.GONE);
       holder.progressBar.setVisibility(View.VISIBLE);
 
-    } else if(fileItem.getFileStatus() != FileItem.TO_BE_SENT){ // Icon for TO_BE_SENT is assigned by default in the item layout
+    } else if(fileItem.getFileStatus() != TO_BE_SENT){ // Icon for TO_BE_SENT is assigned by default in the item layout
       holder.progressBar.setVisibility(View.GONE);
 
       switch (fileItem.getFileStatus()) {
-        case FileItem.SENT :  holder.statusImage.setImageResource(R.drawable.ic_baseline_check_24px);
+        case SENT :  holder.statusImage.setImageResource(R.drawable.ic_baseline_check_24px);
                               break;
-        case FileItem.ERROR:  holder.statusImage.setImageResource(R.drawable.ic_baseline_error_24px);
+        case ERROR:  holder.statusImage.setImageResource(R.drawable.ic_baseline_error_24px);
                               break;
       }
 

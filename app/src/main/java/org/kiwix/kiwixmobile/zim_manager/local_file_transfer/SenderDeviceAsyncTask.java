@@ -18,6 +18,7 @@ import java.net.Socket;
 
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.DeviceListFragment.FILE_TRANSFER_PORT;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.DeviceListFragment.getFileName;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.*;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.showToast;
 
 /**
@@ -48,7 +49,7 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
 
   @Override
   protected void onPreExecute() {
-    transferProgressFragment.changeStatus(fileItemIndex, FileItem.SENDING);
+    transferProgressFragment.changeStatus(fileItemIndex, SENDING);
   }
 
   @Override
@@ -97,11 +98,11 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
     deviceListFragment.incrementTotalFilesSent();
 
     if(fileSendSuccessful) {
-      transferProgressFragment.changeStatus(fileItemIndex, FileItem.SENT);
+      transferProgressFragment.changeStatus(fileItemIndex, SENT);
     } else {
       Activity activity = deviceListFragment.getActivity();
       showToast(activity, activity.getString(R.string.error_sending) + " " + getFileName(deviceListFragment.getFileUriList().get(fileItemIndex)), Toast.LENGTH_SHORT);
-      transferProgressFragment.changeStatus(fileItemIndex, FileItem.ERROR);
+      transferProgressFragment.changeStatus(fileItemIndex, ERROR);
     }
 
     if(deviceListFragment.allFilesSent()) {

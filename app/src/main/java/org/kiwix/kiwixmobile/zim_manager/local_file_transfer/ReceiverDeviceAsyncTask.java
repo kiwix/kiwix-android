@@ -16,6 +16,8 @@ import java.util.ArrayList;
 
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.DeviceListFragment.FILE_TRANSFER_PORT;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.DeviceListFragment.copyToOutputStream;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.SENDING;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.SENT;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.showToast;
 
 /**
@@ -28,7 +30,7 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTra
  * A single Task is used for the entire file transfer (the server socket accepts connections as
  * many times as the no. of files).
  * */
-class ReceiverDeviceAsyncTask extends AsyncTask<Void, Short, Boolean> {
+class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
 
   private static final String TAG = "ReceiverDeviceAsyncTask";
 
@@ -56,7 +58,7 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Short, Boolean> {
         if(BuildConfig.DEBUG) Log.d(TAG, "Server: Client connected for file " + currentFile);
 
         fileItemIndex = currentFile-1;
-        publishProgress(FileItem.SENDING);
+        publishProgress(SENDING);
 
         ArrayList<FileItem> fileItems = deviceListFragment.getFileItems();
         String incomingFileName = fileItems.get(fileItemIndex).getFileName();
@@ -73,7 +75,7 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Short, Boolean> {
 
         copyToOutputStream(client.getInputStream(), new FileOutputStream(clientNoteFileLocation));
 
-        publishProgress(FileItem.SENT);
+        publishProgress(SENT);
         deviceListFragment.incrementTotalFilesSent();
       }
       serverSocket.close();
@@ -87,8 +89,8 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Short, Boolean> {
   }
 
   @Override
-  protected void onProgressUpdate(Short... values) {
-    short fileStatus = values[0];
+  protected void onProgressUpdate(Integer... values) {
+    int fileStatus = values[0];
     transferProgressFragment.changeStatus(fileItemIndex, fileStatus);
   }
 
