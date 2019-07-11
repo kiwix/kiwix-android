@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -12,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -157,21 +155,21 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
     if(userDevice != null) {
       deviceName.setText(userDevice.deviceName);
-      deviceStatus.setText(getDeviceStatus(userDevice.status));
+      deviceStatus.setText(getString(getDeviceStatus(userDevice.status)));
     }
   }
 
-  public String getDeviceStatus(int status) {
+  public static int getDeviceStatus(int status) {
 
     if(BuildConfig.DEBUG) Log.d(TAG, "Peer Status: " + status);
     switch (status) {
-      case WifiP2pDevice.AVAILABLE : return getString(R.string.available);
-      case WifiP2pDevice.INVITED   : return getString(R.string.invited);
-      case WifiP2pDevice.CONNECTED : return getString(R.string.connected);
-      case WifiP2pDevice.FAILED    : return getString(R.string.failed);
-      case WifiP2pDevice.UNAVAILABLE:return getString(R.string.unavailable);
+      case WifiP2pDevice.AVAILABLE : return R.string.available;
+      case WifiP2pDevice.INVITED   : return R.string.invited;
+      case WifiP2pDevice.CONNECTED : return R.string.connected;
+      case WifiP2pDevice.FAILED    : return R.string.failed;
+      case WifiP2pDevice.UNAVAILABLE:return R.string.unavailable;
 
-      default: return getString(R.string.unknown);
+      default: return R.string.unknown;
     }
   }
 
@@ -320,51 +318,6 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     outputStream.close();
     inputStream.close();
     Log.d(LocalFileTransferActivity.TAG, "Both streams closed");
-  }
-
-
-  private class WifiPeerListAdapter extends ArrayAdapter<WifiP2pDevice> {
-
-    private List<WifiP2pDevice> listItems;
-
-    public WifiPeerListAdapter(@NonNull Context context, int resource, List<WifiP2pDevice> objects) {
-      super(context, resource, objects);
-      this.listItems = objects;
-    }
-
-    @NonNull
-    @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-      View rowView = convertView;
-      ViewHolder viewHolder;
-
-      if(rowView == null) {
-        LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-        rowView = layoutInflater.inflate(R.layout.row_peer_device, parent, false);
-        viewHolder = new ViewHolder(rowView);
-        rowView.setTag(viewHolder);
-      } else {
-        viewHolder = (ViewHolder) rowView.getTag();
-      }
-
-      WifiP2pDevice device = listItems.get(position);
-
-      if(device != null) {
-        viewHolder.deviceName.setText(device.deviceName);
-        viewHolder.deviceStatus.setText(getDeviceStatus(device.status));
-      }
-
-      return rowView;
-    }
-  }
-
-  static class ViewHolder {
-    @BindView(R.id.row_device_name) TextView deviceName;
-    @BindView(R.id.row_device_status) TextView deviceStatus;
-
-    public ViewHolder(View view) {
-      ButterKnife.bind(this, view);
-    }
   }
 
   public interface DeviceActionListener {
