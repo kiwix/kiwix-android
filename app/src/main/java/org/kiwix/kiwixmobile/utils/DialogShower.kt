@@ -19,6 +19,6 @@ package org.kiwix.kiwixmobile.utils
 interface DialogShower {
   fun show(
     dialog: KiwixDialog,
-    vararg clickListener: () -> Unit
+    vararg clickListeners: () -> Unit
   )
 }

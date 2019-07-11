@@ -88,7 +88,7 @@
   <string name="remote_zims">Online</string>
   <string name="zim_downloads">Downloading</string>
   <string name="zim_manager">Library</string>
-  <string name="delete_specific_zim">Delete this file?</string>
+  <string name="delete_zim_body">Delete %s?</string>
   <string name="delete_specific_zim_toast">File deleted</string>
   <string name="zim_file_downloading">Downloading</string>
   <string name="zim_file_downloaded">Downloaded</string>
