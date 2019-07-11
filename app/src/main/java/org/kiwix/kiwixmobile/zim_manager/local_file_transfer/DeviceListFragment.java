@@ -236,8 +236,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
         showToast(localFileTransferActivity, R.string.starting_transfer, Toast.LENGTH_SHORT);
 
-        if(groupInfo.isGroupOwner)  fileReceiverDeviceAddress = selectedPeerDeviceInetAddress;
-        else                        fileReceiverDeviceAddress = groupInfo.groupOwnerAddress;
+        fileReceiverDeviceAddress = (groupInfo.isGroupOwner) ?  selectedPeerDeviceInetAddress : groupInfo.groupOwnerAddress;
 
         // Hack for allowing slower receiver devices to setup server before sender device requests to connect
         showToast(localFileTransferActivity, R.string.preparing_files, Toast.LENGTH_LONG);

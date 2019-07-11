@@ -225,7 +225,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   }
   
   static void showToast(Context context, int stringResource, int duration) {
-    Toast.makeText(context, context.getString(stringResource), duration).show();
+    showToast(context, context.getString(stringResource), duration);
   }
 
   static void showToast(Context context, String text, int duration) {
@@ -444,7 +444,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
           .setPositiveButton(R.string.open_location_settings, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-              paramDialogInterface.cancel();
               startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), LocalFileTransferActivity.REQUEST_ENABLE_LOCATION_SERVICES);
             }
           })
@@ -482,7 +481,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
           .setPositiveButton(R.string.open_wifi_settings, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-              paramDialogInterface.cancel();
               startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
             }
           })
