@@ -233,7 +233,8 @@ android {
     //TODO stop ignoring
     ignore 'MissingTranslation',
         'CheckResult',
-        'DuplicateStrings'
+        'DuplicateStrings',
+        'LogConditional'
     baseline file("lint-baseline.xml")
   }
 
