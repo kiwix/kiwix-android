@@ -19,9 +19,11 @@
 
 package eu.mhutti1.utils.storage;
 
+import android.annotation.SuppressLint;
+
 class ExternalPaths {
 
-  private static final String[] paths = {
+  @SuppressLint("SdCardPath") private static final String[] paths = {
       "/storage/sdcard0",
       "/storage/sdcard1",
       "/storage/extsdcard",

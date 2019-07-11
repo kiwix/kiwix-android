@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.zim_manager.library_view
 
+import android.annotation.SuppressLint
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -209,6 +210,7 @@ class LibraryFragment : BaseFragment() {
   private fun notEnoughSpaceAvailable(item: BookItem) =
     spaceAvailable < item.book.size.toLong() * 1024f
 
+  @SuppressLint("ImplicitSamInstance")
   private fun showStorageSelectDialog() {
     StorageSelectDialog()
         .apply {

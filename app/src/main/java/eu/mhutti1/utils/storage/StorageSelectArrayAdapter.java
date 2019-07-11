@@ -19,6 +19,7 @@
 
 package eu.mhutti1.utils.storage;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,7 @@ class StorageSelectArrayAdapter extends ArrayAdapter<StorageDevice> {
     mExternal = external;
   }
 
-  @Override
+  @SuppressLint("SetTextI18n") @Override
   public View getView(int position, View convertView, ViewGroup parent) {
 
     ViewHolder holder;
@@ -64,7 +65,7 @@ class StorageSelectArrayAdapter extends ArrayAdapter<StorageDevice> {
     return convertView;
   }
 
-  private class ViewHolder {
+  class ViewHolder {
     TextView fileName;
     TextView fileSize;
   }
