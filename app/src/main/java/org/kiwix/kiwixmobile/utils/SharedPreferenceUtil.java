@@ -11,7 +11,6 @@ import javax.inject.Singleton;
 
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_AUTONIGHTMODE;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_BACK_TO_TOP;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_BOTTOM_TOOLBAR;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_EXTERNAL_LINK_POPUP;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_FULLSCREEN;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_HIDE_TOOLBAR;
@@ -59,9 +58,6 @@ public class SharedPreferenceUtil {
     return sharedPreferences.getBoolean(PREF_FULLSCREEN, false);
   }
 
-  public boolean getPrefBottomToolbar() {
-    return sharedPreferences.getBoolean(PREF_BOTTOM_TOOLBAR, false);
-  }
 
   public boolean getPrefBackToTop() {
     return sharedPreferences.getBoolean(PREF_BACK_TO_TOP, false);
