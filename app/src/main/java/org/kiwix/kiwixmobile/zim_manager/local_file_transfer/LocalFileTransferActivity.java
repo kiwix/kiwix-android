@@ -1,13 +1,10 @@
 package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -17,7 +14,6 @@ import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,18 +22,20 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.utils.AlertDialogShower;
+import org.kiwix.kiwixmobile.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 import java.util.ArrayList;
@@ -63,8 +61,8 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   private static final int PERMISSION_REQUEST_CODE_COARSE_LOCATION = 1;
   private static final int PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS = 2;
 
-  @Inject
-  SharedPreferenceUtil sharedPreferenceUtil;
+  @Inject SharedPreferenceUtil sharedPreferenceUtil;
+  @Inject AlertDialogShower alertDialogShower;
 
   @BindView(R.id.toolbar_local_file_transfer) Toolbar actionBar;
 
@@ -82,12 +80,14 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   private final IntentFilter intentFilter = new IntentFilter(); // For specifying broadcasts (of the P2P API) that the module needs to respond to
   private BroadcastReceiver receiver = null; // For receiving the broadcasts given by above filter
 
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_local_file_transfer);
-    KiwixApplication.getApplicationComponent().inject(this);
+    KiwixApplication.getApplicationComponent().activityComponent()
+        .activity(this)
+        .build()
+        .inject(this);
     ButterKnife.bind(this);
 
     /*
@@ -153,7 +153,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
       final DeviceListFragment deviceListFragment = (DeviceListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_device_list);
       deviceListFragment.onInitiateDiscovery();
-      deviceListFragment.setSharedPreferenceUtil(sharedPreferenceUtil);
+      deviceListFragment.performFieldInjection(sharedPreferenceUtil, alertDialogShower);
       manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
         @Override
         public void onSuccess() {
@@ -334,15 +334,12 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
       if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
         if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
-          new AlertDialog.Builder(this)
-              .setMessage(R.string.permission_rationale_location)
-              .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                  requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_CODE_COARSE_LOCATION);
-                }
-              })
-              .show();
+          alertDialogShower.show(KiwixDialog.LocationPermissionRationale.INSTANCE, new Function0<Unit>() {
+            @Override public Unit invoke() {
+              requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_CODE_COARSE_LOCATION);
+              return Unit.INSTANCE;
+            }
+          });
 
         } else {
           requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_CODE_COARSE_LOCATION);
@@ -361,15 +358,12 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
       if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
         if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-          new AlertDialog.Builder(this)
-              .setMessage(R.string.permission_rationale_storage)
-              .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                  requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS);
-                }
-              })
-              .show();
+          alertDialogShower.show(KiwixDialog.StoragePermissionRationale.INSTANCE, new Function0<Unit>() {
+            @Override public Unit invoke() {
+              requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS);
+              return Unit.INSTANCE;
+            }
+          });
 
         } else {
           requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS);

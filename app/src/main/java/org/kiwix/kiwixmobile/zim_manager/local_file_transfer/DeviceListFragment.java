@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 
-import android.content.DialogInterface;
 import android.net.Uri;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.ListFragment;
@@ -27,8 +25,12 @@ import androidx.fragment.app.ListFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.utils.AlertDialogShower;
+import org.kiwix.kiwixmobile.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 import java.io.IOException;
@@ -60,6 +62,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
   public static int FILE_TRANSFER_PORT = 8008;
 
   private SharedPreferenceUtil sharedPreferenceUtil;
+  private AlertDialogShower alertDialogShower;
 
   private LocalFileTransferActivity localFileTransferActivity;  // Parent activity, starting point of the module
   private TransferProgressFragment transferProgressFragment;    // Sibling fragment, for displaying transfer progress
@@ -131,16 +134,12 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
       return;
 
     selectedPeerDevice = (WifiP2pDevice) getListAdapter().getItem(position);
-    new AlertDialog.Builder(localFileTransferActivity)
-        .setMessage(getString(R.string.transfer_to, selectedPeerDevice.deviceName))
-        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            ((DeviceActionListener) localFileTransferActivity).connect(selectedPeerDevice);
-          }
-        })
-        .setNegativeButton(android.R.string.no, null)
-        .show();
+    alertDialogShower.show(new KiwixDialog.FileTransferConfirmation(selectedPeerDevice), new Function0<Unit>() {
+      @Override public Unit invoke() {
+        ((DeviceActionListener) localFileTransferActivity).connect(selectedPeerDevice);
+        return Unit.INSTANCE;
+      }
+    });
   }
 
   private void displayTransferProgressFragment() {
@@ -287,8 +286,9 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     return (filesSent == totalFilesForTransfer);
   }
 
-  public void setSharedPreferenceUtil(SharedPreferenceUtil sharedPreferenceUtil) {
+  public void performFieldInjection(SharedPreferenceUtil sharedPreferenceUtil, AlertDialogShower alertDialogShower) {
     this.sharedPreferenceUtil = sharedPreferenceUtil;
+    this.alertDialogShower = alertDialogShower;
   }
 
   public String getZimStorageRootPath() {
