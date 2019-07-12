@@ -1,10 +1,4 @@
-import com.android.annotations.NonNull
 import com.android.build.OutputFile
-import com.android.builder.testing.api.TestServer
-import com.testdroid.api.APIClient
-import com.testdroid.api.APIKeyClient
-import com.testdroid.api.model.APIProject
-import com.testdroid.api.model.APIUser
 import groovy.json.JsonSlurper
 
 buildscript {
@@ -16,8 +10,7 @@ buildscript {
 
   dependencies {
     classpath "com.android.tools.build:gradle:$androidGradlePluginVersion"
-    classpath "org.apache.httpcomponents:httpclient-android:4.3.3"
-    classpath "com.testdroid:testdroid-api:2.71"
+    classpath 'com.testdroid:gradle:2.63.1'
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     classpath "io.objectbox:objectbox-gradle-plugin:$objectboxVersion"
   }
@@ -33,6 +26,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.objectbox'
 apply plugin: 'jacoco-android'
+apply plugin: 'testdroid'
 
 repositories {
   google()
@@ -207,7 +201,6 @@ private Integer generateVersionCode() {
 
 android {
   compileSdkVersion 28
-  testServer new TestDroidUpload()
 
   defaultConfig {
     minSdkVersion 15
@@ -456,43 +449,11 @@ play {
   resolutionStrategy = "fail"
 }
 
-class TestDroidUpload extends TestServer {
-  def buildNumber = System.getenv("TRAVIS_BUILD_NUMBER")
-  def API_KEY = System.getenv("PUBLIC_TESTDROID_API_KEY")
-  def TESTDROID_SERVER = "https://cloud.testdroid.com"
-  def RUNNER_GATEWAY = System.getenv("TESTDROID_RUNNER_GATEWAY")
-  def accessGroup = System.getenv("ACCESS_GROUP_ID")
-
-  @Override
-  String getName() {
-    return "kiwixtest"
-  }
-
-  @Override
-  void uploadApks(@NonNull String variantName, @NonNull File testApk, File testedApk) {
-    APIUser.metaClass.shareFile { id, accessGroup ->
-      System.out.println(id)
-      try {
-        delegate.postResource(createUri(selfURI, "/files/" + id + "/share"),
-            [accessGroupId: accessGroup], APIProject.class)
-      } catch (Exception e) {
-        System.out.println(e.getLocalizedMessage())
-      }
-    }
-
-    APIClient client = new APIKeyClient(TESTDROID_SERVER, API_KEY)
-    APIUser user = client.me()
-    String testId = user.uploadFile(testApk).getId()
-    user.shareFile(testId, accessGroup)
-    String testedId = user.uploadFile(testedApk).getId()
-    user.shareFile(testedId, accessGroup)
-
-    new URL(RUNNER_GATEWAY + "?apk=" + testedId + "&test=" + testId + "&buildno=" + buildNumber).
-        getText()
-  }
-
-  @Override
-  boolean isConfigured() {
-    return true
-  }
+testdroid {
+  authorization "APIKEY"
+  apiKey System.getenv("PUBLIC_TESTDROID_API_KEY")
+  deviceGroup 'Kiwix'
+  projectName "Kiwix"
+  mode "FULL_RUN"
+  testRunName System.getenv("TRAVIS_BUILD_NUMBER")
 }
