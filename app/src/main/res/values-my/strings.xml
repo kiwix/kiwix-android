@@ -15,11 +15,9 @@
   <string name="save_media_error">မီဒီယာဖိုင်ကို သိမ်းရန်ကြိုးစားနေစဉ် အမှားတစ်ခု ဖြစ်ပေါ်သွားသည်။</string>
   <string name="save_media_saved">မီဒီယာဖိုင်ကို %s အဖြစ် Android/media/org.kiwix…/ တွင် သိမ်းပြီးဖြစ်သည်။</string>
   <string name="rescan_fs_warning">ဒေါင်းလုပ်ရယူနိုင်သော အကြောင်းအရာဖိုင်များကို ရှာဖတ်နေသည်။ ခေတ္တစောင့်ဆိုင်းပါ …</string>
-  <string name="button_backtotop">ထိပ်ဆုံးသို့ ပြန်သွားရန်</string>
   <string name="search_label">ရှာဖွေရန်</string>
   <string name="choose_file">အကြောင်းအရာဖိုင်တစ်ခုကို ရွေးချယ်ပါ (*.zim)</string>
   <string name="open_in_new_tab">တဘ်အသစ်မှာ လင့်ကိုဖွင့်မလား။</string>
-  <string name="error_nozimfilesfound">သင့်စက်ပေါ်တွင် အကြောင်းအရာဖိုင် တစ်ခုမှ ရှာမတွေ့ပါ။\nအကူအညီစာမျက်နှာကိုကြည့်၍ ကီဝစ်ထဲသို့ အချက်အလက်များ မည်သို့ထည့်ရမည်ကို လမ်းညွှန်မှု ရယူပါ။\nအကယ်၍ ZIM ဖိုင်ကို သင့်စက်ထဲ/သိုလှောင်သိမ်းဆည်းရာ နေရာထဲ ထည့်ပြီးသည်မှာ သေချာလျှင် တစ်မိနစ်ခန့် အကြာတွက် ပြန်ကြိုးစားကြည့်ပါ၊ သို့မဟုတ် စက်ကို ရီစတတ်ချကြည့်ပါ။</string>
   <string name="error_filenotfound">အမှားသတိပေးချက် − ရွေးချယ်ထားသော ZIM ဖိုင်ကို ရှာမတွေ့ပါ။</string>
   <string name="error_fileinvalid">အမှားသတိပေးချက် − ရွေးချယ်ထားသောဖိုင်သည် တရားဝင် ZIM ဖိုင် မဟုတ်ပါ။</string>
   <string name="error_articleurlnotfound">အမှားသတိပေးချက် − (Url: %1$s) ဆောင်းပါးထည့်သွင်းခြင်း မအောင်မြင်ပါ။</string>
@@ -38,7 +36,6 @@
   <string name="pref_credits">ပံပိုးပေးသူများနှင့် လိုင်စင်များ</string>
   <string name="tts_lang_not_supported">ဤစာမျက်နှာ၏ ဘာသာစကားကို မထောက်ပံ့ထားပါ၊ သို့မဟုတ် သင့်လျော်သော ဘာသာစကားဒေတာကို သွင်းမထားပါ။ ဆောင်းပါးကို မှန်ကန်စွာ ဖတ်နိုင်မည်မဟုတ်ပါ။</string>
   <string name="go_to_play_store">Play စတိုးသို့ သွားရန်</string>
-  <string name="no_bookmarks">စာညှပ်မှတ်ထားခြင်း မရှိ!</string>
   <string name="menu_bookmarks_list">ဖတ်ရန်မှတ်ထားမှု</string>
   <string name="delete_recent_search_item">ဤဟာကို ဖျက်မည်လား</string>
   <string name="pref_clear_all_history_title">မှတ်တမ်းအားရှင်းမည်</string>
@@ -49,18 +46,15 @@
   <string name="got_it">ရပြီဟေ့</string>
   <string name="did_you_know">သင်သိပါသလား</string>
   <string name="undo">နောက်ပြန် ပြန်ပြင်ရန်</string>
-  <string name="deleted_message">ဖျက်ပြီးပြီ</string>
   <string name="bookmark_added">စာညှပ်မှတ် ထည့်ပေါင်းပြီး</string>
   <string name="rate_dialog_title">ကျေးဇူးပြု၍ ကျွန်ုပ်တို့အား အဆင့်သတ်မှတ်ပေးပါ</string>
   <string name="rate_dialog_negative">မလိုပါ၊ ကျေးဇူးတင်ပါသည်။</string>
   <string name="rate_dialog_neutral">နောက်မှ</string>
   <string name="open">ဖွင့်ပါ</string>
-  <string name="download_started_library">ဒေါင်းလုတ် စတင်ခဲ့သည်…</string>
   <string name="local_zims">စက်ပစ္စည်း</string>
   <string name="remote_zims">အွန်လိုင်း</string>
   <string name="zim_downloads">ဒေါင်းလုတ်ဆွဲနေသည်</string>
   <string name="zim_manager">မှတ်ထားမှုများ</string>
-  <string name="delete_specific_zim">ဤဖိုင်ကို ဖျက်မည်လား</string>
   <string name="delete_specific_zim_toast">ဖိုင် ဖျက်ပြီးပြီ</string>
   <string name="zim_file_downloading">ဒေါင်းလုတ်ဆွဲနေသည်</string>
   <string name="zim_file_downloaded">ဒေါင်းလုဒ်ဆွဲပြီးပြီ</string>
@@ -68,7 +62,6 @@
   <string name="download_stop">ရပ်</string>
   <string name="download_paused">ခေတ္တရပ်ပြီး</string>
   <string name="no_files_here">ဤနေရာတွင် ဖိုင်များမရှိပါ</string>
-  <string name="download_complete_snackbar">ဒေါင်းလုပ် ပြီးစီးပါပြီ</string>
   <string name="download_no_space">ဤဖိုင်ကို ဒေါင်းလုပ်ရယူရန် နေရာလွတ် မလုံလောက်ပါ။</string>
   <string name="space_available">နေရာလွတ် ရရှိနိုင်မှု-</string>
   <string name="zim_simple">ရိုးရိုး</string>

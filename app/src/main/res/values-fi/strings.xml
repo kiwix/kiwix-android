@@ -16,11 +16,9 @@
   <string name="save_media_error">Virhe mediaa tallennettaessa!</string>
   <string name="save_media_saved">Tallennettu media %s muodossa hakemistoon Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Skannataan ladattavaa sisältöä, odota…</string>
-  <string name="button_backtotop">Takaisin alkuun</string>
   <string name="search_label">Hae</string>
   <string name="choose_file">Valitse sisältötiedosto (*.zim)</string>
   <string name="open_in_new_tab">Avaa linkki uudessa välilehdessä?</string>
-  <string name="error_nozimfilesfound">Sisältöä ei löytynyt laitteestasi.\nKatso Ohje-sivua saadaksesi ohjeet siitä, miten ladata sisältöä Kiwixiin.\nJos et laita ZIM-tiedostoa laitteeseen/ulkoiseen tallennustilaan, saatat joutua yrittämään uudelleen hetken kuluttua tai käynnistämään laitteesi uudelleen.</string>
   <string name="error_filenotfound">Virhe: valittua ZIM-tiedostoa ei löytynyt.</string>
   <string name="error_fileinvalid">Virhe: valittu tiedosto ei ole kelvollinen ZIM-tiedosto.</string>
   <string name="error_articleurlnotfound">Virhe: Artikkelin (Url: %1$s) lataus epäonnistui.</string>
@@ -42,7 +40,6 @@
   <string name="no_reader_application_installed">Ei voitu löytää asennettua sovellusta tämän tyyppiselle tiedostolle</string>
   <string name="customapp_missing_content">Sovelluksesi on viottunut.\nTämä voi tapahtua kun poistat tiedostoja SD-kortilta.\nSinun pitää poistaa ja sitten uudelleenasentaa sovellus Play-kaupasta.</string>
   <string name="go_to_play_store">Mene Play-kauppaan</string>
-  <string name="no_bookmarks">Ei kirjanmerkkejä</string>
   <string name="menu_bookmarks_list">Kirjanmerkit</string>
   <string name="no_section_info">Sisältöotsikoita ei löydy</string>
   <string name="request_storage">Käyttääksemme offline-sisältöä, tarvitsemme pääsyn tallennuslaitteeseesi</string>
@@ -57,7 +54,6 @@
   <string name="did_you_know">Tiesitkö?</string>
   <string name="undo">Kumoa</string>
   <string name="tab_closed">Välilehti suljettu</string>
-  <string name="deleted_message">poistettu</string>
   <string name="bookmark_added">Kirjanmerkki lisätty</string>
   <string name="rate_dialog_title">Arvioi meitä</string>
   <string name="rate_dialog_msg_1">Jos nautit</string>
@@ -74,11 +70,9 @@
   <string name="search_widget_text">Hae Kiwixistä</string>
   <string name="speech_prompt_text">Puhu hakeaksesi %s</string>
   <string name="speech_not_supported">Sori! Laitteesi ei tue puheensyöttöä</string>
-  <string name="download_started_library">Lataus aloitettu…</string>
   <string name="local_zims">Laite</string>
   <string name="zim_downloads">Ladataan</string>
   <string name="zim_manager">Kirjasto</string>
-  <string name="delete_specific_zim">Poista tämä tiedosto?</string>
   <string name="delete_specific_zim_toast">Tiedosto poistettu</string>
   <string name="zim_file_downloading">Ladataan</string>
   <string name="zim_file_downloaded">ladattu</string>
@@ -87,7 +81,6 @@
   <string name="download_paused">keskeytetty</string>
   <string name="no_downloads_here">Ei latauksia täällä</string>
   <string name="no_files_here">Ei tiedostoja täällä</string>
-  <string name="download_complete_snackbar">Lataus suoritettu</string>
   <string name="space_available">Tilaa käytettävissä:</string>
   <string name="zim_simple">Yksinkertainen</string>
   <string name="zim_nopic">Ei kuvia</string>
@@ -103,7 +96,6 @@
   <string name="help_12">Kuinka käyttää suuria ZIM-tiedostoja?</string>
   <string name="help_16">\u2022 Microsoft Windowsissa: HJ-Split</string>
   <string name="help_17">\u2022 Apple Mac OSX:ssä: Split and Concat</string>
-  <string name="help_20">Kiitos että valitsit Kiwixin!</string>
   <string name="pref_storage">Tallennuslaite</string>
   <string name="pref_current_folder">Nykyinen kansio</string>
   <string name="delete_zim_failed">Emme pystyneet poistamaan tätä tiedostoa. Sinun pitäisi kokeilla käyttää tiedostonhallintaa sen sijaan.</string>
@@ -118,7 +110,6 @@
   <string name="confirm_stop_download_msg">Haluatko varmasti pysäyttää tämän latauksen?</string>
   <string name="download_change_storage">Tallennuslaitteen valitsin</string>
   <string name="tts_not_enabled">Teksti puheeksi ei ole käytössä tässä ZIM-tiedostossa</string>
-  <string name="delete_tab">Poista välilehti</string>
   <string name="next">Seuraava</string>
   <string name="previous">Edellinen</string>
   <string name="wifi_only_title">Salli sisällön lataaminen mobiiliverkon kautta?</string>
@@ -128,7 +119,6 @@
   <string name="time_left">jäljellä</string>
   <string name="pref_autonightmode_summary">Vaihda automaattisesti päivä- ja yötilan välillä.</string>
   <string name="pref_autonightmode">Automatisoitu yötila</string>
-  <string name="pref_multi_search_title">MultiZim-haku</string>
   <string name="external_link_popup_dialog_title">Ulkoisen linkin syöttäminen</string>
   <string name="do_not_ask_anymore">Älä kysy enää</string>
   <string name="your_languages">Valitut kielet:</string>

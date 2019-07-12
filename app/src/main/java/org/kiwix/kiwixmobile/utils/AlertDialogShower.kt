@@ -11,24 +11,33 @@ class AlertDialogShower @Inject constructor(
 ) : DialogShower {
   override fun show(
     dialog: KiwixDialog,
-    vararg clickListener: () -> Unit
+    vararg clickListeners: () -> Unit
   ) {
 
     AlertDialog.Builder(activity, dialogStyle())
         .apply {
           dialog.title?.let { setTitle(it) }
-          setMessage(dialog.message)
+          setMessage(
+              activity.getString(
+                  dialog.message,
+                  *bodyArguments(dialog)
+              )
+          )
           setPositiveButton(dialog.positiveMessage) { _, _ ->
-            clickListener.getOrNull(0)
+            clickListeners.getOrNull(0)
                 ?.invoke()
           }
           setNegativeButton(dialog.negativeMessage) { _, _ ->
-            clickListener.getOrNull(1)
+            clickListeners.getOrNull(1)
                 ?.invoke()
           }
         }
         .show()
   }
+
+  private fun bodyArguments(dialog: KiwixDialog) =
+    if (dialog is HasBodyFormatArgs) dialog.args
+    else emptyArray()
 
   private fun dialogStyle() =
     if (sharedPreferenceUtil.nightMode()) {

@@ -16,11 +16,9 @@
   <string name="save_media_error">Ett fel uppstod när media skulle sparas!</string>
   <string name="save_media_saved">Sparade media som %s i Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Söker efter nedladdningsbart innehåll, var god vänta…</string>
-  <string name="button_backtotop">Tillbaka till början</string>
   <string name="search_label">Sök</string>
   <string name="choose_file">Välj en innehållsfil (*.zim)</string>
   <string name="open_in_new_tab">Öppna länk i ny flik?</string>
-  <string name="error_nozimfilesfound">Inget innehåll hittades på din enhet.\nTa en titt på hjälpsidan för att få hjälp om hur man läser in innehåll i Kiwix.\nOm du lade in en ZIM-fil på din enhet/externa minne bör du kanske prova igen om någon minut eller starta om din enhet.</string>
   <string name="error_filenotfound">Fel: Den valda ZIM-filen kunde inte hittas.</string>
   <string name="error_fileinvalid">Fel: Den valda filen är inte en giltig ZIM-fil.</string>
   <string name="error_articleurlnotfound">Fel: Inläsning av artikel (url: %1$s) misslyckades.</string>
@@ -42,7 +40,6 @@
   <string name="no_reader_application_installed">Kunde inte hitta ett installerat program för denna filtyp</string>
   <string name="customapp_missing_content">Din app är skadad.\nDetta kan hända när du tar bort filer på SD-kortet.\nDu måste avinstallera och sedan installera om appen från Play Store.</string>
   <string name="go_to_play_store">Gå till Play Store</string>
-  <string name="no_bookmarks">Inga bokmärken</string>
   <string name="menu_bookmarks_list">Bokmärken</string>
   <string name="no_section_info">Ingen innehållsrubrik hittades</string>
   <string name="request_storage">För att komma åt offlineinnehåll behöver vi tillgång till ditt lagringsutrymme</string>
@@ -60,7 +57,6 @@
   <string name="did_you_know">Visste du att?</string>
   <string name="undo">Ångra</string>
   <string name="tab_closed">Flik stängdes</string>
-  <string name="deleted_message">raderades</string>
   <string name="bookmark_added">Bokmärke lades till</string>
   <string name="rate_dialog_title">Sätt betyg på oss</string>
   <string name="rate_dialog_msg_1">Om du gillar att använda</string>
@@ -77,12 +73,10 @@
   <string name="search_widget_text">Sök Kiwix</string>
   <string name="speech_prompt_text">Tala för att söka %s</string>
   <string name="speech_not_supported">Tyvärr! Din enhet stöder inte tal-till-text.</string>
-  <string name="download_started_library">Nedladdning startades…</string>
   <string name="local_zims">Enhet</string>
   <string name="remote_zims">Ansluten</string>
   <string name="zim_downloads">Laddar ned</string>
   <string name="zim_manager">Bibliotek</string>
-  <string name="delete_specific_zim">Radera denna fil?</string>
   <string name="delete_specific_zim_toast">Fil raderades</string>
   <string name="zim_file_downloading">Laddar ned</string>
   <string name="zim_file_downloaded">Nedladdad</string>
@@ -91,7 +85,6 @@
   <string name="download_paused">pausad</string>
   <string name="no_downloads_here">Inga nedladdningar här</string>
   <string name="no_files_here">Inga filer här</string>
-  <string name="download_complete_snackbar">Nedladdnings slutförd</string>
   <string name="download_no_space">Otillräckligt utrymme för att ladda ned denna fil.</string>
   <string name="space_available">Tillgängligt utrymme:</string>
   <string name="zim_simple">Enkelt</string>
@@ -99,9 +92,7 @@
   <string name="zim_novid">Inga videor</string>
   <string name="no_network_connection">Ingen nätverksanslutning</string>
   <string name="get_library_over_network">Använd nätverket för att ladda ned innehållslistan. (Uppskattningsvis 6MB)</string>
-  <string name="proceed">Fortsätt</string>
   <string name="wait_for_load">Läser fortfarande in innehåll</string>
-  <string name="help_1">Kiwix ger dig offlineåtkomst till webbplatser som Wikipedia i ett högkomprimerat format.</string>
   <string name="help_2">Vad gör Kiwix?</string>
   <string name="help_3">Kiwix är en innehållsläsare för offlineanvändning. Den fungerar som en webbläsare, men istället för att komma åt webbsidor online läser den innehåll från en fil i ZIM-format.</string>
   <string name="help_4">Även om Kiwix ursprungligen skapades för att tillhandahålla Wikipedia offline läser den även annat innehåll.</string>
@@ -119,8 +110,6 @@
   <string name="help_16">\u2022 På Microsoft Windows: HJ-Split</string>
   <string name="help_17">\u2022 På Apple Mac OSX: Split och Concat</string>
   <string name="help_19">OBS: Resultatfilerna måste heta min_stora_fil.zimaa, min_stora_fil.zimab, etc.</string>
-  <string name="help_20">Tack för att du valde Kiwix!</string>
-  <string name="help_21">Vi är glada att ha dig ombord och skulle uppskatta återkoppling eller förslag på android@kiwix.org.</string>
   <string name="pref_storage">Lagring</string>
   <string name="pref_current_folder">Nuvarande mapp</string>
   <string name="path_not_writable">Kan inte komma åt önskad katalog, använder standardplatsen. För att åtgärda detta, välj önskad katalog i appens inställningar igen.</string>
@@ -131,14 +120,12 @@
   <string name="tts_stop">stoppa</string>
   <string name="internal_storage">Internt</string>
   <string name="external_storage">Extern</string>
-  <string name="zim_already_downloading">Zim laddas redan ned</string>
   <string name="yes">Ja</string>
   <string name="no">Nej</string>
   <string name="confirm_stop_download_title">Stoppa nedladdning?</string>
   <string name="confirm_stop_download_msg">Är du säker på att du vill stoppa denna nedladdning?</string>
   <string name="download_change_storage">Val av enhetslagring</string>
   <string name="tts_not_enabled">Text till tal är inte aktiverat för denna ZIM-fil</string>
-  <string name="delete_tab">Radera flik</string>
   <string name="next">Nästa</string>
   <string name="previous">Föregående</string>
   <string name="wifi_only_title">Tillåt att ladda ned innehåll med mobildata?</string>
@@ -150,8 +137,6 @@
   <string name="pref_bottomtoolbar_summary">Visa ett verktygsfält med snabbåtgärder längst ned på skärmen</string>
   <string name="pref_autonightmode_summary">Växla automatiskt mellan dag- och nattläge.</string>
   <string name="pref_autonightmode">Automatiskt nattläge</string>
-  <string name="pref_multi_search_title">MultiZim-sökning</string>
-  <string name="pref_multi_search_summary">Tillåt appen att söka igenom ZIM-filer (varning: mycket experimentellt).</string>
   <string name="pref_external_link_popup_title">Varna vid externa länkar</string>
   <string name="pref_external_link_popup_summary">Visar popup för att varna om ytterligare kostnader eller att det inte fungerar i offlinelänkar.</string>
   <string name="external_link_popup_dialog_title">Går till extern länk</string>

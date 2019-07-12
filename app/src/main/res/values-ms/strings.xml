@@ -15,11 +15,9 @@
   <string name="save_media_error">Ralat berlaku ketika cubaan menyimpan media!</string>
   <string name="save_media_saved">Menyimpan media sebagai %1$s dalam folder Gambar (Pictures) anda</string>
   <string name="rescan_fs_warning">Sedang mengimbas untuk fail ZIM, sila tunggu…</string>
-  <string name="button_backtotop">Kembali ke Atas</string>
   <string name="search_label">Cari</string>
   <string name="choose_file">Pilih Fail Kandungan ZIM (*.zim)</string>
   <string name="open_in_new_tab">Buka pautan dalam tab baru?</string>
-  <string name="error_nozimfilesfound">Tidak terdapat fail ZIM di dalam peranti anda.\nSila baca halaman Bantuan untuk mendapat petua untuk cara memuatkan kandungan ke dalam Kiwix.\nJika benar anda meletakkan fail ZIM di dalam peranti/storan luaran anda, apa kata anda cuba lagi sebentar kemudian atau me-restart peranti anda.</string>
   <string name="error_filenotfound">Ralat: Fail ZIM yang terpilih tidak dapat ditemui.</string>
   <string name="error_fileinvalid">Ralat: Fail yang terpilih bukan fail ZIM yang sah.</string>
   <string name="error_articleurlnotfound">Ralat: Rencana (Url: %1$s) gagal dimuatkan.</string>
@@ -38,7 +36,6 @@
   <string name="no_reader_application_installed">Tidak terjumpa aplikasi yang dipasang untuk jenis fail ini</string>
   <string name="customapp_missing_content">Aplikasi anda tercemar.\nIni mungkin berlaku apabila anda mengalihkan keluar fail pada kad SD.\nAnda perlu menyahpasang lalu memasang semula aplikasi berkenaan dari App Store.</string>
   <string name="go_to_play_store">Pergi ke Play Store</string>
-  <string name="no_bookmarks">Tiada bookmark!</string>
   <string name="menu_bookmarks_list">Kegemaran</string>
   <string name="no_section_info">Tiada judul kandungan ditemui</string>
   <string name="request_storage">Untuk mencapai fail ZIM kami memerlukan akses kepada storan anda</string>

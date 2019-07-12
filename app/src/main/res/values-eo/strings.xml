@@ -16,11 +16,9 @@
   <string name="save_media_error">Eraro okazis dum provo konservi la plurmediaĵon!</string>
   <string name="save_media_saved">Aŭdvidaĵoj konservitaj kiel %1$s en dosierujo Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Daŭras serĉado de elŝutebla enhavo, bonvolu atendi…</string>
-  <string name="button_backtotop">Reiri Supren</string>
   <string name="search_label">Serĉi</string>
   <string name="choose_file">Elektu Dosieron de Enhavo (*.zim)</string>
   <string name="open_in_new_tab">Ĉu malfermi ligilon en nova langeto?</string>
-  <string name="error_nozimfilesfound">Neniu enhavo estas trovita en la memorilo.\nKonzultu la paĝon Helpo por trovi instrukciojn pri ŝargado de enhavo en Kiwix.\nSe vi enmetis ZIM-dosieron en la memorilon, vi povas reprovi post momento aŭ restartigi la memorilon.</string>
   <string name="error_filenotfound">Eraro: Ne eblis trovi la elektitan ZIM-dosieron.</string>
   <string name="error_fileinvalid">Eraro: La elektita dosiero ne estas valida ZIM-dosiero.</string>
   <string name="error_articleurlnotfound">Eraro: Ŝargado de la artikolo (Url: %1$s) fiaskis.</string>
@@ -44,7 +42,6 @@
   <string name="no_reader_application_installed">Ne povis trovi instalitan aplikaĵon por ĉi tiu dosiertipo</string>
   <string name="customapp_missing_content">Via aplikaĵo estas koruptita.\nTio eble okazis ĉar dosieroj en la SD-karto estis forigitaj.\nVi devas malistali kaj reinstali la Aplikaĵon el Play-Vendejo.</string>
   <string name="go_to_play_store">Iri al Play Store</string>
-  <string name="no_bookmarks">Neniu Legosigno</string>
   <string name="menu_bookmarks_list">Legosignoj</string>
   <string name="no_section_info">Ne Trovis Enhavajn Ĉapojn</string>
   <string name="request_storage">Por atingi konservitan enhavon ni bezonas atingon al via konservejo</string>
@@ -62,7 +59,6 @@
   <string name="did_you_know">Ĉu vi scias?</string>
   <string name="undo">Malfari</string>
   <string name="tab_closed">Fermis langeton</string>
-  <string name="deleted_message">forigita</string>
   <string name="bookmark_added">Aldonis legosignon</string>
   <string name="rate_dialog_title">Bonvolu Taksi Nin</string>
   <string name="rate_dialog_msg_1">Se vi ĝuas uzadon de</string>
@@ -79,12 +75,10 @@
   <string name="search_widget_text">Serĉi Kiwix</string>
   <string name="speech_prompt_text">Paroli por serĉi %s</string>
   <string name="speech_not_supported">Domaĝe, via aparato ne subtenas voĉan enigon</string>
-  <string name="download_started_library">Komencis elŝuton…</string>
   <string name="local_zims">Aparato</string>
   <string name="remote_zims">Konektita</string>
   <string name="zim_downloads">Elŝutante</string>
   <string name="zim_manager">Biblioteko</string>
-  <string name="delete_specific_zim">Ĉu forigi tiu dosieron?</string>
   <string name="delete_specific_zim_toast">Forigis dosieron</string>
   <string name="zim_file_downloading">Elŝutante</string>
   <string name="zim_file_downloaded">Elŝutita</string>
@@ -93,7 +87,6 @@
   <string name="download_paused">paŭzinta</string>
   <string name="no_downloads_here">Neniu elŝuto ĉi tie</string>
   <string name="no_files_here">Neniu dosiero ĉi tie</string>
-  <string name="download_complete_snackbar">Elŝuto finiĝis</string>
   <string name="download_no_space">Ne estas sufiĉa spaco por elŝuti ĉi tiun dosieron.</string>
   <string name="space_available">Havebla Spaco:</string>
   <string name="zim_simple">Simpla</string>
@@ -101,9 +94,7 @@
   <string name="zim_novid">Neniu Videaĵo</string>
   <string name="no_network_connection">Reta konekto mankas</string>
   <string name="get_library_over_network">Uzi reton por elŝuti liston de enhavo (proksimume 6 megabajtoj)</string>
-  <string name="proceed">Daŭrigi</string>
   <string name="wait_for_load">Enhavo Estas Ankoraŭ Ŝarĝata</string>
-  <string name="help_1">Kiwix ebligas vin senkonekte legi retejojn kiel Vikipedion en tre kunpremita formo.</string>
   <string name="help_2">Kion faras Kiwix?</string>
   <string name="help_3">Kiwix estas senkonekta legilo de enhavo. Ĝi estas simila al TTT-legilo, sed anstataŭ legi retpaĝojn konektite, ĝi legas enhavon en ZIM-dosiero.</string>
   <string name="help_4">Kiwix estis originale farita por senkonekta legado de Vikipedio, sed ĝi povas legi alian enhavon.</string>
@@ -121,8 +112,6 @@
   <string name="help_16">\2022 Je Microsoft Windows: HJ-Split</string>
   <string name="help_17">\u2022 Je Apple macOS: Split kaj Concat</string>
   <string name="help_19">Noto: viaj rezultaj dosieroj nomiĝu mia_dosierego.zimaa, mia_dosierego.zimab, ktp.</string>
-  <string name="help_20">Dankon pro via elekto de Kiwix!</string>
-  <string name="help_21">Ni ĝojas ke vi uzas nian aplikaĵon; plaĉus al ni ajnaj komenoj aŭ sugestoj, senditaj al android@kiwix.org.</string>
   <string name="pref_storage">Konservejo</string>
   <string name="pref_current_folder">Aktuala Dosierujo</string>
   <string name="path_not_writable">Ne povas atingi deziratan dosierujon; uzante la implicitan. Por korekti tion, reelektu la deziratan dosierujon en la aplikaĵaj agordoj.</string>
@@ -133,14 +122,12 @@
   <string name="tts_stop">haltigi</string>
   <string name="internal_storage">Interna</string>
   <string name="external_storage">Ekstera</string>
-  <string name="zim_already_downloading">Zim jam estas elŝutata</string>
   <string name="yes">Jes</string>
   <string name="no">Ne</string>
   <string name="confirm_stop_download_title">Haltigi elŝuton?</string>
   <string name="confirm_stop_download_msg">Ĉu vi certas ke vi volas ĉesigi ĉi tiun elŝuton?</string>
   <string name="download_change_storage">Elektilo de konservejo</string>
   <string name="tts_not_enabled">Parolsintezo estas neebla por ĉi tiu ZIM-dosiero</string>
-  <string name="delete_tab">Forigi Langeton</string>
   <string name="next">Sekven</string>
   <string name="previous">Antaŭen</string>
   <string name="wifi_only_title">Ĉu permesi elŝutadon de enhavo per poŝaparata reto?</string>
@@ -152,8 +139,6 @@
   <string name="pref_bottomtoolbar_summary">Montri ilobreton kun rapidaj agoj ĉe la malsupro de la ekrano</string>
   <string name="pref_autonightmode_summary">Aŭtomate ŝalti tagan/noktan reĝimon</string>
   <string name="pref_autonightmode">Aŭtomata nokta reĝimo</string>
-  <string name="pref_multi_search_title">MultiZim-Serĉo</string>
-  <string name="pref_multi_search_summary">Permesi serĉadon tra ZIM-dosieroj (Averto: Tre Eksperimenta).</string>
   <string name="pref_external_link_popup_title">Averti pri aliro al eksteraj ligiloj</string>
   <string name="pref_external_link_popup_summary">Montri averton pri plia kosto aŭ nefunkciado pri eksteraj ligiloj.</string>
   <string name="external_link_popup_dialog_title">Enigi Eksteran Ligilon</string>

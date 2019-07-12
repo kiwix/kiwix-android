@@ -16,11 +16,9 @@
   <string name="save_media_error">Đã xuất hiện lỗi khi lưu phương tiện!</string>
   <string name="save_media_saved">Đã lưu phương tiện thành %s trong thư mục hình ảnh Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Đang tìm nội dung có thể tải về, xin vui lòng chờ…</string>
-  <string name="button_backtotop">Trở lên Đầu trang</string>
   <string name="search_label">Tìm kiếm</string>
   <string name="choose_file">Chọn một Tập tin Nội dung (*.zim)</string>
   <string name="open_in_new_tab">Mở liên kết trong thẻ mới?</string>
-  <string name="error_nozimfilesfound">Không tìm thấy nội dung trên thiết bị của bạn.\nHãy đọc Trang Trợ giúp để biết cách tải nội dung vào Kiwix.\nNếu bạn có đưa tập tin ZIM vào thiết bị hoặc bộ nhớ ngoài của bạn, hãy thử lại sau hoặc khởi động lại thiết bị của bạn.</string>
   <string name="error_filenotfound">Lỗi: Không tìm thấy tập tin ZIM đã chọn</string>
   <string name="error_fileinvalid">Lỗi: Tập tin đã chọn không phải là tập tin ZIM hợp lệ.</string>
   <string name="error_articleurlnotfound">Lỗi: Việc tải bài (URL: %1$s) bị thất bại.</string>
@@ -44,7 +42,6 @@
   <string name="no_reader_application_installed">Không tìm thấy ứng dụng đã cài đặt ứng với kiểu tập tin này</string>
   <string name="customapp_missing_content">Ứng dụng bị hư hỏng.\nĐiều này có thể xảy ra sau khi bạn xóa tập tin khỏi thẻ SD.\nBạn có thể cần gỡ bỏ rồi cài đặt lại ứng dụng từ Cửa hàng Play.</string>
   <string name="go_to_play_store">Đi đến Cửa hàng Play</string>
-  <string name="no_bookmarks">Không có Dấu trang</string>
   <string name="menu_bookmarks_list">Dấu trang</string>
   <string name="no_section_info">Không tìm thấy Đầu đề Nội dung</string>
   <string name="request_storage">Để truy cập các nội dung ngoại tuyến, chúng tôi cần được phép truy cập thiết bị lưu trữ của bạn</string>
@@ -61,7 +58,6 @@
   <string name="did_you_know">Bạn có biết</string>
   <string name="undo">hoàn tác</string>
   <string name="tab_closed">Thẻ đã đóng</string>
-  <string name="deleted_message">đã xóa</string>
   <string name="bookmark_added">Đã thêm dấu trang</string>
   <string name="rate_dialog_title">Xin vui lòng Đánh giá Chúng tôi</string>
   <string name="rate_dialog_msg_1">Nếu bạn thích sử dụng</string>
@@ -78,12 +74,10 @@
   <string name="search_widget_text">Tìm kiếm Kiwix</string>
   <string name="speech_prompt_text">Nói để tìm %s</string>
   <string name="speech_not_supported">Xin lỗi! Thiết bị của bạn không hỗ trợ nhập bằng guọng nói</string>
-  <string name="download_started_library">Đã bắt đầu tải về…</string>
   <string name="local_zims">Thiết bị</string>
   <string name="remote_zims">Trực tuyến</string>
   <string name="zim_downloads">Đang tải về</string>
   <string name="zim_manager">Thư viện</string>
-  <string name="delete_specific_zim">Xóa tập tin này?</string>
   <string name="delete_specific_zim_toast">Đã xóa tập tin</string>
   <string name="zim_file_downloading">Đang tải về</string>
   <string name="zim_file_downloaded">Đã tải về</string>
@@ -92,7 +86,6 @@
   <string name="download_paused">đang tạm ngừng</string>
   <string name="no_downloads_here">Không có dữ liệu tải về nào ở đây</string>
   <string name="no_files_here">Không có tập tin nào ở đây</string>
-  <string name="download_complete_snackbar">Tải về xong</string>
   <string name="download_no_space">Không đủ dung lượng trống để tải về tập tin này.</string>
   <string name="space_available">Dung lượng trống còn lại:</string>
   <string name="zim_simple">Đơn giản</string>
@@ -100,9 +93,7 @@
   <string name="zim_novid">Không có video</string>
   <string name="no_network_connection">Không có kết nối mạng</string>
   <string name="get_library_over_network">Dùng mạng để tải về danh sách nội dung (khoảng 6MB)</string>
-  <string name="proceed">Tiến hành</string>
   <string name="wait_for_load">Vẫn đang tải nội dung</string>
-  <string name="help_1">Kiwix cho phép bạn truy cập ngoại tuyến các trang web như Wikipedia dưới dạng nén cực đại.</string>
   <string name="help_2">Kiwix dùng để làm gì?</string>
   <string name="help_3">Kiwix là một chương trình đọc nội dung ngoại tuyến. Kiwix hoạt động như trình duyệt, tuy nhiên, thay vì truy cập các trang web trực tuyến thì Kiwix lại đọc nội dung từ các tập tin định dạng ZIM.</string>
   <string name="help_4">Mặc dù Kiwix lúc ban đầu được tạo ra để giúp bạn truy cập Wikipedia ngoại tuyến, chương trình cũng có thể đọc các nội dung khác nữa.</string>
@@ -120,8 +111,6 @@
   <string name="help_16">\u2022 Đối với Microsoft Windows: HJ-Split</string>
   <string name="help_17">\u2022 Đối với Apple Mac OSX: Split and Concat</string>
   <string name="help_19">Lưu ý: các tập tin kết quả phải được đặt theo dạng my_big_file.zimaa, my_big_file.zimab,…</string>
-  <string name="help_20">Cảm ơn bạn đã dùng Kiwix!</string>
-  <string name="help_21">Chúng tôi rất vui khi có bạn đồng hành và chúng tôi rất mong muốn được nhận phản hồi hoặc góp ý tại android@kiwix.org.</string>
   <string name="pref_storage">Lưu trữ</string>
   <string name="pref_current_folder">Thư mục Hiện tại</string>
   <string name="delete_zim_failed">Rất tiếc, chúng tôi không thể xoá tập tin này. Bạn hãy dùng một trình duyệt tập tin để làm việc đó.</string>
@@ -130,14 +119,12 @@
   <string name="tts_stop">dừng</string>
   <string name="internal_storage">Nội bộ</string>
   <string name="external_storage">Bên ngoài</string>
-  <string name="zim_already_downloading">Tập tim ZIM đang được tải</string>
   <string name="yes">Có</string>
   <string name="no">Không</string>
   <string name="confirm_stop_download_title">Dừng tải về?</string>
   <string name="confirm_stop_download_msg">Bạn có chắc muốn ngừng việc tải về này không?</string>
   <string name="download_change_storage">Trình chọn thiết bị lưu trữ</string>
   <string name="tts_not_enabled">Tập tin ZIM này không hỗ trợ tìm bằng giọng nói</string>
-  <string name="delete_tab">Xóa Thẻ</string>
   <string name="next">Tiếp</string>
   <string name="previous">Trước</string>
   <string name="wifi_only_title">Cho phép tải về nội dung qua mạng di động?</string>
@@ -152,7 +139,6 @@
   <string name="pref_bottomtoolbar_summary">Hiển thị một thanh tác vụ nhanh nằm ở dưới màn hình</string>
   <string name="pref_autonightmode_summary">Tự động chuyển qua lại giữa chế độ đêm và ngày.</string>
   <string name="pref_autonightmode">Chế độ đêm tự động</string>
-  <string name="pref_multi_search_title">Tìm MultiZim</string>
   <string name="pref_external_link_popup_title">Cảnh báo khi truy cập đường dẫn ngoài</string>
   <string name="pref_external_link_popup_summary">Hiện cảnh báo về việc mất thêm cước truy cập hoặc không hoạt động đối với các đường dẫn ngoại tuyến.</string>
   <string name="external_link_popup_dialog_title">Đang truy cập đường dẫn ngoài</string>
