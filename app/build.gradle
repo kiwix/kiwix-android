@@ -231,6 +231,7 @@ android {
     warningsAsErrors true
     ignore 'MissingTranslation', //TODO stop ignoring
         'CheckResult'
+    warning 'UnknownNullness'
     baseline file("lint-baseline.xml")
   }
 

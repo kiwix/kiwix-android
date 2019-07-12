@@ -56,17 +56,18 @@ before_script:
   - adb shell input keyevent 82 &
 
 script:
-  - ./gradlew createKiwixDebugCoverageReport lintKiwixDebug jacocoTestKiwixDebugUnitTestReport assemble
+  - ./gradlew lintKiwixDebug jacocoTestKiwixDebugUnitTestReport createKiwixDebugCoverageReport assemble
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   - ./gradlew kiwixtestUploadKiwix
 
 after_failure:
-  - export LOG_DIR = ${TRAVIS_HOME}/build/kiwix/kiwix-android/app/build/outputs/reports/androidTests/connected/flavors/KIWIX/
-  - lynx --dump ${LOG_DIR}com.android.builder.testing.ConnectedDevice.html
-  - lynx --dump ${LOG_DIR}com.android.builder.testing.html
-  - lynx --dump ${LOG_DIR}org.kiwix.kiwixmobile.tests.BasicTest.html;
+  - export REPORT_DIR=${TRAVIS_HOME}/build/kiwix/kiwix-android/app/build/outputs/reports/
+  - export LOG_DIR=${REPORT_DIR}androidTests/connected/flavors/KIWIX/
+  - lynx -dump ${LOG_DIR}index.html
+  - lynx -dump ${REPORT_DIR}lint-results-kiwixDebug.html
+
 
 before_deploy:
   #  - export APP_CHANGELOG=$(cat app/src/kiwix/play/release-notes/en-US/default.txt)
