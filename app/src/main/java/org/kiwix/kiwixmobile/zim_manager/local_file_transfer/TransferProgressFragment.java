@@ -43,7 +43,7 @@ public class TransferProgressFragment extends Fragment {
     View view = inflater.inflate(R.layout.fragment_transfer_progress, container, false);
     unbinder = ButterKnife.bind(this, view);
 
-    fileListAdapter = new FileListAdapter(getActivity(), fileItems);
+    fileListAdapter = new FileListAdapter(fileItems);
     filesRecyclerView.setAdapter(fileListAdapter);
 
     filesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

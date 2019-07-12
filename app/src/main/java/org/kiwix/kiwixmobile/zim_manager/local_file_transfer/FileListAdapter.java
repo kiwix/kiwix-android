@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,17 +23,15 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.Fil
  * */
 public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileViewHolder> {
   private final ArrayList<FileItem> fileItems;
-  private LayoutInflater layoutInflater;
 
-  public FileListAdapter(Context context, ArrayList<FileItem> fileItems) {
-    this.layoutInflater = LayoutInflater.from(context);
+  public FileListAdapter(ArrayList<FileItem> fileItems) {
     this.fileItems = fileItems;
   }
 
   @NonNull
   @Override
   public FileListAdapter.FileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    View itemView = layoutInflater.inflate(R.layout.item_transfer_list, parent, false);
+    View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transfer_list, parent, false);
     return new FileViewHolder(itemView, this);
   }
 
