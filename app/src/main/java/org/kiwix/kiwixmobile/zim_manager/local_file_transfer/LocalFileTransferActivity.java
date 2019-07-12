@@ -29,6 +29,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -330,7 +331,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   private boolean checkCoarseLocationAccessPermission() { // Required by Android to detect wifi-p2p peers
     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-      if(checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+      if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
         if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
           new AlertDialog.Builder(this)
@@ -357,7 +358,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   private boolean checkExternalStorageWritePermission() { // To access and store the zims
     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-      if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+      if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
         if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
           new AlertDialog.Builder(this)
