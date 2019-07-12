@@ -14,7 +14,7 @@
   <string name="menu_read_aloud_stop">Dejar de leer en voz alta</string>
   <string name="save_media">Guardar multimedia</string>
   <string name="save_media_error">¡Se produjo un error al intentar guardar los medios!</string>
-  <string name="save_media_saved">Multimedia guardado como %s en Android/media/org.kiwix.../</string>
+  <string name="save_media_saved">Multimedia guardado como %s en Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Buscando contenido descargable; espera…</string>
   <string name="button_backtotop">Volver al principio</string>
   <string name="search_label">Buscar</string>
@@ -49,7 +49,7 @@
   <string name="no_section_info">No se encontraron cabeceras de contenido</string>
   <string name="request_storage">Para acceder a contenido sin conexión necesitamos tener acceso a tu almacenamiento</string>
   <string name="request_storage_custom">Si ves una advertencia en la pantalla, simplemente reinicia tu dispositivo para arreglarla.</string>
-  <string name="clear_recent_and_tabs_history_dialog">¿Seguro quieres eliminar tu historial de búsqueda y restablecer todas las pestañas activas?</string>
+  <string name="clear_recent_and_tabs_history_dialog">¿Seguro que quieres eliminar tu historial de búsqueda y restablecer todas las pestañas activas?</string>
   <string name="delete_recent_search_item">¿Borrar este elemento?</string>
   <string name="pref_clear_all_history_title">Limpiar el historial</string>
   <string name="pref_clear_all_history_summary">Borrar las búsquedas recientes y el historial de pestañas</string>
@@ -88,7 +88,6 @@
   <string name="zim_file_downloading">Descargando</string>
   <string name="zim_file_downloaded">Descargado</string>
   <string name="download_pause">Pausar</string>
-  <string name="download_play">Continuar</string>
   <string name="download_stop">Detener</string>
   <string name="download_paused">pausado</string>
   <string name="no_downloads_here">Ninguna descarga aquí</string>
@@ -105,7 +104,7 @@
   <string name="help_1">Kiwix te permite acceder sin conexión a sitios web como Wikipedia de una manera muy compacta.</string>
   <string name="help_2">¿Qué hace Kiwix?</string>
   <string name="help_3">Kiwix es un lector de contenido desconectado. Actúa mucho como un navegador pero en vez de acceder páginas web en línea, lee contenido de un archivo en formato ZIM.</string>
-  <string name="help_4">Si bien Kiwix se diseño originalmente para proporcionar Wikipedia sin conexión, también puede leer otros contenidos.</string>
+  <string name="help_4">Si bien Kiwix se diseñó originalmente para proporcionar una Wikipedia sin conexión, también puede leer otros contenidos.</string>
   <string name="help_5">¿Dónde está el contenido?</string>
   <string name="help_6">Nuestro contenido está alojado en el sitio web de Kiwix.</string>
   <string name="help_7">Están disponibles como archivos ZIM. Hay un montón:</string>
@@ -115,11 +114,11 @@
   <string name="help_11">Los archivos ZIM descargados en la aplicación se encuentran en el directorio de almacenamiento externo, en una carpeta llamada Kiwix.</string>
   <string name="help_12">¿Cómo utilizar archivos ZIM grandes?</string>
   <string name="help_13">Si tu archivo ZIM es mayor a 4GB, puede que no puedas almacenarlo en tu tarjeta SD debido a limitaciones en el sistema de archivos.</string>
-  <string name="help_14">La descarga en la aplicación gestiona archivos grandes automáticamente, partiéndoles para ti.</string>
-  <string name="help_15">Sin embargo, si estás descargando en otro dispositivo, puede que necesites dividir el archivo ZIM utilizando el siguiente software:</string>
+  <string name="help_14">La descarga en la aplicación gestiona archivos grandes automáticamente, partiéndolos para ti.</string>
+  <string name="help_15">Sin embargo, si estás descargandolo en otro dispositivo, puede que necesites dividir el archivo ZIM utilizando el siguiente software:</string>
   <string name="help_16">\u2022 En Microsoft Windows: HJ-Split</string>
   <string name="help_17">\u2022 En Apple Mac OSX: Split y Concat</string>
-  <string name="help_19">Nota: los archivos resultantes deben llamares mi_gran_archivo.zimaa, mi_gran_archivo.zimab, etc.</string>
+  <string name="help_19">Nota: los archivos resultantes deben llamarse mi_gran_archivo.zimaa, mi_gran_archivo.zimab, etc.</string>
   <string name="help_20">¡Gracias por elegir Kiwix!</string>
   <string name="help_21">Estamos felices de tenerte a bordo y apreciaríamos cualquier comentario o sugerencias en android@kiwix.org.</string>
   <string name="pref_storage">Almacenamiento</string>
@@ -135,14 +134,14 @@
   <string name="zim_already_downloading">El zim ya se está descargando</string>
   <string name="yes">Sí</string>
   <string name="confirm_stop_download_title">¿Detener descarga?</string>
-  <string name="confirm_stop_download_msg">¿Seguro quieres detener esta descarga?</string>
+  <string name="confirm_stop_download_msg">¿Seguro que quieres detener esta descarga?</string>
   <string name="download_change_storage">Selector de dispositivo de almacenamiento</string>
   <string name="tts_not_enabled">Texto a voz no está activado para este archivo ZIM</string>
   <string name="delete_tab">Eliminar pestaña</string>
   <string name="next">Siguiente</string>
   <string name="previous">Anterior</string>
   <string name="wifi_only_title">¿Permitir descargar contenido mediante la red móvil?</string>
-  <string name="wifi_only_msg">Si eliges "Sí", no se te advertirá en el futuro. Sin embargo, siempre puedes cambiar esto en Configuración</string>
+  <string name="wifi_only_msg">Si eliges “Sí”, no se te advertirá en el futuro. Sin embargo, siempre puedes cambiar esto en Configuración</string>
   <string name="pref_wifi_only">Descargar contenido solo mediante wifi</string>
   <string name="time_day">día</string>
   <string name="time_left">faltan</string>
@@ -153,8 +152,32 @@
   <string name="pref_multi_search_title">Búsqueda MultiZim</string>
   <string name="pref_multi_search_summary">Permitir que la aplicación busque en archivos ZIM (atención: experimental).</string>
   <string name="pref_external_link_popup_title">Advertir al seguir enlaces externos</string>
-  <string name="external_link_popup_dialog_message">Estás por seguir un enlace externo. Ello podría generar gastos por transferencia de datos o sencillamente no funcionará si no tienes conexión. ¿Quieres continuar?</string>
+  <string name="pref_external_link_popup_summary">Mostrar advertencia sobre costos adicionales o no funcionamiento en enlaces sin conexión.</string>
+  <string name="external_link_popup_dialog_title">Acceso a enlace externo</string>
+  <string name="external_link_popup_dialog_message">Estás a punto de seguir un enlace externo. Ello podría generarte gastos por transferencia de datos o sencillamente no funcionará si no tienes conexión. ¿Quieres continuar?</string>
   <string name="do_not_ask_anymore">No preguntar de nuevo</string>
   <string name="your_languages">Idiomas seleccionados:</string>
   <string name="other_languages">Otros idiomas:</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

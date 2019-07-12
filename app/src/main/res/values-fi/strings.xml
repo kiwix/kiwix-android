@@ -1,47 +1,63 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="menu_zim_manager">Hanki sisältöä</string>
   <string name="menu_help">Ohje</string>
-  <string name="menu_home">Etusivu</string>
+  <string name="menu_home">Koti</string>
   <string name="menu_settings">Asetukset</string>
-  <string name="menu_search">Haku</string>
-  <string name="menu_searchintext">Etsi tekstissä</string>
+  <string name="menu_search">Hae artikkelia</string>
+  <string name="menu_searchintext">Etsi sivulta</string>
   <string name="menu_bookmarks">Kirjanmerkit</string>
   <string name="menu_randomarticle">Satunnainen artikkeli</string>
   <string name="menu_fullscreen">Koko näyttö</string>
-  <string name="menu_exitfullscreen">Poistu koko näytöstä</string>
+  <string name="menu_exitfullscreen">Poistu kokoruututilasta</string>
   <string name="menu_read_aloud">Lue ääneen</string>
   <string name="menu_read_aloud_stop">Lopeta ääneen lukeminen</string>
-  <string name="save_media">Tallenna media nimellä...</string>
-  <string name="save_media_error">Tapahtui virhe mediaa tallentaessa!</string>
-  <string name="save_media_saved">Tallennettu media %1$s kuvakansiossasi</string>
-  <string name="rescan_fs_warning">Skannataan ZIM-tiedostoja, ole hyvä ja odota...</string>
+  <string name="save_media">Tallenna media</string>
+  <string name="save_media_error">Virhe mediaa tallennettaessa!</string>
+  <string name="save_media_saved">Tallennettu media %s muodossa hakemistoon Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">Skannataan ladattavaa sisältöä, odota…</string>
   <string name="button_backtotop">Takaisin alkuun</string>
-  <string name="search_label">Haku</string>
-  <string name="choose_file">Valitse ZIM-sisältötiedosto (*.zim)</string>
+  <string name="search_label">Hae</string>
+  <string name="choose_file">Valitse sisältötiedosto (*.zim)</string>
   <string name="open_in_new_tab">Avaa linkki uudessa välilehdessä?</string>
-  <string name="error_nozimfilesfound">ZIM-tiedostoja ei löytynyt laitteestasi.\nKatso Ohje-sivua saadaksesi ohjeet siitä, miten ladata sisältöä Kiwixiin.\nJos et laita ZIM-tiedostoa laitteeseen/ulkoiseen tallennistilaan, saatat joutua yrittämään uudelleen hetken kuluttua tai käynnistämään laitteesi uudelleen.</string>
+  <string name="error_nozimfilesfound">Sisältöä ei löytynyt laitteestasi.\nKatso Ohje-sivua saadaksesi ohjeet siitä, miten ladata sisältöä Kiwixiin.\nJos et laita ZIM-tiedostoa laitteeseen/ulkoiseen tallennustilaan, saatat joutua yrittämään uudelleen hetken kuluttua tai käynnistämään laitteesi uudelleen.</string>
   <string name="error_filenotfound">Virhe: valittua ZIM-tiedostoa ei löytynyt.</string>
   <string name="error_fileinvalid">Virhe: valittu tiedosto ei ole kelvollinen ZIM-tiedosto.</string>
   <string name="error_articleurlnotfound">Virhe: Artikkelin (Url: %1$s) lataus epäonnistui.</string>
   <string name="pref_display_title">Näytä</string>
+  <string name="pref_zoom_sub_title">Zoomaa</string>
   <string name="pref_zoom_dialog">Zoomaustaso</string>
   <string name="pref_info_title">Tiedot</string>
   <string name="pref_info_version">Versio</string>
   <string name="pref_zoom_enable">Zoomaussäätimet</string>
   <string name="pref_nightmode">Yötila</string>
-  <string name="pref_nightmode_summary">Näytä artikkelit palautetuilla väreillä</string>
+  <string name="pref_nightmode_summary">Näytä artikkelit käänteisillä väreillä</string>
   <string name="pref_backtotop">Takaisin alkuun</string>
   <string name="pref_backtotop_summary">Näytä painike sivun lopussa rullataksesi ylös alkuun</string>
   <string name="pref_language_title">Kieli</string>
   <string name="pref_language_chooser">Valitse kieli</string>
+  <string name="pref_credits">Avustajat ja lisenssit</string>
+  <string name="pref_credits_title">Tekijät</string>
   <string name="tts_lang_not_supported">Tämän sivun kieltä ei tueta, tai kielellistä tietoa ei ole asennettu. Artikkelia ei voida lukea kunnolla.</string>
   <string name="no_reader_application_installed">Ei voitu löytää asennettua sovellusta tämän tyyppiselle tiedostolle</string>
   <string name="customapp_missing_content">Sovelluksesi on viottunut.\nTämä voi tapahtua kun poistat tiedostoja SD-kortilta.\nSinun pitää poistaa ja sitten uudelleenasentaa sovellus Play-kaupasta.</string>
   <string name="go_to_play_store">Mene Play-kauppaan</string>
-  <string name="no_bookmarks">Ei kirjanmerkkejä!</string>
+  <string name="no_bookmarks">Ei kirjanmerkkejä</string>
   <string name="menu_bookmarks_list">Kirjanmerkit</string>
-  <string name="no_section_info">Sisältö otsikoita ei löydy</string>
-  <string name="request_storage">Käyttääksemme ZIM-tiedostoja, tarvitsemme pääsyn muistiisi</string>
+  <string name="no_section_info">Sisältöotsikoita ei löydy</string>
+  <string name="request_storage">Käyttääksemme offline-sisältöä, tarvitsemme pääsyn tallennuslaitteeseesi</string>
+  <string name="clear_recent_and_tabs_history_dialog">Haluatko varmasti poistaa hakuhistoriasi ja resetoida kaikki aktiiviset välilehdet?</string>
+  <string name="delete_recent_search_item">Poista tämä kohde?</string>
+  <string name="pref_clear_all_history_title">Tyhjennä historia</string>
+  <string name="all_history_cleared_toast">Kaikki historia tyhjennetty</string>
+  <string name="clear_all_history_dialog_title">Tyhjennä kaikki historia</string>
+  <string name="delete">Poista</string>
+  <string name="hint_contents_drawer_message">Voit tarkastella tämän artikkelin sisältöä pyyhkäisemällä vasemmalle</string>
+  <string name="got_it">Selvä</string>
+  <string name="did_you_know">Tiesitkö?</string>
+  <string name="undo">Kumoa</string>
+  <string name="tab_closed">Välilehti suljettu</string>
+  <string name="deleted_message">poistettu</string>
   <string name="bookmark_added">Kirjanmerkki lisätty</string>
   <string name="rate_dialog_title">Arvioi meitä</string>
   <string name="rate_dialog_msg_1">Jos nautit</string>
@@ -49,7 +65,94 @@
   <string name="rate_dialog_positive">Arvioi!</string>
   <string name="rate_dialog_negative">Ei kiitos</string>
   <string name="rate_dialog_neutral">Myöhemmin</string>
+  <string name="open">Avaa</string>
+  <string name="bookmark_removed">Kirjanmerkki poistettu</string>
   <string name="pref_newtab_background_title">Avaa uusi välilehti taustalla</string>
   <string name="pref_newtab_background_summary">Kun avaat uuden välilehden, se aukeaa taustalla</string>
+  <string name="pref_extras">Ekstrat</string>
+  <string name="new_tab_snackbar">Artikkeli avattu uudessa välilehdessä</string>
+  <string name="search_widget_text">Hae Kiwixistä</string>
+  <string name="speech_prompt_text">Puhu hakeaksesi %s</string>
+  <string name="speech_not_supported">Sori! Laitteesi ei tue puheensyöttöä</string>
+  <string name="download_started_library">Lataus aloitettu…</string>
+  <string name="local_zims">Laite</string>
+  <string name="zim_downloads">Ladataan</string>
   <string name="zim_manager">Kirjasto</string>
+  <string name="delete_specific_zim">Poista tämä tiedosto?</string>
+  <string name="delete_specific_zim_toast">Tiedosto poistettu</string>
+  <string name="zim_file_downloading">Ladataan</string>
+  <string name="zim_file_downloaded">ladattu</string>
+  <string name="download_pause">Tauko</string>
+  <string name="download_stop">Pysäytä</string>
+  <string name="download_paused">keskeytetty</string>
+  <string name="no_downloads_here">Ei latauksia täällä</string>
+  <string name="no_files_here">Ei tiedostoja täällä</string>
+  <string name="download_complete_snackbar">Lataus suoritettu</string>
+  <string name="space_available">Tilaa käytettävissä:</string>
+  <string name="zim_simple">Yksinkertainen</string>
+  <string name="zim_nopic">Ei kuvia</string>
+  <string name="zim_novid">Ei videoita</string>
+  <string name="no_network_connection">Ei verkkoyhteyttä</string>
+  <string name="get_library_over_network">Lataa sisältöluettelo käyttämällä verkkoa. (Noin 6 Mt)</string>
+  <string name="wait_for_load">Sisältö latautuu edelleen</string>
+  <string name="help_2">Mitä Kiwix tekee?</string>
+  <string name="help_5">Missä sisältö on?</string>
+  <string name="help_6">Sisältöämme ylläpidetään Kiwixin verkkosivulla.</string>
+  <string name="help_8">\u2022 Wikipedia on saatavilla erikseen kullekin kielelle</string>
+  <string name="help_9">\u2022 Muut sisällöt kuten Wikileaks tai Wikiaineisto ovat myös käytettävissä</string>
+  <string name="help_12">Kuinka käyttää suuria ZIM-tiedostoja?</string>
+  <string name="help_16">\u2022 Microsoft Windowsissa: HJ-Split</string>
+  <string name="help_17">\u2022 Apple Mac OSX:ssä: Split and Concat</string>
+  <string name="help_20">Kiitos että valitsit Kiwixin!</string>
+  <string name="pref_storage">Tallennuslaite</string>
+  <string name="pref_current_folder">Nykyinen kansio</string>
+  <string name="delete_zim_failed">Emme pystyneet poistamaan tätä tiedostoa. Sinun pitäisi kokeilla käyttää tiedostonhallintaa sen sijaan.</string>
+  <string name="tts_pause">keskeytä</string>
+  <string name="tts_resume">jatka</string>
+  <string name="tts_stop">pysäytä</string>
+  <string name="internal_storage">Sisäinen</string>
+  <string name="external_storage">Ulkoinen</string>
+  <string name="yes">Kyllä</string>
+  <string name="no">Ei</string>
+  <string name="confirm_stop_download_title">Pysäytä lataaminen?</string>
+  <string name="confirm_stop_download_msg">Haluatko varmasti pysäyttää tämän latauksen?</string>
+  <string name="download_change_storage">Tallennuslaitteen valitsin</string>
+  <string name="tts_not_enabled">Teksti puheeksi ei ole käytössä tässä ZIM-tiedostossa</string>
+  <string name="delete_tab">Poista välilehti</string>
+  <string name="next">Seuraava</string>
+  <string name="previous">Edellinen</string>
+  <string name="wifi_only_title">Salli sisällön lataaminen mobiiliverkon kautta?</string>
+  <string name="pref_wifi_only">Lataa sisältöä vain WiFin kautta</string>
+  <string name="time_day">päivä</string>
+  <string name="time_hour">t</string>
+  <string name="time_left">jäljellä</string>
+  <string name="pref_autonightmode_summary">Vaihda automaattisesti päivä- ja yötilan välillä.</string>
+  <string name="pref_autonightmode">Automatisoitu yötila</string>
+  <string name="pref_multi_search_title">MultiZim-haku</string>
+  <string name="external_link_popup_dialog_title">Ulkoisen linkin syöttäminen</string>
+  <string name="do_not_ask_anymore">Älä kysy enää</string>
+  <string name="your_languages">Valitut kielet:</string>
+  <string name="other_languages">Muut kielet:</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>
