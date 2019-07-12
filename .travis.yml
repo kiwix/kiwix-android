@@ -75,6 +75,7 @@ before_deploy:
   - export UNIVERSAL_RELEASE_APK=$OUTPUT_DIR/release/*universal*.apk
   - export UNIVERSAL_DEBUG_APK=$OUTPUT_DIR/debug/*universal*.apk
   - export SSH_KEY=travisci_builder_id_key
+  - chmod 600 $SSH_KEY
 
 deploy:
 
