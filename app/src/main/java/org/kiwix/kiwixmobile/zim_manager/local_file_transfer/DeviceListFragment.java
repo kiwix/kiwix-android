@@ -132,7 +132,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
     selectedPeerDevice = (WifiP2pDevice) getListAdapter().getItem(position);
     new AlertDialog.Builder(localFileTransferActivity)
-        .setMessage(getString(R.string.transfer_to) + " " + selectedPeerDevice.deviceName + "?")
+        .setMessage(getString(R.string.transfer_to, selectedPeerDevice.deviceName))
         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {

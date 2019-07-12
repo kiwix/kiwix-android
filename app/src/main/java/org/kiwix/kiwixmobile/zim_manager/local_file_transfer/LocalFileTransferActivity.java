@@ -161,7 +161,8 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
         @Override
         public void onFailure(int reason) {
-          showToast(LocalFileTransferActivity.this, LocalFileTransferActivity.this.getString(R.string.discovery_failed) + " " + getErrorMessage(reason), Toast.LENGTH_SHORT);
+          String errorMessage = getErrorMessage(reason);
+          showToast(LocalFileTransferActivity.this, LocalFileTransferActivity.this.getString(R.string.discovery_failed, errorMessage), Toast.LENGTH_SHORT);
         }
       });
       return true;
@@ -205,7 +206,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
       case WifiP2pManager.BUSY:            return getString(R.string.wifi_p2p_framework_busy);
       case WifiP2pManager.P2P_UNSUPPORTED: return getString(R.string.wifi_p2p_unsupported);
 
-      default: return (getString(R.string.wifi_p2p_unknown_error) + " " + reason);
+      default: return (getString(R.string.wifi_p2p_unknown_error, reason));
     }
   }
 
@@ -272,8 +273,9 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
           @Override
           public void onFailure(int reasonCode) {
+            String errorMessage = getErrorMessage(reasonCode);
             showToast(LocalFileTransferActivity.this,
-                getString(R.string.abort_failed) + " " + getErrorMessage(reasonCode),
+                getString(R.string.abort_failed, errorMessage),
                 Toast.LENGTH_SHORT);
           }
         });
@@ -295,7 +297,8 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
       @Override
       public void onFailure(int reason) {
-        showToast(LocalFileTransferActivity.this, getString(R.string.connection_failed) + " " + getErrorMessage(reason), Toast.LENGTH_LONG);
+        String errorMessage = getErrorMessage(reason);
+        showToast(LocalFileTransferActivity.this, getString(R.string.connection_failed, errorMessage), Toast.LENGTH_LONG);
       }
     });
   }
