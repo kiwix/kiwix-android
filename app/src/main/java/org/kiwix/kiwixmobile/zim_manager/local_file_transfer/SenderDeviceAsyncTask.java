@@ -56,7 +56,6 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
   protected Boolean doInBackground(Uri... fileUris) {
     Uri fileUri = fileUris[0];    // Uri of file to be transferred
     Socket socket = new Socket(); // Represents the sender device
-    boolean fileSendSuccessful;   // Whether this task was successful in sending the file
 
     try {
       socket.bind(null);
@@ -74,11 +73,11 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
       DeviceListFragment.copyToOutputStream(fileInputStream, socketOutputStream);
       if(BuildConfig.DEBUG) Log.d(TAG, "Sender: Data written");
 
-      fileSendSuccessful = true;
+      return true;
 
     } catch (IOException e) {
       Log.e(TAG, e.getMessage());
-      fileSendSuccessful = false;
+      return false;
 
     } finally {
       if (socket.isConnected()) {
@@ -89,15 +88,13 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
         }
       }
     }
-
-    return fileSendSuccessful;
   }
 
   @Override
   protected void onPostExecute(Boolean fileSendSuccessful) {
     deviceListFragment.incrementTotalFilesSent();
 
-    if(fileSendSuccessful) {
+    if(fileSendSuccessful) { // Whether this task was successful in sending the file
       transferProgressFragment.changeStatus(fileItemIndex, SENT);
     } else {
       Activity activity = deviceListFragment.getActivity();
