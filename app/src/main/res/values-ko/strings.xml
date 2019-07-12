@@ -16,11 +16,9 @@
   <string name="save_media_error">미디어 저장을 시도할 때 오류가 발생하였습니다!</string>
   <string name="save_media_saved">내 사진 폴더에 %1$s 미디어가 저장되었습니다</string>
   <string name="rescan_fs_warning">다운로드 가능한 파일을 검색 중입니다. 기다려 주십시오…</string>
-  <string name="button_backtotop">맨 위로 돌아가기</string>
   <string name="search_label">검색</string>
   <string name="choose_file">내용 파일 (*.zim) 선택</string>
   <string name="open_in_new_tab">새 탭으로 링크를 여시겠습니까?</string>
-  <string name="error_nozimfilesfound">장치에서 ZIM 파일이 발견되지 않았습니다.\n내용을 어떻게 Kiwix로 불러오는지 알아보려면 도움말 문서를 살펴보세요.\n만약 ZIM 파일을 외장 디스크나 기기에 넣었다면, 잠시 뒤에 다시 시도하거나 장치를 다시 시작해 보세요.</string>
   <string name="error_filenotfound">오류: 선택된 ZIM 파일을 찾을 수 없습니다.</string>
   <string name="error_fileinvalid">오류: 선택한 파일은 올바른 ZIM 파일이 아닙니다.</string>
   <string name="error_articleurlnotfound">오류: 문서(Url: %1$s)를 불러오는 데 실패했습니다.</string>
@@ -44,7 +42,6 @@
   <string name="no_reader_application_installed">이 형식의 파일을 위해 설치된 응용 프로그램을 찾을 수 없습니다</string>
   <string name="customapp_missing_content">애플리케이션이 손상되어 있습니다.\nSD 카드에서 파일을 제거할 때 일어날 수 있습니다.\n앱을 제거한 다음 Play 스토어에서 다시 설치해야 합니다.</string>
   <string name="go_to_play_store">플레이 스토어로 이동</string>
-  <string name="no_bookmarks">북마크가 없습니다!</string>
   <string name="menu_bookmarks_list">책갈피</string>
   <string name="no_section_info">콘텐츠 헤더를 찾을 수 없습니다</string>
   <string name="request_storage">오프라인 콘텐츠에 접근하려면 저장소에 대한 접근 권한이 필요합니다</string>
@@ -62,7 +59,6 @@
   <string name="did_you_know">알고 계십니까?</string>
   <string name="undo">실행 취소</string>
   <string name="tab_closed">탭 닫힘</string>
-  <string name="deleted_message">삭제됨</string>
   <string name="bookmark_added">북마크가 추가됨</string>
   <string name="rate_dialog_title">평가해 주세요</string>
   <string name="rate_dialog_msg_1">즐겁게 사용하고 있다면</string>
@@ -79,12 +75,10 @@
   <string name="search_widget_text">Kiwix 검색</string>
   <string name="speech_prompt_text">%s을(를) 찾으려면 말하세요</string>
   <string name="speech_not_supported">죄송합니다! 장치가 음성 입력을 지원하지 않습니다</string>
-  <string name="download_started_library">다운로드가 시작되었습니다…</string>
   <string name="local_zims">장치</string>
   <string name="remote_zims">온라인</string>
   <string name="zim_downloads">다운로드 중</string>
   <string name="zim_manager">라이브러리</string>
-  <string name="delete_specific_zim">이 파일을 지우시겠습니까?</string>
   <string name="delete_specific_zim_toast">파일이 삭제되었습니다</string>
   <string name="zim_file_downloading">다운로드 중</string>
   <string name="zim_file_downloaded">다운로드되었습니다</string>
@@ -93,7 +87,6 @@
   <string name="download_paused">일시 정지함</string>
   <string name="no_downloads_here">여기에 다운로드가 없습니다</string>
   <string name="no_files_here">여기에 파일이 없습니다</string>
-  <string name="download_complete_snackbar">다운로드 완료</string>
   <string name="download_no_space">이 파일을 다운로드할 공간이 충분하지 않습니다.</string>
   <string name="space_available">사용 가능한 공간:</string>
   <string name="zim_simple">간단히</string>
@@ -101,9 +94,7 @@
   <string name="zim_novid">동영상 없음</string>
   <string name="no_network_connection">네트워크 연결 없음</string>
   <string name="get_library_over_network">콘텐츠 목록의 다운로드를 위해 네트워크를 사용합니다. (약 6MB)</string>
-  <string name="proceed">진행</string>
   <string name="wait_for_load">내용을 계속 불러오고 있습니다</string>
-  <string name="help_1">Kiwix는 고압축 형태로 위키백과와 같은 웹사이트에 대한 오프라인 접근을 허용합니다.</string>
   <string name="help_2">Kiwix의 역할이 무엇입니까?</string>
   <string name="help_3">Kiwix는 오프라인 콘텐츠 리더입니다. 브라우저와 매우 비슷하게 동작하지만 온라인 웹 페이지에 접근하는 대신 ZIM 포맷의 파일로부터 내용을 읽습니다.</string>
   <string name="help_4">Kiwix가 본래 오프라인 상태에서 위키백과를 제공하도록 설계되었으나 다른 콘텐츠도 읽을 수 있습니다.</string>
@@ -121,8 +112,6 @@
   <string name="help_16">\u2022 마이크로소프트 윈도우: HJ-Split</string>
   <string name="help_17">\u2022 애플 맥 OSX: Split, Concat</string>
   <string name="help_19">참고: 결과 파일의 이름은 my_big_file.zimaa, my_big_file.zimab 등으로 되어야 합니다.</string>
-  <string name="help_20">Kiwix를 선택해 주셔서 감사합니다!</string>
-  <string name="help_21">만나서 반가워요. 피드백이나 제안이 있으면 android@kiwix.org 로 보내주시면 감사하겠습니다.</string>
   <string name="pref_storage">기억 장치</string>
   <string name="pref_current_folder">현재 폴더</string>
   <string name="path_not_writable">기본값을 사용하여 원하는 디렉터리에 접근할 수 없습니다. 이 문제를 해결하려면 앱 설정에서 원하는 디렉터리를 다시 선택하십시오.</string>
@@ -133,14 +122,12 @@
   <string name="tts_stop">정지</string>
   <string name="internal_storage">내부 장치</string>
   <string name="external_storage">외부 장치</string>
-  <string name="zim_already_downloading">Zim이 이미 다운로드 중입니다</string>
   <string name="yes">예</string>
   <string name="no">아니오</string>
   <string name="confirm_stop_download_title">다운로드를 중단하시겠습니까?</string>
   <string name="confirm_stop_download_msg">이 다운로드를 중단하시겠습니까?</string>
   <string name="download_change_storage">기억 장치 선택기</string>
   <string name="tts_not_enabled">이 ZIM 파일에 대해 TTS가 활성화되어 있지 않습니다</string>
-  <string name="delete_tab">탭 삭제</string>
   <string name="next">다음</string>
   <string name="previous">이전</string>
   <string name="wifi_only_title">모바일 네트워크를 통해 내용을 다운로드할 수 있도록 하겠습니까?</string>
@@ -155,8 +142,6 @@
   <string name="pref_bottomtoolbar_summary">화면 하단에 빠른 동작들이 포함된 도구 모음을 표시합니다</string>
   <string name="pref_autonightmode_summary">야간 모드와 낮 모드를 자동으로 전환합니다.</string>
   <string name="pref_autonightmode">자동 야간 모드</string>
-  <string name="pref_multi_search_title">MultiZim 검색</string>
-  <string name="pref_multi_search_summary">앱이 ZIM 파일을 검색할 수 있도록 허용합니다. (경고: 매우 실험적인 기능)</string>
   <string name="pref_external_link_popup_title">외부 링크에 진입할 때 경고합니다</string>
   <string name="pref_external_link_popup_summary">추가 비용 또는 오프라인 링크로 동작하지 않음에 대한 경고에 대한 팝업을 표시합니다.</string>
   <string name="external_link_popup_dialog_title">외부 링크에 진입합니다</string>

@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.utils
 
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 
 sealed class KiwixDialog(
   val title: Int?,
@@ -9,9 +10,11 @@ sealed class KiwixDialog(
   val negativeMessage: Int
 ) {
 
-  object DeleteZim : KiwixDialog(
-      null, R.string.delete_specific_zim, R.string.delete, R.string.no
-  )
+  data class DeleteZim(override val args: Array<out Any>) : KiwixDialog(
+      null, R.string.delete_zim_body, R.string.delete, R.string.no
+  ), HasBodyFormatArgs {
+    constructor(bookOnDisk: BookOnDisk) : this(arrayOf(bookOnDisk.book.title))
+  }
 
   open class YesNoDialog(
     title: Int,
@@ -25,4 +28,8 @@ sealed class KiwixDialog(
         R.string.wifi_only_title, R.string.wifi_only_msg
     )
   }
+}
+
+interface HasBodyFormatArgs {
+  val args: Array<out Any>
 }

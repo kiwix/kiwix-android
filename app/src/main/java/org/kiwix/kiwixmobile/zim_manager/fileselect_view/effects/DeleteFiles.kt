@@ -19,7 +19,7 @@ class DeleteFiles(val booksOnDiskListItem: List<BookOnDisk>) :
   override fun invokeWith(activity: Activity) {
     activityComponent(activity).inject(this)
     booksOnDiskListItem.forEach {
-      dialogShower.show(DeleteZim, {
+      dialogShower.show(DeleteZim(it), {
         if (deleteSpecificZimFile(it)) {
           activity.toast(string.delete_specific_zim_toast)
         } else {

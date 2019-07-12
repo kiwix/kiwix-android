@@ -10,7 +10,6 @@
   <string name="menu_randomarticle">Nejaušs raksts</string>
   <string name="menu_fullscreen">Pilnekrāna režīms</string>
   <string name="menu_exitfullscreen">Iziet no pilnekrāna</string>
-  <string name="button_backtotop">Atpakaļ uz augšu</string>
   <string name="search_label">Meklēt</string>
   <string name="pref_display_title">Displejs</string>
   <string name="pref_info_title">Informācija</string>
@@ -29,9 +28,7 @@
   <string name="search_widget_text">Meklēt Kiwix</string>
   <string name="zim_downloads">Lejupielādē</string>
   <string name="zim_manager">Bibliotēka</string>
-  <string name="delete_specific_zim">Dzēst šo failu?</string>
   <string name="delete_specific_zim_toast">Fails dzēsts</string>
-  <string name="download_complete_snackbar">Lejupielāde pabeigta</string>
   <string name="tts_resume">turpināt</string>
   <string name="no">Nē</string>
 
