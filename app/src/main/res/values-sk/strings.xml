@@ -11,15 +11,13 @@
   <string name="menu_exitfullscreen">Ukončiť režim celej obrazovky</string>
   <string name="menu_read_aloud">Čítať nahlas</string>
   <string name="menu_read_aloud_stop">Zastaviť čítanie nahlas</string>
-  <string name="save_media">Uložiť médiá ako...</string>
+  <string name="save_media">Uložiť médiá ako…</string>
   <string name="save_media_error">Pri ukladaní došlo k chybe!</string>
   <string name="save_media_saved">Médiá uložené ako %1$s v priečinku Obrázky</string>
-  <string name="rescan_fs_warning">Vyhľadávanie ZIM súborov, čakajte prosím...</string>
-  <string name="button_backtotop">Späť na začiatok</string>
+  <string name="rescan_fs_warning">Vyhľadávanie ZIM súborov, čakajte prosím…</string>
   <string name="search_label">Hľadať</string>
   <string name="choose_file">Vyberte súbor so ZIM obsahom (*.zim)</string>
   <string name="open_in_new_tab">Otvoriť odkaz na novej karte?</string>
-  <string name="error_nozimfilesfound">Na vašom zariadení sa nenašli žiadne ZIM súbory.\nPozrite sa na stránku Pomoc, aby ste sa dozvedeli ako načítať obsah do aplikácie Kiwix.\nAk ste do Vášho zariadenia pridali ZIM súbor, skúste ho načítať o minútu alebo zariadenie reštartujte.</string>
   <string name="error_filenotfound">Chyba: Vybraný súbor ZIM sa nenašiel.</string>
   <string name="error_fileinvalid">Chyba: Vybraný súbor nie je platný ZIM súbor.</string>
   <string name="error_articleurlnotfound">Chyba: Načítavanie článku (Url: %1$s) sa nepodarilo.</string>
@@ -38,7 +36,6 @@
   <string name="no_reader_application_installed">Nebola nájdená nainštalovaná aplikácia pre tento typ súboru</string>
   <string name="customapp_missing_content">Vaša aplikácia je poškodená.\nToto sa stáva, keď vymažete súbory na SD Karte.\nMusíte odinštalovať a potom znovu nainštalovať aplikáciu z Obchodu Play.</string>
   <string name="go_to_play_store">Prejsť do Obchodu Play</string>
-  <string name="no_bookmarks">Žiadne záložky!</string>
   <string name="menu_bookmarks_list">Záložky</string>
   <string name="no_section_info">Neboly nájdené hlavičky obsahu (content headers)</string>
   <string name="request_storage">Na prístup k súborom typu ZIM potrebujeme prístup k vášmu úložisku</string>
@@ -52,4 +49,26 @@
   <string name="pref_newtab_background_title">Otvoriť novú kartu na pozadí</string>
   <string name="pref_newtab_background_summary">Pri otvorení novej karty bude karta otvorená na pozadí</string>
   <string name="zim_manager">Knižnica</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

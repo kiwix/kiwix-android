@@ -2,28 +2,27 @@
 <resources>
   <string name="menu_help">အ​ကူ​အ​ညီ​</string>
   <string name="menu_home">ပင်မ</string>
-  <string name="menu_settings">ကြိုတင်စီစဉ်မှုများ</string>
-  <string name="menu_search">ရှာဖွေရန်</string>
-  <string name="menu_searchintext">စာပိုဒ်ထဲတွင် ရှာရန်</string>
+  <string name="menu_settings">အပြင်အဆင်များ</string>
+  <string name="menu_search">ဆောင်းပါး ရှာဖွေရန်</string>
+  <string name="menu_searchintext">စာမျက်နှာတွင် ရှာဖွေရန်</string>
   <string name="menu_bookmarks">ဖတ်ရန်မှတ်ထားမှု</string>
-  <string name="menu_randomarticle">ကျပန်း စာတွဲ</string>
+  <string name="menu_randomarticle">ကျပန်း ဆောင်းပါး</string>
   <string name="menu_fullscreen">မျက်နှာဖွင့်အပြည့်</string>
   <string name="menu_exitfullscreen">မျက်နှာဖွင့်အပြည့်မှ ထွက်ရန်</string>
   <string name="menu_read_aloud">ကျယ်ကျယ်ဖတ်ပါ</string>
   <string name="menu_read_aloud_stop">ကျယ်ကျယ်ဖတ်နေခြင်းကို ရပ်တန့်ပါ</string>
   <string name="save_media">မီဒီယာဖိုင်ကို ဤသို့သိမ်းရန်..</string>
   <string name="save_media_error">မီဒီယာဖိုင်ကို သိမ်းရန်ကြိုးစားနေစဉ် အမှားတစ်ခု ဖြစ်ပေါ်သွားသည်။</string>
-  <string name="save_media_saved">သင့် Pictures ဖိုင်တွဲထဲတွင် မီဒီယာဖိုင်ကို %1$s အဖြစ် သိမ်းပြီးဖြစ်သည်။</string>
-  <string name="rescan_fs_warning">ZIM ဖိုင်များကို ရှာဖတ်နေသည်။ တစ်ဆိတ်လောက် စောင့်ပါ...</string>
-  <string name="button_backtotop">ထိပ်ဆုံးသို့ ပြန်သွားရန်</string>
+  <string name="save_media_saved">မီဒီယာဖိုင်ကို %s အဖြစ် Android/media/org.kiwix…/ တွင် သိမ်းပြီးဖြစ်သည်။</string>
+  <string name="rescan_fs_warning">ဒေါင်းလုပ်ရယူနိုင်သော အကြောင်းအရာဖိုင်များကို ရှာဖတ်နေသည်။ ခေတ္တစောင့်ဆိုင်းပါ …</string>
   <string name="search_label">ရှာဖွေရန်</string>
-  <string name="choose_file">ZIM အချက်အလက်ဖိုင်တစ်ခုကို ရွေးချယ်ပါ (*.zim)</string>
+  <string name="choose_file">အကြောင်းအရာဖိုင်တစ်ခုကို ရွေးချယ်ပါ (*.zim)</string>
   <string name="open_in_new_tab">တဘ်အသစ်မှာ လင့်ကိုဖွင့်မလား။</string>
-  <string name="error_nozimfilesfound">သင့်စက်ပေါ်တွင် ZIM ဖိုင် တစ်ခုမှ ရှာမတွေ့ပါ။\nအကူအညီစာမျက်နှာကိုကြည့်၍ ကီဝစ်ထဲသို့ အချက်အလက်များ မည်သို့ထည့်ရမည်ကို လမ်းညွှန်မှု ရယူပါ။\nအကယ်၍ ZIM ဖိုင်ကို သင့်စက်ထဲ/သိုလှောင်သိမ်းဆည်းရာ နေရာထဲ ထည့်ပြီးသည်မှာ သေချာလျှင် တစ်မိနစ်ခန့် အကြာတွက် ပြန်ကြိုးစားကြည့်ပါ၊ သို့မဟုတ် စက်ကို ရီစတတ်ချကြည့်ပါ။</string>
   <string name="error_filenotfound">အမှားသတိပေးချက် − ရွေးချယ်ထားသော ZIM ဖိုင်ကို ရှာမတွေ့ပါ။</string>
   <string name="error_fileinvalid">အမှားသတိပေးချက် − ရွေးချယ်ထားသောဖိုင်သည် တရားဝင် ZIM ဖိုင် မဟုတ်ပါ။</string>
   <string name="error_articleurlnotfound">အမှားသတိပေးချက် − (Url: %1$s) ဆောင်းပါးထည့်သွင်းခြင်း မအောင်မြင်ပါ။</string>
   <string name="pref_display_title">မြင်ကွင်း</string>
+  <string name="pref_zoom_sub_title">ချုံ့/ချဲ့ကြည့်ရန်</string>
   <string name="pref_zoom_dialog">ချဲ့ကြည့်သည့်အဆင့်</string>
   <string name="pref_info_title">သတင်းအချက်အလက်</string>
   <string name="pref_info_version">မူ</string>
@@ -34,10 +33,81 @@
   <string name="pref_backtotop_summary">ထိပ်ဆုံးသို့ပြန်သွားရန်အတွက် စာမျက်နှာ၏အောက်ဆုံးတွင် ခလုတ်တစ်ခု ပြပါ။</string>
   <string name="pref_language_title">ဘာသာစကား</string>
   <string name="pref_language_chooser">ဘာသာစကားရွေးချယ်ရန်</string>
+  <string name="pref_credits">ပံပိုးပေးသူများနှင့် လိုင်စင်များ</string>
+  <string name="tts_lang_not_supported">ဤစာမျက်နှာ၏ ဘာသာစကားကို မထောက်ပံ့ထားပါ၊ သို့မဟုတ် သင့်လျော်သော ဘာသာစကားဒေတာကို သွင်းမထားပါ။ ဆောင်းပါးကို မှန်ကန်စွာ ဖတ်နိုင်မည်မဟုတ်ပါ။</string>
   <string name="go_to_play_store">Play စတိုးသို့ သွားရန်</string>
-  <string name="no_bookmarks">စာညှပ်မှတ်ထားခြင်း မရှိ!</string>
   <string name="menu_bookmarks_list">ဖတ်ရန်မှတ်ထားမှု</string>
+  <string name="delete_recent_search_item">ဤဟာကို ဖျက်မည်လား</string>
+  <string name="pref_clear_all_history_title">မှတ်တမ်းအားရှင်းမည်</string>
+  <string name="all_history_cleared_toast">ရာဇဝင်အားလုံး ရှင်းလင်းပြီး</string>
+  <string name="clear_all_history_dialog_title">မှတ်တမ်းများအားလုံး ရှင်းလင်းရန်</string>
+  <string name="delete">ဖျက်</string>
+  <string name="delete_specific_search_toast">မကြာမီက ရှာဖွေမှုကို ဖယ်ရှားပြီးပြီ</string>
+  <string name="got_it">ရပြီဟေ့</string>
+  <string name="did_you_know">သင်သိပါသလား</string>
+  <string name="undo">နောက်ပြန် ပြန်ပြင်ရန်</string>
   <string name="bookmark_added">စာညှပ်မှတ် ထည့်ပေါင်းပြီး</string>
   <string name="rate_dialog_title">ကျေးဇူးပြု၍ ကျွန်ုပ်တို့အား အဆင့်သတ်မှတ်ပေးပါ</string>
+  <string name="rate_dialog_negative">မလိုပါ၊ ကျေးဇူးတင်ပါသည်။</string>
+  <string name="rate_dialog_neutral">နောက်မှ</string>
+  <string name="open">ဖွင့်ပါ</string>
+  <string name="local_zims">စက်ပစ္စည်း</string>
+  <string name="remote_zims">အွန်လိုင်း</string>
+  <string name="zim_downloads">ဒေါင်းလုတ်ဆွဲနေသည်</string>
   <string name="zim_manager">မှတ်ထားမှုများ</string>
+  <string name="delete_specific_zim_toast">ဖိုင် ဖျက်ပြီးပြီ</string>
+  <string name="zim_file_downloading">ဒေါင်းလုတ်ဆွဲနေသည်</string>
+  <string name="zim_file_downloaded">ဒေါင်းလုဒ်ဆွဲပြီးပြီ</string>
+  <string name="download_pause">ခေတ္တရပ်</string>
+  <string name="download_stop">ရပ်</string>
+  <string name="download_paused">ခေတ္တရပ်ပြီး</string>
+  <string name="no_files_here">ဤနေရာတွင် ဖိုင်များမရှိပါ</string>
+  <string name="download_no_space">ဤဖိုင်ကို ဒေါင်းလုပ်ရယူရန် နေရာလွတ် မလုံလောက်ပါ။</string>
+  <string name="space_available">နေရာလွတ် ရရှိနိုင်မှု-</string>
+  <string name="zim_simple">ရိုးရိုး</string>
+  <string name="zim_nopic">ပုံများ မရှိပါ</string>
+  <string name="zim_novid">ဗီဒီယိုများ မရှိပါ</string>
+  <string name="no_network_connection">နက်ဝက်ကွန်နက်ရှင် မရှိပါ</string>
+  <string name="help_5">အကြောင်းအရာ ဘယ်မှာနည်း?</string>
+  <string name="pref_storage">သိုလှောင်ခန်း</string>
+  <string name="pref_current_folder">လက်ရှိ ဖိုလ်ဒါ</string>
+  <string name="tts_pause">ခေတ္တရပ်</string>
+  <string name="tts_stop">ရပ်</string>
+  <string name="external_storage">ပြင်ပ</string>
+  <string name="yes">ဟုတ်ကဲ့</string>
+  <string name="no">မလုပ်ပါ</string>
+  <string name="next">ရှေ့</string>
+  <string name="previous">ယခင်</string>
+  <string name="wifi_only_title">မိုလ်ဘိုင်းကွန်ရက်မှ အကြောင်းအရာကို ဒေါင်းလုတ်ဆွဲရန် ခွင့်ပြုမည်လော?</string>
+  <string name="pref_wifi_only">အကြောင်းအရာကို ဝိုင်ဖိုင်ဖြင့်သာလျင် ဒေါင်းလုတ်ယူရန်</string>
+  <string name="time_day">ရက်</string>
+  <string name="time_hour">နာရီ</string>
+  <string name="time_minute">မိနစ်</string>
+  <string name="time_second">စက္ကန့်</string>
+  <string name="time_left">ကျန်ရှိ</string>
+  <string name="do_not_ask_anymore">နောက်ထပ် မမေးတော့</string>
+  <string name="your_languages">ရွေးချယ်ထားသော ဘာသာစကားများ -</string>
+  <string name="other_languages">အခြားဘာသာစကားများ</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

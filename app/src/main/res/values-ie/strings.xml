@@ -9,11 +9,32 @@
   <string name="menu_randomarticle">Articul sporadic</string>
   <string name="menu_fullscreen">Scren ampli</string>
   <string name="menu_exitfullscreen">Cluder plen-scren</string>
-  <string name="button_backtotop">Retro a supra</string>
   <string name="search_label">Sercha</string>
   <string name="pref_display_title">Exposition</string>
   <string name="pref_backtotop">Retro a supra</string>
   <string name="pref_backtotop_summary">Monstra un taste in li fin del págine por saltar a supra.</string>
   <string name="pref_language_title">Lingue</string>
   <string name="menu_bookmarks_list">Marcatores</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

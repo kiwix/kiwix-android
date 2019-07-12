@@ -9,10 +9,9 @@
   <string name="menu_randomarticle">ランダム記事</string>
   <string name="menu_fullscreen">全画面表示</string>
   <string name="menu_exitfullscreen">全画面表示を終了</string>
-  <string name="save_media">メディアに名前を付けて保存...</string>
+  <string name="save_media">メディアに名前を付けて保存…</string>
   <string name="save_media_error">メディアを保存しようとした際にエラーが発生しました!</string>
-  <string name="rescan_fs_warning">ZIM ファイルをスキャンしています。お待ちください...</string>
-  <string name="button_backtotop">トップに戻る</string>
+  <string name="rescan_fs_warning">ダウンロード可能なコンテンツをスキャンしています。お待ちください…</string>
   <string name="search_label">検索</string>
   <string name="open_in_new_tab">リンクを新しいタブで開きますか?</string>
   <string name="error_filenotfound">エラー: 選択した ZIM ファイルが見つかりませんでした。</string>
@@ -29,7 +28,30 @@
   <string name="pref_language_title">言語</string>
   <string name="pref_language_chooser">言語を選択</string>
   <string name="menu_bookmarks_list">ブックマーク</string>
+  <string name="all_history_cleared_toast">全履歴を削除しました</string>
   <string name="zim_manager">ライブラリ</string>
   <string name="do_not_ask_anymore">これ以上聞かないでください</string>
   <string name="other_languages">その他の言語:</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

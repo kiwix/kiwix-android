@@ -14,12 +14,10 @@
   <string name="save_media">Kaydi galka muuqaalka ah si</string>
   <string name="save_media_error">Waxaa dhacay qalad markii la doonayay in la kaydiyo!</string>
   <string name="save_media_saved">U kaydi qaab ah %1$s galka sawirka gaarka kuu ah</string>
-  <string name="rescan_fs_warning">Waxaa socota Kala hufidda ee Galalka ZIM, fadlan Sug...</string>
-  <string name="button_backtotop">Ku laabo kor</string>
+  <string name="rescan_fs_warning">Waxaa socota Kala hufidda ee Galalka ZIM, fadlan Sug…</string>
   <string name="search_label">Raadi</string>
   <string name="choose_file">Dooro galka ZIM ee ka samaysan (*.zim)</string>
   <string name="open_in_new_tab">Fur webka qaab cusub</string>
-  <string name="error_nozimfilesfound">Lagama helin wax galal ZIM ah qalabkaada.\nSoo eeg bogga caawimaadda si aad u hesho hagis gaar ah taasaa ku tusaysa sidii aad wax u galinlahad Kiwix.\nHaddii aad galisat galka ZIM qalabkaad/kaydiyaha kuu gaarka ah, waxaa laga yaabaa inaad u baahantahay inaad dib u soo shido.</string>
   <string name="error_filenotfound">Qalad: Galka ZIM ee aad dooratay lama helin.</string>
   <string name="error_fileinvalid">Qalad: Galka ZIM ee aad dooratay maaha mid shaqaynaya.</string>
   <string name="error_articleurlnotfound">Qalad: Galinta maqaalka (Url: %1$s) ma galin.</string>
@@ -36,4 +34,26 @@
   <string name="pref_language_chooser">Dooro luqad</string>
   <string name="menu_bookmarks_list">Calaamadaha aqriska</string>
   <string name="zim_manager">Maktabad</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

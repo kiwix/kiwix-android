@@ -10,7 +10,6 @@
   <string name="menu_fullscreen">Preko cijelog zaslona</string>
   <string name="menu_exitfullscreen">Izađi iz prikaza preko cijelog zaslona</string>
   <string name="menu_read_aloud">Pročitaj naglas</string>
-  <string name="button_backtotop">Natrag na vrh</string>
   <string name="search_label">Traži</string>
   <string name="pref_display_title">Prikaz</string>
   <string name="pref_info_title">Informacije</string>
@@ -19,4 +18,26 @@
   <string name="pref_language_chooser">Odaberite jezik</string>
   <string name="menu_bookmarks_list">Bilješke</string>
   <string name="zim_manager">Knjižnica</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

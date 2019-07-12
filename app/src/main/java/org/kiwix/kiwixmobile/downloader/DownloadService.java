@@ -318,7 +318,7 @@ public class DownloadService extends Service {
         book.file.getPath() + ".part").exists())) {
       // Calculate initial download progress
       int initial =
-          (int) (getCurrentSize(book) / (Long.valueOf(book.getSize()) * BOOK_SIZE_OFFSET));
+          (int) (FileUtils.getCurrentSize(book) / (Long.valueOf(book.getSize()) * BOOK_SIZE_OFFSET));
       notification.get(notificationID).setProgress(100, initial, false);
       updateDownloadFragmentProgress(initial, notificationID);
       notificationManager.notify(notificationID, notification.get(notificationID).build());

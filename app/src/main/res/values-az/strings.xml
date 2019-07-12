@@ -9,12 +9,10 @@
   <string name="menu_randomarticle">Təsadüfi məqalə</string>
   <string name="menu_fullscreen">Tam ekran</string>
   <string name="menu_exitfullscreen">Tam ekran rejimini bağla</string>
-  <string name="rescan_fs_warning">ZIM fayllar axtarılır, xahiş edirik, gözləyin...</string>
-  <string name="button_backtotop">Əvvələ qayıt</string>
+  <string name="rescan_fs_warning">ZIM fayllar axtarılır, xahiş edirik, gözləyin…</string>
   <string name="search_label">Axtar</string>
   <string name="choose_file">ZIM məzmunlu fayl seç (*.zim)</string>
   <string name="open_in_new_tab">Linki yeni pəncərədə aç?</string>
-  <string name="error_nozimfilesfound">Sizin qurğunuzda ZIM-faylları tapılmadı. Kiwix tərkibinin necə yüklənilməsi barədə göstərişlər\nməlumat səhifəsində yerləşdirilmişdir.\nƏgər siz, cihaz və ya daşıyıcı yaddaş qurğusunda ZIM-fayl yerləşdirmisinzə, proqramı və ya cihazı yenidən başladın.</string>
   <string name="error_filenotfound">Xəta: Seçilmiş ZIM fayl mövcud deyil.</string>
   <string name="error_fileinvalid">Xəta: Seçilmiş ZIM faylı yararlı deyil.</string>
   <string name="error_articleurlnotfound">Xəta: Məqalənin (Url: %1$s) yüklənməsi alınmadı.</string>
@@ -24,7 +22,7 @@
   <string name="pref_info_version">Versiya</string>
   <string name="pref_zoom_enable">Miqyas quraşdırılmaları</string>
   <string name="pref_nightmode">Gecə rejimi</string>
-  <string name="pref_nightmode_summary">Məqalələri "gecə rejimində" göstər</string>
+  <string name="pref_nightmode_summary">Məqalələri “gecə rejimində” göstər</string>
   <string name="pref_backtotop">Əvvələ qayıt</string>
   <string name="pref_backtotop_summary">Səhifənin sonunda göstərilən və səhifənin əvvəlinə qaytaran düymə.</string>
   <string name="pref_language_title">Dil</string>
@@ -39,4 +37,26 @@
   <string name="rate_dialog_negative">Yox, sağ olun</string>
   <string name="rate_dialog_neutral">Daha sonra</string>
   <string name="zim_manager">Kitabxana</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

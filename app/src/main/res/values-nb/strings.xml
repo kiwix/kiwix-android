@@ -11,15 +11,13 @@
   <string name="menu_exitfullscreen">Avslutt fullskjerm</string>
   <string name="menu_read_aloud">Les høyt</string>
   <string name="menu_read_aloud_stop">Stopp høytlesning</string>
-  <string name="save_media">Lagre media som...</string>
+  <string name="save_media">Lagre media som…</string>
   <string name="save_media_error">En feil oppstod under lagring av mediet!</string>
   <string name="save_media_saved">Lagret media som %1$s i din bildemappe.</string>
-  <string name="rescan_fs_warning">Søker etter ZIM-filer, vennligst vent...</string>
-  <string name="button_backtotop">Tilbake til toppen</string>
+  <string name="rescan_fs_warning">Søker etter ZIM-filer, vennligst vent…</string>
   <string name="search_label">Søk</string>
   <string name="choose_file">Velg en ZIM-innholdsfil (*.zim)</string>
   <string name="open_in_new_tab">Åpne lenke i ny fane?</string>
-  <string name="error_nozimfilesfound">Ingen ZIM-filer ble funnet på din enhet. Ta en kikk på hjelpesiden for hjelp om hvordan en laster inn innhold i Kiwix. Hvis du har lastet inn en ZIM-fil på din enhet/eksterne lagring kan du forsøke på nytt om ett minutt eller omstarte enheten.</string>
   <string name="error_filenotfound">Feil: Den valgte ZIM-filen ble ikke funnet</string>
   <string name="error_fileinvalid">Feil: Den valgte filen er ikke en gyldig ZIM-fil</string>
   <string name="error_articleurlnotfound">Feil: Kunne ikke laste inn artikkelen (Url: %1$s).</string>
@@ -38,7 +36,6 @@
   <string name="no_reader_application_installed">Kunne ikke finne en installert app for denne typen fil</string>
   <string name="customapp_missing_content">Appen din er korrupt.\nDette kan skje når du fjerner filer på SD-kortet.\nDu må avinstallere og installere appen igjen fra Play Butikk.</string>
   <string name="go_to_play_store">Gå til Play Butikk</string>
-  <string name="no_bookmarks">Ingen bokmerker!</string>
   <string name="menu_bookmarks_list">Bokmerker</string>
   <string name="no_section_info">Ingen innholdstitteler funnet.</string>
   <string name="request_storage">For å få åpnet ZIM-filer trenger vi tilgang til lagringsplassen din</string>
@@ -52,4 +49,26 @@
   <string name="pref_newtab_background_title">Åpne ny fane i bakgrunnen</string>
   <string name="pref_newtab_background_summary">Når en ny fane åpnes vil den åpnes i bakgrunnen</string>
   <string name="zim_manager">Bibliotek</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

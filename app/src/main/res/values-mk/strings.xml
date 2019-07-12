@@ -14,13 +14,11 @@
   <string name="menu_read_aloud_stop">Запри читање на глас</string>
   <string name="save_media">Зачувај медиум</string>
   <string name="save_media_error">Настана грешка при зачувувањето на податотеката!</string>
-  <string name="save_media_saved">Податотеката е зачувана како %s во Android/media/org.kiwix.../</string>
-  <string name="rescan_fs_warning">Пребарувам преземлива содржина. Почекајте...</string>
-  <string name="button_backtotop">Најгоре</string>
+  <string name="save_media_saved">Податотеката е зачувана како %s во Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">Пребарувам преземлива содржина. Почекајте…</string>
   <string name="search_label">Пребарај</string>
   <string name="choose_file">Изберете содржинска податотека (*.zim)</string>
   <string name="open_in_new_tab">Да ја отворам врската во ново јазиче?</string>
-  <string name="error_nozimfilesfound">Не најдов содржини на уредот.\nПогледајте ја страницата за помош за да дознаете како да ставите содржини во Kiwix.\nАко сепак имате ставено ZIM-податотека во уредот/надворешниот склад, обидете се повторно за една минута или превклучете го уредот.</string>
   <string name="error_filenotfound">Грешка: Не ја најдов избраната ZIM-податотека.</string>
   <string name="error_fileinvalid">Грешка: Одбраната податотека не е вежачка ZIM-податотека.</string>
   <string name="error_articleurlnotfound">Грешка: Не успеав да ја вчитам статијата (URL: %1$s).</string>
@@ -44,7 +42,6 @@
   <string name="no_reader_application_installed">Не можев да најдам воспоставен приложник за овој вид податотека</string>
   <string name="customapp_missing_content">Прилогот ви е расипан.\nОва може да се случи при отстранување податотеки од SD-картичка.\nЌе треба да го отстраните прилогот и повторно да го воспоставите преку Play Store.</string>
   <string name="go_to_play_store">Оди на Play Store</string>
-  <string name="no_bookmarks">Нема обележувачи</string>
   <string name="menu_bookmarks_list">Обележани</string>
   <string name="no_section_info">Не пронајдов содржински заглавија</string>
   <string name="request_storage">Ќе треба пристап до вашиот склад за да дојдам до вонмрежната содржина</string>
@@ -62,7 +59,6 @@
   <string name="did_you_know">Дали сте знаеле?</string>
   <string name="undo">Врати</string>
   <string name="tab_closed">Јазичето е затворено</string>
-  <string name="deleted_message">избришана</string>
   <string name="bookmark_added">Обележувачот е додаден</string>
   <string name="rate_dialog_title">Дајте ни оценка</string>
   <string name="rate_dialog_msg_1">Ако ви се допаѓа</string>
@@ -79,22 +75,18 @@
   <string name="search_widget_text">Пребарај по Kiwix</string>
   <string name="speech_prompt_text">Гласовно пребарајте го %s</string>
   <string name="speech_not_supported">Жалиме! Вашиот уред не поддржува гласовно внесување</string>
-  <string name="download_started_library">Преземањето започна...</string>
   <string name="local_zims">Уред</string>
   <string name="remote_zims">На линија</string>
   <string name="zim_downloads">Преземам</string>
   <string name="zim_manager">Библиотека</string>
-  <string name="delete_specific_zim">Да ја избришам податотекава?</string>
   <string name="delete_specific_zim_toast">Податотеката е избришана</string>
   <string name="zim_file_downloading">Преземам</string>
   <string name="zim_file_downloaded">Преземено</string>
   <string name="download_pause">Паузирај</string>
-  <string name="download_play">Пушти</string>
   <string name="download_stop">Запри</string>
   <string name="download_paused">паузирано</string>
   <string name="no_downloads_here">Нема преземања</string>
   <string name="no_files_here">Нема податотеки</string>
-  <string name="download_complete_snackbar">Преземањето заврши</string>
   <string name="download_no_space">Немате доволно место за преземање на податотекава.</string>
   <string name="space_available">Достапен простор:</string>
   <string name="zim_simple">Просто</string>
@@ -102,9 +94,7 @@
   <string name="zim_novid">Нема видеа</string>
   <string name="no_network_connection">Немате мрежна врска</string>
   <string name="get_library_over_network">Користи мрежа за преземање на списокот содржини (прибл. 6 МБ)</string>
-  <string name="proceed">Продолжи</string>
   <string name="wait_for_load">Содржината сè уште се вчитува</string>
-  <string name="help_1">Kiwix овозможува вонмрежен пристап до мрежни места како Википедија во високонабиен облик.</string>
   <string name="help_2">Што прави Kiwix?</string>
   <string name="help_3">Kiwix е вонмрежен читач на содржини. Работи како прелистувач но чита содржини од податотека во ZIM-формат место од семрежјето.</string>
   <string name="help_4">Иако Kiwix е првично предвиден како вонмрежен читач на Википедија, но сега чита и други содржини.</string>
@@ -122,8 +112,6 @@
   <string name="help_16">\u2022 На Microsoft Windows: HJ-Split</string>
   <string name="help_17">\u2022 На Apple Mac OSX: Split и Concat</string>
   <string name="help_19">Напомена: исходните податотеки мораат да бидат наречени my_big_file.zimaa, my_big_file.zimab и тн.</string>
-  <string name="help_20">Ви благодариме што го избравте Kiwix!</string>
-  <string name="help_21">Драго ни е што сте со нас. Би ги ценеле вашите мислења и предлози на android@kiwix.org.</string>
   <string name="pref_storage">Склад</string>
   <string name="pref_current_folder">Тековна папка</string>
   <string name="path_not_writable">Не можам да дојдам до саканата папка. Ќе ја користам основната. За да го поправите ова, преизберете папка во поставките на прилогот.</string>
@@ -134,14 +122,12 @@
   <string name="tts_stop">запри</string>
   <string name="internal_storage">Внатрешен</string>
   <string name="external_storage">Надворешен</string>
-  <string name="zim_already_downloading">Zim веќе се презема</string>
   <string name="yes">Да</string>
   <string name="no">Не</string>
   <string name="confirm_stop_download_title">Да го прекинам преземањето?</string>
   <string name="confirm_stop_download_msg">Дали сте сигурни дека сакате да го запрете преземањево?</string>
   <string name="download_change_storage">Избор на складишник</string>
   <string name="tts_not_enabled">Претворањето текст во говор не е овозможено за оваа ZIM-податотека</string>
-  <string name="delete_tab">Избриши јазиче</string>
   <string name="next">Следно</string>
   <string name="previous">Претходно</string>
   <string name="wifi_only_title">Дозволувате преземање на содржини преку мобилна мрежа?</string>
@@ -156,8 +142,6 @@
   <string name="pref_bottomtoolbar_summary">Прикажи алатник за брзи дејства најдолу во екранот.</string>
   <string name="pref_autonightmode_summary">Автоматски префрлај меѓу дневен и ноќен режим.</string>
   <string name="pref_autonightmode">Автоматски ноќен режим</string>
-  <string name="pref_multi_search_title">Пребарување по MultiZim</string>
-  <string name="pref_multi_search_summary">Дозволи прилог за пребарување низ ZIM-податотеки (Предупредување: мошне опитно).</string>
   <string name="pref_external_link_popup_title">Предупреди ме кога се внесуваат надворешни врски</string>
   <string name="pref_external_link_popup_summary">Прикажи отскочници со предупредување за дополнителни трошоци или неработа во вонмрежни врски.</string>
   <string name="external_link_popup_dialog_title">Внесување на надворешна врска</string>
@@ -165,4 +149,26 @@
   <string name="do_not_ask_anymore">Повеќе не прашувај</string>
   <string name="your_languages">Избрани јазици:</string>
   <string name="other_languages">Други јазици:</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

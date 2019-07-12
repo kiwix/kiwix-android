@@ -11,15 +11,13 @@
   <string name="menu_exitfullscreen">Išeiti iš viso ekrano režimo</string>
   <string name="menu_read_aloud">Skaityk garsiai</string>
   <string name="menu_read_aloud_stop">Nustok garsiai skaityti</string>
-  <string name="save_media">Išsaugoti duomenis kaip...</string>
+  <string name="save_media">Išsaugoti duomenis kaip…</string>
   <string name="save_media_error">Įvyko klaida bandant išsaugoti duomenis!</string>
   <string name="save_media_saved">Duomenys išsaugoti jūsų Paveikslėlių aplanke kaip %1$s</string>
-  <string name="rescan_fs_warning">Ieškoma ZIM failų, prašome palaukti...</string>
-  <string name="button_backtotop">Atgal į viršų</string>
+  <string name="rescan_fs_warning">Ieškoma ZIM failų, prašome palaukti…</string>
   <string name="search_label">Paieška</string>
   <string name="choose_file">Pasirinkite ZIM Turinio Failą (*.zim)</string>
   <string name="open_in_new_tab">Atidaryti nuorodą naujame skirtuke?</string>
-  <string name="error_nozimfilesfound">Jūsų prietaise ZIM failų nerasta.\nPažvelkite Pagalbos puslapį norėdami gauti nurodymus, kaip įkelti turinį į Kiwix.\nJei jūs įkėlėte ZIM failą į jūsų prietaisą/išorinę atmintį,  po minutės galite pabandyti iš naujo  arba iš naujo paleisti įrenginį.</string>
   <string name="error_filenotfound">Klaida: pasirinktas ZIM failas nerastas.</string>
   <string name="error_fileinvalid">Klaida: pasirinktas failas nėra galiojantis ZIM failas.</string>
   <string name="error_articleurlnotfound">Klaida: nepavyko įkelti straipsnio (Url: %1$s).</string>
@@ -35,7 +33,6 @@
   <string name="pref_language_title">Kalba</string>
   <string name="pref_language_chooser">Pasirinkite kalbą</string>
   <string name="go_to_play_store">Eiti į „Play Store“</string>
-  <string name="no_bookmarks">Jokių žymių!</string>
   <string name="menu_bookmarks_list">Žymės</string>
   <string name="no_section_info">Nerasta jokių turinio puslapių.</string>
   <string name="bookmark_added">Pridėtos žymos</string>
@@ -46,4 +43,26 @@
   <string name="rate_dialog_neutral">Vėliau</string>
   <string name="pref_newtab_background_title">Atidaryti naujame skirtuke</string>
   <string name="zim_manager">Biblioteka</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

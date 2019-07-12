@@ -11,15 +11,13 @@
   <string name="menu_exitfullscreen">მთლიანი ეკრანიდან გამოსვლა</string>
   <string name="menu_read_aloud">ხმამაღლა კითხვა</string>
   <string name="menu_read_aloud_stop">ხმამაღლა კითხვის შეჩერება</string>
-  <string name="save_media">მედიის შენახვა როგორც...</string>
+  <string name="save_media">მედიის შენახვა როგორც…</string>
   <string name="save_media_error">მედია-ფაილის შენახვისას მოხდა შეცდომა!</string>
   <string name="save_media_saved">მედია-ფაილის თქვენი სურათების საქაღალდეში შენახვა როგორც %1$</string>
   <string name="rescan_fs_warning">ZIM-ფაილების ძიება, გთხოვთ, მოიცადოთ…</string>
-  <string name="button_backtotop">თავში დაბრუნება</string>
   <string name="search_label">ძიება</string>
   <string name="choose_file">აირჩიეთ ZIM-ფაილი (*.zim)</string>
   <string name="open_in_new_tab">ბმული ახალ ჩანართში გაიხსნას?</string>
-  <string name="error_nozimfilesfound">თქვენს მოწყობილობაში ZIM-ფაილების პოვნა ვერ მოხერხდა.\nიხლეთ დახმარების გვერდი, რათა გაიგოთ თუ როგორ ატვირთოთ შიგთავსი Kiwix-ზე.\nთუკი თქვენ ZIM-ფაილი თქვენს მოწყობილობაში ან მატარებელზე განათავსეთ, შესაძლოა, უკეთსი იყოს ცოტა ხნის შემდეგ გაიმეოროთ ან მოწყობილობა გადატვირთოთ.</string>
   <string name="error_filenotfound">შეცდომა: არჩეული ZIM ფაილი ვერ მოიძებნა.</string>
   <string name="error_fileinvalid">შეცდომა: არჩეული ფაილი არ არის სწორი ZIM ფაილი.</string>
   <string name="error_articleurlnotfound">შეცდომა: სტატია (Url: %1$s) ვერ ჩაიტვირთა.</string>
@@ -35,7 +33,6 @@
   <string name="pref_language_title">ენა</string>
   <string name="pref_language_chooser">აირჩიეთ ენა</string>
   <string name="go_to_play_store">Play მარკეტში გადასვლა</string>
-  <string name="no_bookmarks">სანიშნები არ არის!</string>
   <string name="menu_bookmarks_list">სანიშნები</string>
   <string name="bookmark_added">სანიშნი დამატებულია</string>
   <string name="rate_dialog_title">გთხოვთ, შეგვაფასეთ</string>
@@ -44,4 +41,26 @@
   <string name="rate_dialog_negative">არა, გმადლობთ</string>
   <string name="rate_dialog_neutral">მოგვიანებით</string>
   <string name="zim_manager">ბიბლიოთეკა</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

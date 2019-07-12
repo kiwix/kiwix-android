@@ -11,7 +11,6 @@
   <string name="menu_exitfullscreen">Bɔ ekaran falen na</string>
   <string name="search_label">Ɲinini kɛ</string>
   <string name="choose_file">I mago bɛ fisiye min na ZIMU kɔnɔ, o suganti yan.</string>
-  <string name="error_nozimfilesfound">Fisiye ZIMU foyi ma sɔrɔ i ka mansin kan. \nTaa i ɲɛ jɔ  dɛmɛ ɲɛ kan, walasa ka faamuya sɔrɔ kunnafoniw bila cogo la Kiwikisi kan. \nN\'a sɔrɔla i ye Fisiye ZIMU dɔ bila i ka mansin kan walima kile dɔ kan, i bɛ se ka segin a kan miniti kelen kɔnɔ walima k\'i ka mansin faga k\'a mɛnɛ.</string>
   <string name="error_filenotfound">Fili: Fisiye sugantilen ma se ka ye fan si.</string>
   <string name="error_fileinvalid">Fili: fisiye sugantilen tɛ fisiye yamaruyalen ye.</string>
   <string name="error_articleurlnotfound">Fili: Kunnafoni (Url: %1$s)  sariziyeli tigɛra sira la.</string>
@@ -24,4 +23,26 @@
   <string name="pref_language_title">Kan</string>
   <string name="menu_bookmarks_list">Ɲɛ dogo</string>
   <string name="zim_manager">Gafeso</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

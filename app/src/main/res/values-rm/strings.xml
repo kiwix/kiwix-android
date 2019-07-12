@@ -9,12 +9,10 @@
   <string name="menu_randomarticle">Artitgel casual</string>
   <string name="menu_fullscreen">Maletg entir</string>
   <string name="menu_exitfullscreen">Ord il maletg entir</string>
-  <string name="rescan_fs_warning">Tschertga datotecas ZIM, spetgai per plaschair...</string>
-  <string name="button_backtotop">Enavos a l\'entschatta</string>
+  <string name="rescan_fs_warning">Tschertga datotecas ZIM, spetgai per plaschair…</string>
   <string name="search_label">Tschertgar</string>
   <string name="choose_file">Selecziunar ina datoteca da cuntegn ZIM (*.zim)</string>
   <string name="open_in_new_tab">Avrir il link en in nov tab?</string>
-  <string name="error_nozimfilesfound">Nagina datoteca ZIM chattada sin vos apparat.\nConsultai la pagina d\'agid per instrucziuns davart chargiar cuntegn en Kiwix.\nSche vus avais mess ina datoteca ZIM sin il apparat/la memoria externa, pudais vus pruvar danovamain en ina minuta u reaviar il apparat.</string>
   <string name="error_filenotfound">Errur: la datoteca ZIM selecziunada è betg vegnida chattada.</string>
   <string name="error_fileinvalid">Errur: la datoteca selecziunada è betg ina datoteca ZIM valida.</string>
   <string name="error_articleurlnotfound">Errur: chargiar il artitgel (Url: %1$s) n\'a betg funcziunà.</string>
@@ -30,4 +28,26 @@
   <string name="pref_language_title">Lingua</string>
   <string name="menu_bookmarks_list">Segnapaginas</string>
   <string name="zim_manager">Biblioteca</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

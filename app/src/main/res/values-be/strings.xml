@@ -15,11 +15,9 @@
   <string name="save_media_error">Узнікла памылка пры захаванні медыя-файла!</string>
   <string name="save_media_saved">Медыя захавана як %1$s у тэчцы вашых выяваў</string>
   <string name="rescan_fs_warning">Пошук сярод ZIM-файлаў. Калі ласка, пачакайце…</string>
-  <string name="button_backtotop">Вярнуцца ўверх</string>
   <string name="search_label">Пошук</string>
   <string name="choose_file">Абярыце ZIM-файл (*.zim)</string>
   <string name="open_in_new_tab">Адкрыць спасылку ў новым вакенцы?</string>
-  <string name="error_nozimfilesfound">ZIM-файлы не знойдзеныя на Вашай прыладзе.\nПаглядзіце на старонцы даведкі як загружаць змест у Kiwix.\nКалі вы размясцілі файл на вашай прыладзе або вонкавым сховішчы, магчыма, варта паспрабаваць яшчэ раз праз некалькі хвілін або перазагрузіць прыладу.</string>
   <string name="error_filenotfound">Памылка: абраны ZIM-файл ня знойдзены.</string>
   <string name="error_fileinvalid">Памылка: абраны файл не з\'яўляецца слушным ZIM-файлам.</string>
   <string name="error_articleurlnotfound">Памылка: загрузка артыкула не атрымалася (Url: %1$s).</string>
@@ -38,7 +36,6 @@
   <string name="no_reader_application_installed">Не ўдалося знайсці ўсталяваную праграму для гэтага тыпу файлаў</string>
   <string name="customapp_missing_content">Вашая праграма пашкоджаная.\nГэта можа адбывацца, калі вы выдаляеце файлы з SD-карткі.\nВам трэба выдаліць праграму, а пасля пераўсталяваць яе з Play Store.</string>
   <string name="go_to_play_store">Перайсці ў Play Store</string>
-  <string name="no_bookmarks">Няма закладак!</string>
   <string name="menu_bookmarks_list">Закладкі</string>
   <string name="no_section_info">Ня знойдзеныя загалоўкі кантэнту</string>
   <string name="request_storage">Каб атрымаць доступ да ZIM-файлаў, нам трэба мець доступ да вашага сховішча</string>
@@ -52,4 +49,26 @@
   <string name="pref_newtab_background_title">Адкрыць новае вакенца на фоне</string>
   <string name="pref_newtab_background_summary">Пры адкрыцці новага вакенца, яно будзе адкрытае ў фоне</string>
   <string name="zim_manager">Бібліятэка</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

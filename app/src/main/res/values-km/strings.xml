@@ -9,8 +9,7 @@
   <string name="menu_randomarticle">អត្ថបទចៃដន្យ</string>
   <string name="menu_fullscreen">ទំហំពេញអេក្រង់</string>
   <string name="menu_exitfullscreen">ចាកចេញពីម៉ូដទំហំពេញអេក្រង់</string>
-  <string name="rescan_fs_warning">កំពុងង​ស្កេន​រក​ឯកសារ ZIM, សូម​រង់​ចាំ...</string>
-  <string name="button_backtotop">ត្រឡប់ទៅលើ</string>
+  <string name="rescan_fs_warning">កំពុងង​ស្កេន​រក​ឯកសារ ZIM, សូម​រង់​ចាំ…</string>
   <string name="search_label">ស្វែងរក</string>
   <string name="choose_file">ជ្រើសរើសឯកសារមាតិកា ZIM (*.zim)</string>
   <string name="open_in_new_tab">បើក​តំណ​ក្នុង​ផ្ទាំង​ថ្មី?</string>
@@ -27,4 +26,26 @@
   <string name="pref_language_title">ភាសា​</string>
   <string name="menu_bookmarks_list">ការកត់ចំណាំ</string>
   <string name="zim_manager">បណ្ណាល័យ</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

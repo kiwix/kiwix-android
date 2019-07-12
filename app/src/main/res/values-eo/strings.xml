@@ -1,29 +1,29 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="menu_zim_manager">Akiri Enhavon</string>
   <string name="menu_help">Helpo</string>
   <string name="menu_home">Hejmo</string>
   <string name="menu_settings">Agordoj</string>
-  <string name="menu_search">Serĉi</string>
-  <string name="menu_searchintext">Trovi en teksto</string>
+  <string name="menu_search">Serĉi artikolon</string>
+  <string name="menu_searchintext">Trovi en paĝo</string>
   <string name="menu_bookmarks">Legosignoj</string>
   <string name="menu_randomarticle">Hazarda artikolo</string>
   <string name="menu_fullscreen">Plenekrane</string>
-  <string name="menu_exitfullscreen">Eliri plenekranon</string>
+  <string name="menu_exitfullscreen">Eliri plenekranan reĝimon</string>
   <string name="menu_read_aloud">Laŭtlegi</string>
   <string name="menu_read_aloud_stop">Ĉesi laŭtlegadon</string>
-  <string name="save_media">Konservi plurmediaĵon kiel...</string>
+  <string name="save_media">Konservi Aŭdvidaĵon</string>
   <string name="save_media_error">Eraro okazis dum provo konservi la plurmediaĵon!</string>
-  <string name="save_media_saved">Plumediaĵoj konservitaj kiel %1$s en via dosierujo Bildoj</string>
-  <string name="rescan_fs_warning">Daŭras serĉado de ZIM-dosieroj, bonvolu atendi...</string>
-  <string name="button_backtotop">Reiri al Supro</string>
+  <string name="save_media_saved">Aŭdvidaĵoj konservitaj kiel %1$s en dosierujo Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">Daŭras serĉado de elŝutebla enhavo, bonvolu atendi…</string>
   <string name="search_label">Serĉi</string>
-  <string name="choose_file">Elektu enhavan dosieron ZIM (*.zim)</string>
+  <string name="choose_file">Elektu Dosieron de Enhavo (*.zim)</string>
   <string name="open_in_new_tab">Ĉu malfermi ligilon en nova langeto?</string>
-  <string name="error_nozimfilesfound">Neniu ZIM-dosiero estas trovita en la memorilo.\nKonzultu la paĝon Helpo por trovi instrukciojn pri ŝargado de enhavo en Kiwix.\nSe vi enmetis ZIM-dosieron en la memorilon, vi povas reprovi post momento aŭ restartigi la memorilon.</string>
   <string name="error_filenotfound">Eraro: Ne eblis trovi la elektitan ZIM-dosieron.</string>
   <string name="error_fileinvalid">Eraro: La elektita dosiero ne estas valida ZIM-dosiero.</string>
   <string name="error_articleurlnotfound">Eraro: Ŝargado de la artikolo (Url: %1$s) fiaskis.</string>
-  <string name="pref_display_title">Montri</string>
+  <string name="pref_display_title">Montrado</string>
+  <string name="pref_zoom_sub_title">Zomi</string>
   <string name="pref_zoom_dialog">Zomnivelo</string>
   <string name="pref_info_title">Informo</string>
   <string name="pref_info_version">Versio</string>
@@ -32,10 +32,140 @@
   <string name="pref_nightmode_summary">Montri artikolojn inverskolore</string>
   <string name="pref_backtotop">Reiri al Supro</string>
   <string name="pref_backtotop_summary">Montri suprenan rulumilon paĝofine</string>
+  <string name="pref_hidetoolbar">Kaŝi ilobreton dum rulumado</string>
+  <string name="pref_hidetoolbar_summary">Kaŝi ilobreton post rulumado malsupren</string>
   <string name="pref_language_title">Lingvo</string>
   <string name="pref_language_chooser">Elektu lingvon</string>
+  <string name="pref_credits">Kontribuintoj kaj Permesiloj</string>
+  <string name="pref_credits_title">Agnoskoj</string>
+  <string name="tts_lang_not_supported">La lingvo de ĉi tiu paĝo ne estas subtenata, aŭ la lingva dateno ne estis instalita. Ĉi tiu artikolo ne povas esti ĝuste legata.</string>
+  <string name="no_reader_application_installed">Ne povis trovi instalitan aplikaĵon por ĉi tiu dosiertipo</string>
+  <string name="customapp_missing_content">Via aplikaĵo estas koruptita.\nTio eble okazis ĉar dosieroj en la SD-karto estis forigitaj.\nVi devas malistali kaj reinstali la Aplikaĵon el Play-Vendejo.</string>
+  <string name="go_to_play_store">Iri al Play Store</string>
   <string name="menu_bookmarks_list">Legosignoj</string>
+  <string name="no_section_info">Ne Trovis Enhavajn Ĉapojn</string>
+  <string name="request_storage">Por atingi konservitan enhavon ni bezonas atingon al via konservejo</string>
+  <string name="request_storage_custom">Se vi vidas surmetata averto, simple restartigu vian aparataon por korekti.</string>
+  <string name="clear_recent_and_tabs_history_dialog">Ĉu vi certas ke vi volas forviŝi vian serĉadan historion kaj restarigi ĉiujn aktivajn langetojn?</string>
+  <string name="delete_recent_search_item">Forigi ĉi tiu eron?</string>
+  <string name="pref_clear_all_history_title">Forviŝi hisorion</string>
+  <string name="pref_clear_all_history_summary">Forviŝi ĵusajn serĉojn kaj historion de langetoj</string>
+  <string name="all_history_cleared_toast">Forviŝis Ĉiun Historion</string>
+  <string name="clear_all_history_dialog_title">Forviŝi Ĉiun da Historio</string>
+  <string name="delete">Forigi</string>
+  <string name="delete_specific_search_toast">Forigis lastatempajn serĉojn</string>
+  <string name="hint_contents_drawer_message">Vi povas ŝovumi maldekstren por vidi la enhavon de ĉi tiu artikolo</string>
+  <string name="got_it">Komprenite</string>
+  <string name="did_you_know">Ĉu vi scias?</string>
+  <string name="undo">Malfari</string>
+  <string name="tab_closed">Fermis langeton</string>
+  <string name="bookmark_added">Aldonis legosignon</string>
+  <string name="rate_dialog_title">Bonvolu Taksi Nin</string>
+  <string name="rate_dialog_msg_1">Se vi ĝuas uzadon de</string>
+  <string name="rate_dialog_msg_2">, bonvolu taksi ĝin. Dankon pro via subteno!</string>
+  <string name="rate_dialog_positive">Taksi!</string>
   <string name="rate_dialog_negative">Ne, dankon</string>
   <string name="rate_dialog_neutral">Poste</string>
-  <string name="zim_manager">Libraro</string>
+  <string name="open">Malfermi</string>
+  <string name="bookmark_removed">Forigis legosignon</string>
+  <string name="pref_newtab_background_title">Malfermi novan langeton en fono</string>
+  <string name="pref_newtab_background_summary">Novaj langetoj malfermiĝos fone</string>
+  <string name="pref_extras">Kromaĵoj</string>
+  <string name="new_tab_snackbar">Artikolo malfermiĝis en nova langeto</string>
+  <string name="search_widget_text">Serĉi Kiwix</string>
+  <string name="speech_prompt_text">Paroli por serĉi %s</string>
+  <string name="speech_not_supported">Domaĝe, via aparato ne subtenas voĉan enigon</string>
+  <string name="local_zims">Aparato</string>
+  <string name="remote_zims">Konektita</string>
+  <string name="zim_downloads">Elŝutante</string>
+  <string name="zim_manager">Biblioteko</string>
+  <string name="delete_specific_zim_toast">Forigis dosieron</string>
+  <string name="zim_file_downloading">Elŝutante</string>
+  <string name="zim_file_downloaded">Elŝutita</string>
+  <string name="download_pause">Paŭzigi</string>
+  <string name="download_stop">Halti</string>
+  <string name="download_paused">paŭzinta</string>
+  <string name="no_downloads_here">Neniu elŝuto ĉi tie</string>
+  <string name="no_files_here">Neniu dosiero ĉi tie</string>
+  <string name="download_no_space">Ne estas sufiĉa spaco por elŝuti ĉi tiun dosieron.</string>
+  <string name="space_available">Havebla Spaco:</string>
+  <string name="zim_simple">Simpla</string>
+  <string name="zim_nopic">Neniu Bildo</string>
+  <string name="zim_novid">Neniu Videaĵo</string>
+  <string name="no_network_connection">Reta konekto mankas</string>
+  <string name="get_library_over_network">Uzi reton por elŝuti liston de enhavo (proksimume 6 megabajtoj)</string>
+  <string name="wait_for_load">Enhavo Estas Ankoraŭ Ŝarĝata</string>
+  <string name="help_2">Kion faras Kiwix?</string>
+  <string name="help_3">Kiwix estas senkonekta legilo de enhavo. Ĝi estas simila al TTT-legilo, sed anstataŭ legi retpaĝojn konektite, ĝi legas enhavon en ZIM-dosiero.</string>
+  <string name="help_4">Kiwix estis originale farita por senkonekta legado de Vikipedio, sed ĝi povas legi alian enhavon.</string>
+  <string name="help_5">Kie estas la enhavo?</string>
+  <string name="help_6">La Kiwix-retejo gastigas nian enhavon.</string>
+  <string name="help_7">Ili estas haveblaj kiel ZIM-dosieroj. Jen multe da ili:</string>
+  <string name="help_8">\u2022 Vikipedio estas havebla aparte por ĉiu lingvo</string>
+  <string name="help_9">\u2022 Alia enhavo, kiel Wikileaks aŭ Vikifontaro, estas havebla</string>
+  <string name="help_10">Vi povas aŭ elŝuti vian elektitajn ZIM-dosierojn per ĉi tiu aplikaĵo, aŭ zorge elekti tiu(j)n kiu(j) vi deziras kaj elŝuti ilin per surtabla komputilo, antaŭ transigi la ZIM-dosierojn per SD-karto.</string>
+  <string name="help_11">ZIM-dosieroj elŝutitaj per ĉi tiu aplikaĵo estas en la dosierujo nomita Kiwix en ekstera konservejo.</string>
+  <string name="help_12">Kiel uzi grandan ZIM-dosieron?</string>
+  <string name="help_13">Se via ZIM-dosiero estas pli granda ol 4 GB, vi eble ne povas konservi ĝin en via SD-karto pro dosiersistemaj limoj.</string>
+  <string name="help_14">Elŝutado per la aplikaĵo aŭtomate traktas grandajn dosierojn por vi per disfendado.</string>
+  <string name="help_15">Se, tamen, vi elŝutas per alia aparato, vi eble devas disfendi la ZIM-dosieron per unu el la jenaj programaroj:</string>
+  <string name="help_16">\2022 Je Microsoft Windows: HJ-Split</string>
+  <string name="help_17">\u2022 Je Apple macOS: Split kaj Concat</string>
+  <string name="help_19">Noto: viaj rezultaj dosieroj nomiĝu mia_dosierego.zimaa, mia_dosierego.zimab, ktp.</string>
+  <string name="pref_storage">Konservejo</string>
+  <string name="pref_current_folder">Aktuala Dosierujo</string>
+  <string name="path_not_writable">Ne povas atingi deziratan dosierujon; uzante la implicitan. Por korekti tion, reelektu la deziratan dosierujon en la aplikaĵaj agordoj.</string>
+  <string name="reboot_message">Pro cimo en Android 6.0, ni postulas vin restartigi vian aparaton por daŭrigi sen la permeso de konservado. Ni bedaŭras ajnan malkonvenaĵon kaŭzatan de tio.</string>
+  <string name="delete_zim_failed">Domaĝe, ni ne povis forigi ĉi tiun dosieron. Vi reprovu per dosiermastrumilo.</string>
+  <string name="tts_pause">paŭzigi</string>
+  <string name="tts_resume">daŭrigi</string>
+  <string name="tts_stop">haltigi</string>
+  <string name="internal_storage">Interna</string>
+  <string name="external_storage">Ekstera</string>
+  <string name="yes">Jes</string>
+  <string name="no">Ne</string>
+  <string name="confirm_stop_download_title">Haltigi elŝuton?</string>
+  <string name="confirm_stop_download_msg">Ĉu vi certas ke vi volas ĉesigi ĉi tiun elŝuton?</string>
+  <string name="download_change_storage">Elektilo de konservejo</string>
+  <string name="tts_not_enabled">Parolsintezo estas neebla por ĉi tiu ZIM-dosiero</string>
+  <string name="next">Sekven</string>
+  <string name="previous">Antaŭen</string>
+  <string name="wifi_only_title">Ĉu permesi elŝutadon de enhavo per poŝaparata reto?</string>
+  <string name="wifi_only_msg">Se vi elektas “Jes”, vi ne avertiĝos de nun. Tamen, vi povas ŝanĝi tion en Agordoj</string>
+  <string name="pref_wifi_only">Elŝuti nur per vifio</string>
+  <string name="time_day">tago</string>
+  <string name="time_left">restas</string>
+  <string name="pref_bottomtoolbar">Ŝalti malsupran ilobreton</string>
+  <string name="pref_bottomtoolbar_summary">Montri ilobreton kun rapidaj agoj ĉe la malsupro de la ekrano</string>
+  <string name="pref_autonightmode_summary">Aŭtomate ŝalti tagan/noktan reĝimon</string>
+  <string name="pref_autonightmode">Aŭtomata nokta reĝimo</string>
+  <string name="pref_external_link_popup_title">Averti pri aliro al eksteraj ligiloj</string>
+  <string name="pref_external_link_popup_summary">Montri averton pri plia kosto aŭ nefunkciado pri eksteraj ligiloj.</string>
+  <string name="external_link_popup_dialog_title">Enigi Eksteran Ligilon</string>
+  <string name="external_link_popup_dialog_message">Vi estas ironta al celo de ekstera ligilo. Tio eble plie kostos por datentransigo, aŭ simple ne funkcios se vi ne estas konektita. Ĉu daŭrigi?</string>
+  <string name="do_not_ask_anymore">Ne demandu plu</string>
+  <string name="your_languages">Elektitaj lingvoj:</string>
+  <string name="other_languages">Aliaj Lingvoj:</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

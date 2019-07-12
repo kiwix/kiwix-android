@@ -11,15 +11,13 @@
   <string name="menu_exitfullscreen">සම්පූර්ණ තිරයෙන් ඉවත් වන්න</string>
   <string name="menu_read_aloud">හඬනගා කියවන්න</string>
   <string name="menu_read_aloud_stop">හඬනගා කියවීම නවත්වන්න</string>
-  <string name="save_media">මාධ්‍යය සුරකින්න...</string>
+  <string name="save_media">මාධ්‍යය සුරකින්න…</string>
   <string name="save_media_error">මාධ්‍යය ආරක්ෂණය කිරීමට යාමේදී හටගන්නා ලදී!</string>
   <string name="save_media_saved">ඔබගේ පින්තුර ගොනුවෙහි %1$s ලෙස, මාධ්‍යය සුරක්ෂිත කරන ලදී</string>
-  <string name="rescan_fs_warning">ZIM ගොනු පරීක්ෂා කෙරේ, රැඳී සිටින්න...</string>
-  <string name="button_backtotop">නැවත මුදුනට</string>
+  <string name="rescan_fs_warning">ZIM ගොනු පරීක්ෂා කෙරේ, රැඳී සිටින්න…</string>
   <string name="search_label">ගවේෂණය</string>
   <string name="choose_file">ZIM වර්ගයේ ගොනුවක් තෝරාගන්න (*.zim)</string>
   <string name="open_in_new_tab">සබැඳිය නව තීරුවක විවෘත කරන්න?</string>
-  <string name="error_nozimfilesfound">ඔබේ උපකරණය තුළ ZIM ගොනු හමු නොවිණි.\nKiwix වෙත අන්තර්ගතය පූරණය කරන ආකාරය දැනගැනීම සඳහා උදව් පිටුව බලන්න.\nඔබ ZIM ගොනුවක් ඔබේ උපකරණයේ/බාහිර රැඳවුමේ තැබුවේ නම්, ඔබ නැවත මිනිත්තුවකින් උත්සහ කරන්න නැතහොත් ඔබේ උපකරණය යළි පණගන්වන්න.</string>
   <string name="error_filenotfound">දෝෂය: තෝරාගත් ZIM ගොනුව සොයා ගැනීමට නොහැකි විය.</string>
   <string name="error_fileinvalid">දෝෂය: තෝරාගත් ගොනුව වලංගු ZIM ගොනුවක් නොවේ.</string>
   <string name="error_articleurlnotfound">දෝෂය: (Url: %1$s) ලිපිය පූරණය වීම අසාර්ථකයි.</string>
@@ -36,4 +34,26 @@
   <string name="pref_language_chooser">භාෂාවක් තෝරාගන්න</string>
   <string name="menu_bookmarks_list">පොත්යොමු</string>
   <string name="zim_manager">පුස්තකාලය</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

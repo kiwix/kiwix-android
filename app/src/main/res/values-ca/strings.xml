@@ -1,25 +1,24 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+  <string name="menu_zim_manager">Obtenir contingut</string>
   <string name="menu_help">Ajuda</string>
-  <string name="menu_home">Pàgina d\'inici</string>
-  <string name="menu_settings">Preferències</string>
-  <string name="menu_search">Cercar</string>
-  <string name="menu_searchintext">Cercar en el text</string>
-  <string name="menu_bookmarks">Preferits</string>
-  <string name="menu_randomarticle">Article a l\'atzar</string>
+  <string name="menu_home">Inici</string>
+  <string name="menu_settings">Configuració</string>
+  <string name="menu_search">Cercar article</string>
+  <string name="menu_searchintext">Cercar a la pàgina</string>
+  <string name="menu_bookmarks">Marcadors</string>
+  <string name="menu_randomarticle">Article aleatori</string>
   <string name="menu_fullscreen">Pantalla completa</string>
-  <string name="menu_exitfullscreen">Sortir del mode de pantalla completa</string>
+  <string name="menu_exitfullscreen">Sortir de pantalla completa</string>
   <string name="menu_read_aloud">Llegir en veu alta</string>
   <string name="menu_read_aloud_stop">Deixar de llegir en veu alta</string>
   <string name="save_media">Anomena i desa el fitxer…</string>
   <string name="save_media_error">S\'ha produït un error en mirar de desar el fitxer!</string>
   <string name="save_media_saved">El fitxer s\'ha desat amb el nom %1$s a la vostra carpeta d\'imatges</string>
-  <string name="rescan_fs_warning">Buscant arxius ZIM. Espereu...</string>
-  <string name="button_backtotop">Tornar a dalt</string>
+  <string name="rescan_fs_warning">Buscant arxius ZIM. Espereu…</string>
   <string name="search_label">Cercar</string>
   <string name="choose_file">Seleccioneu un fitxer de contingut ZIM (*.zim)</string>
   <string name="open_in_new_tab">Obrir l\'enllaç en una pestanya nova?</string>
-  <string name="error_nozimfilesfound">No s\'han trobat fitxers ZIM al vostre dispositiu. A la pàgina d\'ajuda trobareu instruccions sobre com carregar contingut a Kiwix. Si realment vau col·locar un fitxer ZIM al vostre dispositiu d\'emmagatzematge extern, podeu tornar a intentar-ho d\'aquí uns moments o bé reiniciar el dispositiu.</string>
   <string name="error_filenotfound">Error: no s\'ha trobat el fitxer ZIM.</string>
   <string name="error_fileinvalid">Error: el fitxer seleccionat no és un fitxer ZIM vàlid.</string>
   <string name="error_articleurlnotfound">Error: no s\'ha pogut carregar l\'article (Url: %1$s).</string>
@@ -34,8 +33,88 @@
   <string name="pref_backtotop_summary">Mostrar un botó al final de la pàgina per a desplaçar-se cap a la part superior</string>
   <string name="pref_language_title">Idioma</string>
   <string name="pref_language_chooser">Trieu un idioma</string>
-  <string name="menu_bookmarks_list">Preferits</string>
+  <string name="no_reader_application_installed">No s\'ha pogut trobar una aplicació instal·lada per a aquest tipus de fitxer</string>
+  <string name="customapp_missing_content">L\'aplicació està espatllada.\nAixò pot passar quan s\'esborren fitxers de la targeta SD.\nHas de desinstal·lar i tornar a instal·lar l\'aplicació des del Play Store.</string>
+  <string name="go_to_play_store">Anar a la Play Store</string>
+  <string name="menu_bookmarks_list">Marcadors</string>
+  <string name="no_section_info">No es van trobar capçaleres de contingut</string>
+  <string name="clear_recent_and_tabs_history_dialog">Segur que vols esborrar l\'historial de cerques i restablir totes les pestanyes actives?</string>
+  <string name="delete_recent_search_item">Esborrar aquest element?</string>
+  <string name="all_history_cleared_toast">Esborrat tot l\'historial</string>
+  <string name="clear_all_history_dialog_title">Esborra tot l\'historial</string>
+  <string name="delete">Esborrar</string>
+  <string name="delete_specific_search_toast">Les darreres cerques han estat suprimides</string>
+  <string name="hint_contents_drawer_message">Podeu lliscar el dit cap a l\'esquerra per veure el contingut d\'aquest article</string>
+  <string name="got_it">Entesos</string>
+  <string name="did_you_know">Sabies que…?</string>
+  <string name="undo">Desfer</string>
+  <string name="bookmark_added">Marcador afegit</string>
+  <string name="open">Obrir</string>
+  <string name="bookmark_removed">Marcador eliminat</string>
+  <string name="new_tab_snackbar">Article obert en una pestanya nova</string>
+  <string name="local_zims">Dispositiu</string>
   <string name="zim_manager">Biblioteca</string>
-  <string name="pref_multi_search_title">Cerca MultiZim</string>
+  <string name="delete_specific_zim_toast">Fitxer esborrat</string>
+  <string name="download_pause">Aturar</string>
+  <string name="download_stop">Detenir</string>
+  <string name="download_paused">Aturat</string>
+  <string name="no_downloads_here">Cap descàrrega aquí</string>
+  <string name="no_files_here">Cap fitxer aquí</string>
+  <string name="download_no_space">Espai insuficient per descarregar aquest fitxer.</string>
+  <string name="no_network_connection">Cap connexió de xarxa</string>
+  <string name="get_library_over_network">Utilitzar la xarxa per descarregar la llista de contingut. (Aproximadament 6MB)</string>
+  <string name="help_2">Què fa Kiwix?</string>
+  <string name="help_3">Kiwix és un lector de contingut sense connexió. Actua molt semblant a un navegador però en comptes d\'accedir a pàgines web en línia, llegeix el contingut d\'un fitxer en format ZIM.</string>
+  <string name="help_4">Si bé Kiwix es va dissenyar originalment per a proporcionar una Wikipedia sense connexió, també pot llegir altres continguts.</string>
+  <string name="help_5">On està el contingut?</string>
+  <string name="help_6">El nostre contingut està allotjat en el lloc web de Kiwix</string>
+  <string name="help_7">Estan disponibles com a fitxers ZIM. Hi ha molts d\'ells:</string>
+  <string name="help_8">\u2022 La Viquipèdia està disponible per separat per a cada idioma</string>
+  <string name="help_9">\u2022 Altres continguts com Wikileaks o Wikisource també estan disponibles</string>
+  <string name="help_10">Pots descarregar els arxius ZIM triats a l\'aplicació, o bé seleccionar acuradament els que vulguis, descarregar-los des d\'un ordinador i transferir-los a la targeta SD.</string>
+  <string name="help_11">Els fitxers ZIM descarregats en l\'aplicació es troben al directori d\'emmagatzematge extern, en una carpeta anomenada Kiwix.</string>
+  <string name="help_12">Com utilitzar fitxers ZIM grans?</string>
+  <string name="help_13">Si el teu fitxer ZIM és més gran de 4GB, pot ser que no puguis emmagatzemar-lo en la teva targeta SD per limitacions en el sistema de fitxers.</string>
+  <string name="help_14">La descàrrega en l\'aplicació gestiona els fitxers grans automàticament, i els parteix per a tu.</string>
+  <string name="help_15">No obstant això, si estàs descarregant-lo en un altre dispositiu, pot ser que necessitis dividir el fitxer ZIM amb el següent programari:</string>
+  <string name="help_16">\u2022 En Microsoft Windows: HJ-Split</string>
+  <string name="help_17">\u2022 En Apple Mac OSX: Split i Concat</string>
+  <string name="help_19">Nota: cal que els fitxers resultants siguin anomenats fitxer_gran.zimaa, fitxer_gran.zimab, etc.</string>
+  <string name="path_not_writable">No s\'ha pogut accedir al directori desitjat, s\'usa el predeterminat. Per solucionar això, torna a seleccionar el directori desitjat en les preferències de l\'aplicació.</string>
+  <string name="delete_zim_failed">No podem eliminar aquest fitxer. Hauries de provar amb un administrador de fitxers.</string>
+  <string name="internal_storage">Intern</string>
+  <string name="external_storage">Extern</string>
+  <string name="yes">Sí</string>
+  <string name="confirm_stop_download_title">Aturar la descàrrega?</string>
+  <string name="confirm_stop_download_msg">Segur que vols aturar aquesta descàrrega?</string>
+  <string name="download_change_storage">Selector de dispositiu d\'emmagatzematge</string>
+  <string name="next">Següent</string>
+  <string name="pref_autonightmode">Mode nocturn automatitzat</string>
+  <string name="external_link_popup_dialog_title">Accés a enllaç extern</string>
+  <string name="external_link_popup_dialog_message">Estàs entrant a un enllaç extern. Això podria ocasionar-te costos addicionals per transferència de dades o, senzillament, no funcionarà si no tens connexió. Vols continuar?</string>
+  <string name="do_not_ask_anymore">No tornar a preguntar</string>
   <string name="your_languages">Idiomes seleccionats:</string>
+  <string name="other_languages">Altres idiomes:</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

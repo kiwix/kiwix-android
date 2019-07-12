@@ -13,14 +13,12 @@
   <string name="menu_read_aloud">Читать вслух</string>
   <string name="menu_read_aloud_stop">Остановить чтение вслух</string>
   <string name="save_media">Сохранить Медиа-файлы</string>
-  <string name="save_media_error">Произошла ошибка при сохранении медиа-файла!</string>
-  <string name="save_media_saved">Медиа-файл сохранён как %s в Android/media/org.kiwix.../</string>
+  <string name="save_media_error">Произошла ошибка при сохранении медиафайла!</string>
+  <string name="save_media_saved">Медиафайл сохранён как %s в Android/media/org.kiwix…/</string>
   <string name="rescan_fs_warning">Поиск загружаемого контента, пожалуйста, подождите…</string>
-  <string name="button_backtotop">Вернуться наверх</string>
   <string name="search_label">Поиск</string>
   <string name="choose_file">Выберите файл содержимого (*.zim)</string>
   <string name="open_in_new_tab">Открыть ссылку в новой вкладке?</string>
-  <string name="error_nozimfilesfound">Не удалось найти содержимое на вашем устройстве.\nВзгляните на страницу справки, чтобы получить указания о том, как загружать содержимое на Kiwix.\nЕсли вы расположили ZIM-файл на вашем устройстве или внешнем носителе, возможно, стоит повторить попытку через минуту-другую или перезагрузить устройство.</string>
   <string name="error_filenotfound">Ошибка: выбранный ZIM-файл не найден.</string>
   <string name="error_fileinvalid">Ошибка: Выбранный файл не является пригодным ZIM-файлом.</string>
   <string name="error_articleurlnotfound">Ошибка: Загрузка статьи (Url: %1$s) не удалась.</string>
@@ -44,10 +42,9 @@
   <string name="no_reader_application_installed">Не удалось найти установленное приложение для этого типа файлов</string>
   <string name="customapp_missing_content">Приложение повреждено.\nЭто может случиться при удалении файлов с SD-карты.\nВам необходимо удалить приложение, а затем переустановить его из Play Store.</string>
   <string name="go_to_play_store">Перейти в Play Маркет</string>
-  <string name="no_bookmarks">Нет Закладок</string>
   <string name="menu_bookmarks_list">Закладки</string>
   <string name="no_section_info">Не Найдены Заголовки Содержимого.</string>
-  <string name="request_storage">Для доступа к оффлайн контенту нам нужен доступ к вашему файловому хранилищу</string>
+  <string name="request_storage">Для доступа к офлайн контенту нам нужен доступ к вашему файловому хранилищу</string>
   <string name="request_storage_custom">Если вы видите предупреждение об оверлее экрана, просто перезапустите ваше устройство, чтобы исправить это.</string>
   <string name="clear_recent_and_tabs_history_dialog">Вы уверены, что хотите удалить историю поиска и закрыть все активные вкладки?</string>
   <string name="delete_recent_search_item">Удалить этот элемент?</string>
@@ -62,7 +59,6 @@
   <string name="did_you_know">Вы знали?</string>
   <string name="undo">Отменить</string>
   <string name="tab_closed">Вкладка закрыта</string>
-  <string name="deleted_message">удалено</string>
   <string name="bookmark_added">Закладка добавлена</string>
   <string name="rate_dialog_title">Пожалуйста, оцените нас</string>
   <string name="rate_dialog_msg_1">Если вам нравится</string>
@@ -79,22 +75,18 @@
   <string name="search_widget_text">Поиск Kiwix</string>
   <string name="speech_prompt_text">Говорите, чтобы искать %s</string>
   <string name="speech_not_supported">Приносим извинения! Ваше устройство не поддерживает ввод речи.</string>
-  <string name="download_started_library">Загрузка началась...</string>
   <string name="local_zims">Устройство</string>
   <string name="remote_zims">Онлайн</string>
   <string name="zim_downloads">Загрузка</string>
   <string name="zim_manager">Библиотека</string>
-  <string name="delete_specific_zim">Удалить этот файл?</string>
   <string name="delete_specific_zim_toast">Файл удалён</string>
   <string name="zim_file_downloading">Загрузка</string>
   <string name="zim_file_downloaded">Загружено</string>
   <string name="download_pause">Пауза</string>
-  <string name="download_play">Воспроизвести</string>
   <string name="download_stop">Остановить</string>
   <string name="download_paused">пауза</string>
   <string name="no_downloads_here">Загрузки отсутствуют</string>
   <string name="no_files_here">Файлы отсутствуют</string>
-  <string name="download_complete_snackbar">Загрузка завершена</string>
   <string name="download_no_space">Недостаточно места для загрузки этого файла.</string>
   <string name="space_available">Доступно Места:</string>
   <string name="zim_simple">Простой</string>
@@ -102,12 +94,10 @@
   <string name="zim_novid">Нет видео</string>
   <string name="no_network_connection">Отсутствует сетевое подключение</string>
   <string name="get_library_over_network">Используйте сеть, чтобы загрузить список контента. (Около 6MB)</string>
-  <string name="proceed">Продолжить</string>
   <string name="wait_for_load">Содержимое Ещё Загружается</string>
-  <string name="help_1">Kiwix даёт вам оффлайн доступ к таким сайтам, как Wikipedia, в сильно упрощённом виде.</string>
   <string name="help_2">Что делает Kiwix?</string>
   <string name="help_3">Kiwix - это автономный контент-ридер. Он действует схоже с браузером, но вместо обращения к онлайн страницам, он считывает содержимое из файла в формате ZIM.</string>
-  <string name="help_4">Хотя Kiwix и был изначально разработан, чтобы просматривать Wikipedia оффлайн, он также пригоден и для другого содержимого.</string>
+  <string name="help_4">Хотя Kiwix и был изначально разработан, чтобы просматривать Wikipedia офлайн, он также пригоден и для другого содержимого.</string>
   <string name="help_5">Где содержимое?</string>
   <string name="help_6">Наш контент размещён на сайте Kiwix.</string>
   <string name="help_7">Они доступны как ZIM файлы. Их существует много:</string>
@@ -122,8 +112,6 @@
   <string name="help_16">• На Microsoft Windows: HJ-Split</string>
   <string name="help_17">\u2022 На Apple Mac OSX: Split and Concat</string>
   <string name="help_19">Примечание: ваши готовые файлы должны быть названы my_big_file.zimaa, my_big_file.zimab и т.д.</string>
-  <string name="help_20">Спасибо, что выбрали Kiwix!</string>
-  <string name="help_21">Мы рады, что вы присоединились к нам и будем благодарны за любые отзывы или предложения на android@kiwix.org</string>
   <string name="pref_storage">Хранилище</string>
   <string name="pref_current_folder">Текущая Папка</string>
   <string name="path_not_writable">Нет доступа к желаемой директории, используя значение по умолчанию. Чтобы исправить это, выберите желаемую директорию заново в настройках приложения.</string>
@@ -134,32 +122,53 @@
   <string name="tts_stop">остановить</string>
   <string name="internal_storage">Внутренний</string>
   <string name="external_storage">Внешний</string>
-  <string name="zim_already_downloading">Zim уже загружается</string>
   <string name="yes">Да</string>
   <string name="no">Нет</string>
   <string name="confirm_stop_download_title">Остановить загрузку?</string>
   <string name="confirm_stop_download_msg">Вы уверены, что хотите остановить эту загрузку?</string>
   <string name="download_change_storage">Выбор носителя информации</string>
   <string name="tts_not_enabled">Перевод текста в речь не доступен для этого ZIM файла</string>
-  <string name="delete_tab">Удалить вкладку</string>
   <string name="next">Далее</string>
   <string name="previous">Предыдущий</string>
   <string name="wifi_only_title">Разрешить загрузку контента через мобильную сеть?</string>
-  <string name="wifi_only_msg">При выборе "Да", вы не будете предупреждаться в будущем. Однако, вы всегда можете поменять это в Настройках.</string>
+  <string name="wifi_only_msg">При выборе “Да”, вы не будете предупреждаться в будущем. Однако, вы всегда можете поменять это в Настройках.</string>
   <string name="pref_wifi_only">Загрузить контент только через WiFi</string>
   <string name="time_day">день</string>
   <string name="time_hour">ч</string>
   <string name="time_minute">м</string>
   <string name="time_second">с</string>
-  <string name="time_left">лево</string>
+  <string name="time_left">осталось</string>
   <string name="pref_bottomtoolbar">Включить нижнюю панель управления</string>
   <string name="pref_bottomtoolbar_summary">Отобразить панель управления с быстрыми действиями внизу экрана</string>
   <string name="pref_autonightmode_summary">Автоматически переключать между дневным и ночным режимами.</string>
   <string name="pref_autonightmode">Автоматический ночной режим</string>
-  <string name="pref_multi_search_summary">Позволить приложению искать в файлах ZIM (Внимание: ранняя стадия разработки)</string>
   <string name="pref_external_link_popup_title">Предупреждать когда происходит ввод внешних ссылок</string>
-  <string name="external_link_popup_dialog_title">Ввод Внешней Ссылки</string>
+  <string name="pref_external_link_popup_summary">Показать всплывающее сообщение про снятие дополнительных средств мобильным оператором или невозможности работы ссылок в офлайне.</string>
+  <string name="external_link_popup_dialog_title">Ввод внешней ссылки</string>
+  <string name="external_link_popup_dialog_message">Вы указали внешнюю ссылку. Её открытие может привести к снятию средств мобильным оператором или может не сработать, если вы офлайн. Хотите продолжить?</string>
   <string name="do_not_ask_anymore">Больше не спрашивай</string>
   <string name="your_languages">Выбранные языки:</string>
   <string name="other_languages">Другие языки:</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

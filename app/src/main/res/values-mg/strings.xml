@@ -11,15 +11,13 @@
   <string name="menu_exitfullscreen">Hiala amin\'ny fisehoana mameno fikandra</string>
   <string name="menu_read_aloud">Vakiana ho heno</string>
   <string name="menu_read_aloud_stop">Hijanona tsy hamaky ho heno</string>
-  <string name="save_media">Hitahiry ny media ho...</string>
+  <string name="save_media">Hitahiry ny media ho…</string>
   <string name="save_media_error">Nisy hadisoana nitranga tam-pitahirizana ny haino aman-jery!</string>
   <string name="save_media_saved">Haino aman-jery voatahiry ao amin\'ny %1$s ao amin\'ny petra-tsarinao</string>
   <string name="rescan_fs_warning">Am-pandinihana ny raktra ZIM, miandrasa azafady....</string>
-  <string name="button_backtotop">Tampon-pejy</string>
   <string name="search_label">Hikaroka</string>
   <string name="choose_file">Hisafidy rakitra misy votoatiny (*.zim)</string>
   <string name="open_in_new_tab">Hanokatra rohy anaty sasa-joro vaovao?</string>
-  <string name="error_nozimfilesfound">Tsy nahitana rakitra ZIM tao amin\'ny fitaovanao.\nJereo ny pejy fanoroana mikasika ny fampidirana votoatiny anaty Kiwix.\nRaha efa nametraka rakitra ZIM tanaty fitahirizana ivelany na anaty ianao, dia andramo afaka iray minitra ary avereno ampirehetina ny fitaovanao.</string>
   <string name="error_filenotfound">Hadisoana: Tsy nahita ilay rakitra ZIM voafidinao.</string>
   <string name="error_fileinvalid">Hadisoana: Rakitra ZIM tsy azo raisina ilay voafidinao.</string>
   <string name="error_articleurlnotfound">Hadisoana: tsy nahafahana ilay lahatsoratra (Url: %1$s).</string>
@@ -38,7 +36,6 @@
   <string name="no_reader_application_installed">Tsy nahita fampiaharana napetraka ho an\'ity karazan-drakitra ity</string>
   <string name="customapp_missing_content">Simba ny fampiharanao.\nMety mitranga izany rehefa manala rakitra amin\'ny karatra SD.\nMila manala sy mamerina manetraka ilay fampiharana avy amin\'ny Play Store ianao.</string>
   <string name="go_to_play_store">Handeha any amin\'ny Play Stor</string>
-  <string name="no_bookmarks">Tsy misy marika</string>
   <string name="menu_bookmarks_list">Marika pejy</string>
   <string name="no_section_info">Tsy misy loham-botoatiny hita</string>
   <string name="request_storage">Mila ny toeram-pitahirizanao izahay raha hamaky rakitra ZIM</string>
@@ -52,4 +49,26 @@
   <string name="pref_newtab_background_title">Hanokatra vakizoro any aoriana</string>
   <string name="pref_newtab_background_summary">Rehefa manokatra vakizoro dia hosokafany any aoriana</string>
   <string name="zim_manager">Tahirim-boky</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

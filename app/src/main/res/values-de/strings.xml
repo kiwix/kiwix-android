@@ -14,13 +14,11 @@
   <string name="menu_read_aloud_stop">Mit dem Vorlesen aufhören</string>
   <string name="save_media">Medium speichern</string>
   <string name="save_media_error">Beim Versuch, das Medium zu speichern, ist ein Fehler aufgetreten!</string>
-  <string name="save_media_saved">Medium als %s nach Android/media/org.kiwix.../ gespeichert</string>
+  <string name="save_media_saved">Medium als %s nach Android/media/org.kiwix…/ gespeichert</string>
   <string name="rescan_fs_warning">Scanne herunterladbaren Inhalt. Bitte warten …</string>
-  <string name="button_backtotop">Zurück nach oben</string>
   <string name="search_label">Suchen</string>
   <string name="choose_file">Wähle eine Inhaltsdatei aus (*.zim)</string>
   <string name="open_in_new_tab">Link in neuer Registerkarte öffnen?</string>
-  <string name="error_nozimfilesfound">Es wurde kein Inhalt auf Ihrem Gerät gefunden.\nSehen Sie auf den Hilfeseiten nach, um Lösungen zum Laden von Inhalt in Kiwix zu erhalten.\nFalls sich eine ZIM-Datei auf Ihrem Gerät oder externen Speicher befindet, versuchen Sie in einer Minute die Suche oder Ihr Gerät neu zu starten.</string>
   <string name="error_filenotfound">Fehler: Die ausgewählte ZIM-Datei konnte nicht gefunden werden.</string>
   <string name="error_fileinvalid">Fehler: Die ausgewählte Datei ist keine gültige ZIM-Datei.</string>
   <string name="error_articleurlnotfound">Fehler: Das Laden des Artikels (URL: %1$s) ist fehlgeschlagen.</string>
@@ -42,7 +40,6 @@
   <string name="no_reader_application_installed">Es konnte keine installierte Anwendung für diesen Dateityp gefunden werden</string>
   <string name="customapp_missing_content">Ihre Anwendung ist beschädigt.\nDies kann passieren, wenn Sie Dateien auf der SD-Karte entfernen.\nSie müssen die App deinstallieren und sie aus dem Play Store neu installieren.</string>
   <string name="go_to_play_store">Zum Play Store gehen</string>
-  <string name="no_bookmarks">Keine Lesezeichen</string>
   <string name="menu_bookmarks_list">Lesezeichen</string>
   <string name="no_section_info">Keine Inhaltsheader gefunden</string>
   <string name="request_storage">Um auf Offlineinhalt zuzugreifen, müssen wir auf Ihren Speicher zugreifen.</string>
@@ -60,7 +57,6 @@
   <string name="did_you_know">Schon gewusst?</string>
   <string name="undo">Rückgängig</string>
   <string name="tab_closed">Reiter geschlossen</string>
-  <string name="deleted_message">gelöscht</string>
   <string name="bookmark_added">Lesezeichen hinzugefügt</string>
   <string name="rate_dialog_title">Bitte bewerte uns</string>
   <string name="rate_dialog_msg_1">Wenn du</string>
@@ -76,21 +72,17 @@
   <string name="search_widget_text">Kiwix durchsuchen</string>
   <string name="speech_prompt_text">Sprechen, um %s zu suchen</string>
   <string name="speech_not_supported">Leider unterstützt Ihr Gerät keine Spracheingabe!</string>
-  <string name="download_started_library">Download gestartet …</string>
   <string name="local_zims">Gerät</string>
   <string name="zim_downloads">Herunterladen</string>
   <string name="zim_manager">Bibliothek</string>
-  <string name="delete_specific_zim">Diese Datei löschen?</string>
   <string name="delete_specific_zim_toast">Datei gelöscht</string>
   <string name="zim_file_downloading">Herunterladen</string>
   <string name="zim_file_downloaded">Heruntergeladen</string>
   <string name="download_pause">Pausieren</string>
-  <string name="download_play">Wiedergabe</string>
   <string name="download_stop">Abbrechen</string>
   <string name="download_paused">pausiert</string>
   <string name="no_downloads_here">Hier gibt es keine Downloads</string>
   <string name="no_files_here">Hier gibt es keine Dateien</string>
-  <string name="download_complete_snackbar">Download vollständig</string>
   <string name="download_no_space">Nicht ausreichender Speicher, um diese Datei herunterzuladen.</string>
   <string name="space_available">Verfügbarer Speicher:</string>
   <string name="zim_simple">Einfach</string>
@@ -98,9 +90,7 @@
   <string name="zim_novid">Keine Videos</string>
   <string name="no_network_connection">Keine Netzwerkverbindung</string>
   <string name="get_library_over_network">Netzwerk verwenden, um die Inhaltsliste herunterzuladen (ungefähr 6 MB).</string>
-  <string name="proceed">Fortfahren</string>
   <string name="wait_for_load">Inhalt lädt noch</string>
-  <string name="help_1">Kiwix erlaubt es Ihnen, offline auf Websites wie Wikipedia in einer stark komprimierten Form zuzugreifen.</string>
   <string name="help_2">Was macht Kiwix?</string>
   <string name="help_3">Kiwix ist eine Lesesoftware für Offlineinhalte. Sie funktioniert wie ein Browser, aber anstatt auf Webseiten online zuzugreifen, liest sie Inhalte von einer Datei im ZIM-Format.</string>
   <string name="help_4">Obwohl Kiwix ursprünglich entwickelt wurde, um Wikipedia offline zur Verfügung zu stellen, liest es auch andere Inhalte.</string>
@@ -118,8 +108,6 @@
   <string name="help_16">\u2022 Auf Microsoft Windows: HJ-Split</string>
   <string name="help_17">\u2022 Auf Apple Mac OSX: Split &amp; Concat</string>
   <string name="help_19">Hinweis: Ihre Dateien müssen meine_große_datei.zimaa, meine_große_datei.zimab etc. heißen.</string>
-  <string name="help_20">Vielen Dank, dass Sie Kiwix ausgewählt haben!</string>
-  <string name="help_21">Wir sind froh, dass wir Sie an Bord haben und schätzen jede Rückmeldung und jeden Vorschlag unter android@kiwix.org.</string>
   <string name="pref_storage">Speicher</string>
   <string name="pref_current_folder">Aktueller Ordner</string>
   <string name="path_not_writable">Auf das gewünschte Verzeichnis kann nicht zugegriffen werden. Es wird das Standardverzeichnis verwendet. Um dieses Problem zu beheben, wählen Sie das gewünschte Verzeichnis in den App-Einstellungen erneut aus.</string>
@@ -130,14 +118,12 @@
   <string name="tts_stop">abbrechen</string>
   <string name="internal_storage">Intern</string>
   <string name="external_storage">Extern</string>
-  <string name="zim_already_downloading">Zim lädt bereits</string>
   <string name="yes">Ja</string>
   <string name="no">Nein</string>
   <string name="confirm_stop_download_title">Herunterladen beenden?</string>
   <string name="confirm_stop_download_msg">Sind Sie sicher, dass Sie diesen Download abbrechen möchten?</string>
   <string name="download_change_storage">Speichergeräteauswahl</string>
   <string name="tts_not_enabled">Text-to-Speech ist für diese ZIM-Datei nicht aktiviert</string>
-  <string name="delete_tab">Reiter löschen</string>
   <string name="next">Nächste</string>
   <string name="previous">Vorherige</string>
   <string name="wifi_only_title">Herunterladen des Inhalts über das mobile Netzwerk erlauben?</string>
@@ -152,8 +138,6 @@
   <string name="pref_bottomtoolbar_summary">Eine Werkzeugleiste mit Schnellzugriffsaktionen am unteren Bildschirmrand anzeigen</string>
   <string name="pref_autonightmode_summary">Automatisch zwischen Tag- und Nachtmodus umschalten.</string>
   <string name="pref_autonightmode">Automatischer Nachtmodus</string>
-  <string name="pref_multi_search_title">MultiZim-Suche</string>
-  <string name="pref_multi_search_summary">Der App erlauben, ZIM-Dateien zu durchsuchen (Warnung: Sehr experimentell).</string>
   <string name="pref_external_link_popup_title">Beim Einfügen von externen Links warnen</string>
   <string name="pref_external_link_popup_summary">Popups für Warnungen über zusätzliche Kosten oder das Nichtfunktionieren von Offlinelinks anzeigen.</string>
   <string name="external_link_popup_dialog_title">Externen Link einfügen</string>
@@ -161,4 +145,26 @@
   <string name="do_not_ask_anymore">Nicht mehr fragen</string>
   <string name="your_languages">Ausgewählte Sprachen:</string>
   <string name="other_languages">Weitere Sprachen:</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

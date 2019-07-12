@@ -9,12 +9,10 @@
   <string name="menu_randomarticle">Lukrake artikel</string>
   <string name="menu_fullscreen">Volle skerm</string>
   <string name="menu_exitfullscreen">Verlaat volskerm-modus</string>
-  <string name="rescan_fs_warning">Soek ZIM-lêers. Wag asb...</string>
-  <string name="button_backtotop">Terug na bo</string>
+  <string name="rescan_fs_warning">Soek ZIM-lêers. Wag asb…</string>
   <string name="search_label">Soek</string>
   <string name="choose_file">Kies \'n ZIM-inhoudslêer (*.zim)</string>
   <string name="open_in_new_tab">Open skakel in nuwe oortjie?</string>
-  <string name="error_nozimfilesfound">Geen ZIM-lêers op u toestel nie.\nKyk na die Hulpbladsy vir instruksies oor hoe om inhoud in Kiwix te laai.\nAs u \'n ZIM-lêer op u toestel/eksterne kaart gesit het, probeer na \'n paar sekondes weer of herlaai u toestel.</string>
   <string name="error_filenotfound">Fout: die geselekteerde ZIM-lêer kon nie gevind word nie.</string>
   <string name="error_fileinvalid">Fout: die geselekteerde lêer is nie \'n geldige ZIM-lêer nie.</string>
   <string name="error_articleurlnotfound">Fout: Laai van bladsy (URL: %1$s) het gefaal.</string>
@@ -31,4 +29,26 @@
   <string name="pref_language_chooser">Kies \'n taal</string>
   <string name="menu_bookmarks_list">Boekmerke</string>
   <string name="zim_manager">Biblioteek</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>

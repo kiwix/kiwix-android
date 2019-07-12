@@ -11,15 +11,13 @@
   <string name="menu_exitfullscreen">Gadael modd sgrin-llawn</string>
   <string name="menu_read_aloud">Darllenwch yn uchel</string>
   <string name="menu_read_aloud_stop">Stopiwch ddarllen yn uchel</string>
-  <string name="save_media">Cadw\'r cyfrwng fel...</string>
-  <string name="save_media_error">Gwall wrth geisio achub y cyfryngau!</string>
-  <string name="save_media_saved">Arbedwyd cyfryngau fel  %1$s  yn eich ffolder Lluniau</string>
-  <string name="rescan_fs_warning">Sganio am ffeiliau ZIM, dal dy ddŵr...</string>
-  <string name="button_backtotop">Nôl i\'r brig</string>
+  <string name="save_media">Cadw\'r cyfrwng fel…</string>
+  <string name="save_media_error">Gwall wrth geisio cadw\'r cyfrwng!</string>
+  <string name="save_media_saved">Arbedwyd cyfryngau fel  %1$s  yn Android/media/org.kiwix…/</string>
+  <string name="rescan_fs_warning">Sganio am ffeiliau i\'w lawrlwytho, dal dy ddŵr…</string>
   <string name="search_label">Chwilio</string>
-  <string name="choose_file">Dewisiwch Ffeil ZIM Content (*.zim)</string>
+  <string name="choose_file">Dewisiwch Ffeil Gynnwys (*.zim)</string>
   <string name="open_in_new_tab">Agor y ddolen mewn tab newydd?</string>
-  <string name="error_nozimfilesfound">Dim ffeiliau ZIM ar eich dyfais.\nCymrwch gip ar y Dudalen Gymorth i gael cyfarwyddiadau sut i lwytho cynnwys i Kiwix.\nOs y rhoesoch ffeil ZIM yn eich dyfais/storws allanol gallech ailgynnig mewn munud neu ailgychwyn eich dyfais.</string>
   <string name="error_filenotfound">Gwall: Doedd dim modd canfod y ffeil ZIM dan sylw.</string>
   <string name="error_fileinvalid">Gwall: Dydy\'r ffeil dan sylw ddim yn ffeil ZIM dilys.</string>
   <string name="error_articleurlnotfound">Gwall: Methwyd a llwytho\'r erthygl: (Url: %1$s).</string>
@@ -36,4 +34,26 @@
   <string name="pref_language_chooser">Dewis iaith</string>
   <string name="menu_bookmarks_list">Llyfrnodau</string>
   <string name="zim_manager">Llyfrgell</string>
+
+  <string-array name="description_help_2">
+    <item>@string/help_3</item>
+    <item>@string/help_4</item>
+  </string-array>
+  <string-array name="description_help_5">
+    <item>@string/help_6</item>
+    <item>@string/help_7</item>
+    <item>@string/help_8</item>
+    <item>@string/help_9</item>
+    <item>@string/help_10</item>
+    <item>@string/help_11</item>
+  </string-array>
+  <string-array name="description_help_12">
+    <item>@string/help_13</item>
+    <item>@string/help_14</item>
+    <item>@string/help_15</item>
+    <item>@string/help_16</item>
+    <item>@string/help_17</item>
+    <item>@string/help_18</item>
+    <item>@string/help_19</item>
+  </string-array>
 </resources>
