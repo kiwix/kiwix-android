@@ -321,8 +321,6 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
   }
 
   public interface DeviceActionListener {
-    void cancelSearch();
-
     void connect(@NonNull WifiP2pDevice peerDevice);
 
     void closeLocalFileTransferActivity();

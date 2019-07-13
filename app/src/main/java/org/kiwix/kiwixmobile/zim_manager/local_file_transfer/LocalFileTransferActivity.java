@@ -168,12 +168,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
       });
       return true;
 
-    } else if(item.getItemId() == R.id.menu_item_cancel_search) {
-      if(manager != null) {
-        cancelSearch();
-      }
-      return true;
-
     } else {
       return super.onOptionsItemSelected(item);
     }
@@ -251,39 +245,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
 
   /* From DeviceListFragment.DeviceActionListener interface */
-  @Override
-  public void cancelSearch() {
-
-    if (manager != null) {
-      final DeviceListFragment fragment = (DeviceListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_device_list);
-
-      if (fragment.getUserDevice() == null
-          || fragment.getUserDevice().status == WifiP2pDevice.CONNECTED) {
-        disconnect();
-
-      } else if (fragment.getUserDevice().status == WifiP2pDevice.AVAILABLE
-          || fragment.getUserDevice().status == WifiP2pDevice.INVITED) {
-
-        manager.cancelConnect(channel, new WifiP2pManager.ActionListener() {
-
-          @Override
-          public void onSuccess() {
-            showToast(LocalFileTransferActivity.this, R.string.abort_connection,
-                Toast.LENGTH_SHORT);
-          }
-
-          @Override
-          public void onFailure(int reasonCode) {
-            String errorMessage = getErrorMessage(reasonCode);
-            showToast(LocalFileTransferActivity.this,
-                getString(R.string.abort_failed, errorMessage),
-                Toast.LENGTH_SHORT);
-          }
-        });
-      }
-    }
-  }
-
   @Override
   public void connect(@NonNull final WifiP2pDevice peerDevice) {
     WifiP2pConfig config = new WifiP2pConfig();

@@ -4,13 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".zim_manager.local_file_transfer.LocalFileTransferActivity">
 
-    <item android:id="@+id/menu_item_cancel_search"
-        android:title="@string/cancel_search"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_baseline_cancel_24px" />
-
     <item android:id="@+id/menu_item_search_devices"
         android:title="@string/search_for_peers"
         app:showAsAction="always"
         android:icon="@drawable/action_search"/>
+
 </menu>
