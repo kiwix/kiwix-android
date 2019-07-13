@@ -143,7 +143,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
   }
 
   private void displayTransferProgressFragment() {
-    transferProgressFragment = new TransferProgressFragment(filesToSend);
+    transferProgressFragment = TransferProgressFragment.newInstance(filesToSend);
     FragmentManager fragmentManager = localFileTransferActivity.getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
     fragmentTransaction.add(R.id.container_fragment_transfer_progress, transferProgressFragment)

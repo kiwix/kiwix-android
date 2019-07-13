@@ -2,6 +2,7 @@ package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,8 +35,19 @@ public class TransferProgressFragment extends Fragment {
     // Required empty public constructor
   }
 
-  public TransferProgressFragment(ArrayList<FileItem> fileItems) {
-    this.fileItems = fileItems;
+  public static TransferProgressFragment newInstance(ArrayList<FileItem> fileItems) {
+    TransferProgressFragment fragment = new TransferProgressFragment();
+    Bundle args = new Bundle();
+    args.putParcelableArrayList("FILE_ITEMS", fileItems);
+    fragment.setArguments(args);
+    return fragment;
+  }
+
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    Bundle bundle = this.getArguments();
+    this.fileItems = bundle.getParcelableArrayList("FILE_ITEMS");
   }
 
   @Override

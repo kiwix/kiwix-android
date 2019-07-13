@@ -1,5 +1,7 @@
 package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import androidx.annotation.IntDef;
 
 import java.lang.annotation.Retention;
@@ -12,7 +14,8 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.Fil
  *
  * Defines a file-item to represent the files being transferred.
  * */
-public class FileItem {
+public class FileItem implements Parcelable {
+
   @Retention(RetentionPolicy.SOURCE)
   @IntDef({TO_BE_SENT, SENDING, SENT, ERROR})
   public @interface FileStatus {
@@ -30,6 +33,38 @@ public class FileItem {
     this.fileStatus = fileStatus;
   }
 
+  // For making FileItem a Parcelable
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(fileName);
+    dest.writeInt(fileStatus);
+  }
+
+  public static final Parcelable.Creator<FileItem> CREATOR
+      = new Parcelable.Creator<FileItem>() {
+
+    @Override
+    public FileItem createFromParcel(Parcel source) {
+      return (new FileItem(source));
+    }
+
+    @Override
+    public FileItem[] newArray(int size) {
+      return new FileItem[size];
+    }
+  };
+
+  public FileItem(Parcel parcel) {
+    this.fileName = parcel.readString();
+    this.fileStatus = parcel.readInt();
+  }
+
+  // Helper methods
   public void setFileStatus(@FileStatus int fileStatus) {
     this.fileStatus = fileStatus;
   }
