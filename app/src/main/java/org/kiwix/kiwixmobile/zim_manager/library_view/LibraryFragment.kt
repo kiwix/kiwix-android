@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.zim_manager.library_view
 
+import android.annotation.SuppressLint
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -30,7 +31,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import eu.mhutti1.utils.storage.StorageDevice
-import eu.mhutti1.utils.storage.support.StorageSelectDialog
+import eu.mhutti1.utils.storage.StorageSelectDialog
 import kotlinx.android.synthetic.main.activity_library.libraryErrorText
 import kotlinx.android.synthetic.main.activity_library.libraryList
 import kotlinx.android.synthetic.main.activity_library.librarySwipeRefresh
@@ -209,8 +210,10 @@ class LibraryFragment : BaseFragment() {
   private fun notEnoughSpaceAvailable(item: BookItem) =
     spaceAvailable < item.book.size.toLong() * 1024f
 
+  @SuppressLint("ImplicitSamInstance")
   private fun showStorageSelectDialog() {
-    StorageSelectDialog().apply {
+    StorageSelectDialog()
+        .apply {
       arguments = Bundle().apply {
         putString(
             StorageSelectDialog.STORAGE_DIALOG_INTERNAL,
