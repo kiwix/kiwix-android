@@ -456,4 +456,8 @@ testdroid {
   projectName "Kiwix"
   mode "FULL_RUN"
   testRunName System.getenv("TRAVIS_BUILD_NUMBER")
+  fullRunConfig {
+    instrumentationAPKPath = "app/build/outputs/kiwix/debug/*universal.apk"
+  }
+
 }
