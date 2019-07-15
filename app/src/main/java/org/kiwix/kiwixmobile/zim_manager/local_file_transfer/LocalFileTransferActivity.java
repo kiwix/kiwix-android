@@ -418,7 +418,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
       case REQUEST_ENABLE_WIFI_P2P: {
         if(!isWifiP2pEnabled()) {
-          showToast(this, R.string.request_refused_wifi, Toast.LENGTH_LONG);
+          showToast(this, R.string.discovery_needs_wifi, Toast.LENGTH_LONG);
         }
         break;
       }

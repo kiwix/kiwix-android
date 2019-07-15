@@ -33,7 +33,7 @@ public class RequestEnableLocationServicesDialog extends DialogFragment {
         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
-            showToast(getActivity(), R.string.request_refused_location, Toast.LENGTH_SHORT);
+            showToast(getActivity(), R.string.discovery_needs_location, Toast.LENGTH_SHORT);
           }
         });
 

@@ -31,7 +31,6 @@
         app:layout_constraintTop_toBottomOf="@+id/text_view_your_device"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:hint="@string/device_name"
         android:textStyle="bold"
         android:textSize="17sp"
         android:layout_marginLeft="15dp"

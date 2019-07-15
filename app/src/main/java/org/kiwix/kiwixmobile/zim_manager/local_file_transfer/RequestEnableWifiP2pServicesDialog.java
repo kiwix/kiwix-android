@@ -33,7 +33,7 @@ public class RequestEnableWifiP2pServicesDialog extends DialogFragment {
         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
-            showToast(getActivity(), R.string.request_refused_wifi, Toast.LENGTH_SHORT);
+            showToast(getActivity(), R.string.discovery_needs_wifi, Toast.LENGTH_SHORT);
           }
         });
 

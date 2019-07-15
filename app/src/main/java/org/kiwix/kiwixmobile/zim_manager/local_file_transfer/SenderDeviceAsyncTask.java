@@ -103,7 +103,7 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
     }
 
     if(deviceListFragment.allFilesSent()) {
-      showToast(deviceListFragment.getActivity(), R.string.all_files_transferred, Toast.LENGTH_SHORT);
+      showToast(deviceListFragment.getActivity(), R.string.file_transfer_complete, Toast.LENGTH_SHORT);
       deviceListFragment.getActivity().finish();
     }
   }

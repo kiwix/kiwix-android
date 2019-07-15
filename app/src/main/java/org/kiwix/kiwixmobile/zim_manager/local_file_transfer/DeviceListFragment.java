@@ -226,13 +226,10 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
       displayTransferProgressFragment();
 
       new ReceiverDeviceAsyncTask(this, transferProgressFragment).execute();
-      showToast(localFileTransferActivity, R.string.preparing_to_receive, Toast.LENGTH_SHORT);
 
     } else if(groupInfo.groupFormed) {
       {
         Log.d(LocalFileTransferActivity.TAG, "Starting file transfer");
-
-        showToast(localFileTransferActivity, R.string.starting_transfer, Toast.LENGTH_SHORT);
 
         fileReceiverDeviceAddress = (groupInfo.isGroupOwner) ?  selectedPeerDeviceInetAddress : groupInfo.groupOwnerAddress;
 
