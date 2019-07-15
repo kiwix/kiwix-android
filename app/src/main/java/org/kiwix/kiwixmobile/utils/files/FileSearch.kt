@@ -26,6 +26,7 @@ import android.provider.MediaStore.MediaColumns
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
+import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.extensions.forEachRow
 import org.kiwix.kiwixmobile.extensions.get
 import java.io.File
@@ -37,8 +38,8 @@ class FileSearch @Inject constructor(private val context: Context) {
 
   fun scan(defaultPath: String) =
     Flowable.combineLatest(
-        Flowable.fromCallable { scanFileSystem(defaultPath) },
-        Flowable.fromCallable(this::scanMediaStore),
+        Flowable.fromCallable { scanFileSystem(defaultPath) }.subscribeOn(Schedulers.io()),
+        Flowable.fromCallable(this::scanMediaStore).subscribeOn(Schedulers.io()),
         BiFunction<List<File>, List<File>, List<File>> { filesSystemFiles, mediaStoreFiles ->
           filesSystemFiles + mediaStoreFiles
         }
