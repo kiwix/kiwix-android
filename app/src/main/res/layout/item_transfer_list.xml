@@ -12,6 +12,7 @@
       android:layout_height="wrap_content"
       android:gravity="center_vertical"
       android:textColor="#000000"
+      android:hint="File name"
       android:textSize="14sp"
       android:paddingTop="1dp"
       android:paddingBottom="1dp"
