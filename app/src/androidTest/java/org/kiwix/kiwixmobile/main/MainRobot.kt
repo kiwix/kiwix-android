@@ -15,24 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.intro
+package org.kiwix.kiwixmobile.main
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.junit.Rule
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.kiwix.kiwixmobile.BaseActivityTest
+import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.intro.ViewId
 
-@RunWith(AndroidJUnit4::class)
-class IntroActivityTest : BaseActivityTest<IntroActivity>() {
-  @get:Rule
-  override var activityRule = activityTestRule<IntroActivity>()
+fun main(func: MainRobot.() -> Unit) = MainRobot().apply(func)
 
-  @Test
-  fun viewIsSwipeableAnd() {
-    intro {
-      swipeLeft()
-      swipeRight()
-    } clickGetStarted { }
+class MainRobot : BaseRobot() {
+  init {
+    isVisible(ViewId(R.id.activity_main_root))
   }
 }
