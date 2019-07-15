@@ -17,6 +17,8 @@
  */
 package org.kiwix.kiwixmobile.di.components;
 
+import android.content.Context;
+import dagger.BindsInstance;
 import dagger.Component;
 import javax.inject.Singleton;
 import org.kiwix.kiwixmobile.data.DataModule;
@@ -39,6 +41,14 @@ import org.kiwix.kiwixmobile.utils.TestNetworkInterceptor;
     DataModule.class
 })
 public interface TestComponent extends ApplicationComponent {
+
+  @Component.Builder
+  interface Builder {
+
+    @BindsInstance TestComponent.Builder context(Context context);
+
+    TestComponent build();
+  }
 
   void inject(ZimTest zimTest);
 

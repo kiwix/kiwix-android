@@ -11,7 +11,6 @@ import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.base.BasePresenter;
 import org.kiwix.kiwixmobile.data.DataSource;
-import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.di.PerActivity;
 import org.kiwix.kiwixmobile.di.qualifiers.Computation;
 import org.kiwix.kiwixmobile.di.qualifiers.MainThread;
@@ -35,7 +34,7 @@ class HistoryPresenter extends BasePresenter<HistoryContract.View>
   @Override
   public void loadHistory(boolean showHistoryCurrentBook) {
     dataSource.getDateCategorizedHistory(showHistoryCurrentBook)
-        .subscribe(new SingleObserver<List<History>>() {
+        .subscribe(new SingleObserver<List<HistoryListItem>>() {
           @Override
           public void onSubscribe(Disposable d) {
             if (disposable != null && !disposable.isDisposed()) {
@@ -46,7 +45,7 @@ class HistoryPresenter extends BasePresenter<HistoryContract.View>
           }
 
           @Override
-          public void onSuccess(List<History> histories) {
+          public void onSuccess(List<HistoryListItem> histories) {
             view.updateHistoryList(histories);
           }
 
@@ -58,29 +57,33 @@ class HistoryPresenter extends BasePresenter<HistoryContract.View>
   }
 
   @Override
-  public void filterHistory(List<History> historyList, String newText) {
+  public void filterHistory(List<HistoryListItem> historyList, String newText) {
     Observable.just(historyList)
         .flatMapIterable(histories -> {
-          List<History> historyList1 = new ArrayList<>();
-          for (History history : histories) {
-            if (history != null && history.getHistoryTitle().toLowerCase()
-                .contains(newText.toLowerCase())) {
-              historyList1.add(history);
+          List<HistoryListItem> filteredHistories = new ArrayList<>();
+          for (HistoryListItem historyListItem : histories) {
+            if (historyListItem instanceof HistoryListItem.HistoryItem) {
+              final HistoryListItem.HistoryItem historyItem =
+                  (HistoryListItem.HistoryItem) historyListItem;
+              if (historyItem.getHistoryTitle().toLowerCase()
+                  .contains(newText.toLowerCase())) {
+                filteredHistories.add(historyItem);
+              }
             }
           }
-          return historyList1;
+          return filteredHistories;
         })
         .toList()
         .subscribeOn(computation)
         .observeOn(mainThread)
-        .subscribe(new SingleObserver<List<History>>() {
+        .subscribe(new SingleObserver<List<HistoryListItem>>() {
           @Override
           public void onSubscribe(Disposable d) {
             compositeDisposable.add(d);
           }
 
           @Override
-          public void onSuccess(List<History> historyList1) {
+          public void onSuccess(List<HistoryListItem> historyList1) {
             view.notifyHistoryListFiltered(historyList1);
           }
 
@@ -92,7 +95,7 @@ class HistoryPresenter extends BasePresenter<HistoryContract.View>
   }
 
   @Override
-  public void deleteHistory(List<History> deleteList) {
+  public void deleteHistory(List<HistoryListItem> deleteList) {
     dataSource.deleteHistory(deleteList)
         .subscribe(new CompletableObserver() {
           @Override

@@ -15,6 +15,6 @@ charset = utf-8
 continuation_indent_size = 4
 
 # windows command files need windows newline
-[*.{bat,cmd}]
+[*.{bat, cmd}]
 end_of_line = crlf
 

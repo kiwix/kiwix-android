@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+
+  <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/app_bar_add_note_dialog"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/add_note_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </androidx.appcompat.widget.Toolbar>
+
+  </com.google.android.material.appbar.AppBarLayout>
+
+  <ScrollView
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      app:layout_constraintTop_toBottomOf="@id/app_bar_add_note_dialog"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+      <TextView
+          android:id="@+id/add_note_text_view"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:maxLines="1"
+          android:background="@android:color/transparent"
+          android:hint="@string/wiki_article_title"
+          android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+          android:paddingTop="10dp"
+          android:paddingLeft="20dp"
+          android:paddingRight="20dp"/>
+
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_marginLeft="15dp"
+          android:layout_marginTop="5dp"
+          android:layout_marginBottom="5dp"
+          android:layout_marginRight="15dp"
+          android:background="#000000"/>
+
+      <EditText
+          android:id="@+id/add_note_edit_text"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:paddingTop="5dp"
+          android:paddingBottom="10dp"
+          android:paddingLeft="20dp"
+          android:paddingRight="20dp"
+          android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
+          android:minLines="6"
+          android:gravity="top|left"
+          android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+          android:scrollbars="vertical"
+          android:background="@android:color/transparent"
+          android:hint="@string/note"/>
+
+    </LinearLayout>
+  </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

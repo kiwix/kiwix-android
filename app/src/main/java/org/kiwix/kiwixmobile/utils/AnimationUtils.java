@@ -86,7 +86,7 @@ public class AnimationUtils {
 
       public void onAnimationStart(Animation animation) {
         v.setImageDrawable(
-            ContextCompat.getDrawable(v.getContext(), R.drawable.ic_close_white_24dp));
+            ContextCompat.getDrawable(v.getContext(), R.drawable.ic_close_black_24dp));
       }
     });
   }

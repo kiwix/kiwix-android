@@ -17,6 +17,8 @@
  */
 package org.kiwix.kiwixmobile.utils;
 
+import android.os.Environment;
+
 import org.kiwix.kiwixmobile.BuildConfig;
 
 public final class Constants {
@@ -29,6 +31,12 @@ public final class Constants {
   public static final int REQUEST_FILE_SEARCH = 1236;
 
   public static final int REQUEST_STORAGE_PERMISSION = 1;
+
+  public static final int REQUEST_READ_STORAGE_PERMISSION = 2;
+
+  public static final int REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE = 3;
+
+  public static final int REQUEST_HISTORY_ITEM_CHOSEN = 99;
 
   public static final int REQUEST_FILE_SELECT = 1234;
 
@@ -57,8 +65,6 @@ public final class Constants {
   public static final String PREF_NIGHTMODE = "pref_nightmode";
 
   public static final String PREF_WIFI_ONLY = "pref_wifi_only";
-
-  public static final String PREF_BOTTOM_TOOLBAR = "pref_bottomtoolbar";
 
   public static final String PREF_KIWIX_MOBILE = "kiwix-mobile";
 
@@ -130,4 +136,7 @@ public final class Constants {
   public static final String OLD_PROVIDER_DOMAIN = "org.kiwix.zim.base";
 
   public static final String NEW_PROVIDER_DOMAIN = BuildConfig.APPLICATION_ID + ".zim.base";
+
+  // Path Constants
+  public static final String NOTES_DIRECTORY = Environment.getExternalStorageDirectory() + "/Kiwix/Notes/";
 }

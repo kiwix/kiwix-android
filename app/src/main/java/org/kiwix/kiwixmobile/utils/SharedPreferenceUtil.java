@@ -4,13 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import io.reactivex.processors.BehaviorProcessor;
 import java.util.Calendar;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_AUTONIGHTMODE;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_BACK_TO_TOP;
-import static org.kiwix.kiwixmobile.utils.Constants.PREF_BOTTOM_TOOLBAR;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_EXTERNAL_LINK_POPUP;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_FULLSCREEN;
 import static org.kiwix.kiwixmobile.utils.Constants.PREF_HIDE_TOOLBAR;
@@ -34,10 +34,12 @@ public class SharedPreferenceUtil {
   private static final String PREF_SHOW_BOOKMARKS_CURRENT_BOOK = "show_bookmarks_current_book";
   private static final String PREF_SHOW_HISTORY_CURRENT_BOOK = "show_history_current_book";
   private SharedPreferences sharedPreferences;
+  public final BehaviorProcessor<String> prefStorages;
 
   @Inject
   public SharedPreferenceUtil(Context context) {
     sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+    prefStorages = BehaviorProcessor.createDefault(getPrefStorage());
   }
 
   public boolean getPrefWifiOnly() {
@@ -56,9 +58,6 @@ public class SharedPreferenceUtil {
     return sharedPreferences.getBoolean(PREF_FULLSCREEN, false);
   }
 
-  public boolean getPrefBottomToolbar() {
-    return sharedPreferences.getBoolean(PREF_BOTTOM_TOOLBAR, false);
-  }
 
   public boolean getPrefBackToTop() {
     return sharedPreferences.getBoolean(PREF_BACK_TO_TOP, false);
@@ -124,6 +123,7 @@ public class SharedPreferenceUtil {
 
   public void putPrefStorage(String storage) {
     sharedPreferences.edit().putString(PREF_STORAGE, storage).apply();
+    prefStorages.onNext(storage);
   }
 
   public void putPrefFullScreen(boolean fullScreen) {

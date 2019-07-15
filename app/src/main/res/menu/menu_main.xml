@@ -15,6 +15,18 @@
       app:showAsAction="always"/>
 
   <item
+    android:id="@+id/menu_add_note"
+    android:title="@string/add_note"
+    android:icon="@drawable/ic_add_note"
+    app:showAsAction="always"/>
+
+  <item
+    android:id="@+id/menu_clear_notes"
+    android:title="@string/clear_all_notes"
+    android:icon="@drawable/ic_baseline_delete_sweep_24px"
+    app:showAsAction="ifRoom"/>
+
+  <item
       android:id="@+id/menu_new_tab"
       android:title="@string/new_tab"
       app:showAsAction="never"/>

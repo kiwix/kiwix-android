@@ -7,11 +7,13 @@ import io.reactivex.disposables.Disposable;
 import java.util.List;
 import javax.inject.Inject;
 import org.kiwix.kiwixmobile.base.BasePresenter;
+import org.kiwix.kiwixmobile.bookmark.BookmarkItem;
 import org.kiwix.kiwixmobile.data.DataSource;
 import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
-import org.kiwix.kiwixmobile.data.local.entity.History;
 import org.kiwix.kiwixmobile.di.PerActivity;
+import org.kiwix.kiwixmobile.history.HistoryListItem;
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
 /**
  * Presenter for {@link MainActivity}.
@@ -30,14 +32,14 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
   @Override
   public void showHome() {
     dataSource.getLanguageCategorizedBooks()
-        .subscribe(new SingleObserver<List<LibraryNetworkEntity.Book>>() {
+        .subscribe(new SingleObserver<List<BooksOnDiskListItem>>() {
           @Override
           public void onSubscribe(Disposable d) {
             compositeDisposable.add(d);
           }
 
           @Override
-          public void onSuccess(List<LibraryNetworkEntity.Book> books) {
+          public void onSuccess(List<BooksOnDiskListItem> books) {
             view.addBooks(books);
           }
 
@@ -49,7 +51,7 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
   }
 
   @Override
-  public void saveBooks(List<LibraryNetworkEntity.Book> book) {
+  public void saveBooks(List<BooksOnDiskListItem.BookOnDisk> book) {
     dataSource.saveBooks(book)
         .subscribe(new CompletableObserver() {
           @Override
@@ -70,7 +72,7 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
   }
 
   @Override
-  public void saveHistory(History history) {
+  public void saveHistory(HistoryListItem.HistoryItem history) {
     dataSource.saveHistory(history)
         .subscribe(new CompletableObserver() {
           @Override
@@ -98,7 +100,7 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
   }
 
   @Override
-  public void saveBookmark(Bookmark bookmark) {
+  public void saveBookmark(BookmarkItem bookmark) {
     dataSource.saveBookmark(bookmark)
         .subscribe(new CompletableObserver() {
           @Override
@@ -119,7 +121,7 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
   }
 
   @Override
-  public void deleteBookmark(Bookmark bookmark) {
+  public void deleteBookmark(BookmarkItem bookmark) {
     dataSource.deleteBookmark(bookmark)
         .subscribe(new CompletableObserver() {
           @Override
