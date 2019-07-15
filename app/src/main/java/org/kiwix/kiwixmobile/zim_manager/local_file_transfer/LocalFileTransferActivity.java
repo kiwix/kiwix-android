@@ -163,7 +163,8 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
         @Override
         public void onFailure(int reason) {
           String errorMessage = getErrorMessage(reason);
-          showToast(LocalFileTransferActivity.this, LocalFileTransferActivity.this.getString(R.string.discovery_failed, errorMessage), Toast.LENGTH_SHORT);
+          Log.d(TAG, getString(R.string.discovery_failed) + ": " + errorMessage);
+          showToast(LocalFileTransferActivity.this, LocalFileTransferActivity.this.getString(R.string.discovery_failed), Toast.LENGTH_SHORT);
         }
       });
       return true;
@@ -197,11 +198,11 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
   private String getErrorMessage(int reason) {
     switch (reason) {
-      case WifiP2pManager.ERROR:           return getString(R.string.wifi_p2p_internal_error);
-      case WifiP2pManager.BUSY:            return getString(R.string.wifi_p2p_framework_busy);
-      case WifiP2pManager.P2P_UNSUPPORTED: return getString(R.string.wifi_p2p_unsupported);
+      case WifiP2pManager.ERROR:           return "Internal error";
+      case WifiP2pManager.BUSY:            return "Framework busy, unable to service request";
+      case WifiP2pManager.P2P_UNSUPPORTED: return "P2P unsupported on this device";
 
-      default: return (getString(R.string.wifi_p2p_unknown_error, reason));
+      default: return "Unknown error code - "+reason;
     }
   }
 
@@ -233,7 +234,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   public void onChannelDisconnected() {
     // Upon disconnection, retry one more time
     if(manager != null && !retryChannel) {
-      showToast(this, R.string.channel_lost, Toast.LENGTH_LONG);
+      Log.d(TAG, "Channel lost, trying again");
       resetData();
       retryChannel = true;
       manager.initialize(this, getMainLooper(), this);
@@ -260,7 +261,8 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
       @Override
       public void onFailure(int reason) {
         String errorMessage = getErrorMessage(reason);
-        showToast(LocalFileTransferActivity.this, getString(R.string.connection_failed, errorMessage), Toast.LENGTH_LONG);
+        Log.d(TAG, getString(R.string.connection_failed) + ": " + errorMessage);
+        showToast(LocalFileTransferActivity.this, getString(R.string.connection_failed), Toast.LENGTH_LONG);
       }
     });
   }

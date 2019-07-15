@@ -24,7 +24,7 @@ public class RequestEnableWifiP2pServicesDialog extends DialogFragment {
 
     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
     builder.setMessage(R.string.request_enable_wifi)
-        .setPositiveButton(R.string.open_wifi_settings, new DialogInterface.OnClickListener() {
+        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface paramDialogInterface, int paramInt) {
             startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
