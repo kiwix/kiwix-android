@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.kiwix.kiwixmobile.data.local;
+package org.kiwix.kiwixmobile.local;
 
 import com.yahoo.squidb.data.AbstractModel;
 import com.yahoo.squidb.data.SquidCursor;
@@ -24,6 +24,7 @@ import com.yahoo.squidb.sql.Query;
 import org.junit.Before;
 import org.junit.Test;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
+import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
 import org.kiwix.kiwixmobile.data.local.dao.RecentSearchDao;
 import org.kiwix.kiwixmobile.data.local.entity.RecentSearch;
 import org.mockito.Mock;

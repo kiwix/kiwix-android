@@ -45,7 +45,7 @@ public interface TestComponent extends ApplicationComponent {
   @Component.Builder
   interface Builder {
 
-    @BindsInstance TestComponent.Builder context(Context context);
+    @BindsInstance Builder context(Context context);
 
     TestComponent build();
   }
