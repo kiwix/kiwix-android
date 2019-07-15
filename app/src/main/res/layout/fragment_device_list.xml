@@ -37,21 +37,6 @@
         android:layout_marginLeft="15dp"
         android:layout_marginStart="15dp"
         android:paddingLeft="5dp"
-        android:paddingRight="5dp"/>
-
-    <TextView
-        android:id="@+id/text_view_device_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_device_name"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:hint="@string/device_status"
-        android:textSize="15sp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginStart="15dp"
-        android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:paddingBottom="5dp"/>
 
@@ -60,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="#0000f0"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_device_status"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_device_name"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="5dp"

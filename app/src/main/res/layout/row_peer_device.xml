@@ -18,17 +18,4 @@
         android:paddingLeft="5dp"
         android:paddingRight="5dp"/>
 
-    <TextView
-        android:id="@+id/row_device_status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:layout_gravity="center_vertical"
-        android:contentDescription="@string/device_status"
-        android:textSize="17sp"
-        android:paddingTop="1dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingBottom="1dp"/>
-
 </LinearLayout>

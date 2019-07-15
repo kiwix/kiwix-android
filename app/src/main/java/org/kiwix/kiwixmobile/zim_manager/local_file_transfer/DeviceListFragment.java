@@ -69,7 +69,6 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
   // Views part of the DeviceListFragment
   @BindView(R.id.text_view_device_name) TextView deviceName;
-  @BindView(R.id.text_view_device_status) TextView deviceStatus;
   @BindView(R.id.progress_bar_searching_peers) ProgressBar searchingPeersProgressBar;
   @BindView(R.id.frame_layout_peer_devices) FrameLayout frameLayoutPeerDevices;
 
@@ -155,21 +154,21 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
 
     if(userDevice != null) {
       deviceName.setText(userDevice.deviceName);
-      deviceStatus.setText(getString(getDeviceStatus(userDevice.status)));
+      Log.d(TAG, getDeviceStatus(userDevice.status));
     }
   }
 
-  public static int getDeviceStatus(int status) {
+  public static String getDeviceStatus(int status) {
 
     if(BuildConfig.DEBUG) Log.d(TAG, "Peer Status: " + status);
     switch (status) {
-      case WifiP2pDevice.AVAILABLE : return R.string.available;
-      case WifiP2pDevice.INVITED   : return R.string.invited;
-      case WifiP2pDevice.CONNECTED : return R.string.connected;
-      case WifiP2pDevice.FAILED    : return R.string.failed;
-      case WifiP2pDevice.UNAVAILABLE:return R.string.unavailable;
+      case WifiP2pDevice.AVAILABLE : return "Available";
+      case WifiP2pDevice.INVITED   : return "Invited";
+      case WifiP2pDevice.CONNECTED : return "Connected";
+      case WifiP2pDevice.FAILED    : return "Failed";
+      case WifiP2pDevice.UNAVAILABLE:return "Unavailable";
 
-      default: return R.string.unknown;
+      default: return "Unknown";
     }
   }
 

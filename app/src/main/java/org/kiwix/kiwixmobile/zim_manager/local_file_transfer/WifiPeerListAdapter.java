@@ -3,6 +3,7 @@ package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 import android.app.Activity;
 import android.content.Context;
 import android.net.wifi.p2p.WifiP2pDevice;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import org.kiwix.kiwixmobile.R;
 import java.util.List;
 
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.DeviceListFragment.getDeviceStatus;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.DeviceListFragment.TAG;
 
 /**
  * Helper class, part of the local file sharing module.
@@ -53,16 +55,14 @@ public class WifiPeerListAdapter extends ArrayAdapter<WifiP2pDevice> {
 
     if(device != null) {
       viewHolder.deviceName.setText(device.deviceName);
-      viewHolder.deviceStatus.setText(context.getString(getDeviceStatus(device.status)));
+      Log.d(TAG, getDeviceStatus(device.status));
     }
 
     return rowView;
   }
 
   static class ViewHolder {
-    @BindView(R.id.row_device_name)
-    TextView deviceName;
-    @BindView(R.id.row_device_status) TextView deviceStatus;
+    @BindView(R.id.row_device_name) TextView deviceName;
 
     public ViewHolder(View view) {
       ButterKnife.bind(this, view);

@@ -274,12 +274,6 @@
   <string name="request_enable_wifi">Enable WiFi P2P from system settings</string>
   <string name="request_refused_wifi">Cannot discover peers without WiFi ON</string>
   <string name="transfer_to">Transfer files to %s?</string>
-  <string name="available">Available</string>
-  <string name="invited">Invited</string>
-  <string name="connected">Connected</string>
-  <string name="failed">Failed</string>
-  <string name="unavailable">Unavailable</string>
-  <string name="unknown">Unknown</string>
   <string name="device_not_cooperating">Selected device not cooperating for transfer</string>
   <string name="preparing_to_receive">Preparing to receive files...</string>
   <string name="starting_transfer">Starting file transfer...</string>
