@@ -21,20 +21,20 @@ class IntroRobot() : BaseRobot() {
   }
 
   fun swipeLeft() {
-    waitFor(viewPager).swipeLeft()
+    isVisible(viewPager).swipeLeft()
     isVisible(TextId(string.save_books_offline))
     isVisible(TextId(R.string.download_books_message))
 
   }
 
   fun swipeRight() {
-    waitFor(viewPager).swipeRight()
+    isVisible(viewPager).swipeRight()
     isVisible(TextId(R.string.welcome_to_the_family))
     isVisible(TextId(R.string.human_kind_knowledge))
   }
 
   infix fun clickGetStarted(func: MainRobot.() -> Unit): MainRobot {
-    waitFor(getStarted).click()
+    clickOn(getStarted)
     return main(func)
   }
 }

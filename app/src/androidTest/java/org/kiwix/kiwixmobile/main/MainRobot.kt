@@ -18,13 +18,14 @@
 package org.kiwix.kiwixmobile.main
 
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.intro.ViewId
+import org.kiwix.kiwixmobile.R.id
 
 fun main(func: MainRobot.() -> Unit) = MainRobot().apply(func)
 
 class MainRobot : BaseRobot() {
   init {
-    isVisible(ViewId(R.id.activity_main_root))
+    isVisible(ViewId(id.activity_main_root))
   }
 }
