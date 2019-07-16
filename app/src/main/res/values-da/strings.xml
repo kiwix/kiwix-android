@@ -129,8 +129,6 @@
   <string name="time_day">dag</string>
   <string name="time_hour">t</string>
   <string name="time_left">tilbage</string>
-  <string name="pref_bottomtoolbar">Aktiver knapværktøjslinje</string>
-  <string name="pref_bottomtoolbar_summary">Vis en værktøjslinje med hurtige handling i bunden af skærmen</string>
   <string name="pref_autonightmode_summary">Skift automatisk mellem dag- og nattilstand.</string>
   <string name="pref_autonightmode">Automatisk nattilstand</string>
   <string name="pref_external_link_popup_title">Advar når man bruger eksterne henvisninger</string>

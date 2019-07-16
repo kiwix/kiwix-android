@@ -133,8 +133,6 @@
   <string name="pref_wifi_only">Ladda ned endast via WiFi</string>
   <string name="time_day">dag</string>
   <string name="time_left">kvar</string>
-  <string name="pref_bottomtoolbar">Aktivera verktygsfält i nederkant</string>
-  <string name="pref_bottomtoolbar_summary">Visa ett verktygsfält med snabbåtgärder längst ned på skärmen</string>
   <string name="pref_autonightmode_summary">Växla automatiskt mellan dag- och nattläge.</string>
   <string name="pref_autonightmode">Automatiskt nattläge</string>
   <string name="pref_external_link_popup_title">Varna vid externa länkar</string>

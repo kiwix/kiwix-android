@@ -138,8 +138,6 @@
   <string name="time_minute">मिन</string>
   <string name="time_second">स्</string>
   <string name="time_left">बाएँ ओर</string>
-  <string name="pref_bottomtoolbar">तलस्त साधनपट्टी को सक्षम करें</string>
-  <string name="pref_bottomtoolbar_summary">स्क्रीन के ताल में त्वरित-कार्य सुविधा युक्त साधनपट्टी को प्रदर्शित करें</string>
   <string name="pref_autonightmode_summary">स्वचालित रूप से दिन और रात मोड के बीच स्विच करें।</string>
   <string name="pref_autonightmode">स्वचालित रात मोड</string>
   <string name="pref_external_link_popup_title">बाह्य कड़ियों में प्रवेश करने पर सावधान करें</string>

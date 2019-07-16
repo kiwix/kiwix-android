@@ -46,11 +46,13 @@ Our branching strategy is based on [this article](https://nvie.com/posts/a-succe
 
 + **master** a history of releases, once merged to from develop and tagged we create a release on the play store & GitHub releases.
 + **develop**  the actively worked on next release of the app, what we branch off of while working on new features and what we merge into upon feature completion
-+ **feature/** or feature/\<username\>/ any branch under this directory is an actively developed feature, feature branches culminate in a PR, are merged and deleted. Typically a feature branch is off of develop and into develop but in rare scenarios if there is an issue in production a branch may be made off master to fix this issue, this type of feature branch must be merged to develop and master before being deleted.
++ **feature/** or feature/\<username\>/ any branch under this directory is an actively developed feature, feature branches culminate in a PR, are merged and deleted.
+ Typically a feature branch is off of develop and into develop but in rare scenarios if there is an issue in production a branch may be made off master to fix this issue, this type of feature branch must be merged to develop and master before being deleted.
+Branch names should be in the format **#\<issue-number\>-kebab-case-title**
 
-All branches should have distinct history and should be visually easy to follow, for this reason only preform merge commits when merging code either by PR or when synchronising.
+All branches should have distinct history and should be visually easy to follow, for this reason only perform merge commits when merging code either by PR or when synchronising.
 
-Rebasing should be avoided.
+If you wish to rebase you should be following the [Golden Rule](https://www.atlassian.com/git/tutorials/merging-vs-rebasing#the-golden-rule-of-rebasing) and ahere to the advice in the heading [Aside: Rebase as cleanup is awesome in the coding lifecycle](https://www.atlassian.com/git/articles/git-team-workflows-merge-or-rebase).
 
 ### Building
 

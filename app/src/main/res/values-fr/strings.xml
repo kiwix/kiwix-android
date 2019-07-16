@@ -126,8 +126,6 @@
   <string name="pref_wifi_only">Télécharger le contenu uniquement via WiFi</string>
   <string name="time_day">jour</string>
   <string name="time_left">restante(s)</string>
-  <string name="pref_bottomtoolbar">Activer la barre d’outils en bas</string>
-  <string name="pref_bottomtoolbar_summary">Afficher une barre d’outils avec des actions rapides en bas de l’écran</string>
   <string name="pref_autonightmode_summary">Basculer automatiquement entre les modes jour et nuit.</string>
   <string name="pref_autonightmode">Mode nuit automatisé</string>
   <string name="pref_external_link_popup_title">Avertir lors de l\'accès à des liens externes</string>

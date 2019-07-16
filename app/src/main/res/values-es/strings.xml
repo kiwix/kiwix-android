@@ -132,8 +132,6 @@
   <string name="pref_wifi_only">Descargar contenido solo mediante wifi</string>
   <string name="time_day">día</string>
   <string name="time_left">faltan</string>
-  <string name="pref_bottomtoolbar">Activar barra de herramientas inferior</string>
-  <string name="pref_bottomtoolbar_summary">Mostrar una barra con acciones rápidas en la parte inferior de la pantalla</string>
   <string name="pref_autonightmode_summary">Cambiar automáticamente entre el modo diurno y el nocturno</string>
   <string name="pref_autonightmode">Modo nocturno automatizado</string>
   <string name="pref_external_link_popup_title">Advertir al seguir enlaces externos</string>
