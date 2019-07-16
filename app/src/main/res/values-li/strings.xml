@@ -96,8 +96,6 @@
   <string name="time_hour">o</string>
   <string name="time_minute">m</string>
   <string name="time_left">links</string>
-  <string name="pref_bottomtoolbar">Zèt de gereidsjapsbalk óngeraan aan</string>
-  <string name="pref_bottomtoolbar_summary">Tuin \'ne gereidsjapsbalk mit snel hanjelinge óngeraan \'t sjerm</string>
   <string name="pref_autonightmode_summary">Sjakel autematis tösse daag- en nachmodus</string>
   <string name="pref_autonightmode">Automatiseerde nachmodus</string>
   <string name="pref_external_link_popup_title">Waorsjoewing mich wen ich nao \'nen externe link gaon</string>

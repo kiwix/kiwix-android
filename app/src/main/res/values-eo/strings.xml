@@ -135,8 +135,6 @@
   <string name="pref_wifi_only">Elŝuti nur per vifio</string>
   <string name="time_day">tago</string>
   <string name="time_left">restas</string>
-  <string name="pref_bottomtoolbar">Ŝalti malsupran ilobreton</string>
-  <string name="pref_bottomtoolbar_summary">Montri ilobreton kun rapidaj agoj ĉe la malsupro de la ekrano</string>
   <string name="pref_autonightmode_summary">Aŭtomate ŝalti tagan/noktan reĝimon</string>
   <string name="pref_autonightmode">Aŭtomata nokta reĝimo</string>
   <string name="pref_external_link_popup_title">Averti pri aliro al eksteraj ligiloj</string>

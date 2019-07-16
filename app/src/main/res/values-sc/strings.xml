@@ -135,8 +135,6 @@
   <string name="time_day">die</string>
   <string name="time_hour">o</string>
   <string name="time_left">galu</string>
-  <string name="pref_bottomtoolbar">Abìlita sa barra de sas ainas in fundu</string>
-  <string name="pref_bottomtoolbar_summary">Ammustra una barra de sas ainas in fundu a s\'ischermu</string>
   <string name="pref_autonightmode_summary">Cola in manera automàtica intre sa modalidade die e note.</string>
   <string name="pref_autonightmode">Modalidade note automàtica</string>
   <string name="pref_external_link_popup_title">Avisa cando ses aberende unu ligàmene esternu</string>
