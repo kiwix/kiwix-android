@@ -151,8 +151,6 @@
   <string name="time_minute">دق</string>
   <string name="time_second">ث</string>
   <string name="time_left">متبقي</string>
-  <string name="pref_bottomtoolbar">تمكين شريط الأدوات السفلي</string>
-  <string name="pref_bottomtoolbar_summary">عرض شريط أدوات بإجراءات سريعة في الجزء السفلي من الشاشة</string>
   <string name="pref_autonightmode_summary">التبديل تلقائيا بين وضع اليلي والنهاري.</string>
   <string name="pref_autonightmode">الوضع الليلي الآلي</string>
   <string name="pref_multi_search_title">بحث متعدد Zim</string>

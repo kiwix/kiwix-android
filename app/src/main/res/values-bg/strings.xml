@@ -151,8 +151,6 @@
   <string name="time_minute">мин.</string>
   <string name="time_second">сек.</string>
   <string name="time_left">остават</string>
-  <string name="pref_bottomtoolbar">Позволете туулбара от долната страна</string>
-  <string name="pref_bottomtoolbar_summary">Показва туулбар с бързи действия от долната страна на екрана</string>
   <string name="pref_autonightmode_summary">Превключвай автоматично между дневен и нощен режим.</string>
   <string name="pref_autonightmode">Автоматичен нощен режим.</string>
   <string name="pref_multi_search_title">MultiZim търсене</string>

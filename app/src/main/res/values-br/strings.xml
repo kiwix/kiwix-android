@@ -148,8 +148,6 @@
   <string name="pref_wifi_only">Pellgargañ an endalc\'had dre WiFi hepken</string>
   <string name="time_day">deiz</string>
   <string name="time_left">kleiz</string>
-  <string name="pref_bottomtoolbar">Gweredekaat ar varrenn ostilhoù en traoñ</string>
-  <string name="pref_bottomtoolbar_summary">Diskwel ur varrenn ostilhoù gant oberoù prim e traoñ ar skramm</string>
   <string name="pref_autonightmode_summary">Cheñch ent emgefre etre ar modoù noz ha deiz.</string>
   <string name="pref_autonightmode">Mod noz emgefreek</string>
   <string name="pref_multi_search_title">Enklask MultiZim</string>

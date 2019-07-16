@@ -147,8 +147,6 @@
   <string name="time_minute">Minuten</string>
   <string name="time_second">Sekunden</string>
   <string name="time_left">verbleibend</string>
-  <string name="pref_bottomtoolbar">Untere Werkzeugleiste aktivieren</string>
-  <string name="pref_bottomtoolbar_summary">Eine Werkzeugleiste mit Schnellzugriffsaktionen am unteren Bildschirmrand anzeigen</string>
   <string name="pref_autonightmode_summary">Automatisch zwischen Tag- und Nachtmodus umschalten.</string>
   <string name="pref_autonightmode">Automatischer Nachtmodus</string>
   <string name="pref_multi_search_title">MultiZim-Suche</string>

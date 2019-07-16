@@ -151,8 +151,6 @@
   <string name="time_minute">분</string>
   <string name="time_second">초</string>
   <string name="time_left">남음</string>
-  <string name="pref_bottomtoolbar">하단 도구 모음 사용</string>
-  <string name="pref_bottomtoolbar_summary">화면 하단에 빠른 동작들이 포함된 도구 모음을 표시합니다</string>
   <string name="pref_autonightmode_summary">야간 모드와 낮 모드를 자동으로 전환합니다.</string>
   <string name="pref_autonightmode">자동 야간 모드</string>
   <string name="pref_multi_search_title">MultiZim 검색</string>

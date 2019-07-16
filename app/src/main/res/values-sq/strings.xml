@@ -147,8 +147,6 @@
   <string name="time_day">ditë</string>
   <string name="time_minute">min.</string>
   <string name="time_left">edhe</string>
-  <string name="pref_bottomtoolbar">Aktivizo panel të poshtëm</string>
-  <string name="pref_bottomtoolbar_summary">Shfaq në fund të ekranit një panel me butona veprimesh të shpejta</string>
   <string name="pref_autonightmode_summary">Mënyrat ditë dhe mbrëmje këmbeji automatikisht.</string>
   <string name="pref_autonightmode">Mënyrë mbrëmje automatike</string>
   <string name="pref_multi_search_title">Kërkim MultiZim</string>

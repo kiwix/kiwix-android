@@ -151,8 +151,6 @@
   <string name="time_minute">dk</string>
   <string name="time_second">sn</string>
   <string name="time_left">kaldı</string>
-  <string name="pref_bottomtoolbar">Alt araç çubuğunu etkinleştir</string>
-  <string name="pref_bottomtoolbar_summary">Ekranın altındaki hızlı hareketlerle bir araç çubuğu sergileyin</string>
   <string name="pref_autonightmode_summary">Gece ve gündüz modu arasında otomatik geçiş.</string>
   <string name="pref_autonightmode">Otomatik gece modu</string>
   <string name="pref_multi_search_title">MultiZim arama</string>

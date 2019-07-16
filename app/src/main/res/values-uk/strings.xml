@@ -151,8 +151,6 @@
   <string name="time_minute">хв</string>
   <string name="time_second">с</string>
   <string name="time_left">залишилось</string>
-  <string name="pref_bottomtoolbar">Увімкнути нижню панель</string>
-  <string name="pref_bottomtoolbar_summary">Відображати знизу панель з швидкими діями</string>
   <string name="pref_autonightmode_summary">Автоматично перемикатися між денним та нічним режимами.</string>
   <string name="pref_autonightmode">Автоматичний нічний режим</string>
   <string name="pref_multi_search_title">Пошук MultiZim</string>

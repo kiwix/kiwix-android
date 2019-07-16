@@ -147,8 +147,6 @@
   <string name="time_day">eguna</string>
   <string name="time_second">k</string>
   <string name="time_left">joanda</string>
-  <string name="pref_bottomtoolbar">Gaitu beheko tresna-barra</string>
-  <string name="pref_bottomtoolbar_summary">Gaitu ekintza azkarretako tresna-barra pantailaren beheko partean</string>
   <string name="pref_autonightmode_summary">Automatikoki piztu egun eta gauaren arteko modoa.</string>
   <string name="pref_autonightmode">Gaueko modo automatikoa</string>
   <string name="pref_multi_search_title">MultiZim bilaketa</string>

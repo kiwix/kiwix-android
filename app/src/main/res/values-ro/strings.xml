@@ -143,8 +143,6 @@
   <string name="pref_wifi_only">Descarcă conținut numai prin WiFi</string>
   <string name="time_day">zi</string>
   <string name="time_left">stânga</string>
-  <string name="pref_bottomtoolbar">Activează bara de unelte de jos</string>
-  <string name="pref_bottomtoolbar_summary">Arată o bară de unelte cu acțiuni rapide din partea de jos a ecranului</string>
   <string name="pref_autonightmode_summary">Schimbă automat între modul de zi și de noapte.</string>
   <string name="pref_autonightmode">Mod automat de noapte</string>
   <string name="pref_multi_search_title">Căutare MultiZlim</string>
