@@ -42,13 +42,6 @@
   <string name="pref_info_title">Information</string>
   <string name="pref_info_version">Version</string>
   <string name="pref_zoom_enable">Zoom controls</string>
-  <string name="pref_hotspot">Hotspot Settings</string>
-  <string name="pref_set_hotspot_pass_summary">Password required to connect with hotspot</string>
-  <string name="pref_set_hotspot_pass_title">Set Password</string>
-  <string name="pref_hotspot_pass_summary">********</string>
-  <string name="pref_hotspot_pass_title">Set hotspot password</string>
-  <string name="pref_hotspot_ssid_summary">hotspot</string>
-  <string name="pref_hotspot_ssid_title">Hotspot SSID</string>
   <string name="pref_nightmode">Night mode</string>
   <string name="pref_nightmode_summary">Show articles with inverted colors</string>
   <string name="pref_backtotop">Back to Top</string>
