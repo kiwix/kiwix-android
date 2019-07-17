@@ -99,15 +99,11 @@ public class WifiHotspotManager {
   //This method checks the state of the hostpot for devices>=Oreo
   @RequiresApi(api = Build.VERSION_CODES.O)
   public boolean checkHotspotState() {
-    if (hotspotReservation == null) {
-      return false;
-    } else {
-      return true;
-    }
+    return hotspotReservation != null;
   }
 
   // This method returns the current state of the Wifi access point
-  public WIFI_AP_STATE_ENUMS getWifiApState() {
+  private WIFI_AP_STATE_ENUMS getWifiApState() {
     try {
       Method method = wifiManager.getClass().getMethod("getWifiApState");
 
@@ -131,7 +127,7 @@ public class WifiHotspotManager {
   }
 
   //This method is to get the wifi ap configuration
-  public WifiConfiguration getWifiApConfiguration() {
+  private WifiConfiguration getWifiApConfiguration() {
     try {
       Method method = wifiManager.getClass().getMethod("getWifiApConfiguration");
       return (WifiConfiguration) method.invoke(wifiManager);

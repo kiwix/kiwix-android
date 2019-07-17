@@ -262,7 +262,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private CompatFindActionModeCallback compatCallback;
   private TabsAdapter tabsAdapter;
   private int currentWebViewIndex = 0;
-  private final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
   private Task<LocationSettingsResponse> task;
   private File file;
   private ActionMode actionMode = null;
@@ -1108,12 +1107,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     if (Build.VERSION.SDK_INT < VERSION_CODES.O) {
       AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
 
-      builder.setPositiveButton(this.getString(R.string.yes), (dialog, id) -> {
-        disableMobileData();
-      });
-      builder.setNegativeButton(android.R.string.no, (dialog, id) -> {
-        wifiHotspotManager.setWifiEnabled(null, true);
-      });
+      builder.setPositiveButton(this.getString(R.string.yes), (dialog, id) -> disableMobileData());
+      builder.setNegativeButton(android.R.string.no, (dialog, id) -> wifiHotspotManager.setWifiEnabled(null, true));
       builder.setTitle(this.getString(R.string.mobile_data_enabled));
       builder.setMessage(
           this.getString(R.string.mobile_data_message) + "\n" + this.getString(
@@ -1142,6 +1137,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       if (!check) {
         //Show rationale and request location permission.
         //No explanation needed; request the permission
+        int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
         ActivityCompat.requestPermissions(this,
             new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
             MY_PERMISSIONS_ACCESS_FINE_LOCATION);
@@ -1180,7 +1176,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   // This method checks if mobile data is enabled in user's device.
-  public static boolean isMobileDataEnabled(Context context) {
+  private static boolean isMobileDataEnabled(Context context) {
     boolean enabled = false;
     ConnectivityManager cm =
         (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -1196,7 +1192,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   //This method sends the user to data usage summary settings activity
-  public void disableMobileData() {
+  private void disableMobileData() {
     Intent intent = new Intent();
     intent.setComponent(new ComponentName("com.android.settings",
         "com.android.settings.Settings$DataUsageSummaryActivity"));
@@ -2318,41 +2314,38 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void locationSettingsResponseBuilder() {
-    task.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
-      @Override
-      public void onComplete(Task<LocationSettingsResponse> task) {
-        try {
-          LocationSettingsResponse response = task.getResult(ApiException.class);
-          // All location settings are satisfied. The client can initialize location
-          // requests here.
+    task.addOnCompleteListener(task -> {
+      try {
+        LocationSettingsResponse response = task.getResult(ApiException.class);
+        // All location settings are satisfied. The client can initialize location
+        // requests here.
 
-          //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          startService(ACTION_TURN_ON_AFTER_O);
-          //}
-        } catch (ApiException exception) {
-          switch (exception.getStatusCode()) {
-            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-              // Location settings are not satisfied. But could be fixed by showing the
-              // user a dialog.
-              try {
-                // Cast to a resolvable exception.
-                ResolvableApiException resolvable = (ResolvableApiException) exception;
-                // Show the dialog by calling startResolutionForResult(),
-                // and check the result in onActivityResult().
-                resolvable.startResolutionForResult(
-                    MainActivity.this,
-                    101);
-              } catch (IntentSender.SendIntentException e) {
-                // Ignore the error.
-              } catch (ClassCastException e) {
-                // Ignore, should be an impossible error.
-              }
-              break;
-            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-              // Location settings are not satisfied. However, we have no way to fix the
-              // settings so we won't show the dialog.
-              break;
-          }
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        startService(ACTION_TURN_ON_AFTER_O);
+        //}
+      } catch (ApiException exception) {
+        switch (exception.getStatusCode()) {
+          case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+            // Location settings are not satisfied. But could be fixed by showing the
+            // user a dialog.
+            try {
+              // Cast to a resolvable exception.
+              ResolvableApiException resolvable = (ResolvableApiException) exception;
+              // Show the dialog by calling startResolutionForResult(),
+              // and check the result in onActivityResult().
+              resolvable.startResolutionForResult(
+                  MainActivity.this,
+                  101);
+            } catch (IntentSender.SendIntentException e) {
+              // Ignore the error.
+            } catch (ClassCastException e) {
+              // Ignore, should be an impossible error.
+            }
+            break;
+          case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+            // Location settings are not satisfied. However, we have no way to fix the
+            // settings so we won't show the dialog.
+            break;
         }
       }
     });

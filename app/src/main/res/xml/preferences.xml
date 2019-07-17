@@ -62,7 +62,7 @@
         android:summary="@string/pref_wifi_only"
         android:title="@string/pref_wifi_only"/>
   </PreferenceCategory>
-  
+
   <PreferenceCategory
       android:key="pref_storage"
       android:title="@string/pref_storage">

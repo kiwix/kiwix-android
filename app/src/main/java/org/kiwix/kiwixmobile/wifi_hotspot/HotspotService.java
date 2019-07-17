@@ -32,9 +32,7 @@ import static org.kiwix.kiwixmobile.main.MainActivity.startHotspotDetails;
 
 public class HotspotService extends Service {
   private static final int HOTSPOT_NOTIFICATION_ID = 666;
-  public static final String ACTION_START = "hotspot_start";
   public static final String ACTION_STOP = "hotspot_stop";
-  public static final String ACTION_STATUS = "hotspot_status";
   public static WifiHotspotManager hotspotManager;
   private BroadcastReceiver stopReceiver;
   private NotificationManager notificationManager;
