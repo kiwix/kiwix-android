@@ -284,5 +284,6 @@
   <string name="nearby_devices">NEARBY DEVICES</string>
   <string name="no_devices_found">No devices detected. Tap on search button to try again.</string>
   <string name="files_for_transfer">FILES FOR TRANSFER</string>
-  <string name="preparing_files">Preparing files for transfer...</string>
+  <string name="preparing_files">Preparing files for transfer....</string>
+  <string name="performing_handshake">Performing handshake....</string>
 </resources>

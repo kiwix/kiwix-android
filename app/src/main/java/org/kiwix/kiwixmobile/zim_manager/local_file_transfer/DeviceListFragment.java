@@ -140,6 +140,7 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     alertDialogShower.show(new KiwixDialog.FileTransferConfirmation(selectedPeerDevice), new Function0<Unit>() {
       @Override public Unit invoke() {
         ((DeviceActionListener) localFileTransferActivity).connect(selectedPeerDevice);
+        showToast(localFileTransferActivity, R.string.performing_handshake, Toast.LENGTH_LONG);
         return Unit.INSTANCE;
       }
     });

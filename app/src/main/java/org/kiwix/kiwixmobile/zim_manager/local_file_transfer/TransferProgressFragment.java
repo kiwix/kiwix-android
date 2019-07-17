@@ -25,6 +25,8 @@ import java.util.ArrayList;
  * */
 public class TransferProgressFragment extends Fragment {
 
+  private static final String FILE_ITEMS = "file_items";
+
   @BindView(R.id.recycler_view_transfer_files) RecyclerView filesRecyclerView;
   private Unbinder unbinder;
 
@@ -38,7 +40,7 @@ public class TransferProgressFragment extends Fragment {
   public static TransferProgressFragment newInstance(ArrayList<FileItem> fileItems) {
     TransferProgressFragment fragment = new TransferProgressFragment();
     Bundle args = new Bundle();
-    args.putParcelableArrayList("FILE_ITEMS", fileItems);
+    args.putParcelableArrayList(FILE_ITEMS, fileItems);
     fragment.setArguments(args);
     return fragment;
   }
@@ -47,7 +49,7 @@ public class TransferProgressFragment extends Fragment {
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     Bundle bundle = this.getArguments();
-    this.fileItems = bundle.getParcelableArrayList("FILE_ITEMS");
+    this.fileItems = bundle.getParcelableArrayList(FILE_ITEMS);
   }
 
   @Override
