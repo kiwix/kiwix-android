@@ -53,8 +53,8 @@ import javax.inject.Inject;
  * The module uses this activity along with {@link DeviceListFragment} to manage connection
  * and file transfer between the devices.
  */
-public class LocalFileTransferActivity extends AppCompatActivity
-    implements WifiP2pManager.ChannelListener, DeviceListFragment.DeviceActionListener {
+public class LocalFileTransferActivity extends AppCompatActivity {
+    //implements WifiP2pManager.ChannelListener, DeviceListFragment.DeviceActionListener {
 
   public static final String TAG = "LocalFileTransferActvty";
       // Not a typo, 'Log' tags have a length upper limit of 25 characters
@@ -70,10 +70,10 @@ public class LocalFileTransferActivity extends AppCompatActivity
 
   private ArrayList<Uri> fileUriArrayList;
       // For sender device, stores Uris of files to be transferred
-  private Boolean fileSendingDevice = false;// Whether the device is the file sender or not
+  public Boolean fileSendingDevice = false;// Whether the device is the file sender or not
 
   /* Variables related to the WiFi P2P API */
-  private boolean wifiP2pEnabled = false; // Whether WiFi has been enabled or not
+  /*private boolean wifiP2pEnabled = false; // Whether WiFi has been enabled or not
   private boolean retryChannel = false;   // Whether channel has retried connecting previously
 
   private WifiP2pManager manager;         // Overall manager of Wifi p2p connections for the module
@@ -82,7 +82,9 @@ public class LocalFileTransferActivity extends AppCompatActivity
 
   private final IntentFilter intentFilter = new IntentFilter();
       // For specifying broadcasts (of the P2P API) that the module needs to respond to
-  private BroadcastReceiver receiver = null; // For receiving the broadcasts given by above filter
+  private BroadcastReceiver receiver = null; // For receiving the broadcasts given by above filter*/
+
+  public WifiDirectManager wifiDirectManager;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -112,13 +114,13 @@ public class LocalFileTransferActivity extends AppCompatActivity
     actionBar.setNavigationOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        closeLocalFileTransferActivity();
+        wifiDirectManager.closeLocalFileTransferActivity();
       }
     });
 
 
     /* Initialisations for using the WiFi P2P API */
-
+/*
     // Intents that the broadcast receiver will be responding to
     intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
     intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
@@ -126,7 +128,10 @@ public class LocalFileTransferActivity extends AppCompatActivity
     intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
     manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-    channel = manager.initialize(this, getMainLooper(), null);
+    channel = manager.initialize(this, getMainLooper(), null);*/
+
+    this.wifiDirectManager = new WifiDirectManager(this);
+    wifiDirectManager.initialiseWifiDirectManager();
   }
 
   @Override
@@ -160,7 +165,7 @@ public class LocalFileTransferActivity extends AppCompatActivity
               R.id.fragment_device_list);
       deviceListFragment.onInitiateDiscovery();
       deviceListFragment.performFieldInjection(sharedPreferenceUtil, alertDialogShower);
-      manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
+      /*manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
         @Override
         public void onSuccess() {
           showToast(LocalFileTransferActivity.this, R.string.discovery_initiated,
@@ -175,7 +180,9 @@ public class LocalFileTransferActivity extends AppCompatActivity
               LocalFileTransferActivity.this.getString(R.string.discovery_failed),
               Toast.LENGTH_SHORT);
         }
-      });
+      });*/
+
+      wifiDirectManager.discoverPeerDevices();
       return true;
     } else {
       return super.onOptionsItemSelected(item);
@@ -196,14 +203,14 @@ public class LocalFileTransferActivity extends AppCompatActivity
   }
 
   public void setWifiP2pEnabled(boolean wifiP2pEnabled) {
-    this.wifiP2pEnabled = wifiP2pEnabled;
+    this.wifiDirectManager.setWifiP2pEnabled(wifiP2pEnabled);
   }
 
   public boolean isWifiP2pEnabled() {
-    return wifiP2pEnabled;
+    return this.wifiDirectManager.isWifiP2pEnabled();
   }
 
-  private String getErrorMessage(int reason) {
+  public String getErrorMessage(int reason) {
     switch (reason) {
       case WifiP2pManager.ERROR:
         return "Internal error";
@@ -243,7 +250,7 @@ public class LocalFileTransferActivity extends AppCompatActivity
     Toast.makeText(context, text, duration).show();
   }
 
-  /* From WifiP2pManager.ChannelListener interface */
+  /* From WifiP2pManager.ChannelListener interface *//*
   @Override
   public void onChannelDisconnected() {
     // Upon disconnection, retry one more time
@@ -255,10 +262,10 @@ public class LocalFileTransferActivity extends AppCompatActivity
     } else {
       showToast(this, R.string.severe_loss_error, Toast.LENGTH_LONG);
     }
-  }
+  }*/
 
   /* From DeviceListFragment.DeviceActionListener interface */
-  @Override
+  /*@Override
   public void connect(@NonNull final WifiP2pDevice peerDevice) {
     WifiP2pConfig config = new WifiP2pConfig();
     config.deviceAddress = peerDevice.deviceAddress;
@@ -292,9 +299,9 @@ public class LocalFileTransferActivity extends AppCompatActivity
     fileSendingDevice = false;
     disconnect();
     this.finish();
-  }
+  }*/
 
-  public void disconnect() {
+  /*public void disconnect() {
     manager.removeGroup(channel, new WifiP2pManager.ActionListener() {
 
       @Override
@@ -307,7 +314,7 @@ public class LocalFileTransferActivity extends AppCompatActivity
         Log.d(TAG, "Disconnect successful");
       }
     });
-  }
+  }*/
 
   /* Helper methods used in the activity */
   private boolean checkCoarseLocationAccessPermission() { // Required by Android to detect wifi-p2p peers
@@ -373,7 +380,7 @@ public class LocalFileTransferActivity extends AppCompatActivity
           Log.e(TAG, "Location permission not granted");
 
           showToast(this, R.string.permission_refused_location, Toast.LENGTH_LONG);
-          closeLocalFileTransferActivity();
+          wifiDirectManager.closeLocalFileTransferActivity();
           break;
         }
       }
@@ -383,7 +390,7 @@ public class LocalFileTransferActivity extends AppCompatActivity
           Log.e(TAG, "Storage write permission not granted");
 
           showToast(this, R.string.permission_refused_storage, Toast.LENGTH_LONG);
-          closeLocalFileTransferActivity();
+          wifiDirectManager.closeLocalFileTransferActivity();
           break;
         }
       }
@@ -463,14 +470,16 @@ public class LocalFileTransferActivity extends AppCompatActivity
   @Override
   public void onResume() {
     super.onResume();
-    receiver = new WifiDirectBroadcastReceiver(manager, channel, this);
-    registerReceiver(receiver, intentFilter);
+    /*receiver = new WifiDirectBroadcastReceiver(manager, channel, this);
+    registerReceiver(receiver, intentFilter);*/
+    wifiDirectManager.registerWifiDirectBroadcastRecevier();
   }
 
   @Override
   public void onPause() {
     super.onPause();
-    unregisterReceiver(receiver);
+    /*unregisterReceiver(receiver);*/
+    wifiDirectManager.unregisterWifiDirectBroadcastRecevier();
   }
 
   @Override protected void onDestroy() {
@@ -486,6 +495,6 @@ public class LocalFileTransferActivity extends AppCompatActivity
   @Override
   public void onBackPressed() {
     super.onBackPressed();
-    closeLocalFileTransferActivity();
+    wifiDirectManager.closeLocalFileTransferActivity();
   }
 }

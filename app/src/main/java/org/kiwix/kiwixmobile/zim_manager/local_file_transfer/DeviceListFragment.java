@@ -147,7 +147,7 @@ public class DeviceListFragment extends ListFragment
     alertDialogShower.show(new KiwixDialog.FileTransferConfirmation(selectedPeerDevice),
         new Function0<Unit>() {
           @Override public Unit invoke() {
-            ((DeviceActionListener) localFileTransferActivity).connect(selectedPeerDevice);
+            ((DeviceActionListener) localFileTransferActivity.wifiDirectManager).connect(selectedPeerDevice);
             showToast(localFileTransferActivity, R.string.performing_handshake, Toast.LENGTH_LONG);
             return Unit.INSTANCE;
           }
@@ -245,7 +245,7 @@ public class DeviceListFragment extends ListFragment
     if (clientAddress == null) {
       // null is returned only in case of a failed handshake
       showToast(localFileTransferActivity, R.string.device_not_cooperating, Toast.LENGTH_LONG);
-      localFileTransferActivity.closeLocalFileTransferActivity();
+      localFileTransferActivity.wifiDirectManager.closeLocalFileTransferActivity();
       return;
     }
 
