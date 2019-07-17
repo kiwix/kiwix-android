@@ -443,6 +443,14 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     unregisterReceiver(receiver);
   }
 
+  @Override protected void onDestroy() {
+    super.onDestroy();
+    final DeviceListFragment deviceListFragment = (DeviceListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_device_list);
+    if(deviceListFragment != null) {
+      deviceListFragment.cancelAsyncTasks();
+    }
+  }
+
   @Override
   public void onBackPressed() {
     super.onBackPressed();
