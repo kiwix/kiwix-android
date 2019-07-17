@@ -23,14 +23,16 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.DeviceListFr
 /**
  * Helper class, part of the local file sharing module.
  *
- * Defines the Adapter for the list of wifi peer-device items displayed in {@link DeviceListFragment}
- * */
+ * Defines the Adapter for the list of wifi peer-device items displayed in {@link
+ * DeviceListFragment}
+ */
 public class WifiPeerListAdapter extends ArrayAdapter<WifiP2pDevice> {
 
   private Context context;
   private List<WifiP2pDevice> listItems;
 
-  public WifiPeerListAdapter(@NonNull Context context, int resource, @NonNull List<WifiP2pDevice> objects) {
+  public WifiPeerListAdapter(@NonNull Context context, int resource,
+      @NonNull List<WifiP2pDevice> objects) {
     super(context, resource, objects);
     this.context = context;
     this.listItems = objects;
@@ -42,7 +44,7 @@ public class WifiPeerListAdapter extends ArrayAdapter<WifiP2pDevice> {
     View rowView = convertView;
     ViewHolder viewHolder;
 
-    if(rowView == null) {
+    if (rowView == null) {
       LayoutInflater layoutInflater = ((Activity) context).getLayoutInflater();
       rowView = layoutInflater.inflate(R.layout.row_peer_device, parent, false);
       viewHolder = new ViewHolder(rowView);
@@ -53,7 +55,7 @@ public class WifiPeerListAdapter extends ArrayAdapter<WifiP2pDevice> {
 
     WifiP2pDevice device = listItems.get(position);
 
-    if(device != null) {
+    if (device != null) {
       viewHolder.deviceName.setText(device.deviceName);
       Log.d(TAG, getDeviceStatus(device.status));
     }

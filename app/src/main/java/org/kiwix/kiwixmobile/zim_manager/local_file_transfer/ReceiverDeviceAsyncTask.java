@@ -29,7 +29,7 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTra
  *
  * A single Task is used for the entire file transfer (the server socket accepts connections as
  * many times as the no. of files).
- * */
+ */
 class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
 
   private static final String TAG = "ReceiverDeviceAsyncTask";
@@ -38,7 +38,8 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
   private TransferProgressFragment transferProgressFragment;
   private int fileItemIndex;
 
-  public ReceiverDeviceAsyncTask(DeviceListFragment deviceListFragment, TransferProgressFragment transferProgressFragment) {
+  public ReceiverDeviceAsyncTask(DeviceListFragment deviceListFragment,
+      TransferProgressFragment transferProgressFragment) {
     this.deviceListFragment = deviceListFragment;
     this.transferProgressFragment = transferProgressFragment;
   }
@@ -46,17 +47,17 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
   @Override
   protected Boolean doInBackground(Void... voids) {
     try (ServerSocket serverSocket = new ServerSocket(FILE_TRANSFER_PORT)) {
-      if(BuildConfig.DEBUG) Log.d(TAG, "Server: Socket opened at " + FILE_TRANSFER_PORT);
+      if (BuildConfig.DEBUG) Log.d(TAG, "Server: Socket opened at " + FILE_TRANSFER_PORT);
 
       final String KIWIX_ROOT = deviceListFragment.getZimStorageRootPath();
 
       int totalFileCount = deviceListFragment.getTotalFilesForTransfer();
-      for(int currentFile = 1; currentFile <= totalFileCount && !isCancelled(); currentFile++) {
+      for (int currentFile = 1; currentFile <= totalFileCount && !isCancelled(); currentFile++) {
 
         Socket client = serverSocket.accept();
-        if(BuildConfig.DEBUG) Log.d(TAG, "Server: Client connected for file " + currentFile);
+        if (BuildConfig.DEBUG) Log.d(TAG, "Server: Client connected for file " + currentFile);
 
-        fileItemIndex = currentFile-1;
+        fileItemIndex = currentFile - 1;
         publishProgress(SENDING);
 
         ArrayList<FileItem> fileItems = deviceListFragment.getFileItems();
@@ -64,13 +65,13 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
 
         final File clientNoteFileLocation = new File(KIWIX_ROOT + incomingFileName);
         File dirs = new File(clientNoteFileLocation.getParent());
-        if(!dirs.exists() && !dirs.mkdirs()) {
+        if (!dirs.exists() && !dirs.mkdirs()) {
           Log.d(TAG, "ERROR: Required parent directories couldn't be created");
           return false;
         }
 
         boolean fileCreated = clientNoteFileLocation.createNewFile();
-        if(BuildConfig.DEBUG) Log.d(TAG, "File creation: "+ fileCreated);
+        if (BuildConfig.DEBUG) Log.d(TAG, "File creation: " + fileCreated);
 
         copyToOutputStream(client.getInputStream(), new FileOutputStream(clientNoteFileLocation));
 
@@ -78,11 +79,11 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
         deviceListFragment.incrementTotalFilesSent();
       }
 
-      if(isCancelled())
+      if (isCancelled()) {
         return false; // Returned in case the task was cancelled
-      else
+      } else {
         return true;  // Returned in case of a successful file transfer
-
+      }
     } catch (IOException e) {
       Log.e(TAG, e.getMessage());
       return false; // Returned when an error was encountered during transfer
@@ -101,12 +102,14 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
 
   @Override
   protected void onPostExecute(Boolean allFilesReceived) {
-    if(BuildConfig.DEBUG) Log.d(TAG, "File transfer complete");
+    if (BuildConfig.DEBUG) Log.d(TAG, "File transfer complete");
 
-    if(allFilesReceived) {
-      showToast(deviceListFragment.getActivity(), R.string.file_transfer_complete, Toast.LENGTH_LONG);
+    if (allFilesReceived) {
+      showToast(deviceListFragment.getActivity(), R.string.file_transfer_complete,
+          Toast.LENGTH_LONG);
     } else {
-      showToast(deviceListFragment.getActivity(), R.string.error_during_transfer, Toast.LENGTH_LONG);
+      showToast(deviceListFragment.getActivity(), R.string.error_during_transfer,
+          Toast.LENGTH_LONG);
     }
 
     ((LocalFileTransferActivity) deviceListFragment.getActivity()).closeLocalFileTransferActivity();

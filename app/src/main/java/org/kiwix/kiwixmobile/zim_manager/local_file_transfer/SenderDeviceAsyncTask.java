@@ -32,7 +32,7 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTra
  * on the list of files for transfer in {@link TransferProgressFragment}.
  *
  * A new task is created by the sender for every file to be transferred
- * */
+ */
 class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
 
   private static final String TAG = "SenderDeviceAsyncTask";
@@ -41,7 +41,8 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
   private TransferProgressFragment transferProgressFragment;
   private int fileItemIndex;
 
-  public SenderDeviceAsyncTask(DeviceListFragment deviceListFragment, TransferProgressFragment transferProgressFragment, int fileItemIndex) {
+  public SenderDeviceAsyncTask(DeviceListFragment deviceListFragment,
+      TransferProgressFragment transferProgressFragment, int fileItemIndex) {
     this.deviceListFragment = deviceListFragment;
     this.transferProgressFragment = transferProgressFragment;
     this.fileItemIndex = fileItemIndex;
@@ -57,9 +58,11 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
     Uri fileUri = fileUris[0];    // Uri of file to be transferred
     ContentResolver contentResolver = deviceListFragment.getActivity().getContentResolver();
 
-    try (Socket socket = new Socket(); InputStream fileInputStream = contentResolver.openInputStream(fileUri)) { // Represents the sender device
+    try (Socket socket = new Socket();
+         InputStream fileInputStream = contentResolver.openInputStream(
+             fileUri)) { // Represents the sender device
 
-      if(isCancelled()) {
+      if (isCancelled()) {
         return false;
       }
       socket.bind(null);
@@ -67,15 +70,14 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
       String hostAddress = deviceListFragment.getFileReceiverDeviceAddress().getHostAddress();
       socket.connect((new InetSocketAddress(hostAddress, FILE_TRANSFER_PORT)), 15000);
 
-      if(BuildConfig.DEBUG) Log.d(TAG, "Sender socket - " + socket.isConnected());
+      if (BuildConfig.DEBUG) Log.d(TAG, "Sender socket - " + socket.isConnected());
 
       OutputStream socketOutputStream = socket.getOutputStream();
 
       DeviceListFragment.copyToOutputStream(fileInputStream, socketOutputStream);
-      if(BuildConfig.DEBUG) Log.d(TAG, "Sender: Data written");
+      if (BuildConfig.DEBUG) Log.d(TAG, "Sender: Data written");
 
       return true;
-
     } catch (IOException e) {
       Log.e(TAG, e.getMessage());
       return false;
@@ -90,16 +92,18 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
   protected void onPostExecute(Boolean fileSendSuccessful) {
     deviceListFragment.incrementTotalFilesSent();
 
-    if(fileSendSuccessful) { // Whether this task was successful in sending the file
+    if (fileSendSuccessful) { // Whether this task was successful in sending the file
       transferProgressFragment.changeStatus(fileItemIndex, SENT);
     } else {
       Activity activity = deviceListFragment.getActivity();
-      showToast(activity, activity.getString(R.string.error_sending, getFileName(deviceListFragment.getFileUriList().get(fileItemIndex))), Toast.LENGTH_SHORT);
+      showToast(activity, activity.getString(R.string.error_sending,
+          getFileName(deviceListFragment.getFileUriList().get(fileItemIndex))), Toast.LENGTH_SHORT);
       transferProgressFragment.changeStatus(fileItemIndex, ERROR);
     }
 
-    if(deviceListFragment.allFilesSent()) {
-      showToast(deviceListFragment.getActivity(), R.string.file_transfer_complete, Toast.LENGTH_SHORT);
+    if (deviceListFragment.allFilesSent()) {
+      showToast(deviceListFragment.getActivity(), R.string.file_transfer_complete,
+          Toast.LENGTH_SHORT);
       deviceListFragment.getActivity().finish();
     }
   }

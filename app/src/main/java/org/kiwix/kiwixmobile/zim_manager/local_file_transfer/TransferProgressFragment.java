@@ -22,7 +22,7 @@ import java.util.ArrayList;
  * Part of the local file sharing module, this fragment is used to display the progress of the
  * file transfer. It displays a list of files along with their current status (as defined in the
  * {@link FileItem} class.
- * */
+ */
 public class TransferProgressFragment extends Fragment {
 
   private static final String FILE_ITEMS = "file_items";
@@ -53,7 +53,8 @@ public class TransferProgressFragment extends Fragment {
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_transfer_progress, container, false);
     unbinder = ButterKnife.bind(this, view);
 
@@ -68,7 +69,7 @@ public class TransferProgressFragment extends Fragment {
   @Override
   public void onDestroyView() {
     super.onDestroyView();
-    if(unbinder != null) unbinder.unbind();
+    if (unbinder != null) unbinder.unbind();
   }
 
   public void changeStatus(int itemIndex, @FileItem.FileStatus int status) {

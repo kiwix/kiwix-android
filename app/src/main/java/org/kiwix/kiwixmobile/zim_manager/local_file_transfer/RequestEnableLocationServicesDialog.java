@@ -27,7 +27,8 @@ public class RequestEnableLocationServicesDialog extends DialogFragment {
         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-            startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), LocalFileTransferActivity.REQUEST_ENABLE_LOCATION_SERVICES);
+            startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS),
+                LocalFileTransferActivity.REQUEST_ENABLE_LOCATION_SERVICES);
           }
         })
         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

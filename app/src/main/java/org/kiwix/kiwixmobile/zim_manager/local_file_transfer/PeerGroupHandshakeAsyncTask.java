@@ -33,7 +33,7 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.Fil
  * (no. of files & their names) with the receiver. Finally, the onPostExecute() of the sender
  * initiates the file transfer through {@link SenderDeviceAsyncTask} on the sender and using
  * {@link ReceiverDeviceAsyncTask} on the receiver.
- * */
+ */
 class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
 
   private static final String TAG = "PeerGrpHndshakeAsyncTsk";
@@ -50,7 +50,7 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
   @Override
   protected InetAddress doInBackground(Void... voids) {
 
-    if(groupInfo.groupFormed && groupInfo.isGroupOwner && !isCancelled()) {
+    if (groupInfo.groupFormed && groupInfo.isGroupOwner && !isCancelled()) {
       try (ServerSocket serverSocket = new ServerSocket(PEER_HANDSHAKE_PORT)) {
         serverSocket.setReuseAddress(true);
         Socket server = serverSocket.accept();
@@ -60,13 +60,12 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
 
         // Verify that the peer trying to communicate is a kiwix app intending to transfer files
         if (isKiwixHandshake(object) && !isCancelled()) {
-          if(BuildConfig.DEBUG) {
-            Log.d(TAG, "Client IP address: "+ server.getInetAddress());
+          if (BuildConfig.DEBUG) {
+            Log.d(TAG, "Client IP address: " + server.getInetAddress());
           }
           exchangeFileTransferMetadata(server.getOutputStream(), server.getInputStream());
 
           return server.getInetAddress();
-
         } else { // Selected device is not accepting wifi direct connections through the kiwix app
           return null;
         }
@@ -74,25 +73,24 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
         ex.printStackTrace();
         return null;
       }
-    }
-    else if(groupInfo.groupFormed && !isCancelled()) { //&& !groupInfo.isGroupOwner
+    } else if (groupInfo.groupFormed && !isCancelled()) { //&& !groupInfo.isGroupOwner
       try (Socket client = new Socket()) {
         client.setReuseAddress(true);
-        client.connect((new InetSocketAddress(groupInfo.groupOwnerAddress.getHostAddress(), PEER_HANDSHAKE_PORT)), 15000);
+        client.connect((new InetSocketAddress(groupInfo.groupOwnerAddress.getHostAddress(),
+            PEER_HANDSHAKE_PORT)), 15000);
 
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(client.getOutputStream());
-        objectOutputStream.writeObject(HANDSHAKE_MESSAGE); // Send message for the peer device to verify
+        objectOutputStream.writeObject(
+            HANDSHAKE_MESSAGE); // Send message for the peer device to verify
 
         exchangeFileTransferMetadata(client.getOutputStream(), client.getInputStream());
 
         return groupInfo.groupOwnerAddress;
-
       } catch (Exception ex) {
         ex.printStackTrace();
         return null;
       }
-    }
-    else {
+    } else {
       return null;
     }
   }
@@ -102,46 +100,43 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
   }
 
   private void exchangeFileTransferMetadata(OutputStream outputStream, InputStream inputStream) {
-      if(deviceListFragment.isFileSender()) {
-        try (ObjectOutputStream objectOutputStream =  new ObjectOutputStream(outputStream)) {
-          // Send total number of files which will be transferred
-          objectOutputStream.writeObject(""+deviceListFragment.getTotalFilesForTransfer());
+    if (deviceListFragment.isFileSender()) {
+      try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)) {
+        // Send total number of files which will be transferred
+        objectOutputStream.writeObject("" + deviceListFragment.getTotalFilesForTransfer());
 
-          ArrayList<Uri> fileUriList = deviceListFragment.getFileUriList();
-          for(
-              Uri fileUri :fileUriList)
-
-          { // Send the names of each of those files, in order
-            objectOutputStream.writeObject(getFileName(fileUri));
-          }
-        } catch (Exception e) {
-          e.printStackTrace();
+        ArrayList<Uri> fileUriList = deviceListFragment.getFileUriList();
+        for (
+            Uri fileUri : fileUriList) { // Send the names of each of those files, in order
+          objectOutputStream.writeObject(getFileName(fileUri));
         }
+      } catch (Exception e) {
+        e.printStackTrace();
       }
-      else { // Device is not the file sender
-        try (ObjectInputStream objectInputStream =  new ObjectInputStream(inputStream)) {
-          // Read the number of files
-          Object totalFilesObject = objectInputStream.readObject();
+    } else { // Device is not the file sender
+      try (ObjectInputStream objectInputStream = new ObjectInputStream(inputStream)) {
+        // Read the number of files
+        Object totalFilesObject = objectInputStream.readObject();
 
-          if (totalFilesObject.getClass().equals(String.class)) {
-            int total = Integer.parseInt((String) totalFilesObject);
-            deviceListFragment.setTotalFilesForTransfer(total);
+        if (totalFilesObject.getClass().equals(String.class)) {
+          int total = Integer.parseInt((String) totalFilesObject);
+          deviceListFragment.setTotalFilesForTransfer(total);
 
-            ArrayList<FileItem> fileItems = new ArrayList<>();
-            for (int i = 0; i < total; i++) { // Read names of each of those files, in order
-              Object fileNameObject = objectInputStream.readObject();
+          ArrayList<FileItem> fileItems = new ArrayList<>();
+          for (int i = 0; i < total; i++) { // Read names of each of those files, in order
+            Object fileNameObject = objectInputStream.readObject();
 
-              if (fileNameObject.getClass().equals(String.class)) {
-                fileItems.add(new FileItem((String) fileNameObject, TO_BE_SENT));
-              }
+            if (fileNameObject.getClass().equals(String.class)) {
+              fileItems.add(new FileItem((String) fileNameObject, TO_BE_SENT));
             }
-
-            deviceListFragment.setFileItems(fileItems);
           }
-        } catch (Exception e) {
-          e.printStackTrace();
+
+          deviceListFragment.setFileItems(fileItems);
         }
+      } catch (Exception e) {
+        e.printStackTrace();
       }
+    }
   }
 
   @Override protected void onCancelled() {

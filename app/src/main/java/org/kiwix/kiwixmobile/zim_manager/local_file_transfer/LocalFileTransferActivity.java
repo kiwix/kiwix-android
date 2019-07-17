@@ -52,10 +52,12 @@ import javax.inject.Inject;
  *
  * The module uses this activity along with {@link DeviceListFragment} to manage connection
  * and file transfer between the devices.
- * */
-public class LocalFileTransferActivity extends AppCompatActivity implements WifiP2pManager.ChannelListener, DeviceListFragment.DeviceActionListener {
+ */
+public class LocalFileTransferActivity extends AppCompatActivity
+    implements WifiP2pManager.ChannelListener, DeviceListFragment.DeviceActionListener {
 
-  public static final String TAG = "LocalFileTransferActvty"; // Not a typo, 'Log' tags have a length upper limit of 25 characters
+  public static final String TAG = "LocalFileTransferActvty";
+      // Not a typo, 'Log' tags have a length upper limit of 25 characters
   public static final int REQUEST_ENABLE_WIFI_P2P = 1;
   public static final int REQUEST_ENABLE_LOCATION_SERVICES = 2;
   private static final int PERMISSION_REQUEST_CODE_COARSE_LOCATION = 1;
@@ -66,18 +68,20 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
   @BindView(R.id.toolbar_local_file_transfer) Toolbar actionBar;
 
-  private ArrayList<Uri> fileUriArrayList;  // For sender device, stores Uris of files to be transferred
+  private ArrayList<Uri> fileUriArrayList;
+      // For sender device, stores Uris of files to be transferred
   private Boolean fileSendingDevice = false;// Whether the device is the file sender or not
-
 
   /* Variables related to the WiFi P2P API */
   private boolean wifiP2pEnabled = false; // Whether WiFi has been enabled or not
   private boolean retryChannel = false;   // Whether channel has retried connecting previously
 
   private WifiP2pManager manager;         // Overall manager of Wifi p2p connections for the module
-  private WifiP2pManager.Channel channel; // Connects the module to device's underlying Wifi p2p framework
+  private WifiP2pManager.Channel channel;
+      // Connects the module to device's underlying Wifi p2p framework
 
-  private final IntentFilter intentFilter = new IntentFilter(); // For specifying broadcasts (of the P2P API) that the module needs to respond to
+  private final IntentFilter intentFilter = new IntentFilter();
+      // For specifying broadcasts (of the P2P API) that the module needs to respond to
   private BroadcastReceiver receiver = null; // For receiving the broadcasts given by above filter
 
   @Override
@@ -91,21 +95,21 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     ButterKnife.bind(this);
 
     /*
-    * Presence of file Uris decides whether the device with the activity open is a sender or receiver:
-    * - On the sender device, this activity is started from the app chooser post selection
-    * of files to share in the Library
-    * - On the receiver device, the activity is started directly from within the 'Get Content'
-    * activity, without any file Uris
-    * */
+     * Presence of file Uris decides whether the device with the activity open is a sender or receiver:
+     * - On the sender device, this activity is started from the app chooser post selection
+     * of files to share in the Library
+     * - On the receiver device, the activity is started directly from within the 'Get Content'
+     * activity, without any file Uris
+     * */
     Intent filesIntent = getIntent();
     fileUriArrayList = filesIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
-    if(fileUriArrayList != null && fileUriArrayList.size() > 0) {
+    if (fileUriArrayList != null && fileUriArrayList.size() > 0) {
       setDeviceAsFileSender();
     }
 
     setSupportActionBar(actionBar);
     actionBar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-    actionBar.setNavigationOnClickListener(new View.OnClickListener(){
+    actionBar.setNavigationOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         closeLocalFileTransferActivity();
@@ -133,47 +137,50 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    if(item.getItemId() == R.id.menu_item_search_devices) {
+    if (item.getItemId() == R.id.menu_item_search_devices) {
 
       /* Permissions essential for this module */
-      if(!checkCoarseLocationAccessPermission()) return true;
+      if (!checkCoarseLocationAccessPermission()) return true;
 
-      if(!checkExternalStorageWritePermission()) return true;
+      if (!checkExternalStorageWritePermission()) return true;
 
       // Initiate discovery
-      if(!isWifiP2pEnabled()) {
+      if (!isWifiP2pEnabled()) {
         requestEnableWifiP2pServices();
         return true;
       }
 
-      if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isLocationServicesEnabled()) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isLocationServicesEnabled()) {
         requestEnableLocationServices();
         return true;
       }
 
-      final DeviceListFragment deviceListFragment = (DeviceListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_device_list);
+      final DeviceListFragment deviceListFragment =
+          (DeviceListFragment) getSupportFragmentManager().findFragmentById(
+              R.id.fragment_device_list);
       deviceListFragment.onInitiateDiscovery();
       deviceListFragment.performFieldInjection(sharedPreferenceUtil, alertDialogShower);
       manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
         @Override
         public void onSuccess() {
-          showToast(LocalFileTransferActivity.this, R.string.discovery_initiated, Toast.LENGTH_SHORT);
+          showToast(LocalFileTransferActivity.this, R.string.discovery_initiated,
+              Toast.LENGTH_SHORT);
         }
 
         @Override
         public void onFailure(int reason) {
           String errorMessage = getErrorMessage(reason);
           Log.d(TAG, getString(R.string.discovery_failed) + ": " + errorMessage);
-          showToast(LocalFileTransferActivity.this, LocalFileTransferActivity.this.getString(R.string.discovery_failed), Toast.LENGTH_SHORT);
+          showToast(LocalFileTransferActivity.this,
+              LocalFileTransferActivity.this.getString(R.string.discovery_failed),
+              Toast.LENGTH_SHORT);
         }
       });
       return true;
-
     } else {
       return super.onOptionsItemSelected(item);
     }
   }
-
 
   /* Helper methods used in the activity */
   public void setDeviceAsFileSender() {
@@ -198,28 +205,36 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
   private String getErrorMessage(int reason) {
     switch (reason) {
-      case WifiP2pManager.ERROR:           return "Internal error";
-      case WifiP2pManager.BUSY:            return "Framework busy, unable to service request";
-      case WifiP2pManager.P2P_UNSUPPORTED: return "P2P unsupported on this device";
+      case WifiP2pManager.ERROR:
+        return "Internal error";
+      case WifiP2pManager.BUSY:
+        return "Framework busy, unable to service request";
+      case WifiP2pManager.P2P_UNSUPPORTED:
+        return "P2P unsupported on this device";
 
-      default: return "Unknown error code - "+reason;
+      default:
+        return "Unknown error code - " + reason;
     }
   }
 
   public void resetPeers() {
-    DeviceListFragment deviceListFragment = (DeviceListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_device_list);
-    if(deviceListFragment != null) {
+    DeviceListFragment deviceListFragment =
+        (DeviceListFragment) getSupportFragmentManager().findFragmentById(
+            R.id.fragment_device_list);
+    if (deviceListFragment != null) {
       deviceListFragment.clearPeers();
     }
   }
 
   public void resetData() {
-    DeviceListFragment deviceListFragment = (DeviceListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_device_list);
-    if(deviceListFragment != null) {
+    DeviceListFragment deviceListFragment =
+        (DeviceListFragment) getSupportFragmentManager().findFragmentById(
+            R.id.fragment_device_list);
+    if (deviceListFragment != null) {
       deviceListFragment.clearPeers();
     }
   }
-  
+
   static void showToast(Context context, int stringResource, int duration) {
     showToast(context, context.getString(stringResource), duration);
   }
@@ -228,22 +243,19 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     Toast.makeText(context, text, duration).show();
   }
 
-
   /* From WifiP2pManager.ChannelListener interface */
   @Override
   public void onChannelDisconnected() {
     // Upon disconnection, retry one more time
-    if(manager != null && !retryChannel) {
+    if (manager != null && !retryChannel) {
       Log.d(TAG, "Channel lost, trying again");
       resetData();
       retryChannel = true;
       manager.initialize(this, getMainLooper(), this);
-
     } else {
       showToast(this, R.string.severe_loss_error, Toast.LENGTH_LONG);
     }
   }
-
 
   /* From DeviceListFragment.DeviceActionListener interface */
   @Override
@@ -262,15 +274,18 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
       public void onFailure(int reason) {
         String errorMessage = getErrorMessage(reason);
         Log.d(TAG, getString(R.string.connection_failed) + ": " + errorMessage);
-        showToast(LocalFileTransferActivity.this, getString(R.string.connection_failed), Toast.LENGTH_LONG);
+        showToast(LocalFileTransferActivity.this, getString(R.string.connection_failed),
+            Toast.LENGTH_LONG);
       }
     });
   }
 
   @Override
   public void closeLocalFileTransferActivity() {
-    final DeviceListFragment deviceListFragment = (DeviceListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_device_list);
-    if(deviceListFragment != null) {
+    final DeviceListFragment deviceListFragment =
+        (DeviceListFragment) getSupportFragmentManager().findFragmentById(
+            R.id.fragment_device_list);
+    if (deviceListFragment != null) {
       deviceListFragment.cancelAsyncTasks();
     }
 
@@ -291,26 +306,28 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
       public void onSuccess() {
         Log.d(TAG, "Disconnect successful");
       }
-
     });
   }
 
   /* Helper methods used in the activity */
   private boolean checkCoarseLocationAccessPermission() { // Required by Android to detect wifi-p2p peers
-    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-      if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+      if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+          != PackageManager.PERMISSION_GRANTED) {
 
-        if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
-          alertDialogShower.show(KiwixDialog.LocationPermissionRationale.INSTANCE, new Function0<Unit>() {
-            @Override public Unit invoke() {
-              requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_CODE_COARSE_LOCATION);
-              return Unit.INSTANCE;
-            }
-          });
-
+        if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+          alertDialogShower.show(KiwixDialog.LocationPermissionRationale.INSTANCE,
+              new Function0<Unit>() {
+                @Override public Unit invoke() {
+                  requestPermissions(new String[] { Manifest.permission.ACCESS_COARSE_LOCATION },
+                      PERMISSION_REQUEST_CODE_COARSE_LOCATION);
+                  return Unit.INSTANCE;
+                }
+              });
         } else {
-          requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_CODE_COARSE_LOCATION);
+          requestPermissions(new String[] { Manifest.permission.ACCESS_COARSE_LOCATION },
+              PERMISSION_REQUEST_CODE_COARSE_LOCATION);
         }
 
         return false;
@@ -321,20 +338,23 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   }
 
   private boolean checkExternalStorageWritePermission() { // To access and store the zims
-    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-      if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+      if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+          != PackageManager.PERMISSION_GRANTED) {
 
-        if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-          alertDialogShower.show(KiwixDialog.StoragePermissionRationale.INSTANCE, new Function0<Unit>() {
-            @Override public Unit invoke() {
-              requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS);
-              return Unit.INSTANCE;
-            }
-          });
-
+        if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+          alertDialogShower.show(KiwixDialog.StoragePermissionRationale.INSTANCE,
+              new Function0<Unit>() {
+                @Override public Unit invoke() {
+                  requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                      PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS);
+                  return Unit.INSTANCE;
+                }
+              });
         } else {
-          requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS);
+          requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+              PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS);
         }
 
         return false;
@@ -346,7 +366,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
   @Override
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                         @NonNull int[] grantResults) {
+      @NonNull int[] grantResults) {
     switch (requestCode) {
       case PERMISSION_REQUEST_CODE_COARSE_LOCATION: {
         if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
@@ -371,36 +391,44 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   }
 
   private boolean isLocationServicesEnabled() {
-    LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+    LocationManager locationManager =
+        (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
     boolean gps_enabled = false;
     boolean network_enabled = false;
 
     try {
       gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-    } catch(Exception ex) {ex.printStackTrace();}
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
 
     try {
       network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-    } catch(Exception ex) {ex.printStackTrace();}
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
 
     return (gps_enabled || network_enabled);
   }
 
   private void requestEnableLocationServices() {
     FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-    Fragment prev = getSupportFragmentManager().findFragmentByTag(RequestEnableLocationServicesDialog.TAG);
+    Fragment prev =
+        getSupportFragmentManager().findFragmentByTag(RequestEnableLocationServicesDialog.TAG);
 
-    if(prev == null) {
-      RequestEnableLocationServicesDialog dialogFragment = new RequestEnableLocationServicesDialog();
+    if (prev == null) {
+      RequestEnableLocationServicesDialog dialogFragment =
+          new RequestEnableLocationServicesDialog();
       dialogFragment.show(fragmentTransaction, RequestEnableLocationServicesDialog.TAG);
     }
   }
 
   private void requestEnableWifiP2pServices() {
     FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-    Fragment prev = getSupportFragmentManager().findFragmentByTag(RequestEnableWifiP2pServicesDialog.TAG);
+    Fragment prev =
+        getSupportFragmentManager().findFragmentByTag(RequestEnableWifiP2pServicesDialog.TAG);
 
-    if(prev == null) {
+    if (prev == null) {
       RequestEnableWifiP2pServicesDialog dialogFragment = new RequestEnableWifiP2pServicesDialog();
       dialogFragment.show(fragmentTransaction, RequestEnableWifiP2pServicesDialog.TAG);
     }
@@ -412,9 +440,11 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
     switch (requestCode) {
       case REQUEST_ENABLE_LOCATION_SERVICES: {
-        LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager =
+            (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 
-        if(!(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))) {
+        if (!(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+            || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))) {
           // If neither provider is enabled
           showToast(this, R.string.permission_refused_location, Toast.LENGTH_LONG);
         }
@@ -422,7 +452,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
       }
 
       case REQUEST_ENABLE_WIFI_P2P: {
-        if(!isWifiP2pEnabled()) {
+        if (!isWifiP2pEnabled()) {
           showToast(this, R.string.discovery_needs_wifi, Toast.LENGTH_LONG);
         }
         break;
@@ -445,8 +475,10 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
   @Override protected void onDestroy() {
     super.onDestroy();
-    final DeviceListFragment deviceListFragment = (DeviceListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_device_list);
-    if(deviceListFragment != null) {
+    final DeviceListFragment deviceListFragment =
+        (DeviceListFragment) getSupportFragmentManager().findFragmentById(
+            R.id.fragment_device_list);
+    if (deviceListFragment != null) {
       deviceListFragment.cancelAsyncTasks();
     }
   }

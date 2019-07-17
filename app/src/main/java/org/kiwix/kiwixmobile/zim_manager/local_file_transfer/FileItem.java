@@ -13,11 +13,11 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.Fil
  * Helper class, part of the local file sharing module.
  *
  * Defines a file-item to represent the files being transferred.
- * */
+ */
 public class FileItem implements Parcelable {
 
   @Retention(RetentionPolicy.SOURCE)
-  @IntDef({TO_BE_SENT, SENDING, SENT, ERROR})
+  @IntDef({ TO_BE_SENT, SENDING, SENT, ERROR })
   public @interface FileStatus {
     int TO_BE_SENT = -1;  // File yet to be sent
     int SENDING = 0;      // Being sent

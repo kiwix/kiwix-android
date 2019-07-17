@@ -20,7 +20,7 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.Fil
  * Helper class, part of the local file sharing module.
  *
  * Defines the Adapter for the list of file-items displayed in {@link TransferProgressFragment}
- * */
+ */
 public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileViewHolder> {
   private final ArrayList<FileItem> fileItems;
 
@@ -30,8 +30,10 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
 
   @NonNull
   @Override
-  public FileListAdapter.FileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transfer_list, parent, false);
+  public FileListAdapter.FileViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
+      int viewType) {
+    View itemView = LayoutInflater.from(parent.getContext())
+        .inflate(R.layout.item_transfer_list, parent, false);
     return new FileViewHolder(itemView, this);
   }
 
@@ -42,18 +44,20 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
     String name = fileItem.getFileName();
     holder.fileName.setText(name);
 
-    if(fileItem.getFileStatus() == SENDING) {
+    if (fileItem.getFileStatus() == SENDING) {
       holder.statusImage.setVisibility(View.GONE);
       holder.progressBar.setVisibility(View.VISIBLE);
-
-    } else if(fileItem.getFileStatus() != TO_BE_SENT){ // Icon for TO_BE_SENT is assigned by default in the item layout
+    } else if (fileItem.getFileStatus()
+        != TO_BE_SENT) { // Icon for TO_BE_SENT is assigned by default in the item layout
       holder.progressBar.setVisibility(View.GONE);
 
       switch (fileItem.getFileStatus()) {
-        case SENT :  holder.statusImage.setImageResource(R.drawable.ic_baseline_check_24px);
-                              break;
-        case ERROR:  holder.statusImage.setImageResource(R.drawable.ic_baseline_error_24px);
-                              break;
+        case SENT:
+          holder.statusImage.setImageResource(R.drawable.ic_baseline_check_24px);
+          break;
+        case ERROR:
+          holder.statusImage.setImageResource(R.drawable.ic_baseline_error_24px);
+          break;
       }
 
       holder.statusImage.setVisibility(View.VISIBLE);
