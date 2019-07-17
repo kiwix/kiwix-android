@@ -55,9 +55,13 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
   @Override
   protected Boolean doInBackground(Uri... fileUris) {
     Uri fileUri = fileUris[0];    // Uri of file to be transferred
-    Socket socket = new Socket(); // Represents the sender device
+    ContentResolver contentResolver = deviceListFragment.getActivity().getContentResolver();
 
-    try {
+    try (Socket socket = new Socket(); InputStream fileInputStream = contentResolver.openInputStream(fileUri)) { // Represents the sender device
+
+      if(isCancelled()) {
+        return false;
+      }
       socket.bind(null);
 
       String hostAddress = deviceListFragment.getFileReceiverDeviceAddress().getHostAddress();
@@ -67,9 +71,6 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
 
       OutputStream socketOutputStream = socket.getOutputStream();
 
-      ContentResolver contentResolver = deviceListFragment.getActivity().getContentResolver();
-      InputStream fileInputStream = contentResolver.openInputStream(fileUri);
-
       DeviceListFragment.copyToOutputStream(fileInputStream, socketOutputStream);
       if(BuildConfig.DEBUG) Log.d(TAG, "Sender: Data written");
 
@@ -78,16 +79,11 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
     } catch (IOException e) {
       Log.e(TAG, e.getMessage());
       return false;
-
-    } finally {
-      if (socket.isConnected()) {
-        try {
-          socket.close();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-      }
     }
+  }
+
+  @Override protected void onCancelled() {
+    Log.d(TAG, "SenderDeviceAsyncTask cancelled");
   }
 
   @Override

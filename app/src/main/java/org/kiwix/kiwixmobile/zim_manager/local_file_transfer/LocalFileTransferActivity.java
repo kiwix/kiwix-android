@@ -269,6 +269,11 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
   @Override
   public void closeLocalFileTransferActivity() {
+    final DeviceListFragment deviceListFragment = (DeviceListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_device_list);
+    if(deviceListFragment != null) {
+      deviceListFragment.cancelAsyncTasks();
+    }
+
     fileSendingDevice = false;
     disconnect();
     this.finish();

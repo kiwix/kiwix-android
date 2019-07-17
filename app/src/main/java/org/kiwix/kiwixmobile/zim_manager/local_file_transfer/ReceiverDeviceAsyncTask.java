@@ -45,14 +45,13 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
 
   @Override
   protected Boolean doInBackground(Void... voids) {
-    try {
-      ServerSocket serverSocket = new ServerSocket(FILE_TRANSFER_PORT);
+    try (ServerSocket serverSocket = new ServerSocket(FILE_TRANSFER_PORT)) {
       if(BuildConfig.DEBUG) Log.d(TAG, "Server: Socket opened at " + FILE_TRANSFER_PORT);
 
       final String KIWIX_ROOT = deviceListFragment.getZimStorageRootPath();
 
       int totalFileCount = deviceListFragment.getTotalFilesForTransfer();
-      for(int currentFile = 1; currentFile <= totalFileCount; currentFile++) {
+      for(int currentFile = 1; currentFile <= totalFileCount && !isCancelled(); currentFile++) {
 
         Socket client = serverSocket.accept();
         if(BuildConfig.DEBUG) Log.d(TAG, "Server: Client connected for file " + currentFile);
@@ -78,9 +77,11 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
         publishProgress(SENT);
         deviceListFragment.incrementTotalFilesSent();
       }
-      serverSocket.close();
 
-      return true;  // Returned in case of a succesful file transfer
+      if(isCancelled())
+        return false; // Returned in case the task was cancelled
+      else
+        return true;  // Returned in case of a successful file transfer
 
     } catch (IOException e) {
       Log.e(TAG, e.getMessage());
@@ -92,6 +93,10 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
   protected void onProgressUpdate(Integer... values) {
     int fileStatus = values[0];
     transferProgressFragment.changeStatus(fileItemIndex, fileStatus);
+  }
+
+  @Override protected void onCancelled() {
+    Log.d(TAG, "ReceiverDeviceAsyncTask cancelled");
   }
 
   @Override

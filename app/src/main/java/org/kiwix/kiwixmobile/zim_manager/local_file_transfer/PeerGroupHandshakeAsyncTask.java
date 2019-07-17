@@ -50,9 +50,8 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
   @Override
   protected InetAddress doInBackground(Void... voids) {
 
-    try {
-      if(groupInfo.groupFormed && groupInfo.isGroupOwner) {
-        ServerSocket serverSocket = new ServerSocket(PEER_HANDSHAKE_PORT);
+    if(groupInfo.groupFormed && groupInfo.isGroupOwner && !isCancelled()) {
+      try (ServerSocket serverSocket = new ServerSocket(PEER_HANDSHAKE_PORT)) {
         serverSocket.setReuseAddress(true);
         Socket server = serverSocket.accept();
 
@@ -60,20 +59,24 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
         Object object = objectInputStream.readObject();
 
         // Verify that the peer trying to communicate is a kiwix app intending to transfer files
-        if (isKiwixHandshake(object)) {
+        if (isKiwixHandshake(object) && !isCancelled()) {
           if(BuildConfig.DEBUG) {
             Log.d(TAG, "Client IP address: "+ server.getInetAddress());
           }
           exchangeFileTransferMetadata(server.getOutputStream(), server.getInputStream());
-          server.close();
+
           return server.getInetAddress();
 
         } else { // Selected device is not accepting wifi direct connections through the kiwix app
           return null;
         }
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        return null;
       }
-      else if(groupInfo.groupFormed) { //&& !groupInfo.isGroupOwner
-        Socket client = new Socket();
+    }
+    else if(groupInfo.groupFormed && !isCancelled()) { //&& !groupInfo.isGroupOwner
+      try (Socket client = new Socket()) {
         client.setReuseAddress(true);
         client.connect((new InetSocketAddress(groupInfo.groupOwnerAddress.getHostAddress(), PEER_HANDSHAKE_PORT)), 15000);
 
@@ -82,16 +85,14 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
 
         exchangeFileTransferMetadata(client.getOutputStream(), client.getInputStream());
 
-        client.close();
-
         return groupInfo.groupOwnerAddress;
-      }
-      else {
+
+      } catch (Exception ex) {
+        ex.printStackTrace();
         return null;
       }
-
-    } catch (Exception ex) {
-      ex.printStackTrace();
+    }
+    else {
       return null;
     }
   }
@@ -141,6 +142,10 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
           e.printStackTrace();
         }
       }
+  }
+
+  @Override protected void onCancelled() {
+    Log.d(TAG, "PeerGroupHandshakeAsyncTask cancelled");
   }
 
   @Override

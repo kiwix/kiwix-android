@@ -90,6 +90,10 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
   private InetAddress fileReceiverDeviceAddress;  // IP address of the file receiving device
   private boolean fileTransferStarted = false;
 
+  private PeerGroupHandshakeAsyncTask peerGroupHandshakeAsyncTask;
+  private SenderDeviceAsyncTask senderDeviceAsyncTaskArray[];
+  private ReceiverDeviceAsyncTask receiverDeviceAsyncTask;
+
   @Override
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
@@ -192,6 +196,20 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     ((WifiPeerListAdapter) getListAdapter()).notifyDataSetChanged();
   }
 
+  void cancelAsyncTasks() {
+    if(peerGroupHandshakeAsyncTask != null) {
+      peerGroupHandshakeAsyncTask.cancel(true);
+    }
+
+    if(senderDeviceAsyncTaskArray != null) {
+      for(SenderDeviceAsyncTask task : senderDeviceAsyncTaskArray) {
+        task.cancel(true);
+      }
+    } else if(receiverDeviceAsyncTask != null) {
+      receiverDeviceAsyncTask.cancel(true);
+    }
+  }
+
   public void onInitiateDiscovery() { // Setup UI for searching peers
     searchingPeersProgressBar.setVisibility(View.VISIBLE);
     frameLayoutPeerDevices.setVisibility(View.INVISIBLE);
@@ -203,7 +221,8 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     /* Devices have successfully connected, and 'info' holds information about the wifi p2p group formed */
     groupInfo = info;
     // Start handshake between the devices
-    new PeerGroupHandshakeAsyncTask(this, groupInfo).execute();
+    peerGroupHandshakeAsyncTask = new PeerGroupHandshakeAsyncTask(this, groupInfo);
+    peerGroupHandshakeAsyncTask.execute();
   }
 
   public void setClientAddress(InetAddress clientAddress) {
@@ -225,7 +244,8 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
     if(groupInfo.groupFormed && !fileSender) {
       displayTransferProgressFragment();
 
-      new ReceiverDeviceAsyncTask(this, transferProgressFragment).execute();
+      receiverDeviceAsyncTask = new ReceiverDeviceAsyncTask(this, transferProgressFragment);
+      receiverDeviceAsyncTask.execute();
 
     } else if(groupInfo.groupFormed) {
       {
@@ -237,8 +257,10 @@ public class DeviceListFragment extends ListFragment implements WifiP2pManager.P
         showToast(localFileTransferActivity, R.string.preparing_files, Toast.LENGTH_LONG);
         for(int i = 0; i < 20000000; i++);
 
+        senderDeviceAsyncTaskArray = new SenderDeviceAsyncTask[totalFilesForTransfer];
         for(int i = 0; i < totalFilesForTransfer; i++) {
-          new SenderDeviceAsyncTask(this, transferProgressFragment, i).execute(fileUriList.get(i));
+          senderDeviceAsyncTaskArray[i] = new SenderDeviceAsyncTask(this, transferProgressFragment, i);
+          senderDeviceAsyncTaskArray[i].execute(fileUriList.get(i));
         }
       }
     }
