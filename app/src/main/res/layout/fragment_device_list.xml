@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:hint="Device Name"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_your_device"
+        app:layout_constraintTop_toBottomOf="@id/text_view_your_device"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:textStyle="bold"
@@ -45,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="#0000f0"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_device_name"
+        app:layout_constraintTop_toBottomOf="@id/text_view_device_name"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="5dp"
@@ -59,36 +59,34 @@
         android:gravity="center"
         android:textSize="16sp"
         app:fontFamily="monospace"
-        app:layout_constraintTop_toBottomOf="@+id/view_device_list_boundary"
+        app:layout_constraintTop_toBottomOf="@id/view_device_list_boundary"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:paddingTop="5dp"/>
 
-    <FrameLayout
-        android:id="@+id/frame_layout_peer_devices"
+    <ListView
+        android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_available_device"
+        app:layout_constraintTop_toBottomOf="@id/text_view_available_device"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:visibility="invisible">
+        app:layout_constraintVertical_bias="0.0"
+        android:visibility="invisible"/>
 
-        <ListView
-            android:id="@android:id/list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </ListView>
-
-        <TextView
-            android:id="@android:id/empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/no_devices_found"
-            android:gravity="center"
-            android:layout_margin="50dp"
-            android:textColor="@android:color/black" />
-
-    </FrameLayout>
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/no_devices_found"
+        android:gravity="center"
+        android:layout_margin="50dp"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@id/text_view_available_device"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
     <ProgressBar
         android:id="@+id/progress_bar_searching_peers"
@@ -96,7 +94,7 @@
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:layout_margin="50dp"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_available_device"
+        app:layout_constraintTop_toBottomOf="@id/text_view_available_device"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:visibility="gone"/>

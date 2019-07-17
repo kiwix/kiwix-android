@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -73,7 +72,8 @@ public class DeviceListFragment extends ListFragment
   // Views part of the DeviceListFragment
   @BindView(R.id.text_view_device_name) TextView deviceName;
   @BindView(R.id.progress_bar_searching_peers) ProgressBar searchingPeersProgressBar;
-  @BindView(R.id.frame_layout_peer_devices) FrameLayout frameLayoutPeerDevices;
+  @BindView(android.R.id.list) ListView listViewPeerDevices;
+  @BindView(android.R.id.empty) TextView textViewPeerDevices;
 
   private Unbinder unbinder;
 
@@ -195,7 +195,7 @@ public class DeviceListFragment extends ListFragment
   @Override
   public void onPeersAvailable(WifiP2pDeviceList peers) {
     searchingPeersProgressBar.setVisibility(View.GONE);
-    frameLayoutPeerDevices.setVisibility(View.VISIBLE);
+    listViewPeerDevices.setVisibility(View.VISIBLE);
 
     peerDevices.clear();
     peerDevices.addAll(peers.getDeviceList());
@@ -227,7 +227,8 @@ public class DeviceListFragment extends ListFragment
 
   public void onInitiateDiscovery() { // Setup UI for searching peers
     searchingPeersProgressBar.setVisibility(View.VISIBLE);
-    frameLayoutPeerDevices.setVisibility(View.INVISIBLE);
+    listViewPeerDevices.setVisibility(View.INVISIBLE);
+    textViewPeerDevices.setVisibility(View.INVISIBLE);
   }
 
   /* From WifiP2pManager.ConnectionInfoListener callback-interface */
