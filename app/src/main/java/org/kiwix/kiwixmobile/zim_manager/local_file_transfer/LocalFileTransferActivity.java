@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pDeviceList;
+import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +20,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,12 +32,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetAddress;
+import java.util.List;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
+import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.utils.AlertDialogShower;
@@ -41,6 +54,8 @@ import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
+
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.TO_BE_SENT;
 
 /**
  * Created by @Aditya-Sood as a part of GSoC 2019.
@@ -53,8 +68,7 @@ import javax.inject.Inject;
  * The module uses this activity along with {@link DeviceListFragment} to manage connection
  * and file transfer between the devices.
  */
-public class LocalFileTransferActivity extends AppCompatActivity {
-    //implements WifiP2pManager.ChannelListener, DeviceListFragment.DeviceActionListener {
+public class LocalFileTransferActivity extends AppCompatActivity implements WifiP2pManager.PeerListListener, WifiP2pManager.ConnectionInfoListener {
 
   public static final String TAG = "LocalFileTransferActvty";
       // Not a typo, 'Log' tags have a length upper limit of 25 characters
@@ -63,28 +77,45 @@ public class LocalFileTransferActivity extends AppCompatActivity {
   private static final int PERMISSION_REQUEST_CODE_COARSE_LOCATION = 1;
   private static final int PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS = 2;
 
+  public static int PEER_HANDSHAKE_PORT = 8009;
+  public static int FILE_TRANSFER_PORT = 8008;
+
+  private TransferProgressFragment transferProgressFragment;
+
   @Inject SharedPreferenceUtil sharedPreferenceUtil;
   @Inject AlertDialogShower alertDialogShower;
 
   @BindView(R.id.toolbar_local_file_transfer) Toolbar actionBar;
+  // Views part of the DeviceListFragment
+  @BindView(R.id.text_view_device_name) TextView deviceName;
+  @BindView(R.id.progress_bar_searching_peers) ProgressBar searchingPeersProgressBar;
+  @BindView(R.id.list_peer_devices) ListView listViewPeerDevices;
+  @BindView(R.id.text_view_empty_peer_list) TextView textViewPeerDevices;
 
   private ArrayList<Uri> fileUriArrayList;
       // For sender device, stores Uris of files to be transferred
   public Boolean fileSendingDevice = false;// Whether the device is the file sender or not
 
-  /* Variables related to the WiFi P2P API */
-  /*private boolean wifiP2pEnabled = false; // Whether WiFi has been enabled or not
-  private boolean retryChannel = false;   // Whether channel has retried connecting previously
-
-  private WifiP2pManager manager;         // Overall manager of Wifi p2p connections for the module
-  private WifiP2pManager.Channel channel;
-      // Connects the module to device's underlying Wifi p2p framework
-
-  private final IntentFilter intentFilter = new IntentFilter();
-      // For specifying broadcasts (of the P2P API) that the module needs to respond to
-  private BroadcastReceiver receiver = null; // For receiving the broadcasts given by above filter*/
-
   public WifiDirectManager wifiDirectManager;
+
+  private int totalFilesForTransfer = -1;
+  private int filesSent = 0;          // Count of number of files transferred until now
+  private ArrayList<FileItem> filesToSend = new ArrayList<>();
+
+  private WifiP2pDevice userDevice;   // Represents the device on which the app is running
+  private WifiP2pInfo groupInfo;
+  // Corresponds to the WiFi P2P group formed between the two devices
+  private List<WifiP2pDevice> peerDevices = new ArrayList<WifiP2pDevice>();
+
+  private WifiP2pDevice selectedPeerDevice = null;
+  private InetAddress selectedPeerDeviceInetAddress;
+
+  private InetAddress fileReceiverDeviceAddress;  // IP address of the file receiving device
+  private boolean fileTransferStarted = false;
+
+  private PeerGroupHandshakeAsyncTask peerGroupHandshakeAsyncTask;
+  private SenderDeviceAsyncTask senderDeviceAsyncTaskArray[];
+  private ReceiverDeviceAsyncTask receiverDeviceAsyncTask;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -120,18 +151,39 @@ public class LocalFileTransferActivity extends AppCompatActivity {
 
 
     /* Initialisations for using the WiFi P2P API */
-/*
-    // Intents that the broadcast receiver will be responding to
-    intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
-    intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
-    intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-    intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
-
-    manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-    channel = manager.initialize(this, getMainLooper(), null);*/
-
     this.wifiDirectManager = new WifiDirectManager(this);
     wifiDirectManager.initialiseWifiDirectManager();
+
+    listViewPeerDevices.setAdapter(new WifiPeerListAdapter(this, R.layout.row_peer_device, peerDevices));
+
+    if(isFileSender()) {
+      totalFilesForTransfer = fileUriArrayList.size();
+
+      for (int i = 0; i < fileUriArrayList.size(); i++) {
+        filesToSend.add(new FileItem(getFileName(fileUriArrayList.get(i)), TO_BE_SENT));
+      }
+
+      displayTransferProgressFragment();
+
+      listViewPeerDevices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+          /* Connection can only be initiated by user of the sender device, & only when transfer has not been started */
+          if (!isFileSender() || fileTransferStarted) {
+            return;
+          }
+
+          selectedPeerDevice = (WifiP2pDevice) listViewPeerDevices.getAdapter().getItem(position);
+          alertDialogShower.show(new KiwixDialog.FileTransferConfirmation(selectedPeerDevice),
+              new Function0<Unit>() {
+                @Override public Unit invoke() {
+                  ((DeviceListFragment.DeviceActionListener) wifiDirectManager).connect(selectedPeerDevice);
+                  showToast(LocalFileTransferActivity.this, R.string.performing_handshake, Toast.LENGTH_LONG);
+                  return Unit.INSTANCE;
+                }
+              });
+        }
+      });
+    }
   }
 
   @Override
@@ -160,11 +212,12 @@ public class LocalFileTransferActivity extends AppCompatActivity {
         return true;
       }
 
-      final DeviceListFragment deviceListFragment =
+      onInitiateDiscovery();
+      /*final DeviceListFragment deviceListFragment =
           (DeviceListFragment) getSupportFragmentManager().findFragmentById(
               R.id.fragment_device_list);
       deviceListFragment.onInitiateDiscovery();
-      deviceListFragment.performFieldInjection(sharedPreferenceUtil, alertDialogShower);
+      deviceListFragment.performFieldInjection(sharedPreferenceUtil, alertDialogShower);*/
       /*manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
         @Override
         public void onSuccess() {
@@ -225,21 +278,23 @@ public class LocalFileTransferActivity extends AppCompatActivity {
   }
 
   public void resetPeers() {
-    DeviceListFragment deviceListFragment =
+    /*DeviceListFragment deviceListFragment =
         (DeviceListFragment) getSupportFragmentManager().findFragmentById(
             R.id.fragment_device_list);
     if (deviceListFragment != null) {
       deviceListFragment.clearPeers();
-    }
+    }*/
+    clearPeers();
   }
 
   public void resetData() {
-    DeviceListFragment deviceListFragment =
+    /*DeviceListFragment deviceListFragment =
         (DeviceListFragment) getSupportFragmentManager().findFragmentById(
             R.id.fragment_device_list);
     if (deviceListFragment != null) {
       deviceListFragment.clearPeers();
-    }
+    }*/
+    clearPeers();
   }
 
   static void showToast(Context context, int stringResource, int duration) {
@@ -484,17 +539,216 @@ public class LocalFileTransferActivity extends AppCompatActivity {
 
   @Override protected void onDestroy() {
     super.onDestroy();
-    final DeviceListFragment deviceListFragment =
-        (DeviceListFragment) getSupportFragmentManager().findFragmentById(
-            R.id.fragment_device_list);
-    if (deviceListFragment != null) {
-      deviceListFragment.cancelAsyncTasks();
-    }
+    cancelAsyncTasks();
   }
 
   @Override
   public void onBackPressed() {
     super.onBackPressed();
     wifiDirectManager.closeLocalFileTransferActivity();
+  }
+
+  public static String getFileName(Uri fileUri) {
+    String fileUriString = fileUri.toString();
+    // Returns text after location of last slash in the file path
+    return fileUriString.substring(fileUriString.lastIndexOf('/') + 1);
+  }
+
+  private void displayTransferProgressFragment() {
+    transferProgressFragment = TransferProgressFragment.newInstance(filesToSend);
+    FragmentManager fragmentManager = this.getSupportFragmentManager();
+    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+    fragmentTransaction.add(R.id.container_fragment_transfer_progress, transferProgressFragment)
+        .commit();
+  }
+
+  public void updateUserDevice(WifiP2pDevice device) { // Update UI with user device's details
+    this.userDevice = device;
+
+    if (userDevice != null) {
+      deviceName.setText(userDevice.deviceName);
+      Log.d(TAG, getDeviceStatus(userDevice.status));
+    }
+  }
+
+  public static String getDeviceStatus(int status) {
+
+    if (BuildConfig.DEBUG) Log.d(TAG, "Peer Status: " + status);
+    switch (status) {
+      case WifiP2pDevice.AVAILABLE:
+        return "Available";
+      case WifiP2pDevice.INVITED:
+        return "Invited";
+      case WifiP2pDevice.CONNECTED:
+        return "Connected";
+      case WifiP2pDevice.FAILED:
+        return "Failed";
+      case WifiP2pDevice.UNAVAILABLE:
+        return "Unavailable";
+
+      default:
+        return "Unknown";
+    }
+  }
+
+  /* From WifiP2pManager.PeerListListener callback-interface */
+  @Override
+  public void onPeersAvailable(WifiP2pDeviceList peers) {
+    searchingPeersProgressBar.setVisibility(View.GONE);
+    listViewPeerDevices.setVisibility(View.VISIBLE);
+
+    peerDevices.clear();
+    peerDevices.addAll(peers.getDeviceList());
+    ((WifiPeerListAdapter) listViewPeerDevices.getAdapter()).notifyDataSetChanged();
+
+    if (peerDevices.size() == 0) {
+      Log.d(LocalFileTransferActivity.TAG, "No devices found");
+    }
+  }
+
+  public void clearPeers() {
+    peerDevices.clear();
+    ((WifiPeerListAdapter) listViewPeerDevices.getAdapter()).notifyDataSetChanged();
+  }
+
+  void cancelAsyncTasks() {
+    if (peerGroupHandshakeAsyncTask != null) {
+      peerGroupHandshakeAsyncTask.cancel(true);
+    }
+
+    if (senderDeviceAsyncTaskArray != null) {
+      for (SenderDeviceAsyncTask task : senderDeviceAsyncTaskArray) {
+        task.cancel(true);
+      }
+    } else if (receiverDeviceAsyncTask != null) {
+      receiverDeviceAsyncTask.cancel(true);
+    }
+  }
+
+  public void onInitiateDiscovery() { // Setup UI for searching peers
+    searchingPeersProgressBar.setVisibility(View.VISIBLE);
+    listViewPeerDevices.setVisibility(View.INVISIBLE);
+    textViewPeerDevices.setVisibility(View.INVISIBLE);
+  }
+
+  /* From WifiP2pManager.ConnectionInfoListener callback-interface */
+  @Override
+  public void onConnectionInfoAvailable(WifiP2pInfo info) {
+    /* Devices have successfully connected, and 'info' holds information about the wifi p2p group formed */
+    groupInfo = info;
+    // Start handshake between the devices
+    peerGroupHandshakeAsyncTask = new PeerGroupHandshakeAsyncTask(this, groupInfo);
+    peerGroupHandshakeAsyncTask.execute();
+  }
+
+  public void setClientAddress(InetAddress clientAddress) {
+    if (clientAddress == null) {
+      // null is returned only in case of a failed handshake
+      showToast(this, R.string.device_not_cooperating, Toast.LENGTH_LONG);
+      wifiDirectManager.closeLocalFileTransferActivity();
+      return;
+    }
+
+    // If control reaches here, means handshake was successful
+    selectedPeerDeviceInetAddress = clientAddress;
+    startFileTransfer();
+  }
+
+  private void startFileTransfer() {
+    fileTransferStarted = true;
+
+    if (groupInfo.groupFormed && !isFileSender()) {
+      displayTransferProgressFragment();
+
+      receiverDeviceAsyncTask = new ReceiverDeviceAsyncTask(this, transferProgressFragment);
+      receiverDeviceAsyncTask.execute();
+    } else if (groupInfo.groupFormed) {
+      {
+        Log.d(LocalFileTransferActivity.TAG, "Starting file transfer");
+
+        fileReceiverDeviceAddress =
+            (groupInfo.isGroupOwner) ? selectedPeerDeviceInetAddress : groupInfo.groupOwnerAddress;
+
+        // Hack for allowing slower receiver devices to setup server before sender device requests to connect
+        showToast(this, R.string.preparing_files, Toast.LENGTH_LONG);
+        for (int i = 0; i < 20000000; i++) ;
+
+        senderDeviceAsyncTaskArray = new SenderDeviceAsyncTask[totalFilesForTransfer];
+        for (int i = 0; i < totalFilesForTransfer; i++) {
+          senderDeviceAsyncTaskArray[i] =
+              new SenderDeviceAsyncTask(this, transferProgressFragment, i);
+          senderDeviceAsyncTaskArray[i].execute(fileUriArrayList.get(i));
+        }
+      }
+    }
+  }
+
+  /* Helper methods */
+
+  public WifiP2pDevice getUserDevice() {
+    return userDevice;
+  }
+
+  public int getTotalFilesForTransfer() {
+    return totalFilesForTransfer;
+  }
+
+  public void setTotalFilesForTransfer(int totalFilesForTransfer) {
+    this.totalFilesForTransfer = totalFilesForTransfer;
+  }
+
+  public ArrayList<FileItem> getFileItems() {
+    return filesToSend;
+  }
+
+  public void setFileItems(ArrayList<FileItem> fileItems) {
+    this.filesToSend = fileItems;
+  }
+
+  public ArrayList<Uri> getFileUriList() {
+    return fileUriArrayList;
+  }
+
+  public void incrementTotalFilesSent() {
+    this.filesSent++;
+  }
+
+  public boolean allFilesSent() {
+    return (filesSent == totalFilesForTransfer);
+  }
+
+  /*public void performFieldInjection(SharedPreferenceUtil sharedPreferenceUtil,
+      AlertDialogShower alertDialogShower) {
+    this.sharedPreferenceUtil = sharedPreferenceUtil;
+    this.alertDialogShower = alertDialogShower;
+  }*/
+
+  public String getZimStorageRootPath() {
+    return (sharedPreferenceUtil.getPrefStorage() + "/Kiwix/");
+  }
+
+  public InetAddress getFileReceiverDeviceAddress() {
+    return fileReceiverDeviceAddress;
+  }
+
+  /*public static String getFileName(Uri fileUri) {
+    String fileUriString = fileUri.toString();
+    // Returns text after location of last slash in the file path
+    return fileUriString.substring(fileUriString.lastIndexOf('/') + 1);
+  }*/
+
+  public static void copyToOutputStream(InputStream inputStream, OutputStream outputStream)
+      throws IOException {
+    byte[] bufferForBytes = new byte[1024];
+    int bytesRead;
+
+    Log.d(TAG, "Copying to OutputStream...");
+    while ((bytesRead = inputStream.read(bufferForBytes)) != -1) {
+      outputStream.write(bufferForBytes, 0, bytesRead);
+    }
+
+    outputStream.close();
+    inputStream.close();
+    Log.d(LocalFileTransferActivity.TAG, "Both streams closed");
   }
 }

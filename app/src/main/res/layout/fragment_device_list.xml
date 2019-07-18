@@ -5,7 +5,7 @@
     android:background="@android:color/transparent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
+    <!--<TextView
         android:id="@+id/text_view_your_device"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -97,6 +97,6 @@
         app:layout_constraintTop_toBottomOf="@id/text_view_available_device"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:visibility="gone"/>
+        android:visibility="gone"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

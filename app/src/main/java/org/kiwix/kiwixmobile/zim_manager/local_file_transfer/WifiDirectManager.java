@@ -16,11 +16,15 @@ import org.kiwix.kiwixmobile.R;
 import static android.os.Looper.getMainLooper;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.showToast;
 
+
+/**
+ * Manager for the Wifi-P2p API, used in the local file transfer module
+ * */
 public class WifiDirectManager implements WifiP2pManager.ChannelListener, DeviceListFragment.DeviceActionListener {
 
   private static final String TAG = "WifiDirectManager";
 
-  LocalFileTransferActivity activity;
+  private LocalFileTransferActivity activity;
 
   /* Variables related to the WiFi P2P API */
   private boolean wifiP2pEnabled = false; // Whether WiFi has been enabled or not
@@ -125,12 +129,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, Device
 
   @Override
   public void closeLocalFileTransferActivity() {
-    final DeviceListFragment deviceListFragment =
-        (DeviceListFragment) activity.getSupportFragmentManager().findFragmentById(
-            R.id.fragment_device_list);
-    if (deviceListFragment != null) {
-      deviceListFragment.cancelAsyncTasks();
-    }
+    activity.cancelAsyncTasks();
 
     activity.fileSendingDevice = false;
     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {

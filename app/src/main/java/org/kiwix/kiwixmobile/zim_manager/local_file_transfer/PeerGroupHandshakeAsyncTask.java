@@ -17,9 +17,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.DeviceListFragment.PEER_HANDSHAKE_PORT;
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.DeviceListFragment.getFileName;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.TO_BE_SENT;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.PEER_HANDSHAKE_PORT;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.getFileName;
 
 /**
  * Helper class for the local file sharing module, used in {@link DeviceListFragment}.
@@ -39,11 +39,11 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
   private static final String TAG = "PeerGrpHndshakeAsyncTsk";
   private final String HANDSHAKE_MESSAGE = "Request Kiwix File Sharing";
 
-  private DeviceListFragment deviceListFragment;
+  private LocalFileTransferActivity localFileTransferActivity;
   private WifiP2pInfo groupInfo;
 
-  public PeerGroupHandshakeAsyncTask(DeviceListFragment deviceListFragment, WifiP2pInfo groupInfo) {
-    this.deviceListFragment = deviceListFragment;
+  public PeerGroupHandshakeAsyncTask(LocalFileTransferActivity localFileTransferActivity, WifiP2pInfo groupInfo) {
+    this.localFileTransferActivity = localFileTransferActivity;
     this.groupInfo = groupInfo;
   }
 
@@ -100,12 +100,12 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
   }
 
   private void exchangeFileTransferMetadata(OutputStream outputStream, InputStream inputStream) {
-    if (deviceListFragment.isFileSender()) {
+    if (localFileTransferActivity.isFileSender()) {
       try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)) {
         // Send total number of files which will be transferred
-        objectOutputStream.writeObject("" + deviceListFragment.getTotalFilesForTransfer());
+        objectOutputStream.writeObject("" + localFileTransferActivity.getTotalFilesForTransfer());
 
-        ArrayList<Uri> fileUriList = deviceListFragment.getFileUriList();
+        ArrayList<Uri> fileUriList = localFileTransferActivity.getFileUriList();
         for (
             Uri fileUri : fileUriList) { // Send the names of each of those files, in order
           objectOutputStream.writeObject(getFileName(fileUri));
@@ -120,7 +120,7 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
 
         if (totalFilesObject.getClass().equals(String.class)) {
           int total = Integer.parseInt((String) totalFilesObject);
-          deviceListFragment.setTotalFilesForTransfer(total);
+          localFileTransferActivity.setTotalFilesForTransfer(total);
 
           ArrayList<FileItem> fileItems = new ArrayList<>();
           for (int i = 0; i < total; i++) { // Read names of each of those files, in order
@@ -131,7 +131,7 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
             }
           }
 
-          deviceListFragment.setFileItems(fileItems);
+          localFileTransferActivity.setFileItems(fileItems);
         }
       } catch (Exception e) {
         e.printStackTrace();
@@ -145,6 +145,6 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
 
   @Override
   protected void onPostExecute(InetAddress inetAddress) {
-    deviceListFragment.setClientAddress(inetAddress);
+    localFileTransferActivity.setClientAddress(inetAddress);
   }
 }

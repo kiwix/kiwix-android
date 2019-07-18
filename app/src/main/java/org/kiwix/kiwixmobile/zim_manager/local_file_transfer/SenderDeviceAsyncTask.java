@@ -16,9 +16,10 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.DeviceListFragment.FILE_TRANSFER_PORT;
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.DeviceListFragment.getFileName;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.*;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.FILE_TRANSFER_PORT;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.copyToOutputStream;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.getFileName;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.showToast;
 
 /**
@@ -37,13 +38,13 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
 
   private static final String TAG = "SenderDeviceAsyncTask";
 
-  private DeviceListFragment deviceListFragment;
+  private LocalFileTransferActivity localFileTransferActivity;
   private TransferProgressFragment transferProgressFragment;
   private int fileItemIndex;
 
-  public SenderDeviceAsyncTask(DeviceListFragment deviceListFragment,
+  public SenderDeviceAsyncTask(LocalFileTransferActivity localFileTransferActivity,
       TransferProgressFragment transferProgressFragment, int fileItemIndex) {
-    this.deviceListFragment = deviceListFragment;
+    this.localFileTransferActivity = localFileTransferActivity;
     this.transferProgressFragment = transferProgressFragment;
     this.fileItemIndex = fileItemIndex;
   }
@@ -56,7 +57,7 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
   @Override
   protected Boolean doInBackground(Uri... fileUris) {
     Uri fileUri = fileUris[0];    // Uri of file to be transferred
-    ContentResolver contentResolver = deviceListFragment.getActivity().getContentResolver();
+    ContentResolver contentResolver = localFileTransferActivity.getContentResolver();
 
     try (Socket socket = new Socket();
          InputStream fileInputStream = contentResolver.openInputStream(
@@ -67,14 +68,14 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
       }
       socket.bind(null);
 
-      String hostAddress = deviceListFragment.getFileReceiverDeviceAddress().getHostAddress();
+      String hostAddress = localFileTransferActivity.getFileReceiverDeviceAddress().getHostAddress();
       socket.connect((new InetSocketAddress(hostAddress, FILE_TRANSFER_PORT)), 15000);
 
       if (BuildConfig.DEBUG) Log.d(TAG, "Sender socket - " + socket.isConnected());
 
       OutputStream socketOutputStream = socket.getOutputStream();
 
-      DeviceListFragment.copyToOutputStream(fileInputStream, socketOutputStream);
+      copyToOutputStream(fileInputStream, socketOutputStream);
       if (BuildConfig.DEBUG) Log.d(TAG, "Sender: Data written");
 
       return true;
@@ -90,21 +91,20 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
 
   @Override
   protected void onPostExecute(Boolean fileSendSuccessful) {
-    deviceListFragment.incrementTotalFilesSent();
+    localFileTransferActivity.incrementTotalFilesSent();
 
     if (fileSendSuccessful) { // Whether this task was successful in sending the file
       transferProgressFragment.changeStatus(fileItemIndex, SENT);
     } else {
-      Activity activity = deviceListFragment.getActivity();
-      showToast(activity, activity.getString(R.string.error_sending,
-          getFileName(deviceListFragment.getFileUriList().get(fileItemIndex))), Toast.LENGTH_SHORT);
+      showToast(localFileTransferActivity, localFileTransferActivity.getString(R.string.error_sending,
+          getFileName(localFileTransferActivity.getFileUriList().get(fileItemIndex))), Toast.LENGTH_SHORT);
       transferProgressFragment.changeStatus(fileItemIndex, ERROR);
     }
 
-    if (deviceListFragment.allFilesSent()) {
-      showToast(deviceListFragment.getActivity(), R.string.file_transfer_complete,
+    if (localFileTransferActivity.allFilesSent()) {
+      showToast(localFileTransferActivity, R.string.file_transfer_complete,
           Toast.LENGTH_SHORT);
-      deviceListFragment.getActivity().finish();
+      localFileTransferActivity.finish();
     }
   }
 }

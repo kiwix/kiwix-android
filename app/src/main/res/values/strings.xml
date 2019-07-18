@@ -286,4 +286,5 @@
   <string name="files_for_transfer">FILES FOR TRANSFER</string>
   <string name="preparing_files">Preparing files for transfer....</string>
   <string name="performing_handshake">Performing handshake....</string>
+  <string name="local_zim_sharing">Local ZIM Sharing</string>
 </resources>

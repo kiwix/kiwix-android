@@ -54,9 +54,7 @@ public class WifiDirectBroadcastReceiver extends BroadcastReceiver {
       if (manager != null) {
         /* List of available peers has changed, so request & use the new list through
          * PeerListListener.requestPeers() callback */
-        manager.requestPeers(channel,
-            (WifiP2pManager.PeerListListener) wifiActivity.getSupportFragmentManager()
-                .findFragmentById(R.id.fragment_device_list));
+        manager.requestPeers(channel, wifiActivity);
       }
       Log.d(LocalFileTransferActivity.TAG, "P2P peers changed");
     } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
@@ -68,19 +66,14 @@ public class WifiDirectBroadcastReceiver extends BroadcastReceiver {
 
       if (networkInfo.isConnected()) {
         // Request connection info about the wifi p2p group formed upon connection
-        manager.requestConnectionInfo(channel,
-            (DeviceListFragment) wifiActivity.getSupportFragmentManager()
-                .findFragmentById(R.id.fragment_device_list));
+        manager.requestConnectionInfo(channel, wifiActivity);
       } else {
         // Not connected after connection change -> Disconnected
         wifiActivity.resetData();
       }
     } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
       // Update UI with wifi-direct details about the user device
-      DeviceListFragment deviceListFragment =
-          (DeviceListFragment) wifiActivity.getSupportFragmentManager()
-              .findFragmentById(R.id.fragment_device_list);
-      deviceListFragment.updateUserDevice(
+      wifiActivity.updateUserDevice(
           intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE));
     }
   }

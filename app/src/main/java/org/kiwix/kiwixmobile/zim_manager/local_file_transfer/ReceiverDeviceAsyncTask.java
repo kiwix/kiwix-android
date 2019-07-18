@@ -14,10 +14,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.DeviceListFragment.FILE_TRANSFER_PORT;
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.DeviceListFragment.copyToOutputStream;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.SENDING;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.SENT;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.FILE_TRANSFER_PORT;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.copyToOutputStream;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.showToast;
 
 /**
@@ -34,13 +34,13 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
 
   private static final String TAG = "ReceiverDeviceAsyncTask";
 
-  private DeviceListFragment deviceListFragment;
+  private LocalFileTransferActivity localFileTransferActivity;
   private TransferProgressFragment transferProgressFragment;
   private int fileItemIndex;
 
-  public ReceiverDeviceAsyncTask(DeviceListFragment deviceListFragment,
+  public ReceiverDeviceAsyncTask(LocalFileTransferActivity localFileTransferActivity,
       TransferProgressFragment transferProgressFragment) {
-    this.deviceListFragment = deviceListFragment;
+    this.localFileTransferActivity = localFileTransferActivity;
     this.transferProgressFragment = transferProgressFragment;
   }
 
@@ -49,9 +49,9 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
     try (ServerSocket serverSocket = new ServerSocket(FILE_TRANSFER_PORT)) {
       if (BuildConfig.DEBUG) Log.d(TAG, "Server: Socket opened at " + FILE_TRANSFER_PORT);
 
-      final String KIWIX_ROOT = deviceListFragment.getZimStorageRootPath();
+      final String KIWIX_ROOT = localFileTransferActivity.getZimStorageRootPath();
 
-      int totalFileCount = deviceListFragment.getTotalFilesForTransfer();
+      int totalFileCount = localFileTransferActivity.getTotalFilesForTransfer();
       for (int currentFile = 1; currentFile <= totalFileCount && !isCancelled(); currentFile++) {
 
         Socket client = serverSocket.accept();
@@ -60,7 +60,7 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
         fileItemIndex = currentFile - 1;
         publishProgress(SENDING);
 
-        ArrayList<FileItem> fileItems = deviceListFragment.getFileItems();
+        ArrayList<FileItem> fileItems = localFileTransferActivity.getFileItems();
         String incomingFileName = fileItems.get(fileItemIndex).getFileName();
 
         final File clientNoteFileLocation = new File(KIWIX_ROOT + incomingFileName);
@@ -76,7 +76,7 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
         copyToOutputStream(client.getInputStream(), new FileOutputStream(clientNoteFileLocation));
 
         publishProgress(SENT);
-        deviceListFragment.incrementTotalFilesSent();
+        localFileTransferActivity.incrementTotalFilesSent();
       }
 
       if (isCancelled()) {
@@ -105,13 +105,13 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
     if (BuildConfig.DEBUG) Log.d(TAG, "File transfer complete");
 
     if (allFilesReceived) {
-      showToast(deviceListFragment.getActivity(), R.string.file_transfer_complete,
+      showToast(localFileTransferActivity, R.string.file_transfer_complete,
           Toast.LENGTH_LONG);
     } else {
-      showToast(deviceListFragment.getActivity(), R.string.error_during_transfer,
+      showToast(localFileTransferActivity, R.string.error_during_transfer,
           Toast.LENGTH_LONG);
     }
 
-    ((LocalFileTransferActivity) deviceListFragment.getActivity()).wifiDirectManager.closeLocalFileTransferActivity();
+    (localFileTransferActivity).wifiDirectManager.closeLocalFileTransferActivity();
   }
 }
