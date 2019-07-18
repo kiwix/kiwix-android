@@ -1,9 +1,3 @@
-package org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base
-
-
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-
 /*
  * Kiwix Android
  * Copyright (C) 2018  Kiwix <android.kiwix.org>
@@ -21,22 +15,25 @@ import androidx.recyclerview.widget.RecyclerView
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-interface AbsDelegateAdapter<INSTANCE : SUPERTYPE,
-    SUPERTYPE : Any,
-    VIEWHOLDER : BaseViewHolder<INSTANCE>> :
-    AdapterDelegate<SUPERTYPE> {
+package org.kiwix.kiwixmobile.language.viewmodel
 
-  val itemClass: Class<INSTANCE>
+import android.app.Activity
+import io.reactivex.Flowable
+import io.reactivex.schedulers.Schedulers
+import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
+import org.kiwix.kiwixmobile.zim_manager.Language
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.SideEffect
 
-  @Suppress("UNCHECKED_CAST")
-  override fun bind(
-    viewHolder: RecyclerView.ViewHolder,
-    itemToBind: SUPERTYPE
-  ) {
-    (viewHolder as VIEWHOLDER).bind(itemToBind as INSTANCE)
+data class SaveLanguagesAndFinish(
+  val languages: List<Language>,
+  val languageDao: NewLanguagesDao
+) : SideEffect<Unit> {
+
+  override fun invokeWith(activity: Activity) {
+    Flowable.fromCallable { languageDao.insert(languages) }
+        .subscribeOn(Schedulers.io())
+        .subscribe({
+          activity.finish()
+        }, Throwable::printStackTrace)
   }
-
-  override fun isFor(item: SUPERTYPE) = itemClass.isInstance(item)
-
-  override fun createViewHolder(parent: ViewGroup): VIEWHOLDER
 }

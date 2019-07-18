@@ -1,9 +1,3 @@
-package org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base
-
-
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-
 /*
  * Kiwix Android
  * Copyright (C) 2018  Kiwix <android.kiwix.org>
@@ -21,22 +15,13 @@ import androidx.recyclerview.widget.RecyclerView
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-interface AbsDelegateAdapter<INSTANCE : SUPERTYPE,
-    SUPERTYPE : Any,
-    VIEWHOLDER : BaseViewHolder<INSTANCE>> :
-    AdapterDelegate<SUPERTYPE> {
+package org.kiwix.kiwixmobile.language.adapter
 
-  val itemClass: Class<INSTANCE>
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base.AdapterDelegate
+import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base.BaseDelegateAdapter
 
-  @Suppress("UNCHECKED_CAST")
-  override fun bind(
-    viewHolder: RecyclerView.ViewHolder,
-    itemToBind: SUPERTYPE
-  ) {
-    (viewHolder as VIEWHOLDER).bind(itemToBind as INSTANCE)
-  }
-
-  override fun isFor(item: SUPERTYPE) = itemClass.isInstance(item)
-
-  override fun createViewHolder(parent: ViewGroup): VIEWHOLDER
+class LanguageAdapter(
+  vararg delegates: AdapterDelegate<LanguageListItem>
+) : BaseDelegateAdapter<LanguageListItem>(*delegates) {
+  override fun getIdFor(item: LanguageListItem) = item.id
 }

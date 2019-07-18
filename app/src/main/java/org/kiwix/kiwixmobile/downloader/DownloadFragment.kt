@@ -23,7 +23,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.layout_download_management.download_management_no_downloads
@@ -31,6 +30,7 @@ import kotlinx.android.synthetic.main.layout_download_management.zim_downloader_
 import org.kiwix.kiwixmobile.base.BaseFragment
 import org.kiwix.kiwixmobile.di.components.ActivityComponent
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
+import org.kiwix.kiwixmobile.extensions.viewModel
 import org.kiwix.kiwixmobile.utils.DialogShower
 import org.kiwix.kiwixmobile.utils.KiwixDialog.YesNoDialog.StopDownload
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
@@ -44,10 +44,10 @@ class DownloadFragment : BaseFragment() {
   @Inject lateinit var sharedPreferenceUtil: SharedPreferenceUtil
   @Inject lateinit var downloader: Downloader
 
-  private val zimManageViewModel: ZimManageViewModel by lazy {
-    ViewModelProviders.of(activity!!, viewModelFactory)
-        .get(ZimManageViewModel::class.java)
+  private val zimManageViewModel by lazy {
+    activity!!.viewModel<ZimManageViewModel>(viewModelFactory)
   }
+
   private val downloadAdapter = DownloadAdapter {
     dialogShower.show(StopDownload, { downloader.cancelDownload(it) })
   }

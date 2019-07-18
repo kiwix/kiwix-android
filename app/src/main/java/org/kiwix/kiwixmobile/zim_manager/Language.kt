@@ -6,6 +6,7 @@ import java.util.Locale
 
 @Parcelize
 data class Language constructor(
+  val id: Long = 0,
   var active: Boolean,
   var occurencesOfLanguage: Int,
   var language: String,
@@ -13,11 +14,14 @@ data class Language constructor(
   var languageCode: String,
   var languageCodeISO2: String
 ) : Parcelable {
+
   constructor(
     locale: Locale,
     active: Boolean,
-    occurrencesOfLanguage: Int
+    occurrencesOfLanguage: Int,
+    id: Long = 0
   ) : this(
+      id,
       active,
       occurrencesOfLanguage,
       locale.displayLanguage,
@@ -35,4 +39,7 @@ data class Language constructor(
   override fun equals(other: Any?): Boolean {
     return (other as Language).language == language && other.active == active
   }
+
+  fun matches(filter: String) =
+    language.contains(filter, true) or languageLocalized.contains(filter, true)
 }
