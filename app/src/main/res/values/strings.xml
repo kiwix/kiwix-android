@@ -266,7 +266,6 @@
   <string name="severe_loss_error">Severe error! Try Disable/Re-enable WiFi P2P</string>
   <string name="connection_failed">Connection failed</string>
   <string name="permission_rationale_location">Location permission is required by Android to allow the app to detect peer devices</string>
-  <string name="permission_rationale_storage">Storage permissions required for accessing and storing ZIM files</string>
   <string name="permission_refused_location">Cannot locate peer devices without location permissions</string>
   <string name="permission_refused_storage">Cannot access zim files without storage permission</string>
   <string name="request_enable_location">Enable location to allow detection of peers</string>

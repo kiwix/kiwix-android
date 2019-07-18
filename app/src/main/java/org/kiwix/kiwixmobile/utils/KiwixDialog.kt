@@ -22,7 +22,7 @@ sealed class KiwixDialog(
   )
 
   object StoragePermissionRationale : KiwixDialog( // For the local file transfer module
-      null, R.string.permission_rationale_storage, android.R.string.yes, android.R.string.cancel
+      null, R.string.request_storage, android.R.string.yes, android.R.string.cancel
   )
 
   data class FileTransferConfirmation(override val args: Array<out Any>) : KiwixDialog( // For the local file transfer module
