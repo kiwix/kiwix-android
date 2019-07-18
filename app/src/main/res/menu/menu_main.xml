@@ -97,6 +97,7 @@
   <item
       android:id="@+id/menu_wifi_hotspot"
       android:title="@string/menu_wifi_hotspot"
+      android:visible="false"
       app:showAsAction="never"/>
 
 </menu>
