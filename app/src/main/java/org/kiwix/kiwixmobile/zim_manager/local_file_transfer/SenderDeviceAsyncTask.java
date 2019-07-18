@@ -30,7 +30,7 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTra
  *
  * It takes in the uri of a single file, and copies all the bytes from input stream of the file to
  * the output stream of the receiver device. Also changes the status of the corresponding FileItem
- * on the list of files for transfer in {@link TransferProgressFragment}.
+ * on the list of files for transfer in {TransferProgressFragment}.
  *
  * A new task is created by the sender for every file to be transferred
  */
@@ -39,19 +39,16 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
   private static final String TAG = "SenderDeviceAsyncTask";
 
   private LocalFileTransferActivity localFileTransferActivity;
-  private TransferProgressFragment transferProgressFragment;
   private int fileItemIndex;
 
-  public SenderDeviceAsyncTask(LocalFileTransferActivity localFileTransferActivity,
-      TransferProgressFragment transferProgressFragment, int fileItemIndex) {
+  public SenderDeviceAsyncTask(LocalFileTransferActivity localFileTransferActivity, int fileItemIndex) {
     this.localFileTransferActivity = localFileTransferActivity;
-    this.transferProgressFragment = transferProgressFragment;
     this.fileItemIndex = fileItemIndex;
   }
 
   @Override
   protected void onPreExecute() {
-    transferProgressFragment.changeStatus(fileItemIndex, SENDING);
+    localFileTransferActivity.changeStatus(fileItemIndex, SENDING);
   }
 
   @Override
@@ -94,11 +91,11 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
     localFileTransferActivity.incrementTotalFilesSent();
 
     if (fileSendSuccessful) { // Whether this task was successful in sending the file
-      transferProgressFragment.changeStatus(fileItemIndex, SENT);
+      localFileTransferActivity.changeStatus(fileItemIndex, SENT);
     } else {
       showToast(localFileTransferActivity, localFileTransferActivity.getString(R.string.error_sending,
-          getFileName(localFileTransferActivity.getFileUriList().get(fileItemIndex))), Toast.LENGTH_SHORT);
-      transferProgressFragment.changeStatus(fileItemIndex, ERROR);
+          getFileName(localFileTransferActivity.getFileUriArrayList().get(fileItemIndex))), Toast.LENGTH_SHORT);
+      localFileTransferActivity.changeStatus(fileItemIndex, ERROR);
     }
 
     if (localFileTransferActivity.allFilesSent()) {

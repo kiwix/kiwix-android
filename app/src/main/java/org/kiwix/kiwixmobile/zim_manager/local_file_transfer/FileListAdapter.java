@@ -19,7 +19,7 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.Fil
 /**
  * Helper class, part of the local file sharing module.
  *
- * Defines the Adapter for the list of file-items displayed in {@link TransferProgressFragment}
+ * Defines the Adapter for the list of file-items displayed in {TransferProgressFragment}
  */
 public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileViewHolder> {
   private final ArrayList<FileItem> fileItems;

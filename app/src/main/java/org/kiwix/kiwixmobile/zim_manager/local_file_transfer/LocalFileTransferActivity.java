@@ -31,6 +31,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import java.io.IOException;
@@ -76,8 +78,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   public static int PEER_HANDSHAKE_PORT = 8009;
   public static int FILE_TRANSFER_PORT = 8008;
 
-  private TransferProgressFragment transferProgressFragment;
-
   @Inject SharedPreferenceUtil sharedPreferenceUtil;
   @Inject AlertDialogShower alertDialogShower;
 
@@ -86,6 +86,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   @BindView(R.id.progress_bar_searching_peers) ProgressBar searchingPeersProgressBar;
   @BindView(R.id.list_peer_devices) ListView listViewPeerDevices;
   @BindView(R.id.text_view_empty_peer_list) TextView textViewPeerDevices;
+  @BindView(R.id.recycler_view_transfer_files) RecyclerView filesRecyclerView;
 
   private ArrayList<Uri> fileUriArrayList;
       // For sender device, stores Uris of files to be transferred
@@ -111,6 +112,8 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   private PeerGroupHandshakeAsyncTask peerGroupHandshakeAsyncTask;
   private SenderDeviceAsyncTask senderDeviceAsyncTaskArray[];
   private ReceiverDeviceAsyncTask receiverDeviceAsyncTask;
+
+  private FileListAdapter fileListAdapter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +154,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
     listViewPeerDevices.setAdapter(new WifiPeerListAdapter(this, R.layout.row_peer_device, peerDevices));
 
-    if(isFileSender()) {
+    if(fileSendingDevice) {
       totalFilesForTransfer = fileUriArrayList.size();
 
       for (int i = 0; i < fileUriArrayList.size(); i++) {
@@ -163,7 +166,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
       listViewPeerDevices.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
           /* Connection can only be initiated by user of the sender device, & only when transfer has not been started */
-          if (!isFileSender() || fileTransferStarted) {
+          if (!fileSendingDevice || fileTransferStarted) {
             return;
           }
 
@@ -448,11 +451,14 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   }
 
   private void displayTransferProgressFragment() {
-    transferProgressFragment = TransferProgressFragment.newInstance(filesToSend);
+    /*transferProgressFragment = TransferProgressFragment.newInstance(filesToSend);
     FragmentManager fragmentManager = this.getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
     fragmentTransaction.add(R.id.container_fragment_transfer_progress, transferProgressFragment)
-        .commit();
+        .commit();*/
+    fileListAdapter = new FileListAdapter(filesToSend);
+    filesRecyclerView.setAdapter(fileListAdapter);
+    filesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
   }
 
   public void updateUserDevice(WifiP2pDevice device) { // Update UI with user device's details
@@ -530,6 +536,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     /* Devices have successfully connected, and 'info' holds information about the wifi p2p group formed */
     groupInfo = info;
     // Start handshake between the devices
+    Log.d(TAG, "Starting handshake");
     peerGroupHandshakeAsyncTask = new PeerGroupHandshakeAsyncTask(this, groupInfo);
     peerGroupHandshakeAsyncTask.execute();
   }
@@ -550,10 +557,10 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   private void startFileTransfer() {
     fileTransferStarted = true;
 
-    if (groupInfo.groupFormed && !isFileSender()) {
+    if (groupInfo.groupFormed && !fileSendingDevice) {
       displayTransferProgressFragment();
 
-      receiverDeviceAsyncTask = new ReceiverDeviceAsyncTask(this, transferProgressFragment);
+      receiverDeviceAsyncTask = new ReceiverDeviceAsyncTask(this);
       receiverDeviceAsyncTask.execute();
     } else if (groupInfo.groupFormed) {
       {
@@ -568,8 +575,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
         senderDeviceAsyncTaskArray = new SenderDeviceAsyncTask[totalFilesForTransfer];
         for (int i = 0; i < totalFilesForTransfer; i++) {
-          senderDeviceAsyncTaskArray[i] =
-              new SenderDeviceAsyncTask(this, transferProgressFragment, i);
+          senderDeviceAsyncTaskArray[i] = new SenderDeviceAsyncTask(this, i);
           senderDeviceAsyncTaskArray[i].execute(fileUriArrayList.get(i));
         }
       }
@@ -598,9 +604,9 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     this.filesToSend = fileItems;
   }
 
-  public ArrayList<Uri> getFileUriList() {
+  /*public ArrayList<Uri> getFileUriList() {
     return fileUriArrayList;
-  }
+  }*/
 
   public void incrementTotalFilesSent() {
     this.filesSent++;
@@ -632,6 +638,11 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     inputStream.close();
     Log.d(LocalFileTransferActivity.TAG, "Both streams closed");
   }
+
+  public void changeStatus(int itemIndex, @FileItem.FileStatus int status) {
+    filesToSend.get(itemIndex).setFileStatus(status);
+    fileListAdapter.notifyItemChanged(itemIndex);
+  }
 }
 
 /**
@@ -645,4 +656,10 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
  * device and {@link ReceiverDeviceAsyncTask} files receiving device
  *
  * The starting point for the module is {@link LocalFileTransferActivity}
+ */
+
+/**
+ * Part of the local file sharing module, this fragment is used to display the progress of the
+ * file transfer. It displays a list of files along with their current status (as defined in the
+ * {@link FileItem} class.
  */

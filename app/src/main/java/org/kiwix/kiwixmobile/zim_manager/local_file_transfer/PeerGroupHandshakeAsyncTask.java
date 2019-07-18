@@ -49,11 +49,13 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
 
   @Override
   protected InetAddress doInBackground(Void... voids) {
-
+    Log.d(TAG, "Handshake in process");
     if (groupInfo.groupFormed && groupInfo.isGroupOwner && !isCancelled()) {
       try (ServerSocket serverSocket = new ServerSocket(PEER_HANDSHAKE_PORT)) {
         serverSocket.setReuseAddress(true);
         Socket server = serverSocket.accept();
+
+        Log.d(TAG, "Group owner accepted connection");
 
         ObjectInputStream objectInputStream = new ObjectInputStream(server.getInputStream());
         Object object = objectInputStream.readObject();
@@ -78,6 +80,8 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
         client.setReuseAddress(true);
         client.connect((new InetSocketAddress(groupInfo.groupOwnerAddress.getHostAddress(),
             PEER_HANDSHAKE_PORT)), 15000);
+
+        Log.d(TAG, "Group owner accepted connection");
 
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(client.getOutputStream());
         objectOutputStream.writeObject(
@@ -105,10 +109,11 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
         // Send total number of files which will be transferred
         objectOutputStream.writeObject("" + localFileTransferActivity.getTotalFilesForTransfer());
 
-        ArrayList<Uri> fileUriList = localFileTransferActivity.getFileUriList();
+        ArrayList<Uri> fileUriList = localFileTransferActivity.getFileUriArrayList();
         for (
             Uri fileUri : fileUriList) { // Send the names of each of those files, in order
           objectOutputStream.writeObject(getFileName(fileUri));
+          Log.d(TAG, "Sending " + fileUri.toString());
         }
       } catch (Exception e) {
         e.printStackTrace();
@@ -146,5 +151,6 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
   @Override
   protected void onPostExecute(InetAddress inetAddress) {
     localFileTransferActivity.setClientAddress(inetAddress);
+    Log.d(TAG, "Handshake over");
   }
 }

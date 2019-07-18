@@ -35,13 +35,10 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
   private static final String TAG = "ReceiverDeviceAsyncTask";
 
   private LocalFileTransferActivity localFileTransferActivity;
-  private TransferProgressFragment transferProgressFragment;
   private int fileItemIndex;
 
-  public ReceiverDeviceAsyncTask(LocalFileTransferActivity localFileTransferActivity,
-      TransferProgressFragment transferProgressFragment) {
+  public ReceiverDeviceAsyncTask(LocalFileTransferActivity localFileTransferActivity) {
     this.localFileTransferActivity = localFileTransferActivity;
-    this.transferProgressFragment = transferProgressFragment;
   }
 
   @Override
@@ -93,7 +90,7 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
   @Override
   protected void onProgressUpdate(Integer... values) {
     int fileStatus = values[0];
-    transferProgressFragment.changeStatus(fileItemIndex, fileStatus);
+    localFileTransferActivity.changeStatus(fileItemIndex, fileStatus);
   }
 
   @Override protected void onCancelled() {

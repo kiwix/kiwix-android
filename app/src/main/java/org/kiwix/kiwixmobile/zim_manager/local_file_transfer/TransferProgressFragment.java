@@ -18,20 +18,16 @@ import org.kiwix.kiwixmobile.R;
 
 import java.util.ArrayList;
 
-/**
- * Part of the local file sharing module, this fragment is used to display the progress of the
- * file transfer. It displays a list of files along with their current status (as defined in the
- * {@link FileItem} class.
- */
+
 public class TransferProgressFragment extends Fragment {
 
   private static final String FILE_ITEMS = "file_items";
 
-  @BindView(R.id.recycler_view_transfer_files) RecyclerView filesRecyclerView;
+  /*@BindView(R.id.recycler_view_transfer_files) RecyclerView filesRecyclerView;*/
   private Unbinder unbinder;
 
-  private ArrayList<FileItem> fileItems;
-  private FileListAdapter fileListAdapter;
+  /*private ArrayList<FileItem> fileItems;
+  private FileListAdapter fileListAdapter;*/
 
   public TransferProgressFragment() {
     // Required empty public constructor
@@ -49,7 +45,7 @@ public class TransferProgressFragment extends Fragment {
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     Bundle bundle = this.getArguments();
-    this.fileItems = bundle.getParcelableArrayList(FILE_ITEMS);
+    /*this.fileItems = bundle.getParcelableArrayList(FILE_ITEMS);*/
   }
 
   @Override
@@ -58,10 +54,10 @@ public class TransferProgressFragment extends Fragment {
     View view = inflater.inflate(R.layout.fragment_transfer_progress, container, false);
     unbinder = ButterKnife.bind(this, view);
 
-    fileListAdapter = new FileListAdapter(fileItems);
+    /*fileListAdapter = new FileListAdapter(fileItems);
     filesRecyclerView.setAdapter(fileListAdapter);
 
-    filesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    filesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));*/
 
     return view;
   }
@@ -72,8 +68,8 @@ public class TransferProgressFragment extends Fragment {
     if (unbinder != null) unbinder.unbind();
   }
 
-  public void changeStatus(int itemIndex, @FileItem.FileStatus int status) {
+  /*public void changeStatus(int itemIndex, @FileItem.FileStatus int status) {
     fileItems.get(itemIndex).setFileStatus(status);
     fileListAdapter.notifyItemChanged(itemIndex);
-  }
+  }*/
 }
