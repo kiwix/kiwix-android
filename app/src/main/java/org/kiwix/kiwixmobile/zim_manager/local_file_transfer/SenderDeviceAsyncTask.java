@@ -23,7 +23,7 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTra
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.showToast;
 
 /**
- * Helper class for the local file sharing module, used in {@link DeviceListFragment}.
+ * Helper class for the local file sharing module, used in {DeviceListFragment}.
  *
  * Once the handshake between the two connected devices has taked place, this async-task is used
  * on the sender device to transfer the file to the receiver device at the FILE_TRANSFER_PORT port.

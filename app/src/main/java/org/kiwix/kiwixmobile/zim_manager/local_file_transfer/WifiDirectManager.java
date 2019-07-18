@@ -20,7 +20,7 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTra
 /**
  * Manager for the Wifi-P2p API, used in the local file transfer module
  * */
-public class WifiDirectManager implements WifiP2pManager.ChannelListener, DeviceListFragment.DeviceActionListener {
+public class WifiDirectManager implements WifiP2pManager.ChannelListener {
 
   private static final String TAG = "WifiDirectManager";
 
@@ -104,8 +104,6 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, Device
     }
   }
 
-  /* From DeviceListFragment.DeviceActionListener interface */
-  @Override
   public void connect(@NonNull final WifiP2pDevice peerDevice) {
     WifiP2pConfig config = new WifiP2pConfig();
     config.deviceAddress = peerDevice.deviceAddress;
@@ -127,7 +125,6 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, Device
     });
   }
 
-  @Override
   public void closeLocalFileTransferActivity() {
     activity.cancelAsyncTasks();
 

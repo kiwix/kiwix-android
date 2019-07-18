@@ -22,7 +22,7 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTra
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.getFileName;
 
 /**
- * Helper class for the local file sharing module, used in {@link DeviceListFragment}.
+ * Helper class for the local file sharing module, used in {DeviceListFragment}.
  *
  * Once two peer devices are connected through wifi direct, this task is executed to perform a
  * handshake between the two devices. The purpose of the handshake is to allow the file sending
