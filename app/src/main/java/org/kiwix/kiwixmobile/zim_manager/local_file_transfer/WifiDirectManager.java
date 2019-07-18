@@ -96,7 +96,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener {
     // Upon disconnection, retry one more time
     if (manager != null && !retryChannel) {
       Log.d(TAG, "Channel lost, trying again");
-      activity.resetData();
+      activity.clearPeers();
       retryChannel = true;
       manager.initialize(activity, getMainLooper(), this);
     } else {

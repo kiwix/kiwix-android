@@ -46,7 +46,7 @@ public class WifiDirectBroadcastReceiver extends BroadcastReceiver {
       } else {
         wifiActivity.setWifiP2pEnabled(false);
         showToast(wifiActivity, R.string.discovery_needs_wifi, Toast.LENGTH_SHORT);
-        wifiActivity.resetPeers();
+        wifiActivity.clearPeers();
       }
       Log.d(LocalFileTransferActivity.TAG, "WiFi P2P state changed - " + wifiP2pState);
     } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
@@ -69,7 +69,7 @@ public class WifiDirectBroadcastReceiver extends BroadcastReceiver {
         manager.requestConnectionInfo(channel, wifiActivity);
       } else {
         // Not connected after connection change -> Disconnected
-        wifiActivity.resetData();
+        wifiActivity.clearPeers();
       }
     } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
       // Update UI with wifi-direct details about the user device
