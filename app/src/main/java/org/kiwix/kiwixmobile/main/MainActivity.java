@@ -44,8 +44,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.provider.Settings;
-import android.text.InputFilter;
-import android.text.InputType;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
@@ -61,11 +59,9 @@ import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -77,7 +73,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -104,16 +99,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import java.io.File;
 
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
@@ -135,7 +126,7 @@ import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
-import org.kiwix.kiwixmobile.webserver.WebServer;
+import org.kiwix.kiwixmobile.webserver.WebServerHelper;
 import org.kiwix.kiwixmobile.wifi_hotspot.HotspotService;
 import org.kiwix.kiwixmobile.wifi_hotspot.WifiHotspotManager;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
@@ -181,6 +172,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 import static org.kiwix.kiwixmobile.utils.UpdateUtils.reformatProviderUrl;
+import static org.kiwix.kiwixmobile.webserver.WebServerHelper.isStarted;
 import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.checkHotspotState;
 
 public class MainActivity extends BaseActivity implements WebViewCallback,
@@ -202,14 +194,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private final ArrayList<String> bookmarks = new ArrayList<>();
   private final List<KiwixWebView> webViewList = new ArrayList<>();
   private Intent serviceIntent;
-  private WebServer webServer;
-  private static final int DEFAULT_PORT = 8080;
   private BroadcastReceiver broadcastReceiverNetworkState;
-  private static boolean isStarted = false;
-  private CoordinatorLayout coordinatorLayout;
-  private EditText editTextPort;
-  private TextView textViewIpAccess;
-  private int port;
+  public static WebServerHelper webServerHelper;
   @BindView(R.id.activity_main_root)
   ConstraintLayout root;
   @BindView(R.id.activity_main_toolbar)
@@ -789,12 +775,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(this);
     tts.shutdown();
-
-    stopAndroidWebServer();
+    webServerHelper.stopAndroidWebServer();
     isStarted = false;
-    if (broadcastReceiverNetworkState != null) {
-      unregisterReceiver(broadcastReceiverNetworkState);
-    }
+    //if (broadcastReceiverNetworkState != null) {
+    //  unregisterReceiver(broadcastReceiverNetworkState);
+    //}
   }
 
   private void updateTableOfContents() {
@@ -976,14 +961,13 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         openExternalUrl(intentSupportKiwix);
 
       case R.id.menu_wifi_hotspot:
-        startServerDialog();
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        //  toggleHotspot();
-        //} else {
-        //  if (showWritePermissionSettings()) { //request permission and if already granted switch hotspot.
-        //    switchHotspot();
-        //  }
-        //}
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+          toggleHotspot();
+        } else {
+          if (showWritePermissionSettings()) { //request permission and if already granted switch hotspot.
+            switchHotspot();
+          }
+        }
 
       default:
         break;
@@ -992,65 +976,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     return super.onOptionsItemSelected(item);
   }
 
-  private boolean startAndroidWebServer() {
-    if (!isStarted) {
-      port = getPortFromEditText();
-      try {
-        if (port == 0) {
-          throw new Exception();
-        }
-
-        webServer = new WebServer(port);
-        webServer.start();
-        //dialog.dismiss();
-        return true;
-      } catch (Exception e) {
-        e.printStackTrace();
-        Snackbar.make(coordinatorLayout,
-            "The PORT " + port + " doesn't work, please change it between 1000 and 9999.",
-            Snackbar.LENGTH_LONG).show();
-      }
-    }
-    return false;
-  }
-
-  private int getPortFromEditText() {
-    String valueEditText = editTextPort.getText().toString();
-    return (valueEditText.length() > 0) ? Integer.parseInt(valueEditText) : DEFAULT_PORT;
-  }
-
-  private void setIpAccess() {
-    textViewIpAccess.setText(getIpAddress());
-  }
-
-  // get Ip address of the device's wireless access point i.e. wifi hotspot OR wifi network
-  private String getIpAddress() {
-    Log.v("DANG", "Inside getIpAdress()");
-    String ip = "";
-    try {
-      Enumeration<NetworkInterface> enumNetworkInterfaces = NetworkInterface
-          .getNetworkInterfaces();
-      while (enumNetworkInterfaces.hasMoreElements()) {
-        NetworkInterface networkInterface = enumNetworkInterfaces
-            .nextElement();
-        Enumeration<InetAddress> enumInetAddress = networkInterface
-            .getInetAddresses();
-        while (enumInetAddress.hasMoreElements()) {
-          InetAddress inetAddress = enumInetAddress.nextElement();
-
-          if (inetAddress.isSiteLocalAddress()) {
-            ip += inetAddress.getHostAddress() + "\n";
-          }
-        }
-      }
-    } catch (SocketException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-      ip += "Something Wrong! " + e.toString() + "\n";
-    }
-    Log.v("DANG", "Returning : " + "http://" + ip);
-    return "http://" + ip;
-  }
 
   private void initBroadcastReceiverNetworkStateChanged() {
     final IntentFilter filters = new IntentFilter();
@@ -1059,69 +984,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     broadcastReceiverNetworkState = new BroadcastReceiver() {
       @Override
       public void onReceive(Context context, Intent intent) {
-        setIpAccess();
+        //setIpAccess();
       }
     };
     super.registerReceiver(broadcastReceiverNetworkState, filters);
   }
 
-  private boolean stopAndroidWebServer() {
-    if (isStarted && webServer != null) {
-      webServer.stop();
-      return true;
-    }
-    return false;
-  }
-
-  private void startServerDialog() {
-    AlertDialog.Builder alert = new AlertDialog.Builder(this);
-    alert.setTitle("Start the server");
-    alert.setMessage("Happy sharing");
-
-    LinearLayout layout = new LinearLayout(this);
-    layout.setOrientation(LinearLayout.HORIZONTAL);
-
-    textViewIpAccess = new TextView(this);
-    textViewIpAccess.setText("http://000.000.000.000");
-    textViewIpAccess.setTextSize(20);
-    layout.addView(textViewIpAccess);
-
-    TextView colonTextView = new TextView(this);
-    colonTextView.setTextSize(20);
-    colonTextView.setText(":");
-    layout.addView(colonTextView);
-
-    editTextPort = new EditText(this);
-    editTextPort.setInputType(InputType.TYPE_CLASS_NUMBER);
-    editTextPort.setHint(R.string.port_hint);
-    editTextPort.setText(R.string.port_hint);
-    editTextPort.setFilters(new InputFilter[] { new InputFilter.LengthFilter(4) });
-    editTextPort.setTextSize(20);
-    layout.addView(editTextPort);
-
-    alert.setView(layout);
-
-    alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-      public void onClick(DialogInterface dialog, int whichButton) {
-        if (!isStarted && startAndroidWebServer()) {
-          isStarted = true;
-          editTextPort.setEnabled(false);
-        } else if (stopAndroidWebServer()) {
-          isStarted = false;
-          editTextPort.setEnabled(true);
-        }
-      }
-    });
-
-    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-      public void onClick(DialogInterface dialog, int whichButton) {
-        // Canceled.
-      }
-    });
-    alert.show();
-
-    setIpAccess();
-  }
   /** Dialog to take user confirmation before deleting all notes */
   private void showClearAllNotesDialog() {
 
@@ -1243,9 +1111,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       startService(ACTION_TURN_OFF_BEFORE_O);
     } else {
       if (isMobileDataEnabled(this)) {
-
         mobileDataDialog();
       } else {
+        webServerHelper = new WebServerHelper(this);
         startService(ACTION_TURN_ON_BEFORE_O);
       }
       }
@@ -2497,7 +2365,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         // requests here.
 
         //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        //webServerHelper = new WebServerHelper(this);
         startService(ACTION_TURN_ON_AFTER_O);
+
         //}
       } catch (ApiException exception) {
         switch (exception.getStatusCode()) {
