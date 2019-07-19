@@ -3,14 +3,12 @@ package org.kiwix.kiwixmobile.webserver;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.google.android.material.snackbar.Snackbar;
@@ -30,10 +28,10 @@ public class WebServerHelper extends Activity {
   private static final int DEFAULT_PORT = 8080;
   private static CoordinatorLayout coordinatorLayout;
 
-public WebServerHelper(Context context)
-{
-  this.context = context;
-}
+  public WebServerHelper(Context context) {
+    this.context = context;
+  }
+
   public static void startServerDialog() {
     AlertDialog.Builder alert = new AlertDialog.Builder(context);
     alert.setTitle("Start the server");
@@ -151,5 +149,4 @@ public WebServerHelper(Context context)
     Log.v("DANG", "Returning : " + "http://" + ip);
     return "http://" + ip;
   }
-
 }

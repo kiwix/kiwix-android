@@ -103,7 +103,7 @@ public class HotspotService extends Service {
   }
 
   private Notification buildForegroundNotification(String status, boolean showStopButton) {
-    Log.v("DANG","Building notification "+status);
+    Log.v("DANG", "Building notification " + status);
     builder = new NotificationCompat.Builder(this);
     builder.setContentTitle("Kiwix Hotspot").setContentText(status);
     Intent targetIntent = new Intent(this, MainActivity.class);
