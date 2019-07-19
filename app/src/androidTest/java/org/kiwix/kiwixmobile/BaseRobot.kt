@@ -8,7 +8,7 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
 
-const val WAIT_TIMEOUT_MS = 5000L
+const val WAIT_TIMEOUT_MS = 10000L
 
 abstract class BaseRobot(
   val instrumentation: Instrumentation = InstrumentationRegistry.getInstrumentation(),
