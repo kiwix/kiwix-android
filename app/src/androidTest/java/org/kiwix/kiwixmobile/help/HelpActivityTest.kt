@@ -17,10 +17,6 @@
  */
 package org.kiwix.kiwixmobile.help
 
-import android.content.Intent
-import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.rule.ActivityTestRule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
@@ -31,7 +27,6 @@ class HelpActivityTest : BaseActivityTest<HelpActivity>() {
 
   @Test
   fun verifyHelpActivity() {
-    Intents.init()
     help {
       clickOnWhatDoesKiwixDo()
       assertWhatDoesKiwixDoIsExpanded()
@@ -41,8 +36,6 @@ class HelpActivityTest : BaseActivityTest<HelpActivity>() {
       assertLargeZimsIsExpanded()
       clickOnSendFeedback()
     }
-    intended(IntentMatchers.hasAction(Intent.ACTION_CHOOSER))
-    Intents.release()
   }
 
 }
