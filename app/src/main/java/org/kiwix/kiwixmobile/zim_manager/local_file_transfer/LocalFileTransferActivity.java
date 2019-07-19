@@ -67,7 +67,8 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.Fil
  * 2) After handshake, starting the files transfer using {@link SenderDeviceAsyncTask} on the sender
  * device and {@link ReceiverDeviceAsyncTask} files receiving device
  */
-public class LocalFileTransferActivity extends AppCompatActivity implements WifiP2pManager.PeerListListener, WifiP2pManager.ConnectionInfoListener {
+public class LocalFileTransferActivity extends AppCompatActivity
+    implements WifiP2pManager.PeerListListener, WifiP2pManager.ConnectionInfoListener {
 
   // Not a typo, 'Log' tags have a length upper limit of 25 characters
   public static final String TAG = "LocalFileTransferActvty";
@@ -88,7 +89,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   @BindView(R.id.list_peer_devices) ListView listViewPeerDevices;
   @BindView(R.id.text_view_empty_peer_list) TextView textViewPeerDevices;
   @BindView(R.id.recycler_view_transfer_files) RecyclerView filesRecyclerView;
-
 
   private ArrayList<Uri> fileUriArrayList; // For sender device, stores uris of the files
   public @NonNull Boolean fileSendingDevice = false;// Whether the device is the file sender or not
@@ -143,9 +143,10 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
     wifiDirectManager.initialiseWifiDirectManager();
 
-    listViewPeerDevices.setAdapter(new WifiPeerListAdapter(this, R.layout.row_peer_device, peerDevices));
+    listViewPeerDevices.setAdapter(
+        new WifiPeerListAdapter(this, R.layout.row_peer_device, peerDevices));
 
-    if(fileSendingDevice) {
+    if (fileSendingDevice) {
       totalFilesForTransfer = fileUriArrayList.size();
 
       for (int i = 0; i < fileUriArrayList.size(); i++) {
@@ -163,13 +164,16 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
       return;
     }
 
-    WifiP2pDevice senderSelectedPeerDevice = (WifiP2pDevice) listViewPeerDevices.getAdapter().getItem(position);
+    WifiP2pDevice senderSelectedPeerDevice =
+        (WifiP2pDevice) listViewPeerDevices.getAdapter().getItem(position);
     wifiDirectManager.setSenderSelectedPeerDevice(senderSelectedPeerDevice);
-    alertDialogShower.show(new KiwixDialog.FileTransferConfirmation(senderSelectedPeerDevice.deviceName),
+    alertDialogShower.show(
+        new KiwixDialog.FileTransferConfirmation(senderSelectedPeerDevice.deviceName),
         new Function0<Unit>() {
           @Override public Unit invoke() {
             wifiDirectManager.connect();
-            showToast(LocalFileTransferActivity.this, R.string.performing_handshake, Toast.LENGTH_LONG);
+            showToast(LocalFileTransferActivity.this, R.string.performing_handshake,
+                Toast.LENGTH_LONG);
             return Unit.INSTANCE;
           }
         });
@@ -190,7 +194,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
       if (!checkExternalStorageWritePermission()) return true;
 
-       /* Initiate discovery */
+      /* Initiate discovery */
       if (!isWifiP2pEnabled()) {
         requestEnableWifiP2pServices();
         return true;
@@ -309,7 +313,8 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
         Log.d(LocalFileTransferActivity.TAG, "Starting file transfer");
 
         fileReceiverDeviceAddress =
-            (wifiDirectManager.isGroupOwner()) ? selectedPeerDeviceInetAddress : wifiDirectManager.getGroupOwnerAddress();
+            (wifiDirectManager.isGroupOwner()) ? selectedPeerDeviceInetAddress
+                : wifiDirectManager.getGroupOwnerAddress();
 
         // Hack for allowing slower receiver devices to setup server before sender device requests to connect
         showToast(this, R.string.preparing_files, Toast.LENGTH_LONG);
@@ -398,7 +403,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     wifiDirectManager.setGroupInfo(groupInfo);
 
     // Start handshake between the devices
-    if(BuildConfig.DEBUG) {
+    if (BuildConfig.DEBUG) {
       Log.d(TAG, "Starting handshake");
     }
     peerGroupHandshakeAsyncTask = new PeerGroupHandshakeAsyncTask(this, groupInfo);
