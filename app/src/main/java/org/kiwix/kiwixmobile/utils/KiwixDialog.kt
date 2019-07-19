@@ -28,7 +28,7 @@ sealed class KiwixDialog(
   data class FileTransferConfirmation(override val args: Array<out Any>) : KiwixDialog( // For the local file transfer module
       null, R.string.transfer_to, R.string.yes, android.R.string.cancel
   ), HasBodyFormatArgs {
-    constructor(selectedPeerDevice: WifiP2pDevice) : this(arrayOf(selectedPeerDevice.deviceName))
+    constructor(selectedPeerDeviceName: String) : this(arrayOf(selectedPeerDeviceName))
   }
 
   open class YesNoDialog(

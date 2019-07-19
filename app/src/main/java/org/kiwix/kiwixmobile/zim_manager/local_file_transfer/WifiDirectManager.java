@@ -6,11 +6,13 @@ import android.content.IntentFilter;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import java.net.InetAddress;
 import org.kiwix.kiwixmobile.R;
 
 import static android.os.Looper.getMainLooper;
@@ -37,6 +39,11 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener {
   private final IntentFilter intentFilter = new IntentFilter();
   // For specifying broadcasts (of the P2P API) that the module needs to respond to
   private BroadcastReceiver receiver = null; // For receiving the broadcasts given by above filter
+
+  private WifiP2pDevice userDevice;   // Represents the device on which the app is running
+  private WifiP2pInfo groupInfo;      // Corresponds to P2P group formed between the two devices
+
+  private WifiP2pDevice senderSelectedPeerDevice = null;
 
   public WifiDirectManager(@NonNull LocalFileTransferActivity activity) {
     this.activity = activity;
@@ -73,7 +80,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener {
 
       @Override
       public void onFailure(int reason) {
-        String errorMessage = activity.getErrorMessage(reason);
+        String errorMessage = getErrorMessage(reason);
         Log.d(TAG, activity.getString(R.string.discovery_failed) + ": " + errorMessage);
         showToast(activity,
             activity.getString(R.string.discovery_failed),
@@ -104,9 +111,37 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener {
     }
   }
 
-  public void connect(@NonNull final WifiP2pDevice peerDevice) {
+  public void setUserDevice(WifiP2pDevice userDevice) {
+    this.userDevice = userDevice;
+  }
+
+  public void setGroupInfo(WifiP2pInfo groupInfo) {
+    this.groupInfo = groupInfo;
+  }
+
+  public boolean isGroupFormed() {
+    return groupInfo.groupFormed;
+  }
+
+  public boolean isGroupOwner() {
+    return groupInfo.isGroupOwner;
+  }
+
+  public InetAddress getGroupOwnerAddress() {
+    return groupInfo.groupOwnerAddress;
+  }
+
+  public void setSenderSelectedPeerDevice(WifiP2pDevice senderSelectedPeerDevice) {
+    this.senderSelectedPeerDevice = senderSelectedPeerDevice;
+  }
+
+  public void connect() {
+    if(senderSelectedPeerDevice == null) {
+      Log.d(TAG, "No device set as selected");
+    }
+
     WifiP2pConfig config = new WifiP2pConfig();
-    config.deviceAddress = peerDevice.deviceAddress;
+    config.deviceAddress = senderSelectedPeerDevice.deviceAddress;
     config.wps.setup = WpsInfo.PBC;
 
     manager.connect(channel, config, new WifiP2pManager.ActionListener() {
@@ -117,7 +152,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener {
 
       @Override
       public void onFailure(int reason) {
-        String errorMessage = activity.getErrorMessage(reason);
+        String errorMessage = getErrorMessage(reason);
         Log.d(TAG, activity.getString(R.string.connection_failed) + ": " + errorMessage);
         showToast(activity, activity.getString(R.string.connection_failed),
             Toast.LENGTH_LONG);
@@ -154,5 +189,20 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener {
 
   public void closeActivity() {
     activity.finish();
+  }
+
+
+  public String getErrorMessage(int reason) {
+    switch (reason) {
+      case WifiP2pManager.ERROR:
+        return "Internal error";
+      case WifiP2pManager.BUSY:
+        return "Framework busy, unable to service request";
+      case WifiP2pManager.P2P_UNSUPPORTED:
+        return "P2P unsupported on this device";
+
+      default:
+        return "Unknown error code - " + reason;
+    }
   }
 }

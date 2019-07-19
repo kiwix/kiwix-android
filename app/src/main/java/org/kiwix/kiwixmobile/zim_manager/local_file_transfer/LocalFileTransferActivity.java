@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -70,8 +69,8 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.Fil
  */
 public class LocalFileTransferActivity extends AppCompatActivity implements WifiP2pManager.PeerListListener, WifiP2pManager.ConnectionInfoListener {
 
+  // Not a typo, 'Log' tags have a length upper limit of 25 characters
   public static final String TAG = "LocalFileTransferActvty";
-      // Not a typo, 'Log' tags have a length upper limit of 25 characters
   public static final int REQUEST_ENABLE_WIFI_P2P = 1;
   public static final int REQUEST_ENABLE_LOCATION_SERVICES = 2;
   private static final int PERMISSION_REQUEST_CODE_COARSE_LOCATION = 1;
@@ -99,22 +98,16 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   private int totalFilesForTransfer = -1;
   private int filesSent = 0;          // Count of number of files transferred until now
   private ArrayList<FileItem> filesToSend = new ArrayList<>();
+  private FileListAdapter fileListAdapter;
 
-  private WifiP2pDevice userDevice;   // Represents the device on which the app is running
-  private WifiP2pInfo groupInfo;      // Corresponds to P2P group formed between the two devices
   private List<WifiP2pDevice> peerDevices = new ArrayList<WifiP2pDevice>();
-
-  private WifiP2pDevice selectedPeerDevice = null;
   private InetAddress selectedPeerDeviceInetAddress;
-
   private InetAddress fileReceiverDeviceAddress;  // IP address of the file receiving device
   private boolean fileTransferStarted = false;
 
   private PeerGroupHandshakeAsyncTask peerGroupHandshakeAsyncTask;
   private SenderDeviceAsyncTask senderDeviceAsyncTaskArray[];
   private ReceiverDeviceAsyncTask receiverDeviceAsyncTask;
-
-  private FileListAdapter fileListAdapter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -170,11 +163,12 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
       return;
     }
 
-    selectedPeerDevice = (WifiP2pDevice) listViewPeerDevices.getAdapter().getItem(position);
-    alertDialogShower.show(new KiwixDialog.FileTransferConfirmation(selectedPeerDevice),
+    WifiP2pDevice senderSelectedPeerDevice = (WifiP2pDevice) listViewPeerDevices.getAdapter().getItem(position);
+    wifiDirectManager.setSenderSelectedPeerDevice(senderSelectedPeerDevice);
+    alertDialogShower.show(new KiwixDialog.FileTransferConfirmation(senderSelectedPeerDevice.deviceName),
         new Function0<Unit>() {
           @Override public Unit invoke() {
-            (wifiDirectManager).connect(selectedPeerDevice);
+            wifiDirectManager.connect();
             showToast(LocalFileTransferActivity.this, R.string.performing_handshake, Toast.LENGTH_LONG);
             return Unit.INSTANCE;
           }
@@ -196,7 +190,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
       if (!checkExternalStorageWritePermission()) return true;
 
-      // Initiate discovery
+       /* Initiate discovery */
       if (!isWifiP2pEnabled()) {
         requestEnableWifiP2pServices();
         return true;
@@ -237,8 +231,8 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     return this.wifiDirectManager.isWifiP2pEnabled();
   }
 
-  public void updateUserDevice(WifiP2pDevice device) { // Update UI with user device's details
-    this.userDevice = device;
+  public void updateUserDevice(WifiP2pDevice userDevice) { // Update UI with user device's details
+    wifiDirectManager.setUserDevice(userDevice);
 
     if (userDevice != null) {
       deviceName.setText(userDevice.deviceName);
@@ -249,20 +243,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   public void clearPeers() {
     peerDevices.clear();
     ((WifiPeerListAdapter) listViewPeerDevices.getAdapter()).notifyDataSetChanged();
-  }
-
-  public String getErrorMessage(int reason) {
-    switch (reason) {
-      case WifiP2pManager.ERROR:
-        return "Internal error";
-      case WifiP2pManager.BUSY:
-        return "Framework busy, unable to service request";
-      case WifiP2pManager.P2P_UNSUPPORTED:
-        return "P2P unsupported on this device";
-
-      default:
-        return "Unknown error code - " + reason;
-    }
   }
 
   public static String getDeviceStatus(int status) {
@@ -319,17 +299,17 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
   private void startFileTransfer() {
     fileTransferStarted = true;
 
-    if (groupInfo.groupFormed && !fileSendingDevice) {
+    if (wifiDirectManager.isGroupFormed() && !fileSendingDevice) {
       displayFileTransferProgress();
 
       receiverDeviceAsyncTask = new ReceiverDeviceAsyncTask(this);
       receiverDeviceAsyncTask.execute();
-    } else if (groupInfo.groupFormed) {
+    } else if (wifiDirectManager.isGroupFormed()) { // && fileSendingDevice
       {
         Log.d(LocalFileTransferActivity.TAG, "Starting file transfer");
 
         fileReceiverDeviceAddress =
-            (groupInfo.isGroupOwner) ? selectedPeerDeviceInetAddress : groupInfo.groupOwnerAddress;
+            (wifiDirectManager.isGroupOwner()) ? selectedPeerDeviceInetAddress : wifiDirectManager.getGroupOwnerAddress();
 
         // Hack for allowing slower receiver devices to setup server before sender device requests to connect
         showToast(this, R.string.preparing_files, Toast.LENGTH_LONG);
@@ -342,10 +322,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
         }
       }
     }
-  }
-
-  public WifiP2pDevice getUserDevice() {
-    return userDevice;
   }
 
   public int getTotalFilesForTransfer() {
@@ -417,9 +393,10 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
 
   /* From WifiP2pManager.ConnectionInfoListener callback-interface */
   @Override
-  public void onConnectionInfoAvailable(WifiP2pInfo info) {
+  public void onConnectionInfoAvailable(WifiP2pInfo groupInfo) {
     /* Devices have successfully connected, and 'info' holds information about the wifi p2p group formed */
-    groupInfo = info;
+    wifiDirectManager.setGroupInfo(groupInfo);
+
     // Start handshake between the devices
     if(BuildConfig.DEBUG) {
       Log.d(TAG, "Starting handshake");
@@ -579,7 +556,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements Wifi
     }
   }
 
-  /* Miscellaneous helper methods*/
+  /* Miscellaneous helper methods */
   static void showToast(Context context, int stringResource, int duration) {
     showToast(context, context.getString(stringResource), duration);
   }
