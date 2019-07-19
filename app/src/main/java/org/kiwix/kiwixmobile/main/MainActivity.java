@@ -29,7 +29,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -416,8 +415,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     wifiHotspotManager = new WifiHotspotManager(this);
 
     serviceIntent = new Intent(this, HotspotService.class);
-
-    //initBroadcastReceiverNetworkStateChanged();
   }
 
   //End of onCreate
@@ -974,20 +971,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
 
     return super.onOptionsItemSelected(item);
-  }
-
-
-  private void initBroadcastReceiverNetworkStateChanged() {
-    final IntentFilter filters = new IntentFilter();
-    filters.addAction("android.net.wifi.WIFI_STATE_CHANGED");
-    filters.addAction("android.net.wifi.STATE_CHANGE");
-    broadcastReceiverNetworkState = new BroadcastReceiver() {
-      @Override
-      public void onReceive(Context context, Intent intent) {
-        //setIpAccess();
-      }
-    };
-    super.registerReceiver(broadcastReceiverNetworkState, filters);
   }
 
   /** Dialog to take user confirmation before deleting all notes */
