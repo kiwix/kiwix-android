@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
@@ -22,7 +23,7 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTra
 /**
  * Manager for the Wifi-P2p API, used in the local file transfer module
  * */
-public class WifiDirectManager implements WifiP2pManager.ChannelListener {
+public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2pManager.PeerListListener, WifiP2pManager.ConnectionInfoListener {
 
   private static final String TAG = "WifiDirectManager";
 
@@ -109,6 +110,20 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener {
     } else {
       showToast(activity, R.string.severe_loss_error, Toast.LENGTH_LONG);
     }
+  }
+
+  /* From WifiP2pManager.PeerListListener callback-interface */
+  @Override
+  public void onPeersAvailable(@NonNull WifiP2pDeviceList peers) {
+    ((Callbacks) activity).updatePeerDevicesList(peers);
+  }
+
+  /* From WifiP2pManager.ConnectionInfoListener callback-interface */
+  @Override
+  public void onConnectionInfoAvailable(@NonNull WifiP2pInfo groupInfo) {
+    /* Devices have successfully connected, and 'info' holds information about the wifi p2p group formed */
+    setGroupInfo(groupInfo);
+    ((Callbacks) activity).performHandshakeWithSelectedPeerDevice(groupInfo);
   }
 
   public void setUserDevice(@NonNull WifiP2pDevice userDevice) {
@@ -204,5 +219,11 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener {
       default:
         return ("Unknown error code - " + reason);
     }
+  }
+
+  public interface Callbacks {
+    void updatePeerDevicesList(@NonNull WifiP2pDeviceList peers);
+
+    void performHandshakeWithSelectedPeerDevice(@NonNull WifiP2pInfo groupInfo);
   }
 }

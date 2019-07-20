@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
-import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -67,8 +66,8 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.Fil
  * 2) After handshake, starting the files transfer using {@link SenderDeviceAsyncTask} on the sender
  * device and {@link ReceiverDeviceAsyncTask} files receiving device
  */
-public class LocalFileTransferActivity extends AppCompatActivity
-    implements WifiP2pManager.PeerListListener, WifiP2pManager.ConnectionInfoListener {
+public class LocalFileTransferActivity extends AppCompatActivity implements
+    WifiDirectManager.Callbacks {
 
   // Not a typo, 'Log' tags have a length upper limit of 25 characters
   public static final String TAG = "LocalFileTransferActvty";
@@ -196,7 +195,7 @@ public class LocalFileTransferActivity extends AppCompatActivity
       if (!checkExternalStorageWritePermission()) return true;
 
       /* Initiate discovery */
-      if (!isWifiP2pEnabled()) {
+      if (!wifiDirectManager.isWifiP2pEnabled()) {
         requestEnableWifiP2pServices();
         return true;
       }
@@ -226,14 +225,6 @@ public class LocalFileTransferActivity extends AppCompatActivity
 
   public @NonNull ArrayList<Uri> getFileUriArrayList() {
     return fileUriArrayList;
-  }
-
-  public void setWifiP2pEnabled(boolean wifiP2pEnabled) {
-    this.wifiDirectManager.setWifiP2pEnabled(wifiP2pEnabled);
-  }
-
-  public boolean isWifiP2pEnabled() {
-    return this.wifiDirectManager.isWifiP2pEnabled();
   }
 
   public void updateUserDevice(@Nullable WifiP2pDevice userDevice) { // Update UI with user device's details
@@ -382,9 +373,9 @@ public class LocalFileTransferActivity extends AppCompatActivity
     fileListAdapter.notifyItemChanged(itemIndex);
   }
 
-  /* From WifiP2pManager.PeerListListener callback-interface */
+  /* From WifiDirectManager.Callbacks interface */
   @Override
-  public void onPeersAvailable(@NonNull WifiP2pDeviceList peers) {
+  public void updatePeerDevicesList(@NonNull WifiP2pDeviceList peers) {
     searchingPeersProgressBar.setVisibility(View.GONE);
     listViewPeerDevices.setVisibility(View.VISIBLE);
 
@@ -397,13 +388,8 @@ public class LocalFileTransferActivity extends AppCompatActivity
     }
   }
 
-  /* From WifiP2pManager.ConnectionInfoListener callback-interface */
   @Override
-  public void onConnectionInfoAvailable(@NonNull WifiP2pInfo groupInfo) {
-    /* Devices have successfully connected, and 'info' holds information about the wifi p2p group formed */
-    wifiDirectManager.setGroupInfo(groupInfo);
-
-    // Start handshake between the devices
+  public void performHandshakeWithSelectedPeerDevice(@NonNull WifiP2pInfo groupInfo) {
     if (BuildConfig.DEBUG) {
       Log.d(TAG, "Starting handshake");
     }
@@ -554,7 +540,7 @@ public class LocalFileTransferActivity extends AppCompatActivity
       }
 
       case REQUEST_ENABLE_WIFI_P2P: {
-        if (!isWifiP2pEnabled()) {
+        if (!wifiDirectManager.isWifiP2pEnabled()) {
           showToast(this, R.string.discovery_needs_wifi, Toast.LENGTH_LONG);
         }
         break;
