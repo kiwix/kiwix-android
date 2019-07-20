@@ -13,6 +13,7 @@
         android:hint="Device Name"
         android:textIsSelectable="false"
         android:textStyle="bold"
+        android:background="@android:color/transparent"
         android:textSize="17sp"
         android:paddingTop="1dp"
         android:paddingBottom="1dp"

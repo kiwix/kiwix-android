@@ -111,14 +111,14 @@ public class LocalFileTransferActivity extends AppCompatActivity
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_local_file_transfer);
     KiwixApplication.getApplicationComponent().activityComponent()
         .activity(this)
         .build()
         .inject(this);
+    setTheme(sharedPreferenceUtil.nightMode() ? R.style.Theme_AppCompat_DayNight_NoActionBar : R.style.AppTheme);
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_local_file_transfer);
     ButterKnife.bind(this);
-    //setTheme(sharedPreferenceUtil.nightMode() ? R.style.AddNoteDialogStyle_Night : R.style.AppTheme_Base);
 
     /*
      * Presence of file Uris decides whether the device with the activity open is a sender or receiver:
