@@ -9,6 +9,7 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import org.kiwix.kiwixmobile.R;
 
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.showToast;
@@ -25,8 +26,8 @@ public class WifiDirectBroadcastReceiver extends BroadcastReceiver {
   private WifiP2pManager.Channel channel;
   private LocalFileTransferActivity wifiActivity;
 
-  public WifiDirectBroadcastReceiver(WifiP2pManager manager, WifiP2pManager.Channel channel,
-      LocalFileTransferActivity activity) {
+  public WifiDirectBroadcastReceiver(@NonNull WifiP2pManager manager, @NonNull WifiP2pManager.Channel channel,
+      @NonNull LocalFileTransferActivity activity) {
     super();
     this.manager = manager;
     this.channel = channel;
@@ -34,7 +35,7 @@ public class WifiDirectBroadcastReceiver extends BroadcastReceiver {
   }
 
   @Override
-  public void onReceive(Context context, Intent intent) {
+  public void onReceive(@NonNull Context context, @NonNull Intent intent) {
     String action = intent.getAction();
 
     if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {

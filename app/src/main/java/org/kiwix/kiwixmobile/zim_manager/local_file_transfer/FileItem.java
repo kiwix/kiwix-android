@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.IntDef;
 
+import androidx.annotation.NonNull;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -28,7 +29,7 @@ public class FileItem implements Parcelable {
   private String fileName;
   private int fileStatus;
 
-  public FileItem(String fileName, @FileStatus int fileStatus) {
+  public FileItem(@NonNull String fileName, @FileStatus int fileStatus) {
     this.fileName = fileName;
     this.fileStatus = fileStatus;
   }
@@ -40,7 +41,7 @@ public class FileItem implements Parcelable {
   }
 
   @Override
-  public void writeToParcel(Parcel dest, int flags) {
+  public void writeToParcel(@NonNull Parcel dest, int flags) {
     dest.writeString(fileName);
     dest.writeInt(fileStatus);
   }
@@ -59,7 +60,7 @@ public class FileItem implements Parcelable {
     }
   };
 
-  public FileItem(Parcel parcel) {
+  public FileItem(@NonNull Parcel parcel) {
     this.fileName = parcel.readString();
     this.fileStatus = parcel.readInt();
   }
@@ -69,7 +70,7 @@ public class FileItem implements Parcelable {
     this.fileStatus = fileStatus;
   }
 
-  public String getFileName() {
+  public @NonNull String getFileName() {
     return fileName;
   }
 

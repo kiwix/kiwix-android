@@ -78,11 +78,8 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
         localFileTransferActivity.incrementTotalFilesSent();
       }
 
-      if (isCancelled()) {
-        return false; // Returned in case the task was cancelled
-      } else {
-        return true;  // Returned in case of a successful file transfer
-      }
+      return !isCancelled(); // Return true only if not cancelled
+
     } catch (IOException e) {
       Log.e(TAG, e.getMessage());
       return false; // Returned when an error was encountered during transfer

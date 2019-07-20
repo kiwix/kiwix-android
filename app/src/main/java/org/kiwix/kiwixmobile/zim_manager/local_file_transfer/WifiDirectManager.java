@@ -26,7 +26,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener {
 
   private static final String TAG = "WifiDirectManager";
 
-  private LocalFileTransferActivity activity;
+  @NonNull LocalFileTransferActivity activity;
 
   /* Variables related to the WiFi P2P API */
   private boolean wifiP2pEnabled = false; // Whether WiFi has been enabled or not
@@ -111,11 +111,11 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener {
     }
   }
 
-  public void setUserDevice(WifiP2pDevice userDevice) {
+  public void setUserDevice(@NonNull WifiP2pDevice userDevice) {
     this.userDevice = userDevice;
   }
 
-  public void setGroupInfo(WifiP2pInfo groupInfo) {
+  public void setGroupInfo(@NonNull WifiP2pInfo groupInfo) {
     this.groupInfo = groupInfo;
   }
 
@@ -127,11 +127,11 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener {
     return groupInfo.isGroupOwner;
   }
 
-  public InetAddress getGroupOwnerAddress() {
+  public @NonNull InetAddress getGroupOwnerAddress() {
     return groupInfo.groupOwnerAddress;
   }
 
-  public void setSenderSelectedPeerDevice(WifiP2pDevice senderSelectedPeerDevice) {
+  public void setSenderSelectedPeerDevice(@NonNull WifiP2pDevice senderSelectedPeerDevice) {
     this.senderSelectedPeerDevice = senderSelectedPeerDevice;
   }
 
@@ -192,7 +192,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener {
   }
 
 
-  public String getErrorMessage(int reason) {
+  public @NonNull String getErrorMessage(int reason) {
     switch (reason) {
       case WifiP2pManager.ERROR:
         return "Internal error";
@@ -202,7 +202,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener {
         return "P2P unsupported on this device";
 
       default:
-        return "Unknown error code - " + reason;
+        return ("Unknown error code - " + reason);
     }
   }
 }

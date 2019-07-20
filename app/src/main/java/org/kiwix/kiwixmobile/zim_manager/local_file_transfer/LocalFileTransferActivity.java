@@ -106,11 +106,11 @@ public class LocalFileTransferActivity extends AppCompatActivity
   private boolean fileTransferStarted = false;
 
   private PeerGroupHandshakeAsyncTask peerGroupHandshakeAsyncTask;
-  private SenderDeviceAsyncTask senderDeviceAsyncTaskArray[];
+  private SenderDeviceAsyncTask[] senderDeviceAsyncTaskArray;
   private ReceiverDeviceAsyncTask receiverDeviceAsyncTask;
 
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_local_file_transfer);
     KiwixApplication.getApplicationComponent().activityComponent()
@@ -118,6 +118,7 @@ public class LocalFileTransferActivity extends AppCompatActivity
         .build()
         .inject(this);
     ButterKnife.bind(this);
+    //setTheme(sharedPreferenceUtil.nightMode() ? R.style.AddNoteDialogStyle_Night : R.style.AppTheme_Base);
 
     /*
      * Presence of file Uris decides whether the device with the activity open is a sender or receiver:
@@ -180,13 +181,13 @@ public class LocalFileTransferActivity extends AppCompatActivity
   }
 
   @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
+  public boolean onCreateOptionsMenu(@NonNull Menu menu) {
     getMenuInflater().inflate(R.menu.wifi_file_share_items, menu);
     return true;
   }
 
   @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
+  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
     if (item.getItemId() == R.id.menu_item_search_devices) {
 
       /* Permissions essential for this module */
@@ -235,7 +236,7 @@ public class LocalFileTransferActivity extends AppCompatActivity
     return this.wifiDirectManager.isWifiP2pEnabled();
   }
 
-  public void updateUserDevice(WifiP2pDevice userDevice) { // Update UI with user device's details
+  public void updateUserDevice(@Nullable WifiP2pDevice userDevice) { // Update UI with user device's details
     wifiDirectManager.setUserDevice(userDevice);
 
     if (userDevice != null) {
@@ -249,7 +250,7 @@ public class LocalFileTransferActivity extends AppCompatActivity
     ((WifiPeerListAdapter) listViewPeerDevices.getAdapter()).notifyDataSetChanged();
   }
 
-  public static String getDeviceStatus(int status) {
+  public static @NonNull String getDeviceStatus(int status) {
 
     if (BuildConfig.DEBUG) Log.d(TAG, "Peer Status: " + status);
     switch (status) {
@@ -269,7 +270,7 @@ public class LocalFileTransferActivity extends AppCompatActivity
     }
   }
 
-  public static String getFileName(Uri fileUri) {
+  public static @NonNull String getFileName(@NonNull Uri fileUri) {
     String fileUriString = fileUri.toString();
     // Returns text after location of last slash in the file path
     return fileUriString.substring(fileUriString.lastIndexOf('/') + 1);
@@ -287,7 +288,7 @@ public class LocalFileTransferActivity extends AppCompatActivity
     textViewPeerDevices.setVisibility(View.INVISIBLE);
   }
 
-  public void setClientAddress(InetAddress clientAddress) {
+  public void setClientAddress(@Nullable InetAddress clientAddress) {
     if (clientAddress == null) {
       // null is returned only in case of a failed handshake
       showToast(this, R.string.device_not_cooperating, Toast.LENGTH_LONG);
@@ -337,11 +338,11 @@ public class LocalFileTransferActivity extends AppCompatActivity
     this.totalFilesForTransfer = totalFilesForTransfer;
   }
 
-  public ArrayList<FileItem> getFileItems() {
+  public @NonNull ArrayList<FileItem> getFileItems() {
     return filesToSend;
   }
 
-  public void setFileItems(ArrayList<FileItem> fileItems) {
+  public void setFileItems(@NonNull ArrayList<FileItem> fileItems) {
     this.filesToSend = fileItems;
   }
 
@@ -353,15 +354,15 @@ public class LocalFileTransferActivity extends AppCompatActivity
     return (filesSent == totalFilesForTransfer);
   }
 
-  public String getZimStorageRootPath() {
+  public @NonNull String getZimStorageRootPath() {
     return (sharedPreferenceUtil.getPrefStorage() + "/Kiwix/");
   }
 
-  public InetAddress getFileReceiverDeviceAddress() {
+  public @NonNull InetAddress getFileReceiverDeviceAddress() {
     return fileReceiverDeviceAddress;
   }
 
-  public static void copyToOutputStream(InputStream inputStream, OutputStream outputStream)
+  public static void copyToOutputStream(@NonNull InputStream inputStream, @NonNull OutputStream outputStream)
       throws IOException {
     byte[] bufferForBytes = new byte[1024];
     int bytesRead;
@@ -383,7 +384,7 @@ public class LocalFileTransferActivity extends AppCompatActivity
 
   /* From WifiP2pManager.PeerListListener callback-interface */
   @Override
-  public void onPeersAvailable(WifiP2pDeviceList peers) {
+  public void onPeersAvailable(@NonNull WifiP2pDeviceList peers) {
     searchingPeersProgressBar.setVisibility(View.GONE);
     listViewPeerDevices.setVisibility(View.VISIBLE);
 
@@ -398,7 +399,7 @@ public class LocalFileTransferActivity extends AppCompatActivity
 
   /* From WifiP2pManager.ConnectionInfoListener callback-interface */
   @Override
-  public void onConnectionInfoAvailable(WifiP2pInfo groupInfo) {
+  public void onConnectionInfoAvailable(@NonNull WifiP2pInfo groupInfo) {
     /* Devices have successfully connected, and 'info' holds information about the wifi p2p group formed */
     wifiDirectManager.setGroupInfo(groupInfo);
 

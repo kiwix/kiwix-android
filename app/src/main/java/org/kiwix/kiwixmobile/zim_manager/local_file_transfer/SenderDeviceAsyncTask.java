@@ -58,9 +58,8 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
     final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
     ContentResolver contentResolver = localFileTransferActivity.getContentResolver();
 
-    try (Socket socket = new Socket();
-         InputStream fileInputStream = contentResolver.openInputStream(
-             fileUri)) { // Represents the sender device
+    try (Socket socket = new Socket(); // Represents the sender device
+         InputStream fileInputStream = contentResolver.openInputStream(fileUri)) {
 
       if (isCancelled()) {
         return false;

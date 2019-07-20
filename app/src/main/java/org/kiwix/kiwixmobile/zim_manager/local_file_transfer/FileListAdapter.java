@@ -24,7 +24,7 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.Fil
 public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileViewHolder> {
   private final ArrayList<FileItem> fileItems;
 
-  public FileListAdapter(ArrayList<FileItem> fileItems) {
+  public FileListAdapter(@NonNull ArrayList<FileItem> fileItems) {
     this.fileItems = fileItems;
   }
 
@@ -58,7 +58,8 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
         case ERROR:
           holder.statusImage.setImageResource(R.drawable.ic_baseline_error_24px);
           break;
-        default:
+        case TO_BE_SENT:
+        case SENDING:
           break;
       }
 
