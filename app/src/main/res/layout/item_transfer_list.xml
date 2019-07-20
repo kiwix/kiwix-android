@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:padding="10dp">
 
   <TextView
@@ -12,6 +13,7 @@
       android:layout_height="wrap_content"
       android:gravity="center_vertical"
       android:hint="File name"
+      tools:ignore="HardcodedText"
       android:textIsSelectable="true"
       android:textSize="14sp"
       android:background="@android:color/transparent"

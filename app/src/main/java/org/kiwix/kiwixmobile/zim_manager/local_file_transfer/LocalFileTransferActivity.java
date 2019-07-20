@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -66,6 +67,7 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.Fil
  * 2) After handshake, starting the files transfer using {@link SenderDeviceAsyncTask} on the sender
  * device and {@link ReceiverDeviceAsyncTask} files receiving device
  */
+@SuppressLint("GoogleAppIndexingApiWarning")
 public class LocalFileTransferActivity extends AppCompatActivity implements
     WifiDirectManager.Callbacks {
 
