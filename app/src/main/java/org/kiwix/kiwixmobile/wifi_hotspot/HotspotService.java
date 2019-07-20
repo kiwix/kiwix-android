@@ -25,6 +25,7 @@ import static org.kiwix.kiwixmobile.main.MainActivity.ACTION_TURN_OFF_BEFORE_O;
 import static org.kiwix.kiwixmobile.main.MainActivity.ACTION_TURN_ON_AFTER_O;
 import static org.kiwix.kiwixmobile.main.MainActivity.ACTION_TURN_ON_BEFORE_O;
 import static org.kiwix.kiwixmobile.webserver.WebServerHelper.startServerDialog;
+import static org.kiwix.kiwixmobile.webserver.WebServerHelper.stopAndroidWebServer;
 
 /**
  * HotspotService is used to add a foreground service for the wifi hotspot.
@@ -81,9 +82,11 @@ public class HotspotService extends Service {
         }
         break;
       case ACTION_TURN_OFF_BEFORE_O:
-        hotspotManager.setWifiEnabled(null, false);
-        stopForeground(true);
-        stopSelf();
+        if (hotspotManager.setWifiEnabled(null, false)) {
+          stopForeground(true);
+          stopSelf();
+          stopAndroidWebServer();
+        }
         break;
       case ACTION_TURN_OFF_AFTER_O:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -91,6 +94,7 @@ public class HotspotService extends Service {
         }
         stopForeground(true);
         stopSelf();
+        stopAndroidWebServer();
         break;
       default:
         break;
@@ -138,6 +142,7 @@ public class HotspotService extends Service {
     }
     stopForeground(true);
     stopSelf();
+    stopAndroidWebServer();
   }
 
   @Override
