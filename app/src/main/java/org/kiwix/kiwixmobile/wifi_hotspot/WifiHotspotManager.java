@@ -12,6 +12,7 @@ import java.lang.reflect.Method;
 import org.kiwix.kiwixmobile.R;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
+import static org.kiwix.kiwixmobile.webserver.WebServerHelper.startServerDialog;
 
 /**
  * WifiHotstopManager class makes use of the Android's WifiManager and WifiConfiguration class
@@ -65,6 +66,8 @@ public class WifiHotspotManager {
               + " \n SSID is : "
               + currentConfig.SSID);
 
+          startServerDialog();
+          
           //hotspotDetailsDialog();
 
           oreoenabled = true;
