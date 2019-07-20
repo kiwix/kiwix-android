@@ -1,12 +1,12 @@
 package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.lang.ref.WeakReference;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.R;
 
@@ -38,22 +38,24 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
 
   private static final String TAG = "SenderDeviceAsyncTask";
 
-  private LocalFileTransferActivity localFileTransferActivity;
+  private WeakReference<LocalFileTransferActivity> weakReferenceToActivity;
   private int fileItemIndex;
 
   public SenderDeviceAsyncTask(LocalFileTransferActivity localFileTransferActivity, int fileItemIndex) {
-    this.localFileTransferActivity = localFileTransferActivity;
+    this.weakReferenceToActivity = new WeakReference<>(localFileTransferActivity);
     this.fileItemIndex = fileItemIndex;
   }
 
   @Override
   protected void onPreExecute() {
+    final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
     localFileTransferActivity.changeStatus(fileItemIndex, SENDING);
   }
 
   @Override
   protected Boolean doInBackground(Uri... fileUris) {
     Uri fileUri = fileUris[0];    // Uri of file to be transferred
+    final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
     ContentResolver contentResolver = localFileTransferActivity.getContentResolver();
 
     try (Socket socket = new Socket();
@@ -88,6 +90,7 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Void, Boolean> {
 
   @Override
   protected void onPostExecute(Boolean fileSendSuccessful) {
+    final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
     localFileTransferActivity.incrementTotalFilesSent();
 
     if (fileSendSuccessful) { // Whether this task was successful in sending the file

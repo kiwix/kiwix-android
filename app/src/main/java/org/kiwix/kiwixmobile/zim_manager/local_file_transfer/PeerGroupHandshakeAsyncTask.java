@@ -5,6 +5,7 @@ import android.net.wifi.p2p.WifiP2pInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.lang.ref.WeakReference;
 import org.kiwix.kiwixmobile.BuildConfig;
 
 import java.io.InputStream;
@@ -39,11 +40,11 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
   private static final String TAG = "PeerGrpHndshakeAsyncTsk";
   private final String HANDSHAKE_MESSAGE = "Request Kiwix File Sharing";
 
-  private LocalFileTransferActivity localFileTransferActivity;
+  private WeakReference<LocalFileTransferActivity> weakReferenceToActivity;
   private WifiP2pInfo groupInfo;
 
   public PeerGroupHandshakeAsyncTask(LocalFileTransferActivity localFileTransferActivity, WifiP2pInfo groupInfo) {
-    this.localFileTransferActivity = localFileTransferActivity;
+    this.weakReferenceToActivity = new WeakReference<>(localFileTransferActivity);
     this.groupInfo = groupInfo;
   }
 
@@ -103,6 +104,8 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
   }
 
   private void exchangeFileTransferMetadata(OutputStream outputStream, InputStream inputStream) {
+    final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
+
     if (localFileTransferActivity.isFileSender()) {
       try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)) {
         // Send total number of files which will be transferred
@@ -149,6 +152,7 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
 
   @Override
   protected void onPostExecute(InetAddress inetAddress) {
+    final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
     localFileTransferActivity.setClientAddress(inetAddress);
   }
 }

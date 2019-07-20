@@ -22,8 +22,7 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTra
 /**
  * Helper class, part of the local file sharing module.
  *
- * Defines the Adapter for the list of wifi peer-device items displayed in {
- * DeviceListFragment}
+ * Defines the Adapter for the list of wifi peer-device items displayed.
  */
 public class WifiPeerListAdapter extends ArrayAdapter<WifiP2pDevice> {
 

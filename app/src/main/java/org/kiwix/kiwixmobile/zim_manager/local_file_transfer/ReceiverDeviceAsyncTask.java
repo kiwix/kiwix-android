@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.lang.ref.WeakReference;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.R;
 
@@ -34,11 +35,11 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
 
   private static final String TAG = "ReceiverDeviceAsyncTask";
 
-  private LocalFileTransferActivity localFileTransferActivity;
+  private WeakReference<LocalFileTransferActivity> weakReferenceToActivity;
   private int fileItemIndex;
 
   public ReceiverDeviceAsyncTask(LocalFileTransferActivity localFileTransferActivity) {
-    this.localFileTransferActivity = localFileTransferActivity;
+    this.weakReferenceToActivity = new WeakReference<>(localFileTransferActivity);
   }
 
   @Override
@@ -46,6 +47,7 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
     try (ServerSocket serverSocket = new ServerSocket(FILE_TRANSFER_PORT)) {
       if (BuildConfig.DEBUG) Log.d(TAG, "Server: Socket opened at " + FILE_TRANSFER_PORT);
 
+      final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
       final String KIWIX_ROOT = localFileTransferActivity.getZimStorageRootPath();
 
       int totalFileCount = localFileTransferActivity.getTotalFilesForTransfer();
@@ -90,6 +92,7 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
   @Override
   protected void onProgressUpdate(Integer... values) {
     int fileStatus = values[0];
+    final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
     localFileTransferActivity.changeStatus(fileItemIndex, fileStatus);
   }
 
@@ -101,6 +104,7 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
   protected void onPostExecute(Boolean allFilesReceived) {
     if (BuildConfig.DEBUG) Log.d(TAG, "File transfer complete");
 
+    final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
     if (allFilesReceived) {
       showToast(localFileTransferActivity, R.string.file_transfer_complete,
           Toast.LENGTH_LONG);

@@ -58,6 +58,8 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
         case ERROR:
           holder.statusImage.setImageResource(R.drawable.ic_baseline_error_24px);
           break;
+        default:
+          break;
       }
 
       holder.statusImage.setVisibility(View.VISIBLE);
