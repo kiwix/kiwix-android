@@ -65,9 +65,6 @@ public class WebServerHelper extends Activity {
         if (!isStarted && startAndroidWebServer()) {
           isStarted = true;
           editTextPort.setEnabled(false);
-        } else if (stopAndroidWebServer()) {
-          isStarted = false;
-          editTextPort.setEnabled(true);
         }
       }
     });
@@ -77,8 +74,7 @@ public class WebServerHelper extends Activity {
         // Canceled.
       }
     });
-    stopAndroidWebServer();
-    isStarted = false;
+
     alert.show();
 
     setIpAccess();
@@ -87,6 +83,7 @@ public class WebServerHelper extends Activity {
   public static boolean stopAndroidWebServer() {
     if (isStarted && webServer != null) {
       webServer.stop();
+      isStarted = false;
       return true;
     }
     return false;
