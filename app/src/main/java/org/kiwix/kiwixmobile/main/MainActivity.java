@@ -1116,7 +1116,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
 
       builder.setPositiveButton(this.getString(R.string.yes), (dialog, id) -> disableMobileData());
-      builder.setNegativeButton(android.R.string.no, (dialog, id) -> wifiHotspotManager.setWifiEnabled(null, true));
+      builder.setNegativeButton(android.R.string.no,
+          (dialog, id) -> startService(ACTION_TURN_ON_BEFORE_O));
       builder.setTitle(this.getString(R.string.mobile_data_enabled));
       builder.setMessage(
           this.getString(R.string.mobile_data_message) + "\n" + this.getString(
