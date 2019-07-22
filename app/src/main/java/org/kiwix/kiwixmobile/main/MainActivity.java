@@ -939,7 +939,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   /** Method to delete all user notes */
-  private void clearAllNotes() {
+  void clearAllNotes() {
 
     boolean result = true; // Result of all delete() calls is &&-ed to this variable
 
@@ -995,7 +995,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       *  returning null means that the AddNoteDialog is currently not on display (as doesn't exist)
       **/
       AddNoteDialog dialogFragment = new AddNoteDialog(sharedPreferenceUtil);
-      dialogFragment.show(fragmentTransaction, AddNoteDialog.TAG); // For DialogFragments, show() handles the fragment commit and display
+      dialogFragment.show(fragmentTransaction, AddNoteDialog.TAG);
+      // For DialogFragments, show() handles the fragment commit and display
     }
   }
 

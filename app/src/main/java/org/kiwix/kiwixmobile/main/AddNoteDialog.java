@@ -76,16 +76,16 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
   private String zimNoteDirectoryName;  // Corresponds to "ZimFileName" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
   private String articleNotefileName;   // Corresponds to "ArticleUrl" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
   private boolean noteFileExists = false;
-  private boolean noteEdited = false;   // Keeps track of state of the note (whether edited since last save)
+  boolean noteEdited = false;   // Keeps track of state of the note (whether edited since last save)
 
   private String ZIM_NOTES_DIRECTORY;   // Stores path to directory for the currently open zim's notes
 
-  public AddNoteDialog(SharedPreferenceUtil sharedPreferenceUtil) {
+  public AddNoteDialog(@NonNull SharedPreferenceUtil sharedPreferenceUtil) {
     this.sharedPreferenceUtil = sharedPreferenceUtil;
   }
 
   @Override
-  public void onCreate(Bundle savedInstanceState) {
+  public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     setStyle(DialogFragment.STYLE_NORMAL, sharedPreferenceUtil.nightMode() ? R.style.AddNoteDialogStyle_Night : R.style.AddNoteDialogStyle);
@@ -109,7 +109,7 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+  public @NonNull View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     super.onCreateView(inflater, container, savedInstanceState);
     View view = inflater.inflate(R.layout.dialog_add_note, container, false);
     unbinder = ButterKnife.bind(this, view);
@@ -214,7 +214,7 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
     };
   }
 
-  private void exitAddNoteDialog() {
+  void exitAddNoteDialog() {
     if(noteEdited) {
       Fragment previousInstance = getActivity().getSupportFragmentManager().findFragmentByTag(ConfirmationAlertDialogFragment.TAG);
 
@@ -244,7 +244,7 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
     }
   }
 
-  private void enableSaveNoteMenuItem() {
+  void enableSaveNoteMenuItem() {
     if(toolbar.getMenu() != null) {
       MenuItem saveItem = toolbar.getMenu().findItem(R.id.save_note);
       saveItem.setEnabled(true);
@@ -255,7 +255,7 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
     }
   }
 
-  private void enableShareNoteMenuItem() {
+  void enableShareNoteMenuItem() {
     if(toolbar.getMenu() != null) {
       MenuItem shareItem = toolbar.getMenu().findItem(R.id.share_note);
       shareItem.setEnabled(true);
@@ -277,17 +277,17 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
     }
   }
 
-  public void showKeyboard(){
+  private void showKeyboard(){
     InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
     inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
   }
 
-  public void closeKeyboard(){
+  void closeKeyboard(){
     InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
     inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
   }
 
-  private void saveNote(String noteText) {
+  void saveNote(String noteText) {
 
     /* String content of the EditText, given by noteText, is saved into the text file given by:
      *    "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
@@ -349,26 +349,17 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
       noteFileExists = true;
 
       StringBuilder contents = new StringBuilder();
-      try {
+      try(BufferedReader input = new BufferedReader(new java.io.FileReader(noteFile))) {
+        String line = null;
 
-        BufferedReader input = new BufferedReader(new java.io.FileReader(noteFile));
-        try {
-          String line = null;
-
-          while((line = input.readLine()) != null) {
-            contents.append(line);
-            contents.append(System.getProperty("line.separator"));
-          }
-        } catch (IOException e) {
-          e.printStackTrace();
-          Log.d(TAG, "Error reading line with BufferedReader");
-        } finally {
-          input.close();
+        while((line = input.readLine()) != null) {
+          contents.append(line);
+          contents.append(System.getProperty("line.separator"));
         }
 
       } catch (IOException e) {
         e.printStackTrace();
-        Log.d(TAG, "Error closing BufferedReader");
+        Log.d(TAG, "Error reading line with BufferedReader");
       }
 
       addNoteEditText.setText(contents.toString()); // Display the note content
@@ -379,7 +370,7 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
     // No action in case the note file for the currently open article doesn't exist
   }
 
-  private void shareNote() {
+  void shareNote() {
 
     /* The note text file corresponding to the currently open article, given at:
      *    "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
@@ -421,7 +412,7 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
     }
   }
 
-  public static boolean isExternalStorageWritable() {
+  static boolean isExternalStorageWritable() {
     return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
   }
 
