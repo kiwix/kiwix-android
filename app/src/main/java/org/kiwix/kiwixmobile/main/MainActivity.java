@@ -154,7 +154,7 @@ import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 import static org.kiwix.kiwixmobile.utils.UpdateUtils.reformatProviderUrl;
 
 public class MainActivity extends BaseActivity implements WebViewCallback,
-    MainContract.View{
+    MainContract.View {
 
   private static final String NEW_TAB = "NEW_TAB";
   private static final String HOME_URL = "file:///android_asset/home.html";
@@ -276,7 +276,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
   };
 
-
   private static void updateWidgets(Context context) {
     Intent intent = new Intent(context.getApplicationContext(), KiwixSearchWidget.class);
     intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
@@ -359,13 +358,13 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     wasHideToolbar = isHideToolbar;
     booksAdapter = new BooksOnDiskAdapter(
-       new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
-           bookOnDiskItem -> {
-             open(bookOnDiskItem);
-             return Unit.INSTANCE;
-           },
-           null,
-           null),
+        new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
+            bookOnDiskItem -> {
+              open(bookOnDiskItem);
+              return Unit.INSTANCE;
+            },
+            null,
+            null),
         BookOnDiskDelegate.LanguageDelegate.INSTANCE
     );
 
@@ -846,14 +845,14 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         break;
 
       case R.id.menu_add_note:
-        if(requestExternalStorageWritePermissionForNotes()) {
+        if (requestExternalStorageWritePermissionForNotes()) {
           // Check permission since notes are stored in the public-external storage
           showAddNoteDialog();
         }
         break;
 
       case R.id.menu_clear_notes:
-        if(requestExternalStorageWritePermissionForNotes()) { // Check permission since notes are stored in the public-external storage
+        if (requestExternalStorageWritePermissionForNotes()) { // Check permission since notes are stored in the public-external storage
           showClearAllNotesDialog();
         }
         break;
@@ -943,8 +942,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     boolean result = true; // Result of all delete() calls is &&-ed to this variable
 
-    if(AddNoteDialog.isExternalStorageWritable()) {
-      if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+    if (AddNoteDialog.isExternalStorageWritable()) {
+      if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+          != PackageManager.PERMISSION_GRANTED) {
         Log.d("MainActivity", "WRITE_EXTERNAL_STORAGE permission not granted");
         showToast(R.string.ext_storage_permission_not_granted, Toast.LENGTH_LONG);
         return;
@@ -955,17 +955,17 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       File notesDirectory = new File(NOTES_DIRECTORY);
       File[] filesInNotesDirectory = notesDirectory.listFiles();
 
-      if(filesInNotesDirectory == null) { // Notes folder doesn't exist
+      if (filesInNotesDirectory == null) { // Notes folder doesn't exist
         showToast(R.string.notes_deletion_none_found, Toast.LENGTH_LONG);
         return;
       }
 
-      for(File wikiFileDirectory : filesInNotesDirectory) {
-        if(wikiFileDirectory.isDirectory()) {
+      for (File wikiFileDirectory : filesInNotesDirectory) {
+        if (wikiFileDirectory.isDirectory()) {
           File[] filesInWikiDirectory = wikiFileDirectory.listFiles();
 
-          for(File noteFile : filesInWikiDirectory) {
-            if(noteFile.isFile()) {
+          for (File noteFile : filesInWikiDirectory) {
+            if (noteFile.isFile()) {
               result = result && noteFile.delete();
             }
           }
@@ -974,10 +974,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         result = result && wikiFileDirectory.delete(); // Wiki specific notes directory deleted
       }
 
-      result = result && notesDirectory.delete(); // "{External Storage}/Kiwix/Notes" directory deleted
+      result =
+          result && notesDirectory.delete(); // "{External Storage}/Kiwix/Notes" directory deleted
     }
 
-    if(result) {
+    if (result) {
       showToast(R.string.notes_deletion_successful, Toast.LENGTH_SHORT);
     } else {
       showToast(R.string.notes_deletion_unsuccessful, Toast.LENGTH_SHORT);
@@ -990,10 +991,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     Fragment previousInstance = getSupportFragmentManager().findFragmentByTag(AddNoteDialog.TAG);
 
     // To prevent multiple instances of the DialogFragment
-    if(previousInstance == null) {
+    if (previousInstance == null) {
       /* Since the DialogFragment is never added to the back-stack, so findFragmentByTag()
-      *  returning null means that the AddNoteDialog is currently not on display (as doesn't exist)
-      **/
+       *  returning null means that the AddNoteDialog is currently not on display (as doesn't exist)
+       **/
       AddNoteDialog dialogFragment = new AddNoteDialog(sharedPreferenceUtil);
       dialogFragment.show(fragmentTransaction, AddNoteDialog.TAG);
       // For DialogFragments, show() handles the fragment commit and display
@@ -1001,13 +1002,13 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private boolean requestExternalStorageWritePermissionForNotes() {
-    if(Build.VERSION.SDK_INT >= 23) { // For Marshmallow & higher API levels
+    if (Build.VERSION.SDK_INT >= 23) { // For Marshmallow & higher API levels
 
-      if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+      if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+          == PackageManager.PERMISSION_GRANTED) {
         return true;
-
       } else {
-        if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+        if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
           /* shouldShowRequestPermissionRationale() returns false when:
            *  1) User has previously checked on "Don't ask me again", and/or
            *  2) Permission has been disabled on device
@@ -1015,9 +1016,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           showToast(R.string.ext_storage_permission_rationale_add_note, Toast.LENGTH_LONG);
         }
 
-        requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE);
+        requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+            REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE);
       }
-
     } else { // For Android versions below Marshmallow 6.0 (API 23)
       return true; // As already requested at install time
     }
@@ -1203,12 +1204,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
       case REQUEST_WRITE_STORAGE_PERMISSION_ADD_NOTE: {
 
-        if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
           // Successfully granted permission, so opening the note keeper
           showAddNoteDialog();
-
         } else {
-          Toast.makeText(getApplicationContext(), getString(R.string.ext_storage_write_permission_denied_add_note), Toast.LENGTH_LONG);
+          Toast.makeText(getApplicationContext(),
+              getString(R.string.ext_storage_write_permission_denied_add_note), Toast.LENGTH_LONG);
         }
 
         break;
@@ -1328,7 +1329,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     //Check maybe need refresh
     String articleUrl = getCurrentWebView().getUrl();
     boolean isBookmark = false;
-    BookmarkItem bookmark = BookmarkItem.fromZimContentProvider(getCurrentWebView().getTitle(),articleUrl);
+    BookmarkItem bookmark =
+        BookmarkItem.fromZimContentProvider(getCurrentWebView().getTitle(), articleUrl);
     if (articleUrl != null && !bookmarks.contains(articleUrl)) {
       if (ZimContentProvider.getId() != null) {
         presenter.saveBookmark(bookmark);
@@ -1979,7 +1981,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     String url = getCurrentWebView().getUrl();
     if (url != null && !url.equals(HOME_URL)) {
       final long timeStamp = System.currentTimeMillis();
-      SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy", LanguageUtils.getCurrentLocale(this));
+      SimpleDateFormat sdf =
+          new SimpleDateFormat("d MMM yyyy", LanguageUtils.getCurrentLocale(this));
       HistoryListItem.HistoryItem history = new HistoryListItem.HistoryItem(
           0L,
           ZimContentProvider.getId(),
