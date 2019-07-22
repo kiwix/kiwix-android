@@ -70,6 +70,7 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
 
   private Unbinder unbinder;
 
+  private String zimFileName;
   private String zimFileTitle;
   private String articleTitle;
   private String zimNoteDirectoryName;  // Corresponds to "ZimFileName" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
@@ -89,13 +90,22 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
 
     setStyle(DialogFragment.STYLE_NORMAL, sharedPreferenceUtil.nightMode() ? R.style.AddNoteDialogStyle_Night : R.style.AddNoteDialogStyle);
 
-    zimFileTitle = ZimContentProvider.getZimFileTitle();
-    articleTitle = ((MainActivity)getActivity()).getCurrentWebView().getTitle();
+    zimFileName = ZimContentProvider.getZimFile(); // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"
 
-    zimNoteDirectoryName = getZimNoteDirectoryName();
-    articleNotefileName = getArticleNotefileName();
+    if(zimFileName != null) { // No zim file currently opened
+      zimFileTitle = ZimContentProvider.getZimFileTitle();
+      articleTitle = ((MainActivity)getActivity()).getCurrentWebView().getTitle();
 
-    ZIM_NOTES_DIRECTORY = NOTES_DIRECTORY + zimNoteDirectoryName + "/";
+      zimNoteDirectoryName = getZimNoteDirectoryName();
+      articleNotefileName = getArticleNotefileName();
+
+      ZIM_NOTES_DIRECTORY = NOTES_DIRECTORY + zimNoteDirectoryName + "/";
+
+    } else {
+      showToast(R.string.error_filenotfound, Toast.LENGTH_LONG);
+      closeKeyboard();
+      getFragmentManager().beginTransaction().remove(AddNoteDialog.this).commit();
+    }
   }
 
   @Override
@@ -159,7 +169,7 @@ public class AddNoteDialog extends DialogFragment implements ConfirmationAlertDi
   }
 
   private @NonNull String getZimNoteDirectoryName() {
-    String zimFileName = ZimContentProvider.getZimFile(); // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"
+    /*String zimFileName = ZimContentProvider.getZimFile(); // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"*/
 
     String noteDirectoryName = getTextAfterLastSlashWithoutExtension(zimFileName);
 
