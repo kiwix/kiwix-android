@@ -236,10 +236,10 @@ class ZimManageViewModel @Inject constructor(
                   .timeout(60, SECONDS)
                   .retry(5)
                   .subscribe(
-                      { library.offer(it) },
+                      { library.onNext(it) },
                       {
                         it.printStackTrace()
-                        library.offer(LibraryNetworkEntity().apply { book = LinkedList() })
+                        library.onNext(LibraryNetworkEntity().apply { book = LinkedList() })
                       }
                   )
             },
