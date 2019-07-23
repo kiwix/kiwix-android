@@ -34,7 +34,7 @@ sealed class LanguageListViewHolder<T : LanguageListItem>(override val container
       item_language_books_count.text = containerView.resources.getQuantityString(
           R.plurals.books_count, language.occurencesOfLanguage, language.occurencesOfLanguage
       )
-      item_language_checkbox.isChecked = language.active;
+      item_language_checkbox.isChecked = language.active
       item_language_clickable_area.setOnClickListener { clickAction(item) }
     }
 

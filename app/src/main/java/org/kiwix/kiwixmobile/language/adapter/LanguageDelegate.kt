@@ -20,7 +20,7 @@ sealed class LanguageDelegate<I : LanguageListItem, VH : LanguageListViewHolder<
 
   }
 
-  class LanguageItemDelegate(val clickAction: (LanguageItem) -> Unit) : LanguageDelegate<LanguageItem, LanguageViewHolder>() {
+  class LanguageItemDelegate(private val clickAction: (LanguageItem) -> Unit) : LanguageDelegate<LanguageItem, LanguageViewHolder>() {
     override val itemClass = LanguageItem::class.java
 
     override fun createViewHolder(parent: ViewGroup) =

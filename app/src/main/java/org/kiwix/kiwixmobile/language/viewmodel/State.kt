@@ -5,7 +5,7 @@ import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.HeaderItem
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.zim_manager.Language
 
-sealed class State() {
+sealed class State {
   object Loading : State()
   object Saving : State()
   data class Content(

@@ -34,7 +34,7 @@ class LanguageActivity : BaseActivity() {
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
-  val compositeDisposable = CompositeDisposable()
+  private val compositeDisposable = CompositeDisposable()
 
   private val languageAdapter =
     LanguageAdapter(
@@ -75,7 +75,7 @@ class LanguageActivity : BaseActivity() {
     compositeDisposable.clear()
   }
 
-  fun render(state: State) = when (state) {
+  private fun render(state: State) = when (state) {
     Loading -> language_progressbar.show()
     is Content -> {
       language_progressbar.hide()

@@ -8,7 +8,7 @@ sealed class LanguageListItem {
   data class HeaderItem constructor(
     override val id: Long
   ) : LanguageListItem() {
-    companion object{
+    companion object {
       const val SELECTED = Long.MAX_VALUE
       const val OTHER = Long.MIN_VALUE
     }
