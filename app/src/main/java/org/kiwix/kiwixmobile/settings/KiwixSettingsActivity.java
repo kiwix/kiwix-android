@@ -21,6 +21,7 @@ package org.kiwix.kiwixmobile.settings;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.EditTextPreference;
@@ -229,11 +230,16 @@ public class KiwixSettingsActivity extends BaseActivity {
     }
 
     private void setAppVersionNumber() {
-      String version;
-      version = BuildConfig.VERSION_NAME + " Build: " + BuildConfig.VERSION_CODE;
-      EditTextPreference versionPref = (EditTextPreference) PrefsFragment.this
-          .findPreference(PREF_VERSION);
-      versionPref.setSummary(version);
+      EditTextPreference versionPref = (EditTextPreference) findPreference(PREF_VERSION);
+      versionPref.setSummary(BuildConfig.VERSION_NAME + " Build: " + getVersionCode());
+    }
+
+    private int getVersionCode()  {
+      try {
+        return getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionCode;
+      } catch (PackageManager.NameNotFoundException e) {
+        throw new RuntimeException(e);
+      }
     }
 
     @Override
