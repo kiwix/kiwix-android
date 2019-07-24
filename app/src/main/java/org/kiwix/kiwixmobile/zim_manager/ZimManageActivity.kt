@@ -50,7 +50,7 @@ class ZimManageActivity : BaseActivity() {
 
   private val zimManageViewModel: ZimManageViewModel by lazy {
     ViewModelProviders.of(this, viewModelFactory)
-        .get(ZimManageViewModel::class.java)
+      .get(ZimManageViewModel::class.java)
   }
   private val mSectionsPagerAdapter: SectionsPagerAdapter by lazy {
     SectionsPagerAdapter(this, supportFragmentManager)
@@ -76,7 +76,7 @@ class ZimManageActivity : BaseActivity() {
       adapter = mSectionsPagerAdapter
       offscreenPageLimit = 2
       tabs.setupWithViewPager(this)
-      addOnPageChangeListener(SimplePageChangeListener(this@ZimManageActivity::updateMenu))
+      addOnPageChangeListener(SimplePageChangeListener(::updateMenu))
     }
     zimManageViewModel.languageItems.observe(this, Observer {
       onLanguageItemsForDialogUpdated(it!!)
@@ -100,17 +100,17 @@ class ZimManageActivity : BaseActivity() {
       toast(R.string.wait_for_load)
     } else {
       LanguageSelectDialog.Builder(this, dialogStyle())
-          .apply {
-            onOkClicked = {
-              Flowable.fromCallable {
-                languagesDao.insert(it)
-              }
-                  .subscribeOn(Schedulers.io())
-                  .subscribe()
+        .apply {
+          onOkClicked = {
+            Flowable.fromCallable {
+              languagesDao.insert(it)
             }
-            this.languages = languages
+              .subscribeOn(Schedulers.io())
+              .subscribe()
           }
-          .show()
+          this.languages = languages
+        }
+        .show()
     }
   }
 
@@ -124,8 +124,8 @@ class ZimManageActivity : BaseActivity() {
     supportActionBar!!.setHomeButtonEnabled(true)
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     supportActionBar!!.setTitle(R.string.zim_manager)
-    toolbar.setNavigationOnClickListener { _ -> onBackPressed() }
-    toolbar.setOnClickListener { _ ->
+    toolbar.setNavigationOnClickListener { onBackPressed() }
+    toolbar.setOnClickListener {
       if (manageViewPager.currentItem == 1)
         searchItem?.expandActionView()
     }
@@ -147,9 +147,9 @@ class ZimManageActivity : BaseActivity() {
     languageItem = menu.findItem(R.id.select_language)
     val searchView = searchItem!!.actionView as SearchView
     updateMenu(manageViewPager.currentItem)
-    searchView.setOnQueryTextListener(SimpleTextListener {
-      zimManageViewModel.requestFiltering.onNext(it)
-    })
+    searchView.setOnQueryTextListener(
+      SimpleTextListener(zimManageViewModel.requestFiltering::onNext)
+    )
     return true
   }
 

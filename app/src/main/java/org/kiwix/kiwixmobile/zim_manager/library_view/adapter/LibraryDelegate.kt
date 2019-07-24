@@ -28,8 +28,8 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryViewHolder.
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryViewHolder.LibraryDividerViewHolder
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base.AbsDelegateAdapter
 
-sealed class LibraryDelegate<I : LibraryListItem, VH : LibraryViewHolder<I>> :
-    AbsDelegateAdapter<I, LibraryListItem, VH> {
+sealed class LibraryDelegate<I : LibraryListItem, out VH : LibraryViewHolder<I>> :
+  AbsDelegateAdapter<I, LibraryListItem, VH> {
 
   class BookDelegate(
     private val bookUtils: BookUtils,
@@ -39,9 +39,9 @@ sealed class LibraryDelegate<I : LibraryListItem, VH : LibraryViewHolder<I>> :
 
     override fun createViewHolder(parent: ViewGroup) =
       LibraryBookViewHolder(
-          parent.inflate(R.layout.library_item, false),
-          bookUtils,
-          clickAction
+        parent.inflate(R.layout.library_item, false),
+        bookUtils,
+        clickAction
       )
   }
 

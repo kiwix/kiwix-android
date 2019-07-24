@@ -38,37 +38,37 @@ import javax.inject.Inject
 
 class Fat32Checker @Inject constructor(sharedPreferenceUtil: SharedPreferenceUtil) {
   private val _fileSystemStates: BehaviorProcessor<FileSystemState> = BehaviorProcessor.create()
-  val fileSystemStates = _fileSystemStates.distinctUntilChanged()
+  val fileSystemStates: Flowable<FileSystemState> = _fileSystemStates.distinctUntilChanged()
   var fileObserver: FileObserver? = null
   private val requestCheckSystemFileType = BehaviorProcessor.createDefault(Unit)
 
   init {
     Flowable.combineLatest(
-        sharedPreferenceUtil.prefStorages.distinctUntilChanged(),
-        requestCheckSystemFileType,
-        pollForExternalStoragePermissionGranted(),
-        Function3 { storage: String, _: Unit, _: Boolean -> storage }
+      sharedPreferenceUtil.prefStorages.distinctUntilChanged(),
+      requestCheckSystemFileType,
+      pollForExternalStoragePermissionGranted(),
+      Function3 { storage: String, _: Unit, _: Boolean -> storage }
     )
-        .observeOn(Schedulers.io())
-        .subscribe(
-            {
-              val systemState = toFileSystemState(it)
-              _fileSystemStates.onNext(systemState)
-              fileObserver = if (systemState == NotEnoughSpaceFor4GbFile) fileObserver(it) else null
-            },
-            Throwable::printStackTrace
-        )
+      .observeOn(Schedulers.io())
+      .subscribe(
+        {
+          val systemState = toFileSystemState(it)
+          _fileSystemStates.onNext(systemState)
+          fileObserver = if (systemState == NotEnoughSpaceFor4GbFile) fileObserver(it) else null
+        },
+        Throwable::printStackTrace
+      )
   }
 
   private fun pollForExternalStoragePermissionGranted() =
     Flowable.interval(1, SECONDS)
-        .map {
-          ContextCompat.checkSelfPermission(
-              KiwixApplication.getInstance(), permission.WRITE_EXTERNAL_STORAGE
-          ) == PackageManager.PERMISSION_GRANTED
-        }
-        .filter { it }
-        .take(1)
+      .map {
+        ContextCompat.checkSelfPermission(
+          KiwixApplication.getInstance(), permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+      }
+      .filter { it }
+      .take(1)
 
   private fun fileObserver(it: String?): FileObserver {
     return object : FileObserver(it, MOVED_FROM or DELETE) {
@@ -95,7 +95,7 @@ class Fat32Checker @Inject constructor(sharedPreferenceUtil: SharedPreferenceUti
     try {
       RandomAccessFile(path, "rw").use {
         it.setLength(FOUR_GIGABYTES_IN_BYTES)
-        return true
+        return@canCreate4GbFile true
       }
     } catch (e: Exception) {
       e.printStackTrace()
@@ -111,7 +111,7 @@ class Fat32Checker @Inject constructor(sharedPreferenceUtil: SharedPreferenceUti
     const val FOUR_GIGABYTES_IN_KILOBYTES = 4L * 1024L * 1024L
   }
 
-  sealed class FileSystemState() {
+  sealed class FileSystemState {
     object NotEnoughSpaceFor4GbFile : FileSystemState()
     object CanWrite4GbFile : FileSystemState()
     object CannotWrite4GbFile : FileSystemState()

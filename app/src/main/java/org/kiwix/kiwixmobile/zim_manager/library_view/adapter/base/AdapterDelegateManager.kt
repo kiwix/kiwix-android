@@ -4,7 +4,7 @@ import android.view.ViewGroup
 import androidx.collection.SparseArrayCompat
 import androidx.recyclerview.widget.RecyclerView
 
-class AdapterDelegateManager<T>() {
+class AdapterDelegateManager<T> {
   fun addDelegate(delegate: AdapterDelegate<T>) {
     delegates.put(delegates.size(), delegate)
   }

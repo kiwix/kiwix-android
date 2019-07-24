@@ -504,7 +504,5 @@ class TestDroidUpload extends TestServer {
 
 apply from: "${rootDir}/team-props/git-hooks.gradle"
 afterEvaluate {
-  android.applicationVariants.all { variant ->
-    variant.preBuild.dependsOn(installGitHooks)
-  }
+  tasks['preBuild'].dependsOn installGitHooks
 }

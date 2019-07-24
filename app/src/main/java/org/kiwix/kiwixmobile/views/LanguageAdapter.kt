@@ -7,14 +7,14 @@ import org.kiwix.kiwixmobile.extensions.inflate
 import org.kiwix.kiwixmobile.zim_manager.Language
 
 class LanguageAdapter(val listItems: MutableList<Language>) :
-    RecyclerView.Adapter<LanguageViewHolder>() {
+  RecyclerView.Adapter<LanguageViewHolder>() {
 
   override fun onCreateViewHolder(
     parent: ViewGroup,
     viewType: Int
   ) = LanguageViewHolder(
-      parent.inflate(R.layout.item_language, false),
-      this::toggleItemAt
+    parent.inflate(R.layout.item_language, false),
+    ::toggleItemAt
   )
 
   override fun getItemCount() = listItems.size

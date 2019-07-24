@@ -6,10 +6,10 @@ import org.kiwix.kiwixmobile.downloader.model.Base64String
 fun ImageView.setBitmap(base64String: Base64String) {
   if (tag != base64String) {
     base64String.toBitmap()
-        ?.let {
-          setImageBitmap(it)
-          tag = base64String
-        }
+      ?.let {
+        setImageBitmap(it)
+        tag = base64String
+      }
   }
 }
 

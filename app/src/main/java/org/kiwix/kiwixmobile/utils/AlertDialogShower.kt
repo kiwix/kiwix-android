@@ -15,24 +15,24 @@ class AlertDialogShower @Inject constructor(
   ) {
 
     AlertDialog.Builder(activity, dialogStyle())
-        .apply {
-          dialog.title?.let { setTitle(it) }
-          setMessage(
-              activity.getString(
-                  dialog.message,
-                  *bodyArguments(dialog)
-              )
+      .apply {
+        dialog.title?.let(this::setTitle)
+        setMessage(
+          activity.getString(
+            dialog.message,
+            *bodyArguments(dialog)
           )
-          setPositiveButton(dialog.positiveMessage) { _, _ ->
-            clickListeners.getOrNull(0)
-                ?.invoke()
-          }
-          setNegativeButton(dialog.negativeMessage) { _, _ ->
-            clickListeners.getOrNull(1)
-                ?.invoke()
-          }
+        )
+        setPositiveButton(dialog.positiveMessage) { _, _ ->
+          clickListeners.getOrNull(0)
+            ?.invoke()
         }
-        .show()
+        setNegativeButton(dialog.negativeMessage) { _, _ ->
+          clickListeners.getOrNull(1)
+            ?.invoke()
+        }
+      }
+      .show()
   }
 
   private fun bodyArguments(dialog: KiwixDialog) =

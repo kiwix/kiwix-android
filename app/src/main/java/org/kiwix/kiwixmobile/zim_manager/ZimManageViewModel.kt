@@ -143,30 +143,30 @@ class ZimManageViewModel @Inject constructor(
     val networkLibrary = PublishProcessor.create<LibraryNetworkEntity>()
     val languages = languageDao.languages()
     return arrayOf(
-        updateDownloadItems(downloadStatuses),
-        removeCompletedDownloadsFromDb(downloadStatuses),
-        removeNonExistingDownloadsFromDb(downloadStatuses, downloads),
-        updateBookItems(),
-        checkFileSystemForBooksOnRequest(booksFromDao),
-        updateLibraryItems(booksFromDao, downloads, networkLibrary, languages),
-        updateLanguagesInDao(networkLibrary, languages),
-        updateNetworkStates(),
-        updateLanguageItemsForDialog(languages),
-        requestsAndConnectivtyChangesToLibraryRequests(networkLibrary),
-        fileSelectActions()
+      updateDownloadItems(downloadStatuses),
+      removeCompletedDownloadsFromDb(downloadStatuses),
+      removeNonExistingDownloadsFromDb(downloadStatuses, downloads),
+      updateBookItems(),
+      checkFileSystemForBooksOnRequest(booksFromDao),
+      updateLibraryItems(booksFromDao, downloads, networkLibrary, languages),
+      updateLanguagesInDao(networkLibrary, languages),
+      updateNetworkStates(),
+      updateLanguageItemsForDialog(languages),
+      requestsAndConnectivtyChangesToLibraryRequests(networkLibrary),
+      fileSelectActions()
     )
   }
 
   private fun fileSelectActions() = fileSelectActions.subscribe({
     sideEffects.offer(
-        when (it) {
-          is RequestOpen -> OpenFile(it.bookOnDisk)
-          is RequestMultiSelection -> startMultiSelectionAndSelectBook(it.bookOnDisk)
-          RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState())
-          RequestShareMultiSelection -> ShareFiles(selectionsFromState())
-          MultiModeFinished -> noSideEffectAndClearSelectionState()
-          is RequestSelect -> noSideEffectSelectBook(it.bookOnDisk)
-        }
+      when (it) {
+        is RequestOpen -> OpenFile(it.bookOnDisk)
+        is RequestMultiSelection -> startMultiSelectionAndSelectBook(it.bookOnDisk)
+        RequestDeleteMultiSelection -> DeleteFiles(selectionsFromState())
+        RequestShareMultiSelection -> ShareFiles(selectionsFromState())
+        MultiModeFinished -> noSideEffectAndClearSelectionState()
+        is RequestSelect -> noSideEffectSelectBook(it.bookOnDisk)
+      }
     )
   }, Throwable::printStackTrace)
 
@@ -175,10 +175,10 @@ class ZimManageViewModel @Inject constructor(
   ): StartMultiSelection {
     fileSelectListStates.value?.let {
       fileSelectListStates.postValue(
-          it.copy(
-              bookOnDiskListItems = selectBook(it, bookOnDisk),
-              selectionMode = MULTI
-          )
+        it.copy(
+          bookOnDiskListItems = selectBook(it, bookOnDisk),
+          selectionMode = MULTI
+        )
       )
     }
     return StartMultiSelection(bookOnDisk, fileSelectActions)
@@ -197,10 +197,10 @@ class ZimManageViewModel @Inject constructor(
   private fun noSideEffectSelectBook(bookOnDisk: BookOnDisk): SideEffect<Unit> {
     fileSelectListStates.value?.let {
       fileSelectListStates.postValue(
-          it.copy(bookOnDiskListItems = it.bookOnDiskListItems.map { listItem ->
-            if (listItem.id == bookOnDisk.id) listItem.apply { isSelected = !isSelected }
-            else listItem
-          })
+        it.copy(bookOnDiskListItems = it.bookOnDiskListItems.map { listItem ->
+          if (listItem.id == bookOnDisk.id) listItem.apply { isSelected = !isSelected }
+          else listItem
+        })
       )
     }
     return None
@@ -211,10 +211,12 @@ class ZimManageViewModel @Inject constructor(
   private fun noSideEffectAndClearSelectionState(): SideEffect<Unit> {
     fileSelectListStates.value?.let {
       fileSelectListStates.postValue(
-          it.copy(
-              bookOnDiskListItems = it.bookOnDiskListItems.map { it.apply { isSelected = false } },
-              selectionMode = NORMAL
-          )
+        it.copy(
+          bookOnDiskListItems = it.bookOnDiskListItems.map { booksOnDiskListItem ->
+            booksOnDiskListItem.apply { isSelected = false }
+          },
+          selectionMode = NORMAL
+        )
       )
     }
     return None
@@ -224,83 +226,82 @@ class ZimManageViewModel @Inject constructor(
     library: PublishProcessor<LibraryNetworkEntity>
   ) =
     Flowable.combineLatest(
-        requestDownloadLibrary,
-        connectivityBroadcastReceiver.networkStates.distinctUntilChanged().filter(
-            CONNECTED::equals
-        ),
-        BiFunction<Unit, NetworkState, Unit> { _, _ -> Unit }
+      requestDownloadLibrary,
+      connectivityBroadcastReceiver.networkStates.distinctUntilChanged().filter(
+        CONNECTED::equals
+      ),
+      BiFunction<Unit, NetworkState, Unit> { _, _ -> Unit }
     )
-        .subscribeOn(Schedulers.io())
-        .observeOn(Schedulers.io())
-        .subscribe(
-            {
-              kiwixService.library
-                  .timeout(60, SECONDS)
-                  .retry(5)
-                  .subscribe(
-                      { library.onNext(it) },
-                      {
-                        it.printStackTrace()
-                        library.onNext(LibraryNetworkEntity().apply { book = LinkedList() })
-                      }
-                  )
-            },
-            Throwable::printStackTrace
-        )
+      .subscribeOn(Schedulers.io())
+      .observeOn(Schedulers.io())
+      .subscribe(
+        {
+          kiwixService.library
+            .timeout(60, SECONDS)
+            .retry(5)
+            .subscribe(
+              library::onNext
+            ) {
+              it.printStackTrace()
+              library.onNext(LibraryNetworkEntity().apply { book = LinkedList() })
+            }
+        },
+        Throwable::printStackTrace
+      )
 
   private fun removeNonExistingDownloadsFromDb(
     downloadStatuses: Flowable<List<DownloadStatus>>,
     downloads: Flowable<List<DownloadModel>>
   ) = downloadStatuses
-      .withLatestFrom(
-          downloads,
-          BiFunction(this::combineToDownloadsWithoutStatuses)
-      )
-      .buffer(3, SECONDS)
-      .map(this::downloadIdsWithNoStatusesOverBufferPeriod)
-      .filter { it.isNotEmpty() }
-      .subscribe(
-          {
-            downloadDao.delete(*it.toLongArray())
-          },
-          Throwable::printStackTrace
-      )
+    .withLatestFrom(
+      downloads,
+      BiFunction(::combineToDownloadsWithoutStatuses)
+    )
+    .buffer(3, SECONDS)
+    .map(::downloadIdsWithNoStatusesOverBufferPeriod)
+    .filter { it.isNotEmpty() }
+    .subscribe(
+      {
+        downloadDao.delete(*it.toLongArray())
+      },
+      Throwable::printStackTrace
+    )
 
   private fun downloadIdsWithNoStatusesOverBufferPeriod(noStatusIds: List<MutableList<Long>>) =
     noStatusIds.flatten()
-        .fold(mutableMapOf<Long, Int>(), { acc, id -> acc.increment(id) })
-        .filter { (_, count) -> count == noStatusIds.size }
-        .map { (id, _) -> id }
+      .fold(mutableMapOf<Long, Int>(), { acc, id -> acc.increment(id) })
+      .filter { (_, count) -> count == noStatusIds.size }
+      .map { (id, _) -> id }
 
   private fun combineToDownloadsWithoutStatuses(
     statuses: List<DownloadStatus>,
     downloads: List<DownloadModel>
   ): MutableList<Long> {
-    val downloadIdsWithStatuses = statuses.map { it.downloadId }
+    val downloadIdsWithStatuses = statuses.map(DownloadStatus::downloadId)
     return downloads.fold(
-        mutableListOf(),
-        { acc, downloadModel ->
-          if (!downloadIdsWithStatuses.contains(downloadModel.downloadId)) {
-            acc.add(downloadModel.downloadId)
-          }
-          acc
+      mutableListOf(),
+      { acc, downloadModel ->
+        if (!downloadIdsWithStatuses.contains(downloadModel.downloadId)) {
+          acc.add(downloadModel.downloadId)
         }
+        acc
+      }
     )
   }
 
   private fun updateLanguageItemsForDialog(languages: Flowable<List<Language>>) =
     requestLanguagesDialog
-        .withLatestFrom(
-            languages,
-            BiFunction<Unit, List<Language>, List<Language>> { _, langs -> langs })
-        .subscribe(
-            languageItems::postValue,
-            Throwable::printStackTrace
-        )
+      .withLatestFrom(
+        languages,
+        BiFunction<Unit, List<Language>, List<Language>> { _, langs -> langs })
+      .subscribe(
+        languageItems::postValue,
+        Throwable::printStackTrace
+      )
 
   private fun updateNetworkStates() =
     connectivityBroadcastReceiver.networkStates.subscribe(
-        networkStates::postValue, Throwable::printStackTrace
+      networkStates::postValue, Throwable::printStackTrace
     )
 
   private fun updateLibraryItems(
@@ -309,40 +310,40 @@ class ZimManageViewModel @Inject constructor(
     library: Flowable<LibraryNetworkEntity>,
     languages: Flowable<List<Language>>
   ) = Flowable.combineLatest(
-      booksFromDao,
-      downloads,
-      languages.filter { it.isNotEmpty() },
-      library,
-      requestFiltering
-          .doOnNext { libraryListIsRefreshing.postValue(true) }
-          .debounce(500, MILLISECONDS)
-          .observeOn(Schedulers.io()),
-      fat32Checker.fileSystemStates,
-      Function6(this::combineLibrarySources)
+    booksFromDao,
+    downloads,
+    languages.filter { it.isNotEmpty() },
+    library,
+    requestFiltering
+      .doOnNext { libraryListIsRefreshing.postValue(true) }
+      .debounce(500, MILLISECONDS)
+      .observeOn(Schedulers.io()),
+    fat32Checker.fileSystemStates,
+    Function6(::combineLibrarySources)
   )
-      .doOnNext { libraryListIsRefreshing.postValue(false) }
-      .subscribeOn(Schedulers.io())
-      .subscribe(
-          libraryItems::postValue,
-          Throwable::printStackTrace
-      )
+    .doOnNext { libraryListIsRefreshing.postValue(false) }
+    .subscribeOn(Schedulers.io())
+    .subscribe(
+      libraryItems::postValue,
+      Throwable::printStackTrace
+    )
 
   private fun updateLanguagesInDao(
     library: Flowable<LibraryNetworkEntity>,
     languages: Flowable<List<Language>>
   ) = library
-      .subscribeOn(Schedulers.io())
-      .map { it.books }
-      .withLatestFrom(
-          languages,
-          BiFunction(this::combineToLanguageList)
-      )
-      .map { it.sortedBy(Language::language) }
-      .filter { it.isNotEmpty() }
-      .subscribe(
-          languageDao::insert,
-          Throwable::printStackTrace
-      )
+    .subscribeOn(Schedulers.io())
+    .map { it.books }
+    .withLatestFrom(
+      languages,
+      BiFunction(::combineToLanguageList)
+    )
+    .map { it.sortedBy(Language::language) }
+    .filter { it.isNotEmpty() }
+    .subscribe(
+      languageDao::insert,
+      Throwable::printStackTrace
+    )
 
   private fun combineToLanguageList(
     booksFromNetwork: List<Book>,
@@ -352,21 +353,21 @@ class ZimManageViewModel @Inject constructor(
     booksFromNetwork.isEmpty() && allLanguages.isNotEmpty() -> emptyList()
     booksFromNetwork.isNotEmpty() && allLanguages.isEmpty() ->
       fromLocalesWithNetworkMatchesSetActiveBy(
-          networkLanguageCounts(booksFromNetwork), defaultLanguage()
+        networkLanguageCounts(booksFromNetwork), defaultLanguage()
       )
     booksFromNetwork.isNotEmpty() && allLanguages.isNotEmpty() ->
       fromLocalesWithNetworkMatchesSetActiveBy(
-          networkLanguageCounts(booksFromNetwork), allLanguages
+        networkLanguageCounts(booksFromNetwork), allLanguages
       )
     else -> throw RuntimeException("Impossible state")
   }
 
   private fun networkLanguageCounts(booksFromNetwork: List<Book>) =
-    booksFromNetwork.mapNotNull { it.language }
-        .fold(
-            mutableMapOf<String, Int>(),
-            { acc, language -> acc.increment(language) }
-        )
+    booksFromNetwork.mapNotNull(Book::language)
+      .fold(
+        mutableMapOf<String, Int>(),
+        { acc, language -> acc.increment(language) }
+      )
 
   private fun <K> MutableMap<K, Int>.increment(key: K) =
     apply { set(key, getOrElse(key, { 0 }) + 1) }
@@ -375,19 +376,19 @@ class ZimManageViewModel @Inject constructor(
     networkLanguageCounts: MutableMap<String, Int>,
     listToActivateBy: List<Language>
   ) = Locale.getISOLanguages()
-      .map { Locale(it) }
-      .filter { networkLanguageCounts.containsKey(it.isO3Language) }
-      .map { locale ->
-        Language(
-            locale.isO3Language,
-            languageIsActive(listToActivateBy, locale),
-            networkLanguageCounts.getOrElse(locale.isO3Language, { 0 })
-        )
-      }
+    .map(::Locale)
+    .filter { networkLanguageCounts.containsKey(it.isO3Language) }
+    .map { locale ->
+      Language(
+        locale.isO3Language,
+        languageIsActive(listToActivateBy, locale),
+        networkLanguageCounts.getOrElse(locale.isO3Language, { 0 })
+      )
+    }
 
   private fun defaultLanguage() =
     listOf(
-        defaultLanguageProvider.provide()
+      defaultLanguageProvider.provide()
     )
 
   private fun languageIsActive(
@@ -406,40 +407,40 @@ class ZimManageViewModel @Inject constructor(
     val downloadedBooksIds = booksOnFileSystem.map { it.book.id }
     val downloadingBookIds = activeDownloads.map { it.book.id }
     val activeLanguageCodes = allLanguages.filter(Language::active)
-        .map { it.languageCode }
+      .map(Language::languageCode)
     val booksUnfilteredByLanguage =
       applyUserFilter(
-          libraryNetworkEntity.books
-              .filter {
-                when (fileSystemState) {
-                  CannotWrite4GbFile -> isLessThan4GB(it)
-                  NotEnoughSpaceFor4GbFile,
-                  CanWrite4GbFile -> true
-                }
-              }
-              .filterNot { downloadedBooksIds.contains(it.id) }
-              .filterNot { downloadingBookIds.contains(it.id) }
-              .filterNot { it.url.contains("/stack_exchange/") }, // Temp filter see #694, filter)
-          filter
+        libraryNetworkEntity.books
+          .filter {
+            when (fileSystemState) {
+              CannotWrite4GbFile -> isLessThan4GB(it)
+              NotEnoughSpaceFor4GbFile,
+              CanWrite4GbFile -> true
+            }
+          }
+          .filterNot { downloadedBooksIds.contains(it.id) }
+          .filterNot { downloadingBookIds.contains(it.id) }
+          .filterNot { it.url.contains("/stack_exchange/") }, // Temp filter see #694, filter)
+        filter
       )
 
     return listOf(
-        *createLibrarySection(
-            booksUnfilteredByLanguage.filter { activeLanguageCodes.contains(it.language) },
-            R.string.your_languages,
-            Long.MAX_VALUE
-        ),
-        *createLibrarySection(
-            booksUnfilteredByLanguage.filterNot { activeLanguageCodes.contains(it.language) },
-            R.string.other_languages,
-            Long.MIN_VALUE
-        )
+      *createLibrarySection(
+        booksUnfilteredByLanguage.filter { activeLanguageCodes.contains(it.language) },
+        R.string.your_languages,
+        Long.MAX_VALUE
+      ),
+      *createLibrarySection(
+        booksUnfilteredByLanguage.filterNot { activeLanguageCodes.contains(it.language) },
+        R.string.other_languages,
+        Long.MIN_VALUE
+      )
     )
   }
 
   private fun isLessThan4GB(it: Book) =
     it.size.toLongOrNull() ?: 0L <
-        Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES
+      Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES
 
   private fun createLibrarySection(
     books: List<Book>,
@@ -448,8 +449,8 @@ class ZimManageViewModel @Inject constructor(
   ) =
     if (books.isNotEmpty())
       arrayOf(
-          DividerItem(sectionId, context.getString(sectionStringId)),
-          *toBookItems(books)
+        DividerItem(sectionId, context.getString(sectionStringId)),
+        *toBookItems(books)
       )
     else emptyArray()
 
@@ -468,35 +469,35 @@ class ZimManageViewModel @Inject constructor(
 
   private fun checkFileSystemForBooksOnRequest(booksFromDao: Flowable<List<BookOnDisk>>) =
     requestFileSystemCheck
-        .subscribeOn(Schedulers.io())
-        .observeOn(Schedulers.io())
-        .onBackpressureDrop()
-        .doOnNext { deviceListIsRefreshing.postValue(true) }
-        .switchMap(
-            {
-              booksFromStorageNotIn(booksFromDao)
-            },
-            1
-        )
-        .onBackpressureDrop()
-        .doOnNext { deviceListIsRefreshing.postValue(false) }
-        .filter { it.isNotEmpty() }
-        .map { it.distinctBy { it.book.id } }
-        .subscribe(
-            bookDao::insert,
-            Throwable::printStackTrace
-        )
+      .subscribeOn(Schedulers.io())
+      .observeOn(Schedulers.io())
+      .onBackpressureDrop()
+      .doOnNext { deviceListIsRefreshing.postValue(true) }
+      .switchMap(
+        {
+          booksFromStorageNotIn(booksFromDao)
+        },
+        1
+      )
+      .onBackpressureDrop()
+      .doOnNext { deviceListIsRefreshing.postValue(false) }
+      .filter { it.isNotEmpty() }
+      .map { it.distinctBy { bookOnDisk -> bookOnDisk.book.id } }
+      .subscribe(
+        bookDao::insert,
+        Throwable::printStackTrace
+      )
 
   private fun books() = bookDao.books()
-      .subscribeOn(Schedulers.io())
-      .map { it.sortedBy { book -> book.book.title } }
+    .subscribeOn(Schedulers.io())
+    .map { it.sortedBy { book -> book.book.title } }
 
   private fun booksFromStorageNotIn(booksFromDao: Flowable<List<BookOnDisk>>) =
     storageObserver.booksOnFileSystem
-        .withLatestFrom(
-            booksFromDao.map { it.map { bookOnDisk -> bookOnDisk.book.id } },
-            BiFunction(this::removeBooksAlreadyInDao)
-        )
+      .withLatestFrom(
+        booksFromDao.map { it.map { bookOnDisk -> bookOnDisk.book.id } },
+        BiFunction(::removeBooksAlreadyInDao)
+      )
 
   private fun removeBooksAlreadyInDao(
     booksFromFileSystem: Collection<BookOnDisk>,
@@ -505,62 +506,62 @@ class ZimManageViewModel @Inject constructor(
 
   private fun updateBookItems() =
     dataSource.booksOnDiskAsListItems()
-        .subscribe(
-            { newList ->
-              fileSelectListStates.postValue(
-                  fileSelectListStates.value?.let { inheritSelections(it, newList) }
-                      ?: FileSelectListState(newList)
-              )
-            },
-            Throwable::printStackTrace
-        )
+      .subscribe(
+        { newList ->
+          fileSelectListStates.postValue(
+            fileSelectListStates.value?.let { inheritSelections(it, newList) }
+              ?: FileSelectListState(newList)
+          )
+        },
+        Throwable::printStackTrace
+      )
 
   private fun inheritSelections(
     oldState: FileSelectListState,
     newList: MutableList<BooksOnDiskListItem>
   ): FileSelectListState {
     return oldState.copy(
-        bookOnDiskListItems = newList.map { newBookOnDisk ->
-          val firstOrNull =
-            oldState.bookOnDiskListItems.firstOrNull { oldBookOnDisk ->
-              oldBookOnDisk.id == newBookOnDisk.id
-            }
-          newBookOnDisk.apply { isSelected = firstOrNull?.isSelected ?: false }
-        })
+      bookOnDiskListItems = newList.map { newBookOnDisk ->
+        val firstOrNull =
+          oldState.bookOnDiskListItems.firstOrNull { oldBookOnDisk ->
+            oldBookOnDisk.id == newBookOnDisk.id
+          }
+        newBookOnDisk.apply { isSelected = firstOrNull?.isSelected ?: false }
+      })
   }
 
   private fun removeCompletedDownloadsFromDb(downloadStatuses: Flowable<List<DownloadStatus>>) =
     downloadStatuses
-        .observeOn(Schedulers.io())
-        .subscribeOn(Schedulers.io())
-        .map { it.filter { status -> status.state == Successful } }
-        .filter { it.isNotEmpty() }
-        .subscribe(
-            {
-              bookDao.insert(
-                  it.map { downloadStatus -> downloadStatus.toBookOnDisk(uriToFileConverter) })
-              downloadDao.delete(
-                  *it.map { status -> status.downloadId }.toLongArray()
-              )
-            },
-            Throwable::printStackTrace
-        )
+      .observeOn(Schedulers.io())
+      .subscribeOn(Schedulers.io())
+      .map { it.filter { status -> status.state == Successful } }
+      .filter { it.isNotEmpty() }
+      .subscribe(
+        {
+          bookDao.insert(
+            it.map { downloadStatus -> downloadStatus.toBookOnDisk(uriToFileConverter) })
+          downloadDao.delete(
+            *it.map(DownloadStatus::downloadId).toLongArray()
+          )
+        },
+        Throwable::printStackTrace
+      )
 
   private fun updateDownloadItems(downloadStatuses: Flowable<List<DownloadStatus>>) =
     downloadStatuses
-        .map { statuses -> statuses.map { DownloadItem(it) } }
-        .subscribe(
-            downloadItems::postValue,
-            Throwable::printStackTrace
-        )
+      .map { statuses -> statuses.map(::DownloadItem) }
+      .subscribe(
+        downloadItems::postValue,
+        Throwable::printStackTrace
+      )
 
   private fun downloadStatuses(downloads: Flowable<List<DownloadModel>>) =
     Flowable.combineLatest(
-        downloads,
-        Flowable.interval(1, SECONDS),
-        BiFunction { downloadModels: List<DownloadModel>, _: Long -> downloadModels }
+      downloads,
+      Flowable.interval(1, SECONDS),
+      BiFunction { downloadModels: List<DownloadModel>, _: Long -> downloadModels }
     )
-        .subscribeOn(Schedulers.io())
-        .map(downloader::queryStatus)
-        .distinctUntilChanged()
+      .subscribeOn(Schedulers.io())
+      .map(downloader::queryStatus)
+      .distinctUntilChanged()
 }

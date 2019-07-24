@@ -64,7 +64,7 @@ class FileSearchTest {
     every { externalStorageDirectory.absolutePath } returns "/externalStorageDirectory"
     every { context.contentResolver } returns contentResolver
     every { StorageDeviceUtils.getStorageDevices(context, false) } returns arrayListOf(
-        storageDevice
+      storageDevice
     )
     every { storageDevice.name } returns "/deviceDir"
     fileSearch = FileSearch(context)
@@ -83,8 +83,8 @@ class FileSearchTest {
     fun `scan of directory that doesn't exist returns nothing`() {
       every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
       fileSearch.scan("doesNotExist")
-          .test()
-          .assertValue(listOf())
+        .test()
+        .assertValue(listOf())
     }
 
     @Test
@@ -94,8 +94,8 @@ class FileSearchTest {
       File.createTempFile("${unitTestTempDirectoryPath}willNotFind", ".txt")
       every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
       val fileList = fileSearch.scan(zimFile.parent)
-          .test()
-          .values()[0]
+        .test()
+        .values()[0]
       assertThat(fileList).containsExactlyInAnyOrder(zimFile, zimaaFile)
     }
   }
@@ -108,8 +108,8 @@ class FileSearchTest {
       val fileToFind = File.createTempFile("${unitTestTempDirectoryPath}fileToFind", ".zim")
       expectFromMediaStore(fileToFind)
       fileSearch.scan("")
-          .test()
-          .assertValue(listOf(fileToFind))
+        .test()
+        .assertValue(listOf(fileToFind))
     }
 
     @Test
@@ -118,19 +118,19 @@ class FileSearchTest {
       expectFromMediaStore(unreadableFile)
       unreadableFile.delete()
       fileSearch.scan("")
-          .test()
-          .assertValue(listOf())
+        .test()
+        .assertValue(listOf())
     }
 
     private fun expectFromMediaStore(fileToFind: File) {
       val cursor = mockk<Cursor>()
       every {
         contentResolver.query(
-            null,
-            arrayOf(MediaColumns.DATA),
-            MediaColumns.DATA + " like ? or " + MediaColumns.DATA + " like ? ",
-            arrayOf("%." + "zim", "%." + "zimaa"),
-            null
+          null,
+          arrayOf(MediaColumns.DATA),
+          MediaColumns.DATA + " like ? or " + MediaColumns.DATA + " like ? ",
+          arrayOf("%." + "zim", "%." + "zimaa"),
+          null
         )
       } returns cursor
       every { cursor.moveToNext() } returnsMany listOf(true, false)
@@ -142,6 +142,6 @@ class FileSearchTest {
 
   private fun deleteTempDirectory() {
     File.createTempFile("${unitTestTempDirectoryPath}temp", ".txt")
-        .parentFile.deleteRecursively()
+      .parentFile.deleteRecursively()
   }
 }

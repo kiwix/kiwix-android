@@ -36,7 +36,7 @@ class LanguageSelectDialog constructor(
 ) : AlertDialog(context) {
 
   class Builder : AlertDialog.Builder, LayoutContainer {
-    lateinit var dialogView: View
+    private lateinit var dialogView: View
     override val containerView: View? by lazy { dialogView }
     lateinit var onOkClicked: (List<Language>) -> Unit
     var languages: List<Language> = listOf()

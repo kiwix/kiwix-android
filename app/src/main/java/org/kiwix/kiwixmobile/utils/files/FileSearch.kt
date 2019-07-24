@@ -34,52 +34,52 @@ import javax.inject.Inject
 
 class FileSearch @Inject constructor(private val context: Context) {
 
-  val zimFileExtensions = arrayOf("zim", "zimaa")
+  private val zimFileExtensions = arrayOf("zim", "zimaa")
 
-  fun scan(defaultPath: String) =
+  fun scan(defaultPath: String): Flowable<List<File>> =
     Flowable.combineLatest(
-        Flowable.fromCallable { scanFileSystem(defaultPath) }.subscribeOn(Schedulers.io()),
-        Flowable.fromCallable(this::scanMediaStore).subscribeOn(Schedulers.io()),
-        BiFunction<List<File>, List<File>, List<File>> { filesSystemFiles, mediaStoreFiles ->
-          filesSystemFiles + mediaStoreFiles
-        }
+      Flowable.fromCallable { scanFileSystem(defaultPath) }.subscribeOn(Schedulers.io()),
+      Flowable.fromCallable(::scanMediaStore).subscribeOn(Schedulers.io()),
+      BiFunction<List<File>, List<File>, List<File>> { filesSystemFiles, mediaStoreFiles ->
+        filesSystemFiles + mediaStoreFiles
+      }
     )
 
   private fun scanMediaStore() = mutableListOf<File>().apply {
     queryMediaStore()
-        ?.forEachRow { cursor ->
-          File(cursor.get<String>(MediaColumns.DATA)).takeIf(File::canRead)
-              ?.also { add(it) }
-        }
+      ?.forEachRow { cursor ->
+        File(cursor.get<String>(MediaColumns.DATA)).takeIf(File::canRead)
+          ?.also { add(it) }
+      }
   }
 
   private fun queryMediaStore() = context.contentResolver
-      .query(
-          Files.getContentUri("external"),
-          arrayOf(MediaColumns.DATA),
-          MediaColumns.DATA + " like ? or " + MediaColumns.DATA + " like ? ",
-          arrayOf("%." + zimFileExtensions[0], "%." + zimFileExtensions[1]),
-          null
-      )
+    .query(
+      Files.getContentUri("external"),
+      arrayOf(MediaColumns.DATA),
+      MediaColumns.DATA + " like ? or " + MediaColumns.DATA + " like ? ",
+      arrayOf("%." + zimFileExtensions[0], "%." + zimFileExtensions[1]),
+      null
+    )
 
   private fun scanFileSystem(defaultPath: String) =
     directoryRoots(defaultPath)
-        .minus(Environment.getExternalStorageDirectory().absolutePath)
-        .fold(mutableListOf<File>(), { acc, root ->
-          acc.apply { addAll(scanDirectory(root)) }
-        })
+      .minus(Environment.getExternalStorageDirectory().absolutePath)
+      .fold(mutableListOf<File>(), { acc, root ->
+        acc.apply { addAll(scanDirectory(root)) }
+      })
 
   private fun directoryRoots(defaultPath: String) = listOf(
-      "/mnt",
-      defaultPath,
-      *StorageDeviceUtils.getStorageDevices(context, false).map { it.name }.toTypedArray()
+    "/mnt",
+    defaultPath,
+    *StorageDeviceUtils.getStorageDevices(context, false).map { it.name }.toTypedArray()
   )
 
   private fun scanDirectory(directory: String) = filesMatchingExtensions(directory) ?: emptyList()
 
   private fun filesMatchingExtensions(directory: String) = File(directory)
-      .listFiles { _, name -> name.endsWithAny(*zimFileExtensions) }
-      ?.toList()
+    .listFiles { _, name -> name.endsWithAny(*zimFileExtensions) }
+    ?.toList()
 }
 
 internal fun String.endsWithAny(vararg suffixes: String) =

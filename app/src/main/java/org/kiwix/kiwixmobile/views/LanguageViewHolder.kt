@@ -16,7 +16,7 @@ class LanguageViewHolder(
   override val containerView: View,
   private val onCheckboxChecked: (Int) -> Unit
 ) : ViewHolder(containerView),
-    LayoutContainer {
+  LayoutContainer {
   fun bind(
     language: Language,
     position: Int
@@ -24,12 +24,12 @@ class LanguageViewHolder(
     val context = containerView.context
     item_language_name.text = language.language
     item_language_localized_name.text = context.getString(
-        R.string.language_localized,
-        language.languageLocalized
+      R.string.language_localized,
+      language.languageLocalized
     )
     item_language_localized_name.typeface = Typeface.createFromAsset(
-        context.assets,
-        LanguageUtils.getTypeface(language.languageCode)
+      context.assets,
+      LanguageUtils.getTypeface(language.languageCode)
     )
     item_language_books_count.text =
       context.getString(R.string.language_count, language.occurencesOfLanguage)

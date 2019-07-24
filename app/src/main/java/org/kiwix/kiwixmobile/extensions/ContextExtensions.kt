@@ -1,6 +1,7 @@
 package org.kiwix.kiwixmobile.extensions
 
 import android.content.Context
+import android.content.Intent
 import android.content.IntentFilter
 import android.widget.Toast
 import org.kiwix.kiwixmobile.zim_manager.BaseBroadcastReceiver
@@ -11,7 +12,7 @@ fun Context?.toast(
 ) {
   this?.let {
     Toast.makeText(this, stringId, length)
-        .show()
+      .show()
   }
 }
 
@@ -21,9 +22,9 @@ fun Context?.toast(
 ) {
   this?.let {
     Toast.makeText(this, text, length)
-        .show()
+      .show()
   }
 }
 
-fun Context.registerReceiver(baseBroadcastReceiver: BaseBroadcastReceiver) =
+fun Context.registerReceiver(baseBroadcastReceiver: BaseBroadcastReceiver): Intent? =
   registerReceiver(baseBroadcastReceiver, IntentFilter(baseBroadcastReceiver.action))

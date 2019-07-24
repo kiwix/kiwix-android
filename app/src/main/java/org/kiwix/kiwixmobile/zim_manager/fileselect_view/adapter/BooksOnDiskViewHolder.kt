@@ -25,8 +25,8 @@ import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskList
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.LanguageItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base.BaseViewHolder
 
-sealed class BookOnDiskViewHolder<T : BooksOnDiskListItem>(containerView: View) :
-    BaseViewHolder<T>(containerView) {
+sealed class BookOnDiskViewHolder<in T : BooksOnDiskListItem>(containerView: View) :
+  BaseViewHolder<T>(containerView) {
 
   class BookViewHolder(
     containerView: View,
@@ -57,8 +57,8 @@ sealed class BookOnDiskViewHolder<T : BooksOnDiskListItem>(containerView: View) 
 
       if (sharedPreferenceUtil.nightMode()) {
         item_book_icon.drawable
-            .mutate()
-            .colorFilter = ColorMatrixColorFilter(KiwixWebView.NIGHT_MODE_COLORS)
+          .mutate()
+          .colorFilter = ColorMatrixColorFilter(KiwixWebView.NIGHT_MODE_COLORS)
       }
 
       val path = item.file.path
@@ -91,7 +91,7 @@ sealed class BookOnDiskViewHolder<T : BooksOnDiskListItem>(containerView: View) 
 }
 
 class LanguageItemViewHolder(containerView: View) :
-    BookOnDiskViewHolder<LanguageItem>(containerView) {
+  BookOnDiskViewHolder<LanguageItem>(containerView) {
 
   override fun bind(item: LanguageItem) {
     header_language.text = item.text

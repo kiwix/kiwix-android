@@ -67,8 +67,8 @@ fun downloadStatus(
   uri: String? = null,
   book: Book = book()
 ) = DownloadStatus(
-    downloadId, title, description, downloadState, bytesDownloadedSoFar,
-    totalSizeBytes, lastModified, localUri, mediaProviderUri, mediaType, uri, book
+  downloadId, title, description, downloadState, bytesDownloadedSoFar,
+  totalSizeBytes, lastModified, localUri, mediaProviderUri, mediaType, uri, book
 )
 
 fun downloadModel(

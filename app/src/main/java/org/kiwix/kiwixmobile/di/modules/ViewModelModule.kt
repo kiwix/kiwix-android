@@ -35,5 +35,5 @@ abstract class ViewModelModule {
 
   @Binds
   internal abstract fun bindViewModelFactory(factory: KiwixViewModelFactory):
-      ViewModelProvider.Factory
+    ViewModelProvider.Factory
 }

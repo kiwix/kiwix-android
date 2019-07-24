@@ -46,7 +46,7 @@ class DownloadFragment : BaseFragment() {
 
   private val zimManageViewModel: ZimManageViewModel by lazy {
     ViewModelProviders.of(activity!!, viewModelFactory)
-        .get(ZimManageViewModel::class.java)
+      .get(ZimManageViewModel::class.java)
   }
   private val downloadAdapter = DownloadAdapter {
     dialogShower.show(StopDownload, { downloader.cancelDownload(it) })

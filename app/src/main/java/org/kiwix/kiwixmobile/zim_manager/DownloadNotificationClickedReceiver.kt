@@ -35,13 +35,13 @@ class DownloadNotificationClickedReceiver : BaseBroadcastReceiver() {
     intent: Intent
   ) {
     KiwixApplication.getApplicationComponent()
-        .inject(this)
+      .inject(this)
     if (downloadDao.containsAny(*longArrayFrom(intent.extras))) {
       context.startActivity(
-          Intent(context, ZimManageActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            putExtra(ZimManageActivity.TAB_EXTRA, 2)
-          }
+        Intent(context, ZimManageActivity::class.java).apply {
+          addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+          putExtra(ZimManageActivity.TAB_EXTRA, 2)
+        }
       )
     }
   }

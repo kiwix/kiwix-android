@@ -63,7 +63,7 @@ class DownloadStatus(
   val bytesDownloadedSoFar: Long,
   val totalSizeBytes: Long,
   val lastModified: String,
-  val localUri: String?,
+  private val localUri: String?,
   val mediaProviderUri: String?,
   val mediaType: String?,
   val uri: String?,
@@ -77,18 +77,18 @@ class DownloadStatus(
     cursor: Cursor,
     downloadModel: DownloadModel
   ) : this(
-      cursor[COLUMN_ID],
-      cursor[COLUMN_TITLE],
-      cursor[COLUMN_DESCRIPTION],
-      DownloadState.from(cursor[COLUMN_STATUS], cursor[COLUMN_REASON]),
-      cursor[COLUMN_BYTES_DOWNLOADED_SO_FAR],
-      cursor[COLUMN_TOTAL_SIZE_BYTES],
-      cursor[COLUMN_LAST_MODIFIED_TIMESTAMP],
-      cursor[COLUMN_LOCAL_URI],
-      cursor[COLUMN_MEDIAPROVIDER_URI],
-      cursor[COLUMN_MEDIA_TYPE],
-      cursor[COLUMN_URI],
-      downloadModel.book
+    cursor[COLUMN_ID],
+    cursor[COLUMN_TITLE],
+    cursor[COLUMN_DESCRIPTION],
+    DownloadState.from(cursor[COLUMN_STATUS], cursor[COLUMN_REASON]),
+    cursor[COLUMN_BYTES_DOWNLOADED_SO_FAR],
+    cursor[COLUMN_TOTAL_SIZE_BYTES],
+    cursor[COLUMN_LAST_MODIFIED_TIMESTAMP],
+    cursor[COLUMN_LOCAL_URI],
+    cursor[COLUMN_MEDIAPROVIDER_URI],
+    cursor[COLUMN_MEDIA_TYPE],
+    cursor[COLUMN_URI],
+    downloadModel.book
   )
 }
 
@@ -118,9 +118,7 @@ sealed class DownloadState(val stringId: Int) {
   object Running : DownloadState(R.string.running_state)
   object Successful : DownloadState(R.string.successful_state)
 
-  override fun toString(): String {
-    return javaClass.simpleName
-  }
+  override fun toString(): String = javaClass.simpleName
 }
 
 sealed class FailureReason(val stringId: Int) {

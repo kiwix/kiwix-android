@@ -14,9 +14,9 @@ abstract class BaseFragment : Fragment() {
   override fun onAttach(context: Context?) {
     super.onAttach(context)
     inject(
-        KiwixApplication.getApplicationComponent().activityComponent()
-            .activity(activity!!)
-            .build()
+      KiwixApplication.getApplicationComponent().activityComponent()
+        .activity(activity!!)
+        .build()
     )
   }
 

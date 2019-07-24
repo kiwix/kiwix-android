@@ -10,8 +10,8 @@ import org.kiwix.kiwixmobile.utils.files.FileUtils
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import javax.inject.Inject
 
-class DeleteFiles(val booksOnDiskListItem: List<BookOnDisk>) :
-    SideEffect<Unit> {
+class DeleteFiles(private val booksOnDiskListItem: List<BookOnDisk>) :
+  SideEffect<Unit> {
 
   @Inject lateinit var dialogShower: DialogShower
   @Inject lateinit var newBookDao: NewBookDao

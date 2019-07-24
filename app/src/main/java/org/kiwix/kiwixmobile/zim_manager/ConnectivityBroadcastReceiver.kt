@@ -11,7 +11,7 @@ import javax.inject.Inject
 class ConnectivityBroadcastReceiver @Inject constructor(
   private val connectivityManager: ConnectivityManager
 ) :
-    BaseBroadcastReceiver() {
+  BaseBroadcastReceiver() {
 
   override val action: String = ConnectivityManager.CONNECTIVITY_ACTION
 

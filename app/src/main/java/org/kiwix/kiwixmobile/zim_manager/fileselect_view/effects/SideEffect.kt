@@ -20,7 +20,7 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects
 import android.app.Activity
 import org.kiwix.kiwixmobile.KiwixApplication
 
-interface SideEffect<T : Any?> {
+interface SideEffect<out T : Any?> {
   fun invokeWith(activity: Activity): T
   fun activityComponent(activity: Activity) =
     KiwixApplication.getApplicationComponent().activityComponent().activity(activity).build()

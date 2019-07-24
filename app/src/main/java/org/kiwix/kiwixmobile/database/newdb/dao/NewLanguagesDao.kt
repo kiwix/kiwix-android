@@ -28,7 +28,7 @@ import javax.inject.Inject
 
 class NewLanguagesDao @Inject constructor(private val box: Box<LanguageEntity>) {
   fun languages() = box.asFlowable()
-      .map { it.map(LanguageEntity::toLanguageModel) }
+    .map { it.map(LanguageEntity::toLanguageModel) }
 
   fun insert(languages: List<Language>) {
     box.store.callInTx {

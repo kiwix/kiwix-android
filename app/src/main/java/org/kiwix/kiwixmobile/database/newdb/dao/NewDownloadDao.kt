@@ -12,29 +12,29 @@ import javax.inject.Inject
 class NewDownloadDao @Inject constructor(private val box: Box<DownloadEntity>) {
 
   fun downloads() = box.asFlowable()
-      .map { it.map(DownloadEntity::toDownloadModel) }
+    .map { it.map(DownloadEntity::toDownloadModel) }
 
   fun delete(vararg downloadIds: Long) {
     box
-        .query {
-          inValues(DownloadEntity_.downloadId, downloadIds)
-        }
-        .remove()
+      .query {
+        inValues(DownloadEntity_.downloadId, downloadIds)
+      }
+      .remove()
   }
 
   fun containsAny(vararg downloadIds: Long) =
     box
-        .query {
-          inValues(DownloadEntity_.downloadId, downloadIds)
-        }
-        .count() > 0
+      .query {
+        inValues(DownloadEntity_.downloadId, downloadIds)
+      }
+      .count() > 0
 
   fun doesNotAlreadyExist(book: Book) =
     box
-        .query {
-          equal(DownloadEntity_.bookId, book.id)
-        }
-        .count() == 0L
+      .query {
+        equal(DownloadEntity_.bookId, book.id)
+      }
+      .count() == 0L
 
   fun insert(downloadModel: DownloadModel) {
     box.put(DownloadEntity(downloadModel))

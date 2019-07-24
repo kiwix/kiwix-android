@@ -25,8 +25,8 @@ fun Activity.startActionMode(
       mode: ActionMode,
       menu: Menu?
     ): Boolean {
-      mode.getMenuInflater()
-          .inflate(menuId, menu)
+      mode.menuInflater
+        .inflate(menuId, menu)
       return true
     }
 

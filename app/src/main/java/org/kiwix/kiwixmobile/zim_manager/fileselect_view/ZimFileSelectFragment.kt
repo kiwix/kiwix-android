@@ -63,14 +63,14 @@ class ZimFileSelectFragment : BaseFragment() {
 
   private val zimManageViewModel: ZimManageViewModel by lazy {
     ViewModelProviders.of(activity!!, viewModelFactory)
-        .get(ZimManageViewModel::class.java)
+      .get(ZimManageViewModel::class.java)
   }
 
   private val bookDelegate: BookDelegate by lazy {
     BookDelegate(sharedPreferenceUtil,
-        { offerAction(RequestOpen(it)) },
-        { offerAction(RequestMultiSelection(it)) },
-        { offerAction(RequestSelect(it)) })
+      { offerAction(RequestOpen(it)) },
+      { offerAction(RequestMultiSelection(it)) },
+      { offerAction(RequestSelect(it)) })
   }
 
   private val booksOnDiskAdapter: BooksOnDiskAdapter by lazy {
@@ -95,13 +95,13 @@ class ZimFileSelectFragment : BaseFragment() {
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    zim_swiperefresh.setOnRefreshListener(this::requestFileSystemCheck)
+    zim_swiperefresh.setOnRefreshListener(::requestFileSystemCheck)
     zimfilelist.run {
       adapter = booksOnDiskAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
     }
-    zimManageViewModel.fileSelectListStates.observe(this, Observer { render(it) })
+    zimManageViewModel.fileSelectListStates.observe(this, Observer(::render))
     disposable.add(sideEffects())
     zimManageViewModel.deviceListIsRefreshing.observe(this, Observer {
       zim_swiperefresh.isRefreshing = it!!
@@ -109,12 +109,12 @@ class ZimFileSelectFragment : BaseFragment() {
   }
 
   private fun sideEffects() = zimManageViewModel.sideEffects.subscribe(
-      {
-        val effectResult = it.invokeWith(activity!!)
-        if (effectResult is ActionMode) {
-          actionMode = effectResult
-        }
-      }, Throwable::printStackTrace
+    {
+      val effectResult = it.invokeWith(activity!!)
+      if (effectResult is ActionMode) {
+        actionMode = effectResult
+      }
+    }, Throwable::printStackTrace
   )
 
   private fun render(state: FileSelectListState) {
@@ -143,14 +143,14 @@ class ZimFileSelectFragment : BaseFragment() {
 
   private fun checkPermissions() {
     if (ContextCompat.checkSelfPermission(
-            activity!!,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) != PackageManager.PERMISSION_GRANTED
+        activity!!,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE
+      ) != PackageManager.PERMISSION_GRANTED
     ) {
       context.toast(R.string.request_storage)
       requestPermissions(
-          arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-          REQUEST_STORAGE_PERMISSION
+        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+        REQUEST_STORAGE_PERMISSION
       )
     } else {
       requestFileSystemCheck()

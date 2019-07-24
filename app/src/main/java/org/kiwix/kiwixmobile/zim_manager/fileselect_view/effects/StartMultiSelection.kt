@@ -16,11 +16,10 @@ data class StartMultiSelection(
 ) : SideEffect<ActionMode?> {
   override fun invokeWith(activity: Activity) =
     activity.startActionMode(
-        R.menu.menu_zim_files_contextual,
-        mapOf(
-            R.id.zim_file_delete_item to { fileSelectActions.offer(RequestDeleteMultiSelection) },
-            R.id.zim_file_share_item to { fileSelectActions.offer(RequestShareMultiSelection) }
-        ),
-        { fileSelectActions.offer(FileSelectActions.MultiModeFinished) }
-    )
+      R.menu.menu_zim_files_contextual,
+      mapOf(
+        R.id.zim_file_delete_item to { fileSelectActions.offer(RequestDeleteMultiSelection) },
+        R.id.zim_file_share_item to { fileSelectActions.offer(RequestShareMultiSelection) }
+      )
+    ) { fileSelectActions.offer(FileSelectActions.MultiModeFinished) }
 }

@@ -22,8 +22,8 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.Bo
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.LibraryListItem.DividerItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base.BaseViewHolder
 
-sealed class LibraryViewHolder<T : LibraryListItem>(containerView: View) :
-    BaseViewHolder<T>(containerView) {
+sealed class LibraryViewHolder<in T : LibraryListItem>(containerView: View) :
+  BaseViewHolder<T>(containerView) {
 
   class LibraryBookViewHolder(
     view: View,
@@ -39,7 +39,7 @@ sealed class LibraryViewHolder<T : LibraryListItem>(containerView: View) :
       size.setTextAndVisibility(KiloByte(item.book.size).humanReadable)
       language.text = bookUtils.getLanguage(item.book.getLanguage())
       fileName.text = NetworkUtils.parseURL(
-          KiwixApplication.getInstance(), item.book.url
+        KiwixApplication.getInstance(), item.book.url
       )
       favicon.setBitmap(Base64String(item.book.favicon))
 

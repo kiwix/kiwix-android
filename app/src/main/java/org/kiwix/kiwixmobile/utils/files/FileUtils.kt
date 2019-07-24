@@ -37,17 +37,17 @@ object FileUtils {
 
   val saveFilePath =
     "${Environment.getExternalStorageDirectory()}${File.separator}Android$" +
-        "{File.separator}obb${File.separator}${BuildConfig.APPLICATION_ID}"
+      "{File.separator}obb${File.separator}${BuildConfig.APPLICATION_ID}"
 
-  @JvmStatic fun getFileCacheDir(context: Context) =
+  @JvmStatic fun getFileCacheDir(context: Context): File =
     if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
-      context.externalCacheDir
+      context.externalCacheDir!!
     } else {
       context.cacheDir
     }
 
   @JvmStatic @Synchronized fun deleteCachedFiles(context: Context) {
-    getFileCacheDir(context)?.deleteRecursively()
+    getFileCacheDir(context).deleteRecursively()
   }
 
   @JvmStatic @Synchronized fun deleteZimFile(path: String) {
@@ -84,12 +84,11 @@ object FileUtils {
     if (file.exists()) {
       file.delete()
       return true
-    } else {
-      val singlePart = File("$path.part")
-      if (singlePart.exists()) {
-        singlePart.delete()
-        return true
-      }
+    }
+    val singlePart = File("$path.part")
+    if (singlePart.exists()) {
+      singlePart.delete()
+      return true
     }
     return false
   }
@@ -102,7 +101,7 @@ object FileUtils {
    */
   @JvmStatic fun getExpansionAPKFileName(mainFile: Boolean) =
     "${if (mainFile) "main." else "patch."}${BuildConfig.CONTENT_VERSION_CODE}" +
-        ".${BuildConfig.APPLICATION_ID}.obb"
+      ".${BuildConfig.APPLICATION_ID}.obb"
 
   /**
    * Returns the filename (where the file should be saved) from info about a download
@@ -132,14 +131,13 @@ object FileUtils {
       if (fileForNewFile.length() == fileSize) {
         Log.d(TAG_KIWIX, "Correct file '$fileName' found.")
         return true
-      } else {
-        Log.d(
-            TAG_KIWIX,
-            "File '" + fileName + "' found but with wrong size=" + fileForNewFile.length()
-        )
-        if (deleteFileOnMismatch) {
-          fileForNewFile.delete()
-        }
+      }
+      Log.d(
+        TAG_KIWIX,
+        "File '" + fileName + "' found but with wrong size=" + fileForNewFile.length()
+      )
+      if (deleteFileOnMismatch) {
+        fileForNewFile.delete()
       }
     } else {
       Log.d(TAG_KIWIX, "No file '$fileName' found.")
@@ -153,22 +151,22 @@ object FileUtils {
   ): String? {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT &&
-        DocumentsContract.isDocumentUri(ctx, uri)
+      DocumentsContract.isDocumentUri(ctx, uri)
     ) {
       if ("com.android.externalstorage.documents" == uri.authority) {
         val documentId = DocumentsContract.getDocumentId(uri)
-            .split(":")
+          .split(":")
 
         if (documentId[0] == "primary") {
           return "${Environment.getExternalStorageDirectory()}/${documentId[1]}"
         }
       } else if ("com.android.providers.downloads.documents" == uri.authority)
         return contentQuery(
-            ctx,
-            ContentUris.withAppendedId(
-                Uri.parse("content://downloads/public_downloads"),
-                DocumentsContract.getDocumentId(uri).toLong()
-            )
+          ctx,
+          ContentUris.withAppendedId(
+            Uri.parse("content://downloads/public_downloads"),
+            DocumentsContract.getDocumentId(uri).toLong()
+          )
         )
     } else if ("content".equals(uri.scheme!!, ignoreCase = true)) {
       return contentQuery(ctx, uri)
@@ -184,11 +182,11 @@ object FileUtils {
   ): String? {
     val columnName = "_data"
     return context.contentResolver.query(uri, arrayOf(columnName), null, null, null)
-        ?.use {
-          if (it.moveToFirst() && it.getColumnIndex(columnName) != -1) {
-            it.get<String>(columnName)
-          } else null
-        }
+      ?.use {
+        if (it.moveToFirst() && it.getColumnIndex(columnName) != -1) {
+          it.get<String>(columnName)
+        } else null
+      }
   }
 
   @JvmStatic fun readLocalesFromAssets(context: Context) =
@@ -197,11 +195,11 @@ object FileUtils {
   private fun readContentFromLocales(context: Context): String {
     try {
       context.assets.open("locales.txt")
-          .use {
-            val buffer = ByteArray(it.available())
-            it.read(buffer)
-            return String(buffer)
-          }
+        .use {
+          val buffer = ByteArray(it.available())
+          it.read(buffer)
+          return@readContentFromLocales String(buffer)
+        }
     } catch (ignored: IOException) {
       return ""
     }
@@ -221,12 +219,10 @@ object FileUtils {
     for (firstCharacter in 'a'..'z') {
       for (secondCharacter in 'a'..'z') {
         path = path.substring(0, path.length - 2) + firstCharacter + secondCharacter
-        if (File(path).exists()) {
-          files.add(File(path))
-        } else if (File("$path.part").exists()) {
-          files.add(File("$path.part"))
-        } else {
-          return files
+        when {
+          File(path).exists() -> files.add(File(path))
+          File("$path.part").exists() -> files.add(File("$path.part"))
+          else -> return files
         }
       }
     }

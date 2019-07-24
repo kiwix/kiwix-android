@@ -17,24 +17,24 @@ class ShareFiles(val selectedBooks: List<BookOnDisk>) : SideEffect<Unit> {
     val selectedFileContentURIs = selectedBooks.mapNotNull {
       if (Build.VERSION.SDK_INT >= 24) {
         FileProvider.getUriForFile(
-            activity,
-            BuildConfig.APPLICATION_ID + ".fileprovider",
-            it.file
+          activity,
+          BuildConfig.APPLICATION_ID + ".fileprovider",
+          it.file
         )
       } else {
         Uri.fromFile(it.file)
       }
     }
     selectedFileShareIntent.putParcelableArrayListExtra(
-        Intent.EXTRA_STREAM,
-        ArrayList(selectedFileContentURIs)
+      Intent.EXTRA_STREAM,
+      ArrayList(selectedFileContentURIs)
     )
     selectedFileShareIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
     val shareChooserIntent = Intent.createChooser(
-        selectedFileShareIntent,
-        activity.getString(R.string.selected_file_cab_app_chooser_title)
+      selectedFileShareIntent,
+      activity.getString(R.string.selected_file_cab_app_chooser_title)
     )
-    if (shareChooserIntent.resolveActivity(activity.getPackageManager()) != null) {
+    if (shareChooserIntent.resolveActivity(activity.packageManager) != null) {
       activity.startActivity(shareChooserIntent) // Open the app chooser dialog
     }
   }

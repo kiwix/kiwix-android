@@ -39,12 +39,12 @@ class SectionsPagerAdapter(
 
   override fun getCount() = 3
 
-  override fun getPageTitle(position: Int) = context.getString(
-      when (position) {
-        0 -> R.string.local_zims
-        1 -> R.string.remote_zims
-        2 -> R.string.zim_downloads
-        else -> throw RuntimeException("No matching title for position: $position")
-      }
+  override fun getPageTitle(position: Int): String = context.getString(
+    when (position) {
+      0 -> R.string.local_zims
+      1 -> R.string.remote_zims
+      2 -> R.string.zim_downloads
+      else -> throw RuntimeException("No matching title for position: $position")
+    }
   )
 }

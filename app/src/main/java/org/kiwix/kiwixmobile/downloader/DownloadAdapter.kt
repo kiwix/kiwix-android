@@ -23,8 +23,8 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.extensions.inflate
 
-class DownloadAdapter(val itemClickListener: (DownloadItem) -> Unit) :
-    RecyclerView.Adapter<DownloadViewHolder>() {
+class DownloadAdapter(private val itemClickListener: (DownloadItem) -> Unit) :
+  RecyclerView.Adapter<DownloadViewHolder>() {
 
   init {
     setHasStableIds(true)
