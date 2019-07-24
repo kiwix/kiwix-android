@@ -49,7 +49,7 @@ class NetworkUtilsTest {
     every { context.getSystemService(Context.CONNECTIVITY_SERVICE) } returns connectivity
     every { connectivity.allNetworkInfo } returns networkInfos
 
-    //one network is connected
+    // one network is connected
     every { (networkInfo1.state) } returns NetworkInfo.State.CONNECTED
     every { (networkInfo2.state) } returns NetworkInfo.State.DISCONNECTING
     assertEquals(true, NetworkUtils.isNetworkAvailable(context))
@@ -58,7 +58,7 @@ class NetworkUtilsTest {
     every { (networkInfo2.state) } returns NetworkInfo.State.CONNECTING
     assertEquals(false, NetworkUtils.isNetworkAvailable(context))
 
-    //no network is available
+    // no network is available
     every { (networkInfo1.state) } returns NetworkInfo.State.DISCONNECTED
     every { (networkInfo2.state) } returns NetworkInfo.State.DISCONNECTED
     assertEquals(false, NetworkUtils.isNetworkAvailable(context))
@@ -78,51 +78,51 @@ class NetworkUtilsTest {
     every { (context.getSystemService(Context.CONNECTIVITY_SERVICE)) } returns connectivity
     every { (connectivity.activeNetworkInfo) } returns networkInfo
 
-    //SDK >= 23
+    // SDK >= 23
     try {
       SetSDKVersion(Build.VERSION::class.java.getField("SDK_INT"), 23)
     } catch (e: Exception) {
       Log.d("NetworkUtilsTest", "Unable to set Build SDK Version")
     }
 
-    //on Mobile Data
+    // on Mobile Data
     every { (networkInfo.type) } returns ConnectivityManager.TYPE_MOBILE
     assertEquals(false, NetworkUtils.isWiFi(context))
-    //verify that the correct methods are used according to the build SDK version
+    // verify that the correct methods are used according to the build SDK version
     verify {
       connectivity.activeNetworkInfo
       networkInfo.type
     }
     verify(exactly = 0) { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) }
 
-    //on WIFI connected
+    // on WIFI connected
     every { (networkInfo.type) } returns ConnectivityManager.TYPE_WIFI
     every { (networkInfo.isConnected) } returns java.lang.Boolean.TRUE
     assertEquals(true, NetworkUtils.isWiFi(context))
     verify(exactly = 2) { connectivity.activeNetworkInfo }
     verify(exactly = 0) { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) }
 
-    //on WIFI disconnected
+    // on WIFI disconnected
     every { (networkInfo.type) } returns ConnectivityManager.TYPE_WIFI
     every { (networkInfo.isConnected) } returns java.lang.Boolean.FALSE
     assertEquals(false, NetworkUtils.isWiFi(context))
     verify(exactly = 3) { connectivity.activeNetworkInfo }
     verify(exactly = 0) { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) }
 
-    //SDK < 23
+    // SDK < 23
     try {
       SetSDKVersion(Build.VERSION::class.java.getField("SDK_INT"), 22)
     } catch (e: Exception) {
       Log.d("NetworkUtilsTest", "Unable to set Build SDK Version")
     }
 
-    //WIFI connected
+    // WIFI connected
     every { (connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI)) } returns networkInfo
     every { (networkInfo.isConnected) } returns true
     assertEquals(true, NetworkUtils.isWiFi(context))
     verify { connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI) }
 
-    //WIFI disconnected
+    // WIFI disconnected
     every { (connectivity.getNetworkInfo(ConnectivityManager.TYPE_WIFI)) } returns networkInfo
     every { (networkInfo.isConnected) } returns false
     assertEquals(false, NetworkUtils.isWiFi(context))
@@ -167,13 +167,17 @@ class NetworkUtilsTest {
     // Here the Method should return the substring between the first '?' character and the nearest '/' character preceeding it
     assertEquals(
         "File Name from URL standard case", "search", NetworkUtils.getFileNameFromUrl(
-        "https://www.google.com/search?source=hp&ei=zs4LW6W1E5n6rQH65Z-wDQ&q=kiwix+android&oq=kiwix+android&gs_l=psy-ab.3...2590.6259.0.6504.14.12.0.0.0.0.263.485.2-2.2.0....0...1c.1.64.psy-ab..12.2.485.0..0j35i39k1.0.WSlGY7hWzTo"
+        "https://www.google.com/search?source=hp&ei=zs4LW6W1E5n6rQH65Z-wDQ&q=" +
+            "kiwix+android&oq=kiwix+android&gs_l=psy-ab.3..." +
+            "2590.6259.0.6504.14.12.0.0.0.0.263.485.2-2.2.0...." +
+            "0...1c.1.64.psy-ab..12.2.485.0..0j35i39k1.0.WSlGY7hWzTo"
     )
     )
     assertEquals(
         "File Name from URL standard case", "Special:Search",
         NetworkUtils.getFileNameFromUrl(
-            "https://en.wikipedia.org/wiki/Special:Search?search=kiwix+android&go=Go&searchToken=3zrcxw8fltdcij99zvoh5c6wy"
+            "https://en.wikipedia.org/wiki/Special:Search?search=" +
+                "kiwix+android&go=Go&searchToken=3zrcxw8fltdcij99zvoh5c6wy"
         )
     )
     assertEquals(
@@ -190,7 +194,7 @@ class NetworkUtilsTest {
 
     assertEquals("URL Parsing on empty string", "", NetworkUtils.parseURL(context, ""))
 
-    //Using the standard Kiwix Download URLs
+    // Using the standard Kiwix Download URLs
     assertEquals(
         "URL Parsing", "No Pictures", NetworkUtils.parseURL(
         context,
@@ -200,7 +204,8 @@ class NetworkUtilsTest {
     assertEquals(
         "URL Parsing", "No Videos", NetworkUtils.parseURL(
         context,
-        "http://www.mirrorservice.org/sites/download.kiwix.org/zim/wikipedia/wikipedia_af_all_novid_2016-05.zim"
+        "http://www.mirrorservice.org/sites/download.kiwix.org/zim/wikipedia/" +
+            "wikipedia_af_all_novid_2016-05.zim"
     )
     )
     assertEquals(
@@ -223,7 +228,7 @@ class NetworkUtilsTest {
     )
   }
 
-  //Sets the Build SDK version
+  // Sets the Build SDK version
   @Throws(Exception::class)
   private fun SetSDKVersion(
     field: Field,
@@ -236,4 +241,3 @@ class NetworkUtilsTest {
     field.set(null, newValue)
   }
 }
-

@@ -15,5 +15,4 @@ inline class Base64String(private val encodedString: String?) {
   } catch (illegalArgumentException: IllegalArgumentException) {
     null
   }
-
 }

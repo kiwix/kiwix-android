@@ -86,7 +86,4 @@ class DownloadManagerRequester @Inject constructor(
 
   private fun DownloadModel.toQuery() =
     DownloadManager.Query().setFilterById(downloadId)
-
 }
-
-

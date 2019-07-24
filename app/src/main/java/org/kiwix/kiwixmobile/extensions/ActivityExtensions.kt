@@ -38,6 +38,5 @@ fun Activity.startActionMode(
     override fun onDestroyActionMode(mode: ActionMode?) {
       onDestroyAction()
     }
-
   })
 }

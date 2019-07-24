@@ -1,13 +1,13 @@
 package org.kiwix.kiwixmobile.views
 
-
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.extensions.inflate
 import org.kiwix.kiwixmobile.zim_manager.Language
 
-class LanguageAdapter(val listItems: MutableList<Language>) : RecyclerView.Adapter<LanguageViewHolder>() {
+class LanguageAdapter(val listItems: MutableList<Language>) :
+    RecyclerView.Adapter<LanguageViewHolder>() {
 
   override fun onCreateViewHolder(
     parent: ViewGroup,
@@ -31,4 +31,3 @@ class LanguageAdapter(val listItems: MutableList<Language>) : RecyclerView.Adapt
     notifyItemChanged(position)
   }
 }
-

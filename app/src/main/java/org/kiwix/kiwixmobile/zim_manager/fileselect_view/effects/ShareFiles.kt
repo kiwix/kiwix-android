@@ -35,8 +35,7 @@ class ShareFiles(val selectedBooks: List<BookOnDisk>) : SideEffect<Unit> {
         activity.getString(R.string.selected_file_cab_app_chooser_title)
     )
     if (shareChooserIntent.resolveActivity(activity.getPackageManager()) != null) {
-      activity.startActivity(shareChooserIntent)  // Open the app chooser dialog
+      activity.startActivity(shareChooserIntent) // Open the app chooser dialog
     }
   }
-
 }

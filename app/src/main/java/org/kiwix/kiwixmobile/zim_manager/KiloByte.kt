@@ -8,9 +8,8 @@ inline class KiloByte(val kilobyteString: String?) {
       val units = arrayOf("KB", "MB", "GB", "TB")
       val conversion = (Math.log10(it.toDouble()) / Math.log10(1024.0)).toInt()
       (DecimalFormat("#,##0.#")
-          .format(it / Math.pow(1024.0, conversion.toDouble()))
-          + " "
-          + units[conversion])
+          .format(it / Math.pow(1024.0, conversion.toDouble())) +
+          " " +
+          units[conversion])
     } ?: ""
-
 }

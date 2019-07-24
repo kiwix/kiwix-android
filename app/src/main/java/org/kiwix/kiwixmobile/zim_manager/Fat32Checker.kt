@@ -55,7 +55,6 @@ class Fat32Checker @Inject constructor(sharedPreferenceUtil: SharedPreferenceUti
               val systemState = toFileSystemState(it)
               _fileSystemStates.onNext(systemState)
               fileObserver = if (systemState == NotEnoughSpaceFor4GbFile) fileObserver(it) else null
-
             },
             Throwable::printStackTrace
         )

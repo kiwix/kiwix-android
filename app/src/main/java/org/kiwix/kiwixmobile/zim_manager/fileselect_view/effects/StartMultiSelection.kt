@@ -23,5 +23,4 @@ data class StartMultiSelection(
         ),
         { fileSelectActions.offer(FileSelectActions.MultiModeFinished) }
     )
-
 }

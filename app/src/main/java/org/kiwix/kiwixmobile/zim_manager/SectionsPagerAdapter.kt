@@ -34,7 +34,7 @@ class SectionsPagerAdapter(
     0 -> ZimFileSelectFragment()
     1 -> LibraryFragment()
     2 -> DownloadFragment()
-    else -> throw  RuntimeException("No matching fragment for position: $position")
+    else -> throw RuntimeException("No matching fragment for position: $position")
   }
 
   override fun getCount() = 3
@@ -44,7 +44,7 @@ class SectionsPagerAdapter(
         0 -> R.string.local_zims
         1 -> R.string.remote_zims
         2 -> R.string.zim_downloads
-        else -> throw  RuntimeException("No matching title for position: $position")
+        else -> throw RuntimeException("No matching title for position: $position")
       }
   )
 }

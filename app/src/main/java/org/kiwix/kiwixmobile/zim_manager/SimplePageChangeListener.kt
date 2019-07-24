@@ -8,7 +8,6 @@ class SimplePageChangeListener(val onPageSelectedAction: (Int) -> Unit) : OnPage
     positionOffset: Float,
     positionOffsetPixels: Int
   ) {
-
   }
 
   override fun onPageSelected(position: Int) {
@@ -16,6 +15,5 @@ class SimplePageChangeListener(val onPageSelectedAction: (Int) -> Unit) : OnPage
   }
 
   override fun onPageScrollStateChanged(state: Int) {
-
   }
 }

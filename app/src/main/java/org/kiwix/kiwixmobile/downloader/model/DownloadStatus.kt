@@ -58,19 +58,19 @@ import java.io.File
 class DownloadStatus(
   val downloadId: Long,
   val title: String,
-  val description: String ,
-  val state: DownloadState ,
-  val bytesDownloadedSoFar: Long ,
+  val description: String,
+  val state: DownloadState,
+  val bytesDownloadedSoFar: Long,
   val totalSizeBytes: Long,
   val lastModified: String,
   val localUri: String?,
-  val mediaProviderUri: String? ,
+  val mediaProviderUri: String?,
   val mediaType: String?,
   val uri: String?,
   val book: Book
 ) {
 
-  fun toBookOnDisk(uriToFileConverter:UriToFileConverter) =
+  fun toBookOnDisk(uriToFileConverter: UriToFileConverter) =
     BookOnDisk(book = book, file = uriToFileConverter.convert(localUri))
 
   constructor(
@@ -94,7 +94,7 @@ class DownloadStatus(
 
 interface UriToFileConverter {
   fun convert(uriString: String?) = File(Uri.parse(uriString).path)
-  class Impl:UriToFileConverter{}
+  class Impl : UriToFileConverter
 }
 
 sealed class DownloadState(val stringId: Int) {

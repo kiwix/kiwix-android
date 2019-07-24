@@ -83,22 +83,22 @@ class ChunkUtilsTest {
 
     assertEquals(
         "verify that the same notificationID is passed on to each chunk",
-        true, listReturned[0].url == URL
-        && listReturned[1].url == URL
-        && listReturned[2].url == URL
-        && listReturned[3].url == URL
-        && listReturned[4].url == URL
-        && listReturned[5].url == URL
+        true, listReturned[0].url == URL &&
+        listReturned[1].url == URL &&
+        listReturned[2].url == URL &&
+        listReturned[3].url == URL &&
+        listReturned[4].url == URL &&
+        listReturned[5].url == URL
     )
 
     assertEquals(
         "verify that the same URL is passed on to each chunk",
-        true, listReturned[0].notificationID == 56
-        && listReturned[1].notificationID == 56
-        && listReturned[2].notificationID == 56
-        && listReturned[3].notificationID == 56
-        && listReturned[4].notificationID == 56
-        && listReturned[5].notificationID == 56
+        true, listReturned[0].notificationID == 56 &&
+        listReturned[1].notificationID == 56 &&
+        listReturned[2].notificationID == 56 &&
+        listReturned[3].notificationID == 56 &&
+        listReturned[4].notificationID == 56 &&
+        listReturned[5].notificationID == 56
     )
 
     // test assignment of file names
@@ -139,18 +139,21 @@ class ChunkUtilsTest {
     size = ChunkUtils.CHUNK_SIZE
     listReturned = ChunkUtils.getChunks("TestURL", size, 0)
     assertEquals(
-        "verify that previous extension in the filename (if any) is removed in case of files having 1 chunk",
+        "verify that previous extension in the filename (if any) is removed" +
+            " in case of files having 1 chunk",
         "TestFileName.xml.part.part", listReturned[0].fileName
     )
 
     size = ChunkUtils.CHUNK_SIZE * 2.toLong()
     listReturned = ChunkUtils.getChunks("TestURL", size, 0)
     assertEquals(
-        "verify that previous extension in the filename (if any) is removed in case of files having more than 1 chunk",
+        "verify that previous extension in the filename (if any) is removed" +
+            " in case of files having more than 1 chunk",
         "TestFileName.zimaa.part.part", listReturned[0].fileName
     )
     assertEquals(
-        "verify that previous extension in the filename (if any) is removed in case of files having more than 1 chunk",
+        "verify that previous extension in the filename (if any) is removed" +
+            " in case of files having more than 1 chunk",
         "TestFileName.zimab.part.part", listReturned[1].fileName
     )
   }

@@ -12,5 +12,4 @@ interface AdapterDelegate<T> {
   )
 
   fun isFor(item: T): Boolean
-
 }

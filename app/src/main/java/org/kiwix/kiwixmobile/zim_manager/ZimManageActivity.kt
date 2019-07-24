@@ -136,7 +136,7 @@ class ZimManageActivity : BaseActivity() {
     if (value == 1) {
       startActivity(Intent(this, MainActivity::class.java))
     } else {
-      super.onBackPressed()  // optional depending on your needs
+      super.onBackPressed() // optional depending on your needs
     }
   }
 

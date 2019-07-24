@@ -5,9 +5,6 @@ import io.reactivex.Flowable
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import org.kiwix.kiwixmobile.bookmark.BookmarkItem
-import org.kiwix.kiwixmobile.data.local.dao.BookmarksDao
-import org.kiwix.kiwixmobile.data.local.dao.RecentSearchDao
-import org.kiwix.kiwixmobile.data.local.entity.Bookmark
 import org.kiwix.kiwixmobile.database.newdb.dao.HistoryDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookDao
 import org.kiwix.kiwixmobile.database.newdb.dao.NewBookmarksDao
@@ -31,7 +28,8 @@ import javax.inject.Singleton
 
 @Singleton
 class Repository @Inject internal constructor(
-  @param:IO private val io: Scheduler, @param:MainThread private val mainThread: Scheduler,
+  @param:IO private val io: Scheduler,
+  @param:MainThread private val mainThread: Scheduler,
   private val bookDao: NewBookDao,
   private val bookmarksDao: NewBookmarksDao,
   private val historyDao: HistoryDao,

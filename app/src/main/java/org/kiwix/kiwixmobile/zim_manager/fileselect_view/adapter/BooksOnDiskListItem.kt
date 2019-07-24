@@ -36,5 +36,4 @@ sealed class BooksOnDiskListItem {
         bookOnDiskEntity.file
     )
   }
-
 }

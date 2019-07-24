@@ -254,7 +254,7 @@ class ZimManageViewModelTest {
   inner class Lanuages {
 
     @Test
-    fun `a network request with no result and an empty language db triggers an activation of the default locale`() {
+    fun `network no result & empty language db activates the default locale`() {
       val expectedLanguage = Language(
           active = true,
           occurencesOfLanguage = 1,
@@ -272,7 +272,7 @@ class ZimManageViewModelTest {
     }
 
     @Test
-    fun `a network request with no result and a non empty language db does not trigger anything`() {
+    fun `network no result & a language db result triggers nothing`() {
       expectNetworkDbAndDefault(
           listOf(),
           listOf(
@@ -291,7 +291,7 @@ class ZimManageViewModelTest {
     }
 
     @Test
-    fun `a network request with a result and an empty language db triggers an activation of the default locale with the result of the web request`() {
+    fun `network result & empty language db triggers combined result of default + network`() {
       val defaultLanguage = Language(
           active = true,
           occurencesOfLanguage = 1,
@@ -326,7 +326,7 @@ class ZimManageViewModelTest {
     }
 
     @Test
-    fun `a network request with a result and a non empty language db triggers an activation of the result of the web request with the db`() {
+    fun `network result & language db results activates a combined network + db result`() {
       val dbLanguage = Language(
           active = true,
           occurencesOfLanguage = 1,

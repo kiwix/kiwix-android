@@ -47,7 +47,6 @@ sealed class LibraryViewHolder<T : LibraryListItem>(containerView: View) :
         clickAction.invoke(item)
       }
     }
-
   }
 
   class LibraryDividerViewHolder(view: View) : LibraryViewHolder<DividerItem>(view) {
@@ -55,5 +54,4 @@ sealed class LibraryViewHolder<T : LibraryListItem>(containerView: View) :
       divider_text.text = item.text
     }
   }
-
 }

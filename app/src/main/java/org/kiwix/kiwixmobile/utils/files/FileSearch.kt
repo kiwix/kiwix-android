@@ -80,7 +80,6 @@ class FileSearch @Inject constructor(private val context: Context) {
   private fun filesMatchingExtensions(directory: String) = File(directory)
       .listFiles { _, name -> name.endsWithAny(*zimFileExtensions) }
       ?.toList()
-
 }
 
 internal fun String.endsWithAny(vararg suffixes: String) =

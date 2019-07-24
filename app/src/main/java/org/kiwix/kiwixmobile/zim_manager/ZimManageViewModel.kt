@@ -220,7 +220,9 @@ class ZimManageViewModel @Inject constructor(
     return None
   }
 
-  private fun requestsAndConnectivtyChangesToLibraryRequests(library: PublishProcessor<LibraryNetworkEntity>) =
+  private fun requestsAndConnectivtyChangesToLibraryRequests(
+    library: PublishProcessor<LibraryNetworkEntity>
+  ) =
     Flowable.combineLatest(
         requestDownloadLibrary,
         connectivityBroadcastReceiver.networkStates.distinctUntilChanged().filter(
@@ -410,14 +412,14 @@ class ZimManageViewModel @Inject constructor(
           libraryNetworkEntity.books
               .filter {
                 when (fileSystemState) {
-                  CannotWrite4GbFile -> it.size.toLongOrNull() ?: 0L < Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES
+                  CannotWrite4GbFile -> isLessThan4GB(it)
                   NotEnoughSpaceFor4GbFile,
                   CanWrite4GbFile -> true
                 }
               }
               .filterNot { downloadedBooksIds.contains(it.id) }
               .filterNot { downloadingBookIds.contains(it.id) }
-              .filterNot { it.url.contains("/stack_exchange/") },// Temp filter see #694, filter)
+              .filterNot { it.url.contains("/stack_exchange/") }, // Temp filter see #694, filter)
           filter
       )
 
@@ -434,6 +436,10 @@ class ZimManageViewModel @Inject constructor(
         )
     )
   }
+
+  private fun isLessThan4GB(it: Book) =
+    it.size.toLongOrNull() ?: 0L <
+        Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES
 
   private fun createLibrarySection(
     books: List<Book>,
@@ -516,7 +522,9 @@ class ZimManageViewModel @Inject constructor(
     return oldState.copy(
         bookOnDiskListItems = newList.map { newBookOnDisk ->
           val firstOrNull =
-            oldState.bookOnDiskListItems.firstOrNull { oldBookOnDisk -> oldBookOnDisk.id == newBookOnDisk.id }
+            oldState.bookOnDiskListItems.firstOrNull { oldBookOnDisk ->
+              oldBookOnDisk.id == newBookOnDisk.id
+            }
           newBookOnDisk.apply { isSelected = firstOrNull?.isSelected ?: false }
         })
   }
@@ -555,7 +563,4 @@ class ZimManageViewModel @Inject constructor(
         .subscribeOn(Schedulers.io())
         .map(downloader::queryStatus)
         .distinctUntilChanged()
-
 }
-
-

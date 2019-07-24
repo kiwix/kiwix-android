@@ -38,5 +38,4 @@ class DeleteFiles(val booksOnDiskListItem: List<BookOnDisk>) :
     newBookDao.delete(book.databaseId!!)
     return true
   }
-
 }

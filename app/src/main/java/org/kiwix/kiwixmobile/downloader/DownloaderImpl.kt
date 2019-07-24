@@ -37,7 +37,7 @@ class DownloaderImpl @Inject constructor(
         .take(1)
         .subscribe(
             {
-              if(downloadDao.doesNotAlreadyExist(book)){
+              if (downloadDao.doesNotAlreadyExist(book)) {
                 val downloadId = downloadRequester.enqueue(
                     DownloadRequest(it, book)
                 )

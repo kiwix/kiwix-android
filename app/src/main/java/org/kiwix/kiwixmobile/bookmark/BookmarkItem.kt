@@ -35,5 +35,4 @@ data class BookmarkItem(
         favicon = ZimContentProvider.getFavicon()
     )
   }
-
 }

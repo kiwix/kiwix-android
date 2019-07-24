@@ -43,7 +43,6 @@ sealed class LibraryDelegate<I : LibraryListItem, VH : LibraryViewHolder<I>> :
           bookUtils,
           clickAction
       )
-
   }
 
   object DividerDelegate : LibraryDelegate<DividerItem, LibraryDividerViewHolder>() {

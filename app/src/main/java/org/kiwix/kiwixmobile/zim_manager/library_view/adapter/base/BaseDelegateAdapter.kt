@@ -56,5 +56,5 @@ abstract class BaseDelegateAdapter<ITEM>(
     return getIdFor(items[position])
   }
 
-  abstract fun getIdFor(item:ITEM):Long
+  abstract fun getIdFor(item: ITEM): Long
 }

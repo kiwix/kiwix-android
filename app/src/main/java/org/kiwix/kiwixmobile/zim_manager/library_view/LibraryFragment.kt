@@ -180,9 +180,9 @@ class LibraryFragment : BaseFragment() {
     when {
       notEnoughSpaceAvailable(item) -> {
         context.toast(
-            getString(R.string.download_no_space)
-                + "\n" + getString(R.string.space_available) + " "
-                + LibraryUtils.bytesToHuman(spaceAvailable)
+            getString(R.string.download_no_space) +
+                "\n" + getString(R.string.space_available) + " " +
+                LibraryUtils.bytesToHuman(spaceAvailable)
         )
         libraryList.snack(
             R.string.download_change_storage,

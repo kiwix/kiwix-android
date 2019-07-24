@@ -36,7 +36,8 @@ import java.util.ArrayList
 object FileUtils {
 
   val saveFilePath =
-    "${Environment.getExternalStorageDirectory()}${File.separator}Android${File.separator}obb${File.separator}${BuildConfig.APPLICATION_ID}"
+    "${Environment.getExternalStorageDirectory()}${File.separator}Android$" +
+        "{File.separator}obb${File.separator}${BuildConfig.APPLICATION_ID}"
 
   @JvmStatic fun getFileCacheDir(context: Context) =
     if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
@@ -100,7 +101,8 @@ object FileUtils {
    * @return String the file name of the expansion file
    */
   @JvmStatic fun getExpansionAPKFileName(mainFile: Boolean) =
-    "${if (mainFile) "main." else "patch."}${BuildConfig.CONTENT_VERSION_CODE}.${BuildConfig.APPLICATION_ID}.obb"
+    "${if (mainFile) "main." else "patch."}${BuildConfig.CONTENT_VERSION_CODE}" +
+        ".${BuildConfig.APPLICATION_ID}.obb"
 
   /**
    * Returns the filename (where the file should be saved) from info about a download
@@ -264,5 +266,4 @@ object FileUtils {
 
   @JvmStatic fun getCurrentSize(book: Book) =
     getAllZimParts(book).fold(0L, { acc, file -> acc + file.length() })
-
 }

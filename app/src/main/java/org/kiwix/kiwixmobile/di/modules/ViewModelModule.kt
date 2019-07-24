@@ -34,5 +34,6 @@ abstract class ViewModelModule {
   internal abstract fun bindUserViewModel(userViewModel: ZimManageViewModel): ViewModel
 
   @Binds
-  internal abstract fun bindViewModelFactory(factory: KiwixViewModelFactory): ViewModelProvider.Factory
+  internal abstract fun bindViewModelFactory(factory: KiwixViewModelFactory):
+      ViewModelProvider.Factory
 }
