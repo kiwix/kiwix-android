@@ -457,6 +457,10 @@ play {
   resolutionStrategy = "fail"
 }
 
+ktlint{
+  android = true
+}
+
 class TestDroidUpload extends TestServer {
   def buildNumber = System.getenv("TRAVIS_BUILD_NUMBER")
   def API_KEY = System.getenv("PUBLIC_TESTDROID_API_KEY")
@@ -495,5 +499,12 @@ class TestDroidUpload extends TestServer {
   @Override
   boolean isConfigured() {
     return true
+  }
+}
+
+apply from: "${rootDir}/team-props/git-hooks.gradle"
+afterEvaluate {
+  android.applicationVariants.all { variant ->
+    variant.preBuild.dependsOn(installGitHooks)
   }
 }

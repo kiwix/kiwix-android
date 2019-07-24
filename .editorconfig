@@ -1,20 +1,35 @@
-# EditorConfig is awesome: https://EditorConfig.org
-
-# top-most EditorConfig file
-root = true
-
-# Unix-style newlines with a newline ending every file
 [*]
-end_of_line = lf
-indent_style = space
-indent_size = 2
-insert_final_newline = true
-charset = utf-8
-# android studio / intellij specific, also in squares android style guide:
-# https://github.com/kiwix/kiwix-android/blob/master/docs/codestyle.md
-continuation_indent_size = 4
+charset=utf-8
+end_of_line=lf
+insert_final_newline=true
+indent_style=space
+indent_size=2
 
-# windows command files need windows newline
-[*.{bat, cmd}]
-end_of_line = crlf
+[{*.sht,*.html,*.shtm,*.shtml,*.htm}]
+indent_style=space
+indent_size=4
+
+[*.json]
+indent_style=space
+indent_size=2
+
+[*.properties]
+indent_style=space
+indent_size=4
+
+[.editorconfig]
+indent_style=space
+indent_size=4
+
+[{*.pyw,*.py}]
+indent_style=space
+indent_size=4
+
+[{*.yml,*.yaml}]
+indent_style=space
+indent_size=2
+
+[{*.markdown,*.md,*.mkd}]
+indent_style=space
+indent_size=4
 
