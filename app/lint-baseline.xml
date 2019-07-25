@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="5" by="lint 3.4.1" client="gradle" variant="all" version="3.4.1">
+<issues format="5" by="lint 3.4.1" client="gradle" variant="kiwixDebug" version="3.4.1">
 
     <issue
         id="ObsoleteLintCustomCheck"
@@ -2410,32 +2410,6 @@
     </issue>
 
     <issue
-        id="UnusedIds"
-        message="The resource `R.id.toolbar_layout` appears to be unused"
-        errorLine1="        android:id=&quot;@+id/toolbar_layout&quot;"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-        includedVariants="customexampleDebug,customexampleRelease"
-        excludedVariants="kiwixDebug,kiwixRelease">
-        <location
-            file="src\main\res\layout\search.xml"
-            line="18"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="UnusedIds"
-        message="The resource `R.id.zim_manager_main_activity` appears to be unused"
-        errorLine1="    android:id=&quot;@+id/zim_manager_main_activity&quot;"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-        includedVariants="customexampleDebug,customexampleRelease"
-        excludedVariants="kiwixDebug,kiwixRelease">
-        <location
-            file="src\main\res\layout\zim_manager.xml"
-            line="5"
-            column="5"/>
-    </issue>
-
-    <issue
         id="UnusedNamespace"
         message="Unused namespace declaration xmlns:android; already declared on the root element"
         errorLine1="    &lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;"
@@ -2466,49 +2440,6 @@
             file="src\main\res\values\strings.xml"
             line="140"
             column="32"/>
-    </issue>
-
-    <issue
-        id="IconDipSize"
-        message="The image `ic_kiwix_widget.png` varies significantly in its density-independent (dip) size across the various density versions: drawable-hdpi\\ic_kiwix_widget.png: 48x48 dp (72x72 px), drawable-mdpi\\ic_kiwix_widget.png: 72x72 dp (72x72 px), drawable-xhdpi\\ic_kiwix_widget.png: 48x48 dp (96x96 px), drawable-xxhdpi\\ic_kiwix_widget.png: 48x48 dp (144x144 px), drawable-xxxhdpi\\ic_kiwix_widget.png: 48x48 dp (192x192 px)"
-        includedVariants="customexampleDebug,customexampleRelease"
-        excludedVariants="kiwixDebug,kiwixRelease">
-        <location
-            file="src\customexample\res\drawable-xhdpi\ic_kiwix_widget.png"/>
-        <location
-            file="src\customexample\res\drawable-xxxhdpi\ic_kiwix_widget.png"/>
-        <location
-            file="src\customexample\res\drawable-xxhdpi\ic_kiwix_widget.png"/>
-        <location
-            file="src\customexample\res\drawable-hdpi\ic_kiwix_widget.png"/>
-        <location
-            file="src\customexample\res\drawable-mdpi\ic_kiwix_widget.png"/>
-    </issue>
-
-    <issue
-        id="IconDipSize"
-        message="The image `kiwix_icon.png` varies significantly in its density-independent (dip) size across the various density versions: mipmap-hdpi\\kiwix_icon.png: 48x48 dp (72x72 px), mipmap-mdpi\\kiwix_icon.png: 72x72 dp (72x72 px), mipmap-xhdpi\\kiwix_icon.png: 48x48 dp (96x96 px), mipmap-xxhdpi\\kiwix_icon.png: 48x48 dp (144x144 px), mipmap-xxxhdpi\\kiwix_icon.png: 48x48 dp (192x192 px)"
-        includedVariants="customexampleDebug,customexampleRelease"
-        excludedVariants="kiwixDebug,kiwixRelease">
-        <location
-            file="src\customexample\res\mipmap-hdpi\kiwix_icon.png"/>
-        <location
-            file="src\customexample\res\mipmap-xxxhdpi\kiwix_icon.png"/>
-        <location
-            file="src\customexample\res\mipmap-xhdpi\kiwix_icon.png"/>
-        <location
-            file="src\customexample\res\mipmap-xxhdpi\kiwix_icon.png"/>
-        <location
-            file="src\customexample\res\mipmap-mdpi\kiwix_icon.png"/>
-    </issue>
-
-    <issue
-        id="IconExpectedSize"
-        message="Incorrect icon size for `mipmap-mdpi\\kiwix_icon.png`: expected 48x48, but was 72x72"
-        includedVariants="customexampleDebug,customexampleRelease"
-        excludedVariants="kiwixDebug,kiwixRelease">
-        <location
-            file="src\customexample\res\mipmap-mdpi\kiwix_icon.png"/>
     </issue>
 
     <issue
@@ -2547,14 +2478,10 @@
     </issue>
 
     <issue
-        id="IconDuplicates"
-        message="The following unrelated icon files have identical contents: ic_kiwix_widget.png, kiwix_icon.png"
-        includedVariants="customexampleDebug,customexampleRelease"
-        excludedVariants="kiwixDebug,kiwixRelease">
+        id="IconDensities"
+        message="Missing the following drawables in `drawable-xxxhdpi`: ic_action_back.png, ic_action_delete.png, ic_action_forward.png, ic_action_plus.png, kiwix_notification.png">
         <location
-            file="src\customexample\res\mipmap-hdpi\kiwix_icon.png"/>
-        <location
-            file="src\customexample\res\drawable-hdpi\ic_kiwix_widget.png"/>
+            file="src\main\res\drawable-xxxhdpi"/>
     </issue>
 
     <issue
