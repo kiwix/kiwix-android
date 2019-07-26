@@ -2,6 +2,8 @@ package org.kiwix.kiwixmobile.webserver;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
+import android.os.Handler;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
@@ -16,6 +18,8 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 import org.kiwix.kiwixmobile.R;
+
+import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class WebServerHelper {
   private Context context;
@@ -63,7 +67,7 @@ public class WebServerHelper {
       public void onClick(DialogInterface dialog, int whichButton) {
         if (!isStarted && startAndroidWebServer()) {
           isStarted = true;
-          editTextPort.setEnabled(false);
+          serverStartedDialog();
         }
       }
     });
@@ -144,5 +148,19 @@ public class WebServerHelper {
     }
     Log.v("DANG", "Returning : " + "http://" + ip);
     return "http://" + ip;
+  }
+
+  public void serverStartedDialog() {
+
+    AlertDialog.Builder builder = new AlertDialog.Builder(context, dialogStyle());
+    WebServerHelper webServerHelper = new WebServerHelper(context);
+    builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
+
+    });
+    builder.setTitle(context.getString(R.string.server_started_title));
+    builder.setMessage(
+        context.getString(R.string.server_started_message) + "\n " + getIpAddress() + ":" + port);
+    AlertDialog dialog = builder.create();
+    dialog.show();
   }
 }
