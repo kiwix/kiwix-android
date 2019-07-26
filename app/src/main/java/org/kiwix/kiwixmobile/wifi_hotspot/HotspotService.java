@@ -24,6 +24,7 @@ import static org.kiwix.kiwixmobile.main.MainActivity.ACTION_TURN_OFF_AFTER_O;
 import static org.kiwix.kiwixmobile.main.MainActivity.ACTION_TURN_OFF_BEFORE_O;
 import static org.kiwix.kiwixmobile.main.MainActivity.ACTION_TURN_ON_AFTER_O;
 import static org.kiwix.kiwixmobile.main.MainActivity.ACTION_TURN_ON_BEFORE_O;
+import static org.kiwix.kiwixmobile.main.MainActivity.startHotspotDetails;
 import static org.kiwix.kiwixmobile.webserver.WebServerHelper.startServerDialog;
 import static org.kiwix.kiwixmobile.webserver.WebServerHelper.stopAndroidWebServer;
 
@@ -63,15 +64,15 @@ public class HotspotService extends Service {
     switch (intent.getAction()) {
       case ACTION_TURN_ON_BEFORE_O:
         if (hotspotManager.setWifiEnabled(null, true)) {
-          final Handler handler = new Handler();
-          handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-              startServerDialog();
-            }
-          }, 6000);
+          //final Handler handler = new Handler();
+          //handler.postDelayed(new Runnable() {
+          //  @Override
+          //  public void run() {
+          //    startServerDialog();
+          //  }
+          //}, 6000);
 
-          //startHotspotDetails();
+          startHotspotDetails();
           updateNotification(getString(R.string.hotspot_running), true);
         }
         break;

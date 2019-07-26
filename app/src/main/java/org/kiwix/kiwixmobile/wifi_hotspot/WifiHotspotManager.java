@@ -66,9 +66,7 @@ public class WifiHotspotManager {
               + " \n SSID is : "
               + currentConfig.SSID);
 
-          startServerDialog();
-          
-          //hotspotDetailsDialog();
+          hotspotDetailsDialog();
 
           oreoenabled = true;
         }
@@ -157,7 +155,7 @@ public class WifiHotspotManager {
     AlertDialog.Builder builder = new AlertDialog.Builder(context, dialogStyle());
 
     builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
-      //Do nothing
+      startServerDialog(context);
     });
     builder.setTitle(context.getString(R.string.hotspot_turned_on));
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

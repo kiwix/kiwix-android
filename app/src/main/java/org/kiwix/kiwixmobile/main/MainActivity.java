@@ -1096,7 +1096,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       if (isMobileDataEnabled(this)) {
         mobileDataDialog();
       } else {
-        webServerHelper = new WebServerHelper(this);
+        webServerHelper = new WebServerHelper(getApplicationContext());
         startService(ACTION_TURN_ON_BEFORE_O);
       }
       }

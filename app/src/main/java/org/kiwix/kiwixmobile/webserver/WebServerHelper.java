@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.webserver;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.text.InputFilter;
@@ -18,7 +17,7 @@ import java.net.SocketException;
 import java.util.Enumeration;
 import org.kiwix.kiwixmobile.R;
 
-public class WebServerHelper extends Activity {
+public class WebServerHelper {
   private static Context context;
   private static TextView textViewIpAccess;
   private static EditText editTextPort;
@@ -32,7 +31,7 @@ public class WebServerHelper extends Activity {
     this.context = context;
   }
 
-  public static void startServerDialog() {
+  public static void startServerDialog(Context context) {
     AlertDialog.Builder alert = new AlertDialog.Builder(context);
     alert.setTitle("Start the server");
     alert.setMessage("Happy sharing");
