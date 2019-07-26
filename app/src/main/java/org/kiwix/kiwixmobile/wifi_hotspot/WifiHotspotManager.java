@@ -154,9 +154,22 @@ public class WifiHotspotManager {
 
     AlertDialog.Builder builder = new AlertDialog.Builder(context, dialogStyle());
 
-    builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
-      startServerDialog(context);
-    });
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
+        startServerDialog(context);
+      });
+    } else {
+      builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+          @Override
+          public void run() {
+            startServerDialog(context);
+          }
+        }, 6000);
+      });
+    }
+
     builder.setTitle(context.getString(R.string.hotspot_turned_on));
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       builder.setMessage(

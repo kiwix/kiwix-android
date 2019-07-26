@@ -64,14 +64,6 @@ public class HotspotService extends Service {
     switch (intent.getAction()) {
       case ACTION_TURN_ON_BEFORE_O:
         if (hotspotManager.setWifiEnabled(null, true)) {
-          //final Handler handler = new Handler();
-          //handler.postDelayed(new Runnable() {
-          //  @Override
-          //  public void run() {
-          //    startServerDialog();
-          //  }
-          //}, 6000);
-
           startHotspotDetails();
           updateNotification(getString(R.string.hotspot_running), true);
         }
