@@ -75,13 +75,19 @@ class FileSearch @Inject constructor(private val context: Context) {
       *StorageDeviceUtils.getStorageDevices(context, false).map { it.name }.toTypedArray()
   )
 
-  private fun scanDirectory(directory: String) = filesMatchingExtensions(directory) ?: emptyList()
-
-  private fun filesMatchingExtensions(directory: String) = File(directory)
-      .listFiles { _, name -> name.endsWithAny(*zimFileExtensions) }
-      ?.toList()
+  private fun scanDirectory(directory: String): List<File> = File(directory).listFiles()
+      ?.fold(
+          mutableListOf(), { acc, file ->
+        acc.apply {
+          if (file.isDirectory) {
+            addAll(scanDirectory(file.path))
+          } else if (file.extension.isAny(*zimFileExtensions)) {
+            add(file)
+          }
+        }
+      }) ?: emptyList()
 
 }
 
-internal fun String.endsWithAny(vararg suffixes: String) =
-  suffixes.fold(false, { acc, s -> acc or endsWith(s) })
+internal fun String.isAny(vararg suffixes: String) =
+  suffixes.firstOrNull { endsWith(it) } != null
