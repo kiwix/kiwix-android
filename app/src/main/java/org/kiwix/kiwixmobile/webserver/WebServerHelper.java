@@ -18,20 +18,20 @@ import java.util.Enumeration;
 import org.kiwix.kiwixmobile.R;
 
 public class WebServerHelper {
-  private static Context context;
-  private static TextView textViewIpAccess;
-  private static EditText editTextPort;
+  private Context context;
+  private TextView textViewIpAccess;
+  private EditText editTextPort;
   public static boolean isStarted;
-  private static int port;
+  private int port;
   private static WebServer webServer;
-  private static final int DEFAULT_PORT = 8080;
-  private static CoordinatorLayout coordinatorLayout;
+  private final int DEFAULT_PORT = 8080;
+  private CoordinatorLayout coordinatorLayout;
 
   public WebServerHelper(Context context) {
     this.context = context;
   }
 
-  public static void startServerDialog(Context context) {
+  public void startServerDialog() {
     AlertDialog.Builder alert = new AlertDialog.Builder(context);
     alert.setTitle("Start the server");
     alert.setMessage("Happy sharing");
@@ -40,7 +40,7 @@ public class WebServerHelper {
     layout.setOrientation(LinearLayout.HORIZONTAL);
 
     textViewIpAccess = new TextView(context);
-    textViewIpAccess.setText("http://000.000.000.000");
+    textViewIpAccess.setText(context.getString(R.string.sample_ip_address));
     textViewIpAccess.setTextSize(20);
     layout.addView(textViewIpAccess);
 
@@ -88,7 +88,7 @@ public class WebServerHelper {
     return false;
   }
 
-  private static boolean startAndroidWebServer() {
+  private boolean startAndroidWebServer() {
     if (!isStarted) {
       port = getPortFromEditText();
       try {
@@ -108,17 +108,17 @@ public class WebServerHelper {
     return false;
   }
 
-  private static int getPortFromEditText() {
+  private int getPortFromEditText() {
     String valueEditText = editTextPort.getText().toString();
     return (valueEditText.length() > 0) ? Integer.parseInt(valueEditText) : DEFAULT_PORT;
   }
 
-  private static void setIpAccess() {
+  private void setIpAccess() {
     textViewIpAccess.setText(getIpAddress());
   }
 
   // get Ip address of the device's wireless access point i.e. wifi hotspot OR wifi network
-  private static String getIpAddress() {
+  private String getIpAddress() {
     Log.v("DANG", "Inside getIpAdress()");
     String ip = "";
     try {

@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import androidx.annotation.Nullable;
@@ -25,7 +24,6 @@ import static org.kiwix.kiwixmobile.main.MainActivity.ACTION_TURN_OFF_BEFORE_O;
 import static org.kiwix.kiwixmobile.main.MainActivity.ACTION_TURN_ON_AFTER_O;
 import static org.kiwix.kiwixmobile.main.MainActivity.ACTION_TURN_ON_BEFORE_O;
 import static org.kiwix.kiwixmobile.main.MainActivity.startHotspotDetails;
-import static org.kiwix.kiwixmobile.webserver.WebServerHelper.startServerDialog;
 import static org.kiwix.kiwixmobile.webserver.WebServerHelper.stopAndroidWebServer;
 
 /**

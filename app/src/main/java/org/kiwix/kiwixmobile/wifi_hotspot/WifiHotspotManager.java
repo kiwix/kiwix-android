@@ -10,9 +10,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import java.lang.reflect.Method;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.webserver.WebServerHelper;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
-import static org.kiwix.kiwixmobile.webserver.WebServerHelper.startServerDialog;
 
 /**
  * WifiHotstopManager class makes use of the Android's WifiManager and WifiConfiguration class
@@ -153,10 +153,11 @@ public class WifiHotspotManager {
   public void hotspotDetailsDialog() {
 
     AlertDialog.Builder builder = new AlertDialog.Builder(context, dialogStyle());
+    WebServerHelper webServerHelper = new WebServerHelper(context);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
-        startServerDialog(context);
+        webServerHelper.startServerDialog();
       });
     } else {
       builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
@@ -164,7 +165,7 @@ public class WifiHotspotManager {
         handler.postDelayed(new Runnable() {
           @Override
           public void run() {
-            startServerDialog(context);
+            webServerHelper.startServerDialog();
           }
         }, 6000);
       });

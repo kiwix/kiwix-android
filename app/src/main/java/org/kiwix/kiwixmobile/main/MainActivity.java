@@ -125,7 +125,6 @@ import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
-import org.kiwix.kiwixmobile.webserver.WebServerHelper;
 import org.kiwix.kiwixmobile.wifi_hotspot.HotspotService;
 import org.kiwix.kiwixmobile.wifi_hotspot.WifiHotspotManager;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
@@ -172,6 +171,7 @@ import static org.kiwix.kiwixmobile.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 import static org.kiwix.kiwixmobile.utils.UpdateUtils.reformatProviderUrl;
 import static org.kiwix.kiwixmobile.webserver.WebServerHelper.isStarted;
+import static org.kiwix.kiwixmobile.webserver.WebServerHelper.stopAndroidWebServer;
 import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.checkHotspotState;
 
 public class MainActivity extends BaseActivity implements WebViewCallback,
@@ -194,7 +194,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private final List<KiwixWebView> webViewList = new ArrayList<>();
   private Intent serviceIntent;
   private BroadcastReceiver broadcastReceiverNetworkState;
-  public static WebServerHelper webServerHelper;
   @BindView(R.id.activity_main_root)
   ConstraintLayout root;
   @BindView(R.id.activity_main_toolbar)
@@ -772,7 +771,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(this);
     tts.shutdown();
-    webServerHelper.stopAndroidWebServer();
+    stopAndroidWebServer();
     isStarted = false;
     //if (broadcastReceiverNetworkState != null) {
     //  unregisterReceiver(broadcastReceiverNetworkState);
@@ -1096,7 +1095,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       if (isMobileDataEnabled(this)) {
         mobileDataDialog();
       } else {
-        webServerHelper = new WebServerHelper(getApplicationContext());
         startService(ACTION_TURN_ON_BEFORE_O);
       }
       }
@@ -2348,8 +2346,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         // All location settings are satisfied. The client can initialize location
         // requests here.
 
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        //webServerHelper = new WebServerHelper(this);
         startService(ACTION_TURN_ON_AFTER_O);
 
         //}
