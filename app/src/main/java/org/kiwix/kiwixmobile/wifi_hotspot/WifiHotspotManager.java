@@ -184,6 +184,7 @@ public class WifiHotspotManager {
               R.string.hotspot_ssid_label) + " " + currentConfig.SSID + "\n" + context.getString(
               R.string.hotspot_pass_label) + " " + currentConfig.preSharedKey);
     }
+    builder.setCancelable(false);
     AlertDialog dialog = builder.create();
     dialog.show();
   }
