@@ -573,7 +573,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     ++tempVisitCount;
     visitCounterPref.setCount(tempVisitCount);
 
-    if (tempVisitCount >= 5
+    if (tempVisitCount >= 10
         && !visitCounterPref.getNoThanksState()
         && NetworkUtils.isNetworkAvailable(this) && !BuildConfig.DEBUG) {
       showRateDialog();
