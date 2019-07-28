@@ -5,12 +5,11 @@ import fi.iki.elonen.NanoHTTPD;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Map;
 
 public class WebServer extends NanoHTTPD {
   private String selectedFilePath;
 
-  public WebServer(int port,String selectedFilePath) {
+  public WebServer(int port, String selectedFilePath) {
     super(port);
     this.selectedFilePath = selectedFilePath;
   }
@@ -26,11 +25,10 @@ public class WebServer extends NanoHTTPD {
         answer += line;
       }
       reader.close();
-
-    } catch(IOException ioe) {
+    } catch (IOException ioe) {
       Log.w("Httpd", ioe.toString());
     }
 
-
     return newFixedLengthResponse(answer);
   }
+}
