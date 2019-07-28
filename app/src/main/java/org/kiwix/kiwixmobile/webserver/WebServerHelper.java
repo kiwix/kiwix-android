@@ -155,7 +155,7 @@ public class WebServerHelper {
       ip += "Something Wrong! " + e.toString() + "\n";
     };
 
-    Log.v("DANG", "Returning : " + "http://" + ip)
+    Log.v("DANG", "Returning : " + "http://" + ip);
     return "http://" + ip;
   }
 
