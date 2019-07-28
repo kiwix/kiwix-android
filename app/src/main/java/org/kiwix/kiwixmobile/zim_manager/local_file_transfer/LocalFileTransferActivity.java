@@ -92,7 +92,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   @BindView(R.id.recycler_view_transfer_files) RecyclerView filesRecyclerView;
 
   private ArrayList<Uri> fileUriArrayList; // For sender device, stores uris of the files
-  public @NonNull Boolean fileSendingDevice = false;// Whether the device is the file sender or not
+  public @NonNull Boolean isFileSender = false;// Whether the device is the file sender or not
 
   public @NonNull WifiDirectManager wifiDirectManager = new WifiDirectManager(this);
 
@@ -130,9 +130,10 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
      * */
     Intent filesIntent = getIntent();
     fileUriArrayList = filesIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
-    if (fileUriArrayList != null && fileUriArrayList.size() > 0) {
+    isFileSender = (fileUriArrayList != null && fileUriArrayList.size() > 0);
+    /*if (fileUriArrayList != null && fileUriArrayList.size() > 0) {
       setDeviceAsFileSender();
-    }
+    }*/
 
     setSupportActionBar(actionBar);
     actionBar.setNavigationIcon(R.drawable.ic_close_white_24dp);
@@ -148,7 +149,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     listViewPeerDevices.setAdapter(
         new WifiPeerListAdapter(this, R.layout.row_peer_device, peerDevices));
 
-    if (fileSendingDevice) {
+    if (isFileSender) {
       totalFilesForTransfer = fileUriArrayList.size();
 
       for (int i = 0; i < fileUriArrayList.size(); i++) {
@@ -162,7 +163,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   @OnItemClick(R.id.list_peer_devices)
   void onItemClick(int position) {
     /* Connection can only be initiated by user of the sender device, & only when transfer has not been started */
-    if (!fileSendingDevice || fileTransferStarted) {
+    if (!isFileSender || fileTransferStarted) {
       return;
     }
 
@@ -218,11 +219,11 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
 
   /* Helper methods used in the activity */
   public void setDeviceAsFileSender() {
-    fileSendingDevice = true;
+    isFileSender = true;
   }
 
   public boolean isFileSender() {
-    return fileSendingDevice;
+    return isFileSender;
   }
 
   public @NonNull ArrayList<Uri> getFileUriArrayList() {
@@ -297,12 +298,12 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   private void startFileTransfer() {
     fileTransferStarted = true;
 
-    if (wifiDirectManager.isGroupFormed() && !fileSendingDevice) {
+    if (wifiDirectManager.isGroupFormed() && !isFileSender) {
       displayFileTransferProgress();
 
       receiverDeviceAsyncTask = new ReceiverDeviceAsyncTask(this);
       receiverDeviceAsyncTask.execute();
-    } else if (wifiDirectManager.isGroupFormed()) { // && fileSendingDevice
+    } else if (wifiDirectManager.isGroupFormed()) { // && isFileSender
       {
         Log.d(LocalFileTransferActivity.TAG, "Starting file transfer");
 

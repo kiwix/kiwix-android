@@ -178,7 +178,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   public void closeLocalFileTransferActivity() {
     activity.cancelAsyncTasks();
 
-    activity.fileSendingDevice = false;
+    activity.isFileSender = false;
     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
       channel.close();
     }
