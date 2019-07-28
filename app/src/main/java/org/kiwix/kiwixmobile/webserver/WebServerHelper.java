@@ -19,6 +19,7 @@ import java.net.SocketException;
 import java.util.Enumeration;
 import org.kiwix.kiwixmobile.R;
 
+import static org.kiwix.kiwixmobile.main.MainActivity.MAIN_PAGE_STORAGE_PATH;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class WebServerHelper {
@@ -99,7 +100,7 @@ public class WebServerHelper {
         if (port == 0) {
           throw new Exception();
         }
-        webServer = new WebServer(port);
+        webServer = new WebServer(port, MAIN_PAGE_STORAGE_PATH);
         webServer.start();
         return true;
       } catch (Exception e) {
