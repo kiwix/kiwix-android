@@ -141,12 +141,21 @@ public class WebServerHelper {
           }
         }
       }
+      if (ip.length() > 14) {
+        for (int i = 15, j = 12; i < 18; i++, j++) {
+          if ((ip.charAt(i) == '.')) {
+            ip = ip.substring(0, j + 1); //from first char to 12
+            break;
+          }
+        }
+      }
     } catch (SocketException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
       ip += "Something Wrong! " + e.toString() + "\n";
-    }
-    Log.v("DANG", "Returning : " + "http://" + ip);
+    };
+
+    Log.v("DANG", "Returning : " + "http://" + ip)
     return "http://" + ip;
   }
 
