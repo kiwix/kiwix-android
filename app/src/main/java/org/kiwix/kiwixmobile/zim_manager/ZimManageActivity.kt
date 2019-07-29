@@ -34,6 +34,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.zim_manager.manageViewPager
 import kotlinx.android.synthetic.main.zim_manager.tabs
 import kotlinx.android.synthetic.main.zim_manager.toolbar
+import org.kiwix.kiwixmobile.KiwixApplication
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.base.BaseActivity
 import org.kiwix.kiwixmobile.database.newdb.dao.NewLanguagesDao
@@ -61,6 +62,9 @@ class ZimManageActivity : BaseActivity() {
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var languagesDao: NewLanguagesDao
+  override fun injection() {
+    KiwixApplication.getApplicationComponent().inject(this)
+  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)

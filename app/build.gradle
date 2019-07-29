@@ -134,8 +134,15 @@ dependencies {
   testImplementation "org.assertj:assertj-core:3.11.1"
   testImplementation 'com.jraska.livedata:testing-ktx:1.1.0'
   testImplementation 'androidx.arch.core:core-testing:2.0.1'
+
+  androidTestImplementation "io.mockk:mockk-android:1.9"
   androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
   androidTestImplementation "org.assertj:assertj-core:3.11.1"
+  androidTestImplementation ("org.simpleframework:simple-xml:2.7.1"){
+    exclude module: 'stax'
+    exclude module: 'stax-api'
+    exclude module: 'xpp3'
+  }
 }
 
 // Set custom app import directory

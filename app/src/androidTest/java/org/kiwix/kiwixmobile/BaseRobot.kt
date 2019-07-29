@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile
 
+import android.R.id
 import android.app.Instrumentation
 import android.content.Context
 import androidx.test.platform.app.InstrumentationRegistry
@@ -7,20 +8,31 @@ import androidx.test.uiautomator.Direction
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
+import org.kiwix.kiwixmobile.Findable.Text
+import org.kiwix.kiwixmobile.Findable.ViewId
 
 const val WAIT_TIMEOUT_MS = 10000L
 
 abstract class BaseRobot(
-  val instrumentation: Instrumentation = InstrumentationRegistry.getInstrumentation(),
+  private val instrumentation: Instrumentation = InstrumentationRegistry.getInstrumentation(),
   val context: Context = instrumentation.targetContext,
-  val uiDevice: UiDevice = UiDevice.getInstance(instrumentation)
+  private val uiDevice: UiDevice = UiDevice.getInstance(instrumentation)
 ) {
 
-  protected fun isVisible(findable: Findable) =
-    waitFor(findable) ?: throw RuntimeException(findable.errorMessage(this))
+  internal fun clickNegativeDialogButton() {
+    clickOn(ViewId(id.button2))
+  }
 
-  protected fun waitFor(findable: Findable): UiObject2? =
-    uiDevice.wait(Until.findObject(findable.selector(this)), WAIT_TIMEOUT_MS)
+  internal fun clickPositiveDialogButton() {
+    clickOn(ViewId(id.button1))
+  }
+
+  internal fun pressBack() {
+    uiDevice.pressBack()
+  }
+
+  protected fun isVisible(findable: Findable, timeout: Long = WAIT_TIMEOUT_MS) =
+    waitFor(findable, timeout) ?: throw RuntimeException(findable.errorMessage(this))
 
   protected fun UiObject2.swipeLeft() {
     customSwipe(Direction.LEFT)
@@ -30,15 +42,32 @@ abstract class BaseRobot(
     customSwipe(Direction.RIGHT)
   }
 
-  private fun UiObject2.customSwipe(
-    direction: Direction,
-    fl: Float = 1.0f
-  ) {
-    this.swipe(direction, fl)
-  }
-
   protected fun clickOn(findable: Findable) {
     isVisible(findable).click()
   }
 
+  protected fun longClickOn(findable: Findable) {
+    isVisible(findable).click(2500L)
+  }
+
+  protected fun clickOnTab(textId: Int) {
+    clickOn(Text(context.getString(textId).toUpperCase()))
+  }
+
+  protected fun waitFor(milliseconds: Long) {
+    waitFor(Text("WILL_NEVER_EXIST"), milliseconds)
+  }
+
+  private fun waitFor(
+    findable: Findable,
+    timeout: Long = WAIT_TIMEOUT_MS
+  ): UiObject2? =
+    uiDevice.wait(Until.findObject(findable.selector(this)), timeout)
+
+  private fun UiObject2.customSwipe(
+    direction: Direction,
+    fl: Float = 1.0f
+  ) {
+    swipe(direction, fl)
+  }
 }

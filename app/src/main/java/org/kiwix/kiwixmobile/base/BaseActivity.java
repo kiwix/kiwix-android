@@ -39,9 +39,13 @@ public abstract class BaseActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
-    AndroidInjection.inject(this);
+    injection();
     super.onCreate(savedInstanceState);
     LanguageUtils.handleLocaleChange(this, sharedPreferenceUtil);
+  }
+
+  protected void injection() {
+    AndroidInjection.inject(this);
   }
 
   @Override

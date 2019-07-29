@@ -15,22 +15,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.intro
+package org.kiwix.kiwixmobile.di.modules
 
-import org.junit.Rule
-import org.junit.Test
-import org.kiwix.kiwixmobile.BaseActivityTest
+import dagger.Module
+import okhttp3.OkHttpClient
+import org.kiwix.kiwixmobile.data.remote.KiwixService
 
+/**
+ * Created by mhutti1 on 14/04/17.
+ */
 
-class IntroActivityTest : BaseActivityTest<IntroActivity>() {
-  @get:Rule
-  override var activityRule = activityTestRule<IntroActivity>()
-
-  @Test
-  fun viewIsSwipeableAndNavigatesToMain() {
-    intro {
-      swipeLeft()
-      swipeRight()
-    } clickGetStarted { }
-  }
+@Module
+class TestNetworkModule : NetworkModule() {
+  internal override fun provideKiwixService(okHttpClient: OkHttpClient): KiwixService =
+    KiwixService.ServiceCreator.newHacklistService(
+      okHttpClient,
+      "http://localhost:8080/"
+    )
 }

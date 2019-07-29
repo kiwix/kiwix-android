@@ -21,7 +21,7 @@ import static org.kiwix.kiwixmobile.utils.StandardActions.enterSettings;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class SettingsTest {
+public class SettingsActivityTest {
   @Rule
   public ActivityTestRule<MainActivity> activityTestRule =
       new ActivityTestRule<>(MainActivity.class);

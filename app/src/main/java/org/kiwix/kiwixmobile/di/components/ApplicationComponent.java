@@ -21,6 +21,7 @@ import android.content.Context;
 import dagger.BindsInstance;
 import dagger.Component;
 import javax.inject.Singleton;
+import org.jetbrains.annotations.NotNull;
 import org.kiwix.kiwixmobile.KiwixApplication;
 import org.kiwix.kiwixmobile.data.DataModule;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
@@ -32,6 +33,7 @@ import org.kiwix.kiwixmobile.main.KiwixWebView;
 import org.kiwix.kiwixmobile.search.AutoCompleteAdapter;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.zim_manager.DownloadNotificationClickedReceiver;
+import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 
 @Singleton
 @Component(modules = {
@@ -48,8 +50,8 @@ public interface ApplicationComponent {
     @BindsInstance Builder context(Context context);
 
     ApplicationComponent build();
-  }
 
+  }
   ActivityComponent.Builder activityComponent();
 
   void inject(KiwixApplication application);
@@ -65,4 +67,6 @@ public interface ApplicationComponent {
   void inject(AutoCompleteAdapter autoCompleteAdapter);
 
   void inject(DownloadNotificationClickedReceiver downloadNotificationClickedReceiver);
+
+  void inject(@NotNull ZimManageActivity zimManageActivity);
 }

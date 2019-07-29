@@ -12,7 +12,6 @@
       android:id="@+id/libraryErrorText"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/get_library_over_network"
       android:visibility="gone"
       tools:visibility="visible"
       app:layout_constraintBottom_toBottomOf="parent"
