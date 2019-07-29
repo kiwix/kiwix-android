@@ -26,13 +26,8 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
 import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
-import javax.inject.Inject;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import okio.Buffer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -46,7 +41,6 @@ import org.kiwix.kiwixmobile.di.components.DaggerTestComponent;
 import org.kiwix.kiwixmobile.di.components.TestComponent;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.testutils.TestUtils;
-import org.kiwix.kiwixmobile.utils.IOUtils;
 import org.kiwix.kiwixmobile.utils.KiwixIdlingResource;
 
 import static androidx.test.InstrumentationRegistry.getInstrumentation;
@@ -79,8 +73,8 @@ public class NetworkTest {
   @Rule
   public GrantPermissionRule writePermissionRule =
       GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-  @Inject
-  MockWebServer mockWebServer;
+  //@Inject
+  //MockWebServer mockWebServer;
 
   @BeforeClass
   public static void beforeClass() {
@@ -103,19 +97,19 @@ public class NetworkTest {
     InputStream metalinks =
         NetworkTest.class.getClassLoader().getResourceAsStream("test.zim.meta4");
     InputStream testzim = NetworkTest.class.getClassLoader().getResourceAsStream("testzim.zim");
-    try {
-      byte[] libraryBytes = IOUtils.toByteArray(library);
-      mockWebServer.enqueue(new MockResponse().setBody(new String(libraryBytes)));
-      byte[] metalinkBytes = IOUtils.toByteArray(metalinks);
-      mockWebServer.enqueue(new MockResponse().setBody(new String(metalinkBytes)));
-      mockWebServer.enqueue(new MockResponse().setHeader("Content-Length", 357269));
-      Buffer buffer = new Buffer();
-      buffer.write(IOUtils.toByteArray(testzim));
-      buffer.close();
-      mockWebServer.enqueue(new MockResponse().setBody(buffer));
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    //try {
+    //  byte[] libraryBytes = IOUtils.toByteArray(library);
+    //  mockWebServer.enqueue(new MockResponse().setBody(new String(libraryBytes)));
+    //  byte[] metalinkBytes = IOUtils.toByteArray(metalinks);
+    //  mockWebServer.enqueue(new MockResponse().setBody(new String(metalinkBytes)));
+    //  mockWebServer.enqueue(new MockResponse().setHeader("Content-Length", 357269));
+    //  Buffer buffer = new Buffer();
+    //  buffer.write(IOUtils.toByteArray(testzim));
+    //  buffer.close();
+    //  mockWebServer.enqueue(new MockResponse().setBody(buffer));
+    //} catch (IOException e) {
+    //  e.printStackTrace();
+    //}
   }
 
   @Test
