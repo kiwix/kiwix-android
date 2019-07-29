@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.main;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -8,11 +9,13 @@ import android.view.View;
 public class OnSwipeTouchListener implements View.OnTouchListener {
   private final GestureDetector gestureDetector;
 
+  @SuppressLint("SyntheticAccessor")
   public OnSwipeTouchListener(Context ctx) {
     gestureDetector = new GestureDetector(ctx, new GestureListener());
   }
 
   @Override
+  @SuppressLint("ClickableViewAccessibility")
   public boolean onTouch(View v, MotionEvent event) {
     return gestureDetector.onTouchEvent(event);
   }

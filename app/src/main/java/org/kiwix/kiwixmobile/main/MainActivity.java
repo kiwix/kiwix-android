@@ -337,6 +337,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     toolbar.setOnTouchListener(new OnSwipeTouchListener(this) {
 
+      @Override
+      @SuppressLint("SyntheticAccessor")
       public void onSwipeBottom() {
         showTabSwitcher();
       }
