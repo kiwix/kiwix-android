@@ -273,6 +273,9 @@ android {
 
     // Release Type
     release {
+      minifyEnabled true
+      shrinkResources true
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
       signingConfig signingConfigs.release
       buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://mirror.download.kiwix.org/\""
       buildConfigField "boolean", "KIWIX_ERROR_ACTIVITY", "true"
@@ -407,15 +410,6 @@ android {
     javaMaxHeapSize "4g"
   }
 
-  /*
-  Add back once proguard is configured
-  buildTypes {
-    release {
-      minifyEnabled true
-      proguardFiles getDefaultProguardFile("proguard-android.txt")
-    }
-  }
-  */
   androidExtensions {
     experimental = true
   }
