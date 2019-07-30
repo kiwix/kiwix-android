@@ -43,8 +43,8 @@ abstract class BaseRobot(
     customSwipe(Direction.RIGHT)
   }
 
-  protected fun clickOn(findable: Findable) {
-    isVisible(findable).click()
+  protected fun clickOn(findable: Findable, timeout: Long = WAIT_TIMEOUT_MS) {
+    isVisible(findable, timeout).click()
   }
 
   protected fun longClickOn(findable: Findable) {
@@ -52,7 +52,7 @@ abstract class BaseRobot(
   }
 
   protected fun clickOnTab(textId: Int) {
-    clickOn(ContentDesc(textId))
+    clickOn(ContentDesc(textId), 15000L)
   }
 
   protected fun waitFor(milliseconds: Long) {

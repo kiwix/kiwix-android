@@ -43,9 +43,9 @@ interface Findable {
   }
 
   class ContentDesc(val textId: Int) : Findable {
-    override fun selector(baseRobot: BaseRobot) = By.desc(baseRobot.context.getString(textId))
+    override fun selector(baseRobot: BaseRobot) = By.desc(text(baseRobot))
 
-    override fun errorMessage(baseRobot: BaseRobot) = "No view found with text ${text(baseRobot)}"
+    override fun errorMessage(baseRobot: BaseRobot) = "No view found with content description ${text(baseRobot)}"
 
     private fun text(baseRobot: BaseRobot) = baseRobot.context.getString(textId)
 

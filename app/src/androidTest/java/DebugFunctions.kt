@@ -65,7 +65,14 @@ private fun getViewHierarchy(v: View, desc: StringBuilder, margin: Int) {
 
 private fun getViewMessage(v: View, marginOffset: Int) =
   "${numSpaces(marginOffset)}[${v.javaClass.simpleName}]${resourceId(v)}${text(v)}" +
-      "${contentDescription(v)}\n"
+      "${contentDescription(v)}${visibility(v)}\n"
+
+fun visibility(v: View) = " visibility:" +
+    when (v.visibility) {
+      View.VISIBLE -> "visible"
+      View.INVISIBLE -> "invisible"
+      else -> "gone"
+    }
 
 fun contentDescription(view: View) =
   view.contentDescription?.let {
