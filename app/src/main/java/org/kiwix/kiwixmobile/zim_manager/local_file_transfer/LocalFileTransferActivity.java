@@ -131,9 +131,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     Intent filesIntent = getIntent();
     fileUriArrayList = filesIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
     isFileSender = (fileUriArrayList != null && fileUriArrayList.size() > 0);
-    /*if (fileUriArrayList != null && fileUriArrayList.size() > 0) {
-      setDeviceAsFileSender();
-    }*/
 
     setSupportActionBar(actionBar);
     actionBar.setNavigationIcon(R.drawable.ic_close_white_24dp);
@@ -144,7 +141,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
       }
     });
 
-    wifiDirectManager.initialiseWifiDirectManager();
+    wifiDirectManager.initialiseWifiDirectManager(alertDialogShower);
 
     listViewPeerDevices.setAdapter(
         new WifiPeerListAdapter(this, R.layout.row_peer_device, peerDevices));
@@ -169,7 +166,8 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
 
     WifiP2pDevice senderSelectedPeerDevice =
         (WifiP2pDevice) listViewPeerDevices.getAdapter().getItem(position);
-    wifiDirectManager.setSenderSelectedPeerDevice(senderSelectedPeerDevice);
+    wifiDirectManager.sendToDevice(senderSelectedPeerDevice);
+    /*wifiDirectManager.setSenderSelectedPeerDevice(senderSelectedPeerDevice);
     alertDialogShower.show(
         new KiwixDialog.FileTransferConfirmation(senderSelectedPeerDevice.deviceName),
         new Function0<Unit>() {
@@ -179,7 +177,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
                 Toast.LENGTH_LONG);
             return Unit.INSTANCE;
           }
-        });
+        });*/
   }
 
   @Override
@@ -218,10 +216,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   }
 
   /* Helper methods used in the activity */
-  public void setDeviceAsFileSender() {
-    isFileSender = true;
-  }
-
   public boolean isFileSender() {
     return isFileSender;
   }

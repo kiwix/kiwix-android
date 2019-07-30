@@ -14,7 +14,11 @@ import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import java.net.InetAddress;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.utils.AlertDialogShower;
+import org.kiwix.kiwixmobile.utils.KiwixDialog;
 
 import static android.os.Looper.getMainLooper;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.showToast;
@@ -37,26 +41,29 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   private WifiP2pManager.Channel channel;
   // Connects the module to device's underlying Wifi p2p framework
 
-  private final IntentFilter intentFilter = new IntentFilter();
-  // For specifying broadcasts (of the P2P API) that the module needs to respond to
+  /*private final IntentFilter intentFilter = new IntentFilter();
+  // For specifying broadcasts (of the P2P API) that the module needs to respond to*/
   private BroadcastReceiver receiver = null; // For receiving the broadcasts given by above filter
 
   private WifiP2pDevice userDevice;   // Represents the device on which the app is running
   private WifiP2pInfo groupInfo;      // Corresponds to P2P group formed between the two devices
 
   private WifiP2pDevice senderSelectedPeerDevice = null;
+  private AlertDialogShower alertDialogShower;
 
   public WifiDirectManager(@NonNull LocalFileTransferActivity activity) {
     this.activity = activity;
   }
 
   /* Initialisations for using the WiFi P2P API */
-  public void initialiseWifiDirectManager() {
-    // Intents that the broadcast receiver will be responding to
+  public void initialiseWifiDirectManager(@NonNull AlertDialogShower alertDialogShower) {
+    this.alertDialogShower = alertDialogShower;
+
+    /*// Intents that the broadcast receiver will be responding to
     intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
     intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
     intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-    intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+    intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);*/
 
     manager = (WifiP2pManager) activity.getSystemService(Context.WIFI_P2P_SERVICE);
     channel = manager.initialize(activity, getMainLooper(), null);
@@ -64,6 +71,14 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
 
   public void registerWifiDirectBroadcastRecevier() {
     receiver = new WifiDirectBroadcastReceiver(manager, channel, activity);
+
+    // For specifying broadcasts (of the P2P API) that the module needs to respond to
+    IntentFilter intentFilter = new IntentFilter();
+    intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+    intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+    intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+    intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+
     activity.registerReceiver(receiver, intentFilter);
   }
 
@@ -146,8 +161,22 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     return groupInfo.groupOwnerAddress;
   }
 
-  public void setSenderSelectedPeerDevice(@NonNull WifiP2pDevice senderSelectedPeerDevice) {
+  /*public void setSenderSelectedPeerDevice(@NonNull WifiP2pDevice senderSelectedPeerDevice) {
     this.senderSelectedPeerDevice = senderSelectedPeerDevice;
+  }*/
+
+  public void sendToDevice(@NonNull WifiP2pDevice senderSelectedPeerDevice) {
+    this.senderSelectedPeerDevice = senderSelectedPeerDevice;
+
+    alertDialogShower.show(
+        new KiwixDialog.FileTransferConfirmation(senderSelectedPeerDevice.deviceName),
+        new Function0<Unit>() {
+          @Override public Unit invoke() {
+            connect();
+            showToast(activity, R.string.performing_handshake, Toast.LENGTH_LONG);
+            return Unit.INSTANCE;
+          }
+        });
   }
 
   public void connect() {
