@@ -29,7 +29,7 @@ class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
 
   @Test
   fun testZimManageDataFlow() {
-    zimManage(activityRule.activity) {
+    zimManage() {
       clickOnOnline {
         clickOnSearch()
         searchFor(book(title = "zzzzz"))

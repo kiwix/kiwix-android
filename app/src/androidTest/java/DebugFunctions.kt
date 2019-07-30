@@ -16,16 +16,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import android.R.id
 import android.app.Activity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
+import androidx.test.runner.lifecycle.Stage.RESUMED
 import org.kiwix.kiwixmobile.BaseRobot
 import java.io.File
 
 inline fun <reified T : BaseRobot> T.applyWithViewHierarchyPrinting(
-  activity: Activity,
   crossinline function: T.() -> Unit
 ): T =
   apply {
@@ -33,14 +34,21 @@ inline fun <reified T : BaseRobot> T.applyWithViewHierarchyPrinting(
       function()
     } catch (runtimeException: RuntimeException) {
       uiDevice.takeScreenshot(File("${context.filesDir}${runtimeException.message}${System.currentTimeMillis()}"))
-      throw RuntimeException(combineMessages(runtimeException, activity))
+      InstrumentationRegistry.getInstrumentation().runOnMainSync {
+        throw RuntimeException(
+          combineMessages(
+            runtimeException,
+            ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(RESUMED).last()
+          )
+        )
+      }
     }
   }
 
 fun combineMessages(
   runtimeException: RuntimeException,
   activity: Activity
-) = "${runtimeException.message}\n${getViewHierarchy(activity.findViewById(id.content))}"
+) = "${runtimeException.message}\n${getViewHierarchy(activity.window.decorView)}"
 
 fun getViewHierarchy(v: View) =
   StringBuilder().apply { getViewHierarchy(v, this, 0) }.toString()

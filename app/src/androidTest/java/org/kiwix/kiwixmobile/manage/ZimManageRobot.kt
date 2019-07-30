@@ -23,10 +23,9 @@ import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
-import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 
-fun zimManage(activity: ZimManageActivity, func: ZimManageRobot.() -> Unit) =
-    ZimManageRobot().applyWithViewHierarchyPrinting(activity, func)
+fun zimManage(func: ZimManageRobot.() -> Unit) =
+    ZimManageRobot().applyWithViewHierarchyPrinting(func)
 
 class ZimManageRobot : BaseRobot() {
   init {
