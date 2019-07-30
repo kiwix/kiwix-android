@@ -66,7 +66,6 @@
   <string name="zim_simple">Enostavno</string>
   <string name="zim_nopic">Ni slik</string>
   <string name="zim_novid">Ni videoposnetkov</string>
-  <string name="wait_for_load">Vsebina se še nalaga</string>
   <string name="pref_storage">Shranjevanje</string>
   <string name="pref_current_folder">Trenutna mapa</string>
   <string name="tts_pause">premor</string>

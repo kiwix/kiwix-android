@@ -27,7 +27,7 @@ class AdapterDelegateManager<T>() {
   private fun getDelegateIndexFor(item: T): Int {
     for (index in 0..delegates.size()) {
       val valueAt = delegates.valueAt(index)
-      if (valueAt.isFor(item)) {
+      if (valueAt?.isFor(item) == true) {
         return index;
       }
     }
