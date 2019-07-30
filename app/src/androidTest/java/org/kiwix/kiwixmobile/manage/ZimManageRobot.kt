@@ -54,6 +54,7 @@ class ZimManageRobot : BaseRobot() {
     }
 
     fun clickOn(book: Book) {
+      waitFor(5000L)
       clickOn(Text(book.title))
     }
 
@@ -88,7 +89,7 @@ class ZimManageRobot : BaseRobot() {
   private fun device(func: DeviceRobot.() -> Unit) = DeviceRobot().apply(func)
   inner class DeviceRobot : BaseRobot() {
     init {
-      isVisible(ViewId(R.id.zimfilelist))
+      // isVisible(ViewId(R.id.zimfilelist))
     }
 
     fun longClickOn(book: Book) {
