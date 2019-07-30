@@ -17,6 +17,7 @@ interface Findable {
     private fun resourceName(baseRobot: BaseRobot) =
       baseRobot.context.resources.getResourceName(viewId)
   }
+
   class TextId(val textId: Int) : Findable {
     override fun errorMessage(baseRobot: BaseRobot) = "No view found with text ${text(baseRobot)}"
 
@@ -32,12 +33,21 @@ interface Findable {
     override fun selector(baseRobot: BaseRobot) =
       By.textContains(text(baseRobot))
 
-    fun text(baseRobot: BaseRobot) = baseRobot.context.getString(textId)
+    private fun text(baseRobot: BaseRobot) = baseRobot.context.getString(textId)
   }
 
   class Text(val text: String) : Findable {
     override fun errorMessage(baseRobot: BaseRobot) = "No view found with text $text"
 
     override fun selector(baseRobot: BaseRobot) = By.text(text)
+  }
+
+  class ContentDesc(val textId: Int) : Findable {
+    override fun selector(baseRobot: BaseRobot) = By.desc(baseRobot.context.getString(textId))
+
+    override fun errorMessage(baseRobot: BaseRobot) = "No view found with text ${text(baseRobot)}"
+
+    private fun text(baseRobot: BaseRobot) = baseRobot.context.getString(textId)
+
   }
 }

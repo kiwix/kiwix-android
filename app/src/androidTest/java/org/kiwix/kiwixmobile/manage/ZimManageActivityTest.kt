@@ -16,27 +16,28 @@ class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
     KiwixApplication.setApplicationComponent(testComponent())
   }
 
-  private val libraryNetworkEntity = libraryNetworkEntity(listOf(book()))
+  private val book = book()
+
   private val mockServer = KiwixMockServer().apply {
     enqueueForEvery(
       mapOf(
-        "/library/library_zim.xml" to libraryNetworkEntity,
-        "/${libraryNetworkEntity.book[0].url.substringAfterLast("/")}" to metaLinkNetworkEntity()
+        "/library/library_zim.xml" to libraryNetworkEntity(listOf(book)),
+        "/${book.url.substringAfterLast("/")}" to metaLinkNetworkEntity()
       )
     )
   }
 
   @Test
   fun testZimManageDataFlow() {
-    zimManage {
+    zimManage(activityRule.activity) {
       clickOnOnline {
         clickOnSearch()
-        searchFor(libraryNetworkEntity(listOf(book(title = "zzzzz"))))
+        searchFor(book(title = "zzzzz"))
         waitForEmptyView()
-        searchFor(libraryNetworkEntity)
+        searchFor(book)
         pressBack()
         pressBack()
-        clickOn(libraryNetworkEntity)
+        clickOn(book)
       }
       clickOnDownloading {
         clickStop()
@@ -45,18 +46,18 @@ class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
         clickPositiveDialogButton()
       }
       clickOnOnline {
-        clickOn(libraryNetworkEntity)
+        clickOn(book)
       }
       clickOnDownloading {
         waitForEmptyView()
       }
       clickOnDevice {
-        longClickOn(libraryNetworkEntity)
+        longClickOn(book)
         clickCloseActionMode()
-        longClickOn(libraryNetworkEntity)
+        longClickOn(book)
         clickDelete()
         clickNegativeDialogButton()
-        longClickOn(libraryNetworkEntity)
+        longClickOn(book)
         clickDelete()
         clickPositiveDialogButton()
         waitForEmptyView()

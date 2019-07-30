@@ -17,13 +17,16 @@
  */
 package org.kiwix.kiwixmobile.manage
 
+import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 
-fun zimManage(func: ZimManageRobot.() -> Unit) = ZimManageRobot().apply(func)
+fun zimManage(activity: ZimManageActivity, func: ZimManageRobot.() -> Unit) =
+    ZimManageRobot().applyWithViewHierarchyPrinting(activity, func)
 
 class ZimManageRobot : BaseRobot() {
   init {
@@ -51,20 +54,16 @@ class ZimManageRobot : BaseRobot() {
       isVisible(ViewId(R.id.libraryList))
     }
 
-    fun clickText(text: String) {
-      clickOn(Text(text))
-    }
-
-    fun clickOn(libraryNetworkEntity: LibraryNetworkEntity) {
-      clickOn(Text(libraryNetworkEntity.book[0].title))
+    fun clickOn(book: Book) {
+      clickOn(Text(book.title))
     }
 
     fun clickOnSearch() {
       clickOn(ViewId(R.id.action_search))
     }
 
-    fun searchFor(libraryNetworkEntity: LibraryNetworkEntity) {
-      isVisible(ViewId(R.id.search_src_text)).text= libraryNetworkEntity.book[0].title
+    fun searchFor(book: Book) {
+      isVisible(ViewId(R.id.search_src_text)).text = book.title
     }
 
     fun waitForEmptyView() {
@@ -93,8 +92,8 @@ class ZimManageRobot : BaseRobot() {
       isVisible(ViewId(R.id.zimfilelist))
     }
 
-    fun longClickOn(libraryNetworkEntity: LibraryNetworkEntity) {
-      longClickOn(Text(libraryNetworkEntity.book[0].title))
+    fun longClickOn(book: Book) {
+      longClickOn(Text(book.title))
     }
 
     fun clickCloseActionMode() {

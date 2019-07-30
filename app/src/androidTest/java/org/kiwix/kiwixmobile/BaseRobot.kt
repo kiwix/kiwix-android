@@ -8,6 +8,7 @@ import androidx.test.uiautomator.Direction
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
+import org.kiwix.kiwixmobile.Findable.ContentDesc
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 
@@ -16,7 +17,7 @@ const val WAIT_TIMEOUT_MS = 10000L
 abstract class BaseRobot(
   private val instrumentation: Instrumentation = InstrumentationRegistry.getInstrumentation(),
   val context: Context = instrumentation.targetContext,
-  private val uiDevice: UiDevice = UiDevice.getInstance(instrumentation)
+  val uiDevice: UiDevice = UiDevice.getInstance(instrumentation)
 ) {
 
   internal fun clickNegativeDialogButton() {
@@ -47,11 +48,11 @@ abstract class BaseRobot(
   }
 
   protected fun longClickOn(findable: Findable) {
-    isVisible(findable).click(2500L)
+    isVisible(findable).click(1000L)
   }
 
   protected fun clickOnTab(textId: Int) {
-    clickOn(Text(context.getString(textId).toUpperCase()))
+    clickOn(ContentDesc(textId))
   }
 
   protected fun waitFor(milliseconds: Long) {
