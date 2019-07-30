@@ -42,11 +42,8 @@ fun combineMessages(
   activity: Activity
 ) = "${runtimeException.message}\n${getViewHierarchy(activity.findViewById(id.content))}"
 
-fun getViewHierarchy(v: View): String {
-  val desc = StringBuilder()
-  getViewHierarchy(v, desc, 0)
-  return desc.toString()
-}
+fun getViewHierarchy(v: View) =
+  StringBuilder().apply { getViewHierarchy(v, this, 0) }.toString()
 
 private fun getViewHierarchy(v: View, desc: StringBuilder, margin: Int) {
   desc.append(getViewMessage(v, margin))
@@ -58,26 +55,23 @@ private fun getViewHierarchy(v: View, desc: StringBuilder, margin: Int) {
 }
 
 private fun getViewMessage(v: View, marginOffset: Int) =
-  "${numSpaces(marginOffset)}[${v.javaClass.simpleName}]${resourceId(v)}${text(v)}${contentDescription(
-    v
-  )}\n"
+  "${numSpaces(marginOffset)}[${v.javaClass.simpleName}]${resourceId(v)}${text(v)}" +
+      "${contentDescription(v)}\n"
 
 fun contentDescription(view: View) =
   view.contentDescription?.let {
-    if (it.isNotEmpty()) " contDesc: $it"
+    if (it.isNotEmpty()) " contDesc:$it"
     else null
   } ?: ""
 
 fun text(v: View) =
-  if (TextView::class.java.isAssignableFrom(v.javaClass))
-    (v as TextView).let {
-      if (it.text.isNotEmpty()) " text:${v.text}"
+  if (v is TextView)
+    if (v.text.isNotEmpty()) " text:${v.text}"
       else ""
-    }
   else ""
 
 private fun resourceId(view: View) =
   if (view.id > 0) " id:${view.resources.getResourceName(view.id)}"
   else ""
 
-private fun numSpaces(marginOffset: Int) = (0..marginOffset).fold("", { acc, i -> "${acc}_" })
+private fun numSpaces(marginOffset: Int) = (0..marginOffset).fold("", { acc, _ -> "$acc-" })
