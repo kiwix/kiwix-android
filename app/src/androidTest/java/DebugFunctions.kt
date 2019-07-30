@@ -33,13 +33,14 @@ inline fun <reified T : BaseRobot> T.applyWithViewHierarchyPrinting(
     try {
       function()
     } catch (runtimeException: RuntimeException) {
-      uiDevice.takeScreenshot(File("${context.filesDir}${runtimeException.message}${System.currentTimeMillis()}"))
+      uiDevice.takeScreenshot(File(context.filesDir,"${System.currentTimeMillis()}.png"))
       InstrumentationRegistry.getInstrumentation().runOnMainSync {
         throw RuntimeException(
           combineMessages(
             runtimeException,
             ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(RESUMED).last()
-          )
+          ),
+          runtimeException
         )
       }
     }
