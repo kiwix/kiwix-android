@@ -17,6 +17,7 @@
  */
 package org.kiwix.kiwixmobile.zim_manager.library_view
 
+import android.annotation.SuppressLint
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,11 +27,10 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import eu.mhutti1.utils.storage.StorageDevice
-import eu.mhutti1.utils.storage.support.StorageSelectDialog
+import eu.mhutti1.utils.storage.StorageSelectDialog
 import kotlinx.android.synthetic.main.activity_library.libraryErrorText
 import kotlinx.android.synthetic.main.activity_library.libraryList
 import kotlinx.android.synthetic.main.activity_library.librarySwipeRefresh
@@ -41,6 +41,7 @@ import org.kiwix.kiwixmobile.di.components.ActivityComponent
 import org.kiwix.kiwixmobile.downloader.Downloader
 import org.kiwix.kiwixmobile.extensions.snack
 import org.kiwix.kiwixmobile.extensions.toast
+import org.kiwix.kiwixmobile.extensions.viewModel
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.main.MainActivity
 import org.kiwix.kiwixmobile.utils.BookUtils
@@ -71,10 +72,10 @@ class LibraryFragment : BaseFragment() {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var bookUtils: BookUtils
 
-  private val zimManageViewModel: ZimManageViewModel by lazy {
-    ViewModelProviders.of(activity!!, viewModelFactory)
-        .get(ZimManageViewModel::class.java)
+  private val zimManageViewModel by lazy {
+    activity!!.viewModel<ZimManageViewModel>(viewModelFactory)
   }
+
   private val libraryAdapter: LibraryAdapter by lazy {
     LibraryAdapter(
         BookDelegate(bookUtils, this::onBookItemClick), DividerDelegate
@@ -209,8 +210,10 @@ class LibraryFragment : BaseFragment() {
   private fun notEnoughSpaceAvailable(item: BookItem) =
     spaceAvailable < item.book.size.toLong() * 1024f
 
+  @SuppressLint("ImplicitSamInstance")
   private fun showStorageSelectDialog() {
-    StorageSelectDialog().apply {
+    StorageSelectDialog()
+        .apply {
       arguments = Bundle().apply {
         putString(
             StorageSelectDialog.STORAGE_DIALOG_INTERNAL,

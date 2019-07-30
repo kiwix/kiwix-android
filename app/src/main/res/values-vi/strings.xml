@@ -93,7 +93,6 @@
   <string name="zim_novid">Không có video</string>
   <string name="no_network_connection">Không có kết nối mạng</string>
   <string name="get_library_over_network">Dùng mạng để tải về danh sách nội dung (khoảng 6MB)</string>
-  <string name="wait_for_load">Vẫn đang tải nội dung</string>
   <string name="help_2">Kiwix dùng để làm gì?</string>
   <string name="help_3">Kiwix là một chương trình đọc nội dung ngoại tuyến. Kiwix hoạt động như trình duyệt, tuy nhiên, thay vì truy cập các trang web trực tuyến thì Kiwix lại đọc nội dung từ các tập tin định dạng ZIM.</string>
   <string name="help_4">Mặc dù Kiwix lúc ban đầu được tạo ra để giúp bạn truy cập Wikipedia ngoại tuyến, chương trình cũng có thể đọc các nội dung khác nữa.</string>
@@ -135,8 +134,6 @@
   <string name="time_minute">phút</string>
   <string name="time_second">giây</string>
   <string name="time_left">còn lại</string>
-  <string name="pref_bottomtoolbar">Bật thanh tác vụ bên dưới</string>
-  <string name="pref_bottomtoolbar_summary">Hiển thị một thanh tác vụ nhanh nằm ở dưới màn hình</string>
   <string name="pref_autonightmode_summary">Tự động chuyển qua lại giữa chế độ đêm và ngày.</string>
   <string name="pref_autonightmode">Chế độ đêm tự động</string>
   <string name="pref_external_link_popup_title">Cảnh báo khi truy cập đường dẫn ngoài</string>

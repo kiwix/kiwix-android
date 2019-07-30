@@ -91,7 +91,6 @@
   <string name="zim_novid">Fără video</string>
   <string name="no_network_connection">Nu există conexiune de rețea</string>
   <string name="get_library_over_network">Folosește rețeaua să descarci lista de conținut. (Aproximativ 6MB)</string>
-  <string name="wait_for_load">Conținutul încă se încarcă</string>
   <string name="help_2">Ce face Kiwix?</string>
   <string name="help_3">Kiwix este un server de citit conținut off-line. Este aproape ca un browser dar în loc să acceseze paginile web online citește conținut de la un fișier în formatul ZIM.</string>
   <string name="help_4">În timp ce Kiwix a fost făcut inițial să ofere Wikipedia off-line de asemenea citește și alt conținut.</string>
@@ -130,8 +129,6 @@
   <string name="pref_wifi_only">Descarcă conținut numai prin WiFi</string>
   <string name="time_day">zi</string>
   <string name="time_left">stânga</string>
-  <string name="pref_bottomtoolbar">Activează bara de unelte de jos</string>
-  <string name="pref_bottomtoolbar_summary">Arată o bară de unelte cu acțiuni rapide din partea de jos a ecranului</string>
   <string name="pref_autonightmode_summary">Schimbă automat între modul de zi și de noapte.</string>
   <string name="pref_autonightmode">Mod automat de noapte</string>
   <string name="pref_external_link_popup_title">Atenționați când introduceți legături extern</string>

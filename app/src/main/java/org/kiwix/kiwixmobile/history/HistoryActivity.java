@@ -106,7 +106,7 @@ public class HistoryActivity extends BaseActivity implements HistoryContract.Vie
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     presenter.attachView(this);
-    setContentView(R.layout.activity_bookmarks_history_language);
+    setContentView(R.layout.activity_history);
     setSupportActionBar(toolbar);
 
     ActionBar actionBar = getSupportActionBar();

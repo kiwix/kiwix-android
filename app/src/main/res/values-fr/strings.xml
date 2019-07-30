@@ -87,7 +87,6 @@
   <string name="zim_novid">Aucune vidéo</string>
   <string name="no_network_connection">Aucune connexion réseau</string>
   <string name="get_library_over_network">Utiliser le réseau pour télécharger la liste de contenu (environ 6Mo).</string>
-  <string name="wait_for_load">Le contenu est encore en cours de chargement</string>
   <string name="help_2">Que fait Kiwix ?</string>
   <string name="help_3">Kiwix est un lecteur de contenu hors connexion. Il agit quasiment comme un navigateur, mais au lieu d’accéder à des pages web en ligne, il lit le contenu depuis un fichier au format ZIM.</string>
   <string name="help_4">Bien que Kiwix ait été conçu au départ pour fournir Wikipédia hors connexion, il lit aussi d’autre contenu.</string>
@@ -126,8 +125,6 @@
   <string name="pref_wifi_only">Télécharger le contenu uniquement via WiFi</string>
   <string name="time_day">jour</string>
   <string name="time_left">restante(s)</string>
-  <string name="pref_bottomtoolbar">Activer la barre d’outils en bas</string>
-  <string name="pref_bottomtoolbar_summary">Afficher une barre d’outils avec des actions rapides en bas de l’écran</string>
   <string name="pref_autonightmode_summary">Basculer automatiquement entre les modes jour et nuit.</string>
   <string name="pref_autonightmode">Mode nuit automatisé</string>
   <string name="pref_external_link_popup_title">Avertir lors de l\'accès à des liens externes</string>

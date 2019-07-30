@@ -26,6 +26,7 @@ import android.provider.MediaStore.MediaColumns
 import eu.mhutti1.utils.storage.StorageDeviceUtils
 import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
+import io.reactivex.schedulers.Schedulers
 import org.kiwix.kiwixmobile.extensions.forEachRow
 import org.kiwix.kiwixmobile.extensions.get
 import java.io.File
@@ -37,8 +38,8 @@ class FileSearch @Inject constructor(private val context: Context) {
 
   fun scan(defaultPath: String) =
     Flowable.combineLatest(
-        Flowable.fromCallable { scanFileSystem(defaultPath) },
-        Flowable.fromCallable(this::scanMediaStore),
+        Flowable.fromCallable { scanFileSystem(defaultPath) }.subscribeOn(Schedulers.io()),
+        Flowable.fromCallable(this::scanMediaStore).subscribeOn(Schedulers.io()),
         BiFunction<List<File>, List<File>, List<File>> { filesSystemFiles, mediaStoreFiles ->
           filesSystemFiles + mediaStoreFiles
         }
@@ -74,13 +75,19 @@ class FileSearch @Inject constructor(private val context: Context) {
       *StorageDeviceUtils.getStorageDevices(context, false).map { it.name }.toTypedArray()
   )
 
-  private fun scanDirectory(directory: String) = filesMatchingExtensions(directory) ?: emptyList()
-
-  private fun filesMatchingExtensions(directory: String) = File(directory)
-      .listFiles { _, name -> name.endsWithAny(*zimFileExtensions) }
-      ?.toList()
+  private fun scanDirectory(directory: String): List<File> = File(directory).listFiles()
+      ?.fold(
+          mutableListOf(), { acc, file ->
+        acc.apply {
+          if (file.isDirectory) {
+            addAll(scanDirectory(file.path))
+          } else if (file.extension.isAny(*zimFileExtensions)) {
+            add(file)
+          }
+        }
+      }) ?: emptyList()
 
 }
 
-internal fun String.endsWithAny(vararg suffixes: String) =
-  suffixes.fold(false, { acc, s -> acc or endsWith(s) })
+internal fun String.isAny(vararg suffixes: String) =
+  suffixes.firstOrNull { endsWith(it) } != null

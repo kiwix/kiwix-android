@@ -93,7 +93,6 @@
   <string name="zim_novid">Perunu vìdeu</string>
   <string name="no_network_connection">Peruna connessione de retza</string>
   <string name="get_library_over_network">Imprea sa retza pro iscarrigare sa lista de cuntenutos (pagu prus o mancu 6MB)</string>
-  <string name="wait_for_load">Cuntenutu galu in carrigamentu</string>
   <string name="help_2">Ite faghet Kiwix?</string>
   <string name="help_3">Kiwix est unu leghidore de cuntenutu non in lìnia. Funtzionat comente unu navigadore ma imbetzes de intrare in pàginas web in lìnia leghet cuntenutu dae unu documentu in formatu ZIM.</string>
   <string name="help_4">Fintzas si Kiwix est istadu creadu, in orìgine, pro lèghere Wikipèdia chene lìnia, leghet fintzas àteros cuntenutos.</string>
@@ -135,8 +134,6 @@
   <string name="time_day">die</string>
   <string name="time_hour">o</string>
   <string name="time_left">galu</string>
-  <string name="pref_bottomtoolbar">Abìlita sa barra de sas ainas in fundu</string>
-  <string name="pref_bottomtoolbar_summary">Ammustra una barra de sas ainas in fundu a s\'ischermu</string>
   <string name="pref_autonightmode_summary">Cola in manera automàtica intre sa modalidade die e note.</string>
   <string name="pref_autonightmode">Modalidade note automàtica</string>
   <string name="pref_external_link_popup_title">Avisa cando ses aberende unu ligàmene esternu</string>

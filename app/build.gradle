@@ -56,9 +56,6 @@ dependencies {
     archs = file("../kiwixlib/src/main/jniLibs").list()
   }
 
-  // Storage Devices
-  implementation "eu.mhutti1.utils.storage:android-storage-devices:0.6.2"
-
   // Android Support
   implementation "androidx.appcompat:appcompat:$appCompatVersion"
   implementation "com.google.android.material:material:$materialVersion"
@@ -125,9 +122,8 @@ dependencies {
   implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 
   // Leak canary
-  releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
-  androidTestImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
-  debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
+  debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
+
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
   implementation "android.arch.lifecycle:extensions:1.1.1"
@@ -233,8 +229,11 @@ android {
     //TODO stop ignoring
     ignore 'MissingTranslation',
         'CheckResult',
+        'LabelFor',
         'DuplicateStrings',
         'LogConditional'
+    warning 'UnknownNullness',
+        'SelectableText'
     baseline file("lint-baseline.xml")
   }
 
@@ -274,6 +273,9 @@ android {
 
     // Release Type
     release {
+      minifyEnabled true
+      shrinkResources true
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
       signingConfig signingConfigs.release
       buildConfigField "String", "KIWIX_DOWNLOAD_URL", "\"http://mirror.download.kiwix.org/\""
       buildConfigField "boolean", "KIWIX_ERROR_ACTIVITY", "true"
@@ -408,15 +410,6 @@ android {
     javaMaxHeapSize "4g"
   }
 
-  /*
-  Add back once proguard is configured
-  buildTypes {
-    release {
-      minifyEnabled true
-      proguardFiles getDefaultProguardFile("proguard-android.txt")
-    }
-  }
-  */
   androidExtensions {
     experimental = true
   }

@@ -94,7 +94,6 @@
   <string name="zim_novid">Neniu Videaĵo</string>
   <string name="no_network_connection">Reta konekto mankas</string>
   <string name="get_library_over_network">Uzi reton por elŝuti liston de enhavo (proksimume 6 megabajtoj)</string>
-  <string name="wait_for_load">Enhavo Estas Ankoraŭ Ŝarĝata</string>
   <string name="help_2">Kion faras Kiwix?</string>
   <string name="help_3">Kiwix estas senkonekta legilo de enhavo. Ĝi estas simila al TTT-legilo, sed anstataŭ legi retpaĝojn konektite, ĝi legas enhavon en ZIM-dosiero.</string>
   <string name="help_4">Kiwix estis originale farita por senkonekta legado de Vikipedio, sed ĝi povas legi alian enhavon.</string>
@@ -135,8 +134,6 @@
   <string name="pref_wifi_only">Elŝuti nur per vifio</string>
   <string name="time_day">tago</string>
   <string name="time_left">restas</string>
-  <string name="pref_bottomtoolbar">Ŝalti malsupran ilobreton</string>
-  <string name="pref_bottomtoolbar_summary">Montri ilobreton kun rapidaj agoj ĉe la malsupro de la ekrano</string>
   <string name="pref_autonightmode_summary">Aŭtomate ŝalti tagan/noktan reĝimon</string>
   <string name="pref_autonightmode">Aŭtomata nokta reĝimo</string>
   <string name="pref_external_link_popup_title">Averti pri aliro al eksteraj ligiloj</string>

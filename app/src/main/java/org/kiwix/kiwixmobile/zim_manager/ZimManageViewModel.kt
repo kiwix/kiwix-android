@@ -110,13 +110,11 @@ class ZimManageViewModel @Inject constructor(
   val deviceListIsRefreshing = MutableLiveData<Boolean>()
   val libraryListIsRefreshing = MutableLiveData<Boolean>()
   val networkStates = MutableLiveData<NetworkState>()
-  val languageItems = MutableLiveData<List<Language>>()
 
   val requestFileSystemCheck = PublishProcessor.create<Unit>()
   val fileSelectActions = PublishProcessor.create<FileSelectActions>()
   val requestDownloadLibrary = BehaviorProcessor.createDefault<Unit>(Unit)
   val requestFiltering = BehaviorProcessor.createDefault<String>("")
-  val requestLanguagesDialog = PublishProcessor.create<Unit>()
 
   private val compositeDisposable = CompositeDisposable()
 
@@ -151,7 +149,6 @@ class ZimManageViewModel @Inject constructor(
         updateLibraryItems(booksFromDao, downloads, networkLibrary, languages),
         updateLanguagesInDao(networkLibrary, languages),
         updateNetworkStates(),
-        updateLanguageItemsForDialog(languages),
         requestsAndConnectivtyChangesToLibraryRequests(networkLibrary),
         fileSelectActions()
     )
@@ -285,16 +282,6 @@ class ZimManageViewModel @Inject constructor(
         }
     )
   }
-
-  private fun updateLanguageItemsForDialog(languages: Flowable<List<Language>>) =
-    requestLanguagesDialog
-        .withLatestFrom(
-            languages,
-            BiFunction<Unit, List<Language>, List<Language>> { _, langs -> langs })
-        .subscribe(
-            languageItems::postValue,
-            Throwable::printStackTrace
-        )
 
   private fun updateNetworkStates() =
     connectivityBroadcastReceiver.networkStates.subscribe(

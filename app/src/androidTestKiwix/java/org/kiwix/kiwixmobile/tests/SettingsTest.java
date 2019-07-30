@@ -49,10 +49,6 @@ public class SettingsTest {
         withKey("pref_hidetoolbar")))
         .perform(click());
 
-    onData(allOf(
-        is(instanceOf(Preference.class)),
-        withKey("pref_bottomtoolbar")))
-        .perform(click());
 
     onData(allOf(
         is(instanceOf(Preference.class)),

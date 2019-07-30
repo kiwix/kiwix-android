@@ -94,7 +94,6 @@
   <string name="zim_novid">لا يوجد فيديو</string>
   <string name="no_network_connection">لا يوجد اتصال بالشبكة</string>
   <string name="get_library_over_network">استخدم الشبكة لتنزيل قائمة المحتويات. (حوالي 6 ميغابايت)</string>
-  <string name="wait_for_load">لا يزال يتم تحميل المحتوى</string>
   <string name="help_2">ماذا يفعل كيويكس؟</string>
   <string name="help_3">كيويكس قارئ محتوى غير متصل، وهو يعمل إلى حد كبير مثل المتصفح، ولكن بدلا من الوصول إلى صفحات الويب على الإنترنت، فإنه يقرأ المحتوى من ملف بتنسيق ZIM.</string>
   <string name="help_4">بينما كان كيويكس مصمما في الأصل لتوفير ويكيبيديا في وضع عدم الاتصال، فإنه يقرأ أيضا محتويات أخرى.</string>
@@ -138,8 +137,6 @@
   <string name="time_minute">دق</string>
   <string name="time_second">ث</string>
   <string name="time_left">متبقي</string>
-  <string name="pref_bottomtoolbar">تمكين شريط الأدوات السفلي</string>
-  <string name="pref_bottomtoolbar_summary">عرض شريط أدوات بإجراءات سريعة في الجزء السفلي من الشاشة</string>
   <string name="pref_autonightmode_summary">التبديل تلقائيا بين وضع اليلي والنهاري.</string>
   <string name="pref_autonightmode">الوضع الليلي الآلي</string>
   <string name="pref_external_link_popup_title">التحذير عند إدخال وصلات خارجية</string>

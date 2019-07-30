@@ -89,7 +89,6 @@
   <string name="zim_novid">Ingen videoer</string>
   <string name="no_network_connection">Ingen netværksforbindelse</string>
   <string name="get_library_over_network">Brug netværk til at hente indholdsliste. (Cirka 6 MB)</string>
-  <string name="wait_for_load">Indhold indlæses stadig</string>
   <string name="help_2">Hvad gør Kiwix?</string>
   <string name="help_3">Kiwix er en lokal indholdlæser. Den fungerer meget lig en browser, men i stedet for at tilgå internetsider, så læser den indhold fra en fil i ZIM-formatet.</string>
   <string name="help_4">Selvom Kiwix oprindelig blev designet for at tilbyde Wikipedia lokalt, så læser det også andet indhold.</string>
@@ -129,8 +128,6 @@
   <string name="time_day">dag</string>
   <string name="time_hour">t</string>
   <string name="time_left">tilbage</string>
-  <string name="pref_bottomtoolbar">Aktiver knapværktøjslinje</string>
-  <string name="pref_bottomtoolbar_summary">Vis en værktøjslinje med hurtige handling i bunden af skærmen</string>
   <string name="pref_autonightmode_summary">Skift automatisk mellem dag- og nattilstand.</string>
   <string name="pref_autonightmode">Automatisk nattilstand</string>
   <string name="pref_external_link_popup_title">Advar når man bruger eksterne henvisninger</string>

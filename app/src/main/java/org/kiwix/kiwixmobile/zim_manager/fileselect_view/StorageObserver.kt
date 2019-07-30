@@ -14,11 +14,11 @@ import javax.inject.Inject
 
 class StorageObserver @Inject constructor(
   private val sharedPreferenceUtil: SharedPreferenceUtil,
-  downloadDao: NewDownloadDao,
+  private val downloadDao: NewDownloadDao,
   private val fileSearch: FileSearch
 ) {
 
-  val booksOnFileSystem = scanFiles()
+  val booksOnFileSystem get() = scanFiles()
       .withLatestFrom(
           downloadDao.downloads(),
           BiFunction(this::toFilesThatAreNotDownloading)

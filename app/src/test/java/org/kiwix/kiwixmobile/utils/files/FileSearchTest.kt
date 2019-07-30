@@ -29,11 +29,14 @@ import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.reactivex.schedulers.Schedulers
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.kiwix.kiwixmobile.resetSchedulers
+import org.kiwix.kiwixmobile.setScheduler
 import java.io.File
 
 class FileSearchTest {
@@ -45,7 +48,10 @@ class FileSearchTest {
   private val contentResolver: ContentResolver = mockk()
   private val storageDevice: StorageDevice = mockk()
 
-  private val unitTestTempDirectoryPath = "unittest${File.separator}"
+
+  init {
+    setScheduler(Schedulers.trampoline())
+  }
 
   @BeforeEach
   fun init() {
@@ -66,6 +72,7 @@ class FileSearchTest {
   @AfterAll
   fun teardown() {
     deleteTempDirectory()
+    resetSchedulers()
   }
 
   @Nested
@@ -81,14 +88,26 @@ class FileSearchTest {
 
     @Test
     fun `scan of directory that has files returns files`() {
-      val zimFile = File.createTempFile("${unitTestTempDirectoryPath}fileToFind", ".zim")
-      val zimaaFile = File.createTempFile("${unitTestTempDirectoryPath}fileToFind2", ".zimaa")
-      File.createTempFile("${unitTestTempDirectoryPath}willNotFind", ".txt")
+      val zimFile = File.createTempFile("fileToFind", ".zim")
+      val zimaaFile = File.createTempFile("fileToFind2", ".zimaa")
+      File.createTempFile("willNotFind", ".txt")
       every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
       val fileList = fileSearch.scan(zimFile.parent)
           .test()
           .values()[0]
       assertThat(fileList).containsExactlyInAnyOrder(zimFile, zimaaFile)
+    }
+
+    @Test
+    fun `scan of directory recursively traverses filesystem`() {
+      val tempRoot = File.createTempFile("tofindroot", "extension")
+          .parentFile.absolutePath
+      val zimFile = File.createTempFile("fileToFind", ".zim", File("${tempRoot}${File.separator}dir").apply { mkdirs() })
+      every { contentResolver.query(any(), any(), any(), any(), any()) } returns null
+      val fileList = fileSearch.scan(zimFile.parentFile.parent)
+          .test()
+          .values()[0]
+      assertThat(fileList).containsExactlyInAnyOrder(zimFile)
     }
   }
 
@@ -97,7 +116,7 @@ class FileSearchTest {
 
     @Test
     fun `scan media store, if files are readable they are returned`() {
-      val fileToFind = File.createTempFile("${unitTestTempDirectoryPath}fileToFind", ".zim")
+      val fileToFind = File.createTempFile("fileToFind", ".zim")
       expectFromMediaStore(fileToFind)
       fileSearch.scan("")
           .test()
@@ -106,7 +125,7 @@ class FileSearchTest {
 
     @Test
     fun `scan media store, if files are not readable they are not returned`() {
-      val unreadableFile = File.createTempFile("${unitTestTempDirectoryPath}fileToFind", ".zim")
+      val unreadableFile = File.createTempFile("fileToFind", ".zim")
       expectFromMediaStore(unreadableFile)
       unreadableFile.delete()
       fileSearch.scan("")
@@ -133,7 +152,7 @@ class FileSearchTest {
   }
 
   private fun deleteTempDirectory() {
-    File.createTempFile("${unitTestTempDirectoryPath}temp", ".txt")
+    File.createTempFile("temp", ".txt")
         .parentFile.deleteRecursively()
   }
 }

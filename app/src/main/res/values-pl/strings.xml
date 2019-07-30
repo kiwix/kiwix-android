@@ -109,8 +109,6 @@
   <string name="pref_wifi_only">Pobierz zawartość tylko poprzez WiFi</string>
   <string name="time_day">dzień</string>
   <string name="time_left">do lewej</string>
-  <string name="pref_bottomtoolbar">Włącz dolny pasek narzędzi</string>
-  <string name="pref_bottomtoolbar_summary">Wyświetl pasek narzędzi z szybkimi akcjami u dołu ekranu</string>
   <string name="pref_autonightmode_summary">Przełączaj automatycznie między trybami dnia i nocy.</string>
   <string name="pref_autonightmode">Zautomatyzowany tryb nocny.</string>
   <string name="do_not_ask_anymore">Nie pytaj więcej</string>

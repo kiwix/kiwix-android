@@ -94,7 +94,6 @@
   <string name="zim_novid">Video ebet</string>
   <string name="no_network_connection">N\'eus kevreadur rouedad ebet</string>
   <string name="get_library_over_network">Implijout ar rouedad evit pellgargañ ar roll endalc\'had (war-dro 6Mo).</string>
-  <string name="wait_for_load">O kargañ emañ an endalc\'had c\'hoazh</string>
   <string name="help_2">Petra a ra Kiwix ?</string>
   <string name="help_3">Ul lenner endalc\'had ezlinenn eo Kiwix. Ober a ra traoù hogos evel ur merdeer, met e-lec\'h diraez pajennoù web enlinenn e lenn an endalc\'had diwar ur restr er furmad ZIM.</string>
   <string name="help_4">Daoust ma\'z eo bet krouet Kiwix evit pourchas Wikipedia ezlinenn e lenn endalc\'hioù all ivez.</string>
@@ -135,8 +134,6 @@
   <string name="pref_wifi_only">Pellgargañ an endalc\'had dre WiFi hepken</string>
   <string name="time_day">deiz</string>
   <string name="time_left">kleiz</string>
-  <string name="pref_bottomtoolbar">Gweredekaat ar varrenn ostilhoù en traoñ</string>
-  <string name="pref_bottomtoolbar_summary">Diskwel ur varrenn ostilhoù gant oberoù prim e traoñ ar skramm</string>
   <string name="pref_autonightmode_summary">Cheñch ent emgefre etre ar modoù noz ha deiz.</string>
   <string name="pref_autonightmode">Mod noz emgefreek</string>
   <string name="pref_external_link_popup_title">Kemenn pa\'z eer liammoù diavaez</string>

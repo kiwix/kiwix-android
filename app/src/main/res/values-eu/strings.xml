@@ -93,7 +93,6 @@
   <string name="zim_novid">Bideorik ez</string>
   <string name="no_network_connection">Ez dago konexiorik</string>
   <string name="get_library_over_network">Sarea erabili eduki zerrenda deskargatzeko. (6MB inguru)</string>
-  <string name="wait_for_load">Oraindik Edukia Kargatzen</string>
   <string name="help_2">Zer egiten du Kiwix-ek?</string>
   <string name="help_3">Kiwix konexio gabeko eduki irakurlea da. Nabigatzaile baten moduan erabiltzen da, baina sarean dauden web orrialdeetan sartu beharrean, ZIM formatoko edukia irakurtzen du.</string>
   <string name="help_4">Nahiz eta, Kiwix, berez, Wikipedia konexiorik gabe erabiltzeko sortu, beste edukiak ere eskeintzen ditu.</string>
@@ -134,8 +133,6 @@
   <string name="time_day">eguna</string>
   <string name="time_second">k</string>
   <string name="time_left">joanda</string>
-  <string name="pref_bottomtoolbar">Gaitu beheko tresna-barra</string>
-  <string name="pref_bottomtoolbar_summary">Gaitu ekintza azkarretako tresna-barra pantailaren beheko partean</string>
   <string name="pref_autonightmode_summary">Automatikoki piztu egun eta gauaren arteko modoa.</string>
   <string name="pref_autonightmode">Gaueko modo automatikoa</string>
   <string name="pref_external_link_popup_title">Kanpo esteketara sartzerakoan ohartarazi</string>

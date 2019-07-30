@@ -19,9 +19,9 @@
 
 package org.kiwix.kiwixmobile.settings;
 
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.EditTextPreference;
@@ -35,6 +35,7 @@ import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import eu.mhutti1.utils.storage.StorageDevice;
 import eu.mhutti1.utils.storage.StorageSelectDialog;
@@ -200,7 +201,7 @@ public class KiwixSettingsActivity extends BaseActivity {
       String selectedLang = sharedPreferenceUtil.getPrefLanguage(Locale.getDefault().toString());
       List<String> languageCodeList = new LanguageUtils(getActivity()).getKeys();
       selectedLang = languageCodeList.contains(selectedLang) ? selectedLang : "en";
-      String code[] = languageCodeList.toArray(new String[languageCodeList.size()]);
+      String code[] = languageCodeList.toArray(new String[0]);
       String[] entries = new String[code.length];
       for (int index = 0; index < code.length; index++) {
         Locale locale = new Locale(code[index]);
@@ -229,11 +230,16 @@ public class KiwixSettingsActivity extends BaseActivity {
     }
 
     private void setAppVersionNumber() {
-      String version;
-      version = BuildConfig.VERSION_NAME + " Build: " + BuildConfig.VERSION_CODE;
-      EditTextPreference versionPref = (EditTextPreference) PrefsFragment.this
-          .findPreference(PREF_VERSION);
-      versionPref.setSummary(version);
+      EditTextPreference versionPref = (EditTextPreference) findPreference(PREF_VERSION);
+      versionPref.setSummary(BuildConfig.VERSION_NAME + " Build: " + getVersionCode());
+    }
+
+    private int getVersionCode()  {
+      try {
+        return getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionCode;
+      } catch (PackageManager.NameNotFoundException e) {
+        throw new RuntimeException(e);
+      }
     }
 
     @Override
@@ -322,7 +328,6 @@ public class KiwixSettingsActivity extends BaseActivity {
     }
 
     public void openFolderSelect() {
-      FragmentManager fm = getFragmentManager();
       StorageSelectDialog dialogFragment = new StorageSelectDialog();
       Bundle b = new Bundle();
       b.putString(StorageSelectDialog.STORAGE_DIALOG_INTERNAL,
@@ -332,7 +337,7 @@ public class KiwixSettingsActivity extends BaseActivity {
       b.putInt(StorageSelectDialog.STORAGE_DIALOG_THEME, StyleUtils.dialogStyle());
       dialogFragment.setArguments(b);
       dialogFragment.setOnSelectListener(this);
-      dialogFragment.show(fm, getResources().getString(R.string.pref_storage));
+      dialogFragment.show(((AppCompatActivity) getActivity()).getSupportFragmentManager(), getResources().getString(R.string.pref_storage));
     }
 
     @Override

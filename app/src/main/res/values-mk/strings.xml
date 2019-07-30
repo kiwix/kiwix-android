@@ -94,7 +94,6 @@
   <string name="zim_novid">Нема видеа</string>
   <string name="no_network_connection">Немате мрежна врска</string>
   <string name="get_library_over_network">Користи мрежа за преземање на списокот содржини (прибл. 6 МБ)</string>
-  <string name="wait_for_load">Содржината сè уште се вчитува</string>
   <string name="help_2">Што прави Kiwix?</string>
   <string name="help_3">Kiwix е вонмрежен читач на содржини. Работи како прелистувач но чита содржини од податотека во ZIM-формат место од семрежјето.</string>
   <string name="help_4">Иако Kiwix е првично предвиден како вонмрежен читач на Википедија, но сега чита и други содржини.</string>
@@ -138,8 +137,6 @@
   <string name="time_minute">мин</string>
   <string name="time_second">с</string>
   <string name="time_left">лево</string>
-  <string name="pref_bottomtoolbar">Вклучи алатник најдолу</string>
-  <string name="pref_bottomtoolbar_summary">Прикажи алатник за брзи дејства најдолу во екранот.</string>
   <string name="pref_autonightmode_summary">Автоматски префрлај меѓу дневен и ноќен режим.</string>
   <string name="pref_autonightmode">Автоматски ноќен режим</string>
   <string name="pref_external_link_popup_title">Предупреди ме кога се внесуваат надворешни врски</string>
