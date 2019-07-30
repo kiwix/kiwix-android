@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import org.kiwix.kiwixmobile.R;
 
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.REQUEST_ENABLE_WIFI_P2P;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.showToast;
 
 public class RequestEnableWifiP2pServicesDialog extends DialogFragment {
@@ -27,7 +28,8 @@ public class RequestEnableWifiP2pServicesDialog extends DialogFragment {
         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-            startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+            startActivityForResult(new Intent(Settings.ACTION_WIFI_SETTINGS),
+                REQUEST_ENABLE_WIFI_P2P);
           }
         })
         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

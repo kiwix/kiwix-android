@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import org.kiwix.kiwixmobile.R;
 
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.REQUEST_ENABLE_LOCATION_SERVICES;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.showToast;
 
 public class RequestEnableLocationServicesDialog extends DialogFragment {
@@ -28,7 +29,7 @@ public class RequestEnableLocationServicesDialog extends DialogFragment {
           @Override
           public void onClick(DialogInterface paramDialogInterface, int paramInt) {
             startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS),
-                LocalFileTransferActivity.REQUEST_ENABLE_LOCATION_SERVICES);
+                REQUEST_ENABLE_LOCATION_SERVICES);
           }
         })
         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

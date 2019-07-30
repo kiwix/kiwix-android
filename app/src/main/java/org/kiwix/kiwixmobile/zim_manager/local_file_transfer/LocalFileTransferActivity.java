@@ -78,9 +78,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   private static final int PERMISSION_REQUEST_CODE_COARSE_LOCATION = 1;
   private static final int PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS = 2;
 
-  public static int PEER_HANDSHAKE_PORT = 8009;
-  public static int FILE_TRANSFER_PORT = 8008;
-
   @Inject SharedPreferenceUtil sharedPreferenceUtil;
   @Inject AlertDialogShower alertDialogShower;
 

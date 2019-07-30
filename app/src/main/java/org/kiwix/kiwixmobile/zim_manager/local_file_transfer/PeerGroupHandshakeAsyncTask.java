@@ -19,7 +19,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.TO_BE_SENT;
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.PEER_HANDSHAKE_PORT;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.getFileName;
 
 /**
@@ -38,6 +37,7 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTra
 class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
 
   private static final String TAG = "PeerGrpHndshakeAsyncTsk";
+  private static int PEER_HANDSHAKE_PORT = 8009;
   private final String HANDSHAKE_MESSAGE = "Request Kiwix File Sharing";
 
   private WeakReference<LocalFileTransferActivity> weakReferenceToActivity;

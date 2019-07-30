@@ -32,6 +32,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     WifiDirectBroadcastReceiver.BroadcastListener {
 
   private static final String TAG = "WifiDirectManager";
+  public static int FILE_TRANSFER_PORT = 8008;
 
   @NonNull LocalFileTransferActivity activity;
 
