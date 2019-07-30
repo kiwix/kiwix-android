@@ -73,7 +73,7 @@ class ZimManageRobot : BaseRobot() {
   private fun download(func: DownloadRobot.() -> Unit) = DownloadRobot().apply(func)
   inner class DownloadRobot : BaseRobot() {
     init {
-      isVisible(ViewId(R.id.zim_downloader_list))
+      isVisible(ViewId(R.id.zim_downloader_list), 15000L)
     }
 
     fun clickStop() {

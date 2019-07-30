@@ -79,7 +79,7 @@ fun text(v: View) =
   else ""
 
 private fun resourceId(view: View) =
-  if (view.id > 0) " id:${view.resources.getResourceName(view.id)}"
+  if (view.id > 0 && view.resources != null) " id:${view.resources.getResourceName(view.id)}"
   else ""
 
 private fun numSpaces(marginOffset: Int) = (0..marginOffset).fold("", { acc, _ -> "$acc-" })
