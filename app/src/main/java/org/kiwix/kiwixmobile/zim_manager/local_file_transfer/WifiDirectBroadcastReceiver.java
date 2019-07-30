@@ -7,12 +7,9 @@ import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import org.kiwix.kiwixmobile.R;
-
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.showToast;
+import androidx.annotation.Nullable;
 
 /**
  * Helper class for the local file sharing module.
@@ -24,14 +21,14 @@ public class WifiDirectBroadcastReceiver extends BroadcastReceiver {
 
   private WifiP2pManager manager;
   private WifiP2pManager.Channel channel;
-  private LocalFileTransferActivity wifiActivity;
+  private WifiDirectManager wifiDirectManager;
 
   public WifiDirectBroadcastReceiver(@NonNull WifiP2pManager manager, @NonNull WifiP2pManager.Channel channel,
-      @NonNull LocalFileTransferActivity activity) {
+      @NonNull WifiDirectManager wifiDirectManager) {
     super();
     this.manager = manager;
     this.channel = channel;
-    this.wifiActivity = activity;
+    this.wifiDirectManager = wifiDirectManager;
   }
 
   @Override
@@ -43,23 +40,23 @@ public class WifiDirectBroadcastReceiver extends BroadcastReceiver {
       int wifiP2pState = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
 
       if (wifiP2pState == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
-        wifiActivity.wifiDirectManager.setWifiP2pEnabled(true);
+        ((BroadcastListener) wifiDirectManager).setWifiP2pEnabled(true);
       } else {
-        wifiActivity.wifiDirectManager.setWifiP2pEnabled(false);
-        showToast(wifiActivity, R.string.discovery_needs_wifi, Toast.LENGTH_SHORT);
-        wifiActivity.clearPeers();
+        ((BroadcastListener) wifiDirectManager).setWifiP2pEnabled(false);
       }
       Log.d(LocalFileTransferActivity.TAG, "WiFi P2P state changed - " + wifiP2pState);
-    } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
 
+
+    } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
       if (manager != null) {
         /* List of available peers has changed, so request & use the new list through
          * PeerListListener.requestPeers() callback */
-        manager.requestPeers(channel, wifiActivity.wifiDirectManager);
+        manager.requestPeers(channel, wifiDirectManager);
       }
       Log.d(LocalFileTransferActivity.TAG, "P2P peers changed");
-    } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
 
+
+    } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
       if (manager == null) {
         return;
       }
@@ -67,15 +64,23 @@ public class WifiDirectBroadcastReceiver extends BroadcastReceiver {
 
       if (networkInfo.isConnected()) {
         // Request connection info about the wifi p2p group formed upon connection
-        manager.requestConnectionInfo(channel, wifiActivity.wifiDirectManager);
+        manager.requestConnectionInfo(channel, wifiDirectManager);
       } else {
         // Not connected after connection change -> Disconnected
-        wifiActivity.clearPeers();
+        ((BroadcastListener) wifiDirectManager).onDisconnected();
       }
+
+
     } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
-      // Update UI with wifi-direct details about the user device
-      wifiActivity.updateUserDevice(
-          intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE));
+      ((BroadcastListener) wifiDirectManager).onDeviceChanged(intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE));
     }
+  }
+
+  public interface BroadcastListener {
+    void setWifiP2pEnabled(boolean wifiP2pEnabled);
+
+    void onDisconnected();
+
+    void onDeviceChanged(@Nullable WifiP2pDevice userDevice);
   }
 }

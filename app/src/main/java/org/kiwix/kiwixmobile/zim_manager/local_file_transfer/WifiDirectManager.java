@@ -13,6 +13,7 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import java.net.InetAddress;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
@@ -27,7 +28,8 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTra
 /**
  * Manager for the Wifi-P2p API, used in the local file transfer module
  * */
-public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2pManager.PeerListListener, WifiP2pManager.ConnectionInfoListener {
+public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2pManager.PeerListListener, WifiP2pManager.ConnectionInfoListener,
+    WifiDirectBroadcastReceiver.BroadcastListener {
 
   private static final String TAG = "WifiDirectManager";
 
@@ -41,8 +43,6 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   private WifiP2pManager.Channel channel;
   // Connects the module to device's underlying Wifi p2p framework
 
-  /*private final IntentFilter intentFilter = new IntentFilter();
-  // For specifying broadcasts (of the P2P API) that the module needs to respond to*/
   private BroadcastReceiver receiver = null; // For receiving the broadcasts given by above filter
 
   private WifiP2pDevice userDevice;   // Represents the device on which the app is running
@@ -59,18 +59,12 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   public void initialiseWifiDirectManager(@NonNull AlertDialogShower alertDialogShower) {
     this.alertDialogShower = alertDialogShower;
 
-    /*// Intents that the broadcast receiver will be responding to
-    intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
-    intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
-    intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-    intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);*/
-
     manager = (WifiP2pManager) activity.getSystemService(Context.WIFI_P2P_SERVICE);
     channel = manager.initialize(activity, getMainLooper(), null);
   }
 
   public void registerWifiDirectBroadcastRecevier() {
-    receiver = new WifiDirectBroadcastReceiver(manager, channel, activity);
+    receiver = new WifiDirectBroadcastReceiver(manager, channel, this);
 
     // For specifying broadcasts (of the P2P API) that the module needs to respond to
     IntentFilter intentFilter = new IntentFilter();
@@ -105,8 +99,25 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     });
   }
 
+  @Override
   public void setWifiP2pEnabled(boolean wifiP2pEnabled) {
     this.wifiP2pEnabled = wifiP2pEnabled;
+
+    if(wifiP2pEnabled == false) {
+      showToast(activity, R.string.discovery_needs_wifi, Toast.LENGTH_SHORT);
+      activity.clearPeers();
+    }
+  }
+
+  @Override
+  public void onDisconnected() {
+    activity.clearPeers();
+  }
+
+  @Override
+  public void onDeviceChanged(@Nullable WifiP2pDevice userDevice) {
+    // Update UI with wifi-direct details about the user device
+    activity.updateUserDevice(userDevice);
   }
 
   public boolean isWifiP2pEnabled() {
@@ -160,10 +171,6 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   public @NonNull InetAddress getGroupOwnerAddress() {
     return groupInfo.groupOwnerAddress;
   }
-
-  /*public void setSenderSelectedPeerDevice(@NonNull WifiP2pDevice senderSelectedPeerDevice) {
-    this.senderSelectedPeerDevice = senderSelectedPeerDevice;
-  }*/
 
   public void sendToDevice(@NonNull WifiP2pDevice senderSelectedPeerDevice) {
     this.senderSelectedPeerDevice = senderSelectedPeerDevice;

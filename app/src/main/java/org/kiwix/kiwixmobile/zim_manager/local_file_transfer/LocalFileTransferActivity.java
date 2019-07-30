@@ -167,17 +167,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     WifiP2pDevice senderSelectedPeerDevice =
         (WifiP2pDevice) listViewPeerDevices.getAdapter().getItem(position);
     wifiDirectManager.sendToDevice(senderSelectedPeerDevice);
-    /*wifiDirectManager.setSenderSelectedPeerDevice(senderSelectedPeerDevice);
-    alertDialogShower.show(
-        new KiwixDialog.FileTransferConfirmation(senderSelectedPeerDevice.deviceName),
-        new Function0<Unit>() {
-          @Override public Unit invoke() {
-            wifiDirectManager.connect();
-            showToast(LocalFileTransferActivity.this, R.string.performing_handshake,
-                Toast.LENGTH_LONG);
-            return Unit.INSTANCE;
-          }
-        });*/
   }
 
   @Override
