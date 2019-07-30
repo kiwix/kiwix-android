@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
     android:paddingEnd="0dp"
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
@@ -135,5 +134,14 @@
       app:layout_constraintStart_toStartOf="@id/item_book_title"
       app:layout_constraintTop_toBottomOf="@id/item_book_label_picture"
       />
-
+  <View
+      android:background="?android:attr/selectableItemBackground"
+      android:id="@+id/item_book_clickable_area"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      />
 </androidx.constraintlayout.widget.ConstraintLayout>

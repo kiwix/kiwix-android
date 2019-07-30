@@ -5,6 +5,7 @@ import android.view.View
 import kotlinx.android.synthetic.main.header_language.header_language
 import kotlinx.android.synthetic.main.item_book.itemBookCheckbox
 import kotlinx.android.synthetic.main.item_book.item_book_article_count
+import kotlinx.android.synthetic.main.item_book.item_book_clickable_area
 import kotlinx.android.synthetic.main.item_book.item_book_date
 import kotlinx.android.synthetic.main.item_book.item_book_description
 import kotlinx.android.synthetic.main.item_book.item_book_icon
@@ -74,13 +75,13 @@ sealed class BookOnDiskViewHolder<T : BooksOnDiskListItem>(containerView: View) 
       when (selectionMode) {
         MULTI -> {
           itemBookCheckbox.visibility = View.VISIBLE
-          containerView.setOnClickListener { multiSelectAction?.invoke(item) }
-          containerView.setOnLongClickListener(null)
+          item_book_clickable_area.setOnClickListener { multiSelectAction?.invoke(item) }
+          item_book_clickable_area.setOnLongClickListener(null)
         }
         NORMAL -> {
           itemBookCheckbox.visibility = View.GONE
-          containerView.setOnClickListener { clickAction.invoke(item) }
-          containerView.setOnLongClickListener {
+          item_book_clickable_area.setOnClickListener { clickAction.invoke(item) }
+          item_book_clickable_area.setOnLongClickListener {
             longClickAction?.invoke(item)
             return@setOnLongClickListener true
           }

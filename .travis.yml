@@ -4,6 +4,8 @@ jdk: oraclejdk8
 
 sudo: required
 
+dist: trusty
+
 env:
   global:
     # switch glibc to a memory conserving mode
@@ -38,8 +40,6 @@ cache:
 
 android:
   components:
-    - tools
-    - platform-tools
     - build-tools-28.0.3
     - android-28
     - extra-android-m2repository
