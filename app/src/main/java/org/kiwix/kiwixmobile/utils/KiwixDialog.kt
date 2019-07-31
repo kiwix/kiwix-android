@@ -24,6 +24,10 @@ sealed class KiwixDialog(
       null, R.string.request_storage, android.R.string.yes, android.R.string.cancel
   )
 
+  object EnableWifiP2pServices : KiwixDialog(
+      null, R.string.request_enable_wifi, R.string.yes, android.R.string.no
+  )
+
   data class FileTransferConfirmation(override val args: Array<out Any>) : KiwixDialog( // For the local file transfer module
       null, R.string.transfer_to, R.string.yes, android.R.string.cancel
   ), HasBodyFormatArgs {
