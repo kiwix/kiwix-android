@@ -129,10 +129,7 @@ class ZimManageActivity : BaseActivity() {
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     when (item.itemId) {
       R.id.select_language -> start<LanguageActivity>()
-      
-      R.id.get_zim_nearby_device -> {
-        startActivity(Intent(this, LocalFileTransferActivity::class.java));
-      }
+      R.id.get_zim_nearby_device -> start<LocalFileTransferActivity>()
     }
     return super.onOptionsItemSelected(item)
   }

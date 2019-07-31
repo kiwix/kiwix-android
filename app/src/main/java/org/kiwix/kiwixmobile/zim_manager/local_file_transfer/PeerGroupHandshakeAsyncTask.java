@@ -100,7 +100,7 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
   }
 
   private boolean isKiwixHandshake(Object object) {
-    return (object.getClass().equals(String.class) && object.equals(HANDSHAKE_MESSAGE));
+    return HANDSHAKE_MESSAGE.equals(object);
   }
 
   private void exchangeFileTransferMetadata(OutputStream outputStream, InputStream inputStream) {

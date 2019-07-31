@@ -573,7 +573,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
 
   @Override
   public void onBackPressed() {
-    super.onBackPressed();
     wifiDirectManager.closeLocalFileTransferActivity();
   }
 }
