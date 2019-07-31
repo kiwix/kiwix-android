@@ -74,8 +74,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
 
   // Not a typo, 'Log' tags have a length upper limit of 25 characters
   public static final String TAG = "LocalFileTransferActvty";
-  public static final int REQUEST_ENABLE_WIFI_P2P = 1;
-  public static final int REQUEST_ENABLE_LOCATION_SERVICES = 2;
+  public static final int REQUEST_ENABLE_LOCATION_SERVICES = 1;
   private static final int PERMISSION_REQUEST_CODE_COARSE_LOCATION = 1;
   private static final int PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS = 2;
 
