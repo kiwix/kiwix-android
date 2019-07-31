@@ -31,12 +31,12 @@ class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
   fun testZimManageDataFlow() {
     zimManage() {
       clickOnOnline {
-        clickOnSearch()
-        searchFor(book(title = "zzzzz"))
-        waitForEmptyView()
-        searchFor(book)
-        pressBack()
-        pressBack()
+        // clickOnSearch()
+        // searchFor(book(title = "zzzzz"))
+        // waitForEmptyView()
+        // searchFor(book)
+        // pressBack()
+        // pressBack()
         clickOn(book)
       }
       clickOnDownloading {
