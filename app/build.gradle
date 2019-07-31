@@ -235,7 +235,8 @@ android {
         'DuplicateStrings',
         'LogConditional'
     warning 'UnknownNullness',
-        'SelectableText'
+      'SelectableText',
+      'IconDensities'
     baseline file("lint-baseline.xml")
   }
 
