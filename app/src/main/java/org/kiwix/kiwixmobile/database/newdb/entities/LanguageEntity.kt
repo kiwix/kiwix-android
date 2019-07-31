@@ -24,7 +24,7 @@ data class LanguageEntity(
   )
 
   fun toLanguageModel() =
-    Language(locale, active, occurencesOfLanguage)
+    Language(locale, active, occurencesOfLanguage, id)
 }
 
 class StringToLocaleConverter : PropertyConverter<Locale, String> {

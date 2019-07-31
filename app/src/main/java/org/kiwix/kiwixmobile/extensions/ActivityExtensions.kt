@@ -1,10 +1,16 @@
 package org.kiwix.kiwixmobile.extensions
 
 import android.app.Activity
+import android.content.Intent
 import android.view.ActionMode
 import android.view.ActionMode.Callback
 import android.view.Menu
 import android.view.MenuItem
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import org.kiwix.kiwixmobile.base.BaseActivity
 
 fun Activity.startActionMode(
   menuId: Int,
@@ -40,3 +46,12 @@ fun Activity.startActionMode(
     }
   })
 }
+
+inline fun <reified T : Activity> Activity.start() {
+  startActivity(Intent(this, T::class.java))
+}
+
+inline fun <reified T : ViewModel> FragmentActivity.viewModel(viewModelFactory: ViewModelProvider.Factory) =
+  ViewModelProviders.of(this, viewModelFactory)
+      .get(T::class.java)
+

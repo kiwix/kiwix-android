@@ -27,7 +27,6 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import eu.mhutti1.utils.storage.StorageDevice
@@ -42,6 +41,7 @@ import org.kiwix.kiwixmobile.di.components.ActivityComponent
 import org.kiwix.kiwixmobile.downloader.Downloader
 import org.kiwix.kiwixmobile.extensions.snack
 import org.kiwix.kiwixmobile.extensions.toast
+import org.kiwix.kiwixmobile.extensions.viewModel
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.main.MainActivity
 import org.kiwix.kiwixmobile.utils.BookUtils
@@ -72,10 +72,10 @@ class LibraryFragment : BaseFragment() {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var bookUtils: BookUtils
 
-  private val zimManageViewModel: ZimManageViewModel by lazy {
-    ViewModelProviders.of(activity!!, viewModelFactory)
-      .get(ZimManageViewModel::class.java)
+  private val zimManageViewModel by lazy {
+    activity!!.viewModel<ZimManageViewModel>(viewModelFactory)
   }
+
   private val libraryAdapter: LibraryAdapter by lazy {
     LibraryAdapter(
       BookDelegate(bookUtils, ::onBookItemClick), DividerDelegate

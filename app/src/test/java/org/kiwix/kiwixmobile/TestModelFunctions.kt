@@ -21,7 +21,9 @@ import org.kiwix.kiwixmobile.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.downloader.model.DownloadState.Pending
 import org.kiwix.kiwixmobile.downloader.model.DownloadStatus
+import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.zim_manager.Language
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import java.io.File
 
@@ -76,3 +78,19 @@ fun downloadModel(
   downloadId: Long = 1L,
   book: Book = book()
 ) = DownloadModel(databaseId, downloadId, book)
+
+fun language(
+  id: Long = 0,
+  isActive: Boolean = false,
+  occurencesOfLanguage: Int = 0,
+  language: String = "",
+  languageLocalized: String = "",
+  languageCode: String = "",
+  languageCodeISO2: String = ""
+) = Language(
+    id, isActive, occurencesOfLanguage, language, languageLocalized, languageCode,
+    languageCodeISO2
+)
+
+fun languageItem(language: Language = language()) =
+  LanguageItem(language)

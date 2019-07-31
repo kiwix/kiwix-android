@@ -29,7 +29,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
@@ -40,6 +39,7 @@ import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.base.BaseFragment
 import org.kiwix.kiwixmobile.di.components.ActivityComponent
 import org.kiwix.kiwixmobile.extensions.toast
+import org.kiwix.kiwixmobile.extensions.viewModel
 import org.kiwix.kiwixmobile.utils.Constants.REQUEST_STORAGE_PERMISSION
 import org.kiwix.kiwixmobile.utils.LanguageUtils
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
@@ -61,11 +61,9 @@ class ZimFileSelectFragment : BaseFragment() {
   private var actionMode: ActionMode? = null
   val disposable = CompositeDisposable()
 
-  private val zimManageViewModel: ZimManageViewModel by lazy {
-    ViewModelProviders.of(activity!!, viewModelFactory)
-      .get(ZimManageViewModel::class.java)
+  private val zimManageViewModel by lazy {
+    activity!!.viewModel<ZimManageViewModel>(viewModelFactory)
   }
-
   private val bookDelegate: BookDelegate by lazy {
     BookDelegate(sharedPreferenceUtil,
       { offerAction(RequestOpen(it)) },

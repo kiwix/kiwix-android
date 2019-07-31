@@ -20,6 +20,7 @@
 package org.kiwix.kiwixmobile.main;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.ActivityNotFoundException;
@@ -320,6 +321,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
   }
 
+  @SuppressLint("ClickableViewAccessibility")
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -331,6 +333,15 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     setContentView(R.layout.activity_main);
     setSupportActionBar(toolbar);
     actionBar = getSupportActionBar();
+
+    toolbar.setOnTouchListener(new OnSwipeTouchListener(this) {
+
+      @Override
+      @SuppressLint("SyntheticAccessor")
+      public void onSwipeBottom() {
+        showTabSwitcher();
+      }
+    });
 
     tableDrawerRight =
         tableDrawerRightContainer.getHeaderView(0).findViewById(R.id.right_drawer_list);

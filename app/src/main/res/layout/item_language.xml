@@ -57,4 +57,9 @@
       app:layout_constraintTop_toTopOf="parent"
       tools:text="9 books"
       />
+  <View
+      android:background="?android:attr/selectableItemBackground"
+      android:id="@+id/item_language_clickable_area"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

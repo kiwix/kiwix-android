@@ -26,8 +26,8 @@ class AdapterDelegateManager<T> {
   private fun getDelegateIndexFor(item: T): Int {
     for (index in 0..delegates.size()) {
       val valueAt = delegates.valueAt(index)
-      if (valueAt.isFor(item)) {
-        return index
+      if (valueAt?.isFor(item) == true) {
+        return index;
       }
     }
     throw RuntimeException("No delegate registered for $item")

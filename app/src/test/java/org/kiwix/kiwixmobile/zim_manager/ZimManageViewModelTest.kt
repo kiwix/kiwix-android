@@ -49,6 +49,7 @@ import org.kiwix.kiwixmobile.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.downloader.model.DownloadStatus
 import org.kiwix.kiwixmobile.downloader.model.UriToFileConverter
+import org.kiwix.kiwixmobile.language
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.resetSchedulers
@@ -284,7 +285,7 @@ class ZimManageViewModelTest {
             languageCodeISO2 = "en"
           )
         ),
-        Language(true, 1, "", "", "", "")
+        language(isActive = true, occurencesOfLanguage = 1)
       )
       verify(exactly = 0) { newLanguagesDao.insert(any()) }
     }
@@ -341,7 +342,7 @@ class ZimManageViewModelTest {
           Book().apply { language = "fra" }
         ),
         listOf(dbLanguage),
-        Language(true, 1, "", "", "", "")
+        language(isActive = true, occurencesOfLanguage = 1)
       )
       verify {
         newLanguagesDao.insert(
@@ -384,20 +385,6 @@ class ZimManageViewModelTest {
     networkStates.offer(NOT_CONNECTED)
     viewModel.networkStates.test()
       .assertValue(NOT_CONNECTED)
-  }
-
-  @Test
-  fun `language items for dialog observed`() {
-    val expectedValue = listOf(
-      Language(true, 1, "e", "e", "e", "e")
-    )
-    testScheduler.triggerActions()
-    languages.onNext(expectedValue)
-    testScheduler.triggerActions()
-    viewModel.requestLanguagesDialog.onNext(Unit)
-    testScheduler.triggerActions()
-    viewModel.languageItems.test()
-      .assertValue(expectedValue)
   }
 
   @Test
@@ -446,8 +433,8 @@ class ZimManageViewModelTest {
     books.onNext(listOf(bookOnDisk(book = bookAlreadyOnDisk)))
     languages.onNext(
       listOf(
-        Language(true, 1, "", "", "activeLanguage", ""),
-        Language(false, 1, "", "", "inactiveLanguage", "")
+        language(isActive = true, occurencesOfLanguage = 1, languageCode = "activeLanguage"),
+        language(isActive = false, occurencesOfLanguage = 1, languageCode = "inactiveLanguage")
       )
     )
     fileSystemStates.onNext(CanWrite4GbFile)
@@ -481,7 +468,7 @@ class ZimManageViewModelTest {
     books.onNext(listOf())
     languages.onNext(
       listOf(
-        Language(true, 1, "", "", "activeLanguage", "")
+        language(isActive = true, occurencesOfLanguage = 1, languageCode = "activeLanguage")
       )
     )
     fileSystemStates.onNext(CannotWrite4GbFile)

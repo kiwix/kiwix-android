@@ -92,7 +92,7 @@ public class BookmarksActivity extends BaseActivity implements BookmarksContract
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     presenter.attachView(this);
-    setContentView(R.layout.activity_bookmarks_history_language);
+    setContentView(R.layout.activity_bookmarks);
     setSupportActionBar(toolbar);
 
     ActionBar actionBar = getSupportActionBar();

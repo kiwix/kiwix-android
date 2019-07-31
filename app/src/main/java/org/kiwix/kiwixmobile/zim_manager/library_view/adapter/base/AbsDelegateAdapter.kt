@@ -25,6 +25,8 @@ interface AbsDelegateAdapter<INSTANCE : SUPERTYPE,
   out VIEWHOLDER : BaseViewHolder<INSTANCE>> :
   AdapterDelegate<SUPERTYPE> {
   val itemClass: Class<INSTANCE>
+
+  @Suppress("UNCHECKED_CAST")
   override fun bind(
     viewHolder: RecyclerView.ViewHolder,
     itemToBind: SUPERTYPE
