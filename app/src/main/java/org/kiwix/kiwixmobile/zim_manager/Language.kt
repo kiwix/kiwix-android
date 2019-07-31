@@ -21,13 +21,13 @@ data class Language constructor(
     occurrencesOfLanguage: Int,
     id: Long = 0
   ) : this(
-      id,
-      active,
-      occurrencesOfLanguage,
-      locale.displayLanguage,
-      locale.getDisplayLanguage(locale),
-      locale.isO3Language,
-      locale.language
+    id,
+    active,
+    occurrencesOfLanguage,
+    locale.displayLanguage,
+    locale.getDisplayLanguage(locale),
+    locale.isO3Language,
+    locale.language
   )
 
   constructor(
@@ -36,8 +36,13 @@ data class Language constructor(
     occurrencesOfLanguage: Int
   ) : this(Locale(languageCode), active, occurrencesOfLanguage)
 
-  override fun equals(other: Any?): Boolean {
-    return (other as Language).language == language && other.active == active
+  override fun equals(other: Any?): Boolean =
+    (other as Language).language == language && other.active == active
+
+  override fun hashCode(): Int {
+    var result = active.hashCode()
+    result = 31 * result + language.hashCode()
+    return result
   }
 
   fun matches(filter: String) =

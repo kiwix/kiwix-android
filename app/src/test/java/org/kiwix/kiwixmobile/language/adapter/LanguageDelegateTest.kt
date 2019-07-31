@@ -48,7 +48,7 @@ class LanguageDelegateTest {
       mockkStatic("org.kiwix.kiwixmobile.extensions.ViewGroupExtensionsKt")
       every { parent.inflate(R.layout.header_date, false) } returns mockk(relaxed = true)
       assertThat(HeaderDelegate().createViewHolder(parent))
-          .isInstanceOf(HeaderViewHolder::class.java)
+        .isInstanceOf(HeaderViewHolder::class.java)
     }
   }
 
@@ -56,7 +56,7 @@ class LanguageDelegateTest {
   inner class LanguageItemDelegateTests {
     @Test
     fun `class is lanuguage item`() {
-      assertThat(LanguageItemDelegate({}).itemClass).isEqualTo(LanguageItem::class.java)
+      assertThat(LanguageItemDelegate {}.itemClass).isEqualTo(LanguageItem::class.java)
     }
 
     @Test
@@ -66,7 +66,7 @@ class LanguageDelegateTest {
       every { parent.inflate(R.layout.item_language, false) } returns mockk(relaxed = true)
       val clickAction = mockk<(LanguageItem) -> Unit>()
       assertThat(LanguageItemDelegate(clickAction).createViewHolder(parent))
-          .isInstanceOf(LanguageViewHolder::class.java)
+        .isInstanceOf(LanguageViewHolder::class.java)
     }
   }
 }

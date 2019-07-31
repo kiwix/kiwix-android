@@ -41,27 +41,27 @@ data class DownloadEntity(
   val favIcon: String
 ) {
   constructor(downloadModel: DownloadModel) : this(
-      0,
-      downloadModel.downloadId,
-      downloadModel.book.getId(),
-      downloadModel.book.getTitle(),
-      downloadModel.book.getDescription(),
-      downloadModel.book.getLanguage(),
-      downloadModel.book.getCreator(),
-      downloadModel.book.getPublisher(),
-      downloadModel.book.getDate(),
-      downloadModel.book.getUrl(),
-      downloadModel.book.getArticleCount(),
-      downloadModel.book.getMediaCount(),
-      downloadModel.book.getSize(),
-      downloadModel.book.getName(),
-      downloadModel.book.getFavicon()
+    0,
+    downloadModel.downloadId,
+    downloadModel.book.getId(),
+    downloadModel.book.getTitle(),
+    downloadModel.book.getDescription(),
+    downloadModel.book.getLanguage(),
+    downloadModel.book.getCreator(),
+    downloadModel.book.getPublisher(),
+    downloadModel.book.getDate(),
+    downloadModel.book.getUrl(),
+    downloadModel.book.getArticleCount(),
+    downloadModel.book.getMediaCount(),
+    downloadModel.book.getSize(),
+    downloadModel.book.name,
+    downloadModel.book.getFavicon()
   )
 
   fun toDownloadModel() = DownloadModel(id, downloadId, toBook())
 
   private fun toBook() = Book().apply {
-    id = this@DownloadEntity.bookId
+    id = bookId
     title = this@DownloadEntity.title
     description = this@DownloadEntity.description
     language = this@DownloadEntity.language
@@ -72,7 +72,7 @@ data class DownloadEntity(
     articleCount = this@DownloadEntity.articleCount
     mediaCount = this@DownloadEntity.mediaCount
     size = this@DownloadEntity.size
-    bookName = this@DownloadEntity.name
-    favicon = this@DownloadEntity.favIcon
+    bookName = name
+    favicon = favIcon
   }
 }

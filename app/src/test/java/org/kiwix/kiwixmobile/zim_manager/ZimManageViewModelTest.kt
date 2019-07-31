@@ -122,9 +122,9 @@ class ZimManageViewModelTest {
     every { application.registerReceiver(any(), any()) } returns mockk()
     every { dataSource.booksOnDiskAsListItems() } returns booksOnDiskListItems
     viewModel = ZimManageViewModel(
-        newDownloadDao, newBookDao, newLanguagesDao, downloader,
-        storageObserver, kiwixService, application, connectivityBroadcastReceiver, bookUtils,
-        fat32Checker, uriToFileConverter, defaultLanguageProvider, dataSource
+      newDownloadDao, newBookDao, newLanguagesDao, downloader,
+      storageObserver, kiwixService, application, connectivityBroadcastReceiver, bookUtils,
+      fat32Checker, uriToFileConverter, defaultLanguageProvider, dataSource
     )
     testScheduler.triggerActions()
   }
@@ -155,16 +155,16 @@ class ZimManageViewModelTest {
       val expectedStatus = downloadStatus()
       expectStatusWith(listOf(expectedStatus))
       viewModel.downloadItems
-          .test()
-          .assertValue(listOf(DownloadItem(expectedStatus)))
+        .test()
+        .assertValue(listOf(DownloadItem(expectedStatus)))
     }
 
     @Test
     fun `on emission of successful status create a book and delete the download`() {
       every { uriToFileConverter.convert(any()) } returns File("test")
       val expectedStatus = downloadStatus(
-          downloadId = 10L,
-          downloadState = DownloadState.Successful
+        downloadId = 10L,
+        downloadState = DownloadState.Successful
       )
       expectStatusWith(listOf(expectedStatus))
       val element = expectedStatus.toBookOnDisk(uriToFileConverter)
@@ -177,8 +177,8 @@ class ZimManageViewModelTest {
     @Test
     fun `if statuses don't have a matching Id for download in db over 3 secs then delete`() {
       expectStatusWith(
-          listOf(downloadStatus(downloadId = 1)),
-          listOf(downloadModel(downloadId = 1), downloadModel(downloadId = 3))
+        listOf(downloadStatus(downloadId = 1)),
+        listOf(downloadModel(downloadId = 1), downloadModel(downloadId = 3))
       )
       testScheduler.advanceTimeBy(3, SECONDS)
       testScheduler.triggerActions()
@@ -190,8 +190,8 @@ class ZimManageViewModelTest {
     @Test
     fun `if statuses do have a matching Id for download in db over 3 secs then don't delete`() {
       expectStatusWith(
-          listOf(downloadStatus(downloadId = 1)),
-          listOf(downloadModel(downloadId = 1))
+        listOf(downloadStatus(downloadId = 1)),
+        listOf(downloadModel(downloadId = 1))
       )
       testScheduler.advanceTimeBy(3, SECONDS)
       testScheduler.triggerActions()
@@ -203,13 +203,12 @@ class ZimManageViewModelTest {
     private fun expectStatusWith(
       expectedStatuses: List<DownloadStatus>,
       expectedDownloads: List<DownloadModel> = listOf(
-          downloadModel()
+        downloadModel()
       )
     ) {
       every { application.getString(any()) } returns ""
-      val downloadList = expectedDownloads
-      every { downloader.queryStatus(downloadList) } returns expectedStatuses
-      downloads.offer(downloadList)
+      every { downloader.queryStatus(expectedDownloads) } returns expectedStatuses
+      downloads.offer(expectedDownloads)
       testScheduler.triggerActions()
       testScheduler.advanceTimeBy(1, SECONDS)
       testScheduler.triggerActions()
@@ -224,7 +223,7 @@ class ZimManageViewModelTest {
       booksOnDiskListItems.onNext(expectedList)
       testScheduler.triggerActions()
       viewModel.fileSelectListStates.test()
-          .assertValue(FileSelectListState(expectedList))
+        .assertValue(FileSelectListState(expectedList))
     }
 
     @Test
@@ -238,11 +237,11 @@ class ZimManageViewModelTest {
       books.onNext(listOf(bookToRemove))
       testScheduler.triggerActions()
       booksOnFileSystem.onNext(
-          listOf(
-              expectedBook,
-              expectedBook,
-              bookToRemove
-          )
+        listOf(
+          expectedBook,
+          expectedBook,
+          bookToRemove
+        )
       )
       testScheduler.triggerActions()
       verify {
@@ -255,109 +254,109 @@ class ZimManageViewModelTest {
   inner class Lanuages {
 
     @Test
-    fun `a network request with no result and an empty language db triggers an activation of the default locale`() {
+    fun `network no result & empty language db activates the default locale`() {
       val expectedLanguage = Language(
-          active = true,
-          occurencesOfLanguage = 1,
-          language = "eng",
-          languageLocalized = "englocal",
-          languageCode = "ENG",
-          languageCodeISO2 = "en"
+        active = true,
+        occurencesOfLanguage = 1,
+        language = "eng",
+        languageLocalized = "englocal",
+        languageCode = "ENG",
+        languageCodeISO2 = "en"
       )
       expectNetworkDbAndDefault(
-          listOf(),
-          listOf(),
-          expectedLanguage
+        listOf(),
+        listOf(),
+        expectedLanguage
       )
       verify { newLanguagesDao.insert(listOf(expectedLanguage)) }
     }
 
     @Test
-    fun `a network request with no result and a non empty language db does not trigger anything`() {
+    fun `network no result & a language db result triggers nothing`() {
       expectNetworkDbAndDefault(
-          listOf(),
-          listOf(
-              Language(
-                  active = true,
-                  occurencesOfLanguage = 1,
-                  language = "eng",
-                  languageLocalized = "englocal",
-                  languageCode = "ENG",
-                  languageCodeISO2 = "en"
-              )
-          ),
-          language(isActive = true, occurencesOfLanguage = 1)
+        listOf(),
+        listOf(
+          Language(
+            active = true,
+            occurencesOfLanguage = 1,
+            language = "eng",
+            languageLocalized = "englocal",
+            languageCode = "ENG",
+            languageCodeISO2 = "en"
+          )
+        ),
+        language(isActive = true, occurencesOfLanguage = 1)
       )
       verify(exactly = 0) { newLanguagesDao.insert(any()) }
     }
 
     @Test
-    fun `a network request with a result and an empty language db triggers an activation of the default locale with the result of the web request`() {
+    fun `network result & empty language db triggers combined result of default + network`() {
       val defaultLanguage = Language(
-          active = true,
-          occurencesOfLanguage = 1,
-          language = "English",
-          languageLocalized = "English",
-          languageCode = "eng",
-          languageCodeISO2 = "eng"
+        active = true,
+        occurencesOfLanguage = 1,
+        language = "English",
+        languageLocalized = "English",
+        languageCode = "eng",
+        languageCodeISO2 = "eng"
       )
       expectNetworkDbAndDefault(
-          listOf(
-              Book().apply { language = "eng" },
-              Book().apply { language = "eng" },
-              Book().apply { language = "fra" }
-          ),
-          listOf(),
-          defaultLanguage)
+        listOf(
+          Book().apply { language = "eng" },
+          Book().apply { language = "eng" },
+          Book().apply { language = "fra" }
+        ),
+        listOf(),
+        defaultLanguage)
       verify {
         newLanguagesDao.insert(
-            listOf(
-                defaultLanguage.copy(occurencesOfLanguage = 2),
-                Language(
-                    active = false,
-                    occurencesOfLanguage = 1,
-                    language = "fra",
-                    languageLocalized = "",
-                    languageCode = "",
-                    languageCodeISO2 = ""
-                )
+          listOf(
+            defaultLanguage.copy(occurencesOfLanguage = 2),
+            Language(
+              active = false,
+              occurencesOfLanguage = 1,
+              language = "fra",
+              languageLocalized = "",
+              languageCode = "",
+              languageCodeISO2 = ""
             )
+          )
         )
       }
     }
 
     @Test
-    fun `a network request with a result and a non empty language db triggers an activation of the result of the web request with the db`() {
+    fun `network result & language db results activates a combined network + db result`() {
       val dbLanguage = Language(
-          active = true,
-          occurencesOfLanguage = 1,
-          language = "English",
-          languageLocalized = "English",
-          languageCode = "eng",
-          languageCodeISO2 = "eng"
+        active = true,
+        occurencesOfLanguage = 1,
+        language = "English",
+        languageLocalized = "English",
+        languageCode = "eng",
+        languageCodeISO2 = "eng"
       )
       expectNetworkDbAndDefault(
-          listOf(
-              Book().apply { language = "eng" },
-              Book().apply { language = "eng" },
-              Book().apply { language = "fra" }
-          ),
-          listOf(dbLanguage),
-          language(isActive = true, occurencesOfLanguage = 1)
+        listOf(
+          Book().apply { language = "eng" },
+          Book().apply { language = "eng" },
+          Book().apply { language = "fra" }
+        ),
+        listOf(dbLanguage),
+        language(isActive = true, occurencesOfLanguage = 1)
       )
       verify {
         newLanguagesDao.insert(
-            listOf(
-                dbLanguage.copy(occurencesOfLanguage = 2),
-                Language(
-                    active = false,
-                    occurencesOfLanguage = 1,
-                    language = "fra",
-                    languageLocalized = "",
-                    languageCode = "",
-                    languageCodeISO2 = ""
-                )
+          listOf(
+            dbLanguage.copy(occurencesOfLanguage = 2),
+            Language(
+              active = false,
+              occurencesOfLanguage = 1,
+              language = "fra",
+              languageLocalized = "",
+              languageCode = "",
+              languageCodeISO2 = ""
             )
+          )
         )
       }
     }
@@ -369,9 +368,9 @@ class ZimManageViewModelTest {
     ) {
       every { application.getString(any()) } returns ""
       every { kiwixService.library } returns Single.just(
-          LibraryNetworkEntity().apply {
-            book = LinkedList(networkBooks)
-          })
+        LibraryNetworkEntity().apply {
+          book = LinkedList(networkBooks)
+        })
       val defaultLanguage = defaultLanguage
       every { defaultLanguageProvider.provide() } returns defaultLanguage
       languages.onNext(dbBooks)
@@ -385,7 +384,7 @@ class ZimManageViewModelTest {
   fun `network states observed`() {
     networkStates.offer(NOT_CONNECTED)
     viewModel.networkStates.test()
-        .assertValue(NOT_CONNECTED)
+      .assertValue(NOT_CONNECTED)
   }
 
   @Test
@@ -417,39 +416,39 @@ class ZimManageViewModelTest {
       url = ""
     }
     every { kiwixService.library } returns Single.just(
-        LibraryNetworkEntity().apply {
-          book = LinkedList(
-              listOf(
-                  bookAlreadyOnDisk,
-                  bookDownloading,
-                  bookWithStackExchange,
-                  bookWithActiveLanguage,
-                  bookWithInactiveLanguage
-              )
+      LibraryNetworkEntity().apply {
+        book = LinkedList(
+          listOf(
+            bookAlreadyOnDisk,
+            bookDownloading,
+            bookWithStackExchange,
+            bookWithActiveLanguage,
+            bookWithInactiveLanguage
           )
-        }
+        )
+      }
     )
     networkStates.onNext(CONNECTED)
     downloads.onNext(listOf(downloadModel(book = bookDownloading)))
     books.onNext(listOf(bookOnDisk(book = bookAlreadyOnDisk)))
     languages.onNext(
-        listOf(
-            language(isActive = true, occurencesOfLanguage = 1, languageCode = "activeLanguage"),
-            language(isActive = false, occurencesOfLanguage = 1, languageCode = "inactiveLanguage")
-        )
+      listOf(
+        language(isActive = true, occurencesOfLanguage = 1, languageCode = "activeLanguage"),
+        language(isActive = false, occurencesOfLanguage = 1, languageCode = "inactiveLanguage")
+      )
     )
     fileSystemStates.onNext(CanWrite4GbFile)
     testScheduler.advanceTimeBy(500, MILLISECONDS)
     testScheduler.triggerActions()
     viewModel.libraryItems.test()
-        .assertValue(
-            listOf(
-                LibraryListItem.DividerItem(Long.MAX_VALUE, "1"),
-                LibraryListItem.BookItem(bookWithActiveLanguage),
-                LibraryListItem.DividerItem(Long.MIN_VALUE, "2"),
-                LibraryListItem.BookItem(bookWithInactiveLanguage)
-            )
+      .assertValue(
+        listOf(
+          LibraryListItem.DividerItem(Long.MAX_VALUE, "1"),
+          LibraryListItem.BookItem(bookWithActiveLanguage),
+          LibraryListItem.DividerItem(Long.MIN_VALUE, "2"),
+          LibraryListItem.BookItem(bookWithInactiveLanguage)
         )
+      )
   }
 
   @Test
@@ -460,22 +459,22 @@ class ZimManageViewModelTest {
       size = "${Fat32Checker.FOUR_GIGABYTES_IN_KILOBYTES + 1}"
     }
     every { kiwixService.library } returns Single.just(
-        LibraryNetworkEntity().apply {
-          book = LinkedList(listOf(bookOver4Gb))
-        }
+      LibraryNetworkEntity().apply {
+        book = LinkedList(listOf(bookOver4Gb))
+      }
     )
     networkStates.onNext(CONNECTED)
     downloads.onNext(listOf())
     books.onNext(listOf())
     languages.onNext(
-        listOf(
-            language(isActive = true, occurencesOfLanguage = 1, languageCode =  "activeLanguage")
-        )
+      listOf(
+        language(isActive = true, occurencesOfLanguage = 1, languageCode = "activeLanguage")
+      )
     )
     fileSystemStates.onNext(CannotWrite4GbFile)
     testScheduler.advanceTimeBy(500, MILLISECONDS)
     testScheduler.triggerActions()
     viewModel.libraryItems.test()
-        .assertValue(listOf())
+      .assertValue(listOf())
   }
 }

@@ -28,25 +28,25 @@ data class BookOnDiskEntity(
   val favIcon: String
 ) {
   constructor(bookOnDisk: BookOnDisk) : this(
-      0,
-      bookOnDisk.file,
-      bookOnDisk.book.getId(),
-      bookOnDisk.book.getTitle(),
-      bookOnDisk.book.getDescription(),
-      bookOnDisk.book.getLanguage(),
-      bookOnDisk.book.getCreator(),
-      bookOnDisk.book.getPublisher(),
-      bookOnDisk.book.getDate(),
-      bookOnDisk.book.getUrl(),
-      bookOnDisk.book.getArticleCount(),
-      bookOnDisk.book.getMediaCount(),
-      bookOnDisk.book.getSize(),
-      bookOnDisk.book.getName(),
-      bookOnDisk.book.getFavicon()
+    0,
+    bookOnDisk.file,
+    bookOnDisk.book.getId(),
+    bookOnDisk.book.getTitle(),
+    bookOnDisk.book.getDescription(),
+    bookOnDisk.book.getLanguage(),
+    bookOnDisk.book.getCreator(),
+    bookOnDisk.book.getPublisher(),
+    bookOnDisk.book.getDate(),
+    bookOnDisk.book.getUrl(),
+    bookOnDisk.book.getArticleCount(),
+    bookOnDisk.book.getMediaCount(),
+    bookOnDisk.book.getSize(),
+    bookOnDisk.book.name,
+    bookOnDisk.book.getFavicon()
   )
 
   fun toBook() = Book().apply {
-    id = this@BookOnDiskEntity.bookId
+    id = bookId
     title = this@BookOnDiskEntity.title
     description = this@BookOnDiskEntity.description
     language = this@BookOnDiskEntity.language
@@ -57,15 +57,13 @@ data class BookOnDiskEntity(
     articleCount = this@BookOnDiskEntity.articleCount
     mediaCount = this@BookOnDiskEntity.mediaCount
     size = this@BookOnDiskEntity.size
-    bookName = this@BookOnDiskEntity.name
-    favicon = this@BookOnDiskEntity.favIcon
+    bookName = name
+    favicon = favIcon
   }
-
 }
 
 class StringToFileConverter : PropertyConverter<File, String> {
   override fun convertToDatabaseValue(entityProperty: File?) = entityProperty?.path ?: ""
 
   override fun convertToEntityProperty(databaseValue: String?) = File(databaseValue ?: "")
-
 }

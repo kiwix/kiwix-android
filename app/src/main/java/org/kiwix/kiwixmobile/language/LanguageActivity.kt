@@ -15,16 +15,16 @@ import kotlinx.android.synthetic.main.activity_language.toolbar
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.base.BaseActivity
 import org.kiwix.kiwixmobile.extensions.viewModel
-import org.kiwix.kiwixmobile.language.viewmodel.Action.Select
-import org.kiwix.kiwixmobile.language.viewmodel.State.Content
-import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
-import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
 import org.kiwix.kiwixmobile.language.adapter.LanguageAdapter
 import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.HeaderDelegate
 import org.kiwix.kiwixmobile.language.adapter.LanguageDelegate.LanguageItemDelegate
 import org.kiwix.kiwixmobile.language.viewmodel.Action
+import org.kiwix.kiwixmobile.language.viewmodel.Action.Select
 import org.kiwix.kiwixmobile.language.viewmodel.LanguageViewModel
 import org.kiwix.kiwixmobile.language.viewmodel.State
+import org.kiwix.kiwixmobile.language.viewmodel.State.Content
+import org.kiwix.kiwixmobile.language.viewmodel.State.Loading
+import org.kiwix.kiwixmobile.language.viewmodel.State.Saving
 import org.kiwix.kiwixmobile.zim_manager.SimpleTextListener
 import javax.inject.Inject
 
@@ -38,8 +38,8 @@ class LanguageActivity : BaseActivity() {
 
   private val languageAdapter =
     LanguageAdapter(
-        LanguageItemDelegate { languageViewModel.actions.offer(Select(it)) },
-        HeaderDelegate()
+      LanguageItemDelegate { languageViewModel.actions.offer(Select(it)) },
+      HeaderDelegate()
     )
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,16 +57,14 @@ class LanguageActivity : BaseActivity() {
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
     }
-    languageViewModel.state.observe(this, Observer {
-      render(it)
-    })
+    languageViewModel.state.observe(this, Observer(::render))
     compositeDisposable.add(
-        languageViewModel.effects.subscribe(
-            {
-              it.invokeWith(this)
-            },
-            Throwable::printStackTrace
-        )
+      languageViewModel.effects.subscribe(
+        {
+          it.invokeWith(this)
+        },
+        Throwable::printStackTrace
+      )
     )
   }
 
@@ -106,5 +104,4 @@ class LanguageActivity : BaseActivity() {
     }
     return super.onOptionsItemSelected(item)
   }
-
 }

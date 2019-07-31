@@ -26,17 +26,17 @@ import org.junit.jupiter.api.Test
 class BookUtilsTest {
   private val container: LanguageUtils.LanguageContainer = mockk()
 
-  //Test that the language returned for the given language code is correct
+  // Test that the language returned for the given language code is correct
   @Test
   fun testLanguageFromCode() {
     val t = BookUtils(container)
 
-    //testing trivial cases
+    // testing trivial cases
     assertEquals("null is passed", "", t.getLanguage(null))
     assertEquals("empty string passed", "", t.getLanguage(""))
     assertEquals("code length more than 3", "", t.getLanguage("english"))
 
-    //testing the hashmap created inside the BookUtils class
+    // testing the hashmap created inside the BookUtils class
     assertEquals("code length equals 3 (English)", "English", t.getLanguage("eng"))
     assertEquals("code length equals 3 (Hindi)", "Hindi", t.getLanguage("hin"))
     assertEquals("code length equals 3 (French)", "French", t.getLanguage("fra"))
@@ -44,9 +44,9 @@ class BookUtilsTest {
     assertEquals("code length equals 3 (Burmese)", "Burmese", t.getLanguage("mya"))
     assertEquals("code length equals 3 (Catalan)", "Catalan", t.getLanguage("cat"))
 
-    //this case uses the result from the container nested class inside LanguageUtils. It will be tested in LanguageUtilsTest
+    // this case uses the result from the container nested class inside LanguageUtils. It will be tested in LanguageUtilsTest
     every { container.findLanguageName(any()) } returns container
-    every { container.languageName} returns "English"
+    every { container.languageName } returns "English"
     assertEquals("code length equals 2 (dummy)", "English", t.getLanguage("en"))
   }
 }

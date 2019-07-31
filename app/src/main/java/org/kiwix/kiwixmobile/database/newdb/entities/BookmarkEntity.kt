@@ -32,12 +32,12 @@ data class BookmarkEntity(
   var favicon: String
 ) {
   constructor(item: BookmarkItem) : this(
-      item.databaseId,
-      item.zimId,
-      item.zimName,
-      item.zimFilePath,
-      item.bookmarkUrl,
-      item.bookmarkTitle,
-      item.favicon
+    item.databaseId,
+    item.zimId,
+    item.zimName,
+    item.zimFilePath,
+    item.bookmarkUrl,
+    item.bookmarkTitle,
+    item.favicon
   )
 }

@@ -11,11 +11,11 @@ fun Book.calculateSearchMatches(
 ) {
   val searchableText = buildSearchableText(bookUtils)
   searchMatches = filter.split("\\s+")
-      .foldRight(0,
-          { filterWord, acc ->
-            if (searchableText.contains(filterWord, true)) acc + 1
-            else acc
-          })
+    .foldRight(0,
+      { filterWord, acc ->
+        if (searchableText.contains(filterWord, true)) acc + 1
+        else acc
+      })
 }
 
 fun Book.buildSearchableText(bookUtils: BookUtils): String =
@@ -25,7 +25,7 @@ fun Book.buildSearchableText(bookUtils: BookUtils): String =
     append(description)
     append("|")
     append(NetworkUtils.parseURL(KiwixApplication.getInstance(), url))
-    append("|");
+    append("|")
     if (bookUtils.localeMap.containsKey(language)) {
       append(bookUtils.localeMap[language]!!.displayLanguage)
       append("|")

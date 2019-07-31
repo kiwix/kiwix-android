@@ -1,11 +1,10 @@
 package org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base
 
-
 import android.view.ViewGroup
 import androidx.collection.SparseArrayCompat
 import androidx.recyclerview.widget.RecyclerView
 
-class AdapterDelegateManager<T>() {
+class AdapterDelegateManager<T> {
   fun addDelegate(delegate: AdapterDelegate<T>) {
     delegates.put(delegates.size(), delegate)
   }
@@ -28,12 +27,11 @@ class AdapterDelegateManager<T>() {
     for (index in 0..delegates.size()) {
       val valueAt = delegates.valueAt(index)
       if (valueAt?.isFor(item) == true) {
-        return index;
+        return index
       }
     }
     throw RuntimeException("No delegate registered for $item")
   }
 
   var delegates: SparseArrayCompat<AdapterDelegate<T>> = SparseArrayCompat()
-
 }

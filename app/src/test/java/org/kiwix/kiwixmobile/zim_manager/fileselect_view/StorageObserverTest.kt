@@ -86,17 +86,17 @@ class StorageObserverTest {
   @Test
   fun `iterable ZimContentProvider with zim file produces a book`() {
     val expectedBook = book(
-        "id", "title", "1", "favicon", "creator", "publisher", "date",
-        "description", "language"
+      "id", "title", "1", "favicon", "creator", "publisher", "date",
+      "description", "language"
     )
     mockkStatic(ZimContentProvider::class)
     withNoFiltering()
     every { ZimContentProvider.setZimFile("This won't match") } returns ""
     expect(expectedBook)
     booksOnFileSystem().assertValues(
-        listOf(
-            bookOnDisk(book = expectedBook, file = file, databaseId = null)
-        )
+      listOf(
+        bookOnDisk(book = expectedBook, file = file, databaseId = null)
+      )
     )
     assertThat(ZimContentProvider.originalFileName).isEqualTo("")
   }
@@ -119,11 +119,11 @@ class StorageObserverTest {
   }
 
   private fun booksOnFileSystem() = storageObserver.booksOnFileSystem
-      .test()
-      .also {
-        downloads.offer(listOf(downloadModel))
-        files.offer(listOf(file))
-      }
+    .test()
+    .also {
+      downloads.offer(listOf(downloadModel))
+      files.offer(listOf(file))
+    }
 
   private fun expect(expectedBook: Book) {
     every { ZimContentProvider.getZimFileTitle() } returns expectedBook.title

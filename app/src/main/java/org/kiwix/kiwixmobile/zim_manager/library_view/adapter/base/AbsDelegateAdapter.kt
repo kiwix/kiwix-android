@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base
 
-
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
@@ -22,10 +21,9 @@ import androidx.recyclerview.widget.RecyclerView
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 interface AbsDelegateAdapter<INSTANCE : SUPERTYPE,
-    SUPERTYPE : Any,
-    VIEWHOLDER : BaseViewHolder<INSTANCE>> :
-    AdapterDelegate<SUPERTYPE> {
-
+  SUPERTYPE : Any,
+  out VIEWHOLDER : BaseViewHolder<INSTANCE>> :
+  AdapterDelegate<SUPERTYPE> {
   val itemClass: Class<INSTANCE>
 
   @Suppress("UNCHECKED_CAST")

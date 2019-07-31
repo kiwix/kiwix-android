@@ -27,14 +27,14 @@ data class DownloadRequest(
   val description: String
 ) {
 
-  val uri get() = Uri.parse(urlString)
+  val uri: Uri get() = Uri.parse(urlString)
 
   constructor(
     metaLinkNetworkEntity: MetaLinkNetworkEntity,
     book: LibraryNetworkEntity.Book
   ) : this(
-      metaLinkNetworkEntity.relevantUrl.value,
-      book.title,
-      book.description
+    metaLinkNetworkEntity.relevantUrl.value,
+    book.title,
+    book.description
   )
 }

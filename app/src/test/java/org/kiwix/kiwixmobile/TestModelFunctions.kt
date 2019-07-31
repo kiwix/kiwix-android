@@ -69,8 +69,8 @@ fun downloadStatus(
   uri: String? = null,
   book: Book = book()
 ) = DownloadStatus(
-    downloadId, title, description, downloadState, bytesDownloadedSoFar,
-    totalSizeBytes, lastModified, localUri, mediaProviderUri, mediaType, uri, book
+  downloadId, title, description, downloadState, bytesDownloadedSoFar,
+  totalSizeBytes, lastModified, localUri, mediaProviderUri, mediaType, uri, book
 )
 
 fun downloadModel(
@@ -88,8 +88,8 @@ fun language(
   languageCode: String = "",
   languageCodeISO2: String = ""
 ) = Language(
-    id, isActive, occurencesOfLanguage, language, languageLocalized, languageCode,
-    languageCodeISO2
+  id, isActive, occurencesOfLanguage, language, languageLocalized, languageCode,
+  languageCodeISO2
 )
 
 fun languageItem(language: Language = language()) =

@@ -2,31 +2,12 @@
 
 Our code style guidelines is based on the [Square's Android Style Guide](https://github.com/square/java-code-styles/blob/master/configs/codestyles/SquareAndroid.xml).
 
-Download the xml file and [import it](https://user-images.githubusercontent.com/1624385/37678878-9b61b562-2c7f-11e8-9733-d1d593f0aa67.png) in IntelliJ/Android Studio.
-
-### For XML files
-
-Kiwix follows `2 spaces` for the `Indent` and `4 spaces` for the `Continuous Indent` values. (Same as that in Square's Style Guide) You can update these values using following steps:
-
-- Go to **Settings** -> **Editor** -> **Code Style** -> **XML**
-- Update the respective values under the **Tabs and Indents** tab
-
-After changing the values, one can simply select the files to indent, `Right click` -> `Reformat Code` -> Check `Rearrange entries` -> `OK`.
+Our code style is managed in version control and will be installed automatically when you clone the repo.
 
 ### Only a few extra rules
 
-- Line length is 120 characters
+- Line length is 100 characters
 - FIXME must not be committed in the repository use TODO instead. FIXME can be used in your own local repository only.
-
-You can run a checkstyle with most rules via a gradle command:
-
-```
-$ ./gradlew checkstyle
-```
-
-It generates a HTML report in `build/reports/checkstyle/checkstyle.html`.
-
-Try to remove as much warnings as possible, It's not completely possible to remove all the warnings, but over a period of time, we should try to make it as complete as possible.
 
 ### Some **DONT's**
 

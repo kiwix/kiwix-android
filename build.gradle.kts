@@ -35,7 +35,7 @@ ext {
   set("powerMockVersion", "1.6.6")
   set("powerMockJUnitVersion", "1.7.4")
   set("baristaVersion", "2.7.1")
-  set("kotlinVersion", "1.3.40")
+  set("kotlinVersion", "1.3.41")
   set("objectboxVersion", "2.3.4")
 }
 

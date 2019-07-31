@@ -38,11 +38,6 @@ proguard/
 ### Android Patch ###
 gen-external-apklibs
 
-# IDE
-.idea
-.settings
-*.iml
-
 # Mac OS X
 .DS_Store
 
@@ -55,3 +50,19 @@ glassify
 
 .vscode
 captures/
+
+# IDEA/Android Studio ignores
+*.iml
+*.ipr
+*.iws
+/.idea/*
+
+# IDEA/Android Studio Ignore exceptions
+!/.idea/vcs.xml
+!/.idea/fileTemplates/
+!/.idea/inspectionProfiles/
+!/.idea/scopes/
+!/.idea/codeStyles/
+!/.idea/encodings.xml
+!/.idea/copyright/
+!/.idea/compiler.xml

@@ -29,10 +29,10 @@ import java.io.File
 
 class FileUtilsTest {
 
-  val mockFile: File = mockk()
-  val testBook = Book().apply { file = mockFile }
-  val testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c"
-  val fileName = "/data/user/0/org.kiwix.kiwixmobile/files${File.separator}$testId"
+  private val mockFile: File = mockk()
+  private val testBook = Book().apply { file = mockFile }
+  private val testId = "8ce5775a-10a9-bbf3-178a-9df69f23263c"
+  private val fileName = "/data/user/0/org.kiwix.kiwixmobile/files${File.separator}$testId"
 
   @BeforeEach
   fun init() {
@@ -63,7 +63,7 @@ class FileUtilsTest {
   fun `Filename ends with zimXX and no such file exists at any such location`() {
     expect("zimab", false)
     assertThat(FileUtils.getAllZimParts(testBook).size).isEqualTo(0)
-        .withFailMessage("Nothing is returned in this case")
+      .withFailMessage("Nothing is returned in this case")
   }
 
   private fun testWith(
@@ -73,13 +73,13 @@ class FileUtilsTest {
     expect(extension, fileExists)
     val files = FileUtils.getAllZimParts(testBook)
     assertThat(files.size).isEqualTo(1)
-        .withFailMessage("Only a single book is returned in case the file has extension $extension")
+      .withFailMessage("Only a single book is returned in case the file has extension $extension")
     if (fileExists) {
       assertThat(testBook.file).isEqualTo(files[0])
-          .withFailMessage("The filename retained as such")
+        .withFailMessage("The filename retained as such")
     } else {
       assertThat(testBook.file.toString() + ".part").isEqualTo(files[0].path)
-          .withFailMessage("The filename is appended with .part")
+        .withFailMessage("The filename is appended with .part")
     }
   }
 
@@ -87,7 +87,7 @@ class FileUtilsTest {
     extension: String,
     fileExists: Boolean
   ) {
-    every { mockFile.getPath() } returns "$fileName$extension"
+    every { mockFile.path } returns "$fileName$extension"
     every { mockFile.exists() } returns fileExists
   }
 }

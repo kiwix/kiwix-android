@@ -39,7 +39,7 @@ import org.kiwix.kiwixmobile.downloader.model.FailureReason.Rfc2616HttpCode
 import org.kiwix.kiwixmobile.extensions.setBitmap
 
 class DownloadViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
-    LayoutContainer {
+  LayoutContainer {
   fun bind(
     downloadItem: DownloadItem,
     itemClickListener: (DownloadItem) -> Unit
@@ -52,7 +52,7 @@ class DownloadViewHolder(override val containerView: View) : RecyclerView.ViewHo
       itemClickListener.invoke(downloadItem)
     }
     downloadState.text = toReadableState(
-        downloadItem.downloadState, containerView.context
+      downloadItem.downloadState, containerView.context
     )
   }
 
@@ -61,12 +61,12 @@ class DownloadViewHolder(override val containerView: View) : RecyclerView.ViewHo
     context: Context
   ) = when (downloadState) {
     is Paused -> context.getString(
-        downloadState.stringId,
-        context.getString(downloadState.reason.stringId)
+      downloadState.stringId,
+      context.getString(downloadState.reason.stringId)
     )
     is Failed -> context.getString(
-        downloadState.stringId,
-        getTemplateString(downloadState, context)
+      downloadState.stringId,
+      getTemplateString(downloadState, context)
     )
     Pending,
     Running,
@@ -78,8 +78,8 @@ class DownloadViewHolder(override val containerView: View) : RecyclerView.ViewHo
     context: Context
   ) = when (downloadState.reason) {
     is Rfc2616HttpCode -> context.getString(
-        downloadState.reason.stringId,
-        downloadState.reason.code
+      downloadState.reason.stringId,
+      downloadState.reason.code
     )
     else -> context.getString(downloadState.reason.stringId)
   }

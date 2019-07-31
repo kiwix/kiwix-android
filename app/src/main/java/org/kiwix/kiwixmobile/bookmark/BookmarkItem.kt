@@ -13,13 +13,13 @@ data class BookmarkItem(
   val favicon: String
 ) {
   constructor(entity: BookmarkEntity) : this(
-      entity.id,
-      entity.zimId,
-      entity.zimName,
-      entity.zimFilePath,
-      entity.bookmarkUrl,
-      entity.bookmarkTitle,
-      entity.favicon
+    entity.id,
+    entity.zimId,
+    entity.zimName,
+    entity.zimFilePath,
+    entity.bookmarkUrl,
+    entity.bookmarkTitle,
+    entity.favicon
   )
 
   companion object {
@@ -27,13 +27,12 @@ data class BookmarkItem(
       title: String,
       url: String
     ) = BookmarkItem(
-        zimId = ZimContentProvider.getId(),
-        zimName = ZimContentProvider.getName(),
-        zimFilePath = ZimContentProvider.getZimFile(),
-        bookmarkUrl = url,
-        bookmarkTitle = title,
-        favicon = ZimContentProvider.getFavicon()
+      zimId = ZimContentProvider.getId(),
+      zimName = ZimContentProvider.getName(),
+      zimFilePath = ZimContentProvider.getZimFile(),
+      bookmarkUrl = url,
+      bookmarkTitle = title,
+      favicon = ZimContentProvider.getFavicon()
     )
   }
-
 }

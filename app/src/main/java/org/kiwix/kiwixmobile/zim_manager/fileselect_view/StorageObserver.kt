@@ -18,13 +18,14 @@ class StorageObserver @Inject constructor(
   private val fileSearch: FileSearch
 ) {
 
-  val booksOnFileSystem get() = scanFiles()
+  val booksOnFileSystem
+    get() = scanFiles()
       .withLatestFrom(
-          downloadDao.downloads(),
-          BiFunction(this::toFilesThatAreNotDownloading)
+        downloadDao.downloads(),
+        BiFunction(::toFilesThatAreNotDownloading)
       )
       .map {
-        it.mapNotNull { file -> convertToBookOnDisk(file) }
+        it.mapNotNull(::convertToBookOnDisk)
       }
 
   private fun toFilesThatAreNotDownloading(
@@ -40,7 +41,7 @@ class StorageObserver @Inject constructor(
   } == null
 
   private fun scanFiles() = fileSearch.scan(sharedPreferenceUtil.prefStorage)
-      .subscribeOn(Schedulers.io())
+    .subscribeOn(Schedulers.io())
 
   private fun convertToBookOnDisk(file: File): BookOnDisk? {
     configureZimContentProvider()
@@ -56,7 +57,7 @@ class StorageObserver @Inject constructor(
     title = ZimContentProvider.getZimFileTitle()
     id = ZimContentProvider.getId()
     size = ZimContentProvider.getFileSize()
-        .toString()
+      .toString()
     favicon = ZimContentProvider.getFavicon()
     creator = ZimContentProvider.getCreator()
     publisher = ZimContentProvider.getPublisher()
