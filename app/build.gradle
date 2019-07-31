@@ -121,7 +121,7 @@ dependencies {
   implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
 
   // Leak canary
-  debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
+//  debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
 
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
