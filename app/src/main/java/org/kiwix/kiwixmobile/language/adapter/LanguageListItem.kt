@@ -12,7 +12,6 @@ sealed class LanguageListItem {
       const val SELECTED = Long.MAX_VALUE
       const val OTHER = Long.MIN_VALUE
     }
-
   }
 
   data class LanguageItem(

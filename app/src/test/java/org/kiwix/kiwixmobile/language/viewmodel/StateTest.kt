@@ -33,25 +33,25 @@ class StateTest {
     fun `creates language list items with headers for active and inactive languages`() {
       val content = Content(listOf(language(), language(isActive = true)))
       assertThat(content.viewItems).isEqualTo(
-          listOf(
-              HeaderItem(Long.MAX_VALUE),
-              LanguageItem(language(isActive = true)),
-              HeaderItem(Long.MIN_VALUE),
-              LanguageItem(language())
-          )
+        listOf(
+          HeaderItem(Long.MAX_VALUE),
+          LanguageItem(language(isActive = true)),
+          HeaderItem(Long.MIN_VALUE),
+          LanguageItem(language())
+        )
       )
     }
 
     @Test
     fun `filters out based on filter`() {
       val content = Content(
-          listOf(language(language = "matchesFilter"), language(isActive = true))
+        listOf(language(language = "matchesFilter"), language(isActive = true))
       ).updateFilter("matches")
       assertThat(content.viewItems).isEqualTo(
-          listOf(
-              HeaderItem(Long.MIN_VALUE),
-              LanguageItem(language(language = "matchesFilter"))
-          )
+        listOf(
+          HeaderItem(Long.MIN_VALUE),
+          LanguageItem(language(language = "matchesFilter"))
+        )
       )
     }
   }

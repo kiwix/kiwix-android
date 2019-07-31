@@ -69,33 +69,33 @@ class LanguageViewModelTest {
   @Test
   fun `initial state is Loading`() {
     languageViewModel.state.test()
-        .assertValueHistory(Loading)
+      .assertValueHistory(Loading)
   }
 
   @Test
   fun `an empty languages emission does not send update action`() {
     languageViewModel.actions.test()
-        .also {
-          languages.offer(listOf())
-        }
-        .assertValues()
+      .also {
+        languages.offer(listOf())
+      }
+      .assertValues()
   }
 
   @Test
   fun `a languages emission sends update action`() {
     val expectedList = listOf(language())
     languageViewModel.actions.test()
-        .also {
-          languages.offer(expectedList)
-        }
-        .assertValues(UpdateLanguages(expectedList))
+      .also {
+        languages.offer(expectedList)
+      }
+      .assertValues(UpdateLanguages(expectedList))
   }
 
   @Test
   fun `UpdateLanguages Action changes state to Content when Loading`() {
     languageViewModel.actions.offer(UpdateLanguages(listOf()))
     languageViewModel.state.test()
-        .assertValueHistory(Content(listOf()))
+      .assertValueHistory(Content(listOf()))
   }
 
   @Test
@@ -103,7 +103,7 @@ class LanguageViewModelTest {
     languageViewModel.actions.offer(UpdateLanguages(listOf()))
     languageViewModel.actions.offer(UpdateLanguages(listOf()))
     languageViewModel.state.test()
-        .assertValueHistory(Content(listOf()))
+      .assertValueHistory(Content(listOf()))
   }
 
   @Test
@@ -111,14 +111,14 @@ class LanguageViewModelTest {
     languageViewModel.actions.offer(UpdateLanguages(listOf()))
     languageViewModel.actions.offer(Filter("filter"))
     languageViewModel.state.test()
-        .assertValueHistory(Content(listOf(), filter = "filter"))
+      .assertValueHistory(Content(listOf(), filter = "filter"))
   }
 
   @Test
   fun `Filter Action has no effect on other states`() {
     languageViewModel.actions.offer(Filter(""))
     languageViewModel.state.test()
-        .assertValueHistory(Loading)
+      .assertValueHistory(Loading)
   }
 
   @Test
@@ -126,32 +126,32 @@ class LanguageViewModelTest {
     languageViewModel.actions.offer(UpdateLanguages(listOf(language())))
     languageViewModel.actions.offer(Select(languageItem()))
     languageViewModel.state.test()
-        .assertValueHistory(Content(listOf(language(isActive = true))))
+      .assertValueHistory(Content(listOf(language(isActive = true))))
   }
 
   @Test
   fun `Select Action has no effect on other states`() {
     languageViewModel.actions.offer(Select(languageItem()))
     languageViewModel.state.test()
-        .assertValueHistory(Loading)
+      .assertValueHistory(Loading)
   }
 
   @Test
   fun `SaveAll changes Content to Saving with SideEffect SaveLanguagesAndFinish`() {
     languageViewModel.actions.offer(UpdateLanguages(listOf()))
     languageViewModel.effects.test()
-        .also {
-          languageViewModel.actions.offer(SaveAll)
-        }
-        .assertValues(SaveLanguagesAndFinish(listOf(), newLanguagesDao))
+      .also {
+        languageViewModel.actions.offer(SaveAll)
+      }
+      .assertValues(SaveLanguagesAndFinish(listOf(), newLanguagesDao))
     languageViewModel.state.test()
-        .assertValueHistory(Saving)
+      .assertValueHistory(Saving)
   }
 
   @Test
   fun `SaveAll has no effect on other states`() {
     languageViewModel.actions.offer(SaveAll)
     languageViewModel.state.test()
-        .assertValueHistory(Loading)
+      .assertValueHistory(Loading)
   }
 }

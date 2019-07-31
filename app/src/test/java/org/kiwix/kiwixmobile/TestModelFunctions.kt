@@ -88,8 +88,8 @@ fun language(
   languageCode: String = "",
   languageCodeISO2: String = ""
 ) = Language(
-    id, isActive, occurencesOfLanguage, language, languageLocalized, languageCode,
-    languageCodeISO2
+  id, isActive, occurencesOfLanguage, language, languageLocalized, languageCode,
+  languageCodeISO2
 )
 
 fun languageItem(language: Language = language()) =

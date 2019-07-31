@@ -131,9 +131,9 @@ class LibraryFragment : BaseFragment() {
       }
       NOT_CONNECTED -> {
         if (libraryAdapter.itemCount > 0) {
-          context.toast(R.string.no_network_connection)
+          context.toast(string.no_network_connection)
         } else {
-          libraryErrorText.setText(R.string.no_network_connection)
+          libraryErrorText.setText(string.no_network_connection)
           libraryErrorText.visibility = VISIBLE
         }
       }
@@ -144,8 +144,8 @@ class LibraryFragment : BaseFragment() {
     libraryAdapter.items = it!!
     if (it.isEmpty()) {
       libraryErrorText.setText(
-        if (isNotConnected) R.string.no_network_connection
-        else R.string.no_items_msg
+        if (isNotConnected) string.no_network_connection
+        else string.no_items_msg
       )
       libraryErrorText.visibility = VISIBLE
       TestingUtils.unbindResource(LibraryFragment::class.java)
@@ -156,7 +156,7 @@ class LibraryFragment : BaseFragment() {
 
   private fun refreshFragment() {
     if (isNotConnected) {
-      context.toast(R.string.no_network_connection)
+      context.toast(string.no_network_connection)
     } else {
       zimManageViewModel.requestDownloadLibrary.onNext(Unit)
     }
@@ -170,8 +170,8 @@ class LibraryFragment : BaseFragment() {
     sharedPreferenceUtil.putPrefStorage(storageDevice.name)
     sharedPreferenceUtil.putPrefStorageTitle(
       getString(
-        if (storageDevice.isInternal) R.string.internal_storage
-        else R.string.external_storage
+        if (storageDevice.isInternal) string.internal_storage
+        else string.external_storage
       )
     )
   }
@@ -180,19 +180,19 @@ class LibraryFragment : BaseFragment() {
     when {
       notEnoughSpaceAvailable(item) -> {
         context.toast(
-          getString(R.string.download_no_space) +
-            "\n" + getString(R.string.space_available) + " " +
+          getString(string.download_no_space) +
+            "\n" + getString(string.space_available) + " " +
             LibraryUtils.bytesToHuman(spaceAvailable)
         )
         libraryList.snack(
-          R.string.download_change_storage,
-          R.string.open,
+          string.download_change_storage,
+          string.open,
           ::showStorageSelectDialog
         )
         return
       }
       isNotConnected -> {
-        context.toast(R.string.no_network_connection)
+        context.toast(string.no_network_connection)
         return
       }
       noWifiWithWifiOnlyPreferenceSet -> {
