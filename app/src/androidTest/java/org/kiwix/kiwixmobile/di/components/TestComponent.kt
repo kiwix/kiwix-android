@@ -24,8 +24,8 @@ import org.kiwix.kiwixmobile.data.DataModule
 import org.kiwix.kiwixmobile.di.modules.ApplicationModule
 import org.kiwix.kiwixmobile.di.modules.JNIModule
 import org.kiwix.kiwixmobile.di.modules.TestNetworkModule
-import org.kiwix.kiwixmobile.tests.NetworkTest
-import org.kiwix.kiwixmobile.tests.ZimTest
+import org.kiwix.kiwixmobile.NetworkTest
+import org.kiwix.kiwixmobile.ZimTest
 import javax.inject.Singleton
 
 /**

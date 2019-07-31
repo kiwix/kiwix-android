@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile.tests;
+package org.kiwix.kiwixmobile;
 
 import android.preference.Preference;
 import androidx.test.filters.LargeTest;

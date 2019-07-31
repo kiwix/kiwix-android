@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.tests;
+package org.kiwix.kiwixmobile;
 
 import android.Manifest;
 import android.util.Log;
@@ -34,8 +34,6 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import org.kiwix.kiwixmobile.KiwixApplication;
-import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.di.components.DaggerTestComponent;
 import org.kiwix.kiwixmobile.di.components.TestComponent;

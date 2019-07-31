@@ -15,4 +15,4 @@
  * Activity)
  */
 
-package org.kiwix.kiwixmobile.tests.activities;
+package org.kiwix.kiwixmobile.activities;

@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.kiwix.kiwixmobile.tests;
+package org.kiwix.kiwixmobile;
 
 import android.Manifest;
 import android.util.Log;

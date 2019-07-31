@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile.tests.activities;
+package org.kiwix.kiwixmobile.activities;
 
 import android.Manifest;
 import androidx.test.filters.LargeTest;
@@ -8,15 +8,15 @@ import androidx.test.runner.AndroidJUnit4;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kiwix.kiwixmobile.search.SearchActivity;
+import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class SearchActivityTest {
+public class BookmarksActivityTest {
 
   @Rule
-  public ActivityTestRule<SearchActivity> mActivityTestRule = new ActivityTestRule<>(
-      SearchActivity.class);
+  public ActivityTestRule<BookmarksActivity> mActivityTestRule = new ActivityTestRule<>(
+      BookmarksActivity.class);
   @Rule
   public GrantPermissionRule readPermissionRule =
       GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -25,7 +25,7 @@ public class SearchActivityTest {
       GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @Test
-  public void SearchActivitySimple() {
+  public void BookmarksActivitySimple() {
 
   }
 }
