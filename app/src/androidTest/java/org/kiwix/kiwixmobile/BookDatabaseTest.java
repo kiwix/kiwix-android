@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.kiwix.kiwixmobile.local;
+package org.kiwix.kiwixmobile;
 
 import android.content.Context;
 import androidx.test.InstrumentationRegistry;

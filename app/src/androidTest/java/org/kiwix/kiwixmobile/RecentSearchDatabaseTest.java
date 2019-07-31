@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.kiwix.kiwixmobile.local;
+package org.kiwix.kiwixmobile;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.yahoo.squidb.data.AbstractModel;
