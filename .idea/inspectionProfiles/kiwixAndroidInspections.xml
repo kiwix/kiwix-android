@@ -69,7 +69,6 @@
     <inspection_tool class="AndroidLintHardcodedText" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintHardwareIds" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintIconColors" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="AndroidLintIconDensities" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintIconDipSize" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintIconDuplicates" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="AndroidLintIconDuplicatesConfig" enabled="true" level="ERROR" enabled_by_default="true" />
