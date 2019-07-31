@@ -18,11 +18,13 @@
 
 package org.kiwix.kiwixmobile.local;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.yahoo.squidb.data.AbstractModel;
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
 import org.kiwix.kiwixmobile.data.local.dao.RecentSearchDao;
@@ -35,6 +37,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@RunWith(AndroidJUnit4.class)
 public class RecentSearchDatabaseTest {
 
   @Mock private KiwixDatabase kiwixDatabase;

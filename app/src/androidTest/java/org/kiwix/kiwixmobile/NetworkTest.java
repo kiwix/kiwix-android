@@ -22,6 +22,7 @@ import android.util.Log;
 import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.IdlingPolicies;
 import androidx.test.espresso.IdlingRegistry;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 import com.schibsted.spain.barista.interaction.BaristaMenuClickInteractions;
@@ -34,6 +35,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.di.components.DaggerTestComponent;
 import org.kiwix.kiwixmobile.di.components.TestComponent;
@@ -59,7 +61,7 @@ import static org.kiwix.kiwixmobile.testutils.TestUtils.withContent;
 /**
  * Created by mhutti1 on 14/04/17.
  */
-
+@RunWith(AndroidJUnit4.class)
 public class NetworkTest {
   private static final String NETWORK_TEST_TAG = "KiwixNetworkTest";
   @Rule
