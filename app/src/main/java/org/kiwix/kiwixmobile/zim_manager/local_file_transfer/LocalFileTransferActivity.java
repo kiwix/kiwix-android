@@ -484,31 +484,28 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   }
 
   private void requestEnableLocationServices() {
-    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-    Fragment prev =
-        getSupportFragmentManager().findFragmentByTag(RequestEnableLocationServicesDialog.TAG);
-
-    if (prev == null) {
-      RequestEnableLocationServicesDialog dialogFragment =
-          new RequestEnableLocationServicesDialog();
-      dialogFragment.show(fragmentTransaction, RequestEnableLocationServicesDialog.TAG);
-    }
+    alertDialogShower.show(KiwixDialog.EnableLocationServices.INSTANCE,
+        new Function0<Unit>() {
+          @Override public Unit invoke() {
+            startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS),
+                REQUEST_ENABLE_LOCATION_SERVICES);
+            return Unit.INSTANCE;
+          }
+        },
+        new Function0<Unit>() {
+          @Override public Unit invoke() {
+            showToast(LocalFileTransferActivity.this, R.string.discovery_needs_location,
+                Toast.LENGTH_SHORT);
+            return Unit.INSTANCE;
+          }
+        });
   }
 
   private void requestEnableWifiP2pServices() {
-    /*FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-    Fragment prev =
-        getSupportFragmentManager().findFragmentByTag(RequestEnableWifiP2pServicesDialog.TAG);
-
-    if (prev == null) {
-      RequestEnableWifiP2pServicesDialog dialogFragment = new RequestEnableWifiP2pServicesDialog();
-      dialogFragment.show(fragmentTransaction, RequestEnableWifiP2pServicesDialog.TAG);
-    }*/
     alertDialogShower.show(KiwixDialog.EnableWifiP2pServices.INSTANCE,
         new Function0<Unit>() {
           @Override public Unit invoke() {
-            startActivityForResult(new Intent(Settings.ACTION_WIFI_SETTINGS),
-                REQUEST_ENABLE_WIFI_P2P);
+            startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
             return Unit.INSTANCE;
           }
         },
@@ -537,13 +534,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
         }
         break;
       }
-
-      /*case REQUEST_ENABLE_WIFI_P2P: {
-        if (!wifiDirectManager.isWifiP2pEnabled()) {
-          showToast(this, R.string.discovery_needs_wifi, Toast.LENGTH_LONG);
-        }
-        break;
-      }*/
     }
   }
 
