@@ -1099,7 +1099,15 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     builder.setNeutralButton(getString(R.string.hotspot_dialog_neutral_button), (dialog, id) -> {
       //TO DO: START SERVER WITHIN THE SERVICE.
       WebServerHelper webServerHelper = new WebServerHelper(this);
-      webServerHelper.startServerDialog();
+      //Adding a handler because sometimes hotspot can take time to turn on.
+      //TO DO: Add a progress dialog instead of handler
+      final Handler handler = new Handler();
+      handler.postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          webServerHelper.startServerDialog();
+        }
+      }, 5000);
     });
 
     builder.setTitle(getString(R.string.hotspot_dialog_title));
