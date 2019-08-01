@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.webserver;
 
-import android.util.Log;
 import fi.iki.elonen.NanoHTTPD;
 import java.util.Map;
 
