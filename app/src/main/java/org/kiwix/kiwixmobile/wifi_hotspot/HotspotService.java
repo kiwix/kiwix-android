@@ -20,10 +20,7 @@ import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.Constants;
 
 import static org.kiwix.kiwixmobile.main.MainActivity.ACTION_TURN_OFF_AFTER_O;
-import static org.kiwix.kiwixmobile.main.MainActivity.ACTION_TURN_OFF_BEFORE_O;
 import static org.kiwix.kiwixmobile.main.MainActivity.ACTION_TURN_ON_AFTER_O;
-import static org.kiwix.kiwixmobile.main.MainActivity.ACTION_TURN_ON_BEFORE_O;
-import static org.kiwix.kiwixmobile.main.MainActivity.startHotspotDetails;
 import static org.kiwix.kiwixmobile.webserver.WebServerHelper.stopAndroidWebServer;
 
 /**
@@ -41,9 +38,7 @@ public class HotspotService extends Service {
 
   @Override public void onCreate() {
     super.onCreate();
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-      hotspotManager = new WifiHotspotManager(this);
-    }
+
     stopReceiver = new BroadcastReceiver() {
       @Override
       public void onReceive(Context context, Intent intent) {
@@ -60,25 +55,14 @@ public class HotspotService extends Service {
 
   @Override public int onStartCommand(Intent intent, int flags, int startId) {
     switch (intent.getAction()) {
-      case ACTION_TURN_ON_BEFORE_O:
-        if (hotspotManager.setWifiEnabled(null, true)) {
-          startHotspotDetails();
-          updateNotification(getString(R.string.hotspot_running), true);
-        }
-        break;
+
       case ACTION_TURN_ON_AFTER_O:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
           hotspotManager.turnOnHotspot();
           updateNotification(getString(R.string.hotspot_running), true);
         }
         break;
-      case ACTION_TURN_OFF_BEFORE_O:
-        if (hotspotManager.setWifiEnabled(null, false)) {
-          stopForeground(true);
-          stopSelf();
-          stopAndroidWebServer();
-        }
-        break;
+
       case ACTION_TURN_OFF_AFTER_O:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
           hotspotManager.turnOffHotspot();
@@ -108,9 +92,9 @@ public class HotspotService extends Service {
     builder.setContentIntent(contentIntent)
         .setSmallIcon(R.mipmap.kiwix_icon)
         .setWhen(System.currentTimeMillis());
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
       hotspotNotificationChannel();
-    }
+
     if (showStopButton) {
       Intent stopIntent = new Intent(ACTION_STOP);
       PendingIntent stopHotspot =
@@ -125,12 +109,9 @@ public class HotspotService extends Service {
         buildForegroundNotification(status, stopAction));
   }
 
+  @RequiresApi(Build.VERSION_CODES.O)
   private void stopHotspot() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       hotspotManager.turnOffHotspot();
-    } else {
-      hotspotManager.setWifiEnabled(null, false);
-    }
     stopForeground(true);
     stopSelf();
     stopAndroidWebServer();

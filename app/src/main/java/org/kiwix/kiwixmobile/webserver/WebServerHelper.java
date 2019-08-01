@@ -170,7 +170,6 @@ public class WebServerHelper {
   public void serverStartedDialog() {
 
     AlertDialog.Builder builder = new AlertDialog.Builder(context, dialogStyle());
-    WebServerHelper webServerHelper = new WebServerHelper(context);
     builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
 
     });
