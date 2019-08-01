@@ -129,7 +129,6 @@ import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.wifi_hotspot.HotspotService;
-import org.kiwix.kiwixmobile.wifi_hotspot.WifiHotspotManager;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
@@ -413,8 +412,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     tabRecyclerView.setAdapter(tabsAdapter);
     new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
     drawerLayout.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
-
-    wifiHotspotManager = new WifiHotspotManager(this);
 
     serviceIntent = new Intent(this, HotspotService.class);
   }
@@ -1117,8 +1114,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
 
       builder.setPositiveButton(this.getString(R.string.yes), (dialog, id) -> disableMobileData());
-      builder.setNegativeButton(android.R.string.no,
-          (dialog, id) -> startService(ACTION_TURN_ON_BEFORE_O));
+      builder.setNegativeButton((android.R.string.no), (dialog, id) -> {
+      });
       builder.setTitle(this.getString(R.string.mobile_data_enabled));
       builder.setMessage(
           this.getString(R.string.mobile_data_message) + "\n" + this.getString(
