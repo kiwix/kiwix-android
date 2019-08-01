@@ -182,8 +182,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   private static final String NEW_TAB = "NEW_TAB";
   private static final String HOME_URL = "file:///android_asset/home.html";
-  public static final String ACTION_TURN_ON_BEFORE_O = "Turn_on_hotspot_before_oreo";
-  public static final String ACTION_TURN_OFF_BEFORE_O = "Turn_aff_hotspot_before_oreo";
   public static final String ACTION_TURN_ON_AFTER_O = "Turn_on_hotspot_after_oreo";
   public static final String ACTION_TURN_OFF_AFTER_O = "Turn_off_hotspot_after_oreo";
   public static final String MAIN_PAGE_STORAGE_PATH =
@@ -193,7 +191,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   public static boolean refresh;
   public static boolean wifiOnly;
   public static boolean nightMode;
-  private static WifiHotspotManager wifiHotspotManager;
   private static Uri KIWIX_LOCAL_MARKET_URI;
   private static Uri KIWIX_BROWSER_MARKET_URI;
   private final ArrayList<String> bookmarks = new ArrayList<>();
@@ -964,9 +961,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             toggleHotspot();
           } else {
-            if (showWritePermissionSettings()) { //request permission and if already granted switch hotspot.
-              switchHotspot();
-            }
+            //TO DO: show Dialog() + within that add check mobile Data check later.
           }
         }
       default:
@@ -1112,24 +1107,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     Toast.makeText(this, stringResource, duration).show();
   }
 
-  // For API<26 we use this
-  // Checks if wifi access point is already enabled then turns it off, otherwise enables it.
-  private void switchHotspot() {
-    if (wifiHotspotManager.isWifiApEnabled()) {
-      startService(ACTION_TURN_OFF_BEFORE_O);
-    } else {
-      if (isMobileDataEnabled(this)) {
-        mobileDataDialog();
-      } else {
-        startService(ACTION_TURN_ON_BEFORE_O);
-      }
-      }
-  }
-
-  public static void startHotspotDetails() {
-    wifiHotspotManager.hotspotDetailsDialog();
-  }
-
   private void startService(String ACTION) {
     serviceIntent.setAction(ACTION);
     this.startService(serviceIntent);
@@ -1170,22 +1147,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
             new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
             MY_PERMISSIONS_ACCESS_FINE_LOCATION);
     }
-  }
-
-  //To get write permission settings, we use this method.
-  private boolean showWritePermissionSettings() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-        && Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-      if (!Settings.System.canWrite(this)) {
-        Log.v("DANG", " " + !Settings.System.canWrite(this));
-        Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
-        intent.setData(Uri.parse("package:" + this.getPackageName()));
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        this.startActivity(intent);
-        return false;
-      }
-    }
-    return true; //Permission already given
   }
 
   @SuppressWarnings("SameReturnValue")
