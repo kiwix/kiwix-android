@@ -39,14 +39,16 @@ public class HotspotService extends Service {
   @Override public void onCreate() {
     super.onCreate();
 
-    stopReceiver = new BroadcastReceiver() {
-      @Override
-      public void onReceive(Context context, Intent intent) {
-        if (intent != null && intent.getAction().equals(ACTION_STOP)) {
-          stopHotspot();
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      stopReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+          if (intent != null && intent.getAction().equals(ACTION_STOP)) {
+            stopHotspot();
+          }
         }
-      }
-    };
+      };
+    }
     registerReceiver(stopReceiver, new IntentFilter(ACTION_STOP));
     notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     startForeground(HOTSPOT_NOTIFICATION_ID,
@@ -110,7 +112,7 @@ public class HotspotService extends Service {
   }
 
   @RequiresApi(Build.VERSION_CODES.O)
-  private void stopHotspot() {
+  void stopHotspot() {
       hotspotManager.turnOffHotspot();
     stopForeground(true);
     stopSelf();
