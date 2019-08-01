@@ -188,6 +188,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   public static final String ACTION_TURN_OFF_AFTER_O = "Turn_off_hotspot_after_oreo";
   public static final String MAIN_PAGE_STORAGE_PATH =
       "/storage/emulated/0/Download/outputDang.html";
+  private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
   public static boolean isFullscreenOpened;
   public static boolean refresh;
   public static boolean wifiOnly;
@@ -1153,7 +1154,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @RequiresApi(api = VERSION_CODES.O)
   private void toggleHotspot() {
-    boolean check = false;
     //Check if location permissions are granted
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         == PackageManager.PERMISSION_GRANTED) {
@@ -1165,20 +1165,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         setupLocationServices();
       }
     } else {
-      //This var makes sure recursion occurs only once.
-      if (!check) {
-        //Show rationale and request location permission.
-        //No explanation needed; request the permission
-        int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
+      //Ask location permission if not granted
         ActivityCompat.requestPermissions(this,
             new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
             MY_PERMISSIONS_ACCESS_FINE_LOCATION);
-
-        check = true;
-
-        //Go to toggle hotspot to check if permission is granted.
-        toggleHotspot();
-      }
     }
   }
 
@@ -1375,6 +1365,15 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           dialog.show();
         }
         break;
+      }
+
+      case MY_PERMISSIONS_ACCESS_FINE_LOCATION: {
+        if (grantResults.length > 0
+            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            toggleHotspot();
+          }
+        }
       }
 
       case REQUEST_READ_STORAGE_PERMISSION: {
