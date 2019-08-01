@@ -36,6 +36,7 @@ public class WebServerHelper {
     this.context = context;
   }
 
+  //Dialog to start the server where user is shown the hotspot ip address can edit the port no.
   public void startServerDialog() {
     AlertDialog.Builder alert = new AlertDialog.Builder(context);
     alert.setTitle("Start the server");
@@ -142,10 +143,11 @@ public class WebServerHelper {
           }
         }
       }
+      //To remove extra characters from IP for Android Pie
       if (ip.length() > 14) {
         for (int i = 15, j = 12; i < 18; i++, j++) {
           if ((ip.charAt(i) == '.')) {
-            ip = ip.substring(0, j + 1); //from first char to 12
+            ip = ip.substring(0, j + 1);
             break;
           }
         }
@@ -160,6 +162,7 @@ public class WebServerHelper {
     return "http://" + ip;
   }
 
+  //Once server is started successfully, this dialog is shown.
   public void serverStartedDialog() {
 
     AlertDialog.Builder builder = new AlertDialog.Builder(context, dialogStyle());
