@@ -274,7 +274,7 @@
   <string name="device_not_cooperating">Selected device not co-operating for transfer</string>
   <string name="file_transfer_complete">File transfer complete</string>
   <string name="error_during_transfer">An error was encountered during transfer</string>
-  <string name="error_sending">Error sending file %s</string>
+  <string name="error_transferring">Error transferring file %s</string>
   <string name="get_content_from_nearby_device">Get content from nearby device</string>
   <string name="search_for_peers">Search For Peers</string>
   <string name="your_device">Your Device:</string>

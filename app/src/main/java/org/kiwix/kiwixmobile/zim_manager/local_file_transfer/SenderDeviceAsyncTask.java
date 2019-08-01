@@ -80,7 +80,7 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Integer, Boolean> {
       } catch (IOException e) {
         Log.e(TAG, e.getMessage());
         result = false;
-        showToast(localFileTransferActivity, localFileTransferActivity.getString(R.string.error_sending, getFileName(localFileTransferActivity.getFileUriArrayList().get(fileItemIndex))), Toast.LENGTH_SHORT);
+        showToast(localFileTransferActivity, localFileTransferActivity.getString(R.string.error_transferring, getFileName(localFileTransferActivity.getFileUriArrayList().get(fileItemIndex))), Toast.LENGTH_SHORT);
         publishProgress(fileItemIndex, ERROR);
 
       }

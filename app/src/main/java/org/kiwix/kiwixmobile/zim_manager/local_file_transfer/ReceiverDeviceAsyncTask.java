@@ -15,6 +15,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.ERROR;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.SENDING;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.SENT;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectManager.FILE_TRANSFER_PORT;
@@ -49,36 +50,43 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
 
       final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
       final String KIWIX_ROOT = localFileTransferActivity.getZimStorageRootPath();
-
       int totalFileCount = localFileTransferActivity.getTotalFilesForTransfer();
+      boolean result = true;
+
       for (int currentFile = 1; currentFile <= totalFileCount && !isCancelled(); currentFile++) {
-
-        Socket client = serverSocket.accept();
-        if (BuildConfig.DEBUG) Log.d(TAG, "Server: Client connected for file " + currentFile);
-
         fileItemIndex = currentFile - 1;
-        publishProgress(SENDING);
-
         ArrayList<FileItem> fileItems = localFileTransferActivity.getFileItems();
         String incomingFileName = fileItems.get(fileItemIndex).getFileName();
 
-        final File clientNoteFileLocation = new File(KIWIX_ROOT + incomingFileName);
-        File dirs = new File(clientNoteFileLocation.getParent());
-        if (!dirs.exists() && !dirs.mkdirs()) {
-          Log.d(TAG, "ERROR: Required parent directories couldn't be created");
-          return false;
+        try (Socket client = serverSocket.accept()) {
+          if (BuildConfig.DEBUG) Log.d(TAG, "Server: Client connected for file " + currentFile);
+          publishProgress(fileItemIndex, SENDING);
+
+          final File clientNoteFileLocation = new File(KIWIX_ROOT + incomingFileName);
+          File dirs = new File(clientNoteFileLocation.getParent());
+          if (!dirs.exists() && !dirs.mkdirs()) {
+            Log.d(TAG, "ERROR: Required parent directories couldn't be created");
+            result = false;
+            continue;
+          }
+
+          boolean fileCreated = clientNoteFileLocation.createNewFile();
+          if (BuildConfig.DEBUG) Log.d(TAG, "File creation: " + fileCreated);
+
+          copyToOutputStream(client.getInputStream(), new FileOutputStream(clientNoteFileLocation));
+          publishProgress(fileItemIndex, SENT);
+
+        } catch (IOException e) {
+          Log.e(TAG, e.getMessage());
+          result = false;
+          showToast(localFileTransferActivity, localFileTransferActivity.getString(R.string.error_transferring, incomingFileName), Toast.LENGTH_SHORT);
+          publishProgress(fileItemIndex, ERROR);
         }
 
-        boolean fileCreated = clientNoteFileLocation.createNewFile();
-        if (BuildConfig.DEBUG) Log.d(TAG, "File creation: " + fileCreated);
-
-        copyToOutputStream(client.getInputStream(), new FileOutputStream(clientNoteFileLocation));
-
-        publishProgress(SENT);
         localFileTransferActivity.incrementTotalFilesSent();
       }
 
-      return !isCancelled(); // Return true only if not cancelled
+      return (!isCancelled() && result);
 
     } catch (IOException e) {
       Log.e(TAG, e.getMessage());
@@ -88,9 +96,10 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
 
   @Override
   protected void onProgressUpdate(Integer... values) {
-    int fileStatus = values[0];
+    int fileIndex = values[0];
+    int fileStatus = values[1];
     final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
-    localFileTransferActivity.changeStatus(fileItemIndex, fileStatus);
+    localFileTransferActivity.changeStatus(fileIndex, fileStatus);
   }
 
   @Override protected void onCancelled() {
