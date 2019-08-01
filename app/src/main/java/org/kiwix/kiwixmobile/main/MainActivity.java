@@ -1149,6 +1149,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           this.getString(R.string.mobile_data_message) + "\n" + this.getString(
               R.string.mobile_data_message_confirmation)
       );
+      builder.setCancelable(false);
       AlertDialog dialog = builder.create();
       dialog.show();
     }
