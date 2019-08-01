@@ -88,8 +88,8 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   @BindView(R.id.text_view_empty_peer_list) TextView textViewPeerDevices;
   @BindView(R.id.recycler_view_transfer_files) RecyclerView filesRecyclerView;
 
-  private ArrayList<Uri> fileUriArrayList; // For sender device, stores uris of the files
-  public @NonNull Boolean isFileSender = false;// Whether the device is the file sender or not
+  private ArrayList<Uri> fileUriArrayList;// For sender device, stores uris of the files
+  public boolean isFileSender = false;    // Whether the device is the file sender or not
 
   public @NonNull WifiDirectManager wifiDirectManager = new WifiDirectManager(this);
 
@@ -104,7 +104,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   private boolean fileTransferStarted = false;
 
   private PeerGroupHandshakeAsyncTask peerGroupHandshakeAsyncTask;
-  private SenderDeviceAsyncTask[] senderDeviceAsyncTaskArray;
+  private SenderDeviceAsyncTask senderDeviceAsyncTaskArray;
   private ReceiverDeviceAsyncTask receiverDeviceAsyncTask;
 
   @Override
@@ -295,11 +295,8 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
         showToast(this, R.string.preparing_files, Toast.LENGTH_LONG);
         for (int i = 0; i < 20000000; i++) ;
 
-        senderDeviceAsyncTaskArray = new SenderDeviceAsyncTask[totalFilesForTransfer];
-        for (int i = 0; i < totalFilesForTransfer; i++) {
-          senderDeviceAsyncTaskArray[i] = new SenderDeviceAsyncTask(this, i);
-          senderDeviceAsyncTaskArray[i].execute(fileUriArrayList.get(i));
-        }
+        senderDeviceAsyncTaskArray = new SenderDeviceAsyncTask(this);
+        senderDeviceAsyncTaskArray.execute(fileUriArrayList.toArray(new Uri[0]));
       }
     }
   }
@@ -559,9 +556,8 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     }
 
     if (senderDeviceAsyncTaskArray != null) {
-      for (SenderDeviceAsyncTask task : senderDeviceAsyncTaskArray) {
-        task.cancel(true);
-      }
+      senderDeviceAsyncTaskArray.cancel(true);
+
     } else if (receiverDeviceAsyncTask != null) {
       receiverDeviceAsyncTask.cancel(true);
     }
