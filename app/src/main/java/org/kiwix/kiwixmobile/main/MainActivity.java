@@ -24,7 +24,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.ActivityNotFoundException;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -100,9 +99,6 @@ import com.google.android.material.snackbar.Snackbar;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -194,7 +190,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private final ArrayList<String> bookmarks = new ArrayList<>();
   private final List<KiwixWebView> webViewList = new ArrayList<>();
   private Intent serviceIntent;
-  private BroadcastReceiver broadcastReceiverNetworkState;
   @BindView(R.id.activity_main_root)
   ConstraintLayout root;
   @BindView(R.id.activity_main_toolbar)
