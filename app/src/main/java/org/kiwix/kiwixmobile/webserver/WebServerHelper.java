@@ -2,8 +2,6 @@ package org.kiwix.kiwixmobile.webserver;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Build;
-import android.os.Handler;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
