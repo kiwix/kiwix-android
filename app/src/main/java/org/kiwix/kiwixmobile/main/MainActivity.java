@@ -778,9 +778,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     tts.shutdown();
     stopAndroidWebServer();
     isStarted = false;
-    //if (broadcastReceiverNetworkState != null) {
-    //  unregisterReceiver(broadcastReceiverNetworkState);
-    //}
   }
 
   private void updateTableOfContents() {
