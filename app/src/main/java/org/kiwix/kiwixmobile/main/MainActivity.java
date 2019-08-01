@@ -960,7 +960,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
             toggleHotspot();
           } else {
             //TO DO: show Dialog() + within that add check mobile Data check later.
-            startHotspotDialog();
+            if (isMobileDataEnabled(this)) {
+              mobileDataDialog();
+            } else {
+              startHotspotDialog();
+            }
           }
         }
       default:
@@ -1138,6 +1142,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
       builder.setPositiveButton(this.getString(R.string.yes), (dialog, id) -> disableMobileData());
       builder.setNegativeButton((android.R.string.no), (dialog, id) -> {
+        startHotspotDialog();
       });
       builder.setTitle(this.getString(R.string.mobile_data_enabled));
       builder.setMessage(
