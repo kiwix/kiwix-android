@@ -60,6 +60,7 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
           break;
         case TO_BE_SENT:
         case SENDING:
+        default:
           break;
       }
 

@@ -458,6 +458,11 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
           break;
         }
       }
+
+      default: {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        break;
+      }
     }
   }
 
@@ -519,8 +524,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-
     switch (requestCode) {
       case REQUEST_ENABLE_LOCATION_SERVICES: {
         LocationManager locationManager =
@@ -531,6 +534,11 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
           // If neither provider is enabled
           showToast(this, R.string.permission_refused_location, Toast.LENGTH_LONG);
         }
+        break;
+      }
+
+      default: {
+        super.onActivityResult(requestCode, resultCode, data);
         break;
       }
     }
