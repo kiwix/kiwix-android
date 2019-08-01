@@ -959,6 +959,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
             toggleHotspot();
           } else {
             //TO DO: show Dialog() + within that add check mobile Data check later.
+            startHotspotDialog();
           }
         }
       default:
@@ -1107,6 +1108,25 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private void startService(String ACTION) {
     serviceIntent.setAction(ACTION);
     this.startService(serviceIntent);
+  }
+
+  //Advice user to turn on hotspot manually for API<26
+  private void startHotspotDialog() {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
+
+    builder.setPositiveButton(getString(R.string.hotspot_dialog_positive_button), (dialog, id) -> {
+    });
+
+    builder.setNeutralButton(getString(R.string.hotspot_dialog_neutral_button), (dialog, id) -> {
+      //TO DO: START SERVER WITHIN THE SERVICE.
+    });
+
+    builder.setTitle(getString(R.string.hotspot_dialog_title));
+    builder.setMessage(
+        getString(R.string.hotspot_dialog_message)
+    );
+    AlertDialog dialog = builder.create();
+    dialog.show();
   }
 
   private void mobileDataDialog() {
