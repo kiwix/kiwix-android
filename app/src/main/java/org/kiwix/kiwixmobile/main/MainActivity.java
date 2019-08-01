@@ -955,7 +955,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         openExternalUrl(intentSupportKiwix);
 
       case R.id.menu_wifi_hotspot:
-        if (readHtmlPage()) {
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             toggleHotspot();
           } else {
@@ -966,34 +965,11 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
               startHotspotDialog();
             }
           }
-        }
       default:
         break;
     }
 
     return super.onOptionsItemSelected(item);
-  }
-
-  private boolean readHtmlPage() {
-    String url =
-        Uri.parse(ZimContentProvider.CONTENT_URI + ZimContentProvider.getMainPage()).toString();
-    Uri uri = Uri.parse(url);
-    try {
-      InputStream in = getContentResolver().openInputStream(uri);
-      OutputStream out =
-          new FileOutputStream(new File(MAIN_PAGE_STORAGE_PATH));
-      byte[] buf = new byte[1024];
-      int len;
-      while ((len = in.read(buf)) > 0) {
-        out.write(buf, 0, len);
-      }
-      out.close();
-      in.close();
-      return true;
-    } catch (Exception e) {
-      Log.v("DANG", e.toString());
-    }
-    return false;
   }
 
   /** Dialog to take user confirmation before deleting all notes */
