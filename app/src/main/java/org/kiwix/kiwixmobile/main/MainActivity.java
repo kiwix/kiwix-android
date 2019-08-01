@@ -184,8 +184,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private static final String HOME_URL = "file:///android_asset/home.html";
   public static final String ACTION_TURN_ON_AFTER_O = "Turn_on_hotspot_after_oreo";
   public static final String ACTION_TURN_OFF_AFTER_O = "Turn_off_hotspot_after_oreo";
-  public static final String MAIN_PAGE_STORAGE_PATH =
-      "/storage/emulated/0/Download/outputDang.html";
   private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
   public static boolean isFullscreenOpened;
   public static boolean refresh;
