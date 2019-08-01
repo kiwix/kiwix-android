@@ -128,6 +128,7 @@ import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
+import org.kiwix.kiwixmobile.webserver.WebServerHelper;
 import org.kiwix.kiwixmobile.wifi_hotspot.HotspotService;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver;
@@ -1119,6 +1120,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     builder.setNeutralButton(getString(R.string.hotspot_dialog_neutral_button), (dialog, id) -> {
       //TO DO: START SERVER WITHIN THE SERVICE.
+      WebServerHelper webServerHelper = new WebServerHelper(this);
+      webServerHelper.startServerDialog();
     });
 
     builder.setTitle(getString(R.string.hotspot_dialog_title));
