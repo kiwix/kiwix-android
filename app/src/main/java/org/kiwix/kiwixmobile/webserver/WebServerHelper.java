@@ -97,7 +97,7 @@ public class WebServerHelper {
     return false;
   }
 
-  private boolean startAndroidWebServer() {
+  boolean startAndroidWebServer() {
     if (!isStarted) {
       port = getPortFromEditText();
       try {
