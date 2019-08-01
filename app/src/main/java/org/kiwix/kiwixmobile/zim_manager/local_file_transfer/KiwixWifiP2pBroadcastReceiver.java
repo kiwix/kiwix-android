@@ -17,13 +17,13 @@ import androidx.annotation.Nullable;
  * Handles the broadcasts pertaining to the wifi p2p group formed in WiFi Direct. Works along with
  * the wifi p2p manager in {@link LocalFileTransferActivity}.
  */
-public class WifiDirectBroadcastReceiver extends BroadcastReceiver {
+public class KiwixWifiP2pBroadcastReceiver extends BroadcastReceiver {
 
   private WifiP2pManager manager;
   private WifiP2pManager.Channel channel;
   private WifiDirectManager wifiDirectManager;
 
-  public WifiDirectBroadcastReceiver(@NonNull WifiP2pManager manager, @NonNull WifiP2pManager.Channel channel,
+  public KiwixWifiP2pBroadcastReceiver(@NonNull WifiP2pManager manager, @NonNull WifiP2pManager.Channel channel,
       @NonNull WifiDirectManager wifiDirectManager) {
     super();
     this.manager = manager;
@@ -40,9 +40,9 @@ public class WifiDirectBroadcastReceiver extends BroadcastReceiver {
       int wifiP2pState = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
 
       if (wifiP2pState == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
-        ((BroadcastListener) wifiDirectManager).setWifiP2pEnabled(true);
+        ((P2pEventListener) wifiDirectManager).setWifiP2pEnabled(true);
       } else {
-        ((BroadcastListener) wifiDirectManager).setWifiP2pEnabled(false);
+        ((P2pEventListener) wifiDirectManager).setWifiP2pEnabled(false);
       }
       Log.d(LocalFileTransferActivity.TAG, "WiFi P2P state changed - " + wifiP2pState);
 
@@ -67,16 +67,16 @@ public class WifiDirectBroadcastReceiver extends BroadcastReceiver {
         manager.requestConnectionInfo(channel, wifiDirectManager);
       } else {
         // Not connected after connection change -> Disconnected
-        ((BroadcastListener) wifiDirectManager).onDisconnected();
+        ((P2pEventListener) wifiDirectManager).onDisconnected();
       }
 
 
     } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
-      ((BroadcastListener) wifiDirectManager).onDeviceChanged(intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE));
+      ((P2pEventListener) wifiDirectManager).onDeviceChanged(intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE));
     }
   }
 
-  public interface BroadcastListener {
+  public interface P2pEventListener {
     void setWifiP2pEnabled(boolean wifiP2pEnabled);
 
     void onDisconnected();

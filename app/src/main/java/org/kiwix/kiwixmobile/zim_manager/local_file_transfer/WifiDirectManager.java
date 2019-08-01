@@ -29,7 +29,7 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTra
  * Manager for the Wifi-P2p API, used in the local file transfer module
  * */
 public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2pManager.PeerListListener, WifiP2pManager.ConnectionInfoListener,
-    WifiDirectBroadcastReceiver.BroadcastListener {
+    KiwixWifiP2pBroadcastReceiver.P2pEventListener {
 
   private static final String TAG = "WifiDirectManager";
   public static int FILE_TRANSFER_PORT = 8008;
@@ -65,7 +65,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   }
 
   public void registerWifiDirectBroadcastRecevier() {
-    receiver = new WifiDirectBroadcastReceiver(manager, channel, this);
+    receiver = new KiwixWifiP2pBroadcastReceiver(manager, channel, this);
 
     // For specifying broadcasts (of the P2P API) that the module needs to respond to
     IntentFilter intentFilter = new IntentFilter();
