@@ -32,7 +32,6 @@ public class WebServerHelper {
   public static boolean isStarted;
   private int port;
   private static WebServer webServer;
-  private final int DEFAULT_PORT = 8080;
   private CoordinatorLayout coordinatorLayout;
 
   public WebServerHelper(Context context) {
@@ -119,6 +118,7 @@ public class WebServerHelper {
 
   private int getPortFromEditText() {
     String valueEditText = editTextPort.getText().toString();
+    int DEFAULT_PORT = 8080;
     return (valueEditText.length() > 0) ? Integer.parseInt(valueEditText) : DEFAULT_PORT;
   }
 
@@ -159,14 +159,14 @@ public class WebServerHelper {
       // TODO Auto-generated catch block
       e.printStackTrace();
       ip += "Something Wrong! " + e.toString() + "\n";
-    };
+    }
 
     Log.v("DANG", "Returning : " + "http://" + ip);
     return "http://" + ip;
   }
 
   //Once server is started successfully, this dialog is shown.
-  public void serverStartedDialog() {
+  void serverStartedDialog() {
 
     AlertDialog.Builder builder = new AlertDialog.Builder(context, dialogStyle());
     builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
