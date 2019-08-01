@@ -20,6 +20,12 @@ import org.kiwix.kiwixmobile.R;
 import static org.kiwix.kiwixmobile.main.MainActivity.MAIN_PAGE_STORAGE_PATH;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
+/**
+ * WebServerHelper class is used to set up the suitable environment i.e. getting the
+ * ip address and port no. before starting the WebServer
+ * Created by Adeel Zafar on 18/07/2019.
+ */
+
 public class WebServerHelper {
   private Context context;
   private TextView textViewIpAccess;
