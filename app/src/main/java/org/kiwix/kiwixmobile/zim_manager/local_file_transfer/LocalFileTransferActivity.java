@@ -583,9 +583,4 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     super.onDestroy();
     cancelAsyncTasks();
   }
-
-  @Override
-  public void onBackPressed() {
-    wifiDirectManager.closeLocalFileTransferActivity();
-  }
 }

@@ -212,6 +212,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     });
   }
 
+  // TODO: Shift async tasks to WDM and handle cleanup from here itself
   public void closeLocalFileTransferActivity() {
     activity.cancelAsyncTasks();
 
