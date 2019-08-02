@@ -27,8 +27,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -435,30 +433,30 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   @Override
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
       @NonNull int[] grantResults) {
-    switch (requestCode) {
-      case PERMISSION_REQUEST_CODE_COARSE_LOCATION: {
-        if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+
+    if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+      switch (requestCode) {
+
+        case PERMISSION_REQUEST_CODE_COARSE_LOCATION: {
           Log.e(TAG, "Location permission not granted");
 
           showToast(this, R.string.permission_refused_location, Toast.LENGTH_LONG);
           wifiDirectManager.closeLocalFileTransferActivity();
           break;
         }
-      }
 
-      case PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS: {
-        if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+        case PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS: {
           Log.e(TAG, "Storage write permission not granted");
 
           showToast(this, R.string.permission_refused_storage, Toast.LENGTH_LONG);
           wifiDirectManager.closeLocalFileTransferActivity();
           break;
         }
-      }
 
-      default: {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        break;
+        default: {
+          super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+          break;
+        }
       }
     }
   }
