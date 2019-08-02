@@ -57,7 +57,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   }
 
   /* Initialisations for using the WiFi P2P API */
-  public void initialiseWifiDirectManager(@NonNull AlertDialogShower alertDialogShower) {
+  public void createWifiDirectManager(@NonNull AlertDialogShower alertDialogShower) {
     this.alertDialogShower = alertDialogShower;
 
     manager = (WifiP2pManager) activity.getSystemService(Context.WIFI_P2P_SERVICE);
@@ -213,14 +213,14 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   }
 
   // TODO: Shift async tasks to WDM and handle cleanup from here itself
-  public void closeLocalFileTransferActivity() {
+  public void destroyWifiDirectManager() {
     activity.cancelAsyncTasks();
 
-    activity.isFileSender = false;
-    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-      channel.close();
+    if (!activity.isFileSender) {
+      disconnect();
+    } else {
+      closeChannel();
     }
-    disconnect();
   }
 
   public void disconnect() {
@@ -229,19 +229,21 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
       @Override
       public void onFailure(int reasonCode) {
         Log.d(TAG, "Disconnect failed. Reason: " + reasonCode);
-        closeActivity();
+        closeChannel();
       }
 
       @Override
       public void onSuccess() {
         Log.d(TAG, "Disconnect successful");
-        closeActivity();
+        closeChannel();
       }
     });
   }
 
-  public void closeActivity() {
-    activity.finish();
+  public void closeChannel() {
+    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+      channel.close();
+    }
   }
 
 

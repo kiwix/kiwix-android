@@ -119,6 +119,6 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
           Toast.LENGTH_LONG);
     }
 
-    (localFileTransferActivity).wifiDirectManager.closeLocalFileTransferActivity();
+    localFileTransferActivity.finish();
   }
 }

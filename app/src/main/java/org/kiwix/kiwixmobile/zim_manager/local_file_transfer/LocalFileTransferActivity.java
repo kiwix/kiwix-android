@@ -133,11 +133,11 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     actionBar.setNavigationOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        wifiDirectManager.closeLocalFileTransferActivity();
+        finish();
       }
     });
 
-    wifiDirectManager.initialiseWifiDirectManager(alertDialogShower);
+    wifiDirectManager.createWifiDirectManager(alertDialogShower);
 
     listViewPeerDevices.setAdapter(
         new WifiPeerListAdapter(this, R.layout.row_peer_device, peerDevices));
@@ -269,7 +269,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     if (clientAddress == null) {
       // null is returned only in case of a failed handshake
       showToast(this, R.string.device_not_cooperating, Toast.LENGTH_LONG);
-      wifiDirectManager.closeLocalFileTransferActivity();
+      finish();
       return;
     }
 
@@ -440,7 +440,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
           Log.e(TAG, "Location permission not granted");
 
           showToast(this, R.string.permission_refused_location, Toast.LENGTH_LONG);
-          wifiDirectManager.closeLocalFileTransferActivity();
+          finish();
           break;
         }
 
@@ -448,7 +448,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
           Log.e(TAG, "Storage write permission not granted");
 
           showToast(this, R.string.permission_refused_storage, Toast.LENGTH_LONG);
-          wifiDirectManager.closeLocalFileTransferActivity();
+          finish();
           break;
         }
 
@@ -574,6 +574,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
 
   @Override protected void onDestroy() {
     super.onDestroy();
-    cancelAsyncTasks();
+    wifiDirectManager.destroyWifiDirectManager();
   }
 }
