@@ -47,6 +47,8 @@ public class WebServerHelper {
     LinearLayout layout = new LinearLayout(context);
     layout.setOrientation(LinearLayout.HORIZONTAL);
 
+    coordinatorLayout = new CoordinatorLayout(context);
+
     textViewIpAccess = new TextView(context);
     textViewIpAccess.setText(context.getString(R.string.sample_ip_address));
     textViewIpAccess.setTextSize(20);
