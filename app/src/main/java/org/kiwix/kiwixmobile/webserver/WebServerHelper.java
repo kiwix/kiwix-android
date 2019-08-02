@@ -41,8 +41,8 @@ public class WebServerHelper {
   //Dialog to start the server where user is shown the hotspot ip address can edit the port no.
   public void startServerDialog() {
     AlertDialog.Builder alert = new AlertDialog.Builder(context);
-    alert.setTitle("Start the server");
-    alert.setMessage("Happy sharing");
+    alert.setTitle(R.string.start_server_dialog_title);
+    alert.setMessage(R.string.start_server_dialog_message);
 
     LinearLayout layout = new LinearLayout(context);
     layout.setOrientation(LinearLayout.HORIZONTAL);
@@ -69,7 +69,7 @@ public class WebServerHelper {
 
     alert.setView(layout);
 
-    alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+    alert.setPositiveButton("START SERVER", new DialogInterface.OnClickListener() {
       public void onClick(DialogInterface dialog, int whichButton) {
         if (!isStarted && startAndroidWebServer()) {
           isStarted = true;
@@ -78,7 +78,7 @@ public class WebServerHelper {
       }
     });
 
-    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
       public void onClick(DialogInterface dialog, int whichButton) {
         // Canceled.
       }
