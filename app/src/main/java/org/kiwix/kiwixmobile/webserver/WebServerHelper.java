@@ -37,7 +37,7 @@ public class WebServerHelper {
   public WebServerHelper(Context context) {
     this.context = context;
   }
-  
+
   //Dialog to start the server where user is shown the hotspot ip address can edit the port no.
   public void startServerDialog() {
     AlertDialog.Builder alert = new AlertDialog.Builder(context);

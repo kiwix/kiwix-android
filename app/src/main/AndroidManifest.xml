@@ -27,7 +27,6 @@
   <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
 
   <!-- Devices with version >= Oreo need location permission to start/stop the hotspot -->
-  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
   <!-- Device with versions >= Pie need this permission -->
