@@ -26,6 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -175,9 +176,13 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     if (item.getItemId() == R.id.menu_item_search_devices) {
 
       /* Permissions essential for this module */
-      if (!checkCoarseLocationAccessPermission()) return true;
+      if (!checkCoarseLocationAccessPermission()) {
+        return true;
+      }
 
-      if (!checkExternalStorageWritePermission()) return true;
+      if (!checkExternalStorageWritePermission()) {
+        return true;
+      }
 
       /* Initiate discovery */
       if (!wifiDirectManager.isWifiP2pEnabled()) {
@@ -377,57 +382,51 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
 
   /* Helper methods used for checking permissions and states of services */
   private boolean checkCoarseLocationAccessPermission() { // Required by Android to detect wifi-p2p peers
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+        == PackageManager.PERMISSION_DENIED) {
 
-      if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-          != PackageManager.PERMISSION_GRANTED) {
-
-        if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
-          alertDialogShower.show(KiwixDialog.LocationPermissionRationale.INSTANCE,
-              new Function0<Unit>() {
-                @Override public Unit invoke() {
-                  requestPermissions(new String[] { Manifest.permission.ACCESS_COARSE_LOCATION },
-                      PERMISSION_REQUEST_CODE_COARSE_LOCATION);
-                  return Unit.INSTANCE;
-                }
-              });
-        } else {
-          requestPermissions(new String[] { Manifest.permission.ACCESS_COARSE_LOCATION },
-              PERMISSION_REQUEST_CODE_COARSE_LOCATION);
-        }
-
-        return false;
+      if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+        alertDialogShower.show(KiwixDialog.LocationPermissionRationale.INSTANCE,
+            new Function0<Unit>() {
+              @Override public Unit invoke() {
+                ActivityCompat.requestPermissions(LocalFileTransferActivity.this, new String[] { Manifest.permission.ACCESS_COARSE_LOCATION },
+                    PERMISSION_REQUEST_CODE_COARSE_LOCATION);
+                return Unit.INSTANCE;
+              }
+            });
+      } else {
+        ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_COARSE_LOCATION },
+            PERMISSION_REQUEST_CODE_COARSE_LOCATION);
       }
-    }
+      return false;
 
-    return true; // Control reaches here: Either permission granted at install time, or at the time of request
+    } else {
+      return true; // Control reaches here: Either permission granted at install time, or at the time of request
+    }
   }
 
   private boolean checkExternalStorageWritePermission() { // To access and store the zims
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        == PackageManager.PERMISSION_DENIED) {
 
-      if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-          != PackageManager.PERMISSION_GRANTED) {
-
-        if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-          alertDialogShower.show(KiwixDialog.StoragePermissionRationale.INSTANCE,
-              new Function0<Unit>() {
-                @Override public Unit invoke() {
-                  requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-                      PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS);
-                  return Unit.INSTANCE;
-                }
-              });
-        } else {
-          requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-              PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS);
-        }
-
-        return false;
+      if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+        alertDialogShower.show(KiwixDialog.StoragePermissionRationale.INSTANCE,
+            new Function0<Unit>() {
+              @Override public Unit invoke() {
+                ActivityCompat.requestPermissions(LocalFileTransferActivity.this, new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                    PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS);
+                return Unit.INSTANCE;
+              }
+            });
+      } else {
+        ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+            PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS);
       }
-    }
+      return false;
 
-    return true; // Control reaches here: Either permission granted at install time, or at the time of request
+    } else {
+      return true; // Control reaches here: Either permission granted at install time, or at the time of request
+    }
   }
 
   @Override
