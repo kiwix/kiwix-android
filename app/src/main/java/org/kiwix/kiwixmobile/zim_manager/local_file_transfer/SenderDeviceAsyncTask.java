@@ -18,8 +18,8 @@ import java.net.Socket;
 
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.*;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectManager.FILE_TRANSFER_PORT;
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.copyToOutputStream;
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.getFileName;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectManager.copyToOutputStream;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectManager.getFileName;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.showToast;
 
 /**
@@ -47,6 +47,16 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Integer, Boolean> {
 
   @Override
   protected Boolean doInBackground(Uri... fileUris) {
+
+    /*try {
+      Thread.sleep(5000);
+    } catch (InterruptedException e) {
+      Log.e(TAG, e.getMessage());
+      return false;
+    }*/
+
+    for(int i = 0; i < 2000000000; i++);
+
     final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
     ContentResolver contentResolver = localFileTransferActivity.getContentResolver();
 
@@ -64,7 +74,7 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Integer, Boolean> {
         }
         socket.bind(null);
 
-        String hostAddress = localFileTransferActivity.getFileReceiverDeviceAddress().getHostAddress();
+        String hostAddress = localFileTransferActivity.wifiDirectManager.getFileReceiverDeviceAddress().getHostAddress();
         socket.connect((new InetSocketAddress(hostAddress, FILE_TRANSFER_PORT)), 15000);
 
         if (BuildConfig.DEBUG) Log.d(TAG, "Sender socket - " + socket.isConnected());
@@ -79,12 +89,12 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Integer, Boolean> {
 
       } catch (IOException e) {
         Log.e(TAG, e.getMessage());
+        e.printStackTrace();
         result = false;
-        showToast(localFileTransferActivity, localFileTransferActivity.getString(R.string.error_transferring, getFileName(localFileTransferActivity.getFileUriArrayList().get(fileItemIndex))), Toast.LENGTH_SHORT);
         publishProgress(fileItemIndex, ERROR);
-
       }
-      localFileTransferActivity.incrementTotalFilesSent();
+
+      localFileTransferActivity.wifiDirectManager.incrementTotalFilesSent();
     }
 
     return result;
@@ -96,6 +106,10 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Integer, Boolean> {
     int fileStatus = values[1];
     final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
     localFileTransferActivity.changeStatus(fileIndex, fileStatus);
+
+    if(fileStatus == ERROR) {
+      showToast(localFileTransferActivity, localFileTransferActivity.getString(R.string.error_transferring, getFileName(localFileTransferActivity.wifiDirectManager.getFileUriArrayList().get(fileItemIndex))), Toast.LENGTH_SHORT);
+    }
   }
 
   @Override protected void onCancelled() {
@@ -106,7 +120,7 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Integer, Boolean> {
   protected void onPostExecute(Boolean fileSendSuccessful) {
     final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
 
-    if (localFileTransferActivity.allFilesSent()) {
+    if (localFileTransferActivity.wifiDirectManager.allFilesSent()) {
       showToast(localFileTransferActivity, R.string.file_transfer_complete,
           Toast.LENGTH_SHORT);
       localFileTransferActivity.finish();

@@ -17,7 +17,7 @@ import org.kiwix.kiwixmobile.R;
 
 import java.util.List;
 
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.getDeviceStatus;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectManager.getDeviceStatus;
 
 /**
  * Helper class, part of the local file sharing module.
