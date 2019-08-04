@@ -326,20 +326,17 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     if (isGroupFormed() && !isFileSender) {
       ((Callbacks) activity).onFilesForTransferAvailable(filesForTransfer);
 
-      receiverDeviceAsyncTask = new ReceiverDeviceAsyncTask(this, activity);
+      receiverDeviceAsyncTask = new ReceiverDeviceAsyncTask(this);
       receiverDeviceAsyncTask.execute();
+
     } else if (isGroupFormed()) { // && isFileSender
       {
         Log.d(LocalFileTransferActivity.TAG, "Starting file transfer");
 
         fileReceiverDeviceAddress =
-            (isGroupOwner()) ? selectedPeerDeviceInetAddress
-                : getGroupOwnerAddress();
+            (isGroupOwner()) ? selectedPeerDeviceInetAddress : getGroupOwnerAddress();
 
-        // Hack for allowing slower receiver devices to setup server before sender device requests to connect
         showToast(activity, R.string.preparing_files, Toast.LENGTH_LONG);
-        //for (int i = 0; i < 20000000; i++) ;
-
         senderDeviceAsyncTaskArray = new SenderDeviceAsyncTask(this, activity);
         senderDeviceAsyncTaskArray.execute(fileUriArrayList.toArray(new Uri[0]));
       }
@@ -391,7 +388,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     });
   }
 
-  public void closeChannel() {
+  void closeChannel() {
     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
       channel.close();
     }

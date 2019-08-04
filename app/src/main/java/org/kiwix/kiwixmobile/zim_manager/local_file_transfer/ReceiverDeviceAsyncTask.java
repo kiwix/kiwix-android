@@ -37,7 +37,7 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
   private WifiDirectManager wifiDirectManager;
   private String incomingFileName;
 
-  public ReceiverDeviceAsyncTask(WifiDirectManager wifiDirectManager, LocalFileTransferActivity localFileTransferActivity) {
+  public ReceiverDeviceAsyncTask(WifiDirectManager wifiDirectManager) {
     this.wifiDirectManager = wifiDirectManager;
   }
 
