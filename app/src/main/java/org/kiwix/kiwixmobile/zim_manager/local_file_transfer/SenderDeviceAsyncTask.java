@@ -106,11 +106,10 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Integer, Boolean> {
   protected void onProgressUpdate(Integer... values) {
     int fileIndex = values[0];
     int fileStatus = values[1];
-    final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
     wifiDirectManager.changeStatus(fileIndex, fileStatus);
 
     if(fileStatus == ERROR) {
-      showToast(localFileTransferActivity, localFileTransferActivity.getString(R.string.error_transferring, getFileName(wifiDirectManager.getFileUriArrayList().get(fileItemIndex))), Toast.LENGTH_SHORT);
+      wifiDirectManager.displayToast(R.string.error_transferring, getFileName(wifiDirectManager.getFileUriArrayList().get(fileItemIndex)), Toast.LENGTH_SHORT);
     }
   }
 
@@ -123,8 +122,7 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Integer, Boolean> {
     final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
 
     if (wifiDirectManager.allFilesSent()) {
-      showToast(localFileTransferActivity, R.string.file_transfer_complete,
-          Toast.LENGTH_SHORT);
+      wifiDirectManager.displayToast(R.string.file_transfer_complete, Toast.LENGTH_SHORT);
       localFileTransferActivity.finish();
     }
   }

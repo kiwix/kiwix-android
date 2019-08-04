@@ -29,7 +29,6 @@ import org.kiwix.kiwixmobile.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 import static android.os.Looper.getMainLooper;
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.TO_BE_SENT;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.showToast;
 
 
@@ -42,7 +41,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   private static final String TAG = "WifiDirectManager";
   public static int FILE_TRANSFER_PORT = 8008;
 
-  @NonNull LocalFileTransferActivity activity;
+  private @NonNull LocalFileTransferActivity activity;
 
   private SharedPreferenceUtil sharedPreferenceUtil;
   private AlertDialogShower alertDialogShower;
@@ -66,7 +65,6 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   private SenderDeviceAsyncTask senderDeviceAsyncTaskArray;
   private ReceiverDeviceAsyncTask receiverDeviceAsyncTask;
 
-  private boolean isFileTransferInProgress = false;
   private InetAddress selectedPeerDeviceInetAddress;
   private InetAddress fileReceiverDeviceAddress;  // IP address of the file receiving device
 
@@ -75,7 +73,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   private ArrayList<FileItem> filesForTransfer = new ArrayList<>();
 
   private ArrayList<Uri> fileUriArrayList; // For sender device, stores uris of the files
-  public boolean isFileSender = false;    // Whether the device is the file sender or not
+  private boolean isFileSender = false;    // Whether the device is the file sender or not
 
   public WifiDirectManager(@NonNull LocalFileTransferActivity activity) {
     this.activity = activity;
@@ -93,9 +91,6 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
 
     if(isFileSender) {
       this.totalFilesForTransfer = fileUriArrayList.size();
-      /*for (int i = 0; i < fileUriArrayList.size(); i++) {
-        filesForTransfer.add(new FileItem(getFileName(fileUriArrayList.get(i)), TO_BE_SENT));
-      }*/
     }
 
     manager = (WifiP2pManager) activity.getSystemService(Context.WIFI_P2P_SERVICE);
@@ -328,8 +323,6 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   }
 
   private void startFileTransfer() {
-    isFileTransferInProgress = true;
-
     if (isGroupFormed() && !isFileSender) {
       ((Callbacks) activity).onFilesForTransferAvailable(filesForTransfer);
 
@@ -443,6 +436,14 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     String fileUriString = fileUri.toString();
     // Returns text after location of last slash in the file path
     return fileUriString.substring(fileUriString.lastIndexOf('/') + 1);
+  }
+
+  public void displayToast(int stringResourceId, @NonNull String templateValue, int duration) {
+    showToast(activity, activity.getString(stringResourceId, templateValue), duration);
+  }
+
+  public void displayToast(int stringResourceId, int duration) {
+    showToast(activity, stringResourceId, duration);
   }
 
   public interface Callbacks {

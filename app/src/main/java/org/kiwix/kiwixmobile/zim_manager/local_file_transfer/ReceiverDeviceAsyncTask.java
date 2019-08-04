@@ -20,7 +20,6 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.Fil
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.SENT;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectManager.FILE_TRANSFER_PORT;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectManager.copyToOutputStream;
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.showToast;
 
 /**
  * Helper class for the local file sharing module.
@@ -103,9 +102,8 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
     int fileStatus = values[1];
     wifiDirectManager.changeStatus(fileIndex, fileStatus);
 
-    final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
     if(fileStatus == ERROR) {
-      showToast(localFileTransferActivity, localFileTransferActivity.getString(R.string.error_transferring, incomingFileName), Toast.LENGTH_SHORT);
+      wifiDirectManager.displayToast(R.string.error_transferring, incomingFileName, Toast.LENGTH_SHORT);
     }
   }
 
@@ -119,11 +117,9 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
 
     final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
     if (allFilesReceived) {
-      showToast(localFileTransferActivity, R.string.file_transfer_complete,
-          Toast.LENGTH_LONG);
+      wifiDirectManager.displayToast(R.string.file_transfer_complete, Toast.LENGTH_LONG);
     } else {
-      showToast(localFileTransferActivity, R.string.error_during_transfer,
-          Toast.LENGTH_LONG);
+      wifiDirectManager.displayToast(R.string.error_during_transfer, Toast.LENGTH_LONG);
     }
 
     localFileTransferActivity.finish();
