@@ -113,10 +113,8 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Integer, Boolean> {
   }
 
   @Override
-  protected void onPostExecute(Boolean fileSendSuccessful) {
-    if (wifiDirectManager.allFilesSent()) {
-      wifiDirectManager.displayToast(R.string.file_transfer_complete, Toast.LENGTH_SHORT);
-    }
-    wifiDirectManager.onFileTransferAsyncTaskComplete();
+  protected void onPostExecute(Boolean wereAllFilesTransferred) {
+    if (BuildConfig.DEBUG) Log.d(TAG, "SenderDeviceAsyncTask complete");
+    wifiDirectManager.onFileTransferAsyncTaskComplete(wereAllFilesTransferred);
   }
 }

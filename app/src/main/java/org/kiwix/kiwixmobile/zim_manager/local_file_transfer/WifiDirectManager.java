@@ -118,17 +118,14 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
       @Override
       public void onSuccess() {
-        showToast(activity, R.string.discovery_initiated,
-            Toast.LENGTH_SHORT);
+        displayToast(R.string.discovery_initiated, Toast.LENGTH_SHORT);
       }
 
       @Override
       public void onFailure(int reason) {
         String errorMessage = getErrorMessage(reason);
         Log.d(TAG, activity.getString(R.string.discovery_failed) + ": " + errorMessage);
-        showToast(activity,
-            activity.getString(R.string.discovery_failed),
-            Toast.LENGTH_SHORT);
+        displayToast(R.string.discovery_failed, Toast.LENGTH_SHORT);
       }
     });
   }
@@ -138,7 +135,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     this.wifiP2pEnabled = wifiP2pEnabled;
 
     if(wifiP2pEnabled == false) {
-      showToast(activity, R.string.discovery_needs_wifi, Toast.LENGTH_SHORT);
+      displayToast(R.string.discovery_needs_wifi, Toast.LENGTH_SHORT);
       ((Callbacks) activity).clearListOfAvailablePeers();
     }
   }
@@ -171,7 +168,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
       retryChannel = true;
       manager.initialize(activity, getMainLooper(), this);
     } else {
-      showToast(activity, R.string.severe_loss_error, Toast.LENGTH_LONG);
+      displayToast(R.string.severe_loss_error, Toast.LENGTH_LONG);
     }
   }
 
@@ -214,7 +211,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
           @Override public Unit invoke() {
             ((Callbacks) activity).onSenderStartedConnection();
             connect();
-            showToast(activity, R.string.performing_handshake, Toast.LENGTH_LONG);
+            displayToast(R.string.performing_handshake, Toast.LENGTH_LONG);
             return Unit.INSTANCE;
           }
         });
@@ -239,8 +236,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
       public void onFailure(int reason) {
         String errorMessage = getErrorMessage(reason);
         Log.d(TAG, activity.getString(R.string.connection_failed) + ": " + errorMessage);
-        showToast(activity, activity.getString(R.string.connection_failed),
-            Toast.LENGTH_LONG);
+        displayToast(R.string.connection_failed, Toast.LENGTH_LONG);
       }
     });
   }
@@ -312,8 +308,8 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   public void setClientAddress(@Nullable InetAddress clientAddress) {
     if (clientAddress == null) {
       // null is returned only in case of a failed handshake
-      showToast(activity, R.string.device_not_cooperating, Toast.LENGTH_LONG);
-      activity.finish();
+      displayToast(R.string.device_not_cooperating, Toast.LENGTH_LONG);
+      ((Callbacks) activity).onFileTransferComplete(false);
       return;
     }
 
@@ -336,7 +332,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
         fileReceiverDeviceAddress =
             (isGroupOwner()) ? selectedPeerDeviceInetAddress : getGroupOwnerAddress();
 
-        showToast(activity, R.string.preparing_files, Toast.LENGTH_LONG);
+        displayToast(R.string.preparing_files, Toast.LENGTH_LONG);
         senderDeviceAsyncTaskArray = new SenderDeviceAsyncTask(this, activity);
         senderDeviceAsyncTaskArray.execute(fileUriArrayList.toArray(new Uri[0]));
       }
@@ -443,8 +439,13 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     showToast(activity, stringResourceId, duration);
   }
 
-  public void onFileTransferAsyncTaskComplete() {
-    ((Callbacks) activity).onFileTransferComplete();
+  public void onFileTransferAsyncTaskComplete(boolean wereAllFilesTransferred) {
+    if (wereAllFilesTransferred) {
+      displayToast(R.string.file_transfer_complete, Toast.LENGTH_LONG);
+    } else {
+      displayToast(R.string.error_during_transfer, Toast.LENGTH_LONG);
+    }
+    ((Callbacks) activity).onFileTransferComplete(wereAllFilesTransferred);
   }
 
   public interface Callbacks {
@@ -460,6 +461,6 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
 
     void onFileStatusChanged(int itemIndex);
 
-    void onFileTransferComplete();
+    void onFileTransferComplete(boolean wereAllFilesTransferred);
   }
 }

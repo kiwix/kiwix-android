@@ -109,15 +109,8 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
   }
 
   @Override
-  protected void onPostExecute(Boolean allFilesReceived) {
-    if (BuildConfig.DEBUG) Log.d(TAG, "File transfer complete");
-
-    if (allFilesReceived) {
-      wifiDirectManager.displayToast(R.string.file_transfer_complete, Toast.LENGTH_LONG);
-    } else {
-      wifiDirectManager.displayToast(R.string.error_during_transfer, Toast.LENGTH_LONG);
-    }
-
-    wifiDirectManager.onFileTransferAsyncTaskComplete();
+  protected void onPostExecute(Boolean wereAllFilesTransferred) {
+    if (BuildConfig.DEBUG) Log.d(TAG, "ReceiverDeviceAsyncTask complete");
+    wifiDirectManager.onFileTransferAsyncTaskComplete(wereAllFilesTransferred);
   }
 }

@@ -247,7 +247,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   }
 
   @Override
-  public void onFileTransferComplete() {
+  public void onFileTransferComplete(boolean wereAllFilesTransferred) {
     finish();
   }
 
