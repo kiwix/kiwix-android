@@ -446,6 +446,10 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     showToast(activity, stringResourceId, duration);
   }
 
+  public void onFileTransferAsyncTaskComplete() {
+    ((Callbacks) activity).onFileTransferComplete();
+  }
+
   public interface Callbacks {
     void onUserDeviceDetailsAvailable(@Nullable WifiP2pDevice userDevice);
 
@@ -458,5 +462,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     void onFilesForTransferAvailable(@NonNull ArrayList<FileItem> filesForTransfer);
 
     void onFileStatusChanged(int itemIndex);
+
+    void onFileTransferComplete();
   }
 }

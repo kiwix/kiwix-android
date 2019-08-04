@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.lang.ref.WeakReference;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.R;
 
@@ -20,7 +19,6 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.Fil
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectManager.FILE_TRANSFER_PORT;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectManager.copyToOutputStream;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectManager.getFileName;
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.showToast;
 
 /**
  * Helper class for the local file sharing module.
@@ -38,13 +36,12 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Integer, Boolean> {
 
   private static final String TAG = "SenderDeviceAsyncTask";
 
-  private WeakReference<LocalFileTransferActivity> weakReferenceToActivity;
   private WifiDirectManager wifiDirectManager;
-  private int fileItemIndex = -1;
+  private ContentResolver contentResolver;
 
   public SenderDeviceAsyncTask(WifiDirectManager wifiDirectManager, LocalFileTransferActivity localFileTransferActivity) {
-    this.weakReferenceToActivity = new WeakReference<>(localFileTransferActivity);
     this.wifiDirectManager = wifiDirectManager;
+    this.contentResolver = localFileTransferActivity.getContentResolver();
   }
 
   @Override
@@ -59,10 +56,8 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Integer, Boolean> {
 
     for(int i = 0; i < 2000000000; i++);
 
-    final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
-    ContentResolver contentResolver = localFileTransferActivity.getContentResolver();
-
-    Boolean result = true;
+    boolean result = true;
+    int fileItemIndex = -1;
 
     for(Uri fileUri : fileUris) { // Uri of file to be transferred
       fileItemIndex++;
@@ -109,7 +104,7 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Integer, Boolean> {
     wifiDirectManager.changeStatus(fileIndex, fileStatus);
 
     if(fileStatus == ERROR) {
-      wifiDirectManager.displayToast(R.string.error_transferring, getFileName(wifiDirectManager.getFileUriArrayList().get(fileItemIndex)), Toast.LENGTH_SHORT);
+      wifiDirectManager.displayToast(R.string.error_transferring, getFileName(wifiDirectManager.getFileUriArrayList().get(fileIndex)), Toast.LENGTH_SHORT);
     }
   }
 
@@ -119,11 +114,9 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Integer, Boolean> {
 
   @Override
   protected void onPostExecute(Boolean fileSendSuccessful) {
-    final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
-
     if (wifiDirectManager.allFilesSent()) {
       wifiDirectManager.displayToast(R.string.file_transfer_complete, Toast.LENGTH_SHORT);
-      localFileTransferActivity.finish();
     }
+    wifiDirectManager.onFileTransferAsyncTaskComplete();
   }
 }

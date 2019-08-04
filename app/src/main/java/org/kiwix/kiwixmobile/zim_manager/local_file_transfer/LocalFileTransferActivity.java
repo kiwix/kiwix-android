@@ -246,6 +246,11 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     }
   }
 
+  @Override
+  public void onFileTransferComplete() {
+    finish();
+  }
+
   /* Helper methods used for checking permissions and states of services */
   private boolean checkCoarseLocationAccessPermission() { // Required by Android to detect wifi-p2p peers
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)

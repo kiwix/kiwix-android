@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.lang.ref.WeakReference;
 import org.kiwix.kiwixmobile.BuildConfig;
 import org.kiwix.kiwixmobile.R;
 
@@ -35,13 +34,10 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
 
   private static final String TAG = "ReceiverDeviceAsyncTask";
 
-  private WeakReference<LocalFileTransferActivity> weakReferenceToActivity;
   private WifiDirectManager wifiDirectManager;
-  private int fileItemIndex;
   private String incomingFileName;
 
   public ReceiverDeviceAsyncTask(WifiDirectManager wifiDirectManager, LocalFileTransferActivity localFileTransferActivity) {
-    this.weakReferenceToActivity = new WeakReference<>(localFileTransferActivity);
     this.wifiDirectManager = wifiDirectManager;
   }
 
@@ -53,6 +49,7 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
       final String KIWIX_ROOT = wifiDirectManager.getZimStorageRootPath();
       int totalFileCount = wifiDirectManager.getTotalFilesForTransfer();
       boolean result = true;
+      int fileItemIndex;
 
       if (BuildConfig.DEBUG) Log.d(TAG, "Expecting "+totalFileCount+" files");
 
@@ -115,13 +112,12 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
   protected void onPostExecute(Boolean allFilesReceived) {
     if (BuildConfig.DEBUG) Log.d(TAG, "File transfer complete");
 
-    final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
     if (allFilesReceived) {
       wifiDirectManager.displayToast(R.string.file_transfer_complete, Toast.LENGTH_LONG);
     } else {
       wifiDirectManager.displayToast(R.string.error_during_transfer, Toast.LENGTH_LONG);
     }
 
-    localFileTransferActivity.finish();
+    wifiDirectManager.onFileTransferAsyncTaskComplete();
   }
 }
