@@ -1,11 +1,9 @@
 package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 
 import android.net.Uri;
-import android.net.wifi.p2p.WifiP2pInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import java.lang.ref.WeakReference;
 import org.kiwix.kiwixmobile.BuildConfig;
 
 import java.io.InputStream;
@@ -137,7 +135,7 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
             }
           }
 
-          wifiDirectManager.setFileItems(fileItems);
+          wifiDirectManager.setFilesForTransfer(fileItems);
         }
       } catch (Exception e) {
         e.printStackTrace();

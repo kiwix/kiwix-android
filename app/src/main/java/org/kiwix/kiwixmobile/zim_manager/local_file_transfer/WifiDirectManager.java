@@ -83,8 +83,8 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
 
   /* Initialisations for using the WiFi P2P API */
   public void createWifiDirectManager(@NonNull SharedPreferenceUtil sharedPreferenceUtil,
-      @NonNull AlertDialogShower alertDialogShower, @Nullable ArrayList<Uri> fileUriArrayList,
-      @Nullable ArrayList<FileItem> filesForTransfer) {
+      @NonNull AlertDialogShower alertDialogShower, @Nullable ArrayList<FileItem> filesForTransfer,
+      @Nullable ArrayList<Uri> fileUriArrayList) {
     this.sharedPreferenceUtil = sharedPreferenceUtil;
     this.alertDialogShower = alertDialogShower;
     this.fileUriArrayList = fileUriArrayList;
@@ -274,11 +274,11 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     this.totalFilesForTransfer = totalFilesForTransfer;
   }
 
-  public @NonNull ArrayList<FileItem> getFileItems() {
+  public @NonNull ArrayList<FileItem> getFilesForTransfer() {
     return filesForTransfer;
   }
 
-  public void setFileItems(@NonNull ArrayList<FileItem> fileItems) {
+  public void setFilesForTransfer(@NonNull ArrayList<FileItem> fileItems) {
     this.filesForTransfer = fileItems;
   }
 

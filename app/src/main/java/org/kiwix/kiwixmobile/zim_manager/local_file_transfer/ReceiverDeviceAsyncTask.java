@@ -59,7 +59,7 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
 
       for (int currentFile = 1; currentFile <= totalFileCount && !isCancelled(); currentFile++) {
         fileItemIndex = currentFile - 1;
-        ArrayList<FileItem> fileItems = wifiDirectManager.getFileItems();
+        ArrayList<FileItem> fileItems = wifiDirectManager.getFilesForTransfer();
         incomingFileName = fileItems.get(fileItemIndex).getFileName();
 
         try (Socket client = serverSocket.accept()) {

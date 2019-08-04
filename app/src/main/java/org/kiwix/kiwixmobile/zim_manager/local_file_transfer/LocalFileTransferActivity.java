@@ -83,10 +83,9 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   @BindView(R.id.text_view_empty_peer_list) TextView textViewPeerDevices;
   @BindView(R.id.recycler_view_transfer_files) RecyclerView filesRecyclerView;
 
-  private ArrayList<Uri> fileUriArrayList;// For sender device, stores uris of the files
-  public boolean isFileSender = false;    // Whether the device is the file sender or not
+  private boolean isFileSender = false;    // Whether the device is the file sender or not
 
-  public @NonNull WifiDirectManager wifiDirectManager = new WifiDirectManager(this);
+  private @NonNull WifiDirectManager wifiDirectManager = new WifiDirectManager(this);
 
   private ArrayList<FileItem> filesForTransfer = new ArrayList<>();
   private FileListAdapter fileListAdapter;
@@ -113,6 +112,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
      * activity, without any file Uris
      * */
     Intent filesIntent = getIntent();
+    ArrayList<Uri> fileUriArrayList;
     fileUriArrayList = filesIntent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
     isFileSender = (fileUriArrayList != null && fileUriArrayList.size() > 0);
 
@@ -136,7 +136,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
       displayFileTransferProgress(filesForTransfer);
     }
 
-    wifiDirectManager.createWifiDirectManager(sharedPreferenceUtil, alertDialogShower, fileUriArrayList, filesForTransfer);
+    wifiDirectManager.createWifiDirectManager(sharedPreferenceUtil, alertDialogShower, filesForTransfer, fileUriArrayList);
   }
 
   @OnItemClick(R.id.list_peer_devices)
@@ -190,7 +190,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     }
   }
 
-  /* Helper methods used in the activity */
   @Override
   public void onUserDeviceDetailsAvailable(@Nullable WifiP2pDevice userDevice) { // Update UI with user device's details
     if (userDevice != null) {
@@ -228,17 +227,11 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     this.hasSenderStartedConnection = true;
   }
 
-  /*public void changeStatus(int itemIndex, @FileItem.FileStatus int status) {
-    filesForTransfer.get(itemIndex).setFileStatus(status);
-    fileListAdapter.notifyItemChanged(itemIndex);
-  }*/
-
   @Override
   public void onFileStatusChanged(int itemIndex) {
     fileListAdapter.notifyItemChanged(itemIndex);
   }
 
-  /* From WifiDirectManager.Callbacks interface */
   @Override
   public void updateListOfAvailablePeers(@NonNull WifiP2pDeviceList peers) {
     availablePeerDevices.clear();
