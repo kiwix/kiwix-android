@@ -33,7 +33,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
-import java.net.InetAddress;
 import java.util.List;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
@@ -89,11 +88,11 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
 
   public @NonNull WifiDirectManager wifiDirectManager = new WifiDirectManager(this);
 
-  private ArrayList<FileItem> filesToSend = new ArrayList<>();
+  private ArrayList<FileItem> filesForTransfer = new ArrayList<>();
   private FileListAdapter fileListAdapter;
 
-  private List<WifiP2pDevice> peerDevices = new ArrayList<WifiP2pDevice>();
-  private boolean fileTransferStarted = false;
+  private List<WifiP2pDevice> availablePeerDevices = new ArrayList<WifiP2pDevice>();
+  private boolean hasSenderStartedConnection = false;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -126,24 +125,24 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
       }
     });
 
-    wifiDirectManager.createWifiDirectManager(sharedPreferenceUtil, alertDialogShower, fileUriArrayList);
-
     listViewPeerDevices.setAdapter(
-        new WifiPeerListAdapter(this, R.layout.row_peer_device, peerDevices));
+        new WifiPeerListAdapter(this, R.layout.row_peer_device, availablePeerDevices));
 
     if (isFileSender) {
       for (int i = 0; i < fileUriArrayList.size(); i++) {
-        filesToSend.add(new FileItem(getFileName(fileUriArrayList.get(i)), TO_BE_SENT));
+        filesForTransfer.add(new FileItem(getFileName(fileUriArrayList.get(i)), TO_BE_SENT));
       }
 
-      displayFileTransferProgress(filesToSend);
+      displayFileTransferProgress(filesForTransfer);
     }
+
+    wifiDirectManager.createWifiDirectManager(sharedPreferenceUtil, alertDialogShower, fileUriArrayList, filesForTransfer);
   }
 
   @OnItemClick(R.id.list_peer_devices)
   void onItemClick(int position) {
     /* Connection can only be initiated by user of the sender device, & only when transfer has not been started */
-    if (!isFileSender || fileTransferStarted) {
+    if (!isFileSender || hasSenderStartedConnection) {
       return;
     }
 
@@ -182,7 +181,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
         return true;
       }
 
-      onInitiateDiscovery();
+      showPeerDiscoveryProgressBar();
       wifiDirectManager.discoverPeerDevices();
 
       return true;
@@ -192,52 +191,64 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   }
 
   /* Helper methods used in the activity */
-  public void updateUserDevice(@Nullable WifiP2pDevice userDevice) { // Update UI with user device's details
-    wifiDirectManager.setUserDevice(userDevice);
-
+  @Override
+  public void onUserDeviceDetailsAvailable(@Nullable WifiP2pDevice userDevice) { // Update UI with user device's details
     if (userDevice != null) {
       deviceName.setText(userDevice.deviceName);
       Log.d(TAG, getDeviceStatus(userDevice.status));
     }
   }
 
-  public void clearPeers() {
-    peerDevices.clear();
+  @Override
+  public void clearListOfAvailablePeers() {
+    availablePeerDevices.clear();
     ((WifiPeerListAdapter) listViewPeerDevices.getAdapter()).notifyDataSetChanged();
   }
 
-  @Override
-  public void displayFileTransferProgress(ArrayList<FileItem> filesToSend) {
-    if(!isFileSender) {
-      this.filesToSend = filesToSend;
-    }
+  private void displayFileTransferProgress(@NonNull ArrayList<FileItem> filesToSend) {
     fileListAdapter = new FileListAdapter(filesToSend);
     filesRecyclerView.setAdapter(fileListAdapter);
     filesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
   }
 
-  public void onInitiateDiscovery() { // Setup UI for searching peers
+  @Override
+  public void onFilesForTransferAvailable(@NonNull ArrayList<FileItem> filesForTransfer) {
+    this.filesForTransfer = filesForTransfer;
+    displayFileTransferProgress(filesForTransfer);
+  }
+
+  private void showPeerDiscoveryProgressBar() { // Setup UI for searching peers
     searchingPeersProgressBar.setVisibility(View.VISIBLE);
     listViewPeerDevices.setVisibility(View.INVISIBLE);
     textViewPeerDevices.setVisibility(View.INVISIBLE);
   }
 
-  public void changeStatus(int itemIndex, @FileItem.FileStatus int status) {
-    filesToSend.get(itemIndex).setFileStatus(status);
+  @Override
+  public void onSenderStartedConnection() {
+    this.hasSenderStartedConnection = true;
+  }
+
+  /*public void changeStatus(int itemIndex, @FileItem.FileStatus int status) {
+    filesForTransfer.get(itemIndex).setFileStatus(status);
+    fileListAdapter.notifyItemChanged(itemIndex);
+  }*/
+
+  @Override
+  public void onFileStatusChanged(int itemIndex) {
     fileListAdapter.notifyItemChanged(itemIndex);
   }
 
   /* From WifiDirectManager.Callbacks interface */
   @Override
-  public void updatePeerDevicesList(@NonNull WifiP2pDeviceList peers) {
+  public void updateListOfAvailablePeers(@NonNull WifiP2pDeviceList peers) {
+    availablePeerDevices.clear();
+    availablePeerDevices.addAll(peers.getDeviceList());
+
     searchingPeersProgressBar.setVisibility(View.GONE);
     listViewPeerDevices.setVisibility(View.VISIBLE);
-
-    peerDevices.clear();
-    peerDevices.addAll(peers.getDeviceList());
     ((WifiPeerListAdapter) listViewPeerDevices.getAdapter()).notifyDataSetChanged();
 
-    if (peerDevices.size() == 0) {
+    if (availablePeerDevices.size() == 0) {
       Log.d(LocalFileTransferActivity.TAG, "No devices found");
     }
   }

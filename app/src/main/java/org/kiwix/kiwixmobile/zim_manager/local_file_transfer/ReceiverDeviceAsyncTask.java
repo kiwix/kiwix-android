@@ -37,11 +37,13 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
   private static final String TAG = "ReceiverDeviceAsyncTask";
 
   private WeakReference<LocalFileTransferActivity> weakReferenceToActivity;
+  private WifiDirectManager wifiDirectManager;
   private int fileItemIndex;
   private String incomingFileName;
 
-  public ReceiverDeviceAsyncTask(LocalFileTransferActivity localFileTransferActivity) {
+  public ReceiverDeviceAsyncTask(WifiDirectManager wifiDirectManager, LocalFileTransferActivity localFileTransferActivity) {
     this.weakReferenceToActivity = new WeakReference<>(localFileTransferActivity);
+    this.wifiDirectManager = wifiDirectManager;
   }
 
   @Override
@@ -49,16 +51,15 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
     try (ServerSocket serverSocket = new ServerSocket(FILE_TRANSFER_PORT)) {
       if (BuildConfig.DEBUG) Log.d(TAG, "Server: Socket opened at " + FILE_TRANSFER_PORT);
 
-      final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
-      final String KIWIX_ROOT = localFileTransferActivity.wifiDirectManager.getZimStorageRootPath();
-      int totalFileCount = localFileTransferActivity.wifiDirectManager.getTotalFilesForTransfer();
+      final String KIWIX_ROOT = wifiDirectManager.getZimStorageRootPath();
+      int totalFileCount = wifiDirectManager.getTotalFilesForTransfer();
       boolean result = true;
 
       if (BuildConfig.DEBUG) Log.d(TAG, "Expecting "+totalFileCount+" files");
 
       for (int currentFile = 1; currentFile <= totalFileCount && !isCancelled(); currentFile++) {
         fileItemIndex = currentFile - 1;
-        ArrayList<FileItem> fileItems = localFileTransferActivity.wifiDirectManager.getFileItems();
+        ArrayList<FileItem> fileItems = wifiDirectManager.getFileItems();
         incomingFileName = fileItems.get(fileItemIndex).getFileName();
 
         try (Socket client = serverSocket.accept()) {
@@ -85,7 +86,7 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
           publishProgress(fileItemIndex, ERROR);
         }
 
-        localFileTransferActivity.wifiDirectManager.incrementTotalFilesSent();
+        wifiDirectManager.incrementTotalFilesSent();
       }
 
       return (!isCancelled() && result);
@@ -100,9 +101,9 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
   protected void onProgressUpdate(Integer... values) {
     int fileIndex = values[0];
     int fileStatus = values[1];
-    final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
-    localFileTransferActivity.changeStatus(fileIndex, fileStatus);
+    wifiDirectManager.changeStatus(fileIndex, fileStatus);
 
+    final LocalFileTransferActivity localFileTransferActivity = weakReferenceToActivity.get();
     if(fileStatus == ERROR) {
       showToast(localFileTransferActivity, localFileTransferActivity.getString(R.string.error_transferring, incomingFileName), Toast.LENGTH_SHORT);
     }
