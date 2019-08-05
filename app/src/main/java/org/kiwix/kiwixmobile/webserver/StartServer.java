@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.webserver;
 
+import android.view.Menu;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;

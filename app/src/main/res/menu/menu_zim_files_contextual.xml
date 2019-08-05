@@ -18,6 +18,14 @@
       app:iconifiedByDefault="true"
       app:showAsAction="always"/>
 
+  <item
+      android:id="@+id/zim_file_host_item"
+      android:icon="@drawable/ic_baseline_cloud_upload_24px"
+      android:title="@string/menu_host_books"
+      android:visible="true"
+      app:iconifiedByDefault="true"
+      app:showAsAction="always"/>
+
 </menu>
 
     <!-- Menu layout for Contextual Action Bar in response to file selection in the library (ZimFileSelectFragment.java) -->
