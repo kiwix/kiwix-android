@@ -44,7 +44,7 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
   @Override
   protected Boolean doInBackground(Void... voids) {
     try (ServerSocket serverSocket = new ServerSocket(FILE_TRANSFER_PORT)) {
-      if (BuildConfig.DEBUG) Log.d(TAG, "Server: Socket opened at " + FILE_TRANSFER_PORT);
+      Log.d(TAG, "Server: Socket opened at " + FILE_TRANSFER_PORT);
 
       final String KIWIX_ROOT = wifiDirectManager.getZimStorageRootPath();
       int totalFileCount = wifiDirectManager.getTotalFilesForTransfer();

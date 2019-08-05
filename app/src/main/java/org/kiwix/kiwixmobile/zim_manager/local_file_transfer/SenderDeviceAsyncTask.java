@@ -47,14 +47,12 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Integer, Boolean> {
   @Override
   protected Boolean doInBackground(Uri... fileUris) {
 
-    /*try {
-      Thread.sleep(5000);
+    try { // Delay before trying to connect with receiver, to allow slower devices to setup server
+      Thread.sleep(3000);
     } catch (InterruptedException e) {
       Log.e(TAG, e.getMessage());
       return false;
-    }*/
-
-    for(int i = 0; i < 2000000000; i++);
+    }
 
     boolean result = true;
     int fileItemIndex = -1;
@@ -74,7 +72,7 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Integer, Boolean> {
         String hostAddress = wifiDirectManager.getFileReceiverDeviceAddress().getHostAddress();
         socket.connect((new InetSocketAddress(hostAddress, FILE_TRANSFER_PORT)), 15000);
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "Sender socket - " + socket.isConnected());
+        Log.d(TAG, "Sender socket connected to server - " + socket.isConnected());
         publishProgress(fileItemIndex, SENDING);
 
         OutputStream socketOutputStream = socket.getOutputStream();
