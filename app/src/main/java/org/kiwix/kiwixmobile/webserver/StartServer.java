@@ -14,12 +14,12 @@ public class StartServer extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_start_server);
+    setUpToolbar();
     FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
     ZimFileSelectFragment fragment = new ZimFileSelectFragment();
     fragmentTransaction.add(R.id.frameLayoutServer, fragment);
     fragmentTransaction.commit();
-    setUpToolbar();
   }
 
   private void setUpToolbar() {
