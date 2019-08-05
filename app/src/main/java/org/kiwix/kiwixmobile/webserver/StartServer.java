@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.webserver;
 
-import android.view.Menu;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
@@ -31,10 +30,5 @@ public class StartServer extends AppCompatActivity {
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     toolbar.setNavigationOnClickListener(v -> onBackPressed());
-  }
-
-  @Override public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.menu_host_books, menu);
-    return super.onCreateOptionsMenu(menu);
   }
 }

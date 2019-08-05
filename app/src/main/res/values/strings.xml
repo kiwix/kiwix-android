@@ -16,7 +16,6 @@
   <string name="menu_support_kiwix">Support Kiwix</string>
   <string name="menu_wifi_hotspot">Wifi Hotspot</string>
   <string name="menu_host_books">Host Books</string>
-  <string name="menu_start_server">Start server</string>
   <string name="save_media">Save Media</string>
   <string name="save_media_error">An error occurred when trying to save the media!</string>
   <string name="save_media_saved">Saved media as %s to Android/media/org.kiwix…/</string>
