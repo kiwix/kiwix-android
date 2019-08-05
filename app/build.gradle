@@ -69,6 +69,8 @@ dependencies {
   implementation "androidx.collection:collection-ktx:1.1.0"
 
   implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
+  implementation 'androidx.appcompat:appcompat:1.0.2'
+  implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
   androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
   androidTestImplementation "androidx.test.espresso:espresso-web:$espressoVersion"
   androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
@@ -125,7 +127,6 @@ dependencies {
 
   // Leak canary
   debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
-
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
   implementation "android.arch.lifecycle:extensions:1.1.1"
@@ -253,8 +254,8 @@ android {
         'DuplicateStrings',
         'LogConditional'
     warning 'UnknownNullness',
-      'SelectableText',
-      'IconDensities'
+        'SelectableText',
+        'IconDensities'
     baseline file("lint-baseline.xml")
   }
 
@@ -470,7 +471,7 @@ play {
   resolutionStrategy = "fail"
 }
 
-ktlint{
+ktlint {
   android = true
 }
 

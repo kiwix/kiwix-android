@@ -80,6 +80,11 @@
       app:showAsAction="never"/>
 
   <item
+      android:id="@+id/menu_host_books"
+      android:title="@string/menu_host_books"
+      app:showAsAction="never"/>
+
+  <item
       android:id="@+id/menu_help"
       android:title="@string/menu_help"
       app:showAsAction="never"/>

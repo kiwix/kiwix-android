@@ -124,6 +124,7 @@ import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
+import org.kiwix.kiwixmobile.webserver.StartServer;
 import org.kiwix.kiwixmobile.webserver.WebServerHelper;
 import org.kiwix.kiwixmobile.wifi_hotspot.HotspotService;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
@@ -946,6 +947,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         Intent intentSupportKiwix = new Intent(Intent.ACTION_VIEW, uriSupportKiwix);
         intentSupportKiwix.putExtra(EXTRA_EXTERNAL_LINK, true);
         openExternalUrl(intentSupportKiwix);
+        break;
+
+      case R.id.menu_host_books:
+        Intent intent = new Intent(MainActivity.this, StartServer.class);
+        startActivity(intent);
+        break;
 
       case R.id.menu_wifi_hotspot:
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -1911,6 +1918,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         menu.findItem(R.id.menu_random_article).setVisible(false);
         menu.findItem(R.id.menu_searchintext).setVisible(false);
         menu.findItem(R.id.menu_wifi_hotspot).setVisible(false);
+        menu.findItem(R.id.menu_host_books).setVisible(true);
       } else {
         menu.findItem(R.id.menu_read_aloud).setVisible(true);
         menu.findItem(R.id.menu_home).setVisible(true);

@@ -15,6 +15,7 @@
   <string name="menu_read_aloud_stop">Stop reading aloud</string>
   <string name="menu_support_kiwix">Support Kiwix</string>
   <string name="menu_wifi_hotspot">Wifi Hotspot</string>
+  <string name="menu_host_books">Host Books</string>
   <string name="save_media">Save Media</string>
   <string name="save_media_error">An error occurred when trying to save the media!</string>
   <string name="save_media_saved">Saved media as %s to Android/media/org.kiwix…/</string>
@@ -31,6 +32,7 @@
   <string name="hotspot_ssid_label">SSID : </string>
   <string name="hotspot_pass_label">Pass : </string>
   <string name="port_hint">8080</string>
+  <string name="server_textview_default_message">Select the files you wish to host on the server</string>
   <string name="start_server_dialog_title">Start server</string>
   <string name="start_server_dialog_message">You can now start the server using this ip address and port no.</string>
   <string name="mobile_data_enabled">Warning: Mobile data enabled</string>
