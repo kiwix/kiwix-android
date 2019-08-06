@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,15 +48,19 @@ import static org.kiwix.kiwixmobile.webserver.WebServerHelper.stopAndroidWebServ
 import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.checkHotspotState;
 
 public class ZimHostActivity extends AppCompatActivity implements
-    ZimFileSelectFragment.OnHostActionButtonClickedListener {
+    ZimFileSelectFragment.OnHostActionButtonClickedListener, ServerStateListener {
 
   Button startServerButton;
+  TextView serverTextView;
 
   public static final String ACTION_TURN_ON_AFTER_O = "Turn_on_hotspot_after_oreo";
   public static final String ACTION_TURN_OFF_AFTER_O = "Turn_off_hotspot_after_oreo";
+  private final String IP_STATE_KEY = "ip_state_key";
   private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
   private Intent serviceIntent;
   private Task<LocationSettingsResponse> task;
+  boolean flag = false;
+  String ip;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +70,14 @@ public class ZimHostActivity extends AppCompatActivity implements
     setUpToolbar();
 
     startServerButton = (Button) findViewById(R.id.startServerButton);
+    serverTextView = (TextView) findViewById(R.id.server_textView);
+
+    if (savedInstanceState != null) {
+      serverTextView.setText(
+          getString(R.string.server_started_message) + "\n" + savedInstanceState.getString(
+              IP_STATE_KEY));
+      startServerButton.setText(getString(R.string.stop_server_label));
+    }
 
     FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -325,6 +338,26 @@ public class ZimHostActivity extends AppCompatActivity implements
       builder.setCancelable(false);
       AlertDialog dialog = builder.create();
       dialog.show();
+    }
+  }
+
+  @Override public void serverStarted(String ip) {
+    this.ip = ip;
+    serverTextView.setText(getString(R.string.server_started_message) + "\n" + ip);
+    startServerButton.setText(getString(R.string.stop_server_label));
+    flag = true;
+  }
+
+  @Override public void serverStopped() {
+    serverTextView.setText(getString(R.string.server_textview_default_message));
+    startServerButton.setText(getString(R.string.start_server_label));
+    flag = false;
+  }
+
+  @Override protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    if (flag) {
+      outState.putString(IP_STATE_KEY, ip);
     }
   }
 }

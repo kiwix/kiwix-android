@@ -9,6 +9,7 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.webserver.ServerStateListener;
 import org.kiwix.kiwixmobile.webserver.WebServerHelper;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
@@ -21,10 +22,11 @@ import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 public class WifiHotspotManager {
   private WifiManager wifiManager;
-  private Context context;
+  Context context;
   WifiManager.LocalOnlyHotspotReservation hotspotReservation;
   boolean oreoenabled = false;
   WifiConfiguration currentConfig;
+  ServerStateListener serverStateListener;
 
   public WifiHotspotManager(Context context) {
     this.context = context;
@@ -57,6 +59,8 @@ public class WifiHotspotManager {
         public void onStopped() {
           super.onStopped();
           Log.v("DANG", "Local Hotspot Stopped");
+          serverStateListener = (ServerStateListener) context;
+          serverStateListener.serverStopped();
         }
 
         @Override

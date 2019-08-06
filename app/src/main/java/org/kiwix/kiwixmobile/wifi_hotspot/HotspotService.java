@@ -18,6 +18,7 @@ import androidx.core.app.NotificationCompat;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.Constants;
+import org.kiwix.kiwixmobile.webserver.ServerStateListener;
 
 import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_TURN_OFF_AFTER_O;
 import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_TURN_ON_AFTER_O;
@@ -35,6 +36,7 @@ public class HotspotService extends Service {
   private BroadcastReceiver stopReceiver;
   private NotificationManager notificationManager;
   private NotificationCompat.Builder builder;
+  ServerStateListener serverStateListener;
 
   @Override public void onCreate() {
     super.onCreate();
@@ -67,11 +69,8 @@ public class HotspotService extends Service {
 
       case ACTION_TURN_OFF_AFTER_O:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          hotspotManager.turnOffHotspot();
+          stopHotspot();
         }
-        stopForeground(true);
-        stopSelf();
-        stopAndroidWebServer();
         break;
       default:
         break;
@@ -117,6 +116,7 @@ public class HotspotService extends Service {
     stopForeground(true);
     stopSelf();
     stopAndroidWebServer();
+    serverStateListener.serverStopped();
   }
 
   @Override
