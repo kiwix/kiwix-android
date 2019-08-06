@@ -94,16 +94,16 @@ public class ZimHostActivity extends AppCompatActivity implements
           toggleHotspot();
         } else {
           //TO DO: show Dialog() + within that add check mobile Data check later.
-          if (isMobileDataEnabled(context)) {
-            mobileDataDialog();
-          } else {
+          //if (isMobileDataEnabled(context)) {
+          //  mobileDataDialog();
+          //} else {
             if (flag) {
               serverStopped();
               isStarted = false;
             } else {
               startHotspotDialog();
             }
-          }
+          //}
         }
       }
     });
