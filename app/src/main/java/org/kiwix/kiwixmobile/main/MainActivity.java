@@ -28,14 +28,12 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.media.AudioManager;
-import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -63,7 +61,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
@@ -83,15 +80,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsStates;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -100,7 +88,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -125,8 +112,6 @@ import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
 import org.kiwix.kiwixmobile.webserver.StartServer;
-import org.kiwix.kiwixmobile.webserver.WebServerHelper;
-import org.kiwix.kiwixmobile.wifi_hotspot.HotspotService;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
@@ -170,18 +155,12 @@ import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 import static org.kiwix.kiwixmobile.utils.LanguageUtils.getResourceString;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 import static org.kiwix.kiwixmobile.utils.UpdateUtils.reformatProviderUrl;
-import static org.kiwix.kiwixmobile.webserver.WebServerHelper.isStarted;
-import static org.kiwix.kiwixmobile.webserver.WebServerHelper.stopAndroidWebServer;
-import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.checkHotspotState;
 
 public class MainActivity extends BaseActivity implements WebViewCallback,
     MainContract.View {
 
   private static final String NEW_TAB = "NEW_TAB";
   private static final String HOME_URL = "file:///android_asset/home.html";
-  public static final String ACTION_TURN_ON_AFTER_O = "Turn_on_hotspot_after_oreo";
-  public static final String ACTION_TURN_OFF_AFTER_O = "Turn_off_hotspot_after_oreo";
-  private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
   public static boolean isFullscreenOpened;
   public static boolean refresh;
   public static boolean wifiOnly;
@@ -190,7 +169,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private static Uri KIWIX_BROWSER_MARKET_URI;
   private final ArrayList<String> bookmarks = new ArrayList<>();
   private final List<KiwixWebView> webViewList = new ArrayList<>();
-  private Intent serviceIntent;
   @BindView(R.id.activity_main_root)
   ConstraintLayout root;
   @BindView(R.id.activity_main_toolbar)
@@ -261,7 +239,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   private CompatFindActionModeCallback compatCallback;
   private TabsAdapter tabsAdapter;
   private int currentWebViewIndex = 0;
-  private Task<LocationSettingsResponse> task;
   private File file;
   private ActionMode actionMode = null;
   private KiwixWebView tempForUndo;
@@ -407,8 +384,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     tabRecyclerView.setAdapter(tabsAdapter);
     new ItemTouchHelper(tabCallback).attachToRecyclerView(tabRecyclerView);
     drawerLayout.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
-
-    serviceIntent = new Intent(this, HotspotService.class);
   }
 
   //End of onCreate
@@ -766,8 +741,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     // TODO create a base Activity class that class this.
     FileUtils.deleteCachedFiles(this);
     tts.shutdown();
-    stopAndroidWebServer();
-    isStarted = false;
   }
 
   private void updateTableOfContents() {
@@ -955,16 +928,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         break;
 
       case R.id.menu_wifi_hotspot:
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            toggleHotspot();
-          } else {
-            //TO DO: show Dialog() + within that add check mobile Data check later.
-            if (isMobileDataEnabled(this)) {
-              mobileDataDialog();
-            } else {
-              startHotspotDialog();
-            }
-          }
+        //Do nothing
+        break;
       default:
         break;
     }
@@ -1086,79 +1051,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     Toast.makeText(this, stringResource, duration).show();
   }
 
-  private void startService(String ACTION) {
-    serviceIntent.setAction(ACTION);
-    this.startService(serviceIntent);
-  }
-
-  //Advice user to turn on hotspot manually for API<26
-  private void startHotspotDialog() {
-    AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
-
-    builder.setPositiveButton(getString(R.string.hotspot_dialog_positive_button), (dialog, id) -> {
-    });
-
-    builder.setNeutralButton(getString(R.string.hotspot_dialog_neutral_button), (dialog, id) -> {
-      //TO DO: START SERVER WITHIN THE SERVICE.
-      WebServerHelper webServerHelper = new WebServerHelper(this);
-      //Adding a handler because sometimes hotspot can take time to turn on.
-      //TO DO: Add a progress dialog instead of handler
-      final Handler handler = new Handler();
-      handler.postDelayed(new Runnable() {
-        @Override
-        public void run() {
-          webServerHelper.startServerDialog();
-        }
-      }, 5000);
-    });
-
-    builder.setTitle(getString(R.string.hotspot_dialog_title));
-    builder.setMessage(
-        getString(R.string.hotspot_dialog_message)
-    );
-    AlertDialog dialog = builder.create();
-    dialog.show();
-  }
-
-  private void mobileDataDialog() {
-    if (Build.VERSION.SDK_INT < VERSION_CODES.O) {
-      AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
-
-      builder.setPositiveButton(this.getString(R.string.yes), (dialog, id) -> disableMobileData());
-      builder.setNegativeButton((android.R.string.no), (dialog, id) -> {
-        startHotspotDialog();
-      });
-      builder.setTitle(this.getString(R.string.mobile_data_enabled));
-      builder.setMessage(
-          this.getString(R.string.mobile_data_message) + "\n" + this.getString(
-              R.string.mobile_data_message_confirmation)
-      );
-      builder.setCancelable(false);
-      AlertDialog dialog = builder.create();
-      dialog.show();
-    }
-  }
-
-  @RequiresApi(api = VERSION_CODES.O)
-  private void toggleHotspot() {
-    //Check if location permissions are granted
-    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-        == PackageManager.PERMISSION_GRANTED) {
-      if (checkHotspotState(this)) //If hotspot is already enabled, turn it off
-      {
-        startService(ACTION_TURN_OFF_AFTER_O);
-      } else //If hotspot is not already enabled, then turn it on.
-      {
-        setupLocationServices();
-      }
-    } else {
-      //Ask location permission if not granted
-        ActivityCompat.requestPermissions(this,
-            new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
-            MY_PERMISSIONS_ACCESS_FINE_LOCATION);
-    }
-  }
-
   @SuppressWarnings("SameReturnValue")
   @OnLongClick(R.id.bottom_toolbar_bookmark)
   boolean goToBookmarks() {
@@ -1166,30 +1058,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     Intent intentBookmarks = new Intent(this, BookmarksActivity.class);
     startActivityForResult(intentBookmarks, BOOKMARK_CHOSEN_REQUEST);
     return true;
-  }
-
-  // This method checks if mobile data is enabled in user's device.
-  private static boolean isMobileDataEnabled(Context context) {
-    boolean enabled = false;
-    ConnectivityManager cm =
-        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-    try {
-      Class cmClass = Class.forName(cm.getClass().getName());
-      Method method = cmClass.getDeclaredMethod("getMobileDataEnabled");
-      method.setAccessible(true);
-      enabled = (Boolean) method.invoke(cm);
-    } catch (Exception e) {
-      Log.e("DANG", e.toString());
-    }
-    return enabled;
-  }
-
-  //This method sends the user to data usage summary settings activity
-  private void disableMobileData() {
-    Intent intent = new Intent();
-    intent.setComponent(new ComponentName("com.android.settings",
-        "com.android.settings.Settings$DataUsageSummaryActivity"));
-    startActivity(intent);
   }
 
   private void openFullScreen() {
@@ -1338,15 +1206,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         break;
       }
 
-      case MY_PERMISSIONS_ACCESS_FINE_LOCATION: {
-        if (grantResults.length > 0
-            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            toggleHotspot();
-          }
-        }
-      }
-
       case REQUEST_READ_STORAGE_PERMISSION: {
         if (grantResults.length > 0
             && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -1459,23 +1318,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
             finish();
           }
 
-          //Code for webserver
-          if (isStarted) {
-            new android.app.AlertDialog.Builder(this)
-                .setTitle("WARNING")
-                .setMessage("You've already a server running")
-                .setPositiveButton(getResources().getString(android.R.string.ok),
-                    new DialogInterface.OnClickListener() {
-                      public void onClick(DialogInterface dialog, int id) {
-                        finish();
-                      }
-                    })
-                .setNegativeButton(getResources().getString(android.R.string.cancel), null)
-                .show();
-          } else {
-            finish();
-          }
-          return true;
         case KeyEvent.KEYCODE_MENU:
           openOptionsMenu();
           return true;
@@ -1831,23 +1673,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           }
         }
         return;
-      //Checking the result code for LocationSettings resolution
-      case 101:
-        final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
-        switch (resultCode) {
-          case Activity.RESULT_OK:
-            // All required changes were successfully made
-            Log.v("case 101", states.isLocationPresent() + "");
-            startService(ACTION_TURN_ON_AFTER_O);
-            break;
-          case Activity.RESULT_CANCELED:
-            // The user was asked to change settings, but chose not to
-            Log.v("case 101", "Canceled");
-            break;
-          default:
-            break;
-        }
-        break;
+
       default:
         break;
     }
@@ -2318,58 +2144,5 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   public boolean checkNull(View view) {
     return view != null;
-  }
-
-  private void setupLocationServices() {
-    LocationRequest mLocationRequest = new LocationRequest();
-    mLocationRequest.setInterval(10);
-    mLocationRequest.setSmallestDisplacement(10);
-    mLocationRequest.setFastestInterval(10);
-    mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-    LocationSettingsRequest.Builder builder = new
-        LocationSettingsRequest.Builder();
-    builder.addLocationRequest(mLocationRequest);
-
-    task = LocationServices.getSettingsClient(this).checkLocationSettings(builder.build());
-
-    locationSettingsResponseBuilder();
-  }
-
-  private void locationSettingsResponseBuilder() {
-    task.addOnCompleteListener(task -> {
-      try {
-        LocationSettingsResponse response = task.getResult(ApiException.class);
-        // All location settings are satisfied. The client can initialize location
-        // requests here.
-
-        startService(ACTION_TURN_ON_AFTER_O);
-
-        //}
-      } catch (ApiException exception) {
-        switch (exception.getStatusCode()) {
-          case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-            // Location settings are not satisfied. But could be fixed by showing the
-            // user a dialog.
-            try {
-              // Cast to a resolvable exception.
-              ResolvableApiException resolvable = (ResolvableApiException) exception;
-              // Show the dialog by calling startResolutionForResult(),
-              // and check the result in onActivityResult().
-              resolvable.startResolutionForResult(
-                  MainActivity.this,
-                  101);
-            } catch (IntentSender.SendIntentException e) {
-              // Ignore the error.
-            } catch (ClassCastException e) {
-              // Ignore, should be an impossible error.
-            }
-            break;
-          case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-            // Location settings are not satisfied. However, we have no way to fix the
-            // settings so we won't show the dialog.
-            break;
-        }
-      }
-    });
   }
 }
