@@ -1,21 +1,14 @@
 package org.kiwix.kiwixmobile.webserver;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.text.InputFilter;
-import android.text.InputType;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import androidx.appcompat.app.AlertDialog;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import com.google.android.material.snackbar.Snackbar;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
-import org.kiwix.kiwixmobile.R;
 
 /**
  * WebServerHelper class is used to set up the suitable environment i.e. getting the
@@ -29,7 +22,6 @@ public class WebServerHelper {
   private EditText editTextPort;
   public static boolean isStarted;
   int port;
-  private static WebServer webServer;
   private CoordinatorLayout coordinatorLayout;
   ServerStateListener listener;
 
@@ -52,8 +44,7 @@ public class WebServerHelper {
 
 
   public static boolean stopAndroidWebServer() {
-    if (isStarted && webServer != null) {
-      webServer.stop();
+    if (isStarted ) {
       isStarted = false;
       return true;
     }
@@ -63,26 +54,14 @@ public class WebServerHelper {
   boolean startAndroidWebServer() {
     if (!isStarted) {
       port = 8080;
-      try {
-        if (port == 0) {
-          throw new Exception();
-        }
-        webServer = new WebServer(port);
-        webServer.start();
-        return true;
-      } catch (Exception e) {
-        e.printStackTrace();
-        Snackbar.make(coordinatorLayout,
-            "The PORT " + port + " doesn't work, please change it between 1000 and 9999.",
-            Snackbar.LENGTH_LONG).show();
-      }
+      //Call to start server
+      return true;
     }
     return false;
   }
 
   // get Ip address of the device's wireless access point i.e. wifi hotspot OR wifi network
   String getIpAddress() {
-    Log.v("DANG", "Inside getIpAdress()");
     String ip = "";
     try {
       Enumeration<NetworkInterface> enumNetworkInterfaces = NetworkInterface

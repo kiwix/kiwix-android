@@ -97,7 +97,14 @@ public class ZimHostActivity extends AppCompatActivity implements
           if (isMobileDataEnabled(context)) {
             mobileDataDialog();
           } else {
-            startHotspotDialog();
+            if(flag) {
+            serverStopped();
+            isStarted = false;
+            }
+            else
+            {
+              startHotspotDialog();
+            }
           }
         }
       }
