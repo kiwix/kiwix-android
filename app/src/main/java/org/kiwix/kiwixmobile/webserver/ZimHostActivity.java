@@ -306,7 +306,7 @@ public class ZimHostActivity extends AppCompatActivity implements
         public void run() {
           webServerHelper.startServerHelper();
         }
-      }, 5000);
+      }, 7000);
     });
 
     builder.setTitle(getString(R.string.hotspot_dialog_title));
