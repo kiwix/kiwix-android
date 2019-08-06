@@ -94,7 +94,7 @@ public class HotspotService extends Service {
         .setSmallIcon(R.mipmap.kiwix_icon)
         .setWhen(System.currentTimeMillis());
 
-      hotspotNotificationChannel();
+    hotspotNotificationChannel();
 
     if (showStopButton) {
       Intent stopIntent = new Intent(ACTION_STOP);
@@ -112,7 +112,7 @@ public class HotspotService extends Service {
 
   @RequiresApi(Build.VERSION_CODES.O)
   void stopHotspot() {
-      hotspotManager.turnOffHotspot();
+    hotspotManager.turnOffHotspot();
     stopForeground(true);
     stopSelf();
     stopAndroidWebServer();

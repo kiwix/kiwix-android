@@ -37,57 +37,19 @@ public class WebServerHelper {
     this.context = context;
   }
 
-  //Dialog to start the server where user is shown the hotspot ip address can edit the port no.
-  public void startServerDialog() {
-    AlertDialog.Builder alert = new AlertDialog.Builder(context);
-    alert.setTitle(R.string.start_server_dialog_title);
-    alert.setMessage(R.string.start_server_dialog_message);
-
-    LinearLayout layout = new LinearLayout(context);
-    layout.setOrientation(LinearLayout.HORIZONTAL);
-
-    coordinatorLayout = new CoordinatorLayout(context);
-
-    textViewIpAccess = new TextView(context);
-    textViewIpAccess.setText(context.getString(R.string.sample_ip_address));
-    textViewIpAccess.setTextSize(20);
-    layout.addView(textViewIpAccess);
-
-    TextView colonTextView = new TextView(context);
-    colonTextView.setTextSize(20);
-    colonTextView.setText(":");
-    layout.addView(colonTextView);
-
-    editTextPort = new EditText(context);
-    editTextPort.setInputType(InputType.TYPE_CLASS_NUMBER);
-    editTextPort.setHint(R.string.port_hint);
-    editTextPort.setText(R.string.port_hint);
-    editTextPort.setFilters(new InputFilter[] { new InputFilter.LengthFilter(4) });
-    editTextPort.setTextSize(20);
-    layout.addView(editTextPort);
-
-    alert.setView(layout);
-
-    alert.setPositiveButton("START SERVER", new DialogInterface.OnClickListener() {
-      public void onClick(DialogInterface dialog, int whichButton) {
-        if (!isStarted && startAndroidWebServer()) {
-          isStarted = true;
-          listener = (ServerStateListener) context;
-          listener.serverStarted(getIpAddress()+port);
-        }
-      }
-    });
-
-    alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-      public void onClick(DialogInterface dialog, int whichButton) {
-        // Canceled.
-      }
-    });
-
-    alert.show();
-
-    setIpAccess();
+  public void startServerHelper() {
+    //TO DO:
+    //1. Get port from settings screen
+    //2. Ask user to change port in settings if port is in use.
+    //OR
+    //Always use 8080 and when its not available then iterate this number.
+    if (!isStarted && startAndroidWebServer()) {
+      isStarted = true;
+      listener = (ServerStateListener) context;
+      listener.serverStarted(getIpAddress() + port);
+    }
   }
+
 
   public static boolean stopAndroidWebServer() {
     if (isStarted && webServer != null) {
@@ -100,7 +62,7 @@ public class WebServerHelper {
 
   boolean startAndroidWebServer() {
     if (!isStarted) {
-      port = getPortFromEditText();
+      port = 8080;
       try {
         if (port == 0) {
           throw new Exception();
@@ -116,16 +78,6 @@ public class WebServerHelper {
       }
     }
     return false;
-  }
-
-  int getPortFromEditText() {
-    String valueEditText = editTextPort.getText().toString();
-    int DEFAULT_PORT = 8080;
-    return (valueEditText.length() > 0) ? Integer.parseInt(valueEditText) : DEFAULT_PORT;
-  }
-
-  private void setIpAccess() {
-    textViewIpAccess.setText(getIpAddress());
   }
 
   // get Ip address of the device's wireless access point i.e. wifi hotspot OR wifi network

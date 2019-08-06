@@ -304,7 +304,7 @@ public class ZimHostActivity extends AppCompatActivity implements
       handler.postDelayed(new Runnable() {
         @Override
         public void run() {
-          webServerHelper.startServerDialog();
+          webServerHelper.startServerHelper();
         }
       }, 5000);
     });
