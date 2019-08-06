@@ -19,8 +19,8 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.Constants;
 
-import static org.kiwix.kiwixmobile.webserver.StartServer.ACTION_TURN_OFF_AFTER_O;
-import static org.kiwix.kiwixmobile.webserver.StartServer.ACTION_TURN_ON_AFTER_O;
+import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_TURN_OFF_AFTER_O;
+import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_TURN_ON_AFTER_O;
 import static org.kiwix.kiwixmobile.webserver.WebServerHelper.stopAndroidWebServer;
 
 /**

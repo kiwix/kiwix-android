@@ -13,10 +13,8 @@ import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,7 +27,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import butterknife.BindView;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationRequest;
@@ -41,7 +38,6 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.Task;
 import java.lang.reflect.Method;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.wifi_hotspot.HotspotService;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
 
@@ -50,7 +46,7 @@ import static org.kiwix.kiwixmobile.webserver.WebServerHelper.isStarted;
 import static org.kiwix.kiwixmobile.webserver.WebServerHelper.stopAndroidWebServer;
 import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.checkHotspotState;
 
-public class StartServer extends AppCompatActivity implements
+public class ZimHostActivity extends AppCompatActivity implements
     ZimFileSelectFragment.OnHostActionButtonClickedListener {
 
   Button startServerButton;
@@ -64,7 +60,7 @@ public class StartServer extends AppCompatActivity implements
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_start_server);
+    setContentView(R.layout.activity_zim_host);
 
     setUpToolbar();
 
@@ -262,7 +258,7 @@ public class StartServer extends AppCompatActivity implements
               // Show the dialog by calling startResolutionForResult(),
               // and check the result in onActivityResult().
               resolvable.startResolutionForResult(
-                  StartServer.this,
+                  ZimHostActivity.this,
                   101);
             } catch (IntentSender.SendIntentException e) {
               // Ignore the error.

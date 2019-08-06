@@ -111,7 +111,7 @@ import org.kiwix.kiwixmobile.utils.LanguageUtils;
 import org.kiwix.kiwixmobile.utils.NetworkUtils;
 import org.kiwix.kiwixmobile.utils.StyleUtils;
 import org.kiwix.kiwixmobile.utils.files.FileUtils;
-import org.kiwix.kiwixmobile.webserver.StartServer;
+import org.kiwix.kiwixmobile.webserver.ZimHostActivity;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.StorageObserver;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
@@ -923,7 +923,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         break;
 
       case R.id.menu_host_books:
-        Intent intent = new Intent(MainActivity.this, StartServer.class);
+        Intent intent = new Intent(MainActivity.this, ZimHostActivity.class);
         startActivity(intent);
         break;
 
