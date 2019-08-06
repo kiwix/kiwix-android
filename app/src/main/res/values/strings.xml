@@ -43,6 +43,7 @@
   <string name="hotspot_dialog_neutral_button">YES, I’VE TURNED IT ON</string>
   <string name="hotspot_dialog_positive_button">Okay</string>
   <string name="sample_ip_address">http://000.000.000.000</string>
+  <string name="start_server_label">Start server</string>
   <string name="server_started_title">Server started</string>
   <string name="server_started_message">Enter this ip address into your browser to access the server</string>
   <string name="error_filenotfound">Error: The selected ZIM file could not be found.</string>
