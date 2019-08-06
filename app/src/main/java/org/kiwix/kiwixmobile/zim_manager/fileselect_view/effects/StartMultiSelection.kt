@@ -8,6 +8,8 @@ import org.kiwix.kiwixmobile.extensions.startActionMode
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestDeleteMultiSelection
 import org.kiwix.kiwixmobile.zim_manager.ZimManageViewModel.FileSelectActions.RequestShareMultiSelection
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment.Test
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem
 
 data class StartMultiSelection(
@@ -19,7 +21,8 @@ data class StartMultiSelection(
       R.menu.menu_zim_files_contextual,
       mapOf(
         R.id.zim_file_delete_item to { fileSelectActions.offer(RequestDeleteMultiSelection) },
-        R.id.zim_file_share_item to { fileSelectActions.offer(RequestShareMultiSelection) }
+        R.id.zim_file_share_item to { fileSelectActions.offer(RequestShareMultiSelection) },
+        R.id.zim_file_host_item to { ZimFileSelectFragment().Test() }
       )
     ) { fileSelectActions.offer(FileSelectActions.MultiModeFinished) }
 }
