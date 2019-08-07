@@ -9,4 +9,6 @@ public interface ServerStateListener {
   void serverStopped();
 
   void hotspotTurnedOn(WifiConfiguration wifiConfiguration);
+
+  void hotspotState(Boolean state);
 }
