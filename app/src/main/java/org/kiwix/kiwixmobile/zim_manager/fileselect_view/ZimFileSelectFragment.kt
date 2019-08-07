@@ -22,7 +22,6 @@ package org.kiwix.kiwixmobile.zim_manager.fileselect_view
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.ActionMode
 import android.view.LayoutInflater
 import android.view.View
@@ -158,23 +157,6 @@ class ZimFileSelectFragment : BaseFragment() {
 
   private fun requestFileSystemCheck() {
     zimManageViewModel.requestFileSystemCheck.onNext(Unit)
-  }
-
-  interface OnHostActionButtonClickedListener {
-    fun onHostActionButtonClicked()
-  }
-
-  inner class Test() {
-    private var listener: OnHostActionButtonClickedListener? = null
-
-    init {
-      listener = context as? OnHostActionButtonClickedListener
-      listener?.onHostActionButtonClicked()
-      if (listener == null)
-        Log.v("DANG", "Listener is null")
-      if (context == null)
-        Log.v("DANG", "Context is null")
-    }
   }
 }
 

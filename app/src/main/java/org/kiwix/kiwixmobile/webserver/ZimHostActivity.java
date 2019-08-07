@@ -48,7 +48,7 @@ import static org.kiwix.kiwixmobile.webserver.WebServerHelper.stopAndroidWebServ
 import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.checkHotspotState;
 
 public class ZimHostActivity extends AppCompatActivity implements
-    ZimFileSelectFragment.OnHostActionButtonClickedListener, ServerStateListener {
+    ServerStateListener {
 
   Button startServerButton;
   TextView serverTextView;
@@ -233,11 +233,6 @@ public class ZimHostActivity extends AppCompatActivity implements
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     toolbar.setNavigationOnClickListener(v -> onBackPressed());
-  }
-
-  @Override public void onHostActionButtonClicked() {
-    Log.v("DANG", "Action button clicked");
-    Toast.makeText(this, "Host action button has been clicked", Toast.LENGTH_LONG).show();
   }
 
   private void setupLocationServices() {
