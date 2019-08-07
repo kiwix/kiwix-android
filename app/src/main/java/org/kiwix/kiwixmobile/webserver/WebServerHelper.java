@@ -39,7 +39,7 @@ public class WebServerHelper {
     if (!isStarted && startAndroidWebServer()) {
       isStarted = true;
       listener = (ServerStateListener) context;
-      listener.serverStarted(getIpAddress() + port);
+      listener.serverStarted(getIpAddress() + ":" + port);
     }
   }
 

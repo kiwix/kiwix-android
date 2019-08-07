@@ -75,7 +75,7 @@ public class ZimHostActivity extends AppCompatActivity implements
 
     if (savedInstanceState != null) {
       serverTextView.setText(
-          getString(R.string.server_started_message) + "\n" + savedInstanceState.getString(
+          getString(R.string.server_started_message) + " " + savedInstanceState.getString(
               IP_STATE_KEY));
       startServerButton.setText(getString(R.string.stop_server_label));
     }
@@ -343,8 +343,9 @@ public class ZimHostActivity extends AppCompatActivity implements
   }
 
   @Override public void serverStarted(String ip) {
+    ip = ip.replaceAll("\n", "");
     this.ip = ip;
-    serverTextView.setText(getString(R.string.server_started_message) + "\n" + ip);
+    serverTextView.setText(getString(R.string.server_started_message) + " " + ip);
     startServerButton.setText(getString(R.string.stop_server_label));
     flag = true;
   }
