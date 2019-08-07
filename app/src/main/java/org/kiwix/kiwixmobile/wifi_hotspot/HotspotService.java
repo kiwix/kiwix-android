@@ -15,10 +15,12 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.Constants;
 
+import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_CHECK_HOTSPOT_STATE;
 import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_TURN_OFF_AFTER_O;
 import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_TURN_ON_AFTER_O;
 import static org.kiwix.kiwixmobile.webserver.WebServerHelper.stopAndroidWebServer;
@@ -31,13 +33,15 @@ import static org.kiwix.kiwixmobile.webserver.WebServerHelper.stopAndroidWebServ
 public class HotspotService extends Service {
   private static final int HOTSPOT_NOTIFICATION_ID = 666;
   private static final String ACTION_STOP = "hotspot_stop";
-  private static WifiHotspotManager hotspotManager;
+  private WifiHotspotManager hotspotManager;
   private BroadcastReceiver stopReceiver;
   private NotificationManager notificationManager;
   private NotificationCompat.Builder builder;
   String TAG = HotspotService.this.getClass().getSimpleName();
 
   @Override public void onCreate() {
+
+    hotspotManager = new WifiHotspotManager(this);
     super.onCreate();
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -58,6 +62,12 @@ public class HotspotService extends Service {
 
   @Override public int onStartCommand(Intent intent, int flags, int startId) {
     switch (intent.getAction()) {
+
+      case ACTION_CHECK_HOTSPOT_STATE:
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+          sendBroadcast(hotspotManager.checkHotspotState());
+        }
+        break;
 
       case ACTION_TURN_ON_AFTER_O:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -80,6 +90,14 @@ public class HotspotService extends Service {
   @Nullable @Override public IBinder onBind(Intent intent) {
     return null;
   }
+
+  private void sendBroadcast(boolean success) {
+    Intent intent = new Intent(
+        ACTION_CHECK_HOTSPOT_STATE); //put the same message as in the filter you used in the activity when registering the receiver
+    intent.putExtra("hotspot_state", success);
+    LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+  }
+
 
   private Notification buildForegroundNotification(String status, boolean showStopButton) {
     Log.v(TAG, "Building notification " + status);
@@ -135,13 +153,5 @@ public class HotspotService extends Service {
       builder.setChannelId(Constants.HOTSPOT_SERVICE_CHANNEL_ID);
       notificationManager.createNotificationChannel(hotspotServiceChannel);
     }
-  }
-
-  @RequiresApi(api = Build.VERSION_CODES.O)
-  public static boolean checkHotspotState(Context context) {
-    if (hotspotManager == null) {
-      hotspotManager = new WifiHotspotManager(context);
-    }
-    return hotspotManager.checkHotspotState();
   }
 }

@@ -2,10 +2,12 @@ package org.kiwix.kiwixmobile.webserver;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
@@ -28,6 +30,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationRequest;
@@ -45,16 +48,18 @@ import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 import static org.kiwix.kiwixmobile.webserver.WebServerHelper.isStarted;
 import static org.kiwix.kiwixmobile.webserver.WebServerHelper.stopAndroidWebServer;
-import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.checkHotspotState;
 
 public class ZimHostActivity extends AppCompatActivity implements
     ServerStateListener {
 
   Button startServerButton;
   TextView serverTextView;
+  private BroadcastReceiver broadcastReceiver;
+  private boolean bound;
 
   public static final String ACTION_TURN_ON_AFTER_O = "Turn_on_hotspot_after_oreo";
   public static final String ACTION_TURN_OFF_AFTER_O = "Turn_off_hotspot_after_oreo";
+  public static final String ACTION_CHECK_HOTSPOT_STATE = "Check_hotspot_state";
   private final String IP_STATE_KEY = "ip_state_key";
   private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
   private Intent serviceIntent;
@@ -89,6 +94,21 @@ public class ZimHostActivity extends AppCompatActivity implements
     serviceIntent = new Intent(this, HotspotService.class);
     Context context = this;
 
+    broadcastReceiver = new BroadcastReceiver() {
+
+      @Override
+      public void onReceive(Context context, Intent intent) {
+        if (intent.getBooleanExtra("hotspot_state", false)) {
+          startService(ACTION_TURN_OFF_AFTER_O);
+        } else //If hotspot is not already enabled, then turn it on.
+        {
+          setupLocationServices();
+        }
+      }
+    };
+    LocalBroadcastManager.getInstance(this)
+        .registerReceiver(broadcastReceiver, new IntentFilter(ACTION_CHECK_HOTSPOT_STATE));
+
     startServerButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -115,19 +135,19 @@ public class ZimHostActivity extends AppCompatActivity implements
     //Check if location permissions are granted
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         == PackageManager.PERMISSION_GRANTED) {
-      if (checkHotspotState(this)) //If hotspot is already enabled, turn it off
-      {
-        startService(ACTION_TURN_OFF_AFTER_O);
-      } else //If hotspot is not already enabled, then turn it on.
-      {
-        setupLocationServices();
-      }
+      startService(ACTION_CHECK_HOTSPOT_STATE);
     } else {
       //Ask location permission if not granted
       ActivityCompat.requestPermissions(this,
           new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
           MY_PERMISSIONS_ACCESS_FINE_LOCATION);
     }
+  }
+
+  @Override protected void onResume() {
+    super.onResume();
+    LocalBroadcastManager.getInstance(this)
+        .registerReceiver(broadcastReceiver, new IntentFilter(ACTION_CHECK_HOTSPOT_STATE));
   }
 
   // This method checks if mobile data is enabled in user's device.
@@ -236,7 +256,7 @@ public class ZimHostActivity extends AppCompatActivity implements
     toolbar.setNavigationOnClickListener(v -> onBackPressed());
   }
 
-  private void setupLocationServices() {
+  void setupLocationServices() {
     LocationRequest mLocationRequest = new LocationRequest();
     mLocationRequest.setInterval(10);
     mLocationRequest.setSmallestDisplacement(10);
@@ -318,7 +338,7 @@ public class ZimHostActivity extends AppCompatActivity implements
     dialog.show();
   }
 
-  private void startService(String ACTION) {
+  void startService(String ACTION) {
     serviceIntent.setAction(ACTION);
     this.startService(serviceIntent);
   }
