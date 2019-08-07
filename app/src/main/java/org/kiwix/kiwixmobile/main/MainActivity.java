@@ -927,9 +927,6 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         startActivity(intent);
         break;
 
-      case R.id.menu_wifi_hotspot:
-        //Do nothing
-        break;
       default:
         break;
     }
@@ -1743,14 +1740,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         menu.findItem(R.id.menu_home).setVisible(false);
         menu.findItem(R.id.menu_random_article).setVisible(false);
         menu.findItem(R.id.menu_searchintext).setVisible(false);
-        menu.findItem(R.id.menu_wifi_hotspot).setVisible(false);
         menu.findItem(R.id.menu_host_books).setVisible(true);
       } else {
         menu.findItem(R.id.menu_read_aloud).setVisible(true);
         menu.findItem(R.id.menu_home).setVisible(true);
         menu.findItem(R.id.menu_random_article).setVisible(true);
         menu.findItem(R.id.menu_searchintext).setVisible(true);
-        menu.findItem(R.id.menu_wifi_hotspot).setVisible(true);
       }
     }
     return true;
