@@ -1,16 +1,14 @@
 package org.kiwix.kiwixmobile.activities;
 
 import android.Manifest;
-import androidx.test.filters.LargeTest;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.bookmark.BookmarksActivity;
 
-@LargeTest
 @RunWith(AndroidJUnit4.class)
 public class BookmarksActivityTest {
 
@@ -25,7 +23,7 @@ public class BookmarksActivityTest {
       GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @Test
-  public void BookmarksActivitySimple() {
+  public void testSimple() {
 
   }
 }
