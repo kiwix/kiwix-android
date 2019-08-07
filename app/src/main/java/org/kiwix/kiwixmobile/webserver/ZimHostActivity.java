@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
+import android.net.wifi.WifiConfiguration;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
@@ -353,6 +354,32 @@ public class ZimHostActivity extends AppCompatActivity implements
     serverTextView.setText(getString(R.string.server_textview_default_message));
     startServerButton.setText(getString(R.string.start_server_label));
     flag = false;
+  }
+
+  @Override public void hotspotTurnedOn(WifiConfiguration wifiConfiguration) {
+
+    //Show an alert dialog for hotspot details
+    AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
+    WebServerHelper webServerHelper = new WebServerHelper(this);
+    builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
+      final Handler handler = new Handler();
+      handler.postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          webServerHelper.startServerHelper();
+        }
+      }, 2000);
+    });
+
+    builder.setTitle(this.getString(R.string.hotspot_turned_on));
+    builder.setMessage(
+        this.getString(R.string.hotspot_details_message) + "\n" + this.getString(
+            R.string.hotspot_ssid_label) + " " + wifiConfiguration.SSID + "\n" + this.getString(
+            R.string.hotspot_pass_label) + " " + wifiConfiguration.preSharedKey);
+
+    builder.setCancelable(false);
+    AlertDialog dialog = builder.create();
+    dialog.show();
   }
 
   @Override protected void onSaveInstanceState(Bundle outState) {

@@ -32,6 +32,7 @@ public class WifiHotspotManager {
   public WifiHotspotManager(Context context) {
     this.context = context;
     wifiManager = (WifiManager) this.context.getSystemService(Context.WIFI_SERVICE);
+    serverStateListener = (ServerStateListener) context;
   }
 
   //Workaround to turn on hotspot for Oreo versions
@@ -51,7 +52,7 @@ public class WifiHotspotManager {
               + " \n SSID is : "
               + currentConfig.SSID);
 
-          hotspotDetailsDialog();
+          serverStateListener.hotspotTurnedOn(currentConfig);
 
           oreoenabled = true;
         }
@@ -60,7 +61,6 @@ public class WifiHotspotManager {
         public void onStopped() {
           super.onStopped();
           Log.v(TAG, "Local Hotspot Stopped");
-          serverStateListener = (ServerStateListener) context;
           serverStateListener.serverStopped();
         }
 
@@ -90,28 +90,4 @@ public class WifiHotspotManager {
     return hotspotReservation != null;
   }
 
-  public void hotspotDetailsDialog() {
-
-    AlertDialog.Builder builder = new AlertDialog.Builder(context, dialogStyle());
-    WebServerHelper webServerHelper = new WebServerHelper(context);
-      builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-          @Override
-          public void run() {
-            webServerHelper.startServerHelper();
-          }
-        }, 2500);
-      });
-
-    builder.setTitle(context.getString(R.string.hotspot_turned_on));
-      builder.setMessage(
-          context.getString(R.string.hotspot_details_message) + "\n" + context.getString(
-              R.string.hotspot_ssid_label) + " " + currentConfig.SSID + "\n" + context.getString(
-              R.string.hotspot_pass_label) + " " + currentConfig.preSharedKey);
-
-    builder.setCancelable(false);
-    AlertDialog dialog = builder.create();
-    dialog.show();
-  }
 }
