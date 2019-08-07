@@ -23,7 +23,7 @@ public class WebServerHelper {
   public static boolean isStarted;
   int port;
   private CoordinatorLayout coordinatorLayout;
-  ServerStateListener listener;
+  static ServerStateListener listener;
   String TAG = WebServerHelper.this.getClass().getSimpleName();
 
   public WebServerHelper(Context context) {
@@ -47,6 +47,7 @@ public class WebServerHelper {
   public static boolean stopAndroidWebServer() {
     if (isStarted ) {
       isStarted = false;
+      listener.serverStopped();
       return true;
     }
     return false;
