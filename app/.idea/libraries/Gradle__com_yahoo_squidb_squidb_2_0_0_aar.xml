@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.yahoo.squidb:squidb:2.0.0@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/db459ee772d43f335a9e74171de182d2/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/db459ee772d43f335a9e74171de182d2/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.yahoo.squidb/squidb/2.0.0/bfd6ca900ede188cfeb1438d6d1433b73aa23029/squidb-2.0.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

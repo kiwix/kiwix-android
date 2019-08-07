@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: io.mockk:mockk:1.9@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.mockk/mockk/1.9/f8f282214611e16b7004b47e0a69d0453c6ac2e8/mockk-1.9.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.mockk/mockk/1.9/ca79b88919204e3733c14730308511ed1f06445a/mockk-1.9-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

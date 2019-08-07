@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.jakewharton.android.repackaged:dalvik-dx:1@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jakewharton.android.repackaged/dalvik-dx/1/5344672f614ef1df39f7a9d88a5aa0e44d74d4d9/dalvik-dx-1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jakewharton.android.repackaged/dalvik-dx/1/acfc1e1efbdfa8de9839b2a4f58e6233a6904664/dalvik-dx-1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.yahoo.squidb:squidb-annotations:2.0.0@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.yahoo.squidb/squidb-annotations/2.0.0/ef87936cc9a021ba9ac3b9468d346bbe0b15e401/squidb-annotations-2.0.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.yahoo.squidb/squidb-annotations/2.0.0/329b2f3eba39dd8899ffa70b498f98ca1706cf7/squidb-annotations-2.0.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

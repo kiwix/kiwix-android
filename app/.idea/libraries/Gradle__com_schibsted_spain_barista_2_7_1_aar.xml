@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.schibsted.spain:barista:2.7.1@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/094dd41caeb4dba396546ae1906a34ab/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/094dd41caeb4dba396546ae1906a34ab/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.schibsted.spain/barista/2.7.1/92a16b873363762dc227d9b7ec4ea11189aed71/barista-2.7.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
