@@ -140,7 +140,6 @@ public class HotspotService extends Service {
   @RequiresApi(api = Build.VERSION_CODES.O)
   public static boolean checkHotspotState(Context context) {
     if (hotspotManager == null) {
-      Log.v("TAG", "hotspotManager initialized");
       hotspotManager = new WifiHotspotManager(context);
     }
     return hotspotManager.checkHotspotState();

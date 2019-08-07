@@ -95,7 +95,13 @@ public class WifiHotspotManager {
     AlertDialog.Builder builder = new AlertDialog.Builder(context, dialogStyle());
     WebServerHelper webServerHelper = new WebServerHelper(context);
       builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
-        webServerHelper.startServerHelper();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+          @Override
+          public void run() {
+            webServerHelper.startServerHelper();
+          }
+        }, 2500);
       });
 
     builder.setTitle(context.getString(R.string.hotspot_turned_on));

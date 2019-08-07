@@ -16,7 +16,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -141,7 +140,7 @@ public class ZimHostActivity extends AppCompatActivity implements
       method.setAccessible(true);
       enabled = (Boolean) method.invoke(cm);
     } catch (Exception e) {
-      Log.e("TAG", e.toString());
+      Log.e("ZimHostActivity", e.toString());
     }
     return enabled;
   }
