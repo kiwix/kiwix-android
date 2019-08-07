@@ -37,6 +37,7 @@ public class HotspotService extends Service {
   private NotificationManager notificationManager;
   private NotificationCompat.Builder builder;
   ServerStateListener serverStateListener;
+  String TAG = HotspotService.this.getClass().getSimpleName();
 
   @Override public void onCreate() {
     super.onCreate();
@@ -83,7 +84,7 @@ public class HotspotService extends Service {
   }
 
   private Notification buildForegroundNotification(String status, boolean showStopButton) {
-    Log.v("DANG", "Building notification " + status);
+    Log.v(TAG, "Building notification " + status);
     builder = new NotificationCompat.Builder(this);
     builder.setContentTitle("Kiwix Hotspot").setContentText(status);
     Intent targetIntent = new Intent(this, MainActivity.class);
@@ -142,7 +143,7 @@ public class HotspotService extends Service {
   @RequiresApi(api = Build.VERSION_CODES.O)
   public static boolean checkHotspotState(Context context) {
     if (hotspotManager == null) {
-      Log.v("DANG", "hotspotManager initialized");
+      Log.v("TAG", "hotspotManager initialized");
       hotspotManager = new WifiHotspotManager(context);
     }
     return hotspotManager.checkHotspotState();

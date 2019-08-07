@@ -61,6 +61,7 @@ public class ZimHostActivity extends AppCompatActivity implements
   private Task<LocationSettingsResponse> task;
   boolean flag = false;
   String ip;
+  String TAG = ZimHostActivity.this.getClass().getSimpleName();
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +141,7 @@ public class ZimHostActivity extends AppCompatActivity implements
       method.setAccessible(true);
       enabled = (Boolean) method.invoke(cm);
     } catch (Exception e) {
-      Log.e("DANG", e.toString());
+      Log.e("TAG", e.toString());
     }
     return enabled;
   }

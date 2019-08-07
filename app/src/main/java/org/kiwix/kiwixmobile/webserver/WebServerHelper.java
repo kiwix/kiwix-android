@@ -24,6 +24,7 @@ public class WebServerHelper {
   int port;
   private CoordinatorLayout coordinatorLayout;
   ServerStateListener listener;
+  String TAG = WebServerHelper.this.getClass().getSimpleName();
 
   public WebServerHelper(Context context) {
     this.context = context;
@@ -94,7 +95,7 @@ public class WebServerHelper {
       ip += "Something Wrong! " + e.toString() + "\n";
     }
 
-    Log.v("DANG", "Returning : " + "http://" + ip);
+    Log.v("TAG", "Returning : " + "http://" + ip);
     return "http://" + ip;
   }
 }

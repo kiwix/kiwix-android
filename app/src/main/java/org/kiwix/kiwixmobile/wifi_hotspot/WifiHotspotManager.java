@@ -27,6 +27,7 @@ public class WifiHotspotManager {
   boolean oreoenabled = false;
   WifiConfiguration currentConfig;
   ServerStateListener serverStateListener;
+  String TAG = WifiHotspotManager.this.getClass().getSimpleName();
 
   public WifiHotspotManager(Context context) {
     this.context = context;
@@ -45,7 +46,7 @@ public class WifiHotspotManager {
           hotspotReservation = reservation;
           currentConfig = hotspotReservation.getWifiConfiguration();
 
-          Log.v("DANG", "THE PASSWORD IS: "
+          Log.v(TAG, "THE PASSWORD IS: "
               + currentConfig.preSharedKey
               + " \n SSID is : "
               + currentConfig.SSID);
@@ -58,7 +59,7 @@ public class WifiHotspotManager {
         @Override
         public void onStopped() {
           super.onStopped();
-          Log.v("DANG", "Local Hotspot Stopped");
+          Log.v(TAG, "Local Hotspot Stopped");
           serverStateListener = (ServerStateListener) context;
           serverStateListener.serverStopped();
         }
@@ -66,7 +67,7 @@ public class WifiHotspotManager {
         @Override
         public void onFailed(int reason) {
           super.onFailed(reason);
-          Log.v("DANG", "Local Hotspot failed to start");
+          Log.v(TAG, "Local Hotspot failed to start");
         }
       }, new Handler());
     }
@@ -79,7 +80,7 @@ public class WifiHotspotManager {
       hotspotReservation.close();
       hotspotReservation = null;
       oreoenabled = false;
-      Log.v("DANG", "Turned off hotspot");
+      Log.v(TAG, "Turned off hotspot");
     }
   }
 
