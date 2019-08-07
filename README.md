@@ -57,8 +57,8 @@ You can use IRC web interface on [http://chat.kiwix.org/](http://chat.kiwix.org/
 
 Our other sources of communications include
 
-- Email: kiwix-developer@lists.sourceforge.net or contact@kiwix.org
-- Jabber: kelson@kiwix.org
+- Email: contact@kiwix.org
+- Mailing list: kiwix-developer@lists.sourceforge.net
 
 For more information, please refer to [https://wiki.kiwix.org/wiki/Communication](https://wiki.kiwix.org/wiki/Communication).
 
