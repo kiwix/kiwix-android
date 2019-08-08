@@ -334,22 +334,14 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   private boolean isLocationServicesEnabled() {
     LocationManager locationManager =
         (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-    boolean gps_enabled = false;
-    boolean network_enabled = false;
 
     try {
-      gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-    } catch (Exception ex) {
+      return (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER));
+    } catch (SecurityException | IllegalArgumentException ex) {
       ex.printStackTrace();
     }
 
-    try {
-      network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-    } catch (Exception ex) {
-      ex.printStackTrace();
-    }
-
-    return (gps_enabled || network_enabled);
+    return false;
   }
 
   private void requestEnableLocationServices() {
@@ -391,12 +383,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
     switch (requestCode) {
       case REQUEST_ENABLE_LOCATION_SERVICES: {
-        LocationManager locationManager =
-            (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-
-        if (!(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-            || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))) {
-          // If neither provider is enabled
+        if (!isLocationServicesEnabled()) {
           showToast(this, R.string.permission_refused_location, Toast.LENGTH_LONG);
         }
         break;
