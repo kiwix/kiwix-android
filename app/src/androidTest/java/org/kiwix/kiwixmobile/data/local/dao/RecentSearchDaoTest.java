@@ -1,4 +1,4 @@
-/*
+package org.kiwix.kiwixmobile.data.local.dao;/*
  * Kiwix Android
  * Copyright (C) 2018  Kiwix <android.kiwix.org>
  *
@@ -16,8 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.kiwix.kiwixmobile;
-
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.yahoo.squidb.data.AbstractModel;
 import com.yahoo.squidb.data.SquidCursor;
@@ -27,7 +25,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.data.local.KiwixDatabase;
-import org.kiwix.kiwixmobile.data.local.dao.RecentSearchDao;
 import org.kiwix.kiwixmobile.data.local.entity.RecentSearch;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -38,7 +35,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
-public class RecentSearchDatabaseTest {
+public class RecentSearchDaoTest {
 
   @Mock private KiwixDatabase kiwixDatabase;
   private RecentSearchDao recentSearchDao;

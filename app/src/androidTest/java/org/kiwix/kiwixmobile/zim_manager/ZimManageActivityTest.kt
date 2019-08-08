@@ -1,4 +1,4 @@
-package org.kiwix.kiwixmobile.manage
+package org.kiwix.kiwixmobile.zim_manager
 
 import org.junit.Rule
 import org.junit.Test
@@ -8,7 +8,6 @@ import org.kiwix.kiwixmobile.KiwixMockServer
 import org.kiwix.kiwixmobile.book
 import org.kiwix.kiwixmobile.libraryNetworkEntity
 import org.kiwix.kiwixmobile.metaLinkNetworkEntity
-import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity
 
 class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
   @get:Rule
