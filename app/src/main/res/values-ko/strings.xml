@@ -93,7 +93,6 @@
   <string name="zim_nopic">그림 없음</string>
   <string name="zim_novid">동영상 없음</string>
   <string name="no_network_connection">네트워크 연결 없음</string>
-  <string name="get_library_over_network">콘텐츠 목록의 다운로드를 위해 네트워크를 사용합니다. (약 6MB)</string>
   <string name="help_2">Kiwix의 역할이 무엇입니까?</string>
   <string name="help_3">Kiwix는 오프라인 콘텐츠 리더입니다. 브라우저와 매우 비슷하게 동작하지만 온라인 웹 페이지에 접근하는 대신 ZIM 포맷의 파일로부터 내용을 읽습니다.</string>
   <string name="help_4">Kiwix가 본래 오프라인 상태에서 위키백과를 제공하도록 설계되었으나 다른 콘텐츠도 읽을 수 있습니다.</string>

@@ -74,7 +74,6 @@
   <string name="zim_nopic">तस्विर छैन</string>
   <string name="zim_novid">भिडियो छैन</string>
   <string name="no_network_connection">नेटवर्क जडान छैन</string>
-  <string name="get_library_over_network">नेटवर्क प्रयोग गरेर सामग्री सूची डाउनलोड गर्नुहोस् (करिब 6MB)</string>
   <string name="pref_storage">भण्डारण</string>
   <string name="pref_current_folder">हालको फोल्डर</string>
   <string name="delete_zim_failed">माफ गर्नुहोस् हामीले यो फाइल मेट्न सकेनौं। तपाईंले यसको सट्टामा फाइल व्यवस्थापक प्रयोगको प्रयास गर्नुपर्छ ।</string>
