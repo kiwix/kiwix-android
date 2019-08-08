@@ -42,7 +42,7 @@ import static org.junit.Assert.assertArrayEquals;
 @RunWith(AndroidJUnit4.class)
 @SmallTest
 public class KiwixDatabaseTest {
-
+//should run 31 tests like it does locally
   private final Context context;
 
   public KiwixDatabaseTest() {
