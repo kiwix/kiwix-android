@@ -54,8 +54,9 @@ class ZimManageRobot : BaseRobot() {
     }
 
     fun clickOn(book: Book) {
-      waitFor(5000L)
+      waitFor(10000L)
       clickOn(Text(book.title))
+      waitFor(1000L)
     }
 
     fun clickOnSearch() {
@@ -74,7 +75,7 @@ class ZimManageRobot : BaseRobot() {
   private fun download(func: DownloadRobot.() -> Unit) = DownloadRobot().apply(func)
   inner class DownloadRobot : BaseRobot() {
     init {
-      // isVisible(ViewId(R.id.zim_download_root), 20000L)
+      isVisible(ViewId(R.id.zim_download_root), 20000L)
     }
 
     fun clickStop() {
@@ -89,7 +90,7 @@ class ZimManageRobot : BaseRobot() {
   private fun device(func: DeviceRobot.() -> Unit) = DeviceRobot().apply(func)
   inner class DeviceRobot : BaseRobot() {
     init {
-      // isVisible(ViewId(R.id.zimfilelist))
+      isVisible(ViewId(R.id.zimfilelist))
     }
 
     fun longClickOn(book: Book) {
