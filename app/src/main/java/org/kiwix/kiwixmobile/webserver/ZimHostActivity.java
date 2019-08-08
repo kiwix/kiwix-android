@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.ServiceConnection;
@@ -15,7 +14,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -45,8 +43,8 @@ import org.kiwix.kiwixmobile.wifi_hotspot.HotspotService;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
+import static org.kiwix.kiwixmobile.webserver.WebServerHelper.getAddress;
 import static org.kiwix.kiwixmobile.webserver.WebServerHelper.isStarted;
-import static org.kiwix.kiwixmobile.webserver.WebServerHelper.stopAndroidWebServer;
 
 public class ZimHostActivity extends AppCompatActivity implements
     ServerStateListener {
@@ -61,7 +59,6 @@ public class ZimHostActivity extends AppCompatActivity implements
   private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
   private Intent serviceIntent;
   private Task<LocationSettingsResponse> task;
-  boolean flag = false;
   HotspotService hotspotService;
   String ip;
   String TAG = ZimHostActivity.this.getClass().getSimpleName();
@@ -118,9 +115,8 @@ public class ZimHostActivity extends AppCompatActivity implements
           //if (isMobileDataEnabled(context)) {
           //  mobileDataDialog();
           //} else {
-          if (flag) {
+          if (isStarted) {
             serverStopped();
-            isStarted = false;
           } else {
             startHotspotDialog();
           }
@@ -166,6 +162,14 @@ public class ZimHostActivity extends AppCompatActivity implements
 
   @Override protected void onResume() {
     super.onResume();
+    if (isStarted) {
+      ip = getAddress();
+      ip = ip.replaceAll("\n", "");
+      serverTextView.setText(
+          getString(R.string.server_started_message) + " " + ip);
+      startServerButton.setText(getString(R.string.stop_server_label));
+    }
+
   }
 
   // This method checks if mobile data is enabled in user's device.
@@ -209,32 +213,6 @@ public class ZimHostActivity extends AppCompatActivity implements
     }
   }
 
-  @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (event.getAction() == KeyEvent.ACTION_DOWN) {
-      switch (keyCode) {
-        case KeyEvent.KEYCODE_BACK:
-          //Code for webserver
-          if (isStarted) {
-            new android.app.AlertDialog.Builder(this)
-                .setTitle("WARNING")
-                .setMessage("You've already a server running")
-                .setPositiveButton(getResources().getString(android.R.string.ok),
-                    new DialogInterface.OnClickListener() {
-                      public void onClick(DialogInterface dialog, int id) {
-                        finish();
-                      }
-                    })
-                .setNegativeButton(getResources().getString(android.R.string.cancel), null)
-                .show();
-          } else {
-            finish();
-          }
-          return true;
-      }
-    }
-    return false;
-  }
-
   @Override
   protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
     switch (requestCode) {
@@ -260,8 +238,6 @@ public class ZimHostActivity extends AppCompatActivity implements
 
   @Override protected void onDestroy() {
     super.onDestroy();
-    stopAndroidWebServer();
-    isStarted = false;
   }
 
   private void setUpToolbar() {
@@ -385,13 +361,13 @@ public class ZimHostActivity extends AppCompatActivity implements
     this.ip = ip;
     serverTextView.setText(getString(R.string.server_started_message) + " " + ip);
     startServerButton.setText(getString(R.string.stop_server_label));
-    flag = true;
+    isStarted = true;
   }
 
   @Override public void serverStopped() {
     serverTextView.setText(getString(R.string.server_textview_default_message));
     startServerButton.setText(getString(R.string.start_server_label));
-    flag = false;
+    isStarted = false;
   }
 
   @Override public void hotspotTurnedOn(WifiConfiguration wifiConfiguration) {
@@ -426,7 +402,7 @@ public class ZimHostActivity extends AppCompatActivity implements
 
   @Override protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
-    if (flag) {
+    if (isStarted) {
       outState.putString(IP_STATE_KEY, ip);
     }
   }

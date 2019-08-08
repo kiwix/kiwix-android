@@ -21,7 +21,7 @@ public class WebServerHelper {
   private TextView textViewIpAccess;
   private EditText editTextPort;
   public static boolean isStarted;
-  int port;
+  static int port;
   private CoordinatorLayout coordinatorLayout;
   static ServerStateListener listener;
   String TAG = WebServerHelper.this.getClass().getSimpleName();
@@ -63,7 +63,7 @@ public class WebServerHelper {
   }
 
   // get Ip address of the device's wireless access point i.e. wifi hotspot OR wifi network
-  String getIpAddress() {
+  static String getIpAddress() {
     String ip = "";
     try {
       Enumeration<NetworkInterface> enumNetworkInterfaces = NetworkInterface
@@ -98,5 +98,9 @@ public class WebServerHelper {
 
     Log.v("TAG", "Returning : " + "http://" + ip);
     return "http://" + ip;
+  }
+
+  public static String getAddress() {
+    return getIpAddress() + ":" + port;
   }
 }
