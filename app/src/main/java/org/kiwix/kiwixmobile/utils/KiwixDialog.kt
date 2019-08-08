@@ -16,11 +16,11 @@ sealed class KiwixDialog(
     constructor(bookOnDisk: BookOnDisk) : this(arrayOf(bookOnDisk.book.title))
   }
 
-  object LocationPermissionRationale : KiwixDialog( // For the local file transfer module
+  object LocationPermissionRationale : KiwixDialog(
       null, R.string.permission_rationale_location, android.R.string.yes, android.R.string.cancel
   )
 
-  object StoragePermissionRationale : KiwixDialog( // For the local file transfer module
+  object StoragePermissionRationale : KiwixDialog(
       null, R.string.request_storage, android.R.string.yes, android.R.string.cancel
   )
 
