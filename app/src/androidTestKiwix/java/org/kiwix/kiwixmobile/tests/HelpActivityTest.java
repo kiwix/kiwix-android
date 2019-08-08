@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.kiwix.kiwixmobile.help;
+package org.kiwix.kiwixmobile.tests;
 
 import android.Manifest;
 import android.content.Context;
@@ -32,6 +32,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.help.HelpActivity;
 
 import static androidx.test.InstrumentationRegistry.getInstrumentation;
 import static androidx.test.espresso.Espresso.onView;

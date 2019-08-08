@@ -43,6 +43,7 @@ import static org.junit.Assert.assertArrayEquals;
 @SmallTest
 public class KiwixDatabaseTest {
 //should run 31 tests like it does locally
+  //it runs 16, all tests in org.kiwix.kiwixmobile.data.local & org.kiwix.kiwixmobile.tests
   private final Context context;
 
   public KiwixDatabaseTest() {
