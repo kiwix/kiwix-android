@@ -30,10 +30,13 @@ class HelpActivityTest : BaseActivityTest<HelpActivity>() {
     help {
       clickOnWhatDoesKiwixDo()
       assertWhatDoesKiwixDoIsExpanded()
+      clickOnWhatDoesKiwixDo()
       clickOnWhereIsContent()
       assertWhereIsContentIsExpanded()
+      clickOnWhereIsContent()
       clickOnLargeZimFiles()
       assertLargeZimsIsExpanded()
+      clickOnLargeZimFiles()
       clickOnSendFeedback()
     }
   }

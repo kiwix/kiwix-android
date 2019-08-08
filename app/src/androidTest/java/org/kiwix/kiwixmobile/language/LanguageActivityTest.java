@@ -27,6 +27,7 @@ import com.schibsted.spain.barista.interaction.BaristaSleepInteractions;
 import com.schibsted.spain.barista.rule.BaristaRule;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -68,6 +69,7 @@ public class LanguageActivityTest {
   }
 
   @Test
+  @Ignore("Covert to kotlin/robot")
   public void testLanguageActivity() {
     onView(withText("Online")).perform(click());
     // Open the Language Activity
