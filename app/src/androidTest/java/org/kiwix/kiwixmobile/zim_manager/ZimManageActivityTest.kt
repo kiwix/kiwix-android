@@ -8,6 +8,7 @@ import org.kiwix.kiwixmobile.KiwixMockServer
 import org.kiwix.kiwixmobile.book
 import org.kiwix.kiwixmobile.libraryNetworkEntity
 import org.kiwix.kiwixmobile.metaLinkNetworkEntity
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
 
 class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
   @get:Rule
@@ -28,14 +29,15 @@ class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
 
   @Test
   fun testZimManageDataFlow() {
-    zimManage() {
+    SharedPreferenceUtil(activityRule.activity).putPrefWifiOnly(false)
+    zimManage {
       clickOnOnline {
-        // clickOnSearch()
-        // searchFor(book(title = "zzzzz"))
-        // waitForEmptyView()
-        // searchFor(book)
-        // pressBack()
-        // pressBack()
+        clickOnSearch()
+        searchFor(book(title = "zzzzz"))
+        waitForEmptyView()
+        searchFor(book)
+        pressBack()
+        pressBack()
         clickOn(book)
       }
       clickOnDownloading {
