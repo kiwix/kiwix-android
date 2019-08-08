@@ -3,6 +3,7 @@ package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
@@ -47,7 +48,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   private AlertDialogShower alertDialogShower;
 
   /* Variables related to the WiFi P2P API */
-  private boolean wifiP2pEnabled = false; // Whether WiFi has been enabled or not
+  private boolean isWifiP2pEnabled = false; // Whether WiFi has been enabled or not
   private boolean retryChannel = false;   // Whether channel has retried connecting previously
 
   private WifiP2pManager manager;         // Overall manager of Wifi p2p connections for the module
@@ -97,8 +98,8 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     channel = manager.initialize(activity, getMainLooper(), null);
   }
 
-  public void registerWifiDirectBroadcastRecevier() {
-    receiver = new KiwixWifiP2pBroadcastReceiver(manager, channel, this);
+  public void registerWifiDirectBroadcastReceiver() {
+    receiver = new KiwixWifiP2pBroadcastReceiver(this);
 
     // For specifying broadcasts (of the P2P API) that the module needs to respond to
     IntentFilter intentFilter = new IntentFilter();
@@ -110,7 +111,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     activity.registerReceiver(receiver, intentFilter);
   }
 
-  public void unregisterWifiDirectBroadcastRecevier() {
+  public void unregisterWifiDirectBroadcastReceiver() {
     activity.unregisterReceiver(receiver);
   }
 
@@ -131,18 +132,40 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   }
 
   @Override
-  public void setWifiP2pEnabled(boolean wifiP2pEnabled) {
-    this.wifiP2pEnabled = wifiP2pEnabled;
+  public void onWifiP2pStateChanged(int wifiP2pState) {
+    this.isWifiP2pEnabled = (wifiP2pState == WifiP2pManager.WIFI_P2P_STATE_ENABLED);
 
-    if(wifiP2pEnabled == false) {
+    if(!isWifiP2pEnabled) {
       displayToast(R.string.discovery_needs_wifi, Toast.LENGTH_SHORT);
       ((Callbacks) activity).clearListOfAvailablePeers();
     }
+
+    Log.d(TAG, "WiFi P2P state changed - " + isWifiP2pEnabled);
   }
 
   @Override
-  public void onDisconnected() {
-    ((Callbacks) activity).clearListOfAvailablePeers();
+  public void onPeersChanged() {
+    if (manager != null) {
+      /* List of available peers has changed, so request & use the new list through
+       * PeerListListener.requestPeers() callback */
+      manager.requestPeers(channel, this);
+    }
+    Log.d(TAG, "P2P peers changed");
+  }
+
+  @Override
+  public void onConnectionChanged(@NonNull NetworkInfo networkInfo) {
+    if (manager == null) {
+      return;
+    }
+
+    if (networkInfo.isConnected()) {
+      // Request connection info about the wifi p2p group formed upon connection
+      manager.requestConnectionInfo(channel, this);
+    } else {
+      // Not connected after connection change -> Disconnected
+      ((Callbacks) activity).clearListOfAvailablePeers();
+    }
   }
 
   @Override
@@ -155,7 +178,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   }
 
   public boolean isWifiP2pEnabled() {
-    return wifiP2pEnabled;
+    return isWifiP2pEnabled;
   }
 
   /* From WifiP2pManager.ChannelListener interface */

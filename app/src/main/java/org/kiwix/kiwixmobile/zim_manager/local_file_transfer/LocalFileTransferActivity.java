@@ -421,13 +421,13 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   @Override
   public void onResume() {
     super.onResume();
-    wifiDirectManager.registerWifiDirectBroadcastRecevier();
+    wifiDirectManager.registerWifiDirectBroadcastReceiver();
   }
 
   @Override
   public void onPause() {
     super.onPause();
-    wifiDirectManager.unregisterWifiDirectBroadcastRecevier();
+    wifiDirectManager.unregisterWifiDirectBroadcastReceiver();
   }
 
   @Override protected void onDestroy() {

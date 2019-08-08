@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,67 +18,49 @@ import androidx.annotation.Nullable;
  */
 public class KiwixWifiP2pBroadcastReceiver extends BroadcastReceiver {
 
-  private WifiP2pManager manager;
-  private WifiP2pManager.Channel channel;
-  private WifiDirectManager wifiDirectManager;
+  private P2pEventListener p2pEventListener;
 
-  public KiwixWifiP2pBroadcastReceiver(@NonNull WifiP2pManager manager, @NonNull WifiP2pManager.Channel channel,
-      @NonNull WifiDirectManager wifiDirectManager) {
-    super();
-    this.manager = manager;
-    this.channel = channel;
-    this.wifiDirectManager = wifiDirectManager;
+  public KiwixWifiP2pBroadcastReceiver(@NonNull P2pEventListener p2pEventListener) {
+    this.p2pEventListener = p2pEventListener;
   }
 
   @Override
   public void onReceive(@NonNull Context context, @NonNull Intent intent) {
-    String action = intent.getAction();
 
-    if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
-      // Update wifi p2p state
-      int wifiP2pState = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
-
-      if (wifiP2pState == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
-        ((P2pEventListener) wifiDirectManager).setWifiP2pEnabled(true);
-      } else {
-        ((P2pEventListener) wifiDirectManager).setWifiP2pEnabled(false);
-      }
-      Log.d(LocalFileTransferActivity.TAG, "WiFi P2P state changed - " + wifiP2pState);
-
-
-    } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
-      if (manager != null) {
-        /* List of available peers has changed, so request & use the new list through
-         * PeerListListener.requestPeers() callback */
-        manager.requestPeers(channel, wifiDirectManager);
-      }
-      Log.d(LocalFileTransferActivity.TAG, "P2P peers changed");
-
-
-    } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
-      if (manager == null) {
-        return;
-      }
-      NetworkInfo networkInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
-
-      if (networkInfo.isConnected()) {
-        // Request connection info about the wifi p2p group formed upon connection
-        manager.requestConnectionInfo(channel, wifiDirectManager);
-      } else {
-        // Not connected after connection change -> Disconnected
-        ((P2pEventListener) wifiDirectManager).onDisconnected();
+    switch(intent.getAction()) {
+      case WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION: {
+        int wifiP2pState = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
+        p2pEventListener.onWifiP2pStateChanged(wifiP2pState);
+        break;
       }
 
+      case WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION: {
+        p2pEventListener.onPeersChanged();
+        break;
+      }
 
-    } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
-      ((P2pEventListener) wifiDirectManager).onDeviceChanged(intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE));
+      case WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION: {
+        NetworkInfo networkInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+        p2pEventListener.onConnectionChanged(networkInfo);
+        break;
+      }
+
+      case WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION: {
+        WifiP2pDevice userDevice = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
+        p2pEventListener.onDeviceChanged(userDevice);
+        break;
+      }
+
+      default: break;
     }
   }
 
   public interface P2pEventListener {
-    void setWifiP2pEnabled(boolean wifiP2pEnabled);
+    void onWifiP2pStateChanged(int wifiP2pState);
 
-    void onDisconnected();
+    void onPeersChanged();
+
+    void onConnectionChanged(@NonNull NetworkInfo networkInfo);
 
     void onDeviceChanged(@Nullable WifiP2pDevice userDevice);
   }
