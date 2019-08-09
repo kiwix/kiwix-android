@@ -2,6 +2,7 @@ package org.kiwix.kiwixmobile.webserver;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -321,10 +322,15 @@ public class ZimHostActivity extends AppCompatActivity implements
       //TO DO: START SERVER WITHIN THE SERVICE.
       //Adding a handler because sometimes hotspot can take time to turn on.
       //TO DO: Add a progress dialog instead of handler
+      ProgressDialog progressDialog =
+          ProgressDialog.show(this, getString(R.string.progress_dialog_starting_server), "",
+              true);
+      progressDialog.show();
       final Handler handler = new Handler();
       handler.postDelayed(new Runnable() {
         @Override
         public void run() {
+          progressDialog.dismiss();
           startService(ACTION_START_SERVER);
         }
       }, 7000);
@@ -380,11 +386,18 @@ public class ZimHostActivity extends AppCompatActivity implements
 
     //Show an alert dialog for hotspot details
     AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
+
+    ProgressDialog progressDialog =
+        ProgressDialog.show(this, getString(R.string.progress_dialog_starting_server), "",
+            true);
+    progressDialog.show();
+
     builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
       final Handler handler = new Handler();
       handler.postDelayed(new Runnable() {
         @Override
         public void run() {
+          progressDialog.dismiss();
           startService(ACTION_START_SERVER);
           //webServerHelper.startServerHelper();
         }

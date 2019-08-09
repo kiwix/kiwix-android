@@ -32,6 +32,7 @@
   <string name="hotspot_pass_label">Pass : </string>
   <string name="port_hint">8080</string>
   <string name="server_textview_default_message">Select the files you wish to host on the server</string>
+  <string name="progress_dialog_starting_server">Starting server</string>
   <string name="start_server_dialog_title">Start server</string>
   <string name="start_server_dialog_message">You can now start the server using this ip address and port no.</string>
   <string name="mobile_data_enabled">Warning: Mobile data enabled</string>
