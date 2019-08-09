@@ -28,16 +28,16 @@ class LanguageViewModel @Inject constructor(
 
   init {
     compositeDisposable.addAll(
-        actions.map { reduce(it, state.value!!) }
-            .distinctUntilChanged()
-            .subscribe(state::postValue, Throwable::printStackTrace),
-        languageDao.languages().filter { it.isNotEmpty() }
-            .subscribe(
-                {
-                  actions.offer(UpdateLanguages(it))
-                },
-                Throwable::printStackTrace
-            )
+      actions.map { reduce(it, state.value!!) }
+        .distinctUntilChanged()
+        .subscribe(state::postValue, Throwable::printStackTrace),
+      languageDao.languages().filter { it.isNotEmpty() }
+        .subscribe(
+          {
+            actions.offer(UpdateLanguages(it))
+          },
+          Throwable::printStackTrace
+        )
     )
   }
 
@@ -71,9 +71,9 @@ class LanguageViewModel @Inject constructor(
 
   private fun saveAll(currentState: Content): State {
     effects.offer(
-        SaveLanguagesAndFinish(
-            currentState.items, languageDao
-        )
+      SaveLanguagesAndFinish(
+        currentState.items, languageDao
+      )
     )
     return Saving
   }
@@ -87,5 +87,4 @@ class LanguageViewModel @Inject constructor(
     filter: String,
     currentState: Content
   ) = currentState.updateFilter(filter)
-
 }

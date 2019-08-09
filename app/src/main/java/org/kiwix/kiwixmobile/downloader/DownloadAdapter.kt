@@ -17,14 +17,14 @@
  */
 package org.kiwix.kiwixmobile.downloader
 
-
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.extensions.inflate
 
-class DownloadAdapter(val itemClickListener: (DownloadItem) -> Unit) : RecyclerView.Adapter<DownloadViewHolder>() {
+class DownloadAdapter(private val itemClickListener: (DownloadItem) -> Unit) :
+  RecyclerView.Adapter<DownloadViewHolder>() {
 
   init {
     setHasStableIds(true)
@@ -52,4 +52,3 @@ class DownloadAdapter(val itemClickListener: (DownloadItem) -> Unit) : RecyclerV
     holder.bind(itemList[position], itemClickListener)
   }
 }
-

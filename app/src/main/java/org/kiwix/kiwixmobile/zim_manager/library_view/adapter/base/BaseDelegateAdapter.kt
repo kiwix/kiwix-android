@@ -27,6 +27,7 @@ abstract class BaseDelegateAdapter<ITEM>(
 ) : Adapter<ViewHolder>() {
   init {
     delegates.forEach(delegateManager::addDelegate)
+    @Suppress("LeakingThis")
     setHasStableIds(true)
   }
 
@@ -52,9 +53,7 @@ abstract class BaseDelegateAdapter<ITEM>(
   override fun getItemViewType(position: Int) =
     delegateManager.getViewTypeFor(items[position])
 
-  override fun getItemId(position: Int): Long {
-    return getIdFor(items[position])
-  }
+  override fun getItemId(position: Int): Long = getIdFor(items[position])
 
-  abstract fun getIdFor(item:ITEM):Long
+  abstract fun getIdFor(item: ITEM): Long
 }

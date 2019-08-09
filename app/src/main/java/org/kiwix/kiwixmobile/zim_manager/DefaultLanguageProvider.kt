@@ -5,8 +5,8 @@ import javax.inject.Inject
 
 class DefaultLanguageProvider @Inject constructor(private val context: Context) {
   fun provide() = Language(
-      context.resources.configuration.locale.isO3Language,
-      true,
-      1
+    context.resources.configuration.locale.isO3Language,
+    true,
+    1
   )
 }

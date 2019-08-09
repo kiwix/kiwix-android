@@ -43,9 +43,10 @@ class DownloadManagerRequester @Inject constructor(
     val downloadStatuses = mutableListOf<DownloadStatus>()
     if (downloadModels.isNotEmpty()) {
       downloadModels.forEach { model ->
-        downloadManager.query(model.toQuery()).forEachRow {
-          downloadStatuses.add(DownloadStatus(it, model))
-        }
+        downloadManager.query(model.toQuery())
+          .forEachRow {
+            downloadStatuses.add(DownloadStatus(it, model))
+          }
       }
     }
     return downloadStatuses
@@ -58,11 +59,11 @@ class DownloadManagerRequester @Inject constructor(
   private fun DownloadRequest.toDownloadManagerRequest(sharedPreferenceUtil: SharedPreferenceUtil) =
     Request(uri).apply {
       setAllowedNetworkTypes(
-          if (sharedPreferenceUtil.prefWifiOnly) {
-            Request.NETWORK_WIFI
-          } else {
-            Request.NETWORK_MOBILE or Request.NETWORK_WIFI
-          }
+        if (sharedPreferenceUtil.prefWifiOnly) {
+          Request.NETWORK_WIFI
+        } else {
+          Request.NETWORK_MOBILE or Request.NETWORK_WIFI
+        }
       )
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
         setAllowedOverMetered(true)
@@ -77,16 +78,13 @@ class DownloadManagerRequester @Inject constructor(
 
   private fun DownloadRequest.toDestinationUri(sharedPreferenceUtil: SharedPreferenceUtil) =
     Uri.fromFile(
-        File(
-            "${sharedPreferenceUtil.prefStorage}/Kiwix/${
-            StorageUtils.getFileNameFromUrl(urlString)
-            }"
-        )
+      File(
+        "${sharedPreferenceUtil.prefStorage}/Kiwix/${
+        StorageUtils.getFileNameFromUrl(urlString)
+        }"
+      )
     )
 
   private fun DownloadModel.toQuery() =
     DownloadManager.Query().setFilterById(downloadId)
-
 }
-
-

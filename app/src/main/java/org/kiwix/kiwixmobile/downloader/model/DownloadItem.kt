@@ -29,12 +29,12 @@ data class DownloadItem(
   val progress get() = ((bytesDownloaded.toFloat() / totalSizeBytes) * 100).toInt()
 
   constructor(downloadStatus: DownloadStatus) : this(
-      downloadStatus.downloadId,
-      Base64String(downloadStatus.book.favicon),
-      downloadStatus.title,
-      downloadStatus.description,
-      downloadStatus.bytesDownloadedSoFar,
-      downloadStatus.totalSizeBytes,
-      downloadStatus.state
+    downloadStatus.downloadId,
+    Base64String(downloadStatus.book.favicon),
+    downloadStatus.title,
+    downloadStatus.description,
+    downloadStatus.bytesDownloadedSoFar,
+    downloadStatus.totalSizeBytes,
+    downloadStatus.state
   )
 }

@@ -12,12 +12,12 @@ sealed class State {
     val items: List<Language>,
     val filter: String = "",
     val viewItems: List<LanguageListItem> = createViewList(
-        items, filter
+      items, filter
     )
   ) : State() {
     fun select(languageItem: LanguageItem) = Content(
-        items.map { if (it.id == languageItem.id) it.copy(active = !it.active) else it },
-        filter
+      items.map { if (it.id == languageItem.id) it.copy(active = !it.active) else it },
+      filter
     )
 
     fun updateFilter(filter: String) = Content(items, filter)
@@ -27,7 +27,7 @@ sealed class State {
         items: List<Language>,
         filter: String
       ) = activeItems(
-          items, filter
+        items, filter
       ) + otherItems(items, filter)
 
       private fun activeItems(
@@ -35,7 +35,7 @@ sealed class State {
         filter: String
       ) =
         createLanguageSection(
-            items, filter, { it.active }, HeaderItem.SELECTED
+          items, filter, Language::active, HeaderItem.SELECTED
         )
 
       private fun otherItems(
@@ -43,7 +43,7 @@ sealed class State {
         filter: String
       ) =
         createLanguageSection(
-            items, filter, { !it.active }, HeaderItem.OTHER
+          items, filter, { !it.active }, HeaderItem.OTHER
         )
 
       private fun createLanguageSection(
@@ -52,12 +52,10 @@ sealed class State {
         filterCondition: (Language) -> Boolean,
         headerId: Long
       ) = items.filter(filterCondition)
-          .filter { filter.isEmpty() or it.matches(filter) }
-          .takeIf { it.isNotEmpty() }
-          ?.let { listOf(HeaderItem(headerId)) + it.map { language -> LanguageItem(language) } }
-          ?: emptyList()
-
+        .filter { filter.isEmpty() or it.matches(filter) }
+        .takeIf { it.isNotEmpty() }
+        ?.let { listOf(HeaderItem(headerId)) + it.map { language -> LanguageItem(language) } }
+        ?: emptyList()
     }
   }
-
 }

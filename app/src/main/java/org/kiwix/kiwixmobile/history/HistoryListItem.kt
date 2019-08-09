@@ -35,15 +35,15 @@ sealed class HistoryListItem {
     override val id: Long = databaseId
   ) : HistoryListItem() {
     constructor(historyEntity: HistoryEntity) : this(
-        historyEntity.id,
-        historyEntity.zimId,
-        historyEntity.zimName,
-        historyEntity.zimFilePath,
-        historyEntity.favicon,
-        historyEntity.historyUrl,
-        historyEntity.historyTitle,
-        historyEntity.dateString,
-        historyEntity.timeStamp
+      historyEntity.id,
+      historyEntity.zimId,
+      historyEntity.zimName,
+      historyEntity.zimFilePath,
+      historyEntity.favicon,
+      historyEntity.historyUrl,
+      historyEntity.historyTitle,
+      historyEntity.dateString,
+      historyEntity.timeStamp
     )
   }
 

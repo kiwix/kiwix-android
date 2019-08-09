@@ -73,7 +73,7 @@ class ZimManageActivity : BaseActivity() {
       adapter = mSectionsPagerAdapter
       offscreenPageLimit = 2
       tabs.setupWithViewPager(this)
-      addOnPageChangeListener(SimplePageChangeListener(this@ZimManageActivity::updateMenu))
+      addOnPageChangeListener(SimplePageChangeListener(::updateMenu))
     }
     setViewPagerPositionFromIntent(intent)
   }
@@ -89,7 +89,6 @@ class ZimManageActivity : BaseActivity() {
     }
   }
 
-
   private fun updateMenu(position: Int) {
     searchItem?.isVisible = position == 1
     languageItem?.isVisible = position == 1
@@ -100,8 +99,8 @@ class ZimManageActivity : BaseActivity() {
     supportActionBar!!.setHomeButtonEnabled(true)
     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     supportActionBar!!.setTitle(R.string.zim_manager)
-    toolbar.setNavigationOnClickListener { _ -> onBackPressed() }
-    toolbar.setOnClickListener { _ ->
+    toolbar.setNavigationOnClickListener { onBackPressed() }
+    toolbar.setOnClickListener {
       if (manageViewPager.currentItem == 1)
         searchItem?.expandActionView()
     }
@@ -112,7 +111,7 @@ class ZimManageActivity : BaseActivity() {
     if (value == 1) {
       startActivity(Intent(this, MainActivity::class.java))
     } else {
-      super.onBackPressed()  // optional depending on your needs
+      super.onBackPressed() // optional depending on your needs
     }
   }
 
@@ -123,9 +122,9 @@ class ZimManageActivity : BaseActivity() {
     languageItem = menu.findItem(R.id.select_language)
     val searchView = searchItem!!.actionView as SearchView
     updateMenu(manageViewPager.currentItem)
-    searchView.setOnQueryTextListener(SimpleTextListener {
-      zimManageViewModel.requestFiltering.onNext(it)
-    })
+    searchView.setOnQueryTextListener(
+      SimpleTextListener(zimManageViewModel.requestFiltering::onNext)
+    )
     return true
   }
 

@@ -20,6 +20,7 @@ buildscript {
     classpath "com.testdroid:testdroid-api:2.71"
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     classpath "io.objectbox:objectbox-gradle-plugin:$objectboxVersion"
+    classpath "org.jlleitschuh.gradle:ktlint-gradle:8.2.0"
   }
 }
 
@@ -33,6 +34,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.objectbox'
 apply plugin: 'jacoco-android'
+apply plugin: "org.jlleitschuh.gradle.ktlint"
 
 repositories {
   google()
@@ -239,7 +241,8 @@ android {
         'DuplicateStrings',
         'LogConditional'
     warning 'UnknownNullness',
-        'SelectableText'
+      'SelectableText',
+      'IconDensities'
     baseline file("lint-baseline.xml")
   }
 
@@ -455,6 +458,10 @@ play {
   resolutionStrategy = "fail"
 }
 
+ktlint{
+  android = true
+}
+
 class TestDroidUpload extends TestServer {
   def buildNumber = System.getenv("TRAVIS_BUILD_NUMBER")
   def API_KEY = System.getenv("PUBLIC_TESTDROID_API_KEY")
@@ -494,4 +501,9 @@ class TestDroidUpload extends TestServer {
   boolean isConfigured() {
     return true
   }
+}
+
+apply from: "${rootDir}/team-props/git-hooks.gradle"
+afterEvaluate {
+  tasks['preBuild'].dependsOn installGitHooks
 }

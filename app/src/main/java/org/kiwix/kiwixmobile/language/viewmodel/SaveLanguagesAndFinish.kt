@@ -31,9 +31,9 @@ data class SaveLanguagesAndFinish(
 
   override fun invokeWith(activity: Activity) {
     Flowable.fromCallable { languageDao.insert(languages) }
-        .subscribeOn(Schedulers.io())
-        .subscribe({
-          activity.finish()
-        }, Throwable::printStackTrace)
+      .subscribeOn(Schedulers.io())
+      .subscribe({
+        activity.finish()
+      }, Throwable::printStackTrace)
   }
 }
