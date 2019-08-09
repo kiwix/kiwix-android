@@ -57,6 +57,7 @@ public class ZimHostActivity extends AppCompatActivity implements
   public static final String ACTION_TURN_OFF_AFTER_O = "Turn_off_hotspot_after_oreo";
   public static final String ACTION_CHECK_HOTSPOT_STATE = "Check_hotspot_state";
   public static final String ACTION_START_SERVER = "start_server";
+  public static final String ACTION_STOP_SERVER = "stop_server";
   private final String IP_STATE_KEY = "ip_state_key";
   private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
   private Intent serviceIntent;
@@ -117,7 +118,7 @@ public class ZimHostActivity extends AppCompatActivity implements
           //  mobileDataDialog();
           //} else {
           if (isStarted) {
-            serverStopped();
+            startService(ACTION_STOP_SERVER);
           } else {
             startHotspotDialog();
           }

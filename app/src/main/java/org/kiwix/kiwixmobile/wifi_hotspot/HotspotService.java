@@ -17,13 +17,14 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.Constants;
 import org.kiwix.kiwixmobile.webserver.ServerStateListener;
 import org.kiwix.kiwixmobile.webserver.WebServerHelper;
+import org.kiwix.kiwixmobile.webserver.ZimHostActivity;
 
 import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_CHECK_HOTSPOT_STATE;
 import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_START_SERVER;
+import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_STOP_SERVER;
 import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_TURN_OFF_AFTER_O;
 import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_TURN_ON_AFTER_O;
 
@@ -56,6 +57,15 @@ public class HotspotService extends Service {
         public void onReceive(Context context, Intent intent) {
           if (intent != null && intent.getAction().equals(ACTION_STOP)) {
             stopHotspot();
+          }
+        }
+      };
+    } else {
+      stopReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+          if (intent != null && intent.getAction().equals(ACTION_STOP)) {
+            dismissNotification();
           }
         }
       };
@@ -94,6 +104,13 @@ public class HotspotService extends Service {
 
       case ACTION_START_SERVER:
         webServerHelper.startServerHelper(serverStateListener);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+          updateNotification(getString(R.string.hotspot_running), true);
+        }
+        break;
+
+      case ACTION_STOP_SERVER:
+        dismissNotification();
         break;
       default:
         break;
@@ -109,8 +126,8 @@ public class HotspotService extends Service {
     Log.v(TAG, "Building notification " + status);
     builder = new NotificationCompat.Builder(this);
     builder.setContentTitle("Kiwix Hotspot").setContentText(status);
-    Intent targetIntent = new Intent(this, MainActivity.class);
-    targetIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+    Intent targetIntent = new Intent(this, ZimHostActivity.class);
+    targetIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     PendingIntent contentIntent =
         PendingIntent.getActivity(this, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     builder.setContentIntent(contentIntent)
@@ -123,7 +140,7 @@ public class HotspotService extends Service {
       Intent stopIntent = new Intent(ACTION_STOP);
       PendingIntent stopHotspot =
           PendingIntent.getBroadcast(this, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-      builder.addAction(R.drawable.ic_close_white_24dp, getString(R.string.tts_stop), stopHotspot);
+      builder.addAction(R.drawable.ic_close_white_24dp, "STOP", stopHotspot);
     }
     return (builder.build());
   }
@@ -133,16 +150,21 @@ public class HotspotService extends Service {
         buildForegroundNotification(status, stopAction));
   }
 
+  //Dismiss notification and turn off hotspot for devices>=O
   @RequiresApi(Build.VERSION_CODES.O)
   void stopHotspot() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      hotspotManager.turnOffHotspot();
-    }
+    hotspotManager.turnOffHotspot();
+    webServerHelper.stopAndroidWebServer(serverStateListener);
     stopForeground(true);
     stopSelf();
-    webServerHelper.stopAndroidWebServer(serverStateListener);
   }
 
+  //Dismiss notification and turn off hotspot for devices < O
+  void dismissNotification() {
+    webServerHelper.stopAndroidWebServer(serverStateListener);
+    stopForeground(true);
+    stopSelf();
+  }
   @Override
   public void onDestroy() {
     if (stopReceiver != null) {
