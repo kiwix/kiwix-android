@@ -20,10 +20,12 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.Constants;
 import org.kiwix.kiwixmobile.webserver.ServerStateListener;
+import org.kiwix.kiwixmobile.webserver.WebServerHelper;
 
+import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_CHECK_HOTSPOT_STATE;
+import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_START_SERVER;
 import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_TURN_OFF_AFTER_O;
 import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_TURN_ON_AFTER_O;
-import static org.kiwix.kiwixmobile.webserver.WebServerHelper.stopAndroidWebServer;
 
 /**
  * HotspotService is used to add a foreground service for the wifi hotspot.
@@ -39,11 +41,14 @@ public class HotspotService extends Service {
   private NotificationCompat.Builder builder;
   ServerStateListener serverStateListener;
   IBinder serviceBinder = new HotspotBinder();
+  WebServerHelper webServerHelper;
   String TAG = HotspotService.this.getClass().getSimpleName();
 
   @Override public void onCreate() {
 
     super.onCreate();
+
+    hotspotManager = new WifiHotspotManager(this);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       stopReceiver = new BroadcastReceiver() {
@@ -56,6 +61,9 @@ public class HotspotService extends Service {
       };
     }
     registerReceiver(stopReceiver, new IntentFilter(ACTION_STOP));
+
+    webServerHelper = new WebServerHelper(this);
+
     notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     startForeground(HOTSPOT_NOTIFICATION_ID,
         buildForegroundNotification(getString(R.string.hotspot_start), false));
@@ -64,9 +72,16 @@ public class HotspotService extends Service {
   @Override public int onStartCommand(Intent intent, int flags, int startId) {
     switch (intent.getAction()) {
 
+      case ACTION_CHECK_HOTSPOT_STATE:
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+          serverStateListener.hotspotState(hotspotManager.checkHotspotState());
+        }
+        break;
+
       case ACTION_TURN_ON_AFTER_O:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          hotspotManager.turnOnHotspot();
+          //serverStateListener.hotspotTurnedOn(hotspotManager.turnOnHotspot());
+          hotspotManager.turnOnHotspot(serverStateListener);
           updateNotification(getString(R.string.hotspot_running), true);
         }
         break;
@@ -75,6 +90,10 @@ public class HotspotService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
           stopHotspot();
         }
+        break;
+
+      case ACTION_START_SERVER:
+        webServerHelper.startServerHelper(serverStateListener);
         break;
       default:
         break;
@@ -116,10 +135,12 @@ public class HotspotService extends Service {
 
   @RequiresApi(Build.VERSION_CODES.O)
   void stopHotspot() {
-    hotspotManager.turnOffHotspot();
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      hotspotManager.turnOffHotspot();
+    }
     stopForeground(true);
     stopSelf();
-    stopAndroidWebServer();
+    webServerHelper.stopAndroidWebServer(serverStateListener);
   }
 
   @Override
@@ -140,14 +161,6 @@ public class HotspotService extends Service {
       builder.setChannelId(Constants.HOTSPOT_SERVICE_CHANNEL_ID);
       notificationManager.createNotificationChannel(hotspotServiceChannel);
     }
-  }
-
-  @RequiresApi(api = Build.VERSION_CODES.O)
-  public boolean checkHotspotState(Context context) {
-    if (hotspotManager == null) {
-      hotspotManager = new WifiHotspotManager(context);
-    }
-    return hotspotManager.checkHotspotState();
   }
 
   public class HotspotBinder extends Binder {

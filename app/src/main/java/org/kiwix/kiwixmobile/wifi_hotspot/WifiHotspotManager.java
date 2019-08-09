@@ -7,12 +7,8 @@ import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.webserver.ServerStateListener;
-import org.kiwix.kiwixmobile.webserver.WebServerHelper;
 
-import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 
 /**
  * WifiHotstopManager class makes use of the Android's WifiManager and WifiConfiguration class
@@ -26,18 +22,17 @@ public class WifiHotspotManager {
   WifiManager.LocalOnlyHotspotReservation hotspotReservation;
   boolean oreoenabled;
   WifiConfiguration currentConfig;
-  ServerStateListener serverStateListener;
+  boolean actionCompleted;
   String TAG = WifiHotspotManager.this.getClass().getSimpleName();
 
   public WifiHotspotManager(Context context) {
     this.context = context;
     wifiManager = (WifiManager) this.context.getSystemService(Context.WIFI_SERVICE);
-    serverStateListener = (ServerStateListener) context;
   }
 
   //Workaround to turn on hotspot for Oreo versions
   @RequiresApi(api = Build.VERSION_CODES.O)
-  public void turnOnHotspot() {
+  public void turnOnHotspot(ServerStateListener serverStateListener) {
     if (!oreoenabled) {
       wifiManager.startLocalOnlyHotspot(new WifiManager.LocalOnlyHotspotCallback() {
 
@@ -68,6 +63,7 @@ public class WifiHotspotManager {
         public void onFailed(int reason) {
           super.onFailed(reason);
           Log.v(TAG, "Local Hotspot failed to start");
+          actionCompleted = false;
         }
       }, new Handler());
     }

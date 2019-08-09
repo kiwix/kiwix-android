@@ -23,14 +23,13 @@ public class WebServerHelper {
   public static boolean isStarted;
   static int port;
   private CoordinatorLayout coordinatorLayout;
-  static ServerStateListener listener;
   String TAG = WebServerHelper.this.getClass().getSimpleName();
 
   public WebServerHelper(Context context) {
     this.context = context;
   }
 
-  public void startServerHelper() {
+  public void startServerHelper(ServerStateListener stateListener) {
     //TO DO:
     //1. Get port from settings screen
     //2. Ask user to change port in settings if port is in use.
@@ -38,16 +37,14 @@ public class WebServerHelper {
     //Always use 8080 and when its not available then iterate this number.
     if (!isStarted && startAndroidWebServer()) {
       isStarted = true;
-      listener = (ServerStateListener) context;
-      listener.serverStarted(getIpAddress() + ":" + port);
+      stateListener.serverStarted(getIpAddress() + ":" + port);
     }
   }
 
-
-  public static boolean stopAndroidWebServer() {
+  public static boolean stopAndroidWebServer(ServerStateListener stateListener) {
     if (isStarted ) {
       isStarted = false;
-      listener.serverStopped();
+      stateListener.serverStopped();
       return true;
     }
     return false;

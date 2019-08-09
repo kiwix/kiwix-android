@@ -55,6 +55,8 @@ public class ZimHostActivity extends AppCompatActivity implements
 
   public static final String ACTION_TURN_ON_AFTER_O = "Turn_on_hotspot_after_oreo";
   public static final String ACTION_TURN_OFF_AFTER_O = "Turn_off_hotspot_after_oreo";
+  public static final String ACTION_CHECK_HOTSPOT_STATE = "Check_hotspot_state";
+  public static final String ACTION_START_SERVER = "start_server";
   private final String IP_STATE_KEY = "ip_state_key";
   private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
   private Intent serviceIntent;
@@ -88,6 +90,7 @@ public class ZimHostActivity extends AppCompatActivity implements
         HotspotService.HotspotBinder binder = (HotspotService.HotspotBinder) service;
         hotspotService = binder.getService();
         bound = true;
+        hotspotService.registerCallBack(ZimHostActivity.this);
       }
 
       @Override
@@ -103,8 +106,6 @@ public class ZimHostActivity extends AppCompatActivity implements
     fragmentTransaction.commit();
 
     serviceIntent = new Intent(this, HotspotService.class);
-
-    bindService();
 
     startServerButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
@@ -126,6 +127,16 @@ public class ZimHostActivity extends AppCompatActivity implements
     });
   }
 
+  @Override protected void onStart() {
+    super.onStart();
+    bindService();
+  }
+
+  @Override protected void onStop() {
+    super.onStop();
+    unbindService();
+  }
+
   private void bindService() {
 
     bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
@@ -145,13 +156,8 @@ public class ZimHostActivity extends AppCompatActivity implements
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         == PackageManager.PERMISSION_GRANTED) {
 
-      if (hotspotService.checkHotspotState(this)) //If hotspot is already enabled, turn it off
-      {
-        startService(ACTION_TURN_OFF_AFTER_O);
-      } else //If hotspot is not already enabled, then turn it on.
-      {
-        setupLocationServices();
-      }
+      startService(ACTION_CHECK_HOTSPOT_STATE); //If hotspot is already enabled, turn it off
+
     } else {
       //Ask location permission if not granted
       ActivityCompat.requestPermissions(this,
@@ -312,14 +318,13 @@ public class ZimHostActivity extends AppCompatActivity implements
 
     builder.setNeutralButton(getString(R.string.hotspot_dialog_neutral_button), (dialog, id) -> {
       //TO DO: START SERVER WITHIN THE SERVICE.
-      WebServerHelper webServerHelper = new WebServerHelper(this);
       //Adding a handler because sometimes hotspot can take time to turn on.
       //TO DO: Add a progress dialog instead of handler
       final Handler handler = new Handler();
       handler.postDelayed(new Runnable() {
         @Override
         public void run() {
-          webServerHelper.startServerHelper();
+          startService(ACTION_START_SERVER);
         }
       }, 7000);
     });
@@ -374,13 +379,13 @@ public class ZimHostActivity extends AppCompatActivity implements
 
     //Show an alert dialog for hotspot details
     AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
-    WebServerHelper webServerHelper = new WebServerHelper(this);
     builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
       final Handler handler = new Handler();
       handler.postDelayed(new Runnable() {
         @Override
         public void run() {
-          webServerHelper.startServerHelper();
+          startService(ACTION_START_SERVER);
+          //webServerHelper.startServerHelper();
         }
       }, 2000);
     });
@@ -397,6 +402,13 @@ public class ZimHostActivity extends AppCompatActivity implements
   }
 
   @Override public void hotspotState(Boolean state) {
+    if (state) //if hotspot is already enabled, turn it off.
+    {
+      startService(ACTION_TURN_OFF_AFTER_O);
+    } else //If hotspot is not already enabled, then turn it on.
+    {
+      setupLocationServices();
+    }
 
   }
 
