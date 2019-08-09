@@ -342,7 +342,7 @@ public class ZimContentProvider extends ContentProvider {
 
     // This is the code which retrieve the mimeType from the libzim
     // "slow" and still bugyy
-    if (mimeType.isEmpty()) {
+    if (mimeType == null || mimeType.isEmpty()) {
       String t = uri.toString();
       int pos = uri.toString().indexOf(CONTENT_URI.toString());
       if (pos != -1) {
