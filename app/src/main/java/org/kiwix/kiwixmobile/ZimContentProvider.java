@@ -28,16 +28,6 @@ import android.os.ParcelFileDescriptor;
 import android.os.ParcelFileDescriptor.AutoCloseOutputStream;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
-
-import org.kiwix.kiwixlib.JNIKiwix;
-import org.kiwix.kiwixlib.JNIKiwixException;
-import org.kiwix.kiwixlib.JNIKiwixInt;
-import org.kiwix.kiwixlib.JNIKiwixReader;
-import org.kiwix.kiwixlib.JNIKiwixSearcher;
-import org.kiwix.kiwixlib.JNIKiwixString;
-import org.kiwix.kiwixlib.Pair;
-import org.kiwix.kiwixmobile.utils.files.FileUtils;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -49,8 +39,15 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.inject.Inject;
+import org.kiwix.kiwixlib.JNIKiwix;
+import org.kiwix.kiwixlib.JNIKiwixException;
+import org.kiwix.kiwixlib.JNIKiwixInt;
+import org.kiwix.kiwixlib.JNIKiwixReader;
+import org.kiwix.kiwixlib.JNIKiwixSearcher;
+import org.kiwix.kiwixlib.JNIKiwixString;
+import org.kiwix.kiwixlib.Pair;
+import org.kiwix.kiwixmobile.utils.files.FileUtils;
 
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
@@ -344,7 +341,7 @@ public class ZimContentProvider extends ContentProvider {
 
     // This is the code which retrieve the mimeType from the libzim
     // "slow" and still bugyy
-    if (mimeType.isEmpty()) {
+    if (mimeType == null || mimeType.isEmpty()) {
       String t = uri.toString();
       int pos = uri.toString().indexOf(CONTENT_URI.toString());
       if (pos != -1) {
