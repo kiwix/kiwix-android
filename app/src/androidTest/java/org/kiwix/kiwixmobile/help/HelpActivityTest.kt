@@ -40,5 +40,4 @@ class HelpActivityTest : BaseActivityTest<HelpActivity>() {
       clickOnSendFeedback()
     }
   }
-
 }

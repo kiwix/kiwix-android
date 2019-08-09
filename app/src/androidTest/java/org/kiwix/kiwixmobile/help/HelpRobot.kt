@@ -18,10 +18,9 @@
 package org.kiwix.kiwixmobile.help
 
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
-import org.kiwix.kiwixmobile.Findable.TextId
 import org.kiwix.kiwixmobile.Findable.ViewId
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.R.id
 import org.kiwix.kiwixmobile.R.string
 
@@ -34,36 +33,36 @@ class HelpRobot : BaseRobot() {
   }
 
   fun clickOnWhatDoesKiwixDo() {
-    clickOn(TextId(R.string.help_2))
+    clickOn(TextId(string.help_2))
   }
 
   fun assertWhatDoesKiwixDoIsExpanded() {
     isVisible(
-        Text(
-            helpTextFormat(
-                R.string.help_3,
-                R.string.help_4
-            )
+      Text(
+        helpTextFormat(
+          string.help_3,
+          string.help_4
         )
+      )
     )
   }
 
   fun clickOnWhereIsContent() {
-    clickOn(TextId(R.string.help_5))
+    clickOn(TextId(string.help_5))
   }
 
   fun assertWhereIsContentIsExpanded() {
     isVisible(
-        Text(
-            helpTextFormat(
-                string.help_6,
-                string.help_7,
-                string.help_8,
-                string.help_9,
-                string.help_10,
-                string.help_11
-            )
+      Text(
+        helpTextFormat(
+          string.help_6,
+          string.help_7,
+          string.help_8,
+          string.help_9,
+          string.help_10,
+          string.help_11
         )
+      )
     )
   }
 
@@ -73,25 +72,24 @@ class HelpRobot : BaseRobot() {
 
   fun assertLargeZimsIsExpanded() {
     isVisible(
-        Text(
-            helpTextFormat(
-                R.string.help_13,
-                R.string.help_14,
-                R.string.help_15,
-                R.string.help_16,
-                R.string.help_17,
-                R.string.help_18,
-                R.string.help_19
-            )
+      Text(
+        helpTextFormat(
+          string.help_13,
+          string.help_14,
+          string.help_15,
+          string.help_16,
+          string.help_17,
+          string.help_18,
+          string.help_19
         )
+      )
     )
   }
 
   fun clickOnSendFeedback() {
-    clickOn(ViewId(R.id.activity_help_feedback_text_view))
+    clickOn(ViewId(id.activity_help_feedback_text_view))
   }
 
   private fun helpTextFormat(vararg stringIds: Int) =
     stringIds.fold("", { acc, i -> "$acc${context.getString(i)}\n" })
-
 }

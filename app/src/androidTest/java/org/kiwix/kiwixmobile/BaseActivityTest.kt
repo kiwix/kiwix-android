@@ -2,6 +2,7 @@ package org.kiwix.kiwixmobile
 
 import android.Manifest.permission
 import android.app.Activity
+import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.ActivityTestRule
@@ -15,13 +16,13 @@ abstract class BaseActivityTest<T : Activity> {
   @get:Rule
   abstract var activityRule: ActivityTestRule<T>
   @get:Rule
-  var readPermissionRule =
+  var readPermissionRule: GrantPermissionRule =
     GrantPermissionRule.grant(permission.READ_EXTERNAL_STORAGE)
   @get:Rule
-  var writePermissionRule =
+  var writePermissionRule: GrantPermissionRule =
     GrantPermissionRule.grant(permission.WRITE_EXTERNAL_STORAGE)
 
-  val context by lazy {
+  val context: Context by lazy {
     getInstrumentation().targetContext.applicationContext
   }
 

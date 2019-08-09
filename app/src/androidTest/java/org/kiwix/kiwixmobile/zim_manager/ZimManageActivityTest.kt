@@ -63,6 +63,7 @@ class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
         clickPositiveDialogButton()
         waitForEmptyView()
       }
-    }
+      clickOnOnline { }
+    } clickOnLanguageIcon { }
   }
 }

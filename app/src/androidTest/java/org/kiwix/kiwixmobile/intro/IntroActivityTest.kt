@@ -21,7 +21,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 
-
 class IntroActivityTest : BaseActivityTest<IntroActivity>() {
   @get:Rule
   override var activityRule = activityTestRule<IntroActivity>()

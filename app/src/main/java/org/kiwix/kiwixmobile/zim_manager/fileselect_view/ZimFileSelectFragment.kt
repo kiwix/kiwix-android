@@ -59,7 +59,7 @@ class ZimFileSelectFragment : BaseFragment() {
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
   private var actionMode: ActionMode? = null
-  val disposable = CompositeDisposable()
+  private val disposable = CompositeDisposable()
 
   private val zimManageViewModel by lazy {
     activity!!.viewModel<ZimManageViewModel>(viewModelFactory)

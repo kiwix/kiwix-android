@@ -33,7 +33,7 @@ inline fun <reified T : BaseRobot> T.applyWithViewHierarchyPrinting(
     try {
       function()
     } catch (runtimeException: RuntimeException) {
-      uiDevice.takeScreenshot(File(context.filesDir,"${System.currentTimeMillis()}.png"))
+      uiDevice.takeScreenshot(File(context.filesDir, "${System.currentTimeMillis()}.png"))
       InstrumentationRegistry.getInstrumentation().runOnMainSync {
         throw RuntimeException(
           combineMessages(
@@ -65,14 +65,14 @@ private fun getViewHierarchy(v: View, desc: StringBuilder, margin: Int) {
 
 private fun getViewMessage(v: View, marginOffset: Int) =
   "${numSpaces(marginOffset)}[${v.javaClass.simpleName}]${resourceId(v)}${text(v)}" +
-      "${contentDescription(v)}${visibility(v)}\n"
+    "${contentDescription(v)}${visibility(v)}\n"
 
 fun visibility(v: View) = " visibility:" +
-    when (v.visibility) {
-      View.VISIBLE -> "visible"
-      View.INVISIBLE -> "invisible"
-      else -> "gone"
-    }
+  when (v.visibility) {
+    View.VISIBLE -> "visible"
+    View.INVISIBLE -> "invisible"
+    else -> "gone"
+  }
 
 fun contentDescription(view: View) =
   view.contentDescription?.let {
@@ -83,7 +83,7 @@ fun contentDescription(view: View) =
 fun text(v: View) =
   if (v is TextView)
     if (v.text.isNotEmpty()) " text:${v.text}"
-      else ""
+    else ""
   else ""
 
 private fun resourceId(view: View) =

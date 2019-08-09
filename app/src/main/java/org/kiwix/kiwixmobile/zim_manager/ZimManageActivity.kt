@@ -55,6 +55,7 @@ class ZimManageActivity : BaseActivity() {
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var languagesDao: NewLanguagesDao
+
   override fun injection() {
     KiwixApplication.getApplicationComponent().inject(this)
   }

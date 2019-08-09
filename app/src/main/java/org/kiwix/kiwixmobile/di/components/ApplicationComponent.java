@@ -29,6 +29,7 @@ import org.kiwix.kiwixmobile.di.modules.ApplicationModule;
 import org.kiwix.kiwixmobile.di.modules.JNIModule;
 import org.kiwix.kiwixmobile.di.modules.NetworkModule;
 import org.kiwix.kiwixmobile.downloader.DownloadService;
+import org.kiwix.kiwixmobile.language.LanguageActivity;
 import org.kiwix.kiwixmobile.main.KiwixWebView;
 import org.kiwix.kiwixmobile.search.AutoCompleteAdapter;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
@@ -46,12 +47,11 @@ public interface ApplicationComponent {
 
   @Component.Builder
   interface Builder {
-
     @BindsInstance Builder context(Context context);
 
     ApplicationComponent build();
-
   }
+
   ActivityComponent.Builder activityComponent();
 
   void inject(KiwixApplication application);
@@ -69,4 +69,6 @@ public interface ApplicationComponent {
   void inject(DownloadNotificationClickedReceiver downloadNotificationClickedReceiver);
 
   void inject(@NotNull ZimManageActivity zimManageActivity);
+
+  void inject(@NotNull LanguageActivity languageActivity);
 }

@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 class KiwixMockServer {
-  val mockWebServer = MockWebServer().apply {
+  private val mockWebServer = MockWebServer().apply {
     start(8080)
   }
 
@@ -53,7 +53,7 @@ class KiwixMockServer {
   ) {
     mockWebServer.setDispatcher(object : Dispatcher() {
       override fun dispatch(request: RecordedRequest) =
-        pathsToResponses[request.path]?.let { successfulResponse(it) }
+        pathsToResponses[request.path]?.let(::successfulResponse)
           ?: MockResponse().throttleBody(1L, 1L, TimeUnit.SECONDS).setBody("0123456789")
     })
   }
@@ -66,7 +66,7 @@ class KiwixMockServer {
 
 fun Any.asXmlString() = StringWriter().let {
   Persister().write(this, it)
-  it.toString()
+  "$it"
 }
 
 fun metaLinkNetworkEntity() = MetaLinkNetworkEntity().apply {
@@ -130,8 +130,8 @@ fun book(
     this.articleCount = articleCount
     this.mediaCount = mediaCount
     this.size = size
-    this.bookName = name
-    this.favicon = favIcon
+    bookName = name
+    favicon = favIcon
   }
 
 fun libraryNetworkEntity(books: List<Book> = emptyList()) = LibraryNetworkEntity().apply {

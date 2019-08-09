@@ -1,53 +1,53 @@
 package org.kiwix.kiwixmobile
 
+import androidx.annotation.IdRes
+import androidx.annotation.StringRes
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.BySelector
 
-interface Findable {
-  fun selector(baseRobot: BaseRobot): BySelector
-  fun errorMessage(baseRobot: BaseRobot): String
+sealed class Findable {
+  abstract fun selector(baseRobot: BaseRobot): BySelector
+  abstract fun errorMessage(baseRobot: BaseRobot): String
 
-  class ViewId(val viewId: Int) : Findable {
+  class ViewId(@IdRes private val resId: Int) : Findable() {
     override fun errorMessage(baseRobot: BaseRobot) =
       "No view found with Id ${resourceName(baseRobot)}"
 
-    override fun selector(baseRobot: BaseRobot)=
+    override fun selector(baseRobot: BaseRobot): BySelector =
       By.res(resourceName(baseRobot))
 
     private fun resourceName(baseRobot: BaseRobot) =
-      baseRobot.context.resources.getResourceName(viewId)
+      baseRobot.context.resources.getResourceName(resId)
   }
 
-  class TextId(val textId: Int) : Findable {
-    override fun errorMessage(baseRobot: BaseRobot) = "No view found with text ${text(baseRobot)}"
-
-    override fun selector(baseRobot: BaseRobot) =
-      By.text(text(baseRobot))
-
-    private fun text(baseRobot: BaseRobot) = baseRobot.context.getString(textId)
-  }
-
-  class TextContains(val textId: Int) : Findable {
-    override fun errorMessage(baseRobot: BaseRobot) = "No view found containing ${text(baseRobot)}"
-
-    override fun selector(baseRobot: BaseRobot) =
-      By.textContains(text(baseRobot))
-
-    private fun text(baseRobot: BaseRobot) = baseRobot.context.getString(textId)
-  }
-
-  class Text(val text: String) : Findable {
+  class Text(private val text: String) : Findable() {
     override fun errorMessage(baseRobot: BaseRobot) = "No view found with text $text"
 
-    override fun selector(baseRobot: BaseRobot) = By.text(text)
+    override fun selector(baseRobot: BaseRobot): BySelector = By.text(text)
   }
 
-  class ContentDesc(val textId: Int) : Findable {
-    override fun selector(baseRobot: BaseRobot) = By.desc(text(baseRobot))
+  sealed class StringId(@StringRes private val resId: Int) : Findable() {
 
-    override fun errorMessage(baseRobot: BaseRobot) = "No view found with content description ${text(baseRobot)}"
+    fun text(baseRobot: BaseRobot): String = baseRobot.context.getString(resId)
 
-    private fun text(baseRobot: BaseRobot) = baseRobot.context.getString(textId)
+    class ContentDesc(@StringRes resId: Int) : StringId(resId) {
+      override fun selector(baseRobot: BaseRobot): BySelector = By.desc(text(baseRobot))
 
+      override fun errorMessage(baseRobot: BaseRobot) =
+        "No view found with content description ${text(baseRobot)}"
+    }
+
+    class TextContains(@StringRes resId: Int) : StringId(resId) {
+      override fun selector(baseRobot: BaseRobot): BySelector = By.textContains(text(baseRobot))
+
+      override fun errorMessage(baseRobot: BaseRobot) =
+        "No view found containing ${text(baseRobot)}"
+    }
+
+    class TextId(@StringRes resId: Int) : StringId(resId) {
+      override fun selector(baseRobot: BaseRobot): BySelector = By.text(text(baseRobot))
+
+      override fun errorMessage(baseRobot: BaseRobot) = "No view found with text ${text(baseRobot)}"
+    }
   }
 }

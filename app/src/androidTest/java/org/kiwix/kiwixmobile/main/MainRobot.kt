@@ -19,7 +19,6 @@ package org.kiwix.kiwixmobile.main
 
 import org.kiwix.kiwixmobile.BaseRobot
 import org.kiwix.kiwixmobile.Findable.ViewId
-import org.kiwix.kiwixmobile.R
 import org.kiwix.kiwixmobile.R.id
 
 fun main(func: MainRobot.() -> Unit) = MainRobot().apply(func)

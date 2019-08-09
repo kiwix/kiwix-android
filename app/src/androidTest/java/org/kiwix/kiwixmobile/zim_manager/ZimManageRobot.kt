@@ -19,13 +19,16 @@ package org.kiwix.kiwixmobile.zim_manager
 
 import applyWithViewHierarchyPrinting
 import org.kiwix.kiwixmobile.BaseRobot
+import org.kiwix.kiwixmobile.Findable.StringId.TextId
 import org.kiwix.kiwixmobile.Findable.Text
 import org.kiwix.kiwixmobile.Findable.ViewId
 import org.kiwix.kiwixmobile.R
+import org.kiwix.kiwixmobile.language.LanguageRobot
+import org.kiwix.kiwixmobile.language.language
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 
 fun zimManage(func: ZimManageRobot.() -> Unit) =
-    ZimManageRobot().applyWithViewHierarchyPrinting(func)
+  ZimManageRobot().applyWithViewHierarchyPrinting(func)
 
 class ZimManageRobot : BaseRobot() {
   init {
@@ -45,6 +48,12 @@ class ZimManageRobot : BaseRobot() {
   fun clickOnDevice(func: DeviceRobot.() -> Unit): DeviceRobot {
     clickOnTab(R.string.local_zims)
     return device(func)
+  }
+
+  infix fun clickOnLanguageIcon(function: LanguageRobot.() -> Unit): LanguageRobot {
+    TextId(R.string.remote_zims)
+    clickOn(ViewId(R.id.select_language))
+    return language(function)
   }
 
   private fun library(func: LibraryRobot.() -> Unit) = LibraryRobot().apply(func)
