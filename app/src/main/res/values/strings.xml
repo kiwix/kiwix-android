@@ -27,6 +27,7 @@
   <string name="hotspot_failed_title">Failed to start hotspot</string>
   <string name="hotspot_failed_message">It seems like your hotspot is already turned on. Please disable your wifi hotspot to continue.</string>
   <string name="go_to_wifi_settings_label">Go to WIFI settings</string>
+  <string name="go_to_settings_label">Go to settings</string>
   <string name="hotspot_start">Starting hotspot</string>
   <string name="hotspot_running">Running Hotspot</string>
   <string name="hotspot_turned_on">Hotspot turned on</string>

@@ -317,7 +317,7 @@ public class ZimHostActivity extends AppCompatActivity implements
   void startHotspotDialog() {
     AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
 
-    builder.setPositiveButton(getString(R.string.go_to_wifi_settings_label), (dialog, id) -> {
+    builder.setPositiveButton(getString(R.string.go_to_settings_label), (dialog, id) -> {
       setupWifiSettingsIntent();
     });
 
