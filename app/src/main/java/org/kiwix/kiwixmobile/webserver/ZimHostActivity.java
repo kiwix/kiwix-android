@@ -83,6 +83,7 @@ public class ZimHostActivity extends AppCompatActivity implements
           getString(R.string.server_started_message) + " " + savedInstanceState.getString(
               IP_STATE_KEY));
       startServerButton.setText(getString(R.string.stop_server_label));
+      startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
     }
 
     serviceConnection = new ServiceConnection() {
@@ -176,6 +177,7 @@ public class ZimHostActivity extends AppCompatActivity implements
       serverTextView.setText(
           getString(R.string.server_started_message) + " " + ip);
       startServerButton.setText(getString(R.string.stop_server_label));
+      startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
     }
 
   }
@@ -374,12 +376,14 @@ public class ZimHostActivity extends AppCompatActivity implements
     this.ip = ip;
     serverTextView.setText(getString(R.string.server_started_message) + " " + ip);
     startServerButton.setText(getString(R.string.stop_server_label));
+    startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
     isStarted = true;
   }
 
   @Override public void serverStopped() {
     serverTextView.setText(getString(R.string.server_textview_default_message));
     startServerButton.setText(getString(R.string.start_server_label));
+    startServerButton.setBackgroundColor(getResources().getColor(R.color.greenTick));
     isStarted = false;
   }
 
