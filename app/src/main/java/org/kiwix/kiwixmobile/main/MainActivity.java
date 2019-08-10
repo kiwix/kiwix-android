@@ -1112,12 +1112,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void externalLinkPopup(Intent intent) {
-    int warningResId;
-    if (sharedPreferenceUtil.nightMode()) {
-      warningResId = R.drawable.ic_warning_white;
-    } else {
-      warningResId = R.drawable.ic_warning_black;
-    }
+    int warningResId = (sharedPreferenceUtil.nightMode())
+      ? R.drawable.ic_warning_white : R.drawable.ic_warning_black;
+
     new AlertDialog.Builder(this, dialogStyle())
         .setTitle(R.string.external_link_popup_dialog_title)
         .setMessage(R.string.external_link_popup_dialog_message)
