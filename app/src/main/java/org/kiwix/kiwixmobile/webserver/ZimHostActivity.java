@@ -315,7 +315,8 @@ public class ZimHostActivity extends AppCompatActivity implements
   void startHotspotDialog() {
     AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
 
-    builder.setPositiveButton(getString(R.string.hotspot_dialog_positive_button), (dialog, id) -> {
+    builder.setPositiveButton(getString(R.string.go_to_wifi_settings_label), (dialog, id) -> {
+      setupWifiSettingsIntent();
     });
 
     builder.setNeutralButton(getString(R.string.hotspot_dialog_neutral_button), (dialog, id) -> {
@@ -415,6 +416,15 @@ public class ZimHostActivity extends AppCompatActivity implements
     dialog.show();
   }
 
+  private void setupWifiSettingsIntent() {
+    final Intent intent = new Intent(Intent.ACTION_MAIN, null);
+    intent.addCategory(Intent.CATEGORY_LAUNCHER);
+    final ComponentName cn =
+        new ComponentName("com.android.settings", "com.android.settings.TetherSettings");
+    intent.setComponent(cn);
+    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    startActivity(intent);
+  }
   @Override public void hotspotFailed() {
     //Show a dialog to turn off default hotspot
 
@@ -422,13 +432,7 @@ public class ZimHostActivity extends AppCompatActivity implements
 
     builder.setPositiveButton(getString(R.string.go_to_wifi_settings_label), (dialog, id) -> {
       //Open wifi settings intent
-      final Intent intent = new Intent(Intent.ACTION_MAIN, null);
-      intent.addCategory(Intent.CATEGORY_LAUNCHER);
-      final ComponentName cn =
-          new ComponentName("com.android.settings", "com.android.settings.TetherSettings");
-      intent.setComponent(cn);
-      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      startActivity(intent);
+      setupWifiSettingsIntent();
     });
 
     builder.setTitle(this.getString(R.string.hotspot_failed_title));

@@ -41,10 +41,9 @@
   <string name="mobile_data_enabled">Warning: Mobile data enabled</string>
   <string name="mobile_data_message">You\'re about to turn on your wifi hotspot. This feature can work without data usage.</string>
   <string name="mobile_data_message_confirmation">Do you want to disable your data?</string>
-  <string name="hotspot_dialog_title">Turn on your hotspot</string>
-  <string name="hotspot_dialog_message">In order for this feature to work you need to turn on your hotspot first.</string>
+  <string name="hotspot_dialog_title">Turn on your WIFI hotspot</string>
+  <string name="hotspot_dialog_message">In order for this feature to work you need to turn on your WIFI hotspot first.</string>
   <string name="hotspot_dialog_neutral_button">YES, I’VE TURNED IT ON</string>
-  <string name="hotspot_dialog_positive_button">Okay</string>
   <string name="sample_ip_address">http://000.000.000.000</string>
   <string name="start_server_label">Start server</string>
   <string name="stop_server_label">Stop server</string>
