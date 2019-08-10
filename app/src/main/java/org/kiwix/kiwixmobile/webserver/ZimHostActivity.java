@@ -415,6 +415,30 @@ public class ZimHostActivity extends AppCompatActivity implements
     dialog.show();
   }
 
+  @Override public void hotspotFailed() {
+    //Show a dialog to turn off default hotspot
+
+    AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
+
+    builder.setPositiveButton(getString(R.string.go_to_wifi_settings_label), (dialog, id) -> {
+      //Open wifi settings intent
+      final Intent intent = new Intent(Intent.ACTION_MAIN, null);
+      intent.addCategory(Intent.CATEGORY_LAUNCHER);
+      final ComponentName cn =
+          new ComponentName("com.android.settings", "com.android.settings.TetherSettings");
+      intent.setComponent(cn);
+      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      startActivity(intent);
+    });
+
+    builder.setTitle(this.getString(R.string.hotspot_failed_title));
+    builder.setMessage(
+        this.getString(R.string.hotspot_failed_message));
+
+    AlertDialog dialog = builder.create();
+    dialog.show();
+  }
+
   @Override public void hotspotState(Boolean state) {
     if (state) //if hotspot is already enabled, turn it off.
     {

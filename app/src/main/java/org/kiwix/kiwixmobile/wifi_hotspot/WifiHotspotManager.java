@@ -22,7 +22,6 @@ public class WifiHotspotManager {
   WifiManager.LocalOnlyHotspotReservation hotspotReservation;
   boolean oreoenabled;
   WifiConfiguration currentConfig;
-  boolean actionCompleted;
   String TAG = WifiHotspotManager.this.getClass().getSimpleName();
 
   public WifiHotspotManager(Context context) {
@@ -63,7 +62,7 @@ public class WifiHotspotManager {
         public void onFailed(int reason) {
           super.onFailed(reason);
           Log.v(TAG, "Local Hotspot failed to start");
-          actionCompleted = false;
+          serverStateListener.hotspotFailed();
         }
       }, new Handler());
     }
