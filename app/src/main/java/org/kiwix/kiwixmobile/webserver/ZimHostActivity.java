@@ -164,7 +164,6 @@ public class ZimHostActivity extends AppCompatActivity implements
         == PackageManager.PERMISSION_GRANTED) {
 
       startService(ACTION_CHECK_HOTSPOT_STATE); //If hotspot is already enabled, turn it off
-
     } else {
       //Ask location permission if not granted
       ActivityCompat.requestPermissions(this,
@@ -183,7 +182,6 @@ public class ZimHostActivity extends AppCompatActivity implements
       startServerButton.setText(getString(R.string.stop_server_label));
       startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
     }
-
   }
 
   // This method checks if mobile data is enabled in user's device.
@@ -433,6 +431,7 @@ public class ZimHostActivity extends AppCompatActivity implements
     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     startActivity(intent);
   }
+
   @Override public void hotspotFailed() {
     //Show a dialog to turn off default hotspot
 
@@ -459,7 +458,6 @@ public class ZimHostActivity extends AppCompatActivity implements
     {
       setupLocationServices();
     }
-
   }
 
   @Override protected void onSaveInstanceState(Bundle outState) {
