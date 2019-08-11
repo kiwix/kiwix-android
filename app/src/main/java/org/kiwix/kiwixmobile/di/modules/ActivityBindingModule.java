@@ -17,6 +17,7 @@ import org.kiwix.kiwixmobile.main.MainModule;
 import org.kiwix.kiwixmobile.search.SearchActivity;
 import org.kiwix.kiwixmobile.settings.KiwixSettingsActivity;
 import org.kiwix.kiwixmobile.splash.SplashActivity;
+import org.kiwix.kiwixmobile.webserver.ZimHostActivity;
 import org.kiwix.kiwixmobile.zim_manager.ZimManageActivity;
 
 /**
@@ -70,4 +71,8 @@ public abstract class ActivityBindingModule {
   @PerActivity
   @ContributesAndroidInjector
   public abstract HelpActivity provideHelpActivity();
+
+  @PerActivity
+  @ContributesAndroidInjector
+  public abstract ZimHostActivity provideZimHostActivity();
 }
