@@ -41,7 +41,7 @@ class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
           inValues(BookOnDiskEntity_.bookId, booksOnDisk.map { it.book.id }.toTypedArray())
         }
         .remove()
-      box.put(booksOnDisk.map(::BookOnDiskEntity))
+      box.put(booksOnDisk.distinctBy { it.book.id }.map(::BookOnDiskEntity))
     }
   }
 
