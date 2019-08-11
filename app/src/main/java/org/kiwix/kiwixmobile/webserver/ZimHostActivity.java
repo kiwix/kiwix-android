@@ -200,7 +200,7 @@ public class ZimHostActivity extends AppCompatActivity implements
   }
 
   //This method sends the user to data usage summary settings activity
-  private void disableMobileData() {
+  private void openDataUsageActivity() {
     Intent intent = new Intent();
     intent.setComponent(new ComponentName("com.android.settings",
         "com.android.settings.Settings$DataUsageSummaryActivity"));
@@ -361,7 +361,8 @@ public class ZimHostActivity extends AppCompatActivity implements
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
       AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
 
-      builder.setPositiveButton(this.getString(R.string.yes), (dialog, id) -> disableMobileData());
+      builder.setPositiveButton(this.getString(R.string.yes),
+          (dialog, id) -> openDataUsageActivity());
       builder.setNegativeButton((android.R.string.no), (dialog, id) -> {
         startHotspotDialog();
       });
