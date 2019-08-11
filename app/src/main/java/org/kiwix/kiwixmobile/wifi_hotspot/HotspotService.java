@@ -22,7 +22,7 @@ import org.kiwix.kiwixmobile.webserver.ServerStateListener;
 import org.kiwix.kiwixmobile.webserver.WebServerHelper;
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity;
 
-import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_CHECK_HOTSPOT_STATE;
+import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_IS_HOTSPOT_ENABLED;
 import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_START_SERVER;
 import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_STOP_SERVER;
 import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_TURN_OFF_AFTER_O;
@@ -82,7 +82,7 @@ public class HotspotService extends Service {
   @Override public int onStartCommand(Intent intent, int flags, int startId) {
     switch (intent.getAction()) {
 
-      case ACTION_CHECK_HOTSPOT_STATE:
+      case ACTION_IS_HOTSPOT_ENABLED:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
           serverStateListener.hotspotState(hotspotManager.checkHotspotState());
         }

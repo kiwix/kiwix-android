@@ -58,7 +58,7 @@ public class ZimHostActivity extends AppCompatActivity implements
 
   public static final String ACTION_TURN_ON_AFTER_O = "Turn_on_hotspot_after_oreo";
   public static final String ACTION_TURN_OFF_AFTER_O = "Turn_off_hotspot_after_oreo";
-  public static final String ACTION_CHECK_HOTSPOT_STATE = "Check_hotspot_state";
+  public static final String ACTION_IS_HOTSPOT_ENABLED = "Is_hotspot_enabled";
   public static final String ACTION_START_SERVER = "start_server";
   public static final String ACTION_STOP_SERVER = "stop_server";
   private final String IP_STATE_KEY = "ip_state_key";
@@ -163,7 +163,7 @@ public class ZimHostActivity extends AppCompatActivity implements
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         == PackageManager.PERMISSION_GRANTED) {
 
-      startService(ACTION_CHECK_HOTSPOT_STATE); //If hotspot is already enabled, turn it off
+      startService(ACTION_IS_HOTSPOT_ENABLED); //If hotspot is already enabled, turn it off
     } else {
       //Ask location permission if not granted
       ActivityCompat.requestPermissions(this,
