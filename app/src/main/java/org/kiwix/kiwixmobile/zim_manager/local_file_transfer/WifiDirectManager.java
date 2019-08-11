@@ -58,7 +58,6 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
 
   private BroadcastReceiver receiver = null; // For receiving the broadcasts given by above filter
 
-  private WifiP2pDevice userDevice;   // Represents the device on which the app is running
   private WifiP2pInfo groupInfo;      // Corresponds to P2P group formed between the two devices
 
   private WifiP2pDevice senderSelectedPeerDevice = null;
@@ -172,9 +171,6 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   @Override
   public void onDeviceChanged(@Nullable WifiP2pDevice userDevice) {
     // Update UI with wifi-direct details about the user device
-    if(userDevice != null) {
-      setUserDevice(userDevice);
-    }
     ((Callbacks) activity).onUserDeviceDetailsAvailable(userDevice);
   }
 
@@ -208,10 +204,6 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     /* Devices have successfully connected, and 'info' holds information about the wifi p2p group formed */
     this.groupInfo = groupInfo;
     performHandshakeWithSelectedPeerDevice();
-  }
-
-  private void setUserDevice(@NonNull WifiP2pDevice userDevice) {
-    this.userDevice = userDevice;
   }
 
   public boolean isGroupFormed() {
@@ -343,14 +335,8 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   }
 
   private void startFileTransfer() {
-    if (isGroupFormed() && !isFileSender) {
-      ((Callbacks) activity).onFilesForTransferAvailable(filesForTransfer);
-
-      receiverDeviceAsyncTask = new ReceiverDeviceAsyncTask(this);
-      receiverDeviceAsyncTask.execute();
-
-    } else if (isGroupFormed()) { // && isFileSender
-      {
+    if (isGroupFormed()) {
+      if (isFileSender) {
         Log.d(LocalFileTransferActivity.TAG, "Starting file transfer");
 
         fileReceiverDeviceAddress =
@@ -359,6 +345,12 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
         displayToast(R.string.preparing_files, Toast.LENGTH_LONG);
         senderDeviceAsyncTask = new SenderDeviceAsyncTask(this, activity);
         senderDeviceAsyncTask.execute(fileUriArrayList.toArray(new Uri[0]));
+
+      } else {
+        ((Callbacks) activity).onFilesForTransferAvailable(filesForTransfer);
+
+        receiverDeviceAsyncTask = new ReceiverDeviceAsyncTask(this);
+        receiverDeviceAsyncTask.execute();
       }
     }
   }
