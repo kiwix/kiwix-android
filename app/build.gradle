@@ -48,7 +48,14 @@ String[] archs = ['arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64']
 dependencies {
   // use jdk8 java.time backport, as long app < Build.VERSION_CODES.O
   implementation("com.jakewharton.threetenabp:threetenabp:1.1.1")
-  implementation 'org.kiwix.kiwixlib:kiwixlib:5.2.0'
+
+  // Get kiwixlib online if it is not populated locally
+  if (!file("./libs").exists()) {
+    implementation 'org.kiwix.kiwixlib:kiwixlib:5.2.0'
+  } else {
+    implementation 'com.getkeepsafe.relinker:relinker:1.3.1'
+    implementation fileTree(include: ['*.aar'], dir: 'libs')
+  }
 
   // Android Support
   implementation "androidx.appcompat:appcompat:$appCompatVersion"
