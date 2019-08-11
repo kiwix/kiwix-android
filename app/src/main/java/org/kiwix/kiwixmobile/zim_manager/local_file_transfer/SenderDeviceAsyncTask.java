@@ -47,10 +47,7 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Integer, Boolean> {
   @Override
   protected Boolean doInBackground(Uri... fileUris) {
 
-    try { // Delay before trying to connect with receiver, to allow slower devices to setup server
-      Thread.sleep(3000);
-    } catch (InterruptedException e) {
-      Log.e(TAG, e.getMessage());
+    if (delayForSlowReceiverDevicesToSetupServer() == false) {
       return false;
     }
 
@@ -93,6 +90,16 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Integer, Boolean> {
     }
 
     return result;
+  }
+
+  private boolean delayForSlowReceiverDevicesToSetupServer() {
+    try { // Delay trying to connect with receiver, to allow slow receiver devices to setup server
+      Thread.sleep(3000);
+    } catch (InterruptedException e) {
+      Log.e(TAG, e.getMessage());
+      return false;
+    }
+    return true;
   }
 
   @Override
