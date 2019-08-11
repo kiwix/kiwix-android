@@ -29,6 +29,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import butterknife.BindView;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationRequest;
@@ -50,9 +51,10 @@ import static org.kiwix.kiwixmobile.webserver.WebServerHelper.isStarted;
 public class ZimHostActivity extends AppCompatActivity implements
     ServerStateListener {
 
+  @BindView(R.id.startServerButton)
   Button startServerButton;
+  @BindView(R.id.server_textView)
   TextView serverTextView;
-  boolean bound;
 
   public static final String ACTION_TURN_ON_AFTER_O = "Turn_on_hotspot_after_oreo";
   public static final String ACTION_TURN_OFF_AFTER_O = "Turn_off_hotspot_after_oreo";
@@ -65,6 +67,7 @@ public class ZimHostActivity extends AppCompatActivity implements
   private Task<LocationSettingsResponse> task;
   HotspotService hotspotService;
   String ip;
+  boolean bound;
   String TAG = ZimHostActivity.this.getClass().getSimpleName();
   ServiceConnection serviceConnection;
 
