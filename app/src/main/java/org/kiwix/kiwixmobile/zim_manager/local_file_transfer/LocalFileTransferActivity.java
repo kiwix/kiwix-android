@@ -188,7 +188,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   }
 
   @Override
-  public void clearListOfAvailablePeers() {
+  public void onConnectionToPeersLost() {
     availablePeerDevices.clear();
     ((WifiPeerListAdapter) listViewPeerDevices.getAdapter()).notifyDataSetChanged();
   }
@@ -231,7 +231,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   }
 
   @Override
-  public void onFileTransferComplete(boolean wereAllFilesTransferred) {
+  public void onFileTransferComplete() {
     finish();
   }
 

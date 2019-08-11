@@ -139,7 +139,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
 
     if(!isWifiP2pEnabled) {
       displayToast(R.string.discovery_needs_wifi, Toast.LENGTH_SHORT);
-      callbacks.clearListOfAvailablePeers();
+      callbacks.onConnectionToPeersLost();
     }
 
     Log.d(TAG, "WiFi P2P state changed - " + isWifiP2pEnabled);
@@ -166,7 +166,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
       manager.requestConnectionInfo(channel, this);
     } else {
       // Not connected after connection change -> Disconnected
-      callbacks.clearListOfAvailablePeers();
+      callbacks.onConnectionToPeersLost();
     }
   }
 
@@ -186,7 +186,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     // Upon disconnection, retry one more time
     if (manager != null && !retryChannel) {
       Log.d(TAG, "Channel lost, trying again");
-      callbacks.clearListOfAvailablePeers();
+      callbacks.onConnectionToPeersLost();
       retryChannel = true;
       manager.initialize(activity, getMainLooper(), this);
     } else {
@@ -324,7 +324,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     if (clientAddress == null) {
       // null is returned only in case of a failed handshake
       displayToast(R.string.device_not_cooperating, Toast.LENGTH_LONG);
-      callbacks.onFileTransferComplete(false);
+      callbacks.onFileTransferComplete();
       return;
     }
 
@@ -465,13 +465,13 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     } else {
       displayToast(R.string.error_during_transfer, Toast.LENGTH_LONG);
     }
-    callbacks.onFileTransferComplete(wereAllFilesTransferred);
+    callbacks.onFileTransferComplete();
   }
 
   public interface Callbacks {
     void onUserDeviceDetailsAvailable(@Nullable WifiP2pDevice userDevice);
 
-    void clearListOfAvailablePeers();
+    void onConnectionToPeersLost();
 
     void updateListOfAvailablePeers(@NonNull WifiP2pDeviceList peers);
 
@@ -479,6 +479,6 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
 
     void onFileStatusChanged(int itemIndex);
 
-    void onFileTransferComplete(boolean wereAllFilesTransferred);
+    void onFileTransferComplete();
   }
 }
