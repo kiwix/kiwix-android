@@ -22,11 +22,12 @@ public class WebServerHelper {
   }
 
   public void startServerHelper(ServerStateListener stateListener) {
-    //TO DO:
-    //1. Get port from settings screen
-    //2. Ask user to change port in settings if port is in use.
-    //OR
-    //Always use 8080 and when its not available then iterate this number.
+    
+    // 1. Get port from settings screen
+    // 2. Ask user to change port in settings if port is in use.
+    // OR
+    // Always use 8080 and when its not available then iterate this number.
+
     if (!isServerStarted && startAndroidWebServer()) {
       isServerStarted = true;
       stateListener.serverStarted(getIpAddress() + ":" + port);
@@ -80,7 +81,6 @@ public class WebServerHelper {
         }
       }
     } catch (SocketException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
       ip += "Something Wrong! " + e.toString() + "\n";
     }
