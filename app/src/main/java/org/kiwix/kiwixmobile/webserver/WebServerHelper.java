@@ -34,7 +34,7 @@ public class WebServerHelper {
   }
 
   public static boolean stopAndroidWebServer(ServerStateListener stateListener) {
-    if (isStarted ) {
+    if (isStarted) {
       isStarted = false;
       stateListener.serverStopped();
       return true;
