@@ -585,7 +585,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     ++tempVisitCount;
     visitCounterPref.setCount(tempVisitCount);
 
-    if (tempVisitCount >= 5
+    if (tempVisitCount >= 10
         && !visitCounterPref.getNoThanksState()
         && NetworkUtils.isNetworkAvailable(this) && !BuildConfig.DEBUG) {
       showRateDialog();
@@ -1119,6 +1119,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void externalLinkPopup(Intent intent) {
+    int warningResId = (sharedPreferenceUtil.nightMode())
+      ? R.drawable.ic_warning_white : R.drawable.ic_warning_black;
+
     new AlertDialog.Builder(this, dialogStyle())
         .setTitle(R.string.external_link_popup_dialog_title)
         .setMessage(R.string.external_link_popup_dialog_message)
@@ -1132,7 +1135,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           startActivity(intent);
         })
         .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> startActivity(intent))
-        .setIcon(android.R.drawable.ic_dialog_alert)
+        .setIcon(warningResId)
         .show();
   }
 
@@ -1410,6 +1413,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       webViewList.get(currentWebViewIndex).findViewById(R.id.get_content_card).setEnabled(true);
     }
     updateBottomToolbarVisibility();
+    presenter.loadBooks();
 
     Log.d(TAG_KIWIX, "action" + getIntent().getAction());
     Intent intent = getIntent();
@@ -2106,7 +2110,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   @Override
   public void setHomePage(View view) {
     RecyclerView homeRecyclerView = view.findViewById(R.id.recycler_view);
-    presenter.showHome();
+    presenter.loadBooks();
     homeRecyclerView.setAdapter(booksAdapter);
     downloadBookButton = view.findViewById(R.id.content_main_card_download_button);
     downloadBookButton.setOnClickListener(v -> manageZimFiles(1));
