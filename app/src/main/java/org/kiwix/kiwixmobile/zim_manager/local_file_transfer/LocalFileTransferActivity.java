@@ -91,7 +91,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   private FileListAdapter fileListAdapter;
 
   private List<WifiP2pDevice> availablePeerDevices = new ArrayList<WifiP2pDevice>();
-  private boolean hasSenderStartedConnection = false;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -141,11 +140,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
 
   @OnItemClick(R.id.list_peer_devices)
   void onItemClick(int position) {
-    /* Connection can only be initiated by user of the sender device, & only when transfer has not been started */
-    if (!isFileSender || hasSenderStartedConnection) {
-      return;
-    }
-
     WifiP2pDevice senderSelectedPeerDevice =
         (WifiP2pDevice) listViewPeerDevices.getAdapter().getItem(position);
     wifiDirectManager.sendToDevice(senderSelectedPeerDevice);
@@ -220,11 +214,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     searchingPeersProgressBar.setVisibility(View.VISIBLE);
     listViewPeerDevices.setVisibility(View.INVISIBLE);
     textViewPeerDevices.setVisibility(View.INVISIBLE);
-  }
-
-  @Override
-  public void onSenderStartedConnection() {
-    this.hasSenderStartedConnection = true;
   }
 
   @Override

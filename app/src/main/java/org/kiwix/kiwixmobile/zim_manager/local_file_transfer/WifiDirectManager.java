@@ -75,6 +75,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
 
   private ArrayList<Uri> fileUriArrayList; // For sender device, stores uris of the files
   private boolean isFileSender = false;    // Whether the device is the file sender or not
+  private boolean hasSenderStartedConnection = false;
 
   public WifiDirectManager(@NonNull LocalFileTransferActivity activity) {
     this.activity = activity;
@@ -219,13 +220,18 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   }
 
   public void sendToDevice(@NonNull WifiP2pDevice senderSelectedPeerDevice) {
+    /* Connection can only be initiated by user of the sender device, & only when transfer has not been started */
+    if (!isFileSender || hasSenderStartedConnection) {
+      return;
+    }
+
     this.senderSelectedPeerDevice = senderSelectedPeerDevice;
 
     alertDialogShower.show(
         new KiwixDialog.FileTransferConfirmation(senderSelectedPeerDevice.deviceName),
         new Function0<Unit>() {
           @Override public Unit invoke() {
-            ((Callbacks) activity).onSenderStartedConnection();
+            hasSenderStartedConnection = true;
             connect();
             displayToast(R.string.performing_handshake, Toast.LENGTH_LONG);
             return Unit.INSTANCE;
@@ -465,8 +471,6 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     void clearListOfAvailablePeers();
 
     void updateListOfAvailablePeers(@NonNull WifiP2pDeviceList peers);
-
-    void onSenderStartedConnection();
 
     void onFilesForTransferAvailable(@NonNull ArrayList<FileItem> filesForTransfer);
 
