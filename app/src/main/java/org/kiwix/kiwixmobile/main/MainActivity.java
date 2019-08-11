@@ -1112,6 +1112,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   }
 
   private void externalLinkPopup(Intent intent) {
+    int warningResId = (sharedPreferenceUtil.nightMode())
+      ? R.drawable.ic_warning_white : R.drawable.ic_warning_black;
+
     new AlertDialog.Builder(this, dialogStyle())
         .setTitle(R.string.external_link_popup_dialog_title)
         .setMessage(R.string.external_link_popup_dialog_message)
@@ -1125,7 +1128,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           startActivity(intent);
         })
         .setPositiveButton(android.R.string.yes, (dialogInterface, i) -> startActivity(intent))
-        .setIcon(android.R.drawable.ic_dialog_alert)
+        .setIcon(warningResId)
         .show();
   }
 
