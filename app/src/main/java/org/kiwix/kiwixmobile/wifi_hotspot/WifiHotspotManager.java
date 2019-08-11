@@ -21,7 +21,7 @@ public class WifiHotspotManager {
   WifiManager.LocalOnlyHotspotReservation hotspotReservation;
   boolean oreoenabled;
   WifiConfiguration currentConfig;
-  String TAG = WifiHotspotManager.this.getClass().getSimpleName();
+  private static final String TAG = "WifiHotspotManager";
 
   public WifiHotspotManager(Context context) {
     this.context = context;

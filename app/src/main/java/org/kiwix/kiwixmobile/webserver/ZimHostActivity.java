@@ -61,7 +61,8 @@ public class ZimHostActivity extends BaseActivity implements
   public static final String ACTION_IS_HOTSPOT_ENABLED = "Is_hotspot_enabled";
   public static final String ACTION_START_SERVER = "start_server";
   public static final String ACTION_STOP_SERVER = "stop_server";
-  private final String IP_STATE_KEY = "ip_state_key";
+  private static final String IP_STATE_KEY = "ip_state_key";
+  private static final String TAG = "ZimHostActivity";
   private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
   private static final int LOCATION_SETTINGS_PERMISSION_RESULT = 101;
   private Intent serviceIntent;
@@ -69,7 +70,6 @@ public class ZimHostActivity extends BaseActivity implements
   HotspotService hotspotService;
   String ip;
   boolean bound;
-  String TAG = ZimHostActivity.this.getClass().getSimpleName();
   ServiceConnection serviceConnection;
 
   @Override
@@ -191,7 +191,7 @@ public class ZimHostActivity extends BaseActivity implements
       method.setAccessible(true);
       return (Boolean) method.invoke(cm);
     } catch (Exception e) {
-      Log.e("ZimHostActivity", e.toString());
+      Log.e(TAG, e.toString());
     }
     return false;
   }

@@ -36,6 +36,7 @@ import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_TURN_ON_AFT
 public class HotspotService extends Service {
   private static final int HOTSPOT_NOTIFICATION_ID = 666;
   private static final String ACTION_STOP = "hotspot_stop";
+  private static final String TAG = "HotspotService";
   private WifiHotspotManager hotspotManager;
   private BroadcastReceiver stopReceiver;
   private NotificationManager notificationManager;
@@ -43,7 +44,6 @@ public class HotspotService extends Service {
   ServerStateListener serverStateListener;
   IBinder serviceBinder = new HotspotBinder();
   WebServerHelper webServerHelper;
-  String TAG = HotspotService.this.getClass().getSimpleName();
 
   @Override public void onCreate() {
 
