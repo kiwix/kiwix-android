@@ -165,6 +165,7 @@ public class HotspotService extends Service {
     stopForeground(true);
     stopSelf();
   }
+
   @Override
   public void onDestroy() {
     if (stopReceiver != null) {
