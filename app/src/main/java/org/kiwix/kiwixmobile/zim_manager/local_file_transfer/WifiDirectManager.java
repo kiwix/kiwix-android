@@ -301,10 +301,6 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     this.filesSent++;
   }
 
-  public boolean allFilesSent() {
-    return (filesSent == totalFilesForTransfer);
-  }
-
   public @NonNull String getZimStorageRootPath() {
     return (sharedPreferenceUtil.getPrefStorage() + "/Kiwix/");
   }

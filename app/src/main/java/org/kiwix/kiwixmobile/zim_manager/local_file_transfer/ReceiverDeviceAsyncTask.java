@@ -46,7 +46,7 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
     try (ServerSocket serverSocket = new ServerSocket(FILE_TRANSFER_PORT)) {
       Log.d(TAG, "Server: Socket opened at " + FILE_TRANSFER_PORT);
 
-      final String KIWIX_ROOT = wifiDirectManager.getZimStorageRootPath();
+      final String zimStorageRootPath = wifiDirectManager.getZimStorageRootPath();
       int totalFileCount = wifiDirectManager.getTotalFilesForTransfer();
       boolean result = true;
       int fileItemIndex;
@@ -62,7 +62,7 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
           if (BuildConfig.DEBUG) Log.d(TAG, "Server: Client connected for file " + currentFile);
           publishProgress(fileItemIndex, SENDING);
 
-          final File clientNoteFileLocation = new File(KIWIX_ROOT + incomingFileName);
+          final File clientNoteFileLocation = new File(zimStorageRootPath + incomingFileName);
           File dirs = new File(clientNoteFileLocation.getParent());
           if (!dirs.exists() && !dirs.mkdirs()) {
             Log.d(TAG, "ERROR: Required parent directories couldn't be created");

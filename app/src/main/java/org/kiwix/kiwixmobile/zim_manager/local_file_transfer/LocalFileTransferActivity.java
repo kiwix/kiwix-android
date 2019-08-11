@@ -117,12 +117,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
 
     setSupportActionBar(actionBar);
     actionBar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-    actionBar.setNavigationOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        finish();
-      }
-    });
+    actionBar.setNavigationOnClickListener(v -> finish());
 
     listViewPeerDevices.setAdapter(
         new WifiPeerListAdapter(this, R.layout.row_peer_device, availablePeerDevices));
