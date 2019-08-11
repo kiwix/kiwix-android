@@ -124,13 +124,13 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
 
     if (isFileSender) {
       for (int i = 0; i < fileUriArrayList.size(); i++) {
-        filesForTransfer.add(new FileItem(getFileName(fileUriArrayList.get(i)), TO_BE_SENT));
+        filesForTransfer.add(new FileItem(fileUriArrayList.get(i)));
       }
 
       displayFileTransferProgress(filesForTransfer);
     }
 
-    wifiDirectManager.createWifiDirectManager(sharedPreferenceUtil, alertDialogShower, filesForTransfer, fileUriArrayList);
+    wifiDirectManager.startWifiDirectManager(sharedPreferenceUtil, alertDialogShower, filesForTransfer);
   }
 
   @OnItemClick(R.id.list_peer_devices)
@@ -403,6 +403,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
 
   @Override protected void onDestroy() {
     super.onDestroy();
-    wifiDirectManager.destroyWifiDirectManager();
+    wifiDirectManager.stopWifiDirectManager();
   }
 }

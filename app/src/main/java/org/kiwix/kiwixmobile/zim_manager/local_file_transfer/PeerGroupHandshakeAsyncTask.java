@@ -106,11 +106,10 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
         // Send total number of files which will be transferred
         objectOutputStream.writeObject("" + wifiDirectManager.getTotalFilesForTransfer());
 
-        ArrayList<Uri> fileUriList = wifiDirectManager.getFileUriArrayList();
-        for (
-            Uri fileUri : fileUriList) { // Send the names of each of those files, in order
-          objectOutputStream.writeObject(getFileName(fileUri));
-          Log.d(TAG, "Sending " + fileUri.toString());
+        ArrayList<FileItem> fileItemArrayList = wifiDirectManager.getFilesForTransfer();
+        for (FileItem fileItem : fileItemArrayList) { // Send the names of each of those files, in order
+          objectOutputStream.writeObject(fileItem.getFileName());
+          Log.d(TAG, "Sending " + fileItem.getFileUri().toString());
         }
       } catch (Exception e) {
         e.printStackTrace();
@@ -130,7 +129,7 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
             Object fileNameObject = objectInputStream.readObject();
 
             if (fileNameObject.getClass().equals(String.class)) {
-              fileItems.add(new FileItem((String) fileNameObject, TO_BE_SENT));
+              fileItems.add(new FileItem((String) fileNameObject));
               if (BuildConfig.DEBUG) Log.d(TAG, "Expecting "+fileNameObject);
             }
           }

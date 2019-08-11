@@ -1,13 +1,10 @@
 package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 
 import android.content.ContentResolver;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.kiwix.kiwixmobile.BuildConfig;
-import org.kiwix.kiwixmobile.R;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +15,6 @@ import java.net.Socket;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.*;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectManager.FILE_TRANSFER_PORT;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectManager.copyToOutputStream;
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectManager.getFileName;
 
 /**
  * Helper class for the local file sharing module.
@@ -32,7 +28,7 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectMa
  *
  * A single task is used by the sender for the entire transfer
  */
-class SenderDeviceAsyncTask extends AsyncTask<Uri, Integer, Boolean> {
+class SenderDeviceAsyncTask extends AsyncTask<FileItem, Integer, Boolean> {
 
   private static final String TAG = "SenderDeviceAsyncTask";
 
@@ -45,7 +41,7 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Integer, Boolean> {
   }
 
   @Override
-  protected Boolean doInBackground(Uri... fileUris) {
+  protected Boolean doInBackground(FileItem... fileItems) {
 
     if (delayForSlowReceiverDevicesToSetupServer() == false) {
       return false;
@@ -54,11 +50,11 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Integer, Boolean> {
     boolean result = true;
     int fileItemIndex = -1;
 
-    for(Uri fileUri : fileUris) { // Uri of file to be transferred
+    for(FileItem fileItem : fileItems) { // Uri of file to be transferred
       fileItemIndex++;
 
       try (Socket socket = new Socket(); // Represents the sender device
-           InputStream fileInputStream = contentResolver.openInputStream(fileUri)) {
+           InputStream fileInputStream = contentResolver.openInputStream(fileItem.getFileUri())) {
 
         if (isCancelled()) {
           result = false;
@@ -107,10 +103,6 @@ class SenderDeviceAsyncTask extends AsyncTask<Uri, Integer, Boolean> {
     int fileIndex = values[0];
     int fileStatus = values[1];
     wifiDirectManager.changeStatus(fileIndex, fileStatus);
-
-    if(fileStatus == ERROR) {
-      wifiDirectManager.displayToast(R.string.error_transferring, getFileName(wifiDirectManager.getFileUriArrayList().get(fileIndex)), Toast.LENGTH_SHORT);
-    }
   }
 
   @Override protected void onCancelled() {

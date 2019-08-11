@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.IntDef;
@@ -26,12 +27,20 @@ public class FileItem implements Parcelable {
     int ERROR = +2;       // Error encountered while transferring the file
   }
 
+  private Uri fileUri;
   private String fileName;
   private int fileStatus;
 
-  public FileItem(@NonNull String fileName, @FileStatus int fileStatus) {
+  public FileItem(@NonNull Uri fileUri) { // For sender devices
+    this.fileUri = fileUri;
+    this.fileName = WifiDirectManager.getFileName(fileUri);
+    this.fileStatus = TO_BE_SENT;
+  }
+
+  public FileItem(@NonNull String fileName) { // For receiver devices
+    this.fileUri = null;
     this.fileName = fileName;
-    this.fileStatus = fileStatus;
+    this.fileStatus = TO_BE_SENT;
   }
 
   // For making FileItem a Parcelable
@@ -68,6 +77,10 @@ public class FileItem implements Parcelable {
   // Helper methods
   public void setFileStatus(@FileStatus int fileStatus) {
     this.fileStatus = fileStatus;
+  }
+
+  public @NonNull Uri getFileUri() {
+    return fileUri;
   }
 
   public @NonNull String getFileName() {
