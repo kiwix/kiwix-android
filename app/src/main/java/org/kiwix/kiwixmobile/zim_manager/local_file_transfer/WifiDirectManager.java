@@ -44,6 +44,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   public static int FILE_TRANSFER_PORT = 8008;
 
   private @NonNull LocalFileTransferActivity activity;
+  private @NonNull Callbacks callbacks;
 
   private SharedPreferenceUtil sharedPreferenceUtil;
   private AlertDialogShower alertDialogShower;
@@ -79,6 +80,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
 
   public WifiDirectManager(@NonNull LocalFileTransferActivity activity) {
     this.activity = activity;
+    this.callbacks = (Callbacks) activity;
   }
 
   /* Initialisations for using the WiFi P2P API */
@@ -138,7 +140,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
 
     if(!isWifiP2pEnabled) {
       displayToast(R.string.discovery_needs_wifi, Toast.LENGTH_SHORT);
-      ((Callbacks) activity).clearListOfAvailablePeers();
+      callbacks.clearListOfAvailablePeers();
     }
 
     Log.d(TAG, "WiFi P2P state changed - " + isWifiP2pEnabled);
@@ -165,14 +167,14 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
       manager.requestConnectionInfo(channel, this);
     } else {
       // Not connected after connection change -> Disconnected
-      ((Callbacks) activity).clearListOfAvailablePeers();
+      callbacks.clearListOfAvailablePeers();
     }
   }
 
   @Override
   public void onDeviceChanged(@Nullable WifiP2pDevice userDevice) {
     // Update UI with wifi-direct details about the user device
-    ((Callbacks) activity).onUserDeviceDetailsAvailable(userDevice);
+    callbacks.onUserDeviceDetailsAvailable(userDevice);
   }
 
   public boolean isWifiP2pEnabled() {
@@ -185,7 +187,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     // Upon disconnection, retry one more time
     if (manager != null && !retryChannel) {
       Log.d(TAG, "Channel lost, trying again");
-      ((Callbacks) activity).clearListOfAvailablePeers();
+      callbacks.clearListOfAvailablePeers();
       retryChannel = true;
       manager.initialize(activity, getMainLooper(), this);
     } else {
@@ -196,7 +198,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   /* From WifiP2pManager.PeerListListener callback-interface */
   @Override
   public void onPeersAvailable(@NonNull WifiP2pDeviceList peers) {
-    ((Callbacks) activity).updateListOfAvailablePeers(peers);
+    callbacks.updateListOfAvailablePeers(peers);
   }
 
   /* From WifiP2pManager.ConnectionInfoListener callback-interface */
@@ -331,7 +333,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     if (clientAddress == null) {
       // null is returned only in case of a failed handshake
       displayToast(R.string.device_not_cooperating, Toast.LENGTH_LONG);
-      ((Callbacks) activity).onFileTransferComplete(false);
+      callbacks.onFileTransferComplete(false);
       return;
     }
 
@@ -353,7 +355,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
         senderDeviceAsyncTask.execute(fileUriArrayList.toArray(new Uri[0]));
 
       } else {
-        ((Callbacks) activity).onFilesForTransferAvailable(filesForTransfer);
+        callbacks.onFilesForTransferAvailable(filesForTransfer);
 
         receiverDeviceAsyncTask = new ReceiverDeviceAsyncTask(this);
         receiverDeviceAsyncTask.execute();
@@ -363,7 +365,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
 
   public void changeStatus(int itemIndex, @FileItem.FileStatus int status) {
     filesForTransfer.get(itemIndex).setFileStatus(status);
-    ((Callbacks) activity).onFileStatusChanged(itemIndex);
+    callbacks.onFileStatusChanged(itemIndex);
   }
 
   private void cancelAsyncTasks(AsyncTask... tasks) {
@@ -462,7 +464,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     } else {
       displayToast(R.string.error_during_transfer, Toast.LENGTH_LONG);
     }
-    ((Callbacks) activity).onFileTransferComplete(wereAllFilesTransferred);
+    callbacks.onFileTransferComplete(wereAllFilesTransferred);
   }
 
   public interface Callbacks {
