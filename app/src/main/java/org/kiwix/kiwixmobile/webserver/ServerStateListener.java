@@ -8,6 +8,8 @@ public interface ServerStateListener {
 
   void serverStopped();
 
+  void serverFailed();
+
   void hotspotTurnedOn(WifiConfiguration wifiConfiguration);
 
   void hotspotFailed();

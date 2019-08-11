@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -375,9 +376,8 @@ public class ZimHostActivity extends BaseActivity implements
   }
 
   @Override public void serverStarted(String ip) {
-    ip = ip.replaceAll("\n", "");
     this.ip = ip;
-    serverTextView.setText(getString(R.string.server_started_message) + " " + ip);
+    serverTextView.setText(getString(R.string.server_started_message) + " " + this.ip);
     startServerButton.setText(getString(R.string.stop_server_label));
     startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
     isServerStarted = true;
@@ -388,6 +388,11 @@ public class ZimHostActivity extends BaseActivity implements
     startServerButton.setText(getString(R.string.start_server_label));
     startServerButton.setBackgroundColor(getResources().getColor(R.color.greenTick));
     isServerStarted = false;
+  }
+
+  @Override public void serverFailed() {
+    String message = String.format(getString(R.string.server_failed_message));
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show();
   }
 
   @Override public void hotspotTurnedOn(WifiConfiguration wifiConfiguration) {

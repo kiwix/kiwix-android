@@ -22,7 +22,7 @@ public class WebServerHelper {
   }
 
   public void startServerHelper(ServerStateListener stateListener) {
-    
+
     // 1. Get port from settings screen
     // 2. Ask user to change port in settings if port is in use.
     // OR
@@ -30,7 +30,13 @@ public class WebServerHelper {
 
     if (!isServerStarted && startAndroidWebServer()) {
       isServerStarted = true;
-      stateListener.serverStarted(getIpAddress() + ":" + port);
+      String ip = getIpAddress();
+      ip = ip.replaceAll("\n", "");
+      if (ip.length() == 0) {
+        stateListener.serverFailed();
+      } else {
+        stateListener.serverStarted("http://" + ip + ":" + port);
+      }
     }
   }
 
@@ -85,10 +91,10 @@ public class WebServerHelper {
       ip += "Something Wrong! " + e.toString() + "\n";
     }
 
-    return "http://" + ip;
+    return ip;
   }
 
   public static String getAddress() {
-    return getIpAddress() + ":" + port;
+    return "http://" + getIpAddress() + ":" + port;
   }
 }
