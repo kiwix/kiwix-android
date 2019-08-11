@@ -97,6 +97,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
 
     manager = (WifiP2pManager) activity.getSystemService(Context.WIFI_P2P_SERVICE);
     channel = manager.initialize(activity, getMainLooper(), null);
+    registerWifiDirectBroadcastReceiver();
   }
 
   public void registerWifiDirectBroadcastReceiver() {
@@ -382,6 +383,8 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     } else {
       closeChannel();
     }
+
+    unregisterWifiDirectBroadcastReceiver();
   }
 
   public void disconnect() {

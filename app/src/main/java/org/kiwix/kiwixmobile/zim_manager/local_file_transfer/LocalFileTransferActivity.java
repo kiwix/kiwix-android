@@ -389,20 +389,8 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     Toast.makeText(context, text, duration).show();
   }
 
-  @Override
-  public void onResume() {
-    super.onResume();
-    wifiDirectManager.registerWifiDirectBroadcastReceiver();
-  }
-
-  @Override
-  public void onPause() {
-    super.onPause();
-    wifiDirectManager.unregisterWifiDirectBroadcastReceiver();
-  }
-
   @Override protected void onDestroy() {
-    super.onDestroy();
     wifiDirectManager.stopWifiDirectManager();
+    super.onDestroy();
   }
 }
