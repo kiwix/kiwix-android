@@ -4,19 +4,6 @@
     android:installLocation="auto"
     package="org.kiwix.kiwixmobile">
 
-  <supports-screens
-      android:anyDensity="true"
-      android:largeScreens="true"
-      android:normalScreens="true"
-      android:resizeable="true"
-      android:smallScreens="true"/>
-  <supports-screens
-      android:anyDensity="true"
-      android:largeScreens="true"
-      android:normalScreens="true"
-      android:resizeable="true"
-      android:smallScreens="true"/>
-
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.INTERNET"/>
@@ -36,8 +23,7 @@
       android:networkSecurityConfig="@xml/network_security_config"
       android:supportsRtl="true"
       android:theme="@style/AppTheme">
-    <activity android:name=".webserver.ZimHostActivity">
-    </activity>
+
     <activity
         android:name=".splash.SplashActivity"
         android:label="@string/app_name"
@@ -174,6 +160,7 @@
     <activity android:name=".settings.KiwixSettingsActivity"/>
     <activity android:name=".search.SearchActivity"/>
     <activity android:name=".bookmark.BookmarksActivity"/>
+    <activity android:name=".webserver.ZimHostActivity"/>
 
     <provider
         android:name=".data.ZimContentProvider"
