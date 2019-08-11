@@ -79,9 +79,6 @@ public class ZimHostActivity extends AppCompatActivity implements
 
     setUpToolbar();
 
-    startServerButton = (Button) findViewById(R.id.startServerButton);
-    serverTextView = (TextView) findViewById(R.id.server_textView);
-
     if (savedInstanceState != null) {
       serverTextView.setText(
           getString(R.string.server_started_message) + " " + savedInstanceState.getString(
