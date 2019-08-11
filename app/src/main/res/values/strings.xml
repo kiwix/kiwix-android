@@ -30,6 +30,7 @@
   <string name="go_to_settings_label">Go to settings</string>
   <string name="hotspot_start">Starting hotspot</string>
   <string name="hotspot_running">Running Hotspot</string>
+  <string name="stop_hotspot_button">STOP</string>
   <string name="hotspot_turned_on">Hotspot turned on</string>
   <string name="hotspot_details_message">Following are the details of your local hotspot.</string>
   <string name="hotspot_ssid_label">SSID : </string>

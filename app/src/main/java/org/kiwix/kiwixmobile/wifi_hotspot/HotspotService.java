@@ -140,7 +140,8 @@ public class HotspotService extends Service {
       Intent stopIntent = new Intent(ACTION_STOP);
       PendingIntent stopHotspot =
           PendingIntent.getBroadcast(this, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-      builder.addAction(R.drawable.ic_close_white_24dp, "STOP", stopHotspot);
+      builder.addAction(R.drawable.ic_close_white_24dp, getString(R.string.stop_hotspot_button),
+          stopHotspot);
     }
     return (builder.build());
   }
