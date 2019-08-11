@@ -320,7 +320,13 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
         (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 
     try {
-      return (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER));
+      return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    } catch (SecurityException | IllegalArgumentException ex) {
+      ex.printStackTrace();
+    }
+
+    try {
+      return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     } catch (SecurityException | IllegalArgumentException ex) {
       ex.printStackTrace();
     }
