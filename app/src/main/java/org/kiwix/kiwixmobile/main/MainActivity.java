@@ -1403,6 +1403,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       webViewList.get(currentWebViewIndex).findViewById(R.id.get_content_card).setEnabled(true);
     }
     updateBottomToolbarVisibility();
+    presenter.loadBooks();
 
     Log.d(TAG_KIWIX, "action" + getIntent().getAction());
     Intent intent = getIntent();
@@ -2097,7 +2098,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   @Override
   public void setHomePage(View view) {
     RecyclerView homeRecyclerView = view.findViewById(R.id.recycler_view);
-    presenter.showHome();
+    presenter.loadBooks();
     homeRecyclerView.setAdapter(booksAdapter);
     downloadBookButton = view.findViewById(R.id.content_main_card_download_button);
     downloadBookButton.setOnClickListener(v -> manageZimFiles(1));
