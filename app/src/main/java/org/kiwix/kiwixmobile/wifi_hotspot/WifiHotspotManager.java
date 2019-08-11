@@ -9,7 +9,6 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 import org.kiwix.kiwixmobile.webserver.ServerStateListener;
 
-
 /**
  * WifiHotstopManager class makes use of the Android's WifiManager and WifiConfiguration class
  * to implement the wifi hotspot feature.
@@ -84,5 +83,4 @@ public class WifiHotspotManager {
   public boolean checkHotspotState() {
     return hotspotReservation != null;
   }
-
 }
