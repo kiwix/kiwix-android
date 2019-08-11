@@ -11,6 +11,7 @@ import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
@@ -63,7 +64,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   private WifiP2pDevice senderSelectedPeerDevice = null;
 
   private PeerGroupHandshakeAsyncTask peerGroupHandshakeAsyncTask;
-  private SenderDeviceAsyncTask senderDeviceAsyncTaskArray;
+  private SenderDeviceAsyncTask senderDeviceAsyncTask;
   private ReceiverDeviceAsyncTask receiverDeviceAsyncTask;
 
   private InetAddress selectedPeerDeviceInetAddress;
@@ -356,8 +357,8 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
             (isGroupOwner()) ? selectedPeerDeviceInetAddress : getGroupOwnerAddress();
 
         displayToast(R.string.preparing_files, Toast.LENGTH_LONG);
-        senderDeviceAsyncTaskArray = new SenderDeviceAsyncTask(this, activity);
-        senderDeviceAsyncTaskArray.execute(fileUriArrayList.toArray(new Uri[0]));
+        senderDeviceAsyncTask = new SenderDeviceAsyncTask(this, activity);
+        senderDeviceAsyncTask.execute(fileUriArrayList.toArray(new Uri[0]));
       }
     }
   }
@@ -367,21 +368,16 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     ((Callbacks) activity).onFileStatusChanged(itemIndex);
   }
 
-  private void cancelAsyncTasks() {
-    if (peerGroupHandshakeAsyncTask != null) {
-      peerGroupHandshakeAsyncTask.cancel(true);
-    }
-
-    if (senderDeviceAsyncTaskArray != null) {
-      senderDeviceAsyncTaskArray.cancel(true);
-
-    } else if (receiverDeviceAsyncTask != null) {
-      receiverDeviceAsyncTask.cancel(true);
+  private void cancelAsyncTasks(AsyncTask... tasks) {
+    for (AsyncTask asyncTask : tasks) {
+      if (asyncTask != null) {
+        asyncTask.cancel(true);
+      }
     }
   }
 
   public void destroyWifiDirectManager() {
-    cancelAsyncTasks();
+    cancelAsyncTasks(peerGroupHandshakeAsyncTask, senderDeviceAsyncTask, receiverDeviceAsyncTask);
 
     if (!isFileSender) {
       disconnect();
