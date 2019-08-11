@@ -1,7 +1,6 @@
 package org.kiwix.kiwixmobile.webserver;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -23,7 +22,6 @@ public class WebServerHelper {
   public static boolean isStarted;
   static int port;
   private CoordinatorLayout coordinatorLayout;
-  String TAG = WebServerHelper.this.getClass().getSimpleName();
 
   public WebServerHelper(Context context) {
     this.context = context;
@@ -93,7 +91,6 @@ public class WebServerHelper {
       ip += "Something Wrong! " + e.toString() + "\n";
     }
 
-    Log.v("TAG", "Returning : " + "http://" + ip);
     return "http://" + ip;
   }
 
