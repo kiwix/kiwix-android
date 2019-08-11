@@ -186,18 +186,17 @@ public class ZimHostActivity extends AppCompatActivity implements
 
   // This method checks if mobile data is enabled in user's device.
   static boolean isMobileDataEnabled(Context context) {
-    boolean enabled = false;
     ConnectivityManager cm =
         (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     try {
       Class cmClass = Class.forName(cm.getClass().getName());
       Method method = cmClass.getDeclaredMethod("getMobileDataEnabled");
       method.setAccessible(true);
-      enabled = (Boolean) method.invoke(cm);
+      return (Boolean) method.invoke(cm);
     } catch (Exception e) {
       Log.e("ZimHostActivity", e.toString());
     }
-    return enabled;
+    return false;
   }
 
   //This method sends the user to data usage summary settings activity
