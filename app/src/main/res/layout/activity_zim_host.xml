@@ -38,10 +38,11 @@
       app:layout_constraintTop_toBottomOf="@+id/appBarLayout2"
       />
 
-  <FrameLayout
-      android:id="@+id/frameLayoutServer"
-      android:layout_width="wrap_content"
+  <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/recycler_view_zim_host"
+      android:layout_width="0dp"
       android:layout_height="0dp"
+      app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
       android:layout_marginBottom="8dp"
       android:layout_marginTop="16dp"
       app:layout_constraintBottom_toTopOf="@+id/startServerButton"

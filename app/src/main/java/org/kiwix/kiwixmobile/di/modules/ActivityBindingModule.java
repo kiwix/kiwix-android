@@ -73,6 +73,6 @@ public abstract class ActivityBindingModule {
   public abstract HelpActivity provideHelpActivity();
 
   @PerActivity
-  @ContributesAndroidInjector
+  @ContributesAndroidInjector(modules = MainModule.class)
   public abstract ZimHostActivity provideZimHostActivity();
 }

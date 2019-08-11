@@ -10,6 +10,7 @@ import android.content.IntentSender;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.os.Build;
 import android.os.Handler;
@@ -27,8 +28,7 @@ import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -39,23 +39,35 @@ import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.Task;
+import java.io.File;
 import java.lang.reflect.Method;
+import java.util.List;
+import javax.inject.Inject;
+import kotlin.Unit;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
+import org.kiwix.kiwixmobile.main.MainActivity;
+import org.kiwix.kiwixmobile.main.MainContract;
 import org.kiwix.kiwixmobile.wifi_hotspot.HotspotService;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 import static org.kiwix.kiwixmobile.webserver.WebServerHelper.getAddress;
 import static org.kiwix.kiwixmobile.webserver.WebServerHelper.isServerStarted;
 
 public class ZimHostActivity extends BaseActivity implements
-    ServerStateListener {
+    ServerStateListener, MainContract.View {
 
   @BindView(R.id.startServerButton)
   Button startServerButton;
   @BindView(R.id.server_textView)
   TextView serverTextView;
+
+  @Inject
+  MainContract.Presenter presenter;
 
   public static final String ACTION_TURN_ON_AFTER_O = "Turn_on_hotspot_after_oreo";
   public static final String ACTION_TURN_OFF_AFTER_O = "Turn_off_hotspot_after_oreo";
@@ -68,6 +80,7 @@ public class ZimHostActivity extends BaseActivity implements
   private static final int LOCATION_SETTINGS_PERMISSION_RESULT = 101;
   private Intent serviceIntent;
   private Task<LocationSettingsResponse> task;
+  private BooksOnDiskAdapter booksAdapter;
   HotspotService hotspotService;
   String ip;
   boolean bound;
@@ -88,6 +101,23 @@ public class ZimHostActivity extends BaseActivity implements
       startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
     }
 
+    booksAdapter = new BooksOnDiskAdapter(
+        new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
+            bookOnDiskItem -> {
+              open(bookOnDiskItem);
+              return Unit.INSTANCE;
+            },
+            null,
+            null),
+        BookOnDiskDelegate.LanguageDelegate.INSTANCE
+    );
+
+    presenter.attachView(this);
+
+    RecyclerView homeRecyclerView = findViewById(R.id.recycler_view_zim_host);
+    presenter.loadBooks();
+    homeRecyclerView.setAdapter(booksAdapter);
+
     serviceConnection = new ServiceConnection() {
 
       @Override
@@ -103,12 +133,6 @@ public class ZimHostActivity extends BaseActivity implements
         bound = false;
       }
     };
-
-    FragmentManager fragmentManager = getSupportFragmentManager();
-    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-    ZimFileSelectFragment fragment = new ZimFileSelectFragment();
-    fragmentTransaction.add(R.id.frameLayoutServer, fragment);
-    fragmentTransaction.commit();
 
     serviceIntent = new Intent(this, HotspotService.class);
 
@@ -130,6 +154,14 @@ public class ZimHostActivity extends BaseActivity implements
         }
       }
     });
+  }
+
+  public void open(BooksOnDiskListItem.BookOnDisk bookOnDisk) {
+    File file = bookOnDisk.getFile();
+    Intent zimFile = new Intent(this, MainActivity.class);
+    zimFile.setData(Uri.fromFile(file));
+    startActivity(zimFile);
+    finish();
   }
 
   @Override protected void onStart() {
@@ -172,6 +204,7 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override protected void onResume() {
     super.onResume();
+    presenter.loadBooks();
     if (isServerStarted) {
       ip = getAddress();
       ip = ip.replaceAll("\n", "");
@@ -249,6 +282,7 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override protected void onDestroy() {
     super.onDestroy();
+    presenter.detachView();
   }
 
   private void setUpToolbar() {
@@ -471,5 +505,13 @@ public class ZimHostActivity extends BaseActivity implements
     if (isServerStarted) {
       outState.putString(IP_STATE_KEY, ip);
     }
+  }
+
+  @Override public void addBooks(List<BooksOnDiskListItem> books) {
+    booksAdapter.setItems(books);
+  }
+
+  @Override public void refreshBookmarksUrl(List<String> urls) {
+    //Do nothing
   }
 }
