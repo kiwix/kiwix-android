@@ -63,6 +63,7 @@ public class ZimHostActivity extends AppCompatActivity implements
   public static final String ACTION_STOP_SERVER = "stop_server";
   private final String IP_STATE_KEY = "ip_state_key";
   private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
+  private static final int LOCATION_SETTINGS_PERMISSION_RESULT = 101;
   private Intent serviceIntent;
   private Task<LocationSettingsResponse> task;
   HotspotService hotspotService;
@@ -230,17 +231,17 @@ public class ZimHostActivity extends AppCompatActivity implements
   protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
     switch (requestCode) {
       //Checking the result code for LocationSettings resolution
-      case 101:
+      case LOCATION_SETTINGS_PERMISSION_RESULT:
         final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
         switch (resultCode) {
           case Activity.RESULT_OK:
             // All required changes were successfully made
-            Log.v("case 101", states.isLocationPresent() + "");
+            Log.v(TAG, states.isLocationPresent() + "");
             startService(ACTION_TURN_ON_AFTER_O);
             break;
           case Activity.RESULT_CANCELED:
             // The user was asked to change settings, but chose not to
-            Log.v("case 101", "Canceled");
+            Log.v(TAG, "Canceled");
             break;
           default:
             break;
@@ -300,7 +301,7 @@ public class ZimHostActivity extends AppCompatActivity implements
               // and check the result in onActivityResult().
               resolvable.startResolutionForResult(
                   ZimHostActivity.this,
-                  101);
+                  LOCATION_SETTINGS_PERMISSION_RESULT);
             } catch (IntentSender.SendIntentException e) {
               // Ignore the error.
             } catch (ClassCastException e) {
