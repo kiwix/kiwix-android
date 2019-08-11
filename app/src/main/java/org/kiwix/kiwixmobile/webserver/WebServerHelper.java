@@ -1,9 +1,6 @@
 package org.kiwix.kiwixmobile.webserver;
 
 import android.content.Context;
-import android.widget.EditText;
-import android.widget.TextView;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -17,11 +14,8 @@ import java.util.Enumeration;
 
 public class WebServerHelper {
   Context context;
-  private TextView textViewIpAccess;
-  private EditText editTextPort;
   public static boolean isStarted;
   static int port;
-  private CoordinatorLayout coordinatorLayout;
 
   public WebServerHelper(Context context) {
     this.context = context;
