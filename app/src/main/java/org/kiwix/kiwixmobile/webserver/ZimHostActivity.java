@@ -46,7 +46,7 @@ import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
 import static org.kiwix.kiwixmobile.webserver.WebServerHelper.getAddress;
-import static org.kiwix.kiwixmobile.webserver.WebServerHelper.isStarted;
+import static org.kiwix.kiwixmobile.webserver.WebServerHelper.isServerStarted;
 
 public class ZimHostActivity extends AppCompatActivity implements
     ServerStateListener {
@@ -123,7 +123,7 @@ public class ZimHostActivity extends AppCompatActivity implements
           //if (isMobileDataEnabled(context)) {
           //  mobileDataDialog();
           //} else {
-          if (isStarted) {
+          if (isServerStarted) {
             startService(ACTION_STOP_SERVER);
           } else {
             startHotspotDialog();
@@ -174,7 +174,7 @@ public class ZimHostActivity extends AppCompatActivity implements
 
   @Override protected void onResume() {
     super.onResume();
-    if (isStarted) {
+    if (isServerStarted) {
       ip = getAddress();
       ip = ip.replaceAll("\n", "");
       serverTextView.setText(
@@ -378,14 +378,14 @@ public class ZimHostActivity extends AppCompatActivity implements
     serverTextView.setText(getString(R.string.server_started_message) + " " + ip);
     startServerButton.setText(getString(R.string.stop_server_label));
     startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
-    isStarted = true;
+    isServerStarted = true;
   }
 
   @Override public void serverStopped() {
     serverTextView.setText(getString(R.string.server_textview_default_message));
     startServerButton.setText(getString(R.string.start_server_label));
     startServerButton.setBackgroundColor(getResources().getColor(R.color.greenTick));
-    isStarted = false;
+    isServerStarted = false;
   }
 
   @Override public void hotspotTurnedOn(WifiConfiguration wifiConfiguration) {
@@ -461,7 +461,7 @@ public class ZimHostActivity extends AppCompatActivity implements
 
   @Override protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
-    if (isStarted) {
+    if (isServerStarted) {
       outState.putString(IP_STATE_KEY, ip);
     }
   }

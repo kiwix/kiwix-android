@@ -14,7 +14,7 @@ import java.util.Enumeration;
 
 public class WebServerHelper {
   Context context;
-  public static boolean isStarted;
+  public static boolean isServerStarted;
   static int port;
 
   public WebServerHelper(Context context) {
@@ -27,15 +27,15 @@ public class WebServerHelper {
     //2. Ask user to change port in settings if port is in use.
     //OR
     //Always use 8080 and when its not available then iterate this number.
-    if (!isStarted && startAndroidWebServer()) {
-      isStarted = true;
+    if (!isServerStarted && startAndroidWebServer()) {
+      isServerStarted = true;
       stateListener.serverStarted(getIpAddress() + ":" + port);
     }
   }
 
   public static boolean stopAndroidWebServer(ServerStateListener stateListener) {
-    if (isStarted) {
-      isStarted = false;
+    if (isServerStarted) {
+      isServerStarted = false;
       stateListener.serverStopped();
       return true;
     }
@@ -43,7 +43,7 @@ public class WebServerHelper {
   }
 
   boolean startAndroidWebServer() {
-    if (!isStarted) {
+    if (!isServerStarted) {
       port = 8080;
       //Call to start server
       return true;
