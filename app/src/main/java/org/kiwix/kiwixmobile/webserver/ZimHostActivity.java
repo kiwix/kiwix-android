@@ -421,8 +421,7 @@ public class ZimHostActivity extends BaseActivity implements
   }
 
   @Override public void serverFailed() {
-    String message = String.format(getString(R.string.server_failed_message));
-    Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    Toast.makeText(this, R.string.server_failed_message, Toast.LENGTH_LONG).show();
   }
 
   @Override public void hotspotTurnedOn(WifiConfiguration wifiConfiguration) {
