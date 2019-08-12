@@ -44,7 +44,7 @@
           android:textColor="@android:color/white"
           app:backgroundTint="#1565c0"
           app:layout_constraintBottom_toBottomOf="parent"
-          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintRight_toRightOf="parent"
           />
     </androidx.constraintlayout.widget.ConstraintLayout>
   </androidx.cardview.widget.CardView>
