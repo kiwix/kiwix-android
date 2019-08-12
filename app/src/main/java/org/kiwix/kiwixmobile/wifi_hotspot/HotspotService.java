@@ -51,25 +51,15 @@ public class HotspotService extends Service {
 
     hotspotManager = new WifiHotspotManager(this);
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       stopReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
           if (intent != null && intent.getAction().equals(ACTION_STOP)) {
-            stopHotspot();
+            stopHotspotAndDismissNotification();
           }
         }
       };
-    } else {
-      stopReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-          if (intent != null && intent.getAction().equals(ACTION_STOP)) {
-            dismissNotification();
-          }
-        }
-      };
-    }
+
     registerReceiver(stopReceiver, new IntentFilter(ACTION_STOP));
 
     webServerHelper = new WebServerHelper(this);
@@ -98,7 +88,7 @@ public class HotspotService extends Service {
 
       case ACTION_TURN_OFF_AFTER_O:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          stopHotspot();
+          stopHotspotAndDismissNotification();
         }
         break;
 
@@ -110,7 +100,7 @@ public class HotspotService extends Service {
         break;
 
       case ACTION_STOP_SERVER:
-        dismissNotification();
+        stopHotspotAndDismissNotification();
         break;
       default:
         break;
@@ -152,16 +142,10 @@ public class HotspotService extends Service {
   }
 
   //Dismiss notification and turn off hotspot for devices>=O
-  @RequiresApi(Build.VERSION_CODES.O)
-  void stopHotspot() {
-    hotspotManager.turnOffHotspot();
-    webServerHelper.stopAndroidWebServer(serverStateListener);
-    stopForeground(true);
-    stopSelf();
-  }
-
-  //Dismiss notification and turn off hotspot for devices < O
-  void dismissNotification() {
+  void stopHotspotAndDismissNotification() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      hotspotManager.turnOffHotspot();
+    }
     webServerHelper.stopAndroidWebServer(serverStateListener);
     stopForeground(true);
     stopSelf();
