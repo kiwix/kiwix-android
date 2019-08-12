@@ -180,8 +180,7 @@
           android:name="android.appwidget.provider"
           android:resource="@xml/kiwix_widget_provider_info"/>
     </receiver>
-
-    <service android:name=".downloader.DownloadService"/>
+    
     <service android:name=".wifi_hotspot.HotspotService"/>
 
     <activity
