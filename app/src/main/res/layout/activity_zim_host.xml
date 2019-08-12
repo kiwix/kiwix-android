@@ -10,7 +10,7 @@
     tools:context=".webserver.ZimHostActivity"
     >
   <com.google.android.material.appbar.AppBarLayout
-      android:id="@+id/appBarLayout2"
+      android:id="@+id/zimHostAppBarLayout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:theme="@style/AppTheme.AppBarOverlay"
@@ -35,7 +35,7 @@
       android:layout_marginTop="16dp"
       android:text="@string/server_textview_default_message"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/appBarLayout2"
+      app:layout_constraintTop_toBottomOf="@+id/zimHostAppBarLayout"
       />
 
   <androidx.recyclerview.widget.RecyclerView
