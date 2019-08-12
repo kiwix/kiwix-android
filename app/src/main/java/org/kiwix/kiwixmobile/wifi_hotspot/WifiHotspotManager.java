@@ -19,7 +19,7 @@ public class WifiHotspotManager {
   private WifiManager wifiManager;
   Context context;
   WifiManager.LocalOnlyHotspotReservation hotspotReservation;
-  boolean oreoenabled;
+  boolean isHotspotEnabled;
   WifiConfiguration currentConfig;
   private static final String TAG = "WifiHotspotManager";
 
@@ -31,7 +31,7 @@ public class WifiHotspotManager {
   //Workaround to turn on hotspot for Oreo versions
   @RequiresApi(api = Build.VERSION_CODES.O)
   public void turnOnHotspot(ServerStateListener serverStateListener) {
-    if (!oreoenabled) {
+    if (!isHotspotEnabled) {
       wifiManager.startLocalOnlyHotspot(new WifiManager.LocalOnlyHotspotCallback() {
 
         @Override
@@ -47,7 +47,7 @@ public class WifiHotspotManager {
 
           serverStateListener.hotspotTurnedOn(currentConfig);
 
-          oreoenabled = true;
+          isHotspotEnabled = true;
         }
 
         @Override
@@ -73,7 +73,7 @@ public class WifiHotspotManager {
     if (hotspotReservation != null) {
       hotspotReservation.close();
       hotspotReservation = null;
-      oreoenabled = false;
+      isHotspotEnabled = false;
       Log.v(TAG, "Turned off hotspot");
     }
   }
