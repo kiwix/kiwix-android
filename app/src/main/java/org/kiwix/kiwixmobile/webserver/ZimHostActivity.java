@@ -47,11 +47,8 @@ import kotlin.Unit;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
-import org.kiwix.kiwixmobile.main.MainContract;
 import org.kiwix.kiwixmobile.wifi_hotspot.HotspotService;
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
-import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
@@ -59,7 +56,7 @@ import static org.kiwix.kiwixmobile.webserver.WebServerHelper.getAddress;
 import static org.kiwix.kiwixmobile.webserver.WebServerHelper.isServerStarted;
 
 public class ZimHostActivity extends BaseActivity implements
-    ServerStateListener, MainContract.View {
+    ServerStateListener, ZimHostContract.View {
 
   @BindView(R.id.startServerButton)
   Button startServerButton;
@@ -67,7 +64,7 @@ public class ZimHostActivity extends BaseActivity implements
   TextView serverTextView;
 
   @Inject
-  MainContract.Presenter presenter;
+  ZimHostContract.Presenter presenter;
 
   public static final String ACTION_TURN_ON_AFTER_O = "Turn_on_hotspot_after_oreo";
   public static final String ACTION_TURN_OFF_AFTER_O = "Turn_off_hotspot_after_oreo";
@@ -509,9 +506,5 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override public void addBooks(List<BooksOnDiskListItem> books) {
     booksAdapter.setItems(books);
-  }
-
-  @Override public void refreshBookmarksUrl(List<String> urls) {
-    //Do nothing
   }
 }

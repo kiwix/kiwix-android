@@ -10,15 +10,15 @@ import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskList
  * The contract between {@link MainActivity} and {@link MainPresenter}.
  */
 
-public class MainContract {
+class MainContract {
 
-  public interface View extends BaseContract.View<Presenter> {
+  interface View extends BaseContract.View<Presenter> {
     void addBooks(List<BooksOnDiskListItem> books);
 
     void refreshBookmarksUrl(List<String> urls);
   }
 
-  public interface Presenter extends BaseContract.Presenter<View> {
+  interface Presenter extends BaseContract.Presenter<View> {
     void loadBooks();
 
     void saveBooks(List<BooksOnDiskListItem.BookOnDisk> books);
