@@ -129,7 +129,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
       displayFileTransferProgress(filesForTransfer);
     }
 
-    wifiDirectManager.startWifiDirectManager(sharedPreferenceUtil, alertDialogShower, filesForTransfer);
+    wifiDirectManager.startWifiDirectManager(filesForTransfer);
   }
 
   @OnItemClick(R.id.list_peer_devices)

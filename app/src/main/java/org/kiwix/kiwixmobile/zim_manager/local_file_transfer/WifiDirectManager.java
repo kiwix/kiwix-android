@@ -81,16 +81,16 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   private boolean hasSenderStartedConnection = false;
 
   @Inject
-  public WifiDirectManager(@NonNull Activity activity) {
+  public WifiDirectManager(@NonNull Activity activity, @NonNull SharedPreferenceUtil sharedPreferenceUtil,
+      @NonNull AlertDialogShower alertDialogShower) {
     this.activity = (LocalFileTransferActivity) activity;
     this.callbacks = (Callbacks) activity;
+    this.sharedPreferenceUtil = sharedPreferenceUtil;
+    this.alertDialogShower = alertDialogShower;
   }
 
   /* Initialisations for using the WiFi P2P API */
-  public void startWifiDirectManager(@NonNull SharedPreferenceUtil sharedPreferenceUtil,
-      @NonNull AlertDialogShower alertDialogShower, @Nullable ArrayList<FileItem> filesForTransfer) {
-    this.sharedPreferenceUtil = sharedPreferenceUtil;
-    this.alertDialogShower = alertDialogShower;
+  public void startWifiDirectManager(@Nullable ArrayList<FileItem> filesForTransfer) {
     this.filesForTransfer = filesForTransfer;
     this.isFileSender = (filesForTransfer != null && filesForTransfer.size() > 0);
 
