@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import org.kiwix.kiwixmobile.R;
 
 import java.util.ArrayList;
@@ -74,17 +76,15 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
   }
 
   class FileViewHolder extends RecyclerView.ViewHolder {
-    public final TextView fileName;
-    public final ImageView statusImage;
-    public final ProgressBar progressBar;
+    @BindView(R.id.text_view_file_item_name) TextView fileName;
+    @BindView(R.id.image_view_file_transferred) ImageView statusImage;
+    @BindView(R.id.progress_bar_transferring_file) ProgressBar progressBar;
     final FileListAdapter fileListAdapter;
 
     public FileViewHolder(View itemView, FileListAdapter fileListAdapter) {
       super(itemView);
-      this.fileName = itemView.findViewById(R.id.text_view_file_item_name);
-      this.statusImage = itemView.findViewById(R.id.image_view_file_transferred);
-      this.progressBar = itemView.findViewById(R.id.progress_bar_transferring_file);
       this.fileListAdapter = fileListAdapter;
+      ButterKnife.bind(this, itemView);
     }
   }
 }
