@@ -4,6 +4,7 @@ import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
+import org.kiwix.kiwixmobile.di.modules.TestNetworkModule
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
 import org.kiwix.kiwixmobile.library.entity.MetaLinkNetworkEntity
@@ -13,7 +14,7 @@ import org.kiwix.kiwixmobile.library.entity.MetaLinkNetworkEntity.Url
 import org.simpleframework.xml.core.Persister
 import java.io.StringWriter
 import java.util.LinkedList
-import java.util.concurrent.TimeUnit
+import java.util.Stack
 
 /*
  * Kiwix Android
@@ -33,34 +34,39 @@ import java.util.concurrent.TimeUnit
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 class KiwixMockServer {
+
+  val queuedResponses: Stack<MockResponse> = Stack()
+
   private val mockWebServer = MockWebServer().apply {
-    start(8080)
+    start(PORT)
   }
 
   fun stop() {
     mockWebServer.shutdown()
   }
 
-  fun enqueue(libraryNetworkEntity: LibraryNetworkEntity) {
-    mockWebServer.enqueue(MockResponse().apply {
-      setResponseCode(200)
-      setBody(libraryNetworkEntity.asXmlString())
-    })
-  }
-
-  fun enqueueForEvery(
-    pathsToResponses: Map<String, Any>
+  fun map(
+    vararg pathsToResponses: Pair<String, Any>
   ) {
+    val mapOfPathsToResponses = mapOf(*pathsToResponses)
     mockWebServer.setDispatcher(object : Dispatcher() {
       override fun dispatch(request: RecordedRequest) =
-        pathsToResponses[request.path]?.let(::successfulResponse)
-          ?: MockResponse().throttleBody(1L, 1L, TimeUnit.SECONDS).setBody("0123456789")
+        mapOfPathsToResponses[request.path]?.let(::successfulResponse)
+          ?: queuedResponses.pop()?.let { return@let it }
+          ?: throw RuntimeException("No response mapped for ${request.path}")
     })
   }
 
   private fun successfulResponse(bodyObject: Any) = MockResponse().apply {
     setResponseCode(200)
     setBody(bodyObject.asXmlString())
+  }
+
+  fun queueResponse(mockResponse: MockResponse) {
+  }
+
+  companion object {
+    const val PORT = 8080
   }
 }
 
@@ -96,7 +102,7 @@ fun pieces(
 }
 
 fun url(
-  value: String = "http://localhost:8080/relevantUrl.zim.meta4",
+  value: String = "${TestNetworkModule.MOCK_BASE_URL}/relevantUrl.zim.meta4",
   location: String = "location"
 ) = Url().apply {
   this.location = location
@@ -111,7 +117,7 @@ fun book(
   creator: String = "creator",
   publisher: String = "publisher",
   date: String = "date",
-  url: String = "http://localhost:8080/url",
+  url: String = "${TestNetworkModule.MOCK_BASE_URL}/url",
   articleCount: String = "mediaCount",
   mediaCount: String = "mediaCount",
   size: String = "1024",

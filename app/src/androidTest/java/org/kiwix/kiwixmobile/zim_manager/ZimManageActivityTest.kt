@@ -1,29 +1,31 @@
 package org.kiwix.kiwixmobile.zim_manager
 
+import okhttp3.mockwebserver.MockResponse
 import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.KiwixApplication
 import org.kiwix.kiwixmobile.KiwixMockServer
 import org.kiwix.kiwixmobile.book
+import org.kiwix.kiwixmobile.data.remote.KiwixService.LIBRARY_NETWORK_PATH
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.libraryNetworkEntity
 import org.kiwix.kiwixmobile.metaLinkNetworkEntity
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
+import java.util.concurrent.TimeUnit.SECONDS
 
 class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
+
   @get:Rule
   override var activityRule = activityTestRule<ZimManageActivity> {
     KiwixApplication.setApplicationComponent(testComponent())
   }
-
   private val book = book()
 
   private val mockServer = KiwixMockServer().apply {
-    enqueueForEvery(
-      mapOf(
-        "/library/library_zim.xml" to libraryNetworkEntity(listOf(book)),
-        "/${book.url.substringAfterLast("/")}" to metaLinkNetworkEntity()
-      )
+    map(
+      LIBRARY_NETWORK_PATH to libraryNetworkEntity(listOf(book)),
+      book.networkPath to metaLinkNetworkEntity()
     )
   }
 
@@ -38,6 +40,7 @@ class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
         searchFor(book)
         pressBack()
         pressBack()
+        queueMockResponseWith("0123456789")
         clickOn(book)
       }
       clickOnDownloading {
@@ -47,6 +50,7 @@ class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
         clickPositiveDialogButton()
       }
       clickOnOnline {
+        queueMockResponseWith("01234")
         clickOn(book)
       }
       clickOnDownloading {
@@ -66,4 +70,17 @@ class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
       clickOnOnline { }
     } clickOnLanguageIcon { }
   }
+
+  private fun queueMockResponseWith(body: String) {
+    mockServer.queueResponse(
+      MockResponse()
+        .setBody(body)
+        .throttleBody(
+          1L, 1L, SECONDS
+        )
+    )
+  }
+
+  private val LibraryNetworkEntity.Book.networkPath
+    get() = "/${url.substringAfterLast("/")}"
 }

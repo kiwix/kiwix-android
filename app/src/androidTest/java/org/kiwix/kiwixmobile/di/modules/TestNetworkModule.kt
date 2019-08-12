@@ -19,6 +19,7 @@ package org.kiwix.kiwixmobile.di.modules
 
 import dagger.Module
 import okhttp3.OkHttpClient
+import org.kiwix.kiwixmobile.KiwixMockServer
 import org.kiwix.kiwixmobile.data.remote.KiwixService
 
 /**
@@ -27,9 +28,14 @@ import org.kiwix.kiwixmobile.data.remote.KiwixService
 
 @Module
 class TestNetworkModule : NetworkModule() {
+
   internal override fun provideKiwixService(okHttpClient: OkHttpClient): KiwixService =
     KiwixService.ServiceCreator.newHacklistService(
       okHttpClient,
-      "http://localhost:8080/"
+      MOCK_BASE_URL
     )
+
+  companion object {
+    const val MOCK_BASE_URL = "http://localhost:${KiwixMockServer.PORT}/"
+  }
 }

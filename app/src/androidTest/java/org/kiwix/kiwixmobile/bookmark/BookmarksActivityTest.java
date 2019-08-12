@@ -22,7 +22,7 @@ public class BookmarksActivityTest {
       GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
   @Test
-  public void testSimple() {
+  public void BookmarksActivitySimple() {
 
   }
 }
