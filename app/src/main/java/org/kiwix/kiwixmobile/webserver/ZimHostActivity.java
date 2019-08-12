@@ -293,14 +293,14 @@ public class ZimHostActivity extends BaseActivity implements
   }
 
   void setupLocationServices() {
-    LocationRequest mLocationRequest = new LocationRequest();
-    mLocationRequest.setInterval(10);
-    mLocationRequest.setSmallestDisplacement(10);
-    mLocationRequest.setFastestInterval(10);
-    mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    LocationRequest locationRequest = new LocationRequest();
+    locationRequest.setInterval(10);
+    locationRequest.setSmallestDisplacement(10);
+    locationRequest.setFastestInterval(10);
+    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     LocationSettingsRequest.Builder builder = new
         LocationSettingsRequest.Builder();
-    builder.addLocationRequest(mLocationRequest);
+    builder.addLocationRequest(locationRequest);
 
     task = LocationServices.getSettingsClient(this).checkLocationSettings(builder.build());
 
