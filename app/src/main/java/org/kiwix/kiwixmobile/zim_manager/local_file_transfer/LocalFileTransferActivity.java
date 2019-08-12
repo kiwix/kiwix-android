@@ -46,9 +46,7 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.TO_BE_SENT;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectManager.getDeviceStatus;
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectManager.getFileName;
 
 /**
  * Created by @Aditya-Sood as a part of GSoC 2019.
@@ -76,6 +74,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   @Inject SharedPreferenceUtil sharedPreferenceUtil;
   @Inject AlertDialogShower alertDialogShower;
   @Inject WifiDirectManager wifiDirectManager;
+  @Inject LocationManager locationManager;
 
   @BindView(R.id.toolbar_local_file_transfer) Toolbar actionBar;
   @BindView(R.id.text_view_device_name) TextView deviceName;
@@ -164,7 +163,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
         return true;
       }
 
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isLocationServicesEnabled()) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !isLocationServiceEnabled()) {
         requestEnableLocationServices();
         return true;
       }
@@ -314,25 +313,23 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     }
   }
 
-  private boolean isLocationServicesEnabled() {
-    LocationManager locationManager =
-        (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-    boolean gps_enabled = false;
-    boolean network_enabled = false;
+  private boolean isLocationServiceEnabled() {
+    return (isProviderEnabled(LocationManager.GPS_PROVIDER) || isProviderEnabled(LocationManager.NETWORK_PROVIDER));
+  }
 
-    try {
-      gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-    } catch (SecurityException | IllegalArgumentException ex) {
-      ex.printStackTrace();
+  private boolean isProviderEnabled(String locationProvider) {
+    switch (locationProvider) {
+      case LocationManager.GPS_PROVIDER:
+      case LocationManager.NETWORK_PROVIDER: {
+        try {
+          return locationManager.isProviderEnabled(locationProvider);
+        } catch (SecurityException | IllegalArgumentException ex) {
+          ex.printStackTrace();
+        }
+      }
+
+      default: return false;
     }
-
-    try {
-      network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-    } catch (SecurityException | IllegalArgumentException ex) {
-      ex.printStackTrace();
-    }
-
-    return (gps_enabled || network_enabled);
   }
 
   private void requestEnableLocationServices() {
@@ -374,7 +371,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
     switch (requestCode) {
       case REQUEST_ENABLE_LOCATION_SERVICES: {
-        if (!isLocationServicesEnabled()) {
+        if (!isLocationServiceEnabled()) {
           showToast(this, R.string.permission_refused_location, Toast.LENGTH_LONG);
         }
         break;
