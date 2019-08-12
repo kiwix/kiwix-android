@@ -318,20 +318,22 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   private boolean isLocationServicesEnabled() {
     LocationManager locationManager =
         (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+    boolean gps_enabled = false;
+    boolean network_enabled = false;
 
     try {
-      return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+      gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     } catch (SecurityException | IllegalArgumentException ex) {
       ex.printStackTrace();
     }
 
     try {
-      return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+      network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     } catch (SecurityException | IllegalArgumentException ex) {
       ex.printStackTrace();
     }
 
-    return false;
+    return (gps_enabled || network_enabled);
   }
 
   private void requestEnableLocationServices() {
