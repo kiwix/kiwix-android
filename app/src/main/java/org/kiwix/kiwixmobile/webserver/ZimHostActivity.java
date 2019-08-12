@@ -91,10 +91,9 @@ public class ZimHostActivity extends BaseActivity implements
     setUpToolbar();
 
     if (savedInstanceState != null) {
-      serverTextView.setText(
-          getString(R.string.server_started_message) + " " + savedInstanceState.getString(
+      serverTextView.setText(R.string.server_started_message + " " + savedInstanceState.getString(
               IP_STATE_KEY));
-      startServerButton.setText(getString(R.string.stop_server_label));
+      startServerButton.setText(R.string.stop_server_label);
       startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
     }
 
@@ -205,9 +204,8 @@ public class ZimHostActivity extends BaseActivity implements
     if (isServerStarted) {
       ip = getAddress();
       ip = ip.replaceAll("\n", "");
-      serverTextView.setText(
-          getString(R.string.server_started_message) + " " + ip);
-      startServerButton.setText(getString(R.string.stop_server_label));
+      serverTextView.setText(R.string.server_started_message + " " + ip);
+      startServerButton.setText(R.string.stop_server_label);
       startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
     }
   }
@@ -408,15 +406,15 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override public void serverStarted(String ip) {
     this.ip = ip;
-    serverTextView.setText(getString(R.string.server_started_message) + " " + this.ip);
-    startServerButton.setText(getString(R.string.stop_server_label));
+    serverTextView.setText(R.string.server_started_message + " " + this.ip);
+    startServerButton.setText(R.string.stop_server_label);
     startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
     isServerStarted = true;
   }
 
   @Override public void serverStopped() {
-    serverTextView.setText(getString(R.string.server_textview_default_message));
-    startServerButton.setText(getString(R.string.start_server_label));
+    serverTextView.setText(R.string.server_textview_default_message);
+    startServerButton.setText(R.string.start_server_label);
     startServerButton.setBackgroundColor(getResources().getColor(R.color.greenTick));
     isServerStarted = false;
   }
