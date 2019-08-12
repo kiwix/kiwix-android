@@ -75,6 +75,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
 
   @Inject SharedPreferenceUtil sharedPreferenceUtil;
   @Inject AlertDialogShower alertDialogShower;
+  @Inject WifiDirectManager wifiDirectManager;
 
   @BindView(R.id.toolbar_local_file_transfer) Toolbar actionBar;
   @BindView(R.id.text_view_device_name) TextView deviceName;
@@ -84,8 +85,6 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   @BindView(R.id.recycler_view_transfer_files) RecyclerView filesRecyclerView;
 
   private boolean isFileSender = false;    // Whether the device is the file sender or not
-
-  private @NonNull WifiDirectManager wifiDirectManager = new WifiDirectManager(this);
 
   private ArrayList<FileItem> filesForTransfer = new ArrayList<>();
   private FileListAdapter fileListAdapter;

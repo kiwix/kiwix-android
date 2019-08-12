@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
@@ -22,6 +23,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import javax.inject.Inject;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 import org.kiwix.kiwixmobile.BuildConfig;
@@ -78,8 +80,9 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   private boolean isFileSender = false;    // Whether the device is the file sender or not
   private boolean hasSenderStartedConnection = false;
 
-  public WifiDirectManager(@NonNull LocalFileTransferActivity activity) {
-    this.activity = activity;
+  @Inject
+  public WifiDirectManager(@NonNull Activity activity) {
+    this.activity = (LocalFileTransferActivity) activity;
     this.callbacks = (Callbacks) activity;
   }
 
