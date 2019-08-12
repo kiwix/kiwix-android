@@ -150,20 +150,14 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
 
   @Override
   public void onPeersChanged() {
-    if (manager != null) {
-      /* List of available peers has changed, so request & use the new list through
-       * PeerListListener.requestPeers() callback */
-      manager.requestPeers(channel, this);
-    }
+    /* List of available peers has changed, so request & use the new list through
+     * PeerListListener.requestPeers() callback */
+    manager.requestPeers(channel, this);
     Log.d(TAG, "P2P peers changed");
   }
 
   @Override
   public void onConnectionChanged(@NonNull NetworkInfo networkInfo) {
-    if (manager == null) {
-      return;
-    }
-
     if (networkInfo.isConnected()) {
       // Request connection info about the wifi p2p group formed upon connection
       manager.requestConnectionInfo(channel, this);
@@ -187,7 +181,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   @Override
   public void onChannelDisconnected() {
     // Upon disconnection, retry one more time
-    if (manager != null && !retryChannel) {
+    if (!retryChannel) {
       Log.d(TAG, "Channel lost, trying again");
       callbacks.onConnectionToPeersLost();
       retryChannel = true;
@@ -381,10 +375,10 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   public void stopWifiDirectManager() {
     cancelAsyncTasks(peerGroupHandshakeAsyncTask, senderDeviceAsyncTask, receiverDeviceAsyncTask);
 
-    if (!isFileSender) {
-      disconnect();
-    } else {
+    if (isFileSender) {
       closeChannel();
+    } else {
+      disconnect();
     }
 
     unregisterWifiDirectBroadcastReceiver();
