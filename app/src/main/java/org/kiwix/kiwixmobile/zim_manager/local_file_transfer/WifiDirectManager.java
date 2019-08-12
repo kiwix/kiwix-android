@@ -137,8 +137,8 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   }
 
   @Override
-  public void onWifiP2pStateChanged(int wifiP2pState) {
-    this.isWifiP2pEnabled = (wifiP2pState == WifiP2pManager.WIFI_P2P_STATE_ENABLED);
+  public void onWifiP2pStateChanged(boolean isEnabled) {
+    this.isWifiP2pEnabled = isEnabled;
 
     if(!isWifiP2pEnabled) {
       displayToast(R.string.discovery_needs_wifi, Toast.LENGTH_SHORT);
@@ -157,8 +157,8 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   }
 
   @Override
-  public void onConnectionChanged(@NonNull NetworkInfo networkInfo) {
-    if (networkInfo.isConnected()) {
+  public void onConnectionChanged(boolean isConnected) {
+    if (isConnected) {
       // Request connection info about the wifi p2p group formed upon connection
       manager.requestConnectionInfo(channel, this);
     } else {

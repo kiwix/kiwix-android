@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
  * Helper class for the local file sharing module.
  *
  * Handles the broadcasts pertaining to the wifi p2p group formed in WiFi Direct. Works along with
- * the wifi p2p manager in {@link LocalFileTransferActivity}.
+ * the wifi p2p manager in {@link WifiDirectManager}.
  */
 public class KiwixWifiP2pBroadcastReceiver extends BroadcastReceiver {
 
@@ -30,7 +30,7 @@ public class KiwixWifiP2pBroadcastReceiver extends BroadcastReceiver {
     switch(intent.getAction()) {
       case WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION: {
         int wifiP2pState = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
-        p2pEventListener.onWifiP2pStateChanged(wifiP2pState);
+        p2pEventListener.onWifiP2pStateChanged((wifiP2pState == WifiP2pManager.WIFI_P2P_STATE_ENABLED));
         break;
       }
 
@@ -41,7 +41,7 @@ public class KiwixWifiP2pBroadcastReceiver extends BroadcastReceiver {
 
       case WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION: {
         NetworkInfo networkInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
-        p2pEventListener.onConnectionChanged(networkInfo);
+        p2pEventListener.onConnectionChanged(networkInfo.isConnected());
         break;
       }
 
@@ -56,11 +56,11 @@ public class KiwixWifiP2pBroadcastReceiver extends BroadcastReceiver {
   }
 
   public interface P2pEventListener {
-    void onWifiP2pStateChanged(int wifiP2pState);
+    void onWifiP2pStateChanged(boolean isEnabled);
 
     void onPeersChanged();
 
-    void onConnectionChanged(@NonNull NetworkInfo networkInfo);
+    void onConnectionChanged(boolean isConnected);
 
     void onDeviceChanged(@Nullable WifiP2pDevice userDevice);
   }
