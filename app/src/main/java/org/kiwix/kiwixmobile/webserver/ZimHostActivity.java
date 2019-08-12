@@ -80,7 +80,7 @@ public class ZimHostActivity extends BaseActivity implements
   private static final int LOCATION_SETTINGS_PERMISSION_RESULT = 101;
   private Intent serviceIntent;
   private Task<LocationSettingsResponse> task;
-  private BooksOnDiskAdapter booksAdapter;
+  private ZimHostAdapter booksAdapter;
   HotspotService hotspotService;
   String ip;
   boolean bound;
@@ -101,7 +101,7 @@ public class ZimHostActivity extends BaseActivity implements
       startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
     }
 
-    booksAdapter = new BooksOnDiskAdapter(
+    booksAdapter = new ZimHostAdapter(
         new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
             bookOnDiskItem -> {
               open(bookOnDiskItem);
