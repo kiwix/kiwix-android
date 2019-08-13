@@ -41,7 +41,7 @@ import org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX
 import org.kiwix.kiwixmobile.utils.LanguageUtils
 import java.io.File
 import javax.inject.Inject
-import org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity;
+import org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity
 
 class ZimManageActivity : BaseActivity() {
 

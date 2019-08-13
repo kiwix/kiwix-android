@@ -45,7 +45,7 @@ sealed class KiwixDialog(
       null, R.string.request_enable_location, R.string.yes, android.R.string.no
   )
 
-  data class FileTransferConfirmation(override val args: Array<out Any>) : KiwixDialog( // For the local file transfer module
+  data class FileTransferConfirmation(override val args: Array<out Any>) : KiwixDialog(
       null, R.string.transfer_to, R.string.yes, android.R.string.cancel
   ), HasBodyFormatArgs {
     constructor(selectedPeerDeviceName: String) : this(arrayOf(selectedPeerDeviceName))
