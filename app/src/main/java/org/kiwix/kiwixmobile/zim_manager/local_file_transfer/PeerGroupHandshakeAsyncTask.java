@@ -1,11 +1,7 @@
 package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-
-import org.kiwix.kiwixmobile.BuildConfig;
-
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -15,9 +11,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.TO_BE_SENT;
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectManager.getFileName;
+import org.kiwix.kiwixmobile.BuildConfig;
 
 /**
  * Helper class for the local file sharing module.
@@ -46,7 +40,7 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
 
   @Override
   protected InetAddress doInBackground(Void... voids) {
-    if(BuildConfig.DEBUG)  {
+    if (BuildConfig.DEBUG) {
       Log.d(TAG, "Handshake in progress");
     }
 
@@ -76,12 +70,13 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
     } else if (wifiDirectManager.isGroupFormed() && !isCancelled()) { //&& !groupInfo.isGroupOwner
       try (Socket client = new Socket()) {
         client.setReuseAddress(true);
-        client.connect((new InetSocketAddress(wifiDirectManager.getGroupOwnerAddress().getHostAddress(),
+        client.connect(
+          (new InetSocketAddress(wifiDirectManager.getGroupOwnerAddress().getHostAddress(),
             PEER_HANDSHAKE_PORT)), 15000);
 
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(client.getOutputStream());
         objectOutputStream.writeObject(
-            HANDSHAKE_MESSAGE); // Send message for the peer device to verify
+          HANDSHAKE_MESSAGE); // Send message for the peer device to verify
 
         exchangeFileTransferMetadata(client.getOutputStream(), client.getInputStream());
 
@@ -122,7 +117,7 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
         if (totalFilesObject.getClass().equals(String.class)) {
           int total = Integer.parseInt((String) totalFilesObject);
           wifiDirectManager.setTotalFilesForTransfer(total);
-          if (BuildConfig.DEBUG) Log.d(TAG, "Metadata: "+total+" files");
+          if (BuildConfig.DEBUG) Log.d(TAG, "Metadata: " + total + " files");
 
           ArrayList<FileItem> fileItems = new ArrayList<>();
           for (int i = 0; i < total; i++) { // Read names of each of those files, in order
@@ -130,7 +125,7 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
 
             if (fileNameObject.getClass().equals(String.class)) {
               fileItems.add(new FileItem((String) fileNameObject));
-              if (BuildConfig.DEBUG) Log.d(TAG, "Expecting "+fileNameObject);
+              if (BuildConfig.DEBUG) Log.d(TAG, "Expecting " + fileNameObject);
             }
           }
 

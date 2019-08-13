@@ -3,16 +3,16 @@ package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 import android.content.ContentResolver;
 import android.os.AsyncTask;
 import android.util.Log;
-
-import org.kiwix.kiwixmobile.BuildConfig;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import org.kiwix.kiwixmobile.BuildConfig;
 
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.*;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.ERROR;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.SENDING;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.SENT;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectManager.FILE_TRANSFER_PORT;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectManager.copyToOutputStream;
 
@@ -35,7 +35,8 @@ class SenderDeviceAsyncTask extends AsyncTask<FileItem, Integer, Boolean> {
   private WifiDirectManager wifiDirectManager;
   private ContentResolver contentResolver;
 
-  public SenderDeviceAsyncTask(WifiDirectManager wifiDirectManager, LocalFileTransferActivity localFileTransferActivity) {
+  public SenderDeviceAsyncTask(WifiDirectManager wifiDirectManager,
+    LocalFileTransferActivity localFileTransferActivity) {
     this.wifiDirectManager = wifiDirectManager;
     this.contentResolver = localFileTransferActivity.getContentResolver();
   }
@@ -50,7 +51,7 @@ class SenderDeviceAsyncTask extends AsyncTask<FileItem, Integer, Boolean> {
     boolean result = true;
     int fileItemIndex = -1;
 
-    for(FileItem fileItem : fileItems) { // Uri of file to be transferred
+    for (FileItem fileItem : fileItems) { // Uri of file to be transferred
       fileItemIndex++;
 
       try (Socket socket = new Socket(); // Represents the sender device
@@ -74,7 +75,6 @@ class SenderDeviceAsyncTask extends AsyncTask<FileItem, Integer, Boolean> {
         if (BuildConfig.DEBUG) Log.d(TAG, "Sender: Data written");
 
         publishProgress(fileItemIndex, SENT);
-
       } catch (IOException e) {
         Log.e(TAG, e.getMessage());
         e.printStackTrace();

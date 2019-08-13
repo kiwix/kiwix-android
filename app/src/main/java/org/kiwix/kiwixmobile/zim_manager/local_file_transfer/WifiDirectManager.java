@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
@@ -36,12 +35,13 @@ import static android.os.Looper.getMainLooper;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.ERROR;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity.showToast;
 
-
 /**
  * Manager for the Wifi-P2p API, used in the local file transfer module
- * */
-public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2pManager.PeerListListener, WifiP2pManager.ConnectionInfoListener,
-    KiwixWifiP2pBroadcastReceiver.P2pEventListener {
+ */
+public class WifiDirectManager
+  implements WifiP2pManager.ChannelListener, WifiP2pManager.PeerListListener,
+  WifiP2pManager.ConnectionInfoListener,
+  KiwixWifiP2pBroadcastReceiver.P2pEventListener {
 
   private static final String TAG = "WifiDirectManager";
   public static int FILE_TRANSFER_PORT = 8008;
@@ -81,8 +81,9 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   private boolean hasSenderStartedConnection = false;
 
   @Inject
-  public WifiDirectManager(@NonNull Activity activity, @NonNull SharedPreferenceUtil sharedPreferenceUtil,
-      @NonNull AlertDialogShower alertDialogShower) {
+  public WifiDirectManager(@NonNull Activity activity,
+    @NonNull SharedPreferenceUtil sharedPreferenceUtil,
+    @NonNull AlertDialogShower alertDialogShower) {
     this.activity = (LocalFileTransferActivity) activity;
     this.callbacks = (Callbacks) activity;
     this.sharedPreferenceUtil = sharedPreferenceUtil;
@@ -94,7 +95,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     this.filesForTransfer = filesForTransfer;
     this.isFileSender = (filesForTransfer != null && filesForTransfer.size() > 0);
 
-    if(isFileSender) {
+    if (isFileSender) {
       this.totalFilesForTransfer = filesForTransfer.size();
     }
 
@@ -140,7 +141,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   public void onWifiP2pStateChanged(boolean isEnabled) {
     this.isWifiP2pEnabled = isEnabled;
 
-    if(!isWifiP2pEnabled) {
+    if (!isWifiP2pEnabled) {
       displayToast(R.string.discovery_needs_wifi, Toast.LENGTH_SHORT);
       callbacks.onConnectionToPeersLost();
     }
@@ -226,19 +227,19 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     this.senderSelectedPeerDevice = senderSelectedPeerDevice;
 
     alertDialogShower.show(
-        new KiwixDialog.FileTransferConfirmation(senderSelectedPeerDevice.deviceName),
-        new Function0<Unit>() {
-          @Override public Unit invoke() {
-            hasSenderStartedConnection = true;
-            connect();
-            displayToast(R.string.performing_handshake, Toast.LENGTH_LONG);
-            return Unit.INSTANCE;
-          }
-        });
+      new KiwixDialog.FileTransferConfirmation(senderSelectedPeerDevice.deviceName),
+      new Function0<Unit>() {
+        @Override public Unit invoke() {
+          hasSenderStartedConnection = true;
+          connect();
+          displayToast(R.string.performing_handshake, Toast.LENGTH_LONG);
+          return Unit.INSTANCE;
+        }
+      });
   }
 
   public void connect() {
-    if(senderSelectedPeerDevice == null) {
+    if (senderSelectedPeerDevice == null) {
       Log.d(TAG, "No device set as selected");
     }
 
@@ -301,9 +302,8 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     return fileReceiverDeviceAddress;
   }
 
-  public static void copyToOutputStream(@NonNull InputStream inputStream, @NonNull
-      OutputStream outputStream)
-      throws IOException {
+  public static void copyToOutputStream(@NonNull InputStream inputStream,
+    @NonNull OutputStream outputStream) throws IOException {
     byte[] bufferForBytes = new byte[1024];
     int bytesRead;
 
@@ -336,7 +336,7 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
         Log.d(LocalFileTransferActivity.TAG, "Starting file transfer");
 
         fileReceiverDeviceAddress =
-            (isGroupOwner()) ? selectedPeerDeviceInetAddress : getGroupOwnerAddress();
+          (isGroupOwner()) ? selectedPeerDeviceInetAddress : getGroupOwnerAddress();
 
         displayToast(R.string.preparing_files, Toast.LENGTH_LONG);
         ArrayList<Uri> fileUriArrayList = new ArrayList<>();
@@ -345,7 +345,6 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
         }
         senderDeviceAsyncTask = new SenderDeviceAsyncTask(this, activity);
         senderDeviceAsyncTask.execute(filesForTransfer.toArray(new FileItem[0]));
-
       } else {
         callbacks.onFilesForTransferAvailable(filesForTransfer);
 
@@ -359,8 +358,9 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
     filesForTransfer.get(itemIndex).setFileStatus(status);
     callbacks.onFileStatusChanged(itemIndex);
 
-    if(status == ERROR) {
-      displayToast(R.string.error_transferring, filesForTransfer.get(itemIndex).getFileName(), Toast.LENGTH_SHORT);
+    if (status == ERROR) {
+      displayToast(R.string.error_transferring, filesForTransfer.get(itemIndex).getFileName(),
+        Toast.LENGTH_SHORT);
     }
   }
 
@@ -402,11 +402,10 @@ public class WifiDirectManager implements WifiP2pManager.ChannelListener, WifiP2
   }
 
   void closeChannel() {
-    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
       channel.close();
     }
   }
-
 
   public @NonNull String getErrorMessage(int reason) {
     switch (reason) {

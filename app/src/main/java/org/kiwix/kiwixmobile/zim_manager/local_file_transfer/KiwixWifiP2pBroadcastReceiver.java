@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -27,10 +26,11 @@ public class KiwixWifiP2pBroadcastReceiver extends BroadcastReceiver {
   @Override
   public void onReceive(@NonNull Context context, @NonNull Intent intent) {
 
-    switch(intent.getAction()) {
+    switch (intent.getAction()) {
       case WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION: {
         int wifiP2pState = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
-        p2pEventListener.onWifiP2pStateChanged((wifiP2pState == WifiP2pManager.WIFI_P2P_STATE_ENABLED));
+        p2pEventListener.onWifiP2pStateChanged(
+          (wifiP2pState == WifiP2pManager.WIFI_P2P_STATE_ENABLED));
         break;
       }
 
@@ -51,7 +51,8 @@ public class KiwixWifiP2pBroadcastReceiver extends BroadcastReceiver {
         break;
       }
 
-      default: break;
+      default:
+        break;
     }
   }
 

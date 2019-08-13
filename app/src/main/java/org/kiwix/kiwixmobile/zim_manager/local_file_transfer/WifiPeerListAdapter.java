@@ -13,9 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import org.kiwix.kiwixmobile.R;
-
 import java.util.List;
+import org.kiwix.kiwixmobile.R;
 
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectManager.getDeviceStatus;
 
@@ -32,7 +31,7 @@ public class WifiPeerListAdapter extends ArrayAdapter<WifiP2pDevice> {
   private List<WifiP2pDevice> listItems;
 
   public WifiPeerListAdapter(@NonNull Context context, int resource,
-      @NonNull List<WifiP2pDevice> objects) {
+    @NonNull List<WifiP2pDevice> objects) {
     super(context, resource, objects);
     this.context = context;
     this.listItems = objects;

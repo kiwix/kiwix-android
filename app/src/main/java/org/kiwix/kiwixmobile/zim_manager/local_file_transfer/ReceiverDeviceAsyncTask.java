@@ -3,16 +3,14 @@ package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
-
-import org.kiwix.kiwixmobile.BuildConfig;
-import org.kiwix.kiwixmobile.R;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import org.kiwix.kiwixmobile.BuildConfig;
+import org.kiwix.kiwixmobile.R;
 
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.ERROR;
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.SENDING;
@@ -51,7 +49,7 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
       boolean result = true;
       int fileItemIndex;
 
-      if (BuildConfig.DEBUG) Log.d(TAG, "Expecting "+totalFileCount+" files");
+      if (BuildConfig.DEBUG) Log.d(TAG, "Expecting " + totalFileCount + " files");
 
       for (int currentFile = 1; currentFile <= totalFileCount && !isCancelled(); currentFile++) {
         fileItemIndex = currentFile - 1;
@@ -75,7 +73,6 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
 
           copyToOutputStream(client.getInputStream(), new FileOutputStream(clientNoteFileLocation));
           publishProgress(fileItemIndex, SENT);
-
         } catch (IOException e) {
           Log.e(TAG, e.getMessage());
           result = false;
@@ -86,7 +83,6 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
       }
 
       return (!isCancelled() && result);
-
     } catch (IOException e) {
       Log.e(TAG, e.getMessage());
       return false; // Returned when an error was encountered during transfer
@@ -99,8 +95,9 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
     int fileStatus = values[1];
     wifiDirectManager.changeStatus(fileIndex, fileStatus);
 
-    if(fileStatus == ERROR) {
-      wifiDirectManager.displayToast(R.string.error_transferring, incomingFileName, Toast.LENGTH_SHORT);
+    if (fileStatus == ERROR) {
+      wifiDirectManager.displayToast(R.string.error_transferring, incomingFileName,
+        Toast.LENGTH_SHORT);
     }
   }
 

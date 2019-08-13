@@ -6,17 +6,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import java.util.ArrayList;
 import org.kiwix.kiwixmobile.R;
 
-import java.util.ArrayList;
-
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.*;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.ERROR;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.SENDING;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.SENT;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.TO_BE_SENT;
 
 /**
  * Helper class, part of the local file sharing module.
@@ -33,9 +33,9 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.FileVi
   @NonNull
   @Override
   public FileListAdapter.FileViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
-      int viewType) {
+    int viewType) {
     View itemView = LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_transfer_list, parent, false);
+      .inflate(R.layout.item_transfer_list, parent, false);
     return new FileViewHolder(itemView, this);
   }
 

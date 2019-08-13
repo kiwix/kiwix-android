@@ -20,20 +20,20 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
+import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 import org.kiwix.kiwixmobile.KiwixApplication;
@@ -41,10 +41,6 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.utils.AlertDialogShower;
 import org.kiwix.kiwixmobile.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
-
-import java.util.ArrayList;
-
-import javax.inject.Inject;
 
 import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectManager.getDeviceStatus;
 
@@ -63,7 +59,7 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.WifiDirectMa
  */
 @SuppressLint("GoogleAppIndexingApiWarning")
 public class LocalFileTransferActivity extends AppCompatActivity implements
-    WifiDirectManager.Callbacks {
+  WifiDirectManager.Callbacks {
 
   // Not a typo, 'Log' tags have a length upper limit of 25 characters
   public static final String TAG = "LocalFileTransferActvty";
@@ -93,10 +89,11 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     KiwixApplication.getApplicationComponent().activityComponent()
-        .activity(this)
-        .build()
-        .inject(this);
-    setTheme(sharedPreferenceUtil.nightMode() ? R.style.Theme_AppCompat_DayNight_NoActionBar : R.style.AppTheme);
+      .activity(this)
+      .build()
+      .inject(this);
+    setTheme(sharedPreferenceUtil.nightMode() ? R.style.Theme_AppCompat_DayNight_NoActionBar
+      : R.style.AppTheme);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_local_file_transfer);
     ButterKnife.bind(this);
@@ -118,7 +115,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     actionBar.setNavigationOnClickListener(v -> finish());
 
     listViewPeerDevices.setAdapter(
-        new WifiPeerListAdapter(this, R.layout.row_peer_device, availablePeerDevices));
+      new WifiPeerListAdapter(this, R.layout.row_peer_device, availablePeerDevices));
 
     if (isFileSender) {
       for (int i = 0; i < fileUriArrayList.size(); i++) {
@@ -134,7 +131,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   @OnItemClick(R.id.list_peer_devices)
   void onItemClick(int position) {
     WifiP2pDevice senderSelectedPeerDevice =
-        (WifiP2pDevice) listViewPeerDevices.getAdapter().getItem(position);
+      (WifiP2pDevice) listViewPeerDevices.getAdapter().getItem(position);
     wifiDirectManager.sendToDevice(senderSelectedPeerDevice);
   }
 
@@ -178,7 +175,8 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   }
 
   @Override
-  public void onUserDeviceDetailsAvailable(@Nullable WifiP2pDevice userDevice) { // Update UI with user device's details
+  public void onUserDeviceDetailsAvailable(@Nullable WifiP2pDevice userDevice) {
+    // Update UI with user device's details
     if (userDevice != null) {
       deviceName.setText(userDevice.deviceName);
       Log.d(TAG, getDeviceStatus(userDevice.status));
@@ -236,23 +234,25 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   /* Helper methods used for checking permissions and states of services */
   private boolean checkCoarseLocationAccessPermission() { // Required by Android to detect wifi-p2p peers
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-        == PackageManager.PERMISSION_DENIED) {
+      == PackageManager.PERMISSION_DENIED) {
 
-      if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+      if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+        Manifest.permission.ACCESS_COARSE_LOCATION)) {
         alertDialogShower.show(KiwixDialog.LocationPermissionRationale.INSTANCE,
-            new Function0<Unit>() {
-              @Override public Unit invoke() {
-                ActivityCompat.requestPermissions(LocalFileTransferActivity.this, new String[] { Manifest.permission.ACCESS_COARSE_LOCATION },
-                    PERMISSION_REQUEST_CODE_COARSE_LOCATION);
-                return Unit.INSTANCE;
-              }
-            });
+          new Function0<Unit>() {
+            @Override public Unit invoke() {
+              ActivityCompat.requestPermissions(LocalFileTransferActivity.this,
+                new String[] { Manifest.permission.ACCESS_COARSE_LOCATION },
+                PERMISSION_REQUEST_CODE_COARSE_LOCATION);
+              return Unit.INSTANCE;
+            }
+          });
       } else {
-        ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_COARSE_LOCATION },
-            PERMISSION_REQUEST_CODE_COARSE_LOCATION);
+        ActivityCompat.requestPermissions(this,
+          new String[] { Manifest.permission.ACCESS_COARSE_LOCATION },
+          PERMISSION_REQUEST_CODE_COARSE_LOCATION);
       }
       return false;
-
     } else {
       return true; // Control reaches here: Either permission granted at install time, or at the time of request
     }
@@ -260,23 +260,25 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
 
   private boolean checkExternalStorageWritePermission() { // To access and store the zims
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        == PackageManager.PERMISSION_DENIED) {
+      == PackageManager.PERMISSION_DENIED) {
 
-      if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+      if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
         alertDialogShower.show(KiwixDialog.StoragePermissionRationale.INSTANCE,
-            new Function0<Unit>() {
-              @Override public Unit invoke() {
-                ActivityCompat.requestPermissions(LocalFileTransferActivity.this, new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-                    PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS);
-                return Unit.INSTANCE;
-              }
-            });
+          new Function0<Unit>() {
+            @Override public Unit invoke() {
+              ActivityCompat.requestPermissions(LocalFileTransferActivity.this,
+                new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS);
+              return Unit.INSTANCE;
+            }
+          });
       } else {
-        ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-            PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS);
+        ActivityCompat.requestPermissions(this,
+          new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+          PERMISSION_REQUEST_CODE_STORAGE_WRITE_ACCESS);
       }
       return false;
-
     } else {
       return true; // Control reaches here: Either permission granted at install time, or at the time of request
     }
@@ -284,7 +286,7 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
 
   @Override
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-      @NonNull int[] grantResults) {
+    @NonNull int[] grantResults) {
 
     if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
       switch (requestCode) {
@@ -314,7 +316,8 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   }
 
   private boolean isLocationServiceEnabled() {
-    return (isProviderEnabled(LocationManager.GPS_PROVIDER) || isProviderEnabled(LocationManager.NETWORK_PROVIDER));
+    return (isProviderEnabled(LocationManager.GPS_PROVIDER)
+      || isProviderEnabled(LocationManager.NETWORK_PROVIDER));
   }
 
   private boolean isProviderEnabled(String locationProvider) {
@@ -328,43 +331,44 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
         }
       }
 
-      default: return false;
+      default:
+        return false;
     }
   }
 
   private void requestEnableLocationServices() {
     alertDialogShower.show(KiwixDialog.EnableLocationServices.INSTANCE,
-        new Function0<Unit>() {
-          @Override public Unit invoke() {
-            startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS),
-                REQUEST_ENABLE_LOCATION_SERVICES);
-            return Unit.INSTANCE;
-          }
-        },
-        new Function0<Unit>() {
-          @Override public Unit invoke() {
-            showToast(LocalFileTransferActivity.this, R.string.discovery_needs_location,
-                Toast.LENGTH_SHORT);
-            return Unit.INSTANCE;
-          }
-        });
+      new Function0<Unit>() {
+        @Override public Unit invoke() {
+          startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS),
+            REQUEST_ENABLE_LOCATION_SERVICES);
+          return Unit.INSTANCE;
+        }
+      },
+      new Function0<Unit>() {
+        @Override public Unit invoke() {
+          showToast(LocalFileTransferActivity.this, R.string.discovery_needs_location,
+            Toast.LENGTH_SHORT);
+          return Unit.INSTANCE;
+        }
+      });
   }
 
   private void requestEnableWifiP2pServices() {
     alertDialogShower.show(KiwixDialog.EnableWifiP2pServices.INSTANCE,
-        new Function0<Unit>() {
-          @Override public Unit invoke() {
-            startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-            return Unit.INSTANCE;
-          }
-        },
-        new Function0<Unit>() {
-          @Override public Unit invoke() {
-            showToast(LocalFileTransferActivity.this, R.string.discovery_needs_wifi,
-                Toast.LENGTH_SHORT);
-            return Unit.INSTANCE;
-          }
-        });
+      new Function0<Unit>() {
+        @Override public Unit invoke() {
+          startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+          return Unit.INSTANCE;
+        }
+      },
+      new Function0<Unit>() {
+        @Override public Unit invoke() {
+          showToast(LocalFileTransferActivity.this, R.string.discovery_needs_wifi,
+            Toast.LENGTH_SHORT);
+          return Unit.INSTANCE;
+        }
+      });
   }
 
   @Override

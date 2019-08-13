@@ -1,15 +1,15 @@
 package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 
 import android.net.Uri;
-import android.os.Parcel;
-import android.os.Parcelable;
 import androidx.annotation.IntDef;
-
 import androidx.annotation.NonNull;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.*;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.ERROR;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.SENDING;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.SENT;
+import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.FileItem.FileStatus.TO_BE_SENT;
 
 /**
  * Helper class, part of the local file sharing module.
