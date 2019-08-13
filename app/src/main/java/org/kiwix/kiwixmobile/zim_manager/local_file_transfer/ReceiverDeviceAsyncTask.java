@@ -54,7 +54,9 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
         incomingFileName = fileItems.get(fileItemIndex).getFileName();
 
         try (Socket client = serverSocket.accept()) {
-          if (BuildConfig.DEBUG) Log.d(TAG, "Server: Client connected for file " + fileItems.get(fileItemIndex).getFileName());
+          if (BuildConfig.DEBUG) {
+            Log.d(TAG, "Sender device connected for " + fileItems.get(fileItemIndex).getFileName());
+          }
           publishProgress(fileItemIndex, SENDING);
 
           final File clientNoteFileLocation = new File(zimStorageRootPath + incomingFileName);

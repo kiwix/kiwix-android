@@ -51,7 +51,7 @@ class SenderDeviceAsyncTask extends AsyncTask<FileItem, Integer, Boolean> {
     String hostAddress = wifiDirectManager.getFileReceiverDeviceAddress().getHostAddress();
     boolean isTransferErrorFree = true;
 
-    for (int fileIndex = 0; fileIndex < fileItems.length && !isCancelled(); fileIndex++) { // Uri of file to be transferred
+    for (int fileIndex = 0; fileIndex < fileItems.length && !isCancelled(); fileIndex++) {
       FileItem fileItem = fileItems[fileIndex];
 
       try (Socket socket = new Socket(); // Represents the sender device
