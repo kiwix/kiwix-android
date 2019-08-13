@@ -80,7 +80,8 @@ public class ZimHostActivity extends BaseActivity implements
   private static final int LOCATION_SETTINGS_PERMISSION_RESULT = 101;
   private Intent serviceIntent;
   private Task<LocationSettingsResponse> task;
-  BooksOnDiskAdapter booksAdapter;
+
+  private BooksOnDiskAdapter booksAdapter;
   HotspotService hotspotService;
   String ip;
   boolean bound;
@@ -184,7 +185,6 @@ public class ZimHostActivity extends BaseActivity implements
     }
     booksAdapter.setItems(booksList);
   }
-
 
   @Override protected void onStart() {
     super.onStart();
