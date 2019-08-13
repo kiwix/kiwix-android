@@ -152,9 +152,9 @@ if (custom.listFiles()) {
 
     def fileName = file.getName()
     if (fileName.startsWith(".") ||
-        fileName.contains("test") ||
-        fileName == "main" ||
-        fileName.contains("Test")) {
+      fileName.contains("test") ||
+      fileName == "main" ||
+      fileName.contains("Test")) {
       return
     }
     map.put(fileName, file.getAbsolutePath())
@@ -170,8 +170,8 @@ tasks.withType(Test) {
 }
 
 def branchName = System.getenv('TRAVIS_PULL_REQUEST') ?: "false" == "false"
-    ? System.getenv('TRAVIS_BRANCH') ?: "local"
-    : System.getenv('TRAVIS_PULL_REQUEST_BRANCH')
+  ? System.getenv('TRAVIS_BRANCH') ?: "local"
+  : System.getenv('TRAVIS_PULL_REQUEST_BRANCH')
 def buildNumber = System.getenv('TRAVIS_BUILD_NUMBER') ?: "dev"
 
 ext {
@@ -198,9 +198,9 @@ private String generateVersionName() {
 
 private Integer generateVersionCode() {
   20 * 10000 +
-      (ext.versionMajor * 10000) +
-      (ext.versionMinor * 100) +
-      (ext.versionPatch)
+    (ext.versionMajor * 10000) +
+    (ext.versionMinor * 100) +
+    (ext.versionPatch)
 }
 
 android {
@@ -228,12 +228,15 @@ android {
     abortOnError true
     checkAllWarnings true
     warningsAsErrors true
-    //TODO stop ignoring
-    ignore 'MissingTranslation',
-        'CheckResult',
-        'LabelFor',
-        'DuplicateStrings',
-        'LogConditional'
+
+    ignore 'SyntheticAccessor',
+      //TODO stop ignoring below this
+      'MissingTranslation',
+      'CheckResult',
+      'LabelFor',
+      'DuplicateStrings',
+      'LogConditional'
+
     warning 'UnknownNullness',
         'SelectableText',
         'IconDensities'
@@ -437,9 +440,9 @@ android {
       def baseAbiVersionCode = abiCodes.get(output.getFilter(OutputFile.ABI)) ?: 0
       def baseDensityVersionCode = densityCodes.get(output.getFilter(OutputFile.DENSITY)) ?: 1
       output.versionCodeOverride =
-          (baseDensityVersionCode * 10000000) +
-              (baseAbiVersionCode * 1000000) +
-              variant.versionCode
+        (baseDensityVersionCode * 10000000) +
+          (baseAbiVersionCode * 1000000) +
+          variant.versionCode
     }
   }
 }
@@ -474,7 +477,7 @@ class TestDroidUpload extends TestServer {
       System.out.println(id)
       try {
         delegate.postResource(createUri(selfURI, "/files/" + id + "/share"),
-            [accessGroupId: accessGroup], APIProject.class)
+          [accessGroupId: accessGroup], APIProject.class)
       } catch (Exception e) {
         System.out.println(e.getLocalizedMessage())
       }
@@ -488,7 +491,7 @@ class TestDroidUpload extends TestServer {
     user.shareFile(testedId, accessGroup)
 
     new URL(RUNNER_GATEWAY + "?apk=" + testedId + "&test=" + testId + "&buildno=" + buildNumber).
-        getText()
+      getText()
   }
 
   @Override
