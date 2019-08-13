@@ -316,23 +316,16 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
   }
 
   private boolean isLocationServiceEnabled() {
-    return (isProviderEnabled(LocationManager.GPS_PROVIDER)
-      || isProviderEnabled(LocationManager.NETWORK_PROVIDER));
+    return isProviderEnabled(LocationManager.GPS_PROVIDER)
+      || isProviderEnabled(LocationManager.NETWORK_PROVIDER);
   }
 
   private boolean isProviderEnabled(String locationProvider) {
-    switch (locationProvider) {
-      case LocationManager.GPS_PROVIDER:
-      case LocationManager.NETWORK_PROVIDER: {
-        try {
-          return locationManager.isProviderEnabled(locationProvider);
-        } catch (SecurityException | IllegalArgumentException ex) {
-          ex.printStackTrace();
-        }
-      }
-
-      default:
-        return false;
+    try {
+      return locationManager.isProviderEnabled(locationProvider);
+    } catch (SecurityException | IllegalArgumentException ex) {
+      ex.printStackTrace();
+      return false;
     }
   }
 

@@ -54,7 +54,7 @@ public class WifiDirectManager
 
   /* Variables related to the WiFi P2P API */
   private boolean isWifiP2pEnabled = false; // Whether WiFi has been enabled or not
-  private boolean retryChannel = false;   // Whether channel has retried connecting previously
+  private boolean shouldRetry = true;   // Whether channel has retried connecting previously
 
   private WifiP2pManager manager;         // Overall manager of Wifi p2p connections for the module
   private WifiP2pManager.Channel channel;
@@ -182,10 +182,10 @@ public class WifiDirectManager
   @Override
   public void onChannelDisconnected() {
     // Upon disconnection, retry one more time
-    if (!retryChannel) {
+    if (shouldRetry) {
       Log.d(TAG, "Channel lost, trying again");
       callbacks.onConnectionToPeersLost();
-      retryChannel = true;
+      shouldRetry = false;
       manager.initialize(activity, getMainLooper(), this);
     } else {
       displayToast(R.string.severe_loss_error, Toast.LENGTH_LONG);
@@ -339,10 +339,6 @@ public class WifiDirectManager
           (isGroupOwner()) ? selectedPeerDeviceInetAddress : getGroupOwnerAddress();
 
         displayToast(R.string.preparing_files, Toast.LENGTH_LONG);
-        ArrayList<Uri> fileUriArrayList = new ArrayList<>();
-        for (FileItem fileItem : filesForTransfer) {
-          fileUriArrayList.add(fileItem.getFileUri());
-        }
         senderDeviceAsyncTask = new SenderDeviceAsyncTask(this, activity);
         senderDeviceAsyncTask.execute(filesForTransfer.toArray(new FileItem[0]));
       } else {
