@@ -41,6 +41,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.Task;
 import java.io.File;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import kotlin.Unit;
@@ -48,7 +49,9 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.wifi_hotspot.HotspotService;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.SelectionMode;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
+import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskAdapter;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
@@ -77,7 +80,7 @@ public class ZimHostActivity extends BaseActivity implements
   private static final int LOCATION_SETTINGS_PERMISSION_RESULT = 101;
   private Intent serviceIntent;
   private Task<LocationSettingsResponse> task;
-  private ZimHostAdapter booksAdapter;
+  BooksOnDiskAdapter booksAdapter;
   HotspotService hotspotService;
   String ip;
   boolean bound;
@@ -97,15 +100,20 @@ public class ZimHostActivity extends BaseActivity implements
       startServerButton.setText(getString(R.string.stop_server_label));
       startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
     }
-
-    booksAdapter = new ZimHostAdapter(
+    BookOnDiskDelegate.BookDelegate bookDelegate =
         new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
             bookOnDiskItem -> {
               open(bookOnDiskItem);
               return Unit.INSTANCE;
             },
             null,
-            null),
+            bookOnDiskItem -> {
+              select(bookOnDiskItem);
+              return Unit.INSTANCE;
+            });
+    bookDelegate.setSelectionMode(SelectionMode.MULTI);
+    booksAdapter = new BooksOnDiskAdapter(bookDelegate
+        ,
         BookOnDiskDelegate.LanguageDelegate.INSTANCE
     );
 
@@ -135,6 +143,9 @@ public class ZimHostActivity extends BaseActivity implements
 
     startServerButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
+
+        //Get File Path of All The ZIMs using booksAdapter
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
           toggleHotspot();
         } else {
@@ -160,6 +171,20 @@ public class ZimHostActivity extends BaseActivity implements
     startActivity(zimFile);
     finish();
   }
+
+  public void select(BooksOnDiskListItem.BookOnDisk bookOnDisk) {
+    ArrayList<BooksOnDiskListItem> booksList = new ArrayList<>();
+    booksList.addAll(booksAdapter.getItems());
+    int i = 0;
+    for (BooksOnDiskListItem item : booksAdapter.getItems()) {
+      if (item.equals(bookOnDisk)) {
+        booksList.get(i).setSelected(!bookOnDisk.isSelected());
+      }
+      i++;
+    }
+    booksAdapter.setItems(booksList);
+  }
+
 
   @Override protected void onStart() {
     super.onStart();
