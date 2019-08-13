@@ -81,11 +81,12 @@ public class ZimHostActivity extends BaseActivity implements
   private Intent serviceIntent;
   private Task<LocationSettingsResponse> task;
 
-  private BooksOnDiskAdapter booksAdapter;
+  BooksOnDiskAdapter booksAdapter;
   HotspotService hotspotService;
   String ip;
   boolean bound;
   ServiceConnection serviceConnection;
+  ArrayList<String> selectedBooksPath = new ArrayList<>();
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +148,8 @@ public class ZimHostActivity extends BaseActivity implements
 
         //Get File Path of All The ZIMs using booksAdapter
 
+        getSelectedBooksPath();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
           toggleHotspot();
         } else {
@@ -163,6 +166,19 @@ public class ZimHostActivity extends BaseActivity implements
         }
       }
     });
+  }
+
+  void getSelectedBooksPath() {
+    BooksOnDiskListItem.BookOnDisk bookOnDisk;
+
+    for (BooksOnDiskListItem item : booksAdapter.getItems()) {
+      if (item.isSelected()) {
+        bookOnDisk = (BooksOnDiskListItem.BookOnDisk) item;
+        File file = bookOnDisk.getFile();
+        selectedBooksPath.add(file.getAbsolutePath());
+        Log.v(TAG, "ZIM PATH : " + file.getAbsolutePath());
+      }
+    }
   }
 
   public void open(BooksOnDiskListItem.BookOnDisk bookOnDisk) {
