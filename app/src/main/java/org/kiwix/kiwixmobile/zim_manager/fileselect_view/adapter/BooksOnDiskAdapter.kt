@@ -6,7 +6,7 @@ import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base.BaseDelegateA
 class BooksOnDiskAdapter(
   vararg delegates: AdapterDelegate<BooksOnDiskListItem>
 ) : BaseDelegateAdapter<BooksOnDiskListItem>(
-    *delegates
+  *delegates
 ) {
   override fun getIdFor(item: BooksOnDiskListItem) = item.id
 }

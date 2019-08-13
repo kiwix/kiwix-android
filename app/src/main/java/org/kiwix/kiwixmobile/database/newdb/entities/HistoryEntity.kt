@@ -34,15 +34,14 @@ data class HistoryEntity(
   val timeStamp: Long
 ) {
   constructor(historyItem: HistoryItem) : this(
-      historyItem.databaseId,
-      historyItem.zimId,
-      historyItem.zimName,
-      historyItem.zimFilePath,
-      historyItem.favicon,
-      historyItem.historyUrl,
-      historyItem.historyTitle,
-      historyItem.dateString,
-      historyItem.timeStamp
+    historyItem.databaseId,
+    historyItem.zimId,
+    historyItem.zimName,
+    historyItem.zimFilePath,
+    historyItem.favicon,
+    historyItem.historyUrl,
+    historyItem.historyTitle,
+    historyItem.dateString,
+    historyItem.timeStamp
   )
-
 }

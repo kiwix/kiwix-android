@@ -12,13 +12,13 @@ import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.HeaderItem
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.LanguageItem
 import org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base.BaseViewHolder
 
-sealed class LanguageListViewHolder<T : LanguageListItem>(override val containerView: View) :
-    BaseViewHolder<T>(containerView) {
+sealed class LanguageListViewHolder<in T : LanguageListItem>(override val containerView: View) :
+  BaseViewHolder<T>(containerView) {
   class HeaderViewHolder(view: View) : LanguageListViewHolder<HeaderItem>(view) {
     override fun bind(item: HeaderItem) {
       header_date.setText(
-          if (item.id == HeaderItem.SELECTED) R.string.your_languages
-          else R.string.other_languages
+        if (item.id == HeaderItem.SELECTED) R.string.your_languages
+        else R.string.other_languages
       )
     }
   }
@@ -32,11 +32,10 @@ sealed class LanguageListViewHolder<T : LanguageListItem>(override val container
       item_language_name.text = language.language
       item_language_localized_name.text = language.languageLocalized
       item_language_books_count.text = containerView.resources.getQuantityString(
-          R.plurals.books_count, language.occurencesOfLanguage, language.occurencesOfLanguage
+        R.plurals.books_count, language.occurencesOfLanguage, language.occurencesOfLanguage
       )
       item_language_checkbox.isChecked = language.active
       item_language_clickable_area.setOnClickListener { clickAction(item) }
     }
-
   }
 }

@@ -78,7 +78,7 @@ class LibraryFragment : BaseFragment() {
 
   private val libraryAdapter: LibraryAdapter by lazy {
     LibraryAdapter(
-        BookDelegate(bookUtils, this::onBookItemClick), DividerDelegate
+      BookDelegate(bookUtils, ::onBookItemClick), DividerDelegate
     )
   }
 
@@ -108,17 +108,17 @@ class LibraryFragment : BaseFragment() {
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    librarySwipeRefresh.setOnRefreshListener { refreshFragment() }
+    librarySwipeRefresh.setOnRefreshListener(::refreshFragment)
     libraryList.run {
       adapter = libraryAdapter
       layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
       setHasFixedSize(true)
     }
-    zimManageViewModel.libraryItems.observe(this, Observer(this::onLibraryItemsChange))
+    zimManageViewModel.libraryItems.observe(this, Observer(::onLibraryItemsChange))
     zimManageViewModel.libraryListIsRefreshing.observe(
-        this, Observer(this::onRefreshStateChange)
+      this, Observer(::onRefreshStateChange)
     )
-    zimManageViewModel.networkStates.observe(this, Observer(this::onNetworkStateChange))
+    zimManageViewModel.networkStates.observe(this, Observer(::onNetworkStateChange))
   }
 
   private fun onRefreshStateChange(isRefreshing: Boolean?) {
@@ -131,9 +131,9 @@ class LibraryFragment : BaseFragment() {
       }
       NOT_CONNECTED -> {
         if (libraryAdapter.itemCount > 0) {
-          context.toast(R.string.no_network_connection)
+          context.toast(string.no_network_connection)
         } else {
-          libraryErrorText.setText(R.string.no_network_connection)
+          libraryErrorText.setText(string.no_network_connection)
           libraryErrorText.visibility = VISIBLE
         }
       }
@@ -144,8 +144,8 @@ class LibraryFragment : BaseFragment() {
     libraryAdapter.items = it!!
     if (it.isEmpty()) {
       libraryErrorText.setText(
-          if (isNotConnected) R.string.no_network_connection
-          else R.string.no_items_msg
+        if (isNotConnected) string.no_network_connection
+        else string.no_items_msg
       )
       libraryErrorText.visibility = VISIBLE
       TestingUtils.unbindResource(LibraryFragment::class.java)
@@ -156,7 +156,7 @@ class LibraryFragment : BaseFragment() {
 
   private fun refreshFragment() {
     if (isNotConnected) {
-      context.toast(R.string.no_network_connection)
+      context.toast(string.no_network_connection)
     } else {
       zimManageViewModel.requestDownloadLibrary.onNext(Unit)
     }
@@ -169,10 +169,10 @@ class LibraryFragment : BaseFragment() {
   private fun storeDeviceInPreferences(storageDevice: StorageDevice) {
     sharedPreferenceUtil.putPrefStorage(storageDevice.name)
     sharedPreferenceUtil.putPrefStorageTitle(
-        getString(
-            if (storageDevice.isInternal) R.string.internal_storage
-            else R.string.external_storage
-        )
+      getString(
+        if (storageDevice.isInternal) string.internal_storage
+        else string.external_storage
+      )
     )
   }
 
@@ -180,19 +180,19 @@ class LibraryFragment : BaseFragment() {
     when {
       notEnoughSpaceAvailable(item) -> {
         context.toast(
-            getString(R.string.download_no_space)
-                + "\n" + getString(R.string.space_available) + " "
-                + LibraryUtils.bytesToHuman(spaceAvailable)
+          getString(string.download_no_space) +
+            "\n" + getString(string.space_available) + " " +
+            LibraryUtils.bytesToHuman(spaceAvailable)
         )
         libraryList.snack(
-            R.string.download_change_storage,
-            R.string.open,
-            this::showStorageSelectDialog
+          string.download_change_storage,
+          string.open,
+          ::showStorageSelectDialog
         )
         return
       }
       isNotConnected -> {
-        context.toast(R.string.no_network_connection)
+        context.toast(string.no_network_connection)
         return
       }
       noWifiWithWifiOnlyPreferenceSet -> {
@@ -213,20 +213,20 @@ class LibraryFragment : BaseFragment() {
   @SuppressLint("ImplicitSamInstance")
   private fun showStorageSelectDialog() {
     StorageSelectDialog()
-        .apply {
-      arguments = Bundle().apply {
-        putString(
+      .apply {
+        arguments = Bundle().apply {
+          putString(
             StorageSelectDialog.STORAGE_DIALOG_INTERNAL,
             this@LibraryFragment.getString(string.internal_storage)
-        )
-        putString(
+          )
+          putString(
             StorageSelectDialog.STORAGE_DIALOG_EXTERNAL,
             this@LibraryFragment.getString(string.external_storage)
-        )
-        putInt(StorageSelectDialog.STORAGE_DIALOG_THEME, StyleUtils.dialogStyle())
+          )
+          putInt(StorageSelectDialog.STORAGE_DIALOG_THEME, StyleUtils.dialogStyle())
+        }
+        setOnSelectListener(::storeDeviceInPreferences)
       }
-      setOnSelectListener(this@LibraryFragment::storeDeviceInPreferences)
-    }
-        .show(fragmentManager, getString(string.pref_storage))
+      .show(fragmentManager, getString(string.pref_storage))
   }
 }

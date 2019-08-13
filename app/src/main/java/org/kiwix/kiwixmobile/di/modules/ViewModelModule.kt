@@ -40,5 +40,6 @@ abstract class ViewModelModule {
   internal abstract fun bindLanguageViewModel(languageViewModel: LanguageViewModel): ViewModel
 
   @Binds
-  internal abstract fun bindViewModelFactory(factory: KiwixViewModelFactory): ViewModelProvider.Factory
+  internal abstract fun bindViewModelFactory(factory: KiwixViewModelFactory):
+    ViewModelProvider.Factory
 }

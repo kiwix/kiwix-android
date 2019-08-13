@@ -3,7 +3,7 @@ package org.kiwix.kiwixmobile.zim_manager.library_view.adapter.base
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 
-interface AdapterDelegate<T> {
+interface AdapterDelegate<in T> {
   fun createViewHolder(parent: ViewGroup): ViewHolder
 
   fun bind(
@@ -12,5 +12,4 @@ interface AdapterDelegate<T> {
   )
 
   fun isFor(item: T): Boolean
-
 }

@@ -23,6 +23,7 @@ import org.kiwix.kiwixmobile.database.newdb.dao.NewDownloadDao
 import org.kiwix.kiwixmobile.downloader.model.DownloadItem
 import org.kiwix.kiwixmobile.downloader.model.DownloadModel
 import org.kiwix.kiwixmobile.downloader.model.DownloadRequest
+import org.kiwix.kiwixmobile.downloader.model.DownloadStatus
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
 import javax.inject.Inject
 
@@ -34,25 +35,25 @@ class DownloaderImpl @Inject constructor(
 
   override fun download(book: LibraryNetworkEntity.Book) {
     kiwixService.getMetaLinks(book.url)
-        .take(1)
-        .subscribe(
-            {
-              if(downloadDao.doesNotAlreadyExist(book)){
-                val downloadId = downloadRequester.enqueue(
-                    DownloadRequest(it, book)
-                )
-                downloadDao.insert(
-                    DownloadModel(downloadId = downloadId, book = book)
-                )
-              }
-            },
-            Throwable::printStackTrace
-        )
+      .take(1)
+      .subscribe(
+        {
+          if (downloadDao.doesNotAlreadyExist(book)) {
+            val downloadId = downloadRequester.enqueue(
+              DownloadRequest(it, book)
+            )
+            downloadDao.insert(
+              DownloadModel(downloadId = downloadId, book = book)
+            )
+          }
+        },
+        Throwable::printStackTrace
+      )
   }
 
   override fun queryStatus(downloadModels: List<DownloadModel>) =
     downloadRequester.query(downloadModels)
-        .sortedBy { it.downloadId }
+      .sortedBy(DownloadStatus::downloadId)
 
   override fun cancelDownload(downloadItem: DownloadItem) {
     downloadRequester.cancel(downloadItem)

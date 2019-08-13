@@ -8,8 +8,10 @@ import io.reactivex.processors.BehaviorProcessor
 import org.kiwix.kiwixmobile.extensions.networkState
 import javax.inject.Inject
 
-class ConnectivityBroadcastReceiver @Inject constructor(private val connectivityManager: ConnectivityManager) :
-    BaseBroadcastReceiver() {
+class ConnectivityBroadcastReceiver @Inject constructor(
+  private val connectivityManager: ConnectivityManager
+) :
+  BaseBroadcastReceiver() {
 
   override val action: String = ConnectivityManager.CONNECTIVITY_ACTION
 
@@ -22,5 +24,4 @@ class ConnectivityBroadcastReceiver @Inject constructor(private val connectivity
   ) {
     _networkStates.onNext(connectivityManager.networkState)
   }
-
 }

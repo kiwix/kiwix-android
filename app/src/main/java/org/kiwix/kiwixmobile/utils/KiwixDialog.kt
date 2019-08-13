@@ -11,9 +11,22 @@ sealed class KiwixDialog(
 ) {
 
   data class DeleteZim(override val args: Array<out Any>) : KiwixDialog(
-      null, R.string.delete_zim_body, R.string.delete, R.string.no
+    null, R.string.delete_zim_body, R.string.delete, R.string.no
   ), HasBodyFormatArgs {
     constructor(bookOnDisk: BookOnDisk) : this(arrayOf(bookOnDisk.book.title))
+
+    override fun equals(other: Any?): Boolean {
+      if (this === other) return true
+      if (javaClass != other?.javaClass) return false
+
+      other as DeleteZim
+
+      if (!args.contentEquals(other.args)) return false
+
+      return true
+    }
+
+    override fun hashCode() = args.contentHashCode()
   }
 
   object LocationPermissionRationale : KiwixDialog(
@@ -43,11 +56,11 @@ sealed class KiwixDialog(
     message: Int
   ) : KiwixDialog(title, message, R.string.yes, R.string.no) {
     object StopDownload : YesNoDialog(
-        R.string.confirm_stop_download_title, R.string.confirm_stop_download_msg
+      R.string.confirm_stop_download_title, R.string.confirm_stop_download_msg
     )
 
     object WifiOnly : YesNoDialog(
-        R.string.wifi_only_title, R.string.wifi_only_msg
+      R.string.wifi_only_title, R.string.wifi_only_msg
     )
   }
 }

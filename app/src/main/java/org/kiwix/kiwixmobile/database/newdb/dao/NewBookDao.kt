@@ -30,20 +30,19 @@ import javax.inject.Inject
 class NewBookDao @Inject constructor(private val box: Box<BookOnDiskEntity>) {
 
   fun books() = box.asFlowable()
-      .map { it.map(::BookOnDisk) }
+    .map { it.map(::BookOnDisk) }
 
   fun getBooks() = box.all.map(::BookOnDisk)
 
   fun insert(booksOnDisk: List<BookOnDisk>) {
     box.store.callInTx {
       box
-          .query {
-            inValues(BookOnDiskEntity_.bookId, booksOnDisk.map { it.book.id }.toTypedArray())
-          }
-          .remove()
-      box.put(booksOnDisk.map(::BookOnDiskEntity))
+        .query {
+          inValues(BookOnDiskEntity_.bookId, booksOnDisk.map { it.book.id }.toTypedArray())
+        }
+        .remove()
+      box.put(booksOnDisk.distinctBy { it.book.id }.map(::BookOnDiskEntity))
     }
-
   }
 
   fun delete(databaseId: Long) {

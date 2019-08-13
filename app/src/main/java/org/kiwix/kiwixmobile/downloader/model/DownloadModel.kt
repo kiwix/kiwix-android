@@ -27,4 +27,3 @@ data class DownloadModel(
 ) {
   val fileNameFromUrl: String get() = StorageUtils.getFileNameFromUrl(book.url)
 }
-

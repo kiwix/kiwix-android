@@ -11,11 +11,11 @@ fun View.snack(
   actionTextColor: Int = Color.WHITE
 ) {
   Snackbar.make(
-      this, stringId, Snackbar.LENGTH_LONG
+    this, stringId, Snackbar.LENGTH_LONG
   )
-      .setAction(actionStringId) {
-        actionClick.invoke()
-      }
-      .setActionTextColor(actionTextColor)
-      .show()
+    .setAction(actionStringId) {
+      actionClick.invoke()
+    }
+    .setActionTextColor(actionTextColor)
+    .show()
 }

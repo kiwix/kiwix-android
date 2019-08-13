@@ -26,14 +26,14 @@ import javax.inject.Inject
 
 class NewRecentSearchDao @Inject constructor(val box: Box<RecentSearchEntity>) {
   fun getRecentSearches() = box
-      .query {
-        equal(RecentSearchEntity_.zimId, ZimContentProvider.getId() ?: "")
-        orderDesc(RecentSearchEntity_.id)
-      }
-      .find()
-      .distinctBy { it.searchTerm }
-      .take(NUM_RECENT_RESULTS)
-      .map { it.searchTerm }
+    .query {
+      equal(RecentSearchEntity_.zimId, ZimContentProvider.getId() ?: "")
+      orderDesc(RecentSearchEntity_.id)
+    }
+    .find()
+    .distinctBy(RecentSearchEntity::searchTerm)
+    .take(NUM_RECENT_RESULTS)
+    .map(RecentSearchEntity::searchTerm)
 
   fun saveSearch(title: String) {
     box.put(RecentSearchEntity(title))
@@ -41,10 +41,10 @@ class NewRecentSearchDao @Inject constructor(val box: Box<RecentSearchEntity>) {
 
   fun deleteSearchString(searchTerm: String) {
     box
-        .query {
-          equal(RecentSearchEntity_.searchTerm, searchTerm)
-        }
-        .remove()
+      .query {
+        equal(RecentSearchEntity_.searchTerm, searchTerm)
+      }
+      .remove()
   }
 
   fun deleteSearchHistory() {
