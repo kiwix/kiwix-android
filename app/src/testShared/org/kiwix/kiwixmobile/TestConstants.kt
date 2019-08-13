@@ -15,24 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package org.kiwix.kiwixmobile.di.modules
+package org.kiwix.kiwixmobile
 
-import dagger.Module
-import okhttp3.OkHttpClient
-import org.kiwix.kiwixmobile.MOCK_BASE_URL
-import org.kiwix.kiwixmobile.data.remote.KiwixService
-
-/**
- * Created by mhutti1 on 14/04/17.
- */
-
-@Module
-class TestNetworkModule : NetworkModule() {
-
-  internal override fun provideKiwixService(okHttpClient: OkHttpClient): KiwixService =
-    KiwixService.ServiceCreator.newHacklistService(
-      okHttpClient,
-      MOCK_BASE_URL
-    )
-
-}
+const val TEST_PORT = 8080
+const val MOCK_BASE_URL = "http://localhost:$TEST_PORT/"

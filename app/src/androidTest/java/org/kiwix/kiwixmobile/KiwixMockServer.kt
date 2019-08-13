@@ -4,16 +4,8 @@ import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
-import org.kiwix.kiwixmobile.di.modules.TestNetworkModule
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
-import org.kiwix.kiwixmobile.library.entity.MetaLinkNetworkEntity
-import org.kiwix.kiwixmobile.library.entity.MetaLinkNetworkEntity.FileElement
-import org.kiwix.kiwixmobile.library.entity.MetaLinkNetworkEntity.Pieces
-import org.kiwix.kiwixmobile.library.entity.MetaLinkNetworkEntity.Url
 import org.simpleframework.xml.core.Persister
 import java.io.StringWriter
-import java.util.LinkedList
 import java.util.Stack
 
 /*
@@ -38,7 +30,7 @@ class KiwixMockServer {
   val queuedResponses: Stack<MockResponse> = Stack()
 
   private val mockWebServer = MockWebServer().apply {
-    start(PORT)
+    start(TEST_PORT)
   }
 
   fun stop() {
@@ -66,85 +58,14 @@ class KiwixMockServer {
     queuedResponses.push(mockResponse)
   }
 
-  companion object {
-    const val PORT = 8080
+  private fun <E> Stack<E>.popOrNull() =
+    if (empty()) null
+    else pop()
+
+  private fun Any.asXmlString() = StringWriter().let {
+    Persister().write(this, it)
+    "$it"
   }
 }
 
-private fun <E> Stack<E>.popOrNull() =
-  if (empty()) null
-  else pop()
 
-fun Any.asXmlString() = StringWriter().let {
-  Persister().write(this, it)
-  "$it"
-}
-
-fun metaLinkNetworkEntity() = MetaLinkNetworkEntity().apply {
-  file = fileElement()
-}
-
-fun fileElement(
-  urls: List<Url> = listOf(
-    url()
-  ),
-  name: String = "name",
-  hashes: Map<String, String> = mapOf("hash" to "hash"),
-  pieces: Pieces = pieces()
-) = FileElement().apply {
-  this.name = name
-  this.urls = urls
-  this.hashes = hashes
-  this.pieces = pieces
-}
-
-fun pieces(
-  hashType: String = "hashType",
-  pieceHashes: List<String> = listOf("hash")
-) = Pieces().apply {
-  this.hashType = hashType
-  this.pieceHashes = pieceHashes
-}
-
-fun url(
-  value: String = "${TestNetworkModule.MOCK_BASE_URL}relevantUrl.zim.meta4",
-  location: String = "location"
-) = Url().apply {
-  this.location = location
-  this.value = value
-}
-
-fun book(
-  id: String = "id",
-  title: String = "title",
-  description: String = "description",
-  language: String = "eng",
-  creator: String = "creator",
-  publisher: String = "publisher",
-  date: String = "date",
-  url: String = "${TestNetworkModule.MOCK_BASE_URL}url",
-  articleCount: String = "mediaCount",
-  mediaCount: String = "mediaCount",
-  size: String = "1024",
-  name: String = "name",
-  favIcon: String = "favIcon"
-) =
-  Book().apply {
-    this.id = id
-    this.title = title
-    this.description = description
-    this.language = language
-    this.creator = creator
-    this.publisher = publisher
-    this.date = date
-    this.url = url
-    this.articleCount = articleCount
-    this.mediaCount = mediaCount
-    this.size = size
-    bookName = name
-    favicon = favIcon
-  }
-
-fun libraryNetworkEntity(books: List<Book> = emptyList()) = LibraryNetworkEntity().apply {
-  book = LinkedList(books)
-}

@@ -22,38 +22,22 @@ import org.kiwix.kiwixmobile.downloader.model.DownloadState
 import org.kiwix.kiwixmobile.downloader.model.DownloadState.Pending
 import org.kiwix.kiwixmobile.downloader.model.DownloadStatus
 import org.kiwix.kiwixmobile.language.adapter.LanguageListItem.LanguageItem
+import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity
 import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book
+import org.kiwix.kiwixmobile.library.entity.MetaLinkNetworkEntity
+import org.kiwix.kiwixmobile.library.entity.MetaLinkNetworkEntity.FileElement
+import org.kiwix.kiwixmobile.library.entity.MetaLinkNetworkEntity.Pieces
+import org.kiwix.kiwixmobile.library.entity.MetaLinkNetworkEntity.Url
 import org.kiwix.kiwixmobile.zim_manager.Language
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem.BookOnDisk
 import java.io.File
+import java.util.LinkedList
 
 fun bookOnDisk(
   book: Book = book(),
   databaseId: Long? = 0L,
   file: File = File("")
 ) = BookOnDisk(databaseId, book, file)
-
-fun book(
-  id: String = "0",
-  title: String = "",
-  size: String = "",
-  favicon: String = "",
-  creator: String = "",
-  publisher: String = "",
-  date: String = "",
-  description: String = "",
-  language: String = ""
-) = Book().apply {
-  this.id = id
-  this.title = title
-  this.size = size
-  this.favicon = favicon
-  this.creator = creator
-  this.publisher = publisher
-  this.date = date
-  this.description = description
-  this.language = language
-}
 
 fun downloadStatus(
   downloadId: Long = 0L,
@@ -94,3 +78,72 @@ fun language(
 
 fun languageItem(language: Language = language()) =
   LanguageItem(language)
+
+fun metaLinkNetworkEntity() = MetaLinkNetworkEntity().apply {
+  file = fileElement()
+}
+
+fun fileElement(
+  urls: List<Url> = listOf(
+    url()
+  ),
+  name: String = "name",
+  hashes: Map<String, String> = mapOf("hash" to "hash"),
+  pieces: Pieces = pieces()
+) = FileElement().apply {
+  this.name = name
+  this.urls = urls
+  this.hashes = hashes
+  this.pieces = pieces
+}
+
+fun pieces(
+  hashType: String = "hashType",
+  pieceHashes: List<String> = listOf("hash")
+) = Pieces().apply {
+  this.hashType = hashType
+  this.pieceHashes = pieceHashes
+}
+
+fun url(
+  value: String = "${MOCK_BASE_URL}relevantUrl.zim.meta4",
+  location: String = "location"
+) = Url().apply {
+  this.location = location
+  this.value = value
+}
+
+fun book(
+  id: String = "id",
+  title: String = "title",
+  description: String = "description",
+  language: String = "eng",
+  creator: String = "creator",
+  publisher: String = "publisher",
+  date: String = "date",
+  url: String = "${MOCK_BASE_URL}url",
+  articleCount: String = "mediaCount",
+  mediaCount: String = "mediaCount",
+  size: String = "1024",
+  name: String = "name",
+  favIcon: String = "favIcon"
+) =
+  Book().apply {
+    this.id = id
+    this.title = title
+    this.description = description
+    this.language = language
+    this.creator = creator
+    this.publisher = publisher
+    this.date = date
+    this.url = url
+    this.articleCount = articleCount
+    this.mediaCount = mediaCount
+    this.size = size
+    bookName = name
+    favicon = favIcon
+  }
+
+fun libraryNetworkEntity(books: List<Book> = emptyList()) = LibraryNetworkEntity().apply {
+  book = LinkedList(books)
+}
