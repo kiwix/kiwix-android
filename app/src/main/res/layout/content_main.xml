@@ -35,6 +35,7 @@
           app:layout_constraintTop_toTopOf="parent"
           />
 
+      <!-- constraintRight_toRightOf is used as android:layoutDirection is supported from API 17 -->
       <androidx.appcompat.widget.AppCompatButton
           android:id="@+id/content_main_card_download_button"
           android:layout_width="wrap_content"
@@ -44,7 +45,7 @@
           android:textColor="@android:color/white"
           app:backgroundTint="#1565c0"
           app:layout_constraintBottom_toBottomOf="parent"
-          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintRight_toRightOf="parent"
           />
     </androidx.constraintlayout.widget.ConstraintLayout>
   </androidx.cardview.widget.CardView>
