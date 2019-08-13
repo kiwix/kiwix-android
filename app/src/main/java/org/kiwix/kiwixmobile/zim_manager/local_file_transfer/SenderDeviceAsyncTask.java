@@ -1,5 +1,6 @@
 package org.kiwix.kiwixmobile.zim_manager.local_file_transfer;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -35,10 +36,9 @@ class SenderDeviceAsyncTask extends AsyncTask<FileItem, Integer, Boolean> {
   private WifiDirectManager wifiDirectManager;
   private ContentResolver contentResolver;
 
-  public SenderDeviceAsyncTask(WifiDirectManager wifiDirectManager,
-    LocalFileTransferActivity localFileTransferActivity) {
+  public SenderDeviceAsyncTask(WifiDirectManager wifiDirectManager, Activity activity) {
     this.wifiDirectManager = wifiDirectManager;
-    this.contentResolver = localFileTransferActivity.getContentResolver();
+    this.contentResolver = activity.getContentResolver();
   }
 
   @Override

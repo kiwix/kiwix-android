@@ -46,7 +46,7 @@ public class WifiDirectManager
   private static final String TAG = "WifiDirectManager";
   public static int FILE_TRANSFER_PORT = 8008;
 
-  private @NonNull LocalFileTransferActivity activity;
+  private @NonNull Activity activity;
   private @NonNull Callbacks callbacks;
 
   private SharedPreferenceUtil sharedPreferenceUtil;
@@ -83,7 +83,7 @@ public class WifiDirectManager
   public WifiDirectManager(@NonNull Activity activity,
     @NonNull SharedPreferenceUtil sharedPreferenceUtil,
     @NonNull AlertDialogShower alertDialogShower) {
-    this.activity = (LocalFileTransferActivity) activity;
+    this.activity = activity;
     this.callbacks = (Callbacks) activity;
     this.sharedPreferenceUtil = sharedPreferenceUtil;
     this.alertDialogShower = alertDialogShower;
