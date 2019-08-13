@@ -52,7 +52,7 @@ class KiwixMockServer {
     mockWebServer.setDispatcher(object : Dispatcher() {
       override fun dispatch(request: RecordedRequest) =
         mapOfPathsToResponses[request.path]?.let(::successfulResponse)
-          ?: queuedResponses.pop()?.let { return@let it }
+          ?: queuedResponses.popOrNull()?.let { return@let it }
           ?: throw RuntimeException("No response mapped for ${request.path}")
     })
   }
@@ -63,12 +63,17 @@ class KiwixMockServer {
   }
 
   fun queueResponse(mockResponse: MockResponse) {
+    queuedResponses.push(mockResponse)
   }
 
   companion object {
     const val PORT = 8080
   }
 }
+
+private fun <E> Stack<E>.popOrNull() =
+  if (empty()) null
+  else pop()
 
 fun Any.asXmlString() = StringWriter().let {
   Persister().write(this, it)
@@ -102,7 +107,7 @@ fun pieces(
 }
 
 fun url(
-  value: String = "${TestNetworkModule.MOCK_BASE_URL}/relevantUrl.zim.meta4",
+  value: String = "${TestNetworkModule.MOCK_BASE_URL}relevantUrl.zim.meta4",
   location: String = "location"
 ) = Url().apply {
   this.location = location
@@ -117,7 +122,7 @@ fun book(
   creator: String = "creator",
   publisher: String = "publisher",
   date: String = "date",
-  url: String = "${TestNetworkModule.MOCK_BASE_URL}/url",
+  url: String = "${TestNetworkModule.MOCK_BASE_URL}url",
   articleCount: String = "mediaCount",
   mediaCount: String = "mediaCount",
   size: String = "1024",
