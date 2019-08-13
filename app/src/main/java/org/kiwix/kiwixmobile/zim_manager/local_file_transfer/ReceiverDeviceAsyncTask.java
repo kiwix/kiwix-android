@@ -78,8 +78,6 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
           result = false;
           publishProgress(fileItemIndex, ERROR);
         }
-
-        wifiDirectManager.incrementTotalFilesSent();
       }
 
       return (!isCancelled() && result);

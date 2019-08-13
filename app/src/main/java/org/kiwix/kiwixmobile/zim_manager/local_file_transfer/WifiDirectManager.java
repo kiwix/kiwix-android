@@ -74,7 +74,6 @@ public class WifiDirectManager
   private InetAddress fileReceiverDeviceAddress;  // IP address of the file receiving device
 
   private int totalFilesForTransfer = -1;
-  private int filesSent = 0;          // Count of number of files transferred until now
   private ArrayList<FileItem> filesForTransfer;
 
   private boolean isFileSender = false;    // Whether the device is the file sender or not
@@ -288,10 +287,6 @@ public class WifiDirectManager
 
   public void setFilesForTransfer(@NonNull ArrayList<FileItem> fileItems) {
     this.filesForTransfer = fileItems;
-  }
-
-  public void incrementTotalFilesSent() {
-    this.filesSent++;
   }
 
   public @NonNull String getZimStorageRootPath() {
