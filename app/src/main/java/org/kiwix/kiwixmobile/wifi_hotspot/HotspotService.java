@@ -149,6 +149,7 @@ public class HotspotService extends Service {
     webServerHelper.stopAndroidWebServer(serverStateListener);
     stopForeground(true);
     stopSelf();
+    notificationManager.cancel(HOTSPOT_NOTIFICATION_ID);
   }
 
   @Override
