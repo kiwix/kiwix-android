@@ -52,6 +52,7 @@ class ZimManageActivity : BaseActivity() {
 
   private var searchItem: MenuItem? = null
   private var languageItem: MenuItem? = null
+  private var getZimItem: MenuItem? = null
 
   @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
   @Inject lateinit var languagesDao: NewLanguagesDao
@@ -89,6 +90,7 @@ class ZimManageActivity : BaseActivity() {
   private fun updateMenu(position: Int) {
     searchItem?.isVisible = position == 1
     languageItem?.isVisible = position == 1
+    getZimItem?.isVisible = position == 0
   }
 
   private fun setUpToolbar() {
@@ -117,6 +119,7 @@ class ZimManageActivity : BaseActivity() {
     menuInflater.inflate(R.menu.menu_zim_manager, menu)
     searchItem = menu.findItem(R.id.action_search)
     languageItem = menu.findItem(R.id.select_language)
+    getZimItem = menu.findItem(R.id.get_zim_nearby_device)
     val searchView = searchItem!!.actionView as SearchView
     updateMenu(manageViewPager.currentItem)
     searchView.setOnQueryTextListener(
