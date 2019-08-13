@@ -54,15 +54,14 @@ public class WifiDirectManager
 
   /* Variables related to the WiFi P2P API */
   private boolean isWifiP2pEnabled = false; // Whether WiFi has been enabled or not
-  private boolean shouldRetry = true;   // Whether channel has retried connecting previously
+  private boolean shouldRetry = true;       // Whether channel has retried connecting previously
 
   private WifiP2pManager manager;         // Overall manager of Wifi p2p connections for the module
-  private WifiP2pManager.Channel channel;
-  // Connects the module to device's underlying Wifi p2p framework
+  private WifiP2pManager.Channel channel; // Interface to the device's underlying wifi-p2p framework
 
   private BroadcastReceiver receiver = null; // For receiving the broadcasts given by above filter
 
-  private WifiP2pInfo groupInfo;      // Corresponds to P2P group formed between the two devices
+  private WifiP2pInfo groupInfo; // Corresponds to P2P group formed between the two devices
 
   private WifiP2pDevice senderSelectedPeerDevice = null;
 
@@ -73,7 +72,6 @@ public class WifiDirectManager
   private InetAddress selectedPeerDeviceInetAddress;
   private InetAddress fileReceiverDeviceAddress;  // IP address of the file receiving device
 
-  private int totalFilesForTransfer = -1;
   private ArrayList<FileItem> filesForTransfer;
 
   private boolean isFileSender = false;    // Whether the device is the file sender or not
@@ -93,10 +91,6 @@ public class WifiDirectManager
   public void startWifiDirectManager(@Nullable ArrayList<FileItem> filesForTransfer) {
     this.filesForTransfer = filesForTransfer;
     this.isFileSender = (filesForTransfer != null && filesForTransfer.size() > 0);
-
-    if (isFileSender) {
-      this.totalFilesForTransfer = filesForTransfer.size();
-    }
 
     manager = (WifiP2pManager) activity.getSystemService(Context.WIFI_P2P_SERVICE);
     channel = manager.initialize(activity, getMainLooper(), null);
@@ -136,6 +130,7 @@ public class WifiDirectManager
     });
   }
 
+  /* From KiwixWifiP2pBroadcastReceiver.P2pEventListener callback-interface*/
   @Override
   public void onWifiP2pStateChanged(boolean isEnabled) {
     this.isWifiP2pEnabled = isEnabled;
@@ -173,10 +168,6 @@ public class WifiDirectManager
     callbacks.onUserDeviceDetailsAvailable(userDevice);
   }
 
-  public boolean isWifiP2pEnabled() {
-    return isWifiP2pEnabled;
-  }
-
   /* From WifiP2pManager.ChannelListener interface */
   @Override
   public void onChannelDisconnected() {
@@ -203,6 +194,11 @@ public class WifiDirectManager
     /* Devices have successfully connected, and 'info' holds information about the wifi p2p group formed */
     this.groupInfo = groupInfo;
     performHandshakeWithSelectedPeerDevice();
+  }
+
+  /* Helper methods */
+  public boolean isWifiP2pEnabled() {
+    return isWifiP2pEnabled;
   }
 
   public boolean isGroupFormed() {
@@ -274,11 +270,7 @@ public class WifiDirectManager
   }
 
   public int getTotalFilesForTransfer() {
-    return totalFilesForTransfer;
-  }
-
-  public void setTotalFilesForTransfer(int totalFilesForTransfer) {
-    this.totalFilesForTransfer = totalFilesForTransfer;
+    return filesForTransfer.size();
   }
 
   public @NonNull ArrayList<FileItem> getFilesForTransfer() {
@@ -392,7 +384,7 @@ public class WifiDirectManager
     });
   }
 
-  void closeChannel() {
+  private void closeChannel() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
       channel.close();
     }

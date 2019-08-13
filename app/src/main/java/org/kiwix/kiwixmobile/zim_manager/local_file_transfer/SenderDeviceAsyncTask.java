@@ -48,42 +48,37 @@ class SenderDeviceAsyncTask extends AsyncTask<FileItem, Integer, Boolean> {
       return false;
     }
 
-    boolean result = true;
-    int fileItemIndex = -1;
+    String hostAddress = wifiDirectManager.getFileReceiverDeviceAddress().getHostAddress();
+    boolean isTransferErrorFree = true;
 
-    for (FileItem fileItem : fileItems) { // Uri of file to be transferred
-      fileItemIndex++;
+    for (int fileIndex = 0; fileIndex < fileItems.length && !isCancelled(); fileIndex++) { // Uri of file to be transferred
+      FileItem fileItem = fileItems[fileIndex];
 
       try (Socket socket = new Socket(); // Represents the sender device
            InputStream fileInputStream = contentResolver.openInputStream(fileItem.getFileUri())) {
 
-        if (isCancelled()) {
-          result = false;
-          return result;
-        }
         socket.bind(null);
-
-        String hostAddress = wifiDirectManager.getFileReceiverDeviceAddress().getHostAddress();
         socket.connect((new InetSocketAddress(hostAddress, FILE_TRANSFER_PORT)), 15000);
 
         Log.d(TAG, "Sender socket connected to server - " + socket.isConnected());
-        publishProgress(fileItemIndex, SENDING);
 
+        publishProgress(fileIndex, SENDING);
         OutputStream socketOutputStream = socket.getOutputStream();
 
         copyToOutputStream(fileInputStream, socketOutputStream);
         if (BuildConfig.DEBUG) Log.d(TAG, "Sender: Data written");
+        publishProgress(fileIndex, SENT);
 
-        publishProgress(fileItemIndex, SENT);
       } catch (IOException e) {
         Log.e(TAG, e.getMessage());
         e.printStackTrace();
-        result = false;
-        publishProgress(fileItemIndex, ERROR);
+
+        isTransferErrorFree = false;
+        publishProgress(fileIndex, ERROR);
       }
     }
 
-    return result;
+    return (!isCancelled() && isTransferErrorFree);
   }
 
   private boolean delayForSlowReceiverDevicesToSetupServer() {

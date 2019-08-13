@@ -45,26 +45,23 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
       Log.d(TAG, "Server: Socket opened at " + FILE_TRANSFER_PORT);
 
       final String zimStorageRootPath = wifiDirectManager.getZimStorageRootPath();
-      int totalFileCount = wifiDirectManager.getTotalFilesForTransfer();
-      boolean result = true;
-      int fileItemIndex;
+      ArrayList<FileItem> fileItems = wifiDirectManager.getFilesForTransfer();
+      boolean isTransferErrorFree = true;
 
-      if (BuildConfig.DEBUG) Log.d(TAG, "Expecting " + totalFileCount + " files");
+      if (BuildConfig.DEBUG) Log.d(TAG, "Expecting " + fileItems.size() + " files");
 
-      for (int currentFile = 1; currentFile <= totalFileCount && !isCancelled(); currentFile++) {
-        fileItemIndex = currentFile - 1;
-        ArrayList<FileItem> fileItems = wifiDirectManager.getFilesForTransfer();
+      for (int fileItemIndex = 0; fileItemIndex < fileItems.size() && !isCancelled(); fileItemIndex++) {
         incomingFileName = fileItems.get(fileItemIndex).getFileName();
 
         try (Socket client = serverSocket.accept()) {
-          if (BuildConfig.DEBUG) Log.d(TAG, "Server: Client connected for file " + currentFile);
+          if (BuildConfig.DEBUG) Log.d(TAG, "Server: Client connected for file " + fileItems.get(fileItemIndex).getFileName());
           publishProgress(fileItemIndex, SENDING);
 
           final File clientNoteFileLocation = new File(zimStorageRootPath + incomingFileName);
           File dirs = new File(clientNoteFileLocation.getParent());
           if (!dirs.exists() && !dirs.mkdirs()) {
             Log.d(TAG, "ERROR: Required parent directories couldn't be created");
-            result = false;
+            isTransferErrorFree = false;
             continue;
           }
 
@@ -73,14 +70,15 @@ class ReceiverDeviceAsyncTask extends AsyncTask<Void, Integer, Boolean> {
 
           copyToOutputStream(client.getInputStream(), new FileOutputStream(clientNoteFileLocation));
           publishProgress(fileItemIndex, SENT);
+
         } catch (IOException e) {
           Log.e(TAG, e.getMessage());
-          result = false;
+          isTransferErrorFree = false;
           publishProgress(fileItemIndex, ERROR);
         }
       }
+      return (!isCancelled() && isTransferErrorFree);
 
-      return (!isCancelled() && result);
     } catch (IOException e) {
       Log.e(TAG, e.getMessage());
       return false; // Returned when an error was encountered during transfer

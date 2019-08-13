@@ -116,7 +116,6 @@ class PeerGroupHandshakeAsyncTask extends AsyncTask<Void, Void, InetAddress> {
 
         if (totalFilesObject.getClass().equals(String.class)) {
           int total = Integer.parseInt((String) totalFilesObject);
-          wifiDirectManager.setTotalFilesForTransfer(total);
           if (BuildConfig.DEBUG) Log.d(TAG, "Metadata: " + total + " files");
 
           ArrayList<FileItem> fileItems = new ArrayList<>();

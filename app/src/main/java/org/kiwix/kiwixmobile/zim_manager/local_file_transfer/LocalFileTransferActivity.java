@@ -174,6 +174,13 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     }
   }
 
+  private void showPeerDiscoveryProgressBar() { // Setup UI for searching peers
+    searchingPeersProgressBar.setVisibility(View.VISIBLE);
+    listViewPeerDevices.setVisibility(View.INVISIBLE);
+    textViewPeerDevices.setVisibility(View.INVISIBLE);
+  }
+
+  /* From WifiDirectManager.Callbacks interface */
   @Override
   public void onUserDeviceDetailsAvailable(@Nullable WifiP2pDevice userDevice) {
     // Update UI with user device's details
@@ -189,22 +196,16 @@ public class LocalFileTransferActivity extends AppCompatActivity implements
     ((WifiPeerListAdapter) listViewPeerDevices.getAdapter()).notifyDataSetChanged();
   }
 
-  private void displayFileTransferProgress(@NonNull ArrayList<FileItem> filesToSend) {
-    fileListAdapter = new FileListAdapter(filesToSend);
-    filesRecyclerView.setAdapter(fileListAdapter);
-    filesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-  }
-
   @Override
   public void onFilesForTransferAvailable(@NonNull ArrayList<FileItem> filesForTransfer) {
     this.filesForTransfer = filesForTransfer;
     displayFileTransferProgress(filesForTransfer);
   }
 
-  private void showPeerDiscoveryProgressBar() { // Setup UI for searching peers
-    searchingPeersProgressBar.setVisibility(View.VISIBLE);
-    listViewPeerDevices.setVisibility(View.INVISIBLE);
-    textViewPeerDevices.setVisibility(View.INVISIBLE);
+  private void displayFileTransferProgress(@NonNull ArrayList<FileItem> filesToSend) {
+    fileListAdapter = new FileListAdapter(filesToSend);
+    filesRecyclerView.setAdapter(fileListAdapter);
+    filesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
   }
 
   @Override
