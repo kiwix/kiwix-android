@@ -361,7 +361,24 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
     setupDocumentParser();
 
-    manageExternalLaunchAndRestoringViewState();
+    if (BuildConfig.IS_CUSTOM_APP) {
+      Log.d(TAG_KIWIX, "This is a custom app:" +BuildConfig.APPLICATION_ID);
+      if (loadCustomAppContent()) {
+        Log.d(TAG_KIWIX, "Found custom content, continuing...");
+        // Continue
+      } else {
+        Log.e(TAG_KIWIX, "Problem finding the content, no more OnCreate() code");
+        // What should we do here? exit? I'll investigate empirically.
+        // It seems unpredictable behaviour if the code returns at this point as yesterday
+        // it didn't crash yet today the app crashes because it tries to load books
+        // in onResume();
+      }
+
+    } else {
+
+      manageExternalLaunchAndRestoringViewState();
+    }
+
     loadPrefs();
     updateTitle();
 
@@ -1343,17 +1360,15 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     //Check maybe need refresh
     String articleUrl = getCurrentWebView().getUrl();
     boolean isBookmark = false;
-    BookmarkItem bookmark =
-        BookmarkItem.fromZimContentProvider(getCurrentWebView().getTitle(), articleUrl);
     if (articleUrl != null && !bookmarks.contains(articleUrl)) {
       if (ZimContentProvider.getId() != null) {
-        presenter.saveBookmark(bookmark);
+        presenter.saveBookmark( BookmarkItem.fromZimContentProvider(getCurrentWebView().getTitle(), articleUrl));
       } else {
         Toast.makeText(this, R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT).show();
       }
       isBookmark = true;
     } else if (articleUrl != null) {
-      presenter.deleteBookmark(bookmark);
+      presenter.deleteBookmark(articleUrl);
       isBookmark = false;
     }
     popBookmarkSnackbar(isBookmark);
@@ -1876,6 +1891,74 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     }
   }
 
+  /**
+   * loadCustomAppContent  Return true if all's well, else false.
+   */
+  private boolean loadCustomAppContent() {
+      Log.d(TAG_KIWIX, "Kiwix Custom App starting for the first time. Checking Companion ZIM: "
+        + BuildConfig.ZIM_FILE_NAME);
+
+      String currentLocaleCode = Locale.getDefault().toString();
+      // Custom App recommends to start off a specific language
+      if (BuildConfig.ENFORCED_LANG.length() > 0 && !BuildConfig.ENFORCED_LANG
+        .equals(currentLocaleCode)) {
+
+        // change the locale machinery
+        LanguageUtils.handleLocaleChange(this, BuildConfig.ENFORCED_LANG);
+
+        // save new locale into preferences for next startup
+        sharedPreferenceUtil.putPrefLanguage(BuildConfig.ENFORCED_LANG);
+
+        // restart activity for new locale to take effect
+        this.setResult(1236);
+        this.finish();
+        this.startActivity(new Intent(this, this.getClass()));
+        return false;
+      }
+
+      String filePath = "";
+      if (BuildConfig.HAS_EMBEDDED_ZIM) {
+        String appPath = getPackageResourcePath();
+        File libDir = new File(appPath.substring(0, appPath.lastIndexOf("/")) + "/lib/");
+        if (libDir.exists() && libDir.listFiles().length > 0) {
+          filePath = libDir.listFiles()[0].getPath() + "/" + BuildConfig.ZIM_FILE_NAME;
+        }
+        if (filePath.isEmpty() || !new File(filePath).exists()) {
+          filePath = String.format("/data/data/%s/lib/%s", BuildConfig.APPLICATION_ID,
+            BuildConfig.ZIM_FILE_NAME);
+        }
+      } else {
+        String fileName = FileUtils.getExpansionAPKFileName(true);
+        filePath = FileUtils.generateSaveFileName(fileName);
+      }
+
+      Log.d(TAG_KIWIX, "BuildConfig.ZIM_FILE_SIZE = " + BuildConfig.ZIM_FILE_SIZE);
+      if (!FileUtils.doesFileExist(filePath, BuildConfig.ZIM_FILE_SIZE, false)) {
+
+        AlertDialog.Builder zimFileMissingBuilder =
+          new AlertDialog.Builder(this, dialogStyle());
+        zimFileMissingBuilder.setTitle(R.string.app_name);
+        zimFileMissingBuilder.setMessage(R.string.customapp_missing_content);
+        zimFileMissingBuilder.setIcon(R.mipmap.kiwix_icon);
+        final Activity activity = this;
+        zimFileMissingBuilder.setPositiveButton(getString(R.string.go_to_play_store),
+          (dialog, which) -> {
+            String market_uri = "market://details?id=" + BuildConfig.APPLICATION_ID;
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(market_uri));
+            startActivity(intent);
+            activity.finish();
+          });
+        zimFileMissingBuilder.setCancelable(false);
+        AlertDialog zimFileMissingDialog = zimFileMissingBuilder.create();
+        zimFileMissingDialog.show();
+        return false;
+      } else {
+        openZimFile(new File(filePath), true);
+        return true;
+      }
+  }
+
   private void manageExternalLaunchAndRestoringViewState() {
 
     if (getIntent().getData() != null) {
@@ -1902,71 +1985,10 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         // Alternative would be to restore webView state. But more effort to implement, and actually
         // fits better normal android behavior if after closing app ("back" button) state is not maintained.
       } else {
-
-        if (BuildConfig.IS_CUSTOM_APP) {
-          Log.d(TAG_KIWIX, "Kiwix Custom App starting for the first time. Checking Companion ZIM: "
-              + BuildConfig.ZIM_FILE_NAME);
-
-          String currentLocaleCode = Locale.getDefault().toString();
-          // Custom App recommends to start off a specific language
-          if (BuildConfig.ENFORCED_LANG.length() > 0 && !BuildConfig.ENFORCED_LANG
-              .equals(currentLocaleCode)) {
-
-            // change the locale machinery
-            LanguageUtils.handleLocaleChange(this, BuildConfig.ENFORCED_LANG);
-
-            // save new locale into preferences for next startup
-            sharedPreferenceUtil.putPrefLanguage(BuildConfig.ENFORCED_LANG);
-
-            // restart activity for new locale to take effect
-            this.setResult(1236);
-            this.finish();
-            this.startActivity(new Intent(this, this.getClass()));
-          }
-
-          String filePath = "";
-          if (BuildConfig.HAS_EMBEDDED_ZIM) {
-            String appPath = getPackageResourcePath();
-            File libDir = new File(appPath.substring(0, appPath.lastIndexOf("/")) + "/lib/");
-            if (libDir.exists() && libDir.listFiles().length > 0) {
-              filePath = libDir.listFiles()[0].getPath() + "/" + BuildConfig.ZIM_FILE_NAME;
-            }
-            if (filePath.isEmpty() || !new File(filePath).exists()) {
-              filePath = String.format("/data/data/%s/lib/%s", BuildConfig.APPLICATION_ID,
-                  BuildConfig.ZIM_FILE_NAME);
-            }
-          } else {
-            String fileName = FileUtils.getExpansionAPKFileName(true);
-            filePath = FileUtils.generateSaveFileName(fileName);
-          }
-
-          if (!FileUtils.doesFileExist(filePath, BuildConfig.ZIM_FILE_SIZE, false)) {
-
-            AlertDialog.Builder zimFileMissingBuilder =
-                new AlertDialog.Builder(this, dialogStyle());
-            zimFileMissingBuilder.setTitle(R.string.app_name);
-            zimFileMissingBuilder.setMessage(R.string.customapp_missing_content);
-            zimFileMissingBuilder.setIcon(R.mipmap.kiwix_icon);
-            final Activity activity = this;
-            zimFileMissingBuilder.setPositiveButton(getString(R.string.go_to_play_store),
-                (dialog, which) -> {
-                  String market_uri = "market://details?id=" + BuildConfig.APPLICATION_ID;
-                  Intent intent = new Intent(Intent.ACTION_VIEW);
-                  intent.setData(Uri.parse(market_uri));
-                  startActivity(intent);
-                  activity.finish();
-                });
-            zimFileMissingBuilder.setCancelable(false);
-            AlertDialog zimFileMissingDialog = zimFileMissingBuilder.create();
-            zimFileMissingDialog.show();
-          } else {
-            openZimFile(new File(filePath), true);
-          }
-        } else {
           Log.d(TAG_KIWIX, "Kiwix normal start, no zimFile loaded last time  -> display home page");
           showHomePage();
         }
-      }
+
     }
   }
 
