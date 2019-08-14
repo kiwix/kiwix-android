@@ -202,10 +202,10 @@ public class AddNoteDialog extends DialogFragment
     int rightmostDot = path.lastIndexOf('.');
 
     if (rightmostSlash > -1 && rightmostDot > -1) {
-      return (path.substring(rightmostSlash + 1, rightmostDot));
+      return path.substring(rightmostSlash + 1, (rightmostDot > rightmostSlash) ? rightmostDot : path.length());
     }
 
-    return ""; // If couldn't find the dot and/or slash
+    return ""; // If couldn't find a dot and/or slash in the url
   }
 
   // Override onBackPressed() to respond to user pressing 'Back' button on navigation bar
