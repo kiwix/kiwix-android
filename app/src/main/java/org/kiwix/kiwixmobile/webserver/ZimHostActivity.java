@@ -146,7 +146,6 @@ public class ZimHostActivity extends BaseActivity implements
 
     startServerButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
-
         //Get the path of ZIMs user has selected
         if (!isServerStarted) {
           getSelectedBooksPath();
@@ -228,10 +227,11 @@ public class ZimHostActivity extends BaseActivity implements
   private void bindService() {
 
     bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+    bound = true;
   }
 
   private void unbindService() {
-    if (bound) {
+    if (bound && !isServerStarted) {
       hotspotService.registerCallBack(null); // unregister
       unbindService(serviceConnection);
       bound = false;
