@@ -55,7 +55,10 @@ public class KiwixWebViewClient extends WebViewClient {
   public boolean shouldOverrideUrlLoading(WebView view, String url) {
     callback.webViewUrlLoading();
 
-    if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
+    if (ZimContentProvider.isRedirect(url)) {
+      view.loadUrl(ZimContentProvider.getRedirect(url));
+      return true;
+    } else if (url.startsWith(ZimContentProvider.CONTENT_URI.toString())) {
       String extension = MimeTypeMap.getFileExtensionFromUrl(url);
       if (DOCUMENT_TYPES.containsKey(extension)) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
