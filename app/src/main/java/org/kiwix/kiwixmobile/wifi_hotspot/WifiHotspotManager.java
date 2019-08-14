@@ -6,6 +6,7 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import org.kiwix.kiwixmobile.webserver.ServerStateListener;
 
@@ -23,14 +24,14 @@ public class WifiHotspotManager {
   WifiConfiguration currentConfig;
   private static final String TAG = "WifiHotspotManager";
 
-  public WifiHotspotManager(Context context) {
+  public WifiHotspotManager(@NonNull Context context) {
     this.context = context;
     wifiManager = (WifiManager) this.context.getSystemService(Context.WIFI_SERVICE);
   }
 
   //Workaround to turn on hotspot for Oreo versions
   @RequiresApi(api = Build.VERSION_CODES.O)
-  public void turnOnHotspot(ServerStateListener serverStateListener) {
+  public void turnOnHotspot(@NonNull ServerStateListener serverStateListener) {
       wifiManager.startLocalOnlyHotspot(new WifiManager.LocalOnlyHotspotCallback() {
 
         @Override

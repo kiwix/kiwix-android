@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import org.kiwix.kiwixmobile.R;
@@ -68,7 +69,7 @@ public class HotspotService extends Service {
     notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
   }
 
-  @Override public int onStartCommand(Intent intent, int flags, int startId) {
+  @Override public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
     switch (intent.getAction()) {
 
       case ACTION_IS_HOTSPOT_ENABLED:
@@ -115,7 +116,7 @@ public class HotspotService extends Service {
     return START_NOT_STICKY;
   }
 
-  @Nullable @Override public IBinder onBind(Intent intent) {
+  @Nullable @Override public IBinder onBind(@Nullable Intent intent) {
     return serviceBinder;
   }
 
@@ -176,12 +177,12 @@ public class HotspotService extends Service {
 
   public class HotspotBinder extends Binder {
 
-    public HotspotService getService() {
+    @NonNull public HotspotService getService() {
       return HotspotService.this;
     }
   }
 
-  public void registerCallBack(ServerStateListener myCallback) {
+  public void registerCallBack(@NonNull ServerStateListener myCallback) {
     serverStateListener = myCallback;
   }
 }

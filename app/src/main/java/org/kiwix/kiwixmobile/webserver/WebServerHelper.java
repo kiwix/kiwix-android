@@ -2,6 +2,8 @@ package org.kiwix.kiwixmobile.webserver;
 
 import android.content.Context;
 import android.util.Log;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -25,12 +27,12 @@ public class WebServerHelper {
   JNIKiwixServer kiwixServer = new JNIKiwixServer(kiwixLibrary);
   private static final String TAG = "WebServerHelper";
 
-  public WebServerHelper(Context context) {
+  public WebServerHelper(@NonNull Context context) {
     this.context = context;
   }
 
-  public boolean startServerHelper(ServerStateListener stateListener,
-      ArrayList<String> selectedBooksPath) {
+  public boolean startServerHelper(@NonNull ServerStateListener stateListener,
+      @NonNull ArrayList<String> selectedBooksPath) {
 
     // 1. Get port from settings screen
     // 2. Ask user to change port in settings if port is in use.
@@ -46,7 +48,7 @@ public class WebServerHelper {
     return isServerStarted;
   }
 
-  public boolean stopAndroidWebServer(ServerStateListener stateListener) {
+  public boolean stopAndroidWebServer(@NonNull ServerStateListener stateListener) {
     if (isServerStarted) {
       kiwixServer.stop();
       isServerStarted = false;
@@ -111,7 +113,7 @@ public class WebServerHelper {
     return ip;
   }
 
-  public static String getAddress() {
+  @Nullable public static String getAddress() {
     return "http://" + getIpAddress() + ":" + port;
   }
 }
