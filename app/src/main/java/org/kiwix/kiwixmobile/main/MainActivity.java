@@ -68,6 +68,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -205,6 +206,8 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   View tabSwitcherRoot;
   @BindView(R.id.tab_switcher_close_all_tabs)
   FloatingActionButton closeAllTabsButton;
+  @BindView(R.id.snackbar_root)
+  CoordinatorLayout snackbarRoot;
 
   @Inject
   MainContract.Presenter presenter;
@@ -807,7 +810,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     webViewList.remove(index);
     tabsAdapter.notifyItemRemoved(index);
     tabsAdapter.notifyItemRangeChanged(index, webViewList.size());
-    Snackbar.make(drawerLayout, R.string.tab_closed, Snackbar.LENGTH_LONG)
+    Snackbar.make(snackbarRoot, R.string.tab_closed, Snackbar.LENGTH_LONG)
         .setAction(R.string.undo, v -> {
           webViewList.add(index, tempForUndo);
           tabsAdapter.notifyItemInserted(index);
@@ -1221,7 +1224,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
             && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
           scanStorageForZims();
         } else {
-          Snackbar.make(drawerLayout, R.string.request_storage, Snackbar.LENGTH_LONG)
+          Snackbar.make(snackbarRoot, R.string.request_storage, Snackbar.LENGTH_LONG)
               .setAction(R.string.menu_settings, view -> {
                 Intent intent = new Intent();
                 intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -1377,12 +1380,12 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   private void popBookmarkSnackbar(boolean isBookmark) {
     if (isBookmark) {
-      Snackbar.make(drawerLayout, R.string.bookmark_added, Snackbar.LENGTH_LONG)
+      Snackbar.make(snackbarRoot, R.string.bookmark_added, Snackbar.LENGTH_LONG)
           .setAction(getString(R.string.open), v -> goToBookmarks())
           .setActionTextColor(getResources().getColor(R.color.white))
           .show();
     } else {
-      Snackbar.make(drawerLayout, R.string.bookmark_removed, Snackbar.LENGTH_LONG)
+      Snackbar.make(snackbarRoot, R.string.bookmark_removed, Snackbar.LENGTH_LONG)
           .show();
     }
   }
@@ -2103,7 +2106,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       builder.setPositiveButton(android.R.string.yes, (dialog, id) -> {
         if (isOpenNewTabInBackground) {
           newTabInBackground(url);
-          Snackbar.make(drawerLayout, R.string.new_tab_snackbar, Snackbar.LENGTH_LONG)
+          Snackbar.make(snackbarRoot, R.string.new_tab_snackbar, Snackbar.LENGTH_LONG)
               .setAction(getString(R.string.open), v -> {
                 if (webViewList.size() > 1) selectTab(webViewList.size() - 1);
               })
