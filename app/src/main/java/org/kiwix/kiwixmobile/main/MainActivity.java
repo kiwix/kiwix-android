@@ -58,6 +58,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -193,7 +194,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
   @BindView(R.id.activity_main_content_frame)
   FrameLayout contentFrame;
   @BindView(R.id.bottom_toolbar)
-  CardView bottomToolbar;
+  LinearLayout bottomToolbar;
   @BindView(R.id.bottom_toolbar_bookmark)
   ImageView bottomToolbarBookmark;
   @BindView(R.id.bottom_toolbar_arrow_back)
