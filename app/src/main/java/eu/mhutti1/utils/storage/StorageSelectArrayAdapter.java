@@ -25,7 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import java.util.ArrayList;
+import java.util.List;
 import org.kiwix.kiwixmobile.R;
 
 class StorageSelectArrayAdapter extends ArrayAdapter<StorageDevice> {
@@ -34,7 +34,7 @@ class StorageSelectArrayAdapter extends ArrayAdapter<StorageDevice> {
 
   private final String mExternal;
 
-  public StorageSelectArrayAdapter(Context context, int resource, ArrayList<StorageDevice> devices,
+  public StorageSelectArrayAdapter(Context context, int resource, List<StorageDevice> devices,
       String internal, String external) {
     super(context, resource, devices);
     mInternal = internal;
@@ -60,7 +60,7 @@ class StorageSelectArrayAdapter extends ArrayAdapter<StorageDevice> {
     } else {
       holder.fileName.setText(mExternal);
     }
-    holder.fileSize.setText(device.getSize() + " / " + device.getTotalSize());
+    holder.fileSize.setText(device.getAvailableSpace() + " / " + device.getTotalSize());
 
     return convertView;
   }

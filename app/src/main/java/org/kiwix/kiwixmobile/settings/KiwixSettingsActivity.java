@@ -342,7 +342,7 @@ public class KiwixSettingsActivity extends BaseActivity {
 
     @Override
     public void selectionCallback(StorageDevice storageDevice) {
-      findPreference(PREF_STORAGE).setSummary(storageDevice.getSize());
+      findPreference(PREF_STORAGE).setSummary(storageDevice.getAvailableSpace());
       sharedPreferenceUtil.putPrefStorage(storageDevice.getName());
       if (storageDevice.isInternal()) {
         findPreference(PREF_STORAGE).setTitle(getResources().getString(R.string.internal_storage));
