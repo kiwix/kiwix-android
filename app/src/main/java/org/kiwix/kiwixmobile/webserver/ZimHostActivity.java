@@ -90,7 +90,7 @@ public class ZimHostActivity extends BaseActivity implements
   ArrayList<String> selectedBooksPath = new ArrayList<>();
 
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_zim_host);
 
@@ -191,7 +191,7 @@ public class ZimHostActivity extends BaseActivity implements
     }
   }
 
-  public void open(BooksOnDiskListItem.BookOnDisk bookOnDisk) {
+  public void open(@Nullable BooksOnDiskListItem.BookOnDisk bookOnDisk) {
     File file = bookOnDisk.getFile();
     Intent zimFile = new Intent(this, MainActivity.class);
     zimFile.setData(Uri.fromFile(file));
@@ -199,7 +199,7 @@ public class ZimHostActivity extends BaseActivity implements
     finish();
   }
 
-  public void select(BooksOnDiskListItem.BookOnDisk bookOnDisk) {
+  public void select(@NonNull BooksOnDiskListItem.BookOnDisk bookOnDisk) {
     ArrayList<BooksOnDiskListItem> booksList = new ArrayList<>();
     for (BooksOnDiskListItem item : booksAdapter.getItems()) {
       if (item.equals(bookOnDisk)) {
@@ -462,7 +462,7 @@ public class ZimHostActivity extends BaseActivity implements
     }
   }
 
-  @Override public void serverStarted(String ip) {
+  @Override public void serverStarted(@NonNull String ip) {
     this.ip = ip;
     serverTextView.setText(getString(R.string.server_started_message, this.ip));
     startServerButton.setText(getString(R.string.stop_server_label));
@@ -481,7 +481,7 @@ public class ZimHostActivity extends BaseActivity implements
     Toast.makeText(this, R.string.server_failed_message, Toast.LENGTH_LONG).show();
   }
 
-  @Override public void hotspotTurnedOn(WifiConfiguration wifiConfiguration) {
+  @Override public void hotspotTurnedOn(@NonNull WifiConfiguration wifiConfiguration) {
 
     //Show an alert dialog for hotspot details
     AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
@@ -543,7 +543,7 @@ public class ZimHostActivity extends BaseActivity implements
     dialog.show();
   }
 
-  @Override public void hotspotState(Boolean state) {
+  @Override public void hotspotState(@Nullable Boolean state) {
     if (state) //if hotspot is already enabled, turn it off.
     {
       startService(ACTION_TURN_OFF_AFTER_O);
@@ -553,14 +553,14 @@ public class ZimHostActivity extends BaseActivity implements
     }
   }
 
-  @Override protected void onSaveInstanceState(Bundle outState) {
+  @Override protected void onSaveInstanceState(@Nullable Bundle outState) {
     super.onSaveInstanceState(outState);
     if (isServerStarted) {
       outState.putString(IP_STATE_KEY, ip);
     }
   }
 
-  @Override public void addBooks(List<BooksOnDiskListItem> books) {
+  @Override public void addBooks(@Nullable List<BooksOnDiskListItem> books) {
     booksAdapter.setItems(books);
   }
 }
