@@ -97,9 +97,9 @@ public class ZimHostActivity extends BaseActivity implements
     setUpToolbar();
 
     if (savedInstanceState != null) {
+      ip = savedInstanceState.getString(IP_STATE_KEY);
       serverTextView.setText(
-          getString(R.string.server_started_message) + " " + savedInstanceState.getString(
-              IP_STATE_KEY));
+          getString(R.string.server_started_message, ip));
       startServerButton.setText(getString(R.string.stop_server_label));
       startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
     }
@@ -259,7 +259,7 @@ public class ZimHostActivity extends BaseActivity implements
     if (isServerStarted) {
       ip = getAddress();
       ip = ip.replaceAll("\n", "");
-      serverTextView.setText(getString(R.string.server_started_message) + " " + ip);
+      serverTextView.setText(getString(R.string.server_started_message, ip));
       startServerButton.setText(getString(R.string.stop_server_label));
       startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
     }
@@ -464,7 +464,7 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override public void serverStarted(String ip) {
     this.ip = ip;
-    serverTextView.setText(getString(R.string.server_started_message) + " " + this.ip);
+    serverTextView.setText(getString(R.string.server_started_message, this.ip));
     startServerButton.setText(getString(R.string.stop_server_label));
     startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
     isServerStarted = true;

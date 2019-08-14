@@ -54,7 +54,7 @@
   <string name="start_server_label">Start server</string>
   <string name="stop_server_label">Stop server</string>
   <string name="server_started_title">Server started</string>
-  <string name="server_started_message">Enter this ip address into your browser to access the server</string>
+  <string name="server_started_message">Enter this ip address into your browser to access the server %s</string>
   <string name="error_filenotfound">Error: The selected ZIM file could not be found.</string>
   <string name="error_fileinvalid">Error: The selected file is not a valid ZIM file.</string>
   <string name="error_articleurlnotfound">Error: Loading article (Url: %1$s) failed.</string>
