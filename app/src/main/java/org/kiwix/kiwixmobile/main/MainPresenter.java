@@ -119,8 +119,8 @@ class MainPresenter extends BasePresenter<MainContract.View> implements MainCont
   }
 
   @Override
-  public void deleteBookmark(BookmarkItem bookmark) {
-    dataSource.deleteBookmark(bookmark)
+  public void deleteBookmark(String bookmarkUrl) {
+    dataSource.deleteBookmark(bookmarkUrl)
         .subscribe(new CompletableObserver() {
           @Override
           public void onSubscribe(Disposable d) {

@@ -5,9 +5,7 @@ import io.reactivex.Flowable;
 import io.reactivex.Single;
 import java.util.List;
 import org.kiwix.kiwixmobile.bookmark.BookmarkItem;
-import org.kiwix.kiwixmobile.data.local.entity.Bookmark;
 import org.kiwix.kiwixmobile.history.HistoryListItem;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity;
 import org.kiwix.kiwixmobile.zim_manager.Language;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
@@ -40,7 +38,7 @@ public interface DataSource {
 
   Completable deleteBookmarks(List<BookmarkItem> bookmarks);
 
-  Completable deleteBookmark(BookmarkItem bookmark);
+  Completable deleteBookmark(String bookmarkUrl);
 
   Flowable<List<BooksOnDiskListItem>> booksOnDiskAsListItems();
 }
