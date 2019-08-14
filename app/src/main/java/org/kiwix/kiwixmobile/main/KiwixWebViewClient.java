@@ -34,6 +34,7 @@ import org.kiwix.kiwixmobile.data.ZimContentProvider;
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 import static org.kiwix.kiwixmobile.utils.Constants.EXTRA_EXTERNAL_LINK;
+import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
 public class KiwixWebViewClient extends WebViewClient {
 
@@ -91,11 +92,19 @@ public class KiwixWebViewClient extends WebViewClient {
 
   @Override
   public void onPageFinished(WebView view, String url) {
-    if ((url.equals("content://" + BuildConfig.APPLICATION_ID + ".zim.base/null"))
-        && !BuildConfig.IS_CUSTOM_APP) {
-      inflateHomeView(view);
-      return;
+    boolean invalidUrl = url.equals("content://" + BuildConfig.APPLICATION_ID + ".zim.base/null");
+    Log.d(TAG_KIWIX, "invalidUrl = " + invalidUrl);
+
+    if (invalidUrl) {
+      if (BuildConfig.IS_CUSTOM_APP) {
+        Log.e(TAG_KIWIX, "Abandoning WebView as there's a problem getting the content for this custom app.");
+        return;
+      } else {
+        inflateHomeView(view);
+        return;
+      }
     }
+
     if (!url.equals("file:///android_asset/home.html")) {
       view.removeView(home);
     } else if (!BuildConfig.IS_CUSTOM_APP) {
