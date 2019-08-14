@@ -74,6 +74,7 @@ public class ZimHostActivity extends BaseActivity implements
   public static final String ACTION_IS_HOTSPOT_ENABLED = "Is_hotspot_enabled";
   public static final String ACTION_START_SERVER = "start_server";
   public static final String ACTION_STOP_SERVER = "stop_server";
+  public static final String SELECTED_ZIM_PATHS_KEY = "selected_zim_paths";
   private static final String IP_STATE_KEY = "ip_state_key";
   private static final String TAG = "ZimHostActivity";
   private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
@@ -146,28 +147,38 @@ public class ZimHostActivity extends BaseActivity implements
     startServerButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
 
-        //Get File Path of All The ZIMs using booksAdapter
-
-        getSelectedBooksPath();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          toggleHotspot();
-        } else {
-          //TO DO: show Dialog() + within that add check mobile Data check later.
-          //if (isMobileDataEnabled(context)) {
-          //  mobileDataDialog();
-          //} else {
-          if (isServerStarted) {
-            startService(ACTION_STOP_SERVER);
+        //Get the path of ZIMs user has selected
+        if (!isServerStarted) {
+          getSelectedBooksPath();
+          if (selectedBooksPath.size() > 0) {
+            startHotspotHelper();
           } else {
-            startHotspotDialog();
+            Toast.makeText(ZimHostActivity.this, R.string.no_books_selected_toast_message,
+                Toast.LENGTH_SHORT).show();
           }
-          //}
+        } else {
+          startHotspotHelper();
         }
       }
     });
   }
 
+  void startHotspotHelper() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      toggleHotspot();
+    } else {
+      //TO DO: show Dialog() + within that add check mobile Data check later.
+      //if (isMobileDataEnabled(context)) {
+      //  mobileDataDialog();
+      //} else {
+      if (isServerStarted) {
+        startService(ACTION_STOP_SERVER);
+      } else {
+        startHotspotDialog();
+      }
+      //}
+    }
+  }
   void getSelectedBooksPath() {
     BooksOnDiskListItem.BookOnDisk bookOnDisk;
 
@@ -191,13 +202,15 @@ public class ZimHostActivity extends BaseActivity implements
 
   public void select(BooksOnDiskListItem.BookOnDisk bookOnDisk) {
     ArrayList<BooksOnDiskListItem> booksList = new ArrayList<>();
-    booksList.addAll(booksAdapter.getItems());
-    int i = 0;
     for (BooksOnDiskListItem item : booksAdapter.getItems()) {
       if (item.equals(bookOnDisk)) {
-        booksList.get(i).setSelected(!bookOnDisk.isSelected());
+        if (item.isSelected()) {
+          item.setSelected(false);
+        } else {
+          item.setSelected(true);
+        }
       }
-      i++;
+      booksList.add(item);
     }
     booksAdapter.setItems(booksList);
   }
@@ -422,6 +435,9 @@ public class ZimHostActivity extends BaseActivity implements
   }
 
   void startService(String ACTION) {
+    if (ACTION.equals(ACTION_START_SERVER)) {
+      serviceIntent.putStringArrayListExtra(SELECTED_ZIM_PATHS_KEY, selectedBooksPath);
+    }
     serviceIntent.setAction(ACTION);
     this.startService(serviceIntent);
   }
@@ -482,7 +498,6 @@ public class ZimHostActivity extends BaseActivity implements
         public void run() {
           progressDialog.dismiss();
           startService(ACTION_START_SERVER);
-          //webServerHelper.startServerHelper();
         }
       }, 2000);
     });
@@ -496,6 +511,8 @@ public class ZimHostActivity extends BaseActivity implements
     builder.setCancelable(false);
     AlertDialog dialog = builder.create();
     dialog.show();
+
+    //setupServer();
   }
 
   private void setupWifiSettingsIntent() {

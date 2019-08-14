@@ -1,10 +1,15 @@
 package org.kiwix.kiwixmobile.webserver;
 
 import android.content.Context;
+import android.util.Log;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import org.kiwix.kiwixlib.JNIKiwixException;
+import org.kiwix.kiwixlib.JNIKiwixLibrary;
+import org.kiwix.kiwixlib.JNIKiwixServer;
 
 /**
  * WebServerHelper class is used to set up the suitable environment i.e. getting the
@@ -16,32 +21,34 @@ public class WebServerHelper {
   Context context;
   public static boolean isServerStarted;
   static int port;
+  JNIKiwixLibrary kiwixLibrary = new JNIKiwixLibrary();
+  JNIKiwixServer kiwixServer = new JNIKiwixServer(kiwixLibrary);
+  private static final String TAG = "WebServerHelper";
 
   public WebServerHelper(Context context) {
     this.context = context;
   }
 
-  public void startServerHelper(ServerStateListener stateListener) {
+  public boolean startServerHelper(ServerStateListener stateListener,
+      ArrayList<String> selectedBooksPath) {
 
     // 1. Get port from settings screen
     // 2. Ask user to change port in settings if port is in use.
     // OR
     // Always use 8080 and when its not available then iterate this number.
-
-    if (!isServerStarted && startAndroidWebServer()) {
-      isServerStarted = true;
-      String ip = getIpAddress();
-      ip = ip.replaceAll("\n", "");
-      if (ip.length() == 0) {
-        stateListener.serverFailed();
-      } else {
-        stateListener.serverStarted("http://" + ip + ":" + port);
-      }
+    String ip = getIpAddress();
+    ip = ip.replaceAll("\n", "");
+    if (ip.length() == 0) {
+      stateListener.serverFailed();
+    } else if (!isServerStarted && startAndroidWebServer(selectedBooksPath)) {
+      stateListener.serverStarted("http://" + ip + ":" + port);
     }
+    return isServerStarted;
   }
 
-  public static boolean stopAndroidWebServer(ServerStateListener stateListener) {
+  public boolean stopAndroidWebServer(ServerStateListener stateListener) {
     if (isServerStarted) {
+      kiwixServer.stop();
       isServerStarted = false;
       stateListener.serverStopped();
       return true;
@@ -49,13 +56,23 @@ public class WebServerHelper {
     return false;
   }
 
-  boolean startAndroidWebServer() {
+  boolean startAndroidWebServer(ArrayList<String> selectedBooksPath) {
     if (!isServerStarted) {
       port = 8080;
       //Call to start server
-      return true;
+      for (String path : selectedBooksPath) {
+        try {
+          boolean isBookAdded = kiwixLibrary.addBook(path);
+          Log.v(TAG, "Book added:" + path);
+        } catch (JNIKiwixException e) {
+          Log.v(TAG, "Couldn't add book " + path);
+        }
+      }
+      kiwixServer.setPort(port);
+      isServerStarted = kiwixServer.start();
+      Log.v(TAG, "Server status" + isServerStarted);
     }
-    return false;
+    return isServerStarted;
   }
 
   // get Ip address of the device's wireless access point i.e. wifi hotspot OR wifi network

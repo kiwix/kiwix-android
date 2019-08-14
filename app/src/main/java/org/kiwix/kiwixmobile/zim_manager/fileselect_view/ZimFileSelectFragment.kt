@@ -159,4 +159,3 @@ class ZimFileSelectFragment : BaseFragment() {
     zimManageViewModel.requestFileSystemCheck.onNext(Unit)
   }
 }
-

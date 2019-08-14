@@ -13,8 +13,8 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.utils.Constants;
@@ -27,6 +27,7 @@ import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_START_SERVE
 import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_STOP_SERVER;
 import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_TURN_OFF_AFTER_O;
 import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_TURN_ON_AFTER_O;
+import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.SELECTED_ZIM_PATHS_KEY;
 
 /**
  * HotspotService is used to add a foreground service for the wifi hotspot.
@@ -65,8 +66,6 @@ public class HotspotService extends Service {
     webServerHelper = new WebServerHelper(this);
 
     notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-    startForeground(HOTSPOT_NOTIFICATION_ID,
-        buildForegroundNotification(getString(R.string.hotspot_start), false));
   }
 
   @Override public int onStartCommand(Intent intent, int flags, int startId) {
@@ -80,9 +79,9 @@ public class HotspotService extends Service {
 
       case ACTION_TURN_ON_AFTER_O:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          //serverStateListener.hotspotTurnedOn(hotspotManager.turnOnHotspot());
           hotspotManager.turnOnHotspot(serverStateListener);
-          updateNotification(getString(R.string.hotspot_running), true);
+          startForeground(HOTSPOT_NOTIFICATION_ID,
+              buildForegroundNotification(getString(R.string.hotspot_running), true));
         }
         break;
 
@@ -93,10 +92,18 @@ public class HotspotService extends Service {
         break;
 
       case ACTION_START_SERVER:
-        webServerHelper.startServerHelper(serverStateListener);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-          updateNotification(getString(R.string.hotspot_running), true);
+        if (!webServerHelper.startServerHelper(serverStateListener,
+            intent.getStringArrayListExtra(SELECTED_ZIM_PATHS_KEY))) {
+          Toast.makeText(this, R.string.server_failed_toast_message, Toast.LENGTH_LONG).show();
+        } else {
+          if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            startForeground(HOTSPOT_NOTIFICATION_ID,
+                buildForegroundNotification(getString(R.string.hotspot_running), true));
+          }
+          Toast.makeText(this, R.string.server_started__successfully_toast_message,
+              Toast.LENGTH_LONG).show();
         }
+
         break;
 
       case ACTION_STOP_SERVER:
@@ -134,11 +141,6 @@ public class HotspotService extends Service {
           stopHotspot);
     }
     return (builder.build());
-  }
-
-  private void updateNotification(String status, boolean stopAction) {
-    notificationManager.notify(HOTSPOT_NOTIFICATION_ID,
-        buildForegroundNotification(status, stopAction));
   }
 
   //Dismiss notification and turn off hotspot for devices>=O

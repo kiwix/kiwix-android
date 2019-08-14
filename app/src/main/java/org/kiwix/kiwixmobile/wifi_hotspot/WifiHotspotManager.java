@@ -31,7 +31,6 @@ public class WifiHotspotManager {
   //Workaround to turn on hotspot for Oreo versions
   @RequiresApi(api = Build.VERSION_CODES.O)
   public void turnOnHotspot(ServerStateListener serverStateListener) {
-    if (!isHotspotEnabled) {
       wifiManager.startLocalOnlyHotspot(new WifiManager.LocalOnlyHotspotCallback() {
 
         @Override
@@ -48,6 +47,8 @@ public class WifiHotspotManager {
           serverStateListener.hotspotTurnedOn(currentConfig);
 
           isHotspotEnabled = true;
+
+          Log.v(TAG, "Is hotspot enabled? " + isHotspotEnabled);
         }
 
         @Override
@@ -62,9 +63,10 @@ public class WifiHotspotManager {
           super.onFailed(reason);
           Log.v(TAG, "Local Hotspot failed to start");
           serverStateListener.hotspotFailed();
+          isHotspotEnabled = false;
+          Log.v(TAG, "Is hotspot enabled? " + isHotspotEnabled);
         }
       }, new Handler());
-    }
   }
 
   //Workaround to turn off hotspot for Oreo versions
