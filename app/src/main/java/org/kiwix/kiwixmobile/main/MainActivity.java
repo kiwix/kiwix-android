@@ -369,7 +369,9 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       } else {
         Log.e(TAG_KIWIX, "Problem finding the content, no more OnCreate() code");
         // What should we do here? exit? I'll investigate empirically.
-        return;
+        // It seems unpredictable behaviour if the code returns at this point as yesterday
+        // it didn't crash yet today the app crashes because it tries to load books
+        // in onResume();
       }
 
     } else {
