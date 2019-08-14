@@ -109,8 +109,8 @@ class Repository @Inject internal constructor(
     Completable.fromAction { bookmarksDao.deleteBookmarks(bookmarks) }
       .subscribeOn(io)
 
-  override fun deleteBookmark(bookmark: BookmarkItem) =
-    Completable.fromAction { bookmarksDao.deleteBookmark(bookmark) }
+  override fun deleteBookmark(bookmarkUrl: String): Completable? =
+    Completable.fromAction { bookmarksDao.deleteBookmark(bookmarkUrl) }
       .subscribeOn(io)
 
   private fun <SUPERTYPE, ITEM : SUPERTYPE, HEADER : SUPERTYPE> foldOverAddingHeaders(

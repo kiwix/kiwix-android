@@ -1360,17 +1360,15 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
     //Check maybe need refresh
     String articleUrl = getCurrentWebView().getUrl();
     boolean isBookmark = false;
-    BookmarkItem bookmark =
-        BookmarkItem.fromZimContentProvider(getCurrentWebView().getTitle(), articleUrl);
     if (articleUrl != null && !bookmarks.contains(articleUrl)) {
       if (ZimContentProvider.getId() != null) {
-        presenter.saveBookmark(bookmark);
+        presenter.saveBookmark( BookmarkItem.fromZimContentProvider(getCurrentWebView().getTitle(), articleUrl));
       } else {
         Toast.makeText(this, R.string.unable_to_add_to_bookmarks, Toast.LENGTH_SHORT).show();
       }
       isBookmark = true;
     } else if (articleUrl != null) {
-      presenter.deleteBookmark(bookmark);
+      presenter.deleteBookmark(articleUrl);
       isBookmark = false;
     }
     popBookmarkSnackbar(isBookmark);
