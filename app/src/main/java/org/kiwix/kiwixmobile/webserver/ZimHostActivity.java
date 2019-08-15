@@ -144,20 +144,18 @@ public class ZimHostActivity extends BaseActivity implements
 
     serviceIntent = new Intent(this, HotspotService.class);
 
-    startServerButton.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        //Get the path of ZIMs user has selected
-        if (!isServerStarted) {
-          getSelectedBooksPath();
-          if (selectedBooksPath.size() > 0) {
-            startHotspotHelper();
-          } else {
-            Toast.makeText(ZimHostActivity.this, R.string.no_books_selected_toast_message,
-                Toast.LENGTH_SHORT).show();
-          }
-        } else {
+    startServerButton.setOnClickListener(v -> {
+      //Get the path of ZIMs user has selected
+      if (!isServerStarted) {
+        getSelectedBooksPath();
+        if (selectedBooksPath.size() > 0) {
           startHotspotHelper();
+        } else {
+          Toast.makeText(ZimHostActivity.this, R.string.no_books_selected_toast_message,
+              Toast.LENGTH_SHORT).show();
         }
+      } else {
+        startHotspotHelper();
       }
     });
   }
@@ -407,12 +405,9 @@ public class ZimHostActivity extends BaseActivity implements
               true);
       progressDialog.show();
       final Handler handler = new Handler();
-      handler.postDelayed(new Runnable() {
-        @Override
-        public void run() {
-          progressDialog.dismiss();
-          startService(ACTION_START_SERVER);
-        }
+      handler.postDelayed(() -> {
+        progressDialog.dismiss();
+        startService(ACTION_START_SERVER);
       }, 7000);
     });
 
@@ -481,12 +476,9 @@ public class ZimHostActivity extends BaseActivity implements
 
     builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
       final Handler handler = new Handler();
-      handler.postDelayed(new Runnable() {
-        @Override
-        public void run() {
-          progressDialog.dismiss();
-          startService(ACTION_START_SERVER);
-        }
+      handler.postDelayed(() -> {
+        progressDialog.dismiss();
+        startService(ACTION_START_SERVER);
       }, 2000);
     });
 
