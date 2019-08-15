@@ -2,7 +2,6 @@ package org.kiwix.kiwixmobile.webserver;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
