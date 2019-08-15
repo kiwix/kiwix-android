@@ -21,8 +21,8 @@ import org.kiwix.kiwixlib.JNIKiwixServer;
 public class WebServerHelper {
   public static boolean isServerStarted;
   private static int port;
-  private JNIKiwixLibrary kiwixLibrary = new JNIKiwixLibrary();
-  private JNIKiwixServer kiwixServer = new JNIKiwixServer(kiwixLibrary);
+  private final JNIKiwixLibrary kiwixLibrary = new JNIKiwixLibrary();
+  private final JNIKiwixServer kiwixServer = new JNIKiwixServer(kiwixLibrary);
   private static final String TAG = "WebServerHelper";
 
   public WebServerHelper() {
