@@ -64,7 +64,7 @@ public class HotspotService extends Service {
 
     registerReceiver(stopReceiver, new IntentFilter(ACTION_STOP));
 
-    webServerHelper = new WebServerHelper(this);
+    webServerHelper = new WebServerHelper();
 
     notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
   }

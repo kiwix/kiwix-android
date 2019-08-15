@@ -1,6 +1,5 @@
 package org.kiwix.kiwixmobile.webserver;
 
-import android.content.Context;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,15 +19,14 @@ import org.kiwix.kiwixlib.JNIKiwixServer;
  */
 
 public class WebServerHelper {
-  private Context context;
   public static boolean isServerStarted;
   private static int port;
   private JNIKiwixLibrary kiwixLibrary = new JNIKiwixLibrary();
   private JNIKiwixServer kiwixServer = new JNIKiwixServer(kiwixLibrary);
   private static final String TAG = "WebServerHelper";
 
-  public WebServerHelper(@NonNull Context context) {
-    this.context = context;
+  public WebServerHelper() {
+
   }
 
   public boolean startServerHelper(@NonNull ServerStateListener stateListener,
