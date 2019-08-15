@@ -21,19 +21,27 @@ package eu.mhutti1.utils.storage
 
 import android.os.Build
 import android.os.StatFs
-import android.util.Log
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
-import java.io.IOException
+
+const val LOCATION_EXTENSION = "storageLocationMarker"
 
 data class StorageDevice(
   val file: File,
   val isInternal: Boolean
 ) {
 
-  var isDuplicate = true
+  constructor(path: String, internal: Boolean) : this(File(path), internal)
+
+  init {
+    if (file.exists()) {
+      createLocationCode()
+    }
+  }
+
+  var isDuplicate = false
     private set
 
   val name: String
@@ -62,32 +70,19 @@ data class StorageDevice(
         it.blockSize.toLong() * it.blockCount.toLong()
     }
 
-  constructor(path: String, internal: Boolean) : this(File(path), internal)
-
-  init {
-    if (file.exists()) {
-      createLocationCode()
-    }
-  }
-
   // Create unique file to identify duplicate devices.
   private fun createLocationCode() {
     if (!getLocationCodeFromFolder(file)) {
-      val locationCode = File(file.path, ".storageLocationMarker")
-      try {
+      File(file.path, ".$LOCATION_EXTENSION").let { locationCode ->
         locationCode.createNewFile()
-        val fw = FileWriter(locationCode)
-        fw.write(file.path)
-        fw.close()
-      } catch (e: IOException) {
-        Log.d("android-storage-devices", "Unable to create marker file, duplicates may be listed")
+        FileWriter(locationCode).use { it.write(file.path) }
       }
     }
   }
 
   // Check if there is already a device code in our path
   private fun getLocationCodeFromFolder(folder: File): Boolean {
-    val locationCode = File(folder.path, ".storageLocationMarker")
+    val locationCode = File(folder.path, ".$LOCATION_EXTENSION")
     if (locationCode.exists()) {
       try {
         BufferedReader(FileReader(locationCode)).use { br ->
@@ -102,11 +97,11 @@ data class StorageDevice(
         return true
       }
     }
-    val parentFile = folder.parentFile
-    if (parentFile == null) {
+    val parent = folder.parentFile
+    if (parent == null) {
       isDuplicate = false
       return false
     }
-    return getLocationCodeFromFolder(parentFile)
+    return getLocationCodeFromFolder(parent)
   }
 }
