@@ -1334,7 +1334,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           } else {
             finish();
           }
-
+          return true;
         case KeyEvent.KEYCODE_MENU:
           openOptionsMenu();
           return true;
