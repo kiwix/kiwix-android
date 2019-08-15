@@ -111,7 +111,7 @@ public class WebServerHelper {
     return ip;
   }
 
-  @Nullable public static String getAddress() {
+  @NonNull public static String getAddress() {
     return "http://" + getIpAddress() + ":" + port;
   }
 }
