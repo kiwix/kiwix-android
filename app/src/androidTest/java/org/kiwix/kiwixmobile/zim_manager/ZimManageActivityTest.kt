@@ -1,7 +1,6 @@
 package org.kiwix.kiwixmobile.zim_manager
 
 import okhttp3.mockwebserver.MockResponse
-import org.junit.Rule
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 import org.kiwix.kiwixmobile.KiwixApplication
@@ -16,7 +15,6 @@ import java.util.concurrent.TimeUnit.SECONDS
 
 class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
 
-  @get:Rule
   override var activityRule = activityTestRule<ZimManageActivity> {
     KiwixApplication.setApplicationComponent(testComponent())
   }
