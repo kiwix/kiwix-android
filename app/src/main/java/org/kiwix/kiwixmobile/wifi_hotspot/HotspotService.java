@@ -53,14 +53,14 @@ public class HotspotService extends Service {
 
     hotspotManager = new WifiHotspotManager(this);
 
-      stopReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-          if (intent != null && intent.getAction().equals(ACTION_STOP)) {
-            stopHotspotAndDismissNotification();
-          }
+    stopReceiver = new BroadcastReceiver() {
+      @Override
+      public void onReceive(Context context, Intent intent) {
+        if (intent != null && intent.getAction().equals(ACTION_STOP)) {
+          stopHotspotAndDismissNotification();
         }
-      };
+      }
+    };
 
     registerReceiver(stopReceiver, new IntentFilter(ACTION_STOP));
 
@@ -135,10 +135,10 @@ public class HotspotService extends Service {
     hotspotNotificationChannel();
 
     Intent stopIntent = new Intent(ACTION_STOP);
-      PendingIntent stopHotspot =
-          PendingIntent.getBroadcast(this, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-      builder.addAction(R.drawable.ic_close_white_24dp, getString(R.string.stop_hotspot_button),
-          stopHotspot);
+    PendingIntent stopHotspot =
+        PendingIntent.getBroadcast(this, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    builder.addAction(R.drawable.ic_close_white_24dp, getString(R.string.stop_hotspot_button),
+        stopHotspot);
 
     return (builder.build());
   }
