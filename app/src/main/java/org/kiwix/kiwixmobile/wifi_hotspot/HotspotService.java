@@ -182,7 +182,7 @@ public class HotspotService extends Service {
     }
   }
 
-  public void registerCallBack(@NonNull ServerStateListener myCallback) {
+  public void registerCallBack(@Nullable ServerStateListener myCallback) {
     serverStateListener = myCallback;
   }
 }
