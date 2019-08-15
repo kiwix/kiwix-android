@@ -144,7 +144,7 @@ public class HotspotService extends Service {
   }
 
   //Dismiss notification and turn off hotspot for devices>=O
-  private void stopHotspotAndDismissNotification() {
+  void stopHotspotAndDismissNotification() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       hotspotManager.turnOffHotspot();
     }

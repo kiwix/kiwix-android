@@ -19,9 +19,9 @@ import org.kiwix.kiwixmobile.webserver.ServerStateListener;
 public class WifiHotspotManager {
   private final WifiManager wifiManager;
   private final Context context;
-  private WifiManager.LocalOnlyHotspotReservation hotspotReservation;
-  private boolean isHotspotEnabled;
-  private WifiConfiguration currentConfig;
+  WifiManager.LocalOnlyHotspotReservation hotspotReservation;
+  boolean isHotspotEnabled;
+  WifiConfiguration currentConfig;
   private static final String TAG = "WifiHotspotManager";
 
   public WifiHotspotManager(@NonNull Context context) {

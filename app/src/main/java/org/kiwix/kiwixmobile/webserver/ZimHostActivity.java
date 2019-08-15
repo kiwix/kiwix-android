@@ -82,9 +82,9 @@ public class ZimHostActivity extends BaseActivity implements
   private Task<LocationSettingsResponse> task;
 
   private BooksOnDiskAdapter booksAdapter;
-  private HotspotService hotspotService;
+  HotspotService hotspotService;
   private String ip;
-  private boolean bound;
+  boolean bound;
   private ServiceConnection serviceConnection;
   private ArrayList<String> selectedBooksPath = new ArrayList<>();
 
