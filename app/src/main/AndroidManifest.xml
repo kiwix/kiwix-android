@@ -7,6 +7,10 @@
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+  <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+  <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
   <application
       android:name=".KiwixApplication"
@@ -196,6 +200,20 @@
       <meta-data
           android:name="android.support.PARENT_ACTIVITY"
           android:value="main.MainActivity"/>
+    </activity>
+    <activity android:name=".zim_manager.local_file_transfer.LocalFileTransferActivity"
+        android:label="Send to nearby device"
+        android:screenOrientation="portrait">
+      <intent-filter>
+        <action android:name="android.intent.action.SEND_MULTIPLE"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <data android:mimeType="application/octet-stream"/>
+        <data android:pathPattern=".*\\.zim"/>
+        <data android:pathPattern=".*\\..*\\.zim"/>
+        <data android:pathPattern=".*\\..*\\..*\\.zim"/>
+        <data android:pathPattern=".*\\..*\\..*\\..*\\.zim"/>
+        <data android:host="*"/>
+      </intent-filter>
     </activity>
 
     <receiver android:name=".zim_manager.DownloadNotificationClickedReceiver">
