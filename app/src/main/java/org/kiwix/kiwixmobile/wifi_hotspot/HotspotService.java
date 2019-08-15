@@ -82,7 +82,7 @@ public class HotspotService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
           hotspotManager.turnOnHotspot(serverStateListener);
           startForeground(HOTSPOT_NOTIFICATION_ID,
-              buildForegroundNotification(getString(R.string.hotspot_running), true));
+              buildForegroundNotification(getString(R.string.hotspot_running)));
         }
         break;
 
@@ -99,7 +99,7 @@ public class HotspotService extends Service {
         } else {
           if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             startForeground(HOTSPOT_NOTIFICATION_ID,
-                buildForegroundNotification(getString(R.string.hotspot_running), true));
+                buildForegroundNotification(getString(R.string.hotspot_running)));
           }
           Toast.makeText(this, R.string.server_started__successfully_toast_message,
               Toast.LENGTH_LONG).show();
@@ -120,7 +120,7 @@ public class HotspotService extends Service {
     return serviceBinder;
   }
 
-  private Notification buildForegroundNotification(String status, boolean showStopButton) {
+  private Notification buildForegroundNotification(String status) {
     Log.v(TAG, "Building notification " + status);
     builder = new NotificationCompat.Builder(this);
     builder.setContentTitle("Kiwix Hotspot").setContentText(status);
@@ -134,13 +134,12 @@ public class HotspotService extends Service {
 
     hotspotNotificationChannel();
 
-    if (showStopButton) {
-      Intent stopIntent = new Intent(ACTION_STOP);
+    Intent stopIntent = new Intent(ACTION_STOP);
       PendingIntent stopHotspot =
           PendingIntent.getBroadcast(this, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
       builder.addAction(R.drawable.ic_close_white_24dp, getString(R.string.stop_hotspot_button),
           stopHotspot);
-    }
+
     return (builder.build());
   }
 
