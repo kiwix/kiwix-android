@@ -123,7 +123,8 @@ public class HotspotService extends Service {
   private Notification buildForegroundNotification(String status) {
     Log.v(TAG, "Building notification " + status);
     builder = new NotificationCompat.Builder(this);
-    builder.setContentTitle("Kiwix Hotspot").setContentText(status);
+    builder.setContentTitle(getString(R.string.hotspot_notification_content_title))
+        .setContentText(status);
     Intent targetIntent = new Intent(this, ZimHostActivity.class);
     targetIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     PendingIntent contentIntent =
@@ -167,7 +168,7 @@ public class HotspotService extends Service {
       NotificationChannel hotspotServiceChannel = new NotificationChannel(
           Constants.HOTSPOT_SERVICE_CHANNEL_ID, getString(R.string.hotspot_service_channel_name),
           NotificationManager.IMPORTANCE_DEFAULT);
-      hotspotServiceChannel.setDescription("Sample hotspot description");
+      hotspotServiceChannel.setDescription(getString(R.string.hotspot_channel_description));
       hotspotServiceChannel.setSound(null, null);
       builder.setChannelId(Constants.HOTSPOT_SERVICE_CHANNEL_ID);
       notificationManager.createNotificationChannel(hotspotServiceChannel);
