@@ -290,26 +290,20 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
       @NonNull int[] grantResults) {
-    switch (requestCode) {
-      case MY_PERMISSIONS_ACCESS_FINE_LOCATION: {
+    if (requestCode == MY_PERMISSIONS_ACCESS_FINE_LOCATION) {
         if (grantResults.length > 0
             && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             toggleHotspot();
           }
         }
-        break;
-      }
-      default:
-        break;
     }
   }
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-    switch (requestCode) {
       //Checking the result code for LocationSettings resolution
-      case LOCATION_SETTINGS_PERMISSION_RESULT:
+    if (requestCode == LOCATION_SETTINGS_PERMISSION_RESULT) {
         final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
         switch (resultCode) {
           case Activity.RESULT_OK:
@@ -324,9 +318,6 @@ public class ZimHostActivity extends BaseActivity implements
           default:
             break;
         }
-        break;
-      default:
-        break;
     }
   }
 
