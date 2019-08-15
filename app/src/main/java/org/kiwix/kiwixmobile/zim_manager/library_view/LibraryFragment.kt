@@ -17,7 +17,6 @@
  */
 package org.kiwix.kiwixmobile.zim_manager.library_view
 
-import android.annotation.SuppressLint
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -49,7 +48,6 @@ import org.kiwix.kiwixmobile.utils.DialogShower
 import org.kiwix.kiwixmobile.utils.KiwixDialog.YesNoDialog.WifiOnly
 import org.kiwix.kiwixmobile.utils.NetworkUtils
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
-import org.kiwix.kiwixmobile.utils.StyleUtils
 import org.kiwix.kiwixmobile.utils.TestingUtils
 import org.kiwix.kiwixmobile.zim_manager.NetworkState
 import org.kiwix.kiwixmobile.zim_manager.NetworkState.CONNECTED
@@ -210,23 +208,9 @@ class LibraryFragment : BaseFragment() {
   private fun notEnoughSpaceAvailable(item: BookItem) =
     spaceAvailable < item.book.size.toLong() * 1024f
 
-  @SuppressLint("ImplicitSamInstance")
-  private fun showStorageSelectDialog() {
-    StorageSelectDialog()
-      .apply {
-        arguments = Bundle().apply {
-          putString(
-            StorageSelectDialog.STORAGE_DIALOG_INTERNAL,
-            this@LibraryFragment.getString(string.internal_storage)
-          )
-          putString(
-            StorageSelectDialog.STORAGE_DIALOG_EXTERNAL,
-            this@LibraryFragment.getString(string.external_storage)
-          )
-          putInt(StorageSelectDialog.STORAGE_DIALOG_THEME, StyleUtils.dialogStyle())
-        }
-        setOnSelectListener(::storeDeviceInPreferences)
-      }
-      .show(fragmentManager, getString(string.pref_storage))
-  }
+  private fun showStorageSelectDialog() = StorageSelectDialog()
+    .apply {
+      setOnSelectListener(::storeDeviceInPreferences)
+    }
+    .show(fragmentManager!!, getString(string.pref_storage))
 }
