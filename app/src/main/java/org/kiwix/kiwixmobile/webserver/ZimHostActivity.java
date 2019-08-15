@@ -281,7 +281,7 @@ public class ZimHostActivity extends BaseActivity implements
   }
 
   //This method sends the user to data usage summary settings activity
-  private void openDataUsageActivity() {
+  private void openMobileDataActivity() {
     Intent intent = new Intent();
     intent.setComponent(new ComponentName("com.android.settings",
         "com.android.settings.Settings$DataUsageSummaryActivity"));
@@ -447,7 +447,7 @@ public class ZimHostActivity extends BaseActivity implements
       AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
 
       builder.setPositiveButton(this.getString(R.string.yes),
-          (dialog, id) -> openDataUsageActivity());
+          (dialog, id) -> openMobileDataActivity());
       builder.setNegativeButton((android.R.string.no), (dialog, id) -> {
         startHotspotDialog();
       });
