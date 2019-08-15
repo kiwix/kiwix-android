@@ -38,15 +38,19 @@ import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.Task;
+import dagger.android.AndroidInjection;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.main.MainActivity;
+import org.kiwix.kiwixmobile.utils.AlertDialogShower;
+import org.kiwix.kiwixmobile.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.wifi_hotspot.HotspotService;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.SelectionMode;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
@@ -67,6 +71,8 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Inject
   ZimHostContract.Presenter presenter;
+
+  @Inject AlertDialogShower alertDialogShower;
 
   public static final String ACTION_TURN_ON_AFTER_O = "Turn_on_hotspot_after_oreo";
   public static final String ACTION_TURN_OFF_AFTER_O = "Turn_off_hotspot_after_oreo";
@@ -92,6 +98,8 @@ public class ZimHostActivity extends BaseActivity implements
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_zim_host);
+
+    AndroidInjection.inject(this);
 
     setUpToolbar();
 
@@ -491,7 +499,7 @@ public class ZimHostActivity extends BaseActivity implements
     //setupServer();
   }
 
-  private void setupWifiSettingsIntent() {
+  void setupWifiSettingsIntent() {
     final Intent intent = new Intent(Intent.ACTION_MAIN, null);
     intent.addCategory(Intent.CATEGORY_LAUNCHER);
     final ComponentName cn =
@@ -504,19 +512,13 @@ public class ZimHostActivity extends BaseActivity implements
   @Override public void hotspotFailed() {
     //Show a dialog to turn off default hotspot
 
-    AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
-
-    builder.setPositiveButton(getString(R.string.go_to_wifi_settings_label), (dialog, id) -> {
-      //Open wifi settings intent
-      setupWifiSettingsIntent();
-    });
-
-    builder.setTitle(this.getString(R.string.hotspot_failed_title));
-    builder.setMessage(
-        this.getString(R.string.hotspot_failed_message));
-
-    AlertDialog dialog = builder.create();
-    dialog.show();
+    alertDialogShower.show(KiwixDialog.HotspotFailed.INSTANCE,
+        new Function0<Unit>() {
+          @Override public Unit invoke() {
+            setupWifiSettingsIntent();
+            return Unit.INSTANCE;
+          }
+        });
   }
 
   @Override public void hotspotState(@Nullable Boolean state) {
