@@ -82,12 +82,12 @@ public class ZimHostActivity extends BaseActivity implements
   private Intent serviceIntent;
   private Task<LocationSettingsResponse> task;
 
-  BooksOnDiskAdapter booksAdapter;
-  HotspotService hotspotService;
-  String ip;
-  boolean bound;
-  ServiceConnection serviceConnection;
-  ArrayList<String> selectedBooksPath = new ArrayList<>();
+  private BooksOnDiskAdapter booksAdapter;
+  private HotspotService hotspotService;
+  private String ip;
+  private boolean bound;
+  private ServiceConnection serviceConnection;
+  private ArrayList<String> selectedBooksPath = new ArrayList<>();
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -162,7 +162,7 @@ public class ZimHostActivity extends BaseActivity implements
     });
   }
 
-  void startHotspotHelper() {
+  private void startHotspotHelper() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       toggleHotspot();
     } else {
@@ -178,7 +178,8 @@ public class ZimHostActivity extends BaseActivity implements
       //}
     }
   }
-  void getSelectedBooksPath() {
+
+  private void getSelectedBooksPath() {
     BooksOnDiskListItem.BookOnDisk bookOnDisk;
 
     for (BooksOnDiskListItem item : booksAdapter.getItems()) {
@@ -191,7 +192,7 @@ public class ZimHostActivity extends BaseActivity implements
     }
   }
 
-  public void open(@Nullable BooksOnDiskListItem.BookOnDisk bookOnDisk) {
+  private void open(@Nullable BooksOnDiskListItem.BookOnDisk bookOnDisk) {
     File file = bookOnDisk.getFile();
     Intent zimFile = new Intent(this, MainActivity.class);
     zimFile.setData(Uri.fromFile(file));
@@ -199,7 +200,7 @@ public class ZimHostActivity extends BaseActivity implements
     finish();
   }
 
-  public void select(@NonNull BooksOnDiskListItem.BookOnDisk bookOnDisk) {
+  private void select(@NonNull BooksOnDiskListItem.BookOnDisk bookOnDisk) {
     ArrayList<BooksOnDiskListItem> booksList = new ArrayList<>();
     for (BooksOnDiskListItem item : booksAdapter.getItems()) {
       if (item.equals(bookOnDisk)) {
@@ -238,8 +239,7 @@ public class ZimHostActivity extends BaseActivity implements
     }
   }
 
-  @RequiresApi(api = Build.VERSION_CODES.O)
-  void toggleHotspot() {
+  @RequiresApi(api = Build.VERSION_CODES.O) private void toggleHotspot() {
     //Check if location permissions are granted
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         == PackageManager.PERMISSION_GRANTED) {
@@ -336,7 +336,7 @@ public class ZimHostActivity extends BaseActivity implements
     toolbar.setNavigationOnClickListener(v -> onBackPressed());
   }
 
-  void setupLocationServices() {
+  private void setupLocationServices() {
     LocationRequest locationRequest = new LocationRequest();
     locationRequest.setInterval(10);
     locationRequest.setSmallestDisplacement(10);
@@ -392,7 +392,7 @@ public class ZimHostActivity extends BaseActivity implements
   }
 
   //Advice user to turn on hotspot manually for API<26
-  void startHotspotDialog() {
+  private void startHotspotDialog() {
     AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
 
     builder.setPositiveButton(getString(R.string.go_to_settings_label), (dialog, id) -> {
@@ -425,7 +425,7 @@ public class ZimHostActivity extends BaseActivity implements
     dialog.show();
   }
 
-  void startService(String ACTION) {
+  private void startService(String ACTION) {
     if (ACTION.equals(ACTION_START_SERVER)) {
       serviceIntent.putStringArrayListExtra(SELECTED_ZIM_PATHS_KEY, selectedBooksPath);
     }
