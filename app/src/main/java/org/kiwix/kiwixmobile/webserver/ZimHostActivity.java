@@ -279,10 +279,7 @@ public class ZimHostActivity extends BaseActivity implements
 
   //This method sends the user to data usage summary settings activity
   private void openMobileDataActivity() {
-    Intent intent = new Intent();
-    intent.setComponent(new ComponentName("com.android.settings",
-        "com.android.settings.Settings$DataUsageSummaryActivity"));
-    startActivity(intent);
+    startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
   }
 
   @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
