@@ -29,6 +29,28 @@ sealed class KiwixDialog(
     override fun hashCode() = args.contentHashCode()
   }
 
+  object LocationPermissionRationale : KiwixDialog(
+      null, R.string.permission_rationale_location, android.R.string.yes, android.R.string.cancel
+  )
+
+  object StoragePermissionRationale : KiwixDialog(
+      null, R.string.request_storage, android.R.string.yes, android.R.string.cancel
+  )
+
+  object EnableWifiP2pServices : KiwixDialog(
+      null, R.string.request_enable_wifi, R.string.yes, android.R.string.no
+  )
+
+  object EnableLocationServices : KiwixDialog(
+      null, R.string.request_enable_location, R.string.yes, android.R.string.no
+  )
+
+  data class FileTransferConfirmation(override val args: Array<out Any>) : KiwixDialog(
+      null, R.string.transfer_to, R.string.yes, android.R.string.cancel
+  ), HasBodyFormatArgs {
+    constructor(selectedPeerDeviceName: String) : this(arrayOf(selectedPeerDeviceName))
+  }
+
   open class YesNoDialog(
     title: Int,
     message: Int

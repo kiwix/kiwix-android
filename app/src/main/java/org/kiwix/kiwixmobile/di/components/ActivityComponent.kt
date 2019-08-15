@@ -25,6 +25,7 @@ import org.kiwix.kiwixmobile.downloader.DownloadFragment
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.ZimFileSelectFragment
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.effects.DeleteFiles
 import org.kiwix.kiwixmobile.zim_manager.library_view.LibraryFragment
+import org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTransferActivity
 
 @Subcomponent(modules = [ActivityModule::class])
 interface ActivityComponent {
@@ -35,6 +36,8 @@ interface ActivityComponent {
   fun inject(zimFileSelectFragment: ZimFileSelectFragment)
 
   fun inject(deleteFiles: DeleteFiles)
+
+  fun inject(localFileTransferActivity: LocalFileTransferActivity)
 
   @Subcomponent.Builder
   interface Builder {

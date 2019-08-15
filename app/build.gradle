@@ -239,7 +239,8 @@ android {
 
     warning 'UnknownNullness',
         'SelectableText',
-        'IconDensities'
+        'IconDensities',
+        'SyntheticAccessor'
     baseline file("lint-baseline.xml")
   }
 

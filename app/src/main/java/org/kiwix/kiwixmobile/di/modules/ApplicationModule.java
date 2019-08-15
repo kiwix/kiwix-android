@@ -21,6 +21,7 @@ import android.app.Application;
 import android.app.DownloadManager;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.location.LocationManager;
 import dagger.Module;
 import dagger.Provides;
 import dagger.android.AndroidInjectionModule;
@@ -92,5 +93,10 @@ public class ApplicationModule {
   @Provides @Singleton
   UriToFileConverter provideUriToFIleCOnverter() {
     return new UriToFileConverter.Impl();
+  }
+
+  @Provides @Singleton
+  LocationManager provideLocationManager(Context context) {
+    return (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
   }
 }
