@@ -43,9 +43,9 @@ public class HotspotService extends Service {
   private BroadcastReceiver stopReceiver;
   private NotificationManager notificationManager;
   private NotificationCompat.Builder builder;
-  ServerStateListener serverStateListener;
-  IBinder serviceBinder = new HotspotBinder();
-  WebServerHelper webServerHelper;
+  private ServerStateListener serverStateListener;
+  private IBinder serviceBinder = new HotspotBinder();
+  private WebServerHelper webServerHelper;
 
   @Override public void onCreate() {
 
@@ -144,7 +144,7 @@ public class HotspotService extends Service {
   }
 
   //Dismiss notification and turn off hotspot for devices>=O
-  void stopHotspotAndDismissNotification() {
+  private void stopHotspotAndDismissNotification() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       hotspotManager.turnOffHotspot();
     }
