@@ -20,11 +20,11 @@ import org.kiwix.kiwixlib.JNIKiwixServer;
  */
 
 public class WebServerHelper {
-  Context context;
+  private Context context;
   public static boolean isServerStarted;
-  static int port;
-  JNIKiwixLibrary kiwixLibrary = new JNIKiwixLibrary();
-  JNIKiwixServer kiwixServer = new JNIKiwixServer(kiwixLibrary);
+  private static int port;
+  private JNIKiwixLibrary kiwixLibrary = new JNIKiwixLibrary();
+  private JNIKiwixServer kiwixServer = new JNIKiwixServer(kiwixLibrary);
   private static final String TAG = "WebServerHelper";
 
   public WebServerHelper(@NonNull Context context) {
@@ -58,7 +58,7 @@ public class WebServerHelper {
     return false;
   }
 
-  boolean startAndroidWebServer(ArrayList<String> selectedBooksPath) {
+  private boolean startAndroidWebServer(ArrayList<String> selectedBooksPath) {
     if (!isServerStarted) {
       port = 8080;
       //Call to start server
@@ -78,7 +78,7 @@ public class WebServerHelper {
   }
 
   // get Ip address of the device's wireless access point i.e. wifi hotspot OR wifi network
-  static String getIpAddress() {
+  private static String getIpAddress() {
     String ip = "";
     try {
       Enumeration<NetworkInterface> enumNetworkInterfaces = NetworkInterface
