@@ -69,7 +69,7 @@ public class HotspotService extends Service {
     notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
   }
 
-  @Override public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
+  @Override public int onStartCommand(@NonNull Intent intent, int flags, int startId) {
     switch (intent.getAction()) {
 
       case ACTION_IS_HOTSPOT_ENABLED:
