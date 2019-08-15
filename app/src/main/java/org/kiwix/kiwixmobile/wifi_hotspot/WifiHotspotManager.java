@@ -32,42 +32,42 @@ public class WifiHotspotManager {
   //Workaround to turn on hotspot for Oreo versions
   @RequiresApi(api = Build.VERSION_CODES.O)
   public void turnOnHotspot(@NonNull ServerStateListener serverStateListener) {
-      wifiManager.startLocalOnlyHotspot(new WifiManager.LocalOnlyHotspotCallback() {
+    wifiManager.startLocalOnlyHotspot(new WifiManager.LocalOnlyHotspotCallback() {
 
-        @Override
-        public void onStarted(WifiManager.LocalOnlyHotspotReservation reservation) {
-          super.onStarted(reservation);
-          hotspotReservation = reservation;
-          currentConfig = hotspotReservation.getWifiConfiguration();
+      @Override
+      public void onStarted(WifiManager.LocalOnlyHotspotReservation reservation) {
+        super.onStarted(reservation);
+        hotspotReservation = reservation;
+        currentConfig = hotspotReservation.getWifiConfiguration();
 
-          Log.v(TAG, "THE PASSWORD IS: "
-              + currentConfig.preSharedKey
-              + " \n SSID is : "
-              + currentConfig.SSID);
+        Log.v(TAG, "THE PASSWORD IS: "
+            + currentConfig.preSharedKey
+            + " \n SSID is : "
+            + currentConfig.SSID);
 
-          serverStateListener.hotspotTurnedOn(currentConfig);
+        serverStateListener.hotspotTurnedOn(currentConfig);
 
-          isHotspotEnabled = true;
+        isHotspotEnabled = true;
 
-          Log.v(TAG, "Is hotspot enabled? " + isHotspotEnabled);
-        }
+        Log.v(TAG, "Is hotspot enabled? " + isHotspotEnabled);
+      }
 
-        @Override
-        public void onStopped() {
-          super.onStopped();
-          Log.v(TAG, "Local Hotspot Stopped");
-          serverStateListener.serverStopped();
-        }
+      @Override
+      public void onStopped() {
+        super.onStopped();
+        Log.v(TAG, "Local Hotspot Stopped");
+        serverStateListener.serverStopped();
+      }
 
-        @Override
-        public void onFailed(int reason) {
-          super.onFailed(reason);
-          Log.v(TAG, "Local Hotspot failed to start");
-          serverStateListener.hotspotFailed();
-          isHotspotEnabled = false;
-          Log.v(TAG, "Is hotspot enabled? " + isHotspotEnabled);
-        }
-      }, new Handler());
+      @Override
+      public void onFailed(int reason) {
+        super.onFailed(reason);
+        Log.v(TAG, "Local Hotspot failed to start");
+        serverStateListener.hotspotFailed();
+        isHotspotEnabled = false;
+        Log.v(TAG, "Is hotspot enabled? " + isHotspotEnabled);
+      }
+    }, new Handler());
   }
 
   //Workaround to turn off hotspot for Oreo versions
