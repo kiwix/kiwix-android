@@ -16,7 +16,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -289,33 +288,33 @@ public class ZimHostActivity extends BaseActivity implements
   @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
       @NonNull int[] grantResults) {
     if (requestCode == MY_PERMISSIONS_ACCESS_FINE_LOCATION) {
-        if (grantResults.length > 0
-            && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            toggleHotspot();
-          }
+      if (grantResults.length > 0
+          && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+          toggleHotspot();
         }
+      }
     }
   }
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-      //Checking the result code for LocationSettings resolution
+    //Checking the result code for LocationSettings resolution
     if (requestCode == LOCATION_SETTINGS_PERMISSION_RESULT) {
-        final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
-        switch (resultCode) {
-          case Activity.RESULT_OK:
-            // All required changes were successfully made
-            Log.v(TAG, states.isLocationPresent() + "");
-            startService(ACTION_TURN_ON_AFTER_O);
-            break;
-          case Activity.RESULT_CANCELED:
-            // The user was asked to change settings, but chose not to
-            Log.v(TAG, "Canceled");
-            break;
-          default:
-            break;
-        }
+      final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
+      switch (resultCode) {
+        case Activity.RESULT_OK:
+          // All required changes were successfully made
+          Log.v(TAG, states.isLocationPresent() + "");
+          startService(ACTION_TURN_ON_AFTER_O);
+          break;
+        case Activity.RESULT_CANCELED:
+          // The user was asked to change settings, but chose not to
+          Log.v(TAG, "Canceled");
+          break;
+        default:
+          break;
+      }
     }
   }
 
