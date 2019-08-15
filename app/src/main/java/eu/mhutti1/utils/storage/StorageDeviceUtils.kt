@@ -25,20 +25,18 @@ import androidx.core.content.ContextCompat
 import java.io.File
 import java.io.FileFilter
 import java.io.RandomAccessFile
-import java.nio.channels.FileLock
 import java.util.ArrayList
 
 object StorageDeviceUtils {
 
   @JvmStatic
   fun getStorageDevices(context: Context, writable: Boolean): List<StorageDevice> {
-    val storageDevices = ArrayList<StorageDevice>()
-
-    storageDevices.add(environmentDevices(Environment.getExternalStorageDirectory().path, writable))
-    storageDevices.addAll(externalMountPointDevices())
-    storageDevices.addAll(externalFilesDirsDevices(context, writable))
-
-    return validate(storageDevices, writable).also(::deleteStorageMarkers)
+    val storageDevices = ArrayList<StorageDevice>().apply {
+      add(environmentDevices(writable))
+      addAll(externalMountPointDevices())
+      addAll(externalFilesDirsDevices(context, writable))
+    }
+    return validate(storageDevices, writable)
   }
 
   private fun externalFilesDirsDevices(
@@ -48,44 +46,47 @@ object StorageDeviceUtils {
     .filterNotNull()
     .map { dir -> StorageDevice(generalisePath(dir.path, writable), false) }
 
-  private fun externalMountPointDevices(): Collection<StorageDevice> {
-    val storageDevices = ArrayList<StorageDevice>()
-    for (path in ExternalPaths.possiblePaths) {
-      if (path.endsWith("*")) {
-        val root = File(path.substringBeforeLast("*"))
-        root.listFiles(FileFilter(File::isDirectory))
-          ?.mapTo(storageDevices) { dir -> StorageDevice(dir, false) }
-      } else {
-        storageDevices.add(StorageDevice(path, false))
+  private fun externalMountPointDevices(): Collection<StorageDevice> =
+    ExternalPaths.possiblePaths.fold(mutableListOf(), { acc, path ->
+      acc.apply {
+        if (path.endsWith("*")) {
+          addAll(devicesBeneath(File(path.substringBeforeLast("*"))))
+        } else {
+          add(StorageDevice(path, false))
+        }
       }
-    }
-    return storageDevices
-  }
+    })
+
+  private fun devicesBeneath(directory: File) =
+    directory.listFiles(FileFilter(File::isDirectory))
+      ?.map { dir -> StorageDevice(dir, false) }
+      .orEmpty()
 
   private fun environmentDevices(
-    environmentPath: String,
     writable: Boolean
   ) =
-    // This is our internal storage directory
-    if (Environment.isExternalStorageEmulated())
-      StorageDevice(generalisePath(environmentPath, writable), true)
-    // This is an external storage directory
-    else StorageDevice(generalisePath(environmentPath, writable), false)
+    StorageDevice(
+      generalisePath(Environment.getExternalStorageDirectory().path, writable),
+      Environment.isExternalStorageEmulated()
+    )
 
   // Remove app specific path from directories so that we can search them from the top
   private fun generalisePath(path: String, writable: Boolean) =
     if (writable) path
-    else path.substringBeforeLast("/Android/data/")
+    else path.substringBefore("/Android/data/")
 
   // Amazingly file.canWrite() does not always return the correct value
-  private fun canWrite(file: File) = "$file/test.txt".let {
+  private fun canWrite(file: File): Boolean = "$file/test.txt".let {
     try {
       RandomAccessFile(it, "rw").use { randomAccessFile ->
         randomAccessFile.channel.use { channel ->
-          channel.lock().also(FileLock::release)
-          true
+          channel.lock().use { fileLock ->
+            fileLock.release()
+            true
+          }
         }
       }
+    } catch (ignore: Exception) {
       false
     } finally {
       File(it).delete()
@@ -95,13 +96,13 @@ object StorageDeviceUtils {
   private fun validate(
     storageDevices: ArrayList<StorageDevice>,
     writable: Boolean
-  ): List<StorageDevice> {
-    return storageDevices.asSequence().distinct()
-      .filter { it.file.exists() }
-      .filter { it.file.isDirectory }
-      .filter { (!writable || canWrite(it.file)) }
-      .filterNot(StorageDevice::isDuplicate).toList()
-  }
+  ) = storageDevices.asSequence().distinct()
+    .filter { it.file.exists() }
+    .filter { it.file.isDirectory }
+    .filter { canWrite(it.file) || !writable }
+    .filterNot(StorageDevice::isDuplicate)
+    .toList()
+    .also(StorageDeviceUtils::deleteStorageMarkers)
 
   private fun deleteStorageMarkers(validatedDevices: List<StorageDevice>) {
     validatedDevices.forEach { recursiveDeleteStorageMarkers(it.file) }
@@ -109,10 +110,9 @@ object StorageDeviceUtils {
 
   private fun recursiveDeleteStorageMarkers(file: File) {
     file.listFiles().forEach {
-      if (it.isDirectory) {
-        recursiveDeleteStorageMarkers(it)
-      } else if (it.extension == "storageMarker") {
-        it.delete()
+      when {
+        it.isDirectory -> recursiveDeleteStorageMarkers(it)
+        it.extension == LOCATION_EXTENSION -> it.delete()
       }
     }
   }
