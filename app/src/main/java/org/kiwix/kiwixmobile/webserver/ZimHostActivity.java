@@ -395,9 +395,8 @@ public class ZimHostActivity extends BaseActivity implements
   private void startHotspotDialog() {
     AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
 
-    builder.setPositiveButton(getString(R.string.go_to_settings_label), (dialog, id) -> {
-      setupWifiSettingsIntent();
-    });
+    builder.setPositiveButton(getString(R.string.go_to_settings_label),
+        (dialog, id) -> setupWifiSettingsIntent());
 
     builder.setNeutralButton(getString(R.string.hotspot_dialog_neutral_button), (dialog, id) -> {
       //TO DO: START SERVER WITHIN THE SERVICE.
@@ -439,9 +438,7 @@ public class ZimHostActivity extends BaseActivity implements
 
       builder.setPositiveButton(this.getString(R.string.yes),
           (dialog, id) -> openMobileDataActivity());
-      builder.setNegativeButton((android.R.string.no), (dialog, id) -> {
-        startHotspotDialog();
-      });
+      builder.setNegativeButton((android.R.string.no), (dialog, id) -> startHotspotDialog());
       builder.setTitle(this.getString(R.string.mobile_data_enabled));
       builder.setMessage(
           this.getString(R.string.mobile_data_message) + "\n" + this.getString(
