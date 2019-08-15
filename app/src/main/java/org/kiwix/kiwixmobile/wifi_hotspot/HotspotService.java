@@ -44,7 +44,7 @@ public class HotspotService extends Service {
   private NotificationManager notificationManager;
   private NotificationCompat.Builder builder;
   private ServerStateListener serverStateListener;
-  private IBinder serviceBinder = new HotspotBinder();
+  private final IBinder serviceBinder = new HotspotBinder();
   private WebServerHelper webServerHelper;
 
   @Override public void onCreate() {
