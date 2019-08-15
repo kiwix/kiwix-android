@@ -63,7 +63,7 @@ public class WebServerHelper {
       for (String path : selectedBooksPath) {
         try {
           boolean isBookAdded = kiwixLibrary.addBook(path);
-          Log.v(TAG, "Book added:" + path);
+          Log.v(TAG, "isBookAdded: " + isBookAdded + path);
         } catch (JNIKiwixException e) {
           Log.v(TAG, "Couldn't add book " + path);
         }
