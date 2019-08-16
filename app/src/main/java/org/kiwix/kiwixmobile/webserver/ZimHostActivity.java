@@ -67,6 +67,8 @@ public class ZimHostActivity extends BaseActivity implements
   Button startServerButton;
   @BindView(R.id.server_textView)
   TextView serverTextView;
+  @BindView(R.id.recycler_view_zim_host)
+  RecyclerView recyclerViewZimHost;
 
   @Inject
   ZimHostContract.Presenter presenter;
@@ -123,9 +125,8 @@ public class ZimHostActivity extends BaseActivity implements
 
     presenter.attachView(this);
 
-    RecyclerView homeRecyclerView = findViewById(R.id.recycler_view_zim_host);
     presenter.loadBooks();
-    homeRecyclerView.setAdapter(booksAdapter);
+    recyclerViewZimHost.setAdapter(booksAdapter);
 
     serviceConnection = new ServiceConnection() {
 
