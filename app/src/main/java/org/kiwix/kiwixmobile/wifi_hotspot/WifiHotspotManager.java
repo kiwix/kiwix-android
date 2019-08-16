@@ -67,7 +67,6 @@ public class WifiHotspotManager {
     if (hotspotReservation != null) {
       hotspotReservation.close();
       hotspotReservation = null;
-      isHotspotEnabled = false;
       Log.v(TAG, "Turned off hotspot");
     }
   }
