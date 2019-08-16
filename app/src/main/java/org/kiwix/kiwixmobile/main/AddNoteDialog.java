@@ -20,7 +20,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -28,20 +27,17 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-
-import org.kiwix.kiwixmobile.BuildConfig;
-import org.kiwix.kiwixmobile.R;
-import org.kiwix.kiwixmobile.data.ZimContentProvider;
-import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import org.kiwix.kiwixmobile.BuildConfig;
+import org.kiwix.kiwixmobile.R;
+import org.kiwix.kiwixmobile.data.ZimContentProvider;
+import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil;
 
 import static org.kiwix.kiwixmobile.utils.Constants.NOTES_DIRECTORY;
 
@@ -55,7 +51,7 @@ import static org.kiwix.kiwixmobile.utils.Constants.NOTES_DIRECTORY;
  */
 
 public class AddNoteDialog extends DialogFragment
-    implements ConfirmationAlertDialogFragment.UserClickListener {
+  implements ConfirmationAlertDialogFragment.UserClickListener {
 
   public static final String TAG = "AddNoteDialog";
 
@@ -91,8 +87,8 @@ public class AddNoteDialog extends DialogFragment
     super.onCreate(savedInstanceState);
 
     setStyle(DialogFragment.STYLE_NORMAL,
-        sharedPreferenceUtil.nightMode() ? R.style.AddNoteDialogStyle_Night
-            : R.style.AddNoteDialogStyle);
+      sharedPreferenceUtil.nightMode() ? R.style.AddNoteDialogStyle_Night
+        : R.style.AddNoteDialogStyle);
 
     // Returns name of the form ".../Kiwix/granbluefantasy_en_all_all_nopic_2018-10.zim"
     zimFileName = ZimContentProvider.getZimFile();
@@ -118,7 +114,7 @@ public class AddNoteDialog extends DialogFragment
 
   @Override
   public @NonNull View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-      @Nullable Bundle savedInstanceState) {
+    @Nullable Bundle savedInstanceState) {
     super.onCreateView(inflater, container, savedInstanceState);
     View view = inflater.inflate(R.layout.dialog_add_note, container, false);
     unbinder = ButterKnife.bind(this, view);
@@ -212,7 +208,8 @@ public class AddNoteDialog extends DialogFragment
     int rightmostDot = path.lastIndexOf('.');
 
     if (rightmostSlash > -1 && rightmostDot > -1) {
-      return path.substring(rightmostSlash + 1, (rightmostDot > rightmostSlash) ? rightmostDot : path.length());
+      return path.substring(
+        rightmostSlash + 1, (rightmostDot > rightmostSlash) ? rightmostDot : path.length());
     }
 
     return ""; // If couldn't find a dot and/or slash in the url
@@ -233,14 +230,14 @@ public class AddNoteDialog extends DialogFragment
   void exitAddNoteDialog() {
     if (noteEdited) {
       Fragment previousInstance = getActivity().getSupportFragmentManager()
-          .findFragmentByTag(ConfirmationAlertDialogFragment.TAG);
+        .findFragmentByTag(ConfirmationAlertDialogFragment.TAG);
 
       if (previousInstance == null) {
         // Custom AlertDialog for taking user confirmation before closing note dialog in case of unsaved changes
         DialogFragment newFragment = new ConfirmationAlertDialogFragment(sharedPreferenceUtil, TAG,
-            R.string.confirmation_alert_dialog_message);
+          R.string.confirmation_alert_dialog_message);
         newFragment.show(getActivity().getSupportFragmentManager(),
-            ConfirmationAlertDialogFragment.TAG);
+          ConfirmationAlertDialogFragment.TAG);
       }
     } else {
       // Closing unedited note dialog straightaway
@@ -294,13 +291,13 @@ public class AddNoteDialog extends DialogFragment
 
   private void showKeyboard() {
     InputMethodManager inputMethodManager =
-        (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+      (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
     inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
   }
 
   void closeKeyboard() {
     InputMethodManager inputMethodManager =
-        (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+      (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
     inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
   }
 
@@ -313,7 +310,7 @@ public class AddNoteDialog extends DialogFragment
     if (isExternalStorageWritable()) {
 
       if (ContextCompat.checkSelfPermission(getContext(),
-          Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
         Log.d(TAG, "WRITE_EXTERNAL_STORAGE permission not granted");
         showToast(R.string.note_save_unsuccessful, Toast.LENGTH_LONG);
         return;
@@ -392,7 +389,7 @@ public class AddNoteDialog extends DialogFragment
 
     if (noteEdited) {
       saveNote(
-          addNoteEditText.getText().toString()); // Save edited note before sharing the text file
+        addNoteEditText.getText().toString()); // Save edited note before sharing the text file
     }
 
     File noteFile = new File(ZIM_NOTES_DIRECTORY + articleNotefileName + ".txt");
@@ -404,8 +401,8 @@ public class AddNoteDialog extends DialogFragment
         // From Nougat 7 (API 24) access to files is shared temporarily with other apps
         // Need to use FileProvider for the same
         noteFileUri =
-            FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".fileprovider",
-                noteFile);
+          FileProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".fileprovider",
+            noteFile);
       } else {
         noteFileUri = Uri.fromFile(noteFile);
       }
@@ -419,7 +416,7 @@ public class AddNoteDialog extends DialogFragment
       noteFileShareIntent.putExtra(Intent.EXTRA_STREAM, noteFileUri);
       noteFileShareIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
       Intent shareChooser = Intent.createChooser(noteFileShareIntent,
-          getString(R.string.note_share_app_chooser_title));
+        getString(R.string.note_share_app_chooser_title));
 
       if (noteFileShareIntent.resolveActivity(getActivity().getPackageManager()) != null) {
         startActivity(shareChooser);
