@@ -19,7 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.utils.Constants;
-import org.kiwix.kiwixmobile.webserver.ServerStateListener;
+import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks;
 import org.kiwix.kiwixmobile.webserver.WebServerHelper;
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity;
 
@@ -43,7 +43,7 @@ public class HotspotService extends Service {
   private BroadcastReceiver stopReceiver;
   private NotificationManager notificationManager;
   private NotificationCompat.Builder builder;
-  private ServerStateListener serverStateListener;
+  private ZimHostCallbacks zimHostCallbacks;
   private final IBinder serviceBinder = new HotspotBinder();
   private WebServerHelper webServerHelper;
 
@@ -74,13 +74,13 @@ public class HotspotService extends Service {
 
       case ACTION_IS_HOTSPOT_ENABLED:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          serverStateListener.hotspotState(hotspotManager.checkHotspotState());
+          zimHostCallbacks.onHotspotStateReceived(hotspotManager.checkHotspotState());
         }
         break;
 
       case ACTION_TURN_ON_AFTER_O:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          hotspotManager.turnOnHotspot(serverStateListener);
+          hotspotManager.turnOnHotspot(zimHostCallbacks);
           startForeground(HOTSPOT_NOTIFICATION_ID,
               buildForegroundNotification(getString(R.string.hotspot_running)));
         }
@@ -93,7 +93,7 @@ public class HotspotService extends Service {
         break;
 
       case ACTION_START_SERVER:
-        if (!webServerHelper.startServerHelper(serverStateListener,
+        if (!webServerHelper.startServerHelper(zimHostCallbacks,
             intent.getStringArrayListExtra(SELECTED_ZIM_PATHS_KEY))) {
           Toast.makeText(this, R.string.server_failed_toast_message, Toast.LENGTH_LONG).show();
         } else {
@@ -149,7 +149,7 @@ public class HotspotService extends Service {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       hotspotManager.turnOffHotspot();
     }
-    webServerHelper.stopAndroidWebServer(serverStateListener);
+    webServerHelper.stopAndroidWebServer(zimHostCallbacks);
     stopForeground(true);
     stopSelf();
     notificationManager.cancel(HOTSPOT_NOTIFICATION_ID);
@@ -182,7 +182,7 @@ public class HotspotService extends Service {
     }
   }
 
-  public void registerCallBack(@Nullable ServerStateListener myCallback) {
-    serverStateListener = myCallback;
+  public void registerCallBack(@Nullable ZimHostCallbacks myCallback) {
+    zimHostCallbacks = myCallback;
   }
 }

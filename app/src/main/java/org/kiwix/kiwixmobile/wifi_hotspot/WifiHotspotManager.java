@@ -8,7 +8,7 @@ import android.os.Handler;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import org.kiwix.kiwixmobile.webserver.ServerStateListener;
+import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks;
 
 /**
  * WifiHotstopManager class makes use of the Android's WifiManager and WifiConfiguration class
@@ -31,7 +31,7 @@ public class WifiHotspotManager {
 
   //Workaround to turn on hotspot for Oreo versions
   @RequiresApi(api = Build.VERSION_CODES.O)
-  public void turnOnHotspot(@NonNull ServerStateListener serverStateListener) {
+  public void turnOnHotspot(@NonNull ZimHostCallbacks zimHostCallbacks) {
     wifiManager.startLocalOnlyHotspot(new WifiManager.LocalOnlyHotspotCallback() {
 
       @Override
@@ -45,7 +45,7 @@ public class WifiHotspotManager {
             + " \n SSID is : "
             + currentConfig.SSID);
 
-        serverStateListener.hotspotTurnedOn(currentConfig);
+        zimHostCallbacks.onHotspotTurnedOn(currentConfig);
 
         isHotspotEnabled = true;
 
@@ -56,14 +56,14 @@ public class WifiHotspotManager {
       public void onStopped() {
         super.onStopped();
         Log.v(TAG, "Local Hotspot Stopped");
-        serverStateListener.serverStopped();
+        zimHostCallbacks.onServerStopped();
       }
 
       @Override
       public void onFailed(int reason) {
         super.onFailed(reason);
         Log.v(TAG, "Local Hotspot failed to start");
-        serverStateListener.hotspotFailed();
+        zimHostCallbacks.onHotspotFailedToStart();
         isHotspotEnabled = false;
         Log.v(TAG, "Is hotspot enabled? " + isHotspotEnabled);
       }

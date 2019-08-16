@@ -58,7 +58,7 @@ import static org.kiwix.kiwixmobile.webserver.WebServerHelper.getAddress;
 import static org.kiwix.kiwixmobile.webserver.WebServerHelper.isServerStarted;
 
 public class ZimHostActivity extends BaseActivity implements
-    ServerStateListener, ZimHostContract.View {
+    ZimHostCallbacks, ZimHostContract.View {
 
   @BindView(R.id.startServerButton)
   Button startServerButton;
@@ -433,7 +433,7 @@ public class ZimHostActivity extends BaseActivity implements
     }
   }
 
-  @Override public void serverStarted(@NonNull String ip) {
+  @Override public void onServerStarted(@NonNull String ip) {
     this.ip = ip;
     serverTextView.setText(getString(R.string.server_started_message, this.ip));
     startServerButton.setText(getString(R.string.stop_server_label));
@@ -441,18 +441,18 @@ public class ZimHostActivity extends BaseActivity implements
     isServerStarted = true;
   }
 
-  @Override public void serverStopped() {
+  @Override public void onServerStopped() {
     serverTextView.setText(getString(R.string.server_textview_default_message));
     startServerButton.setText(getString(R.string.start_server_label));
     startServerButton.setBackgroundColor(getResources().getColor(R.color.greenTick));
     isServerStarted = false;
   }
 
-  @Override public void serverFailed() {
+  @Override public void onServerFailedToStart() {
     Toast.makeText(this, R.string.server_failed_message, Toast.LENGTH_LONG).show();
   }
 
-  @Override public void hotspotTurnedOn(@NonNull WifiConfiguration wifiConfiguration) {
+  @Override public void onHotspotTurnedOn(@NonNull WifiConfiguration wifiConfiguration) {
 
     //Show an alert dialog for hotspot details
     AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
@@ -493,7 +493,7 @@ public class ZimHostActivity extends BaseActivity implements
     startActivity(intent);
   }
 
-  @Override public void hotspotFailed() {
+  @Override public void onHotspotFailedToStart() {
     //Show a dialog to turn off default hotspot
 
     alertDialogShower.show(KiwixDialog.HotspotFailed.INSTANCE,
@@ -505,8 +505,8 @@ public class ZimHostActivity extends BaseActivity implements
         });
   }
 
-  @Override public void hotspotState(@Nullable Boolean state) {
-    if (state) //if hotspot is already enabled, turn it off.
+  @Override public void onHotspotStateReceived(@Nullable Boolean isHotspotEnabled) {
+    if (isHotspotEnabled) //if hotspot is already enabled, turn it off.
     {
       startService(ACTION_TURN_OFF_AFTER_O);
     } else //If hotspot is not already enabled, then turn it on.
