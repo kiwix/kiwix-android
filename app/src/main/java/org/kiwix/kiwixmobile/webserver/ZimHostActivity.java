@@ -230,7 +230,7 @@ public class ZimHostActivity extends BaseActivity implements
     }
   }
 
-  @RequiresApi(api = Build.VERSION_CODES.O) private void toggleHotspot() {
+  private void toggleHotspot() {
     //Check if location permissions are granted
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         == PackageManager.PERMISSION_GRANTED) {
