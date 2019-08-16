@@ -1,18 +1,19 @@
 package org.kiwix.kiwixmobile.webserver;
 
 import android.net.wifi.WifiConfiguration;
+import androidx.annotation.NonNull;
 
 public interface ZimHostCallbacks {
 
-  void onServerStarted(String ip);
+  void onServerStarted(@NonNull String ip);
 
   void onServerStopped();
 
   void onServerFailedToStart();
 
-  void onHotspotTurnedOn(WifiConfiguration wifiConfiguration);
+  void onHotspotTurnedOn(@NonNull WifiConfiguration wifiConfiguration);
 
   void onHotspotFailedToStart();
 
-  void onHotspotStateReceived(Boolean state);
+  void onHotspotStateReceived(@NonNull Boolean state);
 }

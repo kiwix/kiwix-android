@@ -18,13 +18,12 @@ import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks;
 
 public class WifiHotspotManager {
   private final WifiManager wifiManager;
-  private final Context context;
   WifiManager.LocalOnlyHotspotReservation hotspotReservation;
   private static final String TAG = "WifiHotspotManager";
 
   public WifiHotspotManager(@NonNull Context context) {
-    this.context = context;
-    wifiManager = (WifiManager) this.context.getSystemService(Context.WIFI_SERVICE);
+    wifiManager =
+        (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
   }
 
   //Workaround to turn on hotspot for Oreo versions

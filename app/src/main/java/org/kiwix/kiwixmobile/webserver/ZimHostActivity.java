@@ -505,7 +505,7 @@ public class ZimHostActivity extends BaseActivity implements
         });
   }
 
-  @Override public void onHotspotStateReceived(@Nullable Boolean isHotspotEnabled) {
+  @Override public void onHotspotStateReceived(@NonNull Boolean isHotspotEnabled) {
     if (isHotspotEnabled) //if hotspot is already enabled, turn it off.
     {
       startService(ACTION_TURN_OFF_AFTER_O);
