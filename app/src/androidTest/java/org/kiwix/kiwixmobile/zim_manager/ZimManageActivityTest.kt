@@ -1,5 +1,7 @@
 package org.kiwix.kiwixmobile.zim_manager
 
+import android.os.Build
+import androidx.test.filters.SdkSuppress
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
@@ -13,6 +15,7 @@ import org.kiwix.kiwixmobile.metaLinkNetworkEntity
 import org.kiwix.kiwixmobile.utils.SharedPreferenceUtil
 import java.util.concurrent.TimeUnit.SECONDS
 
+@SdkSuppress(minSdkVersion = Build.VERSION_CODES.JELLY_BEAN_MR2)
 class ZimManageActivityTest : BaseActivityTest<ZimManageActivity>() {
 
   override var activityRule = activityTestRule<ZimManageActivity> {

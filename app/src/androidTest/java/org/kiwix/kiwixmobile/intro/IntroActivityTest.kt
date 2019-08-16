@@ -17,9 +17,12 @@
  */
 package org.kiwix.kiwixmobile.intro
 
+import android.os.Build
+import androidx.test.filters.SdkSuppress
 import org.junit.Test
 import org.kiwix.kiwixmobile.BaseActivityTest
 
+@SdkSuppress(minSdkVersion = Build.VERSION_CODES.JELLY_BEAN_MR2)
 class IntroActivityTest : BaseActivityTest<IntroActivity>() {
 
   override var activityRule = activityTestRule<IntroActivity>()
