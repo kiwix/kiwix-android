@@ -106,10 +106,14 @@ public class AddNoteDialog extends DialogFragment
 
       ZIM_NOTES_DIRECTORY = NOTES_DIRECTORY + zimNoteDirectoryName + "/";
     } else {
-      showToast(R.string.error_filenotfound, Toast.LENGTH_LONG);
-      closeKeyboard();
-      getFragmentManager().beginTransaction().remove(AddNoteDialog.this).commit();
+      onFailureToCreateAddNoteDialog();
     }
+  }
+
+  private void onFailureToCreateAddNoteDialog() {
+    showToast(R.string.error_filenotfound, Toast.LENGTH_LONG);
+    closeKeyboard();
+    getFragmentManager().beginTransaction().remove(AddNoteDialog.this).commit();
   }
 
   @Override
@@ -185,7 +189,13 @@ public class AddNoteDialog extends DialogFragment
     // Returns url of the form: "content://org.kiwix.kiwixmobile.zim.base/A/Main_Page.html"
     String articleUrl = ((MainActivity) getActivity()).getCurrentWebView().getUrl();
 
-    String notefileName = getTextAfterLastSlashWithoutExtension(articleUrl);
+    String notefileName = "";
+    if (articleUrl == null) {
+      onFailureToCreateAddNoteDialog();
+      return "Not Available";
+    } else {
+      notefileName = getTextAfterLastSlashWithoutExtension(articleUrl);
+    }
 
     return (!notefileName.isEmpty()) ? notefileName : articleTitle;
   }
