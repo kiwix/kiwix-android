@@ -95,14 +95,14 @@ public class HotspotService extends Service {
       case ACTION_START_SERVER:
         if (!webServerHelper.startServerHelper(zimHostCallbacks,
             intent.getStringArrayListExtra(SELECTED_ZIM_PATHS_KEY))) {
-          Toast.makeText(this, R.string.server_failed_toast_message, Toast.LENGTH_LONG).show();
+          Toast.makeText(this, R.string.server_failed_toast_message, Toast.LENGTH_SHORT).show();
         } else {
           if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             startForeground(HOTSPOT_NOTIFICATION_ID,
                 buildForegroundNotification(getString(R.string.hotspot_running)));
           }
           Toast.makeText(this, R.string.server_started__successfully_toast_message,
-              Toast.LENGTH_LONG).show();
+              Toast.LENGTH_SHORT).show();
         }
 
         break;
