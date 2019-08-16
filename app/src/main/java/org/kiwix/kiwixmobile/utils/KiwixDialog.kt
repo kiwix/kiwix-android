@@ -49,7 +49,7 @@ sealed class KiwixDialog(
     R.string.hotspot_failed_title,
     R.string.hotspot_failed_message,
     R.string.go_to_wifi_settings_label,
-    R.string.cancel
+    null
   )
 
   data class FileTransferConfirmation(override val args: Array<out Any>) : KiwixDialog(

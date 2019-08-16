@@ -23,7 +23,6 @@
   <string name="choose_file">Select a Content File (*.zim)</string>
   <string name="open_in_new_tab">Open link in new tab?</string>
   <string name="error_nozimfilesfound">No content found on your device.\nTake a look at the Help Page to get directions on how to load content into Kiwix.\nIf you did put a ZIM file on your device/external storage, you might retry in a minute or restart your device.</string>
-  <string name="cancel">Cancel</string>
   <string name="hotspot_service_channel_name">Hotspot Service Channel</string>
   <string name="hotspot_failed_title">Failed to start hotspot</string>
   <string name="hotspot_failed_message">It seems like your hotspot is already turned on. Please disable your wifi hotspot to continue.</string>

@@ -27,9 +27,11 @@ class AlertDialogShower @Inject constructor(
           clickListeners.getOrNull(0)
             ?.invoke()
         }
-        setNegativeButton(dialog.negativeMessage) { _, _ ->
-          clickListeners.getOrNull(1)
-            ?.invoke()
+        dialog.negativeMessage?.let {
+          setNegativeButton(it) { _, _ ->
+            clickListeners.getOrNull(1)
+              ?.invoke()
+          }
         }
       }
       .show()
