@@ -109,10 +109,7 @@ public class ZimHostActivity extends BaseActivity implements
     }
     BookOnDiskDelegate.BookDelegate bookDelegate =
         new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
-            bookOnDiskItem -> {
-              open(bookOnDiskItem);
-              return Unit.INSTANCE;
-            },
+            null,
             null,
             bookOnDiskItem -> {
               select(bookOnDiskItem);
@@ -192,14 +189,6 @@ public class ZimHostActivity extends BaseActivity implements
         Log.v(TAG, "ZIM PATH : " + file.getAbsolutePath());
       }
     }
-  }
-
-  private void open(@Nullable BooksOnDiskListItem.BookOnDisk bookOnDisk) {
-    File file = bookOnDisk.getFile();
-    Intent zimFile = new Intent(this, MainActivity.class);
-    zimFile.setData(Uri.fromFile(file));
-    startActivity(zimFile);
-    finish();
   }
 
   private void select(@NonNull BooksOnDiskListItem.BookOnDisk bookOnDisk) {
