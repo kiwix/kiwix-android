@@ -118,8 +118,7 @@ public class ZimHostActivity extends BaseActivity implements
               return Unit.INSTANCE;
             });
     bookDelegate.setSelectionMode(SelectionMode.MULTI);
-    booksAdapter = new BooksOnDiskAdapter(bookDelegate
-        ,
+    booksAdapter = new BooksOnDiskAdapter(bookDelegate,
         BookOnDiskDelegate.LanguageDelegate.INSTANCE
     );
 
