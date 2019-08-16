@@ -20,7 +20,6 @@ public class WifiHotspotManager {
   private final WifiManager wifiManager;
   private final Context context;
   WifiManager.LocalOnlyHotspotReservation hotspotReservation;
-  boolean isHotspotEnabled;
   private static final String TAG = "WifiHotspotManager";
 
   public WifiHotspotManager(@NonNull Context context) {
@@ -43,26 +42,21 @@ public class WifiHotspotManager {
         printCurrentConfig(currentConfig);
 
         zimHostCallbacks.onHotspotTurnedOn(currentConfig);
-
-        isHotspotEnabled = true;
-
-        Log.v(TAG, "Is hotspot enabled? " + isHotspotEnabled);
+        Log.v(TAG, "Local Hotspot Started");
       }
 
       @Override
       public void onStopped() {
         super.onStopped();
-        Log.v(TAG, "Local Hotspot Stopped");
         zimHostCallbacks.onServerStopped();
+        Log.v(TAG, "Local Hotspot Stopped");
       }
 
       @Override
       public void onFailed(int reason) {
         super.onFailed(reason);
-        Log.v(TAG, "Local Hotspot failed to start");
         zimHostCallbacks.onHotspotFailedToStart();
-        isHotspotEnabled = false;
-        Log.v(TAG, "Is hotspot enabled? " + isHotspotEnabled);
+        Log.v(TAG, "Local Hotspot failed to start");
       }
     }, new Handler());
   }
