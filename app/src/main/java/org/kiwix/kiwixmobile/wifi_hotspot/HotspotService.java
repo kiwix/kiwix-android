@@ -175,14 +175,15 @@ public class HotspotService extends Service {
     }
   }
 
+  public void registerCallBack(@Nullable ZimHostCallbacks myCallback) {
+    zimHostCallbacks = myCallback;
+  }
+
   public class HotspotBinder extends Binder {
 
     @NonNull public HotspotService getService() {
       return HotspotService.this;
     }
-  }
 
-  public void registerCallBack(@Nullable ZimHostCallbacks myCallback) {
-    zimHostCallbacks = myCallback;
   }
 }
