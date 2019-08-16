@@ -26,15 +26,13 @@ import org.kiwix.kiwixmobile.database.newdb.entities.BookmarkEntity_
 import javax.inject.Inject
 
 class NewBookmarksDao @Inject constructor(val box: Box<BookmarkEntity>) {
-  fun getBookmarks(fromCurrentBook: Boolean): List<BookmarkItem> {
-    return box.query {
-      if (fromCurrentBook) {
-        equal(BookmarkEntity_.zimId, ZimContentProvider.getId() ?: "")
-      }
-      order(BookmarkEntity_.bookmarkTitle)
-    }.find()
-      .map(::BookmarkItem)
-  }
+  fun getBookmarks(fromCurrentBook: Boolean) = box.query {
+    if (fromCurrentBook) {
+      equal(BookmarkEntity_.zimName, ZimContentProvider.getName() ?: "")
+    }
+    order(BookmarkEntity_.bookmarkTitle)
+  }.find()
+    .map(::BookmarkItem)
 
   fun getCurrentZimBookmarksUrl() = box.query {
     equal(BookmarkEntity_.zimId, ZimContentProvider.getId() ?: "")
