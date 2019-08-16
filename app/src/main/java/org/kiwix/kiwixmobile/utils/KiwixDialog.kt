@@ -50,7 +50,7 @@ sealed class KiwixDialog(
     R.string.hotspot_failed_message,
     R.string.go_to_wifi_settings_label,
     R.string.cancel
-  );
+  )
 
   data class FileTransferConfirmation(override val args: Array<out Any>) : KiwixDialog(
     null, R.string.transfer_to, R.string.yes, android.R.string.cancel

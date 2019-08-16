@@ -1,10 +1,9 @@
 package org.kiwix.kiwixmobile.webserver;
 
+import android.app.Activity;
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
 import org.kiwix.kiwixmobile.di.PerActivity;
-import org.kiwix.kiwixmobile.utils.AlertDialogShower;
 
 @Module
 public class ZimHostModule {
@@ -15,9 +14,8 @@ public class ZimHostModule {
     return zimHostPresenter;
   }
 
-  @Provides
-  @Singleton AlertDialogShower provideAlertDialogShower(AlertDialogShower alertDialogShower) {
-    return alertDialogShower;
+  @Provides Activity providesActivity(ZimHostActivity zimActivity) {
+    return (Activity) zimActivity;
   }
 }
 

@@ -38,7 +38,6 @@ import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.Task;
-import dagger.android.AndroidInjection;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -98,8 +97,6 @@ public class ZimHostActivity extends BaseActivity implements
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_zim_host);
-
-    AndroidInjection.inject(this);
 
     setUpToolbar();
 
