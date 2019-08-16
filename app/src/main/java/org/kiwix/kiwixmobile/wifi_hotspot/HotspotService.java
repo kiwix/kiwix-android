@@ -184,6 +184,5 @@ public class HotspotService extends Service {
     @NonNull public HotspotService getService() {
       return HotspotService.this;
     }
-
   }
 }
