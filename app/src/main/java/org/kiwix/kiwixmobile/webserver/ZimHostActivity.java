@@ -10,7 +10,6 @@ import android.content.IntentSender;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.os.Build;
 import android.os.Handler;
@@ -21,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
@@ -47,7 +45,6 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
-import org.kiwix.kiwixmobile.main.MainActivity;
 import org.kiwix.kiwixmobile.utils.AlertDialogShower;
 import org.kiwix.kiwixmobile.utils.KiwixDialog;
 import org.kiwix.kiwixmobile.wifi_hotspot.HotspotService;
@@ -384,7 +381,7 @@ public class ZimHostActivity extends BaseActivity implements
     AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
 
     builder.setPositiveButton(getString(R.string.go_to_settings_label),
-        (dialog, id) -> setupWifiSettingsIntent());
+        (dialog, id) -> launchTetheringSettingsScreen());
 
     builder.setNeutralButton(getString(R.string.hotspot_dialog_neutral_button), (dialog, id) -> {
       //TO DO: START SERVER WITHIN THE SERVICE.
@@ -486,7 +483,7 @@ public class ZimHostActivity extends BaseActivity implements
     //setupServer();
   }
 
-  void setupWifiSettingsIntent() {
+  void launchTetheringSettingsScreen() {
     final Intent intent = new Intent(Intent.ACTION_MAIN, null);
     intent.addCategory(Intent.CATEGORY_LAUNCHER);
     final ComponentName cn =
@@ -502,7 +499,7 @@ public class ZimHostActivity extends BaseActivity implements
     alertDialogShower.show(KiwixDialog.HotspotFailed.INSTANCE,
         new Function0<Unit>() {
           @Override public Unit invoke() {
-            setupWifiSettingsIntent();
+            launchTetheringSettingsScreen();
             return Unit.INSTANCE;
           }
         });
