@@ -21,7 +21,6 @@ public class WifiHotspotManager {
   private final Context context;
   WifiManager.LocalOnlyHotspotReservation hotspotReservation;
   boolean isHotspotEnabled;
-  WifiConfiguration currentConfig;
   private static final String TAG = "WifiHotspotManager";
 
   public WifiHotspotManager(@NonNull Context context) {
@@ -37,13 +36,11 @@ public class WifiHotspotManager {
       @Override
       public void onStarted(WifiManager.LocalOnlyHotspotReservation reservation) {
         super.onStarted(reservation);
+        WifiConfiguration currentConfig;
         hotspotReservation = reservation;
         currentConfig = hotspotReservation.getWifiConfiguration();
 
-        Log.v(TAG, "THE PASSWORD IS: "
-            + currentConfig.preSharedKey
-            + " \n SSID is : "
-            + currentConfig.SSID);
+        printCurrentConfig(currentConfig);
 
         zimHostCallbacks.onHotspotTurnedOn(currentConfig);
 
@@ -85,5 +82,12 @@ public class WifiHotspotManager {
   @RequiresApi(api = Build.VERSION_CODES.O)
   public boolean checkHotspotState() {
     return hotspotReservation != null;
+  }
+
+  void printCurrentConfig(WifiConfiguration wifiConfiguration) {
+    Log.v(TAG, "THE PASSWORD IS: "
+        + wifiConfiguration.preSharedKey
+        + " \n SSID is : "
+        + wifiConfiguration.SSID);
   }
 }
