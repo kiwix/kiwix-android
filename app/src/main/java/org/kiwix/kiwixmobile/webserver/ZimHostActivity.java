@@ -175,7 +175,7 @@ public class ZimHostActivity extends BaseActivity implements
       if (isServerStarted) {
         startService(ACTION_STOP_SERVER);
       } else {
-        startHotspotDialog();
+        startHotspotManuallyDialog();
       }
       //}
     }
@@ -391,7 +391,7 @@ public class ZimHostActivity extends BaseActivity implements
   }
 
   //Advice user to turn on hotspot manually for API<26
-  private void startHotspotDialog() {
+  private void startHotspotManuallyDialog() {
     AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
 
     builder.setPositiveButton(getString(R.string.go_to_settings_label),
@@ -434,7 +434,8 @@ public class ZimHostActivity extends BaseActivity implements
 
       builder.setPositiveButton(this.getString(R.string.yes),
           (dialog, id) -> openMobileDataActivity());
-      builder.setNegativeButton((android.R.string.no), (dialog, id) -> startHotspotDialog());
+      builder.setNegativeButton((android.R.string.no),
+          (dialog, id) -> startHotspotManuallyDialog());
       builder.setTitle(this.getString(R.string.mobile_data_enabled));
       builder.setMessage(
           this.getString(R.string.mobile_data_message) + "\n" + this.getString(
