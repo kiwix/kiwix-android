@@ -7,7 +7,7 @@ sealed class KiwixDialog(
   val title: Int?,
   val message: Int,
   val positiveMessage: Int,
-  val negativeMessage: Int
+  val negativeMessage: Int?
 ) {
 
   data class DeleteZim(override val args: Array<out Any>) : KiwixDialog(
