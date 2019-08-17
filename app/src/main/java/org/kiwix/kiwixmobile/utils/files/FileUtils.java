@@ -36,7 +36,7 @@ import static org.kiwix.kiwixmobile.downloader.ChunkUtils.deleteAllParts;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
 public class FileUtils {
-  private static final String TAG = "FileUtils";
+  private static final String TAG = "KiwixFileUtils";
 
   public static File getFileCacheDir(Context context) {
     boolean external = Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
