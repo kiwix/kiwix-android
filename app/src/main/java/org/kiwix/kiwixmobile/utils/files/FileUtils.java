@@ -25,22 +25,18 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.util.Log;
-
-import org.kiwix.kiwixmobile.BuildConfig;
-import org.kiwix.kiwixmobile.downloader.ChunkUtils;
-import org.kiwix.kiwixmobile.library.entity.LibraryNetworkEntity.Book;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import org.kiwix.kiwixmobile.BuildConfig;
 
 import static org.kiwix.kiwixmobile.downloader.ChunkUtils.deleteAllParts;
 import static org.kiwix.kiwixmobile.utils.Constants.TAG_KIWIX;
 
 public class FileUtils {
+  private static final String TAG = "FileUtils";
 
   public static File getFileCacheDir(Context context) {
     boolean external = Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
@@ -150,17 +146,14 @@ public class FileUtils {
   }
 
   static private String contentQuery(Context context, Uri uri) {
-    Cursor cursor = null;
+    try (Cursor cursor = context.getContentResolver()
+        .query(uri, new String[] { "_data" }, null, null, null)) {
 
-    try {
-      cursor = context.getContentResolver().query(uri, new String[]{"_data"}, null, null, null);
-
-      if (cursor != null && cursor.moveToFirst())
+      if (cursor != null && cursor.moveToFirst()) {
         return cursor.getString(cursor.getColumnIndexOrThrow("_data"));
-
-    } finally {
-      if (cursor != null)
-        cursor.close();
+      }
+    } catch (IllegalArgumentException e) {
+      Log.e(TAG, "Uri: " + uri.toString(), e);
     }
 
     return null;
