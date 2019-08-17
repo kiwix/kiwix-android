@@ -454,6 +454,8 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override public void onHotspotTurnedOn(@NonNull WifiConfiguration wifiConfiguration) {
 
+    hotspotService.startForegroundNotificationHelper();
+
     //Show an alert dialog for hotspot details
     AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
 

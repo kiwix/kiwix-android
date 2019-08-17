@@ -81,8 +81,6 @@ public class HotspotService extends Service {
       case ACTION_TURN_ON_AFTER_O:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
           hotspotManager.turnOnHotspot(zimHostCallbacks);
-          startForeground(HOTSPOT_NOTIFICATION_ID,
-              buildForegroundNotification(getString(R.string.hotspot_running)));
         }
         break;
 
@@ -95,11 +93,15 @@ public class HotspotService extends Service {
       case ACTION_START_SERVER:
         if (!webServerHelper.startServerHelper(zimHostCallbacks,
             intent.getStringArrayListExtra(SELECTED_ZIM_PATHS_KEY))) {
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            stopForeground(true);
+            stopSelf();
+            notificationManager.cancel(HOTSPOT_NOTIFICATION_ID);
+          }
           Toast.makeText(this, R.string.server_failed_toast_message, Toast.LENGTH_SHORT).show();
         } else {
           if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            startForeground(HOTSPOT_NOTIFICATION_ID,
-                buildForegroundNotification(getString(R.string.hotspot_running)));
+            startForegroundNotificationHelper();
           }
           Toast.makeText(this, R.string.server_started__successfully_toast_message,
               Toast.LENGTH_SHORT).show();
@@ -177,6 +179,11 @@ public class HotspotService extends Service {
 
   public void registerCallBack(@Nullable ZimHostCallbacks myCallback) {
     zimHostCallbacks = myCallback;
+  }
+
+  public void startForegroundNotificationHelper() {
+    startForeground(HOTSPOT_NOTIFICATION_ID,
+        buildForegroundNotification(getString(R.string.hotspot_running)));
   }
 
   public class HotspotBinder extends Binder {
