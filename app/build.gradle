@@ -188,7 +188,7 @@ def buildNumber = System.getenv('TRAVIS_BUILD_NUMBER') ?: "dev"
 ext {
   versionMajor = 2
   versionMinor = 5
-  versionPatch = 2
+  versionPatch = 3
 }
 
 private String generateVersionName() {
