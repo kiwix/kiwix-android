@@ -28,8 +28,7 @@ public class WebServerHelper {
 
   }
 
-  public boolean startServerHelper(@NonNull ZimHostCallbacks zimHostCallbacks,
-      @NonNull ArrayList<String> selectedBooksPath) {
+  public boolean startServerHelper(@NonNull ArrayList<String> selectedBooksPath) {
 
     // 1. Get port from settings screen
     // 2. Ask user to change port in settings if port is in use.
@@ -38,21 +37,18 @@ public class WebServerHelper {
     String ip = getIpAddress();
     ip = ip.replaceAll("\n", "");
     if (ip.length() == 0) {
-      zimHostCallbacks.onServerFailedToStart();
-    } else if (!isServerStarted && startAndroidWebServer(selectedBooksPath)) {
-      zimHostCallbacks.onServerStarted("http://" + ip + ":" + port);
+      return false;
+    } else if (startAndroidWebServer(selectedBooksPath)) {
+      return true;
     }
     return isServerStarted;
   }
 
-  public boolean stopAndroidWebServer(@NonNull ZimHostCallbacks zimHostCallbacks) {
+  public void stopAndroidWebServer() {
     if (isServerStarted) {
       kiwixServer.stop();
       isServerStarted = false;
-      zimHostCallbacks.onServerStopped();
-      return true;
     }
-    return false;
   }
 
   private boolean startAndroidWebServer(ArrayList<String> selectedBooksPath) {
@@ -111,6 +107,9 @@ public class WebServerHelper {
   }
 
   @NonNull public static String getAddress() {
-    return "http://" + getIpAddress() + ":" + port;
+    String address = "http://" + getIpAddress() + ":" + port;
+    address = address.replaceAll("\n", "");
+    return address;
+
   }
 }

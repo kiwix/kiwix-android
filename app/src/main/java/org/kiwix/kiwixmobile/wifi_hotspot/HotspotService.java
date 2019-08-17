@@ -91,15 +91,16 @@ public class HotspotService extends Service {
         break;
 
       case ACTION_START_SERVER:
-        if (!webServerHelper.startServerHelper(zimHostCallbacks,
+        if (!webServerHelper.startServerHelper(
             intent.getStringArrayListExtra(SELECTED_ZIM_PATHS_KEY))) {
+          zimHostCallbacks.onServerFailedToStart();
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             stopForeground(true);
             stopSelf();
             notificationManager.cancel(HOTSPOT_NOTIFICATION_ID);
           }
-          Toast.makeText(this, R.string.server_failed_toast_message, Toast.LENGTH_SHORT).show();
         } else {
+          zimHostCallbacks.onServerStarted(webServerHelper.getAddress());
           if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             startForegroundNotificationHelper();
           }
@@ -151,7 +152,8 @@ public class HotspotService extends Service {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       hotspotManager.turnOffHotspot();
     }
-    webServerHelper.stopAndroidWebServer(zimHostCallbacks);
+    webServerHelper.stopAndroidWebServer();
+    zimHostCallbacks.onServerStopped();
     stopForeground(true);
     stopSelf();
     notificationManager.cancel(HOTSPOT_NOTIFICATION_ID);

@@ -246,7 +246,6 @@ public class ZimHostActivity extends BaseActivity implements
     presenter.loadBooks();
     if (isServerStarted) {
       ip = getAddress();
-      ip = ip.replaceAll("\n", "");
       serverTextView.setText(getString(R.string.server_started_message, ip));
       startServerButton.setText(getString(R.string.stop_server_label));
       startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
@@ -449,7 +448,7 @@ public class ZimHostActivity extends BaseActivity implements
   }
 
   @Override public void onServerFailedToStart() {
-    Toast.makeText(this, R.string.server_failed_message, Toast.LENGTH_LONG).show();
+    Toast.makeText(this, R.string.server_failed_toast_message, Toast.LENGTH_LONG).show();
   }
 
   @Override public void onHotspotTurnedOn(@NonNull WifiConfiguration wifiConfiguration) {
