@@ -107,12 +107,7 @@ public class ZimHostActivity extends BaseActivity implements
 
     if (savedInstanceState != null) {
       ip = savedInstanceState.getString(IP_STATE_KEY);
-      serverTextView.setText(
-          getString(R.string.server_started_message, ip));
-      startServerButton.setText(getString(R.string.stop_server_label));
-      startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
-      bookDelegate.setSelectionMode(SelectionMode.NORMAL);
-      booksAdapter.notifyDataSetChanged();
+      layoutServerStarted();
     }
     bookDelegate =
         new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
@@ -250,12 +245,27 @@ public class ZimHostActivity extends BaseActivity implements
     presenter.loadBooks();
     if (isServerStarted) {
       ip = getCompleteAddress();
-      serverTextView.setText(getString(R.string.server_started_message, ip));
-      startServerButton.setText(getString(R.string.stop_server_label));
-      startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
-      bookDelegate.setSelectionMode(SelectionMode.NORMAL);
-      booksAdapter.notifyDataSetChanged();
+      layoutServerStarted();
     }
+  }
+
+  private void layoutServerStarted() {
+    serverTextView.setText(getString(R.string.server_started_message, ip));
+    startServerButton.setText(getString(R.string.stop_server_label));
+    startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
+    bookDelegate.setSelectionMode(SelectionMode.NORMAL);
+    for (BooksOnDiskListItem item : booksAdapter.getItems()) {
+      item.setSelected(false);
+    }
+    booksAdapter.notifyDataSetChanged();
+  }
+
+  private void layoutServerStopped() {
+    serverTextView.setText(getString(R.string.server_textview_default_message));
+    startServerButton.setText(getString(R.string.start_server_label));
+    startServerButton.setBackgroundColor(getResources().getColor(R.color.greenTick));
+    bookDelegate.setSelectionMode(SelectionMode.MULTI);
+    booksAdapter.notifyDataSetChanged();
   }
 
   // This method checks if mobile data is enabled in user's device.
@@ -461,30 +471,16 @@ public class ZimHostActivity extends BaseActivity implements
     }
   }
 
-  @Override public void onServerStarted(@NonNull String ip) {
-    this.ip = ip;
-    serverTextView.setText(getString(R.string.server_started_message, this.ip));
-    startServerButton.setText(getString(R.string.stop_server_label));
-    startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
-    isServerStarted = true;
-
-    bookDelegate.setSelectionMode(SelectionMode.NORMAL);
-    for (BooksOnDiskListItem item : booksAdapter.getItems()) {
-      item.setSelected(false);
-    }
-    booksAdapter.notifyDataSetChanged();
+  @Override public void onServerStarted(@NonNull String ipAddress) {
+    this.ip = ipAddress;
+    layoutServerStarted();
   }
 
   @Override public void onServerStopped() {
-    serverTextView.setText(getString(R.string.server_textview_default_message));
-    startServerButton.setText(getString(R.string.start_server_label));
-    startServerButton.setBackgroundColor(getResources().getColor(R.color.greenTick));
-    isServerStarted = false;
+    layoutServerStopped();
     if (selectedBooksPath.size() > 0) {
       selectedBooksPath.clear();
     }
-    bookDelegate.setSelectionMode(SelectionMode.MULTI);
-    booksAdapter.notifyDataSetChanged();
   }
 
   @Override public void onServerFailedToStart() {
