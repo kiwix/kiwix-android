@@ -531,7 +531,7 @@ public class ZimHostActivity extends BaseActivity implements
   @Override public void onHotspotFailedToStart() {
     //Show a dialog to turn off default hotspot
 
-    alertDialogShower.show(KiwixDialog.HotspotFailed.INSTANCE,
+    alertDialogShower.show(KiwixDialog.TurnOffHotspotManually.INSTANCE,
         new Function0<Unit>() {
           @Override public Unit invoke() {
             launchTetheringSettingsScreen();

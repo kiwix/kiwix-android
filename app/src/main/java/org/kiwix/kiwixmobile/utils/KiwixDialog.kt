@@ -45,7 +45,7 @@ sealed class KiwixDialog(
     null, R.string.request_enable_location, R.string.yes, android.R.string.no
   )
 
-  object HotspotFailed : KiwixDialog(
+  object TurnOffHotspotManually : KiwixDialog(
     R.string.hotspot_failed_title,
     R.string.hotspot_failed_message,
     R.string.go_to_wifi_settings_label,
