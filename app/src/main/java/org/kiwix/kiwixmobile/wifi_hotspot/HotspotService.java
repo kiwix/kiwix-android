@@ -100,7 +100,7 @@ public class HotspotService extends Service {
             notificationManager.cancel(HOTSPOT_NOTIFICATION_ID);
           }
         } else {
-          zimHostCallbacks.onServerStarted(webServerHelper.getAddress());
+          zimHostCallbacks.onServerStarted(webServerHelper.getCompleteAddress());
           if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             startForegroundNotificationHelper();
           }

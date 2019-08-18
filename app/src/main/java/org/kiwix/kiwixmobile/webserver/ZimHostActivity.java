@@ -12,7 +12,6 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiConfiguration;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Button;
@@ -36,10 +35,15 @@ import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.Task;
+import io.reactivex.Flowable;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
@@ -54,7 +58,7 @@ import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskAdap
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
-import static org.kiwix.kiwixmobile.webserver.WebServerHelper.getAddress;
+import static org.kiwix.kiwixmobile.webserver.WebServerHelper.getCompleteAddress;
 import static org.kiwix.kiwixmobile.webserver.WebServerHelper.isServerStarted;
 
 public class ZimHostActivity extends BaseActivity implements
@@ -84,6 +88,7 @@ public class ZimHostActivity extends BaseActivity implements
   private static final int LOCATION_SETTINGS_PERMISSION_RESULT = 101;
   private Intent serviceIntent;
   private Task<LocationSettingsResponse> task;
+  ProgressDialog progressDialog;
 
   private BooksOnDiskAdapter booksAdapter;
   HotspotService hotspotService;
@@ -245,7 +250,7 @@ public class ZimHostActivity extends BaseActivity implements
     super.onResume();
     presenter.loadBooks();
     if (isServerStarted) {
-      ip = getAddress();
+      ip = getCompleteAddress();
       serverTextView.setText(getString(R.string.server_started_message, ip));
       startServerButton.setText(getString(R.string.stop_server_label));
       startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
@@ -383,18 +388,13 @@ public class ZimHostActivity extends BaseActivity implements
         (dialog, id) -> launchTetheringSettingsScreen());
 
     builder.setNeutralButton(getString(R.string.hotspot_dialog_neutral_button), (dialog, id) -> {
-      //TO DO: START SERVER WITHIN THE SERVICE.
-      //Adding a handler because sometimes hotspot can take time to turn on.
-      //TO DO: Add a progress dialog instead of handler
-      ProgressDialog progressDialog =
+
+      progressDialog =
           ProgressDialog.show(this, getString(R.string.progress_dialog_starting_server), "",
               true);
       progressDialog.show();
-      final Handler handler = new Handler();
-      handler.postDelayed(() -> {
-        progressDialog.dismiss();
-        startService(ACTION_START_SERVER);
-      }, 7000);
+
+      startFlowable();
     });
 
     builder.setTitle(getString(R.string.hotspot_dialog_title));
@@ -405,7 +405,35 @@ public class ZimHostActivity extends BaseActivity implements
     dialog.show();
   }
 
-  private void startService(String ACTION) {
+  //Keeps checking if hotspot has been turned using the ip address with an interval of 1 sec
+  //If no ip is found after 15 seconds, dismisses the progress dialog
+  private void startFlowable() {
+    Flowable.fromCallable(WebServerHelper::getIp)
+        .retryWhen(error -> error.delay(1, TimeUnit.SECONDS))
+        .timeout(15, TimeUnit.SECONDS)
+        .firstOrError()
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new SingleObserver<String>() {
+          @Override public void onSubscribe(Disposable d) {
+          }
+
+          @Override public void onSuccess(String s) {
+            progressDialog.dismiss();
+            startService(ACTION_START_SERVER);
+            Log.d(TAG, "onSuccess:  " + s);
+          }
+
+          @Override public void onError(Throwable e) {
+            // display the ip and don't forget to dismiss the dialog
+            progressDialog.dismiss();
+            Toast.makeText(ZimHostActivity.this, R.string.server_failed_message, Toast.LENGTH_SHORT)
+                .show();
+            Log.d(TAG, "Unable to turn on server", e);
+          }
+        });
+  }
+
+  void startService(String ACTION) {
     if (ACTION.equals(ACTION_START_SERVER)) {
       serviceIntent.putStringArrayListExtra(SELECTED_ZIM_PATHS_KEY, selectedBooksPath);
     }
@@ -458,17 +486,15 @@ public class ZimHostActivity extends BaseActivity implements
     //Show an alert dialog for hotspot details
     AlertDialog.Builder builder = new AlertDialog.Builder(this, dialogStyle());
 
-    ProgressDialog progressDialog =
-        ProgressDialog.show(this, getString(R.string.progress_dialog_starting_server), "",
-            true);
-    progressDialog.show();
-
     builder.setPositiveButton(android.R.string.ok, (dialog, id) -> {
-      final Handler handler = new Handler();
-      handler.postDelayed(() -> {
-        progressDialog.dismiss();
-        startService(ACTION_START_SERVER);
-      }, 2000);
+
+      progressDialog =
+          ProgressDialog.show(this, getString(R.string.progress_dialog_starting_server), "",
+              true);
+      progressDialog.show();
+
+      startFlowable();
+
     });
 
     builder.setTitle(this.getString(R.string.hotspot_turned_on));

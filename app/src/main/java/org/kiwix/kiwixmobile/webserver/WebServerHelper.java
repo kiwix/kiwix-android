@@ -106,10 +106,17 @@ public class WebServerHelper {
     return ip;
   }
 
-  @NonNull public static String getAddress() {
+  @NonNull public static String getCompleteAddress() {
     String address = "http://" + getIpAddress() + ":" + port;
     address = address.replaceAll("\n", "");
     return address;
 
+  }
+
+  public static String getIp() {
+    String ip = getIpAddress();
+    ip = ip.replaceAll("\n", "");
+    if (ip.length() == 0) throw new IllegalStateException();
+    return ip;
   }
 }
