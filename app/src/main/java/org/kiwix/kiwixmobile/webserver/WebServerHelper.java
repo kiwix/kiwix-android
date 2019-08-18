@@ -20,6 +20,7 @@ import org.kiwix.kiwixlib.JNIKiwixServer;
 public class WebServerHelper {
   public static boolean isServerStarted;
   private static int port;
+  private final int DEFAULT_PORT = 8080;
   private final JNIKiwixLibrary kiwixLibrary = new JNIKiwixLibrary();
   private final JNIKiwixServer kiwixServer = new JNIKiwixServer(kiwixLibrary);
   private static final String TAG = "WebServerHelper";
@@ -53,7 +54,7 @@ public class WebServerHelper {
 
   private boolean startAndroidWebServer(ArrayList<String> selectedBooksPath) {
     if (!isServerStarted) {
-      port = 8080;
+      port = DEFAULT_PORT;
       //Call to start server
       for (String path : selectedBooksPath) {
         try {
