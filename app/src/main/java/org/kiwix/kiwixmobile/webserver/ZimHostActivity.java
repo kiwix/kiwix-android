@@ -91,6 +91,7 @@ public class ZimHostActivity extends BaseActivity implements
   ProgressDialog progressDialog;
 
   private BooksOnDiskAdapter booksAdapter;
+  BookOnDiskDelegate.BookDelegate bookDelegate;
   HotspotService hotspotService;
   private String ip;
   boolean bound;
@@ -110,8 +111,10 @@ public class ZimHostActivity extends BaseActivity implements
           getString(R.string.server_started_message, ip));
       startServerButton.setText(getString(R.string.stop_server_label));
       startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
+      bookDelegate.setSelectionMode(SelectionMode.NORMAL);
+      booksAdapter.notifyDataSetChanged();
     }
-    BookOnDiskDelegate.BookDelegate bookDelegate =
+    bookDelegate =
         new BookOnDiskDelegate.BookDelegate(sharedPreferenceUtil,
             null,
             null,
@@ -250,6 +253,8 @@ public class ZimHostActivity extends BaseActivity implements
       serverTextView.setText(getString(R.string.server_started_message, ip));
       startServerButton.setText(getString(R.string.stop_server_label));
       startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
+      bookDelegate.setSelectionMode(SelectionMode.NORMAL);
+      booksAdapter.notifyDataSetChanged();
     }
   }
 
@@ -462,6 +467,12 @@ public class ZimHostActivity extends BaseActivity implements
     startServerButton.setText(getString(R.string.stop_server_label));
     startServerButton.setBackgroundColor(getResources().getColor(R.color.stopServer));
     isServerStarted = true;
+
+    bookDelegate.setSelectionMode(SelectionMode.NORMAL);
+    for (BooksOnDiskListItem item : booksAdapter.getItems()) {
+      item.setSelected(false);
+    }
+    booksAdapter.notifyDataSetChanged();
   }
 
   @Override public void onServerStopped() {
@@ -472,6 +483,8 @@ public class ZimHostActivity extends BaseActivity implements
     if (selectedBooksPath.size() > 0) {
       selectedBooksPath.clear();
     }
+    bookDelegate.setSelectionMode(SelectionMode.MULTI);
+    booksAdapter.notifyDataSetChanged();
   }
 
   @Override public void onServerFailedToStart() {
