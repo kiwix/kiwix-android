@@ -94,7 +94,6 @@ public class ZimHostActivity extends BaseActivity implements
   BookOnDiskDelegate.BookDelegate bookDelegate;
   HotspotService hotspotService;
   private String ip;
-  boolean bound;
   private ServiceConnection serviceConnection;
   ArrayList<String> selectedBooksPath = new ArrayList<>();
 
@@ -133,13 +132,11 @@ public class ZimHostActivity extends BaseActivity implements
       public void onServiceConnected(ComponentName className, IBinder service) {
         HotspotService.HotspotBinder binder = (HotspotService.HotspotBinder) service;
         hotspotService = binder.getService();
-        bound = true;
         hotspotService.registerCallBack(ZimHostActivity.this);
       }
 
       @Override
       public void onServiceDisconnected(ComponentName arg0) {
-        bound = false;
       }
     };
 
@@ -215,14 +212,11 @@ public class ZimHostActivity extends BaseActivity implements
   private void bindService() {
 
     bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
-    bound = true;
   }
 
   private void unbindService() {
-    if (bound && !isServerStarted) {
-      hotspotService.registerCallBack(null); // unregister
+    if (hotspotService != null) {
       unbindService(serviceConnection);
-      bound = false;
     }
   }
 
