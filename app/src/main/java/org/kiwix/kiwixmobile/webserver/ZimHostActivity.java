@@ -197,11 +197,7 @@ public class ZimHostActivity extends BaseActivity implements
     ArrayList<BooksOnDiskListItem> booksList = new ArrayList<>();
     for (BooksOnDiskListItem item : booksAdapter.getItems()) {
       if (item.equals(bookOnDisk)) {
-        if (item.isSelected()) {
-          item.setSelected(false);
-        } else {
-          item.setSelected(true);
-        }
+        item.setSelected(!item.isSelected());
       }
       booksList.add(item);
     }
@@ -473,6 +469,9 @@ public class ZimHostActivity extends BaseActivity implements
     startServerButton.setText(getString(R.string.start_server_label));
     startServerButton.setBackgroundColor(getResources().getColor(R.color.greenTick));
     isServerStarted = false;
+    if (selectedBooksPath.size() > 0) {
+      selectedBooksPath.clear();
+    }
   }
 
   @Override public void onServerFailedToStart() {
