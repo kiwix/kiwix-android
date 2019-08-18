@@ -106,7 +106,7 @@ public class WebServerHelper {
     return ip;
   }
 
-  @NonNull public static String getCompleteAddress() {
+  @NonNull public static String getSocketAddress() {
     String address = "http://" + getIpAddress() + ":" + port;
     address = address.replaceAll("\n", "");
     return address;

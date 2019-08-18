@@ -58,7 +58,7 @@ import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskAdap
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
-import static org.kiwix.kiwixmobile.webserver.WebServerHelper.getCompleteAddress;
+import static org.kiwix.kiwixmobile.webserver.WebServerHelper.getSocketAddress;
 import static org.kiwix.kiwixmobile.webserver.WebServerHelper.isServerStarted;
 
 public class ZimHostActivity extends BaseActivity implements
@@ -238,7 +238,7 @@ public class ZimHostActivity extends BaseActivity implements
     super.onResume();
     presenter.loadBooks();
     if (isServerStarted) {
-      ip = getCompleteAddress();
+      ip = getSocketAddress();
       layoutServerStarted();
     }
   }
