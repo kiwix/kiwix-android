@@ -1,3 +1,13 @@
+2.5.3
+BUGFIX: Fix IndexOutOfBounds in KiwixMobileActivity `onResume`
+
+2.5.2
+BUGFIX: Some zim files were not displaying
+
+2.5.1
+NEW: Downloads are now using the DownloadManager
+NEW: Downloads/Device/Library completely rewritten
+
 2.5
 NEW: Downloads are now using the DownloadManager
 NEW: Downloads/Device/Library completely rewritten

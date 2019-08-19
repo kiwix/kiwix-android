@@ -1260,7 +1260,9 @@ public class KiwixMobileActivity extends BaseActivity implements WebViewCallback
       }
     }
 
-    if (!mWebViews.isEmpty() && mWebViews.get(currentWebViewIndex).getUrl() != null &&
+    if (!mWebViews.isEmpty() &&
+        currentWebViewIndex < mWebViews.size() &&
+        mWebViews.get(currentWebViewIndex).getUrl() != null &&
         mWebViews.get(currentWebViewIndex).getUrl().equals("file:///android_asset/help.html") &&
         mWebViews.get(currentWebViewIndex).findViewById(R.id.get_content_card) != null) {
       mWebViews.get(currentWebViewIndex).findViewById(R.id.get_content_card).setEnabled(true);
