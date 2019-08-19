@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.utils.Constants;
+import org.kiwix.kiwixmobile.utils.ServerUtils;
 import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks;
 import org.kiwix.kiwixmobile.webserver.WebServerHelper;
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity;
@@ -100,7 +101,7 @@ public class HotspotService extends Service {
             notificationManager.cancel(HOTSPOT_NOTIFICATION_ID);
           }
         } else {
-          zimHostCallbacks.onServerStarted(webServerHelper.getSocketAddress());
+          zimHostCallbacks.onServerStarted(ServerUtils.getSocketAddress());
           if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             startForegroundNotificationHelper();
           }

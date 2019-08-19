@@ -51,6 +51,7 @@ import org.kiwix.kiwixmobile.R;
 import org.kiwix.kiwixmobile.base.BaseActivity;
 import org.kiwix.kiwixmobile.utils.AlertDialogShower;
 import org.kiwix.kiwixmobile.utils.KiwixDialog;
+import org.kiwix.kiwixmobile.utils.ServerUtils;
 import org.kiwix.kiwixmobile.wifi_hotspot.HotspotService;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.SelectionMode;
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BookOnDiskDelegate;
@@ -58,8 +59,6 @@ import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskAdap
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
-import static org.kiwix.kiwixmobile.webserver.WebServerHelper.getSocketAddress;
-import static org.kiwix.kiwixmobile.webserver.WebServerHelper.isServerStarted;
 
 public class ZimHostActivity extends BaseActivity implements
     ZimHostCallbacks, ZimHostContract.View {
@@ -144,7 +143,7 @@ public class ZimHostActivity extends BaseActivity implements
 
     startServerButton.setOnClickListener(v -> {
       //Get the path of ZIMs user has selected
-      if (!isServerStarted) {
+      if (!ServerUtils.isServerStarted) {
         getSelectedBooksPath();
         if (selectedBooksPath.size() > 0) {
           startHotspotHelper();
@@ -166,7 +165,7 @@ public class ZimHostActivity extends BaseActivity implements
       //if (isMobileDataEnabled(context)) {
       //  mobileDataDialog();
       //} else {
-      if (isServerStarted) {
+      if (ServerUtils.isServerStarted) {
         createHotspotIntent(ACTION_STOP_SERVER);
       } else {
         startHotspotManuallyDialog();
@@ -237,8 +236,8 @@ public class ZimHostActivity extends BaseActivity implements
   @Override protected void onResume() {
     super.onResume();
     presenter.loadBooks();
-    if (isServerStarted) {
-      ip = getSocketAddress();
+    if (ServerUtils.isServerStarted) {
+      ip = ServerUtils.getSocketAddress();
       layoutServerStarted();
     }
   }
@@ -413,7 +412,7 @@ public class ZimHostActivity extends BaseActivity implements
   //Keeps checking if hotspot has been turned using the ip address with an interval of 1 sec
   //If no ip is found after 15 seconds, dismisses the progress dialog
   private void startFlowable() {
-    Flowable.fromCallable(WebServerHelper::getIp)
+    Flowable.fromCallable(() -> ServerUtils.getIp())
         .retryWhen(error -> error.delay(1, TimeUnit.SECONDS))
         .timeout(15, TimeUnit.SECONDS)
         .firstOrError()
@@ -545,7 +544,7 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Override protected void onSaveInstanceState(@Nullable Bundle outState) {
     super.onSaveInstanceState(outState);
-    if (isServerStarted) {
+    if (ServerUtils.isServerStarted) {
       outState.putString(IP_STATE_KEY, ip);
     }
   }

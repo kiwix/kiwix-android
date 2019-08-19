@@ -2,14 +2,11 @@ package org.kiwix.kiwixmobile.webserver;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import org.kiwix.kiwixlib.JNIKiwixException;
 import org.kiwix.kiwixlib.JNIKiwixLibrary;
 import org.kiwix.kiwixlib.JNIKiwixServer;
+import org.kiwix.kiwixmobile.utils.ServerUtils;
 
 /**
  * WebServerHelper class is used to set up the suitable environment i.e. getting the
@@ -18,8 +15,6 @@ import org.kiwix.kiwixlib.JNIKiwixServer;
  */
 
 public class WebServerHelper {
-  public static boolean isServerStarted;
-  private static int port;
   private final int DEFAULT_PORT = 8080;
   private final JNIKiwixLibrary kiwixLibrary = new JNIKiwixLibrary();
   private final JNIKiwixServer kiwixServer = new JNIKiwixServer(kiwixLibrary);
@@ -35,26 +30,26 @@ public class WebServerHelper {
     // 2. Ask user to change port in settings if port is in use.
     // OR
     // Always use 8080 and when its not available then iterate this number.
-    String ip = getIpAddress();
+    String ip = ServerUtils.getIpAddress();
     ip = ip.replaceAll("\n", "");
     if (ip.length() == 0) {
       return false;
     } else if (startAndroidWebServer(selectedBooksPath)) {
       return true;
     }
-    return isServerStarted;
+    return ServerUtils.isServerStarted;
   }
 
   public void stopAndroidWebServer() {
-    if (isServerStarted) {
+    if (ServerUtils.isServerStarted) {
       kiwixServer.stop();
-      isServerStarted = false;
+      ServerUtils.isServerStarted = false;
     }
   }
 
   private boolean startAndroidWebServer(ArrayList<String> selectedBooksPath) {
-    if (!isServerStarted) {
-      port = DEFAULT_PORT;
+    if (!ServerUtils.isServerStarted) {
+      ServerUtils.port = DEFAULT_PORT;
       //Call to start server
       for (String path : selectedBooksPath) {
         try {
@@ -64,59 +59,10 @@ public class WebServerHelper {
           Log.v(TAG, "Couldn't add book " + path);
         }
       }
-      kiwixServer.setPort(port);
-      isServerStarted = kiwixServer.start();
-      Log.v(TAG, "Server status" + isServerStarted);
+      kiwixServer.setPort(ServerUtils.port);
+      ServerUtils.isServerStarted = kiwixServer.start();
+      Log.v(TAG, "Server status" + ServerUtils.isServerStarted);
     }
-    return isServerStarted;
-  }
-
-  // get Ip address of the device's wireless access point i.e. wifi hotspot OR wifi network
-  private static String getIpAddress() {
-    String ip = "";
-    try {
-      Enumeration<NetworkInterface> enumNetworkInterfaces = NetworkInterface
-          .getNetworkInterfaces();
-      while (enumNetworkInterfaces.hasMoreElements()) {
-        NetworkInterface networkInterface = enumNetworkInterfaces
-            .nextElement();
-        Enumeration<InetAddress> enumInetAddress = networkInterface
-            .getInetAddresses();
-        while (enumInetAddress.hasMoreElements()) {
-          InetAddress inetAddress = enumInetAddress.nextElement();
-
-          if (inetAddress.isSiteLocalAddress()) {
-            ip += inetAddress.getHostAddress() + "\n";
-          }
-        }
-      }
-      //To remove extra characters from IP for Android Pie
-      if (ip.length() > 14) {
-        for (int i = 15; i < 18; i++) {
-          if ((ip.charAt(i) == '.')) {
-            ip = ip.substring(0, i - 2);
-            break;
-          }
-        }
-      }
-    } catch (SocketException e) {
-      e.printStackTrace();
-      ip += "Something Wrong! " + e.toString() + "\n";
-    }
-    return ip;
-  }
-
-  @NonNull public static String getSocketAddress() {
-    String address = "http://" + getIpAddress() + ":" + port;
-    address = address.replaceAll("\n", "");
-    return address;
-
-  }
-
-  public static String getIp() {
-    String ip = getIpAddress();
-    ip = ip.replaceAll("\n", "");
-    if (ip.length() == 0) throw new IllegalStateException();
-    return ip;
+    return ServerUtils.isServerStarted;
   }
 }
