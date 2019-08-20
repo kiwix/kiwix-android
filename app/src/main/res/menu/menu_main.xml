@@ -51,7 +51,7 @@
   <item
       android:id="@+id/menu_random_article"
       android:icon="@drawable/action_randomarticle"
-      android:title="@string/menu_randomarticle"
+      android:title="@string/menu_random_article"
       android:visible="false"
       app:showAsAction="never"/>
 
@@ -63,7 +63,7 @@
 
   <item
       android:id="@+id/menu_searchintext"
-      android:title="@string/menu_searchintext"
+      android:title="@string/menu_search_in_text"
       android:visible="false"
       app:showAsAction="never"/>
 

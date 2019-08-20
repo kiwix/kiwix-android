@@ -188,8 +188,8 @@ class NetworkUtilsTest {
 
   @Test
   fun testParsedURL() {
-    every { (context.getString(R.string.zim_nopic)) } returns "No Pictures"
-    every { (context.getString(R.string.zim_novid)) } returns "No Videos"
+    every { (context.getString(R.string.zim_no_pic)) } returns "No Pictures"
+    every { (context.getString(R.string.zim_no_vid)) } returns "No Videos"
     every { (context.getString(R.string.zim_simple)) } returns "Simple"
 
     assertEquals("URL Parsing on empty string", "", NetworkUtils.parseURL(context, ""))

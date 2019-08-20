@@ -6,26 +6,26 @@
     <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
         android:defaultValue="false"
         android:key="pref_nightmode"
-        android:summary="@string/pref_nightmode_summary"
-        android:title="@string/pref_nightmode"/>
+        android:summary="@string/pref_night_mode_summary"
+        android:title="@string/pref_night_mode"/>
 
     <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
         android:defaultValue="false"
         android:key="pref_auto_nightmode"
-        android:summary="@string/pref_autonightmode_summary"
-        android:title="@string/pref_autonightmode"/>
+        android:summary="@string/pref_auto_night_mode_summary"
+        android:title="@string/pref_auto_night_mode"/>
 
     <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
         android:defaultValue="false"
         android:key="pref_backtotop"
-        android:summary="@string/pref_backtotop_summary"
-        android:title="@string/pref_backtotop"/>
+        android:summary="@string/pref_back_to_top_summary"
+        android:title="@string/pref_back_to_top"/>
 
     <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
         android:defaultValue="false"
         android:key="pref_hidetoolbar"
-        android:summary="@string/pref_hidetoolbar_summary"
-        android:title="@string/pref_hidetoolbar"/>
+        android:summary="@string/pref_hide_toolbar_summary"
+        android:title="@string/pref_hide_toolbar"/>
 
 
   </PreferenceCategory>
@@ -37,8 +37,8 @@
     <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
         android:defaultValue="false"
         android:key="pref_newtab_background"
-        android:summary="@string/pref_newtab_background_summary"
-        android:title="@string/pref_newtab_background_title"/>
+        android:summary="@string/pref_new_tab_background_summary"
+        android:title="@string/pref_new_tab_background_title"/>
 
     <org.kiwix.kiwixmobile.settings.CustomSwitchPreference
         android:defaultValue="true"
