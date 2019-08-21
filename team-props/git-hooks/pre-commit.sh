@@ -6,7 +6,7 @@ echo "Running lint..."
 
 status=$?
 
-if [[ "$status" = 0 ]] ; then
+if [ "$status" = 0 ] ; then
     echo "Static analysis found no problems."
     exit 0
 else
