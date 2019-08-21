@@ -16,7 +16,7 @@ inline class ArticleCount(val articleCount: String) {
       val units = arrayOf("", "K", "M", "B", "T")
       val conversion = (log10(size.toDouble()) / 3).toInt()
       context.getString(
-        string.articleCount, DecimalFormat("#,##0.#")
+        string.article_count, DecimalFormat("#,##0.#")
           .format(size / 1000.0.pow(conversion.toDouble())) + units[conversion]
       )
     }

@@ -66,7 +66,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -1172,14 +1171,14 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           openMainPage();
           presenter.loadCurrentZimBookmarksUrl();
         } else {
-          Toast.makeText(this, getResources().getString(R.string.error_fileinvalid),
+          Toast.makeText(this, getResources().getString(R.string.error_file_invalid),
               Toast.LENGTH_LONG).show();
           showHomePage();
         }
       } else {
         Log.w(TAG_KIWIX, "ZIM file doesn't exist at " + file.getAbsolutePath());
 
-        Toast.makeText(this, getResources().getString(R.string.error_filenotfound),
+        Toast.makeText(this, getResources().getString(R.string.error_file_not_found),
             Toast.LENGTH_LONG)
             .show();
         showHomePage();
@@ -1664,7 +1663,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
               }
             }
             if (file == null) {
-              Toast.makeText(this, R.string.error_filenotfound, Toast.LENGTH_LONG).show();
+              Toast.makeText(this, R.string.error_file_not_found, Toast.LENGTH_LONG).show();
               return;
             }
             Intent zimFile = new Intent(MainActivity.this, MainActivity.class);
@@ -1942,7 +1941,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
         AlertDialog.Builder zimFileMissingBuilder =
           new AlertDialog.Builder(this, dialogStyle());
         zimFileMissingBuilder.setTitle(R.string.app_name);
-        zimFileMissingBuilder.setMessage(R.string.customapp_missing_content);
+        zimFileMissingBuilder.setMessage(R.string.custom_app_missing_content);
         zimFileMissingBuilder.setIcon(R.mipmap.kiwix_icon);
         final Activity activity = this;
         zimFileMissingBuilder.setPositiveButton(getString(R.string.go_to_play_store),
@@ -1970,7 +1969,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
           FileUtils.getLocalFilePathByUri(getApplicationContext(), getIntent().getData());
 
       if (filePath == null || !new File(filePath).exists()) {
-        Toast.makeText(MainActivity.this, getString(R.string.error_filenotfound), Toast.LENGTH_LONG)
+        Toast.makeText(MainActivity.this, getString(R.string.error_file_not_found), Toast.LENGTH_LONG)
             .show();
         return;
       }
@@ -2043,7 +2042,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
 
   @Override
   public void webViewFailedLoading(String url) {
-    String error = String.format(getString(R.string.error_articleurlnotfound), url);
+    String error = String.format(getString(R.string.error_article_url_not_found), url);
     Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
   }
 
@@ -2107,7 +2106,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       builder.setPositiveButton(android.R.string.yes, (dialog, id) -> {
         if (isOpenNewTabInBackground) {
           newTabInBackground(url);
-          Snackbar.make(snackbarRoot, R.string.new_tab_snackbar, Snackbar.LENGTH_LONG)
+          Snackbar.make(snackbarRoot, R.string.new_tab_snack_bar, Snackbar.LENGTH_LONG)
               .setAction(getString(R.string.open), v -> {
                 if (webViewList.size() > 1) selectTab(webViewList.size() - 1);
               })

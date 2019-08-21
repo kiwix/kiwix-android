@@ -106,7 +106,7 @@ public class AddNoteDialog extends DialogFragment
 
       ZIM_NOTES_DIRECTORY = NOTES_DIRECTORY + zimNoteDirectoryName + "/";
     } else {
-      showToast(R.string.error_filenotfound, Toast.LENGTH_LONG);
+      showToast(R.string.error_file_not_found, Toast.LENGTH_LONG);
       closeKeyboard();
       getFragmentManager().beginTransaction().remove(AddNoteDialog.this).commit();
     }
