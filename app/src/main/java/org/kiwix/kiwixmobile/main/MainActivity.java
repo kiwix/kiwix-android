@@ -2106,7 +2106,7 @@ public class MainActivity extends BaseActivity implements WebViewCallback,
       builder.setPositiveButton(android.R.string.yes, (dialog, id) -> {
         if (isOpenNewTabInBackground) {
           newTabInBackground(url);
-          Snackbar.make(snackbarRoot, R.string.new_tab_snack_bar, Snackbar.LENGTH_LONG)
+          Snackbar.make(snackbarRoot, R.string.new_tab_snackbar, Snackbar.LENGTH_LONG)
               .setAction(getString(R.string.open), v -> {
                 if (webViewList.size() > 1) selectTab(webViewList.size() - 1);
               })
