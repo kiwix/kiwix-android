@@ -24,11 +24,6 @@ import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks;
 import org.kiwix.kiwixmobile.webserver.WebServerHelper;
 import org.kiwix.kiwixmobile.webserver.ZimHostActivity;
 
-import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_IS_HOTSPOT_ENABLED;
-import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_START_SERVER;
-import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_STOP_SERVER;
-import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_TURN_OFF_AFTER_O;
-import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.ACTION_TURN_ON_AFTER_O;
 import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.SELECTED_ZIM_PATHS_KEY;
 
 /**
@@ -37,6 +32,13 @@ import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.SELECTED_ZIM_PATHS
  */
 
 public class HotspotService extends Service {
+
+  public static final String ACTION_TURN_ON_AFTER_O = "Turn_on_hotspot_after_oreo";
+  public static final String ACTION_TURN_OFF_AFTER_O = "Turn_off_hotspot_after_oreo";
+  public static final String ACTION_IS_HOTSPOT_ENABLED = "Is_hotspot_enabled";
+  public static final String ACTION_START_SERVER = "start_server";
+  public static final String ACTION_STOP_SERVER = "stop_server";
+
   private static final int HOTSPOT_NOTIFICATION_ID = 666;
   private static final String ACTION_STOP = "hotspot_stop";
   private static final String TAG = "HotspotService";

@@ -59,6 +59,11 @@ import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskAdap
 import org.kiwix.kiwixmobile.zim_manager.fileselect_view.adapter.BooksOnDiskListItem;
 
 import static org.kiwix.kiwixmobile.utils.StyleUtils.dialogStyle;
+import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_IS_HOTSPOT_ENABLED;
+import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_START_SERVER;
+import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_STOP_SERVER;
+import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_TURN_OFF_AFTER_O;
+import static org.kiwix.kiwixmobile.wifi_hotspot.HotspotService.ACTION_TURN_ON_AFTER_O;
 
 public class ZimHostActivity extends BaseActivity implements
     ZimHostCallbacks, ZimHostContract.View {
@@ -75,16 +80,11 @@ public class ZimHostActivity extends BaseActivity implements
 
   @Inject AlertDialogShower alertDialogShower;
 
-  public static final String ACTION_TURN_ON_AFTER_O = "Turn_on_hotspot_after_oreo";
-  public static final String ACTION_TURN_OFF_AFTER_O = "Turn_off_hotspot_after_oreo";
-  public static final String ACTION_IS_HOTSPOT_ENABLED = "Is_hotspot_enabled";
-  public static final String ACTION_START_SERVER = "start_server";
-  public static final String ACTION_STOP_SERVER = "stop_server";
-  public static final String SELECTED_ZIM_PATHS_KEY = "selected_zim_paths";
-  private static final String IP_STATE_KEY = "ip_state_key";
   private static final String TAG = "ZimHostActivity";
   private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
   private static final int LOCATION_SETTINGS_PERMISSION_RESULT = 101;
+  public static final String SELECTED_ZIM_PATHS_KEY = "selected_zim_paths";
+  private static final String IP_STATE_KEY = "ip_state_key";
   Intent serviceIntent;
   private Task<LocationSettingsResponse> task;
   ProgressDialog progressDialog;
