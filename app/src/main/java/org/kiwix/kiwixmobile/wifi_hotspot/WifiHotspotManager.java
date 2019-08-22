@@ -34,9 +34,8 @@ public class WifiHotspotManager {
       @Override
       public void onStarted(WifiManager.LocalOnlyHotspotReservation reservation) {
         super.onStarted(reservation);
-        WifiConfiguration currentConfig;
         hotspotReservation = reservation;
-        currentConfig = hotspotReservation.getWifiConfiguration();
+        WifiConfiguration currentConfig = hotspotReservation.getWifiConfiguration();
 
         printCurrentConfig(currentConfig);
 
