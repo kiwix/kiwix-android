@@ -161,7 +161,6 @@ public class ZimHostActivity extends BaseActivity implements
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       toggleHotspot();
     } else {
-      //TO DO: show Dialog() + within that add check mobile Data check later.
       //if (isMobileDataEnabled(context)) {
       //  mobileDataDialog();
       //} else {
@@ -209,7 +208,6 @@ public class ZimHostActivity extends BaseActivity implements
   }
 
   private void bindService() {
-
     bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
   }
 
