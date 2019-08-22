@@ -165,7 +165,7 @@ public class ZimHostActivity extends BaseActivity implements
       //  mobileDataDialog();
       //} else {
       if (ServerUtils.isServerStarted) {
-        createHotspotIntent(ACTION_STOP_SERVER);
+        startService(createHotspotIntent(ACTION_STOP_SERVER));
       } else {
         startHotspotManuallyDialog();
       }
@@ -220,7 +220,8 @@ public class ZimHostActivity extends BaseActivity implements
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         == PackageManager.PERMISSION_GRANTED) {
 
-      createHotspotIntent(ACTION_IS_HOTSPOT_ENABLED); //If hotspot is already enabled, turn it off
+      startService(createHotspotIntent(
+          ACTION_IS_HOTSPOT_ENABLED)); //If hotspot is already enabled, turn it off
     } else {
       //Ask location permission if not granted
       ActivityCompat.requestPermissions(this,
@@ -298,7 +299,7 @@ public class ZimHostActivity extends BaseActivity implements
         case Activity.RESULT_OK:
           // All required changes were successfully made
           Log.v(TAG, states.isLocationPresent() + "");
-          createHotspotIntent(ACTION_TURN_ON_AFTER_O);
+          startService(createHotspotIntent(ACTION_TURN_ON_AFTER_O));
           break;
         case Activity.RESULT_CANCELED:
           // The user was asked to change settings, but chose not to
@@ -347,7 +348,7 @@ public class ZimHostActivity extends BaseActivity implements
         // All location settings are satisfied. The client can initialize location
         // requests here.
 
-        createHotspotIntent(ACTION_TURN_ON_AFTER_O);
+        startService(createHotspotIntent(ACTION_TURN_ON_AFTER_O));
 
         //}
       } catch (ApiException exception) {
@@ -435,9 +436,9 @@ public class ZimHostActivity extends BaseActivity implements
         });
   }
 
-  void createHotspotIntent(String ACTION) {
+  Intent createHotspotIntent(String ACTION) {
     serviceIntent.setAction(ACTION);
-    startService(serviceIntent);
+    return serviceIntent;
   }
 
   void mobileDataDialog() {
@@ -528,7 +529,7 @@ public class ZimHostActivity extends BaseActivity implements
   @Override public void onHotspotStateReceived(@NonNull Boolean isHotspotEnabled) {
     if (isHotspotEnabled) //if hotspot is already enabled, turn it off.
     {
-      createHotspotIntent(ACTION_TURN_OFF_AFTER_O);
+      startService(createHotspotIntent(ACTION_TURN_OFF_AFTER_O));
     } else //If hotspot is not already enabled, then turn it on.
     {
       setupLocationServices();
