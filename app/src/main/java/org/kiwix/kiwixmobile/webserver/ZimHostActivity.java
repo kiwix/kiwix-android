@@ -174,11 +174,9 @@ public class ZimHostActivity extends BaseActivity implements
   }
 
   private void getSelectedBooksPath() {
-    BooksOnDiskListItem.BookOnDisk bookOnDisk;
-
     for (BooksOnDiskListItem item : booksAdapter.getItems()) {
       if (item.isSelected()) {
-        bookOnDisk = (BooksOnDiskListItem.BookOnDisk) item;
+        BooksOnDiskListItem.BookOnDisk bookOnDisk = (BooksOnDiskListItem.BookOnDisk) item;
         File file = bookOnDisk.getFile();
         selectedBooksPath.add(file.getAbsolutePath());
         Log.v(TAG, "ZIM PATH : " + file.getAbsolutePath());
