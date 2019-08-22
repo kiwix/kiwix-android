@@ -69,14 +69,12 @@ public class AddNoteDialog extends DialogFragment
   private String zimFileName;
   private String zimFileTitle;
   private String articleTitle;
-  // Corresponds to "ZimFileName" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
-  private String zimNoteDirectoryName;
   // Corresponds to "ArticleUrl" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
   private String articleNotefileName;
   private boolean noteFileExists = false;
-  boolean noteEdited = false;   // Keeps track of state of the note (whether edited since last save)
+  private boolean noteEdited = false;   // Keeps track of state of the note (whether edited since last save)
 
-  private String ZIM_NOTES_DIRECTORY; // Stores path to directory for the currently open zim's notes
+  private String zimNotesDirectory; // Stores path to directory for the currently open zim's notes
 
   public AddNoteDialog(@NonNull SharedPreferenceUtil sharedPreferenceUtil) {
     this.sharedPreferenceUtil = sharedPreferenceUtil;
@@ -97,10 +95,11 @@ public class AddNoteDialog extends DialogFragment
       zimFileTitle = ZimContentProvider.getZimFileTitle();
       articleTitle = ((MainActivity) getActivity()).getCurrentWebView().getTitle();
 
-      zimNoteDirectoryName = getZimNoteDirectoryName();
+      // Corresponds to "ZimFileName" of "{External Storage}/Kiwix/Notes/ZimFileName/ArticleUrl.txt"
+      String zimNoteDirectoryName = getZimNoteDirectoryName();
       articleNotefileName = getArticleNotefileName();
 
-      ZIM_NOTES_DIRECTORY = NOTES_DIRECTORY + zimNoteDirectoryName + "/";
+      zimNotesDirectory = NOTES_DIRECTORY + zimNoteDirectoryName + "/";
     } else {
       onFailureToCreateAddNoteDialog();
     }
@@ -121,29 +120,22 @@ public class AddNoteDialog extends DialogFragment
 
     toolbar.setTitle(R.string.note);
     toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        closeKeyboard();
-        exitAddNoteDialog();
-      }
+    toolbar.setNavigationOnClickListener(v -> {
+      closeKeyboard();
+      exitAddNoteDialog();
     });
 
-    toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-      @Override
-      public boolean onMenuItemClick(MenuItem item) {
+    toolbar.setOnMenuItemClickListener(item -> {
+      switch (item.getItemId()) {
+        case R.id.share_note: // Opens app-chooser for sharing the note text file
+          shareNote();
+          break;
 
-        switch (item.getItemId()) {
-          case R.id.share_note: // Opens app-chooser for sharing the note text file
-            shareNote();
-            break;
-
-          case R.id.save_note:  // Saves the note as a text file
-            saveNote(addNoteEditText.getText().toString());
-            break;
-        }
-        return true;
+        case R.id.save_note:  // Saves the note as a text file
+          saveNote(addNoteEditText.getText().toString());
+          break;
       }
+      return true;
     });
 
     toolbar.inflateMenu(R.menu.menu_add_note_dialog);
@@ -226,7 +218,7 @@ public class AddNoteDialog extends DialogFragment
     };
   }
 
-  void exitAddNoteDialog() {
+  private void exitAddNoteDialog() {
     if (noteEdited) {
       Fragment previousInstance = getActivity().getSupportFragmentManager()
         .findFragmentByTag(ConfirmationAlertDialogFragment.TAG);
@@ -257,7 +249,7 @@ public class AddNoteDialog extends DialogFragment
     }
   }
 
-  void enableSaveNoteMenuItem() {
+  private void enableSaveNoteMenuItem() {
     if (toolbar.getMenu() != null) {
       MenuItem saveItem = toolbar.getMenu().findItem(R.id.save_note);
       saveItem.setEnabled(true);
@@ -267,7 +259,7 @@ public class AddNoteDialog extends DialogFragment
     }
   }
 
-  void enableShareNoteMenuItem() {
+  private void enableShareNoteMenuItem() {
     if (toolbar.getMenu() != null) {
       MenuItem shareItem = toolbar.getMenu().findItem(R.id.share_note);
       shareItem.setEnabled(true);
@@ -294,13 +286,13 @@ public class AddNoteDialog extends DialogFragment
     inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
   }
 
-  void closeKeyboard() {
+  private void closeKeyboard() {
     InputMethodManager inputMethodManager =
       (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
     inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
   }
 
-  void saveNote(String noteText) {
+  private void saveNote(String noteText) {
 
     /* String content of the EditText, given by noteText, is saved into the text file given by:
      *    "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
@@ -315,7 +307,7 @@ public class AddNoteDialog extends DialogFragment
         return;
       }
 
-      File notesFolder = new File(ZIM_NOTES_DIRECTORY);
+      File notesFolder = new File(zimNotesDirectory);
       boolean folderExists = true;
 
       if (!notesFolder.exists()) {
@@ -353,14 +345,14 @@ public class AddNoteDialog extends DialogFragment
      * is displayed in the EditText field (note content area)
      * */
 
-    File noteFile = new File(ZIM_NOTES_DIRECTORY + articleNotefileName + ".txt");
+    File noteFile = new File(zimNotesDirectory + articleNotefileName + ".txt");
 
     if (noteFile.exists()) {
       noteFileExists = true;
 
       StringBuilder contents = new StringBuilder();
       try (BufferedReader input = new BufferedReader(new java.io.FileReader(noteFile))) {
-        String line = null;
+        String line;
 
         while ((line = input.readLine()) != null) {
           contents.append(line);
@@ -379,7 +371,7 @@ public class AddNoteDialog extends DialogFragment
     // No action in case the note file for the currently open article doesn't exist
   }
 
-  void shareNote() {
+  private void shareNote() {
 
     /* The note text file corresponding to the currently open article, given at:
      *    "{External Storage}/Kiwix/Notes/ZimFileTitle/ArticleTitle.txt"
@@ -391,7 +383,7 @@ public class AddNoteDialog extends DialogFragment
         addNoteEditText.getText().toString()); // Save edited note before sharing the text file
     }
 
-    File noteFile = new File(ZIM_NOTES_DIRECTORY + articleNotefileName + ".txt");
+    File noteFile = new File(zimNotesDirectory + articleNotefileName + ".txt");
 
     Uri noteFileUri = null;
     if (noteFile.exists()) {
