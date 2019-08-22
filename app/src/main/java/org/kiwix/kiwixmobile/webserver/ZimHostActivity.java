@@ -498,11 +498,8 @@ public class ZimHostActivity extends BaseActivity implements
     });
 
     builder.setTitle(this.getString(R.string.hotspot_turned_on));
-    builder.setMessage(
-        this.getString(R.string.hotspot_details_message) + "\n" + this.getString(
-            R.string.hotspot_ssid_label) + " " + wifiConfiguration.SSID + "\n" + this.getString(
-            R.string.hotspot_pass_label) + " " + wifiConfiguration.preSharedKey);
-
+    builder.setMessage(getString(R.string.hotspot_details_message, wifiConfiguration.SSID,
+      wifiConfiguration.preSharedKey));
     builder.setCancelable(false);
     AlertDialog dialog = builder.create();
     dialog.show();

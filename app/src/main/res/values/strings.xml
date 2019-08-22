@@ -36,9 +36,7 @@
   <string name="server_failed_toast_message">Couldn’t start server.</string>
   <string name="server_started__successfully_toast_message">Server started successfully.</string>
   <string name="hotspot_turned_on">Hotspot turned on</string>
-  <string name="hotspot_details_message">Following are the details of your local hotspot.</string>
-  <string name="hotspot_ssid_label">SSID : </string>
-  <string name="hotspot_pass_label">Pass : </string>
+  <string name="hotspot_details_message">Following are the details of your local hotspot. \nSSID : %1$s \nPass : %2$s</string>
   <string name="port_hint">8080</string>
   <string name="server_textview_default_message">Select the files you wish to host on the server</string>
   <string name="progress_dialog_starting_server">Starting server</string>
