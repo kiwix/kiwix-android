@@ -93,7 +93,6 @@
   <string name="zim_nopic">Без картинок</string>
   <string name="zim_novid">Нет видео</string>
   <string name="no_network_connection">Отсутствует сетевое подключение</string>
-  <string name="get_library_over_network">Используйте сеть, чтобы загрузить список контента. (Около 6MB)</string>
   <string name="help_2">Что делает Kiwix?</string>
   <string name="help_3">Kiwix - это автономный контент-ридер. Он действует схоже с браузером, но вместо обращения к онлайн страницам, он считывает содержимое из файла в формате ZIM.</string>
   <string name="help_4">Хотя Kiwix и был изначально разработан, чтобы просматривать Wikipedia офлайн, он также пригоден и для другого содержимого.</string>

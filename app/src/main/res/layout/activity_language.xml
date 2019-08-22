@@ -24,7 +24,7 @@
   </com.google.android.material.appbar.AppBarLayout>
 
   <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/recycler_view"
+      android:id="@+id/language_recycler_view"
       android:layout_width="0dp"
       android:layout_height="0dp"
       app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

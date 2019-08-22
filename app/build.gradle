@@ -68,12 +68,11 @@ dependencies {
   implementation "androidx.fragment:fragment-ktx:1.0.0"
   implementation "androidx.collection:collection-ktx:1.1.0"
 
-  implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
   androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
   androidTestImplementation "androidx.test.espresso:espresso-web:$espressoVersion"
   androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
   androidTestImplementation("com.schibsted.spain:barista:$baristaVersion") {
-    exclude group: "com.android.support"
+    exclude group: "com.android.support.test.uiautomator"
   }
   androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")
   androidTestImplementation "androidx.annotation:annotation:$annotationVersion"
@@ -137,6 +136,15 @@ dependencies {
   testImplementation "org.assertj:assertj-core:3.11.1"
   testImplementation 'com.jraska.livedata:testing-ktx:1.1.0'
   testImplementation 'androidx.arch.core:core-testing:2.0.1'
+
+  androidTestImplementation "io.mockk:mockk-android:1.9"
+  androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+  androidTestImplementation "org.assertj:assertj-core:3.11.1"
+  androidTestImplementation ("org.simpleframework:simple-xml:2.7.1"){
+    exclude module: 'stax'
+    exclude module: 'stax-api'
+    exclude module: 'xpp3'
+  }
 }
 
 // Set custom app import directory
@@ -211,8 +219,6 @@ android {
     minSdkVersion 15
     targetSdkVersion 28
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    // See https://github.com/linkedin/dexmaker/issues/65 for why we need the following line.
-    testInstrumentationRunnerArguments.notClass = "com.android.dex.DexIndexOverflowException"
     multiDexEnabled true
     vectorDrawables.useSupportLibrary = true
     archivesBaseName = "$buildNumber"
@@ -256,6 +262,16 @@ android {
       }
     }
   }
+  sourceSets {
+    test {
+      java.srcDirs += "$projectDir/src/testShared"
+    }
+
+    androidTest {
+      java.srcDirs += "$projectDir/src/testShared"
+    }
+  }
+
 
   flavorDimensions "default"
 

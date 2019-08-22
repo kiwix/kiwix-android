@@ -93,7 +93,6 @@
   <string name="zim_nopic">لا توجد صور</string>
   <string name="zim_novid">لا يوجد فيديو</string>
   <string name="no_network_connection">لا يوجد اتصال بالشبكة</string>
-  <string name="get_library_over_network">استخدم الشبكة لتنزيل قائمة المحتويات. (حوالي 6 ميغابايت)</string>
   <string name="help_2">ماذا يفعل كيويكس؟</string>
   <string name="help_3">كيويكس قارئ محتوى غير متصل، وهو يعمل إلى حد كبير مثل المتصفح، ولكن بدلا من الوصول إلى صفحات الويب على الإنترنت، فإنه يقرأ المحتوى من ملف بتنسيق ZIM.</string>
   <string name="help_4">بينما كان كيويكس مصمما في الأصل لتوفير ويكيبيديا في وضع عدم الاتصال، فإنه يقرأ أيضا محتويات أخرى.</string>
