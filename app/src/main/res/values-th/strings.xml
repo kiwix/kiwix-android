@@ -40,7 +40,6 @@
   <string name="download_stop">หยุด</string>
   <string name="download_paused">หยุดชั่วคราว</string>
   <string name="download_no_space">พื้นที่ไม่เพียงพอในการดาวน์โหลดไฟล์นี้</string>
-  <string name="get_library_over_network">ใช้เครือข่ายเพื่อดาวน์โหลดรายการเนื้อหา (ประมาณ 6 เมกะไบต์)</string>
   <string name="help_10">คุณสามารถดาวน์โหลดไฟล์ ZIM ที่คุณเลือกในแอพหรือเลือกไฟล์ที่คุณต้องการและดาวน์โหลดจากคอมพิวเตอร์เดสก์ท็อปอย่างระมัดระวังก่อนที่จะถ่ายโอนไฟล์ ZIM ไปยังเอสดีการ์ดของคุณ</string>
   <string name="help_11">การดาวน์โหลดไฟล์ ZIM ในแอพจะอยู่ในไดเรกทอรีจัดเก็บข้อมูลภายนอกในโฟลเดอร์ชื่อ Kiwix</string>
   <string name="help_12">จะใช้ไฟล์ ZIM ขนาดใหญ่ได้อย่างไร ?</string>

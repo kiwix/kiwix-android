@@ -86,7 +86,6 @@
   <string name="zim_nopic">Aucune image</string>
   <string name="zim_novid">Aucune vidéo</string>
   <string name="no_network_connection">Aucune connexion réseau</string>
-  <string name="get_library_over_network">Utiliser le réseau pour télécharger la liste de contenu (environ 6Mo).</string>
   <string name="help_2">Que fait Kiwix ?</string>
   <string name="help_3">Kiwix est un lecteur de contenu hors connexion. Il agit quasiment comme un navigateur, mais au lieu d’accéder à des pages web en ligne, il lit le contenu depuis un fichier au format ZIM.</string>
   <string name="help_4">Bien que Kiwix ait été conçu au départ pour fournir Wikipédia hors connexion, il lit aussi d’autre contenu.</string>

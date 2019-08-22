@@ -91,7 +91,6 @@
   <string name="zim_nopic">Nincsenek képek</string>
   <string name="zim_novid">Nincsenek videók</string>
   <string name="no_network_connection">Nincs hálózati kapcsolat</string>
-  <string name="get_library_over_network">Használd a hálózatot a tartalomlista letöltéséhez. (Körülbelül 6MB)</string>
   <string name="help_2">Mit csinál a Kiwix?</string>
   <string name="help_3">A Kiwix egy offline tartalom olvasó. Úgy viselkedik, mint egy böngésző, de az online weboldalak betöltése helyett a tartalmát egy ZIM formátumú fájlból olvassa.</string>
   <string name="help_4">Bár a Kiwix eredetileg az offline Wikipédia megvalósítására lett tervezve, más tartalmakat is olvas.</string>

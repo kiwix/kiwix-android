@@ -86,7 +86,6 @@
   <string name="zim_nopic">Ei kuvia</string>
   <string name="zim_novid">Ei videoita</string>
   <string name="no_network_connection">Ei verkkoyhteyttä</string>
-  <string name="get_library_over_network">Lataa sisältöluettelo käyttämällä verkkoa. (Noin 6 Mt)</string>
   <string name="help_2">Mitä Kiwix tekee?</string>
   <string name="help_5">Missä sisältö on?</string>
   <string name="help_6">Sisältöämme ylläpidetään Kiwixin verkkosivulla.</string>

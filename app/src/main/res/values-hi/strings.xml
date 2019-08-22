@@ -93,7 +93,6 @@
   <string name="zim_nopic">चित्र नहीं</string>
   <string name="zim_novid">चलचित्र नहीं</string>
   <string name="no_network_connection">नेटवर्क कनेक्शन नहीं</string>
-  <string name="get_library_over_network">सामग्री सूची डाउनलोड करने के लिए नेटवर्क का उपयोग करें। (लगभग 6 एमबी</string>
   <string name="help_2">किविक्स क्या करता है?</string>
   <string name="help_3">किवीक्स ऑफ़लाइन सामग्री रीडर है यह एक ब्राउज़र की तरह बहुत ज्यादा काम करता है लेकिन ऑनलाइन वेब पेजों को एक्सेस करने के बजाय, यह ZIM प्रारूप में फ़ाइल से सामग्री पढ़ता है।</string>
   <string name="help_4">जबकि किवीक्स को मूल रूप से विकिपीडिया ऑफ़लाइन उपलब्ध कराने के लिए डिज़ाइन किया गया है, यह अन्य सामग्री भी पढ़ता है।</string>

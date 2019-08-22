@@ -39,7 +39,7 @@ import javax.inject.Inject
 class Fat32Checker @Inject constructor(sharedPreferenceUtil: SharedPreferenceUtil) {
   private val _fileSystemStates: BehaviorProcessor<FileSystemState> = BehaviorProcessor.create()
   val fileSystemStates: Flowable<FileSystemState> = _fileSystemStates.distinctUntilChanged()
-  var fileObserver: FileObserver? = null
+  private var fileObserver: FileObserver? = null
   private val requestCheckSystemFileType = BehaviorProcessor.createDefault(Unit)
 
   init {
