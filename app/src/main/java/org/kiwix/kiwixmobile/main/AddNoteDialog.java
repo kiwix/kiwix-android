@@ -188,7 +188,6 @@ public class AddNoteDialog extends DialogFragment
     String notefileName = "";
     if (articleUrl == null) {
       onFailureToCreateAddNoteDialog();
-      return "Not Available";
     } else {
       notefileName = getTextAfterLastSlashWithoutExtension(articleUrl);
     }
