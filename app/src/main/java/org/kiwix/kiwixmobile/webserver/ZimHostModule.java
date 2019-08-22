@@ -14,6 +14,7 @@ public class ZimHostModule {
     return zimHostPresenter;
   }
 
+  @PerActivity
   @Provides Activity providesActivity(ZimHostActivity zimActivity) {
     return (Activity) zimActivity;
   }
