@@ -38,6 +38,7 @@ import static org.kiwix.kiwixmobile.zim_manager.local_file_transfer.LocalFileTra
 /**
  * Manager for the Wifi-P2p API, used in the local file transfer module
  */
+@SuppressWarnings("MissingPermission")
 public class WifiDirectManager
   implements WifiP2pManager.ChannelListener, WifiP2pManager.PeerListListener,
   WifiP2pManager.ConnectionInfoListener,
