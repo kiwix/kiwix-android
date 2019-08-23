@@ -9,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.wifi.WifiConfiguration;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
@@ -31,7 +32,7 @@ import static org.kiwix.kiwixmobile.webserver.ZimHostActivity.SELECTED_ZIM_PATHS
  * Created by Adeel Zafar on 07/01/2019.
  */
 
-public class HotspotService extends Service {
+public class HotspotService extends Service implements HotspotStateListener {
 
   public static final String ACTION_TURN_ON_AFTER_O = "Turn_on_hotspot_after_oreo";
   public static final String ACTION_TURN_OFF_AFTER_O = "Turn_off_hotspot_after_oreo";
@@ -55,6 +56,7 @@ public class HotspotService extends Service {
     super.onCreate();
 
     hotspotManager = new WifiHotspotManager(this);
+    hotspotManager.registerListener(HotspotService.this);
 
     stopReceiver = new BroadcastReceiver() {
       @Override
@@ -83,7 +85,7 @@ public class HotspotService extends Service {
 
       case ACTION_TURN_ON_AFTER_O:
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-          hotspotManager.turnOnHotspot(zimHostCallbacks);
+          hotspotManager.turnOnHotspot();
         }
         break;
 
@@ -154,12 +156,13 @@ public class HotspotService extends Service {
   void stopHotspotAndDismissNotification() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       hotspotManager.turnOffHotspot();
+    } else {
+      webServerHelper.stopAndroidWebServer();
+      zimHostCallbacks.onServerStopped();
+      stopForeground(true);
+      stopSelf();
+      notificationManager.cancel(HOTSPOT_NOTIFICATION_ID);
     }
-    webServerHelper.stopAndroidWebServer();
-    zimHostCallbacks.onServerStopped();
-    stopForeground(true);
-    stopSelf();
-    notificationManager.cancel(HOTSPOT_NOTIFICATION_ID);
   }
 
   @Override
@@ -189,6 +192,23 @@ public class HotspotService extends Service {
   public void startForegroundNotificationHelper() {
     startForeground(HOTSPOT_NOTIFICATION_ID,
         buildForegroundNotification(getString(R.string.hotspot_running)));
+  }
+
+  @Override public void onHotspotTurnedOn(@NonNull WifiConfiguration wifiConfiguration) {
+    zimHostCallbacks.onHotspotTurnedOn(wifiConfiguration);
+  }
+
+  @Override public void onHotspotFailedToStart() {
+    zimHostCallbacks.onHotspotFailedToStart();
+  }
+
+  @Override public void onHotspotStopped() {
+    Log.v("DANG", "Inside Hotspot Service onHotspotStopped()");
+    webServerHelper.stopAndroidWebServer();
+    zimHostCallbacks.onServerStopped();
+    stopForeground(true);
+    stopSelf();
+    notificationManager.cancel(HOTSPOT_NOTIFICATION_ID);
   }
 
   public class HotspotBinder extends Binder {

@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks;
 
 /**
  * WifiHotstopManager class makes use of the Android's WifiManager and WifiConfiguration class
@@ -18,7 +17,8 @@ import org.kiwix.kiwixmobile.webserver.ZimHostCallbacks;
 
 public class WifiHotspotManager {
   private final WifiManager wifiManager;
-  WifiManager.LocalOnlyHotspotReservation hotspotReservation;
+  private WifiManager.LocalOnlyHotspotReservation hotspotReservation;
+  private HotspotStateListener hotspotStateListener;
   private static final String TAG = "WifiHotspotManager";
 
   public WifiHotspotManager(@NonNull Context context) {
@@ -28,7 +28,7 @@ public class WifiHotspotManager {
 
   //Workaround to turn on hotspot for Oreo versions
   @RequiresApi(api = Build.VERSION_CODES.O)
-  public void turnOnHotspot(@NonNull ZimHostCallbacks zimHostCallbacks) {
+  public void turnOnHotspot() {
     wifiManager.startLocalOnlyHotspot(new WifiManager.LocalOnlyHotspotCallback() {
 
       @Override
@@ -38,22 +38,21 @@ public class WifiHotspotManager {
         WifiConfiguration currentConfig = hotspotReservation.getWifiConfiguration();
 
         printCurrentConfig(currentConfig);
-
-        zimHostCallbacks.onHotspotTurnedOn(currentConfig);
+        hotspotStateListener.onHotspotTurnedOn(currentConfig);
         Log.v(TAG, "Local Hotspot Started");
       }
 
       @Override
       public void onStopped() {
         super.onStopped();
-        zimHostCallbacks.onServerStopped();
+        hotspotStateListener.onHotspotStopped();
         Log.v(TAG, "Local Hotspot Stopped");
       }
 
       @Override
       public void onFailed(int reason) {
         super.onFailed(reason);
-        zimHostCallbacks.onHotspotFailedToStart();
+        hotspotStateListener.onHotspotFailedToStart();
         Log.v(TAG, "Local Hotspot failed to start");
       }
     }, new Handler());
@@ -65,6 +64,7 @@ public class WifiHotspotManager {
     if (hotspotReservation != null) {
       hotspotReservation.close();
       hotspotReservation = null;
+      hotspotStateListener.onHotspotStopped();
       Log.v(TAG, "Turned off hotspot");
     }
   }
@@ -80,5 +80,9 @@ public class WifiHotspotManager {
         + wifiConfiguration.preSharedKey
         + " \n SSID is : "
         + wifiConfiguration.SSID);
+  }
+
+  public void registerListener(@NonNull HotspotStateListener hotspotStateListener) {
+    this.hotspotStateListener = hotspotStateListener;
   }
 }
