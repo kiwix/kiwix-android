@@ -58,6 +58,8 @@ If you wish to rebase you should be following the [Golden Rule](https://www.atla
 
 The default build is `debug`, with this variant you can use a debugger while developing. To install the application click the `run` button in Android Studio with the `app` configuration selected while you have a device connected. All other build types but `release` can be ignored, the `release` build is what gets uploaded to the Google Play store and can be built locally with the dummy credentials/keystore provided.
 
+By default we fetch kiwix-lib, the key component for interacting with ZIM files from maven, but if you wish to use your own locally compiled version for testing purposes, then you can create the directory `app/libs` and place your .aar file inside it to have it used instead.
+
 ### Testing
 
 Unit tests are located in `app/src/test` and to run them locally you
