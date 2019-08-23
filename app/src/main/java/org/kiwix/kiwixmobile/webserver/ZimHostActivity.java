@@ -78,7 +78,8 @@ public class ZimHostActivity extends BaseActivity implements
   @Inject
   ZimHostContract.Presenter presenter;
 
-  @Inject AlertDialogShower alertDialogShower;
+  @Inject
+  AlertDialogShower alertDialogShower;
 
   private static final String TAG = "ZimHostActivity";
   private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 102;
