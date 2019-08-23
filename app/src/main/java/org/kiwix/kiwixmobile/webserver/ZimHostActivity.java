@@ -395,7 +395,7 @@ public class ZimHostActivity extends BaseActivity implements
               true);
       progressDialog.show();
 
-      isIpAddressValid();
+      pollForValidIpAddress();
     });
 
     builder.setTitle(getString(R.string.hotspot_dialog_title));
@@ -408,7 +408,7 @@ public class ZimHostActivity extends BaseActivity implements
 
   //Keeps checking if hotspot has been turned using the ip address with an interval of 1 sec
   //If no ip is found after 15 seconds, dismisses the progress dialog
-  private void isIpAddressValid() {
+  private void pollForValidIpAddress() {
     Flowable.fromCallable(() -> ServerUtils.getIp())
         .retryWhen(error -> error.delay(1, TimeUnit.SECONDS))
         .timeout(15, TimeUnit.SECONDS)
@@ -490,7 +490,7 @@ public class ZimHostActivity extends BaseActivity implements
               true);
       progressDialog.show();
 
-      isIpAddressValid();
+      pollForValidIpAddress();
 
     });
 
