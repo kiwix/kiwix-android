@@ -85,7 +85,6 @@ public class ZimHostActivity extends BaseActivity implements
   private static final int LOCATION_SETTINGS_PERMISSION_RESULT = 101;
   public static final String SELECTED_ZIM_PATHS_KEY = "selected_zim_paths";
   private static final String IP_STATE_KEY = "ip_state_key";
-  Intent serviceIntent;
   private Task<LocationSettingsResponse> task;
   ProgressDialog progressDialog;
 
@@ -138,8 +137,6 @@ public class ZimHostActivity extends BaseActivity implements
       public void onServiceDisconnected(ComponentName arg0) {
       }
     };
-
-    serviceIntent = new Intent(this, HotspotService.class);
 
     startServerButton.setOnClickListener(v -> {
       //Get the path of ZIMs user has selected
@@ -206,7 +203,8 @@ public class ZimHostActivity extends BaseActivity implements
   }
 
   private void bindService() {
-    bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+    bindService(new Intent(this, HotspotService.class), serviceConnection,
+        Context.BIND_AUTO_CREATE);
   }
 
   private void unbindService() {
@@ -420,9 +418,8 @@ public class ZimHostActivity extends BaseActivity implements
 
           @Override public void onSuccess(String s) {
             progressDialog.dismiss();
-            serviceIntent.putStringArrayListExtra(SELECTED_ZIM_PATHS_KEY, selectedBooksPath);
-            serviceIntent.setAction(ACTION_START_SERVER);
-            startService(serviceIntent);
+            startService(createHotspotIntent(ACTION_START_SERVER).putStringArrayListExtra(
+                SELECTED_ZIM_PATHS_KEY, selectedBooksPath));
             Log.d(TAG, "onSuccess:  " + s);
           }
 
@@ -436,9 +433,8 @@ public class ZimHostActivity extends BaseActivity implements
         });
   }
 
-  Intent createHotspotIntent(String ACTION) {
-    serviceIntent.setAction(ACTION);
-    return serviceIntent;
+  Intent createHotspotIntent(String action) {
+    return new Intent(this, HotspotService.class).setAction(action);
   }
 
   void mobileDataDialog() {
