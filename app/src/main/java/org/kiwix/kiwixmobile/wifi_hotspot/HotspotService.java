@@ -96,21 +96,22 @@ public class HotspotService extends Service implements HotspotStateListener {
         break;
 
       case ACTION_START_SERVER:
-        if (!webServerHelper.startServerHelper(
+        if (webServerHelper.startServerHelper(
             intent.getStringArrayListExtra(SELECTED_ZIM_PATHS_KEY))) {
-          zimHostCallbacks.onServerFailedToStart();
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            stopForeground(true);
-            stopSelf();
-            notificationManager.cancel(HOTSPOT_NOTIFICATION_ID);
-          }
-        } else {
           zimHostCallbacks.onServerStarted(ServerUtils.getSocketAddress());
           if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             startForegroundNotificationHelper();
           }
           Toast.makeText(this, R.string.server_started__successfully_toast_message,
               Toast.LENGTH_SHORT).show();
+
+        } else {
+          zimHostCallbacks.onServerFailedToStart();
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            stopForeground(true);
+            stopSelf();
+            notificationManager.cancel(HOTSPOT_NOTIFICATION_ID);
+          }
         }
 
         break;
