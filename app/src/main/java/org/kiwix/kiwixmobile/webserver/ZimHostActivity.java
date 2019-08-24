@@ -488,12 +488,11 @@ public class ZimHostActivity extends BaseActivity implements
       progressDialog.show();
 
       pollForValidIpAddress();
-
     });
 
     builder.setTitle(this.getString(R.string.hotspot_turned_on));
     builder.setMessage(getString(R.string.hotspot_details_message, wifiConfiguration.SSID,
-      wifiConfiguration.preSharedKey));
+        wifiConfiguration.preSharedKey));
     builder.setCancelable(false);
     AlertDialog dialog = builder.create();
     dialog.show();
